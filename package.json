@@ -1,0 +1,22 @@
+{
+  "name": "root",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^4.0.0"
+  },
+  "scripts": {
+    "postinstall": "lerna bootstrap",
+    "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn start",
+    "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn start",
+    "build": "lerna run --scope @pagopa-pn/* build",
+    "test": "lerna run --scope @pagopa-pn/* --parallel test"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/**"
+    ]
+  },
+  "dependencies": {
+    "craco": "^0.0.3"
+  }
+}
