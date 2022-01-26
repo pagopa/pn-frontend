@@ -1,16 +1,13 @@
-const path = require("path");
-const { getLoader, loaderByName } = require("@craco/craco");
+const path = require('path');
+const { getLoader, loaderByName } = require('@craco/craco');
 
 const packages = [];
-packages.push(path.join(__dirname, "../pn-commons"));
+packages.push(path.join(__dirname, '../pn-commons'));
 
 module.exports = {
   webpack: {
     configure: (webpackConfig, arg) => {
-      const { isFound, match } = getLoader(
-        webpackConfig,
-        loaderByName("babel-loader")
-      );
+      const { isFound, match } = getLoader(webpackConfig, loaderByName('babel-loader'));
       if (isFound) {
         const include = Array.isArray(match.loader.include)
           ? match.loader.include
@@ -21,4 +18,7 @@ module.exports = {
       return webpackConfig;
     },
   },
+  // babel: {
+  //   plugins: [['@babel/plugin-proposal-nullish-coalescing-operator']],
+  // },
 };

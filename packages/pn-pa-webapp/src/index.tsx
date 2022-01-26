@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from '@pagopa/mui-italia/theme';
+// import { theme } from '@pagopa/mui-italia/src/index';
 import reportWebVitals from './reportWebVitals';
 import { store } from './redux/store';
 import App from './App';

@@ -1,6 +1,6 @@
-import { AppError } from '@pagopa-pn/pn-commons';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { RootState } from '../store';
+import { AppError } from '../..';
+
 interface AppStateState {
     loading: {
         result: boolean;
@@ -44,6 +44,6 @@ export const appStateActions = appStateSlice.actions;
 export const appStateReducer = appStateSlice.reducer;
 
 export const appStateSelectors = {
-    selectLoading: (state: RootState) => state.appState.loading.result,
-    selectErrors: (state: RootState) => state.appState.errors,
+    selectLoading: (state: any) => state.appState.loading.result,
+    selectErrors: (state: any) => state.appState.errors,
 };

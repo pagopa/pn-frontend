@@ -1,5 +1,6 @@
 {
   "name": "@pagopa-pn/pn-pa-webapp",
+  "description": "Backoffice di Piattaforma Notifiche per la Pubblica Amministrazione",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,7 +13,6 @@
     "@mui/x-data-grid-generator": "^5.0.1",
     "@pagopa-pn/pn-commons": "0.1.0",
     "@pagopa/mui-italia": "pagopa/mui-italia#0.3.1",
-    "@pagopa/selfcare-common-frontend": "^1.0.0",
     "@pagopa/ts-commons": "^10.2.1",
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.16.1",
@@ -54,18 +54,11 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
