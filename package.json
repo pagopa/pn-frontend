@@ -2,7 +2,8 @@
   "name": "root",
   "private": true,
   "devDependencies": {
-    "lerna": "^4.0.0"
+    "lerna": "^4.0.0",
+    "craco": "^0.0.3"
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
@@ -12,14 +13,13 @@
     "test": "lerna run --scope @pagopa-pn/* --parallel test",
     "refresh:monorepo": "lerna clean -y && yarn install",
     "clean:win": "rmdir node_modules /s",
-    "clean:nx": "rm -rf node_modules"
+    "clean:nx": "rm -rf node_modules",
+    "lint": "lerna run --scope @pagopa-pn/* lint",
+    "format": "lerna run --scope @pagopa-pn/* format"
   },
   "workspaces": {
     "packages": [
       "packages/**"
     ]
-  },
-  "dependencies": {
-    "craco": "^0.0.3"
   }
 }

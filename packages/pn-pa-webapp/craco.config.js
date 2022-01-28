@@ -18,7 +18,4 @@ module.exports = {
       return webpackConfig;
     },
   },
-  // babel: {
-  //   plugins: [['@babel/plugin-proposal-nullish-coalescing-operator']],
-  // },
 };

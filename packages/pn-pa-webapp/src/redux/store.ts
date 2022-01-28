@@ -6,16 +6,16 @@ import { appStateReducer } from './slices/appStateSlice';
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined];
 
 export const createStore = () =>
-    configureStore({
-        reducer: {
-            appState: appStateReducer,
-        },
-        middleware: (getDefaultMiddleware) =>
-            additionalMiddlewares.reduce(
-                (array, middleware) => (middleware ? array.concat(middleware) : array),
-                getDefaultMiddleware({ serializableCheck: false })
-            ),
-    });
+  configureStore({
+    reducer: {
+      appState: appStateReducer,
+    },
+    middleware: (getDefaultMiddleware) =>
+      additionalMiddlewares.reduce(
+        (array, middleware) => (middleware ? array.concat(middleware) : array),
+        getDefaultMiddleware({ serializableCheck: false })
+      ),
+  });
 
 export const store = createStore();
 
