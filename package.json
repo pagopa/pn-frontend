@@ -1,0 +1,25 @@
+{
+  "name": "root",
+  "private": true,
+  "devDependencies": {
+    "lerna": "^4.0.0",
+    "craco": "^0.0.3"
+  },
+  "scripts": {
+    "postinstall": "lerna bootstrap",
+    "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn start",
+    "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn start",
+    "build": "lerna run --scope @pagopa-pn/* build",
+    "test": "lerna run --scope @pagopa-pn/* --parallel test",
+    "refresh:monorepo": "lerna clean -y && yarn install",
+    "clean:win": "rmdir node_modules /s",
+    "clean:nx": "rm -rf node_modules",
+    "lint": "lerna run --scope @pagopa-pn/* lint",
+    "format": "lerna run --scope @pagopa-pn/* format"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/**"
+    ]
+  }
+}
