@@ -25,6 +25,7 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/redux-logger": "^3.0.9",
     "axios": "^0.23.0",
+    "env-cmd": "^10.1.0",
     "formik": "^2.2.9",
     "fp-ts": "^2.11.5",
     "io-ts": "^2.2.16",
