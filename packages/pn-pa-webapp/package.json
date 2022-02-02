@@ -46,7 +46,7 @@
     "start": "craco start",
     "build": "craco build",
     "build:dev": "env-cmd -f .env.development craco build",
-    "build:uat": "env-cmd -f .env.development craco build",
+    "build:uat": "env-cmd -f .env.uat craco build",
     "test": "craco test --watchAll=false",
     "eject": "craco eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
