@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { AuthApi } from "../../api/auth/Auth.api";
 import { UserSession } from "./types";
 
 export const login = createAsyncThunk<
@@ -7,16 +8,12 @@ export const login = createAsyncThunk<
 // {
 // 	rejectValue: ErrorDetails;
 // }
->("auth/login", async (selfCareToken: string) => {
+>("", async (selfCareToken: string) => {
 
     // use selfcare token to get autenticated user
-    console.log(selfCareToken);
-    const token = '123';
-    // const { user, token } = await AuthAPI.login(username, password);
+    const token = await AuthApi.exchangeToken(selfCareToken);
+    localStorage.setItem("sessionToken", token.sessionToken);
+    localStorage.setItem("selfCareToken", selfCareToken);
 
-    localStorage.setItem("token", token);
-    // localStorage.setItem("userId", Number(user.id).toString());
-    // localStorage.setItem("userProfiles", JSON.stringify(user.userProfiles));
-
-    return { token };
+    return { token: token.sessionToken };
 });
