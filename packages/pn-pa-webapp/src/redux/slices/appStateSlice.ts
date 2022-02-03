@@ -1,5 +1,6 @@
 import { AppError } from '@pagopa-pn/pn-commons';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { login } from '../auth/actions';
 import type { RootState } from '../store';
 interface AppStateState {
   loading: {
@@ -38,6 +39,14 @@ export const appStateSlice = createSlice({
       state.errors = state.errors.filter((e) => e.id !== action.payload.id);
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(login.fulfilled, (state) => {
+      state.loading.result = false;
+    });
+    builder.addCase(login.pending, (state) => {
+      state.loading.result = true;
+    });
+  }
 });
 
 export const appStateActions = appStateSlice.actions;

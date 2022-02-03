@@ -8,7 +8,7 @@ export const login = createAsyncThunk<
 // {
 // 	rejectValue: ErrorDetails;
 // }
->("", async (selfCareToken: string) => {
+>("exchangeToken", async (selfCareToken: string) => {
 
     // use selfcare token to get autenticated user
     const token = await AuthApi.exchangeToken(selfCareToken);
