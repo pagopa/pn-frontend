@@ -9,7 +9,7 @@ import { RootState } from '../redux/store';
 
 /* eslint-disable functional/immutable-data */
 const RequireAuth = () => {
-  const token = useSelector((state: RootState) => state.userState.token);
+  const token = useSelector((state: RootState) => state.userState.user.sessionToken);
 
   if (token === '') {
     // Redirect them to the selfcare login page

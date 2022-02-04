@@ -53,7 +53,9 @@ export const appStateSlice = createSlice({
         state.loading.result = false;
       })
       .addMatcher(handleError, (state, action) => {
+        state.loading.result = false;
         state.errors = action.payload;
+        console.debug(state.errors);
       });
   }
 });

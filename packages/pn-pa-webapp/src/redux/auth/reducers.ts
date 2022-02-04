@@ -1,20 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { login } from "./actions";
-import { UserSession } from "./types";
+import { exchangeToken } from "./actions";
+import { User } from "./types";
 
 /* eslint-disable functional/immutable-data */
 const userSlice = createSlice({
     name: 'userSlice',
     initialState: {
         loading: false,
-        token: ''
-    } as UserSession & { loading: boolean },
+        user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '') : {
+            sessionToken: '',
+            family_name: '',
+            fiscal_number: '',
+            organization: {
+                id: '',
+                role: ''
+            }
+        } as User
+    },
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(login.fulfilled, (state, action) => {
-            state.token = action.payload.token;
+        builder.addCase(exchangeToken.fulfilled, (state, action) => {
+            state.user = action.payload;
         });
-        builder.addCase(login.pending, (state) => {
+        builder.addCase(exchangeToken.pending, (state) => {
             state.loading = true;
         });
     }
