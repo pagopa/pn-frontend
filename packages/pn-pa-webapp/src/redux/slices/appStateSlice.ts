@@ -1,6 +1,5 @@
 import { AppError } from '@pagopa-pn/pn-commons';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { login } from '../auth/actions';
+import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 interface AppStateState {
   loading: {
@@ -17,6 +16,12 @@ const initialState: AppStateState = {
   },
   errors: [],
 };
+
+const isLoading = (action: AnyAction) => action.type.endsWith('/pending');
+
+const isFulfilled = (action: AnyAction) => action.type.endsWith('/fulfilled');
+
+const handleError = (action: AnyAction) => action.type.endsWith('/rejected');
 
 /* eslint-disable functional/immutable-data */
 export const appStateSlice = createSlice({
@@ -39,13 +44,17 @@ export const appStateSlice = createSlice({
       state.errors = state.errors.filter((e) => e.id !== action.payload.id);
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state) => {
-      state.loading.result = false;
-    });
-    builder.addCase(login.pending, (state) => {
-      state.loading.result = true;
-    });
+  extraReducers: builder => {
+    builder
+      .addMatcher(isLoading, (state) => {
+        state.loading.result = true;
+      })
+      .addMatcher(isFulfilled, (state) => {
+        state.loading.result = false;
+      })
+      .addMatcher(handleError, (state, action) => {
+        state.errors = action.payload;
+      });
   }
 });
 
