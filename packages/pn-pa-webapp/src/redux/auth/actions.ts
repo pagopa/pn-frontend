@@ -2,6 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AuthApi } from "../../api/auth/Auth.api";
 import { User } from "./types";
 
+/**
+ * Exchange token action between selfcare and pn. 
+ * If token is valid, user info are set in localstorage
+ */
 export const exchangeToken = createAsyncThunk<
     User,
     string
@@ -19,4 +23,13 @@ export const exchangeToken = createAsyncThunk<
         const user: User = JSON.parse(localStorage.getItem("user") || '');
         return user;
     }
+});
+
+/**
+ * Logout action
+ * Clears localstorage, clears state
+ */
+export const logout = createAsyncThunk<any>("logout", async () => {
+    localStorage.clear();
+    return {};
 });

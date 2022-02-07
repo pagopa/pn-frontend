@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { exchangeToken } from "./actions";
+import { exchangeToken, logout } from "./actions";
 import { User } from "./types";
 
 /* eslint-disable functional/immutable-data */
@@ -23,6 +23,12 @@ const userSlice = createSlice({
             state.user = action.payload;
         });
         builder.addCase(exchangeToken.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(logout.fulfilled, (state, action) => {
+            state.user = action.payload;
+        });
+        builder.addCase(logout.pending, (state) => {
             state.loading = true;
         });
     }

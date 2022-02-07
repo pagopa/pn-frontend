@@ -6,10 +6,13 @@ import Header from '../Header/Header';
 
 type Props = {
   children?: React.ReactNode;
+  /** Assistance email for the user */
   assistanceEmail?: string;
+  /** Logout/exit action to apply */
+  onExitAction?: (() => void) | null;
 };
 
-export default function Layout({ children, assistanceEmail }: Props) {
+export default function Layout({ children, assistanceEmail, onExitAction }: Props) {
   return (
     <Box
       sx={{
@@ -19,7 +22,7 @@ export default function Layout({ children, assistanceEmail }: Props) {
       }}
     >
       {/* <Header withSecondHeader={!!party} subHeaderChild={party && <DashboardMenuContainer />} /> */}
-      <Header withSecondHeader={true} />
+      <Header withSecondHeader={true} onExitAction={onExitAction} />
 
       <Grid container direction="row" flexGrow={1}>
         {children}
