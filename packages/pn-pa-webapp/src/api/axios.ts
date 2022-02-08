@@ -14,6 +14,7 @@ apiClient.interceptors.request.use(function (config) {
     // if (token && config.headers) {
     //     config.headers["Authorization"] = 'Bearer ' + token;
     // }
+    /* eslint-disable functional/immutable-data */
     if (config.headers) {
         config.headers['X-PagoPA-PN-PA'] = '';
     }
