@@ -1,5 +1,5 @@
-import { Notification } from "../../redux/dashboard/types";
 import { apiClient } from "../axios";
+import { Notification, GetNotificationsParams } from "../../redux/dashboard/types";
 
 export const NotificationsApi = {
     /**
@@ -8,9 +8,20 @@ export const NotificationsApi = {
      * @param  {string} endDate
      * @returns Promise
      */
-    getSentNotifications: (_startDate: string, _endDate: string): Promise<Array<Notification>> =>
-    // TODO creare un tipo per i params e passarli
-    // TODO scrivere il tipo di ritorno
-    (apiClient.get<any>("/delivery/notifications/sent")
-        .then((response) => response.data))
+    getSentNotifications: (params: GetNotificationsParams): Promise<Array<Notification>> => {
+        const queryParams = new URLSearchParams();
+        queryParams.append('startDate', params.startDate);
+        queryParams.append('endDate', params.endDate);
+        if (params.recipientId) {
+            queryParams.append('recipientId', params.recipientId);
+        }
+        if (params.status) {
+            queryParams.append('status', params.status);
+        }
+        if (params.subjectRegExp) {
+            queryParams.append('subjectRegExp', params.subjectRegExp);
+        }
+
+        return apiClient.get<Array<Notification>>("/delivery/notifications/sent", { params: queryParams }).then((response) => response.data);
+    }
 };
