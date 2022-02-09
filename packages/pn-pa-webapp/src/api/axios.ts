@@ -9,14 +9,10 @@ export const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use(function (config) {
-    // TODO add authorization token as soon as API are ready
-    // const token = localStorage.getItem("user");
-    // if (token && config.headers) {
-    //     config.headers["Authorization"] = 'Bearer ' + token;
-    // }
     /* eslint-disable functional/immutable-data */
-    if (config.headers) {
-        config.headers['X-PagoPA-PN-PA'] = '';
+    const token = JSON.parse(localStorage.getItem("user") || '');
+    if (token && config.headers) {
+        config.headers.Authorization = 'Bearer ' + (token.sessionToken as string);
     }
     return config;
 },
