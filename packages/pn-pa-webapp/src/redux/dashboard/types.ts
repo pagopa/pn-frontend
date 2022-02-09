@@ -1,5 +1,11 @@
 export interface Notification {
     iun: string;
+    paNotificationId: string;
+    senderId: string;
+    sentAt: string;
+    subject: string;
+    notificationStatus: NotificationStatus;
+    recipientId: string;
 }
 
 export enum NotificationStatus {

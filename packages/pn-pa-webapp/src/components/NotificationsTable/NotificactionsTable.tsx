@@ -1,144 +1,103 @@
-/*
-import { DataGrid } from '@mui/x-data-grid';
+import React from 'react';
 import TablePagination from '@mui/material/TablePagination';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
-*/
+import Paper from '@mui/material/Paper';
+import TableBody from '@mui/material/TableBody';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TableFooter from '@mui/material/TableFooter';
+import TableHead from '@mui/material/TableHead';
 
+import { Notification } from '../../redux/dashboard/types';
 
-function NotificationsTable() {
-  /*
+function NotificationsTable(props: any) {
   const rowsPerPagination = [10, 20, 50, 100, 200, 500];
-  const pageSize = rowsPerPagination[0];
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(rowsPerPagination[0]);
+
+  const rows = props.notifications.map((n: Notification) => n);
+
+  const columns: Array<{id: string; label: string; width: string; align?: 'center' | 'inherit' | 'left' | 'right' | 'justify'}> = [
+    { id: 'sentAt', label: 'Data', width: '15%' },
+    { id: 'recipientId', label: 'Destinatario', width: '15%' },
+    { id: 'subject', label: 'Oggetto', width: '25%' },
+    { id: 'iun', label: 'Codice IUN', width: '15%' },
+    { id: 'groups', label: 'Gruppi', width: '15%' },
+    { id: 'notificationStatus', label: 'Stato', width: '15%', align: 'center'},
+  ];
+
+  // Avoid a layout jump when reaching the last page with empty rows.
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    // setRowsPerPage(parseInt(event.target.value, 10));
-    // setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'firstName', headerName: 'First name', width: 130 },
-    { field: 'lastName', headerName: 'Last name', width: 130 },
-    {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 90,
-    },
-    {
-      field: 'fullName',
-      headerName: 'Full name',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 160,
-      valueGetter: (params: any) =>
-        `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    },
-  ];
-  
-  const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 10, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 11, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 12, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 13, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 14, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 15, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 16, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 17, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 18, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 19, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 20, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 21, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 22, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 23, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 24, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-    { id: 25, lastName: 'Roxie', firstName: 'Harvey', age: 65 }
-  ];
-  */
-
-    /*
-    7<div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={pageSize}
-        rowsPerPageOptions={rowsPerPagination}
-      >
-        <TablePagination
-          rowsPerPageOptions={rowsPerPagination}
-          colSpan={3}
-          count={rows.length}
-          rowsPerPage={pageSize}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </DataGrid>
-    </div>
-    */
-
-    /*
-    <TableContainer component={Paper}>
-    <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
-      <TableBody>
-        {(rowsPerPage > 0
-          ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-          : rows
-        ).map((row) => (
-          <TableRow key={row.name}>
-            <TableCell component="th" scope="row">
-              {row.name}
-            </TableCell>
-            <TableCell style={{ width: 160 }} align="right">
-              {row.calories}
-            </TableCell>
-            <TableCell style={{ width: 160 }} align="right">
-              {row.fat}
-            </TableCell>
-          </TableRow>
-        ))}
-        {emptyRows > 0 && (
-          <TableRow style={{ height: 53 * emptyRows }}>
-            <TableCell colSpan={6} />
-          </TableRow>
-        )}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
-            colSpan={3}
-            count={rows.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            SelectProps={{
-              inputProps: {
-                'aria-label': 'rows per page',
-              },
-              native: true,
-            }}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            ActionsComponent={TablePaginationActions}
-          />
-        </TableRow>
-      </TableFooter>
-    </Table>
-  </TableContainer>
-    */
+  const handleChangePage = (
+    _event: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPage(newPage);
+  };
 
   return (
-    <div>Notification table</div>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
+        <TableHead>
+          <TableRow>
+            {columns.map((column) => (
+              <TableCell key={column.id} align={column.align} style={{ width: column.width }}>
+                {column.label}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {(rowsPerPage > 0
+            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            : rows
+          ).map((row: Notification) => (
+            <TableRow key={row.paNotificationId}>
+              <TableCell style={{ width: '15%' }}>{row.sentAt}</TableCell>
+              <TableCell style={{ width: '15%' }}>{row.recipientId}</TableCell>
+              <TableCell style={{ width: '25%' }}>{row.subject}</TableCell>
+              <TableCell style={{ width: '15%' }}>{row.iun}</TableCell>
+              <TableCell style={{ width: '15%' }}>---</TableCell>
+              <TableCell style={{ width: '15%' }} align="center">
+                {row.notificationStatus}
+              </TableCell>
+            </TableRow>
+          ))}
+          {emptyRows > 0 && (
+            <TableRow style={{ height: 53 * emptyRows }}>
+              <TableCell colSpan={6} />
+            </TableRow>
+          )}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TablePagination
+              rowsPerPageOptions={rowsPerPagination}
+              count={rows.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              SelectProps={{
+                inputProps: {
+                  'aria-label': 'rows per page',
+                },
+                native: true,
+              }}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </TableContainer>
   );
 }
 
