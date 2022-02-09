@@ -11,3 +11,4 @@ export const LOG_REDUX_ACTIONS = IS_DEVELOP;
 // export const PAGOPA_HELP_EMAIL = process.env.REACT_APP_PAGOPA_HELP_EMAIL;
 
 // export const ENABLE_ASSISTANCE = process.env.REACT_APP_ENABLE_ASSISTANCE === 'true';
+//test
