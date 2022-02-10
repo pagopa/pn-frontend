@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import { useEffect, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { RootState } from '../redux/store';
 import { getSentNotifications } from '../redux/dashboard/actions';
 import NotificationsTable from '../components/NotificationsTable/NotificactionsTable';
@@ -12,10 +13,13 @@ const Dashboard = () => {
     dispatch(getSentNotifications({ startDate: '2022-01-01T00:00:00.000Z', endDate: '2022-12-31T00:00:00.000Z' }));
   }, []);
 
+  // TODO: Remove extra style and extra div
   return (
-    <React.Fragment>
-      {notifications && <NotificationsTable notifications={notifications}/>}
-    </React.Fragment>
+    <div style={{padding: '20px', width: '100%', backgroundColor: '#F2F2F2'}}>
+      <Fragment>
+        {notifications && <NotificationsTable notifications={notifications}/>}
+      </Fragment>
+    </div>
   );
 };
 
