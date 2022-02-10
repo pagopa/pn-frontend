@@ -13,7 +13,7 @@ import {
 } from 'formik';
 
 
-const FilterNotificationTable = () => {
+const FilterNotificationsTable = () => {
   // const dispatch = useDispatch();
   // const notifications = useSelector((state: RootState) => state.dashboardState.notifications);
   
@@ -44,4 +44,4 @@ const FilterNotificationTable = () => {
   );
 };
 
-export default FilterNotificationTable;
+export default FilterNotificationsTable;
