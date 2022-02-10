@@ -9,17 +9,26 @@ import FilterNotificationsTable from '../components/Notifications/FilterNotifica
 const Dashboard = () => {
   const dispatch = useDispatch();
   const notifications = useSelector((state: RootState) => state.dashboardState.notifications);
-  
+
   useEffect(() => {
-    dispatch(getSentNotifications({ startDate: '2022-01-01T00:00:00.000Z', endDate: '2022-12-31T00:00:00.000Z' }));
+    dispatch(
+      getSentNotifications({
+        startDate: '2022-01-01T00:00:00.000Z',
+        endDate: '2022-12-31T00:00:00.000Z',
+      })
+    );
   }, []);
 
   // TODO: Remove extra style and extra div
   return (
-    <div style={{padding: '20px', width: '100%', backgroundColor: '#F2F2F2'}}>
+    <div style={{ padding: '20px', width: '100%', backgroundColor: '#F2F2F2' }}>
       <Fragment>
-        <FilterNotificationsTable/>
-        {notifications && <NotificationsTable notifications={notifications}/>}
+        {notifications ? (
+          <div>
+            <FilterNotificationsTable />
+            <NotificationsTable notifications={notifications} />
+          </div>
+        ) : null}
       </Fragment>
     </div>
   );
