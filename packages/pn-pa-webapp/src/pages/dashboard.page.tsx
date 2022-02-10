@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { getSentNotifications } from '../redux/dashboard/actions';
 import NotificationsTable from '../components/NotificationsTable/NotificactionsTable';
+import FilterNotificationTable from '../components/FilterNotificationTable';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
@@ -14,6 +15,7 @@ const Dashboard = () => {
 
   return (
     <React.Fragment>
+      <FilterNotificationTable/>
       {notifications && <NotificationsTable notifications={notifications}/>}
     </React.Fragment>
   );
