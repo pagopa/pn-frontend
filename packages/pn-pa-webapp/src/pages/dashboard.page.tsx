@@ -1,8 +1,5 @@
 import { useEffect, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Chip from '@mui/material/Chip';
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
-import { styled } from '@mui/material/styles';
 
 import { RootState } from '../redux/store';
 import { getSentNotifications } from '../redux/dashboard/actions';
@@ -10,6 +7,7 @@ import { NotificationStatus } from '../redux/dashboard/types';
 import NotificationsTable from './components/Notifications/NotificactionsTable';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 import { Column, Row } from './components/Notifications/types';
+import StatusTooltip from './components/Notifications/StatusTooltip';
 
 // TODO: aggiungere i colori del tema
 function getNotificationStatusLabelAndColor(status: NotificationStatus): {color: string; label: string; tooltip: string} {
@@ -33,21 +31,6 @@ function getNotificationStatusLabelAndColor(status: NotificationStatus): {color:
   }
 }
 
-// TODO: utilizzare colori tema
-const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} arrow classes={{ popper: className }} />
-))(() => ({ // { theme }
-  [`& .${tooltipClasses.arrow}`]: {
-    color: '#455B71',
-  },
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#455B71'
-  },
-  [`& .${tooltipClasses.tooltip} .title`]: {
-    textAlign: 'center'
-  }
-}));
-
 const Dashboard = () => {
   const dispatch = useDispatch();
   const notifications = useSelector((state: RootState) => state.dashboardState.notifications);
@@ -64,21 +47,7 @@ const Dashboard = () => {
     { id: 'groups', label: 'Gruppi', width: '15%', getCellLabel(value: string) { return value; } },
     { id: 'notificationStatus', label: 'Stato', width: '18%', align: 'center', sortable: true, getCellLabel(value: string) {
       const {label, tooltip} = getNotificationStatusLabelAndColor(value as NotificationStatus);
-      const [title, body] = tooltip.split(':');
-      const tooltipContent = 
-        <div>
-          <div className="title">{title.trim().toUpperCase()}</div>
-          <div>{body.trim()}</div>
-        </div>;
-      return (
-        <BootstrapTooltip  
-          title={tooltipContent}
-          arrow
-          placement="bottom"
-        >
-          <Chip label={label} />
-        </BootstrapTooltip >
-      );
+      return <StatusTooltip label={label} tooltip={tooltip}></StatusTooltip>;
     } }
   ];
 
