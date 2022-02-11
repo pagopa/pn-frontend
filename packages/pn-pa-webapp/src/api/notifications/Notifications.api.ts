@@ -1,5 +1,5 @@
 import { apiClient } from "../axios";
-import { Notification, GetNotificationsParams } from "../../redux/dashboard/types";
+import { Notification, GetNotificationsParams, GetNotificationsResponse } from "../../redux/dashboard/types";
 import { formatDate } from "./notifications.mapper";
 
 export const NotificationsApi = {
@@ -9,7 +9,7 @@ export const NotificationsApi = {
      * @param  {string} endDate
      * @returns Promise
      */
-    getSentNotifications: (params: GetNotificationsParams): Promise<Array<Notification>> => {
+    getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => {
         const queryParams = new URLSearchParams();
         queryParams.append('startDate', params.startDate);
         queryParams.append('endDate', params.endDate);
@@ -23,11 +23,16 @@ export const NotificationsApi = {
             queryParams.append('subjectRegExp', params.subjectRegExp);
         }
 
-        return apiClient.get<Array<Notification>>("/delivery/notifications/sent", { params: queryParams }).then((response) => (
-            response.data.map(d => ({
+        // TODO: cambiare modello quando sarà pronto il be
+        return apiClient.get<Array<Notification>>('/delivery/notifications/sent', { params: queryParams }).then((response) => {
+            const notifications = response.data.map(d => ({
                 ...d,
                 sentAt: formatDate(d.sentAt)
-            }))
-        ));
+            }));
+            return {
+                notifications,
+                totalElements: 100
+            };
+        });
     }
 };

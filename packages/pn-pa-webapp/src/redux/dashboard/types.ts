@@ -19,10 +19,15 @@ export enum NotificationStatus {
     CANCELED = 'CANCELED'
 }
 
-export type GetNotificationsParams = {
+export interface GetNotificationsResponse {
+    notifications: Array<Notification>;
+    totalElements: number;
+}
+
+export interface GetNotificationsParams {
     startDate: string;
     endDate: string;
     recipientId?: string;
     status?: NotificationStatus;
     subjectRegExp?: string;
-};
+}

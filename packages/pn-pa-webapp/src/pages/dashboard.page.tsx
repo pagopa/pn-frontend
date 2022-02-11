@@ -1,9 +1,11 @@
 import { useEffect, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { CustomPagination, PaginationData } from '@pagopa-pn/pn-commons';
 
 import { RootState } from '../redux/store';
 import { getSentNotifications } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
+import dashboardSlice from '../redux/dashboard/reducers';
 import NotificationsTable from './components/Notifications/NotificactionsTable';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 import { Column, Row } from './components/Notifications/types';
@@ -17,7 +19,7 @@ function getNotificationStatusLabelAndColor(status: NotificationStatus): {color:
     case NotificationStatus.DELIVERING:
       return {color: 'warning.states.outlined.restingBorder', label: 'In inoltro', tooltip: 'In inoltro: L\'invio della notifica è in corso'};
     case NotificationStatus.UNREACHABLE:
-      return {color: 'warning.states.outlined.restingBorder', label: 'Destinatario irreperibile totale', tooltip: 'Destinatario irreperibile totale: Il destinatario non risulta reperibile'};
+      return {color: 'warning.states.outlined.restingBorder', label: 'Destinatario irreperibile', tooltip: 'Destinatario irreperibile: Il destinatario non risulta reperibile'};
     case NotificationStatus.PAID:
       return {color: 'warning.states.outlined.restingBorder', label: 'Pagata', tooltip: 'Pagata: Il destinatario ha pagato la notifica'};
     case NotificationStatus.RECEIVED:
@@ -34,6 +36,9 @@ function getNotificationStatusLabelAndColor(status: NotificationStatus): {color:
 const Dashboard = () => {
   const dispatch = useDispatch();
   const notifications = useSelector((state: RootState) => state.dashboardState.notifications);
+  const filters = useSelector((state: RootState) => state.dashboardState.filters);
+  const pagination = useSelector((state: RootState) => state.dashboardState.pagination);
+  const elementsPerPage = [10, 20, 50, 100, 200, 500];
 
   const columns: Array<Column> = [
     { id: 'sentAt', label: 'Data', width: '11%', sortable: true, getCellLabel(value: string) { return value; }},
@@ -51,19 +56,20 @@ const Dashboard = () => {
     } }
   ];
 
-  const rows: Array<Row> = notifications.map(n => ({
+  // TODO: rimuovere + i quando da be non arriveranno notifiche con stesso id
+  const rows: Array<Row> = notifications.map((n, i) => ({
     ...n,
-    id: n.paNotificationId
+    id: n.paNotificationId + i.toString()
   }));
+
+  // Pagination handlers
+  const handleChangePage = (paginationData: PaginationData) => {
+    dispatch(dashboardSlice.actions.setPagination(paginationData));
+  };
   
   useEffect(() => {
-    dispatch(
-      getSentNotifications({
-        startDate: '2022-01-01T00:00:00.000Z',
-        endDate: '2022-12-31T00:00:00.000Z',
-      })
-    );
-  }, []);
+    dispatch(getSentNotifications(filters));
+  }, [filters, pagination]);
 
   // TODO: Remove extra style and extra div
   return (
@@ -73,6 +79,7 @@ const Dashboard = () => {
           <div>
             <FilterNotificationsTable />
             <NotificationsTable columns={columns} rows={rows}/>
+            <CustomPagination paginationData={{size: pagination.size, page: pagination.page, totalElements: pagination.totalElements}} elementsPerPage={elementsPerPage} onPageRequest={handleChangePage} />
           </div>
         )}
       </Fragment>
