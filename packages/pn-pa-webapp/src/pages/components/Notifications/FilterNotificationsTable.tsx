@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
-// import { /* useDispatch, */ useSelector } from 'react-redux';
-// import { RootState } from '../redux/store';
-// import Button from '@mui/material/Button';
-// import TextField from '@mui/material/TextField';
-// import { getSentNotifications } from '../redux/dashboard/actions';
-// import NotificationsTable from '../components/NotificationsTable/NotificactionsTable';
-
 import { Formik, Form } from 'formik';
 import { Box, MenuItem, TextField } from '@mui/material';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 
 const FilterNotificationsTable = () => {
   const [searchForSelection, setSearchForSelection] = useState('');
   const [searchForValue, setSearchForValue] = useState('');
+  const [fromDate, setFromDate] = React.useState<Date | null>(null);
+  const [toDate, setToDate] = React.useState<Date | null>(null);
+
   const initialValues = { 1: Number, 2: Number, 3: Number };
 
   const searchForValues = [
@@ -72,6 +71,27 @@ const FilterNotificationsTable = () => {
               value={searchForValue}
               onChange={handleChangeValue}
             />
+            
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DesktopDatePicker
+                label="Da"
+                inputFormat="MM/dd/yyyy"
+                value={fromDate}
+                onChange={(newValue: Date | null) => {
+                  setFromDate(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DesktopDatePicker
+                label="A"
+                inputFormat="MM/dd/yyyy"
+                value={toDate}
+                onChange={(newValue: Date | null) => {setToDate(newValue);}}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
             <button type="submit">Submit</button>
           </Box>
         </Form>
