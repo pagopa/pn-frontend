@@ -1,6 +1,6 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-import { getSentNotifications } from "./actions";
+import { getSentNotifications, setPagination } from "./actions";
 import { Notification } from "./types";
 
 /* eslint-disable functional/immutable-data */
@@ -19,11 +19,7 @@ const dashboardSlice = createSlice({
             page: 0
         }
     },
-    reducers: {
-        setPagination: (state, action: PayloadAction<{ totalElements: number; size: number; page: number }>) => {
-            state.pagination = action.payload;
-        }
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getSentNotifications.fulfilled, (state, action) => {
             state.notifications = action.payload.notifications;
@@ -32,7 +28,10 @@ const dashboardSlice = createSlice({
         builder.addCase(getSentNotifications.pending, (state) => {
             state.loading = true;
         });
+        builder.addCase(setPagination, (state, action) => {
+            state.pagination = action.payload;
+        });
     }
-});
+}); 
 
 export default dashboardSlice;

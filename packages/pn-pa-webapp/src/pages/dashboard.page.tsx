@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CustomPagination, PaginationData } from '@pagopa-pn/pn-commons';
 
 import { RootState } from '../redux/store';
-import { getSentNotifications } from '../redux/dashboard/actions';
+import { getSentNotifications, setPagination } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
-import dashboardSlice from '../redux/dashboard/reducers';
 import NotificationsTable from './components/Notifications/NotificactionsTable';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 import { Column, Row } from './components/Notifications/types';
@@ -64,7 +63,7 @@ const Dashboard = () => {
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
-    dispatch(dashboardSlice.actions.setPagination(paginationData));
+    dispatch(setPagination(paginationData));
   };
   
   useEffect(() => {
