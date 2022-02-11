@@ -2732,10 +2732,10 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@pagopa/mui-italia@^0.4.2":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.4.2.tgz#010fbe4a9e22433c35bd646608dcc42ef5f7c281"
-  integrity sha512-5cPJUtybGH7K1RqeSm6Sq85QHnuUXsfr46sV7n8HCGf/xsvFadsCVqN9wSxIC0U2gaaV8QBwxRtlpvPi5A4gcA==
+"@pagopa/mui-italia@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.4.3.tgz#d8ab51738b5ce88c86a79d5ce890525ca679d78c"
+  integrity sha512-OeuvxnlYebZjwQSJ5uWAdcwHu2FcBFiU/BZE07aaes2BWT8snA1YFmei9kXkox6YpM1AH1zMXFEOdnq2TINs5w==
   dependencies:
     "@emotion/react" "^11.5.0"
     "@emotion/styled" "^11.3.0"

@@ -9,22 +9,11 @@ import TableFooter from '@mui/material/TableFooter';
 import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
 
-import { Notification } from '../../redux/dashboard/types'; // NotificationStatus
-
-type Order = 'asc' | 'desc';
-
-interface Column {
-  id: string;
-  label: string;
-  width: string;
-  align?: 'center' | 'inherit' | 'left' | 'right' | 'justify';
-  sortable?: boolean;
-  showInAChip?: boolean;
-}
+import { Notification } from '../../../redux/dashboard/types';
+import { Column, Row, Order } from './types';
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -45,28 +34,6 @@ function getComparator<Key extends keyof any>(
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-
-/*
-function getNotificationStatusLabelAndColor(status: NotificationStatus): {color: string, label: string} {
-  switch(status) {
-    case NotificationStatus.DELIVERED:
-      return {color: 'warning.states.outlined.restingBorder', label: 'Consegnata'};
-    case NotificationStatus.DELIVERING:
-      return {color: 'warning.states.outlined.restingBorder', label: 'In inoltro'};
-    case NotificationStatus.EFFECTIVE_DATE:
-      return {color: 'warning.states.outlined.restingBorder', label: 'In consegna'};
-    case NotificationStatus.PAID:
-      return {color: 'warning.states.outlined.restingBorder', label: 'Pagata'};
-    case NotificationStatus.RECEIVED:
-      return {color: 'warning.states.outlined.restingBorder', label: 'Ricevuta'};
-    case NotificationStatus.UNREACHABLE:
-      return {color: 'warning.states.outlined.restingBorder', label: 'Non raggiungibile'};
-    case NotificationStatus.VIEWED:
-      return {color: 'warning.states.outlined.restingBorder', label: 'In consegna'};
-  }
-}
-*/
-
 function NotificationsTable(props: any) {
   // define pagination options
   const rowsPerPagination = [10, 20, 50, 100, 200, 500];
@@ -74,19 +41,8 @@ function NotificationsTable(props: any) {
   const [rowsPerPage, setRowsPerPage] = React.useState(rowsPerPagination[0]);
 
   // define table data
-  const rows = props.notifications.map((n: Notification) => ({
-    ...n,
-    recipientId: n.recipientId.length > 3 ? n.recipientId.substring(0, 3) + '...' : n.recipientId,
-    subject: n.subject.length > 65 ? n.subject.substring(0, 65) + '...' : n.subject
-  }));
-  const columns: Array<Column> = [
-    { id: 'sentAt', label: 'Data', width: '15%', sortable: true },
-    { id: 'recipientId', label: 'Destinatario', width: '15%', sortable: true },
-    { id: 'subject', label: 'Oggetto', width: '25%' },
-    { id: 'iun', label: 'Codice IUN', width: '15%' },
-    { id: 'groups', label: 'Gruppi', width: '15%' },
-    { id: 'notificationStatus', label: 'Stato', width: '15%', align: 'center', sortable: true, showInAChip: true },
-  ];
+  const columns: Array<Column> = props.columns;
+  const rows: Array<Row> = props.rows;
 
   // define sort variables
   const [order, setOrder] = React.useState<Order>('asc');
@@ -130,7 +86,7 @@ function NotificationsTable(props: any) {
     tr:last-child td:last-child {
       border-bottom-right-radius: 4px;
     }
-    `,
+    `
   );
 
   // TODO: gestire colore grigio di sfondo con variabile tema
@@ -144,7 +100,7 @@ function NotificationsTable(props: any) {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ width: column.width, backgroundColor: '#F2F2F2', borderBottom: 'none', fontWeight: 600 }}
+                  style={{width: column.width, backgroundColor: '#F2F2F2', borderBottom: 'none', fontWeight: 600}}
                   sortDirection={orderBy === column.id ? order : false}
                 >
                   {column.sortable ?
@@ -173,18 +129,18 @@ function NotificationsTable(props: any) {
             )
               .slice()
               .sort(getComparator(order, orderBy))
-              .map((row: Notification) => (
-                <TableRow key={row.paNotificationId}>
-                  {columns.map((c: Column) => ( 
-                    <TableCell key={row.paNotificationId + '' + c.id} style={{ width: c.width, borderBottom: 'none' }} align={c.align}>
-                      {c.showInAChip ? <Chip label={row[c.id as keyof Notification]} /> : row[c.id as keyof Notification]}
+              .map(row => (
+                <TableRow key={row.id}>
+                  {columns.map(c => ( 
+                    <TableCell key={row.id} style={{ width: c.width, borderBottom: 'none' }} align={c.align}>
+                      {c.getCellLabel(row[c.id as keyof Notification])}
                     </TableCell>
                   ))}
                 </TableRow>
               ))}
             {emptyRows > 0 && (
               <TableRow style={{ height: 53 * emptyRows }}>
-                <TableCell colSpan={6} />
+                <TableCell colSpan={columns.length} />
               </TableRow>
             )}
           </TableBody>

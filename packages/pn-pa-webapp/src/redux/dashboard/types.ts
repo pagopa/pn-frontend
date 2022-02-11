@@ -15,7 +15,8 @@ export enum NotificationStatus {
     VIEWED = 'VIEWED',
     EFFECTIVE_DATE = 'EFFECTIVE_DATE',
     PAID = 'PAID',
-    UNREACHABLE = 'UNREACHABLE'
+    UNREACHABLE = 'UNREACHABLE',
+    CANCELED = 'CANCELED'
 }
 
 export type GetNotificationsParams = {
