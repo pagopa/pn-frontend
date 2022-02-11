@@ -9,7 +9,7 @@ export default function SubHeader({ children }: Props) {
   return (
     <AppBar
       position="relative"
-      sx={{ alignItems: 'center', height: '107px', backgroundColor: '#0066CC', boxShadow: 'none' }}
+      sx={{ alignItems: 'center', height: '107px', backgroundColor: 'primary', boxShadow: 'none' }}
     >
       <Toolbar sx={{ width: { xs: '100%', lg: '90%' }, minHeight: '107px !important' }}>
         <Grid container>
@@ -20,9 +20,9 @@ export default function SubHeader({ children }: Props) {
                 sx={{
                   fontWeight: 'bold',
                   fontSize: '24px',
-                  lineHeight: '36px',
+                  lineHeight: '28px',
                   textAlign: 'left',
-                  color: 'background.default',
+                  color: 'common.white',
                 }}
               >
                 Piattaforma Notifiche
@@ -34,9 +34,9 @@ export default function SubHeader({ children }: Props) {
                 sx={{
                   fontWeight: 'normal',
                   fontSize: '14px',
-                  lineHeight: '24px',
+                  lineHeight: '20px',
                   textAlign: 'left',
-                  color: 'background.default',
+                  color: 'common.white',
                 }}
               >
                 Gestisci le tue notifiche
