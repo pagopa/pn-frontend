@@ -24,6 +24,13 @@ function Router() {
         <Route path={routes.ROLES} element={<h1>Ruoli</h1>} />
         <Route path={routes.API_KEYS} element={<h1>Api Keys</h1>} />
       </Route>
+      <Route
+        element={
+          <RequireAuth roles={[UserRole.REFERENTE_AMMINISTRATIVO, UserRole.REFERENTE_OPERATIVO]} />
+        }
+      >
+        <Route path={routes.API_KEYS} element={<h1>Api Keys</h1>} />
+      </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
