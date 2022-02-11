@@ -7,8 +7,9 @@ import { styled } from '@mui/material/styles';
 import { RootState } from '../redux/store';
 import { getSentNotifications } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
-import NotificationsTable from './components/NotificationsTable/NotificactionsTable';
-import { Column, Row } from './components/NotificationsTable/types';
+import NotificationsTable from './components/Notifications/NotificactionsTable';
+import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
+import { Column, Row } from './components/Notifications/types';
 
 // TODO: aggiungere i colori del tema
 function getNotificationStatusLabelAndColor(status: NotificationStatus): {color: string; label: string; tooltip: string} {
@@ -87,14 +88,24 @@ const Dashboard = () => {
   }));
   
   useEffect(() => {
-    dispatch(getSentNotifications({ startDate: '2022-01-01T00:00:00.000Z', endDate: '2022-12-31T00:00:00.000Z' }));
+    dispatch(
+      getSentNotifications({
+        startDate: '2022-01-01T00:00:00.000Z',
+        endDate: '2022-12-31T00:00:00.000Z',
+      })
+    );
   }, []);
 
   // TODO: Remove extra style and extra div
   return (
-    <div style={{padding: '20px', width: '100%', backgroundColor: '#F2F2F2'}}>
+    <div style={{ padding: '20px', width: '100%', backgroundColor: '#F2F2F2' }}>
       <Fragment>
-        {notifications && <NotificationsTable columns={columns} rows={rows}/>}
+        {notifications && (
+          <div>
+            <FilterNotificationsTable />
+            <NotificationsTable columns={columns} rows={rows}/>
+          </div>
+        )}
       </Fragment>
     </div>
   );
