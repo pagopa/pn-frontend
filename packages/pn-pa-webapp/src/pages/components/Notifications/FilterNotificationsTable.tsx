@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import { Box, Button, Divider, MenuItem, TextField } from '@mui/material';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 // import { RootState } from '../../../redux/store';
@@ -84,7 +84,7 @@ const FilterNotificationsTable = () => {
               }}
             />
             <Divider orientation="vertical" variant="middle" flexItem />
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <LocalizationProvider dateAdapter={DateAdapter}>
               <DesktopDatePicker
                 label="Da"
                 inputFormat="MM/dd/yyyy"
@@ -95,7 +95,7 @@ const FilterNotificationsTable = () => {
                 renderInput={(params) => <TextField {...params} />}
               />
             </LocalizationProvider>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <LocalizationProvider dateAdapter={DateAdapter}>
               <DesktopDatePicker
                 label="A"
                 inputFormat="MM/dd/yyyy"
@@ -122,7 +122,7 @@ const FilterNotificationsTable = () => {
                 </MenuItem>
               ))}
             </TextField>
-            <Button variant="outlined" type="submit" style={{display:"blok"}}>Filtra</Button>
+            <Button variant="outlined" type="submit">Filtra</Button>
             <Button variant="outlined">Rimuovi filtri</Button>
           </Box>
         </Form>

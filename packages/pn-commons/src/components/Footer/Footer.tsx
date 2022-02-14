@@ -13,7 +13,7 @@ const Footer = ({ assistanceEmail }: Props) => (
       pt: '32px',
       height: '156px',
       mt: 'auto',
-      bgcolor: '#01254C',
+      bgcolor: 'primary.dark',
       alignItems: 'center',
       boxSizing: 'unset',
       position: 'relative',
