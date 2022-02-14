@@ -84,7 +84,7 @@ const Dashboard = () => {
           <div>
             <FilterNotificationsTable />
             <NotificationsTable columns={columns} rows={rows} sort={sort} onChangeSorting={handleChangeSorting}/>
-            <CustomPagination paginationData={{size: pagination.size, page: pagination.page, totalElements: pagination.totalElements}} elementsPerPage={elementsPerPage} onPageRequest={handleChangePage} />
+            {notifications.length > 0 && <CustomPagination paginationData={{size: pagination.size, page: pagination.page, totalElements: pagination.totalElements}} elementsPerPage={elementsPerPage} onPageRequest={handleChangePage} /> }
           </div>
         )}
       </Fragment>

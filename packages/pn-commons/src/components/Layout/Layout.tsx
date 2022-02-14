@@ -39,7 +39,7 @@ export default function Layout({ children, assistanceEmail, onExitAction, sideMe
         <Grid item xs={2}>
           {sideMenu}
         </Grid>
-        <Grid item>{children}</Grid>
+        <Grid item xs={10}>{children}</Grid>
       </Grid>
       <Footer assistanceEmail={assistanceEmail} />
     </Box>
