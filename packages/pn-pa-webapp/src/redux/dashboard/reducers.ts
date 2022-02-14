@@ -11,7 +11,10 @@ const dashboardSlice = createSlice({
         notifications: [] as Array<Notification>,
         filters: {
             startDate: '2022-01-01T00:00:00.000Z',
-            endDate: '2022-12-31T00:00:00.000Z'
+            endDate: '2022-12-31T00:00:00.000Z',
+            recipientId: '',
+            status: '',
+            subjectRegExp: '',
         },
         pagination: {
             totalElements: 0,
