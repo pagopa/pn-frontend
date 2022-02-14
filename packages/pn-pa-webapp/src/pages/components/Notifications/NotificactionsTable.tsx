@@ -27,10 +27,7 @@ type Props = {
 function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
   const createSortHandler = (property: string) => () => {
     const isAsc = sort.orderBy === property && sort.order === 'asc';
-    /* eslint-disable functional/immutable-data */
-    sort.order = isAsc ? 'desc' : 'asc';
-    sort.orderBy = property;
-    onChangeSorting(sort);
+    onChangeSorting({order: isAsc ? 'desc' : 'asc', orderBy: property});
   };
   
   // Table style
@@ -56,7 +53,7 @@ function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
   // TODO: gestire colore grigio di sfondo con variabile tema
   return (
     <Root>
-      <TableContainer sx={{ maxHeight: 'calc(100vh - 343px)', backgroundColor: '#F2F2F2', marginBottom: '10px' }}>
+      <TableContainer sx={{ backgroundColor: '#F2F2F2', marginBottom: '10px' }}>
         <Table stickyHeader aria-label="Tabella lista notifiche">
           <TableHead>
             <TableRow>
@@ -64,7 +61,7 @@ function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{width: column.width, backgroundColor: '#F2F2F2', borderBottom: 'none', fontWeight: 600}}
+                  sx={{width: column.width, backgroundColor: '#F2F2F2', borderBottom: 'none', fontWeight: 600}}
                   sortDirection={sort.orderBy === column.id ? sort.order : false}
                 >
                   {column.sortable ?
@@ -91,7 +88,7 @@ function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
               .map(row => (
                 <TableRow key={row.id}>
                   {columns.map(c => ( 
-                    <TableCell key={c.id} style={{ width: c.width, borderBottom: 'none' }} align={c.align}>
+                    <TableCell key={c.id} sx={{ width: c.width, borderBottom: 'none' }} align={c.align}>
                       {c.getCellLabel(row[c.id as keyof Notification])}
                     </TableCell>
                   ))}
