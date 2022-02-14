@@ -3,11 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CustomPagination, PaginationData } from '@pagopa-pn/pn-commons';
 
 import { RootState } from '../redux/store';
-import { getSentNotifications, setPagination } from '../redux/dashboard/actions';
+import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
 import NotificationsTable from './components/Notifications/NotificactionsTable';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
-import { Column, Row } from './components/Notifications/types';
+import { Column, Row, Sort } from './components/Notifications/types';
 import StatusTooltip from './components/Notifications/StatusTooltip';
 
 // TODO: aggiungere i colori del tema
@@ -18,17 +18,17 @@ function getNotificationStatusLabelAndColor(status: NotificationStatus): {color:
     case NotificationStatus.DELIVERING:
       return {color: 'warning.states.outlined.restingBorder', label: 'In inoltro', tooltip: 'In inoltro: L\'invio della notifica è in corso'};
     case NotificationStatus.UNREACHABLE:
-      return {color: 'warning.states.outlined.restingBorder', label: 'Destinatario irreperibile', tooltip: 'Destinatario irreperibile: Il destinatario non risulta reperibile'};
+      return {color: 'error.states.outlined.restingBorder', label: 'Destinatario irreperibile', tooltip: 'Destinatario irreperibile: Il destinatario non risulta reperibile'};
     case NotificationStatus.PAID:
-      return {color: 'warning.states.outlined.restingBorder', label: 'Pagata', tooltip: 'Pagata: Il destinatario ha pagato la notifica'};
+      return {color: 'success.states.outlined.restingBorder', label: 'Pagata', tooltip: 'Pagata: Il destinatario ha pagato la notifica'};
     case NotificationStatus.RECEIVED:
       return {color: 'warning.states.outlined.restingBorder', label: 'Depositata', tooltip: 'Depositata: L’ente ha depositato la notifica'};
     case NotificationStatus.EFFECTIVE_DATE:
-      return {color: 'warning.states.outlined.restingBorder', label: 'Perfezionata per decorrenza termini', tooltip: 'Perfezionata per decorrenza termini: Il destinatario non ha letto la notifica'};
+      return {color: 'grey.grey[300]', label: 'Perfezionata per decorrenza termini', tooltip: 'Perfezionata per decorrenza termini: Il destinatario non ha letto la notifica'};
     case NotificationStatus.VIEWED:
-      return {color: 'warning.states.outlined.restingBorder', label: 'Perfezionata per visione', tooltip: 'Perfezionata per visione: Il destinatario ha letto la notifica'};
+      return {color: 'success.states.outlined.restingBorder', label: 'Perfezionata per visione', tooltip: 'Perfezionata per visione: Il destinatario ha letto la notifica'};
     case NotificationStatus.CANCELED:
-      return {color: 'warning.states.outlined.restingBorder', label: 'Annullata', tooltip: 'Annullata: L\'ente ha annullato l\'invio della notifica'};
+      return {color: 'background.paper', label: 'Annullata', tooltip: 'Annullata: L\'ente ha annullato l\'invio della notifica'};
   }
 }
 
@@ -36,6 +36,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const notifications = useSelector((state: RootState) => state.dashboardState.notifications);
   const filters = useSelector((state: RootState) => state.dashboardState.filters);
+  const sort = useSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useSelector((state: RootState) => state.dashboardState.pagination);
   const elementsPerPage = [10, 20, 50, 100, 200, 500];
 
@@ -50,8 +51,8 @@ const Dashboard = () => {
     { id: 'iun', label: 'Codice IUN', width: '20%', getCellLabel(value: string) { return value; } },
     { id: 'groups', label: 'Gruppi', width: '15%', getCellLabel(value: string) { return value; } },
     { id: 'notificationStatus', label: 'Stato', width: '18%', align: 'center', sortable: true, getCellLabel(value: string) {
-      const {label, tooltip} = getNotificationStatusLabelAndColor(value as NotificationStatus);
-      return <StatusTooltip label={label} tooltip={tooltip}></StatusTooltip>;
+      const {label, tooltip, color} = getNotificationStatusLabelAndColor(value as NotificationStatus);
+      return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
     } }
   ];
 
@@ -65,6 +66,11 @@ const Dashboard = () => {
   const handleChangePage = (paginationData: PaginationData) => {
     dispatch(setPagination(paginationData));
   };
+
+  // Sort handlers
+  const handleChangeSorting = (s: Sort) => {
+    dispatch(setSorting(s));
+  };
   
   useEffect(() => {
     dispatch(getSentNotifications(filters));
@@ -77,7 +83,7 @@ const Dashboard = () => {
         {notifications && (
           <div>
             <FilterNotificationsTable />
-            <NotificationsTable columns={columns} rows={rows}/>
+            <NotificationsTable columns={columns} rows={rows} sort={sort} onChangeSorting={handleChangeSorting}/>
             <CustomPagination paginationData={{size: pagination.size, page: pagination.page, totalElements: pagination.totalElements}} elementsPerPage={elementsPerPage} onPageRequest={handleChangePage} />
           </div>
         )}

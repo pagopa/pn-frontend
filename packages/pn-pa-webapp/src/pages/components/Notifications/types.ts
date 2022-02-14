@@ -1,4 +1,9 @@
-export type Order = 'asc' | 'desc';
+type Order = 'asc' | 'desc';
+
+export interface Sort {
+  orderBy: string;
+  order: Order;
+}
 
 export interface Column {
   id: string;

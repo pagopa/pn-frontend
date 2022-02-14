@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getSentNotifications, setPagination } from "./actions";
+import { getSentNotifications, setPagination, setSorting } from "./actions";
 import { Notification } from "./types";
 
 /* eslint-disable functional/immutable-data */
@@ -17,6 +17,10 @@ const dashboardSlice = createSlice({
             totalElements: 0,
             size: 0,
             page: 0
+        },
+        sort: {
+           orderBy: '',
+           order: 'asc' as ('asc' | 'desc')
         }
     },
     reducers: {},
@@ -30,6 +34,9 @@ const dashboardSlice = createSlice({
         });
         builder.addCase(setPagination, (state, action) => {
             state.pagination = action.payload;
+        });
+        builder.addCase(setSorting, (state, action) => {
+            state.sort = action.payload;
         });
     }
 }); 

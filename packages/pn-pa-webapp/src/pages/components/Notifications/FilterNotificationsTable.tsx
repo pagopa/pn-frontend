@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
-import { Box, Divider, MenuItem, TextField } from '@mui/material';
+import { Box, Button, Divider, MenuItem, TextField } from '@mui/material';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-// import { NotificationStatus } from '../../../redux/dashboard/types';
+// import { RootState } from '../../../redux/store';
+// import { useSelector } from 'react-redux';
 
 const FilterNotificationsTable = () => {
   const [searchForSelection, setSearchForSelection] = useState('');
   const [searchForValue, setSearchForValue] = useState('');
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
   const [toDate, setToDate] = React.useState<Date | null>(null);
-  const [notificationStatus, setNotificationStatus] = useState('Tutti gli stati');
+  const [notificationStatus, setNotificationStatus] = useState('');
+
+  // const filters = useSelector((state: RootState) => state.dashboardState.filters);
 
   const initialValues = { 1: Number, 2: Number, 3: Number };
   // const notificationStatus = Object.values(NotificationStatus);
@@ -19,13 +22,13 @@ const FilterNotificationsTable = () => {
   const notificationAllowedStatus = [
     { value: 0, label: 'Tutti gli stati' },
     { value: 1, label: 'Depositata' },
-    { value: 1, label: 'Consegnata' },
-    { value: 1, label: 'In inoltro' },
-    { value: 1, label: 'Perfezionata per decorrenza termini' },
-    { value: 1, label: 'Perfezionata per visione' },
-    { value: 1, label: 'Pagata' },
-    { value: 1, label: 'Annullata' },
-    { value: 1, label: 'Destinatario irreperibile' },
+    { value: 2, label: 'Consegnata' },
+    { value: 3, label: 'In inoltro' },
+    { value: 4, label: 'Perfezionata per decorrenza termini' },
+    { value: 5, label: 'Perfezionata per visione' },
+    { value: 6, label: 'Pagata' },
+    { value: 7, label: 'Annullata' },
+    { value: 8, label: 'Destinatario irreperibile' },
   ];
 
   const searchForValues = [
@@ -51,6 +54,7 @@ const FilterNotificationsTable = () => {
         <Form>
           <Box
             component="form"
+            display={"flex"}
             sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
             noValidate
             autoComplete="off"
@@ -79,7 +83,7 @@ const FilterNotificationsTable = () => {
                 setSearchForValue(event.target.value);
               }}
             />
-            <Divider orientation="vertical" flexItem />
+            <Divider orientation="vertical" variant="middle" flexItem />
             <LocalizationProvider dateAdapter={DateAdapter}>
               <DesktopDatePicker
                 label="Da"
@@ -112,13 +116,14 @@ const FilterNotificationsTable = () => {
                 setNotificationStatus(event.target.value);
               }}
             >
-              {notificationAllowedStatus.map((option2) => (
-                <MenuItem key={option2.value} value={option2.value}>
-                  {option2.label}
+              {notificationAllowedStatus.map((notStat) => (
+                <MenuItem key={notStat.value} value={notStat.value}>
+                  {notStat.label}
                 </MenuItem>
               ))}
             </TextField>
-            <button type="submit">Submit</button>
+            <Button variant="outlined" type="submit">Filtra</Button>
+            <Button variant="outlined">Rimuovi filtri</Button>
           </Box>
         </Form>
       </Formik>

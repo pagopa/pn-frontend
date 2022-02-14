@@ -11,39 +11,25 @@ import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
 
 import { Notification } from '../../../redux/dashboard/types';
-import { Column, Row, Order } from './types';
+import { Column, Row, Sort } from './types';
 
-function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
+type Props = {
+  /** Table columns */
+  columns: Array<Column>;
+  /** Table rows */
+  rows: Array<Row>;
+  /** Table sort */
+  sort: Sort;
+  /** The function to be invoked if the user change sorting */
+  onChangeSorting: (s: Sort) => void;
+};
 
-function getComparator<Key extends keyof any>(
-  order: Order,
-  orderBy: Key
-): (a: { [key in Key]: number | string }, b: { [key in Key]: number | string }) => number {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function NotificationsTable(props: {columns: Array<Column>; rows: Array<Row>}) {
-  // define table data
-  const columns: Array<Column> = props.columns;
-  const rows: Array<Row> = props.rows;
-
-  // define sort variables
-  const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<string>(columns[0].id);
+function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
   const createSortHandler = (property: string) => () => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+    const isAsc = sort.orderBy === property && sort.order === 'asc';
+    sort.order = isAsc ? 'desc' : 'asc';
+    sort.orderBy = property;
+    onChangeSorting(sort);
   };
   
   // Table style
@@ -76,18 +62,18 @@ function NotificationsTable(props: {columns: Array<Column>; rows: Array<Row>}) {
                   key={column.id}
                   align={column.align}
                   style={{width: column.width, backgroundColor: '#F2F2F2', borderBottom: 'none', fontWeight: 600}}
-                  sortDirection={orderBy === column.id ? order : false}
+                  sortDirection={sort.orderBy === column.id ? sort.order : false}
                 >
                   {column.sortable ?
                     <TableSortLabel
-                      active={orderBy === column.id}
-                      direction={orderBy === column.id ? order : 'asc'}
+                      active={sort.orderBy === column.id}
+                      direction={sort.orderBy === column.id ? sort.order : 'asc'}
                       onClick={createSortHandler(column.id)}
                     >
                       {column.label}
-                      {orderBy === column.id && (
+                      {sort.orderBy === column.id && (
                         <Box component="span" sx={visuallyHidden}>
-                          {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                          {sort.order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                         </Box>
                       )}
                     </TableSortLabel> :
@@ -99,8 +85,6 @@ function NotificationsTable(props: {columns: Array<Column>; rows: Array<Row>}) {
           </TableHead>
           <TableBody sx={{ backgroundColor: 'background.paper'}}>
             {rows.length ? rows
-              .slice()
-              .sort(getComparator(order, orderBy))
               .map(row => (
                 <TableRow key={row.id}>
                   {columns.map(c => ( 
