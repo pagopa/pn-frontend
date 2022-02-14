@@ -20,7 +20,7 @@ const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
   }
 }));
 
-function StatusTooltip({tooltip, label, color}: {tooltip: string; label: string; color: string}) {
+function StatusTooltip({tooltip, label, color}: {tooltip: string; label: string; color: "warning" | "error" | "success" | "info" | "default" | "primary" | "secondary" | undefined}) {
   const [title, body] = tooltip.split(':');
 
   const tooltipContent = 
@@ -54,7 +54,7 @@ function StatusTooltip({tooltip, label, color}: {tooltip: string; label: string;
           disableHoverListener
           disableTouchListener
         >
-          <Chip label={label} onClick={handleTooltipOpen} sx={{backgroundColor: color}}/>
+          <Chip label={label} onClick={handleTooltipOpen} color={color}/>
         </BootstrapTooltip >
       </div>
     </ClickAwayListener>
