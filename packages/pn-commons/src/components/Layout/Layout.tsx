@@ -20,6 +20,7 @@ const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     background: '#F2F2F2',
+    height: '100vh'
   },
 })); 
 
@@ -30,7 +31,6 @@ export default function Layout({ children, assistanceEmail, onExitAction, sideMe
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh',
       }}
     >
       <Header withSecondHeader={true} onExitAction={onExitAction} />
