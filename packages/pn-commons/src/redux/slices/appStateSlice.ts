@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AnyAction, createSlice } from '@reduxjs/toolkit';
 import { AppError } from '../..';
 
 interface AppStateState {
@@ -17,27 +17,32 @@ const initialState: AppStateState = {
   errors: [],
 };
 
+const isLoading = (action: AnyAction) => action.type.endsWith('/pending');
+
+const isFulfilled = (action: AnyAction) => action.type.endsWith('/fulfilled');
+
+const handleError = (action: AnyAction) => action.type.endsWith('/rejected');
+
 /* eslint-disable functional/immutable-data */
 export const appStateSlice = createSlice({
   name: 'appState',
   initialState,
   reducers: {
-    setLoading: (state, action: PayloadAction<{ task: string; loading: boolean }>) => {
-      if (action.payload.loading) {
-        state.loading.result = true;
-        state.loading.tasks[action.payload.task] = true;
-      } else {
-        delete state.loading.tasks[action.payload.task];
-        state.loading.result = Object.keys(state.loading.tasks).length > 0;
-      }
-    },
-    addError: (state, action: PayloadAction<AppError>) => {
-      state.errors.push(action.payload);
-    },
-    removeError: (state, action: PayloadAction<AppError>) => {
-      state.errors = state.errors.filter((e) => e.id !== action.payload.id);
-    },
   },
+  extraReducers: builder => {
+    builder
+      .addMatcher(isLoading, (state) => {
+        state.loading.result = true;
+      })
+      .addMatcher(isFulfilled, (state) => {
+        state.loading.result = false;
+      })
+      .addMatcher(handleError, (state, action) => {
+        state.loading.result = false;
+        state.errors.push(action.payload);
+        // console.debug(state.errors);
+      });
+  }
 });
 
 export const appStateActions = appStateSlice.actions;

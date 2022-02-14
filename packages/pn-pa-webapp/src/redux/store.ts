@@ -1,9 +1,9 @@
+import { appStateReducer } from '@pagopa-pn/pn-commons/src/redux/slices/appStateSlice';
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { LOG_REDUX_ACTIONS } from '../utils/constants';
 import userSlice from './auth/reducers';
 import dashboardSlice from './dashboard/reducers';
-import { appStateReducer } from './slices/appStateSlice';
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined];
 

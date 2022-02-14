@@ -1,6 +1,8 @@
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
+import { makeStyles } from '@mui/styles';
 import React from 'react';
+
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 
@@ -10,9 +12,19 @@ type Props = {
   assistanceEmail?: string;
   /** Logout/exit action to apply */
   onExitAction?: (() => void) | null;
+  /** Side Menu */
+  sideMenu?: React.ReactElement;
 };
 
-export default function Layout({ children, assistanceEmail, onExitAction }: Props) {
+const useStyles = makeStyles(() => ({
+  root: {
+    flexGrow: 1,
+    background: '#F2F2F2',
+  },
+})); 
+
+export default function Layout({ children, assistanceEmail, onExitAction, sideMenu }: Props) {
+  const classes = useStyles();
   return (
     <Box
       sx={{
@@ -21,11 +33,13 @@ export default function Layout({ children, assistanceEmail, onExitAction }: Prop
         minHeight: '100vh',
       }}
     >
-      {/* <Header withSecondHeader={!!party} subHeaderChild={party && <DashboardMenuContainer />} /> */}
       <Header withSecondHeader={true} onExitAction={onExitAction} />
 
-      <Grid container direction="row" flexGrow={1}>
-        {children}
+      <Grid container direction="row" className={classes.root}>
+        <Grid item xs={2}>
+          {sideMenu}
+        </Grid>
+        <Grid item>{children}</Grid>
       </Grid>
       <Footer assistanceEmail={assistanceEmail} />
     </Box>
