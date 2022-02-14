@@ -20,7 +20,7 @@ const Header = ({
       position="relative"
       sx={{
         alignItems: 'center',
-        height: '48px',
+        height: '7%',
         backgroundColor: 'primary.dark',
         boxShadow: 'none',
       }}

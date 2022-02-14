@@ -9,7 +9,7 @@ export default function SubHeader({ children }: Props) {
   return (
     <AppBar
       position="relative"
-      sx={{ alignItems: 'center', height: '107px', backgroundColor: 'primary', boxShadow: 'none' }}
+      sx={{ alignItems: 'center', height: '15%', backgroundColor: 'primary', boxShadow: 'none' }}
     >
       <Toolbar sx={{ width: { xs: '100%', lg: '90%' }, minHeight: '107px !important' }}>
         <Grid container>
