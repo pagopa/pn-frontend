@@ -1,4 +1,3 @@
-import React from 'react';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -27,6 +26,7 @@ type Props = {
 function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
   const createSortHandler = (property: string) => () => {
     const isAsc = sort.orderBy === property && sort.order === 'asc';
+    /* eslint-disable functional/immutable-data */
     sort.order = isAsc ? 'desc' : 'asc';
     sort.orderBy = property;
     onChangeSorting(sort);
