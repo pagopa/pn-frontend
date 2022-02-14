@@ -6,8 +6,9 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableSortLabel from '@mui/material/TableSortLabel';
 import Box from '@mui/material/Box';
-import { styled } from '@mui/material/styles';
+import { styled, useTheme } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
+import { SentimentDissatisfied } from '@mui/icons-material';
 
 import { Notification } from '../../../redux/dashboard/types';
 import { Column, Row, Sort } from './types';
@@ -49,6 +50,8 @@ function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
     }
     `
   );
+
+  const theme = useTheme();
 
   // TODO: gestire colore grigio di sfondo con variabile tema
   return (
@@ -95,7 +98,12 @@ function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
                 </TableRow>
               )) :
               <TableRow>
-                <TableCell colSpan={columns.length} align="center">Nessun elemento trovato</TableCell>
+                <TableCell colSpan={columns.length} align="center">
+                  <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px'}}/>
+                  <span>I filtri che hai aggiunto non hanno dato nessun risultato.</span>
+                  &nbsp;
+                  <span style={{color: theme.palette.primary.main, cursor: 'pointer', fontWeight: 'bold'}}>Rimuovi filtri</span>
+                </TableCell>
               </TableRow>
             }
           </TableBody>
