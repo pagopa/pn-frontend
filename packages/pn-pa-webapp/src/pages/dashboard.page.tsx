@@ -74,7 +74,7 @@ const Dashboard = () => {
   
   useEffect(() => {
     dispatch(getSentNotifications(filters));
-  }, [filters, pagination]);
+  }, [filters, pagination, sort]);
 
   // TODO: Remove extra style and extra div
   return (

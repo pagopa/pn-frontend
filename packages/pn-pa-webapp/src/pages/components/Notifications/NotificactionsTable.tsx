@@ -27,10 +27,7 @@ type Props = {
 function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
   const createSortHandler = (property: string) => () => {
     const isAsc = sort.orderBy === property && sort.order === 'asc';
-    /* eslint-disable functional/immutable-data */
-    sort.order = isAsc ? 'desc' : 'asc';
-    sort.orderBy = property;
-    onChangeSorting(sort);
+    onChangeSorting({order: isAsc ? 'desc' : 'asc', orderBy: property});
   };
   
   // Table style
