@@ -28,8 +28,7 @@ export function getMenuItems(role: UserRole) {
 export function getHomePage(role: UserRole) {
   switch (role) {
     case UserRole.REFERENTE_AMMINISTRATIVO:
-      return routes.DASHBOARD;
     case UserRole.REFERENTE_OPERATIVO:
-      return routes.API_KEYS;
+      return routes.DASHBOARD;
   }
 }

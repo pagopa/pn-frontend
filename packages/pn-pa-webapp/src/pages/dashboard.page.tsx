@@ -78,7 +78,7 @@ const Dashboard = () => {
 
   // TODO: Remove extra style and extra div
   return (
-    <div style={{ padding: '20px', width: '100%', backgroundColor: '#F2F2F2' }}>
+    <div style={{ padding: '20px'}}>
       <Fragment>
         {notifications && (
           <div>
