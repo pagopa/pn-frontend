@@ -20,6 +20,7 @@ const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     background: '#F2F2F2',
+    height: '100vh'
   },
 })); 
 
@@ -30,16 +31,15 @@ export default function Layout({ children, assistanceEmail, onExitAction, sideMe
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh',
       }}
     >
       <Header withSecondHeader={true} onExitAction={onExitAction} />
 
-      <Grid container direction="row" className={classes.root}>
+      <Grid container spacing={2} className={classes.root}>
         <Grid item xs={2}>
           {sideMenu}
         </Grid>
-        <Grid item>{children}</Grid>
+        <Grid item xs={10}>{children}</Grid>
       </Grid>
       <Footer assistanceEmail={assistanceEmail} />
     </Box>
