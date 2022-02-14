@@ -20,7 +20,7 @@ const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     background: '#F2F2F2',
-    height: '80vh'
+    height: '100vh'
   },
 })); 
 
