@@ -4,8 +4,8 @@ import { CustomPagination, PaginationData } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
 import { RootState } from '../redux/store';
-import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
-import { NotificationStatus } from '../redux/dashboard/types';
+import { getSentNotifications, setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/actions';
+import { GetNotificationsParams, NotificationStatus } from '../redux/dashboard/types';
 import NotificationsTable from './components/Notifications/NotificactionsTable';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 import { Column, Row, Sort } from './components/Notifications/types';
@@ -146,10 +146,15 @@ const Dashboard = () => {
     dispatch(setPagination(paginationData));
   };
 
-  // Sort handlers
-  const handleChangeSorting = (s: Sort) => {
-    dispatch(setSorting(s));
+  // Filter handlers
+  const handleChangeFilters = (filters: GetNotificationsParams) => {
+    dispatch(setNotificationFilters(filters));
   };
+
+    // Sort handlers
+    const handleChangeSorting = (s: Sort) => {
+      dispatch(setSorting(s));
+    };
 
   useEffect(() => {
     dispatch(getSentNotifications(filters));
@@ -168,7 +173,7 @@ const Dashboard = () => {
       <Fragment>
         {notifications && (
           <div>
-            <FilterNotificationsTable />
+            <FilterNotificationsTable onChangeFilters={handleChangeFilters}/>
             <NotificationsTable
               columns={columns}
               rows={rows}

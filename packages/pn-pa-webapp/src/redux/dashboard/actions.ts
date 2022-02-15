@@ -9,3 +9,5 @@ export const getSentNotifications = createAsyncThunk<GetNotificationsResponse, G
 export const setPagination = createAction<{totalElements: number; page: number; size: number}>('setPagination');
 
 export const setSorting = createAction<{orderBy: string; order: 'asc' | 'desc'}>('setSorting');
+
+export const setNotificationFilters = createAction<GetNotificationsParams>('setNotificationFilters');

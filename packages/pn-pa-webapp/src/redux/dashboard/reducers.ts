@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { getSentNotifications, setPagination, setSorting } from "./actions";
-import { Notification } from "./types";
+import { getSentNotifications, setPagination, setSorting, setNotificationFilters } from "./actions";
+import { GetNotificationsParams, Notification } from "./types";
 
 /* eslint-disable functional/immutable-data */
 const dashboardSlice = createSlice({
@@ -15,7 +15,7 @@ const dashboardSlice = createSlice({
             recipientId: '',
             status: '',
             subjectRegExp: '',
-        },
+        } as GetNotificationsParams,
         pagination: {
             totalElements: 0,
             size: 0,
@@ -40,6 +40,10 @@ const dashboardSlice = createSlice({
         });
         builder.addCase(setSorting, (state, action) => {
             state.sort = action.payload;
+        });
+        builder.addCase(setNotificationFilters, (state, action) => {
+            state.filters = action.payload;
+            
         });
     }
 }); 

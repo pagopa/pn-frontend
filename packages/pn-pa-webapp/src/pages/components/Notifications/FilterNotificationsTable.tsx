@@ -1,61 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { Formik, Form } from "formik";
-import { Box, Button, Divider, MenuItem, TextField } from "@mui/material";
-import DateAdapter from "@mui/lab/AdapterMoment";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
+import React, { useState } from 'react';
+import { Formik, Form } from 'formik';
+import { Box, Button, Divider, MenuItem, TextField } from '@mui/material';
+import DateAdapter from '@mui/lab/AdapterMoment';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import { GetNotificationsParams } from '../../../redux/dashboard/types';
 
-const FilterNotificationsTable = () => {
-  const [searchForSelection, setSearchForSelection] = useState("");
-  const [searchForValue, setSearchForValue] = useState("");
+interface Props {
+  onChangeFilters: (filters: GetNotificationsParams) => void;
+}
+
+const FilterNotificationsTable = ({ onChangeFilters }: Props) => {
+  const [searchForSelection, setSearchForSelection] = useState('');
+  const [searchForValue, setSearchForValue] = useState('');
   const [fromDate, setFromDate] = React.useState<Date | null>(null);
   const [toDate, setToDate] = React.useState<Date | null>(null);
-  const [notificationStatus, setNotificationStatus] = useState("");
+  const [notificationStatus, setNotificationStatus] = useState('');
 
-  const filters = useSelector((state: RootState) => state.dashboardState.filters);
-
-  const initialValues = { 1: Number, 2: Number, 3: Number };
-  // const notificationStatus = Object.values(NotificationStatus);
+  const filters = {
+    startDate: fromDate? fromDate.toString() : '',
+    endDate: toDate? toDate.toString() : '',
+    recipientId: searchForValue,
+    status: notificationStatus,
+    subjectRegExp: ''
+  };  
 
   const notificationAllowedStatus = [
-    { value: 0, label: "Tutti gli stati" },
-    { value: 1, label: "Depositata" },
-    { value: 2, label: "Consegnata" },
-    { value: 3, label: "In inoltro" },
-    { value: 4, label: "Perfezionata per decorrenza termini" },
-    { value: 5, label: "Perfezionata per visione" },
-    { value: 6, label: "Pagata" },
-    { value: 7, label: "Annullata" },
-    { value: 8, label: "Destinatario irreperibile" },
+    { value: 0, label: 'Tutti gli stati' },
+    { value: 1, label: 'Depositata' },
+    { value: 2, label: 'Consegnata' },
+    { value: 3, label: 'In inoltro' },
+    { value: 4, label: 'Perfezionata per decorrenza termini' },
+    { value: 5, label: 'Perfezionata per visione' },
+    { value: 6, label: 'Pagata' },
+    { value: 7, label: 'Annullata' },
+    { value: 8, label: 'Destinatario irreperibile' },
   ];
-
+  
+  const initialValues = { notificationStatus: notificationAllowedStatus[0].value};
+  
   const searchForValues = [
-    { value: 0, label: "Codice Fiscale" },
-    { value: 1, label: "Codice IUN" },
+    { value: 0, label: 'Codice Fiscale' },
+    { value: 1, label: 'Codice IUN' },
   ];
-
-  useEffect(() => {
-    setSearchForSelection(searchForValues[0].label);
-    setNotificationStatus(notificationAllowedStatus[0].label);
-    console.log(filters);
-  }, []);
-
-  useEffect(() => {
-    // filters.endDate = toDate? toDate?.toString(): "";
-    // filters.startDate = fromDate? fromDate.toString(): "";
-    // filters.recipientId = searchForValue;
-    // filters.status = notificationStatus;
-
-  }, [searchForValue, fromDate, toDate, notificationStatus]);
 
   return (
     <React.Fragment>
       <Formik
         initialValues={initialValues}
-        onSubmit={(values, actions) => {
-          console.log({ values, actions });
+        onSubmit={(values, _actions) => {
+          console.log(values);
+          
+          onChangeFilters(filters);
           // alert(JSON.stringify(values, null, 2));
           // actions.setSubmitting(false);
         }}
@@ -63,8 +59,8 @@ const FilterNotificationsTable = () => {
         <Form>
           <Box
             component="form"
-            display={"flex"}
-            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
+            display={'flex'}
+            sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
             noValidate
             autoComplete="off"
           >
