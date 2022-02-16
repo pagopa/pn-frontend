@@ -4,14 +4,16 @@ import { Box, Button, Divider, MenuItem, TextField } from '@mui/material';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
 import { NotificationStatus } from '../../../redux/dashboard/types';
+import { RootState } from '../../../redux/store';
 
 const FilterNotificationsTable = () => {
   const dispatch = useDispatch();
-  const [fromDate, setFromDate] = React.useState<Date | null>(null);
-  const [toDate, setToDate] = React.useState<Date | null>(null);
+  const [startDate, setStartDate] = React.useState<Date | null>(null);
+  const [endDate, setEndDate] = React.useState<Date | null>(null);
+  const filtersState = useSelector((state: RootState) => state.dashboardState.filters);
 
   const notificationAllowedStatus = [
     { value: 'All', label: 'Tutti gli stati' },
@@ -30,13 +32,14 @@ const FilterNotificationsTable = () => {
     { value: '1', label: 'Codice IUN' },
   ];
 
+  
   const formik = useFormik({
     initialValues: {
       searchFor: 0,
-      startDate: fromDate ? fromDate.toString() : '',
-      endDate: toDate ? toDate.toString() : '',
-      recipientId: '',
-      status: 'All',
+      startDate: filtersState.startDate,
+      endDate: filtersState.endDate,
+      recipientId: filtersState.recipientId,
+      status: filtersState.status,
     },
     /** onSubmit populates filters */
     onSubmit: (values) => {
@@ -49,6 +52,10 @@ const FilterNotificationsTable = () => {
       dispatch(setNotificationFilters(filters));
     },
   });
+
+  // useEffect(() => {
+  //   dispatch(setNotificationFilters({formik.values.startDate, formik.values.endDate}));
+  // }, []);
 
   return (
     <React.Fragment>
@@ -81,14 +88,19 @@ const FilterNotificationsTable = () => {
             name="startDate"
             value={formik.values.startDate}
             dateAdapter={DateAdapter}
-            onChange={formik.handleChange}
           >
             <DesktopDatePicker
               label="Da"
-              inputFormat="MM/dd/yyyy"
-              value={fromDate}
-              onChange={(newValue: Date | null) => {
-                setFromDate(newValue);
+              inputFormat="DD/MM/yyyy"
+              value={startDate}
+              onChange={(value: Date | null)  => {
+                formik
+                  .setFieldValue("startDate", value?.toISOString())
+                  .then( () => {
+                    setStartDate(value);
+                    console.log(value?.toISOString());
+                  })
+                  .catch(() => '');
               }}
               renderInput={(params) => <TextField {...params} />}
             />
@@ -101,10 +113,16 @@ const FilterNotificationsTable = () => {
           >
             <DesktopDatePicker
               label="A"
-              inputFormat="MM/dd/yyyy"
-              value={toDate}
-              onChange={(newValue: Date | null) => {
-                setToDate(newValue);
+              inputFormat="DD/MM/yyyy"
+              value={endDate}
+              onChange={(value: Date | null)  => {
+                formik
+                  .setFieldValue("endDate", value?.toISOString())
+                  .then( () => {
+                    setEndDate(value);
+                    console.log(value?.toISOString());
+                  })
+                  .catch(() => '');
               }}
               renderInput={(params) => <TextField {...params} />}
             />
