@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { today, tenYearsAgo } from "../../utils/date.utility";
 
 import { getSentNotifications, setPagination, setSorting, setNotificationFilters } from "./actions";
 import { GetNotificationsParams, Notification } from "./types";
@@ -10,8 +11,8 @@ const dashboardSlice = createSlice({
         loading: false,
         notifications: [] as Array<Notification>,
         filters: {
-            startDate: '2022-01-01T00:00:00.000Z',
-            endDate: '2022-12-31T00:00:00.000Z',
+            startDate: today.toISOString(),
+            endDate: tenYearsAgo.toISOString(),
             recipientId: '',
             status: '',
             subjectRegExp: '',
