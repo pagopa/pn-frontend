@@ -5,9 +5,10 @@ import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import { useDispatch, useSelector } from 'react-redux';
+
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
-import { NotificationStatus } from '../../../redux/dashboard/types';
 import { RootState } from '../../../redux/store';
+import {NotificationAllowedStatus} from '../../../utils/status.utility';
 
 const FilterNotificationsTable = () => {
   const dispatch = useDispatch();
@@ -15,23 +16,10 @@ const FilterNotificationsTable = () => {
   const [endDate, setEndDate] = React.useState<Date | null>(null);
   const filtersState = useSelector((state: RootState) => state.dashboardState.filters);
 
-  const notificationAllowedStatus = [
-    { value: 'All', label: 'Tutti gli stati' },
-    { value: NotificationStatus.RECEIVED, label: 'Depositata' },
-    { value: NotificationStatus.DELIVERED, label: 'Consegnata' },
-    { value: NotificationStatus.DELIVERING, label: 'In inoltro' },
-    { value: NotificationStatus.EFFECTIVE_DATE, label: 'Perfezionata per decorrenza termini' },
-    { value: NotificationStatus.VIEWED, label: 'Perfezionata per visione' },
-    { value: NotificationStatus.PAID, label: 'Pagata' },
-    { value: NotificationStatus.CANCELED, label: 'Annullata' },
-    { value: NotificationStatus.UNREACHABLE, label: 'Destinatario irreperibile' },
-  ];
-
   const searchForValues = [
     { value: '0', label: 'Codice Fiscale' },
     { value: '1', label: 'Codice IUN' },
   ];
-
   
   const formik = useFormik({
     initialValues: {
@@ -135,7 +123,7 @@ const FilterNotificationsTable = () => {
             onChange={formik.handleChange}
             value={formik.values.status}
           >
-            {notificationAllowedStatus.map((status) => (
+            {NotificationAllowedStatus.map((status) => (
               <MenuItem key={status.value} value={status.value}>
                 {status.label}
               </MenuItem>
