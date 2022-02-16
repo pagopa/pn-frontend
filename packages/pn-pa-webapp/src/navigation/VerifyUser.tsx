@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { exchangeToken } from '../../redux/auth/actions';
-import { RootState } from '../../redux/store';
+import { exchangeToken } from '../redux/auth/actions';
+import { RootState } from '../redux/store';
 
 const VerifyUser = () => {
   const location = useLocation();

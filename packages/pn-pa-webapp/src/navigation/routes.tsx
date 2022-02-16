@@ -1,10 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
+import { NotFound } from '@pagopa-pn/pn-commons';
+
 import Dashboard from '../pages/dashboard.page';
 import { UserRole } from '../models/user';
 
-import NotFound from './NotFound';
 import RequireAuth from './RequiredAuth';
-import VerifyUser from './VerifyUser/VerifyUser';
+import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
 
 function Router() {
