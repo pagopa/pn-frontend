@@ -9,13 +9,13 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
   switch (status) {
     case NotificationStatus.DELIVERED:
       return {
-        color: 'warning',
+        color: 'default',
         label: 'Consegnata',
         tooltip: 'Consegnata: Il destinatario ha ricevuto la notifica',
       };
     case NotificationStatus.DELIVERING:
       return {
-        color: 'warning',
+        color: 'default',
         label: 'In inoltro',
         tooltip: "In inoltro: L'invio della notifica è in corso",
       };
@@ -33,7 +33,7 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
       };
     case NotificationStatus.RECEIVED:
       return {
-        color: 'warning',
+        color: 'default',
         label: 'Depositata',
         tooltip: 'Depositata: L’ente ha depositato la notifica',
       };
@@ -45,13 +45,13 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
       };
     case NotificationStatus.VIEWED:
       return {
-        color: 'success',
+        color: 'info',
         label: 'Perfezionata per visione',
         tooltip: 'Perfezionata per visione: Il destinatario ha letto la notifica',
       };
     case NotificationStatus.CANCELED:
       return {
-        color: 'info',
+        color: 'warning',
         label: 'Annullata',
         tooltip: "Annullata: L'ente ha annullato l'invio della notifica",
       };
