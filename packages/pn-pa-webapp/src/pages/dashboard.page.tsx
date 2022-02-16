@@ -1,9 +1,9 @@
 import { useEffect, Fragment } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { CustomPagination, PaginationData } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
 import { RootState } from '../redux/store';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
 import NotificationsTable from './components/Notifications/NotificactionsTable';
@@ -70,11 +70,11 @@ function getNotificationStatusLabelAndColor(status: NotificationStatus): {
 }
 
 const Dashboard = () => {
-  const dispatch = useDispatch();
-  const notifications = useSelector((state: RootState) => state.dashboardState.notifications);
-  const filters = useSelector((state: RootState) => state.dashboardState.filters);
-  const sort = useSelector((state: RootState) => state.dashboardState.sort);
-  const pagination = useSelector((state: RootState) => state.dashboardState.pagination);
+  const dispatch = useAppDispatch();
+  const notifications = useAppSelector((state: RootState) => state.dashboardState.notifications);
+  const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
+  const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
+  const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
   const elementsPerPage = [10, 20, 50, 100, 200, 500];
 
   const columns: Array<Column> = [
@@ -152,7 +152,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    dispatch(getSentNotifications(filters));
+    void dispatch(getSentNotifications(filters));
   }, [filters, pagination, sort]);
 
   // TODO: Remove extra style and extra div
