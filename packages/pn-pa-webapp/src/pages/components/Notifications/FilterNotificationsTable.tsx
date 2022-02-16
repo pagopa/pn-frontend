@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { Box, Button, Divider, MenuItem, TextField } from '@mui/material';
+import { Box, Button, MenuItem, TextField } from '@mui/material';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
@@ -39,7 +39,7 @@ const FilterNotificationsTable = () => {
       startDate: filtersState.startDate,
       endDate: filtersState.endDate,
       recipientId: filtersState.recipientId,
-      status: filtersState.status,
+      status: notificationAllowedStatus[0].value,
     },
     /** onSubmit populates filters */
     onSubmit: (values) => {
@@ -83,7 +83,6 @@ const FilterNotificationsTable = () => {
             id="outlined-basic"
             variant="outlined"
           />
-          <Divider orientation="vertical" variant="middle" flexItem />
           <LocalizationProvider
             name="startDate"
             value={formik.values.startDate}
