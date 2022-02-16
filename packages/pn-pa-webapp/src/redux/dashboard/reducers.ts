@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import { getSentNotifications, setPagination, setSorting, setNotificationFilters } from "./actions";
 import { GetNotificationsParams, Notification } from "./types";
 

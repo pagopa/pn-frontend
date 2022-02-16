@@ -89,10 +89,10 @@ const Dashboard = () => {
     dispatch(setPagination(paginationData));
   };
 
-    // Sort handlers
-    const handleChangeSorting = (s: Sort) => {
-      dispatch(setSorting(s));
-    };
+  // Sort handlers
+  const handleChangeSorting = (s: Sort) => {
+    dispatch(setSorting(s));
+  };
 
   useEffect(() => {
     dispatch(getSentNotifications(filters));
