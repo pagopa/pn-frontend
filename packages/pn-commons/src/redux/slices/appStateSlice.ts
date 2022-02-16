@@ -1,7 +1,7 @@
-import { AnyAction, createSlice } from '@reduxjs/toolkit';
+import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { AppError } from '../..';
 
-interface AppStateState {
+export interface AppStateState {
   loading: {
     result: boolean;
     tasks: { [taskId: string]: boolean };
@@ -28,6 +28,9 @@ export const appStateSlice = createSlice({
   name: 'appState',
   initialState,
   reducers: {
+    removeError(state, action: PayloadAction<string>) {
+      state.errors = state.errors.filter(e => e.id !== action.payload); 
+    }
   },
   extraReducers: builder => {
     builder
@@ -40,7 +43,6 @@ export const appStateSlice = createSlice({
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
         state.errors.push(action.payload);
-        // console.debug(state.errors);
       });
   }
 });

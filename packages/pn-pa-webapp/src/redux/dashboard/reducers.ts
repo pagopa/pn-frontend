@@ -42,8 +42,7 @@ const dashboardSlice = createSlice({
             state.sort = action.payload;
         });
         builder.addCase(setNotificationFilters, (state, action) => {
-            state.filters = action.payload;
-            
+            state.filters = action.payload; 
         });
     }
 }); 
