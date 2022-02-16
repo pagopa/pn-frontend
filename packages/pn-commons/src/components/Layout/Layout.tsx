@@ -20,10 +20,7 @@ const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     background: '#F2F2F2',
-<<<<<<< HEAD
     height: '100vh'
-=======
->>>>>>> bd1d10b (feat: WIP side menu pn-695)
   },
 })); 
 
