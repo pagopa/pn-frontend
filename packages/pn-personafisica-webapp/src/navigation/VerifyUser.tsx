@@ -8,7 +8,7 @@ const VerifyUser = () => {
   const location = useLocation();
   const [spidToken, setSpidToken] = useState('');
   const dispatch = useAppDispatch();
-  const token = useAppSelector((state: RootState) => state.userState.user.token);
+  const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
 
   useEffect(() => {
     const params = new URLSearchParams(location.hash);
@@ -18,7 +18,7 @@ const VerifyUser = () => {
     } else {
       if (token === '') {
         /* eslint-disable functional/immutable-data */
-        window.location.href = process.env.REACT_APP_URL_FE_LOGIN || '';
+       window.location.href = process.env.REACT_APP_URL_FE_LOGIN || '';
       }
     }
   }, [location]);

@@ -1,7 +1,7 @@
 import { AccessDenied } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
+import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
 /**
@@ -10,15 +10,15 @@ import { RootState } from '../redux/store';
  */
 /* eslint-disable functional/immutable-data */
 const RequireAuth = () => {
-  const token = useSelector((state: RootState) => state.userState.user.token);
+  const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
   const [accessDenied, setAccessDenied] = useState(true);
 
   useEffect(() => {
     if (token === '' || !token) {
-      // Redirect them to the selfcare login page
+      // Redirect them to the spid-hub login page
       window.location.href = process.env.REACT_APP_URL_FE_LOGIN || '';
     }
-    if (token && token !== '' ) {
+    if (token && token !== '') {
       setAccessDenied(false);
     }
   }, [token]);
