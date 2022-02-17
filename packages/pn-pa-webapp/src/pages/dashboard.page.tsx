@@ -109,7 +109,7 @@ const Dashboard = () => {
       width: '13%',
       sortable: true,
       getCellLabel(value: string) {
-        return value.length > 3 ? value.substring(0, 3) + '...' : value;
+        return value;
       },
     },
     {
