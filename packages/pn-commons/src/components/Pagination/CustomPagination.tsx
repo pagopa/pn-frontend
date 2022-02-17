@@ -1,21 +1,8 @@
 import { ChangeEvent, Fragment, useState } from 'react';
-import { Button, Grid, Menu, MenuItem, Pagination } from '@mui/material';
-import PaginationItem from '@mui/material/PaginationItem';
+import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem } from '@mui/material';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 
 import { PaginationData } from './types';
-
-function defaultLabelDisplayedRows(from: number, to: number) {
-  return `${from}-${to}`;
-}
-
-const getLabelDisplayedRowsTo = (count: number, paginationData: number, size: number) => {
-  if (count === -1) {
-    return (paginationData + 1) * size;
-  }
-
-  return size === -1 ? count : Math.min(count, (paginationData + 1) * size);
-};
 
 type Props = {
   /** The actual paginationData */
@@ -24,15 +11,13 @@ type Props = {
   onPageRequest: (r: PaginationData) => void;
    /** The list of numbers of the elements per page */
   elementsPerPage: Array<number>;
+  /** an array containing pages to show */
+  pagesToShow?: Array<number>;
 };
 
 /** Selfcare custom table available pages component */
-export default function CustomPagination({ paginationData, onPageRequest, elementsPerPage }: Props) {
-  const count = paginationData.totalElements;
-  const elsPerPage = elementsPerPage.filter(p => p <= count);
-  const size = paginationData.size || elsPerPage[0] || count;
-  const from = count === 0 ? 0 : paginationData.page * size + 1;
-  const to = getLabelDisplayedRowsTo(count, paginationData.page, size);
+export default function CustomPagination({ paginationData, onPageRequest, elementsPerPage, pagesToShow }: Props) {
+  const size = paginationData.size;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   
@@ -65,11 +50,11 @@ export default function CustomPagination({ paginationData, onPageRequest, elemen
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
-            endIcon={elsPerPage.length > 0 && <ArrowDropDown />}
+            endIcon={(size >= elementsPerPage[0]) && <ArrowDropDown />}
           >
-            {defaultLabelDisplayedRows(from, to)}
+            {size}
           </Button>
-          { elsPerPage.length > 0 && 
+          { (size >= elementsPerPage[0]) && 
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -79,7 +64,7 @@ export default function CustomPagination({ paginationData, onPageRequest, elemen
                 'aria-labelledby': 'Righe per pagina',
               }}
             >
-              {elsPerPage.map(ep => <MenuItem key={ep} onClick={() => handleChangeElementsPerPage(ep)}>{ep}</MenuItem>)}
+              {elementsPerPage.map(ep => <MenuItem key={ep} onClick={() => handleChangeElementsPerPage(ep)}>{ep}</MenuItem>)}
             </Menu>
           }
         </Grid>
@@ -92,7 +77,13 @@ export default function CustomPagination({ paginationData, onPageRequest, elemen
               shape="circular"
               page={paginationData.page + 1}
               count={Math.ceil(paginationData.totalElements / size)}
-              renderItem={(props2) => <PaginationItem {...props2} sx={{ border: 'none' }} />}
+              renderItem={(props2) => {
+                if (pagesToShow && props2.type === 'page' && pagesToShow.indexOf(props2.page) === -1) {
+                  return null;
+                }
+                console.log(props2);
+                return <PaginationItem {...props2} sx={{ border: 'none' }} />
+              }}
               onChange={(_event: ChangeEvent<unknown>, value: number) => (
                 onPageRequest({
                   ...paginationData,
@@ -106,3 +97,9 @@ export default function CustomPagination({ paginationData, onPageRequest, elemen
     </Fragment>
   );
 }
+
+/*
+renderItem={(props2) => {
+                return props2.page === 10 ? null : <PaginationItem {...props2} sx={{ border: 'none' }} />
+              }}
+*/

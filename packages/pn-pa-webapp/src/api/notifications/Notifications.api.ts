@@ -36,8 +36,9 @@ export const NotificationsApi = {
           sentAt: formatDate(d.sentAt),
         }));
         return {
-          notifications,
-          totalElements: 100,
+          results: notifications,
+          moreResult: true,
+          nextPagesKey: ['1', '2', '3', '4', '5', '6']
         };
       });
   },

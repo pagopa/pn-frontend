@@ -17,9 +17,10 @@ const dashboardSlice = createSlice({
             subjectRegExp: '',
         } as GetNotificationsParams,
         pagination: {
-            totalElements: 0,
+            nextPagesKey: [] as Array<string>,
             size: 0,
-            page: 0
+            page: 0,
+            moreResult: false
         },
         sort: {
            orderBy: '',
@@ -29,14 +30,21 @@ const dashboardSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getSentNotifications.fulfilled, (state, action) => {
-            state.notifications = action.payload.notifications;
-            state.pagination.totalElements = action.payload.totalElements;
+            state.notifications = action.payload.results;
+            state.pagination.moreResult = action.payload.moreResult;
+            // because we can jump from a page to another and nextPagesKey returns only the next three pages, we have to check if that pages already exists
+            for (const pageKey of action.payload.nextPagesKey) {
+                if (state.pagination.nextPagesKey.indexOf(pageKey) === -1) {
+                    state.pagination.nextPagesKey.push(pageKey);
+                }
+            }
         });
         builder.addCase(getSentNotifications.pending, (state) => {
             state.loading = true;
         });
         builder.addCase(setPagination, (state, action) => {
-            state.pagination = action.payload;
+            state.pagination.size = action.payload.size;
+            state.pagination.page = action.payload.page;
         });
         builder.addCase(setSorting, (state, action) => {
             state.sort = action.payload;
