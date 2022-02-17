@@ -1,144 +1,156 @@
-import React, { useEffect, useState } from "react";
-import { Formik, Form } from "formik";
-import { Box, Button, Divider, MenuItem, TextField } from "@mui/material";
-import DateAdapter from "@mui/lab/AdapterMoment";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../redux/store";
+import React from 'react';
+import { useFormik } from 'formik';
+import { Box, Button, Divider, MenuItem, TextField } from '@mui/material';
+import DateAdapter from '@mui/lab/AdapterMoment';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { setNotificationFilters } from '../../../redux/dashboard/actions';
+import { RootState } from '../../../redux/store';
+import {NotificationAllowedStatus} from '../../../utils/status.utility';
 
 const FilterNotificationsTable = () => {
-  const [searchForSelection, setSearchForSelection] = useState("");
-  const [searchForValue, setSearchForValue] = useState("");
-  const [fromDate, setFromDate] = React.useState<Date | null>(null);
-  const [toDate, setToDate] = React.useState<Date | null>(null);
-  const [notificationStatus, setNotificationStatus] = useState("");
-
-  const filters = useSelector((state: RootState) => state.dashboardState.filters);
-
-  const initialValues = { 1: Number, 2: Number, 3: Number };
-  // const notificationStatus = Object.values(NotificationStatus);
-
-  const notificationAllowedStatus = [
-    { value: 0, label: "Tutti gli stati" },
-    { value: 1, label: "Depositata" },
-    { value: 2, label: "Consegnata" },
-    { value: 3, label: "In inoltro" },
-    { value: 4, label: "Perfezionata per decorrenza termini" },
-    { value: 5, label: "Perfezionata per visione" },
-    { value: 6, label: "Pagata" },
-    { value: 7, label: "Annullata" },
-    { value: 8, label: "Destinatario irreperibile" },
-  ];
+  const dispatch = useDispatch();
+  const [startDate, setStartDate] = React.useState<Date | null>(null);
+  const [endDate, setEndDate] = React.useState<Date | null>(null);
+  const filtersState = useSelector((state: RootState) => state.dashboardState.filters);
 
   const searchForValues = [
-    { value: 0, label: "Codice Fiscale" },
-    { value: 1, label: "Codice IUN" },
+    { value: '0', label: 'Codice Fiscale' },
+    { value: '1', label: 'Codice IUN' },
   ];
+  
+  const formik = useFormik({
+    initialValues: {
+      searchFor: 0,
+      startDate: filtersState.startDate,
+      endDate: filtersState.endDate,
+      recipientId: filtersState.recipientId,
+      status: filtersState.status,
+    },
+    /** onSubmit populates filters */
+    onSubmit: (values) => {
+      const filters = {
+        startDate: values.startDate,
+        endDate: values.endDate,
+        recipientId: values.recipientId,
+        status: values.status === 'All' ? undefined : values.status,
+      };
+      dispatch(setNotificationFilters(filters));
+    },
+  });
 
-  useEffect(() => {
-    setSearchForSelection(searchForValues[0].label);
-    setNotificationStatus(notificationAllowedStatus[0].label);
-    console.log(filters);
-  }, []);
-
-  useEffect(() => {
-    // filters.endDate = toDate? toDate?.toString(): "";
-    // filters.startDate = fromDate? fromDate.toString(): "";
-    // filters.recipientId = searchForValue;
-    // filters.status = notificationStatus;
-
-  }, [searchForValue, fromDate, toDate, notificationStatus]);
+  // useEffect(() => {
+  //   dispatch(setNotificationFilters({formik.values.startDate, formik.values.endDate}));
+  // }, []);
 
   return (
     <React.Fragment>
-      <Formik
-        initialValues={initialValues}
-        onSubmit={(values, actions) => {
-          console.log({ values, actions });
-          // alert(JSON.stringify(values, null, 2));
-          // actions.setSubmitting(false);
-        }}
-      >
-        <Form>
-          <Box
-            component="form"
-            display={"flex"}
-            sx={{ "& .MuiTextField-root": { m: 1, width: "25ch" } }}
-            noValidate
-            autoComplete="off"
+      <form onSubmit={formik.handleSubmit}>
+        <Box display={'flex'} sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}>
+          <TextField
+            id="outlined-basic"
+            label="Cerca per"
+            select
+            name="searchFor"
+            variant="outlined"
+            value={formik.values.searchFor}
+            onChange={formik.handleChange}
           >
-            <TextField
-              id="outlined-basic"
-              label="Cerca per"
-              select
-              variant="outlined"
-              value={searchForSelection}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setSearchForSelection(event.target.value);
+            {searchForValues.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            value={formik.values.recipientId}
+            onChange={formik.handleChange}
+            name="recipientId"
+            id="outlined-basic"
+            variant="outlined"
+          />
+          <Divider orientation="vertical" variant="middle" flexItem />
+          <LocalizationProvider
+            name="startDate"
+            value={formik.values.startDate}
+            dateAdapter={DateAdapter}
+          >
+            <DesktopDatePicker
+              label="Da"
+              inputFormat="DD/MM/yyyy"
+              value={startDate}
+              onChange={(value: Date | null)  => {
+                formik
+                  .setFieldValue("startDate", value?.toISOString())
+                  .then( () => {
+                    setStartDate(value);
+                    console.log(value?.toISOString());
+                  })
+                  .catch(() => '');
               }}
-            >
-              {searchForValues.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            <TextField
-              id="outlined-basic"
-              variant="outlined"
-              value={searchForValue}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setSearchForValue(event.target.value);
-              }}
+              renderInput={(params) => <TextField {...params} />}
             />
-            <Divider orientation="vertical" variant="middle" flexItem />
-            <LocalizationProvider dateAdapter={DateAdapter}>
-              <DesktopDatePicker
-                label="Da"
-                inputFormat="MM/dd/yyyy"
-                value={fromDate}
-                onChange={(newValue: Date | null) => {
-                  setFromDate(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-            <LocalizationProvider dateAdapter={DateAdapter}>
-              <DesktopDatePicker
-                label="A"
-                inputFormat="MM/dd/yyyy"
-                value={toDate}
-                onChange={(newValue: Date | null) => {
-                  setToDate(newValue);
-                }}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-            <TextField
-              id="outlined-basic"
-              label="Stato"
-              select
-              variant="outlined"
-              value={notificationStatus}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                console.log(event.target.value);
-                setNotificationStatus(event.target.value);
+          </LocalizationProvider>
+          <LocalizationProvider
+            name="endDate"
+            value={formik.values.endDate}
+            dateAdapter={DateAdapter}
+            onChange={formik.handleChange}
+          >
+            <DesktopDatePicker
+              label="A"
+              inputFormat="DD/MM/yyyy"
+              value={endDate}
+              onChange={(value: Date | null)  => {
+                formik
+                  .setFieldValue("endDate", value?.toISOString())
+                  .then( () => {
+                    setEndDate(value);
+                    console.log(value?.toISOString());
+                  })
+                  .catch(() => '');
               }}
-            >
-              {notificationAllowedStatus.map((notStat) => (
-                <MenuItem key={notStat.value} value={notStat.value}>
-                  {notStat.label}
-                </MenuItem>
-              ))}
-            </TextField>
-            <Button variant="outlined" type="submit">
-              Filtra
-            </Button>
-            <Button variant="outlined">Rimuovi filtri</Button>
-          </Box>
-        </Form>
-      </Formik>
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+          <TextField
+            name="status"
+            id="outlined-basic"
+            label="Stato"
+            select
+            variant="outlined"
+            onChange={formik.handleChange}
+            value={formik.values.status}
+          >
+            {NotificationAllowedStatus.map((status) => (
+              <MenuItem key={status.value} value={status.value}>
+                {status.label}
+              </MenuItem>
+            ))}
+          </TextField>
+          <Button variant="outlined" type="submit">
+            Filtra
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() =>
+              // TODO questa può andare in un metodo separato: deve pulire i filtri dello stato redux e pulire il form
+              dispatch(
+                setNotificationFilters({
+                  startDate: '',
+                  endDate: '',
+                  status: undefined,
+                  recipientId: undefined,
+                })
+              )
+            }
+          >
+            Rimuovi filtri
+          </Button>
+        </Box>
+      </form>
     </React.Fragment>
   );
 };
