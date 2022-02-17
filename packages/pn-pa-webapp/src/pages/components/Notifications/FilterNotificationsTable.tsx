@@ -12,9 +12,18 @@ import { NotificationAllowedStatus } from '../../../utils/status.utility';
 import { tenYearsAgo, today } from '../../../utils/date.utility';
 
 const useStyles = makeStyles({
-  button: {
-    height: '40px',
+  customButton: {
+    height: '60px',
     alignSelf: 'center',
+  },
+  customTextField: {
+  //   height: '40px !important',
+  //   alignSelf: 'center !important',
+  //   ' & div': {
+  //     height: '40px !important',
+  //     fontSize:'16px',
+  //   },
+  //   padding:'0px !important'
   },
 });
 
@@ -68,6 +77,7 @@ export default function FilterNotificationsTable() {
       <form onSubmit={formik.handleSubmit}>
         <Box display={'flex'} sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}>
           <TextField
+            className={classes.customTextField}
             id="outlined-basic"
             label="Cerca per"
             select
@@ -83,6 +93,7 @@ export default function FilterNotificationsTable() {
             ))}
           </TextField>
           <TextField
+            className={classes.customTextField}
             value={formik.values.recipientId}
             onChange={formik.handleChange}
             name="recipientId"
@@ -133,6 +144,7 @@ export default function FilterNotificationsTable() {
             />
           </LocalizationProvider>
           <TextField
+            className={classes.customTextField}
             name="status"
             id="outlined-basic"
             label="Stato"
@@ -147,10 +159,10 @@ export default function FilterNotificationsTable() {
               </MenuItem>
             ))}
           </TextField>
-          <Button variant="outlined" type="submit" className={classes.button}>
+          <Button variant="outlined" type="submit" className={classes.customButton}>
             Cerca
           </Button>
-          <Button className={classes.button}  onClick={cleanFilters}>
+          <Button className={classes.customButton} onClick={cleanFilters}>
             Rimuovi filtri
           </Button>
         </Box>
