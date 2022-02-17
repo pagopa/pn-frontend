@@ -11,7 +11,9 @@ const ReferenteAmministrativoMenuItems: Array<SideMenuItem> = [
 ];
 
 const ReferenteTecnicoMenuItems: Array<SideMenuItem> = [
+  { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
   { label: 'Chiavi API', icon: TrendingUp, route: routes.API_KEYS },
+  { label: 'Ruoli', icon: People, route: routes.ROLES },
 ];
 
 export function getMenuItems(role: UserRole) {
@@ -26,8 +28,7 @@ export function getMenuItems(role: UserRole) {
 export function getHomePage(role: UserRole) {
   switch (role) {
     case UserRole.REFERENTE_AMMINISTRATIVO:
-      return routes.DASHBOARD;
     case UserRole.REFERENTE_OPERATIVO:
-      return routes.API_KEYS;
+      return routes.DASHBOARD;
   }
 }
