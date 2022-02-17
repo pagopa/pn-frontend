@@ -2,7 +2,7 @@ import { NotificationStatus } from '../redux/dashboard/types';
 
 // TODO: aggiungere i colori del tema
 export function getNotificationStatusLabelAndColor(status: NotificationStatus): {
-  color: "warning" | "error" | "success" | "info" | "default" | "primary" | "secondary" | undefined;
+  color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
   tooltip: string;
 } {
@@ -35,7 +35,7 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
       return {
         color: 'default',
         label: 'Depositata',
-        tooltip: 'L’ente ha depositato la notifica',
+        tooltip: "L'ente ha depositato la notifica",
       };
     case NotificationStatus.EFFECTIVE_DATE:
       return {

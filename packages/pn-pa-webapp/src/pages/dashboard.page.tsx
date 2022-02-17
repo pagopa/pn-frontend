@@ -89,8 +89,6 @@ const Dashboard = () => {
       : pagination.nextPagesKey.length);
   const pagesToShow: Array<number> = calcPages(size, totalElements, 3, pagination.page + 1);
 
-  console.log(pagesToShow);
-
   const columns: Array<Column> = [
     {
       id: 'sentAt',
