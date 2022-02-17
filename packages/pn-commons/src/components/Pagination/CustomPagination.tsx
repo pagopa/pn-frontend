@@ -85,7 +85,6 @@ export default function CustomPagination({
               page={paginationData.page + 1}
               count={Math.ceil(paginationData.totalElements / size)}
               renderItem={(props2) => {
-                console.log(props2);
                 if (
                   pagesToShow &&
                   props2.type === 'page' &&

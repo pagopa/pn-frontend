@@ -11,49 +11,49 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
       return {
         color: 'default',
         label: 'Consegnata',
-        tooltip: 'Consegnata: Il destinatario ha ricevuto la notifica',
+        tooltip: 'Il destinatario ha ricevuto la notifica',
       };
     case NotificationStatus.DELIVERING:
       return {
         color: 'default',
         label: 'In inoltro',
-        tooltip: "In inoltro: L'invio della notifica è in corso",
+        tooltip: "L'invio della notifica è in corso",
       };
     case NotificationStatus.UNREACHABLE:
       return {
         color: 'error',
         label: 'Destinatario irreperibile',
-        tooltip: 'Destinatario irreperibile: Il destinatario non risulta reperibile',
+        tooltip: 'Il destinatario non risulta reperibile',
       };
     case NotificationStatus.PAID:
       return {
         color: 'success',
         label: 'Pagata',
-        tooltip: 'Pagata: Il destinatario ha pagato la notifica',
+        tooltip: 'Il destinatario ha pagato la notifica',
       };
     case NotificationStatus.RECEIVED:
       return {
         color: 'default',
         label: 'Depositata',
-        tooltip: 'Depositata: L’ente ha depositato la notifica',
+        tooltip: 'L’ente ha depositato la notifica',
       };
     case NotificationStatus.EFFECTIVE_DATE:
       return {
         color: 'info',
         label: 'Perfezionata per decorrenza termini',
-        tooltip: 'Perfezionata per decorrenza termini: Il destinatario non ha letto la notifica',
+        tooltip: 'Il destinatario non ha letto la notifica',
       };
     case NotificationStatus.VIEWED:
       return {
         color: 'info',
         label: 'Perfezionata per visione',
-        tooltip: 'Perfezionata per visione: Il destinatario ha letto la notifica',
+        tooltip: 'Il destinatario ha letto la notifica',
       };
     case NotificationStatus.CANCELED:
       return {
         color: 'warning',
         label: 'Annullata',
-        tooltip: "Annullata: L'ente ha annullato l'invio della notifica",
+        tooltip: "L'ente ha annullato l'invio della notifica",
       };
   }
 }
