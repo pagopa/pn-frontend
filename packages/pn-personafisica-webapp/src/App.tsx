@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 
 const App = () => {
-  const token = useAppSelector((state: RootState) => state.userState.user.token);
+  const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   

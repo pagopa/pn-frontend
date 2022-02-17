@@ -27,5 +27,7 @@ export const exchangeToken = createAsyncThunk<User, string>(
  */
 export const logout = createAsyncThunk<User>('logout', async () => {
   sessionStorage.clear();
-  return { token: '' };
+  return {
+    sessionToken: '',
+  } as User;
 });

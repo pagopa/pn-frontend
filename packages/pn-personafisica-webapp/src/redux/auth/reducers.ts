@@ -7,11 +7,11 @@ const userSlice = createSlice({
   name: 'userSlice',
   initialState: {
     loading: false,
-    user: sessionStorage.getItem('user')
+    user: (sessionStorage.getItem('user')
       ? JSON.parse(sessionStorage.getItem('user') || '')
-      : ({
-          token: '',
-        } as User),
+      : {
+          sessionToken: '',
+        }) as User,
   },
   reducers: {},
   extraReducers: (builder) => {
