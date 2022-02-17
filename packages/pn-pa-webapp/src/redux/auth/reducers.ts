@@ -22,14 +22,8 @@ const userSlice = createSlice({
         builder.addCase(exchangeToken.fulfilled, (state, action) => {
             state.user = action.payload;
         });
-        builder.addCase(exchangeToken.pending, (state) => {
-            state.loading = true;
-        });
         builder.addCase(logout.fulfilled, (state, action) => {
             state.user = action.payload;
-        });
-        builder.addCase(logout.pending, (state) => {
-            state.loading = true;
         });
     }
 });

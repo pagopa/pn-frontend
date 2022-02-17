@@ -7,6 +7,13 @@ import CustomPagination from './components/Pagination/CustomPagination';
 import CustomTooltip from './components/CustomTooltip';
 import AppMessage from './components/AppMessage';
 
+// pages
+import NotFound from './navigation/NotFound';
+import AccessDenied from './navigation/AccessDenied';
+
+export { NotFound };
+export { AccessDenied };
+
 // types
 import { AppError } from './types/AppError';
 import { PaginationData } from './components/Pagination/types';
