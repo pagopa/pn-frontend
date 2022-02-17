@@ -12,6 +12,6 @@ test('renders welcome greetings', () => {
       </Provider>
     </BrowserRouter>
   );
-  const welcomeElement = screen.getByText(/Welcome to/i);
+  const welcomeElement = screen.getByText(/Piattaforma notifiche/i);
   expect(welcomeElement).toBeInTheDocument();
 });
