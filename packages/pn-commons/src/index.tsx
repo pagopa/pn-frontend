@@ -4,6 +4,8 @@ import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import { LoadingOverlay } from './components/Loading/LoadingOverlay';
 import CustomPagination from './components/Pagination/CustomPagination';
+import CustomTooltip from './components/CustomTooltip';
+import AppMessage from './components/AppMessage';
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -22,6 +24,8 @@ export { Header };
 export { Layout };
 export { Footer };
 export { CustomPagination };
+export { CustomTooltip };
+export { AppMessage };
 
 // types
 export type { AppError };
