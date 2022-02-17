@@ -77,19 +77,17 @@ const Dashboard = () => {
   const filters = useSelector((state: RootState) => state.dashboardState.filters);
   const sort = useSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useSelector((state: RootState) => state.dashboardState.pagination);
-  const elementsPerPage = [10, 20, 50, 100, 200, 500];
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
   /* eslint-disable functional/no-let */
-  let size = pagination.size || elementsPerPage[0];
-  size = notifications.length < size ? notifications.length : size;
+  const size = pagination.size || 10;
   const totalElements =
     size *
     (pagination.moreResult
       ? Math.max(pagination.nextPagesKey.length, 8)
       : pagination.nextPagesKey.length);
-  const pagesToShow: Array<number> = calcPages(size, totalElements, 4, pagination.page);
+  const pagesToShow: Array<number> = calcPages(size, totalElements, 3, pagination.page + 1);
 
   console.log(pagesToShow);
 
@@ -194,11 +192,10 @@ const Dashboard = () => {
             {notifications.length > 0 && (
               <CustomPagination
                 paginationData={{
-                  size,
+                  size: pagination.size,
                   page: pagination.page,
                   totalElements,
                 }}
-                elementsPerPage={elementsPerPage}
                 onPageRequest={handleChangePage}
                 pagesToShow={pagesToShow}
               />

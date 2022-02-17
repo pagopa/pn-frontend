@@ -9,18 +9,23 @@ type Props = {
   paginationData: PaginationData;
   /** The function to be invoked if the user change paginationData */
   onPageRequest: (r: PaginationData) => void;
-   /** The list of numbers of the elements per page */
-  elementsPerPage: Array<number>;
+  /** The list of numbers of the elements per page */
+  elementsPerPage?: Array<number>;
   /** an array containing pages to show */
   pagesToShow?: Array<number>;
 };
 
 /** Selfcare custom table available pages component */
-export default function CustomPagination({ paginationData, onPageRequest, elementsPerPage, pagesToShow }: Props) {
-  const size = paginationData.size;
+export default function CustomPagination({
+  paginationData,
+  onPageRequest,
+  elementsPerPage = [10, 20, 50, 100, 200, 500],
+  pagesToShow,
+}: Props) {
+  const size = paginationData.size || elementsPerPage[0];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -37,7 +42,7 @@ export default function CustomPagination({ paginationData, onPageRequest, elemen
       onPageRequest(paginationData);
     }
     handleClose();
-  }
+  };
 
   return (
     <Fragment>
@@ -45,28 +50,30 @@ export default function CustomPagination({ paginationData, onPageRequest, elemen
         <Grid item xs={6} display="flex" justifyContent="start" alignItems={'center'}>
           <Button
             id="basic-button"
-            sx={{color: 'text.primary', fontWeight: 400}}
+            sx={{ color: 'text.primary', fontWeight: 400 }}
             aria-controls={open ? 'basic-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
-            endIcon={(size >= elementsPerPage[0]) && <ArrowDropDown />}
+            endIcon={<ArrowDropDown />}
           >
             {size}
           </Button>
-          { (size >= elementsPerPage[0]) && 
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'Righe per pagina',
-              }}
-            >
-              {elementsPerPage.map(ep => <MenuItem key={ep} onClick={() => handleChangeElementsPerPage(ep)}>{ep}</MenuItem>)}
-            </Menu>
-          }
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            MenuListProps={{
+              'aria-labelledby': 'Righe per pagina',
+            }}
+          >
+            {elementsPerPage.map((ep) => (
+              <MenuItem key={ep} onClick={() => handleChangeElementsPerPage(ep)}>
+                {ep}
+              </MenuItem>
+            ))}
+          </Menu>
         </Grid>
         <Grid item xs={6} display="flex" justifyContent="end" alignItems={'center'}>
           {paginationData.totalElements > size && (
@@ -78,18 +85,22 @@ export default function CustomPagination({ paginationData, onPageRequest, elemen
               page={paginationData.page + 1}
               count={Math.ceil(paginationData.totalElements / size)}
               renderItem={(props2) => {
-                if (pagesToShow && props2.type === 'page' && pagesToShow.indexOf(props2.page) === -1) {
+                console.log(props2);
+                if (
+                  pagesToShow &&
+                  props2.type === 'page' &&
+                  pagesToShow.indexOf(props2.page) === -1
+                ) {
                   return null;
                 }
-                console.log(props2);
-                return <PaginationItem {...props2} sx={{ border: 'none' }} />
+                return <PaginationItem {...props2} sx={{ border: 'none' }} />;
               }}
-              onChange={(_event: ChangeEvent<unknown>, value: number) => (
+              onChange={(_event: ChangeEvent<unknown>, value: number) =>
                 onPageRequest({
                   ...paginationData,
-                  page: value - 1
+                  page: value - 1,
                 })
-              )}
+              }
             />
           )}
         </Grid>
@@ -97,9 +108,3 @@ export default function CustomPagination({ paginationData, onPageRequest, elemen
     </Fragment>
   );
 }
-
-/*
-renderItem={(props2) => {
-                return props2.page === 10 ? null : <PaginationItem {...props2} sx={{ border: 'none' }} />
-              }}
-*/
