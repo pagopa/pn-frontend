@@ -5,9 +5,8 @@ import { makeStyles } from '@mui/styles';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
-import { RootState } from '../../../redux/store';
 import { NotificationAllowedStatus } from '../../../utils/status.utility';
 import { tenYearsAgo, today } from '../../../utils/date.utility';
 
@@ -17,13 +16,13 @@ const useStyles = makeStyles({
     alignSelf: 'center',
   },
   customTextField: {
-  //   height: '40px !important',
-  //   alignSelf: 'center !important',
-  //   ' & div': {
-  //     height: '40px !important',
-  //     fontSize:'16px',
-  //   },
-  //   padding:'0px !important'
+    //   height: '40px !important',
+    //   alignSelf: 'center !important',
+    //   ' & div': {
+    //     height: '40px !important',
+    //     fontSize:'16px',
+    //   },
+    //   padding:'0px !important'
   },
 });
 
@@ -31,7 +30,6 @@ export default function FilterNotificationsTable() {
   const dispatch = useDispatch();
   const [startDate, setStartDate] = React.useState<Date | null>(null);
   const [endDate, setEndDate] = React.useState<Date | null>(null);
-  const filtersState = useSelector((state: RootState) => state.dashboardState.filters);
 
   const searchForValues = [
     { value: '0', label: 'Codice Fiscale' },
@@ -40,10 +38,10 @@ export default function FilterNotificationsTable() {
 
   const formik = useFormik({
     initialValues: {
-      searchFor: 0,
-      startDate: filtersState.startDate,
-      endDate: filtersState.endDate,
-      recipientId: filtersState.recipientId,
+      searchFor: null,
+      startDate: tenYearsAgo.toISOString(),
+      endDate: today.toISOString(),
+      recipientId: ' ',
       status: NotificationAllowedStatus[0].value,
     },
     /** onSubmit populates filters */
@@ -68,6 +66,9 @@ export default function FilterNotificationsTable() {
         recipientId: undefined,
       })
     );
+    formik.resetForm();
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const classes = useStyles();
@@ -78,13 +79,12 @@ export default function FilterNotificationsTable() {
         <Box display={'flex'} sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}>
           <TextField
             className={classes.customTextField}
-            id="outlined-basic"
             label="Cerca per"
-            select
             name="searchFor"
             variant="outlined"
             value={formik.values.searchFor}
             onChange={formik.handleChange}
+            select
           >
             {searchForValues.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -96,8 +96,8 @@ export default function FilterNotificationsTable() {
             className={classes.customTextField}
             value={formik.values.recipientId}
             onChange={formik.handleChange}
+            label="Inserire codice intero"
             name="recipientId"
-            id="outlined-basic"
             variant="outlined"
           />
           <LocalizationProvider
@@ -163,7 +163,7 @@ export default function FilterNotificationsTable() {
             Cerca
           </Button>
           <Button className={classes.customButton} onClick={cleanFilters}>
-            Rimuovi filtri
+            Annulla ricerca
           </Button>
         </Box>
       </form>
