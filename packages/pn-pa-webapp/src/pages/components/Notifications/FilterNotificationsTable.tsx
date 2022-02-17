@@ -1,33 +1,48 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { Box, Button, Divider, MenuItem, TextField } from '@mui/material';
+import { Box, Button, MenuItem, TextField } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import { useDispatch, useSelector } from 'react-redux';
-
+import { useDispatch } from 'react-redux';
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
-import { RootState } from '../../../redux/store';
-import {NotificationAllowedStatus} from '../../../utils/status.utility';
+import { NotificationAllowedStatus } from '../../../utils/status.utility';
+import { tenYearsAgo, today } from '../../../utils/date.utility';
 
-const FilterNotificationsTable = () => {
+const useStyles = makeStyles({
+  customButton: {
+    height: '60px',
+    alignSelf: 'center',
+  },
+  customTextField: {
+    //   height: '40px !important',
+    //   alignSelf: 'center !important',
+    //   ' & div': {
+    //     height: '40px !important',
+    //     fontSize:'16px',
+    //   },
+    //   padding:'0px !important'
+  },
+});
+
+export default function FilterNotificationsTable() {
   const dispatch = useDispatch();
   const [startDate, setStartDate] = React.useState<Date | null>(null);
   const [endDate, setEndDate] = React.useState<Date | null>(null);
-  const filtersState = useSelector((state: RootState) => state.dashboardState.filters);
 
   const searchForValues = [
     { value: '0', label: 'Codice Fiscale' },
     { value: '1', label: 'Codice IUN' },
   ];
-  
+
   const formik = useFormik({
     initialValues: {
-      searchFor: 0,
-      startDate: filtersState.startDate,
-      endDate: filtersState.endDate,
-      recipientId: filtersState.recipientId,
-      status: filtersState.status,
+      searchFor: null,
+      startDate: tenYearsAgo.toISOString(),
+      endDate: today.toISOString(),
+      recipientId: ' ',
+      status: NotificationAllowedStatus[0].value,
     },
     /** onSubmit populates filters */
     onSubmit: (values) => {
@@ -41,22 +56,35 @@ const FilterNotificationsTable = () => {
     },
   });
 
-  // useEffect(() => {
-  //   dispatch(setNotificationFilters({formik.values.startDate, formik.values.endDate}));
-  // }, []);
+  const cleanFilters = () => {
+    // TODO questa può andare in un metodo separato: deve pulire i filtri dello stato redux e pulire il form
+    dispatch(
+      setNotificationFilters({
+        startDate: tenYearsAgo.toISOString(),
+        endDate: today.toISOString(),
+        status: undefined,
+        recipientId: undefined,
+      })
+    );
+    formik.resetForm();
+    setStartDate(null);
+    setEndDate(null);
+  };
+
+  const classes = useStyles();
 
   return (
     <React.Fragment>
       <form onSubmit={formik.handleSubmit}>
         <Box display={'flex'} sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}>
           <TextField
-            id="outlined-basic"
+            className={classes.customTextField}
             label="Cerca per"
-            select
             name="searchFor"
             variant="outlined"
             value={formik.values.searchFor}
             onChange={formik.handleChange}
+            select
           >
             {searchForValues.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -65,13 +93,13 @@ const FilterNotificationsTable = () => {
             ))}
           </TextField>
           <TextField
+            className={classes.customTextField}
             value={formik.values.recipientId}
             onChange={formik.handleChange}
+            label="Inserire codice intero"
             name="recipientId"
-            id="outlined-basic"
             variant="outlined"
           />
-          <Divider orientation="vertical" variant="middle" flexItem />
           <LocalizationProvider
             name="startDate"
             value={formik.values.startDate}
@@ -81,10 +109,10 @@ const FilterNotificationsTable = () => {
               label="Da"
               inputFormat="DD/MM/yyyy"
               value={startDate}
-              onChange={(value: Date | null)  => {
+              onChange={(value: Date | null) => {
                 formik
-                  .setFieldValue("startDate", value?.toISOString())
-                  .then( () => {
+                  .setFieldValue('startDate', value?.toISOString())
+                  .then(() => {
                     setStartDate(value);
                     console.log(value?.toISOString());
                   })
@@ -103,10 +131,10 @@ const FilterNotificationsTable = () => {
               label="A"
               inputFormat="DD/MM/yyyy"
               value={endDate}
-              onChange={(value: Date | null)  => {
+              onChange={(value: Date | null) => {
                 formik
-                  .setFieldValue("endDate", value?.toISOString())
-                  .then( () => {
+                  .setFieldValue('endDate', value?.toISOString())
+                  .then(() => {
                     setEndDate(value);
                     console.log(value?.toISOString());
                   })
@@ -116,6 +144,7 @@ const FilterNotificationsTable = () => {
             />
           </LocalizationProvider>
           <TextField
+            className={classes.customTextField}
             name="status"
             id="outlined-basic"
             label="Stato"
@@ -130,29 +159,14 @@ const FilterNotificationsTable = () => {
               </MenuItem>
             ))}
           </TextField>
-          <Button variant="outlined" type="submit">
-            Filtra
+          <Button variant="outlined" type="submit" className={classes.customButton}>
+            Cerca
           </Button>
-          <Button
-            variant="outlined"
-            onClick={() =>
-              // TODO questa può andare in un metodo separato: deve pulire i filtri dello stato redux e pulire il form
-              dispatch(
-                setNotificationFilters({
-                  startDate: '',
-                  endDate: '',
-                  status: undefined,
-                  recipientId: undefined,
-                })
-              )
-            }
-          >
-            Rimuovi filtri
+          <Button className={classes.customButton} onClick={cleanFilters}>
+            Annulla ricerca
           </Button>
         </Box>
       </form>
     </React.Fragment>
   );
-};
-
-export default FilterNotificationsTable;
+}
