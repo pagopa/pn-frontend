@@ -11,8 +11,8 @@ const dashboardSlice = createSlice({
         loading: false,
         notifications: [] as Array<Notification>,
         filters: {
-            startDate: today.toISOString(),
-            endDate: tenYearsAgo.toISOString(),
+            startDate: tenYearsAgo.toISOString(),
+            endDate: today.toISOString(),
             recipientId: '',
             status: '',
             subjectRegExp: '',
