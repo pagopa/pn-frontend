@@ -12,27 +12,27 @@ const userResponse: User = {
   fiscal_number: 'RSSMRA80A01H501U',
   organization: {
     id: 'mocked-id',
-    role: 'mocked-role'
-  }
-}
+    role: 'mocked-role',
+  },
+};
 
 export const loginInit = () => {
   let axiosMock: MockAdapter;
-  
+
   const mockLoginResponse = () => {
     axiosMock = new MockAdapter(authClient);
     axiosMock.onGet(`/beta/session-token`).reply(200, userResponse);
-  }
-  
+  };
+
   beforeAll(() => {
     mockLoginResponse();
   });
-  
+
   afterAll(() => {
     axiosMock.reset();
     axiosMock.restore();
   });
-}
+};
 
 loginInit();
 
@@ -68,6 +68,14 @@ describe('Auth redux state tests', () => {
     const payload = action.payload;
 
     expect(action.type).toBe('logout/fulfilled');
-    expect(payload).toEqual({});
-  })
+    expect(payload).toEqual({
+      sessionToken: '',
+      family_name: '',
+      fiscal_number: '',
+      organization: {
+        id: '',
+        role: '',
+      },
+    });
+  });
 });
