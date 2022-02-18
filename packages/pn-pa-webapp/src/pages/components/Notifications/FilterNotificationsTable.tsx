@@ -32,36 +32,42 @@ const FilterNotificationsTable = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
+  const fiscalCode_regex = /^(?:[A-Z][AEIOU][AEIOUX]|[AEIOU]X{2}|[B-DF-HJ-NP-TV-Z]{2}[A-Z]){2}(?:[\dLMNP-V]{2}(?:[A-EHLMPR-T](?:[04LQ][1-9MNP-V]|[15MR][\dLMNP-V]|[26NS][0-8LMNP-U])|[DHPS][37PT][0L]|[ACELMRT][37PT][01LM]|[AC-EHLMPR-T][26NS][9V])|(?:[02468LNQSU][048LQU]|[13579MPRTV][26NS])B[26NS][9V])(?:[A-MZ][1-9MNP-V][\dLMNP-V]{2}|[A-M][0L](?:[1-9MNP-V][\dLMNP-V]|[0L][1-9MNP-V]))[A-Z]$/i;
+  // TODO inserire regex corretta
+  const IUN_regex = /^[A-Z]$/i;
+
   const searchForValues = [
     { value: '0', label: 'Codice Fiscale' },
     { value: '1', label: 'Codice IUN' },
   ];
 
-  
-
   const validationSchema = yup.object({
-    recipientId: yup.string().min(2, "test2").required("test"),
+    recipientId: yup.string().matches(fiscalCode_regex, "Inserire il codice completo"),
+    iunId: yup.string().matches(IUN_regex, "Inserire il codice corretto"),
+    startDate : yup.date().min(tenYearsAgo),
+    endDate: yup.date().min(tenYearsAgo)
   });
 
   const formik = useFormik({
     initialValues: {
       searchFor: '',
-      startDate: tenYearsAgo.toISOString(),
-      endDate: today.toISOString(),
+      startDate: tenYearsAgo,
+      endDate: today,
       recipientId: '',
+      iunId: '',
       status: NotificationAllowedStatus[0].value,
     },
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
       const filters = {
-        startDate: values.startDate,
-        endDate: values.endDate,
+        startDate: values.startDate.toDateString(),
+        endDate: values.endDate.toDateString(),
         recipientId: values.recipientId,
         status: values.status === 'All' ? undefined : values.status,
       };
       dispatch(setNotificationFilters(filters));
-    },    
+    },
   });
 
   const cleanFilters = () => {
@@ -81,7 +87,7 @@ const FilterNotificationsTable = () => {
 
   const classes = useStyles();
 
-  const handleChange = (e:ChangeEvent) => {
+  const handleChangeTouched = (e: ChangeEvent) => {
     void formik.setFieldTouched(e.target.id, true, false);
     formik.handleChange(e);
   };
@@ -93,7 +99,10 @@ const FilterNotificationsTable = () => {
   return (
     <Fragment>
       <form onSubmit={formik.handleSubmit}>
-        <Box display={'flex'} sx={{verticalAlign:'top', '& .MuiTextField-root': { m: 1, width: '25ch' } }}>
+        <Box
+          display={'flex'}
+          sx={{ verticalAlign: 'top', '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+        >
           <TextField
             id="searchFor"
             className={classes.customTextField}
@@ -110,18 +119,33 @@ const FilterNotificationsTable = () => {
               </MenuItem>
             ))}
           </TextField>
+          {formik.values.searchFor === '' || formik.values.searchFor === '0' ?
           <TextField
             id="recipientId"
             className={classes.customTextField}
             value={formik.values.recipientId}
-            onChange={handleChange}
-            label="Inserire codice intero"
+            onChange={handleChangeTouched}
+            label="Codice fiscale"
             name="recipientId"
             variant="outlined"
-            error={(formik.touched.recipientId) && Boolean(formik.errors.recipientId)}
-            helperText={(formik.touched.recipientId) && formik.errors.recipientId}
+            error={formik.touched.recipientId && Boolean(formik.errors.recipientId)}
+            helperText={formik.touched.recipientId && formik.errors.recipientId}
             disabled={!formik.values.searchFor}
           />
+          :
+          <TextField
+            id="iunId"
+            className={classes.customTextField}
+            value={formik.values.iunId}
+            onChange={handleChangeTouched}
+            label="Codice IUN"
+            name="iunId"
+            variant="outlined"
+            error={formik.touched.iunId && Boolean(formik.errors.iunId)}
+            helperText={formik.touched.iunId && formik.errors.iunId}
+            disabled={!formik.values.searchFor}
+          />
+        }
           <LocalizationProvider
             id="startDate"
             name="startDate"
@@ -135,13 +159,12 @@ const FilterNotificationsTable = () => {
               onChange={(value: Date | null) => {
                 formik
                   .setFieldValue('startDate', value?.toISOString())
-                  .then(() => {
-                    setStartDate(value);
-                  })
-                  .catch(() => '');
+                  .then(() => { setStartDate(value);  })
+                  .catch(() => 'error');
               }}
               renderInput={(params) => <TextField {...params} />}
-              minDate={tenYearsAgo}
+              disableFuture={true}
+              maxDate={endDate? endDate : undefined}
             />
           </LocalizationProvider>
           <LocalizationProvider
@@ -158,12 +181,12 @@ const FilterNotificationsTable = () => {
               onChange={(value: Date | null) => {
                 formik
                   .setFieldValue('endDate', value?.toISOString())
-                  .then(() => {
-                    setEndDate(value);
-                  })
-                  .catch(() => '');
+                  .then(() => { setEndDate(value); })
+                  .catch(() => 'error');
               }}
               renderInput={(params) => <TextField {...params} />}
+              disableFuture={true}
+              minDate={startDate? startDate : undefined}
             />
           </LocalizationProvider>
           <TextField
@@ -182,7 +205,12 @@ const FilterNotificationsTable = () => {
               </MenuItem>
             ))}
           </TextField>
-          <Button variant="outlined" type="submit" className={classes.customButton} disabled={formik.isSubmitting || !formik.isValid}>
+          <Button
+            variant="outlined"
+            type="submit"
+            className={classes.customButton}
+            disabled={!formik.isValid}
+          >
             Cerca
           </Button>
           <Button className={classes.customButton} onClick={cleanFilters}>
