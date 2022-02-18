@@ -1,5 +1,19 @@
+import MockAdapter from 'axios-mock-adapter';
+
+import { apiClient } from '../../../api/axios';
 import { tenYearsAgo, today } from '../../../utils/date.utility';
+import { exchangeToken, logout } from '../../auth/actions';
+import { loginInit } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
+import { getSentNotifications } from '../actions';
+import { GetNotificationsResponse } from '../types';
+
+const mockNetworkResponse = () => {
+  const mock = new MockAdapter(apiClient);
+  mock.onGet(`/delivery/notifications/sent`).reply(200, [])
+}
+
+loginInit();
 
 describe('Dashbaord redux state tests', () => {
   
@@ -28,16 +42,21 @@ describe('Dashbaord redux state tests', () => {
     });
   });
 
-  /*
-  it('Should be able to fetch the games list for a specific user', async () => {
-    const result = await store.dispatch(fetchGamesSummary(userId))
-    const games = result.payload
+  it('Should be able to fetch the notifications list', async () => {
+    await store.dispatch(exchangeToken('mocked-token'));
+    mockNetworkResponse();
+    const action = await store.dispatch(getSentNotifications({
+      startDate: tenYearsAgo.toISOString(),
+      endDate: today.toISOString()
+    }));
+    const payload = action.payload as GetNotificationsResponse;
 
-    expect(result.type).toBe('games/fetch_list/fulfilled')
-    expect(games.game_1).toEqual(getListResponse.game_1)
-
-    const state = store.getState().games
-    expect(state).toEqual({ games })
+    expect(action.type).toBe('getSentNotifications/fulfilled');
+    expect(payload).toEqual({
+      results: [],
+      moreResult: true,
+      nextPagesKey: ['1', '2', '3', '4', '5', '6']
+    });
+    await store.dispatch(logout());
   })
-  */
 });
