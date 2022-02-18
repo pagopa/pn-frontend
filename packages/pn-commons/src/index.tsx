@@ -5,6 +5,14 @@ import Header from './components/Header/Header';
 import { LoadingOverlay } from './components/Loading/LoadingOverlay';
 import CustomPagination from './components/Pagination/CustomPagination';
 import CustomTooltip from './components/CustomTooltip';
+import AppMessage from './components/AppMessage';
+
+// pages
+import NotFound from './navigation/NotFound';
+import AccessDenied from './navigation/AccessDenied';
+
+export { NotFound };
+export { AccessDenied };
 
 // types
 import { AppError } from './types/AppError';
@@ -17,6 +25,7 @@ export { Layout };
 export { Footer };
 export { CustomPagination };
 export { CustomTooltip };
+export { AppMessage };
 
 // types
 export type { AppError };

@@ -1,9 +1,9 @@
+import { AccessDenied } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { UserRole } from '../models/user';
 import { RootState } from '../redux/store';
-import AccessDenied from './AccessDenied';
 
 interface Props {
   roles: Array<UserRole>;
