@@ -8,6 +8,7 @@ type Props = {
 export default function SubHeader({ children }: Props) {
   return (
     <AppBar
+      role="presentation"
       position="relative"
       sx={{ alignItems: 'center', height: '15%', backgroundColor: 'primary', boxShadow: 'none' }}
     >
