@@ -1,5 +1,6 @@
-import React from 'react';
+import { useEffect, useState, ChangeEvent, Fragment } from 'react';
 import { useFormik } from 'formik';
+import * as yup from 'yup';
 import { Box, Button, MenuItem, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import DateAdapter from '@mui/lab/AdapterMoment';
@@ -26,24 +27,31 @@ const useStyles = makeStyles({
   },
 });
 
-export default function FilterNotificationsTable() {
+const FilterNotificationsTable = () => {
   const dispatch = useDispatch();
-  const [startDate, setStartDate] = React.useState<Date | null>(null);
-  const [endDate, setEndDate] = React.useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   const searchForValues = [
     { value: '0', label: 'Codice Fiscale' },
     { value: '1', label: 'Codice IUN' },
   ];
 
+  
+
+  const validationSchema = yup.object({
+    recipientId: yup.string().min(2, "test2").required("test"),
+  });
+
   const formik = useFormik({
     initialValues: {
-      searchFor: null,
+      searchFor: '',
       startDate: tenYearsAgo.toISOString(),
       endDate: today.toISOString(),
-      recipientId: ' ',
+      recipientId: '',
       status: NotificationAllowedStatus[0].value,
     },
+    validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
       const filters = {
@@ -53,7 +61,7 @@ export default function FilterNotificationsTable() {
         status: values.status === 'All' ? undefined : values.status,
       };
       dispatch(setNotificationFilters(filters));
-    },
+    },    
   });
 
   const cleanFilters = () => {
@@ -73,11 +81,21 @@ export default function FilterNotificationsTable() {
 
   const classes = useStyles();
 
+  const handleChange = (e:ChangeEvent) => {
+    void formik.setFieldTouched(e.target.id, true, false);
+    formik.handleChange(e);
+  };
+
+  useEffect(() => {
+    void formik.validateForm();
+  }, []);
+
   return (
-    <React.Fragment>
+    <Fragment>
       <form onSubmit={formik.handleSubmit}>
-        <Box display={'flex'} sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}>
+        <Box display={'flex'} sx={{verticalAlign:'top', '& .MuiTextField-root': { m: 1, width: '25ch' } }}>
           <TextField
+            id="searchFor"
             className={classes.customTextField}
             label="Cerca per"
             name="searchFor"
@@ -93,14 +111,19 @@ export default function FilterNotificationsTable() {
             ))}
           </TextField>
           <TextField
+            id="recipientId"
             className={classes.customTextField}
             value={formik.values.recipientId}
-            onChange={formik.handleChange}
+            onChange={handleChange}
             label="Inserire codice intero"
             name="recipientId"
             variant="outlined"
+            error={(formik.touched.recipientId) && Boolean(formik.errors.recipientId)}
+            helperText={(formik.touched.recipientId) && formik.errors.recipientId}
+            disabled={!formik.values.searchFor}
           />
           <LocalizationProvider
+            id="startDate"
             name="startDate"
             value={formik.values.startDate}
             dateAdapter={DateAdapter}
@@ -114,14 +137,15 @@ export default function FilterNotificationsTable() {
                   .setFieldValue('startDate', value?.toISOString())
                   .then(() => {
                     setStartDate(value);
-                    console.log(value?.toISOString());
                   })
                   .catch(() => '');
               }}
               renderInput={(params) => <TextField {...params} />}
+              minDate={tenYearsAgo}
             />
           </LocalizationProvider>
           <LocalizationProvider
+            id="endDate"
             name="endDate"
             value={formik.values.endDate}
             dateAdapter={DateAdapter}
@@ -136,7 +160,6 @@ export default function FilterNotificationsTable() {
                   .setFieldValue('endDate', value?.toISOString())
                   .then(() => {
                     setEndDate(value);
-                    console.log(value?.toISOString());
                   })
                   .catch(() => '');
               }}
@@ -144,9 +167,9 @@ export default function FilterNotificationsTable() {
             />
           </LocalizationProvider>
           <TextField
+            id="status"
             className={classes.customTextField}
             name="status"
-            id="outlined-basic"
             label="Stato"
             select
             variant="outlined"
@@ -159,7 +182,7 @@ export default function FilterNotificationsTable() {
               </MenuItem>
             ))}
           </TextField>
-          <Button variant="outlined" type="submit" className={classes.customButton}>
+          <Button variant="outlined" type="submit" className={classes.customButton} disabled={formik.isSubmitting || !formik.isValid}>
             Cerca
           </Button>
           <Button className={classes.customButton} onClick={cleanFilters}>
@@ -167,6 +190,8 @@ export default function FilterNotificationsTable() {
           </Button>
         </Box>
       </form>
-    </React.Fragment>
+    </Fragment>
   );
-}
+};
+
+export default FilterNotificationsTable;
