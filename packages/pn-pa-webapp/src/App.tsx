@@ -1,18 +1,19 @@
-import { LoadingOverlay, Layout } from '@pagopa-pn/pn-commons';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { LoadingOverlay, Layout, AppMessage} from '@pagopa-pn/pn-commons';
+
 import SideMenu from './components/SideMenu/SideMenu';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getHomePage, getMenuItems } from './utils/role.utility';
 
 const App = () => {
-  const token = useSelector((state: RootState) => state.userState.user.sessionToken);
-  const role = useSelector((state: RootState) => state.userState.user.organization?.role);
+  const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
+  const role = useAppSelector((state: RootState) => state.userState.user.organization?.role);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (token !== '') {
@@ -26,6 +27,7 @@ const App = () => {
       onExitAction={() => dispatch(logout())}
       sideMenu={role && <SideMenu menuItems={getMenuItems(role)} />}
     >
+      <AppMessage />
       <LoadingOverlay />
       <Router />
     </Layout>

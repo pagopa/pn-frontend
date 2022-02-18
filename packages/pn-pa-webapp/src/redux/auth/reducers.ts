@@ -7,7 +7,7 @@ const userSlice = createSlice({
     name: 'userSlice',
     initialState: {
         loading: false,
-        user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') || '') : {
+        user: (sessionStorage.getItem('user') ? JSON.parse(sessionStorage.getItem('user') || '') : {
             sessionToken: '',
             family_name: '',
             fiscal_number: '',
@@ -15,21 +15,15 @@ const userSlice = createSlice({
                 id: '',
                 role: ''
             }
-        } as User
+        }) as User
     },
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(exchangeToken.fulfilled, (state, action) => {
             state.user = action.payload;
         });
-        builder.addCase(exchangeToken.pending, (state) => {
-            state.loading = true;
-        });
         builder.addCase(logout.fulfilled, (state, action) => {
             state.user = action.payload;
-        });
-        builder.addCase(logout.pending, (state) => {
-            state.loading = true;
         });
     }
 });

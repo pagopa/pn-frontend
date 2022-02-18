@@ -2,6 +2,7 @@ import { appStateReducer } from '@pagopa-pn/pn-commons/src/redux/slices/appState
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { LOG_REDUX_ACTIONS } from '../utils/constants';
+import userSlice from './auth/reducers';
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined];
 
@@ -9,6 +10,7 @@ export const createStore = () =>
   configureStore({
     reducer: {
       appState: appStateReducer,
+      userState: userSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(

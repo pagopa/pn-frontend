@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 
 const AccessDenied = () => (
   <Fragment>
-    <Typography align="center" color="textPrimary" variant="h1">
+    <Typography align="center" color="textPrimary" variant="h4">
       Non hai le autorizzazioni necessarie per accedere a questa pagina
     </Typography>
   </Fragment>

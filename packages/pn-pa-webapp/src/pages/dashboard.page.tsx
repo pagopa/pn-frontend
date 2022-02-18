@@ -1,9 +1,9 @@
 import { useEffect, Fragment } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { CustomPagination, PaginationData } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
 import { RootState } from '../redux/store';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
 import { getNotificationStatusLabelAndColor } from '../utils/status.utility';
@@ -72,11 +72,11 @@ function calcPages(
 }
 
 const Dashboard = () => {
-  const dispatch = useDispatch();
-  const notifications = useSelector((state: RootState) => state.dashboardState.notifications);
-  const filters = useSelector((state: RootState) => state.dashboardState.filters);
-  const sort = useSelector((state: RootState) => state.dashboardState.sort);
-  const pagination = useSelector((state: RootState) => state.dashboardState.pagination);
+  const dispatch = useAppDispatch();
+  const notifications = useAppSelector((state: RootState) => state.dashboardState.notifications);
+  const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
+  const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
+  const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -164,7 +164,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    dispatch(getSentNotifications(filters));
+    void dispatch(getSentNotifications(filters));
   }, [filters, pagination, sort]);
 
   // TODO: Remove extra style and extra div
