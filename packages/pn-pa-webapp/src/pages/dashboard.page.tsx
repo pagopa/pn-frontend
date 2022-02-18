@@ -169,7 +169,7 @@ const Dashboard = () => {
 
   // TODO: Remove extra style and extra div
   return (
-    <div style={{ padding: '20px' }}>
+    <Box style={{ padding: '20px' }}>
       <Box sx={{ padding: '20px 0' }}>
         <Typography variant="h4">Notifiche</Typography>
         <Typography>
@@ -179,7 +179,7 @@ const Dashboard = () => {
       </Box>
       <Fragment>
         {notifications && (
-          <div>
+          <Fragment>
             <FilterNotificationsTable />
             <NotificationsTable
               columns={columns}
@@ -198,10 +198,10 @@ const Dashboard = () => {
                 pagesToShow={pagesToShow}
               />
             )}
-          </div>
+          </Fragment>
         )}
       </Fragment>
-    </div>
+    </Box>
   );
 };
 
