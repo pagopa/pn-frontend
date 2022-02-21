@@ -13,7 +13,7 @@ const mockNetworkResponse = () => {
   mock.onGet(`/delivery/notifications/sent`).reply(200, {
     moreResult: false,
     nextPagesKey: [],
-    results: []
+    result: []
   })
 }
 
@@ -58,7 +58,7 @@ describe('Dashbaord redux state tests', () => {
     expect(payload).toEqual({
       moreResult: false,
       nextPagesKey: [],
-      results: []
+      result: []
     });
     await store.dispatch(logout());
   })
