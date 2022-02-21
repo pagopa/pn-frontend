@@ -1,4 +1,4 @@
-import { calcPages } from '../pages.utility';
+import { calcPages } from '../pagination.utility';
 
 test('calculate 5 displayed pages for 100 items, 10 items per page and page 1', () => {
   const displayedPages = calcPages(10, 100, 5, 1);

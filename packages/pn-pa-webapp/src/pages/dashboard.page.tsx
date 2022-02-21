@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
 import { getNotificationStatusLabelAndColor } from '../utils/status.utility';
-import { calcPages } from '../utils/pages.utility';
+import { calcPages } from '../utils/pagination.utility';
 import NotificationsTable from './components/Notifications/NotificactionsTable';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 import { Column, Row, Sort } from './components/Notifications/types';
