@@ -35,7 +35,7 @@ export default function Layout({ children, assistanceEmail, onExitAction, sideMe
     >
       <Header withSecondHeader={true} onExitAction={onExitAction} />
 
-      <Grid container spacing={2} className={classes.root}>
+      <Grid role={'navigation'} container spacing={2} className={classes.root}>
         <Grid item xs={2}>
           {sideMenu}
         </Grid>

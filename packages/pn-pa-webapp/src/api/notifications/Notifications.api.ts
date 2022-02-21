@@ -1,6 +1,5 @@
 import { apiClient } from '../axios';
 import {
-  Notification,
   GetNotificationsParams,
   GetNotificationsResponse,
 } from '../../redux/dashboard/types';
@@ -26,18 +25,29 @@ export const NotificationsApi = {
     if (params.subjectRegExp) {
       queryParams.append('subjectRegExp', params.subjectRegExp);
     }
-
-    // TODO: cambiare modello quando sarà pronto il be
+    if (params.size) {
+      queryParams.append('size', params.size.toString());
+    }
+    if (params.nextPagesKey) {
+      queryParams.append('nextPagesKey', params.nextPagesKey);
+    }
     return apiClient
-      .get<Array<Notification>>('/delivery/notifications/sent', { params: queryParams })
+      .get<GetNotificationsResponse>('/delivery/notifications/sent', { params: queryParams })
       .then((response) => {
-        const notifications = response.data.map((d) => ({
-          ...d,
-          sentAt: formatDate(d.sentAt),
-        }));
+        if (response.data && response.data.result) {
+          const notifications = response.data.result.map((d) => ({
+            ...d,
+            sentAt: formatDate(d.sentAt),
+          }));
+          return {
+            ...response.data,
+            result: notifications
+          };
+        }
         return {
-          notifications,
-          totalElements: 100,
+          result: [],
+          moreResult: false,
+          nextPagesKey: []
         };
       });
   },

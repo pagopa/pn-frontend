@@ -1,4 +1,4 @@
-import { UserRole } from "../../models/user";
+import { UserRole } from '../../models/user';
 
 export interface User {
     sessionToken: string;

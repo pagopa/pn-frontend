@@ -20,8 +20,9 @@ export enum NotificationStatus {
 }
 
 export interface GetNotificationsResponse {
-    notifications: Array<Notification>;
-    totalElements: number;
+    result: Array<Notification>;
+    moreResult: boolean;
+    nextPagesKey: Array<string>;
 }
 
 export interface GetNotificationsParams {
@@ -30,4 +31,6 @@ export interface GetNotificationsParams {
     recipientId?: string;
     status?: string;
     subjectRegExp?: string;
+    size?: number;
+    nextPagesKey?: string;
 }

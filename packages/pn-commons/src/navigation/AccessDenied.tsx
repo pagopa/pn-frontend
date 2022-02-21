@@ -1,10 +1,11 @@
 import { Typography } from '@mui/material';
+import { Fragment } from 'react';
 
 const AccessDenied = () => (
-  <div>
+  <Fragment>
     <Typography align="center" color="textPrimary" variant="h4">
       Non hai le autorizzazioni necessarie per accedere a questa pagina
     </Typography>
-  </div>
+  </Fragment>
 );
 export default AccessDenied;
