@@ -1,7 +1,8 @@
-import { cloneElement, Fragment, ReactElement, useState } from 'react'; // ReactNode, cloneElement
+import { cloneElement, ReactElement, useState } from 'react'; // ReactNode, cloneElement
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
 
 type Props = {
   tooltipContent: any;
@@ -42,7 +43,7 @@ function CustomTooltip({openOnClick, tooltipContent, children}: Props) {
 
   return (
     <ClickAwayListener onClickAway={handleTooltipClose}>
-      <Fragment>
+      <Box>
         <BootstrapTooltip
           title={tooltipContent}
           arrow
@@ -60,7 +61,7 @@ function CustomTooltip({openOnClick, tooltipContent, children}: Props) {
             onClick: handleTooltipOpen,
           })}
         </BootstrapTooltip>
-      </Fragment>
+      </Box>
     </ClickAwayListener>
   );
 }
