@@ -1,4 +1,4 @@
-import { useEffect, Fragment } from 'react';
+import { useEffect, Fragment, useRef } from 'react';
 import { CustomPagination, PaginationData } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
@@ -7,69 +7,11 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
 import { getNotificationStatusLabelAndColor } from '../utils/status.utility';
+import { calcPages } from '../utils/pages.utility';
 import NotificationsTable from './components/Notifications/NotificactionsTable';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 import { Column, Row, Sort } from './components/Notifications/types';
 import StatusTooltip from './components/Notifications/StatusTooltip';
-
-function calcDisplayedPages(
-  pages: Array<number>,
-  numOfDisplayedPages: number,
-  pageSelected: number,
-  direction: 'prev' | 'next'
-): Array<number> {
-  // if displayedPages is odd, we show the same number of page before and after
-  // if displayedPages is even, we show more pages before than after if we are navigating forward, the opposite if we are navigating backward
-  /* eslint-disable functional/no-let */
-  let firstPageToDisplay = 0;
-  /* eslint-disable functional/no-let */
-  let lastPageToDisplay = 0;
-  if (numOfDisplayedPages % 2 === 0) {
-    firstPageToDisplay =
-      pageSelected - (direction === 'next' ? numOfDisplayedPages / 2 - 1 : numOfDisplayedPages / 2);
-    lastPageToDisplay =
-      pageSelected + (direction === 'prev' ? numOfDisplayedPages / 2 - 1 : numOfDisplayedPages / 2);
-  } else {
-    firstPageToDisplay = pageSelected - Math.floor(numOfDisplayedPages / 2);
-    lastPageToDisplay = pageSelected + Math.floor(numOfDisplayedPages / 2);
-  }
-  // recalc first page and last page if they are off limits
-  if (firstPageToDisplay <= 0) {
-    const offset = pages[0] - firstPageToDisplay;
-    firstPageToDisplay = pages[0];
-    lastPageToDisplay =
-      lastPageToDisplay + offset <= pages[pages.length - 1]
-        ? lastPageToDisplay + offset
-        : pages[pages.length - 1];
-  }
-  if (lastPageToDisplay > pages[pages.length - 1]) {
-    const offset = lastPageToDisplay - pages[pages.length - 1];
-    lastPageToDisplay = pages[pages.length - 1];
-    firstPageToDisplay =
-      firstPageToDisplay - offset >= pages[0] ? firstPageToDisplay - offset : pages[0];
-  }
-  // fill pages to display
-  const displayedPages: Array<number> = [];
-  for (let i = firstPageToDisplay; i <= lastPageToDisplay; i++) {
-    /* eslint-disable functional/immutable-data */
-    displayedPages.push(i);
-  }
-  return displayedPages;
-}
-
-function calcPages(
-  pageSize: number,
-  numOfItems: number,
-  numOfDisplayedPages: number,
-  pageSelected: number
-): Array<number> {
-  if (pageSize && numOfItems) {
-    const numOfPages = Math.ceil(numOfItems / pageSize);
-    const pages = Array.from({ length: numOfPages }, (_, i) => i + 1);
-    return calcDisplayedPages(pages, numOfDisplayedPages, pageSelected, 'next');
-  }
-  return [];
-}
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -77,6 +19,8 @@ const Dashboard = () => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
+  // store previous values
+  const prevPagination = useRef(pagination);
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -84,8 +28,8 @@ const Dashboard = () => {
   const totalElements =
     pagination.size *
       (pagination.moreResult
-        ? Math.max(pagination.nextPagesKey.length, 8)
-        : pagination.nextPagesKey.length);
+        ? Math.max(pagination.nextPagesKey.length + 1, 8)
+        : pagination.nextPagesKey.length + 1);
   const pagesToShow: Array<number> = calcPages(pagination.size, totalElements, 3, pagination.page + 1);
 
   const columns: Array<Column> = [
@@ -163,8 +107,20 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    void dispatch(getSentNotifications({...filters, size: pagination.size, nextPagesKey: pagination.nextPagesKey[pagination.page]}));
-  }, [filters, pagination, sort]);
+    // assign the ref's current value to the pagination Hook
+    const params = {
+      ...filters,
+      size: pagination.size
+    };
+    if (pagination !== prevPagination.current) {
+      /* eslint-disable functional/immutable-data */
+      prevPagination.current = pagination;
+      const nextPage = pagination.page === prevPagination.current.page ? pagination.nextPagesKey[prevPagination.current.page - 1] : pagination.nextPagesKey[pagination.page - 1];
+      params.nextPagesKey = pagination.page === 0 ? undefined: nextPage;
+      /* eslint-enable functional/immutable-data */
+    }
+    void dispatch(getSentNotifications(params));
+  }, [filters, pagination.size, pagination.page, sort]);
 
   return (
     <Box style={{ padding: '20px' }}>
