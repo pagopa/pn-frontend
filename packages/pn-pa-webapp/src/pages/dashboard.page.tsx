@@ -1,4 +1,5 @@
 import { useEffect, Fragment, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CustomPagination, PaginationData } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
@@ -31,6 +32,8 @@ const Dashboard = () => {
         ? Math.max(pagination.nextPagesKey.length + 1, 8)
         : pagination.nextPagesKey.length + 1);
   const pagesToShow: Array<number> = calcPages(pagination.size, totalElements, 3, pagination.page + 1);
+  
+  const navigate = useNavigate();
 
   const columns: Array<Column> = [
     {
@@ -104,6 +107,11 @@ const Dashboard = () => {
   // Sort handlers
   const handleChangeSorting = (s: Sort) => {
     dispatch(setSorting(s));
+  };
+
+  // Navigation handlers
+  const handleRowClick = (id: string) => {
+    navigate(`/dashboard/${id}/notifica`);
   };
 
   useEffect(() => {

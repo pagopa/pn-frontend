@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { NotFound } from '@pagopa-pn/pn-commons';
 
 import Dashboard from '../pages/dashboard.page';
+import NotificationDetail from '../pages/NotificationDetail.page';
 import { UserRole } from '../models/user';
 
 import RequireAuth from './RequiredAuth';
@@ -23,6 +24,7 @@ function Router() {
         }
       >
         <Route path={routes.DASHBOARD} element={<Dashboard />} />
+        <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
         <Route path={routes.ROLES} element={<h1>Ruoli</h1>} />
         <Route path={routes.API_KEYS} element={<h1>Api Keys</h1>} />
       </Route>
