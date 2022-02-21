@@ -1,6 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { authClient } from '../../../api/axios';
+import { UserRole } from '../../../models/user';
 import { store } from '../../store';
 import { exchangeToken, logout } from '../actions';
 import { User } from '../types';
@@ -12,7 +13,7 @@ const userResponse: User = {
   fiscal_number: 'RSSMRA80A01H501U',
   organization: {
     id: 'mocked-id',
-    role: 'mocked-role',
+    role: UserRole.REFERENTE_AMMINISTRATIVO,
   },
 };
 
