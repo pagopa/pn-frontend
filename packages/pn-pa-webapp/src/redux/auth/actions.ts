@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
+import { UserRole } from '../../models/user';
 import { User } from './types';
 
 /**
@@ -33,7 +34,7 @@ export const logout = createAsyncThunk<User>('logout', async () => {
     fiscal_number: '',
     organization: {
       id: '',
-      role: '',
+      role: UserRole.REFERENTE_OPERATIVO,
     },
   } as User;
 });
