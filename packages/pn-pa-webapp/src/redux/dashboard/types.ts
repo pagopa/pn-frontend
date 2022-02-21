@@ -20,7 +20,7 @@ export enum NotificationStatus {
 }
 
 export interface GetNotificationsResponse {
-    results: Array<Notification>;
+    result: Array<Notification>;
     moreResult: boolean;
     nextPagesKey: Array<string>;
 }

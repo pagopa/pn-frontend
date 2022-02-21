@@ -81,13 +81,12 @@ const Dashboard = () => {
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
   /* eslint-disable functional/no-let */
-  const size = pagination.size || 10;
   const totalElements =
-    size *
-    (pagination.moreResult
-      ? Math.max(pagination.nextPagesKey.length, 8)
-      : pagination.nextPagesKey.length);
-  const pagesToShow: Array<number> = calcPages(size, totalElements, 3, pagination.page + 1);
+    pagination.size *
+      (pagination.moreResult
+        ? Math.max(pagination.nextPagesKey.length, 8)
+        : pagination.nextPagesKey.length);
+  const pagesToShow: Array<number> = calcPages(pagination.size, totalElements, 3, pagination.page + 1);
 
   const columns: Array<Column> = [
     {

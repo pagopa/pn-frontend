@@ -19,7 +19,7 @@ const dashboardSlice = createSlice({
         } as GetNotificationsParams,
         pagination: {
             nextPagesKey: [] as Array<string>,
-            size: 10,
+            size: 1,
             page: 0,
             moreResult: false
         },
@@ -31,12 +31,14 @@ const dashboardSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getSentNotifications.fulfilled, (state, action) => {
-            state.notifications = action.payload.results;
+            state.notifications = action.payload.result;
             state.pagination.moreResult = action.payload.moreResult;
             // because we can jump from a page to another and nextPagesKey returns only the next three pages, we have to check if that pages already exists
-            for (const pageKey of action.payload.nextPagesKey) {
-                if (state.pagination.nextPagesKey.indexOf(pageKey) === -1) {
-                    state.pagination.nextPagesKey.push(pageKey);
+            if (action.payload.nextPagesKey) {
+                for (const pageKey of action.payload.nextPagesKey) {
+                    if (state.pagination.nextPagesKey.indexOf(pageKey) === -1) {
+                        state.pagination.nextPagesKey.push(pageKey);
+                    }
                 }
             }
         });

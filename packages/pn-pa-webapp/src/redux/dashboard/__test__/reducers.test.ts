@@ -53,7 +53,7 @@ describe('Dashbaord redux state tests', () => {
 
     expect(action.type).toBe('getSentNotifications/fulfilled');
     expect(payload).toEqual({
-      results: [],
+      result: [],
       moreResult: true,
       nextPagesKey: ['1', '2', '3', '4', '5', '6']
     });
