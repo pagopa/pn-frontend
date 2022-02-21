@@ -22,7 +22,7 @@ export const loginInit = () => {
 
   const mockLoginResponse = () => {
     axiosMock = new MockAdapter(authClient);
-    axiosMock.onGet(`/beta/session-token`).reply(200, userResponse);
+    axiosMock.onGet(`/token-exchange`).reply(200, userResponse);
   };
 
   beforeAll(() => {

@@ -15,16 +15,7 @@ const useStyles = makeStyles({
   customButton: {
     height: '60px',
     alignSelf: 'center',
-  },
-  customTextField: {
-    //   height: '40px !important',
-    //   alignSelf: 'center !important',
-    //   ' & div': {
-    //     height: '40px !important',
-    //     fontSize:'16px',
-    //   },
-    //   padding:'0px !important'
-  },
+  }
 });
 
 const FilterNotificationsTable = () => {
@@ -61,8 +52,8 @@ const FilterNotificationsTable = () => {
     /** onSubmit populates filters */
     onSubmit: (values) => {
       const filters = {
-        startDate: values.startDate.toDateString(),
-        endDate: values.endDate.toDateString(),
+        startDate: values.startDate.toISOString(),
+        endDate: values.endDate.toISOString(),
         recipientId: values.recipientId,
         status: values.status === 'All' ? undefined : values.status,
       };
@@ -105,7 +96,6 @@ const FilterNotificationsTable = () => {
         >
           <TextField
             id="searchFor"
-            className={classes.customTextField}
             label="Cerca per"
             name="searchFor"
             variant="outlined"
@@ -122,7 +112,6 @@ const FilterNotificationsTable = () => {
           {formik.values.searchFor === '' || formik.values.searchFor === '0' ?
           <TextField
             id="recipientId"
-            className={classes.customTextField}
             value={formik.values.recipientId}
             onChange={handleChangeTouched}
             label="Codice fiscale"
@@ -135,7 +124,6 @@ const FilterNotificationsTable = () => {
           :
           <TextField
             id="iunId"
-            className={classes.customTextField}
             value={formik.values.iunId}
             onChange={handleChangeTouched}
             label="Codice IUN"
@@ -158,7 +146,7 @@ const FilterNotificationsTable = () => {
               value={startDate}
               onChange={(value: Date | null) => {
                 formik
-                  .setFieldValue('startDate', value?.toISOString())
+                  .setFieldValue('startDate', value)
                   .then(() => { setStartDate(value);  })
                   .catch(() => 'error');
               }}
@@ -180,7 +168,7 @@ const FilterNotificationsTable = () => {
               value={endDate}
               onChange={(value: Date | null) => {
                 formik
-                  .setFieldValue('endDate', value?.toISOString())
+                  .setFieldValue('endDate', value)
                   .then(() => { setEndDate(value); })
                   .catch(() => 'error');
               }}
@@ -191,7 +179,6 @@ const FilterNotificationsTable = () => {
           </LocalizationProvider>
           <TextField
             id="status"
-            className={classes.customTextField}
             name="status"
             label="Stato"
             select

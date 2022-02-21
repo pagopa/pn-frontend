@@ -10,7 +10,11 @@ import { GetNotificationsResponse } from '../types';
 
 const mockNetworkResponse = () => {
   const mock = new MockAdapter(apiClient);
-  mock.onGet(`/delivery/notifications/sent`).reply(200, [])
+  mock.onGet(`/delivery/notifications/sent`).reply(200, {
+    moreResult: false,
+    nextPagesKey: [],
+    results: []
+  })
 }
 
 loginInit();
@@ -31,7 +35,7 @@ describe('Dashbaord redux state tests', () => {
       },
       pagination: {
         nextPagesKey: [],
-        size: 0,
+        size: 10,
         page: 0,
         moreResult: false,
       },
@@ -50,12 +54,11 @@ describe('Dashbaord redux state tests', () => {
       endDate: today.toISOString()
     }));
     const payload = action.payload as GetNotificationsResponse;
-
     expect(action.type).toBe('getSentNotifications/fulfilled');
     expect(payload).toEqual({
-      result: [],
-      moreResult: true,
-      nextPagesKey: ['1', '2', '3', '4', '5', '6']
+      moreResult: false,
+      nextPagesKey: [],
+      results: []
     });
     await store.dispatch(logout());
   })
