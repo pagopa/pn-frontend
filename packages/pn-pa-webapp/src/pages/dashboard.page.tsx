@@ -164,10 +164,9 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    void dispatch(getSentNotifications(filters));
+    void dispatch(getSentNotifications({...filters, size: pagination.size, nextPagesKey: pagination.nextPagesKey[pagination.page]}));
   }, [filters, pagination, sort]);
 
-  // TODO: Remove extra style and extra div
   return (
     <Box style={{ padding: '20px' }}>
       <Box sx={{ padding: '20px 0' }}>

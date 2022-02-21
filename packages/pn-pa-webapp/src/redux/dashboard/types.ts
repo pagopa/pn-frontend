@@ -31,4 +31,6 @@ export interface GetNotificationsParams {
     recipientId?: string;
     status?: string;
     subjectRegExp?: string;
+    size?: number;
+    nextPagesKey?: string;
 }
