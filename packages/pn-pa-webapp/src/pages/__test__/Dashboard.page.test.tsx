@@ -5,13 +5,13 @@ import Dashboard from '../dashboard.page';
 import * as redux from 'react-redux';
 
 describe('Dashboard Page', () => {
-  // TODO fix this test: something in patination mock is wrong
+  // TODO fix this test: something in pagination mock is wrong
   test.skip('renders dashboard page', () => {
     const spy = jest.spyOn(redux, 'useSelector');
     spy.mockReturnValue({
       notifications: [],
       pagination: {
-        nextPagesKey: [ '1'],
+        nextPagesKey: ['1'],
         size: 0,
         page: 0,
         moreResult: false,
