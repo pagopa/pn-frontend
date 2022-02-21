@@ -47,7 +47,7 @@
     "build": "craco build",
     "build:dev": "env-cmd -f .env.development craco build",
     "build:uat": "env-cmd -f .env.uat craco build",
-    "test": "craco test --watchAll=false",
+    "test": "craco test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "eject": "craco eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write"
