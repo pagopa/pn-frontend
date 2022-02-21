@@ -19,7 +19,7 @@ const dashboardSlice = createSlice({
         } as GetNotificationsParams,
         pagination: {
             nextPagesKey: [] as Array<string>,
-            size: 0,
+            size: 10,
             page: 0,
             moreResult: false
         },

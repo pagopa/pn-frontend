@@ -1,4 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
+
+import { UserRole } from "../../models/user";
 import { exchangeToken, logout } from "./actions";
 import { User } from "./types";
 
@@ -13,7 +15,7 @@ const userSlice = createSlice({
             fiscal_number: '',
             organization: {
                 id: '',
-                role: ''
+                role: UserRole.REFERENTE_AMMINISTRATIVO
             }
         }) as User
     },

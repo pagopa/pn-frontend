@@ -42,15 +42,15 @@ describe('Auth redux state tests', () => {
     const state = store.getState().userState;
     expect(state).toEqual({
       loading: false,
-      user: localStorage.getItem('user')
-        ? JSON.parse(localStorage.getItem('user') || '')
+      user: sessionStorage.getItem('user')
+        ? JSON.parse(sessionStorage.getItem('user') || '')
         : {
             sessionToken: '',
             family_name: '',
             fiscal_number: '',
             organization: {
               id: '',
-              role: '',
+              role: UserRole.REFERENTE_AMMINISTRATIVO,
             },
           },
     });
@@ -75,7 +75,7 @@ describe('Auth redux state tests', () => {
       fiscal_number: '',
       organization: {
         id: '',
-        role: '',
+        role: UserRole.REFERENTE_AMMINISTRATIVO,
       },
     });
   });
