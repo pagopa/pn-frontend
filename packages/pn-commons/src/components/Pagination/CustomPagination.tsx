@@ -19,7 +19,7 @@ type Props = {
 export default function CustomPagination({
   paginationData,
   onPageRequest,
-  elementsPerPage = [1, 10, 20, 50, 100, 200, 500],
+  elementsPerPage = [10, 20, 50, 100, 200, 500],
   pagesToShow,
 }: Props) {
   const size = paginationData.size || elementsPerPage[0];
