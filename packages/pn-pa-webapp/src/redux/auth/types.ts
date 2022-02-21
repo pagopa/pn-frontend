@@ -1,3 +1,5 @@
+import { UserRole } from "../../models/user";
+
 export interface User {
     sessionToken: string;
     name: string;
@@ -7,5 +9,5 @@ export interface User {
 }
 export interface Organization {
     id: string;
-    role: string;
+    role: UserRole;
 }
