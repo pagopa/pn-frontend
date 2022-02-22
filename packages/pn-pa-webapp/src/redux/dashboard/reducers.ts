@@ -46,6 +46,11 @@ const dashboardSlice = createSlice({
             state.loading = true;
         });
         builder.addCase(setPagination, (state, action) => {
+            if (state.pagination.size !== action.payload.size) {
+                // reset pagination
+                state.pagination.nextPagesKey = [];
+                state.pagination.moreResult = false;
+            }
             state.pagination.size = action.payload.size;
             state.pagination.page = action.payload.page;
         });
@@ -54,6 +59,10 @@ const dashboardSlice = createSlice({
         });
         builder.addCase(setNotificationFilters, (state, action) => {
             state.filters = action.payload;
+            // reset pagination
+            state.pagination.page = 0;
+            state.pagination.nextPagesKey = [];
+            state.pagination.moreResult = false;
         });
     }
 }); 
