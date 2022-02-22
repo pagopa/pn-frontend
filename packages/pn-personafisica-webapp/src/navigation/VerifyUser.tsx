@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { exchangeToken } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { URL_FE_LOGIN } from '../utils/constants';
 
 const VerifyUser = () => {
   const location = useLocation();
@@ -18,7 +19,7 @@ const VerifyUser = () => {
     } else {
       if (token === '') {
         /* eslint-disable functional/immutable-data */
-       window.location.href = process.env.REACT_APP_URL_FE_LOGIN || '';
+       window.location.href = URL_FE_LOGIN || '';
       }
     }
   }, [location]);

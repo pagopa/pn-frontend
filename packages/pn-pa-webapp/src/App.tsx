@@ -8,6 +8,7 @@ import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getHomePage, getMenuItems } from './utils/role.utility';
+import { PAGOPA_HELP_EMAIL } from './utils/constants';
 
 const App = () => {
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
@@ -23,7 +24,7 @@ const App = () => {
 
   return (
     <Layout
-      assistanceEmail={process.env.REACT_APP_PAGOPA_HELP_EMAIL}
+      assistanceEmail={PAGOPA_HELP_EMAIL}
       onExitAction={() => dispatch(logout())}
       sideMenu={role && <SideMenu menuItems={getMenuItems(role)} />}
     >

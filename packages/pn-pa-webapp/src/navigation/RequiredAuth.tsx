@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { UserRole } from '../models/user';
 import { RootState } from '../redux/store';
+import { SELFCARE_URL_FE_LOGIN } from '../utils/constants';
 
 interface Props {
   roles: Array<UserRole>;
@@ -22,7 +23,7 @@ const RequireAuth = ({ roles }: Props) => {
   useEffect(() => {
     if (token === '' || !token) {
       // Redirect them to the selfcare login page
-      window.location.href = process.env.REACT_APP_URL_SELFCARE_LOGIN || '';
+      window.location.href = SELFCARE_URL_FE_LOGIN || '';
     }
     if (token && token !== '' && role && userHasRequiredRole) {
       setAccessDenied(false);

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { URL_FE_LOGIN } from '../utils/constants';
 
 /**
  * This component returns Outlet if user is logged in.
@@ -16,7 +17,7 @@ const RequireAuth = () => {
   useEffect(() => {
     if (token === '' || !token) {
       // Redirect them to the spid-hub login page
-      window.location.href = process.env.REACT_APP_URL_FE_LOGIN || '';
+      window.location.href = URL_FE_LOGIN || '';
     }
     if (token && token !== '') {
       setAccessDenied(false);

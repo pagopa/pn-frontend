@@ -5,6 +5,7 @@ import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
+import { PAGOPA_HELP_EMAIL } from './utils/constants';
 
 const App = () => {
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
@@ -20,7 +21,7 @@ const App = () => {
   return (
     <Layout
       onExitAction={() => dispatch(logout())}
-      assistanceEmail={process.env.REACT_APP_PAGOPA_HELP_EMAIL}
+      assistanceEmail={PAGOPA_HELP_EMAIL}
     >
       <LoadingOverlay />
       <Router />
