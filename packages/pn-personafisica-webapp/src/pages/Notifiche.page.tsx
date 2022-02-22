@@ -1,4 +1,6 @@
 import { Typography } from '@mui/material';
+import FilterNotificationsTable from '../component/notification/FilterNotificationsTable';
+import NotificationsTable from '../component/notification/NotificactionsTable';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
@@ -8,6 +10,8 @@ const Notifiche = () => {
   return (
     <div>
       <Typography variant={'h4'}>Ciao {user.name}, benvenuto nella sezione Notifiche</Typography>
+      <FilterNotificationsTable/>
+      <NotificationsTable/>
     </div>
   );
 };
