@@ -22,11 +22,9 @@ type Props = {
   sort: Sort;
   /** The function to be invoked if the user change sorting */
   onChangeSorting: (s: Sort) => void;
-  /** The function to be invoked if the user click a row */
-  onClickRow: (id: string) => void;
 };
 
-function NotificationsTable({columns, rows, sort, onChangeSorting, onClickRow}: Props) {
+function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
   const createSortHandler = (property: string) => () => {
     const isAsc = sort.orderBy === property && sort.order === 'asc';
     onChangeSorting({order: isAsc ? 'desc' : 'asc', orderBy: property});
@@ -88,9 +86,9 @@ function NotificationsTable({columns, rows, sort, onChangeSorting, onClickRow}: 
           <TableBody sx={{ backgroundColor: 'background.paper'}}>
             {rows.length ? rows
               .map(row => (
-                <TableRow key={row.id} onClick={() => onClickRow(row.id)} sx={{cursor: 'pointer'}}>
+                <TableRow key={row.id} sx={{cursor: 'pointer'}}>
                   {columns.map(c => ( 
-                    <TableCell key={c.id} sx={{ width: c.width, borderBottom: 'none' }} align={c.align}>
+                    <TableCell key={c.id} sx={{ width: c.width, borderBottom: 'none' }} align={c.align} onClick={() => c.onClick && c.onClick(row.id, c.id)}>
                       {c.getCellLabel(row[c.id as keyof Notification])}
                     </TableCell>
                   ))}

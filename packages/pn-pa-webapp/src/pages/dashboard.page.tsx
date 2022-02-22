@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { CustomPagination, PaginationData } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
+import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
-import { NotificationStatus } from '../redux/dashboard/types';
+import { Notification, NotificationStatus } from '../redux/dashboard/types';
 import { getNotificationStatusLabelAndColor } from '../utils/status.utility';
 import { calcPages } from '../utils/pagination.utility';
-import NotificationsTable from './components/Notifications/NotificactionsTable';
+import NotificationsTable from './components/Notifications/NotificationsTable';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 import { Column, Row, Sort } from './components/Notifications/types';
 import StatusTooltip from './components/Notifications/StatusTooltip';
@@ -44,6 +45,9 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
+      onClick(rowId: string, columnId: string) {
+        handleRowClick(rowId, columnId);
+      }
     },
     {
       id: 'recipientId',
@@ -53,6 +57,9 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
+      onClick(rowId: string, columnId: string) {
+        handleRowClick(rowId, columnId);
+      }
     },
     {
       id: 'subject',
@@ -61,6 +68,9 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
+      onClick(rowId: string, columnId: string) {
+        handleRowClick(rowId, columnId);
+      }
     },
     {
       id: 'iun',
@@ -69,6 +79,9 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
+      onClick(rowId: string, columnId: string) {
+        handleRowClick(rowId, columnId);
+      }
     },
     {
       id: 'groups',
@@ -77,6 +90,9 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
+      onClick(rowId: string, columnId: string) {
+        handleRowClick(rowId, columnId);
+      }
     },
     {
       id: 'notificationStatus',
@@ -94,7 +110,7 @@ const Dashboard = () => {
   ];
 
   // TODO: rimuovere + i quando da be non arriveranno notifiche con stesso id
-  const rows: Array<Row> = notifications.map((n, i) => ({
+  const rows: Array<Row> = notifications.map((n: Notification, i: number) => ({
     ...n,
     id: n.paNotificationId + i.toString(),
   }));
@@ -110,8 +126,8 @@ const Dashboard = () => {
   };
 
   // Navigation handlers
-  const handleRowClick = (id: string) => {
-    navigate(`/dashboard/${id}/notifica`);
+  const handleRowClick = (rowId: string, _columnId: string) => {
+    navigate(routes.DETTAGLIO_NOTIFICA.replace(':id', rowId));
   };
 
   useEffect(() => {

@@ -1,11 +1,15 @@
-import { useParams } from 'react-router-dom';
-import { Breadcrumbs, Grid, Typography, Link, Box, styled } from '@mui/material';
+import { useParams, Link } from 'react-router-dom';
+import { Breadcrumbs, Grid, Typography, Box, styled } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
+
+import * as routes from '../navigation/routes.const';
 
 const StyledLink = styled(Link)(({ theme }) => (
   {
-    color: theme.palette.text.primary + '!important',
-    textDecoration: 'none !important',
+    display: 'flex', 
+    alignItems: 'center',
+    color: `${theme.palette.text.primary} !important`,
+    texDecoration: 'none !important',
     '&:hover, &:focus': {
       textDecoration: 'underline !important'
     }
@@ -22,7 +26,7 @@ const NotificationDetail = () => {
       <Grid container spacing={2}>
         <Grid item xs={7}>
           <Breadcrumbs aria-label="breadcrumb">
-            <StyledLink href="/dashboard" sx={{ display: 'flex', alignItems: 'center'}}>
+            <StyledLink to={routes.DASHBOARD}>
               <EmailIcon sx={{ mr: 0.5 }} />
               Notifiche
             </StyledLink>
