@@ -3,6 +3,7 @@ import {
   GetNotificationsParams,
   GetNotificationsResponse,
 } from '../../redux/dashboard/types';
+import { NotificationDetail } from '../../redux/notification/types';
 import { formatDate } from './notifications.mapper';
 
 export const NotificationsApi = {
@@ -37,7 +38,7 @@ export const NotificationsApi = {
         if (response.data && response.data.result) {
           const notifications = response.data.result.map((d) => ({
             ...d,
-            sentAt: formatDate(d.sentAt),
+            sentAt: formatDate(d.sentAt)
           }));
           return {
             ...response.data,
@@ -51,4 +52,21 @@ export const NotificationsApi = {
         };
       });
   },
+  /**
+   * Gets current user notification detail
+   * @param  {string} startDate
+   * @param  {string} endDate
+   * @returns Promise
+   */
+   getSentNotification: (iun: string): Promise<NotificationDetail> => apiClient
+      .get<NotificationDetail>(`/delivery/notifications/sent/${iun}`)
+      .then(response => {
+        if (response.data) {
+          return {
+            ...response.data,
+            sentAt: formatDate(response.data.sentAt)
+          };
+        }
+        return {} as NotificationDetail;
+      })
 };

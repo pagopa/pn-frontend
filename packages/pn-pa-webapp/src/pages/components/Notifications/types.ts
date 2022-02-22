@@ -14,7 +14,7 @@ export interface Column {
   align?: 'center' | 'inherit' | 'left' | 'right' | 'justify';
   sortable?: boolean;
   getCellLabel(value: string | number): ReactNode;
-  onClick?(rowId: string, columnId: string): void;
+  onClick?(row: Row, column: Column): void;
 }
 
 export interface Row {

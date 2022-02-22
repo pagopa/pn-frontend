@@ -45,8 +45,8 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
-      onClick(rowId: string, columnId: string) {
-        handleRowClick(rowId, columnId);
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
       }
     },
     {
@@ -57,8 +57,8 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
-      onClick(rowId: string, columnId: string) {
-        handleRowClick(rowId, columnId);
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
       }
     },
     {
@@ -68,8 +68,8 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
-      onClick(rowId: string, columnId: string) {
-        handleRowClick(rowId, columnId);
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
       }
     },
     {
@@ -79,8 +79,8 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
-      onClick(rowId: string, columnId: string) {
-        handleRowClick(rowId, columnId);
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
       }
     },
     {
@@ -90,8 +90,8 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
-      onClick(rowId: string, columnId: string) {
-        handleRowClick(rowId, columnId);
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
       }
     },
     {
@@ -126,8 +126,8 @@ const Dashboard = () => {
   };
 
   // Navigation handlers
-  const handleRowClick = (rowId: string, _columnId: string) => {
-    navigate(routes.DETTAGLIO_NOTIFICA.replace(':id', rowId));
+  const handleRowClick = (row: Row, _column: Column) => {
+    navigate(routes.DETTAGLIO_NOTIFICA.replace(':id', row.iun as string));
   };
 
   useEffect(() => {
