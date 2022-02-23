@@ -1,12 +1,11 @@
-import { render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { store } from '../../redux/store';
-import Dashboard from '../dashboard.page';
+import { screen } from '@testing-library/react';
 import * as redux from 'react-redux';
 
+import { render } from '../../__test__/test-utils';
+import Dashboard from '../dashboard.page';
+
 describe('Dashboard Page', () => {
-  // TODO fix this test: something in pagination mock is wrong
-  test.skip('renders dashboard page', () => {
+  it('renders dashboard page', () => {
     const spy = jest.spyOn(redux, 'useSelector');
     spy.mockReturnValue({
       notifications: [],
@@ -18,9 +17,7 @@ describe('Dashboard Page', () => {
       },
     });
     render(
-      <Provider store={store}>
-        <Dashboard />
-      </Provider>
+      <Dashboard />
     );
     expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
   });
