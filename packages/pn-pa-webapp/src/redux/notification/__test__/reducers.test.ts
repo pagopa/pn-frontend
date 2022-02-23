@@ -57,7 +57,21 @@ describe('Notification detail redux state tests', () => {
     const state = store.getState().notificationState;
     expect(state).toEqual({
       loading: false,
-      notification: {}
+      notification: {
+				iun: '',
+				paNotificationId: '',
+				subject: '',
+				sentAt: '',
+				cancelledIun: '',
+				cancelledByIun: '',
+				recipients: [],
+				documents: [],
+				payment: {},
+				notificationStatus: '',
+				notificationStatusHistory: [],
+				timeline: [],
+				physicalCommunicationType: ''
+			}
     });
   });
 
