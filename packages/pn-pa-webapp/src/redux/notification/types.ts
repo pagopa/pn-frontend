@@ -20,7 +20,7 @@ interface PhysicalAddress {
   foreignState: string;
 }
 
-interface NotificationDetailRecipient {
+export interface NotificationDetailRecipient {
   taxId: string;
   denomination: string;
   digitalDomicile: DigitalAddress;
@@ -28,7 +28,7 @@ interface NotificationDetailRecipient {
   token: string;
 }
 
-interface NotificationDetailDocument {
+export interface NotificationDetailDocument {
   digests: {
     sha256: string;
   };
@@ -40,7 +40,7 @@ enum NotificationFeePolicy {
   DELIVERY_MODE = 'DELIVERY_MODE'
 }
 
-interface NotificationDetailPayment {
+export interface NotificationDetailPayment {
   iuv: string;
   notificationFeePolicy: NotificationFeePolicy;
   f24: {
@@ -50,7 +50,7 @@ interface NotificationDetailPayment {
   }
 }
 
-interface NotificationStatusHistory {
+export interface NotificationStatusHistory {
   status: NotificationStatus;
   activeFrom: string;
 }
@@ -146,14 +146,14 @@ interface SendDigitalFeedbackDetails {
   errors: Array<string>
 }
 
-interface NotificationDetailTimeline {
+export interface NotificationDetailTimeline {
   elementId: string;
   timestamp: string;
   category: TimelineCategory;
   details: RecivedDetails | NotificationPathChooseDetails | SendDigitalDetails | SendDigitalFeedbackDetails;
 }
 
-enum PhysicalCommunicationType {
+export enum PhysicalCommunicationType {
   SIMPLE_REGISTERED_LETTER = 'SIMPLE_REGISTERED_LETTER',
   REGISTERED_LETTER_890 = 'REGISTERED_LETTER_890'
 }
@@ -172,4 +172,18 @@ export interface NotificationDetail {
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<NotificationDetailTimeline>;
   physicalCommunicationType: PhysicalCommunicationType
+}
+
+enum LegalfactsType {
+  SENDER_ACK = 'SENDER_ACK',
+  DIGITAL_DELIVERY = 'DIGITAL_DELIVERY',
+  ANALOG_DELIVERY = 'ANALOG_DELIVERY',
+  RECIPIENT_ACCESS = 'RECIPIENT_ACCESS'
+}
+
+export interface Legalfacts {
+  iun: string;
+  legalFactId: string;
+  type: LegalfactsType;
+  taxId: string;
 }

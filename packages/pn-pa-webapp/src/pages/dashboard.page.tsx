@@ -127,7 +127,7 @@ const Dashboard = () => {
 
   // Navigation handlers
   const handleRowClick = (row: Row, _column: Column) => {
-    navigate(routes.DETTAGLIO_NOTIFICA.replace(':id', row.iun as string));
+    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
   };
 
   useEffect(() => {

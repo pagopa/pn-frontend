@@ -3,7 +3,7 @@ import {
   GetNotificationsParams,
   GetNotificationsResponse,
 } from '../../redux/dashboard/types';
-import { NotificationDetail } from '../../redux/notification/types';
+import { NotificationDetail, Legalfacts } from '../../redux/notification/types';
 import { formatDate } from './notifications.mapper';
 
 export const NotificationsApi = {
@@ -54,19 +54,34 @@ export const NotificationsApi = {
   },
   /**
    * Gets current user notification detail
-   * @param  {string} startDate
-   * @param  {string} endDate
+   * @param  {string} iun
    * @returns Promise
    */
    getSentNotification: (iun: string): Promise<NotificationDetail> => apiClient
       .get<NotificationDetail>(`/delivery/notifications/sent/${iun}`)
       .then(response => {
         if (response.data) {
-          return {
+          const dataToSend = {
             ...response.data,
             sentAt: formatDate(response.data.sentAt)
           };
+          /* eslint-disable-next-line functional/immutable-data */
+          dataToSend.notificationStatusHistory.sort((a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime());
+          return dataToSend;
         }
         return {} as NotificationDetail;
+      }),
+  /**
+   * Gets current user notification legal acts
+   * @param  {string} iun
+   * @returns Promise
+   */
+   getSentNotificationLegalfacts: (iun: string): Promise<Array<Legalfacts>> => apiClient
+      .get<Array<Legalfacts>>(`/delivery/notifications/sent/${iun}/legalfacts`)
+      .then(response => {
+        if (response.data) {
+          return response.data;
+        }
+        return [] as Array<Legalfacts>;
       })
 };
