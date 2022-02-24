@@ -45,7 +45,7 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
       };
     case NotificationStatus.REFUSED:
       return {
-        color: 'default',
+        color: 'error',
         label: 'Non valida',
         tooltip: 'La notifica non rispetta le validazioni',
       };

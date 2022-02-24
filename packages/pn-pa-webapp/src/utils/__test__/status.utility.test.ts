@@ -36,11 +36,25 @@ test('return notification status, label and color - PAID', () => {
   expect(tooltip).toBe('Il destinatario ha pagato la notifica');
 });
 
-test('return notification status, label and color - RECEIVED', () => {
-  const { label, color, tooltip } = getNotificationStatusLabelAndColor(NotificationStatus.RECEIVED);
+test('return notification status, label and color - ACCEPTED', () => {
+  const { label, color, tooltip } = getNotificationStatusLabelAndColor(NotificationStatus.ACCEPTED);
   expect(label).toBe('Depositata');
   expect(color).toBe('default');
   expect(tooltip).toBe("L'ente ha depositato la notifica");
+});
+
+test('return notification status, label and color - IN_VALIDATION', () => {
+  const { label, color, tooltip } = getNotificationStatusLabelAndColor(NotificationStatus.IN_VALIDATION);
+  expect(label).toBe('In Validazione');
+  expect(color).toBe('default');
+  expect(tooltip).toBe("La notifica è in fase di validazione");
+});
+
+test('return notification status, label and color - REFUSED', () => {
+  const { label, color, tooltip } = getNotificationStatusLabelAndColor(NotificationStatus.REFUSED);
+  expect(label).toBe('Non valida');
+  expect(color).toBe('error');
+  expect(tooltip).toBe("La notifica non rispetta le validazioni");
 });
 
 test('return notification status, label and color - EFFECTIVE_DATE', () => {
