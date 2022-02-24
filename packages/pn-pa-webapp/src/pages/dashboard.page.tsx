@@ -60,7 +60,7 @@ const Dashboard = () => {
       },
     },
     {
-      id: 'iun',
+      id: 'notificationId',
       label: 'Codice IUN',
       width: '20%',
       getCellLabel(value: string) {
