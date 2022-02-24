@@ -1,11 +1,12 @@
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import * as redux from 'react-redux';
 
 import { render } from '../../__test__/test-utils';
+import { tenYearsAgo, today } from '../../utils/date.utility';
 import Dashboard from '../dashboard.page';
 
 describe('Dashboard Page', () => {
-  it('renders dashboard page', () => {
+  it('renders dashboard page', async () => {
     const spy = jest.spyOn(redux, 'useSelector');
     spy.mockReturnValue({
       notifications: [],
@@ -15,10 +16,22 @@ describe('Dashboard Page', () => {
         page: 0,
         moreResult: false,
       },
+      filters: {
+        startDate: tenYearsAgo.toISOString(),
+        endDate: today.toISOString(),
+        recipientId: '',
+        status: '',
+        subjectRegExp: '',
+      },
+      sort: {
+        orderBy: '',
+        order: 'asc'
+     }
     });
-    render(
-      <Dashboard />
-    );
-    expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
+
+    await act( async () => {
+      render(<Dashboard/>);
+      expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
+    });    
   });
 });

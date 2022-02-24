@@ -65,8 +65,10 @@ export const NotificationsApi = {
             ...response.data,
             sentAt: formatDate(response.data.sentAt)
           };
-          /* eslint-disable-next-line functional/immutable-data */
+          /* eslint-disable functional/immutable-data */
           dataToSend.notificationStatusHistory.sort((a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime());
+          dataToSend.timeline.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+          /* eslint-enable functional/immutable-data */
           return dataToSend;
         }
         return {} as NotificationDetail;
