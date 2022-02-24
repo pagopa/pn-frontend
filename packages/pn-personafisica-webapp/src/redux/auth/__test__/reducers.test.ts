@@ -13,7 +13,7 @@ const userResponse: User = {
   fiscal_number: 'RSSMRA80A01H501U',
   organization: {
     id: 'mocked-id',
-    role: UserRole.REFERENTE_AMMINISTRATIVO,
+    role: UserRole.REFERENTE_DELEGATO,
   },
 };
 
@@ -50,7 +50,7 @@ describe('Auth redux state tests', () => {
             fiscal_number: '',
             organization: {
               id: '',
-              role: UserRole.REFERENTE_AMMINISTRATIVO,
+              role: UserRole.REFERENTE_DELEGATO,
             },
           },
     });
@@ -75,7 +75,7 @@ describe('Auth redux state tests', () => {
       fiscal_number: '',
       organization: {
         id: '',
-        role: UserRole.REFERENTE_AMMINISTRATIVO,
+        role: UserRole.REFERENTE_DELEGATO,
       },
     });
   });
