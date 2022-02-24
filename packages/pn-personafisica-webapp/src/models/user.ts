@@ -1,4 +1,4 @@
 export enum UserRole {
-    REFERENTE_AMMINISTRATIVO = 'referente amministrativo',
+    REFERENTE_DELEGATO = 'referente delegato',
     REFERENTE_OPERATIVO = 'referente operativo'
 }

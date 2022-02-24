@@ -1,13 +1,18 @@
 import { Box, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { FC } from 'react';
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { Link } from 'react-router-dom';
+import * as routes from '../../navigation/routes.const';
 import { SideMenuItem } from './SideMenuItem';
 
-interface Props {
-  menuItems: Array<SideMenuItem>;
-}
+const menuItems: Array<SideMenuItem> = [
+  { label: 'Notifiche', icon: MailOutlineIcon, route: routes.NOTIFICHE },
+  { label: 'Deleghe', icon: PeopleOutlineIcon, route: routes.DELEGHE },
+  { label: 'Profilo', icon: SettingsOutlinedIcon, route: routes.PROFILO },
+];
 
-const SideMenu: FC<Props> = ({ menuItems }) => 
+const SideMenu = () => 
   (
     <Box height="100%" display="flex" flexDirection="column" bgcolor={'common.white'}>
       <Box alignItems="left" display="flex" flexDirection="column">

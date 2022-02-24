@@ -34,7 +34,7 @@ export const logout = createAsyncThunk<User>('logout', async () => {
     fiscal_number: '',
     organization: {
       id: '',
-      role: UserRole.REFERENTE_AMMINISTRATIVO,
+      role: UserRole.REFERENTE_DELEGATO,
     },
   } as User;
 });
