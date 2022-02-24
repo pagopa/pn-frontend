@@ -32,11 +32,9 @@ describe('SideMenu', () => {
     expect(ul).toBeTruthy();
     const buttons = await within(ul).findAllByRole('button');
     expect(buttons).toHaveLength(3);
-    const firstItem = buttons[0].querySelector('span');
-    expect(firstItem).toHaveTextContent(/Item 1/i);
-    const secondItem = buttons[1].querySelector('span');
-    expect(secondItem).toHaveTextContent(/Item 2/i);
-    const thirdItem = buttons[2].querySelector('span');
-    expect(thirdItem).toHaveTextContent(/Item 3/i);
+    buttons.forEach((button, i) => {
+      const item = button.querySelector('span');
+      expect(item).toHaveTextContent(sideMenuItems[i].label);
+    });
   });
 });
