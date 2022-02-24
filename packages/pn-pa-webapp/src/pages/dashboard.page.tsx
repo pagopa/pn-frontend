@@ -109,10 +109,9 @@ const Dashboard = () => {
     },
   ];
 
-  // TODO: rimuovere + i quando da be non arriveranno notifiche con stesso id
   const rows: Array<Row> = notifications.map((n: Notification, i: number) => ({
     ...n,
-    id: n.paNotificationId + i.toString(),
+    id: i.toString(),
   }));
 
   // Pagination handlers

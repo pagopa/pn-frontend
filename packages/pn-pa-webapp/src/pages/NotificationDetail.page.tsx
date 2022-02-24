@@ -11,7 +11,6 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
-import DownloadIcon from '@mui/icons-material/Download';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -20,6 +19,7 @@ import { getSentNotification } from '../redux/notification/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
 import DetailTable from './components/NotificationDetail/DetailTable';
 import DetailTimeline from './components/NotificationDetail/DetailTimeline';
+import DetailDocuments from './components/NotificationDetail/DetailDocuments';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   display: 'flex',
@@ -73,21 +73,7 @@ const NotificationDetail = () => {
             )}
             <DetailTable notification={notification}/>
             <Paper sx={{ padding: '24px' }} className="paperContainer">
-              <Grid container direction="row" justifyContent="space-between" alignItems="center">
-                <Grid item>
-                  <Typography
-                    color="text.primary"
-                    fontWeight={700}
-                    textTransform="uppercase"
-                    fontSize={14}
-                  >
-                    Atti Allegati
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Button startIcon={<DownloadIcon />}>Scarica tutti gli Atti</Button>
-                </Grid>
-              </Grid>
+              <DetailDocuments notification={notification}/>
             </Paper>
           </Box>
         </Grid>
