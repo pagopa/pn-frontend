@@ -2,13 +2,14 @@ import axios, { AxiosError } from 'axios';
 import _ from 'lodash';
 
 import { AppError } from '@pagopa-pn/pn-commons/src/types/AppError';
+import { API_BASE_URL } from '../utils/constants';
 
 export const authClient = axios.create({
-  baseURL: process.env.REACT_APP_AUTH_BASE_URL,
+  baseURL: API_BASE_URL,
 });
 
 export const apiClient = axios.create({
-  baseURL: process.env.REACT_APP_URL_API,
+  baseURL: API_BASE_URL,
 });
 
 apiClient.interceptors.request.use(
