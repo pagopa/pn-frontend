@@ -14,6 +14,9 @@ log/*
 /coverage
 test-report.xml
 
+# sonar
+/.scannerwork
+
 # production
 /build
 

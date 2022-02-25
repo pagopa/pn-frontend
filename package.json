@@ -1,9 +1,10 @@
 {
-  "name": "root",
+  "name": "piattaforma-notifiche-monorepo",
   "private": true,
   "devDependencies": {
+    "craco": "^0.0.3",
     "lerna": "^4.0.0",
-    "craco": "^0.0.3"
+    "sonarqube-scanner": "^2.8.1"
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
@@ -15,7 +16,8 @@
     "clean:win": "rmdir node_modules /s",
     "clean:nx": "rm -rf node_modules",
     "lint": "lerna run --scope @pagopa-pn/* lint",
-    "format": "lerna run --scope @pagopa-pn/* format"
+    "format": "lerna run --scope @pagopa-pn/* format",
+    "sonar": "node sonarqube-scanner.js -Dsonar.login={$SONAR_TOKEN}"
   },
   "workspaces": {
     "packages": [
