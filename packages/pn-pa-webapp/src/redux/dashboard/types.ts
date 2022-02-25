@@ -1,5 +1,5 @@
 export interface Notification {
-    iun: string;
+    notificationId: string;
     paNotificationId: string;
     senderId: string;
     sentAt: string;
@@ -9,7 +9,9 @@ export interface Notification {
 }
 
 export enum NotificationStatus {
-    RECEIVED = 'RECEIVED',
+    IN_VALIDATION = 'IN_VALIDATION',
+    ACCEPTED = 'ACCEPTED',
+    REFUSED = 'REFUSED',
     DELIVERING = 'DELIVERING',
     DELIVERED = 'DELIVERED',
     VIEWED = 'VIEWED',

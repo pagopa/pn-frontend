@@ -31,11 +31,23 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
         label: 'Pagata',
         tooltip: 'Il destinatario ha pagato la notifica',
       };
-    case NotificationStatus.RECEIVED:
+    case NotificationStatus.IN_VALIDATION:
+      return {
+        color: 'default',
+        label: 'In Validazione',
+        tooltip: 'La notifica è in fase di validazione',
+      };
+    case NotificationStatus.ACCEPTED:
       return {
         color: 'default',
         label: 'Depositata',
         tooltip: "L'ente ha depositato la notifica",
+      };
+    case NotificationStatus.REFUSED:
+      return {
+        color: 'error',
+        label: 'Non valida',
+        tooltip: 'La notifica non rispetta le validazioni',
       };
     case NotificationStatus.EFFECTIVE_DATE:
       return {
@@ -60,7 +72,9 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
 
 export const NotificationAllowedStatus = [
   { value: 'All', label: 'Tutti gli stati' },
-  { value: NotificationStatus.RECEIVED, label: 'Depositata' },
+  { value: NotificationStatus.IN_VALIDATION, label: 'In Validazione' },
+  { value: NotificationStatus.REFUSED, label: 'Non valida' },
+  { value: NotificationStatus.ACCEPTED, label: 'Depositata' },
   { value: NotificationStatus.DELIVERED, label: 'Consegnata' },
   { value: NotificationStatus.DELIVERING, label: 'In inoltro' },
   { value: NotificationStatus.EFFECTIVE_DATE, label: 'Perfezionata per decorrenza termini' },
