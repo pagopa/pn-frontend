@@ -29,6 +29,7 @@ export interface GetNotificationsParams {
     startDate: string;
     endDate: string;
     recipientId?: string;
+    iunId?: string;
     status?: string;
     subjectRegExp?: string;
     size?: number;
