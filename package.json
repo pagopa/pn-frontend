@@ -10,7 +10,7 @@
     "postinstall": "lerna bootstrap",
     "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn start",
     "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn start",
-    "build": "lerna run --scope @pagopa-pn/* build",
+    "build": "lerna run --scope @pagopa-pn/pn-pa-webapp --scope @pagopa-pn/pn-personafisica-webapp build",
     "test": "lerna run --scope @pagopa-pn/* --parallel test",
     "test:coverage": "lerna run --scope @pagopa-pn/* --parallel test:coverage",
     "refresh:monorepo": "lerna clean -y && yarn install",
