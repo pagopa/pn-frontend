@@ -1,5 +1,5 @@
 export interface Notification {
-    notificationId: string;
+    iun: string;
     paNotificationId: string;
     senderId: string;
     sentAt: string;
