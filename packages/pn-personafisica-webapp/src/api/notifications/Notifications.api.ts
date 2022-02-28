@@ -17,7 +17,7 @@ export const NotificationsApi = {
     queryParams.append('startDate', params.startDate);
     queryParams.append('endDate', params.endDate);
     if (params.recipientId) {
-      queryParams.append('recipientId', params.recipientId);
+      queryParams.append('senderId', params.recipientId);
     }
     if (params.status) {
       queryParams.append('status', params.status);
@@ -32,7 +32,7 @@ export const NotificationsApi = {
       queryParams.append('nextPagesKey', params.nextPagesKey);
     }
     return apiClient
-      .get<GetNotificationsResponse>('/delivery/notifications/sent', { params: queryParams })
+      .get<GetNotificationsResponse>('/delivery/notifications/received', { params: queryParams })
       .then((response) => {
         if (response.data && response.data.result) {
           const notifications = response.data.result.map((d) => ({
