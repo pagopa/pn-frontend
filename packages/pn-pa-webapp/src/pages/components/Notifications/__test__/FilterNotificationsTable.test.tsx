@@ -69,7 +69,7 @@ describe('Filter Notifications Table Component', () => {
     });
   });
 
-  it('test filters inital value', async () => {
+  it.skip('test filters inital value', async () => {
     await act(async () => {
       testFormElementsValue(form, 'searchFor', '');
       testFormElementsValue(form, 'recipientId', '');
