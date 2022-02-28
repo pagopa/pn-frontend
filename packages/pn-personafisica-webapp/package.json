@@ -14,10 +14,6 @@
     "@pagopa-pn/pn-commons": "0.1.0",
     "@pagopa/ts-commons": "^10.2.1",
     "@reduxjs/toolkit": "^1.6.2",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.4.0",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.11.21",
     "@types/react": "^17.0.38",
@@ -48,6 +44,7 @@
     "build:dev": "env-cmd -f .env.development craco build",
     "build:uat": "env-cmd -f .env.uat craco build",
     "test": "craco test --watchAll=false",
+    "test:coverage": "craco test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "eject": "craco eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write"
@@ -71,6 +68,10 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.4.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "danger": "^10.5.3",
@@ -82,6 +83,7 @@
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-sonarjs": "^0.10.0",
+    "jest-sonar-reporter": "^2.0.0",
     "mkdirp": "^1.0.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.4.1",

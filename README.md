@@ -42,3 +42,11 @@ Il monorepo contiene quindi:
 - packages/pn-personafisica-webapp portale per il cittadino
 
 https://medium.com/geekculture/setting-up-monorepo-with-create-react-app-cb2cfa763b96
+
+
+### Sonar
+
+E' possibile eseguire un task di analisi con sonar-scanner tramite lo script
+- `yarn sonar`
+Per essere eseguibile in locale, è necessario creare sull'ambiente locale una variable d'ambiente SONAR_TOKEN con il token del progetto sonar di riferimento.
+L'analisi sonar sarà disponibile [qui](https://sonarcloud.io/project/overview?id=pagopa_pn-frontend)
