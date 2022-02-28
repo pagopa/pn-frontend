@@ -1,19 +1,14 @@
-import { render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
+import { screen } from '@testing-library/react';
 import { axe, toHaveNoViolations } from 'jest-axe';
+
 import App from '../App';
-import { store } from '../redux/store';
-import { BrowserRouter } from 'react-router-dom';
+import { render } from './test-utils';
 
 expect.extend(toHaveNoViolations);
 describe('App', () => {
   it('Piattaforma notifiche', () => {
     render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </BrowserRouter>
+      <App />
     );
     const welcomeElement = screen.getByText(/Piattaforma notifiche/i);
     expect(welcomeElement).toBeInTheDocument();
@@ -21,11 +16,7 @@ describe('App', () => {
 
   it.skip('Test if automatic accessibility tests passes', async () => {
     const { container } = render(
-      <BrowserRouter>
-        <Provider store={store}>
-          <App />
-        </Provider>
-      </BrowserRouter>
+      <App />
     );
     const result = await axe(container);
     expect(result).toHaveNoViolations();

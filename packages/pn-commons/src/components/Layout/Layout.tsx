@@ -19,8 +19,7 @@ type Props = {
 const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-    background: '#F2F2F2',
-    height: '100vh'
+    background: '#F2F2F2'
   },
 })); 
 
@@ -34,7 +33,6 @@ export default function Layout({ children, assistanceEmail, onExitAction, sideMe
       }}
     >
       <Header withSecondHeader={true} onExitAction={onExitAction} />
-
       <Grid role={'navigation'} container spacing={2} className={classes.root}>
         <Grid item xs={2}>
           {sideMenu}

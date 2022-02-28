@@ -72,8 +72,6 @@ const FilterNotificationsTable = () => {
       })
     );
     formik.resetForm();
-    setStartDate(null);
-    setEndDate(null);
   };
 
   const classes = useStyles();
@@ -85,6 +83,8 @@ const FilterNotificationsTable = () => {
 
   useEffect(() => {
     void formik.validateForm();
+    setStartDate(tenYearsAgo);
+    setEndDate(today);
   }, []);
 
   return (
@@ -150,7 +150,7 @@ const FilterNotificationsTable = () => {
                   .then(() => { setStartDate(value);  })
                   .catch(() => 'error');
               }}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => <TextField id="startDate" name="startDate" {...params} />}
               disableFuture={true}
               maxDate={endDate? endDate : undefined}
             />
@@ -172,7 +172,7 @@ const FilterNotificationsTable = () => {
                   .then(() => { setEndDate(value); })
                   .catch(() => 'error');
               }}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => <TextField id="endDate" name="endDate" {...params} />}
               disableFuture={true}
               minDate={startDate? startDate : undefined}
             />
@@ -200,7 +200,7 @@ const FilterNotificationsTable = () => {
           >
             Cerca
           </Button>
-          <Button className={classes.customButton} onClick={cleanFilters}>
+          <Button id="cancelButton" className={classes.customButton} onClick={cleanFilters}>
             Annulla ricerca
           </Button>
         </Box>

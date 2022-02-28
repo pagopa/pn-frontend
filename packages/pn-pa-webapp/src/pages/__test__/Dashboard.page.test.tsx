@@ -1,27 +1,37 @@
-import { render, screen } from '@testing-library/react';
-import { Provider } from 'react-redux';
-import { store } from '../../redux/store';
-import Dashboard from '../dashboard.page';
+import { act, screen } from '@testing-library/react';
 import * as redux from 'react-redux';
 
+import { render } from '../../__test__/test-utils';
+import { tenYearsAgo, today } from '../../utils/date.utility';
+import Dashboard from '../dashboard.page';
+
 describe('Dashboard Page', () => {
-  // TODO fix this test: something in patination mock is wrong
-  test.skip('renders dashboard page', () => {
+  it('renders dashboard page', async () => {
     const spy = jest.spyOn(redux, 'useSelector');
     spy.mockReturnValue({
       notifications: [],
       pagination: {
-        nextPagesKey: [ '1'],
+        nextPagesKey: ['1'],
         size: 0,
         page: 0,
         moreResult: false,
       },
+      filters: {
+        startDate: tenYearsAgo.toISOString(),
+        endDate: today.toISOString(),
+        recipientId: '',
+        status: '',
+        subjectRegExp: '',
+      },
+      sort: {
+        orderBy: '',
+        order: 'asc'
+     }
     });
-    render(
-      <Provider store={store}>
-        <Dashboard />
-      </Provider>
-    );
-    expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
+
+    await act( async () => {
+      render(<Dashboard/>);
+      expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
+    });    
   });
 });
