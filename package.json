@@ -12,6 +12,7 @@
     "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn start",
     "build": "lerna run --scope @pagopa-pn/* build",
     "test": "lerna run --scope @pagopa-pn/* --parallel test",
+    "test:coverage": "lerna run --scope @pagopa-pn/* --parallel test:coverage",
     "refresh:monorepo": "lerna clean -y && yarn install",
     "clean:win": "rmdir node_modules /s",
     "clean:nx": "rm -rf node_modules",
