@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { NotificationStatus } from '../dashboard/types';
 import { NotificationDetail, NotificationDetailDocument, NotificationDetailPayment, NotificationDetailRecipient, NotificationDetailTimeline, NotificationStatusHistory, PhysicalCommunicationType } from './types';
-import { getSentNotification } from './actions';
+import { getSentNotification, getSentNotificationDocument } from './actions';
 
 /* eslint-disable functional/immutable-data */
 const notificationSlice = createSlice({
@@ -32,6 +32,12 @@ const notificationSlice = createSlice({
     });
     builder.addCase(getSentNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
+    });
+    builder.addCase(getSentNotificationDocument.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getSentNotificationDocument.fulfilled, (_state, action) => {
+      console.log(action.payload);
     });
   },
 });

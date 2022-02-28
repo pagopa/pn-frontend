@@ -15,12 +15,23 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
 );
 
 export const getSentNotificationLegalfacts = createAsyncThunk<Array<Legalfacts>, string>(
-    'getSentNotificationLegalfacts',
-    async (params: string, { rejectWithValue }) => {
-      try {
-        return await NotificationsApi.getSentNotificationLegalfacts(params);
-      } catch (e) {
-        return rejectWithValue(e);
-      }
+  'getSentNotificationLegalfacts',
+  async (params: string, { rejectWithValue }) => {
+    try {
+      return await NotificationsApi.getSentNotificationLegalfacts(params);
+    } catch (e) {
+      return rejectWithValue(e);
     }
-  );
+  }
+);
+
+export const getSentNotificationDocument = createAsyncThunk<string, {iun: string; documentIndex: number}>(
+  'getSentNotificationDocument',
+  async (params: {iun: string; documentIndex: number}, { rejectWithValue }) => {
+    try {
+      return await NotificationsApi.getSentNotificationDocument(params.iun, params.documentIndex);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);

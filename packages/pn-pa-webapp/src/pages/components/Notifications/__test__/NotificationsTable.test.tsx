@@ -67,7 +67,7 @@ describe('Notifications Table Component', () => {
     const tableHead = table.querySelector('thead');
     const firstColumn = tableHead!.querySelector('th');
     const sortButton = within(firstColumn!).getByRole('button');
-    expect(sortButton).toBeTruthy();
+    expect(sortButton).toBeInTheDocument();
     fireEvent.click(sortButton);
     expect(handleSort).toHaveBeenCalledTimes(1);
     expect(handleSort).toBeCalledWith({order: 'desc', orderBy: 'column-1'});

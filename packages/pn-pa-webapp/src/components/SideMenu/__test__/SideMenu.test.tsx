@@ -29,7 +29,7 @@ describe('SideMenu', () => {
       <SideMenu menuItems={sideMenuItems}/>
     );
     const ul = screen.getByRole('list');
-    expect(ul).toBeTruthy();
+    expect(ul).toBeInTheDocument();
     const buttons = await within(ul).findAllByRole('button');
     expect(buttons).toHaveLength(3);
     buttons.forEach((button, i) => {

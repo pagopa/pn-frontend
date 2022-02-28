@@ -68,6 +68,12 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
         label: 'Annullata',
         tooltip: "L'ente ha annullato l'invio della notifica",
       };
+    default:
+      return {
+        color: 'info',
+        label: 'Non definito',
+        tooltip: "Stato sconosciuto",
+      };
   }
 }
 

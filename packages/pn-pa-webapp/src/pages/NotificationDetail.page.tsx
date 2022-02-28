@@ -78,7 +78,7 @@ const NotificationDetail = () => {
           </Box>
         </Grid>
         <Grid item xs={5}>
-          <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
+          <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px'}}>
             <DetailTimeline notification={notification}/>
           </Box>
         </Grid>

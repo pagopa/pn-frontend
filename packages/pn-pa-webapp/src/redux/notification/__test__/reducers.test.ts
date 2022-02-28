@@ -4,7 +4,7 @@ import { apiClient } from '../../../api/axios';
 import { exchangeToken, logout } from '../../auth/actions';
 import { loginInit } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
-import { getSentNotification } from '../actions';
+import { getSentNotification, getSentNotificationDocument } from '../actions';
 import { NotificationDetail } from '../types';
 
 const notification = {
@@ -44,9 +44,14 @@ const notification = {
 	physicalCommunicationType: 'REGISTERED_LETTER_890'
 };
 
-const mockNetworkResponse = (iun: String) => {
+const mockNtificationDetailResponse = (iun: string) => {
   const mock = new MockAdapter(apiClient);
   mock.onGet(`/delivery/notifications/sent/${iun}`).reply(200, notification);
+}
+
+const mockNtificationDetailDocumentResponse = (iun: string, documentIndex: number) => {
+  const mock = new MockAdapter(apiClient);
+  mock.onGet(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`).reply(200, '');
 }
 
 loginInit();
@@ -77,11 +82,21 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch the notification detail', async () => {
     await store.dispatch(exchangeToken('mocked-token'));
-    mockNetworkResponse('mocked-iun');
+    mockNtificationDetailResponse('mocked-iun');
     const action = await store.dispatch(getSentNotification('mocked-iun'));
     const payload = action.payload as NotificationDetail;
     expect(action.type).toBe('getSentNotification/fulfilled');
     expect(payload).toEqual({...notification, sentAt: '21/02/2022'});
+    await store.dispatch(logout());
+  });
+
+	it('Should be able to fetch the notification document', async () => {
+    await store.dispatch(exchangeToken('mocked-token'));
+    mockNtificationDetailDocumentResponse('mocked-iun', 0);
+    const action = await store.dispatch(getSentNotificationDocument({iun: 'mocked-iun', documentIndex: 0}));
+    const payload = action.payload;
+    expect(action.type).toBe('getSentNotificationDocument/fulfilled');
+    expect(payload).toEqual('');
     await store.dispatch(logout());
   })
 });
