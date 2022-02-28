@@ -11,10 +11,6 @@
     "@mui/x-data-grid": "^5.0.1",
     "@mui/x-data-grid-generator": "^5.0.1",
     "@reduxjs/toolkit": "^1.7.1",
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.4.0",
     "@types/node": "^16.11.21",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
@@ -27,7 +23,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --watchAll=false --passWithNoTests --ci --coverage --testResultsProcessor=jest-sonar-reporter",
+    "test": "react-scripts test --watchAll=false --passWithNoTests",
+    "test:coverage": "react-scripts test --watchAll=false --passWithNoTests --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "eject": "react-scripts eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write"
@@ -51,6 +48,10 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.4.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "danger": "^10.5.3",
