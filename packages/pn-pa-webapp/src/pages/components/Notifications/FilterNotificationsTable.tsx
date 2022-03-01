@@ -1,4 +1,5 @@
 import { useEffect, useState, ChangeEvent, Fragment } from 'react';
+import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Box, Button, MenuItem, TextField } from '@mui/material';
@@ -6,7 +7,7 @@ import { makeStyles } from '@mui/styles';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import { useDispatch } from 'react-redux';
+
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
 import { NotificationAllowedStatus } from '../../../utils/status.utility';
 import { tenYearsAgo, today } from '../../../utils/date.utility';
@@ -83,8 +84,6 @@ const FilterNotificationsTable = () => {
 
   useEffect(() => {
     void formik.validateForm();
-    setStartDate(tenYearsAgo);
-    setEndDate(today);
   }, []);
 
   return (
