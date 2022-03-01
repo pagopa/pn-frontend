@@ -17,7 +17,7 @@ const Notifiche = () => {
 
   const columns: Array<Column> = [
     {
-      id: 'sentAt',
+      id: 'sentDate',
       label: 'Data',
       width: '11%',
       sortable: true,
@@ -26,8 +26,8 @@ const Notifiche = () => {
       },
     },
     {
-      id: 'recipientId',
-      label: 'Destinatario',
+      id: 'senderId',
+      label: 'Mittente',
       width: '13%',
       sortable: true,
       getCellLabel(value: string) {
@@ -46,14 +46,6 @@ const Notifiche = () => {
       id: 'iun',
       label: 'Codice IUN',
       width: '20%',
-      getCellLabel(value: string) {
-        return value;
-      },
-    },
-    {
-      id: 'groups',
-      label: 'Gruppi',
-      width: '15%',
       getCellLabel(value: string) {
         return value;
       },
