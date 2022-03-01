@@ -23,7 +23,7 @@ const FilterNotificationsTable = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const fiscalCode_regex = /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Za-z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i;
+  const fiscalCode_regex = /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i;
  // TODO inserire regex corretta
   const IUN_regex = /^[A-Z]$/i;
 
@@ -72,8 +72,6 @@ const FilterNotificationsTable = () => {
       })
     );
     formik.resetForm();
-    setStartDate(null);
-    setEndDate(null);
   };
 
   const classes = useStyles();
@@ -85,6 +83,8 @@ const FilterNotificationsTable = () => {
 
   useEffect(() => {
     void formik.validateForm();
+    setStartDate(tenYearsAgo);
+    setEndDate(today);
   }, []);
 
   return (
@@ -150,7 +150,7 @@ const FilterNotificationsTable = () => {
                   .then(() => { setStartDate(value);  })
                   .catch(() => 'error');
               }}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => <TextField id="startDate" name="startDate" {...params} />}
               disableFuture={true}
               maxDate={endDate? endDate : undefined}
             />
@@ -172,7 +172,7 @@ const FilterNotificationsTable = () => {
                   .then(() => { setEndDate(value); })
                   .catch(() => 'error');
               }}
-              renderInput={(params) => <TextField {...params} />}
+              renderInput={(params) => <TextField id="endDate" name="endDate" {...params} />}
               disableFuture={true}
               minDate={startDate? startDate : undefined}
             />
@@ -200,7 +200,7 @@ const FilterNotificationsTable = () => {
           >
             Cerca
           </Button>
-          <Button className={classes.customButton} onClick={cleanFilters}>
+          <Button id="cancelButton" className={classes.customButton} onClick={cleanFilters}>
             Annulla ricerca
           </Button>
         </Box>

@@ -19,15 +19,17 @@ type Props = {
   /** Table rows */
   rows: Array<Row>;
   /** Table sort */
-  sort: Sort;
+  sort?: Sort;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting: (s: Sort) => void;
+  onChangeSorting?: (s: Sort) => void;
 };
 
 function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
   const createSortHandler = (property: string) => () => {
-    const isAsc = sort.orderBy === property && sort.order === 'asc';
-    onChangeSorting({order: isAsc ? 'desc' : 'asc', orderBy: property});
+    if (sort && onChangeSorting) {
+      const isAsc = sort.orderBy === property && sort.order === 'asc';
+      onChangeSorting({order: isAsc ? 'desc' : 'asc', orderBy: property});
+    }
   };
   
   // Table style
@@ -62,9 +64,9 @@ function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
                   key={column.id}
                   align={column.align}
                   sx={{width: column.width, backgroundColor: '#F2F2F2', borderBottom: 'none', fontWeight: 600}}
-                  sortDirection={sort.orderBy === column.id ? sort.order : false}
+                  sortDirection={(sort && sort.orderBy === column.id) ? sort.order : false}
                 >
-                  {column.sortable ?
+                  {(sort && column.sortable) ?
                     <TableSortLabel
                       active={sort.orderBy === column.id}
                       direction={sort.orderBy === column.id ? sort.order : 'asc'}
@@ -86,9 +88,9 @@ function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
           <TableBody sx={{ backgroundColor: 'background.paper'}}>
             {rows.length ? rows
               .map(row => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} sx={{cursor: 'pointer'}}>
                   {columns.map(c => ( 
-                    <TableCell key={c.id} sx={{ width: c.width, borderBottom: 'none' }} align={c.align}>
+                    <TableCell key={c.id} sx={{ width: c.width, borderBottom: 'none' }} align={c.align} onClick={() => c.onClick && c.onClick(row, c)}>
                       {c.getCellLabel(row[c.id as keyof Notification])}
                     </TableCell>
                   ))}

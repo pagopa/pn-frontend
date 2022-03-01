@@ -3,14 +3,14 @@ import * as routes from '../navigation/routes.const';
 import { SideMenuItem } from '../components/SideMenu/SideMenuItem';
 import { UserRole } from '../models/user';
 
-const ReferenteAmministrativoMenuItems: Array<SideMenuItem> = [
+export const ReferenteAmministrativoMenuItems: Array<SideMenuItem> = [
   { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
   { label: 'Chiavi API', icon: TrendingUp, route: routes.API_KEYS },
   { label: 'Ruoli', icon: People, route: routes.ROLES },
   { label: 'Gruppi', icon: GroupWork, route: routes.GROUPS },
 ];
 
-const ReferenteTecnicoMenuItems: Array<SideMenuItem> = [
+export const ReferenteTecnicoMenuItems: Array<SideMenuItem> = [
   { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
   { label: 'Chiavi API', icon: TrendingUp, route: routes.API_KEYS },
   { label: 'Ruoli', icon: People, route: routes.ROLES },

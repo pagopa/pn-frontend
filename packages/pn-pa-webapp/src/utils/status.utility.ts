@@ -1,4 +1,5 @@
 import { NotificationStatus } from '../redux/dashboard/types';
+import { NotificationDetailTimeline, NotificationStatusHistory } from '../redux/notification/types';
 
 // TODO: aggiungere i colori del tema
 export function getNotificationStatusLabelAndColor(status: NotificationStatus): {
@@ -67,7 +68,36 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
         label: 'Annullata',
         tooltip: "L'ente ha annullato l'invio della notifica",
       };
+    default:
+      return {
+        color: 'info',
+        label: 'Non definito',
+        tooltip: "Stato sconosciuto",
+      };
   }
+}
+
+export function getNotificationStatusLabelAndColorFromTimelineCategory(
+  timelineStep: NotificationDetailTimeline,
+  notificationStatusHistory: Array<NotificationStatusHistory>
+): {
+  color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
+  label: string;
+  tooltip: string;
+} {
+  // TODO: cambiare quando l'api restituirà la corrispondenza per id
+  /* eslint-disable-next-line functional/no-let */
+  let currentStatus;
+  const timeLineTime = new Date(timelineStep.timestamp).getTime();
+  for (const notificationStatus of notificationStatusHistory.slice().reverse()) {
+    const currentTime = new Date(notificationStatus.activeFrom).getTime();
+    if (currentTime <= timeLineTime) {
+      currentStatus = notificationStatus.status;
+      continue;
+    }
+    break;
+  }
+  return getNotificationStatusLabelAndColor(currentStatus as NotificationStatus);
 }
 
 export const NotificationAllowedStatus = [
