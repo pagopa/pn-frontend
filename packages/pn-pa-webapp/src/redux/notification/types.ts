@@ -1,6 +1,6 @@
 import { NotificationStatus } from "../dashboard/types";
 
-enum DigitalDomicileType {
+export enum DigitalDomicileType {
   PEC = 'PEC',
   EMAIL = 'EMAIL'
 }
@@ -35,7 +35,7 @@ export interface NotificationDetailDocument {
   contentType: string;
 }
 
-enum NotificationFeePolicy {
+export enum NotificationFeePolicy {
   FLAT_RATE = 'FLAT_RATE',
   DELIVERY_MODE = 'DELIVERY_MODE'
 }
