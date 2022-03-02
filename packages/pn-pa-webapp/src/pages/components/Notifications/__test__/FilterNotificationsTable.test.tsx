@@ -1,5 +1,6 @@
 import { NotificationAllowedStatus } from '@pagopa-pn/pn-commons';
-import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react'; // prettyDOM
+import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react';
+
 import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '../../../../utils/date.utility';
 import { render } from '../../../../__test__/test-utils';
