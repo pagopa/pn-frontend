@@ -17,7 +17,7 @@ export { AccessDenied };
 // types
 import { AppError } from './types/AppError';
 import { PaginationData } from './components/Pagination/types';
-import { createAppError } from './services/errorService';
+import { createAppError } from './services/error.service';
 
 // components
 export { LoadingOverlay };
