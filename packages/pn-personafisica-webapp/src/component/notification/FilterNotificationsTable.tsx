@@ -25,7 +25,7 @@ const FilterNotificationsTable = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const IUN_regex = /^[A-Z]$/i;
+  const IUN_regex = /^[1-9A-Z_-]{1,20}$/i;
 
   const validationSchema = yup.object({
     iunMatch: yup.string().matches(IUN_regex, 'Inserire il codice corretto'),
@@ -84,7 +84,7 @@ const FilterNotificationsTable = () => {
       <form onSubmit={formik.handleSubmit}>
         <Box 
           sx={{ flexGrow: 1, '& .MuiTextField-root': { mt: 3 } }}>
-          <Grid container spacing={1} alignItems="center" xs="auto">
+          <Grid container spacing={1} alignItems="center">
             <Grid item xs={4}>
               <TextField
                 id="iunMatch"
