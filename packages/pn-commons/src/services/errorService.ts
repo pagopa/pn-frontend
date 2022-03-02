@@ -2,11 +2,11 @@ import { AppError } from '../types/AppError';
 import _ from 'lodash';
 
 /**
- * This method intercept http error code and throw a formatted message.
+ * This method get an http error code and return a formatted AppError message.
  * @param  {{response:{status:number;};}} error
  * @returns AppError
  */
-export const interceptErrors = (error: { response: { status: number; }; }): AppError => {
+export const createAppError = (error: any): AppError => {
   const e: AppError = {
     id: _.uniqueId(),
     title: '',
@@ -24,5 +24,5 @@ export const interceptErrors = (error: { response: { status: number; }; }): AppE
     e.title = 'Errore generico';
     e.message = 'Si è verificato un errore. Si prega di riprovare più tardi';
   }
-  throw e;
+  return e;
 }

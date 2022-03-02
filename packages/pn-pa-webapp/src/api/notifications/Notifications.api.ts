@@ -87,13 +87,13 @@ export const NotificationsApi = {
         }
         return [] as Array<Legalfacts>;
       }),
-   /**
+  /**
    * Gets current user notification document
    * @param  {string} iun
    * @param  {number} documentIndex
    * @returns Promise
    */
-    getSentNotificationDocument: (iun: string, documentIndex: number): Promise<string> =>
+  getSentNotificationDocument: (iun: string, documentIndex: number): Promise<string> =>
     apiClient
       .get<string>(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`)
       .then((response) => {
