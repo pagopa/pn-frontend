@@ -1,4 +1,3 @@
-import { interceptErrors } from '@pagopa-pn/pn-commons';
 import axios from 'axios';
 
 import { API_BASE_URL } from '../utils/constants';
@@ -22,6 +21,3 @@ apiClient.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-
-apiClient.interceptors.response.use((response) => response, interceptErrors);
-authClient.interceptors.response.use((response) => response, interceptErrors);

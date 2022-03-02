@@ -3,7 +3,7 @@ import * as redux from 'react-redux';
 
 import { render } from '../../__test__/test-utils';
 import { tenYearsAgo, today } from '../../utils/date.utility';
-import Dashboard from '../dashboard.page';
+import Dashboard from '../Dashboard.page';
 
 describe('Dashboard Page', () => {
   it('renders dashboard page', async () => {

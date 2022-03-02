@@ -9,16 +9,26 @@ import { MessageType } from './Toast/types';
 const AppMessage = () => {
   const dispatch = useDispatch();
   const errors = useSelector((state: any) => state.appState.errors);
-  
+
   const onCloseErrorToast = (id: string) => {
     dispatch(appStateActions.removeError(id));
   };
 
   return (
     <Fragment>
-      {errors.map((e: AppError) => <Toast key={e.id} title={e.title} message={e.message} open type={MessageType.ERROR} onClose={() => onCloseErrorToast(e.id)} closingDelay={2500}/>)}
+      {errors.map((e: AppError) => (
+        <Toast
+          key={e.id}
+          title={e.title}
+          message={e.message}
+          open
+          type={MessageType.ERROR}
+          onClose={() => onCloseErrorToast(e.id)}
+          closingDelay={2500}
+        />
+      ))}
     </Fragment>
-  )
-}
+  );
+};
 
 export default AppMessage;

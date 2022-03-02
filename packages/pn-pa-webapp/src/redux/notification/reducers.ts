@@ -27,14 +27,8 @@ const notificationSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getSentNotification.pending, (state) => {
-      state.loading = true;
-    });
     builder.addCase(getSentNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
-    });
-    builder.addCase(getSentNotificationDocument.pending, (state) => {
-      state.loading = true;
     });
     builder.addCase(getSentNotificationDocument.fulfilled, (_state, action) => {
       console.log(action.payload);
