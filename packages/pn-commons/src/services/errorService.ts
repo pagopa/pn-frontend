@@ -1,14 +1,11 @@
 import { AppError } from '../types/AppError';
 import _ from 'lodash';
 
-export const handleErrors = (errors: Array<AppError>) => {
-  errors
-    .filter((e) => e.toNotify)
-    .forEach((e) => {
-      console.error('An error occurred: ', e);
-    });
-};
-
+/**
+ * This method intercept http error code and throw a formatted message.
+ * @param  {{response:{status:number;};}} error
+ * @returns AppError
+ */
 export const interceptErrors = (error: { response: { status: number; }; }): AppError => {
   const e: AppError = {
     id: _.uniqueId(),

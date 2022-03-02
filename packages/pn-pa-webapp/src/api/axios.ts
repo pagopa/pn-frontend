@@ -1,6 +1,5 @@
 import { interceptErrors } from '@pagopa-pn/pn-commons';
 import axios from 'axios';
-import _ from 'lodash';
 
 import { API_BASE_URL } from '../utils/constants';
 
