@@ -72,7 +72,7 @@ const NotificationDetail = () => {
               </Button>
             )}
             <DetailTable notification={notification}/>
-            <Paper sx={{ padding: '24px' }} className="paperContainer">
+            <Paper sx={{ padding: '24px', marginBottom: '20px'}} className="paperContainer">
               <DetailDocuments notification={notification}/>
             </Paper>
           </Box>

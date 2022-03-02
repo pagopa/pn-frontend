@@ -1,4 +1,5 @@
-import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react'; // prettyDOM
+import { act, fireEvent, waitFor, screen, within } from '@testing-library/react'; // prettyDOM
+
 import { NotificationAllowedStatus } from '../../../../utils/status.utility';
 import { render } from '../../../../__test__/test-utils';
 import FilterNotificationsTable from '../FilterNotificationsTable';
@@ -33,27 +34,37 @@ async function testSelect(form: HTMLFormElement, elementName: string, options: A
   });
 }
 
-/*
 async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
   const input = await form.querySelector(`input[name="${elementName}"]`);
-  await waitFor(() => fireEvent.change(input!, {target: {value}}));
+  fireEvent.change(input!, {target: {value}});
   expect(input).toHaveValue(value);
 }
-*/
+
+async function testCalendar(form: HTMLFormElement, elementName: string) {
+  const input = await form.querySelector(`input[name="${elementName}"]`);
+  const button = await input?.parentElement!.querySelector(`button`);
+  fireEvent.click(button!);
+  const dialog = await screen.findByRole('dialog');
+  expect(dialog).toBeInTheDocument();
+  const dateButtonContainer = await within(dialog).findByRole(`grid`);
+  const dateButton = await dateButtonContainer.querySelector(`button`);
+  const dateButtonValue = dateButton?.getAttribute('aria-label');
+  fireEvent.click(dateButton!);
+  const date = new Date(dateButtonValue as string);
+  const month = `0${date.getMonth() + 1}`.slice(-2);
+  const day = `0${date.getDate()}`.slice(-2);
+  await waitFor(() => {
+    expect(input).toHaveValue(`${day}/${month}/${date.getFullYear()}`);
+    expect(dialog).not.toBeInTheDocument();
+  })
+}
+
 
 describe('Filter Notifications Table Component', () => {
-  let result: RenderResult;
-  let form: HTMLFormElement;
-
-  beforeEach(async () => {
-    await act(async () => {
-      result = render(<FilterNotificationsTable />);
-      form = result.container.querySelector('form') as HTMLFormElement;
-    });
-  })
-
   it('renders filter notifications table', async () => {
     await act(async () => {
+      const result = render(<FilterNotificationsTable />);
+      const form = result.container.querySelector('form') as HTMLFormElement;
       expect(form).toBeInTheDocument();
       testFormElements(form, 'searchFor', 'Cerca per');
       testFormElements(form, 'recipientId', 'Codice fiscale');
@@ -71,6 +82,8 @@ describe('Filter Notifications Table Component', () => {
 
   it.skip('test filters inital value', async () => {
     await act(async () => {
+      const result = render(<FilterNotificationsTable />);
+      const form = result.container.querySelector('form') as HTMLFormElement;
       testFormElementsValue(form, 'searchFor', '');
       testFormElementsValue(form, 'recipientId', '');
       testFormElementsValue(form, 'startDate', '');
@@ -81,23 +94,26 @@ describe('Filter Notifications Table Component', () => {
 
   it('test searchFor select', async () => {
     await act(async () => {
+      const result = render(<FilterNotificationsTable />);
+      const form = result.container.querySelector('form') as HTMLFormElement;
       expect(form.querySelector(`input[name="recipientId"]`)).toBeInTheDocument();
       await testSelect(form, 'searchFor', [{label: 'Codice Fiscale', value: '0'}, {label: 'Codice IUN', value: '1'}]);
       expect(form.querySelector(`input[name="iunId"]`)).toBeInTheDocument();
     });
   });
 
-  /*
   it('test recipientId input', async () => {
     await act(async () => {
+      const result = render(<FilterNotificationsTable />);
+      const form = result.container.querySelector('form') as HTMLFormElement;
       testInput(form, 'recipientId', 'mocked-recipientId');
     });
   });
-  */
 
-  /*
   it('test iunId input', async () => {
     await act(async () => {
+      const result = render(<FilterNotificationsTable />);
+      const form = result.container.querySelector('form') as HTMLFormElement;
       const selectButton = await waitFor(() => form.querySelector(`div[id="searchFor"]`));
       fireEvent.mouseDown(selectButton!);
       const selectOptionsContainer = await screen.findByRole('presentation');
@@ -106,7 +122,33 @@ describe('Filter Notifications Table Component', () => {
       testInput(form, 'iunId', 'mocked-iunId');
     });
   });
-  */
+
+  it('test startDate input', async () => {
+    await act(async () => {
+      const result = render(<FilterNotificationsTable />);
+      const form = result.container.querySelector('form') as HTMLFormElement;
+      testInput(form, 'startDate', '23/02/2022');
+      await testCalendar(form, 'startDate');
+    });
+  });
+
+  it('test endDate input', async () => {
+    await act(async () => {
+      const result = render(<FilterNotificationsTable />);
+      const form = result.container.querySelector('form') as HTMLFormElement;
+      testInput(form, 'endDate', '23/02/2022');
+      await testCalendar(form, 'endDate');
+    });
+  });
+
+  it('test status select', async () => {
+    await act(async () => {
+      const result = render(<FilterNotificationsTable />);
+      const form = result.container.querySelector('form') as HTMLFormElement;
+      expect(form.querySelector(`input[name="status"]`)).toBeInTheDocument();
+      await testSelect(form, 'status', NotificationAllowedStatus);
+    });
+  });
 });
 
 // console.log(prettyDOM(cancelButton!, 100000));
