@@ -1,7 +1,7 @@
 import { apiClient } from '../axios';
 import { GetNotificationsParams, GetNotificationsResponse } from '../../redux/dashboard/types';
 import { NotificationDetail, Legalfacts } from '../../redux/notification/types';
-import { formatDate } from './notifications.mapper';
+import { formatDate } from '@pagopa-pn/pn-commons';
 
 export const NotificationsApi = {
   /**

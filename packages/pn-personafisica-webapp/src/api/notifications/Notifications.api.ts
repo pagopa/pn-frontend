@@ -3,7 +3,7 @@ import {
   GetNotificationsParams,
   GetNotificationsResponse,
 } from '../../redux/dashboard/types';
-import { formatDate } from './notifications.mapper';
+import { formatDate } from '@pagopa-pn/pn-commons';
 
 export const NotificationsApi = {
   /**

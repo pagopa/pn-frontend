@@ -1,4 +1,4 @@
-import { formatDate } from '../notifications.mapper';
+import { formatDate } from "../date.service";
 
 test('format date in the format DD/MM/YYYY', () => {
   const date = '2022-02-16T16:03:37.123Z';

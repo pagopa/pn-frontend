@@ -18,6 +18,7 @@ export { AccessDenied };
 import { AppError } from './types/AppError';
 import { PaginationData } from './components/Pagination/types';
 import { createAppError } from './services/error.service';
+import { formatDate } from './services/date.service';
 
 // components
 export { LoadingOverlay };
@@ -35,3 +36,4 @@ export type { PaginationData };
 // functions
 
 export { createAppError };
+export { formatDate };
