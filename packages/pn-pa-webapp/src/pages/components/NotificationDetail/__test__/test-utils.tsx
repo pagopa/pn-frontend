@@ -1,4 +1,4 @@
-import { NotificationStatus } from '../../../../redux/dashboard/types';
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
 import { AddressSource, DeliveryMode, DigitalDomicileType, LegalFactType, NotificationDetail, NotificationFeePolicy, PhysicalCommunicationType, RecipientType, TimelineCategory } from '../../../../redux/notification/types';
 
 export const NOTIFICATION: NotificationDetail = {
