@@ -1,5 +1,4 @@
 import { useEffect, useState, ChangeEvent, Fragment } from 'react';
-import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Box, Button, MenuItem, TextField } from '@mui/material';
@@ -11,6 +10,7 @@ import { NotificationAllowedStatus } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
 import { tenYearsAgo, today } from '../../../utils/date.utility';
+import { useAppDispatch } from '../../../redux/hooks';
 
 const useStyles = makeStyles({
   customButton: {
@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 });
 
 const FilterNotificationsTable = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -73,6 +73,8 @@ const FilterNotificationsTable = () => {
       })
     );
     formik.resetForm();
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const classes = useStyles();
@@ -199,7 +201,7 @@ const FilterNotificationsTable = () => {
           >
             Cerca
           </Button>
-          <Button id="cancelButton" className={classes.customButton} onClick={cleanFilters}>
+          <Button data-testid="cancelButton" className={classes.customButton} onClick={cleanFilters}>
             Annulla ricerca
           </Button>
         </Box>

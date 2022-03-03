@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getSentNotificationDocument } from '../../../redux/notification/actions';
 import { RootState } from '../../../redux/store';
 
+
 type Props = {
   notification: NotificationDetail;
 };
@@ -40,7 +41,7 @@ const DetailDocuments = ({ notification }: Props) => {
         </Grid>
       </Grid>
       {notification.documents.map((d, i) => (
-        <Button key={d.digests.sha256} startIcon={<AttachFileIcon />} onClick={() => clickHandler(i)}>
+        <Button data-testid="documentButton" key={d.digests.sha256} startIcon={<AttachFileIcon />} onClick={() => clickHandler(i)}>
           {'Documento_' + i.toString()}
         </Button>
       ))}

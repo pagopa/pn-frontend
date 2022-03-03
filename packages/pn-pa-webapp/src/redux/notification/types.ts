@@ -1,8 +1,8 @@
 import { NotificationStatus } from "@pagopa-pn/pn-commons";
 
-enum DigitalDomicileType {
+export enum DigitalDomicileType {
   PEC = 'PEC',
-  EMAIL = 'EMAIL'
+  EMAIL = 'EMAIL',
 }
 
 interface DigitalAddress {
@@ -20,7 +20,13 @@ interface PhysicalAddress {
   foreignState: string;
 }
 
+export enum RecipientType {
+  PF = 'PF',
+  PG = 'PG',
+}
+
 export interface NotificationDetailRecipient {
+  recipientType: RecipientType;
   taxId: string;
   denomination: string;
   digitalDomicile: DigitalAddress;
@@ -33,11 +39,12 @@ export interface NotificationDetailDocument {
     sha256: string;
   };
   contentType: string;
+  title: string;
 }
 
-enum NotificationFeePolicy {
+export enum NotificationFeePolicy {
   FLAT_RATE = 'FLAT_RATE',
-  DELIVERY_MODE = 'DELIVERY_MODE'
+  DELIVERY_MODE = 'DELIVERY_MODE',
 }
 
 export interface NotificationDetailPayment {
@@ -47,15 +54,16 @@ export interface NotificationDetailPayment {
     flatRate: NotificationDetailDocument;
     digital: NotificationDetailDocument;
     analog: NotificationDetailDocument;
-  }
+  };
 }
 
 export interface NotificationStatusHistory {
   status: NotificationStatus;
   activeFrom: string;
+  relatedTimelineElements: Array<string>;
 }
 
-enum TimelineCategory {
+export enum TimelineCategory {
   REQUEST_ACCEPTED = 'REQUEST_ACCEPTED',
   SEND_COURTESY_MESSAGE = 'SEND_COURTESY_MESSAGE',
   NOTIFICATION_PATH_CHOOSE = 'NOTIFICATION_PATH_CHOOSE',
@@ -81,21 +89,74 @@ enum TimelineCategory {
   SEND_ANALOG_DOMICILE = 'SEND_ANALOG_DOMICILE',
   SEND_PAPER_FEEDBACK = 'SEND_PAPER_FEEDBACK',
   PAYMENT = 'PAYMENT',
-  COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE'
+  COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
 }
-
-enum DeliveryMode {
+export enum DeliveryMode {
   DIGITAL = 'DIGITAL',
-  ANALOG = 'ANALOG '
+  ANALOG = 'ANALOG ',
 }
 
-enum AddressSource {
+export enum AddressSource {
   PLATFORM = 'PLATFORM',
   SPECIAL = 'SPECIAL',
-  GENERAL = 'GENERAL '
+  GENERAL = 'GENERAL ',
+}
+
+interface BaseDetails {
+  category: TimelineCategory;
+  taxdId: string;
+}
+
+interface AnalogWorkflowDetails {
+  category: TimelineCategory;
+  taxdId: string;
+  address?: PhysicalAddress;
+}
+
+interface AddressInfoDetails {
+  category: TimelineCategory;
+  taxdId: string;
+  source: AddressSource;
+  isAvailable: boolean;
+  attemptDate: string;
+  available: boolean;
+}
+
+interface NotificationPathChooseDetails {
+  category: TimelineCategory;
+  taxId: string;
+  deliveryMode: DeliveryMode;
+  physicalAddress: PhysicalAddress;
+  platform: DigitalAddress;
+  special: DigitalAddress;
+  general: DigitalAddress;
+  courtesyAddresses: Array<DigitalAddress>;
+}
+
+enum ContactPhase {
+  CHOOSE_DELIVERY = 'CHOOSE_DELIVERY',
+  SEND_ATTEMPT = 'SEND_ATTEMPT ',
+}
+
+interface PublicRegistryCallDetails {
+  category: TimelineCategory;
+  taxId: string;
+  deliveryMode: DeliveryMode;
+  contactPhase: ContactPhase;
+  sentAttemptMade: number;
+  sendDate: string;
+}
+
+interface PublicRegistryResponseDetails {
+  category: TimelineCategory;
+  taxId: string;
+  digitalAddress: DigitalAddress;
+  physicalAddress: PhysicalAddress;
 }
 
 interface RecivedDetails {
+  category: TimelineCategory;
+  taxId: string;
   recipients: Array<NotificationDetailRecipient>;
   documentsDigests: Array<{
     sha256: string;
@@ -113,49 +174,96 @@ interface RecivedDetails {
   };
 }
 
-interface NotificationPathChooseDetails {
+interface RequestRefusedDetails {
+  category: TimelineCategory;
+  errors: Array<string>;
+}
+
+interface DigitalAddressInfo {
+  address: DigitalAddress;
+  addressSource: AddressSource;
+  sentAttemptMade: number;
+  lastAttemptDate: string;
+}
+
+interface ScheduleWorkflowDetails {
+  category: TimelineCategory;
   taxId: string;
-  deliveryMode: DeliveryMode;
-  physicalAddress: PhysicalAddress;
-  platform: DigitalAddress;
-  special: DigitalAddress;
-  general: DigitalAddress;
-  courtesyAddresses: Array<DigitalAddress>;
+  lastAttemptInfo?: DigitalAddressInfo
+}
+
+interface SendCourtesyMessageDetails {
+  category: TimelineCategory;
+  taxId: string;
+  address: DigitalAddress;
+  sendDate: string;
 }
 
 interface SendDigitalDetails {
+  category: TimelineCategory;
   taxId: string;
-  address: DigitalAddress;
-  addressSource: AddressSource;
-  retryNumber: number;
-  downstreamId: {
-    systemId: string;
-    messageId: string;
-  }
-}
-
-interface SendDigitalFeedbackDetails {
-  taxId: string;
-  address: DigitalAddress;
-  addressSource: AddressSource;
-  retryNumber: number;
-  downstreamId: {
+  address?: DigitalAddress;
+  addresses?: Array<{
+    address: DigitalAddress;
+    when: string;
+  }>
+  addressSource?: AddressSource;
+  retryNumber?: number;
+  downstreamId?: {
     systemId: string;
     messageId: string;
   };
-  errors: Array<string>
+  errors?: Array<string>;
+  responseStatus?: 'OK' | 'KO';
+  notificationDate?: string;
+}
+
+interface SendPaperDetails {
+  category: TimelineCategory;
+  taxId: string;
+  address: DigitalAddress;
+  serviceLevel: PhysicalCommunicationType;
+  sentAttemptMade: number;
+  investigation: boolean;
+  newAddress?: PhysicalAddress;
+  errors?: Array<string>;
+}
+
+export enum LegalFactType {
+  SENDER_ACK = 'SENDER_ACK',
+  DIGITAL_DELIVERY = 'DIGITAL_DELIVERY',
+  ANALOG_DELIVERY = 'ANALOG_DELIVERY',
+  RECIPIENT_ACCESS = 'RECIPIENT_ACCESS',
+}
+
+interface LegalFactId {
+  key: string;
+  type: LegalFactType;
 }
 
 export interface NotificationDetailTimeline {
   elementId: string;
   timestamp: string;
   category: TimelineCategory;
-  details: RecivedDetails | NotificationPathChooseDetails | SendDigitalDetails | SendDigitalFeedbackDetails;
+  details:
+    | BaseDetails
+    | AnalogWorkflowDetails
+    | AddressInfoDetails
+    | NotificationPathChooseDetails
+    | PublicRegistryCallDetails
+    | PublicRegistryResponseDetails
+    | RecivedDetails
+    | RequestRefusedDetails
+    | ScheduleWorkflowDetails
+    | SendCourtesyMessageDetails
+    | SendDigitalDetails
+    | SendPaperDetails;
+  legalFactsIds?: Array<LegalFactId>;
 }
 
 export enum PhysicalCommunicationType {
   SIMPLE_REGISTERED_LETTER = 'SIMPLE_REGISTERED_LETTER',
-  REGISTERED_LETTER_890 = 'REGISTERED_LETTER_890'
+  REGISTERED_LETTER_890 = 'REGISTERED_LETTER_890',
 }
 
 export interface NotificationDetail {
@@ -171,14 +279,14 @@ export interface NotificationDetail {
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<NotificationDetailTimeline>;
-  physicalCommunicationType: PhysicalCommunicationType
+  physicalCommunicationType: PhysicalCommunicationType;
 }
 
 enum LegalfactsType {
   SENDER_ACK = 'SENDER_ACK',
   DIGITAL_DELIVERY = 'DIGITAL_DELIVERY',
   ANALOG_DELIVERY = 'ANALOG_DELIVERY',
-  RECIPIENT_ACCESS = 'RECIPIENT_ACCESS'
+  RECIPIENT_ACCESS = 'RECIPIENT_ACCESS',
 }
 
 export interface Legalfacts {
