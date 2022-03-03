@@ -24,14 +24,20 @@ const notificationSlice = createSlice({
       timeline: [] as Array<NotificationDetailTimeline>,
       physicalCommunicationType: '' as PhysicalCommunicationType
     } as NotificationDetail,
+    documentDownloadUrl: ''
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getSentNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
     });
-    builder.addCase(getSentNotificationDocument.fulfilled, (_state, action) => {
-      console.log(action.payload);
+    builder.addCase(getSentNotificationDocument.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getSentNotificationDocument.fulfilled, (state, action) => {
+      if (action.payload.url) {
+        state.documentDownloadUrl = action.payload.url;
+      }
     });
   },
 });
