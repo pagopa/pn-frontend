@@ -1,4 +1,4 @@
-import { act, fireEvent, waitFor, screen, within, RenderResult, prettyDOM } from '@testing-library/react';
+import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';
 
 import { tenYearsAgo, today } from '../../../../utils/date.utility';
