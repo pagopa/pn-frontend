@@ -1,6 +1,11 @@
-import { NotificationStatus } from '../redux/dashboard/types';
+import { NotificationStatus } from '../types/NotificationStatus';
 
 // TODO: aggiungere i colori del tema
+/**
+ * Restituisce il mapping tra lo status della notifica e il suo colore, la sua label e il suo messaggio descrittivo
+ * @param  {NotificationStatus} status
+ * @returns string
+ */
 export function getNotificationStatusLabelAndColor(status: NotificationStatus): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;

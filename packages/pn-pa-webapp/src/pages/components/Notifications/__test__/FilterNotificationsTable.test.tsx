@@ -1,6 +1,6 @@
+import { NotificationAllowedStatus } from '@pagopa-pn/pn-commons';
 import { act, fireEvent, waitFor, screen, within } from '@testing-library/react'; // prettyDOM
 
-import { NotificationAllowedStatus } from '../../../../utils/status.utility';
 import { render } from '../../../../__test__/test-utils';
 import FilterNotificationsTable from '../FilterNotificationsTable';
 

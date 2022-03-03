@@ -6,9 +6,10 @@ import { makeStyles } from '@mui/styles';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import { NotificationAllowedStatus } from '@pagopa-pn/pn-commons';
+
 import { useDispatch } from 'react-redux';
 import { setNotificationFilters } from '../../redux/dashboard/actions';
-import { NotificationAllowedStatus } from '../../utils/status.utility';
 import { tenYearsAgo, today } from '../../utils/date.utility';
 
 const useStyles = makeStyles({

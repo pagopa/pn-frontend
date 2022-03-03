@@ -1,4 +1,4 @@
-import { NotificationStatus } from "../dashboard/types";
+import { NotificationStatus } from "@pagopa-pn/pn-commons";
 
 enum DigitalDomicileType {
   PEC = 'PEC',

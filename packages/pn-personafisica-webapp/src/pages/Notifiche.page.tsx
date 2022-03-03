@@ -1,5 +1,9 @@
 import { Typography } from '@mui/material';
-import { CustomPagination } from '@pagopa-pn/pn-commons';
+import {
+  calcPages,
+  CustomPagination,
+  getNotificationStatusLabelAndColor,
+} from '@pagopa-pn/pn-commons';
 import { PaginationData } from '@pagopa-pn/pn-commons/src/components/Pagination/types';
 import { Fragment, useEffect, useRef } from 'react';
 import FilterNotificationsTable from '../component/notification/FilterNotificationsTable';
@@ -10,8 +14,6 @@ import { getSentNotifications, setPagination, setSorting } from '../redux/dashbo
 import { NotificationStatus } from '../redux/dashboard/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { calcPages } from '../utils/pagination.utility';
-import { getNotificationStatusLabelAndColor } from '../utils/status.utility';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -24,11 +26,15 @@ const Notifiche = () => {
 
   const totalElements =
     pagination.size *
-      (pagination.moreResult
-        ? Math.max(pagination.nextPagesKey.length + 1, 8)
-        : pagination.nextPagesKey.length + 1);
-  const pagesToShow: Array<number> = calcPages(pagination.size, totalElements, 3, pagination.page + 1);
-  
+    (pagination.moreResult
+      ? Math.max(pagination.nextPagesKey.length + 1, 8)
+      : pagination.nextPagesKey.length + 1);
+  const pagesToShow: Array<number> = calcPages(
+    pagination.size,
+    totalElements,
+    3,
+    pagination.page + 1
+  );
 
   const columns: Array<Column> = [
     {
@@ -95,18 +101,20 @@ const Notifiche = () => {
     dispatch(setSorting(s));
   };
 
-
   useEffect(() => {
     // assign the ref's current value to the pagination Hook
     const params = {
       ...filters,
-      size: pagination.size
+      size: pagination.size,
     };
     if (pagination !== prevPagination.current) {
       /* eslint-disable functional/immutable-data */
       prevPagination.current = pagination;
-      const nextPage = pagination.page === prevPagination.current.page ? pagination.nextPagesKey[prevPagination.current.page - 1] : pagination.nextPagesKey[pagination.page - 1];
-      params.nextPagesKey = pagination.page === 0 ? undefined: nextPage;
+      const nextPage =
+        pagination.page === prevPagination.current.page
+          ? pagination.nextPagesKey[prevPagination.current.page - 1]
+          : pagination.nextPagesKey[pagination.page - 1];
+      params.nextPagesKey = pagination.page === 0 ? undefined : nextPage;
       /* eslint-enable functional/immutable-data */
     }
     void dispatch(getSentNotifications(params));
@@ -123,16 +131,16 @@ const Notifiche = () => {
         onChangeSorting={handleChangeSorting}
       />
       {notifications.length > 0 && (
-              <CustomPagination
-                paginationData={{
-                  size: pagination.size,
-                  page: pagination.page,
-                  totalElements,
-                }}
-                onPageRequest={handleChangePage}
-                pagesToShow={pagesToShow}
-              />
-            )}
+        <CustomPagination
+          paginationData={{
+            size: pagination.size,
+            page: pagination.page,
+            totalElements,
+          }}
+          onPageRequest={handleChangePage}
+          pagesToShow={pagesToShow}
+        />
+      )}
     </Fragment>
   );
 };

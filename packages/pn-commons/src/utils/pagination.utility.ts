@@ -42,7 +42,14 @@ function calcDisplayedPages(
   }
   return displayedPages;
 }
-
+/**
+ * Calcola le pagine per il componente CustomPagination
+ * @param  {number} pageSize
+ * @param  {number} numOfItems
+ * @param  {number} numOfDisplayedPages
+ * @param  {number} pageSelected
+ * @returns Array
+ */
 export function calcPages(
   pageSize: number,
   numOfItems: number,
