@@ -1,5 +1,5 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppError } from '../..';
+import { AppError, createAppError } from '../..';
 
 export interface AppStateState {
   loading: {
@@ -42,7 +42,8 @@ export const appStateSlice = createSlice({
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
-        state.errors.push(action.payload);
+        let error = createAppError(action.payload);
+        state.errors.push(error);
       });
   }
 });

@@ -87,7 +87,7 @@ export const NotificationsApi = {
         }
         return [] as Array<Legalfacts>;
       }),
-   /**
+  /**
    * Gets current user notification document
    * @param  {string} iun
    * @param  {number} documentIndex
