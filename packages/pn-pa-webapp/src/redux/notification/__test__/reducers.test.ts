@@ -44,14 +44,14 @@ const notification = {
 	physicalCommunicationType: 'REGISTERED_LETTER_890'
 };
 
-const mockNtificationDetailResponse = (iun: string) => {
+const mockNotificationDetailResponse = (iun: string) => {
   const mock = new MockAdapter(apiClient);
   mock.onGet(`/delivery/notifications/sent/${iun}`).reply(200, notification);
 }
 
-const mockNtificationDetailDocumentResponse = (iun: string, documentIndex: number) => {
+const mockNotificationDetailDocumentResponse = (iun: string, documentIndex: number) => {
   const mock = new MockAdapter(apiClient);
-  mock.onGet(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`).reply(200, '');
+  mock.onGet(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`).reply(200, {url: 'http://mocked-url.com'});
 }
 
 loginInit();
@@ -76,13 +76,14 @@ describe('Notification detail redux state tests', () => {
 				notificationStatusHistory: [],
 				timeline: [],
 				physicalCommunicationType: ''
-			}
+			},
+			documentDownloadUrl: ''
     });
   });
 
   it('Should be able to fetch the notification detail', async () => {
     await store.dispatch(exchangeToken('mocked-token'));
-    mockNtificationDetailResponse('mocked-iun');
+    mockNotificationDetailResponse('mocked-iun');
     const action = await store.dispatch(getSentNotification('mocked-iun'));
     const payload = action.payload as NotificationDetail;
     expect(action.type).toBe('getSentNotification/fulfilled');
@@ -92,11 +93,11 @@ describe('Notification detail redux state tests', () => {
 
 	it('Should be able to fetch the notification document', async () => {
     await store.dispatch(exchangeToken('mocked-token'));
-    mockNtificationDetailDocumentResponse('mocked-iun', 0);
+    mockNotificationDetailDocumentResponse('mocked-iun', 0);
     const action = await store.dispatch(getSentNotificationDocument({iun: 'mocked-iun', documentIndex: 0}));
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationDocument/fulfilled');
-    expect(payload).toEqual('');
+    expect(payload).toEqual({url: 'http://mocked-url.com'});
     await store.dispatch(logout());
   })
 });

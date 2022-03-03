@@ -1,11 +1,12 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 import { NotificationDetail } from '../../../redux/notification/types';
-import { useAppDispatch } from '../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getSentNotificationDocument } from '../../../redux/notification/actions';
+import { RootState } from '../../../redux/store';
 
 type Props = {
   notification: NotificationDetail;
@@ -14,10 +15,17 @@ type Props = {
 // TODO: aggiornare nome documento quando sarà inviato da be
 const DetailDocuments = ({ notification }: Props) => {
   const dispatch = useAppDispatch();
+  const documentDownloadUrl = useAppSelector((state: RootState) => state.notificationState.documentDownloadUrl);
   
   const clickHandler = (documentIndex: number) => {
     void dispatch(getSentNotificationDocument({iun: notification.iun, documentIndex}));
   };
+
+  useEffect(() => {
+    if (documentDownloadUrl) {
+      window.location.assign(documentDownloadUrl);
+    }
+  }, [documentDownloadUrl]);
 
   return (
     <Fragment>
