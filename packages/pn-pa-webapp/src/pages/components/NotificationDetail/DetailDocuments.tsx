@@ -13,7 +13,6 @@ type Props = {
   notification: NotificationDetail;
 };
 
-// TODO: aggiornare nome documento quando sarà inviato da be
 const DetailDocuments = ({ notification }: Props) => {
   const dispatch = useAppDispatch();
   const documentDownloadUrl = useAppSelector((state: RootState) => state.notificationState.documentDownloadUrl);
@@ -42,7 +41,7 @@ const DetailDocuments = ({ notification }: Props) => {
       </Grid>
       {notification.documents.map((d, i) => (
         <Button data-testid="documentButton" key={d.digests.sha256} startIcon={<AttachFileIcon />} onClick={() => clickHandler(i)}>
-          {'Documento_' + i.toString()}
+          {d.title}
         </Button>
       ))}
     </Fragment>

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetail, NotificationDetailDocument, NotificationDetailPayment, NotificationDetailRecipient, NotificationDetailTimeline, NotificationStatusHistory, PhysicalCommunicationType } from './types';
-import { getSentNotification, getSentNotificationDocument } from './actions';
+import { getSentNotification, getSentNotificationDocument, getSentNotificationLegalfact } from './actions';
 
 /* eslint-disable functional/immutable-data */
 const notificationSlice = createSlice({
@@ -24,7 +24,8 @@ const notificationSlice = createSlice({
       timeline: [] as Array<NotificationDetailTimeline>,
       physicalCommunicationType: '' as PhysicalCommunicationType
     } as NotificationDetail,
-    documentDownloadUrl: ''
+    documentDownloadUrl: '',
+    legalFactDownloadUrl: ''
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -37,6 +38,11 @@ const notificationSlice = createSlice({
     builder.addCase(getSentNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.documentDownloadUrl = action.payload.url;
+      }
+    });
+    builder.addCase(getSentNotificationLegalfact.fulfilled, (state, action) => {
+      if (action.payload.url) {
+        state.legalFactDownloadUrl = action.payload.url;
       }
     });
   },

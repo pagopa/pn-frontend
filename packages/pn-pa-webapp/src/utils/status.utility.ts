@@ -9,17 +9,6 @@ export function getNotificationStatusLabelAndColorFromTimelineCategory(
   label: string;
   tooltip: string;
 } {
-  // TODO: cambiare quando l'api restituirà la corrispondenza per id
-  /* eslint-disable-next-line functional/no-let */
-  let currentStatus;
-  const timeLineTime = new Date(timelineStep.timestamp).getTime();
-  for (const notificationStatus of notificationStatusHistory.slice().reverse()) {
-    const currentTime = new Date(notificationStatus.activeFrom).getTime();
-    if (currentTime <= timeLineTime) {
-      currentStatus = notificationStatus.status;
-      continue;
-    }
-    break;
-  }
-  return getNotificationStatusLabelAndColor(currentStatus as NotificationStatus);
+  const notificationStep = notificationStatusHistory.find(n => n.relatedTimelineElements.includes(timelineStep.elementId));
+  return getNotificationStatusLabelAndColor(notificationStep?.status as NotificationStatus);
 }

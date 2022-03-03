@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
-import { Legalfacts, NotificationDetail } from './types';
+import { NotificationDetail, LegalFactId } from './types';
 
 export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
   'getSentNotification',
@@ -14,11 +14,11 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
   }
 );
 
-export const getSentNotificationLegalfacts = createAsyncThunk<Array<Legalfacts>, string>(
-  'getSentNotificationLegalfacts',
-  async (params: string, { rejectWithValue }) => {
+export const getSentNotificationLegalfact = createAsyncThunk<{url: string}, {iun: string; legalFact: LegalFactId}>(
+  'getSentNotificationLegalfact',
+  async (params: {iun: string; legalFact: LegalFactId}, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getSentNotificationLegalfacts(params);
+      return await NotificationsApi.getSentNotificationLegalfact(params.iun, params.legalFact);
     } catch (e) {
       return rejectWithValue(e);
     }
