@@ -93,13 +93,13 @@ export const NotificationsApi = {
    * @param  {number} documentIndex
    * @returns Promise
    */
-    getSentNotificationDocument: (iun: string, documentIndex: number): Promise<string> =>
+    getSentNotificationDocument: (iun: string, documentIndex: number): Promise<{url: string}> =>
     apiClient
-      .get<string>(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`)
+      .get<{url: string}>(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`)
       .then((response) => {
         if (response.data) {
           return response.data;
         }
-        return '';
+        return {url : ''};
       }),
 };
