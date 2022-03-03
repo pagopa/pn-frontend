@@ -32,6 +32,7 @@ describe('Dashboard Page', () => {
     await act( async () => {
       render(<Dashboard/>);
       expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
+      spy.mockClear();
     });    
   });
 });
