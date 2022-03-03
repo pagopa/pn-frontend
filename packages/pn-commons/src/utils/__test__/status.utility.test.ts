@@ -1,5 +1,5 @@
-import { NotificationStatus } from '../../redux/dashboard/types';
 
+import { NotificationStatus } from '../../types/NotificationStatus';
 import { getNotificationStatusLabelAndColor } from '../status.utility';
 
 function testStatusLabelAndColorFn(

@@ -1,15 +1,13 @@
+import { UserRole } from '../../models/user';
+
 export interface User {
-    email: string;
+    sessionToken: string;
+    name: string;
     family_name: string;
     fiscal_number: string;
-    mobile_phone: string;
-    name: string;
-    from_aa: boolean;
-    uid: string;
-    level: string;
-    iat: string;
-    exp: string;
-    iss: string;
-    jti: string;
-    sessionToken: string;
+    organization: Organization;
+}
+export interface Organization {
+    id: string;
+    role: UserRole;
 }

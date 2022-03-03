@@ -1,6 +1,7 @@
 import { LoadingOverlay, Layout } from '@pagopa-pn/pn-commons';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import SideMenu from './component/SideMenu/SideMenu';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
@@ -22,6 +23,7 @@ const App = () => {
     <Layout
       onExitAction={() => dispatch(logout())}
       assistanceEmail={PAGOPA_HELP_EMAIL}
+      sideMenu={<SideMenu/>}
     >
       <LoadingOverlay />
       <Router />

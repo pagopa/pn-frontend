@@ -1,13 +1,13 @@
+import { formatDate, NotificationStatus } from '@pagopa-pn/pn-commons';
 import MockAdapter from 'axios-mock-adapter';
 
 import { apiClient } from '../../../api/axios';
-import { formatDate } from '../../../api/notifications/notifications.mapper';
 import { tenYearsAgo, today } from '../../../utils/date.utility';
 import { exchangeToken, logout } from '../../auth/actions';
 import { loginInit } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
 import { getSentNotifications, setNotificationFilters, setPagination, setSorting } from '../actions';
-import { GetNotificationsResponse, NotificationStatus } from '../types';
+import { GetNotificationsResponse } from '../types';
 
 const notificationsFromBe: GetNotificationsResponse = {
   result: [

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
-import { NotificationStatus } from '../dashboard/types';
 import { NotificationDetail, NotificationDetailDocument, NotificationDetailPayment, NotificationDetailRecipient, NotificationDetailTimeline, NotificationStatusHistory, PhysicalCommunicationType } from './types';
 import { getSentNotification, getSentNotificationDocument } from './actions';
 

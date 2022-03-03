@@ -11,12 +11,12 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getSentNotification } from '../redux/notification/actions';
-import { NotificationStatus } from '../redux/dashboard/types';
 import DetailTable from './components/NotificationDetail/DetailTable';
 import DetailTimeline from './components/NotificationDetail/DetailTimeline';
 import DetailDocuments from './components/NotificationDetail/DetailDocuments';

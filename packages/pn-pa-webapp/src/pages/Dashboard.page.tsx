@@ -1,15 +1,13 @@
 import { useEffect, Fragment, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CustomPagination, PaginationData } from '@pagopa-pn/pn-commons';
+import { calcPages, CustomPagination, getNotificationStatusLabelAndColor, NotificationStatus, PaginationData } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
-import { Notification, NotificationStatus } from '../redux/dashboard/types';
-import { getNotificationStatusLabelAndColor } from '../utils/status.utility';
-import { calcPages } from '../utils/pagination.utility';
+import { Notification } from '../redux/dashboard/types';
 import NotificationsTable from './components/Notifications/NotificationsTable';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 import { Column, Row, Sort } from './components/Notifications/types';
