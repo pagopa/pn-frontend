@@ -10,7 +10,7 @@ import { GetNotificationsResponse } from '../types';
 
 const mockNetworkResponse = () => {
   const mock = new MockAdapter(apiClient);
-  mock.onGet(`/delivery/notifications/sent`).reply(200, {
+  mock.onGet(`/delivery/notifications/received`).reply(200, {
     moreResult: false,
     nextPagesKey: [],
     result: []
@@ -51,7 +51,7 @@ describe('Dashbaord redux state tests', () => {
     mockNetworkResponse();
     const action = await store.dispatch(getSentNotifications({
       startDate: tenYearsAgo.toISOString(),
-      endDate: today.toISOString()
+      endDate: today.toISOString(),
     }));
     const payload = action.payload as GetNotificationsResponse;
     expect(action.type).toBe('getSentNotifications/fulfilled');
