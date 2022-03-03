@@ -25,7 +25,7 @@ const FilterNotificationsTable = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const IUN_regex = /^[1-9A-Z_-]{1,20}$/i;
+  const IUN_regex = /^[0-9A-Z_-]{1,20}$/i;
 
   const validationSchema = yup.object({
     iunMatch: yup.string().matches(IUN_regex, 'Inserire il codice corretto'),
@@ -46,9 +46,10 @@ const FilterNotificationsTable = () => {
       const filters = {
         startDate: values.startDate.toISOString(),
         endDate: values.endDate.toISOString(),
-        recipientId: values.iunMatch,
+        iunMatch: values.iunMatch,
         status: values.status === 'All' ? undefined : values.status,
       };
+      console.log(filters);
       dispatch(setNotificationFilters(filters));
     },
   });
