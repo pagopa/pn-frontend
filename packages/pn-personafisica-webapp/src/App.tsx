@@ -1,4 +1,4 @@
-import { LoadingOverlay, Layout } from '@pagopa-pn/pn-commons';
+import { LoadingOverlay, Layout, AppMessage } from '@pagopa-pn/pn-commons';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SideMenu from './component/SideMenu/SideMenu';
@@ -25,6 +25,7 @@ const App = () => {
       assistanceEmail={PAGOPA_HELP_EMAIL}
       sideMenu={<SideMenu/>}
     >
+      <AppMessage />
       <LoadingOverlay />
       <Router />
     </Layout>
