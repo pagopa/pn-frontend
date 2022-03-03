@@ -201,7 +201,7 @@ const FilterNotificationsTable = () => {
           >
             Cerca
           </Button>
-          <Button id="cancelButton" className={classes.customButton} onClick={cleanFilters}>
+          <Button data-testid="cancelButton" className={classes.customButton} onClick={cleanFilters}>
             Annulla ricerca
           </Button>
         </Box>

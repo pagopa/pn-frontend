@@ -100,7 +100,7 @@ describe('Filter Notifications Table Component', () => {
     jest.clearAllMocks();
   });
 
-  it('renders filter notifications table', () => {
+  it('renders filter notifications table', async () => {
     expect(form).toBeInTheDocument();
     testFormElements(form!, 'searchFor', 'Cerca per');
     testFormElements(form!, 'recipientId', 'Codice fiscale');
@@ -110,7 +110,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveTextContent(/Cerca/i);
-    const cancelButton = form!.querySelector(`button[id="cancelButton"]`);
+    const cancelButton = await within(form!).getByTestId('cancelButton');
     expect(cancelButton).toBeInTheDocument();
     expect(cancelButton).toHaveTextContent(/Annulla ricerca/i);
   });
@@ -203,7 +203,7 @@ describe('Filter Notifications Table Component', () => {
     oneYearBefore.setUTCHours(23,0,0,0);
 
     await setFormValues(form!, '0', 'RSSMRA80A01H501U', oneYearBefore, today, NotificationAllowedStatus[2].value);
-    const cancelButton = form!.querySelector(`button[id="cancelButton"]`);
+    const cancelButton = await within(form!).getByTestId('cancelButton');
     await waitFor(() => {
       fireEvent.click(cancelButton!);
     });

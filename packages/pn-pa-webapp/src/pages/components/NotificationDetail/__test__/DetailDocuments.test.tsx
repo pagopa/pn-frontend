@@ -1,4 +1,4 @@
-import { act, fireEvent, waitFor, RenderResult } from '@testing-library/react'; // prettyDOM
+import { act, fireEvent, waitFor, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';
 
 import { render } from '../../../../__test__/test-utils';
