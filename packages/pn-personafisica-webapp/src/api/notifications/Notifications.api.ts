@@ -31,6 +31,9 @@ export const NotificationsApi = {
     if (params.nextPagesKey) {
       queryParams.append('nextPagesKey', params.nextPagesKey);
     }
+    if (params.iunMatch) {
+      queryParams.append('iunMatch', params.iunMatch);
+    }
     return apiClient
       .get<GetNotificationsResponse>('/delivery/notifications/received', { params: queryParams })
       .then((response) => {
