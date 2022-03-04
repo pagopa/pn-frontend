@@ -42,15 +42,15 @@ const SideMenu: FC<Props> = ({ menuItems }) => {
         <List>
           {menuItems.map((item: SideMenuItem) =>
             item.children ? (
-              <Fragment>
-                <ListItem button key={item.label} onClick={() => handleClick(item.label)}>
+              <Fragment key={item.label}>
+                <ListItem button onClick={() => handleClick(item.label)}>
                   <ListItemIcon>
                     <item.icon />
                   </ListItemIcon>
                   <ListItemText primary={item.label} />
                   {openId === item.label && open ? <ExpandLess /> : <ExpandMore />}
                 </ListItem>
-                <Collapse in={openId === item.label && open} timeout="auto" unmountOnExit>
+                <Collapse in={openId === item.label && open} timeout="auto" unmountOnExit data-testid={`collapse-${item.label}`}>
                   <List disablePadding>
                     {item.children.map(child => itemList(child, {pl: 4}))}
                   </List>
