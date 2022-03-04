@@ -1,7 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
 import { authClient } from '../../../api/axios';
-import { UserRole } from '../../../models/user';
 import { store } from '../../store';
 import { exchangeToken, logout } from '../actions';
 import { User } from '../types';
@@ -11,10 +10,15 @@ const userResponse: User = {
   name: 'Mario',
   family_name: 'Rossi',
   fiscal_number: 'RSSMRA80A01H501U',
-  organization: {
-    id: 'mocked-id',
-    role: UserRole.REFERENTE_DELEGATO,
-  },
+  email: 'info@agid.gov.it',
+  mobile_phone: '333333334',
+  from_aa: false,
+  uid: 'mocked-uid',
+  level: 'L2',
+  iat: 1646394256,
+  exp: 1646397856,
+  iss: 'spid-hub-test.dev.pn.pagopa.it',
+  jti: 'mocked-jti',
 };
 
 export const loginInit = () => {
@@ -46,12 +50,18 @@ describe('Auth redux state tests', () => {
         ? JSON.parse(sessionStorage.getItem('user') || '')
         : {
             sessionToken: '',
+            name: '',
             family_name: '',
             fiscal_number: '',
-            organization: {
-              id: '',
-              role: UserRole.REFERENTE_DELEGATO,
-            },
+            email: '',
+            mobile_phone: '',
+            from_aa: false,
+            uid: '',
+            level: '',
+            iat: 0,
+            exp: 0,
+            iss: '',
+            jti: '',
           },
     });
   });
@@ -71,12 +81,18 @@ describe('Auth redux state tests', () => {
     expect(action.type).toBe('logout/fulfilled');
     expect(payload).toEqual({
       sessionToken: '',
+      name: '',
       family_name: '',
       fiscal_number: '',
-      organization: {
-        id: '',
-        role: UserRole.REFERENTE_DELEGATO,
-      },
+      email: '',
+      mobile_phone: '',
+      from_aa: false,
+      uid: '',
+      level: '',
+      iat: 0,
+      exp: 0,
+      iss: '',
+      jti: '',
     });
   });
 });
