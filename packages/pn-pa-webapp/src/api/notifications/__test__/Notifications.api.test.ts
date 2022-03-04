@@ -1,11 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 
+import { LegalFactId, LegalFactType } from '../../../redux/notification/types';
 import { tenYearsAgo, today } from '../../../utils/date.utility';
-import { NotificationsApi } from '../Notifications.api';
 import { notificationsFromBe, notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
 import { notificationFromBe, notificationToFe } from '../../../redux/notification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
 import { apiClient } from '../../axios';
+import { NotificationsApi } from '../Notifications.api';
 
 describe('Notifications api tests', () => {
 
@@ -40,6 +41,20 @@ describe('Notifications api tests', () => {
     mock.onGet(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`).reply(200, {url: 'http://mocked-url.com'});
     const res = await NotificationsApi.getSentNotificationDocument(iun, documentIndex);
     expect(res).toStrictEqual({url: 'http://mocked-url.com'});
+    mock.reset();
+    mock.restore();
+  });
+  
+  it('getSentNotificationLegalfact', async() => {
+    const iun = 'mocked-iun';
+    const legalFact: LegalFactId = {
+      key: 'mocked-key',
+      type: LegalFactType.ANALOG_DELIVERY
+    };
+    const mock = new MockAdapter(apiClient);
+    mock.onGet(`/delivery-push/legalfacts/${iun}/${legalFact.type}/${legalFact.key}`).reply(200, undefined);
+    const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
+    expect(res).toStrictEqual({url: ''});
     mock.reset();
     mock.restore();
   });
