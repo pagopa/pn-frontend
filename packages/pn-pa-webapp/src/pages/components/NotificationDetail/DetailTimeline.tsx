@@ -10,7 +10,6 @@ import {
 } from '@mui/lab';
 import { Typography, Box, Button, Chip, Grid } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import DownloadIcon from '@mui/icons-material/Download';
 
 import { LegalFactId, NotificationDetail } from '../../../redux/notification/types';
 import { getMonthString, getDay, getTime } from '../../../utils/date.utility';
@@ -50,9 +49,10 @@ const DetailTimeline = ({ notification }: Props) => {
             Stato della notifica
           </Typography>
         </Grid>
-        <Grid item>
+        {/* TODO: ripristinare quando sarà completata la issue pn-719 */}
+        {/* <Grid item>
           <Button startIcon={<DownloadIcon />}>Scarica tutti gli allegati</Button>
-        </Grid>
+        </Grid> */}
       </Grid>
       <Timeline>
         {notification.timeline.map((t, i) => (

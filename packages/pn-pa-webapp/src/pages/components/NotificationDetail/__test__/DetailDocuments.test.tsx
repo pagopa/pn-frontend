@@ -28,7 +28,7 @@ describe('Notification Detail Documents Component', () => {
 
   it('renders detail documents', async () => {
     expect(result?.container).toHaveTextContent(/Atti Allegati/i);
-    expect(result?.container).toHaveTextContent(/Scarica tutti gli Atti/i);
+    // expect(result?.container).toHaveTextContent(/Scarica tutti gli Atti/i);
     const documentsButtons = result?.getAllByTestId('documentButton');
     expect(documentsButtons).toHaveLength(NOTIFICATION.documents.length);
   });
