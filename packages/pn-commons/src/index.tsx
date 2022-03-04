@@ -6,6 +6,7 @@ import { LoadingOverlay } from './components/Loading/LoadingOverlay';
 import CustomPagination from './components/Pagination/CustomPagination';
 import CustomTooltip from './components/CustomTooltip';
 import AppMessage from './components/AppMessage';
+import SideMenu from './components/SideMenu/SideMenu';
 
 export { LoadingOverlay };
 export { Header };
@@ -14,6 +15,7 @@ export { Footer };
 export { CustomPagination };
 export { CustomTooltip };
 export { AppMessage };
+export { SideMenu };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -26,8 +28,11 @@ export { AccessDenied };
 import { AppError } from './types/AppError';
 import { PaginationData } from './components/Pagination/types';
 import { NotificationStatus } from './types/NotificationStatus';
+import { SideMenuItem } from './types/SideMenuItem';
+
 export type { AppError };
 export type { PaginationData };
+export type { SideMenuItem };
 export { NotificationStatus };
 
 // functions

@@ -1,9 +1,9 @@
 import { screen, within } from "@testing-library/react";
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 
-import { render } from "../../../__test__/test-utils"; 
+import { SideMenuItem } from "../../../types/SideMenuItem";
+import { render } from "../../../test-utils";
 import SideMenu from "../SideMenu";
-import { SideMenuItem } from "../SideMenuItem";
 
 const sideMenuItems: Array<SideMenuItem> = [
   { 
