@@ -1,4 +1,4 @@
-import { act, prettyDOM, RenderResult, within } from '@testing-library/react';
+import { act, RenderResult, within } from '@testing-library/react';
 import { getDay, getMonthString, getTime } from '../../../../utils/date.utility';
 
 import { notificationToFe } from '../../../../redux/notification/__test__/test-utils';
