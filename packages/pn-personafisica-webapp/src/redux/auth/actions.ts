@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
-import { UserRole } from '../../models/user';
 import { User } from './types';
 
 /**
@@ -30,11 +29,17 @@ export const logout = createAsyncThunk<User>('logout', async () => {
   sessionStorage.clear();
   return {
     sessionToken: '',
+    name: '',
     family_name: '',
     fiscal_number: '',
-    organization: {
-      id: '',
-      role: UserRole.REFERENTE_DELEGATO,
-    },
+    email: '',
+    mobile_phone: '',
+    from_aa: false,
+    uid: '',
+    level: '',
+    iat: 0,
+    exp: 0,
+    iss: '',
+    jti: '',
   } as User;
 });
