@@ -1,41 +1,29 @@
-import MockAdapter from 'axios-mock-adapter';
-
-import { authClient } from '../../../api/axios';
+import { AuthApi } from '../../../api/auth/Auth.api';
 import { UserRole } from '../../../models/user';
 import { store } from '../../store';
 import { exchangeToken, logout } from '../actions';
 import { User } from '../types';
+import { userResponse } from './test-utils';
 
-const userResponse: User = {
-  sessionToken: 'mocked-session-token',
-  name: 'Mario',
-  family_name: 'Rossi',
-  fiscal_number: 'RSSMRA80A01H501U',
-  organization: {
-    id: 'mocked-id',
-    role: UserRole.REFERENTE_AMMINISTRATIVO,
-  },
+
+const mockLogin = async (): Promise<any> => {
+  const apiSpy = jest.spyOn(AuthApi, 'exchangeToken');
+  apiSpy.mockResolvedValue(userResponse);
+  return store.dispatch(exchangeToken('mocked-token'));
 };
 
-export const loginInit = () => {
-  let axiosMock: MockAdapter;
+const mockLogout = async (): Promise<any> => store.dispatch(logout());
 
-  const mockLoginResponse = () => {
-    axiosMock = new MockAdapter(authClient);
-    axiosMock.onGet(`/token-exchange`).reply(200, userResponse);
-  };
-
+export const mockAuthentication = () => {
   beforeAll(() => {
-    mockLoginResponse();
+    mockLogin();
   });
 
   afterAll(() => {
-    axiosMock.reset();
-    axiosMock.restore();
+    mockLogout();
+    jest.resetAllMocks();
   });
 };
-
-loginInit();
 
 describe('Auth redux state tests', () => {
   it('Initial state', () => {
@@ -57,7 +45,7 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to exchange token', async () => {
-    const action = await store.dispatch(exchangeToken('mocked-token'));
+    const action = await mockLogin();
     const payload = action.payload as User;
 
     expect(action.type).toBe('exchangeToken/fulfilled');
@@ -65,7 +53,7 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to logout', async () => {
-    const action = await store.dispatch(logout());
+    const action = await mockLogout();
     const payload = action.payload;
 
     expect(action.type).toBe('logout/fulfilled');

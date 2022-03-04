@@ -1,6 +1,8 @@
 import { NotificationAllowedStatus } from '@pagopa-pn/pn-commons';
-import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react'; // prettyDOM
+import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react';
+import moment from 'moment';
 import * as redux from 'react-redux';
+
 import { tenYearsAgo, today } from '../../../../utils/date.utility';
 import { render } from '../../../../__test__/test-utils';
 import FilterNotificationsTable from '../FilterNotificationsTable';
@@ -123,7 +125,7 @@ describe('Filter Notifications Table Component', () => {
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
     expect(submitButton).toHaveTextContent(/Cerca/i);
-    const cancelButton = await within(form!).getByTestId('cancelButton');
+    const cancelButton = within(form!).getByTestId('cancelButton');
     expect(cancelButton).toBeInTheDocument();
     expect(cancelButton).toHaveTextContent(/Annulla ricerca/i);
   });
@@ -181,15 +183,14 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form submission - searchFor codice fiscale (valid)', async () => {
-    today.setUTCHours(23, 0, 0, 0);
-    const oneYearBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
-    oneYearBefore.setUTCHours(23, 0, 0, 0);
+    const oneYearAgo = moment().add(-1, 'year').startOf('day');
+    const todayM = moment().startOf('day');
 
     await setFormValues(
       form!,
       '0',
-      oneYearBefore,
-      today,
+      oneYearAgo.toDate(),
+      todayM.toDate(),
       NotificationAllowedStatus[2].value,
       'RSSMRA80A01H501U',
     );
@@ -201,8 +202,8 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toHaveBeenCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
-        startDate: oneYearBefore.toISOString(),
-        endDate: today.toISOString(),
+        startDate: oneYearAgo.toISOString(),
+        endDate: todayM.toISOString(),
         recipientId: 'RSSMRA80A01H501U',
         status: NotificationAllowedStatus[2].value,
         iunMatch: ''
@@ -212,15 +213,14 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form submission - searchFor IUN (valid)', async () => {
-    today.setUTCHours(23, 0, 0, 0);
-    const oneYearBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
-    oneYearBefore.setUTCHours(23, 0, 0, 0);
+    const oneYearAgo = moment().add(-1, 'year').startOf('day');
+    const todayM = moment().startOf('day');
 
     await setFormValues(
       form!,
       '1',
-      oneYearBefore,
-      today,
+      oneYearAgo.toDate(),
+      todayM.toDate(),
       NotificationAllowedStatus[2].value,
       undefined,
       'c_b963-202203041055'
@@ -233,8 +233,8 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toHaveBeenCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
-        startDate: oneYearBefore.toISOString(),
-        endDate: today.toISOString(),
+        startDate: oneYearAgo.toISOString(),
+        endDate: todayM.toISOString(),
         status: NotificationAllowedStatus[2].value,
         iunMatch: 'c_b963-202203041055',
         recipientId: ''
@@ -244,16 +244,15 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form submission - search for codice fiscale (invalid)', async () => {
-    today.setUTCHours(23, 0, 0, 0);
-    const elevenYearsBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 11));
-    elevenYearsBefore.setUTCHours(23, 0, 0, 0);
+    const elevenYearsAgo = moment().add(-11, 'year').startOf('day');
+    const todayM = moment().startOf('day');
 
     // wrong id and wrong start date
     await setFormValues(
       form!,
       '0',
-      elevenYearsBefore,
-      today,
+      elevenYearsAgo.toDate(),
+      todayM.toDate(),
       NotificationAllowedStatus[2].value,
       'mocked-wrongId',
     );
@@ -266,16 +265,15 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form submission - search for codice IUN (invalid)', async () => {
-    today.setUTCHours(23, 0, 0, 0);
-    const elevenYearsBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 11));
-    elevenYearsBefore.setUTCHours(23, 0, 0, 0);
+    const elevenYearsAgo = moment().add(-11, 'year').startOf('day');
+    const todayM = moment().startOf('day');
 
     // wrong id and wrong start date
     await setFormValues(
       form!,
       '1',
-      elevenYearsBefore,
-      today,
+      elevenYearsAgo.toDate(),
+      todayM.toDate(),
       NotificationAllowedStatus[2].value,
       undefined,
       '12345678910abcdfghiol'
@@ -290,21 +288,20 @@ describe('Filter Notifications Table Component', () => {
 
 
   it('test form reset', async () => {
-    today.setUTCHours(23, 0, 0, 0);
-    const oneYearBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
-    oneYearBefore.setUTCHours(23, 0, 0, 0);
+    const oneYearAgo = moment().add(-1, 'year');
+    const todayM = moment();
 
     await setFormValues(
       form!,
       '0',
-      oneYearBefore,
-      today,
+      oneYearAgo.toDate(),
+      todayM.toDate(),
       NotificationAllowedStatus[2].value,
       'RSSMRA80A01H501U',
     );
-    const cancelButton = await within(form!).getByTestId('cancelButton');
+    const cancelButton = within(form!).getByTestId('cancelButton');
     await waitFor(() => {
-      fireEvent.click(cancelButton!);
+      fireEvent.click(cancelButton);
     });
     expect(mockDispatchFn).toHaveBeenCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({

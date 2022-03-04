@@ -56,7 +56,7 @@ const DetailTimeline = ({ notification }: Props) => {
       </Grid>
       <Timeline>
         {notification.timeline.map((t, i) => (
-          <TimelineItem key={t.elementId}>
+          <TimelineItem key={t.elementId} data-testid="timelineItem">
             <TimelineOppositeContent sx={{ textAlign: 'center', margin: 'auto 0' }}>
               <Typography color="text.secondary" fontSize={14}>
                 {getMonthString(t.timestamp)}
@@ -74,7 +74,7 @@ const DetailTimeline = ({ notification }: Props) => {
               <Typography color="text.secondary" fontSize={14} sx={{ paddingBottom: '8px' }}>
                 {getTime(t.timestamp)}
               </Typography>
-              <Chip
+              <Chip data-testid="itemStatus"
                 label={
                   getNotificationStatusLabelAndColorFromTimelineCategory(
                     t,

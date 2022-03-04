@@ -1,46 +1,16 @@
-import { formatDate, NotificationStatus } from '@pagopa-pn/pn-commons';
-import MockAdapter from 'axios-mock-adapter';
+import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
-import { apiClient } from '../../../api/axios';
+import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { tenYearsAgo, today } from '../../../utils/date.utility';
-import { exchangeToken, logout } from '../../auth/actions';
-import { loginInit } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
 import { getSentNotifications, setNotificationFilters, setPagination, setSorting } from '../actions';
 import { GetNotificationsResponse } from '../types';
-
-const notificationsFromBe: GetNotificationsResponse = {
-  result: [
-    {
-      iun: 'mocked-iun',
-      paNotificationId: 'mocked-paNotificationId',
-      senderId: 'mocked-senderId',
-      sentAt: '2022-02-22T14:20:20.566Z',
-      subject: 'mocked-subject',
-      notificationStatus: NotificationStatus.DELIVERED,
-      recipientId: 'mocked-recipientId'
-    }
-  ],
-  moreResult: false,
-  nextPagesKey: []
-}
-
-const notificationsToFe: GetNotificationsResponse = {
-  ...notificationsFromBe,
-  result: notificationsFromBe.result.map(r => ({
-    ...r,
-    sentAt: formatDate(r.sentAt)
-  }))
-}
-
-const mockNetworkResponse = () => {
-  const mock = new MockAdapter(apiClient);
-  mock.onGet(`/delivery/notifications/sent`).reply(200, notificationsFromBe)
-}
-
-loginInit();
+import { notificationsToFe } from './test-utils';
 
 describe('Dashbaord redux state tests', () => {
+
+  mockAuthentication();
   
   it('Initial state', () => {
     const state = store.getState().dashboardState;
@@ -68,8 +38,8 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to fetch the notifications list', async () => {
-    await store.dispatch(exchangeToken('mocked-token'));
-    mockNetworkResponse();
+    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotifications');
+    apiSpy.mockResolvedValue(notificationsToFe);
     const action = await store.dispatch(getSentNotifications({
       startDate: tenYearsAgo.toISOString(),
       endDate: today.toISOString()
@@ -77,7 +47,6 @@ describe('Dashbaord redux state tests', () => {
     const payload = action.payload as GetNotificationsResponse;
     expect(action.type).toBe('getSentNotifications/fulfilled');
     expect(payload).toEqual(notificationsToFe);
-    await store.dispatch(logout());
   });
 
   it('Should be able to change pagination', () => {

@@ -1,19 +1,22 @@
 import { getMonthString, getDay, getTime } from '../date.utility';
 
 const dateString = '2022-02-22T14:20:20.566Z';
+const date = new Date(dateString);
 
 test('return month string, uppercase and truncated to the first three letters', () => {
   const month = getMonthString(dateString);
-  expect(month).toBe('FEB');
+  const expectedMonth = date.toLocaleString('default', { month: 'long' }).toUpperCase().substring(0, 3);
+  expect(month).toBe(expectedMonth);
 });
 
 test('return day', () => {
   const day = getDay(dateString);
-  expect(day).toBe('22');
+  const expectedDay = `0${date.getDate()}`.slice(-2);
+  expect(day).toBe(expectedDay);
 });
 
-// TODO it fails on AWS
-test.skip('return time', () => {
+test('return time', () => {
   const time = getTime(dateString);
-  expect(time).toBe('15:20');
+  const expectedTime = `${date.getHours()}:${date.getMinutes()}`;
+  expect(time).toBe(expectedTime);
 });

@@ -3,8 +3,8 @@ import * as redux from 'react-redux';
 
 import { render } from '../../../../__test__/test-utils';
 import * as actions from '../../../../redux/notification/actions';
+import { notificationToFe } from '../../../../redux/notification/__test__/test-utils';
 import DetailDocuments from '../DetailDocuments';
-import { NOTIFICATION } from './test-utils';
 
 describe('Notification Detail Documents Component', () => {
   let result: RenderResult | undefined;
@@ -17,7 +17,7 @@ describe('Notification Detail Documents Component', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn);
     // render component
     await act(async () => {
-      result = render(<DetailDocuments notification={NOTIFICATION}/>);
+      result = render(<DetailDocuments notification={notificationToFe}/>);
     });
   });
 
@@ -30,7 +30,7 @@ describe('Notification Detail Documents Component', () => {
     expect(result?.container).toHaveTextContent(/Atti Allegati/i);
     // expect(result?.container).toHaveTextContent(/Scarica tutti gli Atti/i);
     const documentsButtons = result?.getAllByTestId('documentButton');
-    expect(documentsButtons).toHaveLength(NOTIFICATION.documents.length);
+    expect(documentsButtons).toHaveLength(notificationToFe.documents.length);
   });
 
   it('test click on document button', async () => {
@@ -43,7 +43,7 @@ describe('Notification Detail Documents Component', () => {
     });
     expect(mockDispatchFn).toHaveBeenCalledTimes(1);
     expect(mockActionFn).toHaveBeenCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({iun: NOTIFICATION.iun, documentIndex: 0});
+    expect(mockActionFn).toBeCalledWith({iun: notificationToFe.iun, documentIndex: 0});
   });
 
 });

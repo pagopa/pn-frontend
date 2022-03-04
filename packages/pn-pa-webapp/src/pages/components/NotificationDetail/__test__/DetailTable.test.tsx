@@ -1,22 +1,22 @@
 import { act, RenderResult } from '@testing-library/react';
 
 import * as hooks from '../../../../redux/hooks';
+import { notificationToFe } from '../../../../redux/notification/__test__/test-utils';
 import { render } from '../../../../__test__/test-utils';
 import DetailTable from '../DetailTable';
-import { NOTIFICATION } from './test-utils';
 
 describe('Notification Detail Table Component', () => {
   let result: RenderResult | undefined;
   let appSelectorSpy: jest.SpyInstance;
 
   const detailTable: Array<{ label: string; value: string }> = [
-    { label: 'Data', value: `${NOTIFICATION.sentAt}` },
+    { label: 'Data', value: `${notificationToFe.sentAt}` },
     { label: 'Termini di pagamento', value: `Entro il` },
-    { label: 'Destinatario', value: `${NOTIFICATION.recipients[0].taxId}` },
-    { label: 'Cognome Nome', value: `${NOTIFICATION.recipients[0].denomination}` },
+    { label: 'Destinatario', value: `${notificationToFe.recipients[0].taxId}` },
+    { label: 'Cognome Nome', value: `${notificationToFe.recipients[0].denomination}` },
     { label: 'Mittente', value: `mocked-sender` },
-    { label: 'Codice IUN annullato', value: `${NOTIFICATION.cancelledIun}` },
-    { label: 'Codice IUN', value: `${NOTIFICATION.cancelledByIun}` },
+    { label: 'Codice IUN annullato', value: `${notificationToFe.cancelledIun}` },
+    { label: 'Codice IUN', value: `${notificationToFe.cancelledByIun}` },
     { label: 'Gruppi', value: '' },
   ];
 
@@ -27,7 +27,7 @@ describe('Notification Detail Table Component', () => {
 
     // render component
     await act(async () => {
-      result = render(<DetailTable notification={NOTIFICATION}/>);
+      result = render(<DetailTable notification={notificationToFe}/>);
     });
   });
 
