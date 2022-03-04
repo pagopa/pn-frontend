@@ -23,4 +23,5 @@ export interface GetNotificationsParams {
     subjectRegExp?: string;
     size?: number;
     nextPagesKey?: string;
+    iunMatch?: string;
 }
