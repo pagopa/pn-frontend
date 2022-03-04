@@ -1,7 +1,9 @@
 import { formatDate } from '@pagopa-pn/pn-commons';
+
 import { apiClient } from '../axios';
 import { GetNotificationsParams, GetNotificationsResponse } from '../../redux/dashboard/types';
-import { NotificationDetail, Legalfacts } from '../../redux/notification/types';
+import { LegalFactId, NotificationDetail } from '../../redux/notification/types';
+
 
 export const NotificationsApi = {
   /**
@@ -74,32 +76,40 @@ export const NotificationsApi = {
       return {} as NotificationDetail;
     }),
   /**
-   * Gets current user notification legal acts
-   * @param  {string} iun
-   * @returns Promise
-   */
-  getSentNotificationLegalfacts: (iun: string): Promise<Array<Legalfacts>> =>
-    apiClient
-      .get<Array<Legalfacts>>(`/delivery/notifications/sent/${iun}/legalfacts`)
-      .then((response) => {
-        if (response.data) {
-          return response.data;
-        }
-        return [] as Array<Legalfacts>;
-      }),
-  /**
    * Gets current user notification document
    * @param  {string} iun
    * @param  {number} documentIndex
    * @returns Promise
    */
-    getSentNotificationDocument: (iun: string, documentIndex: number): Promise<{url: string}> =>
+  getSentNotificationDocument: (iun: string, documentIndex: number): Promise<{ url: string }> =>
     apiClient
-      .get<{url: string}>(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`)
+      .get<{ url: string }>(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`)
       .then((response) => {
         if (response.data) {
           return response.data;
         }
-        return {url : ''};
+        return { url: '' };
+      }),
+  /**
+   * Gets current user notification legalfact
+   * @param  {string} iun
+   * @param  {LegalFactId} legalFact
+   * @returns Promise
+   */
+  getSentNotificationLegalfact: (iun: string, legalFact: LegalFactId): Promise<{ url: string }> =>
+    apiClient
+      .get<Buffer>(`/delivery-push/legalfacts/${iun}/${legalFact.type}/${legalFact.key}`, {
+        responseType: 'arraybuffer',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/pdf',
+        },
+      })
+      .then((response) => {
+        if (response.data) {
+          const blob = new Blob([response.data], { type: 'application/pdf' });
+          return { url: window.URL.createObjectURL(blob) };
+        }
+        return { url: '' };
       }),
 };

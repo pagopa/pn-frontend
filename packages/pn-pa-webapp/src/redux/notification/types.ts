@@ -236,7 +236,7 @@ export enum LegalFactType {
   RECIPIENT_ACCESS = 'RECIPIENT_ACCESS',
 }
 
-interface LegalFactId {
+export interface LegalFactId {
   key: string;
   type: LegalFactType;
 }
@@ -280,18 +280,4 @@ export interface NotificationDetail {
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<NotificationDetailTimeline>;
   physicalCommunicationType: PhysicalCommunicationType;
-}
-
-enum LegalfactsType {
-  SENDER_ACK = 'SENDER_ACK',
-  DIGITAL_DELIVERY = 'DIGITAL_DELIVERY',
-  ANALOG_DELIVERY = 'ANALOG_DELIVERY',
-  RECIPIENT_ACCESS = 'RECIPIENT_ACCESS',
-}
-
-export interface Legalfacts {
-  iun: string;
-  legalFactId: string;
-  type: LegalfactsType;
-  taxId: string;
 }

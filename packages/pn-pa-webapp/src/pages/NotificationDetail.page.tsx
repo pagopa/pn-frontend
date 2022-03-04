@@ -1,14 +1,6 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import {
-  Breadcrumbs,
-  Grid,
-  Typography,
-  Box,
-  styled,
-  Paper,
-  Button
-} from '@mui/material';
+import { Breadcrumbs, Grid, Typography, Box, styled, Paper, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
@@ -44,6 +36,7 @@ const NotificationDetail = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -71,15 +64,18 @@ const NotificationDetail = () => {
                 Annulla Notifica
               </Button>
             )}
-            <DetailTable notification={notification}/>
-            <Paper sx={{ padding: '24px', marginBottom: '20px'}} className="paperContainer">
-              <DetailDocuments notification={notification}/>
+            <DetailTable notification={notification} />
+            <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
+              <DetailDocuments notification={notification} />
             </Paper>
+            <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(-1)}>
+              Indietro
+            </Button>
           </Box>
         </Grid>
         <Grid item xs={5}>
-          <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px'}}>
-            <DetailTimeline notification={notification}/>
+          <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
+            <DetailTimeline notification={notification} />
           </Box>
         </Grid>
       </Grid>

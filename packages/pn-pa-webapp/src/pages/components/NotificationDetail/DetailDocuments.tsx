@@ -1,6 +1,5 @@
 import { Fragment, useEffect } from 'react';
 import { Grid, Typography, Button } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 import { NotificationDetail } from '../../../redux/notification/types';
@@ -13,7 +12,6 @@ type Props = {
   notification: NotificationDetail;
 };
 
-// TODO: aggiornare nome documento quando sarà inviato da be
 const DetailDocuments = ({ notification }: Props) => {
   const dispatch = useAppDispatch();
   const documentDownloadUrl = useAppSelector((state: RootState) => state.notificationState.documentDownloadUrl);
@@ -36,13 +34,14 @@ const DetailDocuments = ({ notification }: Props) => {
             Atti Allegati
           </Typography>
         </Grid>
-        <Grid item>
+        {/* TODO: ripristinare quando sarà completata la issue pn-720 */}
+        {/* <Grid item>
           <Button startIcon={<DownloadIcon />}>Scarica tutti gli Atti</Button>
-        </Grid>
+        </Grid> */}
       </Grid>
       {notification.documents.map((d, i) => (
         <Button data-testid="documentButton" key={d.digests.sha256} startIcon={<AttachFileIcon />} onClick={() => clickHandler(i)}>
-          {'Documento_' + i.toString()}
+          {d.title}
         </Button>
       ))}
     </Fragment>

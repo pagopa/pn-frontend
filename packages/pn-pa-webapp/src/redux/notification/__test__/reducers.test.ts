@@ -4,8 +4,8 @@ import { apiClient } from '../../../api/axios';
 import { exchangeToken, logout } from '../../auth/actions';
 import { loginInit } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
-import { getSentNotification, getSentNotificationDocument } from '../actions';
-import { NotificationDetail } from '../types';
+import { getSentNotification, getSentNotificationDocument, getSentNotificationLegalfact } from '../actions';
+import { NotificationDetail, LegalFactId, LegalFactType } from '../types';
 
 const notification = {
 	iun: 'c_b963-220220221119',
@@ -54,6 +54,17 @@ const mockNotificationDetailDocumentResponse = (iun: string, documentIndex: numb
   mock.onGet(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`).reply(200, {url: 'http://mocked-url.com'});
 }
 
+const mockNotificationDetailLegalfactResponse = (iun: string, legalFact: LegalFactId) => {
+  const mock = new MockAdapter(apiClient);
+  mock.onGet(`/delivery-push/legalfacts/${iun}/${legalFact.type}/${legalFact.key}`,  {
+		responseType: 'arraybuffer',
+		headers: {
+			'Content-Type': 'application/json',
+			Accept: 'application/pdf',
+		},
+	}).reply(200, undefined);
+}
+
 loginInit();
 
 describe('Notification detail redux state tests', () => {
@@ -77,7 +88,8 @@ describe('Notification detail redux state tests', () => {
 				timeline: [],
 				physicalCommunicationType: ''
 			},
-			documentDownloadUrl: ''
+			documentDownloadUrl: '',
+			legalFactDownloadUrl: ''
     });
   });
 
@@ -98,6 +110,16 @@ describe('Notification detail redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationDocument/fulfilled');
     expect(payload).toEqual({url: 'http://mocked-url.com'});
+    await store.dispatch(logout());
+  });
+
+	it('Should be able to fetch the notification legalfact', async () => {
+    await store.dispatch(exchangeToken('mocked-token'));
+    mockNotificationDetailLegalfactResponse('mocked-iun', {key: 'mocked-key', type: LegalFactType.ANALOG_DELIVERY});
+    const action = await store.dispatch(getSentNotificationLegalfact({iun: 'mocked-iun', legalFact: {key: 'mocked-key', type: LegalFactType.ANALOG_DELIVERY}}));
+    const payload = action.payload;
+    expect(action.type).toBe('getSentNotificationLegalfact/fulfilled');
+    expect(payload).toEqual({url: ''});
     await store.dispatch(logout());
   })
 });
