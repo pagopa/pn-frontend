@@ -26,7 +26,7 @@ const FilterNotificationsTable = () => {
 
   const fiscalCode_regex = /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i;
  // TODO inserire regex corretta
-  const IUN_regex = /^[A-Z]$/i;
+ const IUN_regex = /^[0-9A-Z_-]{1,20}$/i;
 
   const searchForValues = [
     { value: '0', label: 'Codice Fiscale' },
@@ -35,7 +35,7 @@ const FilterNotificationsTable = () => {
 
   const validationSchema = yup.object({
     recipientId: yup.string().matches(fiscalCode_regex, "Inserire il codice completo"),
-    iunId: yup.string().matches(IUN_regex, "Inserire il codice corretto"),
+    iunMatch: yup.string().matches(IUN_regex, "Inserire il codice corretto"),
     startDate : yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo)
   });
@@ -46,7 +46,7 @@ const FilterNotificationsTable = () => {
       startDate: tenYearsAgo,
       endDate: today,
       recipientId: '',
-      iunId: '',
+      iunMatch: '',
       status: NotificationAllowedStatus[0].value,
     },
     validationSchema,
@@ -56,6 +56,7 @@ const FilterNotificationsTable = () => {
         startDate: values.startDate.toISOString(),
         endDate: values.endDate.toISOString(),
         recipientId: values.recipientId,
+        iunMatch: values.iunMatch,
         status: values.status === 'All' ? undefined : values.status,
       };
       dispatch(setNotificationFilters(filters));
@@ -70,6 +71,7 @@ const FilterNotificationsTable = () => {
         endDate: today.toISOString(),
         status: undefined,
         recipientId: undefined,
+        iunMatch: undefined,
       })
     );
     formik.resetForm();
@@ -124,14 +126,14 @@ const FilterNotificationsTable = () => {
           />
           :
           <TextField
-            id="iunId"
-            value={formik.values.iunId}
+            id="iunMatch"
+            value={formik.values.iunMatch}
             onChange={handleChangeTouched}
             label="Codice IUN"
-            name="iunId"
+            name="iunMatch"
             variant="outlined"
-            error={formik.touched.iunId && Boolean(formik.errors.iunId)}
-            helperText={formik.touched.iunId && formik.errors.iunId}
+            error={formik.touched.iunMatch && Boolean(formik.errors.iunMatch)}
+            helperText={formik.touched.iunMatch && formik.errors.iunMatch}
             disabled={!formik.values.searchFor}
           />
         }

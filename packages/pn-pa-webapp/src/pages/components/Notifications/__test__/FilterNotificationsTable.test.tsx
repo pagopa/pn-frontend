@@ -24,7 +24,12 @@ function testFormElementsValue(form: HTMLFormElement, elementName: string, value
   expect(formElement).toHaveValue(value);
 }
 
-async function testSelect(form: HTMLFormElement, elementName: string, options: Array<{label: string, value: string}>, optToSelect: number) {
+async function testSelect(
+  form: HTMLFormElement,
+  elementName: string,
+  options: Array<{ label: string; value: string }>,
+  optToSelect: number
+) {
   const selectInput = form.querySelector(`input[name="${elementName}"]`);
   const selectButton = form.querySelector(`div[id="${elementName}"]`);
   fireEvent.mouseDown(selectButton!);
@@ -46,7 +51,7 @@ async function testSelect(form: HTMLFormElement, elementName: string, options: A
 async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
   const input = form.querySelector(`input[name="${elementName}"]`);
   await waitFor(() => {
-    fireEvent.change(input!, {target: {value}});
+    fireEvent.change(input!, { target: { value } });
     expect(input).toHaveValue(value);
   });
 }
@@ -65,15 +70,24 @@ async function testCalendar(form: HTMLFormElement, elementName: string) {
   await waitFor(() => {
     expect(input).toHaveValue(formatDate(date));
     expect(dialog).not.toBeInTheDocument();
-  })
+  });
 }
 
-async function setFormValues(form: HTMLFormElement, searchFor: string, recipientId: string, startDate: Date, endDate: Date, status: string) {
+async function setFormValues(
+  form: HTMLFormElement,
+  searchFor: string,
+  startDate: Date,
+  endDate: Date,
+  status: string,
+  recipientId?: string,
+  iunMatch?: string
+) {
   await testInput(form, 'searchFor', searchFor);
-  await testInput(form, 'recipientId', recipientId);
+  recipientId && (await testInput(form, 'recipientId', recipientId));
   await testInput(form, 'startDate', formatDate(startDate));
   await testInput(form, 'endDate', formatDate(endDate));
   await testInput(form, 'status', status);
+  iunMatch && (await testInput(form, 'iunMatch', iunMatch));
 }
 
 describe('Filter Notifications Table Component', () => {
@@ -83,7 +97,7 @@ describe('Filter Notifications Table Component', () => {
 
   beforeEach(async () => {
     // mock dispatch
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch'); 
+    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     mockDispatchFn = jest.fn();
     useDispatchSpy.mockReturnValue(mockDispatchFn);
     // render component
@@ -124,15 +138,23 @@ describe('Filter Notifications Table Component', () => {
 
   it('test searchFor select', async () => {
     expect(form!.querySelector(`input[name="recipientId"]`)).toBeInTheDocument();
-    await testSelect(form!, 'searchFor', [{label: 'Codice Fiscale', value: '0'}, {label: 'Codice IUN', value: '1'}], 1);
-    expect(form!.querySelector(`input[name="iunId"]`)).toBeInTheDocument();
+    await testSelect(
+      form!,
+      'searchFor',
+      [
+        { label: 'Codice Fiscale', value: '0' },
+        { label: 'Codice IUN', value: '1' },
+      ],
+      1
+    );
+    expect(form!.querySelector(`input[name="iunMatch"]`)).toBeInTheDocument();
   });
 
   it('test recipientId input', async () => {
     await testInput(form!, 'recipientId', 'mocked-recipientId');
   });
 
-  it('test iunId input', async () => {
+  it('test iunMatch input', async () => {
     const selectButton = form!.querySelector(`div[id="searchFor"]`);
     fireEvent.mouseDown(selectButton!);
     const selectOptionsContainer = await screen.findByRole('presentation');
@@ -140,7 +162,7 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(selectOption);
     });
-    await testInput(form!, 'iunId', 'mocked-iunId');
+    await testInput(form!, 'iunMatch', 'mocked-iunMatch');
   });
 
   it('test startDate input', async () => {
@@ -158,12 +180,19 @@ describe('Filter Notifications Table Component', () => {
     await testSelect(form!, 'status', NotificationAllowedStatus, 2);
   });
 
-  it('test form submission (valid)', async () => {
-    today.setUTCHours(23,0,0,0);
+  it('test form submission - searchFor codice fiscale (valid)', async () => {
+    today.setUTCHours(23, 0, 0, 0);
     const oneYearBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
-    oneYearBefore.setUTCHours(23,0,0,0);
+    oneYearBefore.setUTCHours(23, 0, 0, 0);
 
-    await setFormValues(form!, '0', 'RSSMRA80A01H501U', oneYearBefore, today, NotificationAllowedStatus[2].value);
+    await setFormValues(
+      form!,
+      '0',
+      oneYearBefore,
+      today,
+      NotificationAllowedStatus[2].value,
+      'RSSMRA80A01H501U',
+    );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     await waitFor(() => {
@@ -175,19 +204,59 @@ describe('Filter Notifications Table Component', () => {
         startDate: oneYearBefore.toISOString(),
         endDate: today.toISOString(),
         recipientId: 'RSSMRA80A01H501U',
-        status: NotificationAllowedStatus[2].value
+        status: NotificationAllowedStatus[2].value,
+        iunMatch: ''
       },
-      type: 'setNotificationFilters'
+      type: 'setNotificationFilters',
     });
   });
 
-  it('test form submission (invalid)', async () => {
-    today.setUTCHours(23,0,0,0);
+  it('test form submission - searchFor IUN (valid)', async () => {
+    today.setUTCHours(23, 0, 0, 0);
+    const oneYearBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
+    oneYearBefore.setUTCHours(23, 0, 0, 0);
+
+    await setFormValues(
+      form!,
+      '1',
+      oneYearBefore,
+      today,
+      NotificationAllowedStatus[2].value,
+      undefined,
+      'c_b963-202203041055'
+    );
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    expect(submitButton).toBeEnabled();
+    await waitFor(() => {
+      fireEvent.click(submitButton!);
+    });
+    expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledWith({
+      payload: {
+        startDate: oneYearBefore.toISOString(),
+        endDate: today.toISOString(),
+        status: NotificationAllowedStatus[2].value,
+        iunMatch: 'c_b963-202203041055',
+        recipientId: ''
+      },
+      type: 'setNotificationFilters',
+    });
+  });
+
+  it('test form submission - search for codice fiscale (invalid)', async () => {
+    today.setUTCHours(23, 0, 0, 0);
     const elevenYearsBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 11));
-    elevenYearsBefore.setUTCHours(23,0,0,0);
+    elevenYearsBefore.setUTCHours(23, 0, 0, 0);
 
     // wrong id and wrong start date
-    await setFormValues(form!, '0', 'mocked-wrongId', elevenYearsBefore, today, NotificationAllowedStatus[2].value);
+    await setFormValues(
+      form!,
+      '0',
+      elevenYearsBefore,
+      today,
+      NotificationAllowedStatus[2].value,
+      'mocked-wrongId',
+    );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeDisabled();
     await waitFor(() => {
@@ -196,12 +265,43 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toHaveBeenCalledTimes(0);
   });
 
-  it('test form reset', async () => {
-    today.setUTCHours(23,0,0,0);
-    const oneYearBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
-    oneYearBefore.setUTCHours(23,0,0,0);
+  it('test form submission - search for codice IUN (invalid)', async () => {
+    today.setUTCHours(23, 0, 0, 0);
+    const elevenYearsBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 11));
+    elevenYearsBefore.setUTCHours(23, 0, 0, 0);
 
-    await setFormValues(form!, '0', 'RSSMRA80A01H501U', oneYearBefore, today, NotificationAllowedStatus[2].value);
+    // wrong id and wrong start date
+    await setFormValues(
+      form!,
+      '1',
+      elevenYearsBefore,
+      today,
+      NotificationAllowedStatus[2].value,
+      undefined,
+      '12345678910abcdfghiol'
+    );
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    expect(submitButton).toBeDisabled();
+    await waitFor(() => {
+      fireEvent.click(submitButton!);
+    });
+    expect(mockDispatchFn).toHaveBeenCalledTimes(0);
+  });
+
+
+  it('test form reset', async () => {
+    today.setUTCHours(23, 0, 0, 0);
+    const oneYearBefore = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
+    oneYearBefore.setUTCHours(23, 0, 0, 0);
+
+    await setFormValues(
+      form!,
+      '0',
+      oneYearBefore,
+      today,
+      NotificationAllowedStatus[2].value,
+      'RSSMRA80A01H501U',
+    );
     const cancelButton = await within(form!).getByTestId('cancelButton');
     await waitFor(() => {
       fireEvent.click(cancelButton!);
@@ -212,9 +312,10 @@ describe('Filter Notifications Table Component', () => {
         startDate: tenYearsAgo.toISOString(),
         endDate: today.toISOString(),
         recipientId: undefined,
-        status: undefined
+        status: undefined,
+        iunMatch: undefined
       },
-      type: 'setNotificationFilters'
+      type: 'setNotificationFilters',
     });
     testFormElementsValue(form!, 'searchFor', '');
     testFormElementsValue(form!, 'recipientId', '');
