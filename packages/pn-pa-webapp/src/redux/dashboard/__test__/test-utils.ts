@@ -1,6 +1,4 @@
-import { formatDate, NotificationStatus } from "@pagopa-pn/pn-commons";
-
-import { GetNotificationsResponse } from "../types";
+import { formatDate, GetNotificationsResponse, NotificationStatus } from "@pagopa-pn/pn-commons";
 
 export const notificationsFromBe: GetNotificationsResponse = {
   result: [

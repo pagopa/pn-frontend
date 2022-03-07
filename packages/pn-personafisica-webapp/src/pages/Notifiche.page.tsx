@@ -1,13 +1,14 @@
-import { Typography } from '@mui/material';
+import { useEffect, useRef } from 'react';
+import { Box, Typography } from '@mui/material';
 import {
   calcPages,
   CustomPagination,
   getNotificationStatusLabelAndColor,
+  NotificationsTable,
+  PaginationData,
 } from '@pagopa-pn/pn-commons';
-import { PaginationData } from '@pagopa-pn/pn-commons/src/components/Pagination/types';
-import { Fragment, useEffect, useRef } from 'react';
+
 import FilterNotificationsTable from '../component/notification/FilterNotificationsTable';
-import NotificationsTable from '../component/notification/NotificactionsTable';
 import StatusTooltip from '../component/notification/StatusTooltip';
 import { Column, Row, Sort } from '../component/notification/types';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
@@ -121,7 +122,7 @@ const Notifiche = () => {
   }, [filters, pagination.size, pagination.page, sort]);
 
   return (
-    <Fragment>
+    <Box style={{ padding: '20px' }}>
       <Typography variant={'h4'}>Le tue notifiche</Typography>
       <FilterNotificationsTable />
       <NotificationsTable
@@ -141,7 +142,7 @@ const Notifiche = () => {
           pagesToShow={pagesToShow}
         />
       )}
-    </Fragment>
+    </Box>
   );
 };
 

@@ -1,16 +1,24 @@
 import { useEffect, Fragment, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { calcPages, CustomPagination, getNotificationStatusLabelAndColor, NotificationStatus, PaginationData } from '@pagopa-pn/pn-commons';
+import {
+  calcPages,
+  CustomPagination,
+  getNotificationStatusLabelAndColor,
+  NotificationStatus,
+  PaginationData,
+  Notification,
+  NotificationsTable,
+  Column,
+  Row,
+  Sort
+} from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
-import { Notification } from '../redux/dashboard/types';
-import NotificationsTable from './components/Notifications/NotificationsTable';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
-import { Column, Row, Sort } from './components/Notifications/types';
 import StatusTooltip from './components/Notifications/StatusTooltip';
 
 const Dashboard = () => {
@@ -27,11 +35,16 @@ const Dashboard = () => {
   /* eslint-disable functional/no-let */
   const totalElements =
     pagination.size *
-      (pagination.moreResult
-        ? Math.max(pagination.nextPagesKey.length + 1, 8)
-        : pagination.nextPagesKey.length + 1);
-  const pagesToShow: Array<number> = calcPages(pagination.size, totalElements, 3, pagination.page + 1);
-  
+    (pagination.moreResult
+      ? Math.max(pagination.nextPagesKey.length + 1, 8)
+      : pagination.nextPagesKey.length + 1);
+  const pagesToShow: Array<number> = calcPages(
+    pagination.size,
+    totalElements,
+    3,
+    pagination.page + 1
+  );
+
   const navigate = useNavigate();
 
   const columns: Array<Column> = [
@@ -45,7 +58,7 @@ const Dashboard = () => {
       },
       onClick(row: Row, column: Column) {
         handleRowClick(row, column);
-      }
+      },
     },
     {
       id: 'recipientId',
@@ -57,7 +70,7 @@ const Dashboard = () => {
       },
       onClick(row: Row, column: Column) {
         handleRowClick(row, column);
-      }
+      },
     },
     {
       id: 'subject',
@@ -68,7 +81,7 @@ const Dashboard = () => {
       },
       onClick(row: Row, column: Column) {
         handleRowClick(row, column);
-      }
+      },
     },
     {
       id: 'iun',
@@ -79,7 +92,7 @@ const Dashboard = () => {
       },
       onClick(row: Row, column: Column) {
         handleRowClick(row, column);
-      }
+      },
     },
     {
       id: 'groups',
@@ -90,7 +103,7 @@ const Dashboard = () => {
       },
       onClick(row: Row, column: Column) {
         handleRowClick(row, column);
-      }
+      },
     },
     {
       id: 'notificationStatus',
@@ -131,13 +144,16 @@ const Dashboard = () => {
     // assign the ref's current value to the pagination Hook
     const params = {
       ...filters,
-      size: pagination.size
+      size: pagination.size,
     };
     if (pagination !== prevPagination.current) {
       /* eslint-disable functional/immutable-data */
       prevPagination.current = pagination;
-      const nextPage = pagination.page === prevPagination.current.page ? pagination.nextPagesKey[prevPagination.current.page - 1] : pagination.nextPagesKey[pagination.page - 1];
-      params.nextPagesKey = pagination.page === 0 ? undefined: nextPage;
+      const nextPage =
+        pagination.page === prevPagination.current.page
+          ? pagination.nextPagesKey[prevPagination.current.page - 1]
+          : pagination.nextPagesKey[pagination.page - 1];
+      params.nextPagesKey = pagination.page === 0 ? undefined : nextPage;
       /* eslint-enable functional/immutable-data */
     }
     void dispatch(getSentNotifications(params));

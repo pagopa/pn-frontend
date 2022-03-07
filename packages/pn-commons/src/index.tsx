@@ -7,6 +7,7 @@ import CustomPagination from './components/Pagination/CustomPagination';
 import CustomTooltip from './components/CustomTooltip';
 import AppMessage from './components/AppMessage';
 import SideMenu from './components/SideMenu/SideMenu';
+import NotificationsTable from './components/Notifications/NotificationsTable';
 
 export { LoadingOverlay };
 export { Header };
@@ -16,6 +17,7 @@ export { CustomPagination };
 export { CustomTooltip };
 export { AppMessage };
 export { SideMenu };
+export { NotificationsTable };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -29,11 +31,15 @@ import { AppError } from './types/AppError';
 import { PaginationData } from './components/Pagination/types';
 import { NotificationStatus } from './types/NotificationStatus';
 import { SideMenuItem } from './types/SideMenuItem';
+import { Column, Row, Sort } from './types/NotificationsTable';
+import { Notification, GetNotificationsResponse, GetNotificationsParams } from './types/Notifications';
 
 export type { AppError };
 export type { PaginationData };
 export type { SideMenuItem };
 export { NotificationStatus };
+export type { Column, Row, Sort };
+export type { Notification, GetNotificationsResponse, GetNotificationsParams };
 
 // functions
 import { createAppError } from './services/error.service';
