@@ -11,6 +11,7 @@ export default function SubHeader({ children }: Props) {
       role="presentation"
       position="relative"
       sx={{ alignItems: 'center', height: '15%', backgroundColor: 'primary', boxShadow: 'none' }}
+      data-testid="subHeader"
     >
       <Toolbar sx={{ width: { xs: '100%', lg: '90%' }, minHeight: '107px !important' }}>
         <Grid container>

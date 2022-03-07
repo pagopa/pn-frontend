@@ -48,7 +48,7 @@ const Footer = ({ assistanceEmail }: Props) => (
       justifyContent={'center'}
       sx={{ position: 'absolute', bottom: '48px' }}
     >
-      <Box sx={{ width: '90%', display: 'flex' }}>
+      <Box sx={{ width: '90%', display: 'flex' }} data-testid="linksContainer">
         <Typography
           sx={{
             fontWeight: 'normal',
