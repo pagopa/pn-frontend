@@ -2,15 +2,17 @@ import { useEffect, useRef } from 'react';
 import { Box, Typography } from '@mui/material';
 import {
   calcPages,
+  Column,
   CustomPagination,
   getNotificationStatusLabelAndColor,
   NotificationsTable,
   PaginationData,
+  Row,
+  Sort,
+  StatusTooltip,
 } from '@pagopa-pn/pn-commons';
 
 import FilterNotificationsTable from '../component/notification/FilterNotificationsTable';
-import StatusTooltip from '../component/notification/StatusTooltip';
-import { Column, Row, Sort } from '../component/notification/types';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';

@@ -10,7 +10,8 @@ import {
   NotificationsTable,
   Column,
   Row,
-  Sort
+  Sort,
+  StatusTooltip
 } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
@@ -19,7 +20,6 @@ import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
-import StatusTooltip from './components/Notifications/StatusTooltip';
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();

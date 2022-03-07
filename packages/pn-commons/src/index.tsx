@@ -8,6 +8,7 @@ import CustomTooltip from './components/CustomTooltip';
 import AppMessage from './components/AppMessage';
 import SideMenu from './components/SideMenu/SideMenu';
 import NotificationsTable from './components/Notifications/NotificationsTable';
+import StatusTooltip from './components/Notifications/StatusTooltip';
 
 export { LoadingOverlay };
 export { Header };
@@ -18,6 +19,7 @@ export { CustomTooltip };
 export { AppMessage };
 export { SideMenu };
 export { NotificationsTable };
+export { StatusTooltip };
 
 // pages
 import NotFound from './navigation/NotFound';

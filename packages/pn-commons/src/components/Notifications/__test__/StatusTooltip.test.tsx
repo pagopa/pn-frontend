@@ -1,6 +1,6 @@
 import { fireEvent, screen } from '@testing-library/react';
 
-import { render } from "../../../../__test__/test-utils";
+import { render } from '../../../test-utils';
 import StatusTooltip from "../StatusTooltip";
 
 const tooltip = 'mocked tooltip test';
