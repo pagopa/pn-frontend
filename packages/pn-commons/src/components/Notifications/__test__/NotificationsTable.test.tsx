@@ -1,8 +1,8 @@
 import { fireEvent, screen, within } from '@testing-library/react';
 
-import { render } from "../../../../__test__/test-utils";
 import NotificationsTable from "../NotificationsTable";
-import { Column, Row, Sort } from "../types";
+import { Column, Row, Sort } from "../../../types/NotificationsTable";
+import { render } from '../../../test-utils';
 
 const handleSort = jest.fn();
 const handleColumnClick = jest.fn();

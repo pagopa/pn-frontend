@@ -1,5 +1,5 @@
 import { act, RenderResult, within } from '@testing-library/react';
-import { getDay, getMonthString, getTime } from '../../../../utils/date.utility';
+import { getDay, getMonthString, getTime } from '@pagopa-pn/pn-commons';
 
 import { notificationToFe } from '../../../../redux/notification/__test__/test-utils';
 import { render } from '../../../../__test__/test-utils';

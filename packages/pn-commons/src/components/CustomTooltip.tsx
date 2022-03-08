@@ -52,7 +52,7 @@ function CustomTooltip({openOnClick, tooltipContent, children}: Props) {
             disablePortal: true,
           }}
           onClose={handleTooltipClose}
-          open={open}
+          open={openOnClick ? open : undefined}
           disableFocusListener={openOnClick}
           disableHoverListener={openOnClick}
           disableTouchListener={openOnClick}

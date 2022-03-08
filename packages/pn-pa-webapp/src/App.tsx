@@ -1,6 +1,5 @@
-import { LoadingOverlay, Layout, AppMessage} from '@pagopa-pn/pn-commons';
+import { LoadingOverlay, Layout, AppMessage, SideMenu} from '@pagopa-pn/pn-commons';
 
-import SideMenu from './components/SideMenu/SideMenu';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';

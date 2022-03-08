@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
+import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import { apiClient } from '../../../api/axios';
-import { tenYearsAgo, today } from '../../../utils/date.utility';
 import { exchangeToken, logout } from '../../auth/actions';
 import { loginInit } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';

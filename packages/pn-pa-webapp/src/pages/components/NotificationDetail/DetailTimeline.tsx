@@ -10,9 +10,9 @@ import {
 } from '@mui/lab';
 import { Typography, Box, Button, Chip, Grid } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { getTime, getMonthString, getDay } from '@pagopa-pn/pn-commons';
 
 import { LegalFactId, NotificationDetail } from '../../../redux/notification/types';
-import { getMonthString, getDay, getTime } from '../../../utils/date.utility';
 import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../../utils/status.utility';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';

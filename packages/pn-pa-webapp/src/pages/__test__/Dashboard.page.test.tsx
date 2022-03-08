@@ -1,8 +1,8 @@
 import { act, screen } from '@testing-library/react';
 import * as redux from 'react-redux';
+import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../__test__/test-utils';
-import { tenYearsAgo, today } from '../../utils/date.utility';
 import Dashboard from '../Dashboard.page';
 
 describe('Dashboard Page', () => {

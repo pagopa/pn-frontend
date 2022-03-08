@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { today, tenYearsAgo } from "../../utils/date.utility";
+import { tenYearsAgo, today } from "@pagopa-pn/pn-commons";
 
 import { getSentNotifications, setPagination, setSorting, setNotificationFilters } from "./actions";
 import { GetNotificationsParams, Notification } from "./types";

@@ -32,7 +32,7 @@ export default function Layout({ children, assistanceEmail, onExitAction, sideMe
         flexDirection: 'column',
       }}
     >
-      <Header withSecondHeader={true} onExitAction={onExitAction} />
+      <Header withSecondHeader={true} onExitAction={onExitAction} data-testid="header"/>
       <Grid role={'navigation'} container spacing={2} className={classes.root}>
         <Grid item xs={2}>
           {sideMenu}
