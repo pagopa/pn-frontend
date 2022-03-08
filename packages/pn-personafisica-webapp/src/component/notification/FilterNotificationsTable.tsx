@@ -1,5 +1,6 @@
 import { useEffect, useState, ChangeEvent, Fragment } from 'react';
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { Box, Button, Grid, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -16,12 +17,13 @@ const useStyles = makeStyles({
     height: '58px',
     alignSelf: 'center',
     verticalAlign: 'center',
-    "margin-top": '25px !important'
+    'margin-top': '25px !important',
   },
 });
 
 const FilterNotificationsTable = () => {
   const dispatch = useDispatch();
+  const { t, i18n } = useTranslation('common');
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -83,8 +85,7 @@ const FilterNotificationsTable = () => {
   return (
     <Fragment>
       <form onSubmit={formik.handleSubmit}>
-        <Box 
-          sx={{ flexGrow: 1, '& .MuiTextField-root': { mt: 3 } }}>
+        <Box sx={{ flexGrow: 1, '& .MuiTextField-root': { mt: 3 } }}>
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={4}>
               <TextField
@@ -157,7 +158,7 @@ const FilterNotificationsTable = () => {
                 className={classes.customButton}
                 disabled={!formik.isValid}
               >
-                Cerca
+                {t('cerca')}
               </Button>
             </Grid>
             <Grid item xs={2}>
