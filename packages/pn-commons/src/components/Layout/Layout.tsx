@@ -34,10 +34,10 @@ export default function Layout({ children, assistanceEmail, onExitAction, sideMe
     >
       <Header withSecondHeader={true} onExitAction={onExitAction} data-testid="header"/>
       <Grid role={'navigation'} container spacing={2} className={classes.root}>
-        <Grid item xs={2}>
+        <Grid item lg={2} xs={12}>
           {sideMenu}
         </Grid>
-        <Grid item xs={10}>{children}</Grid>
+        <Grid item lg={10} xs={12}>{children}</Grid>
       </Grid>
       <Footer assistanceEmail={assistanceEmail} />
     </Box>
