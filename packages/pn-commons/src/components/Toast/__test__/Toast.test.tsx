@@ -52,7 +52,7 @@ describe('Toast Component', () => {
     await waitFor(() => {
       expect(toastContainer).not.toBeInTheDocument();
     }, {
-      interval: 400
+      timeout: 400
     })
   });
 });
