@@ -1,9 +1,8 @@
-import { NotificationAllowedStatus } from '@pagopa-pn/pn-commons';
 import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react';
 import moment from 'moment';
 import * as redux from 'react-redux';
+import { NotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { tenYearsAgo, today } from '../../../../utils/date.utility';
 import { render } from '../../../../__test__/test-utils';
 import FilterNotificationsTable from '../FilterNotificationsTable';
 

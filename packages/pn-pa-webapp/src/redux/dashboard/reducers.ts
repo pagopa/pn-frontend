@@ -1,7 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { GetNotificationsParams, Notification } from "@pagopa-pn/pn-commons";
+import { GetNotificationsParams, Notification, tenYearsAgo, today } from "@pagopa-pn/pn-commons";
 
-import { today, tenYearsAgo } from "../../utils/date.utility";
 import { getSentNotifications, setPagination, setSorting, setNotificationFilters } from "./actions";
 
 /* eslint-disable functional/immutable-data */

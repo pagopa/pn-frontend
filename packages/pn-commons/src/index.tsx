@@ -51,9 +51,20 @@ import {
   getNotificationStatusLabelAndColor,
   NotificationAllowedStatus,
 } from './utils/status.utility';
+import {
+  getMonthString,
+  getDay,
+  getTime
+} from './utils/date.utility';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusLabelAndColor };
 export { createAppError };
 export { formatDate };
 export { calcPages };
+export { getMonthString, getDay, getTime };
+
+// consts
+import { today, tenYearsAgo } from './utils/date.utility';
+
+export { today, tenYearsAgo };
