@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
@@ -7,18 +7,21 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import theme from '@pagopa/mui-italia/theme';
 import reportWebVitals from './reportWebVitals';
 import { store } from './redux/store';
+import './i18n.ts';
 import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-      </BrowserRouter>
-    </Provider>
+    <Suspense fallback="loading...">
+      <Provider store={store}>
+        <BrowserRouter>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </BrowserRouter>
+      </Provider>
+    </Suspense>
   </React.StrictMode>,
   document.getElementById('root')
 );

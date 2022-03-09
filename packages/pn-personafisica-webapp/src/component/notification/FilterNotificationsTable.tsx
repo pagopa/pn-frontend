@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 
 const FilterNotificationsTable = () => {
   const dispatch = useDispatch();
-  const { t, i18n } = useTranslation('common');
+  const { t } = useTranslation('common');
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -158,7 +158,7 @@ const FilterNotificationsTable = () => {
                 className={classes.customButton}
                 disabled={!formik.isValid}
               >
-                {t('cerca')}
+                {t('button.cerca')}
               </Button>
             </Grid>
             <Grid item xs={2}>
