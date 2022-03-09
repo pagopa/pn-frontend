@@ -16,7 +16,7 @@ const Footer = ({ assistanceEmail }: Props) => (
       bgcolor: 'primary.dark',
       alignItems: 'center',
       boxSizing: 'unset',
-      position: 'relative',
+      position: 'relative'
     }}
   >
     <Grid container justifyContent={'center'} alignItems={'center'}>

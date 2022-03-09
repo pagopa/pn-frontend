@@ -19,7 +19,8 @@ type Props = {
 const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
-    background: '#F2F2F2'
+    background: '#F2F2F2',
+    minHeight: 'calc(100vh - 327px)'
   },
 })); 
 
