@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+/**
+ * Checks if we are on a mobile device 
+ */
 export function useIsMobile() {
   const [width, setWidth] = useState<number>(window.innerWidth);
 
