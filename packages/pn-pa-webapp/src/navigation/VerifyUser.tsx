@@ -31,7 +31,9 @@ const VerifyUser = () => {
   useEffect(() => {
     if (selfCareToken !== '') {
       dispatch(exchangeToken(selfCareToken))
-        .then(() => navigate(getHomePage(role)))
+        .then(() => {
+          navigate(getHomePage(role))
+        })
         .catch(() => {
           /* eslint-disable functional/immutable-data */
           window.location.href = process.env.REACT_APP_URL_SELFCARE_LOGIN || '';

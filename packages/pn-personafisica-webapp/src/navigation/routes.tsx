@@ -9,10 +9,11 @@ import * as routes from './routes.const';
 function Router() {
   return (
     <Routes>
-      <Route path="/" element={<VerifyUser />}></Route>
-      {/* protected routes */}
-      <Route element={<RequireAuth />}>
-        <Route path={routes.NOTIFICHE} element={<Notifiche/>} />
+      <Route path="/" element={<VerifyUser />}>
+        {/* protected routes */}
+        <Route element={<RequireAuth />}>
+          <Route path={routes.NOTIFICHE} element={<Notifiche />} />
+        </Route>
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>
