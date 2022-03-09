@@ -12,16 +12,16 @@ import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Suspense fallback="loading...">
-      <Provider store={store}>
-        <BrowserRouter>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
+    <Provider store={store}>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Suspense fallback="loading...">
             <App />
-          </ThemeProvider>
-        </BrowserRouter>
-      </Provider>
-    </Suspense>
+          </Suspense>
+        </ThemeProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
