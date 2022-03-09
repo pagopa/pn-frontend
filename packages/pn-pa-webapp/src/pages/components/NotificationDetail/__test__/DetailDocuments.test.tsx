@@ -41,8 +41,8 @@ describe('Notification Detail Documents Component', () => {
     await waitFor(() => {
       fireEvent.click(documentsButtons![0]);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(1);
-    expect(mockActionFn).toHaveBeenCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(1);
+    expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith({iun: notificationToFe.iun, documentIndex: 0});
   });
 

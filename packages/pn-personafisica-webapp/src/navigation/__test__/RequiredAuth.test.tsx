@@ -1,7 +1,5 @@
-import * as redux from 'react-redux';
-
-import { UserRole } from "../../models/user";
 import { render } from "../../__test__/test-utils";
+import * as redux  from '../../redux/hooks';
 import RequireAuth from "../RequiredAuth";
 
 jest.mock('react-router-dom', () => {
@@ -22,27 +20,25 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 
 describe('RequireAuth Component', () => {
 
-  beforeEach(() =>  {
-    // useSelector mock
-    const useSelectorSpy = jest.spyOn(redux, 'useSelector');
-    useSelectorSpy
-      .mockReturnValue('mocked-token')
-      .mockReturnValue(UserRole.REFERENTE_AMMINISTRATIVO);
-  });
-
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
   it('renders RequireAuth (user enabled to access)', () => {
+    // useSelector mock
+    const useSelectorSpy = jest.spyOn(redux, 'useAppSelector');
+    useSelectorSpy.mockReturnValue('mocked-token');
     // render component
-    const result = render(<RequireAuth roles={[UserRole.REFERENTE_AMMINISTRATIVO]} />);
+    const result = render(<RequireAuth/>)
     expect(result?.container).toHaveTextContent(/Generic Page/i);
+    useSelectorSpy.mockClear();
+    useSelectorSpy.mockReset();
   });
 
   it('renders RequireAuth (user not enabled to access)', () => {
+    // useSelector mock
+    const useSelectorSpy = jest.spyOn(redux, 'useAppSelector');
+    useSelectorSpy.mockReturnValue(undefined);
     // render component
-    const result = render(<RequireAuth roles={[UserRole.REFERENTE_OPERATIVO]} />);
+    const result = render(<RequireAuth/>);
     expect(result?.container).toHaveTextContent(/Access Denied Page/i);
+    useSelectorSpy.mockClear();
+    useSelectorSpy.mockReset();
   });
 });

@@ -30,7 +30,7 @@ describe('AppMessage Component', () => {
       render(<AppMessage />);
     });
     await waitFor(() => {
-      expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+      expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockDispatchFn).toBeCalledWith({
         payload: errors[0].id,
         type: 'appState/removeError',

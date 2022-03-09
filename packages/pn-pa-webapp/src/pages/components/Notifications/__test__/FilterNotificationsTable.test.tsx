@@ -198,7 +198,7 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(submitButton!);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
         startDate: oneYearAgo.toISOString(),
@@ -229,7 +229,7 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(submitButton!);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
         startDate: oneYearAgo.toISOString(),
@@ -260,7 +260,7 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(submitButton!);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(0);
+    expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
   it('test form submission - search for codice IUN (invalid)', async () => {
@@ -282,7 +282,7 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(submitButton!);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(0);
+    expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
 
@@ -302,7 +302,7 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(cancelButton);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
         startDate: tenYearsAgo.toISOString(),
