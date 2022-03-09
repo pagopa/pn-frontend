@@ -23,7 +23,7 @@ const useStyles = makeStyles({
 
 const FilterNotificationsTable = () => {
   const dispatch = useDispatch();
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['common', 'notifiche']);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
@@ -92,7 +92,7 @@ const FilterNotificationsTable = () => {
                 id="iunMatch"
                 value={formik.values.iunMatch}
                 onChange={handleChangeTouched}
-                label="Inserire codice IUN"
+                label={t('filters.iun', { ns: 'notifiche' })}
                 name="iunMatch"
                 variant="outlined"
                 error={formik.touched.iunMatch && Boolean(formik.errors.iunMatch)}
@@ -108,7 +108,7 @@ const FilterNotificationsTable = () => {
                 dateAdapter={DateAdapter}
               >
                 <DesktopDatePicker
-                  label="Da"
+                  label={t('filters.data_da', { ns: 'notifiche' })}
                   inputFormat="DD/MM/yyyy"
                   value={startDate}
                   onChange={(value: Date | null) => {
@@ -134,7 +134,7 @@ const FilterNotificationsTable = () => {
                 onChange={formik.handleChange}
               >
                 <DesktopDatePicker
-                  label="A"
+                  label={t('filters.data_a', { ns: 'notifiche' })}
                   inputFormat="DD/MM/yyyy"
                   value={endDate}
                   onChange={(value: Date | null) => {
@@ -163,7 +163,7 @@ const FilterNotificationsTable = () => {
             </Grid>
             <Grid item xs={2}>
               <Button className={classes.customButton} onClick={cleanFilters}>
-                Annulla ricerca
+              {t('button.annulla ricerca')}
               </Button>
             </Grid>
           </Grid>

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material';
 import {
   calcPages,
@@ -24,6 +25,7 @@ const Notifiche = () => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
+  const { t } = useTranslation('notifiche');
   // store previous values
   const prevPagination = useRef(pagination);
 
@@ -42,7 +44,7 @@ const Notifiche = () => {
   const columns: Array<Column> = [
     {
       id: 'sentAt',
-      label: 'Data',
+      label: t('table.data'),
       width: '11%',
       sortable: true,
       getCellLabel(value: string) {
@@ -51,7 +53,7 @@ const Notifiche = () => {
     },
     {
       id: 'senderId',
-      label: 'Mittente',
+      label: t('table.mittente'),
       width: '13%',
       sortable: true,
       getCellLabel(value: string) {
@@ -60,7 +62,7 @@ const Notifiche = () => {
     },
     {
       id: 'subject',
-      label: 'Oggetto',
+      label: t('table.oggetto'),
       width: '23%',
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
@@ -68,7 +70,7 @@ const Notifiche = () => {
     },
     {
       id: 'iun',
-      label: 'Codice IUN',
+      label: t('table.iun'),
       width: '20%',
       getCellLabel(value: string) {
         return value;
@@ -76,7 +78,7 @@ const Notifiche = () => {
     },
     {
       id: 'notificationStatus',
-      label: 'Stato',
+      label: t('table.status'),
       width: '18%',
       align: 'center',
       sortable: true,
@@ -125,7 +127,7 @@ const Notifiche = () => {
 
   return (
     <Box style={{ padding: '20px' }}>
-      <Typography variant={'h4'}>Le tue notifiche</Typography>
+      <Typography variant={'h4'}>{t('title')}</Typography>
       <FilterNotificationsTable />
       <NotificationsTable
         columns={columns}

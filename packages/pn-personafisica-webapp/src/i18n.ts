@@ -9,6 +9,7 @@ void i18next
     lng: 'it',
     fallbackLng: 'it',
     debug: process.env.NODE_ENV === 'development',
+    ns: ['common'],
   });
 
 export default i18next;

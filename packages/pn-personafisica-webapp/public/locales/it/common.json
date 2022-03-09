@@ -1,5 +1,11 @@
 {
   "button": {
-    "cerca": "Cerca"
+    "cerca": "Cerca",
+    "annulla ricerca": "Annulla Ricerca"
+  },
+  "menu": {
+    "notifiche": "Notifiche",
+    "deleghe": "Deleghe",
+    "profilo": "Profilo"
   }
 }
