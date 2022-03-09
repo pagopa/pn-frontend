@@ -88,8 +88,8 @@ function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
               .map(row => (
                 <TableRow key={row.id}>
                   {columns.map(c => ( 
-                    <TableCell key={c.id} sx={{ width: c.width, borderBottom: 'none' }} align={c.align}>
-                      {c.getCellLabel(row[c.id as keyof Notification])}
+                    <TableCell key={c.id} sx={{ width: c.width, borderBottom: 'none' }} align={c.align} onClick={() => c.onClick && c.onClick(row, c)}>
+                      {c.getCellLabel(row[c.id as keyof Notification])} 
                     </TableCell>
                   ))}
                 </TableRow>
