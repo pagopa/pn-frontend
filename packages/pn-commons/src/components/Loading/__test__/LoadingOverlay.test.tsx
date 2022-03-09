@@ -1,4 +1,4 @@
-import { act, prettyDOM, RenderResult } from "@testing-library/react";
+import { act, RenderResult } from "@testing-library/react";
 import * as redux from 'react-redux';
 
 import { render } from "../../../test-utils";

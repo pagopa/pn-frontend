@@ -20,6 +20,8 @@ const RequireAuth = ({ roles }: Props) => {
   const userHasRequiredRole = role && roles.includes(role);
   const [accessDenied, setAccessDenied] = useState(true);
 
+  console.log(token, role);
+
   useEffect(() => {
     if (token === '' || !token) {
       // Redirect them to the selfcare login page
