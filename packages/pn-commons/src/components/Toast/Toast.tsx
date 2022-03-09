@@ -1,7 +1,6 @@
 import { useState, Fragment } from 'react';
 import { Alert, Grid, Typography, Box, IconButton, AlertProps } from '@mui/material'; // SvgIcon
-import { styled } from '@mui/system';
-import { Theme } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
