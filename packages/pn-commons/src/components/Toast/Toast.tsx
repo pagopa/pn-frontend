@@ -70,7 +70,7 @@ export default function Toast({ title, message, open, type, closingDelay, onClos
   return (
     <Fragment>
       {openStatus && (
-      <Grid container justifyContent="end" px={2}>
+      <Grid container justifyContent="end" px={2} data-testid="toastContainer">
         <Grid item xs={12} display="flex" justifyContent="flex-end">
           <Box sx={{}}>
             <CustomAlert
