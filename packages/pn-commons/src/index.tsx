@@ -9,6 +9,8 @@ import AppMessage from './components/AppMessage';
 import SideMenu from './components/SideMenu/SideMenu';
 import NotificationsTable from './components/Notifications/NotificationsTable';
 import StatusTooltip from './components/Notifications/StatusTooltip';
+import OutlinedButton from './components/OutlinedButton';
+import TitleAndDescription from './components/TitleAndDescription';
 
 export { LoadingOverlay };
 export { Header };
@@ -20,6 +22,8 @@ export { AppMessage };
 export { SideMenu };
 export { NotificationsTable };
 export { StatusTooltip };
+export { OutlinedButton };
+export { TitleAndDescription };
 
 // pages
 import NotFound from './navigation/NotFound';

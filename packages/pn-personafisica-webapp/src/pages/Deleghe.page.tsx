@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
+import { TitleAndDescription } from '@pagopa-pn/pn-commons';
 
-import TitleAndDescription from '../component/TitleAndDescription/TitleAndDescription';
 import Delegates from './components/Deleghe/Delegates';
 import Delegators from './components/Deleghe/Delegators';
 
