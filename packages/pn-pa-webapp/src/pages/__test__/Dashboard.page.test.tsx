@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../__test__/test-utils';
@@ -7,7 +7,7 @@ import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Dashboard from '../Dashboard.page';
 
 describe('Dashboard Page', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     const spy = jest.spyOn(hooks, 'useAppSelector');
     spy
       .mockReturnValueOnce(notificationsToFe.result)
@@ -16,18 +16,22 @@ describe('Dashboard Page', () => {
         endDate: today.toISOString(),
         recipientId: '',
         status: '',
-        subjectRegExp: ''
+        subjectRegExp: '',
       })
       .mockReturnValueOnce({
         orderBy: '',
-        order: 'asc'
+        order: 'asc',
       })
       .mockReturnValueOnce({
         nextPagesKey: [],
         size: 10,
         page: 0,
-        moreResult: false
+        moreResult: false,
       });
+    // render component
+    await act(async () => {
+      render(<Dashboard />);
+    });
   });
 
   afterEach(() => {
@@ -35,7 +39,6 @@ describe('Dashboard Page', () => {
   });
 
   it('renders dashboard page', () => {
-    render(<Dashboard />);
     expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
   });
 });
