@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+
 import { exchangeToken } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { URL_FE_LOGIN } from '../utils/constants';
+import { NOTIFICHE } from './routes.const';
 
 const VerifyUser = () => {
   const location = useLocation();
@@ -29,7 +31,7 @@ const VerifyUser = () => {
     if (spidToken !== '') {
       dispatch(exchangeToken(spidToken))
         .then(() => {
-          navigate('/')
+          navigate(NOTIFICHE);
         })
         .catch(() => {
           /* eslint-disable functional/immutable-data */
