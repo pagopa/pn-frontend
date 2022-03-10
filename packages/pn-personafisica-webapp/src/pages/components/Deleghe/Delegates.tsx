@@ -1,9 +1,8 @@
 import { Box, Stack, styled } from '@mui/material';
 import { Add, SentimentDissatisfied } from '@mui/icons-material';
-import { NotificationsTable as Table, Row } from '@pagopa-pn/pn-commons';
+import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
 
 import { useTheme } from '@mui/material/styles';
-import OutlinedButton from '../../../component/OutlinedButton';
 import { DelegationStatus } from '../../../utils/status.utility';
 import { delegatesColumns } from './delegationsColumns';
 
@@ -24,7 +23,7 @@ const Delegates = () => {
       endDate: 'arrivederci',
       email: 'email@vera.it',
       visibilityIds: ['pa1', 'pa2', 'pa3'],
-      status: DelegationStatus.ACCEPTED,
+      status: DelegationStatus.ACTIVE,
     },
   ];
 

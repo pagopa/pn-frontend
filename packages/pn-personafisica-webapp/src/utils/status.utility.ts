@@ -1,6 +1,6 @@
 export enum DelegationStatus {
-  ACCEPTED = 'ACCEPTED',
-  PENDING = 'PENDING',
+  ACTIVE = 'Active',
+  PENDING = 'Pending',
 }
 
 export function getDelegationStatusLabelAndColor(status: DelegationStatus): {
@@ -8,7 +8,7 @@ export function getDelegationStatusLabelAndColor(status: DelegationStatus): {
   label: string;
 } {
   switch (status) {
-    case DelegationStatus.ACCEPTED:
+    case DelegationStatus.ACTIVE:
       return {
         color: 'success',
         label: 'Attiva',
@@ -28,6 +28,6 @@ export function getDelegationStatusLabelAndColor(status: DelegationStatus): {
 
 export const DelegationAllowedStatus = [
   { value: 'All', label: 'Tutti gli stati' },
-  { value: DelegationStatus.ACCEPTED, label: 'Non valida' },
-  { value: DelegationStatus.PENDING, label: 'In Validazione' },
+  { value: DelegationStatus.ACTIVE, label: 'Active' },
+  { value: DelegationStatus.PENDING, label: 'Attesa conferma' },
 ];
