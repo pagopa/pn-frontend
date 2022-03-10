@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Paper, Table, TableBody, TableCell, TableContainer, TableRow, Box } from "@mui/material";
 
-import { NotificationDetail } from "../../../redux/notification/types";
+import { NotificationDetail } from '@pagopa-pn/pn-commons/src/types/Notifications';
 import { useAppSelector } from "../../../redux/hooks";
 import { RootState } from "../../../redux/store";
 

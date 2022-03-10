@@ -1,7 +1,6 @@
 import { formatDate, GetNotificationsParams, GetNotificationsResponse } from '@pagopa-pn/pn-commons';
-
+import { LegalFactId, NotificationDetail } from '@pagopa-pn/pn-commons/src/types/Notifications';
 import { apiClient } from '../axios';
-import { LegalFactId, NotificationDetail } from '../../redux/notification/types';
 
 export const NotificationsApi = {
   /**

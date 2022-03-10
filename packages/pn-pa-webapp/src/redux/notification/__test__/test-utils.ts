@@ -10,7 +10,7 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-} from '../types';
+} from '@pagopa-pn/pn-commons/src/types/Notifications';
 
 export const notificationFromBe: NotificationDetail = {
   iun: 'c_b963-220220221119',

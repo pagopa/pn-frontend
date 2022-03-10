@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
-import { NotificationDetail, NotificationDetailDocument, NotificationDetailPayment, NotificationDetailRecipient, NotificationDetailTimeline, NotificationStatusHistory, PhysicalCommunicationType } from './types';
 import { getSentNotification, getSentNotificationDocument, getSentNotificationLegalfact } from './actions';
+import { NotificationDetail, NotificationDetailDocument, NotificationDetailPayment, NotificationDetailRecipient, NotificationDetailTimeline, NotificationStatusHistory, PhysicalCommunicationType } from '@pagopa-pn/pn-commons/src/types/Notifications';
 
 /* eslint-disable functional/immutable-data */
 const notificationSlice = createSlice({

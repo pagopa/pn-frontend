@@ -1,12 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { LegalFactId, LegalFactType } from '../../../redux/notification/types';
 import { notificationsFromBe, notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
 import { notificationFromBe, notificationToFe } from '../../../redux/notification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
 import { apiClient } from '../../axios';
 import { NotificationsApi } from '../Notifications.api';
+import { LegalFactId, LegalFactType } from '@pagopa-pn/pn-commons/src/types/Notifications';
 
 describe('Notifications api tests', () => {
 
