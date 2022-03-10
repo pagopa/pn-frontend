@@ -10,9 +10,10 @@ export interface DelegationsList {
 
 export interface Delegation {
     user: Omit<User, 'uid' | 'exp'>;
-    rangeDate: RangeDate;
+    startDate: string;
+    endDate: string;
     delegationRole: 'delegator' | 'delegated';
-    delegationStatus: 'pending' | 'accepted' | 'rejected';
+    delegationStatus: 'pending' | 'accepted';
     visibilityIds: OrganizationId;
     verificationCode: string;
 }
@@ -20,9 +21,4 @@ export interface Delegation {
 export interface OrganizationId {
     id: string;
     role: 'referente operativo' | 'referente amministrativo';
-}
-
-export interface RangeDate {
-    startDate: string;
-    endDate: string;
 }

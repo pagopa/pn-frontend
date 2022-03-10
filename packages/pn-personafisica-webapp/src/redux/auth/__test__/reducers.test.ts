@@ -22,7 +22,7 @@ const userResponse: User = {
 };
 
 export const loginInit = () => {
-  let axiosMock: MockAdapter;
+  const axiosMock: MockAdapter;
 
   const mockLoginResponse = () => {
     axiosMock = new MockAdapter(authClient);
