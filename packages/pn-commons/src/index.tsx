@@ -9,6 +9,7 @@ import AppMessage from './components/AppMessage';
 import SideMenu from './components/SideMenu/SideMenu';
 import NotificationsTable from './components/Notifications/NotificationsTable';
 import StatusTooltip from './components/Notifications/StatusTooltip';
+import NotificationsCard from './components/Notifications/NotificationsCard';
 
 export { LoadingOverlay };
 export { Header };
@@ -20,6 +21,7 @@ export { AppMessage };
 export { SideMenu };
 export { NotificationsTable };
 export { StatusTooltip };
+export { NotificationsCard };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -34,6 +36,7 @@ import { PaginationData } from './components/Pagination/types';
 import { NotificationStatus } from './types/NotificationStatus';
 import { SideMenuItem } from './types/SideMenuItem';
 import { Column, Row, Sort } from './types/NotificationsTable';
+import { CardElem } from './types/NotificationsCard';
 import { Notification, GetNotificationsResponse, GetNotificationsParams } from './types/Notifications';
 
 export type { AppError };
@@ -41,6 +44,7 @@ export type { PaginationData };
 export type { SideMenuItem };
 export { NotificationStatus };
 export type { Column, Row, Sort };
+export type { CardElem };
 export type { Notification, GetNotificationsResponse, GetNotificationsParams };
 
 // functions
