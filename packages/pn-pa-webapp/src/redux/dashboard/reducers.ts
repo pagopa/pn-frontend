@@ -1,8 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { today, tenYearsAgo } from "../../utils/date.utility";
+import { GetNotificationsParams, Notification, tenYearsAgo, today } from "@pagopa-pn/pn-commons";
 
 import { getSentNotifications, setPagination, setSorting, setNotificationFilters } from "./actions";
-import { GetNotificationsParams, Notification } from "./types";
 
 /* eslint-disable functional/immutable-data */
 const dashboardSlice = createSlice({

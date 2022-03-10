@@ -22,7 +22,7 @@ const Header = ({
         alignItems: 'center',
         height: '7%',
         backgroundColor: 'primary.dark',
-        boxShadow: 'none',
+        boxShadow: 'none'
       }}
     >
       <Toolbar sx={{ width: { xs: '100%', lg: '90%', minHeight: '48px !important' } }}>

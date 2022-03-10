@@ -1,5 +1,6 @@
 import Chip from '@mui/material/Chip';
 import { CustomTooltip } from '@pagopa-pn/pn-commons';
+
 import { Fragment } from 'react';
 
 function StatusTooltip({

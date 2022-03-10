@@ -1,6 +1,7 @@
 import { Email, People, GroupWork, TrendingUp } from '@mui/icons-material';
+import { SideMenuItem } from '@pagopa-pn/pn-commons';
+
 import * as routes from '../navigation/routes.const';
-import { SideMenuItem } from '../components/SideMenu/SideMenuItem';
 import { UserRole } from '../models/user';
 
 export const ReferenteAmministrativoMenuItems: Array<SideMenuItem> = [

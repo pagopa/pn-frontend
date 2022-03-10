@@ -1,11 +1,9 @@
-import { NotificationStatus } from '@pagopa-pn/pn-commons';
+import { GetNotificationsResponse, NotificationStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { tenYearsAgo, today } from '../../../utils/date.utility';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
 import { getSentNotifications, setNotificationFilters, setPagination, setSorting } from '../actions';
-import { GetNotificationsResponse } from '../types';
 import { notificationsToFe } from './test-utils';
 
 describe('Dashbaord redux state tests', () => {
