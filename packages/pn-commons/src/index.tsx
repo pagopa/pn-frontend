@@ -68,3 +68,8 @@ export { getMonthString, getDay, getTime };
 import { today, tenYearsAgo } from './utils/date.utility';
 
 export { today, tenYearsAgo };
+
+// hooks
+import { useIsMobile } from './hooks/IsMobile.hook';
+
+export { useIsMobile };

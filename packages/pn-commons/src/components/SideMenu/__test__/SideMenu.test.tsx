@@ -1,76 +1,44 @@
-import { fireEvent, prettyDOM, screen, waitFor, within } from "@testing-library/react";
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+import {act, fireEvent, screen, waitFor, within } from "@testing-library/react";
 
-import { SideMenuItem } from "../../../types/SideMenuItem";
 import { render } from "../../../test-utils";
+import * as hooks from "../../../hooks/IsMobile.hook";
 import SideMenu from "../SideMenu";
+import { sideMenuItems } from "./test-utils";
 
-const sideMenuItems: Array<SideMenuItem> = [
-  { 
-    label: 'Item 1',
-    icon: QuestionMarkIcon,
-    route: ''
-  },
-  { 
-    label: 'Item 2',
-    icon: QuestionMarkIcon,
-    route: '',
-    children: [{
-      label: 'Item 2-1',
-      icon: QuestionMarkIcon,
-      route: ''
-    }]
-  },
-  { 
-    label: 'Item 3',
-    icon: QuestionMarkIcon,
-    route: '',
-    children: [{
-      label: 'Item 3-1',
-      icon: QuestionMarkIcon,
-      route: ''
-    }, {
-      label: 'Item 3-2',
-      icon: QuestionMarkIcon,
-      route: ''
-    }]
-  }
-];
-async function testMenuItem(container: HTMLElement, expectedLength: number, menuItems: Array<SideMenuItem>) {
-  expect(container).toBeInTheDocument();
-  const buttons = await within(container).findAllByRole('button');
-  expect(buttons).toHaveLength(expectedLength);
-  buttons.forEach((button, i) => {
-    const item = button.querySelector('span');
-    expect(item).toHaveTextContent(menuItems[i].label);
-  });
-}
+const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
 
 describe('SideMenu', () => {
-  it('Render side menu', async () => {
-    render(
-      <SideMenu menuItems={sideMenuItems}/>
-    );
-    const ul = screen.getByRole('list');
-    await testMenuItem(ul, sideMenuItems.length, sideMenuItems);
+  afterEach(() => {
+    useIsMobileSpy.mockClear();
+    useIsMobileSpy.mockReset();
   });
 
-  it('Open and close sub menu', async () => {
+  it('Renders side menu (no mobile)', async () => {
+    useIsMobileSpy.mockReturnValue(false);
     render(
       <SideMenu menuItems={sideMenuItems}/>
     );
     const ul = screen.getByRole('list');
+    expect(ul).toBeInTheDocument();
     const buttons = await within(ul).findAllByRole('button');
+    expect(buttons).toHaveLength(sideMenuItems.length);
+  });
+
+  it('Renders side menu (mobile)', async () => {
+    useIsMobileSpy.mockReturnValue(true);
+    render(
+      <SideMenu menuItems={sideMenuItems}/>
+    );
+    const ul = screen.getByRole('list');
+    expect(ul).toBeInTheDocument();
+    const menuButtons = await within(ul).findAllByRole('button');
+    expect(menuButtons).toHaveLength(1);
     await waitFor(() => {
-      fireEvent.click(buttons[1]);
-    });
-    let collapsedMenu = await within(ul).findByTestId(`collapse-${sideMenuItems[1].label}`);
-    await testMenuItem(collapsedMenu, sideMenuItems[1].children!.length, sideMenuItems[1].children!);
-    await waitFor(() => {
-      fireEvent.click(buttons[2]);
-    });
-    expect(collapsedMenu).not.toBeInTheDocument();
-    collapsedMenu = await within(ul).findByTestId(`collapse-${sideMenuItems[2].label}`);
-    await testMenuItem(collapsedMenu, sideMenuItems[2].children!.length, sideMenuItems[2].children!);
+      fireEvent.click(menuButtons[0]);
+    })
+    const drawer = screen.queryByRole('presentation');
+    expect(drawer).toBeInTheDocument();
+    const buttons = await within(drawer!).findAllByRole('button');
+    expect(buttons).toHaveLength(sideMenuItems.length);
   });
 });
