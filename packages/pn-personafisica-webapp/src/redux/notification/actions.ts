@@ -1,4 +1,4 @@
-import { LegalFactId, NotificationDetail } from '@pagopa-pn/pn-commons/src/types/Notifications';
+import { LegalFactId, NotificationDetail } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
@@ -14,9 +14,12 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
   }
 );
 
-export const getSentNotificationLegalfact = createAsyncThunk<{url: string}, {iun: string; legalFact: LegalFactId}>(
+export const getSentNotificationLegalfact = createAsyncThunk<
+  { url: string },
+  { iun: string; legalFact: LegalFactId }
+>(
   'getSentNotificationLegalfact',
-  async (params: {iun: string; legalFact: LegalFactId}, { rejectWithValue }) => {
+  async (params: { iun: string; legalFact: LegalFactId }, { rejectWithValue }) => {
     try {
       return await NotificationsApi.getSentNotificationLegalfact(params.iun, params.legalFact);
     } catch (e) {
@@ -25,9 +28,12 @@ export const getSentNotificationLegalfact = createAsyncThunk<{url: string}, {iun
   }
 );
 
-export const getSentNotificationDocument = createAsyncThunk<{url: string}, {iun: string; documentIndex: number}>(
+export const getSentNotificationDocument = createAsyncThunk<
+  { url: string },
+  { iun: string; documentIndex: number }
+>(
   'getSentNotificationDocument',
-  async (params: {iun: string; documentIndex: number}, { rejectWithValue }) => {
+  async (params: { iun: string; documentIndex: number }, { rejectWithValue }) => {
     try {
       return await NotificationsApi.getSentNotificationDocument(params.iun, params.documentIndex);
     } catch (e) {

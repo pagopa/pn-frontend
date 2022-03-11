@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { NotificationDetail, LegalFactId } from '@pagopa-pn/pn-commons/src/types/Notifications';
+import { NotificationDetail, LegalFactId } from '@pagopa-pn/pn-commons';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
 export const getSentNotification = createAsyncThunk<NotificationDetail, string>(

@@ -11,8 +11,9 @@ import {
   Sort,
   StatusTooltip,
 } from '@pagopa-pn/pn-commons';
-import * as routes from '../navigation/routes.const';
 import { useNavigate } from 'react-router';
+
+import * as routes from '../navigation/routes.const';
 import FilterNotificationsTable from '../component/notification/FilterNotificationsTable';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';

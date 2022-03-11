@@ -34,14 +34,52 @@ import { PaginationData } from './components/Pagination/types';
 import { NotificationStatus } from './types/NotificationStatus';
 import { SideMenuItem } from './types/SideMenuItem';
 import { Column, Row, Sort } from './types/NotificationsTable';
-import { Notification, GetNotificationsResponse, GetNotificationsParams } from './types/Notifications';
+import {
+  Notification,
+  GetNotificationsResponse,
+  GetNotificationsParams,
+  NotificationDetail,
+  NotificationDetailTimeline,
+  NotificationDetailRecipient,
+  NotificationDetailDocument,
+  NotificationFeePolicy,
+  NotificationDetailPayment,
+  NotificationStatusHistory,
+  TimelineCategory,
+  DigitalDomicileType,
+  RecipientType,
+  DeliveryMode,
+  AddressSource,
+  LegalFactType,
+  LegalFactId,
+  PhysicalCommunicationType,
+} from './types/Notifications';
 
 export type { AppError };
 export type { PaginationData };
 export type { SideMenuItem };
 export { NotificationStatus };
 export type { Column, Row, Sort };
-export type { Notification, GetNotificationsResponse, GetNotificationsParams };
+export type {
+  Notification,
+  GetNotificationsResponse,
+  GetNotificationsParams,
+  NotificationDetail,
+  NotificationDetailTimeline,
+  NotificationDetailRecipient,
+  NotificationDetailDocument,
+  NotificationFeePolicy,
+  NotificationDetailPayment,
+  NotificationStatusHistory,
+  TimelineCategory,
+  DigitalDomicileType,
+  RecipientType,
+  DeliveryMode,
+  AddressSource,
+  LegalFactType,
+  LegalFactId,
+  PhysicalCommunicationType,
+};
 
 // functions
 import { createAppError } from './services/error.service';
@@ -51,11 +89,7 @@ import {
   getNotificationStatusLabelAndColor,
   NotificationAllowedStatus,
 } from './utils/status.utility';
-import {
-  getMonthString,
-  getDay,
-  getTime
-} from './utils/date.utility';
+import { getMonthString, getDay, getTime } from './utils/date.utility';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusLabelAndColor };

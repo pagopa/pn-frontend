@@ -1,4 +1,4 @@
-import { NotificationStatus } from "./NotificationStatus";
+import { NotificationStatus } from './NotificationStatus';
 
 export interface Notification {
   iun: string;
@@ -63,7 +63,6 @@ export interface NotificationDetailTimeline {
   legalFactsIds?: Array<LegalFactId>;
 }
 
-
 interface SendPaperDetails {
   category: TimelineCategory;
   taxId: string;
@@ -74,7 +73,6 @@ interface SendPaperDetails {
   newAddress?: PhysicalAddress;
   errors?: Array<string>;
 }
-
 
 interface BaseDetails {
   category: TimelineCategory;
@@ -163,7 +161,7 @@ interface DigitalAddressInfo {
 interface ScheduleWorkflowDetails {
   category: TimelineCategory;
   taxId: string;
-  lastAttemptInfo?: DigitalAddressInfo
+  lastAttemptInfo?: DigitalAddressInfo;
 }
 
 interface SendCourtesyMessageDetails {
@@ -180,7 +178,7 @@ interface SendDigitalDetails {
   addresses?: Array<{
     address: DigitalAddress;
     when: string;
-  }>
+  }>;
   addressSource?: AddressSource;
   retryNumber?: number;
   downstreamId?: {
@@ -259,7 +257,6 @@ export enum TimelineCategory {
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
 }
 
-
 interface DigitalAddress {
   type: DigitalDomicileType;
   address: string;
@@ -312,4 +309,3 @@ export enum PhysicalCommunicationType {
   SIMPLE_REGISTERED_LETTER = 'SIMPLE_REGISTERED_LETTER',
   REGISTERED_LETTER_890 = 'REGISTERED_LETTER_890',
 }
-
