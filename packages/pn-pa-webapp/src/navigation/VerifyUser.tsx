@@ -32,7 +32,7 @@ const VerifyUser = () => {
     if (selfCareToken !== '') {
       dispatch(exchangeToken(selfCareToken))
         .then(() => {
-          navigate(getHomePage(role))
+          navigate(getHomePage(role));
         })
         .catch(() => {
           /* eslint-disable functional/immutable-data */

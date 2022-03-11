@@ -11,8 +11,8 @@ import {
   StatusTooltip,
 } from '@pagopa-pn/pn-commons';
 
-import FilterNotificationsTable from './FilterNotificationsTable';
 import * as routes from '../../navigation/routes.const';
+import FilterNotificationsTable from './FilterNotificationsTable';
 
 type Props = {
   notifications: Array<Notification>;
