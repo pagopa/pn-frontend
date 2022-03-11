@@ -11,7 +11,9 @@ import {
   Sort,
   StatusTooltip,
 } from '@pagopa-pn/pn-commons';
+import { useNavigate } from 'react-router';
 
+import * as routes from '../navigation/routes.const';
 import FilterNotificationsTable from '../component/notification/FilterNotificationsTable';
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { NotificationStatus } from '../redux/dashboard/types';
@@ -48,6 +50,9 @@ const Notifiche = () => {
       getCellLabel(value: string) {
         return value;
       },
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
+      },
     },
     {
       id: 'senderId',
@@ -57,6 +62,9 @@ const Notifiche = () => {
       getCellLabel(value: string) {
         return value;
       },
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
+      },
     },
     {
       id: 'subject',
@@ -65,6 +73,9 @@ const Notifiche = () => {
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
+      },
     },
     {
       id: 'iun',
@@ -72,6 +83,9 @@ const Notifiche = () => {
       width: '20%',
       getCellLabel(value: string) {
         return value;
+      },
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
       },
     },
     {
@@ -102,6 +116,13 @@ const Notifiche = () => {
   // Sort handlers
   const handleChangeSorting = (s: Sort) => {
     dispatch(setSorting(s));
+  };
+
+  const navigate = useNavigate();
+
+  // Navigation handlers
+  const handleRowClick = (row: Row, _column: Column) => {
+    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
   };
 
   useEffect(() => {
