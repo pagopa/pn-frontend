@@ -69,7 +69,7 @@ describe('Notifications Table Component', () => {
     const sortButton = within(firstColumn!).getByRole('button');
     expect(sortButton).toBeInTheDocument();
     fireEvent.click(sortButton);
-    expect(handleSort).toHaveBeenCalledTimes(1);
+    expect(handleSort).toBeCalledTimes(1);
     expect(handleSort).toBeCalledWith({order: 'desc', orderBy: 'column-1'});
   });
 
@@ -80,7 +80,7 @@ describe('Notifications Table Component', () => {
     const firstRow = tableBody!.querySelector('tr');
     const tableColumns = firstRow!.querySelectorAll('td');
     fireEvent.click(tableColumns[2]);
-    expect(handleColumnClick).toHaveBeenCalledTimes(1);
+    expect(handleColumnClick).toBeCalledTimes(1);
     expect(handleColumnClick).toBeCalledWith(rows[0], columns[2]);
   });
 });

@@ -1,4 +1,4 @@
-import { act, waitFor } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import * as redux from 'react-redux';
 
 import { render } from "../../test-utils";
@@ -26,11 +26,9 @@ describe('AppMessage Component', () => {
     const mockDispatchFn = jest.fn();
     useDispatchSpy.mockReturnValue(mockDispatchFn);
     // render component
-    await act(async () => {
-      render(<AppMessage />);
-    });
+    render(<AppMessage />);
     await waitFor(() => {
-      expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+      expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockDispatchFn).toBeCalledWith({
         payload: errors[0].id,
         type: 'appState/removeError',

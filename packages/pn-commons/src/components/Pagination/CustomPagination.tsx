@@ -47,7 +47,7 @@ export default function CustomPagination({
   return (
     <Fragment>
       <Grid container sx={{ padding: '0 10px' }}>
-        <Grid item xs={6} display="flex" justifyContent="start" alignItems={'center'} data-testid="itemsPerPageSelector">
+        <Grid item xs={4} display="flex" justifyContent="start" alignItems={'center'} data-testid="itemsPerPageSelector">
           <Button
             sx={{ color: 'text.primary', fontWeight: 400 }}
             aria-controls={open ? 'basic-menu' : undefined}
@@ -74,7 +74,7 @@ export default function CustomPagination({
             ))}
           </Menu>
         </Grid>
-        <Grid item xs={6} display="flex" justifyContent="end" alignItems={'center'} data-testid="pageSelector">
+        <Grid item xs={8} display="flex" justifyContent="end" alignItems={'center'} data-testid="pageSelector">
           {paginationData.totalElements > size && (
             <Pagination
               sx={{ display: 'flex' }}

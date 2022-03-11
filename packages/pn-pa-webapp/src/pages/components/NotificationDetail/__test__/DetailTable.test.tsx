@@ -1,4 +1,4 @@
-import { act, RenderResult } from '@testing-library/react';
+import { RenderResult } from '@testing-library/react';
 
 import * as hooks from '../../../../redux/hooks';
 import { notificationToFe } from '../../../../redux/notification/__test__/test-utils';
@@ -20,22 +20,20 @@ describe('Notification Detail Table Component', () => {
     { label: 'Gruppi', value: '' },
   ];
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // mock useAppSelector
     appSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
     appSelectorSpy.mockReturnValue('mocked-sender');
 
     // render component
-    await act(async () => {
-      result = render(<DetailTable notification={notificationToFe}/>);
-    });
+    result = render(<DetailTable notification={notificationToFe}/>);
   });
 
   afterEach(() => {
     result = undefined;
   });
 
-  it('renders detail table', async () => {
+  it('renders detail table', () => {
     const table = result?.container.querySelector('table');
     expect(table).toBeInTheDocument(); 
     expect(table).toHaveAttribute('aria-label', 'notification detail');

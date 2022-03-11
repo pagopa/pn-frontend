@@ -1,6 +1,7 @@
 import { AccessDenied } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
+
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { URL_FE_LOGIN } from '../utils/constants';
