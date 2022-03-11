@@ -58,7 +58,17 @@ import {
 export type { AppError };
 export type { PaginationData };
 export type { SideMenuItem };
-export { NotificationStatus };
+export {
+  NotificationStatus,
+  RecipientType,
+  DigitalDomicileType,
+  NotificationFeePolicy,
+  TimelineCategory,
+  LegalFactType,
+  DeliveryMode,
+  AddressSource,
+  PhysicalCommunicationType,
+};
 export type { Column, Row, Sort };
 export type {
   Notification,
@@ -68,17 +78,9 @@ export type {
   NotificationDetailTimeline,
   NotificationDetailRecipient,
   NotificationDetailDocument,
-  NotificationFeePolicy,
   NotificationDetailPayment,
   NotificationStatusHistory,
-  TimelineCategory,
-  DigitalDomicileType,
-  RecipientType,
-  DeliveryMode,
-  AddressSource,
-  LegalFactType,
   LegalFactId,
-  PhysicalCommunicationType,
 };
 
 // functions
