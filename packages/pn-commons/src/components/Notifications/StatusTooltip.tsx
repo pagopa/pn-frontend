@@ -7,7 +7,7 @@ import CustomTooltip from '../CustomTooltip';
 const CustomChip = styled(Chip)(() => ({
   maxWidth: '100%',
   height: '100%',
-  textAlign: 'left',
+  textAlign: 'center',
 
   '& .MuiChip-label': {
     overflowWrap: 'break-word',
