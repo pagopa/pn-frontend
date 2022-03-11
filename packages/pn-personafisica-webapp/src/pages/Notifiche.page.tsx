@@ -7,7 +7,6 @@ import {
   Sort,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { useNavigate } from 'react-router';
 
 import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
