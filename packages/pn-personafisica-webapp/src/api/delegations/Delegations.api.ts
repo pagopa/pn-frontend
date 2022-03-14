@@ -15,4 +15,11 @@ export const DelegatesApi = {
       }
       return 'error';
     }),
+  rejectDelegation: (id: string): Promise<'success' | 'error'> =>
+    apiClient.patch(`/delegations/${id}/reject`).then((response) => {
+      if (response.status === 204) {
+        return 'success';
+      }
+      return 'error';
+    }),
 };
