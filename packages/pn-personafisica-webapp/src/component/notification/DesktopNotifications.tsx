@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Column,
   NotificationsTable,
@@ -24,57 +25,46 @@ type Props = {
 
 const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) => {
   const navigate = useNavigate();
+  const { t } = useTranslation('notifiche');
 
   const columns: Array<Column> = [
     {
       id: 'sentAt',
-      label: 'Data',
+      label: t('table.data'),
       width: '11%',
       sortable: true,
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Row, column: Column) {
-        handleRowClick(row, column);
-      },
     },
     {
       id: 'senderId',
-      label: 'Mittente',
+      label: t('table.mittente'),
       width: '13%',
       sortable: true,
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Row, column: Column) {
-        handleRowClick(row, column);
-      },
     },
     {
       id: 'subject',
-      label: 'Oggetto',
+      label: t('table.oggetto'),
       width: '23%',
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
-      onClick(row: Row, column: Column) {
-        handleRowClick(row, column);
-      },
     },
     {
       id: 'iun',
-      label: 'Codice IUN',
+      label: t('table.iun'),
       width: '20%',
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Row, column: Column) {
-        handleRowClick(row, column);
-      },
     },
     {
       id: 'notificationStatus',
-      label: 'Stato',
+      label: t('table.status'),
       width: '18%',
       align: 'center',
       sortable: true,
@@ -87,15 +77,15 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
     },
   ];
 
+  const rows: Array<Row> = notifications.map((n, i) => ({
+    ...n,
+    id: n.paNotificationId + i.toString(),
+  }));
+
   // Navigation handlers
   const handleRowClick = (row: Row, _column: Column) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
   };
-
-  const rows: Array<Row> = notifications.map((n, i) => ({
-    ...n,
-    id: i.toString(),
-  }));
 
   return (
     <Fragment>
