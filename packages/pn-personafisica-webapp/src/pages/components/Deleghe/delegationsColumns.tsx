@@ -4,7 +4,8 @@ import { Button, Chip, IconButton, Typography, Menu as MUIMenu, MenuItem } from 
 import { MoreVert } from '@mui/icons-material';
 import { useState } from 'react';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../../utils/status.utility';
-
+import { useAppDispatch } from '../../../redux/hooks';
+import { openRevocationModal } from '../../../redux/delegation/actions';
 
 const delegationsColumns: Array<Column> = [
   {
@@ -68,49 +69,49 @@ const delegationsColumns: Array<Column> = [
   },
 ];
 
-const Menu = (props:any) => {
+const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const dispatch = useAppDispatch();
+
+  const handleRevokeClick = () => {
+    dispatch(openRevocationModal(props.id));
+  };
+
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   const getMenuItemElements = () => {
-    // eslint-disable-next-line sonarjs/no-all-duplicated-branches
-    if(props.menuType === 'delegates'){
-      return(
+    if (props.menuType === 'delegates') {
+      return (
         <>
-        <MenuItem onClick={handleClose}>Mostra Codice {props.id}</MenuItem>
-        {
-          /*
+          <MenuItem onClick={handleClose}>Mostra Codice {props.id}</MenuItem>
+          {/*
             <MenuItem onClick={handleClose}>Modifica</MenuItem>
-          */
-        }
-        <MenuItem onClick={handleClose}>Revoca</MenuItem>      
+          */}
+          <MenuItem onClick={handleRevokeClick}>Revoca</MenuItem>
         </>
       );
-    // eslint-disable-next-line sonarjs/no-duplicated-branches
-    }else{
-      return(
+    } else {
+      return (
         <>
-        <MenuItem onClick={handleClose}>Rifiuta</MenuItem>   
-        </>      
+          <MenuItem onClick={handleClose}>Rifiuta</MenuItem>
+        </>
       );
     }
   };
+
   return (
     <>
       <IconButton onClick={handleClick}>
         <MoreVert fontSize={'small'} />
       </IconButton>
-      <MUIMenu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-      >
+      <MUIMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
         {getMenuItemElements()}
       </MUIMenu>
     </>
@@ -134,7 +135,7 @@ export const delegatesColumns = [
     label: '',
     width: '5%',
     getCellLabel(value: string) {
-      return <Menu menuType={'delegates'} id={value}/>;
+      return <Menu menuType={'delegates'} id={value} />;
     },
   },
 ];
@@ -164,7 +165,7 @@ export const delegatorsColumns = [
     label: '',
     width: '5%',
     getCellLabel() {
-      return <Menu menuType={'delegators'}/>;
+      return <Menu menuType={'delegators'} />;
     },
   },
 ];
