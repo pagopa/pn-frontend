@@ -1,5 +1,5 @@
-import { act, render, RenderResult, within } from '@testing-library/react';
-import { notificationToFe } from '../../../__test__/test-utils';
+import { act, RenderResult, within } from '@testing-library/react';
+import { notificationToFe, render } from '../../../__test__/test-utils';
 import { getDay, getMonthString, getTime } from '@pagopa-pn/pn-commons';
 import DetailTimeline from '../DetailTimeline';
 import { NotificationDetailTimeline } from '@pagopa-pn/pn-commons/src/types/Notifications';

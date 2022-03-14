@@ -1,7 +1,7 @@
-import { act, fireEvent, waitFor, RenderResult, render } from '@testing-library/react';
+import { act, fireEvent, waitFor, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';
 import * as actions from '../../../redux/notification/actions';
-import { notificationToFe } from '../../../__test__/test-utils';
+import { notificationToFe, render } from '../../../__test__/test-utils';
 
 import DetailDocuments from '../DetailDocuments';
 

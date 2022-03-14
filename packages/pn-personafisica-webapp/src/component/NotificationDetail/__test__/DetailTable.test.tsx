@@ -1,5 +1,5 @@
-import { act, render, RenderResult } from '@testing-library/react';
-import { notificationToFe } from '../../../__test__/test-utils';
+import { act, RenderResult } from '@testing-library/react';
+import { notificationToFe, render } from '../../../__test__/test-utils';
 import * as hooks from '../../../redux/hooks';
 import DetailTable from '../DetailTable';
 
