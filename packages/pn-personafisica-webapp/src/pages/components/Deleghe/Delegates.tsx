@@ -6,11 +6,7 @@ import { useTheme } from '@mui/material/styles';
 import { DelegationStatus } from '../../../utils/status.utility';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
-import {
-  closeRevocationModal,
-  openRevocationModal,
-  revokeDelegation,
-} from '../../../redux/delegation/actions';
+import { closeRevocationModal, revokeDelegation } from '../../../redux/delegation/actions';
 import { delegatesColumns } from './delegationsColumns';
 import ConfirmationModal from './ConfirmationModal';
 
@@ -24,10 +20,6 @@ const Delegates = () => {
   const theme = useTheme();
   const { id, open } = useAppSelector((state: RootState) => state.revocationModalState);
   const dispatch = useAppDispatch();
-
-  const handleRevokeClick = () => {
-    dispatch(openRevocationModal('7'));
-  };
 
   const handleCloseModal = () => {
     dispatch(closeRevocationModal());
@@ -71,7 +63,6 @@ const Delegates = () => {
             Aggiungi una delega
           </OutlinedButton>
         </div>
-        <p onClick={handleRevokeClick}>open modal</p>
       </Stack>
       {rows.length ? (
         <Table columns={delegatesColumns} rows={rows} />
