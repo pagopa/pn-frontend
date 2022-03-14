@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material';
 import {
   calcPages,
@@ -16,10 +17,11 @@ import MobileNotifications from '../component/notification/MobileNotifications';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
-  const notifications = useAppSelector((state: RootState) => state.dashboardState.notifications);
-  const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
-  const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
-  const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
+  const { t } = useTranslation(['notifiche']);
+  const { notifications, filters, sort, pagination } = useAppSelector(
+    (state: RootState) => state.dashboardState
+  );
+
   const isMobile = useIsMobile();
   // store previous values
   const prevPagination = useRef(pagination);
@@ -67,7 +69,7 @@ const Notifiche = () => {
 
   return (
     <Box style={{ padding: '20px' }}>
-      <Typography variant={'h4'}>Le tue notifiche</Typography>
+      <Typography variant={'h4'}>{t('Le tue notifiche')}</Typography>
       {isMobile ? (
         <MobileNotifications notifications={notifications} />
       ) : (
