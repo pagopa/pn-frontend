@@ -1,7 +1,10 @@
 import { Column } from '@pagopa-pn/pn-commons';
-import { Button, Chip, IconButton, Typography } from '@mui/material';
+import { Button, Chip, IconButton, Typography, Menu as MUIMenu, MenuItem } from '@mui/material';
+
 import { MoreVert } from '@mui/icons-material';
+import { useState } from 'react';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../../utils/status.utility';
+
 
 const delegationsColumns: Array<Column> = [
   {
@@ -65,11 +68,54 @@ const delegationsColumns: Array<Column> = [
   },
 ];
 
-const Menu = () => (
-  <IconButton>
-    <MoreVert fontSize={'small'} />
-  </IconButton>
-);
+const Menu = (props:any) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  
+  const getMenuItemElements = () => {
+    // eslint-disable-next-line sonarjs/no-all-duplicated-branches
+    if(props.menuType === 'delegates'){
+      return(
+        <>
+        <MenuItem onClick={handleClose}>Mostra Codice {props.id}</MenuItem>
+        {
+          /*
+            <MenuItem onClick={handleClose}>Modifica</MenuItem>
+          */
+        }
+        <MenuItem onClick={handleClose}>Revoca</MenuItem>      
+        </>
+      );
+    // eslint-disable-next-line sonarjs/no-duplicated-branches
+    }else{
+      return(
+        <>
+        <MenuItem onClick={handleClose}>Rifiuta</MenuItem>   
+        </>      
+      );
+    }
+  };
+  return (
+    <>
+      <IconButton onClick={handleClick}>
+        <MoreVert fontSize={'small'} />
+      </IconButton>
+      <MUIMenu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+      >
+        {getMenuItemElements()}
+      </MUIMenu>
+    </>
+  );
+};
 
 export const delegatesColumns = [
   ...delegationsColumns,
@@ -84,11 +130,11 @@ export const delegatesColumns = [
     },
   },
   {
-    id: 'actionsMenu',
+    id: 'id',
     label: '',
     width: '5%',
-    getCellLabel() {
-      return <Menu />;
+    getCellLabel(value: string) {
+      return <Menu menuType={'delegates'} id={value}/>;
     },
   },
 ];
@@ -118,7 +164,7 @@ export const delegatorsColumns = [
     label: '',
     width: '5%',
     getCellLabel() {
-      return <Menu />;
+      return <Menu menuType={'delegators'}/>;
     },
   },
 ];

@@ -7,7 +7,7 @@ import { DelegationsList } from './types';
  */
 export const delegations = createAsyncThunk<DelegationsList, string>(
   'delegations',
-  async (selfCareToken: string) =>
+  async () =>
     ({
       delegators: [],
       delegations: [],
