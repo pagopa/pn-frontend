@@ -30,7 +30,7 @@ const FilterNotificationsTable = () => {
   const IUN_regex = /^[0-9A-Z_-]{1,20}$/i;
 
   const validationSchema = yup.object({
-    iunMatch: yup.string().matches(IUN_regex, 'Inserire il codice corretto'),
+    iunMatch: yup.string().matches(IUN_regex, t('Inserire il codice corretto')),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
   });
@@ -118,7 +118,9 @@ const FilterNotificationsTable = () => {
                       })
                       .catch(() => 'error');
                   }}
-                  renderInput={(params) => <TextField id="startDate" name="startDate" {...params} />}
+                  renderInput={(params) => (
+                    <TextField id="startDate" name="startDate" {...params} />
+                  )}
                   disableFuture={true}
                   maxDate={endDate ? endDate : undefined}
                 />
@@ -161,8 +163,12 @@ const FilterNotificationsTable = () => {
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button data-testid="cancelButton" className={classes.customButton} onClick={cleanFilters}>
-              {t('button.annulla ricerca')}
+              <Button
+                data-testid="cancelButton"
+                className={classes.customButton}
+                onClick={cleanFilters}
+              >
+                {t('button.annulla ricerca')}
               </Button>
             </Grid>
           </Grid>

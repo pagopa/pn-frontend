@@ -12,14 +12,6 @@ function testStatusLabelAndColorFn(
   expect(color).toBe(colorToTest);
   expect(tooltip).toBe(tooltipToTest);
 }
-jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: (str: any) => str,
-    };
-  },
-}));
 
 test('return notification status, label and color - DELIVERED', () => {
   testStatusLabelAndColorFn(

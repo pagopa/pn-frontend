@@ -25,15 +25,6 @@ const _genericError: AppError = {
   toNotify: true,
 };
 
-jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: (str: any) => str,
-    };
-  },
-}));
-
 test('return 404 error message', () => {
   const response = { response: { status: 404 } };
   const errorMessage = createAppError(response);

@@ -31,7 +31,7 @@ const MobileNotifications = ({ notifications }: Props) => {
         const { label, tooltip, color } = getNotificationStatusLabelAndColor(
           value as NotificationStatus
         );
-        return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
+        return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;
       },
     },
   ];
