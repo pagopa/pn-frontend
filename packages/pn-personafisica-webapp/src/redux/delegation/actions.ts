@@ -25,3 +25,14 @@ export const revokeDelegation = createAsyncThunk<'success' | 'error', string>(
     }
   }
 );
+
+export const rejectDelegation = createAsyncThunk<'success' | 'error', string>(
+  'rejectDelegation',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      return await DelegatesApi.rejectDelegation(id);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
