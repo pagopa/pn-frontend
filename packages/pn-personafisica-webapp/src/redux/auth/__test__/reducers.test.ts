@@ -22,7 +22,8 @@ const userResponse: User = {
 };
 
 export const loginInit = () => {
-  const axiosMock: MockAdapter;
+  // eslint-disable-next-line functional/no-let
+  let axiosMock: MockAdapter;
 
   const mockLoginResponse = () => {
     axiosMock = new MockAdapter(authClient);

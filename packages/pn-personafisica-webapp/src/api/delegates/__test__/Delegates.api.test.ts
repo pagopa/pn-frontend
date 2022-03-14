@@ -3,7 +3,7 @@ import { User } from '../../../redux/auth/types';
 import { Delegation } from '../../../redux/delegation/types';
 import { authClient } from '../../axios';
 
-import { DelegatesApi } from '../Delegates.api';
+import { DelegationsApi } from '../Delegates.api';
 
 const user: User = {
     sessionToken: 'mocked-session-token',
@@ -39,7 +39,7 @@ const arrayOfDelegations = new Array(10).fill(delegationResponse);
 export async function getDelegates() {
     const axiosMock = new MockAdapter(authClient);
     axiosMock.onGet(`/delegates`).reply(200, arrayOfDelegations);
-    const res = await DelegatesApi.getDelegate();
+    const res = await DelegationsApi.getDelegate();
     axiosMock.reset();
     axiosMock.restore();
     return res;
