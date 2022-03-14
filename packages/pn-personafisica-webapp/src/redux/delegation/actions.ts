@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { DelegatesApi } from '../../api/delegations/Delegations.api';
 import { DelegationsList } from './types';
 
@@ -25,3 +25,7 @@ export const revokeDelegation = createAsyncThunk<'success' | 'error', string>(
     }
   }
 );
+
+export const openRevocationModal = createAction<string>('openRevocationModal');
+
+export const closeRevocationModal = createAction<void>('closeRevocationModal');
