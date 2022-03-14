@@ -1,4 +1,4 @@
-import { render } from "../../../__test__/test-utils";
+import { render } from "@testing-library/react";
 import DesktopNotifications from "../DesktopNotifications";
 
 jest.mock('../FilterNotificationsTable', () => () => <div>Filters</div>);

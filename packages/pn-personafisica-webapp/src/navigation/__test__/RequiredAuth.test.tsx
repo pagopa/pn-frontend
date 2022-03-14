@@ -1,4 +1,4 @@
-import { render } from "../../__test__/test-utils";
+import { render } from '@testing-library/react';
 import * as redux  from '../../redux/hooks';
 import RequireAuth from "../RequiredAuth";
 

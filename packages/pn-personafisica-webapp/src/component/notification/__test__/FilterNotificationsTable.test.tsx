@@ -3,7 +3,7 @@ import moment from 'moment';
 import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { render } from '../../../__test__/test-utils';
+import { render }  from "@testing-library/react";
 import FilterNotificationsTable from '../FilterNotificationsTable';
 
 function formatDate(date: Date): string {
