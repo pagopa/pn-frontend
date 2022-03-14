@@ -36,6 +36,9 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
       getCellLabel(value: string) {
         return value;
       },
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
+      },
     },
     {
       id: 'senderId',
@@ -45,6 +48,9 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
       getCellLabel(value: string) {
         return value;
       },
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
+      },
     },
     {
       id: 'subject',
@@ -53,6 +59,9 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
+      },
     },
     {
       id: 'iun',
@@ -60,6 +69,9 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
       width: '20%',
       getCellLabel(value: string) {
         return value;
+      },
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
       },
     },
     {

@@ -161,7 +161,7 @@ const FilterNotificationsTable = () => {
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button className={classes.customButton} onClick={cleanFilters}>
+              <Button data-testid="cancelButton" className={classes.customButton} onClick={cleanFilters}>
               {t('button.annulla ricerca')}
               </Button>
             </Grid>
