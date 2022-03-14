@@ -1,10 +1,18 @@
 import { Box, Stack, styled } from '@mui/material';
 import { Add, SentimentDissatisfied } from '@mui/icons-material';
 import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
-
 import { useTheme } from '@mui/material/styles';
+
 import { DelegationStatus } from '../../../utils/status.utility';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { RootState } from '../../../redux/store';
+import {
+  closeRevocationModal,
+  openRevocationModal,
+  revokeDelegation,
+} from '../../../redux/delegation/actions';
 import { delegatesColumns } from './delegationsColumns';
+import ConfirmationModal from './ConfirmationModal';
 
 const StyledStack = styled(Stack)`
   border-radius: 4px;
@@ -14,7 +22,21 @@ const StyledStack = styled(Stack)`
 
 const Delegates = () => {
   const theme = useTheme();
-  // const delegates = useAppSelector((state: RootState) => state.delegationsState.delegates);
+  const { id, open } = useAppSelector((state: RootState) => state.revocationModalState);
+  const dispatch = useAppDispatch();
+
+  const handleRevokeClick = () => {
+    dispatch(openRevocationModal('7'));
+  };
+
+  const handleCloseModal = () => {
+    dispatch(closeRevocationModal());
+  };
+
+  const handleConfirmClick = () => {
+    void dispatch(revokeDelegation(id));
+  };
+
   const rows: Array<Row> = [
     {
       id: '0',
@@ -34,6 +56,13 @@ const Delegates = () => {
 
   return (
     <Box mb={8}>
+      <ConfirmationModal
+        open={open}
+        title={'Vuoi davvero revocare la delega?'}
+        handleClose={handleCloseModal}
+        onConfirm={handleConfirmClick}
+        onConfirmLabel={'Revoca la delega'}
+      />
       <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
         <h2>I tuoi delegati</h2>
         <div>
@@ -42,6 +71,7 @@ const Delegates = () => {
             Aggiungi una delega
           </OutlinedButton>
         </div>
+        <p onClick={handleRevokeClick}>open modal</p>
       </Stack>
       {rows.length ? (
         <Table columns={delegatesColumns} rows={rows} />
