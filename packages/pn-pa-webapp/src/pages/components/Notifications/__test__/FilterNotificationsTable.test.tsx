@@ -114,7 +114,7 @@ describe('Filter Notifications Table Component', () => {
     jest.clearAllMocks();
   });
 
-  it('renders filter notifications table', async () => {
+  it('renders filter notifications table', () => {
     expect(form).toBeInTheDocument();
     testFormElements(form!, 'searchFor', 'Cerca per');
     testFormElements(form!, 'recipientId', 'Codice fiscale');
@@ -198,7 +198,7 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(submitButton!);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
         startDate: oneYearAgo.toISOString(),
@@ -229,7 +229,7 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(submitButton!);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
         startDate: oneYearAgo.toISOString(),
@@ -260,7 +260,7 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(submitButton!);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(0);
+    expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
   it('test form submission - search for codice IUN (invalid)', async () => {
@@ -282,9 +282,8 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(submitButton!);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(0);
+    expect(mockDispatchFn).toBeCalledTimes(0);
   });
-
 
   it('test form reset', async () => {
     const oneYearAgo = moment().add(-1, 'year');
@@ -302,7 +301,7 @@ describe('Filter Notifications Table Component', () => {
     await waitFor(() => {
       fireEvent.click(cancelButton);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
         startDate: tenYearsAgo.toISOString(),

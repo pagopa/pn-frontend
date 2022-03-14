@@ -1,38 +1,44 @@
 import { act, screen } from '@testing-library/react';
-import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../__test__/test-utils';
+import * as hooks from '../../redux/hooks';
+import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Dashboard from '../Dashboard.page';
 
 describe('Dashboard Page', () => {
-  it('renders dashboard page', async () => {
-    const spy = jest.spyOn(redux, 'useSelector');
-    spy.mockReturnValue({
-      notifications: [],
-      pagination: {
-        nextPagesKey: ['1'],
-        size: 0,
-        page: 0,
-        moreResult: false,
-      },
-      filters: {
+  beforeEach(async () => {
+    const spy = jest.spyOn(hooks, 'useAppSelector');
+    spy
+      .mockReturnValueOnce(notificationsToFe.result)
+      .mockReturnValueOnce({
         startDate: tenYearsAgo.toISOString(),
         endDate: today.toISOString(),
         recipientId: '',
         status: '',
         subjectRegExp: '',
-      },
-      sort: {
+      })
+      .mockReturnValueOnce({
         orderBy: '',
-        order: 'asc'
-     }
+        order: 'asc',
+      })
+      .mockReturnValueOnce({
+        nextPagesKey: [],
+        size: 10,
+        page: 0,
+        moreResult: false,
+      });
+    // render component
+    await act(async () => {
+      render(<Dashboard />);
     });
+  });
 
-    await act( async () => {
-      render(<Dashboard/>);
-      expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
-      spy.mockClear();
-    });    
+  afterEach(() => {
+    jest.resetAllMocks();
+  });
+
+  it('renders dashboard page', () => {
+    expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
   });
 });

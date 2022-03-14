@@ -51,7 +51,6 @@ const FilterNotificationsTable = () => {
         iunMatch: values.iunMatch,
         status: values.status === 'All' ? undefined : values.status,
       };
-      console.log(filters);
       dispatch(setNotificationFilters(filters));
     },
   });
@@ -119,7 +118,7 @@ const FilterNotificationsTable = () => {
                       })
                       .catch(() => 'error');
                   }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField id="startDate" name="startDate" {...params} />}
                   disableFuture={true}
                   maxDate={endDate ? endDate : undefined}
                 />
@@ -145,7 +144,7 @@ const FilterNotificationsTable = () => {
                       })
                       .catch(() => 'error');
                   }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField id="endDate" name="endDate" {...params} />}
                   disableFuture={true}
                   minDate={startDate ? startDate : undefined}
                 />

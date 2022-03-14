@@ -1,6 +1,6 @@
-import { formatDate, NotificationStatus } from '@pagopa-pn/pn-commons';
-
 import {
+  formatDate,
+  NotificationStatus,
   AddressSource,
   DeliveryMode,
   DigitalDomicileType,
@@ -10,7 +10,7 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-} from '../types';
+} from '@pagopa-pn/pn-commons';
 
 export const notificationFromBe: NotificationDetail = {
   iun: 'c_b963-220220221119',
@@ -264,11 +264,11 @@ export const notificationToFe = {
   ...notificationFromBe,
   sentAt: formatDate(notificationFromBe.sentAt),
   /* eslint-disable functional/immutable-data */
-  notificationStatusHistory: notificationFromBe.notificationStatusHistory.slice().sort(
-    (a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime()
-  ),
-  timeline: notificationFromBe.timeline.slice().sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  )
+  notificationStatusHistory: notificationFromBe.notificationStatusHistory
+    .slice()
+    .sort((a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime()),
+  timeline: notificationFromBe.timeline
+    .slice()
+    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()),
   /* eslint-enable functional/immutable-data */
 };
