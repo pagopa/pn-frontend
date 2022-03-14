@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
 type Order = 'asc' | 'desc';
 
@@ -13,11 +13,11 @@ export interface Column {
   width: string;
   align?: 'center' | 'inherit' | 'left' | 'right' | 'justify';
   sortable?: boolean;
-  getCellLabel(value: string | number): ReactNode;
+  getCellLabel(value: string | number | Array<string>): ReactNode;
   onClick?(row: Row, column: Column): void;
 }
 
 export interface Row {
   id: string;
-  [key: string]: string | number;
+  [key: string]: string | number | Array<string>;
 }
