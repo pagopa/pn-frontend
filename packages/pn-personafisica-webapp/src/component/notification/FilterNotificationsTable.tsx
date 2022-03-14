@@ -49,7 +49,6 @@ const FilterNotificationsTable = () => {
         iunMatch: values.iunMatch,
         status: values.status === 'All' ? undefined : values.status,
       };
-      console.log(filters);
       dispatch(setNotificationFilters(filters));
     },
   });
@@ -118,7 +117,7 @@ const FilterNotificationsTable = () => {
                       })
                       .catch(() => 'error');
                   }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField id="startDate" name="startDate" {...params} />}
                   disableFuture={true}
                   maxDate={endDate ? endDate : undefined}
                 />
@@ -144,7 +143,7 @@ const FilterNotificationsTable = () => {
                       })
                       .catch(() => 'error');
                   }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField id="endDate" name="endDate" {...params} />}
                   disableFuture={true}
                   minDate={startDate ? startDate : undefined}
                 />
@@ -161,7 +160,7 @@ const FilterNotificationsTable = () => {
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button className={classes.customButton} onClick={cleanFilters}>
+              <Button className={classes.customButton} onClick={cleanFilters} data-testid="cancelButton">
                 Annulla ricerca
               </Button>
             </Grid>

@@ -1,5 +1,5 @@
 
-import { act, fireEvent, RenderResult, waitFor } from "@testing-library/react";
+import { fireEvent, waitFor } from "@testing-library/react";
 
 import { render } from "../../../test-utils";
 import Toast from "../Toast";
@@ -10,24 +10,19 @@ const toastProps = {
   title: 'Mocked title'
 }
 
-const renderToast = async (open: boolean, type: MessageType, closingDelay?: number) => {
-  let result: RenderResult | undefined;
-  await act(async () => {
-    result = render(<Toast open={open} message={toastProps.message} title={toastProps.title} type={type} closingDelay={closingDelay}/>);
-  });
-  return result;
-}
+const renderToast = (open: boolean, type: MessageType, closingDelay?: number) => 
+  render(<Toast open={open} message={toastProps.message} title={toastProps.title} type={type} closingDelay={closingDelay}/>);
 
 describe('Toast Component', () => {
 
-  it('renders toast (closed)', async () => {
-    const result = await renderToast(false, MessageType.INFO);
+  it('renders toast (closed)', () => {
+    const result = renderToast(false, MessageType.INFO);
     const toastContainer = result?.queryByTestId('toastContainer');
     expect(toastContainer).not.toBeInTheDocument();
   });
 
-  it('renders toast (opened)', async () => {
-    const result = await renderToast(true, MessageType.INFO);
+  it('renders toast (opened)', () => {
+    const result = renderToast(true, MessageType.INFO);
     const toastContainer = result?.queryByTestId('toastContainer');
     expect(toastContainer).toBeInTheDocument();
     expect(toastContainer).toHaveTextContent(toastProps.title);
@@ -35,7 +30,7 @@ describe('Toast Component', () => {
   });
 
   it('closes toast by clicking close button', async () => {
-    const result = await renderToast(true, MessageType.INFO);
+    const result = renderToast(true, MessageType.INFO);
     const toastContainer = result?.queryByTestId('toastContainer');
     expect(toastContainer).toBeInTheDocument();
     const closeButton = toastContainer!.querySelector('button');
@@ -46,7 +41,7 @@ describe('Toast Component', () => {
   });
 
   it('closes toast after delay', async () => {
-    const result = await renderToast(true, MessageType.INFO, 400);
+    const result = renderToast(true, MessageType.INFO, 400);
     const toastContainer = result?.queryByTestId('toastContainer');
     expect(toastContainer).toBeInTheDocument();
     await waitFor(() => {
