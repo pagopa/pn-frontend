@@ -3,6 +3,7 @@ import { Add, SentimentDissatisfied } from '@mui/icons-material';
 import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
 
 import { useTheme } from '@mui/material/styles';
+import TableError from '../../../component/TableError/TableError';
 import { DelegationStatus } from '../../../utils/status.utility';
 import { delegatesColumns } from './delegationsColumns';
 
