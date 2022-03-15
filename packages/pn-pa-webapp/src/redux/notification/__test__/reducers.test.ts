@@ -77,7 +77,9 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to reset state', () => {
     const action = store.dispatch(resetState());
     const payload = action.payload;
-    expect(action.type).toBe('resetState/fulfilled');
-    expect(payload).toEqual({ url: 'http://mocked-url.com' });
+    expect(action.type).toBe('resetState');
+    expect(payload).toEqual(undefined);
+    const state = store.getState().notificationState;
+    expect(state).toEqual(initialState);
   });
 });
