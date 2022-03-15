@@ -26,4 +26,5 @@ export interface OrganizationId {
 export interface RevocationModalProps {
   open: boolean;
   id: string;
+  type: string;
 }

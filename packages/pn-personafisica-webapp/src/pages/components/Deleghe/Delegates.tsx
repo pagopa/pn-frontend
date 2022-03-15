@@ -4,11 +4,7 @@ import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-
 import { useTheme } from '@mui/material/styles';
 
 import { DelegationStatus } from '../../../utils/status.utility';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { RootState } from '../../../redux/store';
-import { closeRevocationModal, revokeDelegation } from '../../../redux/delegation/actions';
 import { delegatesColumns } from './delegationsColumns';
-import ConfirmationModal from './ConfirmationModal';
 
 const StyledStack = styled(Stack)`
   border-radius: 4px;
@@ -18,16 +14,6 @@ const StyledStack = styled(Stack)`
 
 const Delegates = () => {
   const theme = useTheme();
-  const { id, open } = useAppSelector((state: RootState) => state.revocationModalState);
-  const dispatch = useAppDispatch();
-
-  const handleCloseModal = () => {
-    dispatch(closeRevocationModal());
-  };
-
-  const handleConfirmClick = () => {
-    void dispatch(revokeDelegation(id));
-  };
 
   const rows: Array<Row> = [
     {
@@ -48,13 +34,6 @@ const Delegates = () => {
 
   return (
     <Box mb={8}>
-      <ConfirmationModal
-        open={open}
-        title={'Vuoi davvero revocare la delega?'}
-        handleClose={handleCloseModal}
-        onConfirm={handleConfirmClick}
-        onConfirmLabel={'Revoca la delega'}
-      />
       <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
         <h2>I tuoi delegati</h2>
         <div>

@@ -3,6 +3,7 @@ import {
   closeRevocationModal,
   delegations,
   openRevocationModal,
+  rejectDelegation,
   revokeDelegation,
 } from './actions';
 import { DelegationsList, RevocationModalProps } from './types';
@@ -31,18 +32,23 @@ export const revocationModalSlice = createSlice({
   initialState: {
     open: false,
     id: '',
+    type: '',
   } as RevocationModalProps,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(openRevocationModal, (state, action) => {
-      state.id = action.payload;
+      state.id = action.payload.id;
       state.open = true;
+      state.type = action.payload.type;
     });
     builder.addCase(closeRevocationModal, (state) => {
       state.id = '';
       state.open = false;
     });
     builder.addCase(revokeDelegation.fulfilled, (state) => {
+      state.open = false;
+    });
+    builder.addCase(rejectDelegation.fulfilled, (state) => {
       state.open = false;
     });
   },

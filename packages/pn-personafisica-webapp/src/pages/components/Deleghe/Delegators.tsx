@@ -7,7 +7,7 @@ import { delegatorsColumns } from './delegationsColumns';
 const Delegators = () => {
   const rows: Array<Row> = [
     {
-      id: '0',
+      id: '1',
       name: 'Jimmy',
       startDate: 'ciao',
       endDate: 'arrivederci',

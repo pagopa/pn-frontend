@@ -74,8 +74,8 @@ const Menu = (props: any) => {
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
 
-  const handleRevokeClick = () => {
-    dispatch(openRevocationModal(props.id));
+  const handleOpenModalClick = () => {
+    dispatch(openRevocationModal({ id: props.id, type: props.menuType }));
   };
 
   const handleClick = (event: any) => {
@@ -94,13 +94,13 @@ const Menu = (props: any) => {
           {/*
             <MenuItem onClick={handleClose}>Modifica</MenuItem>
           */}
-          <MenuItem onClick={handleRevokeClick}>Revoca</MenuItem>
+          <MenuItem onClick={handleOpenModalClick}>Revoca</MenuItem>
         </>
       );
     } else {
       return (
         <>
-          <MenuItem onClick={handleClose}>Rifiuta</MenuItem>
+          <MenuItem onClick={handleOpenModalClick}>Rifiuta</MenuItem>
         </>
       );
     }
@@ -161,11 +161,11 @@ export const delegatorsColumns = [
     },
   },
   {
-    id: 'actionsMenu',
+    id: 'id',
     label: '',
     width: '5%',
-    getCellLabel() {
-      return <Menu menuType={'delegators'} />;
+    getCellLabel(value: string) {
+      return <Menu menuType={'delegators'} id={value} />;
     },
   },
 ];
