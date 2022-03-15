@@ -9,7 +9,7 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
+import { getReceivedNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/notification/DesktopNotifications';
@@ -64,7 +64,7 @@ const Notifiche = () => {
       params.nextPagesKey = pagination.page === 0 ? undefined : nextPage;
       /* eslint-enable functional/immutable-data */
     }
-    void dispatch(getSentNotifications(params));
+    void dispatch(getReceivedNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
   return (
