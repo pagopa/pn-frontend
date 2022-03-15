@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { NotificationStatus } from '@pagopa-pn/pn-commons';
 import {
+  NotificationStatus,
   NotificationDetail,
   NotificationDetailDocument,
   NotificationDetailPayment,
