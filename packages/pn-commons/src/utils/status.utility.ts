@@ -2,7 +2,7 @@ import { NotificationStatus } from '../types/NotificationStatus';
 
 // TODO: aggiungere i colori del tema
 /**
- * Restituisce il mapping tra lo status della notifica e il suo colore, la sua label e il suo messaggio descrittivo
+ * Returns the mapping between current notification status and its color, label and descriptive message.
  * @param  {NotificationStatus} status
  * @returns string
  */
@@ -76,7 +76,7 @@ export function getNotificationStatusLabelAndColor(status: NotificationStatus): 
       return {
         color: 'info',
         label: 'Non definito',
-        tooltip: "Stato sconosciuto",
+        tooltip: 'Stato sconosciuto',
       };
   }
 }

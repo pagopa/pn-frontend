@@ -61,6 +61,15 @@ async function setFormValues(
   await testInput(form, 'iunMatch', iunMatch);
 }
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => {
+    return {
+      t: (str: string) => str,
+    };
+  },
+}));
+
 describe('Filter Notifications Table Component', () => {
   let result: RenderResult | undefined;
   let form: HTMLFormElement | undefined;
@@ -71,6 +80,7 @@ describe('Filter Notifications Table Component', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     mockDispatchFn = jest.fn();
     useDispatchSpy.mockReturnValue(mockDispatchFn);
+    
     // render component
     await act(async () => {
       result = render(<FilterNotificationsTable />);
@@ -86,15 +96,15 @@ describe('Filter Notifications Table Component', () => {
 
   it('renders filter notifications table', () => {
     expect(form).toBeInTheDocument();
-    testFormElements(form!, 'iunMatch', 'Inserire codice IUN');
-    testFormElements(form!, 'startDate', 'Da');
-    testFormElements(form!, 'endDate', 'A');
+    testFormElements(form!, 'iunMatch', 'filters.iun');
+    testFormElements(form!, 'startDate', 'filters.data_da');
+    testFormElements(form!, 'endDate', 'filters.data_a');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
-    expect(submitButton).toHaveTextContent(/Cerca/i);
+    expect(submitButton).toHaveTextContent(/button.cerca/i);
     const cancelButton = within(form!).getByTestId('cancelButton');
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveTextContent(/Annulla ricerca/i);
+    expect(cancelButton).toHaveTextContent(/button.annulla ricerca/i);
   });
 
   it('test filters inital value', () => {
@@ -121,12 +131,7 @@ describe('Filter Notifications Table Component', () => {
     const oneYearAgo = moment().add(-1, 'year').startOf('day');
     const todayM = moment().startOf('day');
 
-    await setFormValues(
-      form!,
-      oneYearAgo.toDate(),
-      todayM.toDate(),
-      'c_b963-202203041055'
-    );
+    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'c_b963-202203041055');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     await waitFor(() => {
@@ -149,12 +154,7 @@ describe('Filter Notifications Table Component', () => {
     const todayM = moment().startOf('day');
 
     // wrong id and wrong start date
-    await setFormValues(
-      form!,
-      elevenYearsAgo.toDate(),
-      todayM.toDate(),
-      '12345678910abcdfghiol'
-    );
+    await setFormValues(form!, elevenYearsAgo.toDate(), todayM.toDate(), '12345678910abcdfghiol');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeDisabled();
     await waitFor(() => {
@@ -167,12 +167,7 @@ describe('Filter Notifications Table Component', () => {
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
 
-    await setFormValues(
-      form!,
-      oneYearAgo.toDate(),
-      todayM.toDate(),
-      'RSSMRA80A01H501U',
-    );
+    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'RSSMRA80A01H501U');
     const cancelButton = within(form!).getByTestId('cancelButton');
     await waitFor(() => {
       fireEvent.click(cancelButton);
@@ -182,7 +177,7 @@ describe('Filter Notifications Table Component', () => {
       payload: {
         startDate: tenYearsAgo.toISOString(),
         endDate: today.toISOString(),
-        iunMatch: undefined
+        iunMatch: undefined,
       },
       type: 'setNotificationFilters',
     });
