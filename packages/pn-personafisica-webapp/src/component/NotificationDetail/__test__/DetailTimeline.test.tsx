@@ -1,8 +1,9 @@
 import { act, RenderResult, within } from '@testing-library/react';
-import { notificationToFe, render } from '../../../__test__/test-utils';
-import { getDay, getMonthString, getTime, NotificationDetailTimeline } from '@pagopa-pn/pn-commons';
+import { render } from '../../../__test__/test-utils';
+import { getDay, getMonthString, getTime } from '@pagopa-pn/pn-commons';
 import DetailTimeline from '../DetailTimeline';
 import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../../utils/status.utility';
+import { notificationToFe } from '../../../redux/notification/__test__/test-utils';
 
 describe('Notification Detail Timeline Component', () => {
   let result: RenderResult | undefined;
