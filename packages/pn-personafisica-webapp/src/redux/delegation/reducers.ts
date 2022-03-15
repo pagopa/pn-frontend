@@ -7,6 +7,7 @@ const delegationsSlice = createSlice({
     name: 'delegationsSlice',
     initialState: {
         loading: false,
+        error: false,
         delegations: {
             delegators: [],
             delegations: [],
@@ -17,6 +18,10 @@ const delegationsSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(delegations.fulfilled, (state, action) => {
             state.delegations = action.payload;
+            state.error = false;
+        });
+        builder.addCase(delegations.rejected, (state) => {
+            state.error = true;
         });
     },
 });
