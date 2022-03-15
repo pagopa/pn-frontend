@@ -1,4 +1,4 @@
-import { useEffect, Fragment, useRef } from 'react';
+import { useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   calcPages,
@@ -27,12 +27,9 @@ const Dashboard = () => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
-  // store previous values
-  const prevPagination = useRef(pagination);
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
-  /* eslint-disable functional/no-let */
   const totalElements =
     pagination.size *
     (pagination.moreResult
@@ -141,21 +138,11 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    // assign the ref's current value to the pagination Hook
     const params = {
       ...filters,
       size: pagination.size,
+      nextPagesKey: pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1]
     };
-    if (pagination !== prevPagination.current) {
-      /* eslint-disable functional/immutable-data */
-      prevPagination.current = pagination;
-      const nextPage =
-        pagination.page === prevPagination.current.page
-          ? pagination.nextPagesKey[prevPagination.current.page - 1]
-          : pagination.nextPagesKey[pagination.page - 1];
-      params.nextPagesKey = pagination.page === 0 ? undefined : nextPage;
-      /* eslint-enable functional/immutable-data */
-    }
     void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 

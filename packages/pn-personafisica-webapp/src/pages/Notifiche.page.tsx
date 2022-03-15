@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material';
 import {
@@ -23,8 +23,6 @@ const Notifiche = () => {
   );
 
   const isMobile = useIsMobile();
-  // store previous values
-  const prevPagination = useRef(pagination);
 
   const totalElements =
     pagination.size *
@@ -53,17 +51,8 @@ const Notifiche = () => {
     const params = {
       ...filters,
       size: pagination.size,
+      nextPagesKey: pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1]
     };
-    if (pagination !== prevPagination.current) {
-      /* eslint-disable functional/immutable-data */
-      prevPagination.current = pagination;
-      const nextPage =
-        pagination.page === prevPagination.current.page
-          ? pagination.nextPagesKey[prevPagination.current.page - 1]
-          : pagination.nextPagesKey[pagination.page - 1];
-      params.nextPagesKey = pagination.page === 0 ? undefined : nextPage;
-      /* eslint-enable functional/immutable-data */
-    }
     void dispatch(getReceivedNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 

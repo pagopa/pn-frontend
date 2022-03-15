@@ -13,31 +13,34 @@ import {
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
+  resetState,
 } from './actions';
+
+const initialState = {
+  loading: false,
+  notification: {
+    iun: '',
+    paNotificationId: '',
+    subject: '',
+    sentAt: '',
+    cancelledIun: '',
+    cancelledByIun: '',
+    recipients: [] as Array<NotificationDetailRecipient>,
+    documents: [] as Array<NotificationDetailDocument>,
+    payment: {} as NotificationDetailPayment,
+    notificationStatus: '' as NotificationStatus,
+    notificationStatusHistory: [] as Array<NotificationStatusHistory>,
+    timeline: [] as Array<NotificationDetailTimeline>,
+    physicalCommunicationType: '' as PhysicalCommunicationType,
+  } as NotificationDetail,
+  documentDownloadUrl: '',
+  legalFactDownloadUrl: '',
+};
 
 /* eslint-disable functional/immutable-data */
 const notificationSlice = createSlice({
   name: 'notificationSlice',
-  initialState: {
-    loading: false,
-    notification: {
-      iun: '',
-      paNotificationId: '',
-      subject: '',
-      sentAt: '',
-      cancelledIun: '',
-      cancelledByIun: '',
-      recipients: [] as Array<NotificationDetailRecipient>,
-      documents: [] as Array<NotificationDetailDocument>,
-      payment: {} as NotificationDetailPayment,
-      notificationStatus: '' as NotificationStatus,
-      notificationStatusHistory: [] as Array<NotificationStatusHistory>,
-      timeline: [] as Array<NotificationDetailTimeline>,
-      physicalCommunicationType: '' as PhysicalCommunicationType,
-    } as NotificationDetail,
-    documentDownloadUrl: '',
-    legalFactDownloadUrl: '',
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getSentNotification.fulfilled, (state, action) => {
@@ -56,6 +59,7 @@ const notificationSlice = createSlice({
         state.legalFactDownloadUrl = action.payload.url;
       }
     });
+    builder.addCase(resetState, () => initialState);
   },
 });
 
