@@ -20,7 +20,7 @@ import {
 import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../utils/status.utility';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { getSentNotificationLegalfact } from '../../redux/notification/actions';
+import { getReceivedNotificationLegalfact } from '../../redux/notification/actions';
 
 type Props = {
   notification: NotificationDetail;
@@ -33,7 +33,7 @@ const DetailTimeline = ({ notification }: Props) => {
   );
 
   const clickHandler = (legalFact: LegalFactId) => {
-    void dispatch(getSentNotificationLegalfact({ iun: notification.iun, legalFact }));
+    void dispatch(getReceivedNotificationLegalfact({ iun: notification.iun, legalFact }));
   };
 
   useEffect(() => {

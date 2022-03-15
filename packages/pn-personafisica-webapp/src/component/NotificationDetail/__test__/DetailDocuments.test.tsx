@@ -35,7 +35,7 @@ describe('Notification Detail Documents Component', () => {
 
   it('test click on document button', async () => {
     const documentsButtons = result?.getAllByTestId('documentButton');
-    const actionSpy = jest.spyOn(actions, 'getSentNotificationDocument');
+    const actionSpy = jest.spyOn(actions, 'getReceivedNotificationDocument');
     const mockActionFn = jest.fn();
     actionSpy.mockImplementation(mockActionFn);
     await waitFor(() => {

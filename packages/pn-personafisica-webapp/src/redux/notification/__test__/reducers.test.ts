@@ -3,9 +3,9 @@ import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
 import {
-  getSentNotification,
-  getSentNotificationDocument,
-  getSentNotificationLegalfact,
+  getReceivedNotification,
+  getReceivedNotificationDocument,
+  getReceivedNotificationLegalfact,
 } from '../actions';
 import { notificationToFe } from './test-utils';
 
@@ -37,36 +37,36 @@ describe('Notification detail redux state tests', () => {
   });
 
   it('Should be able to fetch the notification detail', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotification');
+    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotification');
     apiSpy.mockResolvedValue(notificationToFe);
-    const action = await store.dispatch(getSentNotification('mocked-iun'));
+    const action = await store.dispatch(getReceivedNotification('mocked-iun'));
     const payload = action.payload as NotificationDetail;
-    expect(action.type).toBe('getSentNotification/fulfilled');
+    expect(action.type).toBe('getReceivedNotification/fulfilled');
     expect(payload).toEqual(notificationToFe);
   });
 
   it('Should be able to fetch the notification document', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotificationDocument');
+    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotificationDocument');
     apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
     const action = await store.dispatch(
-      getSentNotificationDocument({ iun: 'mocked-iun', documentIndex: 0 })
+      getReceivedNotificationDocument({ iun: 'mocked-iun', documentIndex: 0 })
     );
     const payload = action.payload;
-    expect(action.type).toBe('getSentNotificationDocument/fulfilled');
+    expect(action.type).toBe('getReceivedNotificationDocument/fulfilled');
     expect(payload).toEqual({ url: 'http://mocked-url.com' });
   });
 
   it('Should be able to fetch the notification legalfact', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotificationLegalfact');
+    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotificationLegalfact');
     apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
     const action = await store.dispatch(
-      getSentNotificationLegalfact({
+      getReceivedNotificationLegalfact({
         iun: 'mocked-iun',
         legalFact: { key: 'mocked-key', type: LegalFactType.ANALOG_DELIVERY },
       })
     );
     const payload = action.payload;
-    expect(action.type).toBe('getSentNotificationLegalfact/fulfilled');
+    expect(action.type).toBe('getReceivedNotificationLegalfact/fulfilled');
     expect(payload).toEqual({ url: 'http://mocked-url.com' });
   });
 });

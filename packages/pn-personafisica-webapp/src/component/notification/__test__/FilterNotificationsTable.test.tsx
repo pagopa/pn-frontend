@@ -2,9 +2,8 @@ import { fireEvent, waitFor, screen, within, RenderResult, act } from '@testing-
 import moment from 'moment';
 import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
-
-import { render }  from "@testing-library/react";
 import FilterNotificationsTable from '../FilterNotificationsTable';
+import { render } from '../../../__test__/test-utils';
 
 function formatDate(date: Date): string {
   const month = `0${date.getMonth() + 1}`.slice(-2);
@@ -80,7 +79,7 @@ describe('Filter Notifications Table Component', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     mockDispatchFn = jest.fn();
     useDispatchSpy.mockReturnValue(mockDispatchFn);
-    
+
     // render component
     await act(async () => {
       result = render(<FilterNotificationsTable />);

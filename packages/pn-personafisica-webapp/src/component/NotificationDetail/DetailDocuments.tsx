@@ -3,9 +3,8 @@ import { Grid, Typography, Button } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { NotificationDetail } from '@pagopa-pn/pn-commons/src/types/Notifications';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getSentNotificationDocument } from '../../redux/notification/actions';
+import { getReceivedNotificationDocument } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-
 
 type Props = {
   notification: NotificationDetail;
@@ -13,10 +12,12 @@ type Props = {
 
 const DetailDocuments = ({ notification }: Props) => {
   const dispatch = useAppDispatch();
-  const documentDownloadUrl = useAppSelector((state: RootState) => state.notificationState.documentDownloadUrl);
-  
+  const documentDownloadUrl = useAppSelector(
+    (state: RootState) => state.notificationState.documentDownloadUrl
+  );
+
   const clickHandler = (documentIndex: number) => {
-    void dispatch(getSentNotificationDocument({iun: notification.iun, documentIndex}));
+    void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
   };
 
   useEffect(() => {
@@ -39,7 +40,12 @@ const DetailDocuments = ({ notification }: Props) => {
         </Grid> */}
       </Grid>
       {notification.documents.map((d, i) => (
-        <Button data-testid="documentButton" key={d.digests.sha256} startIcon={<AttachFileIcon />} onClick={() => clickHandler(i)}>
+        <Button
+          data-testid="documentButton"
+          key={d.digests.sha256}
+          startIcon={<AttachFileIcon />}
+          onClick={() => clickHandler(i)}
+        >
           {d.title}
         </Button>
       ))}
