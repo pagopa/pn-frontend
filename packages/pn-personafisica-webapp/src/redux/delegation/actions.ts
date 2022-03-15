@@ -37,6 +37,7 @@ export const rejectDelegation = createAsyncThunk<'success' | 'error', string>(
   }
 );
 
-export const openRevocationModal = createAction<string>('openRevocationModal');
+export const openRevocationModal =
+  createAction<{ id: string; type: string }>('openRevocationModal');
 
 export const closeRevocationModal = createAction<void>('closeRevocationModal');
