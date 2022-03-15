@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { Breadcrumbs, Grid, Typography, Box, styled, Paper, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
-import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -59,11 +58,6 @@ const NotificationDetail = () => {
           </Breadcrumbs>
           <Box sx={{ padding: '20px 0 0 0' }}>
             <Typography variant="h4">{notification.subject}</Typography>
-            {notification.notificationStatus !== NotificationStatus.PAID && (
-              <Button sx={{ margin: '10px 0' }} variant="outlined">
-                Annulla Notifica
-              </Button>
-            )}
             <DetailTable notification={notification} />
             <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
               <DetailDocuments notification={notification} />
