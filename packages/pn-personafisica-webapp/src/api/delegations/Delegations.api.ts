@@ -22,4 +22,11 @@ export const DelegatesApi = {
       }
       return 'error';
     }),
+  acceptDelegation: (id: string): Promise<{ id: string }> =>
+    apiClient.patch(`/delegations/${id}/accept`).then((response) => {
+      if (response.status === 204) {
+        return { id };
+      }
+      return { id: '-1' };
+    }),
 };

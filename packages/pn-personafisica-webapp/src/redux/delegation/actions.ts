@@ -37,6 +37,17 @@ export const rejectDelegation = createAsyncThunk<'success' | 'error', string>(
   }
 );
 
+export const acceptDelegation = createAsyncThunk<{ id: string }, string>(
+  'acceptDelegation',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      return await DelegatesApi.acceptDelegation(id);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
 export const openRevocationModal =
   createAction<{ id: string; type: string }>('openRevocationModal');
 

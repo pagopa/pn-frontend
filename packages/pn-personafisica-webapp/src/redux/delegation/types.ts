@@ -1,4 +1,5 @@
 import { User } from '../auth/types';
+import { DelegationStatus } from '../../utils/status.utility';
 
 export type UserAndDelegations = User & DelegationsList;
 
@@ -9,11 +10,12 @@ export interface DelegationsList {
 }
 
 export interface Delegation {
+  id: string;
   user: Omit<User, 'uid' | 'exp'>;
   startDate: string;
   endDate: string;
   delegationRole: 'delegator' | 'delegated';
-  delegationStatus: 'pending' | 'accepted';
+  delegationStatus: DelegationStatus.PENDING | DelegationStatus.ACTIVE;
   visibilityIds: OrganizationId;
   verificationCode: string;
 }

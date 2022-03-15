@@ -5,7 +5,7 @@ import { MoreVert } from '@mui/icons-material';
 import { useState } from 'react';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../../utils/status.utility';
 import { useAppDispatch } from '../../../redux/hooks';
-import { openRevocationModal } from '../../../redux/delegation/actions';
+import { acceptDelegation, openRevocationModal } from '../../../redux/delegation/actions';
 
 const delegationsColumns: Array<Column> = [
   {
@@ -118,6 +118,19 @@ const Menu = (props: any) => {
   );
 };
 
+const AcceptButton = ({ id }: { id: string }) => {
+  const dispatch = useAppDispatch();
+  const handleAcceptClick = () => {
+    void dispatch(acceptDelegation(id));
+  };
+
+  return (
+    <Button onClick={handleAcceptClick} variant={'contained'} color={'primary'}>
+      Accetta
+    </Button>
+  );
+};
+
 export const delegatesColumns = [
   ...delegationsColumns,
   {
@@ -149,14 +162,10 @@ export const delegatorsColumns = [
     align: 'center' as const,
     getCellLabel(value: string) {
       const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
-      if (value === DelegationStatus.ACCEPTED) {
+      if (value === DelegationStatus.ACTIVE) {
         return <Chip label={label} color={color} />;
       } else {
-        return (
-          <Button variant={'contained'} color={'primary'}>
-            Accetta
-          </Button>
-        );
+        return <AcceptButton id={value} />;
       }
     },
   },

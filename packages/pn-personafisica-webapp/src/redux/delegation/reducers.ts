@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { DelegationStatus } from '../../utils/status.utility';
 import {
+  acceptDelegation,
   closeRevocationModal,
   delegations,
   openRevocationModal,
@@ -23,6 +25,11 @@ const delegationsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(delegations.fulfilled, (state, action) => {
       state.delegations = action.payload;
+    });
+    builder.addCase(acceptDelegation.fulfilled, (state, action) => {
+      state.delegations.delegators = state.delegations.delegators.map((e) =>
+        e.id === action.payload.id ? e : { ...e, delegationStatus: DelegationStatus.ACTIVE }
+      );
     });
   },
 });

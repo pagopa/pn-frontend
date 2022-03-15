@@ -1,7 +1,6 @@
 export enum DelegationStatus {
   ACTIVE = 'Active',
   PENDING = 'Pending',
-  ACCEPTED = "ACCEPTED"
 }
 
 export function getDelegationStatusLabelAndColor(status: DelegationStatus): {
