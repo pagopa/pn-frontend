@@ -3,7 +3,7 @@ import { GetNotificationsResponse, NotificationStatus, tenYearsAgo, today } from
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
-import { getSentNotifications, setNotificationFilters, setPagination, setSorting } from '../actions';
+import { getReceivedNotifications, setNotificationFilters, setPagination, setSorting } from '../actions';
 import { notificationsToFe } from './test-utils';
 
 describe('Dashbaord redux state tests', () => {
@@ -36,9 +36,9 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to fetch the notifications list', async () => {
-    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotifications');
+    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
     apiSpy.mockResolvedValue(notificationsToFe);
-    const action = await store.dispatch(getSentNotifications({
+    const action = await store.dispatch(getReceivedNotifications({
       startDate: tenYearsAgo.toISOString(),
       endDate: today.toISOString(),
     }));

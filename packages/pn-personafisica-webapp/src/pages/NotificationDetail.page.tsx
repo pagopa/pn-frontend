@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 
 import { useAppDispatch } from '../redux/hooks';
-import { getSentNotification } from '../redux/notification/actions';
+import { getReceivedNotification } from '../redux/notification/actions';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -21,7 +21,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (id) {
-      void dispatch(getSentNotification(id));
+      void dispatch(getReceivedNotification(id));
     }
   }, []);
 

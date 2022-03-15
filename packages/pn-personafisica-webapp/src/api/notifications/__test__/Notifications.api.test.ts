@@ -10,10 +10,10 @@ describe('Notifications api tests', () => {
 
   mockAuthentication();
 
-  it('getSentNotifications', async() => {
+  it('getReceivedNotifications', async() => {
     const mock = new MockAdapter(apiClient);
     mock.onGet(`/delivery/notifications/received`).reply(200, notificationsFromBe);
-    const res = await NotificationsApi.getSentNotifications({
+    const res = await NotificationsApi.getReceivedNotifications({
       startDate: tenYearsAgo.toISOString(),
       endDate: today.toISOString()
     });
