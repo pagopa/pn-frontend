@@ -11,7 +11,7 @@ import { RootState } from '../redux/store';
 import DetailTimeline from '../component/NotificationDetail/DetailTimeline';
 import DetailTable from '../component/NotificationDetail/DetailTable';
 import DetailDocuments from '../component/NotificationDetail/DetailDocuments';
-import { getSentNotification } from '../redux/notification/actions';
+import { getReceivedNotification } from '../redux/notification/actions';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   display: 'flex',
@@ -40,7 +40,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (id) {
-      void dispatch(getSentNotification(id));
+      void dispatch(getReceivedNotification(id));
     }
   }, []);
 

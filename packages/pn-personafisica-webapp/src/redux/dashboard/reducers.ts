@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { GetNotificationsParams, tenYearsAgo, today, Notification } from "@pagopa-pn/pn-commons";
 
-import { getSentNotifications, setPagination, setSorting, setNotificationFilters } from "./actions";
+import { getReceivedNotifications, setPagination, setSorting, setNotificationFilters } from "./actions";
 
 /* eslint-disable functional/immutable-data */
 const dashboardSlice = createSlice({
@@ -29,7 +29,7 @@ const dashboardSlice = createSlice({
     },
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(getSentNotifications.fulfilled, (state, action) => {
+        builder.addCase(getReceivedNotifications.fulfilled, (state, action) => {
             state.notifications = action.payload.result;
             state.pagination.moreResult = action.payload.moreResult;
             // because we can jump from a page to another and nextPagesKey returns only the next three pages, we have to check if that pages already exists
@@ -41,7 +41,7 @@ const dashboardSlice = createSlice({
                 }
             }
         });
-        builder.addCase(getSentNotifications.pending, (state) => {
+        builder.addCase(getReceivedNotifications.pending, (state) => {
             state.loading = true;
         });
         builder.addCase(setPagination, (state, action) => {
