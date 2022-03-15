@@ -1,5 +1,8 @@
 import { getNotificationStatusLabelAndColor, NotificationStatus } from '@pagopa-pn/pn-commons';
-import { NotificationDetailTimeline, NotificationStatusHistory } from '@pagopa-pn/pn-commons/src/types/Notifications';
+import {
+  NotificationDetailTimeline,
+  NotificationStatusHistory,
+} from '@pagopa-pn/pn-commons/src/types/Notifications';
 
 export function getNotificationStatusLabelAndColorFromTimelineCategory(
   timelineStep: NotificationDetailTimeline,
@@ -9,6 +12,8 @@ export function getNotificationStatusLabelAndColorFromTimelineCategory(
   label: string;
   tooltip: string;
 } {
-  const notificationStep = notificationStatusHistory.find(n => n.relatedTimelineElements.includes(timelineStep.elementId));
+  const notificationStep = notificationStatusHistory.find((n) =>
+    n.relatedTimelineElements.includes(timelineStep.elementId)
+  );
   return getNotificationStatusLabelAndColor(notificationStep?.status as NotificationStatus);
 }

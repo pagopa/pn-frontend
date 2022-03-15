@@ -10,8 +10,13 @@ import {
 } from '@mui/lab';
 import { Typography, Box, Button, Chip, Grid } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { getDay, getMonthString, getTime } from '@pagopa-pn/pn-commons';
-import { LegalFactId, NotificationDetail } from '@pagopa-pn/pn-commons/src/types/Notifications';
+import {
+  getDay,
+  getMonthString,
+  getTime,
+  LegalFactId,
+  NotificationDetail,
+} from '@pagopa-pn/pn-commons';
 import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../utils/status.utility';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -23,10 +28,12 @@ type Props = {
 
 const DetailTimeline = ({ notification }: Props) => {
   const dispatch = useAppDispatch();
-  const legalFactDownloadUrl = useAppSelector((state: RootState) => state.notificationState.legalFactDownloadUrl);
-  
+  const legalFactDownloadUrl = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadUrl
+  );
+
   const clickHandler = (legalFact: LegalFactId) => {
-    void dispatch(getSentNotificationLegalfact({iun: notification.iun, legalFact}));
+    void dispatch(getSentNotificationLegalfact({ iun: notification.iun, legalFact }));
   };
 
   useEffect(() => {
@@ -73,7 +80,8 @@ const DetailTimeline = ({ notification }: Props) => {
               <Typography color="text.secondary" fontSize={14} sx={{ paddingBottom: '8px' }}>
                 {getTime(t.timestamp)}
               </Typography>
-              <Chip data-testid="itemStatus"
+              <Chip
+                data-testid="itemStatus"
                 label={
                   getNotificationStatusLabelAndColorFromTimelineCategory(
                     t,
@@ -88,15 +96,17 @@ const DetailTimeline = ({ notification }: Props) => {
                 }
               />
               <Box>
-                {t.legalFactsIds && (
-                  t.legalFactsIds.map(lf => <Button
-                    key={lf.key}
-                    sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
-                    startIcon={<AttachFileIcon />} onClick={() => clickHandler(lf)}
-                  >
-                    Attestato opponibile a Terzi
-                  </Button>
-                ))}
+                {t.legalFactsIds &&
+                  t.legalFactsIds.map((lf) => (
+                    <Button
+                      key={lf.key}
+                      sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
+                      startIcon={<AttachFileIcon />}
+                      onClick={() => clickHandler(lf)}
+                    >
+                      Attestato opponibile a Terzi
+                    </Button>
+                  ))}
               </Box>
             </TimelineContent>
           </TimelineItem>

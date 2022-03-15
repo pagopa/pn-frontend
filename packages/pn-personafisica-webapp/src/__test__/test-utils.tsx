@@ -3,12 +3,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { render, RenderOptions } from '@testing-library/react';
 
-import { formatDate, NotificationStatus } from '@pagopa-pn/pn-commons';
-import { AuthApi } from '../api/auth/Auth.api';
-import { exchangeToken, logout } from '../redux/auth/actions';
-import { User } from '../redux/auth/types';
-
 import {
+  formatDate,
+  NotificationStatus,
   AddressSource,
   DeliveryMode,
   DigitalDomicileType,
@@ -19,26 +16,25 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-} from '@pagopa-pn/pn-commons/src/types/Notifications';
+} from '@pagopa-pn/pn-commons';
+import { AuthApi } from '../api/auth/Auth.api';
+import { exchangeToken, logout } from '../redux/auth/actions';
+import { User } from '../redux/auth/types';
 import { store } from '../redux/store';
 
-const AllTheProviders = ({children}: {children: ReactNode}) => {
+const AllTheProviders = ({ children }: { children: ReactNode }) => {
   return (
     <BrowserRouter>
-      <Provider store={store}>
-        {children}
-      </Provider>
+      <Provider store={store}>{children}</Provider>
     </BrowserRouter>
-  )
-}
+  );
+};
 
-const customRender = (
-  ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>,
-) => render(ui, {wrapper: AllTheProviders, ...options})
+const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
+  render(ui, { wrapper: AllTheProviders, ...options });
 
-export * from '@testing-library/react'
-export {customRender as render}
+export * from '@testing-library/react';
+export { customRender as render };
 
 export const notificationFromBe: NotificationDetail = {
   iun: 'c_b963-220220221119',
@@ -292,15 +288,14 @@ export const notificationToFe = {
   ...notificationFromBe,
   sentAt: formatDate(notificationFromBe.sentAt),
   /* eslint-disable functional/immutable-data */
-  notificationStatusHistory: notificationFromBe.notificationStatusHistory.slice().sort(
-    (a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime()
-  ),
-  timeline: notificationFromBe.timeline.slice().sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  )
+  notificationStatusHistory: notificationFromBe.notificationStatusHistory
+    .slice()
+    .sort((a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime()),
+  timeline: notificationFromBe.timeline
+    .slice()
+    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()),
   /* eslint-enable functional/immutable-data */
 };
-
 
 export const notificationsFromBe: GetNotificationsResponse = {
   result: [
@@ -311,21 +306,20 @@ export const notificationsFromBe: GetNotificationsResponse = {
       sentAt: '2022-02-22T14:20:20.566Z',
       subject: 'mocked-subject',
       notificationStatus: NotificationStatus.DELIVERED,
-      recipientId: 'mocked-recipientId'
-    }
+      recipientId: 'mocked-recipientId',
+    },
   ],
   moreResult: false,
-  nextPagesKey: []
-}
+  nextPagesKey: [],
+};
 
 export const notificationsToFe: GetNotificationsResponse = {
   ...notificationsFromBe,
-  result: notificationsFromBe.result.map(r => ({
+  result: notificationsFromBe.result.map((r) => ({
     ...r,
-    sentAt: formatDate(r.sentAt)
-  }))
-}
-
+    sentAt: formatDate(r.sentAt),
+  })),
+};
 
 export const userResponse: User = {
   sessionToken: 'mocked-session-token',
