@@ -16,7 +16,7 @@ interface Props {
 /* eslint-disable functional/immutable-data */
 const RequireAuth = ({ roles }: Props) => {
   const token = useSelector((state: RootState) => state.userState.user.sessionToken);
-  const { role } = useSelector((state: RootState) => state.userState.user.organization);
+  const role = useSelector((state: RootState) => state.userState.user.organization?.role);
   const userHasRequiredRole = role && roles.includes(role);
   const [accessDenied, setAccessDenied] = useState(true);
 
