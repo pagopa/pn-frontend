@@ -20,7 +20,10 @@ const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
     background: '#F2F2F2',
-    minHeight: 'calc(100vh - 327px)'
+
+    '& > .MuiGrid-item:last-child': {
+      minHeight: 'calc(100vh - 327px)'
+    }
   },
 })); 
 
@@ -34,11 +37,11 @@ export default function Layout({ children, assistanceEmail, onExitAction, sideMe
       }}
     >
       <Header withSecondHeader={true} onExitAction={onExitAction} data-testid="header"/>
-      <Grid role={'navigation'} container spacing={2} className={classes.root} direction={'row'}>
-        <Grid item lg={2} xs={12}>
+      <Grid role={'navigation'} container spacing={2} direction="row" className={classes.root}>
+        <Grid item lg={2} xs={12} container direction="column">
           {sideMenu}
         </Grid>
-        <Grid item lg={10} xs={12}>{children}</Grid>
+        <Grid item lg={10} xs={12} container direction="column">{children}</Grid>
       </Grid>
       <Footer assistanceEmail={assistanceEmail} />
     </Box>

@@ -42,7 +42,7 @@ const SideMenu: FC<Props> = ({ menuItems }) => {
   }
 
   return (
-    <Box height="100%" display="flex" flexDirection="column" bgcolor={'common.white'}>
+    <Box height={isMobile ? 'auto' : '100%'} display="flex" flexDirection="column" bgcolor={'common.white'}>
       <Box alignItems="left" display="flex" flexDirection="column">
         {isMobile ? (
           <Fragment>
