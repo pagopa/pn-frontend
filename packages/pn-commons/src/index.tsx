@@ -10,6 +10,8 @@ import SideMenu from './components/SideMenu/SideMenu';
 import NotificationsTable from './components/Notifications/NotificationsTable';
 import StatusTooltip from './components/Notifications/StatusTooltip';
 import NotificationsCard from './components/Notifications/NotificationsCard';
+import OutlinedButton from './components/OutlinedButton';
+import TitleAndDescription from './components/TitleAndDescription';
 
 export { LoadingOverlay };
 export { Header };
@@ -22,6 +24,8 @@ export { SideMenu };
 export { NotificationsTable };
 export { StatusTooltip };
 export { NotificationsCard };
+export { OutlinedButton };
+export { TitleAndDescription };
 
 // pages
 import NotFound from './navigation/NotFound';
