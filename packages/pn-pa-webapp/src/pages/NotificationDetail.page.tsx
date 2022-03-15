@@ -8,7 +8,7 @@ import { NotificationStatus } from '@pagopa-pn/pn-commons';
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { getSentNotification } from '../redux/notification/actions';
+import { getSentNotification, resetState } from '../redux/notification/actions';
 import DetailTable from './components/NotificationDetail/DetailTable';
 import DetailTimeline from './components/NotificationDetail/DetailTimeline';
 import DetailDocuments from './components/NotificationDetail/DetailDocuments';
@@ -43,6 +43,8 @@ const NotificationDetail = () => {
       void dispatch(getSentNotification(id));
     }
   }, []);
+
+  useEffect(() => () => void dispatch(resetState()), [] );
 
   return (
     <Box className={classes.root}>
