@@ -3,39 +3,39 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
-export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
-  'getSentNotification',
+export const getReceivedNotification = createAsyncThunk<NotificationDetail, string>(
+  'getReceivedNotification',
   async (params: string, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getSentNotification(params);
+      return await NotificationsApi.getReceivedNotification(params);
     } catch (e) {
       return rejectWithValue(e);
     }
   }
 );
 
-export const getSentNotificationLegalfact = createAsyncThunk<
+export const getReceivedNotificationLegalfact = createAsyncThunk<
   { url: string },
   { iun: string; legalFact: LegalFactId }
 >(
-  'getSentNotificationLegalfact',
+  'getReceivedNotificationLegalfact',
   async (params: { iun: string; legalFact: LegalFactId }, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getSentNotificationLegalfact(params.iun, params.legalFact);
+      return await NotificationsApi.getReceivedNotificationLegalfact(params.iun, params.legalFact);
     } catch (e) {
       return rejectWithValue(e);
     }
   }
 );
 
-export const getSentNotificationDocument = createAsyncThunk<
+export const getReceivedNotificationDocument = createAsyncThunk<
   { url: string },
   { iun: string; documentIndex: number }
 >(
-  'getSentNotificationDocument',
+  'getReceivedNotificationDocument',
   async (params: { iun: string; documentIndex: number }, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getSentNotificationDocument(params.iun, params.documentIndex);
+      return await NotificationsApi.getReceivedNotificationDocument(params.iun, params.documentIndex);
     } catch (e) {
       return rejectWithValue(e);
     }

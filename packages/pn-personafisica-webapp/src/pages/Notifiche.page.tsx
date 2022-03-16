@@ -1,31 +1,28 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material';
 import {
   calcPages,
-  Column,
   CustomPagination,
-  getNotificationStatusLabelAndColor,
-  NotificationsTable,
   PaginationData,
-  Row,
   Sort,
-  StatusTooltip,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { useNavigate } from 'react-router';
 
-import * as routes from '../navigation/routes.const';
-import FilterNotificationsTable from '../component/notification/FilterNotificationsTable';
-import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
-import { NotificationStatus } from '../redux/dashboard/types';
+import { getReceivedNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import DesktopNotifications from '../component/notification/DesktopNotifications';
+import MobileNotifications from '../component/notification/MobileNotifications';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
-  const notifications = useAppSelector((state: RootState) => state.dashboardState.notifications);
-  const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
-  const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
-  const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
+  const { t } = useTranslation(['notifiche']);
+  const { notifications, filters, sort, pagination } = useAppSelector(
+    (state: RootState) => state.dashboardState
+  );
+
+  const isMobile = useIsMobile();
   // store previous values
   const prevPagination = useRef(pagination);
 
@@ -41,73 +38,6 @@ const Notifiche = () => {
     pagination.page + 1
   );
 
-  const columns: Array<Column> = [
-    {
-      id: 'sentAt',
-      label: 'Data',
-      width: '11%',
-      sortable: true,
-      getCellLabel(value: string) {
-        return value;
-      },
-      onClick(row: Row, column: Column) {
-        handleRowClick(row, column);
-      },
-    },
-    {
-      id: 'senderId',
-      label: 'Mittente',
-      width: '13%',
-      sortable: true,
-      getCellLabel(value: string) {
-        return value;
-      },
-      onClick(row: Row, column: Column) {
-        handleRowClick(row, column);
-      },
-    },
-    {
-      id: 'subject',
-      label: 'Oggetto',
-      width: '23%',
-      getCellLabel(value: string) {
-        return value.length > 65 ? value.substring(0, 65) + '...' : value;
-      },
-      onClick(row: Row, column: Column) {
-        handleRowClick(row, column);
-      },
-    },
-    {
-      id: 'iun',
-      label: 'Codice IUN',
-      width: '20%',
-      getCellLabel(value: string) {
-        return value;
-      },
-      onClick(row: Row, column: Column) {
-        handleRowClick(row, column);
-      },
-    },
-    {
-      id: 'notificationStatus',
-      label: 'Stato',
-      width: '18%',
-      align: 'center',
-      sortable: true,
-      getCellLabel(value: string) {
-        const { label, tooltip, color } = getNotificationStatusLabelAndColor(
-          value as NotificationStatus
-        );
-        return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
-      },
-    },
-  ];
-
-  const rows: Array<Row> = notifications.map((n, i) => ({
-    ...n,
-    id: n.paNotificationId + i.toString(),
-  }));
-
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
@@ -116,13 +46,6 @@ const Notifiche = () => {
   // Sort handlers
   const handleChangeSorting = (s: Sort) => {
     dispatch(setSorting(s));
-  };
-
-  const navigate = useNavigate();
-
-  // Navigation handlers
-  const handleRowClick = (row: Row, _column: Column) => {
-    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
   };
 
   useEffect(() => {
@@ -141,19 +64,21 @@ const Notifiche = () => {
       params.nextPagesKey = pagination.page === 0 ? undefined : nextPage;
       /* eslint-enable functional/immutable-data */
     }
-    void dispatch(getSentNotifications(params));
+    void dispatch(getReceivedNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
   return (
     <Box style={{ padding: '20px' }}>
-      <Typography variant={'h4'}>Le tue notifiche</Typography>
-      <FilterNotificationsTable />
-      <NotificationsTable
-        columns={columns}
-        rows={rows}
-        sort={sort}
-        onChangeSorting={handleChangeSorting}
-      />
+      <Typography variant={'h4'}>{t('Le tue notifiche')}</Typography>
+      {isMobile ? (
+        <MobileNotifications notifications={notifications} />
+      ) : (
+        <DesktopNotifications
+          notifications={notifications}
+          sort={sort}
+          onChangeSorting={handleChangeSorting}
+        />
+      )}
       {notifications.length > 0 && (
         <CustomPagination
           paginationData={{

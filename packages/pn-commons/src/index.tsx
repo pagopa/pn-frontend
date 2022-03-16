@@ -9,6 +9,7 @@ import AppMessage from './components/AppMessage';
 import SideMenu from './components/SideMenu/SideMenu';
 import NotificationsTable from './components/Notifications/NotificationsTable';
 import StatusTooltip from './components/Notifications/StatusTooltip';
+import NotificationsCard from './components/Notifications/NotificationsCard';
 import OutlinedButton from './components/OutlinedButton';
 import TitleAndDescription from './components/TitleAndDescription';
 
@@ -22,6 +23,7 @@ export { AppMessage };
 export { SideMenu };
 export { NotificationsTable };
 export { StatusTooltip };
+export { NotificationsCard };
 export { OutlinedButton };
 export { TitleAndDescription };
 
@@ -58,6 +60,7 @@ import {
   LegalFactId,
   PhysicalCommunicationType,
 } from './types/Notifications';
+import { CardElem } from './types/NotificationsCard';
 
 export type { AppError };
 export type { PaginationData };
@@ -86,6 +89,7 @@ export type {
   NotificationStatusHistory,
   LegalFactId,
 };
+export type { CardElem };
 
 // functions
 import { createAppError } from './services/error.service';

@@ -1,6 +1,11 @@
-import { formatDate, LegalFactId, NotificationDetail } from '@pagopa-pn/pn-commons';
+import {
+  formatDate,
+  LegalFactId,
+  NotificationDetail,
+  GetNotificationsParams,
+  GetNotificationsResponse,
+} from '@pagopa-pn/pn-commons';
 import { apiClient } from '../axios';
-import { GetNotificationsParams, GetNotificationsResponse } from '../../redux/dashboard/types';
 
 export const NotificationsApi = {
   /**
@@ -9,7 +14,7 @@ export const NotificationsApi = {
    * @param  {string} endDate
    * @returns Promise
    */
-  getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => {
+  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => {
     const queryParams = new URLSearchParams();
     queryParams.append('startDate', params.startDate);
     queryParams.append('endDate', params.endDate);
@@ -56,7 +61,7 @@ export const NotificationsApi = {
    * @param  {string} iun
    * @returns Promise
    */
-  getSentNotification: (iun: string): Promise<NotificationDetail> =>
+  getReceivedNotification: (iun: string): Promise<NotificationDetail> =>
     apiClient
       .get<NotificationDetail>(`/delivery/notifications/received/${iun}`)
       .then((response) => {
@@ -83,7 +88,7 @@ export const NotificationsApi = {
    * @param  {number} documentIndex
    * @returns Promise
    */
-  getSentNotificationDocument: (iun: string, documentIndex: number): Promise<{ url: string }> =>
+  getReceivedNotificationDocument: (iun: string, documentIndex: number): Promise<{ url: string }> =>
     apiClient
       .get<{ url: string }>(`/delivery/notifications/received/${iun}/documents/${documentIndex}`)
       .then((response) => {
@@ -98,7 +103,7 @@ export const NotificationsApi = {
    * @param  {LegalFactId} legalFact
    * @returns Promise
    */
-  getSentNotificationLegalfact: (iun: string, legalFact: LegalFactId): Promise<{ url: string }> =>
+  getReceivedNotificationLegalfact: (iun: string, legalFact: LegalFactId): Promise<{ url: string }> =>
     apiClient
       .get<Buffer>(`/delivery-push/legalfacts/${iun}/${legalFact.type}/${legalFact.key}`, {
         responseType: 'arraybuffer',
