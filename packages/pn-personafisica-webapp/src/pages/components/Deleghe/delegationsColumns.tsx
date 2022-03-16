@@ -90,10 +90,7 @@ const Menu = (props: any) => {
     if (props.menuType === 'delegates') {
       return (
         <>
-          <MenuItem onClick={handleClose}>Mostra Codice {props.id}</MenuItem>
-          {/*
-            <MenuItem onClick={handleClose}>Modifica</MenuItem>
-          */}
+          <MenuItem onClick={handleClose}>Mostra Codice</MenuItem>
           <MenuItem onClick={handleOpenModalClick}>Revoca</MenuItem>
         </>
       );
