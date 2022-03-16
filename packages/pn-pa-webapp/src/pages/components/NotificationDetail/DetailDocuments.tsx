@@ -6,7 +6,7 @@ import { NotificationDetail } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getSentNotificationDocument } from '../../../redux/notification/actions';
 import { RootState } from '../../../redux/store';
-
+import { IS_CHROME, IS_EDGE } from '../../../utils/constants';
 
 type Props = {
   notification: NotificationDetail;
@@ -22,7 +22,11 @@ const DetailDocuments = ({ notification }: Props) => {
 
   useEffect(() => {
     if (documentDownloadUrl) {
-      window.location.assign(documentDownloadUrl);
+      if (IS_CHROME || IS_EDGE) {
+        window.location.assign(documentDownloadUrl);
+      } else {
+        window.open(documentDownloadUrl, '_blank');
+      }
     }
   }, [documentDownloadUrl]);
 
