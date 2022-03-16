@@ -14,6 +14,9 @@
   },
   "sort": {
     "title": "Ordina",
-    "cancel": "Annulla ordinamento"
+    "cancel": "Annulla ordinamento",
+    "asc": "crescente",
+    "desc": "decrescente",
+    "options": "Opzioni sort"
   }
 }

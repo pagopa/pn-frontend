@@ -60,7 +60,11 @@ const Notifiche = () => {
     <Box style={{ padding: '20px' }}>
       <Typography variant={'h4'}>{t('Le tue notifiche')}</Typography>
       {isMobile ? (
-        <MobileNotifications notifications={notifications} />
+        <MobileNotifications
+          notifications={notifications}
+          sort={sort}
+          onChangeSorting={handleChangeSorting}
+        />
       ) : (
         <DesktopNotifications
           notifications={notifications}

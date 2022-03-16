@@ -62,7 +62,7 @@ import {
   LegalFactId,
   PhysicalCommunicationType,
 } from './types/Notifications';
-import { CardElem } from './types/NotificationsCard';
+import { CardElem, CardSort } from './types/NotificationsCard';
 
 export type { AppError };
 export type { PaginationData };
@@ -91,7 +91,7 @@ export type {
   NotificationStatusHistory,
   LegalFactId,
 };
-export type { CardElem };
+export type { CardElem, CardSort };
 
 // functions
 import { createAppError } from './services/error.service';

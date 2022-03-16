@@ -40,9 +40,10 @@ const MobileDialog = styled(Dialog)(() => ({
   '& .MuiDialogActions-root': {
     display: 'block',
     textAlign: 'center',
+    padding: '20px 24px',
 
     '.MuiButton-root': {
-      width: '80%',
+      width: '100%',
       margin: '10px 0',
     },
   },
