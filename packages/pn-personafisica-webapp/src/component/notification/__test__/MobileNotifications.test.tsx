@@ -16,11 +16,14 @@ jest.mock('react-i18next', () => ({
     };
   },
 }));
+jest.mock('../MobileNotificationsSort', () => () => <div>Sort</div>);
 
-describe('DesktopNotifications Component', () => {
-  it('renders DesktopNotifications', () => {
+describe('MobileNotifications Component', () => {
+
+  it('renders MobileNotifications', () => {
     // render component
-    const result = render(<MobileNotifications notifications={[]} />);
+    const result = render(<MobileNotifications notifications={[]} sort={{orderBy: 'mocked-field', order: 'asc'}} onChangeSorting={() => {}}/>);
+    expect(result.container).toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(/Cards/i);
   });
 });

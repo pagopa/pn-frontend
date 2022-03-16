@@ -1,11 +1,10 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import {
   CardElem,
   CardSort,
-  CustomMobileDialog,
   getNotificationStatusLabelAndColor,
   Notification,
   NotificationsCard,
@@ -14,6 +13,7 @@ import {
   Sort,
   StatusTooltip,
 } from '@pagopa-pn/pn-commons';
+import MobileNotificationsSort from './MobileNotificationsSort';
 
 type Props = {
   notifications: Array<Notification>;
@@ -25,8 +25,6 @@ type Props = {
 
 const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) => {
   const { t } = useTranslation('notifiche');
-  const [value, setValue] = useState(sort ? `${sort.orderBy}-${sort.order}` : '');
-  const prevSort = useRef(value);
 
   const cardHeader: [CardElem, CardElem] = [
     {
@@ -100,66 +98,14 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
     return arr;
   }, [] as Array<CardSort>);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const sortSelected = (event.target as HTMLInputElement).value;
-    setValue(sortSelected);
-  };
-
-
-  const handleConfirm = () => {
-    const sortField = sortFields.find(f => f.id === value);
-    if (onChangeSorting && sortField && prevSort.current !== sortField.value) {
-      onChangeSorting({order: sortField.value, orderBy: sortField.field});
-      /* eslint-disable-next-line functional/immutable-data */
-      prevSort.current = sortField.value;
-    }
-  };
-
-  const handleCancel = () => {
-    setValue('');
-    if (onChangeSorting) {
-      onChangeSorting({order: 'asc', orderBy: ''});
-    }
-  };
-
   return (
     <Fragment>
       <Grid container direction="row">
         <Grid item xs={6}>
-          Cerca
         </Grid>
         <Grid item xs={6} textAlign="right">
-          {(sort && onChangeSorting) && (
-            <CustomMobileDialog
-              title={t('sort.title')}
-              actions={[
-                {
-                  key: 'confirm',
-                  component: (
-                    <Button variant="outlined" onClick={handleConfirm}>
-                      {t('sort.title')}
-                    </Button>
-                  ),
-                  closeOnClick: true,
-                },
-                {
-                  key: 'cancel',
-                  component: <Button onClick={handleCancel}>{t('sort.cancel')}</Button>,
-                  closeOnClick: true,
-                },
-              ]}
-            >
-              <RadioGroup
-                aria-labelledby={t('sort.options')}
-                name="radio-buttons-group"
-                onChange={handleChange}
-                value={value}
-              >
-                {sortFields.map((f) => (
-                  <FormControlLabel key={f.id} value={f.id} control={<Radio />} label={f.label} />
-                ))}
-              </RadioGroup>
-            </CustomMobileDialog>
+          {sort && onChangeSorting && (
+            <MobileNotificationsSort sortFields={sortFields} sort={sort} onChangeSorting={onChangeSorting}/>
           )}
         </Grid>
       </Grid>
