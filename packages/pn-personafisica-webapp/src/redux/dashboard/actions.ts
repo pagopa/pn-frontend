@@ -3,10 +3,10 @@ import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 import { NotificationsApi } from "../../api/notifications/Notifications.api";
 
-export const getSentNotifications = createAsyncThunk<GetNotificationsResponse, GetNotificationsParams>
-    ("getSentNotifications", async (params: GetNotificationsParams, { rejectWithValue }) => {
+export const getReceivedNotifications = createAsyncThunk<GetNotificationsResponse, GetNotificationsParams>
+    ("getReceivedNotifications", async (params: GetNotificationsParams, { rejectWithValue }) => {
         try {
-            return await NotificationsApi.getSentNotifications(params);
+            return await NotificationsApi.getReceivedNotifications(params);
         } catch(e) {
             return rejectWithValue(e);
         }
