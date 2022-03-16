@@ -1,7 +1,10 @@
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Button, Grid } from '@mui/material';
 
 import {
   CardElem,
+  CustomMobileDialog,
   getNotificationStatusLabelAndColor,
   Notification,
   NotificationsCard,
@@ -57,7 +60,7 @@ const MobileNotifications = ({ notifications }: Props) => {
       getLabel(value: string) {
         return value;
       },
-    }
+    },
   ];
 
   const cardData: Array<Row> = notifications.map((n, i) => ({
@@ -65,7 +68,27 @@ const MobileNotifications = ({ notifications }: Props) => {
     id: i.toString(),
   }));
 
-  return <NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData}/>;
+  return (
+    <Fragment>
+      <Grid container direction="row">
+        <Grid item xs={6}>
+          Cerca
+        </Grid>
+        <Grid item xs={6} textAlign="right">
+          <CustomMobileDialog
+            title={t('sort.title')}
+            actions={[
+              {key: 'confirm', component: <Button variant="outlined" onClick={() => console.log('clicked')}>{t('sort.title')}</Button>, closeOnClick: true},
+              {key: 'cancel', component: <Button>{t('sort.cancel')}</Button>, closeOnClick: true},
+            ]}
+          >
+            content
+          </CustomMobileDialog>
+        </Grid>
+      </Grid>
+      <NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+    </Fragment>
+  );
 };
 
 export default MobileNotifications;

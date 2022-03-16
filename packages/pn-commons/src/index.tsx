@@ -12,6 +12,7 @@ import StatusTooltip from './components/Notifications/StatusTooltip';
 import NotificationsCard from './components/Notifications/NotificationsCard';
 import OutlinedButton from './components/OutlinedButton';
 import TitleAndDescription from './components/TitleAndDescription';
+import CustomMobileDialog from './components/CustomMobileDialog';
 
 export { LoadingOverlay };
 export { Header };
@@ -26,6 +27,7 @@ export { StatusTooltip };
 export { NotificationsCard };
 export { OutlinedButton };
 export { TitleAndDescription };
+export { CustomMobileDialog };
 
 // pages
 import NotFound from './navigation/NotFound';
