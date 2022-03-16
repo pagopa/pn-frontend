@@ -1,4 +1,4 @@
-import { Column } from '@pagopa-pn/pn-commons';
+import { Column, Row } from '@pagopa-pn/pn-commons';
 import { Button, Chip, IconButton, Typography, Menu as MUIMenu, MenuItem } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import { useState } from 'react';
@@ -157,12 +157,12 @@ export const delegatorsColumns = [
     label: 'Stato',
     width: '18%',
     align: 'center' as const,
-    getCellLabel(value: string) {
+    getCellLabel(value: string, row: Row) {
       const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
       if (value === DelegationStatus.ACTIVE) {
         return <Chip label={label} color={color} />;
       } else {
-        return <AcceptButton id={value} />;
+        return <AcceptButton id={row.id} />;
       }
     },
   },

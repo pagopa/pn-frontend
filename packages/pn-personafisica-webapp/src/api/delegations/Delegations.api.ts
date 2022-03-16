@@ -23,11 +23,11 @@ export const DelegationsApi = {
       }
       return 'error';
     }),
-  acceptDelegation: (id: string): Promise<{ id: string }> =>
+  acceptDelegation: (id: string): Promise<'success' | 'error'> =>
     apiClient.patch(`/delegations/${id}/accept`).then((response) => {
       if (response.status === 204) {
-        return { id };
+        return 'success';
       }
-      return { id: '-1' };
+      return 'error';
     }),
 };

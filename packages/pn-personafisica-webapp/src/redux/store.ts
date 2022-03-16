@@ -5,7 +5,7 @@ import { LOG_REDUX_ACTIONS } from '../utils/constants';
 import userSlice from './auth/reducers';
 import dashboardSlice from './dashboard/reducers';
 import notificationSlice from './notification/reducers';
-import delegationsSlice, { revocationModalSlice } from './delegation/reducers';
+import delegationsSlice from './delegation/reducers';
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined];
 
@@ -17,7 +17,6 @@ export const createStore = () =>
       dashboardState: dashboardSlice.reducer,
       notificationState: notificationSlice.reducer,
       delegationsState: delegationsSlice.reducer,
-      revocationModalState: revocationModalSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(

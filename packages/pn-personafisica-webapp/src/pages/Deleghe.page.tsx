@@ -16,7 +16,9 @@ import Delegators from './components/Deleghe/Delegators';
 import ConfirmationModal from './components/Deleghe/ConfirmationModal';
 
 const Deleghe = () => {
-  const { id, open, type } = useAppSelector((state: RootState) => state.revocationModalState);
+  const { id, open, type } = useAppSelector(
+    (state: RootState) => state.delegationsState.modalState
+  );
   const dispatch = useAppDispatch();
 
   const handleCloseModal = () => {
@@ -24,7 +26,7 @@ const Deleghe = () => {
   };
 
   const handleConfirmClick = () => {
-    if (type === 'delegate') {
+    if (type === 'delegates') {
       void dispatch(revokeDelegation(id));
     } else {
       void dispatch(rejectDelegation(id));

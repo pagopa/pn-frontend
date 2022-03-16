@@ -24,14 +24,14 @@ type Props = {
   onChangeSorting?: (s: Sort) => void;
 };
 
-function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
+function NotificationsTable({ columns, rows, sort, onChangeSorting }: Props) {
   const createSortHandler = (property: string) => () => {
     if (sort && onChangeSorting) {
       const isAsc = sort.orderBy === property && sort.order === 'asc';
-      onChangeSorting({order: isAsc ? 'desc' : 'asc', orderBy: property});
+      onChangeSorting({ order: isAsc ? 'desc' : 'asc', orderBy: property });
     }
   };
-  
+
   // Table style
   const Root = styled('div')(
     () => `
@@ -63,10 +63,15 @@ function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  sx={{width: column.width, backgroundColor: '#F2F2F2', borderBottom: 'none', fontWeight: 600}}
-                  sortDirection={(sort && sort.orderBy === column.id) ? sort.order : false}
+                  sx={{
+                    width: column.width,
+                    backgroundColor: '#F2F2F2',
+                    borderBottom: 'none',
+                    fontWeight: 600,
+                  }}
+                  sortDirection={sort && sort.orderBy === column.id ? sort.order : false}
                 >
-                  {(sort && column.sortable) ?
+                  {sort && column.sortable ? (
                     <TableSortLabel
                       active={sort.orderBy === column.id}
                       direction={sort.orderBy === column.id ? sort.order : 'asc'}
@@ -78,33 +83,48 @@ function NotificationsTable({columns, rows, sort, onChangeSorting}: Props) {
                           {sort.order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                         </Box>
                       )}
-                    </TableSortLabel> :
+                    </TableSortLabel>
+                  ) : (
                     column.label
-                  }
+                  )}
                 </TableCell>
               ))}
             </TableRow>
           </TableHead>
-          <TableBody sx={{ backgroundColor: 'background.paper'}}>
-            {rows.length ? rows
-              .map(row => (
-                <TableRow key={row.id} sx={{cursor: 'pointer'}}>
-                  {columns.map(c => ( 
-                    <TableCell key={c.id} sx={{ width: c.width, borderBottom: 'none' }} align={c.align} onClick={() => c.onClick && c.onClick(row, c)}>
-                      {c.getCellLabel(row[c.id as keyof Notification])}
+          <TableBody sx={{ backgroundColor: 'background.paper' }}>
+            {rows.length ? (
+              rows.map((row) => (
+                <TableRow key={row.id} sx={{ cursor: 'pointer' }}>
+                  {columns.map((c) => (
+                    <TableCell
+                      key={c.id}
+                      sx={{ width: c.width, borderBottom: 'none' }}
+                      align={c.align}
+                      onClick={() => c.onClick && c.onClick(row, c)}
+                    >
+                      {c.getCellLabel(row[c.id as keyof Notification], row)}
                     </TableCell>
                   ))}
                 </TableRow>
-              )) :
+              ))
+            ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} align="center">
-                  <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px'}}/>
+                  <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
                   <span>I filtri che hai aggiunto non hanno dato nessun risultato.</span>
                   &nbsp;
-                  <span style={{color: theme.palette.primary.main, cursor: 'pointer', fontWeight: 'bold'}}>Rimuovi filtri</span>
+                  <span
+                    style={{
+                      color: theme.palette.primary.main,
+                      cursor: 'pointer',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    Rimuovi filtri
+                  </span>
                 </TableCell>
               </TableRow>
-            }
+            )}
           </TableBody>
         </Table>
       </TableContainer>

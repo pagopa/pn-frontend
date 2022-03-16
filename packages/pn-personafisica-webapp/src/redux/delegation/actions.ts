@@ -44,7 +44,7 @@ export const getDelegates = createAsyncThunk<any>(
       email: 'email@falsa.it',
     },
     {
-      mandateId: '1',
+      mandateId: '123',
       delegator: {
         firstName: 'Mario',
         lastName: 'Rossi',
@@ -143,35 +143,38 @@ export const getDelegators = createAsyncThunk<any>(
   ]
 );
 
-export const revokeDelegation = createAsyncThunk<'success' | 'error', string>(
+export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
   'revokeDelegation',
   async (id: string, { rejectWithValue }) => {
     try {
       return await DelegationsApi.revokeDelegation(id);
     } catch (e) {
-      return rejectWithValue(e);
+      // TODO: return rejectWithValue(e);
+      return { id };
     }
   }
 );
 
-export const rejectDelegation = createAsyncThunk<'success' | 'error', string>(
+export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
   'rejectDelegation',
   async (id: string, { rejectWithValue }) => {
     try {
       return await DelegationsApi.rejectDelegation(id);
     } catch (e) {
-      return rejectWithValue(e);
+      // TODO: return rejectWithValue(e);
+      return { id };
     }
   }
 );
 
 export const acceptDelegation = createAsyncThunk<{ id: string }, string>(
   'acceptDelegation',
-  async (id: string, { rejectWithValue }) => {
+  async (id: string) => {
     try {
-      return await DelegatesApi.acceptDelegation(id);
+      return await DelegationsApi.acceptDelegation(id);
     } catch (e) {
-      return rejectWithValue(e);
+      return { id };
+      // TODO: return { rejectWithValue(e) };
     }
   }
 );

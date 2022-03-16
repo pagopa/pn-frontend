@@ -9,7 +9,7 @@ import {
   rejectDelegation,
   revokeDelegation,
 } from './actions';
-import { RevocationModalProps } from './types';
+import { RevocationModalProps, Delegation } from './types';
 
 /* eslint-disable functional/immutable-data */
 const delegationsSlice = createSlice({
@@ -18,10 +18,15 @@ const delegationsSlice = createSlice({
     loading: false,
     error: false,
     delegations: {
-      delegators: [],
-      delegates: [],
+      delegators: [] as Array<Delegation>,
+      delegates: [] as Array<Delegation>,
       isCompany: false,
     },
+    modalState: {
+      open: false,
+      id: '',
+      type: '',
+    } as RevocationModalProps,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -46,36 +51,30 @@ const delegationsSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
-      state.delegations.delegators = state.delegations.delegators.map((e) =>
-        e.id === action.payload.id ? e : { ...e, delegationStatus: DelegationStatus.ACTIVE }
+      state.delegations.delegators = state.delegations.delegators.map((e: any) =>
+        e.mandateId === action.payload.id ? { ...e, status: DelegationStatus.ACTIVE } : e
       );
     });
-  },
-});
-
-export const revocationModalSlice = createSlice({
-  name: 'revocationModalSlice',
-  initialState: {
-    open: false,
-    id: '',
-    type: '',
-  } as RevocationModalProps,
-  reducers: {},
-  extraReducers: (builder) => {
     builder.addCase(openRevocationModal, (state, action) => {
-      state.id = action.payload.id;
-      state.open = true;
-      state.type = action.payload.type;
+      state.modalState.id = action.payload.id;
+      state.modalState.open = true;
+      state.modalState.type = action.payload.type;
     });
     builder.addCase(closeRevocationModal, (state) => {
-      state.id = '';
-      state.open = false;
+      state.modalState.id = '';
+      state.modalState.open = false;
     });
-    builder.addCase(revokeDelegation.fulfilled, (state) => {
-      state.open = false;
+    builder.addCase(revokeDelegation.fulfilled, (state, action) => {
+      state.modalState.open = false;
+      state.delegations.delegates = state.delegations.delegates.filter(
+        (e: any) => e.mandateId !== action.payload.id
+      );
     });
-    builder.addCase(rejectDelegation.fulfilled, (state) => {
-      state.open = false;
+    builder.addCase(rejectDelegation.fulfilled, (state, action) => {
+      state.modalState.open = false;
+      state.delegations.delegators = state.delegations.delegators.filter(
+        (e: any) => e.mandateId !== action.payload.id
+      );
     });
   },
 });
