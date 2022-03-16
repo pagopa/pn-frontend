@@ -21,6 +21,7 @@ import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../..
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
 import { getSentNotificationLegalfact } from '../../../redux/notification/actions';
+import { IS_CHROME, IS_EDGE } from '../../../utils/constants';
 
 type Props = {
   notification: NotificationDetail;
@@ -41,7 +42,11 @@ const DetailTimeline = ({ notification }: Props) => {
       /* eslint-disable functional/immutable-data */
       const link = document.createElement('a');
       link.href = legalFactDownloadUrl;
-      link.download = `Attestato-opponibile-terzi.pdf`;
+      if (IS_CHROME || IS_EDGE) {
+        link.download = `Attestato-opponibile-terzi.pdf`;
+      } else {
+        link.target = '_blank';
+      }
       link.click();
       /* eslint-enable functional/immutable-data */
     }
