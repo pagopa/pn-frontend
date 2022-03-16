@@ -1,30 +1,49 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { DelegationStatus } from '../../utils/status.utility';
 import {
+  getDelegates,
+  getDelegators,
   acceptDelegation,
   closeRevocationModal,
-  delegations,
   openRevocationModal,
   rejectDelegation,
   revokeDelegation,
 } from './actions';
-import { DelegationsList, RevocationModalProps } from './types';
+import { RevocationModalProps } from './types';
 
 /* eslint-disable functional/immutable-data */
 const delegationsSlice = createSlice({
   name: 'delegationsSlice',
   initialState: {
     loading: false,
+    error: false,
     delegations: {
       delegators: [],
-      delegations: [],
+      delegates: [],
       isCompany: false,
-    } as DelegationsList,
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(delegations.fulfilled, (state, action) => {
-      state.delegations = action.payload;
+    builder.addCase(getDelegates.fulfilled, (state, action) => {
+      state.delegations.delegates = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getDelegators.fulfilled, (state, action) => {
+      state.delegations.delegators = action.payload;
+      state.loading = false;
+    });
+    builder.addCase(getDelegates.rejected, (state) => {
+      state.error = true;
+    });
+    builder.addCase(getDelegators.rejected, (state) => {
+      state.error = true;
+    });
+    builder.addCase(getDelegates.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getDelegators.pending, (state) => {
+      state.loading = true;
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((e) =>

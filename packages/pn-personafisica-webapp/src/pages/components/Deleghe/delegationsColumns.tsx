@@ -1,8 +1,8 @@
 import { Column } from '@pagopa-pn/pn-commons';
 import { Button, Chip, IconButton, Typography, Menu as MUIMenu, MenuItem } from '@mui/material';
-
 import { MoreVert } from '@mui/icons-material';
 import { useState } from 'react';
+
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../../utils/status.utility';
 import { useAppDispatch } from '../../../redux/hooks';
 import { acceptDelegation, openRevocationModal } from '../../../redux/delegation/actions';
@@ -90,10 +90,7 @@ const Menu = (props: any) => {
     if (props.menuType === 'delegates') {
       return (
         <>
-          <MenuItem onClick={handleClose}>Mostra Codice {props.id}</MenuItem>
-          {/*
-            <MenuItem onClick={handleClose}>Modifica</MenuItem>
-          */}
+          <MenuItem onClick={handleClose}>Mostra Codice</MenuItem>
           <MenuItem onClick={handleOpenModalClick}>Revoca</MenuItem>
         </>
       );

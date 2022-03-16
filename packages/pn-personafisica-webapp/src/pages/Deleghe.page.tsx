@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { TitleAndDescription } from '@pagopa-pn/pn-commons';
 
@@ -7,6 +8,8 @@ import {
   closeRevocationModal,
   rejectDelegation,
   revokeDelegation,
+  getDelegates,
+  getDelegators,
 } from '../redux/delegation/actions';
 import Delegates from './components/Deleghe/Delegates';
 import Delegators from './components/Deleghe/Delegators';
@@ -27,6 +30,11 @@ const Deleghe = () => {
       void dispatch(rejectDelegation(id));
     }
   };
+
+  useEffect(() => {
+    void dispatch(getDelegates());
+    void dispatch(getDelegators());
+  }, []);
 
   return (
     <Box sx={{ marginRight: 2 }}>

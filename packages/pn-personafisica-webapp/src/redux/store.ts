@@ -16,7 +16,7 @@ export const createStore = () =>
       userState: userSlice.reducer,
       dashboardState: dashboardSlice.reducer,
       notificationState: notificationSlice.reducer,
-      delegationState: delegationsSlice.reducer,
+      delegationsState: delegationsSlice.reducer,
       revocationModalState: revocationModalSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>

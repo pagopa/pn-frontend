@@ -4,7 +4,7 @@ import { User } from '../../../redux/auth/types';
 import { Delegation } from '../../../redux/delegation/types';
 import { authClient } from '../../axios';
 
-import { DelegatesApi } from '../Delegations.api';
+import { DelegationsApi } from '../Delegations.api';
 
 const user: User = {
   sessionToken: 'mocked-session-token',
@@ -40,7 +40,7 @@ const arrayOfDelegations = new Array(10).fill(delegationResponse);
 export async function getDelegates() {
   const axiosMock = new MockAdapter(authClient);
   axiosMock.onGet(`/delegations`).reply(200, arrayOfDelegations);
-  const res = await DelegatesApi.getDelegations();
+  const res = await DelegationsApi.getDelegates();
   axiosMock.reset();
   axiosMock.restore();
   return res;
@@ -55,7 +55,7 @@ describe('Delegations api tests', () => {
   it('revokes a delegation', async () => {
     const mock = new MockAdapter(apiClient);
     mock.onPatch('/delegations/7/revoke').reply(204);
-    const res = await DelegatesApi.revokeDelegation('7');
+    const res = await DelegationsApi.revokeDelegation('7');
     expect(res).toStrictEqual('success');
     mock.reset();
     mock.restore();
