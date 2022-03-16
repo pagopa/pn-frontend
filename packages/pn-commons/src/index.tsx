@@ -9,6 +9,7 @@ import AppMessage from './components/AppMessage';
 import SideMenu from './components/SideMenu/SideMenu';
 import NotificationsTable from './components/Notifications/NotificationsTable';
 import StatusTooltip from './components/Notifications/StatusTooltip';
+import NotificationsCard from './components/Notifications/NotificationsCard';
 import OutlinedButton from './components/OutlinedButton';
 import TitleAndDescription from './components/TitleAndDescription';
 
@@ -22,6 +23,7 @@ export { AppMessage };
 export { SideMenu };
 export { NotificationsTable };
 export { StatusTooltip };
+export { NotificationsCard };
 export { OutlinedButton };
 export { TitleAndDescription };
 
@@ -42,14 +44,52 @@ import {
   Notification,
   GetNotificationsResponse,
   GetNotificationsParams,
+  NotificationDetail,
+  NotificationDetailTimeline,
+  NotificationDetailRecipient,
+  NotificationDetailDocument,
+  NotificationFeePolicy,
+  NotificationDetailPayment,
+  NotificationStatusHistory,
+  TimelineCategory,
+  DigitalDomicileType,
+  RecipientType,
+  DeliveryMode,
+  AddressSource,
+  LegalFactType,
+  LegalFactId,
+  PhysicalCommunicationType,
 } from './types/Notifications';
+import { CardElem } from './types/NotificationsCard';
 
 export type { AppError };
 export type { PaginationData };
 export type { SideMenuItem };
-export { NotificationStatus };
+export {
+  NotificationStatus,
+  RecipientType,
+  DigitalDomicileType,
+  NotificationFeePolicy,
+  TimelineCategory,
+  LegalFactType,
+  DeliveryMode,
+  AddressSource,
+  PhysicalCommunicationType,
+};
 export type { Column, Row, Sort };
-export type { Notification, GetNotificationsResponse, GetNotificationsParams };
+export type {
+  Notification,
+  GetNotificationsResponse,
+  GetNotificationsParams,
+  NotificationDetail,
+  NotificationDetailTimeline,
+  NotificationDetailRecipient,
+  NotificationDetailDocument,
+  NotificationDetailPayment,
+  NotificationStatusHistory,
+  LegalFactId,
+};
+export type { CardElem };
 
 // functions
 import { createAppError } from './services/error.service';

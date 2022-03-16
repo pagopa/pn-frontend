@@ -1,8 +1,8 @@
 import { Column } from '@pagopa-pn/pn-commons';
 import { Button, Chip, IconButton, Typography, Menu as MUIMenu, MenuItem } from '@mui/material';
-
 import { MoreVert } from '@mui/icons-material';
 import { useState } from 'react';
+
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../../utils/status.utility';
 import { useAppDispatch } from '../../../redux/hooks';
 import { openRevocationModal } from '../../../redux/delegation/actions';
@@ -149,7 +149,7 @@ export const delegatorsColumns = [
     align: 'center' as const,
     getCellLabel(value: string) {
       const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
-      if (value === DelegationStatus.ACCEPTED) {
+      if (value === DelegationStatus.ACTIVE) {
         return <Chip label={label} color={color} />;
       } else {
         return (

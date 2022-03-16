@@ -1,21 +1,24 @@
 import { Box, Stack } from '@mui/material';
 import { NotificationsTable, Row } from '@pagopa-pn/pn-commons';
 
-import { DelegationStatus } from '../../../utils/status.utility';
+import { RootState } from '../../../redux/store';
+import { useAppSelector } from '../../../redux/hooks';
 import { delegatorsColumns } from './delegationsColumns';
 
 const Delegators = () => {
-  const rows: Array<Row> = [
-    {
-      id: '0',
-      name: 'Jimmy',
-      startDate: 'ciao',
-      endDate: 'arrivederci',
-      email: 'email@vera.it',
-      visibilityIds: ['pa1', 'pa2', 'pa3'],
-      status: DelegationStatus.PENDING,
-    },
-  ];
+  const delegates = useAppSelector(
+    (state: RootState) => state.delegationsState.delegations.delegators
+  );
+
+  const rows: Array<Row> = delegates.map((e: any) => ({
+    id: e.mandateId,
+    name: `${e.delegate.firstName} ${e.delegate.lastName}`,
+    startDate: e.datefrom,
+    endDate: e.dateto,
+    email: e.email,
+    visibilityIds: e.visibilityIds.map((f: any) => f.name),
+    status: e.status,
+  }));
 
   return (
     <>

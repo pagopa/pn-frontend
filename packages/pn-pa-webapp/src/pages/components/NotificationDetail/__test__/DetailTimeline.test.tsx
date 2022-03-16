@@ -1,4 +1,4 @@
-import { act, RenderResult, within } from '@testing-library/react';
+import { RenderResult, within } from '@testing-library/react';
 import { getDay, getMonthString, getTime } from '@pagopa-pn/pn-commons';
 
 import { notificationToFe } from '../../../../redux/notification/__test__/test-utils';
@@ -9,11 +9,9 @@ import DetailTimeline from '../DetailTimeline';
 describe('Notification Detail Timeline Component', () => {
   let result: RenderResult | undefined;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // render component
-    await act(async () => {
-      result = render(<DetailTimeline notification={notificationToFe}/>);
-    });
+    result = render(<DetailTimeline notification={notificationToFe}/>);
   });
 
   afterEach(() => {

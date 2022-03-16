@@ -1,4 +1,4 @@
-import { act, fireEvent, RenderResult, waitFor, screen } from "@testing-library/react";
+import { fireEvent, RenderResult, waitFor, screen } from "@testing-library/react";
 
 import { render } from "../../../test-utils";
 import CustomPagination from "../CustomPagination";
@@ -16,14 +16,12 @@ describe('CustomPagination Component', () => {
 
   let result: RenderResult | undefined;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // render component
-    await act(async () => {
-      result = render(<CustomPagination paginationData={paginationData} onPageRequest={handlePageChange}/>);
-    });
+    result = render(<CustomPagination paginationData={paginationData} onPageRequest={handlePageChange}/>);
   });
 
-  afterEach(async () => {
+  afterEach(() => {
     result = undefined;
     handlePageChange.mockClear();
     paginationData = {
