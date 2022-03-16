@@ -1,6 +1,6 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+
+import { DelegationsApi } from '../../api/delegations/Delegations.api';
 
 /**
  *
@@ -144,14 +144,14 @@ export const getDelegators = createAsyncThunk<any>(
 );
 
 export const revokeDelegation = createAsyncThunk<'success' | 'error', string>(
-    'revokeDelegation',
-    async (id: string, { rejectWithValue }) => {
-      try {
-        return await DelegationsApi.revokeDelegation(id);
-      } catch (e) {
-        return rejectWithValue(e);
-      }
+  'revokeDelegation',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      return await DelegationsApi.revokeDelegation(id);
+    } catch (e) {
+      return rejectWithValue(e);
     }
+  }
 );
 
 export const openRevocationModal = createAction<string>('openRevocationModal');

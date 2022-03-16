@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getDelegates, getDelegators, openRevocationModal,
-  revokeDelegation, closeRevocationModal} from './actions';
-import { DelegationsList, RevocationModalProps } from './types';
+import {
+  getDelegates,
+  getDelegators,
+  openRevocationModal,
+  revokeDelegation,
+  closeRevocationModal,
+} from './actions';
+import { RevocationModalProps } from './types';
 
 /* eslint-disable functional/immutable-data */
 const delegationsSlice = createSlice({
@@ -36,9 +41,6 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(getDelegators.pending, (state) => {
       state.loading = true;
-    });
-    builder.addCase(delegations.fulfilled, (state, action) => {
-      state.delegations = action.payload;
     });
   },
 });
