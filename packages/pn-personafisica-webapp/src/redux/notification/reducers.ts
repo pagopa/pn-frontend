@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { NotificationStatus } from '@pagopa-pn/pn-commons';
 import {
+  NotificationStatus,
   NotificationDetail,
   NotificationDetailDocument,
   NotificationDetailPayment,
@@ -11,9 +11,9 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import {
-  getSentNotification,
-  getSentNotificationDocument,
-  getSentNotificationLegalfact,
+  getReceivedNotification,
+  getReceivedNotificationDocument,
+  getReceivedNotificationLegalfact,
 } from './actions';
 
 /* eslint-disable functional/immutable-data */
@@ -41,18 +41,18 @@ const notificationSlice = createSlice({
   },
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getSentNotification.fulfilled, (state, action) => {
+    builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
     });
-    builder.addCase(getSentNotificationDocument.pending, (state) => {
+    builder.addCase(getReceivedNotificationDocument.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(getSentNotificationDocument.fulfilled, (state, action) => {
+    builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.documentDownloadUrl = action.payload.url;
       }
     });
-    builder.addCase(getSentNotificationLegalfact.fulfilled, (state, action) => {
+    builder.addCase(getReceivedNotificationLegalfact.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.legalFactDownloadUrl = action.payload.url;
       }
