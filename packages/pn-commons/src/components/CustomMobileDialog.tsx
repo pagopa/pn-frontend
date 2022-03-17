@@ -1,5 +1,7 @@
-import { forwardRef, Fragment, ReactElement, ReactNode, Ref, useState } from 'react';
+import { cloneElement, forwardRef, Fragment, ReactElement, ReactNode, Ref, useState } from 'react';
 import {
+  Badge,
+  BadgeProps,
   Box,
   Button,
   Dialog,
@@ -49,13 +51,24 @@ const MobileDialog = styled(Dialog)(() => ({
   },
 }));
 
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    backgroundColor: theme.palette.primary.main,
+    position: 'unset',
+    transform: 'translate(0, 0)'
+  },
+}));
+
 type Props = {
   title: string;
+  button?: ReactElement<any, any>;
   children?: ReactNode;
   actions?: Array<CustomDialogAction>;
+  hasCounterBadge?: boolean;
+  bagdeCount?: number;
 };
 
-const CustomMobileSort = ({ title, actions, children }: Props) => {
+const CustomMobileSort = ({ title, actions, children, button, hasCounterBadge, bagdeCount = 0 }: Props) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -74,9 +87,18 @@ const CustomMobileSort = ({ title, actions, children }: Props) => {
 
   return (
     <Fragment>
-      <Button onClick={handleClickOpen} sx={{ pr: 0 }}>
-        {title}
-      </Button>
+      <Box>
+        {button ? (
+          cloneElement(button, {
+            onClick: handleClickOpen,
+          })
+        ) : (
+          <Button onClick={handleClickOpen} sx={{ pr: 0 }}>
+            {title}
+          </Button>
+        )}
+        {(hasCounterBadge && bagdeCount > 0) && <StyledBadge badgeContent={bagdeCount} color="secondary"></StyledBadge>}
+      </Box>
       <MobileDialog
         open={open}
         onClose={handleClose}
@@ -108,9 +130,15 @@ const CustomMobileSort = ({ title, actions, children }: Props) => {
           </Grid>
         </DialogTitle>
         <DialogContent>{children}</DialogContent>
-        {actions && <DialogActions>
-          {actions.map(a => <Box data-testid="dialogAction" onClick={() => handleActionClick(a)} key={a.key}>{a.component}</Box>)}  
-        </DialogActions>}
+        {actions && (
+          <DialogActions>
+            {actions.map((a) => (
+              <Box data-testid="dialogAction" onClick={() => handleActionClick(a)} key={a.key}>
+                {a.component}
+              </Box>
+            ))}
+          </DialogActions>
+        )}
       </MobileDialog>
     </Fragment>
   );

@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
-import { useTranslation } from "react-i18next";
-import { CardSort, CustomMobileDialog, Sort } from "@pagopa-pn/pn-commons";
-import { Button, FormControlLabel, Radio, RadioGroup } from "@mui/material";
+import { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { CardSort, CustomMobileDialog, Sort } from '@pagopa-pn/pn-commons';
+import { Button, FormControlLabel, Radio, RadioGroup } from '@mui/material';
 
 type Props = {
   sortFields: Array<CardSort>;
@@ -11,10 +11,11 @@ type Props = {
   onChangeSorting: (s: Sort) => void;
 };
 
-const MobileNotificationsSort = ({sortFields, sort, onChangeSorting}: Props) => {
+const MobileNotificationsSort = ({ sortFields, sort, onChangeSorting }: Props) => {
   const { t } = useTranslation('notifiche');
   const [sortValue, setSortValue] = useState(sort ? `${sort.orderBy}-${sort.order}` : '');
   const prevSort = useRef(sortValue);
+  const isSorted = sort.orderBy !== '';
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const sortSelected = (event.target as HTMLInputElement).value;
@@ -35,26 +36,27 @@ const MobileNotificationsSort = ({sortFields, sort, onChangeSorting}: Props) => 
     onChangeSorting({ order: 'asc', orderBy: '' });
   };
 
+  const dialogActions = [
+    {
+      key: 'confirm',
+      component: (
+        <Button variant="outlined" onClick={handleConfirmSort}>
+          {t('sort.title')}
+        </Button>
+      ),
+      closeOnClick: true,
+    },
+    {
+      key: 'cancel',
+      component: <Button onClick={handleCancelSort}>{t('sort.cancel')}</Button>,
+      closeOnClick: true,
+    },
+  ];
+
+  const dialogButton = <Button sx={{ pr: isSorted ? '10px' : 0 }}>{t('sort.title')}</Button>;
+
   return (
-    <CustomMobileDialog
-      title={t('sort.title')}
-      actions={[
-        {
-          key: 'confirm',
-          component: (
-            <Button variant="outlined" onClick={handleConfirmSort}>
-              {t('sort.title')}
-            </Button>
-          ),
-          closeOnClick: true,
-        },
-        {
-          key: 'cancel',
-          component: <Button onClick={handleCancelSort}>{t('sort.cancel')}</Button>,
-          closeOnClick: true,
-        },
-      ]}
-    >
+    <CustomMobileDialog title={t('sort.title')} actions={dialogActions} button={dialogButton} hasCounterBadge bagdeCount={isSorted ? 1 : 0}>
       <RadioGroup
         aria-labelledby={t('sort.options')}
         name="radio-buttons-group"
