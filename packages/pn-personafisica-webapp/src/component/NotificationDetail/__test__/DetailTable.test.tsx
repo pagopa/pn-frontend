@@ -4,6 +4,15 @@ import * as hooks from '../../../redux/hooks';
 import DetailTable from '../DetailTable';
 import { notificationToFe } from '../../../redux/notification/__test__/test-utils';
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => {
+    return {
+      t: (str: string) => str,
+    };
+  },
+}));
+
 describe('Notification Detail Table Component', () => {
   let result: RenderResult | undefined;
   let appSelectorSpy: jest.SpyInstance;

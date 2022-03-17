@@ -6,6 +6,15 @@ import { render } from '../../../__test__/test-utils';
 
 import DetailDocuments from '../DetailDocuments';
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => {
+    return {
+      t: (str: string) => str,
+    };
+  },
+}));
+
 describe('Notification Detail Documents Component', () => {
   let result: RenderResult | undefined;
   let mockDispatchFn: jest.Mock;
@@ -19,6 +28,7 @@ describe('Notification Detail Documents Component', () => {
     await act(async () => {
       result = render(<DetailDocuments notification={notificationToFe}/>);
     });
+    
   });
 
   afterEach(() => {

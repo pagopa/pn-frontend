@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableRow, Box } from '@mui/material';
 import { NotificationDetail } from '@pagopa-pn/pn-commons/src/types/Notifications';
 
@@ -7,26 +8,28 @@ type Props = {
 };
 
 const DetailTable = ({ notification }: Props) => {
+  const { t } = useTranslation(['notifiche']);
+
   const detailTable: Array<{ id: number; label: string; value: ReactNode }> = [
-    { id: 1, label: 'Data', value: <Box fontWeight={600}>{notification.sentAt}</Box> },
-    { id: 2, label: 'Termini di pagamento', value: `Entro il ` },
+    { id: 1, label: t('Data'), value: <Box fontWeight={600}>{notification.sentAt}</Box> },
+    { id: 2, label: t('Termini di pagamento'), value: t(`Entro il `) },
     {
       id: 3,
-      label: 'Destinatario',
+      label: t('Destinatario'),
       value: <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>,
     },
     {
       id: 4,
-      label: 'Cognome Nome',
+      label: t('Cognome Nome'),
       value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
     },
     {
       id: 6,
-      label: 'Codice IUN annullato',
+      label: t('Codice IUN annullato'),
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
     },
-    { id: 7, label: 'Codice IUN', value: <Box fontWeight={600}>{notification.iun}</Box> },
-    { id: 8, label: 'Gruppi', value: '' },
+    { id: 7, label: t('Codice IUN'), value: <Box fontWeight={600}>{notification.iun}</Box> },
+    { id: 8, label: t('Gruppi'), value: '' },
   ];
 
   return (

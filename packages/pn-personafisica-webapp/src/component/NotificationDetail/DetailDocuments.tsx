@@ -1,4 +1,5 @@
 import { Fragment, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid, Typography, Button } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { NotificationDetail } from '@pagopa-pn/pn-commons/src/types/Notifications';
@@ -12,6 +13,8 @@ type Props = {
 
 const DetailDocuments = ({ notification }: Props) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation(['notifiche']);
+
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -37,7 +40,7 @@ const DetailDocuments = ({ notification }: Props) => {
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography color="text.primary" fontWeight={700} textTransform="uppercase" fontSize={14}>
-            Atti Allegati
+            {t('Atti Allegati')}
           </Typography>
         </Grid>
         {/* TODO: ripristinare quando sarà completata la issue pn-720 */}
