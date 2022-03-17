@@ -1,55 +1,153 @@
 import MockAdapter from 'axios-mock-adapter';
-import { apiClient } from '@pagopa-pn/pn-pa-webapp/src/api/axios';
-import { User } from '../../../redux/auth/types';
-import { Delegation } from '../../../redux/delegation/types';
-import { authClient } from '../../axios';
+import { apiClient } from '../../axios';
 
 import { DelegationsApi } from '../Delegations.api';
 
-const user: User = {
-  sessionToken: 'mocked-session-token',
-  name: 'Mario',
-  family_name: 'Rossi',
-  fiscal_number: 'RSSMRA80A01H501U',
-  email: 'info@agid.gov.it',
-  mobile_phone: '333333334',
-  from_aa: false,
-  uid: 'mocked-uid',
-  level: 'L2',
-  iat: 1646394256,
-  exp: 1646397856,
-  iss: 'spid-hub-test.dev.pn.pagopa.it',
-  jti: 'mocked-jti',
-};
-
-const delegationResponse: Delegation = {
-  user,
-  startDate: new Date().toISOString(),
-  endDate: new Date().toISOString(),
-  delegationRole: 'delegator',
-  delegationStatus: 'accepted',
-  visibilityIds: {
-    id: '6734289379',
-    role: 'referente operativo',
+const arrayOfDelegates = [
+  {
+    mandateId: '1',
+    delegator: {
+      firstName: 'Mario',
+      lastName: 'Rossi',
+      companyName: 'eni',
+      fiscalCode: 'MRIRSS68P24H501C',
+      person: true,
+    },
+    delegate: {
+      firstName: 'Marco',
+      lastName: 'Verdi',
+      companyName: 'eni',
+      fiscalCode: 'MRCVRD83C12H501C',
+      person: true,
+    },
+    status: 'Active',
+    visibilityIds: [
+      {
+        name: 'Agenzia Entrate',
+        uniqueIdentifier: '123456789',
+      },
+    ],
+    verificationCode: '123456',
+    datefrom: '15-12-2021',
+    dateto: '16-04-2022',
+    email: 'email@falsa.it',
   },
-  verificationCode: '23324',
-};
+  {
+    mandateId: '1',
+    delegator: {
+      firstName: 'Mario',
+      lastName: 'Rossi',
+      companyName: 'eni',
+      fiscalCode: 'MRIRSS68P24H501C',
+      person: true,
+    },
+    delegate: {
+      firstName: 'Davide',
+      lastName: 'Legato',
+      companyName: 'eni',
+      fiscalCode: 'DVDLGT83C12H501C',
+      person: true,
+    },
+    status: 'Active',
+    visibilityIds: [
+      {
+        name: 'Agenzia Entrate',
+        uniqueIdentifier: '123456789',
+      },
+    ],
+    verificationCode: '123456',
+    datefrom: '15-12-2021',
+    dateto: '16-04-2022',
+    email: 'email@falsa.it',
+  },
+];
 
-const arrayOfDelegations = new Array(10).fill(delegationResponse);
+const arrayOfDelegators = [
+  {
+    mandateId: '3',
+    delegator: {
+      firstName: 'Marco',
+      lastName: 'Verdi',
+      companyName: 'eni',
+      fiscalCode: 'MRCVRD83C12H501C',
+      person: true,
+    },
+    delegate: {
+      firstName: 'Mario',
+      lastName: 'Rossi',
+      companyName: 'eni',
+      fiscalCode: 'MRIRSS68P24H501C',
+      person: true,
+    },
+    status: 'Pending',
+    visibilityIds: [
+      {
+        name: 'Agenzia Entrate',
+        uniqueIdentifier: '123456789',
+      },
+    ],
+    verificationCode: '123456',
+    datefrom: '15-12-2021',
+    dateto: '16-04-2022',
+    email: 'email@falsa.it',
+  },
+  {
+    mandateId: '4',
+    delegator: {
+      firstName: 'Davide',
+      lastName: 'Legato',
+      companyName: 'eni',
+      fiscalCode: 'DVDLGT83C12H501C',
+      person: true,
+    },
+    delegate: {
+      firstName: 'Mario',
+      lastName: 'Rossi',
+      companyName: 'eni',
+      fiscalCode: 'MRIRSS68P24H501C',
+      person: true,
+    },
+    status: 'Active',
+    visibilityIds: [
+      {
+        name: 'Agenzia Entrate',
+        uniqueIdentifier: '123456789',
+      },
+    ],
+    verificationCode: '123456',
+    datefrom: '15-12-2021',
+    dateto: '16-04-2022',
+    email: 'email@falsa.it',
+  },
+];
 
 export async function getDelegates() {
-  const axiosMock = new MockAdapter(authClient);
-  axiosMock.onGet(`/delegations`).reply(200, arrayOfDelegations);
+  const axiosMock = new MockAdapter(apiClient);
+  axiosMock.onGet(`/delegates`).reply(200, arrayOfDelegates);
   const res = await DelegationsApi.getDelegates();
   axiosMock.reset();
   axiosMock.restore();
   return res;
 }
 
+export async function getDelegators() {
+  const axiosMock = new MockAdapter(apiClient);
+  axiosMock.onGet(`/delegators`).reply(200, arrayOfDelegators);
+  const res = await DelegationsApi.getDelegators();
+  axiosMock.reset();
+  axiosMock.restore();
+  return res;
+}
+
 describe('Delegations api tests', () => {
-  it('get delegations', async () => {
+  it('get delegates', async () => {
     const res = await getDelegates();
-    expect(res.data).toStrictEqual(arrayOfDelegations);
+    expect(res.data).toStrictEqual(arrayOfDelegates);
+  });
+
+  it('get delegators', async () => {
+    const res = await getDelegators();
+    expect(res.data).toStrictEqual(arrayOfDelegators);
   });
 
   it('revokes a delegation', async () => {

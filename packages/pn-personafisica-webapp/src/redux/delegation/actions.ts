@@ -1,6 +1,4 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
-
-import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 /**
  *
