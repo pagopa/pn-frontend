@@ -58,24 +58,6 @@ test('return notification status, label and color - ACCEPTED', () => {
   );
 });
 
-test('return notification status, label and color - IN_VALIDATION', () => {
-  testStatusLabelAndColorFn(
-    NotificationStatus.IN_VALIDATION,
-    'In Validazione',
-    'default',
-    'La notifica è in fase di validazione'
-  );
-});
-
-test('return notification status, label and color - REFUSED', () => {
-  testStatusLabelAndColorFn(
-    NotificationStatus.REFUSED,
-    'Non valida',
-    'error',
-    'La notifica non rispetta le validazioni'
-  );
-});
-
 test('return notification status, label and color - EFFECTIVE_DATE', () => {
   testStatusLabelAndColorFn(
     NotificationStatus.EFFECTIVE_DATE,
