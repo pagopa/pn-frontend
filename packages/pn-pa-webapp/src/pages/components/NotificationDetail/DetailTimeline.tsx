@@ -21,7 +21,6 @@ import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../..
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
 import { getSentNotificationLegalfact } from '../../../redux/notification/actions';
-import { IS_CHROME, IS_EDGE } from '../../../utils/constants';
 
 type Props = {
   notification: NotificationDetail;
