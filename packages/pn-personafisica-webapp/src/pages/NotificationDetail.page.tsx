@@ -10,7 +10,7 @@ import { RootState } from '../redux/store';
 import DetailTimeline from '../component/NotificationDetail/DetailTimeline';
 import DetailTable from '../component/NotificationDetail/DetailTable';
 import DetailDocuments from '../component/NotificationDetail/DetailDocuments';
-import { getReceivedNotification } from '../redux/notification/actions';
+import { getReceivedNotification, resetState } from '../redux/notification/actions';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   display: 'flex',
@@ -42,6 +42,8 @@ const NotificationDetail = () => {
       void dispatch(getReceivedNotification(id));
     }
   }, []);
+
+  useEffect(() => () => void dispatch(resetState()), [] );
 
   return (
     <Box className={classes.root}>
