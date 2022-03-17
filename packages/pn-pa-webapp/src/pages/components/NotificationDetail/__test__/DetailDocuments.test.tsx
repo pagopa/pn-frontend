@@ -1,4 +1,4 @@
-import { act, fireEvent, waitFor, RenderResult } from '@testing-library/react';
+import { fireEvent, waitFor, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';
 
 import { render } from '../../../../__test__/test-utils';
@@ -10,15 +10,13 @@ describe('Notification Detail Documents Component', () => {
   let result: RenderResult | undefined;
   let mockDispatchFn: jest.Mock;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch'); 
     mockDispatchFn = jest.fn();
     useDispatchSpy.mockReturnValue(mockDispatchFn);
     // render component
-    await act(async () => {
-      result = render(<DetailDocuments notification={notificationToFe}/>);
-    });
+    result = render(<DetailDocuments notification={notificationToFe}/>);
   });
 
   afterEach(() => {
@@ -26,7 +24,7 @@ describe('Notification Detail Documents Component', () => {
     jest.clearAllMocks();
   });
 
-  it('renders detail documents', async () => {
+  it('renders detail documents', () => {
     expect(result?.container).toHaveTextContent(/Atti Allegati/i);
     // expect(result?.container).toHaveTextContent(/Scarica tutti gli Atti/i);
     const documentsButtons = result?.getAllByTestId('documentButton');
@@ -41,8 +39,8 @@ describe('Notification Detail Documents Component', () => {
     await waitFor(() => {
       fireEvent.click(documentsButtons![0]);
     });
-    expect(mockDispatchFn).toHaveBeenCalledTimes(1);
-    expect(mockActionFn).toHaveBeenCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(1);
+    expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith({iun: notificationToFe.iun, documentIndex: 0});
   });
 

@@ -1,64 +1,70 @@
-import { FC, Fragment, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Box, Collapse, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import { FC, Fragment, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Menu } from '@mui/icons-material';
 
 import { SideMenuItem } from '../../types/SideMenuItem';
+import { useIsMobile } from '../../hooks/IsMobile.hook';
+import SideMenuList from './SideMenuList';
 
 interface Props {
   menuItems: Array<SideMenuItem>;
 }
 
-const SideMenu: FC<Props> = ({ menuItems }) => {
-  const [open, setOpen] = useState(false);
-  const [openId, setOpenId] = useState('');
-  // store previous values
-  const prevOpenId = useRef(openId);
+const CustomList = styled(List)(({ theme }) => ({
+  boxShadow: '0px 2px 4px -1px rgba(0, 43, 85, 0.1), 0px 4px 5px rgba(0, 43, 85, 0.05), 0px 1px 10px rgba(0, 43, 85, 0.1)',
+  '& .MuiListItemIcon-root': {
+    color: `${theme.palette.primary.main} !important`
+  },
+  '& .MuiTypography-root': {
+    color: `${theme.palette.primary.main} !important`
+  }
+}));
 
-  const handleClick = (label: string) => {
-    if (prevOpenId.current === label) {
-      setOpen(!open);
-    } else {
-      setOpenId(label);
-      /* eslint-disable functional/immutable-data */
-      prevOpenId.current = label;
-      /* eslint-enalbe functional/immutable-data */
-      setOpen(true);
-    }
+const SideMenu: FC<Props> = ({ menuItems }) => {
+  const [state, setState] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isMobile = useIsMobile();
+  const menuItemSelected = menuItems.find(m => m.route === location.pathname) ||
+    menuItems.find(m => location.pathname.indexOf(m.route) > -1) || {label: 'Menu'};
+
+  const toggleDrawer = () => {
+    setState(!state);
   };
 
-  const itemList = (item: SideMenuItem, style?: {[key: string]: string | number}) => (
-    <ListItem button key={item.label} component={Link} to={item.route} sx={style}>
-      <ListItemIcon>
-        <item.icon />
-      </ListItemIcon>
-      <ListItemText primary={item.label} />
-    </ListItem>
-  );
+  const handleNavigation = (link: string) => {
+    if (isMobile) {
+      setState(false);
+    }
+    navigate(link);
+  }
 
   return (
-    <Box height="100%" display="flex" flexDirection="column" bgcolor={'common.white'}>
+    <Box height={isMobile ? 'auto' : '100%'} display="flex" flexDirection="column" bgcolor={'common.white'}>
       <Box alignItems="left" display="flex" flexDirection="column">
-        <List>
-          {menuItems.map((item: SideMenuItem) =>
-            item.children ? (
-              <Fragment key={item.label}>
-                <ListItem button onClick={() => handleClick(item.label)}>
-                  <ListItemIcon>
-                    <item.icon />
-                  </ListItemIcon>
-                  <ListItemText primary={item.label} />
-                  {openId === item.label && open ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
-                <Collapse in={openId === item.label && open} timeout="auto" unmountOnExit data-testid={`collapse-${item.label}`}>
-                  <List disablePadding>
-                    {item.children.map(child => itemList(child, {pl: 4}))}
-                  </List>
-                </Collapse>
-              </Fragment>
-            ) : itemList(item)
-          )}
-        </List>
+        {isMobile ? (
+          <Fragment>
+            <CustomList>
+              <ListItem button onClick={toggleDrawer}>
+                <ListItemIcon>
+                  <Menu />
+                </ListItemIcon>
+                <ListItemText primary={menuItemSelected?.label}/>
+              </ListItem>
+            </CustomList>
+            <Drawer
+              anchor="left"
+              open={state}
+              onClose={toggleDrawer}
+            >
+              {<SideMenuList menuItems={menuItems} handleLinkClick={handleNavigation}/>}
+            </Drawer>
+          </Fragment>
+          ) : (
+          <SideMenuList menuItems={menuItems} handleLinkClick={handleNavigation}/>
+        )}
       </Box>
     </Box>
   );

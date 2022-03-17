@@ -29,6 +29,7 @@ export type FilterModalConfig<T, V> = {
   onFilterChange: (v: V) => void;
 };
 
+/** NOT USED ANYWEHERE - EVALUATE REMOVAL */
 export default function FilterModal({
   open,
   handleClose,

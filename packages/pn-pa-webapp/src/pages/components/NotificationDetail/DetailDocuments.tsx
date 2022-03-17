@@ -1,8 +1,8 @@
 import { Fragment, useEffect } from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { NotificationDetail } from '@pagopa-pn/pn-commons';
 
-import { NotificationDetail } from '../../../redux/notification/types';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getSentNotificationDocument } from '../../../redux/notification/actions';
 import { RootState } from '../../../redux/store';

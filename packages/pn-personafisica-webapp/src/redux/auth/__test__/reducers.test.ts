@@ -1,45 +1,27 @@
-import MockAdapter from 'axios-mock-adapter';
-
-import { authClient } from '../../../api/axios';
+import { AuthApi } from '../../../api/auth/Auth.api';
 import { store } from '../../store';
 import { exchangeToken, logout } from '../actions';
 import { User } from '../types';
+import { userResponse } from './test-utils';
 
-const userResponse: User = {
-  sessionToken: 'mocked-session-token',
-  name: 'Mario',
-  family_name: 'Rossi',
-  fiscal_number: 'RSSMRA80A01H501U',
-  email: 'info@agid.gov.it',
-  mobile_phone: '333333334',
-  from_aa: false,
-  uid: 'mocked-uid',
-  level: 'L2',
-  iat: 1646394256,
-  exp: 1646397856,
-  iss: 'spid-hub-test.dev.pn.pagopa.it',
-  jti: 'mocked-jti',
+const mockLogin = async (): Promise<any> => {
+  const apiSpy = jest.spyOn(AuthApi, 'exchangeToken');
+  apiSpy.mockResolvedValue(userResponse);
+  return store.dispatch(exchangeToken('mocked-token'));
 };
 
-export const loginInit = () => {
-  const axiosMock: MockAdapter;
+const mockLogout = async (): Promise<any> => store.dispatch(logout());
 
-  const mockLoginResponse = () => {
-    axiosMock = new MockAdapter(authClient);
-    axiosMock.onGet(`/token-exchange`).reply(200, userResponse);
-  };
-
+export const mockAuthentication = () => {
   beforeAll(() => {
-    mockLoginResponse();
+    mockLogin();
   });
 
   afterAll(() => {
-    axiosMock.reset();
-    axiosMock.restore();
+    mockLogout();
+    jest.resetAllMocks();
   });
 };
-
-loginInit();
 
 describe('Auth redux state tests', () => {
   it('Initial state', () => {
@@ -67,7 +49,7 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to exchange token', async () => {
-    const action = await store.dispatch(exchangeToken('mocked-token'));
+    const action = await mockLogin();
     const payload = action.payload as User;
 
     expect(action.type).toBe('exchangeToken/fulfilled');
@@ -75,7 +57,7 @@ describe('Auth redux state tests', () => {
   });
 
   it('Should be able to logout', async () => {
-    const action = await store.dispatch(logout());
+    const action = await mockLogout();
     const payload = action.payload;
 
     expect(action.type).toBe('logout/fulfilled');

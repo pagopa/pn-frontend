@@ -37,7 +37,7 @@ function CustomTooltip({openOnClick, tooltipContent, children}: Props) {
 
   const handleTooltipOpen = () => {
     if (openOnClick) {
-      setOpen(true);
+      setOpen(!open);
     }
   };
 

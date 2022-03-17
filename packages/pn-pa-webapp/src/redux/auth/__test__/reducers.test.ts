@@ -5,7 +5,6 @@ import { exchangeToken, logout } from '../actions';
 import { User } from '../types';
 import { userResponse } from './test-utils';
 
-
 const mockLogin = async (): Promise<any> => {
   const apiSpy = jest.spyOn(AuthApi, 'exchangeToken');
   apiSpy.mockResolvedValue(userResponse);

@@ -1,5 +1,6 @@
 import { useEffect, useState, ChangeEvent, Fragment } from 'react';
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { Box, Button, Grid, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -16,19 +17,20 @@ const useStyles = makeStyles({
     height: '58px',
     alignSelf: 'center',
     verticalAlign: 'center',
-    "margin-top": '25px !important'
+    'margin-top': '25px !important',
   },
 });
 
 const FilterNotificationsTable = () => {
   const dispatch = useDispatch();
+  const { t } = useTranslation(['common', 'notifiche']);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   const IUN_regex = /^[0-9A-Z_-]{1,20}$/i;
 
   const validationSchema = yup.object({
-    iunMatch: yup.string().matches(IUN_regex, 'Inserire il codice corretto'),
+    iunMatch: yup.string().matches(IUN_regex, t('Inserire il codice corretto')),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
   });
@@ -49,7 +51,6 @@ const FilterNotificationsTable = () => {
         iunMatch: values.iunMatch,
         status: values.status === 'All' ? undefined : values.status,
       };
-      console.log(filters);
       dispatch(setNotificationFilters(filters));
     },
   });
@@ -83,15 +84,14 @@ const FilterNotificationsTable = () => {
   return (
     <Fragment>
       <form onSubmit={formik.handleSubmit}>
-        <Box 
-          sx={{ flexGrow: 1, '& .MuiTextField-root': { mt: 3 } }}>
+        <Box sx={{ flexGrow: 1, '& .MuiTextField-root': { mt: 3 } }}>
           <Grid container spacing={1} alignItems="center">
             <Grid item xs={4}>
               <TextField
                 id="iunMatch"
                 value={formik.values.iunMatch}
                 onChange={handleChangeTouched}
-                label="Inserire codice IUN"
+                label={t('filters.iun', { ns: 'notifiche' })}
                 name="iunMatch"
                 variant="outlined"
                 error={formik.touched.iunMatch && Boolean(formik.errors.iunMatch)}
@@ -107,7 +107,7 @@ const FilterNotificationsTable = () => {
                 dateAdapter={DateAdapter}
               >
                 <DesktopDatePicker
-                  label="Da"
+                  label={t('filters.data_da', { ns: 'notifiche' })}
                   inputFormat="DD/MM/yyyy"
                   value={startDate}
                   onChange={(value: Date | null) => {
@@ -118,7 +118,9 @@ const FilterNotificationsTable = () => {
                       })
                       .catch(() => 'error');
                   }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => (
+                    <TextField id="startDate" name="startDate" {...params} />
+                  )}
                   disableFuture={true}
                   maxDate={endDate ? endDate : undefined}
                 />
@@ -133,7 +135,7 @@ const FilterNotificationsTable = () => {
                 onChange={formik.handleChange}
               >
                 <DesktopDatePicker
-                  label="A"
+                  label={t('filters.data_a', { ns: 'notifiche' })}
                   inputFormat="DD/MM/yyyy"
                   value={endDate}
                   onChange={(value: Date | null) => {
@@ -144,7 +146,7 @@ const FilterNotificationsTable = () => {
                       })
                       .catch(() => 'error');
                   }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField id="endDate" name="endDate" {...params} />}
                   disableFuture={true}
                   minDate={startDate ? startDate : undefined}
                 />
@@ -157,12 +159,16 @@ const FilterNotificationsTable = () => {
                 className={classes.customButton}
                 disabled={!formik.isValid}
               >
-                Cerca
+                {t('button.cerca')}
               </Button>
             </Grid>
             <Grid item xs={2}>
-              <Button className={classes.customButton} onClick={cleanFilters}>
-                Annulla ricerca
+              <Button
+                data-testid="cancelButton"
+                className={classes.customButton}
+                onClick={cleanFilters}
+              >
+                {t('button.annulla ricerca')}
               </Button>
             </Grid>
           </Grid>

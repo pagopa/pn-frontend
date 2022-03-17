@@ -1,0 +1,15 @@
+{
+  "title": "Le tue notifiche",
+  "table": {
+    "data": "Data",
+    "mittente": "Mittente",
+    "oggetto": "Oggetto",
+    "iun": "Codice IUN",
+    "status": "Stato"
+  },
+  "filters": {
+      "iun": "Inserire codice IUN",
+      "data_da": "Da",
+      "data_a": "A"
+  }
+}

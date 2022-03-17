@@ -102,7 +102,7 @@ export const delegatorsColumns = [
     align: 'center' as const,
     getCellLabel(value: string) {
       const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
-      if (value === DelegationStatus.ACCEPTED) {
+      if (value === DelegationStatus.ACTIVE) {
         return <Chip label={label} color={color} />;
       } else {
         return (

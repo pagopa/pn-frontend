@@ -3,8 +3,9 @@ import { Add, SentimentDissatisfied } from '@mui/icons-material';
 import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
 
 import { useTheme } from '@mui/material/styles';
+import { RootState } from '../../../redux/store';
+import { useAppSelector } from '../../../redux/hooks';
 import TableError from '../../../component/TableError/TableError';
-import { DelegationStatus } from '../../../utils/status.utility';
 import { delegatesColumns } from './delegationsColumns';
 
 const StyledStack = styled(Stack)`
@@ -15,18 +16,19 @@ const StyledStack = styled(Stack)`
 
 const Delegates = () => {
   const theme = useTheme();
-  // const delegates = useAppSelector((state: RootState) => state.delegationsState.delegates);
-  const rows: Array<Row> = [
-    {
-      id: '0',
-      name: 'Jimmy',
-      startDate: 'ciao',
-      endDate: 'arrivederci',
-      email: 'email@vera.it',
-      visibilityIds: ['pa1', 'pa2', 'pa3'],
-      status: DelegationStatus.ACTIVE,
-    },
-  ];
+  const delegates = useAppSelector(
+    (state: RootState) => state.delegationsState.delegations.delegates
+  );
+
+  const rows: Array<Row> = delegates.map((e: any) => ({
+    id: e.mandateId,
+    name: `${e.delegate.firstName} ${e.delegate.lastName}`,
+    startDate: e.datefrom,
+    endDate: e.dateto,
+    email: e.email,
+    visibilityIds: e.visibilityIds.map((f: any) => f.name),
+    status: e.status,
+  }));
 
   const handleAddDelegationClick = () => {
     // TODO: redirect to create new delegation

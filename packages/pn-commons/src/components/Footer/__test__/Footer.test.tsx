@@ -1,4 +1,4 @@
-import { act, RenderResult, within } from '@testing-library/react';
+import { within } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import Footer from '../Footer';
@@ -12,16 +12,12 @@ const footerLinks = [
   {label: 'Assistenza', link: `mailto:${assistanceEmail}`}
 ];
 
-
 describe('Footer Component', () => {
 
   it('renders footer', async () => {
-    let result: RenderResult | undefined;
     // render component
-    await act(async () => {
-      result = render(<Footer/>);
-    });
-    expect(result?.container).toHaveTextContent(/PagoPA S.p.A./i);
+    const result = render(<Footer/>);
+    expect(result.container).toHaveTextContent(/PagoPA S.p.A./i);
     const linksContainer = await within(result?.container!).findByTestId('linksContainer');
     expect(linksContainer).toBeInTheDocument();
     const links = linksContainer.querySelectorAll('a');
@@ -33,12 +29,9 @@ describe('Footer Component', () => {
   });
 
   it('renders assistance mail link', async () => {
-    let result: RenderResult | undefined;
     // render component
-    await act(async () => {
-      result = render(<Footer assistanceEmail={assistanceEmail}/>);
-    });
-    const linksContainer = await within(result?.container!).findByTestId('linksContainer');
+    const result = render(<Footer assistanceEmail={assistanceEmail}/>);
+    const linksContainer = await within(result.container!).findByTestId('linksContainer');
     expect(linksContainer).toBeInTheDocument();
     const links = linksContainer.querySelectorAll('a');
     expect(links).toHaveLength(4);

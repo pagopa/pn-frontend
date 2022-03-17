@@ -1,13 +1,13 @@
 import { useState, Fragment } from 'react';
 import { Alert, Grid, Typography, Box, IconButton, AlertProps } from '@mui/material'; // SvgIcon
-import { styled } from '@mui/system';
-import { Theme } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
 import ReportGmailerrorredOutlinedIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 
+import { useIsMobile } from '../../hooks/IsMobile.hook';
 import { MessageType } from './types';
 
 type Props = {
@@ -25,6 +25,7 @@ const CustomAlert = styled(Alert)({
 
 export default function Toast({ title, message, open, type, closingDelay, onClose }: Props) {
   const [openStatus, setOpenStatus] = useState(open);
+  const isMobile = useIsMobile();
 
   const closeToast = () => {
     setOpenStatus(false);
@@ -79,9 +80,10 @@ export default function Toast({ title, message, open, type, closingDelay, onClos
               sx={{
                 position: 'fixed',
                 bottom: '64px',
-                right: '64px',
+                right: isMobile ? '5%' : '64px',
                 zIndex: 100,
-                width: '376px',
+                width: isMobile ? 'calc(100vw - 10%)' : '376px',
+                maxWidth: '376px',
                 backgroundColor: 'white',
                 borderLeft: getColor,
                 borderRadius: '5px',
