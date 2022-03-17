@@ -42,11 +42,8 @@ const DetailTimeline = ({ notification }: Props) => {
       /* eslint-disable functional/immutable-data */
       const link = document.createElement('a');
       link.href = legalFactDownloadUrl;
-      if (IS_CHROME || IS_EDGE) {
-        link.download = `Attestato-opponibile-terzi.pdf`;
-      } else {
-        link.target = '_blank';
-      }
+      link.target = '_blank';
+      link.rel = 'noreferrer';
       link.click();
       /* eslint-enable functional/immutable-data */
     }
