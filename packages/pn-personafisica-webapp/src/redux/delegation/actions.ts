@@ -31,7 +31,7 @@ export const getDelegates = createAsyncThunk<any>(
         fiscalCode: 'MRCVRD83C12H501C',
         person: true,
       },
-      status: 'Active',
+      status: 'Pending',
       visibilityIds: [
         {
           name: 'Agenzia Entrate',
