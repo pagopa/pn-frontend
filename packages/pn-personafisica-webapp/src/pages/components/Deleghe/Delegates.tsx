@@ -5,6 +5,7 @@ import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-
 import { useTheme } from '@mui/material/styles';
 import { RootState } from '../../../redux/store';
 import { useAppSelector } from '../../../redux/hooks';
+import TableError from '../../../component/TableError/TableError';
 import { delegatesColumns } from './delegationsColumns';
 
 const StyledStack = styled(Stack)`
