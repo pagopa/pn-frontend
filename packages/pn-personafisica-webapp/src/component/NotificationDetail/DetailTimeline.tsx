@@ -1,4 +1,5 @@
 import { Fragment, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Timeline,
   TimelineConnector,
@@ -27,6 +28,7 @@ type Props = {
 };
 
 const DetailTimeline = ({ notification }: Props) => {
+  const { t } = useTranslation(['notifiche']);
   const dispatch = useAppDispatch();
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
@@ -53,7 +55,7 @@ const DetailTimeline = ({ notification }: Props) => {
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography color="text.primary" fontWeight={700} textTransform="uppercase" fontSize={14}>
-            Stato della notifica
+            {t('Stato della notifica')}
           </Typography>
         </Grid>
         {/* TODO: ripristinare quando sarà completata la issue pn-719 */}
@@ -62,14 +64,14 @@ const DetailTimeline = ({ notification }: Props) => {
         </Grid> */}
       </Grid>
       <Timeline>
-        {notification.timeline.map((t, i) => (
-          <TimelineItem key={t.elementId} data-testid="timelineItem">
+        {notification.timeline.map((timelineItem, i) => (
+          <TimelineItem key={timelineItem.elementId} data-testid="timelineItem">
             <TimelineOppositeContent sx={{ textAlign: 'center', margin: 'auto 0' }}>
               <Typography color="text.secondary" fontSize={14}>
-                {getMonthString(t.timestamp)}
+                {getMonthString(timelineItem.timestamp)}
               </Typography>
               <Typography fontWeight={600} fontSize={18}>
-                {getDay(t.timestamp)}
+                {getDay(timelineItem.timestamp)}
               </Typography>
             </TimelineOppositeContent>
             <TimelineSeparator>
@@ -79,33 +81,33 @@ const DetailTimeline = ({ notification }: Props) => {
             </TimelineSeparator>
             <TimelineContent sx={{ flex: '3', msFlex: '3', WebkitFlex: '3', padding: '10px 16px' }}>
               <Typography color="text.secondary" fontSize={14} sx={{ paddingBottom: '8px' }}>
-                {getTime(t.timestamp)}
+                {getTime(timelineItem.timestamp)}
               </Typography>
               <Chip
                 data-testid="itemStatus"
                 label={
                   getNotificationStatusLabelAndColorFromTimelineCategory(
-                    t,
+                    timelineItem,
                     notification.notificationStatusHistory
                   ).label
                 }
                 color={
                   getNotificationStatusLabelAndColorFromTimelineCategory(
-                    t,
+                    timelineItem,
                     notification.notificationStatusHistory
                   ).color
                 }
               />
               <Box>
-                {t.legalFactsIds &&
-                  t.legalFactsIds.map((lf) => (
+                {timelineItem.legalFactsIds &&
+                  timelineItem.legalFactsIds.map((lf) => (
                     <Button
                       key={lf.key}
                       sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
                       startIcon={<AttachFileIcon />}
                       onClick={() => clickHandler(lf)}
                     >
-                      Attestato opponibile a Terzi
+                      {t('Attestato opponibile a Terzi')}
                     </Button>
                   ))}
               </Box>
