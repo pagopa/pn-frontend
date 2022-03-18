@@ -11,6 +11,7 @@ import {
   NotificationStatus,
   StatusTooltip,
 } from '@pagopa-pn/pn-commons';
+import { Badge } from '@mui/material';
 
 import * as routes from '../../navigation/routes.const';
 import FilterNotificationsTable from './FilterNotificationsTable';
@@ -27,7 +28,33 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
 
+  const isNewNotification = (value: string) => {
+    switch (value) {
+      case NotificationStatus.VIEWED:
+      case NotificationStatus.PAID:
+      case NotificationStatus.CANCELED:
+        return false;
+      default:
+        return true;
+    }
+  };
+
   const columns: Array<Column> = [
+    {
+      id: 'notificationStatus',
+      label: '',
+      width: '0%',
+      sortable: false,
+      getCellLabel(value: string) {
+        if (isNewNotification(value)) {
+          return <Badge color="primary" variant="dot" />;
+        }
+        return null;
+      },
+      onClick(row: Row, column: Column) {
+        handleRowClick(row, column);
+      },
+    },
     {
       id: 'sentAt',
       label: t('table.data'),
