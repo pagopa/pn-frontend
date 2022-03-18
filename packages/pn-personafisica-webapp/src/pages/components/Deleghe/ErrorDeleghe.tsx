@@ -1,31 +1,37 @@
 
 import { Grid, Typography, Box, Alert } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { useTranslation } from 'react-i18next';
 
-const ErrorDeleghe = () => {
-    console.log("Componente di errore");
+class ErrorDelega {
+    title: string;
+    description: string;
+    constructor(title: string, description: string) {
+        this.title = title;
+        this.description = description;
+    }
+}
+
+type ErrorDelegheProps = {
+    errorType: number;
+};
+
+const ErrorDeleghe: React.FC<ErrorDelegheProps> = ({ errorType }) => {
+
+    const { t } = useTranslation(['errorCreationNewMandatory']);
+
+    const errors = [
+        new ErrorDelega("Connessione Interrotta", "La tua richiesta non è stata inviata. Controlla che il tuo dispositivo sia connesso a una rete e riprova."),
+        new ErrorDelega("Delega già presente", "La persona che hai indicato ha già una delega per questo ente."),
+        new ErrorDelega("Il servizio non è disponibile", "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi."),
+    ];
+
+
     return (
-        <>
-            {
-                /*
-            <Box sx={{ width:"480px", height: "104px"}}>
-                <Grid container>
-                    <Grid item xs={2} sx={{ backgroundColor: "blue"}}>
-                        <Typography sx={{ marginTop: "1rem" }}>Icona</Typography>
-                    </Grid>
-                    <Grid item xs={10} sx={{ margin: 'auto' }}>
-                        <Box sx={{ display: 'flex', flexDirection: 'row', backgroundColor: "pink" }}>
-                            <Typography sx={{ marginTop: "1rem" }}>Testo da metgtere doop</Typography>
-                        </Box>
-                    </Grid>
-                </Grid>
-            </Box>            
-                */
-            }
             <Box>
                 <Alert
                     className="userToast"
-                    icon={                        <ErrorOutlineIcon sx={{my:"auto", color:"black"}}/>
+                    icon={<ErrorOutlineIcon sx={{ my: "auto", color: "black" }} />
                     }
                     sx={{
                         width: '480px',
@@ -40,15 +46,16 @@ const ErrorDeleghe = () => {
                     }}>
                     <Grid container>
                         <Grid item xs={12}>
-                            <Typography sx={{fontWeight: '600' }}>
-                                Esempio titolo
+                            <Typography sx={{ fontWeight: '600' }}>
+                                {t(errors[errorType].title)}
                             </Typography>
-                            <Typography>Esempio messaggio</Typography>
+                            <Typography>
+                                {t(errors[errorType].description)}
+                            </Typography>
                         </Grid>
                     </Grid>
                 </Alert>
             </Box>
-        </>
     );
 };
 

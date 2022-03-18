@@ -43,7 +43,7 @@ const NuovaDelega = () => {
                 <TitleBox title={"Deleghe"} subTitle={"Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la visualizzazione o la gestione delle tue notifiche"}  variantSubTitle = 'p'/>
                 <Card sx={{ padding: "30px", width: "80%", mt: 4}}>
                     <Typography sx={{ fontWeight: 'bold' }}>
-                        Tipologia di persona *
+                        {t('Tipologia di persona *')}
                     </Typography>
                     <Formik
                         initialValues={{
@@ -77,7 +77,7 @@ const NuovaDelega = () => {
                                     >
                                         <Grid container sx={{ width: "100%" }}>
                                             <Grid item xs={3}>
-                                                <FormControlLabel value="pf" control={<Radio />} name={"selectPersonaFisicaOrPersonaGiuridica"} label="Persona Fisica" />
+                                                <FormControlLabel value="pf" control={<Radio />} name={"selectPersonaFisicaOrPersonaGiuridica"} label={t('Persona Fisica') as string} />
                                             </Grid>
                                             <Grid item xs={4} sx={{ margin: "auto" }}>
                                                 <TextField
@@ -87,7 +87,7 @@ const NuovaDelega = () => {
                                                     onChange={(event) => {
                                                         setFieldValue('nome', event.currentTarget.value);
                                                     }}
-                                                    label={'Nome'}
+                                                    label={t('Nome *')}
                                                     name="cf"
                                                     variant="outlined"
                                                     error={touched.nome && Boolean(errors.nome)}
@@ -102,7 +102,7 @@ const NuovaDelega = () => {
                                                     onChange={(event) => {
                                                         setFieldValue('cognome', event.currentTarget.value);
                                                     }}
-                                                    label={'Cognome'}
+                                                    label={t('Cognome *')}
                                                     name="cognome"
                                                     variant="outlined"
                                                     error={touched.cognome && Boolean(errors.cognome)}
@@ -111,7 +111,7 @@ const NuovaDelega = () => {
                                                 />
                                             </Grid>
                                         </Grid>
-                                        <FormControlLabel value="pg" control={<Radio />} name={"selectPersonaFisicaOrPersonaGiuridica"} label="Persona Giuridica" disabled />
+                                        <FormControlLabel value="pg" control={<Radio />} name={"selectPersonaFisicaOrPersonaGiuridica"} label={t('Persona Giuridica') as string} disabled />
                                     </RadioGroup>
                                 </FormControl>
                                 <TextField
@@ -121,7 +121,7 @@ const NuovaDelega = () => {
                                     onChange={(event) => {
                                         setFieldValue('cf', event.currentTarget.value);
                                     }}
-                                    label={'Codice Fiscale'}
+                                    label={t('Codice Fiscale *') as string}
                                     name="cf"
                                     variant="outlined"
                                     error={touched.cf && Boolean(errors.cf)}
@@ -135,7 +135,7 @@ const NuovaDelega = () => {
                                     onChange={(event) => {
                                         setFieldValue('email', event.currentTarget.value);
                                     }}
-                                    label={'Email'}
+                                    label={t('Email *') as string}
                                     name="email"
                                     variant="outlined"
                                     error={touched.email && Boolean(errors.email)}
@@ -143,7 +143,7 @@ const NuovaDelega = () => {
                                     fullWidth
                                 />
                                 <Typography sx={{ fontWeight: 'bold', marginTop: "2rem" }}>
-                                    Potrà visualizzare le notifiche da parte di*
+                                    {t('Potrà visualizzare le notifiche da parte di*')}
                                 </Typography>
                                 <FormControl sx={{ width: "100%" }}>
                                     <RadioGroup
@@ -155,21 +155,21 @@ const NuovaDelega = () => {
                                             setFieldValue('selectTuttiEntiOrSelezionati', event.currentTarget.value);
                                         }}
                                     >
-                                        <FormControlLabel value="tuttiGliEnti" control={<Radio />} name={"selectTuttiEntiOrSelezionati"} label="Tutti gli enti" />
+                                        <FormControlLabel value="tuttiGliEnti" control={<Radio />} name={t("selectTuttiEntiOrSelezionati")} label={t('Tutti gli enti') as string} />
                                         <Grid container>
                                             <Grid item xs={6}>
-                                                <FormControlLabel value="entiSelezionati" control={<Radio />} name={"selectTuttiEntiOrSelezionati"} label="Solo gli enti selezionati" />
+                                                <FormControlLabel value="entiSelezionati" control={<Radio />} name={"selectTuttiEntiOrSelezionati"} label={t('Solo gli enti selezionati') as string}/>
                                             </Grid>
                                             <Grid item xs={6} sx={{ margin: 'auto' }}>
                                                 {
                                                     values.selectTuttiEntiOrSelezionati === "entiSelezionati" ?
                                                         <FormControl fullWidth>
-                                                            <InputLabel id="ente-select">Seleziona Enti</InputLabel>
+                                                            <InputLabel id="ente-select">{t('Seleziona Enti')}</InputLabel>
                                                             <Select
                                                                 labelId="ente-select"
                                                                 id="ente-select"
                                                                 value={values.enteSelect}
-                                                                label="Seleziona Enti"
+                                                                label={t('Seleziona Enti') as string}
                                                                 onChange={(event: SelectChangeEvent<string>) => {
                                                                     console.log(event);
                                                                     setFieldValue('enteSelect', event.target.value);
@@ -193,7 +193,7 @@ const NuovaDelega = () => {
                                         dateAdapter={DateAdapter}
                                     >
                                         <DesktopDatePicker
-                                            label="Termine Delega"
+                                            label={t("Termine Delega *")}
                                             inputFormat="DD/MM/yyyy"
                                             value={values.expirationDate}
                                             onChange={(value: Date | null) => {
@@ -207,10 +207,10 @@ const NuovaDelega = () => {
                                     </LocalizationProvider>
                                 </Box>
                                 <Divider sx={{ marginTop: "1rem" }} />
-                                <Typography sx={{ fontWeight: 'bold', marginTop: "1rem" }}>Codice di verifica</Typography>
+                                <Typography sx={{ fontWeight: 'bold', marginTop: "1rem" }}>{t('Codice di verifica')}</Typography>
                                 <Grid container>
                                     <Grid item xs={8}>
-                                        <Typography sx={{ marginTop: "1rem" }}>Condividi questo codice con la persona delegata : dovrà inserirlo <br></br> al primo accesso a Piattaforma Notifiche.</Typography>
+                                        <Typography sx={{ marginTop: "1rem" }}>{t('Condividi questo codice con la persona delegata : dovrà inserirlo <br></br> al primo accesso a Piattaforma Notifiche.')}</Typography>
                                     </Grid>
                                     <Grid item xs={4} sx={{ margin: 'auto' }}>
                                         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
@@ -228,11 +228,11 @@ const NuovaDelega = () => {
                                 <Divider sx={{ marginTop: "1rem" }} />
                                 <Grid container sx={{marginTop: "1rem"}}>
                                     <Grid item xs={4} sx={{ margin: 'auto' }}>
-                                        <Button sx={{ marginTop: "1rem", margin: 'auto' }} type={"submit"} variant={"contained"} >Invia la richiesta</Button>
+                                        <Button sx={{ marginTop: "1rem", margin: 'auto' }} type={"submit"} variant={"contained"} >{t('Invia la richiesta')}</Button>
                                     </Grid>
                                     <Grid item xs={8} sx={{ margin: 'auto' }}>
                                         <Stack direction="row" alignItems="center" justifyContent="end">
-                                        <ErrorDeleghe/>
+                                        <ErrorDeleghe errorType={0}/>
                                         </Stack>
                                     </Grid>
                                 </Grid>
