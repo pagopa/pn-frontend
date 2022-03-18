@@ -30,9 +30,11 @@ export { TitleAndDescription };
 // pages
 import NotFound from './navigation/NotFound';
 import AccessDenied from './navigation/AccessDenied';
+import SuccessPage from './components/SuccessPage';
 
 export { NotFound };
 export { AccessDenied };
+export { SuccessPage };
 
 // types
 import { AppError } from './types/AppError';
