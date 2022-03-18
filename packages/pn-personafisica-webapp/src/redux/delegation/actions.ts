@@ -144,7 +144,6 @@ export const getDelegators = createAsyncThunk<any>(
 
 export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
   'revokeDelegation',
-  /* @ts-ignore */
   async (id: string, { rejectWithValue }) => {
     try {
       return await DelegationsApi.revokeDelegation(id);
@@ -157,7 +156,6 @@ export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
 
 export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
   'rejectDelegation',
-  /* @ts-ignore */
   async (id: string, { rejectWithValue }) => {
     try {
       return await DelegationsApi.rejectDelegation(id);
@@ -170,7 +168,6 @@ export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
 
 export const acceptDelegation = createAsyncThunk<{ id: string }, string>(
   'acceptDelegation',
-  /* @ts-ignore */
   async (id: string) => {
     try {
       return await DelegationsApi.acceptDelegation(id);
