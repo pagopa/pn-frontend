@@ -46,13 +46,15 @@ const FilterNotifications = () => {
     endDate: yup.date().min(tenYearsAgo),
   });
 
+  const initialValues = {
+    startDate: tenYearsAgo,
+    endDate: today,
+    iunMatch: '',
+    status: NotificationAllowedStatus[0].value,
+  };
+
   const formik = useFormik({
-    initialValues: {
-      startDate: tenYearsAgo,
-      endDate: today,
-      iunMatch: '',
-      status: NotificationAllowedStatus[0].value,
-    },
+    initialValues,
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
@@ -72,7 +74,7 @@ const FilterNotifications = () => {
       setNotificationFilters({
         startDate: tenYearsAgo.toISOString(),
         endDate: today.toISOString(),
-        status: undefined,
+        status: NotificationAllowedStatus[0].value,
         iunMatch: undefined,
       })
     );
@@ -87,10 +89,6 @@ const FilterNotifications = () => {
     void formik.setFieldTouched(e.target.id, true, false);
     formik.handleChange(e);
   };
-
-  useEffect(() => {
-    void formik.validateForm();
-  }, []);
 
   const formBody = (
     <Fragment>
@@ -212,9 +210,27 @@ const FilterNotifications = () => {
     },
   ];
 
+  const filtersApplied = (): number => {
+    const formValues = formik.values;
+    return Object.entries(formValues).reduce((c: number, el: [string, any]) => {
+      if (el[0] in initialValues && el[1] !== (initialValues as any)[el[0]]) {
+        return c + 1;
+      }
+      return c;
+    }, 0);
+  };
+
+  useEffect(() => {
+    void formik.validateForm();
+  }, []);
+
   return isMobile ? (
     <CustomMobileDialog>
-      <CustomMobileDialogToggle sx={{ pl: 0 }} hasCounterBadge>
+      <CustomMobileDialogToggle
+        sx={{ pl: 0 }}
+        hasCounterBadge
+        bagdeCount={filtersApplied()}
+      >
         {t('button.cerca')}
       </CustomMobileDialogToggle>
       <CustomMobileDialogContent title={t('button.cerca')}>
