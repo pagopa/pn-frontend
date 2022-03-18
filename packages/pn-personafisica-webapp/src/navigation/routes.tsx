@@ -13,6 +13,8 @@ function Router() {
   return (
     <Routes>
       <Route path="/" element={<VerifyUser />}></Route>
+              <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
+
       {/* protected routes */}
       <Route element={<RequireAuth />}>
         <Route path={routes.NOTIFICHE} element={<Notifiche/>} />

@@ -10,7 +10,7 @@ type Props = {
   variantTitle?: Variant;
   variantSubTitle?: Variant;
 };
-export default function TitleBox({
+const TitleBox = ({
   title,
   subTitle,
   mbTitle = 2,
@@ -18,17 +18,17 @@ export default function TitleBox({
   mbSubTitle,
   variantTitle = 'h1',
   variantSubTitle = 'h5',
-}: Props) {
-  return (
-    <Grid container mt={mtGrid}>
-      <Grid item xs={12} mb={mbTitle}>
-        <Typography variant={variantTitle}>{title}</Typography>
-      </Grid>
-      <Grid item xs={12} mb={mbSubTitle}>
-        <Typography variant={variantSubTitle} sx={{ fontSize: '18px' }}>
-          {subTitle}
-        </Typography>
-      </Grid>
+}: Props) => (
+  <Grid container mt={mtGrid}>
+    <Grid item xs={12} mb={mbTitle}>
+      <Typography variant={variantTitle}>{title}</Typography>
     </Grid>
-  );
-}
+    <Grid item xs={12} mb={mbSubTitle}>
+      <Typography variant={variantSubTitle} sx={{ fontSize: '18px' }}>
+        {subTitle}
+      </Typography>
+    </Grid>
+  </Grid>
+);
+
+export default TitleBox;
