@@ -1,10 +1,10 @@
 import { Box, Stack, styled } from '@mui/material';
 import { Add, SentimentDissatisfied } from '@mui/icons-material';
 import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
-
 import { useTheme } from '@mui/material/styles';
-import { RootState } from '../../../redux/store';
+
 import { useAppSelector } from '../../../redux/hooks';
+import { RootState } from '../../../redux/store';
 import { delegatesColumns } from './delegationsColumns';
 
 const StyledStack = styled(Stack)`

@@ -151,4 +151,13 @@ describe('Delegations api tests', () => {
     const res = await getDelegators();
     expect(res.data).toStrictEqual(arrayOfDelegators);
   });
+
+  it('revokes a delegation', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPatch('/delegations/7/revoke').reply(204);
+    const res = await DelegationsApi.revokeDelegation('7');
+    expect(res).toStrictEqual({id: '7'});
+    mock.reset();
+    mock.restore();
+  });
 });

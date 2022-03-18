@@ -2,16 +2,38 @@ import { useEffect } from 'react';
 import { Box } from '@mui/material';
 import { TitleAndDescription } from '@pagopa-pn/pn-commons';
 
+import GenericError from '../component/GenericError/GenericError';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { getDelegates, getDelegators } from '../redux/delegation/actions';
-import GenericError from '../component/GenericError/GenericError';
+import {
+  closeRevocationModal,
+  rejectDelegation,
+  revokeDelegation,
+  getDelegates,
+  getDelegators,
+} from '../redux/delegation/actions';
 import Delegates from './components/Deleghe/Delegates';
 import Delegators from './components/Deleghe/Delegators';
+import ConfirmationModal from './components/Deleghe/ConfirmationModal';
 
 const Deleghe = () => {
+  const { id, open, type } = useAppSelector(
+    (state: RootState) => state.delegationsState.modalState
+  );
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state: RootState) => state.delegationsState);
+
+  const handleCloseModal = () => {
+    dispatch(closeRevocationModal());
+  };
+
+  const handleConfirmClick = () => {
+    if (type === 'delegates') {
+      void dispatch(revokeDelegation(id));
+    } else {
+      void dispatch(rejectDelegation(id));
+    }
+  };
 
   useEffect(() => {
     void dispatch(getDelegates());
@@ -24,6 +46,17 @@ const Deleghe = () => {
         <GenericError />
       ) : (
         <>
+            <ConfirmationModal
+                open={open}
+                title={
+                    type === 'delegates'
+                        ? 'Vuoi davvero revocare la delega?'
+                        : 'Vuoi davvero rifiutare la delega?'
+                }
+                handleClose={handleCloseModal}
+                onConfirm={handleConfirmClick}
+                onConfirmLabel={type === 'delegates' ? 'Revoca la delega' : 'Rifiuta la delega'}
+            />
           <TitleAndDescription title={'Deleghe'}>
             Qui puoi gestire <b>i tuoi delegati</b> e le <b>deleghe a tuo carico</b>. I primi sono
             le persone fisiche o giuridiche che hai autorizzato alla visualizzazione e gestione

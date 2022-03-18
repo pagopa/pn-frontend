@@ -1,10 +1,12 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
+import { DelegationsApi } from '../../api/delegations/Delegations.api';
 
 /**
  *
  */
 export const getDelegates = createAsyncThunk<any>(
   'getDelegates',
+  // TODO: connect to api
   // async (_, {rejectWithValue}) => {
   //   try {
   //     return await DelegationsApi.getDelegates();
@@ -29,7 +31,7 @@ export const getDelegates = createAsyncThunk<any>(
         fiscalCode: 'MRCVRD83C12H501C',
         person: true,
       },
-      status: 'Active',
+      status: 'Pending',
       visibilityIds: [
         {
           name: 'Agenzia Entrate',
@@ -42,7 +44,7 @@ export const getDelegates = createAsyncThunk<any>(
       email: 'email@falsa.it',
     },
     {
-      mandateId: '1',
+      mandateId: '123',
       delegator: {
         firstName: 'Mario',
         lastName: 'Rossi',
@@ -74,6 +76,7 @@ export const getDelegates = createAsyncThunk<any>(
 
 export const getDelegators = createAsyncThunk<any>(
   'getDelegators',
+  // TODO: connect to api
   // async (_, {rejectWithValue}) => {
   //   try {
   //     return await DelegationsApi.getDelegators();
@@ -140,3 +143,44 @@ export const getDelegators = createAsyncThunk<any>(
     },
   ]
 );
+
+export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
+  'revokeDelegation',
+  async (id: string) => {
+    try {
+      return await DelegationsApi.revokeDelegation(id);
+    } catch (e) {
+      // TODO: return rejectWithValue(e);
+      return { id };
+    }
+  }
+);
+
+export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
+  'rejectDelegation',
+  async (id: string) => {
+    try {
+      return await DelegationsApi.rejectDelegation(id);
+    } catch (e) {
+      // TODO: return rejectWithValue(e);
+      return { id };
+    }
+  }
+);
+
+export const acceptDelegation = createAsyncThunk<{ id: string }, string>(
+  'acceptDelegation',
+  async (id: string) => {
+    try {
+      return await DelegationsApi.acceptDelegation(id);
+    } catch (e) {
+      return { id };
+      // TODO: return { rejectWithValue(e) };
+    }
+  }
+);
+
+export const openRevocationModal =
+  createAction<{ id: string; type: string }>('openRevocationModal');
+
+export const closeRevocationModal = createAction<void>('closeRevocationModal');

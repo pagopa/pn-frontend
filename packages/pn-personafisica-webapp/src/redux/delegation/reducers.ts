@@ -1,27 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getDelegates, getDelegators } from './actions';
+import { DelegationStatus } from '../../utils/status.utility';
+import {
+  getDelegates,
+  getDelegators,
+  acceptDelegation,
+  closeRevocationModal,
+  openRevocationModal,
+  rejectDelegation,
+  revokeDelegation,
+} from './actions';
+import { RevocationModalProps, Delegation } from './types';
 
 /* eslint-disable functional/immutable-data */
 const delegationsSlice = createSlice({
   name: 'delegationsSlice',
   initialState: {
-    loading: false,
     error: false,
     delegations: {
-      delegators: [],
-      delegates: [],
+      delegators: [] as Array<Delegation>,
+      delegates: [] as Array<Delegation>,
       isCompany: false,
     },
+    modalState: {
+      open: false,
+      id: '',
+      type: '',
+    } as RevocationModalProps,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getDelegates.fulfilled, (state, action) => {
       state.delegations.delegates = action.payload;
-      state.loading = false;
     });
     builder.addCase(getDelegators.fulfilled, (state, action) => {
       state.delegations.delegators = action.payload;
-      state.loading = false;
     });
     builder.addCase(getDelegates.rejected, (state) => {
       state.error = true;
@@ -29,11 +41,31 @@ const delegationsSlice = createSlice({
     builder.addCase(getDelegators.rejected, (state) => {
       state.error = true;
     });
-    builder.addCase(getDelegates.pending, (state) => {
-      state.loading = true;
+    builder.addCase(acceptDelegation.fulfilled, (state, action) => {
+      state.delegations.delegators = state.delegations.delegators.map((e: any) =>
+        e.mandateId === action.payload.id ? { ...e, status: DelegationStatus.ACTIVE } : e
+      );
     });
-    builder.addCase(getDelegators.pending, (state) => {
-      state.loading = true;
+    builder.addCase(openRevocationModal, (state, action) => {
+      state.modalState.id = action.payload.id;
+      state.modalState.open = true;
+      state.modalState.type = action.payload.type;
+    });
+    builder.addCase(closeRevocationModal, (state) => {
+      state.modalState.id = '';
+      state.modalState.open = false;
+    });
+    builder.addCase(revokeDelegation.fulfilled, (state, action) => {
+      state.modalState.open = false;
+      state.delegations.delegates = state.delegations.delegates.filter(
+        (e: any) => e.mandateId !== action.payload.id
+      );
+    });
+    builder.addCase(rejectDelegation.fulfilled, (state, action) => {
+      state.modalState.open = false;
+      state.delegations.delegators = state.delegations.delegators.filter(
+        (e: any) => e.mandateId !== action.payload.id
+      );
     });
   },
 });

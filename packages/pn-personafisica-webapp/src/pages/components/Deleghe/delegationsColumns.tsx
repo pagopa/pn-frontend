@@ -1,7 +1,11 @@
-import { Column } from '@pagopa-pn/pn-commons';
-import { Button, Chip, IconButton, Typography } from '@mui/material';
+import { Column, Row } from '@pagopa-pn/pn-commons';
+import { Button, Chip, IconButton, Typography, Menu as MUIMenu, MenuItem } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
+import { useState } from 'react';
+
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../../utils/status.utility';
+import { useAppDispatch } from '../../../redux/hooks';
+import { acceptDelegation, openRevocationModal } from '../../../redux/delegation/actions';
 
 const delegationsColumns: Array<Column> = [
   {
@@ -65,11 +69,64 @@ const delegationsColumns: Array<Column> = [
   },
 ];
 
-const Menu = () => (
-  <IconButton>
-    <MoreVert fontSize={'small'} />
-  </IconButton>
-);
+const Menu = (props: any) => {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const dispatch = useAppDispatch();
+
+  const handleOpenModalClick = () => {
+    dispatch(openRevocationModal({ id: props.id, type: props.menuType }));
+  };
+
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const getMenuItemElements = () => {
+    if (props.menuType === 'delegates') {
+      return (
+        <>
+          <MenuItem onClick={handleClose}>Mostra Codice</MenuItem>
+          <MenuItem onClick={handleOpenModalClick}>Revoca</MenuItem>
+        </>
+      );
+    } else {
+      return (
+        <>
+          <MenuItem onClick={handleOpenModalClick}>Rifiuta</MenuItem>
+        </>
+      );
+    }
+  };
+
+  return (
+    <>
+      <IconButton onClick={handleClick}>
+        <MoreVert fontSize={'small'} />
+      </IconButton>
+      <MUIMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
+        {getMenuItemElements()}
+      </MUIMenu>
+    </>
+  );
+};
+
+const AcceptButton = ({ id }: { id: string }) => {
+  const dispatch = useAppDispatch();
+  const handleAcceptClick = () => {
+    void dispatch(acceptDelegation(id));
+  };
+
+  return (
+    <Button onClick={handleAcceptClick} variant={'contained'} color={'primary'}>
+      Accetta
+    </Button>
+  );
+};
 
 export const delegatesColumns = [
   ...delegationsColumns,
@@ -84,11 +141,11 @@ export const delegatesColumns = [
     },
   },
   {
-    id: 'actionsMenu',
+    id: 'id',
     label: '',
     width: '5%',
-    getCellLabel() {
-      return <Menu />;
+    getCellLabel(value: string) {
+      return <Menu menuType={'delegates'} id={value} />;
     },
   },
 ];
@@ -100,25 +157,21 @@ export const delegatorsColumns = [
     label: 'Stato',
     width: '18%',
     align: 'center' as const,
-    getCellLabel(value: string) {
+    getCellLabel(value: string, row: Row) {
       const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
       if (value === DelegationStatus.ACTIVE) {
         return <Chip label={label} color={color} />;
       } else {
-        return (
-          <Button variant={'contained'} color={'primary'}>
-            Accetta
-          </Button>
-        );
+        return <AcceptButton id={row.id} />;
       }
     },
   },
   {
-    id: 'actionsMenu',
+    id: 'id',
     label: '',
     width: '5%',
-    getCellLabel() {
-      return <Menu />;
+    getCellLabel(value: string) {
+      return <Menu menuType={'delegators'} id={value} />;
     },
   },
 ];
