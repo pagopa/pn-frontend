@@ -13,8 +13,8 @@ import { useAppDispatch } from '../../../redux/hooks';
 
 const useStyles = makeStyles({
   customButton: {
+    marginTop:'8px !important',
     height: '60px',
-    alignSelf: 'center',
   }
 });
 

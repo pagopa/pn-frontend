@@ -1,5 +1,5 @@
 import { LegalFactId, NotificationDetail } from '@pagopa-pn/pn-commons';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
@@ -41,3 +41,5 @@ export const getReceivedNotificationDocument = createAsyncThunk<
     }
   }
 );
+
+export const resetState = createAction<void>('resetState');

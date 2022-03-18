@@ -33,7 +33,7 @@ const DetailTable = ({ notification }: Props) => {
     {
       id: 7,
       label: 'Codice IUN',
-      value: <Box fontWeight={600}>{notification.cancelledByIun}</Box>,
+      value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
     { id: 8, label: 'Gruppi', value: '' },
   ];

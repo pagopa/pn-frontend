@@ -100,6 +100,7 @@ import {
   NotificationAllowedStatus,
 } from './utils/status.utility';
 import { getMonthString, getDay, getTime } from './utils/date.utility';
+import { formatFiscalCode } from './utils/fiscal_code.utility';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusLabelAndColor };
@@ -107,6 +108,7 @@ export { createAppError };
 export { formatDate };
 export { calcPages };
 export { getMonthString, getDay, getTime };
+export { formatFiscalCode };
 
 // consts
 import { today, tenYearsAgo } from './utils/date.utility';

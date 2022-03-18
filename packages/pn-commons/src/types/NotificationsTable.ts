@@ -19,5 +19,5 @@ export interface Column {
 
 export interface Row {
   id: string;
-  [key: string]: string | number;
+  [key: string]: string | number | Array<string>;
 }

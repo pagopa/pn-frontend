@@ -19,6 +19,10 @@ const useStyles = makeStyles({
     verticalAlign: 'center',
     'margin-top': '25px !important',
   },
+  helperTextFormat: {
+      // Use existing space / prevents shifting content below field
+      alignItems:'flex'
+  }
 });
 
 const FilterNotificationsTable = () => {
@@ -85,10 +89,10 @@ const FilterNotificationsTable = () => {
     <Fragment>
       <form onSubmit={formik.handleSubmit}>
         <Box sx={{ flexGrow: 1, '& .MuiTextField-root': { mt: 3 } }}>
-          <Grid container spacing={1} alignItems="center">
+          <Grid container spacing={1} className={classes.helperTextFormat}>
             <Grid item xs={4}>
               <TextField
-                id="iunMatch"
+                id='iunMatch'
                 value={formik.values.iunMatch}
                 onChange={handleChangeTouched}
                 label={t('filters.iun', { ns: 'notifiche' })}

@@ -1,5 +1,6 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Breadcrumbs, Grid, Typography, Box, styled, Paper, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
@@ -10,7 +11,7 @@ import { RootState } from '../redux/store';
 import DetailTimeline from '../component/NotificationDetail/DetailTimeline';
 import DetailTable from '../component/NotificationDetail/DetailTable';
 import DetailDocuments from '../component/NotificationDetail/DetailDocuments';
-import { getReceivedNotification } from '../redux/notification/actions';
+import { getReceivedNotification, resetState } from '../redux/notification/actions';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   display: 'flex',
@@ -36,12 +37,15 @@ const NotificationDetail = () => {
   const dispatch = useAppDispatch();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const navigate = useNavigate();
+  const { t } = useTranslation(['notifiche']);
 
   useEffect(() => {
     if (id) {
       void dispatch(getReceivedNotification(id));
     }
   }, []);
+
+  useEffect(() => () => void dispatch(resetState()), []);
 
   return (
     <Box className={classes.root}>
@@ -50,10 +54,10 @@ const NotificationDetail = () => {
           <Breadcrumbs aria-label="breadcrumb">
             <StyledLink to={routes.NOTIFICHE}>
               <EmailIcon sx={{ mr: 0.5 }} />
-              Notifiche
+              {t('Notifiche')}
             </StyledLink>
             <Typography color="text.primary" fontWeight={600}>
-              Dettaglio notifica
+              {t('Dettaglio notifica')}
             </Typography>
           </Breadcrumbs>
           <Box sx={{ padding: '20px 0 0 0' }}>
@@ -63,7 +67,7 @@ const NotificationDetail = () => {
               <DetailDocuments notification={notification} />
             </Paper>
             <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(-1)}>
-              Indietro
+              {t('Indietro')}
             </Button>
           </Box>
         </Grid>
