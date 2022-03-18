@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 import { apiClient } from '../../axios';
-
+import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
 import { DelegationsApi } from '../Delegations.api';
 
 const arrayOfDelegates = [
@@ -123,7 +123,7 @@ const arrayOfDelegators = [
 
 export async function getDelegates() {
   const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onGet(`/delegates`).reply(200, arrayOfDelegates);
+  axiosMock.onGet(`/mandates-by-delegate`).reply(200, arrayOfDelegates);
   const res = await DelegationsApi.getDelegates();
   axiosMock.reset();
   axiosMock.restore();
@@ -132,7 +132,7 @@ export async function getDelegates() {
 
 export async function getDelegators() {
   const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onGet(`/delegators`).reply(200, arrayOfDelegators);
+  axiosMock.onGet(`/mandates-by-delegators`).reply(200, arrayOfDelegators);
   const res = await DelegationsApi.getDelegators();
   axiosMock.reset();
   axiosMock.restore();
@@ -140,6 +140,8 @@ export async function getDelegators() {
 }
 
 describe('Delegations api tests', () => {
+  mockAuthentication();
+
   it('get delegates', async () => {
     const res = await getDelegates();
     expect(res.data).toStrictEqual(arrayOfDelegates);
