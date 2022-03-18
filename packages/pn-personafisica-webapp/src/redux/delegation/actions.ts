@@ -6,6 +6,7 @@ import { DelegationsApi } from '../../api/delegations/Delegations.api';
  */
 export const getDelegates = createAsyncThunk<any>(
   'getDelegates',
+  // TODO: connect to api
   // async (_, {rejectWithValue}) => {
   //   try {
   //     return await DelegationsApi.getDelegates();
@@ -75,6 +76,7 @@ export const getDelegates = createAsyncThunk<any>(
 
 export const getDelegators = createAsyncThunk<any>(
   'getDelegators',
+  // TODO: connect to api
   // async (_, {rejectWithValue}) => {
   //   try {
   //     return await DelegationsApi.getDelegators();
@@ -144,7 +146,7 @@ export const getDelegators = createAsyncThunk<any>(
 
 export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
   'revokeDelegation',
-  async (id: string, { rejectWithValue }) => {
+  async (id: string) => {
     try {
       return await DelegationsApi.revokeDelegation(id);
     } catch (e) {
@@ -156,7 +158,7 @@ export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
 
 export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
   'rejectDelegation',
-  async (id: string, { rejectWithValue }) => {
+  async (id: string) => {
     try {
       return await DelegationsApi.rejectDelegation(id);
     } catch (e) {
