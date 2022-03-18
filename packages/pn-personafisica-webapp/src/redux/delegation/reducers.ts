@@ -15,7 +15,6 @@ import { RevocationModalProps, Delegation } from './types';
 const delegationsSlice = createSlice({
   name: 'delegationsSlice',
   initialState: {
-    loading: false,
     error: false,
     delegations: {
       delegators: [] as Array<Delegation>,
@@ -32,23 +31,15 @@ const delegationsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getDelegates.fulfilled, (state, action) => {
       state.delegations.delegates = action.payload;
-      state.loading = false;
     });
     builder.addCase(getDelegators.fulfilled, (state, action) => {
       state.delegations.delegators = action.payload;
-      state.loading = false;
     });
     builder.addCase(getDelegates.rejected, (state) => {
       state.error = true;
     });
     builder.addCase(getDelegators.rejected, (state) => {
       state.error = true;
-    });
-    builder.addCase(getDelegates.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(getDelegators.pending, (state) => {
-      state.loading = true;
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((e: any) =>
