@@ -1,7 +1,21 @@
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CardSort, CustomMobileDialog, Sort } from '@pagopa-pn/pn-commons';
-import { Button, FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import {
+  CardSort,
+  CustomMobileDialog,
+  CustomMobileDialogAction,
+  CustomMobileDialogContent,
+  CustomMobileDialogToggle,
+  Sort,
+} from '@pagopa-pn/pn-commons';
+import {
+  Button,
+  DialogActions,
+  DialogContent,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+} from '@mui/material';
 
 type Props = {
   sortFields: Array<CardSort>;
@@ -36,37 +50,39 @@ const MobileNotificationsSort = ({ sortFields, sort, onChangeSorting }: Props) =
     onChangeSorting({ order: 'asc', orderBy: '' });
   };
 
-  const dialogActions = [
-    {
-      key: 'confirm',
-      component: (
-        <Button variant="outlined" onClick={handleConfirmSort}>
-          {t('sort.title')}
-        </Button>
-      ),
-      closeOnClick: true,
-    },
-    {
-      key: 'cancel',
-      component: <Button onClick={handleCancelSort}>{t('sort.cancel')}</Button>,
-      closeOnClick: true,
-    },
-  ];
-
-  const dialogButton = <Button sx={{ pr: isSorted ? '10px' : 0 }}>{t('sort.title')}</Button>;
-
   return (
-    <CustomMobileDialog title={t('sort.title')} actions={dialogActions} button={dialogButton} hasCounterBadge bagdeCount={isSorted ? 1 : 0}>
-      <RadioGroup
-        aria-labelledby={t('sort.options')}
-        name="radio-buttons-group"
-        onChange={handleChange}
-        value={sortValue}
+    <CustomMobileDialog>
+      <CustomMobileDialogToggle
+        sx={{ pr: isSorted ? '10px' : 0 }}
+        hasCounterBadge
+        bagdeCount={isSorted ? 1 : 0}
       >
-        {sortFields.map((f) => (
-          <FormControlLabel key={f.id} value={f.id} control={<Radio />} label={f.label} />
-        ))}
-      </RadioGroup>
+        {t('sort.title')}
+      </CustomMobileDialogToggle>
+      <CustomMobileDialogContent title={t('sort.title')}>
+        <DialogContent>
+          <RadioGroup
+            aria-labelledby={t('sort.options')}
+            name="radio-buttons-group"
+            onChange={handleChange}
+            value={sortValue}
+          >
+            {sortFields.map((f) => (
+              <FormControlLabel key={f.id} value={f.id} control={<Radio />} label={f.label} />
+            ))}
+          </RadioGroup>
+        </DialogContent>
+        <DialogActions>
+          <CustomMobileDialogAction closeOnClick>
+            <Button variant="outlined" onClick={handleConfirmSort}>
+              {t('sort.title')}
+            </Button>
+          </CustomMobileDialogAction>
+          <CustomMobileDialogAction closeOnClick>
+            <Button onClick={handleCancelSort}>{t('sort.cancel')}</Button>
+          </CustomMobileDialogAction>
+        </DialogActions>
+      </CustomMobileDialogContent>
     </CustomMobileDialog>
   );
 };

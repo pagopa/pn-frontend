@@ -1,8 +1,11 @@
+import { DialogActions, DialogContent } from "@mui/material";
 import { fireEvent, waitFor, screen, RenderResult } from "@testing-library/react";
 
-import { render } from "../../test-utils";
+import { render } from "../../../test-utils";
 import CustomMobileDialog from "../CustomMobileDialog";
-
+import CustomMobileDialogAction from "../CustomMobileDialogAction";
+import CustomMobileDialogContent from "../CustomMobileDialogContent";
+import CustomMobileDialogToggle from "../CustomMobileDialogToggle";
 
 describe('CustomMobileDialog Component', () => {
 
@@ -10,10 +13,22 @@ describe('CustomMobileDialog Component', () => {
 
   beforeEach(() => {
     // render component
-    result = render(<CustomMobileDialog title="Mocked title" actions={[
-      {key: 'confirm', component: <div>Confirm</div>, closeOnClick: true},
-      {key: 'cancel', component: <div>Cancel</div>},
-    ]}><p>Mocked content</p></CustomMobileDialog>);
+    result = render(
+    <CustomMobileDialog>
+      <CustomMobileDialogToggle>
+        Mocked title
+      </CustomMobileDialogToggle>
+      <CustomMobileDialogContent title="Mocked title">
+        <DialogContent>
+          <p>Mocked content</p>
+        </DialogContent>
+        <DialogActions>
+          <CustomMobileDialogAction closeOnClick><div>Confirm</div></CustomMobileDialogAction>
+          <CustomMobileDialogAction><div>Cancel</div></CustomMobileDialogAction>
+        </DialogActions>
+      </CustomMobileDialogContent>
+    </CustomMobileDialog>
+    );
   });
 
   afterEach(() => {

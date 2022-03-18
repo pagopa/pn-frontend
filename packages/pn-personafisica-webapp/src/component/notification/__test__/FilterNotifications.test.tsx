@@ -2,7 +2,7 @@ import { fireEvent, waitFor, screen, within, RenderResult, act } from '@testing-
 import moment from 'moment';
 import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
-import FilterNotificationsTable from '../FilterNotificationsTable';
+import FilterNotifications from '../FilterNotifications';
 import { render } from '../../../__test__/test-utils';
 
 function formatDate(date: Date): string {
@@ -82,7 +82,7 @@ describe('Filter Notifications Table Component', () => {
 
     // render component
     await act(async () => {
-      result = render(<FilterNotificationsTable />);
+      result = render(<FilterNotifications />);
       form = result.container.querySelector('form') as HTMLFormElement;
     });
   });

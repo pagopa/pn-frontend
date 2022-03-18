@@ -1,7 +1,7 @@
 import { render } from '../../../__test__/test-utils';
 import DesktopNotifications from '../DesktopNotifications';
 
-jest.mock('../FilterNotificationsTable', () => () => <div>Filters</div>);
+jest.mock('../FilterNotifications', () => () => <div>Filters</div>);
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {

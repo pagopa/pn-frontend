@@ -14,6 +14,7 @@ import {
   StatusTooltip,
 } from '@pagopa-pn/pn-commons';
 import MobileNotificationsSort from './MobileNotificationsSort';
+import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
@@ -102,6 +103,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
     <Fragment>
       <Grid container direction="row">
         <Grid item xs={6}>
+          <FilterNotifications />
         </Grid>
         <Grid item xs={6} textAlign="right">
           {sort && onChangeSorting && (
