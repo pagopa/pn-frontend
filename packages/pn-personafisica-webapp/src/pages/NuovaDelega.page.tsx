@@ -55,7 +55,7 @@ const NuovaDelega = () => {
                             selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
                             expirationDate: Date.now(),
                             enteSelect: '',
-                            verificationCode: "12345"
+                            verificationCode: Array.from({length: 5}, () => Math.floor(Math.random() * 9))
                         }}
                         validationSchema={validationSchema}
                         onSubmit={async (values) => {
@@ -210,12 +210,12 @@ const NuovaDelega = () => {
                                 <Typography sx={{ fontWeight: 'bold', marginTop: "1rem" }}>{t('Codice di verifica')}</Typography>
                                 <Grid container>
                                     <Grid item xs={8}>
-                                        <Typography sx={{ marginTop: "1rem" }}>{t('Condividi questo codice con la persona delegata : dovrà inserirlo <br></br> al primo accesso a Piattaforma Notifiche.')}</Typography>
+                                        <Typography sx={{ marginTop: "1rem" }}>{t('Condividi questo codice con la persona delegata : dovrà inserirlo \n al primo accesso a Piattaforma Notifiche.')}</Typography>
                                     </Grid>
                                     <Grid item xs={4} sx={{ margin: 'auto' }}>
                                         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                                             {
-                                                values.verificationCode.split('').map((codeNumber) => (
+                                                values.verificationCode.map((codeNumber) => (
                                                     <Box key={codeNumber} sx={{ display: 'flex', borderRadius: "4px", borderColor: '#0173E5', width: "2.5rem", height: "4rem", borderWidth: "2px", borderStyle: 'solid', justifyContent: 'center', alignItems: 'center', textAlign: 'center', marginRight: "8px" }}>
                                                         <Typography sx={{ color: "#0173E5", fontWeight: 600 }}>{codeNumber}</Typography>
                                                     </Box>
