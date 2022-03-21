@@ -8,6 +8,11 @@ type Props = {
   closeOnClick?: boolean
 }
 
+/**
+ * Dialog actions
+ * @param children the react component for the action
+ * @param closeOnClick flag for close the dialog on action click
+ */
 const CustomMobileDialogAction = ({children, closeOnClick = false}: Props) => {
   const { toggleOpen } = useCustomMobileDialogContext();
 

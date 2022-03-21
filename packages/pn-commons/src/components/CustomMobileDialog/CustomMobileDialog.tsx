@@ -5,6 +5,9 @@ type Props = {
   children?: ReactNode;
 };
 
+/**
+ * Container for mobile version of the dialog
+ */
 const CustomMobileDialog = ({
   children
 }: Props) => {

@@ -19,6 +19,13 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   },
 }));
 
+/**
+ * Button to open/close dialog
+ * @param children the react component for the button
+ * @param hasCounterBadge add counter near the button
+ * @param bagdeCount number to display into the counter
+ * @param sx style to be addded to the button
+ */
 const CustomMobileDialogToggle = ({children, hasCounterBadge, bagdeCount = 0, sx}: Props) => {
 
   const { toggleOpen } = useCustomMobileDialogContext();

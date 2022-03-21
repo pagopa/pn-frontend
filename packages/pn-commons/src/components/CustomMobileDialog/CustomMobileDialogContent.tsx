@@ -45,6 +45,11 @@ const Transition = forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+/**
+ * The content of the dialog (header, body and actions)
+ * @param children the react component for the body and the actions
+ * @param title title to show in the dialog header
+ */
 const CustomMobileDialogContent = ({children, title}: Props) => {
   const { open, toggleOpen } = useCustomMobileDialogContext();
 
