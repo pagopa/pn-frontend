@@ -1,4 +1,4 @@
-import { fireEvent, waitFor, screen, within, RenderResult, act, prettyDOM } from '@testing-library/react';
+import { fireEvent, waitFor, screen, within, RenderResult, act } from '@testing-library/react';
 import moment from 'moment';
 import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
