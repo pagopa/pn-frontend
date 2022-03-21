@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Box, Stack, styled } from '@mui/material';
 import { Add, SentimentDissatisfied } from '@mui/icons-material';
 import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
@@ -5,6 +6,7 @@ import { useTheme } from '@mui/material/styles';
 
 import { useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
+import * as routes from '../../../navigation/routes.const';
 import { delegatesColumns } from './delegationsColumns';
 
 const StyledStack = styled(Stack)`
@@ -15,6 +17,7 @@ const StyledStack = styled(Stack)`
 
 const Delegates = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
@@ -30,8 +33,8 @@ const Delegates = () => {
   }));
 
   const handleAddDelegationClick = () => {
-    // TODO: redirect to create new delegation
-    console.log('add');
+    console.log('navigando');
+    navigate(routes.NUOVA_DELEGA);
   };
 
   return (

@@ -1,4 +1,4 @@
 export interface newDelegation {
-  loaded: boolean;
+  created: boolean;
   error: boolean;
 }

@@ -9,8 +9,10 @@ const ThemedButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const OutlinedButton = ({ children }: any) => (
-  <ThemedButton variant={'outlined'}>{children}</ThemedButton>
+const OutlinedButton = ({ children, onClick }: any) => (
+  <ThemedButton onClick={onClick} variant={'outlined'}>
+    {children}
+  </ThemedButton>
 );
 
 export default OutlinedButton;

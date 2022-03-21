@@ -6,6 +6,7 @@ import userSlice from './auth/reducers';
 import dashboardSlice from './dashboard/reducers';
 import notificationSlice from './notification/reducers';
 import delegationsSlice from './delegation/reducers';
+import newDelegationSlice from './newDelegation/reducers';
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined];
 
@@ -17,6 +18,7 @@ export const createStore = () =>
       dashboardState: dashboardSlice.reducer,
       notificationState: notificationSlice.reducer,
       delegationsState: delegationsSlice.reducer,
+      newDelegationState: newDelegationSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(
