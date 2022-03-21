@@ -107,7 +107,7 @@ import {
   getNotificationStatusLabelAndColor,
   NotificationAllowedStatus,
 } from './utils/status.utility';
-import { getMonthString, getDay, getTime } from './utils/date.utility';
+import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
 import { formatFiscalCode } from './utils/fiscal_code.utility';
 
 export { NotificationAllowedStatus };
@@ -119,11 +119,14 @@ export { getMonthString, getDay, getTime };
 export { formatFiscalCode };
 
 // consts
-import { today, tenYearsAgo } from './utils/date.utility';
-
 export { today, tenYearsAgo };
 
 // hooks
 import { useIsMobile } from './hooks/IsMobile.hook';
 
 export { useIsMobile };
+
+// reducers
+import { appStateReducer } from './redux/slices/appStateSlice';
+
+export { appStateReducer };

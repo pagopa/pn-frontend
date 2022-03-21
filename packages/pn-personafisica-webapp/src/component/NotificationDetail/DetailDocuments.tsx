@@ -2,7 +2,7 @@ import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, Typography, Button } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import { NotificationDetail } from '@pagopa-pn/pn-commons/src/types/Notifications';
+import { NotificationDetail } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getReceivedNotificationDocument } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';

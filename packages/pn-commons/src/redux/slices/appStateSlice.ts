@@ -1,5 +1,6 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppError, createAppError } from '../..';
+import { createAppError } from '../../services/error.service';
+import { AppError } from '../../types/AppError';
 
 export interface AppStateState {
   loading: {

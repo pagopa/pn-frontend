@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Paper, Table, TableBody, TableCell, TableContainer, TableRow, Box } from '@mui/material';
-import { NotificationDetail } from '@pagopa-pn/pn-commons/src/types/Notifications';
+import { NotificationDetail } from "@pagopa-pn/pn-commons";
 
 type Props = {
   notification: NotificationDetail;
