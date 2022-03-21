@@ -332,9 +332,9 @@ const NuovaDelega = () => {
       )}
       {created && (
         <SuccessPage
-          title={t('Aggiungi una delega')}
+          title={t('La tua richiesta di delega è stata creata con successo')}
           subtitle={t(
-            'Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la visualizzazione e la gestione delle tue notifiche. '
+            'Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a Piattaforma Notifiche e accettare la tua richiesta.'
           )}
           onClick={handleDelegationsClick}
           onClickLabel={t('Torna alle tue deleghe')}

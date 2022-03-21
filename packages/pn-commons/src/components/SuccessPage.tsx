@@ -27,7 +27,7 @@ const SuccessPage = ({ icon, title, subtitle, onClick, onClickLabel }: Props) =>
       {title}
     </Typography>
     {subtitle && (
-      <Typography align="center" color="textPrimary" variant="subtitle2">
+      <Typography align="center" color="textPrimary" variant="subtitle1">
         {subtitle}
       </Typography>
     )}
