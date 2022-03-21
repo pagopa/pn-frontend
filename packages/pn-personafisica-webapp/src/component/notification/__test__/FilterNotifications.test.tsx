@@ -2,8 +2,9 @@ import { fireEvent, waitFor, screen, within, RenderResult, act } from '@testing-
 import moment from 'moment';
 import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
-import FilterNotificationsTable from '../FilterNotificationsTable';
+
 import { render } from '../../../__test__/test-utils';
+import FilterNotifications from '../FilterNotifications';
 
 function formatDate(date: Date): string {
   const month = `0${date.getMonth() + 1}`.slice(-2);
@@ -26,8 +27,8 @@ function testFormElementsValue(form: HTMLFormElement, elementName: string, value
 
 async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
   const input = form.querySelector(`input[name="${elementName}"]`);
+  fireEvent.change(input!, { target: { value } });
   await waitFor(() => {
-    fireEvent.change(input!, { target: { value } });
     expect(input).toHaveValue(value);
   });
 }
@@ -69,6 +70,14 @@ jest.mock('react-i18next', () => ({
   },
 }));
 
+jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
+  return {
+    ...original,
+    useIsMobile: () => false
+  } 
+});
+
 describe('Filter Notifications Table Component', () => {
   let result: RenderResult | undefined;
   let form: HTMLFormElement | undefined;
@@ -82,7 +91,7 @@ describe('Filter Notifications Table Component', () => {
 
     // render component
     await act(async () => {
-      result = render(<FilterNotificationsTable />);
+      result = render(<FilterNotifications />);
       form = result.container.querySelector('form') as HTMLFormElement;
     });
   });

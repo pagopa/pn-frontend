@@ -11,5 +11,12 @@
       "iun": "Inserire codice IUN",
       "data_da": "Da",
       "data_a": "A"
+  },
+  "sort": {
+    "title": "Ordina",
+    "cancel": "Annulla ordinamento",
+    "asc": "crescente",
+    "desc": "decrescente",
+    "options": "Opzioni sort"
   }
 }

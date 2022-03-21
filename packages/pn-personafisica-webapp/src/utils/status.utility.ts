@@ -2,7 +2,7 @@ import { getNotificationStatusLabelAndColor, NotificationStatus } from '@pagopa-
 import {
   NotificationDetailTimeline,
   NotificationStatusHistory,
-} from '@pagopa-pn/pn-commons/src/types/Notifications';
+} from '@pagopa-pn/pn-commons';
 
 export function getNotificationStatusLabelAndColorFromTimelineCategory(
   timelineStep: NotificationDetailTimeline,

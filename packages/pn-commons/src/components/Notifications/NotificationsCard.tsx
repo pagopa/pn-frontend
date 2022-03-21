@@ -38,7 +38,13 @@ const NotificationsCard = ({ cardHeader, cardBody, cardData }: Props) => {
         cardData.map((d) => (
           <Card
             key={d.id}
-            sx={{ marginBottom: '16px', padding: '24px' }}
+            sx={{
+              marginBottom: '16px',
+              padding: '24px',
+              borderRadius: '8px',
+              boxShadow:
+                '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
+            }}
             data-testid="notificationCard"
           >
             <CardHeader title={cardHeaderTitle(d)} sx={{ padding: 0 }} />

@@ -1,21 +1,32 @@
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Grid } from '@mui/material';
 
 import {
   CardElem,
+  CardSort,
   getNotificationStatusLabelAndColor,
   Notification,
   NotificationsCard,
   NotificationStatus,
   Row,
+  Sort,
   StatusTooltip,
 } from '@pagopa-pn/pn-commons';
+import MobileNotificationsSort from './MobileNotificationsSort';
+import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
+  /** Card sort */
+  sort?: Sort;
+  /** The function to be invoked if the user change sorting */
+  onChangeSorting?: (s: Sort) => void;
 };
 
-const MobileNotifications = ({ notifications }: Props) => {
+const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) => {
   const { t } = useTranslation('notifiche');
+
   const cardHeader: [CardElem, CardElem] = [
     {
       id: 'sentAt',
@@ -57,7 +68,7 @@ const MobileNotifications = ({ notifications }: Props) => {
       getLabel(value: string) {
         return value;
       },
-    }
+    },
   ];
 
   const cardData: Array<Row> = notifications.map((n, i) => ({
@@ -65,7 +76,44 @@ const MobileNotifications = ({ notifications }: Props) => {
     id: i.toString(),
   }));
 
-  return <NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData}/>;
+  const sortFields: Array<CardSort> = [
+    { id: 'sentAt', label: t('table.data') },
+    { id: 'senderId', label: t('table.mittente') },
+  ].reduce((arr, el) => {
+    /* eslint-disable functional/immutable-data */
+    arr.push(
+      {
+        id: `${el.id}-asc`,
+        label: `${el.label} ${t('sort.asc')}`,
+        field: el.id,
+        value: 'asc',
+      },
+      {
+        id: `${el.id}-desc`,
+        label: `${el.label} ${t('sort.desc')}`,
+        field: el.id,
+        value: 'desc',
+      }
+    );
+    /* eslint-enable functional/immutable-data */
+    return arr;
+  }, [] as Array<CardSort>);
+
+  return (
+    <Fragment>
+      <Grid container direction="row">
+        <Grid item xs={6}>
+          <FilterNotifications />
+        </Grid>
+        <Grid item xs={6} textAlign="right">
+          {sort && onChangeSorting && (
+            <MobileNotificationsSort sortFields={sortFields} sort={sort} onChangeSorting={onChangeSorting}/>
+          )}
+        </Grid>
+      </Grid>
+      <NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+    </Fragment>
+  );
 };
 
 export default MobileNotifications;
