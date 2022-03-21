@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getSentNotificationDocument } from '../../../redux/notification/actions';
 import { RootState } from '../../../redux/store';
 
-
 type Props = {
   notification: NotificationDetail;
 };
@@ -22,7 +21,13 @@ const DetailDocuments = ({ notification }: Props) => {
 
   useEffect(() => {
     if (documentDownloadUrl) {
-      window.location.assign(documentDownloadUrl);
+      /* eslint-disable functional/immutable-data */
+      const link = document.createElement('a');
+      link.href = documentDownloadUrl;
+      link.target = '_blank';
+      link.rel = 'noreferrer';
+      link.click();
+      /* eslint-enable functional/immutable-data */
     }
   }, [documentDownloadUrl]);
 

@@ -1,4 +1,4 @@
-import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons/src/types/Notifications';
+import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';

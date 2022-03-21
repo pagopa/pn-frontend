@@ -4,6 +4,7 @@ import {
   GetNotificationsResponse,
   LegalFactId,
   NotificationDetail,
+  formatFiscalCode
 } from '@pagopa-pn/pn-commons';
 import { apiClient } from '../axios';
 
@@ -19,7 +20,7 @@ export const NotificationsApi = {
     queryParams.append('startDate', params.startDate);
     queryParams.append('endDate', params.endDate);
     if (params.recipientId) {
-      queryParams.append('recipientId', params.recipientId);
+      queryParams.append('recipientId', formatFiscalCode(params.recipientId));
     }
     if (params.status) {
       queryParams.append('status', params.status);

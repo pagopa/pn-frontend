@@ -1,3 +1,4 @@
+import { resetState } from './../actions';
 import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
@@ -10,31 +11,33 @@ import {
 } from '../actions';
 import { notificationToFe } from './test-utils';
 
+const initialState = {
+  loading: false,
+  notification: {
+    iun: '',
+    paNotificationId: '',
+    subject: '',
+    sentAt: '',
+    cancelledIun: '',
+    cancelledByIun: '',
+    recipients: [],
+    documents: [],
+    payment: {},
+    notificationStatus: '',
+    notificationStatusHistory: [],
+    timeline: [],
+    physicalCommunicationType: '',
+  },
+  documentDownloadUrl: '',
+  legalFactDownloadUrl: '',
+};
+
 describe('Notification detail redux state tests', () => {
   mockAuthentication();
 
   it('Initial state', () => {
     const state = store.getState().notificationState;
-    expect(state).toEqual({
-      loading: false,
-      notification: {
-        iun: '',
-        paNotificationId: '',
-        subject: '',
-        sentAt: '',
-        cancelledIun: '',
-        cancelledByIun: '',
-        recipients: [],
-        documents: [],
-        payment: {},
-        notificationStatus: '',
-        notificationStatusHistory: [],
-        timeline: [],
-        physicalCommunicationType: '',
-      },
-      documentDownloadUrl: '',
-      legalFactDownloadUrl: '',
-    });
+    expect(state).toEqual(initialState);
   });
 
   it('Should be able to fetch the notification detail', async () => {
@@ -69,5 +72,14 @@ describe('Notification detail redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationLegalfact/fulfilled');
     expect(payload).toEqual({ url: 'http://mocked-url.com' });
+  });
+
+  it('Should be able to reset state', () => {
+    const action = store.dispatch(resetState());
+    const payload = action.payload;
+    expect(action.type).toBe('resetState');
+    expect(payload).toEqual(undefined);
+    const state = store.getState().notificationState;
+    expect(state).toEqual(initialState);
   });
 });

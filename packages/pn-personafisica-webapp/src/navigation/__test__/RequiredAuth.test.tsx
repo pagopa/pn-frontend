@@ -10,15 +10,16 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-// jest.mock('@pagopa-pn/pn-commons', () => {
-//   const original = jest.requireActual('@pagopa-pn/pn-commons');
-//   return {
-//     ...original,
-//     AccessDenied: () => <div>Access Denied Page</div>,
-//   };
-// });
+jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
+  return {
+    ...original,
+    AccessDenied: () => <div>Access Denied Page</div>,
+  };
+});
 
 describe('RequireAuth Component', () => {
+
   it('renders RequireAuth (user enabled to access)', () => {
     // useSelector mock
     const useSelectorSpy = jest.spyOn(redux, 'useAppSelector');
@@ -36,9 +37,7 @@ describe('RequireAuth Component', () => {
     useSelectorSpy.mockReturnValue(undefined);
     // render component
     const result = render(<RequireAuth />);
-    expect(result?.container).toHaveTextContent(
-      /Non hai le autorizzazioni necessarie per accedere a questa pagina/i
-    );
+    expect(result?.container).toHaveTextContent(/Access Denied Page/i);
     useSelectorSpy.mockClear();
     useSelectorSpy.mockReset();
   });

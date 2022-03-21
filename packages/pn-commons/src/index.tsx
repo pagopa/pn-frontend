@@ -10,6 +10,12 @@ import SideMenu from './components/SideMenu/SideMenu';
 import NotificationsTable from './components/Notifications/NotificationsTable';
 import StatusTooltip from './components/Notifications/StatusTooltip';
 import NotificationsCard from './components/Notifications/NotificationsCard';
+import OutlinedButton from './components/OutlinedButton';
+import TitleAndDescription from './components/TitleAndDescription';
+import CustomMobileDialog from './components/CustomMobileDialog/CustomMobileDialog';
+import CustomMobileDialogToggle from './components/CustomMobileDialog/CustomMobileDialogToggle';
+import CustomMobileDialogContent from './components/CustomMobileDialog/CustomMobileDialogContent';
+import CustomMobileDialogAction from './components/CustomMobileDialog/CustomMobileDialogAction';
 
 export { LoadingOverlay };
 export { Header };
@@ -22,6 +28,12 @@ export { SideMenu };
 export { NotificationsTable };
 export { StatusTooltip };
 export { NotificationsCard };
+export { OutlinedButton };
+export { TitleAndDescription };
+export { CustomMobileDialog };
+export { CustomMobileDialogToggle };
+export { CustomMobileDialogContent };
+export { CustomMobileDialogAction };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -56,7 +68,7 @@ import {
   LegalFactId,
   PhysicalCommunicationType,
 } from './types/Notifications';
-import { CardElem } from './types/NotificationsCard';
+import { CardElem, CardSort } from './types/NotificationsCard';
 
 export type { AppError };
 export type { PaginationData };
@@ -85,7 +97,7 @@ export type {
   NotificationStatusHistory,
   LegalFactId,
 };
-export type { CardElem };
+export type { CardElem, CardSort };
 
 // functions
 import { createAppError } from './services/error.service';
@@ -95,7 +107,8 @@ import {
   getNotificationStatusLabelAndColor,
   NotificationAllowedStatus,
 } from './utils/status.utility';
-import { getMonthString, getDay, getTime } from './utils/date.utility';
+import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
+import { formatFiscalCode } from './utils/fiscal_code.utility';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusLabelAndColor };
@@ -103,13 +116,17 @@ export { createAppError };
 export { formatDate };
 export { calcPages };
 export { getMonthString, getDay, getTime };
+export { formatFiscalCode };
 
 // consts
-import { today, tenYearsAgo } from './utils/date.utility';
-
 export { today, tenYearsAgo };
 
 // hooks
 import { useIsMobile } from './hooks/IsMobile.hook';
 
 export { useIsMobile };
+
+// reducers
+import { appStateReducer } from './redux/slices/appStateSlice';
+
+export { appStateReducer };
