@@ -75,7 +75,6 @@ export default function Toast({ title, message, open, type, closingDelay, onClos
         <Grid item xs={12} display="flex" justifyContent="flex-end">
           <Box sx={{}}>
             <CustomAlert
-              className="userToast"
               variant="outlined"
               sx={{
                 position: 'fixed',
