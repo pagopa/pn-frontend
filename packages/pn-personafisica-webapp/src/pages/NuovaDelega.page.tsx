@@ -1,41 +1,47 @@
-import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography, Card, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, TextField, Button, Divider, Grid, Select, MenuItem, InputLabel, SelectChangeEvent,Avatar, Stack } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Card,
+  FormControl,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  TextField,
+  Button,
+  Divider,
+  Grid,
+  Select,
+  MenuItem,
+  InputLabel,
+  SelectChangeEvent,
+  Stack,
+} from '@mui/material';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import DateAdapter from '@mui/lab/AdapterMoment';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 import { TitleBox } from '@pagopa-pn/pn-commons';
-import DropDownEntiMenuItem from "./components/Deleghe/DropDownEnti";
+import DropDownEntiMenuItem from './components/Deleghe/DropDownEnti';
 import ErrorDeleghe from './components/Deleghe/ErrorDeleghe';
-const fiscalCode_regex = /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i;
+const fiscalCode_regex =
+  /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i;
 
 const validationSchema = yup.object({
-    selectPersonaFisicaOrPersonaGiuridica: yup
-        .string()
-        .required('Email is required'),
-    cf: yup
-        .string()
-        .required('Il Codice Fiscale è obbligatorio').matches(fiscalCode_regex, 'Il codice fiscale inserito non è corretto'),
-    email: yup
-        .string()
-        .required('Email obbligatoria')
-        .email('Email non formattata correttamente'),
-    nome: yup
-        .string()
-        .required('Il nome è obbligatorio'),
-    cognome: yup
-        .string()
-        .required('Il cognome è obbligatorio'),
-    enteSelect: yup
-        .string()
+  selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Email is required'),
+  cf: yup
+    .string()
+    .required('Il Codice Fiscale è obbligatorio')
+    .matches(fiscalCode_regex, 'Il codice fiscale inserito non è corretto'),
+  email: yup.string().required('Email obbligatoria').email('Email non formattata correttamente'),
+  nome: yup.string().required('Il nome è obbligatorio'),
+  cognome: yup.string().required('Il cognome è obbligatorio'),
+  enteSelect: yup.string(),
 });
 
 const NuovaDelega = () => {
-
-    const { t } = useTranslation(['nuovaDelega']);
+  const { t } = useTranslation(['nuovaDelega']);
 
     return (
         <>
