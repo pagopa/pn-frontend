@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -48,20 +48,29 @@ const FilterNotifications = () => {
     iunMatch: '',
     status: NotificationAllowedStatus[0].value,
   };
+  const prevFilters = useRef(initialValues);
+
+  const submitForm = (values: {startDate: Date; endDate: Date; iunMatch: string; status: string}) => {
+    if (prevFilters.current === values) {
+      return;
+    }
+    const filters = {
+      startDate: values.startDate.toISOString(),
+      endDate: values.endDate.toISOString(),
+      iunMatch: values.iunMatch,
+      status: values.status === 'All' ? undefined : values.status,
+    };
+    /* eslint-disable functional/immutable-data */
+    prevFilters.current = values;
+    /* eslint-enable functional/immutable-data */
+    dispatch(setNotificationFilters(filters));
+  };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
     /** onSubmit populates filters */
-    onSubmit: (values) => {
-      const filters = {
-        startDate: values.startDate.toISOString(),
-        endDate: values.endDate.toISOString(),
-        iunMatch: values.iunMatch,
-        status: values.status === 'All' ? undefined : values.status,
-      };
-      dispatch(setNotificationFilters(filters));
-    },
+    onSubmit: submitForm,
   });
 
   const cleanFilters = () => {
@@ -75,6 +84,9 @@ const FilterNotifications = () => {
       })
     );
     formik.resetForm();
+    /* eslint-disable functional/immutable-data */
+    prevFilters.current = initialValues;
+    /* eslint-enable functional/immutable-data */
     changeDate(null, 'start');
     changeDate(null, 'end');
   };
@@ -89,7 +101,7 @@ const FilterNotifications = () => {
   };
 
   const filtersApplied = (): number => {
-    const formValues = formik.values;
+    const formValues = prevFilters.current;
     return Object.entries(formValues).reduce((c: number, el: [string, any]) => {
       if (el[0] in initialValues && el[1] !== (initialValues as any)[el[0]]) {
         return c + 1;
