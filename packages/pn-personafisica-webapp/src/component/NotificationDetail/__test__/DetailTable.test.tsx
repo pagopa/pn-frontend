@@ -24,7 +24,7 @@ describe('Notification Detail Table Component', () => {
     { label: 'Cognome Nome', value: `${notificationToFe.recipients[0].denomination}` },
     { label: 'Mittente', value: `mocked-sender` },
     { label: 'Codice IUN annullato', value: `${notificationToFe.cancelledIun}` },
-    { label: 'Codice IUN', value: `${notificationToFe.cancelledByIun}` },
+    { label: 'Codice IUN', value: `${notificationToFe.iun}` },
     { label: 'Gruppi', value: '' },
   ];
 
