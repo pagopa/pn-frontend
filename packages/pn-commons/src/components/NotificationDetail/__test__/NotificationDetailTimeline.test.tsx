@@ -1,4 +1,4 @@
-import { RenderResult, within } from '@testing-library/react';
+import { fireEvent, waitFor, within, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../../utils/status.utility';
@@ -8,8 +8,9 @@ import {
   NotificationStatusHistory,
   TimelineCategory,
 } from '../../../types/Notifications';
-import NotificationDetailTimeline from '../NotificationDetailTimeline';
 import { NotificationStatus } from '../../../types/NotificationStatus';
+import * as hooks from "../../../hooks/IsMobile.hook";
+import NotificationDetailTimeline from '../NotificationDetailTimeline';
 
 const timeline: Array<INotificationDetailTimeline> = [
   {
@@ -45,34 +46,14 @@ const statusHistory: Array<NotificationStatusHistory> = [
   }
 ];
 
-describe('NotificationDetailTimeline Component', () => {
-  let result: RenderResult | undefined;
+const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
 
-  beforeEach(() => {
-    // render component
-    result = render(
-      <NotificationDetailTimeline
-        title="mocked-title"
-        timeline={timeline}
-        statusHistory={statusHistory}
-        clickHandler={jest.fn()}
-        legalFactLabel="mocked-legalFact-label"
-      />
-    );
-  });
-
-  afterEach(() => {
-    result = undefined;
-  });
-
-  it('renders NotificationDetailTimeline', async () => {
-    expect(result?.container).toHaveTextContent(/mocked-title/i);
-    // expect(result?.container).toHaveTextContent(/Scarica tutti gli allegati/i);
-    const timelineItems = await result?.findAllByTestId('timelineItem');
+const testTimelineRendering = async (container: HTMLElement) => {
+  const timelineItems = container.querySelectorAll('[data-testid="timelineItem"]');
     expect(timelineItems).toHaveLength(timeline.length);
     // beacuse of await into loop, we need to use for loop and not forEach
     let timelineIndex = 0;
-    for (const item of timelineItems!) {
+    for (const item of timelineItems) {
       const dateItems = item.querySelectorAll('p');
       expect(dateItems).toHaveLength(3);
       expect(dateItems[0]).toHaveTextContent(getMonthString(timeline[timelineIndex].timestamp));
@@ -90,5 +71,50 @@ describe('NotificationDetailTimeline Component', () => {
       expect(itemStatus.classList.contains(buttonClass)).toBe(true);
       timelineIndex++;
     }
+}
+
+describe('NotificationDetailTimeline Component', () => {
+  it('renders NotificationDetailTimeline (desktop)', async () => {
+    useIsMobileSpy.mockReturnValue(false);
+    // render component
+    const result = render(
+      <NotificationDetailTimeline
+        title="mocked-title"
+        timeline={timeline}
+        statusHistory={statusHistory}
+        clickHandler={jest.fn()}
+        legalFactLabel="mocked-legalFact-label"
+        historyButtonLabel='mocked-history-label'
+      />
+    );
+    expect(result?.container).toHaveTextContent(/mocked-title/i);
+    // expect(result?.container).toHaveTextContent(/Scarica tutti gli allegati/i);
+    await testTimelineRendering(result?.container);
+  });
+
+  it('renders NotificationDetailTimeline (mobile)', async () => {
+    useIsMobileSpy.mockReturnValue(true);
+    // render component
+    const result = render(
+      <NotificationDetailTimeline
+        title="mocked-title"
+        timeline={timeline}
+        statusHistory={statusHistory}
+        clickHandler={jest.fn()}
+        legalFactLabel="mocked-legalFact-label"
+        historyButtonLabel='mocked-history-label'
+      />
+    );
+    expect(result?.container).toHaveTextContent(/mocked-title/i);
+    const timelineItems = await result?.findAllByTestId('timelineItem');
+    expect(timelineItems).toHaveLength(1);
+    const historyButton = await result?.findByTestId('historyButton');
+    expect(historyButton!).toBeInTheDocument();
+    fireEvent.click(historyButton!);
+    const drawer = await waitFor(() => {
+      return screen.queryByRole('presentation');
+    });
+    expect(drawer!).toBeInTheDocument();
+    await testTimelineRendering(drawer!);
   });
 });

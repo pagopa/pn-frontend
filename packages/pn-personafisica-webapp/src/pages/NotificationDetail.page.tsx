@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { ReactNode, useEffect } from 'react';
+import { Fragment, ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Breadcrumbs, Grid, Typography, Box, Paper, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -7,7 +7,9 @@ import EmailIcon from '@mui/icons-material/Email';
 import { TitleBox, LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailTable,
-  NotificationDetailTimeline, } from '@pagopa-pn/pn-commons';
+  NotificationDetailTimeline,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -30,9 +32,10 @@ const NotificationDetail = () => {
   const classes = useStyles();
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche', 'common']);
+  const isMobile = useIsMobile();
+  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -97,46 +100,48 @@ const NotificationDetail = () => {
 
   useEffect(() => () => void dispatch(resetState()), []);
 
+  const breadcrumb = (
+    <Fragment>
+      <Breadcrumbs aria-label="breadcrumb">
+        <StyledLink to={routes.NOTIFICHE}>
+          <EmailIcon sx={{ mr: 0.5 }} />
+          {t('detail.breadcrumb-root', {ns: 'notifiche'})}
+        </StyledLink>
+        <Typography color="text.primary" fontWeight={600} sx={{ display: 'flex', alignItems: 'center' }}>
+        {t('detail.breadcrumb-leaf', {ns: 'notifiche'})}
+        </Typography>
+      </Breadcrumbs>
+      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
+    </Fragment>
+  );
+
   return (
-    <Box className={classes.root}>
-      <Grid container spacing={2}>
-        <Grid item xs={7} sx={{ marginTop: '20px' }}>
-          <Breadcrumbs aria-label="breadcrumb">
-            <StyledLink to={routes.NOTIFICHE}>
-              <EmailIcon sx={{ mr: 1 }} fontSize="inherit" />
-              {t('detail.breadcrumb_1')}
-            </StyledLink>
-            <Typography
-              sx={{ display: 'flex', alignItems: 'center' }}
-              color="inherit"
-              fontWeight={600}
-            >
-              {t('detail.breadcrumb_2')}
-            </Typography>
-          </Breadcrumbs>
-          <Box sx={{ padding: '20px 0 0 0' }}>
-            <TitleBox variantTitle="h4" title={notification.subject}></TitleBox>
-            <NotificationDetailTable rows={detailTableRows} />
-            <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
-              <NotificationDetailDocuments
-                title={t('Atti Allegati')}
-                documents={notification.documents}
-                clickHandler={documentDowloadHandler}
-              />
-            </Paper>
-            <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(-1)}>
-              {t('button.indietro', { ns: 'common' })}
-            </Button>
-          </Box>
+    <Box className={classes.root} sx={{padding: isMobile ? '0 20px' : 0}}>
+      {isMobile && breadcrumb}
+      <Grid container spacing={2} direction={isMobile ? 'column-reverse' : 'row'}>
+        <Grid item lg={7} xs={12} sx={{ marginTop: isMobile ? 0 : '20px' }}>
+          {!isMobile && breadcrumb}
+          <NotificationDetailTable rows={detailTableRows} />
+          <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
+            <NotificationDetailDocuments
+              title={t('detail.acts', {ns: 'notifiche'})}
+              documents={notification.documents}
+              clickHandler={documentDowloadHandler}
+            />
+          </Paper>
+          <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(-1)}>
+            {t('button.indietro')}
+          </Button>
         </Grid>
-        <Grid item xs={5}>
+        <Grid item lg={5} xs={12}>
           <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
             <NotificationDetailTimeline
               timeline={notification.timeline}
               statusHistory={notification.notificationStatusHistory}
-              title={t('Stato della notifica')}
-              legalFactLabel={t('Attestato opponibile a Terzi')}
+              title={t('detail.timeline-title', {ns: 'notifiche'})}
+              legalFactLabel={t('detail.legalfact', {ns: 'notifiche'})}
               clickHandler={legalFactDownloadHandler}
+              historyButtonLabel={t('detail.show-history', {ns: 'notifiche'})}
             />
           </Box>
         </Grid>
