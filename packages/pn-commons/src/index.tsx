@@ -27,16 +27,16 @@ export { StatusTooltip };
 export { NotificationsCard };
 export { OutlinedButton };
 export { TitleAndDescription };
-export {TitleBox};
+export { TitleBox };
 
 // pages
 import NotFound from './navigation/NotFound';
 import AccessDenied from './navigation/AccessDenied';
-import SuccessPage from './components/SuccessPage';
+import CourtesyPage from './components/CourtesyPage';
 
 export { NotFound };
 export { AccessDenied };
-export { SuccessPage };
+export { CourtesyPage };
 
 // types
 import { AppError } from './types/AppError';

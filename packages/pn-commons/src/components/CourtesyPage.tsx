@@ -9,7 +9,7 @@ type Props = {
   onClickLabel?: string;
 };
 
-const SuccessPage = ({ icon, title, subtitle, onClick, onClickLabel }: Props) => (
+const CourtesyPage = ({ icon, title, subtitle, onClick, onClickLabel }: Props) => (
   <Box
     sx={{
       maxWidth: '480px',
@@ -18,12 +18,12 @@ const SuccessPage = ({ icon, title, subtitle, onClick, onClickLabel }: Props) =>
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
+      mx: 'auto',
+      my: 12,
     }}
-    mx={'auto'}
-    mt={'3rem'}
   >
-    {icon}
-    <Typography mb={1} align="center" color="textPrimary" variant="h4">
+    <Box sx={{ svg: { height: '64px' } }}>{icon}</Box>
+    <Typography mt={4} mb={1} align="center" color="textPrimary" variant="h4">
       {title}
     </Typography>
     {subtitle && (
@@ -39,4 +39,4 @@ const SuccessPage = ({ icon, title, subtitle, onClick, onClickLabel }: Props) =>
   </Box>
 );
 
-export default SuccessPage;
+export default CourtesyPage;

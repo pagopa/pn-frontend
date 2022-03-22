@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
@@ -17,13 +17,17 @@ import {
   InputLabel,
   SelectChangeEvent,
   Stack,
+  Breadcrumbs,
+  styled,
 } from '@mui/material';
+import { IllusCompleted } from '@pagopa/mui-italia';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import DateAdapter from '@mui/lab/AdapterMoment';
-import { SuccessPage, TitleBox } from '@pagopa-pn/pn-commons';
+import { CourtesyPage, TitleBox } from '@pagopa-pn/pn-commons';
+import PeopleIcon from '@mui/icons-material/People';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
@@ -35,6 +39,7 @@ import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
 import DropDownEntiMenuItem from './components/Deleghe/DropDownEnti';
 import ErrorDeleghe from './components/Deleghe/ErrorDeleghe';
+import VerificationCodeComponent from './components/Deleghe/VerificationCodeComponent';
 
 const fiscalCode_regex =
   /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i;
@@ -50,6 +55,16 @@ const validationSchema = yup.object({
   cognome: yup.string().required('Il cognome è obbligatorio'),
   enteSelect: yup.string(),
 });
+
+const StyledLink = styled(Link)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  color: `${theme.palette.text.primary} !important`,
+  texDecoration: 'none !important',
+  '&:hover, &:focus': {
+    textDecoration: 'underline !important',
+  },
+}));
 
 const NuovaDelega = () => {
   const { t } = useTranslation(['deleghe']);
@@ -71,7 +86,16 @@ const NuovaDelega = () => {
   return (
     <>
       {!created && (
-        <Box>
+        <Box mt={3}>
+          <Breadcrumbs aria-label="breadcrumb">
+            <StyledLink to={routes.DELEGHE}>
+              <PeopleIcon sx={{ mr: 0.5 }} />
+              {t('Deleghe')}
+            </StyledLink>
+            <Typography color="text.primary" fontWeight={600}>
+              {t('Nuova Delega')}
+            </Typography>
+          </Breadcrumbs>
           <TitleBox
             title={t('nuovaDelega.title')}
             subTitle={t('nuovaDelega.subtitle')}
@@ -249,7 +273,7 @@ const NuovaDelega = () => {
                       </Grid>
                     </RadioGroup>
                   </FormControl>
-                  <br></br>
+                  <br />
                   <Box sx={{ marginTop: '1rem' }}>
                     <LocalizationProvider dateAdapter={DateAdapter}>
                       <DesktopDatePicker
@@ -257,14 +281,12 @@ const NuovaDelega = () => {
                         inputFormat="DD/MM/yyyy"
                         value={values.expirationDate}
                         onChange={(value: Date | null) => {
-                          console.log(value);
                           setFieldValue('expirationDate', value);
                         }}
                         renderInput={(params) => (
                           <TextField id="endDate" name="endDate" {...params} />
                         )}
                         disablePast={true}
-                        // minDate={startDate ? startDate : undefined}
                       />
                     </LocalizationProvider>
                   </Box>
@@ -279,30 +301,7 @@ const NuovaDelega = () => {
                       </Typography>
                     </Grid>
                     <Grid item xs={4} sx={{ margin: 'auto' }}>
-                      <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                        {values.verificationCode.split('').map((codeNumber) => (
-                          <Box
-                            key={codeNumber}
-                            sx={{
-                              display: 'flex',
-                              borderRadius: '4px',
-                              borderColor: 'primary.main',
-                              width: '2.5rem',
-                              height: '4rem',
-                              borderWidth: '2px',
-                              borderStyle: 'solid',
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              textAlign: 'center',
-                              marginRight: '8px',
-                            }}
-                          >
-                            <Typography sx={{ color: 'primary.main', fontWeight: 600 }}>
-                              {codeNumber}
-                            </Typography>
-                          </Box>
-                        ))}
-                      </Box>
+                      <VerificationCodeComponent code={values.verificationCode} />
                     </Grid>
                   </Grid>
                   <Divider sx={{ marginTop: '1rem' }} />
@@ -329,7 +328,8 @@ const NuovaDelega = () => {
         </Box>
       )}
       {created && (
-        <SuccessPage
+        <CourtesyPage
+          icon={<IllusCompleted />}
           title={t('La tua richiesta di delega è stata creata con successo')}
           subtitle={t(
             'Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a Piattaforma Notifiche e accettare la tua richiesta.'
