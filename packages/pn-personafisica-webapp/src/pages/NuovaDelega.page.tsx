@@ -56,6 +56,8 @@ const NuovaDelega = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { created } = useAppSelector((state: RootState) => state.newDelegationState);
+  const generateVCode = () =>
+    Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('');
 
   const handleSubmit = (values: CreateDelegationProps) => {
     void dispatch(createDelegation(values));
@@ -73,10 +75,11 @@ const NuovaDelega = () => {
           <TitleBox
             title={t('nuovaDelega.title')}
             subTitle={t('nuovaDelega.subtitle')}
-            variantSubTitle="subtitle2"
+            variantTitle="h3"
+            variantSubTitle="body1"
           />
           <Card sx={{ padding: '30px', width: '80%', mt: 4 }}>
-            <Typography sx={{ fontWeight: 'bold' }}>{t('Tipologia di persona *')}</Typography>
+            <Typography sx={{ fontWeight: 'bold' }}>{t('nuovaDelega.form.personType')}</Typography>
             <Formik
               initialValues={{
                 selectPersonaFisicaOrPersonaGiuridica: 'pf',
@@ -87,14 +90,13 @@ const NuovaDelega = () => {
                 selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
                 expirationDate: Date.now(),
                 enteSelect: '',
-                verificationCode: Array.from({ length: 5 }, () =>
-                  Math.floor(Math.random() * 9)
-                ).join(''),
+                verificationCode: generateVCode(),
               }}
               validationSchema={validationSchema}
               onSubmit={(values: CreateDelegationProps) => {
                 handleSubmit(values);
               }}
+              validateOnBlur={false}
             >
               {({ values, setFieldValue, touched, errors }) => (
                 <Form>
@@ -117,7 +119,7 @@ const NuovaDelega = () => {
                             value="pf"
                             control={<Radio />}
                             name={'selectPersonaFisicaOrPersonaGiuridica'}
-                            label={t('Persona Fisica') as string}
+                            label={t('nuovaDelega.form.naturalPerson') as string}
                           />
                         </Grid>
                         <Grid item xs={4} sx={{ margin: 'auto' }}>
@@ -128,7 +130,7 @@ const NuovaDelega = () => {
                             onChange={(event) => {
                               setFieldValue('nome', event.currentTarget.value);
                             }}
-                            label={t('Nome *')}
+                            label={t('nuovaDelega.form.firstName')}
                             name="cf"
                             variant="outlined"
                             error={touched.nome && Boolean(errors.nome)}
@@ -144,7 +146,7 @@ const NuovaDelega = () => {
                             onChange={(event) => {
                               setFieldValue('cognome', event.currentTarget.value);
                             }}
-                            label={t('Cognome *')}
+                            label={t('nuovaDelega.form.lastName')}
                             name="cognome"
                             variant="outlined"
                             error={touched.cognome && Boolean(errors.cognome)}
@@ -157,7 +159,7 @@ const NuovaDelega = () => {
                         value="pg"
                         control={<Radio />}
                         name={'selectPersonaFisicaOrPersonaGiuridica'}
-                        label={t('Persona Giuridica') as string}
+                        label={t('nuovaDelega.form.legalPerson') as string}
                         disabled
                       />
                     </RadioGroup>
@@ -169,7 +171,7 @@ const NuovaDelega = () => {
                     onChange={(event) => {
                       setFieldValue('cf', event.currentTarget.value);
                     }}
-                    label={t('Codice Fiscale *') as string}
+                    label={t('nuovaDelega.form.fiscalCode') as string}
                     name="cf"
                     variant="outlined"
                     error={touched.cf && Boolean(errors.cf)}
@@ -183,7 +185,7 @@ const NuovaDelega = () => {
                     onChange={(event) => {
                       setFieldValue('email', event.currentTarget.value);
                     }}
-                    label={t('Email *') as string}
+                    label={t('nuovaDelega.form.email') as string}
                     name="email"
                     variant="outlined"
                     error={touched.email && Boolean(errors.email)}
@@ -191,7 +193,7 @@ const NuovaDelega = () => {
                     fullWidth
                   />
                   <Typography sx={{ fontWeight: 'bold', marginTop: '2rem' }}>
-                    {t('Potrà visualizzare le notifiche da parte di*')}
+                    {t('nuovaDelega.form.viewFrom')}
                   </Typography>
                   <FormControl sx={{ width: '100%' }}>
                     <RadioGroup
@@ -207,7 +209,7 @@ const NuovaDelega = () => {
                         value="tuttiGliEnti"
                         control={<Radio />}
                         name={t('selectTuttiEntiOrSelezionati')}
-                        label={t('Tutti gli enti') as string}
+                        label={t('nuovaDelega.form.allEntities') as string}
                       />
                       <Grid container>
                         <Grid item xs={6}>
@@ -215,7 +217,7 @@ const NuovaDelega = () => {
                             value="entiSelezionati"
                             control={<Radio />}
                             name={'selectTuttiEntiOrSelezionati'}
-                            label={t('Solo gli enti selezionati') as string}
+                            label={t('nuovaDelega.form.onlySelected') as string}
                           />
                         </Grid>
                         <Grid item xs={6} sx={{ margin: 'auto' }}>
@@ -251,7 +253,7 @@ const NuovaDelega = () => {
                   <Box sx={{ marginTop: '1rem' }}>
                     <LocalizationProvider dateAdapter={DateAdapter}>
                       <DesktopDatePicker
-                        label={t('Termine Delega *')}
+                        label={t('nuovaDelega.form.endDate')}
                         inputFormat="DD/MM/yyyy"
                         value={values.expirationDate}
                         onChange={(value: Date | null) => {
@@ -268,14 +270,12 @@ const NuovaDelega = () => {
                   </Box>
                   <Divider sx={{ marginTop: '1rem' }} />
                   <Typography sx={{ fontWeight: 'bold', marginTop: '1rem' }}>
-                    {t('Codice di verifica')}
+                    {t('nuovaDelega.form.verificationCode')}
                   </Typography>
                   <Grid container>
                     <Grid item xs={8}>
                       <Typography sx={{ marginTop: '1rem' }}>
-                        {t(
-                          'Condividi questo codice con la persona delegata : dovrà inserirlo \n al primo accesso a Piattaforma Notifiche.'
-                        )}
+                        {t('nuovaDelega.form.verificationCodeDescr')}
                       </Typography>
                     </Grid>
                     <Grid item xs={4} sx={{ margin: 'auto' }}>
@@ -313,7 +313,7 @@ const NuovaDelega = () => {
                         type={'submit'}
                         variant={'contained'}
                       >
-                        {t('Invia la richiesta')}
+                        {t('nuovaDelega.form.submit')}
                       </Button>
                     </Grid>
                     <Grid item xs={8} sx={{ margin: 'auto' }}>

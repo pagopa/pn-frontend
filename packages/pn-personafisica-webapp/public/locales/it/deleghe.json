@@ -1,6 +1,30 @@
 {
     "nuovaDelega": {
-        "title": "Deleghe",
-        "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la visualizzazione o la gestione delle tue notifiche"
+        "title": "Le tue deleghe",
+        "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la visualizzazione o la gestione delle tue notifiche",
+        "form" : {
+            "personType": "Tipologia di persona *",
+            "naturalPerson": "Persona fisica",
+            "legalPerson": "Persona giuridica",
+            "firstName": "Nome *",
+            "lastName": "Cognome *",
+            "fiscalCode": "Codice Fiscale *",
+            "email": "Email *",
+            "viewFrom": "Potrà visualizzare le notifiche da parte di *",
+            "allEntities": "Tutti gli enti",
+            "onlySelected": "Solo gli enti selezionati",
+            "endDate": "Termine Delega",
+            "verificationCode": "Codice di Verifica",
+            "verificationCodeDescr": "Condividi questo codice con la persona delegata : dovrà inserirlo \n al primo accesso a Piattaforma Notifiche.",
+            "submit": "Invia la richiesta"
+        },
+        "error": {
+            "noConnection": "Connessione Interrotta",
+            "noConnectionDescr": "La tua richiesta non è stata inviata. Controlla che il tuo dispositivo sia connesso a una rete e riprova.",
+            "existingDelegation": "Delega già presente",
+            "existingDelegationDescr": "La persona che hai indicato ha già una delega per questo ente.",
+            "notAvailable": "Il servizio non è disponibile",
+            "notAvailableDescr": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi."
+        }
     }
 }

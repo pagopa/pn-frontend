@@ -23,11 +23,11 @@ const SuccessPage = ({ icon, title, subtitle, onClick, onClickLabel }: Props) =>
     mt={'3rem'}
   >
     {icon}
-    <Typography align="center" color="textPrimary" variant="h4">
+    <Typography mb={1} align="center" color="textPrimary" variant="h4">
       {title}
     </Typography>
     {subtitle && (
-      <Typography align="center" color="textPrimary" variant="subtitle1">
+      <Typography align="center" color="textPrimary">
         {subtitle}
       </Typography>
     )}
