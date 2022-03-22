@@ -52,7 +52,7 @@ const validationSchema = yup.object({
 });
 
 const NuovaDelega = () => {
-  const { t } = useTranslation(['nuovaDelega']);
+  const { t } = useTranslation(['deleghe']);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { created } = useAppSelector((state: RootState) => state.newDelegationState);
@@ -71,10 +71,8 @@ const NuovaDelega = () => {
       {!created && (
         <Box>
           <TitleBox
-            title={t('Deleghe')}
-            subTitle={t(
-              'Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la visualizzazione o la gestione delle tue notifiche'
-            )}
+            title={t('nuovaDelega.title')}
+            subTitle={t('nuovaDelega.subtitle')}
             variantSubTitle="subtitle2"
           />
           <Card sx={{ padding: '30px', width: '80%', mt: 4 }}>
@@ -288,7 +286,7 @@ const NuovaDelega = () => {
                             sx={{
                               display: 'flex',
                               borderRadius: '4px',
-                              borderColor: '#0173E5',
+                              borderColor: 'primary.main',
                               width: '2.5rem',
                               height: '4rem',
                               borderWidth: '2px',
@@ -299,7 +297,7 @@ const NuovaDelega = () => {
                               marginRight: '8px',
                             }}
                           >
-                            <Typography sx={{ color: '#0173E5', fontWeight: 600 }}>
+                            <Typography sx={{ color: 'primary.main', fontWeight: 600 }}>
                               {codeNumber}
                             </Typography>
                           </Box>
