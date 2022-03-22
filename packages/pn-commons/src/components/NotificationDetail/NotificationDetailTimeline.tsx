@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from 'react';
+import { Fragment } from 'react';
 import {
   Timeline,
   TimelineConnector,
@@ -10,50 +10,26 @@ import {
 } from '@mui/lab';
 import { Typography, Box, Button, Chip, Grid } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
-import {
-  getTime,
-  getMonthString,
-  getDay,
-  LegalFactId,
-  NotificationDetail,
-} from '@pagopa-pn/pn-commons';
-import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../../utils/status.utility';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { RootState } from '../../../redux/store';
-import { getSentNotificationLegalfact } from '../../../redux/notification/actions';
+
+import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../utils/status.utility';
+import { LegalFactId, INotificationDetailTimeline, NotificationStatusHistory } from '../../types/Notifications';
+import { getDay, getMonthString, getTime } from '../../utils/date.utility';
 
 type Props = {
-  notification: NotificationDetail;
+  timeline: Array<INotificationDetailTimeline>;
+  statusHistory: Array<NotificationStatusHistory>;
+  title: string;
+  legalFactLabel: string;
+  clickHandler: (legalFactId: LegalFactId) => void;
 };
 
-const DetailTimeline = ({ notification }: Props) => {
-  const dispatch = useAppDispatch();
-  const legalFactDownloadUrl = useAppSelector(
-    (state: RootState) => state.notificationState.legalFactDownloadUrl
-  );
-
-  const clickHandler = (legalFact: LegalFactId) => {
-    void dispatch(getSentNotificationLegalfact({ iun: notification.iun, legalFact }));
-  };
-
-  useEffect(() => {
-    if (legalFactDownloadUrl) {
-      /* eslint-disable functional/immutable-data */
-      const link = document.createElement('a');
-      link.href = legalFactDownloadUrl;
-      link.target = '_blank';
-      link.rel = 'noreferrer';
-      link.click();
-      /* eslint-enable functional/immutable-data */
-    }
-  }, [legalFactDownloadUrl]);
-
+const NotificationDetailTimeline = ({ timeline, statusHistory, clickHandler, title, legalFactLabel }: Props) => {
   return (
     <Fragment>
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Grid item>
           <Typography color="text.primary" fontWeight={700} textTransform="uppercase" fontSize={14}>
-            Stato della notifica
+            {title}
           </Typography>
         </Grid>
         {/* TODO: ripristinare quando sarà completata la issue pn-719 */}
@@ -62,7 +38,7 @@ const DetailTimeline = ({ notification }: Props) => {
         </Grid> */}
       </Grid>
       <Timeline>
-        {notification.timeline.map((t, i) => (
+        {timeline.map((t, i) => (
           <TimelineItem key={t.elementId} data-testid="timelineItem">
             <TimelineOppositeContent sx={{ textAlign: 'center', margin: 'auto 0' }}>
               <Typography color="text.secondary" fontSize={14}>
@@ -86,13 +62,13 @@ const DetailTimeline = ({ notification }: Props) => {
                 label={
                   getNotificationStatusLabelAndColorFromTimelineCategory(
                     t,
-                    notification.notificationStatusHistory
+                    statusHistory
                   ).label
                 }
                 color={
                   getNotificationStatusLabelAndColorFromTimelineCategory(
                     t,
-                    notification.notificationStatusHistory
+                    statusHistory
                   ).color
                 }
               />
@@ -105,7 +81,7 @@ const DetailTimeline = ({ notification }: Props) => {
                       startIcon={<AttachFileIcon />}
                       onClick={() => clickHandler(lf)}
                     >
-                      Attestato opponibile a Terzi
+                      {legalFactLabel}
                     </Button>
                   ))}
               </Box>
@@ -117,4 +93,4 @@ const DetailTimeline = ({ notification }: Props) => {
   );
 };
 
-export default DetailTimeline;
+export default NotificationDetailTimeline;
