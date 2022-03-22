@@ -11,7 +11,7 @@ import {
   Column,
   Row,
   Sort,
-  StatusTooltip
+  StatusTooltip,
 } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
@@ -140,7 +140,8 @@ const Dashboard = () => {
     const params = {
       ...filters,
       size: pagination.size,
-      nextPagesKey: pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1]
+      nextPagesKey:
+        pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
     void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);

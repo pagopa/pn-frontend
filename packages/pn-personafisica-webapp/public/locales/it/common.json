@@ -1,7 +1,8 @@
 {
   "button": {
     "cerca": "Cerca",
-    "annulla ricerca": "Annulla Ricerca"
+    "annulla ricerca": "Annulla Ricerca",
+    "indietro": "Indietro"
   },
   "menu": {
     "notifiche": "Notifiche",

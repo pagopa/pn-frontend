@@ -16,6 +16,7 @@ import CustomMobileDialog from './components/CustomMobileDialog/CustomMobileDial
 import CustomMobileDialogToggle from './components/CustomMobileDialog/CustomMobileDialogToggle';
 import CustomMobileDialogContent from './components/CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogAction from './components/CustomMobileDialog/CustomMobileDialogAction';
+import TitleBox from './components/TitleBox';
 
 export { LoadingOverlay };
 export { Header };
@@ -34,6 +35,7 @@ export { CustomMobileDialog };
 export { CustomMobileDialogToggle };
 export { CustomMobileDialogContent };
 export { CustomMobileDialogAction };
+export { TitleBox };
 
 // pages
 import NotFound from './navigation/NotFound';
