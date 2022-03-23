@@ -33,7 +33,6 @@ const Delegates = () => {
   }));
 
   const handleAddDelegationClick = () => {
-    console.log('navigando');
     navigate(routes.NUOVA_DELEGA);
   };
 

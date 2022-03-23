@@ -244,7 +244,6 @@ const NuovaDelega = () => {
                                 value={values.enteSelect}
                                 label={t('Seleziona Enti') as string}
                                 onChange={(event: SelectChangeEvent<string>) => {
-                                  console.log(event);
                                   setFieldValue('enteSelect', event.target.value);
                                 }}
                               >
