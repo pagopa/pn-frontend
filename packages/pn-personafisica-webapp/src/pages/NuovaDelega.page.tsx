@@ -94,6 +94,9 @@ const NuovaDelega = () => {
             variantTitle="h3"
             variantSubTitle="body1"
           />
+          <Typography sx={{mt: '1rem', mb:'1rem'}}>
+            Campi Obbligatori *
+          </Typography>
           <Card sx={{ padding: '30px', width: '80%', mt: 4 }}>
             <Typography sx={{ fontWeight: 'bold' }}>{t('nuovaDelega.form.personType')}</Typography>
             <Formik
@@ -312,6 +315,7 @@ const NuovaDelega = () => {
               )}
             </Formik>
           </Card>
+          <Button variant="outlined" sx={{mt:"1rem", mb:"1rem"}} onClick={()=>navigate("/deleghe")}>Indietro</Button>
         </Box>
       )}
       {created && (
