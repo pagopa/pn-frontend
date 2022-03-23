@@ -1,12 +1,11 @@
 import { render } from '../../../__test__/test-utils';
 import DesktopNotifications from '../DesktopNotifications';
 
-jest.mock('../FilterNotificationsTable', () => () => <div>Filters</div>);
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
-    NotificationsTable: () => <div>Table</div>,
+    NotificationsTable: () => <div>Table</div>
   };
 });
 
@@ -18,6 +17,8 @@ jest.mock('react-i18next', () => ({
     };
   },
 }));
+
+jest.mock('../FilterNotifications', () => () => <div>Filters</div>);
 
 describe('DesktopNotifications Component', () => {
   it('renders DesktopNotifications', () => {

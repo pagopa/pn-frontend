@@ -1,4 +1,4 @@
-import { AppError } from '../..';
+import { AppError } from '../../types/AppError';
 import { createAppError } from '../error.service';
 
 const _404error: AppError = {

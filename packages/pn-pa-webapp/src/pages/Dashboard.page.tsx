@@ -11,7 +11,7 @@ import {
   Column,
   Row,
   Sort,
-  StatusTooltip
+  StatusTooltip,
 } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
@@ -27,6 +27,7 @@ const Dashboard = () => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
+  const navigate = useNavigate();
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -41,8 +42,6 @@ const Dashboard = () => {
     3,
     pagination.page + 1
   );
-
-  const navigate = useNavigate();
 
   const columns: Array<Column> = [
     {
@@ -141,7 +140,8 @@ const Dashboard = () => {
     const params = {
       ...filters,
       size: pagination.size,
-      nextPagesKey: pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1]
+      nextPagesKey:
+        pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
     void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);

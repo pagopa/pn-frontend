@@ -13,7 +13,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
-import FilterNotificationsTable from './FilterNotificationsTable';
+import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
@@ -101,7 +101,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
 
   return (
     <Fragment>
-      <FilterNotificationsTable />
+      <FilterNotifications />
       <NotificationsTable
         columns={columns}
         rows={rows}

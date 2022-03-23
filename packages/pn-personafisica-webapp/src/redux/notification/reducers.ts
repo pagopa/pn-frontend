@@ -14,7 +14,7 @@ import {
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
-  resetState
+  resetState,
 } from './actions';
 
 const initialState = {
@@ -46,9 +46,6 @@ const notificationSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
-    });
-    builder.addCase(getReceivedNotificationDocument.pending, (state) => {
-      state.loading = true;
     });
     builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {

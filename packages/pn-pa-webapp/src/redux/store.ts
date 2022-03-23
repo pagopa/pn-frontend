@@ -1,4 +1,4 @@
-import { appStateReducer } from '@pagopa-pn/pn-commons/src/redux/slices/appStateSlice';
+import { appStateReducer } from '@pagopa-pn/pn-commons';
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { LOG_REDUX_ACTIONS } from '../utils/constants';

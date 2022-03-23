@@ -1,7 +1,6 @@
 import { cloneElement, ReactElement, useState } from 'react'; // ReactNode, cloneElement
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import Tooltip from '@mui/material/Tooltip';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 
 type Props = {
@@ -10,23 +9,7 @@ type Props = {
   children: ReactElement<any, any>;
 };
 
-// TODO: utilizzare colori tema
-const BootstrapTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} arrow classes={{ popper: className }} />
-))(() => ({
-  // { theme }
-  [`& .${tooltipClasses.arrow}`]: {
-    color: '#455B71',
-  },
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: '#455B71',
-  },
-  [`& .${tooltipClasses.tooltip} .title`]: {
-    textAlign: 'center',
-  },
-}));
-
-function CustomTooltip({openOnClick, tooltipContent, children}: Props) {
+function CustomTooltip({ openOnClick, tooltipContent, children }: Props) {
   // tooltip state
   const [open, setOpen] = useState(false);
   const handleTooltipClose = () => {
@@ -44,10 +27,9 @@ function CustomTooltip({openOnClick, tooltipContent, children}: Props) {
   return (
     <ClickAwayListener onClickAway={handleTooltipClose}>
       <Box>
-        <BootstrapTooltip
-          title={tooltipContent}
+        <Tooltip
           arrow
-          placement="bottom"
+          title={tooltipContent}
           PopperProps={{
             disablePortal: true,
           }}
@@ -60,7 +42,7 @@ function CustomTooltip({openOnClick, tooltipContent, children}: Props) {
           {cloneElement(children, {
             onClick: handleTooltipOpen,
           })}
-        </BootstrapTooltip>
+        </Tooltip>
       </Box>
     </ClickAwayListener>
   );

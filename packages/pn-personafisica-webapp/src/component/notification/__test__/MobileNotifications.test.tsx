@@ -8,6 +8,7 @@ jest.mock('@pagopa-pn/pn-commons', () => {
     NotificationsCard: () => <div>Cards</div>,
   };
 });
+
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => {
@@ -16,11 +17,16 @@ jest.mock('react-i18next', () => ({
     };
   },
 }));
+jest.mock('../MobileNotificationsSort', () => () => <div>Sort</div>);
+jest.mock('../FilterNotifications', () => () => <div>Filters</div>);
 
-describe('DesktopNotifications Component', () => {
-  it('renders DesktopNotifications', () => {
+describe('MobileNotifications Component', () => {
+
+  it('renders MobileNotifications', () => {
     // render component
-    const result = render(<MobileNotifications notifications={[]} />);
+    const result = render(<MobileNotifications notifications={[]} sort={{orderBy: 'mocked-field', order: 'asc'}} onChangeSorting={() => {}}/>);
+    expect(result.container).toHaveTextContent(/Filters/i);
+    expect(result.container).toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(/Cards/i);
   });
 });

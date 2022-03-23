@@ -41,9 +41,6 @@ const dashboardSlice = createSlice({
                 }
             }
         });
-        builder.addCase(getSentNotifications.pending, (state) => {
-            state.loading = true;
-        });
         builder.addCase(setPagination, (state, action) => {
             if (state.pagination.size !== action.payload.size) {
                 // reset pagination

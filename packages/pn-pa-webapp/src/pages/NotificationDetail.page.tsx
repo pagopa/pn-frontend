@@ -1,9 +1,9 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { Breadcrumbs, Grid, Typography, Box, styled, Paper, Button } from '@mui/material';
+import { Breadcrumbs, Grid, Typography, Box, Paper, Button, styled } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
-import { NotificationStatus } from '@pagopa-pn/pn-commons';
+import { NotificationStatus, TitleBox } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -44,7 +44,7 @@ const NotificationDetail = () => {
     }
   }, []);
 
-  useEffect(() => () => void dispatch(resetState()), [] );
+  useEffect(() => () => void dispatch(resetState()), []);
 
   return (
     <Box className={classes.root}>
@@ -55,12 +55,16 @@ const NotificationDetail = () => {
               <EmailIcon sx={{ mr: 0.5 }} />
               Notifiche
             </StyledLink>
-            <Typography color="text.primary" fontWeight={600}>
-              Dettaglio notifica
+            <Typography
+              sx={{ display: 'flex', alignItems: 'center' }}
+              color="inherit"
+              fontWeight={600}
+            >
+              Dettaglio Notifica
             </Typography>
           </Breadcrumbs>
           <Box sx={{ padding: '20px 0 0 0' }}>
-            <Typography variant="h4">{notification.subject}</Typography>
+            <TitleBox variantTitle="h4" title={notification.subject}></TitleBox>
             {notification.notificationStatus !== NotificationStatus.PAID && (
               <Button sx={{ margin: '10px 0' }} variant="outlined">
                 Annulla Notifica
