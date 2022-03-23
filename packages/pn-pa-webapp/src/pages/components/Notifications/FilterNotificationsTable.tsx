@@ -200,7 +200,9 @@ const FilterNotificationsTable = () => {
           </TextField>
           <Button
             type="submit"
+            variant="outlined"
             className={classes.customButton}
+            size="large"
             disabled={!formik.isValid}
           >
             Cerca
@@ -208,6 +210,7 @@ const FilterNotificationsTable = () => {
           <Button
             data-testid="cancelButton"
             className={classes.customButton}
+            size="large"
             onClick={cleanFilters}
           >
             Annulla ricerca
