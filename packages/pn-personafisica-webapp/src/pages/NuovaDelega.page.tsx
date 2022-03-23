@@ -20,7 +20,7 @@ import {
   Stack,
   Breadcrumbs,
 } from '@mui/material';
-import { IllusCompleted } from '@pagopa/mui-italia';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -317,7 +317,7 @@ const NuovaDelega = () => {
       )}
       {created && (
         <CourtesyPage
-          icon={<IllusCompleted />}
+          icon={<CheckCircleOutlineIcon />}
           title={t('La tua richiesta di delega è stata creata con successo')}
           subtitle={t(
             'Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a Piattaforma Notifiche e accettare la tua richiesta.'
