@@ -7,6 +7,11 @@ import { RootState } from '../redux/store';
 import { SELFCARE_URL_FE_LOGIN } from '../utils/constants';
 import { getHomePage } from '../utils/role.utility';
 
+function goToSelfcareLogin(): void {
+  /* eslint-disable functional/immutable-data */
+  window.location.href = SELFCARE_URL_FE_LOGIN || '';
+}
+
 const VerifyUser = () => {
   const location = useLocation();
   const [selfCareToken, setSelfCareToken] = useState('');
@@ -22,8 +27,7 @@ const VerifyUser = () => {
       setSelfCareToken(selfCareTokenParam);
     } else {
       if (token === '') {
-        /* eslint-disable functional/immutable-data */
-        window.location.href = SELFCARE_URL_FE_LOGIN || '';
+        goToSelfcareLogin();
       }
     }
   }, [location]);
@@ -35,8 +39,7 @@ const VerifyUser = () => {
           navigate(getHomePage(role));
         })
         .catch(() => {
-          /* eslint-disable functional/immutable-data */
-          window.location.href = process.env.REACT_APP_URL_SELFCARE_LOGIN || '';
+          goToSelfcareLogin();
         });
     }
   }, [selfCareToken]);
