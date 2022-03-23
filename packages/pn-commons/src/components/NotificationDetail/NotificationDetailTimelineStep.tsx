@@ -9,7 +9,6 @@ import {
 import { Typography, Chip, Box, Button } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
-import { styled } from '@mui/material/styles';
 
 import { getDay, getMonthString, getTime } from '../../utils/date.utility';
 import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../utils/status.utility';
@@ -29,19 +28,6 @@ type Props = {
   historyButtonLabel?: string; 
   historyButtonClickHandler?: () => void;
 };
-
-const CustomChip = styled(Chip)(() => ({
-  maxWidth: '100%',
-  textAlign: 'center',
-
-  '& .MuiChip-label': {
-    overflowWrap: 'break-word',
-    whiteSpace: 'normal',
-    textOverflow: 'clip',
-    padding: '5px 12px',
-    lineHeight: '16px',
-  },
-}));
 
 /**
  * Notification detail timeline
@@ -83,7 +69,7 @@ const NotificationDetailTimelineStep = ({
         <Typography color="text.secondary" fontSize={14} sx={{ paddingBottom: '8px' }}>
           {getTime(timelineStep.timestamp)}
         </Typography>
-        <CustomChip
+        <Chip
           data-testid="itemStatus"
           label={
             getNotificationStatusLabelAndColorFromTimelineCategory(timelineStep, statusHistory)
