@@ -314,6 +314,7 @@ const NuovaDelega = () => {
               )}
             </Formik>
           </Card>
+          <Button variant="outlined" sx={{mt:"1rem", mb:"1rem"}} onClick={()=>navigate("/deleghe")}>Indietro</Button>
         </Box>
       )}
       {created && (
