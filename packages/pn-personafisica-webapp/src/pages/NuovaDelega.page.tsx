@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
@@ -18,7 +18,6 @@ import {
   SelectChangeEvent,
   Stack,
   Breadcrumbs,
-  styled,
 } from '@mui/material';
 import { IllusCompleted } from '@pagopa/mui-italia';
 import { Formik, Form } from 'formik';
@@ -37,6 +36,7 @@ import {
 } from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
+import StyledLink from '../component/StyledLink/StyledLink';
 import DropDownEntiMenuItem from './components/Deleghe/DropDownEnti';
 import ErrorDeleghe from './components/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from './components/Deleghe/VerificationCodeComponent';
@@ -55,16 +55,6 @@ const validationSchema = yup.object({
   cognome: yup.string().required('Il cognome è obbligatorio'),
   enteSelect: yup.string(),
 });
-
-const StyledLink = styled(Link)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  color: `${theme.palette.text.primary} !important`,
-  texDecoration: 'none !important',
-  '&:hover, &:focus': {
-    textDecoration: 'underline !important',
-  },
-}));
 
 const NuovaDelega = () => {
   const { t } = useTranslation(['deleghe']);
