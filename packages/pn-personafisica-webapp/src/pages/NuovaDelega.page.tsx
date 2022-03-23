@@ -26,7 +26,7 @@ import * as yup from 'yup';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import DateAdapter from '@mui/lab/AdapterMoment';
-import { CourtesyPage, TitleBox } from '@pagopa-pn/pn-commons';
+import { CourtesyPage, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -42,9 +42,6 @@ import DropDownEntiMenuItem from './components/Deleghe/DropDownEnti';
 import ErrorDeleghe from './components/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from './components/Deleghe/VerificationCodeComponent';
 
-const fiscalCode_regex =
-  /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i;
-
 const generateVCode = () =>
   Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('');
 
@@ -53,7 +50,7 @@ const validationSchema = yup.object({
   codiceFiscale: yup
     .string()
     .required('Il Codice Fiscale è obbligatorio')
-    .matches(fiscalCode_regex, 'Il codice fiscale inserito non è corretto'),
+    .matches(fiscalCodeRegex, 'Il codice fiscale inserito non è corretto'),
   email: yup.string().required('Email obbligatoria').email('Email non formattata correttamente'),
   nome: yup.string().required('Il nome è obbligatorio'),
   cognome: yup.string().required('Il cognome è obbligatorio'),

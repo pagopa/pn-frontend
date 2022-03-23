@@ -6,16 +6,21 @@ import { makeStyles } from '@mui/styles';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import { NotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import {
+  fiscalCodeRegex,
+  NotificationAllowedStatus,
+  tenYearsAgo,
+  today,
+} from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
 import { useAppDispatch } from '../../../redux/hooks';
 
 const useStyles = makeStyles({
   customButton: {
-    marginTop:'8px !important',
+    marginTop: '8px !important',
     height: '60px',
-  }
+  },
 });
 
 const FilterNotificationsTable = () => {
@@ -23,9 +28,8 @@ const FilterNotificationsTable = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
-  const fiscalCode_regex = /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i;
- // TODO inserire regex corretta
- const IUN_regex = /^[0-9A-Z_-]{1,20}$/i;
+  // TODO inserire regex corretta
+  const IUN_regex = /^[0-9A-Z_-]{1,20}$/i;
 
   const searchForValues = [
     { value: '0', label: 'Codice Fiscale' },
@@ -33,10 +37,10 @@ const FilterNotificationsTable = () => {
   ];
 
   const validationSchema = yup.object({
-    recipientId: yup.string().matches(fiscalCode_regex, "Inserire il codice completo"),
-    iunMatch: yup.string().matches(IUN_regex, "Inserire il codice corretto"),
-    startDate : yup.date().min(tenYearsAgo),
-    endDate: yup.date().min(tenYearsAgo)
+    recipientId: yup.string().matches(fiscalCodeRegex, 'Inserire il codice completo'),
+    iunMatch: yup.string().matches(IUN_regex, 'Inserire il codice corretto'),
+    startDate: yup.date().min(tenYearsAgo),
+    endDate: yup.date().min(tenYearsAgo),
   });
 
   const formik = useFormik({
@@ -100,7 +104,6 @@ const FilterNotificationsTable = () => {
             id="searchFor"
             label="Cerca per"
             name="searchFor"
-            variant="outlined"
             value={formik.values.searchFor}
             onChange={formik.handleChange}
             select
@@ -111,31 +114,29 @@ const FilterNotificationsTable = () => {
               </MenuItem>
             ))}
           </TextField>
-          {formik.values.searchFor === '' || formik.values.searchFor === '0' ?
-          <TextField
-            id="recipientId"
-            value={formik.values.recipientId}
-            onChange={handleChangeTouched}
-            label="Codice fiscale"
-            name="recipientId"
-            variant="outlined"
-            error={formik.touched.recipientId && Boolean(formik.errors.recipientId)}
-            helperText={formik.touched.recipientId && formik.errors.recipientId}
-            disabled={!formik.values.searchFor}
-          />
-          :
-          <TextField
-            id="iunMatch"
-            value={formik.values.iunMatch}
-            onChange={handleChangeTouched}
-            label="Codice IUN"
-            name="iunMatch"
-            variant="outlined"
-            error={formik.touched.iunMatch && Boolean(formik.errors.iunMatch)}
-            helperText={formik.touched.iunMatch && formik.errors.iunMatch}
-            disabled={!formik.values.searchFor}
-          />
-        }
+          {formik.values.searchFor === '' || formik.values.searchFor === '0' ? (
+            <TextField
+              id="recipientId"
+              value={formik.values.recipientId}
+              onChange={handleChangeTouched}
+              label="Codice fiscale"
+              name="recipientId"
+              error={formik.touched.recipientId && Boolean(formik.errors.recipientId)}
+              helperText={formik.touched.recipientId && formik.errors.recipientId}
+              disabled={!formik.values.searchFor}
+            />
+          ) : (
+            <TextField
+              id="iunMatch"
+              value={formik.values.iunMatch}
+              onChange={handleChangeTouched}
+              label="Codice IUN"
+              name="iunMatch"
+              error={formik.touched.iunMatch && Boolean(formik.errors.iunMatch)}
+              helperText={formik.touched.iunMatch && formik.errors.iunMatch}
+              disabled={!formik.values.searchFor}
+            />
+          )}
           <LocalizationProvider
             id="startDate"
             name="startDate"
@@ -149,12 +150,14 @@ const FilterNotificationsTable = () => {
               onChange={(value: Date | null) => {
                 formik
                   .setFieldValue('startDate', value)
-                  .then(() => { setStartDate(value);  })
+                  .then(() => {
+                    setStartDate(value);
+                  })
                   .catch(() => 'error');
               }}
               renderInput={(params) => <TextField id="startDate" name="startDate" {...params} />}
               disableFuture={true}
-              maxDate={endDate? endDate : undefined}
+              maxDate={endDate ? endDate : undefined}
             />
           </LocalizationProvider>
           <LocalizationProvider
@@ -171,12 +174,14 @@ const FilterNotificationsTable = () => {
               onChange={(value: Date | null) => {
                 formik
                   .setFieldValue('endDate', value)
-                  .then(() => { setEndDate(value); })
+                  .then(() => {
+                    setEndDate(value);
+                  })
                   .catch(() => 'error');
               }}
               renderInput={(params) => <TextField id="endDate" name="endDate" {...params} />}
               disableFuture={true}
-              minDate={startDate? startDate : undefined}
+              minDate={startDate ? startDate : undefined}
             />
           </LocalizationProvider>
           <TextField
@@ -184,7 +189,6 @@ const FilterNotificationsTable = () => {
             name="status"
             label="Stato"
             select
-            variant="outlined"
             onChange={formik.handleChange}
             value={formik.values.status}
           >
@@ -195,14 +199,17 @@ const FilterNotificationsTable = () => {
             ))}
           </TextField>
           <Button
-            variant="outlined"
             type="submit"
             className={classes.customButton}
             disabled={!formik.isValid}
           >
             Cerca
           </Button>
-          <Button data-testid="cancelButton" className={classes.customButton} onClick={cleanFilters}>
+          <Button
+            data-testid="cancelButton"
+            className={classes.customButton}
+            onClick={cleanFilters}
+          >
             Annulla ricerca
           </Button>
         </Box>

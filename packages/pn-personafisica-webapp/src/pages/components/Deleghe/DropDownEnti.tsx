@@ -13,7 +13,7 @@ const DropDownEntiMenuItem: React.FC<DropDownEntiProps> = ({ name }) => (
       </Avatar>
     </Grid>
     <Grid item xs={4} sx={{ margin: 'auto' }}>
-      <Typography sx={{ margin: 'auto', textAlign: 'left', fontWeight: 600 }}>{name}</Typography>
+      <Typography fontWeight={600} sx={{ margin: 'auto', textAlign: 'left'}}>{name}</Typography>
     </Grid>
     <Grid item xs={6} sx={{ margin: 'auto' }}></Grid>
   </Grid>
