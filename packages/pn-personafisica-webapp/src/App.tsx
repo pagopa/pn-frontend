@@ -13,18 +13,18 @@ import { PAGOPA_HELP_EMAIL } from './utils/constants';
 const App = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
-  
+
   const menuItems: Array<SideMenuItem> = [
     { label: t('menu.notifiche'), icon: MailOutlineIcon, route: routes.NOTIFICHE },
     { label: t('menu.deleghe'), icon: PeopleOutlineIcon, route: routes.DELEGHE },
     { label: t('menu.profilo'), icon: SettingsOutlinedIcon, route: routes.PROFILO },
   ];
-  
+
   return (
     <Layout
       onExitAction={() => dispatch(logout())}
       assistanceEmail={PAGOPA_HELP_EMAIL}
-      sideMenu={<SideMenu menuItems={menuItems}/>}
+      sideMenu={<SideMenu menuItems={menuItems} />}
     >
       <AppMessage />
       <LoadingOverlay />
