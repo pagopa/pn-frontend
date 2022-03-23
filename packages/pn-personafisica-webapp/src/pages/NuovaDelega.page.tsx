@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
@@ -44,9 +45,12 @@ import VerificationCodeComponent from './components/Deleghe/VerificationCodeComp
 const fiscalCode_regex =
   /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i;
 
+const generateVCode = () =>
+  Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('');
+
 const validationSchema = yup.object({
   selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Email is required'),
-  cf: yup
+  codiceFiscale: yup
     .string()
     .required('Il Codice Fiscale è obbligatorio')
     .matches(fiscalCode_regex, 'Il codice fiscale inserito non è corretto'),
@@ -61,8 +65,6 @@ const NuovaDelega = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { created } = useAppSelector((state: RootState) => state.newDelegationState);
-  const generateVCode = () =>
-    Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('');
 
   const handleSubmit = (values: CreateDelegationProps) => {
     void dispatch(createDelegation(values));
@@ -74,7 +76,7 @@ const NuovaDelega = () => {
   };
 
   return (
-    <>
+    <Fragment>
       {!created && (
         <Box mt={3}>
           <Breadcrumbs aria-label="breadcrumb">
@@ -97,7 +99,7 @@ const NuovaDelega = () => {
             <Formik
               initialValues={{
                 selectPersonaFisicaOrPersonaGiuridica: 'pf',
-                cf: '',
+                codiceFiscale: '',
                 email: '',
                 nome: '',
                 cognome: '',
@@ -145,12 +147,11 @@ const NuovaDelega = () => {
                               setFieldValue('nome', event.currentTarget.value);
                             }}
                             label={t('nuovaDelega.form.firstName')}
-                            name="cf"
-                            variant="outlined"
+                            name="nome"
                             error={touched.nome && Boolean(errors.nome)}
                             helperText={touched.nome && errors.nome}
                             fullWidth
-                          />{' '}
+                          />
                         </Grid>
                         <Grid item xs={4} sx={{ margin: 'auto' }}>
                           <TextField
@@ -162,7 +163,6 @@ const NuovaDelega = () => {
                             }}
                             label={t('nuovaDelega.form.lastName')}
                             name="cognome"
-                            variant="outlined"
                             error={touched.cognome && Boolean(errors.cognome)}
                             helperText={touched.cognome && errors.cognome}
                             fullWidth
@@ -180,16 +180,15 @@ const NuovaDelega = () => {
                   </FormControl>
                   <TextField
                     sx={{ marginTop: '2rem' }}
-                    id="cf"
-                    value={values.cf.toString()}
+                    id="codiceFiscale"
+                    value={values.codiceFiscale.toString()}
                     onChange={(event) => {
-                      setFieldValue('cf', event.currentTarget.value);
+                      setFieldValue('codiceFiscale', event.currentTarget.value);
                     }}
-                    label={t('nuovaDelega.form.fiscalCode') as string}
-                    name="cf"
-                    variant="outlined"
-                    error={touched.cf && Boolean(errors.cf)}
-                    helperText={touched.cf && errors.cf}
+                    label={t('nuovaDelega.form.fiscalCode')}
+                    name="codiceFiscale"
+                    error={touched.codiceFiscale && Boolean(errors.codiceFiscale)}
+                    helperText={touched.codiceFiscale && errors.codiceFiscale}
                     fullWidth
                   />
                   <TextField
@@ -199,14 +198,13 @@ const NuovaDelega = () => {
                     onChange={(event) => {
                       setFieldValue('email', event.currentTarget.value);
                     }}
-                    label={t('nuovaDelega.form.email') as string}
+                    label={t('nuovaDelega.form.email')}
                     name="email"
-                    variant="outlined"
                     error={touched.email && Boolean(errors.email)}
                     helperText={touched.email && errors.email}
                     fullWidth
                   />
-                  <Typography sx={{ fontWeight: 'bold', marginTop: '2rem' }}>
+                  <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }}>
                     {t('nuovaDelega.form.viewFrom')}
                   </Typography>
                   <FormControl sx={{ width: '100%' }}>
@@ -242,7 +240,7 @@ const NuovaDelega = () => {
                                 labelId="ente-select"
                                 id="ente-select"
                                 value={values.enteSelect}
-                                label={t('Seleziona Enti') as string}
+                                label={t('Seleziona Enti')}
                                 onChange={(event: SelectChangeEvent<string>) => {
                                   setFieldValue('enteSelect', event.target.value);
                                 }}
@@ -280,7 +278,7 @@ const NuovaDelega = () => {
                     </LocalizationProvider>
                   </Box>
                   <Divider sx={{ marginTop: '1rem' }} />
-                  <Typography sx={{ fontWeight: 'bold', marginTop: '1rem' }}>
+                  <Typography fontWeight={'bold'} sx={{ marginTop: '1rem' }}>
                     {t('nuovaDelega.form.verificationCode')}
                   </Typography>
                   <Grid container>
@@ -327,7 +325,7 @@ const NuovaDelega = () => {
           onClickLabel={t('Torna alle tue deleghe')}
         />
       )}
-    </>
+    </Fragment>
   );
 };
 

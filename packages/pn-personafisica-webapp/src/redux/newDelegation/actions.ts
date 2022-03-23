@@ -4,7 +4,7 @@ import { DelegationsApi } from '../../api/delegations/Delegations.api';
 
 export interface CreateDelegationProps {
   selectPersonaFisicaOrPersonaGiuridica: string;
-  cf: string;
+  codiceFiscale: string;
   email: string;
   nome: string;
   cognome: string;
@@ -24,7 +24,7 @@ export const createDelegation = createAsyncThunk<
     // TODO: add return rejectWithValue(e);
     return {
       selectPersonaFisicaOrPersonaGiuridica: 'pf',
-      cf: 'asdfghjkbvxgs',
+      codiceFiscale: 'asdfghjkbvxgs',
       email: 'string@string.it',
       nome: 'Luigi',
       cognome: 'Rossi',
