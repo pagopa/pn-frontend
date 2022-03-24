@@ -13,6 +13,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
+import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
+
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
@@ -34,7 +36,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
       width: '11%',
       sortable: true,
       getCellLabel(value: string) {
-        return value;
+        return getNewNotificationBadge(value);
       },
       onClick(row: Row, column: Column) {
         handleRowClick(row, column);
