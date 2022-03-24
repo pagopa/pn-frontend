@@ -78,7 +78,7 @@ import {
   LegalFactId,
   PhysicalCommunicationType,
 } from './types/Notifications';
-import { CardElem, CardSort } from './types/NotificationsCard';
+import { CardElem, CardSort, CardAction } from './types/NotificationsCard';
 import { DetailTableRow } from './types/NotificationDetailTable';
 
 export type { AppError };
@@ -108,7 +108,7 @@ export type {
   NotificationStatusHistory,
   LegalFactId,
 };
-export type { CardElem, CardSort };
+export type { CardElem, CardSort, CardAction };
 export type { DetailTableRow };
 
 // functions

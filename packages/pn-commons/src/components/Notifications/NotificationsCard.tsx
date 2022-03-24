@@ -1,7 +1,16 @@
 import { SentimentDissatisfied } from '@mui/icons-material';
-import { Box, Card, CardContent, CardHeader, Grid, Typography, useTheme } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  Typography,
+  useTheme,
+} from '@mui/material';
 
-import { CardElem } from '../../types/NotificationsCard';
+import { CardElem, CardAction } from '../../types/NotificationsCard';
 import { Row } from '../../types/NotificationsTable';
 
 type Props = {
@@ -11,9 +20,11 @@ type Props = {
   cardBody: Array<CardElem>;
   /* Card data*/
   cardData: Array<Row>;
+  /* Card actions*/
+  cardActions?: Array<CardAction>;
 };
 
-const NotificationsCard = ({ cardHeader, cardBody, cardData }: Props) => {
+const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Props) => {
   const cardHeaderTitle = (elem: Row) => (
     <Grid container spacing={2} direction="row" alignItems="center">
       <Grid item xs={4} sx={{ fontSize: '14px', fontWeight: 400 }} data-testid="cardHeaderLeft">
@@ -58,6 +69,14 @@ const NotificationsCard = ({ cardHeader, cardBody, cardData }: Props) => {
                 </Box>
               ))}
             </CardContent>
+            <CardActions disableSpacing>
+              {cardActions &&
+                cardActions.map((a) => (
+                  <Box key={a.id} onClick={() => a.onClick(d)} data-testid="cardAction" sx={{marginLeft: 'auto'}}>
+                    {a.component}
+                  </Box>
+                ))}
+            </CardActions>
           </Card>
         ))
       ) : (
