@@ -16,6 +16,7 @@ import CustomMobileDialog from './components/CustomMobileDialog/CustomMobileDial
 import CustomMobileDialogToggle from './components/CustomMobileDialog/CustomMobileDialogToggle';
 import CustomMobileDialogContent from './components/CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogAction from './components/CustomMobileDialog/CustomMobileDialogAction';
+import TitleBox from './components/TitleBox';
 
 export { LoadingOverlay };
 export { Header };
@@ -34,13 +35,16 @@ export { CustomMobileDialog };
 export { CustomMobileDialogToggle };
 export { CustomMobileDialogContent };
 export { CustomMobileDialogAction };
+export { TitleBox };
 
 // pages
 import NotFound from './navigation/NotFound';
 import AccessDenied from './navigation/AccessDenied';
+import CourtesyPage from './components/CourtesyPage';
 
 export { NotFound };
 export { AccessDenied };
+export { CourtesyPage };
 
 // types
 import { AppError } from './types/AppError';
@@ -108,7 +112,7 @@ import {
   NotificationAllowedStatus,
 } from './utils/status.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
-import { formatFiscalCode } from './utils/fiscal_code.utility';
+import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusLabelAndColor };
@@ -117,6 +121,7 @@ export { formatDate };
 export { calcPages };
 export { getMonthString, getDay, getTime };
 export { formatFiscalCode };
+export { fiscalCodeRegex };
 
 // consts
 export { today, tenYearsAgo };

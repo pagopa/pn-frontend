@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   helperTextFormat: {
     // Use existing space / prevents shifting content below field
     alignItems: 'flex',
-  }
+  },
 });
 
 const FilterNotifications = () => {
@@ -50,7 +50,12 @@ const FilterNotifications = () => {
   };
   const prevFilters = useRef(initialValues);
 
-  const submitForm = (values: {startDate: Date; endDate: Date; iunMatch: string; status: string}) => {
+  const submitForm = (values: {
+    startDate: Date;
+    endDate: Date;
+    iunMatch: string;
+    status: string;
+  }) => {
     if (prevFilters.current === values) {
       return;
     }
@@ -102,8 +107,8 @@ const FilterNotifications = () => {
 
   const filtersApplied = (): number => {
     const formValues = prevFilters.current;
-    return Object.entries(formValues).reduce((c: number, el: [string, any]) => {
-      if (el[0] in initialValues && el[1] !== (initialValues as any)[el[0]]) {
+    return Object.entries(formValues).reduce((c: number, element: [string, any]) => {
+      if (element[0] in initialValues && element[1] !== (initialValues as any)[element[0]]) {
         return c + 1;
       }
       return c;
@@ -135,7 +140,11 @@ const FilterNotifications = () => {
             />
           </DialogContent>
           <DialogActions>
-            <FilterNotificationsFormActions formikInstance={formik} cleanFilters={cleanFilters} isInDialog/>
+            <FilterNotificationsFormActions
+              formikInstance={formik}
+              cleanFilters={cleanFilters}
+              isInDialog
+            />
           </DialogActions>
         </form>
       </CustomMobileDialogContent>
@@ -151,7 +160,7 @@ const FilterNotifications = () => {
             setStartDate={(value) => changeDate(value, 'start')}
             setEndDate={(value) => changeDate(value, 'end')}
           />
-          <FilterNotificationsFormActions formikInstance={formik} cleanFilters={cleanFilters}/>
+          <FilterNotificationsFormActions formikInstance={formik} cleanFilters={cleanFilters} />
         </Grid>
       </Box>
     </form>

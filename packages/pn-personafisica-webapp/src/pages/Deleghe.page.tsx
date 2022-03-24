@@ -46,17 +46,17 @@ const Deleghe = () => {
         <GenericError />
       ) : (
         <>
-            <ConfirmationModal
-                open={open}
-                title={
-                    type === 'delegates'
-                        ? 'Vuoi davvero revocare la delega?'
-                        : 'Vuoi davvero rifiutare la delega?'
-                }
-                handleClose={handleCloseModal}
-                onConfirm={handleConfirmClick}
-                onConfirmLabel={type === 'delegates' ? 'Revoca la delega' : 'Rifiuta la delega'}
-            />
+          <ConfirmationModal
+            open={open}
+            title={
+              type === 'delegates'
+                ? 'Vuoi davvero revocare la delega?'
+                : 'Vuoi davvero rifiutare la delega?'
+            }
+            handleClose={handleCloseModal}
+            onConfirm={handleConfirmClick}
+            onConfirmLabel={type === 'delegates' ? 'Revoca la delega' : 'Rifiuta la delega'}
+          />
           <TitleAndDescription title={'Deleghe'}>
             Qui puoi gestire <b>i tuoi delegati</b> e le <b>deleghe a tuo carico</b>. I primi sono
             le persone fisiche o giuridiche che hai autorizzato alla visualizzazione e gestione

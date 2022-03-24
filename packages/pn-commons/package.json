@@ -8,8 +8,6 @@
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.0.3",
     "@mui/material": "^5.0.3",
-    "@mui/x-data-grid": "^5.0.1",
-    "@mui/x-data-grid-generator": "^5.0.1",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/node": "^16.11.21",
     "@types/react": "^17.0.38",

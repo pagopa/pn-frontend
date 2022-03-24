@@ -1,11 +1,12 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import {
   calcPages,
   CustomPagination,
   PaginationData,
   Sort,
+  TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -51,14 +52,15 @@ const Notifiche = () => {
     const params = {
       ...filters,
       size: pagination.size,
-      nextPagesKey: pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1]
+      nextPagesKey:
+        pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
     void dispatch(getReceivedNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
   return (
     <Box style={{ padding: '20px' }}>
-      <Typography variant={'h4'}>{t('Le tue notifiche')}</Typography>
+      <TitleBox variantTitle="h4" title={t('title')}></TitleBox>
       {isMobile ? (
         <MobileNotifications
           notifications={notifications}

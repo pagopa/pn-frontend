@@ -10,8 +10,16 @@ import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 type Props = {
   formikInstance: {
     values: FormikValues;
-    setFieldTouched: (field: string, touched?: boolean, shouldValidate?: boolean | undefined) => Promise<FormikErrors<FormikValues>> | Promise<void>;
-    setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => Promise<FormikErrors<FormikValues>> | Promise<void>;
+    setFieldTouched: (
+      field: string,
+      touched?: boolean,
+      shouldValidate?: boolean | undefined
+    ) => Promise<FormikErrors<FormikValues>> | Promise<void>;
+    setFieldValue: (
+      field: string,
+      value: any,
+      shouldValidate?: boolean | undefined
+    ) => Promise<FormikErrors<FormikValues>> | Promise<void>;
     handleChange: (e: ChangeEvent<any>) => void;
     touched: FormikTouched<FormikValues>;
     errors: FormikErrors<FormikValues>;
@@ -22,7 +30,13 @@ type Props = {
   setEndDate: (value: Date | null) => void;
 };
 
-const FilterNotificationsFormBody = ({formikInstance, startDate, endDate, setStartDate, setEndDate}: Props) => {
+const FilterNotificationsFormBody = ({
+  formikInstance,
+  startDate,
+  endDate,
+  setStartDate,
+  setEndDate,
+}: Props) => {
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
 
@@ -40,7 +54,6 @@ const FilterNotificationsFormBody = ({formikInstance, startDate, endDate, setSta
           onChange={handleChangeTouched}
           label={t('filters.iun', { ns: 'notifiche' })}
           name="iunMatch"
-          variant="outlined"
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
           helperText={formikInstance.touched.iunMatch && formikInstance.errors.iunMatch}
           fullWidth

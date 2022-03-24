@@ -18,5 +18,9 @@
     "asc": "crescente",
     "desc": "decrescente",
     "options": "Opzioni sort"
+  },
+  "detail": {
+    "breadcrumb_1": "Notifiche",
+    "breadcrumb_2": "Dettaglio Notifica"
   }
 }

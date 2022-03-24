@@ -3,6 +3,35 @@ import { apiClient } from '../../axios';
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
 import { DelegationsApi } from '../Delegations.api';
 
+const mockDelegation = {
+  mandateId: '1',
+  delegator: {
+    firstName: 'Mario',
+    lastName: 'Rossi',
+    companyName: 'eni',
+    fiscalCode: 'MRIRSS68P24H501C',
+    person: true,
+  },
+  delegate: {
+    firstName: 'Davide',
+    lastName: 'Legato',
+    companyName: 'eni',
+    fiscalCode: 'DVDLGT83C12H501C',
+    person: true,
+  },
+  status: 'Active',
+  visibilityIds: [
+    {
+      name: 'Agenzia Entrate',
+      uniqueIdentifier: '123456789',
+    },
+  ],
+  verificationCode: '123456',
+  datefrom: '15-12-2021',
+  dateto: '16-04-2022',
+  email: 'email@falsa.it',
+};
+
 const arrayOfDelegates = [
   {
     mandateId: '1',
@@ -139,6 +168,15 @@ export async function getDelegators() {
   return res;
 }
 
+async function createDelegation() {
+  const axiosMock = new MockAdapter(apiClient);
+  axiosMock.onPost(`/mandate`).reply(200, mockDelegation);
+  const res = await DelegationsApi.createDelegation(mockDelegation);
+  axiosMock.reset();
+  axiosMock.restore();
+  return res;
+}
+
 describe('Delegations api tests', () => {
   mockAuthentication();
 
@@ -156,7 +194,16 @@ describe('Delegations api tests', () => {
     const mock = new MockAdapter(apiClient);
     mock.onPatch('/delegations/7/revoke').reply(204);
     const res = await DelegationsApi.revokeDelegation('7');
-    expect(res).toStrictEqual({id: '7'});
+    expect(res).toStrictEqual({ id: '7' });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('creates a new delegation', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPatch('/mandate').reply(204);
+    const res = await createDelegation();
+    expect(res).toStrictEqual(mockDelegation);
     mock.reset();
     mock.restore();
   });
