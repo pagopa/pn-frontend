@@ -5,7 +5,8 @@
     "mittente": "Mittente",
     "oggetto": "Oggetto",
     "iun": "Codice IUN",
-    "status": "Stato"
+    "status": "Stato",
+    "show-detail": "Vedi dettaglio"
   },
   "filters": {
       "iun": "Inserire codice IUN",
