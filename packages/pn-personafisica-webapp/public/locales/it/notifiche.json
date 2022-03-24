@@ -5,7 +5,8 @@
     "mittente": "Mittente",
     "oggetto": "Oggetto",
     "iun": "Codice IUN",
-    "status": "Stato"
+    "status": "Stato",
+    "show-detail": "Vedi dettaglio"
   },
   "filters": {
       "iun": "Inserire codice IUN",
@@ -20,7 +21,11 @@
     "options": "Opzioni sort"
   },
   "detail": {
-    "breadcrumb_1": "Notifiche",
-    "breadcrumb_2": "Dettaglio Notifica"
+    "breadcrumb-root": "Notifiche",
+    "breadcrumb-leaf": "Dettaglio notifica",
+    "acts": "Atti allegati",
+    "timeline-title": "Stato della notifica",
+    "legalfact": "Attestato opponibile a Terzi",
+    "show-history": "Mostra storico"
   }
 }

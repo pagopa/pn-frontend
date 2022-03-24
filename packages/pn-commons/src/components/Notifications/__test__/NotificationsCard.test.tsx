@@ -1,7 +1,11 @@
-import { prettyDOM, render } from "../../../test-utils";
-import { CardElem } from "../../../types/NotificationsCard";
+import { fireEvent, waitFor } from '@testing-library/react';
+
+import { render } from "../../../test-utils";
+import { CardElem, CardAction } from "../../../types/NotificationsCard";
 import { Row } from "../../../types/NotificationsTable";
 import NotificationsCard from "../NotificationsCard";
+
+const clickActionMockFn = jest.fn();
 
 const cardHeader: [CardElem, CardElem] = [
   {id: 'column-1', label: 'Column 1', getLabel: (value: string) => value},
@@ -19,6 +23,10 @@ const cardData: Array<Row> = [
   {id: 'row-3', 'column-1': 'Row 3-1', 'column-2': 'Row 3-2', 'column-3': 'Row 3-3', 'column-4': 'Row 3-4'}
 ];
 
+const cardActions: Array<CardAction> = [
+  {id: 'action-1', 'component': <div>Mocked action</div>, onClick: clickActionMockFn},
+];
+
 describe('Notifications Card Component', () => {
   it('renders notifications card (empty data)', () => {
     const result = render(<NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={[]}/>);
@@ -28,7 +36,7 @@ describe('Notifications Card Component', () => {
   });
 
   it('renders notifications card (with data)', () => {
-    const result = render(<NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData}/>);
+    const result = render(<NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} cardActions={cardActions}/>);
     const notificationsCards = result.queryAllByTestId('notificationCard');
     expect(notificationsCards).toHaveLength(cardData.length);
     notificationsCards.forEach((card, index) => {
@@ -41,7 +49,23 @@ describe('Notifications Card Component', () => {
       cardBodyLabel.forEach((label, j) => {
         expect(label).toHaveTextContent(cardBody[j].label);
         expect(cardBodyValue[j]).toHaveTextContent(cardData[index][cardBody[j].id].toString());
-      })
+      });
+      const cardActionsEl = card.querySelectorAll('[data-testid="cardAction"]');
+      expect(cardActionsEl).toHaveLength(cardActions.length);
+      cardActionsEl.forEach((action, j) => {
+        expect(action).toHaveTextContent(/Mocked action/i);
+      });
     });
+  });
+
+  it('clicks on action', async () => {
+    const result = render(<NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} cardActions={cardActions}/>);
+    const notificationsCards = result.queryAllByTestId('notificationCard');
+    const cardActionsEl = notificationsCards[0].querySelector('[data-testid="cardAction"]');
+    fireEvent.click(cardActionsEl!);
+    await waitFor(() => {
+      expect(clickActionMockFn).toBeCalledTimes(1);
+      expect(clickActionMockFn).toBeCalledWith(cardData[0]);
+    })
   });
 });

@@ -39,11 +39,11 @@ export interface NotificationDetail {
   payment: NotificationDetailPayment;
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
-  timeline: Array<NotificationDetailTimeline>;
+  timeline: Array<INotificationDetailTimeline>;
   physicalCommunicationType: PhysicalCommunicationType;
 }
 
-export interface NotificationDetailTimeline {
+export interface INotificationDetailTimeline {
   elementId: string;
   timestamp: string;
   category: TimelineCategory;

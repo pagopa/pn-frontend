@@ -1,7 +1,8 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid } from '@mui/material';
-
+import { useNavigate } from 'react-router-dom';
+import { Button, Grid } from '@mui/material';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
   CardElem,
   CardSort,
@@ -12,7 +13,11 @@ import {
   Row,
   Sort,
   StatusTooltip,
+  CardAction
 } from '@pagopa-pn/pn-commons';
+
+import * as routes from '../../navigation/routes.const';
+import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import MobileNotificationsSort from './MobileNotificationsSort';
 import FilterNotifications from './FilterNotifications';
 
@@ -25,6 +30,7 @@ type Props = {
 };
 
 const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) => {
+  const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
 
   const cardHeader: [CardElem, CardElem] = [
@@ -32,7 +38,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
       id: 'sentAt',
       label: t('table.data'),
       getLabel(value: string) {
-        return value;
+        return getNewNotificationBadge(value);
       },
     },
     {
@@ -99,6 +105,16 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
     return arr;
   }, [] as Array<CardSort>);
 
+  // Navigation handlers
+  const handleRowClick = (row: Row) => {
+    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+  };
+
+  // TODO: sostituire con button naked
+  const cardActions: Array<CardAction> = [
+    {id: 'go-to-detail', component: <Button endIcon={<ArrowForwardIcon />}>{t('table.show-detail')}</Button>, onClick: handleRowClick}
+  ];
+
   return (
     <Fragment>
       <Grid container direction="row">
@@ -111,7 +127,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
           )}
         </Grid>
       </Grid>
-      <NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+      <NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} cardActions={cardActions}/>
     </Fragment>
   );
 };
