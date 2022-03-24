@@ -13,6 +13,7 @@ import {
   Sort,
   StatusTooltip,
 } from '@pagopa-pn/pn-commons';
+import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import MobileNotificationsSort from './MobileNotificationsSort';
 import FilterNotifications from './FilterNotifications';
 
@@ -32,7 +33,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
       id: 'sentAt',
       label: t('table.data'),
       getLabel(value: string) {
-        return value;
+        return getNewNotificationBadge(value);
       },
     },
     {
