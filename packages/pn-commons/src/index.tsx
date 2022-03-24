@@ -62,6 +62,9 @@ import {
   Notification,
   GetNotificationsResponse,
   GetNotificationsParams,
+} from './types/Notifications';
+import {
+  NotificationDetailTableRow,
   NotificationDetail,
   INotificationDetailTimeline,
   NotificationDetailRecipient,
@@ -77,9 +80,9 @@ import {
   LegalFactType,
   LegalFactId,
   PhysicalCommunicationType,
-} from './types/Notifications';
+} from './types/NotificationDetail';
+
 import { CardElem, CardSort, CardAction } from './types/NotificationsCard';
-import { DetailTableRow } from './types/NotificationDetailTable';
 
 export type { AppError };
 export type { PaginationData };
@@ -109,7 +112,7 @@ export type {
   LegalFactId,
 };
 export type { CardElem, CardSort, CardAction };
-export type { DetailTableRow };
+export type { NotificationDetailTableRow };
 
 // functions
 import { createAppError } from './services/error.service';

@@ -26,6 +26,8 @@
     "acts": "Atti allegati",
     "timeline-title": "Stato della notifica",
     "legalfact": "Attestato opponibile a Terzi",
-    "show-history": "Mostra storico"
+    "show-history": "Mostra storico",
+    "show-more": "Mostra di più",
+    "show-less": "Mostra di meno"
   }
 }

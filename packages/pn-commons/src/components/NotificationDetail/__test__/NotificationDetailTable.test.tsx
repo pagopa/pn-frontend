@@ -1,13 +1,13 @@
 import { RenderResult } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import { DetailTableRow } from '../../../types/NotificationDetailTable';
+import { NotificationDetailTableRow } from '../../../types/NotificationDetail';
 import NotificationDetailTable from '../NotificationDetailTable';
 
 describe('NotificationDetailTable Component', () => {
   let result: RenderResult | undefined;
 
-  const detailRows: Array<DetailTableRow> = [
+  const detailRows: Array<NotificationDetailTableRow> = [
     { id: 1, label: 'Data', value: `mocked-date` },
     { id: 2, label: 'Termini di pagamento', value: `Entro il` },
     { id: 3, label: 'Destinatario', value: `mocked-taxId` },

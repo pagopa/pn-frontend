@@ -1,14 +1,15 @@
 import { Fragment, useState } from 'react';
-import { Timeline } from '@mui/lab';
 import { Typography, Grid, Drawer } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
+import { TimelineNotification } from "@pagopa/mui-italia";
 
 import {
   LegalFactId,
   INotificationDetailTimeline,
   NotificationStatusHistory,
-} from '../../types/Notifications';
+  NotificationDetailTimelineData
+} from '../../types/NotificationDetail';
 import { useIsMobile } from '../../hooks/IsMobile.hook';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
@@ -19,6 +20,8 @@ type Props = {
   legalFactLabel: string;
   clickHandler: (legalFactId: LegalFactId) => void;
   historyButtonLabel: string;
+  showMoreButtonLabel: string;
+  showLessButtonLabel: string;
 };
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -43,6 +46,8 @@ const NotificationDetailTimeline = ({
   title,
   legalFactLabel,
   historyButtonLabel,
+  showMoreButtonLabel,
+  showLessButtonLabel
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
@@ -51,14 +56,42 @@ const NotificationDetailTimeline = ({
     setState(!state);
   };
 
-  const timelineCmp = timeline.map((t, i) => (
+  const timeLineData: Array<NotificationDetailTimelineData> = [];
+  if (timeline.length > 0 && statusHistory.length > 0) {
+    for (const status of statusHistory) {
+      const timeLineDataStep: NotificationDetailTimelineData = {...status, steps: []};
+      // find timeline steps that are linked with current status
+      for (const el of status.relatedTimelineElements) {
+        const step = timeline.find(t => t.elementId === el);
+        if (step) {
+          timeLineDataStep.steps.push(step);
+        }
+      }
+      // order step by time
+      timeLineDataStep.steps.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+      timeLineData.push(timeLineDataStep);
+    }
+  }
+
+  const getPosition = (index: number): 'first' | 'last' | undefined => {
+    if (index === 0) {
+      return 'first';
+    }
+    if (index === timeLineData.length - 1) {
+      return 'last';
+    }
+    return undefined;
+  }
+
+  const timelineCmp = timeLineData.map((t, i) => (
     <NotificationDetailTimelineStep
       timelineStep={t}
-      index={i}
+      position={getPosition(i)}
       legalFactLabel={legalFactLabel}
-      statusHistory={statusHistory}
       clickHandler={clickHandler}
-      key={t.elementId}
+      key={t.activeFrom}
+      showMoreButtonLabel={showMoreButtonLabel}
+      showLessButtonLabel={showLessButtonLabel}
     />
   ));
 
@@ -75,13 +108,12 @@ const NotificationDetailTimeline = ({
           <Button startIcon={<DownloadIcon />}>Scarica tutti gli allegati</Button>
         </Grid> */}
       </Grid>
-      <Timeline>
-        {isMobile && timeline.length > 0 ? (
+      <TimelineNotification>
+        {isMobile && timeLineData.length > 0 ? (
           <NotificationDetailTimelineStep
-            timelineStep={timeline[0]}
-            index={0}
+            timelineStep={timeLineData[0]}
+            position="first"
             legalFactLabel={legalFactLabel}
-            statusHistory={statusHistory}
             clickHandler={clickHandler}
             historyButtonLabel={historyButtonLabel}
             showHistoryButton
@@ -90,7 +122,7 @@ const NotificationDetailTimeline = ({
         ) : (
           timelineCmp
         )}
-      </Timeline>
+      </TimelineNotification>
       <CustomDrawer anchor="left" open={state} onClose={toggleHistoryDrawer}>
         <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: '24px' }}>
           <Grid item>
@@ -114,7 +146,7 @@ const NotificationDetailTimeline = ({
             />
           </Grid>
         </Grid>
-        <Timeline>{timelineCmp}</Timeline>
+        <TimelineNotification>{timelineCmp}</TimelineNotification>
       </CustomDrawer>
     </Fragment>
   );
