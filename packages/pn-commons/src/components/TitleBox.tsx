@@ -1,4 +1,4 @@
-import { GridSize, Typography, Grid } from '@mui/material';
+import { GridSize, Typography, Grid, SxProps, Theme } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 
 type Props = {
@@ -15,6 +15,8 @@ type Props = {
   variantTitle?: Variant;
   /** Typography variant for subtitle */
   variantSubTitle?: Variant;
+  /** style to apply */
+  sx?: SxProps<Theme>;
 };
 
 /**
@@ -28,9 +30,10 @@ export default function TitleBox({
   mbSubTitle,
   variantTitle = 'h1',
   variantSubTitle = 'h5',
+  sx
 }: Props) {
   return (
-    <Grid container mt={mtGrid}>
+    <Grid container mt={mtGrid} sx={sx}>
       <Grid item xs={12} mb={mbTitle}>
         <Typography variant={variantTitle}>{title}</Typography>
       </Grid>

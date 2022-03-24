@@ -5,7 +5,7 @@ import {
   NotificationDetailDocument,
   NotificationDetailPayment,
   NotificationDetailRecipient,
-  NotificationDetailTimeline,
+  INotificationDetailTimeline,
   NotificationStatusHistory,
   PhysicalCommunicationType,
 } from '@pagopa-pn/pn-commons';
@@ -31,7 +31,7 @@ const initialState = {
     payment: {} as NotificationDetailPayment,
     notificationStatus: '' as NotificationStatus,
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
-    timeline: [] as Array<NotificationDetailTimeline>,
+    timeline: [] as Array<INotificationDetailTimeline>,
     physicalCommunicationType: '' as PhysicalCommunicationType,
   } as NotificationDetail,
   documentDownloadUrl: '',
