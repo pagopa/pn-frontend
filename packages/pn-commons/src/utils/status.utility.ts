@@ -1,3 +1,4 @@
+import { INotificationDetailTimeline, NotificationStatusHistory } from '../types/Notifications';
 import { NotificationStatus } from '../types/NotificationStatus';
 
 // TODO: aggiungere i colori del tema
@@ -80,3 +81,17 @@ export const NotificationAllowedStatus = [
   { value: NotificationStatus.CANCELED, label: 'Annullata' },
   { value: NotificationStatus.UNREACHABLE, label: 'Destinatario irreperibile' },
 ];
+
+export function getNotificationStatusLabelAndColorFromTimelineCategory(
+  timelineStep: INotificationDetailTimeline,
+  notificationStatusHistory: Array<NotificationStatusHistory>
+): {
+  color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
+  label: string;
+  tooltip: string;
+} {
+  const notificationStep = notificationStatusHistory.find((n) =>
+    n.relatedTimelineElements.includes(timelineStep.elementId)
+  );
+  return getNotificationStatusLabelAndColor(notificationStep?.status as NotificationStatus);
+}

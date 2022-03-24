@@ -1,4 +1,4 @@
-import { prettyDOM, render } from "../../../test-utils";
+import { render } from "../../../test-utils";
 import { CardElem } from "../../../types/NotificationsCard";
 import { Row } from "../../../types/NotificationsTable";
 import NotificationsCard from "../NotificationsCard";

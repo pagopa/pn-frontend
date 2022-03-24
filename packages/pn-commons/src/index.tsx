@@ -17,6 +17,9 @@ import CustomMobileDialogToggle from './components/CustomMobileDialog/CustomMobi
 import CustomMobileDialogContent from './components/CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogAction from './components/CustomMobileDialog/CustomMobileDialogAction';
 import TitleBox from './components/TitleBox';
+import NotificationDetailTable from './components/NotificationDetail/NotificationDetailTable';
+import NotificationDetailDocuments from './components/NotificationDetail/NotificationDetailDocuments';
+import NotificationDetailTimeline from './components/NotificationDetail/NotificationDetailTimeline';
 
 export { LoadingOverlay };
 export { Header };
@@ -36,6 +39,9 @@ export { CustomMobileDialogToggle };
 export { CustomMobileDialogContent };
 export { CustomMobileDialogAction };
 export { TitleBox };
+export { NotificationDetailTable };
+export { NotificationDetailDocuments };
+export { NotificationDetailTimeline };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -57,7 +63,7 @@ import {
   GetNotificationsResponse,
   GetNotificationsParams,
   NotificationDetail,
-  NotificationDetailTimeline,
+  INotificationDetailTimeline,
   NotificationDetailRecipient,
   NotificationDetailDocument,
   NotificationFeePolicy,
@@ -73,6 +79,7 @@ import {
   PhysicalCommunicationType,
 } from './types/Notifications';
 import { CardElem, CardSort } from './types/NotificationsCard';
+import { DetailTableRow } from './types/NotificationDetailTable';
 
 export type { AppError };
 export type { PaginationData };
@@ -94,7 +101,7 @@ export type {
   GetNotificationsResponse,
   GetNotificationsParams,
   NotificationDetail,
-  NotificationDetailTimeline,
+  INotificationDetailTimeline,
   NotificationDetailRecipient,
   NotificationDetailDocument,
   NotificationDetailPayment,
@@ -102,6 +109,7 @@ export type {
   LegalFactId,
 };
 export type { CardElem, CardSort };
+export type { DetailTableRow };
 
 // functions
 import { createAppError } from './services/error.service';
