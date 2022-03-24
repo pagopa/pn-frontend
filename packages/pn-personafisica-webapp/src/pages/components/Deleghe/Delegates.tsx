@@ -1,12 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Stack, styled } from '@mui/material';
 import { Add, SentimentDissatisfied } from '@mui/icons-material';
-import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
+import { NotificationsTable as Table, OutlinedButton, Row, Sort } from '@pagopa-pn/pn-commons';
 import { useTheme } from '@mui/material/styles';
 
-import { useAppSelector } from '../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
 import * as routes from '../../../navigation/routes.const';
+import { setDelegatesSorting } from '../../../redux/delegation/actions';
 import { delegatesColumns } from './delegationsColumns';
 
 const StyledStack = styled(Stack)`
@@ -17,10 +18,13 @@ const StyledStack = styled(Stack)`
 
 const Delegates = () => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
+
+  const sortDelegates = useAppSelector((state: RootState) => state.delegationsState.sortDelegates);
 
   const rows: Array<Row> = delegates.map((e: any) => ({
     id: e.mandateId,
@@ -36,6 +40,10 @@ const Delegates = () => {
     navigate(routes.NUOVA_DELEGA);
   };
 
+  const handleChangeSorting = (s: Sort) => {
+    dispatch(setDelegatesSorting(s));
+  };
+
   return (
     <Box mb={8}>
       <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
@@ -48,7 +56,7 @@ const Delegates = () => {
         </div>
       </Stack>
       {rows.length ? (
-        <Table columns={delegatesColumns} rows={rows} />
+        <Table columns={delegatesColumns} rows={rows} sort={sortDelegates} onChangeSorting={handleChangeSorting}/>
       ) : (
         <StyledStack
           sx={{ fontSize: '16px' }}

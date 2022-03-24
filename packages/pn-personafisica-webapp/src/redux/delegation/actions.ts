@@ -41,7 +41,7 @@ export const getDelegates = createAsyncThunk<any>(
       verificationCode: '123456',
       datefrom: '15-12-2021',
       dateto: '16-04-2022',
-      email: 'email@falsa.it',
+      email: 'falsa@falsa.it',
     },
     {
       mandateId: '123',
@@ -184,3 +184,7 @@ export const openRevocationModal =
   createAction<{ id: string; type: string }>('openRevocationModal');
 
 export const closeRevocationModal = createAction<void>('closeRevocationModal');
+
+export const setDelegatorsSorting = createAction<{orderBy: string; order: 'asc' | 'desc'}>('setDelegatorsSorting');
+
+export const setDelegatesSorting = createAction<{orderBy: string; order: 'asc' | 'desc'}>('setDelegatesSorting');

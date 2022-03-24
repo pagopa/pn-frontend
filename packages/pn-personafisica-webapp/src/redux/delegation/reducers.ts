@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { WritableDraft } from 'immer/dist/internal';
 import { DelegationStatus } from '../../utils/status.utility';
 import {
   getDelegates,
@@ -8,6 +9,8 @@ import {
   openRevocationModal,
   rejectDelegation,
   revokeDelegation,
+  setDelegatorsSorting,
+  setDelegatesSorting
 } from './actions';
 import { RevocationModalProps, Delegation } from './types';
 
@@ -26,6 +29,14 @@ const delegationsSlice = createSlice({
       id: '',
       type: '',
     } as RevocationModalProps,
+    sortDelegators: {
+      orderBy: '',
+      order: 'asc' as 'asc' | 'desc',
+    },
+    sortDelegates: {
+      orderBy: '',
+      order: 'asc' as 'asc' | 'desc',
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -66,6 +77,19 @@ const delegationsSlice = createSlice({
       state.delegations.delegators = state.delegations.delegators.filter(
         (e: any) => e.mandateId !== action.payload.id
       );
+    });
+    builder.addCase(setDelegatesSorting, (state, action) => {
+      state.sortDelegates = action.payload;
+      state.delegations.delegates = state.delegations.delegates.sort((a:WritableDraft<Delegation>,b:WritableDraft<Delegation>)=> {
+        if(action.payload.order === 'asc'){
+          return a[action.payload.orderBy as keyof Delegation] > b[action.payload.orderBy as keyof Delegation] ? 1 : -1;
+        }else{
+          return a[action.payload.orderBy as keyof Delegation] < b[action.payload.orderBy as keyof Delegation] ? 1 : -1;
+        }
+        } );
+    });
+    builder.addCase(setDelegatorsSorting, (state, action) => {
+      state.sortDelegators = action.payload;
     });
   },
 });
