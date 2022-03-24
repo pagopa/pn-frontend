@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { Box } from '@mui/material';
-import { TitleAndDescription } from '@pagopa-pn/pn-commons';
+import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
+import { Trans } from 'react-i18next';
 import GenericError from '../component/GenericError/GenericError';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -15,8 +16,11 @@ import {
 import Delegates from './components/Deleghe/Delegates';
 import Delegators from './components/Deleghe/Delegators';
 import ConfirmationModal from './components/Deleghe/ConfirmationModal';
+import MobileDelegates from './components/Deleghe/MobileDelegates';
+import MobileDelegators from './components/Deleghe/MobileDelegators';
 
 const Deleghe = () => {
+  const isMobile = useIsMobile();
   const { id, open, type } = useAppSelector(
     (state: RootState) => state.delegationsState.modalState
   );
@@ -41,7 +45,7 @@ const Deleghe = () => {
   }, []);
 
   return (
-    <Box sx={{ marginRight: 2 }}>
+    <Box sx={{ marginRight: isMobile ? 0 : 2 }}>
       {error ? (
         <GenericError />
       ) : (
@@ -57,13 +61,24 @@ const Deleghe = () => {
             onConfirm={handleConfirmClick}
             onConfirmLabel={type === 'delegates' ? 'Revoca la delega' : 'Rifiuta la delega'}
           />
-          <TitleAndDescription title={'Deleghe'}>
-            Qui puoi gestire <b>i tuoi delegati</b> e le <b>deleghe a tuo carico</b>. I primi sono
-            le persone fisiche o giuridiche che hai autorizzato alla visualizzazione e gestione
-            delle tue notifiche, le seconde sono color che hanno autorizzato te.
-          </TitleAndDescription>
-          <Delegates />
-          <Delegators />
+          <Box ml={isMobile ? 2 : 0}>
+            <TitleBox title={'Deleghe'} variantTitle={'h4'}>
+              <Trans ns={'deleghe'} i18nKey="deleghe.description">
+                deleghe.description
+              </Trans>
+            </TitleBox>
+          </Box>
+          {isMobile ? (
+            <>
+              <MobileDelegates />
+              <MobileDelegators />
+            </>
+          ) : (
+            <>
+              <Delegates />
+              <Delegators />
+            </>
+          )}
         </>
       )}
     </Box>

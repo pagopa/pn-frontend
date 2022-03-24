@@ -4,6 +4,7 @@ import { Add, SentimentDissatisfied } from '@mui/icons-material';
 import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
 import { useTheme } from '@mui/material/styles';
 
+import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
 import * as routes from '../../../navigation/routes.const';
@@ -17,6 +18,7 @@ const StyledStack = styled(Stack)`
 
 const Delegates = () => {
   const theme = useTheme();
+  const { t } = useTranslation(['deleghe']);
   const navigate = useNavigate();
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
@@ -39,11 +41,11 @@ const Delegates = () => {
   return (
     <Box mb={8}>
       <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-        <h2>I tuoi delegati</h2>
+        <h2>{t('deleghe.delegatesTitle')}</h2>
         <div>
           <OutlinedButton onClick={handleAddDelegationClick}>
             <Add fontSize={'small'} sx={{ marginRight: 1 }} />
-            Aggiungi una delega
+            {t('deleghe.add')}
           </OutlinedButton>
         </div>
       </Stack>

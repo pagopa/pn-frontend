@@ -1,8 +1,5 @@
 import { getNotificationStatusLabelAndColor, NotificationStatus } from '@pagopa-pn/pn-commons';
-import {
-  NotificationDetailTimeline,
-  NotificationStatusHistory,
-} from '@pagopa-pn/pn-commons';
+import { NotificationDetailTimeline, NotificationStatusHistory } from '@pagopa-pn/pn-commons';
 
 export function getNotificationStatusLabelAndColorFromTimelineCategory(
   timelineStep: NotificationDetailTimeline,
@@ -23,7 +20,7 @@ export enum DelegationStatus {
   PENDING = 'Pending',
 }
 
-export function getDelegationStatusLabelAndColor(status: DelegationStatus): {
+export function getDelegationStatusLabelAndColor(status: 'Active' | 'Pending'): {
   color: 'warning' | 'success' | 'info' | undefined;
   label: string;
 } {

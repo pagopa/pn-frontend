@@ -1,5 +1,6 @@
 import { GridSize, Typography, Grid } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
+import { ReactFragment } from 'react';
 
 type Props = {
   /** Title of the page to render */
@@ -15,6 +16,8 @@ type Props = {
   variantTitle?: Variant;
   /** Typography variant for subtitle */
   variantSubTitle?: Variant;
+  /** Children */
+  children?: ReactFragment;
 };
 
 /**
@@ -28,6 +31,7 @@ export default function TitleBox({
   mbSubTitle,
   variantTitle = 'h1',
   variantSubTitle = 'h5',
+  children,
 }: Props) {
   return (
     <Grid container mt={mtGrid}>
@@ -38,6 +42,9 @@ export default function TitleBox({
         <Typography variant={variantSubTitle} sx={{ fontSize: '18px' }}>
           {subTitle}
         </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography sx={{ fontSize: '18px' }}>{children}</Typography>
       </Grid>
     </Grid>
   );

@@ -69,13 +69,14 @@ const delegationsColumns: Array<Column> = [
   },
 ];
 
-const Menu = (props: any) => {
+export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
 
   const handleOpenModalClick = () => {
     dispatch(openRevocationModal({ id: props.id, type: props.menuType }));
+    setAnchorEl(null);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -115,7 +116,7 @@ const Menu = (props: any) => {
   );
 };
 
-const AcceptButton = ({ id }: { id: string }) => {
+export const AcceptButton = ({ id }: { id: string }) => {
   const dispatch = useAppDispatch();
   const handleAcceptClick = () => {
     void dispatch(acceptDelegation(id));

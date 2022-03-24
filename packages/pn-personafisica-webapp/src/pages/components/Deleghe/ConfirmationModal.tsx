@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Typography, Box, Button, Grid, IconButton, Stack } from '@mui/material';
+import { Typography, Box, Button, Grid, Stack } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 type Props = {
   open: boolean;
@@ -23,10 +23,10 @@ export default function ConfirmationModal({
   handleClose,
   onCloseLabel = 'Annulla',
   minHeight = '4em',
-  width = '32em',
 }: Props) {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
+  const isMobile = useIsMobile();
 
   return (
     <Dialog
@@ -35,32 +35,42 @@ export default function ConfirmationModal({
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
-      <Grid container direction="column" sx={{ minHeight, width }}>
+      <Grid container direction="column" sx={{ minHeight, minWidth: isMobile ? 0 : '32em' }}>
         <Box mx={3} sx={{ height: '100%' }}>
           <Grid container item mt={4}>
             <Grid item xs={10}>
-              <IconButton
-                onClick={handleClose}
-                style={{ position: 'absolute', top: '20px', right: '16px', zIndex: 100 }}
-              >
-                <ClearOutlinedIcon />
-              </IconButton>
               <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }}>
                 {title}
               </Typography>
             </Grid>
           </Grid>
 
-          <Stack direction={'row'} justifyContent={'flex-end'} ml={'auto'} mt={4}>
-            <Grid item mr={1}>
-              <Button onClick={handleClose} color="primary" variant="outlined">
+          <Stack
+            direction={isMobile ? 'column' : 'row'}
+            justifyContent={'flex-end'}
+            alignItems={'center'}
+            ml={'auto'}
+            pb={isMobile ? 4 : 0}
+          >
+            <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4} mr={isMobile ? 0 : 1}>
+              <Button
+                sx={{ width: isMobile ? '100%' : null }}
+                onClick={handleClose}
+                color="primary"
+                variant="outlined"
+              >
                 {onCloseLabel}
               </Button>
             </Grid>
 
             {onConfirm && (
-              <Grid item>
-                <Button color="primary" variant="contained" onClick={onConfirm}>
+              <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4}>
+                <Button
+                  sx={{ width: isMobile ? '100%' : null }}
+                  color="primary"
+                  variant="contained"
+                  onClick={onConfirm}
+                >
                   {onConfirmLabel}
                 </Button>
               </Grid>
