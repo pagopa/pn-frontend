@@ -1,9 +1,9 @@
 import { Box, Stack } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../../../redux/hooks';
-import { RootState } from '../../../redux/store';
-import { Delegation } from '../../../redux/delegation/types';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import { Delegation } from '../../redux/delegation/types';
 import DelegationCard from './DelegationCard';
 
 const MobileDelegators = () => {

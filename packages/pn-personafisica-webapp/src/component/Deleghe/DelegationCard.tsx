@@ -10,8 +10,8 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { Delegation } from '../../../redux/delegation/types';
-import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../../utils/status.utility';
+import { Delegation } from '../../redux/delegation/types';
+import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { AcceptButton, Menu } from './delegationsColumns';
 
 interface DelegationCardProps {
@@ -41,8 +41,12 @@ const DelegationCard = ({ delegation, type }: DelegationCardProps) => {
           '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
       }}
     >
-      <CardHeader title={<Badge />} action={<Menu menuType={type} id={delegation.mandateId} />} />
-      <CardContent>
+      <CardHeader
+        sx={{ padding: 0 }}
+        title={<Badge />}
+        action={<Menu menuType={type} id={delegation.mandateId} />}
+      />
+      <CardContent sx={{ padding: 0, marginTop: 2 }}>
         <Typography mt={1} variant="subtitle2">
           {t('deleghe.table.name')}
         </Typography>
@@ -73,10 +77,14 @@ const DelegationCard = ({ delegation, type }: DelegationCardProps) => {
               sx={{
                 padding: 0,
                 display: 'revert',
+                listStyle: 'square',
               }}
             >
               {delegation.visibilityIds.map((e) => (
-                <ListItem key={e.uniqueIdentifier} sx={{ paddingLeft: 0, display: 'revert' }}>
+                <ListItem
+                  key={e.uniqueIdentifier}
+                  sx={{ display: 'revert', paddingLeft: 0, marginLeft: 3, fontWeight: '500' }}
+                >
                   {e.name}
                 </ListItem>
               ))}

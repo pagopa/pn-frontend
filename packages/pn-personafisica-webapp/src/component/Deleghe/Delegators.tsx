@@ -1,8 +1,8 @@
 import { Box, Stack } from '@mui/material';
 import { NotificationsTable, Row } from '@pagopa-pn/pn-commons';
 
-import { RootState } from '../../../redux/store';
-import { useAppSelector } from '../../../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import { delegatorsColumns } from './delegationsColumns';
 
 const Delegators = () => {

@@ -38,9 +38,9 @@ import {
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
 import StyledLink from '../component/StyledLink/StyledLink';
-import DropDownEntiMenuItem from './components/Deleghe/DropDownEnti';
-import ErrorDeleghe from './components/Deleghe/ErrorDeleghe';
-import VerificationCodeComponent from './components/Deleghe/VerificationCodeComponent';
+import DropDownEntiMenuItem from '../component/Deleghe/DropDownEnti';
+import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
+import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 
 const generateVCode = () =>
   Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('');
@@ -91,9 +91,7 @@ const NuovaDelega = () => {
             variantTitle="h3"
             variantSubTitle="body1"
           />
-          <Typography sx={{mt: '1rem', mb:'1rem'}}>
-            Campi Obbligatori *
-          </Typography>
+          <Typography sx={{ mt: '1rem', mb: '1rem' }}>Campi Obbligatori *</Typography>
           <Card sx={{ padding: '30px', width: '80%', mt: 4 }}>
             <Typography sx={{ fontWeight: 'bold' }}>{t('nuovaDelega.form.personType')}</Typography>
             <Formik
@@ -312,7 +310,13 @@ const NuovaDelega = () => {
               )}
             </Formik>
           </Card>
-          <Button variant="outlined" sx={{mt:"1rem", mb:"1rem"}} onClick={()=>navigate("/deleghe")}>Indietro</Button>
+          <Button
+            variant="outlined"
+            sx={{ mt: '1rem', mb: '1rem' }}
+            onClick={() => navigate('/deleghe')}
+          >
+            Indietro
+          </Button>
         </Box>
       )}
       {created && (

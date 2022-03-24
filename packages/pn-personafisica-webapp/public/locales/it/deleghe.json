@@ -7,6 +7,14 @@
         "delegationStart": "Inizio delega",
         "delegationEnd": "Fine delega",
         "add": "Aggiungi una delega",
+        "revoke": "revoca",
+        "reject": "rifiuta",
+        "accept": "accetta",
+        "show": "Mostra Codice",
+        "revocation_question": "Vuoi davvero revocare la delega?",
+        "rejection_question": "Vuoi davvero rifiutare la delega?",
+        "confirm_revocation": "Revoca la delega",
+        "confirm_rejection": "Rifiuta la delega",
         "table": {
             "name": "Nome",
             "email": "Email",
@@ -20,7 +28,7 @@
             "accept": "Accetta",
             "notificationsFrom": "Notifiche da:",
             "allNotifications": "Tutte le notifiche",
-            "active": "attiva",
+            "active": "Attiva",
             "pending": "Attesa conferma"
         }
     },

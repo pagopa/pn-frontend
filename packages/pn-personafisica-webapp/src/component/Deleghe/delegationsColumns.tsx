@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
 import { Column, Row } from '@pagopa-pn/pn-commons';
-import { Button, Chip, IconButton, Typography, Menu as MUIMenu, MenuItem } from '@mui/material';
+import {
+  Button,
+  Chip,
+  IconButton,
+  Typography,
+  Menu as MUIMenu,
+  MenuItem,
+  Box,
+  List,
+  ListItem,
+} from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
-
-import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../../utils/status.utility';
-import { useAppDispatch } from '../../../redux/hooks';
-import { acceptDelegation, openRevocationModal } from '../../../redux/delegation/actions';
+import { useTranslation } from 'react-i18next';
+import { useAppDispatch } from '../../redux/hooks';
+import { acceptDelegation, openRevocationModal } from '../../redux/delegation/actions';
+import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 
 const delegationsColumns: Array<Column> = [
   {
@@ -47,24 +57,7 @@ const delegationsColumns: Array<Column> = [
     label: 'Permessi per vedere',
     width: '14%',
     getCellLabel(value: Array<string>) {
-      return (
-        <>
-          {value.length > 0 ? (
-            <>
-              <span>Notifiche da:</span>
-              <ul style={{ margin: 0, paddingLeft: '24px' }}>
-                {value.map((e, i) => (
-                  <li key={i} style={{ listStyleType: 'square', fontWeight: 'bold' }}>
-                    {e}
-                  </li>
-                ))}
-              </ul>
-            </>
-          ) : (
-            <Typography>Tutte le notifiche</Typography>
-          )}
-        </>
-      );
+      return <OrganizationsList organizations={value} />;
     },
   },
 ];
@@ -73,6 +66,7 @@ export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation(['deleghe']);
 
   const handleOpenModalClick = () => {
     dispatch(openRevocationModal({ id: props.id, type: props.menuType }));
@@ -91,14 +85,14 @@ export const Menu = (props: any) => {
     if (props.menuType === 'delegates') {
       return (
         <>
-          <MenuItem onClick={handleClose}>Mostra Codice</MenuItem>
-          <MenuItem onClick={handleOpenModalClick}>Revoca</MenuItem>
+          <MenuItem onClick={handleClose}>{t('Mostra Codice')}</MenuItem>
+          <MenuItem onClick={handleOpenModalClick}>{t('Revoca')}</MenuItem>
         </>
       );
     } else {
       return (
         <>
-          <MenuItem onClick={handleOpenModalClick}>Rifiuta</MenuItem>
+          <MenuItem onClick={handleOpenModalClick}>{t('Rifiuta')}</MenuItem>
         </>
       );
     }
@@ -116,7 +110,39 @@ export const Menu = (props: any) => {
   );
 };
 
+const OrganizationsList = (props: { organizations: Array<string> }) => {
+  const { t } = useTranslation(['deleghe']);
+  return (
+    <>
+      {props.organizations.length === 0 ? (
+        <Typography>{t('deleghe.table.allNotifications')}</Typography>
+      ) : (
+        <Box>
+          <Typography>{t('deleghe.table.notificationsFrom')}</Typography>
+          <List
+            sx={{
+              padding: 0,
+              display: 'revert',
+              listStyle: 'square',
+            }}
+          >
+            {props.organizations.map((e) => (
+              <ListItem
+                key={e}
+                sx={{ display: 'revert', paddingLeft: 0, marginLeft: 3, fontWeight: '500' }}
+              >
+                {e}
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      )}
+    </>
+  );
+};
+
 export const AcceptButton = ({ id }: { id: string }) => {
+  const { t } = useTranslation(['deleghe']);
   const dispatch = useAppDispatch();
   const handleAcceptClick = () => {
     void dispatch(acceptDelegation(id));
@@ -124,7 +150,7 @@ export const AcceptButton = ({ id }: { id: string }) => {
 
   return (
     <Button onClick={handleAcceptClick} variant={'contained'} color={'primary'}>
-      Accetta
+      {t('Accetta')}
     </Button>
   );
 };

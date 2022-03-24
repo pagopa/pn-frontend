@@ -3,11 +3,11 @@ import { Box, Stack, styled } from '@mui/material';
 import { Add, SentimentDissatisfied } from '@mui/icons-material';
 import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
 import { useTheme } from '@mui/material/styles';
-
 import { useTranslation } from 'react-i18next';
-import { useAppSelector } from '../../../redux/hooks';
-import { RootState } from '../../../redux/store';
-import * as routes from '../../../navigation/routes.const';
+
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import * as routes from '../../navigation/routes.const';
 import { delegatesColumns } from './delegationsColumns';
 
 const StyledStack = styled(Stack)`

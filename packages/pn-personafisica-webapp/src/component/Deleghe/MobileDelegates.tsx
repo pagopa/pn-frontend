@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { Add } from '@mui/icons-material';
 import { OutlinedButton } from '@pagopa-pn/pn-commons';
 
-import { useAppSelector } from '../../../redux/hooks';
-import { RootState } from '../../../redux/store';
-import * as routes from '../../../navigation/routes.const';
-import { Delegation } from '../../../redux/delegation/types';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
+import { Delegation } from '../../redux/delegation/types';
+import * as routes from '../../navigation/routes.const';
 import DelegationCard from './DelegationCard';
 
 const MobileDelegates = () => {
