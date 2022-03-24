@@ -1,7 +1,7 @@
+import React, { useState } from 'react';
 import { Column, Row } from '@pagopa-pn/pn-commons';
 import { Button, Chip, IconButton, Typography, Menu as MUIMenu, MenuItem } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
-import { useState } from 'react';
 
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../../utils/status.utility';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -70,7 +70,7 @@ const delegationsColumns: Array<Column> = [
 ];
 
 const Menu = (props: any) => {
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
 
@@ -78,7 +78,7 @@ const Menu = (props: any) => {
     dispatch(openRevocationModal({ id: props.id, type: props.menuType }));
   };
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
