@@ -80,16 +80,23 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(setDelegatesSorting, (state, action) => {
       state.sortDelegates = action.payload;
-      state.delegations.delegates = state.delegations.delegates.sort((a:WritableDraft<Delegation>,b:WritableDraft<Delegation>)=> {
-        if(action.payload.order === 'asc'){
+      state.delegations.delegates = state.delegations.delegates.sort((a: WritableDraft<Delegation>, b: WritableDraft<Delegation>) => {
+        if (action.payload.order === 'asc') {
           return a[action.payload.orderBy as keyof Delegation] > b[action.payload.orderBy as keyof Delegation] ? 1 : -1;
-        }else{
+        } else {
           return a[action.payload.orderBy as keyof Delegation] < b[action.payload.orderBy as keyof Delegation] ? 1 : -1;
         }
-        } );
+      });
     });
     builder.addCase(setDelegatorsSorting, (state, action) => {
       state.sortDelegators = action.payload;
+      state.delegations.delegators = state.delegations.delegators.sort((a: WritableDraft<Delegation>, b: WritableDraft<Delegation>) => {
+        if (action.payload.order === 'desc') {
+          return a[action.payload.orderBy as keyof Delegation] < b[action.payload.orderBy as keyof Delegation] ? 1 : -1;
+        } else {
+          return a[action.payload.orderBy as keyof Delegation] > b[action.payload.orderBy as keyof Delegation] ? 1 : -1;
+        }
+      });
     });
   },
 });

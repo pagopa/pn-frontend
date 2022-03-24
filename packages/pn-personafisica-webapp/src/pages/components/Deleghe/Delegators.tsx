@@ -1,14 +1,20 @@
 import { Box, Stack } from '@mui/material';
-import { NotificationsTable, Row } from '@pagopa-pn/pn-commons';
+import { NotificationsTable, Row, Sort } from '@pagopa-pn/pn-commons';
 
 import { RootState } from '../../../redux/store';
-import { useAppSelector } from '../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { setDelegatorsSorting } from '../../../redux/delegation/actions';
 import { delegatorsColumns } from './delegationsColumns';
 
 const Delegators = () => {
+
+  const dispatch = useAppDispatch();
+  
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
   );
+
+  const sortDelegators = useAppSelector((state: RootState) => state.delegationsState.sortDelegators);
 
   const rows: Array<Row> = delegates.map((e: any) => ({
     id: e.mandateId,
@@ -20,6 +26,10 @@ const Delegators = () => {
     status: e.status,
   }));
 
+  const handleChangeSorting = (s: Sort) => {
+    dispatch(setDelegatorsSorting(s));
+  };
+  
   return (
     <>
       {rows.length > 0 && (
@@ -27,7 +37,7 @@ const Delegators = () => {
           <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <h2>Deleghe a tuo carico</h2>
           </Stack>
-          <NotificationsTable columns={delegatorsColumns} rows={rows} />
+          <NotificationsTable columns={delegatorsColumns} rows={rows} sort={sortDelegators} onChangeSorting={handleChangeSorting}/>
         </Box>
       )}
     </>
