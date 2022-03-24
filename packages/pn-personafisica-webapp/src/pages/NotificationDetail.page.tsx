@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { Breadcrumbs, Grid, Typography, Box, Paper, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
-import { TitleBox, LegalFactId,
+import {
+  TitleBox,
+  LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailTable,
   NotificationDetailTimeline,
@@ -14,10 +16,12 @@ import { TitleBox, LegalFactId,
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { getReceivedNotification,
+import {
+  getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
-  resetState, } from '../redux/notification/actions';
+  resetState,
+} from '../redux/notification/actions';
 import StyledLink from '../component/StyledLink/StyledLink';
 
 const useStyles = makeStyles(() => ({
@@ -105,10 +109,14 @@ const NotificationDetail = () => {
       <Breadcrumbs aria-label="breadcrumb">
         <StyledLink to={routes.NOTIFICHE}>
           <EmailIcon sx={{ mr: 0.5 }} />
-          {t('detail.breadcrumb-root', {ns: 'notifiche'})}
+          {t('detail.breadcrumb-root', { ns: 'notifiche' })}
         </StyledLink>
-        <Typography color="text.primary" fontWeight={600} sx={{ display: 'flex', alignItems: 'center' }}>
-        {t('detail.breadcrumb-leaf', {ns: 'notifiche'})}
+        <Typography
+          color="text.primary"
+          fontWeight={600}
+          sx={{ display: 'flex', alignItems: 'center' }}
+        >
+          {t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
         </Typography>
       </Breadcrumbs>
       <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
@@ -116,7 +124,7 @@ const NotificationDetail = () => {
   );
 
   return (
-    <Box className={classes.root} sx={{padding: isMobile ? '0 20px' : 0}}>
+    <Box className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
       {isMobile && breadcrumb}
       <Grid container spacing={2} direction={isMobile ? 'column-reverse' : 'row'}>
         <Grid item lg={7} xs={12} sx={{ marginTop: isMobile ? 0 : '20px' }}>
@@ -124,13 +132,13 @@ const NotificationDetail = () => {
           <NotificationDetailTable rows={detailTableRows} />
           <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
             <NotificationDetailDocuments
-              title={t('detail.acts', {ns: 'notifiche'})}
+              title={t('detail.acts', { ns: 'notifiche' })}
               documents={notification.documents}
               clickHandler={documentDowloadHandler}
             />
           </Paper>
           <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(-1)}>
-            {t('button.indietro')}
+            {t('button.indietro', { ns: 'common' })}
           </Button>
         </Grid>
         <Grid item lg={5} xs={12}>
@@ -138,10 +146,10 @@ const NotificationDetail = () => {
             <NotificationDetailTimeline
               timeline={notification.timeline}
               statusHistory={notification.notificationStatusHistory}
-              title={t('detail.timeline-title', {ns: 'notifiche'})}
-              legalFactLabel={t('detail.legalfact', {ns: 'notifiche'})}
+              title={t('detail.timeline-title', { ns: 'notifiche' })}
+              legalFactLabel={t('detail.legalfact', { ns: 'notifiche' })}
               clickHandler={legalFactDownloadHandler}
-              historyButtonLabel={t('detail.show-history', {ns: 'notifiche'})}
+              historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
             />
           </Box>
         </Grid>
