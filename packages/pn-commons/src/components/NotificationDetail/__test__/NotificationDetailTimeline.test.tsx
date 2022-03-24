@@ -1,4 +1,4 @@
-import { fireEvent, waitFor, screen, prettyDOM } from '@testing-library/react';
+import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import { getDay, getMonthString, getTime } from '../../../utils/date.utility';

@@ -1,4 +1,3 @@
-import { INotificationDetailTimeline, NotificationStatusHistory } from '../types/NotificationDetail';
 import { NotificationStatus } from '../types/NotificationStatus';
 
 // TODO: aggiungere i colori del tema

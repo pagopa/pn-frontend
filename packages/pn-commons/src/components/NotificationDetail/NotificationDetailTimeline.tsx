@@ -52,6 +52,10 @@ const NotificationDetailTimeline = ({
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
 
+  if (!isMobile && state) {
+    setState(false);
+  }
+
   const toggleHistoryDrawer = () => {
     setState(!state);
   };
