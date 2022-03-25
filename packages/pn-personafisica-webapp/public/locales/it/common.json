@@ -2,7 +2,8 @@
   "button": {
     "cerca": "Cerca",
     "annulla ricerca": "Annulla Ricerca",
-    "indietro": "Indietro"
+    "indietro": "Indietro",
+    "associa": "Associa"
   },
   "menu": {
     "notifiche": "Notifiche",

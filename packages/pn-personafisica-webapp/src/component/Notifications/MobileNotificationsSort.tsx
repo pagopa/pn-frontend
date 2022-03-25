@@ -68,7 +68,7 @@ const MobileNotificationsSort = ({ sortFields, sort, onChangeSorting }: Props) =
             value={sortValue}
           >
             {sortFields.map((f) => (
-              <FormControlLabel key={f.id} value={f.id} control={<Radio />} label={f.label} />
+              <FormControlLabel key={f.id} value={f.id} control={<Radio aria-label={f.label}/>} label={f.label} />
             ))}
           </RadioGroup>
         </DialogContent>

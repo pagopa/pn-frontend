@@ -2,6 +2,16 @@
   "title": "I tuoi recapiti",
   "subtitle": "In questa pagina, puoi indicare e modificare i recapiti a cui vuoi ricevere le tue notifiche per via digitale.",
   "digital-contacts": {
-    "title": "Recapito legale"
+    "title": "Recapito legale",
+    "subtitle": "Ricevi le notifiche per via digitale",
+    "description": "Se associ la tua PEC o il tuo account dell’app IO*, riceverai le notifiche soltanto per via digitale. Questo ti permetterà di:",
+    "save-money": "Risparmiare sulle spese dell’invio cartaceo",
+    "avoid-waste": "Evitare gli sprechi di carta generati dalle raccomandate",
+    "fast-notification": "Ricevere le notifiche in tempi più rapidi, evitando code agli sportelli",
+    "link-pec": "Associa PEC",
+    "link-pec-placeholder": "Il tuo indirizzo PEC",
+    "link-io": "Associa l’account dell'app IO*",
+    "io-disclaimer": "*Se vuoi utilizzare l’account dell’app IO, verifica di averlo prima abilitato",
+    "io-disclaimer-link": "nella sezione \"Impostazioni\"."
   }
 }
