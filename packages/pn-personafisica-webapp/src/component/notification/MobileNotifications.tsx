@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Button, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
   CardElem,
@@ -15,6 +15,7 @@ import {
   StatusTooltip,
   CardAction
 } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
@@ -112,7 +113,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
 
   // TODO: sostituire con button naked
   const cardActions: Array<CardAction> = [
-    {id: 'go-to-detail', component: <Button endIcon={<ArrowForwardIcon />}>{t('table.show-detail')}</Button>, onClick: handleRowClick}
+    {id: 'go-to-detail', component: <ButtonNaked endIcon={<ArrowForwardIcon />}>{t('table.show-detail')}</ButtonNaked>, onClick: handleRowClick}
   ];
 
   return (
