@@ -6,9 +6,10 @@
   "dependencies": {
     "@mui/icons-material": "^5.5.1",
     "@mui/material": "^5.5.2",
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
     "@pagopa-pn/pn-commons": "0.1.0",
-    "@pagopa/mui-italia": "^0.6.4",
-    "@pagopa/ts-commons": "^10.2.1",
+    "@pagopa/mui-italia": "^0.6.5",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.11.21",
