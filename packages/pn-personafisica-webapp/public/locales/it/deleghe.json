@@ -15,6 +15,10 @@
         "rejection_question": "Vuoi davvero rifiutare la delega?",
         "confirm_revocation": "Revoca la delega",
         "confirm_rejection": "Rifiuta la delega",
+        "error_title": "Spiacenti, qualcosa è andato storto",
+        "error_subtitle": "Spiacenti, qualcosa è andato storto",
+        "error_button": "Ricarica la pagina",
+        "no_delegates": "Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.",
         "table": {
             "name": "Nome",
             "email": "Email",

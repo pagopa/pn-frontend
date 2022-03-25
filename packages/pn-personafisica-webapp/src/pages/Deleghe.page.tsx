@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Box } from '@mui/material';
-import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { CourtesyPage, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next';
 
-import GenericError from '../component/GenericError/GenericError';
+import { RestorePageOutlined } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import {
@@ -40,6 +40,11 @@ const Deleghe = () => {
     }
   };
 
+  const handleReloadClick = () => {
+    void dispatch(getDelegates());
+    void dispatch(getDelegators());
+  };
+
   useEffect(() => {
     void dispatch(getDelegates());
     void dispatch(getDelegators());
@@ -48,7 +53,13 @@ const Deleghe = () => {
   return (
     <Box sx={{ marginRight: isMobile ? 0 : 2 }}>
       {error ? (
-        <GenericError />
+        <CourtesyPage
+          icon={<RestorePageOutlined />}
+          title={t('deleghe.error_title')}
+          subtitle={t('deleghe.error_subtitle')}
+          onClick={handleReloadClick}
+          onClickLabel={t('deleghe.error_button')}
+        />
       ) : (
         <>
           <ConfirmationModal

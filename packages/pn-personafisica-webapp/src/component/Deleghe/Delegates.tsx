@@ -69,7 +69,7 @@ const Delegates = () => {
             style={{ color: theme.palette.primary.main, cursor: 'pointer', fontWeight: 'bold' }}
             onClick={handleAddDelegationClick}
           >
-            Aggiungi una delega
+            {t('deleghe.add')}
           </span>
         </StyledStack>
       )}

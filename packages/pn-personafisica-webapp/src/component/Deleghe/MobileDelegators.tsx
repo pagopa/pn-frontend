@@ -13,14 +13,18 @@ const MobileDelegators = () => {
   );
 
   return (
-    <Box mx={1} mb={8}>
-      <h2>{t('deleghe.delegatorsTitle')}</h2>
-      <Stack direction="column" mt={4}>
-        {delegators.map((delegation: Delegation, i: number) => (
-          <DelegationCard key={i} delegation={delegation} type={'delegators'} />
-        ))}
-      </Stack>
-    </Box>
+    <>
+      {delegators.length > 0 && (
+        <Box mx={1} mb={8}>
+          <h2>{t('deleghe.delegatorsTitle')}</h2>
+          <Stack direction="column" mt={4}>
+            {delegators.map((delegation: Delegation, i: number) => (
+              <DelegationCard key={i} delegation={delegation} type={'delegators'} />
+            ))}
+          </Stack>
+        </Box>
+      )}
+    </>
   );
 };
 
