@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { appStateActions } from '../redux/slices/appStateSlice';
 import { AppError } from '../types/AppError';
 import Toast from './Toast/Toast';
-import { MessageType } from './Toast/types';
+import { MessageType } from '../types/MessageType';
 
 const AppMessage = () => {
   const dispatch = useDispatch();

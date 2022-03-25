@@ -72,7 +72,12 @@ const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Prop
             <CardActions disableSpacing>
               {cardActions &&
                 cardActions.map((a) => (
-                  <Box key={a.id} onClick={() => a.onClick(d)} data-testid="cardAction" sx={{marginLeft: 'auto'}}>
+                  <Box
+                    key={a.id}
+                    onClick={() => a.onClick(d)}
+                    data-testid="cardAction"
+                    sx={{ marginLeft: 'auto' }}
+                  >
                     {a.component}
                   </Box>
                 ))}

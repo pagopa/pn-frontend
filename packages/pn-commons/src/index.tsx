@@ -20,6 +20,7 @@ import TitleBox from './components/TitleBox';
 import NotificationDetailTable from './components/NotificationDetail/NotificationDetailTable';
 import NotificationDetailDocuments from './components/NotificationDetail/NotificationDetailDocuments';
 import NotificationDetailTimeline from './components/NotificationDetail/NotificationDetailTimeline';
+import Toast from './components/Toast/Toast';
 
 export { LoadingOverlay };
 export { Header };
@@ -42,6 +43,7 @@ export { TitleBox };
 export { NotificationDetailTable };
 export { NotificationDetailDocuments };
 export { NotificationDetailTimeline };
+export { Toast };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -80,6 +82,7 @@ import {
 } from './types/Notifications';
 import { CardElem, CardSort, CardAction } from './types/NotificationsCard';
 import { DetailTableRow } from './types/NotificationDetailTable';
+import { MessageType } from './types/MessageType';
 
 export type { AppError };
 export type { PaginationData };
@@ -110,6 +113,7 @@ export type {
 };
 export type { CardElem, CardSort, CardAction };
 export type { DetailTableRow };
+export { MessageType };
 
 // functions
 import { createAppError } from './services/error.service';
