@@ -27,6 +27,10 @@ type Props = {
 const CustomDrawer = styled(Drawer)(() => ({
   '& .MuiDrawer-paper': {
     width: '100%'
+  },
+  '& .MuiTimeline-root': {
+    marginTop: 0,
+    paddingTop: 0
   }
 }));
 
@@ -65,8 +69,8 @@ const NotificationDetailTimeline = ({
     for (const status of statusHistory) {
       const timeLineDataStep: NotificationDetailTimelineData = {...status, steps: []};
       // find timeline steps that are linked with current status
-      for (const el of status.relatedTimelineElements) {
-        const step = timeline.find(t => t.elementId === el);
+      for (const timelineElement of status.relatedTimelineElements) {
+        const step = timeline.find(t => t.elementId === timelineElement);
         if (step) {
           timeLineDataStep.steps.push(step);
         }
@@ -87,7 +91,7 @@ const NotificationDetailTimeline = ({
     return undefined;
   }
 
-  const timelineCmp = timeLineData.map((t, i) => (
+  const timelineComponent = timeLineData.map((t, i) => (
     <NotificationDetailTimelineStep
       timelineStep={t}
       position={getPosition(i)}
@@ -124,7 +128,7 @@ const NotificationDetailTimeline = ({
             historyButtonClickHandler={toggleHistoryDrawer}
           />
         ) : (
-          timelineCmp
+          timelineComponent
         )}
       </TimelineNotification>
       <CustomDrawer anchor="left" open={state} onClose={toggleHistoryDrawer}>
@@ -150,7 +154,7 @@ const NotificationDetailTimeline = ({
             />
           </Grid>
         </Grid>
-        <TimelineNotification>{timelineCmp}</TimelineNotification>
+        <TimelineNotification sx={{marginTop: 0, paddingTop: 0, background: 'red'}}>{timelineComponent}</TimelineNotification>
       </CustomDrawer>
     </Fragment>
   );
