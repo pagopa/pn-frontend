@@ -3,7 +3,9 @@
     "cerca": "Cerca",
     "annulla ricerca": "Annulla Ricerca",
     "indietro": "Indietro",
-    "associa": "Associa"
+    "associa": "Associa",
+    "conferma": "Conferma",
+    "annulla": "Annulla"
   },
   "menu": {
     "notifiche": "Notifiche",
