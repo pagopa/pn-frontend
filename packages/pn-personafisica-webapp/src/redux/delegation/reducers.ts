@@ -8,8 +8,10 @@ import {
   openRevocationModal,
   rejectDelegation,
   revokeDelegation,
+  openAcceptModal,
+  closeAcceptModal,
 } from './actions';
-import { RevocationModalProps, Delegation } from './types';
+import { Delegation } from './types';
 
 /* eslint-disable functional/immutable-data */
 const delegationsSlice = createSlice({
@@ -25,7 +27,11 @@ const delegationsSlice = createSlice({
       open: false,
       id: '',
       type: '',
-    } as RevocationModalProps,
+    },
+    acceptModalState: {
+      open: false,
+      id: '',
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -45,6 +51,7 @@ const delegationsSlice = createSlice({
       state.delegations.delegators = state.delegations.delegators.map((e: any) =>
         e.mandateId === action.payload.id ? { ...e, status: DelegationStatus.ACTIVE } : e
       );
+      state.acceptModalState.open = false;
     });
     builder.addCase(openRevocationModal, (state, action) => {
       state.modalState.id = action.payload.id;
@@ -66,6 +73,14 @@ const delegationsSlice = createSlice({
       state.delegations.delegators = state.delegations.delegators.filter(
         (e: any) => e.mandateId !== action.payload.id
       );
+    });
+    builder.addCase(openAcceptModal, (state, action) => {
+      state.acceptModalState.id = action.payload.id;
+      state.acceptModalState.open = true;
+    });
+    builder.addCase(closeAcceptModal, (state) => {
+      state.acceptModalState.open = false;
+      state.acceptModalState.id = '';
     });
   },
 });

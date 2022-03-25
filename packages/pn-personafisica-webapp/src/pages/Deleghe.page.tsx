@@ -13,6 +13,7 @@ import {
   getDelegates,
   getDelegators,
 } from '../redux/delegation/actions';
+import AcceptDelegationModal from '../component/Deleghe/AcceptDelegationModal';
 import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
 import MobileDelegates from '../component/Deleghe/MobileDelegates';
 import MobileDelegators from '../component/Deleghe/MobileDelegators';
@@ -24,6 +25,9 @@ const Deleghe = () => {
   const { t } = useTranslation(['deleghe']);
   const { id, open, type } = useAppSelector(
     (state: RootState) => state.delegationsState.modalState
+  );
+  const { id: acceptId, open: acceptOpen } = useAppSelector(
+    (state: RootState) => state.delegationsState.acceptModalState
   );
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state: RootState) => state.delegationsState);
@@ -62,6 +66,7 @@ const Deleghe = () => {
         />
       ) : (
         <>
+          <AcceptDelegationModal open={acceptOpen} id={acceptId} />
           <ConfirmationModal
             open={open}
             title={
