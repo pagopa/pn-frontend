@@ -11,7 +11,7 @@
     "link-pec": "Associa PEC",
     "link-pec-placeholder": "Il tuo indirizzo PEC",
     "link-io": "Associa l’account dell'app IO*",
-    "io-disclaimer": "*Se vuoi utilizzare l’account dell’app IO, verifica di averlo prima abilitato",
-    "io-disclaimer-link": "nella sezione \"Impostazioni\"."
+    "io-disclaimer": "*Se vuoi utilizzare l’account dell’app IO, verifica di averlo prima abilitato nella sezione \"Impostazioni\".",
+    "valid-pec": "Inserire un indirizzo pec valido"
   }
 }
