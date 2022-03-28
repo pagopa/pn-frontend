@@ -10,7 +10,7 @@ import { RootState } from '../../redux/store';
 import { Delegation } from '../../redux/delegation/types';
 import * as routes from '../../navigation/routes.const';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
-import { Menu, OrganizationsList } from './delegationsColumns';
+import { Menu, OrganizationsList } from './DelegationsElements';
 
 const StyledStack = styled(Stack)`
   border-radius: 4px;
@@ -98,7 +98,7 @@ const MobileDelegates = () => {
 
   return (
     <Box mx={1} mb={8}>
-      <Typography variant="h6" mb={2}>
+      <Typography variant="h4" mb={2}>
         {t('deleghe.delegatesTitle')}
       </Typography>
       {delegates.length ? (

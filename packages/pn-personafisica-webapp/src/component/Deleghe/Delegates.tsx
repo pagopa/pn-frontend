@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Stack, styled, Typography } from '@mui/material';
+import { Box, Chip, Stack, styled, Typography } from '@mui/material';
 import { Add, SentimentDissatisfied } from '@mui/icons-material';
-import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
+import { Column, NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
 import { useTheme } from '@mui/material/styles';
 import { useTranslation } from 'react-i18next';
 
@@ -9,7 +9,8 @@ import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
 import { Delegation } from '../../redux/delegation/types';
-import { delegatesColumns } from './delegationsColumns';
+import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import { Menu, OrganizationsList } from './DelegationsElements';
 
 const StyledStack = styled(Stack)`
   border-radius: 4px;
@@ -34,6 +35,69 @@ const Delegates = () => {
     visibilityIds: e.visibilityIds.map((f: any) => f.name),
     status: e.status,
   }));
+
+  const delegatesColumns: Array<Column> = [
+    {
+      id: 'name',
+      label: t('deleghe.table.name'),
+      width: '13%',
+      sortable: true,
+      getCellLabel(value: string) {
+        return <b>{value}</b>;
+      },
+    },
+    {
+      id: 'email',
+      label: t('deleghe.table.email'),
+      width: '18%',
+      sortable: true,
+      getCellLabel(value: string) {
+        return value;
+      },
+    },
+    {
+      id: 'startDate',
+      label: t('deleghe.table.delegationStart'),
+      width: '11%',
+      getCellLabel(value: string) {
+        return value;
+      },
+    },
+    {
+      id: 'endDate',
+      label: t('deleghe.table.delegationEnd'),
+      width: '11%',
+      getCellLabel(value: string) {
+        return value;
+      },
+    },
+    {
+      id: 'visibilityIds',
+      label: t('deleghe.table.permissions'),
+      width: '14%',
+      getCellLabel(value: Array<string>) {
+        return <OrganizationsList organizations={value} />;
+      },
+    },
+    {
+      id: 'status',
+      label: t('deleghe.table.status'),
+      width: '18%',
+      align: 'center' as const,
+      getCellLabel(value: string) {
+        const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
+        return <Chip label={label} color={color} />;
+      },
+    },
+    {
+      id: 'id',
+      label: '',
+      width: '5%',
+      getCellLabel(value: string) {
+        return <Menu menuType={'delegates'} id={value} />;
+      },
+    },
+  ];
 
   const handleAddDelegationClick = () => {
     navigate(routes.NUOVA_DELEGA);

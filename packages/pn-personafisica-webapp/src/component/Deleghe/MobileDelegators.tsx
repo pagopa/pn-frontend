@@ -6,7 +6,7 @@ import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { Delegation } from '../../redux/delegation/types';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
-import { AcceptButton, Menu, OrganizationsList } from './delegationsColumns';
+import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const MobileDelegators = () => {
   const { t } = useTranslation(['deleghe']);
@@ -88,7 +88,7 @@ const MobileDelegators = () => {
     <>
       {delegators.length > 0 && (
         <Box mx={1} mb={8}>
-          <Typography variant="h6" mb={2}>
+          <Typography variant="h4" mb={2}>
             {t('deleghe.delegatorsTitle')}
           </Typography>
           <NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />

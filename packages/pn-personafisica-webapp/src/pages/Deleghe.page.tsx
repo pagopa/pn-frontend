@@ -77,7 +77,7 @@ const Deleghe = () => {
                 : t('deleghe.confirm_rejection')
             }
           />
-          <Box ml={isMobile ? 2 : 0}>
+          <Box ml={isMobile ? 2 : 0} mb={2}>
             <TitleBox title={'Deleghe'} variantTitle={'h4'}>
               <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
                 deleghe.description
