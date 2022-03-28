@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Stack, styled } from '@mui/material';
+import { Box, Stack, styled, Typography } from '@mui/material';
 import { Add, SentimentDissatisfied } from '@mui/icons-material';
 import { NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
 import { useTheme } from '@mui/material/styles';
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
+import { Delegation } from '../../redux/delegation/types';
 import { delegatesColumns } from './delegationsColumns';
 
 const StyledStack = styled(Stack)`
@@ -24,7 +25,7 @@ const Delegates = () => {
     (state: RootState) => state.delegationsState.delegations.delegates
   );
 
-  const rows: Array<Row> = delegates.map((e: any) => ({
+  const rows: Array<Row> = delegates.map((e: Delegation) => ({
     id: e.mandateId,
     name: `${e.delegate.firstName} ${e.delegate.lastName}`,
     startDate: e.datefrom,
@@ -40,14 +41,14 @@ const Delegates = () => {
 
   return (
     <Box mb={8}>
-      <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-        <h2>{t('deleghe.delegatesTitle')}</h2>
-        <div>
+      <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+        <Typography variant="h6">{t('deleghe.delegatesTitle')}</Typography>
+        <Box>
           <OutlinedButton onClick={handleAddDelegationClick}>
             <Add fontSize={'small'} sx={{ marginRight: 1 }} />
             {t('deleghe.add')}
           </OutlinedButton>
-        </div>
+        </Box>
       </Stack>
       {rows.length ? (
         <Table columns={delegatesColumns} rows={rows} />
@@ -62,15 +63,15 @@ const Delegates = () => {
             fontSize={'small'}
             sx={{ verticalAlign: 'middle', margin: '0 20px' }}
           />
-          <span style={{ marginRight: '8px' }}>
+          <Typography sx={{ marginRight: '8px' }}>
             Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.
-          </span>
-          <span
-            style={{ color: theme.palette.primary.main, cursor: 'pointer', fontWeight: 'bold' }}
+          </Typography>
+          <Typography
+            sx={{ color: theme.palette.primary.main, cursor: 'pointer', fontWeight: 'bold' }}
             onClick={handleAddDelegationClick}
           >
             {t('deleghe.add')}
-          </span>
+          </Typography>
         </StyledStack>
       )}
     </Box>

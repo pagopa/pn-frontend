@@ -1,8 +1,9 @@
-import { Box, Stack } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { NotificationsTable, Row } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { Delegation } from '../../redux/delegation/types';
 import { delegatorsColumns } from './delegationsColumns';
 
 const Delegators = () => {
@@ -10,7 +11,7 @@ const Delegators = () => {
     (state: RootState) => state.delegationsState.delegations.delegators
   );
 
-  const rows: Array<Row> = delegates.map((e: any) => ({
+  const rows: Array<Row> = delegates.map((e: Delegation) => ({
     id: e.mandateId,
     name: `${e.delegate.firstName} ${e.delegate.lastName}`,
     startDate: e.datefrom,
@@ -24,8 +25,8 @@ const Delegators = () => {
     <>
       {rows.length > 0 && (
         <Box mb={8}>
-          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <h2>Deleghe a tuo carico</h2>
+          <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+            <Typography variant="h6">Deleghe a tuo carico</Typography>
           </Stack>
           <NotificationsTable columns={delegatorsColumns} rows={rows} />
         </Box>

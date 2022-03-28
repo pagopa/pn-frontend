@@ -313,7 +313,7 @@ const NuovaDelega = () => {
           <Button
             variant="outlined"
             sx={{ mt: '1rem', mb: '1rem' }}
-            onClick={() => navigate('/deleghe')}
+            onClick={() => navigate(routes.DELEGHE)}
           >
             Indietro
           </Button>

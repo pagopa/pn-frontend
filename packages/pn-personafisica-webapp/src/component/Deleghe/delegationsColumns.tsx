@@ -83,18 +83,20 @@ export const Menu = (props: any) => {
 
   const getMenuItemElements = () => {
     if (props.menuType === 'delegates') {
-      return (
-        <>
-          <MenuItem onClick={handleClose}>{t('Mostra Codice')}</MenuItem>
-          <MenuItem onClick={handleOpenModalClick}>{t('Revoca')}</MenuItem>
-        </>
-      );
+      return [
+        <MenuItem key="showCode" onClick={handleClose}>
+          {t('Mostra Codice')}
+        </MenuItem>,
+        <MenuItem key="revoke" onClick={handleOpenModalClick}>
+          {t('Revoca')}
+        </MenuItem>,
+      ];
     } else {
-      return (
-        <>
-          <MenuItem onClick={handleOpenModalClick}>{t('Rifiuta')}</MenuItem>
-        </>
-      );
+      return [
+        <MenuItem key="reject" onClick={handleOpenModalClick}>
+          {t('Rifiuta')}
+        </MenuItem>,
+      ];
     }
   };
 
@@ -110,7 +112,7 @@ export const Menu = (props: any) => {
   );
 };
 
-const OrganizationsList = (props: { organizations: Array<string> }) => {
+export const OrganizationsList = (props: { organizations: Array<string> }) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <>
