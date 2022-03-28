@@ -65,14 +65,15 @@ const NotificationDetailTimelineStep = ({
     oppositeContent: ReactNode | undefined,
     variant: 'outlined' | 'filled' | undefined,
     content: ReactNode | undefined,
-    position: 'first' | 'middle' | 'last'
+    stepPosition: 'first' | 'middle' | 'last',
+    size: 'small' | 'default' = 'default'
   ) => (
     <TimelineNotificationItem key={key}>
       <TimelineNotificationOppositeContent>{oppositeContent}</TimelineNotificationOppositeContent>
       <TimelineSeparator>
-        <TimelineConnector sx={{visibility: position === 'first' ? 'hidden' : 'visible'}}/>
-        <TimelineNotificationDot variant={variant} />
-        <TimelineConnector sx={{visibility: position === 'last' ? 'hidden' : 'visible'}}/>
+        <TimelineConnector sx={{visibility: stepPosition === 'first' ? 'hidden' : 'visible'}}/>
+        <TimelineNotificationDot variant={variant} size={size}/>
+        <TimelineConnector sx={{visibility: stepPosition === 'last' ? 'hidden' : 'visible'}}/>
       </TimelineSeparator>
       <TimelineNotificationContent>{content}</TimelineNotificationContent>
     </TimelineNotificationItem>
@@ -167,7 +168,8 @@ const NotificationDetailTimelineStep = ({
                 {s.category}
               </Typography>
             </Fragment>,
-            'middle'
+            'middle',
+            'small'
           )
         )}
     </Fragment>
