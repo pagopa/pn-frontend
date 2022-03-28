@@ -11,13 +11,13 @@ import { visuallyHidden } from '@mui/utils';
 import { SentimentDissatisfied } from '@mui/icons-material';
 
 import { Notification } from '../../types/Notifications';
-import { Column, Row, Sort } from '../../types/NotificationsTable';
+import { Column, Item, Sort } from '../../types/ItemsTable';
 
 type Props = {
   /** Table columns */
   columns: Array<Column>;
   /** Table rows */
-  rows: Array<Row>;
+  rows: Array<Item>;
   /** Table sort */
   sort?: Sort;
   /** The function to be invoked if the user change sorting */

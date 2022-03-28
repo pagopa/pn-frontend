@@ -21,12 +21,17 @@ jest.mock('../MobileNotificationsSort', () => () => <div>Sort</div>);
 jest.mock('../FilterNotifications', () => () => <div>Filters</div>);
 
 describe('MobileNotifications Component', () => {
-
   it('renders MobileNotifications', () => {
     // render component
-    const result = render(<MobileNotifications notifications={[]} sort={{orderBy: 'mocked-field', order: 'asc'}} onChangeSorting={() => {}}/>);
+    const result = render(
+      <MobileNotifications
+        notifications={[]}
+        sort={{ orderBy: 'mocked-field', order: 'asc' }}
+        onChangeSorting={() => {}}
+      />
+    );
     expect(result.container).toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(/Sort/i);
-    expect(result.container).toHaveTextContent(/Cards/i);
+    expect(result.container).toHaveTextContent(/I filtri che hai aggiunto non hanno dato nessun risultato./i);
   });
 });

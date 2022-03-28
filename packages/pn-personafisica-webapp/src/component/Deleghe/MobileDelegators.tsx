@@ -1,10 +1,11 @@
 import { Box, Chip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { CardElem, NotificationsCard, Row } from '@pagopa-pn/pn-commons';
+import { CardElement, ItemCard, Item } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { Delegation } from '../../redux/delegation/types';
+
+import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
@@ -14,21 +15,13 @@ const MobileDelegators = () => {
     (state: RootState) => state.delegationsState.delegations.delegators
   );
 
-  const cardData: Array<Row> = delegators.map((e: Delegation) => ({
-    id: e.mandateId,
-    name: `${e.delegator.firstName} ${e.delegator.lastName}`,
-    startDate: e.datefrom,
-    endDate: e.dateto,
-    email: e.email,
-    visibilityIds: e.visibilityIds.map((f: any) => f.name),
-    status: e.status,
-  }));
+  const cardData: Array<Item> = delegationToItem(delegators, true);
 
-  const cardHeader: [CardElem, CardElem] = [
+  const cardHeader: [CardElement, CardElement] = [
     {
       id: 'status',
       label: t('deleghe.table.'),
-      getLabel(value: string, row: Row) {
+      getLabel(value: string, row: Item) {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
           return <Chip label={label} color={color} />;
@@ -46,7 +39,7 @@ const MobileDelegators = () => {
     },
   ];
 
-  const cardBody: Array<CardElem> = [
+  const cardBody: Array<CardElement> = [
     {
       id: 'name',
       label: t('Nome'),
@@ -91,7 +84,7 @@ const MobileDelegators = () => {
           <Typography variant="h4" mb={2}>
             {t('deleghe.delegatorsTitle')}
           </Typography>
-          <NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+          <ItemCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
         </Box>
       )}
     </>

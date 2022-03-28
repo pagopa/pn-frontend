@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Column,
-  NotificationsTable,
-  Row,
   Sort,
   Notification,
   getNotificationStatusLabelAndColor,
   NotificationStatus,
   StatusTooltip,
+  Item,
+  ItemsTable,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
@@ -38,7 +38,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
       getCellLabel(value: string) {
         return getNewNotificationBadge(value);
       },
-      onClick(row: Row, column: Column) {
+      onClick(row: Item, column: Column) {
         handleRowClick(row, column);
       },
     },
@@ -50,7 +50,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Row, column: Column) {
+      onClick(row: Item, column: Column) {
         handleRowClick(row, column);
       },
     },
@@ -61,7 +61,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
-      onClick(row: Row, column: Column) {
+      onClick(row: Item, column: Column) {
         handleRowClick(row, column);
       },
     },
@@ -72,7 +72,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Row, column: Column) {
+      onClick(row: Item, column: Column) {
         handleRowClick(row, column);
       },
     },
@@ -91,25 +91,20 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
     },
   ];
 
-  const rows: Array<Row> = notifications.map((n, i) => ({
+  const rows: Array<Item> = notifications.map((n, i) => ({
     ...n,
     id: n.paNotificationId + i.toString(),
   }));
 
   // Navigation handlers
-  const handleRowClick = (row: Row, _column: Column) => {
+  const handleRowClick = (row: Item, _column: Column) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
   };
 
   return (
     <Fragment>
       <FilterNotifications />
-      <NotificationsTable
-        columns={columns}
-        rows={rows}
-        sort={sort}
-        onChangeSorting={onChangeSorting}
-      />
+      <ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={onChangeSorting} />
     </Fragment>
   );
 };

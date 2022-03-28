@@ -10,25 +10,25 @@ import {
   useTheme,
 } from '@mui/material';
 
-import { CardElem, CardAction } from '../../types/NotificationsCard';
-import { Row } from '../../types/NotificationsTable';
+import { CardElement, CardAction } from '../../types/ItemCard';
+import { Item } from '../../types/ItemsTable';
 
 type Props = {
-  /* Card header elements */
-  cardHeader: [CardElem, CardElem];
-  /* Card body elements */
-  cardBody: Array<CardElem>;
-  /* Card data */
-  cardData: Array<Row>;
-  /* Card actions */
+  /* Card header elements*/
+  cardHeader: [CardElement, CardElement];
+  /* Card body elements*/
+  cardBody: Array<CardElement>;
+  /* Card data*/
+  cardData: Array<Item>;
+  /* Card actions*/
   cardActions?: Array<CardAction>;
 };
 
 const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Props) => {
-  const cardHeaderTitle = (elem: Row) => (
+  const cardHeaderTitle = (item: Item) => (
     <Grid container spacing={2} direction="row" alignItems="center">
-      <Grid item xs={5} sx={{ fontSize: '14px', fontWeight: 400 }} data-testid="cardHeaderLeft">
-        {cardHeader[0].getLabel(elem[cardHeader[0].id], elem)}
+      <Grid item xs={4} sx={{ fontSize: '14px', fontWeight: 400 }} data-testid="cardHeaderLeft">
+        {cardHeader[0].getLabel(item[cardHeader[0].id], item)}
       </Grid>
       <Grid
         item
@@ -36,7 +36,7 @@ const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Prop
         sx={{ fontSize: '14px', fontWeight: 400, textAlign: 'right' }}
         data-testid="cardHeaderRight"
       >
-        {cardHeader[1].getLabel(elem[cardHeader[1].id], elem)}
+        {cardHeader[1].getLabel(item[cardHeader[1].id], item)}
       </Grid>
     </Grid>
   );
@@ -46,9 +46,9 @@ const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Prop
   return (
     <Box>
       {cardData.length ? (
-        cardData.map((d) => (
+        cardData.map((data) => (
           <Card
-            key={d.id}
+            key={data.id}
             sx={{
               marginBottom: '16px',
               padding: '24px',
@@ -56,36 +56,38 @@ const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Prop
               boxShadow:
                 '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
             }}
-            data-testid="notificationCard"
+            data-testid="itemCard"
           >
-            <CardHeader title={cardHeaderTitle(d)} sx={{ padding: 0 }} />
+            <CardHeader title={cardHeaderTitle(data)} sx={{ padding: 0 }} />
             <CardContent sx={{ padding: 0, marginTop: '16px', ':last-child': { padding: 0 } }}>
-              {cardBody.map((b) => (
-                <Box key={b.id} sx={{ marginBottom: '16px' }}>
+              {cardBody.map((body) => (
+                <Box key={body.id} sx={{ marginBottom: '16px' }}>
                   <Typography sx={{ fontWeight: 600 }} data-testid="cardBodyLabel">
-                    {b.label}
+                    {body.label}
                   </Typography>
-                  <Typography data-testid="cardBodyValue">{b.getLabel(d[b.id])}</Typography>
+                  <Typography data-testid="cardBodyValue">
+                    {body.getLabel(data[body.id])}
+                  </Typography>
                 </Box>
               ))}
             </CardContent>
             <CardActions disableSpacing>
               {cardActions &&
-                cardActions.map((a) => (
+                cardActions.map((action) => (
                   <Box
-                    key={a.id}
-                    onClick={() => a.onClick(d)}
+                    key={action.id}
+                    onClick={() => action.onClick(data)}
                     data-testid="cardAction"
                     sx={{ marginLeft: 'auto' }}
                   >
-                    {a.component}
+                    {action.component}
                   </Box>
                 ))}
             </CardActions>
           </Card>
         ))
       ) : (
-        <Card data-testid="notificationCard" sx={{ padding: '24px' }}>
+        <Card data-testid="itemCard" sx={{ padding: '24px' }}>
           <CardContent sx={{ padding: 0 }}>
             <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
             <span>I filtri che hai aggiunto non hanno dato nessun risultato.</span>

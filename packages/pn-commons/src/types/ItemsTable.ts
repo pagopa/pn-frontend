@@ -13,11 +13,11 @@ export interface Column {
   width: string;
   align?: 'center' | 'inherit' | 'left' | 'right' | 'justify';
   sortable?: boolean;
-  getCellLabel(value: string | number | Array<string>, row?: Row): ReactNode;
-  onClick?(row: Row, column: Column): void;
+  getCellLabel(value: string | number | Array<string>, row?: Item): ReactNode;
+  onClick?(row: Item, column: Column): void;
 }
 
-export interface Row {
+export interface Item {
   id: string;
   [key: string]: string | number | Array<string>;
 }

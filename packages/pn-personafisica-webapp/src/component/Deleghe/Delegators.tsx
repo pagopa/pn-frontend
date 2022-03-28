@@ -1,10 +1,10 @@
 import { Box, Chip, Stack, Typography } from '@mui/material';
-import { Column, NotificationsTable, Row } from '@pagopa-pn/pn-commons';
+import { Column, ItemsTable, Item } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { Delegation } from '../../redux/delegation/types';
+import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
@@ -14,15 +14,7 @@ const Delegators = () => {
     (state: RootState) => state.delegationsState.delegations.delegators
   );
 
-  const rows: Array<Row> = delegates.map((e: Delegation) => ({
-    id: e.mandateId,
-    name: `${e.delegate.firstName} ${e.delegate.lastName}`,
-    startDate: e.datefrom,
-    endDate: e.dateto,
-    email: e.email,
-    visibilityIds: e.visibilityIds.map((f: any) => f.name),
-    status: e.status,
-  }));
+  const rows: Array<Item> = delegationToItem(delegates, false);
 
   const delegatorsColumns: Array<Column> = [
     {
@@ -72,7 +64,7 @@ const Delegators = () => {
       label: t('deleghe.table.status'),
       width: '18%',
       align: 'center' as const,
-      getCellLabel(value: string, row: Row) {
+      getCellLabel(value: string, row: Item) {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
           return <Chip label={label} color={color} />;
@@ -98,7 +90,7 @@ const Delegators = () => {
           <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <Typography variant="h6">Deleghe a tuo carico</Typography>
           </Stack>
-          <NotificationsTable columns={delegatorsColumns} rows={rows} />
+          <ItemsTable columns={delegatorsColumns} rows={rows} />
         </Box>
       )}
     </>

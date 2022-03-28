@@ -23,7 +23,9 @@ const VerificationCodeComponent = ({ code }: VerificationCodeProps) => (
           marginRight: '8px',
         }}
       >
-        <Typography sx={{ color: 'primary.main', fontWeight: 600 }}>{codeDigit}</Typography>
+        <Typography color="primary" fontWeight={600}>
+          {codeDigit}
+        </Typography>
       </Box>
     ))}
   </Box>

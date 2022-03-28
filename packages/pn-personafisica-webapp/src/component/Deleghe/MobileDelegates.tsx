@@ -1,14 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Chip, Stack, styled, Typography } from '@mui/material';
+import { Box, Button, Chip, Stack, styled, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Add, SentimentDissatisfied } from '@mui/icons-material';
-import { CardElem, NotificationsCard, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
+import { CardElement, ItemCard, Item } from '@pagopa-pn/pn-commons';
 
 import { useTheme } from '@mui/material/styles';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { Delegation } from '../../redux/delegation/types';
 import * as routes from '../../navigation/routes.const';
+import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
@@ -26,17 +26,9 @@ const MobileDelegates = () => {
     (state: RootState) => state.delegationsState.delegations.delegates
   );
 
-  const cardData: Array<Row> = delegates.map((e: Delegation) => ({
-    id: e.mandateId,
-    name: `${e.delegate.firstName} ${e.delegate.lastName}`,
-    startDate: e.datefrom,
-    endDate: e.dateto,
-    email: e.email,
-    visibilityIds: e.visibilityIds.map((f: any) => f.name),
-    status: e.status,
-  }));
+  const cardData: Array<Item> = delegationToItem(delegates, false);
 
-  const cardHeader: [CardElem, CardElem] = [
+  const cardHeader: [CardElement, CardElement] = [
     {
       id: 'status',
       label: t('deleghe.table.status'),
@@ -54,7 +46,7 @@ const MobileDelegates = () => {
     },
   ];
 
-  const cardBody: Array<CardElem> = [
+  const cardBody: Array<CardElement> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
@@ -104,12 +96,12 @@ const MobileDelegates = () => {
       {delegates.length ? (
         <>
           <Box mb={2}>
-            <OutlinedButton onClick={handleAddDelegationClick}>
+            <Button variant="outlined" onClick={handleAddDelegationClick}>
               <Add fontSize={'small'} sx={{ marginRight: 1 }} />
               {t('deleghe.add')}
-            </OutlinedButton>
+            </Button>
           </Box>
-          <NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+          <ItemCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
         </>
       ) : (
         <StyledStack

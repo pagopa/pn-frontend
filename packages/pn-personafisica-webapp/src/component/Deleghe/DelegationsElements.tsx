@@ -80,12 +80,12 @@ export const OrganizationsList = (props: { organizations: Array<string> }) => {
               listStyle: 'square',
             }}
           >
-            {props.organizations.map((e) => (
+            {props.organizations.map((organization) => (
               <ListItem
-                key={e}
+                key={organization}
                 sx={{ display: 'revert', paddingLeft: 0, marginLeft: 3, fontWeight: '500' }}
               >
-                {e}
+                {organization}
               </ListItem>
             ))}
           </List>

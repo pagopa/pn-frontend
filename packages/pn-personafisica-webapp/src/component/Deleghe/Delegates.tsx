@@ -1,14 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Chip, Stack, styled, Typography } from '@mui/material';
+import { Box, Button, Chip, Stack, styled, Typography } from '@mui/material';
 import { Add, SentimentDissatisfied } from '@mui/icons-material';
-import { Column, NotificationsTable as Table, OutlinedButton, Row } from '@pagopa-pn/pn-commons';
-import { useTheme } from '@mui/material/styles';
+import { Column, ItemsTable as Table, Item } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
-import { Delegation } from '../../redux/delegation/types';
+import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
@@ -19,22 +18,13 @@ const StyledStack = styled(Stack)`
 `;
 
 const Delegates = () => {
-  const theme = useTheme();
   const { t } = useTranslation(['deleghe']);
   const navigate = useNavigate();
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
 
-  const rows: Array<Row> = delegates.map((e: Delegation) => ({
-    id: e.mandateId,
-    name: `${e.delegate.firstName} ${e.delegate.lastName}`,
-    startDate: e.datefrom,
-    endDate: e.dateto,
-    email: e.email,
-    visibilityIds: e.visibilityIds.map((f: any) => f.name),
-    status: e.status,
-  }));
+  const rows: Array<Item> = delegationToItem(delegates, false);
 
   const delegatesColumns: Array<Column> = [
     {
@@ -108,10 +98,10 @@ const Delegates = () => {
       <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
         <Typography variant="h6">{t('deleghe.delegatesTitle')}</Typography>
         <Box>
-          <OutlinedButton onClick={handleAddDelegationClick}>
+          <Button variant="outlined" onClick={handleAddDelegationClick}>
             <Add fontSize={'small'} sx={{ marginRight: 1 }} />
             {t('deleghe.add')}
-          </OutlinedButton>
+          </Button>
         </Box>
       </Stack>
       {rows.length ? (
@@ -131,7 +121,9 @@ const Delegates = () => {
             Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.
           </Typography>
           <Typography
-            sx={{ color: theme.palette.primary.main, cursor: 'pointer', fontWeight: 'bold' }}
+            color="primary"
+            fontWeight="bold"
+            sx={{ cursor: 'pointer' }}
             onClick={handleAddDelegationClick}
           >
             {t('deleghe.add')}
