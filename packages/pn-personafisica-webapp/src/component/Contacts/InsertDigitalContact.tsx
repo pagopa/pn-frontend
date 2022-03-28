@@ -69,7 +69,7 @@ const InsertDigitalContact = () => {
     formik.handleChange(e);
   };
 
-  const handleCodeConfirmation = (values: Array<number | undefined>) => {
+  const handleCodeConfirmation = (values: Array<string>) => {
     console.log(values);
   };
 
@@ -171,7 +171,7 @@ const InsertDigitalContact = () => {
         title={`${t('digital-contacts.pec-verify', { ns: 'recapiti' })} ${formik.values.pec}`}
         subtitle={<Trans i18nKey="digital-contacts.pec-verify-descr" ns="recapiti" />}
         open={open}
-        initialValues={new Array(5).fill(undefined)}
+        initialValues={new Array(5).fill('')}
         handleClose={() => setOpen(false)}
         codeSectionTitle={t('digital-contacts.insert-code', { ns: 'recapiti' })}
         codeSectionAdditional={

@@ -1,4 +1,4 @@
-import { ReactNode, KeyboardEvent, useState, ChangeEvent } from 'react';
+import { ReactNode, KeyboardEvent, useState, ChangeEvent, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -16,14 +16,15 @@ type Props = {
   title: ReactNode;
   subtitle: ReactNode;
   open: boolean;
-  initialValues: Array<number | undefined>;
+  initialValues: Array<string>;
   handleClose: () => void;
   codeSectionTitle: string;
   codeSectionAdditional?: ReactNode;
   confirmLabel?: string;
   cancelLabel?: string;
   cancelCallback?: () => void;
-  confirmCallback?: (values: Array<number | undefined>) => void;
+  confirmCallback?: (values: Array<string>) => void;
+  isReadOnly?: boolean;
 };
 
 const CodeModal = ({
@@ -38,6 +39,7 @@ const CodeModal = ({
   cancelLabel,
   cancelCallback,
   confirmCallback,
+  isReadOnly = false
 }: Props) => {
   const [inputsValues, setInputsValues] = useState(initialValues);
   const [inputsRef, setInputsRef] = useState(new Array(initialValues.length).fill(undefined));
@@ -63,15 +65,23 @@ const CodeModal = ({
 
   const changeHandler = (event: ChangeEvent, index: number) => {
     setInputsValues((previousValues) => {
-      previousValues[index] = Number((event.target as HTMLInputElement).value);
-      return previousValues;
+      const prevValues = [...previousValues];
+      prevValues[index] = (event.target as HTMLInputElement).value;
+      return prevValues;
     });
   };
+
+  useEffect(() => {
+    // reset values
+    setInputsValues(initialValues);
+  }, [open]);
+
+  const codeIsValid = inputsValues.every(v => v);
 
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={() => handleClose}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
       data-testid="codeDialog"
@@ -89,7 +99,7 @@ const CodeModal = ({
               variant="outlined"
               placeholder="-"
               sx={{ width: '33px', height: '56px', marginRight: '10px' }}
-              inputProps={{ maxLength: 1, sx: { padding: '16.5px 10px', textAlign: 'center' } }}
+              inputProps={{ maxLength: 1, sx: { padding: '16.5px 10px', textAlign: 'center' }, readOnly: isReadOnly }}
               onKeyDown={(event) => keyDownHandler(event, index)}
               onChange={(event) => changeHandler(event, index)}
               inputRef={(node) => {
@@ -98,6 +108,7 @@ const CodeModal = ({
                   return prevRefs;
                 });
               }}
+              value={inputsValues[index]}
             />
           ))}
         </Box>
@@ -112,7 +123,7 @@ const CodeModal = ({
             {cancelLabel}
           </Button>
         )}
-        {(confirmLabel && confirmCallback) && <Button onClick={() => confirmCallback!(inputsValues)}>{confirmLabel}</Button>}
+        {(confirmLabel && confirmCallback) && <Button onClick={() => confirmCallback!(inputsValues)} disabled={!codeIsValid}>{confirmLabel}</Button>}
       </DialogActions>
     </Dialog>
   );
