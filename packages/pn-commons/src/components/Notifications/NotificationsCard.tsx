@@ -14,29 +14,29 @@ import { CardElem, CardAction } from '../../types/NotificationsCard';
 import { Row } from '../../types/NotificationsTable';
 
 type Props = {
-  /*Card header elements*/
+  /* Card header elements */
   cardHeader: [CardElem, CardElem];
-  /*Card body elements*/
+  /* Card body elements */
   cardBody: Array<CardElem>;
-  /* Card data*/
+  /* Card data */
   cardData: Array<Row>;
-  /* Card actions*/
+  /* Card actions */
   cardActions?: Array<CardAction>;
 };
 
 const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Props) => {
   const cardHeaderTitle = (elem: Row) => (
     <Grid container spacing={2} direction="row" alignItems="center">
-      <Grid item xs={4} sx={{ fontSize: '14px', fontWeight: 400 }} data-testid="cardHeaderLeft">
-        {cardHeader[0].getLabel(elem[cardHeader[0].id])}
+      <Grid item xs={5} sx={{ fontSize: '14px', fontWeight: 400 }} data-testid="cardHeaderLeft">
+        {cardHeader[0].getLabel(elem[cardHeader[0].id], elem)}
       </Grid>
       <Grid
         item
-        xs={8}
+        xs={7}
         sx={{ fontSize: '14px', fontWeight: 400, textAlign: 'right' }}
         data-testid="cardHeaderRight"
       >
-        {cardHeader[1].getLabel(elem[cardHeader[1].id])}
+        {cardHeader[1].getLabel(elem[cardHeader[1].id], elem)}
       </Grid>
     </Grid>
   );
