@@ -26,7 +26,7 @@ const MobileDelegators = () => {
         if (value === DelegationStatus.ACTIVE) {
           return <Chip label={label} color={color} />;
         } else {
-          return <AcceptButton id={row.id} />;
+          return <AcceptButton id={row.id} name={row.name as string} />;
         }
       },
     },

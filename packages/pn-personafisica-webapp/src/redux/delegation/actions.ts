@@ -188,6 +188,6 @@ export const openRevocationModal =
 
 export const closeRevocationModal = createAction<void>('closeRevocationModal');
 
-export const openAcceptModal = createAction<{ id: string }>('openAcceptModal');
+export const openAcceptModal = createAction<{ id: string; name: string }>('openAcceptModal');
 
 export const closeAcceptModal = createAction<void>('closeAcceptModal');

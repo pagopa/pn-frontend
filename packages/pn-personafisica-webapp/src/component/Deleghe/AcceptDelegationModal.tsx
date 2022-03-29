@@ -1,4 +1,4 @@
-import { KeyboardEvent, ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Dialog from '@mui/material/Dialog';
@@ -14,7 +14,8 @@ import {
   TextField,
 } from '@mui/material';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { useAppDispatch } from '../../redux/hooks';
 import { acceptDelegation, closeAcceptModal } from '../../redux/delegation/actions';
 
@@ -23,39 +24,35 @@ const StyledInput = styled(TextField)`
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-right: 8px;
+  margin: 16px 8px;
+  width: 40px;
 `;
-
-// &input: {
-//   padding: 0 8px;
-//   font-size: 36px;
-//   caret-color: transparent;
-//   height: 4rem;
-// },
 
 type Props = {
   open: boolean;
   id: string;
+  name: string;
 };
 
-const AcceptDelegationModal = ({ open, id }: Props) => {
+const AcceptDelegationModal = ({ open, id, name }: Props) => {
   const { t } = useTranslation(['deleghe']);
+  const isMobile = useIsMobile();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const dispatch = useAppDispatch();
   const fieldsArray = Array.from({ length: 5 }, (_, index) => index + 1);
-  const [code, setCode] = useState<string>('');
+  const [code, setCode] = useState<Array<string>>(['', '', '', '', '']);
 
   const handleClose = () => {
     dispatch(closeAcceptModal());
   };
 
   const handleConfirm = () => {
-    // TODO: void dispatch(acceptDelegation({ id, code: digits.join('') }));
+    void dispatch(acceptDelegation({ id, code: code.join('') }));
   };
 
   function handleChange(e: ChangeEvent<HTMLTextAreaElement>, idx: number) {
-    const next = code + e.target.value;
+    const next = [...code.slice(0, idx), e.target.value, ...code.slice(idx + 1, code.length)];
     setCode(next);
     if (e.target.value && idx < 4) {
       const target = document.getElementById(`input-${idx + 1}`);
@@ -65,19 +62,6 @@ const AcceptDelegationModal = ({ open, id }: Props) => {
     }
   }
 
-  const handleCanc = (e: KeyboardEvent<HTMLInputElement>, idx: number) => {
-    if (e.key === 'Backspace' && idx > 0) {
-      const next = code.slice(0, code.length - 1);
-      setCode(next);
-      const target = document.getElementById(`input-${idx - 1}`);
-      if (target) {
-        target.focus();
-      }
-    }
-  };
-
-  console.log(code);
-
   return (
     <Dialog
       fullScreen={fullScreen}
@@ -85,7 +69,11 @@ const AcceptDelegationModal = ({ open, id }: Props) => {
       onClose={handleClose}
       aria-labelledby="responsive-dialog-title"
     >
-      <Grid container direction="column" sx={{ minHeight: '4rem', width: '32rem' }}>
+      <Grid
+        container
+        direction="column"
+        sx={{ minHeight: '4rem', minWidth: isMobile ? 0 : '32em' }}
+      >
         <Box mx={3} sx={{ height: '100%' }}>
           <Grid container item mt={4}>
             <Grid item xs={10}>
@@ -98,26 +86,35 @@ const AcceptDelegationModal = ({ open, id }: Props) => {
               <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }}>
                 {t('deleghe.accept_title')}
               </Typography>
-              <Typography>{t('deleghe.accept_description')}</Typography>
+              <Typography>
+                <Trans ns="deleghe" i18nKey="deleghe.accept_description" values={{ name }}>
+                  deleghe.accept_description
+                </Trans>
+              </Typography>
             </Grid>
           </Grid>
-          <Divider />
+          <Divider sx={{ margin: '16px 0' }} />
+          <Typography variant="subtitle2">{t('deleghe.verification_code')}</Typography>
           <Stack direction="row">
             {fieldsArray.map((_, idx) => (
               <StyledInput
                 key={idx}
+                value={code[idx]}
                 id={`input-${idx}`}
                 placeholder="-"
                 variant="outlined"
-                sx={{ width: 48, marginLeft: 1 }}
                 inputProps={{
                   maxLength: 1,
                   style: {
                     textAlign: 'center',
-                    fontSize: 36,
+                    fontSize: 24,
                     caretColor: 'transparent',
                   },
-                  onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => handleCanc(e, idx),
+                  onClick: (e) =>
+                    e.currentTarget.setSelectionRange(
+                      e.currentTarget.value.length,
+                      e.currentTarget.value.length
+                    ),
                 }}
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChange(e, idx)}
               />

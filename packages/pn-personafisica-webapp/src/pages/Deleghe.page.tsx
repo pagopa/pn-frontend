@@ -26,9 +26,11 @@ const Deleghe = () => {
   const { id, open, type } = useAppSelector(
     (state: RootState) => state.delegationsState.modalState
   );
-  const { id: acceptId, open: acceptOpen } = useAppSelector(
-    (state: RootState) => state.delegationsState.acceptModalState
-  );
+  const {
+    id: acceptId,
+    open: acceptOpen,
+    name: acceptName,
+  } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state: RootState) => state.delegationsState);
 
@@ -66,7 +68,7 @@ const Deleghe = () => {
         />
       ) : (
         <>
-          <AcceptDelegationModal open={acceptOpen} id={acceptId} />
+          <AcceptDelegationModal open={acceptOpen} id={acceptId} name={acceptName} />
           <ConfirmationModal
             open={open}
             title={

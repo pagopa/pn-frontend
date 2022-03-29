@@ -31,6 +31,7 @@ const delegationsSlice = createSlice({
     acceptModalState: {
       open: false,
       id: '',
+      name: '',
     },
   },
   reducers: {},
@@ -76,10 +77,12 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(openAcceptModal, (state, action) => {
       state.acceptModalState.id = action.payload.id;
+      state.acceptModalState.name = action.payload.name;
       state.acceptModalState.open = true;
     });
     builder.addCase(closeAcceptModal, (state) => {
       state.acceptModalState.open = false;
+      state.acceptModalState.name = '';
       state.acceptModalState.id = '';
     });
   },
