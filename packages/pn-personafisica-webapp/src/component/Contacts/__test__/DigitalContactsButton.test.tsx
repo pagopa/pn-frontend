@@ -48,7 +48,7 @@ describe('DigitalContactsButton Component', () => {
   });
 
   it('renders DigitalContactsButton (modal opened)', async () => {
-    useStateSpy.mockImplementation(() => [true, setState]));
+    useStateSpy.mockImplementation(() => [true, setState]);
     render(component);
     const dialog = screen.queryByTestId('codeDialog');
     expect(dialog).toBeInTheDocument();
