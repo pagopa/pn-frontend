@@ -15,8 +15,10 @@ export const DelegationsApi = {
    * Get all the delegation for the authenticated user
    * @returns Promise array of delegations
    */
-  getDelegates: (): AxiosPromise<Array<Delegation>> => apiClient.get('/mandates-by-delegate'),
-  getDelegators: (): AxiosPromise<Array<Delegation>> => apiClient.get('/mandates-by-delegators'),
+  getDelegates: (): AxiosPromise<Array<Delegation>> =>
+    apiClient.get('/mandate/api/v1/mandates-by-delegate'),
+  getDelegators: (): AxiosPromise<Array<Delegation>> =>
+    apiClient.get('/mandate/api/v1/mandates-by-delegator'),
   revokeDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
       .patch(`/delegations/${id}/revoke`)
