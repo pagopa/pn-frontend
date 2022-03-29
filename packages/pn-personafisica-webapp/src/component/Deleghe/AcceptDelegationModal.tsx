@@ -1,3 +1,4 @@
+import { KeyboardEvent, ChangeEvent, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Dialog from '@mui/material/Dialog';
@@ -14,7 +15,6 @@ import {
 } from '@mui/material';
 import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import { useTranslation } from 'react-i18next';
-import { ChangeEvent, useState } from 'react';
 import { useAppDispatch } from '../../redux/hooks';
 import { acceptDelegation, closeAcceptModal } from '../../redux/delegation/actions';
 
@@ -44,7 +44,7 @@ const AcceptDelegationModal = ({ open, id }: Props) => {
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const dispatch = useAppDispatch();
   const fieldsArray = Array.from({ length: 5 }, (_, index) => index + 1);
-  const [code, setCode] = useState(['', '', '']);
+  const [code, setCode] = useState<string>('');
 
   const handleClose = () => {
     dispatch(closeAcceptModal());
@@ -54,8 +54,9 @@ const AcceptDelegationModal = ({ open, id }: Props) => {
     // TODO: void dispatch(acceptDelegation({ id, code: digits.join('') }));
   };
 
-  function handleOnChange(e: ChangeEvent<HTMLTextAreaElement>, idx: number) {
-    console.log(e.target.value);
+  function handleChange(e: ChangeEvent<HTMLTextAreaElement>, idx: number) {
+    const next = code + e.target.value;
+    setCode(next);
     if (e.target.value && idx < 4) {
       const target = document.getElementById(`input-${idx + 1}`);
       if (target) {
@@ -63,6 +64,19 @@ const AcceptDelegationModal = ({ open, id }: Props) => {
       }
     }
   }
+
+  const handleCanc = (e: KeyboardEvent<HTMLInputElement>, idx: number) => {
+    if (e.key === 'Backspace' && idx > 0) {
+      const next = code.slice(0, code.length - 1);
+      setCode(next);
+      const target = document.getElementById(`input-${idx - 1}`);
+      if (target) {
+        target.focus();
+      }
+    }
+  };
+
+  console.log(code);
 
   return (
     <Dialog
@@ -77,7 +91,7 @@ const AcceptDelegationModal = ({ open, id }: Props) => {
             <Grid item xs={10}>
               <IconButton
                 onClick={handleClose}
-                style={{ position: 'absolute', top: '20px', right: '16px', zIndex: 100 }}
+                sx={{ position: 'absolute', top: '20px', right: '16px', zIndex: 100 }}
               >
                 <ClearOutlinedIcon />
               </IconButton>
@@ -101,14 +115,16 @@ const AcceptDelegationModal = ({ open, id }: Props) => {
                   style: {
                     textAlign: 'center',
                     fontSize: 36,
+                    caretColor: 'transparent',
                   },
+                  onKeyDown: (e: KeyboardEvent<HTMLInputElement>) => handleCanc(e, idx),
                 }}
-                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleOnChange(e, idx)}
+                onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChange(e, idx)}
               />
             ))}
           </Stack>
           <Divider />
-          <Stack direction={'row'} justifyContent={'flex-end'} ml={'auto'} mt={4}>
+          <Stack direction={'row'} justifyContent={'flex-end'} ml={'auto'} my={4}>
             <Grid item mr={1}>
               <Button onClick={handleClose} color="primary" variant="outlined">
                 {t('deleghe.close')}
