@@ -1,13 +1,16 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createAppError } from '../../services/error.service';
-import { AppError } from '../../types/AppError';
+import { createAppError, createAppMessage } from '../../services/message.service';
+import { IAppMessage } from '../../types/AppMessage';
 
 export interface AppStateState {
   loading: {
     result: boolean;
     tasks: { [taskId: string]: boolean };
   };
-  errors: Array<AppError>;
+  messages: {
+    errors: Array<IAppMessage>;
+    success: Array<IAppMessage>;
+  }
 }
 
 const initialState: AppStateState = {
@@ -15,7 +18,10 @@ const initialState: AppStateState = {
     result: false,
     tasks: {},
   },
-  errors: [],
+  messages: {
+    errors: [],
+    success: []
+  }
 };
 
 const isLoading = (action: AnyAction) => action.type.endsWith('/pending');
@@ -30,7 +36,14 @@ export const appStateSlice = createSlice({
   initialState,
   reducers: {
     removeError(state, action: PayloadAction<string>) {
-      state.errors = state.errors.filter(e => e.id !== action.payload); 
+      state.messages.errors = state.messages.errors.filter(e => e.id !== action.payload); 
+    },
+    addSuccess(state, action: PayloadAction<{title: string, message: string}>) {
+      const message = createAppMessage(action.payload.title, action.payload.message);
+      state.messages.success.push(message); 
+    },
+    removeSuccess(state, action: PayloadAction<string>) {
+      state.messages.success = state.messages.success.filter(e => e.id !== action.payload); 
     }
   },
   extraReducers: builder => {
@@ -44,7 +57,7 @@ export const appStateSlice = createSlice({
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
         let error = createAppError(action.payload);
-        state.errors.push(error);
+        state.messages.errors.push(error);
       });
   }
 });
@@ -54,5 +67,6 @@ export const appStateReducer = appStateSlice.reducer;
 
 export const appStateSelectors = {
   selectLoading: (state: any) => state.appState.loading.result,
-  selectErrors: (state: any) => state.appState.errors,
+  selectErrors: (state: any) => state.appState.messages.errors,
+  selectSuccess: (state: any) => state.appState.messages.success,
 };

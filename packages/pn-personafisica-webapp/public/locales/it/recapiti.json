@@ -17,6 +17,7 @@
     "pec-verify-descr": "Abbiamo inviato un codice al numero di cellulare indicato. Il codice è <strong>valido per 10 minuti</strong>.",
     "insert-code": "Inserisci codice",
     "new-code": "Non l'hai ricevuto? Controlla di aver inserito la email corretta oppure",
-    "new-code-link": "genera un nuovo codice"
+    "new-code-link": "genera un nuovo codice",
+    "pec-added": "PEC associata correttaemnte"
   }
 }

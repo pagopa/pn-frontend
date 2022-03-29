@@ -48,7 +48,20 @@ const CodeModal = ({
     if (!isNaN(Number(event.key)) || event.key === 'Enter' || event.key === 'Tab') {
       // focus next element
       if (index !== initialValues.length - 1) {
-        setTimeout(() => inputsRef[index + 1].focus());
+        setTimeout(() => {
+          // focus next input
+          inputsRef[index + 1].focus();
+          // set cursor position
+          if (inputsRef[index + 1].setSelectionRange) {
+            inputsRef[index + 1].setSelectionRange(0, 0);
+          } else if (inputsRef[index + 1].createTextRange) {
+              const t = inputsRef[index + 1].createTextRange();
+              t.collapse(true);
+              t.moveEnd('character', 0);
+              t.moveStart('character', 0);
+              t.select();
+          }
+        });
       }
       return;
     } else if (
@@ -123,7 +136,7 @@ const CodeModal = ({
             {cancelLabel}
           </Button>
         )}
-        {(confirmLabel && confirmCallback) && <Button onClick={() => confirmCallback!(inputsValues)} disabled={!codeIsValid}>{confirmLabel}</Button>}
+        {(confirmLabel && confirmCallback) && <Button onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid}>{confirmLabel}</Button>}
       </DialogActions>
     </Dialog>
   );

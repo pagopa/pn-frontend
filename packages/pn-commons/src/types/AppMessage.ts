@@ -1,4 +1,4 @@
-export type AppError = {
+export type IAppMessage = {
   /** The identifier used to recognize the error: it cannot be possible to have the same error id at the same time */
   id: string;
   /** If true, this error will show the error page, not allowing the user to do anything, otherwise it will show a closable popup */

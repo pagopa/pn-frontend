@@ -1,5 +1,5 @@
-import { ChangeEvent, Fragment, useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { ChangeEvent, Fragment, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -8,25 +8,29 @@ import {
   Divider,
   FormControl,
   FormControlLabel,
-  FormHelperText,
   Grid,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  OutlinedInput,
   Radio,
   RadioGroup,
+  TextField,
   Typography,
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
-import { CodeModal } from '@pagopa-pn/pn-commons';
 
+import { LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
+import DigitalContactsButton from './DigitalContactsButton';
 
-const InsertDigitalContact = () => {
+type Props = {
+  recipientId: string;
+};
+
+const InsertDigitalContact = ({ recipientId }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const [open, setOpen] = useState(false);
+  const buttonRef = useRef();
 
   const descriptionBox = [
     { id: 'save-money', label: t('digital-contacts.save-money', { ns: 'recapiti' }) },
@@ -40,7 +44,7 @@ const InsertDigitalContact = () => {
   const validationSchema = yup.object({
     digitalDomicileType: yup.string().required(),
     pec: yup.string().when('digitalDomicileType', {
-      is: 'pec',
+      is: LegalChannelType.PEC,
       then: yup
         .string()
         .required(t('digital-contacts.valid-pec', { ns: 'recapiti' }))
@@ -50,27 +54,19 @@ const InsertDigitalContact = () => {
 
   const formik = useFormik({
     initialValues: {
-      digitalDomicileType: 'pec',
+      digitalDomicileType: LegalChannelType.PEC,
       pec: '',
     },
     validationSchema,
     /** onSubmit populates filters */
-    onSubmit: (values) => {
-      // TODO: call be
-      if (values.digitalDomicileType === 'pec') {
-        // open code verification dialog
-        setOpen(true);
-      }
+    onSubmit: () => {
+      (buttonRef.current as any).handleAddressCreation();
     },
   });
 
   const handleChangeTouched = (e: ChangeEvent) => {
     void formik.setFieldTouched(e.target.id, true, false);
     formik.handleChange(e);
-  };
-
-  const handleCodeConfirmation = (values: Array<string>) => {
-    console.log(values);
   };
 
   useEffect(() => {
@@ -84,14 +80,22 @@ const InsertDigitalContact = () => {
           title={t('digital-contacts.subtitle', { ns: 'recapiti' })}
           subtitle={t('digital-contacts.description', { ns: 'recapiti' })}
           actions={
-            <Button
-              variant="contained"
-              sx={{ marginLeft: 'auto' }}
-              type="submit"
-              disabled={!formik.isValid}
+            <DigitalContactsButton
+              recipientId={recipientId}
+              digitalDomicileType={formik.values.digitalDomicileType}
+              pec={formik.values.pec}
+              ref={buttonRef}
+              successMessage={t('digital-contacts.pec-added', { ns: 'recapiti' })}
             >
-              {t('button.associa')}
-            </Button>
+              <Button
+                variant="contained"
+                sx={{ marginLeft: 'auto' }}
+                type="submit"
+                disabled={!formik.isValid}
+              >
+                {t('button.associa')}
+              </Button>
+            </DigitalContactsButton>
           }
         >
           <List sx={{ margin: '20px 0' }}>
@@ -118,7 +122,7 @@ const InsertDigitalContact = () => {
               onChange={handleChangeTouched}
             >
               <FormControlLabel
-                value="pec"
+                value={LegalChannelType.PEC}
                 control={<Radio aria-label={t('digital-contacts.link-pec', { ns: 'recapiti' })} />}
                 label={
                   <Grid container direction="row" alignItems="center">
@@ -128,20 +132,18 @@ const InsertDigitalContact = () => {
                       </Typography>
                     </Grid>
                     <Grid item xs={9}>
-                      <OutlinedInput
+                      <TextField
                         id="pec"
                         placeholder={t('digital-contacts.link-pec-placeholder', { ns: 'recapiti' })}
                         fullWidth
-                        sx={{ height: '40px' }}
                         name="pec"
                         value={formik.values.pec}
                         onChange={handleChangeTouched}
                         error={formik.touched.pec && Boolean(formik.errors.pec)}
-                        disabled={formik.values.digitalDomicileType !== 'pec'}
+                        helperText={formik.touched.pec && formik.errors.pec}
+                        disabled={formik.values.digitalDomicileType !== LegalChannelType.PEC}
+                        inputProps={{ sx: { height: '12px' } }}
                       />
-                      {formik.touched.pec && Boolean(formik.errors.pec) && (
-                        <FormHelperText error>{formik.errors.pec}</FormHelperText>
-                      )}
                     </Grid>
                   </Grid>
                 }
@@ -154,7 +156,7 @@ const InsertDigitalContact = () => {
                     {t('digital-contacts.link-io', { ns: 'recapiti' })}
                   </Typography>
                 }
-                value="io"
+                value={LegalChannelType.IOPEC}
                 disabled
               />
             </RadioGroup>
@@ -167,28 +169,6 @@ const InsertDigitalContact = () => {
           </Box>
         </DigitalContactsCard>
       </form>
-      <CodeModal
-        title={`${t('digital-contacts.pec-verify', { ns: 'recapiti' })} ${formik.values.pec}`}
-        subtitle={<Trans i18nKey="digital-contacts.pec-verify-descr" ns="recapiti" />}
-        open={open}
-        initialValues={new Array(5).fill('')}
-        handleClose={() => setOpen(false)}
-        codeSectionTitle={t('digital-contacts.insert-code', { ns: 'recapiti' })}
-        codeSectionAdditional={
-          <Box>
-            <Typography variant="body2" display="inline">
-              {t('digital-contacts.new-code', { ns: 'recapiti' })}&nbsp;
-            </Typography>
-            <Typography variant="body2" display="inline" color="primary">
-              {t('digital-contacts.new-code-link', { ns: 'recapiti' })}.
-            </Typography>
-          </Box>
-        }
-        cancelLabel={t('button.annulla')}
-        confirmLabel={t('button.conferma')}
-        cancelCallback={() => setOpen(false)}
-        confirmCallback={handleCodeConfirmation}
-      />
     </Fragment>
   );
 };
