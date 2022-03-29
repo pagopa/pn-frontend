@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { TitleBox } from '@pagopa-pn/pn-commons';
 
-import { DigitalContactsIcon } from './Icons';
+import { IllusEmailValidation } from '@pagopa/mui-italia';
 
 
 type Props = {
@@ -25,7 +25,7 @@ const DigitalContactsCard = ({title, subtitle, children, actions}: Props) => {
   return (
     <Card>
       <CardHeader
-        avatar={<DigitalContactsIcon sx={{ width: '60px', height: '60px' }} color="secondary" />}
+        avatar={<IllusEmailValidation />}
       />
       <CardContent>
         <Typography
