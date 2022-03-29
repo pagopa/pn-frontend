@@ -39,7 +39,7 @@ const SideMenu: FC<Props> = ({ menuItems }) => {
       setState(false);
     }
     navigate(link);
-  }
+  };
 
   return (
     <Box height={isMobile ? 'auto' : '100%'} display="flex" flexDirection="column" bgcolor={'common.white'}>

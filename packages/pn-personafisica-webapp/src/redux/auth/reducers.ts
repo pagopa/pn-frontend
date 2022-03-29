@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { exchangeToken, logout } from './actions';
+import { exchangeToken, getNumberDelegator, logout } from './actions';
 import { User } from './types';
 
 /* eslint-disable functional/immutable-data */
@@ -24,6 +24,7 @@ const userSlice = createSlice({
           iss: '',
           jti: '',
         }) as User,
+    pendingDelegators: 0
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -32,6 +33,9 @@ const userSlice = createSlice({
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = action.payload;
+    });
+    builder.addCase(getNumberDelegator.fulfilled, (state, action) => {
+      state.pendingDelegators = action.payload;
     });
   },
 });

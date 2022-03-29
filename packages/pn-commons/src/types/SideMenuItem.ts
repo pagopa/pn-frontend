@@ -2,7 +2,9 @@ import { SvgIconComponent } from '@mui/icons-material';
 
 export interface SideMenuItem {
   label: string;
-  icon: SvgIconComponent;
+  icon: SvgIconComponent | JSX.Element;
   route: string;
   children?: Array<SideMenuItem>;
+  dotBadge?: boolean;
+  rightBadgeNotification? : number;
 }

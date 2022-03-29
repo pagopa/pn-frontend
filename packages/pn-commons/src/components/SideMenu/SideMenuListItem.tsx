@@ -1,5 +1,8 @@
-import { ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { SideMenuItem } from '../../types/SideMenuItem';
+import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Box } from "@mui/material";
+import MailIcon from '@mui/icons-material/Mail';
+import Badge from '@mui/material/Badge';
+import NotificationBadge from './NotificationBadge';
 
 type Props = {
   item: SideMenuItem;
@@ -10,9 +13,21 @@ type Props = {
 const SideMenuListItem = ({ item, style, handleLinkClick }: Props) => (
   <ListItem button onClick={() => handleLinkClick(item.route)} sx={style}>
     <ListItemIcon>
-      <item.icon />
+      {item.dotBadge ?
+        <Badge color="primary" variant="dot">
+          <item.icon />
+        </Badge>
+        :
+        <item.icon />
+      }
     </ListItemIcon>
     <ListItemText primary={item.label} />
+    {item.rightBadgeNotification &&
+      (
+        <NotificationBadge numberOfNotification={item.rightBadgeNotification}/>
+      ) 
+    }
+
   </ListItem>
 );
 
