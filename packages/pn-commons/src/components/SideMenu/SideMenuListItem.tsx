@@ -1,6 +1,4 @@
-import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
-import { Box } from "@mui/material";
-import MailIcon from '@mui/icons-material/Mail';
+import { ListItem, ListItemIcon, ListItemText } from '@mui/material';
 import Badge from '@mui/material/Badge';
 import NotificationBadge from './NotificationBadge';
 

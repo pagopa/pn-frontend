@@ -11,13 +11,12 @@ import { useAppDispatch,useAppSelector } from './redux/hooks';
 import { PAGOPA_HELP_EMAIL } from './utils/constants';
 import { RootState } from './redux/store';
 
+
 const App = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
-  const AltRouteIconRotate = () => (
-    <AltRouteIcon sx={{ transform: 'rotate(90deg)' }}/>
-  );
+
   const {pendingDelegators} = useAppSelector((state: RootState) => state.userState);
 
   useEffect(() => {
@@ -28,10 +27,14 @@ const App = () => {
     setPendingDelegatorsState(pendingDelegators);
   },[pendingDelegators]);
 
+  const AltRouteIconRotate = () => (
+    <AltRouteIcon sx={{ transform: 'rotate(90deg)' }}/>
+  );
+
   const menuItems: Array<SideMenuItem> = [
     { label: t('menu.notifiche'), icon: MailOutlineIcon, route: routes.NOTIFICHE },
-    { label: t('menu.recapiti'), icon: MarkunreadMailboxIcon, route: routes.PROFILO },
-    { label: t('menu.deleghe'), icon: AltRouteIconRotate, route: routes.DELEGHE, rightBadgeNotification: pendingDelegatorsState }, 
+    { label: t('menu.recapiti'), icon: MarkunreadMailboxIcon, route: routes.DELEGHE },
+    { label: t('menu.deleghe'), icon: AltRouteIconRotate, route: routes.PROFILO }, 
   ];
 
   return (
