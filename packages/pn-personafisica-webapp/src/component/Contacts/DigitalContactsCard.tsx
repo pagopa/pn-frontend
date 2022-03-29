@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   Card,
   CardActions,
@@ -9,23 +8,20 @@ import {
 } from '@mui/material';
 import { TitleBox } from '@pagopa-pn/pn-commons';
 
-import { IllusEmailValidation } from '@pagopa/mui-italia';
-
-
 type Props = {
+  sectionTitle: string;
   title: string;
   subtitle: string;
+  avatar: ReactNode;
   children: ReactNode;
   actions?: ReactNode;
 };
 
-const DigitalContactsCard = ({title, subtitle, children, actions}: Props) => {
-  const { t } = useTranslation(['common', 'recapiti']);
-
+const DigitalContactsCard = ({sectionTitle, title, subtitle, avatar, children, actions}: Props) => {
   return (
     <Card>
       <CardHeader
-        avatar={<IllusEmailValidation />}
+        avatar={avatar}
       />
       <CardContent>
         <Typography
@@ -34,7 +30,7 @@ const DigitalContactsCard = ({title, subtitle, children, actions}: Props) => {
           fontSize={14}
           sx={{ textTransform: 'uppercase' }}
         >
-          {t('digital-contacts.title', { ns: 'recapiti' })}
+          {sectionTitle}
         </Typography>
         <TitleBox
           sx={{ marginTop: '10px' }}

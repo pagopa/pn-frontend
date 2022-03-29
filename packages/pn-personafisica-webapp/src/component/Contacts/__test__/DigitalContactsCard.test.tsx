@@ -20,7 +20,7 @@ describe('DigitalContactsCard Component', () => {
 
   it('renders DigitalContactsCard', () => {
     // render component
-    const result = render(<DigitalContactsCard title={title} subtitle={subTitle} actions={actions}>{body}</DigitalContactsCard>);
+    const result = render(<DigitalContactsCard sectionTitle={'mocked-sectionTitle'} title={title} subtitle={subTitle} actions={actions} avatar="avatar">{body}</DigitalContactsCard>);
     const titleEl = result.container.querySelector('h4');
     expect(titleEl).toBeInTheDocument();
     expect(titleEl).toHaveTextContent(title);

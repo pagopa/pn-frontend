@@ -19,6 +19,8 @@ type Props = {
 const DigitalContactsButton = forwardRef(({children, recipientId, digitalDomicileType, pec, senderId = 'default', successMessage}: Props, ref) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const [open, setOpen] = useState(false);
+
+  console.log(open, setOpen);
   const dispatch = useAppDispatch();
 
   const handleCodeConfirmation = (values: Array<string>) => {

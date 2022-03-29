@@ -19,6 +19,7 @@ import {
   Typography,
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
+import { IllusEmailValidation } from '@pagopa/mui-italia';
 
 import { LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
@@ -77,8 +78,10 @@ const InsertDigitalContact = ({ recipientId }: Props) => {
     <Fragment>
       <form onSubmit={formik.handleSubmit}>
         <DigitalContactsCard
+          sectionTitle={t('digital-contacts.title', { ns: 'recapiti' })}
           title={t('digital-contacts.subtitle', { ns: 'recapiti' })}
           subtitle={t('digital-contacts.description', { ns: 'recapiti' })}
+          avatar={<IllusEmailValidation />}
           actions={
             <DigitalContactsButton
               recipientId={recipientId}
