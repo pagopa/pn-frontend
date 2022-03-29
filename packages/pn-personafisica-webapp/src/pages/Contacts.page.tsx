@@ -7,6 +7,7 @@ import InsertDigitalContact from '../component/Contacts/InsertDigitalContact';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getDigitalAddresses } from '../redux/contact/actions';
 import { RootState } from '../redux/store';
+import CourtesyContacts from '../component/Contacts/CourtesyContacts';
 
 const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
@@ -26,7 +27,9 @@ const Contacts = () => {
           {digitalAddresses.legal.length === 0 && <InsertDigitalContact recipientId={recipientId}/>}
           {digitalAddresses.legal.length > 0 && <div>Lista recapiti digitali</div>}
         </Grid>
-        <Grid item lg={6} xs={12}>Recapito di cortesia</Grid>
+        <Grid item lg={6} xs={12}>
+          <CourtesyContacts />
+        </Grid>
       </Grid>
     </Box>
   );

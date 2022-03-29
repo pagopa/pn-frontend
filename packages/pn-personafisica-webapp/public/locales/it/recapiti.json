@@ -19,5 +19,15 @@
     "new-code": "Non l'hai ricevuto? Controlla di aver inserito la email corretta oppure",
     "new-code-link": "genera un nuovo codice",
     "pec-added": "PEC associata correttaemnte"
+  },
+  "courtesy-contacts": {
+    "title": "Recapito di cortesia",
+    "subtitle": "Ricevi una comunicazione sui tuoi dispositivi",
+    "description": "Ogni volta che ricevi una nuova notifica, ti invieremo gratuitamente un SMS, un’email o un messaggio sull’app IO.",
+    "link-phone-placeholder": "Il tuo cellulare",
+    "link-email-placeholder": "il tuo indirizzo email",
+    "phone-verify": "Avvisami via SMS",
+    "email-verify": "Avvisami via email",
+    "io-enable": "Avvisami sull'app IO"
   }
 }
