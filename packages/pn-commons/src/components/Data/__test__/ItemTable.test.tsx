@@ -1,7 +1,7 @@
 import { fireEvent, screen, within } from '@testing-library/react';
 
-import NotificationsTable from "../NotificationsTable";
-import { Column, Row, Sort } from "../../../types/NotificationsTable";
+import NotificationsTable from "../ItemsTable";
+import { Column, Item, Sort } from "../../../types/ItemsTable";
 import { render } from '../../../test-utils';
 
 const handleSort = jest.fn();
@@ -13,7 +13,7 @@ const columns: Array<Column> = [
   {id: 'column-3', label: 'Column 3', width: '50%', getCellLabel: (value: string) => value, onClick: handleColumnClick}
 ];
 
-const rows: Array<Row> = [
+const rows: Array<Item> = [
   {id: 'row-1', 'column-1': 'Row 1-1', 'column-2': 'Row 1-2', 'column-3': 'Row 1-3'},
   {id: 'row-2', 'column-1': 'Row 2-1', 'column-2': 'Row 2-2', 'column-3': 'Row 2-3'},
   {id: 'row-3', 'column-1': 'Row 3-1', 'column-2': 'Row 3-2', 'column-3': 'Row 3-3'}

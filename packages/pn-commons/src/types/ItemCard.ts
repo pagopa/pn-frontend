@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { Row } from './NotificationsTable';
+import { Item } from './ItemsTable';
 
-export interface CardElem {
+export interface CardElement {
   id: string;
   label: string;
-  getLabel(value: string | number | Array<string>): ReactNode;
+  getLabel(value: string | number | Array<string>, row?: Item): ReactNode;
 }
 
 export interface CardSort {
@@ -17,5 +17,5 @@ export interface CardSort {
 export interface CardAction {
   id: string;
   component: ReactNode;
-  onClick(cardData: Row): void;
+  onClick(cardData: Item): void;
 }

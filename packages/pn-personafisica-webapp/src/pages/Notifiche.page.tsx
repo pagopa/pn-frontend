@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import {
-  calcPages,
+  calculatePages,
   CustomPagination,
   PaginationData,
   Sort,
@@ -30,7 +30,7 @@ const Notifiche = () => {
     (pagination.moreResult
       ? Math.max(pagination.nextPagesKey.length + 1, 8)
       : pagination.nextPagesKey.length + 1);
-  const pagesToShow: Array<number> = calcPages(
+  const pagesToShow: Array<number> = calculatePages(
     pagination.size,
     totalElements,
     3,

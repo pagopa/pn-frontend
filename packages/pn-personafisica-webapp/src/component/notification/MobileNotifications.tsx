@@ -4,16 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
-  CardElem,
+  CardElement,
   CardSort,
   getNotificationStatusLabelAndColor,
   Notification,
-  NotificationsCard,
+  ItemCard,
   NotificationStatus,
-  Row,
+  Item,
   Sort,
   StatusTooltip,
-  CardAction
+  CardAction,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -34,7 +34,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
 
-  const cardHeader: [CardElem, CardElem] = [
+  const cardHeader: [CardElement, CardElement] = [
     {
       id: 'sentAt',
       label: t('table.data'),
@@ -54,7 +54,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
     },
   ];
 
-  const cardBody: Array<CardElem> = [
+  const cardBody: Array<CardElement> = [
     {
       id: 'senderId',
       label: t('table.mittente'),
@@ -78,7 +78,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
     },
   ];
 
-  const cardData: Array<Row> = notifications.map((n, i) => ({
+  const cardData: Array<Item> = notifications.map((n, i) => ({
     ...n,
     id: i.toString(),
   }));
@@ -86,19 +86,19 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
   const sortFields: Array<CardSort> = [
     { id: 'sentAt', label: t('table.data') },
     { id: 'senderId', label: t('table.mittente') },
-  ].reduce((arr, el) => {
+  ].reduce((arr, item) => {
     /* eslint-disable functional/immutable-data */
     arr.push(
       {
-        id: `${el.id}-asc`,
-        label: `${el.label} ${t('sort.asc')}`,
-        field: el.id,
+        id: `${item.id}-asc`,
+        label: `${item.label} ${t('sort.asc')}`,
+        field: item.id,
         value: 'asc',
       },
       {
-        id: `${el.id}-desc`,
-        label: `${el.label} ${t('sort.desc')}`,
-        field: el.id,
+        id: `${item.id}-desc`,
+        label: `${item.label} ${t('sort.desc')}`,
+        field: item.id,
         value: 'desc',
       }
     );
@@ -107,13 +107,17 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
   }, [] as Array<CardSort>);
 
   // Navigation handlers
-  const handleRowClick = (row: Row) => {
+  const handleRowClick = (row: Item) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
   };
 
   // TODO: sostituire con button naked
   const cardActions: Array<CardAction> = [
-    {id: 'go-to-detail', component: <ButtonNaked endIcon={<ArrowForwardIcon />}>{t('table.show-detail')}</ButtonNaked>, onClick: handleRowClick}
+    {
+      id: 'go-to-detail',
+      component: <ButtonNaked endIcon={<ArrowForwardIcon />}>{t('table.show-detail')}</ButtonNaked>,
+      onClick: handleRowClick,
+    },
   ];
 
   return (
@@ -124,11 +128,20 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
         </Grid>
         <Grid item xs={6} textAlign="right">
           {sort && onChangeSorting && (
-            <MobileNotificationsSort sortFields={sortFields} sort={sort} onChangeSorting={onChangeSorting}/>
+            <MobileNotificationsSort
+              sortFields={sortFields}
+              sort={sort}
+              onChangeSorting={onChangeSorting}
+            />
           )}
         </Grid>
       </Grid>
-      <NotificationsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} cardActions={cardActions}/>
+      <ItemCard
+        cardHeader={cardHeader}
+        cardBody={cardBody}
+        cardData={cardData}
+        cardActions={cardActions}
+      />
     </Fragment>
   );
 };

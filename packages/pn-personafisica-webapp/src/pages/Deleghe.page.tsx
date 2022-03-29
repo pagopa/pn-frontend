@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { Box } from '@mui/material';
-import { TitleAndDescription } from '@pagopa-pn/pn-commons';
+import { CourtesyPage, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Trans, useTranslation } from 'react-i18next';
 
-import GenericError from '../component/GenericError/GenericError';
+import { RestorePageOutlined } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import {
@@ -12,11 +13,15 @@ import {
   getDelegates,
   getDelegators,
 } from '../redux/delegation/actions';
-import Delegates from './components/Deleghe/Delegates';
-import Delegators from './components/Deleghe/Delegators';
-import ConfirmationModal from './components/Deleghe/ConfirmationModal';
+import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
+import MobileDelegates from '../component/Deleghe/MobileDelegates';
+import MobileDelegators from '../component/Deleghe/MobileDelegators';
+import Delegates from '../component/Deleghe/Delegates';
+import Delegators from '../component/Deleghe/Delegators';
 
 const Deleghe = () => {
+  const isMobile = useIsMobile();
+  const { t } = useTranslation(['deleghe']);
   const { id, open, type } = useAppSelector(
     (state: RootState) => state.delegationsState.modalState
   );
@@ -35,35 +40,61 @@ const Deleghe = () => {
     }
   };
 
+  const handleReloadClick = () => {
+    void dispatch(getDelegates());
+    void dispatch(getDelegators());
+  };
+
   useEffect(() => {
     void dispatch(getDelegates());
     void dispatch(getDelegators());
   }, []);
 
   return (
-    <Box sx={{ marginRight: 2 }}>
+    <Box sx={{ marginRight: isMobile ? 0 : 2 }}>
       {error ? (
-        <GenericError />
+        <CourtesyPage
+          icon={<RestorePageOutlined />}
+          title={t('deleghe.error_title')}
+          subtitle={t('deleghe.error_subtitle')}
+          onClick={handleReloadClick}
+          onClickLabel={t('deleghe.error_button')}
+        />
       ) : (
         <>
           <ConfirmationModal
             open={open}
             title={
               type === 'delegates'
-                ? 'Vuoi davvero revocare la delega?'
-                : 'Vuoi davvero rifiutare la delega?'
+                ? t('deleghe.revocation_question')
+                : t('deleghe.rejection_question')
             }
             handleClose={handleCloseModal}
             onConfirm={handleConfirmClick}
-            onConfirmLabel={type === 'delegates' ? 'Revoca la delega' : 'Rifiuta la delega'}
+            onConfirmLabel={
+              type === 'delegates'
+                ? t('deleghe.confirm_revocation')
+                : t('deleghe.confirm_rejection')
+            }
           />
-          <TitleAndDescription title={'Deleghe'}>
-            Qui puoi gestire <b>i tuoi delegati</b> e le <b>deleghe a tuo carico</b>. I primi sono
-            le persone fisiche o giuridiche che hai autorizzato alla visualizzazione e gestione
-            delle tue notifiche, le seconde sono color che hanno autorizzato te.
-          </TitleAndDescription>
-          <Delegates />
-          <Delegators />
+          <Box ml={isMobile ? 2 : 0} mb={2}>
+            <TitleBox title={'Deleghe'} variantTitle={'h4'}>
+              <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
+                deleghe.description
+              </Trans>
+            </TitleBox>
+          </Box>
+          {isMobile ? (
+            <>
+              <MobileDelegates />
+              <MobileDelegators />
+            </>
+          ) : (
+            <>
+              <Delegates />
+              <Delegators />
+            </>
+          )}
         </>
       )}
     </Box>

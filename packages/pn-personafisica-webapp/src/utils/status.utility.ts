@@ -3,7 +3,7 @@ export enum DelegationStatus {
   PENDING = 'Pending',
 }
 
-export function getDelegationStatusLabelAndColor(status: DelegationStatus): {
+export function getDelegationStatusLabelAndColor(status: 'Active' | 'Pending'): {
   color: 'warning' | 'success' | 'info' | undefined;
   label: string;
 } {

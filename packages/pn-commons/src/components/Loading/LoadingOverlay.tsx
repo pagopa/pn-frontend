@@ -1,11 +1,9 @@
-import { Modal, useTheme } from '@mui/material';
+import { CircularProgress, Modal } from '@mui/material';
 import { Box } from '@mui/system';
-import MDSpinner from 'react-md-spinner';
 import { useSelector } from 'react-redux';
 import { appStateSelectors } from '../../redux/slices/appStateSlice';
 
 export function LoadingOverlay() {
-  const theme = useTheme();
   const loading = useSelector(appStateSelectors.selectLoading);
 
   return (
@@ -19,7 +17,7 @@ export function LoadingOverlay() {
           outline: 0,
         }}
       >
-        <MDSpinner singleColor={theme.palette.primary.main} role="loadingSpinner" />
+        <CircularProgress color={'primary'} role="loadingSpinner" />
       </Box>
     </Modal>
   );

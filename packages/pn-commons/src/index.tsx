@@ -7,10 +7,9 @@ import CustomPagination from './components/Pagination/CustomPagination';
 import CustomTooltip from './components/CustomTooltip';
 import AppMessage from './components/AppMessage';
 import SideMenu from './components/SideMenu/SideMenu';
-import NotificationsTable from './components/Notifications/NotificationsTable';
 import StatusTooltip from './components/Notifications/StatusTooltip';
-import NotificationsCard from './components/Notifications/NotificationsCard';
-import OutlinedButton from './components/OutlinedButton';
+import ItemsTable from './components/Data/ItemsTable';
+import ItemCard from './components/Data/ItemCard';
 import TitleAndDescription from './components/TitleAndDescription';
 import CustomMobileDialog from './components/CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogToggle from './components/CustomMobileDialog/CustomMobileDialogToggle';
@@ -30,10 +29,9 @@ export { CustomPagination };
 export { CustomTooltip };
 export { AppMessage };
 export { SideMenu };
-export { NotificationsTable };
+export { ItemsTable };
 export { StatusTooltip };
-export { NotificationsCard };
-export { OutlinedButton };
+export { ItemCard };
 export { TitleAndDescription };
 export { CustomMobileDialog };
 export { CustomMobileDialogToggle };
@@ -59,7 +57,7 @@ import { AppError } from './types/AppError';
 import { PaginationData } from './components/Pagination/types';
 import { NotificationStatus } from './types/NotificationStatus';
 import { SideMenuItem } from './types/SideMenuItem';
-import { Column, Row, Sort } from './types/NotificationsTable';
+import { Column, Item, Sort } from './types/ItemsTable';
 import {
   Notification,
   GetNotificationsResponse,
@@ -84,7 +82,7 @@ import {
   PhysicalCommunicationType,
 } from './types/NotificationDetail';
 
-import { CardElem, CardSort, CardAction } from './types/NotificationsCard';
+import { CardElement, CardSort, CardAction } from './types/ItemCard';
 import { MessageType } from './types/MessageType';
 
 export type { AppError };
@@ -101,7 +99,7 @@ export {
   AddressSource,
   PhysicalCommunicationType,
 };
-export type { Column, Row, Sort };
+export type { Column, Item, Sort };
 export type {
   Notification,
   GetNotificationsResponse,
@@ -114,14 +112,14 @@ export type {
   NotificationStatusHistory,
   LegalFactId,
 };
-export type { CardElem, CardSort, CardAction };
+export type { CardElement, CardSort, CardAction };
 export type { NotificationDetailTableRow };
 export { MessageType };
 
 // functions
 import { createAppError } from './services/error.service';
 import { formatDate } from './services/date.service';
-import { calcPages } from './utils/pagination.utility';
+import { calculatePages } from './utils/pagination.utility';
 import {
   getNotificationStatusLabelAndColor,
   NotificationAllowedStatus,
@@ -133,7 +131,7 @@ export { NotificationAllowedStatus };
 export { getNotificationStatusLabelAndColor };
 export { createAppError };
 export { formatDate };
-export { calcPages };
+export { calculatePages };
 export { getMonthString, getDay, getTime };
 export { formatFiscalCode };
 export { fiscalCodeRegex };

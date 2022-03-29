@@ -9,14 +9,18 @@ export interface DelegationsList {
 }
 
 export interface Delegation {
-  id: string;
-  user: Omit<User, 'uid' | 'exp'>;
-  startDate: string;
-  endDate: string;
-  delegationRole: 'delegator' | 'delegated';
-  delegationStatus: 'Pending' | 'Active';
-  visibilityIds: OrganizationId;
+  mandateId: string;
+  delegator: Person;
+  delegate: Person;
+  status: 'Active' | 'Pending';
+  visibilityIds: Array<{
+    name: string;
+    uniqueIdentifier: string;
+  }>;
   verificationCode: string;
+  datefrom: string;
+  dateto: string;
+  email: string;
 }
 
 export interface OrganizationId {
@@ -28,4 +32,13 @@ export interface RevocationModalProps {
   open: boolean;
   id: string;
   type: string;
+}
+
+export interface Person {
+  firstName: string;
+  lastName: string;
+  companyName: string;
+  fiscalCode: string;
+  person: boolean;
+  email: string;
 }
