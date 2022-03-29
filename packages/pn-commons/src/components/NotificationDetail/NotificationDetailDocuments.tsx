@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { Grid, Typography, Button } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 
-import { NotificationDetailDocument } from '../../types/Notifications';
+import { NotificationDetailDocument } from '../../types/NotificationDetail';
 
 type Props = {
   title: string;

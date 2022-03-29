@@ -9,7 +9,7 @@
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@pagopa-pn/pn-commons": "0.1.0",
-    "@pagopa/mui-italia": "^0.6.5",
+    "@pagopa/mui-italia": "^0.6.6",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.11.21",

@@ -6,7 +6,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import {
   NotificationStatus,
   TitleBox,
-  DetailTableRow,
+  NotificationDetailTableRow,
   NotificationDetailTable,
   NotificationDetailDocuments,
   LegalFactId,
@@ -56,7 +56,7 @@ const NotificationDetail = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-  const detailTableRows: Array<DetailTableRow> = [
+  const detailTableRows: Array<NotificationDetailTableRow> = [
     { id: 1, label: 'Data', value: <Box fontWeight={600}>{notification.sentAt}</Box> },
     { id: 2, label: 'Termini di pagamento', value: `Entro il ` },
     {
@@ -165,6 +165,8 @@ const NotificationDetail = () => {
               clickHandler={legalFactDownloadHandler}
               legalFactLabel="Attestato opponibile a Terzi"
               historyButtonLabel="Mostra storico"
+              showMoreButtonLabel="Mostra di più"
+              showLessButtonLabel='Mostra di meno'
             />
           </Box>
         </Grid>
