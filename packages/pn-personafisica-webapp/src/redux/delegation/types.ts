@@ -22,6 +22,11 @@ export interface Delegation {
   dateto: string;
 }
 
+export interface OrganizationId {
+  id: string;
+  role: 'referente operativo' | 'referente amministrativo';
+}
+
 export interface RevocationModalProps {
   open: boolean;
   id: string;
