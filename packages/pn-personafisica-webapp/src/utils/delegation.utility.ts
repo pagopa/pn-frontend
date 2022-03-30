@@ -19,7 +19,7 @@ export default function delegationToItem(
       : `${delegation.delegate.firstName} ${delegation.delegate.lastName}`,
     startDate: delegation.datefrom,
     endDate: delegation.dateto,
-    email: delegation.email,
+    email: isDelegator ? delegation.delegator.email : delegation.delegate.email,
     visibilityIds: delegation.visibilityIds.map((f: any) => f.name),
     status: delegation.status,
   }));

@@ -36,8 +36,20 @@ export interface RevocationModalProps {
 export interface Person {
   firstName: string;
   lastName: string;
-  companyName: string;
+  companyName?: string;
   fiscalCode: string;
   person: boolean;
   email: string;
+}
+
+export interface NewDelegationFormProps {
+  selectPersonaFisicaOrPersonaGiuridica: string;
+  codiceFiscale: string;
+  email: string;
+  nome: string;
+  cognome: string;
+  selectTuttiEntiOrSelezionati: string;
+  expirationDate: number;
+  enteSelect: { name: string; uniqueIdentifier: string };
+  verificationCode: string;
 }

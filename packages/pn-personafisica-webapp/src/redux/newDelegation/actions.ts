@@ -1,7 +1,7 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { Person } from '../delegation/types';
+import { NewDelegationFormProps, Person } from '../delegation/types';
 
 export interface CreateDelegationProps {
   delegate: Person;
@@ -13,11 +13,23 @@ export interface CreateDelegationProps {
   dateto: string;
 }
 
-export const createDelegation = createAsyncThunk<string, CreateDelegationProps>(
+export const createDelegation = createAsyncThunk<string, NewDelegationFormProps>(
   'delegation',
   async (data, { rejectWithValue }) => {
+    const payload = {
+      delegate: {
+        firstName: data.nome,
+        lastName: data.cognome,
+        fiscalCode: data.codiceFiscale,
+        person: data.selectPersonaFisicaOrPersonaGiuridica === 'pf',
+        email: data.email,
+      },
+      visibilityIds: [data.enteSelect],
+      verificationCode: data.verificationCode,
+      dateto: new Date(data.expirationDate).toISOString(),
+    };
     try {
-      return await DelegationsApi.createDelegation(data);
+      return await DelegationsApi.createDelegation(payload);
     } catch (e) {
       return rejectWithValue(e);
     }

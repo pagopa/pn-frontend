@@ -17,7 +17,7 @@ export const DelegationsApi = {
    */
   getDelegates: (): Promise<Array<Delegation>> =>
     apiClient
-      .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegate')
+      .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegator')
       .then((response: AxiosResponse<Array<Delegation>>) => {
         if (response.data) {
           return response.data;
@@ -31,7 +31,7 @@ export const DelegationsApi = {
    */
   getDelegators: (): Promise<Array<Delegation>> =>
     apiClient
-      .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegator')
+      .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegate')
       .then((response: AxiosResponse<Array<Delegation>>) => {
         if (response.data) {
           return response.data;

@@ -182,7 +182,7 @@ describe('Delegations api tests', () => {
 
   it('gets empty delegates', async () => {
     const res = await getDelegates([]);
-    expect(res).toStrictEqual([]);
+    expect(res).toHaveLength(0);
   });
 
   it('gets non empty delegators', async () => {
@@ -192,7 +192,7 @@ describe('Delegations api tests', () => {
 
   it('gets empty delegators', async () => {
     const res = await getDelegators([]);
-    expect(res).toStrictEqual([]);
+    expect(res).toHaveLength(0);
   });
 
   it('revokes a delegation', async () => {
