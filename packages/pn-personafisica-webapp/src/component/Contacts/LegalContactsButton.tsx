@@ -19,6 +19,7 @@ type Props = {
 const LegalContactsButton = forwardRef(({children, recipientId, digitalDomicileType, pec, senderId = 'default', successMessage}: Props, ref) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const [open, setOpen] = useState(false);
+  const [codeNotValid, setCodeNotValid] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleAddressCreation = (verificationCode?: string, noCallback: boolean = false) => {
@@ -43,8 +44,14 @@ const LegalContactsButton = forwardRef(({children, recipientId, digitalDomicileT
           // open code verification dialog
           setOpen(true);
         }
-      })
-      .catch(() => {});
+      }).catch(() => {
+        setCodeNotValid(true);
+      });
+  };
+
+  const handleClose = () => {
+    setCodeNotValid(false);
+    setOpen(false);
   };
 
   // export handleAddressCreation method
@@ -74,8 +81,10 @@ const LegalContactsButton = forwardRef(({children, recipientId, digitalDomicileT
         }
         cancelLabel={t('button.annulla')}
         confirmLabel={t('button.conferma')}
-        cancelCallback={() => setOpen(false)}
+        cancelCallback={handleClose}
         confirmCallback={(values: Array<string>) => handleAddressCreation(values.join(''))}
+        hasError={codeNotValid}
+        errorMessage={t('legal-contacts.wrong-code', { ns: 'recapiti' })}
       />
     </Fragment>
   );

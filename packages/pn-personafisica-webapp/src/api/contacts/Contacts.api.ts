@@ -43,17 +43,13 @@ export const ContactsApi = {
       if (!mockedContact) {
         return reject('No mocked contact found');
       }
-      if (!mockedContact?.isVerified) {
-        mockedContact.isVerified = true;
+      // simulate 200
+      if (!mockedContact?.isVerified && !body.verificationCode) {
         return resolve();
       }
-      // check code
-      if (mockedContact.code !== body.verificationCode && mockedContact.value === 'mario.rossi@toverify.it') {
-        return reject('Wrong code');
-      }
-      if (mockedContact.value === 'mario.rossi@toverify.it') {
-        // reset contact
-        mockedContact.isVerified = false;
+      // check code - simulate 406
+      if (mockedContact.code !== body.verificationCode) {
+        return reject({response: {status: 406}, blockNotification: true});
       }
       return resolve({
         addressType: 'legal',

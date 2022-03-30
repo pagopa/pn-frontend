@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
   Box,
+  Alert,
 } from '@mui/material';
 
 type Props = {
@@ -25,6 +26,8 @@ type Props = {
   cancelCallback?: () => void;
   confirmCallback?: (values: Array<string>) => void;
   isReadOnly?: boolean;
+  hasError?: boolean;
+  errorMessage?: string;
 };
 
 const CodeModal = ({
@@ -39,7 +42,9 @@ const CodeModal = ({
   cancelLabel,
   cancelCallback,
   confirmCallback,
-  isReadOnly = false
+  isReadOnly = false,
+  hasError = false,
+  errorMessage
 }: Props) => {
   const [inputsValues, setInputsValues] = useState(initialValues);
   const [inputsRef, setInputsRef] = useState(new Array(initialValues.length).fill(undefined));
@@ -55,11 +60,11 @@ const CodeModal = ({
           if (inputsRef[index + 1].setSelectionRange) {
             inputsRef[index + 1].setSelectionRange(0, 0);
           } else if (inputsRef[index + 1].createTextRange) {
-              const t = inputsRef[index + 1].createTextRange();
-              t.collapse(true);
-              t.moveEnd('character', 0);
-              t.moveStart('character', 0);
-              t.select();
+            const t = inputsRef[index + 1].createTextRange();
+            t.collapse(true);
+            t.moveEnd('character', 0);
+            t.moveStart('character', 0);
+            t.select();
           }
         });
       }
@@ -89,7 +94,13 @@ const CodeModal = ({
     setInputsValues(initialValues);
   }, [open]);
 
-  const codeIsValid = inputsValues.every(v => v);
+  const codeIsValid = inputsValues.every((v) => v);
+  let inputColor = '';
+  if (hasError) {
+    inputColor = 'error.main';
+  } else if (isReadOnly) {
+    inputColor = 'primary.main';
+  }
 
   return (
     <Dialog
@@ -103,7 +114,9 @@ const CodeModal = ({
       <DialogContent>
         <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
         <Divider sx={{ margin: '20px 0' }} />
-        <Typography fontSize={16} fontWeight={600}>{codeSectionTitle}</Typography>
+        <Typography fontSize={16} fontWeight={600}>
+          {codeSectionTitle}
+        </Typography>
         <Box sx={{ marginTop: '10px' }}>
           {initialValues.map((_value, index) => (
             <TextField
@@ -111,8 +124,12 @@ const CodeModal = ({
               id="outlined-basic"
               variant="outlined"
               placeholder="-"
-              sx={{ width: '33px', height: '56px', marginRight: '10px' }}
-              inputProps={{ maxLength: 1, sx: { padding: '16.5px 10px', textAlign: 'center' }, readOnly: isReadOnly }}
+              sx={{ width: '33px', height: '56px', marginRight: '10px', input: { color: inputColor }}}
+              inputProps={{
+                maxLength: 1,
+                sx: { padding: '16.5px 10px', textAlign: 'center'},
+                readOnly: isReadOnly
+              }}
               onKeyDown={(event) => keyDownHandler(event, index)}
               onChange={(event) => changeHandler(event, index)}
               inputRef={(node) => {
@@ -122,21 +139,27 @@ const CodeModal = ({
                 });
               }}
               value={inputsValues[index]}
+              color={hasError ? 'error' : 'primary'}
+              focused={isReadOnly}
+              error={hasError}
             />
           ))}
         </Box>
-        <Box sx={{ marginTop: '10px' }}>
-          {codeSectionAdditional}
-        </Box>
+        <Box sx={{ marginTop: '10px' }}>{codeSectionAdditional}</Box>
         <Divider sx={{ margin: '20px 0' }} />
+        {(hasError && errorMessage) && <Alert severity="error">{errorMessage}</Alert>}
       </DialogContent>
       <DialogActions>
-        {(cancelLabel && cancelCallback) && (
+        {cancelLabel && cancelCallback && (
           <Button variant="outlined" onClick={cancelCallback}>
             {cancelLabel}
           </Button>
         )}
-        {(confirmLabel && confirmCallback) && <Button onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid}>{confirmLabel}</Button>}
+        {confirmLabel && confirmCallback && (
+          <Button onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid}>
+            {confirmLabel}
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

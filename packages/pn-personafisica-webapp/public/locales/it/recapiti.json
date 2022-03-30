@@ -18,6 +18,7 @@
     "insert-code": "Inserisci codice",
     "new-code": "Non l'hai ricevuto? Controlla di aver inserito la email corretta oppure",
     "new-code-link": "genera un nuovo codice",
+    "wrong-code": "Il codice inserito non è valido",
     "pec-added": "PEC associata correttaemnte"
   }
 }
