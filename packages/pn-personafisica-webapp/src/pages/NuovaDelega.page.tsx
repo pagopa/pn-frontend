@@ -100,7 +100,7 @@ const NuovaDelega = () => {
                 selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
                 expirationDate: Date.now(),
                 enteSelect: { name: '', uniqueIdentifier: '' },
-                verificationCode,
+                verificationCode: generateVCode(),
               }}
               validationSchema={validationSchema}
               onSubmit={(values: NewDelegationFormProps) => {

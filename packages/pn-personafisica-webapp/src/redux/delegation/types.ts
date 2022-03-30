@@ -53,7 +53,6 @@ export interface NewDelegationFormProps {
   enteSelect: { name: string; uniqueIdentifier: string };
   verificationCode: string;
 }
-
 export interface AcceptDelegationResponse {
   id: string;
 }
