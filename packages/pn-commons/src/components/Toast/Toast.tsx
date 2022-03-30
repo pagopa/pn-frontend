@@ -60,37 +60,36 @@ const Toast = ({
   return (
     <Fragment>
       {openStatus && (
-        <Grid container justifyContent="end" px={2} data-testid="toastContainer">
-          <Grid item xs={12} display="flex" justifyContent="flex-end">
-            <Box>
-              <Alert
-                sx={{
-                  position: 'fixed',
-                  bottom: '64px',
-                  right: isMobile ? '5%' : '64px',
-                  zIndex: 100,
-                  width: isMobile ? 'calc(100vw - 10%)' : '376px',
-                }}
-                variant={variant}
-                severity={getColor.get(type)}
-              >
-                <Grid container>
-                  <Grid item xs={10}>
-                    <Typography pb={1} fontWeight={600} fontSize={'16px'}>
-                      {title}
-                    </Typography>
-                    <Typography variant="body2">{message}</Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <IconButton onClick={closeToast}>
-                      <CloseIcon />
-                    </IconButton>
-                  </Grid>
-                </Grid>
-              </Alert>
-            </Box>
-          </Grid>
-        </Grid>
+        <Box px={2} data-testid="toastContainer">
+          <Alert
+            sx={{
+              position: 'fixed',
+              bottom: '64px',
+              right: isMobile ? '5%' : '64px',
+              zIndex: 100,
+              width: isMobile ? 'calc(100vw - 10%)' : '376px',
+              '& .MuiAlert-message': {
+                width: '100%'
+              }
+            }}
+            variant={variant}
+            severity={getColor.get(type)}
+          >
+            <Grid container>
+              <Grid item xs={10}>
+                <Typography pb={1} fontWeight={600} fontSize={'16px'}>
+                  {title}
+                </Typography>
+                <Typography variant="body2">{message}</Typography>
+              </Grid>
+              <Grid item xs={2}>
+                <IconButton onClick={closeToast}>
+                  <CloseIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Alert>
+        </Box>
       )}
     </Fragment>
   );

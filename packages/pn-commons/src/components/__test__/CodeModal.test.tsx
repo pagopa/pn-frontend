@@ -7,20 +7,27 @@ const handleCloseMock = jest.fn();
 const cancelButtonMock = jest.fn();
 const confirmButtonMock = jest.fn();
 
-describe('CodeModal Component', () => {
+const openedModalComponent = (open: boolean, hasError: boolean = false) => (
+  <CodeModal
+    title="mocked-title"
+    subtitle="mocked-subtitle"
+    open={open}
+    initialValues={new Array(5).fill('')}
+    codeSectionTitle="mocked-section-title"
+    handleClose={handleCloseMock}
+    cancelLabel="mocked-cancel"
+    cancelCallback={cancelButtonMock}
+    confirmLabel="mocked-confirm"
+    confirmCallback={confirmButtonMock}
+    hasError={hasError}
+    errorMessage='mocked-errorMessage'
+  />
+);
 
+describe('CodeModal Component', () => {
   it('renders CodeModal (closed)', () => {
     // render component
-    render(
-      <CodeModal
-        title="mocked-title"
-        subtitle="mocked-subtitle"
-        open={false}
-        initialValues={new Array(5).fill(undefined)}
-        codeSectionTitle="mocked-section-title"
-        handleClose={handleCloseMock}
-      />
-    );
+    render(openedModalComponent(false));
 
     const dialog = screen.queryByTestId('codeDialog');
     expect(dialog).not.toBeInTheDocument();
@@ -28,20 +35,7 @@ describe('CodeModal Component', () => {
 
   it('renders CodeModal (opened)', () => {
     // render component
-    render(
-      <CodeModal
-        title="mocked-title"
-        subtitle="mocked-subtitle"
-        open={true}
-        initialValues={new Array(5).fill('')}
-        codeSectionTitle="mocked-section-title"
-        handleClose={handleCloseMock}
-        cancelLabel="mocked-cancel"
-        cancelCallback={cancelButtonMock}
-        confirmLabel="mocked-confirm"
-        confirmCallback={confirmButtonMock}
-      />
-    );
+    render(openedModalComponent(true));
 
     const dialog = screen.queryByTestId('codeDialog');
     expect(dialog).toBeInTheDocument();
@@ -52,7 +46,7 @@ describe('CodeModal Component', () => {
     expect(dialog).toHaveTextContent('mocked-section-title');
     const codeInputs = dialog?.querySelectorAll('input');
     expect(codeInputs).toHaveLength(5);
-    codeInputs?.forEach(input => {
+    codeInputs?.forEach((input) => {
       expect(input).toHaveValue('');
     });
     const buttons = dialog?.querySelectorAll('button');
@@ -63,20 +57,7 @@ describe('CodeModal Component', () => {
 
   it('clicks on cancel', async () => {
     // render component
-    render(
-      <CodeModal
-        title="mocked-title"
-        subtitle="mocked-subtitle"
-        open={true}
-        initialValues={new Array(5).fill('')}
-        codeSectionTitle="mocked-section-title"
-        handleClose={handleCloseMock}
-        cancelLabel="mocked-cancel"
-        cancelCallback={cancelButtonMock}
-        confirmLabel="mocked-confirm"
-        confirmCallback={confirmButtonMock}
-      />
-    );
+    render(openedModalComponent(true));
 
     const dialog = screen.queryByTestId('codeDialog');
     const buttons = dialog?.querySelectorAll('button');
@@ -88,20 +69,7 @@ describe('CodeModal Component', () => {
 
   it('clicks on confirm', async () => {
     // render component
-    render(
-      <CodeModal
-        title="mocked-title"
-        subtitle="mocked-subtitle"
-        open={true}
-        initialValues={new Array(5).fill('')}
-        codeSectionTitle="mocked-section-title"
-        handleClose={handleCloseMock}
-        cancelLabel="mocked-cancel"
-        cancelCallback={cancelButtonMock}
-        confirmLabel="mocked-confirm"
-        confirmCallback={confirmButtonMock}
-      />
-    );
+    render(openedModalComponent(true));
 
     const dialog = screen.queryByTestId('codeDialog');
     const buttons = dialog?.querySelectorAll('button');
@@ -109,7 +77,7 @@ describe('CodeModal Component', () => {
     const codeInputs = dialog?.querySelectorAll('input');
     // fill inputs with values
     codeInputs?.forEach((input, index) => {
-      fireEvent.change(input, {target: {value: index.toString()}});
+      fireEvent.change(input, { target: { value: index.toString() } });
     });
     await waitFor(() => {
       codeInputs?.forEach((input, index) => {
@@ -120,5 +88,15 @@ describe('CodeModal Component', () => {
     fireEvent.click(buttons![1]);
     expect(confirmButtonMock).toBeCalledTimes(1);
     expect(confirmButtonMock).toBeCalledWith(['0', '1', '2', '3', '4']);
+  });
+
+  it('shows error', () => {
+    // render component
+    render(openedModalComponent(true, true));
+
+    const dialog = screen.queryByTestId('codeDialog');
+    const errorAlert = dialog?.querySelector('[data-testid="errorAlert"]');
+    expect(errorAlert).toBeInTheDocument();
+    expect(errorAlert).toHaveTextContent('mocked-errorMessage');
   });
 });

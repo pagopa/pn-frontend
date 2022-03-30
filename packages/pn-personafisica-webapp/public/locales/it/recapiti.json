@@ -1,7 +1,7 @@
 {
   "title": "I tuoi recapiti",
   "subtitle": "In questa pagina, puoi indicare e modificare i recapiti a cui vuoi ricevere le tue notifiche per via digitale.",
-  "digital-contacts": {
+  "legal-contacts": {
     "title": "Recapito legale",
     "subtitle": "Ricevi le notifiche per via digitale",
     "description": "Se associ la tua PEC o il tuo account dell’app IO*, riceverai le notifiche soltanto per via digitale. Questo ti permetterà di:",
@@ -18,6 +18,7 @@
     "insert-code": "Inserisci codice",
     "new-code": "Non l'hai ricevuto? Controlla di aver inserito la email corretta oppure",
     "new-code-link": "genera un nuovo codice",
+    "wrong-code": "Il codice inserito non è valido",
     "pec-added": "PEC associata correttaemnte"
   },
   "courtesy-contacts": {

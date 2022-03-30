@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
-import { DigitalAddress, DigitalAddresses, SaveLegalAddressParams } from '../../models/contacts';
+import { DigitalAddress, DigitalAddresses, SaveDigitalAddressParams } from '../../models/contacts';
 
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   'getDigitalAddresses',
@@ -14,9 +14,9 @@ export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   }
 );
 
-export const createOrUpdateLegalAddress = createAsyncThunk<DigitalAddress | void, SaveLegalAddressParams>(
+export const createOrUpdateLegalAddress = createAsyncThunk<DigitalAddress | void, SaveDigitalAddressParams>(
   'createOrUpdateLegalAddress',
-  async (params: SaveLegalAddressParams, { rejectWithValue }) => {
+  async (params: SaveDigitalAddressParams, { rejectWithValue }) => {
     try {
       return await ContactsApi.createOrUpdateLegalAddress(
         params.recipientId,

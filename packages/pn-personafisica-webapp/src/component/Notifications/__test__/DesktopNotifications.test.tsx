@@ -1,5 +1,17 @@
+import { fireEvent, waitFor} from '@testing-library/react';
+
+import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
 import { render } from '../../../__test__/test-utils';
+import * as routes from '../../../navigation/routes.const';
 import DesktopNotifications from '../DesktopNotifications';
+
+const mockNavigateFn = jest.fn();
+
+// mock imports
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn
+}));
 
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
@@ -28,5 +40,18 @@ describe('DesktopNotifications Component', () => {
     );
     expect(result.container).toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(/Table/i);
+  });
+
+  it('clicks on row', async () => {
+    // render component
+    const result = render(
+      <DesktopNotifications notifications={notificationsToFe.result} sort={{ orderBy: '', order: 'asc' }} />
+    );
+    const notificationsTableCell = result?.container.querySelector('table tr:first-child td:nth-child(2)');
+    fireEvent.click(notificationsTableCell!);
+    await waitFor(() => {
+      expect(mockNavigateFn).toBeCalledTimes(1);
+      expect(mockNavigateFn).toBeCalledWith(routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.result[0].iun));
+    });
   });
 });

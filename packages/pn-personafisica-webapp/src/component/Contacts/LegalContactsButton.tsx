@@ -3,7 +3,7 @@ import { Trans, useTranslation } from "react-i18next";
 import { Box, Typography } from "@mui/material";
 import { appStateActions, CodeModal } from "@pagopa-pn/pn-commons";
 
-import { LegalChannelType, SaveLegalAddressParams } from "../../models/contacts";
+import { LegalChannelType, SaveDigitalAddressParams } from "../../models/contacts";
 import { useAppDispatch } from "../../redux/hooks";
 import { createOrUpdateLegalAddress } from "../../redux/contact/actions";
 
@@ -14,22 +14,17 @@ type Props = {
   pec: string;
   senderId?: string;
   successMessage: string;
+  closeModalOnVerification?: boolean;
 };
 
-const DigitalContactsButton = forwardRef(({children, recipientId, digitalDomicileType, pec, senderId = 'default', successMessage}: Props, ref) => {
+const LegalContactsButton = forwardRef(({children, recipientId, digitalDomicileType, pec, senderId = 'default', successMessage, closeModalOnVerification = true}: Props, ref) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const [open, setOpen] = useState(false);
-
-  console.log(open, setOpen);
+  const [codeNotValid, setCodeNotValid] = useState(false);
   const dispatch = useAppDispatch();
 
-  const handleCodeConfirmation = (values: Array<string>) => {
-    // save contact
-    handleAddressCreation(values.join(''));
-  };
-
   const handleAddressCreation = (verificationCode?: string, noCallback: boolean = false) => {
-    const digitalAddressParams: SaveLegalAddressParams = {
+    const digitalAddressParams: SaveDigitalAddressParams = {
       recipientId,
       senderId,
       channelType: digitalDomicileType,
@@ -42,18 +37,24 @@ const DigitalContactsButton = forwardRef(({children, recipientId, digitalDomicil
         if (noCallback) {
           return;
         }
-        if (digitalDomicileType === LegalChannelType.PEC) {
-          if (res && verificationCode) {
-            // show success message
-            dispatch(appStateActions.addSuccess({ title: '', message: successMessage }));
+        if (res && verificationCode) {
+          // show success message
+          dispatch(appStateActions.addSuccess({ title: '', message: successMessage }));
+          if (closeModalOnVerification) {
             setOpen(false);
-          } else {
-            // open code verification dialog
-            setOpen(true);
           }
+        } else {
+          // open code verification dialog
+          setOpen(true);
         }
-      })
-      .catch(() => {});
+      }).catch(() => {
+        setCodeNotValid(true);
+      });
+  };
+
+  const handleClose = () => {
+    setCodeNotValid(false);
+    setOpen(false);
   };
 
   // export handleAddressCreation method
@@ -65,29 +66,31 @@ const DigitalContactsButton = forwardRef(({children, recipientId, digitalDomicil
     <Fragment>
       {children}
       <CodeModal
-        title={`${t('digital-contacts.pec-verify', { ns: 'recapiti' })} ${pec}`}
-        subtitle={<Trans i18nKey="digital-contacts.pec-verify-descr" ns="recapiti" />}
+        title={`${t('legal-contacts.pec-verify', { ns: 'recapiti' })} ${pec}`}
+        subtitle={<Trans i18nKey="legal-contacts.pec-verify-descr" ns="recapiti" />}
         open={open}
         initialValues={new Array(5).fill('')}
         handleClose={() => setOpen(false)}
-        codeSectionTitle={t('digital-contacts.insert-code', { ns: 'recapiti' })}
+        codeSectionTitle={t('legal-contacts.insert-code', { ns: 'recapiti' })}
         codeSectionAdditional={
           <Box>
             <Typography variant="body2" display="inline">
-              {t('digital-contacts.new-code', { ns: 'recapiti' })}&nbsp;
+              {t('legal-contacts.new-code', { ns: 'recapiti' })}&nbsp;
             </Typography>
-            <Typography variant="body2" display="inline" color="primary" onClick={() => handleAddressCreation(undefined, true)}>
-              {t('digital-contacts.new-code-link', { ns: 'recapiti' })}.
+            <Typography variant="body2" display="inline" color="primary" onClick={() => handleAddressCreation(undefined, true)} sx={{cursor: 'pointer'}}>
+              {t('legal-contacts.new-code-link', { ns: 'recapiti' })}.
             </Typography>
           </Box>
         }
         cancelLabel={t('button.annulla')}
         confirmLabel={t('button.conferma')}
-        cancelCallback={() => setOpen(false)}
-        confirmCallback={handleCodeConfirmation}
+        cancelCallback={handleClose}
+        confirmCallback={(values: Array<string>) => handleAddressCreation(values.join(''))}
+        hasError={codeNotValid}
+        errorMessage={t('legal-contacts.wrong-code', { ns: 'recapiti' })}
       />
     </Fragment>
   );
 });
 
-export default DigitalContactsButton;
+export default LegalContactsButton;

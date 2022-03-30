@@ -23,22 +23,22 @@ import { IllusEmailValidation } from '@pagopa/mui-italia';
 
 import { LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
-import DigitalContactsButton from './DigitalContactsButton';
+import LegalContactsButton from './LegalContactsButton';
 
 type Props = {
   recipientId: string;
 };
 
-const InsertDigitalContact = ({ recipientId }: Props) => {
+const InsertLegalContact = ({ recipientId }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const buttonRef = useRef();
 
   const descriptionBox = [
-    { id: 'save-money', label: t('digital-contacts.save-money', { ns: 'recapiti' }) },
-    { id: 'avoid-waste', label: t('digital-contacts.avoid-waste', { ns: 'recapiti' }) },
+    { id: 'save-money', label: t('legal-contacts.save-money', { ns: 'recapiti' }) },
+    { id: 'avoid-waste', label: t('legal-contacts.avoid-waste', { ns: 'recapiti' }) },
     {
       id: 'fast-notification',
-      label: t('digital-contacts.fast-notification', { ns: 'recapiti' }),
+      label: t('legal-contacts.fast-notification', { ns: 'recapiti' }),
     },
   ];
 
@@ -48,8 +48,8 @@ const InsertDigitalContact = ({ recipientId }: Props) => {
       is: LegalChannelType.PEC,
       then: yup
         .string()
-        .required(t('digital-contacts.valid-pec', { ns: 'recapiti' }))
-        .email(t('digital-contacts.valid-pec', { ns: 'recapiti' })),
+        .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
+        .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     }),
   });
 
@@ -78,17 +78,18 @@ const InsertDigitalContact = ({ recipientId }: Props) => {
     <Fragment>
       <form onSubmit={formik.handleSubmit}>
         <DigitalContactsCard
-          sectionTitle={t('digital-contacts.title', { ns: 'recapiti' })}
-          title={t('digital-contacts.subtitle', { ns: 'recapiti' })}
-          subtitle={t('digital-contacts.description', { ns: 'recapiti' })}
+          sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
+          title={t('legal-contacts.subtitle', { ns: 'recapiti' })}
+          subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
           avatar={<IllusEmailValidation />}
           actions={
-            <DigitalContactsButton
+            <LegalContactsButton
               recipientId={recipientId}
               digitalDomicileType={formik.values.digitalDomicileType}
               pec={formik.values.pec}
               ref={buttonRef}
-              successMessage={t('digital-contacts.pec-added', { ns: 'recapiti' })}
+              successMessage={t('legal-contacts.pec-added', { ns: 'recapiti' })}
+              closeModalOnVerification={false}
             >
               <Button
                 variant="contained"
@@ -98,7 +99,7 @@ const InsertDigitalContact = ({ recipientId }: Props) => {
               >
                 {t('button.associa')}
               </Button>
-            </DigitalContactsButton>
+            </LegalContactsButton>
           }
         >
           <List sx={{ margin: '20px 0' }}>
@@ -125,19 +126,20 @@ const InsertDigitalContact = ({ recipientId }: Props) => {
               onChange={handleChangeTouched}
             >
               <FormControlLabel
+                data-testid="digitalDomicileTypeRadio"
                 value={LegalChannelType.PEC}
-                control={<Radio aria-label={t('digital-contacts.link-pec', { ns: 'recapiti' })} />}
+                control={<Radio aria-label={t('legal-contacts.link-pec', { ns: 'recapiti' })} />}
                 label={
                   <Grid container direction="row" alignItems="center">
                     <Grid item xs={3}>
                       <Typography color="text.primary" fontWeight={400} fontSize={16}>
-                        {t('digital-contacts.link-pec', { ns: 'recapiti' })}
+                        {t('legal-contacts.link-pec', { ns: 'recapiti' })}
                       </Typography>
                     </Grid>
                     <Grid item xs={9}>
                       <TextField
                         id="pec"
-                        placeholder={t('digital-contacts.link-pec-placeholder', { ns: 'recapiti' })}
+                        placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
                         fullWidth
                         name="pec"
                         value={formik.values.pec}
@@ -153,10 +155,11 @@ const InsertDigitalContact = ({ recipientId }: Props) => {
                 sx={{ '& .MuiFormControlLabel-label': { width: '100%' } }}
               />
               <FormControlLabel
-                control={<Radio aria-label={t('digital-contacts.link-io', { ns: 'recapiti' })} />}
+                data-testid="digitalDomicileTypeRadio"
+                control={<Radio aria-label={t('legal-contacts.link-io', { ns: 'recapiti' })} />}
                 label={
                   <Typography color="text.disabled" fontWeight={400} fontSize={16}>
-                    {t('digital-contacts.link-io', { ns: 'recapiti' })}
+                    {t('legal-contacts.link-io', { ns: 'recapiti' })}
                   </Typography>
                 }
                 value={LegalChannelType.IOPEC}
@@ -167,7 +170,7 @@ const InsertDigitalContact = ({ recipientId }: Props) => {
           <Divider />
           <Box sx={{ marginTop: '20px' }}>
             <Typography color="text.primary" fontWeight={400} fontSize={16}>
-              {t('digital-contacts.io-disclaimer', { ns: 'recapiti' })}
+              {t('legal-contacts.io-disclaimer', { ns: 'recapiti' })}
             </Typography>
           </Box>
         </DigitalContactsCard>
@@ -176,4 +179,4 @@ const InsertDigitalContact = ({ recipientId }: Props) => {
   );
 };
 
-export default InsertDigitalContact;
+export default InsertLegalContact;
