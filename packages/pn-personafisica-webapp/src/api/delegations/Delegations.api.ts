@@ -10,6 +10,13 @@ function checkResponseStatus(response: AxiosResponse, id: string) {
   return { id: '-1' };
 }
 
+function getDelegationsResponse(response: AxiosResponse<Array<Delegation>>) {
+  if (response.data) {
+    return response.data;
+  }
+  return [] as Array<Delegation>;
+}
+
 export const DelegationsApi = {
   /**
    * Get all the delegates for the authenticated user
@@ -18,12 +25,7 @@ export const DelegationsApi = {
   getDelegates: (): Promise<Array<Delegation>> =>
     apiClient
       .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegator')
-      .then((response: AxiosResponse<Array<Delegation>>) => {
-        if (response.data) {
-          return response.data;
-        }
-        return [] as Array<Delegation>;
-      }),
+      .then((response: AxiosResponse<Array<Delegation>>) => getDelegationsResponse(response)),
 
   /**
    * Get all the delegators for the authenticated user
@@ -32,12 +34,7 @@ export const DelegationsApi = {
   getDelegators: (): Promise<Array<Delegation>> =>
     apiClient
       .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegate')
-      .then((response: AxiosResponse<Array<Delegation>>) => {
-        if (response.data) {
-          return response.data;
-        }
-        return [] as Array<Delegation>;
-      }),
+      .then((response: AxiosResponse<Array<Delegation>>) => getDelegationsResponse(response)),
   /**
    * Removes a delegation that the user created
    * @param {string} id

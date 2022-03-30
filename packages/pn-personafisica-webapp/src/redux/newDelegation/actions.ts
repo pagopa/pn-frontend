@@ -27,6 +27,7 @@ export const createDelegation = createAsyncThunk<string, NewDelegationFormProps>
       visibilityIds: [data.enteSelect],
       verificationCode: data.verificationCode,
       dateto: new Date(data.expirationDate).toISOString(),
+      status: 'Pending', // TODO: remove when managed from backend
     };
     try {
       return await DelegationsApi.createDelegation(payload);
