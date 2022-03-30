@@ -29,7 +29,7 @@ export const DelegationsApi = {
     apiClient
       .patch(`/delegations/${id}/accept`, data)
       .then((response) => checkResponseStatus(response, id)),
-  createDelegation: (data: CreateDelegationProps): Promise<CreateDelegationProps | 'error'> =>
+  createDelegation: (data: any): Promise<CreateDelegationProps | 'error'> =>
     apiClient.post('/mandate', data).then((response) => {
       if (response.data) {
         return response.data as CreateDelegationProps;
