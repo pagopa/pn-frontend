@@ -14,9 +14,10 @@ type Props = {
   pec: string;
   senderId?: string;
   successMessage: string;
+  closeModalOnVerification?: boolean;
 };
 
-const LegalContactsButton = forwardRef(({children, recipientId, digitalDomicileType, pec, senderId = 'default', successMessage}: Props, ref) => {
+const LegalContactsButton = forwardRef(({children, recipientId, digitalDomicileType, pec, senderId = 'default', successMessage, closeModalOnVerification = true}: Props, ref) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const [open, setOpen] = useState(false);
   const [codeNotValid, setCodeNotValid] = useState(false);
@@ -39,7 +40,9 @@ const LegalContactsButton = forwardRef(({children, recipientId, digitalDomicileT
         if (res && verificationCode) {
           // show success message
           dispatch(appStateActions.addSuccess({ title: '', message: successMessage }));
-          setOpen(false);
+          if (closeModalOnVerification) {
+            setOpen(false);
+          }
         } else {
           // open code verification dialog
           setOpen(true);
@@ -74,7 +77,7 @@ const LegalContactsButton = forwardRef(({children, recipientId, digitalDomicileT
             <Typography variant="body2" display="inline">
               {t('legal-contacts.new-code', { ns: 'recapiti' })}&nbsp;
             </Typography>
-            <Typography variant="body2" display="inline" color="primary" onClick={() => handleAddressCreation(undefined, true)}>
+            <Typography variant="body2" display="inline" color="primary" onClick={() => handleAddressCreation(undefined, true)} sx={{cursor: 'pointer'}}>
               {t('legal-contacts.new-code-link', { ns: 'recapiti' })}.
             </Typography>
           </Box>

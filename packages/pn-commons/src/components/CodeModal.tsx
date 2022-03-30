@@ -147,7 +147,7 @@ const CodeModal = ({
         </Box>
         <Box sx={{ marginTop: '10px' }}>{codeSectionAdditional}</Box>
         <Divider sx={{ margin: '20px 0' }} />
-        {(hasError && errorMessage) && <Alert severity="error">{errorMessage}</Alert>}
+        {(hasError && errorMessage) && <Alert data-testid="errorAlert" severity="error">{errorMessage}</Alert>}
       </DialogContent>
       <DialogActions>
         {cancelLabel && cancelCallback && (

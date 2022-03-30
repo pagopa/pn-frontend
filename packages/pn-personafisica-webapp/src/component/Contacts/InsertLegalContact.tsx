@@ -89,6 +89,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
               pec={formik.values.pec}
               ref={buttonRef}
               successMessage={t('legal-contacts.pec-added', { ns: 'recapiti' })}
+              closeModalOnVerification={false}
             >
               <Button
                 variant="contained"
