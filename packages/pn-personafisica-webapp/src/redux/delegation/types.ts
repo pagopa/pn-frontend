@@ -20,7 +20,6 @@ export interface Delegation {
   verificationCode: string;
   datefrom: string;
   dateto: string;
-  email: string;
 }
 
 export interface OrganizationId {

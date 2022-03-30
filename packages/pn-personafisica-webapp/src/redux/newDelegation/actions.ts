@@ -1,39 +1,27 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { Person } from '../delegation/types';
 
 export interface CreateDelegationProps {
-  selectPersonaFisicaOrPersonaGiuridica: string;
-  codiceFiscale: string;
-  email: string;
-  nome: string;
-  cognome: string;
-  selectTuttiEntiOrSelezionati: string;
-  expirationDate: number;
-  enteSelect: string;
+  delegate: Person;
+  visibilityIds: Array<{
+    name: string;
+    uniqueIdentifier: string;
+  }>;
   verificationCode: string;
+  dateto: string;
 }
 
-export const createDelegation = createAsyncThunk<
-  CreateDelegationProps | string,
-  CreateDelegationProps
->('delegation', async (data) => {
-  try {
-    return await DelegationsApi.createDelegation(data);
-  } catch (e) {
-    // TODO: add return rejectWithValue(e);
-    return {
-      selectPersonaFisicaOrPersonaGiuridica: 'pf',
-      codiceFiscale: 'asdfghjkbvxgs',
-      email: 'string@string.it',
-      nome: 'Luigi',
-      cognome: 'Rossi',
-      selectTuttiEntiOrSelezionati: 'string',
-      expirationDate: 245678909876,
-      enteSelect: 'jasincjs',
-      verificationCode: '12345',
-    };
+export const createDelegation = createAsyncThunk<string, CreateDelegationProps>(
+  'delegation',
+  async (data, { rejectWithValue }) => {
+    try {
+      return await DelegationsApi.createDelegation(data);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
   }
-});
+);
 
 export const resetNewDelegation = createAction<void>('resetNewDelegation');

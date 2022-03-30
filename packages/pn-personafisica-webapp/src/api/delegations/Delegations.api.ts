@@ -11,31 +11,72 @@ function checkResponseStatus(response: AxiosResponse, id: string) {
 }
 
 export const DelegationsApi = {
-  /*
-   * Get all the delegation for the authenticated user
-   * @returns Promise array of delegations
+  /**
+   * Get all the delegates for the authenticated user
+   * @returns {Promise<Array<Delegation>>}
    */
-  getDelegates: (): AxiosPromise<Array<Delegation>> =>
-    apiClient.get('/mandate/api/v1/mandates-by-delegate'),
-  getDelegators: (): AxiosPromise<Array<Delegation>> =>
-    apiClient.get('/mandate/api/v1/mandates-by-delegator'),
+  getDelegates: (): Promise<Array<Delegation>> =>
+    apiClient
+      .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegate')
+      .then((response: AxiosResponse<Array<Delegation>>) => {
+        if (response.data) {
+          return response.data;
+        }
+        return [] as Array<Delegation>;
+      }),
+
+  /**
+   * Get all the delegators for the authenticated user
+   * @return {Promise<Array<Delegation>>}
+   */
+  getDelegators: (): Promise<Array<Delegation>> =>
+    apiClient
+      .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegator')
+      .then((response: AxiosResponse<Array<Delegation>>) => {
+        if (response.data) {
+          return response.data;
+        }
+        return [] as Array<Delegation>;
+      }),
+  /**
+   * Removes a delegation that the user created
+   * @param {string} id
+   * @returns{Promise<{id: string} | {id: string}>}
+   */
   revokeDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
-      .patch(`/delegations/${id}/revoke`)
+      .patch(`/mandate/api/v1/mandate/${id}/revoke`)
       .then((response) => checkResponseStatus(response, id)),
+  /**
+   * Removes a delegation created for the user
+   * @param {string} id
+   * @returns {Promise<{id: string} | {id: string}>}
+   */
   rejectDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
-      .patch(`/delegations/${id}/reject`)
+      .patch(`/mandate/api/v1/mandate/${id}/reject`)
       .then((response) => checkResponseStatus(response, id)),
-  acceptDelegation: (id: string, data: { verificationCode: string }): Promise<{ id: string }> =>
+  /**
+   * Accepts a delegation created for the user
+   * @param {string} id
+   * @returns Promise
+   */
+  acceptDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
-      .patch(`/delegations/${id}/accept`, data)
+      .patch(`/mandate/api/v1/mandate/${id}/accept`)
       .then((response) => checkResponseStatus(response, id)),
-  createDelegation: (data: any): Promise<CreateDelegationProps | 'error'> =>
-    apiClient.post('/mandate', data).then((response) => {
-      if (response.data) {
-        return response.data as CreateDelegationProps;
-      }
-      return 'error';
-    }),
+  /**
+   * Creates a new delegation
+   * @param {object} data
+   * @returns {Promise<"success" | "error" | "success">}
+   */
+  createDelegation: (data: CreateDelegationProps): Promise<'success' | 'error'> =>
+    apiClient
+      .post<CreateDelegationProps>('/mandate/api/v1/mandate', data)
+      .then((response: AxiosResponse<CreateDelegationProps>) => {
+        if (response.data) {
+          return 'success';
+        }
+        return 'error';
+      }),
 };
