@@ -21,7 +21,7 @@ const DigitalContactsCard = ({
 }: Props) => (
   <Card>
     <CardHeader avatar={avatar} />
-    <CardContent>
+    <CardContent data-testid="DigitalContactsCardBody">
       <Typography
         color="text.primary"
         fontWeight={700}
@@ -39,7 +39,7 @@ const DigitalContactsCard = ({
       />
       {children}
     </CardContent>
-    <CardActions>{actions}</CardActions>
+    <CardActions data-testid="DigitalContactsCardActions">{actions}</CardActions>
   </Card>
 );
 

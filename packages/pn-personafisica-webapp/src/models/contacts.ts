@@ -23,8 +23,7 @@ export interface DigitalAddresses {
   courtesy: Array<DigitalAddress>;
 }
 
-
-export interface SaveLegalAddressParams {
+export interface SaveDigitalAddressParams {
   recipientId: string;
   senderId: string;
   channelType: LegalChannelType;
