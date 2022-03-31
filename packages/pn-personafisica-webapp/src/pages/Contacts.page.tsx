@@ -12,7 +12,9 @@ const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
-  const digitalAddresses = useAppSelector((state: RootState) => state.contactsState.digitalAddresses);
+  const digitalAddresses = useAppSelector(
+    (state: RootState) => state.contactsState.digitalAddresses
+  );
 
   useEffect(() => {
     void dispatch(getDigitalAddresses(recipientId));
@@ -20,13 +22,20 @@ const Contacts = () => {
 
   return (
     <Box style={{ padding: '20px' }}>
-      <TitleBox variantTitle="h4" title={t('title')} subTitle={t('subtitle')} variantSubTitle={'body1'}/>
-      <Grid container direction="row" sx={{marginTop: '20px'}} spacing={2}>
+      <TitleBox
+        variantTitle="h4"
+        title={t('title')}
+        subTitle={t('subtitle')}
+        variantSubTitle={'body1'}
+      />
+      <Grid container direction="row" sx={{ marginTop: '20px' }} spacing={2}>
         <Grid item lg={6} xs={12}>
-          {digitalAddresses.legal.length === 0 && <InsertLegalContact recipientId={recipientId}/>}
+          {digitalAddresses.legal.length === 0 && <InsertLegalContact recipientId={recipientId} />}
           {digitalAddresses.legal.length > 0 && <div>Lista recapiti digitali</div>}
         </Grid>
-        <Grid item lg={6} xs={12}>Recapito di cortesia</Grid>
+        <Grid item lg={6} xs={12}>
+          Recapito di cortesia
+        </Grid>
       </Grid>
     </Box>
   );

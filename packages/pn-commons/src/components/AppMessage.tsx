@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { appStateActions, appStateSelectors } from '../redux/slices/appStateSlice';
 import { IAppMessage } from '../types/AppMessage';
-import Toast from './Toast/Toast';
 import { MessageType } from '../types/MessageType';
+import Toast from './Toast/Toast';
 
 const AppMessage = () => {
   const dispatch = useDispatch();
@@ -21,25 +21,25 @@ const AppMessage = () => {
 
   return (
     <Fragment>
-      {errors.map((e: IAppMessage) => (
+      {errors.map((errorMessage: IAppMessage) => (
         <Toast
-          key={e.id}
-          title={e.title}
-          message={e.message}
+          key={errorMessage.id}
+          title={errorMessage.title}
+          message={errorMessage.message}
           open
           type={MessageType.ERROR}
-          onClose={() => onCloseErrorToast(e.id)}
+          onClose={() => onCloseErrorToast(errorMessage.id)}
           closingDelay={2500}
         />
       ))}
-      {success.map((e: IAppMessage) => (
+      {success.map((successMessage: IAppMessage) => (
         <Toast
-          key={e.id}
-          title={e.title}
-          message={e.message}
+          key={successMessage.id}
+          title={successMessage.title}
+          message={successMessage.message}
           open
           type={MessageType.SUCCESS}
-          onClose={() => onCloseSuccessToast(e.id)}
+          onClose={() => onCloseSuccessToast(successMessage.id)}
           closingDelay={2500}
         />
       ))}

@@ -30,6 +30,10 @@ type Props = {
   errorMessage?: string;
 };
 
+/**
+ * This modal allows the user to input a verification code.
+ * @param Props
+ */
 const CodeModal = ({
   title,
   subtitle,
@@ -44,7 +48,7 @@ const CodeModal = ({
   confirmCallback,
   isReadOnly = false,
   hasError = false,
-  errorMessage
+  errorMessage,
 }: Props) => {
   const [inputsValues, setInputsValues] = useState(initialValues);
   const [inputsRef, setInputsRef] = useState(new Array(initialValues.length).fill(undefined));
@@ -95,12 +99,7 @@ const CodeModal = ({
   }, [open]);
 
   const codeIsValid = inputsValues.every((v) => v);
-  let inputColor = '';
-  if (hasError) {
-    inputColor = 'error.main';
-  } else if (isReadOnly) {
-    inputColor = 'primary.main';
-  }
+  const inputColor = hasError ? 'error.main' : 'primary.main';
 
   return (
     <Dialog
@@ -124,11 +123,16 @@ const CodeModal = ({
               id="outlined-basic"
               variant="outlined"
               placeholder="-"
-              sx={{ width: '33px', height: '56px', marginRight: '10px', input: { color: inputColor }}}
+              sx={{
+                width: '33px',
+                height: '56px',
+                marginRight: '10px',
+                input: { color: inputColor },
+              }}
               inputProps={{
                 maxLength: 1,
-                sx: { padding: '16.5px 10px', textAlign: 'center'},
-                readOnly: isReadOnly
+                sx: { padding: '16.5px 10px', textAlign: 'center' },
+                readOnly: isReadOnly,
               }}
               onKeyDown={(event) => keyDownHandler(event, index)}
               onChange={(event) => changeHandler(event, index)}
@@ -147,7 +151,11 @@ const CodeModal = ({
         </Box>
         <Box sx={{ marginTop: '10px' }}>{codeSectionAdditional}</Box>
         <Divider sx={{ margin: '20px 0' }} />
-        {(hasError && errorMessage) && <Alert data-testid="errorAlert" severity="error">{errorMessage}</Alert>}
+        {hasError && errorMessage && (
+          <Alert data-testid="errorAlert" severity="error">
+            {errorMessage}
+          </Alert>
+        )}
       </DialogContent>
       <DialogActions>
         {cancelLabel && cancelCallback && (
