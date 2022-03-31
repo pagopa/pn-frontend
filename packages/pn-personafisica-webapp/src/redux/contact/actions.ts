@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
-import { DigitalAddress, DigitalAddresses, SaveDigitalAddressParams } from '../../models/contacts';
+import { DigitalAddress, DigitalAddresses, SaveDigitalAddressParams, LegalChannelType } from '../../models/contacts';
 
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   'getDigitalAddresses',
@@ -21,7 +21,7 @@ export const createOrUpdateLegalAddress = createAsyncThunk<DigitalAddress | void
       return await ContactsApi.createOrUpdateLegalAddress(
         params.recipientId,
         params.senderId,
-        params.channelType,
+        params.channelType as LegalChannelType,
         { value: params.value, verificationCode: params.code }
       );
     } catch (e) {

@@ -2,16 +2,11 @@ import _ from 'lodash';
 import { DigitalAddress, DigitalAddresses, LegalChannelType } from '../../models/contacts';
 import { apiClient } from '../axios';
 
-const mockedContacts = [
-  {
-    value: 'mario.rossi@toverify.it',
-    code: '12345',
-    isVerified: false,
-  },
+const mockedContacts: Array<{ value: string; code: string; toVerify: boolean }> = [
   {
     value: 'mario.rossi@verified.it',
     code: '12345',
-    isVerified: true,
+    toVerify: false,
   },
 ];
 
@@ -40,17 +35,16 @@ export const ContactsApi = {
     new Promise((resolve, reject) => {
       /* eslint-disable functional/immutable-data */
       const mockedContact = mockedContacts.find((m) => m.value === body.value);
-      if (!mockedContact) {
-        return reject('No mocked contact found');
-      }
       // simulate 200
-      if (!mockedContact?.isVerified && !body.verificationCode) {
+      if (!mockedContact) {
+        mockedContacts.push({ value: body.value, code: '12345', toVerify: true });
         return resolve();
       }
       // check code - simulate 406
-      if (mockedContact.code !== body.verificationCode) {
-        return reject({response: {status: 406}, blockNotification: true});
+      if (mockedContact.toVerify && body.verificationCode !== mockedContact.code) {
+        return reject({ response: { status: 406 }, blockNotification: true });
       }
+      mockedContact.toVerify = false;
       return resolve({
         addressType: 'legal',
         recipientId,

@@ -32,7 +32,18 @@ type Props = {
 
 /**
  * This modal allows the user to input a verification code.
- * @param Props
+ * @param title title to show
+ * @param subtitle subtitle to show
+ * @param open flag to hide/show modal
+ * @param initialValues initial code
+ * @param handleClose function that is called when modal is closed
+ * @param codeSectionTitle title of the section where is the code
+ * @param codeSectionAdditional additional elments under the code
+ * @param confirmLabel label of the confirm button
+ * @param cancelLabel label of the cancel button
+ * @param isReadOnly set if code is in readonly mode
+ * @param hasError set if there is an error
+ * @param errorMessage message to show when there is an error
  */
 const CodeModal = ({
   title,
@@ -104,7 +115,7 @@ const CodeModal = ({
   return (
     <Dialog
       open={open}
-      onClose={() => handleClose}
+      onClose={handleClose}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
       data-testid="codeDialog"
@@ -144,7 +155,6 @@ const CodeModal = ({
               }}
               value={inputsValues[index]}
               color={hasError ? 'error' : 'primary'}
-              focused={isReadOnly}
               error={hasError}
             />
           ))}
