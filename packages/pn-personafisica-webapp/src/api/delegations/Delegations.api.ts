@@ -72,7 +72,7 @@ export const DelegationsApi = {
         return {
           id: '-1',
           type: 'generic',
-          status: 600,
+          status: 400,
           title: 'Errore generico',
           detail: '',
         } as AcceptDelegationResponse;

@@ -4,7 +4,7 @@ import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
 import { DelegationsApi } from '../Delegations.api';
 import { Delegation } from '../../../redux/delegation/types';
 
-const mockDelegation = {
+const mockCreateDelegation = {
   delegate: {
     firstName: 'Davide',
     lastName: 'Legato',
@@ -165,8 +165,8 @@ export async function getDelegators(response: Array<Delegation>) {
 
 async function createDelegation() {
   const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onPost(`/mandate/api/v1/mandate`).reply(200, mockDelegation);
-  const res = await DelegationsApi.createDelegation(mockDelegation);
+  axiosMock.onPost(`/mandate/api/v1/mandate`).reply(200, mockCreateDelegation);
+  const res = await DelegationsApi.createDelegation(mockCreateDelegation);
   axiosMock.reset();
   axiosMock.restore();
   return res;
@@ -224,7 +224,7 @@ describe('Delegations api tests', () => {
 
   it('accept a delegation', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch('/mandate/api/v1/mandate/9/accept').reply(200);
+    mock.onPatch('/mandate/api/v1/mandate/9/accept').reply(200, {});
     const res = await DelegationsApi.acceptDelegation('9', { verificationCode: '12345' });
     expect(res).toStrictEqual({ id: '9' });
     mock.reset();
@@ -233,9 +233,8 @@ describe('Delegations api tests', () => {
 
   it('creates a new delegation', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch('/mandate/api/v1/mandate').reply(204);
     const res = await createDelegation();
-    expect(res).toStrictEqual('success');
+    expect(res).toStrictEqual(mockCreateDelegation);
     mock.reset();
     mock.restore();
   });
