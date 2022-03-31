@@ -22,9 +22,7 @@ const isNewNotification = (value: string) => {
 export function getNewNotificationBadge(value: string): ReactNode {
   return isNewNotification(value) ? (
     <Fragment>
-      <Badge color="primary" variant="dot" sx={{ marginRight: '10px' }} /> {value}
+      <Badge color="primary" variant="dot" sx={{ marginRight: '0px' }} />
     </Fragment>
-  ) : (
-    value
-  );
+  ) : null;
 }

@@ -31,12 +31,24 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
 
   const columns: Array<Column> = [
     {
+      id: 'notificationStatus',
+      label: "",
+      width: '0%',
+      sortable: true,
+      getCellLabel(value: string) {
+        return getNewNotificationBadge(value);
+      },
+      onClick(row: Item, column: Column) {
+        handleRowClick(row, column);
+      },
+    },
+    {
       id: 'sentAt',
       label: t('table.data'),
       width: '11%',
       sortable: true,
       getCellLabel(value: string) {
-        return getNewNotificationBadge(value);
+        return value;
       },
       onClick(row: Item, column: Column) {
         handleRowClick(row, column);
