@@ -12,7 +12,7 @@ export interface Delegation {
   mandateId: string;
   delegator: Person;
   delegate: Person;
-  status: 'Active' | 'Pending';
+  status: 'active' | 'pending';
   visibilityIds: Array<{
     name: string;
     uniqueIdentifier: string;

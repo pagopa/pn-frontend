@@ -1,10 +1,11 @@
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { Delegation } from './types';
 
 /**
  *
  */
-export const getDelegates = createAsyncThunk<any>(
+export const getDelegates = createAsyncThunk<Array<Delegation>>(
   'getDelegates',
   async (_, { rejectWithValue }) => {
     try {
@@ -13,67 +14,9 @@ export const getDelegates = createAsyncThunk<any>(
       return rejectWithValue(e);
     }
   }
-  // async () => [
-  //   {
-  //     mandateId: '1',
-  //     delegator: {
-  //       firstName: 'Mario',
-  //       lastName: 'Rossi',
-  //       companyName: 'eni',
-  //       fiscalCode: 'MRIRSS68P24H501C',
-  //       person: true,
-  //     },
-  //     delegate: {
-  //       firstName: 'Marco',
-  //       lastName: 'Verdi',
-  //       companyName: 'eni',
-  //       fiscalCode: 'MRCVRD83C12H501C',
-  //       person: true,
-  //     },
-  //     status: 'Pending',
-  //     visibilityIds: [
-  //       {
-  //         name: 'Agenzia Entrate',
-  //         uniqueIdentifier: '123456789',
-  //       },
-  //     ],
-  //     verificationCode: '123456',
-  //     datefrom: '15-12-2021',
-  //     dateto: '16-04-2022',
-  //     email: 'email@falsa.it',
-  //   },
-  //   {
-  //     mandateId: '123',
-  //     delegator: {
-  //       firstName: 'Mario',
-  //       lastName: 'Rossi',
-  //       companyName: 'eni',
-  //       fiscalCode: 'MRIRSS68P24H501C',
-  //       person: true,
-  //     },
-  //     delegate: {
-  //       firstName: 'Davide',
-  //       lastName: 'Legato',
-  //       companyName: 'eni',
-  //       fiscalCode: 'DVDLGT83C12H501C',
-  //       person: true,
-  //     },
-  //     status: 'Active',
-  //     visibilityIds: [
-  //       {
-  //         name: 'Agenzia Entrate',
-  //         uniqueIdentifier: '123456789',
-  //       },
-  //     ],
-  //     verificationCode: '123456',
-  //     datefrom: '15-12-2021',
-  //     dateto: '16-04-2022',
-  //     email: 'email@falsa.it',
-  //   },
-  // ]
 );
 
-export const getDelegators = createAsyncThunk<any>(
+export const getDelegators = createAsyncThunk<Array<Delegation>>(
   'getDelegators',
   async (_, { rejectWithValue }) => {
     try {
@@ -82,101 +25,40 @@ export const getDelegators = createAsyncThunk<any>(
       return rejectWithValue(e);
     }
   }
-  // async () => [
-  //   {
-  //     mandateId: '3',
-  //     delegator: {
-  //       firstName: 'Marco',
-  //       lastName: 'Verdi',
-  //       companyName: 'eni',
-  //       fiscalCode: 'MRCVRD83C12H501C',
-  //       person: true,
-  //     },
-  //     delegate: {
-  //       firstName: 'Mario',
-  //       lastName: 'Rossi',
-  //       companyName: 'eni',
-  //       fiscalCode: 'MRIRSS68P24H501C',
-  //       person: true,
-  //     },
-  //     status: 'Pending',
-  //     visibilityIds: [
-  //       {
-  //         name: 'Agenzia Entrate',
-  //         uniqueIdentifier: '123456789',
-  //       },
-  //     ],
-  //     verificationCode: '123456',
-  //     datefrom: '15-12-2021',
-  //     dateto: '16-04-2022',
-  //     email: 'email@falsa.it',
-  //   },
-  //   {
-  //     mandateId: '4',
-  //     delegator: {
-  //       firstName: 'Davide',
-  //       lastName: 'Legato',
-  //       companyName: 'eni',
-  //       fiscalCode: 'DVDLGT83C12H501C',
-  //       person: true,
-  //     },
-  //     delegate: {
-  //       firstName: 'Mario',
-  //       lastName: 'Rossi',
-  //       companyName: 'eni',
-  //       fiscalCode: 'MRIRSS68P24H501C',
-  //       person: true,
-  //     },
-  //     status: 'Active',
-  //     visibilityIds: [
-  //       {
-  //         name: 'Agenzia Entrate',
-  //         uniqueIdentifier: '123456789',
-  //       },
-  //     ],
-  //     verificationCode: '123456',
-  //     datefrom: '15-12-2021',
-  //     dateto: '16-04-2022',
-  //     email: 'email@falsa.it',
-  //   },
-  // ]
 );
 
 export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
   'revokeDelegation',
-  async (id: string) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       return await DelegationsApi.revokeDelegation(id);
     } catch (e) {
-      // TODO: return rejectWithValue(e);
-      return { id };
+      return rejectWithValue(e);
     }
   }
 );
 
 export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
   'rejectDelegation',
-  async (id: string) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       return await DelegationsApi.rejectDelegation(id);
     } catch (e) {
-      // TODO: return rejectWithValue(e);
-      return { id };
+      return rejectWithValue(e);
     }
   }
 );
 
 export const acceptDelegation = createAsyncThunk<{ id: string }, { id: string; code: string }>(
   'acceptDelegation',
-  async ({ id, code }) => {
+  async ({ id, code }, { rejectWithValue }) => {
     const data = {
       verificationCode: code,
     };
     try {
       return await DelegationsApi.acceptDelegation(id, data);
     } catch (e) {
-      return { id };
-      // TODO: return { rejectWithValue(e) };
+      return rejectWithValue(e);
     }
   }
 );

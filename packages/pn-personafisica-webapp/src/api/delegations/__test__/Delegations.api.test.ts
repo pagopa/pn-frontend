@@ -42,7 +42,7 @@ const arrayOfDelegates = [
       person: true,
       email: 'email@falsa.it',
     },
-    status: 'Pending' as const,
+    status: 'pending' as const,
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
@@ -71,7 +71,7 @@ const arrayOfDelegates = [
       person: true,
       email: 'email@falsa.it',
     },
-    status: 'Active' as const,
+    status: 'active' as const,
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
@@ -103,7 +103,7 @@ const arrayOfDelegators = [
       person: true,
       email: 'email@falsa.it',
     },
-    status: 'Pending' as const,
+    status: 'pending' as const,
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
@@ -132,7 +132,7 @@ const arrayOfDelegators = [
       person: true,
       email: 'email@falsa.it',
     },
-    status: 'Active' as const,
+    status: 'active' as const,
     visibilityIds: [
       {
         name: 'Agenzia Entrate',
@@ -147,7 +147,7 @@ const arrayOfDelegators = [
 
 export async function getDelegates(response: Array<Delegation>) {
   const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onGet(`/mandate/api/v1/mandates-by-delegate`).reply(200, response);
+  axiosMock.onGet(`/mandate/api/v1/mandates-by-delegator`).reply(200, response);
   const res = await DelegationsApi.getDelegates();
   axiosMock.reset();
   axiosMock.restore();
@@ -156,7 +156,7 @@ export async function getDelegates(response: Array<Delegation>) {
 
 export async function getDelegators(response: Array<Delegation>) {
   const axiosMock = new MockAdapter(apiClient);
-  axiosMock.onGet(`/mandate/api/v1/mandates-by-delegator`).reply(200, response);
+  axiosMock.onGet(`/mandate/api/v1/mandates-by-delegate`).reply(200, response);
   const res = await DelegationsApi.getDelegators();
   axiosMock.reset();
   axiosMock.restore();
@@ -197,9 +197,36 @@ describe('Delegations api tests', () => {
 
   it('revokes a delegation', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch('/mandate/api/v1/mandate/7/revoke').reply(204);
+    mock.onPatch('/mandate/api/v1/mandate/7/revoke').reply(200);
     const res = await DelegationsApi.revokeDelegation('7');
     expect(res).toStrictEqual({ id: '7' });
+    mock.reset();
+    mock.restore();
+  });
+
+  it("doesn't revoke a delegation and throws an error", async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPatch('/mandate/api/v1/mandate/10/revoke').reply(200);
+    const res = await DelegationsApi.revokeDelegation('10');
+    expect(res).toStrictEqual({ id: '10' });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('rejects a delegation', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPatch('/mandate/api/v1/mandate/8/reject').reply(200);
+    const res = await DelegationsApi.rejectDelegation('8');
+    expect(res).toStrictEqual({ id: '8' });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('accept a delegation', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPatch('/mandate/api/v1/mandate/9/accept').reply(200);
+    const res = await DelegationsApi.acceptDelegation('9');
+    expect(res).toStrictEqual({ id: '9' });
     mock.reset();
     mock.restore();
   });

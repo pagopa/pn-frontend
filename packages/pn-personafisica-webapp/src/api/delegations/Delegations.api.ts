@@ -3,8 +3,9 @@ import { apiClient } from '../axios';
 import { Delegation } from '../../redux/delegation/types';
 import { CreateDelegationProps } from '../../redux/newDelegation/actions';
 
+// TODO: change to requested behaviour when implementing API
 function checkResponseStatus(response: AxiosResponse, id: string) {
-  if (response.status === 204) {
+  if (response.status === 200) {
     return { id };
   }
   return { id: '-1' };
@@ -37,8 +38,8 @@ export const DelegationsApi = {
       .then((response: AxiosResponse<Array<Delegation>>) => getDelegationsResponse(response)),
   /**
    * Removes a delegation that the user created
-   * @param {string} id
-   * @returns{Promise<{id: string} | {id: string}>}
+   * @param id
+   * @return {Promise<{id: string} | {id: string}>}
    */
   revokeDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
@@ -51,7 +52,7 @@ export const DelegationsApi = {
    */
   rejectDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
-      .patch(`/mandate/api/v1/mandate/${id}/reject`)
+      .patch<{ id: string }>(`/mandate/api/v1/mandate/${id}/reject`)
       .then((response) => checkResponseStatus(response, id)),
   /**
    * Accepts a delegation created for the user
@@ -60,8 +61,8 @@ export const DelegationsApi = {
    */
   acceptDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
-      .patch(`/mandate/api/v1/mandate/${id}/accept`)
-      .then((response) => checkResponseStatus(response, id)),
+      .patch<{ id: string }>(`/mandate/api/v1/mandate/${id}/accept`)
+      .then((response: AxiosResponse) => checkResponseStatus(response, id)),
   /**
    * Creates a new delegation
    * @param {object} data
