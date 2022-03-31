@@ -20,6 +20,7 @@ import NotificationDetailTable from './components/NotificationDetail/Notificatio
 import NotificationDetailDocuments from './components/NotificationDetail/NotificationDetailDocuments';
 import NotificationDetailTimeline from './components/NotificationDetail/NotificationDetailTimeline';
 import Toast from './components/Toast/Toast';
+import CodeModal from './components/CodeModal';
 
 export { LoadingOverlay };
 export { Header };
@@ -42,6 +43,7 @@ export { NotificationDetailTable };
 export { NotificationDetailDocuments };
 export { NotificationDetailTimeline };
 export { Toast };
+export { CodeModal };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -53,7 +55,7 @@ export { AccessDenied };
 export { CourtesyPage };
 
 // types
-import { AppError } from './types/AppError';
+import { IAppMessage } from './types/AppMessage';
 import { PaginationData } from './components/Pagination/types';
 import { NotificationStatus } from './types/NotificationStatus';
 import { SideMenuItem } from './types/SideMenuItem';
@@ -85,7 +87,7 @@ import {
 import { CardElement, CardSort, CardAction } from './types/ItemCard';
 import { MessageType } from './types/MessageType';
 
-export type { AppError };
+export type { IAppMessage };
 export type { PaginationData };
 export type { SideMenuItem };
 export {
@@ -117,7 +119,7 @@ export type { NotificationDetailTableRow };
 export { MessageType };
 
 // functions
-import { createAppError } from './services/error.service';
+import { createAppError } from './services/message.service';
 import { formatDate } from './services/date.service';
 import { calculatePages } from './utils/pagination.utility';
 import {
@@ -148,3 +150,8 @@ export { useIsMobile };
 import { appStateReducer } from './redux/slices/appStateSlice';
 
 export { appStateReducer };
+
+// actions
+import { appStateActions } from './redux/slices/appStateSlice';
+
+export { appStateActions };

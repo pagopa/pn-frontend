@@ -13,8 +13,8 @@ import {
 import { getReceivedNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import DesktopNotifications from '../component/notification/DesktopNotifications';
-import MobileNotifications from '../component/notification/MobileNotifications';
+import DesktopNotifications from '../component/Notifications/DesktopNotifications';
+import MobileNotifications from '../component/Notifications/MobileNotifications';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();

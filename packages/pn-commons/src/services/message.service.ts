@@ -1,13 +1,13 @@
-import { AppError } from '../types/AppError';
+import { IAppMessage } from '../types/AppMessage';
 import _ from 'lodash';
 
 /**
- * This method get an http error code and return a formatted AppError message.
+ * This method get an http error code and return a formatted IAppMessage message.
  * @param  {{response:{status:number;};}} error
- * @returns AppError
+ * @returns IAppMessage
  */
-export const createAppError = (error: { response: { status: number } }): AppError => {
-  const e: AppError = {
+export const createAppError = (error: { response: { status: number } }): IAppMessage => {
+  const e: IAppMessage = {
     id: _.uniqueId(),
     title: '',
     message: '',
@@ -26,3 +26,15 @@ export const createAppError = (error: { response: { status: number } }): AppErro
   }
   return e;
 };
+
+export const createAppMessage = (title: string, message: string): IAppMessage => {
+  const e: IAppMessage = {
+    id: _.uniqueId(),
+    title,
+    message,
+    blocking: false,
+    toNotify: true,
+  };
+  return e;
+};
+
