@@ -2,9 +2,6 @@ import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { Delegation } from './types';
 
-/**
- *
- */
 export const getDelegates = createAsyncThunk<Array<Delegation>>(
   'getDelegates',
   async (_, { rejectWithValue }) => {

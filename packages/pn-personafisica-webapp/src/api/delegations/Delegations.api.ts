@@ -1,7 +1,7 @@
 import { AxiosPromise, AxiosResponse } from 'axios';
 import { apiClient } from '../axios';
 import { Delegation } from '../../redux/delegation/types';
-import { CreateDelegationProps } from '../../redux/newDelegation/actions';
+import { CreateDelegationProps, CreateDelegationResponse } from '../../redux/newDelegation/actions';
 
 // TODO: change to requested behaviour when implementing API
 function checkResponseStatus(response: AxiosResponse, id: string) {
@@ -48,7 +48,7 @@ export const DelegationsApi = {
   /**
    * Removes a delegation created for the user
    * @param {string} id
-   * @returns {Promise<{id: string} | {id: string}>}
+   * @returns {Promise<{id: string}>}
    */
   rejectDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
@@ -57,24 +57,30 @@ export const DelegationsApi = {
   /**
    * Accepts a delegation created for the user
    * @param {string} id
-   * @returns Promise
+   * @returns {Promise<{id: string} | {id: string}>}
+   * @param data
    */
-  acceptDelegation: (id: string): Promise<{ id: string }> =>
+  acceptDelegation: (id: string, data: { verificationCode: string }): Promise<{ id: string }> =>
     apiClient
-      .patch<{ id: string }>(`/mandate/api/v1/mandate/${id}/accept`)
-      .then((response: AxiosResponse) => checkResponseStatus(response, id)),
+      .patch(`/mandate/api/v1/mandate/${id}/accept`, data)
+      .then((response) => checkResponseStatus(response, id)),
   /**
    * Creates a new delegation
    * @param {object} data
    * @returns {Promise<"success" | "error" | "success">}
    */
-  createDelegation: (data: CreateDelegationProps): Promise<'success' | 'error'> =>
+  createDelegation: (data: CreateDelegationProps): Promise<CreateDelegationResponse> =>
     apiClient
-      .post<CreateDelegationProps>('/mandate/api/v1/mandate', data)
-      .then((response: AxiosResponse<CreateDelegationProps>) => {
+      .post<CreateDelegationResponse>('/mandate/api/v1/mandate', data)
+      .then((response: AxiosResponse<CreateDelegationResponse>) => {
         if (response.data) {
-          return 'success';
+          return response.data as CreateDelegationResponse;
         }
-        return 'error';
+        return {
+          type: '',
+          status: 400,
+          title: 'Errore generico',
+          detail: '',
+        };
       }),
 };

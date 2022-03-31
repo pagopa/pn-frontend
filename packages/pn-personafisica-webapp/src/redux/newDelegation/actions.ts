@@ -13,7 +13,14 @@ export interface CreateDelegationProps {
   dateto: string;
 }
 
-export const createDelegation = createAsyncThunk<string, NewDelegationFormProps>(
+export interface CreateDelegationResponse {
+  type: string;
+  status: number;
+  title: string;
+  detail: string;
+}
+
+export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
   'delegation',
   async (data, { rejectWithValue }) => {
     const payload = {
