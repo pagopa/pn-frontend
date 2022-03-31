@@ -1,9 +1,8 @@
 import { AxiosPromise, AxiosResponse } from 'axios';
 import { apiClient } from '../axios';
-import { Delegation } from '../../redux/delegation/types';
+import { AcceptDelegationResponse, Delegation } from '../../redux/delegation/types';
 import { CreateDelegationProps, CreateDelegationResponse } from '../../redux/newDelegation/actions';
 
-// TODO: change to requested behaviour when implementing API
 function checkResponseStatus(response: AxiosResponse, id: string) {
   if (response.status === 200) {
     return { id };
@@ -39,12 +38,12 @@ export const DelegationsApi = {
   /**
    * Removes a delegation that the user created
    * @param id
-   * @return {Promise<{id: string} | {id: string}>}
+   * @return {Promise<{id: string}>}
    */
   revokeDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
       .patch(`/mandate/api/v1/mandate/${id}/revoke`)
-      .then((response) => checkResponseStatus(response, id)),
+      .then((response: AxiosResponse) => checkResponseStatus(response, id)),
   /**
    * Removes a delegation created for the user
    * @param {string} id
@@ -52,22 +51,36 @@ export const DelegationsApi = {
    */
   rejectDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
-      .patch<{ id: string }>(`/mandate/api/v1/mandate/${id}/reject`)
-      .then((response) => checkResponseStatus(response, id)),
+      .patch(`/mandate/api/v1/mandate/${id}/reject`)
+      .then((response: AxiosResponse) => checkResponseStatus(response, id)),
   /**
    * Accepts a delegation created for the user
    * @param {string} id
-   * @returns {Promise<{id: string} | {id: string}>}
    * @param data
+   * @return {Promise<{id: string}>}
    */
-  acceptDelegation: (id: string, data: { verificationCode: string }): Promise<{ id: string }> =>
+  acceptDelegation: (
+    id: string,
+    data: { verificationCode: string }
+  ): Promise<AcceptDelegationResponse> =>
     apiClient
-      .patch(`/mandate/api/v1/mandate/${id}/accept`, data)
-      .then((response) => checkResponseStatus(response, id)),
+      .patch<AcceptDelegationResponse>(`/mandate/api/v1/mandate/${id}/accept`, data)
+      .then((response: AxiosResponse<AcceptDelegationResponse>) => {
+        if (response.data) {
+          return { ...response.data, id };
+        }
+        return {
+          id: '-1',
+          type: 'generic',
+          status: 600,
+          title: 'Errore generico',
+          detail: '',
+        } as AcceptDelegationResponse;
+      }),
   /**
    * Creates a new delegation
-   * @param {object} data
-   * @returns {Promise<"success" | "error" | "success">}
+   * @param data
+   * @return {Promise<CreateDelegationResponse>}
    */
   createDelegation: (data: CreateDelegationProps): Promise<CreateDelegationResponse> =>
     apiClient
@@ -77,10 +90,21 @@ export const DelegationsApi = {
           return response.data as CreateDelegationResponse;
         }
         return {
-          type: '',
-          status: 400,
-          title: 'Errore generico',
-          detail: '',
-        };
+          datefrom: '',
+          dateto: '',
+          delegate: {
+            firstName: '',
+            lastName: '',
+            companyName: null,
+            fiscalCode: '',
+            email: '',
+            person: true,
+          },
+          delegator: null,
+          mandateId: '',
+          status: '',
+          verificationCode: '',
+          visibilityIds: [],
+        } as CreateDelegationResponse;
       }),
 };

@@ -14,10 +14,17 @@ export interface CreateDelegationProps {
 }
 
 export interface CreateDelegationResponse {
-  type: string;
-  status: number;
-  title: string;
-  detail: string;
+  datefrom: string;
+  dateto: string;
+  delegate: Person;
+  delegator: Person | null;
+  mandateId: string;
+  status: string;
+  verificationCode: string;
+  visibilityIds: Array<{
+    name: string;
+    uniqueIdentifier: string;
+  }>;
 }
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
@@ -31,10 +38,9 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
         person: data.selectPersonaFisicaOrPersonaGiuridica === 'pf',
         email: data.email,
       },
-      visibilityIds: [data.enteSelect],
+      visibilityIds: data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? [] : [data.enteSelect],
       verificationCode: data.verificationCode,
       dateto: new Date(data.expirationDate).toISOString(),
-      status: 'Pending', // TODO: remove when managed from backend
     };
     try {
       return await DelegationsApi.createDelegation(payload);

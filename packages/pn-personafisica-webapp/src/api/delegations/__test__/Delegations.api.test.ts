@@ -225,7 +225,7 @@ describe('Delegations api tests', () => {
   it('accept a delegation', async () => {
     const mock = new MockAdapter(apiClient);
     mock.onPatch('/mandate/api/v1/mandate/9/accept').reply(200);
-    const res = await DelegationsApi.acceptDelegation('9');
+    const res = await DelegationsApi.acceptDelegation('9', { verificationCode: '12345' });
     expect(res).toStrictEqual({ id: '9' });
     mock.reset();
     mock.restore();

@@ -1,6 +1,6 @@
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { Delegation } from './types';
+import { AcceptDelegationResponse, Delegation } from './types';
 
 export const getDelegates = createAsyncThunk<Array<Delegation>>(
   'getDelegates',
@@ -46,19 +46,19 @@ export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
   }
 );
 
-export const acceptDelegation = createAsyncThunk<{ id: string }, { id: string; code: string }>(
-  'acceptDelegation',
-  async ({ id, code }, { rejectWithValue }) => {
-    const data = {
-      verificationCode: code,
-    };
-    try {
-      return await DelegationsApi.acceptDelegation(id, data);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
+export const acceptDelegation = createAsyncThunk<
+  AcceptDelegationResponse,
+  { id: string; code: string }
+>('acceptDelegation', async ({ id, code }, { rejectWithValue }) => {
+  const data = {
+    verificationCode: code,
+  };
+  try {
+    return await DelegationsApi.acceptDelegation(id, data);
+  } catch (e) {
+    return rejectWithValue(e);
   }
-);
+});
 
 export const openRevocationModal =
   createAction<{ id: string; type: string }>('openRevocationModal');
