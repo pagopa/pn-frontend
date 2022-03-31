@@ -110,7 +110,7 @@ const CodeModal = ({
   }, [open]);
 
   const codeIsValid = inputsValues.every((v) => v);
-  const inputColor = hasError ? 'error.main' : 'primary.main';
+  const inputColor = hasError ? 'error.main' : (isReadOnly ? 'primary.main' : '');
 
   return (
     <Dialog
