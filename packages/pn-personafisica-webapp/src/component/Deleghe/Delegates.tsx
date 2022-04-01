@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Chip, Stack, styled, Typography } from '@mui/material';
-import { Add, SentimentDissatisfied } from '@mui/icons-material';
+import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { Add } from '@mui/icons-material';
 import { Column, ItemsTable as Table, Item } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
@@ -10,12 +10,6 @@ import * as routes from '../../navigation/routes.const';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { Menu, OrganizationsList } from './DelegationsElements';
-
-const StyledStack = styled(Stack)`
-  border-radius: 4px;
-  background-color: #ffffff;
-  padding: 16px;
-`;
 
 const Delegates = () => {
   const { t } = useTranslation(['deleghe']);
@@ -104,32 +98,13 @@ const Delegates = () => {
           </Button>
         </Box>
       </Stack>
-      {rows.length ? (
-        <Table columns={delegatesColumns} rows={rows} />
-      ) : (
-        <StyledStack
-          sx={{ fontSize: '16px' }}
-          direction={'row'}
-          justifyContent={'center'}
-          alignItems={'center'}
-        >
-          <SentimentDissatisfied
-            fontSize={'small'}
-            sx={{ verticalAlign: 'middle', margin: '0 20px' }}
-          />
-          <Typography sx={{ marginRight: '8px' }}>
-            Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.
-          </Typography>
-          <Typography
-            color="primary"
-            fontWeight="bold"
-            sx={{ cursor: 'pointer' }}
-            onClick={handleAddDelegationClick}
-          >
-            {t('deleghe.add')}
-          </Typography>
-        </StyledStack>
-      )}
+      <Table
+        columns={delegatesColumns}
+        rows={rows}
+        emptyActionLabel={t('deleghe.add') as string}
+        emptyMessage={'Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.'}
+        emptyActionCallback={handleAddDelegationClick}
+      />
     </Box>
   );
 };

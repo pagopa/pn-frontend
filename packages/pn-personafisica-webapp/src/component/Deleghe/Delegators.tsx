@@ -90,7 +90,11 @@ const Delegators = () => {
           <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <Typography variant="h6">Deleghe a tuo carico</Typography>
           </Stack>
-          <ItemsTable columns={delegatorsColumns} rows={rows} />
+          <ItemsTable
+            columns={delegatorsColumns}
+            rows={rows}
+            emptyActionCallback={() => console.log()}
+          />
         </Box>
       )}
     </>

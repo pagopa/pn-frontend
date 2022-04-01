@@ -9,7 +9,7 @@ import AppMessage from './components/AppMessage';
 import SideMenu from './components/SideMenu/SideMenu';
 import StatusTooltip from './components/Notifications/StatusTooltip';
 import ItemsTable from './components/Data/ItemsTable';
-import ItemCard from './components/Data/ItemCard';
+import ItemsCard from './components/Data/ItemsCard';
 import TitleAndDescription from './components/TitleAndDescription';
 import CustomMobileDialog from './components/CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogToggle from './components/CustomMobileDialog/CustomMobileDialogToggle';
@@ -32,7 +32,7 @@ export { AppMessage };
 export { SideMenu };
 export { ItemsTable };
 export { StatusTooltip };
-export { ItemCard };
+export { ItemsCard };
 export { TitleAndDescription };
 export { CustomMobileDialog };
 export { CustomMobileDialogToggle };
@@ -84,7 +84,7 @@ import {
   PhysicalCommunicationType,
 } from './types/NotificationDetail';
 
-import { CardElement, CardSort, CardAction } from './types/ItemCard';
+import { CardElement, CardSort, CardAction } from './types/ItemsCard';
 import { MessageType } from './types/MessageType';
 
 export type { IAppMessage };

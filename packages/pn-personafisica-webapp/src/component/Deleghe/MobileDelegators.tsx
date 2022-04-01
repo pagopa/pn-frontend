@@ -1,6 +1,6 @@
 import { Box, Chip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { CardElement, ItemCard, Item } from '@pagopa-pn/pn-commons';
+import { CardElement, ItemsCard, Item } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -84,7 +84,12 @@ const MobileDelegators = () => {
           <Typography variant="h4" mb={2}>
             {t('deleghe.delegatorsTitle')}
           </Typography>
-          <ItemCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+          <ItemsCard
+            cardHeader={cardHeader}
+            cardBody={cardBody}
+            cardData={cardData}
+            emptyActionCallback={() => console.log()}
+          />
         </Box>
       )}
     </>

@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent, Fragment } from 'react';
+import { useEffect, ChangeEvent, Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Box, Button, MenuItem, TextField } from '@mui/material';
@@ -14,7 +14,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
-import { useAppDispatch } from '../../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { RootState } from '../../../redux/store';
 
 const useStyles = makeStyles({
   customButton: {
@@ -24,12 +25,43 @@ const useStyles = makeStyles({
 });
 
 const FilterNotificationsTable = () => {
+  const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
 
   // TODO inserire regex corretta
   const IUN_regex = /^[0-9A-Z_-]{1,20}$/i;
+
+  const emptyValues = {
+    startDate: tenYearsAgo.toISOString(),
+    endDate: today.toISOString(),
+    status: undefined,
+    recipientId: undefined,
+    iunMatch: undefined,
+  };
+
+  const initialValues = () => {
+    if (!filters || filters && filters === emptyValues) {
+      return {
+        searchFor: '',
+        startDate: tenYearsAgo,
+        endDate: today,
+        status: '',
+        recipientId: '',
+        iunMatch: '',
+      };
+    } else {
+      return {
+        searchFor: '',
+        startDate: new Date(filters.startDate),
+        endDate: new Date(filters.endDate),
+        recipientId: filters.recipientId || '',
+        iunMatch: filters.iunMatch || '',
+        status: filters.status || NotificationAllowedStatus[0].value,
+      };
+    }
+  };
 
   const searchForValues = [
     { value: '0', label: 'Codice Fiscale' },
@@ -44,42 +76,23 @@ const FilterNotificationsTable = () => {
   });
 
   const formik = useFormik({
-    initialValues: {
-      searchFor: '',
-      startDate: tenYearsAgo,
-      endDate: today,
-      recipientId: '',
-      iunMatch: '',
-      status: NotificationAllowedStatus[0].value,
-    },
+    initialValues: initialValues(),
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
-      const filters = {
+      const currentFilters = {
         startDate: values.startDate.toISOString(),
         endDate: values.endDate.toISOString(),
         recipientId: values.recipientId,
         iunMatch: values.iunMatch,
         status: values.status === 'All' ? undefined : values.status,
       };
-      dispatch(setNotificationFilters(filters));
+      dispatch(setNotificationFilters(currentFilters));
     },
   });
 
-  const cleanFilters = () => {
-    // TODO questa può andare in un metodo separato: deve pulire i filtri dello stato redux e pulire il form
-    dispatch(
-      setNotificationFilters({
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
-        status: undefined,
-        recipientId: undefined,
-        iunMatch: undefined,
-      })
-    );
-    formik.resetForm();
-    setStartDate(null);
-    setEndDate(null);
+  const cancelSearch = () => {
+    dispatch(setNotificationFilters(emptyValues));
   };
 
   const classes = useStyles();
@@ -92,6 +105,16 @@ const FilterNotificationsTable = () => {
   useEffect(() => {
     void formik.validateForm();
   }, []);
+
+  useEffect(() => {
+    if (filters === emptyValues) {
+      formik.resetForm({
+        values: initialValues(),
+      });
+      setStartDate(null);
+      setEndDate(null);
+    }
+  }, [filters]);
 
   return (
     <Fragment>
@@ -148,12 +171,9 @@ const FilterNotificationsTable = () => {
               inputFormat="DD/MM/yyyy"
               value={startDate}
               onChange={(value: Date | null) => {
-                formik
-                  .setFieldValue('startDate', value)
-                  .then(() => {
-                    setStartDate(value);
-                  })
-                  .catch(() => 'error');
+                void formik.setFieldValue('startDate', value).then(() => {
+                  setStartDate(value);
+                });
               }}
               renderInput={(params) => <TextField id="startDate" name="startDate" {...params} />}
               disableFuture={true}
@@ -172,12 +192,9 @@ const FilterNotificationsTable = () => {
               inputFormat="DD/MM/yyyy"
               value={endDate}
               onChange={(value: Date | null) => {
-                formik
-                  .setFieldValue('endDate', value)
-                  .then(() => {
-                    setEndDate(value);
-                  })
-                  .catch(() => 'error');
+                void formik.setFieldValue('endDate', value).then(() => {
+                  setEndDate(value);
+                });
               }}
               renderInput={(params) => <TextField id="endDate" name="endDate" {...params} />}
               disableFuture={true}
@@ -211,7 +228,7 @@ const FilterNotificationsTable = () => {
             data-testid="cancelButton"
             className={classes.customButton}
             size="large"
-            onClick={cleanFilters}
+            onClick={cancelSearch}
           >
             Annulla ricerca
           </Button>

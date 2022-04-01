@@ -12,13 +12,20 @@ import {
   StatusTooltip,
   ItemsTable,
   Item,
+  tenYearsAgo,
+  today,
 } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
+import {
+  getSentNotifications,
+  setNotificationFilters,
+  setPagination,
+  setSorting,
+} from '../redux/dashboard/actions';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 
 const Dashboard = () => {
@@ -136,6 +143,19 @@ const Dashboard = () => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
   };
 
+  // Remove filter
+  const handleCancelSearch = () => {
+    dispatch(
+      setNotificationFilters({
+        startDate: tenYearsAgo.toISOString(),
+        endDate: today.toISOString(),
+        status: undefined,
+        recipientId: undefined,
+        iunMatch: undefined,
+      })
+    );
+  };
+
   useEffect(() => {
     const params = {
       ...filters,
@@ -164,6 +184,7 @@ const Dashboard = () => {
               rows={rows}
               sort={sort}
               onChangeSorting={handleChangeSorting}
+              emptyActionCallback={handleCancelSearch}
             />
             {notifications.length > 0 && (
               <CustomPagination
