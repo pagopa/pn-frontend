@@ -13,7 +13,7 @@ const NotificationBadge: React.FC<{numberOfNotification: number}> = ({numberOfNo
         alignItems: 'center',
       }}>
         <Typography sx={{ color: 'white', fontSize: '12px' }}>
-          {numberOfNotification}
+          {numberOfNotification !== 0 && <>{numberOfNotification}</>}
         </Typography>
       </Box>
 );
