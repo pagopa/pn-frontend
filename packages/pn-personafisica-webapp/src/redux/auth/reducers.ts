@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Delegation } from '../delegation/types';
 import { exchangeToken, getNumberDelegator, logout } from './actions';
 import { User } from './types';
 
@@ -24,7 +25,8 @@ const userSlice = createSlice({
           iss: '',
           jti: '',
         }) as User,
-    pendingDelegators: 0
+    pendingDelegators: 0,
+    delegators: [] as Array<Delegation>,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -35,7 +37,8 @@ const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(getNumberDelegator.fulfilled, (state, action) => {
-      state.pendingDelegators = action.payload;
+      state.pendingDelegators = action.payload.filter((delegator)=>delegator.status === "pending").length;
+      state.delegators = action.payload; // TODO Filter by pending
     });
   },
 });
