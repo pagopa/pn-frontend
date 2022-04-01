@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
 import { DigitalAddress, DigitalAddresses, SaveDigitalAddressParams, LegalChannelType } from '../../models/contacts';
@@ -29,3 +29,5 @@ export const createOrUpdateLegalAddress = createAsyncThunk<DigitalAddress | void
     }
   }
 );
+
+export const resetContactsState = createAction<void>('resetContactsState');

@@ -4,7 +4,7 @@ import { Box, Grid } from '@mui/material';
 import { TitleBox } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getDigitalAddresses } from '../redux/contact/actions';
+import { getDigitalAddresses, resetContactsState } from '../redux/contact/actions';
 import { RootState } from '../redux/store';
 import { DigitalContactsCodeVerificationProvider } from '../component/Contacts/DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../component/Contacts/InsertLegalContact';
@@ -21,6 +21,8 @@ const Contacts = () => {
   useEffect(() => {
     void dispatch(getDigitalAddresses(recipientId));
   }, []);
+
+  useEffect(() => () => void dispatch(resetContactsState()), []);
 
   return (
     <DigitalContactsCodeVerificationProvider>

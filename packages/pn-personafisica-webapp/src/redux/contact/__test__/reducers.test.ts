@@ -2,21 +2,23 @@ import { DigitalAddress, DigitalAddresses, LegalChannelType } from './../../../m
 import { ContactsApi } from '../../../api/contacts/Contacts.api';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
-import { createOrUpdateLegalAddress, getDigitalAddresses } from '../actions';
+import { createOrUpdateLegalAddress, getDigitalAddresses, resetContactsState } from '../actions';
 import { digitalAddresses } from './test-utils';
+
+const initialState = {
+  loading: false,
+  digitalAddresses: {
+    legal: [],
+    courtesy: [],
+  },
+};
 
 describe('Contacts redux state tests', () => {
   mockAuthentication();
 
   it('Initial state', () => {
     const state = store.getState().contactsState;
-    expect(state).toEqual({
-      loading: false,
-      digitalAddresses: {
-        legal: [],
-        courtesy: [],
-      },
-    });
+    expect(state).toEqual(initialState);
   });
 
   it('Should be able to fetch the digital addresses list', async () => {
@@ -62,5 +64,14 @@ describe('Contacts redux state tests', () => {
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('createOrUpdateLegalAddress/fulfilled');
     expect(payload).toEqual(updatedDigitalAddress);
+  });
+
+  it('Should be able to reset state', () => {
+    const action = store.dispatch(resetContactsState());
+    const payload = action.payload;
+    expect(action.type).toBe('resetContactsState');
+    expect(payload).toEqual(undefined);
+    const state = store.getState().contactsState;
+    expect(state).toEqual(initialState);
   });
 });
