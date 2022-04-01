@@ -8,8 +8,8 @@ import { appStateActions, CodeModal } from "@pagopa-pn/pn-commons";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 // import { CourtesyChannelType, SaveCourtesyAddressParams } from "../../models/contacts";
 import { RootState } from "../../redux/store";
-import { CourtesyChannelType, SaveCourtesyAddressParams } from "../../models/contacts";
-import { createOrUpdateDigitalAddress } from "../../redux/contact/actions";
+import { CourtesyChannelType, SaveDigitalAddressParams } from "../../models/contacts";
+import { createOrUpdateCourtesyAddress } from "../../redux/contact/actions";
 
 interface Props {
   fieldType: "email" | "phone";
@@ -38,7 +38,7 @@ const CourtesyContactItem = (props: Props) => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, SetIsEditMode] = useState(!isVerified);
-  const [isValidationCodeOk, setIsValidationCodeOk] = useState(false);
+  const [isValidationCodeOk, setIsValidationCodeOk] = useState(true);
 
   const subtitleText = `courtesy-contacts.${fieldType}-verify-descr`;
 
@@ -82,15 +82,14 @@ const CourtesyContactItem = (props: Props) => {
   }, []);
 
   const handleAddressCreation = (verificationCode?: string, noCallback: boolean = false) => {
-    console.log(`[HandleAddressCreation] code: ${verificationCode} - isValid: ${isValidationCodeOk}`);
-    const digitalAddressParams: SaveCourtesyAddressParams = {
+    const digitalAddressParams: SaveDigitalAddressParams = {
       recipientId,
       senderId: "default",
       channelType: fieldType === "email" ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS,
       value: fieldValue,
       code: verificationCode,
     };
-    dispatch(createOrUpdateDigitalAddress(digitalAddressParams))
+    dispatch(createOrUpdateCourtesyAddress(digitalAddressParams))
       .unwrap()
       .then((res) => {
         if (noCallback) {
@@ -109,7 +108,6 @@ const CourtesyContactItem = (props: Props) => {
         }
       }).catch(() => {
         setIsValidationCodeOk(false);
-        console.log("entrato nel catch!!!");
       });
   };
 

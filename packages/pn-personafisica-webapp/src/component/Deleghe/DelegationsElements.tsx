@@ -12,7 +12,7 @@ import {
 import { MoreVert } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../redux/hooks';
-import { acceptDelegation, openRevocationModal } from '../../redux/delegation/actions';
+import { openAcceptModal, openRevocationModal } from '../../redux/delegation/actions';
 
 export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -95,11 +95,11 @@ export const OrganizationsList = (props: { organizations: Array<string> }) => {
   );
 };
 
-export const AcceptButton = ({ id }: { id: string }) => {
+export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
   const { t } = useTranslation(['deleghe']);
   const dispatch = useAppDispatch();
   const handleAcceptClick = () => {
-    void dispatch(acceptDelegation(id));
+    void dispatch(openAcceptModal({ id, name }));
   };
 
   return (

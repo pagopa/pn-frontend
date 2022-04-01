@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { DigitalAddresses, DigitalAddress } from './../../models/contacts';
-import { createOrUpdateLegalAddress, getDigitalAddresses } from './actions';
+import { createOrUpdateCourtesyAddress, createOrUpdateLegalAddress, getDigitalAddresses, resetContactsState } from './actions';
 
 const initialState = {
   loading: false,
@@ -31,6 +31,18 @@ const contactsSlice = createSlice({
         }
       }
     });
+    builder.addCase(createOrUpdateCourtesyAddress.fulfilled, (state, action) => {
+      // update or add digital address
+      if (action.payload && action.payload.senderId) {
+        const addressIndex = state.digitalAddresses.courtesy.findIndex(address => address.senderId === (action.payload as DigitalAddress).senderId);
+        if (addressIndex > -1) {
+          state.digitalAddresses.courtesy[addressIndex] = action.payload;
+        } else {
+          state.digitalAddresses.courtesy.push(action.payload);
+        }
+      }
+    });
+    builder.addCase(resetContactsState, () => initialState);
   },
 });
 

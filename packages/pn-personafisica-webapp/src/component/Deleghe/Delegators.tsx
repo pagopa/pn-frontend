@@ -14,7 +14,7 @@ const Delegators = () => {
     (state: RootState) => state.delegationsState.delegations.delegators
   );
 
-  const rows: Array<Item> = delegationToItem(delegates, false);
+  const rows: Array<Item> = delegationToItem(delegates, true);
 
   const delegatorsColumns: Array<Column> = [
     {
@@ -69,7 +69,7 @@ const Delegators = () => {
         if (value === DelegationStatus.ACTIVE) {
           return <Chip label={label} color={color} />;
         } else {
-          return <AcceptButton id={row.id} />;
+          return <AcceptButton id={row.id} name={row.name as string} />;
         }
       },
     },

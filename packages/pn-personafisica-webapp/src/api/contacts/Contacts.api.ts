@@ -4,19 +4,7 @@ import { apiClient } from '../axios';
 
 // const BASE_API_URL = "/address-book/v1/digital-address/";
 
-const mockedDigitalAddrStore = {
-  legal: [
-    {
-      value: 'mario.rossi@toverify.it',
-      code: '12345',
-      isVerified: false,
-    },
-    {
-      value: 'mario.rossi@verified.it',
-      code: '12345',
-      isVerified: true,
-    },
-  ],
+const mockedCourtesy = {
   courtesy: [
     {
       value: 'mariorossi@toverify.it',
@@ -40,6 +28,14 @@ const mockedDigitalAddrStore = {
     },
   ]
 };
+
+const mockedContacts: Array<{ value: string; code: string; toVerify: boolean }> = [
+  {
+    value: 'mario.rossi@verified.it',
+    code: '12345',
+    toVerify: false,
+  },
+];
 
 export const ContactsApi = {
   /**
@@ -65,18 +61,20 @@ export const ContactsApi = {
   ): Promise<void | DigitalAddress> =>
     new Promise((resolve, reject) => {
       /* eslint-disable functional/immutable-data */
-      const mockedContact = mockedDigitalAddrStore.legal.find((m) => m.value === body.value);
-      if (!mockedContact) {
-        return reject('No mocked contact found');
-      }
+      const mockedContact = mockedContacts.find((m) => m.value === body.value);
       // simulate 200
-      if (!mockedContact?.isVerified && !body.verificationCode) {
+      if (!mockedContact) {
+        mockedContacts.push({ value: body.value, code: '12345', toVerify: true });
+        return resolve();
+      }
+      if (mockedContact && mockedContact.toVerify && !body.verificationCode) {
         return resolve();
       }
       // check code - simulate 406
-      if (mockedContact.code !== body.verificationCode) {
-        return reject({response: {status: 406}, blockNotification: true});
+      if (mockedContact.toVerify && body.verificationCode !== mockedContact.code) {
+        return reject({ response: { status: 406 }, blockNotification: true });
       }
+      mockedContact.toVerify = false;
       return resolve({
         addressType: 'legal',
         recipientId,
@@ -87,7 +85,7 @@ export const ContactsApi = {
       });
       /* eslint-enable functional/immutable-data */
     }),
-     /* 
+  /* 
   apiClient
       .post<void>(
         `/address-book/v1/digital-address/${recipientId}/legal/${senderId}/${channelType}`,
@@ -123,7 +121,7 @@ export const ContactsApi = {
   ): Promise<void | DigitalAddress> =>
     new Promise((resolve, reject) => {
       /* eslint-disable functional/immutable-data */
-      const mockedContacts = mockedDigitalAddrStore.courtesy;
+      const mockedContacts = mockedCourtesy.courtesy;
       const mockedContact = mockedContacts.find((m) => m.value === body.value);
       if (!mockedContact) {
         return reject('No mocked contact found');

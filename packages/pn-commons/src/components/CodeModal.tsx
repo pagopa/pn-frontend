@@ -30,6 +30,21 @@ type Props = {
   errorMessage?: string;
 };
 
+/**
+ * This modal allows the user to input a verification code.
+ * @param title title to show
+ * @param subtitle subtitle to show
+ * @param open flag to hide/show modal
+ * @param initialValues initial code
+ * @param handleClose function that is called when modal is closed
+ * @param codeSectionTitle title of the section where is the code
+ * @param codeSectionAdditional additional elments under the code
+ * @param confirmLabel label of the confirm button
+ * @param cancelLabel label of the cancel button
+ * @param isReadOnly set if code is in readonly mode
+ * @param hasError set if there is an error
+ * @param errorMessage message to show when there is an error
+ */
 const CodeModal = ({
   title,
   subtitle,
@@ -44,7 +59,7 @@ const CodeModal = ({
   confirmCallback,
   isReadOnly = false,
   hasError = false,
-  errorMessage
+  errorMessage,
 }: Props) => {
   const [inputsValues, setInputsValues] = useState(initialValues);
   const [inputsRef, setInputsRef] = useState(new Array(initialValues.length).fill(undefined));
@@ -58,12 +73,12 @@ const CodeModal = ({
           inputsRef[index + 1].focus();
           // set cursor position
           if (inputsRef[index + 1].setSelectionRange) {
-            inputsRef[index + 1].setSelectionRange(0, 0);
+            inputsRef[index + 1].setSelectionRange(inputsRef[index + 1].value, inputsRef[index + 1].value);
           } else if (inputsRef[index + 1].createTextRange) {
             const t = inputsRef[index + 1].createTextRange();
             t.collapse(true);
-            t.moveEnd('character', 0);
-            t.moveStart('character', 0);
+            t.moveEnd('character', inputsRef[index + 1].value);
+            t.moveStart('character', inputsRef[index + 1].value);
             t.select();
           }
         });
@@ -95,17 +110,12 @@ const CodeModal = ({
   }, [open]);
 
   const codeIsValid = inputsValues.every((v) => v);
-  let inputColor = '';
-  if (hasError) {
-    inputColor = 'error.main';
-  } else if (isReadOnly) {
-    inputColor = 'primary.main';
-  }
+  const inputColor = hasError ? 'error.main' : (isReadOnly ? 'primary.main' : '');
 
   return (
     <Dialog
       open={open}
-      onClose={() => handleClose}
+      onClose={handleClose}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
       data-testid="codeDialog"
@@ -124,11 +134,16 @@ const CodeModal = ({
               id="outlined-basic"
               variant="outlined"
               placeholder="-"
-              sx={{ width: '33px', height: '56px', marginRight: '10px', input: { color: inputColor }}}
+              sx={{
+                width: '33px',
+                height: '56px',
+                marginRight: '10px',
+                input: { color: inputColor },
+              }}
               inputProps={{
                 maxLength: 1,
-                sx: { padding: '16.5px 10px', textAlign: 'center'},
-                readOnly: isReadOnly
+                sx: { padding: '16.5px 10px', textAlign: 'center' },
+                readOnly: isReadOnly,
               }}
               onKeyDown={(event) => keyDownHandler(event, index)}
               onChange={(event) => changeHandler(event, index)}
@@ -140,14 +155,17 @@ const CodeModal = ({
               }}
               value={inputsValues[index]}
               color={hasError ? 'error' : 'primary'}
-              focused={isReadOnly}
               error={hasError}
             />
           ))}
         </Box>
         <Box sx={{ marginTop: '10px' }}>{codeSectionAdditional}</Box>
         <Divider sx={{ margin: '20px 0' }} />
-        {(hasError && errorMessage) && <Alert data-testid="errorAlert" severity="error">{errorMessage}</Alert>}
+        {hasError && errorMessage && (
+          <Alert data-testid="errorAlert" severity="error">
+            {errorMessage}
+          </Alert>
+        )}
       </DialogContent>
       <DialogActions>
         {cancelLabel && cancelCallback && (

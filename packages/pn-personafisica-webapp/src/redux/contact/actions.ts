@@ -1,7 +1,7 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
-import { DigitalAddress, DigitalAddresses, SaveCourtesyAddressParams, SaveDigitalAddressParams } from '../../models/contacts';
+import { CourtesyChannelType, DigitalAddress, DigitalAddresses, SaveDigitalAddressParams, LegalChannelType } from '../../models/contacts';
 
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   'getDigitalAddresses',
@@ -21,7 +21,7 @@ export const createOrUpdateLegalAddress = createAsyncThunk<DigitalAddress | void
       return await ContactsApi.createOrUpdateLegalAddress(
         params.recipientId,
         params.senderId,
-        params.channelType,
+        params.channelType as LegalChannelType,
         { value: params.value, verificationCode: params.code }
       );
     } catch (e) {
@@ -30,14 +30,14 @@ export const createOrUpdateLegalAddress = createAsyncThunk<DigitalAddress | void
   }
 );
 
-export const createOrUpdateDigitalAddress = createAsyncThunk<DigitalAddress | void, SaveCourtesyAddressParams>(
+export const createOrUpdateCourtesyAddress = createAsyncThunk<DigitalAddress | void, SaveDigitalAddressParams>(
   'createOrUpdateCourtesyAddress',
-  async (params: SaveCourtesyAddressParams, { rejectWithValue }) => {
+  async (params: SaveDigitalAddressParams, { rejectWithValue }) => {
     try {
       return await ContactsApi.createOrUpdateCourtesyAddress(
         params.recipientId,
         params.senderId,
-        params.channelType,
+        params.channelType as CourtesyChannelType,
         { value: params.value, verificationCode: params.code }
       );
     } catch (e) {
@@ -45,3 +45,5 @@ export const createOrUpdateDigitalAddress = createAsyncThunk<DigitalAddress | vo
     }
   }
 );
+
+export const resetContactsState = createAction<void>('resetContactsState');
