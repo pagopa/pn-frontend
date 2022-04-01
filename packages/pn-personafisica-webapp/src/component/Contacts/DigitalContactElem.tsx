@@ -12,9 +12,10 @@ type Props = {
     isEditable?: boolean;
     size: 'auto' | 'variable';
   }>;
+  saveDisabled?: boolean;
 };
 
-const DigitalContactElem = forwardRef(({ fields }: Props, ref) => {
+const DigitalContactElem = forwardRef(({ fields, saveDisabled = false }: Props, ref) => {
   const { t } = useTranslation(['common']);
   const [editMode, setEditMode] = useState(false);
   const isMobile = useIsMobile();
@@ -60,7 +61,7 @@ const DigitalContactElem = forwardRef(({ fields }: Props, ref) => {
       )}
       {editMode && (
         <Grid item lg={2} xs={12} textAlign={isMobile ? 'left' : 'right'}>
-          <ButtonNaked color="primary" type='submit'>
+          <ButtonNaked color="primary" type='submit' disabled={saveDisabled}>
             {t('button.salva')}
           </ButtonNaked>
         </Grid>

@@ -61,10 +61,7 @@ const showDialog = async (
       code: undefined,
     });
   });
-  const dialog = await waitFor(() => {
-    return screen.queryByTestId('codeDialog');
-  });
-  return dialog;
+  return waitFor(() => screen.queryByTestId('codeDialog'));
 };
 
 describe('DigitalContactsCodeVerification Context', () => {
@@ -131,10 +128,18 @@ describe('DigitalContactsCodeVerification Context', () => {
       fireEvent.change(input, { target: { value: index.toString() } });
     });
     const buttons = dialog?.querySelectorAll('button');
+    // clear mocks
+    mockActionFn.mockClear();
+    mockActionFn.mockReset();
+    mockDispatchFn.mockReset();
+    mockDispatchFn.mockClear();
+    mockDispatchFn.mockImplementation(jest.fn(() => ({
+      unwrap: () => Promise.resolve({code: '01234'}),
+    })));
     fireEvent.click(buttons![1]);
     await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(2);
-      expect(mockActionFn).toBeCalledTimes(2);
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockActionFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledWith({
         recipientId: 'mocked-recipientId',
         senderId: 'mocked-senderId',
@@ -142,6 +147,9 @@ describe('DigitalContactsCodeVerification Context', () => {
         value: 'mocked-value',
         code: '01234',
       });
+    });
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
     });
   });
 });

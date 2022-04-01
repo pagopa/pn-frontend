@@ -40,6 +40,9 @@ export const ContactsApi = {
         mockedContacts.push({ value: body.value, code: '12345', toVerify: true });
         return resolve();
       }
+      if (mockedContact && mockedContact.toVerify && !body.verificationCode) {
+        return resolve();
+      }
       // check code - simulate 406
       if (mockedContact.toVerify && body.verificationCode !== mockedContact.code) {
         return reject({ response: { status: 406 }, blockNotification: true });

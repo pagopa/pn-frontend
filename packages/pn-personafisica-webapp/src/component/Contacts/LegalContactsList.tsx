@@ -94,7 +94,12 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
       value: formik.values.pec,
       successMessage: t('legal-contacts.pec-added', { ns: 'recapiti' }),
       actionToBeDispatched: createOrUpdateLegalAddress,
-      callbackOnValidation: () => (contactRef.current as any).toggleEdit()
+      callbackOnValidation: (status: 'validated' | 'cancelled') => {
+        if (status === 'cancelled') {
+          formik.resetForm();
+        }
+        (contactRef.current as any).toggleEdit();
+      }
     });
   };
 
@@ -137,8 +142,9 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                 ),
                 isEditable: true,
                 size: 'auto'
-              },
+              }
             ]}
+            saveDisabled={!formik.isValid}
           />
         </form>
       </Box>

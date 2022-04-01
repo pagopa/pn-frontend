@@ -73,12 +73,12 @@ const CodeModal = ({
           inputsRef[index + 1].focus();
           // set cursor position
           if (inputsRef[index + 1].setSelectionRange) {
-            inputsRef[index + 1].setSelectionRange(0, 0);
+            inputsRef[index + 1].setSelectionRange(inputsRef[index + 1].value, inputsRef[index + 1].value);
           } else if (inputsRef[index + 1].createTextRange) {
             const t = inputsRef[index + 1].createTextRange();
             t.collapse(true);
-            t.moveEnd('character', 0);
-            t.moveStart('character', 0);
+            t.moveEnd('character', inputsRef[index + 1].value);
+            t.moveStart('character', inputsRef[index + 1].value);
             t.select();
           }
         });

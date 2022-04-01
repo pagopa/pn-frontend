@@ -113,7 +113,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         codeSectionAdditional={props.codeSectionAdditional}
         cancelLabel={props.cancelLabel}
         confirmLabel={props.confirmLabel}
-        cancelCallback={handleClose}
+        cancelCallback={() => handleClose('cancelled')}
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         hasError={codeNotValid}
         errorMessage={props.errorMessage}
