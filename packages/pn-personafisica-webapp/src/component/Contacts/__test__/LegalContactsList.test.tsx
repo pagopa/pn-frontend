@@ -181,8 +181,6 @@ describe('LegalContactsList Component', () => {
       expect(dialog).not.toBeInTheDocument();
       expect(input).not.toBeInTheDocument();
       expect(form).toHaveTextContent('mail@valida.mail');
-      expect(buttons![0]).toBeInTheDocument();
-      expect(buttons![1]).toBeInTheDocument();
     });
   });
 });
