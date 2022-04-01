@@ -14,16 +14,16 @@ const CourtesyContactsList = () => {
     <Box style={{ padding: '20px' }}>
       <Grid container direction="row" sx={{marginTop: '20px'}} spacing={2}>
         {phoneContacts.length > 0 ? 
-          phoneContacts.map((contact) => <CourtesyContactItem key={contact.value} type="phone" value={contact.value} isVerified={true} />)
+          phoneContacts.map((contact) => <CourtesyContactItem key={contact.value} fieldType="phone" fieldValue={contact.value} isVerified={true} />)
           :
-          <CourtesyContactItem key="" type="phone" value="" isVerified={false} />
+          <CourtesyContactItem key="phone" fieldType="phone" fieldValue="" isVerified={false} />
         }
       </Grid>
       <Grid container direction="row" sx={{marginTop: '20px'}} spacing={2}>
         {emailContacts.length > 0 ? 
-          emailContacts.map((contact) => <CourtesyContactItem key={contact.value} type="email" value={contact.value} isVerified={true} />)
+          emailContacts.map((contact) => <CourtesyContactItem key={contact.value} fieldType="email" fieldValue={contact.value} isVerified={true} />)
           :
-          <CourtesyContactItem key="" type="email" value="" isVerified={false} />
+          <CourtesyContactItem key="email" fieldType="email" fieldValue="" isVerified={false} />
         }
       </Grid>
     </Box>

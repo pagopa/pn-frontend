@@ -19,7 +19,7 @@
     "new-code": "Non l'hai ricevuto? Controlla di aver inserito la email corretta oppure",
     "new-code-link": "genera un nuovo codice",
     "wrong-code": "Il codice inserito non è valido",
-    "pec-added": "PEC associata correttaemnte"
+    "pec-added": "PEC associata correttamente"
   },
   "courtesy-contacts": {
     "title": "Recapito di cortesia",
@@ -27,8 +27,20 @@
     "description": "Ogni volta che ricevi una nuova notifica, ti invieremo gratuitamente un SMS, un’email o un messaggio sull’app IO.",
     "link-phone-placeholder": "Il tuo cellulare",
     "link-email-placeholder": "il tuo indirizzo email",
-    "phone-verify": "Avvisami via SMS",
-    "email-verify": "Avvisami via email",
-    "io-enable": "Avvisami sull'app IO"
+    "phone-add": "Avvisami via SMS",
+    "email-add": "Avvisami via email",
+    "io-enable": "Avvisami sull'app IO",
+
+    "email-verify": "Verifica email",
+    "email-verify-descr": "Abbiamo inviato un codice all'indirizzo email indicato. Il codice è <strong>valido per 10 minuti</strong>.",
+    "phone-verify": "Verifica cellulare",
+    "phone-verify-descr": "Abbiamo inviato un codice al numero di cellulare indicato. Il codice è <strong>valido per 10 minuti</strong>.",
+    "insert-code": "Inserisci codice",
+    "email-new-code": "Non l'hai ricevuto? Controlla di aver inserito l'indirizzo email corretto oppure",
+    "phone-new-code": "Non l'hai ricevuto? Controlla di aver inserito il numero di cellulare corretto oppure",
+    "new-code-link": "genera un nuovo codice",
+    "wrong-code": "Il codice inserito non è valido",
+    "email-added": "Indirizzo email associato correttamente",
+    "phone-added": "Numero di cellulare associato correttamente"
   }
 }

@@ -30,3 +30,11 @@ export interface SaveDigitalAddressParams {
   value: string;
   code?: string;
 }
+
+export interface SaveCourtesyAddressParams {
+  recipientId: string;
+  senderId: string;
+  channelType: CourtesyChannelType;
+  value: string;
+  code?: string;
+}
