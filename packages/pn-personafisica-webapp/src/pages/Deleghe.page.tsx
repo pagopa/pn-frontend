@@ -12,6 +12,7 @@ import {
   revokeDelegation,
   getDelegates,
   getDelegators,
+  closeVerificationCodeModal,
 } from '../redux/delegation/actions';
 import AcceptDelegationModal from '../component/Deleghe/AcceptDelegationModal';
 import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
@@ -19,6 +20,7 @@ import MobileDelegates from '../component/Deleghe/MobileDelegates';
 import MobileDelegators from '../component/Deleghe/MobileDelegators';
 import Delegates from '../component/Deleghe/Delegates';
 import Delegators from '../component/Deleghe/Delegators';
+import VerificationCodeModal from '../component/Deleghe/VerificationCodeModal';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -31,12 +33,22 @@ const Deleghe = () => {
     open: acceptOpen,
     name: acceptName,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
+  const {
+    open: verificationCodeOpen,
+    name: verificationCodeName,
+    verificationCode: verificationCode
+  } = useAppSelector((state: RootState) => state.delegationsState.verificationCodeModalState);
+
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state: RootState) => state.delegationsState);
 
   const handleCloseModal = () => {
     dispatch(closeRevocationModal());
   };
+
+  const handleCloseVerificationCodeModal = () => {
+    dispatch(closeVerificationCodeModal());
+  }; 
 
   const handleConfirmClick = () => {
     if (type === 'delegates') {
@@ -83,6 +95,12 @@ const Deleghe = () => {
                 ? t('deleghe.confirm_revocation')
                 : t('deleghe.confirm_rejection')
             }
+          />
+          <VerificationCodeModal
+            open={verificationCodeOpen}
+            code={verificationCode}
+            name={verificationCodeName}
+            handleClose={handleCloseVerificationCodeModal}
           />
           <Box ml={isMobile ? 2 : 0} mb={2}>
             <TitleBox title={'Deleghe'} variantTitle={'h4'}>

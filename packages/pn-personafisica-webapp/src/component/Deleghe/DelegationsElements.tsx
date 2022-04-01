@@ -12,9 +12,10 @@ import {
 import { MoreVert } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../redux/hooks';
-import { openAcceptModal, openRevocationModal } from '../../redux/delegation/actions';
+import { openAcceptModal, openRevocationModal, openVerificationCodeModal } from '../../redux/delegation/actions';
 
 export const Menu = (props: any) => {
+  console.log("MENU PROPS", props);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const dispatch = useAppDispatch();
@@ -22,6 +23,11 @@ export const Menu = (props: any) => {
 
   const handleOpenModalClick = () => {
     dispatch(openRevocationModal({ id: props.id, type: props.menuType }));
+    setAnchorEl(null);
+  };
+  
+  const handleOpenVerificationCodeModal = () => {
+    dispatch(openVerificationCodeModal({name: props.name, verificationCode: props.verificationCode }));
     setAnchorEl(null);
   };
 
@@ -36,7 +42,7 @@ export const Menu = (props: any) => {
   const getMenuItemElements = () => {
     if (props.menuType === 'delegates') {
       return [
-        <MenuItem key="showCode" onClick={handleClose}>
+        <MenuItem key="showCode" onClick={handleOpenVerificationCodeModal}>
           {t('Mostra Codice')}
         </MenuItem>,
         <MenuItem key="revoke" onClick={handleOpenModalClick}>

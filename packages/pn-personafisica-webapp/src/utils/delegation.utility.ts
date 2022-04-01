@@ -22,5 +22,6 @@ export default function delegationToItem(
     email: delegation.email,
     visibilityIds: delegation.visibilityIds.map((f: any) => f.name),
     status: delegation.status,
+    verificationCode: delegation.verificationCode
   }));
 }

@@ -10,6 +10,8 @@ import {
   revokeDelegation,
   openAcceptModal,
   closeAcceptModal,
+  openVerificationCodeModal,
+  closeVerificationCodeModal,
 } from './actions';
 import { Delegation } from './types';
 
@@ -32,6 +34,11 @@ const delegationsSlice = createSlice({
       open: false,
       id: '',
       name: '',
+    },
+    verificationCodeModalState: {
+      open: false,
+      name: '',
+      verificationCode: ''
     },
   },
   reducers: {},
@@ -64,6 +71,16 @@ const delegationsSlice = createSlice({
     builder.addCase(closeRevocationModal, (state) => {
       state.modalState.id = '';
       state.modalState.open = false;
+    });
+    builder.addCase(openVerificationCodeModal, (state, action)=> {
+      state.verificationCodeModalState.verificationCode = action.payload.verificationCode;
+      state.verificationCodeModalState.open = true;
+      state.verificationCodeModalState.name = action.payload.name;
+    });
+    builder.addCase(closeVerificationCodeModal, (state) => {
+      state.verificationCodeModalState.open = false;
+      state.verificationCodeModalState.name = '';
+      state.verificationCodeModalState.verificationCode = '';
     });
     builder.addCase(revokeDelegation.fulfilled, (state, action) => {
       state.modalState.open = false;

@@ -83,8 +83,8 @@ const Delegates = () => {
       id: 'id',
       label: '',
       width: '5%',
-      getCellLabel(value: string) {
-        return <Menu menuType={'delegates'} id={value} />;
+      getCellLabel(value: string, row: Item) {
+        return <Menu menuType={'delegates'} id={value} verificationCode={row.verificationCode} name={row.name}/>;
       },
     },
   ];
