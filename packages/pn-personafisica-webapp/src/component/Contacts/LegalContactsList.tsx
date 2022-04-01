@@ -46,11 +46,12 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
   const validationSchema = yup.object({
     pec: yup.string().required(t('legal-contacts.valid-pec', { ns: 'recapiti' })).email(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
   });
+  const initialValues =  {
+    pec: defaultAddress?.value || ''
+  };
 
   const formik = useFormik({
-    initialValues: {
-      pec: defaultAddress?.value || ''
-    },
+    initialValues,
     validationSchema,
     /** onSubmit validate */
     onSubmit: () => {
@@ -96,7 +97,11 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
       actionToBeDispatched: createOrUpdateLegalAddress,
       callbackOnValidation: (status: 'validated' | 'cancelled') => {
         if (status === 'cancelled') {
-          formik.resetForm();
+          formik.resetForm({values: initialValues});
+        } else {
+          /* eslint-disable functional/immutable-data */
+          initialValues.pec = formik.values.pec;
+          /* eslint-enable functional/immutable-data */
         }
         (contactRef.current as any).toggleEdit();
       }
