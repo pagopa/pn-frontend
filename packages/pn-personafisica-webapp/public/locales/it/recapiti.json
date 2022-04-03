@@ -33,7 +33,6 @@
     "phone-add": "Avvisami via SMS",
     "email-add": "Avvisami via email",
     "io-enable": "Avvisami sull'app IO",
-
     "email-verify": "Verifica email",
     "email-verify-descr": "Abbiamo inviato un codice all'indirizzo email indicato. Il codice è <strong>valido per 10 minuti</strong>.",
     "phone-verify": "Verifica cellulare",
@@ -44,6 +43,10 @@
     "new-code-link": "genera un nuovo codice",
     "wrong-code": "Il codice inserito non è valido",
     "email-added": "Indirizzo email associato correttamente",
-    "phone-added": "Numero di cellulare associato correttamente"
+    "phone-added": "Numero di cellulare associato correttamente",
+    "valid-email": "Inserire un indirizzo email valido",
+    "valid-phone": "Inserire un numero di cellulare valido",
+    "email-added-successfully": "Indirizzo email aggiunto correttamente",
+    "phone-added-successfully": "Numero di cellulare aggiunto correttamente"
   }
 }

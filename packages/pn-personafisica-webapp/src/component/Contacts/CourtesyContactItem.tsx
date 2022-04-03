@@ -1,35 +1,27 @@
 import { Close } from '@mui/icons-material';
-import { Box, Button, FormControl, FormGroup, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-// import { CourtesyChannelType, SaveCourtesyAddressParams } from "../../models/contacts";
 import { RootState } from '../../redux/store';
 import { CourtesyChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateCourtesyAddress } from '../../redux/contact/actions';
 
+export enum courtesyFieldType {
+  EMAIL = 'email',
+  PHONE = 'phone',
+}
+
 interface Props {
-  fieldType: 'email' | 'phone';
-  fieldValue: string;
+  type: courtesyFieldType;
+  value: string;
   isVerified: boolean;
 }
 
-const emailValidationSchema = yup.object().shape({
-  field: yup.string().email('Formato non corretto').required('Il campo è obbligatorio'),
-});
-
-const phoneValidationSchema = yup.object().shape({
-  field: yup
-    .string()
-    .required('Il campo è obbligatorio')
-    .matches(/^\d{9,10}$/, 'Formato non corretto!'),
-});
-
-const CourtesyContactItem = (props: Props) => {
-  const { fieldType, fieldValue, isVerified } = props;
+const CourtesyContactItem: React.FC<Props> = ({type, value, isVerified}) => {
 
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
   const dispatch = useAppDispatch();
@@ -39,29 +31,41 @@ const CourtesyContactItem = (props: Props) => {
   const [isEditMode, SetIsEditMode] = useState(!isVerified);
   const [isValidationCodeOk, setIsValidationCodeOk] = useState(true);
 
-  const subtitleText = `courtesy-contacts.${fieldType}-verify-descr`;
+  const subtitleText = `courtesy-contacts.${type}-verify-descr`;
+
+  const emailValidationSchema = yup.object().shape({
+    field: yup.string()
+      .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
+      .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
+  });
+  
+  const phoneValidationSchema = yup.object().shape({
+    field: yup
+      .string()
+      .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
+      .matches(/^\d{9,10}$/, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+  });
 
   const formik = useFormik({
     initialValues: {
-      field: fieldValue,
+      field: value,
     },
-    validationSchema: fieldType === 'email' ? emailValidationSchema : phoneValidationSchema,
-    onSubmit: (values) => {
-      alert('prova! ' + values.field);
-    },
+    validationSchema: type === courtesyFieldType.EMAIL ? emailValidationSchema : phoneValidationSchema,
+    onSubmit: () => {},
   });
 
-  const enteredValueChanged = () => fieldValue !== formik.values.field;
+  useEffect(() => {
+    void formik.validateForm();
+  }, []);
+
+  const enteredValueChanged = () => value !== formik.values.field;
 
   const saveDataHandler = () => {
     if (formik.isValid) {
       if (isVerified && !enteredValueChanged()) {
         SetIsEditMode(false);
       } else {
-        // show modal
         handleAddressCreation();
-        // dispatch azione con chiamata api
-        // se il dato non è verificato
         setIsModalVisible((prevState) => !prevState);
       }
     }
@@ -71,20 +75,16 @@ const CourtesyContactItem = (props: Props) => {
     setIsModalVisible(false);
   };
 
-  const handleChangeTouched = (e: ChangeEvent) => {
-    void formik.setFieldTouched(e.target.id, true, false);
-    formik.handleChange(e);
+  const handleChangeTouched = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    void formik.setFieldTouched(event.target.id, true, false);
+    formik.handleChange(event);
   };
-
-  useEffect(() => {
-    void formik.validateForm();
-  }, []);
 
   const handleAddressCreation = (verificationCode?: string, noCallback: boolean = false) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       recipientId,
       senderId: 'default',
-      channelType: fieldType === 'email' ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS,
+      channelType: type === courtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS,
       value: formik.values.field,
       code: verificationCode,
     };
@@ -97,15 +97,12 @@ const CourtesyContactItem = (props: Props) => {
         }
         if (res && verificationCode) {
           // show success message
-          dispatch(
-            appStateActions.addSuccess({ title: '', message: 'Operazione eseguita correttamente' })
-          ); // 2DO add translation!
-          // if (closeModalOnVerification) {
-          //   setOpen(false);
-          // }
+          dispatch(appStateActions.addSuccess({
+            title: '',
+            message: t(`courtesy-contacts.${type}-added-successfully`, { ns: 'recapiti' })
+          }));
           setIsModalVisible(false);
         } else {
-          // open code verification dialog
           setIsModalVisible(true);
         }
       })
@@ -116,51 +113,46 @@ const CourtesyContactItem = (props: Props) => {
 
   if (isVerified && !isEditMode) {
     return (
-      <form onSubmit={formik.handleSubmit}>
-        <FormGroup sx={{ margin: '20px 0', width: '100%' }}>
-          <Grid item lg={7} xs={8}>
+      <Fragment>
+          <Grid item lg={8} xs={8}>
             <IconButton aria-label="">
               <Close />
             </IconButton>
-            <TextField inputProps={{ sx: { height: '12px' } }}>{fieldValue}</TextField>
+            <Typography variant="body2" display="inline">
+              {value}&nbsp;
+            </Typography>
           </Grid>
-          <Grid item lg={5} xs={6}>
-            <Button variant="text">Text</Button>
+          <Grid item lg={4} xs={4}>
+            <Button variant="text" fullWidth>Modifica</Button>
           </Grid>
-        </FormGroup>
-      </form>
+          </Fragment>
     );
   } else {
     return (
       <Fragment>
-        <form onSubmit={formik.handleSubmit}>
-          <FormControl sx={{ width: "500px"}}>
-            <Grid item lg={7} xs={8}>
-              <TextField
-                id="field"
-                name="field"
-                label={fieldType === 'email' ? 'Email' : 'Phone'}
-                value={formik.values.field}
-                onChange={handleChangeTouched}
-                error={formik.touched.field && Boolean(formik.errors.field)}
-                helperText={formik.touched.field && formik.errors.field}
-                inputProps={{ sx: { height: '12px' } }}
-                placeholder={t(`courtesy-contacts.link-${fieldType}-placeholder`, {
-                  ns: 'recapiti',
-                })}
-                fullWidth
-              />
-            </Grid>
-            <Grid item lg={5} xs={6}>
-              <Button variant="outlined" onClick={saveDataHandler} disabled={!formik.isValid}>
-                {t(`courtesy-contacts.${fieldType}-add`, { ns: 'recapiti' })}
-              </Button>
-            </Grid>
-          </FormControl>
-        </form>
+        <Grid item lg={8} xs={12}>
+          <TextField
+            id="field"
+            name="field"
+            value={formik.values.field}
+            onChange={handleChangeTouched}
+            error={formik.touched.field && Boolean(formik.errors.field)}
+            helperText={formik.touched.field && formik.errors.field}
+            inputProps={{ sx: { height: '12px' } }}
+            placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
+              ns: 'recapiti',
+            })}
+            fullWidth
+          />
+        </Grid>
+        <Grid item lg={4} xs={6} alignItems="right">
+          <Button variant="outlined" onClick={saveDataHandler} disabled={!formik.isValid} fullWidth>
+            {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
+          </Button>
+        </Grid>
         <CodeModal
           title={
-            t(`courtesy-contacts.${fieldType}-verify`, { ns: 'recapiti' }) +
+            t(`courtesy-contacts.${type}-verify`, { ns: 'recapiti' }) +
             ` ${formik.values.field}`
           }
           subtitle={<Trans i18nKey={subtitleText} ns="recapiti" />}
@@ -171,7 +163,7 @@ const CourtesyContactItem = (props: Props) => {
           codeSectionAdditional={
             <Box>
               <Typography variant="body2" display="inline">
-                {t(`courtesy-contacts.${fieldType}-new-code`, { ns: 'recapiti' })}&nbsp;
+                {t(`courtesy-contacts.${type}-new-code`, { ns: 'recapiti' })}&nbsp;
               </Typography>
               <Typography
                 variant="body2"

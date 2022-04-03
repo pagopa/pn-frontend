@@ -39,14 +39,14 @@ const contactsSlice = createSlice({
       }
     });
     builder.addCase(createOrUpdateCourtesyAddress.fulfilled, (state, action) => {
-      // update or add digital address
+      // update or add courtesy address
       if (action.payload && action.payload.senderId) {
         const addressIndex = state.digitalAddresses.courtesy.findIndex(
           (address) =>
             address.senderId === (action.payload as DigitalAddress).senderId &&
             address.channelType === (action.payload as DigitalAddress).channelType
         );
-        if (addressIndex > -1) {
+        if (addressIndex > -1) { // update if found
           state.digitalAddresses.courtesy[addressIndex] = action.payload;
         } else {
           state.digitalAddresses.courtesy.push(action.payload);

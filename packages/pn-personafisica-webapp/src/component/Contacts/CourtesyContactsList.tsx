@@ -2,7 +2,7 @@ import { Box, Grid } from '@mui/material';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { CourtesyChannelType} from "../../models/contacts";
-import CourtesyContactItem from "./CourtesyContactItem";
+import CourtesyContactItem, { courtesyFieldType } from "./CourtesyContactItem";
 
 const CourtesyContactsList = () => {
   const courtesyContacts = useAppSelector((state: RootState) => state.contactsState.digitalAddresses.courtesy);
@@ -11,19 +11,19 @@ const CourtesyContactsList = () => {
   const emailContacts = courtesyContacts.filter(contact => contact.channelType === CourtesyChannelType.EMAIL);
   
   return (
-    <Box style={{ padding: '20px' }}>
-      <Grid container direction="row" sx={{marginTop: '20px'}} spacing={2}>
+    <Box style={{ padding: '1rem' }}>
+      <Grid container direction="row" sx={{marginTop: '1rem'}} spacing={2}>
         {phoneContacts.length > 0 ? 
-          phoneContacts.map((contact) => <CourtesyContactItem key={contact.value} fieldType="phone" fieldValue={contact.value} isVerified={true} />)
+          phoneContacts.map((contact) => <CourtesyContactItem key={contact.value} type={courtesyFieldType.PHONE} value={contact.value} isVerified={true} />)
           :
-          <CourtesyContactItem key="phone" fieldType="phone" fieldValue="" isVerified={false} />
+          <CourtesyContactItem type={courtesyFieldType.PHONE} value="" isVerified={false} />
         }
       </Grid>
-      <Grid container direction="row" sx={{marginTop: '20px'}} spacing={2}>
+      <Grid container direction="row" sx={{marginTop: '1rem'}} spacing={2}>
         {emailContacts.length > 0 ? 
-          emailContacts.map((contact) => <CourtesyContactItem key={contact.value} fieldType="email" fieldValue={contact.value} isVerified={true} />)
+          emailContacts.map((contact) => <CourtesyContactItem key={contact.value} type={courtesyFieldType.EMAIL} value={contact.value} isVerified={true} />)
           :
-          <CourtesyContactItem key="email" fieldType="email" fieldValue="" isVerified={false} />
+          <CourtesyContactItem type={courtesyFieldType.EMAIL} value="" isVerified={false} />
         }
       </Grid>
     </Box>
