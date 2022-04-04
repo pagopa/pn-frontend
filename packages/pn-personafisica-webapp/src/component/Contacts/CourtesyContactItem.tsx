@@ -4,26 +4,27 @@ import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
+import { appStateActions, CodeModal, useIsMobile } from '@pagopa-pn/pn-commons';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { CourtesyChannelType, SaveDigitalAddressParams } from '../../models/contacts';
 import { createOrUpdateCourtesyAddress } from '../../redux/contact/actions';
 
-export enum courtesyFieldType {
+export enum CourtesyFieldType {
   EMAIL = 'email',
   PHONE = 'phone',
 }
 
 interface Props {
-  type: courtesyFieldType;
+  type: CourtesyFieldType;
   value: string;
   isVerified: boolean;
 }
 
-const CourtesyContactItem: React.FC<Props> = ({type, value, isVerified}) => {
-
+const CourtesyContactItem: React.FC<Props> = ({ type, value, isVerified }) => {
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
+  const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'recapiti']);
 
@@ -34,11 +35,12 @@ const CourtesyContactItem: React.FC<Props> = ({type, value, isVerified}) => {
   const subtitleText = `courtesy-contacts.${type}-verify-descr`;
 
   const emailValidationSchema = yup.object().shape({
-    field: yup.string()
+    field: yup
+      .string()
       .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
       .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
   });
-  
+
   const phoneValidationSchema = yup.object().shape({
     field: yup
       .string()
@@ -50,7 +52,8 @@ const CourtesyContactItem: React.FC<Props> = ({type, value, isVerified}) => {
     initialValues: {
       field: value,
     },
-    validationSchema: type === courtesyFieldType.EMAIL ? emailValidationSchema : phoneValidationSchema,
+    validationSchema:
+      type === CourtesyFieldType.EMAIL ? emailValidationSchema : phoneValidationSchema,
     onSubmit: () => {},
   });
 
@@ -84,7 +87,8 @@ const CourtesyContactItem: React.FC<Props> = ({type, value, isVerified}) => {
     const digitalAddressParams: SaveDigitalAddressParams = {
       recipientId,
       senderId: 'default',
-      channelType: type === courtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS,
+      channelType:
+        type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS,
       value: formik.values.field,
       code: verificationCode,
     };
@@ -97,10 +101,12 @@ const CourtesyContactItem: React.FC<Props> = ({type, value, isVerified}) => {
         }
         if (res && verificationCode) {
           // show success message
-          dispatch(appStateActions.addSuccess({
-            title: '',
-            message: t(`courtesy-contacts.${type}-added-successfully`, { ns: 'recapiti' })
-          }));
+          dispatch(
+            appStateActions.addSuccess({
+              title: '',
+              message: t(`courtesy-contacts.${type}-added-successfully`, { ns: 'recapiti' }),
+            })
+          );
           setIsModalVisible(false);
         } else {
           setIsModalVisible(true);
@@ -114,23 +120,37 @@ const CourtesyContactItem: React.FC<Props> = ({type, value, isVerified}) => {
   if (isVerified && !isEditMode) {
     return (
       <Fragment>
-          <Grid item lg={8} xs={8}>
-            <IconButton aria-label="">
+        <Grid item lg={7} xs={8}>
+          {!isMobile && (
+            <IconButton aria-label="Elimina">
               <Close />
             </IconButton>
-            <Typography variant="body2" display="inline">
-              {value}&nbsp;
-            </Typography>
+          )}
+          <Typography variant="body2" display="inline">
+            {value}&nbsp;
+          </Typography>
+        </Grid>
+        {!isMobile && (
+          <Grid item lg={5} xs={4}>
+            <Button variant="text" fullWidth>
+              Modifica
+            </Button>
           </Grid>
-          <Grid item lg={4} xs={4}>
-            <Button variant="text" fullWidth>Modifica</Button>
+        )}
+        {isMobile && (
+          <Grid item lg={5} xs={12}>
+            <ButtonNaked color="primary" sx={{ marginRight: '10px' }}>
+              {t('button.rimuovi')}
+            </ButtonNaked>
+            <ButtonNaked color="primary">{t('button.modifica')}</ButtonNaked>
           </Grid>
-          </Fragment>
+        )}
+      </Fragment>
     );
   } else {
     return (
       <Fragment>
-        <Grid item lg={8} xs={12}>
+        <Grid item lg={7} xs={12}>
           <TextField
             id="field"
             name="field"
@@ -145,15 +165,14 @@ const CourtesyContactItem: React.FC<Props> = ({type, value, isVerified}) => {
             fullWidth
           />
         </Grid>
-        <Grid item lg={4} xs={6} alignItems="right">
+        <Grid item lg={5} xs={12} alignItems="right">
           <Button variant="outlined" onClick={saveDataHandler} disabled={!formik.isValid} fullWidth>
             {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
           </Button>
         </Grid>
         <CodeModal
           title={
-            t(`courtesy-contacts.${type}-verify`, { ns: 'recapiti' }) +
-            ` ${formik.values.field}`
+            t(`courtesy-contacts.${type}-verify`, { ns: 'recapiti' }) + ` ${formik.values.field}`
           }
           subtitle={<Trans i18nKey={subtitleText} ns="recapiti" />}
           open={isModalVisible}
