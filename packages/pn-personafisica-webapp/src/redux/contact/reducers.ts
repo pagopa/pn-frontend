@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { DigitalAddresses, DigitalAddress } from './../../models/contacts';
-import { createOrUpdateLegalAddress, getDigitalAddresses } from './actions';
+import { createOrUpdateLegalAddress, getDigitalAddresses, resetContactsState } from './actions';
 
 const initialState = {
   loading: false,
@@ -31,6 +31,7 @@ const contactsSlice = createSlice({
         }
       }
     });
+    builder.addCase(resetContactsState, () => initialState);
   },
 });
 

@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useEffect } from 'react';
 import { Grid, Typography, Box, IconButton, Alert } from '@mui/material'; // SvgIcon
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -51,11 +51,16 @@ const Toast = ({
     [MessageType.INFO, 'info'],
   ]);
 
-  if (closingDelay) {
-    setTimeout(() => {
-      closeToast();
-    }, closingDelay);
-  }
+  
+  useEffect(() => {
+    if (closingDelay && openStatus) {
+      const timer = setTimeout(() => {
+        closeToast();
+      }, closingDelay);
+      return () => clearTimeout(timer);
+    }
+    return;
+  }, []);
 
   return (
     <Fragment>
