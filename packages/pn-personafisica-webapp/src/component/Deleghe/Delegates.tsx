@@ -103,14 +103,15 @@ const Delegates = () => {
         </Box>
       </Stack>
       {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
-      {!delegatesError &&
-      <Table
+      {!delegatesError && (
+        <Table
           columns={delegatesColumns}
           rows={rows}
           emptyActionLabel={t('deleghe.add') as string}
-          emptyMessage={'Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.'}
+          emptyMessage={t('deleghe.no_delegates') as string}
           emptyActionCallback={handleAddDelegationClick}
-      />}
+        />
+      )}
     </Box>
   );
 };
