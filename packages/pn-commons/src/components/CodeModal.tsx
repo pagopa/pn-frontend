@@ -32,7 +32,18 @@ type Props = {
 
 /**
  * This modal allows the user to input a verification code.
- * @param Props
+ * @param title title to show
+ * @param subtitle subtitle to show
+ * @param open flag to hide/show modal
+ * @param initialValues initial code
+ * @param handleClose function that is called when modal is closed
+ * @param codeSectionTitle title of the section where is the code
+ * @param codeSectionAdditional additional elments under the code
+ * @param confirmLabel label of the confirm button
+ * @param cancelLabel label of the cancel button
+ * @param isReadOnly set if code is in readonly mode
+ * @param hasError set if there is an error
+ * @param errorMessage message to show when there is an error
  */
 const CodeModal = ({
   title,
@@ -62,12 +73,12 @@ const CodeModal = ({
           inputsRef[index + 1].focus();
           // set cursor position
           if (inputsRef[index + 1].setSelectionRange) {
-            inputsRef[index + 1].setSelectionRange(0, 0);
+            inputsRef[index + 1].setSelectionRange(inputsRef[index + 1].value, inputsRef[index + 1].value);
           } else if (inputsRef[index + 1].createTextRange) {
             const t = inputsRef[index + 1].createTextRange();
             t.collapse(true);
-            t.moveEnd('character', 0);
-            t.moveStart('character', 0);
+            t.moveEnd('character', inputsRef[index + 1].value);
+            t.moveStart('character', inputsRef[index + 1].value);
             t.select();
           }
         });
@@ -99,12 +110,12 @@ const CodeModal = ({
   }, [open]);
 
   const codeIsValid = inputsValues.every((v) => v);
-  const inputColor = hasError ? 'error.main' : 'primary.main';
+  const inputColor = hasError ? 'error.main' : (isReadOnly ? 'primary.main' : '');
 
   return (
     <Dialog
       open={open}
-      onClose={() => handleClose}
+      onClose={handleClose}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
       data-testid="codeDialog"
@@ -144,7 +155,6 @@ const CodeModal = ({
               }}
               value={inputsValues[index]}
               color={hasError ? 'error' : 'primary'}
-              focused={isReadOnly}
               error={hasError}
             />
           ))}

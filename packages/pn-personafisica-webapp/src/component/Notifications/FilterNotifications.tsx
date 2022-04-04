@@ -8,13 +8,14 @@ import {
   CustomMobileDialog,
   CustomMobileDialogContent,
   CustomMobileDialogToggle,
-  NotificationAllowedStatus,
   tenYearsAgo,
   today,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
 import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 import { setNotificationFilters } from '../../redux/dashboard/actions';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
@@ -28,6 +29,7 @@ const useStyles = makeStyles({
 
 const FilterNotifications = () => {
   const dispatch = useDispatch();
+  const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common']);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -42,33 +44,33 @@ const FilterNotifications = () => {
     endDate: yup.date().min(tenYearsAgo),
   });
 
+  const emptyValues = {
+    startDate: tenYearsAgo.toISOString(),
+    endDate: today.toISOString(),
+    iunMatch: undefined,
+  };
+
   const initialValues = {
     startDate: tenYearsAgo,
     endDate: today,
     iunMatch: '',
-    status: NotificationAllowedStatus[0].value,
   };
+
   const prevFilters = useRef(initialValues);
 
-  const submitForm = (values: {
-    startDate: Date;
-    endDate: Date;
-    iunMatch: string;
-    status: string;
-  }) => {
+  const submitForm = (values: { startDate: Date; endDate: Date; iunMatch: string }) => {
     if (prevFilters.current === values) {
       return;
     }
-    const filters = {
+    const currentFilters = {
       startDate: values.startDate.toISOString(),
       endDate: values.endDate.toISOString(),
       iunMatch: values.iunMatch,
-      status: values.status === 'All' ? undefined : values.status,
     };
     /* eslint-disable functional/immutable-data */
     prevFilters.current = values;
     /* eslint-enable functional/immutable-data */
-    dispatch(setNotificationFilters(filters));
+    dispatch(setNotificationFilters(currentFilters));
   };
 
   const formik = useFormik({
@@ -79,30 +81,7 @@ const FilterNotifications = () => {
   });
 
   const cleanFilters = () => {
-    // TODO questa può andare in un metodo separato: deve pulire i filtri dello stato redux e pulire il form
-    dispatch(
-      setNotificationFilters({
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
-        status: undefined,
-        iunMatch: undefined,
-      })
-    );
-    formik.resetForm();
-    /* eslint-disable functional/immutable-data */
-    prevFilters.current = initialValues;
-    /* eslint-enable functional/immutable-data */
-    changeDate(null, 'start');
-    changeDate(null, 'end');
-  };
-
-  const changeDate = (value: Date | null, type: 'start' | 'end') => {
-    if (type === 'start') {
-      setStartDate(value);
-    }
-    if (type === 'end') {
-      setEndDate(value);
-    }
+    dispatch(setNotificationFilters(emptyValues));
   };
 
   const filtersApplied = (): number => {
@@ -114,6 +93,19 @@ const FilterNotifications = () => {
       return c;
     }, 0);
   };
+
+  useEffect(() => {
+    if (filters && filters === emptyValues) {
+      formik.resetForm({
+        values: initialValues,
+      });
+      /* eslint-disable functional/immutable-data */
+      prevFilters.current = initialValues;
+      /* eslint-enable functional/immutable-data */
+      setStartDate(null);
+      setEndDate(null);
+    }
+  }, [filters]);
 
   useEffect(() => {
     void formik.validateForm();
@@ -135,8 +127,8 @@ const FilterNotifications = () => {
               formikInstance={formik}
               startDate={startDate}
               endDate={endDate}
-              setStartDate={(value) => changeDate(value, 'start')}
-              setEndDate={(value) => changeDate(value, 'end')}
+              setStartDate={(value) => setStartDate(value)}
+              setEndDate={(value) => setEndDate(value)}
             />
           </DialogContent>
           <DialogActions>
@@ -157,8 +149,8 @@ const FilterNotifications = () => {
             formikInstance={formik}
             startDate={startDate}
             endDate={endDate}
-            setStartDate={(value) => changeDate(value, 'start')}
-            setEndDate={(value) => changeDate(value, 'end')}
+            setStartDate={(value) => setStartDate(value)}
+            setEndDate={(value) => setEndDate(value)}
           />
           <FilterNotificationsFormActions formikInstance={formik} cleanFilters={cleanFilters} />
         </Grid>

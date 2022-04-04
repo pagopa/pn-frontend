@@ -27,9 +27,6 @@ describe('Dashbaord redux state tests', () => {
       filters: {
         startDate: tenYearsAgo.toISOString(),
         endDate: today.toISOString(),
-        recipientId: '',
-        status: '',
-        subjectRegExp: '',
       },
       pagination: {
         nextPagesKey: [],

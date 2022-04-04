@@ -1,15 +1,18 @@
-import TableContainer from '@mui/material/TableContainer';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import Box from '@mui/material/Box';
-import { styled, useTheme } from '@mui/material/styles';
+import { ReactNode } from 'react';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableSortLabel,
+  Typography,
+  Box,
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
 import { SentimentDissatisfied } from '@mui/icons-material';
-
 import { Notification } from '../../types/Notifications';
 import { Column, Item, Sort } from '../../types/ItemsTable';
 
@@ -18,13 +21,27 @@ type Props = {
   columns: Array<Column>;
   /** Table rows */
   rows: Array<Item>;
+  /** Callback to be called when performing an empty action */
+  emptyActionCallback: () => void;
   /** Table sort */
   sort?: Sort;
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort) => void;
+  /** Empty message for no result */
+  emptyMessage?: ReactNode;
+  /** Empty action label */
+  emptyActionLabel?: string;
 };
 
-function NotificationsTable({ columns, rows, sort, onChangeSorting }: Props) {
+function ItemsTable({
+  columns,
+  rows,
+  sort,
+  onChangeSorting,
+  emptyActionCallback,
+  emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
+  emptyActionLabel = 'Rimuovi filtri',
+}: Props) {
   const createSortHandler = (property: string) => () => {
     if (sort && onChangeSorting) {
       const isAsc = sort.orderBy === property && sort.order === 'asc';
@@ -50,12 +67,10 @@ function NotificationsTable({ columns, rows, sort, onChangeSorting }: Props) {
     `
   );
 
-  const theme = useTheme();
-
   // TODO: gestire colore grigio di sfondo con variabile tema
   return (
     <Root>
-      <TableContainer sx={{ backgroundColor: '#F2F2F2', marginBottom: '10px' }}>
+      <TableContainer sx={{ marginBottom: '10px' }}>
         <Table stickyHeader aria-label="Tabella lista notifiche">
           <TableHead>
             <TableRow>
@@ -95,33 +110,36 @@ function NotificationsTable({ columns, rows, sort, onChangeSorting }: Props) {
             {rows.length ? (
               rows.map((row) => (
                 <TableRow key={row.id} sx={{ cursor: 'pointer' }}>
-                  {columns.map((c) => (
+                  {columns.map((column) => (
                     <TableCell
-                      key={c.id}
-                      sx={{ width: c.width, borderBottom: 'none' }}
-                      align={c.align}
-                      onClick={() => c.onClick && c.onClick(row, c)}
+                      key={column.id}
+                      sx={{ width: column.width, borderBottom: 'none' }}
+                      align={column.align}
+                      onClick={() => column.onClick && column.onClick(row, column)}
                     >
-                      {c.getCellLabel(row[c.id as keyof Notification], row)}
+                      {column.getCellLabel(row[column.id as keyof Notification], row)}
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} align="center">
-                  <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
-                  <span>I filtri che hai aggiunto non hanno dato nessun risultato.</span>
-                  &nbsp;
-                  <span
-                    style={{
-                      color: theme.palette.primary.main,
-                      cursor: 'pointer',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    Rimuovi filtri
-                  </span>
+                <TableCell colSpan={columns.length}>
+                  <Box component='div' display='flex' sx={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
+                    <Typography variant="body2">{emptyMessage}</Typography>
+                    &nbsp;
+                    <Typography
+                      variant="body2"
+                      fontWeight={'bold'}
+                      sx={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={emptyActionCallback}
+                    >
+                      {emptyActionLabel}
+                    </Typography>
+                  </Box>
                 </TableCell>
               </TableRow>
             )}
@@ -132,4 +150,4 @@ function NotificationsTable({ columns, rows, sort, onChangeSorting }: Props) {
   );
 }
 
-export default NotificationsTable;
+export default ItemsTable;
