@@ -80,4 +80,23 @@ export const ContactsApi = {
         };
       }),
   */
+
+  /**
+   * Remove current user digital address
+   * @param  {string} recipientId
+   * @returns Promise
+   */
+  deleteLegalAddress: (
+    _recipientId: string,
+    senderId: string,
+    _channelType: LegalChannelType
+  ): Promise<string> =>
+    /*
+    apiClient
+      .delete<string>(`/address-book/v1/digital-address/${recipientId}/legal/${senderId}/${channelType}`)
+      .then(() => senderId),
+    */
+      new Promise((resolve) => {
+        resolve(senderId);
+      })
 };

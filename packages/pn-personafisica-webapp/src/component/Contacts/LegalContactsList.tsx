@@ -7,7 +7,8 @@ import { Divider, Grid, Box, Typography, TextField } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
 import { DigitalAddress, LegalChannelType } from '../../models/contacts';
-import { createOrUpdateLegalAddress } from '../../redux/contact/actions';
+import { createOrUpdateLegalAddress, deleteLegalAddress } from '../../redux/contact/actions';
+import { useAppDispatch } from '../../redux/hooks';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactsCard from './DigitalContactsCard';
 import LegalContactsDisclosure from './LegalContactsDisclosure';
@@ -19,6 +20,7 @@ type Props = {
 };
 
 const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'recapiti']);
   const { setProps, handleCodeVerification } = useDigitalContactsCodeVerificationContext();
   const [disclosureCollapsed, setDisclosureCollapsed] = useState(true);
@@ -111,6 +113,10 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     });
   };
 
+  const removeElemHandler = () => {
+    void dispatch(deleteLegalAddress({recipientId, senderId: 'default', channelType: LegalChannelType.PEC}));
+  };
+
   return (
     <DigitalContactsCard
       sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
@@ -153,6 +159,9 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
               },
             ]}
             saveDisabled={!formik.isValid}
+            onRemoveClick={removeElemHandler}
+            removeModalTitle={t('legal-contacts.remove-pec-title', { ns: 'recapiti' })}
+            removeModalBody={t('legal-contacts.remove-pec-message', { pec: formik.values.pec, ns: 'recapiti'})}
           />
         </form>
       </Box>

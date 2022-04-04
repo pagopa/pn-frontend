@@ -22,6 +22,8 @@
     "new-code-link": "genera un nuovo codice",
     "wrong-code": "Il codice inserito non è valido",
     "pec-added-successfully": "PEC associata correttamente",
-    "pec-added": "PEC associata"
+    "pec-added": "PEC associata",
+    "remove-pec-title": "Rimuovi PEC",
+    "remove-pec-message": "Confermi di voler rimuovere l'inidirizzo PEC {{pec}}?"
   }
 }
