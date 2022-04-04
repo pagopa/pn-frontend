@@ -10,6 +10,12 @@ type Props = {
   clickHandler: (documentIndex: number) => void;
 };
 
+/**
+ * Notification detail documents
+ * @param title title to show
+ * @param documents data to show
+ * @param clickHandler function called when user clicks on the download button
+ */
 const NotificationDetailDocuments = ({ title, documents, clickHandler }: Props) => {
 
   return (

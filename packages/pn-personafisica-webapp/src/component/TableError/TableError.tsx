@@ -1,9 +1,9 @@
 import { Stack, styled, Typography } from '@mui/material';
-import { SentimentDissatisfied } from '@mui/icons-material';
-import { useEffect, useState } from 'react';
+import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import { useTranslation } from 'react-i18next';
 
 type TableErrorProps = {
-  httpErrorNumber?: number;
+  onClick: () => void;
 };
 
 const StyledStack = styled(Stack)`
@@ -12,19 +12,8 @@ const StyledStack = styled(Stack)`
   padding: 16px;
 `;
 
-const TableError: React.FC<TableErrorProps> = ({ httpErrorNumber }) => {
-  const [errorDescription, setErrorDescription] = useState('');
-
-  useEffect(() => {
-    switch (httpErrorNumber) {
-      case 500:
-        setErrorDescription('Si è verificato un errore ai server. Si prega di riprovare più tardi');
-        break;
-      default:
-        setErrorDescription('Si è verificato un errore generico. Si prega di riprovare più tardi');
-        break;
-    }
-  }, []);
+const TableError: React.FC<TableErrorProps> = ({ onClick }) => {
+  const { t } = useTranslation(['deleghe']);
 
   return (
     <StyledStack
@@ -33,11 +22,14 @@ const TableError: React.FC<TableErrorProps> = ({ httpErrorNumber }) => {
       justifyContent={'center'}
       alignItems={'center'}
     >
-      <SentimentDissatisfied
+      <ReportGmailerrorredIcon
         fontSize={'small'}
         sx={{ verticalAlign: 'middle', margin: '0 20px' }}
       />
-      <Typography sx={{ marginRight: '8px' }}>{errorDescription}</Typography>
+      <Typography sx={{ marginRight: '8px' }}>{t('deleghe.error')}</Typography>
+      <Typography color="primary" fontWeight="bold" sx={{ cursor: 'pointer' }} onClick={onClick}>
+        {t('deleghe.reload')}
+      </Typography>
     </StyledStack>
   );
 };

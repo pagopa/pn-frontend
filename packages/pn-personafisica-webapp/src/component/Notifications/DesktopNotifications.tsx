@@ -19,13 +19,14 @@ import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
+  onCancelSearch: () => void;
   /** Table sort */
   sort?: Sort;
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort) => void;
 };
 
-const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) => {
+const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
 
@@ -115,7 +116,13 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
   return (
     <Fragment>
       <FilterNotifications />
-      <ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={onChangeSorting} />
+      <ItemsTable
+        columns={columns}
+        rows={rows}
+        sort={sort}
+        onChangeSorting={onChangeSorting}
+        emptyActionCallback={onCancelSearch}
+      />
     </Fragment>
   );
 };

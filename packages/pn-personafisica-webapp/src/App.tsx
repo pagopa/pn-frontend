@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
 
@@ -16,6 +17,7 @@ const App = () => {
 
   const menuItems: Array<SideMenuItem> = [
     { label: t('menu.notifiche'), icon: MailOutlineIcon, route: routes.NOTIFICHE },
+    { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     { label: t('menu.deleghe'), icon: PeopleOutlineIcon, route: routes.DELEGHE },
     { label: t('menu.profilo'), icon: SettingsOutlinedIcon, route: routes.PROFILO },
   ];

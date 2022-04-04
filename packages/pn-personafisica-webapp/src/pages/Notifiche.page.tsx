@@ -6,15 +6,17 @@ import {
   CustomPagination,
   PaginationData,
   Sort,
+  tenYearsAgo,
   TitleBox,
+  today,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { getReceivedNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
+import { getReceivedNotifications, setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import DesktopNotifications from '../component/notification/DesktopNotifications';
-import MobileNotifications from '../component/notification/MobileNotifications';
+import DesktopNotifications from '../component/Notifications/DesktopNotifications';
+import MobileNotifications from '../component/Notifications/MobileNotifications';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -47,6 +49,17 @@ const Notifiche = () => {
     dispatch(setSorting(s));
   };
 
+  // Remove filter
+  const handleCancelSearch = () => {
+    dispatch(
+      setNotificationFilters({
+        startDate: tenYearsAgo.toISOString(),
+        endDate: today.toISOString(),
+        iunMatch: undefined,
+      })
+    );
+  };
+
   useEffect(() => {
     // assign the ref's current value to the pagination Hook
     const params = {
@@ -66,12 +79,14 @@ const Notifiche = () => {
           notifications={notifications}
           sort={sort}
           onChangeSorting={handleChangeSorting}
+          onCancelSearch={handleCancelSearch}
         />
       ) : (
         <DesktopNotifications
           notifications={notifications}
           sort={sort}
           onChangeSorting={handleChangeSorting}
+          onCancelSearch={handleCancelSearch}
         />
       )}
       {notifications.length > 0 && (

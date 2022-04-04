@@ -8,7 +8,7 @@ import {
   CardSort,
   getNotificationStatusLabelAndColor,
   Notification,
-  ItemCard,
+  ItemsCard,
   NotificationStatus,
   Item,
   Sort,
@@ -24,13 +24,14 @@ import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
+  onCancelSearch: () => void;
   /** Card sort */
   sort?: Sort;
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort) => void;
 };
 
-const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) => {
+const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
 
@@ -118,7 +119,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
   };
 
-  // TODO: sostituire con button naked
   const cardActions: Array<CardAction> = [
     {
       id: 'go-to-detail',
@@ -143,11 +143,12 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting }: Props) =>
           )}
         </Grid>
       </Grid>
-      <ItemCard
+      <ItemsCard
         cardHeader={cardHeader}
         cardBody={cardBody}
         cardData={cardData}
         cardActions={cardActions}
+        emptyActionCallback={onCancelSearch}
       />
     </Fragment>
   );

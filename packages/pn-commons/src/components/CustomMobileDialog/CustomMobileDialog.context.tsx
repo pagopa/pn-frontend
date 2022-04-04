@@ -15,18 +15,20 @@ const CustomMobileDialogProvider: FC<ReactNode> = ({ children }) => {
   };
 
   return (
-    <CustomMobileDialogContext.Provider value={{open, toggleOpen}}>
+    <CustomMobileDialogContext.Provider value={{ open, toggleOpen }}>
       {children}
     </CustomMobileDialogContext.Provider>
   );
 };
 
 const useCustomMobileDialogContext = () => {
-  const context = useContext(CustomMobileDialogContext)
+  const context = useContext(CustomMobileDialogContext);
   if (context === undefined) {
-    throw new Error('useCustomMobileDialogContext must be used within a CustomMobileDialogProvider')
+    throw new Error(
+      'useCustomMobileDialogContext must be used within a CustomMobileDialogProvider'
+    );
   }
-  return context
-}
+  return context;
+};
 
 export { CustomMobileDialogProvider, useCustomMobileDialogContext };

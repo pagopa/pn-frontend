@@ -2,11 +2,18 @@
   "button": {
     "cerca": "Cerca",
     "annulla ricerca": "Annulla Ricerca",
-    "indietro": "Indietro"
+    "indietro": "Indietro",
+    "associa": "Associa",
+    "conferma": "Conferma",
+    "annulla": "Annulla",
+    "modifica": "Modifica",
+    "salva": "Salva",
+    "rimuovi": "Rimuovi"
   },
   "menu": {
     "notifiche": "Notifiche",
     "deleghe": "Deleghe",
-    "profilo": "Profilo"
+    "profilo": "Profilo",
+    "contacts": "Recapiti"
   }
 }
