@@ -4,19 +4,23 @@ import { Add } from '@mui/icons-material';
 import { Column, ItemsTable as Table, Item } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import TableError from '../TableError/TableError';
+import { getDelegates } from '../../redux/delegation/actions';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegates = () => {
   const { t } = useTranslation(['deleghe']);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
+  const { delegatesError } = useAppSelector((state: RootState) => state.delegationsState);
 
   const rows: Array<Item> = delegationToItem(delegates, false);
 
@@ -98,13 +102,16 @@ const Delegates = () => {
           </Button>
         </Box>
       </Stack>
-      <Table
-        columns={delegatesColumns}
-        rows={rows}
-        emptyActionLabel={t('deleghe.add') as string}
-        emptyMessage={'Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.'}
-        emptyActionCallback={handleAddDelegationClick}
-      />
+      {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
+      {!delegatesError && (
+        <Table
+          columns={delegatesColumns}
+          rows={rows}
+          emptyActionLabel={t('deleghe.add') as string}
+          emptyMessage={t('deleghe.no_delegates') as string}
+          emptyActionCallback={handleAddDelegationClick}
+        />
+      )}
     </Box>
   );
 };
