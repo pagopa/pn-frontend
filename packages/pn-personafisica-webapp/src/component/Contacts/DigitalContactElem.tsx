@@ -34,7 +34,7 @@ const DigitalContactElem = forwardRef(({ fields, saveDisabled = false }: Props, 
 
   // export toggleEdit method
   useImperativeHandle(ref, () => ({
-    toggleEdit
+    toggleEdit,
   }));
 
   return (
@@ -61,7 +61,7 @@ const DigitalContactElem = forwardRef(({ fields, saveDisabled = false }: Props, 
       )}
       {editMode && (
         <Grid item lg={2} xs={12} textAlign={isMobile ? 'left' : 'right'}>
-          <ButtonNaked color="primary" type='submit' disabled={saveDisabled}>
+          <ButtonNaked color="primary" type="submit" disabled={saveDisabled}>
             {t('button.salva')}
           </ButtonNaked>
         </Grid>

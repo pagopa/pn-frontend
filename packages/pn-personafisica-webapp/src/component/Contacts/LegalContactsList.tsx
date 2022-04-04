@@ -42,12 +42,15 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     </Grid>
   );
 
-  const defaultAddress = legalAddresses.find(a => a.senderId === 'default');
+  const defaultAddress = legalAddresses.find((a) => a.senderId === 'default');
   const validationSchema = yup.object({
-    pec: yup.string().required(t('legal-contacts.valid-pec', { ns: 'recapiti' })).email(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
+    pec: yup
+      .string()
+      .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
+      .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
   });
-  const initialValues =  {
-    pec: defaultAddress?.value || ''
+  const initialValues = {
+    pec: defaultAddress?.value || '',
   };
 
   const formik = useFormik({
@@ -97,14 +100,14 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
       actionToBeDispatched: createOrUpdateLegalAddress,
       callbackOnValidation: (status: 'validated' | 'cancelled') => {
         if (status === 'cancelled') {
-          formik.resetForm({values: initialValues});
+          formik.resetForm({ values: initialValues });
         } else {
           /* eslint-disable functional/immutable-data */
           initialValues.pec = formik.values.pec;
           /* eslint-enable functional/immutable-data */
         }
         (contactRef.current as any).toggleEdit();
-      }
+      },
     });
   };
 
@@ -127,7 +130,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                 component: (
                   <Typography>{t('legal-contacts.pec-added', { ns: 'recapiti' })}</Typography>
                 ),
-                size: 'variable'
+                size: 'variable',
               },
               {
                 id: 'value',
@@ -137,7 +140,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                     fullWidth
                     name="pec"
                     label="PEC"
-                    variant= "outlined"
+                    variant="outlined"
                     size="small"
                     value={formik.values.pec}
                     onChange={handleChangeTouched}
@@ -146,8 +149,8 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
                   />
                 ),
                 isEditable: true,
-                size: 'auto'
-              }
+                size: 'auto',
+              },
             ]}
             saveDisabled={!formik.isValid}
           />
