@@ -33,8 +33,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
     {
       id: 'notificationStatus',
       label: "",
-      width: '0%',
-      sortable: true,
+      width: '1%',
       getCellLabel(value: string) {
         return getNewNotificationBadge(value);
       },
