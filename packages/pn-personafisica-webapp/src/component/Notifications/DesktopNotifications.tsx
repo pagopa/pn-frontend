@@ -19,24 +19,36 @@ import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
+  onCancelSearch: () => void;
   /** Table sort */
   sort?: Sort;
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort) => void;
 };
 
-const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) => {
+const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
 
   const columns: Array<Column> = [
+    {
+      id: 'notificationStatus',
+      label: "",
+      width: '1%',
+      getCellLabel(value: string) {
+        return getNewNotificationBadge(value);
+      },
+      onClick(row: Item, column: Column) {
+        handleRowClick(row, column);
+      },
+    },
     {
       id: 'sentAt',
       label: t('table.data'),
       width: '11%',
       sortable: true,
       getCellLabel(value: string) {
-        return getNewNotificationBadge(value);
+        return value;
       },
       onClick(row: Item, column: Column) {
         handleRowClick(row, column);
@@ -104,7 +116,13 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting }: Props) =
   return (
     <Fragment>
       <FilterNotifications />
-      <ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={onChangeSorting} />
+      <ItemsTable
+        columns={columns}
+        rows={rows}
+        sort={sort}
+        onChangeSorting={onChangeSorting}
+        emptyActionCallback={onCancelSearch}
+      />
     </Fragment>
   );
 };

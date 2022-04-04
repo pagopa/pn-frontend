@@ -28,8 +28,7 @@ type Props = {
 
 const InsertLegalContact = ({ recipientId }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { setProps, handleCodeVerification } =
-    useDigitalContactsCodeVerificationContext();
+  const { setProps, handleCodeVerification } = useDigitalContactsCodeVerificationContext();
 
   const validationSchema = yup.object({
     digitalDomicileType: yup.string().required(),

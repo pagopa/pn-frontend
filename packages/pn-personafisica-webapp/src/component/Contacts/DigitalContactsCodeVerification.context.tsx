@@ -4,7 +4,11 @@ import _ from 'lodash';
 import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch } from '../../redux/hooks';
-import { CourtesyChannelType, LegalChannelType, SaveDigitalAddressParams } from '../../models/contacts';
+import {
+  CourtesyChannelType,
+  LegalChannelType,
+  SaveDigitalAddressParams,
+} from '../../models/contacts';
 
 type ModalProps = {
   title: string;
@@ -47,7 +51,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     senderId: '',
     digitalDomicileType: LegalChannelType.PEC,
     value: '',
-    successMessage: ''
+    successMessage: '',
   } as ModalProps;
 
   const [open, setOpen] = useState(false);
@@ -89,7 +93,8 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           // open code verification dialog
           setOpen(true);
         }
-      }).catch(() => {
+      })
+      .catch(() => {
         setCodeNotValid(true);
       });
   };

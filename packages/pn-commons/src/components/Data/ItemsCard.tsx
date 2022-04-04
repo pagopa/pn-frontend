@@ -1,16 +1,8 @@
+import { ReactNode } from 'react';
 import { SentimentDissatisfied } from '@mui/icons-material';
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Grid,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Card, CardActions, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 
-import { CardElement, CardAction } from '../../types/ItemCard';
+import { CardElement, CardAction } from '../../types/ItemsCard';
 import { Item } from '../../types/ItemsTable';
 
 type Props = {
@@ -20,11 +12,25 @@ type Props = {
   cardBody: Array<CardElement>;
   /* Card data*/
   cardData: Array<Item>;
+  /** Callback to be called when performing an empty action */
+  emptyActionCallback: () => void;
   /* Card actions*/
   cardActions?: Array<CardAction>;
+  /** Empty message for no result */
+  emptyMessage?: ReactNode;
+  /** Empty action label */
+  emptyActionLabel?: string;
 };
 
-const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Props) => {
+const ItemsCard = ({
+  cardHeader,
+  cardBody,
+  cardData,
+  cardActions,
+  emptyActionCallback,
+  emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
+  emptyActionLabel = 'Rimuovi filtri',
+}: Props) => {
   const cardHeaderTitle = (item: Item) => (
     <Grid container spacing={2} direction="row" alignItems="center">
       <Grid item xs={4} sx={{ fontSize: '14px', fontWeight: 400 }} data-testid="cardHeaderLeft">
@@ -40,8 +46,6 @@ const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Prop
       </Grid>
     </Grid>
   );
-
-  const theme = useTheme();
 
   return (
     <Box>
@@ -89,14 +93,25 @@ const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Prop
       ) : (
         <Card data-testid="itemCard" sx={{ padding: '24px' }}>
           <CardContent sx={{ padding: 0 }}>
-            <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
-            <span>I filtri che hai aggiunto non hanno dato nessun risultato.</span>
-            &nbsp;
-            <span
-              style={{ color: theme.palette.primary.main, cursor: 'pointer', fontWeight: 'bold' }}
+            <Box
+              component="div"
+              display="flex"
+              sx={{ flexDirection: 'column' }}
             >
-              Rimuovi filtri
-            </span>
+              <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
+              <Typography variant="body2">{emptyMessage}</Typography>
+              &nbsp;
+              <Typography
+                variant="body2"
+                fontWeight={'bold'}
+                sx={{
+                  cursor: 'pointer',
+                }}
+                onClick={emptyActionCallback}
+              >
+                {emptyActionLabel}
+              </Typography>
+            </Box>
           </CardContent>
         </Card>
       )}
@@ -104,4 +119,4 @@ const NotificationsCard = ({ cardHeader, cardBody, cardData, cardActions }: Prop
   );
 };
 
-export default NotificationsCard;
+export default ItemsCard;

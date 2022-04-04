@@ -2,17 +2,21 @@ import { Box, Chip, Stack, Typography } from '@mui/material';
 import { Column, ItemsTable, Item } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import { getDelegators } from '../../redux/delegation/actions';
+import TableError from '../TableError/TableError';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegators = () => {
   const { t } = useTranslation(['deleghe']);
+  const dispatch = useAppDispatch();
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
   );
+  const { delegatorsError } = useAppSelector((state: RootState) => state.delegationsState);
 
   const rows: Array<Item> = delegationToItem(delegates, true);
 
@@ -85,12 +89,24 @@ const Delegators = () => {
 
   return (
     <>
-      {rows.length > 0 && (
+      {delegatorsError && (
         <Box mb={8}>
           <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <Typography variant="h6">Deleghe a tuo carico</Typography>
           </Stack>
-          <ItemsTable columns={delegatorsColumns} rows={rows} />
+          <TableError onClick={() => dispatch(getDelegators())} />
+        </Box>
+      )}
+      {!delegatorsError && rows.length > 0 && (
+        <Box mb={8}>
+          <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+            <Typography variant="h6">Deleghe a tuo carico</Typography>
+          </Stack>
+          <ItemsTable
+            columns={delegatorsColumns}
+            rows={rows}
+            emptyActionCallback={() => console.log()}
+          />
         </Box>
       )}
     </>

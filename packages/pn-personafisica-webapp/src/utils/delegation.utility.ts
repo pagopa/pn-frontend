@@ -2,7 +2,7 @@ import { Item } from '@pagopa-pn/pn-commons';
 
 import { Delegation } from '../redux/delegation/types';
 /**
- * Maps Delegation object to Item, in order to be visualised in an ItemCard or ItemsTable component
+ * Maps Delegation object to Item, in order to be visualised in an ItemsCard or ItemsTable component
  * @param  {Array<Delegation>} delegations
  * @param  {boolean} isDelegator
  * @returns Array<Item>

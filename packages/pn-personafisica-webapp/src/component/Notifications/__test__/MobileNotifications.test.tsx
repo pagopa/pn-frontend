@@ -1,4 +1,4 @@
-import { fireEvent, waitFor} from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 
 import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
 import { render } from '../../../__test__/test-utils';
@@ -10,7 +10,7 @@ const mockNavigateFn = jest.fn();
 // mock imports
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigateFn
+  useNavigate: () => mockNavigateFn,
 }));
 
 jest.mock('@pagopa-pn/pn-commons', () => {
@@ -40,23 +40,32 @@ describe('MobileNotifications Component', () => {
         notifications={[]}
         sort={{ orderBy: 'mocked-field', order: 'asc' }}
         onChangeSorting={() => {}}
+        onCancelSearch={() => {}}
       />
     );
     expect(result.container).toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(/Sort/i);
-    expect(result.container).toHaveTextContent(/I filtri che hai aggiunto non hanno dato nessun risultato./i);
+    expect(result.container).toHaveTextContent(
+      /I filtri che hai aggiunto non hanno dato nessun risultato./i
+    );
   });
 
   it('clicks on go to detail action', async () => {
     // render component
     const result = render(
-      <MobileNotifications notifications={notificationsToFe.result} sort={{ orderBy: '', order: 'asc' }} />
+      <MobileNotifications
+        notifications={notificationsToFe.result}
+        sort={{ orderBy: '', order: 'asc' }}
+        onCancelSearch={() => {}}
+      />
     );
     const notificationsCardButton = result?.container.querySelector('button');
     fireEvent.click(notificationsCardButton!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.result[0].iun));
+      expect(mockNavigateFn).toBeCalledWith(
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.result[0].iun)
+      );
     });
   });
 });
