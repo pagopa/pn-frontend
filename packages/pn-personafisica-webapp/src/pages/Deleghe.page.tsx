@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Box } from '@mui/material';
-import { CourtesyPage, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { CodeModal, CourtesyPage, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { RestorePageOutlined } from '@mui/icons-material';
@@ -12,8 +12,9 @@ import {
   revokeDelegation,
   getDelegates,
   getDelegators,
+  closeAcceptModal,
+  acceptDelegation,
 } from '../redux/delegation/actions';
-import AcceptDelegationModal from '../component/Deleghe/AcceptDelegationModal';
 import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
 import MobileDelegates from '../component/Deleghe/MobileDelegates';
 import MobileDelegators from '../component/Deleghe/MobileDelegators';
@@ -29,7 +30,8 @@ const Deleghe = () => {
   const {
     id: acceptId,
     open: acceptOpen,
-    name: acceptName,
+    // TODO add name to description name: acceptName,
+    error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
   const dispatch = useAppDispatch();
   const { error } = useAppSelector((state: RootState) => state.delegationsState);
@@ -51,6 +53,14 @@ const Deleghe = () => {
     void dispatch(getDelegators());
   };
 
+  const handleCloseAcceptModal = () => {
+    dispatch(closeAcceptModal());
+  };
+
+  const handleConfirm = (code: Array<string>) => {
+    void dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
+  };
+
   useEffect(() => {
     void dispatch(getDelegates());
     void dispatch(getDelegators());
@@ -68,7 +78,20 @@ const Deleghe = () => {
         />
       ) : (
         <>
-          <AcceptDelegationModal open={acceptOpen} id={acceptId} name={acceptName} />
+          <CodeModal
+            title={t('deleghe.accept_title')}
+            subtitle={t('deleghe.accept_description')}
+            open={acceptOpen}
+            initialValues={new Array(5).fill('')}
+            handleClose={handleCloseAcceptModal}
+            cancelCallback={handleCloseAcceptModal}
+            cancelLabel={t('deleghe.close')}
+            confirmCallback={handleConfirm}
+            confirmLabel={t('deleghe.accept')}
+            codeSectionTitle={t('deleghe.verification_code')}
+            hasError={acceptError}
+            errorMessage={t('deleghe.invalid_code')}
+          />
           <ConfirmationModal
             open={open}
             title={

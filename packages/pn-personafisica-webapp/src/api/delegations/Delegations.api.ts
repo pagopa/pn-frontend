@@ -1,4 +1,4 @@
-import { AxiosPromise, AxiosResponse } from 'axios';
+import { AxiosResponse } from 'axios';
 import { apiClient } from '../axios';
 import { AcceptDelegationResponse, Delegation } from '../../redux/delegation/types';
 import { CreateDelegationProps, CreateDelegationResponse } from '../../redux/newDelegation/actions';
@@ -71,10 +71,6 @@ export const DelegationsApi = {
         }
         return {
           id: '-1',
-          type: 'generic',
-          status: 400,
-          title: 'Errore generico',
-          detail: '',
         } as AcceptDelegationResponse;
       }),
   /**

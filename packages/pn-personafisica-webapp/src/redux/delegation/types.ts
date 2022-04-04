@@ -51,8 +51,4 @@ export interface NewDelegationFormProps {
 
 export interface AcceptDelegationResponse {
   id: string;
-  type?: string;
-  status?: number;
-  title?: string;
-  detail?: string;
 }

@@ -38,9 +38,7 @@ import DropDownEntiMenuItem from '../component/Deleghe/DropDownEnti';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import { NewDelegationFormProps } from '../redux/delegation/types';
-
-const generateVCode = () =>
-  Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('');
+import { generateVCode } from '../utils/delegation.utility';
 
 const validationSchema = yup.object({
   selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Email is required'),
@@ -59,6 +57,7 @@ const NuovaDelega = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { created } = useAppSelector((state: RootState) => state.newDelegationState);
+  const verificationCode = generateVCode();
 
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
@@ -101,7 +100,7 @@ const NuovaDelega = () => {
                 selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
                 expirationDate: Date.now(),
                 enteSelect: { name: '', uniqueIdentifier: '' },
-                verificationCode: generateVCode(),
+                verificationCode,
               }}
               validationSchema={validationSchema}
               onSubmit={(values: NewDelegationFormProps) => {

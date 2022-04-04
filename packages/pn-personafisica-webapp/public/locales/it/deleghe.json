@@ -10,6 +10,7 @@
         "accept_title": "Inserisci codice di verifica",
         "accept_description": "Per accettare la delega, inserisci il codice generato da {{name}}.",
         "add": "Aggiungi una delega",
+        "invalid_code": "Codice di verifica non valido",
         "revoke": "Revoca",
         "reject": "Rifiuta",
         "accept": "Accetta",

@@ -26,3 +26,9 @@ export default function delegationToItem(
     status: delegation.status,
   }));
 }
+
+export function generateVCode() {
+  const crypto = window.crypto;
+  const array = new Uint32Array(1);
+  return crypto.getRandomValues(array).toString().slice(0, 5);
+}
