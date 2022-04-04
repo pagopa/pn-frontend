@@ -37,8 +37,8 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
 
   const cardHeader: [CardElement, CardElement] = [
     {
-      id: 'sentAt',
-      label: t('table.data'),
+      id: 'notificationStatus',
+      label: '',
       getLabel(value: string) {
         return getNewNotificationBadge(value);
       },
@@ -56,6 +56,13 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
   ];
 
   const cardBody: Array<CardElement> = [
+    {
+      id: 'sentAt',
+      label: t('table.data'),
+      getLabel(value: string) {
+        return value;
+      },
+    },
     {
       id: 'senderId',
       label: t('table.mittente'),

@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Badge } from '@mui/material';
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
@@ -14,17 +14,13 @@ const isNewNotification = (value: string) => {
 };
 
 /**
- * Returns the current value for notification if the notification has already been viewed, 
+ * Returns the current value for notification if the notification has already been viewed,
  * otherwise a blu dot badge followed by the current value
- * @param value 
- * @returns 
+ * @param value
+ * @returns
  */
 export function getNewNotificationBadge(value: string): ReactNode {
   return isNewNotification(value) ? (
-    <Fragment>
-      <Badge color="primary" variant="dot" sx={{ marginRight: '10px' }} /> {value}
-    </Fragment>
-  ) : (
-    value
-  );
+    <Badge color="primary" variant="dot" sx={{ marginRight: '0px' }} />
+  ) : null;
 }
