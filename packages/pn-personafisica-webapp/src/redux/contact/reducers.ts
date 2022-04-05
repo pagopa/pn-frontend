@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { DigitalAddresses, DigitalAddress } from './../../models/contacts';
-import { createOrUpdateLegalAddress, getDigitalAddresses, resetContactsState } from './actions';
+import { createOrUpdateLegalAddress, deleteLegalAddress, getDigitalAddresses, resetContactsState } from './actions';
 
 const initialState = {
   loading: false,
@@ -29,6 +29,12 @@ const contactsSlice = createSlice({
         } else {
           state.digitalAddresses.legal.push(action.payload);
         }
+      }
+    });
+    builder.addCase(deleteLegalAddress.fulfilled, (state, action) => {
+      // remove digital address
+      if (action.payload) {
+        state.digitalAddresses.legal = state.digitalAddresses.legal.filter(l => l.senderId !== action.payload);
       }
     });
     builder.addCase(resetContactsState, () => initialState);
