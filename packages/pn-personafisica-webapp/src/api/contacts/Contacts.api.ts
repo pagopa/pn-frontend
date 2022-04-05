@@ -1,6 +1,26 @@
 import _ from 'lodash';
-import { DigitalAddress, DigitalAddresses, LegalChannelType } from '../../models/contacts';
+import {
+  CourtesyChannelType,
+  DigitalAddress,
+  DigitalAddresses,
+  LegalChannelType,
+} from '../../models/contacts';
 import { apiClient } from '../axios';
+
+// const BASE_API_URL = "/address-book/v1/digital-address/";
+
+const mockedCourtesyContacts = [
+  {
+    value: 'mariorossi@verified.it',
+    code: '123456',
+    isVerified: true,
+  },
+  {
+    value: '3331234567',
+    code: '54321',
+    isVerified: true,
+  },
+];
 
 const mockedContacts: Array<{ value: string; code: string; toVerify: boolean }> = [
   {
@@ -82,6 +102,43 @@ export const ContactsApi = {
   */
 
   /**
+   * Create or update a courtesy address
+   * @param  {string} recipientId
+   * @returns Promise
+   */
+  createOrUpdateCourtesyAddress: (
+    recipientId: string,
+    senderId: string,
+    channelType: CourtesyChannelType,
+    body: { value: string; verificationCode?: string }
+  ): Promise<void | DigitalAddress> =>
+    new Promise((resolve, reject) => {
+      /* eslint-disable functional/immutable-data */
+      const mockedContact = mockedCourtesyContacts.find((m) => m.value === body.value);
+
+      // simulate 200
+      if (!mockedContact) {
+        mockedCourtesyContacts.push({ value: body.value, code: '12345', isVerified: false });
+        return resolve();
+      }
+      if (mockedContact && !mockedContact?.isVerified && !body.verificationCode) {
+        return resolve();
+      }
+      // check code - simulate 406
+      if (!mockedContact?.isVerified && body.verificationCode !== mockedContact.code) {
+        return reject({ response: { status: 406 }, blockNotification: true });
+      }
+      return resolve({
+        addressType: 'courtesy',
+        recipientId,
+        senderId,
+        channelType,
+        value: body.value,
+        code: body.verificationCode || mockedContact.code,
+      });
+      /* eslint-enable functional/immutable-data */
+    }),
+  /*
    * Remove current user digital address
    * @param  {string} recipientId
    * @returns Promise
@@ -96,7 +153,7 @@ export const ContactsApi = {
       .delete<string>(`/address-book/v1/digital-address/${recipientId}/legal/${senderId}/${channelType}`)
       .then(() => senderId),
     */
-      new Promise((resolve) => {
-        resolve(senderId);
-      })
+    new Promise((resolve) => {
+      resolve(senderId);
+    }),
 };
