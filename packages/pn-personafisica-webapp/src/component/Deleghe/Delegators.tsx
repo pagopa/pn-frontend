@@ -1,12 +1,12 @@
 import { Box, Chip, Stack, Typography } from '@mui/material';
-import { Column, ItemsTable, Item } from '@pagopa-pn/pn-commons';
+import { Column, ItemsTable, Item, Sort } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
-import { getDelegators } from '../../redux/delegation/actions';
+import { getDelegators, setDelegatorsSorting } from '../../redux/delegation/actions';
 import TableError from '../TableError/TableError';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
@@ -17,6 +17,9 @@ const Delegators = () => {
     (state: RootState) => state.delegationsState.delegations.delegators
   );
   const { delegatorsError } = useAppSelector((state: RootState) => state.delegationsState);
+  const sortDelegators = useAppSelector(
+    (state: RootState) => state.delegationsState.sortDelegators
+  );
 
   const rows: Array<Item> = delegationToItem(delegates, true);
 
@@ -54,6 +57,7 @@ const Delegators = () => {
       getCellLabel(value: string) {
         return value;
       },
+      sortable: true,
     },
     {
       id: 'visibilityIds',
@@ -87,6 +91,10 @@ const Delegators = () => {
     },
   ];
 
+  const handleChangeSorting = (s: Sort) => {
+    dispatch(setDelegatorsSorting(s));
+  };
+
   return (
     <>
       {delegatorsError && (
@@ -105,7 +113,9 @@ const Delegators = () => {
           <ItemsTable
             columns={delegatorsColumns}
             rows={rows}
-            emptyActionCallback={() => console.log()}
+            emptyActionCallback={() => {}}
+            sort={sortDelegators}
+            onChangeSorting={handleChangeSorting}
           />
         </Box>
       )}

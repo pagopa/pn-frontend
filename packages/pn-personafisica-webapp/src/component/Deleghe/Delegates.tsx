@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { Column, ItemsTable as Table, Item } from '@pagopa-pn/pn-commons';
+import { Column, ItemsTable as Table, Item, Sort } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -10,7 +10,7 @@ import * as routes from '../../navigation/routes.const';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import TableError from '../TableError/TableError';
-import { getDelegates } from '../../redux/delegation/actions';
+import { getDelegates, setDelegatesSorting } from '../../redux/delegation/actions';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegates = () => {
@@ -21,6 +21,7 @@ const Delegates = () => {
     (state: RootState) => state.delegationsState.delegations.delegates
   );
   const { delegatesError } = useAppSelector((state: RootState) => state.delegationsState);
+  const sortDelegates = useAppSelector((state: RootState) => state.delegationsState.sortDelegates);
 
   const rows: Array<Item> = delegationToItem(delegates, false);
 
@@ -58,6 +59,7 @@ const Delegates = () => {
       getCellLabel(value: string) {
         return value;
       },
+      sortable: true,
     },
     {
       id: 'visibilityIds',
@@ -91,6 +93,10 @@ const Delegates = () => {
     navigate(routes.NUOVA_DELEGA);
   };
 
+  const handleChangeSorting = (s: Sort) => {
+    dispatch(setDelegatesSorting(s));
+  };
+
   return (
     <Box mb={8}>
       <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
@@ -110,6 +116,8 @@ const Delegates = () => {
           emptyActionLabel={t('deleghe.add') as string}
           emptyMessage={t('deleghe.no_delegates') as string}
           emptyActionCallback={handleAddDelegationClick}
+          sort={sortDelegates}
+          onChangeSorting={handleChangeSorting}
         />
       )}
     </Box>
