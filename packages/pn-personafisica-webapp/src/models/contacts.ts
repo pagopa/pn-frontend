@@ -26,7 +26,7 @@ export interface DigitalAddresses {
 export interface SaveDigitalAddressParams {
   recipientId: string;
   senderId: string;
-  channelType: LegalChannelType;
+  channelType: LegalChannelType | CourtesyChannelType;
   value: string;
   code?: string;
 }

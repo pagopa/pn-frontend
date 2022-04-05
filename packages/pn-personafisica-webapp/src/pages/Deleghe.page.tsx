@@ -1,9 +1,8 @@
 import { useEffect } from 'react';
 import { Box } from '@mui/material';
-import { CodeModal, CourtesyPage, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { CodeModal, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { RestorePageOutlined } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import {
@@ -34,7 +33,6 @@ const Deleghe = () => {
     error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
   const dispatch = useAppDispatch();
-  const { error } = useAppSelector((state: RootState) => state.delegationsState);
 
   const handleCloseModal = () => {
     dispatch(closeRevocationModal());
@@ -46,11 +44,6 @@ const Deleghe = () => {
     } else {
       void dispatch(rejectDelegation(id));
     }
-  };
-
-  const handleReloadClick = () => {
-    void dispatch(getDelegates());
-    void dispatch(getDelegators());
   };
 
   const handleCloseAcceptModal = () => {
@@ -68,17 +61,8 @@ const Deleghe = () => {
 
   return (
     <Box sx={{ marginRight: isMobile ? 0 : 2 }}>
-      {error ? (
-        <CourtesyPage
-          icon={<RestorePageOutlined />}
-          title={t('deleghe.error_title')}
-          subtitle={t('deleghe.error_subtitle')}
-          onClick={handleReloadClick}
-          onClickLabel={t('deleghe.error_button')}
-        />
-      ) : (
-        <>
-          <CodeModal
+      <>
+        <CodeModal
             title={t('deleghe.accept_title')}
             subtitle={t('deleghe.accept_description')}
             open={acceptOpen}
@@ -91,42 +75,39 @@ const Deleghe = () => {
             codeSectionTitle={t('deleghe.verification_code')}
             hasError={acceptError}
             errorMessage={t('deleghe.invalid_code')}
-          />
-          <ConfirmationModal
-            open={open}
-            title={
-              type === 'delegates'
-                ? t('deleghe.revocation_question')
-                : t('deleghe.rejection_question')
-            }
-            handleClose={handleCloseModal}
-            onConfirm={handleConfirmClick}
-            onConfirmLabel={
-              type === 'delegates'
-                ? t('deleghe.confirm_revocation')
-                : t('deleghe.confirm_rejection')
-            }
-          />
-          <Box ml={isMobile ? 2 : 0} mb={2}>
-            <TitleBox title={'Deleghe'} variantTitle={'h4'}>
-              <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
-                deleghe.description
-              </Trans>
-            </TitleBox>
-          </Box>
-          {isMobile ? (
-            <>
-              <MobileDelegates />
-              <MobileDelegators />
-            </>
-          ) : (
-            <>
-              <Delegates />
-              <Delegators />
-            </>
-          )}
-        </>
-      )}
+        />
+        <ConfirmationModal
+          open={open}
+          title={
+            type === 'delegates'
+              ? t('deleghe.revocation_question')
+              : t('deleghe.rejection_question')
+          }
+          handleClose={handleCloseModal}
+          onConfirm={handleConfirmClick}
+          onConfirmLabel={
+            type === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection')
+          }
+        />
+        <Box ml={isMobile ? 2 : 0} mb={2}>
+          <TitleBox title={'Deleghe'} variantTitle={'h4'}>
+            <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
+              deleghe.description
+            </Trans>
+          </TitleBox>
+        </Box>
+        {isMobile ? (
+          <>
+            <MobileDelegates />
+            <MobileDelegators />
+          </>
+        ) : (
+          <>
+            <Delegates />
+            <Delegators />
+          </>
+        )}
+      </>
     </Box>
   );
 };

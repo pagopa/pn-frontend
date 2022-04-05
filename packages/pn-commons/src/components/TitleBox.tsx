@@ -1,10 +1,10 @@
 import { GridSize, Typography, Grid, SxProps, Theme } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
-import { ReactFragment } from 'react';
+import { ReactFragment, ReactNode } from 'react';
 
 type Props = {
   /** Title of the page to render */
-  title: string;
+  title: ReactNode;
   /** Subtitle (optional) of the page to render */
   subTitle?: string;
   /** Gridsize for title on mobile devices */

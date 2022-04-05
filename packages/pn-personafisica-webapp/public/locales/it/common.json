@@ -5,7 +5,10 @@
     "indietro": "Indietro",
     "associa": "Associa",
     "conferma": "Conferma",
-    "annulla": "Annulla"
+    "annulla": "Annulla",
+    "modifica": "Modifica",
+    "salva": "Salva",
+    "rimuovi": "Rimuovi"
   },
   "menu": {
     "notifiche": "Notifiche",
