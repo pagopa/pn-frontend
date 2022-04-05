@@ -1,6 +1,6 @@
 import { formatDate, Item } from '@pagopa-pn/pn-commons';
 
-import { Delegation } from '../redux/delegation/types';
+import { Delegation, Person } from '../redux/delegation/types';
 /**
  * Maps Delegation object to Item, in order to be visualised in an ItemsCard or ItemsTable component
  * @param  {Array<Delegation>} delegations
@@ -31,4 +31,42 @@ export function generateVCode() {
   const crypto = window.crypto;
   const array = new Uint32Array(1);
   return crypto.getRandomValues(array).toString().slice(0, 5);
+}
+
+export function compareDelegationsStrings(
+  a: Delegation,
+  b: Delegation,
+  orderAttr: string,
+  key: 'delegate' | 'delegator'
+) {
+  // TODO: change when displayName can be retrieved
+  if (orderAttr === 'name') {
+    const delegate1 = a[key].firstName.toLowerCase();
+    const delegate2 = b[key].firstName.toLowerCase();
+    return delegate1 < delegate2 ? 1 : -1;
+  }
+  const delegate1 = a[key][orderAttr as keyof Person] || '';
+  const delegate2 = b[key][orderAttr as keyof Person] || '';
+  return delegate1 < delegate2 ? 1 : -1;
+}
+
+export function sortDelegations(
+  order: string,
+  sortAttr: string,
+  values: Array<Delegation>,
+  isDelegate: boolean
+) {
+  /* eslint-disable-next-line functional/immutable-data */
+  return values.sort((a: Delegation, b: Delegation) => {
+    const orderDirection = order === 'desc' ? 1 : -1;
+    if (sortAttr === 'endDate') {
+      const dateA = new Date(a.dateto).getTime();
+      const dateB = new Date(b.dateto).getTime();
+      return orderDirection * (dateB - dateA);
+    }
+    return (
+      orderDirection *
+      compareDelegationsStrings(a, b, sortAttr, isDelegate ? 'delegate' : 'delegator')
+    );
+  });
 }
