@@ -12,7 +12,7 @@ export interface Delegation {
   mandateId: string;
   delegator: Person;
   delegate: Person;
-  status: 'Active' | 'Pending';
+  status: 'active' | 'pending';
   visibilityIds: Array<{
     name: string;
     uniqueIdentifier: string;
@@ -20,12 +20,6 @@ export interface Delegation {
   verificationCode: string;
   datefrom: string;
   dateto: string;
-  email: string;
-}
-
-export interface OrganizationId {
-  id: string;
-  role: 'referente operativo' | 'referente amministrativo';
 }
 
 export interface RevocationModalProps {
@@ -37,8 +31,48 @@ export interface RevocationModalProps {
 export interface Person {
   firstName: string;
   lastName: string;
-  companyName: string;
+  companyName?: string | null;
   fiscalCode: string;
   person: boolean;
   email: string;
+}
+
+export interface NewDelegationFormProps {
+  selectPersonaFisicaOrPersonaGiuridica: string;
+  codiceFiscale: string;
+  email: string;
+  nome: string;
+  cognome: string;
+  selectTuttiEntiOrSelezionati: string;
+  expirationDate: number;
+  enteSelect: { name: string; uniqueIdentifier: string };
+  verificationCode: string;
+}
+
+export interface AcceptDelegationResponse {
+  id: string;
+}
+
+export interface CreateDelegationProps {
+  delegate: Person;
+  visibilityIds: Array<{
+    name: string;
+    uniqueIdentifier: string;
+  }>;
+  verificationCode: string;
+  dateto: string;
+}
+
+export interface CreateDelegationResponse {
+  datefrom: string;
+  dateto: string;
+  delegate: Person;
+  delegator: Person | null;
+  mandateId: string;
+  status: string;
+  verificationCode: string;
+  visibilityIds: Array<{
+    name: string;
+    uniqueIdentifier: string;
+  }>;
 }

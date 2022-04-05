@@ -1,7 +1,13 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
-import { CourtesyChannelType, DigitalAddress, DigitalAddresses, SaveDigitalAddressParams, LegalChannelType } from '../../models/contacts';
+import {
+  CourtesyChannelType,
+  DigitalAddress,
+  DigitalAddresses,
+  SaveDigitalAddressParams,
+  LegalChannelType,
+} from '../../models/contacts';
 
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   'getDigitalAddresses',
@@ -14,15 +20,36 @@ export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   }
 );
 
-export const createOrUpdateLegalAddress = createAsyncThunk<DigitalAddress | void, SaveDigitalAddressParams>(
-  'createOrUpdateLegalAddress',
-  async (params: SaveDigitalAddressParams, { rejectWithValue }) => {
+export const createOrUpdateLegalAddress = createAsyncThunk<
+  DigitalAddress | void,
+  SaveDigitalAddressParams
+>('createOrUpdateLegalAddress', async (params: SaveDigitalAddressParams, { rejectWithValue }) => {
+  try {
+    return await ContactsApi.createOrUpdateLegalAddress(
+      params.recipientId,
+      params.senderId,
+      params.channelType as LegalChannelType,
+      { value: params.value, verificationCode: params.code }
+    );
+  } catch (e) {
+    return rejectWithValue(e);
+  }
+});
+
+export const deleteLegalAddress = createAsyncThunk<
+  string,
+  { recipientId: string; senderId: string; channelType: LegalChannelType }
+>(
+  'deleteLegalAddress',
+  async (
+    params: { recipientId: string; senderId: string; channelType: LegalChannelType },
+    { rejectWithValue }
+  ) => {
     try {
-      return await ContactsApi.createOrUpdateLegalAddress(
+      return await ContactsApi.deleteLegalAddress(
         params.recipientId,
         params.senderId,
-        params.channelType as LegalChannelType,
-        { value: params.value, verificationCode: params.code }
+        params.channelType
       );
     } catch (e) {
       return rejectWithValue(e);
@@ -30,7 +57,10 @@ export const createOrUpdateLegalAddress = createAsyncThunk<DigitalAddress | void
   }
 );
 
-export const createOrUpdateCourtesyAddress = createAsyncThunk<DigitalAddress | void, SaveDigitalAddressParams>(
+export const createOrUpdateCourtesyAddress = createAsyncThunk<
+  DigitalAddress | void,
+  SaveDigitalAddressParams
+>(
   'createOrUpdateCourtesyAddress',
   async (params: SaveDigitalAddressParams, { rejectWithValue }) => {
     try {

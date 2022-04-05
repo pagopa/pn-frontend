@@ -31,7 +31,7 @@ const Delegates = () => {
       width: '13%',
       sortable: true,
       getCellLabel(value: string) {
-        return <b>{value}</b>;
+        return <Typography fontWeight="bold">{value}</Typography>;
       },
     },
     {
@@ -40,7 +40,7 @@ const Delegates = () => {
       width: '18%',
       sortable: true,
       getCellLabel(value: string) {
-        return value;
+        return <Typography sx={{ wordBreak: 'break-all' }}>{value}</Typography>;
       },
     },
     {

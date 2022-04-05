@@ -128,19 +128,6 @@ export const ContactsApi = {
       if (!mockedContact?.isVerified && body.verificationCode !== mockedContact.code) {
         return reject({ response: { status: 406 }, blockNotification: true });
       }
-      /*
-      if (!mockedContact) {
-        return reject('No mocked contact found');
-      }
-      // simulate 200
-      if (!mockedContact?.isVerified && !body.verificationCode) {
-        return resolve();
-      }
-      // check code - simulate 406
-      if (mockedContact.code !== body.verificationCode) {
-        return reject({response: {status: 406}, blockNotification: true});
-      }
-*/
       return resolve({
         addressType: 'courtesy',
         recipientId,
@@ -150,5 +137,23 @@ export const ContactsApi = {
         code: body.verificationCode || mockedContact.code,
       });
       /* eslint-enable functional/immutable-data */
+    }),
+  /*
+   * Remove current user digital address
+   * @param  {string} recipientId
+   * @returns Promise
+   */
+  deleteLegalAddress: (
+    _recipientId: string,
+    senderId: string,
+    _channelType: LegalChannelType
+  ): Promise<string> =>
+    /*
+    apiClient
+      .delete<string>(`/address-book/v1/digital-address/${recipientId}/legal/${senderId}/${channelType}`)
+      .then(() => senderId),
+    */
+    new Promise((resolve) => {
+      resolve(senderId);
     }),
 };

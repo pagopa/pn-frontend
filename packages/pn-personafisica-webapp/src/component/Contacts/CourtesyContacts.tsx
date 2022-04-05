@@ -25,7 +25,7 @@ const CourtesyContacts = () => {
       <CourtesyContactsList />
       <FormControlLabel
         control={
-          <Switch checked={isIoNotificationEnabled} onChange={handleToggleIoNotification} name="ioNotifications" />
+          <Switch checked={isIoNotificationEnabled} onChange={handleToggleIoNotification} name="ioNotifications" disabled />
         }
         label={t('courtesy-contacts.io-enable', { ns: 'recapiti' }) as string}
       />

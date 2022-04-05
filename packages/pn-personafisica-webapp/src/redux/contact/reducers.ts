@@ -4,6 +4,7 @@ import { DigitalAddresses, DigitalAddress } from './../../models/contacts';
 import {
   createOrUpdateCourtesyAddress,
   createOrUpdateLegalAddress,
+  deleteLegalAddress,
   getDigitalAddresses,
   resetContactsState,
 } from './actions';
@@ -46,11 +47,20 @@ const contactsSlice = createSlice({
             address.senderId === (action.payload as DigitalAddress).senderId &&
             address.channelType === (action.payload as DigitalAddress).channelType
         );
-        if (addressIndex > -1) { // update if found
+        if (addressIndex > -1) {
+          // update if found
           state.digitalAddresses.courtesy[addressIndex] = action.payload;
         } else {
           state.digitalAddresses.courtesy.push(action.payload);
         }
+      }
+    });
+    builder.addCase(deleteLegalAddress.fulfilled, (state, action) => {
+      // remove digital address
+      if (action.payload) {
+        state.digitalAddresses.legal = state.digitalAddresses.legal.filter(
+          (l) => l.senderId !== action.payload
+        );
       }
     });
     builder.addCase(resetContactsState, () => initialState);

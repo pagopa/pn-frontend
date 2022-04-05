@@ -1,9 +1,9 @@
 export enum DelegationStatus {
-  ACTIVE = 'Active',
-  PENDING = 'Pending',
+  ACTIVE = 'active',
+  PENDING = 'pending',
 }
 
-export function getDelegationStatusLabelAndColor(status: 'Active' | 'Pending'): {
+export function getDelegationStatusLabelAndColor(status: 'active' | 'pending'): {
   color: 'warning' | 'success' | 'info' | undefined;
   label: string;
 } {
