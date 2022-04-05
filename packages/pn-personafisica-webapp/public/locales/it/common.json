@@ -12,7 +12,8 @@
   },
   "menu": {
     "notifiche": "Notifiche",
-    "recapiti": "I tuoi recapiti",
-    "deleghe": "Le tue deleghe"
+    "deleghe": "Deleghe",
+    "profilo": "Profilo",
+    "contacts": "Recapiti"
   }
 }
