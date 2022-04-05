@@ -28,7 +28,7 @@ const SideMenu: FC<Props> = ({ menuItems }) => {
   const location = useLocation();
   const isMobile = useIsMobile();
   const menuItemSelected = menuItems.find(m => m.route === location.pathname) ||
-    menuItems.find(m => location.pathname.indexOf(m.route) > -1) || {label: 'Menu'};
+    menuItems.find(m => location.pathname.indexOf(m.route as string) > -1) || {label: 'Menu'};
 
   const toggleDrawer = () => {
     setState(!state);

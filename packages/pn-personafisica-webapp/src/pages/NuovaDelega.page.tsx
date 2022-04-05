@@ -57,8 +57,6 @@ const NuovaDelega = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { created } = useAppSelector((state: RootState) => state.newDelegationState);
-  const verificationCode = generateVCode();
-
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
   };

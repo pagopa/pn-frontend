@@ -38,6 +38,8 @@ const App = () => {
   const menuItems: Array<SideMenuItem> = [
     { label: t('menu.notifiche'), icon: MailOutlineIcon, route: routes.NOTIFICHE, children:mapDelegatorSideMenuItem.length ? mapDelegatorSideMenuItem : undefined},
     { label: t('menu.recapiti'), icon: MarkunreadMailboxIcon, route: routes.PROFILO },
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     { label: t('menu.deleghe'), icon: AltRouteIconRotate, route: routes.DELEGHE, rightBadgeNotification: pendingDelegatorsState ? pendingDelegatorsState : undefined}, 
   ];
 
