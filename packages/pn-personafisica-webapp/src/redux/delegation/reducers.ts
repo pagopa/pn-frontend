@@ -12,16 +12,42 @@ import {
   openAcceptModal,
   closeAcceptModal,
 } from './actions';
-import { Delegation } from './types';
+import { Delegation, Person } from './types';
 
 /* eslint-disable functional/immutable-data */
-function sortDelegations(orderType: string, orderAttr: string, values: Array<Delegation>) {
+function compareDelegations(
+  a: Delegation,
+  b: Delegation,
+  orderAttr: string,
+  key: 'delegate' | 'delegator'
+) {
+  // TODO: change when displayName can be retrieved
+  if (orderAttr === 'name') {
+    const delegate1 = a[key].firstName.toLowerCase();
+    const delegate2 = b[key].firstName.toLowerCase();
+    return delegate1 < delegate2 ? 1 : -1;
+  }
+  const delegate1 = a[key][orderAttr as keyof Person] || '';
+  const delegate2 = b[key][orderAttr as keyof Person] || '';
+  return delegate1 < delegate2 ? 1 : -1;
+}
+
+function sortDelegations(
+  order: string,
+  sortAttr: string,
+  values: Array<Delegation>,
+  isDelegate: boolean
+) {
   return values.sort((a: Delegation, b: Delegation) => {
-    if (orderType === 'desc') {
-      return a[orderAttr as keyof Delegation] < b[orderAttr as keyof Delegation] ? 1 : -1;
-    } else {
-      return a[orderAttr as keyof Delegation] > b[orderAttr as keyof Delegation] ? 1 : -1;
+    const orderDirection = order === 'desc' ? 1 : -1;
+    if (sortAttr === 'endDate') {
+      const dateA = new Date(a.dateto).getTime();
+      const dateB = new Date(b.dateto).getTime();
+      return orderDirection * (dateB - dateA);
     }
+    return (
+      orderDirection * compareDelegations(a, b, sortAttr, isDelegate ? 'delegate' : 'delegator')
+    );
   });
 }
 
@@ -114,7 +140,8 @@ const delegationsSlice = createSlice({
       state.delegations.delegates = sortDelegations(
         action.payload.order,
         action.payload.orderBy,
-        state.delegations.delegates
+        state.delegations.delegates,
+        true
       );
     });
     builder.addCase(setDelegatorsSorting, (state, action) => {
@@ -122,7 +149,8 @@ const delegationsSlice = createSlice({
       state.delegations.delegators = sortDelegations(
         action.payload.order,
         action.payload.orderBy,
-        state.delegations.delegators
+        state.delegations.delegators,
+        false
       );
     });
   },
