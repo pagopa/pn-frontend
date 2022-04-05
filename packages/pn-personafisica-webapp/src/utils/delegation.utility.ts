@@ -1,4 +1,4 @@
-import { Item } from '@pagopa-pn/pn-commons';
+import { formatDate, Item } from '@pagopa-pn/pn-commons';
 
 import { Delegation } from '../redux/delegation/types';
 /**
@@ -17,10 +17,18 @@ export default function delegationToItem(
     name: isDelegator
       ? `${delegation.delegator.firstName} ${delegation.delegator.lastName}`
       : `${delegation.delegate.firstName} ${delegation.delegate.lastName}`,
-    startDate: delegation.datefrom,
-    endDate: delegation.dateto,
-    email: delegation.email,
-    visibilityIds: delegation.visibilityIds.map((f: any) => f.name),
+    startDate: formatDate(delegation.datefrom),
+    endDate: formatDate(delegation.dateto),
+    email: isDelegator ? delegation.delegator.email : delegation.delegate.email,
+    visibilityIds: delegation.visibilityIds.map(
+      (entity: { name: string; uniqueIdentifier: string }) => entity.uniqueIdentifier
+    ),
     status: delegation.status,
   }));
+}
+
+export function generateVCode() {
+  const crypto = window.crypto;
+  const array = new Uint32Array(1);
+  return crypto.getRandomValues(array).toString().slice(0, 5);
 }

@@ -30,20 +30,15 @@ import { CourtesyPage, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import {
-  createDelegation,
-  CreateDelegationProps,
-  resetNewDelegation,
-} from '../redux/newDelegation/actions';
+import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
 import StyledLink from '../component/StyledLink/StyledLink';
 import DropDownEntiMenuItem from '../component/Deleghe/DropDownEnti';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
-
-const generateVCode = () =>
-  Array.from({ length: 5 }, () => Math.floor(Math.random() * 10)).join('');
+import { NewDelegationFormProps } from '../redux/delegation/types';
+import { generateVCode } from '../utils/delegation.utility';
 
 const validationSchema = yup.object({
   selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Email is required'),
@@ -54,7 +49,7 @@ const validationSchema = yup.object({
   email: yup.string().required('Email obbligatoria').email('Email non formattata correttamente'),
   nome: yup.string().required('Il nome è obbligatorio'),
   cognome: yup.string().required('Il cognome è obbligatorio'),
-  enteSelect: yup.string(),
+  enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
 });
 
 const NuovaDelega = () => {
@@ -62,8 +57,9 @@ const NuovaDelega = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { created } = useAppSelector((state: RootState) => state.newDelegationState);
+  const verificationCode = generateVCode();
 
-  const handleSubmit = (values: CreateDelegationProps) => {
+  const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
   };
 
@@ -103,11 +99,11 @@ const NuovaDelega = () => {
                 cognome: '',
                 selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
                 expirationDate: Date.now(),
-                enteSelect: '',
-                verificationCode: generateVCode(),
+                enteSelect: { name: '', uniqueIdentifier: '' },
+                verificationCode,
               }}
               validationSchema={validationSchema}
-              onSubmit={(values: CreateDelegationProps) => {
+              onSubmit={(values: NewDelegationFormProps) => {
                 handleSubmit(values);
               }}
               validateOnBlur={false}
@@ -237,10 +233,13 @@ const NuovaDelega = () => {
                               <Select
                                 labelId="ente-select"
                                 id="ente-select"
-                                value={values.enteSelect}
+                                value={values.enteSelect.uniqueIdentifier}
                                 label={t('Seleziona Enti')}
                                 onChange={(event: SelectChangeEvent<string>) => {
-                                  setFieldValue('enteSelect', event.target.value);
+                                  setFieldValue('enteSelect', {
+                                    uniqueIdentifier: event.target.value,
+                                    name: event.target.name,
+                                  });
                                 }}
                               >
                                 <MenuItem value={'Bollate'}>
