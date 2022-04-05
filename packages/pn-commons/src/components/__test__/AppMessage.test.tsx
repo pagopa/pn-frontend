@@ -2,10 +2,10 @@ import { waitFor } from "@testing-library/react";
 import * as redux from 'react-redux';
 
 import { render } from "../../test-utils";
-import { AppError } from "../../types/AppError";
+import { IAppMessage } from "../../types/AppMessage";
 import AppMessage from "../AppMessage";
 
-const errors: Array<AppError> = [
+const errors: Array<IAppMessage> = [
   {
     id: 'mocked-id',
     blocking: false,

@@ -50,7 +50,7 @@ function calcDisplayedPages(
  * @param  {number} pageSelected
  * @returns Array
  */
-export function calcPages(
+export function calculatePages(
   pageSize: number,
   numOfItems: number,
   numOfDisplayedPages: number,

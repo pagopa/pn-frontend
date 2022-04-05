@@ -168,11 +168,14 @@ export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
   }
 );
 
-export const acceptDelegation = createAsyncThunk<{ id: string }, string>(
+export const acceptDelegation = createAsyncThunk<{ id: string }, { id: string; code: string }>(
   'acceptDelegation',
-  async (id: string) => {
+  async ({ id, code }) => {
+    const data = {
+      verificationCode: code,
+    };
     try {
-      return await DelegationsApi.acceptDelegation(id);
+      return await DelegationsApi.acceptDelegation(id, data);
     } catch (e) {
       return { id };
       // TODO: return { rejectWithValue(e) };
@@ -184,6 +187,10 @@ export const openRevocationModal =
   createAction<{ id: string; type: string }>('openRevocationModal');
 
 export const closeRevocationModal = createAction<void>('closeRevocationModal');
+
+export const openAcceptModal = createAction<{ id: string; name: string }>('openAcceptModal');
+
+export const closeAcceptModal = createAction<void>('closeAcceptModal');
 
 export const setDelegatorsSorting = createAction<{orderBy: string; order: 'asc' | 'desc'}>('setDelegatorsSorting');
 

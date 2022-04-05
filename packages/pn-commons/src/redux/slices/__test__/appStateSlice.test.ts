@@ -17,7 +17,10 @@ describe('App state slice tests', () => {
         result: false,
         tasks: {},
       },
-      errors: [],
+      messages: {
+        errors: [],
+        success: []
+      }
     });
   });
 });

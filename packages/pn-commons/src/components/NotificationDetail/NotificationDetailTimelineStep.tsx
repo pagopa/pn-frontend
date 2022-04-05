@@ -1,109 +1,178 @@
-import {
-  TimelineConnector,
-  TimelineContent,
-  TimelineDot,
-  TimelineItem,
-  TimelineOppositeContent,
-  TimelineSeparator,
-} from '@mui/lab';
+import { TimelineConnector, TimelineSeparator } from '@mui/lab';
+import { useState, Fragment, ReactNode } from 'react';
 import { Typography, Chip, Box, Button } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import UnfoldLessIcon from '@mui/icons-material/UnfoldLess';
+import {
+  TimelineNotificationItem,
+  TimelineNotificationOppositeContent,
+  TimelineNotificationContent,
+  TimelineNotificationDot,
+  ButtonNaked,
+} from '@pagopa/mui-italia';
 
 import { getDay, getMonthString, getTime } from '../../utils/date.utility';
-import { getNotificationStatusLabelAndColorFromTimelineCategory } from '../../utils/status.utility';
-import {
-  INotificationDetailTimeline,
-  LegalFactId,
-  NotificationStatusHistory,
-} from '../../types/Notifications';
+import { getNotificationStatusLabelAndColor } from '../../utils/status.utility';
+import { NotificationDetailTimelineData, LegalFactId } from '../../types/NotificationDetail';
 
 type Props = {
-  timelineStep: INotificationDetailTimeline;
-  statusHistory: Array<NotificationStatusHistory>;
+  timelineStep: NotificationDetailTimelineData;
   legalFactLabel: string;
   clickHandler: (legalFactId: LegalFactId) => void;
-  index: number;
+  position?: 'first' | 'last' | 'middle';
+  showMoreButtonLabel?: string;
+  showLessButtonLabel?: string;
   showHistoryButton?: boolean;
-  historyButtonLabel?: string; 
+  historyButtonLabel?: string;
   historyButtonClickHandler?: () => void;
 };
 
 /**
  * Notification detail timeline
  * @param timelineStep data to show
- * @param statusHistory notification macro-status history
  * @param clickHandler function called when user clicks on the download button
  * @param legalFactLabel label of the download button
- * @param index step index
+ * @param position step position
  * @param showHistoryButton show history button
  * @param historyButtonLabel label for history button
  * @param historyButtonClickHandler function called when user clicks on the history button
  */
 const NotificationDetailTimelineStep = ({
   timelineStep,
-  statusHistory,
   legalFactLabel,
   clickHandler,
-  index,
+  position = 'middle',
+  showMoreButtonLabel,
+  showLessButtonLabel,
   showHistoryButton = false,
   historyButtonLabel,
-  historyButtonClickHandler
+  historyButtonClickHandler,
 }: Props) => {
-  return (
-    <TimelineItem data-testid="timelineItem">
-      <TimelineOppositeContent sx={{ textAlign: 'center', margin: 'auto 0' }}>
-        <Typography color="text.secondary" fontSize={14}>
-          {getMonthString(timelineStep.timestamp)}
-        </Typography>
-        <Typography fontWeight={600} fontSize={18}>
-          {getDay(timelineStep.timestamp)}
-        </Typography>
-      </TimelineOppositeContent>
+  const [collapsed, setCollapsed] = useState(true);
+  const legalFactsIds: Array<LegalFactId> = [];
+
+  if (timelineStep.steps) {
+    for (const step of timelineStep.steps) {
+      if (step.legalFactsIds) {
+        legalFactsIds.push(...step.legalFactsIds);
+      }
+    }
+  }
+
+  const timelineStepCmp = (
+    key: string | undefined,
+    oppositeContent: ReactNode | undefined,
+    variant: 'outlined' | 'filled' | undefined,
+    content: ReactNode | undefined,
+    stepPosition: 'first' | 'middle' | 'last',
+    size: 'small' | 'default' = 'default'
+  ) => (
+    <TimelineNotificationItem key={key}>
+      <TimelineNotificationOppositeContent>{oppositeContent}</TimelineNotificationOppositeContent>
       <TimelineSeparator>
-        <TimelineConnector />
-        <TimelineDot variant={index === 0 ? 'outlined' : undefined} />
-        <TimelineConnector />
+        <TimelineConnector sx={{visibility: stepPosition === 'first' ? 'hidden' : 'visible'}}/>
+        <TimelineNotificationDot variant={variant} size={size}/>
+        <TimelineConnector sx={{visibility: stepPosition === 'last' ? 'hidden' : 'visible'}}/>
       </TimelineSeparator>
-      <TimelineContent sx={{ flex: '3', msFlex: '3', WebkitFlex: '3', padding: '10px 16px' }}>
-        <Typography color="text.secondary" fontSize={14} sx={{ paddingBottom: '8px' }}>
-          {getTime(timelineStep.timestamp)}
-        </Typography>
-        <Chip
-          data-testid="itemStatus"
-          label={
-            getNotificationStatusLabelAndColorFromTimelineCategory(timelineStep, statusHistory)
-              .label
-          }
-          color={
-            getNotificationStatusLabelAndColorFromTimelineCategory(timelineStep, statusHistory)
-              .color
-          }
-        />
-        {showHistoryButton && historyButtonLabel ? (
-          <Button
-            data-testid="historyButton"
-            sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
-            startIcon={<UnfoldMoreIcon />}
-            onClick={historyButtonClickHandler}
-          >{historyButtonLabel}</Button>
-        ) : (
-          <Box>
-            {timelineStep.legalFactsIds &&
-              timelineStep.legalFactsIds.map((lf) => (
-                <Button
-                  key={lf.key}
-                  sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
-                  startIcon={<AttachFileIcon />}
-                  onClick={() => clickHandler(lf)}
-                >
-                  {legalFactLabel}
-                </Button>
-              ))}
-          </Box>
+      <TimelineNotificationContent>{content}</TimelineNotificationContent>
+    </TimelineNotificationItem>
+  );
+
+  return (
+    <Fragment>
+      {timelineStepCmp(
+        undefined,
+        <Fragment>
+          <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+            {getMonthString(timelineStep.activeFrom)}
+          </Typography>
+          <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
+            {getDay(timelineStep.activeFrom)}
+          </Typography>
+        </Fragment>,
+        position === 'first' ? 'outlined' : undefined,
+        <Fragment>
+          <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+            {getTime(timelineStep.activeFrom)}
+          </Typography>
+          <Chip
+            data-testid="itemStatus"
+            label={getNotificationStatusLabelAndColor(timelineStep.status).label}
+            color={getNotificationStatusLabelAndColor(timelineStep.status).color}
+          />
+          {showHistoryButton && historyButtonLabel ? (
+            <Button
+              data-testid="historyButton"
+              sx={{ paddingLeft: 0, paddingRight: 0, marginTop: '5px' }}
+              startIcon={<UnfoldMoreIcon />}
+              onClick={historyButtonClickHandler}
+            >
+              {historyButtonLabel}
+            </Button>
+          ) : (
+            <Box>
+              <Typography color="text.primary" fontSize={16}>
+                Lorem ipsum
+              </Typography>
+              {legalFactsIds &&
+                legalFactsIds.map((lf) => (
+                  <ButtonNaked
+                    key={lf.key}
+                    startIcon={<AttachFileIcon />}
+                    onClick={() => clickHandler(lf)}
+                    color="primary"
+                  >
+                    {legalFactLabel}
+                  </ButtonNaked>
+                ))}
+            </Box>
+          )}
+        </Fragment>,
+        position
+      )}
+      {!showHistoryButton &&
+        timelineStep.steps.length > 0 &&
+        timelineStepCmp(
+          undefined,
+          undefined,
+          undefined,
+          <Box data-testid="moreLessButton">
+            <ButtonNaked
+              startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
+              onClick={() => setCollapsed(!collapsed)}
+            >
+              {collapsed ? showMoreButtonLabel : showLessButtonLabel}
+            </ButtonNaked>
+          </Box>,
+          'middle'
         )}
-      </TimelineContent>
-    </TimelineItem>
+      {!collapsed &&
+        timelineStep.steps.map((s) =>
+          timelineStepCmp(
+            s.elementId,
+            <Fragment>
+              <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+                {getMonthString(s.timestamp)}
+              </Typography>
+              <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
+                {getDay(s.timestamp)}
+              </Typography>
+            </Fragment>,
+            undefined,
+            <Fragment>
+              <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
+                {getTime(s.timestamp)}
+              </Typography>
+              <Typography color="text.primary" fontSize={16} >
+                {s.category}
+              </Typography>
+            </Fragment>,
+            'middle',
+            'small'
+          )
+        )}
+    </Fragment>
   );
 };
 

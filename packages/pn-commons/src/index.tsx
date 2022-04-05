@@ -7,10 +7,9 @@ import CustomPagination from './components/Pagination/CustomPagination';
 import CustomTooltip from './components/CustomTooltip';
 import AppMessage from './components/AppMessage';
 import SideMenu from './components/SideMenu/SideMenu';
-import NotificationsTable from './components/Notifications/NotificationsTable';
 import StatusTooltip from './components/Notifications/StatusTooltip';
-import NotificationsCard from './components/Notifications/NotificationsCard';
-import OutlinedButton from './components/OutlinedButton';
+import ItemsTable from './components/Data/ItemsTable';
+import ItemsCard from './components/Data/ItemsCard';
 import TitleAndDescription from './components/TitleAndDescription';
 import CustomMobileDialog from './components/CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogToggle from './components/CustomMobileDialog/CustomMobileDialogToggle';
@@ -20,6 +19,8 @@ import TitleBox from './components/TitleBox';
 import NotificationDetailTable from './components/NotificationDetail/NotificationDetailTable';
 import NotificationDetailDocuments from './components/NotificationDetail/NotificationDetailDocuments';
 import NotificationDetailTimeline from './components/NotificationDetail/NotificationDetailTimeline';
+import Toast from './components/Toast/Toast';
+import CodeModal from './components/CodeModal';
 
 export { LoadingOverlay };
 export { Header };
@@ -29,10 +30,9 @@ export { CustomPagination };
 export { CustomTooltip };
 export { AppMessage };
 export { SideMenu };
-export { NotificationsTable };
+export { ItemsTable };
 export { StatusTooltip };
-export { NotificationsCard };
-export { OutlinedButton };
+export { ItemsCard };
 export { TitleAndDescription };
 export { CustomMobileDialog };
 export { CustomMobileDialogToggle };
@@ -42,6 +42,8 @@ export { TitleBox };
 export { NotificationDetailTable };
 export { NotificationDetailDocuments };
 export { NotificationDetailTimeline };
+export { Toast };
+export { CodeModal };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -53,15 +55,18 @@ export { AccessDenied };
 export { CourtesyPage };
 
 // types
-import { AppError } from './types/AppError';
+import { IAppMessage } from './types/AppMessage';
 import { PaginationData } from './components/Pagination/types';
 import { NotificationStatus } from './types/NotificationStatus';
 import { SideMenuItem } from './types/SideMenuItem';
-import { Column, Row, Sort } from './types/NotificationsTable';
+import { Column, Item, Sort } from './types/ItemsTable';
 import {
   Notification,
   GetNotificationsResponse,
   GetNotificationsParams,
+} from './types/Notifications';
+import {
+  NotificationDetailTableRow,
   NotificationDetail,
   INotificationDetailTimeline,
   NotificationDetailRecipient,
@@ -77,11 +82,12 @@ import {
   LegalFactType,
   LegalFactId,
   PhysicalCommunicationType,
-} from './types/Notifications';
-import { CardElem, CardSort } from './types/NotificationsCard';
-import { DetailTableRow } from './types/NotificationDetailTable';
+} from './types/NotificationDetail';
 
-export type { AppError };
+import { CardElement, CardSort, CardAction } from './types/ItemsCard';
+import { MessageType } from './types/MessageType';
+
+export type { IAppMessage };
 export type { PaginationData };
 export type { SideMenuItem };
 export {
@@ -95,7 +101,7 @@ export {
   AddressSource,
   PhysicalCommunicationType,
 };
-export type { Column, Row, Sort };
+export type { Column, Item, Sort };
 export type {
   Notification,
   GetNotificationsResponse,
@@ -108,13 +114,14 @@ export type {
   NotificationStatusHistory,
   LegalFactId,
 };
-export type { CardElem, CardSort };
-export type { DetailTableRow };
+export type { CardElement, CardSort, CardAction };
+export type { NotificationDetailTableRow };
+export { MessageType };
 
 // functions
-import { createAppError } from './services/error.service';
+import { createAppError } from './services/message.service';
 import { formatDate } from './services/date.service';
-import { calcPages } from './utils/pagination.utility';
+import { calculatePages } from './utils/pagination.utility';
 import {
   getNotificationStatusLabelAndColor,
   NotificationAllowedStatus,
@@ -126,7 +133,7 @@ export { NotificationAllowedStatus };
 export { getNotificationStatusLabelAndColor };
 export { createAppError };
 export { formatDate };
-export { calcPages };
+export { calculatePages };
 export { getMonthString, getDay, getTime };
 export { formatFiscalCode };
 export { fiscalCodeRegex };
@@ -143,3 +150,8 @@ export { useIsMobile };
 import { appStateReducer } from './redux/slices/appStateSlice';
 
 export { appStateReducer };
+
+// actions
+import { appStateActions } from './redux/slices/appStateSlice';
+
+export { appStateActions };

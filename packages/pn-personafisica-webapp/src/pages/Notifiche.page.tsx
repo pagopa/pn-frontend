@@ -2,19 +2,21 @@ import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import {
-  calcPages,
+  calculatePages,
   CustomPagination,
   PaginationData,
   Sort,
+  tenYearsAgo,
   TitleBox,
+  today,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { getReceivedNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
+import { getReceivedNotifications, setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import DesktopNotifications from '../component/notification/DesktopNotifications';
-import MobileNotifications from '../component/notification/MobileNotifications';
+import DesktopNotifications from '../component/Notifications/DesktopNotifications';
+import MobileNotifications from '../component/Notifications/MobileNotifications';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +32,7 @@ const Notifiche = () => {
     (pagination.moreResult
       ? Math.max(pagination.nextPagesKey.length + 1, 8)
       : pagination.nextPagesKey.length + 1);
-  const pagesToShow: Array<number> = calcPages(
+  const pagesToShow: Array<number> = calculatePages(
     pagination.size,
     totalElements,
     3,
@@ -45,6 +47,17 @@ const Notifiche = () => {
   // Sort handlers
   const handleChangeSorting = (s: Sort) => {
     dispatch(setSorting(s));
+  };
+
+  // Remove filter
+  const handleCancelSearch = () => {
+    dispatch(
+      setNotificationFilters({
+        startDate: tenYearsAgo.toISOString(),
+        endDate: today.toISOString(),
+        iunMatch: undefined,
+      })
+    );
   };
 
   useEffect(() => {
@@ -66,12 +79,14 @@ const Notifiche = () => {
           notifications={notifications}
           sort={sort}
           onChangeSorting={handleChangeSorting}
+          onCancelSearch={handleCancelSearch}
         />
       ) : (
         <DesktopNotifications
           notifications={notifications}
           sort={sort}
           onChangeSorting={handleChangeSorting}
+          onCancelSearch={handleCancelSearch}
         />
       )}
       {notifications.length > 0 && (

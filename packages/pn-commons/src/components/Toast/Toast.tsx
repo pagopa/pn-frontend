@@ -1,29 +1,39 @@
-import { useState, Fragment } from 'react';
-import { Alert, Grid, Typography, Box, IconButton, AlertProps } from '@mui/material'; // SvgIcon
-import { Theme, styled } from '@mui/material/styles';
+import { useState, Fragment, useEffect } from 'react';
+import { Grid, Typography, Box, IconButton, Alert } from '@mui/material'; // SvgIcon
 import CloseIcon from '@mui/icons-material/Close';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined';
-import ReportGmailerrorredOutlinedIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 
 import { useIsMobile } from '../../hooks/IsMobile.hook';
-import { MessageType } from './types';
+import { MessageType } from '../../types/MessageType';
 
 type Props = {
+  /** whether the sneakbar should be open or not */
   open: boolean;
+  /** title to be shown */
   title: string;
+  /** message type (error, success, info, warning) */
   type: MessageType;
+  /** message to be shown */
   message: React.ReactNode;
+  /** A closing delay: if specified the sneakbar would close itself */
   closingDelay?: number;
+  /** onClose action */
   onClose?: () => void;
+  variant?: "outlined" | "standard" | "filled";
 };
 
-const CustomAlert = styled(Alert)({
-  '.MuiAlert-icon': { display: 'none' },
-});
-
-export default function Toast({ title, message, open, type, closingDelay, onClose }: Props) {
+/**
+ * Sneakbar provided for user feedback
+ * @param Props
+ */
+const Toast = ({
+  title,
+  message,
+  open,
+  type,
+  closingDelay,
+  onClose,
+  variant = 'outlined',
+}: Props) => {
   const [openStatus, setOpenStatus] = useState(open);
   const isMobile = useIsMobile();
 
@@ -34,82 +44,60 @@ export default function Toast({ title, message, open, type, closingDelay, onClos
     }
   };
 
-  const getIcon = () => {
-    switch (type) {
-      case MessageType.ERROR:
-        return <ReportGmailerrorredOutlinedIcon />;
-      case MessageType.WARNING:
-        return <WarningAmberOutlinedIcon />;
-      case MessageType.SUCCESS:
-        return <CheckCircleOutlineOutlinedIcon />;
-      case MessageType.INFO:
-        return <InfoOutlinedIcon />;
-    }
-  }
+  const getColor = new Map<MessageType, 'error' | 'warning' | 'success' | 'info'>([
+    [MessageType.ERROR, 'error'],
+    [MessageType.WARNING, 'warning'],
+    [MessageType.SUCCESS, 'success'],
+    [MessageType.INFO, 'info'],
+  ]);
 
-  const getColor = (theme: Theme): string => {
-    switch (type) {
-      case MessageType.ERROR:
-        return `4px solid ${theme.palette.error.main} !important`;
-      case MessageType.WARNING:
-        return `4px solid ${theme.palette.warning.main} !important`;
-      case MessageType.SUCCESS:
-        return `4px solid ${theme.palette.success.main} !important`;
-      case MessageType.INFO:
-        return `4px solid ${theme.palette.info.main} !important`;
-      default:
-        return `4px solid !important`;
-    }
-  }
-
-  if (closingDelay) {
-    setTimeout(() => {
-      closeToast();
-    }, closingDelay);
-  }
   
+  useEffect(() => {
+    if (closingDelay && openStatus) {
+      const timer = setTimeout(() => {
+        closeToast();
+      }, closingDelay);
+      return () => clearTimeout(timer);
+    }
+    return;
+  }, []);
+
   return (
     <Fragment>
       {openStatus && (
-      <Grid container justifyContent="end" px={2} data-testid="toastContainer">
-        <Grid item xs={12} display="flex" justifyContent="flex-end">
-          <Box sx={{}}>
-            <CustomAlert
-              variant="outlined"
-              sx={{
-                position: 'fixed',
-                bottom: '64px',
-                right: isMobile ? '5%' : '64px',
-                zIndex: 100,
-                width: isMobile ? 'calc(100vw - 10%)' : '376px',
-                maxWidth: '376px',
-                backgroundColor: 'white',
-                borderLeft: getColor,
-                borderRadius: '5px',
-                boxShadow: '0px 0px 45px rgba(0, 0, 0, 0.1) ',
-                border: 'none',
-              } as AlertProps}
-            >
-              <Grid container>
-                <Grid item xs={2}>
-                  {getIcon()}
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography pb={1} sx={{ fontSize: '15px', fontWeight: '600' }}>
-                    {title}
-                  </Typography>
-                  <Typography>{message}</Typography>
-                </Grid>
-                <Grid item xs={2}>
-                  <IconButton onClick={closeToast}>
-                    <CloseIcon />
-                  </IconButton>
-                </Grid>
+        <Box px={2} data-testid="toastContainer">
+          <Alert
+            sx={{
+              position: 'fixed',
+              bottom: '64px',
+              right: isMobile ? '5%' : '64px',
+              zIndex: 100,
+              width: isMobile ? 'calc(100vw - 10%)' : '376px',
+              '& .MuiAlert-message': {
+                width: '100%'
+              }
+            }}
+            variant={variant}
+            severity={getColor.get(type)}
+          >
+            <Grid container>
+              <Grid item xs={10}>
+                <Typography pb={1} fontWeight={600} fontSize={'16px'}>
+                  {title}
+                </Typography>
+                <Typography variant="body2">{message}</Typography>
               </Grid>
-            </CustomAlert>
-          </Box>
-        </Grid>
-      </Grid>)}
+              <Grid item xs={2}>
+                <IconButton onClick={closeToast}>
+                  <CloseIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          </Alert>
+        </Box>
+      )}
     </Fragment>
   );
-}
+};
+
+export default Toast;

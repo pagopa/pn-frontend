@@ -1,24 +1,31 @@
 import { useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  calcPages,
+  calculatePages,
   CustomPagination,
   getNotificationStatusLabelAndColor,
   NotificationStatus,
   PaginationData,
   Notification,
-  NotificationsTable,
   Column,
-  Row,
   Sort,
   StatusTooltip,
+  ItemsTable,
+  Item,
+  tenYearsAgo,
+  today,
 } from '@pagopa-pn/pn-commons';
 import { Box, Typography } from '@mui/material';
 
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getSentNotifications, setPagination, setSorting } from '../redux/dashboard/actions';
+import {
+  getSentNotifications,
+  setNotificationFilters,
+  setPagination,
+  setSorting,
+} from '../redux/dashboard/actions';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 
 const Dashboard = () => {
@@ -36,7 +43,7 @@ const Dashboard = () => {
     (pagination.moreResult
       ? Math.max(pagination.nextPagesKey.length + 1, 8)
       : pagination.nextPagesKey.length + 1);
-  const pagesToShow: Array<number> = calcPages(
+  const pagesToShow: Array<number> = calculatePages(
     pagination.size,
     totalElements,
     3,
@@ -52,7 +59,7 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Row, column: Column) {
+      onClick(row: Item, column: Column) {
         handleRowClick(row, column);
       },
     },
@@ -64,7 +71,7 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Row, column: Column) {
+      onClick(row: Item, column: Column) {
         handleRowClick(row, column);
       },
     },
@@ -75,7 +82,7 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
-      onClick(row: Row, column: Column) {
+      onClick(row: Item, column: Column) {
         handleRowClick(row, column);
       },
     },
@@ -86,7 +93,7 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Row, column: Column) {
+      onClick(row: Item, column: Column) {
         handleRowClick(row, column);
       },
     },
@@ -97,7 +104,7 @@ const Dashboard = () => {
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Row, column: Column) {
+      onClick(row: Item, column: Column) {
         handleRowClick(row, column);
       },
     },
@@ -116,7 +123,7 @@ const Dashboard = () => {
     },
   ];
 
-  const rows: Array<Row> = notifications.map((n: Notification, i: number) => ({
+  const rows: Array<Item> = notifications.map((n: Notification, i: number) => ({
     ...n,
     id: i.toString(),
   }));
@@ -132,8 +139,21 @@ const Dashboard = () => {
   };
 
   // Navigation handlers
-  const handleRowClick = (row: Row, _column: Column) => {
+  const handleRowClick = (row: Item, _column: Column) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+  };
+
+  // Remove filter
+  const handleCancelSearch = () => {
+    dispatch(
+      setNotificationFilters({
+        startDate: tenYearsAgo.toISOString(),
+        endDate: today.toISOString(),
+        status: undefined,
+        recipientId: undefined,
+        iunMatch: undefined,
+      })
+    );
   };
 
   useEffect(() => {
@@ -159,11 +179,12 @@ const Dashboard = () => {
         {notifications && (
           <Fragment>
             <FilterNotificationsTable />
-            <NotificationsTable
+            <ItemsTable
               columns={columns}
               rows={rows}
               sort={sort}
               onChangeSorting={handleChangeSorting}
+              emptyActionCallback={handleCancelSearch}
             />
             {notifications.length > 0 && (
               <CustomPagination

@@ -1,9 +1,10 @@
 import { GridSize, Typography, Grid, SxProps, Theme } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
+import { ReactFragment, ReactNode } from 'react';
 
 type Props = {
   /** Title of the page to render */
-  title: string;
+  title: ReactNode;
   /** Subtitle (optional) of the page to render */
   subTitle?: string;
   /** Gridsize for title on mobile devices */
@@ -17,6 +18,8 @@ type Props = {
   variantSubTitle?: Variant;
   /** style to apply */
   sx?: SxProps<Theme>;
+  /** Children */
+  children?: ReactFragment;
 };
 
 /**
@@ -30,7 +33,8 @@ export default function TitleBox({
   mbSubTitle,
   variantTitle = 'h1',
   variantSubTitle = 'h5',
-  sx
+  sx,
+  children,
 }: Props) {
   return (
     <Grid container mt={mtGrid} sx={sx}>
@@ -41,6 +45,9 @@ export default function TitleBox({
         <Typography variant={variantSubTitle} sx={{ fontSize: '18px' }}>
           {subTitle}
         </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography sx={{ fontSize: '18px' }}>{children}</Typography>
       </Grid>
     </Grid>
   );

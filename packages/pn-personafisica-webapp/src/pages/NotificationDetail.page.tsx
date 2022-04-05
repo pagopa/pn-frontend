@@ -37,7 +37,7 @@ const NotificationDetail = () => {
   const { id } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { t } = useTranslation(['notifiche', 'common']);
+  const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const documentDownloadUrl = useAppSelector(
@@ -149,7 +149,9 @@ const NotificationDetail = () => {
               title={t('detail.timeline-title', { ns: 'notifiche' })}
               legalFactLabel={t('detail.legalfact', { ns: 'notifiche' })}
               clickHandler={legalFactDownloadHandler}
-              historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
+              historyButtonLabel={t('detail.show-history', {ns: 'notifiche'})}
+              showMoreButtonLabel={t('detail.show-more', {ns: 'notifiche'})}
+              showLessButtonLabel={t('detail.show-less', {ns: 'notifiche'})}
             />
           </Box>
         </Grid>
