@@ -26,6 +26,8 @@
         "error_button": "Ricarica la pagina",
         "no_delegates": "Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.",
         "reload": "Ricarica",
+        "show_code_title": "Codice di verifica delega {{name}}",
+        "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della notifica.",
         "verification_code": "Codice di verifica",
         "table": {
             "name": "Nome",
