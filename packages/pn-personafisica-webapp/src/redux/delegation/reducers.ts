@@ -46,6 +46,7 @@ const delegationsSlice = createSlice({
       open: false,
       id: '',
       name: '',
+      error: false,
     },
     sortDelegators: {
       orderBy: '',
@@ -77,6 +78,9 @@ const delegationsSlice = createSlice({
           : delegator
       );
       state.acceptModalState.open = false;
+    });
+    builder.addCase(acceptDelegation.rejected, (state) => {
+      state.acceptModalState.error = true;
     });
     builder.addCase(openRevocationModal, (state, action) => {
       state.modalState.id = action.payload.id;

@@ -1,3 +1,4 @@
+import React from 'react';
 import { ChangeEvent, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -41,17 +42,20 @@ const AcceptDelegationModal = ({ open, id, name }: Props) => {
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
   const dispatch = useAppDispatch();
   const fieldsArray = Array.from({ length: 5 }, (_, index) => index + 1);
-  const [code, setCode] = useState<Array<string>>(['', '', '', '', '']);
+  const initialState = ['', '', '', '', ''];
+  const [code, setCode] = useState<Array<string>>(initialState);
 
   const handleClose = () => {
     dispatch(closeAcceptModal());
+    setCode(initialState);
   };
 
   const handleConfirm = () => {
     void dispatch(acceptDelegation({ id, code: code.join('') }));
+    setCode(initialState);
   };
 
-  function handleChange(e: ChangeEvent<HTMLTextAreaElement>, idx: number) {
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>, idx: number) => {
     const next = [...code.slice(0, idx), e.target.value, ...code.slice(idx + 1, code.length)];
     setCode(next);
     if (e.target.value && idx < 4) {
@@ -60,7 +64,19 @@ const AcceptDelegationModal = ({ open, id, name }: Props) => {
         target.focus();
       }
     }
-  }
+  };
+
+  const handleKeyUp = (
+    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+    idx: number
+  ) => {
+    if (e.key === 'Backspace' && idx > 0) {
+      const target = document.getElementById(`input-${idx - 1}`);
+      if (target) {
+        target.focus();
+      }
+    }
+  };
 
   return (
     <Dialog
@@ -115,6 +131,7 @@ const AcceptDelegationModal = ({ open, id, name }: Props) => {
                       e.currentTarget.value.length,
                       e.currentTarget.value.length
                     ),
+                  onKeyUp: (e) => handleKeyUp(e, idx),
                 }}
                 onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChange(e, idx)}
               />

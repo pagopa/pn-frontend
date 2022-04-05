@@ -32,12 +32,16 @@ describe('LegalContactsList Component', () => {
   let result: RenderResult | undefined;
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
+  let deleteMockActionFn: jest.Mock;
 
   beforeEach(async () => {
     // mock action
     mockActionFn = jest.fn();
     const actionSpy = jest.spyOn(actions, 'createOrUpdateLegalAddress');
     actionSpy.mockImplementation(mockActionFn as any);
+    deleteMockActionFn = jest.fn();
+    const deleteActionSpy = jest.spyOn(actions, 'deleteLegalAddress');
+    deleteActionSpy.mockImplementation(deleteMockActionFn as any);
     // mock dispatch
     mockDispatchFn = jest.fn(() => ({
       unwrap: () => Promise.resolve(),
@@ -181,6 +185,26 @@ describe('LegalContactsList Component', () => {
       expect(dialog).not.toBeInTheDocument();
       expect(input).not.toBeInTheDocument();
       expect(form).toHaveTextContent('mail@valida.mail');
+    });
+  });
+
+  it('deletes pec', async () => {
+    const form = result?.container.querySelector('form');
+    const buttons = form?.querySelectorAll('button');
+    fireEvent.click(buttons![0]);
+    const dialog = await waitFor(() => screen.queryByRole('dialog'));
+    expect(dialog).toBeInTheDocument();
+    const dialogButtons = dialog?.querySelectorAll('button');
+    fireEvent.click(dialogButtons![1]);
+    await waitFor(() => {
+      expect(dialog).not.toBeInTheDocument();
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(deleteMockActionFn).toBeCalledTimes(1);
+      expect(deleteMockActionFn).toBeCalledWith({
+        recipientId: 'mocked-recipientId',
+        senderId: 'default',
+        channelType: LegalChannelType.PEC
+      });
     });
   });
 });
