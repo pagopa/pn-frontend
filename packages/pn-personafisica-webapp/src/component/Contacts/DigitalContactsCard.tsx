@@ -4,7 +4,7 @@ import { TitleBox } from '@pagopa-pn/pn-commons';
 
 type Props = {
   sectionTitle: string;
-  title: string;
+  title: ReactNode;
   subtitle: string;
   avatar: ReactNode;
   children: ReactNode;

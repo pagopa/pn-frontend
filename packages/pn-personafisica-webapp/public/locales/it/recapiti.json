@@ -4,7 +4,9 @@
   "legal-contacts": {
     "title": "Recapito legale",
     "subtitle": "Ricevi le notifiche per via digitale",
+    "subtitle-2": "Notifiche per via digitale",
     "description": "Se associ la tua PEC o il tuo account dell’app IO*, riceverai le notifiche soltanto per via digitale. Questo ti permetterà di:",
+    "description-2": "Avendo associato una PEC a Piattaforme Notifiche, puoi riceverai le notifiche a valore legale soltanto in versione digitale. Questo ti permette di:",
     "save-money": "Risparmiare sulle spese dell’invio cartaceo",
     "avoid-waste": "Evitare gli sprechi di carta generati dalle raccomandate",
     "fast-notification": "Ricevere le notifiche in tempi più rapidi, evitando code agli sportelli",
@@ -19,6 +21,34 @@
     "new-code": "Non l'hai ricevuto? Controlla di aver inserito la email corretta oppure",
     "new-code-link": "genera un nuovo codice",
     "wrong-code": "Il codice inserito non è valido",
-    "pec-added": "PEC associata correttamente"
+    "pec-added-successfully": "PEC associata correttamente",
+    "pec-added": "PEC associata",
+    "remove-pec-title": "Rimuovi PEC",
+    "remove-pec-message": "Confermi di voler rimuovere l'inidirizzo PEC {{pec}}?"
+  },
+  "courtesy-contacts": {
+    "title": "Recapito di cortesia",
+    "subtitle": "Ricevi una comunicazione sui tuoi dispositivi",
+    "description": "Ogni volta che ricevi una nuova notifica, ti invieremo gratuitamente un SMS, un’email o un messaggio sull’app IO.",
+    "link-phone-placeholder": "Il tuo cellulare",
+    "link-email-placeholder": "il tuo indirizzo email",
+    "phone-add": "Avvisami via SMS",
+    "email-add": "Avvisami via email",
+    "io-enable": "Avvisami sull'app IO",
+    "email-verify": "Verifica email",
+    "email-verify-descr": "Abbiamo inviato un codice all'indirizzo email indicato. Il codice è <strong>valido per 10 minuti</strong>.",
+    "phone-verify": "Verifica cellulare",
+    "phone-verify-descr": "Abbiamo inviato un codice al numero di cellulare indicato. Il codice è <strong>valido per 10 minuti</strong>.",
+    "insert-code": "Inserisci codice",
+    "email-new-code": "Non l'hai ricevuto? Controlla di aver inserito l'indirizzo email corretto oppure",
+    "phone-new-code": "Non l'hai ricevuto? Controlla di aver inserito il numero di cellulare corretto oppure",
+    "new-code-link": "genera un nuovo codice",
+    "wrong-code": "Il codice inserito non è valido",
+    "email-added": "Indirizzo email associato correttamente",
+    "phone-added": "Numero di cellulare associato correttamente",
+    "valid-email": "Inserire un indirizzo email valido",
+    "valid-phone": "Inserire un numero di cellulare valido",
+    "email-added-successfully": "Indirizzo email aggiunto correttamente",
+    "phone-added-successfully": "Numero di cellulare aggiunto correttamente"
   }
 }

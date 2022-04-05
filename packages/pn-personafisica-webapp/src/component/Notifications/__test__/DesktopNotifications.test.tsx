@@ -1,4 +1,4 @@
-import { fireEvent, waitFor} from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 
 import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
 import { render } from '../../../__test__/test-utils';
@@ -10,7 +10,7 @@ const mockNavigateFn = jest.fn();
 // mock imports
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigateFn
+  useNavigate: () => mockNavigateFn,
 }));
 
 jest.mock('@pagopa-pn/pn-commons', () => {
@@ -36,7 +36,11 @@ describe('DesktopNotifications Component', () => {
   it('renders DesktopNotifications', () => {
     // render component
     const result = render(
-      <DesktopNotifications notifications={[]} sort={{ orderBy: '', order: 'asc' }} />
+      <DesktopNotifications
+        notifications={[]}
+        sort={{ orderBy: '', order: 'asc' }}
+        onCancelSearch={() => {}}
+      />
     );
     expect(result.container).toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(/Table/i);
@@ -45,13 +49,21 @@ describe('DesktopNotifications Component', () => {
   it('clicks on row', async () => {
     // render component
     const result = render(
-      <DesktopNotifications notifications={notificationsToFe.result} sort={{ orderBy: '', order: 'asc' }} />
+      <DesktopNotifications
+        notifications={notificationsToFe.result}
+        sort={{ orderBy: '', order: 'asc' }}
+        onCancelSearch={() => {}}
+      />
     );
-    const notificationsTableCell = result?.container.querySelector('table tr:first-child td:nth-child(2)');
+    const notificationsTableCell = result?.container.querySelector(
+      'table tr:first-child td:nth-child(2)'
+    );
     fireEvent.click(notificationsTableCell!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.result[0].iun));
+      expect(mockNavigateFn).toBeCalledWith(
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.result[0].iun)
+      );
     });
   });
 });

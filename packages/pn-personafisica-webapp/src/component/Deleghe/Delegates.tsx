@@ -1,28 +1,26 @@
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Chip, Stack, styled, Typography } from '@mui/material';
-import { Add, SentimentDissatisfied } from '@mui/icons-material';
+import { Box, Button, Chip, Stack, Typography } from '@mui/material';
+import { Add } from '@mui/icons-material';
 import { Column, ItemsTable as Table, Item } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
+import TableError from '../TableError/TableError';
+import { getDelegates } from '../../redux/delegation/actions';
 import { Menu, OrganizationsList } from './DelegationsElements';
-
-const StyledStack = styled(Stack)`
-  border-radius: 4px;
-  background-color: #ffffff;
-  padding: 16px;
-`;
 
 const Delegates = () => {
   const { t } = useTranslation(['deleghe']);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
+  const { delegatesError } = useAppSelector((state: RootState) => state.delegationsState);
 
   const rows: Array<Item> = delegationToItem(delegates, false);
 
@@ -33,7 +31,7 @@ const Delegates = () => {
       width: '13%',
       sortable: true,
       getCellLabel(value: string) {
-        return <b>{value}</b>;
+        return <Typography fontWeight="bold">{value}</Typography>;
       },
     },
     {
@@ -42,7 +40,7 @@ const Delegates = () => {
       width: '18%',
       sortable: true,
       getCellLabel(value: string) {
-        return value;
+        return <Typography sx={{ wordBreak: 'break-all' }}>{value}</Typography>;
       },
     },
     {
@@ -104,31 +102,15 @@ const Delegates = () => {
           </Button>
         </Box>
       </Stack>
-      {rows.length ? (
-        <Table columns={delegatesColumns} rows={rows} />
-      ) : (
-        <StyledStack
-          sx={{ fontSize: '16px' }}
-          direction={'row'}
-          justifyContent={'center'}
-          alignItems={'center'}
-        >
-          <SentimentDissatisfied
-            fontSize={'small'}
-            sx={{ verticalAlign: 'middle', margin: '0 20px' }}
-          />
-          <Typography sx={{ marginRight: '8px' }}>
-            Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.
-          </Typography>
-          <Typography
-            color="primary"
-            fontWeight="bold"
-            sx={{ cursor: 'pointer' }}
-            onClick={handleAddDelegationClick}
-          >
-            {t('deleghe.add')}
-          </Typography>
-        </StyledStack>
+      {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
+      {!delegatesError && (
+        <Table
+          columns={delegatesColumns}
+          rows={rows}
+          emptyActionLabel={t('deleghe.add') as string}
+          emptyMessage={t('deleghe.no_delegates') as string}
+          emptyActionCallback={handleAddDelegationClick}
+        />
       )}
     </Box>
   );

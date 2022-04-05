@@ -19,7 +19,8 @@ import { Delegation } from './types';
 const delegationsSlice = createSlice({
   name: 'delegationsSlice',
   initialState: {
-    error: false,
+    delegatesError: false,
+    delegatorsError: false,
     delegations: {
       delegators: [] as Array<Delegation>,
       delegates: [] as Array<Delegation>,
@@ -34,6 +35,7 @@ const delegationsSlice = createSlice({
       open: false,
       id: '',
       name: '',
+      error: false,
     },
     verificationCodeModalState: {
       open: false,
@@ -50,10 +52,10 @@ const delegationsSlice = createSlice({
       state.delegations.delegators = action.payload;
     });
     builder.addCase(getDelegates.rejected, (state) => {
-      state.error = true;
+      state.delegatesError = true;
     });
     builder.addCase(getDelegators.rejected, (state) => {
-      state.error = true;
+      state.delegatorsError = true;
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
@@ -62,6 +64,9 @@ const delegationsSlice = createSlice({
           : delegator
       );
       state.acceptModalState.open = false;
+    });
+    builder.addCase(acceptDelegation.rejected, (state) => {
+      state.acceptModalState.error = true;
     });
     builder.addCase(openRevocationModal, (state, action) => {
       state.modalState.id = action.payload.id;
