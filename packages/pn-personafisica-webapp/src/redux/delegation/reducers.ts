@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { WritableDraft } from 'immer/dist/internal';
 import { DelegationStatus } from '../../utils/status.utility';
 import {
   getDelegates,
@@ -20,6 +19,12 @@ import { Delegation } from './types';
 function sortDelegations(orderType: string, orderAttr: string, values: Array<Delegation>) {
   return values.sort((a: Delegation, b: Delegation) => {
     if (orderType === 'desc') {
+      if (orderAttr === 'endDate') {
+        return new Date(a[orderAttr as keyof Delegation]) <
+          new Date(b[orderAttr as keyof Delegation])
+          ? 1
+          : -1;
+      }
       return a[orderAttr as keyof Delegation] < b[orderAttr as keyof Delegation] ? 1 : -1;
     } else {
       return a[orderAttr as keyof Delegation] > b[orderAttr as keyof Delegation] ? 1 : -1;
@@ -123,20 +128,10 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(setDelegatorsSorting, (state, action) => {
       state.sortDelegators = action.payload;
-      state.delegations.delegators = state.delegations.delegators.sort(
-        (a: WritableDraft<Delegation>, b: WritableDraft<Delegation>) => {
-          if (action.payload.order === 'desc') {
-            return a[action.payload.orderBy as keyof Delegation] <
-              b[action.payload.orderBy as keyof Delegation]
-              ? 1
-              : -1;
-          } else {
-            return a[action.payload.orderBy as keyof Delegation] >
-              b[action.payload.orderBy as keyof Delegation]
-              ? 1
-              : -1;
-          }
-        }
+      state.delegations.delegators = sortDelegations(
+        action.payload.order,
+        action.payload.orderBy,
+        state.delegations.delegators
       );
     });
   },
