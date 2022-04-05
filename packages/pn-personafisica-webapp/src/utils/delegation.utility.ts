@@ -40,13 +40,10 @@ export function compareDelegationsStrings(
   key: 'delegate' | 'delegator'
 ) {
   // TODO: change when displayName can be retrieved
-  if (orderAttr === 'name') {
-    const delegate1 = a[key].firstName.toLowerCase();
-    const delegate2 = b[key].firstName.toLowerCase();
-    return delegate1 < delegate2 ? 1 : -1;
-  }
-  const delegate1 = a[key][orderAttr as keyof Person] || '';
-  const delegate2 = b[key][orderAttr as keyof Person] || '';
+  const delegate1 =
+    orderAttr === 'name' ? a[key].firstName.toLowerCase() : a[key][orderAttr as keyof Person] || '';
+  const delegate2 =
+    orderAttr === 'name' ? b[key].firstName.toLowerCase() : b[key][orderAttr as keyof Person] || '';
   return delegate1 < delegate2 ? 1 : -1;
 }
 
