@@ -10,6 +10,7 @@ import { DigitalContactsCodeVerificationProvider } from '../component/Contacts/D
 import InsertLegalContact from '../component/Contacts/InsertLegalContact';
 import LegalContactsList from '../component/Contacts/LegalContactsList';
 import CourtesyContacts from '../component/Contacts/CourtesyContacts';
+import SpecialContacts from '../component/Contacts/SpecialContacts';
 
 const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
@@ -50,6 +51,15 @@ const Contacts = () => {
             <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
           </Grid>
         </Grid>
+        {digitalAddresses.legal.length > 0 && (
+          <Box sx={{ marginTop: '30px' }}>
+            <SpecialContacts
+              recipientId={recipientId}
+              legalAddresses={digitalAddresses.legal}
+              courtesyAddresses={digitalAddresses.courtesy}
+            />
+          </Box>
+        )}
       </Box>
     </DigitalContactsCodeVerificationProvider>
   );
