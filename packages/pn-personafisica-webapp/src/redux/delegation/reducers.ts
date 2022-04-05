@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { DelegationStatus } from '../../utils/status.utility';
 import {
   getDelegates,
   getDelegators,
@@ -19,12 +18,6 @@ import { Delegation } from './types';
 function sortDelegations(orderType: string, orderAttr: string, values: Array<Delegation>) {
   return values.sort((a: Delegation, b: Delegation) => {
     if (orderType === 'desc') {
-      if (orderAttr === 'endDate') {
-        return new Date(a[orderAttr as keyof Delegation]) <
-          new Date(b[orderAttr as keyof Delegation])
-          ? 1
-          : -1;
-      }
       return a[orderAttr as keyof Delegation] < b[orderAttr as keyof Delegation] ? 1 : -1;
     } else {
       return a[orderAttr as keyof Delegation] > b[orderAttr as keyof Delegation] ? 1 : -1;
@@ -78,9 +71,7 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
-        delegator.mandateId === action.payload.id
-          ? { ...delegator, status: DelegationStatus.ACTIVE }
-          : delegator
+        delegator.mandateId === action.payload.id ? { ...delegator, status: 'active' } : delegator
       );
       state.acceptModalState.open = false;
     });
