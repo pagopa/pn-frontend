@@ -1,31 +1,7 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { NewDelegationFormProps, Person } from '../delegation/types';
-
-export interface CreateDelegationProps {
-  delegate: Person;
-  visibilityIds: Array<{
-    name: string;
-    uniqueIdentifier: string;
-  }>;
-  verificationCode: string;
-  dateto: string;
-}
-
-export interface CreateDelegationResponse {
-  datefrom: string;
-  dateto: string;
-  delegate: Person;
-  delegator: Person | null;
-  mandateId: string;
-  status: string;
-  verificationCode: string;
-  visibilityIds: Array<{
-    name: string;
-    uniqueIdentifier: string;
-  }>;
-}
+import { CreateDelegationResponse, NewDelegationFormProps } from '../delegation/types';
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
   'delegation',

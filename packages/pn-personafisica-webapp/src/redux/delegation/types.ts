@@ -52,3 +52,27 @@ export interface NewDelegationFormProps {
 export interface AcceptDelegationResponse {
   id: string;
 }
+
+export interface CreateDelegationProps {
+  delegate: Person;
+  visibilityIds: Array<{
+    name: string;
+    uniqueIdentifier: string;
+  }>;
+  verificationCode: string;
+  dateto: string;
+}
+
+export interface CreateDelegationResponse {
+  datefrom: string;
+  dateto: string;
+  delegate: Person;
+  delegator: Person | null;
+  mandateId: string;
+  status: string;
+  verificationCode: string;
+  visibilityIds: Array<{
+    name: string;
+    uniqueIdentifier: string;
+  }>;
+}

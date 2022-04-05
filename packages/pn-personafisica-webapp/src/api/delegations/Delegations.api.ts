@@ -1,7 +1,11 @@
 import { AxiosResponse } from 'axios';
 import { apiClient } from '../axios';
-import { AcceptDelegationResponse, Delegation } from '../../redux/delegation/types';
-import { CreateDelegationProps, CreateDelegationResponse } from '../../redux/newDelegation/actions';
+import {
+  AcceptDelegationResponse,
+  CreateDelegationProps,
+  CreateDelegationResponse,
+  Delegation,
+} from '../../redux/delegation/types';
 
 function checkResponseStatus(response: AxiosResponse, id: string) {
   if (response.status === 200) {
