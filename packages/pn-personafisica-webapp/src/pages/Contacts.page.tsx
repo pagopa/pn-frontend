@@ -9,6 +9,7 @@ import { RootState } from '../redux/store';
 import { DigitalContactsCodeVerificationProvider } from '../component/Contacts/DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../component/Contacts/InsertLegalContact';
 import LegalContactsList from '../component/Contacts/LegalContactsList';
+import CourtesyContacts from '../component/Contacts/CourtesyContacts';
 
 const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
@@ -46,7 +47,7 @@ const Contacts = () => {
             )}
           </Grid>
           <Grid item lg={6} xs={12}>
-            Recapito di cortesia
+            <CourtesyContacts />
           </Grid>
         </Grid>
       </Box>

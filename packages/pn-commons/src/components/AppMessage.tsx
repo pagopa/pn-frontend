@@ -43,6 +43,17 @@ const AppMessage = () => {
           closingDelay={2500}
         />
       ))}
+      {success.map((errorMessage: IAppMessage) => (
+        <Toast
+          key={errorMessage.id}
+          title={errorMessage.title}
+          message={errorMessage.message}
+          open
+          type={MessageType.SUCCESS}
+          onClose={() => onCloseSuccessToast(errorMessage.id)}
+          closingDelay={2500}
+        />
+      ))}
     </Fragment>
   );
 };

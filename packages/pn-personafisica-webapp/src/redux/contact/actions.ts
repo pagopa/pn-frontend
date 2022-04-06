@@ -2,6 +2,7 @@ import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
 import {
+  CourtesyChannelType,
   DigitalAddress,
   DigitalAddresses,
   SaveDigitalAddressParams,
@@ -49,6 +50,25 @@ export const deleteLegalAddress = createAsyncThunk<
         params.recipientId,
         params.senderId,
         params.channelType
+      );
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
+export const createOrUpdateCourtesyAddress = createAsyncThunk<
+  DigitalAddress | void,
+  SaveDigitalAddressParams
+>(
+  'createOrUpdateCourtesyAddress',
+  async (params: SaveDigitalAddressParams, { rejectWithValue }) => {
+    try {
+      return await ContactsApi.createOrUpdateCourtesyAddress(
+        params.recipientId,
+        params.senderId,
+        params.channelType as CourtesyChannelType,
+        { value: params.value, verificationCode: params.code }
       );
     } catch (e) {
       return rejectWithValue(e);
