@@ -11,7 +11,7 @@ class ErrorDelega {
 }
 
 type ErrorDelegheProps = {
-  errorType: number;
+  errorType?: number;
 };
 
 const ErrorDeleghe: React.FC<ErrorDelegheProps> = ({ errorType }) => {
@@ -28,9 +28,9 @@ const ErrorDeleghe: React.FC<ErrorDelegheProps> = ({ errorType }) => {
 
   return (
     <Toast
-      title={errors[errorType].title}
-      message={errors[errorType].description}
-      open
+      title={errorType ? errors[errorType].title : ''}
+      message={errorType ? errors[errorType].description : ''}
+      open={!!errorType}
       variant="standard"
       type={MessageType.ERROR}
     />
