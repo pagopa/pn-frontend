@@ -1,4 +1,5 @@
 import { AuthApi } from '../../../api/auth/Auth.api';
+import { Delegation } from '../../delegation/types';
 import { store } from '../../store';
 import { exchangeToken, logout } from '../actions';
 import { User } from '../types';
@@ -28,6 +29,8 @@ describe('Auth redux state tests', () => {
     const state = store.getState().userState;
     expect(state).toEqual({
       loading: false,
+      pendingDelegators: 0,
+      delegators: [] as Array<Delegation>,
       user: sessionStorage.getItem('user')
         ? JSON.parse(sessionStorage.getItem('user') || '')
         : {

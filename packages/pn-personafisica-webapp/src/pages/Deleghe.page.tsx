@@ -29,7 +29,7 @@ const Deleghe = () => {
   const {
     id: acceptId,
     open: acceptOpen,
-    // TODO add name to description name: acceptName,
+    name: acceptName,
     error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
 
@@ -65,7 +65,7 @@ const Deleghe = () => {
       <>
         <CodeModal
           title={t('deleghe.accept_title')}
-          subtitle={t('deleghe.accept_description')}
+          subtitle={t('deleghe.accept_description', { name: acceptName })}
           open={acceptOpen}
           initialValues={new Array(5).fill('')}
           handleClose={handleCloseAcceptModal}

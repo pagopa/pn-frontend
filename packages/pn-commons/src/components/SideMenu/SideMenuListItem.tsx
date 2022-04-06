@@ -1,5 +1,7 @@
 import { ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import { SideMenuItem } from '../../types/SideMenuItem';
+import Badge from '@mui/material/Badge';
+import { SideMenuItem } from '../..';
+import NotificationBadge from './NotificationBadge';
 
 type Props = {
   item: SideMenuItem;
@@ -8,11 +10,31 @@ type Props = {
 };
 
 const SideMenuListItem = ({ item, style, handleLinkClick }: Props) => (
-  <ListItem button onClick={() => handleLinkClick(item.route)} sx={style}>
+  <ListItem button onClick={() => handleLinkClick(item.route as string)} style={style}sx={style}>
     <ListItemIcon>
-      <item.icon />
+      {item.dotBadge ?
+        <Badge color="primary" variant="dot">
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-ignore */}
+          {<item.icon />}
+        </Badge>
+        :
+        (
+          <>
+        {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+        {/* @ts-ignore */}
+        <item.icon />
+          </>
+        )
+      }
     </ListItemIcon>
     <ListItemText primary={item.label} />
+    {item.rightBadgeNotification &&
+      (
+        <NotificationBadge numberOfNotification={item.rightBadgeNotification}/>
+      ) 
+    }
+
   </ListItem>
 );
 

@@ -68,3 +68,7 @@ export const closeRevocationModal = createAction<void>('closeRevocationModal');
 export const openAcceptModal = createAction<{ id: string; name: string }>('openAcceptModal');
 
 export const closeAcceptModal = createAction<void>('closeAcceptModal');
+
+export const setDelegatorsSorting = createAction<{orderBy: string; order: 'asc' | 'desc'}>('setDelegatorsSorting');
+
+export const setDelegatesSorting = createAction<{orderBy: string; order: 'asc' | 'desc'}>('setDelegatesSorting');

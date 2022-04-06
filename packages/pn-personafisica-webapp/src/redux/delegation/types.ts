@@ -22,6 +22,11 @@ export interface Delegation {
   dateto: string;
 }
 
+export interface OrganizationId {
+  id: string;
+  role: 'referente operativo' | 'referente amministrativo';
+}
+
 export interface RevocationModalProps {
   open: boolean;
   id: string;
@@ -48,7 +53,6 @@ export interface NewDelegationFormProps {
   enteSelect: { name: string; uniqueIdentifier: string };
   verificationCode: string;
 }
-
 export interface AcceptDelegationResponse {
   id: string;
 }
