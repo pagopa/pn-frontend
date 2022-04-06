@@ -29,7 +29,7 @@ const Deleghe = () => {
   const {
     id: acceptId,
     open: acceptOpen,
-    // TODO add name to description name: acceptName,
+    name: acceptName,
     error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
   const dispatch = useAppDispatch();
@@ -63,18 +63,18 @@ const Deleghe = () => {
     <Box sx={{ marginRight: isMobile ? 0 : 2 }}>
       <>
         <CodeModal
-            title={t('deleghe.accept_title')}
-            subtitle={t('deleghe.accept_description')}
-            open={acceptOpen}
-            initialValues={new Array(5).fill('')}
-            handleClose={handleCloseAcceptModal}
-            cancelCallback={handleCloseAcceptModal}
-            cancelLabel={t('deleghe.close')}
-            confirmCallback={handleConfirm}
-            confirmLabel={t('deleghe.accept')}
-            codeSectionTitle={t('deleghe.verification_code')}
-            hasError={acceptError}
-            errorMessage={t('deleghe.invalid_code')}
+          title={t('deleghe.accept_title')}
+          subtitle={t('deleghe.accept_description', { name: acceptName })}
+          open={acceptOpen}
+          initialValues={new Array(5).fill('')}
+          handleClose={handleCloseAcceptModal}
+          cancelCallback={handleCloseAcceptModal}
+          cancelLabel={t('deleghe.close')}
+          confirmCallback={handleConfirm}
+          confirmLabel={t('deleghe.accept')}
+          codeSectionTitle={t('deleghe.verification_code')}
+          hasError={acceptError}
+          errorMessage={t('deleghe.invalid_code')}
         />
         <ConfirmationModal
           open={open}
