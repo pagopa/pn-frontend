@@ -1,6 +1,6 @@
 import { FC, Fragment, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Menu } from '@mui/icons-material';
 
@@ -13,13 +13,14 @@ interface Props {
 }
 
 const CustomList = styled(List)(({ theme }) => ({
-  boxShadow: '0px 2px 4px -1px rgba(0, 43, 85, 0.1), 0px 4px 5px rgba(0, 43, 85, 0.05), 0px 1px 10px rgba(0, 43, 85, 0.1)',
+  boxShadow:
+    '0px 2px 4px -1px rgba(0, 43, 85, 0.1), 0px 4px 5px rgba(0, 43, 85, 0.05), 0px 1px 10px rgba(0, 43, 85, 0.1)',
   '& .MuiListItemIcon-root': {
-    color: `${theme.palette.primary.main} !important`
+    color: `${theme.palette.primary.main} !important`,
   },
   '& .MuiTypography-root': {
-    color: `${theme.palette.primary.main} !important`
-  }
+    color: `${theme.palette.primary.main} !important`,
+  },
 }));
 
 const SideMenu: FC<Props> = ({ menuItems }) => {
@@ -27,8 +28,8 @@ const SideMenu: FC<Props> = ({ menuItems }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
-  const menuItemSelected = menuItems.find(m => m.route === location.pathname) ||
-    menuItems.find(m => location.pathname.indexOf(m.route as string) > -1) || {label: 'Menu'};
+  const menuItemSelected = menuItems.find((m) => m.route === location.pathname) ||
+    menuItems.find((m) => location.pathname.indexOf(m.route as string) > -1) || { label: 'Menu' };
 
   const toggleDrawer = () => {
     setState(!state);
@@ -42,28 +43,29 @@ const SideMenu: FC<Props> = ({ menuItems }) => {
   };
 
   return (
-    <Box height={isMobile ? 'auto' : '100%'} display="flex" flexDirection="column" bgcolor={'common.white'}>
+    <Box
+      height={isMobile ? 'auto' : '100%'}
+      display="flex"
+      flexDirection="column"
+      bgcolor={'common.white'}
+    >
       <Box alignItems="left" display="flex" flexDirection="column">
         {isMobile ? (
           <Fragment>
             <CustomList>
-              <ListItem button onClick={toggleDrawer}>
+              <ListItemButton onClick={toggleDrawer}>
                 <ListItemIcon>
                   <Menu />
                 </ListItemIcon>
-                <ListItemText primary={menuItemSelected?.label}/>
-              </ListItem>
+                <ListItemText primary={menuItemSelected?.label} />
+              </ListItemButton>
             </CustomList>
-            <Drawer
-              anchor="left"
-              open={state}
-              onClose={toggleDrawer}
-            >
-              {<SideMenuList menuItems={menuItems} handleLinkClick={handleNavigation}/>}
+            <Drawer anchor="left" open={state} onClose={toggleDrawer}>
+              {<SideMenuList menuItems={menuItems} handleLinkClick={handleNavigation} />}
             </Drawer>
           </Fragment>
-          ) : (
-          <SideMenuList menuItems={menuItems} handleLinkClick={handleNavigation}/>
+        ) : (
+          <SideMenuList menuItems={menuItems} handleLinkClick={handleNavigation} />
         )}
       </Box>
     </Box>

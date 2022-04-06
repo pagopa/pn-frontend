@@ -3,7 +3,6 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
-import PersonIcon from '@mui/icons-material/Person';
 import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import * as routes from './navigation/routes.const';
@@ -29,7 +28,6 @@ const App = () => {
   }, [pendingDelegators]);
 
   const mapDelegatorSideMenuItem = delegators.map((delegator) => ({
-    icon: PersonIcon,
     label: `${delegator.delegator.firstName} ${delegator.delegator.lastName}`,
   }));
 
