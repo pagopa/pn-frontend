@@ -47,7 +47,9 @@ const SideMenuList = ({ menuItems, handleLinkClick }: Props) => {
           <Fragment key={item.label}>
             <ListItem button onClick={() => handleClick(item.label)}>
               <ListItemIcon>
-                <item.icon />
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                {/* @ts-ignore */}
+                <item.icon/>
               </ListItemIcon>
               <ListItemText primary={item.label} />
               {openId === item.label && open ? <ExpandLess /> : <ExpandMore />}
