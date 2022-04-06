@@ -13,6 +13,8 @@ import {
   Alert,
 } from '@mui/material';
 
+import { useIsMobile } from '../hooks/IsMobile.hook';
+
 type Props = {
   title: ReactNode;
   subtitle: ReactNode;
@@ -63,6 +65,7 @@ const CodeModal = ({
 }: Props) => {
   const [inputsValues, setInputsValues] = useState(initialValues);
   const [inputsRef, setInputsRef] = useState(new Array(initialValues.length).fill(undefined));
+  const isMobile = useIsMobile();
 
   const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
     if (!isNaN(Number(event.key)) || event.key === 'Enter' || event.key === 'Tab') {
@@ -120,14 +123,14 @@ const CodeModal = ({
       aria-describedby="dialog-description"
       data-testid="codeDialog"
     >
-      <DialogTitle id="dialog-title">{title}</DialogTitle>
+      <DialogTitle id="dialog-title" sx={{textAlign: isMobile ? 'center' : 'left'}}>{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
+        <DialogContentText id="dialog-description" sx={{textAlign: isMobile ? 'center' : 'left'}}>{subtitle}</DialogContentText>
         <Divider sx={{ margin: '20px 0' }} />
-        <Typography fontSize={16} fontWeight={600}>
+        <Typography fontSize={16} fontWeight={600} sx={{textAlign: isMobile ? 'center' : 'left'}}>
           {codeSectionTitle}
         </Typography>
-        <Box sx={{ marginTop: '10px' }}>
+        <Box sx={{ marginTop: '10px', textAlign: isMobile ? 'center' : 'left' }}>
           {initialValues.map((_value, index) => (
             <TextField
               key={index}
@@ -159,22 +162,22 @@ const CodeModal = ({
             />
           ))}
         </Box>
-        <Box sx={{ marginTop: '10px' }}>{codeSectionAdditional}</Box>
+        <Box sx={{ marginTop: '10px', textAlign: isMobile ? 'center' : 'left' }}>{codeSectionAdditional}</Box>
         <Divider sx={{ margin: '20px 0' }} />
         {hasError && errorMessage && (
-          <Alert data-testid="errorAlert" severity="error">
+          <Alert data-testid="errorAlert" severity="error" sx={{textAlign: isMobile ? 'center' : 'left'}}>
             {errorMessage}
           </Alert>
         )}
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{textAlign: isMobile ? 'center' : 'left', flexDirection: isMobile ? 'column' : 'row'}}>
         {cancelLabel && cancelCallback && (
-          <Button variant="outlined" onClick={cancelCallback}>
+          <Button variant="outlined" onClick={cancelCallback} fullWidth={isMobile}>
             {cancelLabel}
           </Button>
         )}
         {confirmLabel && confirmCallback && (
-          <Button onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid}>
+          <Button onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid} fullWidth={isMobile}>
             {confirmLabel}
           </Button>
         )}

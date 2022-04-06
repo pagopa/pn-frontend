@@ -44,8 +44,8 @@
     "phone-new-code": "Non l'hai ricevuto? Controlla di aver inserito il numero di cellulare corretto oppure",
     "new-code-link": "genera un nuovo codice",
     "wrong-code": "Il codice inserito non è valido",
-    "email-added": "Indirizzo email associato correttamente",
-    "phone-added": "Numero di cellulare associato correttamente",
+    "email-added": "Email associata",
+    "phone-added": "Cellulare associato",
     "valid-email": "Inserire un indirizzo email valido",
     "valid-phone": "Inserire un numero di cellulare valido",
     "email-added-successfully": "Indirizzo email aggiunto correttamente",
@@ -64,7 +64,8 @@
     "pec": "Indirizzo PEC",
     "phone": "Cellulare",
     "mail": "Indirizzo mail",
-    "valid-mail": "Inserire un indirizzo mail valido",
-    "valid-tel": "Inserire un numero di telefono valido"
+    "pec-already-exists": "Esiste già una pec associata all'ente selezionato. Se si decide di continuare, il valore precedente verrà sovrascritto.",
+    "phone-already-exists": "Esiste già un cellulare associato all'ente selezionato. Se si decide di continuare, il valore precedente verrà sovrascritto.",
+    "email-already-exists": "Esiste già una email associata all'ente selezionato. Se si decide di continuare, il valore precedente verrà sovrascritto."
   }
 }

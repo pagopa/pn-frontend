@@ -1,5 +1,5 @@
 import { ChangeEvent, Fragment, useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -17,7 +17,6 @@ import {
 import { IllusEmailValidation } from '@pagopa/mui-italia';
 
 import { LegalChannelType } from '../../models/contacts';
-import { createOrUpdateLegalAddress } from '../../redux/contact/actions';
 import DigitalContactsCard from './DigitalContactsCard';
 import LegalContactsDisclosure from './LegalContactsDisclosure';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
@@ -28,7 +27,7 @@ type Props = {
 
 const InsertLegalContact = ({ recipientId }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const { setProps, handleCodeVerification } = useDigitalContactsCodeVerificationContext();
+  const { initValidation } = useDigitalContactsCodeVerificationContext();
 
   const validationSchema = yup.object({
     digitalDomicileType: yup.string().required(),
@@ -53,43 +52,13 @@ const InsertLegalContact = ({ recipientId }: Props) => {
     },
   });
 
-  const handleChangeTouched = (e: ChangeEvent) => {
-    void formik.setFieldTouched(e.target.id, true, false);
+  const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
+    await formik.setFieldTouched(e.target.id, true, false);
   };
 
   const handleAssociation = () => {
-    setProps({
-      title: `${t('legal-contacts.pec-verify', { ns: 'recapiti' })} ${formik.values.pec}`,
-      subtitle: <Trans i18nKey="legal-contacts.pec-verify-descr" ns="recapiti" />,
-      initialValues: new Array(5).fill(''),
-      codeSectionTitle: t('legal-contacts.insert-code', { ns: 'recapiti' }),
-      codeSectionAdditional: (
-        <Box>
-          <Typography variant="body2" display="inline">
-            {t('legal-contacts.new-code', { ns: 'recapiti' })}&nbsp;
-          </Typography>
-          <Typography
-            variant="body2"
-            display="inline"
-            color="primary"
-            onClick={() => handleCodeVerification(undefined, true)}
-            sx={{ cursor: 'pointer' }}
-          >
-            {t('legal-contacts.new-code-link', { ns: 'recapiti' })}.
-          </Typography>
-        </Box>
-      ),
-      cancelLabel: t('button.annulla'),
-      confirmLabel: t('button.conferma'),
-      errorMessage: t('legal-contacts.wrong-code', { ns: 'recapiti' }),
-      recipientId,
-      senderId: 'default',
-      digitalDomicileType: formik.values.digitalDomicileType,
-      value: formik.values.pec,
-      successMessage: t('legal-contacts.pec-added', { ns: 'recapiti' }),
-      actionToBeDispatched: createOrUpdateLegalAddress,
-    });
+    initValidation(formik.values.digitalDomicileType, formik.values.pec, recipientId, 'default');
   };
 
   useEffect(() => {

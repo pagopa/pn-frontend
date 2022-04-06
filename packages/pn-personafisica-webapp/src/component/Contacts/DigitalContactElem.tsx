@@ -1,6 +1,15 @@
-import { forwardRef, Fragment, ReactChild, useImperativeHandle, useState } from 'react';
+import { forwardRef, Fragment, memo, ReactChild, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, Dialog, Typography, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material';
+import {
+  Grid,
+  Dialog,
+  Typography,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
@@ -18,7 +27,7 @@ type Props = {
   onRemoveClick: () => void;
 };
 
-const DigitalContactElem = forwardRef(
+const DigitalContactElem = memo(forwardRef(
   (
     { fields, saveDisabled = false, onRemoveClick, removeModalTitle, removeModalBody }: Props,
     ref
@@ -60,7 +69,7 @@ const DigitalContactElem = forwardRef(
 
     return (
       <Fragment>
-        <Grid container spacing={4} direction="row" alignItems="center">
+        <Grid container spacing={isMobile ? 2 : 4} direction="row" alignItems="center">
           {!isMobile && (
             <Grid item lg="auto">
               <CloseIcon
@@ -70,25 +79,23 @@ const DigitalContactElem = forwardRef(
             </Grid>
           )}
           {mappedChildren}
-          {!editMode && (
-            <Grid item lg={2} xs={12} textAlign={isMobile ? 'left' : 'right'}>
-              {isMobile && (
-                <ButtonNaked color="primary" sx={{ marginRight: '10px' }} onClick={removeHandler}>
-                  {t('button.rimuovi')}
-                </ButtonNaked>
-              )}
+          <Grid item lg={2} xs={12} textAlign={isMobile ? 'left' : 'right'}>
+            {isMobile && (
+              <ButtonNaked color="primary" sx={{ marginRight: '10px' }} onClick={removeHandler}>
+                {t('button.rimuovi')}
+              </ButtonNaked>
+            )}
+            {!editMode && (
               <ButtonNaked color="primary" onClick={toggleEdit}>
                 {t('button.modifica')}
               </ButtonNaked>
-            </Grid>
-          )}
-          {editMode && (
-            <Grid item lg={2} xs={12} textAlign={isMobile ? 'left' : 'right'}>
+            )}
+            {editMode && (
               <ButtonNaked color="primary" type="submit" disabled={saveDisabled}>
                 {t('button.salva')}
               </ButtonNaked>
-            </Grid>
-          )}
+            )}
+          </Grid>
         </Grid>
         <Dialog
           open={showModal}
@@ -101,13 +108,17 @@ const DigitalContactElem = forwardRef(
             <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleModalClose} variant="outlined">{t('button.annulla')}</Button>
-            <Button onClick={confirmHandler} variant="contained">{t('button.conferma')}</Button>
+            <Button onClick={handleModalClose} variant="outlined">
+              {t('button.annulla')}
+            </Button>
+            <Button onClick={confirmHandler} variant="contained">
+              {t('button.conferma')}
+            </Button>
           </DialogActions>
         </Dialog>
       </Fragment>
     );
   }
-);
+));
 
 export default DigitalContactElem;
