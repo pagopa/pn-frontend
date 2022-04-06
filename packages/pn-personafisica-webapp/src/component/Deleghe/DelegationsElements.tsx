@@ -12,11 +12,7 @@ import {
 import { MoreVert } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../redux/hooks';
-import {
-  openAcceptModal,
-  openRevocationModal,
-  openVerificationCodeModal,
-} from '../../redux/delegation/actions';
+import { openAcceptModal, openRevocationModal } from '../../redux/delegation/actions';
 
 export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -30,9 +26,7 @@ export const Menu = (props: any) => {
   };
 
   const handleOpenVerificationCodeModal = () => {
-    dispatch(
-      openVerificationCodeModal({ name: props.name, verificationCode: props.verificationCode })
-    );
+    props.setCodeModal({ open: true, name: props.name, code: props.verificationCode });
     setAnchorEl(null);
   };
 

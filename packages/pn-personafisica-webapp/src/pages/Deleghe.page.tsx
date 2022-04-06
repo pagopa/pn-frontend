@@ -13,7 +13,6 @@ import {
   getDelegators,
   closeAcceptModal,
   acceptDelegation,
-  closeVerificationCodeModal,
 } from '../redux/delegation/actions';
 import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
 import MobileDelegates from '../component/Deleghe/MobileDelegates';
@@ -33,20 +32,11 @@ const Deleghe = () => {
     // TODO add name to description name: acceptName,
     error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
-  const {
-    open: showCodeOpen,
-    name: showCodeName,
-    verificationCode: showCode,
-  } = useAppSelector((state: RootState) => state.delegationsState.verificationCodeModalState);
 
   const dispatch = useAppDispatch();
 
   const handleCloseModal = () => {
     dispatch(closeRevocationModal());
-  };
-
-  const handleCloseShowCodeModal = () => {
-    dispatch(closeVerificationCodeModal());
   };
 
   const handleConfirmClick = () => {
@@ -73,17 +63,6 @@ const Deleghe = () => {
   return (
     <Box sx={{ marginRight: isMobile ? 0 : 2 }}>
       <>
-        <CodeModal
-          title={t('deleghe.show_code_title', { name: showCodeName })}
-          subtitle={t('deleghe.show_code_subtitle')}
-          open={showCodeOpen}
-          initialValues={showCode.split('')}
-          handleClose={handleCloseShowCodeModal}
-          cancelCallback={handleCloseShowCodeModal}
-          cancelLabel={t('deleghe.close')}
-          codeSectionTitle={t('deleghe.verification_code')}
-          isReadOnly
-        />
         <CodeModal
           title={t('deleghe.accept_title')}
           subtitle={t('deleghe.accept_description')}

@@ -60,15 +60,11 @@ export const acceptDelegation = createAsyncThunk<
   }
 });
 
-export const openRevocationModal = createAction<{ id: string; type: string }>('openRevocationModal');
+export const openRevocationModal =
+  createAction<{ id: string; type: string }>('openRevocationModal');
 
 export const closeRevocationModal = createAction<void>('closeRevocationModal');
 
 export const openAcceptModal = createAction<{ id: string; name: string }>('openAcceptModal');
 
 export const closeAcceptModal = createAction<void>('closeAcceptModal');
-
-export const openVerificationCodeModal = createAction<{ name: string; verificationCode: string }>('openVerificationCodeModal');
-
-export const closeVerificationCodeModal = createAction<void>('closeVerificationCodeModal');
-
