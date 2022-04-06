@@ -1,0 +1,83 @@
+import * as redux from 'react-redux';
+import { act, render, screen } from "@testing-library/react";
+import CourtesyContactsList from "../CourtesyContactsList";
+import * as hooks from '../../../redux/hooks';
+import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
+// import * as actions from '../../../redux/contact/actions';
+
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+      t: (str: string) => str,
+    }),
+}));
+
+const mockedStore: Array<DigitalAddress> = [{
+    addressType: 'courtesy',
+    recipientId: 'recipient1',
+    senderId: 'default',
+    channelType: CourtesyChannelType.SMS,
+    value: '3331234567',
+    code: '12345',
+  },{
+    addressType: 'courtesy',
+    recipientId: 'recipient1',
+    senderId: 'default',
+    channelType: CourtesyChannelType.EMAIL,
+    value: 'test@test.com',
+    code: '54321',
+  },
+];
+
+describe('CourtesyContactsList Component', () => {
+  const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
+  const mockDispatchFn = jest.fn(() => ({
+    unwrap: () => Promise.resolve(),
+  }));
+  const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
+  useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+  // const mockActionFn = jest.fn();
+  
+  it('renders correctly with empy store', async () => {
+    mockUseAppSelector.mockReturnValueOnce([]);
+    await act(async () => {
+      render(<CourtesyContactsList />);
+    });
+    
+    const textBoxes = await screen.findAllByRole('textbox');
+    expect(textBoxes).toHaveLength(2);
+
+    const phoneTextBox = await screen.findByPlaceholderText(/courtesy-contacts.link-phone-placeholder/);
+    expect(phoneTextBox).toEqual(textBoxes[0]);
+    expect(phoneTextBox).toHaveValue('');
+
+    const mailTextBox = await screen.findByPlaceholderText(/courtesy-contacts.link-email-placeholder/);
+    expect(mailTextBox).toEqual(textBoxes[1]);
+    expect(mailTextBox).toHaveValue('');
+
+    const buttons = await screen.findAllByRole('button');
+    expect(buttons[0]).toBeDisabled();
+    expect(buttons[1]).toBeDisabled();
+    expect(buttons[0].textContent).toMatch('courtesy-contacts.phone-add');
+    expect(buttons[1].textContent).toMatch('courtesy-contacts.email-add');
+  });
+
+  it('renders correctly with data in store', async () => {
+    mockUseAppSelector.mockReturnValueOnce(mockedStore);
+    await act(async () => {
+      render(<CourtesyContactsList />);
+    });
+
+    expect(screen.queryAllByRole('textbox')).toHaveLength(0);
+    const phoneNumber = screen.queryByText(mockedStore[0].value);
+    expect(phoneNumber).toBeInTheDocument();
+    const email = screen.queryByText(mockedStore[1].value);
+    expect(email).toBeInTheDocument();
+    
+    const buttons = await screen.findAllByRole('button');
+    expect(buttons[0]).toBeEnabled();
+    expect(buttons[1]).toBeEnabled();
+    expect(buttons[0].textContent).toMatch('button.rimuovi');
+    expect(buttons[1].textContent).toMatch('button.modifica');
+  });
+});
