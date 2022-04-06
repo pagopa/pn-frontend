@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { DelegationStatus } from '../../utils/status.utility';
+import { sortDelegations } from '../../utils/delegation.utility';
 import {
   getDelegates,
   getDelegators,
@@ -8,6 +8,8 @@ import {
   openRevocationModal,
   rejectDelegation,
   revokeDelegation,
+  setDelegatorsSorting,
+  setDelegatesSorting,
   openAcceptModal,
   closeAcceptModal,
 } from './actions';
@@ -35,6 +37,14 @@ const delegationsSlice = createSlice({
       name: '',
       error: false,
     },
+    sortDelegators: {
+      orderBy: '',
+      order: 'asc' as 'asc' | 'desc',
+    },
+    sortDelegates: {
+      orderBy: '',
+      order: 'asc' as 'asc' | 'desc',
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -52,9 +62,7 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>
-        delegator.mandateId === action.payload.id
-          ? { ...delegator, status: DelegationStatus.ACTIVE }
-          : delegator
+        delegator.mandateId === action.payload.id ? { ...delegator, status: 'active' } : delegator
       );
       state.acceptModalState.open = false;
     });
@@ -91,6 +99,24 @@ const delegationsSlice = createSlice({
       state.acceptModalState.open = false;
       state.acceptModalState.name = '';
       state.acceptModalState.id = '';
+    });
+    builder.addCase(setDelegatesSorting, (state, action) => {
+      state.sortDelegates = action.payload;
+      state.delegations.delegates = sortDelegations(
+        action.payload.order,
+        action.payload.orderBy,
+        state.delegations.delegates,
+        true
+      );
+    });
+    builder.addCase(setDelegatorsSorting, (state, action) => {
+      state.sortDelegators = action.payload;
+      state.delegations.delegators = sortDelegations(
+        action.payload.order,
+        action.payload.orderBy,
+        state.delegations.delegators,
+        false
+      );
     });
   },
 });
