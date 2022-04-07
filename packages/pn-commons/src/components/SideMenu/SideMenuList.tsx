@@ -49,7 +49,13 @@ const SideMenuList = ({ menuItems, handleLinkClick }: Props) => {
         backgroundColor: 'background.paper',
       }}
     >
-      <List component="nav" aria-label="main piattaforma-notifiche sender" className={classes.root}>
+      <List
+        role="list"
+        data-testid="menu-list"
+        component="nav"
+        aria-label="main piattaforma-notifiche sender"
+        className={classes.root}
+      >
         {menuItems.map((item: SideMenuItem, index: number) =>
           item.children ? (
             // accordion se ci sono children
