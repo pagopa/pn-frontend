@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   calculatePages,
   CustomPagination,
-  getNotificationStatusLabelAndColor,
+  getNotificationStatusInfos,
   NotificationStatus,
   PaginationData,
   Notification,
@@ -123,7 +123,7 @@ const Dashboard = () => {
       align: 'center',
       sortable: true,
       getCellLabel(value: string) {
-        const { label, tooltip, color } = getNotificationStatusLabelAndColor(
+        const { label, tooltip, color } = getNotificationStatusInfos(
           value as NotificationStatus
         );
         return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;

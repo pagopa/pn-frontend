@@ -14,7 +14,7 @@ import {
 } from '@pagopa/mui-italia';
 
 import { getDay, getMonthString, getTime } from '../../utils/date.utility';
-import { getNotificationStatusLabelAndColor } from '../../utils/status.utility';
+import { getNotificationStatusInfos } from '../../utils/status.utility';
 import { NotificationDetailTimelineData, LegalFactId } from '../../types/NotificationDetail';
 
 type Props = {
@@ -99,8 +99,9 @@ const NotificationDetailTimelineStep = ({
           </Typography>
           <Chip
             data-testid="itemStatus"
-            label={getNotificationStatusLabelAndColor(timelineStep.status).label}
-            color={getNotificationStatusLabelAndColor(timelineStep.status).color}
+            label={getNotificationStatusInfos(timelineStep.status).label}
+            color={position === 'first' ? getNotificationStatusInfos(timelineStep.status).color : 'default'}
+            size={position === 'first' ? 'medium' : 'small'}
           />
           {showHistoryButton && historyButtonLabel ? (
             <Button
@@ -112,9 +113,9 @@ const NotificationDetailTimelineStep = ({
               {historyButtonLabel}
             </Button>
           ) : (
-            <Box>
-              <Typography color="text.primary" fontSize={16}>
-                Lorem ipsum
+            <Box style={{display:'flex', flexDirection:'column', alignItems: 'flex-start'}}>
+              <Typography color="text.primary" variant="caption">
+                {getNotificationStatusInfos(timelineStep.status).description}
               </Typography>
               {legalFactsIds &&
                 legalFactsIds.map((lf) => (
@@ -123,6 +124,7 @@ const NotificationDetailTimelineStep = ({
                     startIcon={<AttachFileIcon />}
                     onClick={() => clickHandler(lf)}
                     color="primary"
+                    sx={{marginTop: '10px'}}
                   >
                     {legalFactLabel}
                   </ButtonNaked>

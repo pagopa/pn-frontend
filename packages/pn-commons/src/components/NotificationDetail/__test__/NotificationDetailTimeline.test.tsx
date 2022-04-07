@@ -9,7 +9,7 @@ import {
 } from '../../../types/NotificationDetail';
 import { NotificationStatus } from '../../../types/NotificationStatus';
 import * as hooks from '../../../hooks/IsMobile.hook';
-import { getNotificationStatusLabelAndColor } from '../../../utils/status.utility';
+import { getNotificationStatusInfos } from '../../../utils/status.utility';
 import NotificationDetailTimeline from '../NotificationDetailTimeline';
 
 const timeline: Array<INotificationDetailTimeline> = [
@@ -62,7 +62,7 @@ const testTimelineRendering = async (container: HTMLElement) => {
       const itemStatus = item.querySelector('[data-testid="itemStatus"]');
       expect(itemStatus).toBeInTheDocument();
       const classRoot = 'MuiChip-color';
-      const { color, label } = getNotificationStatusLabelAndColor(statusHistory[timelineIndex / 2].status);
+      const { color, label } = getNotificationStatusInfos(statusHistory[timelineIndex / 2].status);
       const buttonClass = `${classRoot}${color!.charAt(0).toUpperCase() + color!.slice(1)}`;
       expect(itemStatus).toHaveTextContent(label);
       expect(itemStatus!.classList.contains(buttonClass)).toBe(true);

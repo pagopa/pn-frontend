@@ -1,5 +1,5 @@
 import { NotificationStatus } from '../../types/NotificationStatus';
-import { getNotificationStatusLabelAndColor } from '../status.utility';
+import { getNotificationStatusInfos } from '../status.utility';
 
 
 function testStatusLabelAndColorFn(
@@ -8,7 +8,7 @@ function testStatusLabelAndColorFn(
   colorToTest: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary',
   tooltipToTest: string
 ) {
-  const { label, color, tooltip } = getNotificationStatusLabelAndColor(status);
+  const { label, color, tooltip } = getNotificationStatusInfos(status);
   expect(label).toBe(labelToTest);
   expect(color).toBe(colorToTest);
   expect(tooltip).toBe(tooltipToTest);
@@ -19,14 +19,14 @@ test('return notification status, label and color - DELIVERED', () => {
     NotificationStatus.DELIVERED,
     'Consegnata',
     'default',
-    'Il destinatario ha ricevuto la notifica'
+    'La notifica è stata consegnata'
   );
 });
 
 test('return notification status, label and color - DELIVERING', () => {
   testStatusLabelAndColorFn(
     NotificationStatus.DELIVERING,
-    'In inoltro',
+    'Invio in corso',
     'default',
     "L'invio della notifica è in corso"
   );
@@ -37,7 +37,7 @@ test('return notification status, label and color - UNREACHABLE', () => {
     NotificationStatus.UNREACHABLE,
     'Destinatario irreperibile',
     'error',
-    'Il destinatario non risulta reperibile'
+    'Il destinatario non è reperibile'
   );
 });
 
@@ -46,7 +46,7 @@ test('return notification status, label and color - PAID', () => {
     NotificationStatus.PAID,
     'Pagata',
     'success',
-    'Il destinatario ha pagato la notifica'
+    'Il destinatario ha pagato i costi della notifica'
   );
 });
 

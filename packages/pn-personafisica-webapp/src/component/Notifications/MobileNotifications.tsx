@@ -6,7 +6,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
   CardElement,
   CardSort,
-  getNotificationStatusLabelAndColor,
+  getNotificationStatusInfos,
   Notification,
   ItemsCard,
   NotificationStatus,
@@ -37,7 +37,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
 
   const cardHeader: [CardElement, CardElement] = [
     {
-      id: 'notificationStatus',
+      id: 'notificationReadStatus',
       label: '',
       getLabel(value: string) {
         return getNewNotificationBadge(value);
@@ -47,7 +47,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
       id: 'notificationStatus',
       label: t('table.status'),
       getLabel(value: string) {
-        const { label, tooltip, color } = getNotificationStatusLabelAndColor(
+        const { label, tooltip, color } = getNotificationStatusInfos(
           value as NotificationStatus
         );
         return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;

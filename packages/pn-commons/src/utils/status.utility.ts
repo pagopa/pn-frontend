@@ -1,70 +1,80 @@
+import { TimelineCategory } from '../types/NotificationDetail';
 import { NotificationStatus } from '../types/NotificationStatus';
 
-// TODO: aggiungere i colori del tema
 /**
  * Returns the mapping between current notification status and its color, label and descriptive message.
  * @param  {NotificationStatus} status
  * @returns string
  */
-export function getNotificationStatusLabelAndColor(status: NotificationStatus): {
+export function getNotificationStatusInfos(status: NotificationStatus): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
   tooltip: string;
+  description: string;
 } {
   switch (status) {
     case NotificationStatus.DELIVERED:
       return {
         color: 'default',
         label: 'Consegnata',
-        tooltip: 'Il destinatario ha ricevuto la notifica',
+        tooltip: 'La notifica è stata consegnata',
+        description: 'La notifica è stata consegnata'
       };
     case NotificationStatus.DELIVERING:
       return {
         color: 'default',
-        label: 'In inoltro',
+        label: 'Invio in corso',
         tooltip: "L'invio della notifica è in corso",
+        description: "L'invio della notifica è in corso"
       };
     case NotificationStatus.UNREACHABLE:
       return {
         color: 'error',
         label: 'Destinatario irreperibile',
-        tooltip: 'Il destinatario non risulta reperibile',
+        tooltip: 'Il destinatario non è reperibile',
+        description: 'Il destinatario non è reperibile'
       };
     case NotificationStatus.PAID:
       return {
         color: 'success',
         label: 'Pagata',
-        tooltip: 'Il destinatario ha pagato la notifica',
+        tooltip: 'Il destinatario ha pagato i costi della notifica',
+        description: 'Il destinatario ha pagato i costi della notifica'
       };
     case NotificationStatus.ACCEPTED:
       return {
         color: 'default',
         label: 'Depositata',
         tooltip: "L'ente ha depositato la notifica",
+        description: "L'ente ha depositato la notifica"
       };
     case NotificationStatus.EFFECTIVE_DATE:
       return {
         color: 'info',
         label: 'Perfezionata per decorrenza termini',
         tooltip: 'Il destinatario non ha letto la notifica',
+        description: 'Il destinatario non ha letto la notifica entro il termine stabilito'
       };
     case NotificationStatus.VIEWED:
       return {
         color: 'info',
         label: 'Perfezionata per visione',
         tooltip: 'Il destinatario ha letto la notifica',
+        description: 'Il destinatario ha letto la notifica entro il termine stabilito',
       };
     case NotificationStatus.CANCELED:
       return {
         color: 'warning',
         label: 'Annullata',
         tooltip: "L'ente ha annullato l'invio della notifica",
+        description: "L'ente ha annullato l'invio della notifica"
       };
     default:
       return {
         color: 'default',
         label: 'Non definito',
         tooltip: 'Stato sconosciuto',
+        description: 'Stato sconosciuto'
       };
   }
 }
