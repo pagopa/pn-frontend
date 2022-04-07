@@ -3,6 +3,7 @@ import { act, render, screen } from "@testing-library/react";
 import CourtesyContactsList from "../CourtesyContactsList";
 import * as hooks from '../../../redux/hooks';
 import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
+import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 // import * as actions from '../../../redux/contact/actions';
 
 jest.mock('react-i18next', () => ({
@@ -41,7 +42,11 @@ describe('CourtesyContactsList Component', () => {
   it('renders correctly with empy store', async () => {
     mockUseAppSelector.mockReturnValueOnce([]);
     await act(async () => {
-      render(<CourtesyContactsList />);
+      render(
+        <DigitalContactsCodeVerificationProvider>
+          <CourtesyContactsList recipientId="mock-recipient" contacts={[]} />
+        </DigitalContactsCodeVerificationProvider>
+      );
     });
     
     const textBoxes = await screen.findAllByRole('textbox');
@@ -65,7 +70,11 @@ describe('CourtesyContactsList Component', () => {
   it('renders correctly with data in store', async () => {
     mockUseAppSelector.mockReturnValueOnce(mockedStore);
     await act(async () => {
-      render(<CourtesyContactsList />);
+      render(
+        <DigitalContactsCodeVerificationProvider>
+          <CourtesyContactsList recipientId="mock-recipient" contacts={mockedStore} />
+        </DigitalContactsCodeVerificationProvider>
+      );
     });
 
     expect(screen.queryAllByRole('textbox')).toHaveLength(0);

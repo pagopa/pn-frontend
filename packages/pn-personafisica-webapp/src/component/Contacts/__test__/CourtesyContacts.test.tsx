@@ -13,7 +13,7 @@ jest.mock('../CourtesyContactsList', () => () => <div>CourtesyContactsList</div>
 
 describe('CourtesyContacts Component', () => {
   it('renders correctly', () => {
-    render(<CourtesyContacts />);
+    render(<CourtesyContacts recipientId="mock-recipient" contacts={[]}/>);
     const avatar = screen.getByText('Sms');
     expect(avatar).toBeInTheDocument();
     const subtitle = screen.getByTestId(/DigitalContactsCardBody/).getElementsByTagName('p')[0];

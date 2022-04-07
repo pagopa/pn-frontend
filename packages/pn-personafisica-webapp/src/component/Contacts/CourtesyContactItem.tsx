@@ -6,8 +6,6 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 import { CourtesyChannelType } from '../../models/contacts';
 import { createOrUpdateCourtesyAddress } from '../../redux/contact/actions';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
@@ -18,13 +16,13 @@ export enum CourtesyFieldType {
 }
 
 interface Props {
+  recipientId: string;
   type: CourtesyFieldType;
   value: string;
   isVerified: boolean;
 }
 
-const CourtesyContactItem: React.FC<Props> = ({ type, value, isVerified }) => {
-  const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
+const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value, isVerified }) => {
   const isMobile = useIsMobile();
   const { t } = useTranslation(['common', 'recapiti']);
 

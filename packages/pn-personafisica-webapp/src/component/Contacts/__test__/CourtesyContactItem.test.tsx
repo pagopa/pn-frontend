@@ -24,7 +24,7 @@ describe('CourtesyContactItem component', () => {
 
     beforeEach(async () => {
       const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-      mockUseAppSelector.mockReturnValue('mocked-recipientId');
+      mockUseAppSelector.mockReturnValue('mocked-recipient');
       // // mock app selector
       // appSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
       // mock action
@@ -41,7 +41,7 @@ describe('CourtesyContactItem component', () => {
       await act(async () => {
         result = render(
           <DigitalContactsCodeVerificationProvider>
-            <CourtesyContactItem type={CourtesyFieldType.PHONE} value="" isVerified={false} />
+            <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.PHONE} value="" isVerified={false} />
           </DigitalContactsCodeVerificationProvider>
         );
       });
@@ -86,7 +86,7 @@ describe('CourtesyContactItem component', () => {
         expect(mockDispatchFn).toBeCalledTimes(1);
         expect(mockActionFn).toBeCalledTimes(1);
         expect(mockActionFn).toBeCalledWith({
-          recipientId: 'mocked-recipientId',
+          recipientId: 'mocked-recipient',
           senderId: 'default',
           channelType: CourtesyChannelType.SMS,
           value: '3331234567',
@@ -117,7 +117,7 @@ describe('CourtesyContactItem component', () => {
         expect(mockDispatchFn).toBeCalledTimes(1);
         expect(mockActionFn).toBeCalledTimes(1);
         expect(mockActionFn).toBeCalledWith({
-          recipientId: 'mocked-recipientId',
+          recipientId: 'mocked-recipient',
           senderId: 'default',
           channelType: CourtesyChannelType.SMS,
           value: '3331234567',
@@ -134,7 +134,7 @@ describe('CourtesyContactItem component', () => {
 
     beforeEach(async () => {
       const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-      mockUseAppSelector.mockReturnValue('mocked-recipientId');
+      mockUseAppSelector.mockReturnValue('mocked-recipient');
       // // mock app selector
       // appSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
       // mock action
@@ -151,7 +151,7 @@ describe('CourtesyContactItem component', () => {
       await act(async () => {
         result = render(
           <DigitalContactsCodeVerificationProvider>
-            <CourtesyContactItem type={CourtesyFieldType.EMAIL} value="" isVerified={false} />
+            <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.EMAIL} value="" isVerified={false} />
           </DigitalContactsCodeVerificationProvider>
         );
       });
@@ -196,7 +196,7 @@ describe('CourtesyContactItem component', () => {
         expect(mockDispatchFn).toBeCalledTimes(1);
         expect(mockActionFn).toBeCalledTimes(1);
         expect(mockActionFn).toBeCalledWith({
-          recipientId: 'mocked-recipientId',
+          recipientId: 'mocked-recipient',
           senderId: 'default',
           channelType: CourtesyChannelType.EMAIL,
           value: 'prova@pagopa.it',
@@ -227,7 +227,7 @@ describe('CourtesyContactItem component', () => {
         expect(mockDispatchFn).toBeCalledTimes(1);
         expect(mockActionFn).toBeCalledTimes(1);
         expect(mockActionFn).toBeCalledWith({
-          recipientId: 'mocked-recipientId',
+          recipientId: 'mocked-recipient',
           senderId: 'default',
           channelType: CourtesyChannelType.EMAIL,
           value: 'prova@pagopa.it',
