@@ -1,4 +1,3 @@
-import { TimelineCategory } from '../types/NotificationDetail';
 import { NotificationStatus } from '../types/NotificationStatus';
 
 /**
