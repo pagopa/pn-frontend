@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, useEffect } from 'react';
+import { ChangeEvent, Fragment, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -25,9 +25,11 @@ type Props = {
   recipientId: string;
 };
 
-const InsertLegalContact = ({ recipientId }: Props) => {
+const InsertLegalContact = memo(({ recipientId }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
+
+  console.log('Insert Legal Contact');
 
   const validationSchema = yup.object({
     digitalDomicileType: yup.string().required(),
@@ -146,6 +148,6 @@ const InsertLegalContact = ({ recipientId }: Props) => {
       </form>
     </Fragment>
   );
-};
+});
 
 export default InsertLegalContact;

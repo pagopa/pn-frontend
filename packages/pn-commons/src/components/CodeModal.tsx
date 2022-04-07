@@ -1,4 +1,4 @@
-import { ReactNode, KeyboardEvent, useState, ChangeEvent, useEffect } from 'react';
+import { ReactNode, KeyboardEvent, useState, ChangeEvent, useEffect, memo } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -47,7 +47,7 @@ type Props = {
  * @param hasError set if there is an error
  * @param errorMessage message to show when there is an error
  */
-const CodeModal = ({
+const CodeModal = memo(({
   title,
   subtitle,
   open,
@@ -67,32 +67,41 @@ const CodeModal = ({
   const [inputsRef, setInputsRef] = useState(new Array(initialValues.length).fill(undefined));
   const isMobile = useIsMobile();
 
+  const focusInput = (index: number) => {
+    setTimeout(() => {
+      // focus next input
+      inputsRef[index].focus();
+      // set cursor position
+      if (inputsRef[index].setSelectionRange) {
+        inputsRef[index].setSelectionRange(inputsRef[index].value, inputsRef[index].value);
+      } else if (inputsRef[index].createTextRange) {
+        const t = inputsRef[index].createTextRange();
+        t.collapse(true);
+        t.moveEnd('character', inputsRef[index].value);
+        t.moveStart('character', inputsRef[index].value);
+        t.select();
+      }
+    });
+  }
+
   const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
     if (!isNaN(Number(event.key)) || event.key === 'Enter' || event.key === 'Tab') {
       // focus next element
       if (index !== initialValues.length - 1) {
-        setTimeout(() => {
-          // focus next input
-          inputsRef[index + 1].focus();
-          // set cursor position
-          if (inputsRef[index + 1].setSelectionRange) {
-            inputsRef[index + 1].setSelectionRange(inputsRef[index + 1].value, inputsRef[index + 1].value);
-          } else if (inputsRef[index + 1].createTextRange) {
-            const t = inputsRef[index + 1].createTextRange();
-            t.collapse(true);
-            t.moveEnd('character', inputsRef[index + 1].value);
-            t.moveStart('character', inputsRef[index + 1].value);
-            t.select();
-          }
-        });
+        focusInput(index + 1);
       }
       return;
     } else if (
-      event.key === 'Backspace' ||
       event.key === 'ArrowLeft' ||
       event.key === 'ArrowRight' ||
       event.key === 'Delete'
     ) {
+      return;
+    } else if (event.key === 'Backspace') {
+      if (inputsRef[index].value === '' && index > 0) {
+        // focus prev element
+        focusInput(index - 1);
+      }
       return;
     }
     // prevent all values that aren't numbers
@@ -113,7 +122,10 @@ const CodeModal = ({
   }, [open]);
 
   const codeIsValid = inputsValues.every((v) => v);
-  const inputColor = hasError ? 'error.main' : (isReadOnly ? 'primary.main' : '');
+  /* eslint-disable functional/no-let */
+  let inputColor = isReadOnly ? 'primary.main' : '';
+  inputColor = hasError ? 'error.main' : inputColor;
+  /* eslint-enalbe functional/no-let */
 
   return (
     <Dialog
@@ -177,13 +189,13 @@ const CodeModal = ({
           </Button>
         )}
         {confirmLabel && confirmCallback && (
-          <Button onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid} fullWidth={isMobile}>
+          <Button variant="contained" onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid} fullWidth={isMobile}>
             {confirmLabel}
           </Button>
         )}
       </DialogActions>
     </Dialog>
   );
-};
+});
 
 export default CodeModal;
