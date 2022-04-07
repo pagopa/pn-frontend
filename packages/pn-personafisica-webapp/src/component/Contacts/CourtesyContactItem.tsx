@@ -4,12 +4,11 @@ import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { appStateActions, CodeModal, useIsMobile } from '@pagopa-pn/pn-commons';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
-import { CourtesyChannelType, SaveDigitalAddressParams } from '../../models/contacts';
+import { CourtesyChannelType } from '../../models/contacts';
 import { createOrUpdateCourtesyAddress } from '../../redux/contact/actions';
+import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 export enum CourtesyFieldType {
   EMAIL = 'email',
@@ -17,22 +16,19 @@ export enum CourtesyFieldType {
 }
 
 interface Props {
+  recipientId: string;
   type: CourtesyFieldType;
   value: string;
   isVerified: boolean;
 }
 
-const CourtesyContactItem: React.FC<Props> = ({ type, value, isVerified }) => {
-  const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
+const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value, isVerified }) => {
   const isMobile = useIsMobile();
-  const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'recapiti']);
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const digitalDomicileType = type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS;
+  const { setProps, handleCodeVerification } = useDigitalContactsCodeVerificationContext();
   const [isEditMode, SetIsEditMode] = useState(!isVerified);
-  const [isValidationCodeOk, setIsValidationCodeOk] = useState(true);
-
-  const subtitleText = `courtesy-contacts.${type}-verify-descr`;
 
   const emailValidationSchema = yup.object().shape({
     field: yup
@@ -68,14 +64,9 @@ const CourtesyContactItem: React.FC<Props> = ({ type, value, isVerified }) => {
       if (isVerified && !enteredValueChanged()) {
         SetIsEditMode(false);
       } else {
-        handleAddressCreation();
-        setIsModalVisible((prevState) => !prevState);
+        handleAssociation();
       }
     }
-  };
-
-  const handleClose = () => {
-    setIsModalVisible(false);
   };
 
   const handleChangeTouched = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -83,38 +74,38 @@ const CourtesyContactItem: React.FC<Props> = ({ type, value, isVerified }) => {
     formik.handleChange(event);
   };
 
-  const handleAddressCreation = (verificationCode?: string, noCallback: boolean = false) => {
-    const digitalAddressParams: SaveDigitalAddressParams = {
+  const handleAssociation = () => {
+    setProps({
+      title: t(`courtesy-contacts.${type}-verify`, { ns: 'recapiti' }) + ` ${formik.values.field}`,
+      subtitle: <Trans i18nKey={`courtesy-contacts.${type}-verify-descr`} ns="recapiti" />,
+      initialValues: new Array(5).fill(''),
+      codeSectionTitle: t(`courtesy-contacts.insert-code`, { ns: 'recapiti' }),
+      codeSectionAdditional: (
+        <Box>
+          <Typography variant="body2" display="inline">
+            {t(`courtesy-contacts.${type}-new-code`, { ns: 'recapiti' })}&nbsp;
+          </Typography>
+          <Typography
+            variant="body2"
+            display="inline"
+            color="primary"
+            onClick={() => handleCodeVerification(undefined, true)}
+            sx={{ cursor: 'pointer' }}
+          >
+            {t(`courtesy-contacts.new-code-link`, { ns: 'recapiti' })}.
+          </Typography>
+        </Box>
+      ),
+      cancelLabel: t('button.annulla'),
+      confirmLabel: t('button.conferma'),
+      errorMessage: t(`courtesy-contacts.wrong-code`, { ns: 'recapiti' }),
       recipientId,
       senderId: 'default',
-      channelType:
-        type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS,
+      digitalDomicileType,
       value: formik.values.field,
-      code: verificationCode,
-    };
-
-    dispatch(createOrUpdateCourtesyAddress(digitalAddressParams))
-      .unwrap()
-      .then((res) => {
-        if (noCallback) {
-          return;
-        }
-        if (res && verificationCode) {
-          // show success message
-          dispatch(
-            appStateActions.addSuccess({
-              title: '',
-              message: t(`courtesy-contacts.${type}-added-successfully`, { ns: 'recapiti' }),
-            })
-          );
-          setIsModalVisible(false);
-        } else {
-          setIsModalVisible(true);
-        }
-      })
-      .catch(() => {
-        setIsValidationCodeOk(false);
-      });
+      successMessage: t(`courtesy-contacts.${type}-added-successfully`, { ns: 'recapiti' }),
+      actionToBeDispatched: createOrUpdateCourtesyAddress,
+    });
   };
 
   if (isVerified && !isEditMode) {
@@ -170,38 +161,6 @@ const CourtesyContactItem: React.FC<Props> = ({ type, value, isVerified }) => {
             {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
           </Button>
         </Grid>
-        <CodeModal
-          title={
-            t(`courtesy-contacts.${type}-verify`, { ns: 'recapiti' }) + ` ${formik.values.field}`
-          }
-          subtitle={<Trans i18nKey={subtitleText} ns="recapiti" />}
-          open={isModalVisible}
-          initialValues={new Array(5).fill('')}
-          handleClose={() => setIsModalVisible(false)}
-          codeSectionTitle={t(`courtesy-contacts.insert-code`, { ns: 'recapiti' })}
-          codeSectionAdditional={
-            <Box>
-              <Typography variant="body2" display="inline">
-                {t(`courtesy-contacts.${type}-new-code`, { ns: 'recapiti' })}&nbsp;
-              </Typography>
-              <Typography
-                variant="body2"
-                display="inline"
-                color="primary"
-                onClick={() => alert('Click')}
-                sx={{ cursor: 'pointer' }}
-              >
-                {t(`courtesy-contacts.new-code-link`, { ns: 'recapiti' })}
-              </Typography>
-            </Box>
-          }
-          cancelLabel={t('button.annulla')}
-          confirmLabel={t('button.conferma')}
-          cancelCallback={handleClose}
-          confirmCallback={(values: Array<string>) => handleAddressCreation(values.join(''))}
-          hasError={!isValidationCodeOk}
-          errorMessage={t(`courtesy-contacts.wrong-code`, { ns: 'recapiti' })}
-        />
       </Fragment>
     );
   }
