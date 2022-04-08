@@ -8,9 +8,10 @@ import { SideMenuItem } from '../../types/SideMenuItem';
 import { useIsMobile } from '../../hooks/IsMobile.hook';
 import SideMenuList from './SideMenuList';
 
-interface Props {
+type Props = {
   menuItems: Array<SideMenuItem>;
-}
+  selfCareItems?: Array<SideMenuItem>;
+};
 
 const CustomList = styled(List)(({ theme }) => ({
   boxShadow:
@@ -23,7 +24,7 @@ const CustomList = styled(List)(({ theme }) => ({
   },
 }));
 
-const SideMenu: FC<Props> = ({ menuItems }) => {
+const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
   const [state, setState] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -61,11 +62,21 @@ const SideMenu: FC<Props> = ({ menuItems }) => {
               </ListItemButton>
             </CustomList>
             <Drawer anchor="left" open={state} onClose={toggleDrawer}>
-              {<SideMenuList menuItems={menuItems} handleLinkClick={handleNavigation} />}
+              {
+                <SideMenuList
+                  menuItems={menuItems}
+                  selfCareItems={selfCareItems}
+                  handleLinkClick={handleNavigation}
+                />
+              }
             </Drawer>
           </Fragment>
         ) : (
-          <SideMenuList menuItems={menuItems} handleLinkClick={handleNavigation} />
+          <SideMenuList
+            menuItems={menuItems}
+            selfCareItems={selfCareItems}
+            handleLinkClick={handleNavigation}
+          />
         )}
       </Box>
     </Box>

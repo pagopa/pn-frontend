@@ -1,5 +1,13 @@
 import { Fragment, useRef, useState } from 'react';
-import { Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import {
+  Box,
+  Collapse,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
@@ -8,6 +16,7 @@ import SideMenuListItem from './SideMenuListItem';
 
 type Props = {
   menuItems: Array<SideMenuItem>;
+  selfCareItems?: Array<SideMenuItem>;
   handleLinkClick: (link: string) => void;
 };
 
@@ -22,7 +31,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SideMenuList = ({ menuItems, handleLinkClick }: Props) => {
+const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<string>('');
   const [selectedIndex, setSelectedIndex] = useState<{ label: string; index: number }>();
@@ -117,6 +126,28 @@ const SideMenuList = ({ menuItems, handleLinkClick }: Props) => {
           )
         )}
       </List>
+      {selfCareItems && <Divider />}
+      {selfCareItems && (
+        <List
+          component="nav"
+          aria-label="selfcare piattaforma-notifiche sender"
+          className={classes.root}
+        >
+          {selfCareItems?.map((selfcareItem: SideMenuItem, sIndex: number) => (
+            <SideMenuListItem
+              key={selfcareItem.label}
+              item={selfcareItem}
+              handleLinkClick={handleLinkClick}
+              selected={
+                selectedIndex &&
+                sIndex === selectedIndex.index &&
+                selectedIndex.label === selfcareItem.label
+              }
+              onSelect={() => setSelectedIndex({ label: selfcareItem.label, index: sIndex })}
+            />
+          ))}
+        </List>
+      )}
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import { LoadingOverlay, Layout, AppMessage, SideMenu} from '@pagopa-pn/pn-commons';
+import { LoadingOverlay, Layout, AppMessage, SideMenu } from '@pagopa-pn/pn-commons';
 
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
@@ -15,7 +15,14 @@ const App = () => {
     <Layout
       assistanceEmail={PAGOPA_HELP_EMAIL}
       onExitAction={() => dispatch(logout())}
-      sideMenu={role && <SideMenu menuItems={getMenuItems(role)} />}
+      sideMenu={
+        role && (
+          <SideMenu
+            menuItems={getMenuItems(role).menuItems}
+            selfCareItems={getMenuItems(role).selfCareItems}
+          />
+        )
+      }
     >
       <AppMessage />
       <LoadingOverlay />

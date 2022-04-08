@@ -4,25 +4,25 @@ import { SideMenuItem } from '@pagopa-pn/pn-commons';
 import * as routes from '../navigation/routes.const';
 import { UserRole } from '../models/user';
 
-export const ReferenteAmministrativoMenuItems: Array<SideMenuItem> = [
+const BasicMenuItems: Array<SideMenuItem> = [
   { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
   { label: 'Chiavi API', icon: TrendingUp, route: routes.API_KEYS },
+];
+
+const SelfcareMenuItems: Array<SideMenuItem> = [
   { label: 'Ruoli', icon: People, route: routes.ROLES },
   { label: 'Gruppi', icon: GroupWork, route: routes.GROUPS },
 ];
 
-export const ReferenteTecnicoMenuItems: Array<SideMenuItem> = [
-  { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
-  { label: 'Chiavi API', icon: TrendingUp, route: routes.API_KEYS },
-  { label: 'Ruoli', icon: People, route: routes.ROLES },
-];
-
-export function getMenuItems(role: UserRole) {
+export function getMenuItems(role: UserRole): {
+  menuItems: Array<SideMenuItem>;
+  selfCareItems?: Array<SideMenuItem>;
+} {
   switch (role) {
     case UserRole.REFERENTE_AMMINISTRATIVO:
-      return ReferenteAmministrativoMenuItems;
+      return { menuItems: BasicMenuItems, selfCareItems: SelfcareMenuItems };
     case UserRole.REFERENTE_OPERATIVO:
-      return ReferenteTecnicoMenuItems;
+      return { menuItems: BasicMenuItems };
   }
 }
 

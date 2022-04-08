@@ -31,6 +31,7 @@ const App = () => {
     label: `${delegator.delegator.firstName} ${delegator.delegator.lastName}`,
   }));
 
+  // TODO spostare questo in un file di utility
   const menuItems: Array<SideMenuItem> = [
     {
       label: t('menu.notifiche'),
