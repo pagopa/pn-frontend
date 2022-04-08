@@ -41,33 +41,6 @@ import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComp
 import { generateVCode } from '../utils/delegation.utility';
 import { NewDelegationFormProps } from '../redux/delegation/types';
 
-const validationSchema = yup.object({
-  selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Email is required'),
-  codiceFiscale: yup
-    .string()
-    .required('Il Codice Fiscale è obbligatorio')
-    .matches(fiscalCodeRegex, 'Il codice fiscale inserito non è corretto'),
-  email: yup.string().required('Email obbligatoria').email('Email non formattata correttamente'),
-  nome: yup.string().required('Il nome è obbligatorio'),
-  cognome: yup.string().required('Il cognome è obbligatorio'),
-  enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
-});
-
-const initialValues = {
-  selectPersonaFisicaOrPersonaGiuridica: 'pf',
-  codiceFiscale: '',
-  email: '',
-  nome: '',
-  cognome: '',
-  selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-  expirationDate: Date.now(),
-  enteSelect: {
-    name: '',
-    uniqueIdentifier: '',
-  },
-  verificationCode: generateVCode(),
-};
-
 const useStyles = makeStyles(() => ({
   direction: {
     ['@media only screen and (max-width: 576px)']: {
@@ -111,6 +84,33 @@ const NuovaDelega = () => {
     dispatch(resetNewDelegation());
     navigate(routes.DELEGHE);
   };
+
+  const initialValues = {
+    selectPersonaFisicaOrPersonaGiuridica: 'pf',
+    codiceFiscale: '',
+    email: '',
+    nome: '',
+    cognome: '',
+    selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
+    expirationDate: Date.now(),
+    enteSelect: {
+      name: '',
+      uniqueIdentifier: '',
+    },
+    verificationCode: generateVCode(),
+  };
+
+  const validationSchema = yup.object({
+    selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Email is required'),
+    codiceFiscale: yup
+      .string()
+      .required('Il Codice Fiscale è obbligatorio')
+      .matches(fiscalCodeRegex, 'Il codice fiscale inserito non è corretto'),
+    email: yup.string().required('Email obbligatoria').email('Email non formattata correttamente'),
+    nome: yup.string().required('Il nome è obbligatorio'),
+    cognome: yup.string().required('Il cognome è obbligatorio'),
+    enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
+  });
 
   const xsValue = isMobile ? 12 : 4;
 
