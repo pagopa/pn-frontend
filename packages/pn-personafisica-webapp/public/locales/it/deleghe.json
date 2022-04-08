@@ -61,7 +61,8 @@
             "endDate": "Termine Delega",
             "verificationCode": "Codice di Verifica",
             "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della notifica.",
-            "submit": "Invia la richiesta"
+            "submit": "Invia la richiesta",
+            "mandatoryField": "Campi Obbligatori *"
         },
         "error": {
             "noConnection": "Connessione Interrotta",

@@ -20,7 +20,7 @@ import {
   Stack,
   Breadcrumbs,
 } from '@mui/material';
-import {  makeStyles } from '@mui/styles';
+import { makeStyles } from '@mui/styles';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
@@ -31,10 +31,7 @@ import { CourtesyPage, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import {
-  createDelegation,
-  resetNewDelegation,
-} from '../redux/newDelegation/actions';
+import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
 import StyledLink from '../component/StyledLink/StyledLink';
@@ -53,47 +50,60 @@ const validationSchema = yup.object({
   email: yup.string().required('Email obbligatoria').email('Email non formattata correttamente'),
   nome: yup.string().required('Il nome è obbligatorio'),
   cognome: yup.string().required('Il cognome è obbligatorio'),
-  enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required()
+  enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
 });
 
+const initialValues = {
+  selectPersonaFisicaOrPersonaGiuridica: 'pf',
+  codiceFiscale: '',
+  email: '',
+  nome: '',
+  cognome: '',
+  selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
+  expirationDate: Date.now(),
+  enteSelect: {
+    name: '',
+    uniqueIdentifier: '',
+  },
+  verificationCode: generateVCode(),
+};
 
 const useStyles = makeStyles(() => ({
   direction: {
     ['@media only screen and (max-width: 576px)']: {
-      direction: 'column'
+      direction: 'column',
     },
     ['@media only screen and (min-width: 577px) and (max-width: 992px)']: {
-      direction: 'row'
-    }
+      direction: 'row',
+    },
   },
   margin: {
     ['@media only screen and (max-width: 576px)']: {
-      margin: 0
+      margin: 0,
     },
     ['@media only screen and (min-width: 577px) and (max-width: 992px)']: {
-      direction: 'auto'
-    }
+      direction: 'auto',
+    },
   },
   justifyContent: {
     ['@media only screen and (max-width: 576px)']: {
-      justifyContent: 'start'
+      justifyContent: 'start',
     },
   },
-  spaceBetween:{
-    justifyContent:'space-between'
-  }
-})); 
+  spaceBetween: {
+    justifyContent: 'space-between',
+  },
+}));
 
 const NuovaDelega = () => {
   const classes = useStyles();
-  const { t } = useTranslation(['deleghe']);
+  const { t } = useTranslation(['deleghe', 'common']);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { created } = useAppSelector((state: RootState) => state.newDelegationState);
 
   const handleSubmit = (values: NewDelegationFormProps) => {
-    console.log('handle submit partritto');
     void dispatch(createDelegation(values));
   };
 
@@ -102,15 +112,13 @@ const NuovaDelega = () => {
     navigate(routes.DELEGHE);
   };
 
-
   const xsValue = isMobile ? 12 : 4;
 
   return (
     <Fragment>
       {!created && (
         <Box mt={3} sx={{ padding: isMobile ? '30px' : null }}>
-          {
-            !isMobile &&
+          {!isMobile && (
             <Breadcrumbs aria-label="breadcrumb">
               <StyledLink to={routes.DELEGHE}>
                 <PeopleIcon sx={{ mr: 0.5 }} />
@@ -120,7 +128,7 @@ const NuovaDelega = () => {
                 {t('Nuova Delega')}
               </Typography>
             </Breadcrumbs>
-          }
+          )}
           <TitleBox
             title={t('nuovaDelega.title')}
             subTitle={t('nuovaDelega.subtitle')}
@@ -128,25 +136,12 @@ const NuovaDelega = () => {
             variantSubTitle="body1"
           />
           <Typography sx={{ mt: '1rem', mb: '1rem' }}>
-            Campi Obbligatori *
+            {t('nuovaDelega.form.mandatoryField')}
           </Typography>
           <Card sx={{ padding: '30px', width: isMobile ? '100%' : '80%', mt: 4 }}>
             <Typography sx={{ fontWeight: 'bold' }}>{t('nuovaDelega.form.personType')}</Typography>
             <Formik
-              initialValues={{
-                selectPersonaFisicaOrPersonaGiuridica: 'pf',
-                codiceFiscale: '',
-                email: '',
-                nome: '',
-                cognome: '',
-                selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-                expirationDate: Date.now(),
-                enteSelect: {
-                  name: '',
-                  uniqueIdentifier: ''
-                },
-                verificationCode: generateVCode(),
-              }}
+              initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={(values: NewDelegationFormProps) => {
                 handleSubmit(values);
@@ -168,7 +163,11 @@ const NuovaDelega = () => {
                         );
                       }}
                     >
-                      <Grid container sx={{ width: '100%', justifyContent:'space-between'}} className={classes.direction}>
+                      <Grid
+                        container
+                        sx={{ width: '100%', justifyContent: 'space-between' }}
+                        className={classes.direction}
+                      >
                         <Grid item xs={isMobile ? 12 : 3}>
                           <FormControlLabel
                             value="pf"
@@ -281,7 +280,10 @@ const NuovaDelega = () => {
                                 value={values.enteSelect.uniqueIdentifier}
                                 label={t('Seleziona Enti')}
                                 onChange={(event: SelectChangeEvent<string>) => {
-                                  setFieldValue('enteSelect', {name: event.target.name, uniqueIdentifier : event.target.value});
+                                  setFieldValue('enteSelect', {
+                                    name: event.target.name,
+                                    uniqueIdentifier: event.target.value,
+                                  });
                                 }}
                               >
                                 <MenuItem value={'Bollate'}>
@@ -320,7 +322,11 @@ const NuovaDelega = () => {
                   <Typography fontWeight={'bold'} sx={{ marginTop: '1rem' }}>
                     {t('nuovaDelega.form.verificationCode')}
                   </Typography>
-                  <Grid container className={classes.justifyContent} direction={isMobile ? "column" : "row"}>
+                  <Grid
+                    container
+                    className={classes.justifyContent}
+                    direction={isMobile ? 'column' : 'row'}
+                  >
                     <Grid item xs={8}>
                       <Typography sx={{ marginTop: '1rem' }}>
                         {t('nuovaDelega.form.verificationCodeDescr')}
@@ -343,7 +349,7 @@ const NuovaDelega = () => {
                     </Grid>
                     <Grid item xs={8} sx={{ margin: 'auto' }}>
                       <Stack direction="row" alignItems="center" justifyContent="end">
-                        <ErrorDeleghe/>
+                        <ErrorDeleghe />
                       </Stack>
                     </Grid>
                   </Grid>
@@ -351,7 +357,13 @@ const NuovaDelega = () => {
               )}
             </Formik>
           </Card>
-          <Button variant="outlined" sx={{ mt: "1rem", mb: "1rem" }} onClick={() => navigate("/deleghe")}>Indietro</Button>
+          <Button
+            variant="outlined"
+            sx={{ mt: '1rem', mb: '1rem' }}
+            onClick={() => navigate(routes.DELEGHE)}
+          >
+            {t('button.indietro', { ns: 'common' })}
+          </Button>
         </Box>
       )}
       {created && (
@@ -370,4 +382,3 @@ const NuovaDelega = () => {
 };
 
 export default NuovaDelega;
-
