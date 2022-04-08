@@ -4,7 +4,7 @@ import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { CreateDelegationResponse, NewDelegationFormProps } from '../delegation/types';
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
-  'delegation',
+  'createDelegation',
   async (data, { rejectWithValue }) => {
     const payload = {
       delegate: {
@@ -17,7 +17,6 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
       visibilityIds: data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? [] : [data.enteSelect],
       verificationCode: data.verificationCode,
       dateto: new Date(data.expirationDate).toISOString(),
-      status: 'Pending', // TODO: remove when managed from backend
     };
     try {
       return await DelegationsApi.createDelegation(payload);

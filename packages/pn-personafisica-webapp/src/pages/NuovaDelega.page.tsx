@@ -20,6 +20,7 @@ import {
   Stack,
   Breadcrumbs,
 } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
@@ -28,35 +29,53 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import { CourtesyPage, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
-
+import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
 import StyledLink from '../component/StyledLink/StyledLink';
 import DropDownEntiMenuItem from '../component/Deleghe/DropDownEnti';
-import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
-import { NewDelegationFormProps } from '../redux/delegation/types';
+import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import { generateVCode } from '../utils/delegation.utility';
+import { NewDelegationFormProps } from '../redux/delegation/types';
 
-const validationSchema = yup.object({
-  selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Email is required'),
-  codiceFiscale: yup
-    .string()
-    .required('Il Codice Fiscale è obbligatorio')
-    .matches(fiscalCodeRegex, 'Il codice fiscale inserito non è corretto'),
-  email: yup.string().required('Email obbligatoria').email('Email non formattata correttamente'),
-  nome: yup.string().required('Il nome è obbligatorio'),
-  cognome: yup.string().required('Il cognome è obbligatorio'),
-  enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
-});
+const useStyles = makeStyles(() => ({
+  direction: {
+    ['@media only screen and (max-width: 576px)']: {
+      direction: 'column',
+    },
+    ['@media only screen and (min-width: 577px) and (max-width: 992px)']: {
+      direction: 'row',
+    },
+  },
+  margin: {
+    ['@media only screen and (max-width: 576px)']: {
+      margin: 0,
+    },
+    ['@media only screen and (min-width: 577px) and (max-width: 992px)']: {
+      direction: 'auto',
+    },
+  },
+  justifyContent: {
+    ['@media only screen and (max-width: 576px)']: {
+      justifyContent: 'start',
+    },
+  },
+  spaceBetween: {
+    justifyContent: 'space-between',
+  },
+}));
 
 const NuovaDelega = () => {
-  const { t } = useTranslation(['deleghe']);
+  const classes = useStyles();
+  const { t } = useTranslation(['deleghe', 'common']);
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { created } = useAppSelector((state: RootState) => state.newDelegationState);
+
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
   };
@@ -66,40 +85,63 @@ const NuovaDelega = () => {
     navigate(routes.DELEGHE);
   };
 
+  const initialValues = {
+    selectPersonaFisicaOrPersonaGiuridica: 'pf',
+    codiceFiscale: '',
+    email: '',
+    nome: '',
+    cognome: '',
+    selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
+    expirationDate: Date.now(),
+    enteSelect: {
+      name: '',
+      uniqueIdentifier: '',
+    },
+    verificationCode: generateVCode(),
+  };
+
+  const validationSchema = yup.object({
+    selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Email is required'),
+    codiceFiscale: yup
+      .string()
+      .required('Il Codice Fiscale è obbligatorio')
+      .matches(fiscalCodeRegex, 'Il codice fiscale inserito non è corretto'),
+    email: yup.string().required('Email obbligatoria').email('Email non formattata correttamente'),
+    nome: yup.string().required('Il nome è obbligatorio'),
+    cognome: yup.string().required('Il cognome è obbligatorio'),
+    enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
+  });
+
+  const xsValue = isMobile ? 12 : 4;
+
   return (
     <Fragment>
       {!created && (
-        <Box mt={3}>
-          <Breadcrumbs aria-label="breadcrumb">
-            <StyledLink to={routes.DELEGHE}>
-              <PeopleIcon sx={{ mr: 0.5 }} />
-              {t('Deleghe')}
-            </StyledLink>
-            <Typography color="text.primary" fontWeight={600}>
-              {t('Nuova Delega')}
-            </Typography>
-          </Breadcrumbs>
+        <Box mt={3} sx={{ padding: isMobile ? '30px' : null }}>
+          {!isMobile && (
+            <Breadcrumbs aria-label="breadcrumb">
+              <StyledLink to={routes.DELEGHE}>
+                <PeopleIcon sx={{ mr: 0.5 }} />
+                {t('Deleghe')}
+              </StyledLink>
+              <Typography color="text.primary" fontWeight={600}>
+                {t('Nuova Delega')}
+              </Typography>
+            </Breadcrumbs>
+          )}
           <TitleBox
             title={t('nuovaDelega.title')}
             subTitle={t('nuovaDelega.subtitle')}
             variantTitle="h3"
             variantSubTitle="body1"
           />
-          <Typography sx={{ mt: '1rem', mb: '1rem' }}>Campi Obbligatori *</Typography>
-          <Card sx={{ padding: '30px', width: '80%', mt: 4 }}>
+          <Typography sx={{ mt: '1rem', mb: '1rem' }}>
+            {t('nuovaDelega.form.mandatoryField')}
+          </Typography>
+          <Card sx={{ padding: '30px', width: isMobile ? '100%' : '80%', mt: 4 }}>
             <Typography sx={{ fontWeight: 'bold' }}>{t('nuovaDelega.form.personType')}</Typography>
             <Formik
-              initialValues={{
-                selectPersonaFisicaOrPersonaGiuridica: 'pf',
-                codiceFiscale: '',
-                email: '',
-                nome: '',
-                cognome: '',
-                selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-                expirationDate: Date.now(),
-                enteSelect: { name: '', uniqueIdentifier: '' },
-                verificationCode: generateVCode(),
-              }}
+              initialValues={initialValues}
               validationSchema={validationSchema}
               onSubmit={(values: NewDelegationFormProps) => {
                 handleSubmit(values);
@@ -121,8 +163,12 @@ const NuovaDelega = () => {
                         );
                       }}
                     >
-                      <Grid container sx={{ width: '100%' }}>
-                        <Grid item xs={3}>
+                      <Grid
+                        container
+                        sx={{ width: '100%', justifyContent: 'space-between' }}
+                        className={classes.direction}
+                      >
+                        <Grid item xs={isMobile ? 12 : 3}>
                           <FormControlLabel
                             value="pf"
                             control={<Radio />}
@@ -130,7 +176,7 @@ const NuovaDelega = () => {
                             label={t('nuovaDelega.form.naturalPerson') as string}
                           />
                         </Grid>
-                        <Grid item xs={4} sx={{ margin: 'auto' }}>
+                        <Grid item xs={xsValue} className={classes.margin}>
                           <TextField
                             sx={{ margin: 'auto' }}
                             id="nome"
@@ -145,9 +191,9 @@ const NuovaDelega = () => {
                             fullWidth
                           />
                         </Grid>
-                        <Grid item xs={4} sx={{ margin: 'auto' }}>
+                        <Grid item xs={xsValue} className={classes.margin}>
                           <TextField
-                            sx={{ margin: 'auto' }}
+                            sx={{ margin: 'auto', mt: isMobile ? 1 : 0 }}
                             id="cognome"
                             value={values.cognome.toString()}
                             onChange={(event) => {
@@ -215,8 +261,8 @@ const NuovaDelega = () => {
                         name={t('selectTuttiEntiOrSelezionati')}
                         label={t('nuovaDelega.form.allEntities') as string}
                       />
-                      <Grid container>
-                        <Grid item xs={6}>
+                      <Grid container className={classes.direction}>
+                        <Grid item xs={isMobile ? 12 : 6}>
                           <FormControlLabel
                             value="entiSelezionati"
                             control={<Radio />}
@@ -224,8 +270,8 @@ const NuovaDelega = () => {
                             label={t('nuovaDelega.form.onlySelected') as string}
                           />
                         </Grid>
-                        <Grid item xs={6} sx={{ margin: 'auto' }}>
-                          {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' ? (
+                        <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
+                          {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                             <FormControl fullWidth>
                               <InputLabel id="ente-select">{t('Seleziona Enti')}</InputLabel>
                               <Select
@@ -235,8 +281,8 @@ const NuovaDelega = () => {
                                 label={t('Seleziona Enti')}
                                 onChange={(event: SelectChangeEvent<string>) => {
                                   setFieldValue('enteSelect', {
-                                    uniqueIdentifier: event.target.value,
                                     name: event.target.name,
+                                    uniqueIdentifier: event.target.value,
                                   });
                                 }}
                               >
@@ -248,41 +294,45 @@ const NuovaDelega = () => {
                                 </MenuItem>
                               </Select>
                             </FormControl>
-                          ) : (
-                            <></>
                           )}
                         </Grid>
                       </Grid>
                     </RadioGroup>
                   </FormControl>
                   <br />
-                  <Box sx={{ marginTop: '1rem' }}>
-                    <LocalizationProvider dateAdapter={DateAdapter}>
-                      <DesktopDatePicker
-                        label={t('nuovaDelega.form.endDate')}
-                        inputFormat="DD/MM/yyyy"
-                        value={values.expirationDate}
-                        onChange={(value: Date | null) => {
-                          setFieldValue('expirationDate', value);
-                        }}
-                        renderInput={(params) => (
-                          <TextField id="endDate" name="endDate" {...params} />
-                        )}
-                        disablePast={true}
-                      />
-                    </LocalizationProvider>
+                  <Box sx={{ marginTop: '1rem', width: '100%' }}>
+                    <FormControl fullWidth>
+                      <LocalizationProvider dateAdapter={DateAdapter}>
+                        <DesktopDatePicker
+                          label={t('nuovaDelega.form.endDate')}
+                          inputFormat="DD/MM/yyyy"
+                          value={values.expirationDate}
+                          onChange={(value: Date | null) => {
+                            setFieldValue('expirationDate', value);
+                          }}
+                          renderInput={(params) => (
+                            <TextField id="endDate" name="endDate" {...params} />
+                          )}
+                          disablePast={true}
+                        />
+                      </LocalizationProvider>
+                    </FormControl>
                   </Box>
                   <Divider sx={{ marginTop: '1rem' }} />
                   <Typography fontWeight={'bold'} sx={{ marginTop: '1rem' }}>
                     {t('nuovaDelega.form.verificationCode')}
                   </Typography>
-                  <Grid container>
+                  <Grid
+                    container
+                    className={classes.justifyContent}
+                    direction={isMobile ? 'column' : 'row'}
+                  >
                     <Grid item xs={8}>
                       <Typography sx={{ marginTop: '1rem' }}>
                         {t('nuovaDelega.form.verificationCodeDescr')}
                       </Typography>
                     </Grid>
-                    <Grid item xs={4} sx={{ margin: 'auto' }}>
+                    <Grid item xs={4}>
                       <VerificationCodeComponent code={values.verificationCode} />
                     </Grid>
                   </Grid>
@@ -299,7 +349,7 @@ const NuovaDelega = () => {
                     </Grid>
                     <Grid item xs={8} sx={{ margin: 'auto' }}>
                       <Stack direction="row" alignItems="center" justifyContent="end">
-                        <ErrorDeleghe errorType={0} />
+                        <ErrorDeleghe />
                       </Stack>
                     </Grid>
                   </Grid>
@@ -312,7 +362,7 @@ const NuovaDelega = () => {
             sx={{ mt: '1rem', mb: '1rem' }}
             onClick={() => navigate(routes.DELEGHE)}
           >
-            Indietro
+            {t('button.indietro', { ns: 'common' })}
           </Button>
         </Box>
       )}
