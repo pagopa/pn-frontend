@@ -130,7 +130,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick }: Props) => {
       {selfCareItems && (
         <List
           component="nav"
-          aria-label="selfcare piattaforma-notifiche sender"
+          aria-label="secondary piattaforma-notifiche sender"
           className={classes.root}
         >
           {selfCareItems?.map((selfcareItem: SideMenuItem, sIndex: number) => (
@@ -144,6 +144,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick }: Props) => {
                 selectedIndex.label === selfcareItem.label
               }
               onSelect={() => setSelectedIndex({ label: selfcareItem.label, index: sIndex })}
+              goOutside
             />
           ))}
         </List>

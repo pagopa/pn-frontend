@@ -9,19 +9,20 @@ import { PAGOPA_HELP_EMAIL } from './utils/constants';
 
 const App = () => {
   const role = useAppSelector((state: RootState) => state.userState.user.organization?.role);
+  const idOrganization = useAppSelector(
+    (state: RootState) => state.userState.user.organization?.id
+  );
+
   const dispatch = useAppDispatch();
+
+  const menuItems = getMenuItems(role, idOrganization);
 
   return (
     <Layout
       assistanceEmail={PAGOPA_HELP_EMAIL}
       onExitAction={() => dispatch(logout())}
       sideMenu={
-        role && (
-          <SideMenu
-            menuItems={getMenuItems(role).menuItems}
-            selfCareItems={getMenuItems(role).selfCareItems}
-          />
-        )
+        role && <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
       }
     >
       <AppMessage />
