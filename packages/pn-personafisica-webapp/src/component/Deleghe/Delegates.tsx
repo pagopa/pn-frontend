@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { Column, ItemsTable as Table, Item, Sort } from '@pagopa-pn/pn-commons';
+import { Column, ItemsTable as Table, Item, CodeModal, Sort } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
+import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
@@ -22,6 +23,7 @@ const Delegates = () => {
   );
   const { delegatesError } = useAppSelector((state: RootState) => state.delegationsState);
   const sortDelegates = useAppSelector((state: RootState) => state.delegationsState.sortDelegates);
+  const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
 
   const rows: Array<Item> = delegationToItem(delegates, false);
 
@@ -83,8 +85,16 @@ const Delegates = () => {
       id: 'id',
       label: '',
       width: '5%',
-      getCellLabel(value: string) {
-        return <Menu menuType={'delegates'} id={value} />;
+      getCellLabel(value: string, row: Item) {
+        return (
+          <Menu
+            menuType={'delegates'}
+            id={value}
+            verificationCode={row.verificationCode}
+            name={row.name}
+            setCodeModal={setShowCodeModal}
+          />
+        );
       },
     },
   ];
@@ -93,34 +103,51 @@ const Delegates = () => {
     navigate(routes.NUOVA_DELEGA);
   };
 
+  const handleCloseShowCodeModal = () => {
+    setShowCodeModal({ open: false, name: '', code: '' });
+  };
+
   const handleChangeSorting = (s: Sort) => {
     dispatch(setDelegatesSorting(s));
   };
 
   return (
-    <Box mb={8}>
-      <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-        <Typography variant="h6">{t('deleghe.delegatesTitle')}</Typography>
-        <Box>
-          <Button variant="outlined" onClick={handleAddDelegationClick}>
-            <Add fontSize={'small'} sx={{ marginRight: 1 }} />
-            {t('deleghe.add')}
-          </Button>
-        </Box>
-      </Stack>
-      {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
-      {!delegatesError && (
-        <Table
-          columns={delegatesColumns}
-          rows={rows}
-          emptyActionLabel={t('deleghe.add') as string}
-          emptyMessage={t('deleghe.no_delegates') as string}
-          emptyActionCallback={handleAddDelegationClick}
-          sort={sortDelegates}
-          onChangeSorting={handleChangeSorting}
-        />
-      )}
-    </Box>
+    <>
+      <CodeModal
+        title={t('deleghe.show_code_title', { name: showCodeModal.name })}
+        subtitle={t('deleghe.show_code_subtitle')}
+        open={showCodeModal.open}
+        initialValues={showCodeModal.code.split('')}
+        handleClose={handleCloseShowCodeModal}
+        cancelCallback={handleCloseShowCodeModal}
+        cancelLabel={t('deleghe.close')}
+        codeSectionTitle={t('deleghe.verification_code')}
+        isReadOnly
+      />
+      <Box mb={8}>
+        <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+          <Typography variant="h6">{t('deleghe.delegatesTitle')}</Typography>
+          <Box>
+            <Button variant="outlined" onClick={handleAddDelegationClick}>
+              <Add fontSize={'small'} sx={{ marginRight: 1 }} />
+              {t('deleghe.add')}
+            </Button>
+          </Box>
+        </Stack>
+        {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
+        {!delegatesError && (
+          <Table
+            columns={delegatesColumns}
+            rows={rows}
+            emptyActionLabel={t('deleghe.add') as string}
+            emptyMessage={t('deleghe.no_delegates') as string}
+            emptyActionCallback={handleAddDelegationClick}
+            sort={sortDelegates}
+            onChangeSorting={handleChangeSorting}
+          />
+        )}
+      </Box>
+    </>
   );
 };
 

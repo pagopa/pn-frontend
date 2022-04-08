@@ -25,6 +25,11 @@ export const Menu = (props: any) => {
     setAnchorEl(null);
   };
 
+  const handleOpenVerificationCodeModal = () => {
+    props.setCodeModal({ open: true, name: props.name, code: props.verificationCode });
+    setAnchorEl(null);
+  };
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -36,7 +41,7 @@ export const Menu = (props: any) => {
   const getMenuItemElements = () => {
     if (props.menuType === 'delegates') {
       return [
-        <MenuItem key="showCode" onClick={handleClose}>
+        <MenuItem key="showCode" onClick={handleOpenVerificationCodeModal}>
           {t('Mostra Codice')}
         </MenuItem>,
         <MenuItem key="revoke" onClick={handleOpenModalClick}>

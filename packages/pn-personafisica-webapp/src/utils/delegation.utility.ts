@@ -24,6 +24,7 @@ export default function delegationToItem(
       (entity: { name: string; uniqueIdentifier: string }) => entity.uniqueIdentifier
     ),
     status: delegation.status,
+    verificationCode: delegation.verificationCode
   }));
 }
 
