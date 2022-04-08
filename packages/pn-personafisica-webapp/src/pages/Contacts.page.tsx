@@ -47,7 +47,7 @@ const Contacts = () => {
             )}
           </Grid>
           <Grid item lg={6} xs={12}>
-            <CourtesyContacts />
+            <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
           </Grid>
         </Grid>
       </Box>
