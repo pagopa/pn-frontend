@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { Typography, Grid, Drawer } from '@mui/material';
+import { Typography, Grid, Drawer, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
 import { TimelineNotification } from "@pagopa/mui-italia";
@@ -154,7 +154,9 @@ const NotificationDetailTimeline = ({
             />
           </Grid>
         </Grid>
-        <TimelineNotification sx={{marginTop: 0, paddingTop: 0, background: 'red'}}>{timelineComponent}</TimelineNotification>
+        <Box sx={{padding: '0 24px 0 24px'}}>
+          <TimelineNotification>{timelineComponent}</TimelineNotification>
+        </Box>
       </CustomDrawer>
     </Fragment>
   );
