@@ -29,12 +29,11 @@ const CourtesyContactsList: React.FC<Props> = ({recipientId, contacts}) => {
               recipientId={recipientId}
               type={CourtesyFieldType.PHONE}
               value={contact.value}
-              isVerified={true}
             />
           ))
         ) : (
           <CourtesyContactItem 
-          recipientId={recipientId} type={CourtesyFieldType.PHONE} value="" isVerified={false} />
+          recipientId={recipientId} type={CourtesyFieldType.PHONE} value="" />
         )}
       </Grid>
       {isMobile && <Divider />}
@@ -46,11 +45,10 @@ const CourtesyContactsList: React.FC<Props> = ({recipientId, contacts}) => {
               recipientId={recipientId}
               type={CourtesyFieldType.EMAIL}
               value={contact.value}
-              isVerified={true}
             />
           ))
         ) : (
-          <CourtesyContactItem recipientId={recipientId} type={CourtesyFieldType.EMAIL} value="" isVerified={false} />
+          <CourtesyContactItem recipientId={recipientId} type={CourtesyFieldType.EMAIL} value="" />
         )}
       </Grid>
     </Box>
