@@ -14,8 +14,10 @@ import {
   Item,
   tenYearsAgo,
   today,
+  TitleBox,
 } from '@pagopa-pn/pn-commons';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
+import { Tag, TagGroup } from '@pagopa/mui-italia';
 
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
@@ -98,11 +100,17 @@ const Dashboard = () => {
       },
     },
     {
-      id: 'groups',
+      id: 'group',
       label: 'Gruppi',
       width: '15%',
       getCellLabel(value: string) {
-        return value;
+        return (
+          value && (
+            <TagGroup visibleItems={4}>
+              <Tag value={value} />
+            </TagGroup>
+          )
+        );
       },
       onClick(row: Item, column: Column) {
         handleRowClick(row, column);
@@ -167,14 +175,15 @@ const Dashboard = () => {
   }, [filters, pagination.size, pagination.page, sort]);
 
   return (
-    <Box style={{ padding: '20px' }}>
-      <Box sx={{ padding: '20px 0' }}>
-        <Typography variant="h4">Notifiche</Typography>
-        <Typography>
-          Qui trovi tutte le notifiche inviate manualmente dal tuo Ente. Puoi filtrarle per Codice
-          Fiscale, Codice IUN, data di invio e stato.
-        </Typography>
-      </Box>
+    <Box sx={{ padding: '20px' }}>
+      <TitleBox
+        variantTitle="h4"
+        title={'Notifiche'}
+        subTitle={
+          'Qui trovi tutte le notifiche inviate manualmente dal tuo Ente. Puoi filtrarle per Codice Fiscale, Codice IUN, data di invio e stato.'
+        }
+        variantSubTitle={'body1'}
+      ></TitleBox>
       <Fragment>
         {notifications && (
           <Fragment>

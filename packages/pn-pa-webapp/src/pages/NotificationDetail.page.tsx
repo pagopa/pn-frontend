@@ -13,6 +13,7 @@ import {
   NotificationDetailTimeline,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+import { Tag, TagGroup } from '@pagopa/mui-italia';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -80,7 +81,15 @@ const NotificationDetail = () => {
       label: 'Codice IUN',
       value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
-    { id: 8, label: 'Gruppi', value: '' },
+    {
+      id: 8,
+      label: 'Gruppi',
+      value: notification.group && (
+        <TagGroup visibleItems={4}>
+          <Tag value={notification.group} />
+        </TagGroup>
+      ),
+    },
   ];
   const documentDowloadHandler = (documentIndex: number) => {
     void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
@@ -125,7 +134,11 @@ const NotificationDetail = () => {
           <EmailIcon sx={{ mr: 0.5 }} />
           Notifiche
         </StyledLink>
-        <Typography color="text.primary" fontWeight={600} sx={{ display: 'flex', alignItems: 'center' }}>
+        <Typography
+          color="text.primary"
+          fontWeight={600}
+          sx={{ display: 'flex', alignItems: 'center' }}
+        >
           Dettaglio notifica
         </Typography>
       </Breadcrumbs>
@@ -166,7 +179,7 @@ const NotificationDetail = () => {
               legalFactLabel="Attestato opponibile a Terzi"
               historyButtonLabel="Mostra storico"
               showMoreButtonLabel="Mostra di più"
-              showLessButtonLabel='Mostra di meno'
+              showLessButtonLabel="Mostra di meno"
             />
           </Box>
         </Grid>

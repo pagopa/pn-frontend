@@ -38,7 +38,7 @@ const sort: Sort = {
 
 function testNotificationTableHead() {
   const table = screen.getByRole('table');
-  expect(table).toHaveAttribute('aria-label', 'Tabella lista notifiche');
+  expect(table).toHaveAttribute('aria-label', 'Tabella di item');
   const tableHead = table.querySelector('thead');
   const tableColumns = tableHead!.querySelectorAll('th');
   expect(tableColumns).toHaveLength(columns.length);
@@ -73,9 +73,7 @@ describe('Notifications Table Component', () => {
     const tableBody = table.querySelectorAll('td');
     expect(tableBody).toHaveLength(1);
     expect(tableBody[0]).toHaveAttribute('colspan', columns.length.toString());
-    expect(tableBody[0]).toHaveTextContent(
-      /mocked-empty-message/i
-    );
+    expect(tableBody[0]).toHaveTextContent(/mocked-empty-message/i);
   });
 
   it('renders notifications table (with rows)', () => {

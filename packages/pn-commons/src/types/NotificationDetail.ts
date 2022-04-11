@@ -15,6 +15,7 @@ export interface NotificationDetail {
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
   physicalCommunicationType: PhysicalCommunicationType;
+  group?: string;
 }
 
 export interface INotificationDetailTimeline {
