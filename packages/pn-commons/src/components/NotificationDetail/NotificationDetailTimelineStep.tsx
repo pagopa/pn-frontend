@@ -1,4 +1,4 @@
-import { TimelineConnector, TimelineSeparator } from '@mui/lab';
+import { TimelineConnector } from '@mui/lab';
 import { useState, Fragment, ReactNode } from 'react';
 import { Typography, Chip, Box, Button } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
@@ -9,6 +9,7 @@ import {
   TimelineNotificationOppositeContent,
   TimelineNotificationContent,
   TimelineNotificationDot,
+  TimelineNotificationSeparator,
   ButtonNaked,
 } from '@pagopa/mui-italia';
 
@@ -70,11 +71,11 @@ const NotificationDetailTimelineStep = ({
   ) => (
     <TimelineNotificationItem key={key}>
       <TimelineNotificationOppositeContent>{oppositeContent}</TimelineNotificationOppositeContent>
-      <TimelineSeparator>
+      <TimelineNotificationSeparator>
         <TimelineConnector sx={{visibility: stepPosition === 'first' ? 'hidden' : 'visible'}}/>
         <TimelineNotificationDot variant={variant} size={size}/>
         <TimelineConnector sx={{visibility: stepPosition === 'last' ? 'hidden' : 'visible'}}/>
-      </TimelineSeparator>
+      </TimelineNotificationSeparator>
       <TimelineNotificationContent>{content}</TimelineNotificationContent>
     </TimelineNotificationItem>
   );

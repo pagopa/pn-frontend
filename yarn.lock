@@ -2628,10 +2628,10 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@pagopa/mui-italia@^0.6.6":
-  version "0.6.6"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.6.tgz#30de5bf5c70dda047c7b0baeee0deabfe58444dc"
-  integrity sha512-WDVl8FPmUuS4gf0LyWOB++ZiPA9jQPSnwGo97vqAwxJzaC72p3MFuGz/dFMY3+Mur0gTbr2uX7WtA3Fywh2uhQ==
+"@pagopa/mui-italia@^0.6.9":
+  version "0.6.9"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.9.tgz#75f545982ba3b692a1108c6f9cfea770ff56b636"
+  integrity sha512-SeVSiVvmSN/JvtG/a9oNmdezt2NnDjMJ3npuSwWl1quqrvqNkDU3JT2GXaUSXnykUBz8R2OKs/fswNQ1EeR5ZA==
   dependencies:
     "@fontsource/titillium-web" "^4.5.3"
 

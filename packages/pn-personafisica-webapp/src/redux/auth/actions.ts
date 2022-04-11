@@ -10,10 +10,10 @@ import { User } from './types';
  */
 export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
-  async (selfCareToken: string) => {
+  async (spidToken: string) => {
     // use selfcare token to get autenticated user
-    if (selfCareToken && selfCareToken !== '') {
-      const user = await AuthApi.exchangeToken(selfCareToken);
+    if (spidToken && spidToken !== '') {
+      const user = await AuthApi.exchangeToken(spidToken);
       sessionStorage.setItem('user', JSON.stringify(user));
       return user;
     } else {

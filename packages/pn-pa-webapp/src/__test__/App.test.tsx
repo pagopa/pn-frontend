@@ -14,7 +14,7 @@ describe('App', () => {
     expect(welcomeElement).toBeInTheDocument();
   });
 
-  it.skip('Test if automatic accessibility tests passes', async () => {
+  it('Test if automatic accessibility tests passes', async () => {
     const { container } = render(
       <App />
     );
