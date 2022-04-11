@@ -21,7 +21,9 @@ const Delegates = () => {
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
-  const { delegatesError } = useAppSelector((state: RootState) => state.delegationsState);
+  const delegatesError = useAppSelector(
+    (state: RootState) => state.delegationsState.delegatesError
+  );
   const sortDelegates = useAppSelector((state: RootState) => state.delegationsState.sortDelegates);
   const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
 

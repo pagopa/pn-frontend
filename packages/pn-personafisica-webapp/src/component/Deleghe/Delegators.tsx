@@ -16,7 +16,9 @@ const Delegators = () => {
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
   );
-  const { delegatorsError } = useAppSelector((state: RootState) => state.delegationsState);
+  const delegatorsError = useAppSelector(
+    (state: RootState) => state.delegationsState.delegatorsError
+  );
   const sortDelegators = useAppSelector(
     (state: RootState) => state.delegationsState.sortDelegators
   );
@@ -100,7 +102,7 @@ const Delegators = () => {
       {delegatorsError && (
         <Box mb={8}>
           <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <Typography variant="h6">Deleghe a tuo carico</Typography>
+            <Typography variant="h6">{t('deleghe.delegatorsTitle')}</Typography>
           </Stack>
           <TableError onClick={() => dispatch(getDelegators())} />
         </Box>
@@ -108,7 +110,7 @@ const Delegators = () => {
       {!delegatorsError && rows.length > 0 && (
         <Box mb={8}>
           <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <Typography variant="h6">Deleghe a tuo carico</Typography>
+            <Typography variant="h6">{t('deleghe.delegatorsTitle')}</Typography>
           </Stack>
           <ItemsTable
             columns={delegatorsColumns}

@@ -11,11 +11,13 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('DelegationElements', () => {
-  it('renders the Menu', () => {
+  it('renders the Menu closed', () => {
     const result = render(<Menu />);
     const menuIcon = result.queryByTestId('delegationMenuIcon');
+    const closedMenu = result.queryByTestId('delegationMenu');
 
     expect(menuIcon).not.toBeNull();
+    expect(closedMenu).toBeNull();
   });
 
   it('opens the delegate Menu', () => {
@@ -32,7 +34,7 @@ describe('DelegationElements', () => {
     expect(menu).toHaveTextContent(/deleghe.show/i);
   });
 
-  it('opens the delegate Menu', () => {
+  it('opens the delegator Menu', () => {
     const result = render(<Menu menuType={'delegators'} id={'111'} />);
     const menuIcon = result.getByTestId('delegationMenuIcon');
     const closedMenu = result.queryByTestId('delegationMenu');
