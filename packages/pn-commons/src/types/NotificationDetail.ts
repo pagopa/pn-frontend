@@ -38,10 +38,10 @@ export interface INotificationDetailTimeline {
   legalFactsIds?: Array<LegalFactId>;
 }
 
-interface SendPaperDetails {
+export interface SendPaperDetails {
   category: TimelineCategory;
   taxId: string;
-  address: DigitalAddress;
+  address: PhysicalAddress;
   serviceLevel: PhysicalCommunicationType;
   sentAttemptMade: number;
   investigation: boolean;
@@ -51,25 +51,25 @@ interface SendPaperDetails {
 
 interface BaseDetails {
   category: TimelineCategory;
-  taxdId: string;
+  taxId: string;
 }
 
-interface AnalogWorkflowDetails {
+export interface AnalogWorkflowDetails {
   category: TimelineCategory;
-  taxdId: string;
+  taxId: string;
   address?: PhysicalAddress;
 }
 
 interface AddressInfoDetails {
   category: TimelineCategory;
-  taxdId: string;
+  taxId: string;
   source: AddressSource;
   isAvailable: boolean;
   attemptDate: string;
   available: boolean;
 }
 
-interface NotificationPathChooseDetails {
+export interface NotificationPathChooseDetails {
   category: TimelineCategory;
   taxId: string;
   deliveryMode: DeliveryMode;
@@ -139,14 +139,14 @@ interface ScheduleWorkflowDetails {
   lastAttemptInfo?: DigitalAddressInfo;
 }
 
-interface SendCourtesyMessageDetails {
+export interface SendCourtesyMessageDetails {
   category: TimelineCategory;
   taxId: string;
   address: DigitalAddress;
   sendDate: string;
 }
 
-interface SendDigitalDetails {
+export interface SendDigitalDetails {
   category: TimelineCategory;
   taxId: string;
   address?: DigitalAddress;

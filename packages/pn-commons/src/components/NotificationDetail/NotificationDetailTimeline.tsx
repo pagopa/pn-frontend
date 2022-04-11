@@ -8,13 +8,15 @@ import {
   LegalFactId,
   INotificationDetailTimeline,
   NotificationStatusHistory,
-  NotificationDetailTimelineData
+  NotificationDetailTimelineData,
+  NotificationDetailRecipient
 } from '../../types/NotificationDetail';
 import { useIsMobile } from '../../hooks/IsMobile.hook';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {
   timeline: Array<INotificationDetailTimeline>;
+  recipients: Array<NotificationDetailRecipient>;
   statusHistory: Array<NotificationStatusHistory>;
   title: string;
   legalFactLabel: string;
@@ -37,6 +39,7 @@ const CustomDrawer = styled(Drawer)(() => ({
 /**
  * Notification detail timeline
  * @param timeline data to show
+ * @param recipients list of recipients
  * @param statusHistory notification macro-status history
  * @param clickHandler function called when user clicks on the download button
  * @param title title to show
@@ -45,6 +48,7 @@ const CustomDrawer = styled(Drawer)(() => ({
  */
 const NotificationDetailTimeline = ({
   timeline,
+  recipients,
   statusHistory,
   clickHandler,
   title,
@@ -94,6 +98,7 @@ const NotificationDetailTimeline = ({
   const timelineComponent = timeLineData.map((t, i) => (
     <NotificationDetailTimelineStep
       timelineStep={t}
+      recipients={recipients}
       position={getPosition(i)}
       legalFactLabel={legalFactLabel}
       clickHandler={clickHandler}
@@ -120,6 +125,7 @@ const NotificationDetailTimeline = ({
         {isMobile && timeLineData.length > 0 ? (
           <NotificationDetailTimelineStep
             timelineStep={timeLineData[0]}
+            recipients={recipients}
             position="first"
             legalFactLabel={legalFactLabel}
             clickHandler={clickHandler}

@@ -4,7 +4,8 @@ import {
   GetNotificationsResponse,
   LegalFactId,
   NotificationDetail,
-  formatFiscalCode
+  formatFiscalCode,
+  TimelineAllowedStatus
 } from '@pagopa-pn/pn-commons';
 import { apiClient } from '../axios';
 
@@ -76,6 +77,7 @@ export const NotificationsApi = {
         dataToSend.timeline.sort(
           (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
         );
+        dataToSend.timeline = dataToSend.timeline.filter(t => TimelineAllowedStatus.includes(t.category as any));
         /* eslint-enable functional/immutable-data */
         return dataToSend;
       }

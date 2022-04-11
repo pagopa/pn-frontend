@@ -173,6 +173,7 @@ const NotificationDetail = () => {
           <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
             <NotificationDetailTimeline
               timeline={notification.timeline}
+              recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}
               title="Stato della notifica"
               clickHandler={legalFactDownloadHandler}
