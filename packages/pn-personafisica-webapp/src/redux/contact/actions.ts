@@ -76,4 +76,25 @@ export const createOrUpdateCourtesyAddress = createAsyncThunk<
   }
 );
 
+export const deleteCourtesyAddress = createAsyncThunk<
+  string,
+  { recipientId: string; senderId: string; channelType: CourtesyChannelType }
+>(
+  'deleteCourtesyAddress',
+  async (
+    params: { recipientId: string; senderId: string; channelType: CourtesyChannelType },
+    { rejectWithValue }
+  ) => {
+    try {
+      return await ContactsApi.deleteCourtesyAddress(
+        params.recipientId,
+        params.senderId,
+        params.channelType
+      );
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
 export const resetContactsState = createAction<void>('resetContactsState');

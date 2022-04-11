@@ -7,8 +7,9 @@ import * as yup from 'yup';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { CourtesyChannelType } from '../../models/contacts';
-import { createOrUpdateCourtesyAddress } from '../../redux/contact/actions';
+import { createOrUpdateCourtesyAddress, deleteCourtesyAddress } from '../../redux/contact/actions';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
+import { useAppDispatch } from '../../redux/hooks';
 
 export enum CourtesyFieldType {
   EMAIL = 'email',
@@ -28,7 +29,7 @@ interface Props {
 }
 
 const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
-  // console.log(`[RENDERING CourtesyContactItem Component] ${type}`);
+  const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['common', 'recapiti']);
 
@@ -126,6 +127,11 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
 
   const clickDeleteHandler = () => {
     // 2 DO
+    setIsConfirmationModalVisible(true);
+  };
+
+  const handleRemoveContact = () => {
+    void dispatch(deleteCourtesyAddress({recipientId, senderId: 'default', channelType: type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS}));
   };
 
   const getMobileVersion = () => {
@@ -191,7 +197,7 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
       return (
         <Fragment>
           <Grid item lg={7} xs={8}>
-            <IconButton aria-label="Elimina">
+            <IconButton aria-label="Elimina" onClick={clickDeleteHandler} >
               <Close />
             </IconButton>
             <Typography variant="body2" display="inline"  sx={{ marginLeft: '1rem' }}>
@@ -211,7 +217,7 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
         <Fragment>
           {mode === CourtesyMode.EDIT &&
           <Grid item lg={1} xs={12}>
-            <IconButton aria-label="Elimina">
+            <IconButton aria-label="Elimina" onClick={clickDeleteHandler} >
               <Close />
             </IconButton>
           </Grid>
@@ -255,13 +261,13 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
         aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
       >
-        <DialogTitle id="dialog-title">{t(`legal-contacts.remove-${type}-title`, { ns: 'recapiti' })}</DialogTitle>
+        <DialogTitle id="dialog-title">{t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="dialog-description">{t(`legal-contacts.remove-${type}-message`, { value: formik.values.field, ns: 'recapiti'})}</DialogContentText>
+          <DialogContentText id="dialog-description">{t(`courtesy-contacts.remove-${type}-message`, { value: formik.values.field, ns: 'recapiti'})}</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDiscardChanges} variant="outlined">{t('button.annulla')}</Button>
-          <Button onClick={handleAssociation} variant="contained">{t('button.conferma')}</Button>
+          <Button onClick={handleRemoveContact} variant="contained">{t('button.conferma')}</Button>
         </DialogActions>
       </Dialog>
     </Fragment>;
