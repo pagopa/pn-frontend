@@ -3,7 +3,6 @@ import { act, fireEvent, render, RenderResult, screen, waitFor } from "@testing-
 import * as redux from 'react-redux';
 import { CourtesyChannelType } from "../../../models/contacts";
 import * as actions from '../../../redux/contact/actions';
-import * as hooks from '../../../redux/hooks';
 import CourtesyContactItem, { CourtesyFieldType } from "../CourtesyContactItem";
 import { DigitalContactsCodeVerificationProvider } from "../DigitalContactsCodeVerification.context";
 
@@ -20,222 +19,441 @@ describe('CourtesyContactItem component', () => {
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
   
-  describe('testing component having type "phone"', () => {
+  describe('test component having type "phone"', () => {
+    const VALID_PHONE = "3331234567";
+    const VALID_PHONE_2 = "3337654321";
+    const INVALID_PHONE = "33312345";
+    const VALID_CODE = "01234";
 
-    beforeEach(async () => {
-      const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-      mockUseAppSelector.mockReturnValue('mocked-recipient');
-      // // mock app selector
-      // appSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
-      // mock action
+    beforeEach(() => {
+      
       mockActionFn = jest.fn();
       const actionSpy = jest.spyOn(actions, 'createOrUpdateCourtesyAddress');
       actionSpy.mockImplementation(mockActionFn as any);
-      // mock dispatch
+      
       mockDispatchFn = jest.fn(() => ({
         unwrap: () => Promise.resolve(),
       }));
       const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
       useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-      // render component
-      await act(async () => {
-        result = render(
-          <DigitalContactsCodeVerificationProvider>
-            <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.PHONE} value="" isVerified={false} />
-          </DigitalContactsCodeVerificationProvider>
-        );
+    });
+
+    describe('add a new phone number', () => {
+      beforeEach(async () => {
+        
+        await act(async () => {
+          result = render(
+            <DigitalContactsCodeVerificationProvider>
+              <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.PHONE} value="" />
+            </DigitalContactsCodeVerificationProvider>
+          );
+        });
+      });
+  
+      test('type in an invalid number', async () => {
+        const inputs = await result!.findAllByRole('textbox');
+        expect(inputs![0]).toBeInTheDocument();
+        expect(inputs).toHaveLength(1);
+        const input = result?.getByPlaceholderText('courtesy-contacts.link-phone-placeholder');
+        expect(inputs![0]).toEqual(input);
+        fireEvent.change(input!, { target: { value: INVALID_PHONE } });
+        await waitFor(() => expect(input!).toHaveValue(INVALID_PHONE));
+        const textMessage = result!.queryByText('courtesy-contacts.valid-phone');
+        expect(textMessage).toBeInTheDocument();
+        const button = screen.getByRole('button');
+        expect(button).toHaveTextContent('courtesy-contacts.phone-add');
+        expect(button).toBeDisabled();
+        
+      });
+  
+      test('type in a valid number', async() => {
+        const input = result?.getByRole('textbox');
+        expect(input).toHaveValue('');
+        fireEvent.change(input!, { target: { value: VALID_PHONE } });
+        await waitFor(() => expect(input!).toHaveValue(VALID_PHONE));
+        const textMessage = result!.queryByText('courtesy-contacts.valid-phone');
+        expect(textMessage).not.toBeInTheDocument();
+        const buttons = result!.getAllByRole('button');
+        expect(buttons).toHaveLength(1);
+        expect(buttons[0]).toHaveTextContent('courtesy-contacts.phone-add');
+        expect(buttons[0]).toBeEnabled();
+      });
+  
+      test('save a new phone number', async () => {
+        const input = result?.getByRole('textbox');
+        fireEvent.change(input!, { target: { value: VALID_PHONE } });
+        await waitFor(() => expect(input!).toHaveValue(VALID_PHONE));
+        const button = result!.getByRole('button');
+        fireEvent.click(button!);
+        await waitFor(() => {
+          expect(mockDispatchFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledWith({
+            recipientId: 'mocked-recipient',
+            senderId: 'default',
+            channelType: CourtesyChannelType.SMS,
+            value: VALID_PHONE,
+            code: undefined,
+          });
+        });
+        const dialog = await waitFor(() => {
+          const dialogEl = screen.queryByTestId('codeDialog');
+          expect(dialogEl).toBeInTheDocument();
+          return dialogEl;
+        });
+        const codeInputs = dialog?.querySelectorAll('input');
+        // fill inputs with values
+        codeInputs?.forEach((codeInput, index) => {
+          fireEvent.change(codeInput, { target: { value: index.toString() } });
+        });
+        const dialogButtons = dialog?.querySelectorAll('button');
+        // clear mocks
+        mockActionFn.mockClear();
+        mockActionFn.mockReset();
+        mockDispatchFn.mockReset();
+        mockDispatchFn.mockClear();
+        mockDispatchFn.mockImplementation(jest.fn(() => ({
+          unwrap: () => Promise.resolve({code: VALID_CODE}),
+        })));
+        fireEvent.click(dialogButtons![1]);
+        await waitFor(() => {
+          expect(mockDispatchFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledWith({
+            recipientId: 'mocked-recipient',
+            senderId: 'default',
+            channelType: CourtesyChannelType.SMS,
+            value: VALID_PHONE,
+            code: VALID_CODE,
+          });
+        });
+        await waitFor(() => {
+          expect(dialog).not.toBeInTheDocument();
+        });
       });
     });
 
-    test('entering an invalid phone number', async () => {
-      const inputs = await result!.findAllByRole('textbox');
-      expect(inputs![0]).toBeInTheDocument();
-      expect(inputs).toHaveLength(1);
-      const input = result?.getByPlaceholderText('courtesy-contacts.link-phone-placeholder');
-      expect(inputs![0]).toEqual(input);
-      fireEvent.change(input!, { target: { value: '484893' } });
-      await waitFor(() => expect(input!).toHaveValue('484893'));
-      const textMessage = result!.queryByText('courtesy-contacts.valid-phone');
-      expect(textMessage).toBeInTheDocument();
-      const button = screen.getByRole('button');
-      expect(button).toHaveTextContent('courtesy-contacts.phone-add');
-      expect(button).toBeDisabled();
+    describe('change an existing phone number', () => {
+      beforeEach(async () => {
+        
+        await act(async () => {
+          result = render(
+            <DigitalContactsCodeVerificationProvider>
+              <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.PHONE} value={VALID_PHONE} />
+            </DigitalContactsCodeVerificationProvider>
+          );
+        });
+      });
       
-    });
+      test('type in an invalid number while in "edit mode"', async () => {
+        //verify initial conditions
+        screen.getByText(VALID_PHONE);
+        screen.getByRole('button', { name: 'button.rimuovi'});
+        const editButton = screen.getByRole('button', { name: 'button.modifica'});
 
-    test('entering a valid phone number', async() => {
-      const input = result?.getByRole('textbox');
-      expect(input).toHaveValue('');
-      fireEvent.change(input!, { target: { value: '3331234567' } });
-      await waitFor(() => expect(input!).toHaveValue('3331234567'));
-      const textMessage = result!.queryByText('courtesy-contacts.valid-phone');
-      expect(textMessage).not.toBeInTheDocument();
-      const buttons = result!.getAllByRole('button');
-      expect(buttons).toHaveLength(1);
-      expect(buttons[0]).toHaveTextContent('courtesy-contacts.phone-add');
-      expect(buttons[0]).toBeEnabled();
-    });
+        fireEvent.click(editButton);
+        
+        const input = screen.getByRole('textbox');
+        const saveButton = screen.getByRole('button', { name: 'button.salva'});
+        expect(input).toHaveValue(VALID_PHONE);
+        expect(saveButton).toBeEnabled();
 
-    test('adding a new phone number', async () => {
-      const input = result?.getByRole('textbox');
-      fireEvent.change(input!, { target: { value: '3331234567' } });
-      await waitFor(() => expect(input!).toHaveValue('3331234567'));
-      const button = result!.getByRole('button');
-      fireEvent.click(button!);
-      await waitFor(() => {
-        expect(mockDispatchFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledWith({
-          recipientId: 'mocked-recipient',
-          senderId: 'default',
-          channelType: CourtesyChannelType.SMS,
-          value: '3331234567',
-          code: undefined,
+        fireEvent.change(input, { target: { value: INVALID_PHONE } });
+        await waitFor(() => expect(input).toHaveValue(INVALID_PHONE));
+        expect(saveButton).toBeDisabled();
+      });
+
+      test('override an existing phone number using the same value', async () => {
+        const editButton = screen.getByRole('button', { name: 'button.modifica'});
+
+        fireEvent.click(editButton);
+
+        const input = screen.getByRole('textbox');
+        const saveButton = screen.getByRole('button', { name: 'button.salva'});
+
+        fireEvent.change(input, { target: { value: '' } });
+        await waitFor(() => expect(input).toHaveValue(''));
+        fireEvent.change(input, { target: { value: VALID_PHONE } });
+        await waitFor(() => expect(input).toHaveValue(VALID_PHONE));
+
+        fireEvent.click(saveButton);
+        screen.getByText(VALID_PHONE);
+      });
+
+      test('override an existing phone number with a new one', async () => {
+        const editButton = screen.getByRole('button', { name: 'button.modifica'});
+
+        fireEvent.click(editButton);
+
+        const input = result?.getByRole('textbox');
+        fireEvent.change(input!, { target: { value: VALID_PHONE_2 } });
+        await waitFor(() => expect(input!).toHaveValue(VALID_PHONE_2));
+        const saveButton = screen.getByRole('button', { name: 'button.salva'});
+        fireEvent.click(saveButton!);
+        await waitFor(() => {
+          expect(mockDispatchFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledWith({
+            recipientId: 'mocked-recipient',
+            senderId: 'default',
+            channelType: CourtesyChannelType.SMS,
+            value: VALID_PHONE_2,
+            code: undefined,
+          });
         });
-      });
-      const dialog = await waitFor(() => {
-        const dialogEl = screen.queryByTestId('codeDialog');
-        expect(dialogEl).toBeInTheDocument();
-        return dialogEl;
-      });
-      const codeInputs = dialog?.querySelectorAll('input');
-      // fill inputs with values
-      codeInputs?.forEach((codeInput, index) => {
-        fireEvent.change(codeInput, { target: { value: index.toString() } });
-      });
-      const dialogButtons = dialog?.querySelectorAll('button');
-      // clear mocks
-      mockActionFn.mockClear();
-      mockActionFn.mockReset();
-      mockDispatchFn.mockReset();
-      mockDispatchFn.mockClear();
-      mockDispatchFn.mockImplementation(jest.fn(() => ({
-        unwrap: () => Promise.resolve({code: '01234'}),
-      })));
-      fireEvent.click(dialogButtons![1]);
-      await waitFor(() => {
-        expect(mockDispatchFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledWith({
-          recipientId: 'mocked-recipient',
-          senderId: 'default',
-          channelType: CourtesyChannelType.SMS,
-          value: '3331234567',
-          code: '01234',
+        const dialog = await waitFor(() => {
+          const dialogEl = screen.queryByTestId('codeDialog');
+          expect(dialogEl).toBeInTheDocument();
+          return dialogEl;
         });
-      });
-      await waitFor(() => {
-        expect(dialog).not.toBeInTheDocument();
+        const codeInputs = dialog?.querySelectorAll('input');
+        // fill inputs with values
+        codeInputs?.forEach((codeInput, index) => {
+          fireEvent.change(codeInput, { target: { value: index.toString() } });
+        });
+        const dialogButtons = dialog?.querySelectorAll('button');
+        // clear mocks
+        mockActionFn.mockClear();
+        mockActionFn.mockReset();
+        mockDispatchFn.mockReset();
+        mockDispatchFn.mockClear();
+        mockDispatchFn.mockImplementation(jest.fn(() => ({
+          unwrap: () => Promise.resolve({code: VALID_CODE}),
+        })));
+        fireEvent.click(dialogButtons![1]);
+        await waitFor(() => {
+          expect(mockDispatchFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledWith({
+            recipientId: 'mocked-recipient',
+            senderId: 'default',
+            channelType: CourtesyChannelType.SMS,
+            value: VALID_PHONE_2,
+            code: VALID_CODE,
+          });
+        });
+        await waitFor(() => {
+          expect(dialog).not.toBeInTheDocument();
+        });
       });
     });
   });
-
+  
   describe('testing component having type "email"', () => {
+    const VALID_EMAIL = "prova@pagopa.it";
+    const VALID_EMAIL_2 = "testpagopa@gmail.it";
+    const INVALID_EMAIL = "testpagopa.it";
+    const VALID_CODE = "01234";
 
-    beforeEach(async () => {
-      const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-      mockUseAppSelector.mockReturnValue('mocked-recipient');
-      // // mock app selector
-      // appSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
-      // mock action
+    beforeEach(() => {
       mockActionFn = jest.fn();
       const actionSpy = jest.spyOn(actions, 'createOrUpdateCourtesyAddress');
       actionSpy.mockImplementation(mockActionFn as any);
-      // mock dispatch
+      
       mockDispatchFn = jest.fn(() => ({
         unwrap: () => Promise.resolve(),
       }));
       const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
       useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-      // render component
-      await act(async () => {
-        result = render(
-          <DigitalContactsCodeVerificationProvider>
-            <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.EMAIL} value="" isVerified={false} />
-          </DigitalContactsCodeVerificationProvider>
-        );
+    });
+
+    describe('add a new email', () => {
+      beforeEach(async () => {
+        
+        await act(async () => {
+          result = render(
+            <DigitalContactsCodeVerificationProvider>
+              <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.EMAIL} value="" />
+            </DigitalContactsCodeVerificationProvider>
+          );
+        });
+      });
+  
+      test('entering an invalid email keeps submit button disabled', async () => {
+        const inputs = await result!.findAllByRole('textbox');
+        expect(inputs![0]).toBeInTheDocument();
+        expect(inputs).toHaveLength(1);
+        const input = result?.getByPlaceholderText('courtesy-contacts.link-email-placeholder');
+        expect(inputs![0]).toEqual(input);
+        fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
+        await waitFor(() => expect(input!).toHaveValue(INVALID_EMAIL));
+        const textMessage = result!.queryByText('courtesy-contacts.valid-email');
+        expect(textMessage).toBeInTheDocument();
+        const button = screen.getByRole('button');
+        expect(button).toHaveTextContent('courtesy-contacts.email-add');
+        expect(button).toBeDisabled();
+        
+      });
+
+      test('entering a valid number enables submit button', async() => {
+        const input = result?.getByRole('textbox');
+        expect(input).toHaveValue('');
+        fireEvent.change(input!, { target: { value: VALID_EMAIL } });
+        await waitFor(() => expect(input!).toHaveValue(VALID_EMAIL));
+        const textMessage = result!.queryByText('courtesy-contacts.valid-email');
+        expect(textMessage).not.toBeInTheDocument();
+        const buttons = result!.getAllByRole('button');
+        expect(buttons).toHaveLength(1);
+        expect(buttons[0]).toHaveTextContent('courtesy-contacts.email-add');
+        expect(buttons[0]).toBeEnabled();
+      });
+
+      test('adding a new email', async () => {
+        const input = result?.getByRole('textbox');
+        fireEvent.change(input!, { target: { value: VALID_EMAIL } });
+        await waitFor(() => expect(input!).toHaveValue(VALID_EMAIL));
+        const button = result!.getByRole('button');
+        fireEvent.click(button!);
+        await waitFor(() => {
+          expect(mockDispatchFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledWith({
+            recipientId: 'mocked-recipient',
+            senderId: 'default',
+            channelType: CourtesyChannelType.EMAIL,
+            value: VALID_EMAIL,
+            code: undefined,
+          });
+        });
+        const dialog = await waitFor(() => {
+          const dialogEl = screen.queryByTestId('codeDialog');
+          expect(dialogEl).toBeInTheDocument();
+          return dialogEl;
+        });
+        const codeInputs = dialog?.querySelectorAll('input');
+        // fill inputs with values
+        codeInputs?.forEach((codeInput, index) => {
+          fireEvent.change(codeInput, { target: { value: index.toString() } });
+        });
+        const dialogButtons = dialog?.querySelectorAll('button');
+        // clear mocks
+        mockActionFn.mockClear();
+        mockActionFn.mockReset();
+        mockDispatchFn.mockReset();
+        mockDispatchFn.mockClear();
+        mockDispatchFn.mockImplementation(jest.fn(() => ({
+          unwrap: () => Promise.resolve({code: VALID_CODE}),
+        })));
+        fireEvent.click(dialogButtons![1]);
+        await waitFor(() => {
+          expect(mockDispatchFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledWith({
+            recipientId: 'mocked-recipient',
+            senderId: 'default',
+            channelType: CourtesyChannelType.EMAIL,
+            value: VALID_EMAIL,
+            code: VALID_CODE,
+          });
+        });
+        await waitFor(() => {
+          expect(dialog).not.toBeInTheDocument();
+        });
       });
     });
 
-    test('entering an invalid emaill', async () => {
-      const inputs = await result!.findAllByRole('textbox');
-      expect(inputs![0]).toBeInTheDocument();
-      expect(inputs).toHaveLength(1);
-      const input = result?.getByPlaceholderText('courtesy-contacts.link-email-placeholder');
-      expect(inputs![0]).toEqual(input);
-      fireEvent.change(input!, { target: { value: 'provapagopa.it' } });
-      await waitFor(() => expect(input!).toHaveValue('provapagopa.it'));
-      const textMessage = result!.queryByText('courtesy-contacts.valid-email');
-      expect(textMessage).toBeInTheDocument();
-      const button = screen.getByRole('button');
-      expect(button).toHaveTextContent('courtesy-contacts.email-add');
-      expect(button).toBeDisabled();
+    describe('change an existing email', () => {
+      beforeEach(async () => {
+        
+        await act(async () => {
+          result = render(
+            <DigitalContactsCodeVerificationProvider>
+              <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.EMAIL} value="prova@pagopa.it" />
+            </DigitalContactsCodeVerificationProvider>
+          );
+        });
+      });
       
-    });
+      test('type in an invalid email while in "edit mode"', async () => {
+        //verify initial conditions
+        screen.getByText(VALID_EMAIL);
+        screen.getByRole('button', { name: 'button.rimuovi'});
+        const editButton = screen.getByRole('button', { name: 'button.modifica'});
 
-    test('entering a valid email', async() => {
-      const input = result?.getByRole('textbox');
-      expect(input).toHaveValue('');
-      fireEvent.change(input!, { target: { value: 'prova@pagopa.it' } });
-      await waitFor(() => expect(input!).toHaveValue('prova@pagopa.it'));
-      const textMessage = result!.queryByText('courtesy-contacts.valid-email');
-      expect(textMessage).not.toBeInTheDocument();
-      const buttons = result!.getAllByRole('button');
-      expect(buttons).toHaveLength(1);
-      expect(buttons[0]).toHaveTextContent('courtesy-contacts.email-add');
-      expect(buttons[0]).toBeEnabled();
-    });
+        fireEvent.click(editButton);
+        
+        const input = screen.getByRole('textbox');
+        const saveButton = screen.getByRole('button', { name: 'button.salva'});
+        expect(input).toHaveValue(VALID_EMAIL);
+        expect(saveButton).toBeEnabled();
 
-    test('adding a new email', async () => {
-      const input = result?.getByRole('textbox');
-      fireEvent.change(input!, { target: { value: 'prova@pagopa.it' } });
-      await waitFor(() => expect(input!).toHaveValue('prova@pagopa.it'));
-      const button = result!.getByRole('button');
-      fireEvent.click(button!);
-      await waitFor(() => {
-        expect(mockDispatchFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledWith({
-          recipientId: 'mocked-recipient',
-          senderId: 'default',
-          channelType: CourtesyChannelType.EMAIL,
-          value: 'prova@pagopa.it',
-          code: undefined,
+        fireEvent.change(input, { target: { value: INVALID_EMAIL } });
+        await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL));
+        expect(saveButton).toBeDisabled();
+      });
+
+      test('override an existing email using the same value', async () => {
+        const editButton = screen.getByRole('button', { name: 'button.modifica'});
+
+        fireEvent.click(editButton);
+
+        const input = screen.getByRole('textbox');
+        const saveButton = screen.getByRole('button', { name: 'button.salva'});
+
+        fireEvent.change(input, { target: { value: '' } });
+        await waitFor(() => expect(input).toHaveValue(''));
+        fireEvent.change(input, { target: { value: VALID_EMAIL } });
+        await waitFor(() => expect(input).toHaveValue(VALID_EMAIL));
+
+        fireEvent.click(saveButton);
+        screen.getByText(VALID_EMAIL);
+      });
+
+      test('override an existing email with a new one', async () => {
+        const editButton = screen.getByRole('button', { name: 'button.modifica'});
+
+        fireEvent.click(editButton);
+
+        const input = result?.getByRole('textbox');
+        fireEvent.change(input!, { target: { value: VALID_EMAIL_2 } });
+        await waitFor(() => expect(input!).toHaveValue(VALID_EMAIL_2));
+        const saveButton = screen.getByRole('button', { name: 'button.salva'});
+        fireEvent.click(saveButton!);
+        await waitFor(() => {
+          expect(mockDispatchFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledWith({
+            recipientId: 'mocked-recipient',
+            senderId: 'default',
+            channelType: CourtesyChannelType.EMAIL,
+            value: VALID_EMAIL_2,
+            code: undefined,
+          });
         });
-      });
-      const dialog = await waitFor(() => {
-        const dialogEl = screen.queryByTestId('codeDialog');
-        expect(dialogEl).toBeInTheDocument();
-        return dialogEl;
-      });
-      const codeInputs = dialog?.querySelectorAll('input');
-      // fill inputs with values
-      codeInputs?.forEach((codeInput, index) => {
-        fireEvent.change(codeInput, { target: { value: index.toString() } });
-      });
-      const dialogButtons = dialog?.querySelectorAll('button');
-      // clear mocks
-      mockActionFn.mockClear();
-      mockActionFn.mockReset();
-      mockDispatchFn.mockReset();
-      mockDispatchFn.mockClear();
-      mockDispatchFn.mockImplementation(jest.fn(() => ({
-        unwrap: () => Promise.resolve({code: '01234'}),
-      })));
-      fireEvent.click(dialogButtons![1]);
-      await waitFor(() => {
-        expect(mockDispatchFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledWith({
-          recipientId: 'mocked-recipient',
-          senderId: 'default',
-          channelType: CourtesyChannelType.EMAIL,
-          value: 'prova@pagopa.it',
-          code: '01234',
+        const dialog = await waitFor(() => {
+          const dialogEl = screen.queryByTestId('codeDialog');
+          expect(dialogEl).toBeInTheDocument();
+          return dialogEl;
         });
-      });
-      await waitFor(() => {
-        expect(dialog).not.toBeInTheDocument();
+        const codeInputs = dialog?.querySelectorAll('input');
+        // fill inputs with values
+        codeInputs?.forEach((codeInput, index) => {
+          fireEvent.change(codeInput, { target: { value: index.toString() } });
+        });
+        const dialogButtons = dialog?.querySelectorAll('button');
+        // clear mocks
+        mockActionFn.mockClear();
+        mockActionFn.mockReset();
+        mockDispatchFn.mockReset();
+        mockDispatchFn.mockClear();
+        mockDispatchFn.mockImplementation(jest.fn(() => ({
+          unwrap: () => Promise.resolve({code: VALID_CODE}),
+        })));
+        fireEvent.click(dialogButtons![1]);
+        await waitFor(() => {
+          expect(mockDispatchFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledTimes(1);
+          expect(mockActionFn).toBeCalledWith({
+            recipientId: 'mocked-recipient',
+            senderId: 'default',
+            channelType: CourtesyChannelType.EMAIL,
+            value: VALID_EMAIL_2,
+            code: VALID_CODE,
+          });
+        });
+        await waitFor(() => {
+          expect(dialog).not.toBeInTheDocument();
+        });
       });
     });
   });
