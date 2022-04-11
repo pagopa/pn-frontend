@@ -1,8 +1,8 @@
-import { fireEvent, RenderResult, waitFor } from "@testing-library/react";
+import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 
-import { render } from "../../../test-utils";
-import SideMenuListItem from "../SideMenuListItem";
-import { sideMenuItems } from "./test-utils";
+import { render } from '../../../test-utils';
+import SideMenuListItem from '../SideMenuListItem';
+import { sideMenuItems } from './test-utils';
 
 const handleLinkClick = jest.fn();
 
@@ -11,7 +11,11 @@ describe('SideMenuListItem', () => {
 
   beforeEach(() => {
     result = render(
-      <SideMenuListItem item={sideMenuItems[0]} handleLinkClick={handleLinkClick}/>
+      <SideMenuListItem
+        item={sideMenuItems[0]}
+        handleLinkClick={handleLinkClick}
+        onSelect={() => {}}
+      />
     );
   });
 
