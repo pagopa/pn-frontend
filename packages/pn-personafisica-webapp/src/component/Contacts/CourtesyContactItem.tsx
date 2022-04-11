@@ -1,5 +1,5 @@
 import { Close } from '@mui/icons-material';
-import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -15,20 +15,27 @@ export enum CourtesyFieldType {
   PHONE = 'phone',
 }
 
+enum CourtesyMode {
+  NEW = 'NEW',
+  EDIT = 'EDIT',
+  SHOW = 'SHOW'
+};
+
 interface Props {
   recipientId: string;
   type: CourtesyFieldType;
   value: string;
-  isVerified: boolean;
 }
 
-const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value, isVerified }) => {
+const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
+  // console.log(`[RENDERING CourtesyContactItem Component] ${type}`);
   const isMobile = useIsMobile();
   const { t } = useTranslation(['common', 'recapiti']);
 
   const digitalDomicileType = type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS;
   const { setProps, handleCodeVerification } = useDigitalContactsCodeVerificationContext();
-  const [isEditMode, SetIsEditMode] = useState(!isVerified);
+  const [mode, setMode] = useState<CourtesyMode>(value === '' ? CourtesyMode.NEW : CourtesyMode.SHOW);
+  const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
 
   const emailValidationSchema = yup.object().shape({
     field: yup
@@ -61,8 +68,8 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value, isVeri
 
   const saveDataHandler = () => {
     if (formik.isValid) {
-      if (isVerified && !enteredValueChanged()) {
-        SetIsEditMode(false);
+      if(mode === CourtesyMode.EDIT && !enteredValueChanged()) {
+        setMode(CourtesyMode.SHOW);
       } else {
         handleAssociation();
       }
@@ -108,62 +115,156 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value, isVeri
     });
   };
 
-  if (isVerified && !isEditMode) {
-    return (
-      <Fragment>
-        <Grid item lg={7} xs={8}>
-          {!isMobile && (
+  const handleDiscardChanges = () => {
+    setIsConfirmationModalVisible(false);
+    setMode(CourtesyMode.SHOW);
+  };
+
+  const clickEditHandler = () => {
+    setMode(CourtesyMode.EDIT);
+  };
+
+  const clickDeleteHandler = () => {
+    // 2 DO
+  };
+
+  const getMobileVersion = () => {
+    // show mode
+    if(mode === CourtesyMode.SHOW) {
+      return (
+        <Fragment>
+          <Grid item lg={7} xs={8}>
+            <Typography variant="body2" display="inline">
+              {value}&nbsp;
+            </Typography>
+          </Grid>
+          <Grid item lg={5} xs={12}>
+            <ButtonNaked color="primary" sx={{ marginRight: '10px' }} onClick={clickDeleteHandler}>
+              {t('button.rimuovi')}
+            </ButtonNaked>
+            <ButtonNaked color="primary" onClick={clickEditHandler} >{t('button.modifica')}</ButtonNaked>
+          </Grid>
+        </Fragment>
+      );
+    } else {
+    // edit mode
+      return(
+        <Fragment>
+          <Grid item lg={7} xs={12}>
+            <TextField
+              id="field"
+              name="field"
+              value={formik.values.field}
+              onChange={handleChangeTouched}
+              error={formik.touched.field && Boolean(formik.errors.field)}
+              helperText={formik.touched.field && formik.errors.field}
+              inputProps={{ sx: { height: '12px' } }}
+              placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
+                ns: 'recapiti',
+              })}
+              fullWidth
+            />
+          </Grid>
+          <Grid item lg={5} xs={12} alignItems="right">
+            {mode === CourtesyMode.NEW ?
+              <Button variant="outlined" onClick={saveDataHandler} disabled={!formik.isValid} fullWidth>
+                {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
+              </Button>
+            :
+              <Fragment>
+                <ButtonNaked color="primary" sx={{ marginRight: '10px' }} onClick={clickDeleteHandler} >
+                  {t('button.rimuovi')}
+                </ButtonNaked>
+                <ButtonNaked color="primary" onClick={saveDataHandler} disabled={!formik.isValid} >{t('button.salva')}</ButtonNaked>
+              </Fragment>
+            }
+          </Grid>
+        </Fragment>
+      );
+    }
+  };
+
+  const getDeskstopVersion = () => {
+    // show mode
+    const fieldWidth: number = mode === CourtesyMode.EDIT ? 6 : 7; 
+    if(mode === CourtesyMode.SHOW) {
+      return (
+        <Fragment>
+          <Grid item lg={7} xs={8}>
             <IconButton aria-label="Elimina">
               <Close />
             </IconButton>
-          )}
-          <Typography variant="body2" display="inline">
-            {value}&nbsp;
-          </Typography>
-        </Grid>
-        {!isMobile && (
-          <Grid item lg={5} xs={4}>
-            <Button variant="text" fullWidth>
-              Modifica
+            <Typography variant="body2" display="inline"  sx={{ marginLeft: '1rem' }}>
+              {value}&nbsp;
+            </Typography>
+          </Grid>
+          <Grid item lg={5} xs={12}>
+            <Button color="primary" onClick={clickEditHandler} fullWidth>
+              {t('button.modifica')}
             </Button>
           </Grid>
-        )}
-        {isMobile && (
-          <Grid item lg={5} xs={12}>
-            <ButtonNaked color="primary" sx={{ marginRight: '10px' }}>
-              {t('button.rimuovi')}
-            </ButtonNaked>
-            <ButtonNaked color="primary">{t('button.modifica')}</ButtonNaked>
+        </Fragment>
+      );
+    } else {
+    // edit mode
+      return(
+        <Fragment>
+          {mode === CourtesyMode.EDIT &&
+          <Grid item lg={1} xs={12}>
+            <IconButton aria-label="Elimina">
+              <Close />
+            </IconButton>
           </Grid>
-        )}
-      </Fragment>
-    );
-  } else {
-    return (
-      <Fragment>
-        <Grid item lg={7} xs={12}>
-          <TextField
-            id="field"
-            name="field"
-            value={formik.values.field}
-            onChange={handleChangeTouched}
-            error={formik.touched.field && Boolean(formik.errors.field)}
-            helperText={formik.touched.field && formik.errors.field}
-            inputProps={{ sx: { height: '12px' } }}
-            placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
-              ns: 'recapiti',
-            })}
-            fullWidth
-          />
-        </Grid>
-        <Grid item lg={5} xs={12} alignItems="right">
-          <Button variant="outlined" onClick={saveDataHandler} disabled={!formik.isValid} fullWidth>
-            {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
-          </Button>
-        </Grid>
-      </Fragment>
-    );
-  }
+          }
+          <Grid item lg={fieldWidth} xs={12}>
+            <TextField
+              id="field"
+              name="field"
+              value={formik.values.field}
+              onChange={handleChangeTouched}
+              error={formik.touched.field && Boolean(formik.errors.field)}
+              helperText={formik.touched.field && formik.errors.field}
+              inputProps={{ sx: { height: '12px' } }}
+              placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
+                ns: 'recapiti',
+              })}
+              fullWidth
+            />
+          </Grid>
+          <Grid item lg={5} xs={12} alignItems="right">
+            {mode === CourtesyMode.NEW ?
+              <Button variant="outlined" onClick={saveDataHandler} disabled={!formik.isValid} fullWidth>
+                {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
+              </Button>
+            :
+              <Button color="primary" onClick={saveDataHandler} disabled={!formik.isValid} fullWidth>
+                {t('button.salva')}
+              </Button>
+            }
+          </Grid>
+        </Fragment>
+      );
+    }
+  };
+
+  return <Fragment>
+      {isMobile ? getMobileVersion() : getDeskstopVersion()}
+      <Dialog
+        open={isConfirmationModalVisible}
+        onClose={handleDiscardChanges}
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-description"
+      >
+        <DialogTitle id="dialog-title">{t(`legal-contacts.remove-${type}-title`, { ns: 'recapiti' })}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="dialog-description">{t(`legal-contacts.remove-${type}-message`, { value: formik.values.field, ns: 'recapiti'})}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDiscardChanges} variant="outlined">{t('button.annulla')}</Button>
+          <Button onClick={handleAssociation} variant="contained">{t('button.conferma')}</Button>
+        </DialogActions>
+      </Dialog>
+    </Fragment>;
 };
 
 export default CourtesyContactItem;
