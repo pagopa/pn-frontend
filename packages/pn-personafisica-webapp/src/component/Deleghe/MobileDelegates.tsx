@@ -20,7 +20,9 @@ const MobileDelegates = () => {
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
   );
-  const { delegatesError } = useAppSelector((state: RootState) => state.delegationsState);
+  const delegatesError = useAppSelector(
+    (state: RootState) => state.delegationsState.delegatesError
+  );
 
   const cardData: Array<Item> = delegationToItem(delegates, false);
 
@@ -90,23 +92,24 @@ const MobileDelegates = () => {
         {t('deleghe.delegatesTitle')}
       </Typography>
       {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
-      {!delegatesError &&
-      <>
-        <Box mb={2}>
-          <Button variant="outlined" onClick={handleAddDelegationClick}>
-            <Add fontSize={'small'} sx={{ marginRight: 1 }} />
-            {t('deleghe.add')}
-          </Button>
-        </Box>
-        <ItemsCard
+      {!delegatesError && (
+        <>
+          <Box mb={2}>
+            <Button variant="outlined" onClick={handleAddDelegationClick}>
+              <Add fontSize={'small'} sx={{ marginRight: 1 }} />
+              {t('deleghe.add')}
+            </Button>
+          </Box>
+          <ItemsCard
             cardHeader={cardHeader}
             cardBody={cardBody}
             cardData={cardData}
             emptyActionCallback={handleAddDelegationClick}
             emptyMessage={t('deleghe.no_delegates') as string}
             emptyActionLabel={t('deleghe.add') as string}
-        />
-      </>}
+          />
+        </>
+      )}
     </Box>
   );
 };

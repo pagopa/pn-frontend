@@ -17,7 +17,9 @@ const MobileDelegators = () => {
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
   );
-  const { delegatorsError } = useAppSelector((state: RootState) => state.delegationsState);
+  const delegatorsError = useAppSelector(
+    (state: RootState) => state.delegationsState.delegatorsError
+  );
 
   const cardData: Array<Item> = delegationToItem(delegators, true);
 
