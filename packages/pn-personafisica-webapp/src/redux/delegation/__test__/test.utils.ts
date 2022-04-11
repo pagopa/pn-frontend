@@ -138,3 +138,32 @@ export const arrayOfDelegators = [
     dateto: '16-04-2022',
   },
 ];
+
+export const mockDelegationsState = {
+  delegatesError: false,
+  delegatorsError: false,
+  delegations: {
+    delegators: arrayOfDelegators,
+    delegates: arrayOfDelegates,
+    isCompany: false,
+  },
+  modalState: {
+    open: false,
+    id: '',
+    type: '',
+  },
+  acceptModalState: {
+    open: false,
+    id: '',
+    name: '',
+    error: false,
+  },
+  sortDelegators: {
+    orderBy: '',
+    order: 'asc',
+  },
+  sortDelegates: {
+    orderBy: '',
+    order: 'asc',
+  },
+};

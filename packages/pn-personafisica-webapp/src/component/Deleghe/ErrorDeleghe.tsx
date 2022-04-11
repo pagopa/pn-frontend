@@ -28,9 +28,9 @@ const ErrorDeleghe: React.FC<ErrorDelegheProps> = ({ errorType }) => {
 
   return (
     <Toast
-      title={errorType ? errors[errorType].title : ''}
-      message={errorType ? errors[errorType].description : ''}
-      open={!!errorType}
+      title={errorType !== undefined ? errors[errorType].title : ''}
+      message={errorType !== undefined ? errors[errorType].description : ''}
+      open={errorType !== undefined}
       variant="standard"
       type={MessageType.ERROR}
     />
