@@ -32,6 +32,7 @@ const Deleghe = () => {
     name: acceptName,
     error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
+
   const dispatch = useAppDispatch();
 
   const handleCloseModal = () => {

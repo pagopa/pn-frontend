@@ -26,6 +26,8 @@
         "error_button": "Ricarica la pagina",
         "no_delegates": "Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.",
         "reload": "Ricarica",
+        "show_code_title": "Codice di verifica delega {{name}}",
+        "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della notifica.",
         "verification_code": "Codice di verifica",
         "table": {
             "name": "Nome",
@@ -46,7 +48,7 @@
     },
     "nuovaDelega": {
         "title": "Le tue deleghe",
-        "subtitle": "Inserisci i dati della persona fisica o giuridica a cui vuoi delegare la visualizzazione o la gestione delle tue notifiche",
+        "subtitle": "Inserisci i dati della persona fisica o \n giuridica a cui vuoi delegare la visualizzazione o la gestione delle tue notifiche",
         "form" : {
             "personType": "Tipologia di persona *",
             "naturalPerson": "Persona fisica",
@@ -60,8 +62,9 @@
             "onlySelected": "Solo gli enti selezionati",
             "endDate": "Termine Delega",
             "verificationCode": "Codice di Verifica",
-            "verificationCodeDescr": "Condividi questo codice con la persona delegata : dovrà inserirlo \n al primo accesso a Piattaforma Notifiche.",
-            "submit": "Invia la richiesta"
+            "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della notifica.",
+            "submit": "Invia la richiesta",
+            "mandatoryField": "Campi Obbligatori *"
         },
         "error": {
             "noConnection": "Connessione Interrotta",
