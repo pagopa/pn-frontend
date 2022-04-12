@@ -22,6 +22,7 @@ const VerificationCodeComponent = ({ code }: VerificationCodeProps) => (
           textAlign: 'center',
           marginRight: '8px',
         }}
+        data-testid="codeDigit"
       >
         <Typography color="primary" fontWeight={600}>
           {codeDigit}

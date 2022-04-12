@@ -72,7 +72,7 @@ const Notifiche = () => {
   }, [filters, pagination.size, pagination.page, sort]);
 
   return (
-    <Box style={{ padding: '20px' }}>
+    <Box sx={{ padding: '20px' }}>
       <TitleBox variantTitle="h4" title={t('title')}></TitleBox>
       {isMobile ? (
         <MobileNotifications

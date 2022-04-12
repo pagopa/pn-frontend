@@ -42,16 +42,16 @@ export const Menu = (props: any) => {
     if (props.menuType === 'delegates') {
       return [
         <MenuItem key="showCode" onClick={handleOpenVerificationCodeModal}>
-          {t('Mostra Codice')}
+          {t('deleghe.show')}
         </MenuItem>,
         <MenuItem key="revoke" onClick={handleOpenModalClick}>
-          {t('Revoca')}
+          {t('deleghe.revoke')}
         </MenuItem>,
       ];
     } else {
       return [
         <MenuItem key="reject" onClick={handleOpenModalClick}>
-          {t('Rifiuta')}
+          {t('deleghe.reject')}
         </MenuItem>,
       ];
     }
@@ -59,10 +59,10 @@ export const Menu = (props: any) => {
 
   return (
     <>
-      <IconButton onClick={handleClick}>
+      <IconButton onClick={handleClick} data-testid="delegationMenuIcon">
         <MoreVert fontSize={'small'} />
       </IconButton>
-      <MUIMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <MUIMenu anchorEl={anchorEl} open={open} onClose={handleClose} data-testid="delegationMenu">
         {getMenuItemElements()}
       </MUIMenu>
     </>

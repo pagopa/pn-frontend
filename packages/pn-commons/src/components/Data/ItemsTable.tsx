@@ -71,7 +71,7 @@ function ItemsTable({
   return (
     <Root>
       <TableContainer sx={{ marginBottom: '10px' }}>
-        <Table stickyHeader aria-label="Tabella lista notifiche">
+        <Table stickyHeader aria-label="Tabella di item">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -80,7 +80,6 @@ function ItemsTable({
                   align={column.align}
                   sx={{
                     width: column.width,
-                    backgroundColor: '#F2F2F2',
                     borderBottom: 'none',
                     fontWeight: 600,
                   }}

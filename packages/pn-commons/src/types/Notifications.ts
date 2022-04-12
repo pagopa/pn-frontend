@@ -8,6 +8,7 @@ export interface Notification {
   subject: string;
   notificationStatus: NotificationStatus;
   recipientId: string;
+  group?: string;
 }
 
 export interface GetNotificationsResponse {
