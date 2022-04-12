@@ -1,3 +1,4 @@
+import { formatDate } from '../services/date.service';
 import {
   DeliveryMode,
   INotificationDetailTimeline,
@@ -10,13 +11,14 @@ import {
   SendPaperDetails,
   NotificationDetailRecipient,
   DigitalDomicileType,
-} from './../types/NotificationDetail';
+  NotificationDetail,
+} from '../types/NotificationDetail';
 import { NotificationStatus } from '../types/NotificationStatus';
 
 /**
  * Returns the mapping between current notification status and its color, label and descriptive message.
  * @param  {NotificationStatus} status
- * @returns string
+ * @returns object
  */
 export function getNotificationStatusInfos(status: NotificationStatus): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
@@ -74,6 +76,13 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
         tooltip: 'Il destinatario ha letto la notifica',
         description: 'Il destinatario ha letto la notifica entro il termine stabilito',
       };
+    case NotificationStatus.VIEWED_AFTER_DEADLINE:
+      return {
+        color: 'success',
+        label: 'Visualizzata',
+        tooltip: 'Il destinatario ha visualizzato la notifica',
+        description: 'Il destinatario ha visualizzato la notifica',
+      };
     case NotificationStatus.CANCELED:
       return {
         color: 'warning',
@@ -103,23 +112,10 @@ export const NotificationAllowedStatus = [
   { value: NotificationStatus.UNREACHABLE, label: 'Destinatario irreperibile' },
 ];
 
-export const TimelineAllowedStatus = [
-  TimelineCategory.NOTIFICATION_PATH_CHOOSE,
-  TimelineCategory.SCHEDULE_ANALOG_WORKFLOW,
-  TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW,
-  TimelineCategory.SEND_DIGITAL_DOMICILE,
-  TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-  TimelineCategory.SEND_DIGITAL_FEEDBACK,
-  TimelineCategory.SEND_DIGITAL_DOMICILE_FAILURE,
-  TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
-  TimelineCategory.SEND_ANALOG_DOMICILE,
-  TimelineCategory.SEND_PAPER_FEEDBACK,
-];
-
 /**
  * Returns the mapping between current notification timeline status and its label and descriptive message.
  * @param  {TimelineCategory} status
- * @returns string
+ * @returns object
  */
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
@@ -128,7 +124,6 @@ export function getNotificationTimelineStatusInfos(
   label: string;
   description: string;
   linkText?: string;
-  linkDowloadPath?: string;
 } {
   const recipient = ricipients.find(
     (r) =>
@@ -228,4 +223,81 @@ export function getNotificationTimelineStatusInfos(
         description: 'Stato sconosciuto',
       };
   }
+}
+
+const TimelineAllowedStatus = [
+  TimelineCategory.NOTIFICATION_PATH_CHOOSE,
+  TimelineCategory.SCHEDULE_ANALOG_WORKFLOW,
+  TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW,
+  TimelineCategory.SEND_DIGITAL_DOMICILE,
+  TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
+  TimelineCategory.SEND_DIGITAL_FEEDBACK,
+  TimelineCategory.SEND_DIGITAL_DOMICILE_FAILURE,
+  TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
+  TimelineCategory.SEND_ANALOG_DOMICILE,
+  TimelineCategory.SEND_PAPER_FEEDBACK,
+];
+
+/**
+ * Parse notification detail repsonse before sent it to fe.
+ * @param  {NotificationDetail} notificationDetail
+ * @returns NotificationDetail
+ */
+export function parseNotificationDetail(
+  notificationDetail: NotificationDetail
+): NotificationDetail {
+  const parsedNotification = {
+    ...notificationDetail,
+    sentAt: formatDate(notificationDetail.sentAt),
+  };
+  /* eslint-disable functional/immutable-data */
+  /* eslint-disable functional/no-let */
+  // set which elements are visible
+  parsedNotification.timeline = parsedNotification.timeline.map((t) => ({
+    ...t,
+    hidden: !TimelineAllowedStatus.includes(t.category),
+  }));
+  let isEffectiveDateStatus = false;
+  // populate notification macro step with corresponding timeline micro steps
+  for (const status of parsedNotification.notificationStatusHistory) {
+    status.steps = [];
+    // find timeline steps that are linked with current status
+    for (const timelineElement of status.relatedTimelineElements) {
+      const step = parsedNotification.timeline.find(t => t.elementId === timelineElement);
+      if (step) {
+        status.steps.push(step);
+      }
+    }
+    // order step by time
+    status.steps.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    // change status if current is VIEWED and before there is a status EFFECTIVE_DATE
+    if (status.status === NotificationStatus.EFFECTIVE_DATE) {
+      isEffectiveDateStatus = true;
+    }
+    if (status.status === NotificationStatus.VIEWED && isEffectiveDateStatus) {
+      status.status = NotificationStatus.VIEWED_AFTER_DEADLINE;
+    }
+  }
+  // order elements by date
+  parsedNotification.notificationStatusHistory.sort(
+    (a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime()
+  );
+  parsedNotification.timeline.sort(
+    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+  );
+  /* eslint-enable functional/immutable-data */
+  /* eslint-enable functional/no-let */
+  return parsedNotification;
+}
+
+/**
+ * Get legalFact label based on timeline category.
+ * @param  {NotificationDetail} notificationDetail
+ * @returns NotificationDetail
+ */
+export function getLegalFactLabel(category: TimelineCategory, legalFactLabels: {attestation: string, receipt: string}): string {
+  if (category === TimelineCategory.SEND_PAPER_FEEDBACK) {
+    return legalFactLabels.receipt;
+  }
+  return legalFactLabels.attestation;
 }

@@ -36,6 +36,8 @@ export interface INotificationDetailTimeline {
     | SendDigitalDetails
     | SendPaperDetails;
   legalFactsIds?: Array<LegalFactId>;
+  // only fe
+  hidden?: boolean;
 }
 
 export interface SendPaperDetails {
@@ -201,6 +203,8 @@ export interface NotificationStatusHistory {
   status: NotificationStatus;
   activeFrom: string;
   relatedTimelineElements: Array<string>;
+  // only fe
+  steps?: Array<INotificationDetailTimeline>;
 }
 
 export enum TimelineCategory {
@@ -291,7 +295,3 @@ export interface NotificationDetailTableRow {
   label: string;
   value: ReactNode;
 }
-
-export interface NotificationDetailTimelineData extends NotificationStatusHistory {
-  steps: Array<INotificationDetailTimeline>
-};

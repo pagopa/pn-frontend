@@ -144,11 +144,10 @@ const NotificationDetail = () => {
         <Grid item lg={5} xs={12}>
           <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
             <NotificationDetailTimeline
-              timeline={notification.timeline}
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}
               title={t('detail.timeline-title', { ns: 'notifiche' })}
-              legalFactLabel={t('detail.legalfact', { ns: 'notifiche' })}
+              legalFactLabels={{attestation: t('detail.legalfact', { ns: 'notifiche' }), receipt: t('detail.receipt', { ns: 'notifiche' })}}
               clickHandler={legalFactDownloadHandler}
               historyButtonLabel={t('detail.show-history', {ns: 'notifiche'})}
               showMoreButtonLabel={t('detail.show-more', {ns: 'notifiche'})}

@@ -15,20 +15,22 @@ import {
 
 import { getDay, getMonthString, getTime } from '../../utils/date.utility';
 import {
+  getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
-} from '../../utils/status.utility';
+} from '../../utils/notification.utility';
 import {
-  NotificationDetailTimelineData,
   LegalFactId,
   INotificationDetailTimeline,
   NotificationDetailRecipient,
+  NotificationStatusHistory,
+  TimelineCategory,
 } from '../../types/NotificationDetail';
 
 type Props = {
-  timelineStep: NotificationDetailTimelineData;
+  timelineStep: NotificationStatusHistory;
   recipients: Array<NotificationDetailRecipient>;
-  legalFactLabel: string;
+  legalFactLabels: {attestation: string, receipt: string};
   clickHandler: (legalFactId: LegalFactId) => void;
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;
@@ -39,11 +41,39 @@ type Props = {
 };
 
 /**
+ * Timeline step component
+ * @param key unique key
+ * @param oppositeContent element on the left
+ * @param variant dot type
+ * @param content element on the right
+ * @param stepPosition step position
+ * @param size dot size
+ */
+const timelineStepCmp = (
+  key: string | undefined,
+  oppositeContent: ReactNode | undefined,
+  variant: 'outlined' | 'filled' | undefined,
+  content: ReactNode | undefined,
+  stepPosition: 'first' | 'middle' | 'last',
+  size: 'small' | 'default' = 'default'
+) => (
+  <TimelineNotificationItem key={key}>
+    <TimelineNotificationOppositeContent>{oppositeContent}</TimelineNotificationOppositeContent>
+    <TimelineNotificationSeparator>
+      <TimelineConnector sx={{ visibility: stepPosition === 'first' ? 'hidden' : 'visible' }} />
+      <TimelineNotificationDot variant={variant} size={size} />
+      <TimelineConnector sx={{ visibility: stepPosition === 'last' ? 'hidden' : 'visible' }} />
+    </TimelineNotificationSeparator>
+    <TimelineNotificationContent>{content}</TimelineNotificationContent>
+  </TimelineNotificationItem>
+);
+
+/**
  * Notification detail timeline
  * @param timelineStep data to show
  * @param recipients list of recipients
  * @param clickHandler function called when user clicks on the download button
- * @param legalFactLabel label of the download button
+ * @param legalFactLabels label of the download button
  * @param position step position
  * @param showHistoryButton show history button
  * @param historyButtonLabel label for history button
@@ -52,7 +82,7 @@ type Props = {
 const NotificationDetailTimelineStep = ({
   timelineStep,
   recipients,
-  legalFactLabel,
+  legalFactLabels,
   clickHandler,
   position = 'middle',
   showMoreButtonLabel,
@@ -62,33 +92,24 @@ const NotificationDetailTimelineStep = ({
   historyButtonClickHandler,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
-  const legalFactsIds: Array<LegalFactId> = [];
+  /* eslint-disable functional/no-let */
+  let legalFactsIds: Array<{file: LegalFactId, category: TimelineCategory}> = [];
+  let visibleSteps: Array<INotificationDetailTimeline> = [];
+  /* eslint-enable functional/no-let */
   const notificationStatusInfos = getNotificationStatusInfos(timelineStep.status);
 
-  for (const step of timelineStep.steps) {
-    if (step.legalFactsIds) {
-      legalFactsIds.push(...step.legalFactsIds);
-    }
-  }
+  if (timelineStep.steps) {
+    /* eslint-disable functional/immutable-data */
+    legalFactsIds = timelineStep.steps.reduce((arr, s) => {
+      if (s.legalFactsIds) {
+        return arr.concat(s.legalFactsIds.map(lf => ({file: lf, category: s.category})));
+      }
+      return arr;
+    }, [] as Array<{file: LegalFactId, category: TimelineCategory}>);
 
-  const timelineStepCmp = (
-    key: string | undefined,
-    oppositeContent: ReactNode | undefined,
-    variant: 'outlined' | 'filled' | undefined,
-    content: ReactNode | undefined,
-    stepPosition: 'first' | 'middle' | 'last',
-    size: 'small' | 'default' = 'default'
-  ) => (
-    <TimelineNotificationItem key={key}>
-      <TimelineNotificationOppositeContent>{oppositeContent}</TimelineNotificationOppositeContent>
-      <TimelineNotificationSeparator>
-        <TimelineConnector sx={{ visibility: stepPosition === 'first' ? 'hidden' : 'visible' }} />
-        <TimelineNotificationDot variant={variant} size={size} />
-        <TimelineConnector sx={{ visibility: stepPosition === 'last' ? 'hidden' : 'visible' }} />
-      </TimelineNotificationSeparator>
-      <TimelineNotificationContent>{content}</TimelineNotificationContent>
-    </TimelineNotificationItem>
-  );
+    visibleSteps = timelineStep.steps.filter(s => !s.hidden);
+    /* eslint-enable functional/immutable-data */
+  }
 
   const macroStep = timelineStepCmp(
     undefined,
@@ -128,13 +149,13 @@ const NotificationDetailTimelineStep = ({
           {legalFactsIds &&
             legalFactsIds.map((lf) => (
               <ButtonNaked
-                key={lf.key}
+                key={lf.file.key}
                 startIcon={<AttachFileIcon />}
-                onClick={() => clickHandler(lf)}
+                onClick={() => clickHandler(lf.file)}
                 color="primary"
                 sx={{ marginTop: '10px' }}
               >
-                {legalFactLabel}
+                {getLegalFactLabel(lf.category, legalFactLabels)}
               </ButtonNaked>
             ))}
         </Box>
@@ -188,8 +209,8 @@ const NotificationDetailTimelineStep = ({
           <Typography color="text.primary" fontSize={14} display="inline" variant="caption">
             {timelineStatusInfos.description}&nbsp;
           </Typography>
-          {timelineStatusInfos.linkText && (
-            <Typography fontSize={14} display="inline" variant="button" color="primary" sx={{cursor: "pointer"}}>
+          {(timelineStatusInfos.linkText && s.legalFactsIds) && (
+            <Typography fontSize={14} display="inline" variant="button" color="primary" sx={{cursor: "pointer"}} onClick={() => s.legalFactsIds && clickHandler(s.legalFactsIds[0])}>
               {timelineStatusInfos.linkText}
             </Typography>
           )}
@@ -203,8 +224,8 @@ const NotificationDetailTimelineStep = ({
   return (
     <Fragment>
       {macroStep}
-      {!showHistoryButton && timelineStep.steps.length > 0 && moreLessButton}
-      {!collapsed && timelineStep.steps.map((s) => microStep(s))}
+      {!showHistoryButton && visibleSteps.length > 0 && moreLessButton}
+      {!collapsed && visibleSteps.map((s) => microStep(s))}
     </Fragment>
   );
 };

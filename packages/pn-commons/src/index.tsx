@@ -125,14 +125,14 @@ import { calculatePages } from './utils/pagination.utility';
 import {
   getNotificationStatusInfos,
   NotificationAllowedStatus,
-  TimelineAllowedStatus
-} from './utils/status.utility';
+  parseNotificationDetail
+} from './utils/notification.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusInfos };
-export { TimelineAllowedStatus };
+export { parseNotificationDetail };
 export { createAppError };
 export { formatDate };
 export { calculatePages };

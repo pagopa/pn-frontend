@@ -5,7 +5,7 @@ import {
   LegalFactId,
   NotificationDetail,
   formatFiscalCode,
-  TimelineAllowedStatus
+  parseNotificationDetail
 } from '@pagopa-pn/pn-commons';
 import { apiClient } from '../axios';
 
@@ -66,20 +66,7 @@ export const NotificationsApi = {
   getSentNotification: (iun: string): Promise<NotificationDetail> =>
     apiClient.get<NotificationDetail>(`/delivery/notifications/sent/${iun}`).then((response) => {
       if (response.data) {
-        const dataToSend = {
-          ...response.data,
-          sentAt: formatDate(response.data.sentAt),
-        };
-        /* eslint-disable functional/immutable-data */
-        dataToSend.notificationStatusHistory.sort(
-          (a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime()
-        );
-        dataToSend.timeline.sort(
-          (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-        );
-        dataToSend.timeline = dataToSend.timeline.filter(t => TimelineAllowedStatus.includes(t.category as any));
-        /* eslint-enable functional/immutable-data */
-        return dataToSend;
+        return parseNotificationDetail(response.data);
       }
       return {} as NotificationDetail;
     }),

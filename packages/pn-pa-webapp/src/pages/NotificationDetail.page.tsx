@@ -172,12 +172,11 @@ const NotificationDetail = () => {
         <Grid item lg={5} xs={12}>
           <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
             <NotificationDetailTimeline
-              timeline={notification.timeline}
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}
               title="Stato della notifica"
               clickHandler={legalFactDownloadHandler}
-              legalFactLabel="Attestato opponibile a Terzi"
+              legalFactLabels={{attestation: "Attestato opponibile a Terzi", receipt: "Ricevuta"}}
               historyButtonLabel="Mostra storico"
               showMoreButtonLabel="Mostra di più"
               showLessButtonLabel="Mostra di meno"

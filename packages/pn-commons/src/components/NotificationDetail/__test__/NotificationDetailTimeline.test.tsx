@@ -1,76 +1,14 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import { getDay, getMonthString, getTime } from '../../../utils/date.utility';
-import {
-  DigitalDomicileType,
-  INotificationDetailTimeline,
-  NotificationDetailRecipient,
-  NotificationStatusHistory,
-  RecipientType,
-  TimelineCategory,
-} from '../../../types/NotificationDetail';
-import { NotificationStatus } from '../../../types/NotificationStatus';
 import * as hooks from '../../../hooks/IsMobile.hook';
-import { getNotificationStatusInfos } from '../../../utils/status.utility';
+import { getDay, getMonthString, getTime } from '../../../utils/date.utility';
+import { getNotificationStatusInfos } from '../../../utils/notification.utility';
+import { statusHistory, recipients, timeline } from '../../../utils/__test__/test-utils';   
 import NotificationDetailTimeline from '../NotificationDetailTimeline';
 
-const timeline: Array<INotificationDetailTimeline> = [
-  {
-    elementId: 'mocked-id-1',
-    timestamp: '2022-03-21T08:56:50.177Z',
-    category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-    details: {
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-      taxId: 'mocked-taxId',
-    }
-  },
-  {
-    elementId: 'mocked-id-2',
-    timestamp: '2022-01-15T08:56:50.177Z',
-    category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-    details: {
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-      taxId: 'mocked-taxId',
-    },
-  },
-];
-
-const statusHistory: Array<NotificationStatusHistory> = [
-  {
-    status: NotificationStatus.ACCEPTED,
-    activeFrom: '2022-03-21T08:56:50.177Z',
-    relatedTimelineElements: ['mocked-id-1'],
-  },
-  {
-    status: NotificationStatus.DELIVERED,
-    activeFrom: '2022-01-15T08:56:50.177Z',
-    relatedTimelineElements: ['mocked-id-2'],
-  },
-];
-
-const recipients: Array<NotificationDetailRecipient> = [
-  {
-    recipientType: RecipientType.PF,
-    taxId: 'mocked-taxId',
-    denomination: 'Nome Cognome',
-    digitalDomicile: {
-      type: DigitalDomicileType.EMAIL,
-      address: 'nome@cognome.mail'
-    },
-    physicalAddress: {
-      at: '',
-      address: 'mocked address',
-      addressDetails: '',
-      zip: '',
-      municipality: '',
-      province: '',
-      foreignState: ''
-    },
-    token: '',
-  },
-];
-
+statusHistory[0].steps = [timeline[0]];
+statusHistory[1].steps = [timeline[1]];
 const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
 
 const testTimelineRendering = async (container: HTMLElement) => {
@@ -108,11 +46,10 @@ describe('NotificationDetailTimeline Component', () => {
     const result = render(
       <NotificationDetailTimeline
         title="mocked-title"
-        timeline={timeline}
         recipients={recipients}
         statusHistory={statusHistory}
         clickHandler={jest.fn()}
-        legalFactLabel="mocked-legalFact-label"
+        legalFactLabels={{attestation: "mocked-legalFact-label", receipt: "mocked-recipient-label"}}
         historyButtonLabel="mocked-history-label"
         showLessButtonLabel="mocked-less-label"
         showMoreButtonLabel="mocked-more-label"
@@ -129,11 +66,10 @@ describe('NotificationDetailTimeline Component', () => {
     const result = render(
       <NotificationDetailTimeline
         title="mocked-title"
-        timeline={timeline}
         recipients={recipients}
         statusHistory={statusHistory}
         clickHandler={jest.fn()}
-        legalFactLabel="mocked-legalFact-label"
+        legalFactLabels={{attestation: "mocked-legalFact-label", receipt: "mocked-recipient-label"}}
         historyButtonLabel="mocked-history-label"
         showLessButtonLabel="mocked-less-label"
         showMoreButtonLabel="mocked-more-label"
@@ -158,11 +94,10 @@ describe('NotificationDetailTimeline Component', () => {
     const result = render(
       <NotificationDetailTimeline
         title="mocked-title"
-        timeline={timeline}
         recipients={recipients}
         statusHistory={statusHistory}
         clickHandler={jest.fn()}
-        legalFactLabel="mocked-legalFact-label"
+        legalFactLabels={{attestation: "mocked-legalFact-label", receipt: "mocked-recipient-label"}}
         historyButtonLabel="mocked-history-label"
         showLessButtonLabel="mocked-less-label"
         showMoreButtonLabel="mocked-more-label"
