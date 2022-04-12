@@ -9,25 +9,25 @@ import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeV
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-      t: (str: string) => str,
-    }),
+    t: (str: string) => str,
+  }),
 }));
 
 const mockedStore: Array<DigitalAddress> = [{
-    addressType: 'courtesy',
-    recipientId: 'recipient1',
-    senderId: 'default',
-    channelType: CourtesyChannelType.SMS,
-    value: '3331234567',
-    code: '12345',
-  },{
-    addressType: 'courtesy',
-    recipientId: 'recipient1',
-    senderId: 'default',
-    channelType: CourtesyChannelType.EMAIL,
-    value: 'test@test.com',
-    code: '54321',
-  },
+  addressType: 'courtesy',
+  recipientId: 'recipient1',
+  senderId: 'default',
+  channelType: CourtesyChannelType.SMS,
+  value: '3331234567',
+  code: '12345',
+}, {
+  addressType: 'courtesy',
+  recipientId: 'recipient1',
+  senderId: 'default',
+  channelType: CourtesyChannelType.EMAIL,
+  value: 'test@test.com',
+  code: '54321',
+},
 ];
 
 describe('CourtesyContactsList Component', () => {
@@ -38,8 +38,8 @@ describe('CourtesyContactsList Component', () => {
   const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
   useDispatchSpy.mockReturnValue(mockDispatchFn as any);
   // const mockActionFn = jest.fn();
-  
-  it('renders correctly with empy store', async () => {
+
+  it('renders correctly with empty store', async () => {
     mockUseAppSelector.mockReturnValueOnce([]);
     await act(async () => {
       render(
@@ -48,7 +48,7 @@ describe('CourtesyContactsList Component', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-    
+
     const textBoxes = await screen.findAllByRole('textbox');
     expect(textBoxes).toHaveLength(2);
 
@@ -82,7 +82,7 @@ describe('CourtesyContactsList Component', () => {
     expect(phoneNumber).toBeInTheDocument();
     const email = screen.queryByText(mockedStore[1].value);
     expect(email).toBeInTheDocument();
-    
+
     const buttons = await screen.findAllByRole('button');
     expect(buttons[0]).toBeEnabled();
     expect(buttons[1]).toBeEnabled();

@@ -18,6 +18,7 @@ describe('CourtesyContactItem component', () => {
   let result: RenderResult | undefined;
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
+  let deleteMockActionFn: jest.Mock;
   
   describe('test component having type "phone"', () => {
     const VALID_PHONE = "3331234567";
@@ -237,6 +238,57 @@ describe('CourtesyContactItem component', () => {
         });
       });
     });
+
+    describe('delete an existing phone number', () => {
+      beforeEach(async () => {
+        deleteMockActionFn = jest.fn();
+        const deleteActionSpy = jest.spyOn(actions, 'deleteCourtesyAddress');
+        deleteActionSpy.mockImplementation(deleteMockActionFn as any);
+
+        await act(async () => {
+          result = render(
+            <DigitalContactsCodeVerificationProvider>
+              <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.PHONE} value={VALID_PHONE} />
+            </DigitalContactsCodeVerificationProvider>
+          );
+        });
+      });
+
+      test('deletes phone number', async () => {
+        const phoneText = screen.getByText(VALID_PHONE);
+        expect(phoneText).toBeInTheDocument();
+        
+        const deleteButton = screen.getByRole('button', { name: 'button.rimuovi'});
+        
+        fireEvent.click(deleteButton);
+
+        // find confirmation dialog and its buttons
+        const dialogBox = screen.getByRole('dialog', { name: /courtesy-contacts.remove\b/});
+        expect(dialogBox).toBeVisible();
+        const cancelButton = screen.getByRole('button', { name: 'button.annulla' });
+        const confirmButton = screen.getByRole('button', { name: 'button.conferma' });
+
+        // cancel delete and verify the dialog hides and the value is still on the page
+        fireEvent.click(cancelButton);
+        expect(dialogBox).not.toBeVisible();
+        
+        // delete the number
+        fireEvent.click(deleteButton);
+        expect(dialogBox).toBeVisible();
+
+        fireEvent.click(confirmButton);
+        await waitFor(() => {
+          expect(dialogBox).not.toBeVisible();
+          expect(mockDispatchFn).toBeCalledTimes(1);
+          expect(deleteMockActionFn).toBeCalledTimes(1);
+          expect(deleteMockActionFn).toBeCalledWith({
+            recipientId: 'mocked-recipient',
+            senderId: 'default',
+            channelType: CourtesyChannelType.SMS
+          });
+        });
+      });
+    });
   });
   
   describe('testing component having type "email"', () => {
@@ -453,6 +505,57 @@ describe('CourtesyContactItem component', () => {
         });
         await waitFor(() => {
           expect(dialog).not.toBeInTheDocument();
+        });
+      });
+    });
+
+    describe('delete an existing phone number', () => {
+      beforeEach(async () => {
+        deleteMockActionFn = jest.fn();
+        const deleteActionSpy = jest.spyOn(actions, 'deleteCourtesyAddress');
+        deleteActionSpy.mockImplementation(deleteMockActionFn as any);
+
+        await act(async () => {
+          result = render(
+            <DigitalContactsCodeVerificationProvider>
+              <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.EMAIL} value={VALID_EMAIL} />
+            </DigitalContactsCodeVerificationProvider>
+          );
+        });
+      });
+
+      test('deletes phone number', async () => {
+        const phoneText = screen.getByText(VALID_EMAIL);
+        expect(phoneText).toBeInTheDocument();
+        
+        const deleteButton = screen.getByRole('button', { name: 'button.rimuovi'});
+        
+        fireEvent.click(deleteButton);
+
+        // find confirmation dialog and its buttons
+        const dialogBox = screen.getByRole('dialog', { name: /courtesy-contacts.remove\b/});
+        expect(dialogBox).toBeVisible();
+        const cancelButton = screen.getByRole('button', { name: 'button.annulla' });
+        const confirmButton = screen.getByRole('button', { name: 'button.conferma' });
+
+        // cancel delete and verify the dialog hides and the value is still on the page
+        fireEvent.click(cancelButton);
+        expect(dialogBox).not.toBeVisible();
+        
+        // delete the number
+        fireEvent.click(deleteButton);
+        expect(dialogBox).toBeVisible();
+
+        fireEvent.click(confirmButton);
+        await waitFor(() => {
+          expect(dialogBox).not.toBeVisible();
+          expect(mockDispatchFn).toBeCalledTimes(1);
+          expect(deleteMockActionFn).toBeCalledTimes(1);
+          expect(deleteMockActionFn).toBeCalledWith({
+            recipientId: 'mocked-recipient',
+            senderId: 'default',
+            channelType: CourtesyChannelType.EMAIL
+          });
         });
       });
     });
