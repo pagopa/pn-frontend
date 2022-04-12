@@ -65,6 +65,7 @@ const delegationsSlice = createSlice({
         delegator.mandateId === action.payload.id ? { ...delegator, status: 'active' } : delegator
       );
       state.acceptModalState.open = false;
+      state.acceptModalState.error = false;
     });
     builder.addCase(acceptDelegation.rejected, (state) => {
       state.acceptModalState.error = true;
@@ -94,6 +95,7 @@ const delegationsSlice = createSlice({
       state.acceptModalState.id = action.payload.id;
       state.acceptModalState.name = action.payload.name;
       state.acceptModalState.open = true;
+      state.acceptModalState.error = false;
     });
     builder.addCase(closeAcceptModal, (state) => {
       state.acceptModalState.open = false;

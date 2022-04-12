@@ -1,3 +1,5 @@
+import { Delegation } from '../types';
+
 export const mockCreateDelegation = {
   delegate: {
     firstName: 'Davide',
@@ -165,5 +167,34 @@ export const mockDelegationsState = {
   sortDelegates: {
     orderBy: '',
     order: 'asc',
+  },
+};
+
+export const initialState = {
+  delegatesError: false,
+  delegatorsError: false,
+  delegations: {
+    delegators: [] as Array<Delegation>,
+    delegates: [] as Array<Delegation>,
+    isCompany: false,
+  },
+  modalState: {
+    open: false,
+    id: '',
+    type: '',
+  },
+  acceptModalState: {
+    open: false,
+    id: '',
+    name: '',
+    error: false,
+  },
+  sortDelegators: {
+    orderBy: '',
+    order: 'asc' as 'asc' | 'desc',
+  },
+  sortDelegates: {
+    orderBy: '',
+    order: 'asc' as 'asc' | 'desc',
   },
 };
