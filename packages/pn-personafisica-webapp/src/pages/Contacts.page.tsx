@@ -51,7 +51,7 @@ const Contacts = () => {
             <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
           </Grid>
         </Grid>
-        {digitalAddresses.legal.length > 0 && (
+        {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
           <Box sx={{ marginTop: '30px' }}>
             <SpecialContacts
               recipientId={recipientId}

@@ -134,7 +134,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   }, []);
 
   useEffect(() => {
-    const addresses: Array<Address> = legalAddresses
+    const addressesList: Array<Address> = legalAddresses
       .filter((a) => a.senderId !== 'default')
       .map((a) => ({
         senderId: a.senderId,
@@ -151,18 +151,18 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
     for (const address of courtesyAddresses.filter((a) => a.senderId !== 'default')) {
       // check if sender already exists in the list
-      const addressIndex = addresses.findIndex((a) => a.senderId === address.senderId);
+      const addressIndex = addressesList.findIndex((a) => a.senderId === address.senderId);
       const newAddress = getAddress(address);
       if (addressIndex === -1) {
-        addresses.push(newAddress);
+        addressesList.push(newAddress);
       } else {
-        addresses[addressIndex].phone = newAddress.phone;
-        addresses[addressIndex].mail = newAddress.mail;
+        addressesList[addressIndex].phone = newAddress.phone;
+        addressesList[addressIndex].mail = newAddress.mail;
       }
     }
     /* eslint-enable functional/immutable-data */
 
-    setAddresses(addresses);
+    setAddresses(addressesList);
   }, [legalAddresses, courtesyAddresses]);
 
   return (

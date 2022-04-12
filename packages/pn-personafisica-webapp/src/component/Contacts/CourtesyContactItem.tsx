@@ -1,7 +1,7 @@
 import { Close } from '@mui/icons-material';
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, IconButton, TextField, Typography } from '@mui/material';
 import { ChangeEvent, Fragment, useEffect, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
@@ -34,7 +34,7 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
   const { t } = useTranslation(['common', 'recapiti']);
 
   const digitalDomicileType = type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS;
-  const { setProps, handleCodeVerification } = useDigitalContactsCodeVerificationContext();
+  const { initValidation } = useDigitalContactsCodeVerificationContext();
   const [mode, setMode] = useState<CourtesyMode>(value === '' ? CourtesyMode.NEW : CourtesyMode.SHOW);
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
 
@@ -83,37 +83,7 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
   };
 
   const handleAssociation = () => {
-    setProps({
-      title: t(`courtesy-contacts.${type}-verify`, { ns: 'recapiti' }) + ` ${formik.values.field}`,
-      subtitle: <Trans i18nKey={`courtesy-contacts.${type}-verify-descr`} ns="recapiti" />,
-      initialValues: new Array(5).fill(''),
-      codeSectionTitle: t(`courtesy-contacts.insert-code`, { ns: 'recapiti' }),
-      codeSectionAdditional: (
-        <Box>
-          <Typography variant="body2" display="inline">
-            {t(`courtesy-contacts.${type}-new-code`, { ns: 'recapiti' })}&nbsp;
-          </Typography>
-          <Typography
-            variant="body2"
-            display="inline"
-            color="primary"
-            onClick={() => handleCodeVerification(undefined, true)}
-            sx={{ cursor: 'pointer' }}
-          >
-            {t(`courtesy-contacts.new-code-link`, { ns: 'recapiti' })}.
-          </Typography>
-        </Box>
-      ),
-      cancelLabel: t('button.annulla'),
-      confirmLabel: t('button.conferma'),
-      errorMessage: t(`courtesy-contacts.wrong-code`, { ns: 'recapiti' }),
-      recipientId,
-      senderId: 'default',
-      digitalDomicileType,
-      value: formik.values.field,
-      successMessage: t(`courtesy-contacts.${type}-added-successfully`, { ns: 'recapiti' }),
-      actionToBeDispatched: createOrUpdateCourtesyAddress,
-    });
+    initValidation(digitalDomicileType, formik.values.field, recipientId, 'default');
   };
 
   const handleDiscardChanges = () => {
