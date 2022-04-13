@@ -4,6 +4,7 @@ import { DigitalAddresses, DigitalAddress } from './../../models/contacts';
 import {
   createOrUpdateCourtesyAddress,
   createOrUpdateLegalAddress,
+  deleteCourtesyAddress,
   deleteLegalAddress,
   getDigitalAddresses,
   resetContactsState,
@@ -60,6 +61,14 @@ const contactsSlice = createSlice({
       if (action.payload) {
         state.digitalAddresses.legal = state.digitalAddresses.legal.filter(
           (l) => l.senderId !== action.payload
+        );
+      }
+    });
+    builder.addCase(deleteCourtesyAddress.fulfilled, (state, action) => {
+      // remove digital address
+      if (action.payload) {
+        state.digitalAddresses.courtesy = state.digitalAddresses.courtesy.filter(
+          (address) => address.senderId !== action.payload || address.channelType !== action.meta.arg.channelType
         );
       }
     });

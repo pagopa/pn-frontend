@@ -7,7 +7,8 @@ import * as yup from 'yup';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { CourtesyChannelType } from '../../models/contacts';
-import { createOrUpdateCourtesyAddress } from '../../redux/contact/actions';
+import { createOrUpdateCourtesyAddress, deleteCourtesyAddress } from '../../redux/contact/actions';
+import { useAppDispatch } from '../../redux/hooks';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 export enum CourtesyFieldType {
@@ -28,7 +29,7 @@ interface Props {
 }
 
 const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
-  // console.log(`[RENDERING CourtesyContactItem Component] ${type}`);
+  const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['common', 'recapiti']);
 
@@ -57,7 +58,7 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
     },
     validationSchema:
       type === CourtesyFieldType.EMAIL ? emailValidationSchema : phoneValidationSchema,
-    onSubmit: () => {},
+    onSubmit: () => { },
   });
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
 
   const saveDataHandler = () => {
     if (formik.isValid) {
-      if(mode === CourtesyMode.EDIT && !enteredValueChanged()) {
+      if (mode === CourtesyMode.EDIT && !enteredValueChanged()) {
         setMode(CourtesyMode.SHOW);
       } else {
         handleAssociation();
@@ -126,19 +127,25 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
 
   const clickDeleteHandler = () => {
     // 2 DO
+    setIsConfirmationModalVisible(true);
+  };
+
+  const handleRemoveContact = () => {
+    setIsConfirmationModalVisible(false);
+    void dispatch(deleteCourtesyAddress({ recipientId, senderId: 'default', channelType: type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS }));
   };
 
   const getMobileVersion = () => {
     // show mode
-    if(mode === CourtesyMode.SHOW) {
+    if (mode === CourtesyMode.SHOW) {
       return (
         <Fragment>
-          <Grid item lg={7} xs={8}>
+          <Grid item xs={8}>
             <Typography variant="body2" display="inline">
               {value}&nbsp;
             </Typography>
           </Grid>
-          <Grid item lg={5} xs={12}>
+          <Grid item xs={12}>
             <ButtonNaked color="primary" sx={{ marginRight: '10px' }} onClick={clickDeleteHandler}>
               {t('button.rimuovi')}
             </ButtonNaked>
@@ -147,10 +154,10 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
         </Fragment>
       );
     } else {
-    // edit mode
-      return(
+      // edit mode
+      return (
         <Fragment>
-          <Grid item lg={7} xs={12}>
+          <Grid item xs={12}>
             <TextField
               id="field"
               name="field"
@@ -165,12 +172,12 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
               fullWidth
             />
           </Grid>
-          <Grid item lg={5} xs={12} alignItems="right">
+          <Grid item xs={12} alignItems="right">
             {mode === CourtesyMode.NEW ?
               <Button variant="outlined" onClick={saveDataHandler} disabled={!formik.isValid} fullWidth>
                 {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
               </Button>
-            :
+              :
               <Fragment>
                 <ButtonNaked color="primary" sx={{ marginRight: '10px' }} onClick={clickDeleteHandler} >
                   {t('button.rimuovi')}
@@ -186,19 +193,19 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
 
   const getDeskstopVersion = () => {
     // show mode
-    const fieldWidth: number = mode === CourtesyMode.EDIT ? 6 : 7; 
-    if(mode === CourtesyMode.SHOW) {
+    const fieldWidth: number = mode === CourtesyMode.EDIT ? 6 : 7;
+    if (mode === CourtesyMode.SHOW) {
       return (
         <Fragment>
-          <Grid item lg={7} xs={8}>
-            <IconButton aria-label="Elimina">
+          <Grid item lg={7}>
+            <IconButton aria-label={t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })} onClick={clickDeleteHandler} >
               <Close />
             </IconButton>
-            <Typography variant="body2" display="inline"  sx={{ marginLeft: '1rem' }}>
+            <Typography variant="body2" display="inline" sx={{ marginLeft: '1rem' }}>
               {value}&nbsp;
             </Typography>
           </Grid>
-          <Grid item lg={5} xs={12}>
+          <Grid item lg={5}>
             <Button color="primary" onClick={clickEditHandler} fullWidth>
               {t('button.modifica')}
             </Button>
@@ -206,17 +213,17 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
         </Fragment>
       );
     } else {
-    // edit mode
-      return(
+      // edit mode
+      return (
         <Fragment>
           {mode === CourtesyMode.EDIT &&
-          <Grid item lg={1} xs={12}>
-            <IconButton aria-label="Elimina">
-              <Close />
-            </IconButton>
-          </Grid>
+            <Grid item lg={1}>
+              <IconButton aria-label={t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })} onClick={clickDeleteHandler} >
+                <Close />
+              </IconButton>
+            </Grid>
           }
-          <Grid item lg={fieldWidth} xs={12}>
+          <Grid item lg={fieldWidth}>
             <TextField
               id="field"
               name="field"
@@ -231,12 +238,12 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
               fullWidth
             />
           </Grid>
-          <Grid item lg={5} xs={12} alignItems="right">
+          <Grid item lg={5} alignItems="right">
             {mode === CourtesyMode.NEW ?
               <Button variant="outlined" onClick={saveDataHandler} disabled={!formik.isValid} fullWidth>
                 {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
               </Button>
-            :
+              :
               <Button color="primary" onClick={saveDataHandler} disabled={!formik.isValid} fullWidth>
                 {t('button.salva')}
               </Button>
@@ -248,23 +255,23 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
   };
 
   return <Fragment>
-      {isMobile ? getMobileVersion() : getDeskstopVersion()}
-      <Dialog
-        open={isConfirmationModalVisible}
-        onClose={handleDiscardChanges}
-        aria-labelledby="dialog-title"
-        aria-describedby="dialog-description"
-      >
-        <DialogTitle id="dialog-title">{t(`legal-contacts.remove-${type}-title`, { ns: 'recapiti' })}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="dialog-description">{t(`legal-contacts.remove-${type}-message`, { value: formik.values.field, ns: 'recapiti'})}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDiscardChanges} variant="outlined">{t('button.annulla')}</Button>
-          <Button onClick={handleAssociation} variant="contained">{t('button.conferma')}</Button>
-        </DialogActions>
-      </Dialog>
-    </Fragment>;
+    {isMobile ? getMobileVersion() : getDeskstopVersion()}
+    <Dialog
+      open={isConfirmationModalVisible}
+      onClose={handleDiscardChanges}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+    >
+      <DialogTitle id="dialog-title">{t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="dialog-description">{t(`courtesy-contacts.remove-${type}-message`, { value: formik.values.field, ns: 'recapiti' })}</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleDiscardChanges} variant="outlined">{t('button.annulla')}</Button>
+        <Button onClick={handleRemoveContact} variant="contained">{t('button.conferma')}</Button>
+      </DialogActions>
+    </Dialog>
+  </Fragment>;
 };
 
 export default CourtesyContactItem;
