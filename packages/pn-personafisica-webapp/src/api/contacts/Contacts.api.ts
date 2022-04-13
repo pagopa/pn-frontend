@@ -150,7 +150,25 @@ export const ContactsApi = {
   ): Promise<string> =>
     /*
     apiClient
-      .delete<string>(`/address-book/v1/digital-address/${recipientId}/legal/${senderId}/${channelType}`)
+      .delete<string>(`/address-book/v1/digital-address/${recipientId}/courtesy/${senderId}/${channelType}`)
+      .then(() => senderId),
+    */
+    new Promise((resolve) => {
+      resolve(senderId);
+    }),
+  /*
+    * Remove current user digital address
+    * @param  {string} recipientId
+    * @returns Promise
+    */
+  deleteCourtesyAddress: (
+    _recipientId: string,
+    senderId: string,
+    _channelType: CourtesyChannelType
+  ): Promise<string> =>
+    /*
+    apiClient
+      .delete<string>(`/address-book/v1/digital-address/${recipientId}/courtesy/${senderId}/${channelType}`)
       .then(() => senderId),
     */
     new Promise((resolve) => {
