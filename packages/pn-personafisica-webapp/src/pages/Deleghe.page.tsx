@@ -13,12 +13,14 @@ import {
   getDelegators,
   closeAcceptModal,
   acceptDelegation,
+  resetDelegationsState,
 } from '../redux/delegation/actions';
 import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
 import MobileDelegates from '../component/Deleghe/MobileDelegates';
 import MobileDelegators from '../component/Deleghe/MobileDelegators';
 import Delegates from '../component/Deleghe/Delegates';
 import Delegators from '../component/Deleghe/Delegators';
+import { getNumberDelegator } from '../redux/auth/actions';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -51,13 +53,18 @@ const Deleghe = () => {
     dispatch(closeAcceptModal());
   };
 
-  const handleConfirm = (code: Array<string>) => {
-    void dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
+  const handleAccept = async (code: Array<string>) => {
+    await dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
+    void dispatch(getNumberDelegator);
   };
 
   useEffect(() => {
     void dispatch(getDelegates());
     void dispatch(getDelegators());
+
+    return () => {
+      dispatch(resetDelegationsState);
+    };
   }, []);
 
   return (
@@ -71,7 +78,7 @@ const Deleghe = () => {
           handleClose={handleCloseAcceptModal}
           cancelCallback={handleCloseAcceptModal}
           cancelLabel={t('deleghe.close')}
-          confirmCallback={handleConfirm}
+          confirmCallback={handleAccept}
           confirmLabel={t('deleghe.accept')}
           codeSectionTitle={t('deleghe.verification_code')}
           hasError={acceptError}
