@@ -12,40 +12,43 @@ import {
   setDelegatesSorting,
   openAcceptModal,
   closeAcceptModal,
+  resetDelegationsState,
 } from './actions';
 import { Delegation } from './types';
+
+const initialState = {
+  delegatesError: false,
+  delegatorsError: false,
+  delegations: {
+    delegators: [] as Array<Delegation>,
+    delegates: [] as Array<Delegation>,
+    isCompany: false,
+  },
+  modalState: {
+    open: false,
+    id: '',
+    type: '',
+  },
+  acceptModalState: {
+    open: false,
+    id: '',
+    name: '',
+    error: false,
+  },
+  sortDelegators: {
+    orderBy: '',
+    order: 'asc' as 'asc' | 'desc',
+  },
+  sortDelegates: {
+    orderBy: '',
+    order: 'asc' as 'asc' | 'desc',
+  },
+};
 
 /* eslint-disable functional/immutable-data */
 const delegationsSlice = createSlice({
   name: 'delegationsSlice',
-  initialState: {
-    delegatesError: false,
-    delegatorsError: false,
-    delegations: {
-      delegators: [] as Array<Delegation>,
-      delegates: [] as Array<Delegation>,
-      isCompany: false,
-    },
-    modalState: {
-      open: false,
-      id: '',
-      type: '',
-    },
-    acceptModalState: {
-      open: false,
-      id: '',
-      name: '',
-      error: false,
-    },
-    sortDelegators: {
-      orderBy: '',
-      order: 'asc' as 'asc' | 'desc',
-    },
-    sortDelegates: {
-      orderBy: '',
-      order: 'asc' as 'asc' | 'desc',
-    },
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getDelegates.fulfilled, (state, action) => {
@@ -120,6 +123,7 @@ const delegationsSlice = createSlice({
         false
       );
     });
+    builder.addCase(resetDelegationsState, () => initialState);
   },
 });
 
