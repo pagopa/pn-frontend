@@ -24,10 +24,6 @@ describe('delegation redux state tests', () => {
     const state = store.getState().delegationsState;
     expect(state).toEqual(initialState);
   });
-  it('checks the initial state', () => {
-    const state = store.getState().delegationsState;
-    expect(state).toEqual(initialState);
-  });
 
   it('should be able to fetch the delegates', async () => {
     const apiSpy = jest.spyOn(DelegationsApi, 'getDelegates');
