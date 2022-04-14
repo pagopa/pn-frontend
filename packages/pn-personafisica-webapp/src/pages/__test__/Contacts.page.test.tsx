@@ -12,10 +12,11 @@ jest.mock('react-i18next', () => ({
       t: (str: string) => str,
     };
   },
-  Trans: () => 'legal-contacts.pec-verify-descr',
+  Trans: (props: {i18nKey: string}) => props.i18nKey,
 }));
 
 jest.mock('../../component/Contacts/InsertLegalContact', () => () => <div>InsertLegalContact</div>);
+jest.mock('../../component/Contacts/CourtesyContacts', () => () => <div>CourtesyContacts</div>);
 
 describe('Contacts page', () => {
 
@@ -51,6 +52,7 @@ describe('Contacts page', () => {
     expect(result.container).toHaveTextContent(/title/i);
     expect(result.container).toHaveTextContent(/subtitle/i);
     expect(result.container).toHaveTextContent(/InsertLegalContact/i);
+    expect(result.container).toHaveTextContent(/CourtesyContacts/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-recipientId');

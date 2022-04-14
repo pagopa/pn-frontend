@@ -20,6 +20,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
+import { phoneRegExp } from '../../utils/contacts.utility';
 import DigitalContactsCard from './DigitalContactsCard';
 import SpecialContactElem from './SpecialContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
@@ -58,7 +59,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     ],
     []
   );
-  const phoneRegExp = useMemo(() => /^(38[890]|34[7-90]|36[680]|33[3-90]|32[89])\d{7}$/, []);
   const listHeaders = useMemo(
     () => [
       {
@@ -356,7 +356,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                     key={a.senderId}
                     address={a}
                     senders={senders}
-                    phoneRegExp={phoneRegExp}
                     recipientId={recipientId}
                   />
                 ))}
@@ -369,7 +368,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 <SpecialContactElem
                   address={a}
                   senders={senders}
-                  phoneRegExp={phoneRegExp}
                   recipientId={recipientId}
                 />
               </CardContent>

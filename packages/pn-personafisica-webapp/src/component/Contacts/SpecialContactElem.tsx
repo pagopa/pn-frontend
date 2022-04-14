@@ -6,6 +6,7 @@ import { TableCell, TableRow, TextField, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { phoneRegExp } from '../../utils/contacts.utility';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
@@ -16,7 +17,6 @@ type Props = {
     pec?: string;
   };
   senders: Array<{ id: string; value: string }>;
-  phoneRegExp: RegExp;
   recipientId: string;
 };
 
@@ -27,7 +27,7 @@ type Field = {
   labelRoot: string;
 };
 
-const SpecialContactElem = memo(({ address, senders, phoneRegExp, recipientId }: Props) => {
+const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
 
@@ -105,7 +105,7 @@ const SpecialContactElem = memo(({ address, senders, phoneRegExp, recipientId }:
   const jsxField = (f: Field) => (
     <Fragment>
       {address[f.id] && (
-        <form>
+        <form data-testid="specialContactForm">
           <DigitalContactElem
             recipientId={recipientId}
             senderId={address.senderId}

@@ -6,9 +6,11 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
+
 import { CourtesyChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import { phoneRegExp } from '../../utils/contacts.utility';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 export enum CourtesyFieldType {
@@ -49,7 +51,7 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
     field: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(/^\d{9,10}$/, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+      .matches(phoneRegExp, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
   });
 
   const formik = useFormik({

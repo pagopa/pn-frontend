@@ -17,7 +17,7 @@ jest.mock('react-i18next', () => ({
       t: (str: string) => str,
     };
   },
-  Trans: () => 'legal-contacts.pec-verify-descr',
+  Trans: (props: {i18nKey: string}) => props.i18nKey,
 }));
 
 const Wrapper = ({ children }: { children: ReactNode }) => (
