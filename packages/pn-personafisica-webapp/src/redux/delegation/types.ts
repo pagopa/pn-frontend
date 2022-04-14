@@ -28,9 +28,7 @@ export interface Delegate extends IDelegation {
   delegate: Person;
 }
 
-
 export type Delegation = Delegator | Delegate;
-
 
 export interface OrganizationId {
   id: string;
@@ -90,4 +88,3 @@ export interface CreateDelegationResponse {
     uniqueIdentifier: string;
   }>;
 }
-
