@@ -148,7 +148,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
       {children}
-      <CodeModal
+      {!_.isEqual(props, initialProps) && <CodeModal
         title={
           t(`${props.labelRoot}.${props.labelType}-verify`, { ns: 'recapiti' }) + ` ${props.value}`
         }
@@ -181,7 +181,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         hasError={codeNotValid}
         errorMessage={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
-      />
+      />}
     </DigitalContactsCodeVerificationContext.Provider>
   );
 };

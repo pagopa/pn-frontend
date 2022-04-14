@@ -15,7 +15,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import { deleteLegalAddress } from '../../redux/contact/actions';
+import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
@@ -81,7 +81,9 @@ const DigitalContactElem = memo(
       handleModalClose();
       if (contactType === LegalChannelType.PEC) {
         void dispatch(deleteLegalAddress({ recipientId, senderId, channelType: contactType }));
+        return;
       }
+      void dispatch(deleteCourtesyAddress({ recipientId, senderId, channelType: contactType as CourtesyChannelType }));
     };
 
     const editHandler = () => {

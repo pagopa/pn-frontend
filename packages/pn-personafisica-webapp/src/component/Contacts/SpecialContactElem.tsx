@@ -49,13 +49,13 @@ const SpecialContactElem = memo(({ address, senders, phoneRegExp, recipientId }:
         id: 'phone',
         contactType: CourtesyChannelType.SMS,
         label: t('special-contacts.phone', { ns: 'recapiti' }),
-        labelRoot: 'special-contacts',
+        labelRoot: 'courtesy-contacts',
       },
       {
         id: 'mail',
         contactType: CourtesyChannelType.EMAIL,
         label: t('special-contacts.mail', { ns: 'recapiti' }),
-        labelRoot: 'special-contacts',
+        labelRoot: 'courtesy-contacts',
       },
     ],
     []
@@ -134,7 +134,7 @@ const SpecialContactElem = memo(({ address, senders, phoneRegExp, recipientId }:
             saveDisabled={!!formik.errors[f.id]}
             removeModalTitle={t(`${f.labelRoot}.remove-${f.id}-title`, { ns: 'recapiti' })}
             removeModalBody={t(`${f.labelRoot}.remove-${f.id}-message`, {
-              pec: formik.values[f.id],
+              value: formik.values[f.id],
               ns: 'recapiti',
             })}
             value={formik.values[f.id]}

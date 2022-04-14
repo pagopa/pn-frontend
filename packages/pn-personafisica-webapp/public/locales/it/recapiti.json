@@ -26,7 +26,7 @@
     "pec-added-successfully": "PEC associata correttamente",
     "pec-added": "PEC associata",
     "remove-pec-title": "Rimuovi PEC",
-    "remove-pec-message": "Confermi di voler rimuovere l'inidirizzo PEC {{pec}}?"
+    "remove-pec-message": "Confermi di voler rimuovere l'inidirizzo PEC {{value}}?"
   },
   "courtesy-contacts": {
     "title": "Recapito di cortesia",

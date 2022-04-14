@@ -7,7 +7,7 @@ import * as yup from 'yup';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { CourtesyChannelType } from '../../models/contacts';
-import { createOrUpdateCourtesyAddress, deleteCourtesyAddress } from '../../redux/contact/actions';
+import { deleteCourtesyAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
@@ -140,6 +140,7 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
                 ns: 'recapiti',
               })}
               fullWidth
+              type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
             />
           </Grid>
           <Grid item xs={12} alignItems="right">
@@ -206,6 +207,7 @@ const CourtesyContactItem: React.FC<Props> = ({ recipientId, type, value }) => {
                 ns: 'recapiti',
               })}
               fullWidth
+              type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
             />
           </Grid>
           <Grid item lg={5} alignItems="right">
