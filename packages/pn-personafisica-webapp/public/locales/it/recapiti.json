@@ -1,6 +1,8 @@
 {
   "title": "I tuoi dati",
-  "subtitle": "In questa pagina, puoi indicare e modificare i recapiti a cui vuoi ricevere le tue notifiche per via digitale.",
+  "subtitle": "Qui puoi indicare e modificare i recapiti a cui vuoi ricevere le tue notifiche per via digitale.",
+  "general-contacts-title": "Recapiti generali",
+  "special-contacts-title": "Recapiti speciali",
   "legal-contacts": {
     "title": "Recapito legale",
     "subtitle": "Ricevi le notifiche per via digitale",
@@ -18,7 +20,7 @@
     "pec-verify": "Verifica PEC",
     "pec-verify-descr": "Abbiamo inviato un codice al numero di cellulare indicato. Il codice è <strong>valido per 10 minuti</strong>.",
     "insert-code": "Inserisci codice",
-    "new-code": "Non l'hai ricevuto? Controlla di aver inserito la email corretta oppure",
+    "pec-new-code": "Non l'hai ricevuto? Controlla di aver inserito la email corretta oppure",
     "new-code-link": "genera un nuovo codice",
     "wrong-code": "Il codice inserito non è valido",
     "pec-added-successfully": "PEC associata correttamente",
@@ -56,9 +58,9 @@
     "remove-phone-message": "Confermi di voler rimuovere il numero di cellulare {{value}}?"
   },
   "special-contacts": {
-    "title": "Recapiti speciali",
-    "subtitle": "Se vuoi che alcune notifiche e comunicazioni siano indirizzate a un recapito diverso, puoi indicarlo qui. Il recapito può essere sia tuo che intestato ad altri, come per esempio uno studio commercialista o legale.",
+    "subtitle": "Se vuoi che alcune notifiche e comunicazioni siano indirizzate a dei recapiti diversi, puoi indicarli qui. Questi recapiti possono essere sia tuoi che intestati ad altri, come per esempio uno studio legale. Se non specifichi nulla, verranno utilizzati i tuoi recapiti generali.",
     "required-fileds": "* Campi obbligatori",
+    "associated": "Già associati",
     "sender": "Ente",
     "address-type": "Tipo indirizzo",
     "pec": "Indirizzo PEC",

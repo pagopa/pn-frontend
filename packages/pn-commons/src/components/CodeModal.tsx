@@ -189,7 +189,7 @@ const CodeModal = memo(({
           </Button>
         )}
         {confirmLabel && confirmCallback && (
-          <Button variant="contained" onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid} fullWidth={isMobile}>
+          <Button variant="contained" onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid} fullWidth={isMobile} sx={{marginTop: isMobile ? '10px' : 0, marginLeft: isMobile ? 0 : 'auto'}}>
             {confirmLabel}
           </Button>
         )}

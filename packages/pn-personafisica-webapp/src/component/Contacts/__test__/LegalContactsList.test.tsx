@@ -4,8 +4,8 @@ import { act, fireEvent, RenderResult, waitFor, screen } from '@testing-library/
 import { render } from '../../../__test__/test-utils';
 import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
-import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import LegalContactsList from '../LegalContactsList';
+import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -71,8 +71,8 @@ describe('LegalContactsList Component', () => {
     expect(form!).toHaveTextContent('mocked@mail.it');
     const buttons = form?.querySelectorAll('button');
     expect(buttons!).toHaveLength(2);
-    expect(buttons![0]).toHaveTextContent('button.rimuovi');
-    expect(buttons![1]).toHaveTextContent('button.modifica');
+    expect(buttons![0]).toHaveTextContent('button.modifica');
+    expect(buttons![1]).toHaveTextContent('button.rimuovi');
   });
 
   it('expands disclosure', async () => {
@@ -91,7 +91,7 @@ describe('LegalContactsList Component', () => {
   it('enables editing', async () => {
     const form = result?.container.querySelector('form');
     const buttons = form?.querySelectorAll('button');
-    fireEvent.click(buttons![1]);
+    fireEvent.click(buttons![0]);
     const input = await waitFor(() => {
       expect(form!).not.toHaveTextContent('mocked@mail.it');
       return form?.querySelector('input');
@@ -99,14 +99,14 @@ describe('LegalContactsList Component', () => {
     expect(input).toBeInTheDocument();
     expect(input).toHaveValue('mocked@mail.it');
     const newButtons = form?.querySelectorAll('button');
-    expect(newButtons!).toHaveLength(1);
+    expect(newButtons!).toHaveLength(2);
     expect(newButtons![0]).toHaveTextContent('button.salva');
   });
 
   it('checks invalid pec', async () => {
     const form = result?.container.querySelector('form');
     const buttons = form?.querySelectorAll('button');
-    fireEvent.click(buttons![1]);
+    fireEvent.click(buttons![0]);
     const input = await waitFor(() => form?.querySelector('input'));
     fireEvent.change(input!, { target: { value: 'mail-errata' } });
     await waitFor(() => expect(input!).toHaveValue('mail-errata'));
@@ -120,7 +120,7 @@ describe('LegalContactsList Component', () => {
   it('checks valid pec', async () => {
     const form = result?.container.querySelector('form');
     const buttons = form?.querySelectorAll('button');
-    fireEvent.click(buttons![1]);
+    fireEvent.click(buttons![0]);
     const input = await waitFor(() => form?.querySelector('input'));
     fireEvent.change(input!, { target: { value: 'mail@valida.mail' } });
     await waitFor(() => expect(input!).toHaveValue('mail@valida.mail'));
@@ -133,7 +133,7 @@ describe('LegalContactsList Component', () => {
   it('edits pec', async () => {
     const form = result?.container.querySelector('form');
     const buttons = form?.querySelectorAll('button');
-    fireEvent.click(buttons![1]);
+    fireEvent.click(buttons![0]);
     const input = await waitFor(() => form?.querySelector('input'));
     fireEvent.change(input!, { target: { value: 'mail@valida.mail' } });
     await waitFor(() => expect(input!).toHaveValue('mail@valida.mail'));
@@ -191,7 +191,7 @@ describe('LegalContactsList Component', () => {
   it('deletes pec', async () => {
     const form = result?.container.querySelector('form');
     const buttons = form?.querySelectorAll('button');
-    fireEvent.click(buttons![0]);
+    fireEvent.click(buttons![1]);
     const dialog = await waitFor(() => screen.queryByRole('dialog'));
     expect(dialog).toBeInTheDocument();
     const dialogButtons = dialog?.querySelectorAll('button');

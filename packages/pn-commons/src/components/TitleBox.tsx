@@ -38,14 +38,14 @@ export default function TitleBox({
 }: Props) {
   return (
     <Grid container mt={mtGrid} sx={sx}>
-      <Grid item xs={12} mb={mbTitle}>
+      {title && <Grid item xs={12} mb={mbTitle}>
         <Typography variant={variantTitle}>{title}</Typography>
-      </Grid>
-      <Grid item xs={12} mb={mbSubTitle}>
+      </Grid>}
+      {subTitle && <Grid item xs={12} mb={mbSubTitle}>
         <Typography variant={variantSubTitle} sx={{ fontSize: '18px' }}>
           {subTitle}
         </Typography>
-      </Grid>
+      </Grid>}
       <Grid item xs={12}>
         <Typography sx={{ fontSize: '18px' }}>{children}</Typography>
       </Grid>

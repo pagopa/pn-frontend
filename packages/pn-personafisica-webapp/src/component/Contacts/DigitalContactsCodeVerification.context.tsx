@@ -1,5 +1,4 @@
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
-import { AsyncThunk } from '@reduxjs/toolkit';
 import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { Box, Typography } from '@mui/material';
@@ -17,20 +16,12 @@ import {
 } from '../../redux/contact/actions';
 
 type ModalProps = {
-  title: string;
-  subtitle: ReactNode;
-  initialValues: Array<string>;
-  codeSectionTitle: string;
-  codeSectionAdditional: ReactNode;
-  cancelLabel: string;
-  confirmLabel: string;
-  errorMessage: string;
+  labelRoot: string;
+  labelType: string;
   recipientId: string;
   senderId: string;
   digitalDomicileType: LegalChannelType | CourtesyChannelType;
   value: string;
-  successMessage: string;
-  actionToBeDispatched?: AsyncThunk<any, any, any>;
   callbackOnValidation?: (status: 'validated' | 'cancelled') => void;
 };
 
@@ -50,19 +41,12 @@ const DigitalContactsCodeVerificationContext = createContext<
 
 const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) => {
   const initialProps = {
-    title: '',
-    subtitle: '',
-    initialValues: [],
-    codeSectionTitle: '',
-    codeSectionAdditional: '',
-    cancelLabel: '',
-    confirmLabel: '',
-    errorMessage: '',
+    labelRoot: '',
+    labelType: '',
     recipientId: '',
     senderId: '',
     digitalDomicileType: LegalChannelType.PEC,
     value: '',
-    successMessage: '',
   } as ModalProps;
 
   const { t } = useTranslation(['common', 'recapiti']);
@@ -81,7 +65,15 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   };
 
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
-    if (!props.actionToBeDispatched) {
+    /* eslint-disable functional/no-let */
+    let actionToBeDispatched;
+    /* eslint-enable functional/no-let */
+    if (props.digitalDomicileType === LegalChannelType.PEC) {
+      actionToBeDispatched = createOrUpdateLegalAddress;
+    } else {
+      actionToBeDispatched = createOrUpdateCourtesyAddress;
+    }
+    if (!actionToBeDispatched) {
       return;
     }
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -91,7 +83,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       value: props.value,
       code: verificationCode,
     };
-    dispatch(props.actionToBeDispatched(digitalAddressParams))
+    dispatch(actionToBeDispatched(digitalAddressParams))
       .unwrap()
       .then((res) => {
         if (noCallback) {
@@ -99,7 +91,14 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         }
         if (res && res.code) {
           // show success message
-          dispatch(appStateActions.addSuccess({ title: '', message: props.successMessage }));
+          dispatch(
+            appStateActions.addSuccess({
+              title: '',
+              message: t(`${props.labelRoot}.${props.labelType}-added-successfully`, {
+                ns: 'recapiti',
+              }),
+            })
+          );
           handleClose('validated');
         } else {
           // open code verification dialog
@@ -119,68 +118,24 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     callbackOnValidation?: (status: 'validated' | 'cancelled') => void
   ) => {
     /* eslint-disable functional/no-let */
-    let title = '';
-    let subtitle = null;
-    let codeSectionTitle = '';
-    let newCode = '';
-    let newCodeLink = '';
-    let errorMessage = '';
-    let successMessage = '';
-    let actionToBeDispatched;
+    let labelRoot = '';
+    let labelType = '';
     /* eslint-enable functional/no-let */
     if (digitalDomicileType === LegalChannelType.PEC) {
-      title = `${t('legal-contacts.pec-verify', { ns: 'recapiti' })} ${value}`;
-      subtitle = <Trans i18nKey="legal-contacts.pec-verify-descr" ns="recapiti"/>;
-      codeSectionTitle = t('legal-contacts.insert-code', { ns: 'recapiti' });
-      newCode = t('legal-contacts.new-code', { ns: 'recapiti' });
-      newCodeLink = t('legal-contacts.new-code-link', { ns: 'recapiti' });
-      errorMessage = t('legal-contacts.wrong-code', { ns: 'recapiti' });
-      successMessage = t('legal-contacts.pec-added', { ns: 'recapiti' });
-      actionToBeDispatched = createOrUpdateLegalAddress;
+      labelRoot = 'legal-contacts';
+      labelType = 'pec';
     } else {
-      const type = digitalDomicileType === CourtesyChannelType.SMS ? 'phone' : 'email';
-      title = t(`courtesy-contacts.${type}-verify`, { ns: 'recapiti' }) + ` ${value}`;
-      subtitle = <Trans i18nKey={`courtesy-contacts.${type}-verify-descr`} ns="recapiti" />;
-      codeSectionTitle = t(`courtesy-contacts.insert-code`, { ns: 'recapiti' });
-      newCode = t(`courtesy-contacts.${type}-new-code`, { ns: 'recapiti' });
-      newCodeLink = t(`courtesy-contacts.new-code-link`, { ns: 'recapiti' });
-      errorMessage = t(`courtesy-contacts.wrong-code`, { ns: 'recapiti' });
-      successMessage = t(`courtesy-contacts.${type}-added-successfully`, {
-        ns: 'recapiti',
-      });
-      actionToBeDispatched = createOrUpdateCourtesyAddress;
+      labelRoot = 'courtesy-contacts';
+      labelType = digitalDomicileType === CourtesyChannelType.SMS ? 'phone' : 'email';
     }
     setProps({
-      title,
-      subtitle,
-      initialValues: new Array(5).fill(''),
-      codeSectionTitle,
-      codeSectionAdditional: (
-        <Box>
-          <Typography variant="body2" display="inline">
-            {newCode}&nbsp;
-          </Typography>
-          <Typography
-            variant="body2"
-            display="inline"
-            color="primary"
-            onClick={() => handleCodeVerification(undefined, true)}
-            sx={{ cursor: 'pointer' }}
-          >
-            {newCodeLink}.
-          </Typography>
-        </Box>
-      ),
-      cancelLabel: t('button.annulla'),
-      confirmLabel: t('button.conferma'),
-      errorMessage,
+      labelRoot,
+      labelType,
       recipientId,
       senderId,
       digitalDomicileType,
       value,
-      successMessage,
-      actionToBeDispatched,
-      callbackOnValidation
+      callbackOnValidation,
     });
   };
 
@@ -194,19 +149,38 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
       {children}
       <CodeModal
-        title={props.title}
-        subtitle={props.subtitle}
+        title={
+          t(`${props.labelRoot}.${props.labelType}-verify`, { ns: 'recapiti' }) + ` ${props.value}`
+        }
+        subtitle={
+          <Trans i18nKey={`${props.labelRoot}.${props.labelType}-verify-descr`} ns="recapiti" />
+        }
         open={open}
-        initialValues={props.initialValues}
+        initialValues={new Array(5).fill('')}
         handleClose={() => setOpen(false)}
-        codeSectionTitle={props.codeSectionTitle}
-        codeSectionAdditional={props.codeSectionAdditional}
-        cancelLabel={props.cancelLabel}
-        confirmLabel={props.confirmLabel}
+        codeSectionTitle={t(`${props.labelRoot}.insert-code`, { ns: 'recapiti' })}
+        codeSectionAdditional={
+          <Box>
+            <Typography variant="body2" display="inline">
+              {t(`${props.labelRoot}.${props.labelType}-new-code`, { ns: 'recapiti' })}&nbsp;
+            </Typography>
+            <Typography
+              variant="body2"
+              display="inline"
+              color="primary"
+              onClick={() => handleCodeVerification(undefined, true)}
+              sx={{ cursor: 'pointer' }}
+            >
+              {t(`${props.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
+            </Typography>
+          </Box>
+        }
+        cancelLabel={t('button.annulla')}
+        confirmLabel={t('button.conferma')}
         cancelCallback={() => handleClose('cancelled')}
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         hasError={codeNotValid}
-        errorMessage={props.errorMessage}
+        errorMessage={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
       />
     </DigitalContactsCodeVerificationContext.Provider>
   );

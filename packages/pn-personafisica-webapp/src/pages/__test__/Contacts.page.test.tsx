@@ -12,6 +12,7 @@ jest.mock('react-i18next', () => ({
       t: (str: string) => str,
     };
   },
+  Trans: () => 'legal-contacts.pec-verify-descr',
 }));
 
 jest.mock('../../component/Contacts/InsertLegalContact', () => () => <div>InsertLegalContact</div>);
