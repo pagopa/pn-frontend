@@ -70,7 +70,7 @@ export const DelegationsApi = {
     apiClient
       .patch<AcceptDelegationResponse>(`/mandate/api/v1/mandate/${id}/accept`, data)
       .then((response: AxiosResponse<AcceptDelegationResponse>) => {
-        if (response.data) {
+        if (response.status === 200) {
           return { ...response.data, id };
         }
         return {

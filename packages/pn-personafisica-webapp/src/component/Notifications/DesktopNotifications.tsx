@@ -5,7 +5,7 @@ import {
   Column,
   Sort,
   Notification,
-  getNotificationStatusLabelAndColor,
+  getNotificationStatusInfos,
   NotificationStatus,
   StatusTooltip,
   Item,
@@ -95,7 +95,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
       align: 'center',
       sortable: true,
       getCellLabel(_, row: Item) {
-        const { label, tooltip, color } = getNotificationStatusLabelAndColor(
+        const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
         );
         return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;

@@ -163,7 +163,7 @@ export const ContactsApi = {
     */
   deleteCourtesyAddress: (
     _recipientId: string,
-    senderId: string,
+    courtesySenderId: string,
     _channelType: CourtesyChannelType
   ): Promise<string> =>
     /*
@@ -172,6 +172,6 @@ export const ContactsApi = {
       .then(() => senderId),
     */
     new Promise((resolve) => {
-      resolve(senderId);
+      resolve(courtesySenderId);
     }),
 };

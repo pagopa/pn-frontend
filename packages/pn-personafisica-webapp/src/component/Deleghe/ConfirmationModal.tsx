@@ -51,6 +51,7 @@ export default function ConfirmationModal({
             alignItems={'center'}
             ml={'auto'}
             pb={isMobile ? 4 : 0}
+            data-testid="dialogStack"
           >
             <Grid item sx={{ width: isMobile ? '100%' : null }} mt={4} mr={isMobile ? 0 : 1}>
               <Button

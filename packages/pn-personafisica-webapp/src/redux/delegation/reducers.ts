@@ -12,40 +12,43 @@ import {
   setDelegatesSorting,
   openAcceptModal,
   closeAcceptModal,
+  resetDelegationsState,
 } from './actions';
 import { Delegation } from './types';
+
+const initialState = {
+  delegatesError: false,
+  delegatorsError: false,
+  delegations: {
+    delegators: [] as Array<Delegation>,
+    delegates: [] as Array<Delegation>,
+    isCompany: false,
+  },
+  modalState: {
+    open: false,
+    id: '',
+    type: '',
+  },
+  acceptModalState: {
+    open: false,
+    id: '',
+    name: '',
+    error: false,
+  },
+  sortDelegators: {
+    orderBy: '',
+    order: 'asc' as 'asc' | 'desc',
+  },
+  sortDelegates: {
+    orderBy: '',
+    order: 'asc' as 'asc' | 'desc',
+  },
+};
 
 /* eslint-disable functional/immutable-data */
 const delegationsSlice = createSlice({
   name: 'delegationsSlice',
-  initialState: {
-    delegatesError: false,
-    delegatorsError: false,
-    delegations: {
-      delegators: [] as Array<Delegation>,
-      delegates: [] as Array<Delegation>,
-      isCompany: false,
-    },
-    modalState: {
-      open: false,
-      id: '',
-      type: '',
-    },
-    acceptModalState: {
-      open: false,
-      id: '',
-      name: '',
-      error: false,
-    },
-    sortDelegators: {
-      orderBy: '',
-      order: 'asc' as 'asc' | 'desc',
-    },
-    sortDelegates: {
-      orderBy: '',
-      order: 'asc' as 'asc' | 'desc',
-    },
-  },
+  initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getDelegates.fulfilled, (state, action) => {
@@ -65,6 +68,7 @@ const delegationsSlice = createSlice({
         delegator.mandateId === action.payload.id ? { ...delegator, status: 'active' } : delegator
       );
       state.acceptModalState.open = false;
+      state.acceptModalState.error = false;
     });
     builder.addCase(acceptDelegation.rejected, (state) => {
       state.acceptModalState.error = true;
@@ -94,6 +98,7 @@ const delegationsSlice = createSlice({
       state.acceptModalState.id = action.payload.id;
       state.acceptModalState.name = action.payload.name;
       state.acceptModalState.open = true;
+      state.acceptModalState.error = false;
     });
     builder.addCase(closeAcceptModal, (state) => {
       state.acceptModalState.open = false;
@@ -118,6 +123,7 @@ const delegationsSlice = createSlice({
         false
       );
     });
+    builder.addCase(resetDelegationsState, () => initialState);
   },
 });
 
