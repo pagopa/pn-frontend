@@ -87,6 +87,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
           <DigitalContactElem
             recipientId={recipientId}
             senderId="default"
+            // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
             contactType={defaultAddress!.channelType}
             fields={[
               {
