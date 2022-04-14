@@ -37,8 +37,10 @@ const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(getNumberDelegator.fulfilled, (state, action) => {
-      state.pendingDelegators = action.payload.filter((delegator)=>delegator.status === "pending").length;
-      state.delegators = action.payload; // TODO Filter by pending
+      state.pendingDelegators = action.payload.filter(
+        (delegator) => delegator.status === 'pending'
+      ).length;
+      state.delegators = action.payload.filter((delegator) => delegator.status !== 'pending');
     });
   },
 });

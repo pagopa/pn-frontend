@@ -21,11 +21,20 @@
     "options": "Opzioni sort"
   },
   "detail": {
+    "date": "Data",
+    "payment-terms": "Termini di pagamento",
+    "payment-terms-expiration": "Entro il",
+    "recipient": "Destinatario",
+    "surname-name": "Cognome Nome",
+    "cancelled-iun": "Codice IUN annullato",
+    "iun": "Codice IUN",
+    "groups": "Gruppi",
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Dettaglio notifica",
     "acts": "Atti allegati",
     "timeline-title": "Stato della notifica",
     "legalfact": "Attestato opponibile a Terzi",
+    "receipt": "Ricevuta",
     "show-history": "Mostra storico",
     "show-more": "Mostra di più",
     "show-less": "Mostra di meno"

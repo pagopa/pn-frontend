@@ -36,12 +36,14 @@ export interface INotificationDetailTimeline {
     | SendDigitalDetails
     | SendPaperDetails;
   legalFactsIds?: Array<LegalFactId>;
+  // only fe
+  hidden?: boolean;
 }
 
-interface SendPaperDetails {
+export interface SendPaperDetails {
   category: TimelineCategory;
   taxId: string;
-  address: DigitalAddress;
+  address: PhysicalAddress;
   serviceLevel: PhysicalCommunicationType;
   sentAttemptMade: number;
   investigation: boolean;
@@ -51,25 +53,25 @@ interface SendPaperDetails {
 
 interface BaseDetails {
   category: TimelineCategory;
-  taxdId: string;
+  taxId: string;
 }
 
-interface AnalogWorkflowDetails {
+export interface AnalogWorkflowDetails {
   category: TimelineCategory;
-  taxdId: string;
+  taxId: string;
   address?: PhysicalAddress;
 }
 
 interface AddressInfoDetails {
   category: TimelineCategory;
-  taxdId: string;
+  taxId: string;
   source: AddressSource;
   isAvailable: boolean;
   attemptDate: string;
   available: boolean;
 }
 
-interface NotificationPathChooseDetails {
+export interface NotificationPathChooseDetails {
   category: TimelineCategory;
   taxId: string;
   deliveryMode: DeliveryMode;
@@ -139,14 +141,14 @@ interface ScheduleWorkflowDetails {
   lastAttemptInfo?: DigitalAddressInfo;
 }
 
-interface SendCourtesyMessageDetails {
+export interface SendCourtesyMessageDetails {
   category: TimelineCategory;
   taxId: string;
   address: DigitalAddress;
   sendDate: string;
 }
 
-interface SendDigitalDetails {
+export interface SendDigitalDetails {
   category: TimelineCategory;
   taxId: string;
   address?: DigitalAddress;
@@ -201,6 +203,8 @@ export interface NotificationStatusHistory {
   status: NotificationStatus;
   activeFrom: string;
   relatedTimelineElements: Array<string>;
+  // only fe
+  steps?: Array<INotificationDetailTimeline>;
 }
 
 export enum TimelineCategory {
@@ -230,6 +234,7 @@ export enum TimelineCategory {
   SEND_PAPER_FEEDBACK = 'SEND_PAPER_FEEDBACK',
   PAYMENT = 'PAYMENT',
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
+  REQUEST_REFUSED = 'REQUEST_REFUSED'
 }
 
 interface DigitalAddress {
@@ -290,7 +295,3 @@ export interface NotificationDetailTableRow {
   label: string;
   value: ReactNode;
 }
-
-export interface NotificationDetailTimelineData extends NotificationStatusHistory {
-  steps: Array<INotificationDetailTimeline>
-};
