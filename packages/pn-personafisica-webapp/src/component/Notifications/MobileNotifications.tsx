@@ -44,11 +44,11 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
       },
     },
     {
-      id: 'notificationStatus',
+      id: 'status',
       label: t('table.status'),
-      getLabel(value: string) {
+      getLabel(_, row: Item) {
         const { label, tooltip, color } = getNotificationStatusLabelAndColor(
-          value as NotificationStatus
+          row.notificationStatus as NotificationStatus
         );
         return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;
       },
