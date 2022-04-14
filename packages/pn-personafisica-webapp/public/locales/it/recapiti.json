@@ -54,5 +54,9 @@
     "remove-email-message": "Confermi di voler rimuovere l'indirizzo email {{value}}?",
     "remove-phone-title": "Rimuovi cellulare",
     "remove-phone-message": "Confermi di voler rimuovere il numero di cellulare {{value}}?"
+  },
+  "common": {
+    "duplicate-contact-title": "Recapito già presente",
+    "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?"
   }
 }
