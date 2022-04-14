@@ -30,7 +30,7 @@ import {
 type Props = {
   timelineStep: NotificationStatusHistory;
   recipients: Array<NotificationDetailRecipient>;
-  legalFactLabels: {attestation: string, receipt: string};
+  legalFactLabels: { attestation: string; receipt: string };
   clickHandler: (legalFactId: LegalFactId) => void;
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;
@@ -78,6 +78,8 @@ const timelineStepCmp = (
  * @param showHistoryButton show history button
  * @param historyButtonLabel label for history button
  * @param historyButtonClickHandler function called when user clicks on the history button
+ * @param showMoreButtonLabel label of show more button
+ * @param showLessButtonLabel label of show less button
  */
 const NotificationDetailTimelineStep = ({
   timelineStep,
@@ -93,7 +95,7 @@ const NotificationDetailTimelineStep = ({
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
-  let legalFactsIds: Array<{file: LegalFactId, category: TimelineCategory}> = [];
+  let legalFactsIds: Array<{ file: LegalFactId; category: TimelineCategory }> = [];
   let visibleSteps: Array<INotificationDetailTimeline> = [];
   /* eslint-enable functional/no-let */
   const notificationStatusInfos = getNotificationStatusInfos(timelineStep.status);
@@ -102,12 +104,12 @@ const NotificationDetailTimelineStep = ({
     /* eslint-disable functional/immutable-data */
     legalFactsIds = timelineStep.steps.reduce((arr, s) => {
       if (s.legalFactsIds) {
-        return arr.concat(s.legalFactsIds.map(lf => ({file: lf, category: s.category})));
+        return arr.concat(s.legalFactsIds.map((lf) => ({ file: lf, category: s.category })));
       }
       return arr;
-    }, [] as Array<{file: LegalFactId, category: TimelineCategory}>);
+    }, [] as Array<{ file: LegalFactId; category: TimelineCategory }>);
 
-    visibleSteps = timelineStep.steps.filter(s => !s.hidden);
+    visibleSteps = timelineStep.steps.filter((s) => !s.hidden);
     /* eslint-enable functional/immutable-data */
   }
 
@@ -209,8 +211,15 @@ const NotificationDetailTimelineStep = ({
           <Typography color="text.primary" fontSize={14} display="inline" variant="caption">
             {timelineStatusInfos.description}&nbsp;
           </Typography>
-          {(timelineStatusInfos.linkText && s.legalFactsIds) && (
-            <Typography fontSize={14} display="inline" variant="button" color="primary" sx={{cursor: "pointer"}} onClick={() => s.legalFactsIds && clickHandler(s.legalFactsIds[0])}>
+          {timelineStatusInfos.linkText && s.legalFactsIds && (
+            <Typography
+              fontSize={14}
+              display="inline"
+              variant="button"
+              color="primary"
+              sx={{ cursor: 'pointer' }}
+              onClick={() => s.legalFactsIds && clickHandler(s.legalFactsIds[0])}
+            >
               {timelineStatusInfos.linkText}
             </Typography>
           )}

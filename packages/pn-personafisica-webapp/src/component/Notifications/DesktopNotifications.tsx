@@ -32,7 +32,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
 
   const columns: Array<Column> = [
     {
-      id: 'notificationReadStatus',
+      id: 'notificationStatus',
       label: "",
       width: '1%',
       getCellLabel(value: string) {

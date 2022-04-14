@@ -37,7 +37,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
 
   const cardHeader: [CardElement, CardElement] = [
     {
-      id: 'notificationReadStatus',
+      id: 'notificationStatus',
       label: '',
       getLabel(value: string) {
         return getNewNotificationBadge(value);

@@ -35,13 +35,14 @@ const CustomDrawer = styled(Drawer)(() => ({
 
 /**
  * Notification detail timeline
- * @param timeline data to show
  * @param recipients list of recipients
  * @param statusHistory notification macro-status history
  * @param clickHandler function called when user clicks on the download button
  * @param title title to show
  * @param legalFactLabels labels of the download button
  * @param historyButtonLabel label of the history button
+ * @param showMoreButtonLabel label of show more button
+ * @param showLessButtonLabel label of show less button
  */
 const NotificationDetailTimeline = ({
   recipients,
