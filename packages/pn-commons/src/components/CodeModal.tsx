@@ -11,6 +11,7 @@ import {
   Typography,
   Box,
   Alert,
+  AlertTitle,
 } from '@mui/material';
 
 import { useIsMobile } from '../hooks/IsMobile.hook';
@@ -29,6 +30,7 @@ type Props = {
   confirmCallback?: (values: Array<string>) => void;
   isReadOnly?: boolean;
   hasError?: boolean;
+  errorTitle?: string;
   errorMessage?: string;
 };
 
@@ -45,6 +47,7 @@ type Props = {
  * @param cancelLabel label of the cancel button
  * @param isReadOnly set if code is in readonly mode
  * @param hasError set if there is an error
+ * @param errorTitle title to show when there is an error
  * @param errorMessage message to show when there is an error
  */
 const CodeModal = memo(({
@@ -61,6 +64,7 @@ const CodeModal = memo(({
   confirmCallback,
   isReadOnly = false,
   hasError = false,
+  errorTitle,
   errorMessage,
 }: Props) => {
   const [inputsValues, setInputsValues] = useState(initialValues);
@@ -178,6 +182,7 @@ const CodeModal = memo(({
         <Divider sx={{ margin: '20px 0' }} />
         {hasError && errorMessage && (
           <Alert data-testid="errorAlert" severity="error" sx={{textAlign: isMobile ? 'center' : 'left'}}>
+            <AlertTitle>{errorTitle}</AlertTitle>
             {errorMessage}
           </Alert>
         )}
