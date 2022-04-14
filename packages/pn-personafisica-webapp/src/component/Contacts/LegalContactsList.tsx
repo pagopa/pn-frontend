@@ -40,7 +40,10 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     ),
     []
   );
-  const defaultAddress = useMemo(() => legalAddresses.find((a) => a.senderId === 'default'), [legalAddresses]);
+  const defaultAddress = useMemo(
+    () => legalAddresses.find((a) => a.senderId === 'default'),
+    [legalAddresses]
+  );
 
   const validationSchema = yup.object({
     pec: yup

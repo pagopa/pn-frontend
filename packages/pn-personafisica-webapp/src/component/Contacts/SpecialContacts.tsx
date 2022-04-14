@@ -362,17 +362,22 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               </TableBody>
             </Table>
           )}
-          {isMobile && addresses.map((a) => (
-            <Card key={a.senderId} sx={{ border: '1px solid', borderRadius: '8px', borderColor: 'divider', marginTop: '20px'}}>
-              <CardContent>
-                <SpecialContactElem
-                  address={a}
-                  senders={senders}
-                  recipientId={recipientId}
-                />
-              </CardContent>
-            </Card>
-          ))}
+          {isMobile &&
+            addresses.map((a) => (
+              <Card
+                key={a.senderId}
+                sx={{
+                  border: '1px solid',
+                  borderRadius: '8px',
+                  borderColor: 'divider',
+                  marginTop: '20px',
+                }}
+              >
+                <CardContent>
+                  <SpecialContactElem address={a} senders={senders} recipientId={recipientId} />
+                </CardContent>
+              </Card>
+            ))}
         </Fragment>
       )}
     </DigitalContactsCard>
