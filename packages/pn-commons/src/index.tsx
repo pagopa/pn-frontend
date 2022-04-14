@@ -123,14 +123,16 @@ import { createAppError } from './services/message.service';
 import { formatDate } from './services/date.service';
 import { calculatePages } from './utils/pagination.utility';
 import {
-  getNotificationStatusLabelAndColor,
+  getNotificationStatusInfos,
   NotificationAllowedStatus,
-} from './utils/status.utility';
+  parseNotificationDetail
+} from './utils/notification.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
 
 export { NotificationAllowedStatus };
-export { getNotificationStatusLabelAndColor };
+export { getNotificationStatusInfos };
+export { parseNotificationDetail };
 export { createAppError };
 export { formatDate };
 export { calculatePages };
