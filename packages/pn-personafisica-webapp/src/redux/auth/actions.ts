@@ -46,12 +46,13 @@ export const logout = createAsyncThunk<User>('logout', async () => {
   } as User;
 });
 
-export const getNumberDelegator =  createAsyncThunk<Array<Delegation>>('getNumberDelegator', async()=>{
-  try{  
-    return await DelegationsApi.getDelegators();
-    // return delegators.filter((delegator)=>delegator.status === "pending").length;
+export const getNumberDelegator = createAsyncThunk<Array<Delegation>>(
+  'getNumberDelegator',
+  async () => {
+    try {
+      return await DelegationsApi.getDelegators();
+    } catch {
+      return [];
+    }
   }
-  catch { 
-    return [];
-  } 
-});
+);
