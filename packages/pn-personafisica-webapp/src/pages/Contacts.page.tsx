@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { TitleBox } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -10,6 +10,7 @@ import { DigitalContactsCodeVerificationProvider } from '../component/Contacts/D
 import InsertLegalContact from '../component/Contacts/InsertLegalContact';
 import LegalContactsList from '../component/Contacts/LegalContactsList';
 import CourtesyContacts from '../component/Contacts/CourtesyContacts';
+import SpecialContacts from '../component/Contacts/SpecialContacts';
 
 const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
@@ -34,7 +35,8 @@ const Contacts = () => {
           subTitle={t('subtitle')}
           variantSubTitle={'body1'}
         />
-        <Grid container direction="row" sx={{ marginTop: '20px' }} spacing={2}>
+        <Typography variant="h5" fontWeight={600} fontSize={28} sx={{marginTop: '30px'}}>{t('general-contacts-title')}</Typography>
+        <Grid container direction="row" sx={{ marginTop: '5px' }} spacing={2}>
           <Grid item lg={6} xs={12}>
             {digitalAddresses.legal.length === 0 && (
               <InsertLegalContact recipientId={recipientId} />
@@ -50,6 +52,18 @@ const Contacts = () => {
             <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
           </Grid>
         </Grid>
+        {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
+          <Fragment>
+            <Typography variant="h5" fontWeight={600} fontSize={28} sx={{marginTop: '30px'}}>{t('special-contacts-title')}</Typography>
+            <Box sx={{marginTop: '20px'}}>
+              <SpecialContacts
+                recipientId={recipientId}
+                legalAddresses={digitalAddresses.legal}
+                courtesyAddresses={digitalAddresses.courtesy}
+              />
+            </Box>
+          </Fragment>
+        )}
       </Box>
     </DigitalContactsCodeVerificationProvider>
   );

@@ -1,8 +1,8 @@
-import { DigitalAddress, DigitalAddresses, LegalChannelType } from './../../../models/contacts';
+import { DigitalAddress, DigitalAddresses, LegalChannelType, CourtesyChannelType } from './../../../models/contacts';
 import { ContactsApi } from '../../../api/contacts/Contacts.api';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
-import { createOrUpdateLegalAddress, deleteLegalAddress, getDigitalAddresses, resetContactsState } from '../actions';
+import { createOrUpdateCourtesyAddress, createOrUpdateLegalAddress, deleteCourtesyAddress, deleteLegalAddress, getDigitalAddresses, resetContactsState } from '../actions';
 import { digitalAddresses } from './test-utils';
 
 const initialState = {
@@ -79,6 +79,57 @@ describe('Contacts redux state tests', () => {
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('deleteLegalAddress/fulfilled');
     expect(payload).toEqual(digitalAddresses.legal[0].senderId);
+  });
+
+  it('Should be able to update the digital address with courtesy value (email to verify)', async () => {
+    const updatedDigitalAddress = { ...digitalAddresses.courtesy[0], value: 'mario.rossi@mail.it' };
+    const apiSpy = jest.spyOn(ContactsApi, 'createOrUpdateCourtesyAddress');
+    apiSpy.mockResolvedValue(void 0);
+    const action = await store.dispatch(
+      createOrUpdateCourtesyAddress({
+        recipientId: updatedDigitalAddress.recipientId,
+        senderId: updatedDigitalAddress.senderId,
+        channelType: updatedDigitalAddress.channelType as CourtesyChannelType,
+        value: updatedDigitalAddress.value,
+        code: updatedDigitalAddress.code
+      })
+    );
+    const payload = action.payload as DigitalAddress;
+    expect(action.type).toBe('createOrUpdateCourtesyAddress/fulfilled');
+    expect(payload).toEqual(void 0);
+  });
+
+  it('Should be able to update the digital address with courtesy value (email verified)', async () => {
+    const updatedDigitalAddress = { ...digitalAddresses.courtesy[0], value: 'mario.rossi@mail.it' };
+    const apiSpy = jest.spyOn(ContactsApi, 'createOrUpdateCourtesyAddress');
+    apiSpy.mockResolvedValue(updatedDigitalAddress);
+    const action = await store.dispatch(
+      createOrUpdateCourtesyAddress({
+        recipientId: updatedDigitalAddress.recipientId,
+        senderId: updatedDigitalAddress.senderId,
+        channelType: updatedDigitalAddress.channelType as CourtesyChannelType,
+        value: updatedDigitalAddress.value,
+        code: updatedDigitalAddress.code
+      })
+    );
+    const payload = action.payload as DigitalAddress;
+    expect(action.type).toBe('createOrUpdateCourtesyAddress/fulfilled');
+    expect(payload).toEqual(updatedDigitalAddress);
+  });
+
+  it('Should be able to remove the digital address with courtesy value', async () => {
+    const apiSpy = jest.spyOn(ContactsApi, 'deleteCourtesyAddress');
+    apiSpy.mockResolvedValue(digitalAddresses.courtesy[0].senderId);
+    const action = await store.dispatch(
+      deleteCourtesyAddress({
+        recipientId: digitalAddresses.courtesy[0].recipientId,
+        senderId: digitalAddresses.courtesy[0].senderId,
+        channelType: digitalAddresses.courtesy[0].channelType as CourtesyChannelType,
+      })
+    );
+    const payload = action.payload as DigitalAddress;
+    expect(action.type).toBe('deleteCourtesyAddress/fulfilled');
+    expect(payload).toEqual(digitalAddresses.courtesy[0].senderId);
   });
 
   it('Should be able to reset state', () => {

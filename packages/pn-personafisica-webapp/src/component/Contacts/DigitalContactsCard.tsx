@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
 import { Card, CardActions, CardContent, CardHeader, Typography } from '@mui/material';
 import { TitleBox } from '@pagopa-pn/pn-commons';
 
@@ -11,7 +11,7 @@ type Props = {
   actions?: ReactNode;
 };
 
-const DigitalContactsCard = ({
+const DigitalContactsCard = memo(({
   sectionTitle,
   title,
   subtitle,
@@ -20,16 +20,16 @@ const DigitalContactsCard = ({
   actions,
 }: Props) => (
   <Card>
-    <CardHeader avatar={avatar} />
+    {avatar && <CardHeader avatar={avatar} />}
     <CardContent data-testid="DigitalContactsCardBody">
-      <Typography
+      {sectionTitle && <Typography
         color="text.primary"
         fontWeight={700}
         fontSize={14}
         sx={{ textTransform: 'uppercase' }}
       >
         {sectionTitle}
-      </Typography>
+      </Typography>}
       <TitleBox
         sx={{ marginTop: '10px' }}
         variantTitle="h4"
@@ -41,6 +41,6 @@ const DigitalContactsCard = ({
     </CardContent>
     <CardActions data-testid="DigitalContactsCardActions">{actions}</CardActions>
   </Card>
-);
+));
 
 export default DigitalContactsCard;

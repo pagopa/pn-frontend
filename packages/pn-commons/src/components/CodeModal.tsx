@@ -1,4 +1,4 @@
-import { ReactNode, KeyboardEvent, useState, ChangeEvent, useEffect } from 'react';
+import { ReactNode, KeyboardEvent, useState, ChangeEvent, useEffect, memo } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -12,6 +12,8 @@ import {
   Box,
   Alert,
 } from '@mui/material';
+
+import { useIsMobile } from '../hooks/IsMobile.hook';
 
 type Props = {
   title: ReactNode;
@@ -45,7 +47,7 @@ type Props = {
  * @param hasError set if there is an error
  * @param errorMessage message to show when there is an error
  */
-const CodeModal = ({
+const CodeModal = memo(({
   title,
   subtitle,
   open,
@@ -63,33 +65,43 @@ const CodeModal = ({
 }: Props) => {
   const [inputsValues, setInputsValues] = useState(initialValues);
   const [inputsRef, setInputsRef] = useState(new Array(initialValues.length).fill(undefined));
+  const isMobile = useIsMobile();
+
+  const focusInput = (index: number) => {
+    setTimeout(() => {
+      // focus next input
+      inputsRef[index].focus();
+      // set cursor position
+      if (inputsRef[index].setSelectionRange) {
+        inputsRef[index].setSelectionRange(inputsRef[index].value, inputsRef[index].value);
+      } else if (inputsRef[index].createTextRange) {
+        const t = inputsRef[index].createTextRange();
+        t.collapse(true);
+        t.moveEnd('character', inputsRef[index].value);
+        t.moveStart('character', inputsRef[index].value);
+        t.select();
+      }
+    });
+  }
 
   const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
     if (!isNaN(Number(event.key)) || event.key === 'Enter' || event.key === 'Tab') {
       // focus next element
       if (index !== initialValues.length - 1) {
-        setTimeout(() => {
-          // focus next input
-          inputsRef[index + 1].focus();
-          // set cursor position
-          if (inputsRef[index + 1].setSelectionRange) {
-            inputsRef[index + 1].setSelectionRange(inputsRef[index + 1].value, inputsRef[index + 1].value);
-          } else if (inputsRef[index + 1].createTextRange) {
-            const t = inputsRef[index + 1].createTextRange();
-            t.collapse(true);
-            t.moveEnd('character', inputsRef[index + 1].value);
-            t.moveStart('character', inputsRef[index + 1].value);
-            t.select();
-          }
-        });
+        focusInput(index + 1);
       }
       return;
     } else if (
-      event.key === 'Backspace' ||
       event.key === 'ArrowLeft' ||
       event.key === 'ArrowRight' ||
       event.key === 'Delete'
     ) {
+      return;
+    } else if (event.key === 'Backspace') {
+      if (inputsRef[index].value === '' && index > 0) {
+        // focus prev element
+        focusInput(index - 1);
+      }
       return;
     }
     // prevent all values that aren't numbers
@@ -110,7 +122,10 @@ const CodeModal = ({
   }, [open]);
 
   const codeIsValid = inputsValues.every((v) => v);
-  const inputColor = hasError ? 'error.main' : (isReadOnly ? 'primary.main' : '');
+  /* eslint-disable functional/no-let */
+  let inputColor = isReadOnly ? 'primary.main' : '';
+  inputColor = hasError ? 'error.main' : inputColor;
+  /* eslint-enalbe functional/no-let */
 
   return (
     <Dialog
@@ -120,14 +135,14 @@ const CodeModal = ({
       aria-describedby="dialog-description"
       data-testid="codeDialog"
     >
-      <DialogTitle id="dialog-title">{title}</DialogTitle>
+      <DialogTitle id="dialog-title" sx={{textAlign: isMobile ? 'center' : 'left'}}>{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="dialog-description">{subtitle}</DialogContentText>
+        <DialogContentText id="dialog-description" sx={{textAlign: isMobile ? 'center' : 'left'}}>{subtitle}</DialogContentText>
         <Divider sx={{ margin: '20px 0' }} />
-        <Typography fontSize={16} fontWeight={600}>
+        <Typography fontSize={16} fontWeight={600} sx={{textAlign: isMobile ? 'center' : 'left'}}>
           {codeSectionTitle}
         </Typography>
-        <Box sx={{ marginTop: '10px' }}>
+        <Box sx={{ marginTop: '10px', textAlign: isMobile ? 'center' : 'left' }}>
           {initialValues.map((_value, index) => (
             <TextField
               key={index}
@@ -159,28 +174,28 @@ const CodeModal = ({
             />
           ))}
         </Box>
-        <Box sx={{ marginTop: '10px' }}>{codeSectionAdditional}</Box>
+        <Box sx={{ marginTop: '10px', textAlign: isMobile ? 'center' : 'left' }}>{codeSectionAdditional}</Box>
         <Divider sx={{ margin: '20px 0' }} />
         {hasError && errorMessage && (
-          <Alert data-testid="errorAlert" severity="error">
+          <Alert data-testid="errorAlert" severity="error" sx={{textAlign: isMobile ? 'center' : 'left'}}>
             {errorMessage}
           </Alert>
         )}
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{textAlign: isMobile ? 'center' : 'left', flexDirection: isMobile ? 'column' : 'row'}}>
         {cancelLabel && cancelCallback && (
-          <Button variant="outlined" onClick={cancelCallback}>
+          <Button variant="outlined" onClick={cancelCallback} fullWidth={isMobile}>
             {cancelLabel}
           </Button>
         )}
         {confirmLabel && confirmCallback && (
-          <Button onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid}>
+          <Button variant="contained" onClick={() => confirmCallback(inputsValues)} disabled={!codeIsValid} fullWidth={isMobile} sx={{marginTop: isMobile ? '10px' : 0, marginLeft: isMobile ? 0 : 'auto'}}>
             {confirmLabel}
           </Button>
         )}
       </DialogActions>
     </Dialog>
   );
-};
+});
 
 export default CodeModal;
