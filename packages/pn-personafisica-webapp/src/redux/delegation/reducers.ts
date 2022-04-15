@@ -111,7 +111,6 @@ const delegationsSlice = createSlice({
         action.payload.order,
         action.payload.orderBy,
         state.delegations.delegates,
-        true
       );
     });
     builder.addCase(setDelegatorsSorting, (state, action) => {
@@ -120,7 +119,6 @@ const delegationsSlice = createSlice({
         action.payload.order,
         action.payload.orderBy,
         state.delegations.delegators,
-        false
       );
     });
     builder.addCase(resetDelegationsState, () => initialState);

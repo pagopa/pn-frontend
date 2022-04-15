@@ -60,7 +60,7 @@ export const ContactsApi = {
         mockedContacts.push({ value: body.value, code: '12345', toVerify: true });
         return resolve();
       }
-      if (mockedContact && mockedContact.toVerify && !body.verificationCode) {
+      if (mockedContact.toVerify && !body.verificationCode) {
         return resolve();
       }
       // check code - simulate 406
@@ -121,13 +121,14 @@ export const ContactsApi = {
         mockedCourtesyContacts.push({ value: body.value, code: '12345', isVerified: false });
         return resolve();
       }
-      if (mockedContact && !mockedContact?.isVerified && !body.verificationCode) {
+      if (!mockedContact.isVerified && !body.verificationCode) {
         return resolve();
       }
       // check code - simulate 406
-      if (!mockedContact?.isVerified && body.verificationCode !== mockedContact.code) {
+      if (!mockedContact.isVerified && body.verificationCode !== mockedContact.code) {
         return reject({ response: { status: 406 }, blockNotification: true });
       }
+      mockedContact.isVerified = true;
       return resolve({
         addressType: 'courtesy',
         recipientId,
@@ -163,7 +164,7 @@ export const ContactsApi = {
     */
   deleteCourtesyAddress: (
     _recipientId: string,
-    senderId: string,
+    courtesySenderId: string,
     _channelType: CourtesyChannelType
   ): Promise<string> =>
     /*
@@ -172,6 +173,6 @@ export const ContactsApi = {
       .then(() => senderId),
     */
     new Promise((resolve) => {
-      resolve(senderId);
+      resolve(courtesySenderId);
     }),
 };

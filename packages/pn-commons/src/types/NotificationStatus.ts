@@ -9,4 +9,6 @@ export enum NotificationStatus {
   PAID = 'PAID',
   UNREACHABLE = 'UNREACHABLE',
   CANCELED = 'CANCELED',
+  // only fe
+  VIEWED_AFTER_DEADLINE = 'VIEWED_AFTER_DEADLINE'
 }

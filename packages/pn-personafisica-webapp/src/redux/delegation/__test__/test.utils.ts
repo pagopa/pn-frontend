@@ -22,14 +22,6 @@ export const mockCreateDelegation = {
 export const arrayOfDelegates = [
   {
     mandateId: '1',
-    delegator: {
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      companyName: 'eni',
-      fiscalCode: 'MRIRSS68P24H501C',
-      person: true,
-      email: 'email@falsa.it',
-    },
     delegate: {
       firstName: 'Marco',
       lastName: 'Verdi',
@@ -51,14 +43,6 @@ export const arrayOfDelegates = [
   },
   {
     mandateId: '1',
-    delegator: {
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      companyName: 'eni',
-      fiscalCode: 'MRIRSS68P24H501C',
-      person: true,
-      email: 'email@falsa.it',
-    },
     delegate: {
       firstName: 'Davide',
       lastName: 'Legato',
@@ -91,14 +75,6 @@ export const arrayOfDelegators = [
       person: true,
       email: 'email@falsa.it',
     },
-    delegate: {
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      companyName: 'eni',
-      fiscalCode: 'MRIRSS68P24H501C',
-      person: true,
-      email: 'email@falsa.it',
-    },
     status: 'pending' as const,
     visibilityIds: [
       {
@@ -117,14 +93,6 @@ export const arrayOfDelegators = [
       lastName: 'Legato',
       companyName: 'eni',
       fiscalCode: 'DVDLGT83C12H501C',
-      person: true,
-      email: 'email@falsa.it',
-    },
-    delegate: {
-      firstName: 'Mario',
-      lastName: 'Rossi',
-      companyName: 'eni',
-      fiscalCode: 'MRIRSS68P24H501C',
       person: true,
       email: 'email@falsa.it',
     },

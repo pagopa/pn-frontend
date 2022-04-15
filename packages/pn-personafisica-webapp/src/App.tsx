@@ -5,31 +5,39 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
+import PersonIcon from '@mui/icons-material/Person';
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { getNumberDelegator, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { PAGOPA_HELP_EMAIL } from './utils/constants';
 import { RootState } from './redux/store';
+import { Delegation} from './redux/delegation/types';
 
 const App = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
-
+  const sessionToken = useAppSelector((state: RootState) => state.userState.user.sessionToken);
   const { pendingDelegators, delegators } = useAppSelector((state: RootState) => state.userState);
 
   useEffect(() => {
-    void dispatch(getNumberDelegator());
-  }, []);
+    if (sessionToken !== '') {
+      void dispatch(getNumberDelegator());
+    }
+  }, [sessionToken]);
 
   useEffect(() => {
     setPendingDelegatorsState(pendingDelegators);
   }, [pendingDelegators]);
 
-  const mapDelegatorSideMenuItem = delegators.map((delegator) => ({
-    label: `${delegator.delegator.firstName} ${delegator.delegator.lastName}`,
-  }));
+  const mapDelegatorSideMenuItem = delegators.map((delegator:Delegation) => ({
+    icon: PersonIcon,
+    label:
+      'delegator' in delegator && delegator.delegator ? 
+      `${delegator.delegator.firstName} ${delegator.delegator.lastName}`:
+      'No Name Found',
+    }));
 
   // TODO spostare questo in un file di utility
   const menuItems: Array<SideMenuItem> = [
