@@ -15,18 +15,12 @@ jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
       t: (str: string) => str,
-    })
+    }),
+    Trans: (props: {i18nKey: string}) => props.i18nKey,
 }));
 
 const mockedStore = {
-  legal: [{
-    addressType: 'legal',
-    recipientId: 'mocked-recipientId',
-    senderId: 'mocked-senderId',
-    channelType: LegalChannelType.PEC,
-    value: "mocked-value",
-    code: ''
-  }],
+  legal: [],
   courtesy: [{
     addressType: 'courtesy',
     recipientId: 'mocked-recipientId',
@@ -42,25 +36,10 @@ const Wrapper = ({ children }: { children: ReactNode }) => (
 );
 
 const Component = () => {
-  const { setProps } = useDigitalContactsCodeVerificationContext();
+  const { initValidation } = useDigitalContactsCodeVerificationContext();
 
   const handleButtonClick = () => {
-    setProps({
-      title: 'mocked-title',
-      subtitle: 'mocked-subtitle',
-      initialValues: new Array(5).fill(''),
-      codeSectionTitle: 'mocked-sectionTitle',
-      codeSectionAdditional: 'mocked-sectionAdditional',
-      cancelLabel: 'mocked-cancelLabel',
-      confirmLabel: 'mocked-confirmLabel',
-      errorMessage: 'mocked-errorMessage',
-      recipientId: 'mocked-recipientId',
-      senderId: 'mocked-senderId',
-      digitalDomicileType: LegalChannelType.PEC,
-      value: 'mocked-value',
-      successMessage: 'mocked-successMessage',
-      actionToBeDispatched: actions.createOrUpdateLegalAddress,
-    });
+    initValidation(LegalChannelType.PEC, 'mocked-value', 'mocked-recipientId', 'mocked-senderId');
   };
 
   return (
@@ -123,7 +102,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     jest.clearAllMocks();
   });
 
-  it('renders LegalContactsButton (modal closed)', () => {
+  it('renders CodeModal (modal closed)', () => {
     const button = result?.container.querySelector('button');
     expect(button).toBeInTheDocument();
     expect(button).toHaveTextContent('Click me');
@@ -131,22 +110,22 @@ describe('DigitalContactsCodeVerification Context', () => {
     expect(dialog).not.toBeInTheDocument();
   });
 
-  it('renders LegalContactsButton (modal opened)', async () => {
+  it('renders CodeModal (modal opened)', async () => {
     const dialog = await showDialog(result!, mockDispatchFn, mockActionFn);
     expect(dialog).toBeInTheDocument();
     const title = dialog?.querySelector('#dialog-title');
-    expect(title).toHaveTextContent('mocked-title');
+    expect(title).toHaveTextContent('legal-contacts.pec-verify mocked-value');
     const subtitle = dialog?.querySelector('#dialog-description');
-    expect(subtitle).toHaveTextContent('mocked-subtitle');
-    expect(dialog).toHaveTextContent('mocked-sectionTitle');
+    expect(subtitle).toHaveTextContent('legal-contacts.pec-verify-descr');
+    expect(dialog).toHaveTextContent('legal-contacts.insert-code');
     const codeInputs = dialog?.querySelectorAll('input');
     expect(codeInputs).toHaveLength(5);
     codeInputs?.forEach((input) => {
       expect(input).toHaveValue('');
     });
     const buttons = dialog?.querySelectorAll('button');
-    expect(buttons![0]).toHaveTextContent('mocked-cancelLabel');
-    expect(buttons![1]).toHaveTextContent('mocked-confirmLabel');
+    expect(buttons![0]).toHaveTextContent('button.annulla');
+    expect(buttons![1]).toHaveTextContent('button.conferma');
   });
 
   it('clicks on confirm button', async () => {
@@ -193,6 +172,6 @@ describe('DigitalContactsCodeVerification Context', () => {
     const confirmButton = screen.getByRole('button', { name: 'button.conferma' });
 
     fireEvent.click(confirmButton);
-    await screen.findAllByRole('heading', { name: 'mocked-title'});
+    await screen.findAllByRole('heading', { name: /legal-contacts.pec-verify\b/});
   });
 });

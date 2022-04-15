@@ -16,12 +16,14 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
-
+  const sessionToken = useAppSelector((state: RootState) => state.userState.user.sessionToken);
   const { pendingDelegators, delegators } = useAppSelector((state: RootState) => state.userState);
 
   useEffect(() => {
-    void dispatch(getNumberDelegator());
-  }, []);
+    if (sessionToken !== '') {
+      void dispatch(getNumberDelegator());
+    }
+  }, [sessionToken]);
 
   useEffect(() => {
     setPendingDelegatorsState(pendingDelegators);

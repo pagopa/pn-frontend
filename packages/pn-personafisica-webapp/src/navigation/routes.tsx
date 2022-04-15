@@ -6,6 +6,7 @@ import NuovaDelega from '../pages/NuovaDelega.page';
 import Notifiche from '../pages/Notifiche.page';
 import Deleghe from '../pages/Deleghe.page';
 import Contacts from '../pages/Contacts.page';
+import Profile from '../pages/Profile.page';
 import RequireAuth from './RequiredAuth';
 import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
@@ -21,6 +22,7 @@ function Router() {
         <Route path={routes.DELEGHE} element={<Deleghe />} />
         <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
         <Route path={routes.RECAPITI} element={<Contacts />} />
+        <Route path={routes.PROFILO} element={<Profile />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

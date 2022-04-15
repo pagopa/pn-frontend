@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 
-const LegalContactsDisclosure = () => {
+const LegalContactsDisclosure = memo(() => {
   const { t } = useTranslation(['recapiti']);
 
   const descriptionBox = [
@@ -30,6 +31,6 @@ const LegalContactsDisclosure = () => {
       ))}
     </List>
   );
-};
+});
 
 export default LegalContactsDisclosure;

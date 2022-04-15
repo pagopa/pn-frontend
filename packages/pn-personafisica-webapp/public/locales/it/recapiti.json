@@ -1,6 +1,8 @@
 {
   "title": "I tuoi dati",
-  "subtitle": "In questa pagina, puoi indicare e modificare i recapiti a cui vuoi ricevere le tue notifiche per via digitale.",
+  "subtitle": "Qui puoi indicare e modificare i recapiti a cui vuoi ricevere le tue notifiche per via digitale.",
+  "general-contacts-title": "Recapiti generali",
+  "special-contacts-title": "Recapiti speciali",
   "legal-contacts": {
     "title": "Recapito legale",
     "subtitle": "Ricevi le notifiche per via digitale",
@@ -18,13 +20,13 @@
     "pec-verify": "Verifica PEC",
     "pec-verify-descr": "Abbiamo inviato un codice al numero di cellulare indicato. Il codice è <strong>valido per 10 minuti</strong>.",
     "insert-code": "Inserisci codice",
-    "new-code": "Non l'hai ricevuto? Controlla di aver inserito la email corretta oppure",
+    "pec-new-code": "Non l'hai ricevuto? Controlla di aver inserito la email corretta oppure",
     "new-code-link": "genera un nuovo codice",
     "wrong-code": "Il codice inserito non è valido",
     "pec-added-successfully": "PEC associata correttamente",
     "pec-added": "PEC associata",
     "remove-pec-title": "Rimuovi PEC",
-    "remove-pec-message": "Confermi di voler rimuovere l'inidirizzo PEC {{pec}}?"
+    "remove-pec-message": "Confermi di voler rimuovere l'inidirizzo PEC {{value}}?"
   },
   "courtesy-contacts": {
     "title": "Recapito di cortesia",
@@ -44,8 +46,8 @@
     "phone-new-code": "Non l'hai ricevuto? Controlla di aver inserito il numero di cellulare corretto oppure",
     "new-code-link": "genera un nuovo codice",
     "wrong-code": "Il codice inserito non è valido",
-    "email-added": "Indirizzo email associato correttamente",
-    "phone-added": "Numero di cellulare associato correttamente",
+    "email-added": "Email associata",
+    "phone-added": "Cellulare associato",
     "valid-email": "Inserire un indirizzo email valido",
     "valid-phone": "Inserire un numero di cellulare valido",
     "email-added-successfully": "Indirizzo email aggiunto correttamente",
@@ -54,6 +56,19 @@
     "remove-email-message": "Confermi di voler rimuovere l'indirizzo email {{value}}?",
     "remove-phone-title": "Rimuovi cellulare",
     "remove-phone-message": "Confermi di voler rimuovere il numero di cellulare {{value}}?"
+  },
+  "special-contacts": {
+    "subtitle": "Se vuoi che alcune notifiche e comunicazioni siano indirizzate a dei recapiti diversi, puoi indicarli qui. Questi recapiti possono essere sia tuoi che intestati ad altri, come per esempio uno studio legale. Se non specifichi nulla, verranno utilizzati i tuoi recapiti generali.",
+    "required-fileds": "* Campi obbligatori",
+    "associated": "Già associati",
+    "sender": "Ente",
+    "address-type": "Tipo indirizzo",
+    "pec": "Indirizzo PEC",
+    "phone": "Cellulare",
+    "mail": "Indirizzo mail",
+    "pec-already-exists": "Esiste già una pec associata all'ente selezionato. Se si decide di continuare, il valore precedente verrà sovrascritto.",
+    "phone-already-exists": "Esiste già un cellulare associato all'ente selezionato. Se si decide di continuare, il valore precedente verrà sovrascritto.",
+    "email-already-exists": "Esiste già una email associata all'ente selezionato. Se si decide di continuare, il valore precedente verrà sovrascritto."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

@@ -1,0 +1,9 @@
+{
+  "title": "Profilo",
+  "subtitle": "Questi dati vengono ricavati dal tuo SPID e non sono modificabili.",
+  "profile": {
+    "name": "Nome",
+    "family_name": "Cognome",
+    "fiscal_number": "Codice fiscale"
+  }
+}

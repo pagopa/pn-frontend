@@ -9,7 +9,7 @@ import {
   mockCreateDelegation,
 } from '../../../redux/delegation/__test__/test.utils';
 
-async function getDelegates(response: Array<Delegation>) {
+async function getDelegates(response: Array<Delegation> | null) {
   const axiosMock = new MockAdapter(apiClient);
   axiosMock.onGet(`/mandate/api/v1/mandates-by-delegator`).reply(200, response);
   const res = await DelegationsApi.getDelegates();
@@ -18,7 +18,7 @@ async function getDelegates(response: Array<Delegation>) {
   return res;
 }
 
-async function getDelegators(response: Array<Delegation>) {
+async function getDelegators(response: Array<Delegation> | null) {
   const axiosMock = new MockAdapter(apiClient);
   axiosMock.onGet(`/mandate/api/v1/mandates-by-delegate`).reply(200, response);
   const res = await DelegationsApi.getDelegators();
@@ -45,7 +45,7 @@ describe('Delegations api tests', () => {
   });
 
   it('gets empty delegates', async () => {
-    const res = await getDelegates([]);
+    const res = await getDelegates(null);
     expect(res).toHaveLength(0);
   });
 
@@ -55,7 +55,7 @@ describe('Delegations api tests', () => {
   });
 
   it('gets empty delegators', async () => {
-    const res = await getDelegators([]);
+    const res = await getDelegators(null);
     expect(res).toHaveLength(0);
   });
 
@@ -68,11 +68,11 @@ describe('Delegations api tests', () => {
     mock.restore();
   });
 
-  it("doesn't revoke a delegation and throws an error", async () => {
+  it("doesn't revoke a delegation", async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPatch('/mandate/api/v1/mandate/10/revoke').reply(200);
+    mock.onPatch('/mandate/api/v1/mandate/10/revoke').reply(204);
     const res = await DelegationsApi.revokeDelegation('10');
-    expect(res).toStrictEqual({ id: '10' });
+    expect(res).toStrictEqual({ id: '-1' });
     mock.reset();
     mock.restore();
   });
@@ -82,6 +82,15 @@ describe('Delegations api tests', () => {
     mock.onPatch('/mandate/api/v1/mandate/8/reject').reply(200);
     const res = await DelegationsApi.rejectDelegation('8');
     expect(res).toStrictEqual({ id: '8' });
+    mock.reset();
+    mock.restore();
+  });
+
+  it("doesn't reject a delegation", async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPatch('/mandate/api/v1/mandate/10/reject').reply(204);
+    const res = await DelegationsApi.rejectDelegation('10');
+    expect(res).toStrictEqual({ id: '-1' });
     mock.reset();
     mock.restore();
   });

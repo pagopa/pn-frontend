@@ -5,7 +5,7 @@ import {
   Column,
   Sort,
   Notification,
-  getNotificationStatusLabelAndColor,
+  getNotificationStatusInfos,
   NotificationStatus,
   StatusTooltip,
   Item,
@@ -33,7 +33,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
   const columns: Array<Column> = [
     {
       id: 'notificationStatus',
-      label: "",
+      label: '',
       width: '1%',
       getCellLabel(value: string) {
         return getNewNotificationBadge(value);
@@ -89,14 +89,14 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
       },
     },
     {
-      id: 'notificationStatus',
+      id: 'status',
       label: t('table.status'),
       width: '18%',
       align: 'center',
       sortable: true,
-      getCellLabel(value: string) {
-        const { label, tooltip, color } = getNotificationStatusLabelAndColor(
-          value as NotificationStatus
+      getCellLabel(_, row: Item) {
+        const { label, tooltip, color } = getNotificationStatusInfos(
+          row.notificationStatus as NotificationStatus
         );
         return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;
       },

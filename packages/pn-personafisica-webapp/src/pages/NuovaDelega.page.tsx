@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
@@ -81,7 +81,6 @@ const NuovaDelega = () => {
   };
 
   const handleDelegationsClick = () => {
-    dispatch(resetNewDelegation());
     navigate(routes.DELEGHE);
   };
 
@@ -113,6 +112,13 @@ const NuovaDelega = () => {
   });
 
   const xsValue = isMobile ? 12 : 4;
+
+  useEffect(
+    () => () => {
+      dispatch(resetNewDelegation());
+    },
+    []
+  );
 
   return (
     <Fragment>

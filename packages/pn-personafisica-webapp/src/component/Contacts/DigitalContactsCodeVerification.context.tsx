@@ -1,9 +1,9 @@
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
-import { AsyncThunk } from '@reduxjs/toolkit';
+import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
+import { Box, Typography } from '@mui/material';
 import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
@@ -12,28 +12,29 @@ import {
   SaveDigitalAddressParams,
 } from '../../models/contacts';
 import { RootState } from '../../redux/store';
+import {
+  createOrUpdateCourtesyAddress,
+  createOrUpdateLegalAddress,
+} from '../../redux/contact/actions';
 
 type ModalProps = {
-  title: string;
-  subtitle: ReactNode;
-  initialValues: Array<string>;
-  codeSectionTitle: string;
-  codeSectionAdditional: ReactNode;
-  cancelLabel: string;
-  confirmLabel: string;
-  errorMessage: string;
+  labelRoot: string;
+  labelType: string;
   recipientId: string;
   senderId: string;
   digitalDomicileType: LegalChannelType | CourtesyChannelType;
   value: string;
-  successMessage: string;
-  actionToBeDispatched?: AsyncThunk<any, any, any>;
   callbackOnValidation?: (status: 'validated' | 'cancelled') => void;
 };
 
 interface IDigitalContactsCodeVerificationContext {
-  setProps: (props: ModalProps) => void;
-  handleCodeVerification: (verificationCode?: string, noCallback?: boolean) => void;
+  initValidation: (
+    digitalDomicileType: LegalChannelType | CourtesyChannelType,
+    value: string,
+    recipientId: string,
+    senderId: string,
+    callbackOnValidation?: (status: 'validated' | 'cancelled') => void
+  ) => void;
 }
 
 const DigitalContactsCodeVerificationContext = createContext<
@@ -50,19 +51,12 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   const [insertDuplicateConfirmed, setInsertDuplicateConfirmed] = useState(false);
 
   const initialProps = {
-    title: '',
-    subtitle: '',
-    initialValues: [],
-    codeSectionTitle: '',
-    codeSectionAdditional: '',
-    cancelLabel: '',
-    confirmLabel: '',
-    errorMessage: '',
+    labelRoot: '',
+    labelType: '',
     recipientId: '',
     senderId: '',
     digitalDomicileType: LegalChannelType.PEC,
     value: '',
-    successMessage: '',
   } as ModalProps;
 
   const [open, setOpen] = useState(false);
@@ -98,7 +92,15 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   };
 
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
-    if (!props.actionToBeDispatched) {
+    /* eslint-disable functional/no-let */
+    let actionToBeDispatched;
+    /* eslint-enable functional/no-let */
+    if (props.digitalDomicileType === LegalChannelType.PEC) {
+      actionToBeDispatched = createOrUpdateLegalAddress;
+    } else {
+      actionToBeDispatched = createOrUpdateCourtesyAddress;
+    }
+    if (!actionToBeDispatched) {
       return;
     }
     const digitalAddressParams: SaveDigitalAddressParams = {
@@ -111,26 +113,62 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     if(contactAlreadyExists() && !insertDuplicateConfirmed) {
       setIsConfirmationModalVisible(true);
     } else {
-      dispatch(props.actionToBeDispatched(digitalAddressParams))
-        .unwrap()
-        .then((res) => {
-          if (noCallback) {
-            return;
-          }
-          if (res && res.code) {
-            // show success message
-            setInsertDuplicateConfirmed(false);
-            dispatch(appStateActions.addSuccess({ title: '', message: props.successMessage }));
-            handleClose('validated');
-          } else if (!open) {
-            // open code verification dialog
-            setOpen(true);
-          }
-        })
-        .catch(() => {
-          setCodeNotValid(true);
-        });
+      dispatch(actionToBeDispatched(digitalAddressParams))
+      .unwrap()
+      .then((res) => {
+        if (noCallback) {
+          return;
+        }
+        if (res && res.code) {
+          setInsertDuplicateConfirmed(false);
+          // show success message
+          dispatch(
+            appStateActions.addSuccess({
+              title: '',
+              message: t(`${props.labelRoot}.${props.labelType}-added-successfully`, {
+                ns: 'recapiti',
+              }),
+            })
+          );
+          handleClose('validated');
+        } else if (!open) {
+          // open code verification dialog
+          setOpen(true);
+        }
+      })
+      .catch(() => {
+        setCodeNotValid(true);
+      });
     }
+  };
+
+  const initValidation = (
+    digitalDomicileType: LegalChannelType | CourtesyChannelType,
+    value: string,
+    recipientId: string,
+    senderId: string,
+    callbackOnValidation?: (status: 'validated' | 'cancelled') => void
+  ) => {
+    /* eslint-disable functional/no-let */
+    let labelRoot = '';
+    let labelType = '';
+    /* eslint-enable functional/no-let */
+    if (digitalDomicileType === LegalChannelType.PEC) {
+      labelRoot = 'legal-contacts';
+      labelType = 'pec';
+    } else {
+      labelRoot = 'courtesy-contacts';
+      labelType = digitalDomicileType === CourtesyChannelType.SMS ? 'phone' : 'email';
+    }
+    setProps({
+      labelRoot,
+      labelType,
+      recipientId,
+      senderId,
+      digitalDomicileType,
+      value,
+      callbackOnValidation,
+    });
   };
 
   useEffect(() => {
@@ -144,23 +182,42 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   }
 
   return (
-    <DigitalContactsCodeVerificationContext.Provider value={{ setProps, handleCodeVerification }}>
+    <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
       {children}
-      <CodeModal
-        title={props.title}
-        subtitle={props.subtitle}
+      {!_.isEqual(props, initialProps) && <CodeModal
+        title={
+          t(`${props.labelRoot}.${props.labelType}-verify`, { ns: 'recapiti' }) + ` ${props.value}`
+        }
+        subtitle={
+          <Trans i18nKey={`${props.labelRoot}.${props.labelType}-verify-descr`} ns="recapiti" />
+        }
         open={open}
-        initialValues={props.initialValues}
+        initialValues={new Array(5).fill('')}
         handleClose={() => setOpen(false)}
-        codeSectionTitle={props.codeSectionTitle}
-        codeSectionAdditional={props.codeSectionAdditional}
-        cancelLabel={props.cancelLabel}
-        confirmLabel={props.confirmLabel}
+        codeSectionTitle={t(`${props.labelRoot}.insert-code`, { ns: 'recapiti' })}
+        codeSectionAdditional={
+          <Box>
+            <Typography variant="body2" display="inline">
+              {t(`${props.labelRoot}.${props.labelType}-new-code`, { ns: 'recapiti' })}&nbsp;
+            </Typography>
+            <Typography
+              variant="body2"
+              display="inline"
+              color="primary"
+              onClick={() => handleCodeVerification(undefined, true)}
+              sx={{ cursor: 'pointer' }}
+            >
+              {t(`${props.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
+            </Typography>
+          </Box>
+        }
+        cancelLabel={t('button.annulla')}
+        confirmLabel={t('button.conferma')}
         cancelCallback={() => handleClose('cancelled')}
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         hasError={codeNotValid}
-        errorMessage={props.errorMessage}
-      />
+        errorMessage={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
+      />}
       <Dialog
         open={isConfirmationModalVisible}
         onClose={handleDiscard}

@@ -1,5 +1,4 @@
 import {
-  formatDate,
   NotificationStatus,
   AddressSource,
   DeliveryMode,
@@ -10,6 +9,7 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
+  parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
 export const notificationFromBe: NotificationDetail = {
@@ -260,15 +260,4 @@ export const notificationFromBe: NotificationDetail = {
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
 };
 
-export const notificationToFe = {
-  ...notificationFromBe,
-  sentAt: formatDate(notificationFromBe.sentAt),
-  /* eslint-disable functional/immutable-data */
-  notificationStatusHistory: notificationFromBe.notificationStatusHistory
-    .slice()
-    .sort((a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime()),
-  timeline: notificationFromBe.timeline
-    .slice()
-    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()),
-  /* eslint-enable functional/immutable-data */
-};
+export const notificationToFe = parseNotificationDetail(notificationFromBe);
