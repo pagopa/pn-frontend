@@ -2,9 +2,10 @@ import { ReactNode } from 'react';
 import * as redux from 'react-redux';
 import { fireEvent, RenderResult, screen, waitFor } from '@testing-library/react';
 
-import { LegalChannelType } from '../../../models/contacts';
+import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { render } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/contact/actions';
+import * as hooks from '../../../redux/hooks';
 import {
   DigitalContactsCodeVerificationProvider,
   useDigitalContactsCodeVerificationContext,
@@ -12,13 +13,23 @@ import {
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: (str: string) => str,
-    };
-  },
-  Trans: (props: {i18nKey: string}) => props.i18nKey,
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
+
+const mockedStore = {
+  legal: [],
+  courtesy: [{
+    addressType: 'courtesy',
+    recipientId: 'mocked-recipientId',
+    senderId: 'mocked-senderId',
+    channelType: CourtesyChannelType.EMAIL,
+    value: "mocked-value",
+    code: ''
+  }]
+};
 
 const Wrapper = ({ children }: { children: ReactNode }) => (
   <DigitalContactsCodeVerificationProvider>{children}</DigitalContactsCodeVerificationProvider>
@@ -63,6 +74,8 @@ describe('DigitalContactsCodeVerification Context', () => {
   let result: RenderResult | undefined;
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
+  const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
+  mockUseAppSelector.mockReturnValue(mockedStore);
 
   beforeEach(() => {
     // mock action
@@ -129,7 +142,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     mockDispatchFn.mockReset();
     mockDispatchFn.mockClear();
     mockDispatchFn.mockImplementation(jest.fn(() => ({
-      unwrap: () => Promise.resolve({code: '01234'}),
+      unwrap: () => Promise.resolve({ code: '01234' }),
     })));
     fireEvent.click(buttons![1]);
     await waitFor(() => {
@@ -146,5 +159,19 @@ describe('DigitalContactsCodeVerification Context', () => {
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
+  });
+
+  it('asks for confirmation when trying to add an already existing contact', async () => {
+    const button = screen.getByRole('button', { name: 'Click me' });
+    expect(button).toBeInTheDocument();
+    mockUseAppSelector.mockReturnValue(mockedStore);
+
+
+    fireEvent.click(button);
+    screen.getByRole('heading', { name: 'common.duplicate-contact-title' });
+    const confirmButton = screen.getByRole('button', { name: 'button.conferma' });
+
+    fireEvent.click(confirmButton);
+    await screen.findAllByRole('heading', { name: /legal-contacts.pec-verify\b/ });
   });
 });

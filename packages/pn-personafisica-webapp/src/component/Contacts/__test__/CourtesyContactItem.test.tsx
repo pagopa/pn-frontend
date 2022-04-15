@@ -2,6 +2,7 @@
 import { act, fireEvent, render, RenderResult, screen, waitFor } from "@testing-library/react";
 import * as redux from 'react-redux';
 import { CourtesyChannelType } from "../../../models/contacts";
+import * as hooks from '../../../redux/hooks';
 import * as actions from '../../../redux/contact/actions';
 import CourtesyContactItem, { CourtesyFieldType } from "../CourtesyContactItem";
 import { DigitalContactsCodeVerificationProvider } from "../DigitalContactsCodeVerification.context";
@@ -14,11 +15,21 @@ jest.mock('react-i18next', () => ({
     Trans: () => "mocked verify description",
 }));
 
+const emptyMockedStore = {
+  legal: [],
+  courtesy: []
+};
+
 describe('CourtesyContactItem component', () => {
   let result: RenderResult | undefined;
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
   let deleteMockActionFn: jest.Mock;
+
+  beforeEach(() => {
+    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
+    mockUseAppSelector.mockReturnValue(emptyMockedStore);
+  });
   
   describe('test component having type "phone"', () => {
     const VALID_PHONE = "3331234567";
@@ -254,7 +265,7 @@ describe('CourtesyContactItem component', () => {
         });
       });
 
-      test('deletes phone number', async () => {
+      test('delete phone number', async () => {
         const phoneText = screen.getByText(VALID_PHONE);
         expect(phoneText).toBeInTheDocument();
         
@@ -321,7 +332,7 @@ describe('CourtesyContactItem component', () => {
         });
       });
   
-      test('entering an invalid email keeps submit button disabled', async () => {
+      test('type in an invalid email', async () => {
         const inputs = await result!.findAllByRole('textbox');
         expect(inputs![0]).toBeInTheDocument();
         expect(inputs).toHaveLength(1);
@@ -337,7 +348,7 @@ describe('CourtesyContactItem component', () => {
         
       });
 
-      test('entering a valid number enables submit button', async() => {
+      test('type in a valid email', async() => {
         const input = result?.getByRole('textbox');
         expect(input).toHaveValue('');
         fireEvent.change(input!, { target: { value: VALID_EMAIL } });
@@ -350,7 +361,7 @@ describe('CourtesyContactItem component', () => {
         expect(buttons[0]).toBeEnabled();
       });
 
-      test('adding a new email', async () => {
+      test('add a new email', async () => {
         const input = result?.getByRole('textbox');
         fireEvent.change(input!, { target: { value: VALID_EMAIL } });
         await waitFor(() => expect(input!).toHaveValue(VALID_EMAIL));
@@ -410,7 +421,7 @@ describe('CourtesyContactItem component', () => {
         await act(async () => {
           result = render(
             <DigitalContactsCodeVerificationProvider>
-              <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.EMAIL} value="prova@pagopa.it" />
+              <CourtesyContactItem recipientId="mocked-recipient" type={CourtesyFieldType.EMAIL} value={VALID_EMAIL} />
             </DigitalContactsCodeVerificationProvider>
           );
         });
@@ -509,7 +520,7 @@ describe('CourtesyContactItem component', () => {
       });
     });
 
-    describe('delete an existing phone number', () => {
+    describe('delete an existing email', () => {
       beforeEach(async () => {
         deleteMockActionFn = jest.fn();
         const deleteActionSpy = jest.spyOn(actions, 'deleteCourtesyAddress');
@@ -524,9 +535,9 @@ describe('CourtesyContactItem component', () => {
         });
       });
 
-      test('deletes phone number', async () => {
-        const phoneText = screen.getByText(VALID_EMAIL);
-        expect(phoneText).toBeInTheDocument();
+      test('delete email', async () => {
+        const textValue = screen.getByText(VALID_EMAIL);
+        expect(textValue).toBeInTheDocument();
         
         const deleteButton = screen.getByRole('button', { name: 'button.rimuovi'});
         

@@ -69,5 +69,9 @@
     "pec-already-exists": "Esiste già una pec associata all'ente selezionato. Se si decide di continuare, il valore precedente verrà sovrascritto.",
     "phone-already-exists": "Esiste già un cellulare associato all'ente selezionato. Se si decide di continuare, il valore precedente verrà sovrascritto.",
     "email-already-exists": "Esiste già una email associata all'ente selezionato. Se si decide di continuare, il valore precedente verrà sovrascritto."
+  },
+  "common": {
+    "duplicate-contact-title": "Recapito già presente",
+    "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?"
   }
 }

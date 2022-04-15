@@ -3,13 +3,15 @@ import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { Box, Typography } from '@mui/material';
 import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 
-import { useAppDispatch } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
   CourtesyChannelType,
   LegalChannelType,
   SaveDigitalAddressParams,
 } from '../../models/contacts';
+import { RootState } from '../../redux/store';
 import {
   createOrUpdateCourtesyAddress,
   createOrUpdateLegalAddress,
@@ -40,6 +42,13 @@ const DigitalContactsCodeVerificationContext = createContext<
 >(undefined);
 
 const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) => {
+  const { t } = useTranslation(['common', 'recapiti']);
+  const digitalAddresses = useAppSelector(
+    (state: RootState) => state.contactsState.digitalAddresses
+  );
+  const addresses = digitalAddresses ? digitalAddresses.legal.concat(digitalAddresses.courtesy) : [];
+  const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
+
   const initialProps = {
     labelRoot: '',
     labelType: '',
@@ -49,7 +58,6 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     value: '',
   } as ModalProps;
 
-  const { t } = useTranslation(['common', 'recapiti']);
   const [open, setOpen] = useState(false);
   const [codeNotValid, setCodeNotValid] = useState(false);
   const dispatch = useAppDispatch();
@@ -62,6 +70,22 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     if (props.callbackOnValidation) {
       props.callbackOnValidation(status);
     }
+  };
+
+  const handleConfirm = () => {
+    setIsConfirmationModalVisible(false);
+    handleCodeVerification();
+  };
+
+  const handleDiscard = () => {
+    setIsConfirmationModalVisible(false);
+  };
+
+  const contactAlreadyExists = (): boolean => {
+    if (addresses.find((elem) => elem.value === props.value && (elem.senderId !== props.senderId || elem.channelType !== props.digitalDomicileType))) {
+      return true;
+    }
+    return false;
   };
 
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
@@ -83,6 +107,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       value: props.value,
       code: verificationCode,
     };
+
     dispatch(actionToBeDispatched(digitalAddressParams))
       .unwrap()
       .then((res) => {
@@ -140,8 +165,10 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   };
 
   useEffect(() => {
-    if (!_.isEqual(props, initialProps)) {
+    if (!_.isEqual(props, initialProps) && !contactAlreadyExists()) {
       handleCodeVerification();
+    } else if (contactAlreadyExists()) {
+      setIsConfirmationModalVisible(true);
     }
   }, [props]);
 
@@ -182,6 +209,21 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         hasError={codeNotValid}
         errorMessage={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
       />}
+      <Dialog
+        open={isConfirmationModalVisible}
+        onClose={handleDiscard}
+        aria-labelledby="dialog-title"
+        aria-describedby="dialog-description"
+      >
+        <DialogTitle id="dialog-title">{t(`common.duplicate-contact-title`, { value: props.value, ns: 'recapiti' })}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="dialog-description">{t(`common.duplicate-contact-descr`, { value: props.value, ns: 'recapiti' })}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDiscard} variant="outlined">{t('button.annulla')}</Button>
+          <Button onClick={handleConfirm} variant="contained">{t('button.conferma')}</Button>
+        </DialogActions>
+      </Dialog>
     </DigitalContactsCodeVerificationContext.Provider>
   );
 };

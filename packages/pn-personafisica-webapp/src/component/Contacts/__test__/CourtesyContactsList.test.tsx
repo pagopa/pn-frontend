@@ -13,6 +13,11 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
+const emptyMockedStore = {
+  legal: [],
+  courtesy: []
+};
+
 const mockedStore: Array<DigitalAddress> = [{
   addressType: 'courtesy',
   recipientId: 'recipient1',
@@ -40,7 +45,7 @@ describe('CourtesyContactsList Component', () => {
   // const mockActionFn = jest.fn();
 
   it('renders correctly with empty store', async () => {
-    mockUseAppSelector.mockReturnValueOnce([]);
+    mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce([]);
     await act(async () => {
       render(
         <DigitalContactsCodeVerificationProvider>
@@ -68,7 +73,7 @@ describe('CourtesyContactsList Component', () => {
   });
 
   it('renders correctly with data in store', async () => {
-    mockUseAppSelector.mockReturnValueOnce(mockedStore);
+    mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce(mockedStore);
     await act(async () => {
       render(
         <DigitalContactsCodeVerificationProvider>
