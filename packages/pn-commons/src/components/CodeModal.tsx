@@ -180,7 +180,7 @@ const CodeModal = memo(({
         </Box>
         <Box sx={{ marginTop: '10px', textAlign: isMobile ? 'center' : 'left' }}>{codeSectionAdditional}</Box>
         <Divider sx={{ margin: '20px 0' }} />
-        {hasError && errorMessage && (
+        {hasError && (
           <Alert data-testid="errorAlert" severity="error" sx={{textAlign: isMobile ? 'center' : 'left'}}>
             <AlertTitle>{errorTitle}</AlertTitle>
             {errorMessage}

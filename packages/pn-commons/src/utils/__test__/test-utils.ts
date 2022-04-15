@@ -7,10 +7,11 @@ import {
   DigitalDomicileType,
   NotificationFeePolicy,
   PhysicalCommunicationType,
+  NotificationDetail
 } from '../../types/NotificationDetail';
 import { NotificationStatus } from '../../types/NotificationStatus';
 
-export const timeline: Array<INotificationDetailTimeline> = [
+const timeline: Array<INotificationDetailTimeline> = [
   {
     elementId: 'mocked-id-1',
     timestamp: '2022-03-21T08:56:50.177Z',
@@ -31,7 +32,7 @@ export const timeline: Array<INotificationDetailTimeline> = [
   },
 ];
 
-export const statusHistory: Array<NotificationStatusHistory> = [
+const statusHistory: Array<NotificationStatusHistory> = [
   {
     status: NotificationStatus.ACCEPTED,
     activeFrom: '2022-03-21T08:56:50.177Z',
@@ -44,7 +45,7 @@ export const statusHistory: Array<NotificationStatusHistory> = [
   },
 ];
 
-export const recipients: Array<NotificationDetailRecipient> = [
+const recipients: Array<NotificationDetailRecipient> = [
   {
     recipientType: RecipientType.PF,
     taxId: 'mocked-taxId',
@@ -66,11 +67,11 @@ export const recipients: Array<NotificationDetailRecipient> = [
   },
 ];
 
-export const notificationFromBe = {
+export const notificationFromBe: NotificationDetail = {
   iun: '',
   paNotificationId: '',
   subject: '',
-  sentAt: '',
+  sentAt: '2022-02-21T10:19:33.440Z',
   cancelledIun: '',
   cancelledByIun: '',
   recipients,
@@ -81,29 +82,74 @@ export const notificationFromBe = {
     f24: {
       flatRate: {
         digests: {
-          sha256: ''
+          sha256: '',
         },
         contentType: '',
-        title: ''
+        title: '',
       },
       digital: {
         digests: {
-          sha256: ''
+          sha256: '',
         },
         contentType: '',
-        title: ''
+        title: '',
       },
       analog: {
         digests: {
-          sha256: ''
+          sha256: '',
         },
         contentType: '',
-        title: ''
+        title: '',
       },
-    }
+    },
   },
   notificationStatus: NotificationStatus.ACCEPTED,
   notificationStatusHistory: statusHistory,
   timeline,
-  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890
-}
+  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
+};
+
+export const parsedNotification: NotificationDetail = {
+  iun: '',
+  paNotificationId: '',
+  subject: '',
+  sentAt: '21/02/2022',
+  cancelledIun: '',
+  cancelledByIun: '',
+  recipients,
+  documents: [],
+  payment: {
+    iuv: '',
+    notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+    f24: {
+      flatRate: {
+        digests: {
+          sha256: '',
+        },
+        contentType: '',
+        title: '',
+      },
+      digital: {
+        digests: {
+          sha256: '',
+        },
+        contentType: '',
+        title: '',
+      },
+      analog: {
+        digests: {
+          sha256: '',
+        },
+        contentType: '',
+        title: '',
+      },
+    },
+  },
+  notificationStatus: NotificationStatus.ACCEPTED,
+  notificationStatusHistory: [
+    { ...statusHistory[0], steps: [{...timeline[0], hidden: false}] },
+    { ...statusHistory[1], steps: [{...timeline[1], hidden: false}]},
+  ],
+  timeline: timeline.map(t => ({...t, hidden: false})),
+  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
+};
