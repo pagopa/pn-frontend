@@ -48,7 +48,6 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   );
   const addresses = digitalAddresses ? digitalAddresses.legal.concat(digitalAddresses.courtesy) : [];
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
-  const [insertDuplicateConfirmed, setInsertDuplicateConfirmed] = useState(false);
 
   const initialProps = {
     labelRoot: '',
@@ -65,8 +64,6 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   const [props, setProps] = useState(initialProps);
 
   const handleClose = (status: 'validated' | 'cancelled' = 'cancelled') => {
-    setInsertDuplicateConfirmed(false);
-    setIsConfirmationModalVisible(false);
     setCodeNotValid(false);
     setOpen(false);
     setProps(initialProps);
@@ -76,8 +73,8 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   };
 
   const handleConfirm = () => {
-    setInsertDuplicateConfirmed(true);
     setIsConfirmationModalVisible(false);
+    handleCodeVerification();
   };
 
   const handleDiscard = () => {
@@ -85,7 +82,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   };
 
   const contactAlreadyExists = (): boolean => {
-    if(addresses.find((elem) => elem.value === props.value && (elem.senderId !== props.senderId || elem.channelType !== props.digitalDomicileType))){
+    if (addresses.find((elem) => elem.value === props.value && (elem.senderId !== props.senderId || elem.channelType !== props.digitalDomicileType))) {
       return true;
     }
     return false;
@@ -110,17 +107,14 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       value: props.value,
       code: verificationCode,
     };
-    if(contactAlreadyExists() && !insertDuplicateConfirmed) {
-      setIsConfirmationModalVisible(true);
-    } else {
-      dispatch(actionToBeDispatched(digitalAddressParams))
+
+    dispatch(actionToBeDispatched(digitalAddressParams))
       .unwrap()
       .then((res) => {
         if (noCallback) {
           return;
         }
         if (res && res.code) {
-          setInsertDuplicateConfirmed(false);
           // show success message
           dispatch(
             appStateActions.addSuccess({
@@ -131,7 +125,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
             })
           );
           handleClose('validated');
-        } else if (!open) {
+        } else {
           // open code verification dialog
           setOpen(true);
         }
@@ -139,7 +133,6 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       .catch(() => {
         setCodeNotValid(true);
       });
-    }
   };
 
   const initValidation = (
@@ -172,14 +165,12 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   };
 
   useEffect(() => {
-    if (!_.isEqual(props, initialProps)) {
+    if (!_.isEqual(props, initialProps) && !contactAlreadyExists()) {
       handleCodeVerification();
+    } else if (contactAlreadyExists()) {
+      setIsConfirmationModalVisible(true);
     }
   }, [props]);
-
-  if(insertDuplicateConfirmed) {
-    handleCodeVerification();
-  }
 
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>

@@ -14,9 +14,9 @@ import {
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-      t: (str: string) => str,
-    }),
-    Trans: (props: {i18nKey: string}) => props.i18nKey,
+    t: (str: string) => str,
+  }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 const mockedStore = {
@@ -142,7 +142,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     mockDispatchFn.mockReset();
     mockDispatchFn.mockClear();
     mockDispatchFn.mockImplementation(jest.fn(() => ({
-      unwrap: () => Promise.resolve({code: '01234'}),
+      unwrap: () => Promise.resolve({ code: '01234' }),
     })));
     fireEvent.click(buttons![1]);
     await waitFor(() => {
@@ -165,13 +165,13 @@ describe('DigitalContactsCodeVerification Context', () => {
     const button = screen.getByRole('button', { name: 'Click me' });
     expect(button).toBeInTheDocument();
     mockUseAppSelector.mockReturnValue(mockedStore);
-    
+
 
     fireEvent.click(button);
     screen.getByRole('heading', { name: 'common.duplicate-contact-title' });
     const confirmButton = screen.getByRole('button', { name: 'button.conferma' });
 
     fireEvent.click(confirmButton);
-    await screen.findAllByRole('heading', { name: /legal-contacts.pec-verify\b/});
+    await screen.findAllByRole('heading', { name: /legal-contacts.pec-verify\b/ });
   });
 });

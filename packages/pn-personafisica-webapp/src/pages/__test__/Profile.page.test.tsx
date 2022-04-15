@@ -23,7 +23,6 @@ describe('testing profile page', () => {
   });
 
   test('profile page renders properly', () => {
-
     const title = screen.getByRole('heading', { name: 'title' });
     expect(title).toBeInTheDocument();
 
@@ -43,7 +42,5 @@ describe('testing profile page', () => {
     expect(familyName).toBeInTheDocument();
     const fiscalNumber = screen.getByText('RSSMRA45P02H501W');
     expect(fiscalNumber).toBeInTheDocument();
-
-    screen.debug();
   });
 });

@@ -171,6 +171,7 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
+  // 2DO DA CONTROLLARE
   it.skip('test form reset', async () => {
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
