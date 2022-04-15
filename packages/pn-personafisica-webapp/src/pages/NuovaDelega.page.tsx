@@ -128,7 +128,7 @@ const NuovaDelega = () => {
             <Breadcrumbs aria-label="breadcrumb">
               <StyledLink to={routes.DELEGHE}>
                 <PeopleIcon sx={{ mr: 0.5 }} />
-                {t('Deleghe')}
+                {t('nuovaDelega.title')}
               </StyledLink>
               <Typography color="text.primary" fontWeight={600}>
                 {t('Nuova Delega')}
@@ -375,12 +375,10 @@ const NuovaDelega = () => {
       {created && (
         <CourtesyPage
           icon={<CheckCircleOutlineIcon />}
-          title={t('La tua richiesta di delega è stata creata con successo')}
-          subtitle={t(
-            'Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a Piattaforma Notifiche e accettare la tua richiesta.'
-          )}
+          title={t('nuovaDelega.created_title')}
+          subtitle={t('nuovaDelega.created_description')}
           onClick={handleDelegationsClick}
-          onClickLabel={t('Torna alle tue deleghe')}
+          onClickLabel={t('nuovaDelega.back_to_delegations')}
         />
       )}
     </Fragment>
