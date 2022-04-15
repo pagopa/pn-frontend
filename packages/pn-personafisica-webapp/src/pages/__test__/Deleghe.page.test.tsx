@@ -63,7 +63,7 @@ describe('Deleghe page', () => {
   });
 
   it('renders the desktop view of the deleghe page', async () => {
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
     useSelectorSpy(false, false, 'delegates');
     const result = render(<Deleghe />);
@@ -77,7 +77,7 @@ describe('Deleghe page', () => {
   });
 
   it('renders the mobile view of the deleghe page', async () => {
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(true);
     useSelectorSpy(false, false, 'delegates');
     const result = render(<Deleghe />);
@@ -90,7 +90,7 @@ describe('Deleghe page', () => {
   });
 
   it('checks the revocation modal open', async () => {
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
     useSelectorSpy(true, false, 'delegates');
     const result = render(<Deleghe />);
@@ -107,7 +107,7 @@ describe('Deleghe page', () => {
   });
 
   it('checks the revocation modal open', async () => {
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
     useSelectorSpy(true, false, 'delegators');
     const result = render(<Deleghe />);

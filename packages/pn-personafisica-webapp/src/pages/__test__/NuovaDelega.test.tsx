@@ -1,7 +1,6 @@
 import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/IsMobile.hook';
 
 import { fireEvent, waitFor } from '@testing-library/react';
-import * as redux from 'react-redux';
 import { act } from 'react-dom/test-utils';
 import { render } from '../../__test__/test-utils';
 import NuovaDelega from '../NuovaDelega.page';
@@ -32,8 +31,6 @@ jest.mock('react-router-dom', () => ({
 
 const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 const mockSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
-const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-const mockDispatchFn = jest.fn();
 
 async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
   const input = form.querySelector(`input[name="${elementName}"]`);
@@ -49,8 +46,6 @@ describe('NuovaDelega page', () => {
     mockSelectorSpy.mockReset();
     useIsMobileSpy.mockClear();
     useIsMobileSpy.mockReset();
-    useDispatchSpy.mockClear();
-    useDispatchSpy.mockReset();
   });
 
   it('renders the component desktop view', () => {
@@ -101,7 +96,6 @@ describe('NuovaDelega page', () => {
   });
 
   it('fills the form and calls the create function', async () => {
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
     mockSelectorSpy.mockReturnValue({ created: false });
     useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />);
