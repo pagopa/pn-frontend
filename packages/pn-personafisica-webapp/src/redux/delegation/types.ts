@@ -8,10 +8,8 @@ export interface DelegationsList {
   isCompany: boolean;
 }
 
-export interface Delegation {
+export interface IDelegation {
   mandateId: string;
-  delegator: Person;
-  delegate: Person;
   status: 'active' | 'pending';
   visibilityIds: Array<{
     name: string;
@@ -21,6 +19,16 @@ export interface Delegation {
   datefrom: string;
   dateto: string;
 }
+
+export interface Delegator extends IDelegation {
+  delegator: Person;
+}
+
+export interface Delegate extends IDelegation {
+  delegate: Person;
+}
+
+export type Delegation = Delegator | Delegate;
 
 export interface OrganizationId {
   id: string;

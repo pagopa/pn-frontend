@@ -23,7 +23,7 @@ const Delegators = () => {
     (state: RootState) => state.delegationsState.sortDelegators
   );
 
-  const rows: Array<Item> = delegationToItem(delegates, true);
+  const rows: Array<Item> = delegationToItem(delegates);
 
   const delegatorsColumns: Array<Column> = [
     {
