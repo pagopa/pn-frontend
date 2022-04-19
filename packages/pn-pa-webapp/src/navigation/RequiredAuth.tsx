@@ -18,10 +18,12 @@ const RequireAuth = ({ roles }: Props) => {
   const token = useSelector((state: RootState) => state.userState.user.sessionToken);
   const role = useSelector((state: RootState) => state.userState.user.organization?.role);
   const userHasRequiredRole = role && roles.includes(role);
-  const [accessDenied, setAccessDenied] = useState(true);
+  const [accessDenied, setAccessDenied] = useState(token === '' || !token || !userHasRequiredRole);
 
   useEffect(() => {
     if (token === '' || !token) {
+      // TODO: far comparire la modale
+      setAccessDenied(true);
       // Redirect them to the selfcare login page
       window.location.href = SELFCARE_URL_FE_LOGIN || '';
     }
