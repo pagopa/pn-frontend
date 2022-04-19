@@ -22,7 +22,7 @@ const VerifyUser = () => {
     } else {
       if (token === '') {
         /* eslint-disable functional/immutable-data */
-       window.location.href = URL_FE_LOGIN || '';
+        window.location.href = URL_FE_LOGIN || '';
       }
     }
   }, [location]);

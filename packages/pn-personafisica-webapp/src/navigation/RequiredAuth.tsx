@@ -13,10 +13,12 @@ import { URL_FE_LOGIN } from '../utils/constants';
 /* eslint-disable functional/immutable-data */
 const RequireAuth = () => {
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
-  const [accessDenied, setAccessDenied] = useState(true);
+  const [accessDenied, setAccessDenied] = useState(token === '' || !token);
 
   useEffect(() => {
     if (token === '' || !token) {
+      // TODO: far comparire la modale
+      setAccessDenied(true);
       // Redirect them to the spid-hub login page
       window.location.href = URL_FE_LOGIN || '';
     }
