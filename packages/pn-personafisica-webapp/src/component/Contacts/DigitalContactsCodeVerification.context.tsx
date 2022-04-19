@@ -207,7 +207,8 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         cancelCallback={() => handleClose('cancelled')}
         confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
         hasError={codeNotValid}
-        errorMessage={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
+        errorTitle={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
+        errorMessage={t(`${props.labelRoot}.wrong-code-message`, { ns: 'recapiti' })}
       />}
       <Dialog
         open={isConfirmationModalVisible}

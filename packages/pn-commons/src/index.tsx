@@ -20,7 +20,7 @@ import NotificationDetailTable from './components/NotificationDetail/Notificatio
 import NotificationDetailDocuments from './components/NotificationDetail/NotificationDetailDocuments';
 import NotificationDetailTimeline from './components/NotificationDetail/NotificationDetailTimeline';
 import Toast from './components/Toast/Toast';
-import CodeModal from './components/CodeModal';
+import CodeModal from './components/CodeModal/CodeModal';
 
 export { LoadingOverlay };
 export { Header };
