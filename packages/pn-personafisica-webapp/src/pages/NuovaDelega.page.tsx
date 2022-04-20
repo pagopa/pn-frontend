@@ -87,7 +87,6 @@ const NuovaDelega = () => {
   const initialValues = {
     selectPersonaFisicaOrPersonaGiuridica: 'pf',
     codiceFiscale: '',
-    email: '',
     nome: '',
     cognome: '',
     selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
@@ -100,7 +99,7 @@ const NuovaDelega = () => {
   };
 
   const validationSchema = yup.object({
-    selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Email is required'),
+    selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Selezionare il tipo di persona'),
     codiceFiscale: yup
       .string()
       .required('Il Codice Fiscale è obbligatorio')
@@ -233,19 +232,6 @@ const NuovaDelega = () => {
                     name="codiceFiscale"
                     error={touched.codiceFiscale && Boolean(errors.codiceFiscale)}
                     helperText={touched.codiceFiscale && errors.codiceFiscale}
-                    fullWidth
-                  />
-                  <TextField
-                    sx={{ marginTop: '1rem' }}
-                    id="email"
-                    value={values.email.toString()}
-                    onChange={(event) => {
-                      setFieldValue('email', event.currentTarget.value);
-                    }}
-                    label={t('nuovaDelega.form.email')}
-                    name="email"
-                    error={touched.email && Boolean(errors.email)}
-                    helperText={touched.email && errors.email}
                     fullWidth
                   />
                   <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }}>
