@@ -12,11 +12,17 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { getReceivedNotifications, setNotificationFilters, setPagination, setSorting } from '../redux/dashboard/actions';
+import {
+  getReceivedNotifications,
+  setNotificationFilters,
+  setPagination,
+  setSorting,
+} from '../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
+import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -73,6 +79,7 @@ const Notifiche = () => {
 
   return (
     <Box sx={{ padding: '20px' }}>
+      <DomicileBanner />
       <TitleBox variantTitle="h4" title={t('title')}></TitleBox>
       {isMobile ? (
         <MobileNotifications
