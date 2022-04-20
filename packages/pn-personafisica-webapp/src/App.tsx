@@ -10,7 +10,7 @@ import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { PAGOPA_HELP_EMAIL } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation} from './redux/delegation/types';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
@@ -32,13 +32,13 @@ const App = () => {
     setPendingDelegatorsState(pendingDelegators);
   }, [pendingDelegators]);
 
-  const mapDelegatorSideMenuItem = delegators.map((delegator:Delegation) => ({
+  const mapDelegatorSideMenuItem = delegators.map((delegator: Delegation) => ({
     icon: PersonIcon,
     label:
-      'delegator' in delegator && delegator.delegator ? 
-      `${delegator.delegator.firstName} ${delegator.delegator.lastName}`:
-      'No Name Found',
-    }));
+      'delegator' in delegator && delegator.delegator
+        ? `${delegator.delegator.firstName} ${delegator.delegator.lastName}`
+        : 'No Name Found',
+  }));
 
   // TODO spostare questo in un file di utility
   const menuItems: Array<SideMenuItem> = [
@@ -64,7 +64,12 @@ const App = () => {
       assistanceEmail={PAGOPA_HELP_EMAIL}
       sideMenu={<SideMenu menuItems={menuItems} />}
     >
-      <AppMessage />
+      <AppMessage
+        sessionRedirect={() => {
+          /* eslint-disable-next-line functional/immutable-data */
+          window.location.href = URL_FE_LOGIN as string;
+        }}
+      />
       <LoadingOverlay />
       <Router />
     </Layout>
