@@ -8,22 +8,23 @@ import { useEffect, useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
-import { getNumberDelegator, logout } from './redux/auth/actions';
+import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { PAGOPA_HELP_EMAIL } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation} from './redux/delegation/types';
+import { getSidemenuInformation } from './redux/sidemenu/actions';
 
 const App = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
   const sessionToken = useAppSelector((state: RootState) => state.userState.user.sessionToken);
-  const { pendingDelegators, delegators } = useAppSelector((state: RootState) => state.userState);
+  const { pendingDelegators, delegators } = useAppSelector((state: RootState) => state.sidemenuState);
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getNumberDelegator());
+      void dispatch(getSidemenuInformation());
     }
   }, [sessionToken]);
 

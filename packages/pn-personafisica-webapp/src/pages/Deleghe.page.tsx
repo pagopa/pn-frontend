@@ -20,7 +20,7 @@ import MobileDelegates from '../component/Deleghe/MobileDelegates';
 import MobileDelegators from '../component/Deleghe/MobileDelegators';
 import Delegates from '../component/Deleghe/Delegates';
 import Delegators from '../component/Deleghe/Delegators';
-import { getNumberDelegator } from '../redux/auth/actions';
+import { getSidemenuInformation } from '../redux/sidemenu/actions';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -55,13 +55,12 @@ const Deleghe = () => {
 
   const handleAccept = async (code: Array<string>) => {
     await dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
-    void dispatch(getNumberDelegator);
+    void dispatch(getSidemenuInformation);
   };
 
   useEffect(() => {
     void dispatch(getDelegates());
     void dispatch(getDelegators());
-
     return () => {
       dispatch(resetDelegationsState);
     };
