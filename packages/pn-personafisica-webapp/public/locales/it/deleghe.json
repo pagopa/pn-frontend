@@ -47,6 +47,9 @@
         }
     },
     "nuovaDelega": {
+        "back_to_delegations": "Torna alle tue deleghe",
+        "created_title": "La tua richiesta di delega è stata creata con successo",
+        "created_description": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a Piattaforma Notifiche e accettare la tua richiesta.",
         "title": "Le tue deleghe",
         "subtitle": "Inserisci i dati della persona fisica o \n giuridica a cui vuoi delegare la visualizzazione o la gestione delle tue notifiche",
         "form" : {

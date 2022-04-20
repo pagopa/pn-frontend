@@ -90,6 +90,7 @@ const Deleghe = () => {
               ? t('deleghe.revocation_question')
               : t('deleghe.rejection_question')
           }
+          onCloseLabel={t('deleghe.close')}
           handleClose={handleCloseModal}
           onConfirm={handleConfirmClick}
           onConfirmLabel={
@@ -97,7 +98,7 @@ const Deleghe = () => {
           }
         />
         <Box ml={isMobile ? 2 : 0} mb={2}>
-          <TitleBox title={'Deleghe'} variantTitle={'h4'}>
+          <TitleBox title={'deleghe.title'} variantTitle={'h4'}>
             <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
               deleghe.description
             </Trans>

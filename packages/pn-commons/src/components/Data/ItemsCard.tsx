@@ -6,15 +6,15 @@ import { CardElement, CardAction } from '../../types/ItemsCard';
 import { Item } from '../../types/ItemsTable';
 
 type Props = {
-  /* Card header elements*/
+  /* Card header elements */
   cardHeader: [CardElement, CardElement];
-  /* Card body elements*/
+  /* Card body elements */
   cardBody: Array<CardElement>;
-  /* Card data*/
+  /* Card data */
   cardData: Array<Item>;
   /** Callback to be called when performing an empty action */
   emptyActionCallback: () => void;
-  /* Card actions*/
+  /* Card actions */
   cardActions?: Array<CardAction>;
   /** Empty message for no result */
   emptyMessage?: ReactNode;
@@ -69,7 +69,7 @@ const ItemsCard = ({
                   <Typography sx={{ fontWeight: 600 }} data-testid="cardBodyLabel">
                     {body.label}
                   </Typography>
-                  <Typography data-testid="cardBodyValue">
+                  <Typography component="div" data-testid="cardBodyValue">
                     {body.getLabel(data[body.id])}
                   </Typography>
                 </Box>
@@ -93,11 +93,7 @@ const ItemsCard = ({
       ) : (
         <Card data-testid="itemCard" sx={{ padding: '24px' }}>
           <CardContent sx={{ padding: 0 }}>
-            <Box
-              component="div"
-              display="flex"
-              sx={{ flexDirection: 'column' }}
-            >
+            <Box component="div" display="flex" sx={{ flexDirection: 'column' }}>
               <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
               <Typography variant="body2">{emptyMessage}</Typography>
               &nbsp;
