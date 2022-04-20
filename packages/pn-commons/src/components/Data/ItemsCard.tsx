@@ -69,7 +69,7 @@ const ItemsCard = ({
                   <Typography sx={{ fontWeight: 600 }} data-testid="cardBodyLabel">
                     {body.label}
                   </Typography>
-                  <Typography component={'div'} data-testid="cardBodyValue">
+                  <Typography component="div" data-testid="cardBodyValue">
                     {body.getLabel(data[body.id])}
                   </Typography>
                 </Box>
