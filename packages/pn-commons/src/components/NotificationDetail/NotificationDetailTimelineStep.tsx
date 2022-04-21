@@ -226,7 +226,7 @@ const NotificationDetailTimelineStep = ({
         </Box>
         {recipients.length > 1 && (
           <Box>
-            <Typography fontSize={14} color="secondary">
+            <Typography fontSize={14} color="text.secondary">
               {timelineStatusInfos.recipient}
             </Typography>
           </Box>
