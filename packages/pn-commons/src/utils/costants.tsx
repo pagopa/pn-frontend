@@ -6,7 +6,7 @@ export const LANGUAGES = {
 };
 
 export const pagoPALink: CompanyLinkType = {
-  href: "https://www.pagopa.it/",
+  href: "https://www.pagopa.it/it/",
   ariaLabel: "Link: vai al sito di PagoPA S.p.A.",
 };
 

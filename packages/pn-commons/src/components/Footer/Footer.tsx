@@ -13,8 +13,8 @@ const Footer = () => {
       languages={LANGUAGES}
       currentLangCode={"it"}
       onLanguageChanged={() => console.log('Language changed')}
-      onExit={(href, linkType) => {
-        console.log("Clicked on exit", href, linkType);
+      onExit={(href: string) => {
+        window.location.href = href;
       }}
     />
   );
