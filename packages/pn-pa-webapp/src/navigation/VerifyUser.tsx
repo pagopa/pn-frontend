@@ -4,13 +4,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { exchangeToken } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { SELFCARE_URL_FE_LOGIN } from '../utils/constants';
 import { getHomePage } from '../utils/role.utility';
-
-function goToSelfcareLogin(): void {
-  /* eslint-disable functional/immutable-data */
-  window.location.href = SELFCARE_URL_FE_LOGIN || '';
-}
+import { goToSelfcareLogin } from './navigation.utility';
 
 const VerifyUser = () => {
   const location = useLocation();

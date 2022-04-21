@@ -4,7 +4,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { exchangeToken } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { URL_FE_LOGIN } from '../utils/constants';
+import { goToLogin } from './navigation.utility';
 import { NOTIFICHE } from './routes.const';
 
 const VerifyUser = () => {
@@ -21,8 +21,7 @@ const VerifyUser = () => {
       setSpidToken(tokenParam);
     } else {
       if (token === '') {
-        /* eslint-disable functional/immutable-data */
-       window.location.href = URL_FE_LOGIN || '';
+        goToLogin();
       }
     }
   }, [location]);
@@ -34,8 +33,7 @@ const VerifyUser = () => {
           navigate(NOTIFICHE);
         })
         .catch(() => {
-          /* eslint-disable functional/immutable-data */
-          window.location.href = process.env.REACT_APP_URL_FE_LOGIN || '';
+          goToLogin();
         });
     }
   }, [spidToken]);

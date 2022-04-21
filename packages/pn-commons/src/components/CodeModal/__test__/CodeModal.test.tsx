@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { render } from '../../test-utils';
+import { render } from '../../../test-utils';
 import CodeModal from '../CodeModal';
 
 const handleCloseMock = jest.fn();

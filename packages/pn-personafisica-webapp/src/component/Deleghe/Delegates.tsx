@@ -27,7 +27,7 @@ const Delegates = () => {
   const sortDelegates = useAppSelector((state: RootState) => state.delegationsState.sortDelegates);
   const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
 
-  const rows: Array<Item> = delegationToItem(delegates, false);
+  const rows: Array<Item> = delegationToItem(delegates);
 
   const delegatesColumns: Array<Column> = [
     {

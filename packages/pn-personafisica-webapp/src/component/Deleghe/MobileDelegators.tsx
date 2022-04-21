@@ -21,7 +21,7 @@ const MobileDelegators = () => {
     (state: RootState) => state.delegationsState.delegatorsError
   );
 
-  const cardData: Array<Item> = delegationToItem(delegators, true);
+  const cardData: Array<Item> = delegationToItem(delegators);
 
   const cardHeader: [CardElement, CardElement] = [
     {

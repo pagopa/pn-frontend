@@ -4,9 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { appStateActions, appStateSelectors } from '../redux/slices/appStateSlice';
 import { IAppMessage } from '../types/AppMessage';
 import { MessageType } from '../types/MessageType';
+import SessionModal from './SessionModal';
 import Toast from './Toast/Toast';
 
-const AppMessage = () => {
+type Props = {
+  sessionRedirect?: () => void;
+};
+
+const AppMessage = ({ sessionRedirect }: Props) => {
   const dispatch = useDispatch();
   const errors = useSelector(appStateSelectors.selectErrors);
   const success = useSelector(appStateSelectors.selectSuccess);
@@ -21,17 +26,28 @@ const AppMessage = () => {
 
   return (
     <Fragment>
-      {errors.map((errorMessage: IAppMessage) => (
-        <Toast
-          key={errorMessage.id}
-          title={errorMessage.title}
-          message={errorMessage.message}
-          open
-          type={MessageType.ERROR}
-          onClose={() => onCloseErrorToast(errorMessage.id)}
-          closingDelay={2500}
-        />
-      ))}
+      {errors.map((errorMessage: IAppMessage) =>
+        errorMessage.status === 403 ? (
+          <SessionModal
+            open
+            title={errorMessage.title}
+            message={errorMessage.message}
+            handleClose={sessionRedirect}
+            onConfirm={sessionRedirect}
+            onConfirmLabel={"Vai al login"}
+          ></SessionModal>
+        ) : (
+          <Toast
+            key={errorMessage.id}
+            title={errorMessage.title}
+            message={errorMessage.message}
+            open
+            type={MessageType.ERROR}
+            onClose={() => onCloseErrorToast(errorMessage.id)}
+            closingDelay={2500}
+          />
+        )
+      )}
       {success.map((successMessage: IAppMessage) => (
         <Toast
           key={successMessage.id}
@@ -40,17 +56,6 @@ const AppMessage = () => {
           open
           type={MessageType.SUCCESS}
           onClose={() => onCloseSuccessToast(successMessage.id)}
-          closingDelay={2500}
-        />
-      ))}
-      {success.map((errorMessage: IAppMessage) => (
-        <Toast
-          key={errorMessage.id}
-          title={errorMessage.title}
-          message={errorMessage.message}
-          open
-          type={MessageType.SUCCESS}
-          onClose={() => onCloseSuccessToast(errorMessage.id)}
           closingDelay={2500}
         />
       ))}

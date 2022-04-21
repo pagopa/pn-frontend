@@ -9,4 +9,6 @@ export type IAppMessage = {
   title: string;
   /** If true, it will notify the error */
   toNotify: boolean;
+  /** It represents message http status (if exist) */
+  status?: number;
 };

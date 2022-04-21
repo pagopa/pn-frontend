@@ -14,7 +14,7 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
-    AccessDenied: () => <div>Access Denied Page</div>,
+    SessionModal: () => <div>Session Modal</div>,
   };
 });
 
@@ -37,7 +37,7 @@ describe('RequireAuth Component', () => {
     useSelectorSpy.mockReturnValue(undefined);
     // render component
     const result = render(<RequireAuth />);
-    expect(result?.container).toHaveTextContent(/Access Denied Page/i);
+    expect(result?.container).toHaveTextContent(/Session Modal/i);
     useSelectorSpy.mockClear();
     useSelectorSpy.mockReset();
   });

@@ -1,7 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
-import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { Delegation } from '../delegation/types';
 import { User } from './types';
 
 /**
@@ -44,14 +42,4 @@ export const logout = createAsyncThunk<User>('logout', async () => {
     iss: '',
     jti: '',
   } as User;
-});
-
-export const getNumberDelegator =  createAsyncThunk<Array<Delegation>>('getNumberDelegator', async()=>{
-  try{  
-    return await DelegationsApi.getDelegators();
-    // return delegators.filter((delegator)=>delegator.status === "pending").length;
-  }
-  catch { 
-    return [];
-  } 
 });

@@ -1,15 +1,12 @@
-import { ChangeEvent, useRef, useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { ChangeEvent, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
 import { Divider, Grid, Box, Typography, TextField } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 
-import { DigitalAddress, LegalChannelType } from '../../models/contacts';
-import { createOrUpdateLegalAddress, deleteLegalAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
-import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
+import { DigitalAddress } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
 import LegalContactsDisclosure from './LegalContactsDisclosure';
 import DigitalContactElem from './DigitalContactElem';
@@ -20,31 +17,34 @@ type Props = {
 };
 
 const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
-  const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'recapiti']);
-  const { setProps, handleCodeVerification } = useDigitalContactsCodeVerificationContext();
   const [disclosureCollapsed, setDisclosureCollapsed] = useState(true);
-  const contactRef = useRef();
 
   const handleCollapse = () => {
-    setDisclosureCollapsed(!disclosureCollapsed);
+    setDisclosureCollapsed((prevDisclosureCollapsed) => !prevDisclosureCollapsed);
   };
 
-  const title = (
-    <Grid container spacing={1} alignItems="flex-end" direction="row">
-      <Grid item xs="auto">
-        {t('legal-contacts.subtitle-2', { ns: 'recapiti' })}
+  const title = useMemo(
+    () => (
+      <Grid container spacing={1} alignItems="flex-end" direction="row">
+        <Grid item xs="auto">
+          {t('legal-contacts.subtitle-2', { ns: 'recapiti' })}
+        </Grid>
+        <Grid item xs="auto">
+          <ErrorOutlineIcon
+            onClick={handleCollapse}
+            sx={{ cursor: 'pointer', position: 'relative', top: '4px', color: 'action.active' }}
+          />
+        </Grid>
       </Grid>
-      <Grid item xs="auto">
-        <ErrorOutlineIcon
-          onClick={handleCollapse}
-          sx={{ cursor: 'pointer', position: 'relative', top: '4px', color: 'action.active' }}
-        />
-      </Grid>
-    </Grid>
+    ),
+    []
+  );
+  const defaultAddress = useMemo(
+    () => legalAddresses.find((a) => a.senderId === 'default'),
+    [legalAddresses]
   );
 
-  const defaultAddress = legalAddresses.find((a) => a.senderId === 'default');
   const validationSchema = yup.object({
     pec: yup
       .string()
@@ -59,62 +59,18 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     initialValues,
     validationSchema,
     /** onSubmit validate */
-    onSubmit: () => {
-      handleEditConfirm();
-    },
+    onSubmit: () => {},
   });
 
-  const handleChangeTouched = (e: ChangeEvent) => {
-    void formik.setFieldTouched(e.target.id, true, false);
+  const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
+    await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleEditConfirm = () => {
-    setProps({
-      title: `${t('legal-contacts.pec-verify', { ns: 'recapiti' })} ${formik.values.pec}`,
-      subtitle: <Trans i18nKey="legal-contacts.pec-verify-descr" ns="recapiti" />,
-      initialValues: new Array(5).fill(''),
-      codeSectionTitle: t('legal-contacts.insert-code', { ns: 'recapiti' }),
-      codeSectionAdditional: (
-        <Box>
-          <Typography variant="body2" display="inline">
-            {t('legal-contacts.new-code', { ns: 'recapiti' })}&nbsp;
-          </Typography>
-          <Typography
-            variant="body2"
-            display="inline"
-            color="primary"
-            onClick={() => handleCodeVerification(undefined, true)}
-            sx={{ cursor: 'pointer' }}
-          >
-            {t('legal-contacts.new-code-link', { ns: 'recapiti' })}.
-          </Typography>
-        </Box>
-      ),
-      cancelLabel: t('button.annulla'),
-      confirmLabel: t('button.conferma'),
-      errorMessage: t('legal-contacts.wrong-code', { ns: 'recapiti' }),
-      recipientId,
-      senderId: 'default',
-      digitalDomicileType: defaultAddress?.channelType as LegalChannelType,
-      value: formik.values.pec,
-      successMessage: t('legal-contacts.pec-added', { ns: 'recapiti' }),
-      actionToBeDispatched: createOrUpdateLegalAddress,
-      callbackOnValidation: (status: 'validated' | 'cancelled') => {
-        if (status === 'cancelled') {
-          formik.resetForm({ values: initialValues });
-        } else {
-          /* eslint-disable functional/immutable-data */
-          initialValues.pec = formik.values.pec;
-          /* eslint-enable functional/immutable-data */
-        }
-        (contactRef.current as any).toggleEdit();
-      },
-    });
-  };
-
-  const removeElemHandler = () => {
-    void dispatch(deleteLegalAddress({recipientId, senderId: 'default', channelType: LegalChannelType.PEC}));
+  const handleEditConfirm = (status: 'validated' | 'cancelled') => {
+    if (status === 'cancelled') {
+      formik.resetForm({ values: initialValues });
+    }
   };
 
   return (
@@ -127,9 +83,12 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
       {!disclosureCollapsed && <LegalContactsDisclosure />}
       <Divider />
       <Box sx={{ marginTop: '20px' }}>
-        <form onSubmit={formik.handleSubmit}>
+        <form>
           <DigitalContactElem
-            ref={contactRef}
+            recipientId={recipientId}
+            senderId="default"
+            // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
+            contactType={defaultAddress!.channelType}
             fields={[
               {
                 id: 'label',
@@ -159,9 +118,13 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
               },
             ]}
             saveDisabled={!formik.isValid}
-            onRemoveClick={removeElemHandler}
             removeModalTitle={t('legal-contacts.remove-pec-title', { ns: 'recapiti' })}
-            removeModalBody={t('legal-contacts.remove-pec-message', { pec: formik.values.pec, ns: 'recapiti'})}
+            removeModalBody={t('legal-contacts.remove-pec-message', {
+              pec: formik.values.pec,
+              ns: 'recapiti',
+            })}
+            value={formik.values.pec}
+            onConfirmClick={handleEditConfirm}
           />
         </form>
       </Box>
