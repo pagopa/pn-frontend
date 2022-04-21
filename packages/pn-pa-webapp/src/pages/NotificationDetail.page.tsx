@@ -63,13 +63,28 @@ const NotificationDetail = () => {
     {
       id: 3,
       label: 'Destinatario',
-      value: <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>,
+      value:
+        notification.recipients.length > 1 ? (
+          <Box fontWeight={600}>
+            {notification.recipients.map((recipient, i) => (
+              <Box key={i}>
+                {recipient.taxId} - {recipient.denomination}
+              </Box>
+            ))}
+          </Box>
+        ) : (
+          <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>
+        ),
     },
-    {
-      id: 4,
-      label: 'Cognome Nome',
-      value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
-    },
+    ...(notification.recipients.length > 1
+      ? []
+      : [
+          {
+            id: 4,
+            label: 'Cognome Nome',
+            value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
+          },
+        ]),
     { id: 5, label: 'Mittente', value: <Box fontWeight={600}>{sender}</Box> },
     {
       id: 6,
@@ -91,6 +106,7 @@ const NotificationDetail = () => {
       ),
     },
   ];
+
   const documentDowloadHandler = (documentIndex: number) => {
     void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
   };
@@ -176,7 +192,7 @@ const NotificationDetail = () => {
               statusHistory={notification.notificationStatusHistory}
               title="Stato della notifica"
               clickHandler={legalFactDownloadHandler}
-              legalFactLabels={{attestation: "Attestato opponibile a Terzi", receipt: "Ricevuta"}}
+              legalFactLabels={{ attestation: 'Attestato opponibile a Terzi', receipt: 'Ricevuta' }}
               historyButtonLabel="Mostra storico"
               showMoreButtonLabel="Mostra di più"
               showLessButtonLabel="Mostra di meno"
