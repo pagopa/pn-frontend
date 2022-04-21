@@ -124,6 +124,7 @@ export function getNotificationTimelineStatusInfos(
   label: string;
   description: string;
   linkText?: string;
+  recipient?: string;
 } {
   const recipient = ricipients.find(
     (r) =>
@@ -138,12 +139,14 @@ export function getNotificationTimelineStatusInfos(
           label: 'Invio per via cartacea',
           description: "È in corso l' invio della notifica per via cartacea.",
           linkText: "Vai all'attestazione",
+          recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
         };
       }
       return {
         label: 'Invio per via digitale',
         description: "È in corso l' invio della notifica per via digitale.",
         linkText: "Vai all'attestazione",
+        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_COURTESY_MESSAGE:
       const type =
@@ -153,6 +156,7 @@ export function getNotificationTimelineStatusInfos(
       return {
         label: 'Invio del messaggio di cortesia',
         description: `È in corso l' invio del messaggio di cortesia a ${recipient?.denomination} tramite ${type}`,
+        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE:
       return {
@@ -160,6 +164,7 @@ export function getNotificationTimelineStatusInfos(
         description: `È in corso l' invio della notifica a ${
           recipient?.denomination
         } all'indirizzo PEC ${(step.details as SendDigitalDetails).address?.address}`,
+        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK:
       return {
@@ -168,6 +173,7 @@ export function getNotificationTimelineStatusInfos(
           (step.details as SendDigitalDetails).address?.address
         } è riuscito.`,
         linkText: "Vai all'attestazione",
+        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FAILURE:
       return {
@@ -176,6 +182,7 @@ export function getNotificationTimelineStatusInfos(
           (step.details as SendDigitalDetails).address?.address
         } non è riuscito.`,
         linkText: "Vai all'attestazione",
+        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
       return {
@@ -186,6 +193,7 @@ export function getNotificationTimelineStatusInfos(
           (step.details as AnalogWorkflowDetails).address?.address
         } tramite raccomandata semplice.`,
         linkText: "Vai all'attestazione",
+        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_ANALOG_DOMICILE:
       if (
@@ -200,6 +208,7 @@ export function getNotificationTimelineStatusInfos(
             (step.details as AnalogWorkflowDetails).address?.address
           } tramite raccomandata 890.`,
           linkText: "Vai all'attestazione",
+          recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
         };
       }
       return {
@@ -210,12 +219,14 @@ export function getNotificationTimelineStatusInfos(
           (step.details as AnalogWorkflowDetails).address?.address
         } tramite raccomandata A/R.`,
         linkText: "Vai all'attestazione",
+        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_PAPER_FEEDBACK:
       return {
         label: 'Aggiornamento stato raccomandata',
         description: `Si allega un aggiornamento dello stato della raccomandata.`,
         linkText: 'Vedi la ricevuta',
+        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     default:
       return {
@@ -263,7 +274,7 @@ export function parseNotificationDetail(
     status.steps = [];
     // find timeline steps that are linked with current status
     for (const timelineElement of status.relatedTimelineElements) {
-      const step = parsedNotification.timeline.find(t => t.elementId === timelineElement);
+      const step = parsedNotification.timeline.find((t) => t.elementId === timelineElement);
       if (step) {
         status.steps.push(step);
       }
@@ -295,7 +306,10 @@ export function parseNotificationDetail(
  * @param  {NotificationDetail} notificationDetail
  * @returns NotificationDetail
  */
-export function getLegalFactLabel(category: TimelineCategory, legalFactLabels: {attestation: string, receipt: string}): string {
+export function getLegalFactLabel(
+  category: TimelineCategory,
+  legalFactLabels: { attestation: string; receipt: string }
+): string {
   if (category === TimelineCategory.SEND_PAPER_FEEDBACK) {
     return legalFactLabels.receipt;
   }
