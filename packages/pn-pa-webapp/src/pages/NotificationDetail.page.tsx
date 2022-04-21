@@ -181,7 +181,12 @@ const NotificationDetail = () => {
               clickHandler={documentDowloadHandler}
             />
           </Paper>
-          <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(-1)}>
+          <Button
+            data-testid="backButton"
+            sx={{ margin: '10px 0' }}
+            variant="outlined"
+            onClick={() => navigate(-1)}
+          >
             Indietro
           </Button>
         </Grid>
