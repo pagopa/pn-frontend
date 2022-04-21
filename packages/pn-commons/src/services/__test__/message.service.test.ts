@@ -7,30 +7,43 @@ const _404error: IAppMessage = {
   message: 'Si è verificato un errore. Si prega di riprovare più tardi',
   blocking: false,
   toNotify: true,
+  status: 404
 };
 
 const _403error: IAppMessage = {
   id: '2',
   title: 'Utente non autenticato',
-  message: "L'utente corrente non è autenticato",
+  message: "La sessione è scaduta. Riesegui il login.",
   blocking: false,
   toNotify: true,
+  status: 403
+};
+
+const _401error: IAppMessage = {
+  id: '3',
+  title: 'Utente non autorizzato',
+  message: "L'utente corrente non ha le autorizzazioni",
+  blocking: false,
+  toNotify: true,
+  status: 401
 };
 
 const _genericError: IAppMessage = {
-  id: '3',
+  id: '4',
   title: 'Errore generico',
   message: 'Si è verificato un errore. Si prega di riprovare più tardi',
   blocking: false,
   toNotify: true,
+  status: 500
 };
 
 const _genericMessage: IAppMessage = {
-  id: '4',
+  id: '5',
   title: 'mocked-title',
   message: 'mocked-message',
   blocking: false,
   toNotify: true,
+  status: undefined
 };
 
 test('return 404 error message', () => {
@@ -43,6 +56,12 @@ test('return 403 error message', () => {
   const response = { response: { status: 403 } };
   const errorMessage = createAppError(response);
   expect(errorMessage).toEqual(_403error);
+});
+
+test('return 401 error message', () => {
+  const response = { response: { status: 401 } };
+  const errorMessage = createAppError(response);
+  expect(errorMessage).toEqual(_401error);
 });
 
 test('return generic error message', () => {

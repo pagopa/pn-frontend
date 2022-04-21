@@ -6,6 +6,7 @@ import { LoadingOverlay } from './components/Loading/LoadingOverlay';
 import CustomPagination from './components/Pagination/CustomPagination';
 import CustomTooltip from './components/CustomTooltip';
 import AppMessage from './components/AppMessage';
+import SessionModal from './components/SessionModal';
 import SideMenu from './components/SideMenu/SideMenu';
 import StatusTooltip from './components/Notifications/StatusTooltip';
 import ItemsTable from './components/Data/ItemsTable';
@@ -20,7 +21,7 @@ import NotificationDetailTable from './components/NotificationDetail/Notificatio
 import NotificationDetailDocuments from './components/NotificationDetail/NotificationDetailDocuments';
 import NotificationDetailTimeline from './components/NotificationDetail/NotificationDetailTimeline';
 import Toast from './components/Toast/Toast';
-import CodeModal from './components/CodeModal';
+import CodeModal from './components/CodeModal/CodeModal';
 
 export { LoadingOverlay };
 export { Header };
@@ -32,6 +33,7 @@ export { AppMessage };
 export { SideMenu };
 export { ItemsTable };
 export { StatusTooltip };
+export { SessionModal };
 export { ItemsCard };
 export { TitleAndDescription };
 export { CustomMobileDialog };
@@ -125,7 +127,7 @@ import { calculatePages } from './utils/pagination.utility';
 import {
   getNotificationStatusInfos,
   NotificationAllowedStatus,
-  parseNotificationDetail
+  parseNotificationDetail,
 } from './utils/notification.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';

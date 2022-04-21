@@ -80,7 +80,7 @@ describe('Notifications Card Component', () => {
       const cardHeaderRight = card.querySelector('div[data-testid="cardHeaderRight"]');
       expect(cardHeaderRight).toHaveTextContent(cardData[index][cardHeader[1].id].toString());
       const cardBodyLabel = card.querySelectorAll('p[data-testid="cardBodyLabel"]');
-      const cardBodyValue = card.querySelectorAll('p[data-testid="cardBodyValue"]');
+      const cardBodyValue = card.querySelectorAll('div[data-testid="cardBodyValue"]');
       cardBodyLabel.forEach((label, j) => {
         expect(label).toHaveTextContent(cardBody[j].label);
         expect(cardBodyValue[j]).toHaveTextContent(cardData[index][cardBody[j].id].toString());

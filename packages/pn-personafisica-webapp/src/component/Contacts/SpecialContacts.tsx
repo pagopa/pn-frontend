@@ -212,8 +212,9 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       const newAddress = getAddress(address);
       if (addressIndex === -1) {
         addressesList.push(newAddress);
-      } else {
+      } else if (address.channelType === CourtesyChannelType.SMS) {
         addressesList[addressIndex].phone = newAddress.phone;
+      } else {
         addressesList[addressIndex].mail = newAddress.mail;
       }
     }

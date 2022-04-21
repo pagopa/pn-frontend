@@ -5,7 +5,7 @@ import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
-import { PAGOPA_HELP_EMAIL } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, SELFCARE_URL_FE_LOGIN } from './utils/constants';
 
 const App = () => {
   const role = useAppSelector((state: RootState) => state.userState.user.organization?.role);
@@ -25,7 +25,12 @@ const App = () => {
         role && <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
       }
     >
-      <AppMessage />
+      <AppMessage
+        sessionRedirect={() => {
+          /* eslint-disable-next-line functional/immutable-data */
+          window.location.href = SELFCARE_URL_FE_LOGIN as string;
+        }}
+      />
       <LoadingOverlay />
       <Router />
     </Layout>
