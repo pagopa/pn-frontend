@@ -6,6 +6,7 @@ import { IllusError } from '@pagopa/mui-italia';
 type Props = {
   children: ReactNode;
   sx?: SxProps;
+  printError?: boolean;
 };
 
 type State = { hasError: boolean };
@@ -16,15 +17,13 @@ class ErrorBoundary extends Component<Props, State> {
     this.state = { hasError: false };
   }
 
-
   static getDerivedStateFromError() {
     // Update state so the next render will show the fallback UI
     return { hasError: true };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(_error: Error, _errorInfo: ErrorInfo) {
     // You can also log the error to an error reporting service
-    console.log(error, errorInfo);
   }
 
   private handleRefreshPage() {
