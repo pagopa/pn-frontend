@@ -21,7 +21,8 @@ type Props = {
 };
 
 type Field = {
-  id: 'pec' | 'phone' | 'mail';
+  addressId: 'pec' | 'mail' | 'phone';
+  id: string;
   contactType: LegalChannelType | CourtesyChannelType;
   label: string;
   labelRoot: string;
@@ -32,27 +33,30 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const isMobile = useIsMobile();
 
   const initialValues = {
-    pec: address.pec || '',
-    phone: address.phone || '',
-    mail: address.mail || '',
+    [`${address.senderId}_pec`]: address.pec || '',
+    [`${address.senderId}_phone`]: address.phone || '',
+    [`${address.senderId}_mail`]: address.mail || '',
   };
 
   const fields: Array<Field> = useMemo(
     () => [
       {
-        id: 'pec',
+        addressId: 'pec',
+        id: `${address.senderId}_pec`,
         contactType: LegalChannelType.PEC,
         label: t('special-contacts.pec', { ns: 'recapiti' }),
         labelRoot: 'legal-contacts',
       },
       {
-        id: 'phone',
+        addressId: 'phone',
+        id: `${address.senderId}_phone`,
         contactType: CourtesyChannelType.SMS,
         label: t('special-contacts.phone', { ns: 'recapiti' }),
         labelRoot: 'courtesy-contacts',
       },
       {
-        id: 'mail',
+        addressId: 'mail',
+        id: `${address.senderId}_mail`,
         contactType: CourtesyChannelType.EMAIL,
         label: t('special-contacts.mail', { ns: 'recapiti' }),
         labelRoot: 'courtesy-contacts',
@@ -62,15 +66,15 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   );
 
   const validationSchema = yup.object({
-    pec: yup
+    [`${address.senderId}_pec`]: yup
       .string()
       .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
       .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
-    phone: yup
+    [`${address.senderId}_phone`]: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
       .matches(phoneRegExp, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
-    mail: yup
+    [`${address.senderId}_mail`]: yup
       .string()
       .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
       .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
@@ -96,15 +100,15 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
 
   useEffect(() => {
     void formik.setValues({
-      pec: address.pec || '',
-      phone: address.phone || '',
-      mail: address.mail || '',
+      [`${address.senderId}_pec`]: address.pec || '',
+      [`${address.senderId}_phone`]: address.phone || '',
+      [`${address.senderId}_mail`]: address.mail || '',
     });
   }, [address]);
 
   const jsxField = (f: Field) => (
     <Fragment>
-      {address[f.id] && (
+      {address[f.addressId] && (
         <form data-testid="specialContactForm">
           <DigitalContactElem
             recipientId={recipientId}
@@ -132,8 +136,8 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
               },
             ]}
             saveDisabled={!!formik.errors[f.id]}
-            removeModalTitle={t(`${f.labelRoot}.remove-${f.id}-title`, { ns: 'recapiti' })}
-            removeModalBody={t(`${f.labelRoot}.remove-${f.id}-message`, {
+            removeModalTitle={t(`${f.labelRoot}.remove-${f.addressId}-title`, { ns: 'recapiti' })}
+            removeModalBody={t(`${f.labelRoot}.remove-${f.addressId}-message`, {
               value: formik.values[f.id],
               ns: 'recapiti',
             })}
@@ -143,7 +147,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
           />
         </form>
       )}
-      {!address[f.id] && '-'}
+      {!address[f.addressId] && '-'}
     </Fragment>
   );
 
