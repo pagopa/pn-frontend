@@ -22,7 +22,11 @@ const useStyles = makeStyles({
     height: '43px !important',
     marginRight: '8px !important',
   },
-  cancelButton: { height: '43px !important', padding: '0 16px !important' },
+  cancelButton: {
+    height: '43px !important',
+    padding: '0 16px !important',
+    minWidth: '130px !important',
+  },
 });
 
 const FilterNotificationsTable = () => {
@@ -125,7 +129,7 @@ const FilterNotificationsTable = () => {
           sx={{
             marginTop: 5,
             verticalAlign: 'top',
-            '& .MuiTextField-root': { mr: 1, width: '18ch' },
+            '& .MuiTextField-root': { mr: 1, width: '100%' },
           }}
         >
           <TextField
