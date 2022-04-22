@@ -71,8 +71,8 @@ describe('NuovaDelega page', () => {
     useIsMobileSpy.mockReturnValue(true);
     const result = render(<NuovaDelega />);
 
-    expect(result.container).toHaveTextContent(/nuovaDelega.created_title/i);
-    expect(result.container).toHaveTextContent(/nuovaDelega.created_description/i);
+    expect(result.container).toHaveTextContent(/nuovaDelega.createdTitle/i);
+    expect(result.container).toHaveTextContent(/nuovaDelega.createdDescription/i);
   });
 
   it('navigates to Deleghe page before creation', () => {
@@ -89,7 +89,7 @@ describe('NuovaDelega page', () => {
     mockSelectorSpy.mockReturnValueOnce({ created: true });
     useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />);
-    const backButton = result.getByText('nuovaDelega.back_to_delegations');
+    const backButton = result.getByText('nuovaDelega.backToDelegations');
 
     fireEvent.click(backButton);
     expect(mockNavigateFn).toBeCalled();
