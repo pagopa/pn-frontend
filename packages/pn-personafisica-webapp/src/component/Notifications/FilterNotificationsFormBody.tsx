@@ -47,7 +47,7 @@ const FilterNotificationsFormBody = ({
 
   return (
     <Fragment>
-      <Grid item lg={4} xs={12}>
+      <Grid item lg xs={12}>
         <TextField
           id="iunMatch"
           value={formikInstance.values.iunMatch}
@@ -58,6 +58,7 @@ const FilterNotificationsFormBody = ({
           helperText={formikInstance.touched.iunMatch && formikInstance.errors.iunMatch}
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
+          size="small"
         />
       </Grid>
       <Grid item lg={2} xs={12}>
@@ -86,6 +87,7 @@ const FilterNotificationsFormBody = ({
                 {...params}
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
+                size="small"
               />
             )}
             disableFuture={true}
@@ -120,6 +122,7 @@ const FilterNotificationsFormBody = ({
                 {...params}
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
+                size="small"
               />
             )}
             disableFuture={true}
