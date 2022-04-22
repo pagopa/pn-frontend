@@ -27,6 +27,7 @@ const useStyles = makeStyles({
     padding: '0 16px !important',
     minWidth: '130px !important',
   },
+  cancelButton: { height: '43px !important', padding: '0 16px !important' },
 });
 
 const FilterNotificationsTable = () => {
