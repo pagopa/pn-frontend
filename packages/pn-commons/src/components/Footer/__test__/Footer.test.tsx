@@ -1,43 +1,41 @@
-import { within } from '@testing-library/react';
+import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
+import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utils/costants';
 import Footer from '../Footer';
-
-const assistanceEmail = 'mocked-assistance@mail.com';
-
-const footerLinks = [
-  {label: 'Privacy Policy', link: 'https://www.pagopa.it/it/privacy-policy/'},
-  {label: 'Termini e condizioni d’uso del sito', link: 'https://www.pagopa.it/it/termini-e-condizioni-di-utilizzo-del-sito/'},
-  {label: 'Sicurezza delle informazioni', link: 'https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdft'},
-  {label: 'Assistenza', link: `mailto:${assistanceEmail}`}
-];
 
 describe('Footer Component', () => {
 
-  it('renders footer', async () => {
+  it('renders footer', () => {
     // render component
     const result = render(<Footer/>);
-    expect(result.container).toHaveTextContent(/PagoPA S.p.A./i);
-    const linksContainer = await within(result?.container!).findByTestId('linksContainer');
-    expect(linksContainer).toBeInTheDocument();
-    const links = linksContainer.querySelectorAll('a');
-    expect(links).toHaveLength(3);
-    links.forEach((link, index) => {
-      expect(link).toHaveTextContent(footerLinks[index].label);
-      expect(link).toHaveAttribute('href', footerLinks[index].link);
+    const buttons = result.container.querySelectorAll('button');
+    expect(buttons).toHaveLength(5);
+    buttons.forEach((button, index) => {
+      if (index === 0) {
+        expect(button).toHaveTextContent('PagoPA');
+        expect(button).toHaveAttribute('aria-label', pagoPALink.ariaLabel);
+      } else if (index === 4) {
+        expect(button).toHaveTextContent(LANGUAGES.it.it); // language 'it' is default selected
+      } else {
+        expect(button).toHaveTextContent(postLoginLinks[index - 1].label);
+        expect(button).toHaveAttribute('aria-label', postLoginLinks[index - 1].ariaLabel);
+      }
     })
   });
 
-  it('renders assistance mail link', async () => {
+  it('shows languages dropdown', async () => {
     // render component
-    const result = render(<Footer assistanceEmail={assistanceEmail}/>);
-    const linksContainer = await within(result.container!).findByTestId('linksContainer');
-    expect(linksContainer).toBeInTheDocument();
-    const links = linksContainer.querySelectorAll('a');
-    expect(links).toHaveLength(4);
-    links.forEach((link, index) => {
-      expect(link).toHaveTextContent(footerLinks[index].label);
-      expect(link).toHaveAttribute('href', footerLinks[index].link);
-    })
+    const result = render(<Footer/>);
+    const buttons = result.container.querySelectorAll('button');
+    fireEvent.click(buttons[4]);
+    const languageSelector = await waitFor(() => screen.queryByRole('presentation'));
+    expect(languageSelector).toBeInTheDocument();
+    const languagesElements = languageSelector?.querySelectorAll('ul li');
+    expect(languagesElements).toHaveLength(Object.keys(LANGUAGES).length);
+    const languagesKeys = Object.keys(LANGUAGES.it); // language 'it' is default selected
+    languagesElements!.forEach((languageElement, index) => {
+      expect(languageElement).toHaveTextContent(LANGUAGES.it[languagesKeys[index] as 'it' | 'en']);
+    });
   });
 });
