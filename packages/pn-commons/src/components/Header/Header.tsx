@@ -8,6 +8,8 @@ import {
 } from '@pagopa/mui-italia';
 import { Box } from '@mui/material';
 
+import {pagoPALink } from '../../utils/costants';
+
 type HeaderProps = {
   /** Assistance email for the user */
   assistanceEmail?: string;
@@ -21,10 +23,9 @@ type HeaderProps = {
   loggedUser: JwtUser;
 };
 
-const pagoPALink: RootLinkType = {
+const pagoPAHeaderLink: RootLinkType = {
+  ...pagoPALink,
   label: 'PagoPA S.p.A.',
-  href: '',
-  ariaLabel: 'Link: vai al sito di PagoPA S.p.A.',
   title: 'Sito di PagoPA S.p.A.',
 };
 
@@ -46,12 +47,12 @@ const Header = ({
   return (
     <Box sx={{ zIndex: 1 }}>
       <HeaderAccount
-        rootLink={pagoPALink}
+        rootLink={pagoPAHeaderLink}
         loggedUser={loggedUser}
         onAssistanceClick={() => {
           if (assistanceEmail) {
             /* eslint-disable-next-line functional/immutable-data */
-            window.location.href = assistanceEmail;
+            window.location.href = `mailto:${assistanceEmail}`;
           }
         }}
         onLogout={onExitAction}

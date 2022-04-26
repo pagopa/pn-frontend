@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
     background: '#F2F2F2',
 
     '& > .MuiGrid-item:last-child': {
-      minHeight: 'calc(100vh - 280px)',
+      minHeight: 'calc(100vh - 253px)',
     },
   },
 }));

@@ -10,18 +10,18 @@ import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { URL_FE_LOGIN } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
 import { RootState } from './redux/store';
-import { Delegation} from './redux/delegation/types';
+import { Delegation } from './redux/delegation/types';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
 
 // TODO: get products list from be (?)
 const productsList = [
   {
-    id: "0",
+    id: '0',
     title: `Piattaforma Notifiche`,
-    productUrl: "",
-  }
+    productUrl: '',
+  },
 ];
 
 const App = () => {
@@ -29,16 +29,20 @@ const App = () => {
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { pendingDelegators, delegators } = useAppSelector((state: RootState) => state.sidemenuState);
+  const { pendingDelegators, delegators } = useAppSelector(
+    (state: RootState) => state.sidemenuState
+  );
 
   const sessionToken = useMemo(() => loggedUser.sessionToken, [loggedUser]);
-  const jwtUser = useMemo(() => ({
-    id: loggedUser.fiscal_number,
-    name: loggedUser.name,
-    surname: loggedUser.family_name,
-    mail: loggedUser.email
-  }), [loggedUser]);
-
+  const jwtUser = useMemo(
+    () => ({
+      id: loggedUser.fiscal_number,
+      name: loggedUser.name,
+      surname: loggedUser.family_name,
+      mail: loggedUser.email,
+    }),
+    [loggedUser]
+  );
 
   useEffect(() => {
     if (sessionToken !== '') {
@@ -78,6 +82,7 @@ const App = () => {
 
   return (
     <Layout
+      assistanceEmail={PAGOPA_HELP_EMAIL}
       onExitAction={() => dispatch(logout())}
       sideMenu={<SideMenu menuItems={menuItems} />}
       productsList={productsList}

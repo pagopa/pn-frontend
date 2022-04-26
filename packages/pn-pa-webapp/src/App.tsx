@@ -50,6 +50,7 @@ const App = () => {
       sideMenu={
         role && <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
       }
+      assistanceEmail={PAGOPA_HELP_EMAIL}
       productsList={productsList}
       partyList={partyList}
       loggedUser={jwtUser}
