@@ -4,7 +4,7 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
@@ -15,12 +15,30 @@ import { RootState } from './redux/store';
 import { Delegation} from './redux/delegation/types';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
 
+// TODO: get products list from be (?)
+const productsList = [
+  {
+    id: "0",
+    title: `Piattaforma Notifiche`,
+    productUrl: "",
+  }
+];
+
 const App = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
-  const sessionToken = useAppSelector((state: RootState) => state.userState.user.sessionToken);
+  const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { pendingDelegators, delegators } = useAppSelector((state: RootState) => state.sidemenuState);
+
+  const sessionToken = useMemo(() => loggedUser.sessionToken, [loggedUser]);
+  const jwtUser = useMemo(() => ({
+    id: loggedUser.fiscal_number,
+    name: loggedUser.name,
+    surname: loggedUser.family_name,
+    mail: loggedUser.email
+  }), [loggedUser]);
+
 
   useEffect(() => {
     if (sessionToken !== '') {
@@ -62,6 +80,8 @@ const App = () => {
     <Layout
       onExitAction={() => dispatch(logout())}
       sideMenu={<SideMenu menuItems={menuItems} />}
+      productsList={productsList}
+      loggedUser={jwtUser}
     >
       <AppMessage
         sessionRedirect={() => {

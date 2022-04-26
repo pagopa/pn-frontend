@@ -2628,12 +2628,13 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@pagopa/mui-italia@^0.6.12":
-  version "0.6.12"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.12.tgz#f7514b194cb3a8607a58e47d110bc86144a1dfbd"
-  integrity sha512-wnCqKjONa4USm5PPgLT1o+5kKeWvqN01JnXvnmNuiAwQc9rOJsEgqYx7IIelqwpWciO9X+IxcG6nr6f2yD8D6A==
+"@pagopa/mui-italia@^0.6.13":
+  version "0.6.13"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.13.tgz#94f3d453c93cb22e6eb3182364eaa0ccd80b8214"
+  integrity sha512-Gdymo8VxH3EgPqa85iAYXPuKNmiXYedYv2Su/ampttjBBHCI3ZLK/vEex1Kp7BuiDhLEzI6Qkz1W+Zu3REwHyQ==
   dependencies:
     "@fontsource/titillium-web" "^4.5.3"
+    clsx "^1.1.1"
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
   version "0.5.4"
