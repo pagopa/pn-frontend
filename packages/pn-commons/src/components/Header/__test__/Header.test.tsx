@@ -1,41 +1,8 @@
-import { fireEvent, prettyDOM, waitFor, screen } from "@testing-library/react";
+import { fireEvent, waitFor, screen } from "@testing-library/react";
 
 import { render } from "../../../test-utils";
 import Header from "../Header";
-
-const productsList = [
-  {
-    id: "0",
-    title: `Product 1`,
-    productUrl: "",
-  },
-  {
-    id: "1",
-    title: `Product 2`,
-    productUrl: "",
-  }
-];
-
-const partyList = [
-  {
-    id: "0",
-    name: `Party 1`,
-    productRole: 'Role 1',
-    logoUrl: ``
-  },
-  {
-    id: "1",
-    name: `Party 2`,
-    productRole: 'Role 2',
-    logoUrl: ``
-  }
-];
-
-const loggedUser = {
-  id: 'mocked-id',
-  name: 'Mario',
-  surname: 'Rossi'
-};
+import { loggedUser, partyList, productsList } from "./test-utils";
 
 const handleActionClick = jest.fn();
 const userActions = [
