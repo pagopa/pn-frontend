@@ -64,7 +64,7 @@ const App = () => {
       onClick: () => dispatch(logout()),
       icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
     }
-  ]), [])
+  ]), []);
 
   useEffect(() => {
     if (sessionToken !== '') {
