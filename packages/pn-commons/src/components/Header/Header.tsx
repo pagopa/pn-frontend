@@ -5,6 +5,7 @@ import {
   ProductEntity,
   PartyEntity,
   JwtUser,
+  UserAction
 } from '@pagopa/mui-italia';
 import { Box } from '@mui/material';
 
@@ -21,6 +22,10 @@ type HeaderProps = {
   onExitAction?: () => void;
   /** current logged user */
   loggedUser: JwtUser;
+  /** Enable user dropdown */
+  enableDropdown?: boolean;
+  /** Actions linked to user dropdown*/
+  userActions?: Array<UserAction>;
 };
 
 const pagoPAHeaderLink: RootLinkType = {
@@ -35,6 +40,8 @@ const Header = ({
   productsList,
   partyList,
   loggedUser,
+  enableDropdown,
+  userActions
 }: HeaderProps) => {
 
   const handleProductSelection = (product: ProductEntity) => {
@@ -56,6 +63,8 @@ const Header = ({
           }
         }}
         onLogout={onExitAction}
+        enableDropdown={enableDropdown}
+        userActions={userActions}
       />
       <HeaderProduct productsList={productsList} partyList={partyList} onSelectedProduct={handleProductSelection}/>
     </Box>

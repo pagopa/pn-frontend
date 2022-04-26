@@ -1,11 +1,15 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
-import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
-import { useEffect, useMemo, useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
+
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
@@ -32,6 +36,7 @@ const App = () => {
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.sidemenuState
   );
+  const navigate = useNavigate();
 
   const sessionToken = useMemo(() => loggedUser.sessionToken, [loggedUser]);
   const jwtUser = useMemo(
@@ -43,6 +48,23 @@ const App = () => {
     }),
     [loggedUser]
   );
+
+  const userActions = useMemo(() => ([
+    {
+      id: "profile",
+      label: t('menu.profilo'),
+      onClick: () => {
+        navigate(routes.PROFILO);
+      },
+      icon: <SettingsIcon fontSize="small" color="inherit" />,
+    },
+    {
+      id: "logout",
+      label: t('header.logout'),
+      onClick: () => dispatch(logout()),
+      icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
+    }
+  ]), [])
 
   useEffect(() => {
     if (sessionToken !== '') {
@@ -87,6 +109,8 @@ const App = () => {
       sideMenu={<SideMenu menuItems={menuItems} />}
       productsList={productsList}
       loggedUser={jwtUser}
+      enableUserDropdown
+      userActions={userActions}
     >
       <AppMessage
         sessionRedirect={() => {

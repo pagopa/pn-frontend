@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import { makeStyles } from '@mui/styles';
-import { ProductEntity, JwtUser, PartyEntity } from '@pagopa/mui-italia';
+import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
 
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
@@ -22,6 +22,10 @@ type Props = {
   partyList?: Array<PartyEntity>;
   /** current logged user */
   loggedUser: JwtUser;
+  /** Enable user dropdown */
+  enableUserDropdown?: boolean;
+  /** Actions linked to user dropdown*/
+  userActions?: Array<UserAction>;
 };
 
 const useStyles = makeStyles(() => ({
@@ -43,6 +47,8 @@ export default function Layout({
   productsList,
   partyList,
   loggedUser,
+  enableUserDropdown,
+  userActions
 }: Props) {
   const classes = useStyles();
 
@@ -60,7 +66,8 @@ export default function Layout({
           productsList={productsList}
           partyList={partyList}
           loggedUser={loggedUser}
-          data-testid="header"
+          enableDropdown={enableUserDropdown}
+          userActions={userActions}
         />
         <Grid role={'navigation'} container spacing={2} direction="row" className={classes.root}>
           <Grid item lg={2} xs={12} container direction="column">
