@@ -23,6 +23,7 @@ import {
   resetState,
 } from '../redux/notification/actions';
 import StyledLink from '../component/StyledLink/StyledLink';
+import NotificationPayment from '../component/Notifications/NotificationPayment';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -93,16 +94,19 @@ const NotificationDetail = () => {
   useEffect(() => {
     if (documentDownloadUrl) {
       dowloadDocument(documentDownloadUrl);
+      console.log("DocumentDownload", documentDownloadUrl);
     }
   }, [documentDownloadUrl]);
 
   useEffect(() => {
     if (legalFactDownloadUrl) {
       dowloadDocument(legalFactDownloadUrl);
+      console.log("Legal Fact Download", legalFactDownloadUrl);
     }
   }, [legalFactDownloadUrl]);
 
   useEffect(() => () => void dispatch(resetState()), []);
+
 
   const breadcrumb = (
     <Fragment>
@@ -130,6 +134,7 @@ const NotificationDetail = () => {
         <Grid item lg={7} xs={12} sx={{ marginTop: isMobile ? 0 : '20px' }}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
+          <NotificationPayment notification={notification} />
           <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
             <NotificationDetailDocuments
               title={t('detail.acts', { ns: 'notifiche' })}

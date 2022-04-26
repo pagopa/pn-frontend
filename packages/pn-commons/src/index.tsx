@@ -129,6 +129,7 @@ import {
 } from './utils/notification.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
+import { formatCurrency, formatEurocentToCurrency } from './utils/currency.utility';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusInfos };
@@ -139,6 +140,7 @@ export { calculatePages };
 export { getMonthString, getDay, getTime };
 export { formatFiscalCode };
 export { fiscalCodeRegex };
+export { formatCurrency, formatEurocentToCurrency };
 
 // consts
 export { today, tenYearsAgo };

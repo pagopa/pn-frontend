@@ -37,6 +37,18 @@
     "receipt": "Ricevuta",
     "show-history": "Mostra storico",
     "show-more": "Mostra di più",
-    "show-less": "Mostra di meno"
+    "show-less": "Mostra di meno",
+    "payment": {
+      "summary": "Importo totale",
+      "disclaimer": "Questo importo verrà aggiornato al momento del pagamento. Quindi potrebbe essere diverso.",
+      "disclaimer-link": "Come mai?",
+      "submit": "Paga",
+      "divider-text": "oppure",
+      "download-pagopa-notification": "Scarica l'avviso pagoPA",
+      "download-f24": "Scarica il modello F24",
+      "message-completed": "Il pagamento è stato effettuato con successo.",
+      "message-pending": "Il pagamento è stato effettuato con successo.<br /><strong>Entro 24 ore</strong> verrà aggiornato lo stato della notifica. In caso di eventuali problemi verrai contattato tramite email/controlla la tua casella email.",
+      "message-failed": "Il pagamento non è andato a buon fine. Premi \"Paga\" per riprovare."
+    }
   }
 }
