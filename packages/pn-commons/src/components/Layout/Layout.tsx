@@ -9,8 +9,6 @@ import ErrorBoundary from '../ErrorBoundary';
 
 type Props = {
   children?: React.ReactNode;
-  /** Assistance email for the user */
-  assistanceEmail?: string;
   /** Logout/exit action to apply */
   onExitAction?: (() => void) | null;
   /** Side Menu */
@@ -23,15 +21,15 @@ const useStyles = makeStyles(() => ({
     background: '#F2F2F2',
 
     '& > .MuiGrid-item:last-child': {
-      minHeight: 'calc(100vh - 327px)',
+      minHeight: 'calc(100vh - 280px)',
     },
   },
 }));
 
-export default function Layout({ children, assistanceEmail, onExitAction, sideMenu }: Props) {
+export default function Layout({ children, onExitAction, sideMenu }: Props) {
   const classes = useStyles();
   return (
-    <ErrorBoundary sx={{height: '100vh'}}>
+    <ErrorBoundary sx={{ height: '100vh' }}>
       <Box
         sx={{
           display: 'flex',
@@ -47,7 +45,7 @@ export default function Layout({ children, assistanceEmail, onExitAction, sideMe
             <ErrorBoundary>{children}</ErrorBoundary>
           </Grid>
         </Grid>
-        <Footer assistanceEmail={assistanceEmail} />
+        <Footer />
       </Box>
     </ErrorBoundary>
   );

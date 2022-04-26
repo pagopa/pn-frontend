@@ -10,7 +10,7 @@ import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
+import { URL_FE_LOGIN } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation} from './redux/delegation/types';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
@@ -61,7 +61,6 @@ const App = () => {
   return (
     <Layout
       onExitAction={() => dispatch(logout())}
-      assistanceEmail={PAGOPA_HELP_EMAIL}
       sideMenu={<SideMenu menuItems={menuItems} />}
     >
       <AppMessage
