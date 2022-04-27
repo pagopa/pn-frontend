@@ -47,13 +47,12 @@ export interface Person {
   companyName?: string | null;
   fiscalCode: string;
   person: boolean;
-  email: string;
+  email?: string;
 }
 
 export interface NewDelegationFormProps {
   selectPersonaFisicaOrPersonaGiuridica: string;
   codiceFiscale: string;
-  email: string;
   nome: string;
   cognome: string;
   selectTuttiEntiOrSelezionati: string;
