@@ -104,7 +104,6 @@ const NuovaDelega = () => {
       .string()
       .required('Il Codice Fiscale è obbligatorio')
       .matches(fiscalCodeRegex, 'Il codice fiscale inserito non è corretto'),
-    email: yup.string().required('Email obbligatoria').email('Email non formattata correttamente'),
     nome: yup.string().required('Il nome è obbligatorio'),
     cognome: yup.string().required('Il cognome è obbligatorio'),
     enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
