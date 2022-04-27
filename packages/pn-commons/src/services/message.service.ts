@@ -11,15 +11,20 @@ export const createAppError = (error: { response: { status: number } }): IAppMes
     id: _.uniqueId(),
     title: '',
     message: '',
+    status: 200,
     blocking: false,
     toNotify: true,
   };
+  e.status = error.response?.status;
   if (error.response?.status === 404) {
     e.title = 'Risorsa non trovata';
     e.message = 'Si è verificato un errore. Si prega di riprovare più tardi';
   } else if (error.response?.status === 403) {
     e.title = 'Utente non autenticato';
-    e.message = "L'utente corrente non è autenticato";
+    e.message = "La sessione è scaduta. Riesegui il login.";
+  } else if (error.response?.status === 401) {
+    e.title = 'Utente non autorizzato';
+    e.message = "L'utente corrente non ha le autorizzazioni";
   } else {
     e.title = 'Errore generico';
     e.message = 'Si è verificato un errore. Si prega di riprovare più tardi';
@@ -27,14 +32,14 @@ export const createAppError = (error: { response: { status: number } }): IAppMes
   return e;
 };
 
-export const createAppMessage = (title: string, message: string): IAppMessage => {
+export const createAppMessage = (title: string, message: string, status?: number): IAppMessage => {
   const e: IAppMessage = {
     id: _.uniqueId(),
     title,
     message,
     blocking: false,
     toNotify: true,
+    status,
   };
   return e;
 };
-

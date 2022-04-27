@@ -1,10 +1,10 @@
-import { AccessDenied } from '@pagopa-pn/pn-commons';
+import { SessionModal } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { URL_FE_LOGIN } from '../utils/constants';
+import { goToLogin } from './navigation.utility';
 
 /**
  * This component returns Outlet if user is logged in.
@@ -20,14 +20,23 @@ const RequireAuth = () => {
       // TODO: far comparire la modale
       setAccessDenied(true);
       // Redirect them to the spid-hub login page
-      window.location.href = URL_FE_LOGIN || '';
+      goToLogin();
     }
     if (token && token !== '') {
       setAccessDenied(false);
     }
   }, [token]);
 
-  return accessDenied ? <AccessDenied /> : <Outlet />;
+  return accessDenied ? (
+    <SessionModal
+      open
+      title={'Stai uscendo da Piattaforma Notifiche'}
+      message={'Verrai reindirizzato'}
+      handleClose={goToLogin}
+    ></SessionModal>
+  ) : (
+    <Outlet />
+  );
 };
 
 export default RequireAuth;

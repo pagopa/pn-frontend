@@ -42,7 +42,7 @@ export const arrayOfDelegates = [
     dateto: '16-04-2022',
   },
   {
-    mandateId: '1',
+    mandateId: '2',
     delegate: {
       firstName: 'Davide',
       lastName: 'Legato',

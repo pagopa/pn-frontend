@@ -37,6 +37,11 @@
     "receipt": "Ricevuta",
     "show-history": "Mostra storico",
     "show-more": "Mostra di più",
-    "show-less": "Mostra di meno"
+    "show-less": "Mostra di meno",
+    "add_domicile": "Associa",
+    "domicile_1": "Associa la tua PEC o l’app IO per ricevere le notifiche soltanto in versione digitale.",
+    "domicile_2": "Associa la tua PEC o l’app IO per risparmiare sulle spese dell’invio cartaceo.",
+    "domicile_3": "Associa la tua PEC o l’app IO per evitare gli sprechi di carta generati dalle raccomandate.",
+    "domicile_4": "Associa la tua PEC o l’app IO per ricevere le notifiche in tempi più rapidi."
   }
 }

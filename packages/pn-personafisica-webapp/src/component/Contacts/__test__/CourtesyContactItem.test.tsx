@@ -177,31 +177,33 @@ describe('CourtesyContactItem component', () => {
 
       test('override an existing phone number using the same value', async () => {
         const editButton = screen.getByRole('button', { name: 'button.modifica'});
-
         fireEvent.click(editButton);
-
-        const input = screen.getByRole('textbox');
+        const input =  await waitFor(() => screen.getByRole('textbox'));
         const saveButton = screen.getByRole('button', { name: 'button.salva'});
-
         fireEvent.change(input, { target: { value: '' } });
         await waitFor(() => expect(input).toHaveValue(''));
         fireEvent.change(input, { target: { value: VALID_PHONE } });
         await waitFor(() => expect(input).toHaveValue(VALID_PHONE));
-
+        // clear mocks
+        mockActionFn.mockClear();
+        mockActionFn.mockReset();
+        mockDispatchFn.mockReset();
+        mockDispatchFn.mockClear();
+        mockDispatchFn.mockImplementation(jest.fn(() => ({
+          unwrap: () => Promise.resolve({code: VALID_CODE}),
+        })));
         fireEvent.click(saveButton);
-        screen.getByText(VALID_PHONE);
+        await waitFor(() => screen.getByText(VALID_PHONE));
       });
 
       test('override an existing phone number with a new one', async () => {
         const editButton = screen.getByRole('button', { name: 'button.modifica'});
-
         fireEvent.click(editButton);
-
         const input = result?.getByRole('textbox');
         fireEvent.change(input!, { target: { value: VALID_PHONE_2 } });
         await waitFor(() => expect(input!).toHaveValue(VALID_PHONE_2));
         const saveButton = screen.getByRole('button', { name: 'button.salva'});
-        fireEvent.click(saveButton!);
+        fireEvent.click(saveButton);
         await waitFor(() => {
           expect(mockDispatchFn).toBeCalledTimes(1);
           expect(mockActionFn).toBeCalledTimes(1);
@@ -447,19 +449,23 @@ describe('CourtesyContactItem component', () => {
 
       test('override an existing email using the same value', async () => {
         const editButton = screen.getByRole('button', { name: 'button.modifica'});
-
         fireEvent.click(editButton);
-
-        const input = screen.getByRole('textbox');
+        const input = await waitFor(() => screen.getByRole('textbox'));
         const saveButton = screen.getByRole('button', { name: 'button.salva'});
-
         fireEvent.change(input, { target: { value: '' } });
         await waitFor(() => expect(input).toHaveValue(''));
         fireEvent.change(input, { target: { value: VALID_EMAIL } });
         await waitFor(() => expect(input).toHaveValue(VALID_EMAIL));
-
+        // clear mocks
+        mockActionFn.mockClear();
+        mockActionFn.mockReset();
+        mockDispatchFn.mockReset();
+        mockDispatchFn.mockClear();
+        mockDispatchFn.mockImplementation(jest.fn(() => ({
+          unwrap: () => Promise.resolve({code: VALID_CODE}),
+        })));
         fireEvent.click(saveButton);
-        screen.getByText(VALID_EMAIL);
+        await waitFor(() => screen.getByText(VALID_EMAIL));
       });
 
       test('override an existing email with a new one', async () => {

@@ -217,7 +217,7 @@ describe('SpecialContacts Component', () => {
     const form = result?.container.querySelector('form');
     testFormElements(form!, 'sender', 'special-contacts.sender');
     testFormElements(form!, 'addressType', 'special-contacts.address-type');
-    testFormElements(form!, 'pec', 'special-contacts.pec');
+    testFormElements(form!, 's_pec', 'special-contacts.pec');
     const button = form?.querySelector('button');
     expect(button).toHaveTextContent('button.associa');
     expect(button).toBeDisabled();
@@ -248,19 +248,19 @@ describe('SpecialContacts Component', () => {
       ],
       1
     );
-    const pecInput = form?.querySelector(`input[name="pec"]`);
+    const pecInput = form?.querySelector(`input[name="s_pec"]`);
     expect(pecInput).not.toBeInTheDocument();
-    testFormElements(form!, 'phone', 'special-contacts.phone');
+    testFormElements(form!, 's_phone', 'special-contacts.phone');
   });
 
   it('checks invalid pec', async () => {
     const form = result?.container.querySelector('form');
-    await testInvalidField(form!, 'pec', 'mail-errata', 'legal-contacts.valid-pec');
+    await testInvalidField(form!, 's_pec', 'mail-errata', 'legal-contacts.valid-pec');
   });
 
   it('checks valid pec', async () => {
     const form = result?.container.querySelector('form');
-    await testValidFiled(form!, 'pec', 'mail@valida.mail');
+    await testValidFiled(form!, 's_pec', 'mail@valida.mail');
   });
 
   it('checks invalid mail', async () => {
@@ -275,7 +275,7 @@ describe('SpecialContacts Component', () => {
       ],
       2
     );
-    await testInvalidField(form!, 'mail', 'mail-errata', 'courtesy-contacts.valid-email');
+    await testInvalidField(form!, 's_mail', 'mail-errata', 'courtesy-contacts.valid-email');
   });
 
   it('checks valid mail', async () => {
@@ -290,7 +290,7 @@ describe('SpecialContacts Component', () => {
       ],
       2
     );
-    await testValidFiled(form!, 'mail', 'mail@valida.mail');
+    await testValidFiled(form!, 's_mail', 'mail@valida.mail');
   });
 
   it('checks invalid phone', async () => {
@@ -305,7 +305,7 @@ describe('SpecialContacts Component', () => {
       ],
       1
     );
-    await testInvalidField(form!, 'phone', 'telefono-errato', 'courtesy-contacts.valid-phone');
+    await testInvalidField(form!, 's_phone', 'telefono-errato', 'courtesy-contacts.valid-phone');
   });
 
   it('checks valid phone', async () => {
@@ -320,12 +320,12 @@ describe('SpecialContacts Component', () => {
       ],
       1
     );
-    await testValidFiled(form!, 'phone', '3494568016');
+    await testValidFiled(form!, 's_phone', '3494568016');
   });
 
   it('adds pec', async () => {
     const form = result?.container.querySelector('form');
-    await testContactAddition(form!, 'pec', 'mail@valida.mail', mockDispatchFn, mockActionFn, LegalChannelType.PEC);
+    await testContactAddition(form!, 's_pec', 'mail@valida.mail', mockDispatchFn, mockActionFn, LegalChannelType.PEC);
   });
 
   it('adds phone', async () => {
@@ -340,7 +340,7 @@ describe('SpecialContacts Component', () => {
       ],
       1
     );
-    await testContactAddition(form!, 'phone', '3494568016', mockDispatchFn, mockActionFn, CourtesyChannelType.SMS);
+    await testContactAddition(form!, 's_phone', '3494568016', mockDispatchFn, mockActionFn, CourtesyChannelType.SMS);
   });
 
   it('adds email', async () => {
@@ -355,6 +355,6 @@ describe('SpecialContacts Component', () => {
       ],
       2
     );
-    await testContactAddition(form!, 'mail', 'mail@valida.mail', mockDispatchFn, mockActionFn, CourtesyChannelType.EMAIL);
+    await testContactAddition(form!, 's_mail', 'mail@valida.mail', mockDispatchFn, mockActionFn, CourtesyChannelType.EMAIL);
   });
 });
