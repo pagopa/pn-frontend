@@ -14,7 +14,7 @@ const Footer = () => {
       currentLangCode={"it"}
       onLanguageChanged={() => console.log('Language changed')}
       onExit={(href: string) => {
-        window.location.href = href;
+        window.open(href, '_blank');
       }}
     />
   );
