@@ -171,11 +171,9 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
-  // 2DO DA CONTROLLARE
-  it.skip('test form reset', async () => {
+  it('test form reset', async () => {
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
-
     await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'RSSMRA80A01H501U');
     const cancelButton = within(form!).getByTestId('cancelButton');
     await waitFor(() => {
@@ -190,8 +188,5 @@ describe('Filter Notifications Table Component', () => {
       },
       type: 'setNotificationFilters',
     });
-    testFormElementsValue(form!, 'startDate', '');
-    testFormElementsValue(form!, 'endDate', '');
-    testFormElementsValue(form!, 'iunMatch', '');
   });
 });

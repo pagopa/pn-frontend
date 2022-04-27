@@ -285,10 +285,7 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
-  // TODO unskip this test
-  // dopo aver cambiato la gestione del reset del form utilizzando dispatch e useEffect
-  // questo test va riscritto
-  it.skip('test form reset', async () => {
+  it('test form reset', async () => {
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
 
@@ -315,10 +312,5 @@ describe('Filter Notifications Table Component', () => {
       },
       type: 'setNotificationFilters',
     });
-    testFormElementsValue(form!, 'searchFor', '');
-    testFormElementsValue(form!, 'recipientId', '');
-    testFormElementsValue(form!, 'startDate', '');
-    testFormElementsValue(form!, 'endDate', '');
-    testFormElementsValue(form!, 'status', NotificationAllowedStatus[0].value);
   });
 });
