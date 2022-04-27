@@ -8,6 +8,7 @@ import {
   TitleBox,
   LegalFactId,
   NotificationDetailDocuments,
+  // HelpNotificationDetails,
   NotificationDetailTable,
   NotificationDetailTimeline,
   useIsMobile,
@@ -149,7 +150,22 @@ const NotificationDetail = () => {
               title={t('detail.acts', { ns: 'notifiche' })}
               documents={notification.documents}
               clickHandler={documentDowloadHandler}
+              documentsAvailable={false}
             />
+          </Paper>
+          <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
+            {
+              /*
+            <HelpNotificationDetails 
+              title="Hai bisogno di aiuto?"
+              subtitle="Se hai domande relative al contenuto della notifica, contatta il"
+              courtName="Tribunale di Milano"
+              phoneNumber="848.800.444"
+              mail="nome.cognome@email.it"
+              website="https://www.tribunale.milano.it/"
+            />              
+              */
+            }
           </Paper>
           <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(-1)}>
             {t('button.indietro', { ns: 'common' })}
