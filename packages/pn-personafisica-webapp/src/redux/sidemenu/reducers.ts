@@ -16,7 +16,7 @@ const sidemenuSlice = createSlice({
         (delegator) => delegator.status === 'pending'
       ).length;
       state.delegators = action.payload.filter((delegator) => delegator.status !== 'pending');
-    }); 
+    });
   },
 });
 

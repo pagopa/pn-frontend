@@ -12,6 +12,7 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
+import { useParams } from 'react-router-dom';
 import {
   getReceivedNotifications,
   setNotificationFilters,
@@ -23,15 +24,30 @@ import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
+import { Delegation } from '../redux/delegation/types';
 
-const Notifiche = () => {
+const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
+  const { fiscalCode } = useParams();
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
-
+  const { delegators } = useAppSelector((state: RootState) => state.sidemenuState);
+  const currentDelegator =
+    delegators.length > 0 &&
+    delegators.find((delegation: Delegation) =>
+      'delegator' in delegation && delegation.delegator
+        ? delegation.delegator.fiscalCode === fiscalCode
+        : undefined
+    );
   const isMobile = useIsMobile();
+  const pageTitle =
+    isDelegator && currentDelegator && 'delegator' in currentDelegator
+      ? t('delegatorTitle', {
+          name: `${currentDelegator.delegator.firstName} ${currentDelegator.delegator.lastName}`,
+        })
+      : t('title');
 
   const totalElements =
     pagination.size *
@@ -70,6 +86,7 @@ const Notifiche = () => {
     // assign the ref's current value to the pagination Hook
     const params = {
       ...filters,
+      ...(isDelegator && { mandateId: currentDelegator ? currentDelegator.mandateId : '' }),
       size: pagination.size,
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
@@ -80,7 +97,7 @@ const Notifiche = () => {
   return (
     <Box sx={{ padding: '20px' }}>
       <DomicileBanner />
-      <TitleBox variantTitle="h4" title={t('title')}></TitleBox>
+      <TitleBox variantTitle="h4" title={pageTitle} />
       {isMobile ? (
         <MobileNotifications
           notifications={notifications}

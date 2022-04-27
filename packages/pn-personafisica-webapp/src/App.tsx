@@ -12,7 +12,7 @@ import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
 import { RootState } from './redux/store';
-import { Delegation} from './redux/delegation/types';
+import { Delegation } from './redux/delegation/types';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
 
 const App = () => {
@@ -20,7 +20,9 @@ const App = () => {
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
   const sessionToken = useAppSelector((state: RootState) => state.userState.user.sessionToken);
-  const { pendingDelegators, delegators } = useAppSelector((state: RootState) => state.sidemenuState);
+  const { pendingDelegators, delegators } = useAppSelector(
+    (state: RootState) => state.sidemenuState
+  );
 
   useEffect(() => {
     if (sessionToken !== '') {
@@ -38,6 +40,10 @@ const App = () => {
       'delegator' in delegator && delegator.delegator
         ? `${delegator.delegator.firstName} ${delegator.delegator.lastName}`
         : 'No Name Found',
+    route:
+      'delegator' in delegator && delegator.delegator
+        ? routes.GET_NOTIFICHE_DELEGATO_PATH(delegator.delegator.fiscalCode)
+        : '*',
   }));
 
   // TODO spostare questo in un file di utility
