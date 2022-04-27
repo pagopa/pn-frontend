@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -49,22 +48,25 @@ const App = () => {
     [loggedUser]
   );
 
-  const userActions = useMemo(() => ([
-    {
-      id: "profile",
-      label: t('menu.profilo'),
-      onClick: () => {
-        navigate(routes.PROFILO);
+  const userActions = useMemo(
+    () => [
+      {
+        id: 'profile',
+        label: t('menu.profilo'),
+        onClick: () => {
+          navigate(routes.PROFILO);
+        },
+        icon: <SettingsIcon fontSize="small" color="inherit" />,
       },
-      icon: <SettingsIcon fontSize="small" color="inherit" />,
-    },
-    {
-      id: "logout",
-      label: t('header.logout'),
-      onClick: () => dispatch(logout()),
-      icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
-    }
-  ]), []);
+      {
+        id: 'logout',
+        label: t('header.logout'),
+        onClick: () => dispatch(logout()),
+        icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
+      },
+    ],
+    []
+  );
 
   useEffect(() => {
     if (sessionToken !== '') {
@@ -99,7 +101,6 @@ const App = () => {
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegatorsState ? pendingDelegatorsState : undefined,
     },
-    { label: t('menu.profilo'), icon: SettingsOutlinedIcon, route: routes.PROFILO },
   ];
 
   return (

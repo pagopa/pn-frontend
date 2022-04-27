@@ -17,7 +17,7 @@ const productsList = [
   {
     id: "1",
     title: `Area Riservata`,
-    productUrl: SELFCARE_BASE_URL!,
+    productUrl: SELFCARE_BASE_URL as string,
   }
 ];
 
