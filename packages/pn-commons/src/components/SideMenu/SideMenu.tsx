@@ -17,8 +17,19 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
-  const menuItemSelected = menuItems.find((m) => m.route === location.pathname) ||
-    menuItems.find((m) => location.pathname.indexOf(m.route as string) > -1) || { label: 'Menu' };
+  const menuItemsWithIndex = menuItems.map<{ index: number; label: string; route: string }>(
+    (item, i) => ({
+      index: i,
+      label: item.label,
+      route: item.route || '',
+    })
+  );
+  const menuItemSelected = menuItemsWithIndex.find((m) => m.route === location.pathname) ||
+    menuItemsWithIndex.find((m) => location.pathname.indexOf(m.route as string) > -1) || {
+      index: -1,
+      label: 'Menu',
+      route: '',
+    };
 
   const toggleDrawer = () => {
     setState(!state);
@@ -63,6 +74,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
                   menuItems={menuItems}
                   selfCareItems={selfCareItems}
                   handleLinkClick={handleNavigation}
+                  selectedItem={menuItemSelected}
                 />
               }
             </Drawer>
@@ -72,6 +84,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
             menuItems={menuItems}
             selfCareItems={selfCareItems}
             handleLinkClick={handleNavigation}
+            selectedItem={menuItemSelected}
           />
         )}
       </Box>
