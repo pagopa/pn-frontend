@@ -130,7 +130,7 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test filters inital value', () => {
-    testFormElementsValue(form!, 'searchFor', '');
+    testFormElementsValue(form!, 'searchFor', '0');
     testFormElementsValue(form!, 'recipientId', '');
     testFormElementsValue(form!, 'startDate', '');
     testFormElementsValue(form!, 'endDate', '');

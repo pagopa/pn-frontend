@@ -49,7 +49,7 @@ const FilterNotificationsTable = () => {
   const initialValues = () => {
     if (!filters || (filters && filters === emptyValues)) {
       return {
-        searchFor: '',
+        searchFor: '0',
         startDate: tenYearsAgo,
         endDate: today,
         status: '',
@@ -58,7 +58,7 @@ const FilterNotificationsTable = () => {
       };
     } else {
       return {
-        searchFor: '',
+        searchFor: '0',
         startDate: new Date(filters.startDate),
         endDate: new Date(filters.endDate),
         recipientId: filters.recipientId || '',
