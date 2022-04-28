@@ -14,5 +14,8 @@ export function getDay(dateString: string): string {
 
 export function getTime(dateString: string): string {
   const date = new Date(dateString);
-  return `${date.getHours()}:${date.getMinutes()}`;
+  return `${date.getHours().toString().padStart(2, '0')}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}`;
 }

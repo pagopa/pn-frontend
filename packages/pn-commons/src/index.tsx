@@ -22,6 +22,7 @@ import NotificationDetailDocuments from './components/NotificationDetail/Notific
 import NotificationDetailTimeline from './components/NotificationDetail/NotificationDetailTimeline';
 import Toast from './components/Toast/Toast';
 import CodeModal from './components/CodeModal/CodeModal';
+import InactivityHandler from './components/InactivityHandler';
 
 export { LoadingOverlay };
 export { Header };
@@ -46,6 +47,7 @@ export { NotificationDetailDocuments };
 export { NotificationDetailTimeline };
 export { Toast };
 export { CodeModal };
+export { InactivityHandler };
 
 // pages
 import NotFound from './navigation/NotFound';

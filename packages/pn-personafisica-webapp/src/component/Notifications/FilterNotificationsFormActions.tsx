@@ -19,16 +19,16 @@ const FilterNotificationsFormActions = ({
   const { t } = useTranslation(['common']);
 
   const confirmAction = (
-    <Grid item lg={1} xs={12}>
-      <Button variant="outlined" type="submit" size="large" disabled={!formikInstance.isValid}>
+    <Grid item lg="auto" xs={12}>
+      <Button variant="outlined" type="submit" size="small" disabled={!formikInstance.isValid}>
         {t('button.cerca')}
       </Button>
     </Grid>
   );
 
   const cancelAction = (
-    <Grid item lg={2} xs={12}>
-      <Button data-testid="cancelButton" size="large" onClick={cleanFilters}>
+    <Grid item lg="auto" xs={12}>
+      <Button data-testid="cancelButton" size="small" onClick={cleanFilters}>
         {t('button.annulla ricerca')}
       </Button>
     </Grid>

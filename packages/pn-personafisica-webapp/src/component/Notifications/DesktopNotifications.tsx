@@ -46,7 +46,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
       id: 'sentAt',
       label: t('table.data'),
       width: '11%',
-      sortable: true,
+      sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string) {
         return value;
       },
@@ -58,7 +58,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
       id: 'senderId',
       label: t('table.mittente'),
       width: '13%',
-      sortable: true,
+      sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string) {
         return value;
       },
@@ -93,7 +93,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
       label: t('table.status'),
       width: '18%',
       align: 'center',
-      sortable: true,
+      sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(_, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus

@@ -84,21 +84,21 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const validationSchema = yup.object({
     sender: yup.string().required(),
     addressType: yup.string().required(),
-    pec: yup.string().when('addressType', {
+    s_pec: yup.string().when('addressType', {
       is: LegalChannelType.PEC,
       then: yup
         .string()
         .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
         .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     }),
-    mail: yup.string().when('addressType', {
+    s_mail: yup.string().when('addressType', {
       is: CourtesyChannelType.EMAIL,
       then: yup
         .string()
         .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
         .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
     }),
-    phone: yup.string().when('addressType', {
+    s_phone: yup.string().when('addressType', {
       is: CourtesyChannelType.SMS,
       then: yup
         .string()
@@ -111,16 +111,16 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     initialValues: {
       sender: '',
       addressType: LegalChannelType.PEC as LegalChannelType | CourtesyChannelType,
-      pec: '',
-      mail: '',
-      phone: '',
+      s_pec: '',
+      s_mail: '',
+      s_phone: '',
     },
     validateOnMount: true,
     validationSchema,
     onSubmit: (values) => {
       initValidation(
         values.addressType,
-        values.pec || values.mail || values.phone,
+        values.s_pec || values.s_mail || values.s_phone,
         recipientId,
         values.sender,
         (status: 'validated' | 'cancelled') => {
@@ -163,24 +163,24 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
   const addressTypeChangeHandler = async (e: ChangeEvent) => {
     if ((e.target as any).value === LegalChannelType.PEC) {
-      await formik.setFieldValue('mail', '');
-      await formik.setFieldValue('phone', '');
+      await formik.setFieldValue('s_mail', '');
+      await formik.setFieldValue('s_phone', '');
       const alreadyExists =
         addresses.findIndex((a) => a.senderId === formik.values.sender && a.pec) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.pec-already-exists', { ns: 'recapiti' }) : ''
       );
     } else if ((e.target as any).value === CourtesyChannelType.EMAIL) {
-      await formik.setFieldValue('pec', '');
-      await formik.setFieldValue('phone', '');
+      await formik.setFieldValue('s_pec', '');
+      await formik.setFieldValue('s_phone', '');
       const alreadyExists =
         addresses.findIndex((a) => a.senderId === formik.values.sender && a.mail) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.email-already-exists', { ns: 'recapiti' }) : ''
       );
     } else {
-      await formik.setFieldValue('pec', '');
-      await formik.setFieldValue('mail', '');
+      await formik.setFieldValue('s_pec', '');
+      await formik.setFieldValue('s_mail', '');
       const alreadyExists =
         addresses.findIndex((a) => a.senderId === formik.values.sender && a.phone) > -1;
       setAlreadyExistsMessage(
@@ -274,47 +274,47 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
           <Grid item lg xs={12}>
             {formik.values.addressType === LegalChannelType.PEC && (
               <TextField
-                id="pec"
+                id="s_pec"
                 label={`${t('special-contacts.pec', { ns: 'recapiti' })}*`}
-                name="pec"
-                value={formik.values.pec}
+                name="s_pec"
+                value={formik.values.s_pec}
                 onChange={handleChangeTouched}
                 fullWidth
                 variant="outlined"
                 type="mail"
                 size="small"
-                error={formik.touched.pec && Boolean(formik.errors.pec)}
-                helperText={formik.touched.pec && formik.errors.pec}
+                error={formik.touched.s_pec && Boolean(formik.errors.s_pec)}
+                helperText={formik.touched.s_pec && formik.errors.s_pec}
               />
             )}
             {formik.values.addressType === CourtesyChannelType.SMS && (
               <TextField
-                id="phone"
+                id="s_phone"
                 label={`${t('special-contacts.phone', { ns: 'recapiti' })}*`}
-                name="phone"
-                value={formik.values.phone}
+                name="s_phone"
+                value={formik.values.s_phone}
                 onChange={handleChangeTouched}
                 fullWidth
                 variant="outlined"
                 type="tel"
                 size="small"
-                error={formik.touched.phone && Boolean(formik.errors.phone)}
-                helperText={formik.touched.phone && formik.errors.phone}
+                error={formik.touched.s_phone && Boolean(formik.errors.s_phone)}
+                helperText={formik.touched.s_phone && formik.errors.s_phone}
               />
             )}
             {formik.values.addressType === CourtesyChannelType.EMAIL && (
               <TextField
-                id="mail"
+                id="s_mail"
                 label={`${t('special-contacts.mail', { ns: 'recapiti' })}*`}
-                name="mail"
-                value={formik.values.mail}
+                name="s_mail"
+                value={formik.values.s_mail}
                 onChange={handleChangeTouched}
                 fullWidth
                 variant="outlined"
                 type="mail"
                 size="small"
-                error={formik.touched.mail && Boolean(formik.errors.mail)}
-                helperText={formik.touched.mail && formik.errors.mail}
+                error={formik.touched.s_mail && Boolean(formik.errors.s_mail)}
+                helperText={formik.touched.s_mail && formik.errors.s_mail}
               />
             )}
           </Grid>

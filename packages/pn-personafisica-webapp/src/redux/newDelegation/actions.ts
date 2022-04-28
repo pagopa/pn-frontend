@@ -12,7 +12,6 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
         lastName: data.cognome,
         fiscalCode: data.codiceFiscale,
         person: data.selectPersonaFisicaOrPersonaGiuridica === 'pf',
-        email: data.email,
       },
       visibilityIds: data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? [] : [data.enteSelect],
       verificationCode: data.verificationCode,

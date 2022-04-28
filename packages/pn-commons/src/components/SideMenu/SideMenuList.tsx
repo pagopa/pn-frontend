@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import {
   Box,
   Collapse,
@@ -18,6 +18,7 @@ type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
   handleLinkClick: (link: string) => void;
+  selectedItem: { index: number; label: string; route: string };
 };
 
 const useStyles = makeStyles(() => ({
@@ -31,10 +32,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick }: Props) => {
+const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem }: Props) => {
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<string>('');
-  const [selectedIndex, setSelectedIndex] = useState<{ label: string; index: number }>();
+  const [selectedIndex, setSelectedIndex] =
+    useState<{ label: string; index: number; route: string }>();
   const classes = useStyles();
   // store previous values
   const prevOpenId = useRef(openId);
@@ -50,6 +52,11 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick }: Props) => {
       setOpen(true);
     }
   };
+
+  useEffect(() => {
+    setSelectedIndex(selectedItem);
+  }, [selectedItem]);
+
   return (
     <Box
       sx={{
@@ -76,7 +83,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick }: Props) => {
                   selectedIndex.label === item.label
                 }
                 onClick={() => {
-                  setSelectedIndex({ label: item.label, index });
+                  setSelectedIndex({ label: item.label, index, route: item.route || '' });
                   handleLinkClick(item.route as string);
                   handleClick(item.label);
                 }}
@@ -107,7 +114,13 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick }: Props) => {
                       item={child}
                       handleLinkClick={handleLinkClick}
                       style={{ pl: 4 }}
-                      onSelect={() => setSelectedIndex({ label: child.label, index: childIndex })}
+                      onSelect={() =>
+                        setSelectedIndex({
+                          label: child.label,
+                          index: childIndex,
+                          route: item.route || '',
+                        })
+                      }
                     />
                   ))}
                 </List>
@@ -121,7 +134,9 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick }: Props) => {
               selected={
                 selectedIndex && index === selectedIndex.index && selectedIndex.label === item.label
               }
-              onSelect={() => setSelectedIndex({ label: item.label, index })}
+              onSelect={() =>
+                setSelectedIndex({ label: item.label, index, route: item.route || '' })
+              }
             />
           )
         )}
@@ -143,7 +158,13 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick }: Props) => {
                 sIndex === selectedIndex.index &&
                 selectedIndex.label === selfcareItem.label
               }
-              onSelect={() => setSelectedIndex({ label: selfcareItem.label, index: sIndex })}
+              onSelect={() =>
+                setSelectedIndex({
+                  label: selfcareItem.label,
+                  index: sIndex,
+                  route: selfcareItem.route || '',
+                })
+              }
               goOutside
             />
           ))}

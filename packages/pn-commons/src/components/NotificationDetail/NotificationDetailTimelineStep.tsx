@@ -224,6 +224,13 @@ const NotificationDetailTimelineStep = ({
             </Typography>
           )}
         </Box>
+        {recipients.length > 1 && (
+          <Box>
+            <Typography fontSize={14} color="text.secondary">
+              {timelineStatusInfos.recipient}
+            </Typography>
+          </Box>
+        )}
       </Fragment>,
       'middle',
       'small'

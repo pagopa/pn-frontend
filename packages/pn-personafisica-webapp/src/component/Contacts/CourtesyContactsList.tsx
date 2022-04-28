@@ -1,4 +1,4 @@
-import { Box, Divider, Grid } from '@mui/material';
+import { Box, Divider } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { CourtesyChannelType, DigitalAddress } from '../../models/contacts';
 import CourtesyContactItem, { CourtesyFieldType } from './CourtesyContactItem';
@@ -6,51 +6,39 @@ import CourtesyContactItem, { CourtesyFieldType } from './CourtesyContactItem';
 interface Props {
   recipientId: string;
   contacts: Array<DigitalAddress>;
-};
+}
 
-const CourtesyContactsList: React.FC<Props> = ({recipientId, contacts}) => {
+const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
   const isMobile = useIsMobile();
 
-  const phoneContacts = contacts.filter(
+  const phoneContact = contacts.find(
     (contact) => contact.channelType === CourtesyChannelType.SMS && contact.senderId === 'default'
   );
-  const emailContacts = contacts.filter(
+  const emailContact = contacts.find(
     (contact) => contact.channelType === CourtesyChannelType.EMAIL && contact.senderId === 'default'
   );
 
-
   return (
     <Box style={{ padding: '1rem' }}>
-      <Grid container direction="row" sx={{ my: '1rem' }} spacing={2}>
-        {phoneContacts.length > 0 ? (
-          phoneContacts.map((contact) => (
-            <CourtesyContactItem
-              key={contact.value}
-              recipientId={recipientId}
-              type={CourtesyFieldType.PHONE}
-              value={contact.value}
-            />
-          ))
-        ) : (
-          <CourtesyContactItem 
-          recipientId={recipientId} type={CourtesyFieldType.PHONE} value="" />
-        )}
-      </Grid>
-      {isMobile && <Divider />}
-      <Grid container direction="row" sx={{ my: '1rem' }} spacing={2}>
-        {emailContacts.length > 0 ? (
-          emailContacts.map((contact) => (
-            <CourtesyContactItem
-              key={contact.value}
-              recipientId={recipientId}
-              type={CourtesyFieldType.EMAIL}
-              value={contact.value}
-            />
-          ))
-        ) : (
-          <CourtesyContactItem recipientId={recipientId} type={CourtesyFieldType.EMAIL} value="" />
-        )}
-      </Grid>
+      {phoneContact ? (
+        <CourtesyContactItem
+          recipientId={recipientId}
+          type={CourtesyFieldType.PHONE}
+          value={phoneContact.value}
+        />
+      ) : (
+        <CourtesyContactItem recipientId={recipientId} type={CourtesyFieldType.PHONE} value="" />
+      )}
+      {(isMobile || phoneContact) && <Divider />}
+      {emailContact ? (
+        <CourtesyContactItem
+          recipientId={recipientId}
+          type={CourtesyFieldType.EMAIL}
+          value={emailContact.value}
+        />
+      ) : (
+        <CourtesyContactItem recipientId={recipientId} type={CourtesyFieldType.EMAIL} value="" />
+      )}
     </Box>
   );
 };

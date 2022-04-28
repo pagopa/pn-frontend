@@ -25,10 +25,10 @@ export default function delegationToItem(delegations: Array<Delegation>): Array<
 }
 
 export const getEmailFromDelegation = (delegation: Delegation): string => {
-  if ('delegator' in delegation && delegation.delegator) {
+  if ('delegator' in delegation && delegation.delegator && delegation.delegator.email) {
     return delegation.delegator.email;
   }
-  if ('delegate' in delegation && delegation.delegate) {
+  if ('delegate' in delegation && delegation.delegate && delegation.delegate.email) {
     return delegation.delegate.email;
   }
   return '';

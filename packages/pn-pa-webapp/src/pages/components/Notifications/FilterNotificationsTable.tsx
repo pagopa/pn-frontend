@@ -18,9 +18,14 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
 
 const useStyles = makeStyles({
-  customButton: {
-    marginTop: '8px !important',
-    height: '60px',
+  searchButton: {
+    height: '43px !important',
+    marginRight: '8px !important',
+  },
+  cancelButton: {
+    height: '43px !important',
+    padding: '0 16px !important',
+    minWidth: '130px !important',
   },
 });
 
@@ -42,9 +47,9 @@ const FilterNotificationsTable = () => {
   };
 
   const initialValues = () => {
-    if (!filters || filters && filters === emptyValues) {
+    if (!filters || (filters && filters === emptyValues)) {
       return {
-        searchFor: '',
+        searchFor: '0',
         startDate: tenYearsAgo,
         endDate: today,
         status: '',
@@ -53,7 +58,7 @@ const FilterNotificationsTable = () => {
       };
     } else {
       return {
-        searchFor: '',
+        searchFor: '0',
         startDate: new Date(filters.startDate),
         endDate: new Date(filters.endDate),
         recipientId: filters.recipientId || '',
@@ -121,7 +126,11 @@ const FilterNotificationsTable = () => {
       <form onSubmit={formik.handleSubmit}>
         <Box
           display={'flex'}
-          sx={{ verticalAlign: 'top', '& .MuiTextField-root': { m: 1, width: '25ch' } }}
+          sx={{
+            marginTop: 5,
+            verticalAlign: 'top',
+            '& .MuiTextField-root': { mr: 1, width: '100%' },
+          }}
         >
           <TextField
             id="searchFor"
@@ -130,6 +139,7 @@ const FilterNotificationsTable = () => {
             value={formik.values.searchFor}
             onChange={formik.handleChange}
             select
+            size="small"
           >
             {searchForValues.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -147,6 +157,7 @@ const FilterNotificationsTable = () => {
               error={formik.touched.recipientId && Boolean(formik.errors.recipientId)}
               helperText={formik.touched.recipientId && formik.errors.recipientId}
               disabled={!formik.values.searchFor}
+              size="small"
             />
           ) : (
             <TextField
@@ -158,6 +169,7 @@ const FilterNotificationsTable = () => {
               error={formik.touched.iunMatch && Boolean(formik.errors.iunMatch)}
               helperText={formik.touched.iunMatch && formik.errors.iunMatch}
               disabled={!formik.values.searchFor}
+              size="small"
             />
           )}
           <LocalizationProvider
@@ -175,7 +187,9 @@ const FilterNotificationsTable = () => {
                   setStartDate(value);
                 });
               }}
-              renderInput={(params) => <TextField id="startDate" name="startDate" {...params} />}
+              renderInput={(params) => (
+                <TextField id="startDate" name="startDate" size="small" {...params} />
+              )}
               disableFuture={true}
               maxDate={endDate ? endDate : undefined}
             />
@@ -196,7 +210,9 @@ const FilterNotificationsTable = () => {
                   setEndDate(value);
                 });
               }}
-              renderInput={(params) => <TextField id="endDate" name="endDate" {...params} />}
+              renderInput={(params) => (
+                <TextField id="endDate" name="endDate" size="small" {...params} />
+              )}
               disableFuture={true}
               minDate={startDate ? startDate : undefined}
             />
@@ -208,6 +224,7 @@ const FilterNotificationsTable = () => {
             select
             onChange={formik.handleChange}
             value={formik.values.status}
+            size="small"
           >
             {NotificationAllowedStatus.map((status) => (
               <MenuItem key={status.value} value={status.value}>
@@ -218,16 +235,16 @@ const FilterNotificationsTable = () => {
           <Button
             type="submit"
             variant="outlined"
-            className={classes.customButton}
-            size="large"
+            className={classes.searchButton}
+            size="small"
             disabled={!formik.isValid}
           >
             Cerca
           </Button>
           <Button
             data-testid="cancelButton"
-            className={classes.customButton}
-            size="large"
+            className={classes.cancelButton}
+            size="small"
             onClick={cancelSearch}
           >
             Annulla ricerca
