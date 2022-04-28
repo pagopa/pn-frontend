@@ -57,7 +57,7 @@ const Dashboard = () => {
       id: 'sentAt',
       label: 'Data',
       width: '11%',
-      sortable: true,
+      sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string) {
         return value;
       },
@@ -69,7 +69,7 @@ const Dashboard = () => {
       id: 'recipientId',
       label: 'Destinatario',
       width: '13%',
-      sortable: true,
+      sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string) {
         return value;
       },
@@ -121,11 +121,9 @@ const Dashboard = () => {
       label: 'Stato',
       width: '18%',
       align: 'center',
-      sortable: true,
+      sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string) {
-        const { label, tooltip, color } = getNotificationStatusInfos(
-          value as NotificationStatus
-        );
+        const { label, tooltip, color } = getNotificationStatusInfos(value as NotificationStatus);
         return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
       },
     },
