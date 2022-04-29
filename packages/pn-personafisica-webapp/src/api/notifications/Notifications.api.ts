@@ -132,16 +132,19 @@ export const NotificationsApi = {
    */
   getNotificationPaymentInfo: (iuv: string): Promise<PaymentDetail> =>
   new Promise((resolve, reject) => {
-    if(!iuv){
-      return reject({ response: { status: 400 }, blockNotification: true });
-    }
+    setTimeout(() => {
+      if(!iuv){
+        return reject({ response: { status: 400 }, blockNotification: true });
+      }
     // mocked response (returns a random payment status)
-    const randomIndex = Math.floor(Math.random() * 4);
-    return resolve(mocked_payments_detail[randomIndex]);
+      const randomIndex = Math.floor(Math.random() * 4);
+      return resolve(mocked_payments_detail[randomIndex]);
+    }, 1500);
+    // return resolve(mocked_payments_detail[randomIndex]);
     
   }),
     // apiClient
-    // .get<PaymentDetail>(`/delivery/notifications//payment/${iuv}`)
+    // .get<PaymentDetail>(`/delivery/notifications/payment/${iuv}`)
     // .then((response) => {
     //   if (response.data) {
     //     return response.data;
