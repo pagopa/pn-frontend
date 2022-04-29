@@ -91,7 +91,7 @@ describe('CourtesyContactsList Component', () => {
     const buttons = await screen.findAllByRole('button');
     expect(buttons[0]).toBeEnabled();
     expect(buttons[1]).toBeEnabled();
-    expect(buttons[0].textContent).toMatch('button.rimuovi');
-    expect(buttons[1].textContent).toMatch('button.modifica');
+    expect(buttons[0].textContent).toMatch('button.modifica');
+    expect(buttons[1].textContent).toMatch('button.rimuovi');
   });
 });

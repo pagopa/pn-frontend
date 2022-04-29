@@ -7,7 +7,7 @@ import Notifiche from '../pages/Notifiche.page';
 import Deleghe from '../pages/Deleghe.page';
 import Contacts from '../pages/Contacts.page';
 import Profile from '../pages/Profile.page';
-import RequireAuth from './RequiredAuth';
+import RequireAuth from './RequireAuth';
 import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
 

@@ -1,50 +1,74 @@
-import { AppBar, Button, SvgIcon, Toolbar } from '@mui/material';
-import { Box } from '@mui/system';
-import { Fragment } from 'react';
-import { ReactComponent as logo } from '../../assets/logo_pago_pa_mini.svg';
-import SubHeader from './subHeader/SubHeader';
+import {
+  HeaderAccount,
+  RootLinkType,
+  HeaderProduct,
+  ProductEntity,
+  PartyEntity,
+  JwtUser,
+  UserAction
+} from '@pagopa/mui-italia';
+import { Box } from '@mui/material';
+
+import {pagoPALink } from '../../utils/costants';
 
 type HeaderProps = {
-  withSecondHeader: boolean;
-  onExitAction?: (() => void) | null;
-  subHeaderChild?: React.ReactNode;
+  /** Assistance email for the user */
+  assistanceEmail?: string;
+  /** List of available products */
+  productsList: Array<ProductEntity>;
+  /** List of available parties */
+  partyList?: Array<PartyEntity>;
+  /** Logout/exit action to apply */
+  onExitAction?: () => void;
+  /** current logged user */
+  loggedUser: JwtUser;
+  /** Enable user dropdown */
+  enableDropdown?: boolean;
+  /** Actions linked to user dropdown*/
+  userActions?: Array<UserAction>;
+};
+
+const pagoPAHeaderLink: RootLinkType = {
+  ...pagoPALink,
+  label: 'PagoPA S.p.A.',
+  title: 'Sito di PagoPA S.p.A.',
 };
 
 const Header = ({
-  withSecondHeader,
   onExitAction = () => window.location.assign(''),
-  subHeaderChild,
-}: HeaderProps) => (
-  <Fragment>
-    <AppBar
-      position="relative"
-      sx={{
-        alignItems: 'center',
-        height: '7%',
-        backgroundColor: 'primary.dark',
-        boxShadow: 'none'
-      }}
-    >
-      <Toolbar sx={{ width: { xs: '100%', lg: '90%', minHeight: '48px !important' } }}>
-        <SvgIcon component={logo} viewBox="0 0 80 24" sx={{ width: '80px' }} />
-        {onExitAction !== null ? (
-          <Box sx={{ flexGrow: 1, textAlign: 'end' }}>
-            <Button
-              variant="contained"
-              sx={{ width: '88px', backgroundColor: '#004C99', height: '32px' }}
-              onClick={onExitAction}
-            >
-              Esci
-            </Button>
-          </Box>
-        ) : (
-          ''
-        )}
-      </Toolbar>
-    </AppBar>
-    {withSecondHeader === true ? <SubHeader>{subHeaderChild}</SubHeader> : ''}
-  </Fragment>
-  /*  </Box> */
-);
+  assistanceEmail,
+  productsList,
+  partyList,
+  loggedUser,
+  enableDropdown,
+  userActions
+}: HeaderProps) => {
+
+  const handleProductSelection = (product: ProductEntity) => {
+    if (product.productUrl) {
+      /* eslint-disable-next-line functional/immutable-data */
+      window.location.href = product.productUrl;
+    }
+  };
+
+  return (
+    <Box sx={{ zIndex: 1 }}>
+      <HeaderAccount
+        rootLink={pagoPAHeaderLink}
+        loggedUser={loggedUser}
+        onAssistanceClick={() => {
+          if (assistanceEmail) {
+            /* eslint-disable-next-line functional/immutable-data */
+            window.location.href = `mailto:${assistanceEmail}`;
+          }
+        }}
+        onLogout={onExitAction}
+        enableDropdown={enableDropdown}
+        userActions={userActions}
+      />
+      <HeaderProduct productsList={productsList} partyList={partyList} onSelectedProduct={handleProductSelection}/>
+    </Box>
+  );
+};
 
 export default Header;

@@ -1,14 +1,19 @@
-import { SessionModal } from '@pagopa-pn/pn-commons';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-import { UserRole } from '../models/user';
+import { InactivityHandler, SessionModal } from '@pagopa-pn/pn-commons';
+
+import { logout } from '../redux/auth/actions';
+import { useAppDispatch } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { UserRole } from '../models/user';
 import { goToSelfcareLogin } from './navigation.utility';
 
 interface Props {
   roles: Array<UserRole>;
 }
+
+const inactivityTimer = 5 * 60 * 1000;
 
 /**
  * This component returns Outlet if user is logged in.
@@ -20,6 +25,7 @@ const RequireAuth = ({ roles }: Props) => {
   const role = useSelector((state: RootState) => state.userState.user.organization?.role);
   const userHasRequiredRole = role && roles.includes(role);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token || !userHasRequiredRole);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (token === '' || !token) {
@@ -32,15 +38,23 @@ const RequireAuth = ({ roles }: Props) => {
     }
   }, [token, role]);
 
-  return accessDenied ? (
-    <SessionModal
-      open
-      title={'Stai uscendo da Piattaforma Notifiche'}
-      message={'Verrai reindirizzato'}
-      handleClose={goToSelfcareLogin}
-    ></SessionModal>
-  ) : (
-    <Outlet />
+  return (
+    <Fragment>
+      {accessDenied && (
+        <SessionModal
+          open
+          title={'Stai uscendo da Piattaforma Notifiche'}
+          message={'Verrai reindirizzato'}
+          handleClose={goToSelfcareLogin}
+        ></SessionModal>
+      )}
+      <InactivityHandler
+        inactivityTimer={inactivityTimer}
+        onTimerExpired={() => dispatch(logout())}
+      >
+        <Outlet />
+      </InactivityHandler>
+    </Fragment>
   );
 };
 

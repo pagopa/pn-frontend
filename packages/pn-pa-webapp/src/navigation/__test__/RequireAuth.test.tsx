@@ -2,7 +2,7 @@ import * as redux from 'react-redux';
 
 import { UserRole } from "../../models/user";
 import { render } from "../../__test__/test-utils";
-import RequireAuth from "../RequiredAuth";
+import RequireAuth from "../RequireAuth";
 
 jest.mock('react-router-dom', () => {
   const original = jest.requireActual('react-router-dom');
