@@ -14,6 +14,8 @@ import {
 
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
+import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utils/events';
 
 import FilterNotifications from './FilterNotifications';
 
@@ -111,6 +113,8 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
   // Navigation handlers
   const handleRowClick = (row: Item, _column: Column) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+    // log event
+    trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
   };
 
   return (

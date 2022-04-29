@@ -1,3 +1,4 @@
+import { AppBar } from '@mui/material';
 import {
   HeaderAccount,
   RootLinkType,
@@ -7,7 +8,6 @@ import {
   JwtUser,
   UserAction
 } from '@pagopa/mui-italia';
-import { Box } from '@mui/material';
 
 import {pagoPALink } from '../../utils/costants';
 
@@ -52,7 +52,7 @@ const Header = ({
   };
 
   return (
-    <Box sx={{ zIndex: 1 }}>
+    <AppBar sx={{ boxShadow: 'none' }} position="relative">
       <HeaderAccount
         rootLink={pagoPAHeaderLink}
         loggedUser={loggedUser}
@@ -67,7 +67,7 @@ const Header = ({
         userActions={userActions}
       />
       <HeaderProduct productsList={productsList} partyList={partyList} onSelectedProduct={handleProductSelection}/>
-    </Box>
+    </AppBar>
   );
 };
 

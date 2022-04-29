@@ -17,6 +17,7 @@ import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
+import { mixpanelInit } from './utils/mixpanel';
 
 // TODO: get products list from be (?)
 const productsList = [
@@ -37,7 +38,7 @@ const App = () => {
   );
   const navigate = useNavigate();
 
-  const sessionToken = useMemo(() => loggedUser.sessionToken, [loggedUser]);
+  const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -67,6 +68,11 @@ const App = () => {
     ],
     []
   );
+
+  useEffect(() => {
+    // init mixpanel
+    mixpanelInit();
+  }, []);
 
   useEffect(() => {
     if (sessionToken !== '') {

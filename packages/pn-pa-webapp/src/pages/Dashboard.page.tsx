@@ -28,6 +28,8 @@ import {
   setPagination,
   setSorting,
 } from '../redux/dashboard/actions';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 import FilterNotificationsTable from './components/Notifications/FilterNotificationsTable';
 
 const Dashboard = () => {
@@ -147,6 +149,8 @@ const Dashboard = () => {
   // Navigation handlers
   const handleRowClick = (row: Item, _column: Column) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+    // log event
+    trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
   };
 
   // Remove filter

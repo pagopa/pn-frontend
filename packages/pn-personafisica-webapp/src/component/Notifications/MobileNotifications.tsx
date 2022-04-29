@@ -19,6 +19,8 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
+import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utils/events';
 import MobileNotificationsSort from './MobileNotificationsSort';
 import FilterNotifications from './FilterNotifications';
 
@@ -117,6 +119,8 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
   // Navigation handlers
   const handleRowClick = (row: Item) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+    // log event
+    trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
   };
 
   const cardActions: Array<CardAction> = [
