@@ -8,5 +8,5 @@ export function formatCurrency(currency: number) {
 }
 
 export function formatEurocentToCurrency(eurocent: number) {
-  return euro.format(eurocent / 100);
+  return formatCurrency(eurocent / 100);
 }

@@ -10,7 +10,7 @@ export interface AppStateState {
   messages: {
     errors: Array<IAppMessage>;
     success: Array<IAppMessage>;
-  }
+  };
 }
 
 const initialState: AppStateState = {
@@ -20,8 +20,8 @@ const initialState: AppStateState = {
   },
   messages: {
     errors: [],
-    success: []
-  }
+    success: [],
+  },
 };
 
 const isLoading = (action: AnyAction) => action.type.endsWith('/pending');
@@ -36,17 +36,24 @@ export const appStateSlice = createSlice({
   initialState,
   reducers: {
     removeError(state, action: PayloadAction<string>) {
-      state.messages.errors = state.messages.errors.filter(e => e.id !== action.payload); 
+      state.messages.errors = state.messages.errors.filter((e) => e.id !== action.payload);
     },
-    addSuccess(state, action: PayloadAction<{title: string, message: string}>) {
-      const message = createAppMessage(action.payload.title, action.payload.message);
-      state.messages.success.push(message); 
+    addSuccess(
+      state,
+      action: PayloadAction<{ title: string; message: string; status?: number }>
+    ) {
+      const message = createAppMessage(
+        action.payload.title,
+        action.payload.message,
+        action.payload.status
+      );
+      state.messages.success.push(message);
     },
     removeSuccess(state, action: PayloadAction<string>) {
-      state.messages.success = state.messages.success.filter(e => e.id !== action.payload); 
-    }
+      state.messages.success = state.messages.success.filter((e) => e.id !== action.payload);
+    },
   },
-  extraReducers: builder => {
+  extraReducers: (builder) => {
     builder
       .addMatcher(isLoading, (state) => {
         state.loading.result = true;
@@ -61,7 +68,7 @@ export const appStateSlice = createSlice({
           state.messages.errors.push(error);
         }
       });
-  }
+  },
 });
 
 export const appStateActions = appStateSlice.actions;

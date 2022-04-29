@@ -24,6 +24,7 @@ import {
 } from '../redux/notification/actions';
 import StyledLink from '../component/StyledLink/StyledLink';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
+import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -48,8 +49,16 @@ const NotificationDetail = () => {
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
   const detailTableRows: Array<{ id: number; label: string; value: ReactNode }> = [
-    { id: 1, label: t('detail.date', { ns: 'notifiche' }), value: <Box fontWeight={600}>{notification.sentAt}</Box> },
-    { id: 2, label: t('detail.payment-terms', { ns: 'notifiche' }), value: t('detail.payment-terms-expiration', { ns: 'notifiche' }) },
+    {
+      id: 1,
+      label: t('detail.date', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{notification.sentAt}</Box>,
+    },
+    {
+      id: 2,
+      label: t('detail.payment-terms', { ns: 'notifiche' }),
+      value: t('detail.payment-terms-expiration', { ns: 'notifiche' }),
+    },
     {
       id: 3,
       label: t('detail.recipient', { ns: 'notifiche' }),
@@ -65,7 +74,11 @@ const NotificationDetail = () => {
       label: t('detail.cancelled-iun', { ns: 'notifiche' }),
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
     },
-    { id: 7, label: t('detail.iun', { ns: 'notifiche' }), value: <Box fontWeight={600}>{notification.iun}</Box> },
+    {
+      id: 7,
+      label: t('detail.iun', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{notification.iun}</Box>,
+    },
     { id: 8, label: t('detail.groups', { ns: 'notifiche' }), value: '' },
   ];
   const documentDowloadHandler = (documentIndex: number) => {
@@ -94,14 +107,12 @@ const NotificationDetail = () => {
   useEffect(() => {
     if (documentDownloadUrl) {
       dowloadDocument(documentDownloadUrl);
-      console.log("DocumentDownload", documentDownloadUrl);
     }
   }, [documentDownloadUrl]);
 
   useEffect(() => {
     if (legalFactDownloadUrl) {
       dowloadDocument(legalFactDownloadUrl);
-      console.log("Legal Fact Download", legalFactDownloadUrl);
     }
   }, [legalFactDownloadUrl]);
 
@@ -134,7 +145,8 @@ const NotificationDetail = () => {
         <Grid item lg={7} xs={12} sx={{ marginTop: isMobile ? 0 : '20px' }}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
-          <NotificationPayment notification={notification} />
+          <NotificationPayment notification={notification} onDocumentDownload={dowloadDocument} />
+          <DomicileBanner />
           <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
             <NotificationDetailDocuments
               title={t('detail.acts', { ns: 'notifiche' })}
@@ -152,11 +164,14 @@ const NotificationDetail = () => {
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}
               title={t('detail.timeline-title', { ns: 'notifiche' })}
-              legalFactLabels={{attestation: t('detail.legalfact', { ns: 'notifiche' }), receipt: t('detail.receipt', { ns: 'notifiche' })}}
+              legalFactLabels={{
+                attestation: t('detail.legalfact', { ns: 'notifiche' }),
+                receipt: t('detail.receipt', { ns: 'notifiche' }),
+              }}
               clickHandler={legalFactDownloadHandler}
-              historyButtonLabel={t('detail.show-history', {ns: 'notifiche'})}
-              showMoreButtonLabel={t('detail.show-more', {ns: 'notifiche'})}
-              showLessButtonLabel={t('detail.show-less', {ns: 'notifiche'})}
+              historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
+              showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
+              showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
             />
           </Box>
         </Grid>

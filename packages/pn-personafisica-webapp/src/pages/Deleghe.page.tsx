@@ -20,7 +20,7 @@ import MobileDelegates from '../component/Deleghe/MobileDelegates';
 import MobileDelegators from '../component/Deleghe/MobileDelegators';
 import Delegates from '../component/Deleghe/Delegates';
 import Delegators from '../component/Deleghe/Delegators';
-import { getNumberDelegator } from '../redux/auth/actions';
+import { getSidemenuInformation } from '../redux/sidemenu/actions';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -55,13 +55,12 @@ const Deleghe = () => {
 
   const handleAccept = async (code: Array<string>) => {
     await dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
-    void dispatch(getNumberDelegator);
+    void dispatch(getSidemenuInformation);
   };
 
   useEffect(() => {
     void dispatch(getDelegates());
     void dispatch(getDelegators());
-
     return () => {
       dispatch(resetDelegationsState);
     };
@@ -91,6 +90,7 @@ const Deleghe = () => {
               ? t('deleghe.revocation_question')
               : t('deleghe.rejection_question')
           }
+          onCloseLabel={t('deleghe.close')}
           handleClose={handleCloseModal}
           onConfirm={handleConfirmClick}
           onConfirmLabel={
@@ -98,7 +98,7 @@ const Deleghe = () => {
           }
         />
         <Box ml={isMobile ? 2 : 0} mb={2}>
-          <TitleBox title={'Deleghe'} variantTitle={'h4'}>
+          <TitleBox title={'deleghe.title'} variantTitle={'h4'}>
             <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
               deleghe.description
             </Trans>

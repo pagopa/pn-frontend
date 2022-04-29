@@ -1,14 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  IconButton,
-  Typography,
-  Menu as MUIMenu,
-  MenuItem,
-  Box,
-  List,
-  ListItem,
-} from '@mui/material';
+import { Button, IconButton, Menu as MUIMenu, MenuItem, Box, List, ListItem } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../redux/hooks';
@@ -74,10 +65,10 @@ export const OrganizationsList = (props: { organizations: Array<string> }) => {
   return (
     <>
       {props.organizations.length === 0 ? (
-        <Typography>{t('deleghe.table.allNotifications')}</Typography>
+        <>{t('deleghe.table.allNotifications')}</>
       ) : (
         <Box>
-          <Typography>{t('deleghe.table.notificationsFrom')}</Typography>
+          <>{t('deleghe.table.notificationsFrom')}</>
           <List
             sx={{
               padding: 0,

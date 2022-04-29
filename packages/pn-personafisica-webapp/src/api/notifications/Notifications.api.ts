@@ -7,7 +7,23 @@ import {
   formatFiscalCode,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
+import { PaymentDetail, PaymentStatus } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { apiClient } from '../axios';
+
+const mocked_payments_detail = [
+  {
+    amount: 47350,
+    status: PaymentStatus.REQUIRED
+  }, {
+    amount: 47350,
+    status: PaymentStatus.INPROGRESS
+  },  {
+    status: PaymentStatus.SUCCEEDED
+  },  {
+    amount: 47350,
+    status: PaymentStatus.FAILED,
+  }
+];
 
 export const NotificationsApi = {
   /**
@@ -109,4 +125,28 @@ export const NotificationsApi = {
         }
         return { url: '' };
       }),
+  /**
+   * Gets current user's notification payment info
+   * @param  {string} iuv
+   * @returns Promise
+   */
+  getNotificationPaymentInfo: (iuv: string): Promise<PaymentDetail> =>
+  new Promise((resolve, reject) => {
+    if(!iuv){
+      return reject({ response: { status: 400 }, blockNotification: true });
+    }
+    // mocked response (returns a random payment status)
+    const randomIndex = Math.floor(Math.random() * 4);
+    return resolve(mocked_payments_detail[randomIndex]);
+    
+  }),
+    // apiClient
+    // .get<PaymentDetail>(`/delivery/notifications//payment/${iuv}`)
+    // .then((response) => {
+    //   if (response.data) {
+    //     return response.data;
+    //   }
+    //   return { };
+    //   // return response.data;
+    // }),
 };
