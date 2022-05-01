@@ -28,42 +28,34 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
   );
 
   useEffect(() => {
-    dispatch(getNotificationPaymentInfo(notificationPayment.iuv)).unwrap()
-    .then(() => {
-      setLoading(false);
-      setError("");
-    })
-    .catch(() => {
-      setLoading(false);
-      setError(t('detail.payment.message-network-error', { ns: 'notifiche' }));
-    });
-    // const fetchPaymentInfo = () => {
-    //   // if (notificationPayment.iuv) {
-    //     // dispatch(getNotificationPaymentDetails({ iun: notification.iun, recipientId: notification.recipients[0].taxId })).unwrap()
-    //     dispatch(getNotificationPaymentInfo(notificationPayment.iuv)).unwrap()
-    //     .then(() => {
-    //       setLoading(false);
-    //       setError("");
-    //     })
-    //     .catch(() => {
-    //       setLoading(false);
-    //       setError(t('detail.payment.message-network-error', { ns: 'notifiche' }));
-    //     });
-    //   // }
-    //   // else {
-    //   //   setLoading(false);
-    //   //   setError("IUV not found!");
-    //   // }
-    // };
-    
-    // fetchPaymentInfo();
-  }, [notificationPayment]);
+    const fetchPaymentInfo = () => {
+      if (notificationPayment?.iuv) {
+        // dispatch(getNotificationPaymentDetails({ iun: notification.iun, recipientId: notification.recipients[0].taxId })).unwrap()
+        dispatch(getNotificationPaymentInfo(notificationPayment.iuv)).unwrap()
+        .then(() => {
+          setLoading(() => false);
+          setError(() => "");
+        })
+        .catch(() => {
+          setLoading(() => false);
+          setError(() => t('detail.payment.message-network-error', { ns: 'notifiche' }));
+        });
+      }
+      else {
+        setLoading(() => false);
+        setError(() => "IUV not found");
+      }
+    };
+
+    fetchPaymentInfo();
+  }, []);
   
   const onPayClick = () => {
     if(CHECKOUT_URL && notificationPayment.iuv) {
-      window.open(CHECKOUT_URL.concat("/").concat(notificationPayment.iuv));
+      window.open(`${CHECKOUT_URL}/${notificationPayment.iuv}`);
     }
     else if(CHECKOUT_URL) {
+      // uiv not available, do we need to inform the user and redirect to base checkout url?
       console.log("UIV not found!");
       setTimeout(() => {
         window.open(CHECKOUT_URL);
@@ -105,21 +97,24 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
   };
   // to be fixed once the notification payment model is stable
   const getAttachments = () => {
-    const attachments = new Set<{name: string; title: string; url: string}>();
+    // eslint-disable-next-line functional/no-let
+    const attachments = new Array<{name: string; title: string; url: string}>();
 
     if(notificationPayment && notificationPayment.f24){
       const pagopaAttachment = notificationPayment.f24.flatRate;
       const f24Attachment = notificationPayment.f24.digital;
     
-      if(pagopaAttachment) {
-        attachments.add({
+      if(pagopaAttachment && pagopaAttachment.title) {
+        // eslint-disable-next-line functional/immutable-data
+        attachments.push({
           name: 'pagopa',
           title: t('detail.payment.download-pagopa-notification', { ns: 'notifiche' }),
           url: pagopaAttachment.title
         });
       }
-      if(f24Attachment) {
-        attachments.add({
+      if(f24Attachment && f24Attachment.title) {
+        // eslint-disable-next-line functional/immutable-data
+        attachments.push({
           name: 'f24',
           title: t('detail.payment.download-f24', { ns: 'notifiche' }),
           url: f24Attachment.title
@@ -200,13 +195,13 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
               {action.text}
             </Button>
           </Grid>
-          {attachments.size > 0 &&
+          {attachments.length > 0 &&
           <Grid item xs={12} lg={12} sx={{ my: '1rem'}}>
             <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
           </Grid>
           }
-          {attachments.forEach(attachment => (
-            <Grid key={attachment.name} item xs={12} lg={12/attachments.size || 1} sx={{ textAlign: 'center', my: '1rem'}}>
+          {attachments.map(attachment => (
+            <Grid key={attachment.name} item xs={12} lg={12/attachments.length || 1} sx={{ textAlign: 'center', my: '1rem'}}>
               <Button name="downloadNotification" startIcon={<DownloadIcon />} onClick={() => onDocumentDownload(attachment.url)}>
                 {attachment.title}
               </Button>
