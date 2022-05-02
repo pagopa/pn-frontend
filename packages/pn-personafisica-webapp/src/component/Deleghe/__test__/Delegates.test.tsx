@@ -17,7 +17,6 @@ describe('Delegates Component', () => {
     expect(result.container).toHaveTextContent(/deleghe.delegatesTitle/i);
     expect(result.container).toHaveTextContent(/deleghe.add/i);
     expect(result.container).toHaveTextContent(/deleghe.table.name/i);
-    expect(result.container).toHaveTextContent(/deleghe.table.email/i);
     expect(result.container).toHaveTextContent(/deleghe.table.delegationStart/i);
     expect(result.container).toHaveTextContent(/deleghe.table.delegationEnd/i);
     expect(result.container).toHaveTextContent(/deleghe.table.permissions/i);

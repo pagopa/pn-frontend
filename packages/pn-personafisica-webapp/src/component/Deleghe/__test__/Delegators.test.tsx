@@ -16,7 +16,6 @@ describe('Delegators Component', () => {
 
     expect(result.container).not.toHaveTextContent(/deleghe.delegatorsTitle/i);
     expect(result.container).not.toHaveTextContent(/deleghe.table.name/i);
-    expect(result.container).not.toHaveTextContent(/deleghe.table.email/i);
   });
 
   it('renders the delegators', () => {

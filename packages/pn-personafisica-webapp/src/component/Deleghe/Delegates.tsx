@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
-import { Add } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
 import { Column, ItemsTable as Table, Item, CodeModal, Sort } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
@@ -37,15 +37,6 @@ const Delegates = () => {
       sortable: true,
       getCellLabel(value: string) {
         return <Typography fontWeight="bold">{value}</Typography>;
-      },
-    },
-    {
-      id: 'email',
-      label: t('deleghe.table.email'),
-      width: '18%',
-      sortable: true,
-      getCellLabel(value: string) {
-        return <Typography sx={{ wordBreak: 'break-all' }}>{value}</Typography>;
       },
     },
     {
@@ -131,7 +122,7 @@ const Delegates = () => {
           <Typography variant="h6">{t('deleghe.delegatesTitle')}</Typography>
           <Box>
             <Button variant="outlined" onClick={handleAddDelegationClick}>
-              <Add fontSize={'small'} sx={{ marginRight: 1 }} />
+              <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
               {t('deleghe.add')}
             </Button>
           </Box>
