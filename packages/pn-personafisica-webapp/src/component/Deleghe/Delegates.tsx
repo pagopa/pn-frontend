@@ -40,15 +40,6 @@ const Delegates = () => {
       },
     },
     {
-      id: 'email',
-      label: t('deleghe.table.email'),
-      width: '18%',
-      sortable: true,
-      getCellLabel(value: string) {
-        return <Typography sx={{ wordBreak: 'break-all' }}>{value}</Typography>;
-      },
-    },
-    {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
       width: '11%',

@@ -45,7 +45,7 @@ describe('Delegations api tests', () => {
   });
 
   it('gets empty delegates', async () => {
-    const res = await getDelegates(null);
+    const res = await getDelegates([]);
     expect(res).toHaveLength(0);
   });
 
@@ -55,7 +55,7 @@ describe('Delegations api tests', () => {
   });
 
   it('gets empty delegators', async () => {
-    const res = await getDelegators(null);
+    const res = await getDelegators([]);
     expect(res).toHaveLength(0);
   });
 

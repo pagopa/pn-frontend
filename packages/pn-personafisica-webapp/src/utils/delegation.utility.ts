@@ -15,7 +15,6 @@ export default function delegationToItem(delegations: Array<Delegation>): Array<
     name: getFirstName(delegation),
     startDate: formatDate(delegation.datefrom),
     endDate: formatDate(delegation.dateto),
-    email: getEmailFromDelegation(delegation),
     visibilityIds: delegation.visibilityIds.map(
       (entity: { name: string; uniqueIdentifier: string }) => entity.uniqueIdentifier
     ),
@@ -23,16 +22,6 @@ export default function delegationToItem(delegations: Array<Delegation>): Array<
     verificationCode: delegation.verificationCode,
   }));
 }
-
-export const getEmailFromDelegation = (delegation: Delegation): string => {
-  if ('delegator' in delegation && delegation.delegator && delegation.delegator.email) {
-    return delegation.delegator.email;
-  }
-  if ('delegate' in delegation && delegation.delegate && delegation.delegate.email) {
-    return delegation.delegate.email;
-  }
-  return '';
-};
 
 export function generateVCode() {
   const crypto = window.crypto;
