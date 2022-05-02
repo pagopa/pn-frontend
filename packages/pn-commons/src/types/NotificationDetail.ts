@@ -1,6 +1,22 @@
 import { ReactNode } from "react";
 import { NotificationStatus } from "./NotificationStatus";
 
+// =========== START TEMP: WAITING FOR PAYMENT APIs DEFINITION ===========
+
+export enum PaymentStatus {
+  REQUIRED = "REQUIRED",
+  SUCCEEDED = "SUCCEEDED",
+  INPROGRESS = "INPROGRESS",
+  FAILED = "FAILED"
+}
+
+export interface PaymentDetail {
+  status: PaymentStatus;
+  amount?: number;
+}
+
+// =========== END TEMP: WAITING FOR PAYMENT APIs DEFINITION ===========
+
 export interface NotificationDetail {
   iun: string;
   paNotificationId: string;
