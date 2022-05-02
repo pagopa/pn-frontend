@@ -2,6 +2,7 @@ import { appStateReducer } from '@pagopa-pn/pn-commons';
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { LOG_REDUX_ACTIONS } from '../utils/constants';
+import { trackingMiddleware } from '../utils/mixpanel';
 import userSlice from './auth/reducers';
 import dashboardSlice from './dashboard/reducers';
 import notificationSlice from './notification/reducers';
@@ -9,7 +10,8 @@ import delegationsSlice from './delegation/reducers';
 import newDelegationSlice from './newDelegation/reducers';
 import contactsSlice from './contact/reducers';
 import sidemenuSlice from './sidemenu/reducers';
-const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined];
+
+const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined, trackingMiddleware];
 
 export const createStore = () =>
   configureStore({
