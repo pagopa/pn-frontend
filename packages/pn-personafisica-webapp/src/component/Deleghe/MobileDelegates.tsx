@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Chip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { Add } from '@mui/icons-material';
+import AddIcon from '@mui/icons-material/Add';
 import { CardElement, ItemsCard, Item } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -96,7 +96,7 @@ const MobileDelegates = () => {
         <>
           <Box mb={2}>
             <Button variant="outlined" onClick={handleAddDelegationClick}>
-              <Add fontSize={'small'} sx={{ marginRight: 1 }} />
+              <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
               {t('deleghe.add')}
             </Button>
           </Box>
