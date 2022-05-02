@@ -8,8 +8,8 @@ import {
   INotificationDetailTimeline,
   NotificationStatusHistory,
   PhysicalCommunicationType,
+  PaymentDetail,
 } from '@pagopa-pn/pn-commons';
-import { PaymentDetail } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 
 import {
   getNotificationPaymentInfo,

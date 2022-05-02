@@ -6,23 +6,27 @@ import {
   GetNotificationsResponse,
   formatFiscalCode,
   parseNotificationDetail,
+  PaymentDetail,
+  PaymentStatus,
 } from '@pagopa-pn/pn-commons';
-import { PaymentDetail, PaymentStatus } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { apiClient } from '../axios';
 
 const mocked_payments_detail = [
   {
     amount: 47350,
-    status: PaymentStatus.REQUIRED
-  }, {
+    status: PaymentStatus.REQUIRED,
+  },
+  {
     amount: 47350,
-    status: PaymentStatus.INPROGRESS
-  },  {
-    status: PaymentStatus.SUCCEEDED
-  },  {
+    status: PaymentStatus.INPROGRESS,
+  },
+  {
+    status: PaymentStatus.SUCCEEDED,
+  },
+  {
     amount: 47350,
     status: PaymentStatus.FAILED,
-  }
+  },
 ];
 
 export const NotificationsApi = {
@@ -109,7 +113,10 @@ export const NotificationsApi = {
    * @param  {LegalFactId} legalFact
    * @returns Promise
    */
-  getReceivedNotificationLegalfact: (iun: string, legalFact: LegalFactId): Promise<{ url: string }> =>
+  getReceivedNotificationLegalfact: (
+    iun: string,
+    legalFact: LegalFactId
+  ): Promise<{ url: string }> =>
     apiClient
       .get<Buffer>(`/delivery-push/legalfacts/${iun}/${legalFact.type}/${legalFact.key}`, {
         responseType: 'arraybuffer',
@@ -131,25 +138,24 @@ export const NotificationsApi = {
    * @returns Promise
    */
   getNotificationPaymentInfo: (iuv: string): Promise<PaymentDetail> =>
-  new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if(!iuv){
-        return reject({ response: { status: 400 }, blockNotification: true });
-      }
-    // mocked response (returns a random payment status)
-      const randomIndex = Math.floor(Math.random() * 4);
-      return resolve(mocked_payments_detail[randomIndex]);
-    }, 1500);
-    // return resolve(mocked_payments_detail[randomIndex]);
-    
-  }),
-    // apiClient
-    // .get<PaymentDetail>(`/delivery/notifications/payment/${iuv}`)
-    // .then((response) => {
-    //   if (response.data) {
-    //     return response.data;
-    //   }
-    //   return { };
-    //   // return response.data;
-    // }),
+    new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (!iuv) {
+          return reject({ response: { status: 400 }, blockNotification: true });
+        }
+        // mocked response (returns a random payment status)
+        const randomIndex = Math.floor(Math.random() * 4);
+        return resolve(mocked_payments_detail[randomIndex]);
+      }, 1500);
+      // return resolve(mocked_payments_detail[randomIndex]);
+    }),
+  // apiClient
+  // .get<PaymentDetail>(`/delivery/notifications/payment/${iuv}`)
+  // .then((response) => {
+  //   if (response.data) {
+  //     return response.data;
+  //   }
+  //   return { };
+  //   // return response.data;
+  // }),
 };

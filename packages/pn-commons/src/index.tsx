@@ -77,6 +77,7 @@ import {
   NotificationDetailDocument,
   NotificationFeePolicy,
   NotificationDetailPayment,
+  PaymentDetail,
   NotificationStatusHistory,
   TimelineCategory,
   DigitalDomicileType,
@@ -86,6 +87,7 @@ import {
   LegalFactType,
   LegalFactId,
   PhysicalCommunicationType,
+  PaymentStatus,
 } from './types/NotificationDetail';
 
 import { CardElement, CardSort, CardAction } from './types/ItemsCard';
@@ -116,11 +118,12 @@ export type {
   NotificationDetailDocument,
   NotificationDetailPayment,
   NotificationStatusHistory,
+  PaymentDetail,
   LegalFactId,
 };
 export type { CardElement, CardSort, CardAction };
 export type { NotificationDetailTableRow };
-export { MessageType };
+export { MessageType, PaymentStatus };
 
 // functions
 import { createAppError } from './services/message.service';

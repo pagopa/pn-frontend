@@ -1,5 +1,4 @@
-import { LegalFactId, NotificationDetail } from '@pagopa-pn/pn-commons';
-import { PaymentDetail } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
+import { LegalFactId, NotificationDetail, PaymentDetail } from '@pagopa-pn/pn-commons';
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
