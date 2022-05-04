@@ -60,7 +60,7 @@ describe('Contacts page', () => {
     expect(mockActionFn).toBeCalledWith('mocked-recipientId');
   });
 
-  test('subtitle link properly redirects to profile page', async () => {
+  test('subtitle link properly redirects to profile page', () => {
     appSelectorSpy.mockReturnValueOnce('mocked-recipientId').mockReturnValueOnce({
       legal: [],
       courtesy: [],
@@ -71,9 +71,7 @@ describe('Contacts page', () => {
     expect(subtitleLink).toBeInTheDocument();
 
     fireEvent.click(subtitleLink);
-    await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(PROFILO);
-    });
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(PROFILO);
   });
 });
