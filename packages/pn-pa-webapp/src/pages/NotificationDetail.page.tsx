@@ -1,6 +1,6 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment } from 'react';
-import { Breadcrumbs, Grid, Typography, Box, Paper, Button, styled } from '@mui/material';
+import { Breadcrumbs, Grid, Typography, Box, Paper, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
@@ -12,6 +12,7 @@ import {
   LegalFactId,
   NotificationDetailTimeline,
   useIsMobile,
+  BreadcrumbLink,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 
@@ -24,16 +25,6 @@ import {
   getSentNotificationLegalfact,
   resetState,
 } from '../redux/notification/actions';
-
-const StyledLink = styled(Link)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  color: `${theme.palette.text.primary} !important`,
-  texDecoration: 'none !important',
-  '&:hover, &:focus': {
-    textDecoration: 'underline !important',
-  },
-}));
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -146,10 +137,10 @@ const NotificationDetail = () => {
   const breadcrumb = (
     <Fragment>
       <Breadcrumbs aria-label="breadcrumb">
-        <StyledLink to={routes.DASHBOARD}>
+        <BreadcrumbLink to={routes.DASHBOARD}>
           <EmailIcon sx={{ mr: 0.5 }} />
           Notifiche
-        </StyledLink>
+        </BreadcrumbLink>
         <Typography
           color="text.primary"
           fontWeight={600}
