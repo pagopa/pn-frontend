@@ -3,7 +3,7 @@ import { SELFCARE_BASE_URL } from '../utils/constants';
 export const DASHBOARD = '/dashboard';
 const NOTIFICA = '/notifica';
 export const DETTAGLIO_NOTIFICA = `${DASHBOARD}/:id${NOTIFICA}`;
-export const NUOVA_NOTIFICA = `${DASHBOARD}/nuova`;
+export const NUOVA_NOTIFICA = `${DASHBOARD}/nuova-notifica`;
 export const API_KEYS = '/api-keys';
 
 export const ROLES_SEGMENT = '/users';

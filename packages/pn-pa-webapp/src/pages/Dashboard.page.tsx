@@ -16,7 +16,7 @@ import {
   today,
   TitleBox,
 } from '@pagopa-pn/pn-commons';
-import { Box } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 
 import * as routes from '../navigation/routes.const';
@@ -182,10 +182,17 @@ const Dashboard = () => {
         variantTitle="h4"
         title={'Notifiche'}
         subTitle={
-          'Qui trovi tutte le notifiche inviate manualmente dal tuo Ente. Puoi filtrarle per Codice Fiscale, Codice IUN, data di invio e stato.'
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            Qui trovi tutte le notifiche inviate dall&apos;Ente. Puoi filtrarle per Codice Fiscale,
+            Codice IUN, data di invio e stato.
+            <Button variant="contained" onClick={() => navigate(routes.NUOVA_NOTIFICA)}>
+              Invia una nuova notifica
+            </Button>
+          </Box>
         }
         variantSubTitle={'body1'}
       ></TitleBox>
+
       <Fragment>
         {notifications && (
           <Fragment>
