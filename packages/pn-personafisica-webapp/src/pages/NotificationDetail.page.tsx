@@ -119,7 +119,6 @@ const NotificationDetail = () => {
 
   useEffect(() => () => void dispatch(resetState()), []);
 
-
   const breadcrumb = (
     <Fragment>
       <Breadcrumbs aria-label="breadcrumb">
@@ -146,19 +145,30 @@ const NotificationDetail = () => {
         <Grid item lg={7} xs={12} sx={{ marginTop: isMobile ? 0 : '20px' }}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
-          {notification.payment?.iuv && <NotificationPayment notificationPayment={notification.payment} onDocumentDownload={dowloadDocument} />}
+          {notification.payment?.iuv && (
+            <NotificationPayment
+              notificationPayment={notification.payment}
+              onDocumentDownload={dowloadDocument}
+            />
+          )}
           <DomicileBanner />
           <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
             <NotificationDetailDocuments
               title={t('detail.acts', { ns: 'notifiche' })}
               documents={notification.documents}
               clickHandler={documentDowloadHandler}
-              documentsAvailable={false}
+              /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+              documentsAvailable={notification.documentsAvailable!}
+              downloadFilesMessage={
+                /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+                notification.documentsAvailable!
+                  ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
+                  : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' })
+              }
             />
           </Paper>
+          {/*
           <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
-            {
-              /*
             <HelpNotificationDetails 
               title="Hai bisogno di aiuto?"
               subtitle="Se hai domande relative al contenuto della notifica, contatta il"
@@ -167,9 +177,8 @@ const NotificationDetail = () => {
               mail="nome.cognome@email.it"
               website="https://www.tribunale.milano.it/"
             />              
-              */
-            }
           </Paper>
+              */}
           <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(-1)}>
             {t('button.indietro', { ns: 'common' })}
           </Button>

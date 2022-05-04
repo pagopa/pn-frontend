@@ -260,6 +260,8 @@ export function parseNotificationDetail(
   const parsedNotification = {
     ...notificationDetail,
     sentAt: formatDate(notificationDetail.sentAt),
+    // TODO remove when the flag will be populated by API
+    documentsAvailable: Math.random() < 0.5,
   };
   /* eslint-disable functional/immutable-data */
   /* eslint-disable functional/no-let */
