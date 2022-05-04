@@ -31,7 +31,6 @@ export function generateVCode() {
 }
 
 export function compareDelegationsStrings(a: Delegation, b: Delegation, orderAttr: string) {
-  // TODO: change when displayName can be retrieved
   if ('delegator' in a && a.delegator && 'delegator' in b && b.delegator) {
     const delegator1 = compareOrderAttribute(a.delegator, orderAttr);
     const delegator2 = compareOrderAttribute(b.delegator, orderAttr);
@@ -66,9 +65,9 @@ function compareOrderAttribute(person: Person, orderAttr: string) {
 
 function getFirstName(delegation: Delegation): string {
   if ('delegator' in delegation && delegation.delegator) {
-    return `${delegation.delegator?.firstName} ${delegation.delegator?.lastName}`;
+    return `${delegation.delegator?.displayName}`;
   } else if ('delegate' in delegation && delegation.delegate) {
-    return `${delegation.delegate?.firstName} ${delegation.delegate?.lastName}`;
+    return `${delegation.delegate?.displayName}`;
   }
   return '';
 }

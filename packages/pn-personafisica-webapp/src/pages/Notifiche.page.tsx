@@ -45,7 +45,7 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
   const pageTitle =
     isDelegator && currentDelegator && 'delegator' in currentDelegator
       ? t('delegatorTitle', {
-          name: `${currentDelegator.delegator.firstName} ${currentDelegator.delegator.lastName}`,
+          name: currentDelegator.delegator ? currentDelegator.delegator.displayName : '',
         })
       : t('title');
 
