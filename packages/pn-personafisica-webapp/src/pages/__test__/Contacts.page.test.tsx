@@ -1,5 +1,5 @@
 import * as redux from 'react-redux';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { render } from '../../__test__/test-utils';
 import * as hooks from '../../redux/hooks';
 import * as actions from '../../redux/contact/actions';
