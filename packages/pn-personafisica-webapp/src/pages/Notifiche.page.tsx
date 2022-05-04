@@ -92,7 +92,7 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
     void dispatch(getReceivedNotifications(params));
-  }, [filters, pagination.size, pagination.page, sort]);
+  }, [currentDelegator, filters, pagination.size, pagination.page, sort]);
 
   return (
     <Box sx={{ padding: '20px' }}>
