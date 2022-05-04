@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, IconButton, Menu as MUIMenu, MenuItem, Box, List, ListItem } from '@mui/material';
-import { MoreVert } from '@mui/icons-material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../redux/hooks';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/actions';
@@ -51,7 +51,7 @@ export const Menu = (props: any) => {
   return (
     <>
       <IconButton onClick={handleClick} data-testid="delegationMenuIcon">
-        <MoreVert fontSize={'small'} />
+        <MoreVertIcon fontSize={'small'} />
       </IconButton>
       <MUIMenu anchorEl={anchorEl} open={open} onClose={handleClose} data-testid="delegationMenu">
         {getMenuItemElements()}

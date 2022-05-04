@@ -1,4 +1,6 @@
+import { useEffect, useMemo } from 'react';
 import { LoadingOverlay, Layout, AppMessage, SideMenu } from '@pagopa-pn/pn-commons';
+import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
@@ -6,29 +8,32 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 import { PAGOPA_HELP_EMAIL, SELFCARE_URL_FE_LOGIN, SELFCARE_BASE_URL } from './utils/constants';
+import { mixpanelInit } from './utils/mixpanel';
 
 // TODO: get products list from be (?)
-const productsList = [
+const productsList: Array<ProductSwitchItem> = [
   {
-    id: "0",
+    id: '0',
     title: `Piattaforma Notifiche`,
-    productUrl: "",
+    productUrl: '',
+    linkType: 'internal'
   },
   {
-    id: "1",
+    id: '1',
     title: `Area Riservata`,
     productUrl: SELFCARE_BASE_URL as string,
-  }
+    linkType: 'external'
+  },
 ];
 
 // TODO: get parties list from be (?)
-const partyList = [
+const partyList: Array<PartyEntity> = [
   {
-    id: "0",
+    id: '0',
     name: `Comune di Milano`,
     productRole: 'Referente amministrativo',
-    logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`
-  }
+    logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
+  },
 ];
 
 const App = () => {
@@ -37,12 +42,20 @@ const App = () => {
 
   const role = loggedUser.organization?.role;
   const idOrganization = loggedUser.organization?.id;
-  const menuItems = getMenuItems(role, idOrganization);
-  const jwtUser = {
-    id: loggedUser.fiscal_number,
-    name: loggedUser.name,
-    surname: loggedUser.family_name
-  };
+  const menuItems = useMemo(() => getMenuItems(role, idOrganization), [role, idOrganization]);
+  const jwtUser = useMemo(
+    () => ({
+      id: loggedUser.fiscal_number,
+      name: loggedUser.name,
+      surname: loggedUser.family_name,
+    }),
+    [loggedUser]
+  );
+
+  useEffect(() => {
+    // init mixpanel
+    mixpanelInit();
+  }, []);
 
   return (
     <Layout

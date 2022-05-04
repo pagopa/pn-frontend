@@ -8,6 +8,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
+import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
@@ -17,13 +18,15 @@ import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
+import { mixpanelInit } from './utils/mixpanel';
 
 // TODO: get products list from be (?)
-const productsList = [
+const productsList: Array<ProductSwitchItem> = [
   {
     id: '0',
     title: `Piattaforma Notifiche`,
     productUrl: '',
+    linkType: 'internal'
   },
 ];
 
@@ -37,7 +40,7 @@ const App = () => {
   );
   const navigate = useNavigate();
 
-  const sessionToken = useMemo(() => loggedUser.sessionToken, [loggedUser]);
+  const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -67,6 +70,11 @@ const App = () => {
     ],
     []
   );
+
+  useEffect(() => {
+    // init mixpanel
+    mixpanelInit();
+  }, []);
 
   useEffect(() => {
     if (sessionToken !== '') {

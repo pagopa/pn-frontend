@@ -33,6 +33,7 @@ describe('Notification detail redux state tests', () => {
       },
       documentDownloadUrl: '',
       legalFactDownloadUrl: '',
+      paymentDetail: {},
     });
   });
 
