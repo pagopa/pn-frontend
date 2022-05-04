@@ -76,7 +76,7 @@ export const notificationFromBe: NotificationDetail = {
       },
     },
   },
-  notificationStatus: NotificationStatus.PAID,
+  notificationStatus: NotificationStatus.DELIVERED,
   notificationStatusHistory: [
     {
       status: NotificationStatus.DELIVERED,
@@ -345,7 +345,7 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
       },
     },
   },
-  notificationStatus: NotificationStatus.PAID,
+  notificationStatus: NotificationStatus.DELIVERED,
   notificationStatusHistory: [
     {
       status: NotificationStatus.DELIVERED,

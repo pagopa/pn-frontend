@@ -131,4 +131,13 @@ describe('Dashboard Page', () => {
       );
     });
   });
+
+  it('clicks on new notification', async () => {
+    const newNotificationBtn = result?.queryByTestId('newNotificationBtn');
+    expect(newNotificationBtn).toHaveTextContent('Invia una nuova notifica');
+    fireEvent.click(newNotificationBtn!);
+    await waitFor(() => {
+      expect(mockNavigateFn).toBeCalledTimes(1);
+    });
+  });
 });

@@ -151,7 +151,7 @@ const NotificationDetail = () => {
       </Breadcrumbs>
       <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
-        <Button sx={{ margin: '10px 0' }} variant="outlined">
+        <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(routes.NUOVA_NOTIFICA)} data-testid="cancelNotificationBtn">
           Annulla Notifica
         </Button>
       )}

@@ -89,4 +89,10 @@ describe('NotificationDetail Page', () => {
     fireEvent.click(backButton!);
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
+
+  test('clicks on the cancel button', () => {
+    const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
+    fireEvent.click(cancelNotificationBtn!);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+  });
 });

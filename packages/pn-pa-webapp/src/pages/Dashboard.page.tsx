@@ -14,9 +14,8 @@ import {
   Item,
   tenYearsAgo,
   today,
-  TitleBox,
 } from '@pagopa-pn/pn-commons';
-import { Box, Button } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 
 import * as routes from '../navigation/routes.const';
@@ -178,20 +177,20 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ padding: '20px' }}>
-      <TitleBox
-        variantTitle="h4"
-        title={'Notifiche'}
-        subTitle={
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            Qui trovi tutte le notifiche inviate dall&apos;Ente. Puoi filtrarle per Codice Fiscale,
-            Codice IUN, data di invio e stato.
-            <Button variant="contained" onClick={() => navigate(routes.NUOVA_NOTIFICA)}>
-              Invia una nuova notifica
-            </Button>
-          </Box>
-        }
-        variantSubTitle={'body1'}
-      ></TitleBox>
+      <Typography variant="h4">Notifiche</Typography>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="body1">
+          Qui trovi tutte le notifiche inviate dall&apos;Ente. Puoi filtrarle per Codice Fiscale,
+          Codice IUN, data di invio e stato.
+        </Typography>
+        <Button
+          variant="contained"
+          onClick={() => navigate(routes.NUOVA_NOTIFICA)}
+          data-testid="newNotificationBtn"
+        >
+          Invia una nuova notifica
+        </Button>
+      </Box>
 
       <Fragment>
         {notifications && (
