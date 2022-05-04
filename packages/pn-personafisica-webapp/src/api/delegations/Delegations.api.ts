@@ -4,7 +4,9 @@ import {
   AcceptDelegationResponse,
   CreateDelegationProps,
   CreateDelegationResponse,
+  Delegate,
   Delegation,
+  Delegator,
 } from '../../redux/delegation/types';
 
 function checkResponseStatus(response: AxiosResponse, id: string) {
@@ -14,31 +16,44 @@ function checkResponseStatus(response: AxiosResponse, id: string) {
   return { id: '-1' };
 }
 
-function getDelegationsResponse(response: AxiosResponse<Array<Delegation>>) {
-  if (response.data) {
-    return response.data;
-  }
-  return [] as Array<Delegation>;
-}
-
 export const DelegationsApi = {
   /**
    * Get all the delegates for the authenticated user
    * @returns {Promise<Array<Delegation>>}
    */
-  getDelegates: (): Promise<Array<Delegation>> =>
+  getDelegates: (): Promise<Array<Delegate>> =>
     apiClient
       .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegator')
-      .then((response: AxiosResponse<Array<Delegation>>) => getDelegationsResponse(response)),
+      .then((response: AxiosResponse<Array<Delegation>>) =>
+        response.data.map((delegation) => ({
+          mandateId: delegation.mandateId,
+          status: delegation.status,
+          visibilityIds: delegation.visibilityIds,
+          verificationCode: delegation.verificationCode,
+          datefrom: delegation.datefrom,
+          dateto: delegation.dateto,
+          delegate: 'delegate' in delegation ? delegation.delegate : null,
+        }))
+      ),
 
   /**
    * Get all the delegators for the authenticated user
    * @return {Promise<Array<Delegation>>}
    */
-  getDelegators: (): Promise<Array<Delegation>> =>
+  getDelegators: (): Promise<Array<Delegator>> =>
     apiClient
       .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegate')
-      .then((response: AxiosResponse<Array<Delegation>>) => getDelegationsResponse(response)),
+      .then((response: AxiosResponse<Array<Delegation>>) =>
+        response.data.map((delegation) => ({
+          mandateId: delegation.mandateId,
+          status: delegation.status,
+          visibilityIds: delegation.visibilityIds,
+          verificationCode: delegation.verificationCode,
+          datefrom: delegation.datefrom,
+          dateto: delegation.dateto,
+          delegator: 'delegator' in delegation ? delegation.delegator : null,
+        }))
+      ),
   /**
    * Removes a delegation that the user created
    * @param id

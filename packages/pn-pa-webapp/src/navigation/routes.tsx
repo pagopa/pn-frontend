@@ -4,7 +4,7 @@ import { NotFound } from '@pagopa-pn/pn-commons';
 import Dashboard from '../pages/Dashboard.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
 import { UserRole } from '../models/user';
-import RequireAuth from './RequiredAuth';
+import RequireAuth from './RequireAuth';
 import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
 

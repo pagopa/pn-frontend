@@ -42,6 +42,19 @@
     "domicile_1": "Associa la tua PEC o l’app IO per ricevere le notifiche soltanto in versione digitale.",
     "domicile_2": "Associa la tua PEC o l’app IO per risparmiare sulle spese dell’invio cartaceo.",
     "domicile_3": "Associa la tua PEC o l’app IO per evitare gli sprechi di carta generati dalle raccomandate.",
-    "domicile_4": "Associa la tua PEC o l’app IO per ricevere le notifiche in tempi più rapidi."
+    "domicile_4": "Associa la tua PEC o l’app IO per ricevere le notifiche in tempi più rapidi.",
+    "payment": {
+      "summary": "Importo totale",
+      "disclaimer": "Questo importo verrà aggiornato al momento del pagamento. Quindi potrebbe essere diverso.",
+      "disclaimer-link": "Come mai?",
+      "submit": "Paga",
+      "divider-text": "oppure",
+      "download-pagopa-notification": "Scarica l'avviso pagoPA",
+      "download-f24": "Scarica il modello F24",
+      "message-completed": "Il pagamento è stato effettuato con successo.",
+      "message-pending": "Il pagamento è stato effettuato con successo.<br /><strong>Entro 24 ore</strong> verrà aggiornato lo stato della notifica. In caso di eventuali problemi verrai contattato tramite email/controlla la tua casella email.",
+      "message-failed": "Il pagamento non è andato a buon fine. Premi \"Paga\" per riprovare.",
+      "message-network-error": "Errore nel recupero delle informazioni di pagamento!"
+    }
   }
 }

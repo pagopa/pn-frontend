@@ -1,4 +1,4 @@
-import { ChangeEvent, memo } from 'react';
+import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -25,7 +25,7 @@ type Props = {
   recipientId: string;
 };
 
-const InsertLegalContact = memo(({ recipientId }: Props) => {
+const InsertLegalContact = ({ recipientId }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
 
@@ -137,6 +137,6 @@ const InsertLegalContact = memo(({ recipientId }: Props) => {
       </DigitalContactsCard>
     </form>
   );
-});
+};
 
 export default InsertLegalContact;

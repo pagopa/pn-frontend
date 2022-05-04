@@ -1,11 +1,14 @@
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
-import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
-import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
-import { useEffect, useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
+
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
@@ -14,15 +17,62 @@ import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getSidemenuInformation } from './redux/sidemenu/actions';
+import { mixpanelInit } from './utils/mixpanel';
+
+// TODO: get products list from be (?)
+const productsList = [
+  {
+    id: '0',
+    title: `Piattaforma Notifiche`,
+    productUrl: '',
+  },
+];
 
 const App = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
-  const sessionToken = useAppSelector((state: RootState) => state.userState.user.sessionToken);
+  const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.sidemenuState
   );
+  const navigate = useNavigate();
+
+  const sessionToken = loggedUser.sessionToken;
+  const jwtUser = useMemo(
+    () => ({
+      id: loggedUser.fiscal_number,
+      name: loggedUser.name,
+      surname: loggedUser.family_name,
+      mail: loggedUser.email,
+    }),
+    [loggedUser]
+  );
+
+  const userActions = useMemo(
+    () => [
+      {
+        id: 'profile',
+        label: t('menu.profilo'),
+        onClick: () => {
+          navigate(routes.PROFILO);
+        },
+        icon: <SettingsIcon fontSize="small" color="inherit" />,
+      },
+      {
+        id: 'logout',
+        label: t('header.logout'),
+        onClick: () => dispatch(logout()),
+        icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
+      },
+    ],
+    []
+  );
+
+  useEffect(() => {
+    // init mixpanel
+    mixpanelInit();
+  }, []);
 
   useEffect(() => {
     if (sessionToken !== '') {
@@ -61,14 +111,17 @@ const App = () => {
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegatorsState ? pendingDelegatorsState : undefined,
     },
-    { label: t('menu.profilo'), icon: SettingsOutlinedIcon, route: routes.PROFILO },
   ];
 
   return (
     <Layout
-      onExitAction={() => dispatch(logout())}
       assistanceEmail={PAGOPA_HELP_EMAIL}
+      onExitAction={() => dispatch(logout())}
       sideMenu={<SideMenu menuItems={menuItems} />}
+      productsList={productsList}
+      loggedUser={jwtUser}
+      enableUserDropdown
+      userActions={userActions}
     >
       <AppMessage
         sessionRedirect={() => {

@@ -104,7 +104,6 @@ describe('NuovaDelega page', () => {
     await act(async () => {
       await testInput(form, 'nome', 'Mario');
       await testInput(form, 'cognome', 'Rossi');
-      await testInput(form, 'email', 'mariorossi@email.com');
       await testInput(form, 'nome', 'RSSMRA01A01A111A');
     });
   });

@@ -23,6 +23,7 @@ import {
   resetState,
 } from '../redux/notification/actions';
 import StyledLink from '../component/StyledLink/StyledLink';
+import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 
 const useStyles = makeStyles(() => ({
@@ -117,6 +118,7 @@ const NotificationDetail = () => {
 
   useEffect(() => () => void dispatch(resetState()), []);
 
+
   const breadcrumb = (
     <Fragment>
       <Breadcrumbs aria-label="breadcrumb">
@@ -143,6 +145,7 @@ const NotificationDetail = () => {
         <Grid item lg={7} xs={12} sx={{ marginTop: isMobile ? 0 : '20px' }}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
+          {notification.payment?.iuv && <NotificationPayment notificationPayment={notification.payment} onDocumentDownload={dowloadDocument} />}
           <DomicileBanner />
           <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
             <NotificationDetailDocuments

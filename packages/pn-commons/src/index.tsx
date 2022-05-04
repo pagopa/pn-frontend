@@ -22,6 +22,7 @@ import NotificationDetailDocuments from './components/NotificationDetail/Notific
 import NotificationDetailTimeline from './components/NotificationDetail/NotificationDetailTimeline';
 import Toast from './components/Toast/Toast';
 import CodeModal from './components/CodeModal/CodeModal';
+import InactivityHandler from './components/InactivityHandler';
 
 export { LoadingOverlay };
 export { Header };
@@ -46,6 +47,7 @@ export { NotificationDetailDocuments };
 export { NotificationDetailTimeline };
 export { Toast };
 export { CodeModal };
+export { InactivityHandler };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -75,6 +77,7 @@ import {
   NotificationDetailDocument,
   NotificationFeePolicy,
   NotificationDetailPayment,
+  PaymentDetail,
   NotificationStatusHistory,
   TimelineCategory,
   DigitalDomicileType,
@@ -84,6 +87,7 @@ import {
   LegalFactType,
   LegalFactId,
   PhysicalCommunicationType,
+  PaymentStatus,
 } from './types/NotificationDetail';
 
 import { CardElement, CardSort, CardAction } from './types/ItemsCard';
@@ -114,11 +118,12 @@ export type {
   NotificationDetailDocument,
   NotificationDetailPayment,
   NotificationStatusHistory,
+  PaymentDetail,
   LegalFactId,
 };
 export type { CardElement, CardSort, CardAction };
 export type { NotificationDetailTableRow };
-export { MessageType };
+export { MessageType, PaymentStatus };
 
 // functions
 import { createAppError } from './services/message.service';
@@ -131,6 +136,7 @@ import {
 } from './utils/notification.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
+import { formatCurrency, formatEurocentToCurrency } from './utils/currency.utility';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusInfos };
@@ -141,6 +147,7 @@ export { calculatePages };
 export { getMonthString, getDay, getTime };
 export { formatFiscalCode };
 export { fiscalCodeRegex };
+export { formatCurrency, formatEurocentToCurrency };
 
 // consts
 export { today, tenYearsAgo };

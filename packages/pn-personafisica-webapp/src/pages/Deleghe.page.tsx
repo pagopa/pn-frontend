@@ -98,7 +98,7 @@ const Deleghe = () => {
           }
         />
         <Box ml={isMobile ? 2 : 0} mb={2}>
-          <TitleBox title={'deleghe.title'} variantTitle={'h4'}>
+          <TitleBox title={t('deleghe.title')} variantTitle={'h4'}>
             <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
               deleghe.description
             </Trans>

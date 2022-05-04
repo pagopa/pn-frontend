@@ -16,7 +16,6 @@ export default function delegationToItem(delegations: Array<Delegation>): Array<
     // la data arriva nel formato YYYY-MM-DDZ rimuovere slice in caso di rimozione di Z
     startDate: formatDate(delegation.datefrom.slice(0, -1)),
     endDate: formatDate(delegation.dateto),
-    email: getEmailFromDelegation(delegation),
     visibilityIds: delegation.visibilityIds.map(
       (entity: { name: string; uniqueIdentifier: string }) => entity.uniqueIdentifier
     ),
@@ -24,16 +23,6 @@ export default function delegationToItem(delegations: Array<Delegation>): Array<
     verificationCode: delegation.verificationCode,
   }));
 }
-
-export const getEmailFromDelegation = (delegation: Delegation): string => {
-  if ('delegator' in delegation && delegation.delegator) {
-    return delegation.delegator.email;
-  }
-  if ('delegate' in delegation && delegation.delegate) {
-    return delegation.delegate.email;
-  }
-  return '';
-};
 
 export function generateVCode() {
   const crypto = window.crypto;

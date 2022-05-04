@@ -1,4 +1,4 @@
-import { LegalFactId, NotificationDetail } from '@pagopa-pn/pn-commons';
+import { LegalFactId, NotificationDetail, PaymentDetail } from '@pagopa-pn/pn-commons';
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
@@ -36,6 +36,20 @@ export const getReceivedNotificationDocument = createAsyncThunk<
   async (params: { iun: string; documentIndex: number }, { rejectWithValue }) => {
     try {
       return await NotificationsApi.getReceivedNotificationDocument(params.iun, params.documentIndex);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
+export const getNotificationPaymentInfo = createAsyncThunk<
+  PaymentDetail,
+  string
+>(
+  'getNotificationPaymentInfo',
+  async (params: string, { rejectWithValue }) => {
+    try {
+      return await NotificationsApi.getNotificationPaymentInfo(params);
     } catch (e) {
       return rejectWithValue(e);
     }

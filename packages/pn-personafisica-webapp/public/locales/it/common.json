@@ -15,5 +15,8 @@
     "deleghe": "Deleghe",
     "profilo": "Profilo",
     "contacts": "I tuoi dati"
+  },
+  "header": {
+    "logout": "Esci"
   }
 }

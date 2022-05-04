@@ -53,16 +53,14 @@ const ItemsCard = ({
         cardData.map((data) => (
           <Card
             key={data.id}
+            raised
+            data-testid="itemCard"
             sx={{
               marginBottom: '16px',
               padding: '24px',
-              borderRadius: '8px',
-              boxShadow:
-                '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
             }}
-            data-testid="itemCard"
           >
-            <CardHeader title={cardHeaderTitle(data)} sx={{ padding: 0 }} />
+            <CardHeader title={cardHeaderTitle(data)} />
             <CardContent sx={{ padding: 0, marginTop: '16px', ':last-child': { padding: 0 } }}>
               {cardBody.map((body) => (
                 <Box key={body.id} sx={{ marginBottom: '16px' }}>
