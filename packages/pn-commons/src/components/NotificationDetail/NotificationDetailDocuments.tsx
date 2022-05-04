@@ -24,7 +24,7 @@ const NotificationDetailDocuments = ({
   title,
   documents,
   clickHandler,
-  documentsAvailable = false,
+  documentsAvailable = true,
   downloadFilesMessage,
 }: Props) => (
   <Fragment>

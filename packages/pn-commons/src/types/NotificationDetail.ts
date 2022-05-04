@@ -26,7 +26,7 @@ export interface NotificationDetail {
   cancelledByIun: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
-  documentsAvailable?: boolean;
+  documentsAvailable: boolean;
   payment: NotificationDetailPayment;
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
