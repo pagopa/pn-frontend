@@ -304,6 +304,7 @@ export interface LegalFactId {
 export enum PhysicalCommunicationType {
   SIMPLE_REGISTERED_LETTER = 'SIMPLE_REGISTERED_LETTER',
   REGISTERED_LETTER_890 = 'REGISTERED_LETTER_890',
+  REGISTERED_MAIL_AR = 'REGISTERED_MAIL_AR',
 }
 
 export interface NotificationDetailTableRow {

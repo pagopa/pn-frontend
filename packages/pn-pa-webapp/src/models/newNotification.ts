@@ -1,4 +1,14 @@
-import { NotificationDetailRecipient, NotificationFeePolicy, PhysicalCommunicationType } from "@pagopa-pn/pn-commons";
+import {
+  NotificationDetailRecipient,
+  NotificationFeePolicy,
+  PhysicalCommunicationType,
+} from '@pagopa-pn/pn-commons';
+
+export enum PaymentModel {
+  PAGO_PA_NOTICE = 'PAGO_PA_NOTICE',
+  PAGO_PA_NOTICE_F24_FLATRATE = 'PAGO_PA_NOTICE_F24_FLATRATE',
+  PAGO_PA_NOTICE_F24 = 'PAGO_PA_NOTICE_F24',
+}
 
 interface NewNotificationDocument {
   digests: {
@@ -10,7 +20,7 @@ interface NewNotificationDocument {
   ref: {
     key: string;
     versionToken: string;
-  }
+  };
 }
 
 export interface NewNotificationPayment {
@@ -23,13 +33,18 @@ export interface NewNotificationPayment {
   };
 }
 
-export interface NewNotification {
+export interface NewNotificationBe {
   paNotificationId: string;
   subject: string;
+  description?: string;
   cancelledIun?: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NewNotificationDocument>;
   payment: NewNotificationPayment;
   physicalCommunicationType: PhysicalCommunicationType;
-  group: string;
+  group?: string;
+}
+
+export interface NewNotificationFe extends NewNotificationBe {
+  paymentMode: PaymentModel;
 }

@@ -3,8 +3,8 @@ import {
   PhysicalCommunicationType,
 } from '@pagopa-pn/pn-commons';
 
-import { NewNotification, NewNotificationPayment } from '../../models/newNotification';
-import { resetNewNotificationState } from './actions';
+import { NewNotificationFe, NewNotificationPayment, PaymentModel } from '../../models/newNotification';
+import { resetNewNotificationState, setPreliminaryInformations } from './actions';
 
 const initialState = {
   loading: false,
@@ -16,8 +16,9 @@ const initialState = {
     documents: [],
     payment: {} as NewNotificationPayment,
     physicalCommunicationType: '' as PhysicalCommunicationType,
-    group: ''
-  } as NewNotification
+    group: '',
+    paymentMode: '' as PaymentModel
+  } as NewNotificationFe
 };
 
 /* eslint-disable functional/immutable-data */
@@ -26,6 +27,9 @@ const newNotificationSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(setPreliminaryInformations, (state, action) => {
+      state.notification = {...state.notification, ...action.payload};
+    });
     builder.addCase(resetNewNotificationState, () => initialState);
   },
 });

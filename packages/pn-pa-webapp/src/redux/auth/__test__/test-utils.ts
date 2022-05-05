@@ -10,4 +10,5 @@ export const userResponse: User = {
     id: 'mocked-id',
     role: UserRole.REFERENTE_AMMINISTRATIVO,
   },
+  groups: undefined
 };
