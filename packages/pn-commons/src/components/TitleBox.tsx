@@ -6,7 +6,7 @@ type Props = {
   /** Title of the page to render */
   title: ReactNode;
   /** Subtitle (optional) of the page to render */
-  subTitle?: string;
+  subTitle?: string | JSX.Element;
   /** Gridsize for title on mobile devices */
   mbTitle?: GridSize;
   mtGrid?: number;
