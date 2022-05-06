@@ -1,5 +1,16 @@
 import { useTranslation } from 'react-i18next';
-import { Alert, AlertTitle, Box, Button, Grid, Link, Paper, SxProps, Theme, Typography } from '@mui/material';
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Grid,
+  Link,
+  Paper,
+  SxProps,
+  Theme,
+  Typography,
+} from '@mui/material';
 import { TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +23,9 @@ const Profile = () => {
   const { t } = useTranslation(['profilo']);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
 
-  const alertButtonStyle: SxProps<Theme> = useIsMobile() ? { textAlign: 'center'} : { textAlign: 'center', minWidth: 'max-content' };
+  const alertButtonStyle: SxProps<Theme> = useIsMobile()
+    ? { textAlign: 'center' }
+    : { textAlign: 'center', minWidth: 'max-content' };
 
   const handleRedirectToContactsPage = () => {
     navigate(RECAPITI);
@@ -35,23 +48,33 @@ const Profile = () => {
                 <Typography variant="body2">{t('profile.name', { ns: 'profilo' })}</Typography>
               </Grid>
               <Grid item lg={10} xs={7}>
-              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>{currentUser.name}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  {currentUser.name}
+                </Typography>
               </Grid>
             </Grid>
             <Grid container direction="row">
               <Grid item lg={2} xs={5}>
-              <Typography variant="body2">{t('profile.family_name', { ns: 'profilo' })}</Typography>
+                <Typography variant="body2">
+                  {t('profile.family_name', { ns: 'profilo' })}
+                </Typography>
               </Grid>
               <Grid item lg={10} xs={7}>
-              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>{currentUser.family_name}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  {currentUser.family_name}
+                </Typography>
               </Grid>
             </Grid>
             <Grid container direction="row">
               <Grid item lg={2} xs={5}>
-              <Typography variant="body2">{t('profile.fiscal_number', { ns: 'profilo' })}</Typography>
+                <Typography variant="body2">
+                  {t('profile.fiscal_number', { ns: 'profilo' })}
+                </Typography>
               </Grid>
               <Grid item lg={10} xs={7}>
-              <Typography variant="body2" sx={{ fontWeight: 'bold' }}>{currentUser.fiscal_number}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                  {currentUser.fiscal_number}
+                </Typography>
               </Grid>
             </Grid>
           </Paper>
@@ -60,20 +83,26 @@ const Profile = () => {
         <Grid item lg={7} xs={12}>
           <Alert
             severity="info"
-            aria-label='contacts-redirect'
+            aria-label="contacts-redirect"
             action={
-            <Button
-              component={Link}
-              color="primary"
-              sx={alertButtonStyle}
-              onClick={handleRedirectToContactsPage}
-            >
-              {t('alert-redirect-to-contacts.action-text', { ns: 'profilo' })}
-            </Button>
+              <Button
+                component={Link}
+                color="primary"
+                sx={alertButtonStyle}
+                onClick={handleRedirectToContactsPage}
+              >
+                {t('alert-redirect-to-contacts.action-text', { ns: 'profilo' })}
+              </Button>
             }
           >
-            <AlertTitle><Typography fontWeight={'bold'} variant="body1">{t('alert-redirect-to-contacts.title', { ns: 'profilo' })}</Typography></AlertTitle>
-            <Typography variant="body2">{t('alert-redirect-to-contacts.message', { ns: 'profilo' })}</Typography>
+            <AlertTitle>
+              <Typography fontWeight={'bold'} variant="body1">
+                {t('alert-redirect-to-contacts.title', { ns: 'profilo' })}
+              </Typography>
+            </AlertTitle>
+            <Typography variant="body2">
+              {t('alert-redirect-to-contacts.message', { ns: 'profilo' })}
+            </Typography>
           </Alert>
         </Grid>
       </Grid>
