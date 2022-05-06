@@ -29,14 +29,14 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const userGroups = useAppSelector((state: RootState) => state.userState.user.groups);
   const [groups, _setGroups] = useState(userGroups);
 
-  const initialValues = {
+  const initialValues = () => ({
     paProtocolNumber: notification.paProtocolNumber || '',
     subject: notification.subject || '',
     abstract: notification.abstract || '',
     group: notification.group || '',
     physicalCommunicationType: notification.physicalCommunicationType || '',
     paymentModel: notification.paymentMode || '',
-  };
+  });
 
   const validationSchema = yup.object({
     paProtocolNumber: yup.string().required('Numero di protocollo obbligatorio'),
@@ -47,7 +47,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   });
 
   const formik = useFormik({
-    initialValues,
+    initialValues: initialValues(),
     validateOnMount: true,
     validationSchema,
     /** onSubmit validate */
