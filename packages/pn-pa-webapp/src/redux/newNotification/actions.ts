@@ -6,7 +6,7 @@ import { PaymentModel } from './../../models/newNotification';
 export const setPreliminaryInformations = createAction<{
   paProtocolNumber: string;
   subject: string;
-  description?: string;
+  abstract?: string;
   physicalCommunicationType: PhysicalCommunicationType;
   group?: string;
   paymentModel: PaymentModel;

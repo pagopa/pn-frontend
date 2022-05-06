@@ -32,7 +32,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const initialValues = {
     paProtocolNumber: notification.paProtocolNumber || '',
     subject: notification.subject || '',
-    description: '',
+    abstract: notification.abstract || '',
     group: notification.group || '',
     physicalCommunicationType: notification.physicalCommunicationType || '',
     paymentModel: notification.paymentMode || '',
@@ -99,11 +99,11 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           margin="normal"
         />
         <TextField
-          id="description"
+          id="abstract"
           label="Descrizione"
           fullWidth
-          name="description"
-          value={formik.values.description}
+          name="abstract"
+          value={formik.values.abstract}
           onChange={handleChangeTouched}
           size="small"
           margin="normal"

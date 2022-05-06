@@ -31,7 +31,7 @@ describe('New notification redux state tests', () => {
     const preliminaryInformations = {
       paProtocolNumber: 'mocked-notificationId',
       subject: 'mocked-subject',
-      description: '',
+      abstract: '',
       physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
       group: '',
       paymentModel: PaymentModel.PAGO_PA_NOTICE_F24

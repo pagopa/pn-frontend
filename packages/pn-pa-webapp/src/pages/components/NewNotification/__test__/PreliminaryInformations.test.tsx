@@ -56,7 +56,7 @@ describe('PreliminaryInformations Component', () => {
     const form = result?.container.querySelector('form');
     testFormElements(form!, 'paProtocolNumber', 'Numero di protocollo *');
     testFormElements(form!, 'subject', 'Oggetto della notifica *');
-    testFormElements(form!, 'description', 'Descrizione');
+    testFormElements(form!, 'abstract', 'Descrizione');
     testFormElements(form!, 'group', 'Gruppo *');
     testRadioElements(form!, 'comunicationTypeRadio', ['Modello 890', 'Raccomandata A/R']);
     testRadioElements(form!, 'paymentMethodRadio', [
@@ -85,7 +85,7 @@ describe('PreliminaryInformations Component', () => {
         payload: {
           paProtocolNumber: 'mocked-NotificationId',
           subject: 'mocked-Subject',
-          description: '',
+          abstract: '',
           group: 'Group2',
           physicalCommunicationType: PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER,
           paymentModel: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE
