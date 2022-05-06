@@ -15,8 +15,6 @@ interface NewNotificationDocument {
     sha256: string;
   };
   contentType: string;
-  title: string;
-  body: string;
   ref: {
     key: string;
     versionToken: string;
@@ -24,24 +22,34 @@ interface NewNotificationDocument {
 }
 
 export interface NewNotificationPayment {
-  iuv: string;
   notificationFeePolicy: NotificationFeePolicy;
-  f24: {
-    flatRate: NewNotificationDocument;
-    digital: NewNotificationDocument;
-    analog: NewNotificationDocument;
-  };
+  noticeCode: string;
+  creditorTaxId: string;
+  pagoPaForm: NewNotificationDocument;
+  f24flatRate: NewNotificationDocument;
+  f24digital: NewNotificationDocument;
+  f24digitalWithRs: NewNotificationDocument;
+  f24analogRaccSingle: NewNotificationDocument;
+  f24analogRaccDouble: NewNotificationDocument;
+  f24analogRiSingle: NewNotificationDocument;
+  f24analogRiDouble: NewNotificationDocument;
+}
+
+export interface NewNotificationRecipient extends NotificationDetailRecipient {
+  payment?: NewNotificationPayment;
 }
 
 export interface NewNotificationBe {
-  paNotificationId: string;
+  idempotenceToken?: string;
+  paProtocolNumber: string;
   subject: string;
-  description?: string;
+  abstract?: string;
   cancelledIun?: string;
-  recipients: Array<NotificationDetailRecipient>;
+  recipients: Array<NewNotificationRecipient>;
   documents: Array<NewNotificationDocument>;
-  payment: NewNotificationPayment;
   physicalCommunicationType: PhysicalCommunicationType;
+  senderDenomination?: string;
+  senderTaxId?: string;
   group?: string;
 }
 

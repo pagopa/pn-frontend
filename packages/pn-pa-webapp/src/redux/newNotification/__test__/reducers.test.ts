@@ -8,12 +8,11 @@ import { resetNewNotificationState, setPreliminaryInformations } from '../action
 const initialState = {
   loading: false,
   notification: {
-    paNotificationId: '',
+    paProtocolNumber: '',
     subject: '',
     cancelledIun: '',
     recipients: [],
     documents: [],
-    payment: {},
     physicalCommunicationType: '',
     paymentMode: '',
     group: ''
@@ -30,7 +29,7 @@ describe('New notification redux state tests', () => {
 
   it('Should be able to set preliminary informations', () => {
     const preliminaryInformations = {
-      paNotificationId: 'mocked-notificationId',
+      paProtocolNumber: 'mocked-notificationId',
       subject: 'mocked-subject',
       description: '',
       physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,

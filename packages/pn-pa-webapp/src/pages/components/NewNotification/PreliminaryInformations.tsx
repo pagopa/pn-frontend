@@ -30,7 +30,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const [groups, _setGroups] = useState(userGroups);
 
   const initialValues = {
-    paNotificationId: notification.paNotificationId || '',
+    paProtocolNumber: notification.paProtocolNumber || '',
     subject: notification.subject || '',
     description: '',
     group: notification.group || '',
@@ -39,7 +39,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   };
 
   const validationSchema = yup.object({
-    paNotificationId: yup.string().required('Numero di protocollo obbligatorio'),
+    paProtocolNumber: yup.string().required('Numero di protocollo obbligatorio'),
     subject: yup.string().required('Oggetto di protocollo obbligatorio'),
     physicalCommunicationType: yup.string().required(),
     paymentModel: yup.string().required(),
@@ -75,14 +75,14 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     <form onSubmit={formik.handleSubmit}>
       <NewNotificationCard isContinueDisabled={!formik.isValid} title="Informazioni preliminari">
         <TextField
-          id="paNotificationId"
+          id="paProtocolNumber"
           label="Numero di protocollo *"
           fullWidth
-          name="paNotificationId"
-          value={formik.values.paNotificationId}
+          name="paProtocolNumber"
+          value={formik.values.paProtocolNumber}
           onChange={handleChangeTouched}
-          error={formik.touched.paNotificationId && Boolean(formik.errors.paNotificationId)}
-          helperText={formik.touched.paNotificationId && formik.errors.paNotificationId}
+          error={formik.touched.paProtocolNumber && Boolean(formik.errors.paProtocolNumber)}
+          helperText={formik.touched.paProtocolNumber && formik.errors.paProtocolNumber}
           size="small"
           margin="normal"
         />
@@ -152,7 +152,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               data-testid="comunicationTypeRadio"
             />
             <FormControlLabel
-              value={PhysicalCommunicationType.REGISTERED_MAIL_AR}
+              value={PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER}
               control={<Radio />}
               label="Raccomandata A/R"
               data-testid="comunicationTypeRadio"

@@ -38,6 +38,10 @@ const NewNotification = () => {
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.newNotificationState.notification);
 
+  const goToNextStep = () => {
+    setActiveStep((previousStep) => previousStep + 1);
+  };
+
   return (
     <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
       <Grid item xs={12} lg={8}>
@@ -77,7 +81,7 @@ const NewNotification = () => {
             </Step>
           ))}
         </Stepper>
-        {activeStep === 0 && <PreliminaryInformations notification={notification} onConfirm={() => setActiveStep(1)}/>}
+        {activeStep === 0 && <PreliminaryInformations notification={notification} onConfirm={goToNextStep}/>}
         {activeStep === 1 && <Recipient />}
         {activeStep === 2 && <Attachments />}
         {activeStep === 3 && <PaymentMethods />}

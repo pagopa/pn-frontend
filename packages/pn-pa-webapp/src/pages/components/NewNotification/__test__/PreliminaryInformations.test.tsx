@@ -3,31 +3,16 @@ import * as redux from 'react-redux';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
-import { render } from '../../../../__test__/test-utils';
+import { render, testFormElements, testInput, testSelect } from '../../../../__test__/test-utils';
 import { PaymentModel } from '../../../../models/newNotification';
+import * as hooks from '../../../../redux/hooks';
 import PreliminaryInformations from '../PreliminaryInformations';
-
-function testFormElements(form: HTMLFormElement, elementName: string, label: string) {
-  const formElement = form.querySelector(`input[name="${elementName}"]`);
-  expect(formElement).toBeInTheDocument();
-  const formElementLabel = form.querySelector(`label[for="${elementName}"]`);
-  expect(formElementLabel).toBeInTheDocument();
-  expect(formElementLabel).toHaveTextContent(label);
-}
 
 function testRadioElements(form: HTMLFormElement, dataTestId: string, values: Array<string>) {
   const radioButtons = form?.querySelectorAll(`[data-testid="${dataTestId}"]`);
   expect(radioButtons).toHaveLength(values.length);
   values.forEach((value, index) => {
-    expect(radioButtons![index]).toHaveTextContent(value);
-  });
-}
-
-async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
-  const input = form.querySelector(`input[name="${elementName}"]`);
-  fireEvent.change(input!, { target: { value } });
-  await waitFor(() => {
-    expect(input).toHaveValue(value);
+    expect(radioButtons[index]).toHaveTextContent(value);
   });
 }
 
@@ -46,6 +31,9 @@ describe('PreliminaryInformations Component', () => {
   const confirmHandlerMk = jest.fn();
 
   beforeEach(async () => {
+    // mock app selector
+    const useAppSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
+    useAppSelectorSpy.mockReturnValue(['Group1', 'Group2']);
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     mockDispatchFn = jest.fn();
@@ -66,7 +54,7 @@ describe('PreliminaryInformations Component', () => {
   it('renders PreliminaryInformations', () => {
     expect(result?.container).toHaveTextContent(/Informazioni preliminari/i);
     const form = result?.container.querySelector('form');
-    testFormElements(form!, 'paNotificationId', 'Numero di protocollo *');
+    testFormElements(form!, 'paProtocolNumber', 'Numero di protocollo *');
     testFormElements(form!, 'subject', 'Oggetto della notifica *');
     testFormElements(form!, 'description', 'Descrizione');
     testFormElements(form!, 'group', 'Gruppo *');
@@ -83,8 +71,9 @@ describe('PreliminaryInformations Component', () => {
 
   it('changes form values and clicks on confirm', async () => {
     const form = result?.container.querySelector('form');
-    await testInput(form!, 'paNotificationId', 'mocked-NotificationId');
+    await testInput(form!, 'paProtocolNumber', 'mocked-NotificationId');
     await testInput(form!, 'subject', 'mocked-Subject');
+    await testSelect(form!, 'group', [{label: 'Group1', value: 'Group1'}, {label: 'Group2', value: 'Group2'}], 1);
     await testRadio(form!, 'comunicationTypeRadio', 1);
     await testRadio(form!, 'paymentMethodRadio', 1);
     const buttons = form?.querySelectorAll('button');
@@ -94,11 +83,11 @@ describe('PreliminaryInformations Component', () => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockDispatchFn).toBeCalledWith({
         payload: {
-          paNotificationId: 'mocked-NotificationId',
+          paProtocolNumber: 'mocked-NotificationId',
           subject: 'mocked-Subject',
           description: '',
-          group: '',
-          physicalCommunicationType: PhysicalCommunicationType.REGISTERED_MAIL_AR,
+          group: 'Group2',
+          physicalCommunicationType: PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER,
           paymentModel: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE
         },
         type: 'setPreliminaryInformations',
