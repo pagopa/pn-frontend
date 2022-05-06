@@ -8,6 +8,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
+import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
@@ -20,11 +21,12 @@ import { getSidemenuInformation } from './redux/sidemenu/actions';
 import { mixpanelInit } from './utils/mixpanel';
 
 // TODO: get products list from be (?)
-const productsList = [
+const productsList: Array<ProductSwitchItem> = [
   {
     id: '0',
     title: `Piattaforma Notifiche`,
     productUrl: '',
+    linkType: 'internal'
   },
 ];
 

@@ -99,13 +99,14 @@ const NuovaDelega = () => {
   };
 
   const validationSchema = yup.object({
-    selectPersonaFisicaOrPersonaGiuridica: yup.string().required('Selezionare il tipo di persona'),
+    selectPersonaFisicaOrPersonaGiuridica: yup.string().required(t('nuovaDelega.validation.email.required')),
     codiceFiscale: yup
       .string()
-      .required('Il Codice Fiscale è obbligatorio')
-      .matches(fiscalCodeRegex, 'Il codice fiscale inserito non è corretto'),
-    nome: yup.string().required('Il nome è obbligatorio'),
-    cognome: yup.string().required('Il cognome è obbligatorio'),
+      .required(t('nuovaDelega.validation.fiscalCode.required'))
+      .matches(fiscalCodeRegex, t('nuovaDelega.validation.fiscalCode.wrong')),
+    email: yup.string().required('Email obbligatoria').email(t('nuovaDelega.validation.fiscalCode.required')),
+    nome: yup.string().required(t('nuovaDelega.validation.name.required')),
+    cognome: yup.string().required(t('nuovaDelega.validation.surname.required')),
     enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
   });
 
@@ -360,10 +361,10 @@ const NuovaDelega = () => {
       {created && (
         <CourtesyPage
           icon={<CheckCircleOutlineIcon />}
-          title={t('nuovaDelega.created_title')}
-          subtitle={t('nuovaDelega.created_description')}
+          title={t('nuovaDelega.createdTitle')}
+          subtitle={t('nuovaDelega.createdDescription')}
           onClick={handleDelegationsClick}
-          onClickLabel={t('nuovaDelega.back_to_delegations')}
+          onClickLabel={t('nuovaDelega.backToDelegations')}
         />
       )}
     </Fragment>
