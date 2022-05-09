@@ -10,12 +10,13 @@ describe('FileUpload Component', () => {
 
   const mockUploadFileHandler = jest.fn();
   const mockRemoveFileHandler = jest.fn();
+  const file = new Blob(['mocked content'], { type: 'text/plain' });
+  (file as any).name = 'Mocked file';
 
   async function testFileUploading() {
     const fileInput = result.queryByTestId('fileInput');
     expect(fileInput).toBeInTheDocument();
     const input = fileInput?.querySelector('input');
-    const file = new Blob(['mocked content'], { type: 'text/plain' });
     fireEvent.change(input!, { target: { files: [file] } });
     await waitFor(() => {
       expect(mockUploadFn).toBeCalledTimes(1);
