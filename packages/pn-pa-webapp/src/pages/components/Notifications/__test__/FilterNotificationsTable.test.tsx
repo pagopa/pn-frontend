@@ -3,7 +3,7 @@ import moment from 'moment';
 import * as redux from 'react-redux';
 import { NotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { render } from '../../../../__test__/test-utils';
+import { render, testFormElements, testInput, testSelect } from '../../../../__test__/test-utils';
 import FilterNotificationsTable from '../FilterNotificationsTable';
 
 function formatDate(date: Date): string {
@@ -12,49 +12,9 @@ function formatDate(date: Date): string {
   return `${day}/${month}/${date.getFullYear()}`;
 }
 
-function testFormElements(form: HTMLFormElement, elementName: string, label: string) {
-  const formElement = form.querySelector(`input[name="${elementName}"]`);
-  expect(formElement).toBeInTheDocument();
-  const formElementLabel = form.querySelector(`label[for="${elementName}"]`);
-  expect(formElementLabel).toBeInTheDocument();
-  expect(formElementLabel).toHaveTextContent(label);
-}
-
 function testFormElementsValue(form: HTMLFormElement, elementName: string, value: any) {
   const formElement = form.querySelector(`input[name="${elementName}"]`);
   expect(formElement).toHaveValue(value);
-}
-
-async function testSelect(
-  form: HTMLFormElement,
-  elementName: string,
-  options: Array<{ label: string; value: string }>,
-  optToSelect: number
-) {
-  const selectInput = form.querySelector(`input[name="${elementName}"]`);
-  const selectButton = form.querySelector(`div[id="${elementName}"]`);
-  fireEvent.mouseDown(selectButton!);
-  const selectOptionsContainer = await screen.findByRole('presentation');
-  expect(selectOptionsContainer).toBeInTheDocument();
-  const selectOptionsList = await within(selectOptionsContainer).findByRole('listbox');
-  expect(selectOptionsList).toBeInTheDocument();
-  const selectOptionsListItems = await within(selectOptionsList).findAllByRole('option');
-  expect(selectOptionsListItems).toHaveLength(options.length);
-  selectOptionsListItems.forEach((opt, index) => {
-    expect(opt).toHaveTextContent(options[index].label);
-  });
-  await waitFor(() => {
-    fireEvent.click(selectOptionsListItems[optToSelect]);
-    expect(selectInput).toHaveValue(options[optToSelect].value);
-  });
-}
-
-async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
-  const input = form.querySelector(`input[name="${elementName}"]`);
-  await waitFor(() => {
-    fireEvent.change(input!, { target: { value } });
-    expect(input).toHaveValue(value);
-  });
 }
 
 async function testCalendar(form: HTMLFormElement, elementName: string) {
