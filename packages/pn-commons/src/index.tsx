@@ -24,6 +24,7 @@ import Toast from './components/Toast/Toast';
 import CodeModal from './components/CodeModal/CodeModal';
 import InactivityHandler from './components/InactivityHandler';
 import BreadcrumbLink from './components/BreadcrumbLink';
+import FileUpload from './components/FileUpload';
 
 export { LoadingOverlay };
 export { Header };
@@ -50,6 +51,7 @@ export { Toast };
 export { CodeModal };
 export { InactivityHandler };
 export { BreadcrumbLink };
+export { FileUpload };
 
 // pages
 import NotFound from './navigation/NotFound';

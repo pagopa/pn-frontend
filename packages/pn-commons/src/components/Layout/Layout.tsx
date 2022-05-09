@@ -7,7 +7,6 @@ import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-ita
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import ErrorBoundary from '../ErrorBoundary';
-
 type Props = {
   children?: ReactNode;
   /** Assistance email for the user */
