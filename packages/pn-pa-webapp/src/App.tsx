@@ -58,7 +58,7 @@ const App = () => {
     <Layout
       onExitAction={() => dispatch(logout())}
       sideMenu={
-        role && <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
+        role && menuItems && <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
       }
       assistanceEmail={PAGOPA_HELP_EMAIL}
       productsList={productsList}
