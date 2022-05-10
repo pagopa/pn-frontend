@@ -190,7 +190,6 @@ export interface NotificationDetailRecipient {
   denomination: string;
   digitalDomicile: DigitalAddress;
   physicalAddress: PhysicalAddress;
-  token: string;
 }
 
 export interface NotificationDetailDocument {

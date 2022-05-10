@@ -37,7 +37,6 @@ export const notificationFromBe: NotificationDetail = {
         province: 'PROV',
         foreignState: '',
       },
-      token: 'mocked-token',
     },
   ],
   documents: [
@@ -76,7 +75,7 @@ export const notificationFromBe: NotificationDetail = {
       },
     },
   },
-  notificationStatus: NotificationStatus.PAID,
+  notificationStatus: NotificationStatus.DELIVERED,
   notificationStatusHistory: [
     {
       status: NotificationStatus.DELIVERED,
@@ -110,7 +109,6 @@ export const notificationFromBe: NotificationDetail = {
               province: '',
               foreignState: '',
             },
-            token: '',
           },
         ],
         documentsDigests: [
@@ -287,7 +285,6 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
         province: 'PROV',
         foreignState: '',
       },
-      token: 'mocked-token',
     },
     {
       recipientType: RecipientType.PF,
@@ -306,7 +303,6 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
         province: 'PROV',
         foreignState: '',
       },
-      token: 'mocked-token',
     },
   ],
   documents: [
@@ -345,7 +341,7 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
       },
     },
   },
-  notificationStatus: NotificationStatus.PAID,
+  notificationStatus: NotificationStatus.DELIVERED,
   notificationStatusHistory: [
     {
       status: NotificationStatus.DELIVERED,
@@ -379,7 +375,6 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
               province: '',
               foreignState: '',
             },
-            token: '',
           },
         ],
         documentsDigests: [
