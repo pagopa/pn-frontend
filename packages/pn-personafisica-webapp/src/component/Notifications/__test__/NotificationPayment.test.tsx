@@ -3,7 +3,7 @@ import { NotificationDetailPayment } from "@pagopa-pn/pn-commons";
 import { waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { PaymentStatus } from "@pagopa-pn/pn-commons/src/types/NotificationDetail";
-import { render, screen } from "../../../__test__/test-utils";
+import { axe, render, screen } from "../../../__test__/test-utils";
 import * as actions from '../../../redux/notification/actions';
 import * as hooks from '../../../redux/hooks';
 import NotificationPayment from "../NotificationPayment";
@@ -246,5 +246,30 @@ describe('NotificationPayment component', () => {
     const alertMessage = screen.getByRole('alert').querySelector('p');
     expect(alertMessage).toBeInTheDocument();
     expect(alertMessage).toHaveTextContent('detail.payment.message-failed');
+  });
+
+  it('does not have basic accessibility issues (required status)', async () => {
+    const result = render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
+
+    const amountLoader = result.getByRole('heading', { name: ''}).querySelector('svg');
+    expect(amountLoader).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockActionFn).toBeCalledTimes(1);
+      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(amountLoader).not.toBeInTheDocument();
+    });
+
+    const amount = result.getByRole('heading', { name: /473,50\b/ });
+    expect(amount).toBeInTheDocument();
+
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 });

@@ -3,7 +3,7 @@ import * as redux from 'react-redux';
 import { fireEvent, RenderResult, screen, waitFor } from '@testing-library/react';
 
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/contact/actions';
 import * as hooks from '../../../redux/hooks';
 import {
@@ -173,5 +173,14 @@ describe('DigitalContactsCodeVerification Context', () => {
 
     fireEvent.click(confirmButton);
     await screen.findAllByRole('heading', { name: /legal-contacts.pec-verify\b/ });
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 });

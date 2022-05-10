@@ -1,6 +1,7 @@
 /* eslint-disable functional/no-let */
-import { act, fireEvent, render, RenderResult, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, RenderResult, screen, waitFor } from "@testing-library/react";
 import * as redux from 'react-redux';
+import { render, axe } from "../../../__test__/test-utils";
 import { CourtesyChannelType } from "../../../models/contacts";
 import * as hooks from '../../../redux/hooks';
 import * as actions from '../../../redux/contact/actions';
@@ -143,6 +144,13 @@ describe('CourtesyContactItem component', () => {
           expect(dialog).not.toBeInTheDocument();
         });
       });
+
+      it('does not have basic accessibility issues', async () => {
+        if (result) {
+          const results = await axe(result.container);
+          expect(results).toHaveNoViolations();
+        }
+      });
     });
 
     describe('change an existing phone number', () => {
@@ -250,6 +258,13 @@ describe('CourtesyContactItem component', () => {
           expect(dialog).not.toBeInTheDocument();
         });
       });
+
+      it('does not have basic accessibility issues', async () => {
+        if (result) {
+          const results = await axe(result.container);
+          expect(results).toHaveNoViolations();
+        }
+      });
     });
 
     describe('delete an existing phone number', () => {
@@ -301,6 +316,13 @@ describe('CourtesyContactItem component', () => {
           });
         });
       });
+    });
+
+    it('does not have basic accessibility issues', async () => {
+      if (result) {
+        const results = await axe(result.container);
+        expect(results).toHaveNoViolations();
+      }
     });
   });
   
@@ -415,6 +437,13 @@ describe('CourtesyContactItem component', () => {
           expect(dialog).not.toBeInTheDocument();
         });
       });
+
+      it('does not have basic accessibility issues', async () => {
+        if (result) {
+          const results = await axe(result.container);
+          expect(results).toHaveNoViolations();
+        }
+      });
     });
 
     describe('change an existing email', () => {
@@ -523,6 +552,13 @@ describe('CourtesyContactItem component', () => {
         await waitFor(() => {
           expect(dialog).not.toBeInTheDocument();
         });
+      });
+
+      it('does not have basic accessibility issues', async () => {
+        if (result) {
+          const results = await axe(result.container);
+          expect(results).toHaveNoViolations();
+        }
       });
     });
 
