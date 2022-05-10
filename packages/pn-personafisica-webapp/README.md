@@ -21,3 +21,16 @@ Ora puoi lanciare `yarn start` e avverrà il redirect dall'url di riferimento al
 La Piattaforma per il cittadino è dotata di supporto per l'internazionalizzazione. L'unica lingua al momento presente è l'italiano. Il tool usato per fornire l'internazionalizzazion è [react-i18next](https://react.i18next.com/).
 
 E' fortemente consigliato quindi wrappare i testi (anche se non è fornita traduzione o non salvati al momento su file di traduzione) utilizzando l'hook [`useTranslation`](https://react.i18next.com/latest/usetranslation-hook).
+
+## Variabili d'ambiente (sviluppo)
+
+E' necessario aggiungere nel proprio file .env.local le seguenti variabili d'ambiente:
+
+```
+REACT_APP_URL_FE_LOGIN
+REACT_APP_URL_API
+REACT_APP_CHECKOUT_URL
+REACT_APP_PAYMENT_DISCLAIMER_URL
+REACT_APP_PAGOPA_HELP_EMAIL= email di assistenza, si puo' usare una email fittizia in sviluppo
+REACT_APP_DISABLE_INACTIVITY_HANDLER = true se si vuole disabilitare la gestione dell'inattivita' utente, falsa altrimenti
+```
