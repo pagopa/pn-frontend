@@ -1,5 +1,5 @@
 import { useMemo, useReducer, Fragment, useRef, ChangeEvent, DragEvent, useEffect } from 'react';
-import { Alert, Box, Input, LinearProgress, Typography } from '@mui/material';
+import { Alert, Box, Input, LinearProgress, SxProps, Typography } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
@@ -12,6 +12,7 @@ type Props = {
   onFileUploaded: (data: any) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
+  sx?: SxProps;
 };
 
 enum UploadStatus {
@@ -63,9 +64,10 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
  * @param onFileUploaded function called after file upload
  * @param onRemoveFile function called after file deletion
  * @param isSending flag for sending status
+ * @param sx style to be addded to the component
  * @returns
  */
-const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUploaded, onRemoveFile, isSending }: Props) => {
+const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUploaded, onRemoveFile, isSending, sx }: Props) => {
   const [data, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
     file: null,
@@ -156,7 +158,7 @@ const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUplo
 
   return (
     <Box
-      sx={{ ...containerStyle, padding: '24px', borderRadius: '10px' }}
+      sx={{ ...containerStyle, padding: '24px', borderRadius: '10px', ...sx }}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
       onDragEnter={handleDragEnter}

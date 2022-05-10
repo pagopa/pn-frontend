@@ -1,9 +1,14 @@
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
+import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { PaymentModel } from '../../../models/newNotification';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
-import { resetNewNotificationState, setPreliminaryInformations } from '../actions';
+import {
+  resetNewNotificationState,
+  setPreliminaryInformations,
+  uploadNotificationDocument,
+} from '../actions';
 
 const initialState = {
   loading: false,
@@ -15,8 +20,8 @@ const initialState = {
     documents: [],
     physicalCommunicationType: '',
     paymentMode: '',
-    group: ''
-  }
+    group: '',
+  },
 };
 
 describe('New notification redux state tests', () => {
@@ -34,14 +39,29 @@ describe('New notification redux state tests', () => {
       abstract: '',
       physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
       group: '',
-      paymentModel: PaymentModel.PAGO_PA_NOTICE_F24
+      paymentModel: PaymentModel.PAGO_PA_NOTICE_F24,
     };
-    const action = store.dispatch(
-      setPreliminaryInformations(preliminaryInformations)
-    );
+    const action = store.dispatch(setPreliminaryInformations(preliminaryInformations));
     const payload = action.payload;
     expect(action.type).toBe('setPreliminaryInformations');
     expect(payload).toEqual(preliminaryInformations);
+  });
+
+  it('Should be able to upload document', async () => {
+    const file = new Blob(['mocked content'], { type: 'text/plain' });
+    (file as any).name = 'Mocked file';
+    const apiSpy = jest.spyOn(NotificationsApi, 'preloadNotificationDocument');
+    apiSpy.mockResolvedValue({ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' });
+    const action = await store.dispatch(
+      uploadNotificationDocument({
+        key: 'mocked-key',
+        contentType: 'text/plain',
+        file,
+      })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('uploadNotificationDocument/fulfilled');
+    expect(payload).toEqual(void 0);
   });
 
   it('Should be able to reset state', () => {

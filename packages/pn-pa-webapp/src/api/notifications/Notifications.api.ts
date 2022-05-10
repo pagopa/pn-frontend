@@ -5,7 +5,7 @@ import {
   LegalFactId,
   NotificationDetail,
   formatFiscalCode,
-  parseNotificationDetail
+  parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 import { apiClient } from '../axios';
 
@@ -106,5 +106,26 @@ export const NotificationsApi = {
           return { url: window.URL.createObjectURL(blob) };
         }
         return { url: '' };
+      }),
+  /**
+   * Preload notification document
+   * @param  {string} key
+   * @param  {contentType} contentType
+   * @returns Promise
+   */
+  preloadNotificationDocument: (
+    key: string,
+    contentType: string
+  ): Promise<{ url: string; secret: string; httpMethod: string }> =>
+    apiClient
+      .post<{ url: string; secret: string; httpMethod: string }>(`/delivery/attachments/preload`, {
+        key,
+        contentType,
+      })
+      .then((response) => {
+        if (response.data) {
+          return response.data;
+        }
+        return { url: '', secret: '', httpMethod: '' };
       }),
 };

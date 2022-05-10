@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -6,8 +6,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { BreadcrumbLink, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { resetNewNotificationState } from '../redux/newNotification/actions';
 import * as routes from '../navigation/routes.const';
 import PreliminaryInformations from './components/NewNotification/PreliminaryInformations';
 import Recipient from './components/NewNotification/Recipient';
@@ -33,14 +34,17 @@ const steps = ['Informazioni preliminari', 'Destinatario', 'Allegati', 'Metodi d
 
 const NewNotification = () => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(2);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.newNotificationState.notification);
+  const dispatch = useAppDispatch();
 
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
   };
+
+  useEffect(() => () => void dispatch(resetNewNotificationState()), []);
 
   return (
     <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
@@ -83,7 +87,7 @@ const NewNotification = () => {
         </Stepper>
         {activeStep === 0 && <PreliminaryInformations notification={notification} onConfirm={goToNextStep}/>}
         {activeStep === 1 && <Recipient />}
-        {activeStep === 2 && <Attachments />}
+        {activeStep === 2 && <Attachments onConfirm={goToNextStep}/>}
         {activeStep === 3 && <PaymentMethods />}
       </Grid>
     </Grid>

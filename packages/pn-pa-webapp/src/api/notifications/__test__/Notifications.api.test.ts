@@ -66,4 +66,15 @@ describe('Notifications api tests', () => {
     mock.reset();
     mock.restore();
   });
+
+  it('preloadNotificationDocument', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock
+      .onPost(`/delivery/attachments/preload`, {key: 'mocked-key', contentType: 'text/plain'})
+      .reply(200, { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' });
+    const res = await NotificationsApi.preloadNotificationDocument('mocked-key', 'text/plain');
+    expect(res).toStrictEqual({ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' });
+    mock.reset();
+    mock.restore();
+  });
 });

@@ -1,11 +1,91 @@
+import { RenderResult, act, fireEvent, waitFor, prettyDOM } from '@testing-library/react';
+
 import { render } from "../../../../__test__/test-utils";
 import Attachments from "../Attachments";
 
 describe('Attachments Component', () => {
+  let result: RenderResult;
+  const confirmHandlerMk = jest.fn();
+  const file = new Blob(['mocked content'], { type: 'application/pdf' });
+  (file as any).name = 'Mocked file';
+
+  function uploadDocument(elem: ParentNode, index: number) {
+    const fileInput = elem.querySelector('[data-testid="fileInput"]');
+    const input = fileInput?.querySelector('input');
+    fireEvent.change(input!, { target: { files: [file] } });
+    const nameInput = elem.querySelector(`[id="documents.${index}.name"]`);
+    fireEvent.change(nameInput!, { target: { value: 'Doc1' } });
+  }
+
+  beforeEach(async () => {
+    // render component
+    await act(async () => {
+      result = render(
+        <Attachments onConfirm={confirmHandlerMk} />
+      );
+    });
+  });
+
+  afterEach(() => {
+    jest.resetAllMocks();
+    jest.clearAllMocks();
+  });
 
   it('renders Attachments', () => {
-    // render component
-    const result = render(<Attachments />);
-    expect(result?.container).toHaveTextContent(/Allegati/i);
+    const form = result.container.querySelector('form');
+    expect(form).toHaveTextContent(/Allegati per tutti i destinatari/i);
+    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
+    expect(attachmentBoxes).toHaveLength(1);
+    expect(attachmentBoxes[0]).toHaveTextContent(/Allega l'Atto */i);
+    const deleteIcon = attachmentBoxes[0].querySelector('[data-testid="DeleteIcon"]');
+    expect(deleteIcon).not.toBeInTheDocument();
+    const fileInput = attachmentBoxes[0].parentNode?.querySelector('[data-testid="fileInput"]');
+    expect(fileInput).toBeInTheDocument();
+    const buttons = form?.querySelectorAll('button');
+    expect(buttons).toHaveLength(3);
+    expect(buttons![2]).toBeDisabled();
+  });
+
+  it('adds document and click on confirm', async () => {
+    const form = result.container.querySelector('form');
+    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
+    uploadDocument(attachmentBoxes[0].parentNode!, 0);
+    const buttons = await waitFor(() => form?.querySelectorAll('button'));
+    expect(buttons![2]).toBeEnabled();
+    // TODO: test click on confirm
+  });
+
+  it('adds another document and click on confirm', async () => {
+    const form = result.container.querySelector('form');
+    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
+    uploadDocument(attachmentBoxes[0].parentNode!, 0);
+    const buttons = await waitFor(() => form?.querySelectorAll('button'));
+    fireEvent.click(buttons![0]);
+    await waitFor(() => {
+      expect(buttons![2]).toBeDisabled();
+    });
+    const newAttachmentBoxes = result.queryAllByTestId('attachmentBox');
+    expect(newAttachmentBoxes).toHaveLength(2);
+    expect(newAttachmentBoxes[1]).toHaveTextContent(/Allega un altro documento */i);
+    const deleteIcon = newAttachmentBoxes[1].querySelector('[data-testid="DeleteIcon"]');
+    expect(deleteIcon).toBeInTheDocument();
+    uploadDocument(newAttachmentBoxes[1].parentNode!, 1);
+    await waitFor(() => expect(buttons![2]).toBeEnabled());
+    // TODO: test click on confirm
+  });
+
+  it('delete document and click on confirm', async () => {
+    const form = result.container.querySelector('form');
+    const attachmentBoxes = result.queryAllByTestId('attachmentBox');
+    uploadDocument(attachmentBoxes[0].parentNode!, 0);
+    const buttons = await waitFor(() => form?.querySelectorAll('button'));
+    fireEvent.click(buttons![0]);
+    let newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
+    const deleteIcon = newAttachmentBoxes[1].querySelector('[data-testid="DeleteIcon"]');
+    fireEvent.click(deleteIcon!);
+    newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
+    expect(newAttachmentBoxes).toHaveLength(1);
+    await waitFor(() => expect(buttons![2]).toBeEnabled());
+    // TODO: test click on confirm
   });
 });

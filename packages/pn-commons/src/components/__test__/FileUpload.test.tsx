@@ -59,7 +59,6 @@ describe('FileUpload Component', () => {
     const fileInput = result.queryByTestId('fileInput');
     expect(fileInput).toBeInTheDocument();
     const input = fileInput?.querySelector('input');
-    const file = new Blob(['mocked content'], { type: 'application/pdf' });
     fireEvent.change(input!, { target: { files: [file] } });
     await waitFor(() => {
       expect(mockUploadFn).not.toBeCalled();
