@@ -1,7 +1,7 @@
 import * as redux from 'react-redux';
 
 import { UserRole } from "../../models/user";
-import { render } from "../../__test__/test-utils";
+import { render, axe } from "../../__test__/test-utils";
 import RequireAuth from "../RequireAuth";
 
 jest.mock('react-router-dom', () => {
@@ -44,5 +44,17 @@ describe('RequireAuth Component', () => {
     // render component
     const result = render(<RequireAuth roles={[UserRole.REFERENTE_OPERATIVO]} />);
     expect(result?.container).toHaveTextContent(/Session Modal/i);
+  });
+
+  it('does not have basic accessibility issues rendering RequireAuth (user enabled to access)', async () => {
+    const { container } = render(<RequireAuth roles={[UserRole.REFERENTE_AMMINISTRATIVO]} />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
+  });
+
+  it('does not have basic accessibility issues rendering RequireAuth (user not enabled to access)', async () => {
+    const { container } = render(<RequireAuth roles={[UserRole.REFERENTE_OPERATIVO]} />);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 });

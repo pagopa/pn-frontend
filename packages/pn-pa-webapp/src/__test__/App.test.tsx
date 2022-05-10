@@ -1,18 +1,15 @@
 import { screen } from '@testing-library/react';
-import { axe, toHaveNoViolations } from 'jest-axe';
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
 
 import App from '../App';
-import { render } from './test-utils';
+import { axe, render } from './test-utils';
 
 const Component = () => (
   <ThemeProvider theme={theme}>
     <App />
   </ThemeProvider>
 );
-
-expect.extend(toHaveNoViolations);
 
 describe('App', () => {
   it('Piattaforma notifiche', () => {

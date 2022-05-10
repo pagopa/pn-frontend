@@ -2,10 +2,10 @@ import { render, screen } from '@testing-library/react';
 import { Suspense } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { axe, toHaveNoViolations } from 'jest-axe';
 import App from '../App';
 import i18n from '../i18n';
 import { store } from '../redux/store';
+import { axe } from './test-utils';
 
 const Component = () => (
   <BrowserRouter>
@@ -16,8 +16,6 @@ const Component = () => (
     </Provider>
   </BrowserRouter>
 );
-
-expect.extend(toHaveNoViolations);
 
 describe('App', () => {
   beforeEach(async () => {

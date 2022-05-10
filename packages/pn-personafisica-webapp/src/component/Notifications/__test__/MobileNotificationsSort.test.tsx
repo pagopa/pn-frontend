@@ -1,7 +1,7 @@
 import { fireEvent, waitFor, screen, RenderResult, within } from "@testing-library/react";
 import { CardSort, Sort } from "@pagopa-pn/pn-commons";
 
-import { render } from "../../../__test__/test-utils";
+import { axe, render } from "../../../__test__/test-utils";
 import MobileNotificationsSort from "../MobileNotificationsSort";
 
 jest.mock('react-i18next', () => ({
@@ -124,6 +124,15 @@ describe('MobileNotifications Component', () => {
       });
       expect(dialog).not.toBeInTheDocument();
     });
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 
 });

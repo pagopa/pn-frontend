@@ -1,7 +1,7 @@
 import * as redux from 'react-redux';
 import { act, fireEvent, RenderResult, waitFor, screen } from '@testing-library/react';
 
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/contact/actions';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../InsertLegalContact';
@@ -150,5 +150,14 @@ describe('InsertLegalContact component', () => {
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 });
