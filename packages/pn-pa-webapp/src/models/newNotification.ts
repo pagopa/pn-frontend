@@ -1,4 +1,10 @@
-import { NotificationDetailRecipient, NotificationFeePolicy, PhysicalCommunicationType } from "@pagopa-pn/pn-commons";
+import {
+  DigitalDomicileType,
+  NotificationDetailRecipient,
+  NotificationFeePolicy,
+  PhysicalCommunicationType,
+  RecipientType,
+} from '@pagopa-pn/pn-commons';
 
 interface NewNotificationDocument {
   digests: {
@@ -10,7 +16,7 @@ interface NewNotificationDocument {
   ref: {
     key: string;
     versionToken: string;
-  }
+  };
 }
 
 export interface NewNotificationPayment {
@@ -32,4 +38,27 @@ export interface NewNotification {
   payment: NewNotificationPayment;
   physicalCommunicationType: PhysicalCommunicationType;
   group: string;
+}
+
+export interface FormRecipient {
+  recipientType: RecipientType;
+  taxId: string;
+  creditorTaxId: string;
+  noticeCode: string;
+  firstName: string;
+  lastName: string;
+  type: DigitalDomicileType;
+  digitalDomicile: string;
+  at?: string;
+  address: string;
+  houseNumber: string;
+  addressDetails?: string;
+  zip: string;
+  municipality: string;
+  municipalityDetails?: string;
+  province: string;
+  foreignState: string;
+  token: string;
+  showDigitalDomicile?: string;
+  showPhysicalAddress?: string;
 }

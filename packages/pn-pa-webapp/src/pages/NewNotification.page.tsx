@@ -38,15 +38,15 @@ const NewNotification = () => {
   return (
     <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
       <Grid item xs={12} lg={8}>
-        <Grid container spacing={1} sx={{marginTop: '10px'}}>
+        <Grid container spacing={1} sx={{ marginTop: '10px' }}>
           <Grid item>
-            <ButtonNaked color="primary" startIcon={<ArrowBackIcon/>} onClick={() => navigate(-1)}>Indietro</ButtonNaked>
+            <ButtonNaked color="primary" startIcon={<ArrowBackIcon />} onClick={() => navigate(-1)}>
+              Indietro
+            </ButtonNaked>
           </Grid>
           <Grid item>
             <Breadcrumbs aria-label="breadcrumb">
-              <BreadcrumbLink to={routes.DASHBOARD}>
-                Notifiche
-              </BreadcrumbLink>
+              <BreadcrumbLink to={routes.DASHBOARD}>Notifiche</BreadcrumbLink>
               <Typography
                 color="text.primary"
                 fontWeight={600}

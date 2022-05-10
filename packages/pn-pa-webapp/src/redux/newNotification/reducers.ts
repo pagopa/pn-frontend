@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  PhysicalCommunicationType,
-} from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NewNotification, NewNotificationPayment } from '../../models/newNotification';
-import { resetNewNotificationState } from './actions';
+import { formatNotificationRecipients } from '../../utils/notification.utility';
+import { resetNewNotificationState, saveRecipients } from './actions';
 
 const initialState = {
   loading: false,
@@ -16,8 +15,8 @@ const initialState = {
     documents: [],
     payment: {} as NewNotificationPayment,
     physicalCommunicationType: '' as PhysicalCommunicationType,
-    group: ''
-  } as NewNotification
+    group: '',
+  } as NewNotification,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -27,6 +26,9 @@ const newNotificationSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(resetNewNotificationState, () => initialState);
+    builder.addCase(saveRecipients, (state, action) => {
+      state.notification.recipients = formatNotificationRecipients(action.payload.recipients);
+    });
   },
 });
 
