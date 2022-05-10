@@ -29,7 +29,7 @@ import { Delegation } from '../redux/delegation/types';
 const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
-  const { fiscalCode } = useParams();
+  const { mandateId } = useParams();
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
@@ -38,7 +38,7 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
     delegators.length > 0 &&
     delegators.find((delegation: Delegation) =>
       'delegator' in delegation && delegation.delegator
-        ? delegation.delegator.fiscalCode === fiscalCode
+        ? delegation.mandateId === mandateId
         : undefined
     );
   const isMobile = useIsMobile();

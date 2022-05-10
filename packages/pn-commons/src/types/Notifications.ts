@@ -20,6 +20,7 @@ export interface GetNotificationsResponse {
 export interface GetNotificationsParams {
   startDate: string;
   endDate: string;
+  mandateId?: string;
   recipientId?: string;
   status?: string;
   subjectRegExp?: string;

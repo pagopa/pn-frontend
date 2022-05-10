@@ -1,5 +1,5 @@
 export const NOTIFICHE = '/notifiche';
-export const NOTIFICHE_DELEGATO = `${NOTIFICHE}/:fiscalCode`;
+export const NOTIFICHE_DELEGATO = `${NOTIFICHE}/:mandateId`;
 export const DELEGHE = '/deleghe';
 export const PROFILO = '/profilo';
 const NOTIFICA = '/notifica';

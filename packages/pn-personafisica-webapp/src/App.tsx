@@ -26,7 +26,7 @@ const productsList: Array<ProductSwitchItem> = [
     id: '0',
     title: `Piattaforma Notifiche`,
     productUrl: '',
-    linkType: 'internal'
+    linkType: 'internal',
   },
 ];
 
@@ -94,7 +94,7 @@ const App = () => {
         : 'No Name Found',
     route:
       'delegator' in delegator && delegator.delegator
-        ? routes.GET_NOTIFICHE_DELEGATO_PATH(delegator.delegator.fiscalCode)
+        ? routes.GET_NOTIFICHE_DELEGATO_PATH(delegator.mandateId)
         : '*',
   }));
 
