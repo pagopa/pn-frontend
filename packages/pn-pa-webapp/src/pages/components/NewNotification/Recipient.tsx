@@ -149,9 +149,12 @@ const Recipient = () => {
                     alignItems="center"
                     justifyContent="space-between"
                   >
-                    <Typography variant="h6">Destinatario {recipient + 1}</Typography>
+                    <Typography variant="h6">
+                      Destinatario {values.recipients.length > 1 ? recipient + 1 : null}
+                    </Typography>
                     {values.recipients.length > 1 && (
                       <Delete
+                        data-testid="DeleteRecipientIcon"
                         onClick={() => {
                           setFieldValue(
                             'recipients',
