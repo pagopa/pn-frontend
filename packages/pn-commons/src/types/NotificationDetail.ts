@@ -26,7 +26,6 @@ export interface NotificationDetail {
   cancelledByIun: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
-  documentsAvailable?: boolean;
   payment: NotificationDetailPayment;
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
@@ -259,9 +258,9 @@ interface DigitalAddress {
 }
 
 interface PhysicalAddress {
-  at?: string;
+  at: string;
   address: string;
-  addressDetails?: string;
+  addressDetails: string;
   zip: string;
   municipality: string;
   municipalityDetails?: string;

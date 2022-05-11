@@ -93,7 +93,7 @@ export default function CustomPagination({
             <Pagination
               sx={{ display: 'flex' }}
               color="primary"
-              variant="text"
+              variant="outlined"
               shape="circular"
               page={paginationData.page + 1}
               count={Math.ceil(paginationData.totalElements / size)}

@@ -170,7 +170,6 @@ const NotificationDetail = () => {
               title="Atti Allegati"
               documents={notification.documents}
               clickHandler={documentDowloadHandler}
-              documentsAvailable={true}
             />
           </Paper>
           <Button

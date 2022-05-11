@@ -75,7 +75,6 @@ export const notificationFromBe: NotificationDetail = {
   cancelledIun: '',
   cancelledByIun: '',
   recipients,
-  documentsAvailable: true,
   documents: [],
   payment: {
     iuv: '',
@@ -118,7 +117,6 @@ export const parsedNotification: NotificationDetail = {
   cancelledIun: '',
   cancelledByIun: '',
   recipients,
-  documentsAvailable: true,
   documents: [],
   payment: {
     iuv: '',

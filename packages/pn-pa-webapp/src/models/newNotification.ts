@@ -1,9 +1,7 @@
 import {
-  DigitalDomicileType,
   NotificationDetailRecipient,
   NotificationFeePolicy,
   PhysicalCommunicationType,
-  RecipientType,
 } from '@pagopa-pn/pn-commons';
 
 export enum PaymentModel {
@@ -57,27 +55,4 @@ export interface NewNotificationBe {
 
 export interface NewNotificationFe extends NewNotificationBe {
   paymentMode: PaymentModel;
-}
-
-export interface FormRecipient {
-  recipientType: RecipientType;
-  taxId: string;
-  creditorTaxId: string;
-  noticeCode: string;
-  firstName: string;
-  lastName: string;
-  type: DigitalDomicileType;
-  digitalDomicile: string;
-  at?: string;
-  address: string;
-  houseNumber: string;
-  addressDetails?: string;
-  zip: string;
-  municipality: string;
-  municipalityDetails?: string;
-  province: string;
-  foreignState: string;
-  token: string;
-  showDigitalDomicile?: string;
-  showPhysicalAddress?: string;
 }

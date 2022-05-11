@@ -55,10 +55,6 @@
       "message-pending": "Il pagamento è stato effettuato con successo.<br /><strong>Entro 24 ore</strong> verrà aggiornato lo stato della notifica. In caso di eventuali problemi verrai contattato tramite email/controlla la tua casella email.",
       "message-failed": "Il pagamento non è andato a buon fine. Premi \"Paga\" per riprovare.",
       "message-network-error": "Errore nel recupero delle informazioni di pagamento!"
-    },
-    "acts_files": {
-      "downloadable_acts": "Puoi scaricare gli atti da Piattaforma Notifiche entro 120 giorni dalla data di perfezionamento. Oltre questo termine, dovrai rivolgerti al mittente.",
-      "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente."
     }
   }
 }

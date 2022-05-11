@@ -19,7 +19,6 @@ export const notificationFromBe: NotificationDetail = {
   sentAt: '2022-02-21T10:19:33.440Z',
   cancelledIun: 'mocked-cancelledIun',
   cancelledByIun: 'mocked-cancelledByIun',
-  documentsAvailable: true,
   recipients: [
     {
       recipientType: RecipientType.PF,

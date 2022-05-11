@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { InactivityHandler, SessionModal } from '@pagopa-pn/pn-commons';
 
-import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 import { logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -41,16 +40,12 @@ const RequireAuth = () => {
           handleClose={goToLogin}
         ></SessionModal>
       )}
-      {DISABLE_INACTIVITY_HANDLER ? (
+      <InactivityHandler
+        inactivityTimer={inactivityTimer}
+        onTimerExpired={() => dispatch(logout())}
+      >
         <Outlet />
-      ) : (
-        <InactivityHandler
-          inactivityTimer={inactivityTimer}
-          onTimerExpired={() => dispatch(logout())}
-        >
-          <Outlet />
-        </InactivityHandler>
-      )}
+      </InactivityHandler>
     </Fragment>
   );
 };

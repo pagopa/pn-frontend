@@ -1,6 +1,5 @@
 import { useEffect, useMemo } from 'react';
 import { LoadingOverlay, Layout, AppMessage, SideMenu } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
@@ -11,23 +10,21 @@ import { PAGOPA_HELP_EMAIL, SELFCARE_URL_FE_LOGIN, SELFCARE_BASE_URL } from './u
 import { mixpanelInit } from './utils/mixpanel';
 
 // TODO: get products list from be (?)
-const productsList: Array<ProductSwitchItem> = [
+const productsList = [
   {
     id: '0',
     title: `Piattaforma Notifiche`,
     productUrl: '',
-    linkType: 'internal'
   },
   {
     id: '1',
     title: `Area Riservata`,
     productUrl: SELFCARE_BASE_URL as string,
-    linkType: 'external'
   },
 ];
 
 // TODO: get parties list from be (?)
-const partyList: Array<PartyEntity> = [
+const partyList = [
   {
     id: '0',
     name: `Comune di Milano`,

@@ -19,7 +19,6 @@ import CustomMobileDialogAction from './components/CustomMobileDialog/CustomMobi
 import TitleBox from './components/TitleBox';
 import NotificationDetailTable from './components/NotificationDetail/NotificationDetailTable';
 import NotificationDetailDocuments from './components/NotificationDetail/NotificationDetailDocuments';
-import HelpNotificationDetails from './components/NotificationDetail/HelpNotificationDetails';
 import NotificationDetailTimeline from './components/NotificationDetail/NotificationDetailTimeline';
 import Toast from './components/Toast/Toast';
 import CodeModal from './components/CodeModal/CodeModal';
@@ -47,7 +46,6 @@ export { CustomMobileDialogAction };
 export { TitleBox };
 export { NotificationDetailTable };
 export { NotificationDetailDocuments };
-export { HelpNotificationDetails };
 export { NotificationDetailTimeline };
 export { Toast };
 export { CodeModal };
