@@ -1,8 +1,6 @@
 {
-  "title": "I tuoi recapiti",
-  "subtitle-1": "Qui puoi indicare e modificare i recapiti a cui vuoi ricevere le tue notifiche per via digitale. Se stai cercando i tuoi dati personali, ",
-  "subtitle-2": ".",
-  "subtitle-link": "li trovi qui",
+  "title": "I tuoi dati",
+  "subtitle": "Qui puoi indicare e modificare i recapiti a cui vuoi ricevere le tue notifiche per via digitale.",
   "general-contacts-title": "Recapiti generali",
   "special-contacts-title": "Recapiti speciali",
   "legal-contacts": {
@@ -34,7 +32,7 @@
   "courtesy-contacts": {
     "title": "Recapito di cortesia",
     "subtitle": "Ricevi una comunicazione sui tuoi dispositivi",
-    "description": "Ogni volta che ricevi una notifica o che abbiamo bisogno di dirti qualcosa di importante ti invieremo un SMS, un’email o un messaggio sull’app IO.",
+    "description": "Ogni volta che ricevi una nuova notifica, ti invieremo gratuitamente un SMS, un’email o un messaggio sull’app IO.",
     "link-phone-placeholder": "Il tuo cellulare",
     "link-email-placeholder": "il tuo indirizzo email",
     "phone-add": "Avvisami via SMS",

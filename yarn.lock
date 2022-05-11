@@ -1338,10 +1338,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@fontsource/titillium-web@^4.5.8":
-  version "4.5.8"
-  resolved "https://registry.yarnpkg.com/@fontsource/titillium-web/-/titillium-web-4.5.8.tgz#1bebb1daf86b02c7c8d816071a850121904f7b56"
-  integrity sha512-9sOpgikaqh9qvYRYLnk7C0PSIU4GNt17Qtw3txUwLioRcLWiL0OeNDE1vndC1NzeWII6AicTRMOoMTbthRuFIw==
+"@fontsource/titillium-web@^4.5.3":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@fontsource/titillium-web/-/titillium-web-4.5.3.tgz#36053f80be1d92a6c9a3a9f71cd202ffe1aedead"
+  integrity sha512-ErKKKl/6pRJ9D+duTEV6Q+XOhwNGlE3PkABdRUJELBdqPexGNjIIZt1vMK3vuTKmSlCxqF8V9mKemMuY1kpvyQ==
 
 "@gar/promisify@^1.0.1":
   version "1.1.3"
@@ -2241,10 +2241,10 @@
     npmlog "^4.1.2"
     write-file-atomic "^3.0.3"
 
-"@mui/base@5.0.0-alpha.79":
-  version "5.0.0-alpha.79"
-  resolved "https://registry.yarnpkg.com/@mui/base/-/base-5.0.0-alpha.79.tgz#1994a6382a162b52ec93b66f3c74d193820d2365"
-  integrity sha512-/lZLF027BkiEjM8MIYoeS/FEhTKf+41ePU9SOijMGrCin1Y0Igucw+IHa1fF8HXD7wDbFKqHuso3J1jMG8wyNw==
+"@mui/base@5.0.0-alpha.78":
+  version "5.0.0-alpha.78"
+  resolved "https://registry.yarnpkg.com/@mui/base/-/base-5.0.0-alpha.78.tgz#9d0ee8c913969f60cd7072a6082e3c0652be0b74"
+  integrity sha512-5L+GNe2M9/tFjQpjK2r837+kzRg/l6D5R9SQbG1wmSWejw5Ei8P+KXIgS/NLNi9g7dUT8bnCyzz9AZKQX1Jsfg==
   dependencies:
     "@babel/runtime" "^7.17.2"
     "@emotion/is-prop-valid" "^1.1.2"
@@ -2262,14 +2262,14 @@
   dependencies:
     "@babel/runtime" "^7.17.2"
 
-"@mui/lab@^5.0.0-alpha.80":
-  version "5.0.0-alpha.80"
-  resolved "https://registry.yarnpkg.com/@mui/lab/-/lab-5.0.0-alpha.80.tgz#6a0768749d452e29f69a5684ff478a635bcc16de"
-  integrity sha512-td5Ak0Hx+EzVN9MJqBlZJ6BKFGjTrHyNjXncjSHTvp8Z9p157AlOA/Sf7r+RyqyVzOzBfv4S37i9ShFTzSK61Q==
+"@mui/lab@^5.0.0-alpha.78":
+  version "5.0.0-alpha.79"
+  resolved "https://registry.yarnpkg.com/@mui/lab/-/lab-5.0.0-alpha.79.tgz#9e706cca861497f2f00a9255ecd16c609730dc20"
+  integrity sha512-128+sKDQ3Z+jGBIbpH4QGrPyproDV7eAwuCHXE8XS8xoVhsJg1/E5NKs82Uvqmfbvv6sfhmPAfSfqztr/9RWiw==
   dependencies:
     "@babel/runtime" "^7.17.2"
-    "@mui/base" "5.0.0-alpha.79"
-    "@mui/system" "^5.6.4"
+    "@mui/base" "5.0.0-alpha.78"
+    "@mui/system" "^5.6.3"
     "@mui/utils" "^5.6.1"
     "@mui/x-date-pickers" "5.0.0-alpha.0"
     clsx "^1.1.1"
@@ -2278,14 +2278,14 @@
     react-transition-group "^4.4.2"
     rifm "^0.12.1"
 
-"@mui/material@^5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.6.4.tgz#5c6d6770acaea84d7b1c6492639627baed62f65b"
-  integrity sha512-7TD+u/SExZK2a55w6reX56oPk37gKr/M/XGt156X+m0d9LhzOsW864nkErIX/H8oSkX/6kCimxu1FDsO+gjiVw==
+"@mui/material@^5.6.2":
+  version "5.6.3"
+  resolved "https://registry.yarnpkg.com/@mui/material/-/material-5.6.3.tgz#a5b6cd1b0417fca67a65172530ff5573ab7bc453"
+  integrity sha512-2VovFsbCEhic29NYoBF7zFrpH2sEOlKXXDhGjzxmWiI9OnC3SX63hapWunjaVsiRINVnjuMHuW1MOs4UtV8Gfg==
   dependencies:
     "@babel/runtime" "^7.17.2"
-    "@mui/base" "5.0.0-alpha.79"
-    "@mui/system" "^5.6.4"
+    "@mui/base" "5.0.0-alpha.78"
+    "@mui/system" "^5.6.3"
     "@mui/types" "^7.1.3"
     "@mui/utils" "^5.6.1"
     "@types/react-transition-group" "^4.4.4"
@@ -2346,10 +2346,10 @@
     jss-plugin-vendor-prefixer "^10.8.2"
     prop-types "^15.7.2"
 
-"@mui/system@^5.6.4":
-  version "5.6.4"
-  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.6.4.tgz#b1c615c70b3573d61a8a56dbaee6700bb9a5ca9b"
-  integrity sha512-7rsWED1wMFMePySJobsBerFZNu7ga580QSi3Zd6sJR8nVj12qD3yIdfvxA70/PxJ/805KbIT0GX7edKI+hpyhA==
+"@mui/system@^5.6.3":
+  version "5.6.3"
+  resolved "https://registry.yarnpkg.com/@mui/system/-/system-5.6.3.tgz#a03ad6d61b0b7d304a8af60374e27e71e7818ef7"
+  integrity sha512-4SRi52a4ttZ2S4EHEDE8arVNuKqyQLTYUTF80WAZ0tQwnG20qwlBtzcrywCGItmVAMl7RUaYopyWOx3yVPvrmQ==
   dependencies:
     "@babel/runtime" "^7.17.2"
     "@mui/private-theming" "^5.6.2"
@@ -2652,12 +2652,12 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@pagopa/mui-italia@^0.6.16":
-  version "0.6.17"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.17.tgz#b2162c19ff8b2414223aaac5f0f9b9b7804ebcc7"
-  integrity sha512-t6ZDAOA+iiv8scmgFMkHX8AhVBJtrRT6v6ZhKw8dfrIQaVOlE7LTSoVbD7VkSwrP6CzKgcG9IwqDNqKk4W0X9Q==
+"@pagopa/mui-italia@^0.6.15":
+  version "0.6.15"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.15.tgz#4af6912d89c1087e0f24aec9629bc3197631b91d"
+  integrity sha512-Ovps5+lt3r6f1TJ/tHVaAIFTLPhvOUt0S8jqzJ5mGhyujCHeSiDBNXhIH47uocOGAnCzkLIcO9yA8s4gPfHF6g==
   dependencies:
-    "@fontsource/titillium-web" "^4.5.8"
+    "@fontsource/titillium-web" "^4.5.3"
     clsx "^1.1.1"
 
 "@pmmmwh/react-refresh-webpack-plugin@^0.5.3":
@@ -4220,9 +4220,9 @@ async-retry@1.2.3:
     retry "0.12.0"
 
 async@^2.6.2:
-  version "2.6.4"
-  resolved "https://registry.yarnpkg.com/async/-/async-2.6.4.tgz#706b7ff6084664cd7eae713f6f965433b5504221"
-  integrity sha512-mzo5dfJYwAn29PeiJ0zvwTo04zj8HDJj0Mn8TD7sno7q12prdbnasKJHhkm2c1LgrhlJ0teaea8860oxi51mGA==
+  version "2.6.3"
+  resolved "https://registry.yarnpkg.com/async/-/async-2.6.3.tgz#d72625e2344a3656e3a3ad4fa749fa83299d82ff"
+  integrity sha512-zflvls11DCy+dQWzTW2dzuilv8Z5X/pjfmZOWba6TNIVDm+2UDaJmXSOXlasHKfNBs8oo3M0aT50fDEWfKZjXg==
   dependencies:
     lodash "^4.17.14"
 

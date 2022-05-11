@@ -1,9 +1,8 @@
 import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Grid, Link, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { TitleBox } from '@pagopa-pn/pn-commons';
 
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getDigitalAddresses, resetContactsState } from '../redux/contact/actions';
 import { RootState } from '../redux/store';
@@ -12,10 +11,8 @@ import InsertLegalContact from '../component/Contacts/InsertLegalContact';
 import LegalContactsList from '../component/Contacts/LegalContactsList';
 import CourtesyContacts from '../component/Contacts/CourtesyContacts';
 import SpecialContacts from '../component/Contacts/SpecialContacts';
-import { PROFILO } from '../navigation/routes.const';
 
 const Contacts = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
@@ -29,25 +26,13 @@ const Contacts = () => {
 
   useEffect(() => () => void dispatch(resetContactsState()), []);
 
-  const handleRedirectToProfilePage = () => {
-    navigate(PROFILO);
-  };
-  
-  const subtitle = (
-    <>
-      {t('subtitle-1', { ns: 'recapiti' })}
-      <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage}>{t('subtitle-link', { ns: 'recapiti' })}</Link>
-      {t('subtitle-2', { ns: 'recapiti' })}
-    </>
-  );
-
   return (
     <DigitalContactsCodeVerificationProvider>
       <Box style={{ padding: '20px' }}>
         <TitleBox
           variantTitle="h4"
           title={t('title')}
-          subTitle={subtitle}
+          subTitle={t('subtitle')}
           variantSubTitle={'body1'}
         />
         <Typography variant="h5" fontWeight={600} fontSize={28} sx={{marginTop: '30px'}}>{t('general-contacts-title')}</Typography>

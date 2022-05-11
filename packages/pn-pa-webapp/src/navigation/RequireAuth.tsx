@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { InactivityHandler, SessionModal } from '@pagopa-pn/pn-commons';
-import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 
 import { logout } from '../redux/auth/actions';
 import { useAppDispatch } from '../redux/hooks';
@@ -49,16 +48,12 @@ const RequireAuth = ({ roles }: Props) => {
           handleClose={goToSelfcareLogin}
         ></SessionModal>
       )}
-      {DISABLE_INACTIVITY_HANDLER ? (
+      <InactivityHandler
+        inactivityTimer={inactivityTimer}
+        onTimerExpired={() => dispatch(logout())}
+      >
         <Outlet />
-      ) : (
-        <InactivityHandler
-          inactivityTimer={inactivityTimer}
-          onTimerExpired={() => dispatch(logout())}
-        >
-          <Outlet />
-        </InactivityHandler>
-      )}
+      </InactivityHandler>
     </Fragment>
   );
 };
