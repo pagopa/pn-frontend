@@ -52,7 +52,7 @@ const Header = ({
   };
 
   return (
-    <AppBar sx={{ boxShadow: 'none' }} position="relative">
+    <AppBar sx={{ boxShadow: 'none', color: 'inherit' }} position="relative">
       <HeaderAccount
         rootLink={pagoPAHeaderLink}
         loggedUser={loggedUser}
