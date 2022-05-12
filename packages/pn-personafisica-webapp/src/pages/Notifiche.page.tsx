@@ -24,7 +24,7 @@ import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import { Delegation } from '../redux/delegation/types';
+import { Delegator } from '../redux/delegation/types';
 
 const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
   const dispatch = useAppDispatch();
@@ -34,16 +34,13 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
     (state: RootState) => state.dashboardState
   );
   const { delegators } = useAppSelector((state: RootState) => state.sidemenuState);
-  const currentDelegator =
-    delegators.length > 0 &&
-    delegators.find((delegation: Delegation) =>
-      'delegator' in delegation && delegation.delegator
-        ? delegation.mandateId === mandateId
-        : undefined
-    );
+  const currentDelegator = delegators.find(
+    (delegation: Delegator) => delegation.mandateId === mandateId
+  );
+
   const isMobile = useIsMobile();
   const pageTitle =
-    isDelegator && currentDelegator && 'delegator' in currentDelegator
+    isDelegator && currentDelegator
       ? t('delegatorTitle', {
           name: currentDelegator.delegator ? currentDelegator.delegator.displayName : '',
         })
