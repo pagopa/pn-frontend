@@ -21,7 +21,7 @@ expect.extend(toHaveNoViolations);
 
 describe('App', () => {
   beforeEach(async () => {
-    i18n.init();
+    void i18n.init();
   });
 
   it('Renderd Piattaforma notifiche', () => {

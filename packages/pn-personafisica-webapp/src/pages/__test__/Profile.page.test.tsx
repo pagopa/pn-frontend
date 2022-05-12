@@ -2,6 +2,7 @@
 import { render, screen } from "@testing-library/react";
 import Profile from "../Profile.page";
 import * as hooks from '../../redux/hooks';
+import { axe } from "../../__test__/test-utils";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -18,7 +19,6 @@ describe('testing profile page', () => {
       family_name: 'Rossi',
       fiscal_number: 'RSSMRA45P02H501W'
     });
-
     render(<Profile />);
   });
 
@@ -27,7 +27,7 @@ describe('testing profile page', () => {
     expect(title).toBeInTheDocument();
 
     const subtitle = screen.getByText('subtitle');
-    expect(subtitle).toBeInTheDocument()
+    expect(subtitle).toBeInTheDocument();
 
     const nameLabel = screen.getByText('profile.name');
     expect(nameLabel).toBeInTheDocument();
@@ -42,5 +42,17 @@ describe('testing profile page', () => {
     expect(familyName).toBeInTheDocument();
     const fiscalNumber = screen.getByText('RSSMRA45P02H501W');
     expect(fiscalNumber).toBeInTheDocument();
+  });
+
+  it('is profile page accessible', async ()=>{
+    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
+    mockUseAppSelector.mockReturnValueOnce({
+      name: 'Mario',
+      family_name: 'Rossi',
+      fiscal_number: 'RSSMRA45P02H501W'
+    });
+    const { container } = render(<Profile/>);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 });

@@ -3,7 +3,7 @@ import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import * as actions from '../../redux/dashboard/actions';
-import { render } from '../../__test__/test-utils';
+import { axe, render } from '../../__test__/test-utils';
 import * as hooks from '../../redux/hooks';
 import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Notifiche from '../Notifiche.page';
@@ -129,5 +129,14 @@ describe('Notifiche Page', () => {
         type: 'setPagination',
       });
     });
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 });

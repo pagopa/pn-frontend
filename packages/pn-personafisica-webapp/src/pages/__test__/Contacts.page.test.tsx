@@ -1,18 +1,16 @@
 import * as redux from 'react-redux';
 
-import { render } from "../../__test__/test-utils";
+import { axe, render } from "../../__test__/test-utils";
 import * as hooks from '../../redux/hooks';
 import * as actions from '../../redux/contact/actions';
 import Contacts from "../Contacts.page";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
+  useTranslation: () => ({
       t: (str: string) => str,
-    };
-  },
-  Trans: (props: {i18nKey: string}) => props.i18nKey,
+    }),
+    Trans: () => "mocked verify description",
 }));
 
 jest.mock('../../component/Contacts/InsertLegalContact', () => () => <div>InsertLegalContact</div>);
@@ -22,6 +20,7 @@ describe('Contacts page', () => {
 
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
+  // eslint-disable-next-line functional/no-let
   let appSelectorSpy: jest.SpyInstance;
 
   beforeEach(() => {
@@ -33,12 +32,12 @@ describe('Contacts page', () => {
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockDispatchFn);
-  })
+  });
   
   afterEach(() => {
     jest.resetAllMocks();
     jest.clearAllMocks();
-  })
+  });
 
   it('renders Contacts (no contacts)', () => {
     appSelectorSpy
@@ -56,5 +55,17 @@ describe('Contacts page', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-recipientId');
+  });
+
+  it('is contact page accessible', async ()=>{
+    appSelectorSpy
+    .mockReturnValueOnce('mocked-recipientId')
+    .mockReturnValueOnce({
+      legal: [],
+      courtesy: []
+    });
+    const { container } = render(<Contacts/>);
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 });
