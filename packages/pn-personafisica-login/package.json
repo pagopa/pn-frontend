@@ -1,0 +1,83 @@
+{
+  "name": "selfcare-login-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "homepage": "/auth/",
+  "dependencies": {
+    "@emotion/react": "^11.4.1",
+    "@emotion/styled": "^11.3.0",
+    "@mui/icons-material": "^5.0.3",
+    "@mui/material": "^5.6.4",
+    "@pagopa-pn/pn-commons": "0.1.0",
+    "@pagopa/mui-italia": "^0.6.16",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "i18next": "^21.6.14",
+    "react": "^17.0.2",
+    "react-app-polyfill": "^3.0.0",
+    "react-datepicker": "^4.2.1",
+    "react-dom": "^17.0.2",
+    "react-i18next": "^11.16.1",
+    "react-router": "^5.2.1",
+    "react-scripts": "5.0.0",
+    "typescript": "^4.5.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test -i",
+    "test:coverage": "craco test -i --coverage",
+    "eject": "craco eject",
+    "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
+    "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx ",
+    "prettify": "prettier --write \"./**/*.{ts,tsx}\""
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/history": "^4.7.9",
+    "@types/jest": "^26.0.15",
+    "@types/react-router": "^5.1.16",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "danger": "^10.5.3",
+    "danger-plugin-digitalcitizenship": "^1.0.0",
+    "eslint": "7.11.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-functional": "^3.7.2",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-sonarjs": "^0.10.0",
+    "prettier": "^2.4.1"
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "src/index.tsx",
+      "src/reportWebVitals.ts",
+      "src/utils/constants.ts",
+      "src/utils/IDPS.ts"
+    ]
+  }
+}
