@@ -9,7 +9,7 @@ type Props = {
   errors: FormikErrors<FormikValues>;
   setFieldValue: any;
   handleBlur?: any;
-  width: number;
+  width?: number;
 };
 
 const FormTextField = ({

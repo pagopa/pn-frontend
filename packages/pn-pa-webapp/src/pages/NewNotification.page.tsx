@@ -36,7 +36,9 @@ const NewNotification = () => {
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const notification = useAppSelector((state: RootState) => state.newNotificationState.notification);
+  const notification = useAppSelector(
+    (state: RootState) => state.newNotificationState.notification
+  );
 
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
@@ -81,7 +83,9 @@ const NewNotification = () => {
             </Step>
           ))}
         </Stepper>
-        {activeStep === 0 && <PreliminaryInformations notification={notification} onConfirm={goToNextStep}/>}
+        {activeStep === 0 && (
+          <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
+        )}
         {activeStep === 1 && <Recipient />}
         {activeStep === 2 && <Attachments />}
         {activeStep === 3 && <PaymentMethods />}

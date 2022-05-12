@@ -77,7 +77,6 @@ export interface FormRecipient {
   municipalityDetails?: string;
   province: string;
   foreignState: string;
-  token: string;
-  showDigitalDomicile?: string;
-  showPhysicalAddress?: string;
+  showDigitalDomicile?: boolean;
+  showPhysicalAddress?: boolean;
 }

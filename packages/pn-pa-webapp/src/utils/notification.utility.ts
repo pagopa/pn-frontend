@@ -2,7 +2,7 @@ import { FormRecipient } from '../models/newNotification';
 
 export const formatNotificationRecipients = (recipients: Array<FormRecipient>) =>
   recipients.map((recipient) => ({
-    denomination: `${recipient.firstName} ${recipient.firstName}`,
+    denomination: `${recipient.firstName} ${recipient.lastName}`,
     recipientType: recipient.recipientType,
     taxId: recipient.taxId,
     token: recipient.noticeCode,
