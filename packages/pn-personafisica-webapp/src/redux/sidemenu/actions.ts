@@ -1,8 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { Delegation } from '../delegation/types';
+import { Delegator } from '../delegation/types';
 
-export const getSidemenuInformation = createAsyncThunk<Array<Delegation>>(
+export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
   'getDelegator',
   async () => {
     try {
