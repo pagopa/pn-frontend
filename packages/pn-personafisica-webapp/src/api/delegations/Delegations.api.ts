@@ -54,6 +54,26 @@ export const DelegationsApi = {
           delegator: 'delegator' in delegation ? delegation.delegator : null,
         }))
       ),
+  // new Promise((resolve, _reject) => {
+  //   return resolve([
+  //     {
+  //       mandateId: 'mandateIdProva',
+  //       status: 'active',
+  //       visibilityIds: [],
+  //       verificationCode: '1234',
+  //       datefrom: '2021-12-28+01:00',
+  //       dateto: '',
+  //       delegator: {
+  //         firstName: 'Carlotta',
+  //         lastName: 'Dimatteo',
+  //         displayName: undefined,
+  //         companyName: undefined,
+  //         fiscalCode: 'DNTCLD90E63D628I',
+  //         person: true,
+  //       },
+  //     },
+  //   ]);
+  // }),
   /**
    * Removes a delegation that the user created
    * @param id

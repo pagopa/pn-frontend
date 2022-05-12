@@ -23,6 +23,7 @@ export const arrayOfDelegates = [
   {
     mandateId: '1',
     delegate: {
+      displayName: 'Marco Verdi',
       firstName: 'Marco',
       lastName: 'Verdi',
       companyName: 'eni',
@@ -44,6 +45,7 @@ export const arrayOfDelegates = [
   {
     mandateId: '2',
     delegate: {
+      displayName: 'Davide Legato',
       firstName: 'Davide',
       lastName: 'Legato',
       companyName: 'eni',
@@ -68,6 +70,7 @@ export const arrayOfDelegators = [
   {
     mandateId: '3',
     delegator: {
+      displayName: 'Marco Verdi',
       firstName: 'Marco',
       lastName: 'Verdi',
       companyName: 'eni',
@@ -89,6 +92,7 @@ export const arrayOfDelegators = [
   {
     mandateId: '4',
     delegator: {
+      displayName: 'Davide Legato',
       firstName: 'Davide',
       lastName: 'Legato',
       companyName: 'eni',

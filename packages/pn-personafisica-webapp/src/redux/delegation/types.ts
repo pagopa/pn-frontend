@@ -39,6 +39,7 @@ export interface RevocationModalProps {
 export interface Person {
   firstName: string;
   lastName: string;
+  displayName?: string;
   companyName?: string | null;
   fiscalCode: string;
   person: boolean;
