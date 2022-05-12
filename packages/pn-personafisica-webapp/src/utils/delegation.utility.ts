@@ -14,7 +14,7 @@ export default function delegationToItem(delegations: Array<Delegation>): Array<
     id: delegation.mandateId,
     name: getFirstName(delegation),
     // la data arriva nel formato YYYY-MM-DDZ rimuovere slice in caso di rimozione di Z
-    startDate: formatDate(delegation.datefrom.slice(0, -1)),
+    startDate: formatDate(delegation.datefrom.slice(0, 10)),
     endDate: formatDate(delegation.dateto),
     visibilityIds: delegation.visibilityIds.map(
       (entity: { name: string; uniqueIdentifier: string }) => entity.uniqueIdentifier
