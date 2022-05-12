@@ -1,6 +1,4 @@
-import { useNavigate } from 'react-router-dom';
 import { Add, Delete } from '@mui/icons-material';
-import { Fragment } from 'react';
 import {
   FormControl,
   Stack,
@@ -10,7 +8,6 @@ import {
   Radio,
   FormControlLabel,
   Checkbox,
-  Button,
   Box,
   Paper,
 } from '@mui/material';
@@ -23,15 +20,16 @@ import { saveRecipients } from '../../../redux/newNotification/actions';
 import { useAppDispatch } from '../../../redux/hooks';
 import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
+import NewNotificationCard from './NewNotificationCard';
 
-const oneRecipient = {
+const singleRecipient = {
   recipientType: RecipientType.PF,
   taxId: '',
   creditorTaxId: '',
   noticeCode: '',
   firstName: '',
   lastName: '',
-  type: 'PEC',
+  type: DigitalDomicileType.PEC,
   digitalDomicile: '',
   at: '',
   address: '',
@@ -42,38 +40,19 @@ const oneRecipient = {
   municipalityDetails: '',
   province: '',
   foreignState: '',
-  token: '',
+  showDigitalDomicile: false,
+  showPhysicalAddress: false,
 };
 
-const Recipient = () => {
-  const navigate = useNavigate();
+type Props = {
+  onConfirm: () => void;
+};
+
+const Recipient = ({ onConfirm }: Props) => {
   const dispatch = useAppDispatch();
 
   const initialValues = {
-    recipients: [
-      {
-        recipientType: RecipientType.PF,
-        taxId: '',
-        creditorTaxId: '',
-        noticeCode: '',
-        firstName: '',
-        lastName: '',
-        type: DigitalDomicileType.PEC,
-        digitalDomicile: '',
-        at: '',
-        address: '',
-        houseNumber: '',
-        addressDetails: '',
-        zip: '',
-        municipality: '',
-        municipalityDetails: '',
-        province: '',
-        foreignState: '',
-        token: '',
-        showDigitalDomicile: false,
-        showPhysicalAddress: false,
-      },
-    ],
+    recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }],
   };
 
   const validationSchema = yup.object({
@@ -118,28 +97,33 @@ const Recipient = () => {
     ),
   });
 
-  const handleSubmit = (values: FormikValues) => {
-    dispatch(saveRecipients(values));
+  const handleAddRecipient = (values: FormikValues, setFieldValue: any) => {
+    const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx as number;
+    setFieldValue('recipients', [
+      ...values.recipients,
+      { ...singleRecipient, idx: lastRecipientIdx + 1, id: `recipient.${lastRecipientIdx + 1}` },
+    ]);
   };
 
-  const handleGoBack = () => {
-    navigate(-1);
+  const handleSubmit = (values: FormikValues) => {
+    dispatch(saveRecipients(values));
+    onConfirm();
   };
 
   return (
-    <Fragment>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={(values) => handleSubmit(values)}
-        validateOnBlur={false}
-      >
-        {({ values, setFieldValue, touched, handleBlur, errors }) => (
-          <>
-            <Form>
-              {Array.from(Array(values.recipients.length).keys()).map((recipient) => (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={(values) => handleSubmit(values)}
+      validateOnBlur={false}
+    >
+      {({ values, setFieldValue, touched, handleBlur, errors, isValid }) => (
+        <>
+          <Form>
+            <NewNotificationCard noPaper isContinueDisabled={!isValid}>
+              {values.recipients.map((recipient, index) => (
                 <Paper
-                  key={recipient}
+                  key={recipient.id}
                   sx={{ padding: '24px', marginTop: '40px' }}
                   className="paperContainer"
                 >
@@ -150,7 +134,7 @@ const Recipient = () => {
                     justifyContent="space-between"
                   >
                     <Typography variant="h6">
-                      Destinatario {values.recipients.length > 1 ? recipient + 1 : null}
+                      Destinatario {values.recipients.length > 1 ? index + 1 : null}
                     </Typography>
                     {values.recipients.length > 1 && (
                       <Delete
@@ -158,7 +142,7 @@ const Recipient = () => {
                         onClick={() => {
                           setFieldValue(
                             'recipients',
-                            values.recipients.filter((_, index) => index !== recipient)
+                            values.recipients.filter((_, j) => index !== j)
                           );
                         }}
                       />
@@ -171,8 +155,8 @@ const Recipient = () => {
                         <RadioGroup
                           aria-labelledby="radio-buttons-group-pf-pg"
                           defaultValue={RecipientType.PF}
-                          name={`recipients[${recipient}].recipientType`}
-                          value={values.recipients[recipient].recipientType}
+                          name={`recipients[${index}].recipientType`}
+                          value={values.recipients[index].recipientType}
                           onChange={(event) => {
                             setFieldValue(
                               'selectPersonaFisicaOrPersonaGiuridica',
@@ -185,14 +169,14 @@ const Recipient = () => {
                               <FormControlLabel
                                 value={RecipientType.PF}
                                 control={<Radio />}
-                                name={`recipients[${recipient}].recipientType`}
+                                name={`recipients[${index}].recipientType`}
                                 label={'Persona Fisica'}
                               />
                             </Grid>
-                            {values.recipients[recipient].recipientType === RecipientType.PF && (
+                            {values.recipients[index].recipientType === RecipientType.PF && (
                               <>
                                 <FormTextField
-                                  keyName={`recipients[${recipient}].firstName`}
+                                  keyName={`recipients[${index}].firstName`}
                                   label={'Nome*'}
                                   values={values}
                                   touched={touched}
@@ -202,7 +186,7 @@ const Recipient = () => {
                                   width={4}
                                 />
                                 <FormTextField
-                                  keyName={`recipients[${recipient}].lastName`}
+                                  keyName={`recipients[${index}].lastName`}
                                   label={'Cognome*'}
                                   values={values}
                                   touched={touched}
@@ -220,14 +204,14 @@ const Recipient = () => {
                             <FormControlLabel
                               value={RecipientType.PG}
                               control={<Radio />}
-                              name={`recipients[${recipient}].recipientType`}
+                              name={`recipients[${index}].recipientType`}
                               label={'Persona giuridica'}
                               disabled
                             />
                           </Grid>
-                          {values.recipients[recipient].recipientType === RecipientType.PG && (
+                          {values.recipients[index].recipientType === RecipientType.PG && (
                             <FormTextField
-                              keyName={`recipients[${recipient}].firstName`}
+                              keyName={`recipients[${index}].firstName`}
                               label={'Ragione sociale*'}
                               values={values}
                               touched={touched}
@@ -241,7 +225,7 @@ const Recipient = () => {
                       </FormControl>
                       <Grid container spacing={2} mt={2}>
                         <FormTextField
-                          keyName={`recipients[${recipient}].taxId`}
+                          keyName={`recipients[${index}].taxId`}
                           label={'Codice fiscale destinatario*'}
                           values={values}
                           touched={touched}
@@ -251,7 +235,7 @@ const Recipient = () => {
                           width={12}
                         />
                         <FormTextField
-                          keyName={`recipients[${recipient}].creditorTaxId`}
+                          keyName={`recipients[${index}].creditorTaxId`}
                           label={'Codice fiscale Ente Creditore*'}
                           values={values}
                           touched={touched}
@@ -261,7 +245,7 @@ const Recipient = () => {
                           width={6}
                         />
                         <FormTextField
-                          keyName={`recipients[${recipient}].noticeCode`}
+                          keyName={`recipients[${index}].noticeCode`}
                           label={'Codice avviso*'}
                           values={values}
                           touched={touched}
@@ -273,21 +257,22 @@ const Recipient = () => {
                         <Grid
                           item
                           xs={6}
+                          data-testid="DigitalDomicileCheckbox"
                           onClick={() =>
                             setFieldValue(
-                              `recipients[${recipient}].showDigitalDomicile`,
-                              !values.recipients[recipient].showDigitalDomicile
+                              `recipients[${index}].showDigitalDomicile`,
+                              !values.recipients[index].showDigitalDomicile
                             )
                           }
                         >
                           <Stack display="flex" direction="row" alignItems="center">
-                            <Checkbox checked={values.recipients[recipient].showDigitalDomicile} />
+                            <Checkbox checked={values.recipients[index].showDigitalDomicile} />
                             <Typography>Aggiungi un domicilio digitale</Typography>
                           </Stack>
                         </Grid>
-                        {values.recipients[recipient].showDigitalDomicile && (
+                        {values.recipients[index].showDigitalDomicile && (
                           <FormTextField
-                            keyName={`recipients[${recipient}].digitalDomicile`}
+                            keyName={`recipients[${index}].digitalDomicile`}
                             label={'Domicilio digitale'}
                             values={values}
                             touched={touched}
@@ -302,39 +287,39 @@ const Recipient = () => {
                         <Grid
                           xs={12}
                           item
+                          data-testid="PhysicalAddressCheckbox"
                           onClick={() =>
                             setFieldValue(
-                              `recipients[${recipient}].showPhysicalAddress`,
-                              !values.recipients[recipient].showPhysicalAddress
+                              `recipients[${index}].showPhysicalAddress`,
+                              !values.recipients[index].showPhysicalAddress
                             )
                           }
                         >
                           <Stack display="flex" direction="row" alignItems="center">
-                            <Checkbox checked={values.recipients[recipient].showPhysicalAddress} />
+                            <Checkbox checked={values.recipients[index].showPhysicalAddress} />
                             <Typography>Aggiungi un indirizzo fisico</Typography>
                           </Stack>
                         </Grid>
-                        {values.recipients[recipient].showPhysicalAddress && (
+                        {values.recipients[index].showPhysicalAddress && (
                           <PhysicalAddress
                             values={values}
                             setFieldValue={setFieldValue}
                             touched={touched}
                             errors={errors}
-                            recipient={recipient}
+                            recipient={index}
                             handleBlur={handleBlur}
                           />
                         )}
                       </Grid>
-                      {values.recipients.length - 1 === recipient && (
-                        <Stack display="flex" direction="row" justifyContent="space-between">
+                      {values.recipients.length - 1 === index && (
+                        <Stack mt={4} display="flex" direction="row" justifyContent="space-between">
                           <ButtonNaked
                             startIcon={<Add />}
                             onClick={() => {
-                              setFieldValue('recipients', [...values.recipients, oneRecipient]);
+                              handleAddRecipient(values, setFieldValue);
                             }}
                             color="primary"
                             size="large"
-                            mt={4}
                           >
                             Aggiungi un destinatario
                           </ButtonNaked>
@@ -344,28 +329,11 @@ const Recipient = () => {
                   </Box>
                 </Paper>
               ))}
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                sx={{ marginTop: '40px', marginBottom: '20px' }}
-              >
-                <Button variant="outlined" type="button" onClick={handleGoBack}>
-                  Torna alle notifiche
-                </Button>
-                <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={Object.keys(touched).length === 0 || Object.keys(errors).length > 0}
-                >
-                  Continua
-                </Button>
-              </Box>
-            </Form>
-          </>
-        )}
-      </Formik>
-    </Fragment>
+            </NewNotificationCard>
+          </Form>
+        </>
+      )}
+    </Formik>
   );
 };
 
