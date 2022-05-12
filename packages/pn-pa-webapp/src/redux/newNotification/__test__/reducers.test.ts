@@ -6,6 +6,7 @@ import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
 import {
   resetNewNotificationState,
+  setCancelledIun,
   setPreliminaryInformations,
   uploadNotificationDocument,
 } from '../actions';
@@ -30,6 +31,13 @@ describe('New notification redux state tests', () => {
   it('Initial state', () => {
     const state = store.getState().newNotificationState;
     expect(state).toEqual(initialState);
+  });
+
+  it('Should be able to set cancelled iun', () => {
+    const action = store.dispatch(setCancelledIun('mocked-iun'));
+    const payload = action.payload;
+    expect(action.type).toBe('setCancelledIun');
+    expect(payload).toEqual('mocked-iun');
   });
 
   it('Should be able to set preliminary informations', () => {

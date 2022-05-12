@@ -1,8 +1,10 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationDocument, PaymentModel } from './../../models/newNotification';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { NewNotificationDocument, PaymentModel } from '../../models/newNotification';
+
+export const setCancelledIun = createAction<string>('setCancelledIun');
 
 export const setPreliminaryInformations = createAction<{
   paProtocolNumber: string;
@@ -42,13 +44,13 @@ export const uploadNotificationDocument = createAsyncThunk<
       }
       return items.map((item, index) => ({
         digests: {
-          sha256: item.sha256
+          sha256: item.sha256,
         },
         contentType: item.contentType,
         ref: {
           key: item.key,
-          versionToken: presignedUrls[index].secret
-        }
+          versionToken: presignedUrls[index].secret,
+        },
       }));
     } catch (e) {
       return rejectWithValue(e);
