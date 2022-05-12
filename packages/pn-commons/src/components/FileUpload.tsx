@@ -4,15 +4,19 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 
+import { calcBase64String, calcSha256String } from '../utils/file.utility';
+
 type Props = {
   uploadText: string;
   vertical?: boolean;
   accept: string;
-  uploadFn: (file: any) => Promise<any>;
-  onFileUploaded: (data: any) => void;
+  uploadFn?: (file: any, fileBase64?: string, sha256?: {hashBase64: string, hashHex: string}) => Promise<void>;
+  onFileUploaded: (file: any, fileBase64?: string, sha256?: {hashBase64: string, hashHex: string}) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
   sx?: SxProps;
+  calcSha256?: boolean;
+  calcBase64?: boolean;
 };
 
 enum UploadStatus {
@@ -35,13 +39,13 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
     case 'FILE_TYPE_NOT_SUPPORTED':
       return {
         ...state,
-        file: action.payload,
         error: 'Estensione file non supportata. Riprovare con un altro file.',
       };
     case 'UPLOAD_IN_ERROR':
       return {
         ...state,
-        file: action.payload,
+        file: null,
+        status: UploadStatus.TO_UPLOAD,
         error: 'Si è verificato un errore durante il caricamento del file. Si prega di riprovare.',
       };
     case 'FILE_UPLOADED':
@@ -65,9 +69,22 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
  * @param onRemoveFile function called after file deletion
  * @param isSending flag for sending status
  * @param sx style to be addded to the component
+ * @param calcSha256 flag to calculate the sha256
+ * @param calcBase64 flag to calculate the base64 version of the file
  * @returns
  */
-const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUploaded, onRemoveFile, isSending, sx }: Props) => {
+const FileUpload = ({
+  uploadText,
+  vertical = false,
+  accept,
+  uploadFn,
+  onFileUploaded,
+  onRemoveFile,
+  isSending,
+  sx,
+  calcSha256 = false,
+  calcBase64 = false,
+}: Props) => {
   const [data, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
     file: null,
@@ -101,17 +118,20 @@ const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUplo
     (uploadInputRef.current as any).click();
   };
 
-  const uploadFile = (file: any) => {
+  const uploadFile = async (file: any) => {
     if (file && file.type && accept.indexOf(file.type) > -1) {
       dispatch({ type: 'ADD_FILE', payload: file });
-      uploadFn(file)
-        .then((res: any) => {
-          dispatch({ type: 'FILE_UPLOADED' });
-          onFileUploaded(res);
-        })
-        .catch(() => {
-          dispatch({ type: 'UPLOAD_IN_ERROR' });
-        });
+      try {
+        const fileBase64 = calcBase64 ? await calcBase64String(file) : undefined;
+        const sha256 = calcSha256 ? await calcSha256String(file) : undefined;
+        if (uploadFn) {
+          await uploadFn(file, fileBase64, sha256);
+        }
+        dispatch({ type: 'FILE_UPLOADED' });
+        onFileUploaded(file, fileBase64, sha256);
+      } catch {
+        dispatch({ type: 'UPLOAD_IN_ERROR' });
+      }
     } else {
       dispatch({ type: 'FILE_TYPE_NOT_SUPPORTED' });
     }
@@ -122,7 +142,7 @@ const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUplo
   };
 
   const removeFileHandler = () => {
-    dispatch({type: 'REMOVE_FILE'});
+    dispatch({ type: 'REMOVE_FILE' });
     onRemoveFile();
   };
 
@@ -153,8 +173,8 @@ const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUplo
     if (data.status !== UploadStatus.UPLOADED && data.status !== UploadStatus.SENDING) {
       return;
     }
-    dispatch(isSending ? {type: 'IS_SENDING'} : {type: 'FILE_UPLOADED'})
-  }, [isSending])
+    dispatch(isSending ? { type: 'IS_SENDING' } : { type: 'FILE_UPLOADED' });
+  }, [isSending]);
 
   return (
     <Box
@@ -201,15 +221,22 @@ const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUplo
         {(data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) && (
           <Fragment>
             <Typography display="inline" variant="body2">
-              {data.status === UploadStatus.IN_PROGRESS ? 'Caricamento in corso...' : 'Invio in corso...'}
+              {data.status === UploadStatus.IN_PROGRESS
+                ? 'Caricamento in corso...'
+                : 'Invio in corso...'}
             </Typography>
-            <Typography sx={{ margin: '0 20px', width: '80%' }}>
+            <Typography sx={{ margin: '0 20px', width: 'calc(100% - 200px)' }}>
               <LinearProgress />
             </Typography>
           </Fragment>
         )}
         {data.status === UploadStatus.UPLOADED && (
-          <Box display="flex" justifyContent="space-between" alignItems="center" sx={{width: '100%'}}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ width: '100%' }}
+          >
             <Box display="flex" justifyContent="center" alignItems="center">
               <AttachFileIcon color="primary" />
               <Typography color="primary">{data.file.name}</Typography>
@@ -217,7 +244,7 @@ const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUplo
                 {(data.file.size / 1024).toFixed(2)}&nbsp;KB
               </Typography>
             </Box>
-            <CloseIcon sx={{ cursor: 'pointer' }} onClick={removeFileHandler}/>
+            <CloseIcon sx={{ cursor: 'pointer' }} onClick={removeFileHandler} />
           </Box>
         )}
       </Box>

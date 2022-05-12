@@ -34,7 +34,7 @@ const steps = ['Informazioni preliminari', 'Destinatario', 'Allegati', 'Metodi d
 
 const NewNotification = () => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = useState(2);
+  const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.newNotificationState.notification);

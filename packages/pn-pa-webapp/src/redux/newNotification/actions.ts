@@ -1,8 +1,8 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
+import { NewNotificationDocument, PaymentModel } from './../../models/newNotification';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
-import { PaymentModel } from './../../models/newNotification';
 
 export const setPreliminaryInformations = createAction<{
   paProtocolNumber: string;
@@ -14,14 +14,42 @@ export const setPreliminaryInformations = createAction<{
 }>('setPreliminaryInformations');
 
 export const uploadNotificationDocument = createAsyncThunk<
-  void,
-  { key: string; contentType: string; file: any }
+  Array<NewNotificationDocument>,
+  Array<{ key: string; contentType: string; fileBase64: string; sha256: string }>
 >(
   'uploadNotificationDocument',
-  async (params: { key: string; contentType: string }, { rejectWithValue }) => {
+  async (
+    items: Array<{ key: string; contentType: string; fileBase64: string; sha256: string }>,
+    { rejectWithValue }
+  ) => {
     try {
-      await NotificationsApi.preloadNotificationDocument(params.key, params.contentType);
-      return;
+      const presignedUrls = await NotificationsApi.preloadNotificationDocument(items);
+      if (presignedUrls.length) {
+        const uploadDocumentCalls: Array<Promise<void>> = [];
+        // upload document
+        presignedUrls.forEach((presigneUrl, index) => {
+          /* eslint-disable-next-line functional/immutable-data */
+          uploadDocumentCalls.push(
+            NotificationsApi.uploadNotificationDocument(
+              presigneUrl.url,
+              items[index].sha256,
+              presigneUrl.secret,
+              items[index].fileBase64
+            )
+          );
+        });
+        await Promise.all(uploadDocumentCalls);
+      }
+      return items.map((item, index) => ({
+        digests: {
+          sha256: item.sha256
+        },
+        contentType: item.contentType,
+        ref: {
+          key: item.key,
+          versionToken: presignedUrls[index].secret
+        }
+      }));
     } catch (e) {
       return rejectWithValue(e);
     }

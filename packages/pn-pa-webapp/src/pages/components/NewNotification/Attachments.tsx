@@ -7,6 +7,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
+import { useAppDispatch } from '../../../redux/hooks';
+import { uploadNotificationDocument } from '../../../redux/newNotification/actions';
 import NewNotificationCard from './NewNotificationCard';
 
 type AttachmentBoxProps = {
@@ -20,8 +22,11 @@ type AttachmentBoxProps = {
   fieldTouched?: boolean;
   fieldErros?: string;
   onFieldTouched: (e: ChangeEvent) => void;
-  uploadAttachment: (id: string, file: any) => Promise<any>;
-  onFileUploaded: () => void;
+  onFileUploaded: (
+    id: string,
+    fileBase64?: string,
+    sha256?: { hashBase64: string; hashHex: string }
+  ) => void;
   onRemoveFile: (id: string) => void;
 };
 
@@ -36,24 +41,30 @@ const AttachmentBox = ({
   fieldTouched,
   fieldErros,
   onFieldTouched,
-  uploadAttachment,
   onFileUploaded,
   onRemoveFile,
 }: AttachmentBoxProps) => (
   <Fragment>
-    <Box display="flex" justifyContent="space-between" alignItems="center" sx={sx} data-testid="attachmentBox">
-      <Typography fontWeight={600}>
-        {title}
-      </Typography>
-      {canBeDeleted && <DeleteIcon color="action" onClick={onDelete} sx={{cursor: 'pointer'}}/>}
+    <Box
+      display="flex"
+      justifyContent="space-between"
+      alignItems="center"
+      sx={sx}
+      data-testid="attachmentBox"
+    >
+      <Typography fontWeight={600}>{title}</Typography>
+      {canBeDeleted && <DeleteIcon color="action" onClick={onDelete} sx={{ cursor: 'pointer' }} />}
     </Box>
     <FileUpload
       uploadText="Trascina qui il documento"
       accept="application/pdf"
-      uploadFn={(file) => uploadAttachment(`${id}.file`, file)}
-      onFileUploaded={onFileUploaded}
+      onFileUploaded={(_file, fileBase64, sha256) =>
+        onFileUploaded(`${id}.file`, fileBase64, sha256)
+      }
       onRemoveFile={() => onRemoveFile(`${id}.file`)}
       sx={{ marginTop: '10px' }}
+      calcBase64
+      calcSha256
     />
     <TextField
       id={`${id}.name`}
@@ -75,10 +86,22 @@ type Props = {
 };
 
 const Attachments = ({ onConfirm }: Props) => {
+  const dispatch = useAppDispatch();
+
   const validationSchema = yup.object({
     documents: yup.array().of(
       yup.object({
-        file: yup.mixed().required(),
+        file: yup
+          .object({
+            base64: yup.string().required(),
+            sha256: yup
+              .object({
+                hashBase64: yup.string().required(),
+                hashHex: yup.string().required(),
+              })
+              .required(),
+          })
+          .required(),
         name: yup.string().required("Nome dell'atto obbligatorio"),
       })
     ),
@@ -90,7 +113,7 @@ const Attachments = ({ onConfirm }: Props) => {
         {
           id: `documents.0`,
           idx: 0,
-          file: '',
+          file: { base64: '', sha256: { hashBase64: '', hashHex: '' } },
           name: '',
         },
       ],
@@ -99,9 +122,21 @@ const Attachments = ({ onConfirm }: Props) => {
     validateOnMount: true,
     onSubmit: (values) => {
       if (formik.isValid) {
-        console.log(values);
-        // dispatch(setPreliminaryInformations(values));
-        onConfirm();
+        dispatch(
+          uploadNotificationDocument(
+            values.documents.map((v) => ({
+              key: v.name,
+              fileBase64: v.file.base64,
+              sha256: v.file.sha256.hashBase64,
+              contentType: 'application/pdf',
+            }))
+          )
+        )
+          .unwrap()
+          .then(() => {
+            onConfirm();
+          })
+          .catch(() => {});
       }
     },
   });
@@ -111,13 +146,14 @@ const Attachments = ({ onConfirm }: Props) => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const uploadAttachment = async (id: string, file: any) => {
+  const fileUploadedHandler = async (
+    id: string,
+    fileBase64?: string,
+    sha256?: { hashBase64: string; hashHex: string }
+  ) => {
     await formik.setFieldTouched(id, true, false);
-    await formik.setFieldValue(id, file);
-    return Promise.resolve();
+    await formik.setFieldValue(id, { base64: fileBase64, sha256 });
   };
-
-  const fileUploadedHandler = () => {};
 
   const removeFileHandler = async (id: string) => {
     await formik.setFieldValue(id, '');
@@ -131,7 +167,7 @@ const Attachments = ({ onConfirm }: Props) => {
         {
           id: `documents.${lastDocIdx + 1}`,
           idx: lastDocIdx + 1,
-          file: '',
+          file: { base64: '', sha256: { hashBase64: '', hashHex: '' } },
           name: '',
         },
       ],
@@ -171,13 +207,17 @@ const Attachments = ({ onConfirm }: Props) => {
                 : undefined
             }
             onFieldTouched={handleChangeTouched}
-            uploadAttachment={uploadAttachment}
             onFileUploaded={fileUploadedHandler}
             onRemoveFile={removeFileHandler}
-            sx={{marginTop: i > 0 ? '30px' : '10px'}}
+            sx={{ marginTop: i > 0 ? '30px' : '10px' }}
           />
         ))}
-        <ButtonNaked onClick={addDocumentHandler} color="primary" startIcon={<AddIcon />} sx={{marginTop: '30px'}}>
+        <ButtonNaked
+          onClick={addDocumentHandler}
+          color="primary"
+          startIcon={<AddIcon />}
+          sx={{ marginTop: '30px' }}
+        >
           {formik.values.documents.length === 1
             ? 'Aggiungi un documento (per esempio, la lettera d’accompagnamento)'
             : 'Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)'}

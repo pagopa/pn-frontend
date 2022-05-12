@@ -48,20 +48,30 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to upload document', async () => {
-    const file = new Blob(['mocked content'], { type: 'text/plain' });
-    (file as any).name = 'Mocked file';
     const apiSpy = jest.spyOn(NotificationsApi, 'preloadNotificationDocument');
-    apiSpy.mockResolvedValue({ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' });
+    apiSpy.mockResolvedValue([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
+    const nextApiSpy = jest.spyOn(NotificationsApi, 'uploadNotificationDocument');
+    nextApiSpy.mockResolvedValue(void 0);
     const action = await store.dispatch(
-      uploadNotificationDocument({
+      uploadNotificationDocument([{
         key: 'mocked-key',
         contentType: 'text/plain',
-        file,
-      })
+        fileBase64: 'mocked-fileBase64',
+        sha256: 'mocked-sha256'
+      }])
     );
     const payload = action.payload;
     expect(action.type).toBe('uploadNotificationDocument/fulfilled');
-    expect(payload).toEqual(void 0);
+    expect(payload).toEqual([{
+      digests: {
+        sha256: 'mocked-sha256'
+      },
+      contentType: 'text/plain',
+      ref: {
+        key: 'mocked-key',
+        versionToken: 'mocked-secret'
+      }
+    }]);
   });
 
   it('Should be able to reset state', () => {

@@ -4,7 +4,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationFe, PaymentModel } from '../../models/newNotification';
-import { resetNewNotificationState, setPreliminaryInformations } from './actions';
+import { resetNewNotificationState, setPreliminaryInformations, uploadNotificationDocument } from './actions';
 
 const initialState = {
   loading: false,
@@ -28,6 +28,9 @@ const newNotificationSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(setPreliminaryInformations, (state, action) => {
       state.notification = {...state.notification, ...action.payload};
+    });
+    builder.addCase(uploadNotificationDocument.fulfilled, (state, action) => {
+      state.notification = {...state.notification, documents: action.payload};
     });
     builder.addCase(resetNewNotificationState, () => initialState);
   },
