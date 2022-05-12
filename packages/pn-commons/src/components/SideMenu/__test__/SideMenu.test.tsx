@@ -1,7 +1,7 @@
 import { fireEvent, screen, waitFor, within } from "@testing-library/react";
 
 import { render } from "../../../test-utils";
-import * as hooks from "../../../hooks/IsMobile.hook";
+import * as hooks from "../../../hooks/IsMobile";
 import SideMenu from "../SideMenu";
 import { sideMenuItems } from "./test-utils";
 
