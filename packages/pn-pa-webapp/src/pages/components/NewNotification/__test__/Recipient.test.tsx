@@ -22,7 +22,7 @@ describe('Recipient Component', () => {
 
   it('renders Recipient', () => {
     // render component
-    const result = render(<Recipient />);
+    const result = render(<Recipient onConfirm={() => {}} />);
     expect(result?.container).toHaveTextContent(/Destinatario/i);
     expect(result?.container).toHaveTextContent(/Soggetto giuridico*/i);
     expect(result?.container).toHaveTextContent(/Persona fisica/i);
@@ -35,7 +35,7 @@ describe('Recipient Component', () => {
   });
 
   it('renders the second card, then deletes it', async () => {
-    const result = render(<Recipient />);
+    const result = render(<Recipient onConfirm={() => {}} />);
     expect(result?.container).not.toHaveTextContent(/Destinatario 1/i);
     expect(result?.container).not.toHaveTextContent(/Destinatario 2/i);
     const addButton = result.queryByText('Aggiungi un destinatario');
@@ -59,7 +59,7 @@ describe('Recipient Component', () => {
   it('tests the form inputs and submit function', async () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
 
-    const result = render(<Recipient />);
+    const result = render(<Recipient onConfirm={() => {}} />);
     const form = result.container.querySelector('form') as HTMLFormElement;
 
     await testInput(form!, `recipients[0].firstName`, formRecipients[0].firstName);
@@ -83,7 +83,7 @@ describe('Recipient Component', () => {
   });
 
   it('shows the digital domicile form and the physical address form', async () => {
-    const result = render(<Recipient />);
+    const result = render(<Recipient onConfirm={() => {}} />);
 
     const digitalDomicileCheckbox = result.getByTestId('DigitalDomicileCheckbox');
     const physicalAddressCheckbox = result.getByTestId('PhysicalAddressCheckbox');

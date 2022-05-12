@@ -86,7 +86,7 @@ const NewNotification = () => {
         {activeStep === 0 && (
           <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
         )}
-        {activeStep === 1 && <Recipient />}
+        {activeStep === 1 && <Recipient onConfirm={goToNextStep} />}
         {activeStep === 2 && <Attachments />}
         {activeStep === 3 && <PaymentMethods />}
       </Grid>

@@ -44,11 +44,15 @@ const singleRecipient = {
   showPhysicalAddress: false,
 };
 
-const Recipient = () => {
+type Props = {
+  onConfirm: () => void;
+};
+
+const Recipient = ({ onConfirm }: Props) => {
   const dispatch = useAppDispatch();
 
   const initialValues = {
-    recipients: [singleRecipient],
+    recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }],
   };
 
   const validationSchema = yup.object({
@@ -93,8 +97,17 @@ const Recipient = () => {
     ),
   });
 
+  const handleAddRecipient = (values: FormikValues, setFieldValue: any) => {
+    const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx as number;
+    setFieldValue('recipients', [
+      ...values.recipients,
+      { ...singleRecipient, idx: lastRecipientIdx + 1, id: `recipient.${lastRecipientIdx + 1}` },
+    ]);
+  };
+
   const handleSubmit = (values: FormikValues) => {
     dispatch(saveRecipients(values));
+    onConfirm();
   };
 
   return (
@@ -104,18 +117,13 @@ const Recipient = () => {
       onSubmit={(values) => handleSubmit(values)}
       validateOnBlur={false}
     >
-      {({ values, setFieldValue, touched, handleBlur, errors }) => (
+      {({ values, setFieldValue, touched, handleBlur, errors, isValid }) => (
         <>
           <Form>
-            <NewNotificationCard
-              noPaper
-              isContinueDisabled={
-                Object.keys(touched).length === 0 || Object.keys(errors).length > 0
-              }
-            >
-              {[...Array(values.recipients.length)].map((_recipient, index) => (
+            <NewNotificationCard noPaper isContinueDisabled={!isValid}>
+              {values.recipients.map((recipient, index) => (
                 <Paper
-                  key={`recipient.${index}`}
+                  key={recipient.id}
                   sx={{ padding: '24px', marginTop: '40px' }}
                   className="paperContainer"
                 >
@@ -134,7 +142,7 @@ const Recipient = () => {
                         onClick={() => {
                           setFieldValue(
                             'recipients',
-                            values.recipients.filter((_, index) => index !== index)
+                            values.recipients.filter((_, j) => index !== j)
                           );
                         }}
                       />
@@ -308,7 +316,7 @@ const Recipient = () => {
                           <ButtonNaked
                             startIcon={<Add />}
                             onClick={() => {
-                              setFieldValue('recipients', [...values.recipients, singleRecipient]);
+                              handleAddRecipient(values, setFieldValue);
                             }}
                             color="primary"
                             size="large"
