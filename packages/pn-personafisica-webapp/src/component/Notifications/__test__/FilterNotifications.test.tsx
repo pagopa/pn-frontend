@@ -3,7 +3,7 @@ import moment from 'moment';
 import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
 function formatDate(date: Date): string {
@@ -188,5 +188,14 @@ describe('Filter Notifications Table Component', () => {
       },
       type: 'setNotificationFilters',
     });
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 });

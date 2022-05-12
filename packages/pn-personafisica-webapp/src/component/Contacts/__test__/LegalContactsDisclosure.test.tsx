@@ -1,4 +1,4 @@
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import LegalContactsDisclosure from "../LegalContactsDisclosure";
 
 jest.mock('react-i18next', () => ({
@@ -19,5 +19,11 @@ describe('LegalContactsDisclosure Component', () => {
     expect(result.container).toHaveTextContent(/legal-contacts.save-money/i);
     expect(result.container).toHaveTextContent(/legal-contacts.avoid-waste/i);
     expect(result.container).toHaveTextContent(/legal-contacts.fast-notification/i);
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    const { container } = render(<LegalContactsDisclosure />);
+    const result = await axe(container);
+    expect(result).toHaveNoViolations();
   });
 });

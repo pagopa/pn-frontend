@@ -8,7 +8,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/contact/actions';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
@@ -356,5 +356,14 @@ describe('SpecialContacts Component', () => {
       2
     );
     await testContactAddition(form!, 's_mail', 'mail@valida.mail', mockDispatchFn, mockActionFn, CourtesyChannelType.EMAIL);
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 });

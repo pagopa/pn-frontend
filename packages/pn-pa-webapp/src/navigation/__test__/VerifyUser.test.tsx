@@ -4,7 +4,7 @@ import { Dispatch } from '@reduxjs/toolkit';
 
 import * as actions from '../../redux/auth/actions';
 import { UserRole } from '../../models/user';
-import { render } from '../../__test__/test-utils';
+import { render, axe } from '../../__test__/test-utils';
 import VerifyUser from '../VerifyUser';
 
 const mockNavigateFn = jest.fn();
@@ -45,12 +45,15 @@ describe('VerifyUser Component', () => {
     const mockDispatchFn = jest.fn(() => Promise.resolve()) as Dispatch<any>;
     useDispatchSpy.mockReturnValue(mockDispatchFn);
     // render component
-    render(<VerifyUser />);
+    const { container } = render(<VerifyUser />);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-hash');
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
-    })
+    });
+
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 });

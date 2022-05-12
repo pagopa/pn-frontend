@@ -1,5 +1,7 @@
+import { fail } from 'assert';
 import * as redux from 'react-redux';
-import { act, render, screen } from "@testing-library/react";
+import { act, screen, RenderResult } from "@testing-library/react";
+import { render, axe } from "../../../__test__/test-utils";
 import CourtesyContactsList from "../CourtesyContactsList";
 import * as hooks from '../../../redux/hooks';
 import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
@@ -36,6 +38,8 @@ const mockedStore: Array<DigitalAddress> = [{
 ];
 
 describe('CourtesyContactsList Component', () => {
+  // eslint-disable-next-line functional/no-let
+  let result: RenderResult | undefined;
   const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
   const mockDispatchFn = jest.fn(() => ({
     unwrap: () => Promise.resolve(),
@@ -72,6 +76,7 @@ describe('CourtesyContactsList Component', () => {
     expect(buttons[1].textContent).toMatch('courtesy-contacts.email-add');
   });
 
+
   it('renders correctly with data in store', async () => {
     mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce(mockedStore);
     await act(async () => {
@@ -93,5 +98,41 @@ describe('CourtesyContactsList Component', () => {
     expect(buttons[1]).toBeEnabled();
     expect(buttons[0].textContent).toMatch('button.modifica');
     expect(buttons[1].textContent).toMatch('button.rimuovi');
+  });
+
+  it('does not have basic accessibility issues (empty store)', async () => {
+    mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce([]);
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <CourtesyContactsList recipientId="mock-recipient" contacts={[]} />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+
+    if(result){
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
+  });
+
+  it('does not have basic accessibility issues (data in store)', async () => {
+    mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce(mockedStore);
+    await act(async () => {
+      result = render(
+        <DigitalContactsCodeVerificationProvider>
+          <CourtesyContactsList recipientId="mock-recipient" contacts={mockedStore} />
+        </DigitalContactsCodeVerificationProvider>
+      );
+    });
+
+    if(result){
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 });

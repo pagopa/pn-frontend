@@ -1,9 +1,12 @@
 import * as redux from 'react-redux';
 
 import { axe, render } from "../../__test__/test-utils";
+import { fireEvent, screen } from '@testing-library/react';
+import { render } from '../../__test__/test-utils';
 import * as hooks from '../../redux/hooks';
 import * as actions from '../../redux/contact/actions';
-import Contacts from "../Contacts.page";
+import Contacts from '../Contacts.page';
+import { PROFILO } from '../../navigation/routes.const';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -17,7 +20,6 @@ jest.mock('../../component/Contacts/InsertLegalContact', () => () => <div>Insert
 jest.mock('../../component/Contacts/CourtesyContacts', () => () => <div>CourtesyContacts</div>);
 
 describe('Contacts page', () => {
-
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
   // eslint-disable-next-line functional/no-let
@@ -40,12 +42,10 @@ describe('Contacts page', () => {
   });
 
   it('renders Contacts (no contacts)', () => {
-    appSelectorSpy
-      .mockReturnValueOnce('mocked-recipientId')
-      .mockReturnValueOnce({
-        legal: [],
-        courtesy: []
-      });
+    appSelectorSpy.mockReturnValueOnce('mocked-recipientId').mockReturnValueOnce({
+      legal: [],
+      courtesy: [],
+    });
     // render component
     const result = render(<Contacts />);
     expect(result.container).toHaveTextContent(/title/i);

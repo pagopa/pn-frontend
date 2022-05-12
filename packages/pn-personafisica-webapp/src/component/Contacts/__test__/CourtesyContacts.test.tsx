@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { render, axe } from "../../../__test__/test-utils";
 import CourtesyContacts from "../CourtesyContacts";
 
 jest.mock('react-i18next', () => ({
@@ -29,5 +30,11 @@ describe('CourtesyContacts Component', () => {
     expect(courtesyContactsListComponents).toHaveLength(1);
     const checkbox = screen.getByRole('checkbox', {name: /courtesy-contacts.io-enable/});
     expect(checkbox).toBeDisabled();
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    const { container } = render(<CourtesyContacts recipientId="mock-recipient" contacts={[]}/>);
+    const result = await axe(container);
+    expect(result).toHaveNoViolations();
   });
 });

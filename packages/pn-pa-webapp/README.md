@@ -16,3 +16,15 @@ PORT=443
 ```
 
 Ora puoi lanciare `yarn start` e avverrà il redirect dall'url di riferimento all'app servita su localhost.
+
+## Variabili d'ambiente (sviluppo)
+
+E' necessario aggiungere nel proprio file .env.local le seguenti variabili d'ambiente:
+
+```
+REACT_APP_URL_SELFCARE_LOGIN
+REACT_APP_URL_SELFCARE_BASE
+REACT_APP_URL_API
+REACT_APP_PAGOPA_HELP_EMAIL = email di assistenza, si puo' usare una email fittizia in sviluppo
+REACT_APP_DISABLE_INACTIVITY_HANDLER = true se si vuole disabilitare la gestione dell'inattivita' utente, falsa altrimenti
+```
