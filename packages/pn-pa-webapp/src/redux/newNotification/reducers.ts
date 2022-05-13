@@ -1,10 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {
-  PhysicalCommunicationType,
-} from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationFe, PaymentModel } from '../../models/newNotification';
-import { resetNewNotificationState, setCancelledIun, setPreliminaryInformations, uploadNotificationDocument } from './actions';
+import { formatNotificationRecipients } from '../../utils/notification.utility';
+import { resetNewNotificationState, setCancelledIun, setPreliminaryInformations, uploadNotificationDocument, saveRecipients } from './actions';
 
 const initialState = {
   loading: false,
@@ -36,6 +35,9 @@ const newNotificationSlice = createSlice({
       state.notification = {...state.notification, documents: action.payload};
     });
     builder.addCase(resetNewNotificationState, () => initialState);
+    builder.addCase(saveRecipients, (state, action) => {
+      state.notification.recipients = formatNotificationRecipients(action.payload.recipients);
+    });
   },
 });
 

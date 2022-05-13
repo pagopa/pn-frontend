@@ -1,4 +1,5 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { FormikValues } from 'formik';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
@@ -58,4 +59,7 @@ export const uploadNotificationDocument = createAsyncThunk<
   }
 );
 
+export const saveRecipients = createAction<FormikValues>('saveRecipients');
+
 export const resetNewNotificationState = createAction<void>('resetNewNotificationState');
+
