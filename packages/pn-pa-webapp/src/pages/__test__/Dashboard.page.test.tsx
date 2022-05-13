@@ -137,5 +137,5 @@ describe('Dashboard Page', () => {
       const results = await axe(result.container);
       expect(results).toHaveNoViolations();
     }
-  });
+  }, 15000);
 });

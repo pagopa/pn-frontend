@@ -6,10 +6,10 @@ import {
   ProductEntity,
   PartyEntity,
   JwtUser,
-  UserAction
+  UserAction,
 } from '@pagopa/mui-italia';
 
-import {pagoPALink } from '../../utils/costants';
+import { pagoPALink } from '../../utils/costants';
 
 type HeaderProps = {
   /** Assistance email for the user */
@@ -41,9 +41,8 @@ const Header = ({
   partyList,
   loggedUser,
   enableDropdown,
-  userActions
+  userActions,
 }: HeaderProps) => {
-
   const handleProductSelection = (product: ProductEntity) => {
     if (product.productUrl) {
       /* eslint-disable-next-line functional/immutable-data */
@@ -66,7 +65,11 @@ const Header = ({
         enableDropdown={enableDropdown}
         userActions={userActions}
       />
-      <HeaderProduct productsList={productsList} partyList={partyList} onSelectedProduct={handleProductSelection}/>
+      <HeaderProduct
+        productsList={productsList}
+        partyList={partyList}
+        onSelectedProduct={handleProductSelection}
+      />
     </AppBar>
   );
 };

@@ -1,6 +1,11 @@
 import { Footer as MuiFooter } from '@pagopa/mui-italia';
-
-import { companyLegalInfo, LANGUAGES, pagoPALink, postLoginLinks, preLoginLinks } from '../../utils/costants';
+import {
+  companyLegalInfo,
+  LANGUAGES,
+  pagoPALink,
+  postLoginLinks,
+  preLoginLinks,
+} from '../../utils/costants';
 
 const Footer = () => {
   return (
@@ -11,7 +16,7 @@ const Footer = () => {
       postLoginLinks={postLoginLinks}
       preLoginLinks={preLoginLinks}
       languages={LANGUAGES}
-      currentLangCode={"it"}
+      currentLangCode={'it'}
       onLanguageChanged={() => console.log('Language changed')}
       onExit={(href: string) => {
         window.open(href, '_blank');
