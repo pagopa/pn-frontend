@@ -105,7 +105,7 @@ const CodeInput = memo(
     }, [inputsRef.current.every((v) => v && !v.value)]);
 
     useImperativeHandle(ref, () => ({
-      inputsValues: inputsRef.current.map((inputElem) => inputElem.value),
+      inputsValues: inputsRef.current.map((inputElem) => inputElem?.value),
     }));
 
     return (
