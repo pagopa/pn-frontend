@@ -1,5 +1,6 @@
 {
-  "name": "selfcare-login-frontend",
+  "name": "@pagopa-pn/pn-personafisica-login",
+  "description": "Pagina di login di Piattaforma Notifiche per il cittadino",
   "version": "1.0.0",
   "private": true,
   "homepage": "/auth/",
@@ -13,6 +14,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "env-var": "^7.1.1",
     "i18next": "^21.6.14",
     "react": "^17.0.2",
     "react-app-polyfill": "^3.0.0",
@@ -27,8 +29,8 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
-    "test": "craco test -i",
-    "test:coverage": "craco test -i --coverage",
+    "test": "craco test --watchAll=false",
+    "test:coverage": "craco test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "eject": "craco eject",
     "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx ",
@@ -70,6 +72,7 @@
     "eslint-plugin-react": "^7.26.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-sonarjs": "^0.10.0",
+    "jest-sonar-reporter": "^2.0.0",
     "prettier": "^2.4.1"
   },
   "jest": {

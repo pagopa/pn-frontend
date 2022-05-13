@@ -1,5 +1,3 @@
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import Login from './pages/login/Login';
 import {
   ROUTE_LOGIN,
@@ -12,7 +10,7 @@ import { redirectToLogin } from './utils/utils';
 import ValidateSession from './pages/ValidateSession/ValidateSession';
 import Logout from './pages/logout/Logout';
 import LoginError from './pages/loginError/LoginError';
-import { storageOnSuccessOps } from './utils/storage';
+import { storageOnSuccessOps, storageTokenOps } from './utils/storage';
 
 const onLogout = () => <Logout />;
 
@@ -32,7 +30,8 @@ const onLoginRequest = () => {
 
 const handleLoginRequestOnSuccessRequest = () => {
   const onSuccess: string | null = new URLSearchParams(window.location.search).get('onSuccess');
-  trackEvent('LOGIN_INTENT', { target: onSuccess ?? 'dashboard' });
+  // mixpanel tracking event
+  // trackEvent('LOGIN_INTENT', { target: onSuccess ?? 'dashboard' });
   if (onSuccess) {
     storageOnSuccessOps.write(onSuccess);
   }

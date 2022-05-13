@@ -8,7 +8,6 @@ import Icon from '@mui/material/Icon';
 import { IconButton } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Trans, useTranslation } from 'react-i18next';
 import Layout from '../../components/Layout';
 import { IDPS } from '../../utils/IDPS';
@@ -38,17 +37,18 @@ const Login = () => {
 
   const goCIE = () => {
     storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
-    trackEvent(
-      'LOGIN_IDP_SELECTED',
-      {
-        SPID_IDP_NAME: 'CIE',
-        SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
-      },
-      () =>
-        window.location.assign(
-          `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
-        )
-    );
+    // TODO track event
+    // trackEvent(
+    //   'LOGIN_IDP_SELECTED',
+    //   {
+    //     SPID_IDP_NAME: 'CIE',
+    //     SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
+    //   },
+    //   () =>
+    //     window.location.assign(
+    //       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
+    //     )
+    // );
   };
 
   const goBackToLandingPage = () => {
@@ -59,10 +59,10 @@ const Login = () => {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
   }
 
-  const redirectPrivacyLink = () =>
-    trackEvent('LOGIN_PRIVACY', { SPID_IDP_NAME: 'LOGIN_PRIVACY' }, () =>
-      window.location.assign(ENV.URL_FILE.PRIVACY_DISCLAIMER)
-    );
+  // const redirectPrivacyLink = () =>
+  //   trackEvent('LOGIN_PRIVACY', { SPID_IDP_NAME: 'LOGIN_PRIVACY' }, () =>
+  //     window.location.assign(ENV.URL_FILE.PRIVACY_DISCLAIMER)
+  //   );
   return (
     <Layout>
       <Grid container direction="column" my={'auto'}>
@@ -209,14 +209,14 @@ const Login = () => {
                 Autenticandoti dichiari di aver letto e compreso l&apos;
                 <Link
                   sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                  onClick={redirectPrivacyLink}
+                  onClick={() => console.log('track some event')}
                 >
                   Informativa
                 </Link>
                 <br />
                 <Link
                   sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                  onClick={redirectPrivacyLink}
+                  onClick={() => console.log('track some event')}
                 >
                   Privacy
                 </Link>
@@ -224,9 +224,9 @@ const Login = () => {
                 <Link
                   sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
                   onClick={() => {
-                    trackEvent('LOGIN_TOS', { SPID_IDP_NAME: 'LOGIN_TOS' }, () =>
-                      window.location.assign(ENV.URL_FILE.TERMS_AND_CONDITIONS)
-                    );
+                    // trackEvent('LOGIN_TOS', { SPID_IDP_NAME: 'LOGIN_TOS' }, () =>
+                    //   window.location.assign(ENV.URL_FILE.TERMS_AND_CONDITIONS)
+                    // );
                   }}
                 >
                   {'Termini e condizioni d’uso'}

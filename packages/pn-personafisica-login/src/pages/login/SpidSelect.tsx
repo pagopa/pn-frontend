@@ -6,7 +6,6 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Trans, useTranslation } from 'react-i18next';
 import { IdentityProvider, IDPS } from '../../utils/IDPS';
 import SpidBig from '../../assets/spid_big.svg';
@@ -18,17 +17,17 @@ const Login = ({ onBack }: { onBack: () => void }) => {
   const { t } = useTranslation();
   const getSPID = (IDP: IdentityProvider) => {
     storageSpidSelectedOps.write(IDP.entityId);
-    trackEvent(
-      'LOGIN_IDP_SELECTED',
-      {
-        SPID_IDP_NAME: IDP.name,
-        SPID_IDP_ID: IDP.entityId,
-      },
-      () =>
-        window.location.assign(
-          `${ENV.URL_API.LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`
-        )
-    );
+    // trackEvent(
+    //   'LOGIN_IDP_SELECTED',
+    //   {
+    //     SPID_IDP_NAME: IDP.name,
+    //     SPID_IDP_ID: IDP.entityId,
+    //   },
+    //   () =>
+    //     window.location.assign(
+    //       `${ENV.URL_API.LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`
+    //     )
+    // );
   };
   const goBackToLandingPage = () => {
     window.location.assign(`${ENV.URL_FE.LANDING}`);

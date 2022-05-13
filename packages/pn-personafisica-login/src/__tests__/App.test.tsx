@@ -1,8 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import App from '../App';
 import { ROUTE_LOGIN } from '../utils/constants';
-import { storageTokenOps } from '@pagopa/selfcare-common-frontend/utils/storage';
-import { storageOnSuccessOps } from '../utils/storage';
+import { storageOnSuccessOps, storageTokenOps } from '../utils/storage';
 
 const oldWindowLocation = global.window.location;
 const mockedLocation = {

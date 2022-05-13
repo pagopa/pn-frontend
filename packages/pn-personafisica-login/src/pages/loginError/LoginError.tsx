@@ -1,12 +1,11 @@
 import { Dialog, Box, Typography } from '@mui/material';
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
 import { Trans, useTranslation } from 'react-i18next';
 import { storageSpidSelectedOps } from '../../utils/storage';
 import { redirectToLogin } from '../../utils/utils';
 
 const handleError = (queryParams: string) => {
-  const spidId = storageSpidSelectedOps.read();
-  trackEvent('LOGIN_FAILURE', { reason: queryParams, idp: spidId });
+  storageSpidSelectedOps.read();
+  // trackEvent('LOGIN_FAILURE', { reason: queryParams, idp: spidId });
   console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
 };
 

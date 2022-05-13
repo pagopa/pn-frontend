@@ -1,9 +1,12 @@
-import { trackEvent } from '@pagopa/selfcare-common-frontend/services/analyticsService';
-import { storageTokenOps, storageUserOps } from '@pagopa/selfcare-common-frontend/utils/storage';
 import { User, userFromJwtToken } from '../../models/User';
 import { ENV } from '../../utils/env';
 import { redirectToLogin } from '../../utils/utils';
-import { storageOnSuccessOps, storageSpidSelectedOps } from '../../utils/storage';
+import {
+  storageOnSuccessOps,
+  storageSpidSelectedOps,
+  storageTokenOps,
+  storageUserOps,
+} from '../../utils/storage';
 
 export const readUserFromToken = (token: string) => {
   const user: User = userFromJwtToken(token);
@@ -29,8 +32,8 @@ const LoginSuccess = () => {
   const urlToken = hash.replace('#token=', '');
 
   if (urlToken !== '' && urlToken !== undefined) {
-    const spidId = storageSpidSelectedOps.read();
-    trackEvent('LOGIN_SUCCESS', { idp: spidId });
+    storageSpidSelectedOps.read();
+    // trackEvent('LOGIN_SUCCESS', { idp: spidId });
     storageTokenOps.write(urlToken);
     readUserFromToken(urlToken);
     redirectSuccessLogin();
