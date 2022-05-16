@@ -12,7 +12,7 @@ export enum PaymentModel {
   PAGO_PA_NOTICE_F24 = 'PAGO_PA_NOTICE_F24',
 }
 
-interface NewNotificationDocument {
+export interface NewNotificationDocument {
   digests: {
     sha256: string;
   };

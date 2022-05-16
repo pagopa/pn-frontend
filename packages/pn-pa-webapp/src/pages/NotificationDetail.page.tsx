@@ -25,6 +25,7 @@ import {
   getSentNotificationLegalfact,
   resetState,
 } from '../redux/notification/actions';
+import { setCancelledIun } from '../redux/newNotification/actions';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -114,10 +115,16 @@ const NotificationDetail = () => {
     /* eslint-enable functional/immutable-data */
   };
 
+  const handleCancelNotification = () => {
+    dispatch(setCancelledIun(notification.iun));
+    navigate(routes.NUOVA_NOTIFICA);
+  };
+
   useEffect(() => {
     if (id) {
       void dispatch(getSentNotification(id));
     }
+    return () => void dispatch(resetState());
   }, []);
 
   useEffect(() => {
@@ -131,8 +138,6 @@ const NotificationDetail = () => {
       dowloadDocument(legalFactDownloadUrl);
     }
   }, [legalFactDownloadUrl]);
-
-  useEffect(() => () => void dispatch(resetState()), []);
 
   const breadcrumb = (
     <Fragment>
@@ -151,7 +156,7 @@ const NotificationDetail = () => {
       </Breadcrumbs>
       <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
-        <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(routes.NUOVA_NOTIFICA)} data-testid="cancelNotificationBtn">
+        <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={handleCancelNotification} data-testid="cancelNotificationBtn">
           Annulla Notifica
         </Button>
       )}

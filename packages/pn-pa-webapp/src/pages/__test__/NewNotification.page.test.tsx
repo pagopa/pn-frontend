@@ -98,7 +98,7 @@ describe('NewNotification Page', () => {
 
   test('tests step navigation', async () => {
     await testNavigation('PreliminaryInformations', 'Recipient');
-    // await testNavigation('Recipient', 'Attachments');
-    // await testNavigation('Attachments', 'PaymentMethods');
+    await testNavigation('Recipient', 'Attachments');
+    await testNavigation('Attachments', 'PaymentMethods');
   });
 });

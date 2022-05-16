@@ -1,17 +1,41 @@
-import { useMemo, useReducer, Fragment, useRef, ChangeEvent, DragEvent, useEffect } from 'react';
-import { Alert, Box, Input, LinearProgress, Typography } from '@mui/material';
+import {
+  useMemo,
+  useReducer,
+  Fragment,
+  useRef,
+  ChangeEvent,
+  DragEvent,
+  useEffect,
+  ReactNode,
+} from 'react';
+import { Alert, Box, IconButton, Input, LinearProgress, SxProps, Typography } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+
+import { calcBase64String, calcSha256String } from '../utils/file.utility';
+import CustomTooltip from './CustomTooltip';
 
 type Props = {
   uploadText: string;
   vertical?: boolean;
   accept: string;
-  uploadFn: (file: any) => Promise<any>;
-  onFileUploaded: (data: any) => void;
+  uploadFn?: (
+    file: any,
+    fileBase64?: string,
+    sha256?: { hashBase64: string; hashHex: string }
+  ) => Promise<void>;
+  onFileUploaded: (
+    file: any,
+    fileBase64?: string,
+    sha256?: { hashBase64: string; hashHex: string }
+  ) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
+  sx?: SxProps;
+  calcSha256?: boolean;
+  calcBase64?: boolean;
 };
 
 enum UploadStatus {
@@ -25,6 +49,7 @@ type UploadState = {
   file: any;
   status: UploadStatus;
   error: string;
+  sha256: string;
 };
 
 const reducer = (state: UploadState, action: { type: string; payload?: any }) => {
@@ -34,25 +59,38 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
     case 'FILE_TYPE_NOT_SUPPORTED':
       return {
         ...state,
-        file: action.payload,
         error: 'Estensione file non supportata. Riprovare con un altro file.',
       };
     case 'UPLOAD_IN_ERROR':
       return {
         ...state,
-        file: action.payload,
+        file: null,
+        status: UploadStatus.TO_UPLOAD,
         error: 'Si è verificato un errore durante il caricamento del file. Si prega di riprovare.',
+        sha256: '',
       };
     case 'FILE_UPLOADED':
-      return { ...state, status: UploadStatus.UPLOADED, error: '' };
+      return { ...state, status: UploadStatus.UPLOADED, error: '', sha256: action.payload };
     case 'REMOVE_FILE':
-      return { ...state, status: UploadStatus.TO_UPLOAD, file: null };
+      return { ...state, status: UploadStatus.TO_UPLOAD, file: null, sha256: '' };
     case 'IS_SENDING':
       return { ...state, status: UploadStatus.SENDING };
     default:
       return state;
   }
 };
+
+const OrientedBox = ({ vertical, children }: { vertical: boolean; children: ReactNode }) => (
+  <Box
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    flexDirection={vertical ? 'column' : 'row'}
+    margin="auto"
+  >
+    {children}
+  </Box>
+);
 
 /**
  * This component allows file upload
@@ -63,13 +101,28 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
  * @param onFileUploaded function called after file upload
  * @param onRemoveFile function called after file deletion
  * @param isSending flag for sending status
+ * @param sx style to be addded to the component
+ * @param calcSha256 flag to calculate the sha256
+ * @param calcBase64 flag to calculate the base64 version of the file
  * @returns
  */
-const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUploaded, onRemoveFile, isSending }: Props) => {
+const FileUpload = ({
+  uploadText,
+  vertical = false,
+  accept,
+  uploadFn,
+  onFileUploaded,
+  onRemoveFile,
+  isSending,
+  sx,
+  calcSha256 = false,
+  calcBase64 = false,
+}: Props) => {
   const [data, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
     file: null,
     error: '',
+    sha256: '',
   });
   const uploadInputRef = useRef();
 
@@ -99,17 +152,20 @@ const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUplo
     (uploadInputRef.current as any).click();
   };
 
-  const uploadFile = (file: any) => {
+  const uploadFile = async (file: any) => {
     if (file && file.type && accept.indexOf(file.type) > -1) {
       dispatch({ type: 'ADD_FILE', payload: file });
-      uploadFn(file)
-        .then((res: any) => {
-          dispatch({ type: 'FILE_UPLOADED' });
-          onFileUploaded(res);
-        })
-        .catch(() => {
-          dispatch({ type: 'UPLOAD_IN_ERROR' });
-        });
+      try {
+        const fileBase64 = calcBase64 ? await calcBase64String(file) : undefined;
+        const sha256 = calcSha256 ? await calcSha256String(file) : undefined;
+        if (uploadFn) {
+          await uploadFn(file, fileBase64, sha256);
+        }
+        dispatch({ type: 'FILE_UPLOADED', payload: sha256?.hashHex });
+        onFileUploaded(file, fileBase64, sha256);
+      } catch {
+        dispatch({ type: 'UPLOAD_IN_ERROR' });
+      }
     } else {
       dispatch({ type: 'FILE_TYPE_NOT_SUPPORTED' });
     }
@@ -120,7 +176,7 @@ const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUplo
   };
 
   const removeFileHandler = () => {
-    dispatch({type: 'REMOVE_FILE'});
+    dispatch({ type: 'REMOVE_FILE' });
     onRemoveFile();
   };
 
@@ -151,63 +207,64 @@ const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUplo
     if (data.status !== UploadStatus.UPLOADED && data.status !== UploadStatus.SENDING) {
       return;
     }
-    dispatch(isSending ? {type: 'IS_SENDING'} : {type: 'FILE_UPLOADED'})
-  }, [isSending])
+    dispatch(isSending ? { type: 'IS_SENDING' } : { type: 'FILE_UPLOADED' });
+  }, [isSending]);
 
   return (
     <Box
-      sx={{ ...containerStyle, padding: '24px', borderRadius: '10px' }}
+      sx={{ ...containerStyle, padding: '24px', borderRadius: '10px', ...sx }}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       component="div"
     >
-      <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        flexDirection={vertical ? 'column' : 'row'}
-        margin="auto"
-      >
-        {data.status === UploadStatus.TO_UPLOAD && (
-          <Fragment>
-            <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
-            <Typography display="inline" variant="body2">
-              {uploadText}&nbsp;oppure&nbsp;
-            </Typography>
-            <Typography
-              display="inline"
-              variant="body2"
-              color="primary"
-              sx={{ cursor: 'pointer' }}
-              onClick={chooseFileHandler}
-              data-testid="loadFromPc"
-            >
-              selezionalo dal tuo computer
-            </Typography>
-            <Input
-              type="file"
-              sx={{ display: 'none' }}
-              inputRef={uploadInputRef}
-              inputProps={{ accept }}
-              onChange={uploadFileHandler}
-              data-testid="fileInput"
-            />
-          </Fragment>
-        )}
-        {(data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) && (
-          <Fragment>
-            <Typography display="inline" variant="body2">
-              {data.status === UploadStatus.IN_PROGRESS ? 'Caricamento in corso...' : 'Invio in corso...'}
-            </Typography>
-            <Typography sx={{ margin: '0 20px', width: '80%' }}>
-              <LinearProgress />
-            </Typography>
-          </Fragment>
-        )}
-        {data.status === UploadStatus.UPLOADED && (
-          <Box display="flex" justifyContent="space-between" alignItems="center" sx={{width: '100%'}}>
+      {data.status === UploadStatus.TO_UPLOAD && (
+        <OrientedBox vertical={vertical}>
+          <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
+          <Typography display="inline" variant="body2">
+            {uploadText}&nbsp;oppure&nbsp;
+          </Typography>
+          <Typography
+            display="inline"
+            variant="body2"
+            color="primary"
+            sx={{ cursor: 'pointer' }}
+            onClick={chooseFileHandler}
+            data-testid="loadFromPc"
+          >
+            selezionalo dal tuo computer
+          </Typography>
+          <Input
+            type="file"
+            sx={{ display: 'none' }}
+            inputRef={uploadInputRef}
+            inputProps={{ accept }}
+            onChange={uploadFileHandler}
+            data-testid="fileInput"
+          />
+        </OrientedBox>
+      )}
+      {(data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) && (
+        <OrientedBox vertical={vertical}>
+          <Typography display="inline" variant="body2">
+            {data.status === UploadStatus.IN_PROGRESS
+              ? 'Caricamento in corso...'
+              : 'Invio in corso...'}
+          </Typography>
+          <Typography sx={{ margin: '0 20px', width: 'calc(100% - 200px)' }}>
+            <LinearProgress />
+          </Typography>
+        </OrientedBox>
+      )}
+      {data.status === UploadStatus.UPLOADED && (
+        <Fragment>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{ width: '100%' }}
+          >
             <Box display="flex" justifyContent="center" alignItems="center">
               <AttachFileIcon color="primary" />
               <Typography color="primary">{data.file.name}</Typography>
@@ -215,10 +272,29 @@ const FileUpload = ({ uploadText, vertical = false, accept, uploadFn, onFileUplo
                 {(data.file.size / 1024).toFixed(2)}&nbsp;KB
               </Typography>
             </Box>
-            <CloseIcon sx={{ cursor: 'pointer' }} onClick={removeFileHandler}/>
+            <CloseIcon sx={{ cursor: 'pointer' }} onClick={removeFileHandler} />
           </Box>
-        )}
-      </Box>
+          {data.sha256 && (
+            <Box sx={{ marginTop: '20px' }}>
+              <Typography display="inline" fontWeight={700}>
+                Codice hash
+              </Typography>
+              <Typography sx={{ marginLeft: '10px' }} variant="caption" display="inline">
+                {data.sha256}
+              </Typography>
+              <CustomTooltip
+                openOnClick
+                tooltipContent="Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file"
+                sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '10px' }}
+              >
+                <IconButton>
+                  <InfoOutlinedIcon color="action" />
+                </IconButton>
+              </CustomTooltip>
+            </Box>
+          )}
+        </Fragment>
+      )}
       {data.error && (
         <Alert severity="error" sx={{ marginTop: '10px' }}>
           {data.error}

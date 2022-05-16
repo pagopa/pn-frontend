@@ -5,9 +5,9 @@ import {
   LegalFactId,
   NotificationDetail,
   formatFiscalCode,
-  parseNotificationDetail
+  parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
-import { apiClient } from '../axios';
+import { apiClient, externalClient } from '../axios';
 
 export const NotificationsApi = {
   /**
@@ -107,4 +107,55 @@ export const NotificationsApi = {
         }
         return { url: '' };
       }),
+  /**
+   * Preload notification document
+   * @param  {string} key
+   * @param  {string} contentType
+   * @returns Promise
+   */
+  preloadNotificationDocument: (
+    items: Array<{ key: string; contentType: string }>
+  ): Promise<Array<{ url: string; secret: string; httpMethod: string }>> =>
+    apiClient
+      .post<{ items: Array<{ url: string; secret: string; httpMethod: string }> }>(
+        `/delivery/attachments/preload`,
+        {
+          items,
+        }
+      )
+      .then((response) => {
+        if (response.data && response.data.items) {
+          return response.data.items;
+        }
+        return [];
+      }),
+  /**
+   * Upload notification document
+   * @param  {string} url
+   * @param  {string} sha256
+   * @param  {string} secret
+   * @param  {string} fileBase64
+   * @returns Promise
+   */
+  uploadNotificationDocument: (
+    url: string,
+    sha256: string,
+    secret: string,
+    fileBase64: string
+  ): Promise<void> =>
+    externalClient
+      .put<void>(
+        url,
+        {
+          'upload-file': fileBase64,
+        },
+        {
+          headers: {
+            'Content-type': 'application/pdf',
+            'x-amz-checksum-sha256': sha256,
+            'x-amz-meta-secret': secret,
+          },
+        }
+      )
+      .then(() => void 0),
 };

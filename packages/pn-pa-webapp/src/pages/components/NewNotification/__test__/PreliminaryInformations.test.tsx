@@ -26,7 +26,7 @@ async function testRadio(form: HTMLFormElement, dataTestId: string, index: numbe
 }
 
 describe('PreliminaryInformations Component', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
   let mockDispatchFn: jest.Mock;
   const confirmHandlerMk = jest.fn();
 
@@ -52,8 +52,8 @@ describe('PreliminaryInformations Component', () => {
   });
 
   it('renders PreliminaryInformations', () => {
-    expect(result?.container).toHaveTextContent(/Informazioni preliminari/i);
-    const form = result?.container.querySelector('form');
+    expect(result.container).toHaveTextContent(/Informazioni preliminari/i);
+    const form = result.container.querySelector('form');
     testFormElements(form!, 'paProtocolNumber', 'Numero di protocollo *');
     testFormElements(form!, 'subject', 'Oggetto della notifica *');
     testFormElements(form!, 'abstract', 'Descrizione');
@@ -70,7 +70,7 @@ describe('PreliminaryInformations Component', () => {
   });
 
   it('changes form values and clicks on confirm', async () => {
-    const form = result?.container.querySelector('form');
+    const form = result.container.querySelector('form');
     await testInput(form!, 'paProtocolNumber', 'mocked-NotificationId');
     await testInput(form!, 'subject', 'mocked-Subject');
     await testSelect(form!, 'group', [{label: 'Group1', value: 'Group1'}, {label: 'Group2', value: 'Group2'}], 1);
