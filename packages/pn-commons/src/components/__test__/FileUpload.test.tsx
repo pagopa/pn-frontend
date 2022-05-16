@@ -20,7 +20,7 @@ describe('FileUpload Component', () => {
     fireEvent.change(input!, { target: { files: [file] } });
     await waitFor(() => {
       expect(mockUploadFn).toBeCalledTimes(1);
-      expect(mockUploadFn).toBeCalledWith(file);
+      expect(mockUploadFn).toBeCalledWith(file, undefined, undefined);
       expect(result.container).toHaveTextContent(/Caricamento/i);
     });
   };
@@ -59,8 +59,7 @@ describe('FileUpload Component', () => {
     const fileInput = result.queryByTestId('fileInput');
     expect(fileInput).toBeInTheDocument();
     const input = fileInput?.querySelector('input');
-    const file = new Blob(['mocked content'], { type: 'application/pdf' });
-    fireEvent.change(input!, { target: { files: [file] } });
+    fireEvent.change(input!, { target: { files: [new Blob(['mocked content'], { type: 'application/pdf' })] } });
     await waitFor(() => {
       expect(mockUploadFn).not.toBeCalled();
       expect(result.container).toHaveTextContent(/Mocked upload text/i);

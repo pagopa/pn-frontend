@@ -13,8 +13,8 @@
   "menu": {
     "notifiche": "Notifiche",
     "deleghe": "Deleghe",
-    "profilo": "Profilo",
-    "contacts": "I tuoi dati"
+    "profilo": "I tuoi dati",
+    "contacts": "I tuoi recapiti"
   },
   "header": {
     "logout": "Esci"

@@ -10,7 +10,7 @@ import {
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
-import { apiClient } from '../../axios';
+import { apiClient, externalClient } from '../../axios';
 import { NotificationsApi } from '../Notifications.api';
 
 describe('Notifications api tests', () => {
@@ -63,6 +63,40 @@ describe('Notifications api tests', () => {
       .reply(200, undefined);
     const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('preloadNotificationDocument', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock
+      .onPost(`/delivery/attachments/preload`, {
+        items: [{ key: 'mocked-key', contentType: 'text/plain' }],
+      })
+      .reply(200, { items: [{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }] });
+    const res = await NotificationsApi.preloadNotificationDocument([
+      { key: 'mocked-key', contentType: 'text/plain' },
+    ]);
+    expect(res).toStrictEqual([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
+    mock.reset();
+    mock.restore();
+  });
+
+  it('uploadNotificationDocument', async () => {
+    const mock = new MockAdapter(externalClient);
+    mock
+      .onPut(
+        `https://mocked-url.com`,
+        { 'upload-file': 'mocked-fileBase64' }
+      )
+      .reply(200, void 0);
+    const res = await NotificationsApi.uploadNotificationDocument(
+      'https://mocked-url.com',
+      'mocked-sha256',
+      'mocked-secret',
+      'mocked-fileBase64'
+    );
+    expect(res).toStrictEqual(void 0);
     mock.reset();
     mock.restore();
   });

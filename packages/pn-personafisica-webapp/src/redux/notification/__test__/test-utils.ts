@@ -19,6 +19,7 @@ export const notificationFromBe: NotificationDetail = {
   sentAt: '2022-02-21T10:19:33.440Z',
   cancelledIun: 'mocked-cancelledIun',
   cancelledByIun: 'mocked-cancelledByIun',
+  documentsAvailable: true,
   recipients: [
     {
       recipientType: RecipientType.PF,
@@ -36,8 +37,7 @@ export const notificationFromBe: NotificationDetail = {
         municipality: 'Comune',
         province: 'PROV',
         foreignState: '',
-      },
-      token: 'mocked-token',
+      }
     },
   ],
   documents: [
@@ -110,7 +110,6 @@ export const notificationFromBe: NotificationDetail = {
               province: '',
               foreignState: '',
             },
-            token: '',
           },
         ],
         documentsDigests: [

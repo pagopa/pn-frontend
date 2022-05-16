@@ -7,42 +7,58 @@ import NotificationDetailDocuments from '../NotificationDetailDocuments';
 const documents: Array<NotificationDetailDocument> = [
   {
     digests: {
-      sha256: 'mocked-sha'
+      sha256: 'mocked-sha',
     },
     contentType: 'mocked-contentType',
-    title: 'mocked-doc-title'
-  }
-]
+    title: 'mocked-doc-title',
+  },
+];
 
 describe('NotificationDetailDocuments Component', () => {
-  let result: RenderResult | undefined;
+  let resultWithDownloadableFiles: RenderResult | undefined;
+  let resultNotDownloadableFiles: RenderResult | undefined;
   let mockClickFn: jest.Mock;
 
   beforeEach(() => {
     mockClickFn = jest.fn();
     // render component
-    result = render(<NotificationDetailDocuments title="Mocked title" documents={documents} clickHandler={mockClickFn}/>);
+    resultWithDownloadableFiles = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={documents}
+        clickHandler={mockClickFn}
+        documentsAvailable
+      />
+    );
+    resultNotDownloadableFiles = render(
+      <NotificationDetailDocuments
+        title="Mocked title"
+        documents={documents}
+        clickHandler={mockClickFn}
+        documentsAvailable={false}
+        downloadFilesMessage="mocked"
+      />
+    );
   });
-
   afterEach(() => {
-    result = undefined;
+    resultWithDownloadableFiles = undefined;
+    resultNotDownloadableFiles = undefined;
     jest.clearAllMocks();
   });
 
   it('renders NotificationDetailDocuments', () => {
-    expect(result?.container).toHaveTextContent(/Mocked title/i);
+    expect(resultWithDownloadableFiles?.container).toHaveTextContent(/Mocked title/i);
     // expect(result?.container).toHaveTextContent(/Scarica tutti gli Atti/i);
-    const documentsButtons = result?.getAllByTestId('documentButton');
+    const documentsButtons = resultWithDownloadableFiles?.getAllByTestId('documentButton');
     expect(documentsButtons).toHaveLength(documents.length);
   });
 
   it('test click on document button', async () => {
-    const documentsButtons = result?.getAllByTestId('documentButton');
+    const documentsButtons = resultWithDownloadableFiles?.getAllByTestId('documentButton');
     fireEvent.click(documentsButtons![0]);
     await waitFor(() => {
       expect(mockClickFn).toBeCalledTimes(1);
       expect(mockClickFn).toBeCalledWith(0);
     });
   });
-
 });

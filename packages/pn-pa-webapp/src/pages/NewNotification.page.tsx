@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -6,8 +6,9 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { BreadcrumbLink, TitleBox, Prompt, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
-import { useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { resetNewNotificationState } from '../redux/newNotification/actions';
 import * as routes from '../navigation/routes.const';
 import PreliminaryInformations from './components/NewNotification/PreliminaryInformations';
 import Recipient from './components/NewNotification/Recipient';
@@ -36,25 +37,34 @@ const NewNotification = () => {
   const [activeStep, setActiveStep] = useState(0);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const notification = useAppSelector((state: RootState) => state.newNotificationState.notification);
+  const notification = useAppSelector(
+    (state: RootState) => state.newNotificationState.notification
+  );
+  const dispatch = useAppDispatch();
 
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
   };
 
+  useEffect(() => () => void dispatch(resetNewNotificationState()), []);
+
   return (
     <Prompt title="Vuoi davvero uscire?" message="Se esci, i dati inseriti andranno persi.">
       <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
         <Grid item xs={12} lg={8}>
-          <Grid container spacing={1} sx={{marginTop: '10px'}}>
+          <Grid container spacing={1} sx={{ marginTop: '10px' }}>
             <Grid item>
-              <ButtonNaked color="primary" startIcon={<ArrowBackIcon/>} onClick={() => navigate(-1)}>Indietro</ButtonNaked>
+              <ButtonNaked
+                color="primary"
+                startIcon={<ArrowBackIcon />}
+                onClick={() => navigate(-1)}
+              >
+                Indietro
+              </ButtonNaked>
             </Grid>
             <Grid item>
               <Breadcrumbs aria-label="breadcrumb">
-                <BreadcrumbLink to={routes.DASHBOARD}>
-                  Notifiche
-                </BreadcrumbLink>
+                <BreadcrumbLink to={routes.DASHBOARD}>Notifiche</BreadcrumbLink>
                 <Typography
                   color="text.primary"
                   fontWeight={600}
@@ -82,9 +92,11 @@ const NewNotification = () => {
               </Step>
             ))}
           </Stepper>
-          {activeStep === 0 && <PreliminaryInformations notification={notification} onConfirm={goToNextStep}/>}
-          {activeStep === 1 && <Recipient />}
-          {activeStep === 2 && <Attachments />}
+          {activeStep === 0 && (
+            <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
+          )}
+          {activeStep === 1 && <Recipient onConfirm={goToNextStep} />}
+          {activeStep === 2 && <Attachments onConfirm={goToNextStep} />}
           {activeStep === 3 && <PaymentMethods />}
         </Grid>
       </Grid>

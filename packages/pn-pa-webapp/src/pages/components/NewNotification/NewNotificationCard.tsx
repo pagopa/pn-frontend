@@ -1,14 +1,15 @@
-import { Fragment, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Fragment, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Box, Button, Paper, Typography } from '@mui/material';
 
 type Props = {
   children: ReactNode;
   isContinueDisabled: boolean;
-  title: string;
+  title?: string;
+  noPaper?: boolean;
 };
 
-const NewNotificationCard = ({children, isContinueDisabled, title}: Props) => {
+const NewNotificationCard = ({ children, isContinueDisabled, title, noPaper = false }: Props) => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
@@ -17,20 +18,25 @@ const NewNotificationCard = ({children, isContinueDisabled, title}: Props) => {
 
   return (
     <Fragment>
-      <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
-        <Typography variant="h6">{title}</Typography>
-        <Box sx={{marginTop: '20px'}}>
-          {children}
-        </Box>
-      </Paper>
+      {!noPaper && (
+        <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
+          {title && <Typography variant="h6">{title}</Typography>}
+          <Box sx={{ marginTop: '20px' }}>{children}</Box>
+        </Paper>
+      )}
+      {noPaper && <Box>{children}</Box>}
       <Box
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        sx={{marginTop: '40px', marginBottom: '20px'}}
+        sx={{ marginTop: '40px', marginBottom: '20px' }}
       >
-        <Button variant="outlined" type="button" onClick={handleGoBack}>Torna alle notifiche</Button>
-        <Button variant="contained" type="submit" disabled={isContinueDisabled}>Continua</Button>
+        <Button variant="outlined" type="button" onClick={handleGoBack}>
+          Torna alle notifiche
+        </Button>
+        <Button variant="contained" type="submit" disabled={isContinueDisabled}>
+          Continua
+        </Button>
       </Box>
     </Fragment>
   );
