@@ -1,5 +1,5 @@
 import { fireEvent } from '@testing-library/react';
-import * as hooks from '@pagopa-pn/pn-commons/src/hooks/IsMobile.hook';
+import * as hooks from '@pagopa-pn/pn-commons/src/hooks/IsMobile';
 import * as React from 'react';
 import { render } from '../../../__test__/test-utils';
 
