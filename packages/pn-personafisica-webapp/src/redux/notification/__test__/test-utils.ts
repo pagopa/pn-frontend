@@ -37,8 +37,7 @@ export const notificationFromBe: NotificationDetail = {
         municipality: 'Comune',
         province: 'PROV',
         foreignState: '',
-      },
-      token: 'mocked-token',
+      }
     },
   ],
   documents: [
@@ -111,7 +110,6 @@ export const notificationFromBe: NotificationDetail = {
               province: '',
               foreignState: '',
             },
-            token: '',
           },
         ],
         documentsDigests: [
