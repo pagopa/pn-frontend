@@ -315,9 +315,9 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('does not have basic accessibility issues', async () => {
-    if(result) {
+    if (result) {
       const results = await axe(result.container);
       expect(results).toHaveNoViolations();
     }
-  });
+  }, 15000);
 });

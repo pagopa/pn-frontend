@@ -4,6 +4,7 @@ export const delegationArray: Array<Delegation> = [
   {
     mandateId: '7014cdd1-0a78-4e16-a08b-79dec878dc4e',
     delegate: {
+      displayName: 'Mario Enmnti',
       firstName: 'Mario',
       lastName: 'Enmnti',
       companyName: null,
@@ -19,6 +20,7 @@ export const delegationArray: Array<Delegation> = [
   {
     mandateId: '036421d2-0978-4bab-a94a-d508d303cc62',
     delegate: {
+      displayName: 'test delega',
       firstName: 'test',
       lastName: 'delega',
       companyName: null,
@@ -57,6 +59,7 @@ export const testItem: Array<Item> = [
 export const delegateTest: Delegation = {
   mandateId: '7014cdd1-0a78-4e16-a08b-79dec878dc4e',
   delegate: {
+    displayName: 'Mario Enmnti',
     firstName: 'Mario',
     lastName: 'Enmnti',
     companyName: null,
@@ -73,6 +76,7 @@ export const delegateTest: Delegation = {
 export const delegatorTest: Delegation = {
   mandateId: '7014cdd1-0a78-4e16-a08b-79dec878dc4e',
   delegator: {
+    displayName: 'Mario Enmnti',
     firstName: 'Mario',
     lastName: 'Enmnti',
     companyName: null,
