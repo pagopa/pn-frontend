@@ -5,6 +5,7 @@ export const formatNotificationRecipients = (recipients: Array<FormRecipient>) =
     denomination: `${recipient.firstName} ${recipient.lastName}`,
     recipientType: recipient.recipientType,
     taxId: recipient.taxId,
+    creditorTaxId: recipient.creditorTaxId,
     token: recipient.noticeCode,
     digitalDomicile: {
       type: recipient.type,
