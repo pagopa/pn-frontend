@@ -187,6 +187,7 @@ export interface SendDigitalDetails {
 export interface NotificationDetailRecipient {
   recipientType: RecipientType;
   taxId: string;
+  creditorTaxId?: string;
   denomination: string;
   digitalDomicile: DigitalAddress;
   physicalAddress: PhysicalAddress;

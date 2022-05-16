@@ -16,6 +16,7 @@ import * as yup from 'yup';
 import { Formik, Form, FormikValues } from 'formik';
 import { DigitalDomicileType, fiscalCodeRegex, RecipientType } from '@pagopa-pn/pn-commons';
 
+import { pIvaRegex } from '@pagopa-pn/pn-commons/src/utils/fiscal_code.utility';
 import { saveRecipients } from '../../../redux/newNotification/actions';
 import { useAppDispatch } from '../../../redux/hooks';
 import PhysicalAddress from './PhysicalAddress';
@@ -67,7 +68,7 @@ const Recipient = ({ onConfirm }: Props) => {
         creditorTaxId: yup
           .string()
           .required('Campo obbligatorio')
-          .matches(fiscalCodeRegex, 'Il codice fiscale inserito non è corretto'),
+          .matches(pIvaRegex, 'Il codice fiscale inserito non è corretto'),
         noticeCode: yup.string().required('Campo obbligatorio'),
         address: yup.string().when('showPhysicalAddress', {
           is: true,

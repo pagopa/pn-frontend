@@ -4,7 +4,7 @@ export const formRecipients = [
   {
     recipientType: RecipientType.PF,
     taxId: 'AAAAAA11A11A111A',
-    creditorTaxId: 'BBBBBB22B22B222B',
+    creditorTaxId: '01234567890',
     noticeCode: '12345678',
     firstName: 'TestNome',
     lastName: 'TestCognome',
@@ -29,6 +29,7 @@ export const formattedRecipients = [
     denomination: `TestNome TestCognome`,
     recipientType: RecipientType.PF,
     taxId: 'AAAAAA11A11A111A',
+    creditorTaxId: '01234567890',
     token: '12345678',
     digitalDomicile: {
       type: DigitalDomicileType.PEC,
