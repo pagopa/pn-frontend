@@ -16,7 +16,8 @@ export const mockCreateDelegation = {
     },
   ],
   verificationCode: '123456',
-  dateto: '16-04-2022',
+  datefrom: '2021-12-15',
+  dateto: '2022-04-16',
 };
 
 export const arrayOfDelegates = [
@@ -39,8 +40,8 @@ export const arrayOfDelegates = [
       },
     ],
     verificationCode: '123456',
-    datefrom: '15-12-2021',
-    dateto: '16-04-2022',
+    datefrom: '2021-12-15',
+    dateto: '2022-04-16',
   },
   {
     mandateId: '2',
@@ -61,8 +62,8 @@ export const arrayOfDelegates = [
       },
     ],
     verificationCode: '123456',
-    datefrom: '15-12-2021',
-    dateto: '16-04-2022',
+    datefrom: '2021-12-15',
+    dateto: '2022-04-16',
   },
 ];
 
@@ -86,8 +87,8 @@ export const arrayOfDelegators = [
       },
     ],
     verificationCode: '123456',
-    datefrom: '15-12-2021',
-    dateto: '16-04-2022',
+    datefrom: '2021-12-15',
+    dateto: '2022-04-16',
   },
   {
     mandateId: '4',
@@ -108,8 +109,8 @@ export const arrayOfDelegators = [
       },
     ],
     verificationCode: '123456',
-    datefrom: '15-12-2021',
-    dateto: '16-04-2022',
+    datefrom: '2021-12-15',
+    dateto: '2022-04-16',
   },
 ];
 
