@@ -11,8 +11,8 @@ describe('Contacts api tests', () => {
 
   it('getDigitalAddresses', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onGet(`/address-book/v1/digital-address/mocked-recipientId`).reply(200, digitalAddresses);
-    const res = await ContactsApi.getDigitalAddresses('mocked-recipientId');
+    mock.onGet(`/address-book/v1/digital-address`).reply(200, digitalAddresses);
+    const res = await ContactsApi.getDigitalAddresses();
     expect(res).toStrictEqual(digitalAddresses);
     mock.reset();
     mock.restore();

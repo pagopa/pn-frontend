@@ -9,26 +9,26 @@ import { apiClient } from '../axios';
 
 // const BASE_API_URL = "/address-book/v1/digital-address/";
 
-const mockedCourtesyContacts = [
-  {
-    value: 'mariorossi@verified.it',
-    code: '123456',
-    isVerified: true,
-  },
-  {
-    value: '3331234567',
-    code: '54321',
-    isVerified: true,
-  },
-];
+// const mockedCourtesyContacts = [
+//   {
+//     value: 'mariorossi@verified.it',
+//     code: '123456',
+//     isVerified: true,
+//   },
+//   {
+//     value: '3331234567',
+//     code: '54321',
+//     isVerified: true,
+//   },
+// ];
 
-const mockedContacts: Array<{ value: string; code: string; toVerify: boolean }> = [
-  {
-    value: 'mario.rossi@verified.it',
-    code: '12345',
-    toVerify: false,
-  },
-];
+// const mockedContacts: Array<{ value: string; code: string; toVerify: boolean }> = [
+//   {
+//     value: 'mario.rossi@verified.it',
+//     code: '12345',
+//     toVerify: false,
+//   },
+// ];
 
 export const ContactsApi = {
   /**
@@ -36,9 +36,9 @@ export const ContactsApi = {
    * @param  {string} recipientId
    * @returns Promise
    */
-  getDigitalAddresses: (recipientId: string): Promise<DigitalAddresses> =>
+  getDigitalAddresses: (): Promise<DigitalAddresses> =>
     apiClient
-      .get<DigitalAddresses>(`/address-book/v1/digital-address/${recipientId}`)
+      .get<DigitalAddresses>(`/address-book/v1/digital-address`)
       .then((response) => response.data),
 
   /**
@@ -122,7 +122,7 @@ export const ContactsApi = {
         }
         // email already verified
         return {
-          addressType: 'legal',
+          addressType: 'courtesy',
           recipientId,
           senderId,
           channelType,
