@@ -32,11 +32,13 @@ const Contacts = () => {
   const handleRedirectToProfilePage = () => {
     navigate(PROFILO);
   };
-  
+
   const subtitle = (
     <>
       {t('subtitle-1', { ns: 'recapiti' })}
-      <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage}>{t('subtitle-link', { ns: 'recapiti' })}</Link>
+      <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage}>
+        {t('subtitle-link', { ns: 'recapiti' })}
+      </Link>
       {t('subtitle-2', { ns: 'recapiti' })}
     </>
   );
@@ -50,7 +52,9 @@ const Contacts = () => {
           subTitle={subtitle}
           variantSubTitle={'body1'}
         />
-        <Typography variant="h5" fontWeight={600} fontSize={28} sx={{marginTop: '30px'}}>{t('general-contacts-title')}</Typography>
+        <Typography variant="h5" fontWeight={600} fontSize={28} sx={{ marginTop: '30px' }}>
+          {t('general-contacts-title')}
+        </Typography>
         <Grid container direction="row" sx={{ marginTop: '5px' }} spacing={2}>
           <Grid item lg={6} xs={12}>
             {digitalAddresses.legal.length === 0 && (
@@ -69,8 +73,10 @@ const Contacts = () => {
         </Grid>
         {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
           <Fragment>
-            <Typography variant="h5" fontWeight={600} fontSize={28} sx={{marginTop: '30px'}}>{t('special-contacts-title')}</Typography>
-            <Box sx={{marginTop: '20px'}}>
+            <Typography variant="h5" fontWeight={600} fontSize={28} sx={{ marginTop: '30px' }}>
+              {t('special-contacts-title')}
+            </Typography>
+            <Box sx={{ marginTop: '20px' }}>
               <SpecialContacts
                 recipientId={recipientId}
                 legalAddresses={digitalAddresses.legal}
