@@ -14,7 +14,7 @@ jest.mock('react-i18next', () => ({
       t: (str: string) => str,
     };
   },
-  Trans: (props: {i18nKey: string}) => props.i18nKey,
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('InsertLegalContact component', () => {
@@ -132,9 +132,11 @@ describe('InsertLegalContact component', () => {
     mockActionFn.mockReset();
     mockDispatchFn.mockReset();
     mockDispatchFn.mockClear();
-    mockDispatchFn.mockImplementation(jest.fn(() => ({
-      unwrap: () => Promise.resolve({code: '01234'}),
-    })));
+    mockDispatchFn.mockImplementation(
+      jest.fn(() => ({
+        unwrap: () => Promise.resolve({ code: '01234' }),
+      }))
+    );
     fireEvent.click(dialogButtons![1]);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
@@ -157,7 +159,7 @@ describe('InsertLegalContact component', () => {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
-  });
+  }, 10000);
 });

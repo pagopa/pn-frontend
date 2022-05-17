@@ -16,13 +16,15 @@ export const mockCreateDelegation = {
     },
   ],
   verificationCode: '123456',
-  dateto: '16-04-2022',
+  datefrom: '2021-12-15',
+  dateto: '2022-04-16',
 };
 
 export const arrayOfDelegates = [
   {
     mandateId: '1',
     delegate: {
+      displayName: 'Marco Verdi',
       firstName: 'Marco',
       lastName: 'Verdi',
       companyName: 'eni',
@@ -38,12 +40,13 @@ export const arrayOfDelegates = [
       },
     ],
     verificationCode: '123456',
-    datefrom: '15-12-2021',
-    dateto: '16-04-2022',
+    datefrom: '2021-12-15',
+    dateto: '2022-04-16',
   },
   {
     mandateId: '2',
     delegate: {
+      displayName: 'Davide Legato',
       firstName: 'Davide',
       lastName: 'Legato',
       companyName: 'eni',
@@ -59,8 +62,8 @@ export const arrayOfDelegates = [
       },
     ],
     verificationCode: '123456',
-    datefrom: '15-12-2021',
-    dateto: '16-04-2022',
+    datefrom: '2021-12-15',
+    dateto: '2022-04-16',
   },
 ];
 
@@ -68,6 +71,7 @@ export const arrayOfDelegators = [
   {
     mandateId: '3',
     delegator: {
+      displayName: 'Marco Verdi',
       firstName: 'Marco',
       lastName: 'Verdi',
       companyName: 'eni',
@@ -83,12 +87,13 @@ export const arrayOfDelegators = [
       },
     ],
     verificationCode: '123456',
-    datefrom: '15-12-2021',
-    dateto: '16-04-2022',
+    datefrom: '2021-12-15',
+    dateto: '2022-04-16',
   },
   {
     mandateId: '4',
     delegator: {
+      displayName: 'Davide Legato',
       firstName: 'Davide',
       lastName: 'Legato',
       companyName: 'eni',
@@ -104,8 +109,8 @@ export const arrayOfDelegators = [
       },
     ],
     verificationCode: '123456',
-    datefrom: '15-12-2021',
-    dateto: '16-04-2022',
+    datefrom: '2021-12-15',
+    dateto: '2022-04-16',
   },
 ];
 
