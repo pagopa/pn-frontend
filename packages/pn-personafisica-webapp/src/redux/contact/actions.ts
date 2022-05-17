@@ -11,9 +11,9 @@ import {
 
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   'getDigitalAddresses',
-  async (params: string, { rejectWithValue }) => {
+  async (_params: string, { rejectWithValue }) => {
     try {
-      return await ContactsApi.getDigitalAddresses(params);
+      return await ContactsApi.getDigitalAddresses();
     } catch (e) {
       return rejectWithValue(e);
     }
