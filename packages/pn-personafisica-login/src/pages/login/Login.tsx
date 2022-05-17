@@ -37,6 +37,10 @@ const Login = () => {
 
   const goCIE = () => {
     storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
+    // () =>
+    window.location.assign(
+      `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
+    );
     // TODO track event
     // trackEvent(
     //   'LOGIN_IDP_SELECTED',

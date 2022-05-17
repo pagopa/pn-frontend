@@ -17,6 +17,7 @@ const Login = ({ onBack }: { onBack: () => void }) => {
   const { t } = useTranslation();
   const getSPID = (IDP: IdentityProvider) => {
     storageSpidSelectedOps.write(IDP.entityId);
+    window.location.assign(`${ENV.URL_API.LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`);
     // trackEvent(
     //   'LOGIN_IDP_SELECTED',
     //   {
