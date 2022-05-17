@@ -9,26 +9,26 @@ import { apiClient } from '../axios';
 
 // const BASE_API_URL = "/address-book/v1/digital-address/";
 
-// const mockedCourtesyContacts = [
-//   {
-//     value: 'mariorossi@verified.it',
-//     code: '123456',
-//     isVerified: true,
-//   },
-//   {
-//     value: '3331234567',
-//     code: '54321',
-//     isVerified: true,
-//   },
-// ];
+const mockedCourtesyContacts = [
+  {
+    value: 'mariorossi@verified.it',
+    code: '123456',
+    isVerified: true,
+  },
+  {
+    value: '3331234567',
+    code: '54321',
+    isVerified: true,
+  },
+];
 
-// const mockedContacts: Array<{ value: string; code: string; toVerify: boolean }> = [
-//   {
-//     value: 'mario.rossi@verified.it',
-//     code: '12345',
-//     toVerify: false,
-//   },
-// ];
+const mockedContacts: Array<{ value: string; code: string; toVerify: boolean }> = [
+  {
+    value: 'mario.rossi@verified.it',
+    code: '12345',
+    toVerify: false,
+  },
+];
 
 export const ContactsApi = {
   /**
@@ -37,9 +37,10 @@ export const ContactsApi = {
    * @returns Promise
    */
   getDigitalAddresses: (): Promise<DigitalAddresses> =>
-    apiClient
-      .get<DigitalAddresses>(`/address-book/v1/digital-address`)
-      .then((response) => response.data),
+    apiClient.get<DigitalAddresses>(`/address-book/v1/digital-address`).then((response) => ({
+      legal: response.data.legal ? response.data.legal : [],
+      courtesy: response.data.courtesy ? response.data.courtesy : [],
+    })),
 
   /**
    * Create or update a digital address with legal value
@@ -52,31 +53,31 @@ export const ContactsApi = {
     channelType: LegalChannelType,
     body: { value: string; verificationCode?: string }
   ): Promise<void | DigitalAddress> =>
-    // new Promise((resolve, reject) => {
-    //   /* eslint-disable functional/immutable-data */
-    //   const mockedContact = mockedContacts.find((m) => m.value === body.value);
-    //   // simulate 200
-    //   if (!mockedContact) {
-    //     mockedContacts.push({ value: body.value, code: '12345', toVerify: true });
-    //     return resolve();
-    //   }
-    //   if (mockedContact.toVerify && !body.verificationCode) {
-    //     return resolve();
-    //   }
-    //   // check code - simulate 406
-    //   if (mockedContact.toVerify && body.verificationCode !== mockedContact.code) {
-    //     return reject({ response: { status: 406 }, blockNotification: true });
-    //   }
-    //   mockedContact.toVerify = false;
-    //   return resolve({
-    //     addressType: 'legal',
-    //     recipientId,
-    //     senderId,
-    //     channelType,
-    //     value: body.value,
-    //     code: body.verificationCode || mockedContact.code,
-    //   });
-    //   /* eslint-enable functional/immutable-data */
+    /* new Promise((resolve, reject) => {
+      /* eslint-disable functional/immutable-data */
+    /* const mockedContact = mockedContacts.find((m) => m.value === body.value);
+      // simulate 200
+      if (!mockedContact) {
+        mockedContacts.push({ value: body.value, code: '12345', toVerify: true });
+        return resolve();
+      }
+      if (mockedContact.toVerify && !body.verificationCode) {
+        return resolve();
+      }
+      // check code - simulate 406
+      if (mockedContact.toVerify && body.verificationCode !== mockedContact.code) {
+        return reject({ response: { status: 406 }, blockNotification: true });
+      }
+      mockedContact.toVerify = false;
+      return resolve({
+        addressType: 'legal',
+        recipientId,
+        senderId,
+        channelType,
+        value: body.value,
+        code: body.verificationCode || mockedContact.code,
+      });
+      /* eslint-enable functional/immutable-data */
     // }),
     apiClient
       .post<void>(
@@ -110,85 +111,67 @@ export const ContactsApi = {
     channelType: CourtesyChannelType,
     body: { value: string; verificationCode?: string }
   ): Promise<void | DigitalAddress> =>
-    apiClient
-      .post<void>(
-        `/address-book/v1/digital-address/${recipientId}/courtesy/${senderId}/${channelType}`,
-        body
-      )
-      .then((response) => {
-        if (response.status !== 204) {
-          // user must verify email
-          return;
-        }
-        // email already verified
-        return {
-          addressType: 'courtesy',
-          recipientId,
-          senderId,
-          channelType,
-          value: body.value,
-          code: body.verificationCode as string,
-        };
-      }),
-  /* eslint-disable functional/immutable-data */
-  // const mockedContact = mockedCourtesyContacts.find((m) => m.value === body.value);
+    new Promise((resolve, reject) => {
+      /* eslint-disable functional/immutable-data */
+      const mockedContact = mockedCourtesyContacts.find((m) => m.value === body.value);
 
-  // // simulate 200
-  // if (!mockedContact) {
-  //   mockedCourtesyContacts.push({ value: body.value, code: '12345', isVerified: false });
-  //   return resolve();
-  // }
-  // if (!mockedContact.isVerified && !body.verificationCode) {
-  //   return resolve();
-  // }
-  // // check code - simulate 406
-  // if (!mockedContact.isVerified && body.verificationCode !== mockedContact.code) {
-  //   return reject({ response: { status: 406 }, blockNotification: true });
-  // }
-  // mockedContact.isVerified = true;
-  // return resolve({
-  //   addressType: 'courtesy',
-  //   recipientId,
-  //   senderId,
-  //   channelType,
-  //   value: body.value,
-  //   code: body.verificationCode || mockedContact.code,
-  // });
-  /* eslint-enable functional/immutable-data */
+      // simulate 200
+      if (!mockedContact) {
+        mockedCourtesyContacts.push({ value: body.value, code: '12345', isVerified: false });
+        return resolve();
+      }
+      if (!mockedContact.isVerified && !body.verificationCode) {
+        return resolve();
+      }
+      // check code - simulate 406
+      if (!mockedContact.isVerified && body.verificationCode !== mockedContact.code) {
+        return reject({ response: { status: 406 }, blockNotification: true });
+      }
+      mockedContact.isVerified = true;
+      return resolve({
+        addressType: 'courtesy',
+        recipientId,
+        senderId,
+        channelType,
+        value: body.value,
+        code: body.verificationCode || mockedContact.code,
+      });
+      /* eslint-enable functional/immutable-data */
+    }),
   /*
    * Remove current user digital address
    * @param  {string} recipientId
    * @returns Promise
    */
   deleteLegalAddress: (
-    recipientId: string,
+    _recipientId: string,
     senderId: string,
-    channelType: LegalChannelType
+    _channelType: LegalChannelType
   ): Promise<string> =>
+    /*
     apiClient
-      .delete<string>(
-        `/address-book/v1/digital-address/${recipientId}/courtesy/${senderId}/${channelType}`
-      )
+      .delete<string>(`/address-book/v1/digital-address/${recipientId}/courtesy/${senderId}/${channelType}`)
       .then(() => senderId),
-  // new Promise((resolve) => {
-  //   resolve(senderId);
-  // }),
+    */
+    new Promise((resolve) => {
+      resolve(senderId);
+    }),
   /*
    * Remove current user digital address
    * @param  {string} recipientId
    * @returns Promise
    */
   deleteCourtesyAddress: (
-    recipientId: string,
+    _recipientId: string,
     courtesySenderId: string,
-    channelType: CourtesyChannelType
+    _channelType: CourtesyChannelType
   ): Promise<string> =>
+    /*
     apiClient
-      .delete<string>(
-        `/address-book/v1/digital-address/${recipientId}/courtesy/${courtesySenderId}/${channelType}`
-      )
-      .then(() => courtesySenderId),
-  // new Promise((resolve) => {
-  //   resolve(courtesySenderId);
-  // }),
+      .delete<string>(`/address-book/v1/digital-address/${recipientId}/courtesy/${senderId}/${channelType}`)
+      .then(() => senderId),
+    */
+    new Promise((resolve) => {
+      resolve(courtesySenderId);
+    }),
 };
