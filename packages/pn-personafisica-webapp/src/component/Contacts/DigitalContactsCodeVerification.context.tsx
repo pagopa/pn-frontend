@@ -3,7 +3,14 @@ import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { Box, Typography } from '@mui/material';
 import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
@@ -46,7 +53,9 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
   );
-  const addresses = digitalAddresses ? digitalAddresses.legal.concat(digitalAddresses.courtesy) : [];
+  const addresses = digitalAddresses
+    ? digitalAddresses.legal.concat(digitalAddresses.courtesy)
+    : [];
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
 
   const initialProps = {
@@ -81,12 +90,12 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     setIsConfirmationModalVisible(false);
   };
 
-  const contactAlreadyExists = (): boolean => {
-    if (addresses.find((elem) => elem.value === props.value && (elem.senderId !== props.senderId || elem.channelType !== props.digitalDomicileType))) {
-      return true;
-    }
-    return false;
-  };
+  const contactAlreadyExists = (): boolean =>
+    !!addresses.find(
+      (elem) =>
+        elem.value === props.value &&
+        (elem.senderId !== props.senderId || elem.channelType !== props.digitalDomicileType)
+    );
 
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
     /* eslint-disable functional/no-let */
@@ -175,54 +184,65 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
       {children}
-      {!_.isEqual(props, initialProps) && <CodeModal
-        title={
-          t(`${props.labelRoot}.${props.labelType}-verify`, { ns: 'recapiti' }) + ` ${props.value}`
-        }
-        subtitle={
-          <Trans i18nKey={`${props.labelRoot}.${props.labelType}-verify-descr`} ns="recapiti" />
-        }
-        open={open}
-        initialValues={new Array(5).fill('')}
-        handleClose={() => setOpen(false)}
-        codeSectionTitle={t(`${props.labelRoot}.insert-code`, { ns: 'recapiti' })}
-        codeSectionAdditional={
-          <Box>
-            <Typography variant="body2" display="inline">
-              {t(`${props.labelRoot}.${props.labelType}-new-code`, { ns: 'recapiti' })}&nbsp;
-            </Typography>
-            <Typography
-              variant="body2"
-              display="inline"
-              color="primary"
-              onClick={() => handleCodeVerification(undefined, true)}
-              sx={{ cursor: 'pointer' }}
-            >
-              {t(`${props.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
-            </Typography>
-          </Box>
-        }
-        cancelLabel={t('button.annulla')}
-        confirmLabel={t('button.conferma')}
-        cancelCallback={() => handleClose('cancelled')}
-        confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
-        hasError={codeNotValid}
-        errorTitle={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
-        errorMessage={t(`${props.labelRoot}.wrong-code-message`, { ns: 'recapiti' })}
-      />}
+      {!_.isEqual(props, initialProps) && (
+        <CodeModal
+          title={
+            t(`${props.labelRoot}.${props.labelType}-verify`, { ns: 'recapiti' }) +
+            ` ${props.value}`
+          }
+          subtitle={
+            <Trans i18nKey={`${props.labelRoot}.${props.labelType}-verify-descr`} ns="recapiti" />
+          }
+          open={open}
+          initialValues={new Array(5).fill('')}
+          handleClose={() => setOpen(false)}
+          codeSectionTitle={t(`${props.labelRoot}.insert-code`, { ns: 'recapiti' })}
+          codeSectionAdditional={
+            <Box>
+              <Typography variant="body2" display="inline">
+                {t(`${props.labelRoot}.${props.labelType}-new-code`, { ns: 'recapiti' })}&nbsp;
+              </Typography>
+              <Typography
+                variant="body2"
+                display="inline"
+                color="primary"
+                onClick={() => handleCodeVerification(undefined, true)}
+                sx={{ cursor: 'pointer' }}
+              >
+                {t(`${props.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
+              </Typography>
+            </Box>
+          }
+          cancelLabel={t('button.annulla')}
+          confirmLabel={t('button.conferma')}
+          cancelCallback={() => handleClose('cancelled')}
+          confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
+          hasError={codeNotValid}
+          errorTitle={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
+          errorMessage={t(`${props.labelRoot}.wrong-code-message`, { ns: 'recapiti' })}
+        />
+      )}
       <Dialog
         open={isConfirmationModalVisible}
         onClose={handleDiscard}
         aria-labelledby="dialog-title"
         aria-describedby="dialog-description"
       >
-        <DialogTitle id="dialog-title">{t(`common.duplicate-contact-title`, { value: props.value, ns: 'recapiti' })}</DialogTitle>
+        <DialogTitle id="dialog-title">
+          {t(`common.duplicate-contact-title`, { value: props.value, ns: 'recapiti' })}
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText id="dialog-description">{t(`common.duplicate-contact-descr`, { value: props.value, ns: 'recapiti' })}</DialogContentText>
+          <DialogContentText id="dialog-description">
+            {t(`common.duplicate-contact-descr`, { value: props.value, ns: 'recapiti' })}
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDiscard} variant="outlined">{t('button.annulla')}</Button>
-          <Button onClick={handleConfirm} variant="contained">{t('button.conferma')}</Button>
+          <Button onClick={handleDiscard} variant="outlined">
+            {t('button.annulla')}
+          </Button>
+          <Button onClick={handleConfirm} variant="contained">
+            {t('button.conferma')}
+          </Button>
         </DialogActions>
       </Dialog>
     </DigitalContactsCodeVerificationContext.Provider>

@@ -76,10 +76,7 @@ const CodeInput = memo(
       ) {
         return;
       } else if (event.key === 'Backspace') {
-        if (inputsRef.current[index].value === '') {
-          // focus prev element
-          focusInput(index - 1);
-        }
+        focusInput(index - 1);
         return;
       }
       // prevent all values that aren't numbers
@@ -105,7 +102,7 @@ const CodeInput = memo(
     }, [inputsRef.current.every((v) => v && !v.value)]);
 
     useImperativeHandle(ref, () => ({
-      inputsValues: inputsRef.current.map((inputElem) => inputElem.value),
+      inputsValues: inputsRef.current.map((inputElem) => inputElem?.value),
     }));
 
     return (
@@ -121,6 +118,11 @@ const CodeInput = memo(
               maxLength: 1,
               sx: { padding: '16.5px 10px', textAlign: 'center' },
               readOnly: isReadOnly,
+              onClick: (e) =>
+                e.currentTarget.setSelectionRange(
+                  e.currentTarget.value.length,
+                  e.currentTarget.value.length
+                ),
             }}
             onKeyDown={(event) => keyDownHandler(event, index)}
             onChange={changeHandler}

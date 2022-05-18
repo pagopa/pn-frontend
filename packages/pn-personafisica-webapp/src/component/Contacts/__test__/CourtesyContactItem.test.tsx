@@ -33,8 +33,8 @@ describe('CourtesyContactItem component', () => {
   });
   
   describe('test component having type "phone"', () => {
-    const VALID_PHONE = "3331234567";
-    const VALID_PHONE_2 = "3337654321";
+    const VALID_PHONE = "+393331234567";
+    const VALID_PHONE_2 = "+393337654321";
     const INVALID_PHONE = "33312345";
     const VALID_CODE = "01234";
 
