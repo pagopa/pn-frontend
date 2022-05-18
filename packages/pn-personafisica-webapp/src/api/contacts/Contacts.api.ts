@@ -43,7 +43,7 @@ export const ContactsApi = {
           senderId,
           channelType,
           value: body.value,
-          code: body.verificationCode as string,
+          code: 'verified',
         };
       }),
   /**
@@ -71,7 +71,7 @@ export const ContactsApi = {
           senderId,
           channelType,
           value: body.value,
-          code: body.verificationCode as string,
+          code: 'verified',
         };
       }),
   /*

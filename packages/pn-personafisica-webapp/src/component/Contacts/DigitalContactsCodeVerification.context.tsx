@@ -123,7 +123,8 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         if (noCallback) {
           return;
         }
-        if (res && res.code) {
+        if (res && res.code === 'verified') {
+          // contact has already been verified
           // show success message
           dispatch(
             appStateActions.addSuccess({

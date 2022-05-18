@@ -134,7 +134,7 @@ describe('InsertLegalContact component', () => {
     mockDispatchFn.mockClear();
     mockDispatchFn.mockImplementation(
       jest.fn(() => ({
-        unwrap: () => Promise.resolve({ code: '01234' }),
+        unwrap: () => Promise.resolve({ code: 'verified' }),
       }))
     );
     fireEvent.click(dialogButtons![1]);
