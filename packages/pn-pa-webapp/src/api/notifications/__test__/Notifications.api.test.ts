@@ -82,21 +82,21 @@ describe('Notifications api tests', () => {
     mock.restore();
   });
 
-  it('uploadNotificationDocument', async () => {
+  it('uploadNotificationAttachment', async () => {
     const mock = new MockAdapter(externalClient);
     mock
       .onPut(
         `https://mocked-url.com`,
-        { 'upload-file': 'mocked-fileBase64' }
+        { 'upload-file': 'mocked-fileBase64' },
       )
-      .reply(200, void 0);
-    const res = await NotificationsApi.uploadNotificationDocument(
+      .reply(200, void 0, {'x-amz-version-id': 'mocked-versionToken'});
+    const res = await NotificationsApi.uploadNotificationAttachment(
       'https://mocked-url.com',
       'mocked-sha256',
       'mocked-secret',
       'mocked-fileBase64'
     );
-    expect(res).toStrictEqual(void 0);
+    expect(res).toStrictEqual('mocked-versionToken');
     mock.reset();
     mock.restore();
   });

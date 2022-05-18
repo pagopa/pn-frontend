@@ -1,9 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
+import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationFe, PaymentModel } from '../../models/newNotification';
 import { formatNotificationRecipients } from '../../utils/notification.utility';
-import { resetNewNotificationState, setCancelledIun, setPreliminaryInformations, uploadNotificationDocument, saveRecipients } from './actions';
+import {
+  resetNewNotificationState,
+  setCancelledIun,
+  setPreliminaryInformations,
+  uploadNotificationAttachment,
+  saveRecipients,
+  uploadNotificationPaymentDocument,
+} from './actions';
 
 const initialState = {
   loading: false,
@@ -15,8 +22,9 @@ const initialState = {
     documents: [],
     physicalCommunicationType: '' as PhysicalCommunicationType,
     group: '',
-    paymentMode: '' as PaymentModel
-  } as NewNotificationFe
+    paymentMode: '' as PaymentModel,
+    notificationFeePolicy: '' as NotificationFeePolicy
+  } as NewNotificationFe,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -26,18 +34,27 @@ const newNotificationSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(setCancelledIun, (state, action) => {
-      state.notification = {...state.notification, cancelledIun: action.payload};
+      state.notification = { ...state.notification, cancelledIun: action.payload };
     });
     builder.addCase(setPreliminaryInformations, (state, action) => {
-      state.notification = {...state.notification, ...action.payload};
+      state.notification = { ...state.notification, ...action.payload };
     });
-    builder.addCase(uploadNotificationDocument.fulfilled, (state, action) => {
-      state.notification = {...state.notification, documents: action.payload};
-    });
-    builder.addCase(resetNewNotificationState, () => initialState);
     builder.addCase(saveRecipients, (state, action) => {
       state.notification.recipients = formatNotificationRecipients(action.payload.recipients);
     });
+    builder.addCase(uploadNotificationAttachment.fulfilled, (state, action) => {
+      state.notification = { ...state.notification, documents: action.payload };
+    });
+    builder.addCase(uploadNotificationPaymentDocument.fulfilled, (state, action) => {
+      state.notification = {
+        ...state.notification,
+        recipients: state.notification.recipients.map((r) => {
+          r.payment = { ...action.payload[r.taxId], creditorTaxId: r.creditorTaxId, noticeCode: r.token };
+          return r;
+        }),
+      };
+    });
+    builder.addCase(resetNewNotificationState, () => initialState);
   },
 });
 

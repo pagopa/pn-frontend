@@ -88,7 +88,7 @@ describe('PreliminaryInformations Component', () => {
           abstract: '',
           group: 'Group2',
           physicalCommunicationType: PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER,
-          paymentModel: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE
+          paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE
         },
         type: 'setPreliminaryInformations',
       });

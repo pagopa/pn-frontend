@@ -35,14 +35,14 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     abstract: notification.abstract || '',
     group: notification.group || '',
     physicalCommunicationType: notification.physicalCommunicationType || '',
-    paymentModel: notification.paymentMode || '',
+    paymentMode: notification.paymentMode || '',
   });
 
   const validationSchema = yup.object({
     paProtocolNumber: yup.string().required('Numero di protocollo obbligatorio'),
     subject: yup.string().required('Oggetto di protocollo obbligatorio'),
     physicalCommunicationType: yup.string().required(),
-    paymentModel: yup.string().required(),
+    paymentMode: yup.string().required(),
     group: groups ? yup.string().required() : yup.string(),
   });
 
@@ -167,8 +167,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           </FormLabel>
           <RadioGroup
             aria-labelledby="payment-method-label"
-            name="paymentModel"
-            value={formik.values.paymentModel}
+            name="paymentMode"
+            value={formik.values.paymentMode}
             onChange={formik.handleChange}
           >
             <FormControlLabel

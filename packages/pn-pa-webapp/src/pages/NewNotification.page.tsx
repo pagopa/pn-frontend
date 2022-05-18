@@ -43,6 +43,10 @@ const NewNotification = () => {
   const dispatch = useAppDispatch();
 
   const goToNextStep = () => {
+    if (activeStep === 1) {
+      setActiveStep((previousStep) => previousStep + 2);
+      return;
+    }
     setActiveStep((previousStep) => previousStep + 1);
   };
 
@@ -97,7 +101,7 @@ const NewNotification = () => {
           )}
           {activeStep === 1 && <Recipient onConfirm={goToNextStep} />}
           {activeStep === 2 && <Attachments onConfirm={goToNextStep} />}
-          {activeStep === 3 && <PaymentMethods />}
+          {activeStep === 3 && <PaymentMethods notification={notification} onConfirm={goToNextStep}/>}
         </Grid>
       </Grid>
     </Prompt>

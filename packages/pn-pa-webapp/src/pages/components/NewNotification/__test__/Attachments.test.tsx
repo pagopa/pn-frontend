@@ -3,6 +3,7 @@ import * as redux from 'react-redux';
 
 import { render } from '../../../../__test__/test-utils';
 import * as actions from '../../../../redux/newNotification/actions';
+import { UploadAttachmentParams } from '../../../../models/newNotification';
 import Attachments from '../Attachments';
 
 describe('Attachments Component', () => {
@@ -24,7 +25,7 @@ describe('Attachments Component', () => {
 
   async function testConfirm(
     button: HTMLButtonElement,
-    documents: Array<{ key: string; contentType: string; fileBase64: string; sha256: string }>
+    documents: Array<UploadAttachmentParams>
   ) {
     fireEvent.click(button);
     await waitFor(() => {
@@ -38,7 +39,7 @@ describe('Attachments Component', () => {
   beforeEach(async () => {
     // mock action
     mockActionFn = jest.fn();
-    const actionSpy = jest.spyOn(actions, 'uploadNotificationDocument');
+    const actionSpy = jest.spyOn(actions, 'uploadNotificationAttachment');
     actionSpy.mockImplementation(mockActionFn);
     // mock dispatch
     mockDispatchFn = jest.fn(() => ({
