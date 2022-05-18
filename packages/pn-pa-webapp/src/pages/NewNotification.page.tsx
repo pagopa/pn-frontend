@@ -43,10 +43,6 @@ const NewNotification = () => {
   const dispatch = useAppDispatch();
 
   const goToNextStep = () => {
-    if (activeStep === 1) {
-      setActiveStep((previousStep) => previousStep + 2);
-      return;
-    }
     setActiveStep((previousStep) => previousStep + 1);
   };
 
