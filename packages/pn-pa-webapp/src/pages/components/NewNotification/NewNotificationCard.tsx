@@ -2,6 +2,8 @@ import { Fragment, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Paper, Typography } from '@mui/material';
 
+import * as routes from '../../../navigation/routes.const';
+
 type Props = {
   children: ReactNode;
   isContinueDisabled: boolean;
@@ -13,7 +15,7 @@ const NewNotificationCard = ({ children, isContinueDisabled, title, noPaper = fa
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate(-1);
+    navigate(routes.DASHBOARD);
   };
 
   return (

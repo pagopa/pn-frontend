@@ -52,6 +52,9 @@ jest.mock(
         </div>
       )
 );
+jest.mock('../components/NewNotification/SyncFeedback', () => () => (
+  <div data-testid="stepContent">SyncFeedback</div>
+));
 
 describe('NewNotification Page', () => {
   let result: RenderResult | undefined;
