@@ -32,13 +32,13 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const dispatch = useAppDispatch();
-  const paymentDetail = useAppSelector((state: RootState) => state.notificationState.paymentDetail);
+  const paymentInfo = useAppSelector((state: RootState) => state.notificationState.paymentInfo);
 
   useEffect(() => {
     const fetchPaymentInfo = () => {
-      if (notificationPayment?.iuv) {
-        // dispatch(getNotificationPaymentDetails({ iun: notification.iun, recipientId: notification.recipients[0].taxId })).unwrap()
-        dispatch(getNotificationPaymentInfo(notificationPayment.iuv))
+      if (notificationPayment) {
+        // dispatch(getNotificationPaymentInfo({ iun: notification.iun, recipientId: notification.recipients[0].taxId })).unwrap()
+        dispatch(getNotificationPaymentInfo({ noticeCode: notificationPayment.noticeCode, taxId: notificationPayment.creditorTaxId }))
           .unwrap()
           .then(() => {
             setLoading(() => false);
@@ -50,7 +50,7 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
           });
       } else {
         setLoading(() => false);
-        setError(() => 'IUV not found');
+        setError(() => 'Not found');
       }
     };
 
@@ -58,8 +58,8 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
   }, []);
 
   const onPayClick = () => {
-    if (CHECKOUT_URL && notificationPayment.iuv) {
-      window.open(`${CHECKOUT_URL}/${notificationPayment.iuv}`);
+    if (CHECKOUT_URL && notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
+      window.open(`${CHECKOUT_URL}/${notificationPayment.noticeCode}${notificationPayment.creditorTaxId}`);
     } else if (CHECKOUT_URL) {
       // uiv not available, do we need to inform the user and redirect to base checkout url?
       console.log('UIV not found!');
@@ -80,8 +80,8 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
         body: error,
       };
     }
-    if (paymentDetail) {
-      switch (paymentDetail?.status) {
+    if (paymentInfo) {
+      switch (paymentInfo?.status) {
         case PaymentStatus.SUCCEEDED:
           return {
             type: 'success',
@@ -106,33 +106,32 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
     // eslint-disable-next-line functional/no-let
     const attachments = new Array<{ name: string; title: string; url: string }>();
 
-    if (notificationPayment && notificationPayment.f24) {
-      const pagopaAttachment = notificationPayment.f24.flatRate;
-      const f24Attachment = notificationPayment.f24.digital;
+    const pagopaDoc = notificationPayment.pagoPaForm;
+    const f24Doc = notificationPayment.f24flatRate || notificationPayment.f24standard;
 
-      if (pagopaAttachment && pagopaAttachment.title) {
-        // eslint-disable-next-line functional/immutable-data
-        attachments.push({
-          name: 'pagopa',
-          title: t('detail.payment.download-pagopa-notification', { ns: 'notifiche' }),
-          url: pagopaAttachment.title,
-        });
-      }
-      if (f24Attachment && f24Attachment.title) {
-        // eslint-disable-next-line functional/immutable-data
-        attachments.push({
-          name: 'f24',
-          title: t('detail.payment.download-f24', { ns: 'notifiche' }),
-          url: f24Attachment.title,
-        });
-      }
+    if(pagopaDoc) {
+      // eslint-disable-next-line functional/immutable-data
+      attachments.push({
+        name: 'pagopa',
+        title: t('detail.payment.download-pagopa-notification', { ns: 'notifiche' }),
+        url: pagopaDoc.ref.key,
+      });
+    }
+
+    if(f24Doc) {
+      // eslint-disable-next-line functional/immutable-data
+      attachments.push({
+        name: 'f24',
+        title: t('detail.payment.download-f24', { ns: 'notifiche' }),
+        url: f24Doc.ref.key,
+      });
     }
 
     return attachments;
   };
 
   const title = t('detail.payment.summary', { ns: 'notifiche' });
-  const amount = paymentDetail?.amount ? formatEurocentToCurrency(paymentDetail.amount) : '';
+  const amount = paymentInfo?.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
 
   const disclaimer = (
     <>
@@ -190,8 +189,8 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
             </LoadingButton>
           </Grid>
         )}
-        {(paymentDetail?.status === PaymentStatus.REQUIRED ||
-          paymentDetail?.status === PaymentStatus.FAILED) && (
+        {(paymentInfo?.status === PaymentStatus.REQUIRED ||
+          paymentInfo?.status === PaymentStatus.FAILED) && (
           <>
             <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
               <Button onClick={action.callback} variant="contained" fullWidth>

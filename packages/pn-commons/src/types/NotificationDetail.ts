@@ -6,14 +6,33 @@ import { NotificationStatus } from "./NotificationStatus";
 export enum PaymentStatus {
   REQUIRED = "REQUIRED",
   SUCCEEDED = "SUCCEEDED",
-  INPROGRESS = "INPROGRESS",
+  INPROGRESS = "IN_PROGRESS",
   FAILED = "FAILED"
 }
 
-export interface PaymentDetail {
+export enum PaymentErrorType {
+  PPA_TECH_ERR = "PPA_TECH_ERR",
+  PPA_BAD_REQ_ERR = "PPA_BAD_REQ_ERR",
+  PPA_PA_RESP_ERR = "PPA_PA_RESP_ERR",
+  PPA_EXPIRED_ERR = "PPA_EXPIRED_ERR",
+  PPA_CANCELED_ERR = "PPA_CANCELED_ERR",
+  PPA_DUPLICATED_ERR = "PPA_DUPLICATED_ERR",
+  PPA_GENERIC_ERR = "PPA_GENERIC_ERR"
+}
+
+export interface PaymentInfo {
   status: PaymentStatus;
+  errorType?: PaymentErrorType;
+  errorCode?: string;
   amount?: number;
 }
+
+export enum PaymentAttachmentSName {
+  PAGOPA = "PAGOPA",
+  F24 = "F24"
+}
+
+export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
 
 // =========== END TEMP: WAITING FOR PAYMENT APIs DEFINITION ===========
 
@@ -198,7 +217,21 @@ export interface NotificationDetailDocument {
     sha256: string;
   };
   contentType: string;
-  title: string;
+  ref: {
+    key: string;
+    versionToken: string;
+  };
+}
+
+export interface NotificationPaymentAttachment {
+  digests: {
+    sha256: string;
+  };
+  contentType: string;
+  ref: {
+    key: string;
+    versionToken: string;
+  };
 }
 
 export enum NotificationFeePolicy {
@@ -207,13 +240,12 @@ export enum NotificationFeePolicy {
 }
 
 export interface NotificationDetailPayment {
-  iuv: string;
   notificationFeePolicy: NotificationFeePolicy;
-  f24: {
-    flatRate: NotificationDetailDocument;
-    digital: NotificationDetailDocument;
-    analog: NotificationDetailDocument;
-  };
+  noticeCode: string;
+  creditorTaxId: string;
+  pagoPaForm: NotificationPaymentAttachment;
+  f24flatRate?: NotificationPaymentAttachment;
+  f24standard?: NotificationPaymentAttachment;
 }
 
 export interface NotificationStatusHistory {

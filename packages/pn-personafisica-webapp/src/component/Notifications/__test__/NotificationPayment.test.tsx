@@ -17,29 +17,17 @@ jest.mock('react-i18next', () => ({
 }));
 
 const mockedNotificationDetailPayment = {
-  iuv: "mocked-iuv",
   notificationFeePolicy: 'FLAT_RATE',
-  f24: {
-    flatRate: {
-      digests: {
-        sha256: ""
-      },
-      contentType: 'application/pdf',
-      title: "mocked-pagopa"
+  noticeCode: 'mocked-noticeCode',
+  creditorTaxId: "mocked-creditorTaxId",
+  pagoPaForm: {
+    "digests": {
+      "sha256": "mocked-sha256"
     },
-    digital: {
-      digests: {
-        sha256: ""
-      },
-      contentType: 'application/pdf',
-      title: "mocked-f24"
-    },
-    analog: {
-      digests: {
-        sha256: ""
-      },
-      contentType: 'application/pdf',
-      title: ""
+    "contentType": "application/pdf",
+    "ref": {
+      "key": "mocked-key",
+      "versionToken": "mockedVersionToken"
     }
   }
 } as NotificationDetailPayment;

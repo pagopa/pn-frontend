@@ -6,8 +6,9 @@ import {
   GetNotificationsResponse,
   formatFiscalCode,
   parseNotificationDetail,
-  PaymentDetail,
+  PaymentInfo,
   PaymentStatus,
+  PaymentAttachmentNameType,
 } from '@pagopa-pn/pn-commons';
 import { apiClient } from '../axios';
 
@@ -136,14 +137,32 @@ export const NotificationsApi = {
         return { url: '' };
       }),
   /**
+    * Gets current user specified Payment Attachment
+    * @param  {string} iun
+    * @param  {PaymentAttachmentNameType} attachmentName
+    * @returns Promise
+    */
+  getPaymentAttachment: (
+    iun: string,
+    attachmentName: PaymentAttachmentNameType
+  ): Promise<{ url: string }> =>
+    apiClient
+      .get<{ url: string }>(`/delivery/notifications/received/${iun}/attachments/payment/${attachmentName}`)
+      .then((response) => {
+        if (response.data) {
+          return { url: response.data.url };
+        }
+        return { url: '' };
+      }),
+  /**
    * Gets current user's notification payment info
    * @param  {string} iuv
    * @returns Promise
    */
-  getNotificationPaymentInfo: (iuv: string): Promise<PaymentDetail> =>
+  getNotificationPaymentInfo: ( noticeCode: string, taxId: string ): Promise<PaymentInfo> =>
     new Promise((resolve, reject) => {
       setTimeout(() => {
-        if (!iuv) {
+        if (!noticeCode || ! taxId) {
           return reject({ response: { status: 400 }, blockNotification: true });
         }
         // mocked response (returns a random payment status)
@@ -153,7 +172,7 @@ export const NotificationsApi = {
       // return resolve(mocked_payments_detail[randomIndex]);
     }),
   // apiClient
-  // .get<PaymentDetail>(`/delivery/notifications/payment/${iuv}`)
+  // .get<PaymentInfo>(`ext-registry/pagopa/v1/paymentinfo/{taxId}/{noticeCode}`)
   // .then((response) => {
   //   if (response.data) {
   //     return response.data;

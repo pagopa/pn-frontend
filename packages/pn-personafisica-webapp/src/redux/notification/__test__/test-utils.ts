@@ -47,33 +47,24 @@ export const notificationFromBe: NotificationDetail = {
         sha256: '3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659',
       },
       contentType: 'application/pdf',
-      title: 'Mocked document',
+      ref: {
+        key: "mocked-key",
+        versionToken: "mocked-versionToken"
+      },
     },
   ],
   payment: {
-    iuv: '',
     notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
-    f24: {
-      flatRate: {
-        digests: {
-          sha256: 'mocked-sha256',
-        },
-        contentType: 'mocked-contentType',
-        title: 'Mocked document',
+    noticeCode: "mocked-noticeCode",
+    creditorTaxId: "mocked-creditorTaxId",
+    pagoPaForm:  {
+      digests: {
+        sha256: "3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659"
       },
-      digital: {
-        digests: {
-          sha256: 'mocked-sha256',
-        },
-        contentType: 'mocked-contentType',
-        title: 'Mocked document',
-      },
-      analog: {
-        digests: {
-          sha256: 'mocked-sha256',
-        },
-        contentType: 'mocked-contentType',
-        title: 'Mocked document',
+      contentType: 'application/pdf',
+      ref: {
+        key: "mocked-key",
+        versionToken: "mocked-versionToken"
       },
     },
   },
