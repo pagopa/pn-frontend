@@ -72,11 +72,7 @@ describe('Contacts api tests', () => {
         `/address-book/v1/digital-address/mocked-recipientId/legal/mocked-senderId/${LegalChannelType.PEC}`
       )
       .reply(204, void 0);
-    const res = await ContactsApi.deleteLegalAddress(
-      'mocked-recipientId',
-      'mocked-senderId',
-      LegalChannelType.PEC
-    );
+    const res = await ContactsApi.deleteLegalAddress('mocked-senderId', LegalChannelType.PEC);
     expect(res).toStrictEqual('mocked-senderId');
     mock.reset();
     mock.restore();
@@ -137,7 +133,6 @@ describe('Contacts api tests', () => {
       )
       .reply(204, void 0);
     const res = await ContactsApi.deleteCourtesyAddress(
-      'mocked-recipientId',
       'mocked-senderId',
       CourtesyChannelType.EMAIL
     );

@@ -19,18 +19,17 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({id: 'mocked-id'})
+  useParams: () => ({ id: 'mocked-id' }),
 }));
 
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
   NotificationDetailTable: () => <div>Table</div>,
   NotificationDetailDocuments: () => <div>Documents</div>,
-  NotificationDetailTimeline: () => <div>Timeline</div>
+  NotificationDetailTimeline: () => <div>Timeline</div>,
 }));
 
 describe('NotificationDetail Page', () => {
-
   let result: RenderResult | undefined;
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
@@ -42,7 +41,8 @@ describe('NotificationDetail Page', () => {
       .mockReturnValueOnce(notificationToFe)
       .mockReturnValueOnce('mocked-sender')
       .mockReturnValueOnce('mocked-download-url')
-      .mockReturnValueOnce('mocked-legal-fact-url');
+      .mockReturnValueOnce('mocked-legal-fact-url')
+      .mockReturnValueOnce({ legalDomicile: [] });
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockDispatchFn);
@@ -61,7 +61,7 @@ describe('NotificationDetail Page', () => {
     mockDispatchFn.mockReset();
     mockActionFn.mockClear();
     mockActionFn.mockReset();
-  })
+  });
 
   test('renders NotificationDetail page', () => {
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
