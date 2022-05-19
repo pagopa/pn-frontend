@@ -51,6 +51,7 @@ export const notificationFromBe: NotificationDetail = {
         key: "mocked-key",
         versionToken: "mocked-versionToken"
       },
+      title: 'Mocked document'
     },
   ],
   payment: {

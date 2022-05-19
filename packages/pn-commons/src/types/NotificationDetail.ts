@@ -221,6 +221,7 @@ export interface NotificationDetailDocument {
     key: string;
     versionToken: string;
   };
+  title: string; // left for back-compatibility - to be removed
 }
 
 export interface NotificationPaymentAttachment {

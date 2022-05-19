@@ -53,7 +53,7 @@ const NotificationDetailDocuments = ({
     <Grid sx={{ mt: 1 }} key={'download-files-section'} />
     {documents.map((d, i) =>
       !documentsAvailable ? (
-        <Typography key={d.digests.sha256}>{d.ref.key}</Typography>
+        <Typography key={d.digests.sha256}>{d.title}</Typography>
       ) : (
         <ButtonNaked
           data-testid="documentButton"
@@ -62,7 +62,7 @@ const NotificationDetailDocuments = ({
           startIcon={<AttachFileIcon />}
           onClick={() => clickHandler(i)}
         >
-          {d.ref.key}
+          {d.title}
           <Typography sx={{ fontWeight: 600, ml: '10px' }}>
             {'650 KB'} {/* TODO: integrate specific dimension of file */}
           </Typography>

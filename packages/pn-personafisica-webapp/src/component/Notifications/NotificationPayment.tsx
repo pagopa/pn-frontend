@@ -12,27 +12,30 @@ import {
 import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
-import { formatEurocentToCurrency, NotificationDetailPayment } from '@pagopa-pn/pn-commons';
+import { formatEurocentToCurrency, NotificationDetailPayment, PaymentAttachmentSName } from '@pagopa-pn/pn-commons';
 import { PaymentStatus } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getNotificationPaymentInfo } from '../../redux/notification/actions';
+import { getNotificationPaymentInfo, getPaymentAttachment } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
 import { CHECKOUT_URL, PAYMENT_DISCLAIMER_URL } from '../../utils/constants';
 
 interface Props {
+  iun: string;
   notificationPayment: NotificationDetailPayment;
   onDocumentDownload: (url: string) => void;
 }
 
-const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentDownload }) => {
+const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocumentDownload }) => {
   const { t } = useTranslation(['notifiche']);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const dispatch = useAppDispatch();
   const paymentInfo = useAppSelector((state: RootState) => state.notificationState.paymentInfo);
+  const pagopaAttachmentUrl = useAppSelector((state: RootState) => state.notificationState.pagopaAttachmentUrl);
+  const f24AttachmentUrl = useAppSelector((state: RootState) => state.notificationState.f24AttachmentUrl);
 
   useEffect(() => {
     const fetchPaymentInfo = () => {
@@ -57,6 +60,18 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
     fetchPaymentInfo();
   }, []);
 
+  useEffect(() => {
+    if (pagopaAttachmentUrl) {
+      onDocumentDownload(pagopaAttachmentUrl);
+    }
+  }, [pagopaAttachmentUrl]);
+
+  useEffect(() => {
+    if (f24AttachmentUrl) {
+      onDocumentDownload(f24AttachmentUrl);
+    }
+  }, [f24AttachmentUrl]);
+
   const onPayClick = () => {
     if (CHECKOUT_URL && notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
       window.open(`${CHECKOUT_URL}/${notificationPayment.noticeCode}${notificationPayment.creditorTaxId}`);
@@ -67,6 +82,10 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
         window.open(CHECKOUT_URL);
       }, 1000);
     }
+  };
+  
+  const onDocumentClick = (name: PaymentAttachmentSName) => {
+    void dispatch(getPaymentAttachment({ iun, attachmentName: name }));
   };
 
   const onDisclaimerClick = () => {
@@ -104,7 +123,7 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
   // to be fixed once the notification payment model is stable
   const getAttachments = () => {
     // eslint-disable-next-line functional/no-let
-    const attachments = new Array<{ name: string; title: string; url: string }>();
+    const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();
 
     const pagopaDoc = notificationPayment.pagoPaForm;
     const f24Doc = notificationPayment.f24flatRate || notificationPayment.f24standard;
@@ -112,18 +131,16 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
     if(pagopaDoc) {
       // eslint-disable-next-line functional/immutable-data
       attachments.push({
-        name: 'pagopa',
-        title: t('detail.payment.download-pagopa-notification', { ns: 'notifiche' }),
-        url: pagopaDoc.ref.key,
+        name: PaymentAttachmentSName.PAGOPA,
+        title: t('detail.payment.download-pagopa-notification', { ns: 'notifiche' })
       });
     }
 
     if(f24Doc) {
       // eslint-disable-next-line functional/immutable-data
       attachments.push({
-        name: 'f24',
-        title: t('detail.payment.download-f24', { ns: 'notifiche' }),
-        url: f24Doc.ref.key,
+        name: PaymentAttachmentSName.F24,
+        title: t('detail.payment.download-f24', { ns: 'notifiche' })
       });
     }
 
@@ -213,7 +230,7 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
                 <Button
                   name="downloadNotification"
                   startIcon={<DownloadIcon />}
-                  onClick={() => onDocumentDownload(attachment.url)}
+                  onClick={() => onDocumentClick(attachment.name)}
                 >
                   {attachment.title}
                 </Button>

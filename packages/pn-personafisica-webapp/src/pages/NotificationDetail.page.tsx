@@ -145,8 +145,9 @@ const NotificationDetail = () => {
         <Grid item lg={7} xs={12} sx={{ marginTop: isMobile ? 0 : '20px' }}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
-          {notification.payment && (
+          {notification.payment.noticeCode && (
             <NotificationPayment
+              iun={notification.iun}
               notificationPayment={notification.payment}
               onDocumentDownload={dowloadDocument}
             />

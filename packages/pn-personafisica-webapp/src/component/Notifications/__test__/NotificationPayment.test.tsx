@@ -75,7 +75,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly while loading payment info', async () => {
-    render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     const title = screen.getByRole('heading', { name: 'detail.payment.summary'});
     expect(title).toBeInTheDocument();
 
@@ -98,7 +98,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly if getPaymentInfo returns a "required" status', async () => {
-    render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
 
     const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
@@ -135,7 +135,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly if getPaymentInfo returns a "in progress" status', async () => {
-    render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.inprogress);
 
     const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
@@ -169,7 +169,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly if getPaymentInfo returns a "succeeded" status', async () => {
-    render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.succeeded);
 
     const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
@@ -203,7 +203,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly if getPaymentInfo returns a "failed" status', async () => {
-    render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed);
 
     const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
@@ -237,7 +237,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('does not have basic accessibility issues (required status)', async () => {
-    const result = render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    const result = render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
 
     const amountLoader = result.getByRole('heading', { name: ''}).querySelector('svg');
