@@ -1,6 +1,6 @@
 {
-  "name": "pagopa interop",
-  "short_name": "pagopa interop",
+  "name": "pagopa piattaforma notifiche login",
+  "short_name": "pagopa pn",
   "start_url": "/",
   "background_color": "#FFFFFF",
   "theme_color": "#00a1b0",
