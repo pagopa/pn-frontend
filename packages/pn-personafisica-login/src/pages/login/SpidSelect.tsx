@@ -12,12 +12,16 @@ import SpidBig from '../../assets/spid_big.svg';
 import { ENV } from '../../utils/env';
 import { ENABLE_LANDING_REDIRECT } from '../../utils/constants';
 import { storageSpidSelectedOps } from '../../utils/storage';
+import { shuffleList } from '../../utils/utils';
 
 const Login = ({ onBack }: { onBack: () => void }) => {
   const { t } = useTranslation();
+  const shuffledIDPS = shuffleList(IDPS.identityProviders);
+
   const getSPID = (IDP: IdentityProvider) => {
     storageSpidSelectedOps.write(IDP.entityId);
     window.location.assign(`${ENV.URL_API.LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`);
+    // https://hub-login.ecs.dev.pn.pagopa.it/login?entityID=xx_testenv2&authLevel=SpidL2
     // trackEvent(
     //   'LOGIN_IDP_SELECTED',
     //   {
@@ -30,9 +34,6 @@ const Login = ({ onBack }: { onBack: () => void }) => {
     //     )
     // );
   };
-  const goBackToLandingPage = () => {
-    window.location.assign(`${ENV.URL_FE.LANDING}`);
-  };
 
   return (
     <Fragment>
@@ -43,13 +44,7 @@ const Login = ({ onBack }: { onBack: () => void }) => {
           </Grid>
           <Grid item xs={1} sx={{ textAlign: 'right' }}>
             {ENABLE_LANDING_REDIRECT && (
-              <IconButton
-                color="primary"
-                style={{
-                  maxWidth: '17.42px',
-                }}
-                onClick={() => goBackToLandingPage()}
-              >
+              <IconButton color="primary" onClick={onBack}>
                 <ClearOutlinedIcon />
               </IconButton>
             )}
@@ -72,7 +67,7 @@ const Login = ({ onBack }: { onBack: () => void }) => {
           </Grid>
           <Grid item>
             <Grid container direction="row" justifyItems="center" spacing={2}>
-              {IDPS.identityProviders.map((IDP, i) => (
+              {shuffledIDPS.map((IDP, i) => (
                 <Grid
                   item
                   key={IDP.entityId}
