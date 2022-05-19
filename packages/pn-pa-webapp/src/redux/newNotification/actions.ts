@@ -1,9 +1,14 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { FormikValues } from 'formik';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
-import { NewNotificationDocument, PaymentModel } from '../../models/newNotification';
+import {
+  NewNotificationDocument,
+  PaymentModel,
+  NewNotificationFe,
+  NewNotificationResponse,
+  FormRecipient,
+} from '../../models/newNotification';
 
 export const setCancelledIun = createAction<string>('setCancelledIun');
 
@@ -15,6 +20,8 @@ export const setPreliminaryInformations = createAction<{
   group?: string;
   paymentModel: PaymentModel;
 }>('setPreliminaryInformations');
+
+export const saveRecipients = createAction<{recipients: Array<FormRecipient>}>('saveRecipients');
 
 export const uploadNotificationDocument = createAsyncThunk<
   Array<NewNotificationDocument>,
@@ -59,7 +66,16 @@ export const uploadNotificationDocument = createAsyncThunk<
   }
 );
 
-export const saveRecipients = createAction<FormikValues>('saveRecipients');
+export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotificationFe>(
+  'createNewNotification',
+  async (notification: NewNotificationFe, { rejectWithValue }) => {
+    try {
+      const notificationToSave = { ...notification, paymentMode: undefined };
+      return await NotificationsApi.createNewNotification(notificationToSave);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
 
 export const resetNewNotificationState = createAction<void>('resetNewNotificationState');
-

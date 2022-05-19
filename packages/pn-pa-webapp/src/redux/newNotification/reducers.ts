@@ -31,13 +31,13 @@ const newNotificationSlice = createSlice({
     builder.addCase(setPreliminaryInformations, (state, action) => {
       state.notification = {...state.notification, ...action.payload};
     });
+    builder.addCase(saveRecipients, (state, action) => {
+      state.notification.recipients = formatNotificationRecipients(action.payload.recipients);
+    });
     builder.addCase(uploadNotificationDocument.fulfilled, (state, action) => {
       state.notification = {...state.notification, documents: action.payload};
     });
     builder.addCase(resetNewNotificationState, () => initialState);
-    builder.addCase(saveRecipients, (state, action) => {
-      state.notification.recipients = formatNotificationRecipients(action.payload.recipients);
-    });
   },
 });
 

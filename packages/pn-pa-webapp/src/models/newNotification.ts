@@ -80,3 +80,9 @@ export interface FormRecipient {
   showDigitalDomicile?: boolean;
   showPhysicalAddress?: boolean;
 }
+
+export interface NewNotificationResponse {
+  notificationRequestId: string;
+  paProtocolNumber: string;
+  idempotenceToken: string;
+}

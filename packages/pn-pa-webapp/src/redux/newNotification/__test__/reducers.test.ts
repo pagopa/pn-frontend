@@ -1,4 +1,4 @@
-import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
+import { DigitalDomicileType, PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { PaymentModel } from '../../../models/newNotification';
@@ -9,7 +9,10 @@ import {
   setCancelledIun,
   setPreliminaryInformations,
   uploadNotificationDocument,
+  createNewNotification,
+  saveRecipients
 } from '../actions';
+import { newNotification } from './test-utils';
 
 const initialState = {
   loading: false,
@@ -55,6 +58,29 @@ describe('New notification redux state tests', () => {
     expect(payload).toEqual(preliminaryInformations);
   });
 
+  it('Should be able to save recipients', () => {
+    const recipients = [{
+      recipientType: RecipientType.PF,
+      taxId: 'mocked-taxId',
+      creditorTaxId: 'mocked-creditorTaxId',
+      noticeCode: 'mocked-noticeCode',
+      firstName: 'mocked-firstName',
+      lastName: 'mocked-lastName',
+      type: DigitalDomicileType.EMAIL,
+      digitalDomicile: 'mocked@mail.com',
+      address: 'mocked-address',
+      houseNumber: 'mocked-houseNumber',
+      zip: 'mocked-zip',
+      municipality: 'mocked-municipality',
+      province: 'mocked-province',
+      foreignState: 'mocked-foreignState'
+    }];
+    const action = store.dispatch(saveRecipients({recipients}));
+    const payload = action.payload;
+    expect(action.type).toBe('saveRecipients');
+    expect(payload).toEqual({recipients});
+  });
+
   it('Should be able to upload document', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'preloadNotificationDocument');
     apiSpy.mockResolvedValue([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
@@ -80,6 +106,23 @@ describe('New notification redux state tests', () => {
         versionToken: 'mocked-secret'
       }
     }]);
+  });
+
+  it('Should be able to create new notification', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'createNewNotification');
+    apiSpy.mockResolvedValue({
+      notificationRequestId: 'mocked-notificationRequestId',
+      paProtocolNumber: 'mocked-paProtocolNumber',
+      idempotenceToken: 'mocked-idempotenceToken'
+    });
+    const action = await store.dispatch(createNewNotification(newNotification));
+    const payload = action.payload;
+    expect(action.type).toBe('createNewNotification/fulfilled');
+    expect(payload).toEqual({
+      notificationRequestId: 'mocked-notificationRequestId',
+      paProtocolNumber: 'mocked-paProtocolNumber',
+      idempotenceToken: 'mocked-idempotenceToken'
+    });
   });
 
   it('Should be able to reset state', () => {

@@ -7,6 +7,8 @@ import {
   formatFiscalCode,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
+
+import { NewNotificationBe, NewNotificationResponse } from '../../models/newNotification';
 import { apiClient, externalClient } from '../axios';
 
 export const NotificationsApi = {
@@ -158,4 +160,17 @@ export const NotificationsApi = {
         }
       )
       .then(() => void 0),
+
+  /**
+   * create new notification
+   * @param  {NewNotificationBe} notification
+   * @returns Promise
+   */
+  createNewNotification: (
+    notification: NewNotificationBe
+  ): Promise<NewNotificationResponse> => {
+    return apiClient
+      .post<NewNotificationResponse>(`/delivery/requests`, notification)
+      .then((response) => response.data);
+  },
 };

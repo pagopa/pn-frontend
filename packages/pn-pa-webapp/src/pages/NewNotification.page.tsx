@@ -8,7 +8,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { resetNewNotificationState } from '../redux/newNotification/actions';
+import { createNewNotification, resetNewNotificationState } from '../redux/newNotification/actions';
 import * as routes from '../navigation/routes.const';
 import PreliminaryInformations from './components/NewNotification/PreliminaryInformations';
 import Recipient from './components/NewNotification/Recipient';
@@ -43,6 +43,13 @@ const NewNotification = () => {
   const dispatch = useAppDispatch();
 
   const goToNextStep = () => {
+    // if it is last step, save notification
+    if (activeStep === 3) {
+      dispatch(createNewNotification(notification))
+        .unwrap()
+        .then(() => setActiveStep((previousStep) => previousStep + 1));
+      return;
+    }
     setActiveStep((previousStep) => previousStep + 1);
   };
 
