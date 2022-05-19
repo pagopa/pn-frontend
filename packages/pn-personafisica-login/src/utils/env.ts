@@ -3,7 +3,6 @@ import * as env from 'env-var';
 const PUBLIC_URL: string = env.get('PUBLIC_URL').default('').asString();
 
 export const ENV = {
-  ENV: env.get('REACT_APP_ENV').required().asString(),
   PUBLIC_URL,
 
   ASSISTANCE: {
@@ -12,11 +11,8 @@ export const ENV = {
   },
 
   URL_FE: {
-    LOGOUT: PUBLIC_URL + '/logout',
-    ONBOARDING: env.get('REACT_APP_URL_FE_ONBOARDING').required().asString(),
-    DASHBOARD: env.get('REACT_APP_URL_FE_DASHBOARD').required().asString(),
     LANDING: env.get('REACT_APP_URL_FE_LANDING').required().asString(),
-    ASSISTANCE: env.get('REACT_APP_URL_FE_ASSISTANCE').required().asString(),
+    LOGOUT: PUBLIC_URL + '/logout',
   },
 
   URL_API: {
