@@ -23,7 +23,13 @@ const handleLinkClick = jest.fn();
 
 describe('SideMenuList', () => {
   beforeEach(() => {
-    render(<SideMenuList menuItems={sideMenuItems} handleLinkClick={handleLinkClick} />);
+    render(
+      <SideMenuList
+        menuItems={sideMenuItems}
+        handleLinkClick={handleLinkClick}
+        selectedItem={{ index: 0, label: sideMenuItems[0].label, route: sideMenuItems[0].route! }}
+      />
+    );
   });
 
   afterEach(() => {

@@ -1,5 +1,4 @@
 import * as redux from 'react-redux';
-
 import { axe, render } from '../../__test__/test-utils';
 import { fireEvent, screen } from '@testing-library/react';
 import * as hooks from '../../redux/hooks';
