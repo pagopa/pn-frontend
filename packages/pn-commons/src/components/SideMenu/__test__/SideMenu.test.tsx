@@ -18,7 +18,7 @@ describe('SideMenu', () => {
     render(
       <SideMenu menuItems={sideMenuItems}/>
     );
-    const ul = screen.getByRole('list');
+    const ul = screen.getByRole('navigation');
     expect(ul).toBeInTheDocument();
     const buttons = await within(ul).findAllByRole('button');
     expect(buttons).toHaveLength(sideMenuItems.length);
