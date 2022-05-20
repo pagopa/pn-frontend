@@ -11,8 +11,8 @@ describe('Contacts api tests', () => {
 
   it('getDigitalAddresses', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onGet(`/address-book/v1/digital-address/mocked-recipientId`).reply(200, digitalAddresses);
-    const res = await ContactsApi.getDigitalAddresses('mocked-recipientId');
+    mock.onGet(`/address-book/v1/digital-address`).reply(200, digitalAddresses);
+    const res = await ContactsApi.getDigitalAddresses();
     expect(res).toStrictEqual(digitalAddresses);
     mock.reset();
     mock.restore();
@@ -72,11 +72,7 @@ describe('Contacts api tests', () => {
         `/address-book/v1/digital-address/mocked-recipientId/legal/mocked-senderId/${LegalChannelType.PEC}`
       )
       .reply(204, void 0);
-    const res = await ContactsApi.deleteLegalAddress(
-      'mocked-recipientId',
-      'mocked-senderId',
-      LegalChannelType.PEC
-    );
+    const res = await ContactsApi.deleteLegalAddress('mocked-senderId', LegalChannelType.PEC);
     expect(res).toStrictEqual('mocked-senderId');
     mock.reset();
     mock.restore();
@@ -137,7 +133,6 @@ describe('Contacts api tests', () => {
       )
       .reply(204, void 0);
     const res = await ContactsApi.deleteCourtesyAddress(
-      'mocked-recipientId',
       'mocked-senderId',
       CourtesyChannelType.EMAIL
     );

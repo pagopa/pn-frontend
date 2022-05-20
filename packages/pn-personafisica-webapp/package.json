@@ -9,7 +9,7 @@
     "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.6.4",
     "@pagopa-pn/pn-commons": "0.1.0",
-    "@pagopa/mui-italia": "^0.6.16",
+    "@pagopa/mui-italia": "^0.6.19",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.11.21",
