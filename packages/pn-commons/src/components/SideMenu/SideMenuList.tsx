@@ -17,7 +17,7 @@ import SideMenuListItem from './SideMenuListItem';
 type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
-  handleLinkClick: (link: string) => void;
+  handleLinkClick: (link: string, flag?:boolean) => void;
   selectedItem: { index: number; label: string; route: string };
 };
 
@@ -66,7 +66,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
       }}
     >
       <List
-        role="list"
+        role="navigation"
         data-testid="menu-list"
         component="nav"
         aria-label="main piattaforma-notifiche sender"
@@ -84,7 +84,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                 }
                 onClick={() => {
                   setSelectedIndex({ label: item.label, index, route: item.route || '' });
-                  handleLinkClick(item.route as string);
+                  handleLinkClick(item.route as string, true) ;
                   handleClick(item.label);
                 }}
               >
@@ -105,6 +105,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                 <List>
                   {item.children.map((child, childIndex) => (
                     <SideMenuListItem
+
                       key={child.label}
                       selected={
                         selectedIndex &&

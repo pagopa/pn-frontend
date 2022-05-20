@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { axe } from '../../../__test__/test-utils';
 import ErrorDeleghe from '../ErrorDeleghe';
 
 jest.mock('react-i18next', () => ({
@@ -45,5 +46,11 @@ describe('ErrorDeleghe Component', () => {
     expect(toast).not.toBeNull();
     expect(result.baseElement).toHaveTextContent(/nuovaDelega.error.notAvailable/i);
     expect(result.container).toHaveTextContent(/nuovaDelega.error.notAvailableDescr/i);
+  });
+
+  it('is ErrorDeleghe component accessible', async()=>{
+    const result = render(<ErrorDeleghe errorType={2} />);
+    const results = await axe(result?.container);
+    expect(results).toHaveNoViolations();
   });
 });

@@ -1,4 +1,4 @@
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import Delegates from '../Delegates';
 import { arrayOfDelegates } from '../../../redux/delegation/__test__/test.utils';
 import * as hooks from '../../../redux/hooks';
@@ -42,5 +42,13 @@ describe('Delegates Component', () => {
     expect(result.container).not.toHaveTextContent(/marco verdi/i);
     expect(result.container).not.toHaveTextContent(/davide legato/i);
     expect(result.container).toHaveTextContent(/deleghe.error/i);
+  });
+
+  it('is Delegates component accessible', async ()=>{
+    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
+    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegates);
+    const result = render(<Delegates />);
+    const results = await axe(result?.container);
+    expect(results).toHaveNoViolations();
   });
 });
