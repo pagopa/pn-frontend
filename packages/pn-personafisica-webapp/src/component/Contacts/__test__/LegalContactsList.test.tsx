@@ -167,7 +167,7 @@ describe('LegalContactsList Component', () => {
     mockDispatchFn.mockReset();
     mockDispatchFn.mockClear();
     mockDispatchFn.mockImplementation(jest.fn(() => ({
-      unwrap: () => Promise.resolve({code: '01234'}),
+      unwrap: () => Promise.resolve({code: 'verified'}),
     })));
     fireEvent.click(dialogButtons![1]);
     await waitFor(() => {

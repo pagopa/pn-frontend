@@ -33,7 +33,7 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
-  const { delegators } = useAppSelector((state: RootState) => state.sidemenuState);
+  const { delegators } = useAppSelector((state: RootState) => state.generalInfoState);
   const currentDelegator = delegators.find(
     (delegation: Delegator) => delegation.mandateId === mandateId
   );

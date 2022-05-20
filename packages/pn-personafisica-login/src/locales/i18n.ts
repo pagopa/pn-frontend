@@ -4,7 +4,7 @@ import login from './it/login.json';
 
 const resources = {
   it: {
-    traslation: login,
+    login,
   },
 };
 
@@ -18,10 +18,10 @@ void i18n
     interpolation: {
       escapeValue: false,
     },
-    ns: ['login']
+    ns: ['login'],
   })
   .catch((err: any) => {
     throw new Error(err);
   });
-  
+
 export default i18n;

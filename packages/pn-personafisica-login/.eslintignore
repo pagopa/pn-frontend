@@ -1,5 +1,5 @@
 locales/locales.ts
-**/__tests__/**
+**/__test__/**
 .eslintrc.js
 definitions/*
 src/react-app-env.d.ts

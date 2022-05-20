@@ -153,7 +153,7 @@ async function testContactAddition(
   mockDispatchFn.mockClear();
   mockDispatchFn.mockImplementation(
     jest.fn(() => ({
-      unwrap: () => Promise.resolve({ code: '01234' }),
+      unwrap: () => Promise.resolve({ code: 'verified' }),
     }))
   );
   fireEvent.click(dialogButtons![1]);
@@ -313,7 +313,7 @@ describe('SpecialContacts Component', () => {
       ],
       1
     );
-    await testValidFiled(form!, 's_phone', '3494568016');
+    await testValidFiled(form!, 's_phone', '+393494568016');
   });
 
   it('adds pec', async () => {
@@ -343,7 +343,7 @@ describe('SpecialContacts Component', () => {
     await testContactAddition(
       form!,
       's_phone',
-      '3494568016',
+      '+393494568016',
       mockDispatchFn,
       mockActionFn,
       CourtesyChannelType.SMS

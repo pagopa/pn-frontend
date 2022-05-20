@@ -53,7 +53,8 @@ describe('Notifiche Page', () => {
           moreResult: true,
         },
       })
-      .mockReturnValueOnce({ delegators: [] });
+      .mockReturnValueOnce({ delegators: [] })
+      .mockReturnValueOnce({ legalDomicile: [] });
     // mock action
     const actionSpy = jest.spyOn(actions, 'getReceivedNotifications');
     actionSpy.mockImplementation(mockActionFn);
@@ -139,5 +140,5 @@ describe('Notifiche Page', () => {
     } else {
       fail("render() returned undefined!");
     }
-  });
+  }, 10000);
 });

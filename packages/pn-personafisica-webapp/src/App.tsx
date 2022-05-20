@@ -17,7 +17,7 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
-import { getSidemenuInformation } from './redux/sidemenu/actions';
+import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { mixpanelInit } from './utils/mixpanel';
 
 // TODO: get products list from be (?)
@@ -36,7 +36,7 @@ const App = () => {
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { pendingDelegators, delegators } = useAppSelector(
-    (state: RootState) => state.sidemenuState
+    (state: RootState) => state.generalInfoState
   );
   const navigate = useNavigate();
 
@@ -79,6 +79,7 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
+      void dispatch(getDomicileInfo());
     }
   }, [sessionToken]);
 
