@@ -66,7 +66,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
       }}
     >
       <List
-        role="list"
+        role="navigation"
         data-testid="menu-list"
         component="nav"
         aria-label="main piattaforma-notifiche sender"
