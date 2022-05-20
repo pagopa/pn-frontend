@@ -27,8 +27,8 @@ test('go to the spid url', () => {
   idps.forEach((element) => {
     const spidImg = screen.getByAltText(element.name);
     const spidSpan = spidImg.parentNode;
-    const spidButton = spidSpan.parentNode;
-    fireEvent.click(spidButton);
+    const spidButton = spidSpan!.parentNode;
+    fireEvent.click(spidButton!);
     const id = element.entityId;
     expect(global.window.location.assign).toBeCalledWith(
       ENV.URL_API.LOGIN + '/login?entityID=' + id + '&authLevel=SpidL2'

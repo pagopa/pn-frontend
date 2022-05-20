@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import Login from '../Login';
 import { ENV } from '../../../utils/env';
-import './../../../locales/i18n';
+import '../../../locales/i18n';
 
 const oldWindowLocation = global.window.location;
 
@@ -26,8 +26,9 @@ test('rendering test', () => {
 test('renders button Entra con Spid', () => {
   render(<Login />);
   const ButtonSpid = document.getElementById('spidButton');
-
-  fireEvent.click(ButtonSpid);
+  if (ButtonSpid) {
+    fireEvent.click(ButtonSpid);
+  }
   expect(screen.getAllByRole('img')[0]).toHaveAttribute('src', 'spid_big.svg');
 });
 
