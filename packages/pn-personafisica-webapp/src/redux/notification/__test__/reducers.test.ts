@@ -33,6 +33,8 @@ describe('Notification detail redux state tests', () => {
       },
       documentDownloadUrl: '',
       legalFactDownloadUrl: '',
+      pagopaAttachmentUrl: '',
+      f24AttachmentUrl: '',
       paymentInfo: {},
     });
   });

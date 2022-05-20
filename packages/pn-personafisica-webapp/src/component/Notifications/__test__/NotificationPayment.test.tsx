@@ -21,13 +21,23 @@ const mockedNotificationDetailPayment = {
   noticeCode: 'mocked-noticeCode',
   creditorTaxId: "mocked-creditorTaxId",
   pagoPaForm: {
-    "digests": {
-      "sha256": "mocked-sha256"
+    digests: {
+      sha256: "mocked-pagopa-sha256"
     },
-    "contentType": "application/pdf",
-    "ref": {
-      "key": "mocked-key",
-      "versionToken": "mockedVersionToken"
+    contentType: "application/pdf",
+    ref: {
+      key: "mocked-pagopa-key",
+      versionToken: "mockedVersionToken"
+    }
+  },
+  f24flatRate: {
+    digests: {
+      sha256: "mocked-f24-sha256"
+    },
+    contentType: "application/pdf",
+    ref: {
+      key: "mocked-f24-key",
+      versionToken: "mockedVersionToken"
     }
   }
 } as NotificationDetailPayment;
@@ -92,7 +102,7 @@ describe('NotificationPayment component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
   });
@@ -106,8 +116,8 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
     
@@ -143,8 +153,8 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
     
@@ -177,8 +187,8 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
     
@@ -211,8 +221,8 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
     
@@ -245,8 +255,8 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
 

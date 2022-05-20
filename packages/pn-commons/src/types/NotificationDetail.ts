@@ -242,7 +242,7 @@ export enum NotificationFeePolicy {
 
 export interface NotificationDetailPayment {
   notificationFeePolicy: NotificationFeePolicy;
-  noticeCode: string;
+  noticeCode?: string;
   creditorTaxId: string;
   pagoPaForm: NotificationPaymentAttachment;
   f24flatRate?: NotificationPaymentAttachment;

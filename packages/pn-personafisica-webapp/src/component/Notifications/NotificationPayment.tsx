@@ -12,8 +12,7 @@ import {
 import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
-import { formatEurocentToCurrency, NotificationDetailPayment, PaymentAttachmentSName } from '@pagopa-pn/pn-commons';
-import { PaymentStatus } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
+import { formatEurocentToCurrency, NotificationDetailPayment, PaymentAttachmentSName, PaymentStatus } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
@@ -39,7 +38,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
 
   useEffect(() => {
     const fetchPaymentInfo = () => {
-      if (notificationPayment) {
+      if (notificationPayment.noticeCode) {
         // dispatch(getNotificationPaymentInfo({ iun: notification.iun, recipientId: notification.recipients[0].taxId })).unwrap()
         dispatch(getNotificationPaymentInfo({ noticeCode: notificationPayment.noticeCode, taxId: notificationPayment.creditorTaxId }))
           .unwrap()
@@ -228,7 +227,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
                 sx={{ textAlign: 'center', my: '1rem' }}
               >
                 <Button
-                  name="downloadNotification"
+                  name={`download-${attachment.name.toLowerCase()}-notification`}
                   startIcon={<DownloadIcon />}
                   onClick={() => onDocumentClick(attachment.name)}
                 >

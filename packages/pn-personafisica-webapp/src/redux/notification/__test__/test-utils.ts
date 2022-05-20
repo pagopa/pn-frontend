@@ -56,9 +56,19 @@ export const notificationFromBe: NotificationDetail = {
   ],
   payment: {
     notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
-    noticeCode: "mocked-noticeCode",
+    // noticeCode: "",
     creditorTaxId: "mocked-creditorTaxId",
     pagoPaForm:  {
+      digests: {
+        sha256: "3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659"
+      },
+      contentType: 'application/pdf',
+      ref: {
+        key: "mocked-key",
+        versionToken: "mocked-versionToken"
+      },
+    },
+    f24standard:  {
       digests: {
         sha256: "3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659"
       },
