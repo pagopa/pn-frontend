@@ -1,16 +1,25 @@
 import * as redux from 'react-redux';
-import { axe } from "../../__test__/test-utils";
+import { fireEvent, screen } from '@testing-library/react';
+import { axe } from '../../__test__/test-utils';
 import { render } from '../../__test__/test-utils';
 import * as hooks from '../../redux/hooks';
 import * as actions from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
+import { PROFILO } from '../../navigation/routes.const';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-      t: (str: string) => str,
-    }),
-    Trans: () => "mocked verify description",
+    t: (str: string) => str,
+  }),
+  Trans: () => 'mocked verify description',
+}));
+
+const mockNavigateFn = jest.fn();
+// mock imports
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
 }));
 
 jest.mock('../../component/Contacts/InsertLegalContact', () => () => <div>InsertLegalContact</div>);
@@ -32,7 +41,7 @@ describe('Contacts page', () => {
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockDispatchFn);
   });
-  
+
   afterEach(() => {
     jest.resetAllMocks();
     jest.clearAllMocks();
@@ -54,14 +63,27 @@ describe('Contacts page', () => {
     expect(mockActionFn).toBeCalledWith('mocked-recipientId');
   });
 
-  it('is contact page accessible', async ()=>{
-    appSelectorSpy
-    .mockReturnValueOnce('mocked-recipientId')
-    .mockReturnValueOnce({
+  test('subtitle link properly redirects to profile page', () => {
+    appSelectorSpy.mockReturnValueOnce('mocked-recipientId').mockReturnValueOnce({
       legal: [],
-      courtesy: []
+      courtesy: [],
     });
-    const { container } = render(<Contacts/>);
+    render(<Contacts />);
+
+    const subtitleLink = screen.getByText('subtitle-link');
+    expect(subtitleLink).toBeInTheDocument();
+
+    fireEvent.click(subtitleLink);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(PROFILO);
+  });
+
+  it('is contact page accessible', async () => {
+    appSelectorSpy.mockReturnValueOnce('mocked-recipientId').mockReturnValueOnce({
+      legal: [],
+      courtesy: [],
+    });
+    const { container } = render(<Contacts />);
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });

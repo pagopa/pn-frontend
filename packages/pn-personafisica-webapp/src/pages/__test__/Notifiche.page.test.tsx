@@ -139,5 +139,5 @@ describe('Notifiche Page', () => {
     } else {
       fail("render() returned undefined!");
     }
-  });
+  }, 10000);
 });
