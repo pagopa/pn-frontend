@@ -113,7 +113,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                         selectedIndex.label === child.label
                       }
                       item={child}
-                      handleLinkClick={()=>{console.log("ciao");}}
+                      handleLinkClick={handleLinkClick}
                       style={{ pl: 4 }}
                       onSelect={() =>
                         setSelectedIndex({
