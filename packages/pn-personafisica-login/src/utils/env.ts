@@ -11,7 +11,6 @@ export const ENV = {
   },
 
   URL_FE: {
-    LANDING: env.get('REACT_APP_URL_FE_LANDING').required().asString(),
     LOGOUT: PUBLIC_URL + '/logout',
   },
 

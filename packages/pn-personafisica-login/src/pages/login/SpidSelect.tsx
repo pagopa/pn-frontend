@@ -10,7 +10,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { IdentityProvider, IDPS } from '../../utils/IDPS';
 import SpidBig from '../../assets/spid_big.svg';
 import { ENV } from '../../utils/env';
-import { ENABLE_LANDING_REDIRECT } from '../../utils/constants';
 import { storageSpidSelectedOps } from '../../utils/storage';
 import { shuffleList } from '../../utils/utils';
 
@@ -43,11 +42,9 @@ const Login = ({ onBack }: { onBack: () => void }) => {
             <img src={SpidBig} />
           </Grid>
           <Grid item xs={1} sx={{ textAlign: 'right' }}>
-            {ENABLE_LANDING_REDIRECT && (
-              <IconButton color="primary" onClick={onBack}>
-                <ClearOutlinedIcon />
-              </IconButton>
-            )}
+            <IconButton color="primary" onClick={onBack}>
+              <ClearOutlinedIcon />
+            </IconButton>
           </Grid>
         </Grid>
         <Grid container direction="column" justifyContent="center" alignItems="center" spacing="10">
