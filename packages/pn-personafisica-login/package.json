@@ -3,7 +3,6 @@
   "description": "Pagina di login di Piattaforma Notifiche per il cittadino",
   "version": "1.0.0",
   "private": true,
-  "homepage": "/auth/",
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
