@@ -27,13 +27,6 @@ afterEach(() => {
 
 jest.mock('../pages/logout/Logout', () => () => 'LOGOUT');
 jest.mock('../pages/login/Login', () => () => 'LOGIN');
-jest.mock('../pages/loginSuccess/LoginSuccess', () => () => 'LOGIN_SUCCESS');
-jest.mock(
-  '../pages/ValidateSession/ValidateSession',
-  () =>
-    ({ sessionToken }) =>
-      'VALIDATE_SESSION:' + sessionToken
-);
 
 test('test not served path', () => {
   render(<App />);
@@ -70,22 +63,6 @@ test('test Login with onSuccess', () => {
   render(<App />);
   screen.getByText('LOGIN');
   expect(storageOnSuccessOps.read()).toBe('prova');
-  checkRedirect(false);
-});
-
-test('test ValidateSession', () => {
-  mockedLocation.pathname = '/login';
-  storageTokenOps.write('testToken');
-  render(<App />);
-  screen.getByText('VALIDATE_SESSION:testToken');
-  checkRedirect(false);
-});
-
-test('test LoginSuccess', () => {
-  mockedLocation.pathname = '/login/success';
-  mockedLocation.hash = 'token=successToken';
-  render(<App />);
-  screen.getByText('LOGIN_SUCCESS');
   checkRedirect(false);
 });
 

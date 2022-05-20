@@ -6,6 +6,12 @@ import { ENV } from '../../../utils/env';
 const oldWindowLocation = global.window.location;
 const idps = IDPS.identityProviders;
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({ t: (str: string) => str }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
+}));
+
 beforeAll(() => {
   // eslint-disable-next-line functional/immutable-data
   Object.defineProperty(window, 'location', { value: { assign: jest.fn() } });
