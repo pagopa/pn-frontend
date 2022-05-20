@@ -1,7 +1,6 @@
 import * as redux from 'react-redux';
+import { axe, render } from '../../__test__/test-utils';
 import { fireEvent, screen } from '@testing-library/react';
-import { axe } from '../../__test__/test-utils';
-import { render } from '../../__test__/test-utils';
 import * as hooks from '../../redux/hooks';
 import * as actions from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
