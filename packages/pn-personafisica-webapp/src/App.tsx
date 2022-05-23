@@ -91,7 +91,7 @@ const App = () => {
     icon: PersonIcon,
     label:
       'delegator' in delegator && delegator.delegator
-        ? `${delegator.delegator.firstName} ${delegator.delegator.lastName}`
+        ? `${delegator.delegator.displayName}`
         : 'No Name Found',
     route:
       'delegator' in delegator && delegator.delegator
