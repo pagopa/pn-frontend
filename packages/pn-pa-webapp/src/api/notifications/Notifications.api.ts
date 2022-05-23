@@ -137,14 +137,14 @@ export const NotificationsApi = {
    * @param  {string} fileBase64
    * @returns Promise
    */
-  uploadNotificationDocument: (
+  uploadNotificationAttachment: (
     url: string,
     sha256: string,
     secret: string,
     fileBase64: string
-  ): Promise<void> =>
+  ): Promise<string> =>
     externalClient
-      .put<void>(
+      .put<string>(
         url,
         {
           'upload-file': fileBase64,
@@ -157,5 +157,5 @@ export const NotificationsApi = {
           },
         }
       )
-      .then(() => void 0),
+      .then((res) => res.headers['x-amz-version-id']),
 };

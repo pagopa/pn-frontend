@@ -1,6 +1,7 @@
+import { NotificationDetailRecipient } from '@pagopa-pn/pn-commons';
 import { FormRecipient } from '../models/newNotification';
 
-export const formatNotificationRecipients = (recipients: Array<FormRecipient>) =>
+export const formatNotificationRecipients = (recipients: Array<FormRecipient>): Array<NotificationDetailRecipient> =>
   recipients.map((recipient) => ({
     denomination: `${recipient.firstName} ${recipient.lastName}`,
     recipientType: recipient.recipientType,

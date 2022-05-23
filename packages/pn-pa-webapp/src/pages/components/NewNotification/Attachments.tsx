@@ -8,7 +8,7 @@ import { FileUpload } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../../redux/hooks';
-import { uploadNotificationDocument } from '../../../redux/newNotification/actions';
+import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
 import NewNotificationCard from './NewNotificationCard';
 
 type AttachmentBoxProps = {
@@ -123,7 +123,7 @@ const Attachments = ({ onConfirm }: Props) => {
     onSubmit: (values) => {
       if (formik.isValid) {
         dispatch(
-          uploadNotificationDocument(
+          uploadNotificationAttachment(
             values.documents.map((v) => ({
               key: v.name,
               fileBase64: v.file.base64,

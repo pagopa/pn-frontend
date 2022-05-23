@@ -97,7 +97,7 @@ const NewNotification = () => {
           )}
           {activeStep === 1 && <Recipient onConfirm={goToNextStep} />}
           {activeStep === 2 && <Attachments onConfirm={goToNextStep} />}
-          {activeStep === 3 && <PaymentMethods />}
+          {activeStep === 3 && <PaymentMethods notification={notification} onConfirm={goToNextStep}/>}
         </Grid>
       </Grid>
     </Prompt>
