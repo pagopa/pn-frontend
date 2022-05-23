@@ -125,7 +125,7 @@ export function getNotificationTimelineStatusInfos(
   description: string;
   linkText?: string;
   recipient?: string;
-} {
+} | null {
   const recipient = ricipients.find(
     (r) =>
       r.taxId ===
@@ -137,14 +137,14 @@ export function getNotificationTimelineStatusInfos(
       if ((step.details as NotificationPathChooseDetails).deliveryMode === DeliveryMode.ANALOG) {
         return {
           label: 'Invio per via cartacea',
-          description: "È in corso l' invio della notifica per via cartacea.",
+          description: "È in corso l'invio della notifica per via cartacea.",
           linkText: "Vai all'attestazione",
           recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
         };
       }
       return {
         label: 'Invio per via digitale',
-        description: "È in corso l' invio della notifica per via digitale.",
+        description: "È in corso l'invio della notifica per via digitale.",
         linkText: "Vai all'attestazione",
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
@@ -155,18 +155,32 @@ export function getNotificationTimelineStatusInfos(
           : 'sms';
       return {
         label: 'Invio del messaggio di cortesia',
-        description: `È in corso l' invio del messaggio di cortesia a ${recipient?.denomination} tramite ${type}`,
+        description: `È in corso l'invio del messaggio di cortesia a ${recipient?.denomination} tramite ${type}`,
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE:
+      if(!(step.details as SendDigitalDetails).address?.address) { // if digital domicile is undefined
+        return null;
+      }
       return {
         label: 'Invio via PEC',
-        description: `È in corso l' invio della notifica a ${
+        description: `È in corso l'invio della notifica a ${
           recipient?.denomination
         } all'indirizzo PEC ${(step.details as SendDigitalDetails).address?.address}`,
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK:
+      const errors = (step.details as SendDigitalDetails).errors;
+      if (errors && errors.includes("RETRYABLE_FAIL")) {
+        return {
+          label: 'Invio via PEC fallito',
+          description: `L'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
+            (step.details as SendDigitalDetails).address?.address
+          } non è riuscito.`,
+          linkText: "Vai all'attestazione",
+          recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        };
+      }
       return {
         label: 'Invio via PEC riuscito',
         description: `L' invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
@@ -177,17 +191,15 @@ export function getNotificationTimelineStatusInfos(
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FAILURE:
       return {
-        label: 'Invio via PEC non riuscito',
-        description: `L' invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
-          (step.details as SendDigitalDetails).address?.address
-        } non è riuscito.`,
+        label: 'Invio per via digitale fallito',
+        description: `L'invio della notifica a ${recipient?.denomination} per via digitale non è riuscito.`,
         linkText: "Vai all'attestazione",
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
       return {
         label: 'Invio via raccomandata semplice',
-        description: `È in corso l' invio della notifica a ${
+        description: `È in corso l'invio della notifica a ${
           recipient?.denomination
         } all'indirizzo ${
           (step.details as AnalogWorkflowDetails).address?.address
@@ -202,7 +214,7 @@ export function getNotificationTimelineStatusInfos(
       ) {
         return {
           label: 'Invio via raccomandata 890',
-          description: `È in corso l' invio della notifica a ${
+          description: `È in corso l'invio della notifica a ${
             recipient?.denomination
           } all'indirizzo ${
             (step.details as AnalogWorkflowDetails).address?.address
@@ -213,7 +225,7 @@ export function getNotificationTimelineStatusInfos(
       }
       return {
         label: 'Invio via raccomandata A/R',
-        description: `È in corso l' invio della notifica a ${
+        description: `È in corso l'invio della notifica a ${
           recipient?.denomination
         } all'indirizzo ${
           (step.details as AnalogWorkflowDetails).address?.address
