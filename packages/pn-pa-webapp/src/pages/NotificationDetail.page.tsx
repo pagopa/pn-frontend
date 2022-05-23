@@ -1,8 +1,9 @@
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment } from 'react';
-import { Breadcrumbs, Grid, Typography, Box, Paper, Button, styled } from '@mui/material';
+import { Breadcrumbs, Grid, Typography, Box, Paper, Button, styled, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
+import { ArrowBack } from '@mui/icons-material';
 import {
   NotificationStatus,
   TitleBox,
@@ -13,7 +14,7 @@ import {
   NotificationDetailTimeline,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Tag, TagGroup } from '@pagopa/mui-italia';
+import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -145,19 +146,24 @@ const NotificationDetail = () => {
 
   const breadcrumb = (
     <Fragment>
-      <Breadcrumbs aria-label="breadcrumb">
-        <StyledLink to={routes.DASHBOARD}>
-          <EmailIcon sx={{ mr: 0.5 }} />
-          Notifiche
-        </StyledLink>
-        <Typography
-          color="text.primary"
-          fontWeight={600}
-          sx={{ display: 'flex', alignItems: 'center' }}
-        >
-          Dettaglio notifica
-        </Typography>
-      </Breadcrumbs>
+      <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'start', sm: 'center' }} justifyContent="start" spacing={3}>
+        <ButtonNaked onClick={() => navigate(-1)} startIcon={<ArrowBack />} color="primary" size="medium" >
+          Indietro
+        </ButtonNaked>
+        <Breadcrumbs aria-label="breadcrumb">
+          <StyledLink to={routes.DASHBOARD}>
+            <EmailIcon sx={{ mr: 0.5 }} />
+            Notifiche
+          </StyledLink>
+          <Typography
+            color="text.primary"
+            fontWeight={600}
+            sx={{ display: 'flex', alignItems: 'center' }}
+          >
+            Dettaglio notifica
+          </Typography>
+        </Breadcrumbs>
+      </Stack>
       <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
         <Button sx={{ margin: '10px 0' }} variant="outlined">
@@ -182,14 +188,6 @@ const NotificationDetail = () => {
               documentsAvailable={true}
             />
           </Paper>
-          <Button
-            data-testid="backButton"
-            sx={{ margin: '10px 0' }}
-            variant="outlined"
-            onClick={() => navigate(-1)}
-          >
-            Indietro
-          </Button>
         </Grid>
         <Grid item lg={5} xs={12}>
           <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
