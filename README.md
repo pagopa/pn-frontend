@@ -12,6 +12,7 @@ Avviare le applicazioni
 
 - `yarn start:pf` per avviare localmente il portale per i cittadini
 - `yarn start:pa` per avviare localmente il portale per la PA
+- `yarn start:login` per avviare localmente il portale di login per il cittadino (va su localhost:300)
 
 In ogni caso, si può sempre navigare nella cartella del package di riferimento e lanciare
 

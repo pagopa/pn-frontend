@@ -1,9 +1,7 @@
-import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { width } from '@mui/system';
 import Login from '../Login';
 import { ENV } from '../../../utils/env';
-import './../../../locale/i18n';
+import '../../../locales/i18n';
 
 const oldWindowLocation = global.window.location;
 
@@ -26,14 +24,16 @@ test('rendering test', () => {
 });
 
 test('renders button Entra con Spid', () => {
-  const login = render(<Login />);
+  render(<Login />);
   const ButtonSpid = document.getElementById('spidButton');
-  fireEvent.click(ButtonSpid);
+  if (ButtonSpid) {
+    fireEvent.click(ButtonSpid);
+  }
   expect(screen.getAllByRole('img')[0]).toHaveAttribute('src', 'spid_big.svg');
 });
 
-test.skip('renders button Entra con CIE', () => {
-  const login = render(<Login />);
+test('renders button Entra con CIE', () => {
+  render(<Login />);
   const ButtonCIE = screen.getByRole(/Button/i, {
     name: 'Entra con CIE',
   });
@@ -42,4 +42,20 @@ test.skip('renders button Entra con CIE', () => {
   expect(global.window.location.assign).toBeCalledWith(
     `${ENV.URL_API.LOGIN}/login?entityID=xx_servizicie_test&authLevel=SpidL2`
   );
+});
+
+test('renders the privacy disclaimer link', () => {
+  render(<Login />);
+  const privacyDisclaimerLink = screen.getByText(/Informativa Privacy/i);
+
+  fireEvent.click(privacyDisclaimerLink);
+  expect(global.window.location.assign).toBeCalledWith(`${ENV.URL_FILE.PRIVACY_DISCLAIMER}`);
+});
+
+test('renders the  link', () => {
+  render(<Login />);
+  const privacyDisclaimerLink = screen.getByTestId('terms-and-conditions');
+
+  fireEvent.click(privacyDisclaimerLink);
+  expect(global.window.location.assign).toBeCalledWith(`${ENV.URL_FILE.TERMS_AND_CONDITIONS}`);
 });

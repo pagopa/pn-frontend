@@ -33,6 +33,7 @@ const ErrorDeleghe: React.FC<ErrorDelegheProps> = ({ errorType }) => {
       open={errorType !== undefined}
       variant="standard"
       type={MessageType.ERROR}
+      aria-label="errore"
     />
   );
 };

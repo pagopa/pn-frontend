@@ -29,8 +29,7 @@ const SideMenuListItem = ({
   goOutside = false,
   handleLinkClick,
   onSelect,
-}: Props) => {
-  return (
+}: Props) => (
     <ListItemButton
       selected={selected}
       onClick={() => {
@@ -61,6 +60,5 @@ const SideMenuListItem = ({
       {goOutside && <ExitToApp color="action" />}
     </ListItemButton>
   );
-};
 
 export default SideMenuListItem;

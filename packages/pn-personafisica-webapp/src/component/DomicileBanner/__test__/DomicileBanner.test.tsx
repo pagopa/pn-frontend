@@ -1,5 +1,5 @@
 import { fireEvent } from '@testing-library/react';
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import DomicileBanner from '../DomicileBanner';
 
 jest.mock('react-i18next', () => ({
@@ -39,7 +39,12 @@ describe('DomicileBanner component', () => {
 
     fireEvent.click(closeButton);
     const dialog = result.queryByTestId('addDomicileBanner');
-
     expect(dialog).toBeNull();
+  });
+
+  it('is Domicile Banner component accessible', async()=>{
+    const result = render(<DomicileBanner />);
+    const results = await axe(result?.container);
+    expect(results).toHaveNoViolations();
   });
 });

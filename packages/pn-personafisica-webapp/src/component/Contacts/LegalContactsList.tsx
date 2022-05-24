@@ -120,7 +120,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             saveDisabled={!formik.isValid}
             removeModalTitle={t('legal-contacts.remove-pec-title', { ns: 'recapiti' })}
             removeModalBody={t('legal-contacts.remove-pec-message', {
-              pec: formik.values.pec,
+              value: formik.values.pec,
               ns: 'recapiti',
             })}
             value={formik.values.pec}

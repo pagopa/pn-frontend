@@ -4,7 +4,7 @@ import { RenderResult } from '@testing-library/react';
 import * as actions from '../../redux/notification/actions';
 import * as hooks from '../../redux/hooks';
 import { notificationToFe } from '../../redux/notification/__test__/test-utils';
-import { render } from '../../__test__/test-utils';
+import { axe, render } from '../../__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
 
 // mock imports
@@ -63,7 +63,7 @@ describe('NotificationDetail Page', () => {
     mockActionFn.mockReset();
   });
 
-  test('renders NotificationDetail page', () => {
+  test('renders NotificationDetail page', async() => {
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent(/Table/i);
@@ -72,5 +72,6 @@ describe('NotificationDetail Page', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-id');
+    expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
   });
 });

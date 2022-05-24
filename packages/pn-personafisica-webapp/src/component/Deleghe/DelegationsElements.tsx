@@ -50,7 +50,7 @@ export const Menu = (props: any) => {
 
   return (
     <>
-      <IconButton onClick={handleClick} data-testid="delegationMenuIcon">
+      <IconButton onClick={handleClick} data-testid="delegationMenuIcon" aria-label="Delegation Menu Icon">
         <MoreVertIcon fontSize={'small'} />
       </IconButton>
       <MUIMenu anchorEl={anchorEl} open={open} onClose={handleClose} data-testid="delegationMenu">

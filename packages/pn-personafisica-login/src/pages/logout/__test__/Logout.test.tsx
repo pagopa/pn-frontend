@@ -1,4 +1,3 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 import Logout from '../Logout';
 import { ROUTE_LOGIN } from '../../../utils/constants';

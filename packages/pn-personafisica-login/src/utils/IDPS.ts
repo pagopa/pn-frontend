@@ -1,12 +1,12 @@
 import { ENV } from './env';
-export type IdentityProvider= { 
+export type IdentityProvider = {
   identifier: string;
   entityId: string;
   name: string;
-  imageUrl:string;
+  imageUrl: string;
 };
 
-const IDPS: {identityProviders: Array<IdentityProvider>; richiediSpid:string} = {
+const IDPS: { identityProviders: Array<IdentityProvider>; richiediSpid: string } = {
   identityProviders: [
     {
       identifier: 'Aruba',
@@ -55,6 +55,12 @@ const IDPS: {identityProviders: Array<IdentityProvider>; richiediSpid:string} = 
       entityId: 'timid',
       name: 'TIM id',
       imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-timid.png',
+    },
+    {
+      identifier: 'Lepida',
+      entityId: 'lepidaid',
+      name: 'Lepida id',
+      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-lepidaid.png',
     },
   ],
   richiediSpid: 'https://www.spid.gov.it/cos-e-spid/come-attivare-spid/',
