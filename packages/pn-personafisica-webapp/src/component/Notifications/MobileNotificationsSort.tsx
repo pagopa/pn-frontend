@@ -53,7 +53,7 @@ const MobileNotificationsSort = ({ sortFields, sort, onChangeSorting }: Props) =
   return (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
-        sx={{ pr: isSorted ? '10px' : 0 }}
+        sx={{ pr: isSorted ? '10px' : 0, height: '24px' }}
         hasCounterBadge
         bagdeCount={isSorted ? 1 : 0}
       >
