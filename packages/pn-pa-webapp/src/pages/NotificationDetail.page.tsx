@@ -161,7 +161,7 @@ const NotificationDetail = () => {
       <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
         <Button sx={{ margin: '10px 0' }} variant="outlined">
-          Annulla Notifica
+          Annulla notifica
         </Button>
       )}
     </Fragment>
