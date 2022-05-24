@@ -7,11 +7,11 @@ import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 import { logout } from '../redux/auth/actions';
 import { useAppDispatch } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { UserRole } from '../models/user';
+import { PartyRole } from '../models/user';
 import { goToSelfcareLogin } from './navigation.utility';
 
 interface Props {
-  roles: Array<UserRole>;
+  roles: Array<PartyRole>;
 }
 
 const inactivityTimer = 5 * 60 * 1000;
@@ -23,8 +23,8 @@ const inactivityTimer = 5 * 60 * 1000;
 /* eslint-disable functional/immutable-data */
 const RequireAuth = ({ roles }: Props) => {
   const token = useSelector((state: RootState) => state.userState.user.sessionToken);
-  const role = useSelector((state: RootState) => state.userState.user.organization?.role);
-  const userHasRequiredRole = role && roles.includes(role);
+  const role = useSelector((state: RootState) => state.userState.user.organization?.roles[0]);
+  const userHasRequiredRole = role && roles.includes(role.partyRole);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token || !userHasRequiredRole);
   const dispatch = useAppDispatch();
 

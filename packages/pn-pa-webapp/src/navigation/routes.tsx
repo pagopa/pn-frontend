@@ -3,7 +3,7 @@ import { NotFound } from '@pagopa-pn/pn-commons';
 
 import Dashboard from '../pages/Dashboard.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
-import { UserRole } from '../models/user';
+import { PartyRole } from '../models/user';
 import RequireAuth from './RequireAuth';
 import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
@@ -16,7 +16,7 @@ function Router() {
         <Route
           element={
             <RequireAuth
-              roles={[UserRole.REFERENTE_AMMINISTRATIVO, UserRole.REFERENTE_OPERATIVO]}
+              roles={[PartyRole.MANAGER, PartyRole.OPERATOR]}
             />
           }
         >
