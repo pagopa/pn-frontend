@@ -117,15 +117,13 @@ export const NotificationsApi = {
     items: Array<{ key: string; contentType: string }>
   ): Promise<Array<{ url: string; secret: string; httpMethod: string }>> =>
     apiClient
-      .post<{ items: Array<{ url: string; secret: string; httpMethod: string }> }>(
+      .post<Array<{ url: string; secret: string; httpMethod: string }>>(
         `/delivery/attachments/preload`,
-        {
-          items,
-        }
+        items
       )
       .then((response) => {
-        if (response.data && response.data.items) {
-          return response.data.items;
+        if (response.data) {
+          return response.data;
         }
         return [];
       }),
@@ -139,7 +137,7 @@ export const NotificationsApi = {
    */
   uploadNotificationAttachment: (
     url: string,
-    sha256: string,
+    _sha256: string,
     secret: string,
     fileBase64: string
   ): Promise<string> =>
@@ -151,11 +149,14 @@ export const NotificationsApi = {
         },
         {
           headers: {
-            'Content-type': 'application/pdf',
-            'x-amz-checksum-sha256': sha256,
+            'Content-Type': 'application/pdf',
             'x-amz-meta-secret': secret,
           },
         }
       )
       .then((res) => res.headers['x-amz-version-id']),
 };
+
+// TODO: da rimettere appena aggiornate le api
+// 'x-amz-sdk-checksum-algorithm': 'SHA256',
+// 'x-amz-checksum-sha256': sha256

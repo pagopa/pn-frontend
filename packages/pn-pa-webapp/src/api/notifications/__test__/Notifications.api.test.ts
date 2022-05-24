@@ -70,10 +70,8 @@ describe('Notifications api tests', () => {
   it('preloadNotificationDocument', async () => {
     const mock = new MockAdapter(apiClient);
     mock
-      .onPost(`/delivery/attachments/preload`, {
-        items: [{ key: 'mocked-key', contentType: 'text/plain' }],
-      })
-      .reply(200, { items: [{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }] });
+      .onPost(`/delivery/attachments/preload`, [{ key: 'mocked-key', contentType: 'text/plain' }])
+      .reply(200, [{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
     const res = await NotificationsApi.preloadNotificationDocument([
       { key: 'mocked-key', contentType: 'text/plain' },
     ]);
