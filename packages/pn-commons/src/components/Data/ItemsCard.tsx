@@ -67,7 +67,7 @@ const ItemsCard = ({
             <CardContent sx={{ padding: 0, marginTop: '16px', ':last-child': { padding: 0 } }}>
               {cardBody.map((body) => (
                 <Box key={body.id} sx={{ marginBottom: '16px' }}>
-                  <Typography sx={{ fontWeight: 600, fontSize: '14px' }} data-testid="cardBodyLabel">
+                  <Typography variant="caption-semibold" data-testid="cardBodyLabel">
                     {body.label}
                   </Typography>
                   <Typography variant="body2" data-testid="cardBodyValue">
