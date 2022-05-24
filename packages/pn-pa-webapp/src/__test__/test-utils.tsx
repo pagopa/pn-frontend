@@ -2,26 +2,24 @@ import { ReactElement, ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { fireEvent, render, RenderOptions, waitFor, within, screen } from '@testing-library/react';
+import { configureAxe, toHaveNoViolations } from 'jest-axe';
 
 import { store } from '../redux/store';
 
-const AllTheProviders = ({children}: {children: ReactNode}) => {
-  return (
-    <BrowserRouter>
-      <Provider store={store}>
-        {children}
-      </Provider>
-    </BrowserRouter>
-  )
-}
+const AllTheProviders = ({ children }: { children: ReactNode }) => (
+  <BrowserRouter>
+    <Provider store={store}>{children}</Provider>
+  </BrowserRouter>
+);
 
-const customRender = (
-  ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>,
-) => render(ui, {wrapper: AllTheProviders, ...options})
-
-export * from '@testing-library/react'
-export {customRender as render}
+const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
+  render(ui, { wrapper: AllTheProviders, ...options });
+  
+const axe = configureAxe({
+  rules: {
+    region: { enabled: false },
+  },
+});
 
 // utility functions
 export function testFormElements(form: HTMLFormElement, elementName: string, label: string) {
@@ -63,3 +61,9 @@ export async function testSelect(
     expect(selectInput).toHaveValue(options[optToSelect].value);
   });
 }
+
+expect.extend(toHaveNoViolations);
+
+export * from '@testing-library/react';
+export { customRender as render };
+export { axe };

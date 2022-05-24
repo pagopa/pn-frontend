@@ -16,13 +16,13 @@ const productsList: Array<ProductSwitchItem> = [
     id: '0',
     title: `Piattaforma Notifiche`,
     productUrl: '',
-    linkType: 'internal'
+    linkType: 'internal',
   },
   {
     id: '1',
     title: `Area Riservata`,
     productUrl: SELFCARE_BASE_URL as string,
-    linkType: 'external'
+    linkType: 'external',
   },
 ];
 
@@ -40,9 +40,10 @@ const App = () => {
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const dispatch = useAppDispatch();
 
-  const role = loggedUser.organization?.role;
+  // TODO check if it can exist more than one role on user
+  const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
-  const menuItems = useMemo(() => getMenuItems(role, idOrganization), [role, idOrganization]);
+  const menuItems = useMemo(() => getMenuItems(role.partyRole, idOrganization), [role, idOrganization]);
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,

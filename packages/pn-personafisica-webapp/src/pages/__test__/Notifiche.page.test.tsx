@@ -1,28 +1,26 @@
-import { act, fireEvent, RenderResult, screen , waitFor, within} from '@testing-library/react';
+import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import * as actions from '../../redux/dashboard/actions';
-import { render } from '../../__test__/test-utils';
+import { axe, render } from '../../__test__/test-utils';
 import * as hooks from '../../redux/hooks';
 import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Notifiche from '../Notifiche.page';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: (str: string) => str,
-    };
-  },
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
 
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
-    useIsMobile: () => false
-  } 
+    useIsMobile: () => false,
+  };
 });
 
 describe('Notifiche Page', () => {
@@ -53,8 +51,10 @@ describe('Notifiche Page', () => {
           size: 10,
           page: 0,
           moreResult: true,
-        }
-      });
+        },
+      })
+      .mockReturnValueOnce({ delegators: [] })
+      .mockReturnValueOnce({ legalDomicile: [] });
     // mock action
     const actionSpy = jest.spyOn(actions, 'getReceivedNotifications');
     actionSpy.mockImplementation(mockActionFn);
@@ -91,16 +91,16 @@ describe('Notifiche Page', () => {
       recipientId: '',
       status: '',
       subjectRegExp: '',
-      size: 10
+      size: 10,
     });
   });
 
   it('changes items per page', async () => {
-    const itemsPerPageSelectorBtn = result?.container.querySelector('[data-testid="itemsPerPageSelector"] > button');
+    const itemsPerPageSelectorBtn = result?.container.querySelector(
+      '[data-testid="itemsPerPageSelector"] > button'
+    );
     fireEvent.click(itemsPerPageSelectorBtn!);
-    const itemsPerPageDropdown = await waitFor(() => {
-      return screen.queryByRole('presentation');
-    });
+    const itemsPerPageDropdown = await waitFor(() => screen.queryByRole('presentation'));
     expect(itemsPerPageDropdown).toBeInTheDocument();
     const itemsPerPageItem = within(itemsPerPageDropdown!).queryByText('100');
     // reset mock dispatch function
@@ -117,7 +117,9 @@ describe('Notifiche Page', () => {
   });
 
   it('changes page', async () => {
-    const pageSelectorBtn = result?.container.querySelector('[data-testid="pageSelector"] li:nth-child(3) > button');
+    const pageSelectorBtn = result?.container.querySelector(
+      '[data-testid="pageSelector"] li:nth-child(3) > button'
+    );
     // reset mock dispatch function
     mockDispatchFn.mockReset();
     mockDispatchFn.mockClear();
@@ -130,4 +132,13 @@ describe('Notifiche Page', () => {
       });
     });
   });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
+  }, 15000);
 });

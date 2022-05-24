@@ -99,12 +99,13 @@ const NuovaDelega = () => {
   };
 
   const validationSchema = yup.object({
-    selectPersonaFisicaOrPersonaGiuridica: yup.string().required(t('nuovaDelega.validation.email.required')),
+    selectPersonaFisicaOrPersonaGiuridica: yup
+      .string()
+      .required(t('nuovaDelega.validation.email.required')),
     codiceFiscale: yup
       .string()
       .required(t('nuovaDelega.validation.fiscalCode.required'))
       .matches(fiscalCodeRegex, t('nuovaDelega.validation.fiscalCode.wrong')),
-    email: yup.string().required('Email obbligatoria').email(t('nuovaDelega.validation.fiscalCode.required')),
     nome: yup.string().required(t('nuovaDelega.validation.name.required')),
     cognome: yup.string().required(t('nuovaDelega.validation.surname.required')),
     enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),

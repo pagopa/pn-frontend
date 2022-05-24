@@ -145,6 +145,7 @@ import {
 import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
 import { formatCurrency, formatEurocentToCurrency } from './utils/currency.utility';
+import { storageOpsBuilder } from './utils/storage.utility';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusInfos };
@@ -156,6 +157,7 @@ export { getMonthString, getDay, getTime };
 export { formatFiscalCode };
 export { fiscalCodeRegex };
 export { formatCurrency, formatEurocentToCurrency };
+export { storageOpsBuilder };
 
 // consts
 export { today, tenYearsAgo };

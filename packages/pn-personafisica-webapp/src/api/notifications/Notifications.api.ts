@@ -58,6 +58,9 @@ export const NotificationsApi = {
     if (params.iunMatch) {
       queryParams.append('iunMatch', params.iunMatch);
     }
+    if (params.mandateId) {
+      queryParams.append('mandateId', params.mandateId);
+    }
     return apiClient
       .get<GetNotificationsResponse>('/delivery/notifications/received', { params: queryParams })
       .then((response) => {

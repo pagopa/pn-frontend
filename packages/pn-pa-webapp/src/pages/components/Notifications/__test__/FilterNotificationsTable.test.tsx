@@ -3,7 +3,7 @@ import moment from 'moment';
 import * as redux from 'react-redux';
 import { NotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { render, testFormElements, testInput, testSelect } from '../../../../__test__/test-utils';
+import { render, testFormElements, testInput, testSelect, axe } from '../../../../__test__/test-utils';
 import FilterNotificationsTable from '../FilterNotificationsTable';
 
 function formatDate(date: Date): string {
@@ -273,4 +273,11 @@ describe('Filter Notifications Table Component', () => {
       type: 'setNotificationFilters',
     });
   });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
+  }, 15000);
 });

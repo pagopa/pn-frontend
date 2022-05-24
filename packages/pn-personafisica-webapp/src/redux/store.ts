@@ -9,7 +9,7 @@ import notificationSlice from './notification/reducers';
 import delegationsSlice from './delegation/reducers';
 import newDelegationSlice from './newDelegation/reducers';
 import contactsSlice from './contact/reducers';
-import sidemenuSlice from './sidemenu/reducers';
+import generalInfoSlice from './sidemenu/reducers';
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined, trackingMiddleware];
 
@@ -23,7 +23,7 @@ export const createStore = () =>
       delegationsState: delegationsSlice.reducer,
       newDelegationState: newDelegationSlice.reducer,
       contactsState: contactsSlice.reducer,
-      sidemenuState: sidemenuSlice.reducer
+      generalInfoState: generalInfoSlice.reducer
     },
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(

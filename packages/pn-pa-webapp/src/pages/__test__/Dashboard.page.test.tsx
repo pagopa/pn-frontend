@@ -3,7 +3,7 @@ import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import * as actions from '../../redux/dashboard/actions';
-import { render } from '../../__test__/test-utils';
+import { render, axe } from '../../__test__/test-utils';
 import * as hooks from '../../redux/hooks';
 import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import * as routes from '../../navigation/routes.const';
@@ -140,4 +140,11 @@ describe('Dashboard Page', () => {
       expect(mockNavigateFn).toBeCalledTimes(1);
     });
   });
+
+  it('does not have basic accessibility issues rendering the page', async () => {
+    if(result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
+  }, 15000);
 });
