@@ -53,7 +53,7 @@ const Login = ({ onBack }: { onBack: () => void }) => {
               py={5}
               px={0}
               color="textPrimary"
-              variant="h2"
+              variant="h3"
               sx={{
                 textAlign: 'center',
               }}
