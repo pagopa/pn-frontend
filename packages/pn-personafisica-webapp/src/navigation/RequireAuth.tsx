@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { InactivityHandler, SessionModal } from '@pagopa-pn/pn-commons';
 
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
@@ -7,6 +7,7 @@ import { logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { goToLogin } from './navigation.utility';
+import { TOS } from './routes.const';
 
 const inactivityTimer = 5 * 60 * 1000;
 
@@ -17,8 +18,10 @@ const inactivityTimer = 5 * 60 * 1000;
 /* eslint-disable functional/immutable-data */
 const RequireAuth = () => {
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
+  const tos = useAppSelector((state: RootState) => state.userState.tos);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (token === '' || !token) {
@@ -28,6 +31,9 @@ const RequireAuth = () => {
     }
     if (token && token !== '') {
       setAccessDenied(false);
+    }
+    if (!tos) {
+      navigate(TOS);
     }
   }, [token]);
 
@@ -39,7 +45,7 @@ const RequireAuth = () => {
           title={'Stai uscendo da Piattaforma Notifiche'}
           message={'Verrai reindirizzato'}
           handleClose={goToLogin}
-        ></SessionModal>
+        />
       )}
       {DISABLE_INACTIVITY_HANDLER ? (
         <Outlet />

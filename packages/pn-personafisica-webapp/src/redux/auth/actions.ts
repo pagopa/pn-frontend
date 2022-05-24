@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
+import { ConsentsApi } from '../../api/consents/Consents.api';
+import { Consent, ConsentActionType, ConsentPath } from '../../models/consents';
 import { User } from './types';
 
 /**
@@ -42,4 +44,29 @@ export const logout = createAsyncThunk<User>('logout', async () => {
     iss: '',
     jti: '',
   } as User;
+});
+
+/**
+ * Retrieves if the terms of service are already approved
+ */
+export const getToSApproval = createAsyncThunk<Consent>(
+  'getToSApproval',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await ConsentsApi.getConsentByType(ConsentPath.tos);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
+export const acceptToS = createAsyncThunk<string>('acceptToS', async (_, { rejectWithValue }) => {
+  const body = {
+    action: ConsentActionType.ACCEPT,
+  };
+  try {
+    return await ConsentsApi.setConsentByType(ConsentPath.tos, body);
+  } catch (e) {
+    return rejectWithValue(e);
+  }
 });

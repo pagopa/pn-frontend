@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { exchangeToken, logout } from './actions';
+import { acceptToS, exchangeToken, getToSApproval, logout } from './actions';
 import { User } from './types';
 
 /* eslint-disable functional/immutable-data */
@@ -24,6 +24,7 @@ const userSlice = createSlice({
           iss: '',
           jti: '',
         }) as User,
+    tos: false,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -32,6 +33,12 @@ const userSlice = createSlice({
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = action.payload;
+    });
+    builder.addCase(getToSApproval.fulfilled, (state, action) => {
+      state.tos = action.payload.accepted;
+    });
+    builder.addCase(acceptToS.fulfilled, (state, action) => {
+      state.tos = true;
     });
   },
 });
