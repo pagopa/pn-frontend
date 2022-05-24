@@ -139,10 +139,10 @@ const NotificationDetail = () => {
   );
 
   return (
-    <Box className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
+    <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 }}}>
       {isMobile && breadcrumb}
-      <Grid container spacing={2} direction={isMobile ? 'column-reverse' : 'row'}>
-        <Grid item lg={7} xs={12} sx={{ marginTop: isMobile ? 0 : '20px' }}>
+      <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
+        <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }}}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
           {notification.payment?.iuv && (

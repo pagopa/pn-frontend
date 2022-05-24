@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import { Grid } from '@mui/material';
-import { Box } from '@mui/system';
+import { Grid, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
 
@@ -33,9 +32,9 @@ const useStyles = makeStyles(() => ({
     flexGrow: 1,
     background: '#F2F2F2',
 
-    '& > .MuiGrid-item:last-child': {
-      minHeight: 'calc(100vh - 253px)',
-    },
+    // '& > .MuiGrid-item:last-child': {
+    //   minHeight: 'calc(100vh - 253px)',
+    // },
   },
 }));
 
@@ -54,11 +53,9 @@ export default function Layout({
 
   return (
     <ErrorBoundary sx={{ height: '100vh' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
+      <Stack
+        direction="column"
+        sx={{ minHeight: '100vh'}} // 100vh per sticky footer
       >
         <Header
           onExitAction={onExitAction}
@@ -69,7 +66,7 @@ export default function Layout({
           enableDropdown={enableUserDropdown}
           userActions={userActions}
         />
-        <Grid role={'navigation'} container spacing={2} direction="row" className={classes.root}>
+        <Grid role={'navigation'} container direction="row" className={classes.root}>
           <Grid item lg={2} xs={12} container direction="column">
             {sideMenu}
           </Grid>
@@ -78,7 +75,7 @@ export default function Layout({
           </Grid>
         </Grid>
         <Footer />
-      </Box>
+      </Stack>
     </ErrorBoundary>
   );
 }

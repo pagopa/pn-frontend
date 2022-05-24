@@ -7,8 +7,7 @@ import {
   preLoginLinks,
 } from '../../utils/costants';
 
-const Footer = () => {
-  return (
+const Footer = () => (
     <MuiFooter
       loggedUser={true}
       companyLink={pagoPALink}
@@ -23,6 +22,5 @@ const Footer = () => {
       }}
     />
   );
-};
 
 export default Footer;

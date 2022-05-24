@@ -86,16 +86,16 @@ const MobileDelegators = () => {
   return (
     <>
       {delegatorsError && (
-        <Box mb={8}>
-          <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+        <Box>
+          <Stack mb={3} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
             <Typography variant="h6">Deleghe a tuo carico</Typography>
           </Stack>
           <TableError onClick={() => dispatch(getDelegators())} />
         </Box>
       )}
       {!delegatorsError && delegators.length > 0 && (
-        <Box mx={1} mb={8}>
-          <Typography variant="h4" mb={2}>
+        <Box>
+          <Typography variant="h4" mb={3}>
             {t('deleghe.delegatorsTitle')}
           </Typography>
           <ItemsCard
