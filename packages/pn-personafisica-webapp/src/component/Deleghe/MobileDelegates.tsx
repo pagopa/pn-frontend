@@ -1,8 +1,9 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Chip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { Box, Button, Chip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { CardElement, ItemsCard, Item } from '@pagopa-pn/pn-commons';
+import { CardElement, ItemsCard, Item, CodeModal } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -23,6 +24,7 @@ const MobileDelegates = () => {
   const delegatesError = useAppSelector(
     (state: RootState) => state.delegationsState.delegatesError
   );
+  const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
 
   const cardData: Array<Item> = delegationToItem(delegates);
 
@@ -38,8 +40,16 @@ const MobileDelegates = () => {
     {
       id: 'id',
       label: '',
-      getLabel(value: string) {
-        return <Menu menuType={'delegates'} id={value} />;
+      getLabel(value: string, row: Item) {
+        return (
+          <Menu
+            menuType={'delegates'}
+            id={value}
+            verificationCode={row.verificationCode}
+            name={row.name}
+            setCodeModal={setShowCodeModal}
+          />
+        );
       },
     },
   ];
@@ -86,31 +96,48 @@ const MobileDelegates = () => {
     navigate(routes.NUOVA_DELEGA);
   };
 
+  const handleCloseShowCodeModal = () => {
+    setShowCodeModal({ open: false, name: '', code: '' });
+  };
+
   return (
-    <Box mx={1} mb={8}>
-      <Typography variant="h4" mb={2}>
-        {t('deleghe.delegatesTitle')}
-      </Typography>
-      {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
-      {!delegatesError && (
-        <>
-          <Box mb={2}>
-            <Button variant="outlined" onClick={handleAddDelegationClick}>
-              <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
-              {t('deleghe.add')}
-            </Button>
-          </Box>
-          <ItemsCard
-            cardHeader={cardHeader}
-            cardBody={cardBody}
-            cardData={cardData}
-            emptyActionCallback={handleAddDelegationClick}
-            emptyMessage={t('deleghe.no_delegates') as string}
-            emptyActionLabel={t('deleghe.add') as string}
-          />
-        </>
-      )}
-    </Box>
+    <>
+      <CodeModal
+        title={t('deleghe.show_code_title', { name: showCodeModal.name })}
+        subtitle={t('deleghe.show_code_subtitle')}
+        open={showCodeModal.open}
+        initialValues={showCodeModal.code.split('')}
+        handleClose={handleCloseShowCodeModal}
+        cancelCallback={handleCloseShowCodeModal}
+        cancelLabel={t('deleghe.close')}
+        codeSectionTitle={t('deleghe.verification_code')}
+        isReadOnly
+      />
+      <Box mx={1} mb={8}>
+        <Typography variant="h4" mb={2}>
+          {t('deleghe.delegatesTitle')}
+        </Typography>
+        {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
+        {!delegatesError && (
+          <>
+            <Box mb={2}>
+              <Button variant="outlined" onClick={handleAddDelegationClick}>
+                <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
+                {t('deleghe.add')}
+              </Button>
+            </Box>
+            <ItemsCard
+              cardHeader={cardHeader}
+              cardBody={cardBody}
+              cardData={cardData}
+              emptyActionCallback={handleAddDelegationClick}
+              emptyMessage={t('deleghe.no_delegates')}
+              emptyActionLabel={t('deleghe.add')}
+            />
+          </>
+        )}
+      </Box>
+    </>
   );
 };
 
