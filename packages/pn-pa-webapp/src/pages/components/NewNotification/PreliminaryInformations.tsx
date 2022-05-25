@@ -59,9 +59,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     },
   });
 
-  const handleChangeTouched = (e: ChangeEvent) => {
-    void formik.setFieldTouched(e.target.id, true, false);
+  const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
+    await formik.setFieldTouched(e.target.id, true, false);
   };
 
   useEffect(() => {

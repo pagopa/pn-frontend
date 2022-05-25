@@ -117,6 +117,7 @@ const Recipient = ({ onConfirm }: Props) => {
       validationSchema={validationSchema}
       onSubmit={(values) => handleSubmit(values)}
       validateOnBlur={false}
+      validateOnMount
     >
       {({ values, setFieldValue, touched, handleBlur, errors, isValid }) => (
         <>

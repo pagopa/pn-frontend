@@ -137,7 +137,7 @@ export const NotificationsApi = {
    */
   uploadNotificationAttachment: (
     url: string,
-    _sha256: string,
+    sha256: string,
     secret: string,
     fileBase64: string
   ): Promise<string> =>
@@ -151,12 +151,10 @@ export const NotificationsApi = {
           headers: {
             'Content-Type': 'application/pdf',
             'x-amz-meta-secret': secret,
+            'x-amz-sdk-checksum-algorithm': 'SHA256',
+            'x-amz-checksum-sha256': sha256
           },
         }
       )
       .then((res) => res.headers['x-amz-version-id']),
 };
-
-// TODO: da rimettere appena aggiornate le api
-// 'x-amz-sdk-checksum-algorithm': 'SHA256',
-// 'x-amz-checksum-sha256': sha256
