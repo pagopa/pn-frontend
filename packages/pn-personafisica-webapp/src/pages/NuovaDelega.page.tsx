@@ -29,7 +29,9 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import { CourtesyPage, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { ArrowBack } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
@@ -120,21 +122,30 @@ const NuovaDelega = () => {
     []
   );
 
+  const breadcrumbs = (
+    <Fragment>
+      <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'start', sm: 'center' }} justifyContent="start" spacing={3}>
+        <ButtonNaked onClick={() => navigate(-1)} startIcon={<ArrowBack />} color="primary" size="medium" >
+          {t('button.indietro', { ns: 'common' })}
+        </ButtonNaked>
+        <Breadcrumbs aria-label="breadcrumb">
+          <StyledLink to={routes.DELEGHE}>
+            <PeopleIcon sx={{ mr: 0.5 }} />
+            {t('nuovaDelega.title')}
+          </StyledLink>
+          <Typography color="text.primary" fontWeight={600}>
+            {t('Nuova Delega')}
+          </Typography>
+        </Breadcrumbs>
+      </Stack>
+    </Fragment>
+  );
+
   return (
     <Fragment>
       {!created && (
         <Box mt={3} sx={{ padding: isMobile ? '30px' : null }}>
-          {!isMobile && (
-            <Breadcrumbs aria-label="breadcrumb">
-              <StyledLink to={routes.DELEGHE}>
-                <PeopleIcon sx={{ mr: 0.5 }} />
-                {t('nuovaDelega.title')}
-              </StyledLink>
-              <Typography color="text.primary" fontWeight={600}>
-                {t('Nuova Delega')}
-              </Typography>
-            </Breadcrumbs>
-          )}
+          {breadcrumbs}
           <TitleBox
             title={t('nuovaDelega.title')}
             subTitle={t('nuovaDelega.subtitle')}
@@ -350,13 +361,6 @@ const NuovaDelega = () => {
               )}
             </Formik>
           </Card>
-          <Button
-            variant="outlined"
-            sx={{ mt: '1rem', mb: '1rem' }}
-            onClick={() => navigate(routes.DELEGHE)}
-          >
-            {t('button.indietro', { ns: 'common' })}
-          </Button>
         </Box>
       )}
       {created && (
