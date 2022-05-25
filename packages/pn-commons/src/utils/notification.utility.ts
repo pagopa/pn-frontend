@@ -7,6 +7,7 @@ import {
   SendDigitalDetails,
   AnalogWorkflowDetails,
   TimelineCategory,
+  TimelineError,
   PhysicalCommunicationType,
   SendPaperDetails,
   NotificationDetailRecipient,
@@ -171,7 +172,7 @@ export function getNotificationTimelineStatusInfos(
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK:
       const errors = (step.details as SendDigitalDetails).errors;
-      if (errors && errors.includes("RETRYABLE_FAIL")) {
+      if (errors && errors.includes(TimelineError.RETRYABLE_FAIL)) {
         return {
           label: 'Invio via PEC fallito',
           description: `L'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
