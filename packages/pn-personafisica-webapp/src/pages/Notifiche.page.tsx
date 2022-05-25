@@ -92,7 +92,7 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
   }, [currentDelegator, filters, pagination.size, pagination.page, sort]);
 
   return (
-    <Box sx={{ padding: '20px' }}>
+    <Box p={3}>
       <DomicileBanner />
       <TitleBox variantTitle="h4" title={pageTitle} />
       {isMobile ? (

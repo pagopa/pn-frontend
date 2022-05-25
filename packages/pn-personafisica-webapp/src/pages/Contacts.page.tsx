@@ -45,7 +45,7 @@ const Contacts = () => {
 
   return (
     <DigitalContactsCodeVerificationProvider>
-      <Box style={{ padding: '20px' }}>
+      <Box p={3}>
         <TitleBox
           variantTitle="h4"
           title={t('title')}
