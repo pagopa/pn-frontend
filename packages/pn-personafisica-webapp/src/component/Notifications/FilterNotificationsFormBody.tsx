@@ -40,12 +40,34 @@ const FilterNotificationsFormBody = ({
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
 
+  const handleDashInputMask = (input: string) => {
+    if(input.length){
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      void formikInstance.setFieldValue('iunMatch',formikInstance.values.iunMatch + input + '-');
+    }
+  };
+  
   const handleChangeTouched = (e: ChangeEvent) => {
     void formikInstance.setFieldTouched(e.target.id, true, false);
     formikInstance.handleChange(e);
+    switch(formikInstance.values.iunMatch.length){
+      case 3: 
+      case 8:
+      case 13: 
+      case 20:
+      case 22:
+      // La proprietà data all'interno della chiave NativeEvent non viene trovata dall'interfaccia ChangeEvent
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      handleDashInputMask(e.nativeEvent.data);break;
+
+    }
+    
   };
 
-  return (
+
+
+  return ( 
     <Fragment>
       <Grid item lg xs={12}>
         <TextField
@@ -59,6 +81,7 @@ const FilterNotificationsFormBody = ({
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
           size="small"
+          inputProps={{ maxLength: 25 }}
         />
       </Grid>
       <Grid item lg={2} xs={12}>
