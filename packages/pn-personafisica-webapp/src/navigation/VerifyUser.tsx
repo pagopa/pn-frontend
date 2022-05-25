@@ -5,7 +5,7 @@ import { exchangeToken, getToSApproval } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { goToLogin } from './navigation.utility';
-import { NOTIFICHE, TOS } from './routes.const';
+import { NOTIFICHE } from './routes.const';
 
 const VerifyUser = () => {
   const location = useLocation();
@@ -28,15 +28,13 @@ const VerifyUser = () => {
 
   useEffect(() => {
     if (spidToken !== '') {
-      dispatch(exchangeToken(spidToken)).catch(() => {
-        goToLogin();
-      });
-      dispatch(getToSApproval())
+      dispatch(exchangeToken(spidToken))
         .then(() => {
+          void dispatch(getToSApproval());
           navigate(NOTIFICHE);
         })
         .catch(() => {
-          navigate(TOS);
+          goToLogin();
         });
     }
   }, [spidToken]);

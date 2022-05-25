@@ -1,16 +1,16 @@
 import { apiClient } from '../axios';
-import { Consent, ConsentActionType, ConsentPath } from '../../models/consents';
+import { Consent, ConsentActionType, ConsentType } from '../../models/consents';
 
 export const ConsentsApi = {
-  getConsentByType: (consentPath: ConsentPath): Promise<Consent> =>
+  getConsentByType: (consentType: ConsentType): Promise<Consent> =>
     apiClient
-      .get<Consent>(`/user-consents/v1/consents/${consentPath}`)
+      .get<Consent>(`/user-consents/v1/consents/${consentType}`)
       .then((response) => response.data),
   setConsentByType: (
-    consentPath: ConsentPath,
+    consentType: ConsentType,
     body: { action: ConsentActionType }
   ): Promise<string> =>
-    apiClient.put<Consent>(`/user-consents/v1/consents/${consentPath}`, body).then((response) => {
+    apiClient.put<Consent>(`/user-consents/v1/consents/${consentType}`, body).then((response) => {
       if (response.status === 200) {
         return 'success';
       } else {

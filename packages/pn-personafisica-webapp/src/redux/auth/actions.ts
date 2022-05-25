@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
 import { ConsentsApi } from '../../api/consents/Consents.api';
-import { Consent, ConsentActionType, ConsentPath } from '../../models/consents';
+import { Consent, ConsentActionType, ConsentType } from '../../models/consents';
 import { User } from './types';
 
 /**
@@ -53,7 +53,7 @@ export const getToSApproval = createAsyncThunk<Consent>(
   'getToSApproval',
   async (_, { rejectWithValue }) => {
     try {
-      return await ConsentsApi.getConsentByType(ConsentPath.tos);
+      return await ConsentsApi.getConsentByType(ConsentType.TOS);
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -65,7 +65,7 @@ export const acceptToS = createAsyncThunk<string>('acceptToS', async (_, { rejec
     action: ConsentActionType.ACCEPT,
   };
   try {
-    return await ConsentsApi.setConsentByType(ConsentPath.tos, body);
+    return await ConsentsApi.setConsentByType(ConsentType.TOS, body);
   } catch (e) {
     return rejectWithValue(e);
   }

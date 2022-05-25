@@ -37,8 +37,14 @@ const userSlice = createSlice({
     builder.addCase(getToSApproval.fulfilled, (state, action) => {
       state.tos = action.payload.accepted;
     });
-    builder.addCase(acceptToS.fulfilled, (state, action) => {
+    builder.addCase(getToSApproval.rejected, (state) => {
+      state.tos = false;
+    });
+    builder.addCase(acceptToS.fulfilled, (state) => {
       state.tos = true;
+    });
+    builder.addCase(acceptToS.rejected, (state) => {
+      state.tos = false;
     });
   },
 });

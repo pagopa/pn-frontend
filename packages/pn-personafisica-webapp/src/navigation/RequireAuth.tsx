@@ -1,13 +1,13 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { InactivityHandler, SessionModal } from '@pagopa-pn/pn-commons';
 
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 import { logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import TermsOfService from '../pages/TermsOfService.page';
 import { goToLogin } from './navigation.utility';
-import { TOS } from './routes.const';
 
 const inactivityTimer = 5 * 60 * 1000;
 
@@ -21,7 +21,6 @@ const RequireAuth = () => {
   const tos = useAppSelector((state: RootState) => state.userState.tos);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (token === '' || !token) {
@@ -31,9 +30,6 @@ const RequireAuth = () => {
     }
     if (token && token !== '') {
       setAccessDenied(false);
-    }
-    if (!tos) {
-      navigate(TOS);
     }
   }, [token]);
 
@@ -47,15 +43,19 @@ const RequireAuth = () => {
           handleClose={goToLogin}
         />
       )}
-      {DISABLE_INACTIVITY_HANDLER ? (
-        <Outlet />
-      ) : (
-        <InactivityHandler
-          inactivityTimer={inactivityTimer}
-          onTimerExpired={() => dispatch(logout())}
-        >
+      {tos ? (
+        DISABLE_INACTIVITY_HANDLER ? (
           <Outlet />
-        </InactivityHandler>
+        ) : (
+          <InactivityHandler
+            inactivityTimer={inactivityTimer}
+            onTimerExpired={() => dispatch(logout())}
+          >
+            <Outlet />
+          </InactivityHandler>
+        )
+      ) : (
+        <TermsOfService />
       )}
     </Fragment>
   );
