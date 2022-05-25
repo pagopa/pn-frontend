@@ -254,6 +254,11 @@ export enum TimelineCategory {
   REQUEST_REFUSED = 'REQUEST_REFUSED'
 }
 
+export enum TimelineError {
+  OK = "OK",
+  RETRYABLE_FAIL = "RETRYABLE_FAIL"
+}
+
 interface DigitalAddress {
   type: DigitalDomicileType;
   address: string;

@@ -123,7 +123,7 @@ describe('timeline utility functions', () => {
       DeliveryMode.ANALOG;
     testTimelineStatusInfosFn(
       'Invio per via cartacea',
-      "È in corso l' invio della notifica per via cartacea."
+      "È in corso l'invio della notifica per via cartacea."
     );
   });
 
@@ -133,7 +133,7 @@ describe('timeline utility functions', () => {
       DeliveryMode.DIGITAL;
     testTimelineStatusInfosFn(
       'Invio per via digitale',
-      "È in corso l' invio della notifica per via digitale."
+      "È in corso l'invio della notifica per via digitale."
     );
   });
 
@@ -145,7 +145,7 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio del messaggio di cortesia',
-      "È in corso l' invio del messaggio di cortesia a Nome Cognome tramite email"
+      "È in corso l'invio del messaggio di cortesia a Nome Cognome tramite email"
     );
   });
 
@@ -157,7 +157,7 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio via PEC',
-      "È in corso l' invio della notifica a Nome Cognome all'indirizzo PEC mocked@address.mail.it"
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo PEC mocked@address.mail.it"
     );
   });
 
@@ -180,8 +180,8 @@ describe('timeline utility functions', () => {
       address: 'mocked@address.mail.it',
     };
     testTimelineStatusInfosFn(
-      'Invio via PEC non riuscito',
-      "L' invio della notifica a Nome Cognome all'indirizzo PEC mocked@address.mail.it non è riuscito."
+      'Invio per via digitale fallito',
+      "L'invio della notifica a Nome Cognome per via digitale non è riuscito."
     );
   });
 
@@ -198,7 +198,7 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio via raccomandata semplice',
-      "È in corso l' invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata semplice."
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata semplice."
     );
   });
 
@@ -217,7 +217,7 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio via raccomandata 890',
-      "È in corso l' invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata 890."
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata 890."
     );
   });
 
@@ -236,7 +236,7 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio via raccomandata A/R',
-      "È in corso l' invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata A/R."
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata A/R."
     );
   });
 

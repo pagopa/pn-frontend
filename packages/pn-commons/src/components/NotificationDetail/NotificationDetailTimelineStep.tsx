@@ -183,6 +183,9 @@ const NotificationDetailTimelineStep = ({
 
   const microStep = (s: INotificationDetailTimeline) => {
     const timelineStatusInfos = getNotificationTimelineStatusInfos(s, recipients);
+    if (!timelineStatusInfos) {
+      return null;
+    }
     return timelineStepCmp(
       s.elementId,
       <Fragment>
