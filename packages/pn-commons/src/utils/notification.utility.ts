@@ -139,14 +139,14 @@ export function getNotificationTimelineStatusInfos(
         return {
           label: 'Invio per via cartacea',
           description: "È in corso l'invio della notifica per via cartacea.",
-          linkText: "Vai all'attestazione",
+          linkText: "Attestazione opponibile a terzi",
           recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
         };
       }
       return {
         label: 'Invio per via digitale',
         description: "È in corso l'invio della notifica per via digitale.",
-        linkText: "Vai all'attestazione",
+        linkText: "Attestazione opponibile a terzi",
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_COURTESY_MESSAGE:
@@ -178,7 +178,7 @@ export function getNotificationTimelineStatusInfos(
           description: `L'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
             (step.details as SendDigitalDetails).address?.address
           } non è riuscito.`,
-          linkText: "Vai all'attestazione",
+          linkText: "Attestazione opponibile a terzi",
           recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
         };
       }
@@ -187,14 +187,14 @@ export function getNotificationTimelineStatusInfos(
         description: `L' invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
           (step.details as SendDigitalDetails).address?.address
         } è riuscito.`,
-        linkText: "Vai all'attestazione",
+        linkText: "Attestazione opponibile a terzi",
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FAILURE:
       return {
         label: 'Invio per via digitale fallito',
         description: `L'invio della notifica a ${recipient?.denomination} per via digitale non è riuscito.`,
-        linkText: "Vai all'attestazione",
+        linkText: "Attestazione opponibile a terzi",
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
@@ -205,7 +205,7 @@ export function getNotificationTimelineStatusInfos(
         } all'indirizzo ${
           (step.details as AnalogWorkflowDetails).address?.address
         } tramite raccomandata semplice.`,
-        linkText: "Vai all'attestazione",
+        linkText: "Attestazione opponibile a terzi",
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_ANALOG_DOMICILE:
@@ -220,7 +220,7 @@ export function getNotificationTimelineStatusInfos(
           } all'indirizzo ${
             (step.details as AnalogWorkflowDetails).address?.address
           } tramite raccomandata 890.`,
-          linkText: "Vai all'attestazione",
+          linkText: "Vedi la ricevuta",
           recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
         };
       }
@@ -231,7 +231,7 @@ export function getNotificationTimelineStatusInfos(
         } all'indirizzo ${
           (step.details as AnalogWorkflowDetails).address?.address
         } tramite raccomandata A/R.`,
-        linkText: "Vai all'attestazione",
+        linkText: "Vedi la ricevuta",
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_PAPER_FEEDBACK:
