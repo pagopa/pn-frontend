@@ -115,7 +115,13 @@ const FilterNotifications = () => {
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
-        sx={{ pl: 0, pr: filtersApplied() ? '10px' : 0, justifyContent: 'left', minWidth: 'unset', height: '24px' }}
+        sx={{
+          pl: 0,
+          pr: filtersApplied() ? '10px' : 0,
+          justifyContent: 'left',
+          minWidth: 'unset',
+          height: '24px',
+        }}
         hasCounterBadge
         bagdeCount={filtersApplied()}
       >
@@ -136,6 +142,7 @@ const FilterNotifications = () => {
             <FilterNotificationsFormActions
               formikInstance={formik}
               cleanFilters={cleanFilters}
+              appliedFilters={filtersApplied()}
               isInDialog
             />
           </DialogActions>
@@ -153,7 +160,11 @@ const FilterNotifications = () => {
             setStartDate={(value) => setStartDate(value)}
             setEndDate={(value) => setEndDate(value)}
           />
-          <FilterNotificationsFormActions formikInstance={formik} cleanFilters={cleanFilters} />
+          <FilterNotificationsFormActions
+            formikInstance={formik}
+            cleanFilters={cleanFilters}
+            appliedFilters={filtersApplied()}
+          />
         </Grid>
       </Box>
     </form>
