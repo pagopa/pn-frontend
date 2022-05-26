@@ -55,7 +55,7 @@ const Contacts = () => {
         <Typography variant="h5" fontWeight={600} fontSize={28} sx={{ marginTop: '30px' }}>
           {t('general-contacts-title')}
         </Typography>
-        <Grid container direction="row" sx={{ marginTop: '5px' }} spacing={2}>
+        <Grid container direction="row" sx={{ marginTop: '5px' }} spacing={3}>
           <Grid item lg={6} xs={12}>
             {digitalAddresses.legal.length === 0 && (
               <InsertLegalContact recipientId={recipientId} />

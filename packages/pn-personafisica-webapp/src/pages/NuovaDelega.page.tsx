@@ -29,7 +29,9 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import { CourtesyPage, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { ArrowBack } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
@@ -61,11 +63,6 @@ const useStyles = makeStyles(() => ({
     },
     ['@media only screen and (min-width: 577px) and (max-width: 992px)']: {
       direction: 'auto',
-    },
-  },
-  justifyContent: {
-    ['@media only screen and (max-width: 576px)']: {
-      justifyContent: 'start',
     },
   },
   spaceBetween: {
@@ -127,19 +124,24 @@ const NuovaDelega = () => {
 
   const breadcrumbs = (
     <Fragment>
-      <Breadcrumbs aria-label="breadcrumb">
-        <StyledLink to={routes.DELEGHE}>
-          <PeopleIcon sx={{ mr: 0.5 }} />
-          {t('nuovaDelega.title')}
-        </StyledLink>
-        <Typography
-          color="text.primary"
-          fontWeight={600}
-          sx={{ display: 'flex', alignItems: 'center' }}
-        >
-          {t('Nuova Delega')}
-        </Typography>
-      </Breadcrumbs>
+      <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'start', sm: 'center' }} justifyContent="start" spacing={3}>
+        <ButtonNaked onClick={() => navigate(-1)} startIcon={<ArrowBack />} color="primary" size="medium" >
+          {t('button.indietro', { ns: 'common' })}
+        </ButtonNaked>
+        <Breadcrumbs aria-label="breadcrumb">
+          <StyledLink to={routes.DELEGHE}>
+            <PeopleIcon sx={{ mr: 0.5 }} />
+            {t('nuovaDelega.title')}
+          </StyledLink>
+          <Typography
+            color="text.primary"
+            fontWeight={600}
+            sx={{ display: 'flex', alignItems: 'center' }}
+          >
+            {t('Nuova Delega')}
+          </Typography>
+        </Breadcrumbs>
+      </Stack>
       <TitleBox
         title={t('nuovaDelega.title')}
         subTitle={t('nuovaDelega.subtitle')}
@@ -332,20 +334,12 @@ const NuovaDelega = () => {
                       <Typography fontWeight={'bold'} sx={{ marginTop: '1rem' }}>
                         {t('nuovaDelega.form.verificationCode')}
                       </Typography>
-                      <Grid
-                        container
-                        className={classes.justifyContent}
-                        direction={isMobile ? 'column' : 'row'}
-                      >
-                        <Grid item xs={8}>
-                          <Typography sx={{ marginTop: '1rem' }}>
-                            {t('nuovaDelega.form.verificationCodeDescr')}
-                          </Typography>
-                        </Grid>
-                        <Grid item xs={4}>
-                          <VerificationCodeComponent code={values.verificationCode} />
-                        </Grid>
-                      </Grid>
+                      <Stack direction={{ xs: 'column', lg: 'row' }} justifyContent={{ sm: 'flex-start'}} spacing={2}>
+                        <Typography sx={{ marginTop: '1rem', flexGrow: '1' }}>
+                          {t('nuovaDelega.form.verificationCodeDescr')}
+                        </Typography>
+                        <VerificationCodeComponent code={values.verificationCode} />
+                      </Stack>
                       <Divider sx={{ marginTop: '1rem' }} />
                       <Grid container sx={{ marginTop: '1rem' }}>
                         <Grid item xs={4} sx={{ margin: 'auto' }}>
@@ -369,13 +363,6 @@ const NuovaDelega = () => {
               </Paper>
             </Grid>
           </Grid>
-          <Button
-            variant="outlined"
-            sx={{ mt: '1rem', mb: '1rem' }}
-            onClick={() => navigate(routes.DELEGHE)}
-          >
-            {t('button.indietro', { ns: 'common' })}
-          </Button>
         </Box>
       )}
       {created && (

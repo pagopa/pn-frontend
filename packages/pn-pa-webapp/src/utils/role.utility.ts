@@ -2,7 +2,7 @@ import { Email, People, VpnKey, SupervisedUserCircle } from '@mui/icons-material
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
-import { UserRole } from '../models/user';
+import { PartyRole } from '../models/user';
 
 const BasicMenuItems: Array<SideMenuItem> = [
   { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
@@ -17,23 +17,21 @@ function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
 }
 
 /** Get Menu Items based on user role */
-export function getMenuItems(role: UserRole, idOrganization: string): {
+export function getMenuItems(role: PartyRole, idOrganization: string): {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
 } {
   switch (role) {
-    case UserRole.REFERENTE_AMMINISTRATIVO:
+    case PartyRole.MANAGER:
       return { menuItems: BasicMenuItems, selfCareItems: selfcareMenuItems(idOrganization) };
-    case UserRole.REFERENTE_OPERATIVO:
+    case PartyRole.OPERATOR:
+      return { menuItems: BasicMenuItems };
+    default:
       return { menuItems: BasicMenuItems };
   }
 }
 
 /** Get Home Page based on user role */
-export function getHomePage(role: UserRole) {
-  switch (role) {
-    case UserRole.REFERENTE_AMMINISTRATIVO:
-    case UserRole.REFERENTE_OPERATIVO:
-      return routes.DASHBOARD;
-  }
+export function getHomePage() {
+  return routes.DASHBOARD;
 }

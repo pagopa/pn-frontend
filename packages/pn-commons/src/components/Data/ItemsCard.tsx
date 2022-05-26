@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { SentimentDissatisfied } from '@mui/icons-material';
-import { Box, Card, CardActions, CardContent, CardHeader, Grid, Typography } from '@mui/material';
+import { Box, Card, CardActions, CardContent, CardHeader, Grid, SxProps, Typography } from '@mui/material';
 
 import { CardElement, CardAction } from '../../types/ItemsCard';
 import { Item } from '../../types/ItemsTable';
@@ -20,6 +20,8 @@ type Props = {
   emptyMessage?: ReactNode;
   /** Empty action label */
   emptyActionLabel?: string;
+  /** Custom style */
+  sx?: SxProps
 };
 
 const ItemsCard = ({
@@ -30,10 +32,11 @@ const ItemsCard = ({
   emptyActionCallback,
   emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
   emptyActionLabel = 'Rimuovi filtri',
+  sx
 }: Props) => {
   const cardHeaderTitle = (item: Item) => (
     <Grid container spacing={2} direction="row" alignItems="center">
-      <Grid item xs={4} sx={{ fontSize: '14px', fontWeight: 400 }} data-testid="cardHeaderLeft">
+      <Grid item xs={5} sx={{ fontSize: '14px', fontWeight: 400 }} data-testid="cardHeaderLeft">
         {cardHeader[0].getLabel(item[cardHeader[0].id], item)}
       </Grid>
       <Grid
@@ -48,7 +51,7 @@ const ItemsCard = ({
   );
 
   return (
-    <Box>
+    <Box sx={sx}>
       {cardData.length ? (
         cardData.map((data) => (
           <Card
@@ -60,20 +63,20 @@ const ItemsCard = ({
               padding: '24px',
             }}
           >
-            <CardHeader title={cardHeaderTitle(data)} />
+            <CardHeader title={cardHeaderTitle(data)} className="card-header"/>
             <CardContent sx={{ padding: 0, marginTop: '16px', ':last-child': { padding: 0 } }}>
               {cardBody.map((body) => (
                 <Box key={body.id} sx={{ marginBottom: '16px' }}>
-                  <Typography sx={{ fontWeight: 600 }} data-testid="cardBodyLabel">
+                  <Typography variant="caption-semibold" data-testid="cardBodyLabel">
                     {body.label}
                   </Typography>
-                  <Typography component="div" data-testid="cardBodyValue">
+                  <Typography variant="body2" data-testid="cardBodyValue">
                     {body.getLabel(data[body.id])}
                   </Typography>
                 </Box>
               ))}
             </CardContent>
-            <CardActions disableSpacing>
+            <CardActions disableSpacing className="card-actions">
               {cardActions &&
                 cardActions.map((action) => (
                   <Box
