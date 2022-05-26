@@ -134,7 +134,11 @@ const NotificationDetail = () => {
           {t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
         </Typography>
       </Breadcrumbs>
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
+      <TitleBox
+        variantTitle="h4"
+        title={notification.subject}
+        sx={{ pt: '20px' }}
+      />
     </Fragment>
   );
 
