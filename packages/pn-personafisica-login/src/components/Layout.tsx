@@ -41,7 +41,7 @@ const Layout = ({ children }: Props) => (
         console.log('Clicked/Tapped on Assistance');
       }}
     />
-    <Box sx={{ backgroundColor: '#F2F2F2' }}>{children}</Box>
+    <Box bgcolor="background.default">{children}</Box>
     <Box>
       <Footer
         loggedUser={false}
