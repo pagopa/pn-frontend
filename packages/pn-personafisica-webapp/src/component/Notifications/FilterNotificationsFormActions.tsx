@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 import { FormikValues } from 'formik';
+import _ from 'lodash';
 
 type Props = {
   appliedFilters: number;
@@ -29,7 +30,9 @@ const FilterNotificationsFormActions = ({
         variant="outlined"
         type="submit"
         size="small"
-        disabled={!formikInstance.isValid || formikInstance.values === formikInstance.initialValues}
+        disabled={
+          !formikInstance.isValid || _.isEqual(formikInstance.values, formikInstance.initialValues)
+        }
       >
         {t('button.cerca')}
       </Button>

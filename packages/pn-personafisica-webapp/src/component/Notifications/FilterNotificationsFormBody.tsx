@@ -4,7 +4,7 @@ import { Grid, TextField } from '@mui/material';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { tenYearsAgo, today, useIsMobile } from '@pagopa-pn/pn-commons';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 
 type Props = {
@@ -74,7 +74,7 @@ const FilterNotificationsFormBody = ({
             value={startDate}
             onChange={(value: Date | null) => {
               formikInstance
-                .setFieldValue('startDate', value)
+                .setFieldValue('startDate', value ? value : tenYearsAgo)
                 .then(() => {
                   setStartDate(value);
                 })
@@ -109,7 +109,7 @@ const FilterNotificationsFormBody = ({
             value={endDate}
             onChange={(value: Date | null) => {
               formikInstance
-                .setFieldValue('endDate', value)
+                .setFieldValue('endDate', value ? value : today)
                 .then(() => {
                   setEndDate(value);
                 })

@@ -83,15 +83,13 @@ const FilterNotifications = () => {
     dispatch(setNotificationFilters(emptyValues));
   };
 
-  const filtersApplied = (): number => {
-    const formValues = prevFilters;
-    return Object.entries(formValues).reduce((c: number, element: [string, any]) => {
+  const filtersApplied = (): number =>
+    Object.entries(prevFilters).reduce((c: number, element: [string, any]) => {
       if (element[0] in initialValues && element[1] !== (initialValues as any)[element[0]]) {
         return c + 1;
       }
       return c;
     }, 0);
-  };
 
   useEffect(() => {
     if (filters && _.isEqual(filters, emptyValues)) {

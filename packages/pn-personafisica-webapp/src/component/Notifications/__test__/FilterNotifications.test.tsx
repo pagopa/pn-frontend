@@ -170,18 +170,6 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form reset', async () => {
-    const mockUseAppSelector = jest.spyOn(redux, 'useSelector');
-    mockUseAppSelector
-      .mockReturnValueOnce({
-        iunMatch: undefined,
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
-      })
-      .mockReturnValueOnce({
-        iunMatch: 'RSSMRA80A01H501U',
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
-      });
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
     await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'RSSMRA80A01H501U');
