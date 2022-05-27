@@ -15,6 +15,8 @@ type Props = {
   onExitAction?: () => void;
   /** Side Menu */
   sideMenu?: React.ReactElement;
+  /** Show Side Menu */
+  showSideMenu?: boolean;
   /** List of available products */
   productsList: Array<ProductEntity>;
   /** List of available parties */
@@ -23,7 +25,7 @@ type Props = {
   loggedUser: JwtUser;
   /** Enable user dropdown */
   enableUserDropdown?: boolean;
-  /** Actions linked to user dropdown*/
+  /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
 };
 
@@ -32,11 +34,12 @@ export default function Layout({
   assistanceEmail,
   onExitAction,
   sideMenu,
+  showSideMenu = true,
   productsList,
   partyList,
   loggedUser,
   enableUserDropdown,
-  userActions
+  userActions,
 }: Props) {
 
   return (
@@ -55,9 +58,11 @@ export default function Layout({
           userActions={userActions}
         />
         <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
+          {showSideMenu && (
           <Box sx={{ width: { lg: 300 }, flexShrink: '0'}} component="nav">
             {sideMenu}
           </Box>
+          )}
           <Box sx={{ flexGrow: 1 }} component="main">
           <ErrorBoundary>{children}</ErrorBoundary>
           </Box>
