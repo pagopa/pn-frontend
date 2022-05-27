@@ -16,6 +16,8 @@ type Props = {
   onExitAction?: () => void;
   /** Side Menu */
   sideMenu?: React.ReactElement;
+  /** Show Side Menu */
+  showSideMenu?: boolean;
   /** List of available products */
   productsList: Array<ProductEntity>;
   /** List of available parties */
@@ -24,7 +26,7 @@ type Props = {
   loggedUser: JwtUser;
   /** Enable user dropdown */
   enableUserDropdown?: boolean;
-  /** Actions linked to user dropdown*/
+  /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
 };
 
@@ -44,11 +46,12 @@ export default function Layout({
   assistanceEmail,
   onExitAction,
   sideMenu,
+  showSideMenu = true,
   productsList,
   partyList,
   loggedUser,
   enableUserDropdown,
-  userActions
+  userActions,
 }: Props) {
   const classes = useStyles();
 
@@ -70,10 +73,12 @@ export default function Layout({
           userActions={userActions}
         />
         <Grid role={'navigation'} container spacing={2} direction="row" className={classes.root}>
-          <Grid item lg={2} xs={12} container direction="column">
-            {sideMenu}
-          </Grid>
-          <Grid item lg={10} xs={12} container direction="column">
+          {showSideMenu && (
+            <Grid item lg={2} xs={12} container direction="column">
+              {sideMenu}
+            </Grid>
+          )}
+          <Grid item lg={showSideMenu ? 10 : 12} xs={12} container direction="column">
             <ErrorBoundary>{children}</ErrorBoundary>
           </Grid>
         </Grid>
