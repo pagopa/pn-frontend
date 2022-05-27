@@ -70,10 +70,10 @@ describe('Notifications api tests', () => {
   it('preloadNotificationDocument', async () => {
     const mock = new MockAdapter(apiClient);
     mock
-      .onPost(`/delivery/attachments/preload`, [{ key: 'mocked-key', contentType: 'text/plain' }])
+      .onPost(`/delivery/attachments/preload`, [{ key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' }])
       .reply(200, [{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
     const res = await NotificationsApi.preloadNotificationDocument([
-      { key: 'mocked-key', contentType: 'text/plain' },
+      { key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' },
     ]);
     expect(res).toStrictEqual([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
     mock.reset();
@@ -92,7 +92,8 @@ describe('Notifications api tests', () => {
       'https://mocked-url.com',
       'mocked-sha256',
       'mocked-secret',
-      'mocked-fileBase64'
+      'mocked-fileBase64',
+      'PUT'
     );
     expect(res).toStrictEqual('mocked-versionToken');
     mock.reset();

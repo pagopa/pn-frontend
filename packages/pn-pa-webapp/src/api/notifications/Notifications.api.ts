@@ -114,7 +114,7 @@ export const NotificationsApi = {
    * @returns Promise
    */
   preloadNotificationDocument: (
-    items: Array<{ key: string; contentType: string }>
+    items: Array<{ key: string; contentType: string; sha256: string }>
   ): Promise<Array<{ url: string; secret: string; httpMethod: string }>> =>
     apiClient
       .post<Array<{ url: string; secret: string; httpMethod: string }>>(
@@ -139,10 +139,11 @@ export const NotificationsApi = {
     url: string,
     sha256: string,
     secret: string,
-    fileBase64: string
-  ): Promise<string> =>
-    externalClient
-      .put<string>(
+    fileBase64: string,
+    httpMethod: string
+  ): Promise<string> => {
+    const method = httpMethod.toLowerCase() as 'get' | 'post' | 'put';
+    return externalClient[method]<string>(
         url,
         {
           'upload-file': fileBase64,
@@ -151,10 +152,12 @@ export const NotificationsApi = {
           headers: {
             'Content-Type': 'application/pdf',
             'x-amz-meta-secret': secret,
-            'x-amz-sdk-checksum-algorithm': 'SHA256',
-            'x-amz-checksum-sha256': sha256
+            'x-amz-checksum-sha256': sha256,
           },
         }
       )
-      .then((res) => res.headers['x-amz-version-id']),
+      .then((res) => res.headers['x-amz-version-id']);
+  },
 };
+
+// 'x-amz-sdk-checksum-algorithm': 'SHA256',

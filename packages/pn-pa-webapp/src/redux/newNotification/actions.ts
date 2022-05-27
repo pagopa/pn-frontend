@@ -27,7 +27,7 @@ export const saveRecipients = createAction<FormikValues>('saveRecipients');
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {
-    const presignedUrls = await NotificationsApi.preloadNotificationDocument(items.map(item => ({contentType: item.contentType, key: item.key})));
+    const presignedUrls = await NotificationsApi.preloadNotificationDocument(items.map(item => ({contentType: item.contentType, key: item.key, sha256: item.sha256})));
     if (presignedUrls.length) {
       const uploadDocumentCalls: Array<Promise<string>> = [];
       // upload document
@@ -38,7 +38,8 @@ const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams
             presigneUrl.url,
             items[index].sha256,
             presigneUrl.secret,
-            items[index].fileBase64
+            items[index].fileBase64,
+            presigneUrl.httpMethod
           )
         );
       });
