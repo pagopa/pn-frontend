@@ -55,7 +55,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
             <List
               role="navigation"
               component="nav"
-              aria-label="main piattaforma-notifiche sender mobile"
+              aria-label="piattaforma-notifiche navigazione principale"
               sx={{
                 boxShadow:
                   '0px 2px 4px -1px rgba(0, 43, 85, 0.1), 0px 4px 5px rgba(0, 43, 85, 0.05), 0px 1px 10px rgba(0, 43, 85, 0.1)',

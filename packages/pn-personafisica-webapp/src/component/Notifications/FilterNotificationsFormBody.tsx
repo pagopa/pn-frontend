@@ -1,10 +1,11 @@
+import currentLocale from "date-fns/locale/it";
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, TextField } from '@mui/material';
-import DateAdapter from '@mui/lab/AdapterMoment';
+import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { DATE_FORMAT, useIsMobile } from '@pagopa-pn/pn-commons';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 
 type Props = {
@@ -67,10 +68,11 @@ const FilterNotificationsFormBody = ({
           name="startDate"
           value={formikInstance.values.startDate}
           dateAdapter={DateAdapter}
+          locale={currentLocale}
         >
           <DesktopDatePicker
             label={t('filters.data_da', { ns: 'notifiche' })}
-            inputFormat="DD/MM/yyyy"
+            inputFormat={DATE_FORMAT}
             value={startDate}
             onChange={(value: Date | null) => {
               formikInstance
@@ -102,10 +104,11 @@ const FilterNotificationsFormBody = ({
           value={formikInstance.values.endDate}
           dateAdapter={DateAdapter}
           onChange={formikInstance.handleChange}
+          locale={currentLocale}
         >
           <DesktopDatePicker
             label={t('filters.data_a', { ns: 'notifiche' })}
-            inputFormat="DD/MM/yyyy"
+            inputFormat={DATE_FORMAT}
             value={endDate}
             onChange={(value: Date | null) => {
               formikInstance

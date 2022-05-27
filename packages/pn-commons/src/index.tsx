@@ -136,7 +136,7 @@ import {
   NotificationAllowedStatus,
   parseNotificationDetail,
 } from './utils/notification.utility';
-import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
+import { getMonthString, getDay, getTime, today, tenYearsAgo, DATE_FORMAT } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
 import { formatCurrency, formatEurocentToCurrency } from './utils/currency.utility';
 import { storageOpsBuilder } from './utils/storage.utility';
@@ -154,7 +154,7 @@ export { formatCurrency, formatEurocentToCurrency };
 export { storageOpsBuilder };
 
 // consts
-export { today, tenYearsAgo };
+export { today, tenYearsAgo, DATE_FORMAT };
 
 // hooks
 import { useIsMobile } from './hooks/IsMobile.hook';

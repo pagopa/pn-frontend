@@ -1,3 +1,4 @@
+import currentLocale from "date-fns/locale/it";
 import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,8 +27,8 @@ import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import DateAdapter from '@mui/lab/AdapterMoment';
-import { CourtesyPage, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import { CourtesyPage, DATE_FORMAT, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
@@ -314,10 +315,10 @@ const NuovaDelega = () => {
                       <br />
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
                         <FormControl fullWidth>
-                          <LocalizationProvider dateAdapter={DateAdapter}>
+                          <LocalizationProvider dateAdapter={DateAdapter} locale={currentLocale}>
                             <DesktopDatePicker
                               label={t('nuovaDelega.form.endDate')}
-                              inputFormat="DD/MM/yyyy"
+                              inputFormat={DATE_FORMAT}
                               value={values.expirationDate}
                               onChange={(value: Date | null) => {
                                 setFieldValue('expirationDate', value);

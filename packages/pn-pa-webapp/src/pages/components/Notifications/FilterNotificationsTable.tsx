@@ -1,12 +1,14 @@
+import currentLocale from "date-fns/locale/it";
 import { useEffect, ChangeEvent, Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Box, Button, MenuItem, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import DateAdapter from '@mui/lab/AdapterMoment';
+import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import {
+  DATE_FORMAT,
   fiscalCodeRegex,
   NotificationAllowedStatus,
   tenYearsAgo,
@@ -177,10 +179,11 @@ const FilterNotificationsTable = () => {
             name="startDate"
             value={formik.values.startDate}
             dateAdapter={DateAdapter}
+            locale={currentLocale}
           >
             <DesktopDatePicker
-              label="Da"
-              inputFormat="DD/MM/yyyy"
+              label="Dalle"
+              inputFormat={DATE_FORMAT}
               value={startDate}
               onChange={(value: Date | null) => {
                 void formik.setFieldValue('startDate', value).then(() => {
@@ -200,10 +203,11 @@ const FilterNotificationsTable = () => {
             value={formik.values.endDate}
             dateAdapter={DateAdapter}
             onChange={formik.handleChange}
+            locale={currentLocale}
           >
             <DesktopDatePicker
               label="A"
-              inputFormat="DD/MM/yyyy"
+              inputFormat={DATE_FORMAT}
               value={endDate}
               onChange={(value: Date | null) => {
                 void formik.setFieldValue('endDate', value).then(() => {
