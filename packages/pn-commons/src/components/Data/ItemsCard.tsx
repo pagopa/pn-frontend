@@ -70,9 +70,10 @@ const ItemsCard = ({
                   <Typography variant="caption-semibold" data-testid="cardBodyLabel">
                     {body.label}
                   </Typography>
-                  <Typography variant="body2" data-testid="cardBodyValue">
+                  {!body.notWrappedInTypography && <Typography variant="body2" data-testid="cardBodyValue">
                     {body.getLabel(data[body.id])}
-                  </Typography>
+                  </Typography>}
+                  {body.notWrappedInTypography && body.getLabel(data[body.id])}
                 </Box>
               ))}
             </CardContent>

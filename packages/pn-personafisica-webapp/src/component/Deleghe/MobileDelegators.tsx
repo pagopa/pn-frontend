@@ -78,8 +78,9 @@ const MobileDelegators = () => {
       id: 'visibilityIds',
       label: t('Permessi per vedere'),
       getLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} />;
+        return <OrganizationsList organizations={value} textVariant="body2"/>;
       },
+      notWrappedInTypography: true
     },
   ];
 
