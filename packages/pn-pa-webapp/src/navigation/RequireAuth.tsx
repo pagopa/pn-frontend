@@ -45,7 +45,7 @@ const RequireAuth = ({ roles }: Props) => {
         <SessionModal
           open
           title={'Stai uscendo da Piattaforma Notifiche'}
-          message={'Verrai reindirizzato'}
+          message={'Non hai i provilegi per accedere a questa sezione'}
           handleClose={goToSelfcareLogin}
         ></SessionModal>
       )}
