@@ -1,4 +1,4 @@
-import currentLocale from "date-fns/locale/it";
+import currentLocale from 'date-fns/locale/it';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, TextField } from '@mui/material';
@@ -118,11 +118,25 @@ const FilterNotificationsFormBody = ({
                 })
                 .catch(() => 'error');
             }}
+
+            
+
+            leftArrowButtonText="Vai al mese precedente"
+            rightArrowButtonText="Vai al mese successivo"
+
+            OpenPickerButtonProps={{ 'aria-label': 'Scegli data' }}
             renderInput={(params) => (
               <TextField
                 id="endDate"
                 name="endDate"
+                aria-label="Scegli data fine"
                 {...params}
+                inputProps={{
+                  ...params.inputProps,
+                  inputMode: 'text',
+                  'aria-label': 'inserisci data fine ricerca',
+                  type: 'data',
+                }}
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 size="small"
