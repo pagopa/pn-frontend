@@ -177,7 +177,7 @@ const Dashboard = () => {
   }, [filters, pagination.size, pagination.page, sort]);
 
   return (
-    <Box sx={{ padding: '20px' }}>
+    <Box p={3}>
       <TitleBox
         variantTitle="h4"
         title={'Notifiche'}

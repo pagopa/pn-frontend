@@ -61,7 +61,6 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
     <Box
       sx={{
         height: '100%',
-        maxWidth: 360,
         backgroundColor: 'background.paper',
       }}
     >
