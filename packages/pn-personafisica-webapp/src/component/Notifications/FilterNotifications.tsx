@@ -1,7 +1,9 @@
 import { useEffect, useState, useRef } from 'react';
-import { useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { useFormik } from 'formik';
 import * as yup from 'yup';
+import _ from 'lodash';
 import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import {
@@ -13,7 +15,6 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { setNotificationFilters } from '../../redux/dashboard/actions';
@@ -95,7 +96,7 @@ const FilterNotifications = () => {
   };
 
   useEffect(() => {
-    if (filters && filters === emptyValues) {
+    if (filters && _.isEqual(filters, emptyValues)) {
       formik.resetForm({
         values: initialValues,
       });
@@ -114,7 +115,7 @@ const FilterNotifications = () => {
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
-        sx={{ pl: 0, pr: filtersApplied() ? '10px' : 0, justifyContent: 'left', minWidth: 'unset' }}
+        sx={{ pl: 0, pr: filtersApplied() ? '10px' : 0, justifyContent: 'left', minWidth: 'unset', height: '24px' }}
         hasCounterBadge
         bagdeCount={filtersApplied()}
       >

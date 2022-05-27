@@ -1,9 +1,11 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { Fragment, ReactNode, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Breadcrumbs, Grid, Typography, Box, Paper, Button } from '@mui/material';
+import { Breadcrumbs, Grid, Typography, Box, Paper, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
+import { ArrowBack } from '@mui/icons-material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   TitleBox,
   LegalFactId,
@@ -121,19 +123,24 @@ const NotificationDetail = () => {
 
   const breadcrumb = (
     <Fragment>
-      <Breadcrumbs aria-label="breadcrumb">
-        <StyledLink to={routes.NOTIFICHE}>
-          <EmailIcon sx={{ mr: 0.5 }} />
-          {t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        </StyledLink>
-        <Typography
-          color="text.primary"
-          fontWeight={600}
-          sx={{ display: 'flex', alignItems: 'center' }}
-        >
-          {t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
-        </Typography>
-      </Breadcrumbs>
+      <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'start', sm: 'center' }} justifyContent="start" spacing={3}>
+        <ButtonNaked onClick={() => navigate(-1)} startIcon={<ArrowBack />} color="primary" size="medium" >
+          {t('button.indietro', { ns: 'common' })}
+        </ButtonNaked>
+        <Breadcrumbs saria-label="breadcrumb">
+          <StyledLink to={routes.NOTIFICHE}>
+            <EmailIcon sx={{ mr: 0.5 }} />
+            {t('detail.breadcrumb-root', { ns: 'notifiche' })}
+          </StyledLink>
+          <Typography
+            color="text.primary"
+            fontWeight={600}
+            sx={{ display: 'flex', alignItems: 'center' }}
+          >
+            {t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
+          </Typography>
+        </Breadcrumbs>
+      </Stack>
       <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
     </Fragment>
   );
@@ -177,9 +184,7 @@ const NotificationDetail = () => {
             />              
           </Paper>
               */}
-          <Button sx={{ margin: '10px 0' }} variant="outlined" onClick={() => navigate(-1)}>
-            {t('button.indietro', { ns: 'common' })}
-          </Button>
+          
         </Grid>
         <Grid item lg={5} xs={12}>
           <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>

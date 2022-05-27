@@ -206,6 +206,7 @@ const Dashboard = () => {
                 }}
                 onPageRequest={handleChangePage}
                 pagesToShow={pagesToShow}
+                sx={{padding: '0 10px'}}
               />
             )}
           </Fragment>

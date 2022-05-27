@@ -35,6 +35,7 @@ const App = () => {
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const tos = useAppSelector((state: RootState) => state.userState.tos);
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
@@ -91,7 +92,7 @@ const App = () => {
     icon: PersonIcon,
     label:
       'delegator' in delegator && delegator.delegator
-        ? `${delegator.delegator.firstName} ${delegator.delegator.lastName}`
+        ? `${delegator.delegator.displayName}`
         : 'No Name Found',
     route:
       'delegator' in delegator && delegator.delegator
@@ -121,6 +122,7 @@ const App = () => {
       assistanceEmail={PAGOPA_HELP_EMAIL}
       onExitAction={() => dispatch(logout())}
       sideMenu={<SideMenu menuItems={menuItems} />}
+      showSideMenu={tos}
       productsList={productsList}
       loggedUser={jwtUser}
       enableUserDropdown

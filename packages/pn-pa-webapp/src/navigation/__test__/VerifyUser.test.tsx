@@ -3,7 +3,7 @@ import * as redux from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
 
 import * as actions from '../../redux/auth/actions';
-import { UserRole } from '../../models/user';
+import { PartyRole } from '../../models/user';
 import { render, axe } from '../../__test__/test-utils';
 import VerifyUser from '../VerifyUser';
 
@@ -18,17 +18,14 @@ jest.mock('react-router-dom', () => ({
     pathname: '',
     search: '',
   }),
-  useNavigate: () => mockNavigateFn
+  useNavigate: () => mockNavigateFn,
 }));
 
 describe('VerifyUser Component', () => {
-
   beforeEach(() => {
     // useSelector mock
     const useSelectorSpy = jest.spyOn(redux, 'useSelector');
-    useSelectorSpy
-      .mockReturnValue('mocked-token')
-      .mockReturnValue(UserRole.REFERENTE_AMMINISTRATIVO);
+    useSelectorSpy.mockReturnValue('mocked-token').mockReturnValue(PartyRole.MANAGER);
   });
 
   afterEach(() => {

@@ -133,7 +133,7 @@ describe('Filter Notifications Table Component', () => {
   it('test endDate input', async () => {
     await testInput(form!, 'endDate', '23/02/2022');
     await testCalendar(form!, 'endDate');
-  });
+  }, 10000);
 
   it('test form submission - iunMatch (valid)', async () => {
     const oneYearAgo = moment().add(-1, 'year').startOf('day');
