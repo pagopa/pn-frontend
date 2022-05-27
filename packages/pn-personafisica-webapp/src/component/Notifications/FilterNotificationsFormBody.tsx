@@ -74,7 +74,7 @@ const FilterNotificationsFormBody = ({
             value={startDate}
             onChange={(value: Date | null) => {
               formikInstance
-                .setFieldValue('startDate', value ? value : tenYearsAgo)
+                .setFieldValue('startDate', value || tenYearsAgo)
                 .then(() => {
                   setStartDate(value);
                 })
@@ -109,7 +109,7 @@ const FilterNotificationsFormBody = ({
             value={endDate}
             onChange={(value: Date | null) => {
               formikInstance
-                .setFieldValue('endDate', value ? value : today)
+                .setFieldValue('endDate', value || today)
                 .then(() => {
                   setEndDate(value);
                 })
