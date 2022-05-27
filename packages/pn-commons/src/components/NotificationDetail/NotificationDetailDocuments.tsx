@@ -64,7 +64,7 @@ const NotificationDetailDocuments = ({
         >
           {d.title}
           <Typography sx={{ fontWeight: 600, ml: '10px' }}>
-            {'650 KB'} {/* TODO: integrate specific dimension of file */}
+            {''} {/* TODO: integrate specific dimension of file */}
           </Typography>
         </ButtonNaked>
       )
