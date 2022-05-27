@@ -114,8 +114,8 @@ const MobileDelegates = () => {
         codeSectionTitle={t('deleghe.verification_code')}
         isReadOnly
       />
-      <Box mx={1} mb={8}>
-        <Typography variant="h4" mb={2}>
+      <Box>
+        <Typography variant="h4" mb={3}>
           {t('deleghe.delegatesTitle')}
         </Typography>
         {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
