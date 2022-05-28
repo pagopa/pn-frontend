@@ -118,32 +118,36 @@ const FilterNotificationsFormBody = ({
                 })
                 .catch(() => 'error');
             }}
-
-            
-
-            leftArrowButtonText="Vai al mese precedente"
-            rightArrowButtonText="Vai al mese successivo"
-
-            OpenPickerButtonProps={{ 'aria-label': 'Scegli data' }}
             renderInput={(params) => (
               <TextField
                 id="endDate"
                 name="endDate"
-                aria-label="Scegli data fine"
                 {...params}
+                fullWidth
+                sx={{ marginBottom: isMobile ? '20px' : '0' }}
+                size="small"
+                aria-label="Scegli data fine" // aria-label for TextField + Button group
                 inputProps={{
                   ...params.inputProps,
                   inputMode: 'text',
                   'aria-label': 'inserisci data fine ricerca',
-                  type: 'data',
+                  type: 'text',
                 }}
-                fullWidth
-                sx={{ marginBottom: isMobile ? '20px' : '0' }}
-                size="small"
               />
             )}
             disableFuture={true}
             minDate={startDate ? startDate : undefined}
+            // props for date picker
+            leftArrowButtonText="Vai al mese precedente" // deprecated
+            rightArrowButtonText="Vai al mese successivo" // deprecated
+            getViewSwitchingButtonText={(view) => view === 'year' ? 'modalità di scelta dell\'anno attiva, passa alla modalità calendario' : 'modalità calendario attiva, passa alla modalità di scelta dell\'anno' }
+            getOpenDialogAriaText={(value, utils) => {
+              if(value) {
+                return `Scegli data fine ricerca, la data selezionata è ${utils.format(utils.date(value), 'fullDate')}`;
+              }
+              return "Scegli data fine ricerca";
+            }}
+            // OpenPickerButtonProps={{ 'aria-label': 'Scegli data'}} // props for calendar button
           />
         </LocalizationProvider>
       </Grid>
