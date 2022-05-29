@@ -1,4 +1,4 @@
-import currentLocale from "date-fns/locale/it";
+import currentLocale from 'date-fns/locale/it';
 import { useEffect, ChangeEvent, Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -6,8 +6,8 @@ import { Box, Button, MenuItem, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import {
+  CustomDatePicker,
   DATE_FORMAT,
   fiscalCodeRegex,
   NotificationAllowedStatus,
@@ -181,7 +181,7 @@ const FilterNotificationsTable = () => {
             dateAdapter={DateAdapter}
             locale={currentLocale}
           >
-            <DesktopDatePicker
+            <CustomDatePicker
               label="Dalle"
               inputFormat={DATE_FORMAT}
               value={startDate}
@@ -191,7 +191,19 @@ const FilterNotificationsTable = () => {
                 });
               }}
               renderInput={(params) => (
-                <TextField id="startDate" name="startDate" size="small" {...params} />
+                <TextField
+                  id="startDate"
+                  name="startDate"
+                  size="small"
+                  {...params}
+                  aria-label="Data inizio ricerca" // aria-label for (TextField + Button) Group
+                  inputProps={{
+                    ...params.inputProps,
+                    inputMode: 'text',
+                    'aria-label': 'Inserisci la data iniziale della ricerca',
+                    type: 'text',
+                  }}
+                />
               )}
               disableFuture={true}
               maxDate={endDate ? endDate : undefined}
@@ -205,7 +217,7 @@ const FilterNotificationsTable = () => {
             onChange={formik.handleChange}
             locale={currentLocale}
           >
-            <DesktopDatePicker
+            <CustomDatePicker
               label="A"
               inputFormat={DATE_FORMAT}
               value={endDate}
@@ -215,7 +227,19 @@ const FilterNotificationsTable = () => {
                 });
               }}
               renderInput={(params) => (
-                <TextField id="endDate" name="endDate" size="small" {...params} />
+                <TextField
+                  id="endDate"
+                  name="endDate"
+                  size="small"
+                  {...params}
+                  aria-label="Data fine ricerca" // aria-label for (TextField + Button) Group
+                  inputProps={{
+                    ...params.inputProps,
+                    inputMode: 'text',
+                    'aria-label': 'inserisci la data finale della ricerca',
+                    type: 'text',
+                  }}
+                />
               )}
               disableFuture={true}
               minDate={startDate ? startDate : undefined}

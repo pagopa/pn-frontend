@@ -1,11 +1,10 @@
 import currentLocale from 'date-fns/locale/it';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, TextField } from '@mui/material';
+import { Grid, TextField, TextFieldProps } from '@mui/material';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import { DATE_FORMAT, useIsMobile } from '@pagopa-pn/pn-commons';
+import { CustomDatePicker, DATE_FORMAT, useIsMobile } from '@pagopa-pn/pn-commons';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 
 type Props = {
@@ -70,7 +69,7 @@ const FilterNotificationsFormBody = ({
           dateAdapter={DateAdapter}
           locale={currentLocale}
         >
-          <DesktopDatePicker
+          <CustomDatePicker
             label={t('filters.data_da', { ns: 'notifiche' })}
             inputFormat={DATE_FORMAT}
             value={startDate}
@@ -90,6 +89,13 @@ const FilterNotificationsFormBody = ({
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 size="small"
+                aria-label="Data inizio ricerca" // aria-label for (TextField + Button) Group
+                inputProps={{
+                  ...params.inputProps,
+                  inputMode: 'text',
+                  'aria-label': 'Inserisci la data iniziale della ricerca',
+                  type: 'text',
+                }}
               />
             )}
             disableFuture={true}
@@ -106,7 +112,7 @@ const FilterNotificationsFormBody = ({
           onChange={formikInstance.handleChange}
           locale={currentLocale}
         >
-          <DesktopDatePicker
+          <CustomDatePicker
             label={t('filters.data_a', { ns: 'notifiche' })}
             inputFormat={DATE_FORMAT}
             value={endDate}
@@ -118,7 +124,7 @@ const FilterNotificationsFormBody = ({
                 })
                 .catch(() => 'error');
             }}
-            renderInput={(params) => (
+            renderInput={(params: TextFieldProps) => (
               <TextField
                 id="endDate"
                 name="endDate"
@@ -126,28 +132,17 @@ const FilterNotificationsFormBody = ({
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 size="small"
-                aria-label="Scegli data fine" // aria-label for TextField + Button group
+                aria-label="Data fine ricerca" // aria-label for (TextField + Button) Group
                 inputProps={{
                   ...params.inputProps,
                   inputMode: 'text',
-                  'aria-label': 'inserisci data fine ricerca',
+                  'aria-label': 'inserisci la data finale della ricerca',
                   type: 'text',
                 }}
               />
             )}
             disableFuture={true}
             minDate={startDate ? startDate : undefined}
-            // props for date picker
-            leftArrowButtonText="Vai al mese precedente" // deprecated
-            rightArrowButtonText="Vai al mese successivo" // deprecated
-            getViewSwitchingButtonText={(view) => view === 'year' ? 'modalità di scelta dell\'anno attiva, passa alla modalità calendario' : 'modalità calendario attiva, passa alla modalità di scelta dell\'anno' }
-            getOpenDialogAriaText={(value, utils) => {
-              if(value) {
-                return `Scegli data fine ricerca, la data selezionata è ${utils.format(utils.date(value), 'fullDate')}`;
-              }
-              return "Scegli data fine ricerca";
-            }}
-            // OpenPickerButtonProps={{ 'aria-label': 'Scegli data'}} // props for calendar button
           />
         </LocalizationProvider>
       </Grid>
