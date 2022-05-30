@@ -12,7 +12,7 @@ import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
-import { logout } from './redux/auth/actions';
+import { getToSApproval, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
 import { RootState } from './redux/store';
@@ -81,6 +81,9 @@ const App = () => {
     if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
       void dispatch(getDomicileInfo());
+      void dispatch(getToSApproval()).then(() => {
+        navigate(routes.NOTIFICHE);
+      });
     }
   }, [sessionToken]);
 
