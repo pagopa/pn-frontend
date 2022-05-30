@@ -20,7 +20,7 @@ describe('FileUpload Component', () => {
     fireEvent.change(input!, { target: { files: [file] } });
     await waitFor(() => {
       expect(mockUploadFn).toBeCalledTimes(1);
-      expect(mockUploadFn).toBeCalledWith(file, undefined, undefined);
+      expect(mockUploadFn).toBeCalledWith(file, undefined);
       expect(result.container).toHaveTextContent(/Caricamento/i);
     });
   };
