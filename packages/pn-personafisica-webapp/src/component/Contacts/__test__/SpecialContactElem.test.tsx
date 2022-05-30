@@ -1,6 +1,6 @@
 import { act, RenderResult } from "@testing-library/react";
 
-import { render } from "../../../__test__/test-utils";
+import { axe, render } from "../../../__test__/test-utils";
 import { DigitalContactsCodeVerificationProvider } from "../DigitalContactsCodeVerification.context";
 import SpecialContactElem from "../SpecialContactElem";
 
@@ -59,5 +59,14 @@ describe('SpecialContactElem Component', () => {
     expect(secondFormButtons).toHaveLength(2);
     expect(secondFormButtons[0]).toHaveTextContent('button.modifica');
     expect(secondFormButtons[1]).toHaveTextContent('button.rimuovi');
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 });

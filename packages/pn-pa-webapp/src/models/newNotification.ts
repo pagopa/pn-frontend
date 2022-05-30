@@ -24,17 +24,11 @@ export interface NewNotificationDocument {
 }
 
 export interface NewNotificationPayment {
-  notificationFeePolicy: NotificationFeePolicy;
   noticeCode: string;
   creditorTaxId: string;
   pagoPaForm: NewNotificationDocument;
-  f24flatRate: NewNotificationDocument;
-  f24digital: NewNotificationDocument;
-  f24digitalWithRs: NewNotificationDocument;
-  f24analogRaccSingle: NewNotificationDocument;
-  f24analogRaccDouble: NewNotificationDocument;
-  f24analogRiSingle: NewNotificationDocument;
-  f24analogRiDouble: NewNotificationDocument;
+  f24flatRate?: NewNotificationDocument;
+  f24standard?: NewNotificationDocument;
 }
 
 export interface NewNotificationRecipient extends NotificationDetailRecipient {
@@ -42,6 +36,7 @@ export interface NewNotificationRecipient extends NotificationDetailRecipient {
 }
 
 export interface NewNotificationBe {
+  notificationFeePolicy: NotificationFeePolicy;
   idempotenceToken?: string;
   paProtocolNumber: string;
   subject: string;
@@ -81,8 +76,33 @@ export interface FormRecipient {
   showPhysicalAddress?: boolean;
 }
 
+export interface UploadAttachmentParams {
+  key: string;
+  contentType: string;
+  file: Uint8Array | undefined;
+  sha256: string;
+}
+
+export interface UploadPayementParams {
+  [key: string]: {
+    pagoPaForm: UploadAttachmentParams;
+    f24flatRate: UploadAttachmentParams;
+    f24standard: UploadAttachmentParams;
+  };
+}
+
+export interface UpaloadPaymentResponse {
+  [key: string]: {
+    pagoPaForm: NewNotificationDocument;
+    f24flatRate?: NewNotificationDocument;
+    f24standard?: NewNotificationDocument;
+  };
+}
+
 export interface NewNotificationResponse {
   notificationRequestId: string;
   paProtocolNumber: string;
   idempotenceToken: string;
 }
+
+

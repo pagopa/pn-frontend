@@ -14,6 +14,7 @@ import PreliminaryInformations from './components/NewNotification/PreliminaryInf
 import Recipient from './components/NewNotification/Recipient';
 import Attachments from './components/NewNotification/Attachments';
 import PaymentMethods from './components/NewNotification/PaymentMethods';
+import SyncFeedback from './components/NewNotification/SyncFeedback';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -54,6 +55,10 @@ const NewNotification = () => {
   };
 
   useEffect(() => () => void dispatch(resetNewNotificationState()), []);
+
+  if (activeStep === 4) {
+    return <SyncFeedback />;
+  }
 
   return (
     <Prompt title="Vuoi davvero uscire?" message="Se esci, i dati inseriti andranno persi.">
@@ -104,7 +109,7 @@ const NewNotification = () => {
           )}
           {activeStep === 1 && <Recipient onConfirm={goToNextStep} />}
           {activeStep === 2 && <Attachments onConfirm={goToNextStep} />}
-          {activeStep === 3 && <PaymentMethods />}
+          {activeStep === 3 && <PaymentMethods notification={notification} onConfirm={goToNextStep}/>}
         </Grid>
       </Grid>
     </Prompt>

@@ -14,7 +14,7 @@ import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-import { calcBase64String, calcSha256String } from '../utils/file.utility';
+import { calcUnit8Array, calcSha256String, calcBase64String } from '../utils/file.utility';
 import CustomTooltip from './CustomTooltip';
 
 type Props = {
@@ -23,19 +23,17 @@ type Props = {
   accept: string;
   uploadFn?: (
     file: any,
-    fileBase64?: string,
     sha256?: { hashBase64: string; hashHex: string }
   ) => Promise<void>;
   onFileUploaded: (
     file: any,
-    fileBase64?: string,
     sha256?: { hashBase64: string; hashHex: string }
   ) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
   sx?: SxProps;
   calcSha256?: boolean;
-  calcBase64?: boolean;
+  fileFormat?: 'base64' | 'uint8Array';
 };
 
 enum UploadStatus {
@@ -103,7 +101,7 @@ const OrientedBox = ({ vertical, children }: { vertical: boolean; children: Reac
  * @param isSending flag for sending status
  * @param sx style to be addded to the component
  * @param calcSha256 flag to calculate the sha256
- * @param calcBase64 flag to calculate the base64 version of the file
+ * @param fileFormat format of the file after loading
  * @returns
  */
 const FileUpload = ({
@@ -116,7 +114,7 @@ const FileUpload = ({
   isSending,
   sx,
   calcSha256 = false,
-  calcBase64 = false,
+  fileFormat,
 }: Props) => {
   const [data, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
@@ -156,13 +154,19 @@ const FileUpload = ({
     if (file && file.type && accept.indexOf(file.type) > -1) {
       dispatch({ type: 'ADD_FILE', payload: file });
       try {
-        const fileBase64 = calcBase64 ? await calcBase64String(file) : undefined;
+        /* eslint-disable-next-line functional/no-let */
+        let fileFormatted = file;
+        if (fileFormat === 'base64') {
+          fileFormatted = await calcBase64String(file);
+        } else if (fileFormat === 'uint8Array') {
+          fileFormatted = await calcUnit8Array(file);
+        }
         const sha256 = calcSha256 ? await calcSha256String(file) : undefined;
         if (uploadFn) {
-          await uploadFn(file, fileBase64, sha256);
+          await uploadFn(fileFormatted, sha256);
         }
         dispatch({ type: 'FILE_UPLOADED', payload: sha256?.hashHex });
-        onFileUploaded(file, fileBase64, sha256);
+        onFileUploaded(fileFormatted, sha256);
       } catch {
         dispatch({ type: 'UPLOAD_IN_ERROR' });
       }

@@ -1,5 +1,5 @@
 
-import { render } from "../../../__test__/test-utils";
+import { axe, render } from "../../../__test__/test-utils";
 import DigitalContactsCard from "../DigitalContactsCard";
 
 const title = 'Mocked title';
@@ -31,5 +31,11 @@ describe('DigitalContactsCard Component', () => {
     const buttonEl = result.container.querySelector('button');
     expect(buttonEl).toBeInTheDocument();
     expect(buttonEl).toHaveTextContent(/Click me/i);
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    const { container } = render(<DigitalContactsCard sectionTitle={'mocked-sectionTitle'} title={title} subtitle={subTitle} actions={actions} avatar="avatar">{body}</DigitalContactsCard>);
+    const result = await axe(container);
+    expect(result).toHaveNoViolations();
   });
 });

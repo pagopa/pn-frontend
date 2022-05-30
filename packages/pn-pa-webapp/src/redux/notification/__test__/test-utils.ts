@@ -21,6 +21,8 @@ export const notificationFromBe: NotificationDetail = {
   cancelledByIun: 'mocked-cancelledByIun',
   recipients: [
     {
+      creditorTaxId: 'mocked-creditorTaxId',
+      token: 'mocked-token',
       recipientType: RecipientType.PF,
       taxId: 'CGNNMO80A03H501U',
       denomination: 'Analogico Ok',
@@ -93,6 +95,8 @@ export const notificationFromBe: NotificationDetail = {
         category: TimelineCategory.REQUEST_ACCEPTED,
         recipients: [
           {
+            creditorTaxId: 'mocked-creditorTaxId',
+            token: 'mocked-token',
             recipientType: RecipientType.PF,
             taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
             denomination: 'Mario Rossi',
@@ -269,6 +273,8 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
   cancelledByIun: 'mocked-cancelledByIun',
   recipients: [
     {
+      creditorTaxId: 'mocked-creditorTaxId',
+      token: 'mocked-token',
       recipientType: RecipientType.PF,
       taxId: 'CGNNMO80A03H501U',
       denomination: 'Analogico Ok',
@@ -287,6 +293,8 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
       },
     },
     {
+      creditorTaxId: 'mocked-creditorTaxId',
+      token: 'mocked-token',
       recipientType: RecipientType.PF,
       taxId: 'CGNNMO80A03H501V',
       denomination: 'Altro Ok',
@@ -359,6 +367,8 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
         category: TimelineCategory.REQUEST_ACCEPTED,
         recipients: [
           {
+            creditorTaxId: 'mocked-creditorTaxId',
+            token: 'mocked-token',
             recipientType: RecipientType.PF,
             taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
             denomination: 'Mario Rossi',

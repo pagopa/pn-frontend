@@ -26,19 +26,19 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
   );
   const menuItemSelected = menuItemsWithIndex.find((m) => m.route === location.pathname) ||
     menuItemsWithIndex.find((m) => location.pathname.indexOf(m.route as string) > -1) || {
-      index: -1,
-      label: 'Menu',
-      route: '',
-    };
+    index: -1,
+    label: 'Menu',
+    route: '',
+  };
 
   const toggleDrawer = () => {
     setState(!state);
   };
 
-  const handleNavigation = (link: string) => {
-    if (isMobile) {
+  const handleNavigation = (link: string, menuFlag?: boolean) => {
+    if (isMobile && !menuFlag) {
       setState(false);
-    }
+    };
     navigate(link);
   };
 

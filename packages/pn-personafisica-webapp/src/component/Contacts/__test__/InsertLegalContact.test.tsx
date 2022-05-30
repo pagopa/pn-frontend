@@ -1,7 +1,7 @@
 import * as redux from 'react-redux';
 import { act, fireEvent, RenderResult, waitFor, screen } from '@testing-library/react';
 
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/contact/actions';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../InsertLegalContact';
@@ -14,7 +14,7 @@ jest.mock('react-i18next', () => ({
       t: (str: string) => str,
     };
   },
-  Trans: (props: {i18nKey: string}) => props.i18nKey,
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 describe('InsertLegalContact component', () => {
@@ -132,9 +132,11 @@ describe('InsertLegalContact component', () => {
     mockActionFn.mockReset();
     mockDispatchFn.mockReset();
     mockDispatchFn.mockClear();
-    mockDispatchFn.mockImplementation(jest.fn(() => ({
-      unwrap: () => Promise.resolve({code: '01234'}),
-    })));
+    mockDispatchFn.mockImplementation(
+      jest.fn(() => ({
+        unwrap: () => Promise.resolve({ code: 'verified' }),
+      }))
+    );
     fireEvent.click(dialogButtons![1]);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
@@ -151,4 +153,13 @@ describe('InsertLegalContact component', () => {
       expect(dialog).not.toBeInTheDocument();
     });
   });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail('render() returned undefined!');
+    }
+  }, 10000);
 });

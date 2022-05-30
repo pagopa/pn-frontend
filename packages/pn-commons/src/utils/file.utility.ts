@@ -18,6 +18,29 @@ export const calcBase64String = (file: any): Promise<string> => {
   });
 };
 
+export const calcUnit8Array = (file: any): Promise<Uint8Array> => {
+  // this is because test fails due to resolve in onload function
+  if (process.env.NODE_ENV === 'test') {
+    return Promise.resolve(new Uint8Array());
+  }
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    /* eslint-disable functional/immutable-data */
+    reader.onload = async () => {
+      try {
+        resolve(new Uint8Array(reader.result as ArrayBuffer));
+      } catch {
+        reject();
+      }
+    };
+    reader.onerror = () => {
+      reject();
+    };
+    /* eslint-enable functional/immutable-data */
+  });
+};
+
 export const calcSha256String = (file: any): Promise<{ hashHex: string; hashBase64: string }> => {
   // this is because in jest crypto is undefined and test fails due to resolve in onload function
   if (process.env.NODE_ENV === 'test') {

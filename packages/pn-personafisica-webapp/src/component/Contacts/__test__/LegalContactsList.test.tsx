@@ -1,7 +1,7 @@
 import * as redux from 'react-redux';
 import { act, fireEvent, RenderResult, waitFor, screen } from '@testing-library/react';
 
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import { DigitalAddress, LegalChannelType } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import LegalContactsList from '../LegalContactsList';
@@ -167,7 +167,7 @@ describe('LegalContactsList Component', () => {
     mockDispatchFn.mockReset();
     mockDispatchFn.mockClear();
     mockDispatchFn.mockImplementation(jest.fn(() => ({
-      unwrap: () => Promise.resolve({code: '01234'}),
+      unwrap: () => Promise.resolve({code: 'verified'}),
     })));
     fireEvent.click(dialogButtons![1]);
     await waitFor(() => {
@@ -206,5 +206,14 @@ describe('LegalContactsList Component', () => {
         channelType: LegalChannelType.PEC
       });
     });
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 });

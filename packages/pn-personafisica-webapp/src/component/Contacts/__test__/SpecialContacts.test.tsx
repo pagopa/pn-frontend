@@ -1,14 +1,7 @@
 import * as redux from 'react-redux';
-import {
-  act,
-  fireEvent,
-  screen,
-  RenderResult,
-  within,
-  waitFor,
-} from '@testing-library/react';
+import { act, fireEvent, screen, RenderResult, within, waitFor } from '@testing-library/react';
 
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/contact/actions';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
@@ -160,7 +153,7 @@ async function testContactAddition(
   mockDispatchFn.mockClear();
   mockDispatchFn.mockImplementation(
     jest.fn(() => ({
-      unwrap: () => Promise.resolve({ code: '01234' }),
+      unwrap: () => Promise.resolve({ code: 'verified' }),
     }))
   );
   fireEvent.click(dialogButtons![1]);
@@ -320,12 +313,19 @@ describe('SpecialContacts Component', () => {
       ],
       1
     );
-    await testValidFiled(form!, 's_phone', '3494568016');
+    await testValidFiled(form!, 's_phone', '+393494568016');
   });
 
   it('adds pec', async () => {
     const form = result?.container.querySelector('form');
-    await testContactAddition(form!, 's_pec', 'mail@valida.mail', mockDispatchFn, mockActionFn, LegalChannelType.PEC);
+    await testContactAddition(
+      form!,
+      's_pec',
+      'mail@valida.mail',
+      mockDispatchFn,
+      mockActionFn,
+      LegalChannelType.PEC
+    );
   });
 
   it('adds phone', async () => {
@@ -340,7 +340,14 @@ describe('SpecialContacts Component', () => {
       ],
       1
     );
-    await testContactAddition(form!, 's_phone', '3494568016', mockDispatchFn, mockActionFn, CourtesyChannelType.SMS);
+    await testContactAddition(
+      form!,
+      's_phone',
+      '+393494568016',
+      mockDispatchFn,
+      mockActionFn,
+      CourtesyChannelType.SMS
+    );
   });
 
   it('adds email', async () => {
@@ -355,6 +362,22 @@ describe('SpecialContacts Component', () => {
       ],
       2
     );
-    await testContactAddition(form!, 's_mail', 'mail@valida.mail', mockDispatchFn, mockActionFn, CourtesyChannelType.EMAIL);
+    await testContactAddition(
+      form!,
+      's_mail',
+      'mail@valida.mail',
+      mockDispatchFn,
+      mockActionFn,
+      CourtesyChannelType.EMAIL
+    );
   });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail('render() returned undefined!');
+    }
+  }, 10000);
 });

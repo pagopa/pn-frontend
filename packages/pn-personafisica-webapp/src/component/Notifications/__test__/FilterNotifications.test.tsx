@@ -3,7 +3,7 @@ import moment from 'moment';
 import * as redux from 'react-redux';
 import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
 function formatDate(date: Date): string {
@@ -133,7 +133,7 @@ describe('Filter Notifications Table Component', () => {
   it('test endDate input', async () => {
     await testInput(form!, 'endDate', '23/02/2022');
     await testCalendar(form!, 'endDate');
-  });
+  }, 10000);
 
   it('test form submission - iunMatch (valid)', async () => {
     const oneYearAgo = moment().add(-1, 'year').startOf('day');
@@ -188,5 +188,14 @@ describe('Filter Notifications Table Component', () => {
       },
       type: 'setNotificationFilters',
     });
+  });
+
+  it('does not have basic accessibility issues', async () => {
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail("render() returned undefined!");
+    }
   });
 });

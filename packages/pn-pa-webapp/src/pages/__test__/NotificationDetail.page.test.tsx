@@ -4,7 +4,7 @@ import { fireEvent, RenderResult } from '@testing-library/react';
 import * as actions from '../../redux/notification/actions';
 import * as hooks from '../../redux/hooks';
 import { notificationToFe } from '../../redux/notification/__test__/test-utils';
-import { render } from '../../__test__/test-utils';
+import { render, axe } from '../../__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = jest.fn();
@@ -94,5 +94,12 @@ describe('NotificationDetail Page', () => {
     const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn!);
     expect(mockNavigateFn).toBeCalledTimes(1);
+  });
+
+  it('does not have basic accessibility issues rendering the page', async () => {
+    if(result) {
+      const results = await axe(result.container);
+      expect(results).toHaveNoViolations();
+    }
   });
 });

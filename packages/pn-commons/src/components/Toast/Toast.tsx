@@ -88,7 +88,7 @@ const Toast = ({
                 <Typography variant="body2">{message}</Typography>
               </Grid>
               <Grid item xs={2}>
-                <IconButton onClick={closeToast}>
+                <IconButton onClick={closeToast} aria-label="Close toast icon">
                   <CloseIcon />
                 </IconButton>
               </Grid>

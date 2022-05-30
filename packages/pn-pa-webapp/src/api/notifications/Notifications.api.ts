@@ -116,18 +116,16 @@ export const NotificationsApi = {
    * @returns Promise
    */
   preloadNotificationDocument: (
-    items: Array<{ key: string; contentType: string }>
+    items: Array<{ key: string; contentType: string; sha256: string }>
   ): Promise<Array<{ url: string; secret: string; httpMethod: string }>> =>
     apiClient
-      .post<{ items: Array<{ url: string; secret: string; httpMethod: string }> }>(
+      .post<Array<{ url: string; secret: string; httpMethod: string }>>(
         `/delivery/attachments/preload`,
-        {
-          items,
-        }
+        items
       )
       .then((response) => {
-        if (response.data && response.data.items) {
-          return response.data.items;
+        if (response.data) {
+          return response.data;
         }
         return [];
       }),
@@ -139,38 +137,32 @@ export const NotificationsApi = {
    * @param  {string} fileBase64
    * @returns Promise
    */
-  uploadNotificationDocument: (
+  uploadNotificationAttachment: (
     url: string,
     sha256: string,
     secret: string,
-    fileBase64: string
-  ): Promise<void> =>
-    externalClient
-      .put<void>(
-        url,
-        {
-          'upload-file': fileBase64,
-        },
-        {
-          headers: {
-            'Content-type': 'application/pdf',
-            'x-amz-checksum-sha256': sha256,
-            'x-amz-meta-secret': secret,
-          },
-        }
-      )
-      .then(() => void 0),
+    file: Uint8Array,
+    httpMethod: string
+  ): Promise<string> => {
+    const method = httpMethod.toLowerCase() as 'get' | 'post' | 'put';
+    return externalClient[method]<string>(url, file, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'x-amz-meta-secret': secret,
+        'x-amz-checksum-sha256': sha256,
+      },
+    }).then((res) => res.headers['x-amz-version-id']);
+  },
 
   /**
    * create new notification
    * @param  {NewNotificationBe} notification
    * @returns Promise
    */
-  createNewNotification: (
-    notification: NewNotificationBe
-  ): Promise<NewNotificationResponse> => {
-    return apiClient
+  createNewNotification: (notification: NewNotificationBe): Promise<NewNotificationResponse> =>
+    apiClient
       .post<NewNotificationResponse>(`/delivery/requests`, notification)
-      .then((response) => response.data);
-  },
+      .then((response) => response.data),
 };
+
+// 'x-amz-sdk-checksum-algorithm': 'SHA256',

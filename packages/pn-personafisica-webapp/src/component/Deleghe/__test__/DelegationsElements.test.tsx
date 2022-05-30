@@ -1,7 +1,7 @@
 import { fireEvent } from '@testing-library/react';
 
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -64,5 +64,11 @@ describe('DelegationElements', () => {
     const result = render(<AcceptButton id={'1'} name={'test'} />);
 
     expect(result.container).toHaveTextContent(/Accetta/i);
+  });
+
+  it('is Menu component accessible', async ()=>{
+    const result = render(<Menu />);
+    const results = await axe(result?.container);
+    expect(results).toHaveNoViolations();
   });
 });

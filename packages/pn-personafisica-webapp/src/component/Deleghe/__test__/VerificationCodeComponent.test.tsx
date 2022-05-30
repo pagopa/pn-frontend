@@ -1,4 +1,5 @@
 import { render } from '@testing-library/react';
+import { axe } from '../../../__test__/test-utils';
 import VerificationCodeComponent from '../VerificationCodeComponent';
 
 describe('VerificationCodeComponent', () => {
@@ -16,9 +17,16 @@ describe('VerificationCodeComponent', () => {
     const fiveDigits = '987654321';
     const result = render(<VerificationCodeComponent code={fiveDigits} />);
     const digitsElements = result.queryAllByTestId('codeDigit');
-
     expect(result.baseElement).toHaveTextContent(/987654321/i);
     expect(result.baseElement).not.toHaveTextContent(/asdfgh/i);
     expect(digitsElements).toHaveLength(fiveDigits.length);
   });
+
+  it('is Verification Code component accessible', async()=>{
+    const fiveDigits = '987654321';
+    const result = render(<VerificationCodeComponent code={fiveDigits} />);
+    const results = await axe(result?.container);
+    expect(results).toHaveNoViolations();
+  });
+  
 });
