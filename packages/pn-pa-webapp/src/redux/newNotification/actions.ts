@@ -38,7 +38,7 @@ const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams
             presigneUrl.url,
             items[index].sha256,
             presigneUrl.secret,
-            items[index].fileBase64,
+            items[index].file as Uint8Array,
             presigneUrl.httpMethod
           )
         );
@@ -83,10 +83,10 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
     const documentsToUpload = Object.values(items).reduce((arr, item) => {
       /* eslint-disable functional/immutable-data */
       arr.push(item.pagoPaForm);
-      if (item.f24flatRate.fileBase64 && item.f24flatRate.sha256) {
+      if (item.f24flatRate.file && item.f24flatRate.sha256) {
         arr.push(item.f24flatRate);
       }
-      if (item.f24standard.fileBase64 && item.f24standard.sha256) {
+      if (item.f24standard.file && item.f24standard.sha256) {
         arr.push(item.f24standard);
       }
       /* eslint-enable functional/immutable-data */
@@ -97,7 +97,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
     );
     const response: UpaloadPaymentResponse = {};
     const getFile = (item: UploadAttachmentParams) => {
-      if (item.fileBase64 && item.sha256) {
+      if (item.file && item.sha256) {
         return documentsUploaded.find(
           (f) => f.digests.sha256 === item.sha256
         );

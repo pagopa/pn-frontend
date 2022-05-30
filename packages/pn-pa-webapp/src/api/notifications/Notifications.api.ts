@@ -139,15 +139,13 @@ export const NotificationsApi = {
     url: string,
     sha256: string,
     secret: string,
-    fileBase64: string,
+    file: Uint8Array,
     httpMethod: string
   ): Promise<string> => {
     const method = httpMethod.toLowerCase() as 'get' | 'post' | 'put';
     return externalClient[method]<string>(
         url,
-        {
-          'upload-file': fileBase64,
-        },
+        file,
         {
           headers: {
             'Content-Type': 'application/pdf',

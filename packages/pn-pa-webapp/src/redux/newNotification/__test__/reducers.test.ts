@@ -67,7 +67,7 @@ describe('New notification redux state tests', () => {
         {
           key: 'mocked-key',
           contentType: 'text/plain',
-          fileBase64: 'mocked-fileBase64',
+          file: new Uint8Array(),
           sha256: 'mocked-sha256',
         },
       ])
@@ -102,19 +102,19 @@ describe('New notification redux state tests', () => {
           pagoPaForm: {
             key: 'mocked-key',
             contentType: 'text/plain',
-            fileBase64: 'mocked-fileBase64',
+            file: new Uint8Array(),
             sha256: 'mocked-pa-sha256',
           },
           f24flatRate: {
             key: 'mocked-key',
             contentType: 'text/plain',
-            fileBase64: '',
+            file: undefined,
             sha256: '',
           },
           f24standard: {
             key: 'mocked-key',
             contentType: 'text/plain',
-            fileBase64: 'mocked-fileBase64',
+            file: new Uint8Array(),
             sha256: 'mocked-f24-sha256',
           },
         },

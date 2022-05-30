@@ -79,7 +79,7 @@ export interface FormRecipient {
 export interface UploadAttachmentParams {
   key: string;
   contentType: string;
-  fileBase64: string;
+  file: Uint8Array | undefined;
   sha256: string;
 }
 
