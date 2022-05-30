@@ -55,6 +55,7 @@ export interface NewNotificationFe extends NewNotificationBe {
 }
 
 export interface FormRecipient {
+  idx: number;
   recipientType: RecipientType;
   taxId: string;
   creditorTaxId: string;

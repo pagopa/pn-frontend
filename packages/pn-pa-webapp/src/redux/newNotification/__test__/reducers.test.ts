@@ -28,6 +28,7 @@ const initialState = {
     group: '',
     notificationFeePolicy: '',
   },
+  mustBeSaved: false
 };
 
 describe('New notification redux state tests', () => {
@@ -62,6 +63,7 @@ describe('New notification redux state tests', () => {
 
   it('Should be able to save recipients', () => {
     const recipients = [{
+      idx: 0,
       recipientType: RecipientType.PF,
       taxId: 'mocked-taxId',
       creditorTaxId: 'mocked-creditorTaxId',

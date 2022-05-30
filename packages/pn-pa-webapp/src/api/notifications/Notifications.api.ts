@@ -151,8 +151,10 @@ export const NotificationsApi = {
         'x-amz-meta-secret': secret,
         'x-amz-checksum-sha256': sha256,
       },
-    }).then((res) => res.headers['x-amz-version-id']);
+    }).then((_res) => Date.now().toString());
   },
+  // TODO: in attesa di fix be
+  // res.headers['x-amz-version-id']
 
   /**
    * create new notification
@@ -164,5 +166,3 @@ export const NotificationsApi = {
       .post<NewNotificationResponse>(`/delivery/requests`, notification)
       .then((response) => response.data),
 };
-
-// 'x-amz-sdk-checksum-algorithm': 'SHA256',
