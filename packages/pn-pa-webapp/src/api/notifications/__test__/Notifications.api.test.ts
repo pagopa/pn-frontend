@@ -70,12 +70,10 @@ describe('Notifications api tests', () => {
   it('preloadNotificationDocument', async () => {
     const mock = new MockAdapter(apiClient);
     mock
-      .onPost(`/delivery/attachments/preload`, {
-        items: [{ key: 'mocked-key', contentType: 'text/plain' }],
-      })
-      .reply(200, { items: [{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }] });
+      .onPost(`/delivery/attachments/preload`, [{ key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' }])
+      .reply(200, [{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
     const res = await NotificationsApi.preloadNotificationDocument([
-      { key: 'mocked-key', contentType: 'text/plain' },
+      { key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' },
     ]);
     expect(res).toStrictEqual([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
     mock.reset();
@@ -83,18 +81,19 @@ describe('Notifications api tests', () => {
   });
 
   it('uploadNotificationAttachment', async () => {
+    const file = new Uint8Array();
     const mock = new MockAdapter(externalClient);
     mock
       .onPut(
         `https://mocked-url.com`,
-        { 'upload-file': 'mocked-fileBase64' },
       )
       .reply(200, void 0, {'x-amz-version-id': 'mocked-versionToken'});
     const res = await NotificationsApi.uploadNotificationAttachment(
       'https://mocked-url.com',
       'mocked-sha256',
       'mocked-secret',
-      'mocked-fileBase64'
+      file,
+      'PUT'
     );
     expect(res).toStrictEqual('mocked-versionToken');
     mock.reset();

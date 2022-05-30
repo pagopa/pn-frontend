@@ -83,7 +83,7 @@ describe('Attachments Component', () => {
       {
         key: 'Doc0',
         contentType: 'application/pdf',
-        fileBase64: 'mocked-base64String',
+        file: new Uint8Array(),
         sha256: 'mocked-hasBase64',
       },
     ]);
@@ -109,13 +109,13 @@ describe('Attachments Component', () => {
       {
         key: 'Doc0',
         contentType: 'application/pdf',
-        fileBase64: 'mocked-base64String',
+        file: new Uint8Array(),
         sha256: 'mocked-hasBase64',
       },
       {
         key: 'Doc1',
         contentType: 'application/pdf',
-        fileBase64: 'mocked-base64String',
+        file: new Uint8Array(),
         sha256: 'mocked-hasBase64',
       },
     ]);
@@ -137,7 +137,7 @@ describe('Attachments Component', () => {
       {
         key: 'Doc0',
         contentType: 'application/pdf',
-        fileBase64: 'mocked-base64String',
+        file: new Uint8Array(),
         sha256: 'mocked-hasBase64',
       },
     ]);

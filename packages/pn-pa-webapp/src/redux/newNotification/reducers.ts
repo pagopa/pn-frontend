@@ -23,7 +23,7 @@ const initialState = {
     physicalCommunicationType: '' as PhysicalCommunicationType,
     group: '',
     paymentMode: '' as PaymentModel,
-    notificationFeePolicy: '' as NotificationFeePolicy
+    notificationFeePolicy: '' as NotificationFeePolicy,
   } as NewNotificationFe,
 };
 
@@ -37,7 +37,12 @@ const newNotificationSlice = createSlice({
       state.notification = { ...state.notification, cancelledIun: action.payload };
     });
     builder.addCase(setPreliminaryInformations, (state, action) => {
-      state.notification = { ...state.notification, ...action.payload };
+      // TODO: capire la logica di set della fee policy sia corretta
+      state.notification = {
+        ...state.notification,
+        ...action.payload,
+        notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
+      };
     });
     builder.addCase(saveRecipients, (state, action) => {
       state.notification.recipients = formatNotificationRecipients(action.payload.recipients);
@@ -49,7 +54,11 @@ const newNotificationSlice = createSlice({
       state.notification = {
         ...state.notification,
         recipients: state.notification.recipients.map((r) => {
-          r.payment = { ...action.payload[r.taxId], creditorTaxId: r.creditorTaxId, noticeCode: r.token };
+          r.payment = {
+            ...action.payload[r.taxId],
+            creditorTaxId: r.creditorTaxId,
+            noticeCode: r.token,
+          };
           return r;
         }),
       };

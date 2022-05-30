@@ -24,7 +24,7 @@ type AttachmentBoxProps = {
   onFieldTouched: (e: ChangeEvent) => void;
   onFileUploaded: (
     id: string,
-    fileBase64?: string,
+    file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string }
   ) => void;
   onRemoveFile: (id: string) => void;
@@ -58,12 +58,10 @@ const AttachmentBox = ({
     <FileUpload
       uploadText="Trascina qui il documento"
       accept="application/pdf"
-      onFileUploaded={(_file, fileBase64, sha256) =>
-        onFileUploaded(`${id}.file`, fileBase64, sha256)
-      }
+      onFileUploaded={(file, sha256) => onFileUploaded(`${id}.file`, file, sha256)}
       onRemoveFile={() => onRemoveFile(`${id}.file`)}
       sx={{ marginTop: '10px' }}
-      calcBase64
+      fileFormat="uint8Array"
       calcSha256
     />
     <TextField
@@ -93,7 +91,10 @@ const Attachments = ({ onConfirm }: Props) => {
       yup.object({
         file: yup
           .object({
-            base64: yup.string().required(),
+            uint8Array: yup
+              .mixed()
+              .test((input) => input instanceof Uint8Array)
+              .required(),
             sha256: yup
               .object({
                 hashBase64: yup.string().required(),
@@ -113,7 +114,7 @@ const Attachments = ({ onConfirm }: Props) => {
         {
           id: `documents.0`,
           idx: 0,
-          file: { base64: '', sha256: { hashBase64: '', hashHex: '' } },
+          file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
           name: '',
         },
       ],
@@ -126,7 +127,7 @@ const Attachments = ({ onConfirm }: Props) => {
           uploadNotificationAttachment(
             values.documents.map((v) => ({
               key: v.name,
-              fileBase64: v.file.base64,
+              file: v.file.uint8Array,
               sha256: v.file.sha256.hashBase64,
               contentType: 'application/pdf',
             }))
@@ -148,11 +149,11 @@ const Attachments = ({ onConfirm }: Props) => {
 
   const fileUploadedHandler = async (
     id: string,
-    fileBase64?: string,
+    file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string }
   ) => {
     await formik.setFieldTouched(id, true, false);
-    await formik.setFieldValue(id, { base64: fileBase64, sha256 });
+    await formik.setFieldValue(id, { uint8Array: file, sha256 });
   };
 
   const removeFileHandler = async (id: string) => {
@@ -167,7 +168,7 @@ const Attachments = ({ onConfirm }: Props) => {
         {
           id: `documents.${lastDocIdx + 1}`,
           idx: lastDocIdx + 1,
-          file: { base64: '', sha256: { hashBase64: '', hashHex: '' } },
+          file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
           name: '',
         },
       ],

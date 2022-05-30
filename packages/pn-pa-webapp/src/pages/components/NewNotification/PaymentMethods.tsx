@@ -5,7 +5,11 @@ import _ from 'lodash';
 import { Paper, Typography } from '@mui/material';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationFe, UploadPayementParams, PaymentModel } from '../../../models/newNotification';
+import {
+  NewNotificationFe,
+  UploadPayementParams,
+  PaymentModel,
+} from '../../../models/newNotification';
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../../redux/newNotification/actions';
 import NewNotificationCard from './NewNotificationCard';
@@ -15,7 +19,7 @@ type PaymentBoxProps = {
   title: string;
   onFileUploaded: (
     id: string,
-    fileBase64?: string,
+    file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string }
   ) => void;
   onRemoveFile: (id: string) => void;
@@ -29,10 +33,10 @@ const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile }: PaymentBoxProps
     <FileUpload
       uploadText="Trascina qui il documento"
       accept="application/pdf"
-      onFileUploaded={(_file, fileBase64, sha256) => onFileUploaded(id, fileBase64, sha256)}
+      onFileUploaded={(file, sha256) => onFileUploaded(id, file as Uint8Array, sha256)}
       onRemoveFile={() => onRemoveFile(id)}
       sx={{ marginTop: '10px' }}
-      calcBase64
+      fileFormat="uint8Array"
       calcSha256
     />
   </Fragment>
@@ -41,7 +45,7 @@ const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile }: PaymentBoxProps
 type PaymentDocument = {
   name: string;
   file: {
-    base64: string;
+    uint8Array: Uint8Array | undefined;
     sha256: { hashBase64: string; hashHex: string };
   };
 };
@@ -63,14 +67,17 @@ const PaymentMethods = ({ notification, onConfirm }: Props) => {
   const paymentDocumentSchema = yup.object({
     name: yup.string().required(),
     file: yup.object({
-      base64: yup.string().required(),
+      uint8Array: yup
+        .mixed()
+        .test((input) => input instanceof Uint8Array)
+        .required(),
       sha256: yup
         .object({
           hashBase64: yup.string().required(),
           hashHex: yup.string().required(),
         })
         .required(),
-    })
+    }),
   });
 
   const validationSchema = yup.lazy((obj) =>
@@ -89,13 +96,16 @@ const PaymentMethods = ({ notification, onConfirm }: Props) => {
       obj[r.taxId] = {
         pagoPaForm: {
           name: 'Avviso pagoPA',
-          file: { base64: '', sha256: { hashBase64: '', hashHex: '' } },
+          file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
         },
         f24flatRate: {
           name: 'F24 forfettario',
-          file: { base64: '', sha256: { hashBase64: '', hashHex: '' } },
+          file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
         },
-        f24standard: { name: 'F24', file: { base64: '', sha256: { hashBase64: '', hashHex: '' } } },
+        f24standard: {
+          name: 'F24',
+          file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
+        },
       };
       return obj;
     }, {}),
@@ -105,7 +115,7 @@ const PaymentMethods = ({ notification, onConfirm }: Props) => {
       const valuesToSend: UploadPayementParams = {};
       const getSingleValueToSend = (value: PaymentDocument) => ({
         key: value.name,
-        fileBase64: value.file.base64,
+        file: value.file.uint8Array,
         sha256: value.file.sha256.hashBase64,
         contentType: 'application/pdf',
       });
@@ -128,11 +138,11 @@ const PaymentMethods = ({ notification, onConfirm }: Props) => {
 
   const fileUploadedHandler = async (
     id: string,
-    fileBase64?: string,
+    file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string }
   ) => {
     await formik.setFieldTouched(id, true, false);
-    await formik.setFieldValue(id, { base64: fileBase64, sha256 });
+    await formik.setFieldValue(id, { uint8Array: file, sha256 });
   };
 
   const removeFileHandler = async (id: string) => {

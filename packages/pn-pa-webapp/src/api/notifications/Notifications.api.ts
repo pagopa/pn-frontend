@@ -114,18 +114,16 @@ export const NotificationsApi = {
    * @returns Promise
    */
   preloadNotificationDocument: (
-    items: Array<{ key: string; contentType: string }>
+    items: Array<{ key: string; contentType: string; sha256: string }>
   ): Promise<Array<{ url: string; secret: string; httpMethod: string }>> =>
     apiClient
-      .post<{ items: Array<{ url: string; secret: string; httpMethod: string }> }>(
+      .post<Array<{ url: string; secret: string; httpMethod: string }>>(
         `/delivery/attachments/preload`,
-        {
-          items,
-        }
+        items
       )
       .then((response) => {
-        if (response.data && response.data.items) {
-          return response.data.items;
+        if (response.data) {
+          return response.data;
         }
         return [];
       }),
@@ -141,21 +139,23 @@ export const NotificationsApi = {
     url: string,
     sha256: string,
     secret: string,
-    fileBase64: string
-  ): Promise<string> =>
-    externalClient
-      .put<string>(
+    file: Uint8Array,
+    httpMethod: string
+  ): Promise<string> => {
+    const method = httpMethod.toLowerCase() as 'get' | 'post' | 'put';
+    return externalClient[method]<string>(
         url,
-        {
-          'upload-file': fileBase64,
-        },
+        file,
         {
           headers: {
-            'Content-type': 'application/pdf',
-            'x-amz-checksum-sha256': sha256,
+            'Content-Type': 'application/pdf',
             'x-amz-meta-secret': secret,
+            'x-amz-checksum-sha256': sha256,
           },
         }
       )
-      .then((res) => res.headers['x-amz-version-id']),
+      .then((res) => res.headers['x-amz-version-id']);
+  },
 };
+
+// 'x-amz-sdk-checksum-algorithm': 'SHA256',

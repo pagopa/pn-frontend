@@ -81,19 +81,19 @@ describe('PaymentMethods Component', () => {
         obj[r.taxId] = {
           pagoPaForm: {
             key: 'Avviso pagoPA',
-            fileBase64: 'mocked-base64String',
+            file: new Uint8Array(),
             sha256: 'mocked-hasBase64',
             contentType: 'application/pdf',
           },
           f24flatRate: {
             key: 'F24 forfettario',
-            fileBase64: '',
+            file: undefined,
             sha256: '',
             contentType: 'application/pdf',
           },
           f24standard: {
             key: 'F24',
-            fileBase64: index === 0 ? '' : 'mocked-base64String',
+            file: index === 0 ? undefined : new Uint8Array(),
             sha256: index === 0 ? '' : 'mocked-hasBase64',
             contentType: 'application/pdf',
           },
