@@ -1,4 +1,5 @@
 import { Dialog, Box, Typography } from '@mui/material';
+import { Fragment } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { storageSpidSelectedOps } from '../../utils/storage';
 import { redirectToLogin } from '../../utils/utils';
@@ -15,18 +16,18 @@ const LoginError = () => {
 
   const title = t('loginError.title');
   const message = (
-    <>
+    <Fragment>
       <Trans i18nKey="message">
         A causa di un errore del sistema non è possibile completare la procedura.
         <br />
         Ti chiediamo di riprovare più tardi.
       </Trans>
-    </>
+    </Fragment>
   );
   handleError(window.location.search);
 
   return (
-    <Dialog fullScreen={true} open={true} aria-labelledby="responsive-dialog-title">
+    <Dialog fullScreen={true} open={true} aria-labelledby="dialog-per-messaggi-di-errore">
       <Box m="auto" sx={{ textAlign: 'center', width: '100%' }}>
         <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }}>
           {title}

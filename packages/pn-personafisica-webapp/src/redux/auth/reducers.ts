@@ -25,6 +25,7 @@ const userSlice = createSlice({
           jti: '',
         }) as User,
     tos: false,
+    fetchedTos: false,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -36,9 +37,11 @@ const userSlice = createSlice({
     });
     builder.addCase(getToSApproval.fulfilled, (state, action) => {
       state.tos = action.payload.accepted;
+      state.fetchedTos = true;
     });
     builder.addCase(getToSApproval.rejected, (state) => {
       state.tos = false;
+      state.fetchedTos = true;
     });
     builder.addCase(acceptToS.fulfilled, (state) => {
       state.tos = true;
