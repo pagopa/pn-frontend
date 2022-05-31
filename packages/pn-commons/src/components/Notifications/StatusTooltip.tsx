@@ -15,7 +15,7 @@ const StatusTooltip = ({
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
   return (
-    <CustomTooltip openOnClick tooltipContent={tooltipContent}>
+    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent}>
       <Chip label={label} color={color} />
     </CustomTooltip>
   );

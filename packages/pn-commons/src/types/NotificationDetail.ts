@@ -26,7 +26,7 @@ export interface NotificationDetail {
   cancelledByIun: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
-  documentsAvailable?: boolean;
+  documentsAvailable: boolean;
   payment: NotificationDetailPayment;
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
@@ -252,6 +252,11 @@ export enum TimelineCategory {
   PAYMENT = 'PAYMENT',
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
   REQUEST_REFUSED = 'REQUEST_REFUSED'
+}
+
+export enum TimelineError {
+  OK = "OK",
+  RETRYABLE_FAIL = "RETRYABLE_FAIL"
 }
 
 interface DigitalAddress {

@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { theme } from '@pagopa/mui-italia';
 import { ThemeProvider } from '@mui/material/styles';
 import './locales/i18n.ts';
+
+import './index.css';
 import App from './App';
 
 ReactDOM.render(

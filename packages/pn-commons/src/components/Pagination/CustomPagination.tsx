@@ -1,5 +1,5 @@
-import { ChangeEvent, Fragment, useState } from 'react';
-import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem } from '@mui/material';
+import { ChangeEvent, useState } from 'react';
+import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 
 import { PaginationData } from './types';
@@ -13,6 +13,8 @@ type Props = {
   elementsPerPage?: Array<number>;
   /** an array containing pages to show */
   pagesToShow?: Array<number>;
+  /** custom style */
+  sx?: SxProps;
 };
 
 /** Selfcare custom table available pages component */
@@ -21,6 +23,7 @@ export default function CustomPagination({
   onPageRequest,
   elementsPerPage = [10, 20, 50, 100, 200, 500],
   pagesToShow,
+  sx
 }: Props) {
   const size = paginationData.size || elementsPerPage[0];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -45,79 +48,79 @@ export default function CustomPagination({
   };
 
   return (
-    <Fragment>
-      <Grid container sx={{ padding: '0 10px' }}>
-        <Grid
-          item
-          xs={4}
-          display="flex"
-          justifyContent="start"
-          alignItems={'center'}
-          data-testid="itemsPerPageSelector"
+    <Grid container sx={sx}>
+      <Grid
+        item
+        xs={4}
+        display="flex"
+        justifyContent="start"
+        alignItems={'center'}
+        data-testid="itemsPerPageSelector"
+        className="items-per-page-selector"
+      >
+        <Button
+          sx={{ color: 'text.primary', fontWeight: 400 }}
+          aria-controls={open ? 'basic-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+          endIcon={<ArrowDropDown />}
         >
-          <Button
-            sx={{ color: 'text.primary', fontWeight: 400 }}
-            aria-controls={open ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            endIcon={<ArrowDropDown />}
-          >
-            {size}
-          </Button>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'Righe per pagina',
-            }}
-          >
-            {elementsPerPage.map((ep) => (
-              <MenuItem key={ep} onClick={() => handleChangeElementsPerPage(ep)}>
-                {ep}
-              </MenuItem>
-            ))}
-          </Menu>
-        </Grid>
-        <Grid
-          item
-          xs={8}
-          display="flex"
-          justifyContent="end"
-          alignItems={'center'}
-          data-testid="pageSelector"
+          {size}
+        </Button>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'Righe per pagina',
+          }}
         >
-          {paginationData.totalElements > size && (
-            <Pagination
-              sx={{ display: 'flex' }}
-              color="primary"
-              variant="text"
-              shape="circular"
-              page={paginationData.page + 1}
-              count={Math.ceil(paginationData.totalElements / size)}
-              renderItem={(props2) => {
-                if (
-                  pagesToShow &&
-                  props2.type === 'page' &&
-                  props2.page !== null &&
-                  pagesToShow.indexOf(props2.page) === -1
-                ) {
-                  return null;
-                }
-                return <PaginationItem {...props2} sx={{ border: 'none' }} />;
-              }}
-              onChange={(_event: ChangeEvent<unknown>, value: number) =>
-                onPageRequest({
-                  ...paginationData,
-                  page: value - 1,
-                })
-              }
-            />
-          )}
-        </Grid>
+          {elementsPerPage.map((ep) => (
+            <MenuItem key={ep} onClick={() => handleChangeElementsPerPage(ep)}>
+              {ep}
+            </MenuItem>
+          ))}
+        </Menu>
       </Grid>
-    </Fragment>
+      <Grid
+        item
+        xs={8}
+        display="flex"
+        justifyContent="end"
+        alignItems={'center'}
+        data-testid="pageSelector"
+        className="page-selector"
+      >
+        {paginationData.totalElements > size && (
+          <Pagination
+            sx={{ display: 'flex' }}
+            color="primary"
+            variant="text"
+            shape="circular"
+            page={paginationData.page + 1}
+            count={Math.ceil(paginationData.totalElements / size)}
+            renderItem={(props2) => {
+              if (
+                pagesToShow &&
+                props2.type === 'page' &&
+                props2.page !== null &&
+                pagesToShow.indexOf(props2.page) === -1
+              ) {
+                return null;
+              }
+              return <PaginationItem {...props2} sx={{ border: 'none' }} />;
+            }}
+            onChange={(_event: ChangeEvent<unknown>, value: number) =>
+              onPageRequest({
+                ...paginationData,
+                page: value - 1,
+              })
+            }
+          />
+        )}
+      </Grid>
+    </Grid>
   );
 }

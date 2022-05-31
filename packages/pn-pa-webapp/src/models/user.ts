@@ -1,4 +1,11 @@
-export enum UserRole {
-    REFERENTE_AMMINISTRATIVO = 'referente amministrativo',
-    REFERENTE_OPERATIVO = 'referente operativo'
+export interface Role {
+  role: string;
+  partyRole: PartyRole;
+}
+
+export enum PartyRole {
+  DELEGATE = 'DELEGATE',
+  MANAGER = 'MANAGER',
+  OPERATOR = 'OPERATOR',
+  SUB_DELEGATE = 'SUB_DELEGATE',
 }

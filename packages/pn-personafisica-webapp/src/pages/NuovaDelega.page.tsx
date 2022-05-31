@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import {
   Box,
   Typography,
-  Card,
   FormControl,
   RadioGroup,
   FormControlLabel,
@@ -19,6 +18,7 @@ import {
   SelectChangeEvent,
   Stack,
   Breadcrumbs,
+  Paper,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -29,7 +29,9 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import DateAdapter from '@mui/lab/AdapterMoment';
 import { CourtesyPage, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { ArrowBack } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
@@ -42,6 +44,11 @@ import { generateVCode } from '../utils/delegation.utility';
 import { NewDelegationFormProps } from '../redux/delegation/types';
 
 const useStyles = makeStyles(() => ({
+  root: {
+    '& .paperContainer': {
+      boxShadow: 'none',
+    },
+  },
   direction: {
     ['@media only screen and (max-width: 576px)']: {
       direction: 'column',
@@ -56,11 +63,6 @@ const useStyles = makeStyles(() => ({
     },
     ['@media only screen and (min-width: 577px) and (max-width: 992px)']: {
       direction: 'auto',
-    },
-  },
-  justifyContent: {
-    ['@media only screen and (max-width: 576px)']: {
-      justifyContent: 'start',
     },
   },
   spaceBetween: {
@@ -120,243 +122,247 @@ const NuovaDelega = () => {
     []
   );
 
+  const breadcrumbs = (
+    <Fragment>
+      <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'start', sm: 'center' }} justifyContent="start" spacing={3}>
+        <ButtonNaked onClick={() => navigate(-1)} startIcon={<ArrowBack />} color="primary" size="medium" >
+          {t('button.indietro', { ns: 'common' })}
+        </ButtonNaked>
+        <Breadcrumbs aria-label="breadcrumb">
+          <StyledLink to={routes.DELEGHE}>
+            <PeopleIcon sx={{ mr: 0.5 }} />
+            {t('nuovaDelega.title')}
+          </StyledLink>
+          <Typography
+            color="text.primary"
+            fontWeight={600}
+            sx={{ display: 'flex', alignItems: 'center' }}
+          >
+            {t('Nuova Delega')}
+          </Typography>
+        </Breadcrumbs>
+      </Stack>
+      <TitleBox
+        title={t('nuovaDelega.title')}
+        subTitle={t('nuovaDelega.subtitle')}
+        variantTitle="h3"
+        variantSubTitle="body1"
+        sx={{ pt: '20px' }}
+      />
+      <Typography sx={{ mt: '1rem', mb: '1rem' }}>
+        {t('nuovaDelega.form.mandatoryField')}
+      </Typography>
+    </Fragment>
+  );
+
   return (
     <Fragment>
       {!created && (
-        <Box mt={3} sx={{ padding: isMobile ? '30px' : null }}>
-          {!isMobile && (
-            <Breadcrumbs aria-label="breadcrumb">
-              <StyledLink to={routes.DELEGHE}>
-                <PeopleIcon sx={{ mr: 0.5 }} />
-                {t('nuovaDelega.title')}
-              </StyledLink>
-              <Typography color="text.primary" fontWeight={600}>
-                {t('Nuova Delega')}
-              </Typography>
-            </Breadcrumbs>
-          )}
-          <TitleBox
-            title={t('nuovaDelega.title')}
-            subTitle={t('nuovaDelega.subtitle')}
-            variantTitle="h3"
-            variantSubTitle="body1"
-          />
-          <Typography sx={{ mt: '1rem', mb: '1rem' }}>
-            {t('nuovaDelega.form.mandatoryField')}
-          </Typography>
-          <Card sx={{ padding: '30px', width: isMobile ? '100%' : '80%', mt: 4 }}>
-            <Typography sx={{ fontWeight: 'bold' }}>{t('nuovaDelega.form.personType')}</Typography>
-            <Formik
-              initialValues={initialValues}
-              validationSchema={validationSchema}
-              onSubmit={(values: NewDelegationFormProps) => {
-                handleSubmit(values);
-              }}
-              validateOnBlur={false}
-            >
-              {({ values, setFieldValue, touched, errors }) => (
-                <Form>
-                  <FormControl sx={{ width: '100%' }}>
-                    <RadioGroup
-                      aria-labelledby="radio-buttons-group-pf-pg"
-                      defaultValue="pf"
-                      name="selectPersonaFisicaOrPersonaGiuridica"
-                      value={values.selectPersonaFisicaOrPersonaGiuridica.toString()}
-                      onChange={(event) => {
-                        setFieldValue(
-                          'selectPersonaFisicaOrPersonaGiuridica',
-                          event.currentTarget.value
-                        );
-                      }}
-                    >
-                      <Grid
-                        container
-                        sx={{ width: '100%', justifyContent: 'space-between' }}
-                        className={classes.direction}
-                      >
-                        <Grid item xs={isMobile ? 12 : 3}>
+        <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 }}}>
+          {isMobile && breadcrumbs}
+          <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
+            <Grid item lg={8} xs={12} sx={{ p: { xs: 0, lg: 3 }}}>
+              {!isMobile && breadcrumbs}
+              <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
+                <Typography sx={{ fontWeight: 'bold' }}>{t('nuovaDelega.form.personType')}</Typography>
+                <Formik
+                  initialValues={initialValues}
+                  validationSchema={validationSchema}
+                  onSubmit={(values: NewDelegationFormProps) => {
+                    handleSubmit(values);
+                  }}
+                  validateOnBlur={false}
+                >
+                  {({ values, setFieldValue, touched, errors }) => (
+                    <Form>
+                      <FormControl sx={{ width: '100%' }}>
+                        <RadioGroup
+                          aria-labelledby="radio-buttons-group-pf-pg"
+                          defaultValue="pf"
+                          name="selectPersonaFisicaOrPersonaGiuridica"
+                          value={values.selectPersonaFisicaOrPersonaGiuridica.toString()}
+                          onChange={(event) => {
+                            setFieldValue(
+                              'selectPersonaFisicaOrPersonaGiuridica',
+                              event.currentTarget.value
+                            );
+                          }}
+                        >
+                          <Grid
+                            container
+                            sx={{ width: '100%', justifyContent: 'space-between' }}
+                            className={classes.direction}
+                          >
+                            <Grid item xs={isMobile ? 12 : 3}>
+                              <FormControlLabel
+                                value="pf"
+                                control={<Radio />}
+                                name={'selectPersonaFisicaOrPersonaGiuridica'}
+                                label={t('nuovaDelega.form.naturalPerson') as string}
+                              />
+                            </Grid>
+                            <Grid item xs={xsValue} className={classes.margin}>
+                              <TextField
+                                sx={{ margin: 'auto' }}
+                                id="nome"
+                                value={values.nome.toString()}
+                                onChange={(event) => {
+                                  setFieldValue('nome', event.currentTarget.value);
+                                }}
+                                label={t('nuovaDelega.form.firstName')}
+                                name="nome"
+                                error={touched.nome && Boolean(errors.nome)}
+                                helperText={touched.nome && errors.nome}
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid item xs={xsValue} className={classes.margin}>
+                              <TextField
+                                sx={{ margin: 'auto', mt: isMobile ? 1 : 0 }}
+                                id="cognome"
+                                value={values.cognome.toString()}
+                                onChange={(event) => {
+                                  setFieldValue('cognome', event.currentTarget.value);
+                                }}
+                                label={t('nuovaDelega.form.lastName')}
+                                name="cognome"
+                                error={touched.cognome && Boolean(errors.cognome)}
+                                helperText={touched.cognome && errors.cognome}
+                                fullWidth
+                              />
+                            </Grid>
+                          </Grid>
                           <FormControlLabel
-                            value="pf"
+                            value="pg"
                             control={<Radio />}
                             name={'selectPersonaFisicaOrPersonaGiuridica'}
-                            label={t('nuovaDelega.form.naturalPerson') as string}
+                            label={t('nuovaDelega.form.legalPerson') as string}
+                            disabled
                           />
-                        </Grid>
-                        <Grid item xs={xsValue} className={classes.margin}>
-                          <TextField
-                            sx={{ margin: 'auto' }}
-                            id="nome"
-                            value={values.nome.toString()}
-                            onChange={(event) => {
-                              setFieldValue('nome', event.currentTarget.value);
-                            }}
-                            label={t('nuovaDelega.form.firstName')}
-                            name="nome"
-                            error={touched.nome && Boolean(errors.nome)}
-                            helperText={touched.nome && errors.nome}
-                            fullWidth
-                          />
-                        </Grid>
-                        <Grid item xs={xsValue} className={classes.margin}>
-                          <TextField
-                            sx={{ margin: 'auto', mt: isMobile ? 1 : 0 }}
-                            id="cognome"
-                            value={values.cognome.toString()}
-                            onChange={(event) => {
-                              setFieldValue('cognome', event.currentTarget.value);
-                            }}
-                            label={t('nuovaDelega.form.lastName')}
-                            name="cognome"
-                            error={touched.cognome && Boolean(errors.cognome)}
-                            helperText={touched.cognome && errors.cognome}
-                            fullWidth
-                          />
-                        </Grid>
-                      </Grid>
-                      <FormControlLabel
-                        value="pg"
-                        control={<Radio />}
-                        name={'selectPersonaFisicaOrPersonaGiuridica'}
-                        label={t('nuovaDelega.form.legalPerson') as string}
-                        disabled
+                        </RadioGroup>
+                      </FormControl>
+                      <TextField
+                        sx={{ marginTop: '2rem' }}
+                        id="codiceFiscale"
+                        value={values.codiceFiscale.toString()}
+                        onChange={(event) => {
+                          setFieldValue('codiceFiscale', event.currentTarget.value);
+                        }}
+                        label={t('nuovaDelega.form.fiscalCode')}
+                        name="codiceFiscale"
+                        error={touched.codiceFiscale && Boolean(errors.codiceFiscale)}
+                        helperText={touched.codiceFiscale && errors.codiceFiscale}
+                        fullWidth
                       />
-                    </RadioGroup>
-                  </FormControl>
-                  <TextField
-                    sx={{ marginTop: '2rem' }}
-                    id="codiceFiscale"
-                    value={values.codiceFiscale.toString()}
-                    onChange={(event) => {
-                      setFieldValue('codiceFiscale', event.currentTarget.value);
-                    }}
-                    label={t('nuovaDelega.form.fiscalCode')}
-                    name="codiceFiscale"
-                    error={touched.codiceFiscale && Boolean(errors.codiceFiscale)}
-                    helperText={touched.codiceFiscale && errors.codiceFiscale}
-                    fullWidth
-                  />
-                  <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }}>
-                    {t('nuovaDelega.form.viewFrom')}
-                  </Typography>
-                  <FormControl sx={{ width: '100%' }}>
-                    <RadioGroup
-                      aria-labelledby="radio-buttons-group-pf-pg"
-                      defaultValue="tuttiGliEnti"
-                      name="selectTuttiEntiOrSelezionati"
-                      value={values.selectTuttiEntiOrSelezionati.toString()}
-                      onChange={(event) => {
-                        setFieldValue('selectTuttiEntiOrSelezionati', event.currentTarget.value);
-                      }}
-                    >
-                      <FormControlLabel
-                        value="tuttiGliEnti"
-                        control={<Radio />}
-                        name={t('selectTuttiEntiOrSelezionati')}
-                        label={t('nuovaDelega.form.allEntities') as string}
-                      />
-                      <Grid container className={classes.direction}>
-                        <Grid item xs={isMobile ? 12 : 6}>
-                          <FormControlLabel
-                            value="entiSelezionati"
-                            control={<Radio />}
-                            name={'selectTuttiEntiOrSelezionati'}
-                            label={t('nuovaDelega.form.onlySelected') as string}
-                          />
-                        </Grid>
-                        <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
-                          {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
-                            <FormControl fullWidth>
-                              <InputLabel id="ente-select">{t('Seleziona Enti')}</InputLabel>
-                              <Select
-                                labelId="ente-select"
-                                id="ente-select"
-                                value={values.enteSelect.uniqueIdentifier}
-                                label={t('Seleziona Enti')}
-                                onChange={(event: SelectChangeEvent<string>) => {
-                                  setFieldValue('enteSelect', {
-                                    name: event.target.name,
-                                    uniqueIdentifier: event.target.value,
-                                  });
-                                }}
-                              >
-                                <MenuItem value={'Bollate'}>
-                                  <DropDownEntiMenuItem name="Comune di Bollate" />
-                                </MenuItem>
-                                <MenuItem value={'Rho'}>
-                                  <DropDownEntiMenuItem name="Comune di Rho" />
-                                </MenuItem>
-                              </Select>
-                            </FormControl>
-                          )}
-                        </Grid>
-                      </Grid>
-                    </RadioGroup>
-                  </FormControl>
-                  <br />
-                  <Box sx={{ marginTop: '1rem', width: '100%' }}>
-                    <FormControl fullWidth>
-                      <LocalizationProvider dateAdapter={DateAdapter}>
-                        <DesktopDatePicker
-                          label={t('nuovaDelega.form.endDate')}
-                          inputFormat="DD/MM/yyyy"
-                          value={values.expirationDate}
-                          onChange={(value: Date | null) => {
-                            setFieldValue('expirationDate', value);
-                          }}
-                          renderInput={(params) => (
-                            <TextField id="endDate" name="endDate" {...params} />
-                          )}
-                          disablePast={true}
-                        />
-                      </LocalizationProvider>
-                    </FormControl>
-                  </Box>
-                  <Divider sx={{ marginTop: '1rem' }} />
-                  <Typography fontWeight={'bold'} sx={{ marginTop: '1rem' }}>
-                    {t('nuovaDelega.form.verificationCode')}
-                  </Typography>
-                  <Grid
-                    container
-                    className={classes.justifyContent}
-                    direction={isMobile ? 'column' : 'row'}
-                  >
-                    <Grid item xs={8}>
-                      <Typography sx={{ marginTop: '1rem' }}>
-                        {t('nuovaDelega.form.verificationCodeDescr')}
+                      <Typography fontWeight={'bold'} sx={{ marginTop: '2rem' }}>
+                        {t('nuovaDelega.form.viewFrom')}
                       </Typography>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <VerificationCodeComponent code={values.verificationCode} />
-                    </Grid>
-                  </Grid>
-                  <Divider sx={{ marginTop: '1rem' }} />
-                  <Grid container sx={{ marginTop: '1rem' }}>
-                    <Grid item xs={4} sx={{ margin: 'auto' }}>
-                      <Button
-                        sx={{ marginTop: '1rem', margin: 'auto' }}
-                        type={'submit'}
-                        variant={'contained'}
-                      >
-                        {t('nuovaDelega.form.submit')}
-                      </Button>
-                    </Grid>
-                    <Grid item xs={8} sx={{ margin: 'auto' }}>
-                      <Stack direction="row" alignItems="center" justifyContent="end">
-                        <ErrorDeleghe />
+                      <FormControl sx={{ width: '100%' }}>
+                        <RadioGroup
+                          aria-labelledby="radio-buttons-group-pf-pg"
+                          defaultValue="tuttiGliEnti"
+                          name="selectTuttiEntiOrSelezionati"
+                          value={values.selectTuttiEntiOrSelezionati.toString()}
+                          onChange={(event) => {
+                            setFieldValue('selectTuttiEntiOrSelezionati', event.currentTarget.value);
+                          }}
+                        >
+                          <FormControlLabel
+                            value="tuttiGliEnti"
+                            control={<Radio />}
+                            name={t('selectTuttiEntiOrSelezionati')}
+                            label={t('nuovaDelega.form.allEntities') as string}
+                          />
+                          <Grid container className={classes.direction}>
+                            <Grid item xs={isMobile ? 12 : 6}>
+                              <FormControlLabel
+                                value="entiSelezionati"
+                                control={<Radio />}
+                                name={'selectTuttiEntiOrSelezionati'}
+                                label={t('nuovaDelega.form.onlySelected') as string}
+                              />
+                            </Grid>
+                            <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
+                              {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
+                                <FormControl fullWidth>
+                                  <InputLabel id="ente-select">{t('Seleziona Enti')}</InputLabel>
+                                  <Select
+                                    labelId="ente-select"
+                                    id="ente-select"
+                                    value={values.enteSelect.uniqueIdentifier}
+                                    label={t('Seleziona Enti')}
+                                    onChange={(event: SelectChangeEvent<string>) => {
+                                      setFieldValue('enteSelect', {
+                                        name: event.target.name,
+                                        uniqueIdentifier: event.target.value,
+                                      });
+                                    }}
+                                  >
+                                    <MenuItem value={'Bollate'}>
+                                      <DropDownEntiMenuItem name="Comune di Bollate" />
+                                    </MenuItem>
+                                    <MenuItem value={'Rho'}>
+                                      <DropDownEntiMenuItem name="Comune di Rho" />
+                                    </MenuItem>
+                                  </Select>
+                                </FormControl>
+                              )}
+                            </Grid>
+                          </Grid>
+                        </RadioGroup>
+                      </FormControl>
+                      <br />
+                      <Box sx={{ marginTop: '1rem', width: '100%' }}>
+                        <FormControl fullWidth>
+                          <LocalizationProvider dateAdapter={DateAdapter}>
+                            <DesktopDatePicker
+                              label={t('nuovaDelega.form.endDate')}
+                              inputFormat="DD/MM/yyyy"
+                              value={values.expirationDate}
+                              onChange={(value: Date | null) => {
+                                setFieldValue('expirationDate', value);
+                              }}
+                              renderInput={(params) => (
+                                <TextField id="endDate" name="endDate" {...params} />
+                              )}
+                              disablePast={true}
+                            />
+                          </LocalizationProvider>
+                        </FormControl>
+                      </Box>
+                      <Divider sx={{ marginTop: '1rem' }} />
+                      <Typography fontWeight={'bold'} sx={{ marginTop: '1rem' }}>
+                        {t('nuovaDelega.form.verificationCode')}
+                      </Typography>
+                      <Stack direction={{ xs: 'column', lg: 'row' }} justifyContent={{ sm: 'flex-start'}} spacing={2}>
+                        <Typography sx={{ marginTop: '1rem', flexGrow: '1' }}>
+                          {t('nuovaDelega.form.verificationCodeDescr')}
+                        </Typography>
+                        <VerificationCodeComponent code={values.verificationCode} />
                       </Stack>
-                    </Grid>
-                  </Grid>
-                </Form>
-              )}
-            </Formik>
-          </Card>
-          <Button
-            variant="outlined"
-            sx={{ mt: '1rem', mb: '1rem' }}
-            onClick={() => navigate(routes.DELEGHE)}
-          >
-            {t('button.indietro', { ns: 'common' })}
-          </Button>
+                      <Divider sx={{ marginTop: '1rem' }} />
+                      <Grid container sx={{ marginTop: '1rem' }}>
+                        <Grid item xs={4} sx={{ margin: 'auto' }}>
+                          <Button
+                            sx={{ marginTop: '1rem', margin: 'auto' }}
+                            type={'submit'}
+                            variant={'contained'}
+                          >
+                            {t('nuovaDelega.form.submit')}
+                          </Button>
+                        </Grid>
+                        <Grid item xs={8} sx={{ margin: 'auto' }}>
+                          <Stack direction="row" alignItems="center" justifyContent="end">
+                            <ErrorDeleghe />
+                          </Stack>
+                        </Grid>
+                      </Grid>
+                    </Form>
+                  )}
+                </Formik>
+              </Paper>
+            </Grid>
+          </Grid>
         </Box>
       )}
       {created && (

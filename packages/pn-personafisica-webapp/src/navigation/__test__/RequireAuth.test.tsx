@@ -18,6 +18,12 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({ t: (str: string) => str }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
+}));
+
 describe('RequireAuth Component', () => {
   it('renders RequireAuth (user enabled to access)', () => {
     // useSelector mock
