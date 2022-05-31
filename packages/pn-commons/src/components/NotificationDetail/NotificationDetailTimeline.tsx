@@ -9,7 +9,7 @@ import {
   NotificationStatusHistory,
   NotificationDetailRecipient
 } from '../../types/NotificationDetail';
-import { useIsMobile } from '../../hooks/IsMobile.hook';
+import { useIsMobile } from '../../hooks/IsMobile';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {

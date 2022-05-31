@@ -132,6 +132,15 @@ describe('Dashboard Page', () => {
     });
   });
 
+  it('clicks on new notification', async () => {
+    const newNotificationBtn = result?.queryByTestId('newNotificationBtn');
+    expect(newNotificationBtn).toHaveTextContent('Invia una nuova notifica');
+    fireEvent.click(newNotificationBtn!);
+    await waitFor(() => {
+      expect(mockNavigateFn).toBeCalledTimes(1);
+    });
+  });
+
   it('does not have basic accessibility issues rendering the page', async () => {
     if(result) {
       const results = await axe(result.container);
