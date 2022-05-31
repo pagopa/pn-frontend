@@ -18,10 +18,10 @@ const inactivityTimer = 5 * 60 * 1000;
 /* eslint-disable functional/immutable-data */
 const RequireAuth = () => {
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
+  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
 
   useEffect(() => {
     if (token !== '' && fetchedTos && !tos) {

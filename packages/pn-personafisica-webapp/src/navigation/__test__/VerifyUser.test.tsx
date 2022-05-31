@@ -1,11 +1,8 @@
-import { waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
 import * as actions from '../../redux/auth/actions';
 import VerifyUser from '../VerifyUser';
 import { render } from '../../__test__/test-utils';
-
-const mockNavigateFn = jest.fn();
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -16,11 +13,9 @@ jest.mock('react-router-dom', () => ({
     pathname: '',
     search: '',
   }),
-  useNavigate: () => mockNavigateFn
 }));
 
 describe('VerifyUser Component', () => {
-
   beforeEach(() => {
     // useSelector mock
     const useSelectorSpy = jest.spyOn(redux, 'useSelector');
@@ -45,8 +40,5 @@ describe('VerifyUser Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-hash');
-    await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-    })
   });
 });
