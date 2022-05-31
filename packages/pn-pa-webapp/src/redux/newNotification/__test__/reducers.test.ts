@@ -28,7 +28,7 @@ const initialState = {
     group: '',
     notificationFeePolicy: '',
   },
-  mustBeSaved: false
+  isCompleted: false
 };
 
 describe('New notification redux state tests', () => {

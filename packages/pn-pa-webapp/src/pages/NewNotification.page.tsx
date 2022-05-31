@@ -41,8 +41,8 @@ const NewNotification = () => {
   const notification = useAppSelector(
     (state: RootState) => state.newNotificationState.notification
   );
-  const mustBeSaved = useAppSelector(
-    (state: RootState) => state.newNotificationState.mustBeSaved
+  const isCompleted = useAppSelector(
+    (state: RootState) => state.newNotificationState.isCompleted
   );
   const dispatch = useAppDispatch();
 
@@ -50,15 +50,19 @@ const NewNotification = () => {
     setActiveStep((previousStep) => previousStep + 1);
   };
 
-  useEffect(() => {
+  const createNotification = () => {
     // if it is last step, save notification
-    if (activeStep === 3 && mustBeSaved) {
+    if (activeStep === 3 && isCompleted) {
       dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1))
         .catch(() => {});
     }
-  }, [mustBeSaved]);
+  };
+
+  useEffect(() => {
+    createNotification();
+  }, [isCompleted]);
 
   useEffect(() => () => void dispatch(resetNewNotificationState()), []);
 
@@ -115,7 +119,7 @@ const NewNotification = () => {
           )}
           {activeStep === 1 && <Recipient onConfirm={goToNextStep} />}
           {activeStep === 2 && <Attachments onConfirm={goToNextStep} />}
-          {activeStep === 3 && <PaymentMethods notification={notification}/>}
+          {activeStep === 3 && <PaymentMethods onConfirm={createNotification} notification={notification} isCompleted={isCompleted}/>}
         </Grid>
       </Grid>
     </Prompt>

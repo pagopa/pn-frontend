@@ -10,7 +10,6 @@ import {
   uploadNotificationAttachment,
   saveRecipients,
   uploadNotificationPaymentDocument,
-  createNewNotification,
 } from './actions';
 
 const initialState = {
@@ -26,7 +25,7 @@ const initialState = {
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
   } as NewNotificationFe,
-  mustBeSaved: false
+  isCompleted: false
 };
 
 /* eslint-disable functional/immutable-data */
@@ -64,9 +63,8 @@ const newNotificationSlice = createSlice({
           return r;
         }),
       };
-      state.mustBeSaved = true;
+      state.isCompleted = true;
     });
-    builder.addCase(createNewNotification.rejected, (state) => ({...state, mustBeSaved: false}));
     builder.addCase(resetNewNotificationState, () => initialState);
   },
 });

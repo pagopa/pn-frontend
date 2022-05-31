@@ -58,9 +58,11 @@ type PaymentObject = {
 
 type Props = {
   notification: NewNotificationFe;
+  onConfirm: () => void;
+  isCompleted: boolean;
 };
 
-const PaymentMethods = ({ notification }: Props) => {
+const PaymentMethods = ({ notification, onConfirm, isCompleted }: Props) => {
   const dispatch = useAppDispatch();
 
   const paymentDocumentSchema = yup.object({
@@ -111,6 +113,10 @@ const PaymentMethods = ({ notification }: Props) => {
     validationSchema,
     validateOnMount: true,
     onSubmit: async (values) => {
+      if (isCompleted) {
+        onConfirm();
+        return;
+      }
       const valuesToSend: UploadPayementParams = {};
       const getSingleValueToSend = (value: PaymentDocument) => ({
         key: value.name,

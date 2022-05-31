@@ -20,6 +20,7 @@ describe('PaymentMethods Component', () => {
   let result: RenderResult;
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
+  const confirmHandlerMk = jest.fn();
 
   beforeEach(async () => {
     // mock action
@@ -35,7 +36,7 @@ describe('PaymentMethods Component', () => {
     // render component
     await act(async () => {
       result = render(
-        <PaymentMethods notification={newNotification} />
+        <PaymentMethods notification={newNotification} onConfirm={confirmHandlerMk} isCompleted={false}/>
       );
     });
   });
