@@ -10,22 +10,6 @@ import { getMenuItems } from './utils/role.utility';
 import { PAGOPA_HELP_EMAIL, SELFCARE_URL_FE_LOGIN, SELFCARE_BASE_URL } from './utils/constants';
 import { mixpanelInit } from './utils/mixpanel';
 
-// TODO: get products list from be (?)
-const productsList: Array<ProductSwitchItem> = [
-  {
-    id: '0',
-    title: `Piattaforma Notifiche`,
-    productUrl: '',
-    linkType: 'internal',
-  },
-  {
-    id: '1',
-    title: `Area Riservata`,
-    productUrl: SELFCARE_BASE_URL as string,
-    linkType: 'external',
-  },
-];
-
 // TODO: get parties list from be (?)
 const partyList: Array<PartyEntity> = [
   {
@@ -43,7 +27,10 @@ const App = () => {
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
-  const menuItems = useMemo(() => getMenuItems(role.partyRole, idOrganization), [role, idOrganization]);
+  const menuItems = useMemo(
+    () => getMenuItems(role.partyRole, idOrganization),
+    [role, idOrganization]
+  );
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -52,6 +39,22 @@ const App = () => {
     }),
     [loggedUser]
   );
+
+  // TODO: get products list from be (?)
+  const productsList: Array<ProductSwitchItem> = useMemo(() => [
+    {
+      id: '0',
+      title: `Piattaforma Notifiche`,
+      productUrl: '',
+      linkType: 'internal',
+    },
+    {
+      id: '1',
+      title: `Area Riservata`,
+      productUrl: `${SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
+      linkType: 'external',
+    },
+  ], [idOrganization]);
 
   useEffect(() => {
     // init mixpanel
@@ -62,7 +65,7 @@ const App = () => {
     <Layout
       onExitAction={() => dispatch(logout())}
       sideMenu={
-        role && <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
+        role && menuItems && <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
       }
       assistanceEmail={PAGOPA_HELP_EMAIL}
       productsList={productsList}

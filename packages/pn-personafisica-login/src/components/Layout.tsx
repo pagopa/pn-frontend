@@ -41,8 +41,8 @@ const Layout = ({ children }: Props) => (
         console.log('Clicked/Tapped on Assistance');
       }}
     />
-    {children}
-    <Box mt={16}>
+    <Box bgcolor="background.default">{children}</Box>
+    <Box>
       <Footer
         loggedUser={false}
         companyLink={pagoPALink}

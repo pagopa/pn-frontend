@@ -87,8 +87,9 @@ const MobileDelegates = () => {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
       getLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} />;
+        return <OrganizationsList organizations={value} textVariant="body2"/>;
       },
+      notWrappedInTypography: true
     },
   ];
 
@@ -113,8 +114,8 @@ const MobileDelegates = () => {
         codeSectionTitle={t('deleghe.verification_code')}
         isReadOnly
       />
-      <Box mx={1} mb={8}>
-        <Typography variant="h4" mb={2}>
+      <Box>
+        <Typography variant="h4" mb={3}>
           {t('deleghe.delegatesTitle')}
         </Typography>
         {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}

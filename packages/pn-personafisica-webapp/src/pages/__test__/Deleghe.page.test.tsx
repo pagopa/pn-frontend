@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/IsMobile.hook';
+import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/IsMobile';
 import * as redux from 'react-redux';
 import { fireEvent, waitFor } from '@testing-library/react';
 import { axe, render } from '../../__test__/test-utils';
