@@ -142,4 +142,6 @@ export const DelegationsApi = {
           visibilityIds: [],
         } as CreateDelegationResponse;
       }),
+
+  getAllEntities: () : Promise<any> =>apiClient.get('ext-registry/pa/v1/activated-on-pn').then((response: AxiosResponse<any>) => response.data)
 };

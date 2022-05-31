@@ -33,7 +33,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ArrowBack } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
+import { createDelegation, getAllEntities, resetNewDelegation } from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
 import StyledLink from '../component/StyledLink/StyledLink';
@@ -77,7 +77,7 @@ const NuovaDelega = () => {
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { created } = useAppSelector((state: RootState) => state.newDelegationState);
-
+  const { entities } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
   };
@@ -115,12 +115,11 @@ const NuovaDelega = () => {
 
   const xsValue = isMobile ? 12 : 4;
 
-  useEffect(
-    () => () => {
-      dispatch(resetNewDelegation());
-    },
-    []
-  );
+  useEffect(() => {
+    void dispatch(getAllEntities());
+    return () => { dispatch(resetNewDelegation()); };
+  }, []);
+
 
   const breadcrumbs = (
     <Fragment>
@@ -290,12 +289,13 @@ const NuovaDelega = () => {
                                   });
                                 }}
                               >
-                                <MenuItem value={'Bollate'}>
-                                  <DropDownEntiMenuItem name="Comune di Bollate" />
-                                </MenuItem>
-                                <MenuItem value={'Rho'}>
-                                  <DropDownEntiMenuItem name="Comune di Rho" />
-                                </MenuItem>
+                                {
+                                  entities.map((val) => (
+                                    <MenuItem value={val.id} key={val.id}>
+                                      <DropDownEntiMenuItem name={val.name}/>
+                                    </MenuItem>
+                                  ))
+                                }
                               </Select>
                             </FormControl>
                           )}

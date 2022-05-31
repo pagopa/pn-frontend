@@ -25,4 +25,6 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
   }
 );
 
+export const getAllEntities = createAsyncThunk('getAllEntities', async () => await DelegationsApi.getAllEntities());
+
 export const resetNewDelegation = createAction<void>('resetNewDelegation');
