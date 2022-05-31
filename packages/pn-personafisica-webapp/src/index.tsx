@@ -11,6 +11,16 @@ import { store } from './redux/store';
 import './i18n.ts';
 import App from './App';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { worker } = require('./mocks/browser');
+worker.start();
+
+// if (process.env.NODE_ENV === 'development') {
+//   // eslint-disable-next-line @typescript-eslint/no-var-requires
+//   const { worker } = require('./mocks/browser');
+//   worker.start();
+// }
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
