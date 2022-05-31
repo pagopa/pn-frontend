@@ -50,7 +50,7 @@ describe('DesktopNotifications Component', () => {
     // render component
     const result = render(
       <DesktopNotifications
-        notifications={notificationsToFe.result}
+        notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
         onCancelSearch={() => {}}
       />
@@ -62,7 +62,7 @@ describe('DesktopNotifications Component', () => {
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
       expect(mockNavigateFn).toBeCalledWith(
-        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.result[0].iun)
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });
   });
@@ -70,7 +70,7 @@ describe('DesktopNotifications Component', () => {
   it('does not have basic accessibility issues', async () => {
     const result = render(
       <DesktopNotifications
-        notifications={notificationsToFe.result}
+        notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
         onCancelSearch={() => {}}
       />
