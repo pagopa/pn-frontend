@@ -4,10 +4,10 @@ import {
   GetNotificationsResponse,
   LegalFactId,
   NotificationDetail,
-  formatFiscalCode,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 import { apiClient, externalClient } from '../axios';
+import { NOTIFICATIONS_LIST, NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS, NOTIFICATION_DETAIL_LEGALFACT, NOTIFICATION_PRELOAD_DOCUMENT } from './notifications.routes';
 
 export const NotificationsApi = {
   /**
@@ -16,55 +16,31 @@ export const NotificationsApi = {
    * @param  {string} endDate
    * @returns Promise
    */
-  getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => {
-    const queryParams = new URLSearchParams();
-    queryParams.append('startDate', params.startDate);
-    queryParams.append('endDate', params.endDate);
-    if (params.recipientId) {
-      queryParams.append('recipientId', formatFiscalCode(params.recipientId));
-    }
-    if (params.status) {
-      queryParams.append('status', params.status);
-    }
-    if (params.subjectRegExp) {
-      queryParams.append('subjectRegExp', params.subjectRegExp);
-    }
-    if (params.size) {
-      queryParams.append('size', params.size.toString());
-    }
-    if (params.nextPagesKey) {
-      queryParams.append('nextPagesKey', params.nextPagesKey);
-    }
-    if (params.iunMatch) {
-      queryParams.append('iunMatch', params.iunMatch);
-    }
-    return apiClient
-      .get<GetNotificationsResponse>('/delivery/notifications/sent', { params: queryParams })
-      .then((response) => {
-        if (response.data && response.data.result) {
-          const notifications = response.data.result.map((d) => ({
-            ...d,
-            sentAt: formatDate(d.sentAt),
-          }));
-          return {
-            ...response.data,
-            result: notifications,
-          };
-        }
+  getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => 
+    apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
+      if (response.data && response.data.result) {
+        const notifications = response.data.result.map((d) => ({
+          ...d,
+          sentAt: formatDate(d.sentAt),
+        }));
         return {
-          result: [],
-          moreResult: false,
-          nextPagesKey: [],
+          ...response.data,
+          result: notifications,
         };
-      });
-  },
+      }
+      return {
+        result: [],
+        moreResult: false,
+        nextPagesKey: [],
+      };
+    }),
   /**
    * Gets current user notification detail
    * @param  {string} iun
    * @returns Promise
    */
   getSentNotification: (iun: string): Promise<NotificationDetail> =>
-    apiClient.get<NotificationDetail>(`/delivery/notifications/sent/${iun}`).then((response) => {
+    apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
       if (response.data) {
         return parseNotificationDetail(response.data);
       }
@@ -78,7 +54,7 @@ export const NotificationsApi = {
    */
   getSentNotificationDocument: (iun: string, documentIndex: number): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`)
+      .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
       .then((response) => {
         if (response.data) {
           return response.data;
@@ -93,7 +69,7 @@ export const NotificationsApi = {
    */
   getSentNotificationLegalfact: (iun: string, legalFact: LegalFactId): Promise<{ url: string }> =>
     apiClient
-      .get<Buffer>(`/delivery-push/legalfacts/${iun}/${legalFact.type}/${legalFact.key}`, {
+      .get<Buffer>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact), {
         responseType: 'arraybuffer',
         headers: {
           'Content-Type': 'application/json',
@@ -118,7 +94,7 @@ export const NotificationsApi = {
   ): Promise<Array<{ url: string; secret: string; httpMethod: string }>> =>
     apiClient
       .post<Array<{ url: string; secret: string; httpMethod: string }>>(
-        `/delivery/attachments/preload`,
+        NOTIFICATION_PRELOAD_DOCUMENT(),
         items
       )
       .then((response) => {
@@ -143,18 +119,13 @@ export const NotificationsApi = {
     httpMethod: string
   ): Promise<string> => {
     const method = httpMethod.toLowerCase() as 'get' | 'post' | 'put';
-    return externalClient[method]<string>(
-        url,
-        file,
-        {
-          headers: {
-            'Content-Type': 'application/pdf',
-            'x-amz-meta-secret': secret,
-            'x-amz-checksum-sha256': sha256,
-          },
-        }
-      )
-      .then((res) => res.headers['x-amz-version-id']);
+    return externalClient[method]<string>(url, file, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'x-amz-meta-secret': secret,
+        'x-amz-checksum-sha256': sha256,
+      },
+    }).then((res) => res.headers['x-amz-version-id']);
   },
 };
 

@@ -3,11 +3,12 @@ import MockAdapter from 'axios-mock-adapter';
 import { AuthApi } from '../Auth.api';
 import { userResponse } from '../../../redux/auth/__test__/test-utils';
 import { authClient } from '../../axios';
+import { AUTH_TOKEN_EXCHANGE } from '../auth.routes';
 
 export async function mockedExchangeToken() {
   const token = 'mocked-token';
   const axiosMock = new MockAdapter(authClient);
-  axiosMock.onGet(`/token-exchange`).reply(200, userResponse);
+  axiosMock.onGet(AUTH_TOKEN_EXCHANGE()).reply(200, userResponse);
   const res = await AuthApi.exchangeToken(token);
   axiosMock.reset();
   axiosMock.restore();
