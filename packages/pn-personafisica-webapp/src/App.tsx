@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
@@ -31,6 +31,7 @@ const productsList: Array<ProductSwitchItem> = [
 ];
 
 const App = () => {
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
@@ -82,7 +83,9 @@ const App = () => {
       void dispatch(getSidemenuInformation());
       void dispatch(getDomicileInfo());
       void dispatch(getToSApproval()).then(() => {
-        navigate(routes.NOTIFICHE);
+        if (location.pathname === '/') {
+          navigate(routes.NOTIFICHE);
+        }
       });
     }
   }, [sessionToken]);

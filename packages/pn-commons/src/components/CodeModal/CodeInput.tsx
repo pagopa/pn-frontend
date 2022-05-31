@@ -65,6 +65,10 @@ const CodeInput = memo(
     };
 
     const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
+      if (!isNaN(Number(event.key))) {
+        /* eslint-disable-next-line functional/immutable-data */
+        inputsRef.current[index].value = event.key;
+      }
       if (!isNaN(Number(event.key)) || event.key === 'Enter' || event.key === 'Tab') {
         // focus next element
         focusInput(index + 1);
