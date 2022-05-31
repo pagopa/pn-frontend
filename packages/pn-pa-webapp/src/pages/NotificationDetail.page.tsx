@@ -1,6 +1,6 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment } from 'react';
-import { Breadcrumbs, Grid, Typography, Box, Paper, Button, styled, Stack } from '@mui/material';
+import { Breadcrumbs, Grid, Typography, Box, Paper, Button, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import { ArrowBack } from '@mui/icons-material';
@@ -13,6 +13,7 @@ import {
   LegalFactId,
   NotificationDetailTimeline,
   useIsMobile,
+  BreadcrumbLink,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
 
@@ -25,16 +26,7 @@ import {
   getSentNotificationLegalfact,
   resetState,
 } from '../redux/notification/actions';
-
-const StyledLink = styled(Link)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  color: `${theme.palette.text.primary} !important`,
-  texDecoration: 'none !important',
-  '&:hover, &:focus': {
-    textDecoration: 'underline !important',
-  },
-}));
+import { setCancelledIun } from '../redux/newNotification/actions';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -124,10 +116,16 @@ const NotificationDetail = () => {
     /* eslint-enable functional/immutable-data */
   };
 
+  const handleCancelNotification = () => {
+    dispatch(setCancelledIun(notification.iun));
+    navigate(routes.NUOVA_NOTIFICA);
+  };
+
   useEffect(() => {
     if (id) {
       void dispatch(getSentNotification(id));
     }
+    return () => void dispatch(resetState());
   }, []);
 
   useEffect(() => {
@@ -142,19 +140,27 @@ const NotificationDetail = () => {
     }
   }, [legalFactDownloadUrl]);
 
-  useEffect(() => () => void dispatch(resetState()), []);
-
   const breadcrumb = (
     <Fragment>
-      <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'start', sm: 'center' }} justifyContent="start" spacing={3}>
-        <ButtonNaked onClick={() => navigate(-1)} startIcon={<ArrowBack />} color="primary" size="medium" >
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        alignItems={{ xs: 'start', sm: 'center' }}
+        justifyContent="start"
+        spacing={3}
+      >
+        <ButtonNaked
+          onClick={() => navigate(-1)}
+          startIcon={<ArrowBack />}
+          color="primary"
+          size="medium"
+        >
           Indietro
         </ButtonNaked>
         <Breadcrumbs aria-label="breadcrumb">
-          <StyledLink to={routes.DASHBOARD}>
+          <BreadcrumbLink to={routes.DASHBOARD}>
             <EmailIcon sx={{ mr: 0.5 }} />
             Notifiche
-          </StyledLink>
+          </BreadcrumbLink>
           <Typography
             color="text.primary"
             fontWeight={600}
@@ -166,7 +172,12 @@ const NotificationDetail = () => {
       </Stack>
       <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
-        <Button sx={{ margin: '10px 0' }} variant="outlined">
+        <Button
+          sx={{ margin: '10px 0' }}
+          variant="outlined"
+          onClick={handleCancelNotification}
+          data-testid="cancelNotificationBtn"
+        >
           Annulla notifica
         </Button>
       )}
@@ -174,10 +185,10 @@ const NotificationDetail = () => {
   );
 
   return (
-    <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 }}}>
+    <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
       {isMobile && breadcrumb}
       <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
-        <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }}}>
+        <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
           <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">

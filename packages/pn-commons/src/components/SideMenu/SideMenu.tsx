@@ -4,7 +4,7 @@ import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@
 import { Menu } from '@mui/icons-material';
 
 import { SideMenuItem } from '../../types/SideMenuItem';
-import { useIsMobile } from '../../hooks/IsMobile.hook';
+import { useIsMobile } from '../../hooks/IsMobile';
 import SideMenuList from './SideMenuList';
 
 type Props = {

@@ -1,7 +1,7 @@
 import { Box, Button, Grid, Switch, Typography } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 
 import Link from '@mui/material/Link';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
@@ -22,15 +22,13 @@ const TermsOfService = () => {
   const redirectToSLink = () => window.location.assign(URL_FILE_TERMS_OF_SERVICE);
 
   const handleAccept = () => {
-    dispatch(acceptToS())
-      .then(() => {
-        navigate(NOTIFICHE);
-      })
-      .catch(() => {});
+    void dispatch(acceptToS()).then(() => {
+      navigate(NOTIFICHE);
+    });
   };
 
   return (
-    <>
+    <Fragment>
       <Grid container justifyContent="center" my={isMobile ? 4 : 16}>
         <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
           <Typography mb={2} variant="h2" color="textPrimary" textAlign="center">
@@ -97,7 +95,7 @@ const TermsOfService = () => {
           </Button>
         </Grid>
       </Grid>
-    </>
+    </Fragment>
   );
 };
 
