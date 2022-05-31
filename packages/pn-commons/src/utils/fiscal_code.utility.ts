@@ -10,3 +10,5 @@ export function formatFiscalCode(fiscalCode: string): string {
 /** Italian Fiscal Code regex for form validation */
 export const fiscalCodeRegex =
   /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i;
+
+export const pIvaRegex = /^[0-9]{11}$/;

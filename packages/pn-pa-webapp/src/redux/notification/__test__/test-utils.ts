@@ -22,6 +22,8 @@ export const notificationFromBe: NotificationDetail = {
   documentsAvailable: true,
   recipients: [
     {
+      creditorTaxId: 'mocked-creditorTaxId',
+      token: 'mocked-token',
       recipientType: RecipientType.PF,
       taxId: 'CGNNMO80A03H501U',
       denomination: 'Analogico Ok',
@@ -38,7 +40,6 @@ export const notificationFromBe: NotificationDetail = {
         province: 'PROV',
         foreignState: '',
       },
-      token: 'mocked-token',
     },
   ],
   documents: [
@@ -77,7 +78,7 @@ export const notificationFromBe: NotificationDetail = {
       },
     },
   },
-  notificationStatus: NotificationStatus.PAID,
+  notificationStatus: NotificationStatus.DELIVERED,
   notificationStatusHistory: [
     {
       status: NotificationStatus.DELIVERED,
@@ -95,6 +96,8 @@ export const notificationFromBe: NotificationDetail = {
         category: TimelineCategory.REQUEST_ACCEPTED,
         recipients: [
           {
+            creditorTaxId: 'mocked-creditorTaxId',
+            token: 'mocked-token',
             recipientType: RecipientType.PF,
             taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
             denomination: 'Mario Rossi',
@@ -111,7 +114,6 @@ export const notificationFromBe: NotificationDetail = {
               province: '',
               foreignState: '',
             },
-            token: '',
           },
         ],
         documentsDigests: [
@@ -273,6 +275,8 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
   documentsAvailable: true,
   recipients: [
     {
+      creditorTaxId: 'mocked-creditorTaxId',
+      token: 'mocked-token',
       recipientType: RecipientType.PF,
       taxId: 'CGNNMO80A03H501U',
       denomination: 'Analogico Ok',
@@ -289,9 +293,10 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
         province: 'PROV',
         foreignState: '',
       },
-      token: 'mocked-token',
     },
     {
+      creditorTaxId: 'mocked-creditorTaxId',
+      token: 'mocked-token',
       recipientType: RecipientType.PF,
       taxId: 'CGNNMO80A03H501V',
       denomination: 'Altro Ok',
@@ -308,7 +313,6 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
         province: 'PROV',
         foreignState: '',
       },
-      token: 'mocked-token',
     },
   ],
   documents: [
@@ -347,7 +351,7 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
       },
     },
   },
-  notificationStatus: NotificationStatus.PAID,
+  notificationStatus: NotificationStatus.DELIVERED,
   notificationStatusHistory: [
     {
       status: NotificationStatus.DELIVERED,
@@ -365,6 +369,8 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
         category: TimelineCategory.REQUEST_ACCEPTED,
         recipients: [
           {
+            creditorTaxId: 'mocked-creditorTaxId',
+            token: 'mocked-token',
             recipientType: RecipientType.PF,
             taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
             denomination: 'Mario Rossi',
@@ -381,7 +387,6 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
               province: '',
               foreignState: '',
             },
-            token: '',
           },
         ],
         documentsDigests: [

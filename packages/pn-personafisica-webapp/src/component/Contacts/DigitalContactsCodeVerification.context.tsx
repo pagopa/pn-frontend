@@ -1,16 +1,8 @@
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-} from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
