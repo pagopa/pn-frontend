@@ -22,7 +22,7 @@ const TermsOfService = () => {
   const redirectToSLink = () => window.location.assign(URL_FILE_TERMS_OF_SERVICE);
 
   const handleAccept = () => {
-    dispatch(acceptToS()).then(() => {
+    void dispatch(acceptToS()).then(() => {
       navigate(NOTIFICHE);
     });
   };
