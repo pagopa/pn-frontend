@@ -81,7 +81,7 @@ describe('Notifications api tests', () => {
     mock.restore();
   });
 
-  it.skip('uploadNotificationAttachment', async () => {
+  it('uploadNotificationAttachment', async () => {
     const file = new Uint8Array();
     const mock = new MockAdapter(externalClient);
     mock

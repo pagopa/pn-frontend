@@ -151,10 +151,8 @@ export const NotificationsApi = {
         'x-amz-meta-secret': secret,
         'x-amz-checksum-sha256': sha256,
       },
-    }).then((_res) => Date.now().toString());
+    }).then((res) => res.headers['x-amz-version-id']);
   },
-  // TODO: in attesa di fix be
-  // res.headers['x-amz-version-id']
 
   /**
    * create new notification
