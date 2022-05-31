@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { exchangeToken } from '../redux/auth/actions';
+import { exchangeToken, getToSApproval } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { goToLogin } from './navigation.utility';
@@ -30,6 +30,7 @@ const VerifyUser = () => {
     if (spidToken !== '') {
       dispatch(exchangeToken(spidToken))
         .then(() => {
+          void dispatch(getToSApproval());
           navigate(NOTIFICHE);
         })
         .catch(() => {

@@ -3,35 +3,31 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import Icon from '@mui/material/Icon';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { Trans, useTranslation } from 'react-i18next';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
+import { styled } from '@mui/material/styles';
 import Layout from '../../components/Layout';
 import { IDPS } from '../../utils/IDPS';
-import SpidIcon from '../../assets/SpidIcon.svg';
-import CIEIcon from '../../assets/CIEIcon.svg';
 import { ENV } from '../../utils/env';
 import { storageSpidSelectedOps } from '../../utils/storage';
 import SpidSelect from './SpidSelect';
 
-export const spidIcon = () => (
-  <Icon sx={{ width: '25px', height: '25px' }}>
-    <img src={SpidIcon} width="25" height="25" />
-  </Icon>
-);
-
-export const cieIcon = () => (
-  <Icon sx={{ width: '25px', height: '25px' }}>
-    <img src={CIEIcon} width="25" height="25" />
-  </Icon>
-);
+const LoginButton = styled(Button)(() => ({
+  '& .MuiButton-startIcon': {
+    svg: {
+      fontSize: '25px',
+    },
+  },
+}));
 
 const Login = () => {
   const [showIDPS, setShowIDPS] = useState(false);
-
   const { t } = useTranslation(['login']);
+  const isMobile = useIsMobile();
 
   const goCIE = () => {
     storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
@@ -66,12 +62,11 @@ const Login = () => {
 
   return (
     <Layout>
-      <Grid container direction="column" my={'auto'}>
-        <Grid container item justifyContent="center" mt={5}>
+      <Grid container direction="column" my={isMobile ? 4 : 16}>
+        <Grid container item justifyContent="center">
           <Grid item>
             <Typography
               variant="h2"
-              py={1}
               px={0}
               color="textPrimary"
               sx={{
@@ -122,7 +117,7 @@ const Login = () => {
               </Typography>
 
               <Box display="flex" justifyContent="center" alignItems="center">
-                <Button
+                <LoginButton
                   id="spidButton"
                   sx={{
                     borderRadius: '4px',
@@ -132,14 +127,14 @@ const Login = () => {
                   }}
                   onClick={() => setShowIDPS(true)}
                   variant="contained"
-                  startIcon={spidIcon()}
+                  startIcon={<SpidIcon />}
                 >
                   {t('loginPage.loginBox.spidLogin')}
-                </Button>
+                </LoginButton>
               </Box>
 
               <Box display="flex" justifyContent="center" alignItems="center">
-                <Button
+                <LoginButton
                   sx={{
                     borderRadius: '4px',
                     width: '90%',
@@ -147,11 +142,11 @@ const Login = () => {
                     marginTop: 1,
                   }}
                   variant="contained"
-                  startIcon={cieIcon()}
+                  startIcon={<CieIcon />}
                   onClick={() => goCIE()}
                 >
                   {t('loginPage.loginBox.cieLogin')}
-                </Button>
+                </LoginButton>
               </Box>
 
               <Box mt={4}>

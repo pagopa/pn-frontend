@@ -176,7 +176,7 @@ const Dashboard = () => {
   }, [filters, pagination.size, pagination.page, sort]);
 
   return (
-    <Box sx={{ padding: '20px' }}>
+    <Box p={3}>
       <Typography variant="h4">Notifiche</Typography>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="body1">
@@ -191,7 +191,6 @@ const Dashboard = () => {
           Invia una nuova notifica
         </Button>
       </Box>
-
       <Fragment>
         {notifications && (
           <Fragment>
@@ -212,6 +211,7 @@ const Dashboard = () => {
                 }}
                 onPageRequest={handleChangePage}
                 pagesToShow={pagesToShow}
+                sx={{padding: '0 10px'}}
               />
             )}
           </Fragment>

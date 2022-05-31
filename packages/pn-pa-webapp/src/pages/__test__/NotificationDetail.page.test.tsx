@@ -85,7 +85,7 @@ describe('NotificationDetail Page', () => {
   });
 
   test('clicks on the back button', () => {
-    const backButton = result?.getByTestId('backButton');
+    const backButton = result?.getByRole('button', { name: /indietro/i });
     fireEvent.click(backButton!);
     expect(mockNavigateFn).toBeCalledTimes(1);
   });

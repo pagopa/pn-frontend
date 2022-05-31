@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { CodeModal, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -67,7 +67,7 @@ const Deleghe = () => {
   }, []);
 
   return (
-    <Box sx={{ marginRight: isMobile ? 0 : 2 }}>
+    <Box p={3}>
       <>
         <CodeModal
           title={t('deleghe.accept_title')}
@@ -97,7 +97,7 @@ const Deleghe = () => {
             type === 'delegates' ? t('deleghe.confirm_revocation') : t('deleghe.confirm_rejection')
           }
         />
-        <Box ml={isMobile ? 2 : 0} mb={2}>
+        <Box mb={8}>
           <TitleBox title={t('deleghe.title')} variantTitle={'h4'}>
             <Trans ns={'deleghe'} i18nKey="deleghe.description" t={t}>
               deleghe.description
@@ -105,10 +105,10 @@ const Deleghe = () => {
           </TitleBox>
         </Box>
         {isMobile ? (
-          <>
+          <Stack direction="column" spacing={8}>
             <MobileDelegates />
             <MobileDelegators />
-          </>
+          </Stack>
         ) : (
           <>
             <Delegates />

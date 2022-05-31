@@ -45,7 +45,7 @@ const Contacts = () => {
 
   return (
     <DigitalContactsCodeVerificationProvider>
-      <Box style={{ padding: '20px' }}>
+      <Box p={3}>
         <TitleBox
           variantTitle="h4"
           title={t('title')}
@@ -55,7 +55,7 @@ const Contacts = () => {
         <Typography variant="h5" fontWeight={600} fontSize={28} sx={{ marginTop: '30px' }}>
           {t('general-contacts-title')}
         </Typography>
-        <Grid container direction="row" sx={{ marginTop: '5px' }} spacing={2}>
+        <Grid container direction="row" sx={{ marginTop: '5px' }} spacing={3}>
           <Grid item lg={6} xs={12}>
             {digitalAddresses.legal.length === 0 && (
               <InsertLegalContact recipientId={recipientId} />

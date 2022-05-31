@@ -183,6 +183,9 @@ const NotificationDetailTimelineStep = ({
 
   const microStep = (s: INotificationDetailTimeline) => {
     const timelineStatusInfos = getNotificationTimelineStatusInfos(s, recipients);
+    if (!timelineStatusInfos) {
+      return null;
+    }
     return timelineStepCmp(
       s.elementId,
       <Fragment>
@@ -208,21 +211,21 @@ const NotificationDetailTimelineStep = ({
           {timelineStatusInfos.label}
         </Typography>
         <Box>
-          <Typography color="text.primary" fontSize={14} display="inline" variant="caption">
+          <Typography color="text.primary" fontSize={14}>
             {timelineStatusInfos.description}&nbsp;
+            {timelineStatusInfos.linkText && s.legalFactsIds && (
+              <Typography
+                fontSize={14}
+                display="inline"
+                variant="button"
+                color="primary"
+                sx={{ cursor: 'pointer' }}
+                onClick={() => s.legalFactsIds && clickHandler(s.legalFactsIds[0])}
+              >
+                {timelineStatusInfos.linkText}
+              </Typography>
+            )}
           </Typography>
-          {timelineStatusInfos.linkText && s.legalFactsIds && (
-            <Typography
-              fontSize={14}
-              display="inline"
-              variant="button"
-              color="primary"
-              sx={{ cursor: 'pointer' }}
-              onClick={() => s.legalFactsIds && clickHandler(s.legalFactsIds[0])}
-            >
-              {timelineStatusInfos.linkText}
-            </Typography>
-          )}
         </Box>
         {recipients.length > 1 && (
           <Box>
