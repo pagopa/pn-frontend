@@ -92,9 +92,9 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
   }, [currentDelegator, filters, pagination.size, pagination.page, sort]);
 
   return (
-    <Box sx={{ padding: '20px' }}>
+    <Box p={3}>
       <DomicileBanner />
-      <TitleBox variantTitle="h4" title={pageTitle} />
+      <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
       {isMobile ? (
         <MobileNotifications
           notifications={notifications}
@@ -119,6 +119,17 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
           }}
           onPageRequest={handleChangePage}
           pagesToShow={pagesToShow}
+          sx={
+            isMobile
+              ? {
+                  padding: '0',
+                  '& .items-per-page-selector button': {
+                    paddingLeft: 0,
+                    height: '24px'
+                  },
+                }
+              : { padding: '0 10px' }
+          }
         />
       )}
     </Box>

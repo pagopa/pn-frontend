@@ -65,18 +65,18 @@ export const NotificationsApi = {
     return apiClient
       .get<GetNotificationsResponse>('/delivery/notifications/received', { params: queryParams })
       .then((response) => {
-        if (response.data && response.data.result) {
-          const notifications = response.data.result.map((d) => ({
+        if (response.data && response.data.resultsPage) {
+          const notifications = response.data.resultsPage.map((d) => ({
             ...d,
             sentAt: formatDate(d.sentAt),
           }));
           return {
             ...response.data,
-            result: notifications,
+            resultsPage: notifications,
           };
         }
         return {
-          result: [],
+          resultsPage: [],
           moreResult: false,
           nextPagesKey: [],
         };

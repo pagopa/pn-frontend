@@ -32,7 +32,7 @@ const Profile = () => {
   };
 
   return (
-    <Box style={{ padding: '20px' }}>
+    <Box p={3}>
       <TitleBox
         variantTitle="h4"
         title={t('title', { ns: 'profilo' })}
@@ -41,7 +41,7 @@ const Profile = () => {
       />
 
       <Grid container direction="row" spacing={2}>
-        <Grid item lg={7} xs={12}>
+        <Grid item lg={8} xs={12}>
           <Paper sx={{ padding: '24px', marginTop: '20px' }} className="paperContainer">
             <Grid container direction="row">
               <Grid item lg={2} xs={5}>
@@ -80,7 +80,7 @@ const Profile = () => {
           </Paper>
         </Grid>
 
-        <Grid item lg={7} xs={12}>
+        <Grid item lg={8} xs={12}>
           <Alert
             severity="info"
             aria-label="contacts-redirect"

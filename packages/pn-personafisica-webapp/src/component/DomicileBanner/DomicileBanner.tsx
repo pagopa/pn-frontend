@@ -40,8 +40,9 @@ const DomicileBanner = () => {
         variant="outlined"
         onClose={handleClose}
         data-testid="addDomicileBanner"
+        sx={{padding: '16px'}}
       >
-        <Typography>
+        <Typography variant="body2">
           {t(messages[messageIndex])}{' '}
           <Link fontWeight={'bold'} onClick={handleAddDomicile}>
             {t('detail.add_domicile')}

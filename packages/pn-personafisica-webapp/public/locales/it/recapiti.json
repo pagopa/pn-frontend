@@ -10,7 +10,7 @@
     "subtitle": "Ricevi le notifiche per via digitale",
     "subtitle-2": "Notifiche per via digitale",
     "description": "Se associ la tua PEC o il tuo account dell’app IO*, riceverai le notifiche soltanto per via digitale. Questo ti permetterà di:",
-    "description-2": "Avendo associato una PEC a Piattaforme Notifiche, puoi riceverai le notifiche a valore legale soltanto in versione digitale. Questo ti permette di:",
+    "description-2": "Avendo associato una PEC a Piattaforme Notifiche, riceverai le notifiche a valore legale soltanto in versione digitale. Questo ti permette di:",
     "save-money": "Risparmiare sulle spese dell’invio cartaceo",
     "avoid-waste": "Evitare gli sprechi di carta generati dalle raccomandate",
     "fast-notification": "Ricevere le notifiche in tempi più rapidi, evitando code agli sportelli",
@@ -31,7 +31,7 @@
     "pec-added-successfully": "PEC associata correttamente",
     "pec-added": "PEC associata",
     "remove-pec-title": "Rimuovi PEC",
-    "remove-pec-message": "Confermi di voler rimuovere l'inidirizzo PEC {{value}}?"
+    "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?"
   },
   "courtesy-contacts": {
     "title": "Recapito di cortesia",
@@ -58,8 +58,8 @@
     "valid-phone": "Inserire un numero di cellulare valido",
     "email-added-successfully": "Indirizzo email aggiunto correttamente",
     "phone-added-successfully": "Numero di cellulare aggiunto correttamente",
-    "remove-mail-title": "Rimuovi email",
-    "remove-mail-message": "Confermi di voler rimuovere l'indirizzo email {{value}}?",
+    "remove-email-title": "Rimuovi email",
+    "remove-email-message": "Confermi di voler rimuovere l'indirizzo email {{value}}?",
     "remove-phone-title": "Rimuovi cellulare",
     "remove-phone-message": "Confermi di voler rimuovere il numero di cellulare {{value}}?"
   },

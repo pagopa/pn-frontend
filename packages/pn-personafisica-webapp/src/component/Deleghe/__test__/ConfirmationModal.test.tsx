@@ -1,7 +1,7 @@
 import { fireEvent } from '@testing-library/react';
-import * as hooks from '@pagopa-pn/pn-commons/src/hooks/IsMobile.hook';
+import * as hooks from '@pagopa-pn/pn-commons/src/hooks/IsMobile';
 import * as React from 'react';
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 
 import ConfirmationModal from '../ConfirmationModal';
 
@@ -104,5 +104,16 @@ describe('ConfirmationModal Component', () => {
     expect(dialog).toBeInTheDocument();
     expect(buttons).toHaveLength(2);
     expect(stack).toHaveStyle('flex-direction: column');
+  });
+
+  it('is Confirmation Modal component accessible', async ()=>{
+    useIsMobileSpy.mockReturnValue(false);
+    const result = renderConfirmationModal({
+      onConfirm: mockConfirmFunction,
+      onConfirmLabel: 'Conferma',
+      onCloseLabel: 'Cancella',
+    });
+    const results = await axe(result?.container);
+    expect(results).toHaveNoViolations();
   });
 });

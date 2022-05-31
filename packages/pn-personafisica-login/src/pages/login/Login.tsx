@@ -1,42 +1,40 @@
 import { useState } from 'react';
 import Button from '@mui/material/Button';
-import ClearOutlinedIcon from '@mui/icons-material/ClearOutlined';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import Icon from '@mui/material/Icon';
-import { IconButton } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { Trans, useTranslation } from 'react-i18next';
+import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
+
+import { styled } from '@mui/material/styles';
 import Layout from '../../components/Layout';
 import { IDPS } from '../../utils/IDPS';
-import SpidIcon from '../../assets/SpidIcon.svg';
-import CIEIcon from '../../assets/CIEIcon.svg';
 import { ENV } from '../../utils/env';
-import { ENABLE_LANDING_REDIRECT } from '../../utils/constants';
 import { storageSpidSelectedOps } from '../../utils/storage';
 import SpidSelect from './SpidSelect';
 
-export const spidIcon = () => (
-  <Icon sx={{ width: '25px', height: '25px' }}>
-    <img src={SpidIcon} width="25" height="25" />
-  </Icon>
-);
-
-export const cieIcon = () => (
-  <Icon sx={{ width: '25px', height: '25px' }}>
-    <img src={CIEIcon} width="25" height="25" />
-  </Icon>
-);
+const LoginButton = styled(Button)(() => ({
+  '& .MuiButton-startIcon': {
+    svg: {
+      fontSize: '25px',
+    },
+  },
+}));
 
 const Login = () => {
   const [showIDPS, setShowIDPS] = useState(false);
-
-  const { t } = useTranslation();
+  const { t } = useTranslation(['login']);
+  const isMobile = useIsMobile();
 
   const goCIE = () => {
     storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
+    // () =>
+    window.location.assign(
+      `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
+    );
     // TODO track event
     // trackEvent(
     //   'LOGIN_IDP_SELECTED',
@@ -51,41 +49,24 @@ const Login = () => {
     // );
   };
 
-  const goBackToLandingPage = () => {
-    window.location.assign(`${ENV.URL_FE.LANDING}`);
-  };
-
   if (showIDPS) {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
   }
 
-  // const redirectPrivacyLink = () =>
-  //   trackEvent('LOGIN_PRIVACY', { SPID_IDP_NAME: 'LOGIN_PRIVACY' }, () =>
-  //     window.location.assign(ENV.URL_FILE.PRIVACY_DISCLAIMER)
-  //   );
+  const redirectPrivacyLink = () => window.location.assign(ENV.URL_FILE.PRIVACY_DISCLAIMER);
+
+  const redirectToSLink = () => window.location.assign(ENV.URL_FILE.TERMS_AND_CONDITIONS);
+  // trackEvent('LOGIN_PRIVACY', { SPID_IDP_NAME: 'LOGIN_PRIVACY' }, () =>
+  //   window.location.assign(ENV.URL_FILE.PRIVACY_DISCLAIMER)
+  // );
+
   return (
     <Layout>
-      <Grid container direction="column" my={'auto'}>
-        <Grid container direction="row" justifyContent="flex-end" mt={6}>
-          <Grid item xs={2}>
-            {ENABLE_LANDING_REDIRECT && (
-              <IconButton
-                color="primary"
-                style={{
-                  maxWidth: '17.42px',
-                }}
-                onClick={() => goBackToLandingPage()}
-              >
-                <ClearOutlinedIcon />
-              </IconButton>
-            )}
-          </Grid>
-        </Grid>
+      <Grid container direction="column" my={isMobile ? 4 : 16}>
         <Grid container item justifyContent="center">
-          <Grid item xs={4}>
+          <Grid item>
             <Typography
               variant="h2"
-              py={1}
               px={0}
               color="textPrimary"
               sx={{
@@ -97,7 +78,7 @@ const Login = () => {
           </Grid>
         </Grid>
         <Grid container item justifyContent="center">
-          <Grid item xs={6}>
+          <Grid item>
             <Typography
               variant="body2"
               mb={7}
@@ -112,7 +93,7 @@ const Login = () => {
         </Grid>
 
         <Grid container item justifyContent="center">
-          <Grid item xs={6} md={5} lg={4} xl={3}>
+          <Grid item xs={10} sm={6} md={4} lg={4} xl={3}>
             <Box
               sx={{
                 boxShadow:
@@ -136,7 +117,7 @@ const Login = () => {
               </Typography>
 
               <Box display="flex" justifyContent="center" alignItems="center">
-                <Button
+                <LoginButton
                   id="spidButton"
                   sx={{
                     borderRadius: '4px',
@@ -146,14 +127,14 @@ const Login = () => {
                   }}
                   onClick={() => setShowIDPS(true)}
                   variant="contained"
-                  startIcon={spidIcon()}
+                  startIcon={<SpidIcon />}
                 >
                   {t('loginPage.loginBox.spidLogin')}
-                </Button>
+                </LoginButton>
               </Box>
 
               <Box display="flex" justifyContent="center" alignItems="center">
-                <Button
+                <LoginButton
                   sx={{
                     borderRadius: '4px',
                     width: '90%',
@@ -161,11 +142,11 @@ const Login = () => {
                     marginTop: 1,
                   }}
                   variant="contained"
-                  startIcon={cieIcon()}
+                  startIcon={<CieIcon />}
                   onClick={() => goCIE()}
                 >
                   {t('loginPage.loginBox.cieLogin')}
-                </Button>
+                </LoginButton>
               </Box>
 
               <Box mt={4}>
@@ -194,7 +175,7 @@ const Login = () => {
         </Grid>
 
         <Grid container item justifyContent="center">
-          <Grid item xs={6}>
+          <Grid item xs={10} sm={6} md={4} lg={4} xl={3}>
             <Typography
               color="textPrimary"
               py={3}
@@ -205,31 +186,36 @@ const Login = () => {
               component="div"
               variant="body1"
             >
-              <Trans i18nKey="loginPage.privacyAndCondition" shouldUnescape>
+              <Trans
+                i18nKey="loginPage.privacyAndCondition"
+                shouldUnescape
+                components={[
+                  <Link
+                    key="privacy-link"
+                    sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
+                    onClick={redirectPrivacyLink}
+                  />,
+                  <Link
+                    key={'tos-link'}
+                    data-testid="terms-and-conditions"
+                    sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
+                    onClick={redirectToSLink}
+                  />,
+                ]}
+              >
                 Autenticandoti dichiari di aver letto e compreso l&apos;
                 <Link
                   sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                  onClick={() => console.log('track some event')}
+                  onClick={redirectPrivacyLink}
                 >
-                  Informativa
-                </Link>
-                <br />
-                <Link
-                  sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                  onClick={() => console.log('track some event')}
-                >
-                  Privacy
+                  Informativa Privacy
                 </Link>
                 {' e i '}
                 <Link
                   sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                  onClick={() => {
-                    // trackEvent('LOGIN_TOS', { SPID_IDP_NAME: 'LOGIN_TOS' }, () =>
-                    //   window.location.assign(ENV.URL_FILE.TERMS_AND_CONDITIONS)
-                    // );
-                  }}
+                  onClick={redirectToSLink}
                 >
-                  {'Termini e condizioni d’uso'}
+                  Termini e condizioni d&apos;uso
                 </Link>
                 {" dell'Area Riservata."}
               </Trans>
@@ -240,5 +226,4 @@ const Login = () => {
     </Layout>
   );
 };
-
 export default Login;

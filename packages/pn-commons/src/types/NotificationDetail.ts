@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
-import { NotificationStatus } from "./NotificationStatus";
+import { ReactNode } from 'react';
+import { NotificationStatus } from './NotificationStatus';
 
 // =========== START TEMP: WAITING FOR PAYMENT APIs DEFINITION ===========
 
@@ -45,8 +45,7 @@ export interface NotificationDetail {
   cancelledByIun: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
-  documentsAvailable?: boolean;
-  payment: NotificationDetailPayment;
+  documentsAvailable: boolean;
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
@@ -206,10 +205,12 @@ export interface SendDigitalDetails {
 export interface NotificationDetailRecipient {
   recipientType: RecipientType;
   taxId: string;
+//  creditorTaxId: string;
   denomination: string;
-  digitalDomicile: DigitalAddress;
-  physicalAddress: PhysicalAddress;
-  token: string;
+  digitalDomicile?: DigitalAddress;
+  physicalAddress?: PhysicalAddress;
+  payment: NotificationDetailPayment;
+//  token: string;
 }
 
 export interface NotificationDetailDocument {
@@ -284,7 +285,12 @@ export enum TimelineCategory {
   SEND_PAPER_FEEDBACK = 'SEND_PAPER_FEEDBACK',
   PAYMENT = 'PAYMENT',
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
-  REQUEST_REFUSED = 'REQUEST_REFUSED'
+  REQUEST_REFUSED = 'REQUEST_REFUSED',
+}
+
+export enum TimelineError {
+  OK = "OK",
+  RETRYABLE_FAIL = "RETRYABLE_FAIL"
 }
 
 interface DigitalAddress {
@@ -293,11 +299,12 @@ interface DigitalAddress {
 }
 
 interface PhysicalAddress {
-  at: string;
+  at?: string;
   address: string;
-  addressDetails: string;
+  addressDetails?: string;
   zip: string;
   municipality: string;
+  municipalityDetails?: string;
   province: string;
   foreignState: string;
 }

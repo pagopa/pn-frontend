@@ -1,5 +1,5 @@
 import { Button, Grid, TextField } from '@mui/material';
-import { ChangeEvent, useEffect, useMemo, useRef } from 'react';
+import { ChangeEvent, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -23,7 +23,6 @@ interface Props {
 const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
-  const previousValue = useRef(value);
 
   const digitalDomicileType = useMemo(
     () => (type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS),
@@ -44,15 +43,10 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
       .matches(phoneRegExp, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
   });
 
-  const initialValues = useMemo(
-    () => ({
-      [type]: value,
-    }),
-    [value]
-  );
-
   const formik = useFormik({
-    initialValues,
+    initialValues: {
+      [type]: '',
+    },
     validateOnMount: true,
     validationSchema:
       type === CourtesyFieldType.EMAIL ? emailValidationSchema : phoneValidationSchema,
@@ -61,24 +55,19 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
     },
   });
 
-  const handleChangeTouched = (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    void formik.setFieldTouched(event.target.id, true, false);
+  const handleChangeTouched = async (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     formik.handleChange(event);
+    await formik.setFieldTouched(event.target.id, true, false);
   };
 
-  const handleEditConfirm = (status: 'validated' | 'cancelled') => {
+  const handleEditConfirm = async (status: 'validated' | 'cancelled') => {
     if (status === 'cancelled') {
-      formik.resetForm({ values: initialValues });
+      await formik.setFieldValue(type, value, true);
     }
   };
 
   useEffect(() => {
-    if (value !== previousValue.current && !value) {
-      formik.resetForm();
-    }
-    /* eslint-disable functional/immutable-data */
-    previousValue.current = value;
-    /* eslint-enable functional/immutable-data */
+    void formik.setFieldValue(type, value, true);
   }, [value]);
 
   if (value) {

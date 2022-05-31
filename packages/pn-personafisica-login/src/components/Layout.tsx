@@ -1,5 +1,10 @@
 import { Box } from '@mui/material';
-import { Footer, HeaderAccount, PreLoginFooterLinksType, RootLinkType } from '@pagopa/mui-italia';
+import { Footer, HeaderAccount, RootLinkType } from '@pagopa/mui-italia';
+import {
+  companyLegalInfo,
+  postLoginLinks,
+  preLoginLinks,
+} from '@pagopa-pn/pn-commons/src/utils/costants';
 
 type Props = {
   children: any;
@@ -36,14 +41,14 @@ const Layout = ({ children }: Props) => (
         console.log('Clicked/Tapped on Assistance');
       }}
     />
-    {children}
-    <Box mt={16}>
+    <Box bgcolor="background.default">{children}</Box>
+    <Box>
       <Footer
         loggedUser={false}
         companyLink={pagoPALink}
-        legalInfo={[]}
-        postLoginLinks={[]}
-        preLoginLinks={{} as PreLoginFooterLinksType}
+        legalInfo={companyLegalInfo}
+        postLoginLinks={postLoginLinks}
+        preLoginLinks={preLoginLinks}
         currentLangCode={'it'}
         onLanguageChanged={
           (/* newLang */) => {

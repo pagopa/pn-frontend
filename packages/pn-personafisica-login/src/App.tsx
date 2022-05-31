@@ -1,25 +1,13 @@
 import Login from './pages/login/Login';
-import {
-  ROUTE_LOGIN,
-  ROUTE_LOGIN_ERROR,
-  ROUTE_LOGIN_SUCCESS,
-  ROUTE_LOGOUT,
-} from './utils/constants';
-import LoginSuccess from './pages/loginSuccess/LoginSuccess';
+import { ROUTE_LOGIN, ROUTE_LOGIN_ERROR, ROUTE_LOGOUT } from './utils/constants';
 import { redirectToLogin } from './utils/utils';
-import ValidateSession from './pages/ValidateSession/ValidateSession';
 import Logout from './pages/logout/Logout';
 import LoginError from './pages/loginError/LoginError';
-import { storageOnSuccessOps, storageTokenOps } from './utils/storage';
+import { storageOnSuccessOps } from './utils/storage';
 
 const onLogout = () => <Logout />;
 
 const onLoginError = () => <LoginError />;
-
-/** if exists already a session */
-const onAlreadyInSession = (sessionToken: string) => (
-  <ValidateSession sessionToken={sessionToken} />
-);
 
 /** login request operations */
 const onLoginRequest = () => {
@@ -37,21 +25,13 @@ const handleLoginRequestOnSuccessRequest = () => {
   }
 };
 
-const onLoginSuccess = () => <LoginSuccess />;
-
 function App() {
-  const token = storageTokenOps.read();
-
   if (window.location.pathname === ROUTE_LOGOUT) {
     return onLogout();
-  } else if (token !== null && token !== undefined) {
-    return onAlreadyInSession(token);
   } else {
     switch (window.location.pathname) {
       case ROUTE_LOGIN:
         return onLoginRequest();
-      case ROUTE_LOGIN_SUCCESS:
-        return onLoginSuccess();
       case ROUTE_LOGIN_ERROR:
         return onLoginError();
       default:

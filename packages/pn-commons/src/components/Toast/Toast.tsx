@@ -2,7 +2,7 @@ import { useState, Fragment, useEffect } from 'react';
 import { Grid, Typography, Box, IconButton, Alert } from '@mui/material'; // SvgIcon
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useIsMobile } from '../../hooks/IsMobile.hook';
+import { useIsMobile } from '../../hooks/IsMobile';
 import { MessageType } from '../../types/MessageType';
 
 type Props = {
@@ -88,7 +88,7 @@ const Toast = ({
                 <Typography variant="body2">{message}</Typography>
               </Grid>
               <Grid item xs={2}>
-                <IconButton onClick={closeToast}>
+                <IconButton onClick={closeToast} aria-label="Close toast icon">
                   <CloseIcon />
                 </IconButton>
               </Grid>

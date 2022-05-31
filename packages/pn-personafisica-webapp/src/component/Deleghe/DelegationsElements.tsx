@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
-import { Button, IconButton, Menu as MUIMenu, MenuItem, Box, List, ListItem } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useTranslation } from 'react-i18next';
+import {
+  Button,
+  IconButton,
+  Menu as MUIMenu,
+  MenuItem,
+  Box,
+  List,
+  ListItem,
+  Typography,
+} from '@mui/material';
+import { Variant } from '@mui/material/styles/createTypography';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+
 import { useAppDispatch } from '../../redux/hooks';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/actions';
 
@@ -50,7 +61,11 @@ export const Menu = (props: any) => {
 
   return (
     <>
-      <IconButton onClick={handleClick} data-testid="delegationMenuIcon">
+      <IconButton
+        onClick={handleClick}
+        data-testid="delegationMenuIcon"
+        aria-label="Delegation Menu Icon"
+      >
         <MoreVertIcon fontSize={'small'} />
       </IconButton>
       <MUIMenu anchorEl={anchorEl} open={open} onClose={handleClose} data-testid="delegationMenu">
@@ -60,15 +75,20 @@ export const Menu = (props: any) => {
   );
 };
 
-export const OrganizationsList = (props: { organizations: Array<string> }) => {
+export const OrganizationsList = (props: {
+  organizations: Array<string>;
+  textVariant?: Variant;
+}) => {
   const { t } = useTranslation(['deleghe']);
   return (
     <>
       {props.organizations.length === 0 ? (
-        <>{t('deleghe.table.allNotifications')}</>
+        <Typography variant={props.textVariant || 'inherit'}>{t('deleghe.table.allNotifications')}</Typography>
       ) : (
         <Box>
-          <>{t('deleghe.table.notificationsFrom')}</>
+          <Typography variant={props.textVariant || 'inherit'}>
+            {t('deleghe.table.notificationsFrom')}
+          </Typography>
           <List
             sx={{
               padding: 0,
@@ -81,7 +101,7 @@ export const OrganizationsList = (props: { organizations: Array<string> }) => {
                 key={organization}
                 sx={{ display: 'revert', paddingLeft: 0, marginLeft: 3, fontWeight: '500' }}
               >
-                {organization}
+                <Typography variant={props.textVariant || 'inherit'}>{organization}</Typography>
               </ListItem>
             ))}
           </List>

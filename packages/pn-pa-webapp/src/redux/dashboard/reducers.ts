@@ -27,7 +27,7 @@ const dashboardSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getSentNotifications.fulfilled, (state, action) => {
-      state.notifications = action.payload.result;
+      state.notifications = action.payload.resultsPage;
       state.pagination.moreResult = action.payload.moreResult;
       // because we can jump from a page to another and nextPagesKey returns only the next three pages, we have to check if that pages already exists
       if (action.payload.nextPagesKey) {

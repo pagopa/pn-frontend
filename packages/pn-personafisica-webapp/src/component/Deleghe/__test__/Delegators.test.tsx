@@ -1,4 +1,4 @@
-import { render } from '../../../__test__/test-utils';
+import { axe, render } from '../../../__test__/test-utils';
 import { arrayOfDelegates, arrayOfDelegators } from '../../../redux/delegation/__test__/test.utils';
 import * as hooks from '../../../redux/hooks';
 import Delegators from '../Delegators';
@@ -36,5 +36,13 @@ describe('Delegators Component', () => {
     expect(result.container).toHaveTextContent(/deleghe.delegatorsTitle/i);
     expect(result.container).toHaveTextContent(/deleghe.error/i);
     expect(result.container).toHaveTextContent(/deleghe.reload/i);
+  });
+
+  it('is Delegator component accessible', async ()=>{
+    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
+    mockUseAppSelector.mockReturnValueOnce(arrayOfDelegators);
+    const result = render(<Delegators />);
+    const results = await axe(result?.container);
+    expect(results).toHaveNoViolations();
   });
 });

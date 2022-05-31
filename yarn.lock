@@ -1243,7 +1243,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/memoize/-/memoize-0.7.5.tgz#2c40f81449a4e554e9fc6396910ed4843ec2be50"
   integrity sha512-igX9a37DR2ZPGYtV6suZ6whr8pTFtyHL3K/oLUotxpSVO2ASaprmAe2Dkq7tBo7CRY7MMDrAa9nuQP9/YG8FxQ==
 
-"@emotion/react@^11.4.1", "@emotion/react@^11.9.0":
+"@emotion/react@^11.9.0":
   version "11.9.0"
   resolved "https://registry.yarnpkg.com/@emotion/react/-/react-11.9.0.tgz#b6d42b1db3bd7511e7a7c4151dc8bc82e14593b8"
   integrity sha512-lBVSF5d0ceKtfKCDQJveNAtkC7ayxpVlgOohLgXqRwqWr9bOf4TZAFFyIcNngnV6xK6X4x2ZeXq7vliHkoVkxQ==
@@ -1283,7 +1283,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/sheet/-/sheet-1.1.0.tgz#56d99c41f0a1cda2726a05aa6a20afd4c63e58d2"
   integrity sha512-u0AX4aSo25sMAygCuQTzS+HsImZFuS8llY8O7b9MDRzbJM0kVJlAz6KNDqcG7pOuQZJmj/8X/rAW+66kMnMW+g==
 
-"@emotion/styled@^11.3.0", "@emotion/styled@^11.8.1":
+"@emotion/styled@^11.8.1":
   version "11.8.1"
   resolved "https://registry.yarnpkg.com/@emotion/styled/-/styled-11.8.1.tgz#856f6f63aceef0eb783985fa2322e2bf66d04e17"
   integrity sha512-OghEVAYBZMpEquHZwuelXcRjRJQOVayvbmNR0zr174NHdmMgrNkLC6TljKC5h9lZLkN5WGrdUcrKlOJ4phhoTQ==
@@ -2273,7 +2273,7 @@
     prop-types "^15.7.2"
     react-is "^17.0.2"
 
-"@mui/icons-material@^5.0.3", "@mui/icons-material@^5.6.2":
+"@mui/icons-material@^5.6.2":
   version "5.6.2"
   resolved "https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-5.6.2.tgz#239c40fc5841dc7c6af7d00e4e988550de170fcd"
   integrity sha512-9QdI7axKuBAyaGz4mtdi7Uy1j73/thqFmEuxpJHxNC7O8ADEK1Da3t2veK2tgmsXsUlAHcAG63gg+GvWWeQNqQ==
@@ -2670,10 +2670,10 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@pagopa/mui-italia@^0.6.16":
-  version "0.6.17"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.17.tgz#b2162c19ff8b2414223aaac5f0f9b9b7804ebcc7"
-  integrity sha512-t6ZDAOA+iiv8scmgFMkHX8AhVBJtrRT6v6ZhKw8dfrIQaVOlE7LTSoVbD7VkSwrP6CzKgcG9IwqDNqKk4W0X9Q==
+"@pagopa/mui-italia@^0.6.19":
+  version "0.6.19"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.19.tgz#2753f4cf93e0b8916c2e3362a27e1a6999089daa"
+  integrity sha512-mRI5ASObURqO5Vjtzyskzw4B+QYcWH7Kat5IpxLrI8J9DotUvFOPp6v++rajZyxUE72iO6/Pa+zoHSaCbKS8rA==
   dependencies:
     "@fontsource/titillium-web" "^4.5.8"
     clsx "^1.1.1"
@@ -4337,15 +4337,15 @@ axe-core@4.2.1:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.2.1.tgz#2e50bcf10ee5b819014f6e342e41e45096239e34"
   integrity sha512-evY7DN8qSIbsW2H/TWQ1bX3sXN1d4MNb5Vb4n7BzPuCwRHdkZ1H2eNLuSh73EoQqkGKUtju2G2HCcjCfhvZIAA==
 
+axe-core@4.4.1, axe-core@^4.3.5:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.4.1.tgz#7dbdc25989298f9ad006645cd396782443757413"
+  integrity sha512-gd1kmb21kwNuWr6BQz8fv6GNECPBnUasepcoLbekws23NVBLODdsClRZ+bQ8+9Uomf3Sm3+Vwn0oYG9NvwnJCw==
+
 axe-core@^3.5.5:
   version "3.5.6"
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-3.5.6.tgz#e762a90d7f6dbd244ceacb4e72760ff8aad521b5"
   integrity sha512-LEUDjgmdJoA3LqklSTwKYqkjcZ4HKc4ddIYGSAiSkr46NTjzg2L9RNB+lekO9P7Dlpa87+hBtzc2Fzn/+GUWMQ==
-
-axe-core@^4.3.5:
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.4.1.tgz#7dbdc25989298f9ad006645cd396782443757413"
-  integrity sha512-gd1kmb21kwNuWr6BQz8fv6GNECPBnUasepcoLbekws23NVBLODdsClRZ+bQ8+9Uomf3Sm3+Vwn0oYG9NvwnJCw==
 
 axios-mock-adapter@^1.20.0:
   version "1.20.0"
@@ -9255,6 +9255,16 @@ jest-axe@^5.0.1:
   integrity sha512-MMOWA6gT4pcZGbTLS8ZEqABH08Lnj5bInfLPpn9ADWX2wFF++odbbh8csmSfkwKjHaioVPzlCtIypAtxFDx/rw==
   dependencies:
     axe-core "4.2.1"
+    chalk "4.1.0"
+    jest-matcher-utils "27.0.2"
+    lodash.merge "4.6.2"
+
+jest-axe@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/jest-axe/-/jest-axe-6.0.0.tgz#e5ca8e9a0363c8c5f4e00760317bd7d7d29b90b4"
+  integrity sha512-gAh/2zoWii4Rbhe6IUIo5TTiseGJDCitFnDFwBNpIuaOciyQgVZue6jtd4W7oMoKHewKoRSuIol7t/MuGx+mqg==
+  dependencies:
+    axe-core "4.4.1"
     chalk "4.1.0"
     jest-matcher-utils "27.0.2"
     lodash.merge "4.6.2"

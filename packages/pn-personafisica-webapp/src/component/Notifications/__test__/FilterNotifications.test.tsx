@@ -63,19 +63,17 @@ async function setFormValues(
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: (str: string) => str,
-    };
-  },
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
 
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
-    useIsMobile: () => false
-  } 
+    useIsMobile: () => false,
+  };
 });
 
 describe('Filter Notifications Table Component', () => {
@@ -133,7 +131,7 @@ describe('Filter Notifications Table Component', () => {
   it('test endDate input', async () => {
     await testInput(form!, 'endDate', '23/02/2022');
     await testCalendar(form!, 'endDate');
-  });
+  }, 10000);
 
   it('test form submission - iunMatch (valid)', async () => {
     const oneYearAgo = moment().add(-1, 'year').startOf('day');
@@ -175,11 +173,16 @@ describe('Filter Notifications Table Component', () => {
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
     await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'RSSMRA80A01H501U');
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    await waitFor(() => {
+      fireEvent.click(submitButton!);
+    });
     const cancelButton = within(form!).getByTestId('cancelButton');
+    expect(cancelButton).toBeEnabled();
     await waitFor(() => {
       fireEvent.click(cancelButton);
     });
-    expect(mockDispatchFn).toBeCalledTimes(1);
+    expect(mockDispatchFn).toBeCalledTimes(2);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
         startDate: tenYearsAgo.toISOString(),
@@ -195,7 +198,7 @@ describe('Filter Notifications Table Component', () => {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 });

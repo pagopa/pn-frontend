@@ -4,7 +4,7 @@ import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@
 import { Menu } from '@mui/icons-material';
 
 import { SideMenuItem } from '../../types/SideMenuItem';
-import { useIsMobile } from '../../hooks/IsMobile.hook';
+import { useIsMobile } from '../../hooks/IsMobile';
 import SideMenuList from './SideMenuList';
 
 type Props = {
@@ -26,19 +26,19 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
   );
   const menuItemSelected = menuItemsWithIndex.find((m) => m.route === location.pathname) ||
     menuItemsWithIndex.find((m) => location.pathname.indexOf(m.route as string) > -1) || {
-      index: -1,
-      label: 'Menu',
-      route: '',
-    };
+    index: -1,
+    label: 'Menu',
+    route: '',
+  };
 
   const toggleDrawer = () => {
     setState(!state);
   };
 
-  const handleNavigation = (link: string) => {
-    if (isMobile) {
+  const handleNavigation = (link: string, menuFlag?: boolean) => {
+    if (isMobile && !menuFlag) {
       setState(false);
-    }
+    };
     navigate(link);
   };
 
@@ -59,13 +59,15 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
               sx={{
                 boxShadow:
                   '0px 2px 4px -1px rgba(0, 43, 85, 0.1), 0px 4px 5px rgba(0, 43, 85, 0.05), 0px 1px 10px rgba(0, 43, 85, 0.1)',
+                paddingBottom: 0,
+                paddingTop: 0,
               }}
             >
               <ListItemButton onClick={toggleDrawer}>
                 <ListItemIcon>
-                  <Menu />
+                  <Menu color="primary" />
                 </ListItemIcon>
-                <ListItemText primary={menuItemSelected?.label} />
+                <ListItemText primary={menuItemSelected?.label} sx={{color: "primary.main"}}/>
               </ListItemButton>
             </List>
             <Drawer anchor="left" open={state} onClose={toggleDrawer}>
