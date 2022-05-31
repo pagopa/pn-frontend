@@ -1,6 +1,15 @@
 import { ReactNode } from 'react';
 import { SentimentDissatisfied } from '@mui/icons-material';
-import { Box, Card, CardActions, CardContent, CardHeader, Grid, SxProps, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  SxProps,
+  Typography,
+} from '@mui/material';
 
 import { CardElement, CardAction } from '../../types/ItemsCard';
 import { Item } from '../../types/ItemsTable';
@@ -21,7 +30,7 @@ type Props = {
   /** Empty action label */
   emptyActionLabel?: string;
   /** Custom style */
-  sx?: SxProps
+  sx?: SxProps;
 };
 
 const ItemsCard = ({
@@ -32,7 +41,7 @@ const ItemsCard = ({
   emptyActionCallback,
   emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
   emptyActionLabel = 'Rimuovi filtri',
-  sx
+  sx,
 }: Props) => {
   const cardHeaderTitle = (item: Item) => (
     <Grid container spacing={2} direction="row" alignItems="center">
@@ -63,16 +72,17 @@ const ItemsCard = ({
               padding: '24px',
             }}
           >
-            <CardHeader title={cardHeaderTitle(data)} className="card-header"/>
+            <CardHeader title={cardHeaderTitle(data)} className="card-header" />
             <CardContent sx={{ padding: 0, marginTop: '16px', ':last-child': { padding: 0 } }}>
               {cardBody.map((body) => (
                 <Box key={body.id} sx={{ marginBottom: '16px' }}>
                   <Typography variant="caption-semibold" data-testid="cardBodyLabel">
                     {body.label}
                   </Typography>
-                  <Typography variant="body2" data-testid="cardBodyValue">
+                  {!body.notWrappedInTypography && <Typography variant="body2" data-testid="cardBodyValue">
                     {body.getLabel(data[body.id])}
-                  </Typography>
+                  </Typography>}
+                  {body.notWrappedInTypography && body.getLabel(data[body.id])}
                 </Box>
               ))}
             </CardContent>
@@ -94,19 +104,22 @@ const ItemsCard = ({
       ) : (
         <Card data-testid="itemCard" sx={{ padding: '24px' }}>
           <CardContent sx={{ padding: 0 }}>
-            <Box component="div" display="flex" sx={{ flexDirection: 'column' }}>
-              <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
-              <Typography variant="body2">{emptyMessage}</Typography>
-              &nbsp;
-              <Typography
-                variant="body2"
-                fontWeight={'bold'}
-                sx={{
-                  cursor: 'pointer',
-                }}
-                onClick={emptyActionCallback}
-              >
-                {emptyActionLabel}
+            <Box component="div" display="flex" sx={{ flexDirection: 'column' }} textAlign="center">
+              <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 auto 20px auto' }} color="action"/>
+              <Typography variant="body2">
+                {emptyMessage}&nbsp;
+                <Typography
+                  display="inline"
+                  color="primary"
+                  variant="button"
+                  fontWeight={'bold'}
+                  sx={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={emptyActionCallback}
+                >
+                  {emptyActionLabel}
+                </Typography>
               </Typography>
             </Box>
           </CardContent>

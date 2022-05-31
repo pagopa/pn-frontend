@@ -164,17 +164,15 @@ const NotificationDetail = () => {
               title={t('detail.acts', { ns: 'notifiche' })}
               documents={notification.documents}
               clickHandler={documentDowloadHandler}
-              /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-              documentsAvailable={notification.documentsAvailable!}
+              documentsAvailable={notification.documentsAvailable}
               downloadFilesMessage={
-                /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-                notification.documentsAvailable!
+                notification.documentsAvailable
                   ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
                   : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' })
               }
             />
           </Paper>
-          {/*
+          {/* TODO decommentare con pn-841
           <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
             <HelpNotificationDetails 
               title="Hai bisogno di aiuto?"

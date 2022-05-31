@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -56,11 +56,10 @@ const FilterNotifications = () => {
     endDate: today,
     iunMatch: '',
   };
-
-  const prevFilters = useRef(initialValues);
+  const [prevFilters, setPrevFilters] = useState(initialValues);
 
   const submitForm = (values: { startDate: Date; endDate: Date; iunMatch: string }) => {
-    if (prevFilters.current === values) {
+    if (prevFilters === values) {
       return;
     }
     const currentFilters = {
@@ -68,8 +67,7 @@ const FilterNotifications = () => {
       endDate: values.endDate.toISOString(),
       iunMatch: values.iunMatch,
     };
-    /* eslint-disable functional/immutable-data */
-    prevFilters.current = values;
+    setPrevFilters(values);
     /* eslint-enable functional/immutable-data */
     dispatch(setNotificationFilters(currentFilters));
   };
@@ -85,23 +83,20 @@ const FilterNotifications = () => {
     dispatch(setNotificationFilters(emptyValues));
   };
 
-  const filtersApplied = (): number => {
-    const formValues = prevFilters.current;
-    return Object.entries(formValues).reduce((c: number, element: [string, any]) => {
+  const filtersApplied = (): number =>
+    Object.entries(prevFilters).reduce((c: number, element: [string, any]) => {
       if (element[0] in initialValues && element[1] !== (initialValues as any)[element[0]]) {
         return c + 1;
       }
       return c;
     }, 0);
-  };
 
   useEffect(() => {
     if (filters && _.isEqual(filters, emptyValues)) {
       formik.resetForm({
         values: initialValues,
       });
-      /* eslint-disable functional/immutable-data */
-      prevFilters.current = initialValues;
+      setPrevFilters(initialValues);
       /* eslint-enable functional/immutable-data */
       setStartDate(null);
       setEndDate(null);
@@ -115,7 +110,13 @@ const FilterNotifications = () => {
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
-        sx={{ pl: 0, pr: filtersApplied() ? '10px' : 0, justifyContent: 'left', minWidth: 'unset', height: '24px' }}
+        sx={{
+          pl: 0,
+          pr: filtersApplied() ? '10px' : 0,
+          justifyContent: 'left',
+          minWidth: 'unset',
+          height: '24px',
+        }}
         hasCounterBadge
         bagdeCount={filtersApplied()}
       >
@@ -136,6 +137,7 @@ const FilterNotifications = () => {
             <FilterNotificationsFormActions
               formikInstance={formik}
               cleanFilters={cleanFilters}
+              appliedFilters={filtersApplied()}
               isInDialog
             />
           </DialogActions>
@@ -153,7 +155,11 @@ const FilterNotifications = () => {
             setStartDate={(value) => setStartDate(value)}
             setEndDate={(value) => setEndDate(value)}
           />
-          <FilterNotificationsFormActions formikInstance={formik} cleanFilters={cleanFilters} />
+          <FilterNotificationsFormActions
+            formikInstance={formik}
+            cleanFilters={cleanFilters}
+            appliedFilters={filtersApplied()}
+          />
         </Grid>
       </Box>
     </form>

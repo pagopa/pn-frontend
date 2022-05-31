@@ -18,12 +18,12 @@ describe('Contacts api tests', () => {
     mock.restore();
   });
 
-  it.skip('createOrUpdateDigitalAddress (email to verify)', async () => {
+  it('createOrUpdateDigitalAddress (email to verify)', async () => {
     const mock = new MockAdapter(apiClient);
     const body = { value: 'a@a.it', verificationCode: '12345' };
     mock
       .onPost(
-        `/address-book/v1/digital-address/mocked-recipientId/legal/mocked-senderId/${LegalChannelType.PEC}`,
+        `/address-book/v1/digital-address/legal/mocked-senderId/${LegalChannelType.PEC}`,
         body
       )
       .reply(200, void 0);
@@ -38,12 +38,12 @@ describe('Contacts api tests', () => {
     mock.restore();
   });
 
-  it.skip('createOrUpdateDigitalAddress (email verified)', async () => {
+  it('createOrUpdateDigitalAddress (email verified)', async () => {
     const mock = new MockAdapter(apiClient);
     const body = { value: 'a@a.it', verificationCode: '12345' };
     mock
       .onPost(
-        `/address-book/v1/digital-address/mocked-recipientId/legal/mocked-senderId/${LegalChannelType.PEC}`,
+        `/address-book/v1/digital-address/legal/mocked-senderId/${LegalChannelType.PEC}`,
         body
       )
       .reply(204, void 0);
@@ -55,7 +55,7 @@ describe('Contacts api tests', () => {
     );
     expect(res).toStrictEqual({
       value: body.value,
-      code: body.verificationCode,
+      code: 'verified',
       addressType: 'legal',
       channelType: LegalChannelType.PEC,
       recipientId: 'mocked-recipientId',
@@ -65,11 +65,11 @@ describe('Contacts api tests', () => {
     mock.restore();
   });
 
-  it.skip('deleteLegalAddress', async () => {
+  it('deleteLegalAddress', async () => {
     const mock = new MockAdapter(apiClient);
     mock
       .onDelete(
-        `/address-book/v1/digital-address/mocked-recipientId/legal/mocked-senderId/${LegalChannelType.PEC}`
+        `/address-book/v1/digital-address/legal/mocked-senderId/${LegalChannelType.PEC}`
       )
       .reply(204, void 0);
     const res = await ContactsApi.deleteLegalAddress('mocked-senderId', LegalChannelType.PEC);
@@ -78,12 +78,12 @@ describe('Contacts api tests', () => {
     mock.restore();
   });
 
-  it.skip('createOrUpdateCourtesyAddress (email to verify)', async () => {
+  it('createOrUpdateCourtesyAddress (email to verify)', async () => {
     const mock = new MockAdapter(apiClient);
     const body = { value: 'a@a.it', verificationCode: '12345' };
     mock
       .onPost(
-        `/address-book/v1/digital-address/mocked-recipientId/courtesy/mocked-senderId/${CourtesyChannelType.EMAIL}`,
+        `/address-book/v1/digital-address/courtesy/mocked-senderId/${CourtesyChannelType.EMAIL}`,
         body
       )
       .reply(200, void 0);
@@ -98,12 +98,12 @@ describe('Contacts api tests', () => {
     mock.restore();
   });
 
-  it.skip('createOrUpdateCourtesyAddress (email verified)', async () => {
+  it('createOrUpdateCourtesyAddress (email verified)', async () => {
     const mock = new MockAdapter(apiClient);
     const body = { value: 'a@a.it', verificationCode: '12345' };
     mock
       .onPost(
-        `/address-book/v1/digital-address/mocked-recipientId/courtesy/mocked-senderId/${CourtesyChannelType.EMAIL}`,
+        `/address-book/v1/digital-address/courtesy/mocked-senderId/${CourtesyChannelType.EMAIL}`,
         body
       )
       .reply(204, void 0);
@@ -115,7 +115,7 @@ describe('Contacts api tests', () => {
     );
     expect(res).toStrictEqual({
       value: body.value,
-      code: body.verificationCode,
+      code: 'verified',
       addressType: 'courtesy',
       channelType: CourtesyChannelType.EMAIL,
       recipientId: 'mocked-recipientId',
@@ -125,11 +125,11 @@ describe('Contacts api tests', () => {
     mock.restore();
   });
 
-  it.skip('deleteCourtesyAddress', async () => {
+  it('deleteCourtesyAddress', async () => {
     const mock = new MockAdapter(apiClient);
     mock
       .onDelete(
-        `/address-book/v1/digital-address/mocked-recipientId/courtesy/mocked-senderId/${CourtesyChannelType.EMAIL}`
+        `/address-book/v1/digital-address/courtesy/mocked-senderId/${CourtesyChannelType.EMAIL}`
       )
       .reply(204, void 0);
     const res = await ContactsApi.deleteCourtesyAddress(
