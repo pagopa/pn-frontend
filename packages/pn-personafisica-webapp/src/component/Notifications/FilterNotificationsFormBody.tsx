@@ -124,7 +124,6 @@ const FilterNotificationsFormBody = ({
           name="endDate"
           value={formikInstance.values.endDate}
           dateAdapter={DateAdapter}
-          onChange={formikInstance.handleChange}
         >
           <DesktopDatePicker
             label={t('filters.data_a', { ns: 'notifiche' })}
