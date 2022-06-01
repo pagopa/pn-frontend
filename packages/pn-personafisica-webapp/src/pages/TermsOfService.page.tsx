@@ -1,14 +1,15 @@
 import { Box, Button, Grid, Switch, Typography } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 
 import Link from '@mui/material/Link';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { acceptToS } from '../redux/auth/actions';
-import { NOTIFICHE } from '../navigation/routes.const';
+import * as routes from '../navigation/routes.const';
 import { URL_FILE_PRIVACY_DISCLAIMER, URL_FILE_TERMS_OF_SERVICE } from '../utils/constants';
+import { RootState } from '../redux/store';
 
 const TermsOfService = () => {
   const isMobile = useIsMobile();
@@ -16,6 +17,7 @@ const TermsOfService = () => {
   const [accepted, setAccepted] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const tos = useAppSelector((state: RootState) => state.userState.tos);
 
   const redirectPrivacyLink = () => window.location.assign(URL_FILE_PRIVACY_DISCLAIMER);
 
@@ -23,9 +25,15 @@ const TermsOfService = () => {
 
   const handleAccept = () => {
     void dispatch(acceptToS()).then(() => {
-      navigate(NOTIFICHE);
+      navigate(routes.NOTIFICHE);
     });
   };
+
+  useEffect(() => {
+    if (tos) {
+      navigate(routes.NOTIFICHE);
+    }
+  }, [tos]);
 
   return (
     <Fragment>
