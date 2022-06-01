@@ -68,7 +68,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
         role="navigation"
         data-testid="menu-list"
         component="nav"
-        aria-label="main piattaforma-notifiche sender"
+        aria-label="piattaforma-notifiche navigazione principale"
         className={classes.root}
       >
         {menuItems.map((item: SideMenuItem, index: number) =>

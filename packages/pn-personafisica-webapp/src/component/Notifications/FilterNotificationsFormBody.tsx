@@ -1,10 +1,10 @@
+import currentLocale from 'date-fns/locale/it';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, TextField } from '@mui/material';
-import DateAdapter from '@mui/lab/AdapterMoment';
+import { Grid, TextField, TextFieldProps } from '@mui/material';
+import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import { tenYearsAgo, today, useIsMobile } from '@pagopa-pn/pn-commons';
+import { CustomDatePicker, DATE_FORMAT, tenYearsAgo, today, useIsMobile } from '@pagopa-pn/pn-commons';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 
 type Props = {
@@ -67,10 +67,11 @@ const FilterNotificationsFormBody = ({
           name="startDate"
           value={formikInstance.values.startDate}
           dateAdapter={DateAdapter}
+          locale={currentLocale}
         >
-          <DesktopDatePicker
+          <CustomDatePicker
             label={t('filters.data_da', { ns: 'notifiche' })}
-            inputFormat="DD/MM/yyyy"
+            inputFormat={DATE_FORMAT}
             value={startDate}
             onChange={(value: Date | null) => {
               formikInstance
@@ -88,6 +89,13 @@ const FilterNotificationsFormBody = ({
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 size="small"
+                aria-label="Data inizio ricerca" // aria-label for (TextField + Button) Group
+                inputProps={{
+                  ...params.inputProps,
+                  inputMode: 'text',
+                  'aria-label': 'Inserisci la data iniziale della ricerca',
+                  type: 'text',
+                }}
               />
             )}
             disableFuture={true}
@@ -102,10 +110,11 @@ const FilterNotificationsFormBody = ({
           value={formikInstance.values.endDate}
           dateAdapter={DateAdapter}
           onChange={formikInstance.handleChange}
+          locale={currentLocale}
         >
-          <DesktopDatePicker
+          <CustomDatePicker
             label={t('filters.data_a', { ns: 'notifiche' })}
-            inputFormat="DD/MM/yyyy"
+            inputFormat={DATE_FORMAT}
             value={endDate}
             onChange={(value: Date | null) => {
               formikInstance
@@ -115,7 +124,7 @@ const FilterNotificationsFormBody = ({
                 })
                 .catch(() => 'error');
             }}
-            renderInput={(params) => (
+            renderInput={(params: TextFieldProps) => (
               <TextField
                 id="endDate"
                 name="endDate"
@@ -123,6 +132,13 @@ const FilterNotificationsFormBody = ({
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 size="small"
+                aria-label="Data fine ricerca" // aria-label for (TextField + Button) Group
+                inputProps={{
+                  ...params.inputProps,
+                  inputMode: 'text',
+                  'aria-label': 'inserisci la data finale della ricerca',
+                  type: 'text',
+                }}
               />
             )}
             disableFuture={true}
