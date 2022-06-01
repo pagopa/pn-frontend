@@ -137,7 +137,7 @@ describe('Filter Notifications Table Component', () => {
     const oneYearAgo = moment().add(-1, 'year').startOf('day');
     const todayM = moment().startOf('day');
 
-    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'c_b963-202203041055');
+    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     await waitFor(() => {
@@ -149,7 +149,7 @@ describe('Filter Notifications Table Component', () => {
         startDate: oneYearAgo.toISOString(),
         endDate: todayM.toISOString(),
         status: undefined,
-        iunMatch: 'c_b963-202203041055',
+        iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
       },
       type: 'setNotificationFilters',
     });
