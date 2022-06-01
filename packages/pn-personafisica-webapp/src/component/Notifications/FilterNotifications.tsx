@@ -37,7 +37,7 @@ const FilterNotifications = () => {
   const isMobile = useIsMobile();
   const classes = useStyles();
 
-  const IUN_regex = /^[0-9A-Z_-]{1,20}$/i;
+  const IUN_regex = /[A-Z]{4}-[A-Z]{4}-[A-Z]{4}-[\d]{6}-[A-Z]{1}-[\d]{1}/;
 
   const validationSchema = yup.object({
     iunMatch: yup.string().matches(IUN_regex, t('Inserire il codice corretto')),

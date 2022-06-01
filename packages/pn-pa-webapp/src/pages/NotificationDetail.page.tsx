@@ -196,7 +196,7 @@ const NotificationDetail = () => {
               title="Atti Allegati"
               documents={notification.documents}
               clickHandler={documentDowloadHandler}
-              documentsAvailable={notification.documentsAvailable}
+              documentsAvailable={notification.documentsAvailable as boolean}
             />
           </Paper>
         </Grid>

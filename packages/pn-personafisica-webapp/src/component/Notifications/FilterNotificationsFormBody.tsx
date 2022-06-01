@@ -1,11 +1,17 @@
-import currentLocale from 'date-fns/locale/it';
 import { ChangeEvent, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FormikErrors, FormikTouched, FormikValues } from 'formik';
+import currentLocale from 'date-fns/locale/it';
 import { Grid, TextField, TextFieldProps } from '@mui/material';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { CustomDatePicker, DATE_FORMAT, tenYearsAgo, today, useIsMobile } from '@pagopa-pn/pn-commons';
-import { FormikErrors, FormikTouched, FormikValues } from 'formik';
+import {
+  CustomDatePicker,
+  DATE_FORMAT,
+  tenYearsAgo,
+  today,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 
 type Props = {
   formikInstance: {
@@ -40,9 +46,34 @@ const FilterNotificationsFormBody = ({
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
 
-  const handleChangeTouched = (e: ChangeEvent) => {
-    void formikInstance.setFieldTouched(e.target.id, true, false);
-    formikInstance.handleChange(e);
+  const handleDashInputMask = async (e: ChangeEvent) => {
+    const input = (e.nativeEvent as any).data;
+    if (input && input.length) {
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      await formikInstance.setFieldValue('iunMatch', formikInstance.values.iunMatch + input + '-');
+    } else {
+      formikInstance.handleChange(e);
+    }
+  };
+
+  const handleChangeTouched = async (e: ChangeEvent) => {
+    if (e.target.id === 'iunMatch') {
+      switch (formikInstance.values.iunMatch.length) {
+        case 3:
+        case 8:
+        case 13:
+        case 20:
+        case 22:
+          await handleDashInputMask(e);
+          break;
+        default:
+          formikInstance.handleChange(e);
+      }
+    }
+    else {
+      formikInstance.handleChange(e);
+    }
+    await formikInstance.setFieldTouched(e.target.id, true, false);
   };
 
   return (
@@ -59,6 +90,7 @@ const FilterNotificationsFormBody = ({
           fullWidth
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
           size="small"
+          inputProps={{ maxLength: 25 }}
         />
       </Grid>
       <Grid item lg={2} xs={12}>
@@ -109,7 +141,6 @@ const FilterNotificationsFormBody = ({
           name="endDate"
           value={formikInstance.values.endDate}
           dateAdapter={DateAdapter}
-          onChange={formikInstance.handleChange}
           locale={currentLocale}
         >
           <CustomDatePicker
