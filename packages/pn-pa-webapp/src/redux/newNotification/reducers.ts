@@ -10,6 +10,7 @@ import {
   uploadNotificationAttachment,
   saveRecipients,
   uploadNotificationPaymentDocument,
+  setSenderInfos,
 } from './actions';
 
 const initialState = {
@@ -37,14 +38,19 @@ const newNotificationSlice = createSlice({
     builder.addCase(setCancelledIun, (state, action) => {
       state.notification = { ...state.notification, cancelledIun: action.payload };
     });
+    builder.addCase(setSenderInfos, (state, action) => {
+      state.notification = {
+        ...state.notification,
+        senderDenomination: action.payload.senderDenomination,
+        senderTaxId: action.payload.senderTaxId
+      };
+    });
     builder.addCase(setPreliminaryInformations, (state, action) => {
       // TODO: capire la logica di set della fee policy sia corretta
-      // TODO: capire la logica di set del senderDenomination
       state.notification = {
         ...state.notification,
         ...action.payload,
-        notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
-        senderDenomination: 'Comune di Milano'
+        notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
       };
     });
     builder.addCase(saveRecipients, (state, action) => {

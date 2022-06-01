@@ -16,6 +16,8 @@ import {
 
 export const setCancelledIun = createAction<string>('setCancelledIun');
 
+export const setSenderInfos = createAction<{senderDenomination: string; senderTaxId: string}>('setSenderInfos');
+
 export const setPreliminaryInformations = createAction<{
   paProtocolNumber: string;
   subject: string;

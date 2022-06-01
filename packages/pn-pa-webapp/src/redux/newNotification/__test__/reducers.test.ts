@@ -1,3 +1,4 @@
+import { setSenderInfos } from './../actions';
 import { DigitalDomicileType, PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
@@ -44,6 +45,13 @@ describe('New notification redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('setCancelledIun');
     expect(payload).toEqual('mocked-iun');
+  });
+
+  it('Should be able to set sender infos', () => {
+    const action = store.dispatch(setSenderInfos({senderDenomination: 'mocked-denomination', senderTaxId: 'mocked-taxId'}));
+    const payload = action.payload;
+    expect(action.type).toBe('setSenderInfos');
+    expect(payload).toEqual({senderDenomination: 'mocked-denomination', senderTaxId: 'mocked-taxId'});
   });
 
   it('Should be able to set preliminary informations', () => {
