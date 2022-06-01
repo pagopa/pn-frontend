@@ -7,28 +7,28 @@ import {
   formatFiscalCode,
   parseNotificationDetail,
   PaymentInfo,
-  PaymentStatus,
+  // PaymentStatus,
   PaymentAttachmentNameType,
 } from '@pagopa-pn/pn-commons';
 import { apiClient } from '../axios';
 
-const mocked_payments_detail = [
-  {
-    amount: 47350,
-    status: PaymentStatus.REQUIRED,
-  },
-  {
-    amount: 47350,
-    status: PaymentStatus.INPROGRESS,
-  },
-  {
-    status: PaymentStatus.SUCCEEDED,
-  },
-  {
-    amount: 47350,
-    status: PaymentStatus.FAILED,
-  },
-];
+// const mocked_payments_detail = [
+//   {
+//     amount: 47350,
+//     status: PaymentStatus.REQUIRED,
+//   },
+//   {
+//     amount: 47350,
+//     status: PaymentStatus.INPROGRESS,
+//   },
+//   {
+//     status: PaymentStatus.SUCCEEDED,
+//   },
+//   {
+//     amount: 47350,
+//     status: PaymentStatus.FAILED,
+//   },
+// ];
 
 export const NotificationsApi = {
   /**
@@ -156,28 +156,23 @@ export const NotificationsApi = {
       }),
   /**
    * Gets current user's notification payment info
-   * @param  {string} iuv
+   * @param  {string} noticeCode
+   * @param  {string} taxId
    * @returns Promise
    */
   getNotificationPaymentInfo: ( noticeCode: string, taxId: string ): Promise<PaymentInfo> =>
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (!noticeCode || ! taxId) {
-          return reject({ response: { status: 400 }, blockNotification: true });
-        }
-        // mocked response (returns a random payment status)
-        const randomIndex = Math.floor(Math.random() * 4);
-        return resolve(mocked_payments_detail[randomIndex]);
-      }, 1500);
-      // return resolve(mocked_payments_detail[randomIndex]);
-    }),
-  // apiClient
-  // .get<PaymentInfo>(`ext-registry/pagopa/v1/paymentinfo/{taxId}/{noticeCode}`)
-  // .then((response) => {
-  //   if (response.data) {
-  //     return response.data;
-  //   }
-  //   return { };
-  //   // return response.data;
-  // }),
+    // new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     if (!noticeCode || !taxId) {
+    //       return reject({ response: { status: 400 }, blockNotification: true });
+    //     }
+    //     // mocked response (returns a random payment status)
+    //     const randomIndex = Math.floor(Math.random() * 4);
+    //     return resolve(mocked_payments_detail[randomIndex]);
+    //   }, 1500);
+    //   // return resolve(mocked_payments_detail[randomIndex]);
+    // }),
+  apiClient
+  .get<PaymentInfo>(`ext-registry/pagopa/v1/paymentinfo/${taxId}/${noticeCode}`)
+  .then((response) => response.data),
 };
