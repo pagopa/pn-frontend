@@ -39,6 +39,7 @@ function CustomTooltip({ openOnClick, tooltipContent, children, sx }: Props) {
           disableFocusListener={openOnClick}
           disableHoverListener={openOnClick}
           disableTouchListener={openOnClick}
+          enterTouchDelay={0}
         >
           {cloneElement(children, {
             onClick: handleTooltipOpen,

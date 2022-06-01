@@ -1,11 +1,12 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
 interface VerificationCodeProps {
   code: string;
 }
 
 const VerificationCodeComponent = ({ code }: VerificationCodeProps) => (
-  <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+  <Box>
+    <Stack direction="row" spacing={1}>
     {code.split('').map((codeDigit: string, i: number) => (
       <Box
         key={i}
@@ -20,7 +21,6 @@ const VerificationCodeComponent = ({ code }: VerificationCodeProps) => (
           justifyContent: 'center',
           alignItems: 'center',
           textAlign: 'center',
-          marginRight: '8px',
         }}
         data-testid="codeDigit"
       >
@@ -29,6 +29,7 @@ const VerificationCodeComponent = ({ code }: VerificationCodeProps) => (
         </Typography>
       </Box>
     ))}
+    </Stack>
   </Box>
 );
 

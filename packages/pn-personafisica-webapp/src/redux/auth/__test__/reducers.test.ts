@@ -45,6 +45,7 @@ describe('Auth redux state tests', () => {
             iss: '',
             jti: '',
           },
+      tos: false,
     });
   });
 

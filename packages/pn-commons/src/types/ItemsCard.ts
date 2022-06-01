@@ -5,6 +5,7 @@ export interface CardElement {
   id: string;
   label: string;
   getLabel(value: string | number | Array<string>, row?: Item): ReactNode;
+  notWrappedInTypography?: boolean;
 }
 
 export interface CardSort {

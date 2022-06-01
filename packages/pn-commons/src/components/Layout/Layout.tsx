@@ -1,8 +1,7 @@
 import { ReactNode } from 'react';
-import { Grid } from '@mui/material';
-import { Box } from '@mui/system';
-import { makeStyles } from '@mui/styles';
+import { Stack } from '@mui/material';
 import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
+import { Box } from '@mui/system';
 
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
@@ -15,6 +14,8 @@ type Props = {
   onExitAction?: () => void;
   /** Side Menu */
   sideMenu?: React.ReactElement;
+  /** Show Side Menu */
+  showSideMenu?: boolean;
   /** List of available products */
   productsList: Array<ProductEntity>;
   /** List of available parties */
@@ -23,41 +24,28 @@ type Props = {
   loggedUser: JwtUser;
   /** Enable user dropdown */
   enableUserDropdown?: boolean;
-  /** Actions linked to user dropdown*/
+  /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
 };
-
-const useStyles = makeStyles(() => ({
-  root: {
-    flexGrow: 1,
-    background: '#F2F2F2',
-
-    '& > .MuiGrid-item:last-child': {
-      minHeight: 'calc(100vh - 253px)',
-    },
-  },
-}));
 
 export default function Layout({
   children,
   assistanceEmail,
   onExitAction,
   sideMenu,
+  showSideMenu = true,
   productsList,
   partyList,
   loggedUser,
   enableUserDropdown,
-  userActions
+  userActions,
 }: Props) {
-  const classes = useStyles();
 
   return (
     <ErrorBoundary sx={{ height: '100vh' }}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
+      <Stack
+        direction="column"
+        sx={{ minHeight: '100vh'}} // 100vh per sticky footer
       >
         <Header
           onExitAction={onExitAction}
@@ -68,16 +56,19 @@ export default function Layout({
           enableDropdown={enableUserDropdown}
           userActions={userActions}
         />
-        <Grid role={'navigation'} container spacing={2} direction="row" className={classes.root}>
-          <Grid item lg={2} xs={12} container direction="column">
+        <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
+          {showSideMenu && (
+          <Box sx={{ width: { lg: 300 }, flexShrink: '0'}} component="nav">
             {sideMenu}
-          </Grid>
-          <Grid item lg={10} xs={12} container direction="column">
-            <ErrorBoundary>{children}</ErrorBoundary>
-          </Grid>
-        </Grid>
+          </Box>
+          )}
+          <Box sx={{ flexGrow: 1 }} component="main">
+          <ErrorBoundary>{children}</ErrorBoundary>
+          </Box>
+
+        </Stack>
         <Footer />
-      </Box>
+      </Stack>
     </ErrorBoundary>
   );
 }

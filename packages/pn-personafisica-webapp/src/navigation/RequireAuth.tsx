@@ -6,6 +6,7 @@ import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 import { logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import TermsOfService from '../pages/TermsOfService.page';
 import { goToLogin } from './navigation.utility';
 
 const inactivityTimer = 5 * 60 * 1000;
@@ -17,6 +18,7 @@ const inactivityTimer = 5 * 60 * 1000;
 /* eslint-disable functional/immutable-data */
 const RequireAuth = () => {
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
+  const tos = useAppSelector((state: RootState) => state.userState.tos);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token);
   const dispatch = useAppDispatch();
 
@@ -39,17 +41,21 @@ const RequireAuth = () => {
           title={'Stai uscendo da Piattaforma Notifiche'}
           message={'Verrai reindirizzato'}
           handleClose={goToLogin}
-        ></SessionModal>
+        />
       )}
-      {DISABLE_INACTIVITY_HANDLER ? (
-        <Outlet />
-      ) : (
-        <InactivityHandler
-          inactivityTimer={inactivityTimer}
-          onTimerExpired={() => dispatch(logout())}
-        >
+      {tos ? (
+        DISABLE_INACTIVITY_HANDLER ? (
           <Outlet />
-        </InactivityHandler>
+        ) : (
+          <InactivityHandler
+            inactivityTimer={inactivityTimer}
+            onTimerExpired={() => dispatch(logout())}
+          >
+            <Outlet />
+          </InactivityHandler>
+        )
+      ) : (
+        <TermsOfService />
       )}
     </Fragment>
   );
