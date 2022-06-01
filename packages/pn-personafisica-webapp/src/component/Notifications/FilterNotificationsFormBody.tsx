@@ -5,7 +5,13 @@ import currentLocale from 'date-fns/locale/it';
 import { Grid, TextField, TextFieldProps } from '@mui/material';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { CustomDatePicker, DATE_FORMAT, tenYearsAgo, today, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  CustomDatePicker,
+  DATE_FORMAT,
+  tenYearsAgo,
+  today,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 
 type Props = {
   formikInstance: {
@@ -40,34 +46,37 @@ const FilterNotificationsFormBody = ({
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
 
-  const handleDashInputMask = (input: string) => {
-    if(input.length){
+  const handleDashInputMask = async (e: ChangeEvent) => {
+    const input = (e.nativeEvent as any).data;
+    if (input && input.length) {
       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      void formikInstance.setFieldValue('iunMatch',formikInstance.values.iunMatch + input + '-');
+      await formikInstance.setFieldValue('iunMatch', formikInstance.values.iunMatch + input + '-');
+    } else {
+      formikInstance.handleChange(e);
     }
   };
-  
-  const handleChangeTouched = (e: ChangeEvent) => {
-    void formikInstance.setFieldTouched(e.target.id, true, false);
-    formikInstance.handleChange(e);
-    switch(formikInstance.values.iunMatch.length){
-      case 3: 
-      case 8:
-      case 13: 
-      case 20:
-      case 22:
-      // La proprietà data all'interno della chiave NativeEvent non viene trovata dall'interfaccia ChangeEvent
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      handleDashInputMask(e.nativeEvent.data);break;
 
+  const handleChangeTouched = async (e: ChangeEvent) => {
+    if (e.target.id === 'iunMatch') {
+      switch (formikInstance.values.iunMatch.length) {
+        case 3:
+        case 8:
+        case 13:
+        case 20:
+        case 22:
+          await handleDashInputMask(e);
+          break;
+        default:
+          formikInstance.handleChange(e);
+      }
     }
-    
+    else {
+      formikInstance.handleChange(e);
+    }
+    await formikInstance.setFieldTouched(e.target.id, true, false);
   };
 
-
-
-  return ( 
+  return (
     <Fragment>
       <Grid item lg xs={12}>
         <TextField
