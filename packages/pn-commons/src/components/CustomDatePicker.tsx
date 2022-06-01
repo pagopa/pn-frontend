@@ -11,13 +11,13 @@ const CustomDatePicker = (props: DesktopDatePickerProps<Date | null> & React.Ref
         : "modalità calendario attiva, passa alla modalità di scelta dell'anno"
     }
     getOpenDialogAriaText={(value, utils) => {
-      if (value) {
-        return `Scegli data fine ricerca, la data selezionata è ${utils.format(
+      if (value instanceof Date && !isNaN(value.getTime())) {
+        return `Scegli data, la data selezionata è ${utils.format(
           utils.date(value),
-          'fullDate'
+          "fullDate"
         )}`;
       }
-      return 'Scegli data fine ricerca';
+      return 'Scegli data';
     }}
     // OpenPickerButtonProps={{ 'aria-label': 'Scegli data'}} // props for calendar button
   />
