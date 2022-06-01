@@ -136,7 +136,6 @@ describe('Filter Notifications Table Component', () => {
   it('test form submission - iunMatch (valid)', async () => {
     const oneYearAgo = moment().add(-1, 'year').startOf('day');
     const todayM = moment().startOf('day');
-
     await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
@@ -172,7 +171,7 @@ describe('Filter Notifications Table Component', () => {
   it('test form reset', async () => {
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
-    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'RSSMRA80A01H501U');
+    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     await waitFor(() => {
       fireEvent.click(submitButton!);
