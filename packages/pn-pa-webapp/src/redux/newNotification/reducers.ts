@@ -39,10 +39,12 @@ const newNotificationSlice = createSlice({
     });
     builder.addCase(setPreliminaryInformations, (state, action) => {
       // TODO: capire la logica di set della fee policy sia corretta
+      // TODO: capire la logica di set del senderDenomination
       state.notification = {
         ...state.notification,
         ...action.payload,
-        notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
+        notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+        senderDenomination: 'Comune di Milano'
       };
     });
     builder.addCase(saveRecipients, (state, action) => {
