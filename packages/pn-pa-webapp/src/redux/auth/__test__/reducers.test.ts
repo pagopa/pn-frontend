@@ -1,5 +1,5 @@
 import { AuthApi } from '../../../api/auth/Auth.api';
-import { UserRole } from '../../../models/user';
+import { PartyRole } from '../../../models/user';
 import { store } from '../../store';
 import { exchangeToken, logout } from '../actions';
 import { User } from '../types';
@@ -32,12 +32,21 @@ describe('Auth redux state tests', () => {
       user: sessionStorage.getItem('user')
         ? JSON.parse(sessionStorage.getItem('user') || '')
         : {
+            email: '',
+            name: '',
+            uid: '',
             sessionToken: '',
             family_name: '',
             fiscal_number: '',
             organization: {
               id: '',
-              role: UserRole.REFERENTE_AMMINISTRATIVO,
+              roles: [
+                {
+                  role: '',
+                  partyRole: PartyRole.MANAGER,
+                },
+              ],
+              fiscal_code: '',
             },
           },
     });
@@ -57,12 +66,21 @@ describe('Auth redux state tests', () => {
 
     expect(action.type).toBe('logout/fulfilled');
     expect(payload).toEqual({
+      email: '',
+      name: '',
+      uid: '',
       sessionToken: '',
       family_name: '',
       fiscal_number: '',
       organization: {
         id: '',
-        role: UserRole.REFERENTE_AMMINISTRATIVO,
+        roles: [
+          {
+            role: '',
+            partyRole: PartyRole.MANAGER,
+          },
+        ],
+        fiscal_code: '',
       },
     });
   });

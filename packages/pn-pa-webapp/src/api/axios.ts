@@ -21,3 +21,5 @@ apiClient.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
+
+export const externalClient = axios.create();

@@ -55,15 +55,17 @@ export const appStateSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addMatcher(isLoading, (state) => {
-        state.loading.result = true;
+      .addMatcher(isLoading, (state, action) => {
+        if (!action.payload || !action.payload.blockLoading) {
+          state.loading.result = true;
+        }
       })
       .addMatcher(isFulfilled, (state) => {
         state.loading.result = false;
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
-        if (!action.payload.blockNotification) {
+        if (!action.payload || !action.payload.blockNotification) {
           let error = createAppError(action.payload);
           state.messages.errors.push(error);
         }

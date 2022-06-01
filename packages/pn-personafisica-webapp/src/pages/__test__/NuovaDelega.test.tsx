@@ -1,4 +1,4 @@
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/IsMobile.hook';
+import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/IsMobile';
 
 import { fireEvent, waitFor } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';

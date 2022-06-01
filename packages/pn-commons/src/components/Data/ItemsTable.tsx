@@ -129,6 +129,7 @@ function ItemsTable({
                     <Typography variant="body2">{emptyMessage}</Typography>
                     &nbsp;
                     <Typography
+                      color="primary"
                       variant="body2"
                       fontWeight={'bold'}
                       sx={{

@@ -12,7 +12,7 @@ export interface Notification {
 }
 
 export interface GetNotificationsResponse {
-  result: Array<Notification>;
+  resultsPage: Array<Notification>;
   moreResult: boolean;
   nextPagesKey: Array<string>;
 }

@@ -24,6 +24,9 @@ import NotificationDetailTimeline from './components/NotificationDetail/Notifica
 import Toast from './components/Toast/Toast';
 import CodeModal from './components/CodeModal/CodeModal';
 import InactivityHandler from './components/InactivityHandler';
+import BreadcrumbLink from './components/BreadcrumbLink';
+import FileUpload from './components/FileUpload';
+import Prompt from './components/Prompt';
 
 export { LoadingOverlay };
 export { Header };
@@ -50,6 +53,9 @@ export { NotificationDetailTimeline };
 export { Toast };
 export { CodeModal };
 export { InactivityHandler };
+export { BreadcrumbLink };
+export { FileUpload };
+export { Prompt };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -157,7 +163,7 @@ export { storageOpsBuilder };
 export { today, tenYearsAgo };
 
 // hooks
-import { useIsMobile } from './hooks/IsMobile.hook';
+import { useIsMobile } from './hooks/IsMobile';
 
 export { useIsMobile };
 

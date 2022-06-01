@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
   CardElement,
@@ -33,6 +33,16 @@ type Props = {
   onChangeSorting?: (s: Sort) => void;
 };
 
+const cardStyle = {
+  '& .card-header': {
+    padding: 0,
+  },
+  '& .card-actions': {
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+};
+
 const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
@@ -41,8 +51,17 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     {
       id: 'notificationReadStatus',
       label: '',
-      getLabel(value: string) {
-        return getNewNotificationBadge(value);
+      getLabel(_value: string, row: Item) {
+        const badge = getNewNotificationBadge(row.notificationStatus as NotificationStatus);
+        if (badge) {
+          return (
+            <Fragment>
+              <Typography display="inline" sx={{marginRight: '10px'}}>{badge}</Typography>
+              <Typography display="inline" variant="body2">{row.sentAt}</Typography>
+            </Fragment>
+          );
+        }
+        return <Typography variant="body2">{row.sentAt}</Typography>;
       },
     },
     {
@@ -58,13 +77,6 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
   ];
 
   const cardBody: Array<CardElement> = [
-    {
-      id: 'sentAt',
-      label: t('table.data'),
-      getLabel(value: string) {
-        return value;
-      },
-    },
     {
       id: 'senderId',
       label: t('table.mittente'),
@@ -126,14 +138,14 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
   const cardActions: Array<CardAction> = [
     {
       id: 'go-to-detail',
-      component: <ButtonNaked endIcon={<ArrowForwardIcon />}>{t('table.show-detail')}</ButtonNaked>,
+      component: <ButtonNaked endIcon={<ArrowForwardIcon />} color="primary">{t('table.show-detail')}</ButtonNaked>,
       onClick: handleRowClick,
     },
   ];
 
   return (
     <Fragment>
-      <Grid container direction="row">
+      <Grid container direction="row" sx={{marginBottom: '16px'}}>
         <Grid item xs={6}>
           <FilterNotifications />
         </Grid>
@@ -153,6 +165,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
         cardData={cardData}
         cardActions={cardActions}
         emptyActionCallback={onCancelSearch}
+        sx={cardStyle}
       />
     </Fragment>
   );

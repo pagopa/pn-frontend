@@ -1,15 +1,16 @@
 import { cloneElement, ReactElement, useState } from 'react'; // ReactNode, cloneElement
 import Tooltip from '@mui/material/Tooltip';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
-import { Box } from '@mui/material';
+import { Box, SxProps } from '@mui/material';
 
 type Props = {
   tooltipContent: any;
   openOnClick: boolean;
   children: ReactElement<any, any>;
+  sx?: SxProps
 };
 
-function CustomTooltip({ openOnClick, tooltipContent, children }: Props) {
+function CustomTooltip({ openOnClick, tooltipContent, children, sx }: Props) {
   // tooltip state
   const [open, setOpen] = useState(false);
   const handleTooltipClose = () => {
@@ -26,7 +27,7 @@ function CustomTooltip({ openOnClick, tooltipContent, children }: Props) {
 
   return (
     <ClickAwayListener onClickAway={handleTooltipClose}>
-      <Box>
+      <Box sx={sx}>
         <Tooltip
           arrow
           title={tooltipContent}
@@ -38,6 +39,7 @@ function CustomTooltip({ openOnClick, tooltipContent, children }: Props) {
           disableFocusListener={openOnClick}
           disableHoverListener={openOnClick}
           disableTouchListener={openOnClick}
+          enterTouchDelay={0}
         >
           {cloneElement(children, {
             onClick: handleTooltipOpen,

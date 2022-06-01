@@ -18,12 +18,19 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
-describe('RequireAuth Component', () => {
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({ t: (str: string) => str }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
+}));
 
+describe('RequireAuth Component', () => {
   it('renders RequireAuth (user enabled to access)', () => {
     // useSelector mock
     const useSelectorSpy = jest.spyOn(redux, 'useAppSelector');
-    useSelectorSpy.mockReturnValue('mocked-token');
+    useSelectorSpy
+      .mockReturnValueOnce('mocked-token')
+      .mockReturnValueOnce({ tos: true, fetchedTos: true });
     // render component
     const result = render(<RequireAuth />);
     expect(result?.container).toHaveTextContent(/Generic Page/i);
@@ -34,7 +41,9 @@ describe('RequireAuth Component', () => {
   it('renders RequireAuth (user not enabled to access)', () => {
     // useSelector mock
     const useSelectorSpy = jest.spyOn(redux, 'useAppSelector');
-    useSelectorSpy.mockReturnValue(undefined);
+    useSelectorSpy
+      .mockReturnValueOnce(undefined)
+      .mockReturnValueOnce({ tos: true, fetchedTos: true });
     // render component
     const result = render(<RequireAuth />);
     expect(result?.container).toHaveTextContent(/Session Modal/i);

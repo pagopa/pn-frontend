@@ -12,7 +12,6 @@ const VerifyUser = () => {
   const [selfCareToken, setSelfCareToken] = useState('');
   const dispatch = useAppDispatch();
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
-  const role = useAppSelector((state: RootState) => state.userState.user.organization?.role);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const VerifyUser = () => {
     if (selfCareToken !== '') {
       dispatch(exchangeToken(selfCareToken))
         .then(() => {
-          navigate(getHomePage(role));
+          navigate(getHomePage());
         })
         .catch(() => {
           goToSelfcareLogin();

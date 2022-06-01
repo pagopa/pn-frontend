@@ -1,13 +1,13 @@
-import { ReactNode } from "react";
-import { NotificationStatus } from "./NotificationStatus";
+import { ReactNode } from 'react';
+import { NotificationStatus } from './NotificationStatus';
 
 // =========== START TEMP: WAITING FOR PAYMENT APIs DEFINITION ===========
 
 export enum PaymentStatus {
-  REQUIRED = "REQUIRED",
-  SUCCEEDED = "SUCCEEDED",
-  INPROGRESS = "INPROGRESS",
-  FAILED = "FAILED"
+  REQUIRED = 'REQUIRED',
+  SUCCEEDED = 'SUCCEEDED',
+  INPROGRESS = 'INPROGRESS',
+  FAILED = 'FAILED',
 }
 
 export interface PaymentDetail {
@@ -26,7 +26,7 @@ export interface NotificationDetail {
   cancelledByIun: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
-  documentsAvailable?: boolean;
+  documentsAvailable: boolean;
   payment: NotificationDetailPayment;
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
@@ -187,9 +187,10 @@ export interface SendDigitalDetails {
 export interface NotificationDetailRecipient {
   recipientType: RecipientType;
   taxId: string;
+  creditorTaxId: string;
   denomination: string;
-  digitalDomicile: DigitalAddress;
-  physicalAddress: PhysicalAddress;
+  digitalDomicile?: DigitalAddress;
+  physicalAddress?: PhysicalAddress;
   token: string;
 }
 
@@ -251,7 +252,12 @@ export enum TimelineCategory {
   SEND_PAPER_FEEDBACK = 'SEND_PAPER_FEEDBACK',
   PAYMENT = 'PAYMENT',
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
-  REQUEST_REFUSED = 'REQUEST_REFUSED'
+  REQUEST_REFUSED = 'REQUEST_REFUSED',
+}
+
+export enum TimelineError {
+  OK = "OK",
+  RETRYABLE_FAIL = "RETRYABLE_FAIL"
 }
 
 interface DigitalAddress {
@@ -260,11 +266,12 @@ interface DigitalAddress {
 }
 
 interface PhysicalAddress {
-  at: string;
+  at?: string;
   address: string;
-  addressDetails: string;
+  addressDetails?: string;
   zip: string;
   municipality: string;
+  municipalityDetails?: string;
   province: string;
   foreignState: string;
 }
