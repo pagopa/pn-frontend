@@ -18,4 +18,5 @@ export const userResponse: User = {
     ],
     fiscal_code: 'mocked-organization-fiscal-code',
   },
+  groups: undefined
 };

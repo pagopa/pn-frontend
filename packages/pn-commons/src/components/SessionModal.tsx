@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, DialogTitle, DialogContentText, DialogActions, Divider } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
-import { useIsMobile } from '../hooks/IsMobile.hook';
+import { useIsMobile } from '../hooks/IsMobile';
 
 type Props = {
   open: boolean;

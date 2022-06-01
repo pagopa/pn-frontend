@@ -1,7 +1,7 @@
 import { formatDate, GetNotificationsResponse, NotificationStatus } from "@pagopa-pn/pn-commons";
 
 export const notificationsFromBe: GetNotificationsResponse = {
-  result: [
+  resultsPage: [
     {
       iun: 'mocked-iun',
       paNotificationId: 'mocked-paNotificationId',
@@ -18,7 +18,7 @@ export const notificationsFromBe: GetNotificationsResponse = {
 
 export const notificationsToFe: GetNotificationsResponse = {
   ...notificationsFromBe,
-  result: notificationsFromBe.result.map(r => ({
+  resultsPage: notificationsFromBe.resultsPage.map(r => ({
     ...r,
     sentAt: formatDate(r.sentAt)
   }))

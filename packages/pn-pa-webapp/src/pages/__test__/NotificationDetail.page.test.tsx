@@ -90,6 +90,12 @@ describe('NotificationDetail Page', () => {
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
 
+  test('clicks on the cancel button', () => {
+    const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
+    fireEvent.click(cancelNotificationBtn!);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+  });
+
   it('does not have basic accessibility issues rendering the page', async () => {
     if(result) {
       const results = await axe(result.container);

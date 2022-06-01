@@ -13,7 +13,7 @@ import {
   AlertTitle,
 } from '@mui/material';
 
-import { useIsMobile } from '../../hooks/IsMobile.hook';
+import { useIsMobile } from '../../hooks/IsMobile';
 import CodeInput from './CodeInput';
 
 type Props = {

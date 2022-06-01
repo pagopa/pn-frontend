@@ -10,7 +10,7 @@ import {
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
-import { apiClient } from '../../axios';
+import { apiClient, externalClient } from '../../axios';
 import { NotificationsApi } from '../Notifications.api';
 
 describe('Notifications api tests', () => {
@@ -63,6 +63,39 @@ describe('Notifications api tests', () => {
       .reply(200, undefined);
     const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('preloadNotificationDocument', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock
+      .onPost(`/delivery/attachments/preload`, [{ key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' }])
+      .reply(200, [{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
+    const res = await NotificationsApi.preloadNotificationDocument([
+      { key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' },
+    ]);
+    expect(res).toStrictEqual([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
+    mock.reset();
+    mock.restore();
+  });
+
+  it('uploadNotificationAttachment', async () => {
+    const file = new Uint8Array();
+    const mock = new MockAdapter(externalClient);
+    mock
+      .onPut(
+        `https://mocked-url.com`,
+      )
+      .reply(200, void 0, {'x-amz-version-id': 'mocked-versionToken'});
+    const res = await NotificationsApi.uploadNotificationAttachment(
+      'https://mocked-url.com',
+      'mocked-sha256',
+      'mocked-secret',
+      file,
+      'PUT'
+    );
+    expect(res).toStrictEqual('mocked-versionToken');
     mock.reset();
     mock.restore();
   });
