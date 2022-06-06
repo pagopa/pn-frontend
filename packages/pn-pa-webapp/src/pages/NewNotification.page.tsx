@@ -67,7 +67,7 @@ const NewNotification = () => {
 
   useEffect(() => {
     // TODO: in attesa che self care restituisca senderDenomination, questa viene settata come Denomination of + id
-    dispatch(setSenderInfos({senderDenomination: 'Denomination of ' + organization.id.toString(), senderTaxId: organization.fiscal_code}));
+    dispatch(setSenderInfos({senderDenomination: 'Comuune di Milano', senderTaxId: organization.fiscal_code}));
   }, [organization]);
 
   useEffect(() => () => void dispatch(resetNewNotificationState()), []);
