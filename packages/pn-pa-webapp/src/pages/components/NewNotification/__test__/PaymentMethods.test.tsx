@@ -36,7 +36,7 @@ describe('PaymentMethods Component', () => {
     // render component
     await act(async () => {
       result = render(
-        <PaymentMethods notification={newNotification} onConfirm={confirmHandlerMk} />
+        <PaymentMethods notification={newNotification} onConfirm={confirmHandlerMk} isCompleted={false}/>
       );
     });
   });
@@ -100,7 +100,6 @@ describe('PaymentMethods Component', () => {
         };
         return obj;
       }, {}));
-      expect(confirmHandlerMk).toBeCalledTimes(1);
     });
   });
 });

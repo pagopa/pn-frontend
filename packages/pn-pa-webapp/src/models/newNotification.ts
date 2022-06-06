@@ -55,6 +55,7 @@ export interface NewNotificationFe extends NewNotificationBe {
 }
 
 export interface FormRecipient {
+  idx: number;
   recipientType: RecipientType;
   taxId: string;
   creditorTaxId: string;
@@ -97,6 +98,12 @@ export interface UpaloadPaymentResponse {
     f24flatRate?: NewNotificationDocument;
     f24standard?: NewNotificationDocument;
   };
+}
+
+export interface NewNotificationResponse {
+  notificationRequestId: string;
+  paProtocolNumber: string;
+  idempotenceToken: string;
 }
 
 

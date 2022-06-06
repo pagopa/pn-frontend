@@ -9,6 +9,7 @@ import {
   notificationFromBe,
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
+import { newNotification } from './../../../redux/newNotification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
 import { apiClient, externalClient } from '../../axios';
 import { NotificationsApi } from '../Notifications.api';
@@ -96,6 +97,28 @@ describe('Notifications api tests', () => {
       'PUT'
     );
     expect(res).toStrictEqual('mocked-versionToken');
+    mock.reset();
+    mock.restore();
+  });
+
+  it('createNewNotification', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock
+      .onPost(
+        `/delivery/requests`,
+        newNotification
+      )
+      .reply(200, {
+        notificationRequestId: 'mocked-notificationRequestId',
+        paProtocolNumber: 'mocked-paProtocolNumber',
+        idempotenceToken: 'mocked-idempotenceToken'
+      });
+    const res = await NotificationsApi.createNewNotification(newNotification);
+    expect(res).toStrictEqual({
+      notificationRequestId: 'mocked-notificationRequestId',
+      paProtocolNumber: 'mocked-paProtocolNumber',
+      idempotenceToken: 'mocked-idempotenceToken'
+    });
     mock.reset();
     mock.restore();
   });
