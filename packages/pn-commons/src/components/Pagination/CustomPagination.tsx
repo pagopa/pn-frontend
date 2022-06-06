@@ -65,6 +65,7 @@ export default function CustomPagination({
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<ArrowDropDown />}
+          aria-label="Righe per pagina"
         >
           {size}
         </Button>
@@ -96,11 +97,37 @@ export default function CustomPagination({
         {paginationData.totalElements > size && (
           <Pagination
             sx={{ display: 'flex' }}
+            aria-label="Menu Paginazione"
             color="primary"
             variant="text"
             shape="circular"
             page={paginationData.page + 1}
             count={Math.ceil(paginationData.totalElements / size)}
+            getItemAriaLabel={(type, page, selected) => {
+              // eslint-disable-next-line functional/no-let
+              let ariaStr;
+              switch(type) {
+                case 'first':
+                  ariaStr = "primo elemento";
+                  break;
+                case 'last':
+                  ariaStr = "ultimo elemento";
+                  break;
+                case 'page':
+                  ariaStr = "pagina " + page.toString();
+                  break;
+                case 'next':
+                  ariaStr = "Vai alla pagina successiva";
+                  break;
+                case 'previous':
+                  ariaStr = "Vai alla pagina precedente";
+                  break;
+              }
+              if(selected) {
+                ariaStr += ", elemento selezionato";
+              }
+              return ariaStr;
+            }}
             renderItem={(props2) => {
               if (
                 pagesToShow &&
