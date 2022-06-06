@@ -5,6 +5,7 @@ import {
   LegalChannelType,
 } from '../../models/contacts';
 import { apiClient } from '../axios';
+import { CONTACTS_LIST, COURTESY_CONTACT, LEGAL_CONTACT } from './contacts.routes';
 
 export const ContactsApi = {
   /**
@@ -13,7 +14,7 @@ export const ContactsApi = {
    * @returns Promise
    */
   getDigitalAddresses: (): Promise<DigitalAddresses> =>
-    apiClient.get<DigitalAddresses>(`/address-book/v1/digital-address`).then((response) => ({
+    apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => ({
       legal: response.data.legal ? response.data.legal : [],
       courtesy: response.data.courtesy ? response.data.courtesy : [],
     })),
@@ -29,23 +30,21 @@ export const ContactsApi = {
     channelType: LegalChannelType,
     body: { value: string; verificationCode?: string }
   ): Promise<void | DigitalAddress> =>
-    apiClient
-      .post<void>(`/address-book/v1/digital-address/legal/${senderId}/${channelType}`, body)
-      .then((response) => {
-        if (response.status !== 204) {
-          // user must verify email
-          return;
-        }
-        // email already verified
-        return {
-          addressType: 'legal',
-          recipientId,
-          senderId,
-          channelType,
-          value: body.value,
-          code: 'verified',
-        };
-      }),
+    apiClient.post<void>(LEGAL_CONTACT(senderId, channelType), body).then((response) => {
+      if (response.status !== 204) {
+        // user must verify email
+        return;
+      }
+      // email already verified
+      return {
+        addressType: 'legal',
+        recipientId,
+        senderId,
+        channelType,
+        value: body.value,
+        code: 'verified',
+      };
+    }),
   /**
    * Create or update a courtesy address
    * @param  {string} recipientId
@@ -57,32 +56,28 @@ export const ContactsApi = {
     channelType: CourtesyChannelType,
     body: { value: string; verificationCode?: string }
   ): Promise<void | DigitalAddress> =>
-    apiClient
-      .post<void>(`/address-book/v1/digital-address/courtesy/${senderId}/${channelType}`, body)
-      .then((response) => {
-        if (response.status !== 204) {
-          // user must verify email
-          return;
-        }
-        // email already verified
-        return {
-          addressType: 'courtesy',
-          recipientId,
-          senderId,
-          channelType,
-          value: body.value,
-          code: 'verified',
-        };
-      }),
+    apiClient.post<void>(COURTESY_CONTACT(senderId, channelType), body).then((response) => {
+      if (response.status !== 204) {
+        // user must verify email
+        return;
+      }
+      // email already verified
+      return {
+        addressType: 'courtesy',
+        recipientId,
+        senderId,
+        channelType,
+        value: body.value,
+        code: 'verified',
+      };
+    }),
   /*
    * Remove current user digital address
    * @param  {string} recipientId
    * @returns Promise
    */
   deleteLegalAddress: (senderId: string, channelType: LegalChannelType): Promise<string> =>
-    apiClient
-      .delete<string>(`/address-book/v1/digital-address/legal/${senderId}/${channelType}`)
-      .then(() => senderId),
+    apiClient.delete<string>(LEGAL_CONTACT(senderId, channelType)).then(() => senderId),
   /*
    * Remove current user digital address
    * @param  {string} recipientId
@@ -93,8 +88,6 @@ export const ContactsApi = {
     channelType: CourtesyChannelType
   ): Promise<string> =>
     apiClient
-      .delete<string>(
-        `/address-book/v1/digital-address/courtesy/${courtesySenderId}/${channelType}`
-      )
+      .delete<string>(COURTESY_CONTACT(courtesySenderId, channelType))
       .then(() => courtesySenderId),
 };
