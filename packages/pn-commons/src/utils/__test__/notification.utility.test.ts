@@ -248,7 +248,7 @@ describe('timeline utility functions', () => {
     );
   });
 
-  it.skip('return parsed notification detail response', () => {
+  it('return parsed notification detail response', () => {
     const calculatedParsedNotification = parseNotificationDetail(notificationFromBe);
     expect(calculatedParsedNotification).toStrictEqual(parsedNotification);
   });
