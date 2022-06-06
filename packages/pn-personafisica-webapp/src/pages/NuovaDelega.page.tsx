@@ -76,8 +76,7 @@ const NuovaDelega = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
-  const { created } = useAppSelector((state: RootState) => state.newDelegationState);
-  const { entities } = useAppSelector((state: RootState) => state.newDelegationState);
+  const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
   };
