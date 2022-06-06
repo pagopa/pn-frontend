@@ -1,3 +1,5 @@
+export const DATE_FORMAT = "dd/MM/yyyy";
+
 export const today = new Date();
 
 export const tenYearsAgo = new Date(new Date().setMonth(today.getMonth() - 120));
