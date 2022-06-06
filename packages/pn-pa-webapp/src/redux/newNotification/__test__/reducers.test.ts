@@ -1,4 +1,5 @@
-import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
+import { setSenderInfos } from './../actions';
+import { DigitalDomicileType, PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { PaymentModel } from '../../../models/newNotification';
@@ -8,9 +9,12 @@ import {
   resetNewNotificationState,
   setCancelledIun,
   setPreliminaryInformations,
+  createNewNotification,
   uploadNotificationAttachment,
   uploadNotificationPaymentDocument,
+  saveRecipients
 } from '../actions';
+import { newNotification } from './test-utils';
 
 const initialState = {
   loading: false,
@@ -25,6 +29,7 @@ const initialState = {
     group: '',
     notificationFeePolicy: '',
   },
+  isCompleted: false
 };
 
 describe('New notification redux state tests', () => {
@@ -42,6 +47,13 @@ describe('New notification redux state tests', () => {
     expect(payload).toEqual('mocked-iun');
   });
 
+  it('Should be able to set sender infos', () => {
+    const action = store.dispatch(setSenderInfos({senderDenomination: 'mocked-denomination', senderTaxId: 'mocked-taxId'}));
+    const payload = action.payload;
+    expect(action.type).toBe('setSenderInfos');
+    expect(payload).toEqual({senderDenomination: 'mocked-denomination', senderTaxId: 'mocked-taxId'});
+  });
+
   it('Should be able to set preliminary informations', () => {
     const preliminaryInformations = {
       paProtocolNumber: 'mocked-notificationId',
@@ -55,6 +67,30 @@ describe('New notification redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('setPreliminaryInformations');
     expect(payload).toEqual(preliminaryInformations);
+  });
+
+  it('Should be able to save recipients', () => {
+    const recipients = [{
+      idx: 0,
+      recipientType: RecipientType.PF,
+      taxId: 'mocked-taxId',
+      creditorTaxId: 'mocked-creditorTaxId',
+      noticeCode: 'mocked-noticeCode',
+      firstName: 'mocked-firstName',
+      lastName: 'mocked-lastName',
+      type: DigitalDomicileType.EMAIL,
+      digitalDomicile: 'mocked@mail.com',
+      address: 'mocked-address',
+      houseNumber: 'mocked-houseNumber',
+      zip: 'mocked-zip',
+      municipality: 'mocked-municipality',
+      province: 'mocked-province',
+      foreignState: 'mocked-foreignState'
+    }];
+    const action = store.dispatch(saveRecipients({recipients}));
+    const payload = action.payload;
+    expect(action.type).toBe('saveRecipients');
+    expect(payload).toEqual({recipients});
   });
 
   it('Should be able to upload attachment', async () => {
@@ -146,6 +182,23 @@ describe('New notification redux state tests', () => {
           },
         },
       },
+    });
+  });
+
+  it('Should be able to create new notification', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'createNewNotification');
+    apiSpy.mockResolvedValue({
+      notificationRequestId: 'mocked-notificationRequestId',
+      paProtocolNumber: 'mocked-paProtocolNumber',
+      idempotenceToken: 'mocked-idempotenceToken'
+    });
+    const action = await store.dispatch(createNewNotification(newNotification));
+    const payload = action.payload;
+    expect(action.type).toBe('createNewNotification/fulfilled');
+    expect(payload).toEqual({
+      notificationRequestId: 'mocked-notificationRequestId',
+      paProtocolNumber: 'mocked-paProtocolNumber',
+      idempotenceToken: 'mocked-idempotenceToken'
     });
   });
 

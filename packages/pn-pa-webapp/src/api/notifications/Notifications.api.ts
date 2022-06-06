@@ -6,8 +6,16 @@ import {
   NotificationDetail,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
+
+import { NewNotificationBe, NewNotificationResponse } from '../../models/newNotification';
 import { apiClient, externalClient } from '../axios';
-import { NOTIFICATIONS_LIST, NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS, NOTIFICATION_DETAIL_LEGALFACT, NOTIFICATION_PRELOAD_DOCUMENT } from './notifications.routes';
+import {
+  NOTIFICATIONS_LIST,
+  NOTIFICATION_DETAIL,
+  NOTIFICATION_DETAIL_DOCUMENTS,
+  NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_PRELOAD_DOCUMENT,
+} from './notifications.routes';
 
 export const NotificationsApi = {
   /**
@@ -16,20 +24,20 @@ export const NotificationsApi = {
    * @param  {string} endDate
    * @returns Promise
    */
-  getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => 
+  getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
     apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
-      if (response.data && response.data.result) {
-        const notifications = response.data.result.map((d) => ({
+      if (response.data && response.data.resultsPage) {
+        const notifications = response.data.resultsPage.map((d) => ({
           ...d,
           sentAt: formatDate(d.sentAt),
         }));
         return {
           ...response.data,
-          result: notifications,
+          resultsPage: notifications,
         };
       }
       return {
-        result: [],
+        resultsPage: [],
         moreResult: false,
         nextPagesKey: [],
       };
@@ -127,6 +135,16 @@ export const NotificationsApi = {
       },
     }).then((res) => res.headers['x-amz-version-id']);
   },
+
+  /**
+   * create new notification
+   * @param  {NewNotificationBe} notification
+   * @returns Promise
+   */
+  createNewNotification: (notification: NewNotificationBe): Promise<NewNotificationResponse> =>
+    apiClient
+      .post<NewNotificationResponse>(`/delivery/requests`, notification)
+      .then((response) => response.data),
 };
 
 // 'x-amz-sdk-checksum-algorithm': 'SHA256',

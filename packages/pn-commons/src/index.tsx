@@ -24,6 +24,7 @@ import NotificationDetailTimeline from './components/NotificationDetail/Notifica
 import Toast from './components/Toast/Toast';
 import CodeModal from './components/CodeModal/CodeModal';
 import InactivityHandler from './components/InactivityHandler';
+import CustomDatePicker from './components/CustomDatePicker';
 import BreadcrumbLink from './components/BreadcrumbLink';
 import FileUpload from './components/FileUpload';
 import Prompt from './components/Prompt';
@@ -53,6 +54,7 @@ export { NotificationDetailTimeline };
 export { Toast };
 export { CodeModal };
 export { InactivityHandler };
+export { CustomDatePicker };
 export { BreadcrumbLink };
 export { FileUpload };
 export { Prompt };
@@ -142,7 +144,7 @@ import {
   NotificationAllowedStatus,
   parseNotificationDetail,
 } from './utils/notification.utility';
-import { getMonthString, getDay, getTime, today, tenYearsAgo } from './utils/date.utility';
+import { getMonthString, getDay, getTime, today, tenYearsAgo, DATE_FORMAT } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
 import { formatCurrency, formatEurocentToCurrency } from './utils/currency.utility';
 import { storageOpsBuilder } from './utils/storage.utility';
@@ -162,7 +164,7 @@ export { storageOpsBuilder };
 export { compileRoute };
 
 // consts
-export { today, tenYearsAgo };
+export { today, tenYearsAgo, DATE_FORMAT };
 
 // hooks
 import { useIsMobile } from './hooks/IsMobile';
