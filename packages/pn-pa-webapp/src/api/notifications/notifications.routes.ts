@@ -16,6 +16,7 @@ const API_NOTIFICATIONS_DOCUMENTS = 'documents';
 const API_NOTIFICATIONS_LEGALFACTS = 'legalfacts';
 const API_NOTIFICATIONS_ATTACHMENTS = 'attachments';
 const API_NOTIFICATIONS_PRELOAD = 'preload';
+const API_NOTIFICATIONS_REQUESTS = 'requests';
 
 // Parameters
 const API_NOTIFICATIONS_START_DATE_PARAMETER = 'startDate';
@@ -95,5 +96,12 @@ export function NOTIFICATION_PRELOAD_DOCUMENT() {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
     path: API_NOTIFICATION_PRELOAD_DOCUMENT_PATH,
+  });
+}
+
+export function CREATE_NOTIFICATION() {
+  return compileRoute({
+    prefix: API_DELIVERY_PREFIX,
+    path: API_NOTIFICATIONS_REQUESTS,
   });
 }

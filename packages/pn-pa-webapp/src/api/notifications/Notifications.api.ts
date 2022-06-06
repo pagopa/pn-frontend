@@ -10,6 +10,7 @@ import {
 import { NewNotificationBe, NewNotificationResponse } from '../../models/newNotification';
 import { apiClient, externalClient } from '../axios';
 import {
+  CREATE_NOTIFICATION,
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -143,7 +144,7 @@ export const NotificationsApi = {
    */
   createNewNotification: (notification: NewNotificationBe): Promise<NewNotificationResponse> =>
     apiClient
-      .post<NewNotificationResponse>(`/delivery/requests`, notification)
+      .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
       .then((response) => response.data),
 };
 

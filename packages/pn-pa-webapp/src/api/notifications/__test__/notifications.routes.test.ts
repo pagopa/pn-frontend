@@ -1,6 +1,7 @@
 import { LegalFactType } from '@pagopa-pn/pn-commons';
 
 import {
+  CREATE_NOTIFICATION,
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -42,5 +43,10 @@ describe('Notifications routes', () => {
   it('should compile NOTIFICATION_PRELOAD_DOCUMENT', () => {
     const route = NOTIFICATION_PRELOAD_DOCUMENT();
     expect(route).toEqual('/delivery/attachments/preload');
+  });
+
+  it('should compile CREATE_NOTIFICATION', () => {
+    const route = CREATE_NOTIFICATION();
+    expect(route).toEqual('/delivery/requests');
   });
 });

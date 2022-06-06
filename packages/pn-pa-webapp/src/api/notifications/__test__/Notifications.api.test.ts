@@ -14,6 +14,7 @@ import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
 import { apiClient, externalClient } from '../../axios';
 import { NotificationsApi } from '../Notifications.api';
 import {
+  CREATE_NOTIFICATION,
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -115,21 +116,16 @@ describe('Notifications api tests', () => {
 
   it('createNewNotification', async () => {
     const mock = new MockAdapter(apiClient);
-    mock
-      .onPost(
-        `/delivery/requests`,
-        newNotification
-      )
-      .reply(200, {
-        notificationRequestId: 'mocked-notificationRequestId',
-        paProtocolNumber: 'mocked-paProtocolNumber',
-        idempotenceToken: 'mocked-idempotenceToken'
-      });
+    mock.onPost(CREATE_NOTIFICATION(), newNotification).reply(200, {
+      notificationRequestId: 'mocked-notificationRequestId',
+      paProtocolNumber: 'mocked-paProtocolNumber',
+      idempotenceToken: 'mocked-idempotenceToken',
+    });
     const res = await NotificationsApi.createNewNotification(newNotification);
     expect(res).toStrictEqual({
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
-      idempotenceToken: 'mocked-idempotenceToken'
+      idempotenceToken: 'mocked-idempotenceToken',
     });
     mock.reset();
     mock.restore();
