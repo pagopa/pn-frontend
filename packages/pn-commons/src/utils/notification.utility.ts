@@ -139,14 +139,14 @@ export function getNotificationTimelineStatusInfos(
         return {
           label: 'Invio per via cartacea',
           description: "È in corso l'invio della notifica per via cartacea.",
-          linkText: "Attestazione opponibile a terzi",
+          linkText: 'Attestazione opponibile a terzi',
           recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
         };
       }
       return {
         label: 'Invio per via digitale',
         description: "È in corso l'invio della notifica per via digitale.",
-        linkText: "Attestazione opponibile a terzi",
+        linkText: 'Attestazione opponibile a terzi',
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_COURTESY_MESSAGE:
@@ -160,7 +160,8 @@ export function getNotificationTimelineStatusInfos(
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE:
-      if(!(step.details as SendDigitalDetails).address?.address) { // if digital domicile is undefined
+      if (!(step.details as SendDigitalDetails).address?.address) {
+        // if digital domicile is undefined
         return null;
       }
       return {
@@ -178,7 +179,7 @@ export function getNotificationTimelineStatusInfos(
           description: `L'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
             (step.details as SendDigitalDetails).address?.address
           } non è riuscito.`,
-          linkText: "Attestazione opponibile a terzi",
+          linkText: 'Attestazione opponibile a terzi',
           recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
         };
       }
@@ -187,14 +188,14 @@ export function getNotificationTimelineStatusInfos(
         description: `L' invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
           (step.details as SendDigitalDetails).address?.address
         } è riuscito.`,
-        linkText: "Attestazione opponibile a terzi",
+        linkText: 'Attestazione opponibile a terzi',
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FAILURE:
       return {
         label: 'Invio per via digitale fallito',
         description: `L'invio della notifica a ${recipient?.denomination} per via digitale non è riuscito.`,
-        linkText: "Attestazione opponibile a terzi",
+        linkText: 'Attestazione opponibile a terzi',
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
@@ -205,7 +206,7 @@ export function getNotificationTimelineStatusInfos(
         } all'indirizzo ${
           (step.details as AnalogWorkflowDetails).address?.address
         } tramite raccomandata semplice.`,
-        linkText: "Attestazione opponibile a terzi",
+        linkText: 'Attestazione opponibile a terzi',
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_ANALOG_DOMICILE:
@@ -220,7 +221,7 @@ export function getNotificationTimelineStatusInfos(
           } all'indirizzo ${
             (step.details as AnalogWorkflowDetails).address?.address
           } tramite raccomandata 890.`,
-          linkText: "Vedi la ricevuta",
+          linkText: 'Vedi la ricevuta',
           recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
         };
       }
@@ -231,7 +232,7 @@ export function getNotificationTimelineStatusInfos(
         } all'indirizzo ${
           (step.details as AnalogWorkflowDetails).address?.address
         } tramite raccomandata A/R.`,
-        linkText: "Vedi la ricevuta",
+        linkText: 'Vedi la ricevuta',
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.SEND_PAPER_FEEDBACK:
@@ -272,7 +273,10 @@ export function parseNotificationDetail(
 ): NotificationDetail {
   const parsedNotification = {
     ...notificationDetail,
-    sentAt: formatDate(notificationDetail.sentAt)
+    sentAt: formatDate(notificationDetail.sentAt),
+    documentsAvailable: notificationDetail.documentsAvailable
+      ? notificationDetail.documentsAvailable
+      : true,
   };
   /* eslint-disable functional/immutable-data */
   /* eslint-disable functional/no-let */

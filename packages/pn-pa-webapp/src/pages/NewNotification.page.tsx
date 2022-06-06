@@ -14,12 +14,12 @@ import {
   setSenderInfos,
 } from '../redux/newNotification/actions';
 import * as routes from '../navigation/routes.const';
+import { PARTY_MOCK } from '../utils/constants';
 import PreliminaryInformations from './components/NewNotification/PreliminaryInformations';
 import Recipient from './components/NewNotification/Recipient';
 import Attachments from './components/NewNotification/Attachments';
 import PaymentMethods from './components/NewNotification/PaymentMethods';
 import SyncFeedback from './components/NewNotification/SyncFeedback';
-import { PARTY_MOCK } from '../utils/constants';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -57,7 +57,7 @@ const NewNotification = () => {
   const createNotification = () => {
     // if it is last step, save notification
     if (activeStep === 3 && isCompleted) {
-      dispatch(createNewNotification(notification))
+      void dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1));
     }
