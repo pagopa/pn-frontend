@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Breadcrumbs, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Box, Breadcrumbs, Grid, Step, StepLabel, Stepper, Typography, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { BreadcrumbLink, TitleBox, Prompt, useIsMobile } from '@pagopa-pn/pn-commons';
@@ -8,8 +8,13 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { resetNewNotificationState } from '../redux/newNotification/actions';
+import {
+  createNewNotification,
+  resetNewNotificationState,
+  setSenderInfos,
+} from '../redux/newNotification/actions';
 import * as routes from '../navigation/routes.const';
+import { PARTY_MOCK } from '../utils/constants';
 import PreliminaryInformations from './components/NewNotification/PreliminaryInformations';
 import Recipient from './components/NewNotification/Recipient';
 import Attachments from './components/NewNotification/Attachments';
@@ -41,11 +46,33 @@ const NewNotification = () => {
   const notification = useAppSelector(
     (state: RootState) => state.newNotificationState.notification
   );
+  const isCompleted = useAppSelector((state: RootState) => state.newNotificationState.isCompleted);
+  const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const dispatch = useAppDispatch();
 
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
   };
+
+  const createNotification = () => {
+    // if it is last step, save notification
+    if (activeStep === 3 && isCompleted) {
+      void dispatch(createNewNotification(notification))
+        .unwrap()
+        .then(() => setActiveStep((previousStep) => previousStep + 1));
+    }
+  };
+
+  useEffect(() => {
+    createNotification();
+  }, [isCompleted]);
+
+  useEffect(() => {
+    // TODO: in attesa che self care restituisca senderDenomination, questa viene settata come Denomination of + id
+    dispatch(
+      setSenderInfos({ senderDenomination: PARTY_MOCK, senderTaxId: organization.fiscal_code })
+    );
+  }, [organization]);
 
   useEffect(() => () => void dispatch(resetNewNotificationState()), []);
 
@@ -55,10 +82,15 @@ const NewNotification = () => {
 
   return (
     <Prompt title="Vuoi davvero uscire?" message="Se esci, i dati inseriti andranno persi.">
-      <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
-        <Grid item xs={12} lg={8}>
-          <Grid container spacing={1} sx={{ marginTop: '10px' }}>
-            <Grid item>
+      <Box p={3}>
+        <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
+          <Grid item xs={12} lg={8}>
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              alignItems={{ xs: 'start', sm: 'center' }}
+              justifyContent="start"
+              spacing={3}
+            >
               <ButtonNaked
                 color="primary"
                 startIcon={<ArrowBackIcon />}
@@ -66,8 +98,6 @@ const NewNotification = () => {
               >
                 Indietro
               </ButtonNaked>
-            </Grid>
-            <Grid item>
               <Breadcrumbs aria-label="breadcrumb">
                 <BreadcrumbLink to={routes.DASHBOARD}>Notifiche</BreadcrumbLink>
                 <Typography
@@ -78,33 +108,39 @@ const NewNotification = () => {
                   Nuova notifica
                 </Typography>
               </Breadcrumbs>
-            </Grid>
+            </Stack>
+            <TitleBox
+              variantTitle="h4"
+              title="Invia una nuova notifica"
+              sx={{ pt: '20px' }}
+              subTitle={subTitle}
+              variantSubTitle="body1"
+            ></TitleBox>
+            <Typography sx={{ marginTop: '10px' }} variant="body2">
+              * Campi obbligatori
+            </Typography>
+            <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            {activeStep === 0 && (
+              <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
+            )}
+            {activeStep === 1 && <Recipient onConfirm={goToNextStep} />}
+            {activeStep === 2 && <Attachments onConfirm={goToNextStep} />}
+            {activeStep === 3 && (
+              <PaymentMethods
+                onConfirm={createNotification}
+                notification={notification}
+                isCompleted={isCompleted}
+              />
+            )}
           </Grid>
-          <TitleBox
-            variantTitle="h4"
-            title="Invia una nuova notifica"
-            sx={{ pt: '20px' }}
-            subTitle={subTitle}
-            variantSubTitle="body1"
-          ></TitleBox>
-          <Typography sx={{ marginTop: '10px' }} variant="body2">
-            * Campi obbligatori
-          </Typography>
-          <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-          {activeStep === 0 && (
-            <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
-          )}
-          {activeStep === 1 && <Recipient onConfirm={goToNextStep} />}
-          {activeStep === 2 && <Attachments onConfirm={goToNextStep} />}
-          {activeStep === 3 && <PaymentMethods notification={notification} onConfirm={goToNextStep}/>}
         </Grid>
-      </Grid>
+      </Box>
     </Prompt>
   );
 };

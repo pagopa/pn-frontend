@@ -2,6 +2,7 @@ import { DigitalDomicileType, RecipientType } from '@pagopa-pn/pn-commons';
 
 export const formRecipients = [
   {
+    idx: 1,
     recipientType: RecipientType.PF,
     taxId: 'AAAAAA11A11A111A',
     creditorTaxId: '01234567890',

@@ -7,6 +7,8 @@ import {
   formatFiscalCode,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
+
+import { NewNotificationBe, NewNotificationResponse } from '../../models/newNotification';
 import { apiClient, externalClient } from '../axios';
 
 export const NotificationsApi = {
@@ -143,19 +145,24 @@ export const NotificationsApi = {
     httpMethod: string
   ): Promise<string> => {
     const method = httpMethod.toLowerCase() as 'get' | 'post' | 'put';
-    return externalClient[method]<string>(
-        url,
-        file,
-        {
-          headers: {
-            'Content-Type': 'application/pdf',
-            'x-amz-meta-secret': secret,
-            'x-amz-checksum-sha256': sha256,
-          },
-        }
-      )
-      .then((res) => res.headers['x-amz-version-id']);
+    return externalClient[method]<string>(url, file, {
+      headers: {
+        'Content-Type': 'application/pdf',
+        'x-amz-meta-secret': secret,
+        'x-amz-checksum-sha256': sha256,
+      },
+    }).then((res) => res.headers['x-amz-version-id']);
   },
+
+  /**
+   * create new notification
+   * @param  {NewNotificationBe} notification
+   * @returns Promise
+   */
+  createNewNotification: (notification: NewNotificationBe): Promise<NewNotificationResponse> =>
+    apiClient
+      .post<NewNotificationResponse>(`/delivery/requests`, notification)
+      .then((response) => response.data),
 };
 
 // 'x-amz-sdk-checksum-algorithm': 'SHA256',

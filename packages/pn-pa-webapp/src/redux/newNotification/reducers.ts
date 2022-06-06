@@ -10,6 +10,7 @@ import {
   uploadNotificationAttachment,
   saveRecipients,
   uploadNotificationPaymentDocument,
+  setSenderInfos,
 } from './actions';
 
 const initialState = {
@@ -25,6 +26,7 @@ const initialState = {
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
   } as NewNotificationFe,
+  isCompleted: false
 };
 
 /* eslint-disable functional/immutable-data */
@@ -35,6 +37,13 @@ const newNotificationSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(setCancelledIun, (state, action) => {
       state.notification = { ...state.notification, cancelledIun: action.payload };
+    });
+    builder.addCase(setSenderInfos, (state, action) => {
+      state.notification = {
+        ...state.notification,
+        senderDenomination: action.payload.senderDenomination,
+        senderTaxId: action.payload.senderTaxId
+      };
     });
     builder.addCase(setPreliminaryInformations, (state, action) => {
       // TODO: capire la logica di set della fee policy sia corretta
@@ -62,6 +71,7 @@ const newNotificationSlice = createSlice({
           return r;
         }),
       };
+      state.isCompleted = true;
     });
     builder.addCase(resetNewNotificationState, () => initialState);
   },
