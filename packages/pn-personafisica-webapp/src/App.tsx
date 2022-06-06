@@ -12,7 +12,7 @@ import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
-import { logout } from './redux/auth/actions';
+import { getToSApproval, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
 import { RootState } from './redux/store';
@@ -35,7 +35,7 @@ const App = () => {
   const { t } = useTranslation('common');
   const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const tos = useAppSelector((state: RootState) => state.userState.tos);
+  const { fetchedTos, tos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
@@ -81,6 +81,7 @@ const App = () => {
     if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
       void dispatch(getDomicileInfo());
+      void dispatch(getToSApproval());
     }
   }, [sessionToken]);
 
@@ -122,7 +123,7 @@ const App = () => {
       assistanceEmail={PAGOPA_HELP_EMAIL}
       onExitAction={() => dispatch(logout())}
       sideMenu={<SideMenu menuItems={menuItems} />}
-      showSideMenu={tos}
+      showSideMenu={!fetchedTos || tos}
       productsList={productsList}
       loggedUser={jwtUser}
       enableUserDropdown

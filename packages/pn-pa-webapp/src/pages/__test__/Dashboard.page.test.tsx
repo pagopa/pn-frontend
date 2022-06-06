@@ -27,7 +27,7 @@ describe('Dashboard Page', () => {
     // mock app selector
     const spy = jest.spyOn(hooks, 'useAppSelector');
     spy
-      .mockReturnValueOnce(notificationsToFe.result)
+      .mockReturnValueOnce(notificationsToFe.resultsPage)
       .mockReturnValueOnce({
         startDate: tenYearsAgo.toISOString(),
         endDate: today.toISOString(),
@@ -127,7 +127,7 @@ describe('Dashboard Page', () => {
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
       expect(mockNavigateFn).toBeCalledWith(
-        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.result[0].iun)
+        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });
   });

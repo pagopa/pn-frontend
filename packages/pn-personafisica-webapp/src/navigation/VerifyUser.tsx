@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
-import { exchangeToken, getToSApproval } from '../redux/auth/actions';
+import { exchangeToken } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { goToLogin } from './navigation.utility';
-import { NOTIFICHE } from './routes.const';
+import * as routes from './routes.const';
 
 const VerifyUser = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [spidToken, setSpidToken] = useState('');
   const dispatch = useAppDispatch();
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
-  const navigate = useNavigate();
+  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
 
   useEffect(() => {
     const params = new URLSearchParams(location.hash);
@@ -28,16 +29,20 @@ const VerifyUser = () => {
 
   useEffect(() => {
     if (spidToken !== '') {
-      dispatch(exchangeToken(spidToken))
-        .then(() => {
-          void dispatch(getToSApproval());
-          navigate(NOTIFICHE);
-        })
-        .catch(() => {
-          goToLogin();
-        });
+      dispatch(exchangeToken(spidToken)).catch(() => {
+        goToLogin();
+      });
     }
   }, [spidToken]);
+
+  useEffect(() => {
+    if (token !== '' && fetchedTos && !tos) {
+      navigate(routes.TOS);
+    }
+    if (token !== '' && fetchedTos && tos && location.pathname === '/') {
+      navigate(routes.NOTIFICHE);
+    }
+  }, [fetchedTos, tos]);
 
   return <Outlet />;
 };

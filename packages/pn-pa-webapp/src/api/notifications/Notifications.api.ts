@@ -43,18 +43,18 @@ export const NotificationsApi = {
     return apiClient
       .get<GetNotificationsResponse>('/delivery/notifications/sent', { params: queryParams })
       .then((response) => {
-        if (response.data && response.data.result) {
-          const notifications = response.data.result.map((d) => ({
+        if (response.data && response.data.resultsPage) {
+          const notifications = response.data.resultsPage.map((d) => ({
             ...d,
             sentAt: formatDate(d.sentAt),
           }));
           return {
             ...response.data,
-            result: notifications,
+            resultsPage: notifications,
           };
         }
         return {
-          result: [],
+          resultsPage: [],
           moreResult: false,
           nextPagesKey: [],
         };
@@ -164,3 +164,5 @@ export const NotificationsApi = {
       .post<NewNotificationResponse>(`/delivery/requests`, notification)
       .then((response) => response.data),
 };
+
+// 'x-amz-sdk-checksum-algorithm': 'SHA256',
