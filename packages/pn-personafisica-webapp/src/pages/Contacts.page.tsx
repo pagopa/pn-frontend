@@ -25,9 +25,9 @@ const Contacts = () => {
 
   useEffect(() => {
     void dispatch(getDigitalAddresses(recipientId));
-  }, []);
 
-  useEffect(() => () => void dispatch(resetContactsState()), []);
+    return () => void dispatch(resetContactsState());
+  }, []);
 
   const handleRedirectToProfilePage = () => {
     navigate(PROFILO);

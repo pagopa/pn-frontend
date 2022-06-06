@@ -59,9 +59,10 @@ type PaymentObject = {
 type Props = {
   notification: NewNotificationFe;
   onConfirm: () => void;
+  isCompleted: boolean;
 };
 
-const PaymentMethods = ({ notification, onConfirm }: Props) => {
+const PaymentMethods = ({ notification, onConfirm, isCompleted }: Props) => {
   const dispatch = useAppDispatch();
 
   const paymentDocumentSchema = yup.object({
@@ -111,7 +112,11 @@ const PaymentMethods = ({ notification, onConfirm }: Props) => {
     }, {}),
     validationSchema,
     validateOnMount: true,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      if (isCompleted) {
+        onConfirm();
+        return;
+      }
       const valuesToSend: UploadPayementParams = {};
       const getSingleValueToSend = (value: PaymentDocument) => ({
         key: value.name,
@@ -127,12 +132,7 @@ const PaymentMethods = ({ notification, onConfirm }: Props) => {
           f24standard: getSingleValueToSend(value.f24standard),
         };
       }
-      dispatch(uploadNotificationPaymentDocument(valuesToSend))
-        .unwrap()
-        .then(() => {
-          onConfirm();
-        })
-        .catch(() => {});
+      await dispatch(uploadNotificationPaymentDocument(valuesToSend));
     },
   });
 

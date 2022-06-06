@@ -105,6 +105,7 @@ const NotificationDetail = () => {
     if (id) {
       void dispatch(getReceivedNotification(id));
     }
+    return () => void dispatch(resetState());
   }, []);
 
   useEffect(() => {
@@ -118,8 +119,6 @@ const NotificationDetail = () => {
       dowloadDocument(legalFactDownloadUrl);
     }
   }, [legalFactDownloadUrl]);
-
-  useEffect(() => () => void dispatch(resetState()), []);
 
   const breadcrumb = (
     <Fragment>

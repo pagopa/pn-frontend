@@ -1,18 +1,22 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import { FormikValues } from 'formik';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
   NewNotificationDocument,
+  PaymentModel,
+  NewNotificationFe,
+  NewNotificationResponse,
+  FormRecipient,
   UploadAttachmentParams,
   UploadPayementParams,
-  PaymentModel,
   UpaloadPaymentResponse,
 } from '../../models/newNotification';
 
 export const setCancelledIun = createAction<string>('setCancelledIun');
+
+export const setSenderInfos = createAction<{senderDenomination: string; senderTaxId: string}>('setSenderInfos');
 
 export const setPreliminaryInformations = createAction<{
   paProtocolNumber: string;
@@ -23,7 +27,7 @@ export const setPreliminaryInformations = createAction<{
   paymentMode: PaymentModel;
 }>('setPreliminaryInformations');
 
-export const saveRecipients = createAction<FormikValues>('saveRecipients');
+export const saveRecipients = createAction<{recipients: Array<FormRecipient>}>('saveRecipients');
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {
@@ -120,5 +124,17 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
     return rejectWithValue(e);
   }
 });
+
+export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotificationFe>(
+  'createNewNotification',
+  async (notification: NewNotificationFe, { rejectWithValue }) => {
+    try {
+      const notificationToSave = { ...notification, paymentMode: undefined };
+      return await NotificationsApi.createNewNotification(notificationToSave);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
 
 export const resetNewNotificationState = createAction<void>('resetNewNotificationState');
