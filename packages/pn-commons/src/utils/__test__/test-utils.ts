@@ -18,14 +18,22 @@ const timeline: Array<INotificationDetailTimeline> = [
     timestamp: '2022-03-21T08:56:50.177Z',
     category: TimelineCategory.SEND_DIGITAL_DOMICILE,
     details: {
-    },
+      digitalAddress: {
+        address: 'nome@cognome.mail',
+        type: DigitalDomicileType.PEC
+      }
+    } as SendDigitalDetails,
   },
   {
     elementId: 'mocked-id-2',
     timestamp: '2022-01-15T08:56:50.177Z',
     category: TimelineCategory.SEND_DIGITAL_DOMICILE,
     details: {
-    },
+      digitalAddress: {
+        address: 'nome@cognome.mail',
+        type: DigitalDomicileType.PEC
+      }
+    } as SendDigitalDetails,
   },
 ];
 
@@ -46,7 +54,6 @@ const recipients: Array<NotificationDetailRecipient> = [
   {
     recipientType: RecipientType.PF,
     taxId: 'mocked-taxId',
-    creditorTaxId: 'mocked-creatorTaxId',
     denomination: 'Nome Cognome',
     digitalDomicile: {
       type: DigitalDomicileType.PEC,
