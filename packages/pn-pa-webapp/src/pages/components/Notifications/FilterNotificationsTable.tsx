@@ -182,7 +182,7 @@ const FilterNotificationsTable = () => {
             locale={currentLocale}
           >
             <CustomDatePicker
-              label="Dalle"
+              label="Da"
               inputFormat={DATE_FORMAT}
               value={startDate}
               onChange={(value: Date | null) => {

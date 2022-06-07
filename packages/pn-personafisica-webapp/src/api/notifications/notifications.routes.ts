@@ -1,0 +1,104 @@
+import {
+  compileRoute,
+  formatFiscalCode,
+  GetNotificationsParams,
+  LegalFactId,
+} from '@pagopa-pn/pn-commons';
+
+// Prefixes
+const API_DELIVERY_PREFIX = 'delivery';
+const API_DELIVERY_PUSH_PREFIX = 'delivery-push';
+
+// Segments
+const API_NOTIFICATIONS_BASE = 'notifications';
+const API_NOTIFICATIONS_RECEIVED = 'received';
+const API_NOTIFICATIONS_DOCUMENTS = 'documents';
+const API_NOTIFICATIONS_LEGALFACTS = 'legalfacts';
+const API_NOTIFICATIONS_PAYMENT = 'payment';
+
+// Parameters
+const API_NOTIFICATIONS_START_DATE_PARAMETER = 'startDate';
+const API_NOTIFICATIONS_END_DATE_PARAMETER = 'endDate';
+const API_NOTIFICATIONS_RECIPIENT_ID_PARAMETER = 'recipientId';
+const API_NOTIFICATIONS_STATUS_PARAMETER = 'status';
+const API_NOTIFICATIONS_SUBJECT_PARAMETER = 'subjectRegExp';
+const API_NOTIFICATIONS_SIZE_PARAMETER = 'size';
+const API_NOTIFICATIONS_NEXT_PAGES_KEY_PARAMETER = 'nextPagesKey';
+const API_NOTIFICATIONS_IUN_MATCH_PARAMETER = 'iunMatch';
+const API_NOTIFICATIONS_MANDATE_ID_PARAMETER = 'mandateId';
+const API_NOTIFICATIONS_IUN_PARAMETER = 'iun';
+const API_NOTIFICATIONS_DOCUMENT_INDEX_PARAMETER = 'documentIndex';
+const API_NOTIFICATIONS_LEGALFACT_TYPE_PARAMETER = 'legalfactType';
+const API_NOTIFICATIONS_LEGALFACT_KEY_PARAMETER = 'legalfactKey';
+const API_NOTIFICATIONS_IUV_PARAMETER = 'iuv';
+
+// Paths
+const API_NOTIFICATIONS_RECEIVED_PATH = `${API_NOTIFICATIONS_BASE}/${API_NOTIFICATIONS_RECEIVED}`;
+const API_NOTIFICATION_DETAIL_PATH = `${API_NOTIFICATIONS_RECEIVED_PATH}/:${API_NOTIFICATIONS_IUN_PARAMETER}`;
+const API_NOTIFICATION_DETAIL_DOCUMENT_PATH = `${API_NOTIFICATIONS_RECEIVED_PATH}/:${API_NOTIFICATIONS_IUN_PARAMETER}/${API_NOTIFICATIONS_DOCUMENTS}/:${API_NOTIFICATIONS_DOCUMENT_INDEX_PARAMETER}`;
+const API_NOTIFICATION_DETAIL_LEGALFACT_PATH = `${API_NOTIFICATIONS_LEGALFACTS}/:${API_NOTIFICATIONS_IUN_PARAMETER}/:${API_NOTIFICATIONS_LEGALFACT_TYPE_PARAMETER}/:${API_NOTIFICATIONS_LEGALFACT_KEY_PARAMETER}`;
+const API_NOTIFICATION_DETAIL_PAYMENT_PATH = `${API_NOTIFICATIONS_BASE}/${API_NOTIFICATIONS_PAYMENT}/:${API_NOTIFICATIONS_IUV_PARAMETER}`;
+
+// APIs
+export function NOTIFICATIONS_LIST(params: GetNotificationsParams) {
+  return compileRoute({
+    prefix: API_DELIVERY_PREFIX,
+    path: API_NOTIFICATIONS_RECEIVED_PATH,
+    query: {
+      [API_NOTIFICATIONS_START_DATE_PARAMETER]: params.startDate,
+      [API_NOTIFICATIONS_END_DATE_PARAMETER]: params.endDate,
+      [API_NOTIFICATIONS_RECIPIENT_ID_PARAMETER]: params.recipientId
+        ? formatFiscalCode(params.recipientId)
+        : '',
+      [API_NOTIFICATIONS_STATUS_PARAMETER]: params.status || '',
+      [API_NOTIFICATIONS_SUBJECT_PARAMETER]: params.subjectRegExp || '',
+      [API_NOTIFICATIONS_SIZE_PARAMETER]: params.size ? params.size.toString() : '',
+      [API_NOTIFICATIONS_NEXT_PAGES_KEY_PARAMETER]: params.nextPagesKey || '',
+      [API_NOTIFICATIONS_IUN_MATCH_PARAMETER]: params.iunMatch || '',
+      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: params.mandateId || '',
+    },
+  });
+}
+
+export function NOTIFICATION_DETAIL(iun: string) {
+  return compileRoute({
+    prefix: API_DELIVERY_PREFIX,
+    path: API_NOTIFICATION_DETAIL_PATH,
+    params: {
+      [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
+    },
+  });
+}
+
+export function NOTIFICATION_DETAIL_DOCUMENTS(iun: string, documentIndex: number) {
+  return compileRoute({
+    prefix: API_DELIVERY_PREFIX,
+    path: API_NOTIFICATION_DETAIL_DOCUMENT_PATH,
+    params: {
+      [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
+      [API_NOTIFICATIONS_DOCUMENT_INDEX_PARAMETER]: documentIndex,
+    },
+  });
+}
+
+export function NOTIFICATION_DETAIL_LEGALFACT(iun: string, legalFact: LegalFactId) {
+  return compileRoute({
+    prefix: API_DELIVERY_PUSH_PREFIX,
+    path: API_NOTIFICATION_DETAIL_LEGALFACT_PATH,
+    params: {
+      [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
+      [API_NOTIFICATIONS_LEGALFACT_TYPE_PARAMETER]: legalFact.type,
+      [API_NOTIFICATIONS_LEGALFACT_KEY_PARAMETER]: legalFact.key,
+    },
+  });
+}
+
+export function NOTIFICATION_DETAIL_PAYMENT(iuv: string) {
+  return compileRoute({
+    prefix: API_DELIVERY_PREFIX,
+    path: API_NOTIFICATION_DETAIL_PAYMENT_PATH,
+    params: {
+      [API_NOTIFICATIONS_IUV_PARAMETER]: iuv
+    },
+  });
+}

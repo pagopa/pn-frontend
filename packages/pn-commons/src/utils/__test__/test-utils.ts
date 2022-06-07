@@ -7,7 +7,8 @@ import {
   DigitalDomicileType,
   NotificationFeePolicy,
   PhysicalCommunicationType,
-  NotificationDetail
+  NotificationDetail,
+  SendDigitalDetails,
 } from '../../types/NotificationDetail';
 import { NotificationStatus } from '../../types/NotificationStatus';
 
@@ -19,7 +20,10 @@ const timeline: Array<INotificationDetailTimeline> = [
     details: {
       category: TimelineCategory.SEND_DIGITAL_DOMICILE,
       taxId: 'mocked-taxId',
-    },
+      address: {
+        address: 'a@a.it'
+      }
+    } as SendDigitalDetails,
   },
   {
     elementId: 'mocked-id-2',
@@ -28,7 +32,10 @@ const timeline: Array<INotificationDetailTimeline> = [
     details: {
       category: TimelineCategory.SEND_DIGITAL_DOMICILE,
       taxId: 'mocked-taxId',
-    },
+      address: {
+        address: 'b@b.it'
+      }
+    }  as SendDigitalDetails,
   },
 ];
 
@@ -49,6 +56,7 @@ const recipients: Array<NotificationDetailRecipient> = [
   {
     recipientType: RecipientType.PF,
     taxId: 'mocked-taxId',
+    creditorTaxId: 'mocked-creatorTaxId',
     denomination: 'Nome Cognome',
     digitalDomicile: {
       type: DigitalDomicileType.EMAIL,
