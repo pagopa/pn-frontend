@@ -15,6 +15,7 @@ import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
 } from './notifications.routes';
 
 export const NotificationsApi = {
@@ -105,9 +106,7 @@ export const NotificationsApi = {
     attachmentName: PaymentAttachmentNameType
   ): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(
-        `/delivery/notifications/received/${iun}/attachments/payment/${attachmentName}`
-      )
+      .get<{ url: string }>(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string))
       .then((response) => {
         if (response.data) {
           return { url: response.data.url };
