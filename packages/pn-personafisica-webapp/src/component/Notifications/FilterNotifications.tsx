@@ -120,9 +120,9 @@ const FilterNotifications = () => {
         hasCounterBadge
         bagdeCount={filtersApplied()}
       >
-        {t('button.cerca')}
+        {t('button.filtra')}
       </CustomMobileDialogToggle>
-      <CustomMobileDialogContent title={t('button.cerca')}>
+      <CustomMobileDialogContent title={t('button.filtra')}>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <FilterNotificationsFormBody
