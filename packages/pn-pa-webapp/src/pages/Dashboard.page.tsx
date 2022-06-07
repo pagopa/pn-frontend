@@ -67,12 +67,12 @@ const Dashboard = () => {
       },
     },
     {
-      id: 'recipientId',
+      id: 'recipients',
       label: 'Destinatario',
       width: '13%',
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(value: string) {
-        return value;
+      getCellLabel(value: Array<string>) {
+        return value.map((v) => <Typography key={v} variant="body2">{v}</Typography>);
       },
       onClick(row: Item, column: Column) {
         handleRowClick(row, column);
@@ -211,7 +211,7 @@ const Dashboard = () => {
                 }}
                 onPageRequest={handleChangePage}
                 pagesToShow={pagesToShow}
-                sx={{padding: '0 10px'}}
+                sx={{ padding: '0 10px' }}
               />
             )}
           </Fragment>
