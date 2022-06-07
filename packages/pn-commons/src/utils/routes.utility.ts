@@ -31,10 +31,7 @@ export function compileRoute(route: Route) {
   if (route.query) {
     result = Object.entries(route.query)
       .filter(([, v]) => v)
-      .reduce(
-        (agg, [k, v]) => agg.concat(`${k}=${encode(v)}&`),
-        `${result}?`
-      )
+      .reduce((agg, [k, v]) => agg.concat(`${k}=${encode(v)}&`), `${result}?`)
       .slice(0, -1);
   }
   return result;

@@ -1,10 +1,9 @@
 import { compileRoute } from '../routes.utility';
 
-
 describe('Routes utility', () => {
   it('Route with no params and no path', () => {
     const route = compileRoute({
-      prefix: ['mocked', 'route']
+      prefix: ['mocked', 'route'],
     });
     expect(route).toEqual('/mocked/route');
   });
@@ -12,7 +11,7 @@ describe('Routes utility', () => {
   it('Route with path and no params', () => {
     const route = compileRoute({
       prefix: ['mocked', 'route'],
-      path: 'mocked-path'
+      path: 'mocked-path',
     });
     expect(route).toEqual('/mocked/route/mocked-path');
   });
@@ -22,8 +21,8 @@ describe('Routes utility', () => {
       prefix: 'prefix',
       path: 'path/:foo',
       params: {
-        foo: 'bar'
-      }
+        foo: 'bar',
+      },
     });
     expect(route).toEqual('/prefix/path/bar');
   });
@@ -32,8 +31,8 @@ describe('Routes utility', () => {
     const route = compileRoute({
       prefix: 'prefix',
       query: {
-        foo: 'bar'
-      }
+        foo: 'bar',
+      },
     });
     expect(route).toEqual('/prefix?foo=bar');
   });
@@ -43,8 +42,8 @@ describe('Routes utility', () => {
       prefix: 'prefix',
       query: {
         foo: 'bar',
-        foo2: 'bar2'
-      }
+        foo2: 'bar2',
+      },
     });
     expect(route).toEqual('/prefix?foo=bar&foo2=bar2');
   });
@@ -53,8 +52,8 @@ describe('Routes utility', () => {
     const route = compileRoute({
       prefix: 'prefix',
       query: {
-        foo: ''
-      }
+        foo: '',
+      },
     });
     expect(route).toEqual('/prefix');
   });

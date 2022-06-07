@@ -10,7 +10,12 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { apiClient } from '../axios';
-import { NOTIFICATIONS_LIST, NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS, NOTIFICATION_DETAIL_LEGALFACT } from './notifications.routes';
+import {
+  NOTIFICATIONS_LIST,
+  NOTIFICATION_DETAIL,
+  NOTIFICATION_DETAIL_DOCUMENTS,
+  NOTIFICATION_DETAIL_LEGALFACT,
+} from './notifications.routes';
 
 const mocked_payments_detail = [
   {
@@ -37,41 +42,36 @@ export const NotificationsApi = {
    * @param  {string} endDate
    * @returns Promise
    */
-  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => {
-    return apiClient
-      .get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params))
-      .then((response) => {
-        if (response.data && response.data.resultsPage) {
-          const notifications = response.data.resultsPage.map((d) => ({
-            ...d,
-            sentAt: formatDate(d.sentAt),
-          }));
-          return {
-            ...response.data,
-            resultsPage: notifications,
-          };
-        }
+  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
+    apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
+      if (response.data && response.data.resultsPage) {
+        const notifications = response.data.resultsPage.map((d) => ({
+          ...d,
+          sentAt: formatDate(d.sentAt),
+        }));
         return {
-          resultsPage: [],
-          moreResult: false,
-          nextPagesKey: [],
+          ...response.data,
+          resultsPage: notifications,
         };
-      });
-  },
+      }
+      return {
+        resultsPage: [],
+        moreResult: false,
+        nextPagesKey: [],
+      };
+    }),
   /**
    * Gets current user notification detail
    * @param  {string} iun
    * @returns Promise
    */
   getReceivedNotification: (iun: string): Promise<NotificationDetail> =>
-    apiClient
-      .get<NotificationDetail>(NOTIFICATION_DETAIL(iun))
-      .then((response) => {
-        if (response.data) {
-          return parseNotificationDetail(response.data);
-        }
-        return {} as NotificationDetail;
-      }),
+    apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
+      if (response.data) {
+        return parseNotificationDetail(response.data);
+      }
+      return {} as NotificationDetail;
+    }),
   /**
    * Gets current user notification document
    * @param  {string} iun
