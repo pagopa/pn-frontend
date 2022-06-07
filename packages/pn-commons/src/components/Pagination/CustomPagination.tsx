@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 
-import { PaginationData } from './types';
+import { PaginationData, A11yPaginationLabelsTypes } from './types';
 
 type Props = {
   /** The actual paginationData */
@@ -17,13 +17,43 @@ type Props = {
   sx?: SxProps;
 };
 
+const getA11yPaginationLabels = (
+  type: A11yPaginationLabelsTypes,
+  page: number,
+  selected: boolean
+): string => {
+  // eslint-disable-next-line functional/no-let
+  let ariaStr;
+  switch (type) {
+    case 'first':
+      ariaStr = 'primo elemento';
+      break;
+    case 'last':
+      ariaStr = 'ultimo elemento';
+      break;
+    case 'page':
+      ariaStr = 'pagina ' + page.toString();
+      break;
+    case 'next':
+      ariaStr = 'Vai alla pagina successiva';
+      break;
+    case 'previous':
+      ariaStr = 'Vai alla pagina precedente';
+      break;
+  }
+  if (selected) {
+    ariaStr += ', elemento selezionato';
+  }
+  return ariaStr;
+};
+
 /** Selfcare custom table available pages component */
 export default function CustomPagination({
   paginationData,
   onPageRequest,
   elementsPerPage = [10, 20, 50, 100, 200, 500],
   pagesToShow,
-  sx
+  sx,
 }: Props) {
   const size = paginationData.size || elementsPerPage[0];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -65,6 +95,7 @@ export default function CustomPagination({
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<ArrowDropDown />}
+          aria-label="Righe per pagina"
         >
           {size}
         </Button>
@@ -96,11 +127,13 @@ export default function CustomPagination({
         {paginationData.totalElements > size && (
           <Pagination
             sx={{ display: 'flex' }}
+            aria-label="Menu Paginazione"
             color="primary"
             variant="text"
             shape="circular"
             page={paginationData.page + 1}
             count={Math.ceil(paginationData.totalElements / size)}
+            getItemAriaLabel={getA11yPaginationLabels}
             renderItem={(props2) => {
               if (
                 pagesToShow &&

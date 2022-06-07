@@ -83,10 +83,10 @@ describe('Filter Notifications Table Component', () => {
     testFormElements(form!, 'status', 'Stato');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
-    expect(submitButton).toHaveTextContent(/Cerca/i);
+    expect(submitButton).toHaveTextContent(/Filtra/i);
     const cancelButton = within(form!).getByTestId('cancelButton');
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveTextContent(/Annulla ricerca/i);
+    expect(cancelButton).toHaveTextContent(/Annulla filtri/i);
   });
 
   it('test filters inital value', () => {
