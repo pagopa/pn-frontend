@@ -190,7 +190,7 @@ const NotificationDetail = () => {
           
         </Grid>
         <Grid item lg={5} xs={12}>
-          <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
+          <Box component="section" sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
             <NotificationDetailTimeline
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}

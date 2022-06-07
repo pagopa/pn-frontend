@@ -34,7 +34,7 @@ const FilterNotificationsFormActions = ({
           !formikInstance.isValid || _.isEqual(formikInstance.values, formikInstance.initialValues)
         }
       >
-        {t('button.cerca')}
+        {t('button.filtra')}
       </Button>
     </Grid>
   );
@@ -47,7 +47,7 @@ const FilterNotificationsFormActions = ({
         onClick={cleanFilters}
         disabled={appliedFilters === 0}
       >
-        {t('button.annulla ricerca')}
+        {t('button.annulla filtro')}
       </Button>
     </Grid>
   );
