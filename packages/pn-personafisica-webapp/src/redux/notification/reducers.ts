@@ -7,12 +7,14 @@ import {
   INotificationDetailTimeline,
   NotificationStatusHistory,
   PhysicalCommunicationType,
-  PaymentDetail,
   NotificationFeePolicy,
+  PaymentAttachmentSName,
+  PaymentInfo,
 } from '@pagopa-pn/pn-commons';
 
 import {
   getNotificationPaymentInfo,
+  getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
@@ -37,7 +39,9 @@ const initialState = {
   } as NotificationDetail,
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
-  paymentDetail: {} as PaymentDetail,
+  pagopaAttachmentUrl: '',
+  f24AttachmentUrl: '',
+  paymentInfo: {} as PaymentInfo,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -59,9 +63,19 @@ const notificationSlice = createSlice({
         state.legalFactDownloadUrl = action.payload.url;
       }
     });
+    builder.addCase(getPaymentAttachment.fulfilled, (state, action) => {
+      if (action.payload.url) {
+        const attachmentName = action.meta.arg.attachmentName;
+        if(attachmentName === PaymentAttachmentSName.PAGOPA) {
+          state.pagopaAttachmentUrl = action.payload.url;
+        } else if (attachmentName === PaymentAttachmentSName.F24) {
+          state.f24AttachmentUrl = action.payload.url;
+        }
+      }
+    });
     builder.addCase(getNotificationPaymentInfo.fulfilled, (state, action) => {
       if (action.payload) {
-        state.paymentDetail = action.payload;
+        state.paymentInfo = action.payload;
       }
     });
     builder.addCase(resetState, () => initialState);

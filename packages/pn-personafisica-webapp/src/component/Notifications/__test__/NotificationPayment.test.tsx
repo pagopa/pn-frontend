@@ -17,29 +17,27 @@ jest.mock('react-i18next', () => ({
 }));
 
 const mockedNotificationDetailPayment = {
-  iuv: "mocked-iuv",
   notificationFeePolicy: 'FLAT_RATE',
-  f24: {
-    flatRate: {
-      digests: {
-        sha256: ""
-      },
-      contentType: 'application/pdf',
-      title: "mocked-pagopa"
+  noticeCode: 'mocked-noticeCode',
+  creditorTaxId: "mocked-creditorTaxId",
+  pagoPaForm: {
+    digests: {
+      sha256: "mocked-pagopa-sha256"
     },
-    digital: {
-      digests: {
-        sha256: ""
-      },
-      contentType: 'application/pdf',
-      title: "mocked-f24"
+    contentType: "application/pdf",
+    ref: {
+      key: "mocked-pagopa-key",
+      versionToken: "mockedVersionToken"
+    }
+  },
+  f24flatRate: {
+    digests: {
+      sha256: "mocked-f24-sha256"
     },
-    analog: {
-      digests: {
-        sha256: ""
-      },
-      contentType: 'application/pdf',
-      title: ""
+    contentType: "application/pdf",
+    ref: {
+      key: "mocked-f24-key",
+      versionToken: "mockedVersionToken"
     }
   }
 } as NotificationDetailPayment;
@@ -87,7 +85,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly while loading payment info', async () => {
-    render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     const title = screen.getByRole('heading', { name: 'detail.payment.summary'});
     expect(title).toBeInTheDocument();
 
@@ -104,13 +102,13 @@ describe('NotificationPayment component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
   });
 
   it('renders properly if getPaymentInfo returns a "required" status', async () => {
-    render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
 
     const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
@@ -118,8 +116,8 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
     
@@ -147,7 +145,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly if getPaymentInfo returns a "in progress" status', async () => {
-    render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.inprogress);
 
     const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
@@ -155,8 +153,8 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
     
@@ -181,7 +179,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly if getPaymentInfo returns a "succeeded" status', async () => {
-    render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.succeeded);
 
     const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
@@ -189,8 +187,8 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
     
@@ -215,7 +213,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly if getPaymentInfo returns a "failed" status', async () => {
-    render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed);
 
     const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
@@ -223,8 +221,8 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
     
@@ -249,7 +247,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('does not have basic accessibility issues (required status)', async () => {
-    const result = render(<NotificationPayment notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    const result = render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
 
     const amountLoader = result.getByRole('heading', { name: ''}).querySelector('svg');
@@ -257,8 +255,8 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith('mocked-iuv');
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
       expect(amountLoader).not.toBeInTheDocument();
     });
 
