@@ -267,7 +267,7 @@ const FilterNotificationsTable = () => {
             size="small"
             disabled={!formik.isValid}
           >
-            Cerca
+            Filtra
           </Button>
           <Button
             data-testid="cancelButton"
@@ -275,7 +275,7 @@ const FilterNotificationsTable = () => {
             size="small"
             onClick={cancelSearch}
           >
-            Annulla ricerca
+            Annulla filtri
           </Button>
         </Box>
       </form>
