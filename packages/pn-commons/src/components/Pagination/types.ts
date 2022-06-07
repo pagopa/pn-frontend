@@ -3,3 +3,5 @@ export type PaginationData = {
   size: number;
   totalElements: number;
 };
+
+export type A11yPaginationLabelsTypes = "next" | "previous" | "page" | "first" | "last";
