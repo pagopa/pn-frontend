@@ -7,7 +7,7 @@ import { NotificationDetailDocument } from '../../types/NotificationDetail';
 type Props = {
   title: string;
   documents: Array<NotificationDetailDocument>;
-  clickHandler: (documentIndex: number) => void;
+  clickHandler: (documentIndex: string | undefined) => void;
   documentsAvailable: boolean;
   downloadFilesMessage?: string;
 };
@@ -51,18 +51,18 @@ const NotificationDetailDocuments = ({
       {downloadFilesMessage && <Typography variant="body1">{downloadFilesMessage}</Typography>}
     </Grid>
     <Grid sx={{ mt: 1 }} key={'download-files-section'} />
-    {documents.map((d, i) =>
+    {documents.map((d) =>
       !documentsAvailable ? (
-        <Typography key={d.digests.sha256}>{d.title}</Typography>
+        <Typography key={d.digests.sha256}>{d.ref.key}</Typography>
       ) : (
         <ButtonNaked
           data-testid="documentButton"
           key={d.digests.sha256}
           color={'primary'}
           startIcon={<AttachFileIcon />}
-          onClick={() => clickHandler(i)}
+          onClick={() => clickHandler(d.docIdx)}
         >
-          {d.title}
+          {d.ref.key}
           <Typography sx={{ fontWeight: 600, ml: '10px' }}>
             {''} {/* TODO: integrate specific dimension of file */}
           </Typography>
