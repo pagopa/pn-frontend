@@ -2,12 +2,12 @@ import { NotificationStatus } from './NotificationStatus';
 
 export interface Notification {
   iun: string;
-  paNotificationId: string;
-  senderId: string;
+  paProtocolNumber: string;
+  sender: string;
   sentAt: string;
   subject: string;
   notificationStatus: NotificationStatus;
-  recipientId: string;
+  recipients: Array<string>;
   group?: string;
 }
 
