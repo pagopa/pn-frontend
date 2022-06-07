@@ -7,7 +7,8 @@ import {
   DigitalDomicileType,
   NotificationFeePolicy,
   PhysicalCommunicationType,
-  NotificationDetail
+  NotificationDetail,
+  SendDigitalDetails,
 } from '../../types/NotificationDetail';
 import { NotificationStatus } from '../../types/NotificationStatus';
 
@@ -45,6 +46,7 @@ const recipients: Array<NotificationDetailRecipient> = [
   {
     recipientType: RecipientType.PF,
     taxId: 'mocked-taxId',
+    creditorTaxId: 'mocked-creatorTaxId',
     denomination: 'Nome Cognome',
     digitalDomicile: {
       type: DigitalDomicileType.PEC,

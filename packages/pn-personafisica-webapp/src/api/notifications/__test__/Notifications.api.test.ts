@@ -11,13 +11,17 @@ import {
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
+import { NOTIFICATIONS_LIST, NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS, NOTIFICATION_DETAIL_LEGALFACT } from '../notifications.routes';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
 
   it('getReceivedNotifications', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onGet(`/delivery/notifications/received`).reply(200, notificationsFromBe);
+    mock.onGet(NOTIFICATIONS_LIST({
+      startDate: tenYearsAgo.toISOString(),
+      endDate: today.toISOString(),
+    })).reply(200, notificationsFromBe);
     const res = await NotificationsApi.getReceivedNotifications({
       startDate: tenYearsAgo.toISOString(),
       endDate: today.toISOString(),
@@ -30,7 +34,7 @@ describe('Notifications api tests', () => {
   it('getReceivedNotification', async () => {
     const iun = 'mocked-iun';
     const mock = new MockAdapter(apiClient);
-    mock.onGet(`/delivery/notifications/received/${iun}`).reply(200, notificationFromBe);
+    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationFromBe);
     const res = await NotificationsApi.getReceivedNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
     mock.reset();
@@ -42,7 +46,7 @@ describe('Notifications api tests', () => {
     const documentIndex = '0';
     const mock = new MockAdapter(apiClient);
     mock
-      .onGet(`/delivery/notifications/received/${iun}/attachments/documents/${documentIndex}`)
+      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
       .reply(200, { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getReceivedNotificationDocument(iun, documentIndex);
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
@@ -58,7 +62,7 @@ describe('Notifications api tests', () => {
     };
     const mock = new MockAdapter(apiClient);
     mock
-      .onGet(`/delivery-push/${iun}/legal-facts/${legalFact.category}/${legalFact.key}`)
+      .onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
       .reply(200, undefined);
     const res = await NotificationsApi.getReceivedNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
