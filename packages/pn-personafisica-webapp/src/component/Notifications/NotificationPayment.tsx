@@ -38,8 +38,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
 
   useEffect(() => {
     const fetchPaymentInfo = () => {
-      if (notificationPayment.noticeCode) {
-        // dispatch(getNotificationPaymentInfo({ iun: notification.iun, recipientId: notification.recipients[0].taxId })).unwrap()
+      if (notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
         dispatch(getNotificationPaymentInfo({ noticeCode: notificationPayment.noticeCode, taxId: notificationPayment.creditorTaxId }))
           .unwrap()
           .then(() => {
@@ -52,7 +51,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
           });
       } else {
         setLoading(() => false);
-        setError(() => 'Not found');
+        setError(() => 'Codice notifica e/o Codice fiscale ente non presenti!');
       }
     };
 
@@ -74,12 +73,8 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   const onPayClick = () => {
     if (CHECKOUT_URL && notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
       window.open(`${CHECKOUT_URL}/${notificationPayment.noticeCode}${notificationPayment.creditorTaxId}`);
-    } else if (CHECKOUT_URL) {
-      // uiv not available, do we need to inform the user and redirect to base checkout url?
-      console.log('UIV not found!');
-      setTimeout(() => {
-        window.open(CHECKOUT_URL);
-      }, 1000);
+    } else if (CHECKOUT_URL) { // do we need to inform the user that NoticeCode and/or creditorTaxId are unavailable and redirect to base checkout url?
+      window.open(CHECKOUT_URL);
     }
   };
   
@@ -119,7 +114,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     }
     return null;
   };
-  // to be fixed once the notification payment model is stable
+
   const getAttachments = () => {
     // eslint-disable-next-line functional/no-let
     const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();

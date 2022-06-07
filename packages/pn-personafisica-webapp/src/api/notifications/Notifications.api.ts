@@ -7,28 +7,9 @@ import {
   formatFiscalCode,
   parseNotificationDetail,
   PaymentInfo,
-  // PaymentStatus,
   PaymentAttachmentNameType,
 } from '@pagopa-pn/pn-commons';
 import { apiClient } from '../axios';
-
-// const mocked_payments_detail = [
-//   {
-//     amount: 47350,
-//     status: PaymentStatus.REQUIRED,
-//   },
-//   {
-//     amount: 47350,
-//     status: PaymentStatus.INPROGRESS,
-//   },
-//   {
-//     status: PaymentStatus.SUCCEEDED,
-//   },
-//   {
-//     amount: 47350,
-//     status: PaymentStatus.FAILED,
-//   },
-// ];
 
 export const NotificationsApi = {
   /**
@@ -161,17 +142,6 @@ export const NotificationsApi = {
    * @returns Promise
    */
   getNotificationPaymentInfo: ( noticeCode: string, taxId: string ): Promise<PaymentInfo> =>
-    // new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     if (!noticeCode || !taxId) {
-    //       return reject({ response: { status: 400 }, blockNotification: true });
-    //     }
-    //     // mocked response (returns a random payment status)
-    //     const randomIndex = Math.floor(Math.random() * 4);
-    //     return resolve(mocked_payments_detail[randomIndex]);
-    //   }, 1500);
-    //   // return resolve(mocked_payments_detail[randomIndex]);
-    // }),
   apiClient
   .get<PaymentInfo>(`ext-registry/pagopa/v1/paymentinfo/${taxId}/${noticeCode}`)
   .then((response) => response.data),
