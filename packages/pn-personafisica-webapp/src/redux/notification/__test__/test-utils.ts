@@ -22,8 +22,8 @@ export const notificationFromBe: NotificationDetail = {
   documentsAvailable: true,
   recipients: [
     {
-      creditorTaxId: 'mocked-creditorTaxId',
-      token: 'mocked-token',
+      // creditorTaxId: 'mocked-creditorTaxId',
+      // token: 'mocked-token',
       recipientType: RecipientType.PF,
       taxId: 'CGNNMO80A03H501U',
       denomination: 'Analogico Ok',
@@ -40,6 +40,31 @@ export const notificationFromBe: NotificationDetail = {
         province: 'PROV',
         foreignState: '',
       },
+      payment: {
+        notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+        // noticeCode: "",
+        creditorTaxId: "mocked-creditorTaxId",
+        pagoPaForm:  {
+          digests: {
+            sha256: "3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659"
+          },
+          contentType: 'application/pdf',
+          ref: {
+            key: "mocked-key",
+            versionToken: "mocked-versionToken"
+          },
+        },
+        f24standard:  {
+          digests: {
+            sha256: "3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659"
+          },
+          contentType: 'application/pdf',
+          ref: {
+            key: "mocked-key",
+            versionToken: "mocked-versionToken"
+          },
+        },
+      },
     },
   ],
   documents: [
@@ -48,36 +73,13 @@ export const notificationFromBe: NotificationDetail = {
         sha256: '3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659',
       },
       contentType: 'application/pdf',
-      title: 'Mocked document',
+      ref: {
+        key: "mocked-key",
+        versionToken: "mocked-versionToken"
+      },
+      title: 'Mocked document'
     },
   ],
-  payment: {
-    iuv: '',
-    notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
-    f24: {
-      flatRate: {
-        digests: {
-          sha256: 'mocked-sha256',
-        },
-        contentType: 'mocked-contentType',
-        title: 'Mocked document',
-      },
-      digital: {
-        digests: {
-          sha256: 'mocked-sha256',
-        },
-        contentType: 'mocked-contentType',
-        title: 'Mocked document',
-      },
-      analog: {
-        digests: {
-          sha256: 'mocked-sha256',
-        },
-        contentType: 'mocked-contentType',
-        title: 'Mocked document',
-      },
-    },
-  },
   notificationStatus: NotificationStatus.PAID,
   notificationStatusHistory: [
     {
@@ -96,8 +98,8 @@ export const notificationFromBe: NotificationDetail = {
         category: TimelineCategory.REQUEST_ACCEPTED,
         recipients: [
           {
-            creditorTaxId: 'mocked-creditorTaxId',
-            token: 'mocked-token',
+            // creditorTaxId: 'mocked-creditorTaxId',
+            // token: 'mocked-token',
             recipientType: RecipientType.PF,
             taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
             denomination: 'Mario Rossi',
@@ -113,6 +115,31 @@ export const notificationFromBe: NotificationDetail = {
               municipality: '',
               province: '',
               foreignState: '',
+            },
+            payment: {
+              notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+              // noticeCode: "",
+              creditorTaxId: "mocked-creditorTaxId",
+              pagoPaForm:  {
+                digests: {
+                  sha256: "3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659"
+                },
+                contentType: 'application/pdf',
+                ref: {
+                  key: "mocked-key",
+                  versionToken: "mocked-versionToken"
+                },
+              },
+              f24standard:  {
+                digests: {
+                  sha256: "3b56e2b5641d5807fa83d6bc906a35135a6b8b7c21e694b859bbafc3d718d659"
+                },
+                contentType: 'application/pdf',
+                ref: {
+                  key: "mocked-key",
+                  versionToken: "mocked-versionToken"
+                },
+              },
             },
           },
         ],

@@ -87,7 +87,7 @@ import {
   NotificationDetailDocument,
   NotificationFeePolicy,
   NotificationDetailPayment,
-  PaymentDetail,
+  PaymentInfo,
   NotificationStatusHistory,
   TimelineCategory,
   DigitalDomicileType,
@@ -98,6 +98,8 @@ import {
   LegalFactId,
   PhysicalCommunicationType,
   PaymentStatus,
+  PaymentAttachmentSName,
+  PaymentAttachmentNameType
 } from './types/NotificationDetail';
 
 import { CardElement, CardSort, CardAction } from './types/ItemsCard';
@@ -116,6 +118,7 @@ export {
   DeliveryMode,
   AddressSource,
   PhysicalCommunicationType,
+  PaymentAttachmentSName,
 };
 export type { Column, Item, Sort };
 export type {
@@ -128,8 +131,9 @@ export type {
   NotificationDetailDocument,
   NotificationDetailPayment,
   NotificationStatusHistory,
-  PaymentDetail,
+  PaymentInfo,
   LegalFactId,
+  PaymentAttachmentNameType
 };
 export type { CardElement, CardSort, CardAction };
 export type { NotificationDetailTableRow };

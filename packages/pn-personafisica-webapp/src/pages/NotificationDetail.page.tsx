@@ -45,6 +45,7 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const recipient = notification.recipients[0];
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -151,9 +152,10 @@ const NotificationDetail = () => {
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }}}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
-          {notification.payment?.iuv && (
+          {recipient && (
             <NotificationPayment
-              notificationPayment={notification.payment}
+              iun={notification.iun}
+              notificationPayment={recipient.payment}
               onDocumentDownload={dowloadDocument}
             />
           )}

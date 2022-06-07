@@ -5,8 +5,8 @@ import {
   GetNotificationsParams,
   GetNotificationsResponse,
   parseNotificationDetail,
-  PaymentDetail,
-  PaymentStatus,
+  PaymentInfo,
+  PaymentAttachmentNameType,
 } from '@pagopa-pn/pn-commons';
 
 import { apiClient } from '../axios';
@@ -15,25 +15,8 @@ import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
 } from './notifications.routes';
-
-const mocked_payments_detail = [
-  {
-    amount: 47350,
-    status: PaymentStatus.REQUIRED,
-  },
-  {
-    amount: 47350,
-    status: PaymentStatus.INPROGRESS,
-  },
-  {
-    status: PaymentStatus.SUCCEEDED,
-  },
-  {
-    amount: 47350,
-    status: PaymentStatus.FAILED,
-  },
-];
 
 export const NotificationsApi = {
   /**
@@ -113,29 +96,31 @@ export const NotificationsApi = {
         return { url: '' };
       }),
   /**
-   * Gets current user's notification payment info
-   * @param  {string} iuv
+   * Gets current user specified Payment Attachment
+   * @param  {string} iun
+   * @param  {PaymentAttachmentNameType} attachmentName
    * @returns Promise
    */
-  getNotificationPaymentInfo: (iuv: string): Promise<PaymentDetail> =>
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (!iuv) {
-          return reject({ response: { status: 400 }, blockNotification: true });
+  getPaymentAttachment: (
+    iun: string,
+    attachmentName: PaymentAttachmentNameType
+  ): Promise<{ url: string }> =>
+    apiClient
+      .get<{ url: string }>(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string))
+      .then((response) => {
+        if (response.data) {
+          return { url: response.data.url };
         }
-        // mocked response (returns a random payment status)
-        const randomIndex = Math.floor(Math.random() * 4);
-        return resolve(mocked_payments_detail[randomIndex]);
-      }, 1500);
-      // return resolve(mocked_payments_detail[randomIndex]);
-    }),
-  // apiClient
-  // .get<PaymentDetail>(NOTIFICATION_DETAIL_PAYMENT(iuv))
-  // .then((response) => {
-  //   if (response.data) {
-  //     return response.data;
-  //   }
-  //   return { };
-  //   // return response.data;
-  // }),
+        return { url: '' };
+      }),
+  /**
+   * Gets current user's notification payment info
+   * @param  {string} noticeCode
+   * @param  {string} taxId
+   * @returns Promise
+   */
+  getNotificationPaymentInfo: (noticeCode: string, taxId: string): Promise<PaymentInfo> =>
+    apiClient
+      .get<PaymentInfo>(`ext-registry/pagopa/v1/paymentinfo/${taxId}/${noticeCode}`)
+      .then((response) => response.data),
 };

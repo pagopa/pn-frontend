@@ -25,7 +25,6 @@ describe('Notification detail redux state tests', () => {
         cancelledByIun: '',
         recipients: [],
         documents: [],
-        payment: {},
         notificationStatus: '',
         notificationStatusHistory: [],
         timeline: [],
@@ -33,7 +32,9 @@ describe('Notification detail redux state tests', () => {
       },
       documentDownloadUrl: '',
       legalFactDownloadUrl: '',
-      paymentDetail: {},
+      pagopaAttachmentUrl: '',
+      f24AttachmentUrl: '',
+      paymentInfo: {},
     });
   });
 
