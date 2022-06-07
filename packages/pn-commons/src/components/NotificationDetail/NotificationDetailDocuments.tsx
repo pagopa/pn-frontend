@@ -8,7 +8,7 @@ type Props = {
   title: string;
   documents: Array<NotificationDetailDocument>;
   clickHandler: (documentIndex: string | undefined) => void;
-  documentsAvailable: boolean;
+  documentsAvailable?: boolean;
   downloadFilesMessage?: string;
 };
 
