@@ -20,7 +20,7 @@ const partyList: Array<PartyEntity> = [
   {
     id: '0',
     name: PARTY_MOCK,
-    productRole: 'Referente amministrativo',
+    productRole: JSON.parse(sessionStorage.getItem('user') as string).organization.roles[0].role,
     logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
   },
 ];
