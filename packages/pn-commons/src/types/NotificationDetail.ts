@@ -230,7 +230,7 @@ export enum RecipientType {
   PG = 'PG',
 }
 
-export enum DeliveryMode {
+enum DeliveryMode {
   DIGITAL = 'DIGITAL',
   ANALOG = 'ANALOG ',
 }

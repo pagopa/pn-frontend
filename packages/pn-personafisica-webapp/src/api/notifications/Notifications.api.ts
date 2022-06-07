@@ -101,9 +101,9 @@ export const NotificationsApi = {
    * @param  {number} documentIndex
    * @returns Promise
    */
-  getReceivedNotificationDocument: (iun: string, documentIndex: number): Promise<{ url: string }> =>
+  getReceivedNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(`/delivery/notifications/received/${iun}/documents/${documentIndex}`)
+      .get<{ url: string }>(`/delivery/notifications/received/${iun}/attachments/documents/${documentIndex}`)
       .then((response) => {
         if (response.data) {
           return response.data;
@@ -121,7 +121,7 @@ export const NotificationsApi = {
     legalFact: LegalFactId
   ): Promise<{ url: string }> =>
     apiClient
-      .get<Buffer>(`/delivery-push/legalfacts/${iun}/${legalFact.type}/${legalFact.key}`, {
+      .get<Buffer>(`/delivery-push/${iun}/legal-facts/${legalFact.category}/${legalFact.key}`, {
         responseType: 'arraybuffer',
         headers: {
           'Content-Type': 'application/json',

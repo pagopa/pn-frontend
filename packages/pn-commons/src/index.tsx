@@ -92,7 +92,6 @@ import {
   TimelineCategory,
   DigitalDomicileType,
   RecipientType,
-  DeliveryMode,
   AddressSource,
   LegalFactType,
   LegalFactId,
@@ -113,7 +112,6 @@ export {
   NotificationFeePolicy,
   TimelineCategory,
   LegalFactType,
-  DeliveryMode,
   AddressSource,
   PhysicalCommunicationType,
 };

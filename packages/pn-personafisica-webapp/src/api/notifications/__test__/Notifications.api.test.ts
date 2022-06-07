@@ -39,10 +39,10 @@ describe('Notifications api tests', () => {
 
   it('getReceivedNotificationDocument', async () => {
     const iun = 'mocked-iun';
-    const documentIndex = 0;
+    const documentIndex = '0';
     const mock = new MockAdapter(apiClient);
     mock
-      .onGet(`/delivery/notifications/received/${iun}/documents/${documentIndex}`)
+      .onGet(`/delivery/notifications/received/${iun}/attachments/documents/${documentIndex}`)
       .reply(200, { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getReceivedNotificationDocument(iun, documentIndex);
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
@@ -54,11 +54,11 @@ describe('Notifications api tests', () => {
     const iun = 'mocked-iun';
     const legalFact: LegalFactId = {
       key: 'mocked-key',
-      type: LegalFactType.ANALOG_DELIVERY,
+      category: LegalFactType.ANALOG_DELIVERY,
     };
     const mock = new MockAdapter(apiClient);
     mock
-      .onGet(`/delivery-push/legalfacts/${iun}/${legalFact.type}/${legalFact.key}`)
+      .onGet(`/delivery-push/${iun}/legal-facts/${legalFact.category}/${legalFact.key}`)
       .reply(200, undefined);
     const res = await NotificationsApi.getReceivedNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
