@@ -34,7 +34,7 @@ describe('Notifications routes', () => {
   it('should compile NOTIFICATION_DETAIL_LEGALFACT', () => {
     const route = NOTIFICATION_DETAIL_LEGALFACT('mocked-iun', {
       key: 'mocked-key',
-      type: LegalFactType.SENDER_ACK,
+      category: LegalFactType.SENDER_ACK,
     });
     expect(route).toEqual('/delivery-push/mocked-iun/legal-facts/SENDER_ACK/mocked-key');
   });

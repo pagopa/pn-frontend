@@ -86,7 +86,7 @@ export function NOTIFICATION_DETAIL_LEGALFACT(iun: string, legalFact: LegalFactI
     path: API_NOTIFICATION_DETAIL_LEGALFACT_PATH,
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
-      [API_NOTIFICATIONS_LEGALFACT_TYPE_PARAMETER]: legalFact.type,
+      [API_NOTIFICATIONS_LEGALFACT_TYPE_PARAMETER]: legalFact.category,
       [API_NOTIFICATIONS_LEGALFACT_KEY_PARAMETER]: legalFact.key,
     },
   });
