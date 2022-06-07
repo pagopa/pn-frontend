@@ -89,8 +89,8 @@ describe('NotificationDetailTimeline Component', () => {
     const timelineItems = result?.container.querySelectorAll('.MuiTimelineItem-root');
     expect(timelineItems).toHaveLength(1);
     const historyButton = await result?.findByTestId('historyButton');
-    expect(historyButton!).toBeInTheDocument();
-    fireEvent.click(historyButton!);
+    expect(historyButton).toBeInTheDocument();
+    fireEvent.click(historyButton);
     const drawer = await waitFor(() => {
       return screen.queryByRole('presentation');
     });
@@ -98,7 +98,7 @@ describe('NotificationDetailTimeline Component', () => {
     await testTimelineRendering(drawer!);
   });
 
-  it.skip('expand timeline item (desktop)', async () => {
+  it('expand timeline item (desktop)', async () => {
     useIsMobileSpy.mockReturnValue(false);
     // render component
     const result = render(
