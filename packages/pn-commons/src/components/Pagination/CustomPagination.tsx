@@ -2,7 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 
-import { PaginationData } from './types';
+import { PaginationData, A11yPaginationLabelsTypes } from './types';
 
 type Props = {
   /** The actual paginationData */
@@ -45,6 +45,32 @@ export default function CustomPagination({
       onPageRequest(paginationData);
     }
     handleClose();
+  };
+  
+  const getA11yPaginationLabels = (type: A11yPaginationLabelsTypes, page: number, selected: boolean): string => {
+    // eslint-disable-next-line functional/no-let
+    let ariaStr;
+    switch(type) {
+      case 'first':
+        ariaStr = "primo elemento";
+        break;
+      case 'last':
+        ariaStr = "ultimo elemento";
+        break;
+      case 'page':
+        ariaStr = "pagina " + page.toString();
+        break;
+      case 'next':
+        ariaStr = "Vai alla pagina successiva";
+        break;
+      case 'previous':
+        ariaStr = "Vai alla pagina precedente";
+        break;
+    }
+    if(selected) {
+      ariaStr += ", elemento selezionato";
+    }
+    return ariaStr;
   };
 
   return (
@@ -103,31 +129,7 @@ export default function CustomPagination({
             shape="circular"
             page={paginationData.page + 1}
             count={Math.ceil(paginationData.totalElements / size)}
-            getItemAriaLabel={(type, page, selected) => {
-              // eslint-disable-next-line functional/no-let
-              let ariaStr;
-              switch(type) {
-                case 'first':
-                  ariaStr = "primo elemento";
-                  break;
-                case 'last':
-                  ariaStr = "ultimo elemento";
-                  break;
-                case 'page':
-                  ariaStr = "pagina " + page.toString();
-                  break;
-                case 'next':
-                  ariaStr = "Vai alla pagina successiva";
-                  break;
-                case 'previous':
-                  ariaStr = "Vai alla pagina precedente";
-                  break;
-              }
-              if(selected) {
-                ariaStr += ", elemento selezionato";
-              }
-              return ariaStr;
-            }}
+            getItemAriaLabel={getA11yPaginationLabels}
             renderItem={(props2) => {
               if (
                 pagesToShow &&
