@@ -110,6 +110,8 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
     id: n.paNotificationId + i.toString(),
   }));
 
+  const emptyMessage: string = 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione Recapiti: così, se riceverai una notifica, te lo comunicheremo.';
+  
   // Navigation handlers
   const handleRowClick = (row: Item, _column: Column) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
@@ -121,9 +123,12 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
     <Fragment>
       <FilterNotifications />
       <ItemsTable
+        emptyMessage={emptyMessage}
+        emptyActionLabel=''
         columns={columns}
         rows={rows}
         sort={sort}
+        disableSentimentDissatisfied={true}
         onChangeSorting={onChangeSorting}
         emptyActionCallback={onCancelSearch}
       />

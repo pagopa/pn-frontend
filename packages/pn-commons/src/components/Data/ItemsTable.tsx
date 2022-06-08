@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
+import { SentimentDissatisfied } from '@mui/icons-material';
 import { Notification } from '../../types/Notifications';
 import { Column, Item, Sort } from '../../types/ItemsTable';
 
@@ -30,6 +31,8 @@ type Props = {
   emptyMessage?: ReactNode;
   /** Empty action label */
   emptyActionLabel?: string;
+  /** Disable sad emoticon */
+  disableSentimentDissatisfied?: boolean;
 };
 
 function ItemsTable({
@@ -38,8 +41,9 @@ function ItemsTable({
   sort,
   onChangeSorting,
   emptyActionCallback,
-  emptyMessage = 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione Recapiti: così, se riceverai una notifica, te lo comunicheremo.',
-  emptyActionLabel = '',
+  emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
+  emptyActionLabel = 'Rimuovi filtri',
+  disableSentimentDissatisfied = false
 }: Props) {
   const createSortHandler = (property: string) => () => {
     if (sort && onChangeSorting) {
@@ -124,6 +128,7 @@ function ItemsTable({
               <TableRow>
                 <TableCell colSpan={columns.length}>
                   <Box component='div' display='flex' sx={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    {!disableSentimentDissatisfied && <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />}
                     <Typography variant="body2">{emptyMessage}</Typography>
                     &nbsp;
                     <Typography
