@@ -28,16 +28,16 @@ describe('Notifications routes', () => {
   });
 
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {
-    const route = NOTIFICATION_DETAIL_DOCUMENTS('mocked-iun', 0);
-    expect(route).toEqual('/delivery/notifications/sent/mocked-iun/documents/0');
+    const route = NOTIFICATION_DETAIL_DOCUMENTS('mocked-iun', '0');
+    expect(route).toEqual('/delivery/notifications/sent/mocked-iun/attachments/documents/0');
   });
 
   it('should compile NOTIFICATION_DETAIL_LEGALFACT', () => {
     const route = NOTIFICATION_DETAIL_LEGALFACT('mocked-iun', {
       key: 'mocked-key',
-      type: LegalFactType.SENDER_ACK,
+      category: LegalFactType.SENDER_ACK,
     });
-    expect(route).toEqual('/delivery-push/legalfacts/mocked-iun/SENDER_ACK/mocked-key');
+    expect(route).toEqual('/delivery-push/mocked-iun/legal-facts/SENDER_ACK/mocked-key');
   });
 
   it('should compile NOTIFICATION_PRELOAD_DOCUMENT', () => {
