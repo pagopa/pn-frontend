@@ -27,13 +27,23 @@ import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterDateFns';
-import { CourtesyPage, CustomDatePicker, DATE_FORMAT, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
+import {
+  CourtesyPage,
+  CustomDatePicker,
+  DATE_FORMAT,
+  fiscalCodeRegex,
+  TitleBox,
+} from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { ArrowBack } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { createDelegation, getAllEntities, resetNewDelegation } from '../redux/newDelegation/actions';
+import {
+  createDelegation,
+  getAllEntities,
+  resetNewDelegation,
+} from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
 import StyledLink from '../component/StyledLink/StyledLink';
@@ -116,9 +126,10 @@ const NuovaDelega = () => {
 
   useEffect(() => {
     void dispatch(getAllEntities());
-    return () => { dispatch(resetNewDelegation()); };
+    return () => {
+      dispatch(resetNewDelegation());
+    };
   }, []);
-
 
   const breadcrumbs = (
     <Fragment>
@@ -311,13 +322,11 @@ const NuovaDelega = () => {
                                       });
                                     }}
                                   >
-                                    {
-                                      entities.map((entitie)=>(
-                                        <MenuItem value={entitie.id} key={entitie.id}>
+                                    {entities.map((entitie) => (
+                                      <MenuItem value={entitie.id} key={entitie.id}>
                                         <DropDownEntiMenuItem name={entitie.name} />
                                       </MenuItem>
-                                      ))
-                                    }
+                                    ))}
                                   </Select>
                                 </FormControl>
                               )}
