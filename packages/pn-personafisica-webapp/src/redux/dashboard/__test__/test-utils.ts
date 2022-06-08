@@ -4,12 +4,12 @@ export const notificationsFromBe: GetNotificationsResponse = {
   resultsPage: [
     {
       iun: 'mocked-iun',
-      paNotificationId: 'mocked-paNotificationId',
-      senderId: 'mocked-senderId',
+      paProtocolNumber: 'mocked-paNotificationId',
+      sender: 'mocked-senderId',
       sentAt: '2022-02-22T14:20:20.566Z',
       subject: 'mocked-subject',
       notificationStatus: NotificationStatus.DELIVERED,
-      recipientId: 'mocked-recipientId'
+      recipients: ['mocked-recipientId']
     }
   ],
   moreResult: false,
