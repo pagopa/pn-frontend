@@ -23,18 +23,6 @@ export interface NewNotificationDocument {
   };
 }
 
-export interface NewNotificationPayment {
-  noticeCode: string;
-  creditorTaxId: string;
-  pagoPaForm: NewNotificationDocument;
-  f24flatRate?: NewNotificationDocument;
-  f24standard?: NewNotificationDocument;
-}
-
-export interface NewNotificationRecipient extends NotificationDetailRecipient {
-  payment?: NewNotificationPayment;
-}
-
 export interface NewNotificationBe {
   notificationFeePolicy: NotificationFeePolicy;
   idempotenceToken?: string;
@@ -42,7 +30,7 @@ export interface NewNotificationBe {
   subject: string;
   abstract?: string;
   cancelledIun?: string;
-  recipients: Array<NewNotificationRecipient>;
+  recipients: Array<NotificationDetailRecipient>;
   documents: Array<NewNotificationDocument>;
   physicalCommunicationType: PhysicalCommunicationType;
   senderDenomination?: string;

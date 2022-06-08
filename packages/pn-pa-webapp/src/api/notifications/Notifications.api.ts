@@ -61,7 +61,7 @@ export const NotificationsApi = {
    * @param  {number} documentIndex
    * @returns Promise
    */
-  getSentNotificationDocument: (iun: string, documentIndex: number): Promise<{ url: string }> =>
+  getSentNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
       .then((response) => {

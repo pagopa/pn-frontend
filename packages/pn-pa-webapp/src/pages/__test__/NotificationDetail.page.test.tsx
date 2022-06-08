@@ -18,13 +18,24 @@ jest.mock('react-router-dom', () => ({
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
   NotificationDetailTable: () => <div>Table</div>,
-  NotificationDetailDocuments: ({ clickHandler }: { clickHandler: () => void }) => (
-    <div data-testid="documentButton" onClick={() => clickHandler()}>
+  NotificationDetailDocuments: ({
+    clickHandler,
+  }: {
+    clickHandler: (documentIndex: string) => void;
+  }) => (
+    <div data-testid="documentButton" onClick={() => clickHandler('0')}>
       Documents
     </div>
   ),
-  NotificationDetailTimeline: ({ clickHandler }: { clickHandler: () => void }) => (
-    <div data-testid="legalFactButton" onClick={() => clickHandler()}>
+  NotificationDetailTimeline: ({
+    clickHandler,
+  }: {
+    clickHandler: (legalFact: { key: string; category: string }) => void;
+  }) => (
+    <div
+      data-testid="legalFactButton"
+      onClick={() => clickHandler({ key: 'mocked-key', category: 'mocked-category' })}
+    >
       Timeline
     </div>
   ),
@@ -74,7 +85,7 @@ describe('NotificationDetail Page', () => {
     expect(mockActionFn).toBeCalledWith('mocked-id');
   });
 
-  test('executes the document and legal fact download handler', () => {
+  test('executes the document and legal fact download handler', async () => {
     const documentButton = result?.getByTestId('documentButton');
     const legalFactButton = result?.getByTestId('legalFactButton');
     expect(mockDispatchFn).toBeCalledTimes(1);
@@ -97,7 +108,7 @@ describe('NotificationDetail Page', () => {
   });
 
   it('does not have basic accessibility issues rendering the page', async () => {
-    if(result) {
+    if (result) {
       const results = await axe(result.container);
       expect(results).toHaveNoViolations();
     }

@@ -82,7 +82,7 @@ const NotificationDetailTimeline = ({
       position={getPosition(i)}
       legalFactLabels={legalFactLabels}
       clickHandler={clickHandler}
-      key={t.activeFrom}
+      key={'timeline_sep_' + i}
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
     />
