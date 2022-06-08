@@ -97,6 +97,7 @@ import {
   LegalFactType,
   LegalFactId,
   PhysicalCommunicationType,
+  PaymentInfoDetail,
   PaymentStatus,
   PaymentAttachmentSName,
   PaymentAttachmentNameType
@@ -118,6 +119,7 @@ export {
   DeliveryMode,
   AddressSource,
   PhysicalCommunicationType,
+  PaymentInfoDetail,
   PaymentAttachmentSName,
 };
 export type { Column, Item, Sort };

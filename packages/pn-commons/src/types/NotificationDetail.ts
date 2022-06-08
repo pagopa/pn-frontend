@@ -10,19 +10,21 @@ export enum PaymentStatus {
   FAILED = "FAILED"
 }
 
-export enum PaymentErrorType {
-  PPA_TECH_ERR = "PPA_TECH_ERR",
-  PPA_BAD_REQ_ERR = "PPA_BAD_REQ_ERR",
-  PPA_PA_RESP_ERR = "PPA_PA_RESP_ERR",
-  PPA_EXPIRED_ERR = "PPA_EXPIRED_ERR",
-  PPA_CANCELED_ERR = "PPA_CANCELED_ERR",
-  PPA_DUPLICATED_ERR = "PPA_DUPLICATED_ERR",
-  PPA_GENERIC_ERR = "PPA_GENERIC_ERR"
+export enum PaymentInfoDetail {
+  PAYMENT_UNAVAILABLE = "PAYMENT_UNAVAILABLE",    // Technical Error              *
+  PAYMENT_UNKNOWN = "PAYMENT_UNKNOWN",            // Payment data error           *
+  DOMAIN_UNKNOWN = "DOMAIN_UNKNOWN",              // Creditor institution error   *
+  PAYMENT_ONGOING = "PAYMENT_ONGOING",            // Payment on going             
+  PAYMENT_EXPIRED = "PAYMENT_EXPIRED",            // Payment expired              *
+  PAYMENT_CANCELED = "PAYMENT_CANCELED",          // Payment cancelled            *
+  PAYMENT_DUPLICATED = "PAYMENT_DUPLICATED",      // Payment duplicated           
+  GENERIC_ERROR = "GENERIC_ERROR"                 // Generic error                *
 }
 
 export interface PaymentInfo {
   status: PaymentStatus;
-  errorType?: PaymentErrorType;
+  detail?: PaymentInfoDetail;
+  detail_v2?: string;
   errorCode?: string;
   amount?: number;
 }

@@ -84,6 +84,16 @@ const NotificationDetail = () => {
       value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
     { id: 8, label: t('detail.groups', { ns: 'notifiche' }), value: '' },
+    {
+      id: 9,
+      label: t('detail.notice-code', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{notification.recipients[0]?.payment?.noticeCode}</Box>,
+    },
+    {
+      id: 10,
+      label: t('detail.creditor-tax-id', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{notification.recipients[0]?.payment?.creditorTaxId}</Box>,
+    },
   ];
   const documentDowloadHandler = (documentIndex: number) => {
     void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
