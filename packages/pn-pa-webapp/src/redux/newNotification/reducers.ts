@@ -26,7 +26,7 @@ const initialState = {
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
   } as NewNotificationFe,
-  isCompleted: false
+  isCompleted: false,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -42,7 +42,7 @@ const newNotificationSlice = createSlice({
       state.notification = {
         ...state.notification,
         senderDenomination: action.payload.senderDenomination,
-        senderTaxId: action.payload.senderTaxId
+        senderTaxId: action.payload.senderTaxId,
       };
     });
     builder.addCase(setPreliminaryInformations, (state, action) => {
@@ -50,7 +50,7 @@ const newNotificationSlice = createSlice({
       state.notification = {
         ...state.notification,
         ...action.payload,
-        notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
+        notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
       };
     });
     builder.addCase(saveRecipients, (state, action) => {
@@ -65,6 +65,7 @@ const newNotificationSlice = createSlice({
         recipients: state.notification.recipients.map((r) => {
           r.payment = {
             ...action.payload[r.taxId],
+            // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
             creditorTaxId: r.payment!.creditorTaxId,
             noticeCode: r.payment?.noticeCode,
           };
