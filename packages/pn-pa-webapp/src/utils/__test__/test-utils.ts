@@ -30,8 +30,6 @@ export const formattedRecipients = [
     denomination: `TestNome TestCognome`,
     recipientType: RecipientType.PF,
     taxId: 'AAAAAA11A11A111A',
-    creditorTaxId: '01234567890',
-    token: '12345678',
     digitalDomicile: {
       type: DigitalDomicileType.PEC,
       address: 'test@email.it',
@@ -45,6 +43,20 @@ export const formattedRecipients = [
       municipalityDetails: 'Fraction',
       province: 'Province',
       foreignState: 'Foreign State',
+    },
+    payment: {
+      creditorTaxId: '01234567890',
+      noticeCode: '12345678',
+      pagoPaForm: {
+        contentType: '',
+        digests: {
+          sha256: '',
+        },
+        ref: {
+          key: '',
+          versionToken: '',
+        },
+      },
     },
   },
 ];

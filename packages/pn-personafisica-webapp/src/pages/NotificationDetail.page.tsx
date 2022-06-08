@@ -85,8 +85,10 @@ const NotificationDetail = () => {
     },
     { id: 8, label: t('detail.groups', { ns: 'notifiche' }), value: '' },
   ];
-  const documentDowloadHandler = (documentIndex: number) => {
-    void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
+  const documentDowloadHandler = (documentIndex: string | undefined) => {
+    if (documentIndex) {
+      void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
+    }
   };
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     void dispatch(getReceivedNotificationLegalfact({ iun: notification.iun, legalFact }));
@@ -152,7 +154,7 @@ const NotificationDetail = () => {
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }}}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
-          {recipient && (
+          {recipient && recipient.payment && (
             <NotificationPayment
               iun={notification.iun}
               notificationPayment={recipient.payment}
