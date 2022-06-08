@@ -100,11 +100,21 @@ const NotificationDetail = () => {
     },
   ];
 
-  const documentDowloadHandler = (documentIndex: number) => {
-    void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
+  const documentDowloadHandler = (documentIndex: string | undefined) => {
+    if (documentIndex) {
+      void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
+    }
   };
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    void dispatch(getSentNotificationLegalfact({ iun: notification.iun, legalFact }));
+    void dispatch(
+      getSentNotificationLegalfact({
+        iun: notification.iun,
+        legalFact: {
+          key: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
+          category: legalFact.category,
+        },
+      })
+    );
   };
   const dowloadDocument = (url: string) => {
     /* eslint-disable functional/immutable-data */

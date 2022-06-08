@@ -17,18 +17,18 @@ describe('Notification detail redux state tests', () => {
     expect(state).toEqual({
       loading: false,
       notification: {
-        iun: '',
-        paNotificationId: '',
+        paProtocolNumber: '',
         subject: '',
-        sentAt: '',
-        cancelledIun: '',
-        cancelledByIun: '',
         recipients: [],
         documents: [],
+        notificationFeePolicy: '',
+        physicalCommunicationType: '',
+        senderPaId: '',
+        iun: '',
+        sentAt: '',
         notificationStatus: '',
         notificationStatusHistory: [],
-        timeline: [],
-        physicalCommunicationType: '',
+        timeline: []
       },
       documentDownloadUrl: '',
       legalFactDownloadUrl: '',
@@ -51,7 +51,7 @@ describe('Notification detail redux state tests', () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotificationDocument');
     apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
     const action = await store.dispatch(
-      getReceivedNotificationDocument({ iun: 'mocked-iun', documentIndex: 0 })
+      getReceivedNotificationDocument({ iun: 'mocked-iun', documentIndex: '0' })
     );
     const payload = action.payload;
     expect(action.type).toBe('getReceivedNotificationDocument/fulfilled');
@@ -64,7 +64,7 @@ describe('Notification detail redux state tests', () => {
     const action = await store.dispatch(
       getReceivedNotificationLegalfact({
         iun: 'mocked-iun',
-        legalFact: { key: 'mocked-key', type: LegalFactType.ANALOG_DELIVERY },
+        legalFact: { key: 'mocked-key', category: LegalFactType.ANALOG_DELIVERY },
       })
     );
     const payload = action.payload;

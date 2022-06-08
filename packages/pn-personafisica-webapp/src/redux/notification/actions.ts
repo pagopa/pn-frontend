@@ -30,10 +30,10 @@ export const getReceivedNotificationLegalfact = createAsyncThunk<
 
 export const getReceivedNotificationDocument = createAsyncThunk<
   { url: string },
-  { iun: string; documentIndex: number }
+  { iun: string; documentIndex: string }
 >(
   'getReceivedNotificationDocument',
-  async (params: { iun: string; documentIndex: number }, { rejectWithValue }) => {
+  async (params: { iun: string; documentIndex: string }, { rejectWithValue }) => {
     try {
       return await NotificationsApi.getReceivedNotificationDocument(params.iun, params.documentIndex);
     } catch (e) {

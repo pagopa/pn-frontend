@@ -16,6 +16,7 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_PAYMENT_ATTACHMENT,
+  NOTIFICATION_PAYMENT_INFO,
 } from './notifications.routes';
 
 export const NotificationsApi = {
@@ -61,7 +62,7 @@ export const NotificationsApi = {
    * @param  {number} documentIndex
    * @returns Promise
    */
-  getReceivedNotificationDocument: (iun: string, documentIndex: number): Promise<{ url: string }> =>
+  getReceivedNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
       .then((response) => {
@@ -121,6 +122,6 @@ export const NotificationsApi = {
    */
   getNotificationPaymentInfo: (noticeCode: string, taxId: string): Promise<PaymentInfo> =>
     apiClient
-      .get<PaymentInfo>(`ext-registry/pagopa/v1/paymentinfo/${taxId}/${noticeCode}`)
+      .get<PaymentInfo>(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
       .then((response) => response.data),
 };

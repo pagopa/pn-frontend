@@ -9,17 +9,41 @@ export const newNotification: NewNotificationFe = {
   recipients: [
     {
       taxId: 'mocked-taxId1',
-      creditorTaxId: 'mocked-creditorTaxId1',
-      denomination: 'Mario Rossi',
-      token: 'mocked-token1',
+      denomination: 'Mario Rossi',  
       recipientType: RecipientType.PF,
+      payment: {
+        creditorTaxId: 'mocked-creditorTaxId1',
+        noticeCode: 'mocked-token1',
+        pagoPaForm: {
+          digests: {
+            sha256: ''
+          },
+          contentType: '',
+          ref: {
+            key: '',
+            versionToken: ''
+          }
+        }
+      }
     },
     {
       taxId: 'mocked-taxId2',
-      creditorTaxId: 'mocked-creditorTaxId2',
       denomination: 'Sara Giallo',
-      token: 'mocked-token2',
       recipientType: RecipientType.PF,
+      payment: {
+        creditorTaxId: 'mocked-creditorTaxId2',
+        noticeCode: 'mocked-token2',
+        pagoPaForm: {
+          digests: {
+            sha256: ''
+          },
+          contentType: '',
+          ref: {
+            key: '',
+            versionToken: ''
+          }
+        }
+      }
     },
   ],
   documents: [],

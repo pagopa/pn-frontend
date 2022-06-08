@@ -1,7 +1,7 @@
 import { fireEvent, waitFor, RenderResult } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import { NotificationDetailDocument } from '../../../types/Notifications';
+import { NotificationDetailDocument } from '../../../types/NotificationDetail';
 import NotificationDetailDocuments from '../NotificationDetailDocuments';
 
 const documents: Array<NotificationDetailDocument> = [
@@ -9,8 +9,13 @@ const documents: Array<NotificationDetailDocument> = [
     digests: {
       sha256: 'mocked-sha',
     },
+    ref: {
+      key: 'mocked-doc-title',
+      versionToken: 'mocked-versionToken'
+    },
     contentType: 'mocked-contentType',
     title: 'mocked-doc-title',
+    docIdx: '0'
   },
 ];
 
@@ -58,7 +63,7 @@ describe('NotificationDetailDocuments Component', () => {
     fireEvent.click(documentsButtons![0]);
     await waitFor(() => {
       expect(mockClickFn).toBeCalledTimes(1);
-      expect(mockClickFn).toBeCalledWith(0);
+      expect(mockClickFn).toBeCalledWith('0');
     });
   });
 });

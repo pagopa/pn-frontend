@@ -1,4 +1,5 @@
 import { NotificationDetailRecipient } from '@pagopa-pn/pn-commons';
+
 import { FormRecipient } from '../models/newNotification';
 
 const checkFisicalAddress = (recipient: FormRecipient) => {
@@ -41,8 +42,20 @@ export const formatNotificationRecipients = (
       denomination: `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
-      creditorTaxId: recipient.creditorTaxId,
-      token: recipient.noticeCode,
+      payment: {
+        creditorTaxId: recipient.creditorTaxId,
+        noticeCode: recipient.noticeCode,
+        pagoPaForm: {
+          digests: {
+            sha256: ''
+          },
+          contentType: '',
+          ref: {
+            key: '',
+            versionToken: ''
+          }
+        }
+      },
       digitalDomicile,
       physicalAddress: checkFisicalAddress(recipient),
     };
