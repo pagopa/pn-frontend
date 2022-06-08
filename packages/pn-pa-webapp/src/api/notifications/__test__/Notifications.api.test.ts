@@ -56,7 +56,7 @@ describe('Notifications api tests', () => {
 
   it('getSentNotificationDocument', async () => {
     const iun = 'mocked-iun';
-    const documentIndex = 0;
+    const documentIndex = '0';
     const mock = new MockAdapter(apiClient);
     mock
       .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
@@ -71,7 +71,7 @@ describe('Notifications api tests', () => {
     const iun = 'mocked-iun';
     const legalFact: LegalFactId = {
       key: 'mocked-key',
-      type: LegalFactType.ANALOG_DELIVERY,
+      category: LegalFactType.ANALOG_DELIVERY,
     };
     const mock = new MockAdapter(apiClient);
     mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200, undefined);

@@ -24,9 +24,9 @@ export const getSentNotificationLegalfact = createAsyncThunk<{url: string}, {iun
   }
 );
 
-export const getSentNotificationDocument = createAsyncThunk<{url: string}, {iun: string; documentIndex: number}>(
+export const getSentNotificationDocument = createAsyncThunk<{url: string}, {iun: string; documentIndex: string}>(
   'getSentNotificationDocument',
-  async (params: {iun: string; documentIndex: number}, { rejectWithValue }) => {
+  async (params: {iun: string; documentIndex: string}, { rejectWithValue }) => {
     try {
       return await NotificationsApi.getSentNotificationDocument(params.iun, params.documentIndex);
     } catch (e) {

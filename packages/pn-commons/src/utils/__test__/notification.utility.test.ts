@@ -1,9 +1,7 @@
 import _ from 'lodash';
 import {
   AnalogWorkflowDetails,
-  DeliveryMode,
   DigitalDomicileType,
-  NotificationPathChooseDetails,
   PhysicalCommunicationType,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
@@ -117,31 +115,28 @@ describe('notification utility functions', () => {
 });
 
 describe('timeline utility functions', () => {
-  it('return timeline status infos - NOTIFICATION_PATH_CHOOSE (analog)', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_PATH_CHOOSE;
-    (parsedNotificationCopy.timeline[0].details as NotificationPathChooseDetails).deliveryMode =
-      DeliveryMode.ANALOG;
+  test('return timeline status infos - SCHEDULE_ANALOG_WORKFLOW', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_ANALOG_WORKFLOW;
     testTimelineStatusInfosFn(
       'Invio per via cartacea',
       "È in corso l'invio della notifica per via cartacea."
     );
   });
 
-  it('return timeline status infos - NOTIFICATION_PATH_CHOOSE (digital)', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_PATH_CHOOSE;
-    (parsedNotificationCopy.timeline[0].details as NotificationPathChooseDetails).deliveryMode =
-      DeliveryMode.DIGITAL;
+  test('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
     testTimelineStatusInfosFn(
       'Invio per via digitale',
       "È in corso l'invio della notifica per via digitale."
     );
   });
 
-  it('return timeline status infos - SEND_COURTESY_MESSAGE', () => {
+  test('return timeline status infos - SEND_COURTESY_MESSAGE', () => {
+    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.EMAIL;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_COURTESY_MESSAGE;
-    (parsedNotificationCopy.timeline[0].details as SendCourtesyMessageDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as SendCourtesyMessageDetails).digitalAddress = {
       type: DigitalDomicileType.EMAIL,
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
       'Invio del messaggio di cortesia',
@@ -149,35 +144,39 @@ describe('timeline utility functions', () => {
     );
   });
 
-  it('return timeline status infos - SEND_DIGITAL_DOMICILE', () => {
+  test('return timeline status infos - SEND_DIGITAL_DOMICILE', () => {
+    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       type: DigitalDomicileType.PEC,
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
       'Invio via PEC',
-      "È in corso l'invio della notifica a Nome Cognome all'indirizzo PEC mocked@address.mail.it"
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail"
     );
   });
 
-  it('return timeline status infos - SEND_DIGITAL_DOMICILE_FEEDBACK', () => {
+  test('return timeline status infos - SEND_DIGITAL_DOMICILE_FEEDBACK', () => {
+    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       type: DigitalDomicileType.PEC,
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
       'Invio via PEC riuscito',
-      "L' invio della notifica a Nome Cognome all'indirizzo PEC mocked@address.mail.it è riuscito."
+      "L' invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail è riuscito."
     );
   });
 
-  it('return timeline status infos - SEND_DIGITAL_DOMICILE_FAILURE', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE_FAILURE;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).address = {
+  test('return timeline status infos - SEND_DIGITAL_DOMICILE_FAILURE', () => {
+    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).errors = ['mocked-errors'];
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       type: DigitalDomicileType.PEC,
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
       'Invio per via digitale fallito',
@@ -187,10 +186,10 @@ describe('timeline utility functions', () => {
 
   it('return timeline status infos - SEND_SIMPLE_REGISTERED_LETTER', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER;
-    (parsedNotificationCopy.timeline[0].details as AnalogWorkflowDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as AnalogWorkflowDetails).physicalAddress = {
       at: '',
       addressDetails: '',
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
       zip: '',
       municipality: '',
       province: '',
@@ -198,7 +197,7 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio via raccomandata semplice',
-      "È in corso l'invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata semplice."
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo nome@cognome.mail tramite raccomandata semplice."
     );
   });
 
@@ -206,10 +205,10 @@ describe('timeline utility functions', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_DOMICILE;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).serviceLevel =
       PhysicalCommunicationType.REGISTERED_LETTER_890;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
       at: '',
       addressDetails: '',
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
       zip: '',
       municipality: '',
       province: '',
@@ -217,7 +216,7 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio via raccomandata 890',
-      "È in corso l'invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata 890."
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo nome@cognome.mail tramite raccomandata 890."
     );
   });
 
@@ -225,10 +224,10 @@ describe('timeline utility functions', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_DOMICILE;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).serviceLevel =
       PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
       at: '',
       addressDetails: '',
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
       zip: '',
       municipality: '',
       province: '',
@@ -236,7 +235,7 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio via raccomandata A/R',
-      "È in corso l'invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata A/R."
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo nome@cognome.mail tramite raccomandata A/R."
     );
   });
 
