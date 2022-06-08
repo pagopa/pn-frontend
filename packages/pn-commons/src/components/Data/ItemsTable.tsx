@@ -12,7 +12,6 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
-import { SentimentDissatisfied } from '@mui/icons-material';
 import { Notification } from '../../types/Notifications';
 import { Column, Item, Sort } from '../../types/ItemsTable';
 
@@ -39,8 +38,8 @@ function ItemsTable({
   sort,
   onChangeSorting,
   emptyActionCallback,
-  emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
-  emptyActionLabel = 'Rimuovi filtri',
+  emptyMessage = 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione Recapiti: così, se riceverai una notifica, te lo comunicheremo.',
+  emptyActionLabel = '',
 }: Props) {
   const createSortHandler = (property: string) => () => {
     if (sort && onChangeSorting) {
@@ -125,7 +124,6 @@ function ItemsTable({
               <TableRow>
                 <TableCell colSpan={columns.length}>
                   <Box component='div' display='flex' sx={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
                     <Typography variant="body2">{emptyMessage}</Typography>
                     &nbsp;
                     <Typography
