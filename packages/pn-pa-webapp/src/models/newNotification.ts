@@ -23,18 +23,6 @@ export interface NewNotificationDocument {
   };
 }
 
-export interface NewNotificationPayment {
-  noticeCode: string;
-  creditorTaxId: string;
-  pagoPaForm: NewNotificationDocument;
-  f24flatRate?: NewNotificationDocument;
-  f24standard?: NewNotificationDocument;
-}
-
-export interface NewNotificationRecipient extends NotificationDetailRecipient {
-  payment?: NewNotificationPayment;
-}
-
 export interface NewNotificationBe {
   notificationFeePolicy: NotificationFeePolicy;
   idempotenceToken?: string;
@@ -42,7 +30,7 @@ export interface NewNotificationBe {
   subject: string;
   abstract?: string;
   cancelledIun?: string;
-  recipients: Array<NewNotificationRecipient>;
+  recipients: Array<NotificationDetailRecipient>;
   documents: Array<NewNotificationDocument>;
   physicalCommunicationType: PhysicalCommunicationType;
   senderDenomination?: string;
@@ -55,6 +43,7 @@ export interface NewNotificationFe extends NewNotificationBe {
 }
 
 export interface FormRecipient {
+  idx: number;
   recipientType: RecipientType;
   taxId: string;
   creditorTaxId: string;
@@ -97,6 +86,12 @@ export interface UpaloadPaymentResponse {
     f24flatRate?: NewNotificationDocument;
     f24standard?: NewNotificationDocument;
   };
+}
+
+export interface NewNotificationResponse {
+  notificationRequestId: string;
+  paProtocolNumber: string;
+  idempotenceToken: string;
 }
 
 

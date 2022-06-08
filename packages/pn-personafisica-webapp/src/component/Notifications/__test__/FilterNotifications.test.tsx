@@ -107,10 +107,10 @@ describe('Filter Notifications Table Component', () => {
     testFormElements(form!, 'endDate', 'filters.data_a');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
-    expect(submitButton).toHaveTextContent(/button.cerca/i);
+    expect(submitButton).toHaveTextContent(/button.filtra/i);
     const cancelButton = within(form!).getByTestId('cancelButton');
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveTextContent(/button.annulla ricerca/i);
+    expect(cancelButton).toHaveTextContent(/button.annulla filtro/i);
   });
 
   it('test filters inital value', () => {
@@ -136,8 +136,7 @@ describe('Filter Notifications Table Component', () => {
   it('test form submission - iunMatch (valid)', async () => {
     const oneYearAgo = moment().add(-1, 'year').startOf('day');
     const todayM = moment().startOf('day');
-
-    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'c_b963-202203041055');
+    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     await waitFor(() => {
@@ -149,7 +148,7 @@ describe('Filter Notifications Table Component', () => {
         startDate: oneYearAgo.toISOString(),
         endDate: todayM.toISOString(),
         status: undefined,
-        iunMatch: 'c_b963-202203041055',
+        iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
       },
       type: 'setNotificationFilters',
     });
@@ -172,7 +171,7 @@ describe('Filter Notifications Table Component', () => {
   it('test form reset', async () => {
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
-    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'RSSMRA80A01H501U');
+    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     await waitFor(() => {
       fireEvent.click(submitButton!);

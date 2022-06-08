@@ -1,9 +1,7 @@
 import _ from 'lodash';
 import {
   AnalogWorkflowDetails,
-  DeliveryMode,
   DigitalDomicileType,
-  NotificationPathChooseDetails,
   PhysicalCommunicationType,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
@@ -37,13 +35,13 @@ function testTimelineStatusInfosFn(labelToTest: string, descriptionToTest: strin
   const { label, description } = getNotificationTimelineStatusInfos(
     parsedNotificationCopy.timeline[0],
     parsedNotificationCopy.recipients
-  );
+  ) as { label: string; description: string };
   expect(label).toBe(labelToTest);
   expect(description).toBe(descriptionToTest);
 }
 
 describe('notification utility functions', () => {
-  test('return notification status infos - DELIVERED', () => {
+  it('return notification status infos - DELIVERED', () => {
     testNotificationStatusInfosFn(
       NotificationStatus.DELIVERED,
       'Consegnata',
@@ -52,7 +50,7 @@ describe('notification utility functions', () => {
     );
   });
 
-  test('return notification status infos - DELIVERING', () => {
+  it('return notification status infos - DELIVERING', () => {
     testNotificationStatusInfosFn(
       NotificationStatus.DELIVERING,
       'Invio in corso',
@@ -61,7 +59,7 @@ describe('notification utility functions', () => {
     );
   });
 
-  test('return notification status infos - UNREACHABLE', () => {
+  it('return notification status infos - UNREACHABLE', () => {
     testNotificationStatusInfosFn(
       NotificationStatus.UNREACHABLE,
       'Destinatario irreperibile',
@@ -70,7 +68,7 @@ describe('notification utility functions', () => {
     );
   });
 
-  test('return notification status infos - PAID', () => {
+  it('return notification status infos - PAID', () => {
     testNotificationStatusInfosFn(
       NotificationStatus.PAID,
       'Pagata',
@@ -79,7 +77,7 @@ describe('notification utility functions', () => {
     );
   });
 
-  test('return notification status infos - ACCEPTED', () => {
+  it('return notification status infos - ACCEPTED', () => {
     testNotificationStatusInfosFn(
       NotificationStatus.ACCEPTED,
       'Depositata',
@@ -88,7 +86,7 @@ describe('notification utility functions', () => {
     );
   });
 
-  test('return notification status infos - EFFECTIVE_DATE', () => {
+  it('return notification status infos - EFFECTIVE_DATE', () => {
     testNotificationStatusInfosFn(
       NotificationStatus.EFFECTIVE_DATE,
       'Perfezionata per decorrenza termini',
@@ -97,7 +95,7 @@ describe('notification utility functions', () => {
     );
   });
 
-  test('return notification status infos - VIEWED', () => {
+  it('return notification status infos - VIEWED', () => {
     testNotificationStatusInfosFn(
       NotificationStatus.VIEWED,
       'Perfezionata per visione',
@@ -106,7 +104,7 @@ describe('notification utility functions', () => {
     );
   });
 
-  test('return notification status infos - CANCELED', () => {
+  it('return notification status infos - CANCELED', () => {
     testNotificationStatusInfosFn(
       NotificationStatus.CANCELED,
       'Annullata',
@@ -117,20 +115,16 @@ describe('notification utility functions', () => {
 });
 
 describe('timeline utility functions', () => {
-  test('return timeline status infos - NOTIFICATION_PATH_CHOOSE (analog)', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_PATH_CHOOSE;
-    (parsedNotificationCopy.timeline[0].details as NotificationPathChooseDetails).deliveryMode =
-      DeliveryMode.ANALOG;
+  test('return timeline status infos - SCHEDULE_ANALOG_WORKFLOW', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_ANALOG_WORKFLOW;
     testTimelineStatusInfosFn(
       'Invio per via cartacea',
       "È in corso l'invio della notifica per via cartacea."
     );
   });
 
-  test('return timeline status infos - NOTIFICATION_PATH_CHOOSE (digital)', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_PATH_CHOOSE;
-    (parsedNotificationCopy.timeline[0].details as NotificationPathChooseDetails).deliveryMode =
-      DeliveryMode.DIGITAL;
+  test('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
     testTimelineStatusInfosFn(
       'Invio per via digitale',
       "È in corso l'invio della notifica per via digitale."
@@ -138,10 +132,11 @@ describe('timeline utility functions', () => {
   });
 
   test('return timeline status infos - SEND_COURTESY_MESSAGE', () => {
+    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.EMAIL;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_COURTESY_MESSAGE;
-    (parsedNotificationCopy.timeline[0].details as SendCourtesyMessageDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as SendCourtesyMessageDetails).digitalAddress = {
       type: DigitalDomicileType.EMAIL,
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
       'Invio del messaggio di cortesia',
@@ -150,34 +145,38 @@ describe('timeline utility functions', () => {
   });
 
   test('return timeline status infos - SEND_DIGITAL_DOMICILE', () => {
+    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       type: DigitalDomicileType.PEC,
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
       'Invio via PEC',
-      "È in corso l'invio della notifica a Nome Cognome all'indirizzo PEC mocked@address.mail.it"
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail"
     );
   });
 
   test('return timeline status infos - SEND_DIGITAL_DOMICILE_FEEDBACK', () => {
+    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       type: DigitalDomicileType.PEC,
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
       'Invio via PEC riuscito',
-      "L' invio della notifica a Nome Cognome all'indirizzo PEC mocked@address.mail.it è riuscito."
+      "L' invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail è riuscito."
     );
   });
 
   test('return timeline status infos - SEND_DIGITAL_DOMICILE_FAILURE', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE_FAILURE;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).address = {
+    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).errors = ['mocked-errors'];
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       type: DigitalDomicileType.PEC,
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
       'Invio per via digitale fallito',
@@ -185,12 +184,12 @@ describe('timeline utility functions', () => {
     );
   });
 
-  test('return timeline status infos - SEND_SIMPLE_REGISTERED_LETTER', () => {
+  it('return timeline status infos - SEND_SIMPLE_REGISTERED_LETTER', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER;
-    (parsedNotificationCopy.timeline[0].details as AnalogWorkflowDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as AnalogWorkflowDetails).physicalAddress = {
       at: '',
       addressDetails: '',
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
       zip: '',
       municipality: '',
       province: '',
@@ -198,18 +197,18 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio via raccomandata semplice',
-      "È in corso l'invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata semplice."
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo nome@cognome.mail tramite raccomandata semplice."
     );
   });
 
-  test('return timeline status infos - SEND_ANALOG_DOMICILE (890)', () => {
+  it('return timeline status infos - SEND_ANALOG_DOMICILE (890)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_DOMICILE;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).serviceLevel =
       PhysicalCommunicationType.REGISTERED_LETTER_890;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
       at: '',
       addressDetails: '',
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
       zip: '',
       municipality: '',
       province: '',
@@ -217,18 +216,18 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio via raccomandata 890',
-      "È in corso l'invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata 890."
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo nome@cognome.mail tramite raccomandata 890."
     );
   });
 
-  test('return timeline status infos - SEND_ANALOG_DOMICILE (A/R)', () => {
+  it('return timeline status infos - SEND_ANALOG_DOMICILE (A/R)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_DOMICILE;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).serviceLevel =
       PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).address = {
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
       at: '',
       addressDetails: '',
-      address: 'mocked@address.mail.it',
+      address: 'nome@cognome.mail',
       zip: '',
       municipality: '',
       province: '',
@@ -236,11 +235,11 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio via raccomandata A/R',
-      "È in corso l'invio della notifica a Nome Cognome all'indirizzo mocked@address.mail.it tramite raccomandata A/R."
+      "È in corso l'invio della notifica a Nome Cognome all'indirizzo nome@cognome.mail tramite raccomandata A/R."
     );
   });
 
-  test('return timeline status infos - SEND_PAPER_FEEDBACK', () => {
+  it('return timeline status infos - SEND_PAPER_FEEDBACK', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_PAPER_FEEDBACK;
     testTimelineStatusInfosFn(
       'Aggiornamento stato raccomandata',
@@ -248,12 +247,12 @@ describe('timeline utility functions', () => {
     );
   });
 
-  test.skip('return parsed notification detail response', () => {
+  it('return parsed notification detail response', () => {
     const calculatedParsedNotification = parseNotificationDetail(notificationFromBe);
     expect(calculatedParsedNotification).toStrictEqual(parsedNotification);
   });
 
-  test('return legalFact label - NO SEND_PAPER_FEEDBACK', () => {
+  it('return legalFact label - NO SEND_PAPER_FEEDBACK', () => {
     const label = getLegalFactLabel(TimelineCategory.GET_ADDRESS, {
       attestation: 'mocked-legalFact-label',
       receipt: 'mocked-recipient-label',
@@ -261,7 +260,7 @@ describe('timeline utility functions', () => {
     expect(label).toBe('mocked-legalFact-label');
   });
 
-  test('return legalFact label - SEND_PAPER_FEEDBACK', () => {
+  it('return legalFact label - SEND_PAPER_FEEDBACK', () => {
     const label = getLegalFactLabel(TimelineCategory.SEND_PAPER_FEEDBACK, {
       attestation: 'mocked-legalFact-label',
       receipt: 'mocked-recipient-label',

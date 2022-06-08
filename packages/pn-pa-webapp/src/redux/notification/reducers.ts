@@ -3,11 +3,11 @@ import {
   NotificationStatus,
   NotificationDetail,
   NotificationDetailDocument,
-  NotificationDetailPayment,
   NotificationDetailRecipient,
   INotificationDetailTimeline,
   NotificationStatusHistory,
   PhysicalCommunicationType,
+  NotificationFeePolicy
 } from '@pagopa-pn/pn-commons';
 import {
   getSentNotification,
@@ -19,19 +19,18 @@ import {
 const initialState = {
   loading: false,
   notification: {
-    iun: '',
-    paNotificationId: '',
+    paProtocolNumber: '',
     subject: '',
-    sentAt: '',
-    cancelledIun: '',
-    cancelledByIun: '',
     recipients: [] as Array<NotificationDetailRecipient>,
     documents: [] as Array<NotificationDetailDocument>,
-    payment: {} as NotificationDetailPayment,
+    notificationFeePolicy: '' as NotificationFeePolicy,
+    physicalCommunicationType: '' as PhysicalCommunicationType,
+    senderPaId: '',
+    iun: '',
+    sentAt: '',
     notificationStatus: '' as NotificationStatus,
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
-    timeline: [] as Array<INotificationDetailTimeline>,
-    physicalCommunicationType: '' as PhysicalCommunicationType,
+    timeline: [] as Array<INotificationDetailTimeline>
   } as NotificationDetail,
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',

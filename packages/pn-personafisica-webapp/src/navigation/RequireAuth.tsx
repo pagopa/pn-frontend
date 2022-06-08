@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { InactivityHandler, SessionModal } from '@pagopa-pn/pn-commons';
 
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
@@ -7,7 +7,6 @@ import { logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { goToLogin } from './navigation.utility';
-import * as routes from './routes.const';
 
 const inactivityTimer = 5 * 60 * 1000;
 
@@ -18,16 +17,8 @@ const inactivityTimer = 5 * 60 * 1000;
 /* eslint-disable functional/immutable-data */
 const RequireAuth = () => {
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
-  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (token !== '' && fetchedTos && !tos) {
-      navigate(routes.TOS);
-    }
-  }, [fetchedTos, tos]);
 
   useEffect(() => {
     if (token === '' || !token) {

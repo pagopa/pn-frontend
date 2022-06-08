@@ -13,12 +13,13 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import * as yup from 'yup';
-import { Formik, Form, FormikValues } from 'formik';
+import { Formik, Form } from 'formik';
 import { DigitalDomicileType, fiscalCodeRegex, RecipientType } from '@pagopa-pn/pn-commons';
 
 import { pIvaRegex } from '@pagopa-pn/pn-commons/src/utils/fiscal_code.utility';
 import { saveRecipients } from '../../../redux/newNotification/actions';
 import { useAppDispatch } from '../../../redux/hooks';
+import { FormRecipient } from '../../../models/newNotification';
 import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
@@ -98,15 +99,15 @@ const Recipient = ({ onConfirm }: Props) => {
     ),
   });
 
-  const handleAddRecipient = (values: FormikValues, setFieldValue: any) => {
-    const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx as number;
+  const handleAddRecipient = (values: {recipients: Array<FormRecipient>}, setFieldValue: any) => {
+    const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx;
     setFieldValue('recipients', [
       ...values.recipients,
       { ...singleRecipient, idx: lastRecipientIdx + 1, id: `recipient.${lastRecipientIdx + 1}` },
     ]);
   };
 
-  const handleSubmit = (values: FormikValues) => {
+  const handleSubmit = (values: {recipients: Array<FormRecipient>}) => {
     dispatch(saveRecipients(values));
     onConfirm();
   };

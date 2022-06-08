@@ -12,7 +12,7 @@ type Props = {
 const NotificationDetailTable = ({ rows }: Props) => {
   return (
     <TableContainer component={Paper} sx={{ margin: '20px 0' }} className="paperContainer">
-      <Table aria-label="notification detail">
+      <Table aria-label="Dettaglio notifica">
         <TableBody>
           {rows.map((row) => (
             <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>

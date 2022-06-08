@@ -34,7 +34,7 @@ describe('Notifiche Page', () => {
     const spy = jest.spyOn(hooks, 'useAppSelector');
     spy
       .mockReturnValueOnce({
-        notifications: notificationsToFe.result,
+        notifications: notificationsToFe.resultsPage,
         filters: {
           startDate: tenYearsAgo.toISOString(),
           endDate: today.toISOString(),

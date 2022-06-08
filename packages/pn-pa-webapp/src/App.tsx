@@ -7,14 +7,19 @@ import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
-import { PAGOPA_HELP_EMAIL, SELFCARE_URL_FE_LOGIN, SELFCARE_BASE_URL } from './utils/constants';
+import {
+  PAGOPA_HELP_EMAIL,
+  SELFCARE_URL_FE_LOGIN,
+  SELFCARE_BASE_URL,
+  PARTY_MOCK,
+} from './utils/constants';
 import { mixpanelInit } from './utils/mixpanel';
 
 // TODO: get parties list from be (?)
 const partyList: Array<PartyEntity> = [
   {
     id: '0',
-    name: `Comune di Milano`,
+    name: PARTY_MOCK,
     productRole: 'Referente amministrativo',
     logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
   },
@@ -41,20 +46,23 @@ const App = () => {
   );
 
   // TODO: get products list from be (?)
-  const productsList: Array<ProductSwitchItem> = useMemo(() => [
-    {
-      id: '0',
-      title: `Piattaforma Notifiche`,
-      productUrl: '',
-      linkType: 'internal',
-    },
-    {
-      id: '1',
-      title: `Area Riservata`,
-      productUrl: `${SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
-      linkType: 'external',
-    },
-  ], [idOrganization]);
+  const productsList: Array<ProductSwitchItem> = useMemo(
+    () => [
+      {
+        id: '0',
+        title: `Piattaforma Notifiche`,
+        productUrl: '',
+        linkType: 'internal',
+      },
+      {
+        id: '1',
+        title: `Area Riservata`,
+        productUrl: `${SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
+        linkType: 'external',
+      },
+    ],
+    [idOrganization]
+  );
 
   useEffect(() => {
     // init mixpanel
@@ -65,7 +73,10 @@ const App = () => {
     <Layout
       onExitAction={() => dispatch(logout())}
       sideMenu={
-        role && menuItems && <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
+        role &&
+        menuItems && (
+          <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
+        )
       }
       assistanceEmail={PAGOPA_HELP_EMAIL}
       productsList={productsList}

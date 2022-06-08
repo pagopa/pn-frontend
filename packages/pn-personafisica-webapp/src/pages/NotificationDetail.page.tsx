@@ -45,6 +45,7 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const recipient = notification.recipients[0];
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -84,8 +85,10 @@ const NotificationDetail = () => {
     },
     { id: 8, label: t('detail.groups', { ns: 'notifiche' }), value: '' },
   ];
-  const documentDowloadHandler = (documentIndex: number) => {
-    void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
+  const documentDowloadHandler = (documentIndex: string | undefined) => {
+    if (documentIndex) {
+      void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
+    }
   };
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     void dispatch(getReceivedNotificationLegalfact({ iun: notification.iun, legalFact }));
@@ -105,6 +108,7 @@ const NotificationDetail = () => {
     if (id) {
       void dispatch(getReceivedNotification(id));
     }
+    return () => void dispatch(resetState());
   }, []);
 
   useEffect(() => {
@@ -118,8 +122,6 @@ const NotificationDetail = () => {
       dowloadDocument(legalFactDownloadUrl);
     }
   }, [legalFactDownloadUrl]);
-
-  useEffect(() => () => void dispatch(resetState()), []);
 
   const breadcrumb = (
     <Fragment>
@@ -152,9 +154,10 @@ const NotificationDetail = () => {
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }}}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
-          {notification.payment?.iuv && (
+          {recipient && recipient.payment && (
             <NotificationPayment
-              notificationPayment={notification.payment}
+              iun={notification.iun}
+              notificationPayment={recipient.payment}
               onDocumentDownload={dowloadDocument}
             />
           )}
@@ -187,7 +190,7 @@ const NotificationDetail = () => {
           
         </Grid>
         <Grid item lg={5} xs={12}>
-          <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
+          <Box component="section" sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
             <NotificationDetailTimeline
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}

@@ -1,15 +1,15 @@
 import { formatDate, GetNotificationsResponse, NotificationStatus } from "@pagopa-pn/pn-commons";
 
 export const notificationsFromBe: GetNotificationsResponse = {
-  result: [
+  resultsPage: [
     {
       iun: 'mocked-iun',
-      paNotificationId: 'mocked-paNotificationId',
-      senderId: 'mocked-senderId',
+      paProtocolNumber: 'mocked-paNotificationId',
+      sender: 'mocked-senderId',
       sentAt: '2022-02-22T14:20:20.566Z',
       subject: 'mocked-subject',
       notificationStatus: NotificationStatus.DELIVERED,
-      recipientId: 'mocked-recipientId'
+      recipients: ['mocked-recipientId']
     }
   ],
   moreResult: false,
@@ -18,7 +18,7 @@ export const notificationsFromBe: GetNotificationsResponse = {
 
 export const notificationsToFe: GetNotificationsResponse = {
   ...notificationsFromBe,
-  result: notificationsFromBe.result.map(r => ({
+  resultsPage: notificationsFromBe.resultsPage.map(r => ({
     ...r,
     sentAt: formatDate(r.sentAt)
   }))

@@ -1,3 +1,4 @@
+import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -25,9 +26,8 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import DateAdapter from '@mui/lab/AdapterMoment';
-import { CourtesyPage, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import { CourtesyPage, CustomDatePicker, DATE_FORMAT, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
@@ -122,8 +122,18 @@ const NuovaDelega = () => {
 
   const breadcrumbs = (
     <Fragment>
-      <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'start', sm: 'center' }} justifyContent="start" spacing={3}>
-        <ButtonNaked onClick={() => navigate(-1)} startIcon={<ArrowBack />} color="primary" size="medium" >
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        alignItems={{ xs: 'start', sm: 'center' }}
+        justifyContent="start"
+        spacing={3}
+      >
+        <ButtonNaked
+          onClick={() => navigate(-1)}
+          startIcon={<ArrowBack />}
+          color="primary"
+          size="medium"
+        >
           {t('button.indietro', { ns: 'common' })}
         </ButtonNaked>
         <Breadcrumbs aria-label="breadcrumb">
@@ -156,13 +166,15 @@ const NuovaDelega = () => {
   return (
     <Fragment>
       {!created && (
-        <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 }}}>
+        <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumbs}
           <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
-            <Grid item lg={8} xs={12} sx={{ p: { xs: 0, lg: 3 }}}>
+            <Grid item lg={8} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumbs}
               <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
-                <Typography sx={{ fontWeight: 'bold' }}>{t('nuovaDelega.form.personType')}</Typography>
+                <Typography sx={{ fontWeight: 'bold' }}>
+                  {t('nuovaDelega.form.personType')}
+                </Typography>
                 <Formik
                   initialValues={initialValues}
                   validationSchema={validationSchema}
@@ -262,7 +274,10 @@ const NuovaDelega = () => {
                           name="selectTuttiEntiOrSelezionati"
                           value={values.selectTuttiEntiOrSelezionati.toString()}
                           onChange={(event) => {
-                            setFieldValue('selectTuttiEntiOrSelezionati', event.currentTarget.value);
+                            setFieldValue(
+                              'selectTuttiEntiOrSelezionati',
+                              event.currentTarget.value
+                            );
                           }}
                         >
                           <FormControlLabel
@@ -313,16 +328,27 @@ const NuovaDelega = () => {
                       <br />
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
                         <FormControl fullWidth>
-                          <LocalizationProvider dateAdapter={DateAdapter}>
-                            <DesktopDatePicker
+                          <LocalizationProvider dateAdapter={DateAdapter} locale={currentLocale}>
+                            <CustomDatePicker
                               label={t('nuovaDelega.form.endDate')}
-                              inputFormat="DD/MM/yyyy"
+                              inputFormat={DATE_FORMAT}
                               value={values.expirationDate}
                               onChange={(value: Date | null) => {
                                 setFieldValue('expirationDate', value);
                               }}
                               renderInput={(params) => (
-                                <TextField id="endDate" name="endDate" {...params} />
+                                <TextField
+                                  id="endDate"
+                                  name="endDate"
+                                  {...params}
+                                  aria-label="Data termine delega" // aria-label for (TextField + Button) Group
+                                  inputProps={{
+                                    ...params.inputProps,
+                                    inputMode: 'text',
+                                    'aria-label': 'Inserisci la data di termine della delega',
+                                    type: 'text',
+                                  }}
+                                />
                               )}
                               disablePast={true}
                             />
@@ -333,7 +359,11 @@ const NuovaDelega = () => {
                       <Typography fontWeight={'bold'} sx={{ marginTop: '1rem' }}>
                         {t('nuovaDelega.form.verificationCode')}
                       </Typography>
-                      <Stack direction={{ xs: 'column', lg: 'row' }} justifyContent={{ sm: 'flex-start'}} spacing={2}>
+                      <Stack
+                        direction={{ xs: 'column', lg: 'row' }}
+                        justifyContent={{ sm: 'flex-start' }}
+                        spacing={2}
+                      >
                         <Typography sx={{ marginTop: '1rem', flexGrow: '1' }}>
                           {t('nuovaDelega.form.verificationCodeDescr')}
                         </Typography>

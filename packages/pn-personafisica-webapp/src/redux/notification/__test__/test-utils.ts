@@ -1,7 +1,6 @@
 import {
   NotificationStatus,
   AddressSource,
-  DeliveryMode,
   DigitalDomicileType,
   LegalFactType,
   NotificationDetail,
@@ -14,16 +13,16 @@ import {
 
 export const notificationFromBe: NotificationDetail = {
   iun: 'c_b963-220220221119',
-  paNotificationId: '220220221119',
+  paProtocolNumber: '220220221119',
   subject: 'Prova - status',
   sentAt: '2022-02-21T10:19:33.440Z',
   cancelledIun: 'mocked-cancelledIun',
   cancelledByIun: 'mocked-cancelledByIun',
   documentsAvailable: true,
+  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+  senderPaId: 'mocked-senderPaId',
   recipients: [
     {
-      creditorTaxId: 'mocked-creditorTaxId',
-      token: 'mocked-token',
       recipientType: RecipientType.PF,
       taxId: 'CGNNMO80A03H501U',
       denomination: 'Analogico Ok',
@@ -40,6 +39,29 @@ export const notificationFromBe: NotificationDetail = {
         province: 'PROV',
         foreignState: '',
       },
+      payment: {
+        creditorTaxId: 'mocked-creditorTaxId',
+        pagoPaForm: {
+          digests: {
+            sha256: 'mocked-sha256',
+          },
+          contentType: 'mocked-contentType',
+          ref: {
+            key: 'Avviso PagoPa',
+            versionToken: 'mocked-versionToken'
+          }
+        },
+        f24standard: {
+          digests: {
+            sha256: 'mocked-sha256',
+          },
+          contentType: 'mocked-contentType',
+          ref: {
+            key: 'F24 Standard',
+            versionToken: 'mocked-versionToken'
+          }
+        },
+      },
     },
   ],
   documents: [
@@ -49,35 +71,12 @@ export const notificationFromBe: NotificationDetail = {
       },
       contentType: 'application/pdf',
       title: 'Mocked document',
+      ref: {
+        key: 'Mocked document',
+        versionToken: 'mocked-versionToken'
+      }
     },
   ],
-  payment: {
-    iuv: '',
-    notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
-    f24: {
-      flatRate: {
-        digests: {
-          sha256: 'mocked-sha256',
-        },
-        contentType: 'mocked-contentType',
-        title: 'Mocked document',
-      },
-      digital: {
-        digests: {
-          sha256: 'mocked-sha256',
-        },
-        contentType: 'mocked-contentType',
-        title: 'Mocked document',
-      },
-      analog: {
-        digests: {
-          sha256: 'mocked-sha256',
-        },
-        contentType: 'mocked-contentType',
-        title: 'Mocked document',
-      },
-    },
-  },
   notificationStatus: NotificationStatus.PAID,
   notificationStatusHistory: [
     {
@@ -92,62 +91,19 @@ export const notificationFromBe: NotificationDetail = {
       timestamp: '2022-03-02T17:56:46.668Z',
       category: TimelineCategory.REQUEST_ACCEPTED,
       details: {
-        taxId: 'mocked-taxId',
-        category: TimelineCategory.REQUEST_ACCEPTED,
-        recipients: [
-          {
-            creditorTaxId: 'mocked-creditorTaxId',
-            token: 'mocked-token',
-            recipientType: RecipientType.PF,
-            taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
-            denomination: 'Mario Rossi',
-            digitalDomicile: {
-              type: DigitalDomicileType.PEC,
-              address: 'nome.cognome@works.demo.it',
-            },
-            physicalAddress: {
-              at: '',
-              address: '',
-              addressDetails: '',
-              zip: '',
-              municipality: '',
-              province: '',
-              foreignState: '',
-            },
-          },
-        ],
-        documentsDigests: [
-          {
-            sha256: '06e21dbe27ac8e41251a2cfa7003d697c04aea7591ca358c1218071c9ceb3875',
-          },
-        ],
-        f24Digests: {
-          flatRate: {
-            sha256: '',
-          },
-          digital: {
-            sha256: '',
-          },
-          analog: {
-            sha256: '',
-          },
-        },
       },
       legalFactsIds: [
         {
           key: 'sender_ack~0f4Z32eLEiX8NSYR4WYzyvQvnQHh1t7Z',
-          type: LegalFactType.SENDER_ACK,
+          category: LegalFactType.SENDER_ACK,
         },
       ],
     },
     {
       elementId: 'c_b429-202203021814_deliveryMode_rec0',
       timestamp: '2022-03-02T17:56:50.303Z',
-      category: TimelineCategory.NOTIFICATION_PATH_CHOOSE,
+      category: TimelineCategory.SEND_ANALOG_DOMICILE,
       details: {
-        category: TimelineCategory.NOTIFICATION_PATH_CHOOSE,
-        taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
-        deliveryMode: DeliveryMode.DIGITAL,
         physicalAddress: {
           at: '',
           address: '',
@@ -157,24 +113,6 @@ export const notificationFromBe: NotificationDetail = {
           province: '',
           foreignState: '',
         },
-        platform: {
-          type: DigitalDomicileType.EMAIL,
-          address: 'mocked@email.it',
-        },
-        special: {
-          type: DigitalDomicileType.PEC,
-          address: 'nome.cognome@works.demo.it',
-        },
-        general: {
-          type: DigitalDomicileType.EMAIL,
-          address: 'mocked@email.it',
-        },
-        courtesyAddresses: [
-          {
-            type: DigitalDomicileType.EMAIL,
-            address: 'mocked@email.it',
-          },
-        ],
       },
     },
     {
@@ -182,13 +120,11 @@ export const notificationFromBe: NotificationDetail = {
       timestamp: '2022-03-02T17:56:53.636Z',
       category: TimelineCategory.SEND_DIGITAL_DOMICILE,
       details: {
-        category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-        taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
-        address: {
+        digitalAddress: {
           type: DigitalDomicileType.EMAIL,
-          address: 'mocked@email.it',
+          address: 'nome.cognome@works.demo.it',
         },
-        addressSource: AddressSource.GENERAL,
+        digitalAddressSource: AddressSource.GENERAL,
         retryNumber: 1,
         downstreamId: {
           systemId: '',
@@ -201,13 +137,11 @@ export const notificationFromBe: NotificationDetail = {
       timestamp: '2022-03-02T17:56:56.856Z',
       category: TimelineCategory.SEND_DIGITAL_DOMICILE,
       details: {
-        category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-        taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
-        address: {
+        digitalAddress: {
           type: DigitalDomicileType.PEC,
           address: 'nome.cognome@works.demo.it',
         },
-        addressSource: AddressSource.GENERAL,
+        digitalAddressSource: AddressSource.GENERAL,
         retryNumber: 1,
         downstreamId: {
           systemId: '',
@@ -220,13 +154,11 @@ export const notificationFromBe: NotificationDetail = {
       timestamp: '2022-03-02T17:57:03.284Z',
       category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
       details: {
-        category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-        taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
-        address: {
+        digitalAddress: {
           type: DigitalDomicileType.PEC,
           address: 'nome.cognome@works.demo.it',
         },
-        addressSource: AddressSource.GENERAL,
+        digitalAddressSource: AddressSource.GENERAL,
         retryNumber: 1,
         downstreamId: {
           systemId: '',
@@ -238,15 +170,13 @@ export const notificationFromBe: NotificationDetail = {
     {
       elementId: 'c_b429-202203021814_send_courtesy_rec0',
       timestamp: '2022-03-02T17:57:06.819Z',
-      category: TimelineCategory.END_OF_DIGITAL_DELIVERY_WORKFLOW,
+      category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
       details: {
-        category: TimelineCategory.END_OF_DIGITAL_DELIVERY_WORKFLOW,
-        taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
       },
       legalFactsIds: [
         {
           key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
-          type: LegalFactType.DIGITAL_DELIVERY,
+          category: LegalFactType.DIGITAL_DELIVERY,
         },
       ],
     },
@@ -255,8 +185,6 @@ export const notificationFromBe: NotificationDetail = {
       timestamp: '2022-03-02T17:59:10.029Z',
       category: TimelineCategory.REFINEMENT,
       details: {
-        category: TimelineCategory.REFINEMENT,
-        taxId: 'ed84b8c9-444e-410d-80d7-cfad6aa12070',
       },
     },
   ],
