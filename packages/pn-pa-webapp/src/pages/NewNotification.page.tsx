@@ -1,10 +1,8 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Box, Breadcrumbs, Grid, Step, StepLabel, Stepper, Typography, Stack } from '@mui/material';
+import { Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { BreadcrumbLink, TitleBox, Prompt, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { TitleBox, Prompt, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -85,30 +83,7 @@ const NewNotification = () => {
       <Box p={3}>
         <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
           <Grid item xs={12} lg={8}>
-            <Stack
-              direction={{ xs: 'column', sm: 'row' }}
-              alignItems={{ xs: 'start', sm: 'center' }}
-              justifyContent="start"
-              spacing={3}
-            >
-              <ButtonNaked
-                color="primary"
-                startIcon={<ArrowBackIcon />}
-                onClick={() => navigate(-1)}
-              >
-                Indietro
-              </ButtonNaked>
-              <Breadcrumbs aria-label="breadcrumb">
-                <BreadcrumbLink to={routes.DASHBOARD}>Notifiche</BreadcrumbLink>
-                <Typography
-                  color="text.primary"
-                  fontWeight={600}
-                  sx={{ display: 'flex', alignItems: 'center' }}
-                >
-                  Nuova notifica
-                </Typography>
-              </Breadcrumbs>
-            </Stack>
+            <PnBreadcrumb linkRoute={routes.DASHBOARD} linkLabel="Notifiche" currentLocationLabel="Nuova notifica"/>
             <TitleBox
               variantTitle="h4"
               title="Invia una nuova notifica"
