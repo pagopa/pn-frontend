@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TitleBox, Prompt, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
@@ -39,7 +39,6 @@ const steps = ['Informazioni preliminari', 'Destinatario', 'Allegati', 'Metodi d
 const NewNotification = () => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
-  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const notification = useAppSelector(
     (state: RootState) => state.newNotificationState.notification
