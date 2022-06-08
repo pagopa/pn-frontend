@@ -65,7 +65,7 @@ const CodeInput = memo(
     };
 
     const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
-      if (!isNaN(Number(event.key))) {
+      if (!isNaN(Number(event.key)) && inputsRef.current[index].value) {
         /* eslint-disable-next-line functional/immutable-data */
         inputsRef.current[index].value = event.key;
       }
