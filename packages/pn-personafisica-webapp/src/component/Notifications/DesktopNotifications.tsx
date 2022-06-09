@@ -118,7 +118,6 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
   };
   const ItemsTableEmptyState = () => {
     const filterCleared:boolean = filters.clearFilter === undefined ? true : filters.clearFilter;
-    console.log('filtri disattivati', filters.clearFilter);
     const emptyMessage: any = !filterCleared ? undefined : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione';
     const emptyActionLabel: any = !filterCleared ? undefined : 'Recapiti';
     const secondaryMessage = {

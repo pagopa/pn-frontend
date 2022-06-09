@@ -197,7 +197,6 @@ const Dashboard = () => {
 
   const ItemsTableEmptyState = () => {
     const filterCleared = filters.clearFilter === undefined ? true : filters.clearFilter;
-    console.log('filtri disattivati', filterCleared);
     const commonProps = {
       columns,
       rows,
