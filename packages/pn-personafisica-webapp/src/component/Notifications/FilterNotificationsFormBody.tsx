@@ -12,6 +12,7 @@ import {
   tenYearsAgo,
   today,
   useIsMobile,
+  formatIun
 } from '@pagopa-pn/pn-commons';
 
 type Props = {
@@ -47,31 +48,15 @@ const FilterNotificationsFormBody = ({
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
 
-  const handleDashInputMask = async (e: ChangeEvent) => {
-    const input = (e.nativeEvent as any).data;
-    if (input && input.length) {
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      await formikInstance.setFieldValue('iunMatch', formikInstance.values.iunMatch + input + '-');
-    } else {
-      formikInstance.handleChange(e);
-    }
-  };
-
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (e.target.id === 'iunMatch') {
-      switch (formikInstance.values.iunMatch.length) {
-        case 3:
-        case 8:
-        case 13:
-        case 20:
-        case 22:
-          await handleDashInputMask(e);
-          break;
-        default:
-          formikInstance.handleChange(e);
+      const newInput = formatIun(formikInstance.values.iunMatch, (e.nativeEvent as any).data);
+      if (newInput) {
+        await formikInstance.setFieldValue('iunMatch', newInput);
+      } else {
+        formikInstance.handleChange(e);
       }
-    }
-    else {
+    } else {
       formikInstance.handleChange(e);
     }
     await formikInstance.setFieldTouched(e.target.id, true, false);
@@ -99,7 +84,7 @@ const FilterNotificationsFormBody = ({
           id="startDate"
           name="startDate"
           dateAdapter={AdapterDateFns}
-          locale={currentLocale}
+          adapterLocale={currentLocale}
         >
           <CustomDatePicker
             label={t('filters.data_da', { ns: 'notifiche' })}
@@ -140,7 +125,7 @@ const FilterNotificationsFormBody = ({
           id="endDate"
           name="endDate"
           dateAdapter={AdapterDateFns}
-          locale={currentLocale}
+          adapterLocale={currentLocale}
         >
           <CustomDatePicker
             label={t('filters.data_a', { ns: 'notifiche' })}

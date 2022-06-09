@@ -15,6 +15,8 @@ import {
   NotificationAllowedStatus,
   tenYearsAgo,
   today,
+  IUN_regex,
+  formatIun
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
@@ -43,9 +45,6 @@ const FilterNotificationsTable = () => {
   const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-
-  // TODO inserire regex corretta
-  const IUN_regex = /^[0-9A-Z_-]{1,20}$/i;
 
   const emptyValues = {
     startDate: tenYearsAgo.toISOString(),
@@ -106,9 +105,18 @@ const FilterNotificationsTable = () => {
 
   const classes = useStyles();
 
-  const handleChangeTouched = (e: ChangeEvent) => {
-    void formik.setFieldTouched(e.target.id, true, false);
-    formik.handleChange(e);
+  const handleChangeTouched = async (e: ChangeEvent) => {
+    if (e.target.id === 'iunMatch') {
+      const newInput = formatIun(formik.values.iunMatch, (e.nativeEvent as any).data);
+      if (newInput) {
+        await formik.setFieldValue('iunMatch', newInput);
+      } else {
+        formik.handleChange(e);
+      }
+    } else {
+      formik.handleChange(e);
+    }
+    await formik.setFieldTouched(e.target.id, true, false);
   };
 
   useEffect(() => {
@@ -180,7 +188,7 @@ const FilterNotificationsTable = () => {
             id="startDate"
             name="startDate"
             dateAdapter={AdapterDateFns}
-            locale={currentLocale}
+            adapterLocale={currentLocale}
           >
             <CustomDatePicker
               label="Da"
@@ -215,7 +223,7 @@ const FilterNotificationsTable = () => {
             name="endDate"
             dateAdapter={AdapterDateFns}
             onChange={formik.handleChange}
-            locale={currentLocale}
+            adapterLocale={currentLocale}
           >
             <CustomDatePicker
               label="A"

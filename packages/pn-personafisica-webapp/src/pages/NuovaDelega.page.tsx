@@ -308,7 +308,7 @@ const NuovaDelega = () => {
                       <br />
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
                         <FormControl fullWidth>
-                          <LocalizationProvider dateAdapter={AdapterDateFns} locale={currentLocale}>
+                          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
                             <CustomDatePicker
                               label={t('nuovaDelega.form.endDate')}
                               inputFormat={DATE_FORMAT}

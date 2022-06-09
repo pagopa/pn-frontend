@@ -149,6 +149,7 @@ import {
 } from './utils/notification.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo, DATE_FORMAT } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
+import { IUN_regex, formatIun } from './utils/iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './utils/currency.utility';
 import { storageOpsBuilder } from './utils/storage.utility';
 import { compileRoute } from './utils/routes.utility';
@@ -162,6 +163,7 @@ export { calculatePages };
 export { getMonthString, getDay, getTime };
 export { formatFiscalCode };
 export { fiscalCodeRegex };
+export { IUN_regex, formatIun };
 export { formatCurrency, formatEurocentToCurrency };
 export { storageOpsBuilder };
 export { compileRoute };
