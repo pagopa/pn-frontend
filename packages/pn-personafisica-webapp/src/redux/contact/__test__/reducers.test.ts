@@ -1,8 +1,20 @@
-import { DigitalAddress, DigitalAddresses, LegalChannelType, CourtesyChannelType } from './../../../models/contacts';
+import {
+  DigitalAddress,
+  DigitalAddresses,
+  LegalChannelType,
+  CourtesyChannelType,
+} from './../../../models/contacts';
 import { ContactsApi } from '../../../api/contacts/Contacts.api';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
-import { createOrUpdateCourtesyAddress, createOrUpdateLegalAddress, deleteCourtesyAddress, deleteLegalAddress, getDigitalAddresses, resetContactsState } from '../actions';
+import {
+  createOrUpdateCourtesyAddress,
+  createOrUpdateLegalAddress,
+  deleteCourtesyAddress,
+  deleteLegalAddress,
+  getDigitalAddresses,
+  resetContactsState,
+} from '../actions';
 import { digitalAddresses } from './test-utils';
 
 const initialState = {
@@ -11,6 +23,7 @@ const initialState = {
     legal: [],
     courtesy: [],
   },
+  parties: []
 };
 
 describe('Contacts redux state tests', () => {
@@ -40,7 +53,7 @@ describe('Contacts redux state tests', () => {
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as LegalChannelType,
         value: updatedDigitalAddress.value,
-        code: updatedDigitalAddress.code
+        code: updatedDigitalAddress.code,
       })
     );
     const payload = action.payload as DigitalAddress;
@@ -58,7 +71,7 @@ describe('Contacts redux state tests', () => {
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as LegalChannelType,
         value: updatedDigitalAddress.value,
-        code: updatedDigitalAddress.code
+        code: updatedDigitalAddress.code,
       })
     );
     const payload = action.payload as DigitalAddress;
@@ -91,7 +104,7 @@ describe('Contacts redux state tests', () => {
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as CourtesyChannelType,
         value: updatedDigitalAddress.value,
-        code: updatedDigitalAddress.code
+        code: updatedDigitalAddress.code,
       })
     );
     const payload = action.payload as DigitalAddress;
@@ -109,7 +122,7 @@ describe('Contacts redux state tests', () => {
         senderId: updatedDigitalAddress.senderId,
         channelType: updatedDigitalAddress.channelType as CourtesyChannelType,
         value: updatedDigitalAddress.value,
-        code: updatedDigitalAddress.code
+        code: updatedDigitalAddress.code,
       })
     );
     const payload = action.payload as DigitalAddress;

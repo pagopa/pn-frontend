@@ -14,7 +14,7 @@ const AllTheProviders = ({ children }: { children: ReactNode }) => (
 
 const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
   render(ui, { wrapper: AllTheProviders, ...options });
-  
+
 const axe = configureAxe({
   rules: {
     region: { enabled: false },
@@ -30,7 +30,11 @@ export function testFormElements(form: HTMLFormElement, elementName: string, lab
   expect(formElementLabel).toHaveTextContent(label);
 }
 
-export async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
+export async function testInput(
+  form: HTMLFormElement,
+  elementName: string,
+  value: string | number
+) {
   const input = form.querySelector(`input[name="${elementName}"]`);
   fireEvent.change(input!, { target: { value } });
   await waitFor(() => {
