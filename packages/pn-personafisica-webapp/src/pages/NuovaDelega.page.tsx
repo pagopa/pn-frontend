@@ -20,7 +20,6 @@ import {
   InputLabel,
   SelectChangeEvent,
   Stack,
-  Breadcrumbs,
   Paper,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
@@ -37,7 +36,6 @@ import { createDelegation, resetNewDelegation } from '../redux/newDelegation/act
 import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
-import StyledLink from '../component/StyledLink/StyledLink';
 import DropDownEntiMenuItem from '../component/Deleghe/DropDownEnti';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
@@ -124,34 +122,17 @@ const NuovaDelega = () => {
 
   const breadcrumbs = (
     <Fragment>
-      <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        alignItems={{ xs: 'start', sm: 'center' }}
-        justifyContent="start"
-        spacing={3}
-      >
-        <ButtonNaked
-          onClick={() => navigate(-1)}
-          startIcon={<ArrowBack />}
-          color="primary"
-          size="medium"
-        >
-          {t('button.indietro', { ns: 'common' })}
-        </ButtonNaked>
-        <Breadcrumbs aria-label="breadcrumb">
-          <StyledLink to={routes.DELEGHE}>
+      <PnBreadcrumb
+        goBackLabel={t('button.indietro', { ns: 'common' })}
+        linkRoute={routes.DELEGHE}
+        linkLabel={
+          <Fragment>
             <PeopleIcon sx={{ mr: 0.5 }} />
             {t('nuovaDelega.title')}
-          </StyledLink>
-          <Typography
-            color="text.primary"
-            fontWeight={600}
-            sx={{ display: 'flex', alignItems: 'center' }}
-          >
-            {t('Nuova Delega')}
-          </Typography>
-        </Breadcrumbs>
-      </Stack>
+          </Fragment>
+        }
+        currentLocationLabel={t('Nuova Delega')}
+      />
       <TitleBox
         title={t('nuovaDelega.title')}
         subTitle={t('nuovaDelega.subtitle')}

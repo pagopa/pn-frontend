@@ -25,7 +25,7 @@ import Toast from './components/Toast/Toast';
 import CodeModal from './components/CodeModal/CodeModal';
 import InactivityHandler from './components/InactivityHandler';
 import CustomDatePicker from './components/CustomDatePicker';
-import BreadcrumbLink from './components/BreadcrumbLink';
+import PnBreadcrumb from './components/PnBreadcrumb';
 import FileUpload from './components/FileUpload';
 import Prompt from './components/Prompt';
 
@@ -55,7 +55,7 @@ export { Toast };
 export { CodeModal };
 export { InactivityHandler };
 export { CustomDatePicker };
-export { BreadcrumbLink };
+export { PnBreadcrumb };
 export { FileUpload };
 export { Prompt };
 

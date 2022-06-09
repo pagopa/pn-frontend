@@ -1,6 +1,7 @@
 import { useEffect, ChangeEvent, Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import _ from 'lodash';
 import currentLocale from 'date-fns/locale/it';
 import { Box, Button, MenuItem, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -55,7 +56,7 @@ const FilterNotificationsTable = () => {
   };
 
   const initialValues = () => {
-    if (!filters || (filters && filters === emptyValues)) {
+    if (!filters || (filters && _.isEqual(filters, emptyValues))) {
       return {
         searchFor: '0',
         startDate: tenYearsAgo,
@@ -115,7 +116,7 @@ const FilterNotificationsTable = () => {
   }, []);
 
   useEffect(() => {
-    if (filters === emptyValues) {
+    if (_.isEqual(filters, emptyValues)) {
       formik.resetForm({
         values: initialValues(),
       });
