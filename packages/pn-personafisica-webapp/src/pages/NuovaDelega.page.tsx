@@ -23,13 +23,11 @@ import {
   Paper,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
-import ArrowBack from '@mui/icons-material/ArrowBack';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { makeStyles } from '@mui/styles';
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { CourtesyPage, CustomDatePicker, DatePickerTypes, DATE_FORMAT, fiscalCodeRegex, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { CourtesyPage, CustomDatePicker, DatePickerTypes, DATE_FORMAT, fiscalCodeRegex, TitleBox, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
