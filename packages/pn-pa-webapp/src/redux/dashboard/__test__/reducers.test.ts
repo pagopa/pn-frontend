@@ -27,6 +27,9 @@ describe('Dashboard redux state tests', () => {
       filters: {
         startDate: tenYearsAgo.toISOString(),
         endDate: today.toISOString(),
+        status: undefined,
+        recipientId: undefined,
+        iunMatch: undefined,
       },
       pagination: {
         nextPagesKey: [],

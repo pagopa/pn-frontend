@@ -165,7 +165,7 @@ describe('Filter Notifications Table Component', () => {
         endDate: todayM.toISOString(),
         recipientId: 'RSSMRA80A01H501U',
         status: NotificationAllowedStatus[2].value,
-        iunMatch: '',
+        iunMatch: undefined,
       },
       type: 'setNotificationFilters',
     });
@@ -196,7 +196,7 @@ describe('Filter Notifications Table Component', () => {
         endDate: todayM.toISOString(),
         status: NotificationAllowedStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-        recipientId: '',
+        recipientId: undefined,
       },
       type: 'setNotificationFilters',
     });
