@@ -75,6 +75,7 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
         startDate: tenYearsAgo.toISOString(),
         endDate: today.toISOString(),
         iunMatch: undefined,
+        clearFilter: true,
       })
     );
   };

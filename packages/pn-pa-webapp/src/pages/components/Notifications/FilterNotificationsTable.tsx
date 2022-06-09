@@ -47,6 +47,7 @@ const FilterNotificationsTable = () => {
     status: undefined,
     recipientId: undefined,
     iunMatch: undefined,
+    clearFilter: true,
   };
 
   const initialValues = () => {
@@ -58,6 +59,7 @@ const FilterNotificationsTable = () => {
         status: '',
         recipientId: '',
         iunMatch: '',
+        clearFilter: true,
       };
     } else {
       return {
@@ -67,6 +69,7 @@ const FilterNotificationsTable = () => {
         recipientId: filters.recipientId || '',
         iunMatch: filters.iunMatch || '',
         status: filters.status || NotificationAllowedStatus[0].value,
+        clearFilter: false,
       };
     }
   };
@@ -94,6 +97,7 @@ const FilterNotificationsTable = () => {
         recipientId: values.recipientId,
         iunMatch: values.iunMatch,
         status: values.status === 'All' ? undefined : values.status,
+        clearFilter: values.clearFilter,
       };
       dispatch(setNotificationFilters(currentFilters));
     },

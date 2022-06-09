@@ -113,10 +113,17 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
     id: n.paProtocolNumber + i.toString(),
   }));
 
+  const handleRouteContacts = () => {
+    navigate(routes.RECAPITI);
+  };
   const ItemsTableEmptyState = () => {
-    const isEmptyByFilters:boolean = !!filters.iunMatch;
-    const emptyMessage: any = isEmptyByFilters ? undefined : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione Recapiti: così, se riceverai una notifica, te lo comunicheremo.';
-    const emptyActionLabel: any = isEmptyByFilters ? undefined : '';
+    const filterCleared:boolean = filters.clearFilter === undefined ? true : filters.clearFilter;
+    console.log('filtri disattivati', filters.clearFilter);
+    const emptyMessage: any = !filterCleared ? undefined : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione';
+    const emptyActionLabel: any = !filterCleared ? undefined : 'Recapiti';
+    const secondaryMessage = {
+      emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.'
+    };
     return <Fragment>
       <ItemsTable
         emptyMessage={emptyMessage}
@@ -126,7 +133,8 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
         sort={sort}
         disableSentimentDissatisfied={true}
         onChangeSorting={onChangeSorting}
-        emptyActionCallback={onCancelSearch}
+        emptyActionCallback={!filterCleared ? onCancelSearch: handleRouteContacts }
+        secondaryMessage={!filterCleared ? undefined : secondaryMessage}
       />
     </Fragment>;
   };

@@ -49,16 +49,18 @@ const FilterNotifications = () => {
     startDate: tenYearsAgo.toISOString(),
     endDate: today.toISOString(),
     iunMatch: undefined,
+    clearFilter: true,
   };
 
   const initialValues = {
     startDate: tenYearsAgo,
     endDate: today,
     iunMatch: '',
+    clearFilter: true,
   };
   const [prevFilters, setPrevFilters] = useState(initialValues);
 
-  const submitForm = (values: { startDate: Date; endDate: Date; iunMatch: string }) => {
+  const submitForm = (values: { startDate: Date; endDate: Date; iunMatch: string; clearFilter: boolean }) => {
     if (prevFilters === values) {
       return;
     }
@@ -66,6 +68,7 @@ const FilterNotifications = () => {
       startDate: values.startDate.toISOString(),
       endDate: values.endDate.toISOString(),
       iunMatch: values.iunMatch,
+      clearFilter: false,
     };
     setPrevFilters(values);
     /* eslint-enable functional/immutable-data */
