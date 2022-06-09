@@ -89,13 +89,24 @@ const NuovaDelega = () => {
     navigate(routes.DELEGHE);
   };
 
+  const isToday = (date:Date | null):boolean => {
+    const today = new Date();
+    return date?.getDate() === today.getDate() &&
+    date?.getMonth() === today.getMonth() &&
+    date?.getFullYear() === today.getFullYear();
+  };
+
+  // Get tomorrow date
+  const today = new Date();
+  const tomorrow = new Date(today);
+
   const initialValues = {
     selectPersonaFisicaOrPersonaGiuridica: 'pf',
     codiceFiscale: '',
     nome: '',
     cognome: '',
     selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-    expirationDate: Date.now(),
+    expirationDate: tomorrow.setDate(tomorrow.getDate() + 1),
     enteSelect: {
       name: '',
       uniqueIdentifier: '',
@@ -323,6 +334,7 @@ const NuovaDelega = () => {
                               onChange={(value: Date | null) => {
                                 setFieldValue('expirationDate', value);
                               }}
+                              shouldDisableDate={isToday}
                               renderInput={(params) => (
                                 <TextField
                                   id="endDate"
