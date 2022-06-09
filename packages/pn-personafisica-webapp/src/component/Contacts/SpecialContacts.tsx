@@ -252,8 +252,8 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               size="small"
             >
               {parties.map((party) => (
-                <MenuItem value={party.id} key={party.id}>
-                  <DropDownPartyMenuItem name={party.name} />
+                <MenuItem key={party.id} value={party.id} >
+                  <DropDownPartyMenuItem name={party.name}/>
                 </MenuItem>
               ))}
             </TextField>
