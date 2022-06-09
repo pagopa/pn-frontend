@@ -30,11 +30,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { CourtesyPage, CustomDatePicker, DatePickerTypes, DATE_FORMAT, fiscalCodeRegex, TitleBox, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
+import { createDelegation, resetNewDelegation, getAllEntities } from '../redux/newDelegation/actions';
 import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
-import DropDownEntiMenuItem from '../component/Deleghe/DropDownEnti';
+import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import { generateVCode } from '../utils/delegation.utility';
@@ -72,8 +72,7 @@ const NuovaDelega = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
-  const { created } = useAppSelector((state: RootState) => state.newDelegationState);
-
+  const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
   };
@@ -111,12 +110,10 @@ const NuovaDelega = () => {
 
   const xsValue = isMobile ? 12 : 4;
 
-  useEffect(
-    () => () => {
-      dispatch(resetNewDelegation());
-    },
-    []
-  );
+  useEffect(() => {
+    void dispatch(getAllEntities());
+    return () => void dispatch(resetNewDelegation());
+  }, []);
 
   const breadcrumbs = (
     <Fragment>
@@ -292,12 +289,11 @@ const NuovaDelega = () => {
                                       });
                                     }}
                                   >
-                                    <MenuItem value={'Bollate'}>
-                                      <DropDownEntiMenuItem name="Comune di Bollate" />
-                                    </MenuItem>
-                                    <MenuItem value={'Rho'}>
-                                      <DropDownEntiMenuItem name="Comune di Rho" />
-                                    </MenuItem>
+                                    {entities.map((entity) => (
+                                      <MenuItem value={entity.id} key={entity.id}>
+                                        <DropDownPartyMenuItem name={entity.name} />
+                                      </MenuItem>
+                                    ))}
                                   </Select>
                                 </FormControl>
                               )}
