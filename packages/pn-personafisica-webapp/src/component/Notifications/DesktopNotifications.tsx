@@ -60,7 +60,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
       },
     },
     {
-      id: 'senderId',
+      id: 'sender',
       label: t('table.mittente'),
       width: '13%',
       sortable: false, // TODO: will be re-enabled in PN-1124
@@ -110,7 +110,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
 
   const rows: Array<Item> = notifications.map((n, i) => ({
     ...n,
-    id: n.paNotificationId + i.toString(),
+    id: n.paProtocolNumber + i.toString(),
   }));
 
   const ItemsTableEmptyState = () => {
