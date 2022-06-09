@@ -33,7 +33,15 @@ type Props = {
   emptyActionLabel?: string;
   /** Disable sad emoticon */
   disableSentimentDissatisfied?: boolean;
+  /** Secondary Message */
+  secondaryMessage?: Message;
 };
+
+interface Message {
+  emptyMessage?: ReactNode;
+  emptyActionLabel?: string;
+  emptyActionCallback?: () => void;
+}
 
 function ItemsTable({
   columns,
@@ -43,7 +51,11 @@ function ItemsTable({
   emptyActionCallback,
   emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
   emptyActionLabel = 'Rimuovi filtri',
-  disableSentimentDissatisfied = false
+  disableSentimentDissatisfied = false,
+  secondaryMessage = {
+    emptyMessage: '',
+    emptyActionLabel: '',
+  }
 }: Props) {
   const createSortHandler = (property: string) => () => {
     if (sort && onChangeSorting) {
@@ -141,6 +153,20 @@ function ItemsTable({
                       onClick={emptyActionCallback}
                     >
                       {emptyActionLabel}
+                    </Typography>
+                    &nbsp;
+                    <Typography variant="body2">{secondaryMessage.emptyMessage}</Typography>
+                    &nbsp;
+                    <Typography
+                      color="primary"
+                      variant="body2"
+                      fontWeight={'bold'}
+                      sx={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={secondaryMessage.emptyActionCallback}
+                    >
+                      {secondaryMessage.emptyActionLabel}
                     </Typography>
                   </Box>
                 </TableCell>

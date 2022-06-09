@@ -11,6 +11,8 @@ import {
   Item,
   ItemsTable,
 } from '@pagopa-pn/pn-commons';
+import { useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
@@ -30,6 +32,7 @@ type Props = {
 
 const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
+  const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation('notifiche');
 
   const columns: Array<Column> = [
@@ -110,7 +113,23 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
     id: n.paNotificationId + i.toString(),
   }));
 
-  const emptyMessage: string = 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione Recapiti: così, se riceverai una notifica, te lo comunicheremo.';
+  const ItemsTableEmptyState = () => {
+    const isEmptyByFilters:boolean = !!filters.iunMatch;
+    const emptyMessage: any = isEmptyByFilters ? undefined : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione Recapiti: così, se riceverai una notifica, te lo comunicheremo.';
+    const emptyActionLabel: any = isEmptyByFilters ? undefined : '';
+    return <Fragment>
+      <ItemsTable
+        emptyMessage={emptyMessage}
+        emptyActionLabel={emptyActionLabel}
+        columns={columns}
+        rows={rows}
+        sort={sort}
+        disableSentimentDissatisfied={true}
+        onChangeSorting={onChangeSorting}
+        emptyActionCallback={onCancelSearch}
+      />
+    </Fragment>;
+  };
   
   // Navigation handlers
   const handleRowClick = (row: Item, _column: Column) => {
@@ -122,16 +141,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
   return (
     <Fragment>
       <FilterNotifications />
-      <ItemsTable
-        emptyMessage={emptyMessage}
-        emptyActionLabel=''
-        columns={columns}
-        rows={rows}
-        sort={sort}
-        disableSentimentDissatisfied={true}
-        onChangeSorting={onChangeSorting}
-        emptyActionCallback={onCancelSearch}
-      />
+      <ItemsTableEmptyState />
     </Fragment>
   );
 };

@@ -161,8 +161,28 @@ const Dashboard = () => {
         status: undefined,
         recipientId: undefined,
         iunMatch: undefined,
+        clearFilter: true,
       })
     );
+  };
+
+  // route to API keys
+  const handleRouteApiKeys = () => {
+    navigate(routes.API_KEYS);
+  };
+
+  // route to Manual Send
+  const handleRouteManualSend = () => {
+    navigate(routes.NUOVA_NOTIFICA);
+  };
+
+  const emptyMessage:string = 'L\'ente non ha ancora inviato nessuna notifica. Usa le';
+  const emptyActionLabel:string = 'Chiavi API';
+
+  const secondaryMessage:object = {
+    emptyMessage: 'o fai un',
+    emptyActionLabel: 'invio manuale',
+    emptyActionCallback: () => {handleRouteManualSend();}
   };
 
   useEffect(() => {
@@ -174,6 +194,25 @@ const Dashboard = () => {
     };
     void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
+
+  const ItemsTableEmptyState = () => {
+    const filterCleared = filters.clearFilter === undefined ? true : filters.clearFilter;
+    console.log('filtri disattivati', filterCleared);
+    const commonProps = {
+      columns,
+      rows,
+      sort,
+      emptyMessage: !filterCleared ? undefined : emptyMessage,
+      emptyActionLabel : !filterCleared ? undefined : emptyActionLabel,
+      disableSentimentDissatisfied: filterCleared,
+      onChangeSorting: handleChangeSorting,
+      emptyActionCallback: !filterCleared ? handleCancelSearch : handleRouteApiKeys,
+      secondaryMessage: !filterCleared ? undefined : secondaryMessage,
+    };
+    return <Fragment>
+      <ItemsTable {...commonProps} />
+    </Fragment>;
+  };
 
   return (
     <Box p={3}>
@@ -195,13 +234,7 @@ const Dashboard = () => {
         {notifications && (
           <Fragment>
             <FilterNotificationsTable />
-            <ItemsTable
-              columns={columns}
-              rows={rows}
-              sort={sort}
-              onChangeSorting={handleChangeSorting}
-              emptyActionCallback={handleCancelSearch}
-            />
+            <ItemsTableEmptyState />
             {notifications.length > 0 && (
               <CustomPagination
                 paginationData={{
