@@ -44,7 +44,7 @@ import {
 } from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
-import DropDownEntiMenuItem from '../component/Deleghe/DropDownEnti';
+import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import { generateVCode } from '../utils/delegation.utility';
@@ -123,9 +123,7 @@ const NuovaDelega = () => {
 
   useEffect(() => {
     void dispatch(getAllEntities());
-    return () => {
-      dispatch(resetNewDelegation());
-    };
+    return () => void dispatch(resetNewDelegation());
   }, []);
 
   const breadcrumbs = (
@@ -302,9 +300,9 @@ const NuovaDelega = () => {
                                       });
                                     }}
                                   >
-                                    {entities.map((entitie) => (
-                                      <MenuItem value={entitie.id} key={entitie.id}>
-                                        <DropDownEntiMenuItem name={entitie.name} />
+                                    {entities.map((entity) => (
+                                      <MenuItem value={entity.id} key={entity.id}>
+                                        <DropDownPartyMenuItem name={entity.name} />
                                       </MenuItem>
                                     ))}
                                   </Select>

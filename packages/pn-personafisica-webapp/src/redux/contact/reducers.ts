@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Party } from '../../models/party';
 
 import { DigitalAddresses, DigitalAddress } from './../../models/contacts';
 import {
@@ -6,6 +7,7 @@ import {
   createOrUpdateLegalAddress,
   deleteCourtesyAddress,
   deleteLegalAddress,
+  getAllActivatedParties,
   getDigitalAddresses,
   resetContactsState,
 } from './actions';
@@ -16,6 +18,7 @@ const initialState = {
     legal: [],
     courtesy: [],
   } as DigitalAddresses,
+  parties: [] as Array<Party>,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -68,11 +71,16 @@ const contactsSlice = createSlice({
       // remove digital address
       if (action.payload) {
         state.digitalAddresses.courtesy = state.digitalAddresses.courtesy.filter(
-          (address) => address.senderId !== action.payload || address.channelType !== action.meta.arg.channelType
+          (address) =>
+            address.senderId !== action.payload ||
+            address.channelType !== action.meta.arg.channelType
         );
       }
     });
     builder.addCase(resetContactsState, () => initialState);
+    builder.addCase(getAllActivatedParties.fulfilled, (state, action) => {
+      state.parties = action.payload;
+    });
   },
 });
 

@@ -1,6 +1,7 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
+import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { CreateDelegationResponse, NewDelegationFormProps } from '../delegation/types';
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
@@ -25,6 +26,8 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
   }
 );
 
-export const getAllEntities = createAsyncThunk('getAllEntities', async () => await DelegationsApi.getAllEntities());
+export const getAllEntities = createAsyncThunk('getAllEntities', async () =>
+  ExternalRegistriesAPI.getAllActivatedParties()
+);
 
 export const resetNewDelegation = createAction<void>('resetNewDelegation');

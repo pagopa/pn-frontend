@@ -18,9 +18,13 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { getAllActivatedParties } from '../../redux/contact/actions';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { RootState } from '../../redux/store';
 
 import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
 import { phoneRegExp } from '../../utils/contacts.utility';
+import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
 import SpecialContactElem from './SpecialContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
@@ -40,17 +44,14 @@ type Address = {
 
 const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
+  const dispatch = useAppDispatch();
   const [addresses, setAddresses] = useState([] as Array<Address>);
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const { initValidation } = useDigitalContactsCodeVerificationContext();
+  const parties = useAppSelector((state: RootState) => state.contactsState.parties);
+
   const isMobile = useIsMobile();
-  const senders = useMemo(
-    () => [
-      { id: 'comune-milano', value: 'Comune di Milano' },
-      { id: 'tribunale-milano', value: 'Tribunale di Milano' },
-    ],
-    []
-  );
+
   const addressTypes = useMemo(
     () => [
       { id: LegalChannelType.PEC, value: t('special-contacts.pec', { ns: 'recapiti' }) },
@@ -80,6 +81,10 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     ],
     []
   );
+
+  useEffect(() => {
+    void dispatch(getAllActivatedParties());
+  }, []);
 
   const validationSchema = yup.object({
     sender: yup.string().required(),
@@ -246,9 +251,9 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               fullWidth
               size="small"
             >
-              {senders.map((s) => (
-                <MenuItem key={s.id} value={s.id}>
-                  {s.value}
+              {parties.map((party) => (
+                <MenuItem value={party.id} key={party.id}>
+                  <DropDownPartyMenuItem name={party.name} />
                 </MenuItem>
               ))}
             </TextField>
@@ -356,7 +361,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   <SpecialContactElem
                     key={a.senderId}
                     address={a}
-                    senders={senders}
+                    senders={parties}
                     recipientId={recipientId}
                   />
                 ))}
@@ -375,7 +380,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 }}
               >
                 <CardContent>
-                  <SpecialContactElem address={a} senders={senders} recipientId={recipientId} />
+                  <SpecialContactElem address={a} senders={parties} recipientId={recipientId} />
                 </CardContent>
               </Card>
             ))}

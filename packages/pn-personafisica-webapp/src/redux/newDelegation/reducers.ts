@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Party } from '../../models/party';
 import { createDelegation, getAllEntities, resetNewDelegation } from './actions';
 import { newDelegation } from './types';
 
@@ -8,7 +9,7 @@ const newDelegationSlice = createSlice({
   initialState: {
     created: false,
     error: false,
-    entities: []
+    entities: [] as Array<Party>,
   } as newDelegation,
   reducers: {},
   extraReducers: (builder) => {
