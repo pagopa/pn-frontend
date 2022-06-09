@@ -100,9 +100,9 @@ import {
   PaymentAttachmentSName,
   PaymentAttachmentNameType
 } from './types/NotificationDetail';
-
 import { CardElement, CardSort, CardAction } from './types/ItemsCard';
 import { MessageType } from './types/MessageType';
+import { DatePickerTypes } from './components/CustomDatePicker';
 
 export type { IAppMessage };
 export type { PaginationData };
@@ -136,6 +136,7 @@ export type {
 export type { CardElement, CardSort, CardAction };
 export type { NotificationDetailTableRow };
 export { MessageType, PaymentStatus };
+export type {DatePickerTypes};
 
 // functions
 import { createAppError } from './services/message.service';

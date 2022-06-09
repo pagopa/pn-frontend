@@ -2,6 +2,8 @@ import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Formik, Form } from 'formik';
+import * as yup from 'yup';
 import {
   Box,
   Typography,
@@ -21,19 +23,18 @@ import {
   Breadcrumbs,
   Paper,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import { Formik, Form } from 'formik';
-import * as yup from 'yup';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import { CourtesyPage, CustomDatePicker, DATE_FORMAT, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
+import ArrowBack from '@mui/icons-material/ArrowBack';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { makeStyles } from '@mui/styles';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { CourtesyPage, CustomDatePicker, DatePickerTypes, DATE_FORMAT, fiscalCodeRegex, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { ArrowBack } from '@mui/icons-material';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
+import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
 import StyledLink from '../component/StyledLink/StyledLink';
@@ -41,7 +42,6 @@ import DropDownEntiMenuItem from '../component/Deleghe/DropDownEnti';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import { generateVCode } from '../utils/delegation.utility';
-import { NewDelegationFormProps } from '../redux/delegation/types';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -329,13 +329,13 @@ const NuovaDelega = () => {
                       <br />
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
                         <FormControl fullWidth>
-                          <LocalizationProvider dateAdapter={DateAdapter} locale={currentLocale}>
+                          <LocalizationProvider dateAdapter={AdapterDateFns} locale={currentLocale}>
                             <CustomDatePicker
                               label={t('nuovaDelega.form.endDate')}
                               inputFormat={DATE_FORMAT}
-                              value={values.expirationDate}
-                              onChange={(value: Date | null) => {
-                                setFieldValue('expirationDate', value);
+                              value={new Date(values.expirationDate)}
+                              onChange={(value: DatePickerTypes) => {
+                                setFieldValue('expirationDate', value?.getTime());
                               }}
                               renderInput={(params) => (
                                 <TextField

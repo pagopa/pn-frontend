@@ -1,13 +1,14 @@
-import currentLocale from 'date-fns/locale/it';
 import { useEffect, ChangeEvent, Fragment, useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import currentLocale from 'date-fns/locale/it';
 import { Box, Button, MenuItem, TextField } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
   CustomDatePicker,
+  DatePickerTypes,
   DATE_FORMAT,
   fiscalCodeRegex,
   NotificationAllowedStatus,
@@ -30,6 +31,11 @@ const useStyles = makeStyles({
     minWidth: '130px !important',
   },
 });
+
+const searchForValues = [
+  { value: '0', label: 'Codice Fiscale' },
+  { value: '1', label: 'Codice IUN' },
+];
 
 const FilterNotificationsTable = () => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
@@ -69,11 +75,6 @@ const FilterNotificationsTable = () => {
       };
     }
   };
-
-  const searchForValues = [
-    { value: '0', label: 'Codice Fiscale' },
-    { value: '1', label: 'Codice IUN' },
-  ];
 
   const validationSchema = yup.object({
     recipientId: yup.string().matches(fiscalCodeRegex, 'Inserire il codice completo'),
@@ -177,15 +178,14 @@ const FilterNotificationsTable = () => {
           <LocalizationProvider
             id="startDate"
             name="startDate"
-            value={formik.values.startDate}
-            dateAdapter={DateAdapter}
+            dateAdapter={AdapterDateFns}
             locale={currentLocale}
           >
             <CustomDatePicker
               label="Da"
               inputFormat={DATE_FORMAT}
               value={startDate}
-              onChange={(value: Date | null) => {
+              onChange={(value: DatePickerTypes) => {
                 void formik.setFieldValue('startDate', value).then(() => {
                   setStartDate(value);
                 });
@@ -212,8 +212,7 @@ const FilterNotificationsTable = () => {
           <LocalizationProvider
             id="endDate"
             name="endDate"
-            value={formik.values.endDate}
-            dateAdapter={DateAdapter}
+            dateAdapter={AdapterDateFns}
             onChange={formik.handleChange}
             locale={currentLocale}
           >
@@ -221,7 +220,7 @@ const FilterNotificationsTable = () => {
               label="A"
               inputFormat={DATE_FORMAT}
               value={endDate}
-              onChange={(value: Date | null) => {
+              onChange={(value: DatePickerTypes) => {
                 void formik.setFieldValue('endDate', value).then(() => {
                   setEndDate(value);
                 });

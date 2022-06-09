@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import currentLocale from 'date-fns/locale/it';
 import { Grid, TextField, TextFieldProps } from '@mui/material';
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
   CustomDatePicker,
+  DatePickerTypes,
   DATE_FORMAT,
   tenYearsAgo,
   today,
@@ -97,15 +98,14 @@ const FilterNotificationsFormBody = ({
         <LocalizationProvider
           id="startDate"
           name="startDate"
-          value={formikInstance.values.startDate}
-          dateAdapter={DateAdapter}
+          dateAdapter={AdapterDateFns}
           locale={currentLocale}
         >
           <CustomDatePicker
             label={t('filters.data_da', { ns: 'notifiche' })}
             inputFormat={DATE_FORMAT}
             value={startDate}
-            onChange={(value: Date | null) => {
+            onChange={(value: DatePickerTypes) => {
               formikInstance
                 .setFieldValue('startDate', value || tenYearsAgo)
                 .then(() => {
@@ -139,15 +139,14 @@ const FilterNotificationsFormBody = ({
         <LocalizationProvider
           id="endDate"
           name="endDate"
-          value={formikInstance.values.endDate}
-          dateAdapter={DateAdapter}
+          dateAdapter={AdapterDateFns}
           locale={currentLocale}
         >
           <CustomDatePicker
             label={t('filters.data_a', { ns: 'notifiche' })}
             inputFormat={DATE_FORMAT}
             value={endDate}
-            onChange={(value: Date | null) => {
+            onChange={(value: DatePickerTypes) => {
               formikInstance
                 .setFieldValue('endDate', value || today)
                 .then(() => {
