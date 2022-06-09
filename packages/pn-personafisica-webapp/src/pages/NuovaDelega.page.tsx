@@ -18,7 +18,6 @@ import {
   InputLabel,
   SelectChangeEvent,
   Stack,
-  Breadcrumbs,
   Paper,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -27,16 +26,20 @@ import { Formik, Form } from 'formik';
 import * as yup from 'yup';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateAdapter from '@mui/lab/AdapterDateFns';
-import { CourtesyPage, CustomDatePicker, DATE_FORMAT, fiscalCodeRegex, TitleBox } from '@pagopa-pn/pn-commons';
+import {
+  CourtesyPage,
+  CustomDatePicker,
+  DATE_FORMAT,
+  fiscalCodeRegex,
+  PnBreadcrumb,
+  TitleBox,
+} from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
-import { ButtonNaked } from '@pagopa/mui-italia';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { ArrowBack } from '@mui/icons-material';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
-import StyledLink from '../component/StyledLink/StyledLink';
 import DropDownEntiMenuItem from '../component/Deleghe/DropDownEnti';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
@@ -124,34 +127,17 @@ const NuovaDelega = () => {
 
   const breadcrumbs = (
     <Fragment>
-      <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        alignItems={{ xs: 'start', sm: 'center' }}
-        justifyContent="start"
-        spacing={3}
-      >
-        <ButtonNaked
-          onClick={() => navigate(-1)}
-          startIcon={<ArrowBack />}
-          color="primary"
-          size="medium"
-        >
-          {t('button.indietro', { ns: 'common' })}
-        </ButtonNaked>
-        <Breadcrumbs aria-label="breadcrumb">
-          <StyledLink to={routes.DELEGHE}>
+      <PnBreadcrumb
+        goBackLabel={t('button.indietro', { ns: 'common' })}
+        linkRoute={routes.DELEGHE}
+        linkLabel={
+          <Fragment>
             <PeopleIcon sx={{ mr: 0.5 }} />
             {t('nuovaDelega.title')}
-          </StyledLink>
-          <Typography
-            color="text.primary"
-            fontWeight={600}
-            sx={{ display: 'flex', alignItems: 'center' }}
-          >
-            {t('Nuova Delega')}
-          </Typography>
-        </Breadcrumbs>
-      </Stack>
+          </Fragment>
+        }
+        currentLocationLabel={t('Nuova Delega')}
+      />
       <TitleBox
         title={t('nuovaDelega.title')}
         subTitle={t('nuovaDelega.subtitle')}
