@@ -2,6 +2,8 @@ import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Formik, Form } from 'formik';
+import * as yup from 'yup';
 import {
   Box,
   Typography,
@@ -20,31 +22,22 @@ import {
   Stack,
   Paper,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import { Formik, Form } from 'formik';
-import * as yup from 'yup';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import {
-  CourtesyPage,
-  CustomDatePicker,
-  DATE_FORMAT,
-  fiscalCodeRegex,
-  PnBreadcrumb,
-  TitleBox,
-} from '@pagopa-pn/pn-commons';
 import PeopleIcon from '@mui/icons-material/People';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { makeStyles } from '@mui/styles';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { CourtesyPage, CustomDatePicker, DatePickerTypes, DATE_FORMAT, fiscalCodeRegex, TitleBox, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
+
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { createDelegation, resetNewDelegation } from '../redux/newDelegation/actions';
+import { createDelegation, resetNewDelegation, getAllEntities } from '../redux/newDelegation/actions';
+import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
-import DropDownEntiMenuItem from '../component/Deleghe/DropDownEnti';
+import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import { generateVCode } from '../utils/delegation.utility';
-import { NewDelegationFormProps } from '../redux/delegation/types';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -79,8 +72,7 @@ const NuovaDelega = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
-  const { created } = useAppSelector((state: RootState) => state.newDelegationState);
-
+  const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
   };
@@ -89,13 +81,24 @@ const NuovaDelega = () => {
     navigate(routes.DELEGHE);
   };
 
+  const isToday = (date:Date | null):boolean => {
+    const today = new Date();
+    return date?.getDate() === today.getDate() &&
+    date?.getMonth() === today.getMonth() &&
+    date?.getFullYear() === today.getFullYear();
+  };
+
+  // Get tomorrow date
+  const today = new Date();
+  const tomorrow = new Date(today);
+
   const initialValues = {
     selectPersonaFisicaOrPersonaGiuridica: 'pf',
     codiceFiscale: '',
     nome: '',
     cognome: '',
     selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-    expirationDate: Date.now(),
+    expirationDate: tomorrow.setDate(tomorrow.getDate() + 1),
     enteSelect: {
       name: '',
       uniqueIdentifier: '',
@@ -118,12 +121,10 @@ const NuovaDelega = () => {
 
   const xsValue = isMobile ? 12 : 4;
 
-  useEffect(
-    () => () => {
-      dispatch(resetNewDelegation());
-    },
-    []
-  );
+  useEffect(() => {
+    void dispatch(getAllEntities());
+    return () => void dispatch(resetNewDelegation());
+  }, []);
 
   const breadcrumbs = (
     <Fragment>
@@ -299,12 +300,11 @@ const NuovaDelega = () => {
                                       });
                                     }}
                                   >
-                                    <MenuItem value={'Bollate'}>
-                                      <DropDownEntiMenuItem name="Comune di Bollate" />
-                                    </MenuItem>
-                                    <MenuItem value={'Rho'}>
-                                      <DropDownEntiMenuItem name="Comune di Rho" />
-                                    </MenuItem>
+                                    {entities.map((entity) => (
+                                      <MenuItem value={entity.id} key={entity.id}>
+                                        <DropDownPartyMenuItem name={entity.name} />
+                                      </MenuItem>
+                                    ))}
                                   </Select>
                                 </FormControl>
                               )}
@@ -315,14 +315,15 @@ const NuovaDelega = () => {
                       <br />
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
                         <FormControl fullWidth>
-                          <LocalizationProvider dateAdapter={DateAdapter} locale={currentLocale}>
+                          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
                             <CustomDatePicker
                               label={t('nuovaDelega.form.endDate')}
                               inputFormat={DATE_FORMAT}
-                              value={values.expirationDate}
-                              onChange={(value: Date | null) => {
-                                setFieldValue('expirationDate', value);
+                              value={new Date(values.expirationDate)}
+                              onChange={(value: DatePickerTypes) => {
+                                setFieldValue('expirationDate', value?.getTime());
                               }}
+                              shouldDisableDate={isToday}
                               renderInput={(params) => (
                                 <TextField
                                   id="endDate"

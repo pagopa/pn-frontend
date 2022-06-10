@@ -25,7 +25,6 @@ const Contacts = () => {
 
   useEffect(() => {
     void dispatch(getDigitalAddresses(recipientId));
-
     return () => void dispatch(resetContactsState());
   }, []);
 

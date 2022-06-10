@@ -30,12 +30,13 @@ const AppMessage = ({ sessionRedirect }: Props) => {
         errorMessage.status === 403 ? (
           <SessionModal
             open
+            key={errorMessage.id}
             title={errorMessage.title}
             message={errorMessage.message}
             handleClose={sessionRedirect}
             onConfirm={sessionRedirect}
             onConfirmLabel={"Vai al login"}
-          ></SessionModal>
+          />
         ) : (
           <Toast
             key={errorMessage.id}

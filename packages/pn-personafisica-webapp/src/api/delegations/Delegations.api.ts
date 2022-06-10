@@ -8,7 +8,14 @@ import {
   Delegation,
   Delegator,
 } from '../../redux/delegation/types';
-import { ACCEPT_DELEGATION, CREATE_DELEGATION, DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR, REJECT_DELEGATION, REOVKE_DELEGATION } from './delegations.routes';
+import {
+  ACCEPT_DELEGATION,
+  CREATE_DELEGATION,
+  DELEGATIONS_BY_DELEGATE,
+  DELEGATIONS_BY_DELEGATOR,
+  REJECT_DELEGATION,
+  REOVKE_DELEGATION,
+} from './delegations.routes';
 
 function checkResponseStatus(response: AxiosResponse, id: string) {
   if (response.status === 200) {
@@ -55,26 +62,6 @@ export const DelegationsApi = {
           delegator: 'delegator' in delegation ? delegation.delegator : null,
         }))
       ),
-  // new Promise((resolve, _reject) => {
-  //   return resolve([
-  //     {
-  //       mandateId: 'mandateIdProva',
-  //       status: 'active',
-  //       visibilityIds: [],
-  //       verificationCode: '1234',
-  //       datefrom: '2021-12-28+01:00',
-  //       dateto: '',
-  //       delegator: {
-  //         firstName: 'Carlotta',
-  //         lastName: 'Dimatteo',
-  //         displayName: undefined,
-  //         companyName: undefined,
-  //         fiscalCode: 'DNTCLD90E63D628I',
-  //         person: true,
-  //       },
-  //     },
-  //   ]);
-  // }),
   /**
    * Removes a delegation that the user created
    * @param id

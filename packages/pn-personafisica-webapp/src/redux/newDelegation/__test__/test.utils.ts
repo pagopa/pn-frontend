@@ -1,6 +1,7 @@
 export const initialState = {
   created: false,
   error: false,
+  entities: [],
 };
 
 export const createDelegationPayload = {

@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
 import {
   Alert,
@@ -13,9 +16,7 @@ import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import { formatEurocentToCurrency, NotificationDetailPayment, PaymentAttachmentSName, PaymentStatus } from '@pagopa-pn/pn-commons';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Trans, useTranslation } from 'react-i18next';
+
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getNotificationPaymentInfo, getPaymentAttachment } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';

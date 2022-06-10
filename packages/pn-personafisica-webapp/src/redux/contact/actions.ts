@@ -1,6 +1,7 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
+import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import {
   CourtesyChannelType,
   DigitalAddress,
@@ -97,6 +98,10 @@ export const deleteCourtesyAddress = createAsyncThunk<
       return rejectWithValue(e);
     }
   }
+);
+
+export const getAllActivatedParties = createAsyncThunk('getAllActivatedParties', async () =>
+  ExternalRegistriesAPI.getAllActivatedParties()
 );
 
 export const resetContactsState = createAction<void>('resetContactsState');

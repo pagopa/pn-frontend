@@ -13,6 +13,7 @@ import {
   tenYearsAgo,
   today,
   useIsMobile,
+  IUN_regex
 } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
@@ -36,8 +37,6 @@ const FilterNotifications = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
   const classes = useStyles();
-
-  const IUN_regex = /[A-Z]{4}-[A-Z]{4}-[A-Z]{4}-[\d]{6}-[A-Z]{1}-[\d]{1}/;
 
   const validationSchema = yup.object({
     iunMatch: yup.string().matches(IUN_regex, t('Inserire il codice corretto')),
