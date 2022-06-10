@@ -1,9 +1,8 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment } from 'react';
-import { Breadcrumbs, Grid, Typography, Box, Paper, Button, Stack } from '@mui/material';
+import { Grid, Box, Paper, Button } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
-import { ArrowBack } from '@mui/icons-material';
 import {
   NotificationStatus,
   TitleBox,
@@ -13,9 +12,9 @@ import {
   LegalFactId,
   NotificationDetailTimeline,
   useIsMobile,
-  BreadcrumbLink,
+  PnBreadcrumb,
 } from '@pagopa-pn/pn-commons';
-import { ButtonNaked, Tag, TagGroup } from '@pagopa/mui-italia';
+import { Tag, TagGroup } from '@pagopa/mui-italia';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -100,11 +99,21 @@ const NotificationDetail = () => {
     },
   ];
 
-  const documentDowloadHandler = (documentIndex: number) => {
-    void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
+  const documentDowloadHandler = (documentIndex: string | undefined) => {
+    if (documentIndex) {
+      void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
+    }
   };
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    void dispatch(getSentNotificationLegalfact({ iun: notification.iun, legalFact }));
+    void dispatch(
+      getSentNotificationLegalfact({
+        iun: notification.iun,
+        legalFact: {
+          key: legalFact.key.substring(legalFact.key.lastIndexOf('/') + 1),
+          category: legalFact.category,
+        },
+      })
+    );
   };
   const dowloadDocument = (url: string) => {
     /* eslint-disable functional/immutable-data */
@@ -142,34 +151,16 @@ const NotificationDetail = () => {
 
   const breadcrumb = (
     <Fragment>
-      <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        alignItems={{ xs: 'start', sm: 'center' }}
-        justifyContent="start"
-        spacing={3}
-      >
-        <ButtonNaked
-          onClick={() => navigate(-1)}
-          startIcon={<ArrowBack />}
-          color="primary"
-          size="medium"
-        >
-          Indietro
-        </ButtonNaked>
-        <Breadcrumbs aria-label="breadcrumb">
-          <BreadcrumbLink to={routes.DASHBOARD}>
+      <PnBreadcrumb
+        linkRoute={routes.DASHBOARD}
+        linkLabel={
+          <Fragment>
             <EmailIcon sx={{ mr: 0.5 }} />
             Notifiche
-          </BreadcrumbLink>
-          <Typography
-            color="text.primary"
-            fontWeight={600}
-            sx={{ display: 'flex', alignItems: 'center' }}
-          >
-            Dettaglio notifica
-          </Typography>
-        </Breadcrumbs>
-      </Stack>
+          </Fragment>
+        }
+        currentLocationLabel="Dettaglio notifica"
+      />
       <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
         <Button

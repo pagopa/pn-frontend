@@ -1,6 +1,8 @@
-import DesktopDatePicker, { DesktopDatePickerProps } from "@mui/lab/DesktopDatePicker";
+import { DesktopDatePicker, DesktopDatePickerProps } from "@mui/x-date-pickers/DesktopDatePicker";
 
-const CustomDatePicker = (props: DesktopDatePickerProps<Date | null> & React.RefAttributes<HTMLDivElement>) => (
+export type DatePickerTypes = Date | null;
+
+const CustomDatePicker = (props: DesktopDatePickerProps<DatePickerTypes, DatePickerTypes> & React.RefAttributes<HTMLDivElement>) => (
   <DesktopDatePicker
     {...props}
     leftArrowButtonText="Vai al mese precedente" // deprecated

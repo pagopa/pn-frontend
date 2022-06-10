@@ -14,19 +14,18 @@ import { notificationToFe } from './test-utils';
 const initialState = {
   loading: false,
   notification: {
-    iun: '',
-    paNotificationId: '',
+    paProtocolNumber: '',
     subject: '',
-    sentAt: '',
-    cancelledIun: '',
-    cancelledByIun: '',
     recipients: [],
     documents: [],
-    payment: {},
+    notificationFeePolicy: '',
+    physicalCommunicationType: '',
+    senderPaId: '',
+    iun: '',
+    sentAt: '',
     notificationStatus: '',
     notificationStatusHistory: [],
-    timeline: [],
-    physicalCommunicationType: '',
+    timeline: []
   },
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
@@ -53,7 +52,7 @@ describe('Notification detail redux state tests', () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotificationDocument');
     apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
     const action = await store.dispatch(
-      getSentNotificationDocument({ iun: 'mocked-iun', documentIndex: 0 })
+      getSentNotificationDocument({ iun: 'mocked-iun', documentIndex: '0' })
     );
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationDocument/fulfilled');
@@ -66,7 +65,7 @@ describe('Notification detail redux state tests', () => {
     const action = await store.dispatch(
       getSentNotificationLegalfact({
         iun: 'mocked-iun',
-        legalFact: { key: 'mocked-key', type: LegalFactType.ANALOG_DELIVERY },
+        legalFact: { key: 'mocked-key', category: LegalFactType.ANALOG_DELIVERY },
       })
     );
     const payload = action.payload;

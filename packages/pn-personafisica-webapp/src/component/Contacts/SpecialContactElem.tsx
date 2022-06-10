@@ -6,6 +6,7 @@ import { TableCell, TableRow, TextField, Typography } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
+import { Party } from '../../models/party';
 import { phoneRegExp } from '../../utils/contacts.utility';
 import DigitalContactElem from './DigitalContactElem';
 
@@ -16,7 +17,7 @@ type Props = {
     mail?: string;
     pec?: string;
   };
-  senders: Array<{ id: string; value: string }>;
+  senders: Array<Party>;
   recipientId: string;
 };
 
@@ -156,7 +157,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
       <Fragment>
         <Typography fontWeight={600}>{t('special-contacts.sender', { ns: 'recapiti' })}</Typography>
         <Typography fontWeight={700} fontSize={16}>
-          {senders.find((s) => s.id === address.senderId)?.value}
+          {senders.find((s) => s.id === address.senderId)?.name}
         </Typography>
         {fields.map((f) => (
           <Fragment key={f.id}>
@@ -174,7 +175,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     <TableRow>
       <TableCell width="25%" sx={{ borderBottomColor: 'divider' }}>
         <Typography fontWeight={700}>
-          {senders.find((s) => s.id === address.senderId)?.value}
+          {senders.find((s) => s.id === address.senderId)?.name}
         </Typography>
       </TableCell>
       {fields.map((f) => (

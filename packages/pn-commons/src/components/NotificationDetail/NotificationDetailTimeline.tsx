@@ -82,7 +82,7 @@ const NotificationDetailTimeline = ({
       position={getPosition(i)}
       legalFactLabels={legalFactLabels}
       clickHandler={clickHandler}
-      key={t.activeFrom}
+      key={'timeline_sep_' + i}
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
     />
@@ -92,7 +92,7 @@ const NotificationDetailTimeline = ({
     <Fragment>
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Grid item>
-          <Typography color="text.primary" fontWeight={700} textTransform="uppercase" fontSize={14}>
+          <Typography component="h5" color="text.primary" fontWeight={700} textTransform="uppercase" fontSize={14}>
             {title}
           </Typography>
         </Grid>

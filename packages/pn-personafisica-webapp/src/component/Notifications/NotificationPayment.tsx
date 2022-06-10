@@ -1,3 +1,6 @@
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 import { LoadingButton } from '@mui/lab';
 import {
   Alert,
@@ -12,33 +15,32 @@ import {
 import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
-import { formatEurocentToCurrency, NotificationDetailPayment } from '@pagopa-pn/pn-commons';
-import { PaymentStatus } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Trans, useTranslation } from 'react-i18next';
+import { formatEurocentToCurrency, NotificationDetailPayment, PaymentAttachmentSName, PaymentStatus } from '@pagopa-pn/pn-commons';
+
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getNotificationPaymentInfo } from '../../redux/notification/actions';
+import { getNotificationPaymentInfo, getPaymentAttachment } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
 import { CHECKOUT_URL, PAYMENT_DISCLAIMER_URL } from '../../utils/constants';
 
 interface Props {
+  iun: string;
   notificationPayment: NotificationDetailPayment;
   onDocumentDownload: (url: string) => void;
 }
 
-const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentDownload }) => {
+const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocumentDownload }) => {
   const { t } = useTranslation(['notifiche']);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const dispatch = useAppDispatch();
-  const paymentDetail = useAppSelector((state: RootState) => state.notificationState.paymentDetail);
+  const paymentInfo = useAppSelector((state: RootState) => state.notificationState.paymentInfo);
+  const pagopaAttachmentUrl = useAppSelector((state: RootState) => state.notificationState.pagopaAttachmentUrl);
+  const f24AttachmentUrl = useAppSelector((state: RootState) => state.notificationState.f24AttachmentUrl);
 
   useEffect(() => {
     const fetchPaymentInfo = () => {
-      if (notificationPayment?.iuv) {
-        // dispatch(getNotificationPaymentDetails({ iun: notification.iun, recipientId: notification.recipients[0].taxId })).unwrap()
-        dispatch(getNotificationPaymentInfo(notificationPayment.iuv))
+      if (notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
+        dispatch(getNotificationPaymentInfo({ noticeCode: notificationPayment.noticeCode, taxId: notificationPayment.creditorTaxId }))
           .unwrap()
           .then(() => {
             setLoading(() => false);
@@ -50,23 +52,35 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
           });
       } else {
         setLoading(() => false);
-        setError(() => 'IUV not found');
+        setError(() => 'Codice notifica e/o Codice fiscale ente non presenti!');
       }
     };
 
     fetchPaymentInfo();
   }, []);
 
-  const onPayClick = () => {
-    if (CHECKOUT_URL && notificationPayment.iuv) {
-      window.open(`${CHECKOUT_URL}/${notificationPayment.iuv}`);
-    } else if (CHECKOUT_URL) {
-      // uiv not available, do we need to inform the user and redirect to base checkout url?
-      console.log('UIV not found!');
-      setTimeout(() => {
-        window.open(CHECKOUT_URL);
-      }, 1000);
+  useEffect(() => {
+    if (pagopaAttachmentUrl) {
+      onDocumentDownload(pagopaAttachmentUrl);
     }
+  }, [pagopaAttachmentUrl]);
+
+  useEffect(() => {
+    if (f24AttachmentUrl) {
+      onDocumentDownload(f24AttachmentUrl);
+    }
+  }, [f24AttachmentUrl]);
+
+  const onPayClick = () => {
+    if (CHECKOUT_URL && notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
+      window.open(`${CHECKOUT_URL}/${notificationPayment.noticeCode}${notificationPayment.creditorTaxId}`);
+    } else if (CHECKOUT_URL) { // do we need to inform the user that NoticeCode and/or creditorTaxId are unavailable and redirect to base checkout url?
+      window.open(CHECKOUT_URL);
+    }
+  };
+  
+  const onDocumentClick = (name: PaymentAttachmentSName) => {
+    void dispatch(getPaymentAttachment({ iun, attachmentName: name }));
   };
 
   const onDisclaimerClick = () => {
@@ -80,8 +94,8 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
         body: error,
       };
     }
-    if (paymentDetail) {
-      switch (paymentDetail?.status) {
+    if (paymentInfo) {
+      switch (paymentInfo?.status) {
         case PaymentStatus.SUCCEEDED:
           return {
             type: 'success',
@@ -101,38 +115,35 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
     }
     return null;
   };
-  // to be fixed once the notification payment model is stable
+
   const getAttachments = () => {
     // eslint-disable-next-line functional/no-let
-    const attachments = new Array<{ name: string; title: string; url: string }>();
+    const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();
 
-    if (notificationPayment && notificationPayment.f24) {
-      const pagopaAttachment = notificationPayment.f24.flatRate;
-      const f24Attachment = notificationPayment.f24.digital;
+    const pagopaDoc = notificationPayment.pagoPaForm;
+    const f24Doc = notificationPayment.f24flatRate || notificationPayment.f24standard;
 
-      if (pagopaAttachment && pagopaAttachment.title) {
-        // eslint-disable-next-line functional/immutable-data
-        attachments.push({
-          name: 'pagopa',
-          title: t('detail.payment.download-pagopa-notification', { ns: 'notifiche' }),
-          url: pagopaAttachment.title,
-        });
-      }
-      if (f24Attachment && f24Attachment.title) {
-        // eslint-disable-next-line functional/immutable-data
-        attachments.push({
-          name: 'f24',
-          title: t('detail.payment.download-f24', { ns: 'notifiche' }),
-          url: f24Attachment.title,
-        });
-      }
+    if(pagopaDoc) {
+      // eslint-disable-next-line functional/immutable-data
+      attachments.push({
+        name: PaymentAttachmentSName.PAGOPA,
+        title: t('detail.payment.download-pagopa-notification', { ns: 'notifiche' })
+      });
+    }
+
+    if(f24Doc) {
+      // eslint-disable-next-line functional/immutable-data
+      attachments.push({
+        name: PaymentAttachmentSName.F24,
+        title: t('detail.payment.download-f24', { ns: 'notifiche' })
+      });
     }
 
     return attachments;
   };
 
   const title = t('detail.payment.summary', { ns: 'notifiche' });
-  const amount = paymentDetail?.amount ? formatEurocentToCurrency(paymentDetail.amount) : '';
+  const amount = paymentInfo?.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
 
   const disclaimer = (
     <>
@@ -190,8 +201,8 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
             </LoadingButton>
           </Grid>
         )}
-        {(paymentDetail?.status === PaymentStatus.REQUIRED ||
-          paymentDetail?.status === PaymentStatus.FAILED) && (
+        {(paymentInfo?.status === PaymentStatus.REQUIRED ||
+          paymentInfo?.status === PaymentStatus.FAILED) && (
           <>
             <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
               <Button onClick={action.callback} variant="contained" fullWidth>
@@ -212,9 +223,9 @@ const NotificationPayment: React.FC<Props> = ({ notificationPayment, onDocumentD
                 sx={{ textAlign: 'center', my: '1rem' }}
               >
                 <Button
-                  name="downloadNotification"
+                  name={`download-${attachment.name.toLowerCase()}-notification`}
                   startIcon={<DownloadIcon />}
-                  onClick={() => onDocumentDownload(attachment.url)}
+                  onClick={() => onDocumentClick(attachment.name)}
                 >
                   {attachment.title}
                 </Button>

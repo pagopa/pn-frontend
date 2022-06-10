@@ -65,11 +65,11 @@ const CodeInput = memo(
     };
 
     const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
-      if (!isNaN(Number(event.key))) {
+      if (!isNaN(Number(event.key)) && inputsRef.current[index].value) {
         /* eslint-disable-next-line functional/immutable-data */
         inputsRef.current[index].value = event.key;
       }
-      if (!isNaN(Number(event.key)) || event.key === 'Enter' || event.key === 'Tab') {
+      if (!isNaN(Number(event.key)) || event.key === 'Enter' || (event.key === 'Tab' && !event.shiftKey)) {
         // focus next element
         focusInput(index + 1);
         return;
@@ -79,7 +79,7 @@ const CodeInput = memo(
         event.key === 'Delete'
       ) {
         return;
-      } else if (event.key === 'Backspace') {
+      } else if (event.key === 'Backspace' || (event.key === 'Tab' && event.shiftKey)) {
         focusInput(index - 1);
         return;
       }

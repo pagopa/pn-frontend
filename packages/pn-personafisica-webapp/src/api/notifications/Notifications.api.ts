@@ -4,30 +4,20 @@ import {
   NotificationDetail,
   GetNotificationsParams,
   GetNotificationsResponse,
-  formatFiscalCode,
   parseNotificationDetail,
-  PaymentDetail,
-  PaymentStatus,
+  PaymentInfo,
+  PaymentAttachmentNameType,
 } from '@pagopa-pn/pn-commons';
-import { apiClient } from '../axios';
 
-const mocked_payments_detail = [
-  {
-    amount: 47350,
-    status: PaymentStatus.REQUIRED,
-  },
-  {
-    amount: 47350,
-    status: PaymentStatus.INPROGRESS,
-  },
-  {
-    status: PaymentStatus.SUCCEEDED,
-  },
-  {
-    amount: 47350,
-    status: PaymentStatus.FAILED,
-  },
-];
+import { apiClient } from '../axios';
+import {
+  NOTIFICATIONS_LIST,
+  NOTIFICATION_DETAIL,
+  NOTIFICATION_DETAIL_DOCUMENTS,
+  NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
+  NOTIFICATION_PAYMENT_INFO,
+} from './notifications.routes';
 
 export const NotificationsApi = {
   /**
@@ -36,74 +26,45 @@ export const NotificationsApi = {
    * @param  {string} endDate
    * @returns Promise
    */
-  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => {
-    const queryParams = new URLSearchParams();
-    queryParams.append('startDate', params.startDate);
-    queryParams.append('endDate', params.endDate);
-    if (params.recipientId) {
-      queryParams.append('senderId', formatFiscalCode(params.recipientId));
-    }
-    if (params.status) {
-      queryParams.append('status', params.status);
-    }
-    if (params.subjectRegExp) {
-      queryParams.append('subjectRegExp', params.subjectRegExp);
-    }
-    if (params.size) {
-      queryParams.append('size', params.size.toString());
-    }
-    if (params.nextPagesKey) {
-      queryParams.append('nextPagesKey', params.nextPagesKey);
-    }
-    if (params.iunMatch) {
-      queryParams.append('iunMatch', params.iunMatch);
-    }
-    if (params.mandateId) {
-      queryParams.append('mandateId', params.mandateId);
-    }
-    return apiClient
-      .get<GetNotificationsResponse>('/delivery/notifications/received', { params: queryParams })
-      .then((response) => {
-        if (response.data && response.data.resultsPage) {
-          const notifications = response.data.resultsPage.map((d) => ({
-            ...d,
-            sentAt: formatDate(d.sentAt),
-          }));
-          return {
-            ...response.data,
-            resultsPage: notifications,
-          };
-        }
+  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
+    apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
+      if (response.data && response.data.resultsPage) {
+        const notifications = response.data.resultsPage.map((d) => ({
+          ...d,
+          sentAt: formatDate(d.sentAt),
+        }));
         return {
-          resultsPage: [],
-          moreResult: false,
-          nextPagesKey: [],
+          ...response.data,
+          resultsPage: notifications,
         };
-      });
-  },
+      }
+      return {
+        resultsPage: [],
+        moreResult: false,
+        nextPagesKey: [],
+      };
+    }),
   /**
    * Gets current user notification detail
    * @param  {string} iun
    * @returns Promise
    */
   getReceivedNotification: (iun: string): Promise<NotificationDetail> =>
-    apiClient
-      .get<NotificationDetail>(`/delivery/notifications/received/${iun}`)
-      .then((response) => {
-        if (response.data) {
-          return parseNotificationDetail(response.data);
-        }
-        return {} as NotificationDetail;
-      }),
+    apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
+      if (response.data) {
+        return parseNotificationDetail(response.data);
+      }
+      return {} as NotificationDetail;
+    }),
   /**
    * Gets current user notification document
    * @param  {string} iun
    * @param  {number} documentIndex
    * @returns Promise
    */
-  getReceivedNotificationDocument: (iun: string, documentIndex: number): Promise<{ url: string }> =>
+  getReceivedNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(`/delivery/notifications/received/${iun}/documents/${documentIndex}`)
+      .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
       .then((response) => {
         if (response.data) {
           return response.data;
@@ -121,7 +82,7 @@ export const NotificationsApi = {
     legalFact: LegalFactId
   ): Promise<{ url: string }> =>
     apiClient
-      .get<Buffer>(`/delivery-push/legalfacts/${iun}/${legalFact.type}/${legalFact.key}`, {
+      .get<Buffer>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact), {
         responseType: 'arraybuffer',
         headers: {
           'Content-Type': 'application/json',
@@ -136,29 +97,31 @@ export const NotificationsApi = {
         return { url: '' };
       }),
   /**
-   * Gets current user's notification payment info
-   * @param  {string} iuv
+   * Gets current user specified Payment Attachment
+   * @param  {string} iun
+   * @param  {PaymentAttachmentNameType} attachmentName
    * @returns Promise
    */
-  getNotificationPaymentInfo: (iuv: string): Promise<PaymentDetail> =>
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (!iuv) {
-          return reject({ response: { status: 400 }, blockNotification: true });
+  getPaymentAttachment: (
+    iun: string,
+    attachmentName: PaymentAttachmentNameType
+  ): Promise<{ url: string }> =>
+    apiClient
+      .get<{ url: string }>(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string))
+      .then((response) => {
+        if (response.data) {
+          return { url: response.data.url };
         }
-        // mocked response (returns a random payment status)
-        const randomIndex = Math.floor(Math.random() * 4);
-        return resolve(mocked_payments_detail[randomIndex]);
-      }, 1500);
-      // return resolve(mocked_payments_detail[randomIndex]);
-    }),
-  // apiClient
-  // .get<PaymentDetail>(`/delivery/notifications/payment/${iuv}`)
-  // .then((response) => {
-  //   if (response.data) {
-  //     return response.data;
-  //   }
-  //   return { };
-  //   // return response.data;
-  // }),
+        return { url: '' };
+      }),
+  /**
+   * Gets current user's notification payment info
+   * @param  {string} noticeCode
+   * @param  {string} taxId
+   * @returns Promise
+   */
+  getNotificationPaymentInfo: (noticeCode: string, taxId: string): Promise<PaymentInfo> =>
+    apiClient
+      .get<PaymentInfo>(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
+      .then((response) => response.data),
 };
