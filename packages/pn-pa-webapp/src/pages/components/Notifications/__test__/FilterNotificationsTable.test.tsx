@@ -165,7 +165,7 @@ describe('Filter Notifications Table Component', () => {
         endDate: todayM.toISOString(),
         recipientId: 'RSSMRA80A01H501U',
         status: NotificationAllowedStatus[2].value,
-        iunMatch: '',
+        iunMatch: undefined,
       },
       type: 'setNotificationFilters',
     });
@@ -182,7 +182,7 @@ describe('Filter Notifications Table Component', () => {
       todayM.toDate(),
       NotificationAllowedStatus[2].value,
       undefined,
-      'c_b963-202203041055'
+      'ABCD-EFGH-ILMN-123456-A-1'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
@@ -195,8 +195,8 @@ describe('Filter Notifications Table Component', () => {
         startDate: oneYearAgo.toISOString(),
         endDate: todayM.toISOString(),
         status: NotificationAllowedStatus[2].value,
-        iunMatch: 'c_b963-202203041055',
-        recipientId: '',
+        iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
+        recipientId: undefined,
       },
       type: 'setNotificationFilters',
     });

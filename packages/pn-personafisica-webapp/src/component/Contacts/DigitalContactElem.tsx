@@ -83,14 +83,26 @@ const DigitalContactElem = memo(
         void dispatch(deleteLegalAddress({ recipientId, senderId, channelType: contactType }));
         return;
       }
-      void dispatch(deleteCourtesyAddress({ recipientId, senderId, channelType: contactType as CourtesyChannelType }));
+      void dispatch(
+        deleteCourtesyAddress({
+          recipientId,
+          senderId,
+          channelType: contactType as CourtesyChannelType,
+        })
+      );
     };
 
     const editHandler = () => {
-      initValidation(contactType, value, recipientId, senderId, (status: 'validated' | 'cancelled') => {
-        onConfirmClick(status);
-        toggleEdit();
-      });
+      initValidation(
+        contactType,
+        value,
+        recipientId,
+        senderId,
+        (status: 'validated' | 'cancelled') => {
+          onConfirmClick(status);
+          toggleEdit();
+        }
+      );
     };
 
     return (
@@ -117,7 +129,13 @@ const DigitalContactElem = memo(
               </ButtonNaked>
             )}
             {editMode && (
-              <ButtonNaked color="primary" disabled={saveDisabled} type="button" onClick={editHandler} sx={{ marginRight: '10px' }}>
+              <ButtonNaked
+                color="primary"
+                disabled={saveDisabled}
+                type="button"
+                onClick={editHandler}
+                sx={{ marginRight: '10px' }}
+              >
                 {t('button.salva')}
               </ButtonNaked>
             )}

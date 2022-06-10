@@ -10,16 +10,13 @@ import {
 const Footer = () => (
     <MuiFooter
       loggedUser={true}
-      companyLink={pagoPALink}
+      companyLink={{...pagoPALink, onClick: () => window.open(pagoPALink.href, '_blank')}}
       legalInfo={companyLegalInfo}
       postLoginLinks={postLoginLinks}
       preLoginLinks={preLoginLinks}
       languages={LANGUAGES}
       currentLangCode={'it'}
       onLanguageChanged={() => console.log('Language changed')}
-      onExit={(href: string) => {
-        window.open(href, '_blank');
-      }}
     />
   );
 

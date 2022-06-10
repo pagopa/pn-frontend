@@ -31,7 +31,7 @@ type HeaderProps = {
 const pagoPAHeaderLink: RootLinkType = {
   ...pagoPALink,
   label: 'PagoPA S.p.A.',
-  title: 'Sito di PagoPA S.p.A.',
+  title: 'Sito di PagoPA S.p.A.'
 };
 
 const Header = ({

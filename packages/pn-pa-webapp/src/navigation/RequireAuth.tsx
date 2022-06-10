@@ -47,7 +47,7 @@ const RequireAuth = ({ roles }: Props) => {
           title={'Stai uscendo da Piattaforma Notifiche'}
           message={'Non hai i provilegi per accedere a questa sezione'}
           handleClose={goToSelfcareLogin}
-        ></SessionModal>
+        />
       )}
       {DISABLE_INACTIVITY_HANDLER ? (
         <Outlet />

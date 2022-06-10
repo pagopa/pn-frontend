@@ -1,11 +1,11 @@
 import { Grid, Typography, Avatar } from '@mui/material';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
-type DropDownEntiProps = {
+type DropDownPartyProps = {
   name: string;
 };
 
-const DropDownEntiMenuItem: React.FC<DropDownEntiProps> = ({ name }) => (
+const DropDownPartyMenuItem: React.FC<DropDownPartyProps> = ({ name }) => (
   <Grid container>
     <Grid item xs={2}>
       <Avatar sx={{ backgroundColor: '#F5F5F5' }}>
@@ -21,4 +21,4 @@ const DropDownEntiMenuItem: React.FC<DropDownEntiProps> = ({ name }) => (
   </Grid>
 );
 
-export default DropDownEntiMenuItem;
+export default DropDownPartyMenuItem;
