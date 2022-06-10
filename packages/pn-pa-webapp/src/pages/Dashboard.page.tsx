@@ -180,7 +180,7 @@ const Dashboard = () => {
       <Typography variant="h4">Notifiche</Typography>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="body1">
-          Qui trovi tutte le notifiche inviate dall&apos;Ente. Puoi filtrarle per Codice Fiscale,
+          Qui trovi tutte le notifiche inviate dall&apos;ente. Puoi filtrarle per Codice Fiscale,
           Codice IUN, data di invio e stato.
         </Typography>
         <Button
