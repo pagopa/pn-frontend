@@ -46,6 +46,7 @@ export interface NotificationDetail {
   cancelledIun: string;
   cancelledByIun: string;
   recipients: Array<NotificationDetailRecipient>;
+  senderDenomination?: string;
   documents: Array<NotificationDetailDocument>;
   documentsAvailable: boolean;
   notificationStatus: NotificationStatus;

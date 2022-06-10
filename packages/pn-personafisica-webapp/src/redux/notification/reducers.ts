@@ -30,6 +30,7 @@ const initialState = {
     cancelledIun: '',
     cancelledByIun: '',
     recipients: [] as Array<NotificationDetailRecipient>,
+    senderDenomination: '',
     documents: [] as Array<NotificationDetailDocument>,
     notificationStatus: '' as NotificationStatus,
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,

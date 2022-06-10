@@ -20,15 +20,18 @@ const mocked_payments_detail = [
   {// 0
     status: PaymentStatus.FAILED,
     detail: PaymentInfoDetail.DOMAIN_UNKNOWN,
-    detail_v2: "PPT_STAZIONE_INT_PA_ERRORE_RESPONSE"
+    detail_v2: "PPT_STAZIONE_INT_PA_ERRORE_RESPONSE",
+    errorCode: "CODICE_ERRORE"
   }, {// 1
     status: PaymentStatus.FAILED,
     detail: PaymentInfoDetail.PAYMENT_UNAVAILABLE,
-    detail_v2: "PPT_INTERMEDIARIO_PSP_SCONOSCIUTO"
+    detail_v2: "PPT_INTERMEDIARIO_PSP_SCONOSCIUTO",
+    errorCode: "CODICE_ERRORE"
   }, {// 2
     status: PaymentStatus.FAILED,
     detail: PaymentInfoDetail.PAYMENT_UNKNOWN,
-    detail_v2: "PAA_PAGAMENTO_SCONOSCIUTO"
+    detail_v2: "PAA_PAGAMENTO_SCONOSCIUTO",
+    errorCode: "CODICE_ERRORE"
   }, {// 3
     status: PaymentStatus.FAILED,
     detail: PaymentInfoDetail.GENERIC_ERROR
@@ -191,7 +194,7 @@ export const NotificationsApi = {
       // const randomIndex = Math.floor(Math.random() * 4);
       const randomIndex = 8;
       return resolve(mocked_payments_detail[randomIndex]);
-    }, 250);
+    }, 1000);
     // return resolve(mocked_payments_detail[randomIndex]);
   }),
   // apiClient

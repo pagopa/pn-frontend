@@ -28,6 +28,7 @@ import CustomDatePicker from './components/CustomDatePicker';
 import BreadcrumbLink from './components/BreadcrumbLink';
 import FileUpload from './components/FileUpload';
 import Prompt from './components/Prompt';
+import CopyToClipboard from './components/CopyToClipboard';
 
 export { LoadingOverlay };
 export { Header };
@@ -58,6 +59,7 @@ export { CustomDatePicker };
 export { BreadcrumbLink };
 export { FileUpload };
 export { Prompt };
+export { CopyToClipboard };
 
 // pages
 import NotFound from './navigation/NotFound';

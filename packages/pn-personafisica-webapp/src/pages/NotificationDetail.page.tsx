@@ -65,13 +65,13 @@ const NotificationDetail = () => {
     },
     {
       id: 3,
-      label: t('detail.recipient', { ns: 'notifiche' }),
-      value: <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>,
+      label: t('detail.surname-name', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
     },
     {
       id: 4,
-      label: t('detail.surname-name', { ns: 'notifiche' }),
-      value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
+      label: t('detail.sender', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
     },
     {
       id: 6,
@@ -83,14 +83,13 @@ const NotificationDetail = () => {
       label: t('detail.iun', { ns: 'notifiche' }),
       value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
-    { id: 8, label: t('detail.groups', { ns: 'notifiche' }), value: '' },
     {
-      id: 9,
+      id: 8,
       label: t('detail.notice-code', { ns: 'notifiche' }),
       value: <Box fontWeight={600}>{notification.recipients[0]?.payment?.noticeCode}</Box>,
     },
     {
-      id: 10,
+      id: 9,
       label: t('detail.creditor-tax-id', { ns: 'notifiche' }),
       value: <Box fontWeight={600}>{notification.recipients[0]?.payment?.creditorTaxId}</Box>,
     },
