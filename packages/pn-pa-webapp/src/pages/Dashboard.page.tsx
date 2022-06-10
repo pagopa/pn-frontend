@@ -38,7 +38,7 @@ const Dashboard = () => {
   const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
   const navigate = useNavigate();
-  const FilterNotificationsTableRef = useRef({ filtersApplied: false });
+  const filterNotificationsTableRef = useRef({ filtersApplied: false });
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -196,7 +196,7 @@ const Dashboard = () => {
   }, [filters, pagination.size, pagination.page, sort]);
 
   const ItemsTableEmptyState = () => {
-    const filterCleared: boolean = FilterNotificationsTableRef.current.filtersApplied;
+    const filterCleared: boolean = filterNotificationsTableRef.current.filtersApplied;
     const commonProps = {
       columns,
       rows,
@@ -232,7 +232,7 @@ const Dashboard = () => {
       <Fragment>
         {notifications && (
           <Fragment>
-            <FilterNotificationsTable ref={FilterNotificationsTableRef} />
+            <FilterNotificationsTable ref={filterNotificationsTableRef} />
             <ItemsTableEmptyState />
             {notifications.length > 0 && (
               <CustomPagination

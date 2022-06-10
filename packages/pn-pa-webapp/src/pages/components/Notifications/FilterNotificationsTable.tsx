@@ -65,8 +65,6 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
     iunMatch: '',
   };
 
-  const [prevFilters, setPrevFilters] = useState(initialEmptyValues);
-
   const initialValues = () => {
     if (!filters || (filters && _.isEqual(filters, emptyValues))) {
       return initialEmptyValues;
@@ -101,7 +99,6 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
         iunMatch: values.iunMatch ? values.iunMatch : undefined,
         status: values.status === 'All' ? undefined : values.status,
       };
-      setPrevFilters(values);
       dispatch(setNotificationFilters(currentFilters));
     },
   });
@@ -150,7 +147,6 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
       formik.resetForm({
         values: initialValues(),
       });
-      setPrevFilters(initialEmptyValues);
       setStartDate(null);
       setEndDate(null);
       setIsFirstSearch(true);
@@ -159,16 +155,8 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
     }
   }, [filters]);
 
-  const filtersApplied = (): number =>
-    Object.entries(prevFilters).reduce((c: number, element: [string, any]) => {
-      if (element[0] in initialValues() && element[1] !== (initialValues() as any)[element[0]]) {
-        return c + 1;
-      }
-      return c;
-    }, 0);
-
   useImperativeHandle(ref, () => ({
-    filtersApplied: filtersApplied() === 0,
+    filtersApplied: formIsInInitialStatus,
   }));
 
   return (
