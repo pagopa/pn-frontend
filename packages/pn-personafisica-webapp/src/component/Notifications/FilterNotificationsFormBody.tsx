@@ -3,14 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { FormikErrors, FormikTouched, FormikValues } from 'formik';
 import currentLocale from 'date-fns/locale/it';
 import { Grid, TextField, TextFieldProps } from '@mui/material';
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
   CustomDatePicker,
+  DatePickerTypes,
   DATE_FORMAT,
   tenYearsAgo,
   today,
   useIsMobile,
+  formatIun
 } from '@pagopa-pn/pn-commons';
 
 type Props = {
@@ -46,31 +48,15 @@ const FilterNotificationsFormBody = ({
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
 
-  const handleDashInputMask = async (e: ChangeEvent) => {
-    const input = (e.nativeEvent as any).data;
-    if (input && input.length) {
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      await formikInstance.setFieldValue('iunMatch', formikInstance.values.iunMatch + input + '-');
-    } else {
-      formikInstance.handleChange(e);
-    }
-  };
-
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (e.target.id === 'iunMatch') {
-      switch (formikInstance.values.iunMatch.length) {
-        case 3:
-        case 8:
-        case 13:
-        case 20:
-        case 22:
-          await handleDashInputMask(e);
-          break;
-        default:
-          formikInstance.handleChange(e);
+      const newInput = formatIun(formikInstance.values.iunMatch, (e.nativeEvent as any).data);
+      if (newInput) {
+        await formikInstance.setFieldValue('iunMatch', newInput);
+      } else {
+        formikInstance.handleChange(e);
       }
-    }
-    else {
+    } else {
       formikInstance.handleChange(e);
     }
     await formikInstance.setFieldTouched(e.target.id, true, false);
@@ -97,15 +83,14 @@ const FilterNotificationsFormBody = ({
         <LocalizationProvider
           id="startDate"
           name="startDate"
-          value={formikInstance.values.startDate}
-          dateAdapter={DateAdapter}
-          locale={currentLocale}
+          dateAdapter={AdapterDateFns}
+          adapterLocale={currentLocale}
         >
           <CustomDatePicker
             label={t('filters.data_da', { ns: 'notifiche' })}
             inputFormat={DATE_FORMAT}
             value={startDate}
-            onChange={(value: Date | null) => {
+            onChange={(value: DatePickerTypes) => {
               formikInstance
                 .setFieldValue('startDate', value || tenYearsAgo)
                 .then(() => {
@@ -139,15 +124,14 @@ const FilterNotificationsFormBody = ({
         <LocalizationProvider
           id="endDate"
           name="endDate"
-          value={formikInstance.values.endDate}
-          dateAdapter={DateAdapter}
-          locale={currentLocale}
+          dateAdapter={AdapterDateFns}
+          adapterLocale={currentLocale}
         >
           <CustomDatePicker
             label={t('filters.data_a', { ns: 'notifiche' })}
             inputFormat={DATE_FORMAT}
             value={endDate}
-            onChange={(value: Date | null) => {
+            onChange={(value: DatePickerTypes) => {
               formikInstance
                 .setFieldValue('endDate', value || today)
                 .then(() => {

@@ -16,7 +16,7 @@ const StatusTooltip = ({
 
   return (
     <CustomTooltip openOnClick={false} tooltipContent={tooltipContent}>
-      <Chip label={label} color={color} />
+      <Chip label={label} color={color} sx={{cursor: 'default'}}/>
     </CustomTooltip>
   );
 };

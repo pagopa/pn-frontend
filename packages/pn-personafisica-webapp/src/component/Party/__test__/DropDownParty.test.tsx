@@ -1,15 +1,15 @@
 import { render } from '@testing-library/react';
 import { axe } from '../../../__test__/test-utils';
-import DropDownEntiMenuItem from '../DropDownEnti';
+import DropDownPartyMenuItem from '../DropDownParty';
 
-describe('DropDownEnti Component', () => {
+describe('DropDownParty Component', () => {
   it('renders the dropdown menu', () => {
-    const result = render(<DropDownEntiMenuItem name={'test1'} />);
+    const result = render(<DropDownPartyMenuItem name={'test1'} />);
     expect(result.baseElement).toHaveTextContent(/test1/i);
   });
 
-  it('is DropDownEnti component accessible', async()=>{
-    const result = render(<DropDownEntiMenuItem name={'test1'} />);
+  it('is DropDownParty component accessible', async () => {
+    const result = render(<DropDownPartyMenuItem name={'test1'} />);
     const results = await axe(result?.container);
     expect(results).toHaveNoViolations();
   });

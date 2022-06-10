@@ -29,6 +29,8 @@ jest.mock('@pagopa-pn/pn-commons', () => ({
   NotificationDetailTimeline: () => <div>Timeline</div>,
 }));
 
+jest.mock('../../component/Notifications/NotificationPayment', () => () => <div>Payment</div>);
+
 describe('NotificationDetail Page', () => {
   let result: RenderResult | undefined;
   const mockDispatchFn = jest.fn();

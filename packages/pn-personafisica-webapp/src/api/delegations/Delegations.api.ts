@@ -8,6 +8,14 @@ import {
   Delegation,
   Delegator,
 } from '../../redux/delegation/types';
+import {
+  ACCEPT_DELEGATION,
+  CREATE_DELEGATION,
+  DELEGATIONS_BY_DELEGATE,
+  DELEGATIONS_BY_DELEGATOR,
+  REJECT_DELEGATION,
+  REOVKE_DELEGATION,
+} from './delegations.routes';
 
 function checkResponseStatus(response: AxiosResponse, id: string) {
   if (response.status === 200) {
@@ -23,7 +31,7 @@ export const DelegationsApi = {
    */
   getDelegates: (): Promise<Array<Delegate>> =>
     apiClient
-      .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegator')
+      .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATOR())
       .then((response: AxiosResponse<Array<Delegation>>) =>
         response.data.map((delegation) => ({
           mandateId: delegation.mandateId,
@@ -42,7 +50,7 @@ export const DelegationsApi = {
    */
   getDelegators: (): Promise<Array<Delegator>> =>
     apiClient
-      .get<Array<Delegation>>('/mandate/api/v1/mandates-by-delegate')
+      .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATE())
       .then((response: AxiosResponse<Array<Delegation>>) =>
         response.data.map((delegation) => ({
           mandateId: delegation.mandateId,
@@ -54,26 +62,6 @@ export const DelegationsApi = {
           delegator: 'delegator' in delegation ? delegation.delegator : null,
         }))
       ),
-  // new Promise((resolve, _reject) => {
-  //   return resolve([
-  //     {
-  //       mandateId: 'mandateIdProva',
-  //       status: 'active',
-  //       visibilityIds: [],
-  //       verificationCode: '1234',
-  //       datefrom: '2021-12-28+01:00',
-  //       dateto: '',
-  //       delegator: {
-  //         firstName: 'Carlotta',
-  //         lastName: 'Dimatteo',
-  //         displayName: undefined,
-  //         companyName: undefined,
-  //         fiscalCode: 'DNTCLD90E63D628I',
-  //         person: true,
-  //       },
-  //     },
-  //   ]);
-  // }),
   /**
    * Removes a delegation that the user created
    * @param id
@@ -81,7 +69,7 @@ export const DelegationsApi = {
    */
   revokeDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
-      .patch(`/mandate/api/v1/mandate/${id}/revoke`)
+      .patch(REOVKE_DELEGATION(id))
       .then((response: AxiosResponse) => checkResponseStatus(response, id)),
   /**
    * Removes a delegation created for the user
@@ -90,7 +78,7 @@ export const DelegationsApi = {
    */
   rejectDelegation: (id: string): Promise<{ id: string }> =>
     apiClient
-      .patch(`/mandate/api/v1/mandate/${id}/reject`)
+      .patch(REJECT_DELEGATION(id))
       .then((response: AxiosResponse) => checkResponseStatus(response, id)),
   /**
    * Accepts a delegation created for the user
@@ -103,7 +91,7 @@ export const DelegationsApi = {
     data: { verificationCode: string }
   ): Promise<AcceptDelegationResponse> =>
     apiClient
-      .patch<AcceptDelegationResponse>(`/mandate/api/v1/mandate/${id}/accept`, data)
+      .patch<AcceptDelegationResponse>(ACCEPT_DELEGATION(id), data)
       .then((response: AxiosResponse<AcceptDelegationResponse>) => {
         if (response.status === 200) {
           return { ...response.data, id };
@@ -119,10 +107,10 @@ export const DelegationsApi = {
    */
   createDelegation: (data: CreateDelegationProps): Promise<CreateDelegationResponse> =>
     apiClient
-      .post<CreateDelegationResponse>('/mandate/api/v1/mandate', data)
+      .post<CreateDelegationResponse>(CREATE_DELEGATION(), data)
       .then((response: AxiosResponse<CreateDelegationResponse>) => {
         if (response.data) {
-          return response.data as CreateDelegationResponse;
+          return response.data;
         }
         return {
           datefrom: '',

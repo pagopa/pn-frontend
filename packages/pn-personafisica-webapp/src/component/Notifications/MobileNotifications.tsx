@@ -78,7 +78,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
 
   const cardBody: Array<CardElement> = [
     {
-      id: 'senderId',
+      id: 'sender',
       label: t('table.mittente'),
       getLabel(value: string) {
         return value;

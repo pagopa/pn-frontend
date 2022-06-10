@@ -216,7 +216,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     // eslint-disable-next-line functional/no-let
     let action: MessageActionType | undefined;
 
-    const errorCode = paymentInfo.errorCode;
+    const errorCode = paymentInfo.detail_v2;
 
     switch(paymentInfo.detail) {
       case PaymentInfoDetail.DOMAIN_UNKNOWN:      // Creditor institution error

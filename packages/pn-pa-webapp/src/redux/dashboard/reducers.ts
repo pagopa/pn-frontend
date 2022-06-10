@@ -12,6 +12,9 @@ const dashboardSlice = createSlice({
     filters: {
       startDate: tenYearsAgo.toISOString(),
       endDate: today.toISOString(),
+      status: undefined,
+      recipientId: undefined,
+      iunMatch: undefined,
     } as GetNotificationsParams,
     pagination: {
       nextPagesKey: [] as Array<string>,

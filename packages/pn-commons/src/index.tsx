@@ -25,7 +25,7 @@ import Toast from './components/Toast/Toast';
 import CodeModal from './components/CodeModal/CodeModal';
 import InactivityHandler from './components/InactivityHandler';
 import CustomDatePicker from './components/CustomDatePicker';
-import BreadcrumbLink from './components/BreadcrumbLink';
+import PnBreadcrumb from './components/PnBreadcrumb';
 import FileUpload from './components/FileUpload';
 import Prompt from './components/Prompt';
 import CopyToClipboard from './components/CopyToClipboard';
@@ -56,7 +56,7 @@ export { Toast };
 export { CodeModal };
 export { InactivityHandler };
 export { CustomDatePicker };
-export { BreadcrumbLink };
+export { PnBreadcrumb };
 export { FileUpload };
 export { Prompt };
 export { CopyToClipboard };
@@ -94,7 +94,6 @@ import {
   TimelineCategory,
   DigitalDomicileType,
   RecipientType,
-  DeliveryMode,
   AddressSource,
   LegalFactType,
   LegalFactId,
@@ -104,9 +103,9 @@ import {
   PaymentAttachmentSName,
   PaymentAttachmentNameType
 } from './types/NotificationDetail';
-
 import { CardElement, CardSort, CardAction } from './types/ItemsCard';
 import { MessageType } from './types/MessageType';
+import { DatePickerTypes } from './components/CustomDatePicker';
 
 export type { IAppMessage };
 export type { PaginationData };
@@ -118,7 +117,6 @@ export {
   NotificationFeePolicy,
   TimelineCategory,
   LegalFactType,
-  DeliveryMode,
   AddressSource,
   PhysicalCommunicationType,
   PaymentInfoDetail,
@@ -142,6 +140,7 @@ export type {
 export type { CardElement, CardSort, CardAction };
 export type { NotificationDetailTableRow };
 export { MessageType, PaymentStatus };
+export type {DatePickerTypes};
 
 // functions
 import { createAppError } from './services/message.service';
@@ -154,8 +153,10 @@ import {
 } from './utils/notification.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo, DATE_FORMAT } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
+import { IUN_regex, formatIun } from './utils/iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './utils/currency.utility';
 import { storageOpsBuilder } from './utils/storage.utility';
+import { compileRoute } from './utils/routes.utility';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusInfos };
@@ -166,8 +167,10 @@ export { calculatePages };
 export { getMonthString, getDay, getTime };
 export { formatFiscalCode };
 export { fiscalCodeRegex };
+export { IUN_regex, formatIun };
 export { formatCurrency, formatEurocentToCurrency };
 export { storageOpsBuilder };
+export { compileRoute };
 
 // consts
 export { today, tenYearsAgo, DATE_FORMAT };

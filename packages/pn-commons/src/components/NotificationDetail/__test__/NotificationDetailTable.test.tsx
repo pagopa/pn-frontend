@@ -30,7 +30,7 @@ describe('NotificationDetailTable Component', () => {
   it('renders NotificationDetailTable', () => {
     const table = result?.container.querySelector('table');
     expect(table).toBeInTheDocument(); 
-    expect(table).toHaveAttribute('aria-label', 'notification detail');
+    expect(table).toHaveAttribute('aria-label', 'Dettaglio notifica');
     const rows = table?.querySelectorAll('tr');
     expect(rows).toHaveLength(detailRows.length);
     rows?.forEach((row, index) => {

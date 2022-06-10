@@ -1,11 +1,9 @@
-import { useParams, useNavigate } from 'react-router-dom';
 import { Fragment, ReactNode, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Breadcrumbs, Grid, Typography, Box, Paper, Stack } from '@mui/material';
+import { Grid, Box, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
-import { ArrowBack } from '@mui/icons-material';
-import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   TitleBox,
   LegalFactId,
@@ -14,6 +12,7 @@ import {
   NotificationDetailTable,
   NotificationDetailTimeline,
   useIsMobile,
+  PnBreadcrumb,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -25,7 +24,6 @@ import {
   getReceivedNotificationLegalfact,
   resetState,
 } from '../redux/notification/actions';
-import StyledLink from '../component/StyledLink/StyledLink';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 
@@ -41,7 +39,6 @@ const NotificationDetail = () => {
   const classes = useStyles();
   const { id } = useParams();
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
@@ -94,8 +91,10 @@ const NotificationDetail = () => {
       value: <Box fontWeight={600}>{notification.recipients[0]?.payment?.creditorTaxId}</Box>,
     },
   ];
-  const documentDowloadHandler = (documentIndex: number) => {
-    void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
+  const documentDowloadHandler = (documentIndex: string | undefined) => {
+    if (documentIndex) {
+      void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
+    }
   };
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     void dispatch(getReceivedNotificationLegalfact({ iun: notification.iun, legalFact }));
@@ -132,36 +131,29 @@ const NotificationDetail = () => {
 
   const breadcrumb = (
     <Fragment>
-      <Stack direction={{ xs: 'column', sm: 'row' }} alignItems={{ xs: 'start', sm: 'center' }} justifyContent="start" spacing={3}>
-        <ButtonNaked onClick={() => navigate(-1)} startIcon={<ArrowBack />} color="primary" size="medium" >
-          {t('button.indietro', { ns: 'common' })}
-        </ButtonNaked>
-        <Breadcrumbs saria-label="breadcrumb">
-          <StyledLink to={routes.NOTIFICHE}>
+      <PnBreadcrumb
+        goBackLabel={t('button.indietro', { ns: 'common' })}
+        linkRoute={routes.NOTIFICHE}
+        linkLabel={
+          <Fragment>
             <EmailIcon sx={{ mr: 0.5 }} />
             {t('detail.breadcrumb-root', { ns: 'notifiche' })}
-          </StyledLink>
-          <Typography
-            color="text.primary"
-            fontWeight={600}
-            sx={{ display: 'flex', alignItems: 'center' }}
-          >
-            {t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
-          </Typography>
-        </Breadcrumbs>
-      </Stack>
+          </Fragment>
+        }
+        currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
+      />
       <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
     </Fragment>
   );
 
   return (
-    <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 }}}>
+    <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
       {isMobile && breadcrumb}
       <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
-        <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 }}}>
+        <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
-          {recipient && (
+          {recipient?.payment && (
             <NotificationPayment
               iun={notification.iun}
               notificationPayment={recipient.payment}
@@ -194,10 +186,12 @@ const NotificationDetail = () => {
             />              
           </Paper>
               */}
-          
         </Grid>
         <Grid item lg={5} xs={12}>
-          <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
+          <Box
+            component="section"
+            sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}
+          >
             <NotificationDetailTimeline
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}

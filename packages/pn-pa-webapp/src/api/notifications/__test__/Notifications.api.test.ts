@@ -13,13 +13,28 @@ import { newNotification } from './../../../redux/newNotification/__test__/test-
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
 import { apiClient, externalClient } from '../../axios';
 import { NotificationsApi } from '../Notifications.api';
+import {
+  CREATE_NOTIFICATION,
+  NOTIFICATIONS_LIST,
+  NOTIFICATION_DETAIL,
+  NOTIFICATION_DETAIL_DOCUMENTS,
+  NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_PRELOAD_DOCUMENT,
+} from '../notifications.routes';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
 
   it('getSentNotifications', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onGet(`/delivery/notifications/sent`).reply(200, notificationsFromBe);
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: tenYearsAgo.toISOString(),
+          endDate: today.toISOString(),
+        })
+      )
+      .reply(200, notificationsFromBe);
     const res = await NotificationsApi.getSentNotifications({
       startDate: tenYearsAgo.toISOString(),
       endDate: today.toISOString(),
@@ -32,7 +47,7 @@ describe('Notifications api tests', () => {
   it('getSentNotification', async () => {
     const iun = 'mocked-iun';
     const mock = new MockAdapter(apiClient);
-    mock.onGet(`/delivery/notifications/sent/${iun}`).reply(200, notificationFromBe);
+    mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationFromBe);
     const res = await NotificationsApi.getSentNotification(iun);
     expect(res).toStrictEqual(notificationToFe);
     mock.reset();
@@ -41,10 +56,10 @@ describe('Notifications api tests', () => {
 
   it('getSentNotificationDocument', async () => {
     const iun = 'mocked-iun';
-    const documentIndex = 0;
+    const documentIndex = '0';
     const mock = new MockAdapter(apiClient);
     mock
-      .onGet(`/delivery/notifications/sent/${iun}/documents/${documentIndex}`)
+      .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
       .reply(200, { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getSentNotificationDocument(iun, documentIndex);
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
@@ -56,12 +71,10 @@ describe('Notifications api tests', () => {
     const iun = 'mocked-iun';
     const legalFact: LegalFactId = {
       key: 'mocked-key',
-      type: LegalFactType.ANALOG_DELIVERY,
+      category: LegalFactType.ANALOG_DELIVERY,
     };
     const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(`/delivery-push/legalfacts/${iun}/${legalFact.type}/${legalFact.key}`)
-      .reply(200, undefined);
+    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200, undefined);
     const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
     mock.reset();
@@ -71,7 +84,9 @@ describe('Notifications api tests', () => {
   it('preloadNotificationDocument', async () => {
     const mock = new MockAdapter(apiClient);
     mock
-      .onPost(`/delivery/attachments/preload`, [{ key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' }])
+      .onPost(NOTIFICATION_PRELOAD_DOCUMENT(), [
+        { key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' },
+      ])
       .reply(200, [{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
     const res = await NotificationsApi.preloadNotificationDocument([
       { key: 'mocked-key', contentType: 'text/plain', sha256: 'mocked-sha256' },
@@ -85,10 +100,8 @@ describe('Notifications api tests', () => {
     const file = new Uint8Array();
     const mock = new MockAdapter(externalClient);
     mock
-      .onPut(
-        `https://mocked-url.com`,
-      )
-      .reply(200, void 0, {'x-amz-version-id': 'mocked-versionToken'});
+      .onPut(`https://mocked-url.com`)
+      .reply(200, void 0, { 'x-amz-version-id': 'mocked-versionToken' });
     const res = await NotificationsApi.uploadNotificationAttachment(
       'https://mocked-url.com',
       'mocked-sha256',
@@ -103,21 +116,16 @@ describe('Notifications api tests', () => {
 
   it('createNewNotification', async () => {
     const mock = new MockAdapter(apiClient);
-    mock
-      .onPost(
-        `/delivery/requests`,
-        newNotification
-      )
-      .reply(200, {
-        notificationRequestId: 'mocked-notificationRequestId',
-        paProtocolNumber: 'mocked-paProtocolNumber',
-        idempotenceToken: 'mocked-idempotenceToken'
-      });
+    mock.onPost(CREATE_NOTIFICATION(), newNotification).reply(200, {
+      notificationRequestId: 'mocked-notificationRequestId',
+      paProtocolNumber: 'mocked-paProtocolNumber',
+      idempotenceToken: 'mocked-idempotenceToken',
+    });
     const res = await NotificationsApi.createNewNotification(newNotification);
     expect(res).toStrictEqual({
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
-      idempotenceToken: 'mocked-idempotenceToken'
+      idempotenceToken: 'mocked-idempotenceToken',
     });
     mock.reset();
     mock.restore();
