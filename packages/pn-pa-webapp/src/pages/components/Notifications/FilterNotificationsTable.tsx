@@ -156,7 +156,7 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
   }, [filters]);
 
   useImperativeHandle(ref, () => ({
-    filtersApplied: formIsInInitialStatus,
+    filtersApplied: !formIsInInitialStatus,
   }));
 
   return (

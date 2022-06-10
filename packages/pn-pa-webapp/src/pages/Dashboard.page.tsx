@@ -73,7 +73,11 @@ const Dashboard = () => {
       width: '13%',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: Array<string>) {
-        return value.map((v) => <Typography key={v} variant="body2">{v}</Typography>);
+        return value.map((v) => (
+          <Typography key={v} variant="body2">
+            {v}
+          </Typography>
+        ));
       },
       onClick(row: Item, column: Column) {
         handleRowClick(row, column);
@@ -176,13 +180,15 @@ const Dashboard = () => {
     navigate(routes.NUOVA_NOTIFICA);
   };
 
-  const emptyMessage:string = 'L\'ente non ha ancora inviato nessuna notifica. Usa le';
-  const emptyActionLabel:string = 'Chiavi API';
+  const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
+  const emptyActionLabel: string = 'Chiavi API';
 
-  const secondaryMessage:object = {
+  const secondaryMessage: object = {
     emptyMessage: 'o fai un',
     emptyActionLabel: 'invio manuale',
-    emptyActionCallback: () => {handleRouteManualSend();}
+    emptyActionCallback: () => {
+      handleRouteManualSend();
+    },
   };
 
   useEffect(() => {
@@ -196,21 +202,23 @@ const Dashboard = () => {
   }, [filters, pagination.size, pagination.page, sort]);
 
   const ItemsTableEmptyState = () => {
-    const filterCleared: boolean = filterNotificationsTableRef.current.filtersApplied;
+    const filtersApplied: boolean = filterNotificationsTableRef.current.filtersApplied;
     const commonProps = {
       columns,
       rows,
       sort,
-      emptyMessage: !filterCleared ? undefined : emptyMessage,
-      emptyActionLabel : !filterCleared ? undefined : emptyActionLabel,
-      disableSentimentDissatisfied: filterCleared,
+      emptyMessage: filtersApplied ? undefined : emptyMessage,
+      emptyActionLabel: filtersApplied ? undefined : emptyActionLabel,
+      disableSentimentDissatisfied: !filtersApplied,
       onChangeSorting: handleChangeSorting,
-      emptyActionCallback: !filterCleared ? handleCancelSearch : handleRouteApiKeys,
-      secondaryMessage: !filterCleared ? undefined : secondaryMessage,
+      emptyActionCallback: filtersApplied ? handleCancelSearch : handleRouteApiKeys,
+      secondaryMessage: filtersApplied ? undefined : secondaryMessage,
     };
-    return <Fragment>
-      <ItemsTable {...commonProps} />
-    </Fragment>;
+    return (
+      <Fragment>
+        <ItemsTable {...commonProps} />
+      </Fragment>
+    );
   };
 
   return (

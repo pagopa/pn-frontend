@@ -107,7 +107,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
   }, []);
 
   useImperativeHandle(ref, () => ({
-    filtersApplied: filtersApplied() === 0,
+    filtersApplied: filtersApplied() > 0,
   }));
 
   return isMobile ? (

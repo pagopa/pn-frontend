@@ -46,7 +46,7 @@ const cardStyle = {
 const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
-  const FilterNotificationsRef = useRef({ filtersApplied: false });
+  const filterNotificationsRef = useRef({ filtersApplied: false });
   const cardHeader: [CardElement, CardElement] = [
     {
       id: 'notificationReadStatus',
@@ -132,11 +132,11 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     navigate(routes.RECAPITI);
   };
   const ItemsCardEmptyState = () => {
-    const filterCleared: boolean = FilterNotificationsRef.current.filtersApplied;
-    const emptyMessage: string | undefined = !filterCleared
+    const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+    const emptyMessage: string | undefined = filtersApplied
       ? undefined
       : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione';
-    const emptyActionLabel: string | undefined = !filterCleared ? undefined : 'Recapiti';
+    const emptyActionLabel: string | undefined = filtersApplied ? undefined : 'Recapiti';
     const secondaryMessage = {
       emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
     };
@@ -150,8 +150,8 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
           cardData={cardData}
           cardActions={cardActions}
           disableSentimentDissatisfied={true}
-          emptyActionCallback={!filterCleared ? onCancelSearch : handleRouteContacts}
-          secondaryMessage={!filterCleared ? undefined : secondaryMessage}
+          emptyActionCallback={filtersApplied ? onCancelSearch : handleRouteContacts}
+          secondaryMessage={filtersApplied ? undefined : secondaryMessage}
           sx={cardStyle}
         />
       </Fragment>
@@ -177,7 +177,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     <Fragment>
       <Grid container direction="row" sx={{marginBottom: '16px'}}>
         <Grid item xs={6}>
-          <FilterNotifications ref={FilterNotificationsRef} />
+          <FilterNotifications ref={filterNotificationsRef} />
         </Grid>
         <Grid item xs={6} textAlign="right">
           {sort && onChangeSorting && (

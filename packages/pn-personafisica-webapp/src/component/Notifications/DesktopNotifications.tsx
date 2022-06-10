@@ -31,6 +31,7 @@ type Props = {
 const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
+  const filterNotificationsRef = useRef({ filtersApplied: false });
 
   const columns: Array<Column> = [
     {
@@ -104,7 +105,6 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
       },
     },
   ];
-  const FilterNotificationsRef = useRef({ filtersApplied: false });
   const rows: Array<Item> = notifications.map((n, i) => ({
     ...n,
     id: n.paProtocolNumber + i.toString(),
@@ -113,12 +113,13 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
   const handleRouteContacts = () => {
     navigate(routes.RECAPITI);
   };
+
   const ItemsTableEmptyState = () => {
-    const filterCleared: boolean = FilterNotificationsRef.current.filtersApplied;
-    const emptyMessage: string | undefined = !filterCleared
+    const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+    const emptyMessage: string | undefined = filtersApplied
       ? undefined
       : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione';
-    const emptyActionLabel: string | undefined = !filterCleared ? undefined : 'Recapiti';
+    const emptyActionLabel: string | undefined = filtersApplied ? undefined : 'Recapiti';
     const secondaryMessage = {
       emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
     };
@@ -132,8 +133,8 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
           sort={sort}
           disableSentimentDissatisfied={true}
           onChangeSorting={onChangeSorting}
-          emptyActionCallback={!filterCleared ? onCancelSearch : handleRouteContacts}
-          secondaryMessage={!filterCleared ? undefined : secondaryMessage}
+          emptyActionCallback={filtersApplied ? onCancelSearch : handleRouteContacts}
+          secondaryMessage={filtersApplied ? undefined : secondaryMessage}
         />
       </Fragment>
     );
@@ -148,7 +149,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
 
   return (
     <Fragment>
-      <FilterNotifications ref={FilterNotificationsRef} />
+      <FilterNotifications ref={filterNotificationsRef} />
       <ItemsTableEmptyState />
     </Fragment>
   );
