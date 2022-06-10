@@ -15,16 +15,6 @@ import {
 } from './utils/constants';
 import { mixpanelInit } from './utils/mixpanel';
 
-// TODO: get parties list from be (?)
-const partyList: Array<PartyEntity> = [
-  {
-    id: '0',
-    name: PARTY_MOCK,
-    productRole: JSON.parse(sessionStorage.getItem('user') as string).organization.roles[0].role,
-    logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
-  },
-];
-
 const App = () => {
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const dispatch = useAppDispatch();
@@ -63,6 +53,16 @@ const App = () => {
     ],
     [idOrganization]
   );
+
+  // TODO: get parties list from be (?)
+  const partyList: Array<PartyEntity> = useMemo(() => [
+    {
+      id: '0',
+      name: PARTY_MOCK,
+      productRole: role.role,
+      logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
+    },
+  ], [role]);
 
   useEffect(() => {
     // init mixpanel
