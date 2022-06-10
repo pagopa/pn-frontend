@@ -1,4 +1,4 @@
-import { useEffect, ChangeEvent, Fragment, useState } from 'react';
+import { useEffect, ChangeEvent, Fragment, useState, forwardRef, useImperativeHandle } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import _ from 'lodash';
@@ -40,7 +40,8 @@ const searchForValues = [
   { value: '1', label: 'Codice IUN' },
 ];
 
-const FilterNotificationsTable = () => {
+// eslint-disable-next-line sonarjs/cognitive-complexity
+const FilterNotificationsTable = forwardRef((_props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -53,7 +54,6 @@ const FilterNotificationsTable = () => {
     status: undefined,
     recipientId: undefined,
     iunMatch: undefined,
-    clearFilter: true,
   };
 
   const initialEmptyValues = {
@@ -63,8 +63,9 @@ const FilterNotificationsTable = () => {
     status: NotificationAllowedStatus[0].value,
     recipientId: '',
     iunMatch: '',
-    clearFilter: true,
   };
+
+  const [prevFilters, setPrevFilters] = useState(initialEmptyValues);
 
   const initialValues = () => {
     if (!filters || (filters && _.isEqual(filters, emptyValues))) {
@@ -77,7 +78,6 @@ const FilterNotificationsTable = () => {
         recipientId: filters.recipientId || '',
         iunMatch: filters.iunMatch || '',
         status: filters.status || NotificationAllowedStatus[0].value,
-        clearFilter: false,
       };
     }
   };
@@ -100,13 +100,17 @@ const FilterNotificationsTable = () => {
         recipientId: values.recipientId ? values.recipientId : undefined,
         iunMatch: values.iunMatch ? values.iunMatch : undefined,
         status: values.status === 'All' ? undefined : values.status,
-        clearFilter: values.clearFilter,
       };
+      setPrevFilters(values);
       dispatch(setNotificationFilters(currentFilters));
     },
   });
 
-  const formIsInInitialStatus = _.isEqual({...formik.values, searchFor: undefined}, {...initialEmptyValues, searchFor: undefined}) && isFirstSearch;
+  const formIsInInitialStatus =
+    _.isEqual(
+      { ...formik.values, searchFor: undefined },
+      { ...initialEmptyValues, searchFor: undefined }
+    ) && isFirstSearch;
 
   const cancelSearch = () => {
     dispatch(setNotificationFilters(emptyValues));
@@ -146,6 +150,7 @@ const FilterNotificationsTable = () => {
       formik.resetForm({
         values: initialValues(),
       });
+      setPrevFilters(initialEmptyValues);
       setStartDate(null);
       setEndDate(null);
       setIsFirstSearch(true);
@@ -153,6 +158,18 @@ const FilterNotificationsTable = () => {
       setIsFirstSearch(false);
     }
   }, [filters]);
+
+  const filtersApplied = (): number =>
+    Object.entries(prevFilters).reduce((c: number, element: [string, any]) => {
+      if (element[0] in initialValues() && element[1] !== (initialValues() as any)[element[0]]) {
+        return c + 1;
+      }
+      return c;
+    }, 0);
+
+  useImperativeHandle(ref, () => ({
+    filtersApplied: filtersApplied() === 0,
+  }));
 
   return (
     <Fragment>
@@ -311,6 +328,6 @@ const FilterNotificationsTable = () => {
       </form>
     </Fragment>
   );
-};
+});
 
 export default FilterNotificationsTable;

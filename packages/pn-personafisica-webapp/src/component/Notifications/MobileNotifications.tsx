@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Typography } from '@mui/material';
@@ -46,7 +46,7 @@ const cardStyle = {
 const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
-
+  const FilterNotificationsRef = useRef({ filtersApplied: false });
   const cardHeader: [CardElement, CardElement] = [
     {
       id: 'notificationReadStatus',
@@ -128,6 +128,36 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     return arr;
   }, [] as Array<CardSort>);
 
+  const handleRouteContacts = () => {
+    navigate(routes.RECAPITI);
+  };
+  const ItemsCardEmptyState = () => {
+    const filterCleared: boolean = FilterNotificationsRef.current.filtersApplied;
+    const emptyMessage: string | undefined = !filterCleared
+      ? undefined
+      : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione';
+    const emptyActionLabel: string | undefined = !filterCleared ? undefined : 'Recapiti';
+    const secondaryMessage = {
+      emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
+    };
+    return (
+      <Fragment>
+        <ItemsCard
+          emptyMessage={emptyMessage}
+          emptyActionLabel={emptyActionLabel}
+          cardHeader={cardHeader}
+          cardBody={cardBody}
+          cardData={cardData}
+          cardActions={cardActions}
+          disableSentimentDissatisfied={true}
+          emptyActionCallback={!filterCleared ? onCancelSearch : handleRouteContacts}
+          secondaryMessage={!filterCleared ? undefined : secondaryMessage}
+          sx={cardStyle}
+        />
+      </Fragment>
+    );
+  };
+
   // Navigation handlers
   const handleRowClick = (row: Item) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
@@ -147,7 +177,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     <Fragment>
       <Grid container direction="row" sx={{marginBottom: '16px'}}>
         <Grid item xs={6}>
-          <FilterNotifications />
+          <FilterNotifications ref={FilterNotificationsRef} />
         </Grid>
         <Grid item xs={6} textAlign="right">
           {sort && onChangeSorting && (
@@ -159,14 +189,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
           )}
         </Grid>
       </Grid>
-      <ItemsCard
-        cardHeader={cardHeader}
-        cardBody={cardBody}
-        cardData={cardData}
-        cardActions={cardActions}
-        emptyActionCallback={onCancelSearch}
-        sx={cardStyle}
-      />
+      <ItemsCardEmptyState />
     </Fragment>
   );
 };

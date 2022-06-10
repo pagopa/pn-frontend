@@ -1,4 +1,4 @@
-import { useEffect, Fragment } from 'react';
+import { useEffect, Fragment, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   calculatePages,
@@ -38,6 +38,7 @@ const Dashboard = () => {
   const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
   const navigate = useNavigate();
+  const FilterNotificationsTableRef = useRef({ filtersApplied: false });
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -161,7 +162,6 @@ const Dashboard = () => {
         status: undefined,
         recipientId: undefined,
         iunMatch: undefined,
-        clearFilter: true,
       })
     );
   };
@@ -196,7 +196,7 @@ const Dashboard = () => {
   }, [filters, pagination.size, pagination.page, sort]);
 
   const ItemsTableEmptyState = () => {
-    const filterCleared = filters.clearFilter === undefined ? true : filters.clearFilter;
+    const filterCleared: boolean = FilterNotificationsTableRef.current.filtersApplied;
     const commonProps = {
       columns,
       rows,
@@ -232,7 +232,7 @@ const Dashboard = () => {
       <Fragment>
         {notifications && (
           <Fragment>
-            <FilterNotificationsTable />
+            <FilterNotificationsTable ref={FilterNotificationsTableRef} />
             <ItemsTableEmptyState />
             {notifications.length > 0 && (
               <CustomPagination

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle} from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-const FilterNotifications = () => {
+const FilterNotifications = forwardRef((_props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common']);
@@ -48,18 +48,16 @@ const FilterNotifications = () => {
     startDate: tenYearsAgo.toISOString(),
     endDate: today.toISOString(),
     iunMatch: undefined,
-    clearFilter: true,
   };
 
   const initialValues = {
     startDate: tenYearsAgo,
     endDate: today,
     iunMatch: '',
-    clearFilter: true,
   };
   const [prevFilters, setPrevFilters] = useState(initialValues);
 
-  const submitForm = (values: { startDate: Date; endDate: Date; iunMatch: string; clearFilter: boolean }) => {
+  const submitForm = (values: { startDate: Date; endDate: Date; iunMatch: string }) => {
     if (prevFilters === values) {
       return;
     }
@@ -67,7 +65,6 @@ const FilterNotifications = () => {
       startDate: values.startDate.toISOString(),
       endDate: values.endDate.toISOString(),
       iunMatch: values.iunMatch,
-      clearFilter: false,
     };
     setPrevFilters(values);
     /* eslint-enable functional/immutable-data */
@@ -108,6 +105,10 @@ const FilterNotifications = () => {
   useEffect(() => {
     void formik.validateForm();
   }, []);
+
+  useImperativeHandle(ref, () => ({
+    filtersApplied: filtersApplied() === 0,
+  }));
 
   return isMobile ? (
     <CustomMobileDialog>
@@ -166,6 +167,6 @@ const FilterNotifications = () => {
       </Box>
     </form>
   );
-};
+});
 
 export default FilterNotifications;

@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -11,8 +11,6 @@ import {
   Item,
   ItemsTable,
 } from '@pagopa-pn/pn-commons';
-import { useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
 
 import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
@@ -32,7 +30,6 @@ type Props = {
 
 const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
-  const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation('notifiche');
 
   const columns: Array<Column> = [
@@ -107,7 +104,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
       },
     },
   ];
-
+  const FilterNotificationsRef = useRef({ filtersApplied: false });
   const rows: Array<Item> = notifications.map((n, i) => ({
     ...n,
     id: n.paProtocolNumber + i.toString(),
@@ -117,27 +114,31 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
     navigate(routes.RECAPITI);
   };
   const ItemsTableEmptyState = () => {
-    const filterCleared:boolean = filters.clearFilter === undefined ? true : filters.clearFilter;
-    const emptyMessage: any = !filterCleared ? undefined : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione';
-    const emptyActionLabel: any = !filterCleared ? undefined : 'Recapiti';
+    const filterCleared: boolean = FilterNotificationsRef.current.filtersApplied;
+    const emptyMessage: string | undefined = !filterCleared
+      ? undefined
+      : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione';
+    const emptyActionLabel: string | undefined = !filterCleared ? undefined : 'Recapiti';
     const secondaryMessage = {
-      emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.'
+      emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
     };
-    return <Fragment>
-      <ItemsTable
-        emptyMessage={emptyMessage}
-        emptyActionLabel={emptyActionLabel}
-        columns={columns}
-        rows={rows}
-        sort={sort}
-        disableSentimentDissatisfied={true}
-        onChangeSorting={onChangeSorting}
-        emptyActionCallback={!filterCleared ? onCancelSearch: handleRouteContacts }
-        secondaryMessage={!filterCleared ? undefined : secondaryMessage}
-      />
-    </Fragment>;
+    return (
+      <Fragment>
+        <ItemsTable
+          emptyMessage={emptyMessage}
+          emptyActionLabel={emptyActionLabel}
+          columns={columns}
+          rows={rows}
+          sort={sort}
+          disableSentimentDissatisfied={true}
+          onChangeSorting={onChangeSorting}
+          emptyActionCallback={!filterCleared ? onCancelSearch : handleRouteContacts}
+          secondaryMessage={!filterCleared ? undefined : secondaryMessage}
+        />
+      </Fragment>
+    );
   };
-  
+
   // Navigation handlers
   const handleRowClick = (row: Item, _column: Column) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
@@ -147,7 +148,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
 
   return (
     <Fragment>
-      <FilterNotifications />
+      <FilterNotifications ref={FilterNotificationsRef} />
       <ItemsTableEmptyState />
     </Fragment>
   );
