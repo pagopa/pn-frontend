@@ -359,7 +359,7 @@ const NuovaDelega = () => {
                       </Stack>
                       <Divider sx={{ marginTop: '1rem' }} />
                       <Grid container sx={{ marginTop: '1rem' }}>
-                        <Grid item xs={4} sx={{ margin: 'auto' }}>
+                        <Grid item xs={12} sx={{ margin: 'auto' }}>
                           <Button
                             sx={{ marginTop: '1rem', margin: 'auto' }}
                             type={'submit'}
