@@ -87,7 +87,7 @@ function ItemsTable({
     <Root>
       <TableContainer sx={{ marginBottom: '10px' }}>
         <Table stickyHeader aria-label="Tabella di item">
-          <TableHead>
+          {rows.length > 0 && <TableHead>
             <TableRow>
               {columns.map((column) => (
                 <TableCell
@@ -120,6 +120,7 @@ function ItemsTable({
               ))}
             </TableRow>
           </TableHead>
+          }
           <TableBody sx={{ backgroundColor: 'background.paper' }}>
             {rows.length ? (
               rows.map((row) => (
