@@ -238,7 +238,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       <Typography sx={{ marginTop: '20px' }}>
         {t('special-contacts.required-fileds', { ns: 'recapiti' })}
       </Typography>
-      <form style={{ margin: '20px' }} onSubmit={formik.handleSubmit}>
+      <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
         <Grid container direction="row" spacing={2} alignItems="center">
           <Grid item lg xs={12}>
             <TextField
