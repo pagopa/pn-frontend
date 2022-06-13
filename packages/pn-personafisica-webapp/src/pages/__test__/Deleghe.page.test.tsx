@@ -142,9 +142,9 @@ describe('Deleghe page', () => {
     await waitFor(() => {
       fireEvent.click(confirmAcceptButton);
     });
-    expect(mockDispatchFn).toBeCalledTimes(4);
-    fireEvent.click(closeButton);
     expect(mockDispatchFn).toBeCalledTimes(5);
+    fireEvent.click(closeButton);
+    expect(mockDispatchFn).toBeCalledTimes(6);
   });
 
   it('checks the accept modal error state', async () => {
