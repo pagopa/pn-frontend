@@ -25,7 +25,7 @@ jest.mock('react-i18next', () => ({
 
 const mockNavigateFn = jest.fn();
 jest.mock('react-router-dom', () => ({
-  ...(jest.requireActual('react-router-dom') as any),
+  ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigateFn,
 }));
 
@@ -40,7 +40,7 @@ async function testInput(form: HTMLFormElement, elementName: string, value: stri
   });
 }
 
-describe.skip('NuovaDelega page', () => {
+describe('NuovaDelega page', () => {
   afterEach(() => {
     mockSelectorSpy.mockClear();
     mockSelectorSpy.mockReset();
@@ -100,11 +100,8 @@ describe.skip('NuovaDelega page', () => {
     useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />);
     const form = result.container.querySelector('form') as HTMLFormElement;
-
-    await act(async () => {
-      await testInput(form, 'nome', 'Mario');
-      await testInput(form, 'cognome', 'Rossi');
-      await testInput(form, 'nome', 'RSSMRA01A01A111A');
-    });
+    await testInput(form, 'nome', 'Mario');
+    await testInput(form, 'cognome', 'Rossi');
+    await testInput(form, 'nome', 'RSSMRA01A01A111A');
   });
 });
