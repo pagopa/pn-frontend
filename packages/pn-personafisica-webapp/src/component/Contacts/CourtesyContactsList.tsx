@@ -13,19 +13,37 @@ interface Props {
 const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
   const isMobile = useIsMobile();
 
-  const phoneContact = useMemo(() => contacts.find(
-    (contact) => contact.channelType === CourtesyChannelType.SMS && contact.senderId === 'default'
-  ), [contacts]);
+  const phoneContact = useMemo(
+    () =>
+      contacts.find(
+        (contact) =>
+          contact.channelType === CourtesyChannelType.SMS && contact.senderId === 'default'
+      ),
+    [contacts]
+  );
 
-  const emailContact = useMemo(() => contacts.find(
-    (contact) => contact.channelType === CourtesyChannelType.EMAIL && contact.senderId === 'default'
-  ), [contacts]);
+  const emailContact = useMemo(
+    () =>
+      contacts.find(
+        (contact) =>
+          contact.channelType === CourtesyChannelType.EMAIL && contact.senderId === 'default'
+      ),
+    [contacts]
+  );
 
   return (
-    <Box style={{ padding: '1rem' }}>
-      <CourtesyContactItem recipientId={recipientId} type={CourtesyFieldType.PHONE} value={phoneContact ? phoneContact?.value : ''} />
+    <Box style={{ padding: '1rem 0' }}>
+      <CourtesyContactItem
+        recipientId={recipientId}
+        type={CourtesyFieldType.PHONE}
+        value={phoneContact ? phoneContact?.value : ''}
+      />
       {(isMobile || phoneContact) && <Divider />}
-      <CourtesyContactItem recipientId={recipientId} type={CourtesyFieldType.EMAIL} value={emailContact ? emailContact.value : ''} />
+      <CourtesyContactItem
+        recipientId={recipientId}
+        type={CourtesyFieldType.EMAIL}
+        value={emailContact ? emailContact.value : ''}
+      />
     </Box>
   );
 };
