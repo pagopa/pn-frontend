@@ -1,0 +1,7 @@
+locales/locales.ts
+**/__test__/**
+.eslintrc.js
+definitions/*
+src/react-app-env.d.ts
+Dangerfile.ts
+src/reportWebVitals.ts
