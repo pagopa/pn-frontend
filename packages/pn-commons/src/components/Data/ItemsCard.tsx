@@ -31,7 +31,17 @@ type Props = {
   emptyActionLabel?: string;
   /** Custom style */
   sx?: SxProps;
+  /** Disable sad emoticon */
+  disableSentimentDissatisfied?: boolean;
+  /** Secondary Message */
+  secondaryMessage?: Message;
 };
+
+interface Message {
+  emptyMessage?: ReactNode;
+  emptyActionLabel?: string;
+  emptyActionCallback?: () => void;
+}
 
 const ItemsCard = ({
   cardHeader,
@@ -42,6 +52,11 @@ const ItemsCard = ({
   emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
   emptyActionLabel = 'Rimuovi filtri',
   sx,
+  disableSentimentDissatisfied = false,
+  secondaryMessage = {
+    emptyMessage: '',
+    emptyActionLabel: '',
+  },
 }: Props) => {
   const cardHeaderTitle = (item: Item) => (
     <Grid container spacing={2} direction="row" alignItems="center">
@@ -105,7 +120,7 @@ const ItemsCard = ({
         <Card data-testid="itemCard" sx={{ padding: '24px' }}>
           <CardContent sx={{ padding: 0 }}>
             <Box component="div" display="flex" sx={{ flexDirection: 'column' }} textAlign="center">
-              <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 auto 20px auto' }} color="action"/>
+              {!disableSentimentDissatisfied && <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 auto 20px auto' }} color="action"/>}
               <Typography variant="body2">
                 {emptyMessage}&nbsp;
                 <Typography
@@ -119,6 +134,19 @@ const ItemsCard = ({
                   onClick={emptyActionCallback}
                 >
                   {emptyActionLabel}
+                </Typography>
+                &nbsp; {secondaryMessage.emptyMessage} &nbsp;
+                <Typography
+                  display="inline"
+                  color="primary"
+                  variant="button"
+                  fontWeight={'bold'}
+                  sx={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={secondaryMessage.emptyActionCallback}
+                >
+                  {secondaryMessage.emptyActionLabel}
                 </Typography>
               </Typography>
             </Box>
