@@ -3,12 +3,11 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useIsMobile } from "../hooks/IsMobile";
 
 interface Props {
-  getValue: () => string;
-  text?: string;
+  getValue: () => string; // callback used to retrieve the text to be copied
+  text?: string;          // an optional text to be displayed near the "copy to clipboard" icon
 }
 
 const CopyToClipboard: React.FC<Props> = ({ getValue, text }) => {
-  console.log("COPY_TO_CLIPBOARD");
   const alertButtonStyle: SxProps<Theme> = useIsMobile()
     ? { textAlign: 'center' }
     : { textAlign: 'center', minWidth: 'max-content' };
@@ -28,7 +27,6 @@ const CopyToClipboard: React.FC<Props> = ({ getValue, text }) => {
       component={Link}
       color="primary"
       sx={alertButtonStyle}
-      // startIcon={ContentCopyIcon}
       onClick={doCopyToClipboard}
     >
       <ContentCopyIcon fontSize="small" sx={{ m: '5px'}} />

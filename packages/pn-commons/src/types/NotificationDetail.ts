@@ -7,7 +7,7 @@ export enum PaymentStatus {
   REQUIRED = "REQUIRED",
   SUCCEEDED = "SUCCEEDED",
   INPROGRESS = "IN_PROGRESS",
-  FAILED = "FAILED"
+  FAILED = "FAILURE"
 }
 
 export enum PaymentInfoDetail {

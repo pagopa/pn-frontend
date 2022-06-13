@@ -74,6 +74,11 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   const fetchPaymentInfo = () => {
     if (notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
       dispatch(getNotificationPaymentInfo({ noticeCode: notificationPayment.noticeCode, taxId: notificationPayment.creditorTaxId }))
+      // dispatch(getNotificationPaymentInfo({ noticeCode: '302001869076319100', taxId: '77777777777' }))
+      // dispatch(getNotificationPaymentInfo({ noticeCode: '002720356512737953', taxId: '77777777777' }))
+      // dispatch(getNotificationPaymentInfo({ noticeCode: '002720356510529106', taxId: '77777777777' }))
+      // dispatch(getNotificationPaymentInfo({ noticeCode: '002720356084529460', taxId: '00000000000' }))
+      // dispatch(getNotificationPaymentInfo({ noticeCode: '002720356510529106', taxId: '01199250158' }))
         .unwrap()
         .then(() => {
           setLoading(() => false);
@@ -124,7 +129,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     // eslint-disable-next-line functional/no-let
     const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();
     
-    if(paymentInfo.status === PaymentStatus.REQUIRED) {
+    if(paymentInfo?.status === PaymentStatus.REQUIRED) {
       const pagopaDoc = notificationPayment.pagoPaForm;
       const f24Doc = notificationPayment.f24flatRate || notificationPayment.f24standard;
 
@@ -325,8 +330,8 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
           </Typography>
         </Grid>
         <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
-          <Typography variant="h6" display="inline" fontWeight={600} fontSize={24}>
-            {loading ? <Skeleton width={100} height={28} aria-label="loading" sx={{ float: 'right' }} /> : data.amount}
+          <Typography variant="h6" aria-label={t('detail.payment.amount', { ns: 'notifiche' })} display="inline" fontWeight={600} fontSize={24}>
+            {loading ? <Skeleton data-testid="loading-skeleton" width={100} height={28} aria-label="loading" sx={{ float: 'right' }} /> : data.amount}
           </Typography>
         </Grid>
         <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>

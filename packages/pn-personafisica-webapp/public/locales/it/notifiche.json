@@ -47,6 +47,7 @@
     "domicile_4": "Associa la tua PEC o l’app IO per ricevere le notifiche in tempi più rapidi.",
     "payment": {
       "summary": "Da pagare",
+      "amount": "importo",
       "disclaimer": "Questo importo verrà aggiornato al momento del pagamento. Quindi potrebbe essere diverso.",
       "disclaimer-link": "Come mai?",
       "submit": "Paga",
