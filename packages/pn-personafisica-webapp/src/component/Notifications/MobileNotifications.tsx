@@ -9,6 +9,7 @@ import {
   getNotificationStatusInfos,
   Notification,
   ItemsCard,
+  EmptyState,
   NotificationStatus,
   Item,
   Sort,
@@ -131,31 +132,17 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
   const handleRouteContacts = () => {
     navigate(routes.RECAPITI);
   };
-  const ItemsCardEmptyState = () => {
-    const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-    const emptyMessage: string | undefined = filtersApplied
-      ? undefined
-      : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione';
-    const emptyActionLabel: string | undefined = filtersApplied ? undefined : 'Recapiti';
-    const secondaryMessage = {
+
+  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+
+  const EmptyStateProps = {
+    emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
+    emptyActionCallback: filtersApplied ? onCancelSearch : handleRouteContacts,
+    emptyMessage: filtersApplied ? undefined : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione',
+    disableSentimentDissatisfied: true,
+    secondaryMessage: {
       emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
-    };
-    return (
-      <Fragment>
-        <ItemsCard
-          emptyMessage={emptyMessage}
-          emptyActionLabel={emptyActionLabel}
-          cardHeader={cardHeader}
-          cardBody={cardBody}
-          cardData={cardData}
-          cardActions={cardActions}
-          disableSentimentDissatisfied={true}
-          emptyActionCallback={filtersApplied ? onCancelSearch : handleRouteContacts}
-          secondaryMessage={filtersApplied ? undefined : secondaryMessage}
-          sx={cardStyle}
-        />
-      </Fragment>
-    );
+    }
   };
 
   // Navigation handlers
@@ -189,7 +176,17 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
           )}
         </Grid>
       </Grid>
-      <ItemsCardEmptyState />
+      {cardData.length ? (
+        <ItemsCard 
+        cardHeader={cardHeader}
+        cardBody={cardBody}
+        cardData={cardData}
+        cardActions={cardActions}
+        sx={cardStyle}
+/>
+      ) : (
+        <EmptyState {...EmptyStateProps}/>
+      )}
     </Fragment>
   );
 };

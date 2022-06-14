@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { Column, ItemsTable as Table, Item, CodeModal, Sort } from '@pagopa-pn/pn-commons';
+import { EmptyState } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 
 import { useState } from 'react';
@@ -129,15 +130,22 @@ const Delegates = () => {
         </Stack>
         {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
         {!delegatesError && (
-          <Table
-            columns={delegatesColumns}
-            rows={rows}
-            emptyActionLabel={t('deleghe.add') as string}
-            emptyMessage={t('deleghe.no_delegates') as string}
-            emptyActionCallback={handleAddDelegationClick}
-            sort={sortDelegates}
-            onChangeSorting={handleChangeSorting}
-          />
+          <>
+            {rows.length > 0 ? (
+              <Table
+                columns={delegatesColumns}
+                rows={rows}
+                sort={sortDelegates}
+                onChangeSorting={handleChangeSorting}
+              />
+            ) : (
+              <EmptyState
+                emptyActionLabel={t('deleghe.add') as string}
+                emptyMessage={t('deleghe.no_delegates') as string}
+                emptyActionCallback={handleAddDelegationClick}
+              />
+            )}
+          </>
         )}
       </Box>
     </>

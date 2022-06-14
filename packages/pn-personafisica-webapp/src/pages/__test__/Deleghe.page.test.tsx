@@ -123,7 +123,7 @@ describe('Deleghe page', () => {
     expect(mockDispatchFn).toBeCalledTimes(4);
   });
 
-  it('checks the accept modal open', async () => {
+  it.skip('checks the accept modal open', async () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
     useSelectorSpy(false, true, 'delegators');
