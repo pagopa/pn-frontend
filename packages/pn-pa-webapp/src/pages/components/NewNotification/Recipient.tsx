@@ -19,7 +19,7 @@ import { DigitalDomicileType, fiscalCodeRegex, RecipientType } from '@pagopa-pn/
 import { pIvaRegex } from '@pagopa-pn/pn-commons/src/utils/fiscal_code.utility';
 import { saveRecipients } from '../../../redux/newNotification/actions';
 import { useAppDispatch } from '../../../redux/hooks';
-import { FormRecipient } from '../../../models/newNotification';
+import { FormRecipient } from '../../../models/NewNotification';
 import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
@@ -239,7 +239,7 @@ const Recipient = ({ onConfirm }: Props) => {
                         />
                         <FormTextField
                           keyName={`recipients[${index}].creditorTaxId`}
-                          label={'Codice fiscale Ente Creditore*'}
+                          label={'Codice fiscale ente creditore*'}
                           values={values}
                           touched={touched}
                           errors={errors}

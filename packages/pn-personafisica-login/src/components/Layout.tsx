@@ -45,7 +45,7 @@ const Layout = ({ children }: Props) => (
     <Box>
       <Footer
         loggedUser={false}
-        companyLink={pagoPALink}
+        companyLink={{...pagoPALink, onClick: () => window.open(pagoPALink.href, '_blank')}}
         legalInfo={companyLegalInfo}
         postLoginLinks={postLoginLinks}
         preLoginLinks={preLoginLinks}
@@ -56,9 +56,6 @@ const Layout = ({ children }: Props) => (
           }
         }
         languages={LANGUAGES}
-        onExit={(href, linkType) => {
-          console.log('Clicked on exit', href, linkType);
-        }}
       />
     </Box>
   </Box>
