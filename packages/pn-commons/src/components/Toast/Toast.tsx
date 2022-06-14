@@ -18,7 +18,7 @@ type Props = {
   closingDelay?: number;
   /** onClose action */
   onClose?: () => void;
-  variant?: "outlined" | "standard" | "filled";
+  variant?: 'outlined' | 'standard' | 'filled';
 };
 
 /**
@@ -51,7 +51,6 @@ const Toast = ({
     [MessageType.INFO, 'info'],
   ]);
 
-  
   useEffect(() => {
     if (closingDelay && openStatus) {
       const timer = setTimeout(() => {
@@ -74,8 +73,8 @@ const Toast = ({
               zIndex: 100,
               width: isMobile ? 'calc(100vw - 10%)' : '376px',
               '& .MuiAlert-message': {
-                width: '100%'
-              }
+                width: '100%',
+              },
             }}
             variant={variant}
             severity={getColor.get(type)}

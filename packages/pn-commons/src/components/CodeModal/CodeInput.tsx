@@ -69,7 +69,11 @@ const CodeInput = memo(
         /* eslint-disable-next-line functional/immutable-data */
         inputsRef.current[index].value = event.key;
       }
-      if (!isNaN(Number(event.key)) || event.key === 'Enter' || (event.key === 'Tab' && !event.shiftKey)) {
+      if (
+        !isNaN(Number(event.key)) ||
+        event.key === 'Enter' ||
+        (event.key === 'Tab' && !event.shiftKey)
+      ) {
         // focus next element
         focusInput(index + 1);
         return;

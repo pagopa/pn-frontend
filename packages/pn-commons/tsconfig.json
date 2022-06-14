@@ -8,12 +8,14 @@
       "es2019"
     ],
     "jsx": "react-jsx",
-    "noEmit": true,
     "strict": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
     "noImplicitReturns": true,
     "moduleResolution": "node",
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "lib",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -33,8 +35,10 @@
   "exclude": [
     "__mocks__",
     "dist",
+    "lib",
     "node_modules",
     "**/__tests__/*",
+    "**/__test__/*",
     "Dangerfile.ts"
   ]
 }

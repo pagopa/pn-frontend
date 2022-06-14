@@ -87,7 +87,7 @@ describe('Notifications Card Component', () => {
       });
       const cardActionsEl = card.querySelectorAll('[data-testid="cardAction"]');
       expect(cardActionsEl).toHaveLength(cardActions.length);
-      cardActionsEl.forEach((action, j) => {
+      cardActionsEl.forEach((action, _j) => {
         expect(action).toHaveTextContent(/Mocked action/i);
       });
     });
