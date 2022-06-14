@@ -239,7 +239,7 @@ const Recipient = ({ onConfirm }: Props) => {
                         />
                         <FormTextField
                           keyName={`recipients[${index}].creditorTaxId`}
-                          label={'Codice fiscale Ente Creditore*'}
+                          label={'Codice fiscale ente creditore*'}
                           values={values}
                           touched={touched}
                           errors={errors}
