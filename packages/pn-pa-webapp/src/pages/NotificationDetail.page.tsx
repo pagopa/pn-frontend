@@ -198,7 +198,7 @@ const NotificationDetail = () => {
               statusHistory={notification.notificationStatusHistory}
               title="Stato della notifica"
               clickHandler={legalFactDownloadHandler}
-              legalFactLabels={{ attestation: 'Attestato opponibile a Terzi', receipt: 'Ricevuta' }}
+              legalFactLabels={{ attestation: 'Attestazione opponibile a terzi', receipt: 'Ricevuta' }}
               historyButtonLabel="Mostra storico"
               showMoreButtonLabel="Mostra di più"
               showLessButtonLabel="Mostra di meno"
