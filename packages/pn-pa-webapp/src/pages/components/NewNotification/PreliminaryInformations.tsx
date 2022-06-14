@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationFe, PaymentModel } from '../../../models/newNotification';
+import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setPreliminaryInformations } from '../../../redux/newNotification/actions';
 import { RootState } from '../../../redux/store';
