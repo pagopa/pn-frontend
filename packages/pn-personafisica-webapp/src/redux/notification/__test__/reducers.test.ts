@@ -20,6 +20,7 @@ describe('Notification detail redux state tests', () => {
         paProtocolNumber: '',
         subject: '',
         recipients: [],
+        senderDenomination: '',
         documents: [],
         notificationFeePolicy: '',
         physicalCommunicationType: '',
