@@ -3,8 +3,10 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useIsMobile } from "../hooks/IsMobile";
 
 interface Props {
-  getValue: () => string; // callback used to retrieve the text to be copied
-  text?: string;          // an optional text to be displayed near the "copy to clipboard" icon
+  /** callback used to retrieve the text to be copied */
+  getValue: () => string;
+  /** an optional text to be displayed near the "copy to clipboard" icon */
+  text?: string;
 }
 
 const CopyToClipboard: React.FC<Props> = ({ getValue, text }) => {

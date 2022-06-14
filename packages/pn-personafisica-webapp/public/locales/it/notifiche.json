@@ -58,6 +58,7 @@
       "message-in-progress": "Il pagamento è già in corso, riprova tra qualche minuto. Se è passato troppo tempo, segnalacelo!",
       "message-failed": "Il pagamento non è andato a buon fine. Premi \"Paga\" per riprovare.",
       "message-network-error": "Errore nel recupero delle informazioni di pagamento!",
+      "message-missing-parameter": "Codice notifica e/o codice fiscale ente non presenti!",
       "contact-support": "Contatta l'assistenza",
       "copy-to-clipboard": "Copia",
       "reload-page": "Ricarica la pagina",

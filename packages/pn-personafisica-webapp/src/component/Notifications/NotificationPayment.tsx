@@ -74,11 +74,6 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   const fetchPaymentInfo = () => {
     if (notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
       dispatch(getNotificationPaymentInfo({ noticeCode: notificationPayment.noticeCode, taxId: notificationPayment.creditorTaxId }))
-      // dispatch(getNotificationPaymentInfo({ noticeCode: '302001869076319100', taxId: '77777777777' }))
-      // dispatch(getNotificationPaymentInfo({ noticeCode: '002720356512737953', taxId: '77777777777' }))
-      // dispatch(getNotificationPaymentInfo({ noticeCode: '002720356510529106', taxId: '77777777777' }))
-      // dispatch(getNotificationPaymentInfo({ noticeCode: '002720356084529460', taxId: '00000000000' }))
-      // dispatch(getNotificationPaymentInfo({ noticeCode: '002720356510529106', taxId: '01199250158' }))
         .unwrap()
         .then(() => {
           setLoading(() => false);
@@ -90,7 +85,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
         });
     } else {
       setLoading(() => false);
-      setError(() => 'Codice notifica e/o Codice fiscale ente non presenti!');
+      setError(() => t('detail.payment.message-missing-parameter', { ns: 'notifiche' }));
     }
   };
 
@@ -152,7 +147,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     return attachments;
   };
 
-  // composes Payment Data to be rendered
+  /** composes Payment Data to be rendered */
   const composePaymentData = (): PaymentData => {
     const title = t('detail.payment.summary', { ns: 'notifiche' });
 
@@ -160,9 +155,9 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
 
     const disclaimer = amount ? getDisclaimer() : undefined;
 
-    const message = getMessageData(); // TODO
+    const message = getMessageData();
 
-    const action = getActionData(amount); // TODO
+    const action = getActionData(amount);
 
     return {
       title,
@@ -173,7 +168,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     };
   };
 
-  // returns disclaimer JSX
+  /** returns disclaimer JSX */
   const getDisclaimer = (): JSX.Element => (
     <>
       {t('detail.payment.disclaimer', { ns: 'notifiche' })}
@@ -184,7 +179,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     </>
   );
 
-  // returns message data to be passed into the alert
+  /** returns message data to be passed into the alert */
   const getMessageData = (): PaymentMessageData | undefined => {
 
     if (error) {
@@ -214,7 +209,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     return undefined;
   };
 
-  // returns message data for failed status
+  /** returns message data for failed status */
   const getFailedMessageData = (): PaymentMessageData | undefined => {
     // eslint-disable-next-line functional/no-let
     let body = "";
@@ -264,7 +259,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     };
   };
 
-  // returns action data used to render the main button
+  /** returns action data used to render the main button */
   const getActionData = (amount: string): PrimaryAction | undefined => {
     switch (paymentInfo?.status) {
       case PaymentStatus.REQUIRED:
@@ -278,6 +273,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     return undefined;
   };
 
+  /** returns action data for failed status */
   const getFailedActionData = (): PrimaryAction | undefined => {
     switch(paymentInfo.detail) {
       case PaymentInfoDetail.DOMAIN_UNKNOWN:      // Creditor institution error
@@ -298,6 +294,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     }
   };
 
+  /** returns main button JSX  */
   const getMessageAction = (message: PaymentMessageData | undefined) => {
     switch (message?.action) {
       case MessageActionType.CONTACT_SUPPORT:

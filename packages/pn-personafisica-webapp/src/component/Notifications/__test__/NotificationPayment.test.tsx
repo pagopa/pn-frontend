@@ -78,9 +78,6 @@ const mocked_payments_detail = {
       }, {// 5
         status: PaymentStatus.FAILED,
         detail: PaymentInfoDetail.PAYMENT_EXPIRED
-      // }, {// 6 do we need to check the behaviour if, for some reason, we receive a PaymentStatus.FAILED and
-      //   status: PaymentStatus.INPROGRESS,
-      //   amount: 47300
       }]
 };
 
