@@ -1,6 +1,6 @@
 import { NotificationDetailRecipient } from '@pagopa-pn/pn-commons';
 
-import { FormRecipient } from '../models/NewNotification';
+import { FormRecipient } from '../models/NewNotification_';
 
 const checkFisicalAddress = (recipient: FormRecipient) => {
   if (

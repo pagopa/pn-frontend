@@ -11,7 +11,7 @@ import {
   UploadAttachmentParams,
   UploadPayementParams,
   UpaloadPaymentResponse,
-} from '../../models/NewNotification';
+} from '../../models/NewNotification_';
 
 export const setCancelledIun = createAction<string>('setCancelledIun');
 

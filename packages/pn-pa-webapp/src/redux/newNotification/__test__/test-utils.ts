@@ -1,6 +1,6 @@
 import { PhysicalCommunicationType, RecipientType, NotificationFeePolicy } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification';
+import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification_';
 
 export const newNotification: NewNotificationFe = {
   paProtocolNumber: '',

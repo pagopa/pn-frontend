@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationFe, PaymentModel } from '../../models/NewNotification';
+import { NewNotificationFe, PaymentModel } from '../../models/NewNotification_';
 import { formatNotificationRecipients } from '../../utils/notification.utility';
 import {
   resetNewNotificationState,

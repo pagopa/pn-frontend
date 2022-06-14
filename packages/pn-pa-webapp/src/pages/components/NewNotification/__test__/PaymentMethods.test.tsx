@@ -5,7 +5,7 @@ import { newNotification } from '../../../../redux/newNotification/__test__/test
 import * as actions from '../../../../redux/newNotification/actions';
 import { render } from '../../../../__test__/test-utils';
 import PaymentMethods from '../PaymentMethods';
-import { UploadPayementParams } from '../../../../models/NewNotification';
+import { UploadPayementParams } from '../../../../models/NewNotification_';
 
 const file = new Blob(['mocked content'], { type: 'application/pdf' });
 (file as any).name = 'Mocked file';

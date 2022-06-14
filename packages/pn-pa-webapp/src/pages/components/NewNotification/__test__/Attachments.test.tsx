@@ -3,7 +3,7 @@ import * as redux from 'react-redux';
 
 import { render } from '../../../../__test__/test-utils';
 import * as actions from '../../../../redux/newNotification/actions';
-import { UploadAttachmentParams } from '../../../../models/NewNotification';
+import { UploadAttachmentParams } from '../../../../models/NewNotification_';
 import Attachments from '../Attachments';
 
 describe('Attachments Component', () => {

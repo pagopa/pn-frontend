@@ -19,7 +19,7 @@ import { DigitalDomicileType, fiscalCodeRegex, RecipientType } from '@pagopa-pn/
 import { pIvaRegex } from '@pagopa-pn/pn-commons/src/utils/fiscal_code.utility';
 import { saveRecipients } from '../../../redux/newNotification/actions';
 import { useAppDispatch } from '../../../redux/hooks';
-import { FormRecipient } from '../../../models/NewNotification';
+import { FormRecipient } from '../../../models/NewNotification_';
 import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
