@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -31,6 +31,7 @@ type Props = {
 const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
+  const filterNotificationsRef = useRef({ filtersApplied: false });
 
   const columns: Array<Column> = [
     {
@@ -104,11 +105,40 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
       },
     },
   ];
-
   const rows: Array<Item> = notifications.map((n, i) => ({
     ...n,
     id: n.paProtocolNumber + i.toString(),
   }));
+
+  const handleRouteContacts = () => {
+    navigate(routes.RECAPITI);
+  };
+
+  const ItemsTableEmptyState = () => {
+    const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+    const emptyMessage: string | undefined = filtersApplied
+      ? undefined
+      : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione';
+    const emptyActionLabel: string | undefined = filtersApplied ? undefined : 'Recapiti';
+    const secondaryMessage = {
+      emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
+    };
+    return (
+      <Fragment>
+        <ItemsTable
+          emptyMessage={emptyMessage}
+          emptyActionLabel={emptyActionLabel}
+          columns={columns}
+          rows={rows}
+          sort={sort}
+          disableSentimentDissatisfied={true}
+          onChangeSorting={onChangeSorting}
+          emptyActionCallback={filtersApplied ? onCancelSearch : handleRouteContacts}
+          secondaryMessage={filtersApplied ? undefined : secondaryMessage}
+        />
+      </Fragment>
+    );
+  };
 
   // Navigation handlers
   const handleRowClick = (row: Item, _column: Column) => {
@@ -119,14 +149,8 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
 
   return (
     <Fragment>
-      <FilterNotifications />
-      <ItemsTable
-        columns={columns}
-        rows={rows}
-        sort={sort}
-        onChangeSorting={onChangeSorting}
-        emptyActionCallback={onCancelSearch}
-      />
+      <FilterNotifications ref={filterNotificationsRef} />
+      <ItemsTableEmptyState />
     </Fragment>
   );
 };

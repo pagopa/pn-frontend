@@ -31,7 +31,17 @@ type Props = {
   emptyMessage?: ReactNode;
   /** Empty action label */
   emptyActionLabel?: string;
+  /** Disable sad emoticon */
+  disableSentimentDissatisfied?: boolean;
+  /** Secondary Message */
+  secondaryMessage?: Message;
 };
+
+interface Message {
+  emptyMessage?: ReactNode;
+  emptyActionLabel?: string;
+  emptyActionCallback?: () => void;
+}
 
 function ItemsTable({
   columns,
@@ -41,6 +51,11 @@ function ItemsTable({
   emptyActionCallback,
   emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
   emptyActionLabel = 'Rimuovi filtri',
+  disableSentimentDissatisfied = false,
+  secondaryMessage = {
+    emptyMessage: '',
+    emptyActionLabel: '',
+  }
 }: Props) {
   const createSortHandler = (property: string) => () => {
     if (sort && onChangeSorting) {
@@ -125,7 +140,7 @@ function ItemsTable({
               <TableRow>
                 <TableCell colSpan={columns.length}>
                   <Box component='div' display='flex' sx={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
+                    {!disableSentimentDissatisfied && <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />}
                     <Typography variant="body2">{emptyMessage}</Typography>
                     &nbsp;
                     <Typography
@@ -138,6 +153,20 @@ function ItemsTable({
                       onClick={emptyActionCallback}
                     >
                       {emptyActionLabel}
+                    </Typography>
+                    &nbsp;
+                    <Typography variant="body2">{secondaryMessage.emptyMessage}</Typography>
+                    &nbsp;
+                    <Typography
+                      color="primary"
+                      variant="body2"
+                      fontWeight={'bold'}
+                      sx={{
+                        cursor: 'pointer',
+                      }}
+                      onClick={secondaryMessage.emptyActionCallback}
+                    >
+                      {secondaryMessage.emptyActionLabel}
                     </Typography>
                   </Box>
                 </TableCell>

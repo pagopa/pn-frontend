@@ -1,11 +1,11 @@
-import { CompanyLinkType, PreLoginFooterLinksType, FooterLinksType } from '@pagopa/mui-italia';
+import { PreLoginFooterLinksType, FooterLinksType } from '@pagopa/mui-italia';
 
 export const LANGUAGES = {
   it: { it: 'Italiano', en: 'Inglese' },
   en: { it: 'Italian', en: 'English' },
 };
 
-export const pagoPALink: CompanyLinkType = {
+export const pagoPALink: {href: string; ariaLabel: string} = {
   href: "https://www.pagopa.it/it/",
   ariaLabel: "Link: vai al sito di PagoPA S.p.A.",
 };
@@ -52,60 +52,6 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
     ],
   },
-  // Second column
-  productsAndServices: {
-    title: "Prodotti e Servizi",
-    links: [
-      {
-        label: "App IO",
-        href: "#app-io",
-        ariaLabel: "Vai al link: App IO",
-        linkType: "internal",
-      },
-      {
-        label: "Piattaforma pagoPA",
-        href: "#piattaforma-pagoPA",
-        ariaLabel: "Vai al link: Piattaforma pagoPA",
-        linkType: "internal",
-      },
-      {
-        label: "Centro stella",
-        href: "#centro-stella",
-        ariaLabel: "Vai al link: Centro stella",
-        linkType: "internal",
-      },
-      {
-        label: "Check IBAN",
-        href: "#check-iban",
-        ariaLabel: "Vai al link: Check IBAN",
-        linkType: "internal",
-      },
-      {
-        label: "Piattaforma Notifiche Digitali",
-        href: "#pn-digitali",
-        ariaLabel: "Vai al link: Piattaforma Notifiche Digitali",
-        linkType: "internal",
-      },
-      {
-        label: "Piattaforma Digitale Nazionale Dati",
-        href: "#pdnd",
-        ariaLabel: "Vai al link: Piattaforma Digitale Nazionale Dati",
-        linkType: "internal",
-      },
-      {
-        label: "Interoperabilità",
-        href: "#interoperabilita",
-        ariaLabel: "Vai al link: Interoperabilità",
-        linkType: "internal",
-      },
-      {
-        label: "Self Care",
-        href: "#self-care",
-        ariaLabel: "Vai al link: Self Care",
-        linkType: "internal",
-      },
-    ],
-  },
   // Third column
   resources: {
     title: "Risorse",
@@ -130,15 +76,20 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Diritto alla protezione dei dati personali",
-        href: "#diritto-alla-protezione-dei-dati-personali",
         ariaLabel: "Vai al link: Diritto alla protezione dei dati personali",
         linkType: "internal",
+        onClick: () => {
+          console.log("onClick");
+        },
       },
       {
         label: "Preferenze Cookie",
         href: "#preferenze-cookie",
         ariaLabel: "Vai al link: Preferenze Cookie",
         linkType: "internal",
+        onClick: () => {
+          console.log("onClick");
+        },
       },
       {
         label: "Termini e Condizioni",

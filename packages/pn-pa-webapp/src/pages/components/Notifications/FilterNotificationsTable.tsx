@@ -1,4 +1,4 @@
-import { useEffect, ChangeEvent, Fragment, useState } from 'react';
+import { useEffect, ChangeEvent, Fragment, useState, forwardRef, useImperativeHandle } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import _ from 'lodash';
@@ -40,7 +40,8 @@ const searchForValues = [
   { value: '1', label: 'Codice IUN' },
 ];
 
-const FilterNotificationsTable = () => {
+// eslint-disable-next-line sonarjs/cognitive-complexity
+const FilterNotificationsTable = forwardRef((_props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -102,7 +103,11 @@ const FilterNotificationsTable = () => {
     },
   });
 
-  const formIsInInitialStatus = _.isEqual({...formik.values, searchFor: undefined}, {...initialEmptyValues, searchFor: undefined}) && isFirstSearch;
+  const formIsInInitialStatus =
+    _.isEqual(
+      { ...formik.values, searchFor: undefined },
+      { ...initialEmptyValues, searchFor: undefined }
+    ) && isFirstSearch;
 
   const cancelSearch = () => {
     dispatch(setNotificationFilters(emptyValues));
@@ -149,6 +154,10 @@ const FilterNotificationsTable = () => {
       setIsFirstSearch(false);
     }
   }, [filters]);
+
+  useImperativeHandle(ref, () => ({
+    filtersApplied: !formIsInInitialStatus,
+  }));
 
   return (
     <Fragment>
@@ -307,6 +316,6 @@ const FilterNotificationsTable = () => {
       </form>
     </Fragment>
   );
-};
+});
 
 export default FilterNotificationsTable;

@@ -1,4 +1,4 @@
-import { useEffect, Fragment } from 'react';
+import { useEffect, Fragment, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   calculatePages,
@@ -38,6 +38,7 @@ const Dashboard = () => {
   const sort = useAppSelector((state: RootState) => state.dashboardState.sort);
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
   const navigate = useNavigate();
+  const filterNotificationsTableRef = useRef({ filtersApplied: false });
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -72,7 +73,11 @@ const Dashboard = () => {
       width: '13%',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: Array<string>) {
-        return value.map((v) => <Typography key={v} variant="body2">{v}</Typography>);
+        return value.map((v) => (
+          <Typography key={v} variant="body2">
+            {v}
+          </Typography>
+        ));
       },
       onClick(row: Item, column: Column) {
         handleRowClick(row, column);
@@ -165,6 +170,27 @@ const Dashboard = () => {
     );
   };
 
+  // route to API keys
+  const handleRouteApiKeys = () => {
+    navigate(routes.API_KEYS);
+  };
+
+  // route to Manual Send
+  const handleRouteManualSend = () => {
+    navigate(routes.NUOVA_NOTIFICA);
+  };
+
+  const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
+  const emptyActionLabel: string = 'Chiavi API';
+
+  const secondaryMessage: object = {
+    emptyMessage: 'o fai un',
+    emptyActionLabel: 'invio manuale',
+    emptyActionCallback: () => {
+      handleRouteManualSend();
+    },
+  };
+
   useEffect(() => {
     const params = {
       ...filters,
@@ -175,12 +201,32 @@ const Dashboard = () => {
     void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
+  const ItemsTableEmptyState = () => {
+    const filtersApplied: boolean = filterNotificationsTableRef.current.filtersApplied;
+    const commonProps = {
+      columns,
+      rows,
+      sort,
+      emptyMessage: filtersApplied ? undefined : emptyMessage,
+      emptyActionLabel: filtersApplied ? undefined : emptyActionLabel,
+      disableSentimentDissatisfied: !filtersApplied,
+      onChangeSorting: handleChangeSorting,
+      emptyActionCallback: filtersApplied ? handleCancelSearch : handleRouteApiKeys,
+      secondaryMessage: filtersApplied ? undefined : secondaryMessage,
+    };
+    return (
+      <Fragment>
+        <ItemsTable {...commonProps} />
+      </Fragment>
+    );
+  };
+
   return (
     <Box p={3}>
       <Typography variant="h4">Notifiche</Typography>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="body1">
-          Qui trovi tutte le notifiche inviate dall&apos;Ente. Puoi filtrarle per Codice Fiscale,
+          Qui trovi tutte le notifiche inviate dall&apos;ente. Puoi filtrarle per Codice Fiscale,
           Codice IUN, data di invio e stato.
         </Typography>
         <Button
@@ -194,14 +240,8 @@ const Dashboard = () => {
       <Fragment>
         {notifications && (
           <Fragment>
-            <FilterNotificationsTable />
-            <ItemsTable
-              columns={columns}
-              rows={rows}
-              sort={sort}
-              onChangeSorting={handleChangeSorting}
-              emptyActionCallback={handleCancelSearch}
-            />
+            <FilterNotificationsTable ref={filterNotificationsTableRef} />
+            <ItemsTableEmptyState />
             {notifications.length > 0 && (
               <CustomPagination
                 paginationData={{

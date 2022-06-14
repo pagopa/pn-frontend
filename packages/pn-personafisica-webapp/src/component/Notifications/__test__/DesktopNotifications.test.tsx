@@ -30,7 +30,10 @@ jest.mock('react-i18next', () => ({
   },
 }));
 
-jest.mock('../FilterNotifications', () => () => <div>Filters</div>);
+jest.mock('../FilterNotifications', () => {
+  const { forwardRef } = jest.requireActual('react');
+  return forwardRef(() => <div>Filters</div>)
+});
 
 describe('DesktopNotifications Component', () => {
   it('renders DesktopNotifications', () => {

@@ -29,10 +29,15 @@ jest.mock('react-i18next', () => ({
     };
   },
 }));
+
 jest.mock('../MobileNotificationsSort', () => () => <div>Sort</div>);
-jest.mock('../FilterNotifications', () => () => <div>Filters</div>);
+jest.mock('../FilterNotifications', () => {
+  const { forwardRef } = jest.requireActual('react');
+  return forwardRef(() => <div>Filters</div>)
+});
 
 describe('MobileNotifications Component', () => {
+
   it('renders MobileNotifications', () => {
     // render component
     const result = render(
@@ -46,7 +51,7 @@ describe('MobileNotifications Component', () => {
     expect(result.container).toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(
-      /I filtri che hai aggiunto non hanno dato nessun risultato./i
+      /Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull'app IO o inserisci un recapito di cortesia nella sezione Recapiti : così, se riceverai una notifica, te lo comunicheremo./i
     );
   });
 

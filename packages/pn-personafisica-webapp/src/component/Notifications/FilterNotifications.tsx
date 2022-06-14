@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle} from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   },
 });
 
-const FilterNotifications = () => {
+const FilterNotifications = forwardRef((_props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common']);
@@ -106,6 +106,10 @@ const FilterNotifications = () => {
     void formik.validateForm();
   }, []);
 
+  useImperativeHandle(ref, () => ({
+    filtersApplied: filtersApplied() > 0,
+  }));
+
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
@@ -163,6 +167,6 @@ const FilterNotifications = () => {
       </Box>
     </form>
   );
-};
+});
 
 export default FilterNotifications;

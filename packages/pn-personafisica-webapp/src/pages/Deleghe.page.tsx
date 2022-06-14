@@ -55,6 +55,7 @@ const Deleghe = () => {
 
   const handleAccept = async (code: Array<string>) => {
     await dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
+    void dispatch(getDelegators());
     void dispatch(getSidemenuInformation);
   };
 
