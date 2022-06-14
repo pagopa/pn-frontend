@@ -319,7 +319,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   const attachments = getAttachmentsData();
 
   return (
-    <Paper sx={{ padding: '1rem', marginBottom: '1rem' }} className="paperContainer">
+    <Paper sx={{ padding: '24px', marginBottom: '1rem' }} className="paperContainer">
       <Grid container direction="row" justifyContent="space-between">
         <Grid item xs={8} lg={8}>
           <Typography variant="h6" display="inline" fontWeight={600} fontSize={24}>

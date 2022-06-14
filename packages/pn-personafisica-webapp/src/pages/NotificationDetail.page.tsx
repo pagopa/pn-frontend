@@ -42,7 +42,11 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const recipient = notification.recipients[0];
+  
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+
+  const currentRecipient = notification.recipients.filter((recipient) => recipient.taxId === currentUser.fiscal_number)[0];
+
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -63,7 +67,7 @@ const NotificationDetail = () => {
     {
       id: 3,
       label: t('detail.surname-name', { ns: 'notifiche' }),
-      value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
+      value: <Box fontWeight={600}>{currentRecipient?.denomination}</Box>,
     },
     {
       id: 4,
@@ -83,12 +87,12 @@ const NotificationDetail = () => {
     {
       id: 8,
       label: t('detail.notice-code', { ns: 'notifiche' }),
-      value: <Box fontWeight={600}>{notification.recipients[0]?.payment?.noticeCode}</Box>,
+      value: <Box fontWeight={600}>{currentRecipient?.payment?.noticeCode}</Box>,
     },
     {
       id: 9,
       label: t('detail.creditor-tax-id', { ns: 'notifiche' }),
-      value: <Box fontWeight={600}>{notification.recipients[0]?.payment?.creditorTaxId}</Box>,
+      value: <Box fontWeight={600}>{currentRecipient?.payment?.creditorTaxId}</Box>,
     },
   ];
   const documentDowloadHandler = (documentIndex: string | undefined) => {
@@ -153,10 +157,10 @@ const NotificationDetail = () => {
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           {!isMobile && breadcrumb}
           <NotificationDetailTable rows={detailTableRows} />
-          {recipient?.payment && (
+          {currentRecipient?.payment && (
             <NotificationPayment
               iun={notification.iun}
-              notificationPayment={recipient.payment}
+              notificationPayment={currentRecipient.payment}
               onDocumentDownload={dowloadDocument}
             />
           )}
