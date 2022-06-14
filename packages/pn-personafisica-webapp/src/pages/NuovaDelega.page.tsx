@@ -82,7 +82,6 @@ const NuovaDelega = () => {
   };
 
   const isToday = (date:Date | null):boolean => {
-    const today = new Date();
     return date?.getDate() === today.getDate() &&
     date?.getMonth() === today.getMonth() &&
     date?.getFullYear() === today.getFullYear();
