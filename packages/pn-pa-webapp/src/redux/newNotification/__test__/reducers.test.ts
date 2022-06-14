@@ -2,7 +2,7 @@ import { setSenderInfos } from './../actions';
 import { DigitalDomicileType, PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { PaymentModel } from '../../../models/NewNotification_';
+import { PaymentModel } from '../../../models/NewNotification';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
 import {

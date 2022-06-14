@@ -7,7 +7,7 @@ import {
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationBe, NewNotificationResponse } from '../../models/NewNotification_';
+import { NewNotificationBe, NewNotificationResponse } from '../../models/NewNotification';
 import { apiClient, externalClient } from '../axios';
 import {
   CREATE_NOTIFICATION,

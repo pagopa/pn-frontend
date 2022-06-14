@@ -4,7 +4,7 @@ import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
 import { render, testFormElements, testInput, testSelect } from '../../../../__test__/test-utils';
-import { PaymentModel } from '../../../../models/NewNotification_';
+import { PaymentModel } from '../../../../models/NewNotification';
 import * as hooks from '../../../../redux/hooks';
 import PreliminaryInformations from '../PreliminaryInformations';
 
