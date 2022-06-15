@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-import { SentimentDissatisfied } from '@mui/icons-material';
 import {
   Box,
   Card,
@@ -21,42 +19,18 @@ type Props = {
   cardBody: Array<CardElement>;
   /* Card data */
   cardData: Array<Item>;
-  /** Callback to be called when performing an empty action */
-  emptyActionCallback: () => void;
   /* Card actions */
   cardActions?: Array<CardAction>;
-  /** Empty message for no result */
-  emptyMessage?: ReactNode;
-  /** Empty action label */
-  emptyActionLabel?: string;
   /** Custom style */
   sx?: SxProps;
-  /** Disable sad emoticon */
-  disableSentimentDissatisfied?: boolean;
-  /** Secondary Message */
-  secondaryMessage?: Message;
 };
-
-interface Message {
-  emptyMessage?: ReactNode;
-  emptyActionLabel?: string;
-  emptyActionCallback?: () => void;
-}
 
 const ItemsCard = ({
   cardHeader,
   cardBody,
   cardData,
   cardActions,
-  emptyActionCallback,
-  emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
-  emptyActionLabel = 'Rimuovi filtri',
   sx,
-  disableSentimentDissatisfied = false,
-  secondaryMessage = {
-    emptyMessage: '',
-    emptyActionLabel: '',
-  },
 }: Props) => {
   const cardHeaderTitle = (item: Item) => (
     <Grid container spacing={2} direction="row" alignItems="center">
@@ -76,83 +50,45 @@ const ItemsCard = ({
 
   return (
     <Box sx={sx}>
-      {cardData.length ? (
-        cardData.map((data) => (
-          <Card
-            key={data.id}
-            raised
-            data-testid="itemCard"
-            sx={{
-              marginBottom: '16px',
-              padding: '24px',
-            }}
-          >
-            <CardHeader title={cardHeaderTitle(data)} className="card-header" />
-            <CardContent sx={{ padding: 0, marginTop: '16px', ':last-child': { padding: 0 } }}>
-              {cardBody.map((body) => (
-                <Box key={body.id} sx={{ marginBottom: '16px' }}>
-                  <Typography variant="caption-semibold" data-testid="cardBodyLabel">
-                    {body.label}
-                  </Typography>
-                  {!body.notWrappedInTypography && <Typography variant="body2" data-testid="cardBodyValue">
-                    {body.getLabel(data[body.id])}
-                  </Typography>}
-                  {body.notWrappedInTypography && body.getLabel(data[body.id])}
+      {cardData.map((data) => (
+        <Card
+          key={data.id}
+          raised
+          data-testid="itemCard"
+          sx={{
+            marginBottom: '16px',
+            padding: '24px',
+          }}
+        >
+          <CardHeader title={cardHeaderTitle(data)} className="card-header" />
+          <CardContent sx={{ padding: 0, marginTop: '16px', ':last-child': { padding: 0 } }}>
+            {cardBody.map((body) => (
+              <Box key={body.id} sx={{ marginBottom: '16px' }}>
+                <Typography variant="caption-semibold" data-testid="cardBodyLabel">
+                  {body.label}
+                </Typography>
+                {!body.notWrappedInTypography && <Typography variant="body2" data-testid="cardBodyValue">
+                  {body.getLabel(data[body.id])}
+                </Typography>}
+                {body.notWrappedInTypography && body.getLabel(data[body.id])}
+              </Box>
+            ))}
+          </CardContent>
+          <CardActions disableSpacing className="card-actions">
+            {cardActions &&
+              cardActions.map((action) => (
+                <Box
+                  key={action.id}
+                  onClick={() => action.onClick(data)}
+                  data-testid="cardAction"
+                  sx={{ marginLeft: 'auto' }}
+                >
+                  {action.component}
                 </Box>
               ))}
-            </CardContent>
-            <CardActions disableSpacing className="card-actions">
-              {cardActions &&
-                cardActions.map((action) => (
-                  <Box
-                    key={action.id}
-                    onClick={() => action.onClick(data)}
-                    data-testid="cardAction"
-                    sx={{ marginLeft: 'auto' }}
-                  >
-                    {action.component}
-                  </Box>
-                ))}
-            </CardActions>
-          </Card>
-        ))
-      ) : (
-        <Card data-testid="itemCard" sx={{ padding: '24px' }}>
-          <CardContent sx={{ padding: 0 }}>
-            <Box component="div" display="flex" sx={{ flexDirection: 'column' }} textAlign="center">
-              {!disableSentimentDissatisfied && <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 auto 20px auto' }} color="action"/>}
-              <Typography variant="body2">
-                {emptyMessage}&nbsp;
-                <Typography
-                  display="inline"
-                  color="primary"
-                  variant="button"
-                  fontWeight={'bold'}
-                  sx={{
-                    cursor: 'pointer',
-                  }}
-                  onClick={emptyActionCallback}
-                >
-                  {emptyActionLabel}
-                </Typography>
-                &nbsp; {secondaryMessage.emptyMessage} &nbsp;
-                <Typography
-                  display="inline"
-                  color="primary"
-                  variant="button"
-                  fontWeight={'bold'}
-                  sx={{
-                    cursor: 'pointer',
-                  }}
-                  onClick={secondaryMessage.emptyActionCallback}
-                >
-                  {secondaryMessage.emptyActionLabel}
-                </Typography>
-              </Typography>
-            </Box>
-          </CardContent>
+          </CardActions>
         </Card>
-      )}
+      ))}
     </Box>
   );
 };

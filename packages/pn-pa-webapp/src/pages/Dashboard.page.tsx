@@ -11,6 +11,7 @@ import {
   Sort,
   StatusTooltip,
   ItemsTable,
+  EmptyState,
   Item,
   tenYearsAgo,
   today,
@@ -201,24 +202,14 @@ const Dashboard = () => {
     void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
-  const ItemsTableEmptyState = () => {
-    const filtersApplied: boolean = filterNotificationsTableRef.current.filtersApplied;
-    const commonProps = {
-      columns,
-      rows,
-      sort,
-      emptyMessage: filtersApplied ? undefined : emptyMessage,
-      emptyActionLabel: filtersApplied ? undefined : emptyActionLabel,
-      disableSentimentDissatisfied: !filtersApplied,
-      onChangeSorting: handleChangeSorting,
-      emptyActionCallback: filtersApplied ? handleCancelSearch : handleRouteApiKeys,
-      secondaryMessage: filtersApplied ? undefined : secondaryMessage,
-    };
-    return (
-      <Fragment>
-        <ItemsTable {...commonProps} />
-      </Fragment>
-    );
+  const filtersApplied: boolean = filterNotificationsTableRef.current.filtersApplied;
+
+  const EmptyStateProps = {
+    emptyMessage: filtersApplied ? undefined : emptyMessage,
+    emptyActionLabel: filtersApplied ? undefined : emptyActionLabel,
+    disableSentimentDissatisfied: !filtersApplied,
+    emptyActionCallback: filtersApplied ? handleCancelSearch : handleRouteApiKeys,
+    secondaryMessage: filtersApplied ? undefined : secondaryMessage,
   };
 
   return (
@@ -241,18 +232,27 @@ const Dashboard = () => {
         {notifications && (
           <Fragment>
             <FilterNotificationsTable ref={filterNotificationsTableRef} />
-            <ItemsTableEmptyState />
-            {notifications.length > 0 && (
-              <CustomPagination
-                paginationData={{
-                  size: pagination.size,
-                  page: pagination.page,
-                  totalElements,
-                }}
-                onPageRequest={handleChangePage}
-                pagesToShow={pagesToShow}
-                sx={{ padding: '0 10px' }}
-              />
+            {notifications.length > 0 ? (
+              <>
+                <ItemsTable 
+                  columns={columns}
+                  sort={sort}
+                  rows={rows}
+                  onChangeSorting={handleChangeSorting}
+                />
+                <CustomPagination
+                  paginationData={{
+                    size: pagination.size,
+                    page: pagination.page,
+                    totalElements,
+                  }}
+                  onPageRequest={handleChangePage}
+                  pagesToShow={pagesToShow}
+                  sx={{ padding: '0 10px' }}
+                />
+              </>
+            ) : (
+              <EmptyState {...EmptyStateProps}/>
             )}
           </Fragment>
         )}
