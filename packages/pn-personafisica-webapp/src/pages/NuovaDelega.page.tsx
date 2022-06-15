@@ -379,6 +379,7 @@ const NuovaDelega = () => {
                             sx={{ marginTop: '1rem', margin: 'auto' }}
                             type={'submit'}
                             variant={'contained'}
+                            data-testid="createButton"
                           >
                             {t('nuovaDelega.form.submit')}
                           </Button>
