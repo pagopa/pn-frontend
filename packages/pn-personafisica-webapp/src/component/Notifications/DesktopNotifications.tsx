@@ -121,8 +121,8 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
     emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
     emptyActionCallback: filtersApplied ? onCancelSearch : handleRouteContacts,
     emptyMessage: filtersApplied ? undefined : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione',
-    disableSentimentDissatisfied: true,
-    secondaryMessage: {
+    disableSentimentDissatisfied: !filtersApplied,
+    secondaryMessage: filtersApplied ? undefined : {
       emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
     }
   };
