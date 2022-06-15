@@ -14,6 +14,7 @@ import {
   Item,
   tenYearsAgo,
   today,
+  useIsMobile
 } from '@pagopa-pn/pn-commons';
 import { Box, Button, Typography } from '@mui/material';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
@@ -39,6 +40,7 @@ const Dashboard = () => {
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
   const navigate = useNavigate();
   const filterNotificationsTableRef = useRef({ filtersApplied: false });
+  const isMobile = useIsMobile();
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -223,9 +225,9 @@ const Dashboard = () => {
 
   return (
     <Box p={3}>
-      <Typography variant="h4">Notifiche</Typography>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="body1">
+      <Typography variant="h4" mb={isMobile ? 3 : undefined}>Notifiche</Typography>
+      <Box display={isMobile ? "block" : 'flex'} justifyContent="space-between" alignItems="center">
+        <Typography variant="body1" sx={{marginBottom: isMobile ? 3 : undefined}}>
           Qui trovi tutte le notifiche inviate dall&apos;ente. Puoi filtrarle per Codice Fiscale,
           Codice IUN, data di invio e stato.
         </Typography>
