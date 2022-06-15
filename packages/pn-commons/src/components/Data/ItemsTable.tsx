@@ -55,7 +55,7 @@ function ItemsTable({
   secondaryMessage = {
     emptyMessage: '',
     emptyActionLabel: '',
-  }
+  },
 }: Props) {
   const createSortHandler = (property: string) => () => {
     if (sort && onChangeSorting) {
@@ -139,9 +139,13 @@ function ItemsTable({
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length}>
-                  <Box component='div' display='flex' sx={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    {!disableSentimentDissatisfied && <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />}
-                    <Typography variant="body2">{emptyMessage}</Typography>
+                  <Box component="div" display="block" sx={{ textAlign: 'center' }}>
+                    {!disableSentimentDissatisfied && (
+                      <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
+                    )}
+                    <Typography variant="body2" sx={{ display: 'inline' }}>
+                      {emptyMessage}
+                    </Typography>
                     &nbsp;
                     <Typography
                       color="primary"
@@ -149,13 +153,16 @@ function ItemsTable({
                       fontWeight={'bold'}
                       sx={{
                         cursor: 'pointer',
+                        display: 'inline',
                       }}
                       onClick={emptyActionCallback}
                     >
                       {emptyActionLabel}
                     </Typography>
                     &nbsp;
-                    <Typography variant="body2">{secondaryMessage.emptyMessage}</Typography>
+                    <Typography variant="body2" sx={{ display: 'inline' }}>
+                      {secondaryMessage.emptyMessage}
+                    </Typography>
                     &nbsp;
                     <Typography
                       color="primary"
@@ -163,6 +170,7 @@ function ItemsTable({
                       fontWeight={'bold'}
                       sx={{
                         cursor: 'pointer',
+                        display: 'inline',
                       }}
                       onClick={secondaryMessage.emptyActionCallback}
                     >
