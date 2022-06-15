@@ -27,6 +27,7 @@ const initialState = {
     paProtocolNumber: '',
     subject: '',
     recipients: [] as Array<NotificationDetailRecipient>,
+    senderDenomination: '',
     documents: [] as Array<NotificationDetailDocument>,
     notificationFeePolicy: '' as NotificationFeePolicy,
     physicalCommunicationType: '' as PhysicalCommunicationType,

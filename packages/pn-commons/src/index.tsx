@@ -28,6 +28,7 @@ import CustomDatePicker from './components/CustomDatePicker';
 import PnBreadcrumb from './components/PnBreadcrumb';
 import FileUpload from './components/FileUpload';
 import Prompt from './components/Prompt';
+import CopyToClipboard from './components/CopyToClipboard';
 
 export { LoadingOverlay };
 export { Header };
@@ -58,6 +59,7 @@ export { CustomDatePicker };
 export { PnBreadcrumb };
 export { FileUpload };
 export { Prompt };
+export { CopyToClipboard };
 
 // pages
 import NotFound from './navigation/NotFound';
@@ -96,6 +98,7 @@ import {
   LegalFactType,
   LegalFactId,
   PhysicalCommunicationType,
+  PaymentInfoDetail,
   PaymentStatus,
   PaymentAttachmentSName,
   PaymentAttachmentNameType
@@ -116,6 +119,7 @@ export {
   LegalFactType,
   AddressSource,
   PhysicalCommunicationType,
+  PaymentInfoDetail,
   PaymentAttachmentSName,
 };
 export type { Column, Item, Sort };
