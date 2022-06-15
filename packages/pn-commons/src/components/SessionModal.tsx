@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, DialogTitle, DialogContentText, DialogActions, Divider } from '@mui/material';
+import { Button, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import { useIsMobile } from '../hooks/IsMobile';
 
@@ -36,12 +36,11 @@ const SessionModal = ({
       <DialogTitle sx={{ textAlign: 'center' }}>{title}</DialogTitle>
       <DialogContentText
         id="session-dialog-description"
-        sx={{ textAlign: 'center', margin: '10px' }}
+        sx={{ textAlign: 'center', margin: '10px 0', padding: '0 24px' }}
       >
         {message}
       </DialogContentText>
-      {onConfirm && <Divider sx={{ margin: '20px 0' }} />}
-      <DialogActions sx={{ textAlign: 'center', flexDirection: isMobile ? 'column' : 'row' }}>
+      <DialogActions sx={{ textAlign: 'center', flexDirection: isMobile ? 'column' : 'row', padding: '24px' }}>
         {onConfirm && (
           <Button sx={{ width: '100%' }} color="primary" variant="contained" onClick={onConfirm}>
             {onConfirmLabel}
