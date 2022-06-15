@@ -166,6 +166,7 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
           display={'flex'}
           sx={{
             marginTop: 5,
+            marginBottom: 5,
             verticalAlign: 'top',
             '& .MuiTextField-root': { mr: 1, width: '100%' },
           }}
