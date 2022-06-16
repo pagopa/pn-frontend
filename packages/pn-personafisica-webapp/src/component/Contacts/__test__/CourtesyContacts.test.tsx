@@ -14,7 +14,7 @@ jest.mock('../CourtesyContactsList', () => () => <div>CourtesyContactsList</div>
 
 describe('CourtesyContacts Component', () => {
   it('renders correctly', () => {
-    render(<CourtesyContacts recipientId="mock-recipient" contacts={[]}/>);
+    const result = render(<CourtesyContacts recipientId="mock-recipient" contacts={[]}/>);
     const avatar = screen.getByText('Sms');
     expect(avatar).toBeInTheDocument();
     const subtitle = screen.getByTestId(/DigitalContactsCardBody/).getElementsByTagName('p')[0];
@@ -28,8 +28,7 @@ describe('CourtesyContacts Component', () => {
     const courtesyContactsListComponents = screen.getAllByText('CourtesyContactsList');
     expect(courtesyContactsListComponents[0]).toBeInTheDocument();
     expect(courtesyContactsListComponents).toHaveLength(1);
-    const checkbox = screen.getByRole('checkbox', {name: /courtesy-contacts.io-enable/});
-    expect(checkbox).toBeDisabled();
+    expect(result.container).toHaveTextContent(/courtesy-contacts.io-enable/);
   });
 
   it('does not have basic accessibility issues', async () => {

@@ -106,7 +106,6 @@ const Delegators = () => {
           <ItemsTable
             columns={delegatorsColumns}
             rows={rows}
-            emptyActionCallback={() => {}}
             sort={sortDelegators}
             onChangeSorting={handleChangeSorting}
           />

@@ -26,8 +26,15 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
   }
 );
 
-export const getAllEntities = createAsyncThunk('getAllEntities', async () =>
-  ExternalRegistriesAPI.getAllActivatedParties()
+export const getAllEntities = createAsyncThunk(
+  'getAllEntities',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await ExternalRegistriesAPI.getAllActivatedParties();
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
 );
 
 export const resetNewDelegation = createAction<void>('resetNewDelegation');

@@ -1,24 +1,34 @@
 import { ReactElement, ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { configureStore, Store } from '@reduxjs/toolkit';
 import { render, RenderOptions } from '@testing-library/react';
-import { configureAxe } from 'jest-axe';
-import { toHaveNoViolations } from 'jest-axe';
+import { configureAxe, toHaveNoViolations } from 'jest-axe';
 
-import { store } from '../redux/store';
+import { appReducers } from '../redux/store';
 
-const AllTheProviders = ({ children }: { children: ReactNode }) => (
-    <BrowserRouter>
-      <Provider store={store}>{children}</Provider>
-    </BrowserRouter>
-  );
+const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => (
+  <BrowserRouter>
+    <Provider store={testStore}>{children}</Provider>
+  </BrowserRouter>
+);
 
-const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
-  render(ui, { wrapper: AllTheProviders, ...options });
-
-
-export * from '@testing-library/react';
-export { customRender as render };
+const customRender = (
+  ui: ReactElement,
+  {
+    preloadedState,
+    renderOptions
+  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
+) => {
+  const testStore = configureStore({
+    reducer: appReducers,
+    preloadedState
+  });
+  return render(ui, {
+    wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,
+    ...renderOptions,
+  });
+};
 
 const axe = configureAxe({
   rules: {
@@ -26,4 +36,9 @@ const axe = configureAxe({
   },
 });
 expect.extend(toHaveNoViolations);
+
+// re-exporting everything
+export * from '@testing-library/react';
+// override render method
+export { customRender as render };
 export { axe };

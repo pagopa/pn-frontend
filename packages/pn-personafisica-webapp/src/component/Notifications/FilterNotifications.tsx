@@ -39,7 +39,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
   const classes = useStyles();
 
   const validationSchema = yup.object({
-    iunMatch: yup.string().matches(IUN_regex, t('Inserire il codice corretto')),
+    iunMatch: yup.string().matches(IUN_regex, t('Inserisci un codice IUN valido')),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
   });
@@ -150,7 +150,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
   ) : (
     <form onSubmit={formik.handleSubmit}>
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} alignItems="top" className={classes.helperTextFormat}>
+        <Grid container spacing={1} className={classes.helperTextFormat}>
           <FilterNotificationsFormBody
             formikInstance={formik}
             startDate={startDate}

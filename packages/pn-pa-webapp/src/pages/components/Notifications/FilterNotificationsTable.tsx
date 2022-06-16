@@ -81,8 +81,8 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
   };
 
   const validationSchema = yup.object({
-    recipientId: yup.string().matches(fiscalCodeRegex, 'Inserire il codice completo'),
-    iunMatch: yup.string().matches(IUN_regex, 'Inserire il codice corretto'),
+    recipientId: yup.string().matches(fiscalCodeRegex, 'Inserisci il codice per intero'),
+    iunMatch: yup.string().matches(IUN_regex, 'Inserisci un codice IUN valido'),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
   });
@@ -166,13 +166,14 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
           display={'flex'}
           sx={{
             marginTop: 5,
+            marginBottom: 5,
             verticalAlign: 'top',
             '& .MuiTextField-root': { mr: 1, width: '100%' },
           }}
         >
           <TextField
             id="searchFor"
-            label="Cerca per"
+            label="Filtra per"
             name="searchFor"
             value={formik.values.searchFor}
             onChange={searchForHandleChange}
@@ -190,7 +191,7 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
               id="recipientId"
               value={formik.values.recipientId}
               onChange={handleChangeTouched}
-              label="Codice fiscale"
+              label="Codice Fiscale"
               name="recipientId"
               error={formik.touched.recipientId && Boolean(formik.errors.recipientId)}
               helperText={formik.touched.recipientId && formik.errors.recipientId}
@@ -237,6 +238,7 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
                     inputMode: 'text',
                     'aria-label': 'Inserisci la data iniziale della ricerca',
                     type: 'text',
+                    placeholder: 'gg/mm/aaaa',
                   }}
                 />
               )}
@@ -272,6 +274,7 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
                     inputMode: 'text',
                     'aria-label': 'inserisci la data finale della ricerca',
                     type: 'text',
+                    placeholder: 'gg/mm/aaaa',
                   }}
                 />
               )}
@@ -310,7 +313,7 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
             onClick={cancelSearch}
             disabled={formIsInInitialStatus}
           >
-            Annulla filtri
+            Rimuovi filtri
           </Button>
         </Box>
       </form>

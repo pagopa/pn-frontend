@@ -1,10 +1,9 @@
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType, NotificationDetailDocument } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
-  NewNotificationDocument,
   PaymentModel,
   NewNotificationFe,
   NewNotificationResponse,
@@ -12,7 +11,7 @@ import {
   UploadAttachmentParams,
   UploadPayementParams,
   UpaloadPaymentResponse,
-} from '../../models/newNotification';
+} from '../../models/NewNotification';
 
 export const setCancelledIun = createAction<string>('setCancelledIun');
 
@@ -54,9 +53,10 @@ const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams
         },
         contentType: item.contentType,
         ref: {
-          key: item.key,
+          key: presignedUrls[index].key,
           versionToken: documentsToken[index],
         },
+        title: item.key
       }));
     }
     throw new Error();
@@ -66,7 +66,7 @@ const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams
 };
 
 export const uploadNotificationAttachment = createAsyncThunk<
-  Array<NewNotificationDocument>,
+  Array<NotificationDetailDocument>,
   Array<UploadAttachmentParams>
 >(
   'uploadNotificationAttachment',

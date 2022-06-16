@@ -2,7 +2,7 @@
 import { NotificationDetailPayment } from "@pagopa-pn/pn-commons";
 import { waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { PaymentStatus } from "@pagopa-pn/pn-commons/src/types/NotificationDetail";
+import { PaymentStatus, PaymentInfoDetail } from "@pagopa-pn/pn-commons";
 import { axe, render, screen } from "../../../__test__/test-utils";
 import * as actions from '../../../redux/notification/actions';
 import * as hooks from '../../../redux/hooks';
@@ -54,10 +54,31 @@ const mocked_payments_detail = {
   succeeded: {
     status: PaymentStatus.SUCCEEDED
   },
-  failed: {
-    amount: 47350,
-    status: PaymentStatus.FAILED,
-  }
+  failed: [{// 0
+        status: PaymentStatus.FAILED,
+        detail: PaymentInfoDetail.DOMAIN_UNKNOWN,
+        detail_v2: "PPT_STAZIONE_INT_PA_ERRORE_RESPONSE",
+        errorCode: "CODICE_ERRORE"
+      }, {// 1
+        status: PaymentStatus.FAILED,
+        detail: PaymentInfoDetail.PAYMENT_UNAVAILABLE,
+        detail_v2: "PPT_INTERMEDIARIO_PSP_SCONOSCIUTO",
+        errorCode: "CODICE_ERRORE"
+      }, {// 2
+        status: PaymentStatus.FAILED,
+        detail: PaymentInfoDetail.PAYMENT_UNKNOWN,
+        detail_v2: "PAA_PAGAMENTO_SCONOSCIUTO",
+        errorCode: "CODICE_ERRORE"
+      }, {// 3
+        status: PaymentStatus.FAILED,
+        detail: PaymentInfoDetail.GENERIC_ERROR
+      }, {// 4
+        status: PaymentStatus.FAILED,
+        detail: PaymentInfoDetail.PAYMENT_CANCELED
+      }, {// 5
+        status: PaymentStatus.FAILED,
+        detail: PaymentInfoDetail.PAYMENT_EXPIRED
+      }]
 };
 
 describe('NotificationPayment component', () => {
@@ -89,11 +110,11 @@ describe('NotificationPayment component', () => {
     const title = screen.getByRole('heading', { name: 'detail.payment.summary'});
     expect(title).toBeInTheDocument();
 
-    const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
+    const amountLoader = screen.getByTestId("loading-skeleton");
     expect(amountLoader).toBeInTheDocument();
 
-    const disclaimer = screen.getByText('detail.payment.disclaimer');
-    expect(disclaimer).toBeInTheDocument();
+    const disclaimer = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer).not.toBeInTheDocument();
 
     const loadingButton = screen.getByRole('button', { name: 'detail.payment.submit'});
     expect(loadingButton.querySelector('svg')).toBeInTheDocument();
@@ -111,7 +132,7 @@ describe('NotificationPayment component', () => {
     render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
 
-    const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
+    const amountLoader = screen.getByTestId("loading-skeleton");
     expect(amountLoader).toBeInTheDocument();
 
     await waitFor(() => {
@@ -124,8 +145,9 @@ describe('NotificationPayment component', () => {
     const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
 
-    const amount = screen.getByRole('heading', { name: /473,50\b/ });
+    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
+    expect(amount).toHaveTextContent(/473,50\b/);
 
     const disclaimer = screen.getByText('detail.payment.disclaimer');
     expect(disclaimer).toBeInTheDocument();
@@ -148,7 +170,7 @@ describe('NotificationPayment component', () => {
     render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.inprogress);
 
-    const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
+    const amountLoader = screen.getByTestId("loading-skeleton");
     expect(amountLoader).toBeInTheDocument();
 
     await waitFor(() => {
@@ -161,11 +183,46 @@ describe('NotificationPayment component', () => {
     const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
 
-    const amount = screen.getByRole('heading', { name: /473,50\b/ });
+    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
+    expect(amount).toHaveTextContent(/473,50\b/);
 
-    const disclaimer = screen.getByText('detail.payment.disclaimer');
+    const disclaimer = screen.queryByText('detail.payment.disclaimer');
     expect(disclaimer).toBeInTheDocument();
+
+    const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit 473,50\b/ });
+    expect(loadingButton).not.toBeInTheDocument();
+
+    const alert = screen.getByTestId('InfoOutlinedIcon');
+    expect(alert).toBeInTheDocument();
+
+    const alertMessage = screen.getByText('detail.payment.message-in-progress');
+    expect(alertMessage).toBeInTheDocument();
+  });
+
+  it('renders properly if getPaymentInfo returns a "succeeded" status', async () => {
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    mockUseAppSelector.mockReturnValue(mocked_payments_detail.succeeded);
+
+    const amountLoader = screen.getByTestId("loading-skeleton");
+    expect(amountLoader).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(amountLoader).not.toBeInTheDocument();
+    });
+    
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    expect(title).toBeInTheDocument();
+
+    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
+    expect(amount).toBeInTheDocument();
+    expect(amount).toHaveTextContent("");
+
+    const disclaimer = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer).not.toBeInTheDocument();
 
     const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit 473,50\b/ });
     expect(loadingButton).not.toBeInTheDocument();
@@ -175,49 +232,18 @@ describe('NotificationPayment component', () => {
 
     const alertMessage = screen.getByRole('alert').querySelector('p');
     expect(alertMessage).toBeInTheDocument();
-    expect(alertMessage).toHaveTextContent('mocked-text');
-  });
-
-  it('renders properly if getPaymentInfo returns a "succeeded" status', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.succeeded);
-
-    const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
-    expect(amountLoader).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
-      expect(amountLoader).not.toBeInTheDocument();
-    });
-    
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
-    expect(title).toBeInTheDocument();
-
-    // const amount = screen.getByRole('heading', { name: /473,50\b/ });
-    // expect(amount).toBeInTheDocument();
-
-    const disclaimer = screen.getByText('detail.payment.disclaimer');
-    expect(disclaimer).toBeInTheDocument();
-
-    const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit 473,50\b/ });
-    expect(loadingButton).not.toBeInTheDocument();
-
-    const alert = screen.getByTestId('SuccessOutlinedIcon');// getByRole('alert', { name: 'mocked-description'});
-    expect(alert).toBeInTheDocument();
-
-    const alertMessage = screen.getByRole('alert').querySelector('p');
-    expect(alertMessage).toBeInTheDocument();
     expect(alertMessage).toHaveTextContent('detail.payment.message-completed');
   });
 
-  it('renders properly if getPaymentInfo returns a "failed" status', async () => {
+  it('renders properly if getPaymentInfo returns a "failed" status and "domain_unknown" detail', async () => {
     render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed);
+    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[0]);
 
-    const amountLoader = screen.getByRole('heading', { name: ''}).querySelector('svg');
+    const amountLoader = screen.getByTestId("loading-skeleton");
     expect(amountLoader).toBeInTheDocument();
+
+    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer_loading).not.toBeInTheDocument();
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
@@ -229,28 +255,258 @@ describe('NotificationPayment component', () => {
     const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
     expect(title).toBeInTheDocument();
 
-    const amount = screen.getByRole('heading', { name: /473,50\b/ });
+    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
+    expect(amount).toHaveTextContent("");
 
-    const disclaimer = screen.getByText('detail.payment.disclaimer');
-    expect(disclaimer).toBeInTheDocument();
+    const disclaimer = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer).not.toBeInTheDocument();
 
-    const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit 473,50\b/ });
-    expect(loadingButton).toBeInTheDocument();
+    const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
+    expect(loadingButton).not.toBeInTheDocument();
 
-    const alert = screen.getByTestId('ErrorOutlineIcon');// getByRole('alert', { name: 'mocked-description'});
+    const alert = screen.getByTestId('ErrorOutlineIcon');
     expect(alert).toBeInTheDocument();
 
     const alertMessage = screen.getByRole('alert').querySelector('p');
     expect(alertMessage).toBeInTheDocument();
-    expect(alertMessage).toHaveTextContent('detail.payment.message-failed');
+    expect(alertMessage).toHaveTextContent('detail.payment.error-domain-unknown');
+
+    const errorCode = screen.getByText('PPT_STAZIONE_INT_PA_ERRORE_RESPONSE');
+    expect(errorCode).toBeInTheDocument();
+
+    const copyLink = screen.getByRole("button", { name: /detail.payment.copy-to-clipboard/ });
+    expect(copyLink).toBeInTheDocument();
+
+    const button = screen.getByRole("button", { name: /detail.payment.contact-support/ });
+    expect(button).toBeInTheDocument();
+  });
+
+  it('renders properly if getPaymentInfo returns a "failed" status and "payment_unavailable" detail', async () => {
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[1]);
+
+    const amountLoader = screen.getByTestId("loading-skeleton");
+    expect(amountLoader).toBeInTheDocument();
+
+    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer_loading).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(amountLoader).not.toBeInTheDocument();
+    });
+    
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    expect(title).toBeInTheDocument();
+
+    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
+    expect(amount).toBeInTheDocument();
+    expect(amount).toHaveTextContent("");
+
+    const disclaimer = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer).not.toBeInTheDocument();
+
+    const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
+    expect(loadingButton).not.toBeInTheDocument();
+
+    const alert = screen.getByTestId('ErrorOutlineIcon');
+    expect(alert).toBeInTheDocument();
+
+    const alertMessage = screen.getByRole('alert').querySelector('p');
+    expect(alertMessage).toBeInTheDocument();
+    expect(alertMessage).toHaveTextContent('detail.payment.error-payment-unavailable');
+
+    const errorCode = screen.getByText('PPT_INTERMEDIARIO_PSP_SCONOSCIUTO');
+    expect(errorCode).toBeInTheDocument();
+
+    const copyLink = screen.getByRole("button", { name: /detail.payment.copy-to-clipboard/ });
+    expect(copyLink).toBeInTheDocument();
+
+    const button = screen.getByRole("button", { name: /detail.payment.contact-support/ });
+    expect(button).toBeInTheDocument();
+  });
+
+  it('renders properly if getPaymentInfo returns a "failed" status and "payment_unknown" detail', async () => {
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[2]);
+
+    const amountLoader = screen.getByTestId("loading-skeleton");
+    expect(amountLoader).toBeInTheDocument();
+
+    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer_loading).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(amountLoader).not.toBeInTheDocument();
+    });
+    
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    expect(title).toBeInTheDocument();
+
+    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
+    expect(amount).toBeInTheDocument();
+    expect(amount).toHaveTextContent("");
+
+    const disclaimer = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer).not.toBeInTheDocument();
+
+    const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
+    expect(loadingButton).not.toBeInTheDocument();
+
+    const alert = screen.getByTestId('ErrorOutlineIcon');
+    expect(alert).toBeInTheDocument();
+
+    const alertMessage = screen.getByRole('alert').querySelector('p');
+    expect(alertMessage).toBeInTheDocument();
+    expect(alertMessage).toHaveTextContent('detail.payment.error-payment-unknown');
+
+    const errorCode = screen.getByText('PAA_PAGAMENTO_SCONOSCIUTO');
+    expect(errorCode).toBeInTheDocument();
+
+    const copyLink = screen.getByRole("button", { name: /detail.payment.copy-to-clipboard/ });
+    expect(copyLink).toBeInTheDocument();
+
+    const button = screen.getByRole("button", { name: /detail.payment.contact-support/ });
+    expect(button).toBeInTheDocument();
+  });
+
+  it('renders properly if getPaymentInfo returns a "failed" status and "generic_error" detail', async () => {
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[3]);
+
+    const amountLoader = screen.getByTestId("loading-skeleton");
+    expect(amountLoader).toBeInTheDocument();
+
+    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer_loading).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(amountLoader).not.toBeInTheDocument();
+    });
+    
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    expect(title).toBeInTheDocument();
+
+    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
+    expect(amount).toBeInTheDocument();
+    expect(amount).toHaveTextContent("");
+
+    const disclaimer = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer).not.toBeInTheDocument();
+
+    const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
+    expect(loadingButton).not.toBeInTheDocument();
+
+    const alert = screen.getByTestId('ErrorOutlineIcon');
+    expect(alert).toBeInTheDocument();
+
+    const alertMessage = screen.getByRole('alert').querySelector('p');
+    expect(alertMessage).toBeInTheDocument();
+    expect(alertMessage).toHaveTextContent('detail.payment.error-generic');
+
+    const copyLink = screen.getByRole("button", { name: /detail.payment.contact-support/ });
+    expect(copyLink).toBeInTheDocument();
+
+    const button = screen.getByRole("button", { name: /detail.payment.reload-page/ });
+    expect(button).toBeInTheDocument();
+  });
+
+  it('renders properly if getPaymentInfo returns a "failed" status and "payment_canceled" detail', async () => {
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[4]);
+
+    const amountLoader = screen.getByTestId("loading-skeleton");
+    expect(amountLoader).toBeInTheDocument();
+
+    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer_loading).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(amountLoader).not.toBeInTheDocument();
+    });
+    
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    expect(title).toBeInTheDocument();
+
+    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
+    expect(amount).toBeInTheDocument();
+    expect(amount).toHaveTextContent("");
+
+    const disclaimer = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer).not.toBeInTheDocument();
+
+    const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
+    expect(loadingButton).not.toBeInTheDocument();
+
+    const alert = screen.getByTestId('ErrorOutlineIcon');
+    expect(alert).toBeInTheDocument();
+
+    const alertMessage = screen.getByRole('alert').querySelector('p');
+    expect(alertMessage).toBeInTheDocument();
+    expect(alertMessage).toHaveTextContent('detail.payment.error-canceled');
+
+    const button = screen.queryByRole("button");
+    expect(button).not.toBeInTheDocument();
+  });
+
+  it('renders properly if getPaymentInfo returns a "failed" status and "payment_expired" detail', async () => {
+    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[5]);
+
+    const amountLoader = screen.getByTestId("loading-skeleton");
+    expect(amountLoader).toBeInTheDocument();
+
+    const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer_loading).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(amountLoader).not.toBeInTheDocument();
+    });
+    
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    expect(title).toBeInTheDocument();
+
+    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
+    expect(amount).toBeInTheDocument();
+    expect(amount).toHaveTextContent("");
+
+    const disclaimer = screen.queryByText('detail.payment.disclaimer');
+    expect(disclaimer).not.toBeInTheDocument();
+
+    const loadingButton = screen.queryByRole('button', { name: /detail.payment.submit\b/ });
+    expect(loadingButton).not.toBeInTheDocument();
+
+    const alert = screen.getByTestId('ErrorOutlineIcon');
+    expect(alert).toBeInTheDocument();
+
+    const alertMessage = screen.getByRole('alert').querySelector('p');
+    expect(alertMessage).toBeInTheDocument();
+    expect(alertMessage).toHaveTextContent('detail.payment.error-expired');
+
+    const button = screen.queryByRole("button");
+    expect(button).not.toBeInTheDocument();
   });
 
   it('does not have basic accessibility issues (required status)', async () => {
     const result = render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
 
-    const amountLoader = result.getByRole('heading', { name: ''}).querySelector('svg');
+    const amountLoader = screen.getByTestId("loading-skeleton");
     expect(amountLoader).toBeInTheDocument();
 
     await waitFor(() => {
@@ -260,8 +516,9 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
 
-    const amount = result.getByRole('heading', { name: /473,50\b/ });
+    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
+    expect(amount).toHaveTextContent(/473,50\b/);
 
     if (result) {
       const res = await axe(result.container);
