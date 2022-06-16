@@ -18,6 +18,7 @@ batch:
 phases:
   install:
     commands:
+     
       #install Node 12
       - echo installing node
       - curl -sL https://deb.nodesource.com/setup_14.x | bash -
@@ -30,6 +31,8 @@ phases:
   pre_build:
     commands:
       # run yarn install and lerna bootstrap
+      - echo go in packages/pn-pa-webapp directory
+      - cd ./packages/pn-pa-webapp
       - yarn install
   build:
     commands:
@@ -41,4 +44,3 @@ artifacts:
 cache:
   paths:
     - node_modules/**/*
-appRoot: packages/pn-pa-webapp
