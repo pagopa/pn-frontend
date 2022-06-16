@@ -13,12 +13,13 @@ batch:
         variables:
           REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
-          REACT_APP_URL_SELFCARE_BASE: ttps://uat.selfcare.pagopa.it
+          REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.uat.pn.pagopa.it/
 phases:
   install:
     commands:
       #install Node 12
+      - echo go in packages/pn-pa-webapp directory
       - echo installing node
       - curl -sL https://deb.nodesource.com/setup_14.x | bash -
       - apt-get install -y nodejs
@@ -29,14 +30,12 @@ phases:
       - apt install --no-install-recommends yarn
   pre_build:
     commands:
-      # run yarn install and lerna bootstrap
-      - echo launghing yarn install and lerna bootstrap
+      - echo launching yarn install
       - yarn install
   build:
     commands:
-      - echo go in packages/pn-pa-webapp directory
-      - cd ./packages/pn-pa-webapp
-      - yarn build
+      - echo building the solution...
+      - yarn build:pa
 artifacts:
   baseDirectory: build
   files:
