@@ -37,7 +37,7 @@ phases:
       - echo building the solution...
       - yarn build:pa
 artifacts:
-  baseDirectory: packages/pn-pa-webapp/build
+  base-directory: packages/pn-pa-webapp/build
   files:
     - '**/*'
 cache:
