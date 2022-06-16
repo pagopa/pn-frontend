@@ -4,6 +4,8 @@ import { Hero } from "@pagopa/mui-italia/dist/components/Hero";
 import { Showcase } from "@pagopa/mui-italia/dist/components/Showcase";
 import {Box} from "@mui/material";
 import {CieIcon} from "@pagopa/mui-italia/dist/icons";
+import { Walkthrough } from '@pagopa/mui-italia';
+import { getHeroData } from '../api';
 
 
 
@@ -25,12 +27,13 @@ const Home: NextPage = () => {
             </Head>
 
             <main>
-                <Hero title="some title"/>
+                <Hero {...getHeroData()}/>
                 <Box>Infoblock 1</Box>
                 <Box>Infoblock 2</Box>
                 <Box>Infoblock 3</Box>
                 <Showcase title="Un solo modo per risparmiare in tanti modi" items={showcaseItems}/>
                 <Box>Horizontal Nav</Box>
+                {/* <Walkthrough title="Come funziona" items={} /> */}
             </main>
         </>
     );
