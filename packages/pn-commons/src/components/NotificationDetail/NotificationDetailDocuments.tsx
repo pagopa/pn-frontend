@@ -35,8 +35,8 @@ const NotificationDetailDocuments = ({
       justifyContent="space-between"
       alignItems="center"
     >
-      <Grid key={'detail-documents-title'} item>
-        <Typography color="text.primary" fontWeight={700} textTransform="uppercase" fontSize={14}>
+      <Grid key={'detail-documents-title'} item sx={{mb: 3}}>
+        <Typography color="text.primary" variant="overline" fontWeight={700} textTransform="uppercase" fontSize={14}>
           {title}
         </Typography>
       </Grid>
@@ -48,7 +48,7 @@ const NotificationDetailDocuments = ({
       */}
     </Grid>
     <Grid key={'detail-documents-message'} item>
-      {downloadFilesMessage && <Typography variant="body1">{downloadFilesMessage}</Typography>}
+      {downloadFilesMessage && <Typography variant="body2" sx={{mb: 3}}>{downloadFilesMessage}</Typography>}
     </Grid>
     <Grid sx={{ mt: 1 }} key={'download-files-section'} />
     {documents.map((d) =>
