@@ -237,6 +237,7 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
                     inputMode: 'text',
                     'aria-label': 'Inserisci la data iniziale della ricerca',
                     type: 'text',
+                    placeholder: 'gg/mm/aaaa',
                   }}
                 />
               )}
@@ -272,6 +273,7 @@ const FilterNotificationsTable = forwardRef((_props, ref) => {
                     inputMode: 'text',
                     'aria-label': 'inserisci la data finale della ricerca',
                     type: 'text',
+                    placeholder: 'gg/mm/aaaa',
                   }}
                 />
               )}
