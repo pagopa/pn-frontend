@@ -26,10 +26,13 @@ const handleLoginRequestOnSuccessRequest = () => {
 };
 
 function App() {
-  if (window.location.pathname === ROUTE_LOGOUT) {
+  const pathAndHash = window.location.pathname + window.location.hash;
+  console.log("pathAndHash = ", pathAndHash, " ROUTE_LOGIN = ", ROUTE_LOGIN, window.location);
+  
+  if ( pathAndHash === ROUTE_LOGOUT) {
     return onLogout();
   } else {
-    switch (window.location.pathname) {
+    switch ( pathAndHash ) {
       case ROUTE_LOGIN:
         return onLoginRequest();
       case ROUTE_LOGIN_ERROR:

@@ -11,7 +11,7 @@ export const ENV = {
   },
 
   URL_FE: {
-    LOGOUT: PUBLIC_URL + '/logout',
+    LOGOUT: PUBLIC_URL + '#logout',
   },
 
   URL_API: {
