@@ -35,7 +35,7 @@ const AppMessage = ({ sessionRedirect }: Props) => {
             message={errorMessage.message}
             handleClose={sessionRedirect}
             onConfirm={sessionRedirect}
-            onConfirmLabel={"Vai al login"}
+            onConfirmLabel={"Entra"}
           />
         ) : (
           <Toast

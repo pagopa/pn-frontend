@@ -9,7 +9,7 @@ import {
   NewNotificationFe,
   UploadPayementParams,
   PaymentModel,
-} from '../../../models/newNotification';
+} from '../../../models/NewNotification';
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../../redux/newNotification/actions';
 import NewNotificationCard from './NewNotificationCard';

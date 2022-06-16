@@ -23,17 +23,17 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
+  useTranslation: () => (
+    {
       t: (str: string) => str,
-    };
-  },
+    }
+  ),
 }));
 
 jest.mock('../MobileNotificationsSort', () => () => <div>Sort</div>);
 jest.mock('../FilterNotifications', () => {
   const { forwardRef } = jest.requireActual('react');
-  return forwardRef(() => <div>Filters</div>)
+  return forwardRef(() => <div>Filters</div>);
 });
 
 describe('MobileNotifications Component', () => {

@@ -124,6 +124,7 @@ async function testContactAddition(
   await waitFor(() => expect(input!).toHaveValue(value));
   const button = form.querySelector('button');
   fireEvent.click(button!);
+  mockDispatchFn.mockClear();
   await waitFor(() => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
@@ -174,7 +175,7 @@ async function testContactAddition(
 }
 
 describe('SpecialContacts Component', () => {
-  let result: RenderResult | undefined;
+  let result: RenderResult;
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
 
@@ -196,18 +197,34 @@ describe('SpecialContacts Component', () => {
             legalAddresses={[]}
             courtesyAddresses={[]}
           />
-        </DigitalContactsCodeVerificationProvider>
+        </DigitalContactsCodeVerificationProvider>,
+        {
+          preloadedState: {
+            contactsState: {
+              loading: false,
+              digitalAddresses: {
+                legal: [],
+                courtesy: [],
+              },
+              parties: [
+                { name: 'Comune di Milano', id: 'comune-milano' },
+                { name: 'Tribunale di Milano', id: 'tribunale-milano' },
+              ],
+            },
+          },
+        }
       );
     });
   });
 
   afterEach(() => {
-    result = undefined;
+    jest.resetAllMocks();
+    jest.clearAllMocks();
   });
 
   it('renders SpecialContacts', () => {
-    expect(result?.container).toHaveTextContent('special-contacts.subtitle');
-    const form = result?.container.querySelector('form');
+    expect(result.container).toHaveTextContent('special-contacts.subtitle');
+    const form = result.container.querySelector('form');
     testFormElements(form!, 'sender', 'special-contacts.sender');
     testFormElements(form!, 'addressType', 'special-contacts.address-type');
     testFormElements(form!, 's_pec', 'special-contacts.pec');
@@ -216,8 +233,8 @@ describe('SpecialContacts Component', () => {
     expect(button).toBeDisabled();
   });
 
-  it.skip('changes sender', async () => {
-    const form = result?.container.querySelector('form');
+  it('changes sender', async () => {
+    const form = result.container.querySelector('form');
     await testSelect(
       form!,
       'sender',
@@ -229,8 +246,8 @@ describe('SpecialContacts Component', () => {
     );
   });
 
-  it.skip('changes addressType', async () => {
-    const form = result?.container.querySelector('form');
+  it('changes addressType', async () => {
+    const form = result.container.querySelector('form');
     await testSelect(
       form!,
       'addressType',
@@ -246,18 +263,18 @@ describe('SpecialContacts Component', () => {
     testFormElements(form!, 's_phone', 'special-contacts.phone');
   });
 
-  it.skip('checks invalid pec', async () => {
-    const form = result?.container.querySelector('form');
+  it('checks invalid pec', async () => {
+    const form = result.container.querySelector('form');
     await testInvalidField(form!, 's_pec', 'mail-errata', 'legal-contacts.valid-pec');
   });
 
-  it.skip('checks valid pec', async () => {
-    const form = result?.container.querySelector('form');
+  it('checks valid pec', async () => {
+    const form = result.container.querySelector('form');
     await testValidFiled(form!, 's_pec', 'mail@valida.mail');
   });
 
-  it.skip('checks invalid mail', async () => {
-    const form = result?.container.querySelector('form');
+  it('checks invalid mail', async () => {
+    const form = result.container.querySelector('form');
     await testSelect(
       form!,
       'addressType',
@@ -271,8 +288,8 @@ describe('SpecialContacts Component', () => {
     await testInvalidField(form!, 's_mail', 'mail-errata', 'courtesy-contacts.valid-email');
   });
 
-  it.skip('checks valid mail', async () => {
-    const form = result?.container.querySelector('form');
+  it('checks valid mail', async () => {
+    const form = result.container.querySelector('form');
     await testSelect(
       form!,
       'addressType',
@@ -286,8 +303,8 @@ describe('SpecialContacts Component', () => {
     await testValidFiled(form!, 's_mail', 'mail@valida.mail');
   });
 
-  it.skip('checks invalid phone', async () => {
-    const form = result?.container.querySelector('form');
+  it('checks invalid phone', async () => {
+    const form = result.container.querySelector('form');
     await testSelect(
       form!,
       'addressType',
@@ -301,8 +318,8 @@ describe('SpecialContacts Component', () => {
     await testInvalidField(form!, 's_phone', 'telefono-errato', 'courtesy-contacts.valid-phone');
   });
 
-  it.skip('checks valid phone', async () => {
-    const form = result?.container.querySelector('form');
+  it('checks valid phone', async () => {
+    const form = result.container.querySelector('form');
     await testSelect(
       form!,
       'addressType',
@@ -316,8 +333,8 @@ describe('SpecialContacts Component', () => {
     await testValidFiled(form!, 's_phone', '+393494568016');
   });
 
-  it.skip('adds pec', async () => {
-    const form = result?.container.querySelector('form');
+  it('adds pec', async () => {
+    const form = result.container.querySelector('form');
     await testContactAddition(
       form!,
       's_pec',
@@ -328,8 +345,8 @@ describe('SpecialContacts Component', () => {
     );
   });
 
-  it.skip('adds phone', async () => {
-    const form = result?.container.querySelector('form');
+  it('adds phone', async () => {
+    const form = result.container.querySelector('form');
     await testSelect(
       form!,
       'addressType',
@@ -350,8 +367,8 @@ describe('SpecialContacts Component', () => {
     );
   });
 
-  it.skip('adds email', async () => {
-    const form = result?.container.querySelector('form');
+  it('adds email', async () => {
+    const form = result.container.querySelector('form');
     await testSelect(
       form!,
       'addressType',

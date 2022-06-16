@@ -1,7 +1,7 @@
 import { Fragment, ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Grid, Box, Paper } from '@mui/material';
+import { Grid, Box, Paper, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
@@ -42,7 +42,11 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const recipient = notification.recipients[0];
+  
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+
+  const currentRecipient = notification.recipients.filter((recipient) => recipient.taxId === currentUser.fiscal_number)[0];
+
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -62,13 +66,13 @@ const NotificationDetail = () => {
     },
     {
       id: 3,
-      label: t('detail.recipient', { ns: 'notifiche' }),
-      value: <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>,
+      label: t('detail.surname-name', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{currentRecipient?.denomination}</Box>,
     },
     {
       id: 4,
-      label: t('detail.surname-name', { ns: 'notifiche' }),
-      value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
+      label: t('detail.sender', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
     },
     {
       id: 6,
@@ -80,7 +84,16 @@ const NotificationDetail = () => {
       label: t('detail.iun', { ns: 'notifiche' }),
       value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
-    { id: 8, label: t('detail.groups', { ns: 'notifiche' }), value: '' },
+    {
+      id: 8,
+      label: t('detail.notice-code', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{currentRecipient?.payment?.noticeCode}</Box>,
+    },
+    {
+      id: 9,
+      label: t('detail.creditor-tax-id', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{currentRecipient?.payment?.creditorTaxId}</Box>,
+    },
   ];
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
@@ -133,7 +146,7 @@ const NotificationDetail = () => {
         }
         currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
+      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 4 }}></TitleBox>
     </Fragment>
   );
 
@@ -143,16 +156,17 @@ const NotificationDetail = () => {
       <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           {!isMobile && breadcrumb}
+          <Stack spacing={3}>
           <NotificationDetailTable rows={detailTableRows} />
-          {recipient && recipient.payment && (
+          {currentRecipient?.payment && (
             <NotificationPayment
               iun={notification.iun}
-              notificationPayment={recipient.payment}
+              notificationPayment={currentRecipient.payment}
               onDocumentDownload={dowloadDocument}
             />
           )}
           <DomicileBanner />
-          <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
+          <Paper sx={{ p: 3 }} className="paperContainer">
             <NotificationDetailDocuments
               title={t('detail.acts', { ns: 'notifiche' })}
               documents={notification.documents}
@@ -166,7 +180,7 @@ const NotificationDetail = () => {
             />
           </Paper>
           {/* TODO decommentare con pn-841
-          <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
+          <Paper sx={{ p: 3 }} className="paperContainer">
             <HelpNotificationDetails 
               title="Hai bisogno di aiuto?"
               subtitle="Se hai domande relative al contenuto della notifica, contatta il"
@@ -177,11 +191,12 @@ const NotificationDetail = () => {
             />              
           </Paper>
               */}
+          </Stack>
         </Grid>
         <Grid item lg={5} xs={12}>
           <Box
             component="section"
-            sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}
+            sx={{ backgroundColor: 'white', height: '100%', p: 3 }}
           >
             <NotificationDetailTimeline
               recipients={notification.recipients}

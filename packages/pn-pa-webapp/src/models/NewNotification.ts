@@ -4,23 +4,13 @@ import {
   NotificationFeePolicy,
   PhysicalCommunicationType,
   RecipientType,
+  NotificationDetailDocument
 } from '@pagopa-pn/pn-commons';
 
 export enum PaymentModel {
   PAGO_PA_NOTICE = 'PAGO_PA_NOTICE',
   PAGO_PA_NOTICE_F24_FLATRATE = 'PAGO_PA_NOTICE_F24_FLATRATE',
   PAGO_PA_NOTICE_F24 = 'PAGO_PA_NOTICE_F24',
-}
-
-export interface NewNotificationDocument {
-  digests: {
-    sha256: string;
-  };
-  contentType: string;
-  ref: {
-    key: string;
-    versionToken: string;
-  };
 }
 
 export interface NewNotificationBe {
@@ -31,7 +21,7 @@ export interface NewNotificationBe {
   abstract?: string;
   cancelledIun?: string;
   recipients: Array<NotificationDetailRecipient>;
-  documents: Array<NewNotificationDocument>;
+  documents: Array<NotificationDetailDocument>;
   physicalCommunicationType: PhysicalCommunicationType;
   senderDenomination?: string;
   senderTaxId?: string;
@@ -82,9 +72,9 @@ export interface UploadPayementParams {
 
 export interface UpaloadPaymentResponse {
   [key: string]: {
-    pagoPaForm: NewNotificationDocument;
-    f24flatRate?: NewNotificationDocument;
-    f24standard?: NewNotificationDocument;
+    pagoPaForm: NotificationDetailDocument;
+    f24flatRate?: NotificationDetailDocument;
+    f24standard?: NotificationDetailDocument;
   };
 }
 

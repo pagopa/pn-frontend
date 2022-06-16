@@ -10,6 +10,7 @@ import {
   StatusTooltip,
   Item,
   ItemsTable,
+  EmptyState,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
@@ -114,30 +115,16 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
     navigate(routes.RECAPITI);
   };
 
-  const ItemsTableEmptyState = () => {
-    const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-    const emptyMessage: string | undefined = filtersApplied
-      ? undefined
-      : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione';
-    const emptyActionLabel: string | undefined = filtersApplied ? undefined : 'Recapiti';
-    const secondaryMessage = {
+  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+
+  const EmptyStateProps = {
+    emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
+    emptyActionCallback: filtersApplied ? onCancelSearch : handleRouteContacts,
+    emptyMessage: filtersApplied ? undefined : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione',
+    disableSentimentDissatisfied: !filtersApplied,
+    secondaryMessage: filtersApplied ? undefined : {
       emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
-    };
-    return (
-      <Fragment>
-        <ItemsTable
-          emptyMessage={emptyMessage}
-          emptyActionLabel={emptyActionLabel}
-          columns={columns}
-          rows={rows}
-          sort={sort}
-          disableSentimentDissatisfied={true}
-          onChangeSorting={onChangeSorting}
-          emptyActionCallback={filtersApplied ? onCancelSearch : handleRouteContacts}
-          secondaryMessage={filtersApplied ? undefined : secondaryMessage}
-        />
-      </Fragment>
-    );
+    }
   };
 
   // Navigation handlers
@@ -150,7 +137,16 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
   return (
     <Fragment>
       <FilterNotifications ref={filterNotificationsRef} />
-      <ItemsTableEmptyState />
+      {(rows.length) ? (
+        <ItemsTable
+        columns={columns}
+        rows={rows}
+        sort={sort}
+        onChangeSorting={onChangeSorting}
+      />
+      ) : (
+        <EmptyState {...EmptyStateProps} />
+      )}
     </Fragment>
   );
 };
