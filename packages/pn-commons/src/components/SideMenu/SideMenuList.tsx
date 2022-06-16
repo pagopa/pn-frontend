@@ -23,12 +23,10 @@ type Props = {
 
 const useStyles = makeStyles(() => ({
   root: {
-    ['@media only screen and (max-width: 576px)']: {
-      width: '50vw',
-    },
-    ['@media only screen and (min-width: 577px) and (max-width: 992px)']: {
-      width: '30vw',
-    },
+    maxWidth: '90vw',
+    ['@media only screen and (max-width: 1200px)']: {
+      width: '300px',
+    }
   },
 }));
 

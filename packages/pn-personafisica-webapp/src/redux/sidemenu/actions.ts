@@ -1,4 +1,4 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { ContactsApi } from '../../api/contacts/Contacts.api';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { DigitalAddress } from '../../models/contacts';
@@ -25,3 +25,5 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
     }
   }
 );
+
+export const closeDomicileBanner = createAction<void>('closeDomicileBanner');

@@ -2,7 +2,7 @@ import { setSenderInfos } from './../actions';
 import { DigitalDomicileType, PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { PaymentModel } from '../../../models/newNotification';
+import { PaymentModel } from '../../../models/NewNotification';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
 import {
@@ -95,7 +95,7 @@ describe('New notification redux state tests', () => {
 
   it('Should be able to upload attachment', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'preloadNotificationDocument');
-    apiSpy.mockResolvedValue([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' }]);
+    apiSpy.mockResolvedValue([{ url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST', key: 'mocked-preload-key' }]);
     const nextApiSpy = jest.spyOn(NotificationsApi, 'uploadNotificationAttachment');
     nextApiSpy.mockResolvedValue('mocked-versionToken');
     const action = await store.dispatch(
@@ -117,9 +117,10 @@ describe('New notification redux state tests', () => {
         },
         contentType: 'text/plain',
         ref: {
-          key: 'mocked-key',
+          key: 'mocked-preload-key',
           versionToken: 'mocked-versionToken',
         },
+        title: 'mocked-key'
       },
     ]);
   });
@@ -127,8 +128,8 @@ describe('New notification redux state tests', () => {
   it('Should be able to upload payment document', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'preloadNotificationDocument');
     apiSpy.mockResolvedValue([
-      { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' },
-      { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST' },
+      { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST', key: 'mocked-preload-key' },
+      { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST', key: 'mocked-preload-key' },
     ]);
     const nextApiSpy = jest.spyOn(NotificationsApi, 'uploadNotificationAttachment');
     nextApiSpy.mockResolvedValue('mocked-versionToken');
@@ -166,9 +167,10 @@ describe('New notification redux state tests', () => {
           },
           contentType: 'text/plain',
           ref: {
-            key: 'mocked-key',
+            key: 'mocked-preload-key',
             versionToken: 'mocked-versionToken',
           },
+          title: 'mocked-key'
         },
         f24flatRate: undefined,
         f24standard: {
@@ -177,9 +179,10 @@ describe('New notification redux state tests', () => {
           },
           contentType: 'text/plain',
           ref: {
-            key: 'mocked-key',
+            key: 'mocked-preload-key',
             versionToken: 'mocked-versionToken',
           },
+          title: 'mocked-key'
         },
       },
     });

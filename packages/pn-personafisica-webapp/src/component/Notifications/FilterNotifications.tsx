@@ -150,7 +150,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
   ) : (
     <form onSubmit={formik.handleSubmit}>
       <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} alignItems="top" className={classes.helperTextFormat}>
+        <Grid container spacing={1} className={classes.helperTextFormat}>
           <FilterNotificationsFormBody
             formikInstance={formik}
             startDate={startDate}

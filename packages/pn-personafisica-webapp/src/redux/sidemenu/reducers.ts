@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { DigitalAddress } from '../../models/contacts';
 import { Delegator } from '../delegation/types';
-import { getDomicileInfo, getSidemenuInformation } from './actions';
+import { getDomicileInfo, getSidemenuInformation, closeDomicileBanner } from './actions';
 
 /* eslint-disable functional/immutable-data */
 const generalInfoSlice = createSlice({
@@ -10,6 +10,7 @@ const generalInfoSlice = createSlice({
     pendingDelegators: 0,
     delegators: [] as Array<Delegator>,
     legalDomicile: [] as Array<DigitalAddress>,
+    domicileBannerOpened: true
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -21,6 +22,9 @@ const generalInfoSlice = createSlice({
     });
     builder.addCase(getDomicileInfo.fulfilled, (state, action) => {
       state.legalDomicile = action.payload;
+    });
+    builder.addCase(closeDomicileBanner, (state) => {
+      state.domicileBannerOpened = false;
     });
   },
 });
