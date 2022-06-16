@@ -1,0 +1,28 @@
+version: 0.2
+phases:
+  install:
+    commands:
+      #install Node 12
+      - echo installing node
+      - curl -sL https://deb.nodesource.com/setup_14.x | bash -
+      - apt-get install -y nodejs
+      #install yarn
+      - echo installing yarn
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+      - apt install --no-install-recommends yarn
+  pre_build:
+    commands:
+      # run yarn install and lerna bootstrap
+      - yarn install
+  build:
+    commands:
+      - yarn build
+artifacts:
+    baseDirectory: build
+    files:
+      - '**/*'
+cache:
+    paths:
+      - node_modules/**/*
+appRoot: packages/pn-pa-webapp
