@@ -23,16 +23,16 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
+  useTranslation: () => (
+    {
       t: (str: string) => str,
-    };
-  },
+    }
+  ),
 }));
 
 jest.mock('../FilterNotifications', () => {
   const { forwardRef } = jest.requireActual('react');
-  return forwardRef(() => <div>Filters</div>)
+  return forwardRef(() => <div>Filters</div>);
 });
 
 describe('DesktopNotifications Component', () => {
@@ -46,7 +46,10 @@ describe('DesktopNotifications Component', () => {
       />
     );
     expect(result.container).toHaveTextContent(/Filters/i);
-    expect(result.container).toHaveTextContent(/Table/i);
+    expect(result.container).not.toHaveTextContent(/Table/i);
+    expect(result.container).toHaveTextContent(
+      /Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull'app IO o inserisci un recapito di cortesia nella sezione/i
+    );
   });
 
   it('clicks on row', async () => {
