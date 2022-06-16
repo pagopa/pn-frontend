@@ -22,6 +22,8 @@ type Props = {
   sort?: Sort;
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort) => void;
+  /** Disable cursor CSS pointer on row */
+  disableCursorPointerToRow?: boolean;
 };
 
 function ItemsTable({
@@ -29,6 +31,7 @@ function ItemsTable({
   rows,
   sort,
   onChangeSorting,
+  disableCursorPointerToRow,
 }: Props) {
   const createSortHandler = (property: string) => () => {
     if (sort && onChangeSorting) {
@@ -95,7 +98,7 @@ function ItemsTable({
           </TableHead>
           <TableBody sx={{ backgroundColor: 'background.paper' }}>
               {rows.map((row) => (
-                <TableRow key={row.id} sx={{ cursor: 'pointer' }}>
+                <TableRow key={row.id} sx={{ cursor: disableCursorPointerToRow ? 'auto' : 'pointer' }}>
                   {columns.map((column) => (
                     <TableCell
                       key={column.id}

@@ -65,6 +65,22 @@ describe('Notifications Table Component', () => {
     });
   });
 
+  it('renders notifications table (with rows) with disabled CSS cursor pointer on row', () => {
+    render(<ItemsTable columns={columns} rows={rows} disableCursorPointerToRow={true} />);
+    const table = testNotificationTableHead();
+    const tableBody = table.querySelector('tbody');
+    const tableRows = tableBody!.querySelectorAll('tr');
+    expect(tableRows).toHaveLength(rows.length);
+    tableRows.forEach((row, i) => {
+      const tableColumns = row.querySelectorAll('td');
+      expect(tableColumns).toHaveLength(columns.length);
+      expect(row).toHaveStyle('cursor: auto');
+      tableColumns.forEach((column, j) => {
+        expect(column).toHaveTextContent(rows[i][columns[j].id].toString());
+      });
+    });
+  });
+
   it('sorts a column', () => {
     render(
       <ItemsTable

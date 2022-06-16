@@ -108,6 +108,7 @@ const Delegators = () => {
             rows={rows}
             sort={sortDelegators}
             onChangeSorting={handleChangeSorting}
+            disableCursorPointerToRow
           />
         </Box>
       )}
