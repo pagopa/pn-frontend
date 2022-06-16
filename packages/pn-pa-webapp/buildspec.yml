@@ -1,4 +1,20 @@
 version: 0.2
+batch:
+  build-list:
+    - identifier: dev_build
+      env:
+        variables:
+          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
+          REACT_APP_URL_SELFCARE_LOGIN: https://dev.selfcare.pagopa.it/auth/login
+          REACT_APP_URL_SELFCARE_BASE: https://dev.selfcare.pagopa.it
+          REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
+    - identifier: uat_build
+      env:
+        variables:
+          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
+          REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
+          REACT_APP_URL_SELFCARE_BASE: ttps://uat.selfcare.pagopa.it
+          REACT_APP_URL_API: https://webapi.uat.pn.pagopa.it/
 phases:
   install:
     commands:
@@ -19,10 +35,10 @@ phases:
     commands:
       - yarn build
 artifacts:
-    baseDirectory: build
-    files:
-      - '**/*'
+  baseDirectory: build
+  files:
+    - '**/*'
 cache:
-    paths:
-      - node_modules/**/*
+  paths:
+    - node_modules/**/*
 appRoot: packages/pn-pa-webapp
