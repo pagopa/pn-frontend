@@ -1,18 +1,22 @@
-import { Dialog, Box, Typography } from '@mui/material';
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { Dialog, Box, Typography } from '@mui/material';
+
 import { storageSpidSelectedOps } from '../../utils/storage';
-import { redirectToLogin } from '../../utils/utils';
+import { ROUTE_LOGIN } from '../../utils/constants';
 
 const handleError = (queryParams: string) => {
-  storageSpidSelectedOps.read();
-  // trackEvent('LOGIN_FAILURE', { reason: queryParams, idp: spidId });
-  console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
+  if (process.env.NODE_ENV !== 'test') {
+    storageSpidSelectedOps.read();
+    // trackEvent('LOGIN_FAILURE', { reason: queryParams, idp: spidId });
+    console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
+  }
 };
 
 const LoginError = () => {
   const { t } = useTranslation();
-  setTimeout(() => redirectToLogin(), 3000);
+  const navigate = useNavigate();
 
   const title = t('loginError.title');
   const message = (
@@ -24,7 +28,15 @@ const LoginError = () => {
       </Trans>
     </Fragment>
   );
-  handleError(window.location.search);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      navigate(ROUTE_LOGIN);
+    }, 3000);
+    handleError(window.location.search);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Dialog fullScreen={true} open={true} aria-labelledby="dialog-per-messaggi-di-errore">
@@ -32,7 +44,6 @@ const LoginError = () => {
         <Typography variant="h5" sx={{ fontSize: '18px', fontWeight: '600' }}>
           {title}
         </Typography>
-
         <Typography variant="body2">{message}</Typography>
       </Box>
     </Dialog>

@@ -1,13 +1,20 @@
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { ROUTE_LOGIN } from '../../utils/constants';
 import { storageOnSuccessOps, storageTokenOps, storageUserOps } from '../../utils/storage';
-import { redirectToLogin } from '../../utils/utils';
 
 const Logout = () => {
-  storageOnSuccessOps.delete();
-  storageTokenOps.delete();
-  storageUserOps.delete();
-  redirectToLogin();
+  const navigate = useNavigate();
 
-  return <div />;
+  useEffect(() => {
+    storageOnSuccessOps.delete();
+    storageTokenOps.delete();
+    storageUserOps.delete();
+    navigate(ROUTE_LOGIN);
+  }, []);
+
+  return <></>;
 };
 
 export default Logout;
