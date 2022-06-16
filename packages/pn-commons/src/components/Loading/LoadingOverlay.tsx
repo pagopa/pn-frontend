@@ -17,7 +17,7 @@ export function LoadingOverlay() {
           outline: 0,
         }}
       >
-        <CircularProgress color={'primary'} role="loadingSpinner" />
+        <CircularProgress role="loadingSpinner" sx={{color: 'white'}}/>
       </Box>
     </Modal>
   );

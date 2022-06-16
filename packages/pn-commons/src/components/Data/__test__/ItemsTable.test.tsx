@@ -49,35 +49,9 @@ function testNotificationTableHead() {
 }
 
 describe('Notifications Table Component', () => {
-  it('renders notifications table (empty rows with default values)', () => {
-    render(<ItemsTable columns={columns} rows={[]} emptyActionCallback={() => console.log()} />);
-    const table = testNotificationTableHead();
-    const tableBody = table.querySelectorAll('td');
-    expect(tableBody).toHaveLength(1);
-    expect(tableBody[0]).toHaveAttribute('colspan', columns.length.toString());
-    expect(tableBody[0]).toHaveTextContent(
-      /I filtri che hai aggiunto non hanno dato nessun risultato./i
-    );
-  });
-
-  it('renders notifications table (empty rows with custom values)', () => {
-    render(
-      <ItemsTable
-        columns={columns}
-        rows={[]}
-        emptyActionCallback={() => console.log()}
-        emptyMessage="mocked-empty-message"
-      />
-    );
-    const table = testNotificationTableHead();
-    const tableBody = table.querySelectorAll('td');
-    expect(tableBody).toHaveLength(1);
-    expect(tableBody[0]).toHaveAttribute('colspan', columns.length.toString());
-    expect(tableBody[0]).toHaveTextContent(/mocked-empty-message/i);
-  });
 
   it('renders notifications table (with rows)', () => {
-    render(<ItemsTable columns={columns} rows={rows} emptyActionCallback={() => console.log()} />);
+    render(<ItemsTable columns={columns} rows={rows} />);
     const table = testNotificationTableHead();
     const tableBody = table.querySelector('tbody');
     const tableRows = tableBody!.querySelectorAll('tr');
@@ -98,7 +72,6 @@ describe('Notifications Table Component', () => {
         rows={rows}
         sort={sort}
         onChangeSorting={handleSort}
-        emptyActionCallback={() => console.log()}
       />
     );
     const table = screen.getByRole('table');
@@ -117,7 +90,6 @@ describe('Notifications Table Component', () => {
         columns={columns}
         rows={rows}
         sort={sort}
-        emptyActionCallback={() => console.log()}
       />
     );
     const table = screen.getByRole('table');

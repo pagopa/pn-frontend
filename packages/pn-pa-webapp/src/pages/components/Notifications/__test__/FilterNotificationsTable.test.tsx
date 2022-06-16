@@ -76,8 +76,8 @@ describe('Filter Notifications Table Component', () => {
 
   it('renders filter notifications table', () => {
     expect(form).toBeInTheDocument();
-    testFormElements(form!, 'searchFor', 'Cerca per');
-    testFormElements(form!, 'recipientId', 'Codice fiscale');
+    testFormElements(form!, 'searchFor', 'Filtra per');
+    testFormElements(form!, 'recipientId', 'Codice Fiscale');
     testFormElements(form!, 'startDate', 'Da');
     testFormElements(form!, 'endDate', 'A');
     testFormElements(form!, 'status', 'Stato');
@@ -86,7 +86,7 @@ describe('Filter Notifications Table Component', () => {
     expect(submitButton).toHaveTextContent(/Filtra/i);
     const cancelButton = within(form!).getByTestId('cancelButton');
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveTextContent(/Annulla filtri/i);
+    expect(cancelButton).toHaveTextContent(/Rimuovi filtri/i);
   });
 
   it('test filters inital value', () => {

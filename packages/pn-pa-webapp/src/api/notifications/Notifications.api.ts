@@ -7,7 +7,7 @@ import {
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationBe, NewNotificationResponse } from '../../models/newNotification';
+import { NewNotificationBe, NewNotificationResponse } from '../../models/NewNotification';
 import { apiClient, externalClient } from '../axios';
 import {
   CREATE_NOTIFICATION,
@@ -100,9 +100,9 @@ export const NotificationsApi = {
    */
   preloadNotificationDocument: (
     items: Array<{ key: string; contentType: string; sha256: string }>
-  ): Promise<Array<{ url: string; secret: string; httpMethod: string }>> =>
+  ): Promise<Array<{ url: string; secret: string; httpMethod: string; key: string }>> =>
     apiClient
-      .post<Array<{ url: string; secret: string; httpMethod: string }>>(
+      .post<Array<{ url: string; secret: string; httpMethod: string; key: string }>>(
         NOTIFICATION_PRELOAD_DOCUMENT(),
         items
       )

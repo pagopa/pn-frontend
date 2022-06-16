@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment } from 'react';
-import { Grid, Box, Paper, Button } from '@mui/material';
+import { Grid, Box, Paper, Button, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
@@ -161,10 +161,10 @@ const NotificationDetail = () => {
         }
         currentLocationLabel="Dettaglio notifica"
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
+      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 2 }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
         <Button
-          sx={{ margin: '10px 0' }}
+          sx={{ my: 1 }}
           variant="outlined"
           onClick={handleCancelNotification}
           data-testid="cancelNotificationBtn"
@@ -181,24 +181,26 @@ const NotificationDetail = () => {
       <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           {!isMobile && breadcrumb}
-          <NotificationDetailTable rows={detailTableRows} />
-          <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
-            <NotificationDetailDocuments
-              title="Atti Allegati"
-              documents={notification.documents}
-              clickHandler={documentDowloadHandler}
-              documentsAvailable={notification.documentsAvailable as boolean}
-            />
-          </Paper>
+          <Stack spacing={3}>
+            <NotificationDetailTable rows={detailTableRows} />
+            <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+              <NotificationDetailDocuments
+                title="Atti Allegati"
+                documents={notification.documents}
+                clickHandler={documentDowloadHandler}
+                documentsAvailable={notification.documentsAvailable as boolean}
+              />
+            </Paper>
+          </Stack>
         </Grid>
         <Grid item lg={5} xs={12}>
-          <Box sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}>
+          <Box sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
             <NotificationDetailTimeline
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}
               title="Stato della notifica"
               clickHandler={legalFactDownloadHandler}
-              legalFactLabels={{ attestation: 'Attestato opponibile a Terzi', receipt: 'Ricevuta' }}
+              legalFactLabels={{ attestation: 'Attestazione opponibile a terzi', receipt: 'Ricevuta' }}
               historyButtonLabel="Mostra storico"
               showMoreButtonLabel="Mostra di più"
               showLessButtonLabel="Mostra di meno"

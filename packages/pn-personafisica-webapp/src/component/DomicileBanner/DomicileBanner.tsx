@@ -1,27 +1,30 @@
 import { Alert, Box, Link, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import * as routes from '../../navigation/routes.const';
-import { useAppSelector } from '../../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { closeDomicileBanner } from '../../redux/sidemenu/actions';
 import { RootState } from '../../redux/store';
+
+const messageIndex = Math.floor(Math.random() * 4);
+const messages = [
+  'detail.domicile_1',
+  'detail.domicile_2',
+  'detail.domicile_3',
+  'detail.domicile_4',
+];
 
 const DomicileBanner = () => {
   const { t } = useTranslation(['notifiche']);
   const navigate = useNavigate();
-  const [open, setOpen] = useState(true);
+  const dispatch = useAppDispatch();
+  const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const legalDomicile = useAppSelector((state: RootState) => state.generalInfoState.legalDomicile);
-  const messageIndex = Math.floor(Math.random() * 4);
-  const messages = [
-    'detail.domicile_1',
-    'detail.domicile_2',
-    'detail.domicile_3',
-    'detail.domicile_4',
-  ];
 
   const handleClose = () => {
-    setOpen(false);
+    dispatch(closeDomicileBanner());
   };
   const handleAddDomicile = () => {
     navigate(routes.RECAPITI);
@@ -29,7 +32,7 @@ const DomicileBanner = () => {
 
   useEffect(() => {
     if (legalDomicile && legalDomicile.length > 0) {
-      setOpen(false);
+      dispatch(closeDomicileBanner());
     }
   }, [legalDomicile]);
 
@@ -40,9 +43,9 @@ const DomicileBanner = () => {
         variant="outlined"
         onClose={handleClose}
         data-testid="addDomicileBanner"
-        sx={{padding: '16px'}}
+        sx={{ padding: '16px' }}
       >
-        <Typography variant="body2">
+        <Typography variant="body2" sx={{overflow: 'hidden'}}>
           {t(messages[messageIndex])}{' '}
           <Link fontWeight={'bold'} onClick={handleAddDomicile}>
             {t('detail.add_domicile')}
