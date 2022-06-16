@@ -40,7 +40,8 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
+    "build":  "craco build",
+    "build:zip": "craco build && tar -czvf pn-pa-webapp.tar.gz ./build",
     "build:dev": "env-cmd -f .env.development craco build",
     "build:uat": "env-cmd -f .env.uat craco build",
     "test": "craco test --watchAll=false",

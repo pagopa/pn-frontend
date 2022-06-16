@@ -11,7 +11,7 @@
     "start:pa": "lerna run start --parallel --scope @pagopa-pn/pn-pa-webapp --scope @pagopa-pn/pn-commons",
     "start:pf": "lerna run start --parallel --scope @pagopa-pn/pn-personafisica-webapp --scope @pagopa-pn/pn-commons",
     "start:login": "lerna run start --parallel --scope @pagopa-pn/pn-personafisica-login --scope @pagopa-pn/pn-commons",
-    "build": "lerna run build --include-dependencies --since develop",
+    "build": "lerna run build --include-dependencies --since HEAD~1",
     "test": "lerna run --scope @pagopa-pn/* test",
     "test:coverage": "lerna run --scope @pagopa-pn/* test:coverage",
     "refresh:monorepo": "lerna clean -y && yarn install",
