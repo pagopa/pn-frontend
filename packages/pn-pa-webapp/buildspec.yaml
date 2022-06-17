@@ -26,8 +26,8 @@ phases:
       - apt install --no-install-recommends yarn
   pre_build:
     commands:
-      - echo launching yarn install
-      # - cd $SUB_PRJ_NAME
+      - echo launching yarn install in packages/pn-pa-webapp...
+      - cd packages/pn-pa-webapp
       - yarn install
       - echo Running tests..
       - yarn test
@@ -38,10 +38,10 @@ phases:
   post_build:
     commands:
       - echo saving commit id to file
-      # - cd ../..
-      - git rev-parse HEAD > build/commit_id.txt
+      - cd ../..
+      - git rev-parse HEAD > packages/pn-pa-webapp/build/commit_id.txt
 artifacts:
-  base-directory: build
+  base-directory: packages/pn-pa-webapp/build
   files:
     - '**/*'
 cache:
