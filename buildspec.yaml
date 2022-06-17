@@ -39,6 +39,7 @@ phases:
   post_build:
     commands:
       - echo saving commit_id to file
+      - cd ../..
       - git rev-parse HEAD > packages/pn-personafisica-webapp/build/commit_id.txt
 artifacts:
   base-directory: packages/pn-personafisica-webapp/build

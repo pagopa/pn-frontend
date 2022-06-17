@@ -1,18 +1,14 @@
 version: 0.2
-env:
-  variables:
-    PACKAGE_DIR: packages/pn-pa-webapp
-    PACKAGE_PREFIX: pn_pa
 batch:
   build-list:
-    - identifier: $PACKAGE_PREFIX_dev_build
+    - identifier: pn_pa_dev_build
       env:
         variables:
           REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://dev.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://dev.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
-    - identifier: $PACKAGE_PREFIX_uat_build
+    - identifier: pn_pa_uat_build
       env:
         variables:
           REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
@@ -34,21 +30,21 @@ phases:
   pre_build:
     commands:
       - echo launching yarn install
+      - cd packages/pn-pa-webapp
       - yarn install
-      - cd $PACKAGE_DIR
       - echo Running tests..
       - yarn test
-      - cd ../..
   build:
     commands:
       - echo building the solution...
-      - yarn build:pa
+      - yarn build
   post_build:
     commands:
       - echo saving commit if to file
-      - git rev-parse HEAD > $PACKAGE_DIR/build/commit_id.txt
+      - cd ../..
+      - git rev-parse HEAD > packages/pn-pa-webapp/build/commit_id.txt
 artifacts:
-  base-directory: $PACKAGE_DIR/build
+  base-directory: packages/pn-pa-webapp/build
   files:
     - '**/*'
 cache:

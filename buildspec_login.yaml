@@ -1,11 +1,7 @@
 version: 0.2
-env:
-  variables:
-    PACKAGE_DIR: packages/pn-personafisica-login
-    PACKAGE_PREFIX: pn_login
 batch:
   build-list:
-    - identifier: $PACKAGE_PREFIX_dev_build
+    - identifier: pn_login_dev_build
       env:
         variables:
           REACT_APP_ENABLE_ASSISTANCE: true
@@ -15,7 +11,7 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: assistenza@pn.it
           REACT_APP_URL_FILE_PRIVACY_DISCLAIMER: #privacy-disclaimer
           REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: #terms-and-conditions
-    - identifier: $PACKAGE_PREFIX_uat_build
+    - identifier: pn_login_uat_build
       env:
         variables:
           REACT_APP_ENABLE_ASSISTANCE: true
@@ -40,21 +36,21 @@ phases:
   pre_build:
     commands:
       - echo launching yarn install
+      - cd packages/pn-personafisica-login
       - yarn install
-      - cd $PACKAGE_DIR
       - echo Running tests..
       - yarn test
-      - cd ../..
   build:
     commands:
       - echo building the solution...
-      - yarn build:login
+      - yarn build
   post_build:
     commands:
       - echo saving commit if to file
-      - git rev-parse HEAD > $PACKAGE_DIR/build/commit_id.txt
+      - cd ../..
+      - git rev-parse HEAD > packages/pn-personafisica-login/build/commit_id.txt
 artifacts:
-  base-directory: $PACKAGE_DIR/build
+  base-directory: packages/pn-personafisica-login/build
   files:
     - '**/*'
 cache:
