@@ -19,7 +19,7 @@ phases:
   install:
     commands:
       #install yarn
-      - echo env variable REACT_APP_URL_SELFCARE_LOGIN $REACT_APP_URL_SELFCARE_LOGIN
+      - env
       - echo installing yarn
       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
       - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
@@ -27,7 +27,7 @@ phases:
   pre_build:
     commands:
       - echo launching yarn install
-      - cd $SUB_PRJ_NAME
+      # - cd $SUB_PRJ_NAME
       - yarn install
       - echo Running tests..
       - yarn test
@@ -38,10 +38,10 @@ phases:
   post_build:
     commands:
       - echo saving commit id to file
-      - cd ../..
-      - git rev-parse HEAD > $SUB_PRJ_NAME/build/commit_id.txt
+      # - cd ../..
+      - git rev-parse HEAD > build/commit_id.txt
 artifacts:
-  base-directory: $SUB_PRJ_NAME/build
+  base-directory: build
   files:
     - '**/*'
 cache:
