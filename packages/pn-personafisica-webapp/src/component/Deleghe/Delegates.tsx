@@ -136,7 +136,6 @@ const Delegates = () => {
                 rows={rows}
                 sort={sortDelegates}
                 onChangeSorting={handleChangeSorting}
-                disableCursorPointerToRow
               />
             ) : (
               <EmptyState
