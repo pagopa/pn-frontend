@@ -1,14 +1,14 @@
 version: 0.2
 batch:
   build-list:
-    - identifier: dev_build
+    - identifier: pn_pa_dev_build
       env:
         variables:
           REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://dev.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://dev.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
-    - identifier: uat_build
+    - identifier: pn_pa_uat_build
       env:
         variables:
           REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
@@ -18,7 +18,7 @@ batch:
 phases:
   install:
     commands:
-      #install Node 12
+      #install Node 14
       - echo go in packages/pn-pa-webapp directory
       - echo installing node
       - curl -sL https://deb.nodesource.com/setup_14.x | bash -
@@ -36,6 +36,10 @@ phases:
     commands:
       - echo building the solution...
       - yarn build:pa
+  post_build:
+    commands:
+      - echo saving commit if to file
+      - git rev-parse HEAD > packages/pn-pa-webapp/build/commit_id.txt
 artifacts:
   base-directory: packages/pn-pa-webapp/build
   files:

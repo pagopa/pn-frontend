@@ -14,7 +14,6 @@
     "noImplicitReturns": true,
     "moduleResolution": "node",
     "declaration": true,
-    "sourceMap": true,
     "outDir": "lib",
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -39,6 +38,8 @@
     "node_modules",
     "**/__tests__/*",
     "**/__test__/*",
+    "src/test-utils.tsx",
+    "src/setupTests.ts",
     "Dangerfile.ts"
   ]
 }

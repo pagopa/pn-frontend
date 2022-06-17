@@ -17,7 +17,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "tsc -w",
+    "start": "tsc -w --sourceMap=true",
     "build": "tsc",
     "test": "react-scripts test --watchAll=false",
     "test:coverage": "react-scripts test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
