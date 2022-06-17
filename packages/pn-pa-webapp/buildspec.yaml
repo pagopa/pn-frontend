@@ -27,7 +27,7 @@ phases:
   pre_build:
     commands:
       - echo launching yarn install
-      # - cd packages/pn-pa-webapp
+      - cd $SUB_PRJ_NAME
       - yarn install
       - echo Running tests..
       - yarn test
@@ -38,10 +38,10 @@ phases:
   post_build:
     commands:
       - echo saving commit id to file
-      # - cd ../..
-      - git rev-parse HEAD > build/commit_id.txt
+      - cd ../..
+      - git rev-parse HEAD > $SUB_PRJ_NAME/build/commit_id.txt
 artifacts:
-  base-directory: build
+  base-directory: $SUB_PRJ_NAME/build
   files:
     - '**/*'
 cache:
