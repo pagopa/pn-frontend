@@ -55,7 +55,9 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
     },
   });
 
-  const handleChangeTouched = async (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleChangeTouched = async (
+    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
     formik.handleChange(event);
     await formik.setFieldTouched(event.target.id, true, false);
   };
@@ -116,7 +118,7 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
   return (
     <form onSubmit={formik.handleSubmit} style={{ width: '100%', margin: '1rem 0' }}>
       <Grid container spacing={2} direction="row">
-        <Grid item lg={8} xs={12}>
+        <Grid item lg={8} sm={8} xs={12}>
           <TextField
             id={type}
             name={type}
@@ -124,7 +126,7 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
             onChange={handleChangeTouched}
             error={formik.touched[type] && Boolean(formik.errors[type])}
             helperText={formik.touched[type] && formik.errors[type]}
-            inputProps={{ sx: { height: '12px' } }}
+            inputProps={{ sx: { height: '14px' } }}
             placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
               ns: 'recapiti',
             })}
@@ -132,7 +134,7 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
             type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
           />
         </Grid>
-        <Grid item lg={4} xs={12} alignItems="right">
+        <Grid item lg={4} sm={4} xs={12} alignItems="right">
           <Button variant="outlined" disabled={!formik.isValid} fullWidth type="submit">
             {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
           </Button>
