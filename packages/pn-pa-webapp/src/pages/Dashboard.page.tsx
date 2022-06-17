@@ -108,7 +108,13 @@ const Dashboard = () => {
         </Button>
       </Box>
       {isMobile ? (
-        <MobileNotifications />
+        <MobileNotifications
+          notifications={notifications}
+          onChangeSorting={handleChangeSorting}
+          onCancelSearch={handleCancelSearch}
+          onManualSend={handleRouteManualSend}
+          onApiKeys={handleRouteApiKeys}
+        />
       ) : (
         <DesktopNotifications
           notifications={notifications}

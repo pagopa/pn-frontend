@@ -35,7 +35,7 @@ type Props = {
 
 const DesktopNotifications = ({ notifications, onCancelSearch, sort, onChangeSorting, onManualSend, onApiKeys }: Props) => {
   const navigate = useNavigate();
-  const filterNotificationsTableRef = useRef({ filtersApplied: false });
+  const filterNotificationsRef = useRef({ filtersApplied: false });
 
   const columns: Array<Column> = [
     {
@@ -130,7 +130,7 @@ const DesktopNotifications = ({ notifications, onCancelSearch, sort, onChangeSor
     trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
   };
 
-  const filtersApplied: boolean = filterNotificationsTableRef.current.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
   const emptyActionLabel: string = 'Chiavi API';
   const secondaryMessage: object = {
@@ -152,7 +152,7 @@ const DesktopNotifications = ({ notifications, onCancelSearch, sort, onChangeSor
     <Fragment>
       {notifications && (
         <Fragment>
-          <FilterNotificationsTable ref={filterNotificationsTableRef} />
+          <FilterNotificationsTable ref={filterNotificationsRef} />
           {notifications.length > 0 ? (
             <ItemsTable
               columns={columns}

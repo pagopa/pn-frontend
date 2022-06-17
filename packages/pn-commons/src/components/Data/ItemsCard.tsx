@@ -8,6 +8,7 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
+import { Fragment } from 'react';
 
 import { CardElement, CardAction } from '../../types/ItemsCard';
 import { Item } from '../../types/ItemsTable';
@@ -25,13 +26,7 @@ type Props = {
   sx?: SxProps;
 };
 
-const ItemsCard = ({
-  cardHeader,
-  cardBody,
-  cardData,
-  cardActions,
-  sx,
-}: Props) => {
+const ItemsCard = ({ cardHeader, cardBody, cardData, cardActions, sx }: Props) => {
   const cardHeaderTitle = (item: Item) => (
     <Grid container spacing={2} direction="row" alignItems="center">
       <Grid item xs={5} sx={{ fontSize: '14px', fontWeight: 400 }} data-testid="cardHeaderLeft">
@@ -64,13 +59,19 @@ const ItemsCard = ({
           <CardContent sx={{ padding: 0, marginTop: '16px', ':last-child': { padding: 0 } }}>
             {cardBody.map((body) => (
               <Box key={body.id} sx={{ marginBottom: '16px' }}>
-                <Typography variant="caption-semibold" data-testid="cardBodyLabel">
-                  {body.label}
-                </Typography>
-                {!body.notWrappedInTypography && <Typography variant="body2" data-testid="cardBodyValue">
-                  {body.getLabel(data[body.id])}
-                </Typography>}
-                {body.notWrappedInTypography && body.getLabel(data[body.id])}
+                {(!body.hideIfEmpty || (body.hideIfEmpty && body.getLabel(data[body.id]))) && (
+                  <Fragment>
+                    <Typography variant="caption-semibold" data-testid="cardBodyLabel">
+                      {body.label}
+                    </Typography>
+                    {!body.notWrappedInTypography && (
+                      <Typography variant="body2" data-testid="cardBodyValue">
+                        {body.getLabel(data[body.id])}
+                      </Typography>
+                    )}
+                    {body.notWrappedInTypography && body.getLabel(data[body.id])}
+                  </Fragment>
+                )}
               </Box>
             ))}
           </CardContent>
