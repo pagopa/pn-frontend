@@ -198,7 +198,7 @@ const NotificationDetailTimelineStep = ({
       </Fragment>,
       undefined,
       <Fragment>
-        <Typography color="" fontSize={14} data-testid="dateItem">
+        <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
           {getTime(s.timestamp)}
         </Typography>
         <Typography
