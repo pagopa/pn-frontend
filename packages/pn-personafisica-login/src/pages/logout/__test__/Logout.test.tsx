@@ -1,16 +1,16 @@
+import { BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
+
 import Logout from '../Logout';
 import { ROUTE_LOGIN } from '../../../utils/constants';
 import { storageOnSuccessOps, storageTokenOps, storageUserOps } from '../../../utils/storage';
 
-const oldWindowLocation = global.window.location;
+const mockNavigateFn = jest.fn();
 
-beforeAll(() => {
-  Object.defineProperty(window, 'location', { value: { assign: jest.fn() } });
-});
-afterAll(() => {
-  Object.defineProperty(window, 'location', { value: oldWindowLocation });
-});
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
+}));
 
 test('test logout', () => {
   storageOnSuccessOps.write('ON_SUCCESS');
@@ -23,11 +23,16 @@ test('test logout', () => {
     taxCode: 'TAXCODE',
   });
 
-  render(<Logout />);
+  render(
+    <BrowserRouter>
+      <Logout />
+    </BrowserRouter>
+  );
 
   expect(storageOnSuccessOps.read()).toBeUndefined();
   expect(storageTokenOps.read()).toBeUndefined();
   expect(storageUserOps.read()).toBeUndefined();
 
-  expect(global.window.location.assign).toBeCalledWith(ROUTE_LOGIN);
+  expect(mockNavigateFn).toBeCalledTimes(1);
+  expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
 });

@@ -79,10 +79,12 @@ const Recipient = ({ onConfirm }: Props) => {
           is: true,
           then: yup.string().required('Campo obbligatorio'),
         }),
+        /*
         addressDetails: yup.string().when('showPhysicalAddress', {
           is: true,
           then: yup.string().required('Campo obbligatorio'),
         }),
+        */
         zip: yup.string().when('showPhysicalAddress', {
           is: true,
           then: yup.string().required('Campo obbligatorio'),
