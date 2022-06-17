@@ -8,9 +8,9 @@
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
-    "start:pa": "lerna run start --parallel --scope @pagopa-pn/pn-pa-webapp --scope @pagopa-pn/pn-commons",
-    "start:pf": "lerna run start --parallel --scope @pagopa-pn/pn-personafisica-webapp --scope @pagopa-pn/pn-commons",
-    "start:login": "lerna run start --parallel --scope @pagopa-pn/pn-personafisica-login --scope @pagopa-pn/pn-commons",
+    "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn start",
+    "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn start",
+    "start:login": "lerna exec --scope @pagopa-pn/pn-personafisica-login -- yarn start",
     "build:pa": "lerna run build --include-dependencies --scope @pagopa-pn/pn-pa-webapp --scope @pagopa-pn/pn-commons",
     "build:pf": "lerna run build --include-dependencies --scope @pagopa-pn/pn-personafisica-webapp --scope @pagopa-pn/pn-commons",
     "build:login": "lerna run build --include-dependencies --scope @pagopa-pn/pn-personafisica-login --scope @pagopa-pn/pn-commons",

@@ -1,17 +1,13 @@
 version: 0.2
-env:
-  variables:
-    PACKAGE_DIR: packages/pn-personafisica-webapp
-    PACKAGE_PREFIX: pn_pf
 batch:
   build-list:
-    - identifier: $PACKAGE_PREFIX_dev_build
+    - identifier: pn_pf_dev_build
       env:
         variables:
           REACT_APP_URL_FE_LOGIN: https://portale-login-develop.fe.dev.pn.pagopa.it/
           REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
           REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
-    - identifier: $PACKAGE_PREFIX_uat_build
+    - identifier: pn_pf_uat_build
       env:
         variables:
           REACT_APP_URL_FE_LOGIN: https://portale-login-main.fe.dev.pn.pagopa.it/
@@ -31,22 +27,21 @@ phases:
       - apt install --no-install-recommends yarn
   pre_build:
     commands:
-      - echo launching yarn install
+      - echo launching yarn install in packages/pn-personafisica-webapp
+      - cd packages/pn-personafisica-webapp
       - yarn install
+      - echo Running tests..
+      - yarn test
   build:
     commands:
       - echo building the solution...
-      - yarn build:pf
-      - cd $PACKAGE_DIR
-      - echo Running tests..
-      - yarn test
-      - cd ../..
+      - yarn build
   post_build:
     commands:
-      - echo saving commit if to file
-      - git rev-parse HEAD > $PACKAGE_DIR/build/commit_id.txt
+      - echo saving commit_id to file
+      - git rev-parse HEAD > packages/pn-personafisica-webapp/build/commit_id.txt
 artifacts:
-  base-directory: $PACKAGE_DIR/build
+  base-directory: packages/pn-personafisica-webapp/build
   files:
     - '**/*'
 cache:
