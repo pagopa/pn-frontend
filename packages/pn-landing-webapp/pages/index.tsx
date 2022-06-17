@@ -2,12 +2,10 @@ import type { NextPage } from 'next';
 import Head from 'next/head';
 import { Hero } from "@pagopa/mui-italia/dist/components/Hero";
 import { Showcase } from "@pagopa/mui-italia/dist/components/Showcase";
-import {Box} from "@mui/material";
-import {CieIcon} from "@pagopa/mui-italia/dist/icons";
-import { Walkthrough } from '@pagopa/mui-italia';
-import { getHeroData } from '../api';
-
-
+import { Box } from "@mui/material";
+import { CieIcon } from "@pagopa/mui-italia/dist/icons";
+import { Walkthrough } from '@pagopa/mui-italia/dist/components/Walkthrough';
+import { getHeroData, getShowcaseData, getWalkthroughData } from '../api';
 
 const Home: NextPage = () => {
     const showcaseItems = [
@@ -31,9 +29,9 @@ const Home: NextPage = () => {
                 <Box>Infoblock 1</Box>
                 <Box>Infoblock 2</Box>
                 <Box>Infoblock 3</Box>
-                <Showcase title="Un solo modo per risparmiare in tanti modi" items={showcaseItems}/>
+                <Showcase {...getShowcaseData()}/>
                 <Box>Horizontal Nav</Box>
-                {/* <Walkthrough title="Come funziona" items={} /> */}
+                <Walkthrough {...getWalkthroughData()} />
             </main>
         </>
     );
