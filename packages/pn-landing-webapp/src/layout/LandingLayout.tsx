@@ -1,13 +1,13 @@
 import {Box, Stack} from "@mui/material";
-import { HeaderAccount } from "@pagopa/mui-italia";
-import {Footer} from "@pagopa-pn/pn-commons";
+import { HeaderAccount, Footer } from "@pagopa/mui-italia";
 import {ReactNode} from "react";
+import {LANGUAGES, pagoPALink, companyLegalInfo, postLoginLinks, preLoginLinks} from "@pagopa-pn/pn-commons/src/utils/costants";
 
 interface Props {
     children?: ReactNode;
 }
 
-// TODO: implement correct Header
+
 const LandingLayout = ({children}: Props) => {
     const homeLink = {
         label: 'PagoPA S.p.A.',
@@ -33,6 +33,20 @@ const LandingLayout = ({children}: Props) => {
                 >
                     {children}
                 </Box>
+                <Footer
+                    loggedUser={false}
+                    companyLink={{...pagoPALink, onClick: () => window.open(pagoPALink.href, '_blank')}}
+                    legalInfo={companyLegalInfo}
+                    postLoginLinks={postLoginLinks}
+                    preLoginLinks={preLoginLinks}
+                    currentLangCode={'it'}
+                    onLanguageChanged={
+                        (/* newLang */) => {
+                            console.log('Changed Language');
+                        }
+                    }
+                    languages={LANGUAGES}
+                />
             </Stack>
         </Box>);
 };
