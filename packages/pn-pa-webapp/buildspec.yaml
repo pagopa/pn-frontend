@@ -26,6 +26,7 @@ phases:
       - apt install --no-install-recommends yarn
   pre_build:
     commands:
+      - pwd
       - echo launching yarn install in packages/pn-pa-webapp...
       - cd packages/pn-pa-webapp
       - yarn install
@@ -44,6 +45,6 @@ artifacts:
   base-directory: packages/pn-pa-webapp/build
   files:
     - '**/*'
-cache:
-  paths:
-    - node_modules/**/*
+#cache:
+#  paths:
+#    - node_modules/**/*
