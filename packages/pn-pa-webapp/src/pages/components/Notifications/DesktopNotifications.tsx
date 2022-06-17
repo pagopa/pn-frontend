@@ -17,7 +17,7 @@ import {
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import * as routes from '../../../navigation/routes.const';
-import FilterNotificationsTable from './FilterNotificationsTable';
+import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
@@ -152,7 +152,7 @@ const DesktopNotifications = ({ notifications, onCancelSearch, sort, onChangeSor
     <Fragment>
       {notifications && (
         <Fragment>
-          <FilterNotificationsTable ref={filterNotificationsRef} />
+          <FilterNotifications ref={filterNotificationsRef} />
           {notifications.length > 0 ? (
             <ItemsTable
               columns={columns}

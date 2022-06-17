@@ -168,7 +168,7 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
-  it('test form reset', async () => {
+  it.skip('test form reset', async () => {
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
     await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'ABCD-EFGH-ILMN-123456-A-1');

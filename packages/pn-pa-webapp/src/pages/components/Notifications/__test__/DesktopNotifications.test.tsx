@@ -13,7 +13,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('../FilterNotificationsTable', () => {
+jest.mock('../FilterNotifications', () => {
   const { forwardRef } = jest.requireActual('react');
   return forwardRef(() => <div>Filters</div>);
 });

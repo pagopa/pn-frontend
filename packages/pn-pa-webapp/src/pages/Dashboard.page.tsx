@@ -103,6 +103,7 @@ const Dashboard = () => {
           variant="contained"
           onClick={() => navigate(routes.NUOVA_NOTIFICA)}
           data-testid="newNotificationBtn"
+          sx={{ marginBottom: isMobile ? 3 : undefined }}
         >
           Invia una nuova notifica
         </Button>

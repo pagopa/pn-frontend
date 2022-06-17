@@ -1,8 +1,8 @@
 import { fireEvent, waitFor } from '@testing-library/react';
 
-import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
-import { axe, render } from '../../../__test__/test-utils';
-import * as routes from '../../../navigation/routes.const';
+import { notificationsToFe } from '../../../../redux/dashboard/__test__/test-utils';
+import { axe, render } from '../../../../__test__/test-utils';
+import * as routes from '../../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
 const mockNavigateFn = jest.fn();
@@ -22,15 +22,6 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
-jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => (
-    {
-      t: (str: string) => str,
-    }
-  ),
-}));
-
 jest.mock('../FilterNotifications', () => {
   const { forwardRef } = jest.requireActual('react');
   return forwardRef(() => <div>Filters</div>);
@@ -46,12 +37,14 @@ describe('MobileNotifications Component', () => {
         sort={{ orderBy: 'mocked-field', order: 'asc' }}
         onChangeSorting={() => {}}
         onCancelSearch={() => {}}
+        onManualSend={() => {}}
+        onApiKeys={() => {}}
       />
     );
     expect(result.container).toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(
-      /Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull'app IO o inserisci un recapito di cortesia nella sezione Recapiti : così, se riceverai una notifica, te lo comunicheremo./i
+      /L'ente non ha ancora inviato nessuna notifica. Usa le Chiavi API o fai un invio manuale/i
     );
   });
 
@@ -62,6 +55,8 @@ describe('MobileNotifications Component', () => {
         notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
         onCancelSearch={() => {}}
+        onManualSend={() => {}}
+        onApiKeys={() => {}}
       />
     );
     const notificationsCardButton = result?.container.querySelector('button');
@@ -80,6 +75,8 @@ describe('MobileNotifications Component', () => {
         notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
         onCancelSearch={() => {}}
+        onManualSend={() => {}}
+        onApiKeys={() => {}}
       />
     );
 
@@ -98,6 +95,8 @@ describe('MobileNotifications Component', () => {
         sort={{ orderBy: 'mocked-field', order: 'asc' }}
         onChangeSorting={() => {}}
         onCancelSearch={() => {}}
+        onManualSend={() => {}}
+        onApiKeys={() => {}}
       />
     );
 

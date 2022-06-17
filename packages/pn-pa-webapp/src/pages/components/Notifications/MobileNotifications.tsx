@@ -13,12 +13,15 @@ import {
   ItemsCard,
   EmptyState,
   CardAction,
+  MobileNotificationsSort,
+  CardSort,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import * as routes from '../../../navigation/routes.const';
+import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
@@ -55,9 +58,6 @@ const MobileNotifications = ({
   const navigate = useNavigate();
   const filterNotificationsRef = useRef({ filtersApplied: false });
 
-  console.log(sort);
-  console.log(onChangeSorting);
-
   const cardHeader: [CardElement, CardElement] = [
     {
       id: 'sentAt',
@@ -89,6 +89,7 @@ const MobileNotifications = ({
           </Typography>
         ));
       },
+      notWrappedInTypography: true,
     },
     {
       id: 'subject',
@@ -110,7 +111,7 @@ const MobileNotifications = ({
       getLabel(value: string) {
         return value;
       },
-      hideIfEmpty: true
+      hideIfEmpty: true,
     },
   ];
 
@@ -124,7 +125,11 @@ const MobileNotifications = ({
   const cardActions: Array<CardAction> = [
     {
       id: 'go-to-detail',
-      component: <ButtonNaked endIcon={<ArrowForwardIcon />} color="primary">Vedi dettaglio</ButtonNaked>,
+      component: (
+        <ButtonNaked endIcon={<ArrowForwardIcon />} color="primary">
+          Vedi dettaglio
+        </ButtonNaked>
+      ),
       onClick: handleRowClick,
     },
   ];
@@ -133,6 +138,30 @@ const MobileNotifications = ({
     ...n,
     id: i.toString(),
   }));
+
+  const sortFields: Array<CardSort> = [
+    { id: 'sentAt', label: 'Data' },
+    { id: 'recipients', label: 'Destinatario' },
+    { id: 'notificationStatus', label: 'Stato' },
+  ].reduce((arr, item) => {
+    /* eslint-disable functional/immutable-data */
+    arr.push(
+      {
+        id: `${item.id}-asc`,
+        label: `${item.label} crescente`,
+        field: item.id,
+        value: 'asc',
+      },
+      {
+        id: `${item.id}-desc`,
+        label: `${item.label} decrescente`,
+        field: item.id,
+        value: 'desc',
+      }
+    );
+    /* eslint-enable functional/immutable-data */
+    return arr;
+  }, [] as Array<CardSort>);
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
@@ -155,11 +184,30 @@ const MobileNotifications = ({
   return (
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
-        <Grid item xs={6}></Grid>
-        <Grid item xs={6} textAlign="right"></Grid>
+        <Grid item xs={6}>
+          <FilterNotifications ref={filterNotificationsRef} />
+        </Grid>
+        <Grid item xs={6} textAlign="right">
+          {sort && onChangeSorting && (
+            <MobileNotificationsSort
+              title="Ordina"
+              optionsTitle="Opzioni sort"
+              cancelLabel="Annulla ordinamento"
+              sortFields={sortFields}
+              sort={sort}
+              onChangeSorting={onChangeSorting}
+            />
+          )}
+        </Grid>
       </Grid>
       {cardData.length ? (
-        <ItemsCard cardData={cardData} cardHeader={cardHeader} cardBody={cardBody} cardActions={cardActions} sx={cardStyle} />
+        <ItemsCard
+          cardData={cardData}
+          cardHeader={cardHeader}
+          cardBody={cardBody}
+          cardActions={cardActions}
+          sx={cardStyle}
+        />
       ) : (
         <EmptyState {...EmptyStateProps} />
       )}
