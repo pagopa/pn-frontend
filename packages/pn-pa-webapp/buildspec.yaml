@@ -18,11 +18,8 @@ batch:
 phases:
   install:
     commands:
-      #install Node 14
-      - echo installing node
-      - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-      - apt-get install -y nodejs
       #install yarn
+      - echo env variable REACT_APP_URL_SELFCARE_LOGIN $REACT_APP_URL_SELFCARE_LOGIN
       - echo installing yarn
       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
       - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
@@ -40,7 +37,7 @@ phases:
       - yarn build
   post_build:
     commands:
-      - echo saving commit if to file
+      - echo saving commit id to file
       # - cd ../..
       - git rev-parse HEAD > build/commit_id.txt
 artifacts:
