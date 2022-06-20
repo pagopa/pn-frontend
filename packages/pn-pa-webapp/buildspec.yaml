@@ -17,6 +17,8 @@ batch:
           REACT_APP_URL_API: https://webapi.uat.pn.pagopa.it/
 phases:
   install:
+    runtime-versions:
+      nodejs: 14
     commands:
       #install yarn
       - env
@@ -26,9 +28,8 @@ phases:
       - apt install --no-install-recommends yarn
   pre_build:
     commands:
-      - pwd
       - echo launching yarn install in packages/pn-pa-webapp...
-      - cd packages/pn-pa-webapp
+      - cd $SUB_PRJ_NAME
       - yarn install
       - echo Running tests..
       - yarn test
@@ -40,10 +41,14 @@ phases:
     commands:
       - echo saving commit id to file
       - cd ../..
-      - git rev-parse HEAD > packages/pn-pa-webapp/build/commit_id.txt
+      - git rev-parse HEAD > $SUB_PRJ_NAME/build/commit_id.txt
       - echo gzipping and pushing artifact to s3
-      - cd packages/pn-pa-webapp/build
-      - tar c * | gzip | aws s3 cp - "s3://${CiArtifactBucket}/${GitHubProjectName}/${!BRANCH_NAME}/${GitHubProjectName}.tar.gz"
+      - cd $SUB_PRJ_NAME/build
+      - tar c * | gzip | aws s3 cp - "s3://${CI_ARTIFACT_BUCKET}/${GITHUB_PRJ_NAME}/${SUB_PRJ_NAME}.tar.gz"
+artifacts:
+  base-directory: $SUB_PRJ_NAME/build
+  files:
+    - '**/*'
 #cache:
 #  paths:
 #    - node_modules/**/*
