@@ -29,7 +29,7 @@ const LandingLayout = ({children}: Props) => {
                 direction="column"
                 sx={{ minHeight: '100vh'}} // 100vh per sticky footer
             >
-                <HeaderAccount rootLink={homeLink} onAssistanceClick={handleAssistanceClick} />
+                <HeaderAccount enableLogin={false} rootLink={homeLink} onAssistanceClick={handleAssistanceClick} />
                 <Box
                   sx={{ flexGrow: 1 }}
                   component="main"

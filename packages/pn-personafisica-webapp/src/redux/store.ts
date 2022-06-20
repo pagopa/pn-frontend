@@ -13,18 +13,20 @@ import generalInfoSlice from './sidemenu/reducers';
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined, trackingMiddleware];
 
+export const appReducers = {
+  appState: appStateReducer,
+  userState: userSlice.reducer,
+  dashboardState: dashboardSlice.reducer,
+  notificationState: notificationSlice.reducer,
+  delegationsState: delegationsSlice.reducer,
+  newDelegationState: newDelegationSlice.reducer,
+  contactsState: contactsSlice.reducer,
+  generalInfoState: generalInfoSlice.reducer
+};
+
 export const createStore = () =>
   configureStore({
-    reducer: {
-      appState: appStateReducer,
-      userState: userSlice.reducer,
-      dashboardState: dashboardSlice.reducer,
-      notificationState: notificationSlice.reducer,
-      delegationsState: delegationsSlice.reducer,
-      newDelegationState: newDelegationSlice.reducer,
-      contactsState: contactsSlice.reducer,
-      generalInfoState: generalInfoSlice.reducer
-    },
+    reducer: appReducers,
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(
         (array, middleware) => (middleware ? array.concat(middleware) : array),

@@ -20,8 +20,8 @@ export const createAppError = (error: { response: { status: number } }): IAppMes
     e.title = 'Risorsa non trovata';
     e.message = 'Si è verificato un errore. Si prega di riprovare più tardi';
   } else if (error.response?.status === 403) {
-    e.title = 'Utente non autenticato';
-    e.message = "La sessione è scaduta. Riesegui il login.";
+    e.title = 'La sessione è scaduta';
+    e.message = "Entra e accedi con SPID o CIE.";
   } else if (error.response?.status === 401) {
     e.title = 'Utente non autorizzato';
     e.message = "L'utente corrente non ha le autorizzazioni";

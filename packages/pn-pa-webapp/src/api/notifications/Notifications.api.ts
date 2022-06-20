@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import {
   formatDate,
   GetNotificationsParams,
@@ -7,7 +8,7 @@ import {
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationBe, NewNotificationResponse } from '../../models/newNotification';
+import { NewNotificationBe, NewNotificationResponse } from '../../models/NewNotification';
 import { apiClient, externalClient } from '../axios';
 import {
   CREATE_NOTIFICATION,
@@ -17,6 +18,13 @@ import {
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from './notifications.routes';
+
+const getDownloadUrl = (response: AxiosResponse): { url: string } => {
+  if (response.data) {
+    return response.data as { url: string };
+  }
+  return {url: ''};
+};
 
 export const NotificationsApi = {
   /**
@@ -64,12 +72,7 @@ export const NotificationsApi = {
   getSentNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .then((response) => {
-        if (response.data) {
-          return response.data;
-        }
-        return { url: '' };
-      }),
+      .then((response) => getDownloadUrl(response)),
   /**
    * Gets current user notification legalfact
    * @param  {string} iun
@@ -78,20 +81,8 @@ export const NotificationsApi = {
    */
   getSentNotificationLegalfact: (iun: string, legalFact: LegalFactId): Promise<{ url: string }> =>
     apiClient
-      .get<Buffer>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact), {
-        responseType: 'arraybuffer',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/pdf',
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          const blob = new Blob([response.data], { type: 'application/pdf' });
-          return { url: window.URL.createObjectURL(blob) };
-        }
-        return { url: '' };
-      }),
+      .get<{ url: string }>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
+      .then((response) => getDownloadUrl(response)),
   /**
    * Preload notification document
    * @param  {string} key
@@ -100,9 +91,9 @@ export const NotificationsApi = {
    */
   preloadNotificationDocument: (
     items: Array<{ key: string; contentType: string; sha256: string }>
-  ): Promise<Array<{ url: string; secret: string; httpMethod: string }>> =>
+  ): Promise<Array<{ url: string; secret: string; httpMethod: string; key: string }>> =>
     apiClient
-      .post<Array<{ url: string; secret: string; httpMethod: string }>>(
+      .post<Array<{ url: string; secret: string; httpMethod: string; key: string }>>(
         NOTIFICATION_PRELOAD_DOCUMENT(),
         items
       )

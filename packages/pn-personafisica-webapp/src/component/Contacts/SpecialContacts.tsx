@@ -238,8 +238,8 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       <Typography sx={{ marginTop: '20px' }}>
         {t('special-contacts.required-fileds', { ns: 'recapiti' })}
       </Typography>
-      <form style={{ margin: '20px' }} onSubmit={formik.handleSubmit}>
-        <Grid container direction="row" spacing={2} alignItems="center">
+      <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
+        <Grid container direction="row" spacing={2} alignItems="flex">
           <Grid item lg xs={12}>
             <TextField
               id="sender"
@@ -325,7 +325,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
           </Grid>
           <Grid item lg="auto" xs={12} textAlign="right">
             <ButtonNaked
-              sx={{ marginLeft: 'auto' }}
+              sx={{ marginLeft: 'auto', height: '40px' }}
               type="submit"
               disabled={!formik.isValid}
               color="primary"

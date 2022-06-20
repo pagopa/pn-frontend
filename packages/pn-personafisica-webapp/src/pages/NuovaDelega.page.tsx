@@ -23,14 +23,26 @@ import {
   Paper,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { IllusCompleted } from '@pagopa/mui-italia';
 import { makeStyles } from '@mui/styles';
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { CourtesyPage, CustomDatePicker, DatePickerTypes, DATE_FORMAT, fiscalCodeRegex, TitleBox, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
-
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import {
+  CourtesyPage,
+  CustomDatePicker,
+  DatePickerTypes,
+  DATE_FORMAT,
+  fiscalCodeRegex,
+  TitleBox,
+  useIsMobile,
+  PnBreadcrumb,
+} from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { createDelegation, resetNewDelegation, getAllEntities } from '../redux/newDelegation/actions';
+import {
+  createDelegation,
+  resetNewDelegation,
+  getAllEntities,
+} from '../redux/newDelegation/actions';
 import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
@@ -81,12 +93,11 @@ const NuovaDelega = () => {
     navigate(routes.DELEGHE);
   };
 
-  const isToday = (date:Date | null):boolean => {
-    const today = new Date();
-    return date?.getDate() === today.getDate() &&
+  const isToday = (date: Date | null): boolean => (
+    date?.getDate() === today.getDate() &&
     date?.getMonth() === today.getMonth() &&
-    date?.getFullYear() === today.getFullYear();
-  };
+    date?.getFullYear() === today.getFullYear()
+  );
 
   // Get tomorrow date
   const today = new Date();
@@ -315,7 +326,10 @@ const NuovaDelega = () => {
                       <br />
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
                         <FormControl fullWidth>
-                          <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={currentLocale}>
+                          <LocalizationProvider
+                            dateAdapter={AdapterDateFns}
+                            adapterLocale={currentLocale}
+                          >
                             <CustomDatePicker
                               label={t('nuovaDelega.form.endDate')}
                               inputFormat={DATE_FORMAT}
@@ -359,11 +373,12 @@ const NuovaDelega = () => {
                       </Stack>
                       <Divider sx={{ marginTop: '1rem' }} />
                       <Grid container sx={{ marginTop: '1rem' }}>
-                        <Grid item xs={4} sx={{ margin: 'auto' }}>
+                        <Grid item xs={12} sx={{ margin: 'auto' }}>
                           <Button
                             sx={{ marginTop: '1rem', margin: 'auto' }}
                             type={'submit'}
                             variant={'contained'}
+                            data-testid="createButton"
                           >
                             {t('nuovaDelega.form.submit')}
                           </Button>
@@ -384,7 +399,7 @@ const NuovaDelega = () => {
       )}
       {created && (
         <CourtesyPage
-          icon={<CheckCircleOutlineIcon />}
+          icon={<IllusCompleted />}
           title={t('nuovaDelega.createdTitle')}
           subtitle={t('nuovaDelega.createdDescription')}
           onClick={handleDelegationsClick}

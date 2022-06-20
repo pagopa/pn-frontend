@@ -1,71 +1,31 @@
-import { render, screen } from '@testing-library/react';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { render } from '@testing-library/react';
+
 import App from '../App';
-import { ROUTE_LOGIN } from '../utils/constants';
-import { storageOnSuccessOps, storageTokenOps } from '../utils/storage';
 
-const oldWindowLocation = global.window.location;
-const mockedLocation = {
-  assign: jest.fn(),
-  pathname: '',
-  origin: 'MOCKED_ORIGIN',
-  search: '',
-  hash: '',
-};
+const mockNavigateFn = jest.fn();
 
-beforeAll(() => {
-  Object.defineProperty(window, 'location', { value: mockedLocation });
-});
-afterAll(() => {
-  Object.defineProperty(window, 'location', { value: oldWindowLocation });
-});
-
-// clean storage after each test
-afterEach(() => {
-  jest.requireActual('../pages/logout/Logout').default();
-  mockedLocation.assign.mockReset();
-});
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigateFn,
+}));
 
 jest.mock('../pages/logout/Logout', () => () => 'LOGOUT');
 jest.mock('../pages/login/Login', () => () => 'LOGIN');
+jest.mock('../pages/loginError/LoginError', () => () => 'LOGIN_ERROR');
+
 
 test('test not served path', () => {
-  render(<App />);
-  expect(global.window.location.assign).toBeCalledWith(ROUTE_LOGIN);
-  checkRedirect(true);
+  const result = render(<BrowserRouter><App /></BrowserRouter>);
+  expect(result.container).toHaveTextContent('LOGIN');
 });
 
-test('test Logout', () => {
-  mockedLocation.pathname = '/logout';
-  render(<App />);
-  screen.getByText('LOGOUT');
-  checkRedirect(false);
+test('test logout', () => {
+  const result = render(<MemoryRouter initialEntries={['/logout']}><App /></MemoryRouter>);
+  expect(result.container).toHaveTextContent('LOGOUT');
 });
 
-test('test Logout even if in session', () => {
-  mockedLocation.pathname = '/logout';
-  storageTokenOps.write('token');
-  render(<App />);
-  screen.getByText('LOGOUT');
-  checkRedirect(false);
+test('test login error', () => {
+  const result = render(<MemoryRouter initialEntries={['/login/error']}><App /></MemoryRouter>);
+  expect(result.container).toHaveTextContent('LOGIN_ERROR');
 });
-
-test('test Login', () => {
-  mockedLocation.pathname = '/login';
-  render(<App />);
-  screen.getByText('LOGIN');
-  expect(storageOnSuccessOps.read()).toBeUndefined();
-  checkRedirect(false);
-});
-
-test('test Login with onSuccess', () => {
-  mockedLocation.pathname = '/login';
-  mockedLocation.search = 'onSuccess=prova';
-  render(<App />);
-  screen.getByText('LOGIN');
-  expect(storageOnSuccessOps.read()).toBe('prova');
-  checkRedirect(false);
-});
-
-function checkRedirect(expected: boolean) {
-  expect(mockedLocation.assign.mock.calls.length).toBe(expected ? 1 : 0);
-}
