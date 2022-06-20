@@ -259,7 +259,7 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
-  it.skip('test form reset', async () => {
+  it('test form reset', async () => {
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
     await setFormValues(
@@ -270,7 +270,8 @@ describe('Filter Notifications Table Component', () => {
       NotificationAllowedStatus[2].value,
       'RSSMRA80A01H501U'
     );
-    
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    fireEvent.click(submitButton!);
     const cancelButton = await waitFor(() => within(form!).getByTestId('cancelButton'));
     expect(cancelButton).toBeEnabled();
     fireEvent.click(cancelButton);

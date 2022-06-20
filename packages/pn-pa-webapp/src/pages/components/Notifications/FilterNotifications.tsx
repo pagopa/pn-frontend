@@ -13,6 +13,7 @@ import {
   CustomMobileDialog,
   CustomMobileDialogToggle,
   CustomMobileDialogContent,
+  filtersApplied
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
@@ -20,6 +21,23 @@ import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
+
+const emptyValues = {
+  startDate: tenYearsAgo.toISOString(),
+  endDate: today.toISOString(),
+  status: undefined,
+  recipientId: undefined,
+  iunMatch: undefined,
+};
+
+const initialEmptyValues = {
+  searchFor: '0',
+  startDate: tenYearsAgo,
+  endDate: today,
+  status: NotificationAllowedStatus[0].value,
+  recipientId: '',
+  iunMatch: '',
+};
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const FilterNotifications = forwardRef((_props, ref) => {
@@ -29,22 +47,12 @@ const FilterNotifications = forwardRef((_props, ref) => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
 
-  const emptyValues = {
-    startDate: tenYearsAgo.toISOString(),
-    endDate: today.toISOString(),
-    status: undefined,
-    recipientId: undefined,
-    iunMatch: undefined,
-  };
-
-  const initialEmptyValues = {
-    searchFor: '0',
-    startDate: tenYearsAgo,
-    endDate: today,
-    status: NotificationAllowedStatus[0].value,
-    recipientId: '',
-    iunMatch: '',
-  };
+  const validationSchema = yup.object({
+    recipientId: yup.string().matches(fiscalCodeRegex, 'Inserisci il codice per intero'),
+    iunMatch: yup.string().matches(IUN_regex, 'Inserisci un codice IUN valido'),
+    startDate: yup.date().min(tenYearsAgo),
+    endDate: yup.date().min(tenYearsAgo),
+  });
 
   const initialValues = (): FormikValues => {
     if (!filters || (filters && _.isEqual(filters, emptyValues))) {
@@ -62,13 +70,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
   };
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
-
-  const validationSchema = yup.object({
-    recipientId: yup.string().matches(fiscalCodeRegex, 'Inserisci il codice per intero'),
-    iunMatch: yup.string().matches(IUN_regex, 'Inserisci un codice IUN valido'),
-    startDate: yup.date().min(tenYearsAgo),
-    endDate: yup.date().min(tenYearsAgo),
-  });
+  const filtersCount = filtersApplied(prevFilters, emptyValues);
 
   const formik = useFormik({
     initialValues: initialValues(),
@@ -78,28 +80,21 @@ const FilterNotifications = forwardRef((_props, ref) => {
       const currentFilters = {
         startDate: values.startDate.toISOString(),
         endDate: values.endDate.toISOString(),
-        recipientId: values.recipientId ? values.recipientId : undefined,
-        iunMatch: values.iunMatch ? values.iunMatch : undefined,
+        recipientId: values.recipientId || undefined,
+        iunMatch: values.iunMatch || undefined,
         status: values.status === 'All' ? undefined : values.status,
       };
       if (_.isEqual(prevFilters, currentFilters)) {
         return;
       }
       dispatch(setNotificationFilters(currentFilters));
+      setPrevFilters(currentFilters);
     },
   });
 
   const cancelSearch = () => {
     dispatch(setNotificationFilters(emptyValues));
   };
-
-  const filtersApplied = (): number =>
-    Object.entries(prevFilters).reduce((c: number, element: [string, any]) => {
-      if (element[0] in emptyValues && element[1] !== (emptyValues as any)[element[0]]) {
-        return c + 1;
-      }
-      return c;
-    }, 0);
 
   useEffect(() => {
     void formik.validateForm();
@@ -113,13 +108,11 @@ const FilterNotifications = forwardRef((_props, ref) => {
       setStartDate(null);
       setEndDate(null);
       setPrevFilters(emptyValues);
-    } else {
-      setPrevFilters(filters);
     }
   }, [filters]);
 
   useImperativeHandle(ref, () => ({
-    filtersApplied: filtersApplied() > 0,
+    filtersApplied: filtersCount > 0,
   }));
 
   return isMobile ? (
@@ -127,13 +120,13 @@ const FilterNotifications = forwardRef((_props, ref) => {
       <CustomMobileDialogToggle
         sx={{
           pl: 0,
-          pr: filtersApplied() ? '10px' : 0,
+          pr: filtersCount ? '10px' : 0,
           justifyContent: 'left',
           minWidth: 'unset',
           height: '24px',
         }}
         hasCounterBadge
-        bagdeCount={filtersApplied()}
+        bagdeCount={filtersCount}
       >
         Filtra
       </CustomMobileDialogToggle>
@@ -152,7 +145,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
             <FilterNotificationsFormActions
               formikInstance={formik}
               cleanFilters={cancelSearch}
-              filtersApplied={filtersApplied() > 0}
+              filtersApplied={filtersCount > 0}
               isInitialSearch={_.isEqual(formik.values, initialEmptyValues)}
               isInDialog
             />
@@ -182,7 +175,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
           <FilterNotificationsFormActions
             formikInstance={formik}
             cleanFilters={cancelSearch}
-            filtersApplied={filtersApplied() > 0}
+            filtersApplied={filtersCount > 0}
             isInitialSearch={_.isEqual(formik.values, initialEmptyValues)}
           />
         </Box>

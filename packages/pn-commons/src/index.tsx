@@ -154,6 +154,7 @@ import {
   getNotificationStatusInfos,
   NotificationAllowedStatus,
   parseNotificationDetail,
+  filtersApplied
 } from './utils/notification.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo, DATE_FORMAT } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
@@ -165,6 +166,7 @@ import { compileRoute } from './utils/routes.utility';
 export { NotificationAllowedStatus };
 export { getNotificationStatusInfos };
 export { parseNotificationDetail };
+export { filtersApplied };
 export { createAppError };
 export { formatDate };
 export { calculatePages };

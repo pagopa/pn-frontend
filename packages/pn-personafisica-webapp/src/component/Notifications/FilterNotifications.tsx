@@ -1,7 +1,7 @@
 import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { FormikValues, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import * as yup from 'yup';
 import _ from 'lodash';
 import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
@@ -14,6 +14,7 @@ import {
   today,
   useIsMobile,
   IUN_regex,
+  filtersApplied,
 } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
@@ -28,6 +29,18 @@ const useStyles = makeStyles({
     alignItems: 'flex',
   },
 });
+
+const emptyValues = {
+  startDate: tenYearsAgo.toISOString(),
+  endDate: today.toISOString(),
+  iunMatch: undefined,
+};
+
+const initialEmptyValues = {
+  startDate: tenYearsAgo,
+  endDate: today,
+  iunMatch: '',
+};
 
 const FilterNotifications = forwardRef((_props, ref) => {
   const dispatch = useDispatch();
@@ -44,18 +57,6 @@ const FilterNotifications = forwardRef((_props, ref) => {
     endDate: yup.date().min(tenYearsAgo),
   });
 
-  const emptyValues = {
-    startDate: tenYearsAgo.toISOString(),
-    endDate: today.toISOString(),
-    iunMatch: undefined,
-  };
-
-  const initialEmptyValues = {
-    startDate: tenYearsAgo,
-    endDate: today,
-    iunMatch: '',
-  };
-
   const initialValues = () => {
     if (!filters || (filters && _.isEqual(filters, emptyValues))) {
       return initialEmptyValues;
@@ -69,6 +70,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
   };
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
+  const filtersCount = filtersApplied(prevFilters, emptyValues);
 
   const formik = useFormik({
     initialValues: initialValues(),
@@ -84,6 +86,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
         return;
       }
       dispatch(setNotificationFilters(currentFilters));
+      setPrevFilters(currentFilters);
     },
   });
 
@@ -91,13 +94,9 @@ const FilterNotifications = forwardRef((_props, ref) => {
     dispatch(setNotificationFilters(emptyValues));
   };
 
-  const filtersApplied = (): number =>
-    Object.entries(prevFilters).reduce((c: number, element: [string, any]) => {
-      if (element[0] in emptyValues && element[1] !== (emptyValues as any)[element[0]]) {
-        return c + 1;
-      }
-      return c;
-    }, 0);
+  useEffect(() => {
+    void formik.validateForm();
+  }, []);
 
   useEffect(() => {
     if (filters && _.isEqual(filters, emptyValues)) {
@@ -107,17 +106,11 @@ const FilterNotifications = forwardRef((_props, ref) => {
       setStartDate(null);
       setEndDate(null);
       setPrevFilters(emptyValues);
-    } else {
-      setPrevFilters(filters);
     }
   }, [filters]);
 
-  useEffect(() => {
-    void formik.validateForm();
-  }, []);
-
   useImperativeHandle(ref, () => ({
-    filtersApplied: filtersApplied() > 0,
+    filtersApplied: filtersCount > 0,
   }));
 
   return isMobile ? (
@@ -125,13 +118,13 @@ const FilterNotifications = forwardRef((_props, ref) => {
       <CustomMobileDialogToggle
         sx={{
           pl: 0,
-          pr: filtersApplied() ? '10px' : 0,
+          pr: filtersCount ? '10px' : 0,
           justifyContent: 'left',
           minWidth: 'unset',
           height: '24px',
         }}
         hasCounterBadge
-        bagdeCount={filtersApplied()}
+        bagdeCount={filtersCount}
       >
         {t('button.filtra')}
       </CustomMobileDialogToggle>
@@ -150,7 +143,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
             <FilterNotificationsFormActions
               formikInstance={formik}
               cleanFilters={cleanFilters}
-              filtersApplied={filtersApplied() > 0}
+              filtersApplied={filtersCount > 0}
               isInitialSearch={_.isEqual(formik.values, initialValues)}
               isInDialog
             />
@@ -172,8 +165,8 @@ const FilterNotifications = forwardRef((_props, ref) => {
           <FilterNotificationsFormActions
             formikInstance={formik}
             cleanFilters={cleanFilters}
-            filtersApplied={filtersApplied() > 0}
-            isInitialSearch={_.isEqual(formik.values, initialValues)}
+            filtersApplied={filtersCount > 0}
+            isInitialSearch={_.isEqual(formik.values, initialEmptyValues)}
           />
         </Grid>
       </Box>

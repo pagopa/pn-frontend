@@ -24,7 +24,7 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
-describe.skip('Dashboard Page', () => {
+describe('Dashboard Page', () => {
   let result: RenderResult | undefined;
 
   const mockDispatchFn = jest.fn();
