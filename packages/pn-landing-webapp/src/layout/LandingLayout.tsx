@@ -1,14 +1,17 @@
-import {Box, Stack} from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { HeaderAccount, Footer } from "@pagopa/mui-italia";
-import {ReactNode} from "react";
-import {LANGUAGES, pagoPALink, companyLegalInfo, postLoginLinks, preLoginLinks} from "@pagopa-pn/pn-commons/src/utils/costants";
+import { ReactNode } from "react";
+import { LANGUAGES, pagoPALink, companyLegalInfo, postLoginLinks, preLoginLinks } from "@pagopa-pn/pn-commons/src/utils/costants";
+import { useContext } from "react";
+import LangContext from "../../provider/lang-context";
 
 interface Props {
     children?: ReactNode;
 }
 
-
 const LandingLayout = ({children}: Props) => {
+    const lang = useContext(LangContext);
+
     const homeLink = {
         label: 'PagoPA S.p.A.',
         href: '#',
@@ -39,12 +42,8 @@ const LandingLayout = ({children}: Props) => {
                     legalInfo={companyLegalInfo}
                     postLoginLinks={postLoginLinks}
                     preLoginLinks={preLoginLinks}
-                    currentLangCode={'it'}
-                    onLanguageChanged={
-                        (/* newLang */) => {
-                            console.log('Changed Language');
-                        }
-                    }
+                    currentLangCode={lang.selectedLanguage}
+                    onLanguageChanged={lang.changeLanguage}
                     languages={LANGUAGES}
                 />
             </Stack>

@@ -290,7 +290,7 @@ const coHoriziontalNav = {
 /* ************************************** */
 
 /** Application Data Mock */
-export const appData = {
+export const itAppData = {
   pa: {
     hero: paHero,
     infoblocks: paInfoBlocks,
