@@ -113,6 +113,7 @@ const CodeInput = memo(
       <Fragment>
         {initialValues.map((_value, index) => (
           <TextField
+            autoComplete='off'
             key={index}
             id="outlined-basic"
             variant="outlined"
