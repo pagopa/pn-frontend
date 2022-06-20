@@ -68,6 +68,12 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
     }
   };
 
+  const addPhoneNumberPrefix = async()=>{
+    if(!formik.values[type]){
+      await formik.setFieldValue(type, '+39');
+    }
+  };
+
   useEffect(() => {
     void formik.setFieldValue(type, value, true);
   }, [value]);
@@ -131,7 +137,9 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
               ns: 'recapiti',
             })}
             fullWidth
+            onClick={addPhoneNumberPrefix}
             type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
+            
           />
         </Grid>
         <Grid item lg={4} sm={4} xs={12} alignItems="right">
