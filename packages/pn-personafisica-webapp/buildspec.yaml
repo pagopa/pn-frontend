@@ -1,0 +1,19 @@
+version: 0.2
+batch:
+  build-list:
+    - identifier: pn_pf_dev_build
+      buildspec: cra_buildspec.yaml
+      env:
+        variables:
+          BUILD_ID: dev
+          REACT_APP_URL_FE_LOGIN: https://portale-login-develop.fe.dev.pn.pagopa.it/
+          REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
+          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
+    - identifier: pn_pf_uat_build
+      buildspec: cra_buildspec.yaml
+      env:
+        variables:
+          BUILD_ID: dev
+          REACT_APP_URL_FE_LOGIN: https://portale-login-main.fe.dev.pn.pagopa.it/
+          REACT_APP_URL_API: https://webapi.uat.pn.pagopa.it/
+          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it

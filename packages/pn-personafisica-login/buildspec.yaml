@@ -2,8 +2,10 @@ version: 0.2
 batch:
   build-list:
     - identifier: pn_login_dev_build
+      buildspec: cra_buildspec.yaml
       env:
         variables:
+          BUILD_ID: dev
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
@@ -12,8 +14,10 @@ batch:
           REACT_APP_URL_FILE_PRIVACY_DISCLAIMER: #privacy-disclaimer
           REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: #terms-and-conditions
     - identifier: pn_login_uat_build
+      buildspec: cra_buildspec.yaml
       env:
         variables:
+          BUILD_ID: dev
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
@@ -21,38 +25,3 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: assistenza@pn.it
           REACT_APP_URL_FILE_PRIVACY_DISCLAIMER: #privacy-disclaimer
           REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: #terms-and-conditions
-phases:
-  install:
-    commands:
-      #install Node 14
-      - echo installing node
-      - curl -sL https://deb.nodesource.com/setup_14.x | bash -
-      - apt-get install -y nodejs
-      #install yarn
-      - echo installing yarn
-      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-      - apt install --no-install-recommends yarn
-  pre_build:
-    commands:
-      - echo launching yarn install
-      - cd packages/pn-personafisica-login
-      - yarn install
-      - echo Running tests..
-      - yarn test
-  build:
-    commands:
-      - echo building the solution...
-      - yarn build
-  post_build:
-    commands:
-      - echo saving commit if to file
-      - cd ../..
-      - git rev-parse HEAD > packages/pn-personafisica-login/build/commit_id.txt
-artifacts:
-  base-directory: packages/pn-personafisica-login/build
-  files:
-    - '**/*'
-cache:
-  paths:
-    - node_modules/**/*
