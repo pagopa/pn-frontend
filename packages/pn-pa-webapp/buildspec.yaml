@@ -41,12 +41,9 @@ phases:
       - echo saving commit id to file
       - cd ../..
       - git rev-parse HEAD > packages/pn-pa-webapp/build/commit_id.txt
-      - cd packages/pn-pa-webapp/
-      - tar c /build | gzip | aws s3 cp - "s3://${CiArtifactBucket}/${GitHubProjectName}/${!BRANCH_NAME}/${GitHubProjectName}.tar.gz"
-artifacts:
-  base-directory: packages/pn-pa-webapp/build
-  files:
-    - '**/*'
+      - eco gzipping and pushing artifact to s3
+      - cd packages/pn-pa-webapp/build
+      - tar c * | gzip | aws s3 cp - "s3://${CiArtifactBucket}/${GitHubProjectName}/${!BRANCH_NAME}/${GitHubProjectName}.tar.gz"
 #cache:
 #  paths:
 #    - node_modules/**/*
