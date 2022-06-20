@@ -95,11 +95,11 @@ function ItemsTable({
           </TableHead>
           <TableBody sx={{ backgroundColor: 'background.paper' }}>
               {rows.map((row) => (
-                <TableRow key={row.id} sx={{ cursor: 'pointer' }}>
+                <TableRow key={row.id}>
                   {columns.map((column) => (
                     <TableCell
                       key={column.id}
-                      sx={{ width: column.width, borderBottom: 'none' }}
+                      sx={{ width: column.width, borderBottom: 'none', cursor: column.onClick ? 'pointer': 'auto' }}
                       align={column.align}
                       onClick={() => column.onClick && column.onClick(row, column)}
                     >
