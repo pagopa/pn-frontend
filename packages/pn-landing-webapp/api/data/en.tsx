@@ -224,8 +224,8 @@ const coWalkthrough: WalkthroughProps = {
 /* ************************************** */
 
 /** HorizontalNav mocked data */
-// const paHoriziontalNav: HorizontalNavProps = {
-const paHoriziontalNav = {
+// const paHorizontalNav: HorizontalNavProps = {
+const paHorizontalNav = {
   sections: [{
     icon: <CieIcon />,
     title: 'Rappresenti un’impresa?',
@@ -247,8 +247,8 @@ const paHoriziontalNav = {
   }
 ]};
 
-// const pfHoriziontalNav: HorizontalNavProps = {
-const pfHoriziontalNav = {
+// const pfHorizontalNav: HorizontalNavProps = {
+const pfHorizontalNav = {
   sections: [{
     title: '',
     subtitle: '',
@@ -268,8 +268,8 @@ const pfHoriziontalNav = {
   }
 ]};
 
-// const pfHoriziontalNav: HorizontalNavProps = {
-const coHoriziontalNav = {
+// const pfHorizontalNav: HorizontalNavProps = {
+const coHorizontalNav = {
   sections: [{
     title: '',
     subtitle: '',
@@ -297,20 +297,20 @@ export const enAppData = {
     infoblocks: paInfoBlocks,
     showcase: paShowcase,
     walkthrough: paWalkthrough,
-    horizontalNav: paHoriziontalNav,
+    horizontalNav: paHorizontalNav,
   },
   pf: {
     hero: pfHero,
     infoblocks: pfInfoBlocks,
     showcase: pfShowcase,
     walkthrough: pfWalkthrough,
-    horizontalNav: pfHoriziontalNav,
+    horizontalNav: pfHorizontalNav,
   },
   co: {
     hero: coHero,
     infoblocks: coInfoBlocks,
     showcase: coShowcase,
     walkthrough: coWalkthrough,
-    horizontalNav: coHoriziontalNav,
+    horizontalNav: coHorizontalNav,
   }
 };
