@@ -65,7 +65,7 @@ const NotificationDetail = () => {
       value: t('detail.payment-terms-expiration', { ns: 'notifiche' }),
     },
     {
-      label: t('detail.surname-name', { ns: 'notifiche' }),
+      label: t('detail.fullname', { ns: 'notifiche' }),
       rawValue: currentRecipient?.denomination,
       value: <Box fontWeight={600}>{currentRecipient?.denomination}</Box>,
     },

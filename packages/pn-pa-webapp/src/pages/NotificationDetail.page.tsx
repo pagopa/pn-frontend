@@ -83,7 +83,7 @@ const NotificationDetail = () => {
     //         value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
     //       },
     //     ]),
-      label: 'Nome Cognome',
+      label: 'Nome e Cognome',
       rawValue: notification.recipients.map(recipient => recipient.denomination).join(", "),
       value: notification.recipients.map((recipient, index) => <Box key={index}>{recipient.denomination}</Box>)
     }, {
