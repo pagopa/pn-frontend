@@ -1,4 +1,5 @@
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, InputAdornment } from '@mui/material';
+
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -68,12 +69,6 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
     }
   };
 
-  const addPhoneNumberPrefix = async()=>{
-    if(!formik.values[type]){
-      await formik.setFieldValue(type, '+39');
-    }
-  };
-
   useEffect(() => {
     void formik.setFieldValue(type, value, true);
   }, [value]);
@@ -132,14 +127,15 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
             onChange={handleChangeTouched}
             error={formik.touched[type] && Boolean(formik.errors[type])}
             helperText={formik.touched[type] && formik.errors[type]}
-            inputProps={{ sx: { height: '14px' } }}
+            inputProps={{ sx: { height: '14px' }}}
             placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
               ns: 'recapiti',
             })}
             fullWidth
-            onClick={addPhoneNumberPrefix}
             type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
-            
+            InputProps={{
+              startAdornment: <InputAdornment position="start">+39</InputAdornment>,
+            }}
           />
         </Grid>
         <Grid item lg={4} sm={4} xs={12} alignItems="right">
