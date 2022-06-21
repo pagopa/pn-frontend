@@ -62,7 +62,7 @@ const NotificationDetail = () => {
     {
       id: 2,
       label: t('detail.payment-terms', { ns: 'notifiche' }),
-      value: t('detail.payment-terms-expiration', { ns: 'notifiche' }),
+      value: <Box fontWeight={600}>{notification.sentAt}</Box>,
     },
     {
       id: 3,

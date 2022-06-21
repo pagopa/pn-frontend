@@ -51,10 +51,10 @@ const NotificationDetail = () => {
   );
   const detailTableRows: Array<NotificationDetailTableRow> = [
     { id: 1, label: 'Data', value: <Box fontWeight={600}>{notification.sentAt}</Box> },
-    { id: 2, label: 'Termini di pagamento', value: `Entro il ` },
+    { id: 2, label: 'Da pagare entro il', value: <Box fontWeight={600}>{notification.sentAt}</Box> },
     {
       id: 3,
-      label: 'Destinatario',
+      label: 'Codice Fiscale destinatario',
       value:
         notification.recipients.length > 1 ? (
           <Box fontWeight={600}>
@@ -73,7 +73,7 @@ const NotificationDetail = () => {
       : [
           {
             id: 4,
-            label: 'Cognome Nome',
+            label: 'Nome e cognome',
             value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
           },
         ]),
@@ -185,7 +185,7 @@ const NotificationDetail = () => {
             <NotificationDetailTable rows={detailTableRows} />
             <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
               <NotificationDetailDocuments
-                title="Atti Allegati"
+                title="Documenti allegati"
                 documents={notification.documents}
                 clickHandler={documentDowloadHandler}
                 documentsAvailable={notification.documentsAvailable as boolean}
