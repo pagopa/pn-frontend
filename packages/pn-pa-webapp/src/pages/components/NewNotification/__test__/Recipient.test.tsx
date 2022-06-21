@@ -62,6 +62,9 @@ describe('Recipient Component', () => {
     await testInput(form, `recipients[0].taxId`, formRecipients[0].taxId);
     await testInput(form, `recipients[0].creditorTaxId`, formRecipients[0].creditorTaxId);
     await testInput(form, `recipients[0].noticeCode`, formRecipients[0].noticeCode);
+    const checkbox = form.querySelector(`input[name="recipients[0].showDigitalDomicile"]`);
+    fireEvent.click(checkbox!);
+    await testInput(form, `recipients[0].digitalDomicile`, formRecipients[0].digitalDomicile);
     const errors = result.queryAllByText(/Campo Obbligatorio/i);
     expect(errors).toHaveLength(0);
     const submitButton = form.querySelector('button[type="submit"]');
