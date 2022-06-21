@@ -11,7 +11,7 @@ phases:
       - apt install --no-install-recommends yarn
   pre_build:
     commands:
-      - echo launching yarn install in packages/pn-pa-webapp...
+      - echo launching yarn install in $SUB_PRJ_NAME...
       - cd $SUB_PRJ_NAME
       - yarn install
       - echo Running tests..
