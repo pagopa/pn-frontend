@@ -63,7 +63,7 @@ describe('Attachments Component', () => {
     expect(form).toHaveTextContent(/Allegati per tutti i destinatari/i);
     const attachmentBoxes = result.queryAllByTestId('attachmentBox');
     expect(attachmentBoxes).toHaveLength(1);
-    expect(attachmentBoxes[0]).toHaveTextContent(/Allega l'Atto */i);
+    expect(attachmentBoxes[0]).toHaveTextContent(/Allega l'atto */i);
     const deleteIcon = attachmentBoxes[0].querySelector('[data-testid="DeleteIcon"]');
     expect(deleteIcon).not.toBeInTheDocument();
     const fileInput = attachmentBoxes[0].parentNode?.querySelector('[data-testid="fileInput"]');

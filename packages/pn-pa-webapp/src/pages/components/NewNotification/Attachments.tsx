@@ -192,10 +192,10 @@ const Attachments = ({ onConfirm }: Props) => {
           <AttachmentBox
             key={d.id}
             id={d.id}
-            title={i === 0 ? "Allega l'Atto *" : 'Allega un altro documento *'}
+            title={i === 0 ? "Allega l'atto *" : 'Allega un altro documento *'}
             canBeDeleted={i > 0}
             onDelete={() => deleteDocumentHandler(i)}
-            fieldLabel={i === 0 ? "Nome dell'Atto *" : 'Nome del documento *'}
+            fieldLabel={i === 0 ? "Nome dell'atto *" : 'Nome del documento *'}
             fieldValue={d.name}
             fieldTouched={
               formik.touched.documents && formik.touched.documents[i]
