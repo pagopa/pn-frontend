@@ -21,6 +21,7 @@ describe('Notification detail redux state tests', () => {
         subject: '',
         recipients: [],
         senderDenomination: '',
+        paymentExpirationDate: '',
         documents: [],
         notificationFeePolicy: '',
         physicalCommunicationType: '',

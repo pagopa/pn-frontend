@@ -56,8 +56,8 @@ const NotificationDetail = () => {
       value: <Box fontWeight={600}>{notification.sentAt}</Box>
     }, {
       label: 'Termini di pagamento',
-      rawValue: `Entro il `,
-      value: `Entro il `
+      rawValue: notification.paymentExpirationDate,
+      value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>
     }, {
       label: 'Destinatario',
       rawValue: notification.recipients.map(recipient => recipient.denomination).join(", "),
@@ -83,7 +83,7 @@ const NotificationDetail = () => {
     //         value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
     //       },
     //     ]),
-      label: 'Nome e Cognome',
+      label: 'Nome e cognome',
       rawValue: notification.recipients.map(recipient => recipient.denomination).join(", "),
       value: notification.recipients.map((recipient, index) => <Box key={index}>{recipient.denomination}</Box>)
     }, {
