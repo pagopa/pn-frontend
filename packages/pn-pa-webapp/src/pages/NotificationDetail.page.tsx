@@ -185,7 +185,7 @@ const NotificationDetail = () => {
             <NotificationDetailTable rows={detailTableRows} />
             <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
               <NotificationDetailDocuments
-                title="Atti Allegati"
+                title="Documenti allegati"
                 documents={notification.documents}
                 clickHandler={documentDowloadHandler}
                 documentsAvailable={notification.documentsAvailable as boolean}
