@@ -23,6 +23,8 @@ batch:
           REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: #terms-and-conditions
 phases:
   install:
+    runtime-versions:
+      nodejs: 14
     commands:
       #install yarn
       - echo installing yarn
@@ -34,8 +36,8 @@ phases:
       - echo launching yarn install
       - cd packages/pn-personafisica-login
       - yarn install
-      - echo Running tests..
-      - yarn test
+      # - echo Running tests..
+      # - yarn test
   build:
     commands:
       - echo building the solution...
