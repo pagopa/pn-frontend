@@ -28,6 +28,7 @@
         "reload": "Ricarica",
         "show_code_title": "Codice di verifica delega {{name}}",
         "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della notifica.",
+        "undo": "Annulla",
         "verification_code": "Codice di verifica",
         "table": {
             "name": "Nome",
