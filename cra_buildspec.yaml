@@ -27,7 +27,7 @@ phases:
       - git rev-parse HEAD > $SUB_PRJ_NAME/build/commit_id.txt
       - echo gzipping and pushing artifact to s3
       - cd $SUB_PRJ_NAME/build
-      - tar c * | gzip | aws s3 cp - "s3://${CI_ARTIFACT_BUCKET}/${GITHUB_PRJ_NAME}/${SUB_PRJ_NAME}_&{BUILD_ID}.tar.gz"
+      - tar c * | gzip | aws s3 cp - "s3://${CI_ARTIFACT_BUCKET}/${GITHUB_PRJ_NAME}/${SUB_PRJ_NAME}_${BUILD_ID}.tar.gz"
 artifacts:
   base-directory: $SUB_PRJ_NAME/build
   files:
