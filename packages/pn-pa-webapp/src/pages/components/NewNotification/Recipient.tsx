@@ -47,16 +47,16 @@ const singleRecipient = {
   showPhysicalAddress: false,
 };
 
+const initialValues = {
+  recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }],
+};
+
 type Props = {
   onConfirm: () => void;
 };
 
 const Recipient = ({ onConfirm }: Props) => {
   const dispatch = useAppDispatch();
-
-  const initialValues = {
-    recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }],
-  };
 
   const validationSchema = yup.object({
     recipients: yup.array().of(

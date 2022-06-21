@@ -6,11 +6,6 @@ import Recipient from '../Recipient';
 import { formRecipients } from '../../../../utils/__test__/test-utils';
 import { testInput } from './test-utils';
 
-jest.mock('../PhysicalAddress', () => ({
-  __esModule: true,
-  default: () => <div>PhysicalAddress Component</div>,
-}));
-
 const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
 
@@ -77,7 +72,7 @@ describe('Recipient Component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toHaveBeenCalled();
     });
-  });
+  }, 20000);
 
   it('shows the digital domicile form and the physical address form', async () => {
     const digitalDomicileCheckbox = result.getByTestId('DigitalDomicileCheckbox');
@@ -91,7 +86,18 @@ describe('Recipient Component', () => {
     const digitalDomicileInputAfter = await waitFor(() => result.container.querySelector(
       'input[name="recipients[0].digitalDomicile"]'
     ));
-    expect(result.container).toHaveTextContent(/PhysicalAddress Component/i);
     expect(digitalDomicileInputAfter).toBeInTheDocument();
+    await waitFor(() => {
+      const address = result.container.querySelector(`input[name="recipients[0].address"]`);
+      expect(address).toBeInTheDocument();
+      const houseNumber = result.container.querySelector(`input[name="recipients[0].houseNumber"]`);
+      expect(houseNumber).toBeInTheDocument();
+      const zip = result.container.querySelector(`input[name="recipients[0].zip"]`);
+      expect(zip).toBeInTheDocument();
+      const province = result.container.querySelector(`input[name="recipients[0].province"]`);
+      expect(province).toBeInTheDocument();
+      const foreignState = result.container.querySelector(`input[name="recipients[0].foreignState"]`);
+      expect(foreignState).toBeInTheDocument();
+    })
   });
 });
