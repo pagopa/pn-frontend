@@ -104,6 +104,7 @@ describe('notification utility functions', () => {
     );
   });
 
+  /*
   it('return notification status infos - CANCELED', () => {
     testNotificationStatusInfosFn(
       NotificationStatus.CANCELED,
@@ -112,6 +113,7 @@ describe('notification utility functions', () => {
       "L'ente ha annullato l'invio della notifica"
     );
   });
+  */
 });
 
 describe('timeline utility functions', () => {
