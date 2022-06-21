@@ -37,10 +37,10 @@ const VerifyUser = () => {
 
   useEffect(() => {
     if (token !== '' && fetchedTos && !tos) {
-      navigate(routes.TOS);
+      navigate(routes.TOS, {replace: true});
     }
     if (token !== '' && fetchedTos && tos && location.pathname === '/') {
-      navigate(routes.NOTIFICHE);
+      navigate(routes.NOTIFICHE, {replace: true});
     }
   }, [fetchedTos, tos]);
 
