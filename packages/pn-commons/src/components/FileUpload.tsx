@@ -276,7 +276,9 @@ const FileUpload = ({
                 {(data.file.size / 1024).toFixed(2)}&nbsp;KB
               </Typography>
             </Box>
-            <CloseIcon sx={{ cursor: 'pointer' }} onClick={removeFileHandler} />
+            <IconButton onClick={removeFileHandler}>
+              <CloseIcon />
+            </IconButton>
           </Box>
           {data.sha256 && (
             <Box sx={{ marginTop: '20px' }}>
