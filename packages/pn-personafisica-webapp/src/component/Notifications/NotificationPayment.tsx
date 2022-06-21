@@ -319,7 +319,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   const attachments = getAttachmentsData();
 
   return (
-    <Paper sx={{ px: 3, pt: 3, marginBottom: '1rem' }} className="paperContainer">
+    <Paper sx={{ p: 3, mb: '1rem' }} className="paperContainer">
       <Grid container direction="row" justifyContent="space-between">
         <Grid item xs={8} lg={8}>
           <Typography variant="h6" display="inline" fontWeight={600} fontSize={24}>
@@ -378,7 +378,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
                 item
                 xs={12}
                 lg={12 / attachments.length || 1}
-                sx={{ textAlign: 'center', my: '1rem' }}
+                sx={{ textAlign: 'center' }}
               >
                 <Button
                   name={`download-${attachment.name.toLowerCase()}-notification`}
