@@ -72,24 +72,11 @@ const Recipient = ({ onConfirm }: Props) => {
           .required('Campo obbligatorio')
           .matches(pIvaRegex, 'Il codice fiscale inserito non è corretto'),
         noticeCode: yup.string().required('Campo obbligatorio'),
-        showDigitalDomicile: yup.boolean().test(function (value) {
-          const { showPhysicalAddress } = this.parent;
-          if (!showPhysicalAddress) {
-            return !!value;
-          }
-          return true;
-        }),
         digitalDomicile: yup.string().when('showDigitalDomicile', {
           is: true,
           then: yup.string().email('Indirizzo PEC non valido').required('Campo obbligatorio'),
         }),
-        showPhysicalAddress: yup.boolean().test(function (value) {
-          const { showDigitalDomicile } = this.parent;
-          if (!showDigitalDomicile) {
-            return !!value;
-          }
-          return true;
-        }),
+        showPhysicalAddress: yup.boolean().isTrue(),
         address: yup.string().when('showPhysicalAddress', {
           is: true,
           then: yup.string().required('Campo obbligatorio'),
@@ -329,7 +316,7 @@ const Recipient = ({ onConfirm }: Props) => {
                               name={`recipients[${index}].showDigitalDomicile`}
                               onChange={(event) => handleAddressTypeChange(event, values.recipients[index], `recipients[${index}]`, setFieldValue)}
                             />
-                            <Typography>Aggiungi un domicilio digitale*</Typography>
+                            <Typography>Aggiungi un domicilio digitale</Typography>
                           </Stack>
                         </Grid>
                         {values.recipients[index].showDigitalDomicile && (
