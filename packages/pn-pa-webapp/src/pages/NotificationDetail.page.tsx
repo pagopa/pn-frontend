@@ -1,12 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, Fragment } from 'react';
+import { useEffect, Fragment, ReactNode } from 'react';
 import { Grid, Box, Paper, Button, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
   NotificationStatus,
   TitleBox,
-  NotificationDetailTableRow,
+  // NotificationDetailTableRow,
   NotificationDetailTable,
   NotificationDetailDocuments,
   LegalFactId,
@@ -46,15 +46,21 @@ const NotificationDetail = () => {
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
+
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-  const detailTableRows: Array<NotificationDetailTableRow> = [
-    { id: 1, label: 'Data', value: <Box fontWeight={600}>{notification.sentAt}</Box> },
-    { id: 2, label: 'Termini di pagamento', value: `Entro il ` },
-    {
-      id: 3,
+  const unfilteredDetailTableRows: Array<{ label: string; rawValue: string | undefined; value: ReactNode }> = [{
+      label: 'Data',
+      rawValue: notification.sentAt,
+      value: <Box fontWeight={600}>{notification.sentAt}</Box>
+    }, {
+      label: 'Termini di pagamento',
+      rawValue: `Entro il `,
+      value: `Entro il `
+    }, {
       label: 'Destinatario',
+      rawValue: notification.recipients.map(recipient => recipient.denomination).join(", "),
       value:
         notification.recipients.length > 1 ? (
           <Box fontWeight={600}>
@@ -67,30 +73,34 @@ const NotificationDetail = () => {
         ) : (
           <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>
         ),
-    },
-    ...(notification.recipients.length > 1
-      ? []
-      : [
-          {
-            id: 4,
-            label: 'Cognome Nome',
-            value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
-          },
-        ]),
-    { id: 5, label: 'Mittente', value: <Box fontWeight={600}>{sender}</Box> },
-    {
-      id: 6,
+    }, {
+    // ...(notification.recipients.length > 1
+    //   ? []
+    //   : [
+    //       {
+    //         label: 'Cognome Nome',
+    //         rawValue: notification.recipients[0]?.denomination,
+    //         value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
+    //       },
+    //     ]),
+      label: 'Nome Cognome',
+      rawValue: notification.recipients.map(recipient => recipient.denomination).join(", "),
+      value: notification.recipients.map((recipient, index) => <Box key={index}>{recipient.denomination}</Box>)
+    }, {
+      label: 'Mittente',
+      rawValue: sender,
+      value: <Box fontWeight={600}>{sender}</Box>
+    }, {
       label: 'Codice IUN annullato',
+      rawValue: notification.cancelledIun,
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    },
-    {
-      id: 7,
+    }, {
       label: 'Codice IUN',
+      rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,
-    },
-    {
-      id: 8,
+    }, {
       label: 'Gruppi',
+      rawValue: notification.group,
       value: notification.group && (
         <TagGroup visibleItems={4}>
           <Tag value={notification.group} />
@@ -98,6 +108,14 @@ const NotificationDetail = () => {
       ),
     },
   ];
+
+  const filteredDetailTableRows = unfilteredDetailTableRows.filter((row) => row.rawValue);
+
+  const detailTableRows = filteredDetailTableRows.map((row, index) => ({
+    id: index + 1,
+    label: row.label,
+    value: row.value,
+  }));
 
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
