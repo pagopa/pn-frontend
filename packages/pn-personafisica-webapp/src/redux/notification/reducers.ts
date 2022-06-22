@@ -28,6 +28,7 @@ const initialState = {
     subject: '',
     recipients: [] as Array<NotificationDetailRecipient>,
     senderDenomination: '',
+    paymentExpirationDate: '',
     documents: [] as Array<NotificationDetailDocument>,
     notificationFeePolicy: '' as NotificationFeePolicy,
     physicalCommunicationType: '' as PhysicalCommunicationType,
