@@ -34,16 +34,6 @@ type Props = {
   onChangeSorting?: (s: Sort) => void;
 };
 
-const cardStyle = {
-  '& .card-header': {
-    padding: 0,
-  },
-  '& .card-actions': {
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-};
-
 const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
@@ -57,12 +47,20 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
         if (badge) {
           return (
             <Fragment>
-              <Typography display="inline" sx={{marginRight: '10px'}}>{badge}</Typography>
-              <Typography display="inline" variant="body2">{row.sentAt}</Typography>
+              <Typography display="inline" sx={{ marginRight: '10px' }}>
+                {badge}
+              </Typography>
+              <Typography display="inline" variant="body2">
+                {row.sentAt}
+              </Typography>
             </Fragment>
           );
         }
         return <Typography variant="body2">{row.sentAt}</Typography>;
+      },
+      gridProps: {
+        xs: 12,
+        sm: 5,
       },
     },
     {
@@ -73,6 +71,10 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
           row.notificationStatus as NotificationStatus
         );
         return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;
+      },
+      gridProps: {
+        xs: 12,
+        sm: 7,
       },
     },
   ];
@@ -138,11 +140,15 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
   const EmptyStateProps = {
     emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
     emptyActionCallback: filtersApplied ? onCancelSearch : handleRouteContacts,
-    emptyMessage: filtersApplied ? undefined : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione',
+    emptyMessage: filtersApplied
+      ? undefined
+      : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione',
     disableSentimentDissatisfied: !filtersApplied,
-    secondaryMessage: filtersApplied ? undefined : {
-      emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
-    }
+    secondaryMessage: filtersApplied
+      ? undefined
+      : {
+          emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
+        },
   };
 
   // Navigation handlers
@@ -155,7 +161,11 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
   const cardActions: Array<CardAction> = [
     {
       id: 'go-to-detail',
-      component: <ButtonNaked endIcon={<ArrowForwardIcon />} color="primary">{t('table.show-detail')}</ButtonNaked>,
+      component: (
+        <ButtonNaked endIcon={<ArrowForwardIcon />} color="primary">
+          {t('table.show-detail')}
+        </ButtonNaked>
+      ),
       onClick: handleRowClick,
     },
   ];
@@ -164,7 +174,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
 
   return (
     <Fragment>
-      <Grid container direction="row" sx={{marginBottom: '16px'}}>
+      <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
           {showFilters &&
           <FilterNotifications ref={filterNotificationsRef} />
@@ -181,15 +191,15 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
         </Grid>
       </Grid>
       {cardData.length ? (
-        <ItemsCard 
-        cardHeader={cardHeader}
-        cardBody={cardBody}
-        cardData={cardData}
-        cardActions={cardActions}
-        sx={cardStyle}
-/>
+        <ItemsCard
+          cardHeader={cardHeader}
+          cardBody={cardBody}
+          cardData={cardData}
+          cardActions={cardActions}
+          headerGridProps={{ direction: { xs: 'column-reverse', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' } }}
+        />
       ) : (
-        <EmptyState {...EmptyStateProps}/>
+        <EmptyState {...EmptyStateProps} />
       )}
     </Fragment>
   );

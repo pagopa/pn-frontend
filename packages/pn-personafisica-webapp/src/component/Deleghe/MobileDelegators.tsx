@@ -35,6 +35,9 @@ const MobileDelegators = () => {
           return <AcceptButton id={row.id} name={row.name as string} />;
         }
       },
+      gridProps: {
+        xs: 8
+      }
     },
     {
       id: 'id',
@@ -42,6 +45,9 @@ const MobileDelegators = () => {
       getLabel(value: string) {
         return <Menu menuType={'delegators'} id={value} />;
       },
+      gridProps: {
+        xs: 4
+      }
     },
   ];
 
