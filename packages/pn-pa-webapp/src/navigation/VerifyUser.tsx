@@ -30,7 +30,7 @@ const VerifyUser = () => {
     if (selfCareToken !== '') {
       dispatch(exchangeToken(selfCareToken))
         .then(() => {
-          navigate(getHomePage());
+          navigate(getHomePage(), {replace: true});
         })
         .catch(() => {
           goToSelfcareLogin();

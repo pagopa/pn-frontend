@@ -34,16 +34,6 @@ type Props = {
   onChangeSorting?: (s: Sort) => void;
 };
 
-const cardStyle = {
-  '& .card-header': {
-    padding: 0,
-  },
-  '& .card-actions': {
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-};
-
 const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
@@ -68,6 +58,10 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
         }
         return <Typography variant="body2">{row.sentAt}</Typography>;
       },
+      gridProps: {
+        xs: 12,
+        sm: 5,
+      },
     },
     {
       id: 'status',
@@ -77,6 +71,10 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
           row.notificationStatus as NotificationStatus
         );
         return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;
+      },
+      gridProps: {
+        xs: 12,
+        sm: 7,
       },
     },
   ];
@@ -137,7 +135,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     navigate(routes.RECAPITI);
   };
 
-  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsRef?.current?.filtersApplied;
 
   const EmptyStateProps = {
     emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
@@ -172,14 +170,18 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     },
   ];
 
+  const showFilters = notifications?.length > 0 || filtersApplied;
+
   return (
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
+          {showFilters &&
           <FilterNotifications ref={filterNotificationsRef} />
+          }
         </Grid>
         <Grid item xs={6} textAlign="right">
-          {sort && onChangeSorting && (
+          {sort && showFilters && onChangeSorting && (
             <MobileNotificationsSort
               title={t('sort.title')}
               optionsTitle={t('sort.options')}
@@ -197,7 +199,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
           cardBody={cardBody}
           cardData={cardData}
           cardActions={cardActions}
-          sx={cardStyle}
+          headerGridProps={{ direction: { xs: 'column-reverse', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' } }}
         />
       ) : (
         <EmptyState {...EmptyStateProps} />

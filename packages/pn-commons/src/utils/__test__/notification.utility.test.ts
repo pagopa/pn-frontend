@@ -105,6 +105,7 @@ describe('notification utility functions', () => {
     );
   });
 
+  /*
   it('return notification status infos - CANCELED', () => {
     testNotificationStatusInfosFn(
       NotificationStatus.CANCELED,
@@ -113,6 +114,7 @@ describe('notification utility functions', () => {
       "L'ente ha annullato l'invio della notifica"
     );
   });
+  */
 
   it('return notifications filters count (no filters)', () => {
     const count = filtersApplied(

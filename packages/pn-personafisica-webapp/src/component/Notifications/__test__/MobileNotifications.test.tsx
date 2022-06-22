@@ -48,8 +48,8 @@ describe('MobileNotifications Component', () => {
         onCancelSearch={() => {}}
       />
     );
-    expect(result.container).toHaveTextContent(/Filters/i);
-    expect(result.container).toHaveTextContent(/Sort/i);
+    expect(result.container).not.toHaveTextContent(/Filters/i);
+    expect(result.container).not.toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(
       /Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull'app IO o inserisci un recapito di cortesia nella sezione Recapiti : così, se riceverai una notifica, te lo comunicheremo./i
     );

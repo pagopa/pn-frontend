@@ -115,7 +115,7 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
     navigate(routes.RECAPITI);
   };
 
-  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsRef?.current?.filtersApplied;
 
   const EmptyStateProps = {
     emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
@@ -134,9 +134,13 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
     trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
   };
 
+  const showFilters = notifications?.length > 0 || filtersApplied;
+
   return (
     <Fragment>
+      {showFilters &&
       <FilterNotifications ref={filterNotificationsRef} />
+      }
       {(rows.length) ? (
         <ItemsTable
         columns={columns}

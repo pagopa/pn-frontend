@@ -85,13 +85,13 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
         tooltip: 'Il destinatario ha visualizzato la notifica',
         description: 'Il destinatario ha visualizzato la notifica',
       };
-    case NotificationStatus.CANCELED:
+    /*case NotificationStatus.CANCELED:
       return {
         color: 'warning',
         label: 'Annullata',
         tooltip: "L'ente ha annullato l'invio della notifica",
         description: "L'ente ha annullato l'invio della notifica",
-      };
+      };*/
     default:
       return {
         color: 'default',
@@ -110,7 +110,7 @@ export const NotificationAllowedStatus = [
   { value: NotificationStatus.EFFECTIVE_DATE, label: 'Perfezionata per decorrenza termini' },
   { value: NotificationStatus.VIEWED, label: 'Perfezionata per visione' },
   { value: NotificationStatus.PAID, label: 'Pagata' },
-  { value: NotificationStatus.CANCELED, label: 'Annullata' },
+  // { value: NotificationStatus.CANCELED, label: 'Annullata' },
   { value: NotificationStatus.UNREACHABLE, label: 'Destinatario irreperibile' },
 ];
 
