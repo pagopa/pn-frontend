@@ -202,7 +202,7 @@ const Dashboard = () => {
     void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
-  const filtersApplied: boolean = filterNotificationsTableRef.current.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsTableRef?.current?.filtersApplied;
 
   const EmptyStateProps = {
     emptyMessage: filtersApplied ? undefined : emptyMessage,
@@ -211,6 +211,8 @@ const Dashboard = () => {
     emptyActionCallback: filtersApplied ? handleCancelSearch : handleRouteApiKeys,
     secondaryMessage: filtersApplied ? undefined : secondaryMessage,
   };
+
+  const showFilters = notifications?.length > 0 || filtersApplied;
 
   return (
     <Box p={3}>
@@ -231,7 +233,9 @@ const Dashboard = () => {
       <Fragment>
         {notifications && (
           <Fragment>
+            {showFilters &&
             <FilterNotificationsTable ref={filterNotificationsTableRef} />
+            }
             {notifications.length > 0 ? (
               <>
                 <ItemsTable 
