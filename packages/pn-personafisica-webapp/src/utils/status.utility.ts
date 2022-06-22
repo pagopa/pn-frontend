@@ -16,7 +16,7 @@ export function getDelegationStatusLabelAndColor(status: 'active' | 'pending'): 
     case DelegationStatus.PENDING:
       return {
         color: 'warning',
-        label: 'Attesa conferma',
+        label: 'In attesa di conferma',
       };
     default:
       return {
@@ -29,5 +29,5 @@ export function getDelegationStatusLabelAndColor(status: 'active' | 'pending'): 
 export const DelegationAllowedStatus = [
   { value: 'All', label: 'Tutti gli stati' },
   { value: DelegationStatus.ACTIVE, label: 'Active' },
-  { value: DelegationStatus.PENDING, label: 'Attesa conferma' },
+  { value: DelegationStatus.PENDING, label: 'In attesa di conferma' },
 ];
