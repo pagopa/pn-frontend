@@ -16,13 +16,14 @@ const MobileDialog = styled(Dialog)(() => ({
     height: 'auto',
     bottom: 0,
     position: 'absolute',
-    width: '100%',
+    width: '100%'
   },
   '& .MuiPaper-root': {
     borderRadius: '24px 24px 0px 0px',
   },
   '& .MuiDialogContent-root': {
     paddingTop: '20px !important',
+    maxHeight: 'calc(100vh - 250px)'
   },
   '& .MuiDialogActions-root': {
     display: 'block',
@@ -59,6 +60,7 @@ const CustomMobileDialogContent = ({children, title}: Props) => {
 
   return (
     <MobileDialog
+      scroll="paper"
       open={open}
       onClose={handleClose}
       TransitionComponent={Transition}
