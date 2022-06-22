@@ -10,10 +10,11 @@ import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pag
 import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
+import { goToLogin } from './navigation/navigation.utility';
 import Router from './navigation/routes';
 import { getToSApproval, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { PAGOPA_HELP_EMAIL, URL_FE_LOGIN } from './utils/constants';
+import { PAGOPA_HELP_EMAIL } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
@@ -138,9 +139,9 @@ const App = () => {
       userActions={userActions}
     >
       <AppMessage
-        sessionRedirect={() => {
-          /* eslint-disable-next-line functional/immutable-data */
-          window.location.href = URL_FE_LOGIN as string;
+        sessionRedirect={async () => {
+          await dispatch(logout());
+          goToLogin();
         }}
       />
       <LoadingOverlay />
