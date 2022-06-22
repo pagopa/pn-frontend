@@ -175,7 +175,7 @@ const Recipient = ({ onConfirm }: Props) => {
                                 value={RecipientType.PF}
                                 control={<Radio />}
                                 name={`recipients[${index}].recipientType`}
-                                label={'Persona Fisica'}
+                                label={'Persona fisica'}
                               />
                             </Grid>
                             {values.recipients[index].recipientType === RecipientType.PF && (
