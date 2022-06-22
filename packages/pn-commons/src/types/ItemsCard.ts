@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+import { GridProps } from '@mui/material';
+
 import { Item } from './ItemsTable';
 
 export interface CardElement {
@@ -6,6 +8,7 @@ export interface CardElement {
   label: string;
   getLabel(value: string | number | Array<string>, row?: Item): ReactNode;
   notWrappedInTypography?: boolean;
+  gridProps?: GridProps
 }
 
 export interface CardSort {
