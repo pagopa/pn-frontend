@@ -1,2 +1,2 @@
-export const phoneRegExp = /([0-9]){10}/g;
+export const phoneRegExp = /3\d{2}[. ]??\d{6,7}/g;
 
