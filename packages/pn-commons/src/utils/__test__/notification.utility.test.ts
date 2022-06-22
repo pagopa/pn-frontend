@@ -126,8 +126,8 @@ describe('notification utility functions', () => {
 
   it('return notifications filters count (with filters)', () => {
     const count = filtersApplied(
-      { startDate: new Date().toISOString(), endDate: new Date().toISOString() },
-      { startDate: new Date().toISOString(), endDate: new Date().toISOString(), iunMatch: 'mocked-iun', recipientId: 'mocked-recipient' }
+      { startDate: new Date().toISOString(), endDate: new Date().toISOString(), iunMatch: 'mocked-iun', recipientId: 'mocked-recipient' },
+      { startDate: new Date().toISOString(), endDate: new Date().toISOString(), iunMatch: undefined, recipientId: undefined },
     );
     expect(count).toEqual(2);
   });

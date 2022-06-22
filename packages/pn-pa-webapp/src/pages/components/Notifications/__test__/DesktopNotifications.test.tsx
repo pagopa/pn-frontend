@@ -30,7 +30,7 @@ describe('DesktopNotifications Component', () => {
         onApiKeys={() => {}}
       />
     );
-    expect(result.container).toHaveTextContent(/Filters/i);
+    expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(
       /L'ente non ha ancora inviato nessuna notifica. Usa le Chiavi API o fai un invio manuale/i
     );

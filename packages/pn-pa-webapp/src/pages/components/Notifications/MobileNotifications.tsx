@@ -37,16 +37,6 @@ type Props = {
   onApiKeys: () => void;
 };
 
-const cardStyle = {
-  '& .card-header': {
-    padding: 0,
-  },
-  '& .card-actions': {
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-};
-
 const MobileNotifications = ({
   notifications,
   onCancelSearch,
@@ -65,6 +55,10 @@ const MobileNotifications = ({
       getLabel(value: string) {
         return value;
       },
+      gridProps: {
+        xs: 12,
+        sm: 5,
+      },
     },
     {
       id: 'notificationStatus',
@@ -74,6 +68,10 @@ const MobileNotifications = ({
           row.notificationStatus as NotificationStatus
         );
         return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
+      },
+      gridProps: {
+        xs: 12,
+        sm: 7,
       },
     },
   ];
@@ -163,7 +161,7 @@ const MobileNotifications = ({
     return arr;
   }, [] as Array<CardSort>);
 
-  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsRef?.current?.filtersApplied;
   const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
   const emptyActionLabel: string = 'Chiavi API';
   const secondaryMessage: object = {
@@ -181,14 +179,16 @@ const MobileNotifications = ({
     secondaryMessage: filtersApplied ? undefined : secondaryMessage,
   };
 
+  const showFilters = notifications?.length > 0 || filtersApplied;
+
   return (
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
-          <FilterNotifications ref={filterNotificationsRef} />
+          {showFilters && <FilterNotifications ref={filterNotificationsRef} />}
         </Grid>
         <Grid item xs={6} textAlign="right">
-          {sort && onChangeSorting && (
+          {sort && showFilters && onChangeSorting && (
             <MobileNotificationsSort
               title="Ordina"
               optionsTitle="Opzioni sort"
@@ -206,7 +206,10 @@ const MobileNotifications = ({
           cardHeader={cardHeader}
           cardBody={cardBody}
           cardActions={cardActions}
-          sx={cardStyle}
+          headerGridProps={{
+            direction: { xs: 'column-reverse', sm: 'row' },
+            alignItems: { xs: 'flex-start', sm: 'center' },
+          }}
         />
       ) : (
         <EmptyState {...EmptyStateProps} />

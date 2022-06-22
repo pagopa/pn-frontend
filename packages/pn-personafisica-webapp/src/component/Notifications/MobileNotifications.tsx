@@ -176,9 +176,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
-          {showFilters &&
-          <FilterNotifications ref={filterNotificationsRef} />
-          }
+          {showFilters && <FilterNotifications ref={filterNotificationsRef} />}
         </Grid>
         <Grid item xs={6} textAlign="right">
           {sort && showFilters && onChangeSorting && (
@@ -199,7 +197,10 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
           cardBody={cardBody}
           cardData={cardData}
           cardActions={cardActions}
-          headerGridProps={{ direction: { xs: 'column-reverse', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' } }}
+          headerGridProps={{
+            direction: { xs: 'column-reverse', sm: 'row' },
+            alignItems: { xs: 'flex-start', sm: 'center' },
+          }}
         />
       ) : (
         <EmptyState {...EmptyStateProps} />
