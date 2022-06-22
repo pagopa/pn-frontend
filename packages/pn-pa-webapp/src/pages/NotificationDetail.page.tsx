@@ -6,7 +6,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import {
   NotificationStatus,
   TitleBox,
-  // NotificationDetailTableRow,
+  NotificationDetailTableRow,
   NotificationDetailTable,
   NotificationDetailDocuments,
   LegalFactId,
@@ -46,21 +46,27 @@ const NotificationDetail = () => {
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
-
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-  const unfilteredDetailTableRows: Array<{ label: string; rawValue: string | undefined; value: ReactNode }> = [{
+  const unfilteredDetailTableRows: Array<{
+    label: string;
+    rawValue: string | undefined;
+    value: ReactNode;
+  }> = [
+    {
       label: 'Data',
       rawValue: notification.sentAt,
-      value: <Box fontWeight={600}>{notification.sentAt}</Box>
-    }, {
+      value: <Box fontWeight={600}>{notification.sentAt}</Box>,
+    },
+    {
       label: 'Termini di pagamento',
       rawValue: notification.paymentExpirationDate,
-      value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>
-    }, {
+      value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
+    },
+    {
       label: 'Destinatario',
-      rawValue: notification.recipients.map(recipient => recipient.denomination).join(", "),
+      rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
       value:
         notification.recipients.length > 1 ? (
           <Box fontWeight={600}>
@@ -73,32 +79,39 @@ const NotificationDetail = () => {
         ) : (
           <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>
         ),
-    }, {
-    // ...(notification.recipients.length > 1
-    //   ? []
-    //   : [
-    //       {
-    //         label: 'Cognome Nome',
-    //         rawValue: notification.recipients[0]?.denomination,
-    //         value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
-    //       },
-    //     ]),
+    },
+    {
+      // ...(notification.recipients.length > 1
+      //   ? []
+      //   : [
+      //       {
+      //         label: 'Cognome Nome',
+      //         rawValue: notification.recipients[0]?.denomination,
+      //         value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
+      //       },
+      //     ]),
       label: 'Nome e cognome',
-      rawValue: notification.recipients.map(recipient => recipient.denomination).join(", "),
-      value: notification.recipients.map((recipient, index) => <Box key={index}>{recipient.denomination}</Box>)
-    }, {
+      rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
+      value: notification.recipients.map((recipient, index) => (
+        <Box key={index}>{recipient.denomination}</Box>
+      )),
+    },
+    {
       label: 'Mittente',
       rawValue: sender,
-      value: <Box fontWeight={600}>{sender}</Box>
-    }, {
+      value: <Box fontWeight={600}>{sender}</Box>,
+    },
+    {
       label: 'Codice IUN annullato',
       rawValue: notification.cancelledIun,
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    }, {
+    },
+    {
       label: 'Codice IUN',
       rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,
-    }, {
+    },
+    {
       label: 'Gruppi',
       rawValue: notification.group,
       value: notification.group && (
@@ -108,20 +121,20 @@ const NotificationDetail = () => {
       ),
     },
   ];
-
-  const filteredDetailTableRows = unfilteredDetailTableRows.filter((row) => row.rawValue);
-
-  const detailTableRows = filteredDetailTableRows.map((row, index) => ({
-    id: index + 1,
-    label: row.label,
-    value: row.value,
-  }));
+  const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
+    .filter((row) => row.rawValue)
+    .map((row, index) => ({
+      id: index + 1,
+      label: row.label,
+      value: row.value,
+    }));
 
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
       void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
     }
   };
+
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     void dispatch(
       getSentNotificationLegalfact({
@@ -133,6 +146,7 @@ const NotificationDetail = () => {
       })
     );
   };
+
   const dowloadDocument = (url: string) => {
     /* eslint-disable functional/immutable-data */
     const link = document.createElement('a');
@@ -218,7 +232,10 @@ const NotificationDetail = () => {
               statusHistory={notification.notificationStatusHistory}
               title="Stato della notifica"
               clickHandler={legalFactDownloadHandler}
-              legalFactLabels={{ attestation: 'Attestazione opponibile a terzi', receipt: 'Ricevuta' }}
+              legalFactLabels={{
+                attestation: 'Attestazione opponibile a terzi',
+                receipt: 'Ricevuta',
+              }}
               historyButtonLabel="Mostra storico"
               showMoreButtonLabel="Mostra di più"
               showLessButtonLabel="Mostra di meno"
