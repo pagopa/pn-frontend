@@ -49,7 +49,7 @@ const NotificationDetailDocuments = ({
       {/* TODO: ripristinare quando sarà completata la issue pn-720 */}
       {/* !documentsAvailable &&
         <Grid item>
-          <Button startIcon={<DownloadIcon />}>Scarica tutti gli Atti</Button>
+          <Button startIcon={<DownloadIcon />}>Scarica tutti i Documenti</Button>
         </Grid>
       */}
     </Grid>
