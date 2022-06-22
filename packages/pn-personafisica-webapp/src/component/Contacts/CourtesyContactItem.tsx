@@ -6,7 +6,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 import { CourtesyChannelType } from '../../models/contacts';
-import { phoneRegExp } from '../../utils/contacts.utility';
+import { internationalPhonePrefix, phoneRegExp } from '../../utils/contacts.utility';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactElem from './DigitalContactElem';
 
@@ -52,7 +52,11 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
     validationSchema:
       type === CourtesyFieldType.EMAIL ? emailValidationSchema : phoneValidationSchema,
     onSubmit: () => {
-      initValidation(digitalDomicileType, formik.values[type], recipientId, 'default');
+      const contactValue =
+        type === CourtesyFieldType.EMAIL
+          ? formik.values[type]
+          : internationalPhonePrefix + formik.values[type];
+      initValidation(digitalDomicileType, contactValue, recipientId, 'default');
     },
   });
 
@@ -127,14 +131,16 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
             onChange={handleChangeTouched}
             error={formik.touched[type] && Boolean(formik.errors[type])}
             helperText={formik.touched[type] && formik.errors[type]}
-            inputProps={{ sx: { height: '14px' }}}
+            inputProps={{ sx: { height: '14px' } }}
             placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
               ns: 'recapiti',
             })}
             fullWidth
             type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
             InputProps={{
-              startAdornment: <InputAdornment position="start">+39</InputAdornment>,
+              startAdornment: (
+                <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+              ),
             }}
           />
         </Grid>
