@@ -1,6 +1,17 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, Fragment, ReactNode } from 'react';
-import { Grid, Box, Paper, Button, Stack } from '@mui/material';
+import { useEffect, Fragment, ReactNode, useState } from 'react';
+import {
+  Grid,
+  Box,
+  Paper,
+  Button,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
@@ -162,6 +173,11 @@ const NotificationDetail = () => {
     navigate(routes.NUOVA_NOTIFICA);
   };
 
+  const openModal = () => {
+    setShowModal(true);
+    return true;
+  };
+
   useEffect(() => {
     if (id) {
       void dispatch(getSentNotification(id));
@@ -198,7 +214,7 @@ const NotificationDetail = () => {
         <Button
           sx={{ my: 1 }}
           variant="outlined"
-          onClick={handleCancelNotification}
+          onClick={openModal}
           data-testid="cancelNotificationBtn"
         >
           Annulla notifica
@@ -207,43 +223,74 @@ const NotificationDetail = () => {
     </Fragment>
   );
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    handleCancelNotification();
+  };
+
+  const ModalAlert = () => (
+    <Dialog
+      open={showModal}
+      onClose={handleModalClose}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+    >
+      <DialogTitle id="dialog-title">Annulla notifica</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="dialog-description">
+          L&apos;annullamento della notifica sarà completato solo quando si invia una nuova notifica. Chiudere questo messaggio per passare direttamente alla sezione di invio nuova notifica.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleModalClose} variant="outlined">
+          Ok
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+
   return (
-    <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
-      {isMobile && breadcrumb}
-      <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
-        <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-          {!isMobile && breadcrumb}
-          <Stack spacing={3}>
-            <NotificationDetailTable rows={detailTableRows} />
-            <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
-              <NotificationDetailDocuments
-                title="Documenti allegati"
-                documents={notification.documents}
-                clickHandler={documentDowloadHandler}
-                documentsAvailable={notification.documentsAvailable as boolean}
+    <>
+      <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
+        {isMobile && breadcrumb}
+        <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
+          <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
+            {!isMobile && breadcrumb}
+            <Stack spacing={3}>
+              <NotificationDetailTable rows={detailTableRows} />
+              <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                <NotificationDetailDocuments
+                  title="Documenti allegati"
+                  documents={notification.documents}
+                  clickHandler={documentDowloadHandler}
+                  documentsAvailable={notification.documentsAvailable as boolean}
+                />
+              </Paper>
+            </Stack>
+          </Grid>
+          <Grid item lg={5} xs={12}>
+            <Box sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
+              <NotificationDetailTimeline
+                recipients={notification.recipients}
+                statusHistory={notification.notificationStatusHistory}
+                title="Stato della notifica"
+                clickHandler={legalFactDownloadHandler}
+                legalFactLabels={{
+                  attestation: 'Attestazione opponibile a terzi',
+                  receipt: 'Ricevuta',
+                }}
+                historyButtonLabel="Mostra storico"
+                showMoreButtonLabel="Mostra di più"
+                showLessButtonLabel="Mostra di meno"
               />
-            </Paper>
-          </Stack>
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item lg={5} xs={12}>
-          <Box sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
-            <NotificationDetailTimeline
-              recipients={notification.recipients}
-              statusHistory={notification.notificationStatusHistory}
-              title="Stato della notifica"
-              clickHandler={legalFactDownloadHandler}
-              legalFactLabels={{
-                attestation: 'Attestazione opponibile a terzi',
-                receipt: 'Ricevuta',
-              }}
-              historyButtonLabel="Mostra storico"
-              showMoreButtonLabel="Mostra di più"
-              showLessButtonLabel="Mostra di meno"
-            />
-          </Box>
-        </Grid>
-      </Grid>
-    </Box>
+      </Box>
+      <ModalAlert />
+    </>
   );
 };
 
