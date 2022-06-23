@@ -50,7 +50,7 @@
         "backToDelegations": "Torna alle deleghe",
         "createdTitle": "La tua richiesta di delega è stata creata con successo",
         "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a Piattaforma Notifiche e accettare la tua richiesta.",
-        "title": "Deleghe",
+        "title": "Le tue deleghe",
         "subtitle": "Inserisci i dati del soggetto giuridico a cui vuoi delegare la gestione delle tue notifiche",
         "form" : {
             "personType": "Soggetto giuridico*:",
