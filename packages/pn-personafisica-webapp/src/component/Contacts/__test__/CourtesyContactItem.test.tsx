@@ -33,6 +33,7 @@ describe('CourtesyContactItem component', () => {
   });
 
   describe('test component having type "phone"', () => {
+    const VALID_PHONE_NOPREFIX = '3331234567';
     const VALID_PHONE = '+393331234567';
     const VALID_PHONE_2 = '+393337654321';
     const INVALID_PHONE = '33312345';
@@ -95,8 +96,8 @@ describe('CourtesyContactItem component', () => {
 
       test('save a new phone number', async () => {
         const input = result?.getByRole('textbox');
-        fireEvent.change(input!, { target: { value: VALID_PHONE } });
-        await waitFor(() => expect(input!).toHaveValue(VALID_PHONE));
+        fireEvent.change(input!, { target: { value: VALID_PHONE_NOPREFIX } });
+        await waitFor(() => expect(input!).toHaveValue(VALID_PHONE_NOPREFIX));
         const button = result!.getByRole('button');
         fireEvent.click(button!);
         await waitFor(() => {

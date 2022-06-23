@@ -1,8 +1,20 @@
 import { Fragment } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Button, Grid } from '@mui/material';
+import { Button } from '@mui/material';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 import { FormikValues } from 'formik';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles({
+  searchButton: {
+    height: '43px !important',
+    marginRight: '8px !important',
+  },
+  cancelButton: {
+    height: '43px !important',
+    padding: '0 16px !important',
+    minWidth: '130px !important',
+  },
+});
 
 type Props = {
   filtersApplied: boolean;
@@ -23,34 +35,32 @@ const FilterNotificationsFormActions = ({
   isInDialog = false,
   isInitialSearch,
 }: Props) => {
-  const { t } = useTranslation(['common']);
+  const classes = useStyles();
 
   const confirmAction = (
-    <Grid item lg="auto" xs={12}>
-      <Button
-        variant="outlined"
-        type="submit"
-        size="small"
-        disabled={
-          !formikInstance.isValid || (isInitialSearch && !filtersApplied)
-        }
-      >
-        {t('button.filtra')}
-      </Button>
-    </Grid>
+    <Button
+      variant="outlined"
+      type="submit"
+      size="small"
+      className={classes.searchButton}
+      disabled={
+        !formikInstance.isValid || (isInitialSearch && !filtersApplied)
+      }
+    >
+      Filtra
+    </Button>
   );
 
   const cancelAction = (
-    <Grid item lg="auto" xs={12}>
-      <Button
-        data-testid="cancelButton"
-        size="small"
-        onClick={cleanFilters}
-        disabled={!filtersApplied}
-      >
-        {t('button.annulla filtro')}
-      </Button>
-    </Grid>
+    <Button
+      data-testid="cancelButton"
+      className={classes.cancelButton}
+      size="small"
+      onClick={cleanFilters}
+      disabled={!filtersApplied}
+    >
+      Rimuovi filtri
+    </Button>
   );
 
   return (
