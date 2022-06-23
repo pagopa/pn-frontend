@@ -3,7 +3,6 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "@pagopa/mui-italia";
 import LandingLayout from "../src/layout/LandingLayout";
 
-import '../styles/globals.css';
 import { LangProvider } from '../provider/lang-context';
 
 function Main({ Component, pageProps }: AppProps) {
