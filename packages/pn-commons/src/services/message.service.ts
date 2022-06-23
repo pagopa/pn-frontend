@@ -6,7 +6,7 @@ import _ from 'lodash';
  * @param  {{response:{status:number;};}} error
  * @returns IAppMessage
  */
-export const createAppError = (error: { response: { status: number } }): IAppMessage => {
+export const createAppError = (error: { response: { status: number; data: { title: string} } }): IAppMessage => {
   const e: IAppMessage = {
     id: _.uniqueId(),
     title: '',
@@ -25,6 +25,12 @@ export const createAppError = (error: { response: { status: number } }): IAppMes
   } else if (error.response?.status === 401) {
     e.title = 'Utente non autorizzato';
     e.message = "L'utente corrente non ha le autorizzazioni";
+  } else if (error.response?.status === 400 && error.response?.data?.title === "Delega già presente") {
+    e.title = 'Delega già presente';
+    e.message = "La persona che hai indicato ha già una delega per questo ente.";
+  } else if (error.response?.status === 500 && error.response?.data?.title === "Errore generico") {
+    e.title = 'Il servizio non è disponibile';
+    e.message = "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.";
   } else {
     e.title = 'Errore generico';
     e.message = 'Si è verificato un errore. Si prega di riprovare più tardi';
