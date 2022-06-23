@@ -51,28 +51,28 @@
         "createdTitle": "La tua richiesta di delega è stata creata con successo",
         "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a Piattaforma Notifiche e accettare la tua richiesta.",
         "title": "Le tue deleghe",
-        "subtitle": "Inserisci i dati della persona fisica o \n giuridica a cui vuoi delegare la visualizzazione o la gestione delle tue notifiche",
+        "subtitle": "Inserisci i dati del soggetto giuridico a cui vuoi delegare la gestione delle tue notifiche",
         "form" : {
-            "personType": "Tipologia di persona *",
+            "personType": "Soggetto giuridico*:",
             "naturalPerson": "Persona fisica",
             "legalPerson": "Persona giuridica",
-            "firstName": "Nome *",
-            "lastName": "Cognome *",
-            "fiscalCode": "Codice Fiscale *",
-            "email": "Email *",
-            "viewFrom": "Potrà visualizzare le notifiche da parte di *",
+            "firstName": "Nome*",
+            "lastName": "Cognome*",
+            "fiscalCode": "Codice Fiscale*",
+            "email": "Email*",
+            "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
             "allEntities": "Tutti gli enti",
             "onlySelected": "Solo gli enti selezionati",
-            "endDate": "Termine Delega",
-            "verificationCode": "Codice di Verifica",
+            "endDate": "Termine delega",
+            "verificationCode": "Codice di verifica",
             "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
             "submit": "Invia la richiesta",
-            "mandatoryField": "Campi Obbligatori *"
+            "mandatoryField": "Campi obbligatori*"
         },
         "validation": {
             "fiscalCode" : {
                "required":"Il Codice Fiscale è obbligatorio",
-               "wrong": "Il codice fiscale inserito non è corretto"
+               "wrong": "Il Codice Fiscale inserito non è corretto"
             },
             "email" : {
                 "wrong": "Email non formattata correttamente",
