@@ -130,7 +130,7 @@ describe('Deleghe page', () => {
     const result = render(<Deleghe />);
     const codeInput = result.queryAllByPlaceholderText('-');
     const confirmAcceptButton = result.getByText('deleghe.accept');
-    const closeButton = result.getByText(/deleghe.back/i);
+    const closeButton = result.getByText(/button.indietro/i);
 
     expect(mockDispatchFn).toBeCalledTimes(2);
     expect(result.baseElement).toHaveTextContent(/deleghe.accept_title/i);
