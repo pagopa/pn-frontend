@@ -95,7 +95,7 @@ describe('Deleghe page', () => {
     useSelectorSpy(true, false, 'delegates');
     const result = render(<Deleghe />);
     const confirmRevocationButton = result.getByText(/deleghe.confirm_revocation/i);
-    const closeButton = result.getByText(/deleghe.undo/i);
+    const closeButton = result.getByText(/button.annulla/i);
 
     expect(mockDispatchFn).toBeCalledTimes(2);
     expect(result.baseElement).toHaveTextContent(/deleghe.revocation_question/i);
@@ -112,7 +112,7 @@ describe('Deleghe page', () => {
     useSelectorSpy(true, false, 'delegators');
     const result = render(<Deleghe />);
     const confirmRejectionButton = result.getByText(/deleghe.confirm_rejection/i);
-    const closeButton = result.getByText(/deleghe.undo/i);
+    const closeButton = result.getByText(/button.annulla/i);
 
     expect(mockDispatchFn).toBeCalledTimes(2);
     expect(result.baseElement).toHaveTextContent(/deleghe.rejection_question/i);

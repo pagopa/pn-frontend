@@ -91,7 +91,7 @@ const Deleghe = () => {
               ? t('deleghe.revocation_question')
               : t('deleghe.rejection_question')
           }
-          onCloseLabel={t('deleghe.undo')}
+          onCloseLabel={t('button.annulla', { ns: 'common' })}
           handleClose={handleCloseModal}
           onConfirm={handleConfirmClick}
           onConfirmLabel={
