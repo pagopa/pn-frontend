@@ -1,70 +1,70 @@
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
-import { useDispatch } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { useFormik } from 'formik';
+import { useEffect, Fragment, useState, forwardRef, useImperativeHandle } from 'react';
+import { FormikValues, useFormik } from 'formik';
 import * as yup from 'yup';
 import _ from 'lodash';
-import { Box, DialogActions, DialogContent, Grid } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, DialogActions, DialogContent } from '@mui/material';
 import {
-  CustomMobileDialog,
-  CustomMobileDialogContent,
-  CustomMobileDialogToggle,
+  fiscalCodeRegex,
+  NotificationAllowedStatus,
   tenYearsAgo,
   today,
-  useIsMobile,
   IUN_regex,
-  filtersApplied,
+  useIsMobile,
+  CustomMobileDialog,
+  CustomMobileDialogToggle,
+  CustomMobileDialogContent,
+  filtersApplied
 } from '@pagopa-pn/pn-commons';
 
-import { useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
-import { setNotificationFilters } from '../../redux/dashboard/actions';
+import { setNotificationFilters } from '../../../redux/dashboard/actions';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import { RootState } from '../../../redux/store';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
-
-const useStyles = makeStyles({
-  helperTextFormat: {
-    // Use existing space / prevents shifting content below field
-    alignItems: 'flex',
-  },
-});
 
 const emptyValues = {
   startDate: tenYearsAgo.toISOString(),
   endDate: today.toISOString(),
+  status: undefined,
+  recipientId: undefined,
   iunMatch: undefined,
 };
 
 const initialEmptyValues = {
+  searchFor: '0',
   startDate: tenYearsAgo,
   endDate: today,
+  status: NotificationAllowedStatus[0].value,
+  recipientId: '',
   iunMatch: '',
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const FilterNotifications = forwardRef((_props, ref) => {
-  const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
-  const { t } = useTranslation(['common']);
+  const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
-  const classes = useStyles();
 
   const validationSchema = yup.object({
-    iunMatch: yup.string().matches(IUN_regex, t('Inserisci un codice IUN valido')),
+    recipientId: yup.string().matches(fiscalCodeRegex, 'Inserisci il codice per intero'),
+    iunMatch: yup.string().matches(IUN_regex, 'Inserisci un codice IUN valido'),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
   });
 
-  const initialValues = () => {
+  const initialValues = (): FormikValues => {
     if (!filters || (filters && _.isEqual(filters, emptyValues))) {
       return initialEmptyValues;
     } else {
       return {
+        searchFor: '0',
         startDate: new Date(filters.startDate),
         endDate: new Date(filters.endDate),
+        recipientId: filters.recipientId || '',
         iunMatch: filters.iunMatch || '',
+        status: filters.status || NotificationAllowedStatus[0].value,
       };
     }
   };
@@ -80,7 +80,9 @@ const FilterNotifications = forwardRef((_props, ref) => {
       const currentFilters = {
         startDate: values.startDate.toISOString(),
         endDate: values.endDate.toISOString(),
-        iunMatch: values.iunMatch,
+        recipientId: values.recipientId || undefined,
+        iunMatch: values.iunMatch || undefined,
+        status: values.status === 'All' ? undefined : values.status,
       };
       if (_.isEqual(prevFilters, currentFilters)) {
         return;
@@ -90,7 +92,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
     },
   });
 
-  const cleanFilters = () => {
+  const cancelSearch = () => {
     dispatch(setNotificationFilters(emptyValues));
   };
 
@@ -99,7 +101,7 @@ const FilterNotifications = forwardRef((_props, ref) => {
   }, []);
 
   useEffect(() => {
-    if (filters && _.isEqual(filters, emptyValues)) {
+    if (_.isEqual(filters, emptyValues)) {
       formik.resetForm({
         values: initialEmptyValues,
       });
@@ -126,9 +128,9 @@ const FilterNotifications = forwardRef((_props, ref) => {
         hasCounterBadge
         bagdeCount={filtersCount}
       >
-        {t('button.filtra')}
+        Filtra
       </CustomMobileDialogToggle>
-      <CustomMobileDialogContent title={t('button.filtra')}>
+      <CustomMobileDialogContent title="Filtra">
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <FilterNotificationsFormBody
@@ -142,9 +144,9 @@ const FilterNotifications = forwardRef((_props, ref) => {
           <DialogActions>
             <FilterNotificationsFormActions
               formikInstance={formik}
-              cleanFilters={cleanFilters}
+              cleanFilters={cancelSearch}
               filtersApplied={filtersCount > 0}
-              isInitialSearch={_.isEqual(formik.values, initialValues)}
+              isInitialSearch={_.isEqual(formik.values, initialEmptyValues)}
               isInDialog
             />
           </DialogActions>
@@ -152,9 +154,17 @@ const FilterNotifications = forwardRef((_props, ref) => {
       </CustomMobileDialogContent>
     </CustomMobileDialog>
   ) : (
-    <form onSubmit={formik.handleSubmit}>
-      <Box sx={{ flexGrow: 1, mt: 3 }}>
-        <Grid container spacing={1} className={classes.helperTextFormat}>
+    <Fragment>
+      <form onSubmit={formik.handleSubmit}>
+        <Box
+          display={'flex'}
+          sx={{
+            marginTop: 5,
+            marginBottom: 5,
+            verticalAlign: 'top',
+            '& .MuiTextField-root': { mr: 1, width: '100%' },
+          }}
+        >
           <FilterNotificationsFormBody
             formikInstance={formik}
             startDate={startDate}
@@ -164,13 +174,13 @@ const FilterNotifications = forwardRef((_props, ref) => {
           />
           <FilterNotificationsFormActions
             formikInstance={formik}
-            cleanFilters={cleanFilters}
+            cleanFilters={cancelSearch}
             filtersApplied={filtersCount > 0}
             isInitialSearch={_.isEqual(formik.values, initialEmptyValues)}
           />
-        </Grid>
-      </Box>
-    </form>
+        </Box>
+      </form>
+    </Fragment>
   );
 });
 

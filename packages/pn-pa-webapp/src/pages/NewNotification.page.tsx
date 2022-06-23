@@ -91,7 +91,7 @@ const NewNotification = () => {
               variantSubTitle="body1"
             ></TitleBox>
             <Typography sx={{ marginTop: '10px' }} variant="body2">
-              * Campi obbligatori
+              *Campi obbligatori
             </Typography>
             <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
               {steps.map((label) => (

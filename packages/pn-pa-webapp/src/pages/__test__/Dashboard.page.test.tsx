@@ -6,7 +6,6 @@ import * as actions from '../../redux/dashboard/actions';
 import { render, axe } from '../../__test__/test-utils';
 import * as hooks from '../../redux/hooks';
 import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
-import * as routes from '../../navigation/routes.const';
 import Dashboard from '../Dashboard.page';
 
 const mockNavigateFn = jest.fn();
@@ -16,6 +15,14 @@ jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigateFn,
 }));
+
+jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
+  return {
+    ...original,
+    useIsMobile: () => false,
+  };
+});
 
 describe('Dashboard Page', () => {
   let result: RenderResult | undefined;
@@ -116,19 +123,6 @@ describe('Dashboard Page', () => {
         payload: { size: 10, page: 1 },
         type: 'setPagination',
       });
-    });
-  });
-
-  it('clicks on row', async () => {
-    const notificationsTableCell = result?.container.querySelector(
-      'table tr:first-child td:nth-child(2)'
-    );
-    fireEvent.click(notificationsTableCell!);
-    await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-      expect(mockNavigateFn).toBeCalledWith(
-        routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
-      );
     });
   });
 

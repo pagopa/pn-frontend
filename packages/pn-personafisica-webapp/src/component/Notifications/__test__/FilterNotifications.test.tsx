@@ -173,22 +173,20 @@ describe('Filter Notifications Table Component', () => {
     const todayM = moment();
     await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
-    await waitFor(() => {
-      fireEvent.click(submitButton!);
-    });
-    const cancelButton = within(form!).getByTestId('cancelButton');
+    fireEvent.click(submitButton!);
+    const cancelButton = await waitFor(() => within(form!).getByTestId('cancelButton'));
     expect(cancelButton).toBeEnabled();
+    fireEvent.click(cancelButton);
     await waitFor(() => {
-      fireEvent.click(cancelButton);
-    });
-    expect(mockDispatchFn).toBeCalledTimes(2);
-    expect(mockDispatchFn).toBeCalledWith({
-      payload: {
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
-        iunMatch: undefined,
-      },
-      type: 'setNotificationFilters',
+      expect(mockDispatchFn).toBeCalledTimes(2);
+      expect(mockDispatchFn).toBeCalledWith({
+        payload: {
+          startDate: tenYearsAgo.toISOString(),
+          endDate: today.toISOString(),
+          iunMatch: undefined,
+        },
+        type: 'setNotificationFilters',
+      });
     });
   });
 
