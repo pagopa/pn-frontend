@@ -140,7 +140,8 @@ const NotificationDetailTimeline = ({
             />
           </Grid>
         </Grid>
-        <Box sx={{padding: '0 24px 0 24px'}}>
+        <Box sx={{padding: '0 24px 0 24px', height: "calc(100vh - 87px)",
+          overflowY: "scroll"}}>
           <TimelineNotification>{timelineComponent}</TimelineNotification>
         </Box>
       </CustomDrawer>

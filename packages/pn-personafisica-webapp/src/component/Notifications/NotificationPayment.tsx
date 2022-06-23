@@ -44,6 +44,7 @@ interface PaymentData {
 
 const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocumentDownload }) => {
   const { t } = useTranslation(['notifiche']);
+  const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const dispatch = useAppDispatch();
@@ -340,10 +341,11 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
           {data.message && (
             <Alert
               severity={data.message.type}
-              action={getMessageAction(data.message)}
+              action={isMobile ? undefined : getMessageAction(data.message)}
             >
               <Typography variant="body1">{data.message.body}</Typography>
               <Typography variant="body1" fontWeight="bold">{data.message.errorCode}</Typography>
+              {isMobile ? <Box width="100%" display="flex" justifyContent="center" pr={7.5}>{getMessageAction(data.message)}</Box> : null}
             </Alert>
           )}
         </Box>
