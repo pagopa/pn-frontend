@@ -22,7 +22,9 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
       avatar={<IllusSms />}
     >
       <CourtesyContactsList recipientId={recipientId} contacts={contacts} />
-      <Typography color="text.primary" fontWeight={400} fontSize={16}>{t('courtesy-contacts.io-enable', { ns: 'recapiti' })}</Typography>
+      <Typography color="text.primary" fontWeight={400} fontSize={16}>
+        {t('courtesy-contacts.io-enable', { ns: 'recapiti' })}
+      </Typography>
     </DigitalContactsCard>
   );
 };
