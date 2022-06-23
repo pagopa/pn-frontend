@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 // import DownloadIcon from '@mui/icons-material/Download';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -49,7 +49,7 @@ const NotificationDetailDocuments = ({
       {/* TODO: ripristinare quando sarà completata la issue pn-720 */}
       {/* !documentsAvailable &&
         <Grid item>
-          <Button startIcon={<DownloadIcon />}>Scarica tutti gli Atti</Button>
+          <Button startIcon={<DownloadIcon />}>Scarica tutti i Documenti</Button>
         </Grid>
       */}
     </Grid>
@@ -60,25 +60,25 @@ const NotificationDetailDocuments = ({
         </Typography>
       )}
     </Grid>
-    <Grid key={'download-files-section'}>
-      {documents.map((d) =>
-        !documentsAvailable ? (
-          <Typography key={d.digests.sha256}>{d.ref.key}</Typography>
-        ) : (
+    <Grid key={'download-files-section'} item>
+      {documents.map((d) => (
+        <Box key={d.digests.sha256}>
+          {!documentsAvailable ? (
+          <Typography>{d.title || d.ref.key}</Typography>) : (
           <ButtonNaked
             data-testid="documentButton"
-            key={d.digests.sha256}
             color={'primary'}
             startIcon={<AttachFileIcon />}
             onClick={() => clickHandler(d.docIdx)}
           >
-            {d.ref.key}
+            {d.title || d.ref.key}
             <Typography sx={{ fontWeight: 600, ml: '10px' }}>
               {''} {/* TODO: integrate specific dimension of file */}
             </Typography>
           </ButtonNaked>
-        )
-      )}
+          )}
+        </Box>
+      ))}
     </Grid>
   </Fragment>
 );

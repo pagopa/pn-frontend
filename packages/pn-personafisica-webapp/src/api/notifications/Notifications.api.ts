@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import {
   formatDate,
   LegalFactId,
@@ -18,6 +19,13 @@ import {
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
 } from './notifications.routes';
+
+const getDownloadUrl = (response: AxiosResponse): { url: string } => {
+  if (response.data) {
+    return response.data as { url: string };
+  }
+  return {url: ''};
+};
 
 export const NotificationsApi = {
   /**
@@ -65,12 +73,7 @@ export const NotificationsApi = {
   getReceivedNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
-      .then((response) => {
-        if (response.data) {
-          return response.data;
-        }
-        return { url: '' };
-      }),
+      .then((response) => getDownloadUrl(response)),
   /**
    * Gets current user notification legalfact
    * @param  {string} iun
@@ -82,20 +85,8 @@ export const NotificationsApi = {
     legalFact: LegalFactId
   ): Promise<{ url: string }> =>
     apiClient
-      .get<Buffer>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact), {
-        responseType: 'arraybuffer',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/pdf',
-        },
-      })
-      .then((response) => {
-        if (response.data) {
-          const blob = new Blob([response.data], { type: 'application/pdf' });
-          return { url: window.URL.createObjectURL(blob) };
-        }
-        return { url: '' };
-      }),
+      .get<{ url: string }>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
+      .then((response) => getDownloadUrl(response)),
   /**
    * Gets current user specified Payment Attachment
    * @param  {string} iun
@@ -108,12 +99,7 @@ export const NotificationsApi = {
   ): Promise<{ url: string }> =>
     apiClient
       .get<{ url: string }>(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string))
-      .then((response) => {
-        if (response.data) {
-          return { url: response.data.url };
-        }
-        return { url: '' };
-      }),
+      .then((response) => getDownloadUrl(response)),
   /**
    * Gets current user's notification payment info
    * @param  {string} noticeCode

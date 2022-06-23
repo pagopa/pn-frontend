@@ -76,7 +76,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
       <NewNotificationCard isContinueDisabled={!formik.isValid} title="Informazioni preliminari">
         <TextField
           id="paProtocolNumber"
-          label="Numero di protocollo *"
+          label="Numero di protocollo*"
           fullWidth
           name="paProtocolNumber"
           value={formik.values.paProtocolNumber}
@@ -88,7 +88,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         />
         <TextField
           id="subject"
-          label="Oggetto della notifica *"
+          label="Oggetto della notifica*"
           fullWidth
           name="subject"
           value={formik.values.subject}
@@ -110,7 +110,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         />
         <TextField
           id="group"
-          label={`Gruppo${groups ? ' *' : ''}`}
+          label={`Gruppo${groups ? '*' : ''}`}
           fullWidth
           name="group"
           value={formik.values.group}
@@ -135,7 +135,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         <FormControl margin="normal" fullWidth>
           <FormLabel id="comunication-type-label">
             <Typography fontWeight={600} fontSize={16}>
-              Modalità di invio *
+              Modalità di invio*
             </Typography>
           </FormLabel>
           <RadioGroup
@@ -162,7 +162,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         <FormControl margin="normal" fullWidth>
           <FormLabel id="payment-method-label">
             <Typography fontWeight={600} fontSize={16}>
-              Modello di pagamento *
+              Modello di pagamento*
             </Typography>
           </FormLabel>
           <RadioGroup

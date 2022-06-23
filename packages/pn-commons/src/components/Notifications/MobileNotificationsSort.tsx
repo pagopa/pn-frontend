@@ -1,13 +1,4 @@
 import { useState, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
-import {
-  CardSort,
-  CustomMobileDialog,
-  CustomMobileDialogAction,
-  CustomMobileDialogContent,
-  CustomMobileDialogToggle,
-  Sort,
-} from '@pagopa-pn/pn-commons';
 import {
   Button,
   DialogActions,
@@ -17,16 +8,29 @@ import {
   RadioGroup,
 } from '@mui/material';
 
+import { CardSort } from '../../types/ItemsCard';
+import { Sort } from '../../types/ItemsTable';
+import CustomMobileDialog from '../CustomMobileDialog/CustomMobileDialog';
+import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
+import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';
+import CustomMobileDialogAction from '../CustomMobileDialog/CustomMobileDialogAction';
+
 type Props = {
   sortFields: Array<CardSort>;
   /** Card sort */
   sort: Sort;
   /** The function to be invoked if the user change sorting */
   onChangeSorting: (s: Sort) => void;
+  /** Title of the dialog */
+  title: string;
+  /** Title of the options section */
+  optionsTitle: string;
+  /** Label of the cancel button */
+  cancelLabel: string;
+
 };
 
-const MobileNotificationsSort = ({ sortFields, sort, onChangeSorting }: Props) => {
-  const { t } = useTranslation('notifiche');
+const MobileNotificationsSort = ({ sortFields, sort, onChangeSorting, title, optionsTitle, cancelLabel }: Props) => {
   const [sortValue, setSortValue] = useState(sort ? `${sort.orderBy}-${sort.order}` : '');
   const prevSort = useRef(sortValue);
   const isSorted = sort.orderBy !== '';
@@ -57,12 +61,12 @@ const MobileNotificationsSort = ({ sortFields, sort, onChangeSorting }: Props) =
         hasCounterBadge
         bagdeCount={isSorted ? 1 : 0}
       >
-        {t('sort.title')}
+        {title}
       </CustomMobileDialogToggle>
-      <CustomMobileDialogContent title={t('sort.title')}>
+      <CustomMobileDialogContent title={title}>
         <DialogContent>
           <RadioGroup
-            aria-labelledby={t('sort.options')}
+            aria-labelledby={optionsTitle}
             name="radio-buttons-group"
             onChange={handleChange}
             value={sortValue}
@@ -75,11 +79,11 @@ const MobileNotificationsSort = ({ sortFields, sort, onChangeSorting }: Props) =
         <DialogActions>
           <CustomMobileDialogAction closeOnClick>
             <Button variant="outlined" onClick={handleConfirmSort}>
-              {t('sort.title')}
+              {title}
             </Button>
           </CustomMobileDialogAction>
           <CustomMobileDialogAction closeOnClick>
-            <Button onClick={handleCancelSort}>{t('sort.cancel')}</Button>
+            <Button onClick={handleCancelSort}>{cancelLabel}</Button>
           </CustomMobileDialogAction>
         </DialogActions>
       </CustomMobileDialogContent>

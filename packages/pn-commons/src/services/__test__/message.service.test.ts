@@ -12,8 +12,8 @@ const _404error: IAppMessage = {
 
 const _403error: IAppMessage = {
   id: '2',
-  title: 'Utente non autenticato',
-  message: "La sessione è scaduta. Riesegui il login.",
+  title: 'La sessione è scaduta',
+  message: "Entra e accedi con SPID o CIE.",
   blocking: false,
   toNotify: true,
   status: 403

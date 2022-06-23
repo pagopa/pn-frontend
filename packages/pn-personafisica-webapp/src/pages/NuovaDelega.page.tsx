@@ -23,7 +23,7 @@ import {
   Paper,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { IllusCompleted } from '@pagopa/mui-italia';
 import { makeStyles } from '@mui/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -37,7 +37,6 @@ import {
   useIsMobile,
   PnBreadcrumb,
 } from '@pagopa-pn/pn-commons';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   createDelegation,
@@ -400,7 +399,7 @@ const NuovaDelega = () => {
       )}
       {created && (
         <CourtesyPage
-          icon={<CheckCircleOutlineIcon />}
+          icon={<IllusCompleted />}
           title={t('nuovaDelega.createdTitle')}
           subtitle={t('nuovaDelega.createdDescription')}
           onClick={handleDelegationsClick}

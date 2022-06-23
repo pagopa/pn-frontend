@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
-import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
@@ -90,7 +89,6 @@ const App = () => {
   }, [pendingDelegators]);
 
   const mapDelegatorSideMenuItem = delegators.map((delegator: Delegation) => ({
-    icon: PersonIcon,
     label:
       'delegator' in delegator && delegator.delegator
         ? `${delegator.delegator.displayName}`
@@ -101,6 +99,15 @@ const App = () => {
         : '*',
   }));
 
+  // add your notifications menu item
+  if (mapDelegatorSideMenuItem.length) {
+    /* eslint-disable-next-line functional/immutable-data */
+    mapDelegatorSideMenuItem.unshift({
+      label: t('title', {ns: 'notifiche'}),
+      route: routes.NOTIFICHE
+    });
+  }
+
   // TODO spostare questo in un file di utility
   const menuItems: Array<SideMenuItem> = [
     {
@@ -108,6 +115,7 @@ const App = () => {
       icon: MailOutlineIcon,
       route: routes.NOTIFICHE,
       children: mapDelegatorSideMenuItem.length ? mapDelegatorSideMenuItem : undefined,
+      notSelectable: !!mapDelegatorSideMenuItem.length
     },
     { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {

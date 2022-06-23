@@ -1,2 +1,2 @@
-export const phoneRegExp = /^((\+)39)(38[890]|34[6-90]|36[680]|33[3-90]|32[89])\d{7}$/g;
-
+export const phoneRegExp = /3\d{2}[. ]??\d{6,7}/g;
+export const internationalPhonePrefix = '+39';
