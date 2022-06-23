@@ -18,6 +18,7 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   return {
     ...original,
     NotificationsCard: () => <div>Cards</div>,
+    MobileNotificationsSort: () => <div>Sort</div>
   };
 });
 
@@ -30,7 +31,6 @@ jest.mock('react-i18next', () => ({
   ),
 }));
 
-jest.mock('../MobileNotificationsSort', () => () => <div>Sort</div>);
 jest.mock('../FilterNotifications', () => {
   const { forwardRef } = jest.requireActual('react');
   return forwardRef(() => <div>Filters</div>);
