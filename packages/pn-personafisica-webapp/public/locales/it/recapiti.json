@@ -21,8 +21,6 @@
     "valid-pec": "Indirizzo PEC non valido",
     "pec-verify": "Abbiamo inviato un codice a",
     "pec-verify-descr": "Inseriscilo qui sotto per confermare l’indirizzo PEC. Il codice è valido per <strong>10 minuti</strong>.",
-    "email-verify-descr": "Inseriscilo qui sotto per confermare l’indirizzo e-mail. Il codice è valido per <strong>10 minuti</strong>.",
-    "phone-verify-descr": "Inseriscilo qui sotto per confermare il numero di cellulare. Il codice è valido per <strong>10 minuti</strong>.",
     "insert-code": "Inserisci codice",
     "pec-new-code": "Non l’hai ricevuto? Controlla che l’indirizzo PEC sia corretto o",
     "new-code-link": "generane uno nuovo.",
