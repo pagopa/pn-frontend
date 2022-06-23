@@ -10,6 +10,7 @@ import {
 } from '../../types/NotificationDetail';
 import { NotificationStatus } from '../../types/NotificationStatus';
 import {
+  filtersApplied,
   getLegalFactLabel,
   getNotificationStatusInfos,
   getNotificationTimelineStatusInfos,
@@ -114,10 +115,26 @@ describe('notification utility functions', () => {
     );
   });
   */
+
+  it('return notifications filters count (no filters)', () => {
+    const count = filtersApplied(
+      { startDate: new Date().toISOString(), endDate: new Date().toISOString() },
+      { startDate: new Date().toISOString(), endDate: new Date().toISOString() }
+    );
+    expect(count).toEqual(0);
+  });
+
+  it('return notifications filters count (with filters)', () => {
+    const count = filtersApplied(
+      { startDate: new Date().toISOString(), endDate: new Date().toISOString(), iunMatch: 'mocked-iun', recipientId: 'mocked-recipient' },
+      { startDate: new Date().toISOString(), endDate: new Date().toISOString(), iunMatch: undefined, recipientId: undefined },
+    );
+    expect(count).toEqual(2);
+  });
 });
 
 describe('timeline utility functions', () => {
-  test('return timeline status infos - SCHEDULE_ANALOG_WORKFLOW', () => {
+  it('return timeline status infos - SCHEDULE_ANALOG_WORKFLOW', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_ANALOG_WORKFLOW;
     testTimelineStatusInfosFn(
       'Invio per via cartacea',
@@ -125,7 +142,7 @@ describe('timeline utility functions', () => {
     );
   });
 
-  test('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW', () => {
+  it('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
     testTimelineStatusInfosFn(
       'Invio per via digitale',
@@ -133,7 +150,7 @@ describe('timeline utility functions', () => {
     );
   });
 
-  test('return timeline status infos - SEND_COURTESY_MESSAGE', () => {
+  it('return timeline status infos - SEND_COURTESY_MESSAGE', () => {
     parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.EMAIL;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_COURTESY_MESSAGE;
     (parsedNotificationCopy.timeline[0].details as SendCourtesyMessageDetails).digitalAddress = {
@@ -146,7 +163,7 @@ describe('timeline utility functions', () => {
     );
   });
 
-  test('return timeline status infos - SEND_DIGITAL_DOMICILE', () => {
+  it('return timeline status infos - SEND_DIGITAL_DOMICILE', () => {
     parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE;
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
@@ -159,7 +176,7 @@ describe('timeline utility functions', () => {
     );
   });
 
-  test('return timeline status infos - SEND_DIGITAL_DOMICILE_FEEDBACK', () => {
+  it('return timeline status infos - SEND_DIGITAL_DOMICILE_FEEDBACK', () => {
     parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK;
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
@@ -172,7 +189,7 @@ describe('timeline utility functions', () => {
     );
   });
 
-  test('return timeline status infos - SEND_DIGITAL_DOMICILE_FAILURE', () => {
+  it('return timeline status infos - SEND_DIGITAL_DOMICILE_FAILURE', () => {
     parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).errors = ['mocked-errors'];
