@@ -54,10 +54,10 @@ describe('PreliminaryInformations Component', () => {
   it('renders PreliminaryInformations', () => {
     expect(result.container).toHaveTextContent(/Informazioni preliminari/i);
     const form = result.container.querySelector('form');
-    testFormElements(form!, 'paProtocolNumber', 'Numero di protocollo *');
-    testFormElements(form!, 'subject', 'Oggetto della notifica *');
+    testFormElements(form!, 'paProtocolNumber', 'Numero di protocollo*');
+    testFormElements(form!, 'subject', 'Oggetto della notifica*');
     testFormElements(form!, 'abstract', 'Descrizione');
-    testFormElements(form!, 'group', 'Gruppo *');
+    testFormElements(form!, 'group', 'Gruppo*');
     testRadioElements(form!, 'comunicationTypeRadio', ['Modello 890', 'Raccomandata A/R']);
     testRadioElements(form!, 'paymentMethodRadio', [
       'Avviso pagoPA',

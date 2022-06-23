@@ -24,7 +24,7 @@
         "error_title": "Spiacenti, qualcosa è andato storto",
         "error_subtitle": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
         "error_button": "Ricarica la pagina",
-        "no_delegates": "Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.",
+        "no_delegates": "Non hai delegato nessuno alla visualizzazione delle tue notifiche.",
         "reload": "Ricarica",
         "show_code_title": "Codice di verifica per la delega a {{name}}",
         "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",

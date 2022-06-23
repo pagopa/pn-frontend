@@ -9,6 +9,7 @@ import {
   SxProps,
   Typography,
 } from '@mui/material';
+import { Fragment } from 'react';
 
 import { CardElement, CardAction } from '../../types/ItemsCard';
 import { Item } from '../../types/ItemsTable';
@@ -62,7 +63,7 @@ const ItemsCard = ({ cardHeader, cardBody, cardData, cardActions, sx, headerGrid
   );
 
   return (
-    <Box sx={{...cardStyle, ...sx}}>
+    <Box sx={{ ...cardStyle, ...sx }}>
       {cardData.map((data) => (
         <Card
           key={data.id}
@@ -77,15 +78,19 @@ const ItemsCard = ({ cardHeader, cardBody, cardData, cardActions, sx, headerGrid
           <CardContent sx={{ padding: 0, mt: 2, ':last-child': { padding: 0 } }}>
             {cardBody.map((body) => (
               <Box key={body.id} sx={{ mb: 2 }}>
-                <Typography variant="caption-semibold" data-testid="cardBodyLabel">
-                  {body.label}
-                </Typography>
-                {!body.notWrappedInTypography && (
-                  <Typography variant="body2" data-testid="cardBodyValue">
-                    {body.getLabel(data[body.id])}
-                  </Typography>
+                {(!body.hideIfEmpty || (body.hideIfEmpty && body.getLabel(data[body.id]))) && (
+                  <Fragment>
+                    <Typography variant="caption-semibold" data-testid="cardBodyLabel">
+                      {body.label}
+                    </Typography>
+                    {!body.notWrappedInTypography && (
+                      <Typography variant="body2" data-testid="cardBodyValue">
+                        {body.getLabel(data[body.id])}
+                      </Typography>
+                    )}
+                    {body.notWrappedInTypography && body.getLabel(data[body.id])}
+                  </Fragment>
                 )}
-                {body.notWrappedInTypography && body.getLabel(data[body.id])}
               </Box>
             ))}
           </CardContent>
