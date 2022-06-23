@@ -85,13 +85,13 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
         tooltip: 'Il destinatario ha visualizzato la notifica',
         description: 'Il destinatario ha visualizzato la notifica',
       };
-    /*case NotificationStatus.CANCELED:
+    case NotificationStatus.CANCELED:
       return {
         color: 'warning',
         label: 'Annullata',
         tooltip: "L'ente ha annullato l'invio della notifica",
         description: "L'ente ha annullato l'invio della notifica",
-      };*/
+      };
     default:
       return {
         color: 'default',
@@ -110,7 +110,7 @@ export const NotificationAllowedStatus = [
   { value: NotificationStatus.EFFECTIVE_DATE, label: 'Perfezionata per decorrenza termini' },
   { value: NotificationStatus.VIEWED, label: 'Perfezionata per visione' },
   { value: NotificationStatus.PAID, label: 'Pagata' },
-  // { value: NotificationStatus.CANCELED, label: 'Annullata' },
+  { value: NotificationStatus.CANCELED, label: 'Annullata' },
   { value: NotificationStatus.UNREACHABLE, label: 'Destinatario irreperibile' },
 ];
 
@@ -356,7 +356,10 @@ export function getLegalFactLabel(
  * @param  {emptyValues} GetNotificationsParams
  * @returns number
  */
-export function filtersApplied(prevFilters: GetNotificationsParams, emptyValues: GetNotificationsParams): number {
+export function filtersApplied(
+  prevFilters: GetNotificationsParams,
+  emptyValues: GetNotificationsParams
+): number {
   return Object.entries(prevFilters).reduce((c: number, element: [string, any]) => {
     if (element[0] in emptyValues && element[1] !== (emptyValues as any)[element[0]]) {
       return c + 1;
