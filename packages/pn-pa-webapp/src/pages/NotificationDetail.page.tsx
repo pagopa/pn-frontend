@@ -49,12 +49,24 @@ const NotificationDetail = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-  const detailTableRows: Array<NotificationDetailTableRow> = [
-    { id: 1, label: 'Data', value: <Box fontWeight={600}>{notification.sentAt}</Box> },
-    { id: 2, label: 'Da pagare entro il', value: <Box fontWeight={600}>{notification.sentAt}</Box> },
+  const unfilteredDetailTableRows: Array<{
+    label: string;
+    rawValue: string | undefined;
+    value: ReactNode;
+  }> = [
     {
-      id: 3,
+      label: 'Data',
+      rawValue: notification.sentAt,
+      value: <Box fontWeight={600}>{notification.sentAt}</Box>,
+    },
+    {
+      label: 'Da pagare entro il',
+      rawValue: notification.paymentExpirationDate,
+      value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
+    },
+    {
       label: 'Codice Fiscale destinatario',
+      rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
       value:
         notification.recipients.length > 1 ? (
           <Box fontWeight={600}>
@@ -68,16 +80,6 @@ const NotificationDetail = () => {
           <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>
         ),
     },
-    ...(notification.recipients.length > 1
-      ? []
-      : [
-          {
-            id: 4,
-            label: 'Nome e cognome',
-            value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
-          },
-        ]),
-    { id: 5, label: 'Mittente', value: <Box fontWeight={600}>{sender}</Box> },
     {
       // ...(notification.recipients.length > 1
       //   ? []
