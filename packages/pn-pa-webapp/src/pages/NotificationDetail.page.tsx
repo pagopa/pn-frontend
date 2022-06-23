@@ -104,6 +104,7 @@ const NotificationDetail = () => {
       void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
     }
   };
+
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     void dispatch(
       getSentNotificationLegalfact({
@@ -161,10 +162,13 @@ const NotificationDetail = () => {
         }
         currentLocationLabel="Dettaglio notifica"
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 2 }}></TitleBox>
+      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb:1 }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
         <Button
-          sx={{ my: 1 }}
+          sx={{ mb: {
+            xs:"24px",
+            md:"32px"
+          }}}
           variant="outlined"
           onClick={handleCancelNotification}
           data-testid="cancelNotificationBtn"
