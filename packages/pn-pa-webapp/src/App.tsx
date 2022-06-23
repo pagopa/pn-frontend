@@ -9,7 +9,6 @@ import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 import {
   PAGOPA_HELP_EMAIL,
-  SELFCARE_URL_FE_LOGIN,
   SELFCARE_BASE_URL,
   PARTY_MOCK,
 } from './utils/constants';
@@ -84,10 +83,7 @@ const App = () => {
       loggedUser={jwtUser}
     >
       <AppMessage
-        sessionRedirect={() => {
-          /* eslint-disable-next-line functional/immutable-data */
-          window.location.href = SELFCARE_URL_FE_LOGIN as string;
-        }}
+        sessionRedirect={() => dispatch(logout())}
       />
       <LoadingOverlay />
       <Router />
