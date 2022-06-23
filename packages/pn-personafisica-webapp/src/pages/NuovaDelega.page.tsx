@@ -148,7 +148,7 @@ const NuovaDelega = () => {
             {t('nuovaDelega.title')}
           </Fragment>
         }
-        currentLocationLabel={t('Nuova Delega')}
+        currentLocationLabel={t('Nuova delega')}
       />
       <TitleBox
         title={t('nuovaDelega.title')}
@@ -298,12 +298,12 @@ const NuovaDelega = () => {
                             <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
                               {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                                 <FormControl fullWidth>
-                                  <InputLabel id="ente-select">{t('Seleziona Enti')}</InputLabel>
+                                  <InputLabel id="ente-select">{t('Seleziona enti')}</InputLabel>
                                   <Select
                                     labelId="ente-select"
                                     id="ente-select"
                                     value={values.enteSelect.uniqueIdentifier}
-                                    label={t('Seleziona Enti')}
+                                    label={t('Seleziona enti')}
                                     onChange={(event: SelectChangeEvent<string>) => {
                                       setFieldValue('enteSelect', {
                                         name: event.target.name,
