@@ -14,9 +14,9 @@ const NotificationDetailTable = ({ rows }: Props) => (
     <Table aria-label="Dettaglio notifica">
       <TableBody>
         {rows.map((row) => (
-          <TableRow key={row.id} sx={{ '& td': { border: 'none' } }}>
-            <TableCell padding="none" sx={{ py: 1}}>{row.label}</TableCell>
-            <TableCell padding="none" sx={{ py: 1}}>{row.value}</TableCell>
+          <TableRow key={row.id} sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
+            <TableCell padding="none" sx={{ py: 1 }}>{row.label}</TableCell>
+            <TableCell padding="none" sx={{ py: 1 }}>{row.value}</TableCell>
           </TableRow>
         ))}
       </TableBody>
