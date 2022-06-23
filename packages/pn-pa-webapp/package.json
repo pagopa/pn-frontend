@@ -12,7 +12,7 @@
     "@mui/styles": "^5.4.1",
     "@mui/x-date-pickers": "^5.0.0-alpha.5",
     "@pagopa-pn/pn-commons": "0.1.0",
-    "@pagopa/mui-italia": "^0.6.28",
+    "@pagopa/mui-italia": "^0.6.25",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.11.21",
@@ -62,9 +62,6 @@
     ]
   },
   "devDependencies": {
-    "next-compose-plugins": "^2.2.1",
-    "next-transpile-modules": "^9.0.0",
-    "next-images": "^1.8.4",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
