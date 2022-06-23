@@ -2,7 +2,7 @@
     "deleghe": {
         "title": "Deleghe",
         "close": "Chiudi",
-        "description": "Qui puoi gestire <strong>i tuoi delegati</strong> e <strong>le deleghe a tuo carico</strong>. I primi sono le persone fisiche o giuridiche che hai autorizzato alla visualizzazione e gestione delle tue notifiche, le seconde sono coloro che hanno autorizzato te.",
+        "description": "Qui puoi gestire i tuoi delegati e le deleghe a tuo carico. I primi sono le persone fisiche o giuridiche che hai autorizzato alla visualizzazione e gestione delle tue notifiche, le seconde sono coloro che hanno autorizzato te.",
         "delegatesTitle": "I tuoi delegati",
         "delegatorsTitle": "Deleghe a tuo carico",
         "delegationStart": "Inizio delega",
@@ -15,7 +15,7 @@
         "revoke": "Revoca",
         "reject": "Rifiuta",
         "accept": "Accetta",
-        "show": "Mostra Codice",
+        "show": "Mostra codice",
         "revocation_question": "Vuoi davvero revocare la delega?",
         "rejection_question": "Vuoi davvero rifiutare la delega?",
         "confirm_revocation": "Revoca la delega",
@@ -26,8 +26,8 @@
         "error_button": "Ricarica la pagina",
         "no_delegates": "Non hai delegato nessuno alla visualizzazione delle tue notifiche.",
         "reload": "Ricarica",
-        "show_code_title": "Codice di verifica delega {{name}}",
-        "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della notifica.",
+        "show_code_title": "Codice di verifica per la delega a {{name}}",
+        "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
         "verification_code": "Codice di verifica",
         "table": {
             "name": "Nome",
@@ -36,14 +36,14 @@
             "delegationEnd": "Fine delega",
             "permissions": "Permessi",
             "status": "Stato",
-            "showCode": "Mostra Codice",
+            "showCode": "Mostra codice",
             "revoke": "Revoca",
             "reject": "Rifiuta",
             "accept": "Accetta",
             "notificationsFrom": "Notifiche da:",
             "allNotifications": "Tutte le notifiche",
             "active": "Attiva",
-            "pending": "Attesa conferma"
+            "pending": "In attesa di conferma"
         }
     },
     "nuovaDelega": {
@@ -65,7 +65,7 @@
             "onlySelected": "Solo gli enti selezionati",
             "endDate": "Termine Delega",
             "verificationCode": "Codice di Verifica",
-            "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della notifica.",
+            "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
             "submit": "Invia la richiesta",
             "mandatoryField": "Campi Obbligatori *"
         },
