@@ -237,6 +237,7 @@ const NotificationDetail = () => {
   const ModalAlert = () => (
     <Dialog
       open={showModal}
+      data-testid="modalId"
       onClose={handleModalClose}
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
@@ -248,10 +249,10 @@ const NotificationDetail = () => {
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{px: 4, pb: 4}}>
-        <Button onClick={handleModalClose} variant="outlined">
+        <Button onClick={handleModalClose} variant="outlined" data-testid="modalCloseBtnId">
           Indietro
         </Button>
-        <Button onClick={handleModalCloseAndProceed} variant="contained">
+        <Button onClick={handleModalCloseAndProceed} variant="contained" data-testid="modalCloseAndProceedBtnId">
           Invia una nuova notifica
         </Button>
       </DialogActions>
