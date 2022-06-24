@@ -51,7 +51,7 @@ export interface NewDelegationFormProps {
   nome: string;
   cognome: string;
   selectTuttiEntiOrSelezionati: string;
-  expirationDate: number;
+  expirationDate: Date;
   enteSelect: { name: string; uniqueIdentifier: string };
   verificationCode: string;
 }

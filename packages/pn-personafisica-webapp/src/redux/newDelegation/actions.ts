@@ -16,7 +16,7 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
       },
       visibilityIds: data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? [] : [data.enteSelect],
       verificationCode: data.verificationCode,
-      dateto: new Date(data.expirationDate).toISOString().split('T')[0],
+      dateto: data.expirationDate.toISOString().split('T')[0],
     };
     try {
       return await DelegationsApi.createDelegation(payload);

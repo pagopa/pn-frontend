@@ -128,7 +128,7 @@ describe('NuovaDelega page', () => {
     await testInput(form, 'nome', 'Mario');
     await testInput(form, 'cognome', 'Rossi');
     await testInput(form, 'codiceFiscale', 'RSSMRA01A01A111A');
-    await testInput(form, 'endDate', '23/02/2022');
+    await testInput(form, 'expirationDate', '01/01/2122');
     const button = result.queryByTestId('createButton');
     fireEvent.click(button!);
     await waitFor(() => {
@@ -140,7 +140,7 @@ describe('NuovaDelega page', () => {
         nome: 'Mario',
         cognome: 'Rossi',
         selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-        expirationDate: new Date('02/23/2022').getTime(),
+        expirationDate: new Date('01/01/2122'),
         enteSelect: { name: '', uniqueIdentifier: '' },
         verificationCode: 'verification code',
       });
