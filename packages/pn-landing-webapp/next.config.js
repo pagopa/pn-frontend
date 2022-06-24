@@ -1,8 +1,7 @@
 const withPlugins = require("next-compose-plugins");
 const withTM = require("next-transpile-modules")(["@pagopa-pn/pn-commons"]);
-const withImages = require("next-images");
 
-module.exports = withPlugins([withTM(), withImages], {
+module.exports = withPlugins([withTM()], {
   reactStrictMode: true,
   trailingSlash: true,
   webpack: (config) => {
