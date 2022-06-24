@@ -6,11 +6,6 @@ import Recipient from '../Recipient';
 import { formRecipients } from '../../../../utils/__test__/test-utils';
 import { testInput } from './test-utils';
 
-jest.mock('../PhysicalAddress', () => ({
-  __esModule: true,
-  default: () => <div>PhysicalAddress Component</div>,
-}));
-
 const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
 
@@ -62,6 +57,13 @@ describe('Recipient Component', () => {
     await testInput(form, `recipients[0].taxId`, formRecipients[0].taxId);
     await testInput(form, `recipients[0].creditorTaxId`, formRecipients[0].creditorTaxId);
     await testInput(form, `recipients[0].noticeCode`, formRecipients[0].noticeCode);
+    const checkbox = form.querySelector(`input[name="recipients[0].showPhysicalAddress"]`);
+    fireEvent.click(checkbox!);
+    await testInput(form, `recipients[0].address`, formRecipients[0].address);
+    await testInput(form, `recipients[0].houseNumber`, formRecipients[0].houseNumber);
+    await testInput(form, `recipients[0].zip`, formRecipients[0].zip);
+    await testInput(form, `recipients[0].province`, formRecipients[0].province);
+    await testInput(form, `recipients[0].foreignState`, formRecipients[0].foreignState);
     const errors = result.queryAllByText(/Campo Obbligatorio/i);
     expect(errors).toHaveLength(0);
     const submitButton = form.querySelector('button[type="submit"]');
@@ -70,7 +72,7 @@ describe('Recipient Component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toHaveBeenCalled();
     });
-  });
+  }, 20000);
 
   it('shows the digital domicile form and the physical address form', async () => {
     const digitalDomicileCheckbox = result.getByTestId('DigitalDomicileCheckbox');
@@ -84,7 +86,18 @@ describe('Recipient Component', () => {
     const digitalDomicileInputAfter = await waitFor(() => result.container.querySelector(
       'input[name="recipients[0].digitalDomicile"]'
     ));
-    expect(result.container).toHaveTextContent(/PhysicalAddress Component/i);
     expect(digitalDomicileInputAfter).toBeInTheDocument();
+    await waitFor(() => {
+      const address = result.container.querySelector(`input[name="recipients[0].address"]`);
+      expect(address).toBeInTheDocument();
+      const houseNumber = result.container.querySelector(`input[name="recipients[0].houseNumber"]`);
+      expect(houseNumber).toBeInTheDocument();
+      const zip = result.container.querySelector(`input[name="recipients[0].zip"]`);
+      expect(zip).toBeInTheDocument();
+      const province = result.container.querySelector(`input[name="recipients[0].province"]`);
+      expect(province).toBeInTheDocument();
+      const foreignState = result.container.querySelector(`input[name="recipients[0].foreignState"]`);
+      expect(foreignState).toBeInTheDocument();
+    })
   });
 });
