@@ -137,11 +137,11 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
             })}
             fullWidth
             type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
-            InputProps={{
+            InputProps={ type === CourtesyFieldType.PHONE ? {
               startAdornment: (
                 <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
               ),
-            }}
+            } : {}}
           />
         </Grid>
         <Grid item lg={4} sm={4} xs={12} alignItems="right">
