@@ -77,7 +77,7 @@ describe('Filter Notifications Table Component', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn);
     // render component
     await act(async () => {
-      result = render(<FilterNotifications />);
+      result = render(<FilterNotifications showFilters/>);
       form = result.container.querySelector('form') as HTMLFormElement;
     });
   });

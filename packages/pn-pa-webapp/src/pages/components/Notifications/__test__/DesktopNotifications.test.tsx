@@ -14,10 +14,17 @@ jest.mock('react-router-dom', () => ({
 }));
 
 jest.mock('../FilterNotifications', () => {
-  const { forwardRef } = jest.requireActual('react');
-  return forwardRef(() => <div>Filters</div>);
+  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
+  return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
+    useImperativeHandle(ref, () => ({
+      filtersApplied: false
+    }));
+    if (!showFilters) {
+      return <></>;
+    }
+    return <div>Filters</div>;
+  });
 });
-
 describe('DesktopNotifications Component', () => {
   it('renders DesktopNotifications', () => {
     // render component

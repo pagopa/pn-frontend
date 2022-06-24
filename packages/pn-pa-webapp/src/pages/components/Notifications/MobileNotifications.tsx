@@ -46,7 +46,7 @@ const MobileNotifications = ({
   onApiKeys,
 }: Props) => {
   const navigate = useNavigate();
-  const filterNotificationsRef = useRef({ filtersApplied: false });
+  const filterNotificationsRef = useRef({ filtersApplied: false, showFilters: true });
 
   const cardHeader: [CardElement, CardElement] = [
     {
@@ -161,7 +161,7 @@ const MobileNotifications = ({
     return arr;
   }, [] as Array<CardSort>);
 
-  const filtersApplied: boolean = filterNotificationsRef?.current?.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
   const emptyActionLabel: string = 'Chiavi API';
   const secondaryMessage: object = {
@@ -185,7 +185,7 @@ const MobileNotifications = ({
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
-          {showFilters && <FilterNotifications ref={filterNotificationsRef} />}
+          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters}/>
         </Grid>
         <Grid item xs={6} textAlign="right">
           {sort && showFilters && onChangeSorting && (
