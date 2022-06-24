@@ -91,7 +91,7 @@ const delegationsSlice = createSlice({
     builder.addCase(rejectDelegation.fulfilled, (state, action) => {
       state.modalState.open = false;
       state.delegations.delegators = state.delegations.delegators.filter(
-        (delegator: Delegation) => delegator.mandateId !== action.payload.id
+        (delegator: Delegation) => delegator.mandateId !== action.meta.arg
       );
     });
     builder.addCase(openAcceptModal, (state, action) => {
