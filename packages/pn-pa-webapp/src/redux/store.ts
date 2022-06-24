@@ -10,15 +10,17 @@ import notificationSlice from './notification/reducers';
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined, trackingMiddleware];
 
+export const appReducers = {
+  appState: appStateReducer,
+  userState: userSlice.reducer,
+  dashboardState: dashboardSlice.reducer,
+  notificationState: notificationSlice.reducer,
+  newNotificationState: newNotificationSlice.reducer
+};
+
 export const createStore = () =>
   configureStore({
-    reducer: {
-      appState: appStateReducer,
-      userState: userSlice.reducer,
-      dashboardState: dashboardSlice.reducer,
-      notificationState: notificationSlice.reducer,
-      newNotificationState: newNotificationSlice.reducer
-    },
+    reducer: appReducers,
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(
         (array, middleware) => (middleware ? array.concat(middleware) : array),

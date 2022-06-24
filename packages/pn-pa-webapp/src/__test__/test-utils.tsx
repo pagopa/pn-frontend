@@ -1,19 +1,33 @@
 import { ReactElement, ReactNode } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { configureStore, Store } from '@reduxjs/toolkit';
 import { fireEvent, render, RenderOptions, waitFor, within, screen } from '@testing-library/react';
 import { configureAxe, toHaveNoViolations } from 'jest-axe';
+import { appReducers } from '../redux/store';
 
-import { store } from '../redux/store';
-
-const AllTheProviders = ({ children }: { children: ReactNode }) => (
+const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => (
   <BrowserRouter>
-    <Provider store={store}>{children}</Provider>
+    <Provider store={testStore}>{children}</Provider>
   </BrowserRouter>
 );
 
-const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
-  render(ui, { wrapper: AllTheProviders, ...options });
+const customRender = (
+  ui: ReactElement,
+  {
+    preloadedState,
+    renderOptions,
+  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
+) => {
+  const testStore = configureStore({
+    reducer: appReducers,
+    preloadedState,
+  });
+  return render(ui, {
+    wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,
+    ...renderOptions,
+  });
+};
 
 const axe = configureAxe({
   rules: {
