@@ -291,9 +291,6 @@ export function parseNotificationDetail(
   const parsedNotification = {
     ...notificationDetail,
     sentAt: formatDate(notificationDetail.sentAt),
-    documentsAvailable: notificationDetail.documentsAvailable
-      ? notificationDetail.documentsAvailable
-      : true,
   };
   /* eslint-disable functional/immutable-data */
   /* eslint-disable functional/no-let */
