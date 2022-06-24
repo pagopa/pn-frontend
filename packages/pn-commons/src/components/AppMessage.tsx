@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { appStateActions, appStateSelectors } from '../redux/slices/appStateSlice';
@@ -15,6 +15,7 @@ const AppMessage = ({ sessionRedirect }: Props) => {
   const dispatch = useDispatch();
   const errors = useSelector(appStateSelectors.selectErrors);
   const success = useSelector(appStateSelectors.selectSuccess);
+  const [open, setOpen] = useState(true);
 
   const onCloseErrorToast = (id: string) => {
     dispatch(appStateActions.removeError(id));
@@ -24,17 +25,22 @@ const AppMessage = ({ sessionRedirect }: Props) => {
     dispatch(appStateActions.removeSuccess(id));
   };
 
+  const handleSessionModalClose = () => {
+    setOpen(false);
+    sessionRedirect && sessionRedirect();
+  };
+
   return (
     <Fragment>
       {errors.map((errorMessage: IAppMessage) =>
         errorMessage.status === 403 ? (
           <SessionModal
-            open
+            open={open}
             key={errorMessage.id}
             title={errorMessage.title}
             message={errorMessage.message}
-            handleClose={sessionRedirect}
-            onConfirm={sessionRedirect}
+            handleClose={handleSessionModalClose}
+            onConfirm={handleSessionModalClose}
             onConfirmLabel={"Entra"}
           />
         ) : (

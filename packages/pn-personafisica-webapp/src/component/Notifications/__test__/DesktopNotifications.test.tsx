@@ -15,16 +15,22 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => (
-    {
-      t: (str: string) => str,
-    }
-  ),
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
 
 jest.mock('../FilterNotifications', () => {
-  const { forwardRef } = jest.requireActual('react');
-  return forwardRef(() => <div>Filters</div>);
+  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
+  return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
+    useImperativeHandle(ref, () => ({
+      filtersApplied: false
+    }));
+    if (!showFilters) {
+      return <></>;
+    }
+    return <div>Filters</div>;
+  });
 });
 
 describe('DesktopNotifications Component', () => {
@@ -77,7 +83,7 @@ describe('DesktopNotifications Component', () => {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 
@@ -94,7 +100,7 @@ describe('DesktopNotifications Component', () => {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 });
