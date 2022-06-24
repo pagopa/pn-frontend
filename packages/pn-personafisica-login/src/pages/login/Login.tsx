@@ -180,14 +180,14 @@ const Login = () => {
           <Grid item xs={10} sm={6} md={4} lg={4} xl={3}>
             <Typography
               color="text.secondary"
-              py={3}
+              py={0}
               px={0}
               sx={{
                 textAlign: 'center',
               }}
               component="div"
               variant="body1"
-              mb={isMobile ? 4 : 7}
+              mt={isMobile ? 4 : 7}
             >
               <Trans
                 i18nKey="loginPage.privacyAndCondition"
