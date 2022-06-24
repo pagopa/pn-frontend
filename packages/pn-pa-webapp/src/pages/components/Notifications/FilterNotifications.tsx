@@ -22,6 +22,10 @@ import { RootState } from '../../../redux/store';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
 
+type Props = {
+  showFilters: boolean;
+};
+
 const emptyValues = {
   startDate: tenYearsAgo.toISOString(),
   endDate: today.toISOString(),
@@ -40,7 +44,7 @@ const initialEmptyValues = {
 };
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-const FilterNotifications = forwardRef((_props, ref) => {
+const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -112,8 +116,12 @@ const FilterNotifications = forwardRef((_props, ref) => {
   }, [filters]);
 
   useImperativeHandle(ref, () => ({
-    filtersApplied: filtersCount > 0,
+    filtersApplied: filtersCount > 0
   }));
+
+  if (!showFilters) {
+    return <></>;
+  }
 
   return isMobile ? (
     <CustomMobileDialog>

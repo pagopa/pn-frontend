@@ -23,8 +23,16 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 });
 
 jest.mock('../FilterNotifications', () => {
-  const { forwardRef } = jest.requireActual('react');
-  return forwardRef(() => <div>Filters</div>);
+  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
+  return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
+    useImperativeHandle(ref, () => ({
+      filtersApplied: false
+    }));
+    if (!showFilters) {
+      return <></>;
+    }
+    return <div>Filters</div>;
+  });
 });
 
 describe('MobileNotifications Component', () => {

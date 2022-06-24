@@ -89,7 +89,7 @@ describe('Filter Notifications Table Component', () => {
 
     // render component
     await act(async () => {
-      result = render(<FilterNotifications />);
+      result = render(<FilterNotifications showFilters/>);
       form = result.container.querySelector('form') as HTMLFormElement;
     });
   });
