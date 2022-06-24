@@ -227,6 +227,10 @@ const NotificationDetail = () => {
 
   const handleModalClose = () => {
     setShowModal(false);
+  };
+
+  const handleModalCloseAndProceed = () => {
+    setShowModal(false);
     handleCancelNotification();
   };
 
@@ -237,15 +241,18 @@ const NotificationDetail = () => {
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
     >
-      <DialogTitle id="dialog-title">Annulla notifica</DialogTitle>
-      <DialogContent>
+      <DialogTitle id="dialog-title" sx={{p: 4}}>Ci siamo quasi</DialogTitle>
+      <DialogContent sx={{px: 4, pb: 4}}>
         <DialogContentText id="dialog-description">
-          L&apos;annullamento della notifica sarà completato solo quando si invia una nuova notifica. Chiudere questo messaggio per passare direttamente alla sezione di invio nuova notifica.
+        Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la precedente.
         </DialogContentText>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{px: 4, pb: 4}}>
         <Button onClick={handleModalClose} variant="outlined">
-          Ok
+          Indietro
+        </Button>
+        <Button onClick={handleModalCloseAndProceed} variant="contained">
+          Invia una nuova notifica
         </Button>
       </DialogActions>
     </Dialog>
