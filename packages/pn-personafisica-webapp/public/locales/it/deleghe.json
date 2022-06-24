@@ -83,6 +83,10 @@
             },
             "surname":{
                 "required": "Il cognome è obbligatorio"
+            },
+            "expirationDate": {
+                "required": "La data di termine delega è obbligatoria",
+                "wrong": "Data errata"
             }
         },
         "error": {

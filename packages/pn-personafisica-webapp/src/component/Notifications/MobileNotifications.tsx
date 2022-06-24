@@ -135,7 +135,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     navigate(routes.RECAPITI);
   };
 
-  const filtersApplied: boolean = filterNotificationsRef?.current?.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
     emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
@@ -176,7 +176,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
-          {showFilters && <FilterNotifications ref={filterNotificationsRef} />}
+          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters}/>
         </Grid>
         <Grid item xs={6} textAlign="right">
           {sort && showFilters && onChangeSorting && (

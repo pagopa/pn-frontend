@@ -60,12 +60,12 @@ const NotificationDetail = () => {
       value: <Box fontWeight={600}>{notification.sentAt}</Box>,
     },
     {
-      label: 'Termini di pagamento',
+      label: 'Da pagare entro il',
       rawValue: notification.paymentExpirationDate,
       value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
     },
     {
-      label: 'Destinatario',
+      label: 'Codice Fiscale destinatario',
       rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
       value:
         notification.recipients.length > 1 ? (
