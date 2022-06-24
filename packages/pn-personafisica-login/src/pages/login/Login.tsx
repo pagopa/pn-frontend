@@ -66,6 +66,7 @@ const Login = () => {
         <Grid container item justifyContent="center">
           <Grid item>
             <Typography
+              component="h2"
               variant="h3"
               px={0}
               color="textPrimary"
