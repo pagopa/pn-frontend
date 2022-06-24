@@ -2,12 +2,12 @@ import { Fragment, useState } from 'react';
 import { Typography, Grid, Drawer, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { styled } from '@mui/material/styles';
-import { TimelineNotification } from "@pagopa/mui-italia";
+import { TimelineNotification } from '@pagopa/mui-italia';
 
 import {
   LegalFactId,
   NotificationStatusHistory,
-  NotificationDetailRecipient
+  NotificationDetailRecipient,
 } from '../../types/NotificationDetail';
 import { useIsMobile } from '../../hooks/IsMobile';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
@@ -16,7 +16,7 @@ type Props = {
   recipients: Array<NotificationDetailRecipient>;
   statusHistory: Array<NotificationStatusHistory>;
   title: string;
-  legalFactLabels: {attestation: string, receipt: string};
+  legalFactLabels: { attestation: string; receipt: string };
   clickHandler: (legalFactId: LegalFactId) => void;
   historyButtonLabel: string;
   showMoreButtonLabel: string;
@@ -25,12 +25,12 @@ type Props = {
 
 const CustomDrawer = styled(Drawer)(() => ({
   '& .MuiDrawer-paper': {
-    width: '100%'
+    width: '100%',
   },
   '& .MuiTimeline-root': {
     marginTop: 0,
-    paddingTop: 0
-  }
+    paddingTop: 0,
+  },
 }));
 
 /**
@@ -52,7 +52,7 @@ const NotificationDetailTimeline = ({
   legalFactLabels,
   historyButtonLabel,
   showMoreButtonLabel,
-  showLessButtonLabel
+  showLessButtonLabel,
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
@@ -73,7 +73,7 @@ const NotificationDetailTimeline = ({
       return 'last';
     }
     return undefined;
-  }
+  };
 
   const timelineComponent = statusHistory.map((t, i) => (
     <NotificationDetailTimelineStep
@@ -92,7 +92,13 @@ const NotificationDetailTimeline = ({
     <Fragment>
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
         <Grid item>
-          <Typography component="h5" color="text.primary" fontWeight={700} textTransform="uppercase" fontSize={14}>
+          <Typography
+            component="h5"
+            color="text.primary"
+            fontWeight={700}
+            textTransform="uppercase"
+            fontSize={14}
+          >
             {title}
           </Typography>
         </Grid>
@@ -118,7 +124,13 @@ const NotificationDetailTimeline = ({
         )}
       </TimelineNotification>
       <CustomDrawer anchor="left" open={state} onClose={toggleHistoryDrawer}>
-        <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{ padding: '24px' }}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{ padding: '24px' }}
+        >
           <Grid item>
             <Typography
               color="text.primary"
@@ -140,8 +152,7 @@ const NotificationDetailTimeline = ({
             />
           </Grid>
         </Grid>
-        <Box sx={{padding: '0 24px 0 24px', height: "calc(100vh - 87px)",
-          overflowY: "scroll"}}>
+        <Box sx={{ px: 3, height: 'calc(100vh - 87px)', overflowY: 'scroll' }}>
           <TimelineNotification>{timelineComponent}</TimelineNotification>
         </Box>
       </CustomDrawer>
