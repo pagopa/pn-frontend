@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 import { Hero } from "@pagopa/mui-italia/dist/components/Hero";
 import { Showcase } from "@pagopa/mui-italia/dist/components/Showcase";
 import { Walkthrough } from "@pagopa/mui-italia/dist/components/Walkthrough";
-
 import {
   getHeroData,
   getShowcaseData,
@@ -14,12 +13,14 @@ import {
 
 const USER_TYPE = UserType.PA;
 
+// const FAVICON_PATH = `${process.env.NEXT_PUBLIC_ASSETS_URL}/favicon.svg`;
+
 const Home: NextPage = () => (
   <>
     <Head>
       <title>Piattaforma Notifiche</title>
       <meta name="description" content="Landing Piattaforma notifiche" />
-      <link rel="icon" href="/favicon.svg" />
+      <link rel="icon" href="static/favicon.svg" />
     </Head>
 
     <main>
