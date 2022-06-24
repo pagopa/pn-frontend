@@ -322,7 +322,7 @@ const Recipient = ({ onConfirm }: Props) => {
                         {values.recipients[index].showDigitalDomicile && (
                           <FormTextField
                             keyName={`recipients[${index}].digitalDomicile`}
-                            label={'Domicilio digitale'}
+                            label={'Domicilio digitale*'}
                             values={values}
                             touched={touched}
                             errors={errors}
