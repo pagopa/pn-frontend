@@ -42,10 +42,12 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  
+
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
 
-  const currentRecipient = notification.recipients.filter((recipient) => recipient.taxId === currentUser.fiscal_number)[0];
+  const currentRecipient = notification.recipients.filter(
+    (recipient) => recipient.taxId === currentUser.fiscal_number
+  )[0];
 
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
@@ -146,7 +148,18 @@ const NotificationDetail = () => {
         }
         currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 4 }}></TitleBox>
+      <TitleBox
+        variantTitle="h4"
+        title={notification.subject}
+        sx={{
+          pt: 3,
+          mb: {
+            xs: 3,
+            md: 4,
+          },
+        }}
+        mbTitle={0}
+      ></TitleBox>
     </Fragment>
   );
 
@@ -157,29 +170,29 @@ const NotificationDetail = () => {
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           {!isMobile && breadcrumb}
           <Stack spacing={3}>
-          <NotificationDetailTable rows={detailTableRows} />
-          {currentRecipient?.payment && (
-            <NotificationPayment
-              iun={notification.iun}
-              notificationPayment={currentRecipient.payment}
-              onDocumentDownload={dowloadDocument}
-            />
-          )}
-          <DomicileBanner />
-          <Paper sx={{ p: 3 }} className="paperContainer">
-            <NotificationDetailDocuments
-              title={t('detail.acts', { ns: 'notifiche' })}
-              documents={notification.documents}
-              clickHandler={documentDowloadHandler}
-              documentsAvailable={notification.documentsAvailable}
-              downloadFilesMessage={
-                notification.documentsAvailable
-                  ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
-                  : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' })
-              }
-            />
-          </Paper>
-          {/* TODO decommentare con pn-841
+            <NotificationDetailTable rows={detailTableRows} />
+            {currentRecipient?.payment && (
+              <NotificationPayment
+                iun={notification.iun}
+                notificationPayment={currentRecipient.payment}
+                onDocumentDownload={dowloadDocument}
+              />
+            )}
+            <DomicileBanner />
+            <Paper sx={{ p: 3 }} className="paperContainer">
+              <NotificationDetailDocuments
+                title={t('detail.acts', { ns: 'notifiche' })}
+                documents={notification.documents}
+                clickHandler={documentDowloadHandler}
+                documentsAvailable={notification.documentsAvailable}
+                downloadFilesMessage={
+                  notification.documentsAvailable
+                    ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
+                    : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' })
+                }
+              />
+            </Paper>
+            {/* TODO decommentare con pn-841
           <Paper sx={{ p: 3 }} className="paperContainer">
             <HelpNotificationDetails 
               title="Hai bisogno di aiuto?"
@@ -194,10 +207,7 @@ const NotificationDetail = () => {
           </Stack>
         </Grid>
         <Grid item lg={5} xs={12}>
-          <Box
-            component="section"
-            sx={{ backgroundColor: 'white', height: '100%', p: 3 }}
-          >
+          <Box component="section" sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
             <NotificationDetailTimeline
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}
