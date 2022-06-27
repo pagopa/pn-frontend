@@ -1,6 +1,7 @@
 module.exports = {
   root: true,
   extends: [
+    "next/core-web-vitals",
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
@@ -9,6 +10,11 @@ module.exports = {
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
+  },
   plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import', 'functional', 'sonarjs'],
   rules: {
     'no-case-declarations': 'off',
@@ -26,7 +32,7 @@ module.exports = {
     'no-throw-literal': 'error',
     'no-new-wrappers': 'error',
     'no-eval': 'error',
-    'no-console': 0, // TODO: to restore after development ['error', { allow: ['error', 'warn'] }],
+    'no-console': 0, //TODO ['error', { 'allow': ['error', 'warn'] }]
     'no-caller': 'error',
     'no-bitwise': 'error',
     eqeqeq: ['error', 'smart'],
@@ -39,7 +45,6 @@ module.exports = {
     // Enable if we want to enforce the return type for all the functions
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',
-    // TODO: added for compatibility. Removing this line we have to remove all the any usage in the code
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/array-type': [
       'error',
