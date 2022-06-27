@@ -209,10 +209,13 @@ const NotificationDetail = () => {
         }
         currentLocationLabel="Dettaglio notifica"
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 2 }}></TitleBox>
+      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3 }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
         <Button
-          sx={{ my: 1 }}
+          sx={{ mb: {
+            xs: 3,
+            md: 4
+          }}}
           variant="outlined"
           onClick={openModal}
           data-testid="cancelNotificationBtn"

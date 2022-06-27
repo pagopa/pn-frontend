@@ -124,13 +124,7 @@ const NotificationDetailTimeline = ({
         )}
       </TimelineNotification>
       <CustomDrawer anchor="left" open={state} onClose={toggleHistoryDrawer}>
-        <Grid
-          container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          sx={{ padding: '24px' }}
-        >
+        <Grid container direction="row" justifyContent="space-between" alignItems="center" sx={{ p: 3 }}>
           <Grid item>
             <Typography
               color="text.primary"
