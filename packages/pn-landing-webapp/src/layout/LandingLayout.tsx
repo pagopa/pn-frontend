@@ -1,15 +1,14 @@
 import { Box, Stack } from "@mui/material";
 import { HeaderAccount, Footer } from "@pagopa/mui-italia";
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
+import LangContext from "../../provider/lang-context";
 import {
+  companyLegalInfo,
   LANGUAGES,
   pagoPALink,
-  companyLegalInfo,
   postLoginLinks,
   preLoginLinks,
-} from "@pagopa-pn/pn-commons/src/utils/costants";
-import { useContext } from "react";
-import LangContext from "../../provider/lang-context";
+} from "./footer.constants";
 
 interface Props {
   children?: ReactNode;
