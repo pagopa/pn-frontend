@@ -1458,6 +1458,11 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@fontsource/titillium-web@^4.5.8":
+  version "4.5.8"
+  resolved "https://registry.yarnpkg.com/@fontsource/titillium-web/-/titillium-web-4.5.8.tgz#1bebb1daf86b02c7c8d816071a850121904f7b56"
+  integrity sha512-9sOpgikaqh9qvYRYLnk7C0PSIU4GNt17Qtw3txUwLioRcLWiL0OeNDE1vndC1NzeWII6AicTRMOoMTbthRuFIw==
+
 "@gar/promisify@^1.0.1":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
@@ -2993,11 +2998,12 @@
   dependencies:
     "@octokit/openapi-types" "^11.2.0"
 
-"@pagopa/mui-italia@^0.6.25", "@pagopa/mui-italia@^0.6.28":
-  version "0.6.28"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.28.tgz#32fc23af814f21425e3af3dbec589bfd03a63f4f"
-  integrity sha512-6/ZcuvF/cG3YClXQGWB+3Z0tude3uqWrmliLYmNckUExvZdlq+uobEkVMQDXCPdljGVuVifQ+a0DNaAC2cR3ng==
+"@pagopa/mui-italia@0.6.27":
+  version "0.6.27"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.6.27.tgz#d6aba9ac5283c33a1b41fcecd73c99e233e34756"
+  integrity sha512-bI4kxyitZypTS3PBugwCgyha3TKw0nMATxzVBVyucmvEMlHG99+MUBMwsGbesIeoyFT0nzkb2v0BZKnqo0UxDQ==
   dependencies:
+    "@fontsource/titillium-web" "^4.5.8"
     clsx "^1.1.1"
     fp-ts "^2.12.1"
     io-ts "^2.2.16"
@@ -11669,6 +11675,11 @@ next-compose-plugins@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/next-compose-plugins/-/next-compose-plugins-2.2.1.tgz#020fc53f275a7e719d62521bef4300fbb6fde5ab"
   integrity sha512-OjJ+fV15FXO2uQXQagLD4C0abYErBjyjE0I0FHpOEIB8upw0hg1ldFP6cqHTJBH1cZqy96OeR3u1dJ+Ez2D4Bg==
+
+next-global-css@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/next-global-css/-/next-global-css-1.3.1.tgz#9a3097e5bcce87f7ec627b07292edf267dedf6c1"
+  integrity sha512-+OnTwQKmv1lDP7r4R3T94oq6372R9UGVivchBQu49j7ZjzvSXHCnv93yAuhgMkvUgAbGifTs8sQ5YL9wjyAxfA==
 
 next-i18next@^11.0.0:
   version "11.0.0"
