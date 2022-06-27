@@ -25,8 +25,6 @@ import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
-  /** The function to be invoked if the user resets filters */
-  onCancelSearch: () => void;
   /** Table sort */
   sort?: Sort;
   /** The function to be invoked if the user change sorting */
@@ -39,14 +37,13 @@ type Props = {
 
 const MobileNotifications = ({
   notifications,
-  onCancelSearch,
   sort,
   onChangeSorting,
   onManualSend,
   onApiKeys,
 }: Props) => {
   const navigate = useNavigate();
-  const filterNotificationsRef = useRef({ filtersApplied: false, showFilters: true });
+  const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
   const cardHeader: [CardElement, CardElement] = [
     {
@@ -175,7 +172,7 @@ const MobileNotifications = ({
     emptyMessage: filtersApplied ? undefined : emptyMessage,
     emptyActionLabel: filtersApplied ? undefined : emptyActionLabel,
     disableSentimentDissatisfied: !filtersApplied,
-    emptyActionCallback: filtersApplied ? onCancelSearch : onApiKeys,
+    emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
     secondaryMessage: filtersApplied ? undefined : secondaryMessage,
   };
 

@@ -6,16 +6,14 @@ import {
   CustomPagination,
   PaginationData,
   Sort,
-  tenYearsAgo,
   TitleBox,
-  today,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
 import {
   getReceivedNotifications,
-  setNotificationFilters,
+  setMandateId,
   setPagination,
   setSorting,
 } from '../redux/dashboard/actions';
@@ -26,7 +24,7 @@ import MobileNotifications from '../component/Notifications/MobileNotifications'
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { Delegator } from '../redux/delegation/types';
 
-const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
+const Notifiche = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const { mandateId } = useParams();
@@ -39,12 +37,11 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
   );
 
   const isMobile = useIsMobile();
-  const pageTitle =
-    isDelegator && currentDelegator
-      ? t('delegatorTitle', {
-          name: currentDelegator.delegator ? currentDelegator.delegator.displayName : '',
-        })
-      : t('title');
+  const pageTitle = currentDelegator
+    ? t('delegatorTitle', {
+        name: currentDelegator.delegator ? currentDelegator.delegator.displayName : '',
+      })
+    : t('title');
 
   const totalElements =
     pagination.size *
@@ -68,28 +65,19 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
     dispatch(setSorting(s));
   };
 
-  // Remove filter
-  const handleCancelSearch = () => {
-    dispatch(
-      setNotificationFilters({
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
-        iunMatch: undefined,
-      })
-    );
-  };
-
   useEffect(() => {
-    // assign the ref's current value to the pagination Hook
+    if (filters.mandateId !== currentDelegator?.mandateId) {
+      dispatch(setMandateId(currentDelegator?.mandateId));
+      return;
+    }
     const params = {
       ...filters,
-      ...(isDelegator && { mandateId: currentDelegator ? currentDelegator.mandateId : '' }),
       size: pagination.size,
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
     void dispatch(getReceivedNotifications(params));
-  }, [currentDelegator, filters, pagination.size, pagination.page, sort]);
+  }, [filters, pagination.size, pagination.page, sort, currentDelegator]);
 
   return (
     <Box p={3}>
@@ -100,14 +88,14 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
           notifications={notifications}
           sort={sort}
           onChangeSorting={handleChangeSorting}
-          onCancelSearch={handleCancelSearch}
+          currentDelegator={currentDelegator}
         />
       ) : (
         <DesktopNotifications
           notifications={notifications}
           sort={sort}
           onChangeSorting={handleChangeSorting}
-          onCancelSearch={handleCancelSearch}
+          currentDelegator={currentDelegator}
         />
       )}
       {notifications.length > 0 && (
@@ -125,7 +113,7 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
                   padding: '0',
                   '& .items-per-page-selector button': {
                     paddingLeft: 0,
-                    height: '24px'
+                    height: '24px',
                   },
                 }
               : { padding: '0 10px' }
