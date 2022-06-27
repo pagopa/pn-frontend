@@ -162,12 +162,12 @@ const NotificationDetail = () => {
         }
         currentLocationLabel="Dettaglio notifica"
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb:1 }}></TitleBox>
+      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3 }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
         <Button
           sx={{ mb: {
-            xs:"24px",
-            md:"32px"
+            xs: 3,
+            md: 4
           }}}
           variant="outlined"
           onClick={handleCancelNotification}
