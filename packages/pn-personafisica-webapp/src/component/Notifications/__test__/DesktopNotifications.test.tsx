@@ -13,26 +13,24 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    NotificationsTable: () => <div>Table</div>
-  };
-});
-
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => (
-    {
-      t: (str: string) => str,
-    }
-  ),
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
 
 jest.mock('../FilterNotifications', () => {
-  const { forwardRef } = jest.requireActual('react');
-  return forwardRef(() => <div>Filters</div>);
+  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
+  return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
+    useImperativeHandle(ref, () => ({
+      filtersApplied: false
+    }));
+    if (!showFilters) {
+      return <></>;
+    }
+    return <div>Filters</div>;
+  });
 });
 
 describe('DesktopNotifications Component', () => {
@@ -45,8 +43,7 @@ describe('DesktopNotifications Component', () => {
         onCancelSearch={() => {}}
       />
     );
-    expect(result.container).toHaveTextContent(/Filters/i);
-    expect(result.container).not.toHaveTextContent(/Table/i);
+    expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(
       /Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull'app IO o inserisci un recapito di cortesia nella sezione/i
     );
@@ -86,7 +83,7 @@ describe('DesktopNotifications Component', () => {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 
@@ -103,7 +100,7 @@ describe('DesktopNotifications Component', () => {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 });

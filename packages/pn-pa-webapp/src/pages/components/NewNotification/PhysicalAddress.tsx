@@ -34,7 +34,7 @@ const PhysicalAddress = ({
     {physicalAddressFields.map((field) => (
       <FormTextField
         key={field.key}
-        keyName={`recipients[${recipient}][${field.key}]`}
+        keyName={`recipients[${recipient}].${field.key}`}
         label={field.label}
         values={values}
         touched={touched}

@@ -49,6 +49,7 @@ export interface NotificationDetail {
   cancelledIun?: string;
   physicalCommunicationType: PhysicalCommunicationType;
   senderDenomination?: string;
+  paymentExpirationDate?: string;
   senderTaxId?: string;
   group?: string;
   senderPaId: string;

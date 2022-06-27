@@ -1,6 +1,17 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, Fragment } from 'react';
-import { Grid, Box, Paper, Button, Stack } from '@mui/material';
+import { useEffect, Fragment, ReactNode, useState } from 'react';
+import {
+  Grid,
+  Box,
+  Paper,
+  Button,
+  Stack,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+} from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
@@ -49,12 +60,24 @@ const NotificationDetail = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-  const detailTableRows: Array<NotificationDetailTableRow> = [
-    { id: 1, label: 'Data', value: <Box fontWeight={600}>{notification.sentAt}</Box> },
-    { id: 2, label: 'Termini di pagamento', value: `Entro il ` },
+  const unfilteredDetailTableRows: Array<{
+    label: string;
+    rawValue: string | undefined;
+    value: ReactNode;
+  }> = [
     {
-      id: 3,
-      label: 'Destinatario',
+      label: 'Data',
+      rawValue: notification.sentAt,
+      value: <Box fontWeight={600}>{notification.sentAt}</Box>,
+    },
+    {
+      label: 'Da pagare entro il',
+      rawValue: notification.paymentExpirationDate,
+      value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
+    },
+    {
+      label: 'Codice Fiscale destinatario',
+      rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
       value:
         notification.recipients.length > 1 ? (
           <Box fontWeight={600}>
@@ -68,29 +91,40 @@ const NotificationDetail = () => {
           <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>
         ),
     },
-    ...(notification.recipients.length > 1
-      ? []
-      : [
-          {
-            id: 4,
-            label: 'Cognome Nome',
-            value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
-          },
-        ]),
-    { id: 5, label: 'Mittente', value: <Box fontWeight={600}>{sender}</Box> },
     {
-      id: 6,
+      // ...(notification.recipients.length > 1
+      //   ? []
+      //   : [
+      //       {
+      //         label: 'Cognome Nome',
+      //         rawValue: notification.recipients[0]?.denomination,
+      //         value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
+      //       },
+      //     ]),
+      label: 'Nome e cognome',
+      rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
+      value: notification.recipients.map((recipient, index) => (
+        <Box key={index}>{recipient.denomination}</Box>
+      )),
+    },
+    {
+      label: 'Mittente',
+      rawValue: sender,
+      value: <Box fontWeight={600}>{sender}</Box>,
+    },
+    {
       label: 'Codice IUN annullato',
+      rawValue: notification.cancelledIun,
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
     },
     {
-      id: 7,
       label: 'Codice IUN',
+      rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
     {
-      id: 8,
       label: 'Gruppi',
+      rawValue: notification.group,
       value: notification.group && (
         <TagGroup visibleItems={4}>
           <Tag value={notification.group} />
@@ -98,6 +132,13 @@ const NotificationDetail = () => {
       ),
     },
   ];
+  const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
+    .filter((row) => row.rawValue)
+    .map((row, index) => ({
+      id: index + 1,
+      label: row.label,
+      value: row.value,
+    }));
 
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
@@ -116,6 +157,7 @@ const NotificationDetail = () => {
       })
     );
   };
+
   const dowloadDocument = (url: string) => {
     /* eslint-disable functional/immutable-data */
     const link = document.createElement('a');
@@ -129,6 +171,11 @@ const NotificationDetail = () => {
   const handleCancelNotification = () => {
     dispatch(setCancelledIun(notification.iun));
     navigate(routes.NUOVA_NOTIFICA);
+  };
+
+  const openModal = () => {
+    setShowModal(true);
+    return true;
   };
 
   useEffect(() => {
@@ -170,7 +217,7 @@ const NotificationDetail = () => {
             md: 4
           }}}
           variant="outlined"
-          onClick={handleCancelNotification}
+          onClick={openModal}
           data-testid="cancelNotificationBtn"
         >
           Annulla notifica
@@ -179,40 +226,82 @@ const NotificationDetail = () => {
     </Fragment>
   );
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
+  const handleModalCloseAndProceed = () => {
+    setShowModal(false);
+    handleCancelNotification();
+  };
+
+  const ModalAlert = () => (
+    <Dialog
+      open={showModal}
+      data-testid="modalId"
+      onClose={handleModalClose}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+    >
+      <DialogTitle id="dialog-title" sx={{p: 4}}>Ci siamo quasi</DialogTitle>
+      <DialogContent sx={{px: 4, pb: 4}}>
+        <DialogContentText id="dialog-description">
+        Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la precedente.
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions sx={{px: 4, pb: 4}}>
+        <Button onClick={handleModalClose} variant="outlined" data-testid="modalCloseBtnId">
+          Indietro
+        </Button>
+        <Button onClick={handleModalCloseAndProceed} variant="contained" data-testid="modalCloseAndProceedBtnId">
+          Invia una nuova notifica
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+
   return (
-    <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
-      {isMobile && breadcrumb}
-      <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
-        <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-          {!isMobile && breadcrumb}
-          <Stack spacing={3}>
-            <NotificationDetailTable rows={detailTableRows} />
-            <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
-              <NotificationDetailDocuments
-                title="Documenti allegati"
-                documents={notification.documents}
-                clickHandler={documentDowloadHandler}
-                documentsAvailable={notification.documentsAvailable as boolean}
+    <>
+      <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
+        {isMobile && breadcrumb}
+        <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
+          <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
+            {!isMobile && breadcrumb}
+            <Stack spacing={3}>
+              <NotificationDetailTable rows={detailTableRows} />
+              <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                <NotificationDetailDocuments
+                  title="Documenti allegati"
+                  documents={notification.documents}
+                  clickHandler={documentDowloadHandler}
+                  documentsAvailable={notification.documentsAvailable as boolean}
+                />
+              </Paper>
+            </Stack>
+          </Grid>
+          <Grid item lg={5} xs={12}>
+            <Box sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
+              <NotificationDetailTimeline
+                recipients={notification.recipients}
+                statusHistory={notification.notificationStatusHistory}
+                title="Stato della notifica"
+                clickHandler={legalFactDownloadHandler}
+                legalFactLabels={{
+                  attestation: 'Attestazione opponibile a terzi',
+                  receipt: 'Ricevuta',
+                }}
+                historyButtonLabel="Mostra storico"
+                showMoreButtonLabel="Mostra di più"
+                showLessButtonLabel="Mostra di meno"
               />
-            </Paper>
-          </Stack>
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item lg={5} xs={12}>
-          <Box sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
-            <NotificationDetailTimeline
-              recipients={notification.recipients}
-              statusHistory={notification.notificationStatusHistory}
-              title="Stato della notifica"
-              clickHandler={legalFactDownloadHandler}
-              legalFactLabels={{ attestation: 'Attestazione opponibile a terzi', receipt: 'Ricevuta' }}
-              historyButtonLabel="Mostra storico"
-              showMoreButtonLabel="Mostra di più"
-              showLessButtonLabel="Mostra di meno"
-            />
-          </Box>
-        </Grid>
-      </Grid>
-    </Box>
+      </Box>
+      <ModalAlert />
+    </>
   );
 };
 

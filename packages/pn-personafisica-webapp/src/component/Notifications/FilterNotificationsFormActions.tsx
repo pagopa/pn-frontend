@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { Button, Grid } from '@mui/material';
 import { CustomMobileDialogAction } from '@pagopa-pn/pn-commons';
 import { FormikValues } from 'formik';
-import _ from 'lodash';
 
 type Props = {
-  appliedFilters: number;
+  filtersApplied: boolean;
+  isInitialSearch: boolean;
   cleanFilters: () => void;
   formikInstance: {
     isValid: boolean;
@@ -17,10 +17,11 @@ type Props = {
 };
 
 const FilterNotificationsFormActions = ({
-  appliedFilters,
+  filtersApplied,
   cleanFilters,
   formikInstance,
   isInDialog = false,
+  isInitialSearch,
 }: Props) => {
   const { t } = useTranslation(['common']);
 
@@ -31,7 +32,7 @@ const FilterNotificationsFormActions = ({
         type="submit"
         size="small"
         disabled={
-          !formikInstance.isValid || _.isEqual(formikInstance.values, formikInstance.initialValues)
+          !formikInstance.isValid || (isInitialSearch && !filtersApplied)
         }
       >
         {t('button.filtra')}
@@ -45,7 +46,7 @@ const FilterNotificationsFormActions = ({
         data-testid="cancelButton"
         size="small"
         onClick={cleanFilters}
-        disabled={appliedFilters === 0}
+        disabled={!filtersApplied}
       >
         {t('button.annulla filtro')}
       </Button>

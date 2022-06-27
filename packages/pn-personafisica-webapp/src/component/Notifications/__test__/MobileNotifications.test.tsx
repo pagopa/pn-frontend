@@ -18,6 +18,7 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   return {
     ...original,
     NotificationsCard: () => <div>Cards</div>,
+    MobileNotificationsSort: () => <div>Sort</div>
   };
 });
 
@@ -30,10 +31,17 @@ jest.mock('react-i18next', () => ({
   ),
 }));
 
-jest.mock('../MobileNotificationsSort', () => () => <div>Sort</div>);
 jest.mock('../FilterNotifications', () => {
-  const { forwardRef } = jest.requireActual('react');
-  return forwardRef(() => <div>Filters</div>);
+  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
+  return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
+    useImperativeHandle(ref, () => ({
+      filtersApplied: false
+    }));
+    if (!showFilters) {
+      return <></>;
+    }
+    return <div>Filters</div>;
+  });
 });
 
 describe('MobileNotifications Component', () => {
@@ -48,8 +56,8 @@ describe('MobileNotifications Component', () => {
         onCancelSearch={() => {}}
       />
     );
-    expect(result.container).toHaveTextContent(/Filters/i);
-    expect(result.container).toHaveTextContent(/Sort/i);
+    expect(result.container).not.toHaveTextContent(/Filters/i);
+    expect(result.container).not.toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(
       /Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull'app IO o inserisci un recapito di cortesia nella sezione Recapiti : così, se riceverai una notifica, te lo comunicheremo./i
     );

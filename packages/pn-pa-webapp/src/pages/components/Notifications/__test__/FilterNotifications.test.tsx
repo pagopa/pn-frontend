@@ -3,8 +3,22 @@ import moment from 'moment';
 import * as redux from 'react-redux';
 import { NotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { render, testFormElements, testInput, testSelect, axe } from '../../../../__test__/test-utils';
-import FilterNotificationsTable from '../FilterNotificationsTable';
+import {
+  render,
+  testFormElements,
+  testInput,
+  testSelect,
+  axe,
+} from '../../../../__test__/test-utils';
+import FilterNotifications from '../FilterNotifications';
+
+jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
+  return {
+    ...original,
+    useIsMobile: () => false,
+  };
+});
 
 function formatDate(date: Date): string {
   const month = `0${date.getMonth() + 1}`.slice(-2);
@@ -63,7 +77,7 @@ describe('Filter Notifications Table Component', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn);
     // render component
     await act(async () => {
-      result = render(<FilterNotificationsTable />);
+      result = render(<FilterNotifications showFilters/>);
       form = result.container.querySelector('form') as HTMLFormElement;
     });
   });
@@ -248,7 +262,6 @@ describe('Filter Notifications Table Component', () => {
   it('test form reset', async () => {
     const oneYearAgo = moment().add(-1, 'year');
     const todayM = moment();
-
     await setFormValues(
       form!,
       '0',
@@ -257,20 +270,23 @@ describe('Filter Notifications Table Component', () => {
       NotificationAllowedStatus[2].value,
       'RSSMRA80A01H501U'
     );
-    const cancelButton = within(form!).getByTestId('cancelButton');
+    const submitButton = form!.querySelector(`button[type="submit"]`);
+    fireEvent.click(submitButton!);
+    const cancelButton = await waitFor(() => within(form!).getByTestId('cancelButton'));
+    expect(cancelButton).toBeEnabled();
+    fireEvent.click(cancelButton);
     await waitFor(() => {
-      fireEvent.click(cancelButton);
-    });
-    expect(mockDispatchFn).toBeCalledTimes(1);
-    expect(mockDispatchFn).toBeCalledWith({
-      payload: {
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
-        recipientId: undefined,
-        status: undefined,
-        iunMatch: undefined,
-      },
-      type: 'setNotificationFilters',
+      expect(mockDispatchFn).toBeCalledTimes(2);
+      expect(mockDispatchFn).toBeCalledWith({
+        payload: {
+          startDate: tenYearsAgo.toISOString(),
+          endDate: today.toISOString(),
+          recipientId: undefined,
+          status: undefined,
+          iunMatch: undefined,
+        },
+        type: 'setNotificationFilters',
+      });
     });
   });
 

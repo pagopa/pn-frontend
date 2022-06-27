@@ -1,11 +1,12 @@
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, InputAdornment } from '@mui/material';
+
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 import { CourtesyChannelType } from '../../models/contacts';
-import { phoneRegExp } from '../../utils/contacts.utility';
+import { internationalPhonePrefix, phoneRegExp } from '../../utils/contacts.utility';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactElem from './DigitalContactElem';
 
@@ -51,7 +52,11 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
     validationSchema:
       type === CourtesyFieldType.EMAIL ? emailValidationSchema : phoneValidationSchema,
     onSubmit: () => {
-      initValidation(digitalDomicileType, formik.values[type], recipientId, 'default');
+      const contactValue =
+        type === CourtesyFieldType.EMAIL
+          ? formik.values[type]
+          : internationalPhonePrefix + formik.values[type];
+      initValidation(digitalDomicileType, contactValue, recipientId, 'default');
     },
   });
 
@@ -132,6 +137,11 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
             })}
             fullWidth
             type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
+            InputProps={ type === CourtesyFieldType.PHONE ? {
+              startAdornment: (
+                <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+              ),
+            } : {}}
           />
         </Grid>
         <Grid item lg={4} sm={4} xs={12} alignItems="right">

@@ -1,4 +1,4 @@
-import { useEffect, useState, forwardRef, useImperativeHandle} from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -13,7 +13,8 @@ import {
   tenYearsAgo,
   today,
   useIsMobile,
-  IUN_regex
+  IUN_regex,
+  filtersApplied
 } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
@@ -22,6 +23,10 @@ import { setNotificationFilters } from '../../redux/dashboard/actions';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
 
+type Props = {
+  showFilters: boolean;
+};
+
 const useStyles = makeStyles({
   helperTextFormat: {
     // Use existing space / prevents shifting content below field
@@ -29,7 +34,20 @@ const useStyles = makeStyles({
   },
 });
 
-const FilterNotifications = forwardRef((_props, ref) => {
+const emptyValues = {
+  startDate: tenYearsAgo.toISOString(),
+  endDate: today.toISOString(),
+  iunMatch: undefined,
+};
+
+const initialEmptyValues = {
+  startDate: tenYearsAgo,
+  endDate: today,
+  iunMatch: '',
+};
+
+// eslint-disable-next-line sonarjs/cognitive-complexity
+const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common']);
@@ -44,84 +62,78 @@ const FilterNotifications = forwardRef((_props, ref) => {
     endDate: yup.date().min(tenYearsAgo),
   });
 
-  const emptyValues = {
-    startDate: tenYearsAgo.toISOString(),
-    endDate: today.toISOString(),
-    iunMatch: undefined,
-  };
-
-  const initialValues = {
-    startDate: tenYearsAgo,
-    endDate: today,
-    iunMatch: '',
-  };
-  const [prevFilters, setPrevFilters] = useState(initialValues);
-
-  const submitForm = (values: { startDate: Date; endDate: Date; iunMatch: string }) => {
-    if (prevFilters === values) {
-      return;
+  const initialValues = () => {
+    if (!filters || (filters && _.isEqual(filters, emptyValues))) {
+      return initialEmptyValues;
+    } else {
+      return {
+        startDate: new Date(filters.startDate),
+        endDate: new Date(filters.endDate),
+        iunMatch: filters.iunMatch || '',
+      };
     }
-    const currentFilters = {
-      startDate: values.startDate.toISOString(),
-      endDate: values.endDate.toISOString(),
-      iunMatch: values.iunMatch,
-    };
-    setPrevFilters(values);
-    /* eslint-enable functional/immutable-data */
-    dispatch(setNotificationFilters(currentFilters));
   };
+
+  const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
+  const filtersCount = filtersApplied(prevFilters, emptyValues);
 
   const formik = useFormik({
-    initialValues,
+    initialValues: initialValues(),
     validationSchema,
     /** onSubmit populates filters */
-    onSubmit: submitForm,
+    onSubmit: (values) => {
+      const currentFilters = {
+        startDate: values.startDate.toISOString(),
+        endDate: values.endDate.toISOString(),
+        iunMatch: values.iunMatch,
+      };
+      if (_.isEqual(prevFilters, currentFilters)) {
+        return;
+      }
+      dispatch(setNotificationFilters(currentFilters));
+      setPrevFilters(currentFilters);
+    },
   });
 
   const cleanFilters = () => {
     dispatch(setNotificationFilters(emptyValues));
   };
 
-  const filtersApplied = (): number =>
-    Object.entries(prevFilters).reduce((c: number, element: [string, any]) => {
-      if (element[0] in initialValues && element[1] !== (initialValues as any)[element[0]]) {
-        return c + 1;
-      }
-      return c;
-    }, 0);
-
-  useEffect(() => {
-    if (filters && _.isEqual(filters, emptyValues)) {
-      formik.resetForm({
-        values: initialValues,
-      });
-      setPrevFilters(initialValues);
-      /* eslint-enable functional/immutable-data */
-      setStartDate(null);
-      setEndDate(null);
-    }
-  }, [filters]);
-
   useEffect(() => {
     void formik.validateForm();
   }, []);
 
+  useEffect(() => {
+    if (filters && _.isEqual(filters, emptyValues)) {
+      formik.resetForm({
+        values: initialEmptyValues,
+      });
+      setStartDate(null);
+      setEndDate(null);
+      setPrevFilters(emptyValues);
+    }
+  }, [filters]);
+
   useImperativeHandle(ref, () => ({
-    filtersApplied: filtersApplied() > 0,
+    filtersApplied: filtersCount > 0
   }));
+
+  if (!showFilters) {
+    return <></>;
+  }
 
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
         sx={{
           pl: 0,
-          pr: filtersApplied() ? '10px' : 0,
+          pr: filtersCount ? '10px' : 0,
           justifyContent: 'left',
           minWidth: 'unset',
           height: '24px',
         }}
         hasCounterBadge
-        bagdeCount={filtersApplied()}
+        bagdeCount={filtersCount}
       >
         {t('button.filtra')}
       </CustomMobileDialogToggle>
@@ -140,7 +152,8 @@ const FilterNotifications = forwardRef((_props, ref) => {
             <FilterNotificationsFormActions
               formikInstance={formik}
               cleanFilters={cleanFilters}
-              appliedFilters={filtersApplied()}
+              filtersApplied={filtersCount > 0}
+              isInitialSearch={_.isEqual(formik.values, initialValues)}
               isInDialog
             />
           </DialogActions>
@@ -161,7 +174,8 @@ const FilterNotifications = forwardRef((_props, ref) => {
           <FilterNotificationsFormActions
             formikInstance={formik}
             cleanFilters={cleanFilters}
-            appliedFilters={filtersApplied()}
+            filtersApplied={filtersCount > 0}
+            isInitialSearch={_.isEqual(formik.values, initialEmptyValues)}
           />
         </Grid>
       </Box>

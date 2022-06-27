@@ -9,9 +9,9 @@ describe('NotificationDetailTable Component', () => {
 
   const detailRows: Array<NotificationDetailTableRow> = [
     { id: 1, label: 'Data', value: `mocked-date` },
-    { id: 2, label: 'Termini di pagamento', value: `Entro il` },
-    { id: 3, label: 'Destinatario', value: `mocked-taxId` },
-    { id: 4, label: 'Cognome Nome', value: `mocked-denomination` },
+    { id: 2, label: 'Da pagare entro il', value: `mocked-date` },
+    { id: 3, label: 'Codice Fiscale destinatario', value: `mocked-taxId` },
+    { id: 4, label: 'Nome e cognome', value: `mocked-denomination` },
     { id: 5, label: 'Mittente', value: `mocked-sender` },
     { id: 6, label: 'Codice IUN annullato', value: `mocked-cancelledIun` },
     { id: 7, label: 'Codice IUN', value: `mocked-iun` },
