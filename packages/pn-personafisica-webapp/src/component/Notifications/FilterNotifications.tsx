@@ -46,6 +46,7 @@ const initialEmptyValues = {
   iunMatch: '',
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
