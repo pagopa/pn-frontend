@@ -51,7 +51,7 @@ const AppMessage = ({ sessionRedirect }: Props) => {
             open
             type={MessageType.ERROR}
             onClose={() => onCloseErrorToast(errorMessage.id)}
-            closingDelay={2500}
+            closingDelay={5000}
           />
         )
       )}
@@ -63,7 +63,7 @@ const AppMessage = ({ sessionRedirect }: Props) => {
           open
           type={MessageType.SUCCESS}
           onClose={() => onCloseSuccessToast(successMessage.id)}
-          closingDelay={2500}
+          closingDelay={5000}
         />
       ))}
     </Fragment>

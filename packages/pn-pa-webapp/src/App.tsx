@@ -38,16 +38,16 @@ const App = () => {
   const productsList: Array<ProductSwitchItem> = useMemo(
     () => [
       {
-        id: '0',
-        title: `Piattaforma Notifiche`,
-        productUrl: '',
-        linkType: 'internal',
-      },
-      {
         id: '1',
         title: `Area Riservata`,
         productUrl: `${SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
         linkType: 'external',
+      },
+      {
+        id: '0',
+        title: `Piattaforma Notifiche`,
+        productUrl: '',
+        linkType: 'internal',
       },
     ],
     [idOrganization]
@@ -79,6 +79,7 @@ const App = () => {
       }
       assistanceEmail={PAGOPA_HELP_EMAIL}
       productsList={productsList}
+      productId={"0"}
       partyList={partyList}
       loggedUser={jwtUser}
     >

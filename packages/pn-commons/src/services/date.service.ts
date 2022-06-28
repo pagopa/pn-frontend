@@ -13,3 +13,9 @@ export function formatDate(dateString: string): string {
   const day = `0${date.getDate()}`.slice(-2);
   return isToday(date) ? 'Oggi' : `${day}/${month}/${date.getFullYear()}`;
 }
+
+export function formatToSlicedISOString(date: Date): string {
+  const month = `0${date.getMonth() + 1}`.slice(-2);
+  const day = `0${date.getDate()}`.slice(-2);
+  return `${date.getFullYear()}-${month}-${day}`;
+}

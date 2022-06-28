@@ -3,7 +3,7 @@
     "title": "Entra con SPID o CIE",
     "description": "Seleziona la modalità di autenticazione che preferisci.",
     "loginBox": {
-      "title": "Login",
+      "title": "Accedi",
       "spidLogin": "Entra con SPID",
       "cieLogin": "Entra con CIE"
     },

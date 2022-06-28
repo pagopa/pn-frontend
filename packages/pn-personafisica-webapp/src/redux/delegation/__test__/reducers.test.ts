@@ -157,7 +157,7 @@ describe('delegation redux state tests', () => {
 
     expect(closeAction.type).toBe('closeAcceptModal');
     const closeModalState = store.getState().delegationsState.acceptModalState;
-    expect(closeModalState).toEqual({ id: '', open: false, name: '', error: false });
+    expect(closeModalState).toEqual({ id: '', open: false, name: 'test name', error: false });
   });
 
   it('sets the delegates sorting by test in ascendant order', () => {
