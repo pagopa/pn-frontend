@@ -13,7 +13,8 @@ import {
   CustomMobileDialog,
   CustomMobileDialogToggle,
   CustomMobileDialogContent,
-  filtersApplied
+  filtersApplied,
+  getAorB,
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
@@ -43,7 +44,6 @@ const initialEmptyValues = {
   iunMatch: '',
 };
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
@@ -58,20 +58,16 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
     endDate: yup.date().min(tenYearsAgo),
   });
 
-  const initialValues = (): FormikValues => {
-    if (!filters || (filters && _.isEqual(filters, emptyValues))) {
-      return initialEmptyValues;
-    } else {
-      return {
-        searchFor: '0',
-        startDate: new Date(filters.startDate),
-        endDate: new Date(filters.endDate),
-        recipientId: filters.recipientId || '',
-        iunMatch: filters.iunMatch || '',
-        status: filters.status || NotificationAllowedStatus[0].value,
-      };
-    }
+  const filtersValus = {
+    searchFor: '0',
+    startDate: new Date(filters.startDate),
+    endDate: new Date(filters.endDate),
+    recipientId: getAorB(filters.recipientId, ''),
+    iunMatch: getAorB(filters.iunMatch, ''),
+    status: getAorB(filters.status, NotificationAllowedStatus[0].value),
   };
+
+  const initialValues = (): FormikValues => (!filters || (filters && _.isEqual(filters, emptyValues))) ? initialEmptyValues : filtersValus;
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
   const filtersCount = filtersApplied(prevFilters, emptyValues);
@@ -84,8 +80,8 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
       const currentFilters = {
         startDate: values.startDate.toISOString(),
         endDate: values.endDate.toISOString(),
-        recipientId: values.recipientId || undefined,
-        iunMatch: values.iunMatch || undefined,
+        recipientId: getAorB(values.recipientId, undefined),
+        iunMatch: getAorB(values.iunMatch, undefined),
         status: values.status === 'All' ? undefined : values.status,
       };
       if (_.isEqual(prevFilters, currentFilters)) {
