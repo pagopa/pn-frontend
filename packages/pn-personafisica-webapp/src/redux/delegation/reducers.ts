@@ -102,7 +102,6 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(closeAcceptModal, (state) => {
       state.acceptModalState.open = false;
-      state.acceptModalState.name = '';
       state.acceptModalState.id = '';
     });
     builder.addCase(setDelegatesSorting, (state, action) => {
