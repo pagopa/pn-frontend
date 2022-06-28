@@ -2,6 +2,8 @@ import { store } from '../../store';
 import { DelegationsApi } from '../../../api/delegations/Delegations.api';
 import { createDelegation, resetNewDelegation } from '../actions';
 import {
+  createDelegationDuplicatedErrorResponse,
+  createDelegationGenericErrorResponse,
   createDelegationPayload,
   createDelegationResponse,
   createDelegationSelectedPayload,
@@ -34,11 +36,19 @@ describe('delegation redux state tests', () => {
 
   it("can't create a new delegation", async () => {
     const apiSpy = jest.spyOn(DelegationsApi, 'createDelegation');
-    apiSpy.mockRejectedValue('error');
+    apiSpy.mockRejectedValue(createDelegationGenericErrorResponse);
     const action = await store.dispatch(createDelegation(createDelegationPayload));
 
     expect(action.type).toBe('createDelegation/rejected');
-    expect(action.payload).toEqual('error');
+    expect(action.payload).toEqual(createDelegationGenericErrorResponse);
+  });
+
+  it("can't create a new delegation (duplicated)", async () => {
+    const apiSpy = jest.spyOn(DelegationsApi, 'createDelegation');
+    apiSpy.mockRejectedValue(createDelegationDuplicatedErrorResponse);
+    const action = await store.dispatch(createDelegation(createDelegationPayload));
+    expect(action.type).toBe('createDelegation/rejected');
+    expect(action.payload).toEqual(createDelegationDuplicatedErrorResponse);
   });
 
   it('resets the newDelegation state', () => {
