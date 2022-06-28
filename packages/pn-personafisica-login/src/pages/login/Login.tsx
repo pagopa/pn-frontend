@@ -66,7 +66,8 @@ const Login = () => {
         <Grid container item justifyContent="center">
           <Grid item>
             <Typography
-              variant="h2"
+              component="h2"
+              variant="h3"
               px={0}
               color="textPrimary"
               sx={{
@@ -80,8 +81,8 @@ const Login = () => {
         <Grid container item justifyContent="center">
           <Grid item>
             <Typography
-              variant="body2"
-              mb={7}
+              variant="body1"
+              mb={isMobile ? 4 : 7}
               color="textPrimary"
               sx={{
                 textAlign: 'center',
@@ -100,13 +101,14 @@ const Login = () => {
                   '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
                 borderRadius: '16px',
                 p: 1,
+                backgroundColor: 'white',
               }}
             >
               <Typography
                 py={4}
                 px={0}
                 color="textPrimary"
-                variant="h4"
+                variant="h6"
                 sx={{
                   fontWeight: 'bold',
                   textAlign: 'center',
@@ -177,14 +179,15 @@ const Login = () => {
         <Grid container item justifyContent="center">
           <Grid item xs={10} sm={6} md={4} lg={4} xl={3}>
             <Typography
-              color="textPrimary"
-              py={3}
+              color="text.secondary"
+              py={0}
               px={0}
               sx={{
                 textAlign: 'center',
               }}
               component="div"
               variant="body1"
+              mt={isMobile ? 4 : 7}
             >
               <Trans
                 i18nKey="loginPage.privacyAndCondition"

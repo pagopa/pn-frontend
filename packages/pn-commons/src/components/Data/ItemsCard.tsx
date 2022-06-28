@@ -80,7 +80,7 @@ const ItemsCard = ({ cardHeader, cardBody, cardData, cardActions, sx, headerGrid
               <Box key={body.id} sx={{ mb: 2 }}>
                 {(!body.hideIfEmpty || (body.hideIfEmpty && body.getLabel(data[body.id]))) && (
                   <Fragment>
-                    <Typography variant="caption-semibold" data-testid="cardBodyLabel">
+                    <Typography variant="caption" data-testid="cardBodyLabel">
                       {body.label}
                     </Typography>
                     {!body.notWrappedInTypography && (

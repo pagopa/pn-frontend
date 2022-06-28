@@ -11,7 +11,7 @@ export const createDelegationPayload = {
   nome: 'nome',
   cognome: 'cognome',
   selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-  expirationDate: 8765432345678,
+  expirationDate: new Date(),
   enteSelect: { name: '', uniqueIdentifier: '' },
   verificationCode: '00000',
 };
@@ -23,7 +23,7 @@ export const createDelegationSelectedPayload = {
   nome: 'nome',
   cognome: 'cognome',
   selectTuttiEntiOrSelezionati: 'entiSelezionati',
-  expirationDate: 8765432345678,
+  expirationDate: new Date(),
   enteSelect: { name: 'test', uniqueIdentifier: 'test' },
   verificationCode: '00000',
 };
