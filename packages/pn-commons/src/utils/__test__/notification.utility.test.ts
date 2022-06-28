@@ -9,6 +9,7 @@ import {
   TimelineCategory,
 } from '../../types/NotificationDetail';
 import { NotificationStatus } from '../../types/NotificationStatus';
+import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
   getLegalFactLabel,
@@ -115,17 +116,19 @@ describe('notification utility functions', () => {
   });
 
   it('return notifications filters count (no filters)', () => {
+    const date = new Date();
     const count = filtersApplied(
-      { startDate: new Date().toISOString(), endDate: new Date().toISOString() },
-      { startDate: new Date().toISOString(), endDate: new Date().toISOString() }
+      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)) },
+      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)) }
     );
     expect(count).toEqual(0);
   });
 
   it('return notifications filters count (with filters)', () => {
+    const date = new Date();
     const count = filtersApplied(
-      { startDate: new Date().toISOString(), endDate: new Date().toISOString(), iunMatch: 'mocked-iun', recipientId: 'mocked-recipient' },
-      { startDate: new Date().toISOString(), endDate: new Date().toISOString(), iunMatch: undefined, recipientId: undefined },
+      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)), iunMatch: 'mocked-iun', recipientId: 'mocked-recipient' },
+      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)), iunMatch: undefined, recipientId: undefined },
     );
     expect(count).toEqual(2);
   });

@@ -4,6 +4,8 @@ import { Box } from '@mui/material';
 import {
   calculatePages,
   CustomPagination,
+  formatToTimezoneString,
+  getNextDay,
   PaginationData,
   Sort,
   tenYearsAgo,
@@ -72,8 +74,8 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
   const handleCancelSearch = () => {
     dispatch(
       setNotificationFilters({
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
         iunMatch: undefined,
       })
     );

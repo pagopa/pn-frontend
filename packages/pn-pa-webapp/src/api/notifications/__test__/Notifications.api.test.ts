@@ -1,5 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import { tenYearsAgo, today, LegalFactId, LegalFactType } from '@pagopa-pn/pn-commons';
+import { tenYearsAgo, today, LegalFactId, LegalFactType, formatToTimezoneString, getNextDay } from '@pagopa-pn/pn-commons';
 
 import {
   notificationsFromBe,
@@ -30,14 +30,14 @@ describe('Notifications api tests', () => {
     mock
       .onGet(
         NOTIFICATIONS_LIST({
-          startDate: tenYearsAgo.toISOString(),
-          endDate: today.toISOString(),
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
         })
       )
       .reply(200, notificationsFromBe);
     const res = await NotificationsApi.getSentNotifications({
-      startDate: tenYearsAgo.toISOString(),
-      endDate: today.toISOString(),
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(getNextDay(today)),
     });
     expect(res).toStrictEqual(notificationsToFe);
     mock.reset();

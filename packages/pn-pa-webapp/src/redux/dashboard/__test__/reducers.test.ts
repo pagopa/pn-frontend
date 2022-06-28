@@ -1,4 +1,6 @@
 import {
+  formatToTimezoneString,
+  getNextDay,
   GetNotificationsResponse,
   NotificationStatus,
   tenYearsAgo,
@@ -25,8 +27,8 @@ describe('Dashboard redux state tests', () => {
       loading: false,
       notifications: [],
       filters: {
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
         status: undefined,
         recipientId: undefined,
         iunMatch: undefined,
@@ -49,8 +51,8 @@ describe('Dashboard redux state tests', () => {
     apiSpy.mockResolvedValue(notificationsToFe);
     const action = await store.dispatch(
       getSentNotifications({
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
       })
     );
     const payload = action.payload as GetNotificationsResponse;
