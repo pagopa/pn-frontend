@@ -66,7 +66,7 @@ export const appStateSlice = createSlice({
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
         if (!action.payload || !action.payload.blockNotification) {
-          let error = createAppError(action.payload);
+          const error = createAppError(action.payload);
           state.messages.errors.push(error);
         }
       });
