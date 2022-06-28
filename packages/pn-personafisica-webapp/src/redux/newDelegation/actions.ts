@@ -21,7 +21,18 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
     };
     try {
       return await DelegationsApi.createDelegation(payload);
-    } catch (e) {
+    } catch (e: any) {
+      if (e.response.status === 400 && e.response.data.title === "Delega già presente") {
+        return rejectWithValue({
+          response: {
+            ...e.response,
+            customMessage: {
+              title: "Delega già presente",
+              message: "La persona che hai indicato ha già una delega per questo ente."
+            }
+          }
+        });
+      }
       return rejectWithValue(e);
     }
   }
