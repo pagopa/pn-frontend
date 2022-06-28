@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import { IAppMessage } from '../types/AppMessage';
 
-
-
 interface IAppErrorProps {
   response: {
     status: number;
