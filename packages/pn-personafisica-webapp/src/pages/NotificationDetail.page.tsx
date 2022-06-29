@@ -159,7 +159,18 @@ const NotificationDetail = () => {
         }
         currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 4 }}></TitleBox>
+      <TitleBox
+        variantTitle="h4"
+        title={notification.subject}
+        sx={{
+          pt: 3,
+          mb: {
+            xs: 3,
+            md: 4,
+          },
+        }}
+        mbTitle={0}
+      ></TitleBox>
     </Fragment>
   );
 

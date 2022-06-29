@@ -45,3 +45,19 @@ export const createDelegationResponse = {
   verificationCode: '00000',
   visibilityIds: [],
 };
+
+export const createDelegationGenericErrorResponse = {
+  response: {
+    status: 401
+  }
+};
+
+export const createDelegationDuplicatedErrorResponse = {
+  response: {
+    status: 402,
+    customMessage: {
+      title: 'custom-title',
+      message: 'custom-message'
+    }
+  }
+};
