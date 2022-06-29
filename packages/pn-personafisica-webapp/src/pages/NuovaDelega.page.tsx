@@ -23,7 +23,7 @@ import {
   Paper,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { IllusCompleted } from '@pagopa/mui-italia';
 import { makeStyles } from '@mui/styles';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -37,7 +37,6 @@ import {
   useIsMobile,
   PnBreadcrumb,
 } from '@pagopa-pn/pn-commons';
-
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   createDelegation,
@@ -103,6 +102,8 @@ const NuovaDelega = () => {
   // Get tomorrow date
   const today = new Date();
   const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(0, 0, 0, 0);
 
   const initialValues = {
     selectPersonaFisicaOrPersonaGiuridica: 'pf',
@@ -110,7 +111,7 @@ const NuovaDelega = () => {
     nome: '',
     cognome: '',
     selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-    expirationDate: tomorrow.setDate(tomorrow.getDate() + 1),
+    expirationDate: tomorrow,
     enteSelect: {
       name: '',
       uniqueIdentifier: '',
@@ -129,6 +130,10 @@ const NuovaDelega = () => {
     nome: yup.string().required(t('nuovaDelega.validation.name.required')),
     cognome: yup.string().required(t('nuovaDelega.validation.surname.required')),
     enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
+    expirationDate: yup
+      .mixed()
+      .required(t('nuovaDelega.validation.expirationDate.required'))
+      .test('validDate', t('nuovaDelega.validation.expirationDate.wrong'), value => value?.getTime() >= tomorrow.getTime())
   });
 
   const xsValue = isMobile ? 12 : 4;
@@ -149,7 +154,7 @@ const NuovaDelega = () => {
             {t('nuovaDelega.title')}
           </Fragment>
         }
-        currentLocationLabel={t('Nuova Delega')}
+        currentLocationLabel={t('Nuova delega')}
       />
       <TitleBox
         title={t('nuovaDelega.title')}
@@ -184,7 +189,7 @@ const NuovaDelega = () => {
                   }}
                   validateOnBlur={false}
                 >
-                  {({ values, setFieldValue, touched, errors }) => (
+                  {({ values, setFieldValue, touched, errors, setFieldTouched }) => (
                     <Form>
                       <FormControl sx={{ width: '100%' }}>
                         <RadioGroup
@@ -299,12 +304,12 @@ const NuovaDelega = () => {
                             <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
                               {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                                 <FormControl fullWidth>
-                                  <InputLabel id="ente-select">{t('Seleziona Enti')}</InputLabel>
+                                  <InputLabel id="ente-select">{t('Seleziona enti')}</InputLabel>
                                   <Select
                                     labelId="ente-select"
                                     id="ente-select"
                                     value={values.enteSelect.uniqueIdentifier}
-                                    label={t('Seleziona Enti')}
+                                    label={t('Seleziona enti')}
                                     onChange={(event: SelectChangeEvent<string>) => {
                                       setFieldValue('enteSelect', {
                                         name: event.target.name,
@@ -335,14 +340,17 @@ const NuovaDelega = () => {
                               label={t('nuovaDelega.form.endDate')}
                               inputFormat={DATE_FORMAT}
                               value={new Date(values.expirationDate)}
+                              minDate={tomorrow}
                               onChange={(value: DatePickerTypes) => {
-                                setFieldValue('expirationDate', value?.getTime());
+                                // setFieldValue('expirationDate', value?.getTime());
+                                setFieldTouched('expirationDate', true, false);
+                                setFieldValue('expirationDate', value);
                               }}
                               shouldDisableDate={isToday}
                               renderInput={(params) => (
                                 <TextField
-                                  id="endDate"
-                                  name="endDate"
+                                  id="expirationDate"
+                                  name="expirationDate"
                                   {...params}
                                   aria-label="Data termine delega" // aria-label for (TextField + Button) Group
                                   inputProps={{
@@ -351,6 +359,8 @@ const NuovaDelega = () => {
                                     'aria-label': 'Inserisci la data di termine della delega',
                                     type: 'text',
                                   }}
+                                  error={touched.expirationDate && Boolean(errors.expirationDate)}
+                                  helperText={touched.expirationDate && errors.expirationDate}
                                 />
                               )}
                               disablePast={true}
@@ -379,6 +389,7 @@ const NuovaDelega = () => {
                             sx={{ marginTop: '1rem', margin: 'auto' }}
                             type={'submit'}
                             variant={'contained'}
+                            data-testid="createButton"
                           >
                             {t('nuovaDelega.form.submit')}
                           </Button>
@@ -399,7 +410,7 @@ const NuovaDelega = () => {
       )}
       {created && (
         <CourtesyPage
-          icon={<CheckCircleOutlineIcon />}
+          icon={<IllusCompleted />}
           title={t('nuovaDelega.createdTitle')}
           subtitle={t('nuovaDelega.createdDescription')}
           onClick={handleDelegationsClick}

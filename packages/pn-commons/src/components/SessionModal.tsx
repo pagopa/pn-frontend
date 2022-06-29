@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, DialogTitle, DialogContentText, DialogActions, Divider } from '@mui/material';
+import { Button, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import { useIsMobile } from '../hooks/IsMobile';
 
@@ -14,7 +14,7 @@ type Props = {
 
 /**
  * Session Modal to handle end of session or unauthenticated scenarios.
- * @param open boolean - if modal is open or no 
+ * @param open boolean - if modal is open or no
  * @param title string - title of the modal
  * @param message string - message to show inside the modal
  * @param onConfirm action to perform when user click on "confirm" button
@@ -33,15 +33,13 @@ const SessionModal = ({
 
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="session-dialog-title">
-      <DialogTitle sx={{ textAlign: 'center' }}>{title}</DialogTitle>
-      <DialogContentText
-        id="session-dialog-description"
-        sx={{ textAlign: 'center', margin: '10px' }}
-      >
+      <DialogTitle sx={{ textAlign: 'center', pt: 3 }}>{title}</DialogTitle>
+      <DialogContentText id="session-dialog-description" sx={{ textAlign: 'center', px: 3, pb: 1 }}>
         {message}
       </DialogContentText>
-      {onConfirm && <Divider sx={{ margin: '20px 0' }} />}
-      <DialogActions sx={{ textAlign: 'center', flexDirection: isMobile ? 'column' : 'row' }}>
+      <DialogActions
+        sx={{ textAlign: 'center', flexDirection: isMobile ? 'column' : 'row', padding: 3 }}
+      >
         {onConfirm && (
           <Button sx={{ width: '100%' }} color="primary" variant="contained" onClick={onConfirm}>
             {onConfirmLabel}

@@ -17,18 +17,16 @@ import SideMenuListItem from './SideMenuListItem';
 type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
-  handleLinkClick: (link: string, flag?:boolean) => void;
+  handleLinkClick: (link: string, flag?:boolean, notSelectable?: boolean) => void;
   selectedItem: { index: number; label: string; route: string };
 };
 
 const useStyles = makeStyles(() => ({
   root: {
-    ['@media only screen and (max-width: 576px)']: {
-      width: '50vw',
-    },
-    ['@media only screen and (min-width: 577px) and (max-width: 992px)']: {
-      width: '30vw',
-    },
+    maxWidth: '90vw',
+    ['@media only screen and (max-width: 1200px)']: {
+      width: '300px',
+    }
   },
 }));
 
@@ -82,8 +80,10 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                   selectedIndex.label === item.label
                 }
                 onClick={() => {
-                  setSelectedIndex({ label: item.label, index, route: item.route || '' });
-                  handleLinkClick(item.route as string, true) ;
+                  if (!item.notSelectable) {
+                    setSelectedIndex({ label: item.label, index, route: item.route});
+                  }
+                  handleLinkClick(item.route, true, item.notSelectable) ;
                   handleClick(item.label);
                 }}
               >

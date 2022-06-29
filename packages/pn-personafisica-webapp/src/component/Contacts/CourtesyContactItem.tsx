@@ -1,11 +1,12 @@
-import { Button, Grid, TextField } from '@mui/material';
+import { Button, Grid, TextField, InputAdornment } from '@mui/material';
+
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 import { CourtesyChannelType } from '../../models/contacts';
-import { phoneRegExp } from '../../utils/contacts.utility';
+import { internationalPhonePrefix, phoneRegExp } from '../../utils/contacts.utility';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactElem from './DigitalContactElem';
 
@@ -51,11 +52,17 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
     validationSchema:
       type === CourtesyFieldType.EMAIL ? emailValidationSchema : phoneValidationSchema,
     onSubmit: () => {
-      initValidation(digitalDomicileType, formik.values[type], recipientId, 'default');
+      const contactValue =
+        type === CourtesyFieldType.EMAIL
+          ? formik.values[type]
+          : internationalPhonePrefix + formik.values[type];
+      initValidation(digitalDomicileType, contactValue, recipientId, 'default');
     },
   });
 
-  const handleChangeTouched = async (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleChangeTouched = async (
+    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
     formik.handleChange(event);
     await formik.setFieldTouched(event.target.id, true, false);
   };
@@ -116,7 +123,7 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
   return (
     <form onSubmit={formik.handleSubmit} style={{ width: '100%', margin: '1rem 0' }}>
       <Grid container spacing={2} direction="row">
-        <Grid item lg={8} xs={12}>
+        <Grid item lg={8} sm={8} xs={12}>
           <TextField
             id={type}
             name={type}
@@ -124,15 +131,20 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
             onChange={handleChangeTouched}
             error={formik.touched[type] && Boolean(formik.errors[type])}
             helperText={formik.touched[type] && formik.errors[type]}
-            inputProps={{ sx: { height: '12px' } }}
+            inputProps={{ sx: { height: '14px' } }}
             placeholder={t(`courtesy-contacts.link-${type}-placeholder`, {
               ns: 'recapiti',
             })}
             fullWidth
             type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
+            InputProps={ type === CourtesyFieldType.PHONE ? {
+              startAdornment: (
+                <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+              ),
+            } : {}}
           />
         </Grid>
-        <Grid item lg={4} xs={12} alignItems="right">
+        <Grid item lg={4} sm={4} xs={12} alignItems="right">
           <Button variant="outlined" disabled={!formik.isValid} fullWidth type="submit">
             {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
           </Button>

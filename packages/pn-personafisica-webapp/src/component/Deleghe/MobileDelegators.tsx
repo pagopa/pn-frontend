@@ -35,6 +35,9 @@ const MobileDelegators = () => {
           return <AcceptButton id={row.id} name={row.name as string} />;
         }
       },
+      gridProps: {
+        xs: 8
+      }
     },
     {
       id: 'id',
@@ -42,6 +45,9 @@ const MobileDelegators = () => {
       getLabel(value: string) {
         return <Menu menuType={'delegators'} id={value} />;
       },
+      gridProps: {
+        xs: 4
+      }
     },
   ];
 
@@ -78,9 +84,9 @@ const MobileDelegators = () => {
       id: 'visibilityIds',
       label: t('Permessi per vedere'),
       getLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} textVariant="body2"/>;
+        return <OrganizationsList organizations={value} textVariant="body2" />;
       },
-      notWrappedInTypography: true
+      notWrappedInTypography: true,
     },
   ];
 
@@ -99,12 +105,7 @@ const MobileDelegators = () => {
           <Typography variant="h4" mb={3}>
             {t('deleghe.delegatorsTitle')}
           </Typography>
-          <ItemsCard
-            cardHeader={cardHeader}
-            cardBody={cardBody}
-            cardData={cardData}
-            emptyActionCallback={() => console.log()}
-          />
+          <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
         </Box>
       )}
     </>

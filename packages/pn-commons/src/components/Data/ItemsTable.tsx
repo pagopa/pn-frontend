@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import {
   Table,
   TableBody,
@@ -7,12 +6,10 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  Typography,
   Box,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
-import { SentimentDissatisfied } from '@mui/icons-material';
 import { Notification } from '../../types/Notifications';
 import { Column, Item, Sort } from '../../types/ItemsTable';
 
@@ -21,41 +18,17 @@ type Props = {
   columns: Array<Column>;
   /** Table rows */
   rows: Array<Item>;
-  /** Callback to be called when performing an empty action */
-  emptyActionCallback: () => void;
   /** Table sort */
   sort?: Sort;
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort) => void;
-  /** Empty message for no result */
-  emptyMessage?: ReactNode;
-  /** Empty action label */
-  emptyActionLabel?: string;
-  /** Disable sad emoticon */
-  disableSentimentDissatisfied?: boolean;
-  /** Secondary Message */
-  secondaryMessage?: Message;
 };
-
-interface Message {
-  emptyMessage?: ReactNode;
-  emptyActionLabel?: string;
-  emptyActionCallback?: () => void;
-}
 
 function ItemsTable({
   columns,
   rows,
   sort,
   onChangeSorting,
-  emptyActionCallback,
-  emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
-  emptyActionLabel = 'Rimuovi filtri',
-  disableSentimentDissatisfied = false,
-  secondaryMessage = {
-    emptyMessage: '',
-    emptyActionLabel: '',
-  }
 }: Props) {
   const createSortHandler = (property: string) => () => {
     if (sort && onChangeSorting) {
@@ -63,7 +36,7 @@ function ItemsTable({
       onChangeSorting({ order: isAsc ? 'desc' : 'asc', orderBy: property });
     }
   };
-
+  
   // Table style
   const Root = styled('div')(
     () => `
@@ -121,13 +94,12 @@ function ItemsTable({
             </TableRow>
           </TableHead>
           <TableBody sx={{ backgroundColor: 'background.paper' }}>
-            {rows.length ? (
-              rows.map((row) => (
-                <TableRow key={row.id} sx={{ cursor: 'pointer' }}>
+              {rows.map((row) => (
+                <TableRow key={row.id}>
                   {columns.map((column) => (
                     <TableCell
                       key={column.id}
-                      sx={{ width: column.width, borderBottom: 'none' }}
+                      sx={{ width: column.width, borderBottom: 'none', cursor: column.onClick ? 'pointer': 'auto' }}
                       align={column.align}
                       onClick={() => column.onClick && column.onClick(row, column)}
                     >
@@ -135,43 +107,7 @@ function ItemsTable({
                     </TableCell>
                   ))}
                 </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={columns.length}>
-                  <Box component='div' display='flex' sx={{ flexDirection: 'row', justifyContent: 'center' }}>
-                    {!disableSentimentDissatisfied && <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />}
-                    <Typography variant="body2">{emptyMessage}</Typography>
-                    &nbsp;
-                    <Typography
-                      color="primary"
-                      variant="body2"
-                      fontWeight={'bold'}
-                      sx={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={emptyActionCallback}
-                    >
-                      {emptyActionLabel}
-                    </Typography>
-                    &nbsp;
-                    <Typography variant="body2">{secondaryMessage.emptyMessage}</Typography>
-                    &nbsp;
-                    <Typography
-                      color="primary"
-                      variant="body2"
-                      fontWeight={'bold'}
-                      sx={{
-                        cursor: 'pointer',
-                      }}
-                      onClick={secondaryMessage.emptyActionCallback}
-                    >
-                      {secondaryMessage.emptyActionLabel}
-                    </Typography>
-                  </Box>
-                </TableCell>
-              </TableRow>
-            )}
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

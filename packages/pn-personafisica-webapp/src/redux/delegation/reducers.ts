@@ -94,6 +94,12 @@ const delegationsSlice = createSlice({
         (delegator: Delegation) => delegator.mandateId !== action.payload.id
       );
     });
+    builder.addCase(rejectDelegation.rejected, (state) => {
+      state.modalState.open = false;
+    });
+    builder.addCase(revokeDelegation.rejected, (state) => {
+      state.modalState.open = false;
+    });
     builder.addCase(openAcceptModal, (state, action) => {
       state.acceptModalState.id = action.payload.id;
       state.acceptModalState.name = action.payload.name;
@@ -102,7 +108,6 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(closeAcceptModal, (state) => {
       state.acceptModalState.open = false;
-      state.acceptModalState.name = '';
       state.acceptModalState.id = '';
     });
     builder.addCase(setDelegatesSorting, (state, action) => {

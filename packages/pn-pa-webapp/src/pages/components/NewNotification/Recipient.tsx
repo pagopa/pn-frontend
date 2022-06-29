@@ -1,3 +1,4 @@
+import { ChangeEvent } from 'react';
 import { Add, Delete } from '@mui/icons-material';
 import {
   FormControl,
@@ -46,16 +47,16 @@ const singleRecipient = {
   showPhysicalAddress: false,
 };
 
+const initialValues = {
+  recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }],
+};
+
 type Props = {
   onConfirm: () => void;
 };
 
 const Recipient = ({ onConfirm }: Props) => {
   const dispatch = useAppDispatch();
-
-  const initialValues = {
-    recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }],
-  };
 
   const validationSchema = yup.object({
     recipients: yup.array().of(
@@ -71,6 +72,11 @@ const Recipient = ({ onConfirm }: Props) => {
           .required('Campo obbligatorio')
           .matches(pIvaRegex, 'Il codice fiscale inserito non è corretto'),
         noticeCode: yup.string().required('Campo obbligatorio'),
+        digitalDomicile: yup.string().when('showDigitalDomicile', {
+          is: true,
+          then: yup.string().email('Indirizzo PEC non valido').required('Campo obbligatorio'),
+        }),
+        showPhysicalAddress: yup.boolean().isTrue(),
         address: yup.string().when('showPhysicalAddress', {
           is: true,
           then: yup.string().required('Campo obbligatorio'),
@@ -79,10 +85,12 @@ const Recipient = ({ onConfirm }: Props) => {
           is: true,
           then: yup.string().required('Campo obbligatorio'),
         }),
+        /*
         addressDetails: yup.string().when('showPhysicalAddress', {
           is: true,
           then: yup.string().required('Campo obbligatorio'),
         }),
+        */
         zip: yup.string().when('showPhysicalAddress', {
           is: true,
           then: yup.string().required('Campo obbligatorio'),
@@ -99,7 +107,41 @@ const Recipient = ({ onConfirm }: Props) => {
     ),
   });
 
-  const handleAddRecipient = (values: {recipients: Array<FormRecipient>}, setFieldValue: any) => {
+  const handleAddressTypeChange = (
+    event: ChangeEvent,
+    oldValue: FormRecipient,
+    recipientField: string,
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
+  ) => {
+    const checked = (event.target as any).checked;
+    const name = (event.target as any).name;
+    if (!checked && name.endsWith('showPhysicalAddress')) {
+      // reset physical address
+      setFieldValue(recipientField, {
+        ...oldValue,
+        showPhysicalAddress: false,
+        at: '',
+        address: '',
+        houseNumber: '',
+        addressDetails: '',
+        zip: '',
+        municipality: '',
+        municipalityDetails: '',
+        province: '',
+        foreignState: '',
+      }, false);
+    }
+    if (!checked && name.endsWith('showDigitalDomicile')) {
+      // reset digital address
+      setFieldValue(recipientField, {
+        ...oldValue,
+        showDigitalDomicile: false,
+        digitalDomicile: '',
+      }, false);
+    }
+  };
+
+  const handleAddRecipient = (values: { recipients: Array<FormRecipient> }, setFieldValue: any) => {
     const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx;
     setFieldValue('recipients', [
       ...values.recipients,
@@ -107,7 +149,7 @@ const Recipient = ({ onConfirm }: Props) => {
     ]);
   };
 
-  const handleSubmit = (values: {recipients: Array<FormRecipient>}) => {
+  const handleSubmit = (values: { recipients: Array<FormRecipient> }) => {
     dispatch(saveRecipients(values));
     onConfirm();
   };
@@ -173,7 +215,7 @@ const Recipient = ({ onConfirm }: Props) => {
                                 value={RecipientType.PF}
                                 control={<Radio />}
                                 name={`recipients[${index}].recipientType`}
-                                label={'Persona Fisica'}
+                                label={'Persona fisica'}
                               />
                             </Grid>
                             {values.recipients[index].recipientType === RecipientType.PF && (
@@ -269,14 +311,18 @@ const Recipient = ({ onConfirm }: Props) => {
                           }
                         >
                           <Stack display="flex" direction="row" alignItems="center">
-                            <Checkbox checked={values.recipients[index].showDigitalDomicile} />
+                            <Checkbox
+                              checked={values.recipients[index].showDigitalDomicile}
+                              name={`recipients[${index}].showDigitalDomicile`}
+                              onChange={(event) => handleAddressTypeChange(event, values.recipients[index], `recipients[${index}]`, setFieldValue)}
+                            />
                             <Typography>Aggiungi un domicilio digitale</Typography>
                           </Stack>
                         </Grid>
                         {values.recipients[index].showDigitalDomicile && (
                           <FormTextField
                             keyName={`recipients[${index}].digitalDomicile`}
-                            label={'Domicilio digitale'}
+                            label={'Domicilio digitale*'}
                             values={values}
                             touched={touched}
                             errors={errors}
@@ -299,8 +345,12 @@ const Recipient = ({ onConfirm }: Props) => {
                           }
                         >
                           <Stack display="flex" direction="row" alignItems="center">
-                            <Checkbox checked={values.recipients[index].showPhysicalAddress} />
-                            <Typography>Aggiungi un indirizzo fisico</Typography>
+                            <Checkbox
+                              checked={values.recipients[index].showPhysicalAddress}
+                              name={`recipients[${index}].showPhysicalAddress`}
+                              onChange={(event) => handleAddressTypeChange(event, values.recipients[index], `recipients[${index}]`, setFieldValue)}
+                            />
+                            <Typography>Aggiungi un indirizzo fisico*</Typography>
                           </Stack>
                         </Grid>
                         {values.recipients[index].showPhysicalAddress && (

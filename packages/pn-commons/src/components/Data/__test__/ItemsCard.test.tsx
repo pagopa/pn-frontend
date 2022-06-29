@@ -46,22 +46,6 @@ const cardActions: Array<CardAction> = [
 ];
 
 describe('Notifications Card Component', () => {
-  it('renders notifications card (empty data)', () => {
-    const result = render(
-      <ItemsCard
-        cardHeader={cardHeader}
-        cardBody={cardBody}
-        cardData={[]}
-        emptyActionCallback={() => console.log()}
-      />
-    );
-    const notificationsCards = result.queryAllByTestId('itemCard');
-    expect(notificationsCards).toHaveLength(1);
-    expect(notificationsCards[0]).toHaveTextContent(
-      /I filtri che hai aggiunto non hanno dato nessun risultato./i
-    );
-  });
-
   it('renders notifications card (with data)', () => {
     const result = render(
       <ItemsCard
@@ -69,7 +53,6 @@ describe('Notifications Card Component', () => {
         cardBody={cardBody}
         cardData={cardData}
         cardActions={cardActions}
-        emptyActionCallback={() => console.log()}
       />
     );
     const notificationsCards = result.queryAllByTestId('itemCard');
@@ -87,7 +70,7 @@ describe('Notifications Card Component', () => {
       });
       const cardActionsEl = card.querySelectorAll('[data-testid="cardAction"]');
       expect(cardActionsEl).toHaveLength(cardActions.length);
-      cardActionsEl.forEach((action, _j) => {
+      cardActionsEl.forEach((action) => {
         expect(action).toHaveTextContent(/Mocked action/i);
       });
     });
@@ -100,7 +83,6 @@ describe('Notifications Card Component', () => {
         cardBody={cardBody}
         cardData={cardData}
         cardActions={cardActions}
-        emptyActionCallback={() => console.log()}
       />
     );
     const notificationsCards = result.queryAllByTestId('itemCard');

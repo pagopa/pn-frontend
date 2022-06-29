@@ -77,7 +77,7 @@ const Deleghe = () => {
           initialValues={new Array(5).fill('')}
           handleClose={handleCloseAcceptModal}
           cancelCallback={handleCloseAcceptModal}
-          cancelLabel={t('deleghe.close')}
+          cancelLabel={t('button.indietro', { ns: 'common' })}
           confirmCallback={handleAccept}
           confirmLabel={t('deleghe.accept')}
           codeSectionTitle={t('deleghe.verification_code')}
@@ -91,7 +91,7 @@ const Deleghe = () => {
               ? t('deleghe.revocation_question')
               : t('deleghe.rejection_question')
           }
-          onCloseLabel={t('deleghe.close')}
+          onCloseLabel={t('button.annulla', { ns: 'common' })}
           handleClose={handleCloseModal}
           onConfirm={handleConfirmClick}
           onConfirmLabel={

@@ -11,36 +11,33 @@ type Props = {
   actions?: ReactNode;
 };
 
-const DigitalContactsCard = memo(({
-  sectionTitle,
-  title,
-  subtitle,
-  avatar,
-  children,
-  actions,
-}: Props) => (
-  <Card>
-    {avatar && <CardHeader avatar={avatar} />}
-    <CardContent data-testid="DigitalContactsCardBody">
-      {sectionTitle && <Typography
-        color="text.primary"
-        fontWeight={700}
-        fontSize={14}
-        sx={{ textTransform: 'uppercase' }}
-      >
-        {sectionTitle}
-      </Typography>}
-      <TitleBox
-        sx={{ marginTop: '10px' }}
-        variantTitle="h4"
-        title={title}
-        subTitle={subtitle}
-        variantSubTitle={'body1'}
-      />
-      {children}
-    </CardContent>
-    <CardActions data-testid="DigitalContactsCardActions">{actions}</CardActions>
-  </Card>
-));
+const DigitalContactsCard = memo(
+  ({ sectionTitle, title, subtitle, avatar, children, actions }: Props) => (
+    <Card>
+      {avatar && <CardHeader sx={{ px: 3, pt: 4, pb: 1 }} avatar={avatar} />}
+      <CardContent data-testid="DigitalContactsCardBody">
+        {sectionTitle && (
+          <Typography
+            color="text.primary"
+            fontWeight={700}
+            fontSize={14}
+            sx={{ textTransform: 'uppercase' }}
+          >
+            {sectionTitle}
+          </Typography>
+        )}
+        <TitleBox
+          sx={{ marginTop: '10px' }}
+          variantTitle="h4"
+          title={title}
+          subTitle={subtitle}
+          variantSubTitle={'body1'}
+        />
+        {children}
+      </CardContent>
+      <CardActions data-testid="DigitalContactsCardActions">{actions}</CardActions>
+    </Card>
+  )
+);
 
 export default DigitalContactsCard;

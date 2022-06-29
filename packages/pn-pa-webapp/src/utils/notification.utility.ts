@@ -4,13 +4,10 @@ import { FormRecipient } from '../models/NewNotification';
 
 const checkFisicalAddress = (recipient: FormRecipient) => {
   if (
-    recipient.at &&
     recipient.address &&
     recipient.houseNumber &&
-    recipient.addressDetails &&
     recipient.zip &&
     recipient.municipality &&
-    recipient.municipalityDetails &&
     recipient.province &&
     recipient.foreignState
   ) {

@@ -9,7 +9,9 @@ import AppMessage from './components/AppMessage';
 import SessionModal from './components/SessionModal';
 import SideMenu from './components/SideMenu/SideMenu';
 import StatusTooltip from './components/Notifications/StatusTooltip';
+import MobileNotificationsSort from './components/Notifications/MobileNotificationsSort';
 import ItemsTable from './components/Data/ItemsTable';
+import EmptyState from './components/EmptyState';
 import ItemsCard from './components/Data/ItemsCard';
 import TitleAndDescription from './components/TitleAndDescription';
 import CustomMobileDialog from './components/CustomMobileDialog/CustomMobileDialog';
@@ -39,7 +41,9 @@ export { CustomTooltip };
 export { AppMessage };
 export { SideMenu };
 export { ItemsTable };
+export { EmptyState };
 export { StatusTooltip };
+export { MobileNotificationsSort };
 export { SessionModal };
 export { ItemsCard };
 export { TitleAndDescription };
@@ -150,6 +154,7 @@ import {
   getNotificationStatusInfos,
   NotificationAllowedStatus,
   parseNotificationDetail,
+  filtersApplied
 } from './utils/notification.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo, DATE_FORMAT } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
@@ -161,6 +166,7 @@ import { compileRoute } from './utils/routes.utility';
 export { NotificationAllowedStatus };
 export { getNotificationStatusInfos };
 export { parseNotificationDetail };
+export { filtersApplied };
 export { createAppError };
 export { formatDate };
 export { calculatePages };

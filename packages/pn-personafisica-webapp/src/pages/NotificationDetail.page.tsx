@@ -1,7 +1,7 @@
 import { Fragment, ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Grid, Box, Paper } from '@mui/material';
+import { Grid, Box, Paper, Stack } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
@@ -9,6 +9,7 @@ import {
   LegalFactId,
   NotificationDetailDocuments,
   // HelpNotificationDetails,
+  NotificationDetailTableRow,
   NotificationDetailTable,
   NotificationDetailTimeline,
   useIsMobile,
@@ -42,64 +43,76 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
-
-  const currentRecipient = notification.recipients.filter((recipient) => recipient.taxId === currentUser.fiscal_number)[0];
-
+  const currentRecipient = notification.recipients.filter(
+    (recipient) => recipient.taxId === currentUser.fiscal_number
+  )[0];
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-  const detailTableRows: Array<{ id: number; label: string; value: ReactNode }> = [
+  const unfilteredDetailTableRows: Array<{
+    label: string;
+    rawValue: string | undefined;
+    value: ReactNode;
+  }> = [
     {
-      id: 1,
       label: t('detail.date', { ns: 'notifiche' }),
+      rawValue: notification.sentAt,
       value: <Box fontWeight={600}>{notification.sentAt}</Box>,
     },
     {
-      id: 2,
       label: t('detail.payment-terms', { ns: 'notifiche' }),
-      value: t('detail.payment-terms-expiration', { ns: 'notifiche' }),
+      rawValue: notification.paymentExpirationDate,
+      value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
     },
     {
-      id: 3,
-      label: t('detail.surname-name', { ns: 'notifiche' }),
+      label: t('detail.fullname', { ns: 'notifiche' }),
+      rawValue: currentRecipient?.denomination,
       value: <Box fontWeight={600}>{currentRecipient?.denomination}</Box>,
     },
     {
-      id: 4,
       label: t('detail.sender', { ns: 'notifiche' }),
+      rawValue: notification.senderDenomination,
       value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
     },
     {
-      id: 6,
       label: t('detail.cancelled-iun', { ns: 'notifiche' }),
+      rawValue: notification.cancelledIun,
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
     },
     {
-      id: 7,
       label: t('detail.iun', { ns: 'notifiche' }),
+      rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
     {
-      id: 8,
       label: t('detail.notice-code', { ns: 'notifiche' }),
+      rawValue: currentRecipient?.payment?.noticeCode,
       value: <Box fontWeight={600}>{currentRecipient?.payment?.noticeCode}</Box>,
     },
     {
-      id: 9,
       label: t('detail.creditor-tax-id', { ns: 'notifiche' }),
+      rawValue: currentRecipient?.payment?.creditorTaxId,
       value: <Box fontWeight={600}>{currentRecipient?.payment?.creditorTaxId}</Box>,
     },
   ];
+  const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
+    .filter((row) => row.rawValue)
+    .map((row, index) => ({
+      id: index + 1,
+      label: row.label,
+      value: row.value,
+    }));
+
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
       void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
     }
   };
+  
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     void dispatch(getReceivedNotificationLegalfact({ iun: notification.iun, legalFact }));
   };
@@ -146,7 +159,18 @@ const NotificationDetail = () => {
         }
         currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: '20px' }}></TitleBox>
+      <TitleBox
+        variantTitle="h4"
+        title={notification.subject}
+        sx={{
+          pt: 3,
+          mb: {
+            xs: 3,
+            md: 4,
+          },
+        }}
+        mbTitle={0}
+      ></TitleBox>
     </Fragment>
   );
 
@@ -156,30 +180,31 @@ const NotificationDetail = () => {
       <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           {!isMobile && breadcrumb}
-          <NotificationDetailTable rows={detailTableRows} />
-          {currentRecipient?.payment && (
-            <NotificationPayment
-              iun={notification.iun}
-              notificationPayment={currentRecipient.payment}
-              onDocumentDownload={dowloadDocument}
-            />
-          )}
-          <DomicileBanner />
-          <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
-            <NotificationDetailDocuments
-              title={t('detail.acts', { ns: 'notifiche' })}
-              documents={notification.documents}
-              clickHandler={documentDowloadHandler}
-              documentsAvailable={notification.documentsAvailable}
-              downloadFilesMessage={
-                notification.documentsAvailable
-                  ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
-                  : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' })
-              }
-            />
-          </Paper>
-          {/* TODO decommentare con pn-841
-          <Paper sx={{ padding: '24px', marginBottom: '20px' }} className="paperContainer">
+          <Stack spacing={3}>
+            <NotificationDetailTable rows={detailTableRows} />
+            {currentRecipient?.payment && (
+              <NotificationPayment
+                iun={notification.iun}
+                notificationPayment={currentRecipient.payment}
+                onDocumentDownload={dowloadDocument}
+              />
+            )}
+            <DomicileBanner />
+            <Paper sx={{ p: 3 }} className="paperContainer">
+              <NotificationDetailDocuments
+                title={t('detail.acts', { ns: 'notifiche' })}
+                documents={notification.documents}
+                clickHandler={documentDowloadHandler}
+                documentsAvailable={notification.documentsAvailable}
+                downloadFilesMessage={
+                  notification.documentsAvailable
+                    ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
+                    : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' })
+                }
+              />
+            </Paper>
+            {/* TODO decommentare con pn-841
+          <Paper sx={{ p: 3 }} className="paperContainer">
             <HelpNotificationDetails 
               title="Hai bisogno di aiuto?"
               subtitle="Se hai domande relative al contenuto della notifica, contatta il"
@@ -190,12 +215,10 @@ const NotificationDetail = () => {
             />              
           </Paper>
               */}
+          </Stack>
         </Grid>
         <Grid item lg={5} xs={12}>
-          <Box
-            component="section"
-            sx={{ backgroundColor: 'white', height: '100%', padding: '24px' }}
-          >
+          <Box component="section" sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
             <NotificationDetailTimeline
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}

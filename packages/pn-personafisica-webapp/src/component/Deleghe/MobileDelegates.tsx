@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { CardElement, ItemsCard, Item, CodeModal } from '@pagopa-pn/pn-commons';
-
+import { CardElement, ItemsCard, Item, CodeModal, EmptyState } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
@@ -36,6 +35,9 @@ const MobileDelegates = () => {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
         return <Chip label={label} color={color} />;
       },
+      gridProps: {
+        xs: 8
+      }
     },
     {
       id: 'id',
@@ -51,6 +53,9 @@ const MobileDelegates = () => {
           />
         );
       },
+      gridProps: {
+        xs: 4
+      }
     },
   ];
 
@@ -87,9 +92,9 @@ const MobileDelegates = () => {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
       getLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} textVariant="body2"/>;
+        return <OrganizationsList organizations={value} textVariant="body2" />;
       },
-      notWrappedInTypography: true
+      notWrappedInTypography: true,
     },
   ];
 
@@ -127,14 +132,15 @@ const MobileDelegates = () => {
                 {t('deleghe.add')}
               </Button>
             </Box>
-            <ItemsCard
-              cardHeader={cardHeader}
-              cardBody={cardBody}
-              cardData={cardData}
-              emptyActionCallback={handleAddDelegationClick}
-              emptyMessage={t('deleghe.no_delegates')}
-              emptyActionLabel={t('deleghe.add')}
-            />
+            {cardData.length ? (
+              <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+            ) : (
+              <EmptyState
+                emptyActionCallback={handleAddDelegationClick}
+                emptyMessage={t('deleghe.no_delegates')}
+                emptyActionLabel={t('deleghe.add')}
+              />
+            )}
           </>
         )}
       </Box>
