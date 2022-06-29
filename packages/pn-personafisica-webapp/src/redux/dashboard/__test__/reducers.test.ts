@@ -1,4 +1,6 @@
 import {
+  formatToTimezoneString,
+  getNextDay,
   GetNotificationsResponse,
   NotificationStatus,
   tenYearsAgo,
@@ -25,8 +27,8 @@ describe('Dashbaord redux state tests', () => {
       loading: false,
       notifications: [],
       filters: {
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today))
       },
       pagination: {
         nextPagesKey: [],
@@ -46,8 +48,8 @@ describe('Dashbaord redux state tests', () => {
     apiSpy.mockResolvedValue(notificationsToFe);
     const action = await store.dispatch(
       getReceivedNotifications({
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today))
       })
     );
     const payload = action.payload as GetNotificationsResponse;

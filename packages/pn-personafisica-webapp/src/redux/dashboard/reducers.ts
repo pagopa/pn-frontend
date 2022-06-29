@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { GetNotificationsParams, tenYearsAgo, today, Notification } from '@pagopa-pn/pn-commons';
+import { GetNotificationsParams, tenYearsAgo, today, Notification, formatToTimezoneString, getNextDay } from '@pagopa-pn/pn-commons';
 
 import {
   getReceivedNotifications,
@@ -15,8 +15,8 @@ const dashboardSlice = createSlice({
     loading: false,
     notifications: [] as Array<Notification>,
     filters: {
-      startDate: tenYearsAgo.toISOString(),
-      endDate: today.toISOString(),
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(getNextDay(today)),
     } as GetNotificationsParams,
     pagination: {
       nextPagesKey: [] as Array<string>,
