@@ -53,7 +53,6 @@ const NotificationDetail = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const sender = useAppSelector((state: RootState) => state.userState.user.organization?.id);
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -73,7 +72,11 @@ const NotificationDetail = () => {
     {
       label: 'Da pagare entro il',
       rawValue: notification.paymentExpirationDate,
-      value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
+      value: (
+        <Box fontWeight={600} display="inline">
+          {notification.paymentExpirationDate}
+        </Box>
+      ),
     },
     {
       label: 'Codice Fiscale destinatario',
@@ -92,15 +95,6 @@ const NotificationDetail = () => {
         ),
     },
     {
-      // ...(notification.recipients.length > 1
-      //   ? []
-      //   : [
-      //       {
-      //         label: 'Cognome Nome',
-      //         rawValue: notification.recipients[0]?.denomination,
-      //         value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
-      //       },
-      //     ]),
       label: 'Nome e cognome',
       rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
       value: notification.recipients.map((recipient, index) => (
@@ -109,8 +103,8 @@ const NotificationDetail = () => {
     },
     {
       label: 'Mittente',
-      rawValue: sender,
-      value: <Box fontWeight={600}>{sender}</Box>,
+      rawValue: notification.senderDenomination,
+      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
     },
     {
       label: 'Codice IUN annullato',
@@ -212,10 +206,12 @@ const NotificationDetail = () => {
       <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3 }}></TitleBox>
       {notification.notificationStatus !== NotificationStatus.PAID && (
         <Button
-          sx={{ mb: {
-            xs: 3,
-            md: 4
-          }}}
+          sx={{
+            mb: {
+              xs: 3,
+              md: 4,
+            },
+          }}
           variant="outlined"
           onClick={openModal}
           data-testid="cancelNotificationBtn"
@@ -245,17 +241,24 @@ const NotificationDetail = () => {
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
     >
-      <DialogTitle id="dialog-title" sx={{p: 4}}>Ci siamo quasi</DialogTitle>
-      <DialogContent sx={{px: 4, pb: 4}}>
+      <DialogTitle id="dialog-title" sx={{ p: 4 }}>
+        Ci siamo quasi
+      </DialogTitle>
+      <DialogContent sx={{ px: 4, pb: 4 }}>
         <DialogContentText id="dialog-description">
-        Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la precedente.
+          Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la
+          precedente.
         </DialogContentText>
       </DialogContent>
-      <DialogActions sx={{px: 4, pb: 4}}>
+      <DialogActions sx={{ px: 4, pb: 4 }}>
         <Button onClick={handleModalClose} variant="outlined" data-testid="modalCloseBtnId">
           Indietro
         </Button>
-        <Button onClick={handleModalCloseAndProceed} variant="contained" data-testid="modalCloseAndProceedBtnId">
+        <Button
+          onClick={handleModalCloseAndProceed}
+          variant="contained"
+          data-testid="modalCloseAndProceedBtnId"
+        >
           Invia una nuova notifica
         </Button>
       </DialogActions>
