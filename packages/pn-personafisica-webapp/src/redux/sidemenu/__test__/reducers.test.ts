@@ -1,52 +1,11 @@
 /* eslint-disable functional/no-let */
 import { DelegationsApi } from "../../../api/delegations/Delegations.api";
 import { mockAuthentication } from "../../auth/__test__/reducers.test";
-import { acceptDelegation } from "../../delegation/actions";
+import { acceptDelegation, rejectDelegation } from "../../delegation/actions";
 import { Delegator } from "../../delegation/types";
 import { store } from "../../store";
 import { closeDomicileBanner, getSidemenuInformation } from "../actions";
 import { getMockedDelegators, initialState } from "./test-utils";
-
-// const initialState = {
-//   pendingDelegators: 0,
-//   delegators: [],
-//   legalDomicile: [],
-//   domicileBannerOpened: true
-// };
-
-// const getDelegatorsResponse: Array<Delegator> = [
-//   {
-//     mandateId: "1dc53e54-1368-4c2d-8583-2f1d672350d8",
-//     status: "pending",
-//     visibilityIds: [],
-//     verificationCode: "",
-//     datefrom: "2022-03-01",
-//     dateto: "2022-06-30",
-//     delegator: {
-//       displayName: "Alessandro Manzoni",
-//       firstName: "",
-//       lastName: "",
-//       companyName: null,
-//       fiscalCode: "",
-//       person: true
-//     }
-//   }, {
-//     mandateId: "8ff0b635-b770-49ae-925f-3888495f3d13",
-//     status: "pending",
-//     visibilityIds: [],
-//     verificationCode: "",
-//     datefrom: "2022-03-01",
-//     dateto: "2022-06-30",
-//     delegator: {
-//       displayName: "Lucia Mondella",
-//       firstName: "",
-//       lastName: "",
-//       companyName: null,
-//       fiscalCode: "",
-//       person: true
-//     }
-//   }
-// ];
 
 describe('Sidemenu redux state tests', () => {
   mockAuthentication();
@@ -70,7 +29,7 @@ describe('Sidemenu redux state tests', () => {
     expect(state).toEqual({...initialState, domicileBannerOpened: false});
   });
 
-  it('Should load data properly', async () => {
+  it('Should load state properly', async () => {
     // test getSidemenuInformation() with 2 "active" delegators
     await setInitialState(getMockedDelegators("active"));
     
@@ -93,7 +52,7 @@ describe('Sidemenu redux state tests', () => {
     expect(state.pendingDelegators).toBe(1);
   });
 
-  it.only('works after accepting a delegation', async () => {
+  it('Should update state after accepting a delegation', async () => {
     // accept delegation (both in pending state)
     await setInitialState(getMockedDelegators("pending"));
     const acceptDelegationApiSpy = jest.spyOn(DelegationsApi, 'acceptDelegation');
@@ -121,7 +80,29 @@ describe('Sidemenu redux state tests', () => {
     expect(state.pendingDelegators).toBe(0);
   });
 
-  it('works after rejecting a pending delegation', () => {
+  it('Should update state after rejecting a pending delegation', async () => {
+    // reject delegation (both in pending state)
+    await setInitialState(getMockedDelegators("mixed"));
+    const rejectDelegationApiSpy = jest.spyOn(DelegationsApi, 'rejectDelegation');
+    rejectDelegationApiSpy.mockResolvedValue({ id: '1dc53e54-1368-4c2d-8583-2f1d672350d8' });
+    const action = await store.dispatch(rejectDelegation('1dc53e54-1368-4c2d-8583-2f1d672350d8'));
+    
+    const state = store.getState().generalInfoState;
+    expect(action.type).toBe('rejectDelegation/fulfilled');
+    expect(state.delegators.length).toBe(1);
+    expect(state.pendingDelegators).toBe(0);
+  });
 
+  it('Should update state after rejecting an active delegation', async () => {
+    // reject delegation (both in pending state)
+    await setInitialState(getMockedDelegators("mixed"));
+    const rejectDelegationApiSpy = jest.spyOn(DelegationsApi, 'rejectDelegation');
+    rejectDelegationApiSpy.mockResolvedValue({ id: '8ff0b635-b770-49ae-925f-3888495f3d13' });
+    const action = await store.dispatch(rejectDelegation('8ff0b635-b770-49ae-925f-3888495f3d13'));
+    
+    const state = store.getState().generalInfoState;
+    expect(action.type).toBe('rejectDelegation/fulfilled');
+    expect(state.delegators.length).toBe(0);
+    expect(state.pendingDelegators).toBe(1);
   });
 });
