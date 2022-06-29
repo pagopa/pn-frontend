@@ -14,7 +14,9 @@ import {
   today,
   useIsMobile,
   IUN_regex,
-  filtersApplied
+  filtersApplied,
+  formatToTimezoneString,
+  getNextDay
 } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
@@ -35,8 +37,8 @@ const useStyles = makeStyles({
 });
 
 const emptyValues = {
-  startDate: tenYearsAgo.toISOString(),
-  endDate: today.toISOString(),
+  startDate: formatToTimezoneString(tenYearsAgo),
+  endDate: formatToTimezoneString(getNextDay(today)),
   iunMatch: undefined,
 };
 
@@ -83,8 +85,8 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
     /** onSubmit populates filters */
     onSubmit: (values) => {
       const currentFilters = {
-        startDate: values.startDate.toISOString(),
-        endDate: values.endDate.toISOString(),
+        startDate: formatToTimezoneString(values.startDate),
+        endDate: formatToTimezoneString(getNextDay(values.endDate)),
         iunMatch: values.iunMatch,
       };
       if (_.isEqual(prevFilters, currentFilters)) {

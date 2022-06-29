@@ -1,6 +1,6 @@
 import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import * as actions from '../../redux/dashboard/actions';
 import { render, axe } from '../../__test__/test-utils';
@@ -36,8 +36,8 @@ describe('Dashboard Page', () => {
     spy
       .mockReturnValueOnce(notificationsToFe.resultsPage)
       .mockReturnValueOnce({
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
       })
       .mockReturnValueOnce({
         orderBy: '',
@@ -80,8 +80,8 @@ describe('Dashboard Page', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith({
-      startDate: tenYearsAgo.toISOString(),
-      endDate: today.toISOString(),
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(getNextDay(today)),
       size: 10,
     });
   });

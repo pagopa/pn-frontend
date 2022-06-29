@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   calculatePages,
   CustomPagination,
+  formatToTimezoneString,
+  getNextDay,
   PaginationData,
   Sort,
   tenYearsAgo,
@@ -60,8 +62,8 @@ const Dashboard = () => {
   const handleCancelSearch = () => {
     dispatch(
       setNotificationFilters({
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
         status: undefined,
         recipientId: undefined,
         iunMatch: undefined,
