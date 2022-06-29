@@ -16,6 +16,8 @@ type HeaderProps = {
   assistanceEmail?: string;
   /** List of available products */
   productsList: Array<ProductEntity>;
+  /** Current product */
+  productId?: string;
   /** List of available parties */
   partyList?: Array<PartyEntity>;
   /** Logout/exit action to apply */
@@ -24,7 +26,7 @@ type HeaderProps = {
   loggedUser: JwtUser;
   /** Enable user dropdown */
   enableDropdown?: boolean;
-  /** Actions linked to user dropdown*/
+  /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
 };
 
@@ -38,6 +40,7 @@ const Header = ({
   onExitAction = () => window.location.assign(''),
   assistanceEmail,
   productsList,
+  productId,
   partyList,
   loggedUser,
   enableDropdown,
@@ -66,6 +69,7 @@ const Header = ({
         userActions={userActions}
       />
       <HeaderProduct
+        productId={productId}
         productsList={productsList}
         partyList={partyList}
         onSelectedProduct={handleProductSelection}

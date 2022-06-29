@@ -9,7 +9,6 @@ import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 import {
   PAGOPA_HELP_EMAIL,
-  SELFCARE_URL_FE_LOGIN,
   SELFCARE_BASE_URL,
   PARTY_MOCK,
 } from './utils/constants';
@@ -39,16 +38,16 @@ const App = () => {
   const productsList: Array<ProductSwitchItem> = useMemo(
     () => [
       {
-        id: '0',
-        title: `Piattaforma Notifiche`,
-        productUrl: '',
-        linkType: 'internal',
-      },
-      {
         id: '1',
         title: `Area Riservata`,
         productUrl: `${SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
         linkType: 'external',
+      },
+      {
+        id: '0',
+        title: `Piattaforma Notifiche`,
+        productUrl: '',
+        linkType: 'internal',
       },
     ],
     [idOrganization]
@@ -80,14 +79,12 @@ const App = () => {
       }
       assistanceEmail={PAGOPA_HELP_EMAIL}
       productsList={productsList}
+      productId={"0"}
       partyList={partyList}
       loggedUser={jwtUser}
     >
       <AppMessage
-        sessionRedirect={() => {
-          /* eslint-disable-next-line functional/immutable-data */
-          window.location.href = SELFCARE_URL_FE_LOGIN as string;
-        }}
+        sessionRedirect={() => dispatch(logout())}
       />
       <LoadingOverlay />
       <Router />

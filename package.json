@@ -11,6 +11,7 @@
     "start:pa": "lerna exec --scope @pagopa-pn/pn-pa-webapp -- yarn start",
     "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn start",
     "start:login": "lerna exec --scope @pagopa-pn/pn-personafisica-login -- yarn start",
+    "start:landing": "lerna exec --scope @pagopa-pn/pn-landing-webapp -- yarn dev",
     "build": "lerna run --scope @pagopa-pn/pn-pa-webapp --scope @pagopa-pn/pn-personafisica-webapp build",
     "test": "lerna run --scope @pagopa-pn/* test",
     "test:coverage": "lerna run --scope @pagopa-pn/* test:coverage",

@@ -1,8 +1,7 @@
 import * as redux from 'react-redux';
-import { fireEvent, RenderResult } from '@testing-library/react';
+import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 
 import * as actions from '../../redux/notification/actions';
-import * as hooks from '../../redux/hooks';
 import { notificationToFe } from '../../redux/notification/__test__/test-utils';
 import { render, axe } from '../../__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
@@ -47,13 +46,6 @@ describe('NotificationDetail Page', () => {
   const mockActionFn = jest.fn();
 
   beforeEach(async () => {
-    // mock app selector
-    const spy = jest.spyOn(hooks, 'useAppSelector');
-    spy
-      .mockReturnValueOnce(notificationToFe)
-      .mockReturnValueOnce('mocked-sender')
-      .mockReturnValueOnce('mocked-download-url')
-      .mockReturnValueOnce('mocked-legal-fact-url');
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockDispatchFn);
@@ -61,7 +53,16 @@ describe('NotificationDetail Page', () => {
     const actionSpy = jest.spyOn(actions, 'getSentNotification');
     actionSpy.mockImplementation(mockActionFn);
     // render component
-    result = render(<NotificationDetail />);
+    result = render(<NotificationDetail />, {
+      preloadedState: {
+        notificationState: {
+          notification: notificationToFe,
+          documentDownloadUrl: 'mocked-download-url',
+          legalFactDownloadUrl: 'mocked-legal-fact-url',
+        },
+        userState: { user: { organization: { id: 'mocked-sender' } } },
+      },
+    });
   });
 
   afterEach(() => {
@@ -101,9 +102,24 @@ describe('NotificationDetail Page', () => {
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
 
-  test('clicks on the cancel button', () => {
+  test('clicks on the cancel button and on close modal', async () => {
     const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn!);
+    const modal = await waitFor(() => result?.queryByTestId('modalId'));
+    expect(modal).toBeInTheDocument();
+    const closeModalBtn = modal?.querySelector('[data-testid="modalCloseBtnId"]');
+    fireEvent.click(closeModalBtn!);
+    await waitFor(() => expect(modal).not.toBeInTheDocument());
+  });
+
+  test('clicks on the cancel button and on confirm button', async () => {
+    const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
+    fireEvent.click(cancelNotificationBtn!);
+    const modal = await waitFor(() => result?.queryByTestId('modalId'));
+    expect(modal).toBeInTheDocument();
+    const modalCloseAndProceedBtn = modal?.querySelector('[data-testid="modalCloseAndProceedBtnId"]');
+    fireEvent.click(modalCloseAndProceedBtn!);
+    await waitFor(() => expect(modal).not.toBeInTheDocument());
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
 

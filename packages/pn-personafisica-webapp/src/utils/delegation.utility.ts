@@ -17,7 +17,7 @@ export default function delegationToItem(delegations: Array<Delegation>): Array<
     startDate: formatDate(delegation.datefrom.slice(0, 10)),
     endDate: formatDate(delegation.dateto),
     visibilityIds: delegation.visibilityIds.map(
-      (entity: { name: string; uniqueIdentifier: string }) => entity.uniqueIdentifier
+      (entity: { name: string; uniqueIdentifier: string }) => entity.name
     ),
     status: delegation.status,
     verificationCode: delegation.verificationCode,

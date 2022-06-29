@@ -11,7 +11,7 @@ export const createDelegationPayload = {
   nome: 'nome',
   cognome: 'cognome',
   selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-  expirationDate: 8765432345678,
+  expirationDate: new Date(),
   enteSelect: { name: '', uniqueIdentifier: '' },
   verificationCode: '00000',
 };
@@ -23,7 +23,7 @@ export const createDelegationSelectedPayload = {
   nome: 'nome',
   cognome: 'cognome',
   selectTuttiEntiOrSelezionati: 'entiSelezionati',
-  expirationDate: 8765432345678,
+  expirationDate: new Date(),
   enteSelect: { name: 'test', uniqueIdentifier: 'test' },
   verificationCode: '00000',
 };
@@ -44,4 +44,20 @@ export const createDelegationResponse = {
   status: 'pending',
   verificationCode: '00000',
   visibilityIds: [],
+};
+
+export const createDelegationGenericErrorResponse = {
+  response: {
+    status: 401
+  }
+};
+
+export const createDelegationDuplicatedErrorResponse = {
+  response: {
+    status: 402,
+    customMessage: {
+      title: 'custom-title',
+      message: 'custom-message'
+    }
+  }
 };

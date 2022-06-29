@@ -1,5 +1,18 @@
 import { LoadingButton } from '@mui/lab';
-import { Alert, AlertColor, Button, Divider, Grid, Link, Paper, Skeleton, SxProps, Theme, Typography } from '@mui/material';
+import {
+  Alert,
+  AlertColor,
+  Button,
+  Divider,
+  Grid,
+  Link,
+  Paper,
+  Skeleton,
+  Stack,
+  SxProps,
+  Theme,
+  Typography
+} from '@mui/material';
 import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
@@ -44,6 +57,7 @@ interface PaymentData {
 
 const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocumentDownload }) => {
   const { t } = useTranslation(['notifiche']);
+  const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const dispatch = useAppDispatch();
@@ -336,61 +350,64 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
             {data.amount && data.disclaimer}
           </Typography>
         </Grid>
-        <Box width="100%">
-          {data.message && (
-            <Alert
-              severity={data.message.type}
-              action={getMessageAction(data.message)}
-            >
-              <Typography variant="body1">{data.message.body}</Typography>
-              <Typography variant="body1" fontWeight="bold">{data.message.errorCode}</Typography>
-            </Alert>
-          )}
-        </Box>
-        {loading && (
-          <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-            <LoadingButton
-              loading={loading}
-              variant="contained"
-              loadingPosition="end"
-              endIcon={<SendIcon />}
-              fullWidth
-            >
-              {t('detail.payment.submit', { ns: 'notifiche' })}
-            </LoadingButton>
-          </Grid>
-        )}
-        {!loading && data.action && (
-          <>
-            <Grid item xs={12} lg={12}>
-              <Button onClick={data.action.callback} variant="contained" fullWidth>
-                {data.action.text}
-              </Button>
-            </Grid>
-            {attachments.length > 0 && (
-              <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-                <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
-              </Grid>
-            )}
-            {attachments.map((attachment) => (
-              <Grid
-                key={attachment.name}
-                item
-                xs={12}
-                lg={12 / attachments.length || 1}
-                sx={{ textAlign: 'center' }}
+        <Stack spacing={2} width="100%">
+          <Box width="100%">
+            {data.message && (
+              <Alert
+                severity={data.message.type}
+                action={isMobile ? undefined : getMessageAction(data.message)}
               >
-                <Button
-                  name={`download-${attachment.name.toLowerCase()}-notification`}
-                  startIcon={<DownloadIcon />}
-                  onClick={() => onDocumentClick(attachment.name)}
-                >
-                  {attachment.title}
+                <Typography variant="body1">{data.message.body}</Typography>
+                <Typography variant="body1" fontWeight="bold">{data.message.errorCode}</Typography>
+                {isMobile ? <Box width="100%" display="flex" justifyContent="center" pr={7.5}>{getMessageAction(data.message)}</Box> : null}
+              </Alert>
+            )}
+          </Box>
+          {loading && (
+            <Grid item xs={12} lg={12}>
+              <LoadingButton
+                loading={loading}
+                variant="contained"
+                loadingPosition="end"
+                endIcon={<SendIcon />}
+                fullWidth
+              >
+                {t('detail.payment.submit', { ns: 'notifiche' })}
+              </LoadingButton>
+            </Grid>
+          )}
+          {!loading && data.action && (
+            <>
+              <Grid item xs={12} lg={12}>
+                <Button onClick={data.action.callback} variant="contained" fullWidth>
+                  {data.action.text}
                 </Button>
               </Grid>
-            ))}
-          </>
-        )}
+              {attachments.length > 0 && (
+                <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
+                  <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
+                </Grid>
+              )}
+              {attachments.map((attachment) => (
+                <Grid
+                  key={attachment.name}
+                  item
+                  xs={12}
+                  lg={12 / attachments.length || 1}
+                  sx={{ textAlign: 'center' }}
+                >
+                  <Button
+                    name={`download-${attachment.name.toLowerCase()}-notification`}
+                    startIcon={<DownloadIcon />}
+                    onClick={() => onDocumentClick(attachment.name)}
+                  >
+                    {attachment.title}
+                  </Button>
+                </Grid>
+              ))}
+            </>
+          )}
+        </Stack>
       </Grid>
     </Paper>
   );

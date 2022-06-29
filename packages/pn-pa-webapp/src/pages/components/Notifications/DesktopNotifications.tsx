@@ -137,7 +137,7 @@ const DesktopNotifications = ({
     trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
   };
 
-  const filtersApplied: boolean = filterNotificationsRef?.current?.filtersApplied;
+  const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
   const emptyActionLabel: string = 'Chiavi API';
   const secondaryMessage: object = {
@@ -161,7 +161,7 @@ const DesktopNotifications = ({
     <Fragment>
       {notifications && (
         <Fragment>
-          {showFilters && <FilterNotifications ref={filterNotificationsRef} />}
+          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters}/>
           {notifications.length > 0 ? (
             <ItemsTable
               columns={columns}

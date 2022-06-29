@@ -14,7 +14,7 @@ import {
   today,
   useIsMobile,
   IUN_regex,
-  filtersApplied,
+  filtersApplied
 } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
@@ -22,6 +22,10 @@ import { RootState } from '../../redux/store';
 import { setNotificationFilters } from '../../redux/dashboard/actions';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
+
+type Props = {
+  showFilters: boolean;
+};
 
 const useStyles = makeStyles({
   helperTextFormat: {
@@ -42,7 +46,8 @@ const initialEmptyValues = {
   iunMatch: '',
 };
 
-const FilterNotifications = forwardRef((_props, ref) => {
+// eslint-disable-next-line sonarjs/cognitive-complexity
+const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common']);
@@ -110,8 +115,12 @@ const FilterNotifications = forwardRef((_props, ref) => {
   }, [filters]);
 
   useImperativeHandle(ref, () => ({
-    filtersApplied: filtersCount > 0,
+    filtersApplied: filtersCount > 0
   }));
+
+  if (!showFilters) {
+    return <></>;
+  }
 
   return isMobile ? (
     <CustomMobileDialog>
