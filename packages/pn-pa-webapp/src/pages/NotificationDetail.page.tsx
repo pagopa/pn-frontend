@@ -52,47 +52,69 @@ const NotificationDetail = () => {
     label: string;
     rawValue: string | undefined;
     value: ReactNode;
-  }> = [{
-    label: 'Data',
-    rawValue: notification.sentAt,
-    value: <Box fontWeight={600}>{notification.sentAt}</Box>,
-  }, {
-    label: 'Termini di pagamento',
-    rawValue: notification.paymentExpirationDate,
-    value: <Box>Entro il <Typography fontWeight={600} display="inline">{notification.paymentExpirationDate}</Typography></Box>,
-  }, {
-    label: 'Destinatario',
-    rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
-    value: (
-      <Box fontWeight={600}>
-        {notification.recipients.map((recipient, i) => (
-          <Box key={i}>
-            {recipient.taxId} - {recipient.denomination}
+  }> = [
+    {
+      label: 'Data',
+      rawValue: notification.sentAt,
+      value: <Box fontWeight={600}>{notification.sentAt}</Box>,
+    },
+    {
+      label: 'Da pagare entro il',
+      rawValue: notification.paymentExpirationDate,
+      value: (
+        <Typography fontWeight={600} display="inline">
+          {notification.paymentExpirationDate}
+        </Typography>
+      ),
+    },
+    {
+      label: 'Codice Fiscale destinatario',
+      rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
+      value:
+        notification.recipients.length > 1 ? (
+          <Box fontWeight={600}>
+            {notification.recipients.map((recipient, i) => (
+              <Box key={i}>
+                {recipient.taxId} - {recipient.denomination}
+              </Box>
+            ))}
           </Box>
-        ))}
-      </Box>
-    ),
-  }, {
-    label: 'Mittente',
-    rawValue: notification.senderDenomination,
-    value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
-  }, {
-    label: 'Codice IUN annullato',
-    rawValue: notification.cancelledIun,
-    value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-  }, {
-    label: 'Codice IUN',
-    rawValue: notification.iun,
-    value: <Box fontWeight={600}>{notification.iun}</Box>,
-  }, {
-    label: 'Gruppi',
-    rawValue: notification.group,
-    value: notification.group && (
-      <TagGroup visibleItems={4}>
-        <Tag value={notification.group} />
-      </TagGroup>
-    ),
-  }];
+        ) : (
+          <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>
+        ),
+    },
+    {
+      label: 'Nome e cognome',
+      rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
+      value: notification.recipients.map((recipient, index) => (
+        <Box key={index}>{recipient.denomination}</Box>
+      )),
+    },
+    {
+      label: 'Mittente',
+      rawValue: notification.senderDenomination,
+      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
+    },
+    {
+      label: 'Codice IUN annullato',
+      rawValue: notification.cancelledIun,
+      value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
+    },
+    {
+      label: 'Codice IUN',
+      rawValue: notification.iun,
+      value: <Box fontWeight={600}>{notification.iun}</Box>,
+    },
+    {
+      label: 'Gruppi',
+      rawValue: notification.group,
+      value: notification.group && (
+        <TagGroup visibleItems={4}>
+          <Tag value={notification.group} />
+        </TagGroup>
+      ),
+    },
+  ];
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
     .filter((row) => row.rawValue)
     .map((row, index) => ({
