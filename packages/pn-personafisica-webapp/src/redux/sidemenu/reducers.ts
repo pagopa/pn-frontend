@@ -28,13 +28,15 @@ const generalInfoSlice = createSlice({
       state.domicileBannerOpened = false;
     });
     builder.addCase(acceptDelegation.fulfilled, (state) => {
-      state.pendingDelegators--;
+      if(state.pendingDelegators > 0){
+        state.pendingDelegators--;
+      }
     });
     builder.addCase(rejectDelegation.fulfilled, (state, action) => {
       const startingDelegatorsNum = state.delegators.length;
       state.delegators = state.delegators.filter((delegator) => delegator.mandateId !== action.meta.arg);
       // delegation was still in 'pending' state if no delegator has been removed
-      if(startingDelegatorsNum === state.delegators.length) {
+      if(startingDelegatorsNum === state.delegators.length && state.pendingDelegators > 0) {
         state.pendingDelegators--;// so we also need to update pendingDelegators state
       }
     });
