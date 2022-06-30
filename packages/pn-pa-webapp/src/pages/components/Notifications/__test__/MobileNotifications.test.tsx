@@ -44,7 +44,6 @@ describe('MobileNotifications Component', () => {
         notifications={[]}
         sort={{ orderBy: 'mocked-field', order: 'asc' }}
         onChangeSorting={() => {}}
-        onCancelSearch={() => {}}
         onManualSend={() => {}}
         onApiKeys={() => {}}
       />
@@ -62,7 +61,6 @@ describe('MobileNotifications Component', () => {
       <MobileNotifications
         notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
         onManualSend={() => {}}
         onApiKeys={() => {}}
       />
@@ -82,7 +80,6 @@ describe('MobileNotifications Component', () => {
       <MobileNotifications
         notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
         onManualSend={() => {}}
         onApiKeys={() => {}}
       />
@@ -102,7 +99,6 @@ describe('MobileNotifications Component', () => {
         notifications={[]}
         sort={{ orderBy: 'mocked-field', order: 'asc' }}
         onChangeSorting={() => {}}
-        onCancelSearch={() => {}}
         onManualSend={() => {}}
         onApiKeys={() => {}}
       />

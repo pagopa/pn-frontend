@@ -71,7 +71,7 @@ const Recipient = ({ onConfirm }: Props) => {
           .string()
           .required('Campo obbligatorio')
           .matches(pIvaRegex, 'Il codice fiscale inserito non è corretto'),
-        noticeCode: yup.string().required('Campo obbligatorio'),
+        noticeCode: yup.string().matches(/^\d{18}$/, 'Inserisci un codice di 18 caratteri numerici').required('Campo obbligatorio'),
         digitalDomicile: yup.string().when('showDigitalDomicile', {
           is: true,
           then: yup.string().email('Indirizzo PEC non valido').required('Campo obbligatorio'),

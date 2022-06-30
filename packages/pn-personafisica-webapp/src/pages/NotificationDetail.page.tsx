@@ -44,9 +44,9 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
-  const currentRecipient = notification.recipients.filter(
+  const currentRecipient = notification.recipients.find(
     (recipient) => recipient.taxId === currentUser.fiscal_number
-  )[0];
+  );
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -159,7 +159,18 @@ const NotificationDetail = () => {
         }
         currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3, mb: 4 }}></TitleBox>
+      <TitleBox
+        variantTitle="h4"
+        title={notification.subject}
+        sx={{
+          pt: 3,
+          mb: {
+            xs: 3,
+            md: 4,
+          },
+        }}
+        mbTitle={0}
+      ></TitleBox>
     </Fragment>
   );
 

@@ -32,7 +32,6 @@ describe('DesktopNotifications Component', () => {
       <DesktopNotifications
         notifications={[]}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
         onManualSend={() => {}}
         onApiKeys={() => {}}
       />
@@ -48,7 +47,6 @@ describe('DesktopNotifications Component', () => {
       <DesktopNotifications
         notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
         onManualSend={() => {}}
         onApiKeys={() => {}}
       />
@@ -70,7 +68,6 @@ describe('DesktopNotifications Component', () => {
       <DesktopNotifications
         notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
         onManualSend={() => {}}
         onApiKeys={() => {}}
       />
@@ -89,7 +86,6 @@ describe('DesktopNotifications Component', () => {
       <DesktopNotifications
         notifications={[]}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
         onManualSend={() => {}}
         onApiKeys={() => {}}
       />
