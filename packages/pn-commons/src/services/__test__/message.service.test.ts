@@ -28,22 +28,40 @@ const _401error: IAppMessage = {
   status: 401
 };
 
-const _genericError: IAppMessage = {
+const _500error: IAppMessage = {
   id: '4',
-  title: 'Errore generico',
-  message: 'Si è verificato un errore. Si prega di riprovare più tardi',
+  title: 'Il servizio non è disponibile',
+  message: "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
   blocking: false,
   toNotify: true,
   status: 500
 };
 
-const _genericMessage: IAppMessage = {
+const _genericError: IAppMessage = {
   id: '5',
+  title: 'Errore generico',
+  message: 'Si è verificato un errore. Si prega di riprovare più tardi',
+  blocking: false,
+  toNotify: true,
+  status: 501
+};
+
+const _genericMessage: IAppMessage = {
+  id: '6',
   title: 'mocked-title',
   message: 'mocked-message',
   blocking: false,
   toNotify: true,
   status: undefined
+};
+
+const _customMessage: IAppMessage = {
+  id: '7',
+  title: 'custom-title',
+  message: 'custom-message',
+  blocking: false,
+  toNotify: true,
+  status: 401
 };
 
 test('return 404 error message', () => {
@@ -64,8 +82,14 @@ test('return 401 error message', () => {
   expect(errorMessage).toEqual(_401error);
 });
 
-test('return generic error message', () => {
+test('return 500 error message', () => {
   const response = { response: { status: 500 } };
+  const errorMessage = createAppError(response);
+  expect(errorMessage).toEqual(_500error);
+});
+
+test('return generic error message', () => {
+  const response = { response: { status: 501 } };
   const errorMessage = createAppError(response);
   expect(errorMessage).toEqual(_genericError);
 });
@@ -73,4 +97,10 @@ test('return generic error message', () => {
 test('return generic message', () => {
   const genericMessage = createAppMessage('mocked-title', 'mocked-message');
   expect(genericMessage).toEqual(_genericMessage);
+});
+
+test('return custom message', () => {
+  const response = { response: { status: 401, customMessage: { title: 'custom-title', message: 'custom-message'} } };
+  const customMessage = createAppError(response);
+  expect(customMessage).toEqual(_customMessage);
 });

@@ -13,7 +13,9 @@ import {
   CustomMobileDialog,
   CustomMobileDialogToggle,
   CustomMobileDialogContent,
-  filtersApplied
+  filtersApplied,
+  formatToTimezoneString,
+  getNextDay,
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
@@ -27,8 +29,8 @@ type Props = {
 };
 
 const emptyValues = {
-  startDate: tenYearsAgo.toISOString(),
-  endDate: today.toISOString(),
+  startDate: formatToTimezoneString(tenYearsAgo),
+  endDate: formatToTimezoneString(getNextDay(today)),
   status: undefined,
   recipientId: undefined,
   iunMatch: undefined,
@@ -44,7 +46,7 @@ const initialEmptyValues = {
 };
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
+const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -81,8 +83,8 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
     /** onSubmit populates filters */
     onSubmit: (values) => {
       const currentFilters = {
-        startDate: values.startDate.toISOString(),
-        endDate: values.endDate.toISOString(),
+        startDate: formatToTimezoneString(values.startDate),
+        endDate: formatToTimezoneString(getNextDay(values.endDate)),
         recipientId: values.recipientId || undefined,
         iunMatch: values.iunMatch || undefined,
         status: values.status === 'All' ? undefined : values.status,
