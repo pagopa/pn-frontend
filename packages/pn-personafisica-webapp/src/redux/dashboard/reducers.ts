@@ -72,6 +72,7 @@ const dashboardSlice = createSlice({
         endDate: today.toISOString()
       };
       // reset pagination
+      state.pagination.size = 10;
       state.pagination.page = 0;
       state.pagination.nextPagesKey = [];
       state.pagination.moreResult = false;
