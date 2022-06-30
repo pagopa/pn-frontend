@@ -64,7 +64,7 @@ const NotificationDetailDocuments = ({
       {documents.map((d) => (
         <Box key={d.digests.sha256}>
           {!documentsAvailable ? (
-          <Typography>{d.title || d.ref.key}</Typography>) : (
+          <Typography><AttachFileIcon sx={{ mr: 1 }} fontSize='inherit' color="inherit" />{d.title || d.ref.key}</Typography>) : (
           <ButtonNaked
             data-testid="documentButton"
             color={'primary'}
@@ -72,7 +72,7 @@ const NotificationDetailDocuments = ({
             onClick={() => clickHandler(d.docIdx)}
           >
             {d.title || d.ref.key}
-            <Typography sx={{ fontWeight: 600, ml: '10px' }}>
+            <Typography sx={{ fontWeight: 600, ml: 1 }}>
               {''} {/* TODO: integrate specific dimension of file */}
             </Typography>
           </ButtonNaked>

@@ -384,27 +384,23 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
                 </Button>
               </Grid>
               {attachments.length > 0 && (
-                <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-                  <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
-                </Grid>
+              <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
+                <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
+              </Grid>
               )}
-              {attachments.map((attachment) => (
-                <Grid
+              <Stack direction={{ xs: 'column', lg: 'row' }} >
+                {attachments.map((attachment) => (
+                <Button
                   key={attachment.name}
-                  item
-                  xs={12}
-                  lg={12 / attachments.length || 1}
-                  sx={{ textAlign: 'center' }}
+                  sx={{ flexGrow: 1 }}
+                  name={`download-${attachment.name.toLowerCase()}-notification`}
+                  startIcon={<DownloadIcon />}
+                  onClick={() => onDocumentClick(attachment.name)}
                 >
-                  <Button
-                    name={`download-${attachment.name.toLowerCase()}-notification`}
-                    startIcon={<DownloadIcon />}
-                    onClick={() => onDocumentClick(attachment.name)}
-                  >
-                    {attachment.title}
-                  </Button>
-                </Grid>
-              ))}
+                  {attachment.title}
+                </Button>
+                ))}
+              </Stack>
             </>
           )}
         </Stack>

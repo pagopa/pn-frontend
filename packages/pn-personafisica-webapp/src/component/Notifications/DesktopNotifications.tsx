@@ -17,22 +17,29 @@ import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
+import { Delegator } from '../../redux/delegation/types';
 
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
-  onCancelSearch: () => void;
   /** Table sort */
   sort?: Sort;
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort) => void;
+  /** Delegator */
+  currentDelegator?: Delegator;
 };
 
-const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
+const DesktopNotifications = ({
+  notifications,
+  sort,
+  onChangeSorting,
+  currentDelegator,
+}: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
-  const filterNotificationsRef = useRef({ filtersApplied: false });
+  const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
   const columns: Array<Column> = [
     {
@@ -119,7 +126,9 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
 
   const EmptyStateProps = {
     emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
-    emptyActionCallback: filtersApplied ? onCancelSearch : handleRouteContacts,
+    emptyActionCallback: filtersApplied
+      ? filterNotificationsRef.current.cleanFilters
+      : handleRouteContacts,
     emptyMessage: filtersApplied
       ? undefined
       : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione',
@@ -142,7 +151,11 @@ const DesktopNotifications = ({ notifications, sort, onChangeSorting, onCancelSe
 
   return (
     <Fragment>
-      <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters}/>
+      <FilterNotifications
+        ref={filterNotificationsRef}
+        showFilters={showFilters}
+        currentDelegator={currentDelegator}
+      />
       {rows.length ? (
         <ItemsTable columns={columns} rows={rows} sort={sort} onChangeSorting={onChangeSorting} />
       ) : (

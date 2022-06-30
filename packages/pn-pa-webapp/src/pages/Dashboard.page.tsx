@@ -3,12 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   calculatePages,
   CustomPagination,
-  formatToTimezoneString,
-  getNextDay,
   PaginationData,
   Sort,
-  tenYearsAgo,
-  today,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { Box, Button, Typography } from '@mui/material';
@@ -18,7 +14,6 @@ import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   getSentNotifications,
-  setNotificationFilters,
   setPagination,
   setSorting,
 } from '../redux/dashboard/actions';
@@ -56,19 +51,6 @@ const Dashboard = () => {
   // Sort handlers
   const handleChangeSorting = (s: Sort) => {
     dispatch(setSorting(s));
-  };
-
-  // Remove filter
-  const handleCancelSearch = () => {
-    dispatch(
-      setNotificationFilters({
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
-        status: undefined,
-        recipientId: undefined,
-        iunMatch: undefined,
-      })
-    );
   };
 
   // route to Manual Send
@@ -114,7 +96,6 @@ const Dashboard = () => {
         <MobileNotifications
           notifications={notifications}
           onChangeSorting={handleChangeSorting}
-          onCancelSearch={handleCancelSearch}
           onManualSend={handleRouteManualSend}
           onApiKeys={handleRouteApiKeys}
         />
@@ -122,7 +103,6 @@ const Dashboard = () => {
         <DesktopNotifications
           notifications={notifications}
           onChangeSorting={handleChangeSorting}
-          onCancelSearch={handleCancelSearch}
           onManualSend={handleRouteManualSend}
           onApiKeys={handleRouteApiKeys}
         />
