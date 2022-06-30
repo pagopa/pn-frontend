@@ -44,9 +44,9 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
-  const currentRecipient = notification.recipients.filter(
+  const currentRecipient = notification.recipients.find(
     (recipient) => recipient.taxId === currentUser.fiscal_number
-  )[0];
+  );
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
