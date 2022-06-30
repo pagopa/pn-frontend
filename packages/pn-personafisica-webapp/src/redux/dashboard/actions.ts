@@ -17,3 +17,5 @@ export const setPagination = createAction<{page: number; size: number}>('setPagi
 export const setSorting = createAction<{orderBy: string; order: 'asc' | 'desc'}>('setSorting');
 
 export const setNotificationFilters = createAction<GetNotificationsParams>('setNotificationFilters');
+
+export const setMandateId = createAction<string | undefined>('setMandateId');

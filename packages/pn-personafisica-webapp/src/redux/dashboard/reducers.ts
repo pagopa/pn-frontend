@@ -6,6 +6,7 @@ import {
   setPagination,
   setSorting,
   setNotificationFilters,
+  setMandateId
 } from './actions';
 
 /* eslint-disable functional/immutable-data */
@@ -58,6 +59,20 @@ const dashboardSlice = createSlice({
     builder.addCase(setNotificationFilters, (state, action) => {
       state.filters = action.payload;
       // reset pagination
+      state.pagination.page = 0;
+      state.pagination.nextPagesKey = [];
+      state.pagination.moreResult = false;
+    });
+    builder.addCase(setMandateId, (state, action) => {
+      state.notifications = [];
+      state.filters = {
+        iunMatch: undefined,
+        mandateId: action.payload,
+        startDate: tenYearsAgo.toISOString(),
+        endDate: today.toISOString()
+      };
+      // reset pagination
+      state.pagination.size = 10;
       state.pagination.page = 0;
       state.pagination.nextPagesKey = [];
       state.pagination.moreResult = false;

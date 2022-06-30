@@ -1,7 +1,8 @@
 import { ExitToApp } from '@mui/icons-material';
 import { ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import Badge from '@mui/material/Badge';
-import { SideMenuItem } from '../..';
+
+import { SideMenuItem } from '../../types/SideMenuItem';
 import NotificationBadge from './NotificationBadge';
 
 type Props = {
@@ -10,7 +11,7 @@ type Props = {
   style?: { [key: string]: string | number };
   goOutside?: boolean;
   onSelect: () => void;
-  handleLinkClick: (link: string) => void;
+  handleLinkClick: (item: SideMenuItem) => void;
 };
 
 /**
@@ -37,7 +38,7 @@ const SideMenuListItem = ({
         if (goOutside) {
           window.open(item.route as string);
         } else {
-          handleLinkClick(item.route as string);
+          handleLinkClick(item);
         }
       }}
       sx={style}

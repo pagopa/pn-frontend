@@ -38,6 +38,6 @@ describe('SideMenuListItem', () => {
       fireEvent.click(link!);
     });
     expect(handleLinkClick).toBeCalledTimes(1);
-    expect(handleLinkClick).toBeCalledWith(sideMenuItems[0].route);
+    expect(handleLinkClick).toBeCalledWith(sideMenuItems[0]);
   });
 });
