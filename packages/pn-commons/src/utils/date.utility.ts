@@ -1,8 +1,12 @@
+import { format, addDays } from 'date-fns';
+
 export const DATE_FORMAT = "dd/MM/yyyy";
+const DATE_FORMAT_TIMEZONE = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
 export const today = new Date();
-
 export const tenYearsAgo = new Date(new Date().setMonth(today.getMonth() - 120));
+today.setHours(0, 0, 0, 0);
+tenYearsAgo.setHours(0, 0, 0, 0);
 
 export function getMonthString(dateString: string): string {
   const date = new Date(dateString);
@@ -20,4 +24,12 @@ export function getTime(dateString: string): string {
     .getMinutes()
     .toString()
     .padStart(2, '0')}`;
+}
+
+export function getNextDay(date: Date): Date {
+  return addDays(date, 1);
+}
+
+export function formatToTimezoneString(date: Date): string {
+  return format(date, DATE_FORMAT_TIMEZONE);
 }

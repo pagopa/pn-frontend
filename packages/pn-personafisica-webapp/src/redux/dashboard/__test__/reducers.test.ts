@@ -1,4 +1,6 @@
 import {
+  formatToTimezoneString,
+  getNextDay,
   GetNotificationsResponse,
   NotificationStatus,
   tenYearsAgo,
@@ -13,6 +15,7 @@ import {
   setNotificationFilters,
   setPagination,
   setSorting,
+  setMandateId
 } from '../actions';
 import { notificationsToFe } from './test-utils';
 
@@ -25,8 +28,8 @@ describe('Dashbaord redux state tests', () => {
       loading: false,
       notifications: [],
       filters: {
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today))
       },
       pagination: {
         nextPagesKey: [],
@@ -46,8 +49,8 @@ describe('Dashbaord redux state tests', () => {
     apiSpy.mockResolvedValue(notificationsToFe);
     const action = await store.dispatch(
       getReceivedNotifications({
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString(),
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today))
       })
     );
     const payload = action.payload as GetNotificationsResponse;
@@ -104,5 +107,14 @@ describe('Dashbaord redux state tests', () => {
       status: NotificationStatus.PAID,
       subjectRegExp: 'mocked-regexp',
     });
+  });
+
+  it('Should be able to set mandate id', () => {
+    const action = store.dispatch(
+      setMandateId('mocked-mandate-id')
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('setMandateId');
+    expect(payload).toEqual('mocked-mandate-id');
   });
 });

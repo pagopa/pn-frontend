@@ -40,7 +40,6 @@ describe('DesktopNotifications Component', () => {
       <DesktopNotifications
         notifications={[]}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
       />
     );
     expect(result.container).not.toHaveTextContent(/Filters/i);
@@ -55,7 +54,6 @@ describe('DesktopNotifications Component', () => {
       <DesktopNotifications
         notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
       />
     );
     const notificationsTableCell = result?.container.querySelector(
@@ -75,7 +73,6 @@ describe('DesktopNotifications Component', () => {
       <DesktopNotifications
         notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
       />
     );
 
@@ -92,7 +89,6 @@ describe('DesktopNotifications Component', () => {
       <DesktopNotifications
         notifications={[]}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
       />
     );
 

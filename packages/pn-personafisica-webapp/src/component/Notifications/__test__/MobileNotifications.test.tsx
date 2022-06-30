@@ -53,7 +53,6 @@ describe('MobileNotifications Component', () => {
         notifications={[]}
         sort={{ orderBy: 'mocked-field', order: 'asc' }}
         onChangeSorting={() => {}}
-        onCancelSearch={() => {}}
       />
     );
     expect(result.container).not.toHaveTextContent(/Filters/i);
@@ -69,7 +68,6 @@ describe('MobileNotifications Component', () => {
       <MobileNotifications
         notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
       />
     );
     const notificationsCardButton = result?.container.querySelector('button');
@@ -87,7 +85,6 @@ describe('MobileNotifications Component', () => {
       <MobileNotifications
         notifications={notificationsToFe.resultsPage}
         sort={{ orderBy: '', order: 'asc' }}
-        onCancelSearch={() => {}}
       />
     );
 
@@ -105,7 +102,6 @@ describe('MobileNotifications Component', () => {
         notifications={[]}
         sort={{ orderBy: 'mocked-field', order: 'asc' }}
         onChangeSorting={() => {}}
-        onCancelSearch={() => {}}
       />
     );
 

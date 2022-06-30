@@ -34,8 +34,8 @@ describe('AppMessage Component', () => {
         type: 'appState/removeError',
       });
     }, {
-      timeout: 2500
+      timeout: 5000
     });
     jest.resetAllMocks();
-  });
+  }, 10000);
 });

@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { GetNotificationsParams, tenYearsAgo, today, Notification } from '@pagopa-pn/pn-commons';
+import { GetNotificationsParams, tenYearsAgo, today, Notification, formatToTimezoneString, getNextDay } from '@pagopa-pn/pn-commons';
 
 import {
   getReceivedNotifications,
   setPagination,
   setSorting,
   setNotificationFilters,
+  setMandateId
 } from './actions';
 
 /* eslint-disable functional/immutable-data */
@@ -15,8 +16,8 @@ const dashboardSlice = createSlice({
     loading: false,
     notifications: [] as Array<Notification>,
     filters: {
-      startDate: tenYearsAgo.toISOString(),
-      endDate: today.toISOString(),
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(getNextDay(today)),
     } as GetNotificationsParams,
     pagination: {
       nextPagesKey: [] as Array<string>,
@@ -58,6 +59,20 @@ const dashboardSlice = createSlice({
     builder.addCase(setNotificationFilters, (state, action) => {
       state.filters = action.payload;
       // reset pagination
+      state.pagination.page = 0;
+      state.pagination.nextPagesKey = [];
+      state.pagination.moreResult = false;
+    });
+    builder.addCase(setMandateId, (state, action) => {
+      state.notifications = [];
+      state.filters = {
+        iunMatch: undefined,
+        mandateId: action.payload,
+        startDate: tenYearsAgo.toISOString(),
+        endDate: today.toISOString()
+      };
+      // reset pagination
+      state.pagination.size = 10;
       state.pagination.page = 0;
       state.pagination.nextPagesKey = [];
       state.pagination.moreResult = false;

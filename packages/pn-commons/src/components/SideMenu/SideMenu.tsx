@@ -64,12 +64,12 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
     setState(!state);
   };
 
-  const handleNavigation = (link: string, menuFlag?: boolean, notSelectable?: boolean) => {
+  const handleNavigation = (item: SideMenuItem, menuFlag?: boolean) => {
     if (isMobile && !menuFlag) {
       setState(false);
     };
-    if (!notSelectable) {
-      navigate(link);
+    if (!item.notSelectable) {
+      navigate(item.route);
     }
   };
 

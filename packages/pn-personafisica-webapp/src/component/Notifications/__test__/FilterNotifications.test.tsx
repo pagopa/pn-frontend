@@ -1,7 +1,6 @@
 import { fireEvent, waitFor, screen, within, RenderResult, act } from '@testing-library/react';
-import moment from 'moment';
 import * as redux from 'react-redux';
-import { tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import { axe, render } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
@@ -134,9 +133,12 @@ describe('Filter Notifications Table Component', () => {
   }, 10000);
 
   it('test form submission - iunMatch (valid)', async () => {
-    const oneYearAgo = moment().add(-1, 'year').startOf('day');
-    const todayM = moment().startOf('day');
-    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'ABCD-EFGH-ILMN-123456-A-1');
+    const todayM = new Date();
+    const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
+    todayM.setHours(0, 0, 0, 0);
+    oneYearAgo.setHours(0, 0, 0, 0);
+
+    await setFormValues(form!, oneYearAgo, todayM, 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     await waitFor(() => {
@@ -145,8 +147,8 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
-        startDate: oneYearAgo.toISOString(),
-        endDate: todayM.toISOString(),
+        startDate: formatToTimezoneString(oneYearAgo),
+        endDate: formatToTimezoneString(getNextDay(todayM)),
         status: undefined,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
       },
@@ -155,11 +157,13 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form submission - iunMatch (invalid)', async () => {
-    const elevenYearsAgo = moment().add(-11, 'year').startOf('day');
-    const todayM = moment().startOf('day');
+    const todayM = new Date();
+    const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
+    todayM.setHours(0, 0, 0, 0);
+    nineYearsAgo.setHours(0, 0, 0, 0);
 
     // wrong id and wrong start date
-    await setFormValues(form!, elevenYearsAgo.toDate(), todayM.toDate(), '12345678910abcdfghiol');
+    await setFormValues(form!, nineYearsAgo, todayM, '12345678910abcdfghiol');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeDisabled();
     await waitFor(() => {
@@ -169,9 +173,12 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form reset', async () => {
-    const oneYearAgo = moment().add(-1, 'year');
-    const todayM = moment();
-    await setFormValues(form!, oneYearAgo.toDate(), todayM.toDate(), 'ABCD-EFGH-ILMN-123456-A-1');
+    const todayM = new Date();
+    const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
+    todayM.setHours(0, 0, 0, 0);
+    oneYearAgo.setHours(0, 0, 0, 0);
+
+    await setFormValues(form!, oneYearAgo, todayM, 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     const cancelButton = await waitFor(() => within(form!).getByTestId('cancelButton'));
@@ -181,8 +188,8 @@ describe('Filter Notifications Table Component', () => {
       expect(mockDispatchFn).toBeCalledTimes(2);
       expect(mockDispatchFn).toBeCalledWith({
         payload: {
-          startDate: tenYearsAgo.toISOString(),
-          endDate: today.toISOString(),
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
           iunMatch: undefined,
         },
         type: 'setNotificationFilters',
