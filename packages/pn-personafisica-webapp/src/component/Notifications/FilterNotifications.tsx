@@ -1,4 +1,4 @@
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -22,11 +22,14 @@ import {
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { setNotificationFilters } from '../../redux/dashboard/actions';
+import { Delegator } from '../../redux/delegation/types';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
 
 type Props = {
   showFilters: boolean;
+  /** Delegator */
+  currentDelegator?: Delegator;
 };
 
 const useStyles = makeStyles({
@@ -36,20 +39,13 @@ const useStyles = makeStyles({
   },
 });
 
-const emptyValues = {
-  startDate: formatToTimezoneString(tenYearsAgo),
-  endDate: formatToTimezoneString(getNextDay(today)),
-  iunMatch: undefined,
-};
-
 const initialEmptyValues = {
   startDate: tenYearsAgo,
   endDate: today,
   iunMatch: '',
 };
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
-const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
+const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const { t } = useTranslation(['common']);
@@ -58,23 +54,29 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
   const isMobile = useIsMobile();
   const classes = useStyles();
 
+  const emptyValues = {
+    startDate: formatToTimezoneString(tenYearsAgo),
+    endDate: formatToTimezoneString(getNextDay(today)),
+    iunMatch: undefined,
+    mandateId: currentDelegator?.mandateId,
+  };
+
   const validationSchema = yup.object({
     iunMatch: yup.string().matches(IUN_regex, t('Inserisci un codice IUN valido')),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
   });
 
-  const initialValues = () => {
+  const initialValues = useCallback(() => {
     if (!filters || (filters && _.isEqual(filters, emptyValues))) {
       return initialEmptyValues;
-    } else {
-      return {
-        startDate: new Date(filters.startDate),
-        endDate: new Date(filters.endDate),
-        iunMatch: filters.iunMatch || '',
-      };
     }
-  };
+    return {
+      startDate: new Date(filters.startDate),
+      endDate: new Date(filters.endDate),
+      iunMatch: filters.iunMatch || '',
+    };
+  }, []);
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
   const filtersCount = filtersApplied(prevFilters, emptyValues);
@@ -88,6 +90,7 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
         startDate: formatToTimezoneString(values.startDate),
         endDate: formatToTimezoneString(getNextDay(values.endDate)),
         iunMatch: values.iunMatch,
+        mandateId: currentDelegator?.mandateId,
       };
       if (_.isEqual(prevFilters, currentFilters)) {
         return;
@@ -117,7 +120,8 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
   }, [filters]);
 
   useImperativeHandle(ref, () => ({
-    filtersApplied: filtersCount > 0
+    filtersApplied: filtersCount > 0,
+    cleanFilters,
   }));
 
   if (!showFilters) {
@@ -155,7 +159,7 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
               formikInstance={formik}
               cleanFilters={cleanFilters}
               filtersApplied={filtersCount > 0}
-              isInitialSearch={_.isEqual(formik.values, initialValues)}
+              isInitialSearch={_.isEqual(formik.values, initialEmptyValues)}
               isInDialog
             />
           </DialogActions>

@@ -15,6 +15,7 @@ import {
   setNotificationFilters,
   setPagination,
   setSorting,
+  setMandateId
 } from '../actions';
 import { notificationsToFe } from './test-utils';
 
@@ -106,5 +107,14 @@ describe('Dashbaord redux state tests', () => {
       status: NotificationStatus.PAID,
       subjectRegExp: 'mocked-regexp',
     });
+  });
+
+  it('Should be able to set mandate id', () => {
+    const action = store.dispatch(
+      setMandateId('mocked-mandate-id')
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('setMandateId');
+    expect(payload).toEqual('mocked-mandate-id');
   });
 });

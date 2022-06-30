@@ -63,16 +63,15 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const initialValues = (): FormikValues => {
     if (!filters || (filters && _.isEqual(filters, emptyValues))) {
       return initialEmptyValues;
-    } else {
-      return {
-        searchFor: '0',
-        startDate: new Date(filters.startDate),
-        endDate: new Date(filters.endDate),
-        recipientId: filters.recipientId || '',
-        iunMatch: filters.iunMatch || '',
-        status: filters.status || NotificationAllowedStatus[0].value,
-      };
     }
+    return {
+      searchFor: '0',
+      startDate: new Date(filters.startDate),
+      endDate: new Date(filters.endDate),
+      recipientId: filters.recipientId || '',
+      iunMatch: filters.iunMatch || '',
+      status: filters.status || NotificationAllowedStatus[0].value,
+    };
   };
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
@@ -119,6 +118,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
 
   useImperativeHandle(ref, () => ({
     filtersApplied: filtersCount > 0,
+    cleanFilters: cancelSearch,
   }));
 
   if (!showFilters) {
