@@ -64,7 +64,7 @@ const NotificationDetailDocuments = ({
       {documents.map((d) => (
         <Box key={d.digests.sha256}>
           {!documentsAvailable ? (
-          <Typography><AttachFileIcon sx={{ mr: 1 }} fontSize='inherit' color="inherit" />{d.title || d.ref.key}</Typography>) : (
+          <Typography sx={{ display: 'flex', alignItems: 'center' }}><AttachFileIcon sx={{ mr: 1 }} fontSize='inherit' color="inherit" />{d.title || d.ref.key}</Typography>) : (
           <ButtonNaked
             data-testid="documentButton"
             color={'primary'}

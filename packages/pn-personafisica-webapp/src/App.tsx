@@ -120,7 +120,7 @@ const App = () => {
       icon: MailOutlineIcon,
       route: routes.NOTIFICHE,
       children: sideMenuDelegators,
-      notSelectable: sideMenuDelegators?.length === 0
+      notSelectable: sideMenuDelegators && sideMenuDelegators.length > 0
     },
     { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {
