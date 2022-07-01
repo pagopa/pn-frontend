@@ -148,7 +148,7 @@ const NotificationDetailTimelineStep = ({
           <Typography color="text.primary" variant="caption">
             {getNotificationStatusInfos(timelineStep.status).description}
           </Typography>
-          {legalFactsIds &&
+          {legalFactsIds && legalFactsIds.length > 0 &&
             legalFactsIds.map((lf) => (
               <ButtonNaked
                 key={lf.file.key}
@@ -213,7 +213,7 @@ const NotificationDetailTimelineStep = ({
         <Box>
           <Typography color="text.primary" fontSize={14}>
             {timelineStatusInfos.description}&nbsp;
-            {timelineStatusInfos.linkText && s.legalFactsIds && (
+            {timelineStatusInfos.linkText && s.legalFactsIds && s.legalFactsIds.length > 0 && (
               <Typography
                 fontSize={14}
                 display="inline"

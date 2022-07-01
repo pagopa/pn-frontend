@@ -43,15 +43,23 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  // const currentUser = useAppSelector((state: RootState) => state.userState.user);
-  // const currentRecipient = notification.recipients.find(
-  //   (recipient) => recipient.taxId === currentUser.fiscal_number
-  // );
   const currentRecipient = notification.recipients[0];
+  /**
+   * REFERS TO: PN-1724
+   * The following code has been commented out and substituted with the line above
+   * due to issue PN-1724 since we currently do not have enough information to pick
+   * the right recipient assuming a multi-recipient notification, but this feature 
+   * is beyond the MVP scope. 
+   * 
+   const currentUser = useAppSelector((state: RootState) => state.userState.user);
+   const currentRecipient = notification.recipients.find(
+     (recipient) => recipient.taxId === currentUser.fiscal_number
+   );
+   */
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
-
+  
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );

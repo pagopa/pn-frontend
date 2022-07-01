@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   Grid,
+  InputAdornment,
   MenuItem,
   Table,
   TableBody,
@@ -23,7 +24,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 
 import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
-import { phoneRegExp } from '../../utils/contacts.utility';
+import { internationalPhonePrefix, phoneRegExp } from '../../utils/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
 import SpecialContactElem from './SpecialContactElem';
@@ -305,6 +306,9 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 size="small"
                 error={formik.touched.s_phone && Boolean(formik.errors.s_phone)}
                 helperText={formik.touched.s_phone && formik.errors.s_phone}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>,
+                }}
               />
             )}
             {formik.values.addressType === CourtesyChannelType.EMAIL && (
