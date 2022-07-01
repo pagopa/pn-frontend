@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
 
 const NotificationDetail = () => {
   const classes = useStyles();
-  const { id } = useParams();
+  const { id, mandateId } = useParams();
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
@@ -138,7 +138,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (id) {
-      void dispatch(getReceivedNotification(id));
+      void dispatch(getReceivedNotification({iun: id, mandateId}));
     }
     return () => void dispatch(resetState());
   }, []);
