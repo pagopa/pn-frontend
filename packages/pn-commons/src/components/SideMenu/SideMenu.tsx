@@ -34,7 +34,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
     // find if there is a menu item that has route as a part of current one
     items.forEach((item, index) => {
       if (
-        location.pathname.indexOf(item.route) > -1 &&
+        location.pathname.startsWith(item.route) &&
         (menuItemIndex === -1 ||
           (menuItemIndex > -1 && item.route.length > items[menuItemIndex].route.length))
       ) {
