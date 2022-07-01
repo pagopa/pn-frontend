@@ -7,6 +7,7 @@ import {
   Fragment,
   forwardRef,
   useImperativeHandle,
+  useState,
 } from 'react';
 import { TextField } from '@mui/material';
 
@@ -26,6 +27,7 @@ type Props = {
  */
 const CodeInput = memo(
   forwardRef(({ initialValues, isReadOnly, hasError, onChange }: Props, ref) => {
+    const [currentValues, setCurrentValues] = useState(initialValues);
     const inputsRef = useRef(new Array(initialValues.length).fill(undefined));
 
     const inputStyle = useMemo(() => {
@@ -68,6 +70,7 @@ const CodeInput = memo(
       if (!isNaN(Number(event.key)) && inputsRef.current[index].value) {
         /* eslint-disable-next-line functional/immutable-data */
         inputsRef.current[index].value = event.key;
+        changeHandler();
       }
       if (!isNaN(Number(event.key)) || event.key === 'Enter' || (event.key === 'Tab' && !event.shiftKey)) {
         // focus next element
@@ -89,6 +92,7 @@ const CodeInput = memo(
 
     const changeHandler = () => {
       const inputsValues = inputsRef.current.map((inputElem) => inputElem.value);
+      setCurrentValues(() => inputsValues);
       onChange(inputsValues);
     };
 
@@ -131,6 +135,7 @@ const CodeInput = memo(
             }}
             onKeyDown={(event) => keyDownHandler(event, index)}
             onChange={changeHandler}
+            value={currentValues[index]}
             inputRef={(node) => (inputsRef.current[index] = node)}
             color={hasError ? 'error' : 'primary'}
             error={hasError}
