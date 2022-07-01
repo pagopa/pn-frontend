@@ -345,7 +345,7 @@ describe('SpecialContacts Component', () => {
     );
   });
 
-  it('adds phone', async () => {
+  it.skip('adds phone', async () => {
     const form = result.container.querySelector('form');
     await testSelect(
       form!,
