@@ -55,9 +55,30 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
   const addressTypes = useMemo(
     () => [
-      { id: LegalChannelType.PEC, value: t('special-contacts.pec', { ns: 'recapiti' }) },
-      { id: CourtesyChannelType.SMS, value: t('special-contacts.phone', { ns: 'recapiti' }) },
-      { id: CourtesyChannelType.EMAIL, value: t('special-contacts.mail', { ns: 'recapiti' }) },
+      {
+        id: LegalChannelType.PEC,
+        value: t('special-contacts.pec', { ns: 'recapiti' }),
+        disabled:
+          courtesyAddresses.filter(
+            (a) => a.senderId === 'default' && a.channelType === LegalChannelType.PEC
+          ).length === 0,
+      },
+      {
+        id: CourtesyChannelType.SMS,
+        value: t('special-contacts.phone', { ns: 'recapiti' }),
+        disabled:
+          courtesyAddresses.filter(
+            (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
+          ).length === 0,
+      },
+      {
+        id: CourtesyChannelType.EMAIL,
+        value: t('special-contacts.mail', { ns: 'recapiti' }),
+        disabled:
+          courtesyAddresses.filter(
+            (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.EMAIL
+          ).length === 0,
+      },
     ],
     []
   );
@@ -116,7 +137,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const formik = useFormik({
     initialValues: {
       sender: '',
-      addressType: LegalChannelType.PEC as LegalChannelType | CourtesyChannelType,
+      addressType: addressTypes.find(a => !a.disabled)?.id as LegalChannelType | CourtesyChannelType,
       s_pec: '',
       s_mail: '',
       s_phone: '',
@@ -253,8 +274,8 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               size="small"
             >
               {parties.map((party) => (
-                <MenuItem key={party.id} value={party.id} >
-                  <DropDownPartyMenuItem name={party.name}/>
+                <MenuItem key={party.id} value={party.id}>
+                  <DropDownPartyMenuItem name={party.name} />
                 </MenuItem>
               ))}
             </TextField>
@@ -271,7 +292,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               size="small"
             >
               {addressTypes.map((a) => (
-                <MenuItem key={a.id} value={a.id}>
+                <MenuItem key={a.id} value={a.id} disabled={a.disabled}>
                   {a.value}
                 </MenuItem>
               ))}
@@ -307,7 +328,9 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 error={formik.touched.s_phone && Boolean(formik.errors.s_phone)}
                 helperText={formik.touched.s_phone && formik.errors.s_phone}
                 InputProps={{
-                  startAdornment: <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>,
+                  startAdornment: (
+                    <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                  ),
                 }}
               />
             )}
