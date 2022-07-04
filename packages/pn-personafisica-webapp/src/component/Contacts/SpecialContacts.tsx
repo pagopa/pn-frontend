@@ -59,7 +59,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         id: LegalChannelType.PEC,
         value: t('special-contacts.pec', { ns: 'recapiti' }),
         show:
-          courtesyAddresses.filter(
+          legalAddresses.filter(
             (a) => a.senderId === 'default' && a.channelType === LegalChannelType.PEC
           ).length > 0,
       },
