@@ -127,11 +127,11 @@ interface PublicRegistryResponseDetails extends BaseDetails {
   physicalAddress: PhysicalAddress;
 }
 
-interface RequestRefusedDetails {
+interface RequestRefusedDetails extends BaseDetails {
   errors: Array<string>;
 }
 
-interface ScheduleDigitalWorkflowDetails extends DigitalAddress {
+interface ScheduleDigitalWorkflowDetails extends BaseDetails, DigitalAddress {
   digitalAddress: DigitalAddress;
   digitalAddressSource: AddressSource;
   sentAttemptMade: number;
