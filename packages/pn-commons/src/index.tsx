@@ -156,7 +156,7 @@ import {
   parseNotificationDetail,
   filtersApplied
 } from './utils/notification.utility';
-import { getMonthString, getDay, getTime, today, tenYearsAgo, DATE_FORMAT } from './utils/date.utility';
+import { getMonthString, getDay, getTime, today, tenYearsAgo, DATE_FORMAT, getNextDay, formatToTimezoneString } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';
 import { IUN_regex, formatIun } from './utils/iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './utils/currency.utility';
@@ -170,7 +170,7 @@ export { filtersApplied };
 export { createAppError };
 export { formatDate };
 export { calculatePages };
-export { getMonthString, getDay, getTime };
+export { getMonthString, getDay, getTime, getNextDay, formatToTimezoneString };
 export { formatFiscalCode };
 export { fiscalCodeRegex };
 export { IUN_regex, formatIun };

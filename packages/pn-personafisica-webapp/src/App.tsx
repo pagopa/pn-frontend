@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
@@ -32,8 +32,7 @@ const productsList: Array<ProductSwitchItem> = [
 
 const App = () => {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation('common');
-  const [pendingDelegatorsState, setPendingDelegatorsState] = useState(0);
+  const { t } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { fetchedTos, tos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
@@ -90,28 +89,34 @@ const App = () => {
   }, [sessionToken]);
 
   useEffect(() => {
-    setPendingDelegatorsState(pendingDelegators);
+    if (sessionToken !== '') {
+      void dispatch(getSidemenuInformation());
+    }
   }, [pendingDelegators]);
 
-  const mapDelegatorSideMenuItem = delegators.map((delegator: Delegation) => ({
-    label:
-      'delegator' in delegator && delegator.delegator
-        ? `${delegator.delegator.displayName}`
-        : 'No Name Found',
-    route:
-      'delegator' in delegator && delegator.delegator
-        ? routes.GET_NOTIFICHE_DELEGATO_PATH(delegator.mandateId)
-        : '*',
-  }));
+  const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
+    if(delegators.length > 0) {
+      const myNotifications = {
+        label: t('title', {ns: 'notifiche'}),
+        route: routes.NOTIFICHE
+      };
+      const mappedDelegators = delegators.map((delegator: Delegation) => ({
+        label:
+          'delegator' in delegator && delegator.delegator
+            ? `${delegator.delegator.displayName}`
+            : 'No Name Found',
+        route:
+          'delegator' in delegator && delegator.delegator
+            ? routes.GET_NOTIFICHE_DELEGATO_PATH(delegator.mandateId)
+            : '*',
+      }));
+      return [ myNotifications, ...mappedDelegators];
+    } else {
+      return undefined;
+    }
+  };
 
-  // add your notifications menu item
-  if (mapDelegatorSideMenuItem.length) {
-    /* eslint-disable-next-line functional/immutable-data */
-    mapDelegatorSideMenuItem.unshift({
-      label: t('title', {ns: 'notifiche'}),
-      route: routes.NOTIFICHE
-    });
-  }
+  const sideMenuDelegators = mapDelegatorSideMenuItem();
 
   // TODO spostare questo in un file di utility
   const menuItems: Array<SideMenuItem> = [
@@ -119,15 +124,15 @@ const App = () => {
       label: t('menu.notifiche'),
       icon: MailOutlineIcon,
       route: routes.NOTIFICHE,
-      children: mapDelegatorSideMenuItem.length ? mapDelegatorSideMenuItem : undefined,
-      notSelectable: !!mapDelegatorSideMenuItem.length
+      children: sideMenuDelegators,
+      notSelectable: sideMenuDelegators && sideMenuDelegators.length > 0
     },
     { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {
       label: t('menu.deleghe'),
       icon: AltRouteIcon,
       route: routes.DELEGHE,
-      rightBadgeNotification: pendingDelegatorsState ? pendingDelegatorsState : undefined,
+      rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     },
   ];
 

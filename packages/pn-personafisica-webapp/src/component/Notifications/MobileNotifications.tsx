@@ -23,21 +23,23 @@ import * as routes from '../../navigation/routes.const';
 import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotificationBadge';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
+import { Delegator } from '../../redux/delegation/types';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
-  onCancelSearch: () => void;
   /** Card sort */
   sort?: Sort;
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort) => void;
+  /** Delegator */
+  currentDelegator?: Delegator;
 };
 
-const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSearch }: Props) => {
+const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDelegator }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
-  const filterNotificationsRef = useRef({ filtersApplied: false });
+  const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
   const cardHeader: [CardElement, CardElement] = [
     {
       id: 'notificationReadStatus',
@@ -139,7 +141,9 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
 
   const EmptyStateProps = {
     emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
-    emptyActionCallback: filtersApplied ? onCancelSearch : handleRouteContacts,
+    emptyActionCallback: filtersApplied
+      ? filterNotificationsRef.current.cleanFilters
+      : handleRouteContacts,
     emptyMessage: filtersApplied
       ? undefined
       : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione',
@@ -153,7 +157,11 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
 
   // Navigation handlers
   const handleRowClick = (row: Item) => {
-    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+    if (currentDelegator) {
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId));
+    } else {
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+    }
     // log event
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
@@ -176,7 +184,11 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, onCancelSea
     <Fragment>
       <Grid container direction="row" sx={{ marginBottom: '16px' }}>
         <Grid item xs={6}>
-          <FilterNotifications ref={filterNotificationsRef} showFilters={showFilters}/>
+          <FilterNotifications
+            ref={filterNotificationsRef}
+            showFilters={showFilters}
+            currentDelegator={currentDelegator}
+          />
         </Grid>
         <Grid item xs={6} textAlign="right">
           {sort && showFilters && onChangeSorting && (

@@ -6,7 +6,7 @@ export const formRecipients = [
     recipientType: RecipientType.PF,
     taxId: 'AAAAAA11A11A111A',
     creditorTaxId: '01234567890',
-    noticeCode: '12345678',
+    noticeCode: '123456789123456789',
     firstName: 'TestNome',
     lastName: 'TestCognome',
     type: DigitalDomicileType.PEC,
@@ -46,7 +46,7 @@ export const formattedRecipients = [
     },
     payment: {
       creditorTaxId: '01234567890',
-      noticeCode: '12345678',
+      noticeCode: '123456789123456789',
       pagoPaForm: {
         contentType: '',
         digests: {

@@ -20,8 +20,9 @@ function Router() {
         <Route element={<RequireAuth />}>
           <Route path={routes.TOS} element={<TermsOfService />} />
           <Route path={routes.NOTIFICHE} element={<Notifiche />} />
-          <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche isDelegator />} />
+          <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
           <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+          <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
           <Route path={routes.DELEGHE} element={<Deleghe />} />
           <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
           <Route path={routes.RECAPITI} element={<Contacts />} />

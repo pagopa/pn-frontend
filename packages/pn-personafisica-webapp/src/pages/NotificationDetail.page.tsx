@@ -40,15 +40,28 @@ const useStyles = makeStyles(() => ({
 
 const NotificationDetail = () => {
   const classes = useStyles();
-  const { id } = useParams();
+  const { id, mandateId } = useParams();
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const currentUser = useAppSelector((state: RootState) => state.userState.user);
-  const currentRecipient = notification.recipients.filter(
-    (recipient) => recipient.taxId === currentUser.fiscal_number
-  )[0];
+  const currentRecipient = notification.recipients[0];
+  /**
+   * REFERS TO: PN-1724
+   * The following code has been commented out and substituted with the line above
+   * due to issue PN-1724 since we currently do not have enough information to pick
+   * the right recipient assuming a multi-recipient notification, but this feature 
+   * is beyond the MVP scope. 
+   * 
+   const currentUser = useAppSelector((state: RootState) => state.userState.user);
+   const currentRecipient = notification.recipients.find(
+     (recipient) => recipient.taxId === currentUser.fiscal_number
+   );
+   */
+
+  const noticeCode = currentRecipient?.payment?.noticeCode;
+  const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
+  
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -92,13 +105,13 @@ const NotificationDetail = () => {
     },
     {
       label: t('detail.notice-code', { ns: 'notifiche' }),
-      rawValue: currentRecipient?.payment?.noticeCode,
-      value: <Box fontWeight={600}>{currentRecipient?.payment?.noticeCode}</Box>,
+      rawValue: noticeCode,
+      value: <Box fontWeight={600}>{noticeCode}</Box>,
     },
     {
       label: t('detail.creditor-tax-id', { ns: 'notifiche' }),
-      rawValue: currentRecipient?.payment?.creditorTaxId,
-      value: <Box fontWeight={600}>{currentRecipient?.payment?.creditorTaxId}</Box>,
+      rawValue: creditorTaxId,
+      value: <Box fontWeight={600}>{creditorTaxId}</Box>,
     },
   ];
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
@@ -132,7 +145,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (id) {
-      void dispatch(getReceivedNotification(id));
+      void dispatch(getReceivedNotification({iun: id, mandateId}));
     }
     return () => void dispatch(resetState());
   }, []);
@@ -185,13 +198,13 @@ const NotificationDetail = () => {
           {!isMobile && breadcrumb}
           <Stack spacing={3}>
             <NotificationDetailTable rows={detailTableRows} />
-            {currentRecipient?.payment && (
+            {currentRecipient?.payment && creditorTaxId && noticeCode &&
               <NotificationPayment
                 iun={notification.iun}
                 notificationPayment={currentRecipient.payment}
                 onDocumentDownload={dowloadDocument}
               />
-            )}
+            }
             <DomicileBanner />
             <Paper sx={{ p: 3 }} className="paperContainer">
               <NotificationDetailDocuments

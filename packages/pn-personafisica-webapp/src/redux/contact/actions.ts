@@ -33,7 +33,7 @@ export const createOrUpdateLegalAddress = createAsyncThunk<
       { value: params.value, verificationCode: params.code }
     );
   } catch (e: any) {
-    if (e.response === 406) {
+    if (e.response.status === 406) {
       // { response: { status: 406 }, blockNotification: true }
       return rejectWithValue({ response: e.response, blockNotification: true });
     } else {
@@ -73,7 +73,7 @@ export const createOrUpdateCourtesyAddress = createAsyncThunk<
         { value: params.value, verificationCode: params.code }
       );
     } catch (e: any) {
-      if (e.response === 406) {
+      if (e.response.status === 406) {
         // { response: { status: 406 }, blockNotification: true }
         return rejectWithValue({ response: e.response, blockNotification: true });
       } else {

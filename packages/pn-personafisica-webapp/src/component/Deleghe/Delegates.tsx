@@ -100,7 +100,7 @@ const Delegates = () => {
   };
 
   const handleCloseShowCodeModal = () => {
-    setShowCodeModal({ open: false, name: '', code: '' });
+    setShowCodeModal({ ...showCodeModal, open: false });
   };
 
   const handleChangeSorting = (s: Sort) => {

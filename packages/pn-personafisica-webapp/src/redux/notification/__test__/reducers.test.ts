@@ -43,7 +43,7 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the notification detail', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotification');
     apiSpy.mockResolvedValue(notificationToFe);
-    const action = await store.dispatch(getReceivedNotification('mocked-iun'));
+    const action = await store.dispatch(getReceivedNotification({iun: 'mocked-iun'}));
     const payload = action.payload as NotificationDetail;
     expect(action.type).toBe('getReceivedNotification/fulfilled');
     expect(payload).toEqual(notificationToFe);
