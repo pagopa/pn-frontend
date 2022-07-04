@@ -137,7 +137,7 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith('mocked-id');
+    expect(mockActionFn).toBeCalledWith({iun: 'mocked-id', madateId: undefined});
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
