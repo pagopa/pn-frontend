@@ -296,7 +296,7 @@ const NotificationDetail = () => {
     <>
       <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
         {isMobile && breadcrumb}
-        <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
+        <Grid container direction={isMobile ? 'column-reverse' : 'row'} spacing={isMobile ? 3 : 0}>
           <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
             {!isMobile && breadcrumb}
             <Stack spacing={3}>
