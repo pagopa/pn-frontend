@@ -58,26 +58,26 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       {
         id: LegalChannelType.PEC,
         value: t('special-contacts.pec', { ns: 'recapiti' }),
-        disabled:
+        show:
           courtesyAddresses.filter(
             (a) => a.senderId === 'default' && a.channelType === LegalChannelType.PEC
-          ).length === 0,
+          ).length > 0,
       },
       {
         id: CourtesyChannelType.SMS,
         value: t('special-contacts.phone', { ns: 'recapiti' }),
-        disabled:
+        show:
           courtesyAddresses.filter(
             (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
-          ).length === 0,
+          ).length > 0,
       },
       {
         id: CourtesyChannelType.EMAIL,
         value: t('special-contacts.mail', { ns: 'recapiti' }),
-        disabled:
+        show:
           courtesyAddresses.filter(
             (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.EMAIL
-          ).length === 0,
+          ).length > 0,
       },
     ],
     []
@@ -137,7 +137,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const formik = useFormik({
     initialValues: {
       sender: '',
-      addressType: addressTypes.find(a => !a.disabled)?.id as LegalChannelType | CourtesyChannelType,
+      addressType: addressTypes.find(a => a.show)?.id as LegalChannelType | CourtesyChannelType,
       s_pec: '',
       s_mail: '',
       s_phone: '',
@@ -291,8 +291,8 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               fullWidth
               size="small"
             >
-              {addressTypes.map((a) => (
-                <MenuItem key={a.id} value={a.id} disabled={a.disabled}>
+              {addressTypes.filter(a => a.show).map((a) => (
+                <MenuItem key={a.id} value={a.id}>
                   {a.value}
                 </MenuItem>
               ))}
