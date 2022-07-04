@@ -38,7 +38,7 @@ const useStyles = makeStyles(() => ({
 
 const NotificationDetail = () => {
   const classes = useStyles();
-  const { id } = useParams();
+  const { id, mandateId } = useParams();
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
@@ -56,6 +56,10 @@ const NotificationDetail = () => {
      (recipient) => recipient.taxId === currentUser.fiscal_number
    );
    */
+
+  const noticeCode = currentRecipient?.payment?.noticeCode;
+  const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
+  
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -99,13 +103,13 @@ const NotificationDetail = () => {
     },
     {
       label: t('detail.notice-code', { ns: 'notifiche' }),
-      rawValue: currentRecipient?.payment?.noticeCode,
-      value: <Box fontWeight={600}>{currentRecipient?.payment?.noticeCode}</Box>,
+      rawValue: noticeCode,
+      value: <Box fontWeight={600}>{noticeCode}</Box>,
     },
     {
       label: t('detail.creditor-tax-id', { ns: 'notifiche' }),
-      rawValue: currentRecipient?.payment?.creditorTaxId,
-      value: <Box fontWeight={600}>{currentRecipient?.payment?.creditorTaxId}</Box>,
+      rawValue: creditorTaxId,
+      value: <Box fontWeight={600}>{creditorTaxId}</Box>,
     },
   ];
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
@@ -138,7 +142,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (id) {
-      void dispatch(getReceivedNotification(id));
+      void dispatch(getReceivedNotification({iun: id, mandateId}));
     }
     return () => void dispatch(resetState());
   }, []);
@@ -191,13 +195,13 @@ const NotificationDetail = () => {
           {!isMobile && breadcrumb}
           <Stack spacing={3}>
             <NotificationDetailTable rows={detailTableRows} />
-            {currentRecipient?.payment && (
+            {currentRecipient?.payment && creditorTaxId && noticeCode &&
               <NotificationPayment
                 iun={notification.iun}
                 notificationPayment={currentRecipient.payment}
                 onDocumentDownload={dowloadDocument}
               />
-            )}
+            }
             <DomicileBanner />
             <Paper sx={{ p: 3 }} className="paperContainer">
               <NotificationDetailDocuments

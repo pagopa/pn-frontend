@@ -11,8 +11,6 @@ import {
   NotificationDetailRecipient,
   DigitalDomicileType,
   NotificationDetail,
-  DigitalDetails,
-  AnalogDetails,
 } from '../types/NotificationDetail';
 import { GetNotificationsParams } from '../types/Notifications';
 import { NotificationStatus } from '../types/NotificationStatus';
@@ -114,20 +112,6 @@ export const NotificationAllowedStatus = [
   { value: NotificationStatus.UNREACHABLE, label: 'Destinatario irreperibile' },
 ];
 
-function getRecipientByAddress(
-  step: INotificationDetailTimeline,
-  ricipients: Array<NotificationDetailRecipient>
-): NotificationDetailRecipient | undefined {
-  return ricipients.find((r) => {
-    if (r.digitalDomicile && (step.details as DigitalDetails).digitalAddress) {
-      return _.isEqual(r.digitalDomicile, (step.details as DigitalDetails).digitalAddress);
-    } else if (r.physicalAddress && (step.details as AnalogDetails).physicalAddress) {
-      return _.isEqual(r.physicalAddress, (step.details as AnalogDetails).physicalAddress);
-    }
-    return false;
-  });
-}
-
 /**
  * Returns the mapping between current notification timeline status and its label and descriptive message.
  * @param  {TimelineCategory} status
@@ -142,7 +126,7 @@ export function getNotificationTimelineStatusInfos(
   linkText?: string;
   recipient?: string;
 } | null {
-  const recipient = getRecipientByAddress(step, ricipients);
+  const recipient = !_.isNil(step.details.recIndex) ? ricipients[step.details.recIndex] : undefined;
   switch (step.category) {
     case TimelineCategory.SCHEDULE_ANALOG_WORKFLOW:
       return {

@@ -132,7 +132,7 @@ async function testContactAddition(
       recipientId: 'mocked-recipientId',
       senderId: 'comune-milano',
       channelType,
-      value,
+      value: elementName === 's_phone' ? '+39' + value : value,
       code: undefined,
     });
   });
@@ -165,7 +165,7 @@ async function testContactAddition(
       recipientId: 'mocked-recipientId',
       senderId: 'comune-milano',
       channelType,
-      value,
+      value: elementName === 's_phone' ? '+39' + value : value,
       code: '01234',
     });
   });
@@ -386,7 +386,7 @@ describe('SpecialContacts Component', () => {
     await testContactAddition(
       form!,
       's_phone',
-      '+393494568016',
+      '3494568016',
       mockDispatchFn,
       mockActionFn,
       CourtesyChannelType.SMS

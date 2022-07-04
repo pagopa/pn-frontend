@@ -55,10 +55,11 @@ export const NotificationsApi = {
   /**
    * Gets current user notification detail
    * @param  {string} iun
+   * @param  {string} mandateId
    * @returns Promise
    */
-  getReceivedNotification: (iun: string): Promise<NotificationDetail> =>
-    apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
+  getReceivedNotification: (iun: string, mandateId?: string): Promise<NotificationDetail> =>
+    apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
       if (response.data) {
         return parseNotificationDetail(response.data);
       }

@@ -147,7 +147,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     onSubmit: (values) => {
       initValidation(
         values.addressType,
-        values.s_pec || values.s_mail || values.s_phone,
+        values.s_pec || values.s_mail || (internationalPhonePrefix + values.s_phone),
         recipientId,
         values.sender,
         (status: 'validated' | 'cancelled') => {
