@@ -157,7 +157,11 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
 
   // Navigation handlers
   const handleRowClick = (row: Item) => {
-    navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+    if (currentDelegator) {
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId));
+    } else {
+      navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
+    }
     // log event
     trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
   };

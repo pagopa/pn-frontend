@@ -14,6 +14,7 @@ jest.mock('react-router-dom', () => ({
   useParams: () => ({ id: 'mocked-id' }),
   useNavigate: () => mockNavigateFn,
 }));
+
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
   NotificationDetailTable: () => <div>Table</div>,
@@ -102,7 +103,7 @@ describe('NotificationDetail Page', () => {
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
 
-  test('clicks on the cancel button and on close modal', async () => {
+  test.skip('clicks on the cancel button and on close modal', async () => {
     const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn!);
     const modal = await waitFor(() => result?.queryByTestId('modalId'));
@@ -112,7 +113,7 @@ describe('NotificationDetail Page', () => {
     await waitFor(() => expect(modal).not.toBeInTheDocument());
   });
 
-  test('clicks on the cancel button and on confirm button', async () => {
+  test.skip('clicks on the cancel button and on confirm button', async () => {
     const cancelNotificationBtn = result?.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn!);
     const modal = await waitFor(() => result?.queryByTestId('modalId'));
