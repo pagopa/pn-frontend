@@ -16,7 +16,7 @@ type Props = {
   /** custom style */
   sx?: SxProps;
   /** event tracking function callback for page size */
-  eventTrackingCallbackPageSize?: () => void;
+  eventTrackingCallbackPageSize?: (pageSize: number) => void;
 };
 
 const getA11yPaginationLabels = (
@@ -75,8 +75,8 @@ export default function CustomPagination({
       paginationData.size = selectedSize;
       // reset current page
       paginationData.page = 0;
-      if(eventTrackingCallbackPageSize) eventTrackingCallbackPageSize();
       onPageRequest(paginationData);
+      if(eventTrackingCallbackPageSize) eventTrackingCallbackPageSize(selectedSize);
     }
     handleClose();
   };

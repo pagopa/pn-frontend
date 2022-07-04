@@ -82,6 +82,10 @@ const Dashboard = () => {
     void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
 
+  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, {pageSize});
+  };
+
   return (
     <Box p={3}>
       <Typography variant="h4" mb={isMobile ? 3 : undefined}>
@@ -124,6 +128,7 @@ const Dashboard = () => {
             totalElements,
           }}
           onPageRequest={handleChangePage}
+          eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
           pagesToShow={pagesToShow}
           sx={{ padding: '0 10px' }}
         />
