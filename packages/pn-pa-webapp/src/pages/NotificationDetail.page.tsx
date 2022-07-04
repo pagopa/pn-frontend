@@ -210,17 +210,10 @@ const NotificationDetail = () => {
       <TitleBox
         variantTitle="h4"
         title={notification.subject}
-        sx={{
-          pt: 3,
-          mb: {
-            xs: 3,
-            md: 4,
-          },
-        }}
+        sx={{ pt: 3, mb: 2 }}
         mbTitle={0}
-      >
-        <Typography mt={2}>{notification.abstract}</Typography>
-      </TitleBox>
+      ></TitleBox>
+      <Typography variant="body1" mb={{xs: 3, md: 4}}>{notification.abstract}</Typography>
       {
         // PN-1714
         /*
