@@ -18,6 +18,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     timestamp: '2022-03-21T08:56:50.177Z',
     category: TimelineCategory.SEND_DIGITAL_DOMICILE,
     details: {
+      recIndex: 0,
       digitalAddress: {
         address: 'nome@cognome.mail',
         type: DigitalDomicileType.PEC
@@ -29,6 +30,7 @@ const timeline: Array<INotificationDetailTimeline> = [
     timestamp: '2022-01-15T08:56:50.177Z',
     category: TimelineCategory.SEND_DIGITAL_DOMICILE,
     details: {
+      recIndex: 0,
       digitalAddress: {
         address: 'nome@cognome.mail',
         type: DigitalDomicileType.PEC

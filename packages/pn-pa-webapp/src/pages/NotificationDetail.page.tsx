@@ -15,7 +15,8 @@ import {
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
-  NotificationStatus,
+  // PN-1714
+  // NotificationStatus,
   TitleBox,
   NotificationDetailTableRow,
   NotificationDetailTable,
@@ -53,7 +54,6 @@ const NotificationDetail = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const sender = useAppSelector((state: RootState) => state.userState.user.organization?.id);
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -73,7 +73,11 @@ const NotificationDetail = () => {
     {
       label: 'Da pagare entro il',
       rawValue: notification.paymentExpirationDate,
-      value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
+      value: (
+        <Box fontWeight={600} display="inline">
+          {notification.paymentExpirationDate}
+        </Box>
+      ),
     },
     {
       label: 'Codice Fiscale destinatario',
@@ -92,15 +96,6 @@ const NotificationDetail = () => {
         ),
     },
     {
-      // ...(notification.recipients.length > 1
-      //   ? []
-      //   : [
-      //       {
-      //         label: 'Cognome Nome',
-      //         rawValue: notification.recipients[0]?.denomination,
-      //         value: <Box fontWeight={600}>{notification.recipients[0]?.denomination}</Box>,
-      //       },
-      //     ]),
       label: 'Nome e cognome',
       rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
       value: notification.recipients.map((recipient, index) => (
@@ -109,8 +104,8 @@ const NotificationDetail = () => {
     },
     {
       label: 'Mittente',
-      rawValue: sender,
-      value: <Box fontWeight={600}>{sender}</Box>,
+      rawValue: notification.senderDenomination,
+      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
     },
     {
       label: 'Codice IUN annullato',
@@ -173,10 +168,12 @@ const NotificationDetail = () => {
     navigate(routes.NUOVA_NOTIFICA);
   };
 
+  // PN-1714
+  /*
   const openModal = () => {
     setShowModal(true);
-    return true;
   };
+  */
 
   useEffect(() => {
     if (id) {
@@ -209,20 +206,46 @@ const NotificationDetail = () => {
         }
         currentLocationLabel="Dettaglio notifica"
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3 }}></TitleBox>
-      {notification.notificationStatus !== NotificationStatus.PAID && (
-        <Button
-          sx={{ mb: {
+      <TitleBox
+        variantTitle="h4"
+        title={notification.subject}
+        sx={{
+          pt: 3,
+          mb: {
             xs: 3,
-            md: 4
-          }}}
+            md: 4,
+          },
+        }}
+        mbTitle={0}
+      ></TitleBox>
+      {
+        // PN-1714
+        /*
+        <TitleBox variantTitle="h4" title={notification.subject} sx={{
+          pt: 3,
+          mb: notification.notificationStatus !== NotificationStatus.PAID ? 2 : {
+            xs: 3,
+            md: 4,
+          },
+        }}
+        mbTitle={0}></TitleBox>
+        notification.notificationStatus !== NotificationStatus.PAID && (
+        <Button
+          sx={{
+            mb: {
+              xs: 3,
+              md: 4,
+            },
+          }}
           variant="outlined"
           onClick={openModal}
           data-testid="cancelNotificationBtn"
         >
           Annulla notifica
         </Button>
-      )}
+        )
+        */
+      }
     </Fragment>
   );
 
@@ -245,17 +268,24 @@ const NotificationDetail = () => {
       aria-labelledby="dialog-title"
       aria-describedby="dialog-description"
     >
-      <DialogTitle id="dialog-title" sx={{p: 4}}>Ci siamo quasi</DialogTitle>
-      <DialogContent sx={{px: 4, pb: 4}}>
+      <DialogTitle id="dialog-title" sx={{ p: 4 }}>
+        Ci siamo quasi
+      </DialogTitle>
+      <DialogContent sx={{ px: 4, pb: 4 }}>
         <DialogContentText id="dialog-description">
-        Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la precedente.
+          Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la
+          precedente.
         </DialogContentText>
       </DialogContent>
-      <DialogActions sx={{px: 4, pb: 4}}>
+      <DialogActions sx={{ px: 4, pb: 4 }}>
         <Button onClick={handleModalClose} variant="outlined" data-testid="modalCloseBtnId">
           Indietro
         </Button>
-        <Button onClick={handleModalCloseAndProceed} variant="contained" data-testid="modalCloseAndProceedBtnId">
+        <Button
+          onClick={handleModalCloseAndProceed}
+          variant="contained"
+          data-testid="modalCloseAndProceedBtnId"
+        >
           Invia una nuova notifica
         </Button>
       </DialogActions>
