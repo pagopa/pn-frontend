@@ -4,7 +4,7 @@ import { RenderResult } from '@testing-library/react';
 import { NotificationDetail as INotificationDetail } from '@pagopa-pn/pn-commons';
 import * as actions from '../../redux/notification/actions';
 import * as hooks from '../../redux/hooks';
-import { getNotification, notificationToFe  } from '../../redux/notification/__test__/test-utils';
+import { getNotification, notificationToFe } from '../../redux/notification/__test__/test-utils';
 import { axe, render } from '../../__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -39,7 +39,7 @@ describe('NotificationDetail Page', () => {
   const mockActionFn = jest.fn();
 
   const renderComponent = (notification: INotificationDetail) => {
-      // mock app selector
+    // mock app selector
     const spy = jest.spyOn(hooks, 'useAppSelector');
     spy
       .mockReturnValueOnce(notification)
@@ -67,7 +67,7 @@ describe('NotificationDetail Page', () => {
     return undefined;
   };
 
-  test('renders NotificationDetail page with payment box', async() => {
+  test('renders NotificationDetail page with payment box', async () => {
     result = renderComponent(notificationToFe);
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
@@ -77,13 +77,13 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith('mocked-id');
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', madateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
 
-  test('renders NotificationDetail page without payment box if noticeCode is empty', async() => {
-    result = renderComponent(getNotification({noticeCode: ""}));
+  test('renders NotificationDetail page without payment box if noticeCode is empty', async () => {
+    result = renderComponent(getNotification({ noticeCode: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent(/Table/i);
@@ -92,13 +92,13 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith('mocked-id');
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', madateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
 
-  test('renders NotificationDetail page without payment box if creditorTaxId is empty', async() => {
-    result = renderComponent(getNotification({creditorTaxId: ""}));
+  test('renders NotificationDetail page without payment box if creditorTaxId is empty', async () => {
+    result = renderComponent(getNotification({ creditorTaxId: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent(/Table/i);
@@ -107,13 +107,13 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith('mocked-id');
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', madateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
 
-  test('renders NotificationDetail page without payment box if noticeCode and creditorTaxId are both empty', async() => {
-    result = renderComponent(getNotification({creditorTaxId: "", noticeCode: ""}));
+  test('renders NotificationDetail page without payment box if noticeCode and creditorTaxId are both empty', async () => {
+    result = renderComponent(getNotification({ creditorTaxId: "", noticeCode: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent(/Table/i);
@@ -122,12 +122,12 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith('mocked-id');
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', mandateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
 
-  test('renders NotificationDetail page without payment box if payment object is not defined', async() => {
+  test('renders NotificationDetail page without payment box if payment object is not defined', async () => {
     result = renderComponent(getNotification());
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
@@ -137,7 +137,7 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith('mocked-id');
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', madateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
