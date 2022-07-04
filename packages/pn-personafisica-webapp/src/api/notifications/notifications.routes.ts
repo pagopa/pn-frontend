@@ -67,13 +67,16 @@ export function NOTIFICATIONS_LIST(params: GetNotificationsParams) {
   });
 }
 
-export function NOTIFICATION_DETAIL(iun: string) {
+export function NOTIFICATION_DETAIL(iun: string, mandateId?: string) {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
     path: API_NOTIFICATION_DETAIL_PATH,
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
     },
+    query: {
+      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || ''
+    }
   });
 }
 

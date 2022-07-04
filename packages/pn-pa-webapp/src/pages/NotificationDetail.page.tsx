@@ -15,7 +15,8 @@ import {
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
-  NotificationStatus,
+  // PN-1714
+  // NotificationStatus,
   TitleBox,
   NotificationDetailTableRow,
   NotificationDetailTable,
@@ -167,10 +168,12 @@ const NotificationDetail = () => {
     navigate(routes.NUOVA_NOTIFICA);
   };
 
+  // PN-1714
+  /*
   const openModal = () => {
     setShowModal(true);
-    return true;
   };
+  */
 
   useEffect(() => {
     if (id) {
@@ -203,8 +206,30 @@ const NotificationDetail = () => {
         }
         currentLocationLabel="Dettaglio notifica"
       />
-      <TitleBox variantTitle="h4" title={notification.subject} sx={{ pt: 3 }}></TitleBox>
-      {notification.notificationStatus !== NotificationStatus.PAID && (
+      <TitleBox
+        variantTitle="h4"
+        title={notification.subject}
+        sx={{
+          pt: 3,
+          mb: {
+            xs: 3,
+            md: 4,
+          },
+        }}
+        mbTitle={0}
+      ></TitleBox>
+      {
+        // PN-1714
+        /*
+        <TitleBox variantTitle="h4" title={notification.subject} sx={{
+          pt: 3,
+          mb: notification.notificationStatus !== NotificationStatus.PAID ? 2 : {
+            xs: 3,
+            md: 4,
+          },
+        }}
+        mbTitle={0}></TitleBox>
+        notification.notificationStatus !== NotificationStatus.PAID && (
         <Button
           sx={{
             mb: {
@@ -218,7 +243,9 @@ const NotificationDetail = () => {
         >
           Annulla notifica
         </Button>
-      )}
+        )
+        */
+      }
     </Fragment>
   );
 

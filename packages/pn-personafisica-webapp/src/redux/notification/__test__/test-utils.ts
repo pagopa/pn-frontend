@@ -21,49 +21,48 @@ export const notificationFromBe: NotificationDetail = {
   documentsAvailable: true,
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
   senderPaId: 'mocked-senderPaId',
-  recipients: [
-    {
-      recipientType: RecipientType.PF,
-      taxId: 'CGNNMO80A03H501U',
-      denomination: 'Analogico Ok',
-      digitalDomicile: {
-        address: 'mail@pec.it',
-        type: DigitalDomicileType.PEC,
-      },
-      physicalAddress: {
-        at: 'Presso qualcuno',
-        address: 'In via del tutto eccezionale',
-        addressDetails: 'scala A',
-        zip: '00100',
-        municipality: 'Comune',
-        province: 'PROV',
-        foreignState: '',
-      },
-      payment: {
-        creditorTaxId: 'mocked-creditorTaxId',
-        pagoPaForm: {
-          digests: {
-            sha256: 'mocked-sha256',
-          },
-          contentType: 'mocked-contentType',
-          ref: {
-            key: 'Avviso PagoPa',
-            versionToken: 'mocked-versionToken'
-          }
+  recipients: [{
+    recipientType: RecipientType.PF,
+    taxId: 'CGNNMO80A03H501U',
+    denomination: 'Analogico Ok',
+    digitalDomicile: {
+      address: 'mail@pec.it',
+      type: DigitalDomicileType.PEC,
+    },
+    physicalAddress: {
+      at: 'Presso qualcuno',
+      address: 'In via del tutto eccezionale',
+      addressDetails: 'scala A',
+      zip: '00100',
+      municipality: 'Comune',
+      province: 'PROV',
+      foreignState: '',
+    },
+    payment: {
+      creditorTaxId: 'mocked-creditorTaxId',
+      noticeCode: 'mocked-noticeCode',
+      pagoPaForm: {
+        digests: {
+          sha256: 'mocked-sha256',
         },
-        f24standard: {
-          digests: {
-            sha256: 'mocked-sha256',
-          },
-          contentType: 'mocked-contentType',
-          ref: {
-            key: 'F24 Standard',
-            versionToken: 'mocked-versionToken'
-          }
+        contentType: 'mocked-contentType',
+        ref: {
+          key: 'Avviso PagoPa',
+          versionToken: 'mocked-versionToken'
+        }
+      },
+      f24standard: {
+        digests: {
+          sha256: 'mocked-sha256',
         },
+        contentType: 'mocked-contentType',
+        ref: {
+          key: 'F24 Standard',
+          versionToken: 'mocked-versionToken'
+        }
       },
     },
-  ],
+  }],
   documents: [
     {
       digests: {
@@ -191,4 +190,37 @@ export const notificationFromBe: NotificationDetail = {
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
 };
 
+export const getNotification = (payment?: {noticeCode?: string; creditorTaxId?: string}): NotificationDetail => {
+
+  const notification = {...notificationFromBe};
+  // eslint-disable-next-line functional/immutable-data
+  notification.recipients[0].payment = payment ? {
+    creditorTaxId: payment?.creditorTaxId ?? "mocked-creditorTaxId",
+    noticeCode: payment?.noticeCode ?? "mocked-noticeCode",
+    pagoPaForm: {
+      digests: {
+        sha256: 'mocked-sha256',
+      },
+      contentType: 'mocked-contentType',
+      ref: {
+        key: 'Avviso PagoPa',
+        versionToken: 'mocked-versionToken'
+      }
+    },
+    f24standard: {
+      digests: {
+        sha256: 'mocked-sha256',
+      },
+      contentType: 'mocked-contentType',
+      ref: {
+        key: 'F24 Standard',
+        versionToken: 'mocked-versionToken'
+      }
+    },
+  } : undefined;
+
+  return parseNotificationDetail(notification);
+};
+
 export const notificationToFe = parseNotificationDetail(notificationFromBe);
+
