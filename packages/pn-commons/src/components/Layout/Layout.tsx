@@ -8,8 +8,6 @@ import Header from '../Header/Header';
 import ErrorBoundary from '../ErrorBoundary';
 type Props = {
   children?: ReactNode;
-  /** Assistance email for the user */
-  assistanceEmail?: string;
   /** Logout/exit action to apply */
   onExitAction?: () => void;
   /** Side Menu */
@@ -32,11 +30,11 @@ type Props = {
   eventTrackingCallbackAppCrash?: (_error: Error, _errorInfo: ErrorInfo) => void;
   /** event callback on change language */
   eventTrackingCallbackFooterChangeLanguage?: () => void;
+  onAssistanceClick?: () => void;
 };
 
 export default function Layout({
   children,
-  assistanceEmail,
   onExitAction,
   sideMenu,
   showSideMenu = true,
@@ -48,6 +46,7 @@ export default function Layout({
   userActions,
   eventTrackingCallbackAppCrash,
   eventTrackingCallbackFooterChangeLanguage,
+  onAssistanceClick,
 }: Props) {
 
   return (
@@ -58,13 +57,13 @@ export default function Layout({
       >
         <Header
           onExitAction={onExitAction}
-          assistanceEmail={assistanceEmail}
           productsList={productsList}
           productId={productId}
           partyList={partyList}
           loggedUser={loggedUser}
           enableDropdown={enableUserDropdown}
           userActions={userActions}
+          onAssistanceClick={onAssistanceClick}
         />
         <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
           {showSideMenu && (

@@ -1,24 +1,24 @@
-import { useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import {useEffect, useMemo} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
-import { ProductSwitchItem } from '@pagopa/mui-italia';
+import {AppMessage, Layout, LoadingOverlay, SideMenu, SideMenuItem} from '@pagopa-pn/pn-commons';
+import {ProductSwitchItem} from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
-import { getToSApproval, logout } from './redux/auth/actions';
-import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { PAGOPA_HELP_EMAIL } from './utils/constants';
-import { RootState } from './redux/store';
-import { Delegation } from './redux/delegation/types';
-import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
-import { mixpanelInit, trackEventByType } from './utils/mixpanel';
-import { TrackEventType } from "./utils/events";
+import {getToSApproval, logout} from './redux/auth/actions';
+import {useAppDispatch, useAppSelector} from './redux/hooks';
+import {PAGOPA_HELP_EMAIL} from './utils/constants';
+import {RootState} from './redux/store';
+import {Delegation} from './redux/delegation/types';
+import {getDomicileInfo, getSidemenuInformation} from './redux/sidemenu/actions';
+import {mixpanelInit, trackEventByType} from './utils/mixpanel';
+import {TrackEventType} from "./utils/events";
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -136,9 +136,15 @@ const App = () => {
     },
   ];
 
+  const handleAssistanceClick = () => {
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO);
+    /* eslint-disable-next-line functional/immutable-data */
+    window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  };
+
   return (
     <Layout
-      assistanceEmail={PAGOPA_HELP_EMAIL}
+
       onExitAction={() => dispatch(logout())}
       sideMenu={<SideMenu menuItems={menuItems} />}
       showSideMenu={!fetchedTos || tos}
@@ -146,6 +152,7 @@ const App = () => {
       loggedUser={jwtUser}
       enableUserDropdown
       userActions={userActions}
+      onAssistanceClick={handleAssistanceClick}
     >
       <AppMessage
         sessionRedirect={() => dispatch(logout())}

@@ -68,6 +68,10 @@ export const events: {
     category: 'contact',
     action: 'edit telephone courtesy contact'
   },
+  [TrackEventType.CUSTOMER_CARE_MAILTO]: {
+    category: 'customer care',
+    action: 'click on customer care email'
+  },
   [TrackEventType.DELEGATION_DELEGATE_ADD_ACTION]: {
     category: 'delegation',
     action: 'add new delegate'

@@ -1,21 +1,17 @@
-import { useEffect, useMemo, ErrorInfo } from 'react';
-import { LoadingOverlay, Layout, AppMessage, SideMenu } from '@pagopa-pn/pn-commons';
-import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
+import {ErrorInfo, useEffect, useMemo} from 'react';
+import {AppMessage, Layout, LoadingOverlay, SideMenu} from '@pagopa-pn/pn-commons';
+import {PartyEntity, ProductSwitchItem} from '@pagopa/mui-italia';
 
-import { useLocation } from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import Router from './navigation/routes';
-import { logout } from './redux/auth/actions';
-import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { RootState } from './redux/store';
-import { getMenuItems } from './utils/role.utility';
+import {logout} from './redux/auth/actions';
+import {useAppDispatch, useAppSelector} from './redux/hooks';
+import {RootState} from './redux/store';
+import {getMenuItems} from './utils/role.utility';
 
-import {
-  PAGOPA_HELP_EMAIL,
-  SELFCARE_BASE_URL,
-  PARTY_MOCK,
-} from './utils/constants';
-import { mixpanelInit, trackEventByType } from './utils/mixpanel';
-import { TrackEventType } from './utils/events';
+import {PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL,} from './utils/constants';
+import {mixpanelInit, trackEventByType} from './utils/mixpanel';
+import {TrackEventType} from './utils/events';
 
 const App = () => {
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
@@ -91,6 +87,12 @@ const App = () => {
     void dispatch(logout());
   };
 
+  const handleAssistanceClick = () => {
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO);
+    /* eslint-disable-next-line functional/immutable-data */
+    window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  };
+
   return (
     <Layout
       onExitAction={handleLogout}
@@ -102,11 +104,11 @@ const App = () => {
           <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
         )
       }
-      assistanceEmail={PAGOPA_HELP_EMAIL}
       productsList={productsList}
       productId={"0"}
       partyList={partyList}
       loggedUser={jwtUser}
+      onAssistanceClick={handleAssistanceClick}
     >
       <AppMessage
         sessionRedirect={handleLogout}

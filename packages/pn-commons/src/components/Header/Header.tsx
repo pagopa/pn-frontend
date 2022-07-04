@@ -28,8 +28,9 @@ type HeaderProps = {
   enableDropdown?: boolean;
   /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
+  /** Actions linked to user dropdown */
+  onAssistanceClick?: () => void;
 };
-
 const pagoPAHeaderLink: RootLinkType = {
   ...pagoPALink,
   label: 'PagoPA S.p.A.',
@@ -38,13 +39,13 @@ const pagoPAHeaderLink: RootLinkType = {
 
 const Header = ({
   onExitAction = () => window.location.assign(''),
-  assistanceEmail,
   productsList,
   productId,
   partyList,
   loggedUser,
   enableDropdown,
   userActions,
+  onAssistanceClick
 }: HeaderProps) => {
   const handleProductSelection = (product: ProductEntity) => {
     if (product.productUrl) {
@@ -58,12 +59,7 @@ const Header = ({
       <HeaderAccount
         rootLink={pagoPAHeaderLink}
         loggedUser={loggedUser}
-        onAssistanceClick={() => {
-          if (assistanceEmail) {
-            /* eslint-disable-next-line functional/immutable-data */
-            window.location.href = `mailto:${assistanceEmail}`;
-          }
-        }}
+        onAssistanceClick={onAssistanceClick || (() => {})}
         onLogout={onExitAction}
         enableDropdown={enableDropdown}
         userActions={userActions}
