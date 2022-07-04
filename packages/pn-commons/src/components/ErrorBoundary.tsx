@@ -7,6 +7,7 @@ type Props = {
   children: ReactNode;
   sx?: SxProps;
   printError?: boolean;
+  eventTrackingCallback?: (error: Error, errorInfo: ErrorInfo) => void;
 };
 
 type State = { hasError: boolean };
@@ -24,6 +25,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(_error: Error, _errorInfo: ErrorInfo) {
     // You can also log the error to an error reporting service
+    if (this.props.eventTrackingCallback) this.props.eventTrackingCallback(_error, _errorInfo);
   }
 
   private handleRefreshPage() {

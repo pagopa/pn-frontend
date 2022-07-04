@@ -79,7 +79,11 @@ export const trackingMiddleware: Middleware =
 /**
  * Function to track events outside redux
  * @param trackEventType event name
+ * @param attributes optional additional attributes
  */
- export const trackEventByType = (trackEventType: TrackEventType) => {
-  trackEvent(trackEventType, events[trackEventType]);
- };
+export const trackEventByType = (trackEventType: TrackEventType, attributes?: object) => {
+  const eventParameters = attributes
+    ? { ...events[trackEventType], attributes: { ...attributes } }
+    : events[trackEventType];
+  trackEvent(trackEventType, eventParameters);
+};

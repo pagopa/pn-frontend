@@ -1,18 +1,21 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, ErrorInfo } from 'react';
 import { LoadingOverlay, Layout, AppMessage, SideMenu } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
+import { useLocation } from 'react-router-dom';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
+
 import {
   PAGOPA_HELP_EMAIL,
   SELFCARE_BASE_URL,
   PARTY_MOCK,
 } from './utils/constants';
-import { mixpanelInit } from './utils/mixpanel';
+import { mixpanelInit, trackEventByType } from './utils/mixpanel';
+import { TrackEventType } from './utils/events';
 
 const App = () => {
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
@@ -68,9 +71,26 @@ const App = () => {
     mixpanelInit();
   }, []);
 
+  const { pathname } = useLocation();
+  const path = pathname.split('/');
+  const source = path[path.length - 1];
+
+  const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
+    trackEventByType(TrackEventType.APP_CRASH, {
+      route: source,
+      stacktrace: { error: e, errorInfo: eInfo },
+    });
+  };
+
+  const handleLogout = () => {
+    trackEventByType(TrackEventType.USER_LOGOUT);
+    void dispatch(logout());
+  };
+
   return (
     <Layout
       onExitAction={() => dispatch(logout())}
+      eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
       sideMenu={
         role &&
         menuItems && (
@@ -84,7 +104,7 @@ const App = () => {
       loggedUser={jwtUser}
     >
       <AppMessage
-        sessionRedirect={() => dispatch(logout())}
+        sessionRedirect={handleLogout}
       />
       <LoadingOverlay />
       <Router />

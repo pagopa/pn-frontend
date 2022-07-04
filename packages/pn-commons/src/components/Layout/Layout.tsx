@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, ErrorInfo } from 'react';
 import { Stack } from '@mui/material';
 import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
 import { Box } from '@mui/system';
@@ -28,6 +28,8 @@ type Props = {
   enableUserDropdown?: boolean;
   /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
+  /** event callback on app crash  */
+  eventTrackingCallbackAppCrash?: (_error: Error, _errorInfo: ErrorInfo) => void;
 };
 
 export default function Layout({
@@ -42,10 +44,11 @@ export default function Layout({
   loggedUser,
   enableUserDropdown,
   userActions,
+  eventTrackingCallbackAppCrash,
 }: Props) {
 
   return (
-    <ErrorBoundary sx={{ height: '100vh' }}>
+    <ErrorBoundary sx={{ height: '100vh' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
       <Stack
         direction="column"
         sx={{ minHeight: '100vh'}} // 100vh per sticky footer
