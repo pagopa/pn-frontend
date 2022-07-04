@@ -82,6 +82,10 @@ const App = () => {
     });
   };
 
+  const handleEventTrackingCallbackFooterChangeLanguage = () => {
+    trackEventByType(TrackEventType.FOOTER_LANG_SWITCH);
+  };
+
   const handleLogout = () => {
     trackEventByType(TrackEventType.USER_LOGOUT);
     void dispatch(logout());
@@ -89,8 +93,9 @@ const App = () => {
 
   return (
     <Layout
-      onExitAction={() => dispatch(logout())}
+      onExitAction={handleLogout}
       eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
+      eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
       sideMenu={
         role &&
         menuItems && (

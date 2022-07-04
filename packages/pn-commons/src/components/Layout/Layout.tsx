@@ -30,6 +30,8 @@ type Props = {
   userActions?: Array<UserAction>;
   /** event callback on app crash  */
   eventTrackingCallbackAppCrash?: (_error: Error, _errorInfo: ErrorInfo) => void;
+  /** event callback on change language */
+  eventTrackingCallbackFooterChangeLanguage?: () => void;
 };
 
 export default function Layout({
@@ -45,6 +47,7 @@ export default function Layout({
   enableUserDropdown,
   userActions,
   eventTrackingCallbackAppCrash,
+  eventTrackingCallbackFooterChangeLanguage,
 }: Props) {
 
   return (
@@ -74,7 +77,7 @@ export default function Layout({
           </Box>
 
         </Stack>
-        <Footer />
+        <Footer eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage} />
       </Stack>
     </ErrorBoundary>
   );
