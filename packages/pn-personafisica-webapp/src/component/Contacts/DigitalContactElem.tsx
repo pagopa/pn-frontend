@@ -1,23 +1,26 @@
-import { Fragment, memo, ReactChild, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import {Fragment, memo, ReactChild, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
-  Grid,
-  Dialog,
-  Typography,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Grid,
+    Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { ButtonNaked } from '@pagopa/mui-italia';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import {ButtonNaked} from '@pagopa/mui-italia';
+import {useIsMobile} from '@pagopa-pn/pn-commons';
 
-import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
-import { useAppDispatch } from '../../redux/hooks';
-import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
+import {CourtesyChannelType, LegalChannelType} from '../../models/contacts';
+import {deleteCourtesyAddress, deleteLegalAddress} from '../../redux/contact/actions';
+import {useAppDispatch} from '../../redux/hooks';
+import {trackEventByType} from "../../utils/mixpanel";
+import {EventActions, TrackEventType} from "../../utils/events";
+import {getContactEventType} from "../../utils/contacts.utility";
+import {useDigitalContactsCodeVerificationContext} from './DigitalContactsCodeVerification.context';
 
 type Props = {
   fields: Array<{
@@ -81,8 +84,10 @@ const DigitalContactElem = memo(
       handleModalClose();
       if (contactType === LegalChannelType.PEC) {
         void dispatch(deleteLegalAddress({ recipientId, senderId, channelType: contactType }));
+        trackEventByType(TrackEventType.CONTACT_LEGAL_CONTACT, { action: EventActions.DELETE });
         return;
       }
+      const eventTypeByChannel = getContactEventType(contactType);
       void dispatch(
         deleteCourtesyAddress({
           recipientId,
@@ -90,6 +95,7 @@ const DigitalContactElem = memo(
           channelType: contactType as CourtesyChannelType,
         })
       );
+       trackEventByType(eventTypeByChannel, { action: EventActions.DELETE });
     };
 
     const editHandler = () => {

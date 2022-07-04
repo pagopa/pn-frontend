@@ -38,7 +38,7 @@ export const mixpanelInit = function (): void {
  * @param event_name event name
  * @param properties event data
  */
-function trackEvent(event_name: string, properties?: any): void {
+export function trackEvent(event_name: string, properties?: any): void {
   if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line no-console
     console.log(event_name, properties);
@@ -79,7 +79,12 @@ export const trackingMiddleware: Middleware =
 /**
  * Function to track events outside redux
  * @param trackEventType event name
+ * @param attributes event attributes
  */
- export const trackEventByType = (trackEventType: TrackEventType) => {
-  trackEvent(trackEventType, events[trackEventType]);
- };
+export const trackEventByType = (trackEventType: TrackEventType, attributes?: object) => {
+  const eventParameters = attributes
+    ? {...events[trackEventType], attributes: {...attributes}}
+    : events[trackEventType];
+
+  trackEvent(trackEventType, eventParameters);
+};

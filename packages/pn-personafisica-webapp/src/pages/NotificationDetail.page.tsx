@@ -27,6 +27,8 @@ import {
 } from '../redux/notification/actions';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
+import { trackEventByType } from "../utils/mixpanel";
+import { TrackEventType } from "../utils/events";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -110,6 +112,7 @@ const NotificationDetail = () => {
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
       void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
+      trackEventByType(TrackEventType.NOTIFICATION_DETAIL_SINGLE_ATTACHMENT);
     }
   };
   

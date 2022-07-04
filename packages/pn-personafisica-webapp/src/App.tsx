@@ -17,7 +17,8 @@ import { PAGOPA_HELP_EMAIL } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
-import { mixpanelInit } from './utils/mixpanel';
+import { mixpanelInit, trackEventByType } from './utils/mixpanel';
+import { TrackEventType } from "./utils/events";
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -57,6 +58,7 @@ const App = () => {
         id: 'profile',
         label: t('menu.profilo'),
         onClick: () => {
+          trackEventByType(TrackEventType.USER_VIEW_PROFILE);
           navigate(routes.PROFILO);
         },
         icon: <SettingsIcon fontSize="small" color="inherit" />,
@@ -64,7 +66,10 @@ const App = () => {
       {
         id: 'logout',
         label: t('header.logout'),
-        onClick: () => dispatch(logout()),
+        onClick: () => {
+          trackEventByType(TrackEventType.USER_LOGOUT);
+            void dispatch(logout());
+        },
         icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
       },
     ],

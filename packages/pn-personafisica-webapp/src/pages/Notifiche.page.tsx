@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Box} from '@mui/material';
 import {
   calculatePages,
   CustomPagination,
@@ -12,19 +12,16 @@ import {
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
-import { useParams } from 'react-router-dom';
-import {
-  getReceivedNotifications,
-  setNotificationFilters,
-  setPagination,
-  setSorting,
-} from '../redux/dashboard/actions';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
+import {useParams} from 'react-router-dom';
+import {getReceivedNotifications, setNotificationFilters, setPagination, setSorting,} from '../redux/dashboard/actions';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
+import {RootState} from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import { Delegator } from '../redux/delegation/types';
+import {Delegator} from '../redux/delegation/types';
+import {trackEvent, trackEventByType} from "../utils/mixpanel";
+import {TrackEventType} from "../utils/events";
 
 const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
   const dispatch = useAppDispatch();
@@ -60,11 +57,13 @@ const Notifiche = ({ isDelegator = false }: { isDelegator?: boolean }) => {
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
   // Sort handlers
   const handleChangeSorting = (s: Sort) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SORT, {type: s.orderBy});
     dispatch(setSorting(s));
   };
 

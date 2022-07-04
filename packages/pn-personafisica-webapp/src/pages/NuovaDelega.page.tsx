@@ -50,6 +50,8 @@ import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import { generateVCode } from '../utils/delegation.utility';
+import { trackEventByType } from "../utils/mixpanel";
+import {TrackEventType} from "../utils/events";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -86,7 +88,9 @@ const NuovaDelega = () => {
   const dispatch = useAppDispatch();
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSubmit = (values: NewDelegationFormProps) => {
-    void dispatch(createDelegation(values));
+    void dispatch(createDelegation(values)).then(() => {
+      trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
+    });
   };
 
   const handleDelegationsClick = () => {

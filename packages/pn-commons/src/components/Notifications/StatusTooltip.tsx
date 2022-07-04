@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import Chip from '@mui/material/Chip';
 
 import CustomTooltip from '../CustomTooltip';
+import {Box} from "@mui/material";
 
 const StatusTooltip = ({
   tooltip,
@@ -15,9 +16,11 @@ const StatusTooltip = ({
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
   return (
-    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent}>
+      <Box>
+    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} >
       <Chip label={label} color={color} sx={{cursor: 'default'}}/>
     </CustomTooltip>
+      </Box>
   );
 };
 

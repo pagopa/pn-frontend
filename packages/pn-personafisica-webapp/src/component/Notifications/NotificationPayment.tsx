@@ -1,4 +1,4 @@
-import { LoadingButton } from '@mui/lab';
+import {LoadingButton} from '@mui/lab';
 import {
   Alert,
   AlertColor,
@@ -13,16 +13,26 @@ import {
   Theme,
   Typography
 } from '@mui/material';
-import { Box } from '@mui/system';
+import {Box} from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
-import { CopyToClipboard, formatEurocentToCurrency, NotificationDetailPayment, PaymentAttachmentSName, PaymentInfoDetail, PaymentStatus, useIsMobile } from '@pagopa-pn/pn-commons';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getNotificationPaymentInfo, getPaymentAttachment } from '../../redux/notification/actions';
-import { RootState } from '../../redux/store';
-import { CHECKOUT_URL, PAGOPA_HELP_EMAIL, PAYMENT_DISCLAIMER_URL } from '../../utils/constants';
+import {
+  CopyToClipboard,
+  formatEurocentToCurrency,
+  NotificationDetailPayment,
+  PaymentAttachmentSName,
+  PaymentInfoDetail,
+  PaymentStatus,
+  useIsMobile
+} from '@pagopa-pn/pn-commons';
+import {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {useAppDispatch, useAppSelector} from '../../redux/hooks';
+import {getNotificationPaymentInfo, getPaymentAttachment} from '../../redux/notification/actions';
+import {RootState} from '../../redux/store';
+import {CHECKOUT_URL, PAGOPA_HELP_EMAIL, PAYMENT_DISCLAIMER_URL} from '../../utils/constants';
+import {TrackEventType} from "../../utils/events";
+import {trackEventByType} from "../../utils/mixpanel";
 
 interface Props {
   iun: string;
@@ -109,15 +119,18 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     } else if (CHECKOUT_URL) { // do we need to inform the user that NoticeCode and/or creditorTaxId are unavailable and redirect to base checkout url?
       window.open(CHECKOUT_URL);
     }
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION);
   };
 
   const contactSupportClick = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE);
     if (PAGOPA_HELP_EMAIL) {
       window.open(`mailto:${PAGOPA_HELP_EMAIL}`);
     }
   };
 
   const reloadPage = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_RELOAD);
     // reset state
     setLoading(() => true);
     setError(() => '');
@@ -128,6 +141,9 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   
   const onDocumentClick = (name: PaymentAttachmentSName) => {
     void dispatch(getPaymentAttachment({ iun, attachmentName: name }));
+    trackEventByType(name ===PaymentAttachmentSName.PAGOPA
+      ? TrackEventType.NOTIFICATION_DETAIL_PAYMENT_F24_FILE
+      : TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
   };
 
   const onDisclaimerClick = () => {
@@ -217,6 +233,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
             action: MessageActionType.CONTACT_SUPPORT
           };
         case PaymentStatus.FAILED:
+          trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ERROR, { type: paymentInfo.errorCode });
           return getFailedMessageData();
       }
     }

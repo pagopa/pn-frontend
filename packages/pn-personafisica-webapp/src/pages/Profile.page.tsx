@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { RECAPITI } from '../navigation/routes.const';
+import {trackEvent} from "../utils/mixpanel";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const Profile = () => {
     : { textAlign: 'center', minWidth: 'max-content' };
 
   const handleRedirectToContactsPage = () => {
+    trackEvent('USER_VIEW_CONTACTS_PROFILE');
     navigate(RECAPITI);
   };
 
