@@ -24,11 +24,11 @@ phases:
     commands:
       - echo saving commit id to file
       - cd ../..
-      - COMMIT_ID = $(git rev-parse HEAD)
-      - ${COMMIT_ID} > $SUB_PRJ_NAME/build/commit_id.txt
+      - export COMMIT_ID=$(git rev-parse --verify HEAD)
+      - echo $COMMIT_ID > $SUB_PRJ_NAME/build/commit_id.txt
       - echo gzipping and pushing artifact to s3
       - cd $SUB_PRJ_NAME/build
-      - tar c * | gzip | aws s3 cp - "s3://${CI_ARTIFACT_BUCKET}/${GITHUB_PRJ_NAME}/${PACKAGE_NAME}_${BUILD_ID}_${COMMIT_ID}.tar.gz"
+      - tar c * | gzip | aws s3 cp - "s3://${CI_ARTIFACT_BUCKET}/${GITHUB_PRJ_NAME}/${PACKAGE_NAME}_${BUILD_ID}_${}.tar.gz"
 artifacts:
   base-directory: $SUB_PRJ_NAME/build
   files:
