@@ -1,0 +1,23 @@
+version: 0.2
+batch:
+  build-list:
+    - identifier: pn_pa_svil_build
+      buildspec: cra_buildspec.yaml
+      env:
+        variables:
+          BUILD_ID: svil
+          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
+          REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
+          REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
+          REACT_APP_URL_API: https://webapi.svil.pn.pagopa.it/
+          REACT_APP_DISABLE_INACTIVITY_HANDLER: true
+    - identifier: pn_pa_coll_build
+      buildspec: cra_buildspec.yaml
+      env:
+        variables:
+          BUILD_ID: coll
+          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
+          REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
+          REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
+          REACT_APP_URL_API: https://webapi.coll.pn.pagopa.it/
+          REACT_APP_DISABLE_INACTIVITY_HANDLER: false

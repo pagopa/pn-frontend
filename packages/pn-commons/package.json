@@ -2,7 +2,7 @@
   "name": "@pagopa-pn/pn-commons",
   "version": "0.1.0",
   "private": true,
-  "main": "./src/index.tsx",
+  "main": "./src/index.ts",
   "dependencies": {
     "@mui/icons-material": "^5.8.2",
     "@mui/material": "^5.8.2",
@@ -17,8 +17,8 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "tsc -w --sourceMap=true",
+    "build": "tsc",
     "test": "react-scripts test --watchAll=false",
     "test:coverage": "react-scripts test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "eject": "react-scripts eject",

@@ -1,7 +1,7 @@
 /* eslint-disable functional/no-let */
 
 import { fireEvent } from '@testing-library/react';
-import { render, screen } from '../../test-utils';
+import { render } from '../../test-utils';
 import CopyToClipboard from '../CopyToClipboard';
 
 describe('CopyToClipboard component', () => {
