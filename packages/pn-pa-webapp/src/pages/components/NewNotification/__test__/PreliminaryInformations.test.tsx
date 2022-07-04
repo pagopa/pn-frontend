@@ -33,7 +33,10 @@ describe('PreliminaryInformations Component', () => {
   beforeEach(async () => {
     // mock app selector
     const useAppSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
-    useAppSelectorSpy.mockReturnValue(['Group1', 'Group2']);
+    useAppSelectorSpy.mockReturnValue([
+      { id: '1', name: 'Group1', description: '', status: 'ACTIVE' },
+      { id: '2', name: 'Group2', description: '', status: 'ACTIVE' },
+    ]);
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     mockDispatchFn = jest.fn();
@@ -73,7 +76,15 @@ describe('PreliminaryInformations Component', () => {
     const form = result.container.querySelector('form');
     await testInput(form!, 'paProtocolNumber', 'mocked-NotificationId');
     await testInput(form!, 'subject', 'mocked-Subject');
-    await testSelect(form!, 'group', [{label: 'Group1', value: 'Group1'}, {label: 'Group2', value: 'Group2'}], 1);
+    await testSelect(
+      form!,
+      'group',
+      [
+        { label: 'Group1', value: '1' },
+        { label: 'Group2', value: '2' },
+      ],
+      1
+    );
     await testRadio(form!, 'comunicationTypeRadio', 1);
     await testRadio(form!, 'paymentMethodRadio', 1);
     const buttons = form?.querySelectorAll('button');
@@ -86,9 +97,9 @@ describe('PreliminaryInformations Component', () => {
           paProtocolNumber: 'mocked-NotificationId',
           subject: 'mocked-Subject',
           abstract: '',
-          group: 'Group2',
+          group: '2',
           physicalCommunicationType: PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER,
-          paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE
+          paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
         },
         type: 'setPreliminaryInformations',
       });

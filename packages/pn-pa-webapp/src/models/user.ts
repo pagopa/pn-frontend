@@ -9,3 +9,15 @@ export enum PartyRole {
   OPERATOR = 'OPERATOR',
   SUB_DELEGATE = 'SUB_DELEGATE',
 }
+
+export enum GroupStatus {
+  ACTIVE = 'ACTIVE',
+  SUSPENDED = 'SUSPENDED'
+}
+
+export interface UserGroup {
+  id: string;
+  name: string;
+  description: string;
+  status: GroupStatus;
+}

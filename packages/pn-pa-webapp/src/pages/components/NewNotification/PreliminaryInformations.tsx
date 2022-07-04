@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -14,8 +14,9 @@ import {
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification';
+import { GroupStatus } from '../../../models/user';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { setPreliminaryInformations } from '../../../redux/newNotification/actions';
+import { getUserGroups, setPreliminaryInformations } from '../../../redux/newNotification/actions';
 import { RootState } from '../../../redux/store';
 import NewNotificationCard from './NewNotificationCard';
 
@@ -26,8 +27,7 @@ type Props = {
 
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
-  const userGroups = useAppSelector((state: RootState) => state.userState.user.groups);
-  const [groups, _setGroups] = useState(userGroups);
+  const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
 
   const initialValues = () => ({
     paProtocolNumber: notification.paProtocolNumber || '',
@@ -43,7 +43,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     subject: yup.string().required('Oggetto di protocollo obbligatorio'),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
-    group: groups ? yup.string().required() : yup.string(),
+    group: groups.length > 0 ? yup.string().required() : yup.string(),
   });
 
   const formik = useFormik({
@@ -65,9 +65,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   };
 
   useEffect(() => {
-    if (!groups) {
-      // TODO: chiamata al be per prendere gruppi associati con self care
-      // setGroups(['Group1', 'Group2']);
+    if (groups.length === 0) {
+      void dispatch(getUserGroups(GroupStatus.ACTIVE));
     }
   }, []);
 
@@ -110,7 +109,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         />
         <TextField
           id="group"
-          label={`Gruppo${groups ? '*' : ''}`}
+          label={`Gruppo${groups.length > 0 ? '*' : ''}`}
           fullWidth
           name="group"
           value={formik.values.group}
@@ -121,13 +120,13 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           margin="normal"
           select
         >
-          {groups &&
+          {groups.length > 0 &&
             groups.map((group) => (
-              <MenuItem key={group} value={group}>
-                {group}
+              <MenuItem key={group.id} value={group.id}>
+                {group.name}
               </MenuItem>
             ))}
-          {!groups &&
+          {groups.length === 0 &&
               <MenuItem sx={{display: 'none'}}>
               </MenuItem>
             }

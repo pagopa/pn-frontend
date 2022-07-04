@@ -1,5 +1,12 @@
 import MockAdapter from 'axios-mock-adapter';
-import { tenYearsAgo, today, LegalFactId, LegalFactType, formatToTimezoneString, getNextDay } from '@pagopa-pn/pn-commons';
+import {
+  tenYearsAgo,
+  today,
+  LegalFactId,
+  LegalFactType,
+  formatToTimezoneString,
+  getNextDay,
+} from '@pagopa-pn/pn-commons';
 
 import {
   notificationsFromBe,
@@ -15,6 +22,7 @@ import { apiClient, externalClient } from '../../axios';
 import { NotificationsApi } from '../Notifications.api';
 import {
   CREATE_NOTIFICATION,
+  GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -77,6 +85,19 @@ describe('Notifications api tests', () => {
     mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200, undefined);
     const res = await NotificationsApi.getSentNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('getUserGroups', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock
+      .onGet(GET_USER_GROUPS())
+      .reply(200, [{ id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' }]);
+    const res = await NotificationsApi.getUserGroups();
+    expect(res).toStrictEqual([
+      { id: 'mocked-id', name: 'mocked-name', description: '', status: 'ACTIVE' },
+    ]);
     mock.reset();
     mock.restore();
   });
