@@ -23,7 +23,7 @@ import DesktopNotifications from '../component/Notifications/DesktopNotification
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import {Delegator} from '../redux/delegation/types';
-import { trackEvent, trackEventByType } from "../utils/mixpanel";
+import { trackEventByType } from "../utils/mixpanel";
 import { TrackEventType } from "../utils/events";
 
 const Notifiche = () => {
