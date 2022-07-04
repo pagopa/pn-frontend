@@ -1,15 +1,17 @@
-import { Fragment, useEffect } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { Dialog, Box, Typography } from '@mui/material';
+import {Fragment, useEffect} from 'react';
+import {Trans, useTranslation} from 'react-i18next';
+import {useNavigate} from 'react-router-dom';
+import {Box, Dialog, Typography} from '@mui/material';
 
-import { storageSpidSelectedOps } from '../../utils/storage';
-import { ROUTE_LOGIN } from '../../utils/constants';
+import {trackEventByType} from "@pagopa-pn/pn-personafisica-webapp/src/utils/mixpanel";
+import {TrackEventType} from "@pagopa-pn/pn-personafisica-webapp/src/utils/events";
+import {storageSpidSelectedOps} from '../../utils/storage';
+import {ROUTE_LOGIN} from '../../utils/constants';
 
 const handleError = (queryParams: string) => {
   if (process.env.NODE_ENV !== 'test') {
     storageSpidSelectedOps.read();
-    // trackEvent('LOGIN_FAILURE', { reason: queryParams, idp: spidId });
+    trackEventByType(TrackEventType.LOGIN_FAILURE, { reason: queryParams, idp: spidId });
     console.error(`login unsuccessfull! query params obtained from idp: ${queryParams}`);
   }
 };

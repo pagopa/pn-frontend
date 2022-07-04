@@ -150,7 +150,7 @@ const DesktopNotifications = ({
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
     // log event
-    trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   return (

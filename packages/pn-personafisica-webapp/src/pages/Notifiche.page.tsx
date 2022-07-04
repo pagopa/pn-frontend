@@ -22,7 +22,9 @@ import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import { Delegator } from '../redux/delegation/types';
+import {Delegator} from '../redux/delegation/types';
+import { trackEventByType } from "../utils/mixpanel";
+import { TrackEventType } from "../utils/events";
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -57,11 +59,13 @@ const Notifiche = () => {
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
   // Sort handlers
   const handleChangeSorting = (s: Sort) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SORT, {type: s.orderBy});
     dispatch(setSorting(s));
   };
 
