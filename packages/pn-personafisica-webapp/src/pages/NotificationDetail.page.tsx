@@ -1,7 +1,7 @@
 import { Fragment, ReactNode, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Grid, Box, Paper, Stack } from '@mui/material';
+import { Grid, Box, Paper, Stack, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
@@ -183,7 +183,9 @@ const NotificationDetail = () => {
           },
         }}
         mbTitle={0}
-      ></TitleBox>
+      >
+        <Typography mt={2}>{notification.abstract}</Typography>
+      </TitleBox>
     </Fragment>
   );
 

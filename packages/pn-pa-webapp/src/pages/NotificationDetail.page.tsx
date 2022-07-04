@@ -11,6 +11,7 @@ import {
   DialogContent,
   DialogActions,
   DialogContentText,
+  Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
@@ -217,7 +218,9 @@ const NotificationDetail = () => {
           },
         }}
         mbTitle={0}
-      ></TitleBox>
+      >
+        <Typography mt={2}>{notification.abstract}</Typography>
+      </TitleBox>
       {
         // PN-1714
         /*
