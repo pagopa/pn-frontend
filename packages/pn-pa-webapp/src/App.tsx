@@ -88,7 +88,7 @@ const App = () => {
   };
 
   const handleAssistanceClick = () => {
-    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO);
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, {source: 'postlogin'});
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };

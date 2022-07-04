@@ -1,5 +1,5 @@
-import {useEffect, useMemo} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {ErrorInfo, useEffect, useMemo} from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {useTranslation} from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
@@ -39,6 +39,9 @@ const App = () => {
     (state: RootState) => state.generalInfoState
   );
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const path = pathname.split('/');
+  const source = path[path.length - 1];
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -137,15 +140,27 @@ const App = () => {
   ];
 
   const handleAssistanceClick = () => {
-    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO);
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, {source: 'postlogin'});
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 
+  const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
+    trackEventByType(TrackEventType.APP_CRASH, {
+      route: source,
+      stacktrace: { error: e, errorInfo: eInfo },
+    });
+  };
+
+  const handleEventTrackingCallbackFooterChangeLanguage = () => {
+    trackEventByType(TrackEventType.FOOTER_LANG_SWITCH);
+  };
+
   return (
     <Layout
-
       onExitAction={() => dispatch(logout())}
+      eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
+      eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
       sideMenu={<SideMenu menuItems={menuItems} />}
       showSideMenu={!fetchedTos || tos}
       productsList={productsList}

@@ -1,4 +1,5 @@
 export enum TrackEventType {
+  APP_CRASH = 'APP_CRASH',
   CONTACT_LEGAL_CONTACT = 'CONTACT_LEGAL_CONTACT',
   CONTACT_IOAPP_COURTESY = 'CONTACT_IOAPP_COURTESY',
   CONTACT_MAIL_COURTESY = 'CONTACT_MAIL_COURTESY',
@@ -48,6 +49,10 @@ export const events: {
     action: string;
   };
 } = {
+  [TrackEventType.APP_CRASH]: {
+    category: 'app',
+    action: 'app crashed'
+  },
   [TrackEventType.CONTACT_LEGAL_CONTACT]: {
     category: 'contact',
     action: 'edit legal contact'
