@@ -63,11 +63,11 @@ const CodeInput = memo(
           t.moveStart('character', inputsRef.current[index].value);
           t.select();
         }
-      });
+      }, 25);
     };
 
     const keyDownHandler = (event: KeyboardEvent<HTMLDivElement>, index: number) => {
-      if (!isNaN(Number(event.key)) && inputsRef.current[index].value) {
+      if (!isNaN(Number(event.key))) {
         /* eslint-disable-next-line functional/immutable-data */
         inputsRef.current[index].value = event.key;
         changeHandler();
