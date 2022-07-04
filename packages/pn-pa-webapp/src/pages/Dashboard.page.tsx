@@ -17,6 +17,9 @@ import {
   setPagination,
   setSorting,
 } from '../redux/dashboard/actions';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
+
 import DesktopNotifications from './components/Notifications/DesktopNotifications';
 import MobileNotifications from './components/Notifications/MobileNotifications';
 
@@ -45,11 +48,13 @@ const Dashboard = () => {
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
   // Sort handlers
   const handleChangeSorting = (s: Sort) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SORT, {type: s.orderBy});
     dispatch(setSorting(s));
   };
 
@@ -63,6 +68,10 @@ const Dashboard = () => {
     navigate(routes.API_KEYS);
   };
 
+  const handleSendNewNotification = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_SEND);
+    navigate(routes.NUOVA_NOTIFICA);
+  };
   useEffect(() => {
     const params = {
       ...filters,
@@ -85,7 +94,7 @@ const Dashboard = () => {
         </Typography>
         <Button
           variant="contained"
-          onClick={() => navigate(routes.NUOVA_NOTIFICA)}
+          onClick={handleSendNewNotification}
           data-testid="newNotificationBtn"
           sx={{ marginBottom: isMobile ? 3 : undefined }}
         >

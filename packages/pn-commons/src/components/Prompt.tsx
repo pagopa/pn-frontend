@@ -1,4 +1,4 @@
-import { Fragment, ReactNode } from 'react';
+import { Fragment, ReactNode, useEffect } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { usePrompt } from '../hooks/usePrompt';
 
@@ -6,12 +6,25 @@ const Prompt = ({
   title,
   message,
   children,
+  eventTrackingCallbackPromptOpened,
+  eventTrackingCallbackCancel,
+  eventTrackingCallbackConfirm,
 }: {
   title: string;
   message: string;
   children: ReactNode;
+  eventTrackingCallbackPromptOpened: () => void;
+  eventTrackingCallbackCancel: () => void;
+  eventTrackingCallbackConfirm: () => void;
 }) => {
-  const [showPrompt, confirmNavigation, cancelNavigation] = usePrompt(true);
+
+  const [showPrompt, confirmNavigation, cancelNavigation] = usePrompt(true, eventTrackingCallbackCancel, eventTrackingCallbackConfirm);
+
+  useEffect(() => {
+    if (showPrompt) {
+      eventTrackingCallbackPromptOpened();
+    };
+  });
 
   return (
     <Fragment>

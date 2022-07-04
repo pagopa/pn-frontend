@@ -40,7 +40,10 @@ const DesktopNotifications = ({
 }: Props) => {
   const navigate = useNavigate();
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
-
+  const handleEventTrackingTooltip = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
+  };
+  
   const columns: Array<Column> = [
     {
       id: 'sentAt',
@@ -117,7 +120,7 @@ const DesktopNotifications = ({
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string) {
         const { label, tooltip, color } = getNotificationStatusInfos(value as NotificationStatus);
-        return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
+        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },
     },
   ];
@@ -131,7 +134,7 @@ const DesktopNotifications = ({
   const handleRowClick = (row: Item, _column: Column) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     // log event
-    trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;

@@ -5,6 +5,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MenuItem, TextField } from '@mui/material';
 import { CustomDatePicker, DatePickerTypes, DATE_FORMAT, formatIun, NotificationAllowedStatus, useIsMobile } from '@pagopa-pn/pn-commons';
+import { trackEventByType } from '../../../utils/mixpanel';
+import { TrackEventType } from '../../../utils/events';
 
 type Props = {
   formikInstance: {
@@ -47,8 +49,10 @@ const FilterNotificationsFormBody = ({
   const searchForHandleChange = (e: ChangeEvent) => {
     const value = (e.target as any).value;
     if (value === '0') {
+      trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'IUN code'});
       formikInstance.resetForm({ values: { ...formikInstance.values, iunMatch: '', searchFor: '0' } });
     } else if (value === '1') {
+      trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'fiscal code'});
       formikInstance.resetForm({ values: { ...formikInstance.values, recipientId: '', searchFor: '1' } });
     }
   };
@@ -65,6 +69,11 @@ const FilterNotificationsFormBody = ({
       formikInstance.handleChange(e);
     }
     await formikInstance.setFieldTouched(e.target.id, true, false);
+  };
+
+  const handleChangeNotificationStatus = (e: ChangeEvent) => {
+    formikInstance.handleChange(e);
+    trackEventByType(TrackEventType.NOTIFICATION_FILTER_NOTIFICATION_STATE);
   };
   
   return (
@@ -128,6 +137,7 @@ const FilterNotificationsFormBody = ({
           onChange={(value: DatePickerTypes) => {
             void formikInstance.setFieldValue('startDate', value).then(() => {
               setStartDate(value);
+              trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, {source: 'from date'});
             });
           }}
           renderInput={(params) => (
@@ -165,6 +175,7 @@ const FilterNotificationsFormBody = ({
           value={endDate}
           onChange={(value: DatePickerTypes) => {
             void formikInstance.setFieldValue('endDate', value).then(() => {
+              trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, {source: 'to date'});
               setEndDate(value);
             });
           }}
@@ -195,7 +206,7 @@ const FilterNotificationsFormBody = ({
         name="status"
         label="Stato"
         select
-        onChange={formikInstance.handleChange}
+        onChange={handleChangeNotificationStatus}
         value={formikInstance.values.status}
         size="small"
         fullWidth={isMobile}

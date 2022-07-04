@@ -8,6 +8,9 @@ import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
+import { TrackEventType } from './utils/events';
+import { trackEventByType } from './utils/mixpanel';
+
 import {
   PAGOPA_HELP_EMAIL,
   SELFCARE_BASE_URL,
@@ -79,6 +82,9 @@ const App = () => {
       route: source,
       stacktrace: { error: e, errorInfo: eInfo },
     });
+  const handleLogout = () => {
+    trackEventByType(TrackEventType.USER_LOGOUT);
+    void dispatch(logout());
   };
 
   return (
@@ -98,7 +104,7 @@ const App = () => {
       loggedUser={jwtUser}
     >
       <AppMessage
-        sessionRedirect={() => dispatch(logout())}
+        sessionRedirect={handleLogout}
       />
       <LoadingOverlay />
       <Router />
