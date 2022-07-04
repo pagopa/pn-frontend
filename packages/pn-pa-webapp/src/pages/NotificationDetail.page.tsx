@@ -26,6 +26,8 @@ import {
   PnBreadcrumb,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -163,11 +165,13 @@ const NotificationDetail = () => {
   };
 
   const handleCancelNotification = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CONFIRM_CANCEL_NOTIFICATION);
     dispatch(setCancelledIun(notification.iun));
     navigate(routes.NUOVA_NOTIFICA);
   };
 
   const openModal = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
     return true;
   };
