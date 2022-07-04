@@ -15,6 +15,8 @@ type Props = {
   pagesToShow?: Array<number>;
   /** custom style */
   sx?: SxProps;
+  /** event tracking function callback for page size */
+  eventTrackingCallbackPageSize?: () => void;
 };
 
 const getA11yPaginationLabels = (
@@ -54,6 +56,7 @@ export default function CustomPagination({
   elementsPerPage = [10, 20, 50, 100, 200, 500],
   pagesToShow,
   sx,
+  eventTrackingCallbackPageSize,
 }: Props) {
   const size = paginationData.size || elementsPerPage[0];
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -72,6 +75,7 @@ export default function CustomPagination({
       paginationData.size = selectedSize;
       // reset current page
       paginationData.page = 0;
+      if(eventTrackingCallbackPageSize) eventTrackingCallbackPageSize();
       onPageRequest(paginationData);
     }
     handleClose();
