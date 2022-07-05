@@ -88,9 +88,8 @@ const NuovaDelega = () => {
   const dispatch = useAppDispatch();
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSubmit = (values: NewDelegationFormProps) => {
-    void dispatch(createDelegation(values)).then(() => {
-      trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
-    });
+    void dispatch(createDelegation(values));
+    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
 
   const handleDelegationsClick = () => {

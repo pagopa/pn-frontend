@@ -76,31 +76,9 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }
   };
 
   const handleNavigation = (item: SideMenuItem, menuFlag?: boolean) => {
-    let target;
-    switch (item.route) {
-      case '/notifiche':
-        target = 'notifications'
-        break
-      case '/deleghe':
-        target = 'delegations'
-        break
-      case '/recapiti':
-        target = 'contacts'
-        break
-      case '/users':
-        target = 'users'
-        break
-      case '/groups':
-        target = 'groups'
-        break
-      case '/api-keys':
-        target = 'api keys'
-        break
-      default:
-        target = 'other'
-        break
+    if (eventTrackingCallback) {
+      eventTrackingCallback(item.route)
     }
-    if (eventTrackingCallback) eventTrackingCallback(target)
     if (isMobile && !menuFlag) {
       setState(false);
     }
