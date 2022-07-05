@@ -4,7 +4,7 @@ import { NotFound } from '@pagopa-pn/pn-commons';
 import Dashboard from '../pages/Dashboard.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
 import NewNotification from '../pages/NewNotification.page';
-import ApiKeys from '../pages/ApiKeys.page';
+// import ApiKeys from '../pages/ApiKeys.page';
 import { PartyRole } from '../models/user';
 import RequireAuth from './RequireAuth';
 import VerifyUser from './VerifyUser';

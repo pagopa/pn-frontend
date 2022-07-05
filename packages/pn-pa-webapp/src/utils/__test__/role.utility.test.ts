@@ -1,4 +1,4 @@
-import { People, SupervisedUserCircle, VpnKey } from '@mui/icons-material';
+import { People, SupervisedUserCircle } from '@mui/icons-material';
 import Email from '@mui/icons-material/Email';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 import { PartyRole } from '../../models/user';
