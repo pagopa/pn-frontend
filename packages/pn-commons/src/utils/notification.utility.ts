@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import i18next from 'i18next';
 import { formatDate } from '../services/date.service';
 import {
   INotificationDetailTimeline,
@@ -72,7 +73,7 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
     case NotificationStatus.VIEWED:
       return {
         color: 'info',
-        label: 'Perfezionata per visione',
+        label: i18next.t('status.viewed', {ns: 'notifiche'}),
         tooltip: 'Il destinatario ha letto la notifica',
         description: 'Il destinatario ha letto la notifica entro il termine stabilito',
       };

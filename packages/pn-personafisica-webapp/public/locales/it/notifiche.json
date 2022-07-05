@@ -74,5 +74,8 @@
       "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente."
     }
   },
-  "delegatorTitle": "Le notifiche di {{name}}"
+  "delegatorTitle": "Le notifiche di {{name}}",
+  "status": {
+    "viewed": "Perfezionata per visione"
+  }
 }
