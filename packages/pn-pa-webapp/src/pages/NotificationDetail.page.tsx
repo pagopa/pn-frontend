@@ -139,6 +139,7 @@ const NotificationDetail = () => {
 
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
+      trackEventByType(TrackEventType.NOTIFICATION_DETAIL_SINGLE_ATTACHMENT);
       void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
     }
   };
