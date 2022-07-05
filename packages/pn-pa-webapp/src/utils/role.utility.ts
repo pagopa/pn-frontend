@@ -1,4 +1,4 @@
-import { Email, People, VpnKey, SupervisedUserCircle } from '@mui/icons-material';
+import { Email, People, SupervisedUserCircle } from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -6,7 +6,15 @@ import { PartyRole } from '../models/user';
 
 const BasicMenuItems: Array<SideMenuItem> = [
   { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
-  { label: 'Chiavi API', icon: VpnKey, route: routes.API_KEYS },
+  /**
+   * Refers to PN-1741
+   * Commented out because beyond MVP scope
+   * 
+   * LINKED TO:
+   * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
+   * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
+   */
+  // { label: 'Chiavi API', icon: VpnKey, route: routes.API_KEYS },
 ];
 
 function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
