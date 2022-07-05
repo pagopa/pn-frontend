@@ -1,45 +1,43 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, Fragment, ReactNode, useState } from 'react';
+import {useNavigate, useParams} from 'react-router-dom';
+import {Fragment, ReactNode, useEffect, useState} from 'react';
 import {
-  Grid,
   Box,
-  Paper,
   Button,
-  Stack,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
   DialogContentText,
+  DialogTitle,
+  Grid,
+  Paper,
+  Stack,
 } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import {makeStyles} from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
-  // PN-1714
-  // NotificationStatus,
-  TitleBox,
-  NotificationDetailTableRow,
-  NotificationDetailTable,
-  NotificationDetailDocuments,
   LegalFactId,
+  NotificationDetailDocuments,
+  NotificationDetailTable,
+  NotificationDetailTableRow,
   NotificationDetailTimeline,
-  useIsMobile,
   PnBreadcrumb,
+  TitleBox,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { Tag, TagGroup } from '@pagopa/mui-italia';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
+import {Tag, TagGroup} from '@pagopa/mui-italia';
+import {trackEventByType} from '../utils/mixpanel';
+import {TrackEventType} from '../utils/events';
 
 import * as routes from '../navigation/routes.const';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
+import {RootState} from '../redux/store';
 import {
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
   resetState,
 } from '../redux/notification/actions';
-import { setCancelledIun } from '../redux/newNotification/actions';
+import {setCancelledIun} from '../redux/newNotification/actions';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -145,6 +143,7 @@ const NotificationDetail = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT);
     void dispatch(
       getSentNotificationLegalfact({
         iun: notification.iun,
@@ -330,6 +329,7 @@ const NotificationDetail = () => {
                 historyButtonLabel="Mostra storico"
                 showMoreButtonLabel="Mostra di più"
                 showLessButtonLabel="Mostra di meno"
+                eventTrackingCallbackShowMore={() => trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)}
               />
             </Box>
           </Grid>

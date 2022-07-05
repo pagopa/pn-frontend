@@ -1,24 +1,23 @@
-import { Fragment, ReactNode, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { Grid, Box, Paper, Stack } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import {Fragment, ReactNode, useEffect} from 'react';
+import {useParams} from 'react-router-dom';
+import {useTranslation} from 'react-i18next';
+import {Box, Grid, Paper, Stack} from '@mui/material';
+import {makeStyles} from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
-  TitleBox,
   LegalFactId,
   NotificationDetailDocuments,
-  // HelpNotificationDetails,
-  NotificationDetailTableRow,
   NotificationDetailTable,
+  NotificationDetailTableRow,
   NotificationDetailTimeline,
-  useIsMobile,
   PnBreadcrumb,
+  TitleBox,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
+import {useAppDispatch, useAppSelector} from '../redux/hooks';
+import {RootState} from '../redux/store';
 import {
   getReceivedNotification,
   getReceivedNotificationDocument,
@@ -27,8 +26,8 @@ import {
 } from '../redux/notification/actions';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import { trackEventByType } from "../utils/mixpanel";
-import { TrackEventType } from "../utils/events";
+import {trackEventByType} from "../utils/mixpanel";
+import {TrackEventType} from "../utils/events";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -130,6 +129,7 @@ const NotificationDetail = () => {
   };
   
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT);
     void dispatch(getReceivedNotificationLegalfact({ iun: notification.iun, legalFact }));
   };
 
@@ -247,6 +247,7 @@ const NotificationDetail = () => {
               historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
               showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
               showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+              eventTrackingCallbackShowMore={() => trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)}
             />
           </Box>
         </Grid>
