@@ -11,7 +11,10 @@
   "filters": {
       "iun": "Inserisci il Codice IUN",
       "data_da": "Da",
-      "data_a": "A"
+      "data_a": "A",
+      "errors": {
+        "iun": "Inserisci un codice IUN valido"
+      }
   },
   "sort": {
     "title": "Ordina",
