@@ -71,6 +71,7 @@ describe('NotificationDetail Page', () => {
     result = renderComponent(notificationToFe);
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent(/Documents/i);
     expect(result?.container).toHaveTextContent(/Timeline/i);
@@ -86,6 +87,7 @@ describe('NotificationDetail Page', () => {
     result = renderComponent(getNotification({ noticeCode: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent(/Documents/i);
     expect(result?.container).toHaveTextContent(/Timeline/i);
@@ -101,6 +103,7 @@ describe('NotificationDetail Page', () => {
     result = renderComponent(getNotification({ creditorTaxId: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent(/Documents/i);
     expect(result?.container).toHaveTextContent(/Timeline/i);
@@ -116,6 +119,7 @@ describe('NotificationDetail Page', () => {
     result = renderComponent(getNotification({ creditorTaxId: "", noticeCode: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent(/Documents/i);
     expect(result?.container).toHaveTextContent(/Timeline/i);
@@ -131,6 +135,7 @@ describe('NotificationDetail Page', () => {
     result = renderComponent(getNotification());
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent(/Documents/i);
     expect(result?.container).toHaveTextContent(/Timeline/i);
