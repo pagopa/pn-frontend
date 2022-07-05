@@ -101,7 +101,11 @@ const App = () => {
       sideMenu={
         role &&
         menuItems && (
-          <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
+          <SideMenu
+              menuItems={menuItems.menuItems}
+              selfCareItems={menuItems.selfCareItems}
+              eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, {target})}
+          />
         )
       }
       productsList={productsList}

@@ -39,6 +39,7 @@ export enum TrackEventType {
   NOTIFICATION_TABLE_SIZE = 'NOTIFICATION_TABLE_SIZE',
   NOTIFICATION_TABLE_SORT = 'NOTIFICATION_TABLE_SORT',
   USER_LOGOUT = 'USER_LOGOUT',
+  USER_NAV_ITEM = 'USER_NAV_ITEM',
   USER_VIEW_CONTACTS_PROFILE = 'USER_VIEW_CONTACTS_PROFILE',
   USER_VIEW_PROFILE = 'USER_VIEW_PROFILE'
 }
@@ -118,7 +119,7 @@ export const events: {
     action: 'get notifications list'
   },
   [TrackEventType.LOGIN_FAILURE]: {
-    category: 'session',
+    category: 'user',
     action: 'error during login'
   },
   [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE]: {
@@ -158,17 +159,21 @@ export const events: {
     action: 'go to notification detail'
   },
   [TrackEventType.USER_LOGOUT]: {
-    category: 'session',
+    category: 'user',
     action: 'user logs out from action'
   },
+  [TrackEventType.USER_NAV_ITEM]: {
+    category: 'user',
+    action: 'click on a sidebar link'
+  },
   [TrackEventType.USER_VIEW_PROFILE]: {
-    category: 'profile',
+    category: 'user',
     action: 'go to user profile'
   },
   [TrackEventType.USER_VIEW_CONTACTS_PROFILE]: {
-    category: 'profile',
+    category: 'user',
     action: 'go to contacts from profile'
-  }
+  },
 };
 
 export enum EventActions {

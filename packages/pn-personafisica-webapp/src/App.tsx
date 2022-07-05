@@ -161,7 +161,12 @@ const App = () => {
       onExitAction={() => dispatch(logout())}
       eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
       eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
-      sideMenu={<SideMenu menuItems={menuItems} />}
+      sideMenu={
+        <SideMenu
+            menuItems={menuItems}
+            eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, {target})}
+        />
+      }
       showSideMenu={!fetchedTos || tos}
       productsList={productsList}
       loggedUser={jwtUser}

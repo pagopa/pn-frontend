@@ -10,9 +10,10 @@ import SideMenuList from './SideMenuList';
 type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
+  eventTrackingCallback?: (target: string) => void;
 };
 
-const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
+const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }) => {
   const [state, setState] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -75,6 +76,31 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
   };
 
   const handleNavigation = (item: SideMenuItem, menuFlag?: boolean) => {
+    let target;
+    switch (item.route) {
+      case '/notifiche':
+        target = 'notifications'
+        break
+      case '/deleghe':
+        target = 'delegations'
+        break
+      case '/recapiti':
+        target = 'contacts'
+        break
+      case '/users':
+        target = 'users'
+        break
+      case '/groups':
+        target = 'groups'
+        break
+      case '/api-keys':
+        target = 'api keys'
+        break
+      default:
+        target = 'other'
+        break
+    }
+    if (eventTrackingCallback) eventTrackingCallback(target)
     if (isMobile && !menuFlag) {
       setState(false);
     }
