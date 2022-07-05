@@ -40,6 +40,7 @@ export enum TrackEventType {
   NOTIFICATION_TABLE_SORT = 'NOTIFICATION_TABLE_SORT',
   USER_LOGOUT = 'USER_LOGOUT',
   USER_NAV_ITEM = 'USER_NAV_ITEM',
+  USER_PRODUCT_SWITCH = 'USER_PRODUCT_SWITCH',
   USER_VIEW_CONTACTS_PROFILE = 'USER_VIEW_CONTACTS_PROFILE',
   USER_VIEW_PROFILE = 'USER_VIEW_PROFILE'
 }
@@ -165,6 +166,10 @@ export const events: {
   [TrackEventType.USER_NAV_ITEM]: {
     category: 'user',
     action: 'click on a sidebar link'
+  },
+  [TrackEventType.USER_PRODUCT_SWITCH]: {
+    category: 'user',
+    action: 'switch product'
   },
   [TrackEventType.USER_VIEW_PROFILE]: {
     category: 'user',

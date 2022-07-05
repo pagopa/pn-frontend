@@ -30,7 +30,10 @@ type HeaderProps = {
   userActions?: Array<UserAction>;
   /** Actions linked to user dropdown */
   onAssistanceClick?: () => void;
+  /** Track product switch action */
+  eventTrackingCallbackProductSwitch?: (target: string) => void;
 };
+
 const pagoPAHeaderLink: RootLinkType = {
   ...pagoPALink,
   label: 'PagoPA S.p.A.',
@@ -45,9 +48,13 @@ const Header = ({
   loggedUser,
   enableDropdown,
   userActions,
-  onAssistanceClick
+  onAssistanceClick,
+  eventTrackingCallbackProductSwitch
 }: HeaderProps) => {
   const handleProductSelection = (product: ProductEntity) => {
+    if (eventTrackingCallbackProductSwitch) {
+      eventTrackingCallbackProductSwitch(product.productUrl)
+    }
     if (product.productUrl) {
       /* eslint-disable-next-line functional/immutable-data */
       window.location.href = product.productUrl;

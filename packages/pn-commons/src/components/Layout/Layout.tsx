@@ -30,7 +30,10 @@ type Props = {
   eventTrackingCallbackAppCrash?: (_error: Error, _errorInfo: ErrorInfo) => void;
   /** event callback on change language */
   eventTrackingCallbackFooterChangeLanguage?: () => void;
+  /** Track product switch action */
+  eventTrackingCallbackProductSwitch?: (target: string) => void;
   onAssistanceClick?: () => void;
+
 };
 
 export default function Layout({
@@ -46,6 +49,7 @@ export default function Layout({
   userActions,
   eventTrackingCallbackAppCrash,
   eventTrackingCallbackFooterChangeLanguage,
+  eventTrackingCallbackProductSwitch,
   onAssistanceClick,
 }: Props) {
 
@@ -64,6 +68,7 @@ export default function Layout({
           enableDropdown={enableUserDropdown}
           userActions={userActions}
           onAssistanceClick={onAssistanceClick}
+          eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
         />
         <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
           {showSideMenu && (

@@ -156,11 +156,16 @@ const App = () => {
     trackEventByType(TrackEventType.FOOTER_LANG_SWITCH);
   };
 
+  const handleEventTrackingCallbackProductSwitch = (target: string) => {
+    trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
+  };
+
   return (
     <Layout
       onExitAction={() => dispatch(logout())}
       eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
       eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
+      eventTrackingCallbackProductSwitch={(target) => handleEventTrackingCallbackProductSwitch(target)}
       sideMenu={
         <SideMenu
             menuItems={menuItems}
