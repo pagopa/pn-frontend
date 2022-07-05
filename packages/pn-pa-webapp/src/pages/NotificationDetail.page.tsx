@@ -11,6 +11,7 @@ import {
   DialogContent,
   DialogActions,
   DialogContentText,
+  Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
@@ -209,15 +210,10 @@ const NotificationDetail = () => {
       <TitleBox
         variantTitle="h4"
         title={notification.subject}
-        sx={{
-          pt: 3,
-          mb: {
-            xs: 3,
-            md: 4,
-          },
-        }}
+        sx={{ pt: 3, mb: 2 }}
         mbTitle={0}
       ></TitleBox>
+      <Typography variant="body1" mb={{xs: 3, md: 4}}>{notification.abstract}</Typography>
       {
         // PN-1714
         /*
@@ -296,7 +292,7 @@ const NotificationDetail = () => {
     <>
       <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
         {isMobile && breadcrumb}
-        <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
+        <Grid container direction={isMobile ? 'column-reverse' : 'row'} spacing={isMobile ? 3 : 0}>
           <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
             {!isMobile && breadcrumb}
             <Stack spacing={3}>
