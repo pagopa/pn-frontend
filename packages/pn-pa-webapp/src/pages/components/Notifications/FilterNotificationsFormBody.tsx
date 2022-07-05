@@ -49,10 +49,10 @@ const FilterNotificationsFormBody = ({
   const searchForHandleChange = (e: ChangeEvent) => {
     const value = (e.target as any).value;
     if (value === '0') {
-      trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'IUN code'});
+      trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'fiscal code'});
       formikInstance.resetForm({ values: { ...formikInstance.values, iunMatch: '', searchFor: '0' } });
     } else if (value === '1') {
-      trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'fiscal code'});
+      trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'IUN code'});
       formikInstance.resetForm({ values: { ...formikInstance.values, recipientId: '', searchFor: '1' } });
     }
   };
