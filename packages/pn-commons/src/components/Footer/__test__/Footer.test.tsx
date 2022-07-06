@@ -40,6 +40,6 @@ describe('Footer Component', () => {
       expect(languageElement).toHaveTextContent(LANGUAGES.it[languagesKeys[index] as 'it' | 'en']);
       fireEvent.click(languageElement);
     });
-    expect(mockEventTrackingCallbackChangeLanguage).toBeCalledTimes(2);
+    expect(mockEventTrackingCallbackChangeLanguage).toBeCalledTimes(languagesElements!.length);
   });
 });

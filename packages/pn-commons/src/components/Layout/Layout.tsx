@@ -32,8 +32,8 @@ type Props = {
   eventTrackingCallbackFooterChangeLanguage?: () => void;
   /** Track product switch action */
   eventTrackingCallbackProductSwitch?: (target: string) => void;
+  /** event on assistance click button */
   onAssistanceClick?: () => void;
-
 };
 
 export default function Layout({

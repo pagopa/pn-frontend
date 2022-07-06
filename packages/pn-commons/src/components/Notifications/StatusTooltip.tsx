@@ -17,8 +17,8 @@ const StatusTooltip = ({
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
   return (
-    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent}>
-      <Chip label={label} color={color} sx={{cursor: 'default'}} onMouseOver={eventTrackingCallback}/>
+    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} onOpen={eventTrackingCallback}>
+      <Chip label={label} color={color} sx={{cursor: 'default'}}/>
     </CustomTooltip>
   );
 };

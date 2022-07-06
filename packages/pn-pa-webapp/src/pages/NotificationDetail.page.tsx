@@ -16,6 +16,8 @@ import {
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
+  // PN-1714
+  // NotificationStatus,
   LegalFactId,
   NotificationDetailDocuments,
   NotificationDetailTable,
@@ -217,7 +219,9 @@ const NotificationDetail = () => {
         sx={{ pt: 3, mb: 2 }}
         mbTitle={0}
       ></TitleBox>
-      <Typography variant="body1" mb={{xs: 3, md: 4}}>{notification.abstract}</Typography>
+      <Typography variant="body1" mb={{ xs: 3, md: 4 }}>
+        {notification.abstract}
+      </Typography>
       {
         // PN-1714
         /*
@@ -325,7 +329,9 @@ const NotificationDetail = () => {
                 historyButtonLabel="Mostra storico"
                 showMoreButtonLabel="Mostra di più"
                 showLessButtonLabel="Mostra di meno"
-                eventTrackingCallbackShowMore={() => trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)}
+                eventTrackingCallbackShowMore={() =>
+                  trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
+                }
               />
             </Box>
           </Grid>

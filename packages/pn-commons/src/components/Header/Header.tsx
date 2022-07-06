@@ -12,8 +12,6 @@ import {
 import { pagoPALink } from '../../utils/costants';
 
 type HeaderProps = {
-  /** Assistance email for the user */
-  assistanceEmail?: string;
   /** List of available products */
   productsList: Array<ProductEntity>;
   /** Current product */

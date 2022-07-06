@@ -68,7 +68,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const handleChangeDeliveryMode = (e: ChangeEvent & {target: {value: any}}) => {
     formik.handleChange(e);
-    console.log('eeee', e);
     trackEventByType(TrackEventType.NOTIFICATION_SEND_DELIVERY_MODE, {type: e.target.value});
   };
 

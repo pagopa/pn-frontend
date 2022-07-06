@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 
-import { PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL, } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL } from './utils/constants';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 
@@ -61,14 +61,17 @@ const App = () => {
   );
 
   // TODO: get parties list from be (?)
-  const partyList: Array<PartyEntity> = useMemo(() => [
-    {
-      id: '0',
-      name: PARTY_MOCK,
-      productRole: role.role,
-      logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
-    },
-  ], [role]);
+  const partyList: Array<PartyEntity> = useMemo(
+    () => [
+      {
+        id: '0',
+        name: PARTY_MOCK,
+        productRole: role.role,
+        logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
+      },
+    ],
+    [role]
+  );
 
   useEffect(() => {
     // init mixpanel
@@ -110,26 +113,28 @@ const App = () => {
       onExitAction={handleLogout}
       eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
       eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
-      eventTrackingCallbackProductSwitch={(target) => handleEventTrackingCallbackProductSwitch(target)}
+      eventTrackingCallbackProductSwitch={(target) =>
+        handleEventTrackingCallbackProductSwitch(target)
+      }
       sideMenu={
         role &&
         menuItems && (
           <SideMenu
-              menuItems={menuItems.menuItems}
-              selfCareItems={menuItems.selfCareItems}
-              eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, { target })}
+            menuItems={menuItems.menuItems}
+            selfCareItems={menuItems.selfCareItems}
+            eventTrackingCallback={(target) =>
+              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
+            }
           />
         )
       }
       productsList={productsList}
-      productId={"0"}
+      productId={'0'}
       partyList={partyList}
       loggedUser={jwtUser}
       onAssistanceClick={handleAssistanceClick}
     >
-      <AppMessage
-        sessionRedirect={handleLogout}
-      />
+      <AppMessage sessionRedirect={handleLogout} />
       <LoadingOverlay />
       <Router />
     </Layout>
