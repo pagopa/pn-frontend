@@ -60,17 +60,13 @@ const Dashboard = () => {
 
   // route to Manual Send
   const handleRouteManualSend = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_SEND);
     navigate(routes.NUOVA_NOTIFICA);
   };
 
   // route to API keys
   const handleRouteApiKeys = () => {
     navigate(routes.API_KEYS);
-  };
-
-  const handleSendNewNotification = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_SEND);
-    navigate(routes.NUOVA_NOTIFICA);
   };
   useEffect(() => {
     const params = {
@@ -98,7 +94,7 @@ const Dashboard = () => {
         </Typography>
         <Button
           variant="contained"
-          onClick={handleSendNewNotification}
+          onClick={handleRouteManualSend}
           data-testid="newNotificationBtn"
           sx={{ marginBottom: isMobile ? 3 : undefined }}
         >
