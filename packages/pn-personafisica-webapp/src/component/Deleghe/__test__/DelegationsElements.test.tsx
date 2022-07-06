@@ -63,7 +63,7 @@ describe('DelegationElements', () => {
   it('renders the AcceptButton', () => {
     const result = render(<AcceptButton id={'1'} name={'test'} />);
 
-    expect(result.container).toHaveTextContent(/Accetta/i);
+    expect(result.container).toHaveTextContent(/deleghe.accept/i);
   });
 
   it('is Menu component accessible', async ()=>{

@@ -48,7 +48,7 @@ const initialEmptyValues = {
 const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'notifiche']);
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
@@ -62,7 +62,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   };
 
   const validationSchema = yup.object({
-    iunMatch: yup.string().matches(IUN_regex, t('Inserisci un codice IUN valido')),
+    iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', {ns: 'notifiche'})),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
   });
