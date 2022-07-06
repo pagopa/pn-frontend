@@ -1,8 +1,8 @@
-import {Fragment, ReactNode, useEffect} from 'react';
-import {useParams} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
-import {Box, Grid, Paper, Stack} from '@mui/material';
-import {makeStyles} from '@mui/styles';
+import { Fragment, ReactNode, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Grid, Box, Paper, Stack, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
   LegalFactId,
@@ -16,8 +16,8 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
-import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {RootState} from '../redux/store';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 import {
   getReceivedNotification,
   getReceivedNotificationDocument,
@@ -26,8 +26,8 @@ import {
 } from '../redux/notification/actions';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import {trackEventByType} from "../utils/mixpanel";
-import {TrackEventType} from "../utils/events";
+import { trackEventByType } from "../utils/mixpanel";
+import { TrackEventType } from "../utils/events";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -178,22 +178,17 @@ const NotificationDetail = () => {
       <TitleBox
         variantTitle="h4"
         title={notification.subject}
-        sx={{
-          pt: 3,
-          mb: {
-            xs: 3,
-            md: 4,
-          },
-        }}
+        sx={{ pt: 3, mb: 2 }}
         mbTitle={0}
       ></TitleBox>
+      <Typography variant="body1" mb={{xs: 3, md: 4}}>{notification.abstract}</Typography>
     </Fragment>
   );
 
   return (
     <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
       {isMobile && breadcrumb}
-      <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
+      <Grid container direction={isMobile ? 'column-reverse' : 'row'} spacing={isMobile ? 3 : 0}>
         <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
           {!isMobile && breadcrumb}
           <Stack spacing={3}>

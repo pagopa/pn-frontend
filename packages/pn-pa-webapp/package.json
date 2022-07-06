@@ -21,7 +21,6 @@
     "@types/react-router-dom": "^5.1.8",
     "@types/redux-logger": "^3.0.9",
     "axios": "^0.23.0",
-    "env-cmd": "^10.1.0",
     "formik": "^2.2.9",
     "lodash": "^4.17.21",
     "mixpanel-browser": "^2.45.0",
@@ -40,9 +39,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "build": "craco build",
-    "build:dev": "env-cmd -f .env.development craco build",
-    "build:uat": "env-cmd -f .env.uat craco build",
+    "build":  "craco build",
     "test": "craco test --watchAll=false",
     "test:coverage": "craco test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "eject": "craco eject",

@@ -1,5 +1,5 @@
-import {useNavigate, useParams} from 'react-router-dom';
-import {Fragment, ReactNode, useEffect, useState} from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useEffect, Fragment, ReactNode, useState } from 'react';
 import {
   Box,
   Button,
@@ -7,12 +7,13 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  Typography,
   DialogTitle,
   Grid,
   Paper,
   Stack,
 } from '@mui/material';
-import {makeStyles} from '@mui/styles';
+import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
   LegalFactId,
@@ -24,20 +25,20 @@ import {
   TitleBox,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import {Tag, TagGroup} from '@pagopa/mui-italia';
-import {trackEventByType} from '../utils/mixpanel';
-import {TrackEventType} from '../utils/events';
+import { Tag, TagGroup } from '@pagopa/mui-italia';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 
 import * as routes from '../navigation/routes.const';
-import {useAppDispatch, useAppSelector} from '../redux/hooks';
-import {RootState} from '../redux/store';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 import {
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
   resetState,
 } from '../redux/notification/actions';
-import {setCancelledIun} from '../redux/newNotification/actions';
+import { setCancelledIun } from '../redux/newNotification/actions';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -213,15 +214,10 @@ const NotificationDetail = () => {
       <TitleBox
         variantTitle="h4"
         title={notification.subject}
-        sx={{
-          pt: 3,
-          mb: {
-            xs: 3,
-            md: 4,
-          },
-        }}
+        sx={{ pt: 3, mb: 2 }}
         mbTitle={0}
       ></TitleBox>
+      <Typography variant="body1" mb={{xs: 3, md: 4}}>{notification.abstract}</Typography>
       {
         // PN-1714
         /*
@@ -300,7 +296,7 @@ const NotificationDetail = () => {
     <>
       <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
         {isMobile && breadcrumb}
-        <Grid container direction={isMobile ? 'column-reverse' : 'row'}>
+        <Grid container direction={isMobile ? 'column-reverse' : 'row'} spacing={isMobile ? 3 : 0}>
           <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
             {!isMobile && breadcrumb}
             <Stack spacing={3}>

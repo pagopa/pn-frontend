@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { fireEvent, waitFor, RenderResult, prettyDOM } from '@testing-library/react';
+import { fireEvent, waitFor, RenderResult } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import {
@@ -44,6 +44,6 @@ describe('CustomMobileDialog Context', () => {
   it('changes CustomMobileDialog Context', async () => {
     const button = result?.container.querySelector('button');
     fireEvent.click(button!);
-    await waitFor(() => expect(result?.container).toHaveTextContent('Status: true'))
+    await waitFor(() => expect(result?.container).toHaveTextContent('Status: true'));
   });
 });
