@@ -3,6 +3,7 @@ import {AppMessage, Layout, LoadingOverlay, SideMenu} from '@pagopa-pn/pn-common
 import {PartyEntity, ProductSwitchItem} from '@pagopa/mui-italia';
 
 import {useLocation} from 'react-router-dom';
+import { useUnload } from '@pagopa-pn/pn-commons';
 import Router from './navigation/routes';
 import {logout} from './redux/auth/actions';
 import {useAppDispatch, useAppSelector} from './redux/hooks';
@@ -14,6 +15,11 @@ import {mixpanelInit, trackEventByType} from './utils/mixpanel';
 import {TrackEventType} from './utils/events';
 
 const App = () => {
+  useUnload((e: Event) => {
+    e.preventDefault();
+    trackEventByType(TrackEventType.APP_UNLOAD);
+  });
+
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const dispatch = useAppDispatch();
 

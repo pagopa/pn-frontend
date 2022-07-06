@@ -38,6 +38,7 @@ export enum TrackEventType {
   CUSTOMER_CARE_CONTACT_SUCCESS = 'CUSTOMER_CARE_CONTACT_SUCCESS',
   CUSTOMER_CARE_CONTACT_FAILURE = 'CUSTOMER_CARE_CONTACT_FAILURE',
   APP_CRASH = 'APP_CRASH',
+  APP_UNLOAD = 'APP_UNLOAD',
   USER_PRODUCT_SWITCH = 'USER_PRODUCT_SWITCH',
   USER_PARTY_SWITCH = 'USER_PARTY_SWITCH',
   USER_LOGOUT = 'USER_LOGOUT',
@@ -207,6 +208,10 @@ export const events: {
   [TrackEventType.APP_CRASH]: {
     category: 'app',
     action: 'app crashed'
+  },
+  [TrackEventType.APP_UNLOAD]: {
+    category: 'app',
+    action: 'app unloaded'
   },
   [TrackEventType.USER_PRODUCT_SWITCH]: {
     category: 'user',
