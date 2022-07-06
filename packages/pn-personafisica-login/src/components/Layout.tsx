@@ -1,11 +1,9 @@
 import { Box } from '@mui/material';
 import { Footer, HeaderAccount, RootLinkType } from '@pagopa/mui-italia';
-import {
-  companyLegalInfo,
-  postLoginLinks,
-  preLoginLinks,
-} from '@pagopa-pn/pn-commons/src/utils/costants';
-import {PAGOPA_HELP_EMAIL} from "../utils/constants";
+import { companyLegalInfo, postLoginLinks, preLoginLinks, } from '@pagopa-pn/pn-commons/src/utils/costants';
+import { PAGOPA_HELP_EMAIL } from "../utils/constants";
+import { trackEventByType } from "../utils/mixpanel";
+import { TrackEventType } from "../utils/events";
 
 type Props = {
   children: any;
@@ -29,6 +27,7 @@ const LANGUAGES = {
 
 const Layout = ({ children }: Props) => {
     const handleAssistanceClick = () => {
+        trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'prelogin' });
         /* eslint-disable-next-line functional/immutable-data */
         window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
     };
@@ -50,7 +49,7 @@ const Layout = ({ children }: Props) => {
             <Box>
                 <Footer
                     loggedUser={false}
-                    companyLink={{...pagoPALink, onClick: () => window.open(pagoPALink.href, '_blank')}}
+                    companyLink={{ ...pagoPALink, onClick: () => window.open(pagoPALink.href, '_blank') }}
                     legalInfo={companyLegalInfo}
                     postLoginLinks={postLoginLinks}
                     preLoginLinks={preLoginLinks}

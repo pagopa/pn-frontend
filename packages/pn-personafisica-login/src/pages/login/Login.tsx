@@ -14,6 +14,8 @@ import Layout from '../../components/Layout';
 import { IDPS } from '../../utils/IDPS';
 import { ENV } from '../../utils/env';
 import { storageSpidSelectedOps } from '../../utils/storage';
+import { trackEventByType } from "../../utils/mixpanel";
+import { TrackEventType } from "../../utils/events";
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -35,25 +37,25 @@ const Login = () => {
     window.location.assign(
       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
     );
-    // TODO track event
-    // trackEvent(
-    //   'LOGIN_IDP_SELECTED',
-    //   {
-    //     SPID_IDP_NAME: 'CIE',
-    //     SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
-    //   },
-    //   () =>
-    //     window.location.assign(
-    //       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
-    //     )
-    // );
+    trackEventByType(
+      TrackEventType.LOGIN_IDP_SELECTED,
+      {
+        SPID_IDP_NAME: 'CIE',
+        SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
+      },
+    );
   };
 
   if (showIDPS) {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
   }
 
-  const redirectPrivacyLink = () => window.location.assign(ENV.URL_FILE.PRIVACY_DISCLAIMER);
+  const redirectPrivacyLink = () => {
+      trackEventByType(
+          TrackEventType.LOGIN_PRIVACY
+      );
+      window.location.assign(ENV.URL_FILE.PRIVACY_DISCLAIMER);
+  };
 
   const redirectToSLink = () => window.location.assign(ENV.URL_FILE.TERMS_AND_CONDITIONS);
   // trackEvent('LOGIN_PRIVACY', { SPID_IDP_NAME: 'LOGIN_PRIVACY' }, () =>

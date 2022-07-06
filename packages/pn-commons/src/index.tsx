@@ -162,7 +162,7 @@ import { IUN_regex, formatIun } from './utils/iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './utils/currency.utility';
 import { storageOpsBuilder } from './utils/storage.utility';
 import { compileRoute } from './utils/routes.utility';
-import { useUnload } from './utils/useUnload.utlity';
+import { useUnload } from './hooks/useUnload';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusInfos };

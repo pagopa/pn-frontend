@@ -1,24 +1,24 @@
-import {ErrorInfo, useEffect, useMemo} from 'react';
-import {useLocation, useNavigate} from 'react-router-dom';
-import {useTranslation} from 'react-i18next';
+import { ErrorInfo, useEffect, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import {AppMessage, Layout, LoadingOverlay, SideMenu, SideMenuItem} from '@pagopa-pn/pn-commons';
-import {ProductSwitchItem} from '@pagopa/mui-italia';
+import { AppMessage, Layout, LoadingOverlay, SideMenu, SideMenuItem, useUnload } from '@pagopa-pn/pn-commons';
+import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
-import {getToSApproval, logout} from './redux/auth/actions';
-import {useAppDispatch, useAppSelector} from './redux/hooks';
-import {PAGOPA_HELP_EMAIL} from './utils/constants';
-import {RootState} from './redux/store';
-import {Delegation} from './redux/delegation/types';
-import {getDomicileInfo, getSidemenuInformation} from './redux/sidemenu/actions';
-import {mixpanelInit, trackEventByType} from './utils/mixpanel';
-import {TrackEventType} from "./utils/events";
+import { getToSApproval, logout } from './redux/auth/actions';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
+import { PAGOPA_HELP_EMAIL } from './utils/constants';
+import { RootState } from './redux/store';
+import { Delegation } from './redux/delegation/types';
+import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
+import { mixpanelInit, trackEventByType } from './utils/mixpanel';
+import { TrackEventType } from "./utils/events";
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -78,6 +78,13 @@ const App = () => {
     []
   );
 
+  useUnload((e: Event) => {
+    e.preventDefault();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    e.defaultPrevented;
+    trackEventByType(TrackEventType.APP_UNLOAD);
+  });
+
   useEffect(() => {
     // init mixpanel
     mixpanelInit();
@@ -100,7 +107,7 @@ const App = () => {
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
     if(delegators.length > 0) {
       const myNotifications = {
-        label: t('title', {ns: 'notifiche'}),
+        label: t('title', { ns: 'notifiche' }),
         route: routes.NOTIFICHE
       };
       const mappedDelegators = delegators.map((delegator: Delegation) => ({
@@ -140,7 +147,7 @@ const App = () => {
   ];
 
   const handleAssistanceClick = () => {
-    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, {source: 'postlogin'});
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
@@ -169,7 +176,7 @@ const App = () => {
       sideMenu={
         <SideMenu
             menuItems={menuItems}
-            eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, {target})}
+            eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, { target })}
         />
       }
       showSideMenu={!fetchedTos || tos}

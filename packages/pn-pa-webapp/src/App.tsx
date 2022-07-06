@@ -1,22 +1,24 @@
-import {ErrorInfo, useEffect, useMemo} from 'react';
-import {AppMessage, Layout, LoadingOverlay, SideMenu} from '@pagopa-pn/pn-commons';
-import {PartyEntity, ProductSwitchItem} from '@pagopa/mui-italia';
+import { ErrorInfo, useEffect, useMemo } from 'react';
+import { AppMessage, Layout, LoadingOverlay, SideMenu } from '@pagopa-pn/pn-commons';
+import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useUnload } from '@pagopa-pn/pn-commons';
 import Router from './navigation/routes';
-import {logout} from './redux/auth/actions';
-import {useAppDispatch, useAppSelector} from './redux/hooks';
-import {RootState} from './redux/store';
-import {getMenuItems} from './utils/role.utility';
+import { logout } from './redux/auth/actions';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
+import { RootState } from './redux/store';
+import { getMenuItems } from './utils/role.utility';
 
-import {PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL,} from './utils/constants';
-import {mixpanelInit, trackEventByType} from './utils/mixpanel';
-import {TrackEventType} from './utils/events';
+import { PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL, } from './utils/constants';
+import { mixpanelInit, trackEventByType } from './utils/mixpanel';
+import { TrackEventType } from './utils/events';
 
 const App = () => {
   useUnload((e: Event) => {
     e.preventDefault();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    e.defaultPrevented;
     trackEventByType(TrackEventType.APP_UNLOAD);
   });
 
@@ -98,7 +100,7 @@ const App = () => {
   };
 
   const handleAssistanceClick = () => {
-    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, {source: 'postlogin'});
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
     /* eslint-disable-next-line functional/immutable-data */
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
@@ -115,7 +117,7 @@ const App = () => {
           <SideMenu
               menuItems={menuItems.menuItems}
               selfCareItems={menuItems.selfCareItems}
-              eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, {target})}
+              eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, { target })}
           />
         )
       }
