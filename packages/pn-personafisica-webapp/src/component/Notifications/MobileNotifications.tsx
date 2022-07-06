@@ -36,6 +36,18 @@ type Props = {
   currentDelegator?: Delegator;
 };
 
+/**
+ * Refers to PN-1741
+ * The following line has been added for the solely purpose of preventing
+ * the MobileNotificationsSort component to be displayed, as commenting
+ * out the relative code would have caused many "variable/prop declared
+ * but never used" warnings to arise.
+ * 
+ * To enable the sort functionality again remove the line below and any
+ * reference to IS_SORT_ENABLED
+ */
+const IS_SORT_ENABLED = false;
+
 const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDelegator }: Props) => {
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
@@ -191,7 +203,11 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
           />
         </Grid>
         <Grid item xs={6} textAlign="right">
-          {sort && showFilters && onChangeSorting && (
+          {/**
+            * Refers to PN-1741 
+            * See the comment above, where IS_SORT_ENABLE is declared!
+            * */}
+          {IS_SORT_ENABLED && sort && showFilters && onChangeSorting && (
             <MobileNotificationsSort
               title={t('sort.title')}
               optionsTitle={t('sort.options')}
