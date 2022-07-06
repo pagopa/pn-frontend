@@ -77,7 +77,7 @@ export default function Layout({
           </Box>
           )}
           <Box sx={{ flexGrow: 1 }} component="main">
-          <ErrorBoundary>{children}</ErrorBoundary>
+          <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>{children}</ErrorBoundary>
           </Box>
 
         </Stack>
