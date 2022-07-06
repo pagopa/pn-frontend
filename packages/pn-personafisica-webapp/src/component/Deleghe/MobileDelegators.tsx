@@ -26,7 +26,7 @@ const MobileDelegators = () => {
   const cardHeader: [CardElement, CardElement] = [
     {
       id: 'status',
-      label: t('deleghe.table.'),
+      label: t('deleghe.table.status'),
       getLabel(value: string, row: Item) {
         const { label, color } = getDelegationStatusLabelAndColor(value as DelegationStatus);
         if (value === DelegationStatus.ACTIVE) {
@@ -54,35 +54,35 @@ const MobileDelegators = () => {
   const cardBody: Array<CardElement> = [
     {
       id: 'name',
-      label: t('Nome'),
+      label: t('deleghe.table.name'),
       getLabel(value: string) {
         return <b>{value}</b>;
       },
     },
     {
       id: 'email',
-      label: t('Email'),
+      label: t('deleghe.table.email'),
       getLabel(value: string) {
         return value;
       },
     },
     {
       id: 'startDate',
-      label: t('Inizio Delega'),
+      label: t('deleghe.table.delegationStart'),
       getLabel(value: string) {
         return value;
       },
     },
     {
       id: 'endDate',
-      label: t('Fine Delega'),
+      label: t('deleghe.table.delegationEnd'),
       getLabel(value: string) {
         return value;
       },
     },
     {
       id: 'visibilityIds',
-      label: t('Permessi per vedere'),
+      label: t('deleghe.table.permissions'),
       getLabel(value: Array<string>) {
         return <OrganizationsList organizations={value} textVariant="body2" />;
       },
