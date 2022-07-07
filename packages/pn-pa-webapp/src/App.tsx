@@ -98,7 +98,6 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    trackEventByType(TrackEventType.USER_LOGOUT);
     void dispatch(logout());
   };
 

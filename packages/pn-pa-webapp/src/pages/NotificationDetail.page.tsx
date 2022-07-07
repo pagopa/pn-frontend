@@ -140,13 +140,11 @@ const NotificationDetail = () => {
 
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
-      trackEventByType(TrackEventType.NOTIFICATION_DETAIL_SINGLE_ATTACHMENT);
       void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
     }
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT);
     void dispatch(
       getSentNotificationLegalfact({
         iun: notification.iun,
@@ -169,7 +167,6 @@ const NotificationDetail = () => {
   };
 
   const handleCancelNotification = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CONFIRM_CANCEL_NOTIFICATION);
     dispatch(setCancelledIun(notification.iun));
     navigate(routes.NUOVA_NOTIFICA);
   };

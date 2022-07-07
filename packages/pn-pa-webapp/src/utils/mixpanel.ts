@@ -66,22 +66,27 @@ function trackEvent(event_name: string, properties?: any): void {
  */
 export const trackingMiddleware: Middleware =
   // ({getState}: MiddlewareAPI<any>) =>
-  () =>
-  (next: Dispatch<AnyAction>) =>
-  (action: PayloadAction<any, string>): any => {
-    if (action.type in events) {
-      const idx = Object.values(TrackEventType).indexOf(action.type as TrackEventType);
-      const eventKey = Object.keys(TrackEventType)[idx];
-      const attributes = events[action.type].getAttributes?.(action.payload);
 
-      const eventParameters = attributes
-          ? { ...events[action.type], attributes }
+    () =>
+    (next: Dispatch<AnyAction>) =>
+    (action: PayloadAction<any, string>): any => {
+      if (action.type in events) {
+        const idx = Object.values(TrackEventType).indexOf(action.type as TrackEventType);
+        const eventKey = Object.keys(TrackEventType)[idx];
+        const attributes = events[action.type].getAttributes?.(action.payload);
+
+        const eventParameters = attributes
+          ? {
+              category: events[action.type].category,
+              action: events[action.type].action,
+              attributes,
+            }
           : events[action.type];
-      trackEvent(eventKey, eventParameters);
-    }
+        trackEvent(eventKey, eventParameters);
+      }
 
-    return next(action);
-  };
+      return next(action);
+    };
 
 /**
  * Function to track events outside redux

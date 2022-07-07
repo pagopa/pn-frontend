@@ -1,5 +1,4 @@
 export enum TrackEventType {
-  GET_NOTIFICATIONS = 'getSentNotifications/fulfilled',
   NOTIFICATIONS_CHANGE_PAGE = 'setPagination',
   NOTIFICATION_FILTER_TYPE = 'NOTIFICATION_FILTER_TYPE',
   NOTIFICATION_FILTER_DATE = 'NOTIFICATION_FILTER_DATE',
@@ -8,9 +7,9 @@ export enum TrackEventType {
   NOTIFICATION_FILTER_SEARCH = 'NOTIFICATION_FILTER_SEARCH',
   NOTIFICATION_FILTER_REMOVE = 'NOTIFICATION_FILTER_REMOVE',
   NOTIFICATION_DETAIL_CANCEL_NOTIFICATION = 'NOTIFICATION_DETAIL_CANCEL_NOTIFICATION',
-  NOTIFICATION_DETAIL_CONFIRM_CANCEL_NOTIFICATION = 'NOTIFICATION_DETAIL_CONFIRM_CANCEL_NOTIFICATION',
+  NOTIFICATION_DETAIL_CONFIRM_CANCEL_NOTIFICATION = 'setCancelledIun/fulfilled',
   NOTIFICATION_DETAIL_ALL_ATTACHMENTS = 'NOTIFICATION_DETAIL_ALL_ATTACHMENTS',
-  NOTIFICATION_DETAIL_SINGLE_ATTACHMENT = 'NOTIFICATION_DETAIL_SINGLE_ATTACHMENT',
+  NOTIFICATION_DETAIL_SINGLE_ATTACHMENT = 'getSentNotificationDocument/fulfilled',
   NOTIFICATION_SEND = 'NOTIFICATION_SEND',
   NOTIFICATION_SEND_DELIVERY_MODE = 'NOTIFICATION_SEND_DELIVERY_MODE',
   NOTIFICATION_SEND_PAYMENT_MODE = 'NOTIFICATION_SEND_PAYMENT_MODE',
@@ -31,7 +30,7 @@ export enum TrackEventType {
   NOTIFICATION_TABLE_SIZE = 'NOTIFICATION_TABLE_SIZE',
   NOTIFICATION_TABLE_PAGINATION = 'NOTIFICATION_TABLE_PAGINATION',
   NOTIFICATION_TIMELINE_ALL_ATTACHMENTS = 'NOTIFICATION_TIMELINE_ALL_ATTACHMENTS',
-  NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT = 'NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT',
+  NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT = 'getSentNotificationLegalfact/fulfilled',
   NOTIFICATION_TIMELINE_VIEW_MORE = 'NOTIFICATION_TIMELINE_VIEW_MORE',
   CUSTOMER_CARE_MAILTO = 'CUSTOMER_CARE_MAILTO',
   CUSTOMER_CARE_CONTACT = 'CUSTOMER_CARE_CONTACT',
@@ -41,10 +40,10 @@ export enum TrackEventType {
   APP_UNLOAD = 'APP_UNLOAD',
   USER_PRODUCT_SWITCH = 'USER_PRODUCT_SWITCH',
   USER_PARTY_SWITCH = 'USER_PARTY_SWITCH',
-  USER_LOGOUT = 'USER_LOGOUT',
+  USER_LOGOUT = 'logout/fulfilled',
   USER_NAV_ITEM = 'USER_NAV_ITEM',
   FOOTER_ACCESSIBILITY = 'FOOTER_ACCESSIBILITY',
-  FOOTER_LANG_SWITCH = 'FOOTER_LANG_SWITCH'
+  FOOTER_LANG_SWITCH = 'FOOTER_LANG_SWITCH',
 }
 
 export const events: {
@@ -54,188 +53,184 @@ export const events: {
     getAttributes?: (payload: { [key: string]: string }) => { [key: string]: string };
   };
 } = {
-  [TrackEventType.GET_NOTIFICATIONS]: {
-    category: 'notifications',
-    action: 'get notifications list'
-  },
   [TrackEventType.NOTIFICATIONS_CHANGE_PAGE]: {
     category: 'notifications',
-    action: 'change page'
+    action: 'change page',
   },
   [TrackEventType.NOTIFICATION_FILTER_TYPE]: {
     category: 'notifications',
-    action: 'filter by type'
+    action: 'filter by type',
   },
   [TrackEventType.NOTIFICATION_FILTER_DATE]: {
     category: 'notifications',
-    action: 'filter by date'
+    action: 'filter by date',
   },
   [TrackEventType.NOTIFICATION_FILTER_NOTIFICATION_STATE]: {
     category: 'notifications',
-    action: 'filter by notification status'
+    action: 'filter by notification status',
   },
   [TrackEventType.NOTIFICATION_FILTER_CODE_VALIDATION_RATE]: {
     category: 'notifications',
-    action: 'filter validation code'
+    action: 'filter validation code',
   },
   [TrackEventType.NOTIFICATION_FILTER_SEARCH]: {
     category: 'notifications',
-    action: 'click on filter search'
+    action: 'click on filter search',
   },
   [TrackEventType.NOTIFICATION_FILTER_REMOVE]: {
     category: 'notifications',
-    action: 'click on remove filters'
+    action: 'click on remove filters',
   },
   [TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION]: {
     category: 'notifications',
-    action: 'cancel notification'
+    action: 'cancel notification',
   },
   [TrackEventType.NOTIFICATION_DETAIL_CONFIRM_CANCEL_NOTIFICATION]: {
     category: 'notifications',
-    action: 'confirm cancel notification'
+    action: 'confirm cancel notification',
   },
   [TrackEventType.NOTIFICATION_DETAIL_ALL_ATTACHMENTS]: {
     category: 'notifications',
-    action: 'detail all attachments'
+    action: 'detail all attachments',
   },
   [TrackEventType.NOTIFICATION_DETAIL_SINGLE_ATTACHMENT]: {
     category: 'notifications',
-    action: 'detail single attachment'
+    action: 'detail single attachment',
   },
   [TrackEventType.NOTIFICATION_SEND]: {
     category: 'notifications',
-    action: 'send notification'
+    action: 'send notification',
   },
   [TrackEventType.NOTIFICATION_SEND_DELIVERY_MODE]: {
     category: 'notifications',
-    action: 'delivery mode'
+    action: 'delivery mode',
   },
   [TrackEventType.NOTIFICATION_SEND_PAYMENT_MODE]: {
     category: 'notifications',
-    action: 'payment mode'
+    action: 'payment mode',
   },
   [TrackEventType.NOTIFICATION_SEND_PRELIMINARY_INFO]: {
     category: 'notifications',
-    action: 'preliminary info'
+    action: 'preliminary info',
   },
   [TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE]: {
     category: 'notifications',
-    action: 'recipient type'
+    action: 'recipient type',
   },
   [TrackEventType.NOTIFICATION_SEND_PHYSICAL_ADDRESS]: {
     category: 'notifications',
-    action: 'phsycal address'
+    action: 'phsycal address',
   },
   [TrackEventType.NOTIFICATION_SEND_DIGITAL_DOMICILE]: {
     category: 'notifications',
-    action: 'digital domicile'
+    action: 'digital domicile',
   },
   [TrackEventType.NOTIFICATION_SEND_MULTIPLE_RECIPIENTS]: {
     category: 'notifications',
-    action: 'multiple recipients'
+    action: 'multiple recipients',
   },
   [TrackEventType.NOTIFICATION_SEND_RECIPIENT_INFO]: {
     category: 'notifications',
-    action: 'recipient info'
+    action: 'recipient info',
   },
   [TrackEventType.NOTIFICATION_SEND_ATTACHMENTS]: {
     category: 'notifications',
-    action: 'attachments'
+    action: 'attachments',
   },
   [TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES]: {
     category: 'notifications',
-    action: 'payments mode'
+    action: 'payments mode',
   },
   [TrackEventType.NOTIFICATION_SEND_EXIT_WARNING]: {
     category: 'notifications',
-    action: 'confirm cancel send notification'
+    action: 'confirm cancel send notification',
   },
   [TrackEventType.NOTIFICATION_SEND_EXIT_FLOW]: {
     category: 'notifications',
-    action: 'cancel send notification'
+    action: 'cancel send notification',
   },
   [TrackEventType.NOTIFICATION_SEND_EXIT_CANCEL]: {
     category: 'notifications',
-    action: 'abort cancel notification'
+    action: 'abort cancel notification',
   },
   [TrackEventType.NOTIFICATION_TABLE_SORT]: {
     category: 'notifications',
-    action: 'sorting table'
+    action: 'sorting table',
   },
   [TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION]: {
     category: 'notifications',
-    action: 'click on row table'
+    action: 'click on row table',
   },
   [TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP]: {
     category: 'notifications',
-    action: 'open table row tooltip'
+    action: 'open table row tooltip',
   },
   [TrackEventType.NOTIFICATION_TABLE_SIZE]: {
     category: 'notifications',
-    action: 'table rows per page'
+    action: 'table rows per page',
   },
   [TrackEventType.NOTIFICATION_TABLE_PAGINATION]: {
     category: 'notifications',
-    action: 'table pagination'
+    action: 'table pagination',
   },
   [TrackEventType.NOTIFICATION_TIMELINE_ALL_ATTACHMENTS]: {
     category: 'notifications',
-    action: 'timeline all attachments'
+    action: 'timeline all attachments',
   },
   [TrackEventType.NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT]: {
     category: 'notifications',
-    action: 'single single attachment'
+    action: 'single single attachment',
   },
   [TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE]: {
     category: 'notifications',
-    action: 'timeline view mode'
+    action: 'timeline view mode',
   },
   [TrackEventType.CUSTOMER_CARE_MAILTO]: {
     category: 'customer care',
-    action: 'click on customer care email'
+    action: 'click on customer care email',
   },
   [TrackEventType.CUSTOMER_CARE_CONTACT]: {
     category: 'customer care',
-    action: 'click on customer care form'
+    action: 'click on customer care form',
   },
   [TrackEventType.CUSTOMER_CARE_CONTACT_SUCCESS]: {
     category: 'customer care',
-    action: 'send customer care form success'
+    action: 'send customer care form success',
   },
   [TrackEventType.CUSTOMER_CARE_CONTACT_FAILURE]: {
     category: 'customer care',
-    action: 'send customer care form failed'
+    action: 'send customer care form failed',
   },
   [TrackEventType.APP_CRASH]: {
     category: 'app',
-    action: 'app crashed'
+    action: 'app crashed',
   },
   [TrackEventType.APP_UNLOAD]: {
     category: 'app',
-    action: 'app unloaded'
+    action: 'app unloaded',
   },
   [TrackEventType.USER_PRODUCT_SWITCH]: {
     category: 'user',
-    action: 'switch product'
+    action: 'switch product',
   },
   [TrackEventType.USER_PARTY_SWITCH]: {
     category: 'user',
-    action: 'switch ente'
+    action: 'switch ente',
   },
   [TrackEventType.USER_LOGOUT]: {
     category: 'user',
-    action: 'user logout'
+    action: 'user logout',
   },
   [TrackEventType.USER_NAV_ITEM]: {
     category: 'user',
-    action: 'user menu navigation'
+    action: 'user menu navigation',
   },
   [TrackEventType.FOOTER_ACCESSIBILITY]: {
     category: 'footer',
-    action: 'click on app accessibility'
+    action: 'click on app accessibility',
   },
   [TrackEventType.FOOTER_LANG_SWITCH]: {
     category: 'footer',
-    action: 'click on app language option'
-  }
+    action: 'click on app language option',
+  },
 };
