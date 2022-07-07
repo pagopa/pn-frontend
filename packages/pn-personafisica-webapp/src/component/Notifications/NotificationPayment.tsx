@@ -388,7 +388,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
                 <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
               </Grid>
               )}
-              <Stack direction={{ xs: 'column', lg: 'row' }} >
+              <Stack direction={{ xs: 'column', lg: 'row' }} sx={{alignSelf: 'center'}}>
                 {attachments.map((attachment) => (
                 <Button
                   key={attachment.name}
