@@ -154,7 +154,7 @@ const NuovaDelega = () => {
             {t('nuovaDelega.title')}
           </Fragment>
         }
-        currentLocationLabel={t('Nuova delega')}
+        currentLocationLabel={t('nuovaDelega.breadcrumb')}
       />
       <TitleBox
         title={t('nuovaDelega.title')}
@@ -289,8 +289,8 @@ const NuovaDelega = () => {
                           <FormControlLabel
                             value="tuttiGliEnti"
                             control={<Radio />}
-                            name={t('selectTuttiEntiOrSelezionati')}
-                            label={t('nuovaDelega.form.allEntities') as string}
+                            name={'selectTuttiEntiOrSelezionati'}
+                            label={t('nuovaDelega.form.allEntities')}
                           />
                           <Grid container className={classes.direction}>
                             <Grid item xs={isMobile ? 12 : 6}>
@@ -298,18 +298,18 @@ const NuovaDelega = () => {
                                 value="entiSelezionati"
                                 control={<Radio />}
                                 name={'selectTuttiEntiOrSelezionati'}
-                                label={t('nuovaDelega.form.onlySelected') as string}
+                                label={t('nuovaDelega.form.onlySelected')}
                               />
                             </Grid>
                             <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
                               {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                                 <FormControl fullWidth>
-                                  <InputLabel id="ente-select">{t('Seleziona enti')}</InputLabel>
+                                  <InputLabel id="ente-select">{t('nuovaDelega.form.selectEntities')}</InputLabel>
                                   <Select
                                     labelId="ente-select"
                                     id="ente-select"
                                     value={values.enteSelect.uniqueIdentifier}
-                                    label={t('Seleziona enti')}
+                                    label={t('nuovaDelega.form.selectEntities')}
                                     onChange={(event: SelectChangeEvent<string>) => {
                                       setFieldValue('enteSelect', {
                                         name: event.target.name,

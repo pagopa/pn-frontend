@@ -194,8 +194,34 @@ describe('SpecialContacts Component', () => {
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
             recipientId="mocked-recipientId"
-            legalAddresses={[]}
-            courtesyAddresses={[]}
+            legalAddresses={[
+              {
+                addressType: '',
+                recipientId: 'mocked-recipientId',
+                senderId: 'default',
+                channelType: LegalChannelType.PEC,
+                value: 'mocked@mail.com',
+                code: '12345',
+              },
+            ]}
+            courtesyAddresses={[
+              {
+                addressType: '',
+                recipientId: 'mocked-recipientId',
+                senderId: 'default',
+                channelType: CourtesyChannelType.EMAIL,
+                value: 'mocked@mail.com',
+                code: '12345',
+              },
+              {
+                addressType: '',
+                recipientId: 'mocked-recipientId',
+                senderId: 'default',
+                channelType: CourtesyChannelType.SMS,
+                value: '12345678910',
+                code: '12345',
+              }
+            ]}
           />
         </DigitalContactsCodeVerificationProvider>,
         {

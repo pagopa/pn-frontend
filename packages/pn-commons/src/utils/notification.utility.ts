@@ -133,7 +133,7 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
           'Il destinatario ha visualizzato la notifica'
         ),
       };
-    case NotificationStatus.CANCELED:
+    case NotificationStatus.CANCELLED:
       return {
         color: 'warning',
         ...localizeStatus(
@@ -180,7 +180,7 @@ export const NotificationAllowedStatus = [
     label: getI18orDefaultLabel('status.paid', 'Pagata'),
   },
   {
-    value: NotificationStatus.CANCELED,
+    value: NotificationStatus.CANCELLED,
     label: getI18orDefaultLabel('status.canceled', 'Annullata'),
   },
   {

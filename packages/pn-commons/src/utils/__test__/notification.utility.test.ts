@@ -106,9 +106,9 @@ describe('notification utility functions', () => {
     );
   });
 
-  it('return notification status infos - CANCELED', () => {
+  it('return notification status infos - CANCELLED', () => {
     testNotificationStatusInfosFn(
-      NotificationStatus.CANCELED,
+      NotificationStatus.CANCELLED,
       'Annullata',
       'warning',
       "L'ente ha annullato l'invio della notifica"
