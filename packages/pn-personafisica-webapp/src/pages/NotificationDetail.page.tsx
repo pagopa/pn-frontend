@@ -127,7 +127,7 @@ const NotificationDetail = () => {
   };
   
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    void dispatch(getReceivedNotificationLegalfact({ iun: notification.iun, legalFact }));
+    void dispatch(getReceivedNotificationLegalfact({ iun: notification.iun, legalFact, mandateId }));
   };
 
   const dowloadDocument = (url: string) => {

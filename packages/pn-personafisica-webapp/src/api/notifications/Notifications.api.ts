@@ -83,10 +83,11 @@ export const NotificationsApi = {
    */
   getReceivedNotificationLegalfact: (
     iun: string,
-    legalFact: LegalFactId
+    legalFact: LegalFactId,
+    mandateId?: string
   ): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
+      .get<{ url: string }>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact, mandateId))
       .then((response) => getDownloadUrl(response)),
   /**
    * Gets current user specified Payment Attachment
