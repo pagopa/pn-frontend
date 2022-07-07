@@ -11,15 +11,15 @@ type Props = {
 };
 
 const physicalAddressFields = [
-  { key: 'at', label: 'Presso', width: 6 },
-  { key: 'foreignState', label: 'Stato*', width: 6 },
-  { key: 'address', label: 'Via*', width: 9 },
+  { key: 'address', label: 'Indirizzo*', width: 9 },
   { key: 'houseNumber', label: 'Numero civico*', width: 3 },
-  { key: 'zip', label: 'Codice postale*', width: 6 },
+  { key: 'municipalityDetails', label: 'Località', width: 6 },
   { key: 'municipality', label: 'Comune*', width: 6 },
-  { key: 'municipalityDetails', label: 'Frazione', width: 6 },
   { key: 'province', label: 'Provincia*', width: 6 },
-  { key: 'addressDetails', label: 'Altre informazioni (scala, piano)', width: 12 },
+  { key: 'zip', label: 'Codice postale*', width: 6 },
+  { key: 'foreignState', label: 'Stato*', width: 6 },
+  { key: 'addressDetails', label: 'Note aggiuntive (presso, scala, piano)', width: 6 },
+  { key: 'at', label: 'Presso', width: 6 },
 ];
 
 const PhysicalAddress = ({

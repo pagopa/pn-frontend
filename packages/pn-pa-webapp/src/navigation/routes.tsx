@@ -18,7 +18,7 @@ function Router() {
         <Route
           element={
             <RequireAuth
-              roles={[PartyRole.MANAGER, PartyRole.OPERATOR]}
+              roles={[PartyRole.MANAGER, PartyRole.OPERATOR, PartyRole.DELEGATE]}
             />
           }
         >
