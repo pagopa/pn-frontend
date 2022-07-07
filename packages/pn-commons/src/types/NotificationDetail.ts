@@ -78,7 +78,9 @@ export interface INotificationDetailTimeline {
     | ScheduleDigitalWorkflowDetails
     | SendCourtesyMessageDetails
     | SendDigitalDetails
-    | SendPaperDetails;
+    | SendPaperDetails
+    // PN-1647
+    | NotHandledDetails
     // only fe
   hidden?: boolean;
 }
@@ -156,6 +158,12 @@ export interface SendDigitalDetails extends BaseDetails {
   errors?: Array<string>;
 }
 
+// PN-1647
+export interface NotHandledDetails extends BaseDetails {
+  reasonCode: string;
+  reason: string;
+}
+
 export interface NotificationDetailRecipient {
   recipientType: RecipientType;
   taxId: string;
@@ -223,7 +231,9 @@ export enum TimelineCategory {
   SEND_PAPER_FEEDBACK = 'SEND_PAPER_FEEDBACK',
   PAYMENT = 'PAYMENT',
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
-  REQUEST_REFUSED = 'REQUEST_REFUSED'
+  REQUEST_REFUSED = 'REQUEST_REFUSED',
+  // PN-1647
+  NOT_HANDLED = 'NOT_HANDLED'
 }
 
 interface DigitalAddress {
