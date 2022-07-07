@@ -18,8 +18,8 @@ const physicalAddressFields = [
   { key: 'province', label: 'Provincia*', width: 6 },
   { key: 'zip', label: 'Codice postale*', width: 6 },
   { key: 'foreignState', label: 'Stato*', width: 6 },
-  { key: 'addressDetails', label: 'Note aggiuntive (presso, scala, piano)', width: 6 },
   { key: 'at', label: 'Presso', width: 6 },
+  { key: 'addressDetails', label: 'Note aggiuntive (scala, piano)', width: 12 },
 ];
 
 const PhysicalAddress = ({
