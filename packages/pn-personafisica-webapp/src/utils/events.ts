@@ -49,6 +49,7 @@ export const events: {
   [key: string]: {
     category: string;
     action: string;
+    getAttributes?: (payload: { [key: string]: string }) => { [key: string]: string };
   };
 } = {
   [TrackEventType.APP_CRASH]: {
@@ -119,10 +120,6 @@ export const events: {
     category: 'notification',
     action: 'click/tap on  the banner link in notifications detail/list'
   },
-  [TrackEventType.GET_NOTIFICATIONS]: {
-    category: 'notification',
-    action: 'get notifications list'
-  },
   [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE]: {
     category: 'notification',
     action: 'contact assistance'
@@ -151,9 +148,13 @@ export const events: {
     category: 'notification',
     action: 'click/tap on  the banner link in notifications detail/list'
   },
+  [TrackEventType.NOTIFICATION_FILTER_SEARCH]: {
+    category: 'notification',
+    action: 'click/tap on  the filter button in notifications filter'
+  },
   [TrackEventType.NOTIFICATION_TABLE_PAGINATION]: {
     category: 'notification',
-    action: 'change page'
+    action: 'change page',
   },
   [TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION]: {
     category: 'notification',

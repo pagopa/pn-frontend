@@ -1,4 +1,4 @@
-import { Action, AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
+import { AnyAction, Dispatch, Middleware, PayloadAction } from '@reduxjs/toolkit';
 import { init, track, Mixpanel } from 'mixpanel-browser';
 import { events, TrackEventType } from './events';
 /**
@@ -68,9 +68,16 @@ export const trackingMiddleware: Middleware =
   // ({getState}: MiddlewareAPI<any>) =>
   () =>
   (next: Dispatch<AnyAction>) =>
-  (action: Action<any>): any => {
+  (action: PayloadAction<any, string>): any => {
     if (action.type in events) {
-      trackEvent(action.type, events[action.type]);
+      const idx = Object.values(TrackEventType).indexOf(action.type as TrackEventType);
+      const eventKey = Object.keys(TrackEventType)[idx];
+      const attributes = events[action.type].getAttributes?.(action.payload);
+
+      const eventParameters = attributes
+          ? { ...events[action.type], attributes }
+          : events[action.type];
+      trackEvent(eventKey, eventParameters);
     }
 
     return next(action);

@@ -51,6 +51,7 @@ export const events: {
   [key: string]: {
     category: string;
     action: string;
+    getAttributes?: (payload: { [key: string]: string }) => { [key: string]: string };
   };
 } = {
   [TrackEventType.GET_NOTIFICATIONS]: {
