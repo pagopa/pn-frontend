@@ -1,5 +1,6 @@
 export enum TrackEventType {
   APP_UNLOAD = 'APP_UNLOAD',
+  LOGIN_FAILURE = 'LOGIN_FAILURE',
   LOGIN_INTENT = 'LOGIN_INTENT',
   LOGIN_IDP_SELECTED = 'LOGIN_IDP_SELECTED',
   LOGIN_PRIVACY = 'LOGIN_PRIVACY',
@@ -16,6 +17,10 @@ export const events: {
   [TrackEventType.APP_UNLOAD]: {
     category: 'app',
     action: 'app unloaded'
+  },
+  [TrackEventType.LOGIN_FAILURE]: {
+    category: 'user',
+    action: 'error during login'
   },
   [TrackEventType.LOGIN_INTENT]: {
     category: 'user',

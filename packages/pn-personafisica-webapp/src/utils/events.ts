@@ -19,7 +19,6 @@ export enum TrackEventType {
   FOOTER_ACCESSIBILITY = 'FOOTER_ACCESSIBILITY',
   FOOTER_LANG_SWITCH = 'FOOTER_LANG_SWITCH',
   GET_NOTIFICATIONS = 'getReceivedNotifications/fulfilled',
-  LOGIN_FAILURE = 'LOGIN_FAILURE',
   NOTIFICATION_DETAIL_ALL_ATTACHMENTS = 'NOTIFICATION_DETAIL_ALL_ATTACHMENTS',
   NOTIFICATION_DETAIL_HELP_BOX = 'NOTIFICATION_DETAIL_HELP_BOX',
   NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE = 'NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE',
@@ -123,10 +122,6 @@ export const events: {
   [TrackEventType.GET_NOTIFICATIONS]: {
     category: 'notification',
     action: 'get notifications list'
-  },
-  [TrackEventType.LOGIN_FAILURE]: {
-    category: 'user',
-    action: 'error during login'
   },
   [TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE]: {
     category: 'notification',

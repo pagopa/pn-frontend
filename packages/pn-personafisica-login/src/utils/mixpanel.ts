@@ -37,7 +37,7 @@ export const mixpanelInit = function (): void {
  * @param event_name event name
  * @param properties event data
  */
-export function trackEvent(event_name: string, properties?: any): void {
+function trackEvent(event_name: string, properties?: any): void {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
         console.log(event_name, properties);

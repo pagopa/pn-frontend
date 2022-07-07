@@ -1,5 +1,5 @@
-import {createContext, FC, ReactNode, useContext, useEffect, useState} from 'react';
-import {Trans, useTranslation} from 'react-i18next';
+import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import {
   Box,
@@ -11,15 +11,15 @@ import {
   DialogTitle,
   Typography
 } from '@mui/material';
-import {appStateActions, CodeModal} from '@pagopa-pn/pn-commons';
+import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
 
-import {useAppDispatch, useAppSelector} from '../../redux/hooks';
-import {CourtesyChannelType, LegalChannelType, SaveDigitalAddressParams,} from '../../models/contacts';
-import {RootState} from '../../redux/store';
-import {createOrUpdateCourtesyAddress, createOrUpdateLegalAddress,} from '../../redux/contact/actions';
-import {trackEventByType} from "../../utils/mixpanel";
-import {EventActions, TrackEventType} from "../../utils/events";
-import {getContactEventType} from "../../utils/contacts.utility";
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { CourtesyChannelType, LegalChannelType, SaveDigitalAddressParams, } from '../../models/contacts';
+import { RootState } from '../../redux/store';
+import { createOrUpdateCourtesyAddress, createOrUpdateLegalAddress, } from '../../redux/contact/actions';
+import { trackEventByType } from "../../utils/mixpanel";
+import { EventActions, TrackEventType } from "../../utils/events";
+import { getContactEventType } from "../../utils/contacts.utility";
 
 type ModalProps = {
   labelRoot: string;
@@ -117,7 +117,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       code: verificationCode,
     };
 
-    trackEventByType(eventTypeByChannel, { action: EventActions.ADD});
+    trackEventByType(eventTypeByChannel, { action: EventActions.ADD });
     dispatch(actionToBeDispatched(digitalAddressParams))
       .unwrap()
       .then((res) => {

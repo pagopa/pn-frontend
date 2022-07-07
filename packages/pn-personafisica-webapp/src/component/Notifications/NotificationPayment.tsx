@@ -1,4 +1,4 @@
-import {LoadingButton} from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
 import {
   Alert,
   AlertColor,
@@ -13,7 +13,7 @@ import {
   Theme,
   Typography
 } from '@mui/material';
-import {Box} from '@mui/system';
+import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import {
@@ -25,14 +25,14 @@ import {
   PaymentStatus,
   useIsMobile
 } from '@pagopa-pn/pn-commons';
-import {useEffect, useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {useAppDispatch, useAppSelector} from '../../redux/hooks';
-import {getNotificationPaymentInfo, getPaymentAttachment} from '../../redux/notification/actions';
-import {RootState} from '../../redux/store';
-import {CHECKOUT_URL, PAGOPA_HELP_EMAIL, PAYMENT_DISCLAIMER_URL} from '../../utils/constants';
-import {TrackEventType} from "../../utils/events";
-import {trackEventByType} from "../../utils/mixpanel";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { getNotificationPaymentInfo, getPaymentAttachment } from '../../redux/notification/actions';
+import { RootState } from '../../redux/store';
+import { CHECKOUT_URL, PAGOPA_HELP_EMAIL, PAYMENT_DISCLAIMER_URL } from '../../utils/constants';
+import { TrackEventType } from "../../utils/events";
+import { trackEventByType } from "../../utils/mixpanel";
 
 interface Props {
   iun: string;
