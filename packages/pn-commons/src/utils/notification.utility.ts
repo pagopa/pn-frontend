@@ -11,6 +11,7 @@ import {
   NotificationDetailRecipient,
   DigitalDomicileType,
   NotificationDetail,
+  NotHandledDetails,
 } from '../types/NotificationDetail';
 import { GetNotificationsParams } from '../types/Notifications';
 import { NotificationStatus } from '../types/NotificationStatus';
@@ -219,6 +220,7 @@ export function getNotificationTimelineStatusInfos(
     'Attestazione opponibile a terzi'
   );
   const receiptLabel = getLocalizedOrDefaultLabel('notifications', `detail.timeline.view-receipt`, 'Vedi la ricevuta');
+  const recipientLabel = `${recipient?.taxId} - ${recipient?.denomination}`;
 
   switch (step.category) {
     case TimelineCategory.SCHEDULE_ANALOG_WORKFLOW:
@@ -229,7 +231,7 @@ export function getNotificationTimelineStatusInfos(
           "È in corso l'invio della notifica per via cartacea."
         ),
         linkText: legalFactLabel,
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW:
       return {
@@ -239,7 +241,7 @@ export function getNotificationTimelineStatusInfos(
           "È in corso l'invio della notifica per via digitale."
         ),
         linkText: legalFactLabel,
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_COURTESY_MESSAGE:
       const type =
@@ -257,7 +259,7 @@ export function getNotificationTimelineStatusInfos(
             type,
           }
         ),
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE:
       if (!(step.details as SendDigitalDetails).digitalAddress?.address) {
@@ -276,7 +278,7 @@ export function getNotificationTimelineStatusInfos(
             address: (step.details as SendDigitalDetails).digitalAddress?.address,
           }
         ),
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK:
       const digitalDomicileFeedbackErrors = (step.details as SendDigitalDetails).errors;
@@ -294,7 +296,7 @@ export function getNotificationTimelineStatusInfos(
             }
           ),
           linkText: legalFactLabel,
-          recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+          recipient: recipientLabel,
         };
       }
       return {
@@ -310,7 +312,7 @@ export function getNotificationTimelineStatusInfos(
           }
         ),
         linkText: legalFactLabel,
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_FEEDBACK:
       const digitalFeedbackErrors = (step.details as SendDigitalDetails).errors;
@@ -325,7 +327,7 @@ export function getNotificationTimelineStatusInfos(
             }
           ),
           linkText: legalFactLabel,
-          recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+          recipient: recipientLabel,
         };
       }
       return {
@@ -338,7 +340,7 @@ export function getNotificationTimelineStatusInfos(
           }
         ),
         linkText: legalFactLabel,
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
       return {
@@ -354,7 +356,7 @@ export function getNotificationTimelineStatusInfos(
           }
         ),
         linkText: legalFactLabel,
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_ANALOG_DOMICILE:
       if (
@@ -374,7 +376,7 @@ export function getNotificationTimelineStatusInfos(
             }
           ),
           linkText: receiptLabel,
-          recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+          recipient: recipientLabel,
         };
       }
       return {
@@ -390,7 +392,7 @@ export function getNotificationTimelineStatusInfos(
           }
         ),
         linkText: receiptLabel,
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_PAPER_FEEDBACK:
       return {
@@ -405,6 +407,15 @@ export function getNotificationTimelineStatusInfos(
         linkText: receiptLabel,
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
+    // PN-1647
+    case TimelineCategory.NOT_HANDLED:
+      if ((step.details as NotHandledDetails).reasonCode === '001' && (step.details as NotHandledDetails).reason === 'Paper message not handled') {
+        return {
+          label: 'Annullata',
+          description: `La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante la sperimentazione della piattaforma.`,
+        };
+      }
+      return null;
     default:
       return {
         label: 'Non definito',
@@ -422,6 +433,8 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_PAPER_FEEDBACK,
+  // PN-1647
+  TimelineCategory.NOT_HANDLED
 ];
 
 /**
