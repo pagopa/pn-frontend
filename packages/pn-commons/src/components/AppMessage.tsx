@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { appStateActions, appStateSelectors } from '../redux/slices/appStateSlice';
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import { IAppMessage } from '../types/AppMessage';
 import { MessageType } from '../types/MessageType';
 import SessionModal from './SessionModal';
@@ -41,7 +42,7 @@ const AppMessage = ({ sessionRedirect }: Props) => {
             message={errorMessage.message}
             handleClose={handleSessionModalClose}
             onConfirm={handleSessionModalClose}
-            onConfirmLabel={"Entra"}
+            onConfirmLabel={getLocalizedOrDefaultLabel('common', 'button.enter', 'Entra')}
           />
         ) : (
           <Toast

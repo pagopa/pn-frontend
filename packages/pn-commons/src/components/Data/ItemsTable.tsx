@@ -12,6 +12,7 @@ import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
 import { Notification } from '../../types/Notifications';
 import { Column, Item, Sort } from '../../types/ItemsTable';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 type Props = {
   /** Table columns */
@@ -59,7 +60,7 @@ function ItemsTable({
   return (
     <Root>
       <TableContainer sx={{ marginBottom: '10px' }}>
-        <Table stickyHeader aria-label="Tabella di item">
+        <Table stickyHeader aria-label={getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')}>
           <TableHead>
             <TableRow>
               {columns.map((column) => (

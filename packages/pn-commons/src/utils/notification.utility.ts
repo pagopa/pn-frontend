@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import i18next from 'i18next';
 import { formatDate } from '../services/date.service';
 import {
   INotificationDetailTimeline,
@@ -15,14 +14,7 @@ import {
 } from '../types/NotificationDetail';
 import { GetNotificationsParams } from '../types/Notifications';
 import { NotificationStatus } from '../types/NotificationStatus';
-
-function getI18orDefaultLabel(
-  path: string,
-  defaultLabel: string,
-  data?: { [key: string]: string | undefined }
-): string {
-  return i18next.t(path, { ns: 'notifiche', ...data }) || defaultLabel;
-}
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 function localizeStatus(
   status: string,
@@ -35,9 +27,9 @@ function localizeStatus(
   description: string;
 } {
   return {
-    label: getI18orDefaultLabel(`status.${status}`, defaultLabel),
-    tooltip: getI18orDefaultLabel(`status.${status}-tooltip`, defaultTooltip),
-    description: getI18orDefaultLabel(`status.${status}-description`, defaultDescription),
+    label: getLocalizedOrDefaultLabel('notifications', `status.${status}`, defaultLabel),
+    tooltip: getLocalizedOrDefaultLabel('notifications', `status.${status}-tooltip`, defaultTooltip),
+    description: getLocalizedOrDefaultLabel('notifications', `status.${status}-description`, defaultDescription),
   };
 }
 
@@ -154,38 +146,38 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
 }
 
 export const NotificationAllowedStatus = [
-  { value: 'All', label: getI18orDefaultLabel('status.all', 'Tutti gli stati') },
+  { value: 'All', label: getLocalizedOrDefaultLabel('notifications', 'status.all', 'Tutti gli stati') },
   {
     value: NotificationStatus.ACCEPTED,
-    label: getI18orDefaultLabel('status.accepted', 'Depositata'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.accepted', 'Depositata'),
   },
   {
     value: NotificationStatus.DELIVERED,
-    label: getI18orDefaultLabel('status.delivered', 'Consegnata'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.delivered', 'Consegnata'),
   },
   {
     value: NotificationStatus.DELIVERING,
-    label: getI18orDefaultLabel('status.delivering', 'Invio in corso'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.delivering', 'Invio in corso'),
   },
   {
     value: NotificationStatus.EFFECTIVE_DATE,
-    label: getI18orDefaultLabel('status.effective-date', 'Perfezionata per decorrenza termini'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.effective-date', 'Perfezionata per decorrenza termini'),
   },
   {
     value: NotificationStatus.VIEWED,
-    label: getI18orDefaultLabel('status.viewed', 'Perfezionata per visione'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.viewed', 'Perfezionata per visione'),
   },
   {
     value: NotificationStatus.PAID,
-    label: getI18orDefaultLabel('status.paid', 'Pagata'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.paid', 'Pagata'),
   },
   {
     value: NotificationStatus.CANCELLED,
-    label: getI18orDefaultLabel('status.canceled', 'Annullata'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.canceled', 'Annullata'),
   },
   {
     value: NotificationStatus.UNREACHABLE,
-    label: getI18orDefaultLabel('status.unreachable', 'Destinatario irreperibile'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.unreachable', 'Destinatario irreperibile'),
   },
 ];
 
@@ -196,8 +188,9 @@ function localizeTimelineStatus(
   data?: { [key: string]: string | undefined }
 ): { label: string; description: string } {
   return {
-    label: getI18orDefaultLabel(`detail.timeline.${category}`, defaultLabel),
-    description: getI18orDefaultLabel(
+    label: getLocalizedOrDefaultLabel('notifications', `detail.timeline.${category}`, defaultLabel),
+    description: getLocalizedOrDefaultLabel(
+      'notifications', 
       `detail.timeline.${category}-description`,
       defaultDescription,
       data
@@ -220,11 +213,12 @@ export function getNotificationTimelineStatusInfos(
   recipient?: string;
 } | null {
   const recipient = !_.isNil(step.details.recIndex) ? ricipients[step.details.recIndex] : undefined;
-  const legalFactLabel = getI18orDefaultLabel(
+  const legalFactLabel = getLocalizedOrDefaultLabel(
+    'notifications', 
     `detail.legalfact`,
     'Attestazione opponibile a terzi'
   );
-  const receiptLabel = getI18orDefaultLabel(`detail.timeline.view-receipt`, 'Vedi la ricevuta');
+  const receiptLabel = getLocalizedOrDefaultLabel('notifications', `detail.timeline.view-receipt`, 'Vedi la ricevuta');
 
   switch (step.category) {
     case TimelineCategory.SCHEDULE_ANALOG_WORKFLOW:

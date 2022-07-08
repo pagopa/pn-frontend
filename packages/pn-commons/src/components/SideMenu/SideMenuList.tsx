@@ -11,13 +11,14 @@ import {
 import { makeStyles } from '@mui/styles';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { SideMenuItem } from '../../types/SideMenuItem';
 import SideMenuListItem from './SideMenuListItem';
 
 type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
-  handleLinkClick: (item: SideMenuItem, flag?:boolean) => void;
+  handleLinkClick: (item: SideMenuItem, flag?: boolean) => void;
   selectedItem: { index: number; label: string; route: string };
 };
 
@@ -26,7 +27,7 @@ const useStyles = makeStyles(() => ({
     maxWidth: '90vw',
     ['@media only screen and (max-width: 1200px)']: {
       width: '300px',
-    }
+    },
   },
 }));
 
@@ -66,7 +67,11 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
         role="navigation"
         data-testid="menu-list"
         component="nav"
-        aria-label="piattaforma-notifiche navigazione principale"
+        aria-label={getLocalizedOrDefaultLabel(
+          'common',
+          'menu.aria-label',
+          'piattaforma-notifiche navigazione principale'
+        )}
         className={classes.root}
       >
         {menuItems.map((item: SideMenuItem, index: number) =>
@@ -81,9 +86,9 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                 }
                 onClick={() => {
                   if (!item.notSelectable) {
-                    setSelectedIndex({ label: item.label, index, route: item.route});
+                    setSelectedIndex({ label: item.label, index, route: item.route });
                   }
-                  handleLinkClick(item, true) ;
+                  handleLinkClick(item, true);
                   handleClick(item.label);
                 }}
               >
@@ -104,7 +109,6 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
                 <List>
                   {item.children.map((child, childIndex) => (
                     <SideMenuListItem
-
                       key={child.label}
                       selected={
                         selectedIndex &&
@@ -145,7 +149,11 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
       {selfCareItems && (
         <List
           component="nav"
-          aria-label="secondary piattaforma-notifiche sender"
+          aria-label={getLocalizedOrDefaultLabel(
+            'common',
+            'menu.aria-label-sender',
+            'piattaforma-notifiche navigazione mittente'
+          )}
           className={classes.root}
         >
           {selfCareItems?.map((selfcareItem: SideMenuItem, sIndex: number) => (

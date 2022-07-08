@@ -149,6 +149,7 @@ export type {DatePickerTypes};
 // functions
 import { createAppError } from './services/message.service';
 import { formatDate } from './services/date.service';
+import { initLocalization } from './services/localization.service';
 import { calculatePages } from './utils/pagination.utility';
 import {
   getNotificationStatusInfos,
@@ -169,6 +170,7 @@ export { parseNotificationDetail };
 export { filtersApplied };
 export { createAppError };
 export { formatDate };
+export { initLocalization };
 export { calculatePages };
 export { getMonthString, getDay, getTime, getNextDay, formatToTimezoneString };
 export { formatFiscalCode };

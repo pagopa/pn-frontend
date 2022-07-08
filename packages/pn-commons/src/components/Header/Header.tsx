@@ -9,6 +9,7 @@ import {
   UserAction,
 } from '@pagopa/mui-italia';
 
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { pagoPALink } from '../../utils/costants';
 
 type HeaderProps = {
@@ -33,7 +34,7 @@ type HeaderProps = {
 const pagoPAHeaderLink: RootLinkType = {
   ...pagoPALink,
   label: 'PagoPA S.p.A.',
-  title: 'Sito di PagoPA S.p.A.'
+  title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.')
 };
 
 const Header = ({
