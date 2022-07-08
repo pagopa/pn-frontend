@@ -174,9 +174,11 @@ describe('NotificationDetail Page', () => {
   test('renders NotificationDetail if status is cancelled', async () => {
     result = renderComponent(getCancelledNotification());
     
-    // even if documentsAvailable is set to true the component will not display any document
+    // payment component and documents should be hidden if notification
+    // status is "cancelled" even though documentsAvailable is true
     const documentTitle = result.queryByText("Mocked document");
     expect(documentTitle).not.toBeInTheDocument();
+    expect(result?.container).not.toHaveTextContent(/Payment/i);
 
     const documentsText = result.getByText("detail.acts_files.notification_cancelled");
     expect(documentsText).toBeInTheDocument();
