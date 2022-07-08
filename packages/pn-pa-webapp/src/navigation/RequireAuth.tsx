@@ -17,8 +17,10 @@ interface Props {
 const inactivityTimer = 5 * 60 * 1000;
 
 /**
- * This component returns Outlet if user is logged in.
- * Then all private routes can be accessible
+ * This component returns Outlet if user is logged in and has privileges to access some areas.
+ * Then all private routes can be accessed
+ * 
+ * @param roles: List of PartyRole allowed to access some areas
  */
 /* eslint-disable functional/immutable-data */
 const RequireAuth = ({ roles }: Props) => {
@@ -45,7 +47,7 @@ const RequireAuth = ({ roles }: Props) => {
         <SessionModal
           open
           title={'Stai uscendo da Piattaforma Notifiche'}
-          message={'Non hai i provilegi per accedere a questa sezione'}
+          message={'Non hai i privilegi per accedere a questa sezione'}
           handleClose={goToSelfcareLogin}
         />
       )}
