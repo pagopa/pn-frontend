@@ -24,11 +24,11 @@
     "options": "Opzioni sort"
   },
   "detail": {
-    "date": "Data",
+    "date": "Data di invio",
     "payment-terms": "Da pagare entro il",
     "payment-terms-expiration": "Entro il",
-    "fullname": "Nome e cognome",
     "sender": "Mittente",
+    "recipient": "Destinatario",
     "cancelled-iun": "Codice IUN annullato",
     "iun": "Codice IUN",
     "groups": "Gruppi",

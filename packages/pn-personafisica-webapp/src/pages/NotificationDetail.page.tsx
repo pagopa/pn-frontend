@@ -72,6 +72,16 @@ const NotificationDetail = () => {
     value: ReactNode;
   }> = [
     {
+      label: t('detail.sender', { ns: 'notifiche' }),
+      rawValue: notification.senderDenomination,
+      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
+    },
+    {
+      label: t('detail.recipient', { ns: 'notifiche' }),
+      rawValue: currentRecipient?.denomination,
+      value: <Box fontWeight={600}>{currentRecipient?.denomination}</Box>,
+    },
+    {
       label: t('detail.date', { ns: 'notifiche' }),
       rawValue: notification.sentAt,
       value: <Box fontWeight={600}>{notification.sentAt}</Box>,
@@ -82,35 +92,15 @@ const NotificationDetail = () => {
       value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
     },
     {
-      label: t('detail.fullname', { ns: 'notifiche' }),
-      rawValue: currentRecipient?.denomination,
-      value: <Box fontWeight={600}>{currentRecipient?.denomination}</Box>,
-    },
-    {
-      label: t('detail.sender', { ns: 'notifiche' }),
-      rawValue: notification.senderDenomination,
-      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
-    },
-    {
-      label: t('detail.cancelled-iun', { ns: 'notifiche' }),
-      rawValue: notification.cancelledIun,
-      value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    },
-    {
       label: t('detail.iun', { ns: 'notifiche' }),
       rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
     {
-      label: t('detail.notice-code', { ns: 'notifiche' }),
-      rawValue: noticeCode,
-      value: <Box fontWeight={600}>{noticeCode}</Box>,
-    },
-    {
-      label: t('detail.creditor-tax-id', { ns: 'notifiche' }),
-      rawValue: creditorTaxId,
-      value: <Box fontWeight={600}>{creditorTaxId}</Box>,
-    },
+      label: t('detail.cancelled-iun', { ns: 'notifiche' }),
+      rawValue: notification.cancelledIun,
+      value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
+    }
   ];
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
     .filter((row) => row.rawValue)
