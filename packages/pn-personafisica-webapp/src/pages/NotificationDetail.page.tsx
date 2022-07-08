@@ -206,7 +206,7 @@ const NotificationDetail = () => {
           {!isMobile && breadcrumb}
           <Stack spacing={3}>
             <NotificationDetailTable rows={detailTableRows} />
-            {currentRecipient?.payment && creditorTaxId && noticeCode &&
+            {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode &&
               <NotificationPayment
                 iun={notification.iun}
                 notificationPayment={currentRecipient.payment}
