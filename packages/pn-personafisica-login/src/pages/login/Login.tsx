@@ -53,10 +53,6 @@ const Login = () => {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
   }
 
-  // trackEvent('LOGIN_PRIVACY', { SPID_IDP_NAME: 'LOGIN_PRIVACY' }, () =>
-  //   window.location.assign(ENV.URL_FILE.PRIVACY_DISCLAIMER)
-  // );
-
   return (
     <Layout>
       <Grid container direction="column" my={isMobile ? 4 : 16}>
