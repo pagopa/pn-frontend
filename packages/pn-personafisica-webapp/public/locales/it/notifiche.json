@@ -77,7 +77,8 @@
     },
     "acts_files": {
       "downloadable_acts": "Puoi scaricare gli atti entro 120 giorni dalla data di perfezionamento. Oltre questo termine, dovrai rivolgerti al mittente.",
-      "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente."
+      "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente.",
+      "notification_cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili."
     }
   },
   "delegatorTitle": "Le notifiche di {{name}}"

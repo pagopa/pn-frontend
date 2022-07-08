@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useEffect } from 'react';
+import { Fragment, ReactNode, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Grid, Box, Paper, Stack, Typography } from '@mui/material';
@@ -14,6 +14,7 @@ import {
   NotificationDetailTimeline,
   useIsMobile,
   PnBreadcrumb,
+  NotificationStatus,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -130,6 +131,21 @@ const NotificationDetail = () => {
     /* eslint-enable functional/immutable-data */
   };
 
+  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
+
+  const hasDocumentsAvailable = (isCancelled || !notification.documentsAvailable) ? false : true;
+
+  const getDownloadFilesMessage = useCallback((): string => {
+    if(isCancelled) {
+      return t('detail.acts_files.notification_cancelled', { ns: 'notifiche' });
+    } else if (hasDocumentsAvailable) {
+      return t('detail.acts_files.downloadable_acts', { ns: 'notifiche' });
+    } else {
+      return t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
+    }
+  }, [isCancelled, hasDocumentsAvailable]);
+
+
   useEffect(() => {
     if (id) {
       void dispatch(getReceivedNotification({iun: id, mandateId}));
@@ -180,7 +196,7 @@ const NotificationDetail = () => {
           {!isMobile && breadcrumb}
           <Stack spacing={3}>
             <NotificationDetailTable rows={detailTableRows} />
-            {currentRecipient?.payment && creditorTaxId && noticeCode &&
+            {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode &&
               <NotificationPayment
                 iun={notification.iun}
                 notificationPayment={currentRecipient.payment}
@@ -191,14 +207,10 @@ const NotificationDetail = () => {
             <Paper sx={{ p: 3 }} className="paperContainer">
               <NotificationDetailDocuments
                 title={t('detail.acts', { ns: 'notifiche' })}
-                documents={notification.documents}
+                documents={isCancelled ? [] : notification.documents}
                 clickHandler={documentDowloadHandler}
-                documentsAvailable={notification.documentsAvailable}
-                downloadFilesMessage={
-                  notification.documentsAvailable
-                    ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
-                    : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' })
-                }
+                documentsAvailable={hasDocumentsAvailable}
+                downloadFilesMessage={getDownloadFilesMessage()}
               />
             </Paper>
             {/* TODO decommentare con pn-841
