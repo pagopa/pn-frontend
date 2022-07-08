@@ -4,8 +4,6 @@ import { formatToSlicedISOString } from "@pagopa-pn/pn-commons/src/services/date
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { CreateDelegationResponse, NewDelegationFormProps } from '../delegation/types';
-import { trackEventByType } from "../../utils/mixpanel";
-import { TrackEventType } from "../../utils/events";
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
   'createDelegation',
@@ -25,7 +23,6 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
       return await DelegationsApi.createDelegation(payload);
     } catch (e: any) {
       if (e.response.status === 400 && e.response.data.title === "Delega già presente") {
-        trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ERROR, { type: e.response.data.title});
         return rejectWithValue({
           response: {
             ...e.response,

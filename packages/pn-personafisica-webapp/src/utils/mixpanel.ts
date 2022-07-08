@@ -75,7 +75,7 @@ export const trackingMiddleware: Middleware =
       const attributes = events[action.type].getAttributes?.(action.payload);
 
       const eventParameters = attributes
-          ? { ...events[action.type], attributes }
+          ? { category: events[action.type].category, action: events[action.type].action, attributes }
           : events[action.type];
       trackEvent(eventKey, eventParameters);
     }

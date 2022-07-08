@@ -124,12 +124,10 @@ const NotificationDetail = () => {
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
       void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
-      trackEventByType(TrackEventType.NOTIFICATION_DETAIL_SINGLE_ATTACHMENT);
     }
   };
   
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_SINGLE_ATTACHMENT);
     void dispatch(getReceivedNotificationLegalfact({ iun: notification.iun, legalFact }));
   };
 
@@ -145,7 +143,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (id) {
-      void dispatch(getReceivedNotification({iun: id, mandateId}));
+      void dispatch(getReceivedNotification({ iun: id, mandateId }));
     }
     return () => void dispatch(resetState());
   }, []);
@@ -181,7 +179,7 @@ const NotificationDetail = () => {
         sx={{ pt: 3, mb: 2 }}
         mbTitle={0}
       ></TitleBox>
-      <Typography variant="body1" mb={{xs: 3, md: 4}}>{notification.abstract}</Typography>
+      <Typography variant="body1" mb={{ xs: 3, md: 4 }}>{notification.abstract}</Typography>
     </Fragment>
   );
 

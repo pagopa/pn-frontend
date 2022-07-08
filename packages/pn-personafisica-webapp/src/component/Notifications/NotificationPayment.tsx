@@ -141,7 +141,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   
   const onDocumentClick = (name: PaymentAttachmentSName) => {
     void dispatch(getPaymentAttachment({ iun, attachmentName: name }));
-    trackEventByType(name ===PaymentAttachmentSName.PAGOPA
+    trackEventByType(name === PaymentAttachmentSName.PAGOPA
       ? TrackEventType.NOTIFICATION_DETAIL_PAYMENT_F24_FILE
       : TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
   };
@@ -233,7 +233,6 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
             action: MessageActionType.CONTACT_SUPPORT
           };
         case PaymentStatus.FAILED:
-          trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ERROR, { type: paymentInfo.errorCode });
           return getFailedMessageData();
       }
     }

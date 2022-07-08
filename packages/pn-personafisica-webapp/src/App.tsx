@@ -69,7 +69,6 @@ const App = () => {
         id: 'logout',
         label: t('header.logout'),
         onClick: () => {
-          trackEventByType(TrackEventType.USER_LOGOUT);
             void dispatch(logout());
         },
         icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
