@@ -24,12 +24,12 @@ export const getReceivedNotification = createAsyncThunk<
 
 export const getReceivedNotificationLegalfact = createAsyncThunk<
   { url: string },
-  { iun: string; legalFact: LegalFactId }
+  { iun: string; legalFact: LegalFactId; mandateId?: string }
 >(
   'getReceivedNotificationLegalfact',
-  async (params: { iun: string; legalFact: LegalFactId }, { rejectWithValue }) => {
+  async (params: { iun: string; legalFact: LegalFactId; mandateId?: string }, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getReceivedNotificationLegalfact(params.iun, params.legalFact);
+      return await NotificationsApi.getReceivedNotificationLegalfact(params.iun, params.legalFact, params.mandateId);
     } catch (e) {
       return rejectWithValue(e);
     }
