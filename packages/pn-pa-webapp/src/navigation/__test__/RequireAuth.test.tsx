@@ -80,26 +80,3 @@ describe('RequireAuth Component without token', () => {
     expect(result?.container).toHaveTextContent(/Session Modal/i);
   });
 });
-
-describe('RequireAuth Component with token', () => {
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  it('renders RequireAuth', () => {
-    // useSelector mock
-    const useSelectorSpy = jest.spyOn(redux, 'useSelector');
-    useSelectorSpy.mockReturnValueOnce('mocked-token').mockReturnValueOnce(managerRole);
-
-    // useState mock
-    const setState = jest.fn();
-    const setStateFn: any = (init: any) => [init, setState];
-    const useStateSpy = jest.spyOn(React, 'useState');
-    useStateSpy.mockImplementation(setStateFn);
-
-    // render component
-    const result = render(<RequireAuth roles={[PartyRole.MANAGER]} />);
-    expect(setState).toBeCalledTimes(1);
-    expect(result?.container).toHaveTextContent(/Generic Page/i);
-  });
-});

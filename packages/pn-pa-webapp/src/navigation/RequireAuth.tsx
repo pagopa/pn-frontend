@@ -41,14 +41,6 @@ const RequireAuth = ({ roles }: Props) => {
     }
   }, [token, role]);
 
-  useEffect(() => {
-    console.log('---------------');
-    console.log('roles', roles);
-    console.log('role', role);
-    console.log('token', token);
-    console.log('userHasRequiredRole', userHasRequiredRole);
-  });
-
   return (
     <Fragment>
       {accessDenied && (
