@@ -150,7 +150,7 @@ export type {DatePickerTypes};
 import { createAppError } from './services/message.service';
 import { formatDate } from './services/date.service';
 import { calculatePages } from './utils/pagination.utility';
-import { getAorB } from './utils/genericFunctions.utility';
+import { getValidValue } from './utils/genericFunctions.utility';
 import {
   getNotificationStatusInfos,
   NotificationAllowedStatus,
@@ -171,7 +171,7 @@ export { filtersApplied };
 export { createAppError };
 export { formatDate };
 export { calculatePages };
-export { getAorB };
+export { getValidValue };
 export { getMonthString, getDay, getTime, getNextDay, formatToTimezoneString };
 export { formatFiscalCode };
 export { fiscalCodeRegex };

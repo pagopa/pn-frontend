@@ -14,7 +14,7 @@ import {
   CustomMobileDialogToggle,
   CustomMobileDialogContent,
   filtersApplied,
-  getAorB,
+  getValidValue,
   formatToTimezoneString,
   getNextDay,
 } from '@pagopa-pn/pn-commons';
@@ -69,9 +69,9 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       searchFor: '0',
       startDate: new Date(filters.startDate),
       endDate: new Date(filters.endDate),
-      recipientId: getAorB(filters.recipientId, ''),
-      iunMatch: getAorB(filters.iunMatch, ''),
-      status: getAorB(filters.status, NotificationAllowedStatus[0].value),
+      recipientId: getValidValue(filters.recipientId, ''),
+      iunMatch: getValidValue(filters.iunMatch, ''),
+      status: getValidValue(filters.status, NotificationAllowedStatus[0].value),
     };
   };
 
@@ -86,8 +86,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       const currentFilters = {
         startDate: formatToTimezoneString(values.startDate),
         endDate: formatToTimezoneString(getNextDay(values.endDate)),
-        recipientId: getAorB(values.recipientId, undefined),
-        iunMatch: getAorB(values.iunMatch, undefined),
+        recipientId: getValidValue(values.recipientId),
+        iunMatch: getValidValue(values.iunMatch),
         status: values.status === 'All' ? undefined : values.status,
       };
       if (_.isEqual(prevFilters, currentFilters)) {
