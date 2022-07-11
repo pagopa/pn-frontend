@@ -30,9 +30,9 @@ const Home: NextPage = () => (
 
     <main>
       <Hero {...getHeroData(USER_TYPE)} />
-      <Infoblock {...getInfoblockData(USER_TYPE)}></Infoblock>
-      <Infoblock {...getInfoblockData(USER_TYPE)}></Infoblock>
-      <Infoblock {...getInfoblockData(USER_TYPE)}></Infoblock>
+      <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 1")}></Infoblock>
+      <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 2")}></Infoblock>
+      <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 3")}></Infoblock>
       <Showcase {...getShowcaseData(USER_TYPE)} />
       <HorizontalNav {...getHorizontalNavData(USER_TYPE)}></HorizontalNav>
       <Walkthrough {...getWalkthroughData(USER_TYPE)} />
