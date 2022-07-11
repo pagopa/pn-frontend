@@ -45,9 +45,7 @@ const TermsOfService = () => {
 
           <Typography textAlign="center" variant="body1">
             <Trans i18nKey={'tos.body'}>
-              Entra con SPID o CIE.
-              <br />
-              Seleziona la modalità di autenticazione che preferisci.
+              Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.
             </Trans>
           </Typography>
           <Box display="flex" alignItems="center" mt={8}>

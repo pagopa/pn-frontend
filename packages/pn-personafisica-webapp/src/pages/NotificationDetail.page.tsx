@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useEffect } from 'react';
+import { Fragment, ReactNode, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Grid, Box, Paper, Stack, Typography } from '@mui/material';
@@ -14,6 +14,7 @@ import {
   NotificationDetailTimeline,
   useIsMobile,
   PnBreadcrumb,
+  NotificationStatus,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -72,6 +73,16 @@ const NotificationDetail = () => {
     value: ReactNode;
   }> = [
     {
+      label: t('detail.sender', { ns: 'notifiche' }),
+      rawValue: notification.senderDenomination,
+      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
+    },
+    {
+      label: t('detail.recipient', { ns: 'notifiche' }),
+      rawValue: currentRecipient?.denomination,
+      value: <Box fontWeight={600}>{currentRecipient?.denomination}</Box>,
+    },
+    {
       label: t('detail.date', { ns: 'notifiche' }),
       rawValue: notification.sentAt,
       value: <Box fontWeight={600}>{notification.sentAt}</Box>,
@@ -82,35 +93,15 @@ const NotificationDetail = () => {
       value: <Box fontWeight={600}>{notification.paymentExpirationDate}</Box>,
     },
     {
-      label: t('detail.fullname', { ns: 'notifiche' }),
-      rawValue: currentRecipient?.denomination,
-      value: <Box fontWeight={600}>{currentRecipient?.denomination}</Box>,
-    },
-    {
-      label: t('detail.sender', { ns: 'notifiche' }),
-      rawValue: notification.senderDenomination,
-      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
-    },
-    {
-      label: t('detail.cancelled-iun', { ns: 'notifiche' }),
-      rawValue: notification.cancelledIun,
-      value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    },
-    {
       label: t('detail.iun', { ns: 'notifiche' }),
       rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
     {
-      label: t('detail.notice-code', { ns: 'notifiche' }),
-      rawValue: noticeCode,
-      value: <Box fontWeight={600}>{noticeCode}</Box>,
-    },
-    {
-      label: t('detail.creditor-tax-id', { ns: 'notifiche' }),
-      rawValue: creditorTaxId,
-      value: <Box fontWeight={600}>{creditorTaxId}</Box>,
-    },
+      label: t('detail.cancelled-iun', { ns: 'notifiche' }),
+      rawValue: notification.cancelledIun,
+      value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
+    }
   ];
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
     .filter((row) => row.rawValue)
@@ -139,6 +130,21 @@ const NotificationDetail = () => {
     link.click();
     /* eslint-enable functional/immutable-data */
   };
+
+  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
+
+  const hasDocumentsAvailable = (isCancelled || !notification.documentsAvailable) ? false : true;
+
+  const getDownloadFilesMessage = useCallback((): string => {
+    if(isCancelled) {
+      return t('detail.acts_files.notification_cancelled', { ns: 'notifiche' });
+    } else if (hasDocumentsAvailable) {
+      return t('detail.acts_files.downloadable_acts', { ns: 'notifiche' });
+    } else {
+      return t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' });
+    }
+  }, [isCancelled, hasDocumentsAvailable]);
+
 
   useEffect(() => {
     if (id) {
@@ -190,7 +196,7 @@ const NotificationDetail = () => {
           {!isMobile && breadcrumb}
           <Stack spacing={3}>
             <NotificationDetailTable rows={detailTableRows} />
-            {currentRecipient?.payment && creditorTaxId && noticeCode &&
+            {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode &&
               <NotificationPayment
                 iun={notification.iun}
                 notificationPayment={currentRecipient.payment}
@@ -201,14 +207,10 @@ const NotificationDetail = () => {
             <Paper sx={{ p: 3 }} className="paperContainer">
               <NotificationDetailDocuments
                 title={t('detail.acts', { ns: 'notifiche' })}
-                documents={notification.documents}
+                documents={isCancelled ? [] : notification.documents}
                 clickHandler={documentDowloadHandler}
-                documentsAvailable={notification.documentsAvailable}
-                downloadFilesMessage={
-                  notification.documentsAvailable
-                    ? t('detail.acts_files.downloadable_acts', { ns: 'notifiche' })
-                    : t('detail.acts_files.not_downloadable_acts', { ns: 'notifiche' })
-                }
+                documentsAvailable={hasDocumentsAvailable}
+                downloadFilesMessage={getDownloadFilesMessage()}
               />
             </Paper>
             {/* TODO decommentare con pn-841

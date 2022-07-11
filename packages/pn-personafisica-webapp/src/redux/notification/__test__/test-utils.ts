@@ -223,5 +223,21 @@ export const getNotification = (payment?: {noticeCode?: string; creditorTaxId?: 
   return parseNotificationDetail(notification);
 };
 
+export const getUnavailableDocsNotification = (): NotificationDetail => {
+  const notification = {...notificationFromBe};
+  // eslint-disable-next-line functional/immutable-data
+  notification.documentsAvailable = false;
+
+  return parseNotificationDetail(notification);
+};
+
+export const getCancelledNotification = (): NotificationDetail => {
+  const notification = {...notificationFromBe};
+  // eslint-disable-next-line functional/immutable-data
+  notification.notificationStatus = NotificationStatus.CANCELLED;
+
+  return parseNotificationDetail(notification);
+};
+
 export const notificationToFe = parseNotificationDetail(notificationFromBe);
 

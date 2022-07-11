@@ -44,18 +44,15 @@ test('renders button Entra con CIE', () => {
   );
 });
 
-test('renders the privacy disclaimer link', () => {
+test('does not render the privacy disclaimer link', () => {
   render(<Login />);
-  const privacyDisclaimerLink = screen.getByText(/Informativa Privacy/i);
+  const privacyDisclaimerLink = screen.queryByText(/Informativa Privacy/i);
 
-  fireEvent.click(privacyDisclaimerLink);
-  expect(global.window.location.assign).toBeCalledWith(`${ENV.URL_FILE.PRIVACY_DISCLAIMER}`);
+  expect(privacyDisclaimerLink).not.toBeInTheDocument();
 });
 
-test('renders the  link', () => {
+test('does not render the link', () => {
   render(<Login />);
-  const privacyDisclaimerLink = screen.getByTestId('terms-and-conditions');
-
-  fireEvent.click(privacyDisclaimerLink);
-  expect(global.window.location.assign).toBeCalledWith(`${ENV.URL_FILE.TERMS_AND_CONDITIONS}`);
+  const privacyDisclaimerLink = screen.queryByTestId('terms-and-conditions');
+  expect(privacyDisclaimerLink).not.toBeInTheDocument();
 });
