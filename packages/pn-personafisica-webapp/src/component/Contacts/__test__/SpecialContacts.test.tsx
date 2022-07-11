@@ -132,7 +132,7 @@ async function testContactAddition(
       recipientId: 'mocked-recipientId',
       senderId: 'comune-milano',
       channelType,
-      value,
+      value: elementName === 's_phone' ? '+39' + value : value,
       code: undefined,
     });
   });
@@ -165,7 +165,7 @@ async function testContactAddition(
       recipientId: 'mocked-recipientId',
       senderId: 'comune-milano',
       channelType,
-      value,
+      value: elementName === 's_phone' ? '+39' + value : value,
       code: '01234',
     });
   });
@@ -194,8 +194,34 @@ describe('SpecialContacts Component', () => {
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
             recipientId="mocked-recipientId"
-            legalAddresses={[]}
-            courtesyAddresses={[]}
+            legalAddresses={[
+              {
+                addressType: '',
+                recipientId: 'mocked-recipientId',
+                senderId: 'default',
+                channelType: LegalChannelType.PEC,
+                value: 'mocked@mail.com',
+                code: '12345',
+              },
+            ]}
+            courtesyAddresses={[
+              {
+                addressType: '',
+                recipientId: 'mocked-recipientId',
+                senderId: 'default',
+                channelType: CourtesyChannelType.EMAIL,
+                value: 'mocked@mail.com',
+                code: '12345',
+              },
+              {
+                addressType: '',
+                recipientId: 'mocked-recipientId',
+                senderId: 'default',
+                channelType: CourtesyChannelType.SMS,
+                value: '12345678910',
+                code: '12345',
+              }
+            ]}
           />
         </DigitalContactsCodeVerificationProvider>,
         {
@@ -360,7 +386,7 @@ describe('SpecialContacts Component', () => {
     await testContactAddition(
       form!,
       's_phone',
-      '+393494568016',
+      '3494568016',
       mockDispatchFn,
       mockActionFn,
       CourtesyChannelType.SMS

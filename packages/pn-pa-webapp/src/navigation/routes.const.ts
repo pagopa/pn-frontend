@@ -14,7 +14,7 @@ export const GROUPS_SEGMENT = '/groups';
  * @param idOrganization
  */
 export const ROLES = (idOrganization: string) =>
-  `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}/${ID_PN_SEGMENT}${ROLES_SEGMENT}`;
+  `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${ROLES_SEGMENT}#${ID_PN_SEGMENT}`;
 
 /** GROUPS navigation link to SelfCare "Groppi" section for Piattaforma Notifiche 
  * @param idOrganization

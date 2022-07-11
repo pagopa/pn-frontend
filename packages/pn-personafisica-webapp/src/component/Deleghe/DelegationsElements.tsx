@@ -120,7 +120,7 @@ export const AcceptButton = ({ id, name }: { id: string; name: string }) => {
 
   return (
     <Button onClick={handleAcceptClick} variant={'contained'} color={'primary'}>
-      {t('Accetta')}
+      {t('deleghe.accept')}
     </Button>
   );
 };

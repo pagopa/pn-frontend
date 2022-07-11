@@ -5,6 +5,7 @@ import {
   Card,
   CardContent,
   Grid,
+  InputAdornment,
   MenuItem,
   Table,
   TableBody,
@@ -23,7 +24,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 
 import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
-import { phoneRegExp } from '../../utils/contacts.utility';
+import { internationalPhonePrefix, phoneRegExp } from '../../utils/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
 import SpecialContactElem from './SpecialContactElem';
@@ -54,9 +55,30 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
   const addressTypes = useMemo(
     () => [
-      { id: LegalChannelType.PEC, value: t('special-contacts.pec', { ns: 'recapiti' }) },
-      { id: CourtesyChannelType.SMS, value: t('special-contacts.phone', { ns: 'recapiti' }) },
-      { id: CourtesyChannelType.EMAIL, value: t('special-contacts.mail', { ns: 'recapiti' }) },
+      {
+        id: LegalChannelType.PEC,
+        value: t('special-contacts.pec', { ns: 'recapiti' }),
+        show:
+          legalAddresses.filter(
+            (a) => a.senderId === 'default' && a.channelType === LegalChannelType.PEC
+          ).length > 0,
+      },
+      {
+        id: CourtesyChannelType.SMS,
+        value: t('special-contacts.phone', { ns: 'recapiti' }),
+        show:
+          courtesyAddresses.filter(
+            (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
+          ).length > 0,
+      },
+      {
+        id: CourtesyChannelType.EMAIL,
+        value: t('special-contacts.mail', { ns: 'recapiti' }),
+        show:
+          courtesyAddresses.filter(
+            (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.EMAIL
+          ).length > 0,
+      },
     ],
     []
   );
@@ -115,7 +137,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const formik = useFormik({
     initialValues: {
       sender: '',
-      addressType: LegalChannelType.PEC as LegalChannelType | CourtesyChannelType,
+      addressType: addressTypes.find(a => a.show)?.id as LegalChannelType | CourtesyChannelType,
       s_pec: '',
       s_mail: '',
       s_phone: '',
@@ -125,7 +147,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     onSubmit: (values) => {
       initValidation(
         values.addressType,
-        values.s_pec || values.s_mail || values.s_phone,
+        values.s_pec || values.s_mail || (internationalPhonePrefix + values.s_phone),
         recipientId,
         values.sender,
         (status: 'validated' | 'cancelled') => {
@@ -252,8 +274,8 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               size="small"
             >
               {parties.map((party) => (
-                <MenuItem key={party.id} value={party.id} >
-                  <DropDownPartyMenuItem name={party.name}/>
+                <MenuItem key={party.id} value={party.id}>
+                  <DropDownPartyMenuItem name={party.name} />
                 </MenuItem>
               ))}
             </TextField>
@@ -269,7 +291,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               fullWidth
               size="small"
             >
-              {addressTypes.map((a) => (
+              {addressTypes.filter(a => a.show).map((a) => (
                 <MenuItem key={a.id} value={a.id}>
                   {a.value}
                 </MenuItem>
@@ -305,6 +327,11 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 size="small"
                 error={formik.touched.s_phone && Boolean(formik.errors.s_phone)}
                 helperText={formik.touched.s_phone && formik.errors.s_phone}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                  ),
+                }}
               />
             )}
             {formik.values.addressType === CourtesyChannelType.EMAIL && (

@@ -1,13 +1,21 @@
-import { LegalFactId, NotificationDetail, PaymentAttachmentNameType, PaymentInfo } from '@pagopa-pn/pn-commons';
+import {
+  LegalFactId,
+  NotificationDetail,
+  PaymentAttachmentNameType,
+  PaymentInfo,
+} from '@pagopa-pn/pn-commons';
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
-export const getReceivedNotification = createAsyncThunk<NotificationDetail, string>(
+export const getReceivedNotification = createAsyncThunk<
+  NotificationDetail,
+  { iun: string; mandateId?: string }
+>(
   'getReceivedNotification',
-  async (params: string, { rejectWithValue }) => {
+  async (params: { iun: string; mandateId?: string }, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getReceivedNotification(params);
+      return await NotificationsApi.getReceivedNotification(params.iun, params.mandateId);
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -16,12 +24,12 @@ export const getReceivedNotification = createAsyncThunk<NotificationDetail, stri
 
 export const getReceivedNotificationLegalfact = createAsyncThunk<
   { url: string },
-  { iun: string; legalFact: LegalFactId }
+  { iun: string; legalFact: LegalFactId; mandateId?: string }
 >(
   'getReceivedNotificationLegalfact',
-  async (params: { iun: string; legalFact: LegalFactId }, { rejectWithValue }) => {
+  async (params: { iun: string; legalFact: LegalFactId; mandateId?: string }, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getReceivedNotificationLegalfact(params.iun, params.legalFact);
+      return await NotificationsApi.getReceivedNotificationLegalfact(params.iun, params.legalFact, params.mandateId);
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -35,7 +43,10 @@ export const getReceivedNotificationDocument = createAsyncThunk<
   'getReceivedNotificationDocument',
   async (params: { iun: string; documentIndex: string }, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getReceivedNotificationDocument(params.iun, params.documentIndex);
+      return await NotificationsApi.getReceivedNotificationDocument(
+        params.iun,
+        params.documentIndex
+      );
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -47,7 +58,10 @@ export const getPaymentAttachment = createAsyncThunk<
   { iun: string; attachmentName: PaymentAttachmentNameType }
 >(
   'getPaymentAttachment',
-  async (params: { iun: string; attachmentName: PaymentAttachmentNameType }, { rejectWithValue }) => {
+  async (
+    params: { iun: string; attachmentName: PaymentAttachmentNameType },
+    { rejectWithValue }
+  ) => {
     try {
       return await NotificationsApi.getPaymentAttachment(params.iun, params.attachmentName);
     } catch (e) {

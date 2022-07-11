@@ -4,10 +4,10 @@ export interface Role {
 }
 
 export enum PartyRole {
-  DELEGATE = 'DELEGATE',
+  DELEGATE = 'DELEGATE', // not managed by PN
   MANAGER = 'MANAGER',
   OPERATOR = 'OPERATOR',
-  SUB_DELEGATE = 'SUB_DELEGATE',
+  SUB_DELEGATE = 'SUB_DELEGATE', // not managed by PN
 }
 
 export enum GroupStatus {

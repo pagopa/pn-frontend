@@ -47,6 +47,7 @@
         }
     },
     "nuovaDelega": {
+        "breadcrumb": "Nuova delega",
         "backToDelegations": "Torna alle deleghe",
         "createdTitle": "La tua richiesta di delega è stata creata con successo",
         "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a Piattaforma Notifiche e accettare la tua richiesta.",
@@ -63,6 +64,7 @@
             "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
             "allEntities": "Tutti gli enti",
             "onlySelected": "Solo gli enti selezionati",
+            "selectEntities": "Seleziona enti",
             "endDate": "Termine delega",
             "verificationCode": "Codice di verifica",
             "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",

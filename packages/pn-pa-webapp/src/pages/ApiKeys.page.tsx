@@ -1,9 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography } from '@mui/material';
 
 const ApiKeys = () => {
-  const pageTitle = "Api Keys";
+  const pageTitle = 'Api Keys';
 
-  return  (
+  return (
     <Box p={3}>
       <Typography variant="h4">{pageTitle}</Typography>
     </Box>

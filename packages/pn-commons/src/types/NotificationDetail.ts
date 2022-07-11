@@ -78,7 +78,9 @@ export interface INotificationDetailTimeline {
     | ScheduleDigitalWorkflowDetails
     | SendCourtesyMessageDetails
     | SendDigitalDetails
-    | SendPaperDetails;
+    | SendPaperDetails
+    // PN-1647
+    | NotHandledDetails
     // only fe
   hidden?: boolean;
 }
@@ -127,11 +129,11 @@ interface PublicRegistryResponseDetails extends BaseDetails {
   physicalAddress: PhysicalAddress;
 }
 
-interface RequestRefusedDetails {
+interface RequestRefusedDetails extends BaseDetails {
   errors: Array<string>;
 }
 
-interface ScheduleDigitalWorkflowDetails extends DigitalAddress {
+interface ScheduleDigitalWorkflowDetails extends BaseDetails, DigitalAddress {
   digitalAddress: DigitalAddress;
   digitalAddressSource: AddressSource;
   sentAttemptMade: number;
@@ -154,6 +156,12 @@ export interface SendDigitalDetails extends BaseDetails {
   responseStatus?: 'OK' | 'KO';
   notificationDate?: string;
   errors?: Array<string>;
+}
+
+// PN-1647
+export interface NotHandledDetails extends BaseDetails {
+  reasonCode: string;
+  reason: string;
 }
 
 export interface NotificationDetailRecipient {
@@ -186,6 +194,7 @@ export enum NotificationFeePolicy {
 
 export interface NotificationDetailPayment {
   noticeCode?: string;
+  noticeCodeAlternative?: string,
   creditorTaxId: string;
   pagoPaForm: NotificationDetailDocument;
   f24flatRate?: NotificationDetailDocument;
@@ -223,7 +232,9 @@ export enum TimelineCategory {
   SEND_PAPER_FEEDBACK = 'SEND_PAPER_FEEDBACK',
   PAYMENT = 'PAYMENT',
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
-  REQUEST_REFUSED = 'REQUEST_REFUSED'
+  REQUEST_REFUSED = 'REQUEST_REFUSED',
+  // PN-1647
+  NOT_HANDLED = 'NOT_HANDLED'
 }
 
 interface DigitalAddress {
