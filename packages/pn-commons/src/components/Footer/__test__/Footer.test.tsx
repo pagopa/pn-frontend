@@ -1,10 +1,8 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import useApplicationLinks from '../../../hooks/useApplicationLinks';
+import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utils/costants';
 import Footer from '../Footer';
-
-const { LANGUAGES, pagoPALink, postLoginLinks } = useApplicationLinks();
 
 describe('Footer Component', () => {
 
@@ -16,12 +14,12 @@ describe('Footer Component', () => {
     buttons.forEach((button, index) => {
       if (index === 0) {
         expect(button).toHaveTextContent('PagoPA');
-        expect(button).toHaveAttribute('aria-label', pagoPALink.ariaLabel);
+        expect(button).toHaveAttribute('aria-label', pagoPALink().ariaLabel);
       } else if (index === 4) {
         expect(button).toHaveTextContent(LANGUAGES.it.it); // language 'it' is default selected
       } else {
-        expect(button).toHaveTextContent(postLoginLinks[index - 1].label);
-        expect(button).toHaveAttribute('aria-label', postLoginLinks[index - 1].ariaLabel);
+        expect(button).toHaveTextContent(postLoginLinks()[index - 1].label);
+        expect(button).toHaveAttribute('aria-label', postLoginLinks()[index - 1].ariaLabel);
       }
     })
   });

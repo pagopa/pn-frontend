@@ -146,7 +146,7 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
   }
 }
 
-export const NotificationAllowedStatus = [
+export const NotificationAllowedStatus = () => ([
   { value: 'All', label: getLocalizedOrDefaultLabel('notifications', 'status.all', 'Tutti gli stati') },
   {
     value: NotificationStatus.ACCEPTED,
@@ -180,7 +180,7 @@ export const NotificationAllowedStatus = [
     value: NotificationStatus.UNREACHABLE,
     label: getLocalizedOrDefaultLabel('notifications', 'status.unreachable', 'Destinatario irreperibile'),
   },
-];
+]);
 
 function localizeTimelineStatus(
   category: string,

@@ -107,7 +107,7 @@ describe('Filter Notifications Table Component', () => {
     testFormElementsValue(form!, 'recipientId', '');
     testFormElementsValue(form!, 'startDate', '');
     testFormElementsValue(form!, 'endDate', '');
-    testFormElementsValue(form!, 'status', NotificationAllowedStatus[0].value);
+    testFormElementsValue(form!, 'status', NotificationAllowedStatus()[0].value);
   });
 
   it('test searchFor select', async () => {
@@ -151,7 +151,7 @@ describe('Filter Notifications Table Component', () => {
 
   it('test status select', async () => {
     expect(form!.querySelector(`input[name="status"]`)).toBeInTheDocument();
-    await testSelect(form!, 'status', NotificationAllowedStatus, 2);
+    await testSelect(form!, 'status', NotificationAllowedStatus(), 2);
   });
 
   it('test form submission - searchFor codice fiscale (valid)', async () => {
@@ -165,7 +165,7 @@ describe('Filter Notifications Table Component', () => {
       '0',
       oneYearAgo,
       todayM,
-      NotificationAllowedStatus[2].value,
+      NotificationAllowedStatus()[2].value,
       'RSSMRA80A01H501U'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
@@ -179,7 +179,7 @@ describe('Filter Notifications Table Component', () => {
         startDate: formatToTimezoneString(oneYearAgo),
         endDate: formatToTimezoneString(getNextDay(todayM)),
         recipientId: 'RSSMRA80A01H501U',
-        status: NotificationAllowedStatus[2].value,
+        status: NotificationAllowedStatus()[2].value,
         iunMatch: undefined,
       },
       type: 'setNotificationFilters',
@@ -197,7 +197,7 @@ describe('Filter Notifications Table Component', () => {
       '1',
       oneYearAgo,
       todayM,
-      NotificationAllowedStatus[2].value,
+      NotificationAllowedStatus()[2].value,
       undefined,
       'ABCD-EFGH-ILMN-123456-A-1'
     );
@@ -211,7 +211,7 @@ describe('Filter Notifications Table Component', () => {
       payload: {
         startDate: formatToTimezoneString(oneYearAgo),
         endDate: formatToTimezoneString(getNextDay(todayM)),
-        status: NotificationAllowedStatus[2].value,
+        status: NotificationAllowedStatus()[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         recipientId: undefined,
       },
@@ -231,7 +231,7 @@ describe('Filter Notifications Table Component', () => {
       '0',
       nineYearsAgo,
       todayM,
-      NotificationAllowedStatus[2].value,
+      NotificationAllowedStatus()[2].value,
       'mocked-wrongId'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
@@ -254,7 +254,7 @@ describe('Filter Notifications Table Component', () => {
       '1',
       nineYearsAgo,
       todayM,
-      NotificationAllowedStatus[2].value,
+      NotificationAllowedStatus()[2].value,
       undefined,
       '12345678910abcdfghiol'
     );
@@ -277,7 +277,7 @@ describe('Filter Notifications Table Component', () => {
       '0',
       oneYearAgo,
       todayM,
-      NotificationAllowedStatus[2].value,
+      NotificationAllowedStatus()[2].value,
       'RSSMRA80A01H501U'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);

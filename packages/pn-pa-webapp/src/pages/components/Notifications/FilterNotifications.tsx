@@ -28,6 +28,8 @@ type Props = {
   showFilters: boolean;
 };
 
+const localizedNotificationStatus = NotificationAllowedStatus();
+
 const emptyValues = {
   startDate: formatToTimezoneString(tenYearsAgo),
   endDate: formatToTimezoneString(getNextDay(today)),
@@ -40,7 +42,7 @@ const initialEmptyValues = {
   searchFor: '0',
   startDate: tenYearsAgo,
   endDate: today,
-  status: NotificationAllowedStatus[0].value,
+  status: localizedNotificationStatus[0].value,
   recipientId: '',
   iunMatch: '',
 };
@@ -70,7 +72,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       endDate: new Date(filters.endDate),
       recipientId: filters.recipientId || '',
       iunMatch: filters.iunMatch || '',
-      status: filters.status || NotificationAllowedStatus[0].value,
+      status: filters.status || localizedNotificationStatus[0].value,
     };
   };
 
