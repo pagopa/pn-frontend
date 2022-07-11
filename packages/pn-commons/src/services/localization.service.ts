@@ -31,7 +31,7 @@ export function getLocalizedOrDefaultLabel(
   namespaceName: string | Array<string>,
   path: string,
   defaultLabel: string,
-  data?: { [key: string]: string | undefined }
+  data?: { [key: string]: any }
 ): string {
   const namespace = Array.isArray(namespaceName)
     ? namespaceName.map((nm) => localizationNamespaces[nm as LocalizationNamespacesNames])

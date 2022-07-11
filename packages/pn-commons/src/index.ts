@@ -184,7 +184,7 @@ export { compileRoute };
 export { today, tenYearsAgo, DATE_FORMAT };
 
 // hooks
-import { useIsMobile } from './hooks/IsMobile';
+import { useIsMobile } from './hooks/useIsMobile';
 
 export { useIsMobile };
 

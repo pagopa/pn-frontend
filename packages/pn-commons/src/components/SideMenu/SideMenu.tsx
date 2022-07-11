@@ -4,7 +4,7 @@ import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@
 import { Menu } from '@mui/icons-material';
 
 import { SideMenuItem } from '../../types/SideMenuItem';
-import { useIsMobile } from '../../hooks/IsMobile';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import SideMenuList from './SideMenuList';
 

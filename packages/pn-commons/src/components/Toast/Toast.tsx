@@ -2,7 +2,7 @@ import { useState, Fragment, useEffect } from 'react';
 import { Grid, Typography, Box, IconButton, Alert } from '@mui/material'; // SvgIcon
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useIsMobile } from '../../hooks/IsMobile';
+import { useIsMobile } from '../../hooks/useIsMobile';
 import { MessageType } from '../../types/MessageType';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 

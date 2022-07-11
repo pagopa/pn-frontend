@@ -1,13 +1,17 @@
-export const productsList = [
+import { ProductSwitchItem } from '@pagopa/mui-italia';
+
+export const productsList: Array<ProductSwitchItem> = [
   {
     id: "0",
     title: `Product 1`,
     productUrl: "",
+    linkType: 'internal'
   },
   {
     id: "1",
     title: `Product 2`,
     productUrl: "",
+    linkType: 'internal'
   }
 ];
 

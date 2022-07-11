@@ -10,7 +10,7 @@ import {
 } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { pagoPALink } from '../../utils/costants';
+import useApplicationLinks from '../../hooks/useApplicationLinks';
 
 type HeaderProps = {
   /** Assistance email for the user */
@@ -31,12 +31,6 @@ type HeaderProps = {
   userActions?: Array<UserAction>;
 };
 
-const pagoPAHeaderLink: RootLinkType = {
-  ...pagoPALink,
-  label: 'PagoPA S.p.A.',
-  title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.')
-};
-
 const Header = ({
   onExitAction = () => window.location.assign(''),
   assistanceEmail,
@@ -47,6 +41,14 @@ const Header = ({
   enableDropdown,
   userActions,
 }: HeaderProps) => {
+  const { pagoPALink } = useApplicationLinks();
+
+  const pagoPAHeaderLink: RootLinkType = {
+    ...pagoPALink,
+    label: 'PagoPA S.p.A.',
+    title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.')
+  };
+
   const handleProductSelection = (product: ProductEntity) => {
     if (product.productUrl) {
       /* eslint-disable-next-line functional/immutable-data */

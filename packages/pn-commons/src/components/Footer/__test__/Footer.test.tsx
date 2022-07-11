@@ -1,8 +1,10 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utils/costants';
+import useApplicationLinks from '../../../hooks/useApplicationLinks';
 import Footer from '../Footer';
+
+const { LANGUAGES, pagoPALink, postLoginLinks } = useApplicationLinks();
 
 describe('Footer Component', () => {
 

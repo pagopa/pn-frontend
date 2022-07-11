@@ -1,7 +1,7 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import * as hooks from '../../../hooks/IsMobile';
+import * as hooks from '../../../hooks/useIsMobile';
 import { getDay, getMonthString, getTime } from '../../../utils/date.utility';
 import { getNotificationStatusInfos } from '../../../utils/notification.utility';
 import { parsedNotification } from '../../../utils/__test__/test-utils';

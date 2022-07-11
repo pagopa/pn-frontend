@@ -1,5 +1,5 @@
 import { fireEvent } from '@testing-library/react';
-import * as hooks from '@pagopa-pn/pn-commons/src/hooks/IsMobile';
+import * as hooks from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 import * as React from 'react';
 import { axe, render } from '../../../__test__/test-utils';
 
@@ -12,7 +12,7 @@ const mockConfirmFunction = jest.fn();
 
 type Props = {
   open?: boolean;
-  onConfirm?: React.MouseEventHandler<HTMLButtonElement> | undefined;
+  onConfirm?: React.MouseEventHandler<HTMLButtonElement>;
   onConfirmLabel?: string;
   onCloseLabel?: string;
 };
@@ -42,7 +42,7 @@ describe('ConfirmationModal Component', () => {
       onConfirmLabel: 'Conferma',
       onCloseLabel: 'Cancella',
     });
-    const dialog = result!.queryByRole('dialog');
+    const dialog = result.queryByRole('dialog');
 
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent(/Test Title/i);
@@ -53,8 +53,8 @@ describe('ConfirmationModal Component', () => {
   it('checks that the confirm and cancel functions are executed', () => {
     useIsMobileSpy.mockReturnValue(false);
     const result = renderConfirmationModal({ onConfirm: mockConfirmFunction });
-    const confirm = result!.queryAllByTestId('dialogAction')[1];
-    const cancel = result!.queryAllByTestId('dialogAction')[0];
+    const confirm = result.queryAllByTestId('dialogAction')[1];
+    const cancel = result.queryAllByTestId('dialogAction')[0];
 
     fireEvent.click(confirm);
     expect(mockConfirmFunction).toBeCalledTimes(1);
@@ -67,8 +67,8 @@ describe('ConfirmationModal Component', () => {
     useIsMobileSpy.mockReturnValue(false);
     const result = renderConfirmationModal({ onConfirm: mockConfirmFunction });
 
-    const confirm = result!.queryAllByTestId('dialogAction')[1];
-    const cancel = result!.queryAllByTestId('dialogAction')[0];
+    const confirm = result.queryAllByTestId('dialogAction')[1];
+    const cancel = result.queryAllByTestId('dialogAction')[0];
     expect(confirm).toHaveTextContent(/Riprova/i);
     expect(cancel).toHaveTextContent(/Annulla/i);
   });
@@ -77,7 +77,7 @@ describe('ConfirmationModal Component', () => {
     useIsMobileSpy.mockReturnValue(false);
     const result = renderConfirmationModal({});
 
-    const cancel = result!.queryAllByTestId('dialogAction')[0];
+    const cancel = result.queryAllByTestId('dialogAction')[0];
     expect(cancel).toHaveTextContent(/Annulla/i);
   });
 
@@ -85,7 +85,7 @@ describe('ConfirmationModal Component', () => {
     useIsMobileSpy.mockReturnValue(false);
     const result = renderConfirmationModal({ open: false });
 
-    const dialog = result!.queryByRole('dialog');
+    const dialog = result.queryByRole('dialog');
 
     expect(dialog).toBeNull();
   });
@@ -97,8 +97,8 @@ describe('ConfirmationModal Component', () => {
       onConfirmLabel: 'Conferma',
       onCloseLabel: 'Cancella',
     });
-    const buttons = result!.queryAllByTestId('dialogAction');
-    const dialog = result!.queryByRole('dialog');
+    const buttons = result.queryAllByTestId('dialogAction');
+    const dialog = result.queryByRole('dialog');
     const stack = result.queryByTestId('dialogStack');
 
     expect(dialog).toBeInTheDocument();
