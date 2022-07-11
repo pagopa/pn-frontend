@@ -24,6 +24,66 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
+describe('Dashboard Page without notifications', () => {
+  let result: RenderResult | undefined;
+
+  const mockDispatchFn = jest.fn();
+  const mockActionFn = jest.fn();
+
+  beforeEach(async () => {
+    // mock app selector
+    const spy = jest.spyOn(hooks, 'useAppSelector');
+    spy
+      .mockReturnValueOnce([])
+      .mockReturnValueOnce({
+        startDate: formatToTimezoneString(getNextDay(today)),
+        endDate: formatToTimezoneString(getNextDay(today)),
+      })
+      .mockReturnValueOnce({
+        orderBy: '',
+        order: 'asc',
+      })
+      .mockReturnValueOnce({
+        nextPagesKey: ['mocked-page-key-1', 'mocked-page-key-2', 'mocked-page-key-3'],
+        size: 10,
+        page: 0,
+        moreResult: true,
+      });
+    // mock action
+    const actionSpy = jest.spyOn(actions, 'getSentNotifications');
+    actionSpy.mockImplementation(mockActionFn);
+    // mock dispatch
+    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
+    useDispatchSpy.mockReturnValue(mockDispatchFn);
+    // render component
+    await act(async () => {
+      result = render(<Dashboard />);
+    });
+  });
+
+  afterEach(() => {
+    result = undefined;
+    jest.resetAllMocks();
+    jest.clearAllMocks();
+  });
+
+  it('clicks on new notification inside DesktopNotifications component', async () => {
+    const newNotificationBtn = result?.queryByTestId('callToActionSecond');
+    fireEvent.click(newNotificationBtn!);
+    await waitFor(() => {
+      expect(mockNavigateFn).toBeCalledTimes(1);
+    });
+  });
+
+  it('clicks on API KEYS page inside DesktopNotifications component', async () => {
+    const apiKeysBtn = result?.queryByTestId('callToActionFirst');
+    fireEvent.click(apiKeysBtn!);
+    await waitFor(() => {
+      expect(mockNavigateFn).toBeCalledTimes(1);
+    });
+  });
+});
+
 describe('Dashboard Page', () => {
   let result: RenderResult | undefined;
 
