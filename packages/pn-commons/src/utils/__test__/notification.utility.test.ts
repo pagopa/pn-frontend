@@ -2,6 +2,7 @@ import _ from 'lodash';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
+  NotHandledDetails,
   PhysicalCommunicationType,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
@@ -9,6 +10,7 @@ import {
   TimelineCategory,
 } from '../../types/NotificationDetail';
 import { NotificationStatus } from '../../types/NotificationStatus';
+import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
   getLegalFactLabel,
@@ -105,9 +107,9 @@ describe('notification utility functions', () => {
     );
   });
 
-  it('return notification status infos - CANCELED', () => {
+  it('return notification status infos - CANCELLED', () => {
     testNotificationStatusInfosFn(
-      NotificationStatus.CANCELED,
+      NotificationStatus.CANCELLED,
       'Annullata',
       'warning',
       "L'ente ha annullato l'invio della notifica"
@@ -115,17 +117,19 @@ describe('notification utility functions', () => {
   });
 
   it('return notifications filters count (no filters)', () => {
+    const date = new Date();
     const count = filtersApplied(
-      { startDate: new Date().toISOString(), endDate: new Date().toISOString() },
-      { startDate: new Date().toISOString(), endDate: new Date().toISOString() }
+      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)) },
+      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)) }
     );
     expect(count).toEqual(0);
   });
 
   it('return notifications filters count (with filters)', () => {
+    const date = new Date();
     const count = filtersApplied(
-      { startDate: new Date().toISOString(), endDate: new Date().toISOString(), iunMatch: 'mocked-iun', recipientId: 'mocked-recipient' },
-      { startDate: new Date().toISOString(), endDate: new Date().toISOString(), iunMatch: undefined, recipientId: undefined },
+      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)), iunMatch: 'mocked-iun', recipientId: 'mocked-recipient' },
+      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)), iunMatch: undefined, recipientId: undefined },
     );
     expect(count).toEqual(2);
   });
@@ -283,5 +287,16 @@ describe('timeline utility functions', () => {
       receipt: 'mocked-recipient-label',
     });
     expect(label).toBe('mocked-recipient-label');
+  });
+
+  // PN-1647
+  it('return timeline status infos - NOT_HANDLED', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.NOT_HANDLED;
+    (parsedNotificationCopy.timeline[0].details as NotHandledDetails).reasonCode = '001';
+    (parsedNotificationCopy.timeline[0].details as NotHandledDetails).reason = 'Paper message not handled';
+    testTimelineStatusInfosFn(
+      'Annullata',
+      "La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante la sperimentazione della piattaforma."
+    );
   });
 });

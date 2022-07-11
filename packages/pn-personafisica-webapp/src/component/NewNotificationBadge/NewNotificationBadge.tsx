@@ -6,7 +6,7 @@ const isNewNotification = (value: string) => {
   switch (value) {
     case NotificationStatus.VIEWED:
     case NotificationStatus.PAID:
-    case NotificationStatus.CANCELED:
+    case NotificationStatus.CANCELLED:
       return false;
     default:
       return true;

@@ -67,13 +67,16 @@ export function NOTIFICATIONS_LIST(params: GetNotificationsParams) {
   });
 }
 
-export function NOTIFICATION_DETAIL(iun: string) {
+export function NOTIFICATION_DETAIL(iun: string, mandateId?: string) {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
     path: API_NOTIFICATION_DETAIL_PATH,
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
     },
+    query: {
+      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || ''
+    }
   });
 }
 
@@ -88,7 +91,7 @@ export function NOTIFICATION_DETAIL_DOCUMENTS(iun: string, documentIndex: string
   });
 }
 
-export function NOTIFICATION_DETAIL_LEGALFACT(iun: string, legalFact: LegalFactId) {
+export function NOTIFICATION_DETAIL_LEGALFACT(iun: string, legalFact: LegalFactId, mandateId?: string) {
   return compileRoute({
     prefix: API_DELIVERY_PUSH_PREFIX,
     path: API_NOTIFICATION_DETAIL_LEGALFACT_PATH,
@@ -97,6 +100,9 @@ export function NOTIFICATION_DETAIL_LEGALFACT(iun: string, legalFact: LegalFactI
       [API_NOTIFICATIONS_LEGALFACT_TYPE_PARAMETER]: legalFact.category,
       [API_NOTIFICATIONS_LEGALFACT_KEY_PARAMETER]: legalFact.key,
     },
+    query: {
+      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || ''
+    }
   });
 }
 

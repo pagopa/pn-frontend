@@ -11,7 +11,10 @@
   "filters": {
       "iun": "Inserisci il Codice IUN",
       "data_da": "Da",
-      "data_a": "A"
+      "data_a": "A",
+      "errors": {
+        "iun": "Inserisci un codice IUN valido"
+      }
   },
   "sort": {
     "title": "Ordina",
@@ -21,11 +24,11 @@
     "options": "Opzioni sort"
   },
   "detail": {
-    "date": "Data",
+    "date": "Data di invio",
     "payment-terms": "Da pagare entro il",
     "payment-terms-expiration": "Entro il",
-    "fullname": "Nome e cognome",
     "sender": "Mittente",
+    "recipient": "Destinatario",
     "cancelled-iun": "Codice IUN annullato",
     "iun": "Codice IUN",
     "groups": "Gruppi",
@@ -71,7 +74,8 @@
     },
     "acts_files": {
       "downloadable_acts": "Puoi scaricare gli atti entro 120 giorni dalla data di perfezionamento. Oltre questo termine, dovrai rivolgerti al mittente.",
-      "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente."
+      "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente.",
+      "notification_cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili."
     }
   },
   "delegatorTitle": "Le notifiche di {{name}}"

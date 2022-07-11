@@ -15,6 +15,8 @@ import {
   CustomMobileDialogContent,
   filtersApplied,
   getAorB,
+  formatToTimezoneString,
+  getNextDay,
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
@@ -28,8 +30,8 @@ type Props = {
 };
 
 const emptyValues = {
-  startDate: tenYearsAgo.toISOString(),
-  endDate: today.toISOString(),
+  startDate: formatToTimezoneString(tenYearsAgo),
+  endDate: formatToTimezoneString(getNextDay(today)),
   status: undefined,
   recipientId: undefined,
   iunMatch: undefined,
@@ -44,7 +46,8 @@ const initialEmptyValues = {
   iunMatch: '',
 };
 
-const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
+// eslint-disable-next-line sonarjs/cognitive-complexity
+const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
   const [startDate, setStartDate] = useState<Date | null>(null);
@@ -58,16 +61,19 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
     endDate: yup.date().min(tenYearsAgo),
   });
 
-  const filtersValus = {
-    searchFor: '0',
-    startDate: new Date(filters.startDate),
-    endDate: new Date(filters.endDate),
-    recipientId: getAorB(filters.recipientId, ''),
-    iunMatch: getAorB(filters.iunMatch, ''),
-    status: getAorB(filters.status, NotificationAllowedStatus[0].value),
+  const initialValues = (): FormikValues => {
+    if (!filters || (filters && _.isEqual(filters, emptyValues))) {
+      return initialEmptyValues;
+    }
+    return {
+      searchFor: '0',
+      startDate: new Date(filters.startDate),
+      endDate: new Date(filters.endDate),
+      recipientId: getAorB(filters.recipientId, ''),
+      iunMatch: getAorB(filters.iunMatch, ''),
+      status: getAorB(filters.status, NotificationAllowedStatus[0].value),
+    };
   };
-
-  const initialValues = (): FormikValues => (!filters || (filters && _.isEqual(filters, emptyValues))) ? initialEmptyValues : filtersValus;
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
   const filtersCount = filtersApplied(prevFilters, emptyValues);
@@ -78,8 +84,8 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
     /** onSubmit populates filters */
     onSubmit: (values) => {
       const currentFilters = {
-        startDate: values.startDate.toISOString(),
-        endDate: values.endDate.toISOString(),
+        startDate: formatToTimezoneString(values.startDate),
+        endDate: formatToTimezoneString(getNextDay(values.endDate)),
         recipientId: getAorB(values.recipientId, undefined),
         iunMatch: getAorB(values.iunMatch, undefined),
         status: values.status === 'All' ? undefined : values.status,
@@ -112,7 +118,8 @@ const FilterNotifications = forwardRef(({showFilters}: Props, ref) => {
   }, [filters]);
 
   useImperativeHandle(ref, () => ({
-    filtersApplied: filtersCount > 0
+    filtersApplied: filtersCount > 0,
+    cleanFilters: cancelSearch,
   }));
 
   if (!showFilters) {

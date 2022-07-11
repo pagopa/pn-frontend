@@ -1,4 +1,4 @@
-import { People, SupervisedUserCircle, VpnKey } from '@mui/icons-material';
+import { People, SupervisedUserCircle } from '@mui/icons-material';
 import Email from '@mui/icons-material/Email';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 import { PartyRole } from '../../models/user';
@@ -8,7 +8,15 @@ import { getHomePage, getMenuItems } from '../role.utility';
 const mockedIdOrganization = 'mocked-id';
 const BasicMenuItems: Array<SideMenuItem> = [
   { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
-  { label: 'Chiavi API', icon: VpnKey, route: routes.API_KEYS },
+  /**
+  * Refers to PN-1741
+  * Commented out because beyond MVP scope
+  * 
+  * LINKED TO:
+  * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
+  * - BasicMenuItems in packages/pn-pa-webapp/src/utils/role.utility.ts
+  */
+  // { label: 'Chiavi API', icon: VpnKey, route: routes.API_KEYS },
 ];
 
 const SelfCareItems: Array<SideMenuItem> = [

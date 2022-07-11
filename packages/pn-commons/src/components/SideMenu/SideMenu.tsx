@@ -18,7 +18,9 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
   const location = useLocation();
   const isMobile = useIsMobile();
 
-  const findMenuItemSelectedRecursive = (items: Array<SideMenuItem>): { index: number; label: string; route: string } | null => {
+  const findMenuItemSelectedRecursive = (
+    items: Array<SideMenuItem>
+  ): { index: number; label: string; route: string } | null => {
     // find if there is a menu item that matches current route
     // notSelectable flag indicates that the menu item is selectable
     let menuItemIndex = items.findIndex((m) => m.route === location.pathname && !m.notSelectable);
@@ -27,10 +29,18 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
         index: menuItemIndex,
         label: items[menuItemIndex].label,
         route: items[menuItemIndex].route || '',
-      }
+      };
     }
     // find if there is a menu item that has route as a part of current one
-    menuItemIndex = items.findIndex((m) => location.pathname.indexOf(m.route) > -1);
+    items.forEach((item, index) => {
+      if (
+        location.pathname.startsWith(item.route) &&
+        (menuItemIndex === -1 ||
+          (menuItemIndex > -1 && item.route.length > items[menuItemIndex].route.length))
+      ) {
+        menuItemIndex = index;
+      }
+    });
     if (menuItemIndex > -1) {
       if (items[menuItemIndex].children && items[menuItemIndex].children?.length) {
         return findMenuItemSelectedRecursive(items[menuItemIndex].children!);
@@ -39,7 +49,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
         index: menuItemIndex,
         label: items[menuItemIndex].label,
         route: items[menuItemIndex].route || '',
-      }
+      };
     }
     return null;
   };
@@ -64,12 +74,12 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
     setState(!state);
   };
 
-  const handleNavigation = (link: string, menuFlag?: boolean, notSelectable?: boolean) => {
+  const handleNavigation = (item: SideMenuItem, menuFlag?: boolean) => {
     if (isMobile && !menuFlag) {
       setState(false);
-    };
-    if (!notSelectable) {
-      navigate(link);
+    }
+    if (!item.notSelectable) {
+      navigate(item.route);
     }
   };
 
@@ -98,7 +108,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
                 <ListItemIcon>
                   <Menu color="primary" />
                 </ListItemIcon>
-                <ListItemText primary={menuItemSelected?.label} sx={{color: "primary.main"}}/>
+                <ListItemText primary={menuItemSelected?.label} sx={{ color: 'primary.main' }} />
               </ListItemButton>
             </List>
             <Drawer anchor="left" open={state} onClose={toggleDrawer}>

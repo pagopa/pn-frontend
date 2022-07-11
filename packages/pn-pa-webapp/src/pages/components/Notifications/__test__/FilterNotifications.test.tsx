@@ -1,7 +1,6 @@
 import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react';
-import moment from 'moment';
 import * as redux from 'react-redux';
-import { NotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { formatToTimezoneString, getNextDay, NotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import {
   render,
@@ -156,14 +155,16 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form submission - searchFor codice fiscale (valid)', async () => {
-    const oneYearAgo = moment().add(-1, 'year').startOf('day');
-    const todayM = moment().startOf('day');
+    const todayM = new Date();
+    const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
+    todayM.setHours(0, 0, 0, 0);
+    oneYearAgo.setHours(0, 0, 0, 0);
 
     await setFormValues(
       form!,
       '0',
-      oneYearAgo.toDate(),
-      todayM.toDate(),
+      oneYearAgo,
+      todayM,
       NotificationAllowedStatus[2].value,
       'RSSMRA80A01H501U'
     );
@@ -175,8 +176,8 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
-        startDate: oneYearAgo.toISOString(),
-        endDate: todayM.toISOString(),
+        startDate: formatToTimezoneString(oneYearAgo),
+        endDate: formatToTimezoneString(getNextDay(todayM)),
         recipientId: 'RSSMRA80A01H501U',
         status: NotificationAllowedStatus[2].value,
         iunMatch: undefined,
@@ -186,14 +187,16 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form submission - searchFor IUN (valid)', async () => {
-    const oneYearAgo = moment().add(-1, 'year').startOf('day');
-    const todayM = moment().startOf('day');
+    const todayM = new Date();
+    const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
+    todayM.setHours(0, 0, 0, 0);
+    oneYearAgo.setHours(0, 0, 0, 0);
 
     await setFormValues(
       form!,
       '1',
-      oneYearAgo.toDate(),
-      todayM.toDate(),
+      oneYearAgo,
+      todayM,
       NotificationAllowedStatus[2].value,
       undefined,
       'ABCD-EFGH-ILMN-123456-A-1'
@@ -206,8 +209,8 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockDispatchFn).toBeCalledWith({
       payload: {
-        startDate: oneYearAgo.toISOString(),
-        endDate: todayM.toISOString(),
+        startDate: formatToTimezoneString(oneYearAgo),
+        endDate: formatToTimezoneString(getNextDay(todayM)),
         status: NotificationAllowedStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         recipientId: undefined,
@@ -217,15 +220,17 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form submission - search for codice fiscale (invalid)', async () => {
-    const elevenYearsAgo = moment().add(-11, 'year').startOf('day');
-    const todayM = moment().startOf('day');
+    const todayM = new Date();
+    const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
+    todayM.setHours(0, 0, 0, 0);
+    nineYearsAgo.setHours(0, 0, 0, 0);
 
     // wrong id and wrong start date
     await setFormValues(
       form!,
       '0',
-      elevenYearsAgo.toDate(),
-      todayM.toDate(),
+      nineYearsAgo,
+      todayM,
       NotificationAllowedStatus[2].value,
       'mocked-wrongId'
     );
@@ -238,15 +243,17 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form submission - search for codice IUN (invalid)', async () => {
-    const elevenYearsAgo = moment().add(-11, 'year').startOf('day');
-    const todayM = moment().startOf('day');
+    const todayM = new Date();
+    const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
+    todayM.setHours(0, 0, 0, 0);
+    nineYearsAgo.setHours(0, 0, 0, 0);
 
     // wrong id and wrong start date
     await setFormValues(
       form!,
       '1',
-      elevenYearsAgo.toDate(),
-      todayM.toDate(),
+      nineYearsAgo,
+      todayM,
       NotificationAllowedStatus[2].value,
       undefined,
       '12345678910abcdfghiol'
@@ -260,13 +267,16 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test form reset', async () => {
-    const oneYearAgo = moment().add(-1, 'year');
-    const todayM = moment();
+    const todayM = new Date();
+    const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
+    todayM.setHours(0, 0, 0, 0);
+    oneYearAgo.setHours(0, 0, 0, 0);
+
     await setFormValues(
       form!,
       '0',
-      oneYearAgo.toDate(),
-      todayM.toDate(),
+      oneYearAgo,
+      todayM,
       NotificationAllowedStatus[2].value,
       'RSSMRA80A01H501U'
     );
@@ -279,8 +289,8 @@ describe('Filter Notifications Table Component', () => {
       expect(mockDispatchFn).toBeCalledTimes(2);
       expect(mockDispatchFn).toBeCalledWith({
         payload: {
-          startDate: tenYearsAgo.toISOString(),
-          endDate: today.toISOString(),
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
           recipientId: undefined,
           status: undefined,
           iunMatch: undefined,
