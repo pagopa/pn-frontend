@@ -1,14 +1,12 @@
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
-import { Divider, Grid, Box, Typography, TextField } from '@mui/material';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { Grid, Box, Typography, TextField } from '@mui/material';
 
-import { DigitalAddress } from '../../models/contacts';
+import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
-import LegalContactsDisclosure from './LegalContactsDisclosure';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
@@ -18,11 +16,7 @@ type Props = {
 
 const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const [disclosureCollapsed, setDisclosureCollapsed] = useState(true);
 
-  const handleCollapse = () => {
-    setDisclosureCollapsed((prevDisclosureCollapsed) => !prevDisclosureCollapsed);
-  };
 
   const title = useMemo(
     () => (
@@ -30,13 +24,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         <Grid item xs="auto">
           {t('legal-contacts.subtitle-2', { ns: 'recapiti' })}
         </Grid>
-        <Grid item xs="auto">
-          <ErrorOutlineIcon
-            onClick={handleCollapse}
-            sx={{ cursor: 'pointer', position: 'relative', top: '4px', color: 'action.active' }}
-          />
         </Grid>
-      </Grid>
     ),
     []
   );
@@ -77,18 +65,16 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     <DigitalContactsCard
       sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
       title={title}
-      subtitle={disclosureCollapsed ? '' : t('legal-contacts.description-2', { ns: 'recapiti' })}
+      subtitle={t('legal-contacts.description-2', { ns: 'recapiti' }) + t('legal-contacts.link-aar', { ns: 'recapiti' })}
       avatar={<IllusEmailValidation />}
     >
-      {!disclosureCollapsed && <LegalContactsDisclosure />}
-      <Divider />
       <Box sx={{ marginTop: '20px' }}>
         <form>
           <DigitalContactElem
             recipientId={recipientId}
             senderId="default"
             // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-            contactType={defaultAddress!.channelType}
+            contactType={LegalChannelType.PEC}
             fields={[
               {
                 id: 'label',
