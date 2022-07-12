@@ -1,6 +1,6 @@
 import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
@@ -138,10 +138,13 @@ const NuovaDelega = () => {
 
   const xsValue = isMobile ? 12 : 4;
 
-  useEffect(() => {
+  useEffect(() => () => void dispatch(resetNewDelegation()), []);
+
+  const handleGetAllEntities = () => {
     void dispatch(getAllEntities());
-    return () => void dispatch(resetNewDelegation());
-  }, []);
+  };
+
+  const memoEntities = useMemo(() => entities, [entities]);
 
   const breadcrumbs = (
     <Fragment>
@@ -284,6 +287,9 @@ const NuovaDelega = () => {
                               'selectTuttiEntiOrSelezionati',
                               event.currentTarget.value
                             );
+                            if(event.currentTarget.value === 'entiSelezionati') {
+                              handleGetAllEntities();
+                            }
                           }}
                         >
                           <FormControlLabel
@@ -317,7 +323,7 @@ const NuovaDelega = () => {
                                       });
                                     }}
                                   >
-                                    {entities.map((entity) => (
+                                    {memoEntities.map((entity) => (
                                       <MenuItem value={entity.id} key={entity.id}>
                                         <DropDownPartyMenuItem name={entity.name} />
                                       </MenuItem>
