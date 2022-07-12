@@ -106,12 +106,12 @@ describe('notification utility functions', () => {
     );
   });
 
-  it('return notification status infos - CANCELLED', () => {
+  it('return notification status infos - VIEWED_AFTER_DEADLINE', () => {
     testNotificationStatusInfosFn(
-      NotificationStatus.CANCELLED,
-      'Annullata',
-      'warning',
-      "L'ente ha annullato l'invio della notifica"
+        NotificationStatus.VIEWED_AFTER_DEADLINE,
+        'Visualizzata',
+        'success',
+        'Il destinatario ha visualizzato la notifica'
     );
   });
 

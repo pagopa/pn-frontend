@@ -107,4 +107,58 @@ describe('Header Component', () => {
     expect(headers[1]).toHaveTextContent(partyList[1].name);
     expect(headers[1]).toHaveTextContent(partyList[1].productRole);
   });
+
+  it('clicks on assistanceEmail when value is passed', async () => {
+    Object.defineProperty(window, 'location', {
+      get() {
+        return { href: handleClick() }
+      },
+    });
+    // render component
+    const result = render(
+        <Header
+            productsList={productsList}
+            loggedUser={loggedUser}
+            enableDropdown
+            userActions={userActions}
+            partyList={partyList}
+            assistanceEmail={'email'}
+        />
+    );
+    expect(handleClick).toBeCalledTimes(1);
+    const assistanceLink = result.getByText(/Assistenza/i)
+
+    fireEvent.click(assistanceLink)
+
+    expect(handleClick).toBeCalledTimes(2);
+  })
+
+  it('clicks on assistance link when assistanceEmail has no value', () => {
+    Object.defineProperty(window, 'location', {
+      get() {
+        return { href: handleClick() }
+      },
+    });
+    // render component
+    const result = render(
+        <Header
+            productsList={productsList}
+            loggedUser={loggedUser}
+            enableDropdown
+            userActions={userActions}
+            partyList={partyList}
+        />
+    );
+    expect(handleClick).toBeCalledTimes(1);
+    const assistanceLink = result.getByText(/Assistenza/i)
+
+    fireEvent.click(assistanceLink)
+    expect(handleClick).toBeCalledTimes(1);
+  });
+
+  it('clicks on exit with default value', async () => {
+    const result = render(<Header productsList={[productsList[0]]} loggedUser={loggedUser} onExitAction={handleClick}/>);
+
+  });
+
 });
