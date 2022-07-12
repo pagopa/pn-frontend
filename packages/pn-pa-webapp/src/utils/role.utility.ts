@@ -2,7 +2,7 @@ import { Email, People, SupervisedUserCircle } from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
-import { PartyRole } from '../models/user';
+import { PNRole } from '../models/user';
 
 const BasicMenuItems: Array<SideMenuItem> = [
   { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
@@ -25,14 +25,14 @@ function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
 }
 
 /** Get Menu Items based on user role */
-export function getMenuItems(role: PartyRole, idOrganization: string): {
+export function getMenuItems(idOrganization: string, role?: PNRole): {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
 } {
   switch (role) {
-    case PartyRole.MANAGER:
+    case PNRole.ADMIN:
       return { menuItems: BasicMenuItems, selfCareItems: selfcareMenuItems(idOrganization) };
-    case PartyRole.OPERATOR:
+    case PNRole.OPERATOR:
       return { menuItems: BasicMenuItems };
     default:
       return { menuItems: BasicMenuItems };
