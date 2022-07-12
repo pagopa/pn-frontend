@@ -2,6 +2,7 @@ import _ from 'lodash';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
+  NotHandledDetails,
   PhysicalCommunicationType,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
@@ -286,5 +287,16 @@ describe('timeline utility functions', () => {
       receipt: 'mocked-recipient-label',
     });
     expect(label).toBe('mocked-recipient-label');
+  });
+
+  // PN-1647
+  it('return timeline status infos - NOT_HANDLED', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.NOT_HANDLED;
+    (parsedNotificationCopy.timeline[0].details as NotHandledDetails).reasonCode = '001';
+    (parsedNotificationCopy.timeline[0].details as NotHandledDetails).reason = 'Paper message not handled';
+    testTimelineStatusInfosFn(
+      'Annullata',
+      "La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante la sperimentazione della piattaforma."
+    );
   });
 });

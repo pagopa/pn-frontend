@@ -11,6 +11,7 @@ import {
   NotificationDetailRecipient,
   DigitalDomicileType,
   NotificationDetail,
+  NotHandledDetails,
 } from '../types/NotificationDetail';
 import { GetNotificationsParams } from '../types/Notifications';
 import { NotificationStatus } from '../types/NotificationStatus';
@@ -127,21 +128,25 @@ export function getNotificationTimelineStatusInfos(
   linkText?: string;
   recipient?: string;
 } | null {
-  const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
+  const recipient = !_.isNil(step.details.recIndex) ? ricipients[step.details.recIndex] : undefined;
+  const legalFactLabel = 'Attestazione opponibile a terzi';
+  const receiptLabel = 'Vedi la ricevuta';
+  const recipientLabel = `${recipient?.taxId} - ${recipient?.denomination}`;
+
   switch (step.category) {
     case TimelineCategory.SCHEDULE_ANALOG_WORKFLOW:
       return {
         label: 'Invio per via cartacea',
         description: "È in corso l'invio della notifica per via cartacea.",
-        linkText: 'Attestazione opponibile a terzi',
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        linkText: legalFactLabel,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW:
       return {
         label: 'Invio per via digitale',
         description: "È in corso l'invio della notifica per via digitale.",
-        linkText: 'Attestazione opponibile a terzi',
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        linkText: legalFactLabel,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_COURTESY_MESSAGE:
       const type =
@@ -152,7 +157,7 @@ export function getNotificationTimelineStatusInfos(
       return {
         label: 'Invio del messaggio di cortesia',
         description: `È in corso l'invio del messaggio di cortesia a ${recipient?.denomination} tramite ${type}`,
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE:
       if (!(step.details as SendDigitalDetails).digitalAddress?.address) {
@@ -164,7 +169,7 @@ export function getNotificationTimelineStatusInfos(
         description: `È in corso l'invio della notifica a ${
           recipient?.denomination
         } all'indirizzo PEC ${(step.details as SendDigitalDetails).digitalAddress?.address}`,
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK:
       const digitalDomicileFeedbackErrors = (step.details as SendDigitalDetails).errors;
@@ -174,8 +179,8 @@ export function getNotificationTimelineStatusInfos(
           description: `L'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
             (step.details as SendDigitalDetails).digitalAddress?.address
           } non è riuscito.`,
-          linkText: 'Attestazione opponibile a terzi',
-          recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+          linkText: legalFactLabel,
+          recipient: recipientLabel,
         };
       }
       return {
@@ -183,8 +188,8 @@ export function getNotificationTimelineStatusInfos(
         description: `L' invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
           (step.details as SendDigitalDetails).digitalAddress?.address
         } è riuscito.`,
-        linkText: 'Attestazione opponibile a terzi',
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        linkText: legalFactLabel,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_FEEDBACK:
       const digitalFeedbackErrors = (step.details as SendDigitalDetails).errors;
@@ -192,15 +197,15 @@ export function getNotificationTimelineStatusInfos(
         return {
           label: 'Invio per via digitale fallito',
           description: `L'invio della notifica a ${recipient?.denomination} per via digitale non è riuscito.`,
-          linkText: 'Attestazione opponibile a terzi',
-          recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+          linkText: legalFactLabel,
+          recipient: recipientLabel,
         };
       }
       return {
         label: 'Invio per via digitale riuscito',
         description: `L'invio della notifica a ${recipient?.denomination} per via digitale è riuscito.`,
-        linkText: 'Attestazione opponibile a terzi',
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        linkText: legalFactLabel,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
       return {
@@ -210,8 +215,8 @@ export function getNotificationTimelineStatusInfos(
         } all'indirizzo ${
           (step.details as AnalogWorkflowDetails).physicalAddress?.address
         } tramite raccomandata semplice.`,
-        linkText: 'Attestazione opponibile a terzi',
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        linkText: legalFactLabel,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_ANALOG_DOMICILE:
       if (
@@ -225,8 +230,8 @@ export function getNotificationTimelineStatusInfos(
           } all'indirizzo ${
             (step.details as AnalogWorkflowDetails).physicalAddress?.address
           } tramite raccomandata 890.`,
-          linkText: 'Vedi la ricevuta',
-          recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+          linkText: receiptLabel,
+          recipient: recipientLabel,
         };
       }
       return {
@@ -236,16 +241,25 @@ export function getNotificationTimelineStatusInfos(
         } all'indirizzo ${
           (step.details as AnalogWorkflowDetails).physicalAddress?.address
         } tramite raccomandata A/R.`,
-        linkText: 'Vedi la ricevuta',
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        linkText: receiptLabel,
+        recipient: recipientLabel,
       };
     case TimelineCategory.SEND_PAPER_FEEDBACK:
       return {
         label: 'Aggiornamento stato raccomandata',
         description: `Si allega un aggiornamento dello stato della raccomandata.`,
-        linkText: 'Vedi la ricevuta',
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
+        linkText: receiptLabel,
+        recipient: recipientLabel,
       };
+    // PN-1647
+    case TimelineCategory.NOT_HANDLED:
+      if ((step.details as NotHandledDetails).reasonCode === '001' && (step.details as NotHandledDetails).reason === 'Paper message not handled') {
+        return {
+          label: 'Annullata',
+          description: `La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante la sperimentazione della piattaforma.`,
+        };
+      }
+      return null;
     default:
       return {
         label: 'Non definito',
@@ -263,6 +277,8 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_PAPER_FEEDBACK,
+  // PN-1647
+  TimelineCategory.NOT_HANDLED
 ];
 
 /**

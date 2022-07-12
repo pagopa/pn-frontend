@@ -26,7 +26,7 @@ describe('DomicileBanner component', () => {
 
   it('clicks on the link to add a domicile', () => {
     const result = render(<DomicileBanner />);
-    const link = result.getByText('detail.add_domicile');
+    const link = result.getByRole('button', { name: /detail.add_domicile/ });
 
     fireEvent.click(link);
 
