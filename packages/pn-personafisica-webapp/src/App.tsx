@@ -18,6 +18,7 @@ import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { mixpanelInit } from './utils/mixpanel';
+import './utils/onetrust';
 
 declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
@@ -96,7 +97,6 @@ const App = () => {
     if (OTCookieValue.indexOf(checkValue) > -1) {
       mixpanelInit();
     }
-      
   }, []);
 
   useEffect(() => {
@@ -114,9 +114,9 @@ const App = () => {
   }, [pendingDelegators]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
-    if(delegators.length > 0) {
+    if (delegators.length > 0) {
       const myNotifications = {
-        label: t('title', {ns: 'notifiche'}),
+        label: t('title', { ns: 'notifiche' }),
         route: routes.NOTIFICHE
       };
       const mappedDelegators = delegators.map((delegator: Delegation) => ({
@@ -129,7 +129,7 @@ const App = () => {
             ? routes.GET_NOTIFICHE_DELEGATO_PATH(delegator.mandateId)
             : '*',
       }));
-      return [ myNotifications, ...mappedDelegators];
+      return [myNotifications, ...mappedDelegators];
     } else {
       return undefined;
     }

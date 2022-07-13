@@ -1,4 +1,4 @@
-const IS_DEVELOP = process.env.NODE_ENV === 'development';
+export const IS_DEVELOP = process.env.NODE_ENV === 'development';
 
 export const MOCK_USER = IS_DEVELOP;
 export const LOG_REDUX_ACTIONS = IS_DEVELOP;
@@ -19,3 +19,5 @@ export const URL_FILE_PRIVACY_DISCLAIMER = process.env.REACT_APP_URL_FILE_PRIVAC
 export const URL_FILE_TERMS_OF_SERVICE = process.env.REACT_APP_URL_FILE_TERMS_OF_SERVICE || '';
 
 export const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN || 'DUMMY';
+
+export const OT_DOMAIN_ID = process.env.REACT_APP_ONETRUST_DOMAIN_ID || '';
