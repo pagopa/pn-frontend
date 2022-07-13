@@ -50,18 +50,6 @@ const Login = () => {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
   }
 
-  const redirectPrivacyLink = () => {
-      trackEventByType(
-          TrackEventType.LOGIN_PRIVACY
-      );
-      window.location.assign(ENV.URL_FILE.PRIVACY_DISCLAIMER);
-  };
-
-  const redirectToSLink = () => window.location.assign(ENV.URL_FILE.TERMS_AND_CONDITIONS);
-  // trackEvent('LOGIN_PRIVACY', { SPID_IDP_NAME: 'LOGIN_PRIVACY' }, () =>
-  //   window.location.assign(ENV.URL_FILE.PRIVACY_DISCLAIMER)
-  // );
-
   return (
     <Layout>
       <Grid container direction="column" my={isMobile ? 4 : 16}>
@@ -175,56 +163,6 @@ const Login = () => {
                 </Trans>
               </Typography>
             </Box>
-          </Grid>
-        </Grid>
-
-        <Grid container item justifyContent="center">
-          <Grid item xs={10} sm={6} md={4} lg={4} xl={3}>
-            <Typography
-              color="text.secondary"
-              py={0}
-              px={0}
-              sx={{
-                textAlign: 'center',
-              }}
-              component="div"
-              variant="body1"
-              mt={isMobile ? 4 : 7}
-            >
-              <Trans
-                i18nKey="loginPage.privacyAndCondition"
-                shouldUnescape
-                components={[
-                  <Link
-                    key="privacy-link"
-                    sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                    onClick={redirectPrivacyLink}
-                  />,
-                  <Link
-                    key={'tos-link'}
-                    data-testid="terms-and-conditions"
-                    sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                    onClick={redirectToSLink}
-                  />,
-                ]}
-              >
-                Autenticandoti dichiari di aver letto e compreso l&apos;
-                <Link
-                  sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                  onClick={redirectPrivacyLink}
-                >
-                  Informativa Privacy
-                </Link>
-                {' e i '}
-                <Link
-                  sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                  onClick={redirectToSLink}
-                >
-                  Termini e condizioni d&apos;uso
-                </Link>
-                {" dell'Area Riservata."}
-              </Trans>
-            </Typography>
           </Grid>
         </Grid>
       </Grid>

@@ -26,6 +26,7 @@ import {
   PnBreadcrumb,
   TitleBox,
   useIsMobile,
+  NotificationDetailRecipient,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -63,13 +64,52 @@ const NotificationDetail = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
+
+  const { recipients } = notification;
+
+  const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
+
+  const recipientsWithAltNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCodeAlternative);
+
+  const getRecipientsNoticeCodeField = (recipients: Array<NotificationDetailRecipient>, alt: boolean = false): ReactNode => {
+    if(recipients.length > 1) {
+      return recipients.map((recipient, index) =>
+        <Box key={index} fontWeight={600}>
+          {recipient.taxId} - {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
+        </Box>
+      );
+    }
+    return <Box fontWeight={600}>{alt ? recipients[0]?.payment?.noticeCodeAlternative : recipients[0]?.payment?.noticeCode}</Box>;
+  };
+
   const unfilteredDetailTableRows: Array<{
     label: string;
     rawValue: string | undefined;
     value: ReactNode;
   }> = [
     {
-      label: 'Data',
+      label: 'Mittente',
+      rawValue: notification.senderDenomination,
+      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
+    },
+    {
+      label: 'Destinatario',
+      rawValue: recipients.length > 1 ? '' : recipients[0]?.denomination,
+      value: <Box fontWeight={600}>{recipients[0]?.denomination}</Box>,
+    },
+    {
+      label: recipients.length > 1 ? 'Destinatari' : 'Codice Fiscale destinatario',
+      rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
+      value: <>
+        {recipients.map((recipient, i) => (
+          <Box key={i} fontWeight={600}>
+            {recipient.taxId}
+          </Box>
+        ))}
+      </>,
+    },
+    {
+      label: 'Data di invio',
       rawValue: notification.sentAt,
       value: <Box fontWeight={600}>{notification.sentAt}</Box>,
     },
@@ -83,32 +123,9 @@ const NotificationDetail = () => {
       ),
     },
     {
-      label: 'Codice Fiscale destinatario',
-      rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
-      value:
-        notification.recipients.length > 1 ? (
-          <Box fontWeight={600}>
-            {notification.recipients.map((recipient, i) => (
-              <Box key={i}>
-                {recipient.taxId} - {recipient.denomination}
-              </Box>
-            ))}
-          </Box>
-        ) : (
-          <Box fontWeight={600}>{notification.recipients[0]?.taxId}</Box>
-        ),
-    },
-    {
-      label: 'Nome e cognome',
-      rawValue: notification.recipients.map((recipient) => recipient.denomination).join(', '),
-      value: notification.recipients.map((recipient, index) => (
-        <Box key={index}>{recipient.denomination}</Box>
-      )),
-    },
-    {
-      label: 'Mittente',
-      rawValue: notification.senderDenomination,
-      value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
+      label: 'Codice IUN',
+      rawValue: notification.iun,
+      value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
     {
       label: 'Codice IUN annullato',
@@ -116,9 +133,14 @@ const NotificationDetail = () => {
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
     },
     {
-      label: 'Codice IUN',
-      rawValue: notification.iun,
-      value: <Box fontWeight={600}>{notification.iun}</Box>,
+      label: 'Codice Avviso',
+      rawValue: recipientsWithNoticeCode.join(", "),
+      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode)
+    },
+    {
+      label: 'Codice Avviso Alternativo',
+      rawValue: recipientsWithAltNoticeCode.join(", "),
+      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true)
     },
     {
       label: 'Gruppi',
@@ -315,7 +337,7 @@ const NotificationDetail = () => {
           <Grid item lg={5} xs={12}>
             <Box sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
               <NotificationDetailTimeline
-                recipients={notification.recipients}
+                recipients={recipients}
                 statusHistory={notification.notificationStatusHistory}
                 title="Stato della notifica"
                 clickHandler={legalFactDownloadHandler}

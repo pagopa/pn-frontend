@@ -4,7 +4,7 @@ import { RenderResult } from '@testing-library/react';
 import { NotificationDetail as INotificationDetail } from '@pagopa-pn/pn-commons';
 import * as actions from '../../redux/notification/actions';
 import * as hooks from '../../redux/hooks';
-import { getNotification, notificationToFe } from '../../redux/notification/__test__/test-utils';
+import { getCancelledNotification, getNotification, getUnavailableDocsNotification, notificationToFe } from '../../redux/notification/__test__/test-utils';
 import { axe, render } from '../../__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -26,7 +26,7 @@ jest.mock('react-router-dom', () => ({
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
   NotificationDetailTable: () => <div>Table</div>,
-  NotificationDetailDocuments: () => <div>Documents</div>,
+  // NotificationDetailDocuments: () => <div>Documents</div>,
   NotificationDetailTimeline: () => <div>Timeline</div>,
 }));
 
@@ -73,12 +73,12 @@ describe('NotificationDetail Page', () => {
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
-    expect(result?.container).toHaveTextContent(/Documents/i);
+    expect(result?.container).toHaveTextContent("detail.acts");
     expect(result?.container).toHaveTextContent(/Timeline/i);
     expect(result?.container).toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', madateId: undefined });
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', mandateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
@@ -89,12 +89,12 @@ describe('NotificationDetail Page', () => {
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
-    expect(result?.container).toHaveTextContent(/Documents/i);
+    expect(result?.container).toHaveTextContent("detail.acts");
     expect(result?.container).toHaveTextContent(/Timeline/i);
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', madateId: undefined });
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', mandateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
@@ -105,12 +105,12 @@ describe('NotificationDetail Page', () => {
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
-    expect(result?.container).toHaveTextContent(/Documents/i);
+    expect(result?.container).toHaveTextContent("detail.acts");
     expect(result?.container).toHaveTextContent(/Timeline/i);
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', madateId: undefined });
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', mandateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
@@ -121,7 +121,7 @@ describe('NotificationDetail Page', () => {
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
-    expect(result?.container).toHaveTextContent(/Documents/i);
+    expect(result?.container).toHaveTextContent("detail.acts");
     expect(result?.container).toHaveTextContent(/Timeline/i);
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
@@ -137,13 +137,51 @@ describe('NotificationDetail Page', () => {
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
-    expect(result?.container).toHaveTextContent(/Documents/i);
+    expect(result?.container).toHaveTextContent("detail.acts");
     expect(result?.container).toHaveTextContent(/Timeline/i);
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', madateId: undefined });
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', mandateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
+
+  test('renders NotificationDetail if documents are available', async () => {
+    result = renderComponent(getNotification());
+    
+    const downloadDocumentBtn = result.getByRole("button", { name: "Mocked document" });
+    expect(downloadDocumentBtn).toBeInTheDocument();
+
+    const documentsText = result.getByText("detail.acts_files.downloadable_acts");
+    expect(documentsText).toBeInTheDocument();
+
+    result = resetResult();
+  });
+
+  test('renders NotificationDetail if documents are not available', async () => {
+    result = renderComponent(getUnavailableDocsNotification());
+    
+    const documentTitle = result.queryByText("Mocked document");
+    expect(documentTitle).toBeInTheDocument();
+
+    const documentsText = result.getByText("detail.acts_files.not_downloadable_acts");
+    expect(documentsText).toBeInTheDocument();
+
+    result = resetResult();
+  });
+
+  test('renders NotificationDetail if status is cancelled', async () => {
+    result = renderComponent(getCancelledNotification());
+    
+    // payment component and documents should be hidden if notification
+    // status is "cancelled" even though documentsAvailable is true
+    const documentTitle = result.queryByText("Mocked document");
+    expect(documentTitle).not.toBeInTheDocument();
+    expect(result?.container).not.toHaveTextContent(/Payment/i);
+
+    const documentsText = result.getByText("detail.acts_files.notification_cancelled");
+    expect(documentsText).toBeInTheDocument();
+  });
+
 });

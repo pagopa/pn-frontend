@@ -24,11 +24,11 @@
     "options": "Opzioni sort"
   },
   "detail": {
-    "date": "Data",
+    "date": "Data di invio",
     "payment-terms": "Da pagare entro il",
     "payment-terms-expiration": "Entro il",
-    "fullname": "Nome e cognome",
     "sender": "Mittente",
+    "recipient": "Destinatario",
     "cancelled-iun": "Codice IUN annullato",
     "iun": "Codice IUN",
     "groups": "Gruppi",
@@ -43,11 +43,14 @@
     "show-history": "Mostra storico",
     "show-more": "Mostra di più",
     "show-less": "Mostra di meno",
-    "add_domicile": "Associa",
-    "domicile_1": "Associa la tua PEC o l’app IO per ricevere le notifiche soltanto in versione digitale.",
-    "domicile_2": "Associa la tua PEC o l’app IO per risparmiare sulle spese dell’invio cartaceo.",
-    "domicile_3": "Associa la tua PEC o l’app IO per evitare gli sprechi di carta generati dalle raccomandate.",
-    "domicile_4": "Associa la tua PEC o l’app IO per ricevere le notifiche in tempi più rapidi.",
+    "add_domicile_1": "Aggiungi PEC",
+    "add_domicile_2": "Aggiungi cellulare",
+    "add_domicile_3": "Aggiungi email",
+    "add_domicile_4": "Attiva il servizio",
+    "domicile_1": "Hai un indirizzo PEC? Aggiungilo e non riceverai più le raccomandate cartacee.",
+    "domicile_2": "Aggiungi il tuo numero di cellulare: ti invieremo un messaggio ogni volta che ricevi una notifica.",
+    "domicile_3": "Aggiungi il tuo indirizzo email: ti invieremo un messaggio ogni volta che ricevi una notifica.",
+    "domicile_4": "Hai l’app IO? Attiva il servizio per visualizzare e pagare le notifiche direttamente in app.",
     "payment": {
       "summary": "Da pagare",
       "amount": "importo",
@@ -74,7 +77,8 @@
     },
     "acts_files": {
       "downloadable_acts": "Puoi scaricare gli atti entro 120 giorni dalla data di perfezionamento. Oltre questo termine, dovrai rivolgerti al mittente.",
-      "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente."
+      "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente.",
+      "notification_cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili."
     }
   },
   "delegatorTitle": "Le notifiche di {{name}}"

@@ -68,8 +68,8 @@ const dashboardSlice = createSlice({
       state.filters = {
         iunMatch: undefined,
         mandateId: action.payload,
-        startDate: tenYearsAgo.toISOString(),
-        endDate: today.toISOString()
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(getNextDay(today)),
       };
       // reset pagination
       state.pagination.size = 10;
