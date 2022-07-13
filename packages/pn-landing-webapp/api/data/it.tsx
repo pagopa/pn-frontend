@@ -2,7 +2,7 @@ import { ShowcaseProps, WalkthroughProps } from "@pagopa/mui-italia";
 import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
 import { CieIcon } from "@pagopa/mui-italia/dist/icons";
 
-const SELFCARE_URL = process.env.NEXT_SELFCARE_URL || "";
+const SELFCARE_URL = process.env.NEXT_PUBLIC_SELFCARE_URL || "";
 
 /** Hero mocked data */
 const paHero: HeroProps = {
@@ -17,7 +17,7 @@ const paHero: HeroProps = {
   ctaSecondary: {
     label: "Accedi",
     title: "Accedi title",
-    href: SELFCARE_URL,
+    href: SELFCARE_URL + "/auth/login",
   },
   inverse: false,
   image: "",
