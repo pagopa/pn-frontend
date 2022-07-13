@@ -118,13 +118,22 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
               },
             ]}
             saveDisabled={!formik.isValid}
-            removeModalTitle={t('legal-contacts.remove-pec-title', { ns: 'recapiti' })}
-            removeModalBody={t('legal-contacts.remove-pec-message', {
-              value: formik.values.pec,
-              ns: 'recapiti',
-            })}
+            removeModalTitle={
+              legalAddresses.length > 1
+                ? t('legal-contacts.block-remove-pec-title', { ns: 'recapiti' })
+                : t('legal-contacts.remove-pec-title', { ns: 'recapiti' })
+            }
+            removeModalBody={
+              legalAddresses.length > 1
+                ? t('legal-contacts.block-remove-pec-message', { ns: 'recapiti' })
+                : t('legal-contacts.remove-pec-message', {
+                    value: formik.values.pec,
+                    ns: 'recapiti',
+                  })
+            }
             value={formik.values.pec}
             onConfirmClick={handleEditConfirm}
+            blockDelete={legalAddresses.length > 1}
           />
         </form>
       </Box>
