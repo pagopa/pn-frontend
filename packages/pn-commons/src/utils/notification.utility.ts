@@ -128,7 +128,7 @@ export function getNotificationTimelineStatusInfos(
   linkText?: string;
   recipient?: string;
 } | null {
-  const recipient = !_.isNil(step.details.recIndex) ? ricipients[step.details.recIndex] : undefined;
+  const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
   
   const legalFactLabel = 'Attestazione opponibile a terzi';
   const receiptLabel = 'Vedi la ricevuta';

@@ -116,6 +116,15 @@ describe('notification utility functions', () => {
     );
   });
 
+  it('return notification status infos - CANCELLED', () => {
+    testNotificationStatusInfosFn(
+        NotificationStatus.CANCELLED,
+        'Annullata',
+        'warning',
+        "L'ente ha annullato l'invio della notifica"
+    );
+  });
+
   it('return notifications filters count (no filters)', () => {
     const date = new Date();
     const count = filtersApplied(

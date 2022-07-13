@@ -27,6 +27,7 @@ describe('Header Component', () => {
   beforeEach(() => {
     jest.restoreAllMocks();
     jest.resetAllMocks();
+    handleClick.mockClear()
   })
 
   it('renders header (one product, no parties and no user dropdown)', async () => {
@@ -125,12 +126,12 @@ describe('Header Component', () => {
             assistanceEmail={'email'}
         />
     );
-    expect(handleClick).toBeCalledTimes(1);
+    handleClick.mockClear()
     const assistanceLink = result.getByText(/Assistenza/i)
 
     fireEvent.click(assistanceLink)
 
-    expect(handleClick).toBeCalledTimes(2);
+    expect(handleClick).toBeCalledTimes(1);
   })
 
   it('clicks on assistance link when assistanceEmail has no value', () => {
@@ -149,11 +150,11 @@ describe('Header Component', () => {
             partyList={partyList}
         />
     );
-    expect(handleClick).toBeCalledTimes(1);
+    handleClick.mockClear()
     const assistanceLink = result.getByText(/Assistenza/i)
 
     fireEvent.click(assistanceLink)
-    expect(handleClick).toBeCalledTimes(1);
+    expect(handleClick).toBeCalledTimes(0);
   });
 
   it('clicks on exit with default value', async () => {

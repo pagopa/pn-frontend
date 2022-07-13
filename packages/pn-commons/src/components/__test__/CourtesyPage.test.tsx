@@ -15,10 +15,21 @@ describe('test CourtesyPage component', () => {
             />
         );
 
-        const button = result.getByText("Click label");
-
         expect(result.container).toHaveTextContent(/test title/i);
         expect(result.container).toHaveTextContent(/test subtitle/i);
+    });
+
+    test('clicks on the action button', () => {
+        const result = render(
+            <CourtesyPage
+                title="Test title"
+                subtitle="Test subtitle"
+                onClick={mockClickFn}
+                onClickLabel="Click label"
+            />
+        );
+        const button = result.getByText("Click label");
+
         fireEvent.click(button);
         expect(mockClickFn).toHaveBeenCalled();
     });

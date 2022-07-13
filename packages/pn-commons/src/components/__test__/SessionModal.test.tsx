@@ -4,7 +4,7 @@ import * as hooks from "../../hooks/IsMobile";
 
 const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
 
-describe('test CourtesyPage component', () => {
+describe('test SessionModal component', () => {
     test('renders the component without confirm button', () => {
         const result = render(<SessionModal open title={'Test title'} message={'test message'}/>)
 
