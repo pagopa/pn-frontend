@@ -104,8 +104,8 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
 export const NotificationAllowedStatus = [
   { value: 'All', label: 'Tutti gli stati' },
   { value: NotificationStatus.ACCEPTED, label: 'Depositata' },
+  { value: NotificationStatus.DELIVERING, label: 'Invio in corso' },
   { value: NotificationStatus.DELIVERED, label: 'Consegnata' },
-  { value: NotificationStatus.DELIVERING, label: 'In inoltro' },
   { value: NotificationStatus.EFFECTIVE_DATE, label: 'Perfezionata per decorrenza termini' },
   { value: NotificationStatus.VIEWED, label: 'Perfezionata per visione' },
   { value: NotificationStatus.PAID, label: 'Pagata' },
