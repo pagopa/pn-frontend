@@ -73,7 +73,7 @@ const NotificationDetail = () => {
 
   const getRecipientsNoticeCodeField = (recipients: Array<NotificationDetailRecipient>, alt: boolean = false): ReactNode => {
     if(recipients.length > 1) {
-      return recipients.map((recipient, index) =>
+      return recipients.map((recipient, index) => 
         <Box key={index} fontWeight={600}>
           {recipient.taxId} - {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
         </Box>
