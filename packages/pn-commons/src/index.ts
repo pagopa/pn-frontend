@@ -1,3 +1,11 @@
+export * from './components'
+export * from './hooks'
+export * from './navigation'
+export * from './redux'
+export * from './services'
+export * from './types'
+export * from './utils'
+
 // components
 import Layout from './components/Layout/Layout';
 import Footer from './components/Footer/Footer';
@@ -68,7 +76,7 @@ export { CopyToClipboard };
 // pages
 import NotFound from './navigation/NotFound';
 import AccessDenied from './navigation/AccessDenied';
-import CourtesyPage from './components/CourtesyPage';
+import CourtesyPage from './navigation/CourtesyPage';
 
 export { NotFound };
 export { AccessDenied };
@@ -81,31 +89,31 @@ import { NotificationStatus } from './types/NotificationStatus';
 import { SideMenuItem } from './types/SideMenuItem';
 import { Column, Item, Sort } from './types/ItemsTable';
 import {
-  Notification,
-  GetNotificationsResponse,
-  GetNotificationsParams,
+    Notification,
+    GetNotificationsResponse,
+    GetNotificationsParams,
 } from './types/Notifications';
 import {
-  NotificationDetailTableRow,
-  NotificationDetail,
-  INotificationDetailTimeline,
-  NotificationDetailRecipient,
-  NotificationDetailDocument,
-  NotificationFeePolicy,
-  NotificationDetailPayment,
-  PaymentInfo,
-  NotificationStatusHistory,
-  TimelineCategory,
-  DigitalDomicileType,
-  RecipientType,
-  AddressSource,
-  LegalFactType,
-  LegalFactId,
-  PhysicalCommunicationType,
-  PaymentInfoDetail,
-  PaymentStatus,
-  PaymentAttachmentSName,
-  PaymentAttachmentNameType
+    NotificationDetailTableRow,
+    NotificationDetail,
+    INotificationDetailTimeline,
+    NotificationDetailRecipient,
+    NotificationDetailDocument,
+    NotificationFeePolicy,
+    NotificationDetailPayment,
+    PaymentInfo,
+    NotificationStatusHistory,
+    TimelineCategory,
+    DigitalDomicileType,
+    RecipientType,
+    AddressSource,
+    LegalFactType,
+    LegalFactId,
+    PhysicalCommunicationType,
+    PaymentInfoDetail,
+    PaymentStatus,
+    PaymentAttachmentSName,
+    PaymentAttachmentNameType
 } from './types/NotificationDetail';
 import { CardElement, CardSort, CardAction } from './types/ItemsCard';
 import { MessageType } from './types/MessageType';
@@ -115,31 +123,31 @@ export type { IAppMessage };
 export type { PaginationData };
 export type { SideMenuItem };
 export {
-  NotificationStatus,
-  RecipientType,
-  DigitalDomicileType,
-  NotificationFeePolicy,
-  TimelineCategory,
-  LegalFactType,
-  AddressSource,
-  PhysicalCommunicationType,
-  PaymentInfoDetail,
-  PaymentAttachmentSName,
+    NotificationStatus,
+    RecipientType,
+    DigitalDomicileType,
+    NotificationFeePolicy,
+    TimelineCategory,
+    LegalFactType,
+    AddressSource,
+    PhysicalCommunicationType,
+    PaymentInfoDetail,
+    PaymentAttachmentSName,
 };
 export type { Column, Item, Sort };
 export type {
-  Notification,
-  GetNotificationsResponse,
-  GetNotificationsParams,
-  NotificationDetail,
-  INotificationDetailTimeline,
-  NotificationDetailRecipient,
-  NotificationDetailDocument,
-  NotificationDetailPayment,
-  NotificationStatusHistory,
-  PaymentInfo,
-  LegalFactId,
-  PaymentAttachmentNameType
+    Notification,
+    GetNotificationsResponse,
+    GetNotificationsParams,
+    NotificationDetail,
+    INotificationDetailTimeline,
+    NotificationDetailRecipient,
+    NotificationDetailDocument,
+    NotificationDetailPayment,
+    NotificationStatusHistory,
+    PaymentInfo,
+    LegalFactId,
+    PaymentAttachmentNameType
 };
 export type { CardElement, CardSort, CardAction };
 export type { NotificationDetailTableRow };
@@ -151,10 +159,10 @@ import { createAppError } from './services/message.service';
 import { formatDate } from './services/date.service';
 import { calculatePages } from './utils/pagination.utility';
 import {
-  getNotificationStatusInfos,
-  NotificationAllowedStatus,
-  parseNotificationDetail,
-  filtersApplied
+    getNotificationStatusInfos,
+    NotificationAllowedStatus,
+    parseNotificationDetail,
+    filtersApplied
 } from './utils/notification.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo, DATE_FORMAT, getNextDay, formatToTimezoneString } from './utils/date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './utils/fiscal_code.utility';

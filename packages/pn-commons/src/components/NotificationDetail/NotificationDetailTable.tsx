@@ -1,5 +1,5 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
-import { NotificationDetailTableRow } from '../../types/NotificationDetail';
+import { NotificationDetailTableRow } from '../../types';
 
 type Props = {
   rows: Array<NotificationDetailTableRow>;

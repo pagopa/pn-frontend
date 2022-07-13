@@ -13,7 +13,7 @@ import {
   ButtonNaked,
 } from '@pagopa/mui-italia';
 
-import { getDay, getMonthString, getTime } from '../../utils/date.utility';
+import { getDay, getMonthString, getTime } from '../../utils';
 import {
   getLegalFactLabel,
   getNotificationStatusInfos,

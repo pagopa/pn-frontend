@@ -2,8 +2,8 @@ import { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { appStateActions, appStateSelectors } from '../redux/slices/appStateSlice';
-import { IAppMessage } from '../types/AppMessage';
-import { MessageType } from '../types/MessageType';
+import { IAppMessage } from '../types';
+import { MessageType } from '../types';
 import SessionModal from './SessionModal';
 import Toast from './Toast/Toast';
 
