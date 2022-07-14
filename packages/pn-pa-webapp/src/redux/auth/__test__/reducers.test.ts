@@ -1,5 +1,5 @@
 import { AuthApi } from '../../../api/auth/Auth.api';
-import { PartyRole } from '../../../models/user';
+import { PartyRole, PNRole } from '../../../models/user';
 import { store } from '../../store';
 import { exchangeToken, logout } from '../actions';
 import { User } from '../types';
@@ -42,7 +42,7 @@ describe('Auth redux state tests', () => {
               id: '',
               roles: [
                 {
-                  role: '',
+                  role: PNRole.ADMIN,
                   partyRole: PartyRole.MANAGER,
                 },
               ],
@@ -76,7 +76,7 @@ describe('Auth redux state tests', () => {
         id: '',
         roles: [
           {
-            role: '',
+            role: PNRole.ADMIN,
             partyRole: PartyRole.MANAGER,
           },
         ],

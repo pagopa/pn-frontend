@@ -13,7 +13,6 @@ import MobileNotificationsSort from './components/Notifications/MobileNotificati
 import ItemsTable from './components/Data/ItemsTable';
 import EmptyState from './components/EmptyState';
 import ItemsCard from './components/Data/ItemsCard';
-import TitleAndDescription from './components/TitleAndDescription';
 import CustomMobileDialog from './components/CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogToggle from './components/CustomMobileDialog/CustomMobileDialogToggle';
 import CustomMobileDialogContent from './components/CustomMobileDialog/CustomMobileDialogContent';
@@ -46,7 +45,6 @@ export { StatusTooltip };
 export { MobileNotificationsSort };
 export { SessionModal };
 export { ItemsCard };
-export { TitleAndDescription };
 export { CustomMobileDialog };
 export { CustomMobileDialogToggle };
 export { CustomMobileDialogContent };
