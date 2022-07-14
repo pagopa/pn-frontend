@@ -1,13 +1,20 @@
+enum LinkType  {
+  INTERNAL = "internal",
+  EXTERNAL = "external"
+}
+
 export const productsList = [
   {
     id: "0",
     title: `Product 1`,
     productUrl: "",
+    linkType: LinkType.INTERNAL
   },
   {
     id: "1",
     title: `Product 2`,
     productUrl: "",
+    linkType: LinkType.EXTERNAL
   }
 ];
 

@@ -115,19 +115,21 @@ export const NotificationAllowedStatus = [
 
 /**
  * Returns the mapping between current notification timeline status and its label and descriptive message.
- * @param  {TimelineCategory} status
+ * @param  {INotificationDetailTimeline} step
+ * @param {Array<NotificationDetailRecipient>} recipients
  * @returns object
  */
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
-  ricipients: Array<NotificationDetailRecipient>
+  recipients: Array<NotificationDetailRecipient>
 ): {
   label: string;
   description: string;
   linkText?: string;
   recipient?: string;
 } | null {
-  const recipient = !_.isNil(step.details.recIndex) ? ricipients[step.details.recIndex] : undefined;
+  const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
+  
   const legalFactLabel = 'Attestazione opponibile a terzi';
   const receiptLabel = 'Vedi la ricevuta';
   const recipientLabel = `${recipient?.taxId} - ${recipient?.denomination}`;
@@ -334,8 +336,9 @@ export function parseNotificationDetail(
 
 /**
  * Get legalFact label based on timeline category.
- * @param  {NotificationDetail} notificationDetail
- * @returns NotificationDetail
+ * @param {TimelineCategory} category Timeline category
+ * @param {attestation: string; receipt: string} legalFactLabels Attestation and Receipt
+ * @returns {string} attestation or receipt
  */
 export function getLegalFactLabel(
   category: TimelineCategory,
@@ -349,8 +352,8 @@ export function getLegalFactLabel(
 
 /**
  * Returns the number of filters applied
- * @param  {preFilters} GetNotificationsParams
- * @param  {emptyValues} GetNotificationsParams
+ * @param  prevFilters GetNotificationsParams
+ * @param  emptyValues GetNotificationsParams
  * @returns number
  */
 export function filtersApplied(
