@@ -32,9 +32,9 @@ type Props = {
 const emptyValues = {
   startDate: formatToTimezoneString(tenYearsAgo),
   endDate: formatToTimezoneString(getNextDay(today)),
-  status: undefined,
-  recipientId: undefined,
-  iunMatch: undefined,
+  status: '',
+  recipientId: '',
+  iunMatch: '',
 };
 
 const initialEmptyValues = {
@@ -69,8 +69,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       searchFor: '0',
       startDate: new Date(filters.startDate),
       endDate: new Date(filters.endDate),
-      recipientId: getValidValue(filters.recipientId, ''),
-      iunMatch: getValidValue(filters.iunMatch, ''),
+      recipientId: getValidValue(filters.recipientId),
+      iunMatch: getValidValue(filters.iunMatch),
       status: getValidValue(filters.status, NotificationAllowedStatus[0].value),
     };
   };
@@ -88,7 +88,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         endDate: formatToTimezoneString(getNextDay(values.endDate)),
         recipientId: getValidValue(values.recipientId),
         iunMatch: getValidValue(values.iunMatch),
-        status: values.status === 'All' ? undefined : values.status,
+        status: values.status === 'All' ? '' : values.status,
       };
       if (_.isEqual(prevFilters, currentFilters)) {
         return;

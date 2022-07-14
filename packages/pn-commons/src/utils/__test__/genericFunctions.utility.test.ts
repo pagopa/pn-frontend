@@ -7,14 +7,14 @@ describe('get A or B function', () => {
     });
 
     it('return B value', () => {
-        const valueA = undefined;
+        const valueA = '';
         const valueB = 'mock-value-b';
         expect(getValidValue(valueA, valueB)).toBe('mock-value-b');
     });
 
     it('return undefined value', () => {
-        const valueA = undefined;
+        const valueA = '';
         const valueB = undefined;
-        expect(getValidValue(valueA, valueB)).toBe(undefined);
+        expect(getValidValue(valueA, valueB)).toBe('');
     });
 });
