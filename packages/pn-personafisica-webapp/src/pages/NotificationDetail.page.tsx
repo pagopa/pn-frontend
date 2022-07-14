@@ -212,6 +212,7 @@ const NotificationDetail = () => {
                 clickHandler={documentDowloadHandler}
                 documentsAvailable={hasDocumentsAvailable}
                 downloadFilesMessage={getDownloadFilesMessage()}
+                downloadFilesLink={t('detail.acts_files.effected_faq')}
               />
             </Paper>
             {/* TODO decommentare con pn-841
