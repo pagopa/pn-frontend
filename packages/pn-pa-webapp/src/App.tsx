@@ -19,7 +19,7 @@ const App = () => {
   const dispatch = useAppDispatch();
 
   // TODO check if it can exist more than one role on user
-  const role = loggedUser.organization?.roles.at(0);
+  const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
   const menuItems = useMemo(
     () => getMenuItems(idOrganization, role?.role),
