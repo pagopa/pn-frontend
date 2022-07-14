@@ -23,11 +23,20 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 });
 
 describe('RequireAuth Component', () => {
-  beforeEach(() => {
-    // useSelector mock
-    const useSelectorSpy = jest.spyOn(redux, 'useSelector');
-    useSelectorSpy.mockReturnValue('mocked-token').mockReturnValue(managerRole);
-  });
+  const initialState = (token: string) => (
+    {
+      preloadedState: {
+        userState: {
+          user: {
+            sessionToken: token,
+            organization: {
+              roles: [managerRole]
+            }
+          }
+        }
+      }
+    }
+  );
 
   afterEach(() => {
     jest.resetAllMocks();
@@ -35,33 +44,29 @@ describe('RequireAuth Component', () => {
 
   it('renders RequireAuth (user enabled to access)', () => {
     // render component
-    const result = render(<RequireAuth roles={[PartyRole.MANAGER]} />);
+    const result = render(<RequireAuth roles={[PartyRole.MANAGER]}/>, initialState('mocked-token'));
     expect(result?.container).toHaveTextContent(/Generic Page/i);
   });
 
-  it('renders RequireAuth (user not enabled to access)', () => {
+  it('renders RequireAuth (user not enabled to access - wrong role)', () => {
     // render component
-    const result = render(<RequireAuth roles={[PartyRole.OPERATOR]} />);
+    const result = render(<RequireAuth roles={[PartyRole.OPERATOR]} />, initialState('mocked-token'));
     expect(result?.container).toHaveTextContent(/Session Modal/i);
   });
 
   it('does not have basic accessibility issues rendering RequireAuth (user enabled to access)', async () => {
-    const { container } = render(<RequireAuth roles={[PartyRole.MANAGER]} />);
+    const { container } = render(<RequireAuth roles={[PartyRole.MANAGER]} />, initialState('mocked-token'));
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
-  it('does not have basic accessibility issues rendering RequireAuth (user not enabled to access)', async () => {
-    const { container } = render(<RequireAuth roles={[PartyRole.OPERATOR]} />);
+  it('does not have basic accessibility issues rendering RequireAuth (user not enabled to access - wrong role)', async () => {
+    const { container } = render(<RequireAuth roles={[PartyRole.OPERATOR]} />, initialState('mocked-token'));
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
 
-  it('renders RequireAuth without token', () => {
-    // useSelector mock
-    const useSelectorSpy = jest.spyOn(redux, 'useSelector');
-    useSelectorSpy.mockReturnValueOnce('').mockReturnValue(managerRole);
-
+  it('renders RequireAuth (user not enabled to access - no token)', () => {
     // useState mock
     const setState = jest.fn();
     const setStateFn: any = (init: any) => [init, setState];
@@ -69,7 +74,7 @@ describe('RequireAuth Component', () => {
     useStateSpy.mockImplementation(setStateFn);
 
     // render component
-    const result = render(<RequireAuth roles={[PartyRole.MANAGER]} />);
+    const result = render(<RequireAuth roles={[PartyRole.MANAGER]}/>, initialState(''));
     expect(setState).toBeCalledTimes(1);
     expect(result?.container).toHaveTextContent(/Session Modal/i);
   });
