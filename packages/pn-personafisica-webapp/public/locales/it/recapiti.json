@@ -29,7 +29,9 @@
     "remove-pec-title": "Rimuovi PEC",
     "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
     "disclaimer-message": "Niente più raccomandate cartacee: le notifiche che ricevi alla PEC risultano legalmente recapitate a te.",
-    "disclaimer-link": "Scopri di più"
+    "disclaimer-link": "Scopri di più",
+    "block-remove-pec-title": "Non puoi eliminare la PEC",
+    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”."
   },
   "io-contact": {
     "title": "",

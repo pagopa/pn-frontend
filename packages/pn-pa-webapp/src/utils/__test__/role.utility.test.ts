@@ -1,7 +1,7 @@
 import { People, SupervisedUserCircle } from '@mui/icons-material';
 import Email from '@mui/icons-material/Email';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
-import { PartyRole } from '../../models/user';
+import { PNRole } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { getHomePage, getMenuItems } from '../role.utility';
 
@@ -25,12 +25,12 @@ const SelfCareItems: Array<SideMenuItem> = [
 ];
 
 test('return menu items for role REFERENTE_AMMINISTRATIVO', () => {
-  const items = getMenuItems(PartyRole.MANAGER, mockedIdOrganization);
+  const items = getMenuItems(mockedIdOrganization, PNRole.ADMIN);
   expect(items).toEqual({ menuItems: BasicMenuItems, selfCareItems: SelfCareItems });
 });
 
 test('return menu items for role REFERENTE_OPERATIVO', () => {
-  const items = getMenuItems(PartyRole.OPERATOR, mockedIdOrganization);
+  const items = getMenuItems(mockedIdOrganization, PNRole.OPERATOR);
   expect(items).toEqual({ menuItems: BasicMenuItems });
 });
 
