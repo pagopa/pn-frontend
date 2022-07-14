@@ -25,7 +25,7 @@ const inactivityTimer = 5 * 60 * 1000;
 /* eslint-disable functional/immutable-data */
 const RequireAuth = ({ roles }: Props) => {
   const token = useSelector((state: RootState) => state.userState.user.sessionToken);
-  const role = useSelector((state: RootState) => state.userState.user.organization?.roles.at(0));
+  const role = useSelector((state: RootState) => state.userState.user.organization?.roles[0]);
   const userHasRequiredRole = role && roles.includes(role.partyRole);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token || !userHasRequiredRole);
   const dispatch = useAppDispatch();
