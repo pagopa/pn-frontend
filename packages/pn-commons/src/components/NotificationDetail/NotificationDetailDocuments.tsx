@@ -29,7 +29,7 @@ const NotificationDetailDocuments = ({
   clickHandler,
   documentsAvailable = true,
   downloadFilesMessage,
-  downloadFilesLink
+  // TODO: remove comment when link ready downloadFilesLink
 }: Props) => (
   <Fragment>
     <Grid
@@ -64,7 +64,7 @@ const NotificationDetailDocuments = ({
             {downloadFilesMessage}
           </Typography>
         )}
-        {/*downloadFilesLink &&
+        {/* TODO: remove comment when link ready downloadFilesLink &&
           <Typography onClick={() => console.log('link')}>{downloadFilesLink}</Typography>
         */}
       </Stack>
