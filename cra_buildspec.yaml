@@ -29,6 +29,12 @@ phases:
       - echo gzipping and pushing artifact to s3
       - cd $SUB_PRJ_NAME/build
       - tar c * | gzip | aws s3 cp - "s3://${CI_ARTIFACT_BUCKET}/${GITHUB_PRJ_NAME}/commits/${COMMIT_ID}/${PACKAGE_NAME}_${BUILD_ID}.tar.gz"
+      - |
+        BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
+        EVENT_DETAIL="{ \"event_type\": \"BUILD_DONE\", \"project_branch\":\"${BRANCH_NAME}\",\"project_type\":\"FRONTEND\", \"project\":\"pn-frontend\", \"commit_id\": \"${CODEBUILD_RESOLVED_SOURCE_VERSION}\" }"
+                    echo $EVENT_DETAIL | jq -R -s '[{ "DetailType": "CiEvent","EventBusName": "CiEventBus", "Source":"Builder", "Detail": . }]' > ci_event.json
+                    cat ci_event.json
+                    aws events put-events --entries file://ci_event.json
 artifacts:
   base-directory: $SUB_PRJ_NAME/build
   files:
