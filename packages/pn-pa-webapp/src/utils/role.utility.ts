@@ -3,6 +3,7 @@ import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { PNRole } from '../models/user';
+import { IS_DEVELOP } from './constants';
 
 const BasicMenuItems: Array<SideMenuItem> = [
   { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
@@ -24,11 +25,19 @@ function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
   ];
 }
 
-/** Get Menu Items based on user role */
+/**
+ * Get Menu Items based on user role
+ * @param idOrganization 
+ * @param role 
+ * @returns Allowed list of menù items
+ */
 export function getMenuItems(idOrganization: string, role?: PNRole): {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
 } {
+  if (IS_DEVELOP) {
+    return { menuItems: BasicMenuItems, selfCareItems: selfcareMenuItems(idOrganization) };
+  }
   switch (role) {
     case PNRole.ADMIN:
       return { menuItems: BasicMenuItems, selfCareItems: selfcareMenuItems(idOrganization) };
