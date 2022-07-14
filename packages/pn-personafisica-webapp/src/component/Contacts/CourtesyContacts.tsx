@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Typography } from '@mui/material';
+import { Alert, Box, Link, Typography } from '@mui/material';
 import { IllusSms } from '@pagopa/mui-italia';
 
 import { DigitalAddress } from '../../models/contacts';
@@ -21,10 +21,16 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
       subtitle={t('courtesy-contacts.description', { ns: 'recapiti' })}
       avatar={<IllusSms />}
     >
-      <CourtesyContactsList recipientId={recipientId} contacts={contacts} />
-      <Typography color="text.primary" fontWeight={400} fontSize={16}>
-        {t('courtesy-contacts.io-enable', { ns: 'recapiti' })}
-      </Typography>
+      <Box sx={{ width: { xs: '100%', lg: '50%' }}}>
+        <CourtesyContactsList recipientId={recipientId} contacts={contacts} />
+        <Alert
+          sx={{ mt: 4}}
+          severity="info"
+        >
+          <Typography component="span" variant="body1">{t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })} </Typography>
+          <Link href="#" variant='body1'>{t('courtesy-contacts.disclaimer-link', { ns: 'recapiti' })}</Link>
+        </Alert>
+      </Box>
     </DigitalContactsCard>
   );
 };

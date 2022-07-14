@@ -88,8 +88,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
           sx={{ mt: 4}}
           severity="info"
         >
-          <Typography component="span" variant="body1">{t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}</Typography>
-          <br />
+          <Typography component="span" variant="body1">{t('legal-contacts.disclaimer-message', { ns: 'recapiti' })} </Typography>
           <Link href="#" variant='body1'>{t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}</Link>
         </Alert>
       </DigitalContactsCard>

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
-import { Grid, Box, Typography, TextField } from '@mui/material';
+import { Grid, Box, Typography, TextField, Alert, Link } from '@mui/material';
 
 import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
@@ -65,24 +65,18 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     <DigitalContactsCard
       sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
       title={title}
-      subtitle={t('legal-contacts.description-2', { ns: 'recapiti' }) + t('legal-contacts.link-aar', { ns: 'recapiti' })}
+      subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
       avatar={<IllusEmailValidation />}
     >
       <Box sx={{ marginTop: '20px' }}>
         <form>
+          <Typography mb={1} sx={{ fontWeight: 'bold' }}>{t('legal-contacts.pec-added', { ns: 'recapiti' })}</Typography>
           <DigitalContactElem
             recipientId={recipientId}
             senderId="default"
             // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
             contactType={LegalChannelType.PEC}
             fields={[
-              {
-                id: 'label',
-                component: (
-                  <Typography>{t('legal-contacts.pec-added', { ns: 'recapiti' })}</Typography>
-                ),
-                size: 'variable',
-              },
               {
                 id: 'value',
                 component: (
@@ -111,9 +105,17 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             })}
             value={formik.values.pec}
             onConfirmClick={handleEditConfirm}
+            forceMobileView
           />
         </form>
       </Box>
+      <Alert
+        sx={{ mt: 4}}
+        severity="info"
+      >
+        <Typography component="span" variant="body1">{t('legal-contacts.disclaimer-message', { ns: 'recapiti' })} </Typography>
+        <Link href="#" variant='body1'>{t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}</Link>
+      </Alert>
     </DigitalContactsCard>
   );
 };

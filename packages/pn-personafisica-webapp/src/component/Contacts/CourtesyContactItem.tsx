@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, InputAdornment } from '@mui/material';
+import { Button, Grid, TextField, InputAdornment, Typography } from '@mui/material';
 
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -79,7 +79,8 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
 
   if (value) {
     return (
-      <form style={{ width: '100%', margin: '1rem 0' }}>
+      <form style={{ width: '100%'}}>
+        <Typography mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
         <DigitalContactElem
           recipientId={recipientId}
           senderId="default"
@@ -115,13 +116,14 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
           ]}
           saveDisabled={!formik.isValid}
           onConfirmClick={handleEditConfirm}
+          forceMobileView
         />
       </form>
     );
   }
 
   return (
-    <form onSubmit={formik.handleSubmit} style={{ width: '100%', margin: '1rem 0' }}>
+    <form onSubmit={formik.handleSubmit} style={{ width: '100%'}}>
       <Grid container spacing={2} direction="row">
         <Grid item lg={8} sm={8} xs={12}>
           <TextField
