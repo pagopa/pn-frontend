@@ -51,7 +51,7 @@ import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import { generateVCode } from '../utils/delegation.utility';
 import { trackEventByType } from "../utils/mixpanel";
-import {TrackEventType} from "../utils/events";
+import { TrackEventType } from "../utils/events";
 
 const useStyles = makeStyles(() => ({
   root: {

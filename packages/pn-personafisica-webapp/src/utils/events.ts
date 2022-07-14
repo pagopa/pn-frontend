@@ -95,7 +95,7 @@ export const events: {
     category: 'delegation',
     action: 'error while adding new delegate',
     getAttributes:  (payload: { [key: string]: any }) => ({
-      type: payload.response.data.title,
+      type: payload.response.data.title || 'generic error',
     })
   },
   [TrackEventType.DELEGATION_DELEGATE_REVOKE]: {
