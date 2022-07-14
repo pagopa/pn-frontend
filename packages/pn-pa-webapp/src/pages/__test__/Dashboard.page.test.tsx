@@ -9,6 +9,31 @@ import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Dashboard from '../Dashboard.page';
 
 const mockNavigateFn = jest.fn();
+type ComponentProps = {
+  noNotifications?: boolean;
+};
+
+function Component({ noNotifications }: ComponentProps) {
+  const spy = jest.spyOn(hooks, 'useAppSelector');
+  spy
+    .mockReturnValueOnce(noNotifications ? [] : notificationsToFe.resultsPage)
+    .mockReturnValueOnce({
+      startDate: formatToTimezoneString(tenYearsAgo),
+      endDate: formatToTimezoneString(getNextDay(today)),
+    })
+    .mockReturnValueOnce({
+      orderBy: '',
+      order: 'asc',
+    })
+    .mockReturnValueOnce({
+      nextPagesKey: ['mocked-page-key-1', 'mocked-page-key-2', 'mocked-page-key-3'],
+      size: 10,
+      page: 0,
+      moreResult: true,
+    });
+  // render component
+  return <Dashboard />;
+}
 
 // mock imports
 jest.mock('react-router-dom', () => ({
@@ -24,41 +49,20 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
-describe('Dashboard Page without notifications', () => {
+describe('Dashboard Page', () => {
+  // eslint-disable-next-line functional/no-let
   let result: RenderResult | undefined;
 
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
 
   beforeEach(async () => {
-    // mock app selector
-    const spy = jest.spyOn(hooks, 'useAppSelector');
-    spy
-      .mockReturnValueOnce([])
-      .mockReturnValueOnce({
-        startDate: formatToTimezoneString(getNextDay(today)),
-        endDate: formatToTimezoneString(getNextDay(today)),
-      })
-      .mockReturnValueOnce({
-        orderBy: '',
-        order: 'asc',
-      })
-      .mockReturnValueOnce({
-        nextPagesKey: ['mocked-page-key-1', 'mocked-page-key-2', 'mocked-page-key-3'],
-        size: 10,
-        page: 0,
-        moreResult: true,
-      });
     // mock action
     const actionSpy = jest.spyOn(actions, 'getSentNotifications');
     actionSpy.mockImplementation(mockActionFn);
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockDispatchFn);
-    // render component
-    await act(async () => {
-      result = render(<Dashboard />);
-    });
   });
 
   afterEach(() => {
@@ -67,7 +71,10 @@ describe('Dashboard Page without notifications', () => {
     jest.clearAllMocks();
   });
 
-  it('clicks on new notification inside DesktopNotifications component', async () => {
+  it('Dashboard without notifications, clicks on new notification inside DesktopNotifications component', async () => {
+    await act(async () => {
+      result = render(<Component noNotifications={true} />);
+    });
     const newNotificationBtn = result?.queryByTestId('callToActionSecond');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
@@ -75,59 +82,21 @@ describe('Dashboard Page without notifications', () => {
     });
   });
 
-  it('clicks on API KEYS page inside DesktopNotifications component', async () => {
+  it('Dashboard without notifications, clicks on API KEYS page inside DesktopNotifications component', async () => {
+    await act(async () => {
+      result = render(<Component noNotifications={true} />);
+    });
     const apiKeysBtn = result?.queryByTestId('callToActionFirst');
     fireEvent.click(apiKeysBtn!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);
     });
   });
-});
 
-describe('Dashboard Page', () => {
-  let result: RenderResult | undefined;
-
-  const mockDispatchFn = jest.fn();
-  const mockActionFn = jest.fn();
-
-  beforeEach(async () => {
-    // mock app selector
-    const spy = jest.spyOn(hooks, 'useAppSelector');
-    spy
-      .mockReturnValueOnce(notificationsToFe.resultsPage)
-      .mockReturnValueOnce({
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
-      })
-      .mockReturnValueOnce({
-        orderBy: '',
-        order: 'asc',
-      })
-      .mockReturnValueOnce({
-        nextPagesKey: ['mocked-page-key-1', 'mocked-page-key-2', 'mocked-page-key-3'],
-        size: 10,
-        page: 0,
-        moreResult: true,
-      });
-    // mock action
-    const actionSpy = jest.spyOn(actions, 'getSentNotifications');
-    actionSpy.mockImplementation(mockActionFn);
-    // mock dispatch
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
-    // render component
+  it('renders dashboard page', async () => {
     await act(async () => {
-      result = render(<Dashboard />);
+      result = render(<Component />);
     });
-  });
-
-  afterEach(() => {
-    result = undefined;
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-  });
-
-  it('renders dashboard page', () => {
     expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
     const filterForm = result?.container.querySelector('form');
     expect(filterForm).toBeInTheDocument();
@@ -147,13 +116,14 @@ describe('Dashboard Page', () => {
   });
 
   it('changes items per page', async () => {
+    await act(async () => {
+      result = render(<Component />);
+    });
     const itemsPerPageSelectorBtn = result?.container.querySelector(
       '[data-testid="itemsPerPageSelector"] > button'
     );
     fireEvent.click(itemsPerPageSelectorBtn!);
-    const itemsPerPageDropdown = await waitFor(() => {
-      return screen.queryByRole('presentation');
-    });
+    const itemsPerPageDropdown = await waitFor(() => screen.queryByRole('presentation'));
     expect(itemsPerPageDropdown).toBeInTheDocument();
     const itemsPerPageItem = within(itemsPerPageDropdown!).queryByText('100');
     // reset mock dispatch function
@@ -170,6 +140,9 @@ describe('Dashboard Page', () => {
   });
 
   it('changes page', async () => {
+    await act(async () => {
+      result = render(<Component />);
+    });
     const pageSelectorBtn = result?.container.querySelector(
       '[data-testid="pageSelector"] li:nth-child(3) > button'
     );
@@ -187,6 +160,9 @@ describe('Dashboard Page', () => {
   });
 
   it('clicks on new notification', async () => {
+    await act(async () => {
+      result = render(<Component />);
+    });
     const newNotificationBtn = result?.queryByTestId('newNotificationBtn');
     expect(newNotificationBtn).toHaveTextContent('Invia una nuova notifica');
     fireEvent.click(newNotificationBtn!);
@@ -196,7 +172,10 @@ describe('Dashboard Page', () => {
   });
 
   it('does not have basic accessibility issues rendering the page', async () => {
-    if(result) {
+    await act(async () => {
+      result = render(<Component />);
+    });
+    if (result) {
       const results = await axe(result.container);
       expect(results).toHaveNoViolations();
     }

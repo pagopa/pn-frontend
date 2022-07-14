@@ -56,14 +56,8 @@ describe('RequireAuth Component', () => {
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
-});
 
-describe('RequireAuth Component without token', () => {
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-
-  it('renders RequireAuth', () => {
+  it('renders RequireAuth without token', () => {
     // useSelector mock
     const useSelectorSpy = jest.spyOn(redux, 'useSelector');
     useSelectorSpy.mockReturnValueOnce('').mockReturnValue(managerRole);
