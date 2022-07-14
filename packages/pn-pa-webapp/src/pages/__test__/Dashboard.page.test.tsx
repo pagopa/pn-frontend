@@ -1,40 +1,14 @@
 import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { formatToTimezoneString, getNextDay, tenYearsAgo, today, Notification } from '@pagopa-pn/pn-commons';
 
 import * as actions from '../../redux/dashboard/actions';
 import { render, axe } from '../../__test__/test-utils';
-// import * as hooks from '../../redux/hooks';
 import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Dashboard from '../Dashboard.page';
 
 const mockNavigateFn = jest.fn();
-/*
-type ComponentProps = {
-  noNotifications?: boolean;
-};
-function Component({ noNotifications }: ComponentProps) {
-  const spy = jest.spyOn(hooks, 'useAppSelector');
-  spy
-    .mockReturnValueOnce(noNotifications ? [] : notificationsToFe.resultsPage)
-    .mockReturnValueOnce({
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
-    })
-    .mockReturnValueOnce({
-      orderBy: '',
-      order: 'asc',
-    })
-    .mockReturnValueOnce({
-      nextPagesKey: ['mocked-page-key-1', 'mocked-page-key-2', 'mocked-page-key-3'],
-      size: 10,
-      page: 0,
-      moreResult: true,
-    });
-  // render component
-  return <Dashboard />;
-}
-*/
+
 // mock imports
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -56,7 +30,7 @@ describe('Dashboard Page', () => {
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
 
-  const initialState = (notifications: Array<object>) => ({
+  const initialState = (notifications: Array<Notification>) => ({
     preloadedState: {
       dashboardState: {
         notifications,
