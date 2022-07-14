@@ -75,12 +75,16 @@ export function NOTIFICATION_DETAIL(iun: string, mandateId?: string) {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
     },
     query: {
-      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || ''
-    }
+      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || '',
+    },
   });
 }
 
-export function NOTIFICATION_DETAIL_DOCUMENTS(iun: string, documentIndex: string) {
+export function NOTIFICATION_DETAIL_DOCUMENTS(
+  iun: string,
+  documentIndex: string,
+  mandateId?: string
+) {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
     path: API_NOTIFICATION_DETAIL_DOCUMENT_PATH,
@@ -88,10 +92,17 @@ export function NOTIFICATION_DETAIL_DOCUMENTS(iun: string, documentIndex: string
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
       [API_NOTIFICATIONS_DOCUMENT_INDEX_PARAMETER]: documentIndex,
     },
+    query: {
+      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || '',
+    },
   });
 }
 
-export function NOTIFICATION_DETAIL_LEGALFACT(iun: string, legalFact: LegalFactId, mandateId?: string) {
+export function NOTIFICATION_DETAIL_LEGALFACT(
+  iun: string,
+  legalFact: LegalFactId,
+  mandateId?: string
+) {
   return compileRoute({
     prefix: API_DELIVERY_PUSH_PREFIX,
     path: API_NOTIFICATION_DETAIL_LEGALFACT_PATH,
@@ -101,18 +112,25 @@ export function NOTIFICATION_DETAIL_LEGALFACT(iun: string, legalFact: LegalFactI
       [API_NOTIFICATIONS_LEGALFACT_KEY_PARAMETER]: legalFact.key,
     },
     query: {
-      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || ''
-    }
+      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || '',
+    },
   });
 }
 
-export function NOTIFICATION_PAYMENT_ATTACHMENT(iun: string, attachmentName: string) {
+export function NOTIFICATION_PAYMENT_ATTACHMENT(
+  iun: string,
+  attachmentName: string,
+  mandateId?: string
+) {
   return compileRoute({
     prefix: API_DELIVERY_PREFIX,
     path: API_NOTIFICATION_PAYMENT_ATTACHMENT_PATH,
     params: {
       [API_NOTIFICATIONS_IUN_PARAMETER]: iun,
       [API_NOTIFICATIONS_ATTACHMENT_NAME_PARAMETER]: attachmentName,
+    },
+    query: {
+      [API_NOTIFICATIONS_MANDATE_ID_PARAMETER]: mandateId || '',
     },
   });
 }

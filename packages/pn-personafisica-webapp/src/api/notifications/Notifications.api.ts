@@ -24,7 +24,7 @@ const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };
   }
-  return {url: ''};
+  return { url: '' };
 };
 
 export const NotificationsApi = {
@@ -52,6 +52,7 @@ export const NotificationsApi = {
         nextPagesKey: [],
       };
     }),
+
   /**
    * Gets current user notification detail
    * @param  {string} iun
@@ -69,16 +70,23 @@ export const NotificationsApi = {
    * Gets current user notification document
    * @param  {string} iun
    * @param  {number} documentIndex
+   * @param  {string} mandateId
    * @returns Promise
    */
-  getReceivedNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
+  getReceivedNotificationDocument: (
+    iun: string,
+    documentIndex: string,
+    mandateId?: string
+  ): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
+      .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex, mandateId))
       .then((response) => getDownloadUrl(response)),
+
   /**
    * Gets current user notification legalfact
    * @param  {string} iun
    * @param  {LegalFactId} legalFact
+   * @param  {string} mandateId
    * @returns Promise
    */
   getReceivedNotificationLegalfact: (
@@ -89,19 +97,23 @@ export const NotificationsApi = {
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact, mandateId))
       .then((response) => getDownloadUrl(response)),
+
   /**
    * Gets current user specified Payment Attachment
    * @param  {string} iun
    * @param  {PaymentAttachmentNameType} attachmentName
+   * @param  {string} mandateId
    * @returns Promise
    */
   getPaymentAttachment: (
     iun: string,
-    attachmentName: PaymentAttachmentNameType
+    attachmentName: PaymentAttachmentNameType,
+    mandateId?: string
   ): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string))
+      .get<{ url: string }>(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, mandateId))
       .then((response) => getDownloadUrl(response)),
+
   /**
    * Gets current user's notification payment info
    * @param  {string} noticeCode
