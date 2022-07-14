@@ -12,10 +12,23 @@ import {
   UploadPayementParams,
   UpaloadPaymentResponse,
 } from '../../models/NewNotification';
+import { GroupStatus, UserGroup } from '../../models/user';
 
 export const setCancelledIun = createAction<string>('setCancelledIun');
 
-export const setSenderInfos = createAction<{senderDenomination: string; senderTaxId: string}>('setSenderInfos');
+export const setSenderInfos =
+  createAction<{ senderDenomination: string; senderTaxId: string }>('setSenderInfos');
+
+export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
+  'getUserGroups',
+  async (status: GroupStatus | undefined, { rejectWithValue }) => {
+    try {
+      return await NotificationsApi.getUserGroups(status);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
 
 export const setPreliminaryInformations = createAction<{
   paProtocolNumber: string;
@@ -26,11 +39,13 @@ export const setPreliminaryInformations = createAction<{
   paymentMode: PaymentModel;
 }>('setPreliminaryInformations');
 
-export const saveRecipients = createAction<{recipients: Array<FormRecipient>}>('saveRecipients');
+export const saveRecipients = createAction<{ recipients: Array<FormRecipient> }>('saveRecipients');
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {
-    const presignedUrls = await NotificationsApi.preloadNotificationDocument(items.map(item => ({contentType: item.contentType, key: item.key, sha256: item.sha256})));
+    const presignedUrls = await NotificationsApi.preloadNotificationDocument(
+      items.map((item) => ({ contentType: item.contentType, key: item.key, sha256: item.sha256 }))
+    );
     if (presignedUrls.length) {
       const uploadDocumentCalls: Array<Promise<string>> = [];
       // upload document
@@ -56,7 +71,7 @@ const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams
           key: presignedUrls[index].key,
           versionToken: documentsToken[index],
         },
-        title: item.key
+        title: item.key,
       }));
     }
     throw new Error();
@@ -102,9 +117,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
     const response: UpaloadPaymentResponse = {};
     const getFile = (item: UploadAttachmentParams) => {
       if (item.file && item.sha256) {
-        return documentsUploaded.find(
-          (f) => f.digests.sha256 === item.sha256
-        );
+        return documentsUploaded.find((f) => f.digests.sha256 === item.sha256);
       }
       return undefined;
     };

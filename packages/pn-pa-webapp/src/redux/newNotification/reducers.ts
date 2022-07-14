@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationFe, PaymentModel } from '../../models/NewNotification';
+import { UserGroup } from '../../models/user';
 import { formatNotificationRecipients } from '../../utils/notification.utility';
 import {
   resetNewNotificationState,
@@ -11,6 +12,7 @@ import {
   saveRecipients,
   uploadNotificationPaymentDocument,
   setSenderInfos,
+  getUserGroups,
 } from './actions';
 
 const initialState = {
@@ -26,6 +28,7 @@ const initialState = {
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
   } as NewNotificationFe,
+  groups: [] as Array<UserGroup>,
   isCompleted: false,
 };
 
@@ -44,6 +47,9 @@ const newNotificationSlice = createSlice({
         senderDenomination: action.payload.senderDenomination,
         senderTaxId: action.payload.senderTaxId,
       };
+    });
+    builder.addCase(getUserGroups.fulfilled, (state, action) => {
+      state.groups = action.payload;
     });
     builder.addCase(setPreliminaryInformations, (state, action) => {
       // TODO: capire la logica di set della fee policy sia corretta

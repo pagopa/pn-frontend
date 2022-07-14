@@ -9,6 +9,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationBe, NewNotificationResponse } from '../../models/NewNotification';
+import { GroupStatus, UserGroup } from '../../models/user';
 import { apiClient, externalClient } from '../axios';
 import {
   CREATE_NOTIFICATION,
@@ -17,13 +18,14 @@ import {
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_PRELOAD_DOCUMENT,
+  GET_USER_GROUPS,
 } from './notifications.routes';
 
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };
   }
-  return {url: ''};
+  return { url: '' };
 };
 
 export const NotificationsApi = {
@@ -51,6 +53,7 @@ export const NotificationsApi = {
         nextPagesKey: [],
       };
     }),
+
   /**
    * Gets current user notification detail
    * @param  {string} iun
@@ -63,6 +66,7 @@ export const NotificationsApi = {
       }
       return {} as NotificationDetail;
     }),
+
   /**
    * Gets current user notification document
    * @param  {string} iun
@@ -73,6 +77,7 @@ export const NotificationsApi = {
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
       .then((response) => getDownloadUrl(response)),
+
   /**
    * Gets current user notification legalfact
    * @param  {string} iun
@@ -83,6 +88,15 @@ export const NotificationsApi = {
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
       .then((response) => getDownloadUrl(response)),
+
+  /**
+   * get user groups
+   * @param  {GroupStatus} status
+   * @returns Promise
+   */
+  getUserGroups: (status?: GroupStatus): Promise<Array<UserGroup>> =>
+    apiClient.get<Array<UserGroup>>(GET_USER_GROUPS(status)).then((response) => response.data),
+
   /**
    * Preload notification document
    * @param  {string} key
@@ -103,6 +117,7 @@ export const NotificationsApi = {
         }
         return [];
       }),
+
   /**
    * Upload notification document
    * @param  {string} url
