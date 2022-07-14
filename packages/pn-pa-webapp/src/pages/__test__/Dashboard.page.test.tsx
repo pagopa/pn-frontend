@@ -4,15 +4,15 @@ import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-
 
 import * as actions from '../../redux/dashboard/actions';
 import { render, axe } from '../../__test__/test-utils';
-import * as hooks from '../../redux/hooks';
+// import * as hooks from '../../redux/hooks';
 import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Dashboard from '../Dashboard.page';
 
 const mockNavigateFn = jest.fn();
+/*
 type ComponentProps = {
   noNotifications?: boolean;
 };
-
 function Component({ noNotifications }: ComponentProps) {
   const spy = jest.spyOn(hooks, 'useAppSelector');
   spy
@@ -34,7 +34,7 @@ function Component({ noNotifications }: ComponentProps) {
   // render component
   return <Dashboard />;
 }
-
+*/
 // mock imports
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
@@ -56,6 +56,28 @@ describe('Dashboard Page', () => {
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
 
+  const initialState = (notifications: Array<object>) => ({
+    preloadedState: {
+      dashboardState: {
+        notifications,
+        filters: {
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+        },
+        sort: {
+          orderBy: '',
+          order: 'asc',
+        },
+        pagination: {
+          nextPagesKey: ['mocked-page-key-1', 'mocked-page-key-2', 'mocked-page-key-3'],
+          size: 10,
+          page: 0,
+          moreResult: true,
+        },
+      },
+    },
+  });
+
   beforeEach(async () => {
     // mock action
     const actionSpy = jest.spyOn(actions, 'getSentNotifications');
@@ -73,7 +95,7 @@ describe('Dashboard Page', () => {
 
   it('Dashboard without notifications, clicks on new notification inside DesktopNotifications component', async () => {
     await act(async () => {
-      result = render(<Component noNotifications={true} />);
+      result = render(<Dashboard />, initialState([]));
     });
     const newNotificationBtn = result?.queryByTestId('callToActionSecond');
     fireEvent.click(newNotificationBtn!);
@@ -84,7 +106,7 @@ describe('Dashboard Page', () => {
 
   it('Dashboard without notifications, clicks on API KEYS page inside DesktopNotifications component', async () => {
     await act(async () => {
-      result = render(<Component noNotifications={true} />);
+      result = render(<Dashboard />, initialState([]));
     });
     const apiKeysBtn = result?.queryByTestId('callToActionFirst');
     fireEvent.click(apiKeysBtn!);
@@ -95,7 +117,7 @@ describe('Dashboard Page', () => {
 
   it('renders dashboard page', async () => {
     await act(async () => {
-      result = render(<Component />);
+      result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
     });
     expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
     const filterForm = result?.container.querySelector('form');
@@ -117,7 +139,7 @@ describe('Dashboard Page', () => {
 
   it('changes items per page', async () => {
     await act(async () => {
-      result = render(<Component />);
+      result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
     });
     const itemsPerPageSelectorBtn = result?.container.querySelector(
       '[data-testid="itemsPerPageSelector"] > button'
@@ -141,7 +163,7 @@ describe('Dashboard Page', () => {
 
   it('changes page', async () => {
     await act(async () => {
-      result = render(<Component />);
+      result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
     });
     const pageSelectorBtn = result?.container.querySelector(
       '[data-testid="pageSelector"] li:nth-child(3) > button'
@@ -161,7 +183,7 @@ describe('Dashboard Page', () => {
 
   it('clicks on new notification', async () => {
     await act(async () => {
-      result = render(<Component />);
+      result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
     });
     const newNotificationBtn = result?.queryByTestId('newNotificationBtn');
     expect(newNotificationBtn).toHaveTextContent('Invia una nuova notifica');
@@ -173,7 +195,7 @@ describe('Dashboard Page', () => {
 
   it('does not have basic accessibility issues rendering the page', async () => {
     await act(async () => {
-      result = render(<Component />);
+      result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
     });
     if (result) {
       const results = await axe(result.container);
