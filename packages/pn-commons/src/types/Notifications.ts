@@ -21,10 +21,10 @@ export interface GetNotificationsParams {
   startDate: string;
   endDate: string;
   mandateId?: string;
-  recipientId?: string;
-  status?: string;
+  recipientId: string;
+  status: string;
   subjectRegExp?: string;
   size?: number;
   nextPagesKey?: string;
-  iunMatch?: string;
+  iunMatch: string;
 }
