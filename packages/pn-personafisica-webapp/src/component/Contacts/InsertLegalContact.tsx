@@ -2,19 +2,13 @@ import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import {
-  Alert,
-  Button,
-  Grid,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, Grid, Link, TextField, Typography } from '@mui/material';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
 
+import { URL_DIGITAL_NOTIFICATIONS } from '../../utils/constants';
 import { LegalChannelType } from '../../models/contacts';
-import DigitalContactsCard from './DigitalContactsCard';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
+import DigitalContactsCard from './DigitalContactsCard';
 
 type Props = {
   recipientId: string;
@@ -61,35 +55,35 @@ const InsertLegalContact = ({ recipientId }: Props) => {
         subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
         avatar={<IllusEmailValidation />}
       >
-
         <Grid container spacing={2} direction="row" mt={4}>
           <Grid item lg={8} sm={8} xs={12}>
-          <TextField
-            id="pec"
-            placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
-            fullWidth
-            name="pec"
-            value={formik.values.pec}
-            onChange={handleChangeTouched}
-            error={formik.touched.pec && Boolean(formik.errors.pec)}
-            helperText={formik.touched.pec && formik.errors.pec}
-            disabled={formik.values.digitalDomicileType !== LegalChannelType.PEC}
-            size="small"
-          />
+            <TextField
+              id="pec"
+              placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
+              fullWidth
+              name="pec"
+              value={formik.values.pec}
+              onChange={handleChangeTouched}
+              error={formik.touched.pec && Boolean(formik.errors.pec)}
+              helperText={formik.touched.pec && formik.errors.pec}
+              disabled={formik.values.digitalDomicileType !== LegalChannelType.PEC}
+              size="small"
+            />
           </Grid>
           <Grid item lg={4} sm={4} xs={12} alignItems="right">
             <Button variant="outlined" disabled={!formik.isValid} fullWidth type="submit">
-              {t('button.associa')}
-            {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
+              {t('button.conferma')}
+              {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
             </Button>
           </Grid>
         </Grid>
-        <Alert
-          sx={{ mt: 4}}
-          severity="info"
-        >
-          <Typography component="span" variant="body1">{t('legal-contacts.disclaimer-message', { ns: 'recapiti' })} </Typography>
-          <Link href="#" variant='body1'>{t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}</Link>
+        <Alert sx={{ mt: 4 }} severity="info">
+          <Typography component="span" variant="body1">
+            {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
+          </Typography>
+          <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
+            {t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}
+          </Link>
         </Alert>
       </DigitalContactsCard>
     </form>

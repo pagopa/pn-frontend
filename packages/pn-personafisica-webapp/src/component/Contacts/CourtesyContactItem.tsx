@@ -80,7 +80,7 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
   if (value) {
     return (
       <form style={{ width: '100%'}}>
-        <Typography mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
+        <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
         <DigitalContactElem
           recipientId={recipientId}
           senderId="default"
@@ -124,11 +124,13 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
 
   return (
     <form onSubmit={formik.handleSubmit} style={{ width: '100%'}}>
+      <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
       <Grid container spacing={2} direction="row">
         <Grid item lg={8} sm={8} xs={12}>
           <TextField
             id={type}
             name={type}
+            aria-labelledby={`${type}-label`}
             value={formik.values[type]}
             onChange={handleChangeTouched}
             error={formik.touched[type] && Boolean(formik.errors[type])}

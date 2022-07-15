@@ -24,8 +24,10 @@ const Contacts = () => {
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
   );
-  
-  const contactIO = digitalAddresses.courtesy.find((address) => address.channelType === CourtesyChannelType.IOMSG);
+
+  const contactIO = digitalAddresses.courtesy.find(
+    (address) => address.channelType === CourtesyChannelType.IOMSG
+  );
 
   useEffect(() => {
     void dispatch(getDigitalAddresses(recipientId));
@@ -59,14 +61,17 @@ const Contacts = () => {
         <Stack direction="column" spacing={8} mt={8}>
           <Stack spacing={3}>
             <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-              <Box sx={{ width: { xs: '100%', lg: '50%' }}}>
-              {digitalAddresses.legal.length === 0 ?
-                <InsertLegalContact recipientId={recipientId} />
-              :
-                <LegalContactsList recipientId={recipientId} legalAddresses={digitalAddresses.legal} />
-              }
+              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                {digitalAddresses.legal.length === 0 ? (
+                  <InsertLegalContact recipientId={recipientId} />
+                ) : (
+                  <LegalContactsList
+                    recipientId={recipientId}
+                    legalAddresses={digitalAddresses.legal}
+                  />
+                )}
               </Box>
-              <Box sx={{ width: { xs: '100%', lg: '50%' }}}>
+              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
                 <IOContact recipientId={recipientId} contact={contactIO} />
               </Box>
             </Stack>
@@ -85,42 +90,6 @@ const Contacts = () => {
             </Stack>
           )}
         </Stack>
-
-
-
-        {/* <Grid container direction="row" sx={{ marginTop: '5px' }} spacing={3}>
-          <Grid item lg={6} xs={12}>
-            {digitalAddresses.legal.length === 0 && (
-              <InsertLegalContact recipientId={recipientId} />
-            )}
-            {digitalAddresses.legal.length > 0 && (
-              <LegalContactsList
-                recipientId={recipientId}
-                legalAddresses={digitalAddresses.legal}
-              />
-            )}
-          </Grid>
-          <Grid item lg={6} xs={12}>
-            <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
-          </Grid>
-        </Grid>
-        {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
-          <Fragment>
-            <Typography variant="h5" fontWeight={600} fontSize={28} sx={{ marginTop: '30px' }}>
-              {t('special-contacts-title')}
-            </Typography>
-            <Box sx={{ marginTop: '20px' }}>
-              <SpecialContacts
-                recipientId={recipientId}
-                legalAddresses={digitalAddresses.legal}
-                courtesyAddresses={digitalAddresses.courtesy}
-              />
-            </Box>
-          </Fragment>
-        )} */}
-
-
-
       </Box>
     </DigitalContactsCodeVerificationProvider>
   );

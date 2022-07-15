@@ -9,6 +9,11 @@ export enum CourtesyChannelType {
   IOMSG = 'IOMSG',
 }
 
+export enum IOAllowedValues {
+  ENABLED = 'ENABLED',
+  DISABLED = 'DISABLED',
+}
+
 export interface DigitalAddress {
   addressType: string;
   recipientId: string;

@@ -3,19 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { Alert, Box, FormControlLabel, Link, Switch, Typography } from '@mui/material';
 import { IllusSms } from '@pagopa/mui-italia';
 
+import { URL_DIGITAL_NOTIFICATIONS } from '../../utils/constants';
+import { DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { useAppDispatch } from '../../redux/hooks';
-import { createOrUpdateCourtesyAddress, deleteCourtesyAddress } from '../../redux/contact/actions';
-import { CourtesyChannelType, DigitalAddress } from '../../models/contacts';
+import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
 import DigitalContactsCard from './DigitalContactsCard';
 
 interface Props {
   recipientId: string;
   contact?: DigitalAddress | null;
-}
-
-enum IOAllowedValues {
-  ENABLED = "ENABLED",
-  DISABLED = "DISABLED"
 }
 
 const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
@@ -24,19 +20,12 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const [isAvailable, setIsAvailable] = useState<boolean>(true);
 
-  const actionPayload = {
-    recipientId,
-    senderId: 'default',
-    channelType: CourtesyChannelType.IOMSG,
-  };
-
   const parseContact = () => {
     // TODO: verify if IO can be activated and is currently activated or not
     setIsEnabled(() => false);
     if (!contact) {
       setIsAvailable(() => false);
-    }
-    else{
+    } else {
       setIsAvailable(() => true);
       if (contact.value === IOAllowedValues.ENABLED) {
         setIsEnabled(() => true);
@@ -50,7 +39,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
     event.preventDefault();
     if (isAvailable) {
       if (isEnabled) {
-        dispatch(deleteCourtesyAddress(actionPayload))
+        dispatch(disableIOAddress(recipientId))
           .unwrap()
           .then(() => {
             setIsEnabled(() => false);
@@ -61,7 +50,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
             }
           });
       } else {
-        dispatch(createOrUpdateCourtesyAddress({ ...actionPayload, value: 'appIO' }))
+        dispatch(enableIOAddress(recipientId))
           .unwrap()
           .then(() => {
             setIsEnabled(() => true);
@@ -86,31 +75,29 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
       subtitle={t('io-contact.description', { ns: 'recapiti' })}
       avatar={<IllusSms />}
     >
-      <Box mt={3}>
-        <FormControlLabel
-          control={
-            <Switch
-              aria-label=""
-              color="primary"
-              disabled={!isAvailable}
-              defaultChecked
-              checked={isEnabled}
-              onChange={toggleIO}
-            />
-          }
-          label={t('io-contact.switch-label', { ns: 'recapiti' })}
-        />
-      </Box>
-      {!isAvailable && (
-        <Typography color="text.primary" fontWeight={400} fontSize={16}>
-          {t('courtesy-contacts.io-enable', { ns: 'recapiti' })}
-        </Typography>
+      {isAvailable && (
+        <Box mt={3}>
+          <FormControlLabel
+            control={
+              <Switch
+                aria-label=""
+                color="primary"
+                disabled={!isAvailable}
+                checked={isEnabled}
+                onChange={toggleIO}
+              />
+            }
+            label={t('io-contact.switch-label', { ns: 'recapiti' })}
+          />
+        </Box>
       )}
-      <Alert sx={{ mt: 4 }} severity="info">
+      <Alert sx={{ mt: 4 }} severity={isAvailable ? 'info' : 'warning'}>
         <Typography component="span" variant="body1">
-          {t('io-contact.disclaimer-message', { ns: 'recapiti' })}{' '}
+          {isAvailable
+            ? t('io-contact.disclaimer-message', { ns: 'recapiti' })
+            : t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })}{' '}
         </Typography>
-        <Link href="#" variant="body1">
+        <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
           {t('io-contact.disclaimer-link', { ns: 'recapiti' })}
         </Link>
       </Alert>

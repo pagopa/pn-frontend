@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Party } from '../../models/party';
 
-import { DigitalAddresses, DigitalAddress } from './../../models/contacts';
+import { DigitalAddresses, DigitalAddress, CourtesyChannelType, IOAllowedValues } from './../../models/contacts';
 import {
   createOrUpdateCourtesyAddress,
   createOrUpdateLegalAddress,
   deleteCourtesyAddress,
   deleteLegalAddress,
+  disableIOAddress,
+  enableIOAddress,
   getAllActivatedParties,
   getDigitalAddresses,
   resetContactsState,
@@ -76,6 +78,18 @@ const contactsSlice = createSlice({
             address.channelType !== action.meta.arg.channelType
         );
       }
+    });
+    builder.addCase(enableIOAddress.fulfilled, (state) => {
+      const addressIndex = state.digitalAddresses.courtesy.findIndex(
+        (address) => address.channelType === CourtesyChannelType.IOMSG
+      );
+      state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.ENABLED;
+    });
+    builder.addCase(disableIOAddress.fulfilled, (state) => {
+      const addressIndex = state.digitalAddresses.courtesy.findIndex(
+        (address) => address.channelType === CourtesyChannelType.IOMSG
+      );
+      state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.DISABLED;
     });
     builder.addCase(resetContactsState, () => initialState);
     builder.addCase(getAllActivatedParties.fulfilled, (state, action) => {

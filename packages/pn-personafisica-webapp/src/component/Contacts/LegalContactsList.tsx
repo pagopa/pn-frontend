@@ -5,6 +5,7 @@ import * as yup from 'yup';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
 import { Grid, Box, Typography, TextField, Alert, Link } from '@mui/material';
 
+import { URL_DIGITAL_NOTIFICATIONS } from '../../utils/constants';
 import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
 import DigitalContactElem from './DigitalContactElem';
@@ -17,14 +18,13 @@ type Props = {
 const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
 
-
   const title = useMemo(
     () => (
       <Grid container spacing={1} alignItems="flex-end" direction="row">
         <Grid item xs="auto">
           {t('legal-contacts.subtitle-2', { ns: 'recapiti' })}
         </Grid>
-        </Grid>
+      </Grid>
     ),
     []
   );
@@ -70,7 +70,9 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     >
       <Box sx={{ marginTop: '20px' }}>
         <form>
-          <Typography mb={1} sx={{ fontWeight: 'bold' }}>{t('legal-contacts.pec-added', { ns: 'recapiti' })}</Typography>
+          <Typography mb={1} sx={{ fontWeight: 'bold' }}>
+            {t('legal-contacts.pec-added', { ns: 'recapiti' })}
+          </Typography>
           <DigitalContactElem
             recipientId={recipientId}
             senderId="default"
@@ -118,12 +120,13 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
           />
         </form>
       </Box>
-      <Alert
-        sx={{ mt: 4}}
-        severity="info"
-      >
-        <Typography component="span" variant="body1">{t('legal-contacts.disclaimer-message', { ns: 'recapiti' })} </Typography>
-        <Link href="#" variant='body1'>{t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}</Link>
+      <Alert sx={{ mt: 4 }} severity="info">
+        <Typography component="span" variant="body1">
+          {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
+        </Typography>
+        <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
+          {t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}
+        </Link>
       </Alert>
     </DigitalContactsCard>
   );

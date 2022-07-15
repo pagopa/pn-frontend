@@ -73,18 +73,18 @@ describe('LegalContactsList Component', () => {
     expect(buttons![1]).toHaveTextContent('button.rimuovi');
   });
 
-  it('expands disclosure', async () => {
-    expect(result?.container).not.toHaveTextContent('legal-contacts.description-2');
-    expect(result?.container).not.toHaveTextContent('legal-contacts.save-money');
-    expect(result?.container).not.toHaveTextContent('legal-contacts.avoid-waste');
-    const disclosureIcon = result?.queryByTestId('ErrorOutlineIcon');
-    fireEvent.click(disclosureIcon!);
-    await waitFor(() => {
-      expect(result?.container).toHaveTextContent('legal-contacts.description-2');
-      expect(result?.container).toHaveTextContent('legal-contacts.save-money');
-      expect(result?.container).toHaveTextContent('legal-contacts.avoid-waste');
-    });
-  });
+  // it('expands disclosure', async () => {
+  //   expect(result?.container).not.toHaveTextContent('legal-contacts.description-2');
+  //   expect(result?.container).not.toHaveTextContent('legal-contacts.save-money');
+  //   expect(result?.container).not.toHaveTextContent('legal-contacts.avoid-waste');
+  //   const disclosureIcon = result?.queryByTestId('ErrorOutlineIcon');
+  //   fireEvent.click(disclosureIcon!);
+  //   await waitFor(() => {
+  //     expect(result?.container).toHaveTextContent('legal-contacts.description-2');
+  //     expect(result?.container).toHaveTextContent('legal-contacts.save-money');
+  //     expect(result?.container).toHaveTextContent('legal-contacts.avoid-waste');
+  //   });
+  // });
 
   it('enables editing', async () => {
     const form = result?.container.querySelector('form');
