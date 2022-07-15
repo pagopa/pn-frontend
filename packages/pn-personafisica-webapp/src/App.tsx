@@ -38,7 +38,7 @@ const productsList: Array<ProductSwitchItem> = [
 
 const App = () => {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { fetchedTos, tos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
@@ -155,6 +155,10 @@ const App = () => {
     },
   ];
 
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
+
   return (
     <Layout
       assistanceEmail={PAGOPA_HELP_EMAIL}
@@ -165,6 +169,7 @@ const App = () => {
       loggedUser={jwtUser}
       enableUserDropdown
       userActions={userActions}
+      onLanguageChanged={changeLanguageHandler}
     >
       <AppMessage
         sessionRedirect={() => dispatch(logout())}
