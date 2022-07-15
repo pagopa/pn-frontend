@@ -9,7 +9,7 @@ import {
   SendPaperDetails,
   TimelineCategory,
 } from '../../types/NotificationDetail';
-import { NotificationStatus } from '../../types/NotificationStatus';
+import { NotificationStatus } from '../../types';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,

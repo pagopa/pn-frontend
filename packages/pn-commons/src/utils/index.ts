@@ -5,6 +5,7 @@ import {
     parseNotificationDetail,
     filtersApplied
 } from './notification.utility';
+import { getValidValue } from './genericFunctions.utility';
 import { getMonthString, getDay, getTime, today, tenYearsAgo, DATE_FORMAT, getNextDay, formatToTimezoneString } from './date.utility';
 import { formatFiscalCode, fiscalCodeRegex } from './fiscal_code.utility';
 import { IUN_regex, formatIun } from './iun.utility';
@@ -18,6 +19,7 @@ export { parseNotificationDetail };
 export { filtersApplied };
 export { calculatePages };
 export { getMonthString, getDay, getTime, getNextDay, formatToTimezoneString };
+export { getValidValue};
 export { formatFiscalCode };
 export { fiscalCodeRegex };
 export { IUN_regex, formatIun };
