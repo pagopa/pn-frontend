@@ -97,9 +97,11 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
             ? t('io-contact.disclaimer-message', { ns: 'recapiti' })
             : t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })}{' '}
         </Typography>
-        <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
-          {t('io-contact.disclaimer-link', { ns: 'recapiti' })}
-        </Link>
+        {isAvailable &&
+          <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
+            {t('io-contact.disclaimer-link', { ns: 'recapiti' })}
+          </Link>
+        }
       </Alert>
     </DigitalContactsCard>
   );
