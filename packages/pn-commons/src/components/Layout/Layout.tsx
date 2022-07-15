@@ -29,7 +29,7 @@ type Props = {
   /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
   /** Function called when user chenge language */
-  onLanguageChanged: (langCode: string) => void
+  onLanguageChanged?: (langCode: string) => void
 };
 
 export default function Layout({
