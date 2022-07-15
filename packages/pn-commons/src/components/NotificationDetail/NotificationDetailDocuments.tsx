@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Stack, Typography } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 // import DownloadIcon from '@mui/icons-material/Download';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -10,6 +10,7 @@ type Props = {
   clickHandler: (documentIndex: string | undefined) => void;
   documentsAvailable?: boolean;
   downloadFilesMessage?: string;
+  downloadFilesLink?: string;
 };
 
 /**
@@ -18,6 +19,8 @@ type Props = {
  * @param documents data to show
  * @param clickHandler function called when user clicks on the download button
  * @param documentsAvailable flag that allows download file or not (after 120 days)
+ * @param downloadFilesMessage disclaimer to show about downloadable acts
+ * @param downloadFilesLink text to bring to
  */
 
 const NotificationDetailDocuments = ({
@@ -26,6 +29,7 @@ const NotificationDetailDocuments = ({
   clickHandler,
   documentsAvailable = true,
   downloadFilesMessage,
+  // TODO: remove comment when link ready downloadFilesLink
 }: Props) => (
   <Fragment>
     <Grid
@@ -54,11 +58,16 @@ const NotificationDetailDocuments = ({
       */}
     </Grid>
     <Grid key={'detail-documents-message'} item>
-      {downloadFilesMessage && (
-        <Typography variant="body2" sx={{ mb: 3 }}>
-          {downloadFilesMessage}
-        </Typography>
-      )}
+      <Stack direction="row">
+        {downloadFilesMessage && (
+          <Typography variant="body2" sx={{ mb: 3 }}>
+            {downloadFilesMessage}
+          </Typography>
+        )}
+        {/* TODO: remove comment when link ready downloadFilesLink &&
+          <Typography onClick={() => console.log('link')}>{downloadFilesLink}</Typography>
+        */}
+      </Stack>
     </Grid>
     <Grid key={'download-files-section'} item>
       {documents && documents.map((d) => (
