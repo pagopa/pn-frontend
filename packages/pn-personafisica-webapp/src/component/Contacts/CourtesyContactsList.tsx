@@ -31,18 +31,40 @@ const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
     [contacts]
   );
 
+  const phoneContactsQuantity = useMemo(
+      () =>
+          contacts.reduce((total, contact) =>
+              contact.channelType === CourtesyChannelType.SMS
+                  ? total + 1
+                  : total, 0
+          ),
+      [contacts]
+  );
+
+    const emailContactsQuantity = useMemo(
+        () =>
+            contacts.reduce((total, contact) =>
+                contact.channelType === CourtesyChannelType.SMS
+                    ? total + 1
+                    : total, 0
+            ),
+        [contacts]
+    );
+
   return (
     <Box style={{ padding: '1rem 0' }}>
       <CourtesyContactItem
         recipientId={recipientId}
         type={CourtesyFieldType.PHONE}
         value={phoneContact ? phoneContact?.value : ''}
+        blockDelete={phoneContactsQuantity > 1}
       />
       {(isMobile || phoneContact) && <Divider />}
       <CourtesyContactItem
         recipientId={recipientId}
         type={CourtesyFieldType.EMAIL}
         value={emailContact ? emailContact.value : ''}
+        blockDelete={emailContactsQuantity > 1}
       />
     </Box>
   );
