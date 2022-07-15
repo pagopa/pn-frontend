@@ -305,7 +305,7 @@ describe('timeline utility functions', () => {
     (parsedNotificationCopy.timeline[0].details as NotHandledDetails).reason = 'Paper message not handled';
     testTimelineStatusInfosFn(
       'Annullata',
-      "La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante la sperimentazione della piattaforma."
+      "La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante il collaudo della piattaforma."
     );
   });
 });

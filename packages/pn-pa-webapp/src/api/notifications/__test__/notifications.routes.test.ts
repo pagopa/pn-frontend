@@ -16,6 +16,7 @@ describe('Notifications routes', () => {
       endDate: 'end-date',
       recipientId: 'recipient-id',
       iunMatch: 'iun-match',
+      status: '', 
     });
     expect(route).toEqual(
       '/delivery/notifications/sent?startDate=start-date&endDate=end-date&recipientId=RECIPIENT-ID&iunMatch=iun-match'
