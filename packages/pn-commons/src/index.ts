@@ -195,3 +195,8 @@ export { appStateReducer };
 import { appStateActions } from './redux/slices/appStateSlice';
 
 export { appStateActions };
+
+// contexts
+import {NavigationProvider} from './contexts/navigation-context';
+
+export {NavigationProvider}
