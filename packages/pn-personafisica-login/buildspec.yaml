@@ -1,9 +1,9 @@
 version: 0.2
 batch:
   build-list:
-   - identifier: pn_login_dev_build
-     buildspec: cra_buildspec.yaml
-     env:
+    - identifier: pn_login_dev_build
+      buildspec: cra_buildspec.yaml
+      env:
         variables:
           BUILD_ID: dev
           REACT_APP_ENABLE_ASSISTANCE: true
