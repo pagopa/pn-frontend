@@ -11,8 +11,8 @@ batch:
         REACT_APP_URL_SELFCARE_BASE: https://dev.selfcare.pagopa.it
         REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
         REACT_APP_DISABLE_INACTIVITY_HANDLER: true
-        REACT_APP_MIXPANEL_TOKEN: DUMMY
-        REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c
+        # REACT_APP_MIXPANEL_TOKEN: DUMMY
+        # REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c
     - identifier: pn_pa_svil_build
       buildspec: cra_buildspec.yaml
       env:
@@ -23,8 +23,8 @@ batch:
           REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.svil.pn.pagopa.it/
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
-          REACT_APP_MIXPANEL_TOKEN: DUMMY
-          REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c
+          # REACT_APP_MIXPANEL_TOKEN: DUMMY
+          # REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c
     - identifier: pn_pa_coll_build
       buildspec: cra_buildspec.yaml
       env:
@@ -35,8 +35,8 @@ batch:
           REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.coll.pn.pagopa.it/
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
-          REACT_APP_MIXPANEL_TOKEN: DUMMY
-          REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c
+          # REACT_APP_MIXPANEL_TOKEN: DUMMY
+          # REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c
     # - identifier: pn_pa_prod_build
     #   buildspec: cra_buildspec.yaml
     #   env:
