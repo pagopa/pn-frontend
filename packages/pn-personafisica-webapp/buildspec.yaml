@@ -1,6 +1,20 @@
 version: 0.2
 batch:
   build-list:
+    - identifier: pn_pf_dev_build
+      buildspec: cra_buildspec.yaml
+      env:
+        variables:
+          BUILD_ID: dev
+          REACT_APP_PAGOPA_HELP_EMAIL: pn.dev@assistenza.pagopa.it
+          REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
+          REACT_APP_URL_FE_LOGIN: https://portale-login-develop.fe.dev.pn.pagopa.it/
+          REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
+          REACT_APP_PAGOPA_HELP_EMAIL: pn.dev@assistenza.pagopa.it
+          REACT_APP_CHECKOUT_URL: https://uat.checkout.pagopa.it
+          REACT_APP_DISABLE_INACTIVITY_HANDLER: true
+          REACT_APP_MIXPANEL_TOKEN: DUMMY
+          REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c
     - identifier: pn_pf_svil_build
       buildspec: cra_buildspec.yaml
       env:
@@ -8,9 +22,9 @@ batch:
           BUILD_ID: svil
           REACT_APP_PAGOPA_HELP_EMAIL: pn.svil@assistenza.pagopa.it
           REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
-          REACT_APP_URL_FE_LOGIN: https://portale-login-develop.fe.dev.pn.pagopa.it/
-          REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
-          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
+          REACT_APP_URL_FE_LOGIN: https://portale-login.svil.pn.pagopa.it/
+          REACT_APP_URL_API: https://webapi.svil.pn.pagopa.it/
+          REACT_APP_PAGOPA_HELP_EMAIL: pn.svil@assistenza.pagopa.it
           REACT_APP_CHECKOUT_URL: https://uat.checkout.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: DUMMY
@@ -24,8 +38,22 @@ batch:
           REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
           REACT_APP_URL_FE_LOGIN: https://portale-login.coll.pn.pagopa.it
           REACT_APP_URL_API: https://webapi.coll.pn.pagopa.it/
-          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: pn.coll@assistenza.pagopa.it
           REACT_APP_CHECKOUT_URL: https://uat.checkout.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: DUMMY
           REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c
+    # - identifier: pn_pf_prod_build
+    #     buildspec: cra_buildspec.yaml
+    #     env:
+    #       variables:
+    #        BUILD_ID: prod
+    #        REACT_APP_PAGOPA_HELP_EMAIL: pn.coll@assistenza.pagopa.it
+    #        REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
+    #        REACT_APP_URL_FE_LOGIN: https://login.notifichedigitali.pagopa.it
+    #        REACT_APP_URL_API: https://webapi.pn.pagopa.it/
+    #        REACT_APP_PAGOPA_HELP_EMAIL: <TBD>
+    #        REACT_APP_CHECKOUT_URL: https://checkout.pagopa.it
+    #        REACT_APP_DISABLE_INACTIVITY_HANDLER: false
+    #        REACT_APP_MIXPANEL_TOKEN: DUMMY
+    #        REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c
