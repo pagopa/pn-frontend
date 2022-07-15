@@ -1,4 +1,4 @@
-import { PartyRole } from '../../../models/user';
+import { PartyRole, PNRole } from '../../../models/user';
 import { User } from '../types';
 
 export const userResponse: User = {
@@ -13,7 +13,7 @@ export const userResponse: User = {
     roles: [
       {
         partyRole: PartyRole.MANAGER,
-        role: '',
+        role: PNRole.ADMIN,
       },
     ],
     fiscal_code: 'mocked-organization-fiscal-code',
