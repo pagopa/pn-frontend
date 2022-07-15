@@ -3,6 +3,7 @@ import { Box, Divider } from '@mui/material';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, DigitalAddress } from '../../models/contacts';
+import { countContactsByType } from "../../utils/contacts.utility";
 import CourtesyContactItem, { CourtesyFieldType } from './CourtesyContactItem';
 
 interface Props {
@@ -33,21 +34,13 @@ const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
 
   const phoneContactsQuantity = useMemo(
       () =>
-          contacts.reduce((total, contact) =>
-              contact.channelType === CourtesyChannelType.SMS
-                  ? total + 1
-                  : total, 0
-          ),
+          countContactsByType(contacts, CourtesyChannelType.SMS),
       [contacts]
   );
 
     const emailContactsQuantity = useMemo(
         () =>
-            contacts.reduce((total, contact) =>
-                contact.channelType === CourtesyChannelType.SMS
-                    ? total + 1
-                    : total, 0
-            ),
+            countContactsByType(contacts, CourtesyChannelType.EMAIL),
         [contacts]
     );
 

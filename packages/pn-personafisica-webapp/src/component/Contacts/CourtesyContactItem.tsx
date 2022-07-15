@@ -19,7 +19,7 @@ interface Props {
   recipientId: string;
   type: CourtesyFieldType;
   value: string;
-  blockDelete: boolean;
+  blockDelete?: boolean;
 }
 
 const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) => {
