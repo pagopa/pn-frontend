@@ -29,7 +29,9 @@
     "pec-added-successfully": "PEC associata correttamente",
     "pec-added": "PEC associata",
     "remove-pec-title": "Rimuovi PEC",
-    "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?"
+    "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
+    "block-remove-pec-title": "Non puoi eliminare la PEC",
+    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”."
   },
   "courtesy-contacts": {
     "title": "Recapito di cortesia",

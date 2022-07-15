@@ -11,7 +11,7 @@ interface HelpNotificationDetailsProps {
     phoneNumber: string;
     mail: string;
     website: string;
-};
+}
 
 /**
  * Getting help for the user's notification

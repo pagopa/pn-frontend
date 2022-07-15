@@ -1,5 +1,5 @@
 export interface Role {
-  role: string;
+  role: PNRole;
   partyRole: PartyRole;
 }
 
@@ -8,4 +8,9 @@ export enum PartyRole {
   MANAGER = 'MANAGER',
   OPERATOR = 'OPERATOR',
   SUB_DELEGATE = 'SUB_DELEGATE', // not managed by PN
+}
+
+export enum PNRole {
+  ADMIN = 'admin',
+  OPERATOR = 'operator'
 }

@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-test('test login error', async () => {
+test.skip('test login error', async () => {
   render(
     <BrowserRouter>
       <LoginError />

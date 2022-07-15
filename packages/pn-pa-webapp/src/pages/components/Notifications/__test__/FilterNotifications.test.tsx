@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-let */
 import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { formatToTimezoneString, getNextDay, NotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
@@ -53,15 +54,15 @@ async function setFormValues(
   startDate: Date,
   endDate: Date,
   status: string,
-  recipientId?: string,
-  iunMatch?: string
+  recipientId: string,
+  iunMatch: string
 ) {
   await testInput(form, 'searchFor', searchFor);
-  recipientId && (await testInput(form, 'recipientId', recipientId));
+  recipientId !== '' && (await testInput(form, 'recipientId', recipientId));
   await testInput(form, 'startDate', formatDate(startDate));
   await testInput(form, 'endDate', formatDate(endDate));
   await testInput(form, 'status', status);
-  iunMatch && (await testInput(form, 'iunMatch', iunMatch));
+  iunMatch !== '' && (await testInput(form, 'iunMatch', iunMatch));
 }
 
 describe('Filter Notifications Table Component', () => {
@@ -166,7 +167,8 @@ describe('Filter Notifications Table Component', () => {
       oneYearAgo,
       todayM,
       NotificationAllowedStatus[2].value,
-      'RSSMRA80A01H501U'
+      'RSSMRA80A01H501U',
+      ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
@@ -180,7 +182,7 @@ describe('Filter Notifications Table Component', () => {
         endDate: formatToTimezoneString(getNextDay(todayM)),
         recipientId: 'RSSMRA80A01H501U',
         status: NotificationAllowedStatus[2].value,
-        iunMatch: undefined,
+        iunMatch: '',
       },
       type: 'setNotificationFilters',
     });
@@ -198,7 +200,7 @@ describe('Filter Notifications Table Component', () => {
       oneYearAgo,
       todayM,
       NotificationAllowedStatus[2].value,
-      undefined,
+      '',
       'ABCD-EFGH-ILMN-123456-A-1'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
@@ -213,7 +215,7 @@ describe('Filter Notifications Table Component', () => {
         endDate: formatToTimezoneString(getNextDay(todayM)),
         status: NotificationAllowedStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-        recipientId: undefined,
+        recipientId: '',
       },
       type: 'setNotificationFilters',
     });
@@ -232,7 +234,8 @@ describe('Filter Notifications Table Component', () => {
       nineYearsAgo,
       todayM,
       NotificationAllowedStatus[2].value,
-      'mocked-wrongId'
+      'mocked-wrongId',
+      ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeDisabled();
@@ -255,7 +258,7 @@ describe('Filter Notifications Table Component', () => {
       nineYearsAgo,
       todayM,
       NotificationAllowedStatus[2].value,
-      undefined,
+      '',
       '12345678910abcdfghiol'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
@@ -278,7 +281,8 @@ describe('Filter Notifications Table Component', () => {
       oneYearAgo,
       todayM,
       NotificationAllowedStatus[2].value,
-      'RSSMRA80A01H501U'
+      'RSSMRA80A01H501U',
+      ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
@@ -291,9 +295,9 @@ describe('Filter Notifications Table Component', () => {
         payload: {
           startDate: formatToTimezoneString(tenYearsAgo),
           endDate: formatToTimezoneString(getNextDay(today)),
-          recipientId: undefined,
-          status: undefined,
-          iunMatch: undefined,
+          recipientId: '',
+          status: '',
+          iunMatch: '',
         },
         type: 'setNotificationFilters',
       });

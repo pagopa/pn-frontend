@@ -80,7 +80,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
           ).length > 0,
       },
     ],
-    []
+    [legalAddresses, courtesyAddresses]
   );
   const listHeaders = useMemo(
     () => [

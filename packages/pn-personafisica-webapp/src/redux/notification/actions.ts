@@ -27,9 +27,16 @@ export const getReceivedNotificationLegalfact = createAsyncThunk<
   { iun: string; legalFact: LegalFactId; mandateId?: string }
 >(
   'getReceivedNotificationLegalfact',
-  async (params: { iun: string; legalFact: LegalFactId; mandateId?: string }, { rejectWithValue }) => {
+  async (
+    params: { iun: string; legalFact: LegalFactId; mandateId?: string },
+    { rejectWithValue }
+  ) => {
     try {
-      return await NotificationsApi.getReceivedNotificationLegalfact(params.iun, params.legalFact, params.mandateId);
+      return await NotificationsApi.getReceivedNotificationLegalfact(
+        params.iun,
+        params.legalFact,
+        params.mandateId
+      );
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -38,14 +45,18 @@ export const getReceivedNotificationLegalfact = createAsyncThunk<
 
 export const getReceivedNotificationDocument = createAsyncThunk<
   { url: string },
-  { iun: string; documentIndex: string }
+  { iun: string; documentIndex: string; mandateId?: string }
 >(
   'getReceivedNotificationDocument',
-  async (params: { iun: string; documentIndex: string }, { rejectWithValue }) => {
+  async (
+    params: { iun: string; documentIndex: string; mandateId?: string },
+    { rejectWithValue }
+  ) => {
     try {
       return await NotificationsApi.getReceivedNotificationDocument(
         params.iun,
-        params.documentIndex
+        params.documentIndex,
+        params.mandateId
       );
     } catch (e) {
       return rejectWithValue(e);
@@ -55,15 +66,19 @@ export const getReceivedNotificationDocument = createAsyncThunk<
 
 export const getPaymentAttachment = createAsyncThunk<
   { url: string },
-  { iun: string; attachmentName: PaymentAttachmentNameType }
+  { iun: string; attachmentName: PaymentAttachmentNameType; mandateId?: string }
 >(
   'getPaymentAttachment',
   async (
-    params: { iun: string; attachmentName: PaymentAttachmentNameType },
+    params: { iun: string; attachmentName: PaymentAttachmentNameType; mandateId?: string },
     { rejectWithValue }
   ) => {
     try {
-      return await NotificationsApi.getPaymentAttachment(params.iun, params.attachmentName);
+      return await NotificationsApi.getPaymentAttachment(
+        params.iun,
+        params.attachmentName,
+        params.mandateId
+      );
     } catch (e) {
       return rejectWithValue(e);
     }

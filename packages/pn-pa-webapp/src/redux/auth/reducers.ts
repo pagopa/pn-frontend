@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { PartyRole } from '../../models/user';
+import { PartyRole, PNRole } from '../../models/user';
 import { exchangeToken, logout } from './actions';
 import { User } from './types';
 
@@ -22,7 +22,7 @@ const userSlice = createSlice({
             id: '',
             roles: [
               {
-                role: '',
+                role: PNRole.ADMIN,
                 partyRole: PartyRole.MANAGER,
               },
             ],

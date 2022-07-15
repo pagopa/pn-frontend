@@ -61,7 +61,7 @@ const NotificationDetailDocuments = ({
       )}
     </Grid>
     <Grid key={'download-files-section'} item>
-      {documents.map((d) => (
+      {documents && documents.map((d) => (
         <Box key={d.digests.sha256}>
           {!documentsAvailable ? (
           <Typography sx={{ display: 'flex', alignItems: 'center' }}><AttachFileIcon sx={{ mr: 1 }} fontSize='inherit' color="inherit" />{d.title || d.ref.key}</Typography>) : (

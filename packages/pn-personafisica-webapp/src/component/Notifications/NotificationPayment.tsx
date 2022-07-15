@@ -28,6 +28,7 @@ interface Props {
   iun: string;
   notificationPayment: NotificationDetailPayment;
   onDocumentDownload: (url: string) => void;
+  mandateId?: string;
 }
 
 interface PrimaryAction {
@@ -55,7 +56,7 @@ interface PaymentData {
   action?: PrimaryAction;
 }
 
-const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocumentDownload }) => {
+const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocumentDownload, mandateId }) => {
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
@@ -127,7 +128,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   };
   
   const onDocumentClick = (name: PaymentAttachmentSName) => {
-    void dispatch(getPaymentAttachment({ iun, attachmentName: name }));
+    void dispatch(getPaymentAttachment({ iun, attachmentName: name, mandateId }));
   };
 
   const onDisclaimerClick = () => {

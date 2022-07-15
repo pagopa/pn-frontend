@@ -1,5 +1,6 @@
 import { Action, AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
 import { init, track, Mixpanel } from 'mixpanel-browser';
+import { MIXPANEL_TOKEN } from './constants';
 import { events, TrackEventType } from './events';
 /**
  * Function that initialize Mixpanel (must be called once)
@@ -11,7 +12,7 @@ export const mixpanelInit = function (): void {
   } else if (process.env.NODE_ENV === 'test') {
     return;
   } else {
-    init('mocked-key', {
+    init(MIXPANEL_TOKEN, {
       api_host: 'https://api-eu.mixpanel.com',
       persistence: 'localStorage',
       // if this is true, Mixpanel will automatically determine
@@ -39,7 +40,7 @@ export const mixpanelInit = function (): void {
  * @param properties event data
  */
 function trackEvent(event_name: string, properties?: any): void {
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development' || MIXPANEL_TOKEN === 'DUMMY') {
     // eslint-disable-next-line no-console
     console.log(event_name, properties);
   } else if (process.env.NODE_ENV === 'test') {

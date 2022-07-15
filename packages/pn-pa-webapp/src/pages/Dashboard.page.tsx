@@ -4,7 +4,7 @@ import {
   calculatePages,
   CustomPagination,
   PaginationData,
-  Sort,
+  // Sort, // Riabilitare con la issue PN-1124
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { Box, Button, Typography } from '@mui/material';
@@ -15,7 +15,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   getSentNotifications,
   setPagination,
-  setSorting,
+  // setSorting, // Riabilitare con la issue PN-1124
 } from '../redux/dashboard/actions';
 import DesktopNotifications from './components/Notifications/DesktopNotifications';
 import MobileNotifications from './components/Notifications/MobileNotifications';
@@ -49,9 +49,12 @@ const Dashboard = () => {
   };
 
   // Sort handlers
+  // Riabilitare con la issue PN-1124
+  /*
   const handleChangeSorting = (s: Sort) => {
     dispatch(setSorting(s));
   };
+  */
 
   // route to Manual Send
   const handleRouteManualSend = () => {
@@ -95,14 +98,14 @@ const Dashboard = () => {
       {isMobile ? (
         <MobileNotifications
           notifications={notifications}
-          onChangeSorting={handleChangeSorting}
+          // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
           onManualSend={handleRouteManualSend}
           onApiKeys={handleRouteApiKeys}
         />
       ) : (
         <DesktopNotifications
           notifications={notifications}
-          onChangeSorting={handleChangeSorting}
+          // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
           onManualSend={handleRouteManualSend}
           onApiKeys={handleRouteApiKeys}
         />
