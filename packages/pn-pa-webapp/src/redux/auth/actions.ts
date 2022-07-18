@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
-import { PartyRole } from '../../models/user';
+import { PartyRole, PNRole } from '../../models/user';
 import { User } from './types';
 
 /**
@@ -40,7 +40,7 @@ export const logout = createAsyncThunk<User>('logout', async () => {
       roles: [
         {
           partyRole: PartyRole.MANAGER,
-          role: '',
+          role: PNRole.ADMIN,
         },
       ],
       fiscal_code: '',

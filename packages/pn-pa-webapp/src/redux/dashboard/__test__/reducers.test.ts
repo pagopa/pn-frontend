@@ -29,9 +29,9 @@ describe('Dashboard redux state tests', () => {
       filters: {
         startDate: formatToTimezoneString(tenYearsAgo),
         endDate: formatToTimezoneString(getNextDay(today)),
-        status: undefined,
-        recipientId: undefined,
-        iunMatch: undefined,
+        status: '',
+        recipientId: '',
+        iunMatch: '',
       },
       pagination: {
         nextPagesKey: [],
@@ -53,6 +53,9 @@ describe('Dashboard redux state tests', () => {
       getSentNotifications({
         startDate: formatToTimezoneString(tenYearsAgo),
         endDate: formatToTimezoneString(getNextDay(today)),
+        status: '',
+        recipientId: '',
+        iunMatch: '',
       })
     );
     const payload = action.payload as GetNotificationsResponse;
@@ -98,6 +101,7 @@ describe('Dashboard redux state tests', () => {
         recipientId: 'mocked-recipientId',
         status: NotificationStatus.PAID,
         subjectRegExp: 'mocked-regexp',
+        iunMatch: '',
       })
     );
     const payload = action.payload;
@@ -108,6 +112,7 @@ describe('Dashboard redux state tests', () => {
       recipientId: 'mocked-recipientId',
       status: NotificationStatus.PAID,
       subjectRegExp: 'mocked-regexp',
+      iunMatch: '',
     });
   });
 });
