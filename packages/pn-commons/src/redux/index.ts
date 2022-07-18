@@ -1,9 +1,3 @@
-// reducers
-import { appStateReducer } from './slices/appStateSlice';
+import { appStateReducer, appStateActions, appStateSelectors } from './slices/appStateSlice';
 
-export { appStateReducer };
-
-// actions
-import { appStateActions } from './slices/appStateSlice';
-
-export { appStateActions };
+export { appStateReducer, appStateActions, appStateSelectors };

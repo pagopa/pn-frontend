@@ -1,8 +1,7 @@
 import { fireEvent, waitFor } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import { CardElement, CardAction } from '../../../types/ItemsCard';
-import { Item } from '../../../types/ItemsTable';
+import { CardElement, CardAction, Item } from '../../../types';
 import ItemsCard from '../ItemsCard';
 
 const clickActionMockFn = jest.fn();

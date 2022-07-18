@@ -11,8 +11,7 @@ import {
 } from '@mui/material';
 import { Fragment } from 'react';
 
-import { CardElement, CardAction } from '../../types';
-import { Item } from '../../types';
+import { CardElement, CardAction, Item } from '../../types';
 
 type Props = {
   /* Card header elements */

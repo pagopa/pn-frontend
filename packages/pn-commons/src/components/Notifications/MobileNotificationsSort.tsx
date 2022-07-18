@@ -8,8 +8,7 @@ import {
   RadioGroup,
 } from '@mui/material';
 
-import { CardSort } from '../../types';
-import { Sort } from '../../types';
+import { CardSort, Sort } from '../../types';
 import CustomMobileDialog from '../CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogToggle from '../CustomMobileDialog/CustomMobileDialogToggle';
 import CustomMobileDialogContent from '../CustomMobileDialog/CustomMobileDialogContent';

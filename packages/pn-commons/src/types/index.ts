@@ -1,6 +1,7 @@
 // types
-import { IAppMessage } from './AppMessage';
 import { PaginationData } from '../components/Pagination/types';
+import { DatePickerTypes } from '../components/CustomDatePicker';
+import { IAppMessage } from './AppMessage';
 import { NotificationStatus } from './NotificationStatus';
 import { SideMenuItem } from './SideMenuItem';
 import { Column, Item, Sort } from './ItemsTable';
@@ -10,6 +11,8 @@ import {
     GetNotificationsParams,
 } from './Notifications';
 import {
+    AnalogWorkflowDetails,
+    NotHandledDetails,
     NotificationDetailTableRow,
     NotificationDetail,
     INotificationDetailTimeline,
@@ -29,43 +32,55 @@ import {
     PaymentInfoDetail,
     PaymentStatus,
     PaymentAttachmentSName,
-    PaymentAttachmentNameType
+    PaymentAttachmentNameType,
+    SendCourtesyMessageDetails,
+    SendDigitalDetails,
+    SendPaperDetails
 } from './NotificationDetail';
 import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
-import { DatePickerTypes } from '../components/CustomDatePicker';
 
-export type { IAppMessage };
-export type { PaginationData };
-export type { SideMenuItem };
 export {
     NotificationStatus,
-    RecipientType,
-    DigitalDomicileType,
     NotificationFeePolicy,
     TimelineCategory,
-    LegalFactType,
+    DigitalDomicileType,
+    RecipientType,
     AddressSource,
+    LegalFactType,
     PhysicalCommunicationType,
     PaymentInfoDetail,
+    PaymentStatus,
     PaymentAttachmentSName,
+    MessageType
 };
-export type { Column, Item, Sort };
 export type {
-    Notification,
-    GetNotificationsResponse,
+    AnalogWorkflowDetails,
+    CardAction,
+    CardElement,
+    CardSort,
+    Column,
+    DatePickerTypes,
     GetNotificationsParams,
-    NotificationDetail,
+    GetNotificationsResponse,
+    IAppMessage,
     INotificationDetailTimeline,
-    NotificationDetailRecipient,
-    NotificationDetailDocument,
-    NotificationDetailPayment,
-    NotificationStatusHistory,
-    PaymentInfo,
+    Item,
     LegalFactId,
-    PaymentAttachmentNameType
+    NotHandledDetails,
+    Notification,
+    NotificationDetail,
+    NotificationDetailDocument,
+    NotificationDetailRecipient,
+    NotificationDetailPayment,
+    NotificationDetailTableRow,
+    NotificationStatusHistory,
+    PaginationData,
+    PaymentAttachmentNameType,
+    PaymentInfo,
+    SendCourtesyMessageDetails,
+    SendDigitalDetails,
+    SendPaperDetails,
+    SideMenuItem,
+    Sort,
 };
-export type { CardElement, CardSort, CardAction };
-export type { NotificationDetailTableRow };
-export { MessageType, PaymentStatus };
-export type { DatePickerTypes };
