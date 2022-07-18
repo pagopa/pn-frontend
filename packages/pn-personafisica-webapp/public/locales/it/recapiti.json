@@ -29,7 +29,9 @@
     "pec-added-successfully": "PEC associata correttamente",
     "pec-added": "PEC associata",
     "remove-pec-title": "Rimuovi PEC",
-    "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?"
+    "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
+    "block-remove-pec-title": "Non puoi eliminare la PEC",
+    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”."
   },
   "courtesy-contacts": {
     "title": "Recapito di cortesia",
@@ -59,7 +61,11 @@
     "remove-email-title": "Rimuovi email",
     "remove-email-message": "Confermi di voler rimuovere l'indirizzo email {{value}}?",
     "remove-phone-title": "Rimuovi cellulare",
-    "remove-phone-message": "Confermi di voler rimuovere il numero di cellulare {{value}}?"
+    "remove-phone-message": "Confermi di voler rimuovere il numero di cellulare {{value}}?",
+    "block-remove-email-title": "Non puoi eliminare l'email",
+    "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi email che hai indicato alla voce “Altri recapiti”.",
+    "block-remove-phone-title": "Non puoi eliminare il numero di telefono",
+    "block-remove-phone-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”."
   },
   "special-contacts": {
     "subtitle": "Se vuoi che alcune notifiche e comunicazioni siano indirizzate a dei recapiti diversi, puoi indicarli qui. Questi recapiti possono essere sia tuoi che intestati ad altri, come per esempio uno studio legale. Se non specifichi nulla, verranno utilizzati i tuoi recapiti generali.",

@@ -12,7 +12,7 @@ const paHero: HeroProps = {
   ctaPrimary: {
     label: "Scopri come aderire",
     title: "Scopri come aderire title",
-    href: SELFCARE_URL,
+    href: SELFCARE_URL + "/onboarding/prod-pn",
   },
   ctaSecondary: {
     label: "Accedi",
