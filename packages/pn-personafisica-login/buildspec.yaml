@@ -38,7 +38,7 @@ batch:
           REACT_APP_SPID_TEST_ENV_ENABLED: true
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
           REACT_APP_URL_API_LOGIN: https://hub-login.ecs.coll.pn.pagopa.it
-          REACT_APP_PAGOPA_HELP_EMAIL: assistenza.coll@pn.it
+          REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_URL_FILE_PRIVACY_DISCLAIMER: "#privacy-disclaimer"
           REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: "#privacy-disclaimer"
           REACT_APP_MIXPANEL_TOKEN: DUMMY
@@ -52,7 +52,7 @@ batch:
     #       REACT_APP_SPID_TEST_ENV_ENABLED: true
     #       REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie
     #       REACT_APP_URL_API_LOGIN: https://hub-login.ecs.pn.pagopa.it
-    #       REACT_APP_PAGOPA_HELP_EMAIL: <TBD>@pn.it
+    #       REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
     #       REACT_APP_URL_FILE_PRIVACY_DISCLAIMER: "#privacy-disclaimer"
     #       REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: "#privacy-disclaimer"
     #       REACT_APP_MIXPANEL_TOKEN: DUMMY
