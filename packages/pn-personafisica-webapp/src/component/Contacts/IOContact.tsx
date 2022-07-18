@@ -10,54 +10,103 @@ import DigitalContactsCard from './DigitalContactsCard';
 
 interface Props {
   recipientId: string;
-  contact?: DigitalAddress | null;
+  contact?: DigitalAddress | null | undefined;
+}
+
+enum IOContactStatus {
+  PENDING = "pending",
+  UNAVAILABLE = "unavailable",
+  ENABLED = "enabled",
+  DISABLED = "disabled"
 }
 
 const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const [isEnabled, setIsEnabled] = useState<boolean>(false);
-  const [isAvailable, setIsAvailable] = useState<boolean>(true);
+  const [status, setStatus] = useState<IOContactStatus>(IOContactStatus.PENDING);
 
-  /**
-   * Parses the contact to enstablish if IO is available and,
-   * if that's the case, to know it's value.
-   */
   const parseContact = () => {
-    if (!contact) {
-      setIsAvailable(() => false);
+    if (contact === null) {
+      setStatus(() => IOContactStatus.PENDING);
+    } else if (contact === undefined) {
+      setStatus(() => IOContactStatus.UNAVAILABLE);
+    } else if (contact.value === IOAllowedValues.DISABLED) {
+      setStatus(() => IOContactStatus.DISABLED);
     } else {
-      setIsAvailable(() => true);
-      if (contact.value === IOAllowedValues.ENABLED) {
-        setIsEnabled(() => true);
-      } else {
-        setIsEnabled(() => false);
-      }
+      setStatus(() => IOContactStatus.ENABLED);
     }
   };
 
   const toggleIO = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    if (isAvailable) {
-      if (isEnabled) {
+    switch(status) {
+      case IOContactStatus.ENABLED:
         void dispatch(disableIOAddress(recipientId))
-          .unwrap()
-          .then(() => {
-            setIsEnabled(() => false);
-          });
-      } else {
+        .unwrap()
+        .then(() => {
+          setStatus(() => IOContactStatus.DISABLED);
+        });
+        break;
+      case IOContactStatus.DISABLED:
         void dispatch(enableIOAddress(recipientId))
-          .unwrap()
-          .then(() => {
-            setIsEnabled(() => true);
-          });
-      }
+        .unwrap()
+        .then(() => {
+          setStatus(() => IOContactStatus.ENABLED);
+        });
+        break;
+      default: break;
     }
   };
 
   useEffect(() => {
     parseContact();
-  }, [contact]);
+  }, [contact?.value]);
+
+  const getContent = () => {
+    if(status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {
+      return;
+    } else {
+      return (
+        <Box mt={3}>
+          <FormControlLabel
+            control={
+              <Switch
+                aria-label=""
+                color="primary"
+                checked={status === IOContactStatus.ENABLED}
+                onChange={toggleIO}
+              />
+            }
+            label={t('io-contact.switch-label', { ns: 'recapiti' })}
+          />
+        </Box>
+      );
+    }
+  };
+
+  const getDisclaimer = () => {
+    if(status === IOContactStatus.PENDING) {
+      return;
+    } else {
+      return (
+        <Alert sx={{ mt: 4 }} severity={status !== IOContactStatus.UNAVAILABLE ? 'info' : 'warning'}>
+          <Typography component="span" variant="body1">
+            {IOContactStatus.UNAVAILABLE
+              ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
+              : t('io-contact.disclaimer-message', { ns: 'recapiti' })}{' '}
+          </Typography>
+          {/** 
+           * Waiting for FAQs
+            {isAvailable &&
+              <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
+                {t('io-contact.disclaimer-link', { ns: 'recapiti' })}
+              </Link>
+            }
+          * */}
+        </Alert>
+      );
+    }
+  };
 
   return (
     <DigitalContactsCard
@@ -66,37 +115,8 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
       subtitle={t('io-contact.description', { ns: 'recapiti' })}
       avatar={<IllusSms />}
     >
-      {isAvailable && (
-        <Box mt={3}>
-          <FormControlLabel
-            control={
-              <Switch
-                aria-label=""
-                color="primary"
-                disabled={!isAvailable}
-                checked={isEnabled}
-                onChange={toggleIO}
-              />
-            }
-            label={t('io-contact.switch-label', { ns: 'recapiti' })}
-          />
-        </Box>
-      )}
-      <Alert sx={{ mt: 4 }} severity={isAvailable ? 'info' : 'warning'}>
-        <Typography component="span" variant="body1">
-          {isAvailable
-            ? t('io-contact.disclaimer-message', { ns: 'recapiti' })
-            : t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })}{' '}
-        </Typography>
-        {/** 
-         * Waiting for FAQs
-          {isAvailable &&
-            <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
-              {t('io-contact.disclaimer-link', { ns: 'recapiti' })}
-            </Link>
-          }
-         * */}
-      </Alert>
+      {getContent()}
+      {getDisclaimer()}
     </DigitalContactsCard>
   );
 };
