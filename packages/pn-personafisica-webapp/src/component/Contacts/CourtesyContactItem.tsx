@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, InputAdornment } from '@mui/material';
+import { Button, Grid, TextField, InputAdornment, Typography } from '@mui/material';
 
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -80,7 +80,8 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
 
   if (value) {
     return (
-      <form style={{ width: '100%', margin: '1rem 0' }}>
+      <form style={{ width: '100%'}}>
+        <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
         <DigitalContactElem
           recipientId={recipientId}
           senderId="default"
@@ -123,18 +124,21 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           saveDisabled={!formik.isValid}
           onConfirmClick={handleEditConfirm}
           blockDelete={blockDelete}
+          forceMobileView
         />
       </form>
     );
   }
 
   return (
-    <form onSubmit={formik.handleSubmit} style={{ width: '100%', margin: '1rem 0' }}>
+    <form onSubmit={formik.handleSubmit} style={{ width: '100%'}}>
+      <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
       <Grid container spacing={2} direction="row">
         <Grid item lg={8} sm={8} xs={12}>
           <TextField
             id={type}
             name={type}
+            aria-labelledby={`${type}-label`}
             value={formik.values[type]}
             onChange={handleChangeTouched}
             error={formik.touched[type] && Boolean(formik.errors[type])}
