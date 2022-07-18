@@ -9,7 +9,6 @@ import {
   notificationFromBe,
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
-import { newNotification } from './../../../redux/newNotification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
 import { apiClient, externalClient } from '../../axios';
 import { NotificationsApi } from '../Notifications.api';
@@ -21,6 +20,7 @@ import {
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
+import { newNotification } from './../../../redux/newNotification/__test__/test-utils';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
@@ -32,12 +32,18 @@ describe('Notifications api tests', () => {
         NOTIFICATIONS_LIST({
           startDate: formatToTimezoneString(tenYearsAgo),
           endDate: formatToTimezoneString(getNextDay(today)),
+          iunMatch: '',
+          recipientId: '',
+          status: '',
         })
       )
       .reply(200, notificationsFromBe);
     const res = await NotificationsApi.getSentNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(getNextDay(today)),
+      iunMatch: '',
+      recipientId: '',
+      status: '',
     });
     expect(res).toStrictEqual(notificationsToFe);
     mock.reset();
