@@ -1,6 +1,6 @@
 import { render } from "../../test-utils";
 import SessionModal from "../SessionModal";
-import * as hooks from "../../hooks/IsMobile";
+import * as hooks from "../../hooks/useIsMobile";
 
 const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
 
