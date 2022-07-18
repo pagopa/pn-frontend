@@ -52,21 +52,9 @@ describe('InsertLegalContact component', () => {
     expect(cardBody).toHaveTextContent('legal-contacts.title');
     expect(cardBody).toHaveTextContent('legal-contacts.subtitle');
     expect(cardBody).toHaveTextContent('legal-contacts.description');
-    const disclaimerList = cardBody?.querySelector('ul');
-    expect(disclaimerList!).toHaveTextContent('legal-contacts.save-money');
-    expect(disclaimerList!).toHaveTextContent('legal-contacts.avoid-waste');
-    expect(disclaimerList!).toHaveTextContent('legal-contacts.fast-notification');
-    const radioButtons = cardBody?.querySelectorAll('[data-testid="digitalDomicileTypeRadio"]');
-    expect(radioButtons).toHaveLength(2);
-    expect(radioButtons![0]).toHaveTextContent('legal-contacts.link-pec');
-    const radioInput = radioButtons![0].querySelector('input');
-    expect(radioInput!).toBeChecked();
-    expect(radioButtons![1]).toHaveTextContent('legal-contacts.link-io');
     const pecInput = cardBody?.querySelector('input[id="pec"]');
     expect(pecInput!).toHaveValue('');
-    const cardActions = result?.queryByTestId('DigitalContactsCardActions');
-    expect(cardActions).toHaveTextContent('button.associa');
-    const button = cardActions?.querySelector('button');
+    const button = result?.getByRole('button', { name: 'button.conferma'});
     expect(button).toBeDisabled();
   });
 
@@ -78,9 +66,7 @@ describe('InsertLegalContact component', () => {
     const errorMessage = cardBody?.querySelector('#pec-helper-text');
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
-    const cardActions = result?.queryByTestId('DigitalContactsCardActions');
-    expect(cardActions).toHaveTextContent('button.associa');
-    const button = cardActions?.querySelector('button');
+    const button = result?.getByRole('button', { name: 'button.conferma'});
     expect(button).toBeDisabled();
   });
 
@@ -91,9 +77,7 @@ describe('InsertLegalContact component', () => {
     await waitFor(() => expect(pecInput!).toHaveValue('mail@valida.mail'));
     const errorMessage = cardBody?.querySelector('#pec-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const cardActions = result?.queryByTestId('DigitalContactsCardActions');
-    expect(cardActions).toHaveTextContent('button.associa');
-    const button = cardActions?.querySelector('button');
+    const button = result?.getByRole('button', { name: 'button.conferma'});
     expect(button).toBeEnabled();
   });
 
@@ -102,8 +86,7 @@ describe('InsertLegalContact component', () => {
     const pecInput = cardBody?.querySelector('input[id="pec"]');
     fireEvent.change(pecInput!, { target: { value: 'mail@valida.mail' } });
     await waitFor(() => expect(pecInput!).toHaveValue('mail@valida.mail'));
-    const cardActions = result?.queryByTestId('DigitalContactsCardActions');
-    const button = cardActions?.querySelector('button');
+    const button = result?.getByRole('button', { name: 'button.conferma'});
     fireEvent.click(button!);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
