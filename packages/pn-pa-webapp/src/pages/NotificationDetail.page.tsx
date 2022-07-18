@@ -1,5 +1,6 @@
-import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment, ReactNode, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Grid,
   Box,
@@ -62,22 +63,20 @@ const NotificationDetail = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-
   const { recipients } = notification;
-
   const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
-
   const recipientsWithAltNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCodeAlternative);
+  const { t } = useTranslation(['common']);
 
-  const getRecipientsNoticeCodeField = (recipients: Array<NotificationDetailRecipient>, alt: boolean = false): ReactNode => {
-    if(recipients.length > 1) {
-      return recipients.map((recipient, index) => 
+  const getRecipientsNoticeCodeField = (rcpts: Array<NotificationDetailRecipient>, alt: boolean = false): ReactNode => {
+    if(rcpts.length > 1) {
+      return rcpts.map((recipient, index) => 
         <Box key={index} fontWeight={600}>
           {recipient.taxId} - {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
         </Box>
       );
     }
-    return <Box fontWeight={600}>{alt ? recipients[0]?.payment?.noticeCodeAlternative : recipients[0]?.payment?.noticeCode}</Box>;
+    return <Box fontWeight={600}>{alt ? rcpts[0]?.payment?.noticeCodeAlternative : rcpts[0]?.payment?.noticeCode}</Box>;
   };
 
   const unfilteredDetailTableRows: Array<{
@@ -228,6 +227,7 @@ const NotificationDetail = () => {
           </Fragment>
         }
         currentLocationLabel="Dettaglio notifica"
+        goBackLabel={t('button.indietro', { ns: 'common' })}
       />
       <TitleBox
         variantTitle="h4"
@@ -297,7 +297,7 @@ const NotificationDetail = () => {
       </DialogContent>
       <DialogActions sx={{ px: 4, pb: 4 }}>
         <Button onClick={handleModalClose} variant="outlined" data-testid="modalCloseBtnId">
-          Indietro
+          {t('button.indietro')}
         </Button>
         <Button
           onClick={handleModalCloseAndProceed}

@@ -1,5 +1,6 @@
 import { useEffect, useMemo } from 'react';
-import { LoadingOverlay, Layout, AppMessage, SideMenu } from '@pagopa-pn/pn-commons';
+import { useTranslation } from 'react-i18next';
+import { LoadingOverlay, Layout, AppMessage, SideMenu, initLocalization } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
@@ -17,6 +18,7 @@ import { mixpanelInit } from './utils/mixpanel';
 const App = () => {
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
 
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
@@ -39,13 +41,13 @@ const App = () => {
     () => [
       {
         id: '1',
-        title: `Area Riservata`,
+        title: t('header.reserved-area'),
         productUrl: `${SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
         linkType: 'external',
       },
       {
         id: '0',
-        title: `Piattaforma Notifiche`,
+        title: t('header.notification-platform'),
         productUrl: '',
         linkType: 'internal',
       },
@@ -64,9 +66,15 @@ const App = () => {
   ], [role]);
 
   useEffect(() => {
+    // init localization
+    initLocalization((namespace, path, data) => t(path, {ns: namespace, ...data}));
     // init mixpanel
     mixpanelInit();
   }, []);
+
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
 
   return (
     <Layout
@@ -82,6 +90,7 @@ const App = () => {
       productId={"0"}
       partyList={partyList}
       loggedUser={jwtUser}
+      onLanguageChanged={changeLanguageHandler}
     >
       <AppMessage
         sessionRedirect={() => dispatch(logout())}

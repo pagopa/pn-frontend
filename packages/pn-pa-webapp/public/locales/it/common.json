@@ -3,33 +3,22 @@
     "filtra": "Filtra",
     "annulla filtro": "Rimuovi filtri",
     "indietro": "Indietro",
-    "associa": "Associa",
-    "conferma": "Conferma",
     "annulla": "Annulla",
-    "modifica": "Modifica",
-    "salva": "Salva",
-    "rimuovi": "Elimina",
     "enter": "Entra",
-    "exit": "Esci",
-    "close": "Chiudi"
+    "exit": "Esci"
   },
   "menu": {
-    "notifiche": "Notifiche",
-    "deleghe": "Deleghe",
-    "profilo": "I tuoi dati",
-    "contacts": "I tuoi recapiti",
+    "notifications": "Notifiche",
+    "roles": "Ruoli",
+    "groups": "Gruppi",
     "aria-label": "piattaforma-notifiche navigazione principale",
-    "aria-label-inner": "piattaforma-notifiche navigazione destinatario"
+    "aria-label-inner": "piattaforma-notifiche navigazione mittente"
   },
   "header": {
     "logout": "Esci",
-    "pago-pa-link": "Sito di PagoPA S.p.A."
-  },
-  "tos": {
-    "title": "Piattaforma Notifiche",
-    "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
-    "switchLabel": "Accetto l'<0>Informativa Privacy</0> e i <1>Termini e condizioni d’uso</1> di Piattaforma Notifiche.",
-    "button": "Accedi"
+    "pago-pa-link": "Sito di PagoPA S.p.A.",
+    "reserved-area": "Area Riservata",
+    "notification-platform": "Piattaforma Notifiche"
   },
   "table": {
     "aria-label": "Tabella di item"

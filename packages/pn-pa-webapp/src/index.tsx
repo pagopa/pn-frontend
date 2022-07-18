@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from "@pagopa/mui-italia";
+
+import './index.css';
 import reportWebVitals from './reportWebVitals';
 import { store } from './redux/store';
+import './i18n.ts';
 import App from './App';
 
 ReactDOM.render(
@@ -15,7 +17,9 @@ ReactDOM.render(
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <App />
+          <Suspense fallback="loading...">
+            <App />
+          </Suspense>
         </ThemeProvider>
       </BrowserRouter>
     </Provider>

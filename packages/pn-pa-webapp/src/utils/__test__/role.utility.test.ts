@@ -5,9 +5,16 @@ import { PNRole } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { getHomePage, getMenuItems } from '../role.utility';
 
+// mock imports
+jest.mock('i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  t: (str: string) => str,
+}));
+
+
 const mockedIdOrganization = 'mocked-id';
 const BasicMenuItems: Array<SideMenuItem> = [
-  { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
+  { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
   /**
   * Refers to PN-1741
   * Commented out because beyond MVP scope
@@ -20,8 +27,8 @@ const BasicMenuItems: Array<SideMenuItem> = [
 ];
 
 const SelfCareItems: Array<SideMenuItem> = [
-  { label: 'Ruoli', icon: People, route: routes.ROLES(mockedIdOrganization) },
-  { label: 'Gruppi', icon: SupervisedUserCircle, route: routes.GROUPS(mockedIdOrganization) },
+  { label: 'menu.roles', icon: People, route: routes.ROLES(mockedIdOrganization) },
+  { label: 'menu.groups', icon: SupervisedUserCircle, route: routes.GROUPS(mockedIdOrganization) },
 ];
 
 test('return menu items for role REFERENTE_AMMINISTRATIVO', () => {

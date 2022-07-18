@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TitleBox, Prompt, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
@@ -46,6 +47,7 @@ const NewNotification = () => {
   const isCompleted = useAppSelector((state: RootState) => state.newNotificationState.isCompleted);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation(['common']);
 
   const goToNextStep = () => {
     setActiveStep((previousStep) => previousStep + 1);
@@ -82,7 +84,12 @@ const NewNotification = () => {
       <Box p={3}>
         <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
           <Grid item xs={12} lg={8}>
-            <PnBreadcrumb linkRoute={routes.DASHBOARD} linkLabel="Notifiche" currentLocationLabel="Nuova notifica"/>
+            <PnBreadcrumb
+              linkRoute={routes.DASHBOARD}
+              linkLabel="Notifiche"
+              currentLocationLabel="Nuova notifica"
+              goBackLabel={t('button.indietro', { ns: 'common' })}
+            />
             <TitleBox
               variantTitle="h4"
               title="Invia una nuova notifica"

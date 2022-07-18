@@ -15,6 +15,13 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {

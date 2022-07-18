@@ -12,6 +12,14 @@ jest.mock('react-router-dom', () => ({
   useParams: () => ({ id: 'mocked-id' }),
   useNavigate: () => mockNavigateFn,
 }));
+
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 jest.mock(
   '../components/NewNotification/PreliminaryInformations',
   () =>
@@ -22,6 +30,7 @@ jest.mock(
         </div>
       )
 );
+
 jest.mock(
   '../components/NewNotification/Recipient',
   () =>
@@ -32,6 +41,7 @@ jest.mock(
         </div>
       )
 );
+
 jest.mock(
   '../components/NewNotification/Attachments',
   () =>
@@ -42,6 +52,7 @@ jest.mock(
         </div>
       )
 );
+
 jest.mock(
   '../components/NewNotification/PaymentMethods',
   () =>
@@ -52,6 +63,7 @@ jest.mock(
         </div>
       )
 );
+
 jest.mock('../components/NewNotification/SyncFeedback', () => () => (
   <div data-testid="stepContent">SyncFeedback</div>
 ));

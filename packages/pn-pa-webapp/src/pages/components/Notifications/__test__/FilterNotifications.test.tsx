@@ -20,6 +20,13 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 function formatDate(date: Date): string {
   const month = `0${date.getMonth() + 1}`.slice(-2);
   const day = `0${date.getDate()}`.slice(-2);
@@ -97,10 +104,10 @@ describe('Filter Notifications Table Component', () => {
     testFormElements(form!, 'status', 'Stato');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
-    expect(submitButton).toHaveTextContent(/Filtra/i);
+    expect(submitButton).toHaveTextContent(/button.filtra/i);
     const cancelButton = within(form!).getByTestId('cancelButton');
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveTextContent(/Rimuovi filtri/i);
+    expect(cancelButton).toHaveTextContent(/button.annulla filtro/i);
   });
 
   it('test filters inital value', () => {

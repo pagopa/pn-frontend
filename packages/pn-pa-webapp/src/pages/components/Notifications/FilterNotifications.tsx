@@ -1,4 +1,5 @@
 import { useEffect, Fragment, useState, forwardRef, useImperativeHandle } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormikValues, useFormik } from 'formik';
 import * as yup from 'yup';
 import _ from 'lodash';
@@ -55,6 +56,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
+  const { t } = useTranslation(['common']);
 
   const validationSchema = yup.object({
     recipientId: yup.string().matches(fiscalCodeRegex, 'Inserisci il codice per intero'),
@@ -141,9 +143,9 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         hasCounterBadge
         bagdeCount={filtersCount}
       >
-        Filtra
+        {t('button.filtra')}
       </CustomMobileDialogToggle>
-      <CustomMobileDialogContent title="Filtra">
+      <CustomMobileDialogContent title={t('button.filtra')}>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <FilterNotificationsFormBody
