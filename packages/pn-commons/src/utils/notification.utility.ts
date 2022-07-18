@@ -1,5 +1,7 @@
 import _ from 'lodash';
-import { formatDate } from '../services/date.service';
+
+import { formatDate } from '../services';
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import {
   INotificationDetailTimeline,
   SendCourtesyMessageDetails,
@@ -12,10 +14,9 @@ import {
   DigitalDomicileType,
   NotificationDetail,
   NotHandledDetails,
-} from '../types/NotificationDetail';
-import { GetNotificationsParams } from '../types/Notifications';
-import { NotificationStatus } from '../types/NotificationStatus';
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+  GetNotificationsParams,
+  NotificationStatus,
+} from '../types';
 
 function localizeStatus(
   status: string,
@@ -29,8 +30,16 @@ function localizeStatus(
 } {
   return {
     label: getLocalizedOrDefaultLabel('notifications', `status.${status}`, defaultLabel),
-    tooltip: getLocalizedOrDefaultLabel('notifications', `status.${status}-tooltip`, defaultTooltip),
-    description: getLocalizedOrDefaultLabel('notifications', `status.${status}-description`, defaultDescription),
+    tooltip: getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.${status}-tooltip`,
+      defaultTooltip
+    ),
+    description: getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.${status}-description`,
+      defaultDescription
+    ),
   };
 }
 
@@ -146,23 +155,30 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
   }
 }
 
-export const NotificationAllowedStatus = () => ([
-  { value: 'All', label: getLocalizedOrDefaultLabel('notifications', 'status.all', 'Tutti gli stati') },
+export const NotificationAllowedStatus = () => [
+  {
+    value: 'All',
+    label: getLocalizedOrDefaultLabel('notifications', 'status.all', 'Tutti gli stati'),
+  },
   {
     value: NotificationStatus.ACCEPTED,
     label: getLocalizedOrDefaultLabel('notifications', 'status.accepted', 'Depositata'),
-  },
-  {
-    value: NotificationStatus.DELIVERED,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.delivered', 'Consegnata'),
   },
   {
     value: NotificationStatus.DELIVERING,
     label: getLocalizedOrDefaultLabel('notifications', 'status.delivering', 'Invio in corso'),
   },
   {
+    value: NotificationStatus.DELIVERED,
+    label: getLocalizedOrDefaultLabel('notifications', 'status.delivered', 'Consegnata'),
+  },
+  {
     value: NotificationStatus.EFFECTIVE_DATE,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.effective-date', 'Perfezionata per decorrenza termini'),
+    label: getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.effective-date',
+      'Perfezionata per decorrenza termini'
+    ),
   },
   {
     value: NotificationStatus.VIEWED,
@@ -178,9 +194,13 @@ export const NotificationAllowedStatus = () => ([
   },
   {
     value: NotificationStatus.UNREACHABLE,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.unreachable', 'Destinatario irreperibile'),
+    label: getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.unreachable',
+      'Destinatario irreperibile'
+    ),
   },
-]);
+];
 
 function localizeTimelineStatus(
   category: string,
@@ -191,7 +211,7 @@ function localizeTimelineStatus(
   return {
     label: getLocalizedOrDefaultLabel('notifications', `detail.timeline.${category}`, defaultLabel),
     description: getLocalizedOrDefaultLabel(
-      'notifications', 
+      'notifications',
       `detail.timeline.${category}-description`,
       defaultDescription,
       data
@@ -201,25 +221,30 @@ function localizeTimelineStatus(
 
 /**
  * Returns the mapping between current notification timeline status and its label and descriptive message.
- * @param  {TimelineCategory} status
+ * @param  {INotificationDetailTimeline} step
+ * @param {Array<NotificationDetailRecipient>} recipients
  * @returns object
  */
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
-  ricipients: Array<NotificationDetailRecipient>
+  recipients: Array<NotificationDetailRecipient>
 ): {
   label: string;
   description: string;
   linkText?: string;
   recipient?: string;
 } | null {
-  const recipient = !_.isNil(step.details.recIndex) ? ricipients[step.details.recIndex] : undefined;
+  const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
   const legalFactLabel = getLocalizedOrDefaultLabel(
-    'notifications', 
+    'notifications',
     `detail.legalfact`,
     'Attestazione opponibile a terzi'
   );
-  const receiptLabel = getLocalizedOrDefaultLabel('notifications', `detail.timeline.view-receipt`, 'Vedi la ricevuta');
+  const receiptLabel = getLocalizedOrDefaultLabel(
+    'notifications',
+    `detail.timeline.view-receipt`,
+    'Vedi la ricevuta'
+  );
   const recipientLabel = `${recipient?.taxId} - ${recipient?.denomination}`;
 
   switch (step.category) {
@@ -409,10 +434,13 @@ export function getNotificationTimelineStatusInfos(
       };
     // PN-1647
     case TimelineCategory.NOT_HANDLED:
-      if ((step.details as NotHandledDetails).reasonCode === '001' && (step.details as NotHandledDetails).reason === 'Paper message not handled') {
+      if (
+        (step.details as NotHandledDetails).reasonCode === '001' &&
+        (step.details as NotHandledDetails).reason === 'Paper message not handled'
+      ) {
         return {
           label: 'Annullata',
-          description: `La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante la sperimentazione della piattaforma.`,
+          description: `La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante il collaudo della piattaforma.`,
         };
       }
       return null;
@@ -434,7 +462,7 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_PAPER_FEEDBACK,
   // PN-1647
-  TimelineCategory.NOT_HANDLED
+  TimelineCategory.NOT_HANDLED,
 ];
 
 /**
@@ -491,8 +519,9 @@ export function parseNotificationDetail(
 
 /**
  * Get legalFact label based on timeline category.
- * @param  {NotificationDetail} notificationDetail
- * @returns NotificationDetail
+ * @param {TimelineCategory} category Timeline category
+ * @param {attestation: string; receipt: string} legalFactLabels Attestation and Receipt
+ * @returns {string} attestation or receipt
  */
 export function getLegalFactLabel(
   category: TimelineCategory,
@@ -506,8 +535,8 @@ export function getLegalFactLabel(
 
 /**
  * Returns the number of filters applied
- * @param  {preFilters} GetNotificationsParams
- * @param  {emptyValues} GetNotificationsParams
+ * @param  prevFilters GetNotificationsParams
+ * @param  emptyValues GetNotificationsParams
  * @returns number
  */
 export function filtersApplied(

@@ -14,6 +14,7 @@ import {
   CustomMobileDialogToggle,
   CustomMobileDialogContent,
   filtersApplied,
+  getValidValue,
   formatToTimezoneString,
   getNextDay,
 } from '@pagopa-pn/pn-commons';
@@ -33,9 +34,9 @@ const localizedNotificationStatus = NotificationAllowedStatus();
 const emptyValues = {
   startDate: formatToTimezoneString(tenYearsAgo),
   endDate: formatToTimezoneString(getNextDay(today)),
-  status: undefined,
-  recipientId: undefined,
-  iunMatch: undefined,
+  status: '',
+  recipientId: '',
+  iunMatch: '',
 };
 
 const initialEmptyValues = {
@@ -70,9 +71,9 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       searchFor: '0',
       startDate: new Date(filters.startDate),
       endDate: new Date(filters.endDate),
-      recipientId: filters.recipientId || '',
-      iunMatch: filters.iunMatch || '',
-      status: filters.status || localizedNotificationStatus[0].value,
+      recipientId: getValidValue(filters.recipientId),
+      iunMatch: getValidValue(filters.iunMatch),
+      status: getValidValue(filters.status, localizedNotificationStatus[0].value),
     };
   };
 
@@ -87,9 +88,9 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       const currentFilters = {
         startDate: formatToTimezoneString(values.startDate),
         endDate: formatToTimezoneString(getNextDay(values.endDate)),
-        recipientId: values.recipientId || undefined,
-        iunMatch: values.iunMatch || undefined,
-        status: values.status === 'All' ? undefined : values.status,
+        recipientId: getValidValue(values.recipientId),
+        iunMatch: getValidValue(values.iunMatch),
+        status: values.status === 'All' ? '' : values.status,
       };
       if (_.isEqual(prevFilters, currentFilters)) {
         return;

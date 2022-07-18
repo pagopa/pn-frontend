@@ -1,10 +1,9 @@
 import { Fragment, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { appStateActions, appStateSelectors } from '../redux/slices/appStateSlice';
+import { appStateActions, appStateSelectors } from '../redux';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
-import { IAppMessage } from '../types/AppMessage';
-import { MessageType } from '../types/MessageType';
+import { IAppMessage, MessageType } from '../types';
 import SessionModal from './SessionModal';
 import Toast from './Toast/Toast';
 

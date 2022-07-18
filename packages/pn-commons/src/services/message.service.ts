@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { IAppMessage } from '../types/AppMessage';
+import { IAppMessage } from '../types';
 import { getLocalizedOrDefaultLabel } from './localization.service';
 
 interface IAppErrorProps {

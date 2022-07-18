@@ -77,9 +77,10 @@
       "error-expired": "Spiacenti, l’avviso è scaduto e non è più possibile pagarlo. Contatta l’Ente per maggiori informazioni."
     },
     "acts_files": {
-      "downloadable_acts": "Puoi scaricare gli atti entro 120 giorni dalla data di perfezionamento. Oltre questo termine, dovrai rivolgerti al mittente.",
+      "downloadable_acts": "I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.",
       "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente.",
-      "notification_cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili."
+      "notification_cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.",
+      "effected_faq": "Quando si perfeziona una notifica?"
     },
     "timeline": {
       "schedule-analog-workflow": "Invio per via cartacea",

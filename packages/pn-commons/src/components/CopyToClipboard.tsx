@@ -1,6 +1,6 @@
 import { Button, Link, SxProps, Theme } from "@mui/material";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { useIsMobile } from "../hooks/useIsMobile";
+import { useIsMobile } from "../hooks";
 
 interface Props {
   /** callback used to retrieve the text to be copied */

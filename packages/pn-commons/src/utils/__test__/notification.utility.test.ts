@@ -8,8 +8,8 @@ import {
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-} from '../../types/NotificationDetail';
-import { NotificationStatus } from '../../types/NotificationStatus';
+  NotificationStatus
+} from '../../types';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -107,12 +107,21 @@ describe('notification utility functions', () => {
     );
   });
 
+  it('return notification status infos - VIEWED_AFTER_DEADLINE', () => {
+    testNotificationStatusInfosFn(
+        NotificationStatus.VIEWED_AFTER_DEADLINE,
+        'Visualizzata',
+        'success',
+        'Il destinatario ha visualizzato la notifica'
+    );
+  });
+
   it('return notification status infos - CANCELLED', () => {
     testNotificationStatusInfosFn(
-      NotificationStatus.CANCELLED,
-      'Annullata',
-      'warning',
-      "L'ente ha annullato l'invio della notifica"
+        NotificationStatus.CANCELLED,
+        'Annullata',
+        'warning',
+        "L'ente ha annullato l'invio della notifica"
     );
   });
 
@@ -296,7 +305,7 @@ describe('timeline utility functions', () => {
     (parsedNotificationCopy.timeline[0].details as NotHandledDetails).reason = 'Paper message not handled';
     testTimelineStatusInfosFn(
       'Annullata',
-      "La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante la sperimentazione della piattaforma."
+      "La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante il collaudo della piattaforma."
     );
   });
 });

@@ -2,8 +2,8 @@ import { useState, Fragment, useEffect } from 'react';
 import { Grid, Typography, Box, IconButton, Alert } from '@mui/material'; // SvgIcon
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useIsMobile } from '../../hooks/useIsMobile';
-import { MessageType } from '../../types/MessageType';
+import { useIsMobile } from '../../hooks';
+import { MessageType } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 type Props = {

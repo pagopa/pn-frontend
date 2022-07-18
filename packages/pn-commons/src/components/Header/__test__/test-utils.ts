@@ -1,17 +1,22 @@
 import { ProductSwitchItem } from '@pagopa/mui-italia';
 
+enum LinkType  {
+  INTERNAL = "internal",
+  EXTERNAL = "external"
+}
+
 export const productsList: Array<ProductSwitchItem> = [
   {
     id: "0",
     title: `Product 1`,
     productUrl: "",
-    linkType: 'internal'
+    linkType: LinkType.INTERNAL
   },
   {
     id: "1",
     title: `Product 2`,
     productUrl: "",
-    linkType: 'internal'
+    linkType: LinkType.EXTERNAL
   }
 ];
 

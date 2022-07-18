@@ -13,19 +13,20 @@ import {
   ButtonNaked,
 } from '@pagopa/mui-italia';
 
-import { getDay, getMonthString, getTime } from '../../utils/date.utility';
 import {
+  getDay,
+  getMonthString,
+  getTime,
   getLegalFactLabel,
   getNotificationStatusInfos,
-  getNotificationTimelineStatusInfos,
-} from '../../utils/notification.utility';
+  getNotificationTimelineStatusInfos } from '../../utils';
 import {
   LegalFactId,
   INotificationDetailTimeline,
   NotificationDetailRecipient,
   NotificationStatusHistory,
   TimelineCategory,
-} from '../../types/NotificationDetail';
+} from '../../types';
 
 type Props = {
   timelineStep: NotificationStatusHistory;

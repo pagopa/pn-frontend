@@ -12,7 +12,8 @@
     "salva": "Salva",
     "rimuovi": "Elimina",
     "enter": "Entra",
-    "exit": "Esci"
+    "exit": "Esci",
+    "close": "Chiudi"
   },
   "menu": {
     "notifiche": "Notifiche",

@@ -11,8 +11,8 @@ import {
 import { makeStyles } from '@mui/styles';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 
+import { SideMenuItem } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { SideMenuItem } from '../../types/SideMenuItem';
 import SideMenuListItem from './SideMenuListItem';
 
 type Props = {
