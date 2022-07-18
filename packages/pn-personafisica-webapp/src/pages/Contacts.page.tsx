@@ -28,6 +28,21 @@ const Contacts = () => {
   const contactIO = digitalAddresses.courtesy.find(
     (address) => address.channelType === CourtesyChannelType.IOMSG
   );
+  //  /* eslint-disable functional/no-let */
+  //  let contactIO = digitalAddresses.courtesy.find(
+  //   (address) => address.channelType === CourtesyChannelType.IOMSG
+  // );
+
+  // if(!contactIO) {
+  //   contactIO = {
+  //     addressType: "COURTESY",
+  //     recipientId: "PF-9319addf-6f72-4438-8b39-dcc25cbfcbc8",
+  //     senderId: "default",
+  //     channelType: CourtesyChannelType.IOMSG,
+  //     value: IOAllowedValues.DISABLED,
+  //     code: "00000"
+  //   };
+  // }
 
   useEffect(() => {
     void dispatch(getDigitalAddresses(recipientId));

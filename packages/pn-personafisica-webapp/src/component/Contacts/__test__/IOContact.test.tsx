@@ -79,7 +79,21 @@ describe('IOContact component', () => {
   });
 
   describe('test component when IO is available and disabled', () => {
+    let mockDispatchFn: jest.Mock;
+    let mockActionFn: jest.Mock;
+    
     beforeEach(() => {
+      mockActionFn = jest.fn();
+      // mock dispatch
+      mockDispatchFn = jest.fn(() => ({
+        unwrap: () => Promise.resolve(),
+      }));
+
+      // mock action
+      const actionSpy = jest.spyOn(actions, 'enableIOAddress');
+      actionSpy.mockImplementation(mockActionFn as any);
+      const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
+      useDispatchSpy.mockReturnValue(mockDispatchFn as any);
       result = render(<IOContact recipientId="mocked-recipientId" contact={disabledAddress} />);
     });
 
@@ -112,16 +126,6 @@ describe('IOContact component', () => {
     });
 
     it.only('should enable IO', async () => {
-      // mock action
-      const mockActionFn = jest.fn();
-      const actionSpy = jest.spyOn(actions, 'enableIOAddress');
-      actionSpy.mockImplementation(mockActionFn as any);
-      // mock dispatch
-      const mockDispatchFn = jest.fn(() => ({
-        unwrap: () => Promise.resolve(),
-      }));
-      const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-      useDispatchSpy.mockReturnValue(mockDispatchFn as any);
       
       const ioCheckbox = result?.getByRole('checkbox', { name: 'io-contact.switch-label'});
       expect(ioCheckbox).toBeInTheDocument();
@@ -135,8 +139,6 @@ describe('IOContact component', () => {
         expect(mockActionFn).toBeCalledWith('mocked-recipientId');
       });
 
-      jest.resetAllMocks();
-      jest.clearAllMocks();
     });
     
 
@@ -199,16 +201,14 @@ describe('IOContact component', () => {
       expect(ioCheckbox).toBeInTheDocument();
 
       result?.debug();
-      // fireEvent.click(ioCheckbox!);
+      fireEvent.click(ioCheckbox!);
 
-      // await waitFor(() => {
-      //   expect(mockDispatchFn).toBeCalledTimes(1);
-      //   expect(mockActionFn).toBeCalledTimes(1);
-      //   expect(mockActionFn).toBeCalledWith('mocked-recipientId');
-      // });
+      await waitFor(() => {
+        expect(mockDispatchFn).toBeCalledTimes(1);
+        expect(mockActionFn).toBeCalledTimes(1);
+        expect(mockActionFn).toBeCalledWith('mocked-recipientId');
+      });
 
-      // jest.resetAllMocks();
-      // jest.clearAllMocks();
     });
     
 
