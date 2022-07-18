@@ -1,10 +1,10 @@
 import { AuthApi } from '../../../api/auth/Auth.api';
-// import { ConsentsApi } from '../../../api/consents/Consents.api';
-// import { ConsentType } from '../../../models/consents';
+import { ConsentsApi } from '../../../api/consents/Consents.api';
+import { ConsentType } from '../../../models/consents';
 import { store } from '../../store';
 import {
-  // acceptToS,
-  // getToSApproval,
+  acceptToS,
+  getToSApproval,
   exchangeToken,
   logout
 } from '../actions';
@@ -87,75 +87,75 @@ describe('Auth redux state tests', () => {
     });
   });
 
-  // it('Should fetch ToS approved', async () => {
-  //   const consentsApiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');
-  //   consentsApiSpy.mockResolvedValueOnce({
-  //     recipientId: 'mocked-recipientId',
-  //     consentType: ConsentType.TOS,
-  //     accepted: true,
-  //   });
+  it('Should fetch ToS approved', async () => {
+    const consentsApiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');
+    consentsApiSpy.mockResolvedValueOnce({
+      recipientId: 'mocked-recipientId',
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
 
-  //   const stateBefore = store.getState().userState;
-  //   expect(stateBefore.tos).toBe(false);
-  //   expect(stateBefore.fetchedTos).toBe(false);
+    const stateBefore = store.getState().userState;
+    expect(stateBefore.tos).toBe(false);
+    expect(stateBefore.fetchedTos).toBe(false);
 
-  //   const action = await store.dispatch(getToSApproval());
+    const action = await store.dispatch(getToSApproval());
 
-  //   expect(action.type).toBe('getToSApproval/fulfilled');
+    expect(action.type).toBe('getToSApproval/fulfilled');
 
-  //   const stateAfter = store.getState().userState;
-  //   expect(stateAfter.tos).toBe(true);
-  //   expect(stateAfter.fetchedTos).toBe(true);
-  // });
+    const stateAfter = store.getState().userState;
+    expect(stateAfter.tos).toBe(true);
+    expect(stateAfter.fetchedTos).toBe(true);
+  });
 
-  // it('Should fetch ToS not approved', async () => {
-  //   const consentsApiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');
-  //   consentsApiSpy.mockRejectedValueOnce({
-  //     recipientId: 'mocked-recipientId',
-  //     consentType: ConsentType.TOS,
-  //     accepted: false,
-  //   });
+  it('Should fetch ToS not approved', async () => {
+    const consentsApiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');
+    consentsApiSpy.mockRejectedValueOnce({
+      recipientId: 'mocked-recipientId',
+      consentType: ConsentType.TOS,
+      accepted: false,
+    });
 
-  //   const stateBefore = store.getState().userState;
-  //   expect(stateBefore.tos).toBe(false);
-  //   expect(stateBefore.fetchedTos).toBe(false);
+    const stateBefore = store.getState().userState;
+    expect(stateBefore.tos).toBe(false);
+    expect(stateBefore.fetchedTos).toBe(false);
 
-  //   const action = await store.dispatch(getToSApproval());
+    const action = await store.dispatch(getToSApproval());
 
-  //   expect(action.type).toBe('getToSApproval/rejected');
+    expect(action.type).toBe('getToSApproval/rejected');
 
-  //   const stateAfter = store.getState().userState;
-  //   expect(stateAfter.tos).toBe(false);
-  //   expect(stateAfter.fetchedTos).toBe(true);
-  // });
+    const stateAfter = store.getState().userState;
+    expect(stateAfter.tos).toBe(false);
+    expect(stateAfter.fetchedTos).toBe(true);
+  });
 
-  // it('Should accept ToS', async () => {
-  //   const consentsApiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
-  //   consentsApiSpy.mockResolvedValueOnce('success');
+  it('Should accept ToS', async () => {
+    const consentsApiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
+    consentsApiSpy.mockResolvedValueOnce('success');
 
-  //   const stateBefore = store.getState().userState;
-  //   expect(stateBefore.tos).toBe(false);
+    const stateBefore = store.getState().userState;
+    expect(stateBefore.tos).toBe(false);
 
-  //   const action = await store.dispatch(acceptToS());
+    const action = await store.dispatch(acceptToS());
 
-  //   expect(action.type).toBe('acceptToS/fulfilled');
+    expect(action.type).toBe('acceptToS/fulfilled');
 
-  //   const stateAfter = store.getState().userState;
-  //   expect(stateAfter.tos).toBe(true);
-  // });
+    const stateAfter = store.getState().userState;
+    expect(stateAfter.tos).toBe(true);
+  });
 
-  // it('Should reject ToS', async () => {
-  //   const consentsApiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
-  //   consentsApiSpy.mockRejectedValueOnce('error');
+  it('Should reject ToS', async () => {
+    const consentsApiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
+    consentsApiSpy.mockRejectedValueOnce('error');
 
-  //   const stateBefore = store.getState().userState;
-  //   expect(stateBefore.tos).toBe(false);
+    const stateBefore = store.getState().userState;
+    expect(stateBefore.tos).toBe(false);
 
-  //   const action = await store.dispatch(acceptToS());
+    const action = await store.dispatch(acceptToS());
 
-  //   expect(action.type).toBe('acceptToS/rejected');
+    expect(action.type).toBe('acceptToS/rejected');
 
-  //   const stateAfter = store.getState().userState;
-  //   expect(stateAfter.tos).toBe(false);
-  // });
+    const stateAfter = store.getState().userState;
+    expect(stateAfter.tos).toBe(false);
+  });
 });
