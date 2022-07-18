@@ -6,7 +6,7 @@ batch:
       env:
         variables:
           BUILD_ID: svil
-          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.svil.pn.pagopa.it/
@@ -16,7 +16,7 @@ batch:
       env:
         variables:
           BUILD_ID: coll
-          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.coll.pn.pagopa.it/

@@ -6,11 +6,10 @@ batch:
       env:
         variables:
           BUILD_ID: svil
-          REACT_APP_PAGOPA_HELP_EMAIL: pn.svil@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
           REACT_APP_URL_FE_LOGIN: https://portale-login-develop.fe.dev.pn.pagopa.it/
           REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
-          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
           REACT_APP_CHECKOUT_URL: https://uat.checkout.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: DUMMY
@@ -20,11 +19,10 @@ batch:
       env:
         variables:
           BUILD_ID: coll
-          REACT_APP_PAGOPA_HELP_EMAIL: pn.coll@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
           REACT_APP_URL_FE_LOGIN: https://portale-login.coll.pn.pagopa.it
           REACT_APP_URL_API: https://webapi.coll.pn.pagopa.it/
-          REACT_APP_PAGOPA_HELP_EMAIL: pn.local@assistenza.pagopa.it
           REACT_APP_CHECKOUT_URL: https://uat.checkout.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: DUMMY
