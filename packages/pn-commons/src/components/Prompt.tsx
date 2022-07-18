@@ -1,6 +1,15 @@
 import { Fragment, ReactNode } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
+
 import { usePrompt } from '../hooks/usePrompt';
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 const Prompt = ({
   title,
@@ -21,9 +30,11 @@ const Prompt = ({
           <DialogContentText>{message}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={cancelNavigation}>Annulla</Button>
+          <Button variant="outlined" onClick={cancelNavigation}>
+            {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
+          </Button>
           <Button variant="contained" onClick={confirmNavigation} autoFocus>
-            Esci
+            {getLocalizedOrDefaultLabel('common', 'button.exit', 'Esci')}
           </Button>
         </DialogActions>
       </Dialog>

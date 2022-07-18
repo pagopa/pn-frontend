@@ -1,5 +1,7 @@
 import _ from 'lodash';
+
 import { formatDate } from '../services';
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import {
   INotificationDetailTimeline,
   SendCourtesyMessageDetails,
@@ -12,9 +14,34 @@ import {
   DigitalDomicileType,
   NotificationDetail,
   NotHandledDetails,
+  GetNotificationsParams,
+  NotificationStatus,
 } from '../types';
-import { GetNotificationsParams } from '../types';
-import { NotificationStatus } from '../types';
+
+function localizeStatus(
+  status: string,
+  defaultLabel: string,
+  defaultTooltip: string,
+  defaultDescription: string
+): {
+  label: string;
+  tooltip: string;
+  description: string;
+} {
+  return {
+    label: getLocalizedOrDefaultLabel('notifications', `status.${status}`, defaultLabel),
+    tooltip: getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.${status}-tooltip`,
+      defaultTooltip
+    ),
+    description: getLocalizedOrDefaultLabel(
+      'notifications',
+      `status.${status}-description`,
+      defaultDescription
+    ),
+  };
+}
 
 /**
  * Returns the mapping between current notification status and its color, label and descriptive message.
@@ -31,65 +58,92 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
     case NotificationStatus.DELIVERED:
       return {
         color: 'default',
-        label: 'Consegnata',
-        tooltip: 'La notifica è stata consegnata',
-        description: 'La notifica è stata consegnata',
+        ...localizeStatus(
+          'delivered',
+          'Consegnata',
+          'La notifica è stata consegnata',
+          'La notifica è stata consegnata'
+        ),
       };
     case NotificationStatus.DELIVERING:
       return {
         color: 'default',
-        label: 'Invio in corso',
-        tooltip: "L'invio della notifica è in corso",
-        description: "L'invio della notifica è in corso",
+        ...localizeStatus(
+          'delivering',
+          'Invio in corso',
+          "L'invio della notifica è in corso",
+          "L'invio della notifica è in corso"
+        ),
       };
     case NotificationStatus.UNREACHABLE:
       return {
         color: 'error',
-        label: 'Destinatario irreperibile',
-        tooltip: 'Il destinatario non è reperibile',
-        description: 'Il destinatario non è reperibile',
+        ...localizeStatus(
+          'unreachable',
+          'Destinatario irreperibile',
+          'Il destinatario non è reperibile',
+          'Il destinatario non è reperibile'
+        ),
       };
     case NotificationStatus.PAID:
       return {
         color: 'success',
-        label: 'Pagata',
-        tooltip: 'Il destinatario ha pagato i costi della notifica',
-        description: 'Il destinatario ha pagato i costi della notifica',
+        ...localizeStatus(
+          'paid',
+          'Pagata',
+          'Il destinatario ha pagato i costi della notifica',
+          'Il destinatario ha pagato i costi della notifica'
+        ),
       };
     case NotificationStatus.ACCEPTED:
       return {
         color: 'default',
-        label: 'Depositata',
-        tooltip: "L'ente ha depositato la notifica",
-        description: "L'ente ha depositato la notifica",
+        ...localizeStatus(
+          'accepted',
+          'Depositata',
+          "L'ente ha depositato la notifica",
+          "L'ente ha depositato la notifica"
+        ),
       };
     case NotificationStatus.EFFECTIVE_DATE:
       return {
         color: 'info',
-        label: 'Perfezionata per decorrenza termini',
-        tooltip: 'Il destinatario non ha letto la notifica',
-        description: 'Il destinatario non ha letto la notifica entro il termine stabilito',
+        ...localizeStatus(
+          'effective-date',
+          'Perfezionata per decorrenza termini',
+          'Il destinatario non ha letto la notifica',
+          'Il destinatario non ha letto la notifica entro il termine stabilito'
+        ),
       };
     case NotificationStatus.VIEWED:
       return {
         color: 'info',
-        label: 'Perfezionata per visione',
-        tooltip: 'Il destinatario ha letto la notifica',
-        description: 'Il destinatario ha letto la notifica entro il termine stabilito',
+        ...localizeStatus(
+          'viewed',
+          'Perfezionata per visione',
+          'Il destinatario ha letto la notifica',
+          'Il destinatario ha letto la notifica entro il termine stabilito'
+        ),
       };
     case NotificationStatus.VIEWED_AFTER_DEADLINE:
       return {
         color: 'success',
-        label: 'Visualizzata',
-        tooltip: 'Il destinatario ha visualizzato la notifica',
-        description: 'Il destinatario ha visualizzato la notifica',
+        ...localizeStatus(
+          'viewed-after-deadline',
+          'Visualizzata',
+          'Il destinatario ha visualizzato la notifica',
+          'Il destinatario ha visualizzato la notifica'
+        ),
       };
     case NotificationStatus.CANCELLED:
       return {
         color: 'warning',
-        label: 'Annullata',
-        tooltip: "L'ente ha annullato l'invio della notifica",
-        description: "L'ente ha annullato l'invio della notifica",
+        ...localizeStatus(
+          'canceled',
+          'Annullata',
+          "L'ente ha annullato l'invio della notifica",
+          "L'ente ha annullato l'invio della notifica"
+        ),
       };
     default:
       return {
@@ -101,17 +155,69 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
   }
 }
 
-export const NotificationAllowedStatus = [
-  { value: 'All', label: 'Tutti gli stati' },
-  { value: NotificationStatus.ACCEPTED, label: 'Depositata' },
-  { value: NotificationStatus.DELIVERING, label: 'Invio in corso' },
-  { value: NotificationStatus.DELIVERED, label: 'Consegnata' },
-  { value: NotificationStatus.EFFECTIVE_DATE, label: 'Perfezionata per decorrenza termini' },
-  { value: NotificationStatus.VIEWED, label: 'Perfezionata per visione' },
-  { value: NotificationStatus.PAID, label: 'Pagata' },
-  { value: NotificationStatus.CANCELLED, label: 'Annullata' },
-  { value: NotificationStatus.UNREACHABLE, label: 'Destinatario irreperibile' },
+export const NotificationAllowedStatus = () => [
+  {
+    value: 'All',
+    label: getLocalizedOrDefaultLabel('notifications', 'status.all', 'Tutti gli stati'),
+  },
+  {
+    value: NotificationStatus.ACCEPTED,
+    label: getLocalizedOrDefaultLabel('notifications', 'status.accepted', 'Depositata'),
+  },
+  {
+    value: NotificationStatus.DELIVERING,
+    label: getLocalizedOrDefaultLabel('notifications', 'status.delivering', 'Invio in corso'),
+  },
+  {
+    value: NotificationStatus.DELIVERED,
+    label: getLocalizedOrDefaultLabel('notifications', 'status.delivered', 'Consegnata'),
+  },
+  {
+    value: NotificationStatus.EFFECTIVE_DATE,
+    label: getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.effective-date',
+      'Perfezionata per decorrenza termini'
+    ),
+  },
+  {
+    value: NotificationStatus.VIEWED,
+    label: getLocalizedOrDefaultLabel('notifications', 'status.viewed', 'Perfezionata per visione'),
+  },
+  {
+    value: NotificationStatus.PAID,
+    label: getLocalizedOrDefaultLabel('notifications', 'status.paid', 'Pagata'),
+  },
+  {
+    value: NotificationStatus.CANCELLED,
+    label: getLocalizedOrDefaultLabel('notifications', 'status.canceled', 'Annullata'),
+  },
+  {
+    value: NotificationStatus.UNREACHABLE,
+    label: getLocalizedOrDefaultLabel(
+      'notifications',
+      'status.unreachable',
+      'Destinatario irreperibile'
+    ),
+  },
 ];
+
+function localizeTimelineStatus(
+  category: string,
+  defaultLabel: string,
+  defaultDescription: string,
+  data?: { [key: string]: string | undefined }
+): { label: string; description: string } {
+  return {
+    label: getLocalizedOrDefaultLabel('notifications', `detail.timeline.${category}`, defaultLabel),
+    description: getLocalizedOrDefaultLabel(
+      'notifications',
+      `detail.timeline.${category}-description`,
+      defaultDescription,
+      data
+    ),
+  };
+}
 
 /**
  * Returns the mapping between current notification timeline status and its label and descriptive message.
@@ -129,23 +235,36 @@ export function getNotificationTimelineStatusInfos(
   recipient?: string;
 } | null {
   const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
-  
-  const legalFactLabel = 'Attestazione opponibile a terzi';
-  const receiptLabel = 'Vedi la ricevuta';
+  const legalFactLabel = getLocalizedOrDefaultLabel(
+    'notifications',
+    `detail.legalfact`,
+    'Attestazione opponibile a terzi'
+  );
+  const receiptLabel = getLocalizedOrDefaultLabel(
+    'notifications',
+    `detail.timeline.view-receipt`,
+    'Vedi la ricevuta'
+  );
   const recipientLabel = `${recipient?.taxId} - ${recipient?.denomination}`;
 
   switch (step.category) {
     case TimelineCategory.SCHEDULE_ANALOG_WORKFLOW:
       return {
-        label: 'Invio per via cartacea',
-        description: "È in corso l'invio della notifica per via cartacea.",
+        ...localizeTimelineStatus(
+          'schedule-analog-workflow',
+          'Invio per via cartacea',
+          "È in corso l'invio della notifica per via cartacea."
+        ),
         linkText: legalFactLabel,
         recipient: recipientLabel,
       };
     case TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW:
       return {
-        label: 'Invio per via digitale',
-        description: "È in corso l'invio della notifica per via digitale.",
+        ...localizeTimelineStatus(
+          'schedule-digital-workflow',
+          'Invio per via digitale',
+          "È in corso l'invio della notifica per via digitale."
+        ),
         linkText: legalFactLabel,
         recipient: recipientLabel,
       };
@@ -156,8 +275,15 @@ export function getNotificationTimelineStatusInfos(
           ? 'email'
           : 'sms';
       return {
-        label: 'Invio del messaggio di cortesia',
-        description: `È in corso l'invio del messaggio di cortesia a ${recipient?.denomination} tramite ${type}`,
+        ...localizeTimelineStatus(
+          'send-courtesy-message',
+          'Invio del messaggio di cortesia',
+          `È in corso l'invio del messaggio di cortesia a ${recipient?.denomination} tramite ${type}`,
+          {
+            name: recipient?.denomination,
+            type,
+          }
+        ),
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE:
@@ -166,29 +292,50 @@ export function getNotificationTimelineStatusInfos(
         return null;
       }
       return {
-        label: 'Invio via PEC',
-        description: `È in corso l'invio della notifica a ${
-          recipient?.denomination
-        } all'indirizzo PEC ${(step.details as SendDigitalDetails).digitalAddress?.address}`,
+        ...localizeTimelineStatus(
+          'send-digital-domicile',
+          'Invio via PEC',
+          `È in corso l'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
+            (step.details as SendDigitalDetails).digitalAddress?.address
+          }`,
+          {
+            name: recipient?.denomination,
+            address: (step.details as SendDigitalDetails).digitalAddress?.address,
+          }
+        ),
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK:
       const digitalDomicileFeedbackErrors = (step.details as SendDigitalDetails).errors;
       if (digitalDomicileFeedbackErrors && digitalDomicileFeedbackErrors.length > 0) {
         return {
-          label: 'Invio via PEC fallito',
-          description: `L'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
-            (step.details as SendDigitalDetails).digitalAddress?.address
-          } non è riuscito.`,
+          ...localizeTimelineStatus(
+            'send-digital-domicile-error',
+            'Invio via PEC fallito',
+            `L'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
+              (step.details as SendDigitalDetails).digitalAddress?.address
+            } non è riuscito.`,
+            {
+              name: recipient?.denomination,
+              address: (step.details as SendDigitalDetails).digitalAddress?.address,
+            }
+          ),
           linkText: legalFactLabel,
           recipient: recipientLabel,
         };
       }
       return {
-        label: 'Invio via PEC riuscito',
-        description: `L' invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
-          (step.details as SendDigitalDetails).digitalAddress?.address
-        } è riuscito.`,
+        ...localizeTimelineStatus(
+          'send-digital-domicile-success',
+          'Invio via PEC riuscito',
+          `L' invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
+            (step.details as SendDigitalDetails).digitalAddress?.address
+          } è riuscito.`,
+          {
+            name: recipient?.denomination,
+            address: (step.details as SendDigitalDetails).digitalAddress?.address,
+          }
+        ),
         linkText: legalFactLabel,
         recipient: recipientLabel,
       };
@@ -196,26 +343,43 @@ export function getNotificationTimelineStatusInfos(
       const digitalFeedbackErrors = (step.details as SendDigitalDetails).errors;
       if (digitalFeedbackErrors && digitalFeedbackErrors.length > 0) {
         return {
-          label: 'Invio per via digitale fallito',
-          description: `L'invio della notifica a ${recipient?.denomination} per via digitale non è riuscito.`,
+          ...localizeTimelineStatus(
+            'send-digital-error',
+            'Invio per via digitale fallito',
+            `L'invio della notifica a ${recipient?.denomination} per via digitale non è riuscito.`,
+            {
+              name: recipient?.denomination,
+            }
+          ),
           linkText: legalFactLabel,
           recipient: recipientLabel,
         };
       }
       return {
-        label: 'Invio per via digitale riuscito',
-        description: `L'invio della notifica a ${recipient?.denomination} per via digitale è riuscito.`,
+        ...localizeTimelineStatus(
+          'send-digital-success',
+          'Invio per via digitale riuscito',
+          `L'invio della notifica a ${recipient?.denomination} per via digitale è riuscito.`,
+          {
+            name: recipient?.denomination,
+          }
+        ),
         linkText: legalFactLabel,
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
       return {
-        label: 'Invio via raccomandata semplice',
-        description: `È in corso l'invio della notifica a ${
-          recipient?.denomination
-        } all'indirizzo ${
-          (step.details as AnalogWorkflowDetails).physicalAddress?.address
-        } tramite raccomandata semplice.`,
+        ...localizeTimelineStatus(
+          'send-simple-registered-letter',
+          'Invio via raccomandata semplice',
+          `È in corso l'invio della notifica a ${recipient?.denomination} all'indirizzo ${
+            (step.details as AnalogWorkflowDetails).physicalAddress?.address
+          } tramite raccomandata semplice.`,
+          {
+            name: recipient?.denomination,
+            address: (step.details as AnalogWorkflowDetails).physicalAddress?.address,
+          }
+        ),
         linkText: legalFactLabel,
         recipient: recipientLabel,
       };
@@ -225,36 +389,55 @@ export function getNotificationTimelineStatusInfos(
         PhysicalCommunicationType.REGISTERED_LETTER_890
       ) {
         return {
-          label: 'Invio via raccomandata 890',
-          description: `È in corso l'invio della notifica a ${
-            recipient?.denomination
-          } all'indirizzo ${
-            (step.details as AnalogWorkflowDetails).physicalAddress?.address
-          } tramite raccomandata 890.`,
+          ...localizeTimelineStatus(
+            'send-analog-domicile-890',
+            'Invio via raccomandata 890',
+            `È in corso l'invio della notifica a ${recipient?.denomination} all'indirizzo ${
+              (step.details as AnalogWorkflowDetails).physicalAddress?.address
+            } tramite raccomandata 890.`,
+            {
+              name: recipient?.denomination,
+              address: (step.details as AnalogWorkflowDetails).physicalAddress?.address,
+            }
+          ),
           linkText: receiptLabel,
           recipient: recipientLabel,
         };
       }
       return {
-        label: 'Invio via raccomandata A/R',
-        description: `È in corso l'invio della notifica a ${
-          recipient?.denomination
-        } all'indirizzo ${
-          (step.details as AnalogWorkflowDetails).physicalAddress?.address
-        } tramite raccomandata A/R.`,
+        ...localizeTimelineStatus(
+          'send-analog-domicile-ar',
+          'Invio via raccomandata A/R',
+          `È in corso l'invio della notifica a ${recipient?.denomination} all'indirizzo ${
+            (step.details as AnalogWorkflowDetails).physicalAddress?.address
+          } tramite raccomandata A/R.`,
+          {
+            name: recipient?.denomination,
+            address: (step.details as AnalogWorkflowDetails).physicalAddress?.address,
+          }
+        ),
         linkText: receiptLabel,
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_PAPER_FEEDBACK:
       return {
-        label: 'Aggiornamento stato raccomandata',
-        description: `Si allega un aggiornamento dello stato della raccomandata.`,
+        ...localizeTimelineStatus(
+          'send-paper-feedback',
+          'Aggiornamento stato raccomandata',
+          `Si allega un aggiornamento dello stato della raccomandata.`,
+          {
+            name: recipient?.denomination,
+          }
+        ),
         linkText: receiptLabel,
-        recipient: recipientLabel,
+        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     // PN-1647
     case TimelineCategory.NOT_HANDLED:
-      if ((step.details as NotHandledDetails).reasonCode === '001' && (step.details as NotHandledDetails).reason === 'Paper message not handled') {
+      if (
+        (step.details as NotHandledDetails).reasonCode === '001' &&
+        (step.details as NotHandledDetails).reason === 'Paper message not handled'
+      ) {
         return {
           label: 'Annullata',
           description: `La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante il collaudo della piattaforma.`,
@@ -279,7 +462,7 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_PAPER_FEEDBACK,
   // PN-1647
-  TimelineCategory.NOT_HANDLED
+  TimelineCategory.NOT_HANDLED,
 ];
 
 /**

@@ -1,3 +1,3 @@
-import { useIsMobile } from './IsMobile';
+import { useIsMobile } from './useIsMobile';
 
 export { useIsMobile };

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
+
 import { useIsMobile } from '../hooks';
 
 type Props = {

@@ -147,7 +147,7 @@ const NotificationDetailTimelineStep = ({
       ) : (
         <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <Typography color="text.primary" variant="caption">
-            {getNotificationStatusInfos(timelineStep.status).description}
+            {notificationStatusInfos.description}
           </Typography>
           {legalFactsIds && legalFactsIds.length > 0 &&
             legalFactsIds.map((lf) => (

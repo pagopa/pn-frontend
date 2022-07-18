@@ -6,7 +6,7 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem } from '@pagopa-pn/pn-commons';
+import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem, initLocalization } from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
@@ -78,6 +78,8 @@ const App = () => {
   );
 
   useEffect(() => {
+    // init localization
+    initLocalization((namespace, path, data) => t(path, {ns: namespace, ...data}));
     // OneTrust callback at first time
     // eslint-disable-next-line functional/immutable-data
     global.OptanonWrapper = function () {
