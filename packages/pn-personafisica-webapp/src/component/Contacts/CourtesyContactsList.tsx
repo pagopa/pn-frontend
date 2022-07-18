@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { Stack } from '@mui/material';
 
 import { CourtesyChannelType, DigitalAddress } from '../../models/contacts';
+import { countContactsByType } from "../../utils/contacts.utility";
 import CourtesyContactItem, { CourtesyFieldType } from './CourtesyContactItem';
 
 interface Props {
@@ -28,17 +29,31 @@ const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
     [contacts]
   );
 
+  const phoneContactsQuantity = useMemo(
+      () =>
+          countContactsByType(contacts, CourtesyChannelType.SMS),
+      [contacts]
+  );
+
+    const emailContactsQuantity = useMemo(
+        () =>
+            countContactsByType(contacts, CourtesyChannelType.EMAIL),
+        [contacts]
+    );
+
   return (
     <Stack spacing={3} mt={3}>
       <CourtesyContactItem
         recipientId={recipientId}
         type={CourtesyFieldType.PHONE}
         value={phoneContact ? phoneContact?.value : ''}
+        blockDelete={phoneContactsQuantity > 1}
       />
       <CourtesyContactItem
         recipientId={recipientId}
         type={CourtesyFieldType.EMAIL}
         value={emailContact ? emailContact.value : ''}
+        blockDelete={emailContactsQuantity > 1}
       />
     </Stack>
   );

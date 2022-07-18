@@ -19,9 +19,10 @@ interface Props {
   recipientId: string;
   type: CourtesyFieldType;
   value: string;
+  blockDelete?: boolean;
 }
 
-const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
+const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
 
@@ -85,8 +86,14 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
           recipientId={recipientId}
           senderId="default"
           contactType={digitalDomicileType}
-          removeModalTitle={t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })}
-          removeModalBody={t(`courtesy-contacts.remove-${type}-message`, {
+          removeModalTitle={
+            blockDelete
+                ? t(`courtesy-contacts.block-remove-${type}-title`, { ns: 'recapiti' })
+                : t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })}
+          removeModalBody={
+            blockDelete
+                ? t(`courtesy-contacts.block-remove-${type}-message`, { ns: 'recapiti' })
+                : t(`courtesy-contacts.remove-${type}-message`, {
             value: formik.values[type],
             ns: 'recapiti',
           })}
@@ -116,6 +123,7 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
           ]}
           saveDisabled={!formik.isValid}
           onConfirmClick={handleEditConfirm}
+          blockDelete={blockDelete}
           forceMobileView
         />
       </form>
