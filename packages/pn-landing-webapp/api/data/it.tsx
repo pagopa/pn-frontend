@@ -2,7 +2,7 @@ import { ShowcaseProps, WalkthroughProps } from "@pagopa/mui-italia";
 import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
 import { CieIcon } from "@pagopa/mui-italia/dist/icons";
 
-// const ASSETS_PATH = process.env.NEXT_PUBLIC_ASSETS_URL;
+const SELFCARE_URL = process.env.NEXT_PUBLIC_SELFCARE_URL || "";
 
 /** Hero mocked data */
 const paHero: HeroProps = {
@@ -12,15 +12,15 @@ const paHero: HeroProps = {
   ctaPrimary: {
     label: "Scopri come aderire",
     title: "Scopri come aderire title",
-    href: "PRIMARY_CTA_URL",
+    href: SELFCARE_URL + "/onboarding/prod-pn",
   },
   ctaSecondary: {
     label: "Accedi",
     title: "Accedi title",
-    href: "SECONDARY_CTA_URL",
+    href: SELFCARE_URL + "/auth/login",
   },
   inverse: false,
-  image: '',
+  image: "",
   altText: "",
   background: "static/images/hero.jpg",
 };

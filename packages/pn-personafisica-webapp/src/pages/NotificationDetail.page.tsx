@@ -113,7 +113,7 @@ const NotificationDetail = () => {
 
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
-      void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
+      void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex, mandateId }));
     }
   };
   
@@ -201,6 +201,7 @@ const NotificationDetail = () => {
                 iun={notification.iun}
                 notificationPayment={currentRecipient.payment}
                 onDocumentDownload={dowloadDocument}
+                mandateId={mandateId}
               />
             }
             <DomicileBanner />
@@ -211,6 +212,7 @@ const NotificationDetail = () => {
                 clickHandler={documentDowloadHandler}
                 documentsAvailable={hasDocumentsAvailable}
                 downloadFilesMessage={getDownloadFilesMessage()}
+                downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
               />
             </Paper>
             {/* TODO decommentare con pn-841
