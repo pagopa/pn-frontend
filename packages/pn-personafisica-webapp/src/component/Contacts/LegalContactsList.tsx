@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
-import { Grid, Box, Typography, TextField, Alert, Link } from '@mui/material';
+import { Grid, Box, Typography, TextField, Alert } from '@mui/material';
 
-import { URL_DIGITAL_NOTIFICATIONS } from '../../utils/constants';
 import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
 import DigitalContactElem from './DigitalContactElem';
@@ -125,12 +124,11 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
           {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
         </Typography>
           {/** 
-           * URL_DIGITAL_NOTIFICATIONS
-           * waiting for FAQs
-           * */}
+           * Waiting for FAQs
         <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
           {t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}
         </Link>
+           * */}
       </Alert>
     </DigitalContactsCard>
   );

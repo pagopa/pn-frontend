@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Box, FormControlLabel, Link, Switch, Typography } from '@mui/material';
+import { Alert, Box, FormControlLabel, Switch, Typography } from '@mui/material';
 import { IllusSms } from '@pagopa/mui-italia';
 
-import { URL_DIGITAL_NOTIFICATIONS } from '../../utils/constants';
 import { DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { useAppDispatch } from '../../redux/hooks';
 import { disableIOAddress, enableIOAddress } from '../../redux/contact/actions';
@@ -90,15 +89,14 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
             ? t('io-contact.disclaimer-message', { ns: 'recapiti' })
             : t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })}{' '}
         </Typography>
-          {/** 
-           * URL_DIGITAL_NOTIFICATIONS
-           * waiting for FAQs
-           * */}
-        {isAvailable &&
-          <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
-            {t('io-contact.disclaimer-link', { ns: 'recapiti' })}
-          </Link>
-        }
+        {/** 
+         * Waiting for FAQs
+          {isAvailable &&
+            <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
+              {t('io-contact.disclaimer-link', { ns: 'recapiti' })}
+            </Link>
+          }
+         * */}
       </Alert>
     </DigitalContactsCard>
   );

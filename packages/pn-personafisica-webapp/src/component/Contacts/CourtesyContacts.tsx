@@ -1,8 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { Alert, Box, Link, Typography } from '@mui/material';
+import { Alert, Box, Typography } from '@mui/material';
 import { IllusSms } from '@pagopa/mui-italia';
 
-import { URL_DIGITAL_NOTIFICATIONS } from '../../utils/constants';
 import { DigitalAddress } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
 import CourtesyContactsList from './CourtesyContactsList';
@@ -30,10 +29,9 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
         >
           <Typography component="span" variant="body1">{t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })} </Typography>
           {/** 
-           * URL_DIGITAL_NOTIFICATIONS
-           * waiting for FAQs
-           * */}
+           * Waiting for FAQs
           <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant='body1'>{t('courtesy-contacts.disclaimer-link', { ns: 'recapiti' })}</Link>
+           * */}
         </Alert>
       </Box>
     </DigitalContactsCard>

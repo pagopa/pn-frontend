@@ -2,10 +2,9 @@ import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Alert, Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { Alert, Button, Grid, TextField, Typography } from '@mui/material';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
 
-import { URL_DIGITAL_NOTIFICATIONS } from '../../utils/constants';
 import { LegalChannelType } from '../../models/contacts';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactsCard from './DigitalContactsCard';
@@ -82,12 +81,11 @@ const InsertLegalContact = ({ recipientId }: Props) => {
             {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
           </Typography>
           {/** 
-           * URL_DIGITAL_NOTIFICATIONS
-           * waiting for FAQs
-           * */}
+           * Waiting for FAQs
           <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
             {t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}
           </Link>
+           * */}
         </Alert>
       </DigitalContactsCard>
     </form>
