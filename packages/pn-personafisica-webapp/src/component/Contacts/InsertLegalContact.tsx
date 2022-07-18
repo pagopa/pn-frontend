@@ -81,6 +81,10 @@ const InsertLegalContact = ({ recipientId }: Props) => {
           <Typography component="span" variant="body1">
             {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
           </Typography>
+          {/** 
+           * URL_DIGITAL_NOTIFICATIONS
+           * waiting for FAQs
+           * */}
           <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
             {t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}
           </Link>

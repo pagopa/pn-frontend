@@ -29,6 +29,10 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
           severity="info"
         >
           <Typography component="span" variant="body1">{t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })} </Typography>
+          {/** 
+           * URL_DIGITAL_NOTIFICATIONS
+           * waiting for FAQs
+           * */}
           <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant='body1'>{t('courtesy-contacts.disclaimer-link', { ns: 'recapiti' })}</Link>
         </Alert>
       </Box>
