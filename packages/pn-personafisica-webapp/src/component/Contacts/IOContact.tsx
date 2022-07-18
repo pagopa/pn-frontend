@@ -24,7 +24,6 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
    * if that's the case, to know it's value.
    */
   const parseContact = () => {
-    setIsEnabled(() => false);
     if (!contact) {
       setIsAvailable(() => false);
     } else {

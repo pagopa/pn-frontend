@@ -88,7 +88,9 @@ describe('IOContact component', () => {
       const alert = result?.getByRole('alert');
       expect(alert).toBeInTheDocument();
       expect(alert).toHaveTextContent('io-contact.disclaimer-message-unavailable');
-      expect(alert).not.toHaveTextContent('io-contact.disclaimer-link');
+
+      /** Waiting for FAQs */
+      // expect(alert).not.toHaveTextContent('io-contact.disclaimer-link');
 
       const link = result?.container.querySelector('a');
       expect(link).not.toBeInTheDocument();
@@ -125,11 +127,12 @@ describe('IOContact component', () => {
       const alert = result?.getByRole('alert');
       expect(alert).toBeInTheDocument();
       expect(alert).toHaveTextContent('io-contact.disclaimer-message');
-      expect(alert).toHaveTextContent('io-contact.disclaimer-link');
-
-      const link = result?.container.querySelector('a');
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveTextContent('io-contact.disclaimer-link');
+      
+      /** Waiting for FAQs */
+      // expect(alert).toHaveTextContent('io-contact.disclaimer-link');
+      // const link = result?.container.querySelector('a');
+      // expect(link).toBeInTheDocument();
+      // expect(link).toHaveTextContent('io-contact.disclaimer-link');
     });
 
     it('should enable IO', async () => {
@@ -181,11 +184,12 @@ describe('IOContact component', () => {
       const alert = result?.getByRole('alert');
       expect(alert).toBeInTheDocument();
       expect(alert).toHaveTextContent('io-contact.disclaimer-message');
-      expect(alert).toHaveTextContent('io-contact.disclaimer-link');
-
-      const link = result?.container.querySelector('a');
-      expect(link).toBeInTheDocument();
-      expect(link).toHaveTextContent('io-contact.disclaimer-link');
+      
+      /** Waiting for FAQs */
+      // expect(alert).toHaveTextContent('io-contact.disclaimer-link');
+      // const link = result?.container.querySelector('a');
+      // expect(link).toBeInTheDocument();
+      // expect(link).toHaveTextContent('io-contact.disclaimer-link');
     });
 
     it('should disable IO', async () => {
