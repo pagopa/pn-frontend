@@ -1,12 +1,11 @@
 export enum LegalChannelType {
   PEC = 'PEC',
-  IOPEC = 'IOPEC',
 }
 
 export enum CourtesyChannelType {
   EMAIL = 'EMAIL',
   SMS = 'SMS',
-  IOMSG = 'IOMSG',
+  IOMSG = 'APPIO',
 }
 
 export enum IOAllowedValues {

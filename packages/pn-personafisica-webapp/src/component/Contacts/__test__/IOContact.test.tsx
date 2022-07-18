@@ -38,6 +38,32 @@ const enabledAddress = {
 
 describe('IOContact component', () => {
   let result: RenderResult | undefined;
+  let mockDispatchFn: jest.Mock;
+  let mockEnableActionFn: jest.Mock;
+  let mockDisableActionFn: jest.Mock;
+  
+  beforeEach(() => {
+    mockEnableActionFn = jest.fn();
+    mockDisableActionFn = jest.fn();
+
+    // mock dispatch
+    mockDispatchFn = jest.fn(() => ({
+      unwrap: () => Promise.resolve(),
+    }));
+
+    // mock actions
+    const enableActionSpy = jest.spyOn(actions, 'enableIOAddress');
+    enableActionSpy.mockImplementation(mockEnableActionFn as any);
+    const disableActionSpy = jest.spyOn(actions, 'disableIOAddress');
+    disableActionSpy.mockImplementation(mockDisableActionFn as any);
+    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+  });
+
+  afterEach(() => {
+    result = undefined;
+    jest.restoreAllMocks();
+  });
 
   describe('test component when IO is unavailable', () => {
     beforeEach(() => {
@@ -79,28 +105,9 @@ describe('IOContact component', () => {
   });
 
   describe('test component when IO is available and disabled', () => {
-    let mockDispatchFn: jest.Mock;
-    let mockActionFn: jest.Mock;
     
     beforeEach(() => {
-      mockActionFn = jest.fn();
-      // mock dispatch
-      mockDispatchFn = jest.fn(() => ({
-        unwrap: () => Promise.resolve(),
-      }));
-
-      // mock action
-      const actionSpy = jest.spyOn(actions, 'enableIOAddress');
-      actionSpy.mockImplementation(mockActionFn as any);
-      const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-      useDispatchSpy.mockReturnValue(mockDispatchFn as any);
       result = render(<IOContact recipientId="mocked-recipientId" contact={disabledAddress} />);
-    });
-
-    afterEach(() => {
-      result = undefined;
-      jest.resetAllMocks();
-      jest.clearAllMocks();
     });
 
     it('renders as expected', () => {
@@ -125,23 +132,24 @@ describe('IOContact component', () => {
       expect(link).toHaveTextContent('io-contact.disclaimer-link');
     });
 
-    it.only('should enable IO', async () => {
+    it('should enable IO', async () => {
       
       const ioCheckbox = result?.getByRole('checkbox', { name: 'io-contact.switch-label'});
       expect(ioCheckbox).toBeInTheDocument();
+      expect(ioCheckbox).not.toBeChecked();
       
-      result?.debug();
       fireEvent.click(ioCheckbox!);
 
       await waitFor(() => {
         expect(mockDispatchFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledWith('mocked-recipientId');
+        expect(mockEnableActionFn).toBeCalledTimes(1);
+        expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
       });
 
+      expect(ioCheckbox).toBeInTheDocument();
+      expect(ioCheckbox).toBeChecked();
     });
     
-
     it('does not have basic accessibility issues', async () => {
       if (result) {
         const res = await axe(result.container);
@@ -153,14 +161,9 @@ describe('IOContact component', () => {
   });
 
   describe('test component when IO is available and enabled', () => {
+    
     beforeEach(() => {
       result = render(<IOContact recipientId="mocked-recipientId" contact={enabledAddress} />);
-    });
-
-    afterEach(() => {
-      result = undefined;
-      jest.resetAllMocks();
-      jest.clearAllMocks();
     });
 
     it('renders as expected', () => {
@@ -185,33 +188,23 @@ describe('IOContact component', () => {
       expect(link).toHaveTextContent('io-contact.disclaimer-link');
     });
 
-    it.skip('should disable IO', async () => {
-      // mock action
-      const mockActionFn = jest.fn();
-      const actionSpy = jest.spyOn(actions, 'enableIOAddress');
-      actionSpy.mockImplementation(mockActionFn as any);
-      // mock dispatch
-      const mockDispatchFn = jest.fn(() => ({
-        unwrap: () => Promise.resolve(),
-      }));
-      const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-      useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+    it('should disable IO', async () => {
       
       const ioCheckbox = result?.getByRole('checkbox', { name: 'io-contact.switch-label'});
       expect(ioCheckbox).toBeInTheDocument();
+      expect(ioCheckbox).toBeChecked();
 
-      result?.debug();
       fireEvent.click(ioCheckbox!);
 
       await waitFor(() => {
         expect(mockDispatchFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledTimes(1);
-        expect(mockActionFn).toBeCalledWith('mocked-recipientId');
+        expect(mockDisableActionFn).toBeCalledTimes(1);
+        expect(mockDisableActionFn).toBeCalledWith('mocked-recipientId');
       });
 
+      expect(ioCheckbox).not.toBeChecked();
     });
     
-
     it('does not have basic accessibility issues', async () => {
       if (result) {
         const res = await axe(result.container);

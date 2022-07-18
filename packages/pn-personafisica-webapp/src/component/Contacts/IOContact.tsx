@@ -20,8 +20,11 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const [isAvailable, setIsAvailable] = useState<boolean>(true);
 
+  /**
+   * Parses the contact to enstablish if IO is available and,
+   * if that's the case, to know it's value.
+   */
   const parseContact = () => {
-    // TODO: verify if IO can be activated and is currently activated or not
     setIsEnabled(() => false);
     if (!contact) {
       setIsAvailable(() => false);
@@ -39,26 +42,16 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
     event.preventDefault();
     if (isAvailable) {
       if (isEnabled) {
-        dispatch(disableIOAddress(recipientId))
+        void dispatch(disableIOAddress(recipientId))
           .unwrap()
           .then(() => {
             setIsEnabled(() => false);
-          })
-          .catch((error) => {
-            if (error.response.status === 406) {
-              console.log('Error disabling IO');
-            }
           });
       } else {
-        dispatch(enableIOAddress(recipientId))
+        void dispatch(enableIOAddress(recipientId))
           .unwrap()
           .then(() => {
             setIsEnabled(() => true);
-          })
-          .catch((error) => {
-            if (error.response.status === 406) {
-              console.log('Error enabling IO');
-            }
           });
       }
     }

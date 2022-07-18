@@ -83,13 +83,17 @@ const contactsSlice = createSlice({
       const addressIndex = state.digitalAddresses.courtesy.findIndex(
         (address) => address.channelType === CourtesyChannelType.IOMSG
       );
-      state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.ENABLED;
+      if(addressIndex > 0) {
+        state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.ENABLED;
+      }
     });
     builder.addCase(disableIOAddress.fulfilled, (state) => {
       const addressIndex = state.digitalAddresses.courtesy.findIndex(
         (address) => address.channelType === CourtesyChannelType.IOMSG
       );
-      state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.DISABLED;
+      if(addressIndex > 0) {
+        state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.DISABLED;
+      }
     });
     builder.addCase(resetContactsState, () => initialState);
     builder.addCase(getAllActivatedParties.fulfilled, (state, action) => {
