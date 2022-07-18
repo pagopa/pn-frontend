@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { formatDate } from '../services/date.service';
+import { formatDate } from '../services';
 import {
   INotificationDetailTimeline,
   SendCourtesyMessageDetails,
@@ -12,9 +12,9 @@ import {
   DigitalDomicileType,
   NotificationDetail,
   NotHandledDetails,
-} from '../types/NotificationDetail';
-import { GetNotificationsParams } from '../types/Notifications';
-import { NotificationStatus } from '../types/NotificationStatus';
+} from '../types';
+import { GetNotificationsParams } from '../types';
+import { NotificationStatus } from '../types';
 
 /**
  * Returns the mapping between current notification status and its color, label and descriptive message.

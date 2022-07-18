@@ -3,8 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Menu } from '@mui/icons-material';
 
-import { SideMenuItem } from '../../types/SideMenuItem';
-import { useIsMobile } from '../../hooks/IsMobile';
+import { SideMenuItem } from '../../types';
+import { useIsMobile } from '../../hooks';
 import SideMenuList from './SideMenuList';
 
 type Props = {

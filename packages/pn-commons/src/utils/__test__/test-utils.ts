@@ -9,8 +9,8 @@ import {
   PhysicalCommunicationType,
   NotificationDetail,
   SendDigitalDetails,
-} from '../../types/NotificationDetail';
-import { NotificationStatus } from '../../types/NotificationStatus';
+  NotificationStatus
+} from '../../types';
 
 const timeline: Array<INotificationDetailTimeline> = [
   {

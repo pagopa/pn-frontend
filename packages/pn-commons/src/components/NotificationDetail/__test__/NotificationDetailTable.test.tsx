@@ -1,7 +1,7 @@
 import { RenderResult } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import { NotificationDetailTableRow } from '../../../types/NotificationDetail';
+import { NotificationDetailTableRow } from '../../../types';
 import NotificationDetailTable from '../NotificationDetailTable';
 
 describe('NotificationDetailTable Component', () => {

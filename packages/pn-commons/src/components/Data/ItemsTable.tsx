@@ -10,8 +10,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
-import { Notification } from '../../types/Notifications';
-import { Column, Item, Sort } from '../../types/ItemsTable';
+import { Column, Item, Sort, Notification } from '../../types';
 
 type Props = {
   /** Table columns */

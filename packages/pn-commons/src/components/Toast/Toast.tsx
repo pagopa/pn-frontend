@@ -2,8 +2,8 @@ import { useState, Fragment, useEffect } from 'react';
 import { Grid, Typography, Box, IconButton, Alert } from '@mui/material'; // SvgIcon
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useIsMobile } from '../../hooks/IsMobile';
-import { MessageType } from '../../types/MessageType';
+import { useIsMobile } from '../../hooks';
+import { MessageType } from '../../types';
 
 type Props = {
   /** whether the sneakbar should be open or not */
