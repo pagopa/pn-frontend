@@ -1,6 +1,12 @@
 import { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoadingOverlay, Layout, AppMessage, SideMenu, initLocalization } from '@pagopa-pn/pn-commons';
+import {
+  LoadingOverlay,
+  Layout,
+  AppMessage,
+  SideMenu,
+  initLocalization,
+} from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
 import Router from './navigation/routes';
@@ -8,11 +14,7 @@ import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
-import {
-  PAGOPA_HELP_EMAIL,
-  SELFCARE_BASE_URL,
-  PARTY_MOCK,
-} from './utils/constants';
+import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, PARTY_MOCK } from './utils/constants';
 import { mixpanelInit } from './utils/mixpanel';
 
 const App = () => {
@@ -23,10 +25,17 @@ const App = () => {
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
-  const menuItems = useMemo(
-    () => getMenuItems(idOrganization, role?.role),
-    [role, idOrganization]
-  );
+  const menuItems = useMemo(() => {
+    // localize menu items
+    const items = { ...getMenuItems(idOrganization, role?.role) };
+    /* eslint-disable-next-line functional/immutable-data */
+    items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));
+    if (items.selfCareItems) {
+      /* eslint-disable-next-line functional/immutable-data */
+      items.selfCareItems = items.selfCareItems.map((item) => ({ ...item, label: t(item.label) }));
+    }
+    return items;
+  }, [role, idOrganization]);
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -56,18 +65,21 @@ const App = () => {
   );
 
   // TODO: get parties list from be (?)
-  const partyList: Array<PartyEntity> = useMemo(() => [
-    {
-      id: '0',
-      name: PARTY_MOCK,
-      productRole: role?.role,
-      logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
-    },
-  ], [role]);
+  const partyList: Array<PartyEntity> = useMemo(
+    () => [
+      {
+        id: '0',
+        name: PARTY_MOCK,
+        productRole: role?.role,
+        logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
+      },
+    ],
+    [role]
+  );
 
   useEffect(() => {
     // init localization
-    initLocalization((namespace, path, data) => t(path, {ns: namespace, ...data}));
+    initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
     // init mixpanel
     mixpanelInit();
   }, []);
@@ -87,14 +99,12 @@ const App = () => {
       }
       assistanceEmail={PAGOPA_HELP_EMAIL}
       productsList={productsList}
-      productId={"0"}
+      productId={'0'}
       partyList={partyList}
       loggedUser={jwtUser}
       onLanguageChanged={changeLanguageHandler}
     >
-      <AppMessage
-        sessionRedirect={() => dispatch(logout())}
-      />
+      <AppMessage sessionRedirect={() => dispatch(logout())} />
       <LoadingOverlay />
       <Router />
     </Layout>

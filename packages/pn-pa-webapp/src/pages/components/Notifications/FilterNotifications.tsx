@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { Box, DialogActions, DialogContent } from '@mui/material';
 import {
   fiscalCodeRegex,
-  NotificationAllowedStatus,
+  getNotificationAllowedStatus,
   tenYearsAgo,
   today,
   IUN_regex,
@@ -30,7 +30,7 @@ type Props = {
   showFilters: boolean;
 };
 
-const localizedNotificationStatus = NotificationAllowedStatus();
+const localizedNotificationStatus = getNotificationAllowedStatus();
 
 const emptyValues = {
   startDate: formatToTimezoneString(tenYearsAgo),
@@ -56,11 +56,11 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'notifiche']);
 
   const validationSchema = yup.object({
-    recipientId: yup.string().matches(fiscalCodeRegex, 'Inserisci il codice per intero'),
-    iunMatch: yup.string().matches(IUN_regex, 'Inserisci un codice IUN valido'),
+    recipientId: yup.string().matches(fiscalCodeRegex, t('filters.errors.fiscal-code', {ns: 'notifiche'})),
+    iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', {ns: 'notifiche'})),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
   });

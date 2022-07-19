@@ -5,12 +5,6 @@ import { PNRole } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { getHomePage, getMenuItems } from '../role.utility';
 
-// mock imports
-jest.mock('i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  t: (str: string) => str,
-}));
-
 
 const mockedIdOrganization = 'mocked-id';
 const BasicMenuItems: Array<SideMenuItem> = [

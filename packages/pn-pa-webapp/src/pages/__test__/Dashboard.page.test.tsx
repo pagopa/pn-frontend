@@ -100,7 +100,7 @@ describe('Dashboard Page', () => {
     await act(async () => {
       result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
     });
-    expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
+    expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     const filterForm = result?.container.querySelector('form');
     expect(filterForm).toBeInTheDocument();
     const notificationsTable = result?.container.querySelector('table');
@@ -167,7 +167,7 @@ describe('Dashboard Page', () => {
       result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
     });
     const newNotificationBtn = result?.queryByTestId('newNotificationBtn');
-    expect(newNotificationBtn).toHaveTextContent('Invia una nuova notifica');
+    expect(newNotificationBtn).toHaveTextContent('new-notification-button');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);

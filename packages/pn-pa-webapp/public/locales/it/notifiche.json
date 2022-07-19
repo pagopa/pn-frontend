@@ -1,0 +1,73 @@
+{
+  "title": "Notifiche",
+  "subtitle": "Qui trovi tutte le notifiche inviate dall'ente. Puoi filtrarle per Codice Fiscale, Codice IUN, data di invio e stato.",
+  "new-notification-button": "Invia una nuova notifica",
+  "filters": {
+    "search-for": "Filtra per",
+    "fiscal-code": "Codice Fiscale",
+    "iun": "Codice IUN",
+    "data_da": "Da",
+    "data_da-aria-label": "Data inizio ricerca",
+    "data_da-input-aria-label": "Inserisci la data iniziale della ricerca",
+    "data_a": "A",
+    "data_a-aria-label": "Data fine ricerca",
+    "data_a-input-aria-label": "Inserisci la data finale della ricerca",
+    "status": "Stato",
+    "errors": {
+      "iun": "Inserisci un codice IUN valido",
+      "fiscal-code": "Inserisci il codice per intero"
+    }
+  },
+  "table": {
+    "date": "Data",
+    "recipient": "Destinatario",
+    "subject": "Oggetto",
+    "iun": "Codice IUN",
+    "groups": "Gruppi",
+    "status": "Stato",
+    "show-detail": "Vedi dettaglio"
+  },
+  "sort": {
+    "title": "Ordina",
+    "cancel": "Annulla ordinamento",
+    "asc": "crescente",
+    "desc": "decrescente",
+    "options": "Opzioni sort"
+  },
+  "empty-state": {
+    "message": "L'ente non ha ancora inviato nessuna notifica. Usa le",
+    "action": "Chiavi API",
+    "secondary-message": "o fai un",
+    "secondary-action": "invio manuale"
+  },
+  "status": {
+    "all": "Tutti gli stati",
+    "delivered": "Consegnata",
+    "delivered-tooltip": "La notifica è stata consegnata",
+    "delivered-description": "La notifica è stata consegnata",
+    "delivering": "Invio in corso",
+    "delivering-tooltip": "L'invio della notifica è in corso",
+    "delivering-description": "L'invio della notifica è in corso",
+    "unreachable": "Destinatario irreperibile",
+    "unreachable-tooltip": "Il destinatario non è reperibile",
+    "unreachable-description": "Il destinatario non è reperibile",
+    "paid": "Pagata",
+    "paid-tooltip": "Il destinatario ha pagato i costi della notifica",
+    "paid-description": "Il destinatario ha pagato i costi della notifica",
+    "accepted": "Depositata",
+    "accepted-tooltip": "L'ente ha depositato la notifica",
+    "accepted-description": "L'ente ha depositato la notifica",
+    "effective-date": "Perfezionata per decorrenza termini",
+    "effective-date-tooltip": "Il destinatario non ha letto la notifica",
+    "effective-date-description": "Il destinatario non ha letto la notifica entro il termine stabilito",
+    "viewed": "Perfezionata per visione",
+    "viewed-tooltip": "Il destinatario ha letto la notifica",
+    "viewed-description": "Il destinatario ha letto la notifica entro il termine stabilito",
+    "viewed-after-deadline": "Visualizzata",
+    "viewed-after-deadline-tooltip": "Il destinatario ha visualizzato la notifica",
+    "viewed-after-deadline-description": "Il destinatario ha visualizzato la notifica",
+    "canceled": "Annullata",
+    "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
+    "canceled-description": "L'ente ha annullato l'invio della notifica"
+  }
+}

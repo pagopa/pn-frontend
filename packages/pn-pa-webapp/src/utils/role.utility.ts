@@ -1,4 +1,3 @@
-import i18next from 'i18next';
 import { Email, People, SupervisedUserCircle } from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
@@ -7,7 +6,7 @@ import { PNRole } from '../models/user';
 import { IS_DEVELOP } from './constants';
 
 const BasicMenuItems: Array<SideMenuItem> = [
-  { label: i18next.t('menu.notifications', {ns: 'common'}), icon: Email, route: routes.DASHBOARD },
+  { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
   /**
    * Refers to PN-1741
    * Commented out because beyond MVP scope
@@ -21,8 +20,8 @@ const BasicMenuItems: Array<SideMenuItem> = [
 
 function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
   return [
-    { label: i18next.t('menu.roles', {ns: 'common'}), icon: People, route: routes.ROLES(idOrganization) },
-    { label: i18next.t('menu.groups', {ns: 'common'}), icon: SupervisedUserCircle, route: routes.GROUPS(idOrganization) },
+    { label: 'menu.roles', icon: People, route: routes.ROLES(idOrganization) },
+    { label: 'menu.groups', icon: SupervisedUserCircle, route: routes.GROUPS(idOrganization) },
   ];
 }
 

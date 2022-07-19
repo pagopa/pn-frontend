@@ -1,7 +1,7 @@
 import { calculatePages } from './pagination.utility';
 import {
     getNotificationStatusInfos,
-    NotificationAllowedStatus,
+    getNotificationAllowedStatus,
     parseNotificationDetail,
     filtersApplied,
     getLegalFactLabel,
@@ -25,7 +25,7 @@ import { storageOpsBuilder } from './storage.utility';
 import { compileRoute } from './routes.utility';
 
 export {
-    NotificationAllowedStatus,
+    getNotificationAllowedStatus,
     getNotificationStatusInfos,
     parseNotificationDetail,
     filtersApplied,

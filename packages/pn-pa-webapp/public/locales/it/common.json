@@ -54,6 +54,10 @@
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
   },
+  "leaving-app": {
+    "title": "Stai uscendo da Piattaforma Notifiche",
+    "message": "Verrai reindirizzato"
+  },
   "messages": {
     "404-title": "Risorsa non trovata",
     "404-message": "Si è verificato un errore. Si prega di riprovare più tardi",
