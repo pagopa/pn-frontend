@@ -48,11 +48,7 @@ batch:
     #     env:
     #       variables:
     #        BUILD_ID: prod
-<<<<<<< HEAD
     #        REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
-=======
-    #        REACT_APP_PAGOPA_HELP_EMAIL: pn.coll@assistenza.pagopa.it
->>>>>>> origin/pn_ga
     #        REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
     #        REACT_APP_URL_FE_LOGIN: https://login.notifichedigitali.pagopa.it
     #        REACT_APP_URL_API: https://webapi.pn.pagopa.it/
