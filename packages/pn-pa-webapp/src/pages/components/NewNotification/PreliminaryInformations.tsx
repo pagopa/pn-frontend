@@ -27,7 +27,7 @@ type Props = {
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const userGroups = useAppSelector((state: RootState) => state.userState.user.groups);
-  const [groups] = useState(userGroups);
+  const [groups, _setGroups] = useState(userGroups);
 
   const initialValues = () => ({
     paProtocolNumber: notification.paProtocolNumber || '',
