@@ -17,26 +17,22 @@ import { PROFILO } from '../navigation/routes.const';
 import { CourtesyChannelType } from '../models/contacts';
 
 const Contacts = () => {
-  const [actionDispatched, setActionDispatched] = useState(false);
+  const [isDigitalAddressLoaded, setIsDigitalAddressLoaded] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
-  const digitalAddresses = useAppSelector(
-    (state: RootState) => state.contactsState.digitalAddresses
-  );
+  const digitalAddresses = useAppSelector((state: RootState) => state.contactsState.digitalAddresses);
 
-  const isLoading = useAppSelector((state: RootState) => state.contactsState.loading);
-
-  const digitalAddressesLoaded = () => actionDispatched && !isLoading;
-
-  const contactIO = digitalAddressesLoaded() ? digitalAddresses.courtesy.find(
+  const contactIO = isDigitalAddressLoaded ? digitalAddresses.courtesy.find(
     (address) => address.channelType === CourtesyChannelType.IOMSG
   ) : null;
 
   useEffect(() => {
-    void dispatch(getDigitalAddresses(recipientId));
-    setActionDispatched(() => true);
+    void dispatch(getDigitalAddresses(recipientId))
+    .then(() => {
+      setIsDigitalAddressLoaded(() => true);
+    });
     return () => void dispatch(resetContactsState());
   }, []);
 

@@ -60,7 +60,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
 
   useEffect(() => {
     parseContact();
-  }, [contact?.value]);
+  }, [contact]);
 
   const getContent = () => {
     if(status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {

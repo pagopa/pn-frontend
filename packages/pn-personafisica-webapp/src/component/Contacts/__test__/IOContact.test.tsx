@@ -65,9 +65,37 @@ describe('IOContact component', () => {
     jest.restoreAllMocks();
   });
 
-  describe('test component when IO is unavailable', () => {
+  describe('test component when contacts have not yet been fetched', () => {
     beforeEach(() => {
       result = render(<IOContact recipientId="mocked-recipientId" contact={null} />);
+    });
+
+    afterEach(() => {
+      result = undefined;
+    });
+
+    it('renders as expected', () => {
+      const cardAvatar = result?.container.querySelector('svg>title');
+      expect(cardAvatar).toBeInTheDocument();
+      expect(cardAvatar).toHaveTextContent('Sms'); // to be replaced when the correct icon will be available
+
+      const title = result?.getByRole('heading', { name: 'io-contact.subtitle' });
+      expect(title).toBeInTheDocument();
+
+      const ioCheckbox = result?.queryByRole('checkbox', { name: 'io-contact.switch-label'});
+      expect(ioCheckbox).not.toBeInTheDocument();
+
+      const alert = result?.queryByRole('alert');
+      expect(alert).not.toBeInTheDocument();
+
+      const link = result?.container.querySelector('a');
+      expect(link).not.toBeInTheDocument();
+    });
+  });
+
+  describe('test component when IO is unavailable', () => {
+    beforeEach(() => {
+      result = render(<IOContact recipientId="mocked-recipientId" contact={undefined} />);
     });
 
     afterEach(() => {

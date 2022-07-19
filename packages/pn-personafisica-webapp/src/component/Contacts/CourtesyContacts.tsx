@@ -19,6 +19,9 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
       sectionTitle={t('courtesy-contacts.title', { ns: 'recapiti' })}
       title={t('courtesy-contacts.subtitle', { ns: 'recapiti' })}
       subtitle={t('courtesy-contacts.description', { ns: 'recapiti' })}
+      /** 
+       * Waiting for Mail icon to be available in mui-italia (<IllusSms /> as placeholder)
+       * */
       avatar={<IllusSms />}
     >
       <Box sx={{ width: { xs: '100%', lg: '50%' }}}>

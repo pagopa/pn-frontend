@@ -29,12 +29,8 @@ const contactsSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getDigitalAddresses.pending, (state) => {
-      state.loading = true;
-    });
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
       state.digitalAddresses = action.payload;
-      state.loading = false;
     });
     builder.addCase(createOrUpdateLegalAddress.fulfilled, (state, action) => {
       // update or add digital address
