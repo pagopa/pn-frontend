@@ -14,10 +14,10 @@ interface Props {
 }
 
 enum IOContactStatus {
-  PENDING = "pending",
-  UNAVAILABLE = "unavailable",
-  ENABLED = "enabled",
-  DISABLED = "disabled"
+  PENDING = 'pending',
+  UNAVAILABLE = 'unavailable',
+  ENABLED = 'enabled',
+  DISABLED = 'disabled',
 }
 
 const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
@@ -39,22 +39,19 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
 
   const toggleIO = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
-    switch(status) {
+    switch (status) {
       case IOContactStatus.ENABLED:
-        void dispatch(disableIOAddress(recipientId))
-        .unwrap()
-        .then(() => {
+        void dispatch(disableIOAddress(recipientId)).then(() => {
           setStatus(() => IOContactStatus.DISABLED);
         });
         break;
       case IOContactStatus.DISABLED:
-        void dispatch(enableIOAddress(recipientId))
-        .unwrap()
-        .then(() => {
+        void dispatch(enableIOAddress(recipientId)).then(() => {
           setStatus(() => IOContactStatus.ENABLED);
         });
         break;
-      default: break;
+      default:
+        break;
     }
   };
 
@@ -63,7 +60,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
   }, [contact]);
 
   const getContent = () => {
-    if(status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {
+    if (status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {
       return;
     } else {
       return (
@@ -85,11 +82,14 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
   };
 
   const getDisclaimer = () => {
-    if(status === IOContactStatus.PENDING) {
+    if (status === IOContactStatus.PENDING) {
       return;
     } else {
       return (
-        <Alert sx={{ mt: 4 }} severity={status !== IOContactStatus.UNAVAILABLE ? 'info' : 'warning'}>
+        <Alert
+          sx={{ mt: 4 }}
+          severity={status !== IOContactStatus.UNAVAILABLE ? 'info' : 'warning'}
+        >
           <Typography component="span" variant="body1">
             {IOContactStatus.UNAVAILABLE
               ? t('io-contact.disclaimer-message-unavailable', { ns: 'recapiti' })
