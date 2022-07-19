@@ -8,8 +8,8 @@ import {
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-} from '../../types/NotificationDetail';
-import { NotificationStatus } from '../../types/NotificationStatus';
+  NotificationStatus
+} from '../../types';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,

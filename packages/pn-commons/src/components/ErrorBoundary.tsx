@@ -1,7 +1,8 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-
 import { Typography, Box, Button, SxProps } from '@mui/material';
 import { IllusError } from '@pagopa/mui-italia';
+
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 type Props = {
   children: ReactNode;
@@ -33,12 +34,30 @@ class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <Box sx={{minHeight: '350px', height: '100%', display: 'flex', ...this.props.sx}}>
-          <Box sx={{margin: 'auto', textAlign: 'center', width: '80vw'}}>
-            <IllusError/>
-            <Typography variant="h4" color="text.primary" sx={{margin: '20px 0 10px 0'}}>Qualcosa è andato storto</Typography>
-            <Typography variant="body1" color="text.primary">Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.</Typography>
-            <Button variant="contained" sx={{marginTop: '30px'}} onClick={this.handleRefreshPage}>Ricarica la pagina</Button>
+        <Box sx={{ minHeight: '350px', height: '100%', display: 'flex', ...this.props.sx }}>
+          <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
+            <IllusError />
+            <Typography variant="h4" color="text.primary" sx={{ margin: '20px 0 10px 0' }}>
+              {getLocalizedOrDefaultLabel(
+                'common',
+                'error-boundary.title',
+                'Qualcosa è andato storto'
+              )}
+            </Typography>
+            <Typography variant="body1" color="text.primary">
+              {getLocalizedOrDefaultLabel(
+                'common',
+                'error-boundary.description',
+                'Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.'
+              )}
+            </Typography>
+            <Button variant="contained" sx={{ marginTop: '30px' }} onClick={this.handleRefreshPage}>
+              {getLocalizedOrDefaultLabel(
+                'common',
+                'error-boundary.action',
+                'Ricarica la pagina'
+              )}
+            </Button>
           </Box>
         </Box>
       );

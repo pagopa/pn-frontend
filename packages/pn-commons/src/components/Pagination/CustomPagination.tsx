@@ -2,6 +2,7 @@ import { ChangeEvent, useState } from 'react';
 import { Button, Grid, Menu, MenuItem, Pagination, PaginationItem, SxProps } from '@mui/material';
 import ArrowDropDown from '@mui/icons-material/ArrowDropDown';
 
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { PaginationData, A11yPaginationLabelsTypes } from './types';
 
 type Props = {
@@ -26,23 +27,23 @@ const getA11yPaginationLabels = (
   let ariaStr;
   switch (type) {
     case 'first':
-      ariaStr = 'primo elemento';
+      ariaStr = getLocalizedOrDefaultLabel('common', 'paginator.first', 'primo elemento');
       break;
     case 'last':
-      ariaStr = 'ultimo elemento';
+      ariaStr = getLocalizedOrDefaultLabel('common', 'paginator.last', 'ultimo elemento');
       break;
     case 'page':
-      ariaStr = 'pagina ' + page.toString();
+      ariaStr = `${getLocalizedOrDefaultLabel('common', 'paginator.page', 'pagina')} ${page.toString()}`;
       break;
     case 'next':
-      ariaStr = 'Vai alla pagina successiva';
+      ariaStr = getLocalizedOrDefaultLabel('common', 'paginator.next', 'Vai alla pagina successiva');
       break;
     case 'previous':
-      ariaStr = 'Vai alla pagina precedente';
+      ariaStr = getLocalizedOrDefaultLabel('common', 'paginator.previous', 'Vai alla pagina precedente');
       break;
   }
   if (selected) {
-    ariaStr += ', elemento selezionato';
+    ariaStr += `, ${getLocalizedOrDefaultLabel('common', 'paginator.selected', 'elemento selezionato')}`;
   }
   return ariaStr;
 };
@@ -95,7 +96,7 @@ export default function CustomPagination({
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<ArrowDropDown />}
-          aria-label="Righe per pagina"
+          aria-label={getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page', 'Righe per pagina')}
         >
           {size}
         </Button>
@@ -105,7 +106,7 @@ export default function CustomPagination({
           open={open}
           onClose={handleClose}
           MenuListProps={{
-            'aria-labelledby': 'Righe per pagina',
+            'aria-labelledby': getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page', 'Righe per pagina'),
           }}
         >
           {elementsPerPage.map((ep) => (
@@ -127,7 +128,7 @@ export default function CustomPagination({
         {paginationData.totalElements > size && (
           <Pagination
             sx={{ display: 'flex' }}
-            aria-label="Menu Paginazione"
+            aria-label={getLocalizedOrDefaultLabel('common', 'paginator.aria-label', 'Menu Paginazione')}
             color="primary"
             variant="text"
             shape="circular"

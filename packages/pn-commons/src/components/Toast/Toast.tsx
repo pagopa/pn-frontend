@@ -2,8 +2,9 @@ import { useState, Fragment, useEffect } from 'react';
 import { Grid, Typography, Box, IconButton, Alert } from '@mui/material'; // SvgIcon
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useIsMobile } from '../../hooks/IsMobile';
-import { MessageType } from '../../types/MessageType';
+import { useIsMobile } from '../../hooks';
+import { MessageType } from '../../types';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 type Props = {
   /** whether the sneakbar should be open or not */
@@ -87,7 +88,14 @@ const Toast = ({
                 <Typography variant="body2">{message}</Typography>
               </Grid>
               <Grid item xs={2}>
-                <IconButton onClick={closeToast} aria-label="Close toast icon">
+                <IconButton
+                  onClick={closeToast}
+                  aria-label={getLocalizedOrDefaultLabel(
+                    'common',
+                    'toast.aria-label',
+                    'Icona di chisura toast'
+                  )}
+                >
                   <CloseIcon />
                 </IconButton>
               </Grid>

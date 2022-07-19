@@ -1,5 +1,6 @@
-import { format, addDays } from 'date-fns';
+import DateFnsAdapter from "@date-io/date-fns";
 
+const dateFns = new DateFnsAdapter();
 export const DATE_FORMAT = "dd/MM/yyyy";
 const DATE_FORMAT_TIMEZONE = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
 
@@ -27,9 +28,9 @@ export function getTime(dateString: string): string {
 }
 
 export function getNextDay(date: Date): Date {
-  return addDays(date, 1);
+  return dateFns.addDays(date, 1);
 }
 
 export function formatToTimezoneString(date: Date): string {
-  return format(date, DATE_FORMAT_TIMEZONE);
+  return dateFns.formatByString(date, DATE_FORMAT_TIMEZONE);
 }

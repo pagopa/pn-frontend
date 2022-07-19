@@ -28,6 +28,8 @@ type Props = {
   enableUserDropdown?: boolean;
   /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
+  /** Function called when user chenge language */
+  onLanguageChanged?: (langCode: string) => void
 };
 
 export default function Layout({
@@ -42,6 +44,7 @@ export default function Layout({
   loggedUser,
   enableUserDropdown,
   userActions,
+  onLanguageChanged = () => {}
 }: Props) {
 
   return (
@@ -71,7 +74,7 @@ export default function Layout({
           </Box>
 
         </Stack>
-        <Footer />
+        <Footer onLanguageChanged={onLanguageChanged}/>
       </Stack>
     </ErrorBoundary>
   );
