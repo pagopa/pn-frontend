@@ -8,7 +8,7 @@ batch:
           BUILD_ID: dev
           REACT_APP_PAGOPA_HELP_EMAIL: pn.dev@assistenza.pagopa.it
           REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
-          REACT_APP_URL_FE_LOGIN: https://portale-login-develop.fe.dev.pn.pagopa.it/
+          REACT_APP_URL_FE_LOGIN: https://portale-login.dev.pn.pagopa.it/
           REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
           REACT_APP_PAGOPA_HELP_EMAIL: pn.dev@assistenza.pagopa.it
           REACT_APP_CHECKOUT_URL: https://uat.checkout.pagopa.it
