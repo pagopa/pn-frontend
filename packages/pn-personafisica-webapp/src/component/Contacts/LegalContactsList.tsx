@@ -1,14 +1,12 @@
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
-import { Divider, Grid, Box, Typography, TextField } from '@mui/material';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import { Grid, Box, Typography, TextField, Alert } from '@mui/material';
 
-import { DigitalAddress } from '../../models/contacts';
+import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
-import LegalContactsDisclosure from './LegalContactsDisclosure';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
@@ -18,23 +16,12 @@ type Props = {
 
 const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
-  const [disclosureCollapsed, setDisclosureCollapsed] = useState(true);
-
-  const handleCollapse = () => {
-    setDisclosureCollapsed((prevDisclosureCollapsed) => !prevDisclosureCollapsed);
-  };
 
   const title = useMemo(
     () => (
       <Grid container spacing={1} alignItems="flex-end" direction="row">
         <Grid item xs="auto">
           {t('legal-contacts.subtitle-2', { ns: 'recapiti' })}
-        </Grid>
-        <Grid item xs="auto">
-          <ErrorOutlineIcon
-            onClick={handleCollapse}
-            sx={{ cursor: 'pointer', position: 'relative', top: '4px', color: 'action.active' }}
-          />
         </Grid>
       </Grid>
     ),
@@ -77,26 +64,20 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     <DigitalContactsCard
       sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
       title={title}
-      subtitle={disclosureCollapsed ? '' : t('legal-contacts.description-2', { ns: 'recapiti' })}
+      subtitle={t('legal-contacts.description', { ns: 'recapiti' })}
       avatar={<IllusEmailValidation />}
     >
-      {!disclosureCollapsed && <LegalContactsDisclosure />}
-      <Divider />
       <Box sx={{ marginTop: '20px' }}>
         <form>
+          <Typography mb={1} sx={{ fontWeight: 'bold' }}>
+            {t('legal-contacts.pec-added', { ns: 'recapiti' })}
+          </Typography>
           <DigitalContactElem
             recipientId={recipientId}
             senderId="default"
             // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-            contactType={defaultAddress!.channelType}
+            contactType={LegalChannelType.PEC}
             fields={[
-              {
-                id: 'label',
-                component: (
-                  <Typography>{t('legal-contacts.pec-added', { ns: 'recapiti' })}</Typography>
-                ),
-                size: 'variable',
-              },
               {
                 id: 'value',
                 component: (
@@ -118,16 +99,37 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
               },
             ]}
             saveDisabled={!formik.isValid}
-            removeModalTitle={t('legal-contacts.remove-pec-title', { ns: 'recapiti' })}
-            removeModalBody={t('legal-contacts.remove-pec-message', {
-              value: formik.values.pec,
-              ns: 'recapiti',
-            })}
+            removeModalTitle={
+              legalAddresses.length > 1
+                ? t('legal-contacts.block-remove-pec-title', { ns: 'recapiti' })
+                : t('legal-contacts.remove-pec-title', { ns: 'recapiti' })
+            }
+            removeModalBody={
+              legalAddresses.length > 1
+                ? t('legal-contacts.block-remove-pec-message', { ns: 'recapiti' })
+                : t('legal-contacts.remove-pec-message', {
+                    value: formik.values.pec,
+                    ns: 'recapiti',
+                  })
+            }
             value={formik.values.pec}
             onConfirmClick={handleEditConfirm}
+            blockDelete={legalAddresses.length > 1}
+            forceMobileView
           />
         </form>
       </Box>
+      <Alert sx={{ mt: 4 }} severity="info">
+        <Typography component="span" variant="body1">
+          {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
+        </Typography>
+          {/** 
+           * Waiting for FAQs
+        <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
+          {t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}
+        </Link>
+           * */}
+      </Alert>
     </DigitalContactsCard>
   );
 };

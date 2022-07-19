@@ -38,6 +38,7 @@ type Props = {
   value: string;
   onConfirmClick: (status: 'validated' | 'cancelled') => void;
   forceMobileView?: boolean;
+  blockDelete?: boolean;
 };
 
 const DigitalContactElem = memo(
@@ -52,6 +53,7 @@ const DigitalContactElem = memo(
     value,
     onConfirmClick,
     forceMobileView = false,
+    blockDelete,
   }: Props) => {
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
@@ -111,6 +113,21 @@ const DigitalContactElem = memo(
       );
     };
 
+    const deleteModalActions = blockDelete ? (
+      <Button onClick={handleModalClose} variant="outlined">
+        {t('button.close')}
+      </Button>
+    ) : (
+      <>
+        <Button onClick={handleModalClose} variant="outlined">
+          {t('button.annulla')}
+        </Button>
+        <Button onClick={confirmHandler} variant="contained">
+          {t('button.conferma')}
+        </Button>
+      </>
+    );
+
     return (
       <Fragment>
         <Grid container spacing={isMobile ? 2 : 4} direction="row" alignItems="center">
@@ -129,12 +146,11 @@ const DigitalContactElem = memo(
           )}
           {mappedChildren}
           <Grid item lg={forceMobileView ? 12 : 2} xs={12} textAlign={isMobile ? 'left' : 'right'}>
-            {!editMode && (
+            {!editMode ? (
               <ButtonNaked color="primary" onClick={toggleEdit} sx={{ marginRight: '10px' }}>
                 {t('button.modifica')}
               </ButtonNaked>
-            )}
-            {editMode && (
+            ) : (
               <ButtonNaked
                 color="primary"
                 disabled={saveDisabled}
@@ -162,14 +178,7 @@ const DigitalContactElem = memo(
           <DialogContent>
             <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleModalClose} variant="outlined">
-              {t('button.annulla')}
-            </Button>
-            <Button onClick={confirmHandler} variant="contained">
-              {t('button.conferma')}
-            </Button>
-          </DialogActions>
+          <DialogActions>{deleteModalActions}</DialogActions>
         </Dialog>
       </Fragment>
     );

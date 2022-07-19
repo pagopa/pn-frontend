@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, InputAdornment } from '@mui/material';
+import { Button, Grid, TextField, InputAdornment, Typography } from '@mui/material';
 
 import { ChangeEvent, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,9 +19,10 @@ interface Props {
   recipientId: string;
   type: CourtesyFieldType;
   value: string;
+  blockDelete?: boolean;
 }
 
-const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
+const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
 
@@ -79,13 +80,20 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
 
   if (value) {
     return (
-      <form style={{ width: '100%', margin: '1rem 0' }}>
+      <form style={{ width: '100%'}}>
+        <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
         <DigitalContactElem
           recipientId={recipientId}
           senderId="default"
           contactType={digitalDomicileType}
-          removeModalTitle={t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })}
-          removeModalBody={t(`courtesy-contacts.remove-${type}-message`, {
+          removeModalTitle={
+            blockDelete
+                ? t(`courtesy-contacts.block-remove-${type}-title`, { ns: 'recapiti' })
+                : t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })}
+          removeModalBody={
+            blockDelete
+                ? t(`courtesy-contacts.block-remove-${type}-message`, { ns: 'recapiti' })
+                : t(`courtesy-contacts.remove-${type}-message`, {
             value: formik.values[type],
             ns: 'recapiti',
           })}
@@ -115,18 +123,22 @@ const CourtesyContactItem = ({ recipientId, type, value }: Props) => {
           ]}
           saveDisabled={!formik.isValid}
           onConfirmClick={handleEditConfirm}
+          blockDelete={blockDelete}
+          forceMobileView
         />
       </form>
     );
   }
 
   return (
-    <form onSubmit={formik.handleSubmit} style={{ width: '100%', margin: '1rem 0' }}>
+    <form onSubmit={formik.handleSubmit} style={{ width: '100%'}}>
+      <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
       <Grid container spacing={2} direction="row">
         <Grid item lg={8} sm={8} xs={12}>
           <TextField
             id={type}
             name={type}
+            aria-labelledby={`${type}-label`}
             value={formik.values[type]}
             onChange={handleChangeTouched}
             error={formik.touched[type] && Boolean(formik.errors[type])}

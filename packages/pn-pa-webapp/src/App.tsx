@@ -29,7 +29,7 @@ const App = () => {
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
   const menuItems = useMemo(
-    () => getMenuItems(role.partyRole, idOrganization),
+    () => getMenuItems(idOrganization, role?.role),
     [role, idOrganization]
   );
   const jwtUser = useMemo(
@@ -61,17 +61,14 @@ const App = () => {
   );
 
   // TODO: get parties list from be (?)
-  const partyList: Array<PartyEntity> = useMemo(
-    () => [
-      {
-        id: '0',
-        name: PARTY_MOCK,
-        productRole: role.role,
-        logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
-      },
-    ],
-    [role]
-  );
+  const partyList: Array<PartyEntity> = useMemo(() => [
+    {
+      id: '0',
+      name: PARTY_MOCK,
+      productRole: role?.role,
+      logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
+    },
+  ], [role]);
 
   useEffect(() => {
     // init mixpanel

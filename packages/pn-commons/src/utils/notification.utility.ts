@@ -115,19 +115,21 @@ export const NotificationAllowedStatus = [
 
 /**
  * Returns the mapping between current notification timeline status and its label and descriptive message.
- * @param  {TimelineCategory} status
+ * @param  {INotificationDetailTimeline} step
+ * @param {Array<NotificationDetailRecipient>} recipients
  * @returns object
  */
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
-  ricipients: Array<NotificationDetailRecipient>
+  recipients: Array<NotificationDetailRecipient>
 ): {
   label: string;
   description: string;
   linkText?: string;
   recipient?: string;
 } | null {
-  const recipient = !_.isNil(step.details.recIndex) ? ricipients[step.details.recIndex] : undefined;
+  const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
+  
   const legalFactLabel = 'Attestazione opponibile a terzi';
   const receiptLabel = 'Vedi la ricevuta';
   const recipientLabel = `${recipient?.taxId} - ${recipient?.denomination}`;
@@ -255,7 +257,7 @@ export function getNotificationTimelineStatusInfos(
       if ((step.details as NotHandledDetails).reasonCode === '001' && (step.details as NotHandledDetails).reason === 'Paper message not handled') {
         return {
           label: 'Annullata',
-          description: `La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante la sperimentazione della piattaforma.`,
+          description: `La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante il collaudo della piattaforma.`,
         };
       }
       return null;
@@ -300,8 +302,17 @@ export function parseNotificationDetail(
     hidden: !TimelineAllowedStatus.includes(t.category),
   }));
   let isEffectiveDateStatus = false;
+  let acceptedStatusItems: Array<string> = [];
   // populate notification macro step with corresponding timeline micro steps
   for (const status of parsedNotification.notificationStatusHistory) {
+    // if status accepted has items, move them to the next state
+    if (status.status === NotificationStatus.ACCEPTED && status.relatedTimelineElements.length) {
+      acceptedStatusItems = status.relatedTimelineElements;
+      status.relatedTimelineElements = [];
+    } else if (acceptedStatusItems.length) {
+      status.relatedTimelineElements.unshift(...acceptedStatusItems);
+      acceptedStatusItems = [];
+    }
     status.steps = [];
     // find timeline steps that are linked with current status
     for (const timelineElement of status.relatedTimelineElements) {
@@ -334,8 +345,9 @@ export function parseNotificationDetail(
 
 /**
  * Get legalFact label based on timeline category.
- * @param  {NotificationDetail} notificationDetail
- * @returns NotificationDetail
+ * @param {TimelineCategory} category Timeline category
+ * @param {attestation: string; receipt: string} legalFactLabels Attestation and Receipt
+ * @returns {string} attestation or receipt
  */
 export function getLegalFactLabel(
   category: TimelineCategory,
@@ -349,8 +361,8 @@ export function getLegalFactLabel(
 
 /**
  * Returns the number of filters applied
- * @param  {preFilters} GetNotificationsParams
- * @param  {emptyValues} GetNotificationsParams
+ * @param  prevFilters GetNotificationsParams
+ * @param  emptyValues GetNotificationsParams
  * @returns number
  */
 export function filtersApplied(

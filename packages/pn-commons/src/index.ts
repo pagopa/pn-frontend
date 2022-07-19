@@ -13,7 +13,6 @@ import MobileNotificationsSort from './components/Notifications/MobileNotificati
 import ItemsTable from './components/Data/ItemsTable';
 import EmptyState from './components/EmptyState';
 import ItemsCard from './components/Data/ItemsCard';
-import TitleAndDescription from './components/TitleAndDescription';
 import CustomMobileDialog from './components/CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogToggle from './components/CustomMobileDialog/CustomMobileDialogToggle';
 import CustomMobileDialogContent from './components/CustomMobileDialog/CustomMobileDialogContent';
@@ -46,7 +45,6 @@ export { StatusTooltip };
 export { MobileNotificationsSort };
 export { SessionModal };
 export { ItemsCard };
-export { TitleAndDescription };
 export { CustomMobileDialog };
 export { CustomMobileDialogToggle };
 export { CustomMobileDialogContent };
@@ -150,6 +148,7 @@ export type {DatePickerTypes};
 import { createAppError } from './services/message.service';
 import { formatDate } from './services/date.service';
 import { calculatePages } from './utils/pagination.utility';
+import { getValidValue } from './utils/genericFunctions.utility';
 import {
   getNotificationStatusInfos,
   NotificationAllowedStatus,
@@ -171,6 +170,7 @@ export { filtersApplied };
 export { createAppError };
 export { formatDate };
 export { calculatePages };
+export { getValidValue };
 export { getMonthString, getDay, getTime, getNextDay, formatToTimezoneString };
 export { formatFiscalCode };
 export { fiscalCodeRegex };

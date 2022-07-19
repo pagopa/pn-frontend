@@ -1,4 +1,3 @@
-import { screen } from "@testing-library/react";
 import { render, axe } from "../../../__test__/test-utils";
 import CourtesyContacts from "../CourtesyContacts";
 
@@ -15,20 +14,19 @@ jest.mock('../CourtesyContactsList', () => () => <div>CourtesyContactsList</div>
 describe('CourtesyContacts Component', () => {
   it('renders correctly', () => {
     const result = render(<CourtesyContacts recipientId="mock-recipient" contacts={[]}/>);
-    const avatar = screen.getByText('Sms');
+    const avatar = result.getByText('Sms');
     expect(avatar).toBeInTheDocument();
-    const subtitle = screen.getByTestId(/DigitalContactsCardBody/).getElementsByTagName('p')[0];
+    const subtitle = result.getByTestId(/DigitalContactsCardBody/).getElementsByTagName('p')[0];
     expect(subtitle).toHaveTextContent('courtesy-contacts.title');
-    const title = screen.getByRole('heading');
+    const title = result.getByRole('heading');
     expect(title).toBeInTheDocument();
     expect(title).toHaveTextContent("courtesy-contacts.subtitle");
-    const descriptions = screen.getAllByText('courtesy-contacts.description');
+    const descriptions = result.getAllByText('courtesy-contacts.description');
     expect(descriptions[0]).toBeInTheDocument();
     expect(descriptions).toHaveLength(1);
-    const courtesyContactsListComponents = screen.getAllByText('CourtesyContactsList');
+    const courtesyContactsListComponents = result.getAllByText('CourtesyContactsList');
     expect(courtesyContactsListComponents[0]).toBeInTheDocument();
     expect(courtesyContactsListComponents).toHaveLength(1);
-    expect(result.container).toHaveTextContent(/courtesy-contacts.io-enable/);
   });
 
   it('does not have basic accessibility issues', async () => {

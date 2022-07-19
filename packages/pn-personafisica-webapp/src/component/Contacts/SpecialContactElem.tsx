@@ -31,6 +31,12 @@ type Field = {
   labelRoot: string;
 };
 
+const addressTypeToLabel = {
+  'mail': 'email',
+  'pec': 'pec',
+  'phone': 'phone'
+};
+
 const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
@@ -112,7 +118,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
 
   const jsxField = (f: Field) => (
     <Fragment>
-      {address[f.addressId] && (
+      {address[f.addressId] ? (
         <form data-testid="specialContactForm">
           <DigitalContactElem
             recipientId={recipientId}
@@ -140,8 +146,8 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
               },
             ]}
             saveDisabled={!!formik.errors[f.id]}
-            removeModalTitle={t(`${f.labelRoot}.remove-${f.addressId}-title`, { ns: 'recapiti' })}
-            removeModalBody={t(`${f.labelRoot}.remove-${f.addressId}-message`, {
+            removeModalTitle={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-title`, { ns: 'recapiti' })}
+            removeModalBody={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-message`, {
               value: formik.values[f.id],
               ns: 'recapiti',
             })}
@@ -150,8 +156,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
             forceMobileView
           />
         </form>
-      )}
-      {!address[f.addressId] && '-'}
+      ) : '-'}
     </Fragment>
   );
 

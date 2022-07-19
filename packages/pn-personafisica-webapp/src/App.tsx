@@ -19,6 +19,13 @@ import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from "./utils/events";
+import './utils/onetrust';
+
+declare const OneTrust: any;
+declare const OnetrustActiveGroups: string;
+const global = window as any;
+// target cookies (Mixpanel)
+const targCookiesGroup = "C0004";
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -69,7 +76,7 @@ const App = () => {
         id: 'logout',
         label: t('header.logout'),
         onClick: () => {
-            void dispatch(logout());
+          void dispatch(logout());
         },
         icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
       },
@@ -85,8 +92,25 @@ const App = () => {
   });
 
   useEffect(() => {
-    // init mixpanel
-    mixpanelInit();
+    // OneTrust callback at first time
+    // eslint-disable-next-line functional/immutable-data
+    global.OptanonWrapper = function () {
+      OneTrust.OnConsentChanged(function () {
+        const activeGroups = OnetrustActiveGroups;
+        if (activeGroups.indexOf(targCookiesGroup) > -1) {
+          mixpanelInit();
+        }
+      });
+    };
+    // check mixpanel cookie consent in cookie
+    const OTCookieValue: string =
+      document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("OptanonConsent=")) || "";
+    const checkValue = `${targCookiesGroup}%3A1`;
+    if (OTCookieValue.indexOf(checkValue) > -1) {
+      mixpanelInit();
+    }
   }, []);
 
   useEffect(() => {
@@ -104,7 +128,7 @@ const App = () => {
   }, [pendingDelegators]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
-    if(delegators.length > 0) {
+    if (delegators.length > 0) {
       const myNotifications = {
         label: t('title', { ns: 'notifiche' }),
         route: routes.NOTIFICHE
@@ -119,7 +143,7 @@ const App = () => {
             ? routes.GET_NOTIFICHE_DELEGATO_PATH(delegator.mandateId)
             : '*',
       }));
-      return [ myNotifications, ...mappedDelegators];
+      return [myNotifications, ...mappedDelegators];
     } else {
       return undefined;
     }
@@ -174,8 +198,8 @@ const App = () => {
       eventTrackingCallbackProductSwitch={(target) => handleEventTrackingCallbackProductSwitch(target)}
       sideMenu={
         <SideMenu
-            menuItems={menuItems}
-            eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, { target })}
+          menuItems={menuItems}
+          eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, { target })}
         />
       }
       showSideMenu={!fetchedTos || tos}

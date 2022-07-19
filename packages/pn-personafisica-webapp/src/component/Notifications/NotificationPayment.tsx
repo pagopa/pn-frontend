@@ -38,6 +38,7 @@ interface Props {
   iun: string;
   notificationPayment: NotificationDetailPayment;
   onDocumentDownload: (url: string) => void;
+  mandateId?: string;
 }
 
 interface PrimaryAction {
@@ -65,7 +66,7 @@ interface PaymentData {
   action?: PrimaryAction;
 }
 
-const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocumentDownload }) => {
+const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocumentDownload, mandateId }) => {
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
@@ -138,9 +139,9 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     // refresh paymentInfo
     fetchPaymentInfo();
   };
-  
+
   const onDocumentClick = (name: PaymentAttachmentSName) => {
-    void dispatch(getPaymentAttachment({ iun, attachmentName: name }));
+    void dispatch(getPaymentAttachment({ iun, attachmentName: name, mandateId }));
     trackEventByType(name === PaymentAttachmentSName.PAGOPA
       ? TrackEventType.NOTIFICATION_DETAIL_PAYMENT_F24_FILE
       : TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE);
@@ -153,12 +154,12 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   const getAttachmentsData = () => {
     // eslint-disable-next-line functional/no-let
     const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();
-    
-    if(paymentInfo?.status === PaymentStatus.REQUIRED) {
+
+    if (paymentInfo?.status === PaymentStatus.REQUIRED) {
       const pagopaDoc = notificationPayment.pagoPaForm;
       const f24Doc = notificationPayment.f24flatRate || notificationPayment.f24standard;
 
-      if(pagopaDoc) {
+      if (pagopaDoc) {
         // eslint-disable-next-line functional/immutable-data
         attachments.push({
           name: PaymentAttachmentSName.PAGOPA,
@@ -166,7 +167,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
         });
       }
 
-      if(f24Doc) {
+      if (f24Doc) {
         // eslint-disable-next-line functional/immutable-data
         attachments.push({
           name: PaymentAttachmentSName.F24,
@@ -248,7 +249,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
 
     const errorCode = paymentInfo.detail_v2;
 
-    switch(paymentInfo.detail) {
+    switch (paymentInfo.detail) {
       case PaymentInfoDetail.DOMAIN_UNKNOWN:      // Creditor institution error
         body = t('detail.payment.error-domain-unknown', { ns: 'notifiche' });
         action = MessageActionType.COPY_TO_CLIPBOARD;
@@ -305,19 +306,19 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
 
   /** returns action data for failed status */
   const getFailedActionData = (): PrimaryAction | undefined => {
-    switch(paymentInfo.detail) {
+    switch (paymentInfo.detail) {
       case PaymentInfoDetail.DOMAIN_UNKNOWN:      // Creditor institution error
       case PaymentInfoDetail.PAYMENT_UNAVAILABLE: // Technical Error
       case PaymentInfoDetail.PAYMENT_UNKNOWN:     // Payment data error
         return {
-            text: t('detail.payment.contact-support', { ns: 'notifiche' }),
-            callback: contactSupportClick
+          text: t('detail.payment.contact-support', { ns: 'notifiche' }),
+          callback: contactSupportClick
         };
 
       case PaymentInfoDetail.GENERIC_ERROR:       // Generic error
         return {
-            text: t('detail.payment.reload-page', { ns: 'notifiche' }),
-            callback: reloadPage
+          text: t('detail.payment.reload-page', { ns: 'notifiche' }),
+          callback: reloadPage
         };
 
       default: return undefined;
@@ -344,7 +345,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     }
   };
 
-  
+
   const data = composePaymentData();
   const attachments = getAttachmentsData();
 
@@ -400,21 +401,21 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
                 </Button>
               </Grid>
               {attachments.length > 0 && (
-              <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-                <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
-              </Grid>
+                <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
+                  <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
+                </Grid>
               )}
-              <Stack direction={{ xs: 'column', lg: 'row' }} sx={{alignSelf: 'center'}}>
+              <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ alignSelf: 'center' }}>
                 {attachments.map((attachment) => (
-                <Button
-                  key={attachment.name}
-                  sx={{ flexGrow: 1 }}
-                  name={`download-${attachment.name.toLowerCase()}-notification`}
-                  startIcon={<DownloadIcon />}
-                  onClick={() => onDocumentClick(attachment.name)}
-                >
-                  {attachment.title}
-                </Button>
+                  <Button
+                    key={attachment.name}
+                    sx={{ flexGrow: 1 }}
+                    name={`download-${attachment.name.toLowerCase()}-notification`}
+                    startIcon={<DownloadIcon />}
+                    onClick={() => onDocumentClick(attachment.name)}
+                  >
+                    {attachment.title}
+                  </Button>
                 ))}
               </Stack>
             </>

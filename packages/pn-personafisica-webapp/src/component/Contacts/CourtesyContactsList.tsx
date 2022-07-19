@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
-import { Box, Divider } from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { Stack } from '@mui/material';
 
 import { CourtesyChannelType, DigitalAddress } from '../../models/contacts';
+import { countContactsByType } from "../../utils/contacts.utility";
 import CourtesyContactItem, { CourtesyFieldType } from './CourtesyContactItem';
 
 interface Props {
@@ -11,8 +11,6 @@ interface Props {
 }
 
 const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
-  const isMobile = useIsMobile();
-
   const phoneContact = useMemo(
     () =>
       contacts.find(
@@ -31,20 +29,33 @@ const CourtesyContactsList: React.FC<Props> = ({ recipientId, contacts }) => {
     [contacts]
   );
 
+  const phoneContactsQuantity = useMemo(
+      () =>
+          countContactsByType(contacts, CourtesyChannelType.SMS),
+      [contacts]
+  );
+
+    const emailContactsQuantity = useMemo(
+        () =>
+            countContactsByType(contacts, CourtesyChannelType.EMAIL),
+        [contacts]
+    );
+
   return (
-    <Box style={{ padding: '1rem 0' }}>
+    <Stack spacing={3} mt={3}>
       <CourtesyContactItem
         recipientId={recipientId}
         type={CourtesyFieldType.PHONE}
         value={phoneContact ? phoneContact?.value : ''}
+        blockDelete={phoneContactsQuantity > 1}
       />
-      {(isMobile || phoneContact) && <Divider />}
       <CourtesyContactItem
         recipientId={recipientId}
         type={CourtesyFieldType.EMAIL}
         value={emailContact ? emailContact.value : ''}
+        blockDelete={emailContactsQuantity > 1}
       />
-    </Box>
+    </Stack>
   );
 };
 
