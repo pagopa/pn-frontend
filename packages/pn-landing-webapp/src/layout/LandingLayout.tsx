@@ -21,7 +21,7 @@ const LandingLayout = ({ children }: Props) => {
 
   const homeLink = {
     label: "PagoPA S.p.A.",
-    href: PAGOPA_HOME,
+    href: PAGOPA_HOME ?? "",
     ariaLabel: "Titolo",
     title: "PagoPa S.p.A.",
   };
