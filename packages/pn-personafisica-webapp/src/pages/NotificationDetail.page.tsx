@@ -44,19 +44,39 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const currentRecipient = notification.recipients[0];
+
+
   /**
-   * REFERS TO: PN-1724
-   * The following code has been commented out and substituted with the line above
-   * due to issue PN-1724 since we currently do not have enough information to pick
-   * the right recipient assuming a multi-recipient notification, but this feature 
-   * is beyond the MVP scope. 
-   * 
-   const currentUser = useAppSelector((state: RootState) => state.userState.user);
-   const currentRecipient = notification.recipients.find(
-     (recipient) => recipient.taxId === currentUser.fiscal_number
-   );
+   * Determination of the recipient that corresponds to the person
+   * whose notifications are displayed, which can be either the logged user
+   * or a different person who has given delegation powers to her.
    */
+
+  // must obtain data from Redux store outside conditionals, even when only one of these two
+  // items will be needed
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const delegatorsFromStore = useAppSelector((state: RootState) => state.generalInfoState.delegators);
+
+  // I defined functions since linter rules disable the definition of lets, and there is a complex logic 
+  // for the delegator case which I prefer not to code inside a ternary expression
+  function fiscalNumberDaDelegator() {
+    const currentDelegatorFromStore = delegatorsFromStore ? delegatorsFromStore.find(delegatorFromStore => delegatorFromStore.mandateId === mandateId) : null;
+    return currentDelegatorFromStore ? currentDelegatorFromStore.delegator?.fiscalCode : null;
+  }
+
+  function fiscalNumberDaUser() {
+    return currentUser.fiscal_number;
+  }
+
+  // finally the determination for the recipient
+  const fiscalNumberForNotification = mandateId ? fiscalNumberDaDelegator() : fiscalNumberDaUser();
+  const candidateCurrentRecipient = notification.recipients.find(
+    (recipient) => recipient.taxId === fiscalNumberForNotification
+  );
+  // if the algorithm does not find the right recipient, it yields the first one
+  const currentRecipient = candidateCurrentRecipient || notification.recipients[0];
+
+  // ----------  Determination of the recipient - end
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;

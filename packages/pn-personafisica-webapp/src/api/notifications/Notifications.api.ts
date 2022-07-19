@@ -8,6 +8,8 @@ import {
   parseNotificationDetail,
   PaymentInfo,
   PaymentAttachmentNameType,
+  RecipientType,
+  DigitalDomicileType,
 } from '@pagopa-pn/pn-commons';
 
 import { apiClient } from '../axios';
@@ -61,7 +63,43 @@ export const NotificationsApi = {
    */
   getReceivedNotification: (iun: string, mandateId?: string): Promise<NotificationDetail> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
-      if (response.data) {
+      if (response.data && (response.data.iun === "JAHW-EUYQ-ARGL-202207-X-1" || response.data.iun === "PUQA-TWQT-WVME-202207-U-1")) {
+        const notification = parseNotificationDetail(response.data);
+
+        // change notification in order to test the right selection of recipient
+        const newRecipient = {
+          recipientType: RecipientType.PF,
+          taxId: 'TTTUUU29J84Z600X',
+          denomination: 'Totito',
+          digitalDomicile: {
+            type: DigitalDomicileType.PEC,
+            address: 'letotito@pnpagopa.postecert.local'
+          },
+          physicalAddress: {
+            address: 'Via del mistero, 48',
+            zip: '40200',
+            municipality: 'Arcore',
+            province: 'MI',
+            foreignState: 'ITALIA'
+          },
+          payment: {
+            noticeCode: '302011657724564978',
+            creditorTaxId: '77777777778',
+            pagoPaForm: {
+              digests: {
+                sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE='
+              },
+              contentType: 'application/pdf',
+              ref: {
+                key: 'PN_NOTIFICATION_ATTACHMENTS-0001-EWWX-RM6Q-MKZM-VMCV',
+                versionToken: 'v1'
+              }
+            }
+          }
+        };
+
+        return { ...notification, recipients: [newRecipient, ...notification.recipients] };
+      } else if (response.data) {
         return parseNotificationDetail(response.data);
       }
       return {} as NotificationDetail;
