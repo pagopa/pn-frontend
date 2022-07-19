@@ -40,7 +40,7 @@ module.exports = {
     complexity: 'error',
     'arrow-body-style': 'error',
     'import/order': 'error',
-    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
     '@typescript-eslint/no-inferrable-types': 'off',
     // TODO: added for compatibility. Removing this line we have to remove all the any usage in the code
     '@typescript-eslint/no-explicit-any': 'off',
