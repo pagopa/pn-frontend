@@ -7,8 +7,8 @@ batch:
         variables:
           BUILD_ID: dev
           REACT_APP_PAGOPA_HELP_EMAIL: pn.dev@assistenza.pagopa.it
-          REACT_APP_URL_SELFCARE_LOGIN: https://dev.selfcare.pagopa.it/auth/login
-          REACT_APP_URL_SELFCARE_BASE: https://dev.selfcare.pagopa.it
+          REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
+          REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           # REACT_APP_MIXPANEL_TOKEN: DUMMY
@@ -30,7 +30,7 @@ batch:
       env:
         variables:
           BUILD_ID: coll
-          REACT_APP_PAGOPA_HELP_EMAIL: pn.coll@assistenza.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_URL_SELFCARE_LOGIN: https://uat.selfcare.pagopa.it/auth/login
           REACT_APP_URL_SELFCARE_BASE: https://uat.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.coll.pn.pagopa.it/
@@ -42,7 +42,7 @@ batch:
     #   env:
     #     variables:
     #       BUILD_ID: prod
-    #       REACT_APP_PAGOPA_HELP_EMAIL: <TBD>l@assistenza.pagopa.it
+    #       REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
     #       REACT_APP_URL_SELFCARE_LOGIN: https://selfcare.pagopa.it/auth/login
     #       REACT_APP_URL_SELFCARE_BASE: https://selfcare.pagopa.it
     #       REACT_APP_URL_API: https://webapi.pn.pagopa.it/
