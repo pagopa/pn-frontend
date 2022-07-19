@@ -1,6 +1,7 @@
 import { Box, Stack } from "@mui/material";
 import { HeaderAccount, Footer } from "@pagopa/mui-italia";
 import { ReactNode, useContext } from "react";
+
 import LangContext from "../../provider/lang-context";
 import {
   companyLegalInfo,
@@ -9,6 +10,7 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from "./footer.constants";
+import { PAGOPA_HELP_EMAIL, PAGOPA_HOME } from "@utils/constants";
 
 interface Props {
   children?: ReactNode;
@@ -19,13 +21,16 @@ const LandingLayout = ({ children }: Props) => {
 
   const homeLink = {
     label: "PagoPA S.p.A.",
-    href: "#",
+    href: PAGOPA_HOME,
     ariaLabel: "Titolo",
     title: "PagoPa S.p.A.",
   };
 
   const handleAssistanceClick = () => {
-    console.log("go to assistance");
+    if (PAGOPA_HELP_EMAIL) {
+      /* eslint-disable-next-line functional/immutable-data */
+      window.open(`mailto:${PAGOPA_HELP_EMAIL}`);
+    }
   };
 
   return (
