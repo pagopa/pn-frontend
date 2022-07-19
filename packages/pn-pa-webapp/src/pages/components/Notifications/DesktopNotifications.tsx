@@ -50,8 +50,8 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Item) {
-        handleRowClick(row);
+      onClick(row: Item, column: Column) {
+        handleRowClick(row, column);
       },
     },
     {
@@ -66,8 +66,8 @@ const DesktopNotifications = ({
           </Typography>
         ));
       },
-      onClick(row: Item) {
-        handleRowClick(row);
+      onClick(row: Item, column: Column) {
+        handleRowClick(row, column);
       },
     },
     {
@@ -77,8 +77,8 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
-      onClick(row: Item) {
-        handleRowClick(row);
+      onClick(row: Item, column: Column) {
+        handleRowClick(row, column);
       },
     },
     {
@@ -88,8 +88,8 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Item) {
-        handleRowClick(row);
+      onClick(row: Item, column: Column) {
+        handleRowClick(row, column);
       },
     },
     {
@@ -105,8 +105,8 @@ const DesktopNotifications = ({
           )
         );
       },
-      onClick(row: Item) {
-        handleRowClick(row);
+      onClick(row: Item, column: Column) {
+        handleRowClick(row, column);
       },
     },
     {
@@ -128,7 +128,7 @@ const DesktopNotifications = ({
   }));
 
   // Navigation handlers
-  const handleRowClick = (row: Item) => {
+  const handleRowClick = (row: Item, _column: Column) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     // log event
     trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
