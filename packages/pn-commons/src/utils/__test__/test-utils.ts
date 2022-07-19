@@ -41,7 +41,7 @@ const timeline: Array<INotificationDetailTimeline> = [
 
 const statusHistory: Array<NotificationStatusHistory> = [
   {
-    status: NotificationStatus.ACCEPTED,
+    status: NotificationStatus.DELIVERING,
     activeFrom: '2022-03-21T08:56:50.177Z',
     relatedTimelineElements: ['mocked-id-1'],
   },
