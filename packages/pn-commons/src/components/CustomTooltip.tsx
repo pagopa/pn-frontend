@@ -7,7 +7,7 @@ type Props = {
   tooltipContent: any;
   openOnClick: boolean;
   children: ReactElement<any, any>;
-  sx?: SxProps
+  sx?: SxProps;
 };
 
 function CustomTooltip({ openOnClick, tooltipContent, children, sx }: Props) {

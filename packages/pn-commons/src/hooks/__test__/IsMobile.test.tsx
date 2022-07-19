@@ -1,4 +1,4 @@
-import { useIsMobile } from "../IsMobile";
+import { useIsMobile } from "../useIsMobile";
 import { render } from "../../test-utils";
 
 const Component = () => {

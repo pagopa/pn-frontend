@@ -3,8 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Box, Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Menu } from '@mui/icons-material';
 
-import { SideMenuItem } from '../../types/SideMenuItem';
-import { useIsMobile } from '../../hooks/IsMobile';
+import { SideMenuItem } from '../../types';
+import { useIsMobile } from '../../hooks';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import SideMenuList from './SideMenuList';
 
 type Props = {
@@ -96,7 +97,7 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
             <List
               role="navigation"
               component="nav"
-              aria-label="piattaforma-notifiche navigazione principale"
+              aria-label={getLocalizedOrDefaultLabel('common', 'menu.aria-label', 'piattaforma-notifiche navigazione principale')}
               sx={{
                 boxShadow:
                   '0px 2px 4px -1px rgba(0, 43, 85, 0.1), 0px 4px 5px rgba(0, 43, 85, 0.05)',

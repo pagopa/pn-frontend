@@ -35,6 +35,8 @@ const searchForValues = [
   { value: '1', label: 'Codice IUN' },
 ];
 
+const localizedNotificationStatus = NotificationAllowedStatus();
+
 const FilterNotificationsFormBody = ({
   formikInstance,
   startDate,
@@ -201,7 +203,7 @@ const FilterNotificationsFormBody = ({
         fullWidth={isMobile}
         sx={{ marginBottom: isMobile ? '20px' : '0' }}
       >
-        {NotificationAllowedStatus.map((status) => (
+        {localizedNotificationStatus.map((status) => (
           <MenuItem key={status.value} value={status.value}>
             {status.label}
           </MenuItem>

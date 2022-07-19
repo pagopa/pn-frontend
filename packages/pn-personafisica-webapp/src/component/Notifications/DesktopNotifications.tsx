@@ -109,7 +109,7 @@ const DesktopNotifications = ({
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
         );
-        return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;
+        return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
       },
     },
   ];

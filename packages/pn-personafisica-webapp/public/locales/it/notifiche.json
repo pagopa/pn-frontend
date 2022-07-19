@@ -24,6 +24,7 @@
     "options": "Opzioni sort"
   },
   "detail": {
+    "table-aria-label": "Dettaglio notifica",
     "date": "Data di invio",
     "payment-terms": "Da pagare entro il",
     "payment-terms-expiration": "Entro il",
@@ -80,7 +81,68 @@
       "not_downloadable_acts": "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, se vuoi ottenere gli atti devi rivolgerti al mittente.",
       "notification_cancelled": "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.",
       "effected_faq": "Quando si perfeziona una notifica?"
+    },
+    "timeline": {
+      "schedule-analog-workflow": "Invio per via cartacea",
+      "schedule-analog-workflow-description": "È in corso l'invio della notifica per via cartacea.",
+      "schedule-digital-workflow": "Invio per via digitale",
+      "schedule-digital-workflow-description": "È in corso l'invio della notifica per via digitale.",
+      "send-courtesy-message": "Invio del messaggio di cortesia",
+      "send-courtesy-message-description": "È in corso l'invio del messaggio di cortesia a {{name}} tramite {{type}}",
+      "send-digital-domicile": "Invio via PEC",
+      "send-digital-domicile-description": "È in corso l'invio della notifica a {{name}} all'indirizzo PEC {{address}}",
+      "send-digital-domicile-error": "Invio via PEC fallito",
+      "send-digital-domicile-error-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} non è riuscito.",
+      "send-digital-domicile-success": "Invio via PEC riuscito",
+      "send-digital-domicile-success-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} è riuscito.",
+      "send-digital-error": "Invio per via digitale fallito",
+      "send-digital-error-description": "L'invio della notifica a {{name}} per via digitale non è riuscito.",
+      "send-digital-success": "Invio per via digitale riuscito",
+      "send-digital-success-description": "L'invio della notifica a {{name}} per via digitale è riuscito.",
+      "send-simple-registered-letter": "Invio via raccomandata semplice",
+      "send-simple-registered-letter-description": "È in corso l'invio della notifica a {{name}} all'indirizzo {{address}} tramite raccomandata semplice.",
+      "send-analog-domicile-890": "Invio via raccomandata 890",
+      "send-analog-domicile-890-description": "È in corso l'invio della notifica a {{name}} all'indirizzo {{address}} tramite raccomandata 890.",
+      "send-analog-domicile-ar": "Invio via raccomandata A/R",
+      "send-analog-domicile-ar-description": "È in corso l'invio della notifica a {{name}} all'indirizzo {{address}} tramite raccomandata A/R.",
+      "send-paper-feedback": "Aggiornamento stato raccomandata",
+      "send-paper-feedback-description": "Si allega un aggiornamento dello stato della raccomandata.",
+      "view-receipt": "Vedi la ricevuta"
+    },
+    "help": {
+      "goto": "Vai al sito",
+      "assistance": "Per problemi tecnici o domande relative a Piattaforma Notifiche, premi su “Assisistenza” in alto a destra."
     }
   },
-  "delegatorTitle": "Le notifiche di {{name}}"
+  "delegatorTitle": "Le notifiche di {{name}}",
+  "status": {
+    "all": "Tutti gli stati",
+    "delivered": "Consegnata",
+    "delivered-tooltip": "La notifica è stata consegnata",
+    "delivered-description": "La notifica è stata consegnata",
+    "delivering": "Invio in corso",
+    "delivering-tooltip": "L'invio della notifica è in corso",
+    "delivering-description": "L'invio della notifica è in corso",
+    "unreachable": "Destinatario irreperibile",
+    "unreachable-tooltip": "Il destinatario non è reperibile",
+    "unreachable-description": "Il destinatario non è reperibile",
+    "paid": "Pagata",
+    "paid-tooltip": "Il destinatario ha pagato i costi della notifica",
+    "paid-description": "Il destinatario ha pagato i costi della notifica",
+    "accepted": "Depositata",
+    "accepted-tooltip": "L'ente ha depositato la notifica",
+    "accepted-description": "L'ente ha depositato la notifica",
+    "effective-date": "Perfezionata per decorrenza termini",
+    "effective-date-tooltip": "Il destinatario non ha letto la notifica",
+    "effective-date-description": "Il destinatario non ha letto la notifica entro il termine stabilito",
+    "viewed": "Perfezionata per visione",
+    "viewed-tooltip": "Il destinatario ha letto la notifica",
+    "viewed-description": "Il destinatario ha letto la notifica entro il termine stabilito",
+    "viewed-after-deadline": "Visualizzata",
+    "viewed-after-deadline-tooltip": "Il destinatario ha visualizzato la notifica",
+    "viewed-after-deadline-description": "Il destinatario ha visualizzato la notifica",
+    "canceled": "Annullata",
+    "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
+    "canceled-description": "L'ente ha annullato l'invio della notifica"
+  }
 }
