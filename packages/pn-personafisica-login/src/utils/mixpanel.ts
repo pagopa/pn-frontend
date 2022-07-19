@@ -1,16 +1,18 @@
-import { init, track, Mixpanel } from 'mixpanel-browser';
+import { init, track } from 'mixpanel-browser';
+import { MIXPANEL_TOKEN } from './constants';
 import { events, TrackEventType } from './events';
 /**
  * Function that initialize Mixpanel (must be called once)
  */
 export const mixpanelInit = function (): void {
+
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
         // eslint-disable-next-line no-console
         console.log('Mixpanel events mock on console log.');
     } else if (process.env.NODE_ENV === 'test') {
         return;
     } else {
-        init('mocked-key', {
+        init(MIXPANEL_TOKEN, {
             api_host: 'https://api-eu.mixpanel.com',
             persistence: 'localStorage',
             // if this is true, Mixpanel will automatically determine
@@ -19,15 +21,15 @@ export const mixpanelInit = function (): void {
             ip: false,
             // names of properties/superproperties which should never
             // be sent with track() calls
-            property_blacklist: [],
+            property_blacklist: ["$current_url", "$initial_referrer", "$referrer"],
             // function called after mixpanel has finished loading
-            loaded(mixpanel: Mixpanel) {
-                // this is useful to obtain a new distinct_id every session
-                // the distinct_id is the user identifier that mixpanel automatically assign
-                if (sessionStorage.getItem('user') === null) {
-                    mixpanel.reset();
-                }
-            },
+            // loaded(mixpanel: Mixpanel) {
+            //     // this is useful to obtain a new distinct_id every session
+            //     // the distinct_id is the user identifier that mixpanel automatically assign
+            //     if (sessionStorage.getItem('') === null) {
+            //         mixpanel.reset();
+            //     }
+            // },
         });
     }
 };
@@ -39,20 +41,12 @@ export const mixpanelInit = function (): void {
  */
 function trackEvent(event_name: string, properties?: any): void {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line no-console
         console.log(event_name, properties);
     } else if (process.env.NODE_ENV === 'test') {
         return;
     } else {
         try {
-            /*
-            if (ENV === "UAT") {
-              track(event_name, { ...properties, ...{ environment: "UAT" } });
-            } else {
-              track(event_name, properties);
-            }
-            */
-            track(event_name, properties);
+            track(event_name, { ...properties, ...{ environment: "DEV" } });
         } catch (_) {
             // eslint-disable-next-line no-console
             console.log(event_name, properties);
