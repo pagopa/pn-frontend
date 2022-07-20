@@ -2,14 +2,20 @@ import { InfoblockProps } from "@pagopa/mui-italia";
 import { ShowcaseProps, WalkthroughProps } from "@pagopa/mui-italia";
 import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
 import { SvgIcon } from "@pagopa/mui-italia/node_modules/@mui/material";
-import { UserType } from "api";
 import { CheckmarkIcon, CloudIcon, DelegationIcon, DeliverIcon, DocCheckIcon, EasyIcon, EcologyIcon, FireworksIcon, HourglassIcon, IOIcon, MessageIcon, NotificationIcon, PecIcon, PeopleIcon, PiggyIcon, SendIcon, SyncIcon, UploadIcon, WalletIcon } from "./icons";
 // import { SELFCARE_URL } from "@utils/constants";
+import { PAGOPA_HELP_EMAIL } from "@utils/constants";
 
 const IMAGES_PATH = "static/images";
 const PA = "pa";
 const PF = "pf";
 const CO = "co";
+
+const assistanceLink = {
+  label: "Assistenza",
+  ariaLabel: "assistenza",
+  href: `mailto:${PAGOPA_HELP_EMAIL}`
+}
 
 /** Hero mocked data */
 const paHero: HeroProps = {
@@ -500,6 +506,10 @@ const coHorizontalNav = {
 
 /** Application Data Mock */
 export const itAppData = {
+  common: {
+    alert: "La piattaforma non è operativa. Attualmente sono in fase di collaudo solo alcune delle funzionalità descritte in questa pagina, disponibili esclusivamente per un numero limitato di utenti che saranno destinatari delle notifiche inviate dagli enti pilota.",
+    assistance: assistanceLink,
+  },
   pa: {
     hero: paHero,
     infoblocks: paInfoBlocks,
