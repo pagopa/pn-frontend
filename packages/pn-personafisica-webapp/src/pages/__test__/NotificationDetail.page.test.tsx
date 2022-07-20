@@ -4,7 +4,7 @@ import { RenderResult } from '@testing-library/react';
 import { NotificationDetail as INotificationDetail, NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
 import * as actions from '../../redux/notification/actions';
 import * as hooks from '../../redux/hooks';
-import { getCancelledNotification, getNotification, getUnavailableDocsNotification, notificationToFe, notificationToFeTwoRecipients } from '../../redux/notification/__test__/test-utils';
+import { getCancelledNotification, getNotification, getUnavailableDocsNotification, notificationFromBe, notificationFromBeTwoRecipients } from '../../redux/notification/__test__/test-utils';
 import { axe, render } from '../../__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -53,9 +53,9 @@ describe('NotificationDetail Page', () => {
     const delegators = delegatorFiscalNumber && isDelegate ? [{ mandateId: fixedMandateId, delegator: { fiscalCode: delegatorFiscalNumber }}] : [];
     const spy = jest.spyOn(hooks, 'useAppSelector');
     spy
-      .mockReturnValueOnce(notification)
       .mockReturnValueOnce({ fiscal_number: userFiscalNumber || "mocked-user"})
       .mockReturnValueOnce(delegators)
+      .mockReturnValueOnce(notification)
       .mockReturnValueOnce('mocked-download-url')
       .mockReturnValueOnce('mocked-legal-fact-url')
       .mockReturnValueOnce({ legalDomicile: [] });
@@ -81,9 +81,9 @@ describe('NotificationDetail Page', () => {
   };
 
   test('renders NotificationDetail page with payment box', async () => {
-    result = renderComponent(notificationToFe);
+    result = renderComponent(notificationFromBe);
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent("detail.acts");
@@ -99,7 +99,7 @@ describe('NotificationDetail Page', () => {
   test('renders NotificationDetail page without payment box if noticeCode is empty', async () => {
     result = renderComponent(getNotification({ noticeCode: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent("detail.acts");
@@ -115,7 +115,7 @@ describe('NotificationDetail Page', () => {
   test('renders NotificationDetail page without payment box if creditorTaxId is empty', async () => {
     result = renderComponent(getNotification({ creditorTaxId: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent("detail.acts");
@@ -131,7 +131,7 @@ describe('NotificationDetail Page', () => {
   test('renders NotificationDetail page without payment box if noticeCode and creditorTaxId are both empty', async () => {
     result = renderComponent(getNotification({ creditorTaxId: "", noticeCode: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent("detail.acts");
@@ -147,7 +147,7 @@ describe('NotificationDetail Page', () => {
   test('renders NotificationDetail page without payment box if payment object is not defined', async () => {
     result = renderComponent(getNotification());
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent("detail.acts");
@@ -198,7 +198,7 @@ describe('NotificationDetail Page', () => {
   });
 
   test('renders NotificationDetail page with the first recipient logged', async () => {
-    result = renderComponent(notificationToFeTwoRecipients, { userFiscalNumber: 'TTTUUU29J84Z600X', delegatorFiscalNumber: 'CGNNMO80A03H501U', isDelegate: false});
+    result = renderComponent(notificationFromBeTwoRecipients, { userFiscalNumber: 'TTTUUU29J84Z600X', delegatorFiscalNumber: 'CGNNMO80A03H501U', isDelegate: false});
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent('Totito');
     expect(result?.container).not.toHaveTextContent('Analogico Ok');
@@ -207,7 +207,7 @@ describe('NotificationDetail Page', () => {
   });
 
   test('renders NotificationDetail page with the second recipient logged', async () => {
-    result = renderComponent(notificationToFeTwoRecipients, { userFiscalNumber: 'CGNNMO80A03H501U', delegatorFiscalNumber: 'TTTUUU29J84Z600X', isDelegate: false});
+    result = renderComponent(notificationFromBeTwoRecipients, { userFiscalNumber: 'CGNNMO80A03H501U', delegatorFiscalNumber: 'TTTUUU29J84Z600X', isDelegate: false});
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent('Analogico Ok');
     expect(result?.container).not.toHaveTextContent('Totito');
@@ -216,7 +216,7 @@ describe('NotificationDetail Page', () => {
   });
 
   test('renders NotificationDetail page with current delegator as first recipient', async () => {
-    result = renderComponent(notificationToFeTwoRecipients, { userFiscalNumber: 'CGNNMO80A03H501U', delegatorFiscalNumber: 'TTTUUU29J84Z600X', isDelegate: true});
+    result = renderComponent(notificationFromBeTwoRecipients, { userFiscalNumber: 'CGNNMO80A03H501U', delegatorFiscalNumber: 'TTTUUU29J84Z600X', isDelegate: true});
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent('Totito');
     expect(result?.container).not.toHaveTextContent('Analogico Ok');
@@ -225,7 +225,7 @@ describe('NotificationDetail Page', () => {
   });
 
   test('renders NotificationDetail page with current delegator as second recipient', async () => {
-    result = renderComponent(notificationToFeTwoRecipients, { userFiscalNumber: 'TTTUUU29J84Z600X', delegatorFiscalNumber: 'CGNNMO80A03H501U', isDelegate: true});
+    result = renderComponent(notificationFromBeTwoRecipients, { userFiscalNumber: 'TTTUUU29J84Z600X', delegatorFiscalNumber: 'CGNNMO80A03H501U', isDelegate: true});
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent('Analogico Ok');
     expect(result?.container).not.toHaveTextContent('Totito');

@@ -8,7 +8,6 @@ import {
   PhysicalCommunicationType,
   RecipientType,
   TimelineCategory,
-  parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
 export const notificationFromBe: NotificationDetail = {
@@ -260,7 +259,7 @@ export const getNotification = (payment?: {
       }
     : undefined;
 
-  return parseNotificationDetail(notification);
+  return notification;
 };
 
 export const getUnavailableDocsNotification = (): NotificationDetail => {
@@ -268,7 +267,7 @@ export const getUnavailableDocsNotification = (): NotificationDetail => {
   // eslint-disable-next-line functional/immutable-data
   notification.documentsAvailable = false;
 
-  return parseNotificationDetail(notification);
+  return notification;
 };
 
 export const getCancelledNotification = (): NotificationDetail => {
@@ -276,9 +275,6 @@ export const getCancelledNotification = (): NotificationDetail => {
   // eslint-disable-next-line functional/immutable-data
   notification.notificationStatus = NotificationStatus.CANCELLED;
 
-  return parseNotificationDetail(notification);
+  return notification;
 };
 
-export const notificationToFe = parseNotificationDetail(notificationFromBe);
-
-export const notificationToFeTwoRecipients = parseNotificationDetail(notificationFromBeTwoRecipients);

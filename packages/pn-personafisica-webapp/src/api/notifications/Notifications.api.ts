@@ -1,7 +1,7 @@
 import {
   formatDate, GetNotificationsParams,
   GetNotificationsResponse, LegalFactId,
-  NotificationDetail, parseNotificationDetail, PaymentAttachmentNameType, PaymentInfo
+  NotificationDetail, PaymentAttachmentNameType, PaymentInfo
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
 
@@ -55,12 +55,9 @@ export const NotificationsApi = {
    * @returns Promise
    */
   getReceivedNotification: (iun: string, mandateId?: string): Promise<NotificationDetail> =>
-    apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
-      if (response.data) {
-        return parseNotificationDetail(response.data);
-      }
-      return {} as NotificationDetail;
-    }),
+    apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then(
+      (response) => response.data || {} as NotificationDetail
+    ),
   /**
    * Gets current user notification document
    * @param  {string} iun

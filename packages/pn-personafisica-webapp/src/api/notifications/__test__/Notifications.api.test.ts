@@ -8,7 +8,6 @@ import {
 } from '../../../redux/dashboard/__test__/test-utils';
 import {
   notificationFromBe,
-  notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
 import { NOTIFICATIONS_LIST, NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS, NOTIFICATION_DETAIL_LEGALFACT, NOTIFICATION_PAYMENT_ATTACHMENT, NOTIFICATION_PAYMENT_INFO } from '../notifications.routes';
@@ -36,7 +35,7 @@ describe('Notifications api tests', () => {
     const mock = new MockAdapter(apiClient);
     mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationFromBe);
     const res = await NotificationsApi.getReceivedNotification(iun);
-    expect(res).toStrictEqual(notificationToFe);
+    expect(res).toStrictEqual(notificationFromBe);
     mock.reset();
     mock.restore();
   });

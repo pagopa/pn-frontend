@@ -7,7 +7,7 @@ import {
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
 } from '../actions';
-import { notificationToFe } from './test-utils';
+import { notificationFromBe } from './test-utils';
 
 describe('Notification detail redux state tests', () => {
   mockAuthentication();
@@ -42,11 +42,11 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch the notification detail', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotification');
-    apiSpy.mockResolvedValue(notificationToFe);
+    apiSpy.mockResolvedValue(notificationFromBe);
     const action = await store.dispatch(getReceivedNotification({iun: 'mocked-iun'}));
     const payload = action.payload as NotificationDetail;
     expect(action.type).toBe('getReceivedNotification/fulfilled');
-    expect(payload).toEqual(notificationToFe);
+    expect(payload).toEqual(notificationFromBe);
   });
 
   it('Should be able to fetch the notification document', async () => {
