@@ -2,14 +2,9 @@ import { InfoblockProps } from "@pagopa/mui-italia";
 import { ShowcaseProps, WalkthroughProps } from "@pagopa/mui-italia";
 import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
 import { SvgIcon } from "@pagopa/mui-italia/node_modules/@mui/material";
-import { CheckmarkIcon, CloudIcon, DelegationIcon, DeliverIcon, DocCheckIcon, EasyIcon, EcologyIcon, FireworksIcon, HourglassIcon, IOIcon, MessageIcon, NotificationIcon, PecIcon, PeopleIcon, PiggyIcon, SendIcon, SyncIcon, UploadIcon, WalletIcon } from "./icons";
+import { CheckmarkIcon, CloudIcon, DelegationIcon, DeliverIcon, DocCheckIcon, EasyIcon, EcologyIcon, FireworksIcon, HourglassIcon, IOIcon, MessageIcon, NotificationIcon, PECIcon, PeopleIcon, PiggyIcon, SendIcon, SyncIcon, UploadIcon, WalletIcon } from "./icons";
 // import { SELFCARE_URL } from "@utils/constants";
-import { PAGOPA_HELP_EMAIL } from "@utils/constants";
-
-const IMAGES_PATH = "static/images";
-const PA = "pa";
-const PF = "pf";
-const CO = "co";
+import { IMAGES_PATH, PAGOPA_HELP_EMAIL } from "@utils/constants";
 
 const assistanceLink = {
   label: "Assistenza",
@@ -26,7 +21,7 @@ const paHero: HeroProps = {
   inverse: false,
   image: "",
   altText: "",
-  background: `${IMAGES_PATH}/${PA}/hero.jpg`,
+  background: `${IMAGES_PATH}/hero.png`,
 };
 
 const pfHero: HeroProps = {
@@ -34,10 +29,15 @@ const pfHero: HeroProps = {
   subtitle:
     `Con Piattaforma Notifiche puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
     potrai visualizzare, gestire e pagare direttamente online o in app le raccomandate che di solito ti vengono inviate in cartaceo.`,
+  ctaPrimary: {
+    label: "Leggi le tue notifiche",
+    title: "Leggi le tue notifiche",
+    href: "leggi"
+  },
   inverse: false,
   image: "",
   altText: "",
-  background: `${IMAGES_PATH}/${PF}/hero.jpg`,
+  background: `${IMAGES_PATH}/hero.png`,
 };
 
 const coHero: HeroProps = {
@@ -59,7 +59,7 @@ const paInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
 
       Con Piattaforma Notifiche, diminuisce l’incertezza della reperibilità dei destinatari e si riducono i tempi e i costi di gestione.`,
       inverse: false,
-      image: `${IMAGES_PATH}/${PA}/infoblock-1.png`,
+      image: `${IMAGES_PATH}/pa-infoblock-1.png`,
       altText: "",
       imageShadow: true,
     },
@@ -79,7 +79,7 @@ const paInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
       Se il destinatario non ha indicato alcun recapito digitale e non ha accesso alla piattaforma, questa procede con la ricerca di un 
       indirizzo fisico, e quindi con l’invio tramite raccomandata cartacea.`,
       inverse: true,
-      image: `${IMAGES_PATH}/${PA}/infoblock-2.png`,
+      image: `${IMAGES_PATH}/pa-infoblock-2.png`,
       altText: "",
       imageShadow: false,
     },
@@ -96,7 +96,7 @@ const paInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
         Come l’ente, anche il desinatario ha accesso alla cronologia degli stati della notifica e alle attestazioni 
         opponibili a terzi che ne danno prova.`,
       inverse: false,
-      image: `${IMAGES_PATH}/${PA}/infoblock-3.png`,
+      image: `${IMAGES_PATH}/pa-infoblock-3.png`,
       altText: "",
       imageShadow: false,
     },
@@ -110,10 +110,10 @@ const paInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
 
         Quando sarà operativa, anche il tuo ente potrà fare richiesta di adesione e adottarla per digitalizzare il processo di notificazione.`,
       inverse: false,
-      image: `${IMAGES_PATH}/${PA}/infoblock-4.png`,
+      image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: false,
+      imageShadow: true,
     },
   },
 ];
@@ -133,7 +133,7 @@ const pfInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
         ricevute e gestirle direttamente online. Inoltre, ti basta una delega per gestire anche le raccomandate dei 
         tuoi familiari.`,
       inverse: false,
-      image: `${IMAGES_PATH}/${PF}/infoblock-1.png`,
+      image: `${IMAGES_PATH}/pf-infoblock-1.png`,
       imageShadow: false,
     },
   },
@@ -147,7 +147,7 @@ const pfInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
         o aggiornare le tue preferenze tra PEC, App IO, email o SMS. Se non indichi alcun recapito o non hai 
         accesso alla piattaforma, continuerai a ricevere le notifiche tramite raccomandata cartacea.`,
       inverse: true,
-      image: `${IMAGES_PATH}/${PF}/infoblock-2.png`,
+      image: `${IMAGES_PATH}/pf-infoblock-2.png`,
       imageShadow: false,
     },
   },
@@ -161,7 +161,8 @@ const pfInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
         Progressivamente, la piattaforma verrà adottata dalle Pubbliche Amministrazioni e utilizzata per 
         inviare notifiche a tutti i cittadini.`,
       inverse: false,
-      image: `${IMAGES_PATH}/${PF}/infoblock-3.png`,
+      image: `${IMAGES_PATH}/pf-infoblock-3.png`,
+      aspectRatio: '9/16',
       imageShadow: false,
     },
   },
@@ -264,7 +265,7 @@ const pfShowcases: Array<{name: string, data: ShowcaseProps}> = [
       title: "",
       items: [
         {
-          icon: <PecIcon />,
+          icon: <PECIcon />,
           title: "PEC",
           subtitle: `
             Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente consegnate, senza più 
@@ -297,35 +298,26 @@ const pfShowcases: Array<{name: string, data: ShowcaseProps}> = [
 
 const coShowcases: Array<{name: string, data: ShowcaseProps}> = [
   {
-    name: "showcase 1",
+    name: "",
     data: {
       title: "",
       items: [
         {
-          icon: <PecIcon />,
-          title: "PEC",
+          icon: <PECIcon />,
+          title: "",
           subtitle: `
-            Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente consegnate, senza più 
-            raccomandate cartacee. L’avviso di avvenuta ricezione che ti sarà inviato contiene il 
-            link per accedere al contenuto su Piattaforma Notifiche.
             `,
         },
         {
           icon: <IOIcon />,
-          title: "App IO",
+          title: "",
           subtitle: `
-          Se attivi il servizio “Avvisi di cortesia” di Piattaforma Notifiche, puoi ricevere e gestire 
-          direttamente in app le comunicazioni a valore legale. Se non hai la PEC e leggi subito il messaggio, 
-          non riceverai la raccomandata cartacea e la notifica ti risulterà legalmente recapitata.
           `,
         },
         {
           icon: <MessageIcon />,
-          title: "Email o SMS",
+          title: "",
           subtitle:`
-          In più, puoi anche scegliere di ricevere un avviso di cortesia al tuo indirizzo email o tramite SMS. 
-          Se non hai la PEC e accedi alla piattaforma dall’apposito link, non riceverai la raccomandata 
-          cartacea e la notifica ti risulterà legalmente recapitata.
           `,
         },
       ]

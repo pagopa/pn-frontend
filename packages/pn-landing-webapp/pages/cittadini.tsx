@@ -13,8 +13,8 @@ import {
   getInfoblockData,
   getShowcaseData,
   getWalkthroughData,
-  UserType,
 } from "../api";
+import { UserType } from "model";
 
 const USER_TYPE = UserType.PF;
 
