@@ -13,6 +13,13 @@ import { getMenuItems } from './utils/role.utility';
 import { PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL } from './utils/constants';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
+import './utils/onetrust';
+
+declare const OneTrust: any;
+declare const OnetrustActiveGroups: string;
+const global = window as any;
+// target cookies (Mixpanel)
+const targCookiesGroup = "C0004";
 
 const App = () => {
   useUnload((e: Event) => {
@@ -71,8 +78,25 @@ const App = () => {
   ], [role]);
 
   useEffect(() => {
-    // init mixpanel
-    mixpanelInit();
+    // OneTrust callback at first time
+    // eslint-disable-next-line functional/immutable-data
+    global.OptanonWrapper = function () {
+      OneTrust.OnConsentChanged(function () {
+        const activeGroups = OnetrustActiveGroups;
+        if (activeGroups.indexOf(targCookiesGroup) > -1) {
+          mixpanelInit();
+        }
+      });
+    };
+    // check mixpanel cookie consent in cookie
+    const OTCookieValue: string =
+      document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("OptanonConsent=")) || "";
+    const checkValue = `${targCookiesGroup}%3A1`;
+    if (OTCookieValue.indexOf(checkValue) > -1) {
+      mixpanelInit();
+    }
   }, []);
 
   const { pathname } = useLocation();
