@@ -81,7 +81,7 @@ describe('NotificationDetail Page', () => {
   };
 
   test('renders NotificationDetail page with payment box', async () => {
-    result = renderComponent(notificationFromBe);
+    result = renderComponent(notificationFromBe, { userFiscalNumber: 'CGNNMO80A03H501U' });
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');

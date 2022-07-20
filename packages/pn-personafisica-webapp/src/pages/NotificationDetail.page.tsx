@@ -56,8 +56,6 @@ const NotificationDetail = () => {
 
   const currentRecipient = notification && notification.currentRecipient;
 
-  console.log({currentRecipient});
-
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
   

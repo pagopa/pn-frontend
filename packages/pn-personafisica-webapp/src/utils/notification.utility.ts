@@ -32,7 +32,8 @@ export function parseNotificationDetailForRecipient(
     (recipient) => recipient.taxId === fiscalNumberForNotification
   );
   // if the algorithm does not find the right recipient, it yields the first one
-  const currentRecipientIndex = candidateCurrentRecipientIndex || 0;
+  const currentRecipientIndex =
+    candidateCurrentRecipientIndex > -1 ? candidateCurrentRecipientIndex : 0;
   const currentRecipient = notification.recipients[currentRecipientIndex];
 
   // ... the legalfacts pertaining to other recipients will be epurated here ... PN-1737 ...
