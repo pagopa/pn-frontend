@@ -84,7 +84,7 @@ describe('NotificationDetail Page', () => {
   });
 
   test('renders NotificationDetail page', () => {
-    expect(result?.getByRole('link')).toHaveTextContent(/Notifiche/i);
+    expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);

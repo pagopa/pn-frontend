@@ -65,18 +65,28 @@ const NotificationDetail = () => {
   );
   const { recipients } = notification;
   const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
-  const recipientsWithAltNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCodeAlternative);
-  const { t } = useTranslation(['common']);
+  const recipientsWithAltNoticeCode = recipients.filter(
+    (recipient) => recipient.payment?.noticeCodeAlternative
+  );
+  const { t } = useTranslation(['common', 'notifiche']);
 
-  const getRecipientsNoticeCodeField = (rcpts: Array<NotificationDetailRecipient>, alt: boolean = false): ReactNode => {
-    if(rcpts.length > 1) {
-      return rcpts.map((recipient, index) => 
+  const getRecipientsNoticeCodeField = (
+    rcpts: Array<NotificationDetailRecipient>,
+    alt: boolean = false
+  ): ReactNode => {
+    if (rcpts.length > 1) {
+      return rcpts.map((recipient, index) => (
         <Box key={index} fontWeight={600}>
-          {recipient.taxId} - {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
+          {recipient.taxId} -{' '}
+          {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
         </Box>
-      );
+      ));
     }
-    return <Box fontWeight={600}>{alt ? rcpts[0]?.payment?.noticeCodeAlternative : rcpts[0]?.payment?.noticeCode}</Box>;
+    return (
+      <Box fontWeight={600}>
+        {alt ? rcpts[0]?.payment?.noticeCodeAlternative : rcpts[0]?.payment?.noticeCode}
+      </Box>
+    );
   };
 
   const unfilteredDetailTableRows: Array<{
@@ -85,33 +95,38 @@ const NotificationDetail = () => {
     value: ReactNode;
   }> = [
     {
-      label: 'Mittente',
+      label: t('detail.sender', { ns: 'notifiche' }),
       rawValue: notification.senderDenomination,
       value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
     },
     {
-      label: 'Destinatario',
+      label: t('detail.recipient', { ns: 'notifiche' }),
       rawValue: recipients.length > 1 ? '' : recipients[0]?.denomination,
       value: <Box fontWeight={600}>{recipients[0]?.denomination}</Box>,
     },
     {
-      label: recipients.length > 1 ? 'Destinatari' : 'Codice Fiscale destinatario',
+      label:
+        recipients.length > 1
+          ? t('detail.recipients', { ns: 'notifiche' })
+          : t('detail.fiscal-code-recipient', { ns: 'notifiche' }),
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
-      value: <>
-        {recipients.map((recipient, i) => (
-          <Box key={i} fontWeight={600}>
-            {recipient.taxId}
-          </Box>
-        ))}
-      </>,
+      value: (
+        <>
+          {recipients.map((recipient, i) => (
+            <Box key={i} fontWeight={600}>
+              {recipient.taxId}
+            </Box>
+          ))}
+        </>
+      ),
     },
     {
-      label: 'Data di invio',
+      label: t('detail.date', { ns: 'notifiche' }),
       rawValue: notification.sentAt,
       value: <Box fontWeight={600}>{notification.sentAt}</Box>,
     },
     {
-      label: 'Da pagare entro il',
+      label: t('detail.payment-terms', { ns: 'notifiche' }),
       rawValue: notification.paymentExpirationDate,
       value: (
         <Box fontWeight={600} display="inline">
@@ -120,27 +135,27 @@ const NotificationDetail = () => {
       ),
     },
     {
-      label: 'Codice IUN',
+      label: t('detail.iun', { ns: 'notifiche' }),
       rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
     {
-      label: 'Codice IUN annullato',
+      label: t('detail.cancelled-iun', { ns: 'notifiche' }),
       rawValue: notification.cancelledIun,
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
     },
     {
-      label: 'Codice Avviso',
-      rawValue: recipientsWithNoticeCode.join(", "),
-      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode)
+      label: t('detail.notice-code', { ns: 'notifiche' }),
+      rawValue: recipientsWithNoticeCode.join(', '),
+      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode),
     },
     {
-      label: 'Codice Avviso Alternativo',
-      rawValue: recipientsWithAltNoticeCode.join(", "),
-      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true)
+      label: t('detail.secondary-notice-code', { ns: 'notifiche' }),
+      rawValue: recipientsWithAltNoticeCode.join(', '),
+      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true),
     },
     {
-      label: 'Gruppi',
+      label: t('detail.groups', { ns: 'notifiche' }),
       rawValue: notification.group,
       value: notification.group && (
         <TagGroup visibleItems={4}>
@@ -223,10 +238,10 @@ const NotificationDetail = () => {
         linkLabel={
           <Fragment>
             <EmailIcon sx={{ mr: 0.5 }} />
-            Notifiche
+            {t('detail.breadcrumb-root', { ns: 'notifiche' })}
           </Fragment>
         }
-        currentLocationLabel="Dettaglio notifica"
+        currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
         goBackLabel={t('button.indietro', { ns: 'common' })}
       />
       <TitleBox
@@ -235,7 +250,9 @@ const NotificationDetail = () => {
         sx={{ pt: 3, mb: 2 }}
         mbTitle={0}
       ></TitleBox>
-      <Typography variant="body1" mb={{xs: 3, md: 4}}>{notification.abstract}</Typography>
+      <Typography variant="body1" mb={{ xs: 3, md: 4 }}>
+        {notification.abstract}
+      </Typography>
       {
         // PN-1714
         /*
@@ -259,7 +276,7 @@ const NotificationDetail = () => {
           onClick={openModal}
           data-testid="cancelNotificationBtn"
         >
-          Annulla notifica
+          {t('detail.cancel-notification', { ns: 'notifiche' })}
         </Button>
         )
         */
@@ -287,12 +304,11 @@ const NotificationDetail = () => {
       aria-describedby="dialog-description"
     >
       <DialogTitle id="dialog-title" sx={{ p: 4 }}>
-        Ci siamo quasi
+        {t('detail.cancel-notification-modal.title', { ns: 'notifiche' })}
       </DialogTitle>
       <DialogContent sx={{ px: 4, pb: 4 }}>
         <DialogContentText id="dialog-description">
-          Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la
-          precedente.
+          {t('detail.cancel-notification-modal.message', { ns: 'notifiche' })}
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ px: 4, pb: 4 }}>
@@ -304,7 +320,7 @@ const NotificationDetail = () => {
           variant="contained"
           data-testid="modalCloseAndProceedBtnId"
         >
-          Invia una nuova notifica
+          {t('new-notification-button', { ns: 'notifiche' })}
         </Button>
       </DialogActions>
     </Dialog>
@@ -321,7 +337,7 @@ const NotificationDetail = () => {
               <NotificationDetailTable rows={detailTableRows} />
               <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                 <NotificationDetailDocuments
-                  title="Documenti allegati"
+                  title={t('detail.acts', { ns: 'notifiche' })}
                   documents={notification.documents}
                   clickHandler={documentDowloadHandler}
                   documentsAvailable={notification.documentsAvailable as boolean}
@@ -334,15 +350,15 @@ const NotificationDetail = () => {
               <NotificationDetailTimeline
                 recipients={recipients}
                 statusHistory={notification.notificationStatusHistory}
-                title="Stato della notifica"
+                title={t('detail.timeline-title', { ns: 'notifiche' })}
                 clickHandler={legalFactDownloadHandler}
                 legalFactLabels={{
-                  attestation: 'Attestazione opponibile a terzi',
-                  receipt: 'Ricevuta',
+                  attestation: t('detail.legalfact', { ns: 'notifiche' }),
+                  receipt: t('detail.receipt', { ns: 'notifiche' }),
                 }}
-                historyButtonLabel="Mostra storico"
-                showMoreButtonLabel="Mostra di più"
-                showLessButtonLabel="Mostra di meno"
+                historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
+                showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
+                showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
               />
             </Box>
           </Grid>
