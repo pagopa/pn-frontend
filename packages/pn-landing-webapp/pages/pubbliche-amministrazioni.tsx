@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import {
-  HorizontalNav,
+  // HorizontalNav,
   Infoblock,
   Showcase,
   Walkthrough,
@@ -9,7 +9,7 @@ import {
 } from "@pagopa/mui-italia";
 import {
   getHeroData,
-  getHorizontalNavData,
+  // getHorizontalNavData,
   getInfoblockData,
   getShowcaseData,
   getWalkthroughData,
@@ -33,7 +33,7 @@ const Home: NextPage = () => (
       <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 1")}></Infoblock>
       <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 2")}></Infoblock>
       <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 3")}></Infoblock>
-      <Showcase {...getShowcaseData(USER_TYPE)} />
+      <Showcase {...getShowcaseData(USER_TYPE, "showcase 1")} />
       {/* <HorizontalNav {...getHorizontalNavData(USER_TYPE)}></HorizontalNav> */}
       <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 4")}></Infoblock>
       <Walkthrough {...getWalkthroughData(USER_TYPE)} />

@@ -5,6 +5,7 @@ import { WalkthroughProps } from '@pagopa/mui-italia/dist/components/Walkthrough
 import LangContext from "../provider/lang-context";
 import { enAppData } from "./data/en";
 import { itAppData } from "./data/it";
+import { InfoblockProps } from "@pagopa/mui-italia";
 
 export enum UserType {
   PA = "pa",
@@ -25,16 +26,22 @@ export const getAppData = () => {
 
 export const getHeroData = (userType: UserType = UserType.PA): HeroProps => getAppData()[userType].hero;
 
-// export const getAllInfoblocksData = (userType: UserType = UserType.PA): Array<InfoblockProps> =>  getAppData()[userType].infoblocks.map((item) => item.payload);
-export const getAllInfoblocksData = (userType: UserType = UserType.PA) =>  getAppData()[userType].infoblocks.map((item) => item.payload);
+export const getAllInfoblocksData = (userType: UserType = UserType.PA): Array<InfoblockProps> =>  getAppData()[userType].infoblocks.map((item) => item.data);
+// export const getAllInfoblocksData = (userType: UserType = UserType.PA) =>  getAppData()[userType].infoblocks.map((item) => item.data);
 
-// export const getInfoblockData = (userType: UserType = UserType.PA, name: string = ""): InfoblockProps => {
-export const getInfoblockData = (userType: UserType = UserType.PA, name: string = "") => {
+export const getInfoblockData = (userType: UserType = UserType.PA, name: string = ""): InfoblockProps => {
+// export const getInfoblockData = (userType: UserType = UserType.PA, name: string = "") => {
   const infoblock = getAppData()[userType].infoblocks.filter((item) => (item.name === name))[0];
-  return infoblock.payload;
+  return infoblock.data;
 };
 
-export const getShowcaseData = (userType: UserType = UserType.PA): ShowcaseProps => getAppData()[userType].showcase;
+export const getAllShowcasesData = (userType: UserType = UserType.PA): Array<ShowcaseProps> => getAppData()[userType].showcases.map((item) => item.data);
+
+export const getShowcaseData = (userType: UserType = UserType.PA, name: string = ""): ShowcaseProps => {
+// export const getInfoblockData = (userType: UserType = UserType.PA, name: string = "") => {
+  const infoblock = getAppData()[userType].showcases.filter((item) => (item.name === name))[0];
+  return infoblock.data;
+};
 
 export const getWalkthroughData = (userType: UserType = UserType.PA): WalkthroughProps => getAppData()[userType].walkthrough;
 

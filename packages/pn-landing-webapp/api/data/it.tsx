@@ -41,10 +41,10 @@ const coHero: HeroProps = {
 
 /** Infoblocks mocked data */
 
-const paInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
+const paInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
   {
     name: "infoblock 1",
-    payload: {
+    data: {
       // overline: "Rappresenti un ente?",
       title: "Un modo più semplice di gestire le notifiche",
       content:
@@ -60,7 +60,7 @@ const paInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
   },
   {
     name: "infoblock 2",
-    payload: {
+    data: {
       title: "Carica l’atto. Poi, dimenticatene",
       content:
       `Piattaforma Notifiche si integra con il protocollo degli enti e offre sia API per l'invio automatico delle notifiche, sia la 
@@ -80,7 +80,7 @@ const paInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
   },
   {
     name: "infoblock 3",
-    payload: {
+    data: {
       title: "E il destinatario?",
       content:
         `Il destinatario accede alla piattaforma tramite SPID o CIE, dove può visionare e scaricare l’atto notificato. 
@@ -97,7 +97,7 @@ const paInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
   },
   {
     name: "infoblock 4",
-    payload: {
+    data: {
       title: "Presto disponibile per gli enti",
       content:
         `Attualmente, Piattaforma Notifiche è oggetto di collaudo con un numero ristretto di enti pilota.
@@ -112,10 +112,10 @@ const paInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
   },
 ];
 
-const pfInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
+const pfInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
   {
     name: "infoblock 1",
-    payload: {
+    data: {
       title: "Non perderti più nessuna notifica",
       content:
         `Le notifiche sono comunicazioni a valore legale emesse in via ufficiale da un'amministrazione, come multe, 
@@ -133,7 +133,7 @@ const pfInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
   },
   {
     name: "infoblock 2",
-    payload: {
+    data: {
       title: "Scegli tu come ricevere le notifiche ",
       content:
         `Per inviare le comunicazioni a valore legale, Piattaforma Notifiche dà sempre la priorità ai recapiti 
@@ -147,7 +147,7 @@ const pfInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
   },
   {
     name: "infoblock 3",
-    payload: {
+    data: {
       title: "Il futuro delle comunicazioni a valore legale",
       content:
         `Attualmente, Piattaforma Notifiche è oggetto di collaudo con un numero ristretto di amministrazioni.
@@ -161,10 +161,10 @@ const pfInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
   },
 ];
 
-const coInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
+const coInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
   {
     name: "infoblock 1",
-    payload: {
+    data: {
       title: "",
       inverse: false,
       image: "",
@@ -173,7 +173,7 @@ const coInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
   },
   {
     name: "infoblock 2",
-    payload: {
+    data: {
       title: "",
       inverse: true,
       image: "",
@@ -184,98 +184,148 @@ const coInfoBlocks: Array<{name: string, payload: InfoblockProps}> = [
 /* ************************************** */
 
 /** Showcase mocked data */
-const paShowcase: ShowcaseProps = {
-  title: "Un solo modo per risparmiare in tanti modi",
-  items: [
-    {
-      icon: <PeopleIcon />,
-      title: "Unico",
-      subtitle:
-        "Le notifiche sono inviate, gestite e monitorate tramite un solo canale, accessibile da più referenti dello stesso ente",
-    },
-    {
-      icon: <FireworksIcon />,
-      title: "Semplice",
-      subtitle:
-        "Si possono caricare notifiche tramite API o manualmente: depositati i documenti, la piattaforma si occupa dell’invio e tiene traccia dei cambi di stato",
-    },
-    {
-      icon: <EasyIcon />,
-      title: "Immediato",
-      subtitle:
-        "Se il destinatario ha un recapito digitale, i tempi di invio diminuiscono notevolmente",
-    },
-    {
-      icon: <CheckmarkIcon />,
-      title: "Certo",
-      subtitle:
-        "Il processo di notificazione è normato  e c’è maggiore certezza di consegna al destinatario",
-    },
-  ],
-};
+const paShowcases: Array<{name: string, data: ShowcaseProps}> = [
+  {
+    name: "showcase 1",
+    data: {
+      title: "Un solo modo per risparmiare in tanti modi",
+      items: [
+        {
+          icon: <PeopleIcon />,
+          title: "Unico",
+          subtitle:
+            "Le notifiche sono inviate, gestite e monitorate tramite un solo canale, accessibile da più referenti dello stesso ente",
+        },
+        {
+          icon: <FireworksIcon />,
+          title: "Semplice",
+          subtitle:
+            "Si possono caricare notifiche tramite API o manualmente: depositati i documenti, la piattaforma si occupa dell’invio e tiene traccia dei cambi di stato",
+        },
+        {
+          icon: <EasyIcon />,
+          title: "Immediato",
+          subtitle:
+            "Se il destinatario ha un recapito digitale, i tempi di invio diminuiscono notevolmente",
+        },
+        {
+          icon: <CheckmarkIcon />,
+          title: "Certo",
+          subtitle:
+            "Il processo di notificazione è normato  e c’è maggiore certezza di consegna al destinatario",
+        },
+      ],
+    }
+  }
+];
 
-const pfShowcase: ShowcaseProps = {
-  title: "Cosa ti offrono le notifiche digitali",
-  items: [
-    {
-      icon: <PiggyIcon />,
-      title: "Convenienza",
-      subtitle:
-        "Il recapito delle notifiche in digitale comporta minori costi di notificazione e spedizione",
-    },
-    {
-      icon: <HourglassIcon />,
-      title: "Tempo",
-      subtitle:
-        "Niente più attese o code per il ritiro delle comunicazioni cartacee",
-    },
-    {
-      icon: <EcologyIcon />,
-      title: "Sostenibilità",
-      subtitle:
-        "Contribuisci a ridurre il consumo di carta e le emissioni per il trasporto",
-    },
-    {
-      icon: <CloudIcon />,
-      title: "Spazio",
-      subtitle:
-        "Non devi più conservare i documenti stampati",
-    },
-  ],
-};
+const pfShowcases: Array<{name: string, data: ShowcaseProps}> = [
+  {
+    name: "showcase 1",
+    data: {
+      title: "Cosa ti offrono le notifiche digitali",
+      items: [
+        {
+          icon: <PiggyIcon />,
+          title: "Convenienza",
+          subtitle:
+            "Il recapito delle notifiche in digitale comporta minori costi di notificazione e spedizione",
+        },
+        {
+          icon: <HourglassIcon />,
+          title: "Tempo",
+          subtitle:
+            "Niente più attese o code per il ritiro delle comunicazioni cartacee",
+        },
+        {
+          icon: <EcologyIcon />,
+          title: "Sostenibilità",
+          subtitle:
+            "Contribuisci a ridurre il consumo di carta e le emissioni per il trasporto",
+        },
+        {
+          icon: <CloudIcon />,
+          title: "Spazio",
+          subtitle:
+            "Non devi più conservare i documenti stampati",
+        },
+      ],
+    }
+  },
+  {
+    name: "showcase 2",
+    data: {
+      title: "",
+      items: [
+        {
+          icon: <PecIcon />,
+          title: "PEC",
+          subtitle: `
+            Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente consegnate, senza più 
+            raccomandate cartacee. L’avviso di avvenuta ricezione che ti sarà inviato contiene il 
+            link per accedere al contenuto su Piattaforma Notifiche.
+            `,
+        },
+        {
+          icon: <IOIcon />,
+          title: "App IO",
+          subtitle: `
+          Se attivi il servizio “Avvisi di cortesia” di Piattaforma Notifiche, puoi ricevere e gestire 
+          direttamente in app le comunicazioni a valore legale. Se non hai la PEC e leggi subito il messaggio, 
+          non riceverai la raccomandata cartacea e la notifica ti risulterà legalmente recapitata.
+          `,
+        },
+        {
+          icon: <MessageIcon />,
+          title: "Email o SMS",
+          subtitle:`
+          In più, puoi anche scegliere di ricevere un avviso di cortesia al tuo indirizzo email o tramite SMS. 
+          Se non hai la PEC e accedi alla piattaforma dall’apposito link, non riceverai la raccomandata 
+          cartacea e la notifica ti risulterà legalmente recapitata.
+          `,
+        },
+      ]
+    }
+  }
+];
 
-const coShowcase: ShowcaseProps = {
-  title: "",
-  items: [
-    {
-      icon: <PecIcon />,
-      title: "PEC",
-      subtitle: `
-        Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente consegnate, senza più 
-        raccomandate cartacee. L’avviso di avvenuta ricezione che ti sarà inviato contiene il 
-        link per accedere al contenuto su Piattaforma Notifiche.
-        `,
-    },
-    {
-      icon: <IOIcon />,
-      title: "App IO",
-      subtitle: `
-      Se attivi il servizio “Avvisi di cortesia” di Piattaforma Notifiche, puoi ricevere e gestire 
-      direttamente in app le comunicazioni a valore legale. Se non hai la PEC e leggi subito il messaggio, 
-      non riceverai la raccomandata cartacea e la notifica ti risulterà legalmente recapitata.
-      `,
-    },
-    {
-      icon: <MessageIcon />,
-      title: "Email o SMS",
-      subtitle:`
-      In più, puoi anche scegliere di ricevere un avviso di cortesia al tuo indirizzo email o tramite SMS. 
-      Se non hai la PEC e accedi alla piattaforma dall’apposito link, non riceverai la raccomandata 
-      cartacea e la notifica ti risulterà legalmente recapitata.
-      `,
-    },
-  ],
-};
+const coShowcases: Array<{name: string, data: ShowcaseProps}> = [
+  {
+    name: "showcase 1",
+    data: {
+      title: "",
+      items: [
+        {
+          icon: <PecIcon />,
+          title: "PEC",
+          subtitle: `
+            Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente consegnate, senza più 
+            raccomandate cartacee. L’avviso di avvenuta ricezione che ti sarà inviato contiene il 
+            link per accedere al contenuto su Piattaforma Notifiche.
+            `,
+        },
+        {
+          icon: <IOIcon />,
+          title: "App IO",
+          subtitle: `
+          Se attivi il servizio “Avvisi di cortesia” di Piattaforma Notifiche, puoi ricevere e gestire 
+          direttamente in app le comunicazioni a valore legale. Se non hai la PEC e leggi subito il messaggio, 
+          non riceverai la raccomandata cartacea e la notifica ti risulterà legalmente recapitata.
+          `,
+        },
+        {
+          icon: <MessageIcon />,
+          title: "Email o SMS",
+          subtitle:`
+          In più, puoi anche scegliere di ricevere un avviso di cortesia al tuo indirizzo email o tramite SMS. 
+          Se non hai la PEC e accedi alla piattaforma dall’apposito link, non riceverai la raccomandata 
+          cartacea e la notifica ti risulterà legalmente recapitata.
+          `,
+        },
+      ]
+    }
+  }
+];
 /* ************************************** */
 
 /** Walkthrough mocked data */
@@ -453,21 +503,21 @@ export const itAppData = {
   pa: {
     hero: paHero,
     infoblocks: paInfoBlocks,
-    showcase: paShowcase,
+    showcases: paShowcases,
     walkthrough: paWalkthrough,
     horizontalNav: paHorizontalNav,
   },
   pf: {
     hero: pfHero,
     infoblocks: pfInfoBlocks,
-    showcase: pfShowcase,
+    showcases: pfShowcases,
     walkthrough: pfWalkthrough,
     horizontalNav: pfHorizontalNav,
   },
   co: {
     hero: coHero,
     infoblocks: coInfoBlocks,
-    showcase: coShowcase,
+    showcases: coShowcases,
     walkthrough: coWalkthrough,
     horizontalNav: coHorizontalNav,
   },
