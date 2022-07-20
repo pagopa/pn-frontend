@@ -1,12 +1,14 @@
 import * as redux from 'react-redux';
 import { RenderResult } from '@testing-library/react';
 
-import { NotificationDetail as INotificationDetail } from '@pagopa-pn/pn-commons';
+import { NotificationDetail as INotificationDetail, NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
 import * as actions from '../../redux/notification/actions';
 import * as hooks from '../../redux/hooks';
-import { getCancelledNotification, getNotification, getUnavailableDocsNotification, notificationToFe } from '../../redux/notification/__test__/test-utils';
+import { getCancelledNotification, getNotification, getUnavailableDocsNotification, notificationToFe, notificationToFeTwoRecipients } from '../../redux/notification/__test__/test-utils';
 import { axe, render } from '../../__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
+
+const mockUseParamsFn = jest.fn();
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -20,12 +22,12 @@ jest.mock('react-i18next', () => ({
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ id: 'mocked-id' }),
+  useParams: () => mockUseParamsFn()
 }));
 
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
-  NotificationDetailTable: () => <div>Table</div>,
+  NotificationDetailTable: ({rows}: {rows: Array<NotificationDetailTableRow>}) => <div>Table {rows[1].value}</div>,
   // NotificationDetailDocuments: () => <div>Documents</div>,
   NotificationDetailTimeline: () => <div>Timeline</div>,
 }));
@@ -38,15 +40,26 @@ describe('NotificationDetail Page', () => {
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
 
-  const renderComponent = (notification: INotificationDetail) => {
+  const renderComponent = (notification: INotificationDetail, options: { userFiscalNumber? : string;  delegatorFiscalNumber?: string; isDelegate?: boolean } = {}) => {
+    const { userFiscalNumber, delegatorFiscalNumber, isDelegate } = options;
+
+    const fixedMandateId = 'ALFA-BETA-GAMMA';
+    // mock query params
+    const basicMockedQueryParams = { id: 'mocked-id' };
+    const mockedQueryParams = delegatorFiscalNumber && isDelegate ? {...basicMockedQueryParams, mandateId: fixedMandateId } : basicMockedQueryParams; 
+    mockUseParamsFn.mockReturnValue(mockedQueryParams);
+
     // mock app selector
+    const delegators = delegatorFiscalNumber && isDelegate ? [{ mandateId: fixedMandateId, delegator: { fiscalCode: delegatorFiscalNumber }}] : [];
     const spy = jest.spyOn(hooks, 'useAppSelector');
     spy
       .mockReturnValueOnce(notification)
-      .mockReturnValueOnce('mocked-sender')
+      .mockReturnValueOnce({ fiscal_number: userFiscalNumber || "mocked-user"})
+      .mockReturnValueOnce(delegators)
       .mockReturnValueOnce('mocked-download-url')
       .mockReturnValueOnce('mocked-legal-fact-url')
       .mockReturnValueOnce({ legalDomicile: [] });
+
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockDispatchFn);
@@ -182,6 +195,42 @@ describe('NotificationDetail Page', () => {
 
     const documentsText = result.getByText("detail.acts_files.notification_cancelled");
     expect(documentsText).toBeInTheDocument();
+  });
+
+  test('renders NotificationDetail page with the first recipient logged', async () => {
+    result = renderComponent(notificationToFeTwoRecipients, { userFiscalNumber: 'TTTUUU29J84Z600X', delegatorFiscalNumber: 'CGNNMO80A03H501U', isDelegate: false});
+    expect(result?.container).toHaveTextContent('mocked-abstract');
+    expect(result?.container).toHaveTextContent('Totito');
+    expect(result?.container).not.toHaveTextContent('Analogico Ok');
+    expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
+    result = resetResult();
+  });
+
+  test('renders NotificationDetail page with the second recipient logged', async () => {
+    result = renderComponent(notificationToFeTwoRecipients, { userFiscalNumber: 'CGNNMO80A03H501U', delegatorFiscalNumber: 'TTTUUU29J84Z600X', isDelegate: false});
+    expect(result?.container).toHaveTextContent('mocked-abstract');
+    expect(result?.container).toHaveTextContent('Analogico Ok');
+    expect(result?.container).not.toHaveTextContent('Totito');
+    expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
+    result = resetResult();
+  });
+
+  test('renders NotificationDetail page with current delegator as first recipient', async () => {
+    result = renderComponent(notificationToFeTwoRecipients, { userFiscalNumber: 'CGNNMO80A03H501U', delegatorFiscalNumber: 'TTTUUU29J84Z600X', isDelegate: true});
+    expect(result?.container).toHaveTextContent('mocked-abstract');
+    expect(result?.container).toHaveTextContent('Totito');
+    expect(result?.container).not.toHaveTextContent('Analogico Ok');
+    expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
+    result = resetResult();
+  });
+
+  test('renders NotificationDetail page with current delegator as second recipient', async () => {
+    result = renderComponent(notificationToFeTwoRecipients, { userFiscalNumber: 'TTTUUU29J84Z600X', delegatorFiscalNumber: 'CGNNMO80A03H501U', isDelegate: true});
+    expect(result?.container).toHaveTextContent('mocked-abstract');
+    expect(result?.container).toHaveTextContent('Analogico Ok');
+    expect(result?.container).not.toHaveTextContent('Totito');
+    expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
+    result = resetResult();
   });
 
 });

@@ -19,51 +19,54 @@ export const notificationFromBe: NotificationDetail = {
   sentAt: '2022-02-21T10:19:33.440Z',
   cancelledIun: 'mocked-cancelledIun',
   cancelledByIun: 'mocked-cancelledByIun',
+  senderDenomination: 'Il comune di Hobbiton',
   documentsAvailable: true,
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
   senderPaId: 'mocked-senderPaId',
-  recipients: [{
-    recipientType: RecipientType.PF,
-    taxId: 'CGNNMO80A03H501U',
-    denomination: 'Analogico Ok',
-    digitalDomicile: {
-      address: 'mail@pec.it',
-      type: DigitalDomicileType.PEC,
-    },
-    physicalAddress: {
-      at: 'Presso qualcuno',
-      address: 'In via del tutto eccezionale',
-      addressDetails: 'scala A',
-      zip: '00100',
-      municipality: 'Comune',
-      province: 'PROV',
-      foreignState: '',
-    },
-    payment: {
-      creditorTaxId: 'mocked-creditorTaxId',
-      noticeCode: 'mocked-noticeCode',
-      pagoPaForm: {
-        digests: {
-          sha256: 'mocked-sha256',
-        },
-        contentType: 'mocked-contentType',
-        ref: {
-          key: 'Avviso PagoPa',
-          versionToken: 'mocked-versionToken'
-        }
+  recipients: [
+    {
+      recipientType: RecipientType.PF,
+      taxId: 'CGNNMO80A03H501U',
+      denomination: 'Analogico Ok',
+      digitalDomicile: {
+        address: 'mail@pec.it',
+        type: DigitalDomicileType.PEC,
       },
-      f24standard: {
-        digests: {
-          sha256: 'mocked-sha256',
+      physicalAddress: {
+        at: 'Presso qualcuno',
+        address: 'In via del tutto eccezionale',
+        addressDetails: 'scala A',
+        zip: '00100',
+        municipality: 'Comune',
+        province: 'PROV',
+        foreignState: '',
+      },
+      payment: {
+        creditorTaxId: 'mocked-creditorTaxId',
+        noticeCode: 'mocked-noticeCode',
+        pagoPaForm: {
+          digests: {
+            sha256: 'mocked-sha256',
+          },
+          contentType: 'mocked-contentType',
+          ref: {
+            key: 'Avviso PagoPa',
+            versionToken: 'mocked-versionToken',
+          },
         },
-        contentType: 'mocked-contentType',
-        ref: {
-          key: 'F24 Standard',
-          versionToken: 'mocked-versionToken'
-        }
+        f24standard: {
+          digests: {
+            sha256: 'mocked-sha256',
+          },
+          contentType: 'mocked-contentType',
+          ref: {
+            key: 'F24 Standard',
+            versionToken: 'mocked-versionToken',
+          },
+        },
       },
     },
-  }],
+  ],
   documents: [
     {
       digests: {
@@ -73,8 +76,8 @@ export const notificationFromBe: NotificationDetail = {
       title: 'Mocked document',
       ref: {
         key: 'Mocked document',
-        versionToken: 'mocked-versionToken'
-      }
+        versionToken: 'mocked-versionToken',
+      },
     },
   ],
   notificationStatus: NotificationStatus.PAID,
@@ -90,8 +93,7 @@ export const notificationFromBe: NotificationDetail = {
       elementId: 'c_b429-202203021814_start',
       timestamp: '2022-03-02T17:56:46.668Z',
       category: TimelineCategory.REQUEST_ACCEPTED,
-      details: {
-      },
+      details: {},
       legalFactsIds: [
         {
           key: 'sender_ack~0f4Z32eLEiX8NSYR4WYzyvQvnQHh1t7Z',
@@ -171,8 +173,7 @@ export const notificationFromBe: NotificationDetail = {
       elementId: 'c_b429-202203021814_send_courtesy_rec0',
       timestamp: '2022-03-02T17:57:06.819Z',
       category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-      details: {
-      },
+      details: {},
       legalFactsIds: [
         {
           key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
@@ -184,47 +185,86 @@ export const notificationFromBe: NotificationDetail = {
       elementId: 'c_b429-202203021814_recipient_timeout_rec0',
       timestamp: '2022-03-02T17:59:10.029Z',
       category: TimelineCategory.REFINEMENT,
-      details: {
-      },
+      details: {},
     },
   ],
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
 };
 
-export const getNotification = (payment?: {noticeCode?: string; creditorTaxId?: string}): NotificationDetail => {
-
-  const notification = {...notificationFromBe};
-  // eslint-disable-next-line functional/immutable-data
-  notification.recipients[0].payment = payment ? {
-    creditorTaxId: payment?.creditorTaxId ?? "mocked-creditorTaxId",
-    noticeCode: payment?.noticeCode ?? "mocked-noticeCode",
+const recipientToUnshift = {
+  recipientType: RecipientType.PF,
+  taxId: 'TTTUUU29J84Z600X',
+  denomination: 'Totito',
+  digitalDomicile: {
+    type: DigitalDomicileType.PEC,
+    address: 'letotito@pnpagopa.postecert.local',
+  },
+  physicalAddress: {
+    address: 'Via del mistero, 48',
+    zip: '40200',
+    municipality: 'Arcore',
+    province: 'MI',
+    foreignState: 'ITALIA',
+  },
+  payment: {
+    noticeCode: '302011657724564978',
+    creditorTaxId: '77777777778',
     pagoPaForm: {
       digests: {
-        sha256: 'mocked-sha256',
+        sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
       },
-      contentType: 'mocked-contentType',
+      contentType: 'application/pdf',
       ref: {
-        key: 'Avviso PagoPa',
-        versionToken: 'mocked-versionToken'
-      }
-    },
-    f24standard: {
-      digests: {
-        sha256: 'mocked-sha256',
+        key: 'PN_NOTIFICATION_ATTACHMENTS-0001-EWWX-RM6Q-MKZM-VMCV',
+        versionToken: 'v1',
       },
-      contentType: 'mocked-contentType',
-      ref: {
-        key: 'F24 Standard',
-        versionToken: 'mocked-versionToken'
-      }
     },
-  } : undefined;
+  },
+};
+
+export const notificationFromBeTwoRecipients: NotificationDetail = {
+  ...notificationFromBe, 
+  recipients: [recipientToUnshift, ...notificationFromBe.recipients]
+};
+
+export const getNotification = (payment?: {
+  noticeCode?: string;
+  creditorTaxId?: string;
+}): NotificationDetail => {
+  const notification = { ...notificationFromBe };
+  // eslint-disable-next-line functional/immutable-data
+  notification.recipients[0].payment = payment
+    ? {
+        creditorTaxId: payment?.creditorTaxId ?? 'mocked-creditorTaxId',
+        noticeCode: payment?.noticeCode ?? 'mocked-noticeCode',
+        pagoPaForm: {
+          digests: {
+            sha256: 'mocked-sha256',
+          },
+          contentType: 'mocked-contentType',
+          ref: {
+            key: 'Avviso PagoPa',
+            versionToken: 'mocked-versionToken',
+          },
+        },
+        f24standard: {
+          digests: {
+            sha256: 'mocked-sha256',
+          },
+          contentType: 'mocked-contentType',
+          ref: {
+            key: 'F24 Standard',
+            versionToken: 'mocked-versionToken',
+          },
+        },
+      }
+    : undefined;
 
   return parseNotificationDetail(notification);
 };
 
 export const getUnavailableDocsNotification = (): NotificationDetail => {
-  const notification = {...notificationFromBe};
+  const notification = { ...notificationFromBe };
   // eslint-disable-next-line functional/immutable-data
   notification.documentsAvailable = false;
 
@@ -232,7 +272,7 @@ export const getUnavailableDocsNotification = (): NotificationDetail => {
 };
 
 export const getCancelledNotification = (): NotificationDetail => {
-  const notification = {...notificationFromBe};
+  const notification = { ...notificationFromBe };
   // eslint-disable-next-line functional/immutable-data
   notification.notificationStatus = NotificationStatus.CANCELLED;
 
@@ -241,3 +281,4 @@ export const getCancelledNotification = (): NotificationDetail => {
 
 export const notificationToFe = parseNotificationDetail(notificationFromBe);
 
+export const notificationToFeTwoRecipients = parseNotificationDetail(notificationFromBeTwoRecipients);
