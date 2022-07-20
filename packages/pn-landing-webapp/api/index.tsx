@@ -6,9 +6,10 @@ import LangContext from "../provider/lang-context";
 import { enAppData } from "./data/en";
 import { itAppData } from "./data/it";
 import { InfoblockProps } from "@pagopa/mui-italia";
-import { UserType } from "model";
+import { IAppData, UserType } from "model";
+import { HorizontalNavProps } from "@pagopa/mui-italia";
 
-export const getAppData = () => {
+export const getAppData = (): IAppData => {
   const lang = useContext(LangContext);
 
   if(lang.selectedLanguage === 'it') {
@@ -23,7 +24,7 @@ export const getHeroData = (userType: UserType = UserType.PA): HeroProps => getA
 export const getAllInfoblocksData = (userType: UserType = UserType.PA): Array<InfoblockProps> =>  getAppData()[userType].infoblocks.map((item) => item.data);
 
 export const getInfoblockData = (userType: UserType = UserType.PA, name: string = ""): InfoblockProps => {
-  const infoblock = getAppData()[userType].infoblocks.filter((item: [name: string, data: InfoblockProps]) => (item.name === name))[0];
+  const infoblock = getAppData()[userType].infoblocks.filter((item) => (item.name === name))[0];
   return infoblock.data;
 };
 
@@ -36,7 +37,6 @@ export const getShowcaseData = (userType: UserType = UserType.PA, name: string =
 
 export const getWalkthroughData = (userType: UserType = UserType.PA): WalkthroughProps => getAppData()[userType].walkthrough;
 
-// export const getHorizontalNavData = (userType: UserType = UserType.PA): HorizontalNavProps => getAppData()[userType].horizontalNav;
-export const getHorizontalNavData = (userType: UserType = UserType.PA) => getAppData()[userType].horizontalNav;
+export const getHorizontalNavData = (userType: UserType = UserType.PA): HorizontalNavProps => getAppData()[userType].horizontalNav;
 
 // export const getFooterData = (userType: UserType = UserType.PA): FooterProps => getAppData()[userType].footer;

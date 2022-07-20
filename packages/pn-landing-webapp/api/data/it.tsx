@@ -5,6 +5,8 @@ import { SvgIcon } from "@pagopa/mui-italia/node_modules/@mui/material";
 import { CheckmarkIcon, CloudIcon, DelegationIcon, DeliverIcon, DocCheckIcon, EasyIcon, EcologyIcon, FireworksIcon, HourglassIcon, IOIcon, MessageIcon, NotificationIcon, PECIcon, PeopleIcon, PiggyIcon, SendIcon, SyncIcon, UploadIcon, WalletIcon } from "./icons";
 // import { SELFCARE_URL } from "@utils/constants";
 import { IMAGES_PATH, PAGOPA_HELP_EMAIL } from "@utils/constants";
+import { IAppData, IInfoblockData, IShowcaseData } from "model";
+import { HorizontalNavProps } from "@pagopa/mui-italia";
 
 const assistanceLink = {
   label: "Assistenza",
@@ -47,7 +49,7 @@ const coHero: HeroProps = {
 
 /** Infoblocks mocked data */
 
-const paInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
+const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 1",
     data: {
@@ -118,7 +120,7 @@ const paInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
   },
 ];
 
-const pfInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
+const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 1",
     data: {
@@ -168,7 +170,7 @@ const pfInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
   },
 ];
 
-const coInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
+const coInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 1",
     data: {
@@ -191,7 +193,7 @@ const coInfoBlocks: Array<{name: string, data: InfoblockProps}> = [
 /* ************************************** */
 
 /** Showcase mocked data */
-const paShowcases: Array<{name: string, data: ShowcaseProps}> = [
+const paShowcases: Array<IShowcaseData> = [
   {
     name: "showcase 1",
     data: {
@@ -226,7 +228,7 @@ const paShowcases: Array<{name: string, data: ShowcaseProps}> = [
   }
 ];
 
-const pfShowcases: Array<{name: string, data: ShowcaseProps}> = [
+const pfShowcases: Array<IShowcaseData> = [
   {
     name: "showcase 1",
     data: {
@@ -296,7 +298,7 @@ const pfShowcases: Array<{name: string, data: ShowcaseProps}> = [
   }
 ];
 
-const coShowcases: Array<{name: string, data: ShowcaseProps}> = [
+const coShowcases: Array<IShowcaseData> = [
   {
     name: "",
     data: {
@@ -419,8 +421,8 @@ const coWalkthrough: WalkthroughProps = {
 /* ************************************** */
 
 /** HorizontalNav mocked data */
-// const paHorizontalNav: HorizontalNavProps = {
-const paHorizontalNav = {
+const paHorizontalNav: HorizontalNavProps = {
+// const paHorizontalNav = {
   sections: [
     {
       icon: <SvgIcon component="image"><img src="static/icons/HORIZONTAL-NAV-1.svg" /></SvgIcon>,
@@ -497,7 +499,7 @@ const coHorizontalNav = {
 /* ************************************** */
 
 /** Application Data Mock */
-export const itAppData = {
+export const itAppData: IAppData = {
   common: {
     alert: "La piattaforma non è operativa. Attualmente sono in fase di collaudo solo alcune delle funzionalità descritte in questa pagina, disponibili esclusivamente per un numero limitato di utenti che saranno destinatari delle notifiche inviate dagli enti pilota.",
     assistance: assistanceLink,
