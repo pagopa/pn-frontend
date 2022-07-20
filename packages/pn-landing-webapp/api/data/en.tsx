@@ -1,8 +1,15 @@
 import { ShowcaseProps, WalkthroughProps } from "@pagopa/mui-italia";
 import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
 import { CieIcon } from "@pagopa/mui-italia/dist/icons";
+import { PAGOPA_HELP_EMAIL } from "@utils/constants";
 
 const SELFCARE_URL = process.env.NEXT_SELFCARE_URL || "";
+
+const assistanceLink = {
+  label: "Assistenza",
+  ariaLabel: "assistenza",
+  href: `mailto:${PAGOPA_HELP_EMAIL}`
+}
 
 /** Hero mocked data */
 const paHero: HeroProps = {
@@ -338,6 +345,10 @@ const coHorizontalNav = {
 
 /** Application Data Mock */
 export const enAppData = {
+  common: {
+    alert: "La piattaforma non è operativa. Attualmente sono in fase di collaudo solo alcune delle funzionalità descritte in questa pagina, disponibili esclusivamente per un numero limitato di utenti che saranno destinatari delle notifiche inviate dagli enti pilota.",
+    assistance: assistanceLink,
+  },
   pa: {
     hero: paHero,
     infoblocks: paInfoBlocks,
