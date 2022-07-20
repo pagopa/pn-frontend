@@ -14,7 +14,7 @@ batch:
           REACT_APP_URL_FILE_PRIVACY_DISCLAIMER: "#privacy-disclaimer"
           REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: "#terms-and-conditions"
           REACT_APP_MIXPANEL_TOKEN: DUMMY
-          REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c"
+          REACT_APP_ONETRUST_DOMAIN_ID: "f0f07d38-790f-49af-8253-0794e83e8b68"
     - identifier: pn_login_svil_build
       buildspec: cra_buildspec.yaml
       env:
@@ -28,7 +28,7 @@ batch:
           REACT_APP_URL_FILE_PRIVACY_DISCLAIMER: "#privacy-disclaimer"
           REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: "#terms-and-conditions"
           REACT_APP_MIXPANEL_TOKEN: DUMMY
-          REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c"
+          REACT_APP_ONETRUST_DOMAIN_ID: "f0f07d38-790f-49af-8253-0794e83e8b68"
     - identifier: pn_login_coll_build
       buildspec: cra_buildspec.yaml
       env:
@@ -42,7 +42,7 @@ batch:
           REACT_APP_URL_FILE_PRIVACY_DISCLAIMER: "#privacy-disclaimer"
           REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: "#privacy-disclaimer"
           REACT_APP_MIXPANEL_TOKEN: DUMMY
-          REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c"
+          REACT_APP_ONETRUST_DOMAIN_ID: "f0f07d38-790f-49af-8253-0794e83e8b68"
     # - identifier: pn_login_prod_build
     #   buildspec: cra_buildspec.yaml
     #   env:
