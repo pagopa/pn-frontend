@@ -11,6 +11,7 @@ import {
   preLoginLinks,
 } from "./footer.constants";
 import { PAGOPA_HELP_EMAIL, PAGOPA_HOME } from "@utils/constants";
+import NavigationBar from "../components/NavigationBar";
 
 interface Props {
   children?: ReactNode;
@@ -29,7 +30,7 @@ const LandingLayout = ({ children }: Props) => {
   const handleAssistanceClick = () => {
     if (PAGOPA_HELP_EMAIL) {
       /* eslint-disable-next-line functional/immutable-data */
-      window.open(`mailto:${PAGOPA_HELP_EMAIL}`);
+      if (typeof window !== "undefined") window.open(`mailto:${PAGOPA_HELP_EMAIL}`);
     }
   };
 
@@ -44,6 +45,7 @@ const LandingLayout = ({ children }: Props) => {
           rootLink={homeLink}
           onAssistanceClick={handleAssistanceClick}
         />
+        <NavigationBar />
         <Box sx={{ flexGrow: 1 }} component="main">
           {children}
         </Box>
