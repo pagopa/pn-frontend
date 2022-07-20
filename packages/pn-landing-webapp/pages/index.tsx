@@ -34,7 +34,8 @@ const Home: NextPage = () => (
       <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 2")}></Infoblock>
       <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 3")}></Infoblock>
       <Showcase {...getShowcaseData(USER_TYPE)} />
-      <HorizontalNav {...getHorizontalNavData(USER_TYPE)}></HorizontalNav>
+      {/* <HorizontalNav {...getHorizontalNavData(USER_TYPE)}></HorizontalNav> */}
+      <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 4")}></Infoblock>
       <Walkthrough {...getWalkthroughData(USER_TYPE)} />
     </main>
   </>
