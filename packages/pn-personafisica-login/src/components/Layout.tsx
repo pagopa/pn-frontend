@@ -6,6 +6,8 @@ import {
   preLoginLinks,
 } from '@pagopa-pn/pn-commons/src/utils/costants';
 
+import { ENV } from "../utils/env";
+
 type Props = {
   children: any;
 };
@@ -38,7 +40,10 @@ const Layout = ({ children }: Props) => (
       enableLogin={false}
       rootLink={pagoPAHeaderLink}
       onAssistanceClick={() => {
-        console.log('Clicked/Tapped on Assistance');
+          if (ENV.ASSISTANCE.EMAIL) {
+              /* eslint-disable-next-line functional/immutable-data */
+              window.location.href = `mailto:${ENV.ASSISTANCE.EMAIL}`;
+          }
       }}
     />
     <Box bgcolor="#fafafa">{children}</Box>
