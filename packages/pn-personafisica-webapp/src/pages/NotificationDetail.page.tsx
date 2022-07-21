@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useCallback, useEffect, useMemo } from 'react';
+import { Fragment, ReactNode, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Grid, Box, Paper, Stack, Typography } from '@mui/material';
@@ -28,7 +28,6 @@ import {
 } from '../redux/notification/actions';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
-import { parseNotificationDetailForRecipient } from '../utils/notification.utility';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -47,12 +46,7 @@ const NotificationDetail = () => {
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const delegatorsFromStore = useAppSelector((state: RootState) => state.generalInfoState.delegators);
-  const notificationFromBe = useAppSelector((state: RootState) => state.notificationState.notification);
-
-  const notification = useMemo(
-    () => parseNotificationDetailForRecipient(notificationFromBe, currentUser, delegatorsFromStore, mandateId), 
-    [notificationFromBe, currentUser, delegatorsFromStore, mandateId]
-  );
+  const notification = useAppSelector((state: RootState) => state.notificationState.notification);
 
   const currentRecipient = notification && notification.currentRecipient;
 
@@ -146,7 +140,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (id) {
-      void dispatch(getReceivedNotification({iun: id, mandateId}));
+      void dispatch(getReceivedNotification({iun: id, currentUser, delegatorsFromStore, mandateId}));
     }
     return () => void dispatch(resetState());
   }, []);

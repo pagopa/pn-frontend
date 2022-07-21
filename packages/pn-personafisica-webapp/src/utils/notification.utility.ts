@@ -1,10 +1,12 @@
 import { NotificationDetail, parseNotificationDetail } from '@pagopa-pn/pn-commons';
-import { User } from '../redux/auth/types';
-import { Delegator } from '../redux/delegation/types';
+import {
+  UserForParseNotificationDetailForRecipient,
+  DelegatorsForParseNotificationDetailForRecipient,
+} from './../types/notification.utility';
 import { NotificationDetailForRecipient } from './../types/NotificationDetail';
 
 function fiscalNumberDaDelegator(
-  delegatorsFromStore: Array<Delegator>,
+  delegatorsFromStore: DelegatorsForParseNotificationDetailForRecipient,
   mandateId: string
 ): string | undefined {
   const currentDelegatorFromStore = delegatorsFromStore
@@ -13,16 +15,15 @@ function fiscalNumberDaDelegator(
   return currentDelegatorFromStore ? currentDelegatorFromStore.delegator?.fiscalCode : undefined;
 }
 
-function fiscalNumberDaUser(currentUser: User): string {
+function fiscalNumberDaUser(currentUser: { fiscal_number: string }): string {
   return currentUser.fiscal_number;
 }
 
-
 export function parseNotificationDetailForRecipient(
   notification: NotificationDetail,
-  currentUser: User,
-  delegatorsFromStore: Array<Delegator>,
-  mandateId: string | undefined
+  currentUser: UserForParseNotificationDetailForRecipient,
+  delegatorsFromStore: DelegatorsForParseNotificationDetailForRecipient,
+  mandateId?: string
 ): NotificationDetailForRecipient {
   // determine current recipient
   const fiscalNumberForNotification = mandateId
@@ -36,10 +37,8 @@ export function parseNotificationDetailForRecipient(
     candidateCurrentRecipientIndex > -1 ? candidateCurrentRecipientIndex : 0;
   const currentRecipient = notification.recipients[currentRecipientIndex];
 
-  // ... the legalfacts pertaining to other recipients will be epurated here ... PN-1737 ...
-
   // do the changes common to the pa and pf
   const commonNotificationDetailForFe = parseNotificationDetail(notification);
 
-  return {...commonNotificationDetailForFe, currentRecipient, currentRecipientIndex};
-};
+  return { ...commonNotificationDetailForFe, currentRecipient, currentRecipientIndex };
+}

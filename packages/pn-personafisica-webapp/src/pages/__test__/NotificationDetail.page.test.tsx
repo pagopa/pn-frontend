@@ -3,8 +3,7 @@ import { RenderResult } from '@testing-library/react';
 
 import { NotificationDetail as INotificationDetail, NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
 import * as actions from '../../redux/notification/actions';
-import * as hooks from '../../redux/hooks';
-import { getCancelledNotification, getNotification, getUnavailableDocsNotification, notificationFromBe, notificationFromBeTwoRecipients } from '../../redux/notification/__test__/test-utils';
+import { getCancelledNotification, getNotification, getUnavailableDocsNotification, notificationToFe, notificationToFeTwoRecipients } from '../../redux/notification/__test__/test-utils';
 import { axe, render } from '../../__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
 
@@ -40,25 +39,20 @@ describe('NotificationDetail Page', () => {
   const mockDispatchFn = jest.fn();
   const mockActionFn = jest.fn();
 
-  const renderComponent = (notification: INotificationDetail, options: { userFiscalNumber? : string;  delegatorFiscalNumber?: string; isDelegate?: boolean } = {}) => {
-    const { userFiscalNumber, delegatorFiscalNumber, isDelegate } = options;
+  const mockedUserInStore = { fiscal_number: 'mocked-user' };
 
-    const fixedMandateId = 'ALFA-BETA-GAMMA';
+  const renderComponent = (notification: INotificationDetail) => {
+
     // mock query params
-    const basicMockedQueryParams = { id: 'mocked-id' };
-    const mockedQueryParams = delegatorFiscalNumber && isDelegate ? {...basicMockedQueryParams, mandateId: fixedMandateId } : basicMockedQueryParams; 
-    mockUseParamsFn.mockReturnValue(mockedQueryParams);
+    // const basicMockedQueryParams = { id: 'mocked-id' };
+    // const mockedQueryParams = isDelegate ? {...basicMockedQueryParams, mandateId: fixedMandateId } : basicMockedQueryParams; 
+    mockUseParamsFn.mockReturnValue({ id: 'mocked-id' });
 
-    // mock app selector
-    const delegators = delegatorFiscalNumber && isDelegate ? [{ mandateId: fixedMandateId, delegator: { fiscalCode: delegatorFiscalNumber }}] : [];
-    const spy = jest.spyOn(hooks, 'useAppSelector');
-    spy
-      .mockReturnValueOnce({ fiscal_number: userFiscalNumber || "mocked-user"})
-      .mockReturnValueOnce(delegators)
-      .mockReturnValueOnce(notification)
-      .mockReturnValueOnce('mocked-download-url')
-      .mockReturnValueOnce('mocked-legal-fact-url')
-      .mockReturnValueOnce({ legalDomicile: [] });
+    // mock Redux store state
+    const reduxStoreState = {
+      userState: { user: mockedUserInStore },
+      notificationState: { notification, documentDownloadUrl: 'mocked-download-url', legalFactDownloadUrl: 'mocked-legal-fact-url' },
+    };
 
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
@@ -67,7 +61,7 @@ describe('NotificationDetail Page', () => {
     const actionSpy = jest.spyOn(actions, 'getReceivedNotification');
     actionSpy.mockImplementation(mockActionFn);
     // render component
-    return render(<NotificationDetail />);
+    return render(<NotificationDetail />, { preloadedState: reduxStoreState });
   };
 
   const resetResult = () => {
@@ -81,9 +75,9 @@ describe('NotificationDetail Page', () => {
   };
 
   test('renders NotificationDetail page with payment box', async () => {
-    result = renderComponent(notificationFromBe, { userFiscalNumber: 'CGNNMO80A03H501U' });
+    result = renderComponent(notificationToFe);
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent("detail.acts");
@@ -91,7 +85,7 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', mandateId: undefined });
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', currentUser: mockedUserInStore, delegatorsFromStore: [], mandateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
@@ -99,7 +93,7 @@ describe('NotificationDetail Page', () => {
   test('renders NotificationDetail page without payment box if noticeCode is empty', async () => {
     result = renderComponent(getNotification({ noticeCode: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent("detail.acts");
@@ -107,7 +101,7 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', mandateId: undefined });
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', currentUser: mockedUserInStore, delegatorsFromStore: [], mandateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
@@ -115,7 +109,7 @@ describe('NotificationDetail Page', () => {
   test('renders NotificationDetail page without payment box if creditorTaxId is empty', async () => {
     result = renderComponent(getNotification({ creditorTaxId: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent("detail.acts");
@@ -123,7 +117,7 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', mandateId: undefined });
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', currentUser: mockedUserInStore, delegatorsFromStore: [], mandateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
@@ -131,7 +125,7 @@ describe('NotificationDetail Page', () => {
   test('renders NotificationDetail page without payment box if noticeCode and creditorTaxId are both empty', async () => {
     result = renderComponent(getNotification({ creditorTaxId: "", noticeCode: "" }));
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent("detail.acts");
@@ -139,7 +133,7 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', mandateId: undefined });
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', currentUser: mockedUserInStore, delegatorsFromStore: [], mandateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
@@ -147,7 +141,7 @@ describe('NotificationDetail Page', () => {
   test('renders NotificationDetail page without payment box if payment object is not defined', async () => {
     result = renderComponent(getNotification());
     expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationFromBe.subject);
+    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent(/Table/i);
     expect(result?.container).toHaveTextContent("detail.acts");
@@ -155,7 +149,7 @@ describe('NotificationDetail Page', () => {
     expect(result?.container).not.toHaveTextContent(/Payment/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
-    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', mandateId: undefined });
+    expect(mockActionFn).toBeCalledWith({ iun: 'mocked-id', currentUser: mockedUserInStore, delegatorsFromStore: [], mandateId: undefined });
     expect(await axe(result?.container as Element)).toHaveNoViolations(); // Accesibility test
     result = resetResult();
   });
@@ -198,7 +192,7 @@ describe('NotificationDetail Page', () => {
   });
 
   test('renders NotificationDetail page with the first recipient logged', async () => {
-    result = renderComponent(notificationFromBeTwoRecipients, { userFiscalNumber: 'TTTUUU29J84Z600X', delegatorFiscalNumber: 'CGNNMO80A03H501U', isDelegate: false});
+    result = renderComponent(notificationToFeTwoRecipients('TTTUUU29J84Z600X', 'CGNNMO80A03H501U', false));
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent('Totito');
     expect(result?.container).not.toHaveTextContent('Analogico Ok');
@@ -207,7 +201,7 @@ describe('NotificationDetail Page', () => {
   });
 
   test('renders NotificationDetail page with the second recipient logged', async () => {
-    result = renderComponent(notificationFromBeTwoRecipients, { userFiscalNumber: 'CGNNMO80A03H501U', delegatorFiscalNumber: 'TTTUUU29J84Z600X', isDelegate: false});
+    result = renderComponent(notificationToFeTwoRecipients('CGNNMO80A03H501U', 'TTTUUU29J84Z600X', false));
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent('Analogico Ok');
     expect(result?.container).not.toHaveTextContent('Totito');
@@ -216,7 +210,7 @@ describe('NotificationDetail Page', () => {
   });
 
   test('renders NotificationDetail page with current delegator as first recipient', async () => {
-    result = renderComponent(notificationFromBeTwoRecipients, { userFiscalNumber: 'CGNNMO80A03H501U', delegatorFiscalNumber: 'TTTUUU29J84Z600X', isDelegate: true});
+    result = renderComponent(notificationToFeTwoRecipients('CGNNMO80A03H501U', 'TTTUUU29J84Z600X', true));
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent('Totito');
     expect(result?.container).not.toHaveTextContent('Analogico Ok');
@@ -225,7 +219,7 @@ describe('NotificationDetail Page', () => {
   });
 
   test('renders NotificationDetail page with current delegator as second recipient', async () => {
-    result = renderComponent(notificationFromBeTwoRecipients, { userFiscalNumber: 'TTTUUU29J84Z600X', delegatorFiscalNumber: 'CGNNMO80A03H501U', isDelegate: true});
+    result = renderComponent(notificationToFeTwoRecipients('TTTUUU29J84Z600X', 'CGNNMO80A03H501U', true));
     expect(result?.container).toHaveTextContent('mocked-abstract');
     expect(result?.container).toHaveTextContent('Analogico Ok');
     expect(result?.container).not.toHaveTextContent('Totito');

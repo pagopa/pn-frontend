@@ -9,6 +9,7 @@ import {
   RecipientType,
   TimelineCategory,
 } from '@pagopa-pn/pn-commons';
+import { parseNotificationDetailForRecipient } from '../../../utils/notification.utility';
 
 export const notificationFromBe: NotificationDetail = {
   iun: 'c_b963-220220221119',
@@ -278,3 +279,24 @@ export const getCancelledNotification = (): NotificationDetail => {
   return notification;
 };
 
+export const notificationToFe = parseNotificationDetailForRecipient(notificationFromBe, {
+  fiscal_number: 'CGNNMO80A03H501U',
+}, []);
+
+export const fixedMandateId = 'ALFA-BETA-GAMMA';
+
+export const notificationToFeTwoRecipients = (
+  userFiscalNumber: string,
+  delegatorFiscalNumber?: string,
+  isDelegate?: boolean
+) =>
+  parseNotificationDetailForRecipient(
+    notificationFromBeTwoRecipients,
+    {
+      fiscal_number: userFiscalNumber,
+    },
+    delegatorFiscalNumber && isDelegate
+      ? [{ mandateId: fixedMandateId, delegator: { fiscalCode: delegatorFiscalNumber } }]
+      : [],
+    isDelegate ? fixedMandateId : undefined
+  );
