@@ -32,10 +32,10 @@ const NavigationBar = () => {
     }
 
     useEffect(() => {
-        if (pathname === "/pubbliche-amministrazioni") {
+        if (pathname === "/cittadini") {
             setIndex(0);
         }
-        if (pathname === "/cittadini") {
+        if (pathname === "/pubbliche-amministrazioni") {
             setIndex(1);
         }
     }, [pathname]);
@@ -52,15 +52,15 @@ const NavigationBar = () => {
                     aria-label="Navigazione"
                 >
                     <LinkTab
-                        key="Enti"
-                        label="Enti"
-                        href="/pubbliche-amministrazioni"
-                        {...a11yProps(0)}
-                    />
-                    <LinkTab
                         key="Cittadini"
                         label="Cittadini"
                         href="/cittadini"
+                        {...a11yProps(0)}
+                    />
+                    <LinkTab
+                        key="Enti"
+                        label="Enti"
+                        href="/pubbliche-amministrazioni"
                         {...a11yProps(1)}
                     />
                 </Tabs>

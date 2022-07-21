@@ -1,5 +1,13 @@
 import { PreLoginFooterLinksType, FooterLinksType } from '@pagopa/mui-italia';
 
+const privacyClickHandler = () => {
+  window.open('/static/privacy-policy.pdf', '_blank');
+}
+
+const tosClickHandler = () => {
+  window.open('/static/terms-conditions.pdf', '_blank');
+}
+
 export const LANGUAGES = {
   it: { it: 'Italiano', en: 'Inglese' },
   en: { it: 'Italian', en: 'English' },
@@ -28,27 +36,27 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Chi siamo",
-        href: "chi-siamo",
+        href: `${pagoPALink.href}societa/chi-siamo`,
         ariaLabel: "Vai al link: Chi siamo",
-        linkType: "internal",
+        linkType: "external",
       },
       {
         label: "PNRR",
-        href: "pnrr",
+        href: `${pagoPALink.href}opportunita/pnrr/progetti`,
         ariaLabel: "Vai al link: PNRR",
-        linkType: "internal",
+        linkType: "external",
       },
       {
         label: "Media",
-        href: "media",
+        href: `${pagoPALink.href}media`,
         ariaLabel: "Vai al link: Media",
-        linkType: "internal",
+        linkType: "external",
       },
       {
         label: "Lavora con noi",
-        href: "lavora-con-noi",
+        href: `${pagoPALink.href}lavora-con-noi`,
         ariaLabel: "Vai al link: Lavora con noi",
-        linkType: "internal",
+        linkType: "external",
       },
     ],
   },
@@ -58,9 +66,11 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Privacy Policy",
-        href: "privacy-policy",
+        // href: "privacy-policy",
+        // href: "/static/privacy-policy.pdf",
         ariaLabel: "Vai al link: Privacy Policy",
         linkType: "internal",
+        onClick: privacyClickHandler,
       },
       {
         label: "Certificazioni",
@@ -93,9 +103,11 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Termini e Condizioni",
-        href: "terms-conditions",
+        // href: "terms-conditions",
+        // href: "/static/terms-conditions.pdf",
         ariaLabel: "Vai al link: Termini e Condizioni",
         linkType: "internal",
+        onClick: tosClickHandler,
       },
       {
         label: "Società trasparente",

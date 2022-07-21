@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import {
-//   HorizontalNav,
+  // HorizontalNav,
   Infoblock,
   Showcase,
   Walkthrough,
@@ -9,18 +9,18 @@ import {
 } from "@pagopa/mui-italia";
 import {
   getHeroData,
-//   getHorizontalNavData,
+  // getHorizontalNavData,
   getInfoblockData,
   getShowcaseData,
   getWalkthroughData,
-} from "../api";
+} from "../../api";
 import { UserType } from "model";
 
-const USER_TYPE = UserType.PF;
+const USER_TYPE = UserType.PA;
 
 // const FAVICON_PATH = `${process.env.NEXT_PUBLIC_ASSETS_URL}/favicon.svg`;
 
-const Cittadini: NextPage = () => (
+const PubblicheAmministrazioni: NextPage = () => (
   <>
     <Head>
       <title>Piattaforma Notifiche</title>
@@ -31,13 +31,14 @@ const Cittadini: NextPage = () => (
     <main>
       <Hero {...getHeroData(USER_TYPE)} />
       <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 1")}></Infoblock>
-      <Showcase {...getShowcaseData(USER_TYPE, "showcase 1")} />
       <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 2")}></Infoblock>
-      <Showcase {...getShowcaseData(USER_TYPE, "showcase 2")} />
       <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 3")}></Infoblock>
+      <Showcase {...getShowcaseData(USER_TYPE, "showcase 1")} />
+      {/* <HorizontalNav {...getHorizontalNavData(USER_TYPE)}></HorizontalNav> */}
+      <Infoblock {...getInfoblockData(USER_TYPE, "infoblock 4")}></Infoblock>
       <Walkthrough {...getWalkthroughData(USER_TYPE)} />
     </main>
   </>
 );
 
-export default Cittadini;
+export default PubblicheAmministrazioni;

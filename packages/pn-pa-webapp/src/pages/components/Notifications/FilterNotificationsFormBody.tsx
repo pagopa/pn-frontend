@@ -30,11 +30,6 @@ type Props = {
   setEndDate: (value: Date | null) => void;
 };
 
-const searchForValues = [
-  { value: '0', label: 'Codice Fiscale' },
-  { value: '1', label: 'Codice IUN' },
-];
-
 const FilterNotificationsFormBody = ({
   formikInstance,
   startDate,
@@ -43,15 +38,6 @@ const FilterNotificationsFormBody = ({
   setEndDate,
 }: Props) => {
   const isMobile = useIsMobile();
-
-  const searchForHandleChange = (e: ChangeEvent) => {
-    const value = (e.target as any).value;
-    if (value === '0') {
-      formikInstance.resetForm({ values: { ...formikInstance.values, iunMatch: '', searchFor: '0' } });
-    } else if (value === '1') {
-      formikInstance.resetForm({ values: { ...formikInstance.values, recipientId: '', searchFor: '1' } });
-    }
-  };
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (e.target.id === 'iunMatch') {
@@ -69,24 +55,6 @@ const FilterNotificationsFormBody = ({
   
   return (
     <Fragment>
-      <TextField
-        id="searchFor"
-        label="Filtra per"
-        name="searchFor"
-        value={formikInstance.values.searchFor}
-        onChange={searchForHandleChange}
-        select
-        size="small"
-        fullWidth={isMobile}
-        sx={{ marginBottom: isMobile ? '20px' : '0' }}
-      >
-        {searchForValues.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
-      </TextField>
-      {formikInstance.values.searchFor === '' || formikInstance.values.searchFor === '0' ? (
         <TextField
           id="recipientId"
           value={formikInstance.values.recipientId}
@@ -95,12 +63,10 @@ const FilterNotificationsFormBody = ({
           name="recipientId"
           error={formikInstance.touched.recipientId && Boolean(formikInstance.errors.recipientId)}
           helperText={formikInstance.touched.recipientId && formikInstance.errors.recipientId}
-          disabled={!formikInstance.values.searchFor}
           size="small"
           fullWidth={isMobile}
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
         />
-      ) : (
         <TextField
           id="iunMatch"
           value={formikInstance.values.iunMatch}
@@ -109,12 +75,10 @@ const FilterNotificationsFormBody = ({
           name="iunMatch"
           error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
           helperText={formikInstance.touched.iunMatch && formikInstance.errors.iunMatch}
-          disabled={!formikInstance.values.searchFor}
           size="small"
           fullWidth={isMobile}
           sx={{ marginBottom: isMobile ? '20px' : '0' }}
         />
-      )}
       <LocalizationProvider
         id="startDate"
         name="startDate"
