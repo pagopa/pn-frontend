@@ -1,9 +1,16 @@
 import { ReactNode } from 'react';
 import { Stack } from '@mui/material';
-import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
+import { ProductEntity, JwtUser, PartyEntity, UserAction, Footer } from '@pagopa/mui-italia';
 import { Box } from '@mui/system';
 
-import Footer from '../Footer/Footer';
+import {
+  companyLegalInfo,
+  postLoginLinks,
+  preLoginLinks,
+  LANGUAGES,
+  pagoPALink
+} from '@pagopa-pn/pn-commons/src/utils/costants';
+
 import Header from '../Header/Header';
 import ErrorBoundary from '../ErrorBoundary';
 type Props = {
@@ -31,7 +38,7 @@ type Props = {
   /** Function called when user chenge language */
   onLanguageChanged?: (langCode: string) => void
 };
-
+const localizedPagoPALink = pagoPALink();
 export default function Layout({
   children,
   assistanceEmail,
@@ -74,7 +81,16 @@ export default function Layout({
           </Box>
 
         </Stack>
-        <Footer onLanguageChanged={onLanguageChanged}/>
+        <Footer 
+          loggedUser={loggedUser.id !== ''}
+          onLanguageChanged={onLanguageChanged}
+          companyLink={{...localizedPagoPALink, onClick: () => window.open(localizedPagoPALink.href, '_blank')}}
+          legalInfo={companyLegalInfo()}
+          postLoginLinks={postLoginLinks()}
+          preLoginLinks={preLoginLinks()}
+          currentLangCode={'it'}
+          languages={LANGUAGES}
+        />
       </Stack>
     </ErrorBoundary>
   );

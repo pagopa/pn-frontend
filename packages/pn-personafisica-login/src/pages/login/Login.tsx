@@ -1,18 +1,19 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { Trans, useTranslation } from 'react-i18next';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { Trans } from 'react-i18next';
+import { useIsMobile, Layout } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { styled } from '@mui/material/styles';
-import Layout from '../../components/Layout';
 import { IDPS } from '../../utils/IDPS';
 import { ENV } from '../../utils/env';
+import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
 import { storageSpidSelectedOps } from '../../utils/storage';
 import SpidSelect from './SpidSelect';
 
@@ -26,7 +27,7 @@ const LoginButton = styled(Button)(() => ({
 
 const Login = () => {
   const [showIDPS, setShowIDPS] = useState(false);
-  const { t } = useTranslation(['login']);
+  const { t, i18n } = useTranslation(['login', 'notifiche']);
   const isMobile = useIsMobile();
 
   const goCIE = () => {
@@ -53,8 +54,23 @@ const Login = () => {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
   }
 
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
+
   return (
-    <Layout>
+    <Layout
+      productsList={[]}
+      assistanceEmail={PAGOPA_HELP_EMAIL}
+      onLanguageChanged={changeLanguageHandler}
+      showSideMenu={false}
+      loggedUser={{
+        id: '',
+        name: undefined,
+        surname: undefined,
+        email: undefined,
+      }}
+    >
       <Grid container direction="column" my={isMobile ? 4 : 16}>
         <Grid container item justifyContent="center">
           <Grid item>
