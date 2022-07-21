@@ -37,8 +37,26 @@ export function parseNotificationDetailForRecipient(
     candidateCurrentRecipientIndex > -1 ? candidateCurrentRecipientIndex : 0;
   const currentRecipient = notification.recipients[currentRecipientIndex];
 
+  // PN-1737 - epuration of the legalfacts pertaining to other recipients will be epurated here ...  ...
+  const cleanedTimeline = notification.timeline.map((timelineElement) => {
+    const mustCleanLegalFactsIds =
+      timelineElement.legalFactsIds != null &&
+      timelineElement.details?.recIndex != null &&
+      timelineElement.details.recIndex !== currentRecipientIndex;
+    return timelineElement.legalFactsIds
+      ? {
+          ...timelineElement,
+          legalFactsIds: mustCleanLegalFactsIds ? [] : timelineElement.legalFactsIds,
+        }
+      : timelineElement;
+  });
+  const notificationClone = { ...notification, timeline: cleanedTimeline };
+
+  // console.log('after having cleaned legalFactsIds');
+  // console.log({ notification, notificationClone, cleanedTimeline, currentRecipientIndex, currentRecipient });
+
   // do the changes common to the pa and pf
-  const commonNotificationDetailForFe = parseNotificationDetail(notification);
+  const commonNotificationDetailForFe = parseNotificationDetail(notificationClone);
 
   return { ...commonNotificationDetailForFe, currentRecipient, currentRecipientIndex };
 }
