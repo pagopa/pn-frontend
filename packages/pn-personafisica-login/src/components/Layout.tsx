@@ -4,26 +4,19 @@ import {
   companyLegalInfo,
   postLoginLinks,
   preLoginLinks,
+  LANGUAGES,
+  pagoPALink
 } from '@pagopa-pn/pn-commons/src/utils/costants';
 
 type Props = {
   children: any;
 };
 
-const pagoPALink: any = {
-  href: 'https://www.pagopa.it/it/',
-  ariaLabel: 'Link: vai al sito di PagoPA S.p.A.',
-};
-
+const localizedPagoPALink = pagoPALink();
 const pagoPAHeaderLink: RootLinkType = {
-  ...pagoPALink,
+  ...localizedPagoPALink,
   label: 'PagoPA S.p.A.',
-  title: 'Sito di PagoPA S.p.A.',
-};
-
-const LANGUAGES = {
-  it: { it: 'Italiano', en: 'Inglese' },
-  en: { it: 'Italian', en: 'English' },
+  title: 'Sito di PagoPA S.p.A.'
 };
 
 const Layout = ({ children }: Props) => (
@@ -45,10 +38,10 @@ const Layout = ({ children }: Props) => (
     <Box>
       <Footer
         loggedUser={false}
-        companyLink={{...pagoPALink, onClick: () => window.open(pagoPALink.href, '_blank')}}
-        legalInfo={companyLegalInfo}
-        postLoginLinks={postLoginLinks}
-        preLoginLinks={preLoginLinks}
+        companyLink={{...localizedPagoPALink, onClick: () => window.open(localizedPagoPALink.href, '_blank')}}
+        legalInfo={companyLegalInfo()}
+        postLoginLinks={postLoginLinks()}
+        preLoginLinks={preLoginLinks()}
         currentLangCode={'it'}
         onLanguageChanged={
           (/* newLang */) => {
