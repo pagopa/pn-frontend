@@ -4,7 +4,14 @@ import currentLocale from 'date-fns/locale/it';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MenuItem, TextField } from '@mui/material';
-import { CustomDatePicker, DatePickerTypes, DATE_FORMAT, formatIun, NotificationAllowedStatus, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  CustomDatePicker,
+  DatePickerTypes,
+  DATE_FORMAT,
+  formatIun,
+  NotificationAllowedStatus,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 
@@ -32,11 +39,6 @@ type Props = {
   setEndDate: (value: Date | null) => void;
 };
 
-const searchForValues = [
-  { value: '0', label: 'Codice Fiscale' },
-  { value: '1', label: 'Codice IUN' },
-];
-
 const FilterNotificationsFormBody = ({
   formikInstance,
   startDate,
@@ -46,16 +48,16 @@ const FilterNotificationsFormBody = ({
 }: Props) => {
   const isMobile = useIsMobile();
 
-  const searchForHandleChange = (e: ChangeEvent) => {
-    const value = (e.target as any).value;
-    if (value === '0') {
-      trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'fiscal code'});
-      formikInstance.resetForm({ values: { ...formikInstance.values, iunMatch: '', searchFor: '0' } });
-    } else if (value === '1') {
-      trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'IUN code'});
-      formikInstance.resetForm({ values: { ...formikInstance.values, recipientId: '', searchFor: '1' } });
-    }
-  };
+  // const searchForHandleChange = (e: ChangeEvent) => {
+  //   const value = (e.target as any).value;
+  //   if (value === '0') {
+  //     trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'fiscal code'});
+  //     formikInstance.resetForm({ values: { ...formikInstance.values, iunMatch: '', searchFor: '0' } });
+  //   } else if (value === '1') {
+  //     trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'IUN code'});
+  //     formikInstance.resetForm({ values: { ...formikInstance.values, recipientId: '', searchFor: '1' } });
+  //   }
+  // };
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (e.target.id === 'iunMatch') {
@@ -68,6 +70,7 @@ const FilterNotificationsFormBody = ({
     } else {
       formikInstance.handleChange(e);
     }
+    trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, { target: e.target.id });
     await formikInstance.setFieldTouched(e.target.id, true, false);
   };
 
@@ -75,55 +78,33 @@ const FilterNotificationsFormBody = ({
     formikInstance.handleChange(e);
     trackEventByType(TrackEventType.NOTIFICATION_FILTER_NOTIFICATION_STATE);
   };
-  
+
   return (
     <Fragment>
       <TextField
-        id="searchFor"
-        label="Filtra per"
-        name="searchFor"
-        value={formikInstance.values.searchFor}
-        onChange={searchForHandleChange}
-        select
+        id="recipientId"
+        value={formikInstance.values.recipientId}
+        onChange={handleChangeTouched}
+        label="Codice Fiscale"
+        name="recipientId"
+        error={formikInstance.touched.recipientId && Boolean(formikInstance.errors.recipientId)}
+        helperText={formikInstance.touched.recipientId && formikInstance.errors.recipientId}
         size="small"
         fullWidth={isMobile}
         sx={{ marginBottom: isMobile ? '20px' : '0' }}
-      >
-        {searchForValues.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
-      </TextField>
-      {formikInstance.values.searchFor === '' || formikInstance.values.searchFor === '0' ? (
-        <TextField
-          id="recipientId"
-          value={formikInstance.values.recipientId}
-          onChange={handleChangeTouched}
-          label="Codice Fiscale"
-          name="recipientId"
-          error={formikInstance.touched.recipientId && Boolean(formikInstance.errors.recipientId)}
-          helperText={formikInstance.touched.recipientId && formikInstance.errors.recipientId}
-          disabled={!formikInstance.values.searchFor}
-          size="small"
-          fullWidth={isMobile}
-          sx={{ marginBottom: isMobile ? '20px' : '0' }}
-        />
-      ) : (
-        <TextField
-          id="iunMatch"
-          value={formikInstance.values.iunMatch}
-          onChange={handleChangeTouched}
-          label="Codice IUN"
-          name="iunMatch"
-          error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
-          helperText={formikInstance.touched.iunMatch && formikInstance.errors.iunMatch}
-          disabled={!formikInstance.values.searchFor}
-          size="small"
-          fullWidth={isMobile}
-          sx={{ marginBottom: isMobile ? '20px' : '0' }}
-        />
-      )}
+      />
+      <TextField
+        id="iunMatch"
+        value={formikInstance.values.iunMatch}
+        onChange={handleChangeTouched}
+        label="Codice IUN"
+        name="iunMatch"
+        error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
+        helperText={formikInstance.touched.iunMatch && formikInstance.errors.iunMatch}
+        size="small"
+        fullWidth={isMobile}
+        sx={{ marginBottom: isMobile ? '20px' : '0' }}
+      />
       <LocalizationProvider
         id="startDate"
         name="startDate"
@@ -137,7 +118,7 @@ const FilterNotificationsFormBody = ({
           onChange={(value: DatePickerTypes) => {
             void formikInstance.setFieldValue('startDate', value).then(() => {
               setStartDate(value);
-              trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, {source: 'from date'});
+              trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'from date' });
             });
           }}
           renderInput={(params) => (
@@ -175,7 +156,7 @@ const FilterNotificationsFormBody = ({
           value={endDate}
           onChange={(value: DatePickerTypes) => {
             void formikInstance.setFieldValue('endDate', value).then(() => {
-              trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, {source: 'to date'});
+              trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'to date' });
               setEndDate(value);
             });
           }}

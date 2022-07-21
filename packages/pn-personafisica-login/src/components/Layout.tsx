@@ -1,9 +1,14 @@
 import { Box } from '@mui/material';
 import { Footer, HeaderAccount, RootLinkType } from '@pagopa/mui-italia';
-import { companyLegalInfo, postLoginLinks, preLoginLinks, } from '@pagopa-pn/pn-commons/src/utils/costants';
-import { PAGOPA_HELP_EMAIL } from "../utils/constants";
-import { trackEventByType } from "../utils/mixpanel";
-import { TrackEventType } from "../utils/events";
+import {
+  companyLegalInfo,
+  postLoginLinks,
+  preLoginLinks,
+} from '@pagopa-pn/pn-commons/src/utils/costants';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
+
+import { ENV } from '../utils/env';
 
 type Props = {
   children: any;
@@ -26,44 +31,44 @@ const LANGUAGES = {
 };
 
 const Layout = ({ children }: Props) => {
-    const handleAssistanceClick = () => {
-        trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'prelogin' });
-        /* eslint-disable-next-line functional/immutable-data */
-        window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
-    };
+  const handleAssistanceClick = () => {
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'prelogin' });
+    /* eslint-disable-next-line functional/immutable-data */
+    window.location.href = `mailto:${ENV.ASSISTANCE.EMAIL}`;
+  };
 
-    return (
-        <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: '100vh',
-            }}
-        >
-            <HeaderAccount
-                enableLogin={false}
-                rootLink={pagoPAHeaderLink}
-                onAssistanceClick={handleAssistanceClick}
-            />
-            <Box bgcolor="#fafafa">{children}</Box>
-            <Box>
-                <Footer
-                    loggedUser={false}
-                    companyLink={{ ...pagoPALink, onClick: () => window.open(pagoPALink.href, '_blank') }}
-                    legalInfo={companyLegalInfo}
-                    postLoginLinks={postLoginLinks}
-                    preLoginLinks={preLoginLinks}
-                    currentLangCode={'it'}
-                    onLanguageChanged={
-                        (/* newLang */) => {
-                            console.log('Changed Language');
-                        }
-                    }
-                    languages={LANGUAGES}
-                />
-            </Box>
-        </Box>
-    );
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+      }}
+    >
+      <HeaderAccount
+        enableLogin={false}
+        rootLink={pagoPAHeaderLink}
+        onAssistanceClick={handleAssistanceClick}
+      />
+      <Box bgcolor="#fafafa">{children}</Box>
+      <Box>
+        <Footer
+          loggedUser={false}
+          companyLink={{ ...pagoPALink, onClick: () => window.open(pagoPALink.href, '_blank') }}
+          legalInfo={companyLegalInfo}
+          postLoginLinks={postLoginLinks}
+          preLoginLinks={preLoginLinks}
+          currentLangCode={'it'}
+          onLanguageChanged={
+            (/* newLang */) => {
+              console.log('Changed Language');
+            }
+          }
+          languages={LANGUAGES}
+        />
+      </Box>
+    </Box>
+  );
 };
 
 export default Layout;

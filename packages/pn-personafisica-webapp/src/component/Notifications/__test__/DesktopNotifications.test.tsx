@@ -44,7 +44,7 @@ describe('DesktopNotifications Component', () => {
     );
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(
-      /Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull'app IO o inserisci un recapito di cortesia nella sezione/i
+      /Non hai ricevuto nessuna notifica. Vai alla sezione I tuoi recapiti e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo./i
     );
   });
 

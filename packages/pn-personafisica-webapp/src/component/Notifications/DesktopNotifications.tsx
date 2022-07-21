@@ -129,18 +129,18 @@ const DesktopNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
+    emptyActionLabel: filtersApplied ? undefined : 'I tuoi Recapiti',
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : handleRouteContacts,
     emptyMessage: filtersApplied
       ? undefined
-      : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione',
+      : 'Non hai ricevuto nessuna notifica. Vai alla sezione',
     disableSentimentDissatisfied: !filtersApplied,
     secondaryMessage: filtersApplied
       ? undefined
       : {
-          emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
+          emptyMessage: 'e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.',
         },
   };
 
