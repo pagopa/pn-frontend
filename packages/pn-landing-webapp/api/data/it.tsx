@@ -1,12 +1,12 @@
 import { InfoblockProps } from "@pagopa/mui-italia";
 import { ShowcaseProps, WalkthroughProps } from "@pagopa/mui-italia";
 import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
-import { SvgIcon } from "@pagopa/mui-italia/node_modules/@mui/material";
 import { CheckmarkIcon, CloudIcon, DelegationIcon, DeliverIcon, DocCheckIcon, EasyIcon, EcologyIcon, FireworksIcon, HourglassIcon, IOIcon, MessageIcon, NotificationIcon, PECIcon, PeopleIcon, PiggyIcon, SendIcon, SyncIcon, UploadIcon, WalletIcon } from "./icons";
 // import { SELFCARE_URL } from "@utils/constants";
 import { IMAGES_PATH, PAGOPA_HELP_EMAIL } from "@utils/constants";
 import { IAppData, IInfoblockData, IShowcaseData } from "model";
 import { HorizontalNavProps } from "@pagopa/mui-italia";
+import { SvgIcon } from "@mui/material";
 
 const assistanceLink = {
   label: "Assistenza",
@@ -21,9 +21,9 @@ const paHero: HeroProps = {
     `E da oggi anche a farsi. Piattaforma Notifiche digitalizza la gestione delle comunicazioni a valore legale, 
     semplificando il processo per tutti: chi le invia, e chi le riceve.`,
   inverse: false,
-  image: "",
+  image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
-  background: `${IMAGES_PATH}/hero.png`,
+  background: `${IMAGES_PATH}/hero-background.png`,
 };
 
 const pfHero: HeroProps = {
@@ -31,15 +31,15 @@ const pfHero: HeroProps = {
   subtitle:
     `Con Piattaforma Notifiche puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
     potrai visualizzare, gestire e pagare direttamente online o in app le raccomandate che di solito ti vengono inviate in cartaceo.`,
-  ctaPrimary: {
-    label: "Leggi le tue notifiche",
-    title: "Leggi le tue notifiche",
-    href: "leggi"
-  },
+  // ctaPrimary: {
+  //   label: "Leggi le tue notifiche",
+  //   title: "Leggi le tue notifiche",
+  //   href: "leggi"
+  // },
   inverse: false,
-  image: "",
+  image: `${IMAGES_PATH}/pf-hero-foreground.png`,
   altText: "",
-  background: `${IMAGES_PATH}/hero.png`,
+  background: `${IMAGES_PATH}/hero-background.png`,
 };
 
 const coHero: HeroProps = {
@@ -115,7 +115,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: true,
+      imageShadow: false,
     },
   },
 ];
