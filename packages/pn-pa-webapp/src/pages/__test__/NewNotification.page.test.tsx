@@ -94,20 +94,20 @@ describe('NewNotification Page', () => {
   });
 
   test('renders NewNotification page', () => {
-    expect(result?.container.querySelector('h4')).toHaveTextContent('Invia una nuova notifica');
+    expect(result?.container.querySelector('h4')).toHaveTextContent('new-notification.title');
     const stepContent = result?.queryByTestId('stepContent');
     expect(stepContent).toHaveTextContent(/PreliminaryInformations/i);
   });
 
   test('clicks on the breadcrumb button', async () => {
     const links = result?.getAllByRole('link');
-    expect(links![0]).toHaveTextContent(/Notifiche/i);
+    expect(links![0]).toHaveTextContent(/new-notification.breadcrumb-root/i);
     expect(links![0]).toHaveAttribute('href', routes.DASHBOARD);
   });
 
   test('clicks on the api keys link', async () => {
     const links = result?.getAllByRole('link');
-    expect(links![1]).toHaveTextContent(/Chiavi API/i);
+    expect(links![1]).toHaveTextContent(/menu.api-key/i);
     expect(links![1]).toHaveAttribute('href', routes.API_KEYS);
   });
 

@@ -40,28 +40,28 @@ describe('Recipient Component', () => {
   });
 
   it('renders Recipient', () => {
-    expect(result.container).toHaveTextContent(/Destinatario/i);
-    expect(result.container).toHaveTextContent(/Soggetto giuridico*/i);
-    expect(result.container).toHaveTextContent(/Persona fisica/i);
-    expect(result.container).toHaveTextContent(/Persona giuridica/i);
-    expect(result.container).toHaveTextContent(/Aggiungi un domicilio digitale/i);
-    expect(result.container).toHaveTextContent(/Aggiungi un indirizzo fisico/i);
-    expect(result.container).toHaveTextContent(/Aggiungi un destinatario/i);
+    expect(result.container).toHaveTextContent(/title/i);
+    expect(result.container).toHaveTextContent(/legal-entity*/i);
+    expect(result.container).toHaveTextContent(/physical-person/i);
+    expect(result.container).toHaveTextContent(/legal-person/i);
+    expect(result.container).toHaveTextContent(/add-digital-domicile/i);
+    expect(result.container).toHaveTextContent(/add-physical-domicile/i);
+    expect(result.container).toHaveTextContent(/add-recipient/i);
     expect(result.container).toHaveTextContent(/Torna alle Notifiche/i);
     expect(result.container).toHaveTextContent(/Continua/i);
   });
 
   it('renders the second card, then deletes it', async () => {
-    expect(result.container).not.toHaveTextContent(/Destinatario 1/i);
-    expect(result.container).not.toHaveTextContent(/Destinatario 2/i);
-    const addButton = result.queryByText('Aggiungi un destinatario');
+    expect(result.container).not.toHaveTextContent(/title 1/i);
+    expect(result.container).not.toHaveTextContent(/title 2/i);
+    const addButton = result.queryByText('add-recipient');
     fireEvent.click(addButton!);
     const deleteIcon = await waitFor(() => result.queryAllByTestId('DeleteRecipientIcon'));
-    expect(result.container).toHaveTextContent(/Destinatario 1/i);
-    expect(result.container).toHaveTextContent(/Destinatario 2/i);
+    expect(result.container).toHaveTextContent(/title 1/i);
+    expect(result.container).toHaveTextContent(/title 2/i);
     expect(deleteIcon).toHaveLength(2);
     fireEvent.click(deleteIcon[1]);
-    await waitFor(() => expect(result?.container).not.toHaveTextContent(/Destinatario 2/i));
+    await waitFor(() => expect(result?.container).not.toHaveTextContent(/title 2/i));
   });
 
   it('shows the digital domicile form and the physical address form', async () => {

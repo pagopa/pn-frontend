@@ -15,7 +15,7 @@ const BasicMenuItems: Array<SideMenuItem> = [
    * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
    * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
    */
-  // { label: 'Chiavi API', icon: VpnKey, route: routes.API_KEYS },
+  // { label: menu.api-key, icon: VpnKey, route: routes.API_KEYS },
 ];
 
 function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {

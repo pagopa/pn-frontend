@@ -45,7 +45,7 @@ const MobileNotifications = ({
 }: Props) => {
   const navigate = useNavigate();
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
-  const { t } = useTranslation(['notifiche']);
+  const { t } = useTranslation(['notifiche', 'common']);
 
   const cardHeader: [CardElement, CardElement] = [
     {
@@ -163,7 +163,7 @@ const MobileNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const EmptyStateProps = {
     emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
-    emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
+    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', {ns: 'common'}),
     disableSentimentDissatisfied: !filtersApplied,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
     secondaryMessage: filtersApplied ? undefined : {

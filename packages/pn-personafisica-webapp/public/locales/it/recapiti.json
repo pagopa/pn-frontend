@@ -69,7 +69,7 @@
   },
   "special-contacts": {
     "subtitle": "Se vuoi che alcune notifiche e comunicazioni siano indirizzate a dei recapiti diversi, puoi indicarli qui. Questi recapiti possono essere sia tuoi che intestati ad altri, come per esempio uno studio legale. Se non specifichi nulla, verranno utilizzati i tuoi recapiti generali.",
-    "required-fileds": "* Campi obbligatori",
+    "required-fields": "*Campi obbligatori",
     "associated": "Già associati",
     "sender": "Ente",
     "address-type": "Recapito",

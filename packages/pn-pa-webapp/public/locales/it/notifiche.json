@@ -36,7 +36,6 @@
   },
   "empty-state": {
     "message": "L'ente non ha ancora inviato nessuna notifica. Usa le",
-    "action": "Chiavi API",
     "secondary-message": "o fai un",
     "secondary-action": "invio manuale"
   },
@@ -124,5 +123,65 @@
     "canceled": "Annullata",
     "canceled-tooltip": "L'ente ha annullato l'invio della notifica",
     "canceled-description": "L'ente ha annullato l'invio della notifica"
+  },
+  "new-notification": {
+    "title": "Invia una nuova notifica",
+    "subtitle": "Per inviare una notifica, inserisci i dati richiesti e aggiungi i modelli di pagamento. Se devi fare un invio massivo, puoi usare le",
+    "breadcrumb-root": "Notifiche",
+    "breadcrumb-leaf": "Nuova notifica",
+    "prompt": {
+      "title": "Vuoi davvero uscire?",
+      "message": "Se esci, i dati inseriti andranno persi."
+    },
+    "steps": {
+      "preliminary-informations": {
+        "title": "Informazioni preliminari",
+        "protocol-number": "Numero di protocollo",
+        "subject": "Oggetto della notifica",
+        "abstract": "Descrizione",
+        "group": "Gruppo",
+        "comunication-type": "Modalità di invio",
+        "registered-letter-890": "Modello 890",
+        "simple-registered-letter": "Raccomandata A/R",
+        "payment-method": "Modello di pagamento",
+        "pagopa-notice": "Avviso pagoPa",
+        "pagopa-notice-f24-flatrate": "Avviso pagoPA e Modello F24 forfettario",
+        "pagopa-notice-f24": "Avviso pagoPA e Modello F24"
+      },
+      "recipient": {
+        "title": "Destinatario",
+        "fiscal-code-error": "Il codice fiscale inserito non è corretto",
+        "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
+        "pec-error": "Indirizzo PEC non valido",
+        "legal-entity": "Soggetto giuridico",
+        "physical-person": "Persona fisica",
+        "name": "Nome",
+        "surname": "Cognome",
+        "legal-person": "Persona giuridica",
+        "business-name": "Ragione sociale",
+        "recipient-fiscal-code": "Codice fiscale destinatario",
+        "creditor-fiscal-code": "COdice fiscale ente creditore",
+        "notice-code": "Codice avviso",
+        "add-digital-domicile": "Aggiungi un domicilio digitale",
+        "digital-domicile": "Domicilio digitale",
+        "add-physical-domicile": "Aggiungi un indirizzo fisico",
+        "address": "Indirizzo",
+        "house-number": "Numero civico",
+        "municipality-details": "Località",
+        "municipality": "Comune",
+        "province": "Provincia",
+        "zip": "Codice postale",
+        "foreign-state": "Stato",
+        "at": "Presso",
+        "address-details": "Note aggiuntive (scala, piano)",
+        "add-recipient": "Aggiungi un destinatario"
+      },
+      "attachments": {
+        "title": "Allegati"
+      },
+      "payment-methods": {
+        "title": "Metodi di pagamento"
+      }
+    }
   }
 }

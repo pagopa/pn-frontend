@@ -139,7 +139,7 @@ const DesktopNotifications = ({
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const EmptyStateProps = {
     emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
-    emptyActionLabel: filtersApplied ? undefined : t('empty-state.action'),
+    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', {ns: 'common'}),
     disableSentimentDissatisfied: !filtersApplied,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
     secondaryMessage: filtersApplied ? undefined : {

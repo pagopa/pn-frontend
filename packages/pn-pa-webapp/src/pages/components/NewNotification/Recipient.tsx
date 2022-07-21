@@ -1,4 +1,7 @@
 import { ChangeEvent } from 'react';
+import { useTranslation } from 'react-i18next';
+import * as yup from 'yup';
+import { Formik, Form } from 'formik';
 import { Add, Delete } from '@mui/icons-material';
 import {
   FormControl,
@@ -13,8 +16,6 @@ import {
   Paper,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import * as yup from 'yup';
-import { Formik, Form } from 'formik';
 import { DigitalDomicileType, fiscalCodeRegex, RecipientType } from '@pagopa-pn/pn-commons';
 
 import { pIvaRegex } from '@pagopa-pn/pn-commons/src/utils/fiscal_code.utility';
@@ -57,51 +58,58 @@ type Props = {
 
 const Recipient = ({ onConfirm }: Props) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation(['notifiche'], {
+    keyPrefix: 'new-notification.steps.recipient',
+  });
+  const { t: tc } = useTranslation(['common']);
 
   const validationSchema = yup.object({
     recipients: yup.array().of(
       yup.object({
-        firstName: yup.string().required('Campo obbligatorio'),
-        lastName: yup.string().required('Campo obbligatorio'),
+        firstName: yup.string().required(tc('required-field')),
+        lastName: yup.string().required(tc('required-field')),
         taxId: yup
           .string()
-          .required('Campo obbligatorio')
-          .matches(fiscalCodeRegex, 'Il codice fiscale inserito non è corretto'),
+          .required(tc('required-field'))
+          .matches(fiscalCodeRegex, t('fiscal-code-error')),
         creditorTaxId: yup
           .string()
-          .required('Campo obbligatorio')
-          .matches(pIvaRegex, 'Il codice fiscale inserito non è corretto'),
-        noticeCode: yup.string().matches(/^\d{18}$/, 'Inserisci un codice di 18 caratteri numerici').required('Campo obbligatorio'),
+          .required(tc('required-field'))
+          .matches(pIvaRegex, t('fiscal-code-error')),
+        noticeCode: yup
+          .string()
+          .matches(/^\d{18}$/, t('notice-code-error'))
+          .required(tc('required-field')),
         digitalDomicile: yup.string().when('showDigitalDomicile', {
           is: true,
-          then: yup.string().email('Indirizzo PEC non valido').required('Campo obbligatorio'),
+          then: yup.string().email(t('pec-error')).required(tc('required-field')),
         }),
         showPhysicalAddress: yup.boolean().isTrue(),
         address: yup.string().when('showPhysicalAddress', {
           is: true,
-          then: yup.string().required('Campo obbligatorio'),
+          then: yup.string().required(tc('required-field')),
         }),
         houseNumber: yup.string().when('showPhysicalAddress', {
           is: true,
-          then: yup.string().required('Campo obbligatorio'),
+          then: yup.string().required(tc('required-field')),
         }),
         /*
         addressDetails: yup.string().when('showPhysicalAddress', {
           is: true,
-          then: yup.string().required('Campo obbligatorio'),
+          then: yup.string().required(tc('required-field')),
         }),
         */
         zip: yup.string().when('showPhysicalAddress', {
           is: true,
-          then: yup.string().required('Campo obbligatorio'),
+          then: yup.string().required(tc('required-field')),
         }),
         province: yup.string().when('showPhysicalAddress', {
           is: true,
-          then: yup.string().required('Campo obbligatorio'),
+          then: yup.string().required(tc('required-field')),
         }),
         foreignState: yup.string().when('showPhysicalAddress', {
           is: true,
-          then: yup.string().required('Campo obbligatorio'),
+          then: yup.string().required(tc('required-field')),
         }),
       })
     ),
@@ -117,27 +125,35 @@ const Recipient = ({ onConfirm }: Props) => {
     const name = (event.target as any).name;
     if (!checked && name.endsWith('showPhysicalAddress')) {
       // reset physical address
-      setFieldValue(recipientField, {
-        ...oldValue,
-        showPhysicalAddress: false,
-        at: '',
-        address: '',
-        houseNumber: '',
-        addressDetails: '',
-        zip: '',
-        municipality: '',
-        municipalityDetails: '',
-        province: '',
-        foreignState: '',
-      }, false);
+      setFieldValue(
+        recipientField,
+        {
+          ...oldValue,
+          showPhysicalAddress: false,
+          at: '',
+          address: '',
+          houseNumber: '',
+          addressDetails: '',
+          zip: '',
+          municipality: '',
+          municipalityDetails: '',
+          province: '',
+          foreignState: '',
+        },
+        false
+      );
     }
     if (!checked && name.endsWith('showDigitalDomicile')) {
       // reset digital address
-      setFieldValue(recipientField, {
-        ...oldValue,
-        showDigitalDomicile: false,
-        digitalDomicile: '',
-      }, false);
+      setFieldValue(
+        recipientField,
+        {
+          ...oldValue,
+          showDigitalDomicile: false,
+          digitalDomicile: '',
+        },
+        false
+      );
     }
   };
 
@@ -163,228 +179,240 @@ const Recipient = ({ onConfirm }: Props) => {
       validateOnMount
     >
       {({ values, setFieldValue, touched, handleBlur, errors, isValid }) => (
-        <>
-          <Form>
-            <NewNotificationCard noPaper isContinueDisabled={!isValid}>
-              {values.recipients.map((recipient, index) => (
-                <Paper
-                  key={recipient.id}
-                  sx={{ padding: '24px', marginTop: '40px' }}
-                  className="paperContainer"
+        <Form>
+          <NewNotificationCard noPaper isContinueDisabled={!isValid}>
+            {values.recipients.map((recipient, index) => (
+              <Paper
+                key={recipient.id}
+                sx={{ padding: '24px', marginTop: '40px' }}
+                className="paperContainer"
+              >
+                <Stack
+                  display="flex"
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
                 >
-                  <Stack
-                    display="flex"
-                    direction="row"
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Typography variant="h6">
-                      Destinatario {values.recipients.length > 1 ? index + 1 : null}
-                    </Typography>
-                    {values.recipients.length > 1 && (
-                      <Delete
-                        data-testid="DeleteRecipientIcon"
-                        onClick={() => {
+                  <Typography variant="h6">
+                    {t('title')} {values.recipients.length > 1 ? index + 1 : null}
+                  </Typography>
+                  {values.recipients.length > 1 && (
+                    <Delete
+                      data-testid="DeleteRecipientIcon"
+                      onClick={() => {
+                        setFieldValue(
+                          'recipients',
+                          values.recipients.filter((_, j) => index !== j)
+                        );
+                      }}
+                    />
+                  )}
+                </Stack>
+                <Box sx={{ marginTop: '20px' }}>
+                  <Stack>
+                    <Typography fontWeight="bold">{t('legal-entity')}*</Typography>
+                    <FormControl sx={{ width: '100%' }}>
+                      <RadioGroup
+                        aria-labelledby="radio-buttons-group-pf-pg"
+                        defaultValue={RecipientType.PF}
+                        name={`recipients[${index}].recipientType`}
+                        value={values.recipients[index].recipientType}
+                        onChange={(event) => {
                           setFieldValue(
-                            'recipients',
-                            values.recipients.filter((_, j) => index !== j)
+                            'selectPersonaFisicaOrPersonaGiuridica',
+                            event.currentTarget.value
                           );
                         }}
-                      />
-                    )}
-                  </Stack>
-                  <Box sx={{ marginTop: '20px' }}>
-                    <Stack>
-                      <Typography fontWeight="bold">Soggetto giuridico*</Typography>
-                      <FormControl sx={{ width: '100%' }}>
-                        <RadioGroup
-                          aria-labelledby="radio-buttons-group-pf-pg"
-                          defaultValue={RecipientType.PF}
-                          name={`recipients[${index}].recipientType`}
-                          value={values.recipients[index].recipientType}
-                          onChange={(event) => {
-                            setFieldValue(
-                              'selectPersonaFisicaOrPersonaGiuridica',
-                              event.currentTarget.value
-                            );
-                          }}
-                        >
-                          <Grid container spacing={2}>
-                            <Grid item xs={4}>
-                              <FormControlLabel
-                                value={RecipientType.PF}
-                                control={<Radio />}
-                                name={`recipients[${index}].recipientType`}
-                                label={'Persona fisica'}
-                              />
-                            </Grid>
-                            {values.recipients[index].recipientType === RecipientType.PF && (
-                              <>
-                                <FormTextField
-                                  keyName={`recipients[${index}].firstName`}
-                                  label={'Nome*'}
-                                  values={values}
-                                  touched={touched}
-                                  errors={errors}
-                                  setFieldValue={setFieldValue}
-                                  handleBlur={handleBlur}
-                                  width={4}
-                                />
-                                <FormTextField
-                                  keyName={`recipients[${index}].lastName`}
-                                  label={'Cognome*'}
-                                  values={values}
-                                  touched={touched}
-                                  errors={errors}
-                                  setFieldValue={setFieldValue}
-                                  handleBlur={handleBlur}
-                                  width={4}
-                                />
-                              </>
-                            )}
-                          </Grid>
-                        </RadioGroup>
-                        <Grid container sx={{ width: '100%' }}>
+                      >
+                        <Grid container spacing={2}>
                           <Grid item xs={4}>
                             <FormControlLabel
-                              value={RecipientType.PG}
+                              value={RecipientType.PF}
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
-                              label={'Persona giuridica'}
-                              disabled
+                              label={t('physical-person')}
                             />
                           </Grid>
-                          {values.recipients[index].recipientType === RecipientType.PG && (
-                            <FormTextField
-                              keyName={`recipients[${index}].firstName`}
-                              label={'Ragione sociale*'}
-                              values={values}
-                              touched={touched}
-                              errors={errors}
-                              setFieldValue={setFieldValue}
-                              handleBlur={handleBlur}
-                              width={8}
-                            />
+                          {values.recipients[index].recipientType === RecipientType.PF && (
+                            <>
+                              <FormTextField
+                                keyName={`recipients[${index}].firstName`}
+                                label={`${t('name')}*`}
+                                values={values}
+                                touched={touched}
+                                errors={errors}
+                                setFieldValue={setFieldValue}
+                                handleBlur={handleBlur}
+                                width={4}
+                              />
+                              <FormTextField
+                                keyName={`recipients[${index}].lastName`}
+                                label={`${t('surname')}*`}
+                                values={values}
+                                touched={touched}
+                                errors={errors}
+                                setFieldValue={setFieldValue}
+                                handleBlur={handleBlur}
+                                width={4}
+                              />
+                            </>
                           )}
                         </Grid>
-                      </FormControl>
-                      <Grid container spacing={2} mt={2}>
-                        <FormTextField
-                          keyName={`recipients[${index}].taxId`}
-                          label={'Codice fiscale destinatario*'}
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleBlur={handleBlur}
-                          width={12}
-                        />
-                        <FormTextField
-                          keyName={`recipients[${index}].creditorTaxId`}
-                          label={'Codice fiscale ente creditore*'}
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleBlur={handleBlur}
-                          width={6}
-                        />
-                        <FormTextField
-                          keyName={`recipients[${index}].noticeCode`}
-                          label={'Codice avviso*'}
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          handleBlur={handleBlur}
-                          width={6}
-                        />
-                        <Grid
-                          item
-                          xs={6}
-                          data-testid="DigitalDomicileCheckbox"
-                          onClick={() =>
-                            setFieldValue(
-                              `recipients[${index}].showDigitalDomicile`,
-                              !values.recipients[index].showDigitalDomicile
-                            )
-                          }
-                        >
-                          <Stack display="flex" direction="row" alignItems="center">
-                            <Checkbox
-                              checked={values.recipients[index].showDigitalDomicile}
-                              name={`recipients[${index}].showDigitalDomicile`}
-                              onChange={(event) => handleAddressTypeChange(event, values.recipients[index], `recipients[${index}]`, setFieldValue)}
-                            />
-                            <Typography>Aggiungi un domicilio digitale</Typography>
-                          </Stack>
+                      </RadioGroup>
+                      <Grid container sx={{ width: '100%' }}>
+                        <Grid item xs={4}>
+                          <FormControlLabel
+                            value={RecipientType.PG}
+                            control={<Radio />}
+                            name={`recipients[${index}].recipientType`}
+                            label={t('legal-person')}
+                            disabled
+                          />
                         </Grid>
-                        {values.recipients[index].showDigitalDomicile && (
+                        {values.recipients[index].recipientType === RecipientType.PG && (
                           <FormTextField
-                            keyName={`recipients[${index}].digitalDomicile`}
-                            label={'Domicilio digitale*'}
+                            keyName={`recipients[${index}].firstName`}
+                            label={`${t('business-name')}*`}
                             values={values}
                             touched={touched}
                             errors={errors}
                             setFieldValue={setFieldValue}
                             handleBlur={handleBlur}
-                            width={6}
+                            width={8}
                           />
                         )}
                       </Grid>
-                      <Grid container spacing={2}>
-                        <Grid
-                          xs={12}
-                          item
-                          data-testid="PhysicalAddressCheckbox"
-                          onClick={() =>
-                            setFieldValue(
-                              `recipients[${index}].showPhysicalAddress`,
-                              !values.recipients[index].showPhysicalAddress
-                            )
-                          }
-                        >
-                          <Stack display="flex" direction="row" alignItems="center">
-                            <Checkbox
-                              checked={values.recipients[index].showPhysicalAddress}
-                              name={`recipients[${index}].showPhysicalAddress`}
-                              onChange={(event) => handleAddressTypeChange(event, values.recipients[index], `recipients[${index}]`, setFieldValue)}
-                            />
-                            <Typography>Aggiungi un indirizzo fisico*</Typography>
-                          </Stack>
-                        </Grid>
-                        {values.recipients[index].showPhysicalAddress && (
-                          <PhysicalAddress
-                            values={values}
-                            setFieldValue={setFieldValue}
-                            touched={touched}
-                            errors={errors}
-                            recipient={index}
-                            handleBlur={handleBlur}
+                    </FormControl>
+                    <Grid container spacing={2} mt={2}>
+                      <FormTextField
+                        keyName={`recipients[${index}].taxId`}
+                        label={`${t('recipient-fiscal-code')}*`}
+                        values={values}
+                        touched={touched}
+                        errors={errors}
+                        setFieldValue={setFieldValue}
+                        handleBlur={handleBlur}
+                        width={12}
+                      />
+                      <FormTextField
+                        keyName={`recipients[${index}].creditorTaxId`}
+                        label={`${t('creditor-fiscal-code')}*`}
+                        values={values}
+                        touched={touched}
+                        errors={errors}
+                        setFieldValue={setFieldValue}
+                        handleBlur={handleBlur}
+                        width={6}
+                      />
+                      <FormTextField
+                        keyName={`recipients[${index}].noticeCode`}
+                        label={`${t('notice-code')}*`}
+                        values={values}
+                        touched={touched}
+                        errors={errors}
+                        setFieldValue={setFieldValue}
+                        handleBlur={handleBlur}
+                        width={6}
+                      />
+                      <Grid
+                        item
+                        xs={6}
+                        data-testid="DigitalDomicileCheckbox"
+                        onClick={() =>
+                          setFieldValue(
+                            `recipients[${index}].showDigitalDomicile`,
+                            !values.recipients[index].showDigitalDomicile
+                          )
+                        }
+                      >
+                        <Stack display="flex" direction="row" alignItems="center">
+                          <Checkbox
+                            checked={values.recipients[index].showDigitalDomicile}
+                            name={`recipients[${index}].showDigitalDomicile`}
+                            onChange={(digitalCheckEvent) =>
+                              handleAddressTypeChange(
+                                digitalCheckEvent,
+                                values.recipients[index],
+                                `recipients[${index}]`,
+                                setFieldValue
+                              )
+                            }
                           />
-                        )}
-                      </Grid>
-                      {values.recipients.length - 1 === index && (
-                        <Stack mt={4} display="flex" direction="row" justifyContent="space-between">
-                          <ButtonNaked
-                            startIcon={<Add />}
-                            onClick={() => {
-                              handleAddRecipient(values, setFieldValue);
-                            }}
-                            color="primary"
-                            size="large"
-                          >
-                            Aggiungi un destinatario
-                          </ButtonNaked>
+                          <Typography>{t('add-digital-domicile')}</Typography>
                         </Stack>
+                      </Grid>
+                      {values.recipients[index].showDigitalDomicile && (
+                        <FormTextField
+                          keyName={`recipients[${index}].digitalDomicile`}
+                          label={`${t('digital-domicile')}*`}
+                          values={values}
+                          touched={touched}
+                          errors={errors}
+                          setFieldValue={setFieldValue}
+                          handleBlur={handleBlur}
+                          width={6}
+                        />
                       )}
-                    </Stack>
-                  </Box>
-                </Paper>
-              ))}
-            </NewNotificationCard>
-          </Form>
-        </>
+                    </Grid>
+                    <Grid container spacing={2}>
+                      <Grid
+                        xs={12}
+                        item
+                        data-testid="PhysicalAddressCheckbox"
+                        onClick={() =>
+                          setFieldValue(
+                            `recipients[${index}].showPhysicalAddress`,
+                            !values.recipients[index].showPhysicalAddress
+                          )
+                        }
+                      >
+                        <Stack display="flex" direction="row" alignItems="center">
+                          <Checkbox
+                            checked={values.recipients[index].showPhysicalAddress}
+                            name={`recipients[${index}].showPhysicalAddress`}
+                            onChange={(physicalCheckEvent) =>
+                              handleAddressTypeChange(
+                                physicalCheckEvent,
+                                values.recipients[index],
+                                `recipients[${index}]`,
+                                setFieldValue
+                              )
+                            }
+                          />
+                          <Typography>{t('add-physical-domicile')}*</Typography>
+                        </Stack>
+                      </Grid>
+                      {values.recipients[index].showPhysicalAddress && (
+                        <PhysicalAddress
+                          values={values}
+                          setFieldValue={setFieldValue}
+                          touched={touched}
+                          errors={errors}
+                          recipient={index}
+                          handleBlur={handleBlur}
+                        />
+                      )}
+                    </Grid>
+                    {values.recipients.length - 1 === index && (
+                      <Stack mt={4} display="flex" direction="row" justifyContent="space-between">
+                        <ButtonNaked
+                          startIcon={<Add />}
+                          onClick={() => {
+                            handleAddRecipient(values, setFieldValue);
+                          }}
+                          color="primary"
+                          size="large"
+                        >
+                          {t('add-recipient')}
+                        </ButtonNaked>
+                      </Stack>
+                    )}
+                  </Stack>
+                </Box>
+              </Paper>
+            ))}
+          </NewNotificationCard>
+        </Form>
       )}
     </Formik>
   );
