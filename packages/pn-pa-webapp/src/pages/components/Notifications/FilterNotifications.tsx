@@ -40,7 +40,6 @@ const emptyValues = {
 };
 
 const initialEmptyValues = {
-  searchFor: '0',
   startDate: tenYearsAgo,
   endDate: today,
   status: localizedNotificationStatus[0].value,
@@ -68,7 +67,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       return initialEmptyValues;
     }
     return {
-      searchFor: '0',
       startDate: new Date(filters.startDate),
       endDate: new Date(filters.endDate),
       recipientId: getValidValue(filters.recipientId),

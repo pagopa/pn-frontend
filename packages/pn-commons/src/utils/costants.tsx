@@ -57,25 +57,25 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
     links: [
       {
         ...getFooterLinkLabels('who', 'Chi siamo'),
-        href: '#chi-siamo',
-        linkType: 'internal',
+        href: `${pagoPALink().href}societa/chi-siamo`,
+        linkType: 'external',
       },
       {
         label: 'PNRR',
-        href: '#pnrr',
+        href: `${pagoPALink().href}opportunita/pnrr/progetti`,
         ariaLabel: `${getLocalizedOrDefaultLabel('common', 'footer.go-to', 'Vai al link')}: PNRR`,
-        linkType: 'internal',
+        linkType: 'external',
       },
       {
         label: 'Media',
-        href: '#media',
+        href: `${pagoPALink().href}media`,
         ariaLabel: `${getLocalizedOrDefaultLabel('common', 'footer.go-to', 'Vai al link')}: Media`,
-        linkType: 'internal',
+        linkType: 'external',
       },
       {
         ...getFooterLinkLabels('work', 'Lavora con noi'),
-        href: '#lavora-con-noi',
-        linkType: 'internal',
+        href: `${pagoPALink().href}lavora-con-noi`,
+        linkType: 'external',
       },
     ],
   },
