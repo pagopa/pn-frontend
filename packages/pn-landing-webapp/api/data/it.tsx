@@ -7,12 +7,17 @@ import { IMAGES_PATH, PAGOPA_HELP_EMAIL } from "@utils/constants";
 import { IAppData, IInfoblockData, IShowcaseData } from "model";
 import { HorizontalNavProps } from "@pagopa/mui-italia";
 import { SvgIcon } from "@mui/material";
+import { Typography } from "@mui/material";
 
 const assistanceLink = {
   label: "Assistenza",
   ariaLabel: "assistenza",
   href: `mailto:${PAGOPA_HELP_EMAIL}`
 }
+
+const onReadClick = () => {
+  alert("Clicked!");
+};
 
 /** Hero mocked data */
 const paHero: HeroProps = {
@@ -31,11 +36,11 @@ const pfHero: HeroProps = {
   subtitle:
     `Con Piattaforma Notifiche puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
     potrai visualizzare, gestire e pagare direttamente online o in app le raccomandate che di solito ti vengono inviate in cartaceo.`,
-  // ctaPrimary: {
-  //   label: "Leggi le tue notifiche",
-  //   title: "Leggi le tue notifiche",
-  //   href: "leggi"
-  // },
+  ctaPrimary: {
+    label: "Leggi le tue notifiche",
+    title: "Leggi le tue notifiche",
+    onClick: onReadClick
+  },
   inverse: false,
   image: `${IMAGES_PATH}/pf-hero-foreground.png`,
   altText: "",
@@ -55,11 +60,15 @@ const paInfoBlocks: Array<IInfoblockData> = [
     data: {
       // overline: "Rappresenti un ente?",
       title: "Un modo più semplice di gestire le notifiche",
-      content:
-      `Piattaforma Notifiche digitalizza e semplifica la gestione delle comunicazioni a valore legale. Gli enti mittenti 
-      non devono che depositare l’atto da notificare: sarà la piattaforma a occuparsi dell’invio, per via digitale o analogica.
-
-      Con Piattaforma Notifiche, diminuisce l’incertezza della reperibilità dei destinatari e si riducono i tempi e i costi di gestione.`,
+      content: <>
+        <Typography variant="body2">
+          Piattaforma Notifiche digitalizza e semplifica la gestione delle comunicazioni a valore legale. Gli enti mittenti 
+          non devono che depositare l’atto da notificare: sarà la piattaforma a occuparsi dell’invio, per via digitale o analogica.
+        </Typography>
+        <Typography variant="body2">
+          Con Piattaforma Notifiche, diminuisce l’incertezza della reperibilità dei destinatari e si riducono i tempi e i costi di gestione.`
+        </Typography>
+      </>,
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-1.png`,
       altText: "",
@@ -70,16 +79,21 @@ const paInfoBlocks: Array<IInfoblockData> = [
     name: "infoblock 2",
     data: {
       title: "Carica l’atto. Poi, dimenticatene",
-      content:
-      `Piattaforma Notifiche si integra con il protocollo degli enti e offre sia API per l'invio automatico delle notifiche, sia la 
-      possibilità di fare invii manuali. Una volta effettuato il caricamento degli atti e dei moduli di pagamento, la piattaforma 
-      genera lo IUN, un codice univoco identificativo della notifica.
-
-      Successivamente, cerca nei suoi archivi e nei registri pubblici una PEC riconducibile al destinatario e invia la notifica. Poi, 
-      invia un avviso di cortesia agli altri recapiti digitali (app IO, email e SMS) del destinatario. 
-      
-      Se il destinatario non ha indicato alcun recapito digitale e non ha accesso alla piattaforma, questa procede con la ricerca di un 
-      indirizzo fisico, e quindi con l’invio tramite raccomandata cartacea.`,
+      content: <>
+      <Typography variant="body2">
+        Piattaforma Notifiche si integra con il protocollo degli enti e offre sia API per l'invio automatico delle notifiche, sia la 
+        possibilità di fare invii manuali. Una volta effettuato il caricamento degli atti e dei moduli di pagamento, la piattaforma 
+        genera lo IUN, un codice univoco identificativo della notifica.
+      </Typography>
+      <Typography variant="body2">
+        Successivamente, cerca nei suoi archivi e nei registri pubblici una PEC riconducibile al destinatario e invia la notifica. Poi, 
+        invia un avviso di cortesia agli altri recapiti digitali (app IO, email e SMS) del destinatario.
+      </Typography>
+      <Typography variant="body2">
+        Se il destinatario non ha indicato alcun recapito digitale e non ha accesso alla piattaforma, questa procede con la ricerca di un 
+        indirizzo fisico, e quindi con l’invio tramite raccomandata cartacea.
+      </Typography>
+      </> ,
       inverse: true,
       image: `${IMAGES_PATH}/pa-infoblock-2.png`,
       altText: "",
@@ -90,13 +104,17 @@ const paInfoBlocks: Array<IInfoblockData> = [
     name: "infoblock 3",
     data: {
       title: "E il destinatario?",
-      content:
-        `Il destinatario accede alla piattaforma tramite SPID o CIE, dove può visionare e scaricare l’atto notificato. 
+      content: <>
+      <Typography variant="body2">
+        Il destinatario accede alla piattaforma tramite SPID o CIE, dove può visionare e scaricare l’atto notificato. 
         Grazie all’integrazione con pagoPA, può anche pagare contestualmente quanto dovuto. Se ha attivato il servizio 
         su app IO, potrà fare tutto direttamente in app.
-
+      </Typography>
+      <Typography variant="body2">
         Come l’ente, anche il desinatario ha accesso alla cronologia degli stati della notifica e alle attestazioni 
-        opponibili a terzi che ne danno prova.`,
+        opponibili a terzi che ne danno prova.`
+      </Typography>
+      </>,
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-3.png`,
       altText: "",
@@ -107,10 +125,14 @@ const paInfoBlocks: Array<IInfoblockData> = [
     name: "infoblock 4",
     data: {
       title: "Presto disponibile per gli enti",
-      content:
-        `Attualmente, Piattaforma Notifiche è oggetto di collaudo con un numero ristretto di enti pilota.
-
-        Quando sarà operativa, anche il tuo ente potrà fare richiesta di adesione e adottarla per digitalizzare il processo di notificazione.`,
+      content:  <>
+        <Typography variant="body2">
+          Attualmente, Piattaforma Notifiche è oggetto di collaudo con un numero ristretto di enti pilota.
+        </Typography>
+        <Typography variant="body2">
+          Quando sarà operativa, anche il tuo ente potrà fare richiesta di adesione e adottarla per digitalizzare il processo di notificazione.
+        </Typography>
+      </>,
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
@@ -125,15 +147,19 @@ const pfInfoBlocks: Array<IInfoblockData> = [
     name: "infoblock 1",
     data: {
       title: "Non perderti più nessuna notifica",
-      content:
-        `Le notifiche sono comunicazioni a valore legale emesse in via ufficiale da un'amministrazione, come multe, 
-        avvisi di accertamento di tributi, esiti di pratiche amministrative avviate con le Pubbliche Amministrazioni 
-        o rimborsi, che fino ad ora hai sempre ricevuto tramite raccomandata. Da oggi puoi riceverle e consultarle 
-        in digitale, accedendo a Piattaforma Notifiche tramite SPID o CIE o direttamente sull’app IO. 
-
-        Puoi anche pagare eventuali costi grazie all’integrazione con pagoPA, visualizzare lo storico delle notifiche 
-        ricevute e gestirle direttamente online. Inoltre, ti basta una delega per gestire anche le raccomandate dei 
-        tuoi familiari.`,
+      content: <>
+        <Typography variant="body2">
+          Le notifiche sono comunicazioni a valore legale emesse in via ufficiale da un'amministrazione, come multe, 
+          avvisi di accertamento di tributi, esiti di pratiche amministrative avviate con le Pubbliche Amministrazioni 
+          o rimborsi, che fino ad ora hai sempre ricevuto tramite raccomandata. Da oggi puoi riceverle e consultarle 
+          in digitale, accedendo a Piattaforma Notifiche tramite SPID o CIE o direttamente sull’app IO.
+        </Typography>
+        <Typography variant="body2">
+          Puoi anche pagare eventuali costi grazie all’integrazione con pagoPA, visualizzare lo storico delle notifiche 
+          ricevute e gestirle direttamente online. Inoltre, ti basta una delega per gestire anche le raccomandate dei 
+          tuoi familiari.
+        </Typography>
+      </>,
       inverse: false,
       image: `${IMAGES_PATH}/pf-infoblock-1.png`,
       imageShadow: false,
@@ -143,11 +169,14 @@ const pfInfoBlocks: Array<IInfoblockData> = [
     name: "infoblock 2",
     data: {
       title: "Scegli tu come ricevere le notifiche ",
-      content:
-        `Per inviare le comunicazioni a valore legale, Piattaforma Notifiche dà sempre la priorità ai recapiti 
-        digitali del destinatario. In ogni momento, puoi accedere alla piattaforma con SPID e CIE per indicare 
-        o aggiornare le tue preferenze tra PEC, App IO, email o SMS. Se non indichi alcun recapito o non hai 
-        accesso alla piattaforma, continuerai a ricevere le notifiche tramite raccomandata cartacea.`,
+      content: <>
+        <Typography variant="body2">
+          Per inviare le comunicazioni a valore legale, Piattaforma Notifiche dà sempre la priorità ai recapiti 
+          digitali del destinatario. In ogni momento, puoi accedere alla piattaforma con SPID e CIE per indicare 
+          o aggiornare le tue preferenze tra PEC, App IO, email o SMS. Se non indichi alcun recapito o non hai 
+          accesso alla piattaforma, continuerai a ricevere le notifiche tramite raccomandata cartacea.
+        </Typography>
+      </>,
       inverse: true,
       image: `${IMAGES_PATH}/pf-infoblock-2.png`,
       imageShadow: false,
@@ -157,11 +186,15 @@ const pfInfoBlocks: Array<IInfoblockData> = [
     name: "infoblock 3",
     data: {
       title: "Il futuro delle comunicazioni a valore legale",
-      content:
-        `Attualmente, Piattaforma Notifiche è oggetto di collaudo con un numero ristretto di amministrazioni.
-
-        Progressivamente, la piattaforma verrà adottata dalle Pubbliche Amministrazioni e utilizzata per 
-        inviare notifiche a tutti i cittadini.`,
+      content: <>
+        <Typography variant="body2">
+          Attualmente, Piattaforma Notifiche è oggetto di collaudo con un numero ristretto di amministrazioni.
+        </Typography>
+        <Typography variant="body2">
+          Progressivamente, la piattaforma verrà adottata dalle Pubbliche Amministrazioni e utilizzata per 
+          inviare notifiche a tutti i cittadini.
+        </Typography>
+      </>,
       inverse: false,
       image: `${IMAGES_PATH}/pf-infoblock-3.png`,
       aspectRatio: '9/16',
@@ -269,29 +302,30 @@ const pfShowcases: Array<IShowcaseData> = [
         {
           icon: <PECIcon />,
           title: "PEC",
-          subtitle: `
-            Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente consegnate, senza più 
-            raccomandate cartacee. L’avviso di avvenuta ricezione che ti sarà inviato contiene il 
-            link per accedere al contenuto su Piattaforma Notifiche.
-            `,
+          subtitle: <Typography variant="body2">
+              Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente consegnate, senza più 
+              raccomandate cartacee. L’avviso di avvenuta ricezione che ti sarà inviato contiene il 
+              link per accedere al contenuto su Piattaforma Notifiche.
+            </Typography>,
         },
         {
           icon: <IOIcon />,
           title: "App IO",
-          subtitle: `
-          Se attivi il servizio “Avvisi di cortesia” di Piattaforma Notifiche, puoi ricevere e gestire 
-          direttamente in app le comunicazioni a valore legale. Se non hai la PEC e leggi subito il messaggio, 
-          non riceverai la raccomandata cartacea e la notifica ti risulterà legalmente recapitata.
-          `,
+          subtitle: <Typography variant="body2">
+            Se attivi il servizio “Avvisi di cortesia” di Piattaforma Notifiche, puoi ricevere e 
+            gestire <strong>direttamente in app</strong> le comunicazioni a valore legale. Se non 
+            hai la PEC e leggi subito il messaggio, non riceverai la raccomandata cartacea e la 
+            notifica ti risulterà legalmente recapitata.
+          </Typography>,
         },
         {
           icon: <MessageIcon />,
           title: "Email o SMS",
-          subtitle:`
-          In più, puoi anche scegliere di ricevere un avviso di cortesia al tuo indirizzo email o tramite SMS. 
-          Se non hai la PEC e accedi alla piattaforma dall’apposito link, non riceverai la raccomandata 
-          cartacea e la notifica ti risulterà legalmente recapitata.
-          `,
+          subtitle: <Typography variant="body2">
+            In più, puoi anche scegliere di ricevere un avviso di cortesia al tuo indirizzo email o tramite SMS. 
+            Se non hai la PEC e accedi alla piattaforma dall’apposito link, non riceverai la raccomandata 
+            cartacea e la notifica ti risulterà legalmente recapitata.
+          </Typography>,
         },
       ]
     }

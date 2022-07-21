@@ -28,25 +28,25 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Chi siamo",
-        href: "#chi-siamo",
+        href: "chi-siamo",
         ariaLabel: "Vai al link: Chi siamo",
         linkType: "internal",
       },
       {
         label: "PNRR",
-        href: "#pnrr",
+        href: "pnrr",
         ariaLabel: "Vai al link: PNRR",
         linkType: "internal",
       },
       {
         label: "Media",
-        href: "#media",
+        href: "media",
         ariaLabel: "Vai al link: Media",
         linkType: "internal",
       },
       {
         label: "Lavora con noi",
-        href: "#lavora-con-noi",
+        href: "lavora-con-noi",
         ariaLabel: "Vai al link: Lavora con noi",
         linkType: "internal",
       },
@@ -58,19 +58,19 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Privacy Policy",
-        href: "#privacy-policy",
+        href: "privacy-policy",
         ariaLabel: "Vai al link: Privacy Policy",
         linkType: "internal",
       },
       {
         label: "Certificazioni",
-        href: "#certificazioni",
+        href: "certificazioni",
         ariaLabel: "Vai al link: Certificazioni",
         linkType: "internal",
       },
       {
         label: "Sicurezza delle informazioni",
-        href: "#sicurezza-delle-informazioni",
+        href: "sicurezza-delle-informazioni",
         ariaLabel: "Vai al link: Sicurezza delle informazioni",
         linkType: "internal",
       },
@@ -84,7 +84,7 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Preferenze Cookie",
-        href: "#preferenze-cookie",
+        href: "preferenze-cookie",
         ariaLabel: "Vai al link: Preferenze Cookie",
         linkType: "internal",
         onClick: () => {
@@ -93,25 +93,25 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Termini e Condizioni",
-        href: "#terms-conditions",
+        href: "terms-conditions",
         ariaLabel: "Vai al link: Termini e Condizioni",
         linkType: "internal",
       },
       {
         label: "Società trasparente",
-        href: "#societa-trasparente",
+        href: "societa-trasparente",
         ariaLabel: "Vai al link: Società trasparente",
         linkType: "internal",
       },
       {
         label: "Responsible Disclosure Policy",
-        href: "#responsible-disclosure-policy",
+        href: "responsible-disclosure-policy",
         ariaLabel: "Vai al link: Responsible Disclosure Policy",
         linkType: "internal",
       },
       {
         label: "Modello 321",
-        href: "#modello-321",
+        href: "modello-321",
         ariaLabel: "Vai al link: Modello 321",
         linkType: "internal",
       },
@@ -149,7 +149,7 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Accessibilità",
-        href: "#accessibilità",
+        href: "accessibilità",
         ariaLabel: "Vai al link: Accessibilità",
         linkType: "internal",
       },
@@ -160,19 +160,19 @@ export const preLoginLinks: PreLoginFooterLinksType = {
 export const postLoginLinks: Array<FooterLinksType> = [
   {
     label: "Privacy policy",
-    href: "#privacy-policy",
+    href: "privacy-policy",
     ariaLabel: "Vai al link: Privacy policy",
     linkType: "internal",
   },
   {
     label: "Termini e condizioni",
-    href: "#terms-conditions",
+    href: "terms-conditions",
     ariaLabel: "Vai al link: Termini e condizioni",
     linkType: "internal",
   },
   {
     label: "Accessibilità",
-    href: "#accessibility",
+    href: "accessibility",
     ariaLabel: "Vai al link: Accessibilità",
     linkType: "internal",
   },
