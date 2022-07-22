@@ -1,34 +1,36 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment, ReactNode, useState } from 'react';
 import {
-  Grid,
   Box,
-  Paper,
   Button,
-  Stack,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
   DialogContentText,
   Typography,
+  DialogTitle,
+  Grid,
+  Paper,
+  Stack,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
   // PN-1714
   // NotificationStatus,
-  TitleBox,
-  NotificationDetailTableRow,
-  NotificationDetailTable,
-  NotificationDetailDocuments,
   LegalFactId,
+  NotificationDetailDocuments,
+  NotificationDetailTable,
+  NotificationDetailTableRow,
   NotificationDetailTimeline,
-  useIsMobile,
   PnBreadcrumb,
+  TitleBox,
+  useIsMobile,
   NotificationDetailRecipient,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -194,6 +196,7 @@ const NotificationDetail = () => {
   // PN-1714
   /*
   const openModal = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
   };
   */
@@ -235,7 +238,9 @@ const NotificationDetail = () => {
         sx={{ pt: 3, mb: 2 }}
         mbTitle={0}
       ></TitleBox>
-      <Typography variant="body1" mb={{xs: 3, md: 4}}>{notification.abstract}</Typography>
+      <Typography variant="body1" mb={{ xs: 3, md: 4 }}>
+        {notification.abstract}
+      </Typography>
       {
         // PN-1714
         /*
@@ -343,6 +348,9 @@ const NotificationDetail = () => {
                 historyButtonLabel="Mostra storico"
                 showMoreButtonLabel="Mostra di più"
                 showLessButtonLabel="Mostra di meno"
+                eventTrackingCallbackShowMore={() =>
+                  trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
+                }
               />
             </Box>
           </Grid>

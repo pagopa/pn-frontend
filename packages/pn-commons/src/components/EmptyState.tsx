@@ -4,7 +4,7 @@ import { SentimentDissatisfied } from '@mui/icons-material';
 
 type Props = {
   /** Callback to be called when performing an empty action */
-  emptyActionCallback: () => void;
+  emptyActionCallback?: (e: any, source?: string) => void;
   /** Empty message for no result */
   emptyMessage?: ReactNode;
   /** Empty action label */
