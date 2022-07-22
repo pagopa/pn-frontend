@@ -16,9 +16,8 @@ import {
   Paper,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { DigitalDomicileType, fiscalCodeRegex, RecipientType } from '@pagopa-pn/pn-commons';
+import { DigitalDomicileType, fiscalCodeRegex, RecipientType, pIvaRegex } from '@pagopa-pn/pn-commons';
 
-import { pIvaRegex } from '@pagopa-pn/pn-commons/src/utils/fiscal_code.utility';
 import { saveRecipients } from '../../../redux/newNotification/actions';
 import { useAppDispatch } from '../../../redux/hooks';
 import { FormRecipient } from '../../../models/NewNotification';

@@ -1,7 +1,8 @@
-import { useFormik } from 'formik';
 import { Fragment } from 'react';
-import * as yup from 'yup';
 import _ from 'lodash';
+import { useTranslation } from 'react-i18next';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import { Paper, Typography } from '@mui/material';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 
@@ -25,22 +26,26 @@ type PaymentBoxProps = {
   onRemoveFile: (id: string) => void;
 };
 
-const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile }: PaymentBoxProps) => (
-  <Fragment>
-    <Typography fontWeight={600} sx={{ marginTop: '30px' }} data-testid="paymentBox">
-      {title}
-    </Typography>
-    <FileUpload
-      uploadText="Trascina qui il documento"
-      accept="application/pdf"
-      onFileUploaded={(file, sha256) => onFileUploaded(id, file as Uint8Array, sha256)}
-      onRemoveFile={() => onRemoveFile(id)}
-      sx={{ marginTop: '10px' }}
-      fileFormat="uint8Array"
-      calcSha256
-    />
-  </Fragment>
-);
+const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile }: PaymentBoxProps) => {
+  const { t } = useTranslation(['notifiche']);
+
+  return (
+    <Fragment>
+      <Typography fontWeight={600} sx={{ marginTop: '30px' }} data-testid="paymentBox">
+        {title}
+      </Typography>
+      <FileUpload
+        uploadText={t('new-notification.drag-doc')}
+        accept="application/pdf"
+        onFileUploaded={(file, sha256) => onFileUploaded(id, file as Uint8Array, sha256)}
+        onRemoveFile={() => onRemoveFile(id)}
+        sx={{ marginTop: '10px' }}
+        fileFormat="uint8Array"
+        calcSha256
+      />
+    </Fragment>
+  );
+};
 
 type PaymentDocument = {
   name: string;

@@ -133,6 +133,8 @@
       "title": "Vuoi davvero uscire?",
       "message": "Se esci, i dati inseriti andranno persi."
     },
+    "back-to-notifications": "Torna alle notifiche",
+    "drag-doc": "Trascina qui il documento",
     "steps": {
       "preliminary-informations": {
         "title": "Informazioni preliminari",
@@ -160,7 +162,7 @@
         "legal-person": "Persona giuridica",
         "business-name": "Ragione sociale",
         "recipient-fiscal-code": "Codice fiscale destinatario",
-        "creditor-fiscal-code": "COdice fiscale ente creditore",
+        "creditor-fiscal-code": "Codice fiscale ente creditore",
         "notice-code": "Codice avviso",
         "add-digital-domicile": "Aggiungi un domicilio digitale",
         "digital-domicile": "Domicilio digitale",
@@ -177,7 +179,14 @@
         "add-recipient": "Aggiungi un destinatario"
       },
       "attachments": {
-        "title": "Allegati"
+        "title": "Allegati",
+        "attach-for-recipients": "Allegati per tutti i destinatari",
+        "act-attachment": "Allega l'atto",
+        "doc-attachment": "Allega un altro documento",
+        "act-name": "Nome dell'atto",
+        "doc-name": "Nome del documento",
+        "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
+        "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)"
       },
       "payment-methods": {
         "title": "Metodi di pagamento"

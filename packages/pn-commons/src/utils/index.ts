@@ -18,7 +18,7 @@ import {
     getNextDay,
     formatToTimezoneString
 } from './date.utility';
-import { formatFiscalCode, fiscalCodeRegex } from './fiscal_code.utility';
+import { formatFiscalCode, fiscalCodeRegex, pIvaRegex } from './fiscal_code.utility';
 import { IUN_regex, formatIun } from './iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import { storageOpsBuilder } from './storage.utility';
@@ -48,5 +48,6 @@ export {
     tenYearsAgo,
     DATE_FORMAT,
     getLegalFactLabel,
-    getNotificationTimelineStatusInfos
+    getNotificationTimelineStatusInfos,
+    pIvaRegex
 };

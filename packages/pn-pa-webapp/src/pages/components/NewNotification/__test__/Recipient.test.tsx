@@ -5,6 +5,13 @@ import { render, testInput } from '../../../../__test__/test-utils';
 import Recipient from '../Recipient';
 import { formRecipients } from '../../../../utils/__test__/test-utils';
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
 
@@ -47,8 +54,8 @@ describe('Recipient Component', () => {
     expect(result.container).toHaveTextContent(/add-digital-domicile/i);
     expect(result.container).toHaveTextContent(/add-physical-domicile/i);
     expect(result.container).toHaveTextContent(/add-recipient/i);
-    expect(result.container).toHaveTextContent(/Torna alle Notifiche/i);
-    expect(result.container).toHaveTextContent(/Continua/i);
+    expect(result.container).toHaveTextContent(/new-notification.back-to-notifications/i);
+    expect(result.container).toHaveTextContent(/button.continue/i);
   });
 
   it('renders the second card, then deletes it', async () => {

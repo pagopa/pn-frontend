@@ -5,7 +5,8 @@
     "indietro": "Indietro",
     "annulla": "Annulla",
     "enter": "Entra",
-    "exit": "Esci"
+    "exit": "Esci",
+    "continue": "Continua"
   },
   "menu": {
     "notifications": "Notifiche",
@@ -93,5 +94,15 @@
   },
   "required-fields": "*Campi obbligatori",
   "required-field": "Campo obbligatorio",
-  "required": "obbligatorio"
+  "required": "obbligatorio",
+  "upload-file": {
+    "or": "oppure",
+    "select-from-pc": "selezionalo dal tuo computer",
+    "loading": "Caricamento in corso...",
+    "sending": "Invio in corso...",
+    "hash-code": "Codice hash",
+    "hash-code-descr": "Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file",
+    "ext-not-supported": "Estensione file non supportata. Riprovare con un altro file.",
+    "loading-error": "Si è verificato un errore durante il caricamento del file. Si prega di riprovare."
+  }
 }
