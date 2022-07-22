@@ -69,17 +69,31 @@ const NotificationDetail = () => {
 
   const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
 
-  const recipientsWithAltNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCodeAlternative);
+  const recipientsWithAltNoticeCode = recipients.filter(
+    (recipient) => recipient.payment?.noticeCodeAlternative
+  );
 
-  const getRecipientsNoticeCodeField = (recipients: Array<NotificationDetailRecipient>, alt: boolean = false): ReactNode => {
-    if(recipients.length > 1) {
-      return recipients.map((recipient, index) => 
+  const getRecipientsNoticeCodeField = (
+    filteredRecipients: Array<NotificationDetailRecipient>,
+    alt: boolean = false
+  ): ReactNode => {
+    if (filteredRecipients.length > 1) {
+      return filteredRecipients.map((recipient, index) => (
         <Box key={index} fontWeight={600}>
-          {recipient.taxId} - {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
+          {recipient.taxId} -{' '}
+          {recipient?.payment?.creditorTaxId} -{' '}
+          {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
         </Box>
-      );
+      ));
     }
-    return <Box fontWeight={600}>{alt ? recipients[0]?.payment?.noticeCodeAlternative : recipients[0]?.payment?.noticeCode}</Box>;
+    return (
+      <Box fontWeight={600}>
+        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
+        {alt
+          ? filteredRecipients[0]?.payment?.noticeCodeAlternative
+          : filteredRecipients[0]?.payment?.noticeCode}
+      </Box>
+    );
   };
 
   const unfilteredDetailTableRows: Array<{
@@ -100,13 +114,15 @@ const NotificationDetail = () => {
     {
       label: recipients.length > 1 ? 'Destinatari' : 'Codice Fiscale destinatario',
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
-      value: <>
-        {recipients.map((recipient, i) => (
-          <Box key={i} fontWeight={600}>
-            {recipient.taxId}
-          </Box>
-        ))}
-      </>,
+      value: (
+        <>
+          {recipients.map((recipient, i) => (
+            <Box key={i} fontWeight={600}>
+              {recipient.taxId}
+            </Box>
+          ))}
+        </>
+      ),
     },
     {
       label: 'Data di invio',
@@ -123,6 +139,11 @@ const NotificationDetail = () => {
       ),
     },
     {
+      label: 'Importo',
+      rawValue: notification.amount?.toFixed(2),
+      value: <Box fontWeight={600}>{notification.amount?.toFixed(2)}</Box>,
+    },
+    {
       label: 'Codice IUN',
       rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,
@@ -134,13 +155,13 @@ const NotificationDetail = () => {
     },
     {
       label: 'Codice Avviso',
-      rawValue: recipientsWithNoticeCode.join(", "),
-      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode)
+      rawValue: recipientsWithNoticeCode.join(', '),
+      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode),
     },
     {
       label: 'Codice Avviso Alternativo',
-      rawValue: recipientsWithAltNoticeCode.join(", "),
-      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true)
+      rawValue: recipientsWithAltNoticeCode.join(', '),
+      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true),
     },
     {
       label: 'Gruppi',
