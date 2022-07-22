@@ -11,8 +11,8 @@ import { AxiosResponse } from 'axios';
 
 import { Delegator } from '../../redux/delegation/types';
 import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
+import { NotificationDetailForRecipient } from '../../types/NotificationDetail';
 import { apiClient } from '../axios';
-
 import {
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
@@ -21,7 +21,6 @@ import {
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
 } from './notifications.routes';
-import { NotificationDetailForRecipient } from './../../types/NotificationDetail';
 
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
