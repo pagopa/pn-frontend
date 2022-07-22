@@ -157,7 +157,7 @@ describe('Header Component', () => {
         enableDropdown
         userActions={userActions}
         partyList={partyList}
-        assistanceEmail={'email'}
+        onAssistanceClick={() => window.location.href = 'mailto:email'}
       />
     );
     expect(window.location.href).toBe('');

@@ -21,6 +21,8 @@ import { pIvaRegex } from '@pagopa-pn/pn-commons/src/utils/fiscal_code.utility';
 import { saveRecipients } from '../../../redux/newNotification/actions';
 import { useAppDispatch } from '../../../redux/hooks';
 import { FormRecipient } from '../../../models/NewNotification';
+import { trackEventByType } from '../../../utils/mixpanel';
+import { TrackEventType } from '../../../utils/events';
 import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
@@ -115,6 +117,13 @@ const Recipient = ({ onConfirm }: Props) => {
   ) => {
     const checked = (event.target as any).checked;
     const name = (event.target as any).name;
+    if (checked) {
+      trackEventByType(
+        name.endsWith('showPhysicalAddress')
+          ? TrackEventType.NOTIFICATION_SEND_PHYSICAL_ADDRESS
+          : TrackEventType.NOTIFICATION_SEND_DIGITAL_DOMICILE
+      );
+    }
     if (!checked && name.endsWith('showPhysicalAddress')) {
       // reset physical address
       setFieldValue(recipientField, {
@@ -147,6 +156,7 @@ const Recipient = ({ onConfirm }: Props) => {
       ...values.recipients,
       { ...singleRecipient, idx: lastRecipientIdx + 1, id: `recipient.${lastRecipientIdx + 1}` },
     ]);
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_MULTIPLE_RECIPIENTS, {recipients: lastRecipientIdx + 1});
   };
 
   const handleSubmit = (values: { recipients: Array<FormRecipient> }) => {
@@ -207,6 +217,7 @@ const Recipient = ({ onConfirm }: Props) => {
                               'selectPersonaFisicaOrPersonaGiuridica',
                               event.currentTarget.value
                             );
+                            trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {type: event.currentTarget.value});
                           }}
                         >
                           <Grid container spacing={2}>

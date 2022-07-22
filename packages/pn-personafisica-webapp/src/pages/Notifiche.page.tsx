@@ -1,28 +1,18 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import {
-  calculatePages,
-  CustomPagination,
-  PaginationData,
-  Sort,
-  TitleBox,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
+import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, } from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
-import {
-  getReceivedNotifications,
-  setMandateId,
-  setPagination,
-  setSorting,
-} from '../redux/dashboard/actions';
+import { getReceivedNotifications, setMandateId, setPagination, setSorting, } from '../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { Delegator } from '../redux/delegation/types';
+import { trackEventByType } from "../utils/mixpanel";
+import { TrackEventType } from "../utils/events";
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -57,6 +47,7 @@ const Notifiche = () => {
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
@@ -65,7 +56,11 @@ const Notifiche = () => {
     dispatch(setSorting(s));
   };
 
-  useEffect(() => {
+  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
+  };
+
+    useEffect(() => {
     if (filters.mandateId !== currentDelegator?.mandateId) {
       dispatch(setMandateId(currentDelegator?.mandateId));
       return;
@@ -107,6 +102,7 @@ const Notifiche = () => {
           }}
           onPageRequest={handleChangePage}
           pagesToShow={pagesToShow}
+          eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
           sx={
             isMobile
               ? {
