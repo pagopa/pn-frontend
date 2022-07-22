@@ -37,12 +37,12 @@ const Dashboard = () => {
   const totalElements =
     pagination.size *
     (pagination.moreResult
-      ? Math.max(pagination.nextPagesKey.length + 1, 8)
+      ? pagination.nextPagesKey.length + 5
       : pagination.nextPagesKey.length + 1);
   const pagesToShow: Array<number> = calculatePages(
     pagination.size,
     totalElements,
-    Math.min(pagination.nextPagesKey.length, 3),
+    Math.min(pagination.nextPagesKey.length + 1, 3),
     pagination.page + 1
   );
 

@@ -25,23 +25,24 @@ const Notifiche = () => {
   const currentDelegator = delegators.find(
     (delegation: Delegator) => delegation.mandateId === mandateId
   );
-
   const isMobile = useIsMobile();
   const pageTitle = currentDelegator
     ? t('delegatorTitle', {
         name: currentDelegator.delegator ? currentDelegator.delegator.displayName : '',
       })
     : t('title');
-
+  // back end return at most the next three pages
+  // we have flag moreResult to check if there are more pages
+  // the minum number of pages, to have ellipsis in the paginator, is 8
   const totalElements =
     pagination.size *
     (pagination.moreResult
-      ? Math.max(pagination.nextPagesKey.length + 1, 8)
+      ? pagination.nextPagesKey.length + 5
       : pagination.nextPagesKey.length + 1);
   const pagesToShow: Array<number> = calculatePages(
     pagination.size,
     totalElements,
-    Math.min(pagination.nextPagesKey.length, 3),
+    Math.min(pagination.nextPagesKey.length + 1, 3),
     pagination.page + 1
   );
 
