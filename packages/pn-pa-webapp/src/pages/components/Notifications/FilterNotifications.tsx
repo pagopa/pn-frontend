@@ -22,6 +22,8 @@ import {
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
+import { trackEventByType } from '../../../utils/mixpanel';
+import { TrackEventType } from '../../../utils/events';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
 
@@ -91,12 +93,14 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       if (_.isEqual(prevFilters, currentFilters)) {
         return;
       }
+      trackEventByType(TrackEventType.NOTIFICATION_FILTER_SEARCH);
       dispatch(setNotificationFilters(currentFilters));
       setPrevFilters(currentFilters);
     },
   });
 
   const cancelSearch = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_FILTER_REMOVE);
     dispatch(setNotificationFilters(emptyValues));
   };
 

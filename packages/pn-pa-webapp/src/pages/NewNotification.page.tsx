@@ -13,6 +13,8 @@ import {
 } from '../redux/newNotification/actions';
 import * as routes from '../navigation/routes.const';
 import { PARTY_MOCK } from '../utils/constants';
+import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 import PreliminaryInformations from './components/NewNotification/PreliminaryInformations';
 import Recipient from './components/NewNotification/Recipient';
 import Attachments from './components/NewNotification/Attachments';
@@ -47,7 +49,34 @@ const NewNotification = () => {
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const dispatch = useAppDispatch();
 
+  const eventStep = [
+    TrackEventType.NOTIFICATION_SEND_PRELIMINARY_INFO,
+    TrackEventType.NOTIFICATION_SEND_RECIPIENT_INFO,
+    TrackEventType.NOTIFICATION_SEND_ATTACHMENTS,
+    TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES
+  ];
+
+  const stepType = [
+    'preliminary info',
+    'recipient',
+    'attachments',
+    'payment modes'
+  ];
+
+  const handleEventTrackingCallbackPromptOpened = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_WARNING, {source: stepType[activeStep]});
+  };
+
+  const handleEventTrackingCallbackCancel = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_CANCEL, {source: stepType[activeStep]});
+  };
+
+  const handleEventTrackingCallbackConfirm = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_FLOW, {source: stepType[activeStep]});
+  };
   const goToNextStep = () => {
+
+    trackEventByType(eventStep[activeStep]);
     setActiveStep((previousStep) => previousStep + 1);
   };
 
@@ -78,11 +107,21 @@ const NewNotification = () => {
   }
 
   return (
-    <Prompt title="Vuoi davvero uscire?" message="Se esci, i dati inseriti andranno persi.">
+    <Prompt
+      title="Vuoi davvero uscire?"
+      message="Se esci, i dati inseriti andranno persi."
+      eventTrackingCallbackPromptOpened={handleEventTrackingCallbackPromptOpened}
+      eventTrackingCallbackCancel={handleEventTrackingCallbackCancel}
+      eventTrackingCallbackConfirm={handleEventTrackingCallbackConfirm}
+    >
       <Box p={3}>
         <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
           <Grid item xs={12} lg={8}>
-            <PnBreadcrumb linkRoute={routes.DASHBOARD} linkLabel="Notifiche" currentLocationLabel="Nuova notifica"/>
+            <PnBreadcrumb
+              linkRoute={routes.DASHBOARD}
+              linkLabel="Notifiche"
+              currentLocationLabel="Nuova notifica"
+            />
             <TitleBox
               variantTitle="h4"
               title="Invia una nuova notifica"

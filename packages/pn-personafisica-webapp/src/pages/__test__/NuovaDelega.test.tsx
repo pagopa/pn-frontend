@@ -6,6 +6,8 @@ import { render } from '../../__test__/test-utils';
 import NuovaDelega from '../NuovaDelega.page';
 import * as hooks from '../../redux/hooks';
 import * as actions from '../../redux/newDelegation/actions';
+import * as trackingFunctions from '../../utils/mixpanel';
+import {TrackEventType} from "../../utils/events";
 
 jest.mock('../../component/Deleghe/VerificationCodeComponent', () => ({
   __esModule: true,
@@ -37,6 +39,9 @@ const entitiesActionSpy = jest.spyOn(actions, 'getAllEntities');
 const mockEntitiesActionFn = jest.fn();
 const createActionSpy = jest.spyOn(actions, 'createDelegation');
 const mockCreateActionFn = jest.fn();
+// mock tracking
+const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
+const mockTrackEventFn = jest.fn();
 // mock dispatch
 const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
@@ -53,6 +58,7 @@ describe('NuovaDelega page', () => {
   beforeEach(() => {
     createActionSpy.mockImplementation(mockCreateActionFn);
     entitiesActionSpy.mockImplementation(mockEntitiesActionFn);
+    createTrackEventSpy.mockImplementation(mockTrackEventFn);
     useDispatchSpy.mockReturnValue(mockDispatchFn);
   });
 
@@ -67,6 +73,8 @@ describe('NuovaDelega page', () => {
     createActionSpy.mockReset();
     entitiesActionSpy.mockClear();
     entitiesActionSpy.mockReset();
+    createTrackEventSpy.mockClear();
+    createTrackEventSpy.mockReset();
   });
 
   it('renders the component desktop view', () => {
@@ -132,6 +140,8 @@ describe('NuovaDelega page', () => {
     const button = result.queryByTestId('createButton');
     fireEvent.click(button!);
     await waitFor(() => {
+      expect(mockTrackEventFn).toBeCalledTimes(1);
+      expect(mockTrackEventFn).toBeCalledWith(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
       expect(mockDispatchFn).toBeCalledTimes(2);
       expect(mockCreateActionFn).toBeCalledTimes(1);
       expect(mockCreateActionFn).toBeCalledWith({

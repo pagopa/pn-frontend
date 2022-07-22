@@ -1,13 +1,5 @@
 import { PreLoginFooterLinksType, FooterLinksType } from '@pagopa/mui-italia';
 
-const privacyClickHandler = () => {
-  window.open('/static/privacy-policy.pdf', '_blank');
-}
-
-const tosClickHandler = () => {
-  window.open('/static/terms-conditions.pdf', '_blank');
-}
-
 export const LANGUAGES = {
   it: { it: 'Italiano', en: 'Inglese' },
   en: { it: 'Italian', en: 'English' },

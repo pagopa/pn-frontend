@@ -1,34 +1,36 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment, ReactNode, useState } from 'react';
 import {
-  Grid,
   Box,
-  Paper,
   Button,
-  Stack,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
   DialogContentText,
   Typography,
+  DialogTitle,
+  Grid,
+  Paper,
+  Stack,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
   // PN-1714
   // NotificationStatus,
-  TitleBox,
-  NotificationDetailTableRow,
-  NotificationDetailTable,
-  NotificationDetailDocuments,
   LegalFactId,
+  NotificationDetailDocuments,
+  NotificationDetailTable,
+  NotificationDetailTableRow,
   NotificationDetailTimeline,
-  useIsMobile,
   PnBreadcrumb,
+  TitleBox,
+  useIsMobile,
   NotificationDetailRecipient,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -67,17 +69,31 @@ const NotificationDetail = () => {
 
   const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
 
-  const recipientsWithAltNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCodeAlternative);
+  const recipientsWithAltNoticeCode = recipients.filter(
+    (recipient) => recipient.payment?.noticeCodeAlternative
+  );
 
-  const getRecipientsNoticeCodeField = (recipients: Array<NotificationDetailRecipient>, alt: boolean = false): ReactNode => {
-    if(recipients.length > 1) {
-      return recipients.map((recipient, index) => 
+  const getRecipientsNoticeCodeField = (
+    filteredRecipients: Array<NotificationDetailRecipient>,
+    alt: boolean = false
+  ): ReactNode => {
+    if (filteredRecipients.length > 1) {
+      return filteredRecipients.map((recipient, index) => (
         <Box key={index} fontWeight={600}>
-          {recipient.taxId} - {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
+          {recipient.taxId} -{' '}
+          {recipient?.payment?.creditorTaxId} -{' '}
+          {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
         </Box>
-      );
+      ));
     }
-    return <Box fontWeight={600}>{alt ? recipients[0]?.payment?.noticeCodeAlternative : recipients[0]?.payment?.noticeCode}</Box>;
+    return (
+      <Box fontWeight={600}>
+        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
+        {alt
+          ? filteredRecipients[0]?.payment?.noticeCodeAlternative
+          : filteredRecipients[0]?.payment?.noticeCode}
+      </Box>
+    );
   };
 
   const unfilteredDetailTableRows: Array<{
@@ -98,13 +114,15 @@ const NotificationDetail = () => {
     {
       label: recipients.length > 1 ? 'Destinatari' : 'Codice Fiscale destinatario',
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
-      value: <>
-        {recipients.map((recipient, i) => (
-          <Box key={i} fontWeight={600}>
-            {recipient.taxId}
-          </Box>
-        ))}
-      </>,
+      value: (
+        <>
+          {recipients.map((recipient, i) => (
+            <Box key={i} fontWeight={600}>
+              {recipient.taxId}
+            </Box>
+          ))}
+        </>
+      ),
     },
     {
       label: 'Data di invio',
@@ -121,6 +139,11 @@ const NotificationDetail = () => {
       ),
     },
     {
+      label: 'Importo',
+      rawValue: notification.amount?.toFixed(2),
+      value: <Box fontWeight={600}>{notification.amount?.toFixed(2)}</Box>,
+    },
+    {
       label: 'Codice IUN',
       rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,
@@ -132,13 +155,13 @@ const NotificationDetail = () => {
     },
     {
       label: 'Codice Avviso',
-      rawValue: recipientsWithNoticeCode.join(", "),
-      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode)
+      rawValue: recipientsWithNoticeCode.join(', '),
+      value: getRecipientsNoticeCodeField(recipientsWithNoticeCode),
     },
     {
       label: 'Codice Avviso Alternativo',
-      rawValue: recipientsWithAltNoticeCode.join(", "),
-      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true)
+      rawValue: recipientsWithAltNoticeCode.join(', '),
+      value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true),
     },
     {
       label: 'Gruppi',
@@ -194,6 +217,7 @@ const NotificationDetail = () => {
   // PN-1714
   /*
   const openModal = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
   };
   */
@@ -235,7 +259,9 @@ const NotificationDetail = () => {
         sx={{ pt: 3, mb: 2 }}
         mbTitle={0}
       ></TitleBox>
-      <Typography variant="body1" mb={{xs: 3, md: 4}}>{notification.abstract}</Typography>
+      <Typography variant="body1" mb={{ xs: 3, md: 4 }}>
+        {notification.abstract}
+      </Typography>
       {
         // PN-1714
         /*
@@ -343,6 +369,9 @@ const NotificationDetail = () => {
                 historyButtonLabel="Mostra storico"
                 showMoreButtonLabel="Mostra di più"
                 showLessButtonLabel="Mostra di meno"
+                eventTrackingCallbackShowMore={() =>
+                  trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
+                }
               />
             </Box>
           </Grid>

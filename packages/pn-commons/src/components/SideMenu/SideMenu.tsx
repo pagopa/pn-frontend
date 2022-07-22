@@ -10,9 +10,10 @@ import SideMenuList from './SideMenuList';
 type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
+  eventTrackingCallback?: (target: string) => void;
 };
 
-const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
+const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }) => {
   const [state, setState] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -75,6 +76,9 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems }) => {
   };
 
   const handleNavigation = (item: SideMenuItem, menuFlag?: boolean) => {
+    if (eventTrackingCallback) {
+      eventTrackingCallback(item.route)
+    }
     if (isMobile && !menuFlag) {
       setState(false);
     }
