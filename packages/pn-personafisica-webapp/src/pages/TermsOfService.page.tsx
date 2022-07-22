@@ -5,10 +5,10 @@ import { Fragment, useEffect, useState } from 'react';
 
 import Link from '@mui/material/Link';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { URL_PRIVACY_LINK } from '@pagopa-pn/pn-commons/src/utils/costants';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
-import { URL_FILE_PRIVACY_DISCLAIMER, URL_FILE_TERMS_OF_SERVICE } from '../utils/constants';
 import { RootState } from '../redux/store';
 
 const TermsOfService = () => {
@@ -19,9 +19,9 @@ const TermsOfService = () => {
   const navigate = useNavigate();
   const tos = useAppSelector((state: RootState) => state.userState.tos);
 
-  const redirectPrivacyLink = () => window.location.assign(URL_FILE_PRIVACY_DISCLAIMER);
+  const redirectPrivacyLink = () => window.location.assign(URL_PRIVACY_LINK);
 
-  const redirectToSLink = () => window.location.assign(URL_FILE_TERMS_OF_SERVICE);
+  const redirectToSLink = () => window.location.assign(URL_PRIVACY_LINK);
 
   const handleAccept = () => {
     void dispatch(acceptToS()).then(() => {

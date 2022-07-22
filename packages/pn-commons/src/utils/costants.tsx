@@ -10,6 +10,8 @@ export const pagoPALink: {href: string; ariaLabel: string} = {
   ariaLabel: "Link: vai al sito di PagoPA S.p.A.",
 };
 
+export const URL_PRIVACY_LINK = 'https://notifichedigitali.it/cittadini/informativa-privacy'
+
 export const companyLegalInfo = (
   <>
     <strong>PagoPA S.p.A.</strong> — società per azioni con socio unico -
@@ -58,9 +60,9 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Privacy Policy",
-        href: "#privacy-policy",
+        href: `${URL_PRIVACY_LINK}`,
         ariaLabel: "Vai al link: Privacy Policy",
-        linkType: "internal",
+        linkType: "external",
       },
       {
         label: "Certificazioni",
@@ -93,9 +95,9 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Termini e Condizioni",
-        href: "#terms-conditions",
+        href: `${URL_PRIVACY_LINK}`,
         ariaLabel: "Vai al link: Termini e Condizioni",
-        linkType: "internal",
+        linkType: "external",
       },
       {
         label: "Società trasparente",
@@ -160,13 +162,13 @@ export const preLoginLinks: PreLoginFooterLinksType = {
 export const postLoginLinks: Array<FooterLinksType> = [
   {
     label: "Privacy policy",
-    href: "#privacy-policy",
+    href: `${URL_PRIVACY_LINK}`,
     ariaLabel: "Vai al link: Privacy policy",
     linkType: "internal",
   },
   {
     label: "Termini e condizioni",
-    href: "#terms-conditions",
+    href: `${URL_PRIVACY_LINK}`,
     ariaLabel: "Vai al link: Termini e condizioni",
     linkType: "internal",
   },
