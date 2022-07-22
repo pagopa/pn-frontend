@@ -292,7 +292,7 @@ export function parseNotificationDetail(
 ): NotificationDetail {
   const parsedNotification = {
     ...notificationDetail,
-    sentAt: formatDate(notificationDetail.sentAt),
+    sentAt: formatDate(notificationDetail.sentAt)
   };
   /* eslint-disable functional/immutable-data */
   /* eslint-disable functional/no-let */
