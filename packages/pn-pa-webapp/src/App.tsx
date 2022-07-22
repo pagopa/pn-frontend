@@ -1,9 +1,8 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
-import { AppMessage, Layout, LoadingOverlay, SideMenu } from '@pagopa-pn/pn-commons';
+import { AppMessage, Layout, LoadingOverlay, SideMenu, useUnload } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
 import { useLocation } from 'react-router-dom';
-import { useUnload } from '@pagopa-pn/pn-commons';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
@@ -19,7 +18,7 @@ declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
 const global = window as any;
 // target cookies (Mixpanel)
-const targCookiesGroup = "C0004";
+const targCookiesGroup = 'C0004';
 
 const App = () => {
   useUnload((e: Event) => {
@@ -35,10 +34,7 @@ const App = () => {
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
-  const menuItems = useMemo(
-    () => getMenuItems(idOrganization, role?.role),
-    [role, idOrganization]
-  );
+  const menuItems = useMemo(() => getMenuItems(idOrganization, role?.role), [role, idOrganization]);
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -68,14 +64,17 @@ const App = () => {
   );
 
   // TODO: get parties list from be (?)
-  const partyList: Array<PartyEntity> = useMemo(() => [
-    {
-      id: '0',
-      name: PARTY_MOCK,
-      productRole: role?.role,
-      logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
-    },
-  ], [role]);
+  const partyList: Array<PartyEntity> = useMemo(
+    () => [
+      {
+        id: '0',
+        name: PARTY_MOCK,
+        productRole: role?.role,
+        logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
+      },
+    ],
+    [role]
+  );
 
   useEffect(() => {
     // OneTrust callback at first time
@@ -90,9 +89,7 @@ const App = () => {
     };
     // check mixpanel cookie consent in cookie
     const OTCookieValue: string =
-      document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("OptanonConsent=")) || "";
+      document.cookie.split('; ').find((row) => row.startsWith('OptanonConsent=')) || '';
     const checkValue = `${targCookiesGroup}%3A1`;
     if (OTCookieValue.indexOf(checkValue) > -1) {
       mixpanelInit();
