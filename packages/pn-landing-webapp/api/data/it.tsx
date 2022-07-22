@@ -64,7 +64,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
           non devono che depositare l’atto da notificare: sarà la piattaforma a occuparsi dell’invio, per via digitale o analogica.
         </Typography>
         <Typography variant="body2">
-          Con Piattaforma Notifiche, diminuisce l’incertezza della reperibilità dei destinatari e si riducono i tempi e i costi di gestione.`
+          Con Piattaforma Notifiche, diminuisce l’incertezza della reperibilità dei destinatari e si riducono i tempi e i costi di gestione.
         </Typography>
       </>,
       inverse: false,
@@ -110,7 +110,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       </Typography>
       <Typography variant="body2">
         Come l’ente, anche il desinatario ha accesso alla cronologia degli stati della notifica e alle attestazioni 
-        opponibili a terzi che ne danno prova.`
+        opponibili a terzi che ne danno prova.
       </Typography>
       </>,
       inverse: false,

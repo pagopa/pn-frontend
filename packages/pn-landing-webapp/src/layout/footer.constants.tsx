@@ -66,11 +66,9 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Privacy Policy",
-        // href: "privacy-policy",
-        // href: "/static/privacy-policy.pdf",
+        href: "/cittadini/informativa-privacy",
         ariaLabel: "Vai al link: Privacy Policy",
         linkType: "internal",
-        onClick: privacyClickHandler,
       },
       {
         label: "Certificazioni",
@@ -103,11 +101,9 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Termini e Condizioni",
-        // href: "terms-conditions",
-        // href: "/static/terms-conditions.pdf",
+        href: "/cittadini/informativa-privacy",
         ariaLabel: "Vai al link: Termini e Condizioni",
         linkType: "internal",
-        onClick: tosClickHandler,
       },
       {
         label: "Società trasparente",
