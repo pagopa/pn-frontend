@@ -21,7 +21,7 @@ export const getReceivedNotification = createAsyncThunk<
     try {
       return await NotificationsApi.getReceivedNotification(
         params.iun,
-        params.currentUser,
+        params.currentUserTaxId,
         params.delegatorsFromStore,
         params.mandateId
       );

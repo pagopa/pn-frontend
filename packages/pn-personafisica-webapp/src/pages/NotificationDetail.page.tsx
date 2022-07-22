@@ -140,7 +140,7 @@ const NotificationDetail = () => {
 
   useEffect(() => {
     if (id) {
-      void dispatch(getReceivedNotification({iun: id, currentUser, delegatorsFromStore, mandateId}));
+      void dispatch(getReceivedNotification({iun: id, currentUserTaxId: currentUser.fiscal_number, delegatorsFromStore, mandateId}));
     }
     return () => void dispatch(resetState());
   }, []);
