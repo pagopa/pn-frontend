@@ -2,7 +2,7 @@ import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import { LANGUAGES, pagoPALink, postLoginLinks } from '../../../utils/costants';
-import { Footer } from "@pagopa-pn/pn-commons";
+import Footer from '../Footer';
 
 describe('Footer Component', () => {
 

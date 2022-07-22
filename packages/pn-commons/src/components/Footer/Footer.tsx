@@ -16,7 +16,7 @@ type Props = {
   loggedUser?: boolean;
 };
 
-export default function Footer({ onLanguageChanged = () => {}, loggedUser = false }: Props) {
+const Footer = ({ onLanguageChanged = () => {}, loggedUser = false }: Props) => {
   const [currentLangCode, setCurrentLangCode] = useState<'it' | 'en'>('it');
 
   const changeLanguageHandler = (langCode: 'it' | 'en') => {
@@ -40,3 +40,5 @@ export default function Footer({ onLanguageChanged = () => {}, loggedUser = fals
     />
   );
 }
+
+export default Footer;
