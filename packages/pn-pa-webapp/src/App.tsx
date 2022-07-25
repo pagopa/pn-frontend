@@ -1,30 +1,40 @@
-import { useEffect, useMemo } from 'react';
-import { LoadingOverlay, Layout, AppMessage, SideMenu } from '@pagopa-pn/pn-commons';
+import { ErrorInfo, useEffect, useMemo } from 'react';
+import { AppMessage, Layout, LoadingOverlay, SideMenu, useUnload } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
+import { useLocation } from 'react-router-dom';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
-import {
-  PAGOPA_HELP_EMAIL,
-  SELFCARE_BASE_URL,
-  PARTY_MOCK,
-} from './utils/constants';
-import { mixpanelInit } from './utils/mixpanel';
+
+import { PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL } from './utils/constants';
+import { mixpanelInit, trackEventByType } from './utils/mixpanel';
+import { TrackEventType } from './utils/events';
+import './utils/onetrust';
+
+declare const OneTrust: any;
+declare const OnetrustActiveGroups: string;
+const global = window as any;
+// target cookies (Mixpanel)
+const targCookiesGroup = 'C0004';
 
 const App = () => {
+  useUnload((e: Event) => {
+    e.preventDefault();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    e.defaultPrevented;
+    trackEventByType(TrackEventType.APP_UNLOAD);
+  });
+
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const dispatch = useAppDispatch();
 
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
-  const menuItems = useMemo(
-    () => getMenuItems(idOrganization, role?.role),
-    [role, idOrganization]
-  );
+  const menuItems = useMemo(() => getMenuItems(idOrganization, role?.role), [role, idOrganization]);
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -54,38 +64,94 @@ const App = () => {
   );
 
   // TODO: get parties list from be (?)
-  const partyList: Array<PartyEntity> = useMemo(() => [
-    {
-      id: '0',
-      name: PARTY_MOCK,
-      productRole: role?.role,
-      logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
-    },
-  ], [role]);
+  const partyList: Array<PartyEntity> = useMemo(
+    () => [
+      {
+        id: '0',
+        name: PARTY_MOCK,
+        productRole: role?.role,
+        logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
+      },
+    ],
+    [role]
+  );
 
   useEffect(() => {
-    // init mixpanel
-    mixpanelInit();
+    // OneTrust callback at first time
+    // eslint-disable-next-line functional/immutable-data
+    global.OptanonWrapper = function () {
+      OneTrust.OnConsentChanged(function () {
+        const activeGroups = OnetrustActiveGroups;
+        if (activeGroups.indexOf(targCookiesGroup) > -1) {
+          mixpanelInit();
+        }
+      });
+    };
+    // check mixpanel cookie consent in cookie
+    const OTCookieValue: string =
+      document.cookie.split('; ').find((row) => row.startsWith('OptanonConsent=')) || '';
+    const checkValue = `${targCookiesGroup}%3A1`;
+    if (OTCookieValue.indexOf(checkValue) > -1) {
+      mixpanelInit();
+    }
   }, []);
+
+  const { pathname } = useLocation();
+  const path = pathname.split('/');
+  const source = path[path.length - 1];
+
+  const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
+    trackEventByType(TrackEventType.APP_CRASH, {
+      route: source,
+      stacktrace: { error: e, errorInfo: eInfo },
+    });
+  };
+
+  const handleEventTrackingCallbackFooterChangeLanguage = () => {
+    trackEventByType(TrackEventType.FOOTER_LANG_SWITCH);
+  };
+
+  const handleEventTrackingCallbackProductSwitch = (target: string) => {
+    trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
+  };
+
+  const handleLogout = () => {
+    void dispatch(logout());
+  };
+
+  const handleAssistanceClick = () => {
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
+    /* eslint-disable-next-line functional/immutable-data */
+    window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  };
 
   return (
     <Layout
-      onExitAction={() => dispatch(logout())}
+      onExitAction={handleLogout}
+      eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
+      eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
+      eventTrackingCallbackProductSwitch={(target) =>
+        handleEventTrackingCallbackProductSwitch(target)
+      }
       sideMenu={
         role &&
         menuItems && (
-          <SideMenu menuItems={menuItems.menuItems} selfCareItems={menuItems.selfCareItems} />
+          <SideMenu
+            menuItems={menuItems.menuItems}
+            selfCareItems={menuItems.selfCareItems}
+            eventTrackingCallback={(target) =>
+              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
+            }
+          />
         )
       }
-      assistanceEmail={PAGOPA_HELP_EMAIL}
       productsList={productsList}
-      productId={"0"}
+      productId={'0'}
       partyList={partyList}
       loggedUser={jwtUser}
+      onAssistanceClick={handleAssistanceClick}
     >
-      <AppMessage
-        sessionRedirect={() => dispatch(logout())}
-      />
+      <AppMessage sessionRedirect={handleLogout} />
       <LoadingOverlay />
       <Router />
     </Layout>

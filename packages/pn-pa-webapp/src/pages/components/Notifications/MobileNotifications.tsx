@@ -44,6 +44,9 @@ const MobileNotifications = ({
 }: Props) => {
   const navigate = useNavigate();
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
+  const handleEventTrackingTooltip = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
+  };
 
   const cardHeader: [CardElement, CardElement] = [
     {
@@ -64,7 +67,7 @@ const MobileNotifications = ({
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
         );
-        return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
+        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },
       gridProps: {
         xs: 12,
@@ -114,7 +117,7 @@ const MobileNotifications = ({
   const handleRowClick = (row: Item) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     // log event
-    trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   const cardActions: Array<CardAction> = [

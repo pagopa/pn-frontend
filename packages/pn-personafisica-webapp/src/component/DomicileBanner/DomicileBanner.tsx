@@ -1,12 +1,14 @@
 import { Alert, Box, Link, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 import * as routes from '../../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { closeDomicileBanner } from '../../redux/sidemenu/actions';
 import { RootState } from '../../redux/store';
+import { trackEventByType } from "../../utils/mixpanel";
+import { TrackEventType } from "../../utils/events";
 
 const messageIndex = Math.floor(Math.random() * 4) + 1;
 // const messages = [
@@ -18,15 +20,20 @@ const messageIndex = Math.floor(Math.random() * 4) + 1;
 
 const DomicileBanner = () => {
   const { t } = useTranslation(['notifiche']);
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const legalDomicile = useAppSelector((state: RootState) => state.generalInfoState.legalDomicile);
+  const path = pathname.split('/');
+  const source = path[path.length - 1] === 'notifica' ? 'detail' : 'list';
 
   const handleClose = () => {
+    trackEventByType(TrackEventType.DIGITAL_DOMICILE_BANNER_CLOSE, { source });
     dispatch(closeDomicileBanner());
   };
   const handleAddDomicile = () => {
+    trackEventByType(TrackEventType.DIGITAL_DOMICILE_LINK);
     navigate(routes.RECAPITI);
   };
 

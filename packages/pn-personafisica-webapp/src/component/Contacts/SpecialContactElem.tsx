@@ -8,6 +8,8 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { phoneRegExp } from '../../utils/contacts.utility';
+import { trackEventByType } from "../../utils/mixpanel";
+import { EventActions, TrackEventType } from "../../utils/events";
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
@@ -91,6 +93,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     if (status === 'cancelled') {
       formik.resetForm({ values: initialValues });
     }
+    trackEventByType(TrackEventType.CONTACT_SPECIAL_CONTACTS, { action: EventActions.ADD });
   };
 
   const formik = useFormik({

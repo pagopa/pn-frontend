@@ -41,6 +41,7 @@ export const notificationFromBe: NotificationDetail = {
         foreignState: '',
       },
       payment: {
+        noticeCode: 'mocked-noticeCode',
         creditorTaxId: 'mocked-creditorTaxId',
         pagoPaForm: {
           digests: {
@@ -188,6 +189,7 @@ export const notificationFromBe: NotificationDetail = {
     },
   ],
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
+  amount: 130
 };
 
 export const notificationToFe = parseNotificationDetail(notificationFromBe);
@@ -222,7 +224,8 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
         foreignState: '',
       },
       payment: {
-        creditorTaxId: 'mocked-creditorTaxId',
+        noticeCode: 'mocked-noticeCode1',
+        creditorTaxId: 'mocked-creditorTaxId1',
         pagoPaForm: {
           digests: {
             sha256: 'mocked-sha256',
@@ -262,6 +265,20 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
         province: 'PROV',
         foreignState: '',
       },
+      payment: {
+        noticeCode: 'mocked-noticeCode2',
+        creditorTaxId: 'mocked-creditorTaxId2',
+        pagoPaForm: {
+          digests: {
+            sha256: 'mocked-sha256',
+          },
+          contentType: 'mocked-contentType',
+          ref: {
+            key: 'Avviso PagoPa',
+            versionToken: 'mocked-versionToken'
+          }
+        }
+      }
     },
   ],
   documents: [
@@ -390,6 +407,7 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
     },
   ],
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
+  amount: 200
 };
 
 export const notificationToFeMultiRecipient = parseNotificationDetail(
