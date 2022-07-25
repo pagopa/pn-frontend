@@ -378,7 +378,6 @@ export function parseNotificationDetail(
   );
   /* eslint-enable functional/immutable-data */
   /* eslint-enable functional/no-let */
-  console.log(parsedNotification);
   return parsedNotification;
 }
 
