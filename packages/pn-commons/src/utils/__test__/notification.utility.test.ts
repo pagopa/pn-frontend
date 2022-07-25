@@ -203,7 +203,7 @@ describe('timeline utility functions', () => {
   it('return timeline status infos - SEND_DIGITAL_DOMICILE_FAILURE', () => {
     parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).errors = ['mocked-errors'];
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       type: DigitalDomicileType.PEC,
       address: 'nome@cognome.mail',

@@ -173,8 +173,7 @@ export function getNotificationTimelineStatusInfos(
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK:
-      const digitalDomicileFeedbackErrors = (step.details as SendDigitalDetails).errors;
-      if (digitalDomicileFeedbackErrors && digitalDomicileFeedbackErrors.length > 0) {
+      if ((step.details as SendDigitalDetails).responseStatus === 'KO') {
         return {
           label: 'Invio via PEC fallito',
           description: `L'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
@@ -193,8 +192,7 @@ export function getNotificationTimelineStatusInfos(
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_FEEDBACK:
-      const digitalFeedbackErrors = (step.details as SendDigitalDetails).errors;
-      if (digitalFeedbackErrors && digitalFeedbackErrors.length > 0) {
+      if ((step.details as SendDigitalDetails).responseStatus === 'KO') {
         return {
           label: 'Invio per via digitale fallito',
           description: `L'invio della notifica a ${recipient?.denomination} per via digitale non è riuscito.`,
