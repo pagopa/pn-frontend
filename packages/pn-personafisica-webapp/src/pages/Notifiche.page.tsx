@@ -1,28 +1,18 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import {
-  calculatePages,
-  CustomPagination,
-  PaginationData,
-  Sort,
-  TitleBox,
-  useIsMobile,
-} from '@pagopa-pn/pn-commons';
+import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, } from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
-import {
-  getReceivedNotifications,
-  setMandateId,
-  setPagination,
-  setSorting,
-} from '../redux/dashboard/actions';
+import { getReceivedNotifications, setMandateId, setPagination, setSorting, } from '../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { Delegator } from '../redux/delegation/types';
+import { trackEventByType } from "../utils/mixpanel";
+import { TrackEventType } from "../utils/events";
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -35,28 +25,30 @@ const Notifiche = () => {
   const currentDelegator = delegators.find(
     (delegation: Delegator) => delegation.mandateId === mandateId
   );
-
   const isMobile = useIsMobile();
   const pageTitle = currentDelegator
     ? t('delegatorTitle', {
         name: currentDelegator.delegator ? currentDelegator.delegator.displayName : '',
       })
     : t('title');
-
+  // back end return at most the next three pages
+  // we have flag moreResult to check if there are more pages
+  // the minum number of pages, to have ellipsis in the paginator, is 8
   const totalElements =
     pagination.size *
     (pagination.moreResult
-      ? Math.max(pagination.nextPagesKey.length + 1, 8)
+      ? pagination.nextPagesKey.length + 5
       : pagination.nextPagesKey.length + 1);
   const pagesToShow: Array<number> = calculatePages(
     pagination.size,
     totalElements,
-    Math.min(pagination.nextPagesKey.length, 3),
+    Math.min(pagination.nextPagesKey.length + 1, 3),
     pagination.page + 1
   );
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
@@ -65,7 +57,11 @@ const Notifiche = () => {
     dispatch(setSorting(s));
   };
 
-  useEffect(() => {
+  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
+  };
+
+    useEffect(() => {
     if (filters.mandateId !== currentDelegator?.mandateId) {
       dispatch(setMandateId(currentDelegator?.mandateId));
       return;
@@ -107,6 +103,7 @@ const Notifiche = () => {
           }}
           onPageRequest={handleChangePage}
           pagesToShow={pagesToShow}
+          eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
           sx={
             isMobile
               ? {

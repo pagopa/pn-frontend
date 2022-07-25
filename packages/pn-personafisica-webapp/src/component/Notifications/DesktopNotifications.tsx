@@ -41,6 +41,10 @@ const DesktopNotifications = ({
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
+  const handleEventTrackingTooltip = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
+  };
+
   const columns: Array<Column> = [
     {
       id: 'notificationStatus',
@@ -109,7 +113,7 @@ const DesktopNotifications = ({
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
         );
-        return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;
+        return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },
     },
   ];
@@ -150,7 +154,7 @@ const DesktopNotifications = ({
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
     // log event
-    trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   return (

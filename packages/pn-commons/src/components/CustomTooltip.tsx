@@ -7,10 +7,11 @@ type Props = {
   tooltipContent: any;
   openOnClick: boolean;
   children: ReactElement<any, any>;
-  sx?: SxProps
+  sx?: SxProps;
+  onOpen?: () => void;
 };
 
-function CustomTooltip({ openOnClick, tooltipContent, children, sx }: Props) {
+function CustomTooltip({ openOnClick, tooltipContent, children, sx, onOpen }: Props) {
   // tooltip state
   const [open, setOpen] = useState(false);
   const handleTooltipClose = () => {
@@ -40,6 +41,7 @@ function CustomTooltip({ openOnClick, tooltipContent, children, sx }: Props) {
           disableHoverListener={openOnClick}
           disableTouchListener={openOnClick}
           enterTouchDelay={0}
+          onOpen={onOpen}
         >
           {cloneElement(children, {
             onClick: handleTooltipOpen,

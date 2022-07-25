@@ -161,6 +161,7 @@ import { IUN_regex, formatIun } from './utils/iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './utils/currency.utility';
 import { storageOpsBuilder } from './utils/storage.utility';
 import { compileRoute } from './utils/routes.utility';
+import { useUnload } from './hooks/useUnload';
 
 export { NotificationAllowedStatus };
 export { getNotificationStatusInfos };
@@ -177,6 +178,7 @@ export { IUN_regex, formatIun };
 export { formatCurrency, formatEurocentToCurrency };
 export { storageOpsBuilder };
 export { compileRoute };
+export { useUnload };
 
 // consts
 export { today, tenYearsAgo, DATE_FORMAT };

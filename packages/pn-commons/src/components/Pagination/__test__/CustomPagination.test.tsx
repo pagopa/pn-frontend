@@ -11,6 +11,7 @@ let paginationData: PaginationData = {
 };
 
 const handlePageChange = jest.fn();
+const mockEventTrackingPageSize = jest.fn();
 
 describe('CustomPagination Component', () => {
 
@@ -18,7 +19,13 @@ describe('CustomPagination Component', () => {
 
   beforeEach(() => {
     // render component
-    result = render(<CustomPagination paginationData={paginationData} onPageRequest={handlePageChange}/>);
+    result = render(
+      <CustomPagination
+        paginationData={paginationData}
+        eventTrackingCallbackPageSize={mockEventTrackingPageSize}
+        onPageRequest={handlePageChange}
+      />
+    );
   });
 
   afterEach(() => {
@@ -45,6 +52,7 @@ describe('CustomPagination Component', () => {
     await waitFor(() => {
       fireEvent.click(button!);
     });
+
     const itemsPerPageListContainer = await screen.findByRole('presentation');
     expect(itemsPerPageListContainer).toBeInTheDocument();
     const itemsPerPageList = await screen.findAllByRole('menuitem');
@@ -54,6 +62,7 @@ describe('CustomPagination Component', () => {
     });
     expect(button).toHaveTextContent(/200/i);
     expect(handlePageChange).toBeCalledTimes(1);
+    expect(mockEventTrackingPageSize).toBeCalledTimes(1);
     expect(handlePageChange).toBeCalledWith({
       page: 0,
       size: 200,
