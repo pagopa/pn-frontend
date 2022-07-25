@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 import { Stack } from '@mui/material';
 import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
+import { Footer } from "@pagopa-pn/pn-commons";
 import { Box } from '@mui/system';
 
-import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 import ErrorBoundary from '../ErrorBoundary';
 type Props = {
@@ -29,7 +29,7 @@ type Props = {
   /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
   /** Function called when user chenge language */
-  onLanguageChanged?: (langCode: string) => void
+  onLanguageChanged?: (langCode: string) => void;
 };
 
 export default function Layout({
@@ -74,7 +74,10 @@ export default function Layout({
           </Box>
 
         </Stack>
-        <Footer onLanguageChanged={onLanguageChanged}/>
+        <Footer 
+          loggedUser={loggedUser.id !== ''}
+          onLanguageChanged={onLanguageChanged}
+        />
       </Stack>
     </ErrorBoundary>
   );
