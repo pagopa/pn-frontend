@@ -22,7 +22,7 @@ jest.mock('react-router-dom', () => ({
 
 jest.mock('../../component/Contacts/InsertLegalContact', () => () => <div>InsertLegalContact</div>);
 jest.mock('../../component/Contacts/CourtesyContacts', () => () => <div>CourtesyContacts</div>);
-jest.mock('../../component/Contacts/IoContact', () => () => <div>IOContact</div>);
+jest.mock('../../component/Contacts/IOContact', () => () => <div>IOContact</div>);
 
 const initialState =  {
   preloadedState: {
