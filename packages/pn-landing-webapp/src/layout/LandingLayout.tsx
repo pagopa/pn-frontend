@@ -11,7 +11,7 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from "./footer.constants";
-import { PAGOPA_HELP_EMAIL, PAGOPA_HOME } from "@utils/constants";
+import { PAGOPA_HOME } from "@utils/constants";
 import NavigationBar from "../components/NavigationBar";
 import {getAppData} from "../../api";
 
@@ -27,13 +27,6 @@ const LandingLayout = ({ children }: Props) => {
     href: PAGOPA_HOME ?? "",
     ariaLabel: "Titolo",
     title: "PagoPa S.p.A.",
-  };
-
-  const handleAssistanceClick = () => {
-    if (PAGOPA_HELP_EMAIL) {
-      /* eslint-disable-next-line functional/immutable-data */
-      if (typeof window !== "undefined") window.open(`mailto:${PAGOPA_HELP_EMAIL}`);
-    }
   };
 
   return (

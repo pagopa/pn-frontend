@@ -1,13 +1,5 @@
 import { PreLoginFooterLinksType, FooterLinksType } from '@pagopa/mui-italia';
 
-const privacyClickHandler = () => {
-  window.open('/static/privacy-policy.pdf', '_blank');
-}
-
-const tosClickHandler = () => {
-  window.open('/static/terms-conditions.pdf', '_blank');
-}
-
 export const LANGUAGES = {
   it: { it: 'Italiano', en: 'Inglese' },
   en: { it: 'Italian', en: 'English' },
@@ -66,11 +58,9 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Privacy Policy",
-        // href: "privacy-policy",
-        // href: "/static/privacy-policy.pdf",
+        href: "/cittadini/informativa-privacy",
         ariaLabel: "Vai al link: Privacy Policy",
         linkType: "internal",
-        onClick: privacyClickHandler,
       },
       {
         label: "Certificazioni",
@@ -103,11 +93,9 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
       {
         label: "Termini e Condizioni",
-        // href: "terms-conditions",
-        // href: "/static/terms-conditions.pdf",
+        href: "/cittadini/informativa-privacy",
         ariaLabel: "Vai al link: Termini e Condizioni",
         linkType: "internal",
-        onClick: tosClickHandler,
       },
       {
         label: "Società trasparente",
