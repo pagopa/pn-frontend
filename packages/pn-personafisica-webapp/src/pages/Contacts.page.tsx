@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Link, Stack, Typography } from '@mui/material';
 import { TitleBox } from '@pagopa-pn/pn-commons';
@@ -17,20 +17,22 @@ import { PROFILO } from '../navigation/routes.const';
 import { CourtesyChannelType } from '../models/contacts';
 
 const Contacts = () => {
+  const [isDigitalAddressLoaded, setIsDigitalAddressLoaded] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
-  const digitalAddresses = useAppSelector(
-    (state: RootState) => state.contactsState.digitalAddresses
-  );
+  const digitalAddresses = useAppSelector((state: RootState) => state.contactsState.digitalAddresses);
 
-  const contactIO = digitalAddresses.courtesy.find(
+  const contactIO = isDigitalAddressLoaded ? digitalAddresses.courtesy.find(
     (address) => address.channelType === CourtesyChannelType.IOMSG
-  );
+  ) : null;
 
   useEffect(() => {
-    void dispatch(getDigitalAddresses(recipientId));
+    void dispatch(getDigitalAddresses(recipientId))
+    .then(() => {
+      setIsDigitalAddressLoaded(() => true);
+    });
     return () => void dispatch(resetContactsState());
   }, []);
 
