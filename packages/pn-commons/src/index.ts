@@ -197,3 +197,7 @@ export { appStateReducer };
 import { appStateActions } from './redux/slices/appStateSlice';
 
 export { appStateActions };
+
+// paths
+import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './utils/costants';
+export { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH };

@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect, useState } from 'react';
 
 import Link from '@mui/material/Link';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { URL_PRIVACY_LINK } from '@pagopa-pn/pn-commons/src/utils/costants';
+import { PRIVACY_LINK_RELATIVE_PATH, URL_DIGITAL_NOTIFICATIONS, useIsMobile } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
@@ -19,9 +18,9 @@ const TermsOfService = () => {
   const navigate = useNavigate();
   const tos = useAppSelector((state: RootState) => state.userState.tos);
 
-  const redirectPrivacyLink = () => window.location.assign(URL_PRIVACY_LINK);
+  const redirectPrivacyLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`);
 
-  const redirectToSLink = () => window.location.assign(URL_PRIVACY_LINK);
+  const redirectToSLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`);
 
   const handleAccept = () => {
     void dispatch(acceptToS()).then(() => {
