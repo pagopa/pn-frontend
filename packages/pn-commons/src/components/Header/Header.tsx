@@ -54,11 +54,14 @@ const Header = ({
     }
   };
 
+  const enableHeaderProduct = productsList && productsList.length > 0 || partyList && partyList.length > 0;
+  
   return (
     <AppBar sx={{ boxShadow: 'none', color: 'inherit' }} position="relative">
       <HeaderAccount
         rootLink={pagoPAHeaderLink}
         loggedUser={loggedUser}
+        enableLogin={loggedUser.id !== ''}
         onAssistanceClick={() => {
           if (assistanceEmail) {
             /* eslint-disable-next-line functional/immutable-data */
@@ -69,12 +72,14 @@ const Header = ({
         enableDropdown={enableDropdown}
         userActions={userActions}
       />
-      <HeaderProduct
-        productId={productId}
-        productsList={productsList}
-        partyList={partyList}
-        onSelectedProduct={handleProductSelection}
-      />
+      {enableHeaderProduct && (
+        <HeaderProduct
+          productId={productId}
+          productsList={productsList}
+          partyList={partyList}
+          onSelectedProduct={handleProductSelection}
+        />
+      )}
     </AppBar>
   );
 };

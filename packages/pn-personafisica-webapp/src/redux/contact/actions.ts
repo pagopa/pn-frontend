@@ -100,6 +100,37 @@ export const deleteCourtesyAddress = createAsyncThunk<
   }
 );
 
+export const enableIOAddress = createAsyncThunk<DigitalAddress | void, string>(
+  'enableIOAddress',
+  async (recipientId: string, { rejectWithValue }) => {
+    try {
+      return await ContactsApi.createOrUpdateCourtesyAddress(
+        recipientId,
+        'default',
+        CourtesyChannelType.IOMSG,
+        { value: 'APPIO', verificationCode: '00000' }
+      );
+    } catch (e: any) {
+      if (e.response.status === 406) {
+        return rejectWithValue({ response: e.response, blockNotification: true });
+      } else {
+        return rejectWithValue({ response: e.response });
+      }
+    }
+  }
+);
+
+export const disableIOAddress = createAsyncThunk<string, string>(
+  'disableIOAddress',
+  async (_params: string, { rejectWithValue }) => {
+    try {
+      return await ContactsApi.deleteCourtesyAddress('default', CourtesyChannelType.IOMSG);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
 export const getAllActivatedParties = createAsyncThunk('getAllActivatedParties', async () =>
   ExternalRegistriesAPI.getAllActivatedParties()
 );

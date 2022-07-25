@@ -485,8 +485,17 @@ export function parseNotificationDetail(
     hidden: !TimelineAllowedStatus.includes(t.category),
   }));
   let isEffectiveDateStatus = false;
+  let acceptedStatusItems: Array<string> = [];
   // populate notification macro step with corresponding timeline micro steps
   for (const status of parsedNotification.notificationStatusHistory) {
+    // if status accepted has items, move them to the next state
+    if (status.status === NotificationStatus.ACCEPTED && status.relatedTimelineElements.length) {
+      acceptedStatusItems = status.relatedTimelineElements;
+      status.relatedTimelineElements = [];
+    } else if (acceptedStatusItems.length) {
+      status.relatedTimelineElements.unshift(...acceptedStatusItems);
+      acceptedStatusItems = [];
+    }
     status.steps = [];
     // find timeline steps that are linked with current status
     for (const timelineElement of status.relatedTimelineElements) {

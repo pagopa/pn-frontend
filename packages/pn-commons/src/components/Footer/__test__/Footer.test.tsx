@@ -8,7 +8,7 @@ describe('Footer Component', () => {
 
   it('renders footer', () => {
     // render component
-    const result = render(<Footer/>);
+    const result = render(<Footer loggedUser={true}/>);
     const buttons = result.container.querySelectorAll('button');
     expect(buttons).toHaveLength(5);
     buttons.forEach((button, index) => {
@@ -26,7 +26,7 @@ describe('Footer Component', () => {
 
   it('shows languages dropdown', async () => {
     // render component
-    const result = render(<Footer/>);
+    const result = render(<Footer loggedUser={true} />);
     const buttons = result.container.querySelectorAll('button');
     fireEvent.click(buttons[4]);
     const languageSelector = await waitFor(() => screen.queryByRole('presentation'));

@@ -59,14 +59,12 @@ async function testCalendar(form: HTMLFormElement, elementName: string) {
 
 async function setFormValues(
   form: HTMLFormElement,
-  searchFor: string,
   startDate: Date,
   endDate: Date,
   status: string,
   recipientId: string,
   iunMatch: string
 ) {
-  await testInput(form, 'searchFor', searchFor);
   recipientId !== '' && (await testInput(form, 'recipientId', recipientId));
   await testInput(form, 'startDate', formatDate(startDate));
   await testInput(form, 'endDate', formatDate(endDate));
@@ -99,7 +97,6 @@ describe('Filter Notifications Table Component', () => {
 
   it('renders filter notifications table', () => {
     expect(form).toBeInTheDocument();
-    testFormElements(form!, 'searchFor', 'filters.search-for');
     testFormElements(form!, 'recipientId', 'filters.fiscal-code');
     testFormElements(form!, 'startDate', 'filters.data_da');
     testFormElements(form!, 'endDate', 'filters.data_a');
@@ -113,25 +110,10 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test filters inital value', () => {
-    testFormElementsValue(form!, 'searchFor', '0');
     testFormElementsValue(form!, 'recipientId', '');
     testFormElementsValue(form!, 'startDate', '');
     testFormElementsValue(form!, 'endDate', '');
     testFormElementsValue(form!, 'status', localizedNotificationStatus[0].value);
-  });
-
-  it('test searchFor select', async () => {
-    expect(form!.querySelector(`input[name="recipientId"]`)).toBeInTheDocument();
-    await testSelect(
-      form!,
-      'searchFor',
-      [
-        { label: 'Codice Fiscale', value: '0' },
-        { label: 'Codice IUN', value: '1' },
-      ],
-      1
-    );
-    expect(form!.querySelector(`input[name="iunMatch"]`)).toBeInTheDocument();
   });
 
   it('test recipientId input', async () => {
@@ -139,13 +121,6 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test iunMatch input', async () => {
-    const selectButton = form!.querySelector(`div[id="searchFor"]`);
-    fireEvent.mouseDown(selectButton!);
-    const selectOptionsContainer = await screen.findByRole('presentation');
-    const selectOption = await within(selectOptionsContainer).findByText('Codice IUN');
-    await waitFor(() => {
-      fireEvent.click(selectOption);
-    });
     await testInput(form!, 'iunMatch', 'mocked-iunMatch');
   });
 
@@ -164,7 +139,7 @@ describe('Filter Notifications Table Component', () => {
     await testSelect(form!, 'status', localizedNotificationStatus, 2);
   });
 
-  it('test form submission - searchFor codice fiscale (valid)', async () => {
+  it('test form submission - recipientId (valid)', async () => {
     const todayM = new Date();
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
     todayM.setHours(0, 0, 0, 0);
@@ -172,7 +147,6 @@ describe('Filter Notifications Table Component', () => {
 
     await setFormValues(
       form!,
-      '0',
       oneYearAgo,
       todayM,
       localizedNotificationStatus[2].value,
@@ -197,7 +171,7 @@ describe('Filter Notifications Table Component', () => {
     });
   });
 
-  it('test form submission - searchFor IUN (valid)', async () => {
+  it('test form submission - iunMatch (valid)', async () => {
     const todayM = new Date();
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
     todayM.setHours(0, 0, 0, 0);
@@ -205,7 +179,6 @@ describe('Filter Notifications Table Component', () => {
 
     await setFormValues(
       form!,
-      '1',
       oneYearAgo,
       todayM,
       localizedNotificationStatus[2].value,
@@ -230,7 +203,7 @@ describe('Filter Notifications Table Component', () => {
     });
   });
 
-  it('test form submission - search for codice fiscale (invalid)', async () => {
+  it('test form submission - recipientId (invalid)', async () => {
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     todayM.setHours(0, 0, 0, 0);
@@ -239,7 +212,6 @@ describe('Filter Notifications Table Component', () => {
     // wrong id and wrong start date
     await setFormValues(
       form!,
-      '0',
       nineYearsAgo,
       todayM,
       localizedNotificationStatus[2].value,
@@ -254,7 +226,7 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
-  it('test form submission - search for codice IUN (invalid)', async () => {
+  it('test form submission - iunMatch (invalid)', async () => {
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     todayM.setHours(0, 0, 0, 0);
@@ -263,7 +235,6 @@ describe('Filter Notifications Table Component', () => {
     // wrong id and wrong start date
     await setFormValues(
       form!,
-      '1',
       nineYearsAgo,
       todayM,
       localizedNotificationStatus[2].value,
@@ -286,7 +257,6 @@ describe('Filter Notifications Table Component', () => {
 
     await setFormValues(
       form!,
-      '0',
       oneYearAgo,
       todayM,
       localizedNotificationStatus[2].value,

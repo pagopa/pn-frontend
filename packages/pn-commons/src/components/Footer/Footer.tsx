@@ -11,7 +11,12 @@ import {
 
 const localizedPagoPALink = pagoPALink();
 
-const Footer = ({ onLanguageChanged }: { onLanguageChanged: (langCode: string) => void }) => {
+type Props = {
+  onLanguageChanged?: (langCode: string) => void;
+  loggedUser?: boolean;
+};
+
+const Footer = ({ onLanguageChanged = () => {}, loggedUser = false }: Props) => {
   const [currentLangCode, setCurrentLangCode] = useState<'it' | 'en'>('it');
 
   const changeLanguageHandler = (langCode: 'it' | 'en') => {
@@ -21,7 +26,7 @@ const Footer = ({ onLanguageChanged }: { onLanguageChanged: (langCode: string) =
 
   return (
     <MuiFooter
-      loggedUser={true}
+      loggedUser={loggedUser}
       companyLink={{
         ...localizedPagoPALink,
         onClick: () => window.open(localizedPagoPALink.href, '_blank'),
@@ -34,6 +39,6 @@ const Footer = ({ onLanguageChanged }: { onLanguageChanged: (langCode: string) =
       currentLangCode={currentLangCode}
     />
   );
-};
+}
 
 export default Footer;
