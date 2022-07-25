@@ -69,6 +69,9 @@ type Props = {
 
 const PaymentMethods = ({ notification, onConfirm, isCompleted }: Props) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation(['notifiche'], {
+    keyPrefix: 'new-notification.steps.payment-methods',
+  });
 
   const paymentDocumentSchema = yup.object({
     name: yup.string().required(),
@@ -101,11 +104,11 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted }: Props) => {
       /* eslint-disable-next-line functional/immutable-data */
       obj[r.taxId] = {
         pagoPaForm: {
-          name: 'Avviso pagoPA',
+          name: t('pagopa-notice'),
           file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
         },
         f24flatRate: {
-          name: 'F24 forfettario',
+          name: t('f24-flatrate'),
           file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
         },
         f24standard: {
@@ -163,17 +166,17 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted }: Props) => {
             sx={{ padding: '24px', marginTop: '40px' }}
             className="paperContainer"
           >
-            <Typography variant="h6">Modelli di pagamento per {recipient.denomination}</Typography>
+            <Typography variant="h6">{t('payment-models')} {recipient.denomination}</Typography>
             <PaymentBox
               id={`${recipient.taxId}.pagoPaForm.file`}
-              title="Allega Avviso pagoPA*"
+              title={`${t('attach-pagopa-notice')}*`}
               onFileUploaded={fileUploadedHandler}
               onRemoveFile={removeFileHandler}
             />
             {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
               <PaymentBox
                 id={`${recipient.taxId}.f24flatRate.file`}
-                title="Allega Modello F24 forfettario"
+                title={t('attach-f24-flatrate')}
                 onFileUploaded={fileUploadedHandler}
                 onRemoveFile={removeFileHandler}
               />
@@ -181,7 +184,7 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted }: Props) => {
             {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
               <PaymentBox
                 id={`${recipient.taxId}.f24standard.file`}
-                title="Allega Modello F24"
+                title={t('attach-f24')}
                 onFileUploaded={fileUploadedHandler}
                 onRemoveFile={removeFileHandler}
               />
