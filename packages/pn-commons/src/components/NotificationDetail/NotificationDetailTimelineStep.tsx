@@ -30,7 +30,6 @@ import {
 type Props = {
   timelineStep: NotificationStatusHistory;
   recipients: Array<NotificationDetailRecipient>;
-  legalFactLabels: { attestation: string; receipt: string };
   clickHandler: (legalFactId: LegalFactId) => void;
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;
@@ -74,7 +73,6 @@ const timelineStepCmp = (
  * @param timelineStep data to show
  * @param recipients list of recipients
  * @param clickHandler function called when user clicks on the download button
- * @param legalFactLabels label of the download button
  * @param position step position
  * @param showHistoryButton show history button
  * @param historyButtonLabel label for history button
@@ -86,7 +84,6 @@ const timelineStepCmp = (
 const NotificationDetailTimelineStep = ({
   timelineStep,
   recipients,
-  legalFactLabels,
   clickHandler,
   position = 'middle',
   showMoreButtonLabel,
@@ -160,7 +157,7 @@ const NotificationDetailTimelineStep = ({
                 color="primary"
                 sx={{ marginTop: '10px' }}
               >
-                {getLegalFactLabel(lf.category, legalFactLabels)}
+                {getLegalFactLabel(lf.category, lf.file.category)}
               </ButtonNaked>
             ))}
         </Box>
@@ -221,18 +218,19 @@ const NotificationDetailTimelineStep = ({
         <Box sx={{ overflowWrap: 'anywhere' }}>
           <Typography color="text.primary" fontSize={14}>
             {timelineStatusInfos.description}&nbsp;
-            {timelineStatusInfos.linkText && s.legalFactsIds && s.legalFactsIds.length > 0 && (
-              <Typography
+            {s.legalFactsIds && s.legalFactsIds.length > 0 && (
+              s.legalFactsIds.map(lf => <Typography
                 fontSize={14}
                 display="inline"
                 variant="button"
                 color="primary"
                 sx={{ cursor: 'pointer' }}
-                onClick={() => s.legalFactsIds && clickHandler(s.legalFactsIds[0])}
+                onClick={() => s.legalFactsIds && clickHandler(lf)}
+                key={lf.key}
               >
-                {timelineStatusInfos.linkText}
+                {getLegalFactLabel(s.category, lf.category)}
               </Typography>
-            )}
+            ))}
           </Typography>
         </Box>
         {recipients.length > 1 && (
