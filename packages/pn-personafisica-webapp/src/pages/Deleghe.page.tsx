@@ -21,6 +21,8 @@ import MobileDelegators from '../component/Deleghe/MobileDelegators';
 import Delegates from '../component/Deleghe/Delegates';
 import Delegators from '../component/Deleghe/Delegators';
 import { getSidemenuInformation } from '../redux/sidemenu/actions';
+import { trackEventByType } from "../utils/mixpanel";
+import { TrackEventType } from "../utils/events";
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -57,6 +59,7 @@ const Deleghe = () => {
     await dispatch(acceptDelegation({ id: acceptId, code: code.join('') }));
     void dispatch(getDelegators());
     void dispatch(getSidemenuInformation);
+    trackEventByType(TrackEventType.DELEGATION_DELEGATOR_ACCEPT);
   };
 
   useEffect(() => {

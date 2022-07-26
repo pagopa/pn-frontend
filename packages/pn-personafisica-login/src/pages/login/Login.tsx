@@ -14,6 +14,8 @@ import { IDPS } from '../../utils/IDPS';
 import { ENV } from '../../utils/env';
 import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
 import { storageSpidSelectedOps } from '../../utils/storage';
+import { trackEventByType } from "../../utils/mixpanel";
+import { TrackEventType } from "../../utils/events";
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -35,18 +37,13 @@ const Login = () => {
     window.location.assign(
       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
     );
-    // TODO track event
-    // trackEvent(
-    //   'LOGIN_IDP_SELECTED',
-    //   {
-    //     SPID_IDP_NAME: 'CIE',
-    //     SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
-    //   },
-    //   () =>
-    //     window.location.assign(
-    //       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
-    //     )
-    // );
+    trackEventByType(
+      TrackEventType.LOGIN_IDP_SELECTED,
+      {
+        SPID_IDP_NAME: 'CIE',
+        SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
+      },
+    );
   };
 
   if (showIDPS) {

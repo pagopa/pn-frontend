@@ -1,4 +1,4 @@
-import { Action, AnyAction, Dispatch, Middleware } from '@reduxjs/toolkit';
+import { AnyAction, Dispatch, Middleware, PayloadAction } from '@reduxjs/toolkit';
 import { init, track, Mixpanel } from 'mixpanel-browser';
 import { MIXPANEL_TOKEN } from './constants';
 import { events, TrackEventType } from './events';
@@ -40,21 +40,14 @@ export const mixpanelInit = function (): void {
  * @param properties event data
  */
 function trackEvent(event_name: string, properties?: any): void {
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development' || MIXPANEL_TOKEN === 'DUMMY') {
+  if (process.env.NODE_ENV === 'test') {
+    return;
+  } else if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development' || MIXPANEL_TOKEN === 'DUMMY') {
     // eslint-disable-next-line no-console
     console.log(event_name, properties);
-  } else if (process.env.NODE_ENV === 'test') {
-    return;
   } else {
     try {
-      /*
-      if (ENV === "UAT") {
-        track(event_name, { ...properties, ...{ environment: "UAT" } });
-      } else {
-        track(event_name, properties);
-      }
-      */
-      track(event_name, properties);
+      track(event_name, { ...properties, ...{ environment: "DEV" } });
     } catch (_) {
       // eslint-disable-next-line no-console
       console.log(event_name, properties);
@@ -68,19 +61,31 @@ function trackEvent(event_name: string, properties?: any): void {
 export const trackingMiddleware: Middleware =
   // ({getState}: MiddlewareAPI<any>) =>
   () =>
-  (next: Dispatch<AnyAction>) =>
-  (action: Action<any>): any => {
-    if (action.type in events) {
-      trackEvent(action.type, events[action.type]);
-    }
+    (next: Dispatch<AnyAction>) =>
+      (action: PayloadAction<any, string>): any => {
+        if (action.type in events) {
+          const idx = Object.values(TrackEventType).indexOf(action.type as TrackEventType);
+          const eventKey = Object.keys(TrackEventType)[idx];
+          const attributes = events[action.type].getAttributes?.(action.payload);
 
-    return next(action);
-  };
+          const eventParameters = attributes
+            ? { category: events[action.type].category, action: events[action.type].action, attributes }
+            : events[action.type];
+          trackEvent(eventKey, eventParameters);
+        }
+
+        return next(action);
+      };
 
 /**
  * Function to track events outside redux
  * @param trackEventType event name
+ * @param attributes event attributes
  */
- export const trackEventByType = (trackEventType: TrackEventType) => {
-  trackEvent(trackEventType, events[trackEventType]);
- };
+export const trackEventByType = (trackEventType: TrackEventType, attributes?: object) => {
+  const eventParameters = attributes
+    ? { ...events[trackEventType], attributes: { ...attributes } }
+    : events[trackEventType];
+
+  trackEvent(trackEventType, eventParameters);
+};

@@ -24,6 +24,7 @@ module.exports = {
     radix: 'error',
     'one-var': ['error', 'never'],
     'object-shorthand': 'error',
+    'object-curly-spacing': [1, 'always'],
     'no-var': 'error',
     'no-param-reassign': 'error',
     'no-underscore-dangle': 'error',
