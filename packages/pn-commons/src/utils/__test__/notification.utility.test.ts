@@ -149,7 +149,7 @@ describe('timeline utility functions', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_ANALOG_WORKFLOW;
     testTimelineStatusInfosFn(
       'Invio per via cartacea',
-      "È in corso l'invio della notifica per via cartacea."
+      "L'invio della notifica per via cartacea è in preparazione."
     );
   });
 
@@ -296,6 +296,14 @@ describe('timeline utility functions', () => {
       receipt: 'mocked-recipient-label',
     });
     expect(label).toBe('mocked-recipient-label');
+  });
+
+  it('return legalFact label - DIGITAL_FAILURE_WORKFLOW', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
+    testTimelineStatusInfosFn(
+      'Invio per via digitale non riuscito',
+      `L'invio per via digitale della notifica non è riuscito.`
+    );
   });
 
   // PN-1647
