@@ -287,7 +287,7 @@ const pfShowcases: Array<IShowcaseData> = [
           icon: <CloudIcon />,
           title: "Spazio",
           subtitle:
-            "Non devi più conservare i documenti stampati",
+            "Non devi più conservare i documenti stampati, grazie alla possibilità di scaricare e archiviare gli atti in digitale",
         },
       ],
     }
