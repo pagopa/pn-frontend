@@ -1,8 +1,8 @@
-import { UserForParseNotificationDetailForRecipient, DelegatorsForParseNotificationDetailForRecipient } from './../../types/notification.utility';
+import { Delegator } from '../delegation/types';
 
 export interface GetReceivedNotificationParams {
   iun: string;
-  currentUser: UserForParseNotificationDetailForRecipient;
-  delegatorsFromStore: DelegatorsForParseNotificationDetailForRecipient;
+  currentUserTaxId: string;
+  delegatorsFromStore: Array<Delegator>;
   mandateId?: string;
 }

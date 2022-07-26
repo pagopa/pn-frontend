@@ -22,6 +22,8 @@ import {
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
+import { trackEventByType } from '../../../utils/mixpanel';
+import { TrackEventType } from '../../../utils/events';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
 
@@ -38,7 +40,6 @@ const emptyValues = {
 };
 
 const initialEmptyValues = {
-  searchFor: '0',
   startDate: tenYearsAgo,
   endDate: today,
   status: NotificationAllowedStatus[0].value,
@@ -66,7 +67,6 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       return initialEmptyValues;
     }
     return {
-      searchFor: '0',
       startDate: new Date(filters.startDate),
       endDate: new Date(filters.endDate),
       recipientId: getValidValue(filters.recipientId),
@@ -93,12 +93,14 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       if (_.isEqual(prevFilters, currentFilters)) {
         return;
       }
+      trackEventByType(TrackEventType.NOTIFICATION_FILTER_SEARCH);
       dispatch(setNotificationFilters(currentFilters));
       setPrevFilters(currentFilters);
     },
   });
 
   const cancelSearch = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_FILTER_REMOVE);
     dispatch(setNotificationFilters(emptyValues));
   };
 

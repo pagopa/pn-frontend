@@ -17,6 +17,8 @@ import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setPreliminaryInformations } from '../../../redux/newNotification/actions';
 import { RootState } from '../../../redux/store';
+import { trackEventByType } from '../../../utils/mixpanel';
+import { TrackEventType } from '../../../utils/events';
 import NewNotificationCard from './NewNotificationCard';
 
 type Props = {
@@ -64,6 +66,16 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
+  const handleChangeDeliveryMode = (e: ChangeEvent & {target: {value: any}}) => {
+    formik.handleChange(e);
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_DELIVERY_MODE, {type: e.target.value});
+  };
+
+  const handleChangePaymentMode = (e: ChangeEvent & {target: {value: any}}) => {
+    formik.handleChange(e);
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_PAYMENT_MODE, {target: e.target.value});
+  };
+  
   useEffect(() => {
     if (!groups) {
       // TODO: chiamata al be per prendere gruppi associati con self care
@@ -143,7 +155,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             name="physicalCommunicationType"
             row
             value={formik.values.physicalCommunicationType}
-            onChange={formik.handleChange}
+            onChange={handleChangeDeliveryMode}
           >
             <FormControlLabel
               value={PhysicalCommunicationType.REGISTERED_LETTER_890}
@@ -169,7 +181,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             aria-labelledby="payment-method-label"
             name="paymentMode"
             value={formik.values.paymentMode}
-            onChange={formik.handleChange}
+            onChange={handleChangePaymentMode}
           >
             <FormControlLabel
               value={PaymentModel.PAGO_PA_NOTICE}

@@ -9,7 +9,7 @@
     "@mui/icons-material": "^5.8.2",
     "@mui/material": "^5.8.2",
     "@pagopa-pn/pn-commons": "0.1.0",
-    "@pagopa/mui-italia": "0.6.30",
+    "@pagopa/mui-italia": "^0.6.37",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",

@@ -12,6 +12,8 @@ import SpidBig from '../../assets/spid_big.svg';
 import { ENV } from '../../utils/env';
 import { storageSpidSelectedOps } from '../../utils/storage';
 import { shuffleList } from '../../utils/utils';
+import { trackEventByType } from "../../utils/mixpanel";
+import { TrackEventType } from "../../utils/events";
 
 const Login = ({ onBack }: { onBack: () => void }) => {
   const { t } = useTranslation();
@@ -19,19 +21,14 @@ const Login = ({ onBack }: { onBack: () => void }) => {
 
   const getSPID = (IDP: IdentityProvider) => {
     storageSpidSelectedOps.write(IDP.entityId);
+    trackEventByType(
+        TrackEventType.LOGIN_IDP_SELECTED,
+        {
+          SPID_IDP_NAME: IDP.name,
+          SPID_IDP_ID: IDP.entityId,
+        }
+    );
     window.location.assign(`${ENV.URL_API.LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`);
-    // https://hub-login.ecs.dev.pn.pagopa.it/login?entityID=xx_testenv2&authLevel=SpidL2
-    // trackEvent(
-    //   'LOGIN_IDP_SELECTED',
-    //   {
-    //     SPID_IDP_NAME: IDP.name,
-    //     SPID_IDP_ID: IDP.entityId,
-    //   },
-    //   () =>
-    //     window.location.assign(
-    //       `${ENV.URL_API.LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`
-    //     )
-    // );
   };
 
   return (

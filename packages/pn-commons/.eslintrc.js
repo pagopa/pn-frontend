@@ -9,6 +9,11 @@ module.exports = {
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
+  },
   plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import', 'functional', 'sonarjs'],
   rules: {
     'no-case-declarations': 'off',
@@ -19,6 +24,7 @@ module.exports = {
     radix: 'error',
     'one-var': ['error', 'never'],
     'object-shorthand': 'error',
+    'object-curly-spacing': [1, 'always'],
     'no-var': 'error',
     'no-param-reassign': 'error',
     'no-underscore-dangle': 'error',

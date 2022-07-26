@@ -14,7 +14,8 @@ describe('CustomTooltip Component', () => {
 
   it('toggle tooltip on hover', async () => {
     // render component
-    const result = render(<CustomTooltip tooltipContent="Mocked content" openOnClick={false}><p>Mocked Text</p></CustomTooltip>);
+    const mockOnOpenCallback = jest.fn();
+    const result = render(<CustomTooltip tooltipContent="Mocked content" openOnClick={false} onOpen={mockOnOpenCallback}><p>Mocked Text</p></CustomTooltip>);
     const paragraph = result.container.querySelector('p');
     await waitFor(() => {
       fireEvent.mouseOver(paragraph!);
@@ -22,6 +23,7 @@ describe('CustomTooltip Component', () => {
     const tooltip = await screen.findByRole('tooltip');
     expect(tooltip).toBeInTheDocument();
     expect(tooltip).toHaveTextContent(/Mocked content/i);
+    expect(mockOnOpenCallback).toBeCalledTimes(1);
   });
 
   it('toggle tooltip on click', async () => {

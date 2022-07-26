@@ -12,7 +12,7 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-test.skip('test login error', async () => {
+test('test login error', async () => {
   render(
     <BrowserRouter>
       <LoginError />
@@ -33,7 +33,7 @@ test.skip('test login error', async () => {
       expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     },
     {
-      timeout: 3000,
+      timeout: 3500,
     }
   );
 });

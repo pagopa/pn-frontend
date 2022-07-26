@@ -1,5 +1,13 @@
 import MockAdapter from 'axios-mock-adapter';
-import { tenYearsAgo, today, LegalFactId, LegalFactType, PaymentAttachmentNameType, formatToTimezoneString, getNextDay } from '@pagopa-pn/pn-commons';
+import {
+  tenYearsAgo,
+  today,
+  LegalFactId,
+  LegalFactType,
+  PaymentAttachmentNameType,
+  formatToTimezoneString,
+  getNextDay,
+} from '@pagopa-pn/pn-commons';
 import { apiClient } from '../../axios';
 import { NotificationsApi } from '../Notifications.api';
 import {
@@ -10,17 +18,28 @@ import {
   notificationFromBe, notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
-import { NOTIFICATIONS_LIST, NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_DOCUMENTS, NOTIFICATION_DETAIL_LEGALFACT, NOTIFICATION_PAYMENT_ATTACHMENT, NOTIFICATION_PAYMENT_INFO } from '../notifications.routes';
+import {
+  NOTIFICATIONS_LIST,
+  NOTIFICATION_DETAIL,
+  NOTIFICATION_DETAIL_DOCUMENTS,
+  NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_PAYMENT_ATTACHMENT,
+  NOTIFICATION_PAYMENT_INFO,
+} from '../notifications.routes';
 
 describe('Notifications api tests', () => {
   mockAuthentication();
 
   it('getReceivedNotifications', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATIONS_LIST({
-      startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
-    })).reply(200, notificationsFromBe);
+    mock
+      .onGet(
+        NOTIFICATIONS_LIST({
+          startDate: formatToTimezoneString(tenYearsAgo),
+          endDate: formatToTimezoneString(getNextDay(today)),
+        })
+      )
+      .reply(200, notificationsFromBe);
     const res = await NotificationsApi.getReceivedNotifications({
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(getNextDay(today)),
@@ -34,9 +53,11 @@ describe('Notifications api tests', () => {
     const iun = 'mocked-iun';
     const mock = new MockAdapter(apiClient);
     mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationFromBe);
-    const res = await NotificationsApi.getReceivedNotification(iun, {
-      fiscal_number: 'CGNNMO80A03H501U',
-    }, []);
+    const res = await NotificationsApi.getReceivedNotification(
+      iun,
+      'CGNNMO80A03H501U',
+      []
+    );
     expect(res).toStrictEqual(notificationToFe);
     mock.reset();
     mock.restore();
@@ -62,9 +83,7 @@ describe('Notifications api tests', () => {
       category: LegalFactType.ANALOG_DELIVERY,
     };
     const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact))
-      .reply(200, undefined);
+    mock.onGet(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact)).reply(200, undefined);
     const res = await NotificationsApi.getReceivedNotificationLegalfact(iun, legalFact);
     expect(res).toStrictEqual({ url: '' });
     mock.reset();
@@ -77,8 +96,11 @@ describe('Notifications api tests', () => {
     const mock = new MockAdapter(apiClient);
     mock
       .onGet(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName))
-      .reply(200, {url: 'http://mocked-url.com'});
-    const res = await NotificationsApi.getPaymentAttachment(iun, attachmentName as PaymentAttachmentNameType);
+      .reply(200, { url: 'http://mocked-url.com' });
+    const res = await NotificationsApi.getPaymentAttachment(
+      iun,
+      attachmentName as PaymentAttachmentNameType
+    );
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
     mock.reset();
     mock.restore();
@@ -88,16 +110,14 @@ describe('Notifications api tests', () => {
     const taxId = 'mocked-taxId';
     const noticeCode = 'mocked-noticeCode';
     const mock = new MockAdapter(apiClient);
-    mock
-      .onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
-      .reply(200, {
-        status: 'SUCCEEDED',
-        amount: 10
-      });
+    mock.onGet(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode)).reply(200, {
+      status: 'SUCCEEDED',
+      amount: 10,
+    });
     const res = await NotificationsApi.getNotificationPaymentInfo(noticeCode, taxId);
     expect(res).toStrictEqual({
       status: 'SUCCEEDED',
-      amount: 10
+      amount: 10,
     });
     mock.reset();
     mock.restore();

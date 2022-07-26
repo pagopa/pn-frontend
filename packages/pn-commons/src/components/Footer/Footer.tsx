@@ -7,7 +7,19 @@ import {
   preLoginLinks,
 } from '../../utils/costants';
 
-const Footer = () => (
+type Props = {
+  /** Event tracking callback on change language */
+  eventTrackingCallbackChangeLanguage?: () => void;
+}
+const Footer = ({
+  eventTrackingCallbackChangeLanguage
+}: Props) => {
+  const handleOnChangeLanguage = () => {
+    if (eventTrackingCallbackChangeLanguage) eventTrackingCallbackChangeLanguage();
+    console.log('Language changed');
+  };
+
+  return (
     <MuiFooter
       loggedUser={true}
       companyLink={{...pagoPALink, onClick: () => window.open(pagoPALink.href, '_blank')}}
@@ -16,8 +28,9 @@ const Footer = () => (
       preLoginLinks={preLoginLinks}
       languages={LANGUAGES}
       currentLangCode={'it'}
-      onLanguageChanged={() => console.log('Language changed')}
+      onLanguageChanged={handleOnChangeLanguage}
     />
-  );
+  )
+};
 
 export default Footer;
