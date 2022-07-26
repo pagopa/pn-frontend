@@ -437,6 +437,7 @@ const pfWalkthrough: WalkthroughProps = {
       Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online o 
       a ritirare i documenti allegati in versione cartacea presso qualsiasi Ufficio Postale.
       `,
+      isSequential: false
     },
   ],
 };
