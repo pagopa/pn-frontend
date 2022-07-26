@@ -139,7 +139,7 @@ export function getNotificationTimelineStatusInfos(
     case TimelineCategory.SCHEDULE_ANALOG_WORKFLOW:
       return {
         label: 'Invio per via cartacea',
-        description: "È in corso l'invio della notifica per via cartacea.",
+        description: "L'invio della notifica per via cartacea è in preparazione.",
         linkText: legalFactLabel,
         recipient: recipientLabel,
       };
@@ -251,6 +251,13 @@ export function getNotificationTimelineStatusInfos(
         linkText: receiptLabel,
         recipient: recipientLabel,
       };
+    case TimelineCategory.DIGITAL_FAILURE_WORKFLOW:
+      return {
+        label: 'Invio per via digitale non riuscito',
+        description: `L'invio per via digitale della notifica non è riuscito.`,
+        linkText: receiptLabel,
+        recipient: recipientLabel,
+      };
     // PN-1647
     case TimelineCategory.NOT_HANDLED:
       if (
@@ -280,6 +287,7 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_PAPER_FEEDBACK,
+  TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
   // PN-1647
   TimelineCategory.NOT_HANDLED,
 ];
@@ -301,10 +309,10 @@ function populateMacroStep(
   if (step) {
     // hide accepted status micro steps
     if (status.status === NotificationStatus.ACCEPTED) {
-      status.steps!.push({...step, hidden: true});
+      status.steps!.push({ ...step, hidden: true });
       // remove legal facts for those microsteps that are releated to accepted status
     } else if (acceptedStatusItems.length && acceptedStatusItems.indexOf(step.elementId) > -1) {
-      status.steps!.push({...step, legalFactsIds: []});
+      status.steps!.push({ ...step, legalFactsIds: [] });
       // default case
     } else {
       status.steps!.push(step);
