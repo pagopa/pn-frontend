@@ -23,6 +23,7 @@ import { IUN_regex, formatIun } from './iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import { storageOpsBuilder } from './storage.utility';
 import { compileRoute } from './routes.utility';
+import {URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH} from './costants';
 
 export {
     NotificationAllowedStatus,
@@ -48,5 +49,7 @@ export {
     tenYearsAgo,
     DATE_FORMAT,
     getLegalFactLabel,
-    getNotificationTimelineStatusInfos
+    getNotificationTimelineStatusInfos,
+    URL_DIGITAL_NOTIFICATIONS,
+    PRIVACY_LINK_RELATIVE_PATH
 };
