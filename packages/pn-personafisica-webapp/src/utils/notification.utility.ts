@@ -1,12 +1,10 @@
 import { NotificationDetail, parseNotificationDetail } from '@pagopa-pn/pn-commons';
-import {
-  UserForParseNotificationDetailForRecipient,
-  DelegatorsForParseNotificationDetailForRecipient,
-} from './../types/notification.utility';
-import { NotificationDetailForRecipient } from './../types/NotificationDetail';
+
+import { Delegator } from '../redux/delegation/types';
+import { NotificationDetailForRecipient } from '../types/NotificationDetail';
 
 function fiscalNumberDaDelegator(
-  delegatorsFromStore: DelegatorsForParseNotificationDetailForRecipient,
+  delegatorsFromStore: Array<Delegator>,
   mandateId: string
 ): string | undefined {
   const currentDelegatorFromStore = delegatorsFromStore
@@ -15,20 +13,16 @@ function fiscalNumberDaDelegator(
   return currentDelegatorFromStore ? currentDelegatorFromStore.delegator?.fiscalCode : undefined;
 }
 
-function fiscalNumberDaUser(currentUser: { fiscal_number: string }): string {
-  return currentUser.fiscal_number;
-}
-
 export function parseNotificationDetailForRecipient(
   notification: NotificationDetail,
-  currentUser: UserForParseNotificationDetailForRecipient,
-  delegatorsFromStore: DelegatorsForParseNotificationDetailForRecipient,
+  currentUserTaxId: string,
+  delegatorsFromStore: Array<Delegator>,
   mandateId?: string
 ): NotificationDetailForRecipient {
   // determine current recipient
   const fiscalNumberForNotification = mandateId
     ? fiscalNumberDaDelegator(delegatorsFromStore, mandateId)
-    : fiscalNumberDaUser(currentUser);
+    : currentUserTaxId;
   const candidateCurrentRecipientIndex = notification.recipients.findIndex(
     (recipient) => recipient.taxId === fiscalNumberForNotification
   );
@@ -51,9 +45,6 @@ export function parseNotificationDetailForRecipient(
       : timelineElement;
   });
   const notificationClone = { ...notification, timeline: cleanedTimeline };
-
-  // console.log('after having cleaned legalFactsIds');
-  // console.log({ notification, notificationClone, cleanedTimeline, currentRecipientIndex, currentRecipient });
 
   // do the changes common to the pa and pf
   const commonNotificationDetailForFe = parseNotificationDetail(notificationClone);

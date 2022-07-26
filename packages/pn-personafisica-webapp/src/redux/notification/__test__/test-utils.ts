@@ -223,8 +223,8 @@ const recipientToUnshift = {
 };
 
 export const notificationFromBeTwoRecipients: NotificationDetail = {
-  ...notificationFromBe, 
-  recipients: [recipientToUnshift, ...notificationFromBe.recipients]
+  ...notificationFromBe,
+  recipients: [recipientToUnshift, ...notificationFromBe.recipients],
 };
 
 export const getNotification = (payment?: {
@@ -260,7 +260,7 @@ export const getNotification = (payment?: {
       }
     : undefined;
 
-  return notification;
+  return parseNotificationDetailForRecipient(notification, 'CGNNMO80A03H501U', []);
 };
 
 export const getUnavailableDocsNotification = (): NotificationDetail => {
@@ -268,7 +268,7 @@ export const getUnavailableDocsNotification = (): NotificationDetail => {
   // eslint-disable-next-line functional/immutable-data
   notification.documentsAvailable = false;
 
-  return notification;
+  return parseNotificationDetailForRecipient(notification, 'CGNNMO80A03H501U', []);
 };
 
 export const getCancelledNotification = (): NotificationDetail => {
@@ -276,12 +276,14 @@ export const getCancelledNotification = (): NotificationDetail => {
   // eslint-disable-next-line functional/immutable-data
   notification.notificationStatus = NotificationStatus.CANCELLED;
 
-  return notification;
+  return parseNotificationDetailForRecipient(notification, 'CGNNMO80A03H501U', []);
 };
 
-export const notificationToFe = parseNotificationDetailForRecipient(notificationFromBe, {
-  fiscal_number: 'CGNNMO80A03H501U',
-}, []);
+export const notificationToFe = parseNotificationDetailForRecipient(
+  notificationFromBe,
+  'CGNNMO80A03H501U',
+  []
+);
 
 export const fixedMandateId = 'ALFA-BETA-GAMMA';
 
@@ -292,11 +294,24 @@ export const notificationToFeTwoRecipients = (
 ) =>
   parseNotificationDetailForRecipient(
     notificationFromBeTwoRecipients,
-    {
-      fiscal_number: userFiscalNumber,
-    },
+    userFiscalNumber,
     delegatorFiscalNumber && isDelegate
-      ? [{ mandateId: fixedMandateId, delegator: { fiscalCode: delegatorFiscalNumber } }]
+      ? [
+          {
+            mandateId: fixedMandateId,
+            delegator: {
+              fiscalCode: delegatorFiscalNumber,
+              firstName: 'Mario',
+              lastName: 'Rossi',
+              person: true,
+            },
+            status: 'active',
+            visibilityIds: [],
+            verificationCode: '',
+            datefrom: '',
+            dateto: ''
+          },
+        ]
       : [],
     isDelegate ? fixedMandateId : undefined
   );

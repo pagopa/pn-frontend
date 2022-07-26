@@ -5,6 +5,8 @@ import LandingLayout from "../src/layout/LandingLayout";
 
 import { LangProvider } from '../provider/lang-context';
 
+import '../styles/default.css';
+
 function Main({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>

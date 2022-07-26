@@ -12,9 +12,9 @@
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
-    "@mui/material": "^5.8.4",
+    "@mui/material": "^5.8.6",
     "@pagopa-pn/pn-commons": "0.1.0",
-    "@pagopa/mui-italia": "0.6.30",
+    "@pagopa/mui-italia": "^0.6.37",
     "next": "12.1.6",
     "next-i18next": "^11.0.0",
     "next-language-detector": "^1.0.2",
@@ -26,8 +26,8 @@
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.2",
     "eslint": "8.17.0",
-    "next-transpile-modules": "^9.0.0",
     "eslint-config-next": "12.1.6",
+    "next-transpile-modules": "^9.0.0",
     "ts-loader": "^9.3.0",
     "typescript": "4.7.3"
   }

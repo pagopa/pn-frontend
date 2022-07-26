@@ -15,6 +15,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { useAppDispatch } from '../../redux/hooks';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/actions';
+import { trackEventByType } from "../../utils/mixpanel";
+import { TrackEventType } from "../../utils/events";
 
 export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -23,6 +25,11 @@ export const Menu = (props: any) => {
   const { t } = useTranslation(['deleghe']);
 
   const handleOpenModalClick = () => {
+    if (props.menuType === 'delegates') {
+      trackEventByType(TrackEventType.DELEGATION_DELEGATE_REVOKE);
+    } else {
+      trackEventByType(TrackEventType.DELEGATION_DELEGATOR_REJECT);
+    }
     dispatch(openRevocationModal({ id: props.id, type: props.menuType }));
     setAnchorEl(null);
   };
@@ -30,6 +37,7 @@ export const Menu = (props: any) => {
   const handleOpenVerificationCodeModal = () => {
     props.setCodeModal({ open: true, name: props.name, code: props.verificationCode });
     setAnchorEl(null);
+    trackEventByType(TrackEventType.DELEGATION_DELEGATE_VIEW_CODE);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

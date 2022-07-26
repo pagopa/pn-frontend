@@ -11,6 +11,8 @@ import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import TableError from '../TableError/TableError';
 import { getDelegates } from '../../redux/delegation/actions';
+import { trackEventByType } from "../../utils/mixpanel";
+import { TrackEventType } from "../../utils/events";
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const MobileDelegates = () => {
@@ -98,8 +100,9 @@ const MobileDelegates = () => {
     },
   ];
 
-  const handleAddDelegationClick = () => {
+  const handleAddDelegationClick = (source: string) => {
     navigate(routes.NUOVA_DELEGA);
+    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_CTA, {source});
   };
 
   const handleCloseShowCodeModal = () => {
@@ -127,7 +130,7 @@ const MobileDelegates = () => {
         {!delegatesError && (
           <>
             <Box mb={2}>
-              <Button variant="outlined" onClick={handleAddDelegationClick}>
+              <Button variant="outlined" onClick={(_e, source='default') => handleAddDelegationClick(source)}>
                 <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
                 {t('deleghe.add')}
               </Button>
@@ -136,7 +139,7 @@ const MobileDelegates = () => {
               <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
             ) : (
               <EmptyState
-                emptyActionCallback={handleAddDelegationClick}
+                emptyActionCallback={(_e, source='empty_state') => handleAddDelegationClick(source)}
                 emptyMessage={t('deleghe.no_delegates')}
                 emptyActionLabel={t('deleghe.add')}
               />

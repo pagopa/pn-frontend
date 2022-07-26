@@ -4,7 +4,7 @@ import { Transition } from 'history';
 
 import { useBlocker } from './useBlocker';
 
-export function usePrompt(when: boolean): [boolean, (() => void), (() => void)] {
+export function usePrompt(when: boolean, callbackCancel: () => void, callbackConfirm: () => void): [boolean, (() => void), (() => void)] {
   const location = useLocation();
   const navigate = useNavigate();
   const [showPrompt, setShowPrompt] = useState(false);
@@ -13,6 +13,7 @@ export function usePrompt(when: boolean): [boolean, (() => void), (() => void)] 
 
   const cancelNavigation = useCallback(() => {
     setShowPrompt(false);
+    callbackCancel();
   }, []);
 
   // handle blocking when user click on another route prompt will be shown
@@ -35,6 +36,7 @@ export function usePrompt(when: boolean): [boolean, (() => void), (() => void)] 
   const confirmNavigation = useCallback(() => {
     setShowPrompt(false);
     setConfirmedNavigation(true);
+    callbackConfirm();
   }, []);
 
   useEffect(() => {

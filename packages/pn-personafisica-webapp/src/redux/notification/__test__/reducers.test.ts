@@ -52,7 +52,7 @@ describe('Notification detail redux state tests', () => {
     const action = await store.dispatch(
       getReceivedNotification({
         iun: 'mocked-iun',
-        currentUser: { fiscal_number: 'CGNNMO80A03H501U' },
+        currentUserTaxId: 'CGNNMO80A03H501U' ,
         delegatorsFromStore: []
       })
     );

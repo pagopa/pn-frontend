@@ -1,16 +1,18 @@
 import {
-  formatDate, GetNotificationsParams,
-  GetNotificationsResponse, LegalFactId,
-  NotificationDetail, PaymentAttachmentNameType, PaymentInfo, 
+  formatDate,
+  GetNotificationsParams,
+  GetNotificationsResponse,
+  LegalFactId,
+  NotificationDetail,
+  PaymentAttachmentNameType,
+  PaymentInfo,
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
 
-import { apiClient } from '../axios';
+import { Delegator } from '../../redux/delegation/types';
 import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
-import {
-  UserForParseNotificationDetailForRecipient,
-  DelegatorsForParseNotificationDetailForRecipient,
-} from './../../types/notification.utility';
+import { NotificationDetailForRecipient } from '../../types/NotificationDetail';
+import { apiClient } from '../axios';
 
 import {
   NOTIFICATIONS_LIST,
@@ -20,7 +22,6 @@ import {
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
 } from './notifications.routes';
-import { NotificationDetailForRecipient } from './../../types/NotificationDetail';
 
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
@@ -58,20 +59,22 @@ export const NotificationsApi = {
   /**
    * Gets current user notification detail
    * @param  {string} iun
+   * @param  {string} currentUserTaxId
+   * @param  {Array<Delegator>} delegatorsFromStore
    * @param  {string} mandateId
    * @returns Promise
    */
   getReceivedNotification: (
     iun: string,
-    currentUser: UserForParseNotificationDetailForRecipient,
-    delegatorsFromStore: DelegatorsForParseNotificationDetailForRecipient,
+    currentUserTaxId: string,
+    delegatorsFromStore: Array<Delegator>,
     mandateId?: string
   ): Promise<NotificationDetailForRecipient> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
       if (response.data) {
         return parseNotificationDetailForRecipient(
           response.data,
-          currentUser,
+          currentUserTaxId,
           delegatorsFromStore,
           mandateId
         );
@@ -79,7 +82,6 @@ export const NotificationsApi = {
         return {} as NotificationDetailForRecipient;
       }
     }),
-
 
   /**
    * Gets current user notification document
