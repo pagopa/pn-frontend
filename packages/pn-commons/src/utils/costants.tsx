@@ -10,8 +10,8 @@ export const pagoPALink: {href: string; ariaLabel: string} = {
   ariaLabel: "Link: vai al sito di PagoPA S.p.A.",
 };
 
-export const URL_DIGITAL_NOTIFICATIONS = 'https://notifichedigitali.it';
-
+// export const URL_DIGITAL_NOTIFICATIONS = 'https://notifichedigitali.it';
+export const URL_DIGITAL_NOTIFICATIONS = 'https://develop.d33g1ea1dgp7a4.amplifyapp.com';
 // export const URL_PRIVACY_LINK = 'https://notifichedigitali.it/cittadini/informativa-privacy'
 export const PRIVACY_LINK_RELATIVE_PATH = '/cittadini/informativa-privacy'
 
