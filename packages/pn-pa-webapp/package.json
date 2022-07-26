@@ -6,9 +6,9 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
-    "@mui/icons-material": "^5.8.2",
+    "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.80",
-    "@mui/material": "^5.8.2",
+    "@mui/material": "^5.8.6",
     "@mui/styles": "^5.4.1",
     "@mui/x-date-pickers": "^5.0.0-alpha.5",
     "@pagopa-pn/pn-commons": "0.1.0",
