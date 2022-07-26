@@ -365,9 +365,6 @@ export function parseNotificationDetail(
   const parsedNotification = {
     ...notificationDetail,
     sentAt: formatDate(notificationDetail.sentAt),
-    notificationStatusHistory: notificationDetail.notificationStatusHistory.map(
-      status => ({...status, relatedTimelineElements: [...status.relatedTimelineElements]})
-    )
   };
   /* eslint-disable functional/immutable-data */
   /* eslint-disable functional/no-let */
