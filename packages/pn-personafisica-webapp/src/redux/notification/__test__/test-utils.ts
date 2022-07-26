@@ -85,7 +85,22 @@ export const notificationFromBe: NotificationDetail = {
     {
       status: NotificationStatus.DELIVERED,
       activeFrom: '2022-02-22T10:19:33.440Z',
-      relatedTimelineElements: [],
+      relatedTimelineElements: [
+        'c_b429-202203021814_start',                       // legalFact sender_ack~0f4Z32eLEiX8NSYR4WYzyvQvnQHh1t7Z + recIndex 
+        'c_b429-202203021814_deliveryMode_rec0',           
+        'c_b429-202203021814_send_pec_rec0_PLATFORM_n1',   // recIndex
+      ],
+    },
+    {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2022-02-22T10:25:28.440Z',
+      relatedTimelineElements: [
+        'c_b429-202203021814_send_pec_rec0_SPECIAL_n1',    
+        'c_b429-202203021814_send_pec_result_rec0_SPECIAL_n1',    // legalFact sender_ack-toto1
+        'c_b429-202203021814_send_courtesy_rec0',                 // legalFact digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.    
+                                                                  // + recIndex
+        'c_b429-202203021814_recipient_timeout_rec0',             
+      ],
     },
   ],
   timeline: [
@@ -93,7 +108,7 @@ export const notificationFromBe: NotificationDetail = {
       elementId: 'c_b429-202203021814_start',
       timestamp: '2022-03-02T17:56:46.668Z',
       category: TimelineCategory.REQUEST_ACCEPTED,
-      details: {},
+      details: { recIndex: 0 },
       legalFactsIds: [
         {
           key: 'sender_ack~0f4Z32eLEiX8NSYR4WYzyvQvnQHh1t7Z',
@@ -122,6 +137,7 @@ export const notificationFromBe: NotificationDetail = {
       timestamp: '2022-03-02T17:56:53.636Z',
       category: TimelineCategory.SEND_DIGITAL_DOMICILE,
       details: {
+        recIndex: 0,
         digitalAddress: {
           type: DigitalDomicileType.EMAIL,
           address: 'nome.cognome@works.demo.it',
@@ -155,6 +171,12 @@ export const notificationFromBe: NotificationDetail = {
       elementId: 'c_b429-202203021814_send_pec_result_rec0_SPECIAL_n1',
       timestamp: '2022-03-02T17:57:03.284Z',
       category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
+      legalFactsIds: [
+        {
+          key: 'sender_ack-toto1',
+          category: LegalFactType.SENDER_ACK,
+        },
+      ],
       details: {
         digitalAddress: {
           type: DigitalDomicileType.PEC,
@@ -173,7 +195,9 @@ export const notificationFromBe: NotificationDetail = {
       elementId: 'c_b429-202203021814_send_courtesy_rec0',
       timestamp: '2022-03-02T17:57:06.819Z',
       category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-      details: {},
+      details: {
+        recIndex: 0
+      },
       legalFactsIds: [
         {
           key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
@@ -290,10 +314,17 @@ export const fixedMandateId = 'ALFA-BETA-GAMMA';
 export const notificationToFeTwoRecipients = (
   userFiscalNumber: string,
   delegatorFiscalNumber?: string,
-  isDelegate?: boolean
-) =>
-  parseNotificationDetailForRecipient(
-    notificationFromBeTwoRecipients,
+  isDelegate?: boolean,
+  bePreprocess?: (a: NotificationDetail) => NotificationDetail
+) => {
+  const notificationBe = bePreprocess
+    ? bePreprocess(notificationFromBeTwoRecipients)
+    : notificationFromBeTwoRecipients;
+  if (bePreprocess) {
+    console.log(notificationBe.timeline);
+  }
+  return parseNotificationDetailForRecipient(
+    notificationBe,
     userFiscalNumber,
     delegatorFiscalNumber && isDelegate
       ? [
@@ -309,9 +340,10 @@ export const notificationToFeTwoRecipients = (
             visibilityIds: [],
             verificationCode: '',
             datefrom: '',
-            dateto: ''
+            dateto: '',
           },
         ]
       : [],
     isDelegate ? fixedMandateId : undefined
   );
+};
