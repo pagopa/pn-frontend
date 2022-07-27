@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, Fragment, ReactNode, useState } from 'react';
+import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
 import {
   Box,
   Button,
@@ -27,6 +27,7 @@ import {
   TitleBox,
   useIsMobile,
   NotificationDetailRecipient,
+  NotificationStatus,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -214,6 +215,21 @@ const NotificationDetail = () => {
     navigate(routes.NUOVA_NOTIFICA);
   };
 
+  const isCancelled =
+    notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
+
+  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
+
+  const getDownloadFilesMessage = useCallback((): string => {
+    if (isCancelled) {
+      return "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.";
+    } else if (hasDocumentsAvailable) {
+      return "I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.";
+    } else {
+      return "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, i documenti non sono più disponibili.";
+    }
+  }, [isCancelled, hasDocumentsAvailable]);
+
   // PN-1714
   /*
   const openModal = () => {
@@ -348,9 +364,11 @@ const NotificationDetail = () => {
               <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                 <NotificationDetailDocuments
                   title="Documenti allegati"
-                  documents={notification.documents}
+                  documents={notification.documents ?? []}
                   clickHandler={documentDowloadHandler}
-                  documentsAvailable={notification.documentsAvailable as boolean}
+                  documentsAvailable={hasDocumentsAvailable}
+                  downloadFilesMessage={getDownloadFilesMessage()}
+                  downloadFilesLink="Quando si perfeziona una notifica?"
                 />
               </Paper>
             </Stack>
