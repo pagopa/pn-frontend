@@ -71,7 +71,8 @@ const App = () => {
         id: '0',
         name: loggedUserOrganizationParty ? loggedUserOrganizationParty.name : "Ente sconosciuto",
         productRole: role?.role,
-        logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
+        logoUrl: `https://cdn.icon-icons.com/icons2/1863/PNG/512/account-balance_119479.png`,
+        // logoUrl: <AccountBalanceIcon />
       },
     ],
     [role, loggedUserOrganizationParty]
