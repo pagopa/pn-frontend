@@ -2,34 +2,36 @@ import { useEffect, Fragment, ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  Grid,
   Box,
-  Paper,
   Button,
-  Stack,
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
   DialogContentText,
   Typography,
+  DialogTitle,
+  Grid,
+  Paper,
+  Stack,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
   // PN-1714
   // NotificationStatus,
-  TitleBox,
-  NotificationDetailTableRow,
-  NotificationDetailTable,
-  NotificationDetailDocuments,
   LegalFactId,
+  NotificationDetailDocuments,
+  NotificationDetailTable,
+  NotificationDetailTableRow,
   NotificationDetailTimeline,
-  useIsMobile,
   PnBreadcrumb,
+  TitleBox,
+  useIsMobile,
   NotificationDetailRecipient,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -71,20 +73,24 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
 
   const getRecipientsNoticeCodeField = (
-    rcpts: Array<NotificationDetailRecipient>,
+    filteredRecipients: Array<NotificationDetailRecipient>,
     alt: boolean = false
   ): ReactNode => {
-    if (rcpts.length > 1) {
-      return rcpts.map((recipient, index) => (
+    if (filteredRecipients.length > 1) {
+      return filteredRecipients.map((recipient, index) => (
         <Box key={index} fontWeight={600}>
           {recipient.taxId} -{' '}
+          {recipient?.payment?.creditorTaxId} -{' '}
           {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
         </Box>
       ));
     }
     return (
       <Box fontWeight={600}>
-        {alt ? rcpts[0]?.payment?.noticeCodeAlternative : rcpts[0]?.payment?.noticeCode}
+        {filteredRecipients[0]?.payment?.creditorTaxId} -{' '}
+        {alt
+          ? filteredRecipients[0]?.payment?.noticeCodeAlternative
+          : filteredRecipients[0]?.payment?.noticeCode}
       </Box>
     );
   };
@@ -133,6 +139,11 @@ const NotificationDetail = () => {
           {notification.paymentExpirationDate}
         </Box>
       ),
+    },
+    {
+      label: t('detail.amount', { ns: 'notifiche' }),
+      rawValue: notification.amount?.toFixed(2),
+      value: <Box fontWeight={600}>{notification.amount?.toFixed(2)}</Box>,
     },
     {
       label: t('detail.iun', { ns: 'notifiche' }),
@@ -208,6 +219,7 @@ const NotificationDetail = () => {
   // PN-1714
   /*
   const openModal = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_CANCEL_NOTIFICATION);
     setShowModal(true);
   };
   */
@@ -359,6 +371,9 @@ const NotificationDetail = () => {
                 historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                 showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                 showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+                eventTrackingCallbackShowMore={() =>
+                  trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
+                }
               />
             </Box>
           </Grid>

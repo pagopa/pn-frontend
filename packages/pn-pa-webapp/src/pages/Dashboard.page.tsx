@@ -18,6 +18,9 @@ import {
   setPagination,
   // setSorting, // Riabilitare con la issue PN-1124
 } from '../redux/dashboard/actions';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
+
 import DesktopNotifications from './components/Notifications/DesktopNotifications';
 import MobileNotifications from './components/Notifications/MobileNotifications';
 
@@ -36,17 +39,18 @@ const Dashboard = () => {
   const totalElements =
     pagination.size *
     (pagination.moreResult
-      ? Math.max(pagination.nextPagesKey.length + 1, 8)
+      ? pagination.nextPagesKey.length + 5
       : pagination.nextPagesKey.length + 1);
   const pagesToShow: Array<number> = calculatePages(
     pagination.size,
     totalElements,
-    Math.min(pagination.nextPagesKey.length, 3),
+    Math.min(pagination.nextPagesKey.length + 1, 3),
     pagination.page + 1
   );
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
@@ -54,12 +58,14 @@ const Dashboard = () => {
   // Riabilitare con la issue PN-1124
   /*
   const handleChangeSorting = (s: Sort) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SORT, {type: s.orderBy});
     dispatch(setSorting(s));
   };
   */
 
   // route to Manual Send
   const handleRouteManualSend = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_SEND);
     navigate(routes.NUOVA_NOTIFICA);
   };
 
@@ -67,7 +73,6 @@ const Dashboard = () => {
   const handleRouteApiKeys = () => {
     navigate(routes.API_KEYS);
   };
-
   useEffect(() => {
     const params = {
       ...filters,
@@ -77,6 +82,10 @@ const Dashboard = () => {
     };
     void dispatch(getSentNotifications(params));
   }, [filters, pagination.size, pagination.page, sort]);
+
+  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, {pageSize});
+  };
 
   return (
     <Box p={3}>
@@ -89,7 +98,7 @@ const Dashboard = () => {
         </Typography>
         <Button
           variant="contained"
-          onClick={() => navigate(routes.NUOVA_NOTIFICA)}
+          onClick={handleRouteManualSend}
           data-testid="newNotificationBtn"
           sx={{ marginBottom: isMobile ? 3 : undefined }}
         >
@@ -119,6 +128,7 @@ const Dashboard = () => {
             totalElements,
           }}
           onPageRequest={handleChangePage}
+          eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
           pagesToShow={pagesToShow}
           sx={{ padding: '0 10px' }}
         />

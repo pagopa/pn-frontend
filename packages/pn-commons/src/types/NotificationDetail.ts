@@ -60,6 +60,7 @@ export interface NotificationDetail {
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
+  amount?: number
 }
 
 export interface INotificationDetailTimeline {

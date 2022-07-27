@@ -33,7 +33,7 @@ test('test login error', async () => {
       expect(mockNavigateFn).toBeCalledWith(ROUTE_LOGIN);
     },
     {
-      timeout: 3000,
+      timeout: 3500,
     }
   );
 });

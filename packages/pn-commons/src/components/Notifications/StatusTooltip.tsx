@@ -7,15 +7,17 @@ const StatusTooltip = ({
   tooltip,
   label,
   color,
+  eventTrackingCallback,
 }: {
   tooltip: string;
   label: string;
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
+  eventTrackingCallback?: () => void;
 }) => {
   const tooltipContent = <Fragment>{tooltip}</Fragment>;
 
   return (
-    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent}>
+    <CustomTooltip openOnClick={false} tooltipContent={tooltipContent} onOpen={eventTrackingCallback}>
       <Chip label={label} color={color} sx={{cursor: 'default'}}/>
     </CustomTooltip>
   );

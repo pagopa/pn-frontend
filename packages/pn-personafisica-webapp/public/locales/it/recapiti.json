@@ -28,7 +28,7 @@
     "pec-added": "PEC associata",
     "remove-pec-title": "Rimuovi PEC",
     "remove-pec-message": "Confermi di voler rimuovere l'indirizzo PEC {{value}}?",
-    "disclaimer-message": "Niente più raccomandate cartacee: le notifiche che ricevi al tuo indirizzo pec risultano legalmente recapitate a te.",
+    "disclaimer-message": "Questo è l’indirizzo principale che verrà utilizzato per inviarti gli avvisi di avvenuta ricezione in via digitale. Inserendolo, non riceverai più raccomandate cartacee.",
     "disclaimer-link": "Scopri di più",
     "block-remove-pec-title": "Non puoi eliminare la PEC",
     "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”."
@@ -78,8 +78,8 @@
     "disclaimer-link": "Scopri di più"
   },
   "special-contacts": {
-    "subtitle": "Se vuoi che alcune notifiche e comunicazioni siano indirizzate a dei recapiti diversi, puoi indicarli qui. Questi recapiti possono essere sia tuoi che intestati ad altri, come per esempio uno studio legale. Se non specifichi nulla, verranno utilizzati i tuoi recapiti generali.",
-    "required-fields": "*Campi obbligatori",
+    "subtitle": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi puoi indicarli qui, in sostituzione di quelli principali.",
+    "required-fileds": "*Campi obbligatori",
     "associated": "Già associati",
     "sender": "Ente",
     "address-type": "Recapito",

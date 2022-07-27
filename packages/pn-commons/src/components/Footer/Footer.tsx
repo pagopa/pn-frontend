@@ -14,12 +14,15 @@ const localizedPagoPALink = pagoPALink();
 type Props = {
   onLanguageChanged?: (langCode: string) => void;
   loggedUser?: boolean;
+  /** Event tracking callback on change language */
+  eventTrackingCallbackChangeLanguage?: () => void;
 };
 
-const Footer = ({ onLanguageChanged = () => {}, loggedUser = false }: Props) => {
+const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackingCallbackChangeLanguage }: Props) => {
   const [currentLangCode, setCurrentLangCode] = useState<'it' | 'en'>('it');
 
   const changeLanguageHandler = (langCode: 'it' | 'en') => {
+    if (eventTrackingCallbackChangeLanguage) eventTrackingCallbackChangeLanguage();
     setCurrentLangCode(langCode);
     onLanguageChanged(langCode);
   };

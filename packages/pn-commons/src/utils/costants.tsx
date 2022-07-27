@@ -7,6 +7,11 @@ export const LANGUAGES = {
   en: { it: 'Italian', en: 'English' },
 };
 
+// export const URL_DIGITAL_NOTIFICATIONS = 'https://notifichedigitali.it';
+export const URL_DIGITAL_NOTIFICATIONS = 'https://develop.d33g1ea1dgp7a4.amplifyapp.com';
+// export const URL_PRIVACY_LINK = 'https://notifichedigitali.it/cittadini/informativa-privacy'
+export const PRIVACY_LINK_RELATIVE_PATH = '/cittadini/informativa-privacy'
+
 const getFooterLinkLabels = (
   link: string,
   defaultLabel: string
@@ -84,13 +89,13 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
     links: [
       {
         label: 'Privacy Policy',
-        href: '#privacy-policy',
+        href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
         ariaLabel: `${getLocalizedOrDefaultLabel(
           'common',
           'footer.go-to',
           'Vai al link'
         )}: Privacy Policy`,
-        linkType: 'internal',
+        linkType: 'external',
       },
       {
         ...getFooterLinkLabels('certifications', 'Certificazioni'),
@@ -119,8 +124,8 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
       },
       {
         ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
-        href: '#terms-conditions',
-        linkType: 'internal',
+        href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+        linkType: 'external',
       },
       {
         ...getFooterLinkLabels('company', 'Società trasparente'),
@@ -201,18 +206,18 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
 export const postLoginLinks = (): Array<FooterLinksType> => ([
   {
     label: 'Privacy policy',
-    href: '#privacy-policy',
+    href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
     ariaLabel: `${getLocalizedOrDefaultLabel(
       'common',
       'footer.go-to',
       'Vai al link'
     )}: Privacy Policy`,
-    linkType: 'internal',
+    linkType: 'external',
   },
   {
     ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
-    href: '#terms-conditions',
-    linkType: 'internal',
+    href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+    linkType: 'external',
   },
   {
     ...getFooterLinkLabels('accessibility', 'Accessibilità'),

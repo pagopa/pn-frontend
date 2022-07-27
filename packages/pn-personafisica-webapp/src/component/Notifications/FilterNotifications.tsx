@@ -23,6 +23,8 @@ import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import { setNotificationFilters } from '../../redux/dashboard/actions';
 import { Delegator } from '../../redux/delegation/types';
+import { trackEventByType } from "../../utils/mixpanel";
+import { TrackEventType } from "../../utils/events";
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
 
@@ -86,6 +88,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
+      trackEventByType(TrackEventType.NOTIFICATION_FILTER_SEARCH);
       const currentFilters = {
         startDate: formatToTimezoneString(values.startDate),
         endDate: formatToTimezoneString(getNextDay(values.endDate)),
@@ -101,6 +104,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   });
 
   const cleanFilters = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_FILTER_REMOVE);
     dispatch(setNotificationFilters(emptyValues));
   };
 
