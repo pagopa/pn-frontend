@@ -2,9 +2,7 @@ import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Loading, NotFound } from '@pagopa-pn/pn-commons';
 
-import NuovaDelega from '../pages/NuovaDelega.page';
 import Notifiche from '../pages/Notifiche.page';
-import Deleghe from '../pages/Deleghe.page';
 import Profile from '../pages/Profile.page';
 import TermsOfService from '../pages/TermsOfService.page';
 import RequireAuth from './RequireAuth';
@@ -13,6 +11,8 @@ import * as routes from './routes.const';
 
 const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.page'));
 const Contacts = React.lazy(() => import('../pages/Contacts.page'));
+const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
+const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
 
 function Router() {
   return (
