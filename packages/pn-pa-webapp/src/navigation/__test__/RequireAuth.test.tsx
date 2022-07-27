@@ -26,7 +26,6 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (str: string) => str })
 }));
 
-
 describe('RequireAuth Component', () => {
   const initialState = (token: string) => (
     {

@@ -46,6 +46,7 @@
     "fiscal-code-recipient": "Codice Fiscale destinatario",
     "date": "Data di invio",
     "payment-terms": "Da pagare entro il",
+    "amount": "Importo",
     "cancelled-iun": "Codice IUN annullato",
     "iun": "Codice IUN",
     "notice-code": "Codice Avviso",
