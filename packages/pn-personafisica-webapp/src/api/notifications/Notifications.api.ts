@@ -58,33 +58,14 @@ export const NotificationsApi = {
       };
     }),
 
-  // /**
-  //  * Gets current user notification detail
-  //  * @param  {string} iun
-  //  * @param  {string} currentUserTaxId
-  //  * @param  {Array<Delegator>} delegatorsFromStore
-  //  * @param  {string} mandateId
-  //  * @returns Promise
-  //  */
-  // getReceivedNotification: (
-  //   iun: string,
-  //   currentUserTaxId: string,
-  //   delegatorsFromStore: Array<Delegator>,
-  //   mandateId?: string
-  // ): Promise<NotificationDetailForRecipient> =>
-  //   apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
-  //     if (response.data) {
-  //       return parseNotificationDetailForRecipient(
-  //         response.data,
-  //         currentUserTaxId,
-  //         delegatorsFromStore,
-  //         mandateId
-  //       );
-  //     } else {
-  //       return {} as NotificationDetailForRecipient;
-  //     }
-  //   }),
-
+  /**
+   * Gets current user notification detail
+   * @param  {string} iun
+   * @param  {string} currentUserTaxId
+   * @param  {Array<Delegator>} delegatorsFromStore
+   * @param  {string} mandateId
+   * @returns Promise
+   */
   getReceivedNotification: (
     iun: string,
     currentUserTaxId: string,
@@ -92,67 +73,16 @@ export const NotificationsApi = {
     mandateId?: string
   ): Promise<NotificationDetailForRecipient> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
-      if (
-        response.data &&
-        (response.data.iun === 'JAHW-EUYQ-ARGL-202207-X-1' ||
-          response.data.iun === 'PUQA-TWQT-WVME-202207-U-1')
-      ) {
-        const notification = response.data;
-
-        // change notification in order to test the right selection of recipient
-        const newRecipient = {
-          recipientType: RecipientType.PF,
-          taxId: 'TTTUUU29J84Z600X',
-          denomination: 'Totito',
-          digitalDomicile: {
-            type: DigitalDomicileType.PEC,
-            address: 'letotito@pnpagopa.postecert.local',
-          },
-          physicalAddress: {
-            address: 'Via del mistero, 48',
-            zip: '40200',
-            municipality: 'Arcore',
-            province: 'MI',
-            foreignState: 'ITALIA',
-          },
-          payment: {
-            noticeCode: '302011657724564978',
-            creditorTaxId: '77777777778',
-            pagoPaForm: {
-              digests: {
-                sha256: 'jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=',
-              },
-              contentType: 'application/pdf',
-              ref: {
-                key: 'PN_NOTIFICATION_ATTACHMENTS-0001-EWWX-RM6Q-MKZM-VMCV',
-                versionToken: 'v1',
-              },
-            },
-          },
-        };
-
-        // modifico il timesheet per una notifica 
-        const firstTimelineEntry = response.data.iun === 'PUQA-TWQT-WVME-202207-U-1' 
-          ? {...notification.timeline[0], details: { recIndex: 1 }} 
-          : notification.timeline[0];
-
-        return parseNotificationDetailForRecipient(
-          { ...notification, 
-            timeline: [firstTimelineEntry, ...notification.timeline.slice(1)], 
-            recipients: [newRecipient, ...notification.recipients] },
-          currentUserTaxId,
-          delegatorsFromStore,
-          mandateId
-        );
-      } else if (response.data) {
+      if (response.data) {
         return parseNotificationDetailForRecipient(
           response.data,
           currentUserTaxId,
           delegatorsFromStore,
           mandateId
         );
+      } else {
+        return {} as NotificationDetailForRecipient;
       }
-      return {} as NotificationDetailForRecipient;
     }),
 
   /**
