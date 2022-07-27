@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
-  Box,
+  Box, Button,
   Divider,
   FormControl,
   FormControlLabel,
@@ -31,6 +31,7 @@ import { TrackEventType } from "../../utils/events";
 import DropDownPartyMenuItem from "../Party/DropDownParty";
 import VerificationCodeComponent from "../Deleghe/VerificationCodeComponent";
 import {generateVCode} from "../../utils/delegation.utility";
+import ErrorDeleghe from "../Deleghe/ErrorDeleghe";
 
 const NewDelegationForm = () => {
   const { t } = useTranslation(['deleghe', 'common']);
@@ -293,6 +294,23 @@ const NewDelegationForm = () => {
         <VerificationCodeComponent code={getValues("verificationCode")} />
       </Stack>
       <Divider sx={{ marginTop: '1rem' }} />
+      <Grid container sx={{ marginTop: '1rem' }}>
+        <Grid item xs={12} sx={{ margin: 'auto' }}>
+          <Button
+            sx={{ marginTop: '1rem', margin: 'auto' }}
+            type={'submit'}
+            variant={'contained'}
+            data-testid="createButton"
+          >
+            {t('nuovaDelega.form.submit')}
+          </Button>
+        </Grid>
+        <Grid item xs={8} sx={{ margin: 'auto' }}>
+          <Stack direction="row" alignItems="center" justifyContent="end">
+            <ErrorDeleghe />
+          </Stack>
+        </Grid>
+      </Grid>
     </form>
   );
 };
