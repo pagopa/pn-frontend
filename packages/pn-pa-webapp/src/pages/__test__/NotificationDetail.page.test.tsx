@@ -29,8 +29,8 @@ jest.mock('react-i18next', () => ({
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
   NotificationDetailTable: ({ rows }: { rows: Array<NotificationDetailTableRow> }) => {
-    const amount = rows.find((r) => r.label === 'Importo');
-    const noticeCodes = rows.find((r) => r.label === 'Codice Avviso');
+    const amount = rows.find((r) => r.label === 'detail.amount');
+    const noticeCodes = rows.find((r) => r.label === 'detail.notice-code');
     return (
       <div>
         <div>{noticeCodes && noticeCodes.value}</div>
@@ -97,16 +97,16 @@ describe('NotificationDetail Page (one recipient)', () => {
   });
 
   test('renders NotificationDetail page', () => {
-    expect(result?.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result?.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
-    expect(result?.container).toHaveTextContent('mocked-abstract');
-    expect(result?.container).toHaveTextContent(/Table/i);
+    expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
+    expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
+    expect(result.container).toHaveTextContent('mocked-abstract');
+    expect(result.container).toHaveTextContent(/Table/i);
     expect(result.container).toHaveTextContent(/130.00/i);
     expect(result.container).toHaveTextContent(
       `${notificationToFe.recipients[0].payment?.creditorTaxId} - ${notificationToFe.recipients[0].payment?.noticeCode}`
     );
-    expect(result?.container).toHaveTextContent(/Documents/i);
-    expect(result?.container).toHaveTextContent(/Timeline/i);
+    expect(result.container).toHaveTextContent(/Documents/i);
+    expect(result.container).toHaveTextContent(/Timeline/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-id');
@@ -194,7 +194,7 @@ describe('NotificationDetail Page (multi recipient)', () => {
   });
 
   test('renders NotificationDetail page', () => {
-    expect(result.getByRole('link')).toHaveTextContent(/Notifiche/i);
+    expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFeMultiRecipient.subject);
     expect(result.container).toHaveTextContent('mocked-abstract');
     expect(result.container).toHaveTextContent(/Table/i);
