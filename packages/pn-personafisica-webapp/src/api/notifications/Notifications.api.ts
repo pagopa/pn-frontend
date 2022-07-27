@@ -6,8 +6,6 @@ import {
   NotificationDetail,
   PaymentAttachmentNameType,
   PaymentInfo,
-  DigitalDomicileType,
-  RecipientType,
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
 
