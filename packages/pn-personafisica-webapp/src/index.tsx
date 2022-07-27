@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { theme } from "@pagopa/mui-italia";
+import { Loading } from '@pagopa-pn/pn-commons';
 
 import './index.css';
 import reportWebVitals from './reportWebVitals';
@@ -17,7 +18,7 @@ ReactDOM.render(
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Suspense fallback="loading...">
+          <Suspense fallback={<Loading sx={{minHeight: '100vh'}}/>}>
             <App />
           </Suspense>
         </ThemeProvider>

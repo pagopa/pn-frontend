@@ -29,6 +29,7 @@ import PnBreadcrumb from './PnBreadcrumb';
 import FileUpload from './FileUpload';
 import Prompt from './Prompt';
 import CopyToClipboard from './CopyToClipboard';
+import Loading from './Loading';
 
 export {
     LoadingOverlay,
@@ -61,5 +62,6 @@ export {
     PnBreadcrumb,
     FileUpload,
     Prompt,
-    CopyToClipboard
+    CopyToClipboard,
+    Loading
 };
