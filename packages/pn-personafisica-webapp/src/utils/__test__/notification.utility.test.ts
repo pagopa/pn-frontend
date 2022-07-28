@@ -22,32 +22,11 @@ function allLegalFactsIds(historyElement?: NotificationStatusHistory) {
 }
 
 /**
- * Changes the recipient for the "courtesy" timeline element to the second one
- */
-function touchCourtesyTimelineIndex(notification: NotificationDetail) {
-  const courtesyTimelineIndex = notification.timeline.findIndex(
-    (elem) => elem.elementId === 'c_b429-202203021814_send_courtesy_rec0'
-  );
-  const newTimeline =
-    courtesyTimelineIndex > -1
-      ? [
-          ...notification.timeline.slice(0, courtesyTimelineIndex),
-          {
-            ...notification.timeline[courtesyTimelineIndex],
-            details: { recIndex: 1 },
-          },
-          ...notification.timeline.slice(courtesyTimelineIndex + 1),
-        ]
-      : notification.timeline;
-  return { ...notification, timeline: newTimeline };
-}
-
-/**
  * This test suite tests the parseNotificationDetailForRecipient function in a rather indirect mode:
  * it resorts to notificationToFeTwoRecipients which in turn calls parseNotificationDetailForRecipient.
  */
 describe('Parse notification detail to FE - for a given recipient', () => {
-  it('Recipient if first recipient logged', () => {
+  it('Current recipient if first recipient logged', () => {
     const notification = notificationToFeTwoRecipients(
       'TTTUUU29J84Z600X',
       'CGNNMO80A03H501U',
@@ -57,7 +36,7 @@ describe('Parse notification detail to FE - for a given recipient', () => {
     expect(notification.currentRecipient.taxId).toEqual('TTTUUU29J84Z600X');
   });
 
-  it('Recipient if second recipient logged', () => {
+  it('Current recipient if second recipient logged', () => {
     const notification = notificationToFeTwoRecipients(
       'CGNNMO80A03H501U',
       'TTTUUU29J84Z600X',
@@ -67,7 +46,7 @@ describe('Parse notification detail to FE - for a given recipient', () => {
     expect(notification.currentRecipient.taxId).toEqual('CGNNMO80A03H501U');
   });
 
-  it('Recipient if the user looks the notifications of first recipient as delegator ', () => {
+  it('Current recipient if the user looks the notifications of first recipient as delegator - both users are recipients', () => {
     const notification = notificationToFeTwoRecipients(
       'CGNNMO80A03H501U',
       'TTTUUU29J84Z600X',
@@ -77,9 +56,29 @@ describe('Parse notification detail to FE - for a given recipient', () => {
     expect(notification.currentRecipient.taxId).toEqual('TTTUUU29J84Z600X');
   });
 
-  it('Recipient if the user looks the notifications of second recipient as delegator ', () => {
+  it('Current recipient if the user looks the notifications of second recipient as delegator - both users are recipients', () => {
     const notification = notificationToFeTwoRecipients(
       'TTTUUU29J84Z600X',
+      'CGNNMO80A03H501U',
+      true
+    );
+    expect(notification.currentRecipientIndex).toEqual(1);
+    expect(notification.currentRecipient.taxId).toEqual('CGNNMO80A03H501U');
+  });
+
+  it('Current recipient if the user looks the notifications of first recipient as delegator - user not recipient', () => {
+    const notification = notificationToFeTwoRecipients(
+      'CGNNMO80A03H501A',
+      'TTTUUU29J84Z600X',
+      true
+    );
+    expect(notification.currentRecipientIndex).toEqual(0);
+    expect(notification.currentRecipient.taxId).toEqual('TTTUUU29J84Z600X');
+  });
+
+  it('Current recipient if the user looks the notifications of second recipient as delegator - user not recipient', () => {
+    const notification = notificationToFeTwoRecipients(
+      'TTTUUU29J84Z600T',
       'CGNNMO80A03H501U',
       true
     );
@@ -119,36 +118,10 @@ describe('Parse notification detail to FE - for a given recipient', () => {
     ).toHaveLength(0);
     expect(
       allLegalFactsIds(historyElementByStatus(notification, NotificationStatus.VIEWED))
-    ).toHaveLength(1);
-  });
-
-  it('Legal facts if first recipient logged - setting one legal fact for second recipient', () => {
-    const touchedNotification = touchCourtesyTimelineIndex(
-      notificationToFeTwoRecipients('TTTUUU29J84Z600X', 'CGNNMO80A03H501U', false)
-    );
-
-    expect(
-      allLegalFactsIds(historyElementByStatus(touchedNotification, NotificationStatus.DELIVERED))
-    ).toHaveLength(1);
-    expect(
-      allLegalFactsIds(historyElementByStatus(touchedNotification, NotificationStatus.VIEWED))
-    ).toHaveLength(1);
-  });
-
-  it('Legal facts if second recipient logged - setting one legal fact for second recipient', () => {
-    const touchedNotification = touchCourtesyTimelineIndex(
-      notificationToFeTwoRecipients('CGNNMO80A03H501U', 'TTTUUU29J84Z600X', false)
-    );
-
-    expect(
-      allLegalFactsIds(historyElementByStatus(touchedNotification, NotificationStatus.DELIVERED))
-    ).toHaveLength(0);
-    expect(
-      allLegalFactsIds(historyElementByStatus(touchedNotification, NotificationStatus.VIEWED))
     ).toHaveLength(2);
   });
 
-  it('Legal facts if first recipient logged - if the user looks the notifications of second recipient as delegator', () => {
+  it('Legal facts if the user looks the notifications of second recipient as delegator - both users are recipients', () => {
     const notification = notificationToFeTwoRecipients(
       'TTTUUU29J84Z600X',
       'CGNNMO80A03H501U',
@@ -160,10 +133,10 @@ describe('Parse notification detail to FE - for a given recipient', () => {
     ).toHaveLength(0);
     expect(
       allLegalFactsIds(historyElementByStatus(notification, NotificationStatus.VIEWED))
-    ).toHaveLength(1);
+    ).toHaveLength(2);
   });
 
-  it('Legal facts if second recipient logged - if the user looks the notifications of first recipient as delegator', () => {
+  it('Legal facts if the user looks the notifications of first recipient as delegator - both users are recipients', () => {
     const notification = notificationToFeTwoRecipients(
       'CGNNMO80A03H501U',
       'TTTUUU29J84Z600X',
@@ -178,9 +151,9 @@ describe('Parse notification detail to FE - for a given recipient', () => {
     ).toHaveLength(2);
   });
 
-  it('Legal facts if first recipient logged - if the user looks the notifications of second recipient as delegator - setting one legal fact for second recipient', () => {
+  it('Legal facts if the user looks the notifications of second recipient as delegator - user not recipient', () => {
     const touchedNotification = notificationToFeTwoRecipients(
-      'TTTUUU29J84Z600X',
+      'TTTUUU29J84Z600T',
       'CGNNMO80A03H501U',
       true
     );
@@ -193,9 +166,11 @@ describe('Parse notification detail to FE - for a given recipient', () => {
     ).toHaveLength(2);
   });
 
-  it('Legal facts if second recipient logged - if the user looks the notifications of first recipient as delegator - setting one legal fact for second recipient', () => {
-    const touchedNotification = touchCourtesyTimelineIndex(
-      notificationToFeTwoRecipients('CGNNMO80A03H501U', 'TTTUUU29J84Z600X', true)
+  it('Legal facts if the user looks the notifications of first recipient as delegator - user not recipient', () => {
+    const touchedNotification = notificationToFeTwoRecipients(
+      'CGNNMO80A03H501A',
+      'TTTUUU29J84Z600X',
+      true
     );
 
     expect(
@@ -203,6 +178,6 @@ describe('Parse notification detail to FE - for a given recipient', () => {
     ).toHaveLength(1);
     expect(
       allLegalFactsIds(historyElementByStatus(touchedNotification, NotificationStatus.VIEWED))
-    ).toHaveLength(1);
+    ).toHaveLength(2);
   });
 });
