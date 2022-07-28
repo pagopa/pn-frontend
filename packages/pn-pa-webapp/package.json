@@ -12,7 +12,7 @@
     "@mui/styles": "^5.4.1",
     "@mui/x-date-pickers": "^5.0.0-alpha.5",
     "@pagopa-pn/pn-commons": "0.1.0",
-    "@pagopa/mui-italia": "^0.6.37",
+    "@pagopa/mui-italia": "^0.6.38",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.11.21",
