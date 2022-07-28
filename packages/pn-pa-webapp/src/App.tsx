@@ -71,7 +71,11 @@ const App = () => {
         id: '0',
         name: loggedUserOrganizationParty.name,
         productRole: role?.role,
-        logoUrl: `https://cdn.icon-icons.com/icons2/1863/PNG/512/account-balance_119479.png`,
+        logoUrl: undefined,
+        // non posso settare un'icona di MUI perché @pagopa/mui-italia accetta solo string o undefined come logoUrl
+        // ma fortunatamente, se si passa undefined, fa vedere proprio il logo che ci serve
+        // ------------------
+        // Carlos Lombardi, 2022.07.28
         // logoUrl: <AccountBalanceIcon />
       },
     ],
