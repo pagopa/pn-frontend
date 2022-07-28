@@ -13,7 +13,6 @@ import { Delegator } from '../../redux/delegation/types';
 import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
 import { NotificationDetailForRecipient } from '../../types/NotificationDetail';
 import { apiClient } from '../axios';
-
 import {
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,

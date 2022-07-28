@@ -1,22 +1,24 @@
-import { LegalFactId, NotificationDetail, NotificationStatus, NotificationStatusHistory } from "@pagopa-pn/pn-commons";
-import { notificationToFeTwoRecipients } from "../../redux/notification/__test__/test-utils";
-
+import {
+  LegalFactId,
+  NotificationDetail,
+  NotificationStatus,
+  NotificationStatusHistory,
+} from '@pagopa-pn/pn-commons';
+import { notificationToFeTwoRecipients } from '../../redux/notification/__test__/test-utils';
 
 // some functions useful to analyze the notificationStatusHistory
 function historyElementByStatus(notification: NotificationDetail, status: NotificationStatus) {
-  return notification.notificationStatusHistory.find(
-    (elem) => elem.status === status
-  );  
+  return notification.notificationStatusHistory.find((elem) => elem.status === status);
 }
 
 function allLegalFactsIds(historyElement?: NotificationStatusHistory) {
   return historyElement?.steps
-        ? historyElement.steps.reduce(
-            (legalFacts, elem) =>
-              elem.legalFactsIds ? [...legalFacts, ...elem.legalFactsIds] : legalFacts,
-            [] as Array<LegalFactId>
-          )
-        : [];
+    ? historyElement.steps.reduce(
+        (legalFacts, elem) =>
+          elem.legalFactsIds ? [...legalFacts, ...elem.legalFactsIds] : legalFacts,
+        [] as Array<LegalFactId>
+      )
+    : [];
 }
 
 /**
@@ -38,9 +40,7 @@ function touchCourtesyTimelineIndex(notification: NotificationDetail) {
         ]
       : notification.timeline;
   return { ...notification, timeline: newTimeline };
-};
-
-
+}
 
 /**
  * This test suite tests the parseNotificationDetailForRecipient function in a rather indirect mode:
@@ -89,7 +89,7 @@ describe('Parse notification detail to FE - for a given recipient', () => {
 
   /*
    * Delivered history element: 1 legal fact for recipient 0
-   * Viewed history element: 1 legal fact for all recipients + 1 legal fact (in the "courtesy" timeline element) for recipient 0 
+   * Viewed history element: 1 legal fact for all recipients + 1 legal fact (in the "courtesy" timeline element) for recipient 0
    */
 
   it('Legal facts if first recipient logged', () => {
@@ -123,11 +123,8 @@ describe('Parse notification detail to FE - for a given recipient', () => {
   });
 
   it('Legal facts if first recipient logged - setting one legal fact for second recipient', () => {
-    const touchedNotification = notificationToFeTwoRecipients(
-      'TTTUUU29J84Z600X',
-      'CGNNMO80A03H501U',
-      false,
-      touchCourtesyTimelineIndex
+    const touchedNotification = touchCourtesyTimelineIndex(
+      notificationToFeTwoRecipients('TTTUUU29J84Z600X', 'CGNNMO80A03H501U', false)
     );
 
     expect(
@@ -137,13 +134,10 @@ describe('Parse notification detail to FE - for a given recipient', () => {
       allLegalFactsIds(historyElementByStatus(touchedNotification, NotificationStatus.VIEWED))
     ).toHaveLength(1);
   });
-  
+
   it('Legal facts if second recipient logged - setting one legal fact for second recipient', () => {
-    const touchedNotification = notificationToFeTwoRecipients(
-      'CGNNMO80A03H501U',
-      'TTTUUU29J84Z600X',
-      false,
-      touchCourtesyTimelineIndex,
+    const touchedNotification = touchCourtesyTimelineIndex(
+      notificationToFeTwoRecipients('CGNNMO80A03H501U', 'TTTUUU29J84Z600X', false)
     );
 
     expect(
@@ -188,8 +182,7 @@ describe('Parse notification detail to FE - for a given recipient', () => {
     const touchedNotification = notificationToFeTwoRecipients(
       'TTTUUU29J84Z600X',
       'CGNNMO80A03H501U',
-      true,
-      touchCourtesyTimelineIndex
+      true
     );
 
     expect(
@@ -201,11 +194,8 @@ describe('Parse notification detail to FE - for a given recipient', () => {
   });
 
   it('Legal facts if second recipient logged - if the user looks the notifications of first recipient as delegator - setting one legal fact for second recipient', () => {
-    const touchedNotification = notificationToFeTwoRecipients(
-      'CGNNMO80A03H501U',
-      'TTTUUU29J84Z600X',
-      true,
-      touchCourtesyTimelineIndex
+    const touchedNotification = touchCourtesyTimelineIndex(
+      notificationToFeTwoRecipients('CGNNMO80A03H501U', 'TTTUUU29J84Z600X', true)
     );
 
     expect(

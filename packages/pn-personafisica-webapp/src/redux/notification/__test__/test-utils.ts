@@ -314,36 +314,27 @@ export const fixedMandateId = 'ALFA-BETA-GAMMA';
 export const notificationToFeTwoRecipients = (
   userFiscalNumber: string,
   delegatorFiscalNumber?: string,
-  isDelegate?: boolean,
-  bePreprocess?: (a: NotificationDetail) => NotificationDetail
-) => {
-  const notificationBe = bePreprocess
-    ? bePreprocess(notificationFromBeTwoRecipients)
-    : notificationFromBeTwoRecipients;
-  if (bePreprocess) {
-    console.log(notificationBe.timeline);
-  }
-  return parseNotificationDetailForRecipient(
-    notificationBe,
-    userFiscalNumber,
-    delegatorFiscalNumber && isDelegate
-      ? [
-          {
-            mandateId: fixedMandateId,
-            delegator: {
-              fiscalCode: delegatorFiscalNumber,
-              firstName: 'Mario',
-              lastName: 'Rossi',
-              person: true,
-            },
-            status: 'active',
-            visibilityIds: [],
-            verificationCode: '',
-            datefrom: '',
-            dateto: '',
+  isDelegate?: boolean
+) => parseNotificationDetailForRecipient(
+  notificationFromBeTwoRecipients,
+  userFiscalNumber,
+  delegatorFiscalNumber && isDelegate
+    ? [
+        {
+          mandateId: fixedMandateId,
+          delegator: {
+            fiscalCode: delegatorFiscalNumber,
+            firstName: 'Mario',
+            lastName: 'Rossi',
+            person: true,
           },
-        ]
-      : [],
-    isDelegate ? fixedMandateId : undefined
-  );
-};
+          status: 'active',
+          visibilityIds: [],
+          verificationCode: '',
+          datefrom: '',
+          dateto: '',
+        },
+      ]
+    : [],
+  isDelegate ? fixedMandateId : undefined
+);
