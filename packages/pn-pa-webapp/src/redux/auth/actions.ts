@@ -37,7 +37,8 @@ export const getOrganizationParty = createAsyncThunk<Party, string>(
   'getOrganizationParty',
   async (params: string, { rejectWithValue }) => {
     try {
-      return await ExternalRegistriesAPI.getOrganizationParty(params);
+      const partyFromApi = await ExternalRegistriesAPI.getOrganizationParty(params);
+      return partyFromApi || { id: '', name: 'Ente sconosciuto' };
     } catch (e) {
       return rejectWithValue(e);
     }
