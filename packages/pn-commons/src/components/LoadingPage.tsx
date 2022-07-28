@@ -25,6 +25,7 @@ const LoadingPage = ({ renderType = 'part', layout }: Props) => {
           width="100%"
           height={headerHeight}
           sx={{ marginBottom: 1 }}
+          data-testid="header"
         />
         <Stack
           height={`calc(100% - ${headerHeight} - ${footerHeight} - 16px)`}
@@ -32,19 +33,19 @@ const LoadingPage = ({ renderType = 'part', layout }: Props) => {
           sx={{ flexGrow: 1 }}
         >
           <Box sx={{ width: { lg: 300 }, flexShrink: '0', marginRight: { lg: 1 } }} component="nav">
-            <Skeleton variant="rectangular" width="100%" height="100%" />
+            <Skeleton variant="rectangular" width="100%" height="100%" data-testid="menu"/>
           </Box>
           <Box sx={{ flexGrow: 1 }} component="main">
-            <Skeleton variant="rectangular" width="100%" height="100%" />
+            <Skeleton variant="rectangular" width="100%" height="100%" data-testid="body"/>
           </Box>
         </Stack>
-        <Skeleton variant="rectangular" width="100%" height={footerHeight} sx={{ marginTop: 1 }} />
+        <Skeleton variant="rectangular" width="100%" height={footerHeight} sx={{ marginTop: 1 }} data-testid="footer"/>
       </Box>
     );
   }
 
   const pageLayout = layout ? (
-    <Box height={`calc(100% - ${titleHeight} - 80px)`}>
+    <Box height={`calc(100% - ${titleHeight} - 80px)`} data-testid="customContent">
       <Grid container spacing={2}>
         {layout.map((l) => (
           <Grid item key={l.id} xs={l.xs} xl={l.xl} sm={l.sm} md={l.md} lg={l.lg}>
@@ -53,12 +54,12 @@ const LoadingPage = ({ renderType = 'part', layout }: Props) => {
         ))}
       </Grid>
     </Box>
-  ) : <Skeleton variant="rectangular" width="100%" height={`calc(100% - ${titleHeight} - 80px)`} />
+  ) : <Skeleton variant="rectangular" width="100%" height={`calc(100% - ${titleHeight} - 80px)`} data-testid="content"/>
 
   return (
     <Box p={2} height="100%">
-      <Skeleton variant="rectangular" height={titleHeight} sx={{ marginBottom: 2 }} />
-      <Skeleton sx={{ marginBottom: 4 }} />
+      <Skeleton variant="rectangular" height={titleHeight} sx={{ marginBottom: 2 }} data-testid="title"/>
+      <Skeleton sx={{ marginBottom: 4 }} data-testid="subTitle"/>
       {pageLayout}
     </Box>
   );
