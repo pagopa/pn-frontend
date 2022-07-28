@@ -1,10 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { apiClient } from '../../axios';
+import { Party } from '../../../models/party';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
+import { apiClient } from '../../axios';
 import { GET_PARTY_FOR_ORGANIZATION } from '../external-registries-routes';
 import { ExternalRegistriesAPI } from '../External-registries.api';
-import { Party } from '../../../models/party';
 
 describe('External registries api tests', () => {
   mockAuthentication();
