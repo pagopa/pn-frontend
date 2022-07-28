@@ -13,10 +13,37 @@ export const ExternalRegistriesAPI = {
    *     ---------------
    *     Carlos Lombardi, 2022.07.27
    */
-  getOrganizationParty: (organizationId: string): Promise<Party> =>
-    organizationId === "b6c5b42a-8a07-436f-96ce-8c2ab7f4dbd2" 
-      ? Promise.resolve({ id: "b6c5b42a-8a07-436f-96ce-8c2ab7f4dbd2", name: "Comune di Valsamoggia" }) 
+  getOrganizationParty: (organizationId: string): Promise<Party> => 
+    organizationId === 'b6c5b42a-8a07-436f-96ce-8c2ab7f4dbd2'
+      ? Promise.resolve({
+          id: 'b6c5b42a-8a07-436f-96ce-8c2ab7f4dbd2',
+          name: 'Comune di Valsamoggia',
+        })
       : apiClient
-        .get<Array<Party>>(GET_PARTY_FOR_ORGANIZATION(organizationId))
-        .then((response: AxiosResponse<Array<Party>>) => response.data[0]),
+          .get<Array<Party>>(GET_PARTY_FOR_ORGANIZATION(organizationId))
+          .then((response: AxiosResponse<Array<Party>>) => {
+            console.log(response.data);
+            return response.data[0];
+          })
+  ,
 };
+
+  // getOrganizationPartyTentativoDisperato: (organizationId: string): Promise<Party> => {
+  //   console.log({ organizationId });
+  //   // return Promise.resolve({
+  //   //   id: 'b6c5b42a-8a07-436f-96ce-8c2ab7f4dbd2',
+  //   //   name: 'Comune di Valsamoggia',
+  //   // });
+  //   return organizationId === 'b6c5b42a-8a07-436f-96ce-8c2ab7f4dbd2'
+  //     ? Promise.resolve({
+  //         id: 'b6c5b42a-8a07-436f-96ce-8c2ab7f4dbd2',
+  //         name: 'Comune di Valsamoggia',
+  //       })
+  //     : apiClient
+  //         .get<Array<Party>>(GET_PARTY_FOR_ORGANIZATION(organizationId))
+  //         .then((response: AxiosResponse<Array<Party>>) => {
+  //           console.log(response.data);
+  //           return response.data[0];
+  //         });
+  // },
+
