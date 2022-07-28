@@ -1,30 +1,10 @@
-import { AuthApi } from '../../../api/auth/Auth.api';
 import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
 import { Party } from '../../../models/party';
 import { PartyRole, PNRole } from '../../../models/user';
 import { store } from '../../store';
-import { exchangeToken, getOrganizationParty, logout } from '../actions';
+import { getOrganizationParty } from '../actions';
 import { User } from '../types';
-import { userResponse } from './test-utils';
-
-const mockLogin = async (): Promise<any> => {
-  const apiSpy = jest.spyOn(AuthApi, 'exchangeToken');
-  apiSpy.mockResolvedValue(userResponse);
-  return store.dispatch(exchangeToken('mocked-token'));
-};
-
-const mockLogout = async (): Promise<any> => store.dispatch(logout());
-
-export const mockAuthentication = () => {
-  beforeAll(() => {
-    mockLogin();
-  });
-
-  afterAll(() => {
-    mockLogout();
-    jest.resetAllMocks();
-  });
-};
+import { mockLogin, mockLogout, userResponse } from './test-utils';
 
 describe('Auth redux state tests', () => {
   it('Initial state', () => {
@@ -100,5 +80,4 @@ describe('Auth redux state tests', () => {
     expect(action.type).toBe('getOrganizationParty/fulfilled');
     expect(payload).toEqual(partyMock);
   });
-
 });

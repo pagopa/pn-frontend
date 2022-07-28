@@ -1,7 +1,9 @@
 type ParameterValue = string | number | Date;
+
 interface Parameters {
   [key: string]: ParameterValue;
 }
+
 interface QueryParameters {
   [key: string]: ParameterValue | string[];
 }
