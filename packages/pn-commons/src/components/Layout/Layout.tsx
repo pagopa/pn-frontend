@@ -1,7 +1,7 @@
 import { ReactNode, ErrorInfo } from 'react';
 import { Stack } from '@mui/material';
 import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
-import { Footer } from "@pagopa-pn/pn-commons";
+import { Footer } from '@pagopa-pn/pn-commons';
 import { Box } from '@mui/system';
 
 import Header from '../Header/Header';
@@ -55,12 +55,11 @@ export default function Layout({
   eventTrackingCallbackProductSwitch,
   onAssistanceClick,
 }: Props) {
-
   return (
     <ErrorBoundary sx={{ height: '100vh' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
       <Stack
         direction="column"
-        sx={{ minHeight: '100vh'}} // 100vh per sticky footer
+        sx={{ minHeight: '100vh' }} // 100vh per sticky footer
       >
         <Header
           onExitAction={onExitAction}
@@ -75,16 +74,17 @@ export default function Layout({
         />
         <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
           {showSideMenu && (
-          <Box sx={{ width: { lg: 300 }, flexShrink: '0'}} component="nav">
-            {sideMenu}
-          </Box>
+            <Box sx={{ width: { lg: 300 }, flexShrink: '0' }} component="nav">
+              {sideMenu}
+            </Box>
           )}
           <Box sx={{ flexGrow: 1 }} component="main">
-          <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>{children}</ErrorBoundary>
+            <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
+              {children}
+            </ErrorBoundary>
           </Box>
-
         </Stack>
-        <Footer 
+        <Footer
           loggedUser={loggedUser.id !== ''}
           onLanguageChanged={onLanguageChanged}
           eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}

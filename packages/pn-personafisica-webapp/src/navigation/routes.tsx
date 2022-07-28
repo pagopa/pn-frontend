@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { Loading, NotFound } from '@pagopa-pn/pn-commons';
+import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
 import Notifiche from '../pages/Notifiche.page';
 import Profile from '../pages/Profile.page';
@@ -16,7 +16,7 @@ const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
 
 function Router() {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<LoadingPage />}>
       <Routes>
         <Route path="/" element={<VerifyUser />}>
           {/* protected routes */}
@@ -28,7 +28,7 @@ function Router() {
             <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
             <Route path={routes.DELEGHE} element={<Deleghe />} />
             <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
-            <Route path={routes.RECAPITI} element={<Contacts />} />
+            <Route path={routes.RECAPITI} element={<Contacts/>} />
             <Route path={routes.PROFILO} element={<Profile />} />
           </Route>
         </Route>
