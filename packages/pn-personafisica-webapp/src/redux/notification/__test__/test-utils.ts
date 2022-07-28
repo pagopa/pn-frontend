@@ -76,7 +76,6 @@ const statusHistory: Array<NotificationStatusHistory> = [
       'c_b429-202203021814_send_pec_rec0_SPECIAL_n1',
       'c_b429-202203021814_send_pec_result_rec0_SPECIAL_n1', // legalFact sender_ack-toto1
       'c_b429-202203021814_send_courtesy_rec0', // legalFact digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.
-      'c_b429-202203021814_send_courtesy_rec1',
       // + recIndex
       'c_b429-202203021814_recipient_timeout_rec0',
     ],
@@ -186,20 +185,6 @@ const timeline: Array<INotificationDetailTimeline> = [
     ],
   },
   {
-    elementId: 'c_b429-202203021814_send_courtesy_rec1',
-    timestamp: '2022-03-02T17:57:06.819Z',
-    category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-    details: {
-      recIndex: 1,
-    },
-    legalFactsIds: [
-      {
-        key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
-        category: LegalFactType.DIGITAL_DELIVERY,
-      },
-    ],
-  },
-  {
     elementId: 'c_b429-202203021814_recipient_timeout_rec0',
     timestamp: '2022-03-02T17:59:10.029Z',
     category: TimelineCategory.REFINEMENT,
@@ -241,6 +226,27 @@ export const notificationFromBe: NotificationDetail = {
 
 const notificationFromBeTwoRecipients: NotificationDetail = {
   ...notificationFromBe,
+  notificationStatusHistory: [
+    statusHistory[0],
+    {
+      ...statusHistory[1],
+      relatedTimelineElements: [...statusHistory[1].relatedTimelineElements, 'c_b429-202203021814_send_courtesy_rec1']
+    }
+  ],
+  timeline: [...notificationFromBe.timeline, {
+    elementId: 'c_b429-202203021814_send_courtesy_rec1',
+    timestamp: '2022-03-02T17:57:06.819Z',
+    category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
+    details: {
+      recIndex: 1,
+    },
+    legalFactsIds: [
+      {
+        key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
+        category: LegalFactType.DIGITAL_DELIVERY,
+      },
+    ],
+  }],
   recipients: [
     {
       recipientType: RecipientType.PF,
