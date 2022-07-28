@@ -106,11 +106,11 @@ const FilterNotificationsFormBody = ({
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 size="small"
-                aria-label="Data inizio ricerca" // aria-label for (TextField + Button) Group
+                aria-label={t('filters.data_da-aria-label')} // aria-label for (TextField + Button) Group
                 inputProps={{
                   ...params.inputProps,
                   inputMode: 'text',
-                  'aria-label': 'Inserisci la data iniziale della ricerca',
+                  'aria-label': t('filters.data_da-input-aria-label'),
                   type: 'text',
                   placeholder: 'gg/mm/aaaa',
                 }}
@@ -148,11 +148,11 @@ const FilterNotificationsFormBody = ({
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 size="small"
-                aria-label="Data fine ricerca" // aria-label for (TextField + Button) Group
+                aria-label={t('filters.data_a-aria-label')} // aria-label for (TextField + Button) Group
                 inputProps={{
                   ...params.inputProps,
                   inputMode: 'text',
-                  'aria-label': 'inserisci la data finale della ricerca',
+                  'aria-label': t('filters.data_a-input-aria-label'),
                   type: 'text',
                   placeholder: 'gg/mm/aaaa',
                 }}

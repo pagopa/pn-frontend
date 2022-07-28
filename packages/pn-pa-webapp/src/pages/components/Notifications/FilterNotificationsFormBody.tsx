@@ -1,4 +1,5 @@
 import { ChangeEvent, Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormikErrors, FormikState, FormikTouched, FormikValues } from 'formik';
 import currentLocale from 'date-fns/locale/it';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -9,9 +10,10 @@ import {
   DatePickerTypes,
   DATE_FORMAT,
   formatIun,
-  NotificationAllowedStatus,
+  getNotificationAllowedStatus,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
+
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 
@@ -39,7 +41,7 @@ type Props = {
   setEndDate: (value: Date | null) => void;
 };
 
-const localizedNotificationStatus = NotificationAllowedStatus();
+const localizedNotificationStatus = getNotificationAllowedStatus();
 
 const FilterNotificationsFormBody = ({
   formikInstance,
@@ -49,6 +51,7 @@ const FilterNotificationsFormBody = ({
   setEndDate,
 }: Props) => {
   const isMobile = useIsMobile();
+  const { t } = useTranslation(['notifiche']);
 
   // const searchForHandleChange = (e: ChangeEvent) => {
   //   const value = (e.target as any).value;
@@ -87,7 +90,7 @@ const FilterNotificationsFormBody = ({
         id="recipientId"
         value={formikInstance.values.recipientId}
         onChange={handleChangeTouched}
-        label="Codice Fiscale"
+        label={t('filters.fiscal-code')}
         name="recipientId"
         error={formikInstance.touched.recipientId && Boolean(formikInstance.errors.recipientId)}
         helperText={formikInstance.touched.recipientId && formikInstance.errors.recipientId}
@@ -99,7 +102,7 @@ const FilterNotificationsFormBody = ({
         id="iunMatch"
         value={formikInstance.values.iunMatch}
         onChange={handleChangeTouched}
-        label="Codice IUN"
+        label={t('filters.iun')}
         name="iunMatch"
         error={formikInstance.touched.iunMatch && Boolean(formikInstance.errors.iunMatch)}
         helperText={formikInstance.touched.iunMatch && formikInstance.errors.iunMatch}
@@ -114,7 +117,7 @@ const FilterNotificationsFormBody = ({
         adapterLocale={currentLocale}
       >
         <CustomDatePicker
-          label="Da"
+          label={t('filters.data_da')}
           inputFormat={DATE_FORMAT}
           value={startDate}
           onChange={(value: DatePickerTypes) => {
@@ -129,11 +132,11 @@ const FilterNotificationsFormBody = ({
               name="startDate"
               size="small"
               {...params}
-              aria-label="Data inizio ricerca" // aria-label for (TextField + Button) Group
+              aria-label={t('filters.data_da-aria-label')} // aria-label for (TextField + Button) Group
               inputProps={{
                 ...params.inputProps,
                 inputMode: 'text',
-                'aria-label': 'Inserisci la data iniziale della ricerca',
+                'aria-label': t('filters.data_da-input-aria-label'),
                 type: 'text',
                 placeholder: 'gg/mm/aaaa',
               }}
@@ -153,7 +156,7 @@ const FilterNotificationsFormBody = ({
         adapterLocale={currentLocale}
       >
         <CustomDatePicker
-          label="A"
+          label={t('filters.data_a')}
           inputFormat={DATE_FORMAT}
           value={endDate}
           onChange={(value: DatePickerTypes) => {
@@ -168,11 +171,11 @@ const FilterNotificationsFormBody = ({
               name="endDate"
               size="small"
               {...params}
-              aria-label="Data fine ricerca" // aria-label for (TextField + Button) Group
+              aria-label={t('filters.data_a-aria-label')} // aria-label for (TextField + Button) Group
               inputProps={{
                 ...params.inputProps,
                 inputMode: 'text',
-                'aria-label': 'inserisci la data finale della ricerca',
+                'aria-label': t('filters.data_a-input-aria-label'),
                 type: 'text',
                 placeholder: 'gg/mm/aaaa',
               }}
@@ -187,7 +190,7 @@ const FilterNotificationsFormBody = ({
       <TextField
         id="status"
         name="status"
-        label="Stato"
+        label={t('filters.status')}
         select
         onChange={handleChangeNotificationStatus}
         value={formikInstance.values.status}

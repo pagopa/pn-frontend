@@ -19,11 +19,18 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 jest.mock('@pagopa-pn/pn-commons', () => ({
   ...jest.requireActual('@pagopa-pn/pn-commons'),
   NotificationDetailTable: ({ rows }: { rows: Array<NotificationDetailTableRow> }) => {
-    const amount = rows.find((r) => r.label === 'Importo');
-    const noticeCodes = rows.find((r) => r.label === 'Codice Avviso');
+    const amount = rows.find((r) => r.label === 'detail.amount');
+    const noticeCodes = rows.find((r) => r.label === 'detail.notice-code');
     return (
       <div>
         <div>{noticeCodes && noticeCodes.value}</div>
@@ -90,7 +97,7 @@ describe('NotificationDetail Page (one recipient)', () => {
   });
 
   test('renders NotificationDetail page', () => {
-    expect(result.getByRole('link')).toHaveTextContent(/Notifiche/i);
+    expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result.container).toHaveTextContent('mocked-abstract');
     expect(result.container).toHaveTextContent(/Table/i);
@@ -187,7 +194,7 @@ describe('NotificationDetail Page (multi recipient)', () => {
   });
 
   test('renders NotificationDetail page', () => {
-    expect(result.getByRole('link')).toHaveTextContent(/Notifiche/i);
+    expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFeMultiRecipient.subject);
     expect(result.container).toHaveTextContent('mocked-abstract');
     expect(result.container).toHaveTextContent(/Table/i);

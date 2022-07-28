@@ -1,4 +1,5 @@
 import { Fragment, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -44,6 +45,8 @@ const MobileNotifications = ({
 }: Props) => {
   const navigate = useNavigate();
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
+  const { t } = useTranslation(['notifiche', 'common']);
+  
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
   };
@@ -51,7 +54,7 @@ const MobileNotifications = ({
   const cardHeader: [CardElement, CardElement] = [
     {
       id: 'sentAt',
-      label: 'Data',
+      label: t('table.date'),
       getLabel(value: string) {
         return value;
       },
@@ -62,7 +65,7 @@ const MobileNotifications = ({
     },
     {
       id: 'notificationStatus',
-      label: 'Stato',
+      label: t('table.status'),
       getLabel(_, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
@@ -79,7 +82,7 @@ const MobileNotifications = ({
   const cardBody: Array<CardElement> = [
     {
       id: 'recipients',
-      label: 'Destinatario',
+      label: t('table.recipient'),
       getLabel(value: Array<string>) {
         return value.map((v) => (
           <Typography key={v} variant="body2">
@@ -91,21 +94,21 @@ const MobileNotifications = ({
     },
     {
       id: 'subject',
-      label: 'Oggetto',
+      label: t('table.subject'),
       getLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
     },
     {
       id: 'iun',
-      label: 'Codice IUN',
+      label: t('table.iun'),
       getLabel(value: string) {
         return value;
       },
     },
     {
       id: 'group',
-      label: 'Gruppi',
+      label: t('table.groups'),
       getLabel(value: string) {
         return value;
       },
@@ -125,7 +128,7 @@ const MobileNotifications = ({
       id: 'go-to-detail',
       component: (
         <ButtonNaked endIcon={<ArrowForwardIcon />} color="primary">
-          Vedi dettaglio
+          {t('table.show-detail')}
         </ButtonNaked>
       ),
       onClick: handleRowClick,
@@ -138,21 +141,21 @@ const MobileNotifications = ({
   }));
 
   const sortFields: Array<CardSort> = [
-    { id: 'sentAt', label: 'Data' },
-    { id: 'recipients', label: 'Destinatario' },
-    { id: 'notificationStatus', label: 'Stato' },
+    { id: 'sentAt', label: t('table.date') },
+    { id: 'recipients', label: t('table.recipient') },
+    { id: 'notificationStatus', label: t('table.status') },
   ].reduce((arr, item) => {
     /* eslint-disable functional/immutable-data */
     arr.push(
       {
         id: `${item.id}-asc`,
-        label: `${item.label} crescente`,
+        label: `${item.label} ${t('sort.asc')}`,
         field: item.id,
         value: 'asc',
       },
       {
         id: `${item.id}-desc`,
-        label: `${item.label} decrescente`,
+        label: `${item.label} ${t('sort.desc')}`,
         field: item.id,
         value: 'desc',
       }
@@ -162,21 +165,18 @@ const MobileNotifications = ({
   }, [] as Array<CardSort>);
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-  const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
-  const emptyActionLabel: string = 'Chiavi API';
-  const secondaryMessage: object = {
-    emptyMessage: 'o fai un',
-    emptyActionLabel: 'invio manuale',
-    emptyActionCallback: () => {
-      onManualSend();
-    },
-  };
   const EmptyStateProps = {
-    emptyMessage: filtersApplied ? undefined : emptyMessage,
-    emptyActionLabel: filtersApplied ? undefined : emptyActionLabel,
+    emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
+    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', {ns: 'common'}),
     disableSentimentDissatisfied: !filtersApplied,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
-    secondaryMessage: filtersApplied ? undefined : secondaryMessage,
+    secondaryMessage: filtersApplied ? undefined : {
+      emptyMessage: t('empty-state.secondary-message'),
+      emptyActionLabel: t('empty-state.secondary-action'),
+      emptyActionCallback: () => {
+        onManualSend();
+      },
+    },
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
@@ -190,9 +190,9 @@ const MobileNotifications = ({
         <Grid item xs={6} textAlign="right">
           {sort && showFilters && onChangeSorting && (
             <MobileNotificationsSort
-              title="Ordina"
-              optionsTitle="Opzioni sort"
-              cancelLabel="Annulla ordinamento"
+              title={t('sort.title')}
+              optionsTitle={t('sort.options')}
+              cancelLabel={t('sort.cancel')}
               sortFields={sortFields}
               sort={sort}
               onChangeSorting={onChangeSorting}

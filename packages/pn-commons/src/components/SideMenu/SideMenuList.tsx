@@ -151,7 +151,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
           component="nav"
           aria-label={getLocalizedOrDefaultLabel(
             'common',
-            'menu.aria-label-sender',
+            'menu.aria-label-inner',
             'piattaforma-notifiche navigazione mittente'
           )}
           className={classes.root}

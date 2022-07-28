@@ -156,7 +156,7 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
   }
 }
 
-export const NotificationAllowedStatus = () => [
+export const getNotificationAllowedStatus = () => [
   {
     value: 'All',
     label: getLocalizedOrDefaultLabel('notifications', 'status.all', 'Tutti gli stati'),

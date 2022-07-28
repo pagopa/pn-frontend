@@ -15,20 +15,15 @@ import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 import { calcUnit8Array, calcSha256String, calcBase64String } from '../utils/file.utility';
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import CustomTooltip from './CustomTooltip';
 
 type Props = {
   uploadText: string;
   vertical?: boolean;
   accept: string;
-  uploadFn?: (
-    file: any,
-    sha256?: { hashBase64: string; hashHex: string }
-  ) => Promise<void>;
-  onFileUploaded: (
-    file: any,
-    sha256?: { hashBase64: string; hashHex: string }
-  ) => void;
+  uploadFn?: (file: any, sha256?: { hashBase64: string; hashHex: string }) => Promise<void>;
+  onFileUploaded: (file: any, sha256?: { hashBase64: string; hashHex: string }) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
   sx?: SxProps;
@@ -57,14 +52,22 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
     case 'FILE_TYPE_NOT_SUPPORTED':
       return {
         ...state,
-        error: 'Estensione file non supportata. Riprovare con un altro file.',
+        error: getLocalizedOrDefaultLabel(
+          'common',
+          'upload-file.ext-not-supported',
+          'Estensione file non supportata. Riprovare con un altro file.'
+        ),
       };
     case 'UPLOAD_IN_ERROR':
       return {
         ...state,
         file: null,
         status: UploadStatus.TO_UPLOAD,
-        error: 'Si è verificato un errore durante il caricamento del file. Si prega di riprovare.',
+        error: getLocalizedOrDefaultLabel(
+          'common',
+          'upload-file.loading-error',
+          'Si è verificato un errore durante il caricamento del file. Si prega di riprovare.'
+        ),
         sha256: '',
       };
     case 'FILE_UPLOADED':
@@ -227,7 +230,8 @@ const FileUpload = ({
         <OrientedBox vertical={vertical}>
           <CloudUploadIcon color="primary" sx={{ margin: '0 10px' }} />
           <Typography display="inline" variant="body2">
-            {uploadText}&nbsp;oppure&nbsp;
+            {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
+            &nbsp;
           </Typography>
           <Typography
             display="inline"
@@ -237,7 +241,11 @@ const FileUpload = ({
             onClick={chooseFileHandler}
             data-testid="loadFromPc"
           >
-            selezionalo dal tuo computer
+            {getLocalizedOrDefaultLabel(
+              'common',
+              'upload-file.select-from-pc',
+              'selezionalo dal tuo computer'
+            )}
           </Typography>
           <Input
             type="file"
@@ -253,8 +261,12 @@ const FileUpload = ({
         <OrientedBox vertical={vertical}>
           <Typography display="inline" variant="body2">
             {data.status === UploadStatus.IN_PROGRESS
-              ? 'Caricamento in corso...'
-              : 'Invio in corso...'}
+              ? getLocalizedOrDefaultLabel(
+                  'common',
+                  'upload-file.loading',
+                  'Caricamento in corso...'
+                )
+              : getLocalizedOrDefaultLabel('common', 'upload-file.sending', 'Invio in corso...')}
           </Typography>
           <Typography sx={{ margin: '0 20px', width: 'calc(100% - 200px)' }}>
             <LinearProgress />
@@ -283,14 +295,18 @@ const FileUpload = ({
           {data.sha256 && (
             <Box sx={{ marginTop: '20px' }}>
               <Typography display="inline" fontWeight={700}>
-                Codice hash
+                {getLocalizedOrDefaultLabel('common', 'upload-file.hash-code', 'Codice hash')}
               </Typography>
               <Typography sx={{ marginLeft: '10px' }} variant="caption" display="inline">
                 {data.sha256}
               </Typography>
               <CustomTooltip
                 openOnClick
-                tooltipContent="Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file"
+                tooltipContent={getLocalizedOrDefaultLabel(
+                  'common',
+                  'upload-file.hash-code-descr',
+                  'Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file'
+                )}
                 sx={{ display: 'inline-block', verticalAlign: 'middle', marginLeft: '10px' }}
               >
                 <IconButton>
