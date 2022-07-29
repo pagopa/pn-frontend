@@ -89,7 +89,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
         );
-        return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
+        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },
       gridProps: {
         xs: 12,
