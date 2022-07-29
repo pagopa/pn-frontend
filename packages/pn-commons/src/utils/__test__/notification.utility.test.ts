@@ -9,8 +9,8 @@ import {
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-} from '../../types/NotificationDetail';
-import { NotificationStatus } from '../../types/NotificationStatus';
+  NotificationStatus
+} from '../../types';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -150,7 +150,7 @@ describe('timeline utility functions', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_ANALOG_WORKFLOW;
     testTimelineStatusInfosFn(
       'Invio per via cartacea',
-      "È in corso l'invio della notifica per via cartacea."
+      "L'invio della notifica per via cartacea è in preparazione."
     );
   });
 
@@ -204,7 +204,7 @@ describe('timeline utility functions', () => {
   it('return timeline status infos - SEND_DIGITAL_DOMICILE_FAILURE', () => {
     parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).errors = ['mocked-errors'];
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       type: DigitalDomicileType.PEC,
       address: 'nome@cognome.mail',
@@ -311,6 +311,14 @@ describe('timeline utility functions', () => {
   it('return legalFact label - RECIPIENT_ACCESS', () => {
     const label = getLegalFactLabel(TimelineCategory.NOTIFICATION_VIEWED, LegalFactType.RECIPIENT_ACCESS);
     expect(label).toBe('Attestazione opponibile a terzi: avvenuto accesso');
+  });
+
+  it('return legalFact label - DIGITAL_FAILURE_WORKFLOW', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
+    testTimelineStatusInfosFn(
+      'Invio per via digitale non riuscito',
+      `L'invio per via digitale della notifica non è riuscito.`
+    );
   });
 
   // PN-1647

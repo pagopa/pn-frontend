@@ -9,6 +9,11 @@ module.exports = {
     'prettier',
   ],
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: 'tsconfig.json',
+    tsconfigRootDir: __dirname,
+    sourceType: 'module',
+  },
   plugins: ['@typescript-eslint', 'react', 'react-hooks', 'import', 'functional', 'sonarjs'],
   rules: {
     'no-case-declarations': 'off',
@@ -36,7 +41,7 @@ module.exports = {
     complexity: 'error',
     'arrow-body-style': 'error',
     'import/order': 'error',
-    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
     // Enable if we want to enforce the return type for all the functions
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-inferrable-types': 'off',

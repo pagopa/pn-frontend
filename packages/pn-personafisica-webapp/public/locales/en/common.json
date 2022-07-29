@@ -1,0 +1,28 @@
+{
+  "button": {
+    "filtra": "Filter",
+    "annulla filtro": "Remove filters",
+    "indietro": "Back",
+    "associa": "Associate",
+    "conferma": "Confirm",
+    "annulla": "Cancel",
+    "modifica": "Edit",
+    "salva": "Save",
+    "rimuovi": "Delete"
+  },
+  "menu": {
+    "notifiche": "Notifications",
+    "deleghe": "Delegations",
+    "profilo": "Your data",
+    "contacts": "Your contact details"
+  },
+  "header": {
+    "logout": "Exit"
+  },
+  "tos": {
+    "title": "Notification Platform",
+    "body": "To access, read and accept the Privacy Policy and the Terms and Conditions of Use.",
+    "switchLabel": "I accept the <0>Privacy Policy</0> and the <1>Terms and conditions of use</1> of the Notification Platform.",
+    "button": "Log in"
+  }
+}

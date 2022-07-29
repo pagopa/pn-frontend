@@ -8,8 +8,8 @@ import {
   LegalFactId,
   NotificationStatusHistory,
   NotificationDetailRecipient,
-} from '../../types/NotificationDetail';
-import { useIsMobile } from '../../hooks/IsMobile';
+} from '../../types';
+import { useIsMobile } from '../../hooks';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {

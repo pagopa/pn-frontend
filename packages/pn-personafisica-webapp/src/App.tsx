@@ -6,7 +6,7 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { AppMessage, Layout, LoadingOverlay, SideMenu, SideMenuItem, useUnload } from '@pagopa-pn/pn-commons';
+import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem, initLocalization, useUnload } from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
@@ -40,7 +40,7 @@ const productsList: Array<ProductSwitchItem> = [
 
 const App = () => {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { fetchedTos, tos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
@@ -93,6 +93,8 @@ const App = () => {
   });
 
   useEffect(() => {
+    // init localization
+    initLocalization((namespace, path, data) => t(path, {ns: namespace, ...data}));
     // OneTrust callback at first time
     // eslint-disable-next-line functional/immutable-data
     mixpanelInit();
@@ -172,6 +174,10 @@ const App = () => {
     },
   ];
 
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
+
   const handleAssistanceClick = () => {
     trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
     /* eslint-disable-next-line functional/immutable-data */
@@ -210,6 +216,7 @@ const App = () => {
       loggedUser={jwtUser}
       enableUserDropdown
       userActions={userActions}
+      onLanguageChanged={changeLanguageHandler}
       onAssistanceClick={handleAssistanceClick}
     >
       <AppMessage

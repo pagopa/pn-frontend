@@ -1,7 +1,7 @@
 /* eslint-disable functional/no-let */
 import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { formatToTimezoneString, getNextDay, NotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { formatToTimezoneString, getNextDay, getNotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import {
   render,
@@ -19,6 +19,15 @@ jest.mock('@pagopa-pn/pn-commons', () => {
     useIsMobile: () => false,
   };
 });
+
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
+const localizedNotificationStatus = getNotificationAllowedStatus();
 
 function formatDate(date: Date): string {
   const month = `0${date.getMonth() + 1}`.slice(-2);
@@ -88,23 +97,23 @@ describe('Filter Notifications Table Component', () => {
 
   it('renders filter notifications table', () => {
     expect(form).toBeInTheDocument();
-    testFormElements(form!, 'recipientId', 'Codice Fiscale');
-    testFormElements(form!, 'startDate', 'Da');
-    testFormElements(form!, 'endDate', 'A');
-    testFormElements(form!, 'status', 'Stato');
+    testFormElements(form!, 'recipientId', 'filters.fiscal-code');
+    testFormElements(form!, 'startDate', 'filters.data_da');
+    testFormElements(form!, 'endDate', 'filters.data_a');
+    testFormElements(form!, 'status', 'filters.status');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
-    expect(submitButton).toHaveTextContent(/Filtra/i);
+    expect(submitButton).toHaveTextContent(/button.filtra/i);
     const cancelButton = within(form!).getByTestId('cancelButton');
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveTextContent(/Rimuovi filtri/i);
+    expect(cancelButton).toHaveTextContent(/button.annulla filtro/i);
   });
 
   it('test filters inital value', () => {
     testFormElementsValue(form!, 'recipientId', '');
     testFormElementsValue(form!, 'startDate', '');
     testFormElementsValue(form!, 'endDate', '');
-    testFormElementsValue(form!, 'status', NotificationAllowedStatus[0].value);
+    testFormElementsValue(form!, 'status', localizedNotificationStatus[0].value);
   });
 
   it('test recipientId input', async () => {
@@ -127,7 +136,7 @@ describe('Filter Notifications Table Component', () => {
 
   it('test status select', async () => {
     expect(form!.querySelector(`input[name="status"]`)).toBeInTheDocument();
-    await testSelect(form!, 'status', NotificationAllowedStatus, 2);
+    await testSelect(form!, 'status', localizedNotificationStatus, 2);
   });
 
   it('test form submission - recipientId (valid)', async () => {
@@ -140,7 +149,7 @@ describe('Filter Notifications Table Component', () => {
       form!,
       oneYearAgo,
       todayM,
-      NotificationAllowedStatus[2].value,
+      localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       ''
     );
@@ -155,7 +164,7 @@ describe('Filter Notifications Table Component', () => {
         startDate: formatToTimezoneString(oneYearAgo),
         endDate: formatToTimezoneString(getNextDay(todayM)),
         recipientId: 'RSSMRA80A01H501U',
-        status: NotificationAllowedStatus[2].value,
+        status: localizedNotificationStatus[2].value,
         iunMatch: '',
       },
       type: 'setNotificationFilters',
@@ -172,7 +181,7 @@ describe('Filter Notifications Table Component', () => {
       form!,
       oneYearAgo,
       todayM,
-      NotificationAllowedStatus[2].value,
+      localizedNotificationStatus[2].value,
       '',
       'ABCD-EFGH-ILMN-123456-A-1'
     );
@@ -186,7 +195,7 @@ describe('Filter Notifications Table Component', () => {
       payload: {
         startDate: formatToTimezoneString(oneYearAgo),
         endDate: formatToTimezoneString(getNextDay(todayM)),
-        status: NotificationAllowedStatus[2].value,
+        status: localizedNotificationStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         recipientId: '',
       },
@@ -205,7 +214,7 @@ describe('Filter Notifications Table Component', () => {
       form!,
       nineYearsAgo,
       todayM,
-      NotificationAllowedStatus[2].value,
+      localizedNotificationStatus[2].value,
       'mocked-wrongId',
       ''
     );
@@ -228,7 +237,7 @@ describe('Filter Notifications Table Component', () => {
       form!,
       nineYearsAgo,
       todayM,
-      NotificationAllowedStatus[2].value,
+      localizedNotificationStatus[2].value,
       '',
       '12345678910abcdfghiol'
     );
@@ -250,7 +259,7 @@ describe('Filter Notifications Table Component', () => {
       form!,
       oneYearAgo,
       todayM,
-      NotificationAllowedStatus[2].value,
+      localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       ''
     );

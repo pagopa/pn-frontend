@@ -1,6 +1,6 @@
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 
-import { SideMenuItem } from '../../../types/SideMenuItem';
+import { SideMenuItem } from '../../../types';
 import { render } from '../../../test-utils';
 import SideMenuList from '../SideMenuList';
 import { sideMenuItems } from './test-utils';

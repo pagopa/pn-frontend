@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import { InactivityHandler, SessionModal } from '@pagopa-pn/pn-commons';
 
@@ -19,6 +20,7 @@ const RequireAuth = () => {
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation(['common']);
 
   useEffect(() => {
     if (token === '' || !token) {
@@ -36,8 +38,8 @@ const RequireAuth = () => {
       {accessDenied && (
         <SessionModal
           open
-          title={'Stai uscendo da Piattaforma Notifiche'}
-          message={'Verrai reindirizzato'}
+          title={t('leaving-app.title')}
+          message={t('leaving-app.message')}
           handleClose={goToLogin}
         />
       )}

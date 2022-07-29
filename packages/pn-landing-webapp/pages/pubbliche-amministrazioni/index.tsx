@@ -21,7 +21,7 @@ const EntiPage: NextPage = () => (
     <Head>
       <title>Piattaforma Notifiche</title>
       <meta name="description" content="Landing Piattaforma notifiche" />
-      <link rel="icon" href="static/favicon.svg" />
+      <link rel="icon" href="/static/favicon.svg" />
     </Head>
 
     <main>

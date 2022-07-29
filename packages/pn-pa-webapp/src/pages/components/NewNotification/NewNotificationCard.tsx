@@ -1,4 +1,5 @@
 import { Fragment, ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Paper, Typography } from '@mui/material';
 
@@ -13,6 +14,7 @@ type Props = {
 
 const NewNotificationCard = ({ children, isContinueDisabled, title, noPaper = false }: Props) => {
   const navigate = useNavigate();
+  const { t } = useTranslation(['common', 'notifiche']);
 
   const handleGoBack = () => {
     navigate(routes.DASHBOARD);
@@ -34,10 +36,10 @@ const NewNotificationCard = ({ children, isContinueDisabled, title, noPaper = fa
         sx={{ marginTop: '40px', marginBottom: '20px' }}
       >
         <Button variant="outlined" type="button" onClick={handleGoBack}>
-          Torna alle notifiche
+        {t('new-notification.back-to-notifications', {ns: 'notifiche'})}
         </Button>
         <Button variant="contained" type="submit" disabled={isContinueDisabled}>
-          Continua
+          {t('button.continue')}
         </Button>
       </Box>
     </Fragment>

@@ -12,6 +12,14 @@ jest.mock('react-router-dom', () => ({
   useParams: () => ({ id: 'mocked-id' }),
   useNavigate: () => mockNavigateFn,
 }));
+
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 jest.mock(
   '../components/NewNotification/PreliminaryInformations',
   () =>
@@ -22,6 +30,7 @@ jest.mock(
         </div>
       )
 );
+
 jest.mock(
   '../components/NewNotification/Recipient',
   () =>
@@ -32,6 +41,7 @@ jest.mock(
         </div>
       )
 );
+
 jest.mock(
   '../components/NewNotification/Attachments',
   () =>
@@ -42,6 +52,7 @@ jest.mock(
         </div>
       )
 );
+
 jest.mock(
   '../components/NewNotification/PaymentMethods',
   () =>
@@ -52,6 +63,7 @@ jest.mock(
         </div>
       )
 );
+
 jest.mock('../components/NewNotification/SyncFeedback', () => () => (
   <div data-testid="stepContent">SyncFeedback</div>
 ));
@@ -82,20 +94,20 @@ describe('NewNotification Page', () => {
   });
 
   test('renders NewNotification page', () => {
-    expect(result?.container.querySelector('h4')).toHaveTextContent('Invia una nuova notifica');
+    expect(result?.container.querySelector('h4')).toHaveTextContent('new-notification.title');
     const stepContent = result?.queryByTestId('stepContent');
     expect(stepContent).toHaveTextContent(/PreliminaryInformations/i);
   });
 
   test('clicks on the breadcrumb button', async () => {
     const links = result?.getAllByRole('link');
-    expect(links![0]).toHaveTextContent(/Notifiche/i);
+    expect(links![0]).toHaveTextContent(/new-notification.breadcrumb-root/i);
     expect(links![0]).toHaveAttribute('href', routes.DASHBOARD);
   });
 
   test('clicks on the api keys link', async () => {
     const links = result?.getAllByRole('link');
-    expect(links![1]).toHaveTextContent(/Chiavi API/i);
+    expect(links![1]).toHaveTextContent(/menu.api-key/i);
     expect(links![1]).toHaveAttribute('href', routes.API_KEYS);
   });
 
