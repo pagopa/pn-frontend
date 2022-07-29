@@ -2,13 +2,13 @@ import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
-import Notifiche from '../pages/Notifiche.page';
-import Profile from '../pages/Profile.page';
-import TermsOfService from '../pages/TermsOfService.page';
 import RequireAuth from './RequireAuth';
 import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
 
+const Profile = React.lazy(() => import('../pages/Profile.page'));
+const TermsOfService = React.lazy(() => import('../pages/TermsOfService.page'));
+const Notifiche = React.lazy(() => import('../pages/Notifiche.page'));
 const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.page'));
 const Contacts = React.lazy(() => import('../pages/Contacts.page'));
 const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
