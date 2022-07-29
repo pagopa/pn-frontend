@@ -1,10 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import { UserType } from "model";
 import { PRIVACY_DOCUMENT_PATH } from "@utils/constants";
-
-const USER_TYPE = UserType.PF;
 
 // const FAVICON_PATH = `${process.env.NEXT_PUBLIC_ASSETS_URL}/favicon.svg`;
 

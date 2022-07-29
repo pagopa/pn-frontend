@@ -12,8 +12,8 @@ Avviare le applicazioni
 
 - `yarn start:pf` per avviare localmente il portale per i cittadini
 - `yarn start:pa` per avviare localmente il portale per la PA
-- `yarn start:login` per avviare localmente il portale di login per il cittadino (va su localhost:300)
-- `yarn start:landing` per avviare localmente il sito landing (va su localhost:300)
+- `yarn start:login` per avviare localmente il portale di login per il cittadino (va su localhost:3000)
+- `yarn start:landing` per avviare localmente il sito landing (va su localhost:3000)
 
 In ogni caso, si può sempre navigare nella cartella del package di riferimento e lanciare
 
@@ -32,6 +32,7 @@ Altri script disponibili
 
 - `yarn refresh:monorepo` per refreshare e reinstallare le dipendenze su tutto il workspace
 - `yarn clean:win` o `yarn clean:nx` per eliminare i node_modules a livello di workspace (win se Os di riferimento è Windows, nx se Os di riferimento e linux-based)
+
 
 ### Lerna
 
@@ -54,3 +55,18 @@ E' possibile eseguire un task di analisi con sonar-scanner tramite lo script
 - `yarn sonar`
 Per essere eseguibile in locale, è necessario creare sull'ambiente locale una variable d'ambiente SONAR_TOKEN con il token del progetto sonar di riferimento.
 L'analisi sonar sarà disponibile [qui](https://sonarcloud.io/project/overview?id=pagopa_pn-frontend)
+
+
+### Version
+
+Utilizzare il comando `lerna version` dal branch `main` per rilasciare una nuova versione
+
+Il tool rileva in automatico i package che sono stati modificati a partire dall'ultima versione e si occupa di aggiornare i file delle dipendenze ed eseguire i comandi git commit, tag e push.
+
+E' possibile procedere in uno dei modi seguenti:
+- `lerna version 1.0.1` per scegliere esplicitamente un numero di versione
+- `lerna version patch` per effettuare l'avanzamento secondo la convenzione SemVer
+- `lerna version`       per scegliere dal prompt
+
+
+Per un elenco e una descrizione più dettagliata delle varie opzioni disponibili fare riferimento alla specifica del comando presente su [github](https://github.com/lerna/lerna/tree/main/commands/version)

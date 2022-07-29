@@ -6,14 +6,15 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem, initLocalization, useUnload } from '@pagopa-pn/pn-commons';
+import { AppMessage, appStateActions, initLocalization, Layout, LoadingOverlay, SideMenu, SideMenuItem, useMultiEvent, useUnload } from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
+import { Box } from '@mui/material';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { getToSApproval, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { PAGOPA_HELP_EMAIL } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
@@ -199,7 +200,15 @@ const App = () => {
     trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
   };
 
+  const [clickVersion] = useMultiEvent({
+    callback: () => dispatch(appStateActions.addSuccess({
+      title: "Current version",
+      message: `v${VERSION}`
+    })),
+  });
+
   return (
+    <>
     <Layout
       onExitAction={() => dispatch(logout())}
       eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
@@ -225,6 +234,8 @@ const App = () => {
       <LoadingOverlay />
       <Router />
     </Layout>
+    <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
+    </>
   );
 };
 
