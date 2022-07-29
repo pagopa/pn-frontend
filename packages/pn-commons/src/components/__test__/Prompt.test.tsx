@@ -18,9 +18,9 @@ const WrappedPrompt = () => {
           <Prompt
             title={'Test title'}
             message={'Test subtitle'}
-            eventTrackingCallbackPromptOpened={() => console.log()}
-            eventTrackingCallbackCancel={() => console.log()}
-            eventTrackingCallbackConfirm={() => console.log()}
+            eventTrackingCallbackPromptOpened={() => {}}
+            eventTrackingCallbackCancel={() => {}}
+            eventTrackingCallbackConfirm={() => {}}
           >
             <div onClick={handleNavigate}>navigate</div>
           </Prompt>

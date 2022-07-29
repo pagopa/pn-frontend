@@ -1,10 +1,10 @@
 import { ReactNode, ErrorInfo } from 'react';
 import { Stack } from '@mui/material';
 import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
-import { Footer } from "@pagopa-pn/pn-commons";
 import { Box } from '@mui/system';
 
 import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 import ErrorBoundary from '../ErrorBoundary';
 type Props = {
   children?: ReactNode;
