@@ -14,3 +14,5 @@ export const DISABLE_INACTIVITY_HANDLER = process.env.REACT_APP_DISABLE_INACTIVI
 export const PARTY_MOCK = 'Comune di Milano';
 
 export const OT_DOMAIN_ID = process.env.REACT_APP_ONETRUST_DOMAIN_ID || "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c";
+
+export const VERSION = process.env.REACT_APP_VERSION ?? "";

@@ -185,8 +185,9 @@ export { today, tenYearsAgo, DATE_FORMAT };
 
 // hooks
 import { useIsMobile } from './hooks/IsMobile';
+import { useMultiEvent } from './hooks/useMultiEvent';
 
-export { useIsMobile };
+export { useIsMobile, useMultiEvent };
 
 // reducers
 import { appStateReducer } from './redux/slices/appStateSlice';

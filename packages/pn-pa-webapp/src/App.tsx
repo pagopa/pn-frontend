@@ -1,6 +1,7 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
-import { AppMessage, Layout, LoadingOverlay, SideMenu, useUnload } from '@pagopa-pn/pn-commons';
+import { AppMessage, appStateActions, Layout, LoadingOverlay, SideMenu, useMultiEvent, useUnload } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
+import { Box } from '@mui/material';
 
 import { useLocation } from 'react-router-dom';
 import Router from './navigation/routes';
@@ -9,7 +10,7 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 
-import { PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL, VERSION } from './utils/constants';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
@@ -125,36 +126,46 @@ const App = () => {
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 
+  const [clickVersion] = useMultiEvent({
+    callback: () => dispatch(appStateActions.addSuccess({
+      title: "Current version",
+      message: `v${VERSION}`
+    })),
+  });
+
   return (
-    <Layout
-      onExitAction={handleLogout}
-      eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
-      eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
-      eventTrackingCallbackProductSwitch={(target) =>
-        handleEventTrackingCallbackProductSwitch(target)
-      }
-      sideMenu={
-        role &&
-        menuItems && (
-          <SideMenu
-            menuItems={menuItems.menuItems}
-            selfCareItems={menuItems.selfCareItems}
-            eventTrackingCallback={(target) =>
-              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
-            }
-          />
-        )
-      }
-      productsList={productsList}
-      productId={'0'}
-      partyList={partyList}
-      loggedUser={jwtUser}
-      onAssistanceClick={handleAssistanceClick}
-    >
-      <AppMessage sessionRedirect={handleLogout} />
-      <LoadingOverlay />
-      <Router />
-    </Layout>
+    <>
+      <Layout
+        onExitAction={handleLogout}
+        eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
+        eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
+        eventTrackingCallbackProductSwitch={(target) =>
+          handleEventTrackingCallbackProductSwitch(target)
+        }
+        sideMenu={
+          role &&
+          menuItems && (
+            <SideMenu
+              menuItems={menuItems.menuItems}
+              selfCareItems={menuItems.selfCareItems}
+              eventTrackingCallback={(target) =>
+                trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
+              }
+            />
+          )
+        }
+        productsList={productsList}
+        productId={'0'}
+        partyList={partyList}
+        loggedUser={jwtUser}
+        onAssistanceClick={handleAssistanceClick}
+      >
+        <AppMessage sessionRedirect={handleLogout} />
+        <LoadingOverlay />
+        <Router />
+      </Layout>
+      <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
+    </>
   );
 };
 export default App;

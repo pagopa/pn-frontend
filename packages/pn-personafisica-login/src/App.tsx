@@ -1,9 +1,11 @@
 import { useEffect } from "react";
-import { useUnload } from "@pagopa-pn/pn-commons";
+import { Box } from "@mui/material";
+import { useMultiEvent, useUnload } from "@pagopa-pn/pn-commons";
 import Router from './navigation/routes';
 import { mixpanelInit, trackEventByType } from "./utils/mixpanel";
 import { TrackEventType } from "./utils/events";
 import './utils/onetrust';
+import { VERSION } from "./utils/constants";
 
 declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
@@ -42,7 +44,16 @@ const App = () => {
     trackEventByType(TrackEventType.APP_UNLOAD);
   });
 
-  return <Router />;
+  const [clickVersion] = useMultiEvent({
+    callback: () => console.log(`v${VERSION}`),
+  });
+
+  return (
+    <>
+      <Router />
+      <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
+    </>
+  );
 };
 
 export default App;
