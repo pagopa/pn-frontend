@@ -16,7 +16,6 @@ type Props = {
   recipients: Array<NotificationDetailRecipient>;
   statusHistory: Array<NotificationStatusHistory>;
   title: string;
-  legalFactLabels: { attestation: string; receipt: string };
   clickHandler: (legalFactId: LegalFactId) => void;
   historyButtonLabel: string;
   showMoreButtonLabel: string;
@@ -40,7 +39,6 @@ const CustomDrawer = styled(Drawer)(() => ({
  * @param statusHistory notification macro-status history
  * @param clickHandler function called when user clicks on the download button
  * @param title title to show
- * @param legalFactLabels labels of the download button
  * @param historyButtonLabel label of the history button
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
@@ -51,7 +49,6 @@ const NotificationDetailTimeline = ({
   statusHistory,
   clickHandler,
   title,
-  legalFactLabels,
   historyButtonLabel,
   showMoreButtonLabel,
   showLessButtonLabel,
@@ -83,7 +80,6 @@ const NotificationDetailTimeline = ({
       timelineStep={t}
       recipients={recipients}
       position={getPosition(i)}
-      legalFactLabels={legalFactLabels}
       clickHandler={clickHandler}
       key={'timeline_sep_' + i}
       showMoreButtonLabel={showMoreButtonLabel}
@@ -117,7 +113,6 @@ const NotificationDetailTimeline = ({
             timelineStep={statusHistory[0]}
             recipients={recipients}
             position="first"
-            legalFactLabels={legalFactLabels}
             clickHandler={clickHandler}
             historyButtonLabel={historyButtonLabel}
             showHistoryButton

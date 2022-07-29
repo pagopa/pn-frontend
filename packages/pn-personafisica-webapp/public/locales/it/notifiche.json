@@ -110,7 +110,15 @@
       "send-analog-domicile-ar-description": "È in corso l'invio della notifica a {{name}} all'indirizzo {{address}} tramite raccomandata A/R.",
       "send-paper-feedback": "Aggiornamento stato raccomandata",
       "send-paper-feedback-description": "Si allega un aggiornamento dello stato della raccomandata.",
-      "view-receipt": "Vedi la ricevuta"
+      "digital-failure-workflow": "Invio per via digitale non riuscito",
+      "digital-failure-workflow-description": "L'invio per via digitale della notifica non è riuscito.",
+      "legalfact": {
+        "sender-ack": "notifica presa in carico",
+        "digital-delivery-success": "notifica digitale",
+        "digital-delivery-failure": "mancato recapito digitale",
+        "analog-delivery": "conformità",
+        "recipient-access": "avvenuto accesso"
+      }
     },
     "help": {
       "goto": "Vai al sito",

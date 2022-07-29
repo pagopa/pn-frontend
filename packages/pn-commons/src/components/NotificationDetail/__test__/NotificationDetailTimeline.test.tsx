@@ -52,10 +52,6 @@ describe('NotificationDetailTimeline Component', () => {
         recipients={parsedNotification.recipients}
         statusHistory={parsedNotification.notificationStatusHistory}
         clickHandler={jest.fn()}
-        legalFactLabels={{
-          attestation: 'mocked-legalFact-label',
-          receipt: 'mocked-recipient-label',
-        }}
         historyButtonLabel="mocked-history-label"
         showLessButtonLabel="mocked-less-label"
         showMoreButtonLabel="mocked-more-label"
@@ -75,10 +71,6 @@ describe('NotificationDetailTimeline Component', () => {
         recipients={parsedNotification.recipients}
         statusHistory={parsedNotification.notificationStatusHistory}
         clickHandler={jest.fn()}
-        legalFactLabels={{
-          attestation: 'mocked-legalFact-label',
-          receipt: 'mocked-recipient-label',
-        }}
         historyButtonLabel="mocked-history-label"
         showLessButtonLabel="mocked-less-label"
         showMoreButtonLabel="mocked-more-label"
@@ -106,10 +98,6 @@ describe('NotificationDetailTimeline Component', () => {
         recipients={parsedNotification.recipients}
         statusHistory={parsedNotification.notificationStatusHistory}
         clickHandler={jest.fn()}
-        legalFactLabels={{
-          attestation: 'mocked-legalFact-label',
-          receipt: 'mocked-recipient-label',
-        }}
         historyButtonLabel="mocked-history-label"
         showLessButtonLabel="mocked-less-label"
         showMoreButtonLabel="mocked-more-label"
