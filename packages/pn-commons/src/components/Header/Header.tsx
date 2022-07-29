@@ -9,6 +9,7 @@ import {
   UserAction,
 } from '@pagopa/mui-italia';
 
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { pagoPALink } from '../../utils/costants';
 
 type HeaderProps = {
@@ -33,9 +34,9 @@ type HeaderProps = {
 };
 
 const pagoPAHeaderLink: RootLinkType = {
-  ...pagoPALink,
+  ...pagoPALink(),
   label: 'PagoPA S.p.A.',
-  title: 'Sito di PagoPA S.p.A.'
+  title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.')
 };
 
 const Header = ({
@@ -59,22 +60,27 @@ const Header = ({
     }
   };
 
+  const enableHeaderProduct = productsList && productsList.length > 0 || partyList && partyList.length > 0;
+  
   return (
     <AppBar sx={{ boxShadow: 'none', color: 'inherit' }} position="relative">
       <HeaderAccount
         rootLink={pagoPAHeaderLink}
         loggedUser={loggedUser}
+        enableLogin={loggedUser.id !== ''}
         onAssistanceClick={onAssistanceClick || (() => {})}
         onLogout={onExitAction}
         enableDropdown={enableDropdown}
         userActions={userActions}
       />
-      <HeaderProduct
-        productId={productId}
-        productsList={productsList}
-        partyList={partyList}
-        onSelectedProduct={handleProductSelection}
-      />
+      {enableHeaderProduct && (
+        <HeaderProduct
+          productId={productId}
+          productsList={productsList}
+          partyList={partyList}
+          onSelectedProduct={handleProductSelection}
+        />
+      )}
     </AppBar>
   );
 };

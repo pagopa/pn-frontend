@@ -28,7 +28,7 @@ const TermsOfService = () => {
       navigate(routes.NOTIFICHE);
     })
     .catch(_ => {
-      
+      console.error(_);
     });
   };
 

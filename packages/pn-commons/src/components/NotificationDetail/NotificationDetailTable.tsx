@@ -1,5 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
-import { NotificationDetailTableRow } from '../../types/NotificationDetail';
+
+import { NotificationDetailTableRow } from '../../types';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 type Props = {
   rows: Array<NotificationDetailTableRow>;
@@ -11,7 +13,7 @@ type Props = {
  */
 const NotificationDetailTable = ({ rows }: Props) => (
   <TableContainer component={Paper} sx={{ px: 3, py: 2 }} className="paperContainer">
-    <Table aria-label="Dettaglio notifica">
+    <Table aria-label={getLocalizedOrDefaultLabel('notifications', 'detail.table-aria-label', 'Dettaglio notifica')}>
       <TableBody>
         {rows.map((row) => (
           <TableRow key={row.id} sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>

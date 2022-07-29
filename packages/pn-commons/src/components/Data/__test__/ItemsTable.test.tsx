@@ -1,7 +1,7 @@
 import { fireEvent, screen, within } from '@testing-library/react';
 
 import ItemsTable from '../ItemsTable';
-import { Column, Item, Sort } from '../../../types/ItemsTable';
+import { Column, Item, Sort } from '../../../types';
 import { render } from '../../../test-utils';
 
 const handleSort = jest.fn();

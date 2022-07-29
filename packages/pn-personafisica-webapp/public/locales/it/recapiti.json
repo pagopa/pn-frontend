@@ -79,7 +79,7 @@
   },
   "special-contacts": {
     "subtitle": "Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi puoi indicarli qui, in sostituzione di quelli principali.",
-    "required-fileds": "* Campi obbligatori",
+    "required-fileds": "*Campi obbligatori",
     "associated": "Già associati",
     "sender": "Ente",
     "address-type": "Recapito",

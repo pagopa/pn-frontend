@@ -1,6 +1,6 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createAppError, createAppMessage } from '../../services/message.service';
-import { IAppMessage } from '../../types/AppMessage';
+import { IAppMessage } from '../../types';
 
 export interface AppStateState {
   loading: {

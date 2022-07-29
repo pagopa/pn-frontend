@@ -1,4 +1,4 @@
-import { IAppMessage } from '../../types/AppMessage';
+import { IAppMessage } from '../../types';
 import { createAppError, createAppMessage } from '../message.service';
 
 const _404error: IAppMessage = {

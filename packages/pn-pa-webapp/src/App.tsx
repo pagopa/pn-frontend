@@ -1,8 +1,9 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
-import { AppMessage, Layout, LoadingOverlay, SideMenu, useUnload } from '@pagopa-pn/pn-commons';
+import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { AppMessage, initLocalization, Layout, LoadingOverlay, SideMenu, useUnload } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
-import { useLocation } from 'react-router-dom';
 import Router from './navigation/routes';
 import { getOrganizationParty, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
@@ -32,11 +33,22 @@ const App = () => {
   const loggedUserOrganizationParty = useAppSelector((state: RootState) => state.userState.organizationParty);
 
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
 
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
-  const menuItems = useMemo(() => getMenuItems(idOrganization, role?.role), [role, idOrganization]);
+  const menuItems = useMemo(() => {
+    // localize menu items
+    const items = { ...getMenuItems(idOrganization, role?.role) };
+    /* eslint-disable-next-line functional/immutable-data */
+    items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));
+    if (items.selfCareItems) {
+      /* eslint-disable-next-line functional/immutable-data */
+      items.selfCareItems = items.selfCareItems.map((item) => ({ ...item, label: t(item.label) }));
+    }
+    return items;
+  }, [role, idOrganization]);
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -51,13 +63,13 @@ const App = () => {
     () => [
       {
         id: '1',
-        title: `Area Riservata`,
+        title: t('header.reserved-area'),
         productUrl: `${SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
         linkType: 'external',
       },
       {
         id: '0',
-        title: `Piattaforma Notifiche`,
+        title: t('header.notification-platform'),
         productUrl: '',
         linkType: 'internal',
       },
@@ -83,6 +95,8 @@ const App = () => {
   );
 
   useEffect(() => {
+    // init localization
+    initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
     // OneTrust callback at first time
     // eslint-disable-next-line functional/immutable-data
     global.OptanonWrapper = function () {
@@ -139,12 +153,16 @@ const App = () => {
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
+
   return (
     <Layout
       onExitAction={handleLogout}
       eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
       eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
-      eventTrackingCallbackProductSwitch={(target) =>
+      eventTrackingCallbackProductSwitch={(target: string) =>
         handleEventTrackingCallbackProductSwitch(target)
       }
       sideMenu={
@@ -153,7 +171,7 @@ const App = () => {
           <SideMenu
             menuItems={menuItems.menuItems}
             selfCareItems={menuItems.selfCareItems}
-            eventTrackingCallback={(target) =>
+            eventTrackingCallback={(target: string) =>
               trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
             }
           />
@@ -163,6 +181,7 @@ const App = () => {
       productId={'0'}
       partyList={partyList}
       loggedUser={jwtUser}
+      onLanguageChanged={changeLanguageHandler}
       onAssistanceClick={handleAssistanceClick}
     >
       <AppMessage sessionRedirect={handleLogout} />
