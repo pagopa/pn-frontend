@@ -23,8 +23,12 @@ const TermsOfService = () => {
   const redirectToSLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`);
 
   const handleAccept = () => {
-    void dispatch(acceptToS()).then(() => {
+    void dispatch(acceptToS()).unwrap()
+    .then(() => {
       navigate(routes.NOTIFICHE);
+    })
+    .catch(_ => {
+      console.error(_);
     });
   };
 

@@ -1,16 +1,17 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
-import { AppMessage, appStateActions, Layout, LoadingOverlay, SideMenu, useMultiEvent, useUnload } from '@pagopa-pn/pn-commons';
+import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { AppMessage, appStateActions, initLocalization, Layout, LoadingOverlay, SideMenu, useMultiEvent, useUnload } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import { Box } from '@mui/material';
 
-import { useLocation } from 'react-router-dom';
 import Router from './navigation/routes';
-import { logout } from './redux/auth/actions';
+import { getOrganizationParty, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 
-import { PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL, VERSION } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } from './utils/constants';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
@@ -30,12 +31,25 @@ const App = () => {
   });
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const loggedUserOrganizationParty = useAppSelector((state: RootState) => state.userState.organizationParty);
+
   const dispatch = useAppDispatch();
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
 
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
-  const menuItems = useMemo(() => getMenuItems(idOrganization, role?.role), [role, idOrganization]);
+  const menuItems = useMemo(() => {
+    // localize menu items
+    const items = { ...getMenuItems(idOrganization, role?.role) };
+    /* eslint-disable-next-line functional/immutable-data */
+    items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));
+    if (items.selfCareItems) {
+      /* eslint-disable-next-line functional/immutable-data */
+      items.selfCareItems = items.selfCareItems.map((item) => ({ ...item, label: t(item.label) }));
+    }
+    return items;
+  }, [role, idOrganization]);
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -50,13 +64,13 @@ const App = () => {
     () => [
       {
         id: '1',
-        title: `Area Riservata`,
+        title: t('header.reserved-area'),
         productUrl: `${SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
         linkType: 'external',
       },
       {
         id: '0',
-        title: `Piattaforma Notifiche`,
+        title: t('header.notification-platform'),
         productUrl: '',
         linkType: 'internal',
       },
@@ -64,20 +78,26 @@ const App = () => {
     [idOrganization]
   );
 
-  // TODO: get parties list from be (?)
   const partyList: Array<PartyEntity> = useMemo(
     () => [
       {
         id: '0',
-        name: PARTY_MOCK,
+        name: loggedUserOrganizationParty.name,
         productRole: role?.role,
-        logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
+        logoUrl: undefined,
+        // non posso settare un'icona di MUI perché @pagopa/mui-italia accetta solo string o undefined come logoUrl
+        // ma fortunatamente, se si passa undefined, fa vedere proprio il logo che ci serve
+        // ------------------
+        // Carlos Lombardi, 2022.07.28
+        // logoUrl: <AccountBalanceIcon />
       },
     ],
-    [role]
+    [role, loggedUserOrganizationParty]
   );
 
   useEffect(() => {
+    // init localization
+    initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
     // OneTrust callback at first time
     // eslint-disable-next-line functional/immutable-data
     global.OptanonWrapper = function () {
@@ -96,6 +116,14 @@ const App = () => {
       mixpanelInit();
     }
   }, []);
+
+  useEffect(() => {
+    if (idOrganization) {
+      void dispatch(
+        getOrganizationParty(idOrganization)
+      );
+    }
+  }, [idOrganization]);
 
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -126,6 +154,10 @@ const App = () => {
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
+
   const [clickVersion] = useMultiEvent({
     callback: () => dispatch(appStateActions.addSuccess({
       title: "Current version",
@@ -139,7 +171,7 @@ const App = () => {
         onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
-        eventTrackingCallbackProductSwitch={(target) =>
+        eventTrackingCallbackProductSwitch={(target: string) =>
           handleEventTrackingCallbackProductSwitch(target)
         }
         sideMenu={
@@ -148,7 +180,7 @@ const App = () => {
             <SideMenu
               menuItems={menuItems.menuItems}
               selfCareItems={menuItems.selfCareItems}
-              eventTrackingCallback={(target) =>
+              eventTrackingCallback={(target: string) =>
                 trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
               }
             />
@@ -158,6 +190,7 @@ const App = () => {
         productId={'0'}
         partyList={partyList}
         loggedUser={jwtUser}
+        onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
       >
         <AppMessage sessionRedirect={handleLogout} />

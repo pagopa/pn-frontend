@@ -1,5 +1,6 @@
 import { Fragment, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import {
@@ -40,26 +41,28 @@ const DesktopNotifications = ({
 }: Props) => {
   const navigate = useNavigate();
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
+  const { t } = useTranslation(['notifiche']);
+
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
   };
-  
+
   const columns: Array<Column> = [
     {
       id: 'sentAt',
-      label: 'Data',
+      label: t('table.date'),
       width: '11%',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
       id: 'recipients',
-      label: 'Destinatario',
+      label: t('table.recipient'),
       width: '13%',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: Array<string>) {
@@ -69,35 +72,35 @@ const DesktopNotifications = ({
           </Typography>
         ));
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
       id: 'subject',
-      label: 'Oggetto',
+      label: t('table.subject'),
       width: '23%',
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
       id: 'iun',
-      label: 'Codice IUN',
+      label: t('table.iun'),
       width: '20%',
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
       id: 'group',
-      label: 'Gruppi',
+      label: t('table.groups'),
       width: '15%',
       getCellLabel(value: string) {
         return (
@@ -108,13 +111,13 @@ const DesktopNotifications = ({
           )
         );
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
       id: 'notificationStatus',
-      label: 'Stato',
+      label: t('table.status'),
       width: '18%',
       align: 'center',
       sortable: false, // TODO: will be re-enabled in PN-1124
@@ -131,28 +134,25 @@ const DesktopNotifications = ({
   }));
 
   // Navigation handlers
-  const handleRowClick = (row: Item, _column: Column) => {
+  const handleRowClick = (row: Item) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     // log event
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-  const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
-  const emptyActionLabel: string = 'Chiavi API';
-  const secondaryMessage: object = {
-    emptyMessage: 'o fai un',
-    emptyActionLabel: 'invio manuale',
-    emptyActionCallback: () => {
-      onManualSend();
-    },
-  };
   const EmptyStateProps = {
-    emptyMessage: filtersApplied ? undefined : emptyMessage,
-    emptyActionLabel: filtersApplied ? undefined : emptyActionLabel,
+    emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
+    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', {ns: 'common'}),
     disableSentimentDissatisfied: !filtersApplied,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
-    secondaryMessage: filtersApplied ? undefined : secondaryMessage,
+    secondaryMessage: filtersApplied ? undefined : {
+      emptyMessage: t('empty-state.secondary-message'),
+      emptyActionLabel: t('empty-state.secondary-action'),
+      emptyActionCallback: () => {
+        onManualSend();
+      },
+    },
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;

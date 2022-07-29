@@ -2,7 +2,7 @@ import { waitFor } from "@testing-library/react";
 import * as redux from 'react-redux';
 
 import { render } from "../../test-utils";
-import { IAppMessage } from "../../types/AppMessage";
+import { IAppMessage } from "../../types";
 import AppMessage from "../AppMessage";
 
 const errors: Array<IAppMessage> = [

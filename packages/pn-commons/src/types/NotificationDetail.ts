@@ -81,7 +81,7 @@ export interface INotificationDetailTimeline {
     | SendDigitalDetails
     | SendPaperDetails
     // PN-1647
-    | NotHandledDetails
+    | NotHandledDetails;
     // only fe
   hidden?: boolean;
 }
@@ -195,7 +195,7 @@ export enum NotificationFeePolicy {
 
 export interface NotificationDetailPayment {
   noticeCode?: string;
-  noticeCodeAlternative?: string,
+  noticeCodeAlternative?: string;
   creditorTaxId: string;
   pagoPaForm: NotificationDetailDocument;
   f24flatRate?: NotificationDetailDocument;

@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import { InactivityHandler, SessionModal } from '@pagopa-pn/pn-commons';
@@ -29,6 +30,7 @@ const RequireAuth = ({ roles }: Props) => {
   const userHasRequiredRole = role && roles.includes(role.partyRole);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token || !userHasRequiredRole);
   const dispatch = useAppDispatch();
+  const { t } = useTranslation(['common']);
 
   useEffect(() => {
     if (token === '' || !token) {
@@ -46,8 +48,8 @@ const RequireAuth = ({ roles }: Props) => {
       {accessDenied && (
         <SessionModal
           open
-          title={'Stai uscendo da Piattaforma Notifiche'}
-          message={'Non hai i privilegi per accedere a questa sezione'}
+          title={t('leaving-app.title')}
+          message={t('leaving-app.message')}
           handleClose={goToSelfcareLogin}
         />
       )}

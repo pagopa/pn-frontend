@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
+import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
+import { Party } from '../../models/party';
 import { PartyRole, PNRole } from '../../models/user';
 import { User } from './types';
 
@@ -18,6 +20,27 @@ export const exchangeToken = createAsyncThunk<User, string>(
     } else {
       const user: User = JSON.parse(sessionStorage.getItem('user') || '');
       return user;
+    }
+  }
+);
+
+/**
+ * Obtain the organization party for the given organization id.
+ * NB: in fact, when the corresponding reducer is to be called, the value of the organization id 
+ *     is already in the state of this slice. But given the way the reducer/action pair is defined,
+ *     I could not find to have the state accesible to the code of the thunk. 
+ *     Hence the organizationId is expected as a parameter, whose value will be taken from this very slice.
+ *     ------------------------------
+ *     Carlos Lombardi, 2022.07.27
+ */
+export const getOrganizationParty = createAsyncThunk<Party, string>(
+  'getOrganizationParty',
+  async (params: string, { rejectWithValue }) => {
+    try {
+      const partyFromApi = await ExternalRegistriesAPI.getOrganizationParty(params);
+      return partyFromApi || { id: '', name: 'Ente sconosciuto' };
+    } catch (e) {
+      return rejectWithValue(e);
     }
   }
 );
