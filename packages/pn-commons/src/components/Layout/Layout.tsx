@@ -6,6 +6,7 @@ import { Box } from '@mui/system';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import ErrorBoundary from '../ErrorBoundary';
+
 type Props = {
   children?: ReactNode;
   /** Logout/exit action to apply */
