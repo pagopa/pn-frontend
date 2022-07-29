@@ -227,22 +227,48 @@ function localizeTimelineStatus(
  * @param {LegalFactType} legalFactType Legalfact type
  * @returns {string} attestation or receipt
  */
- export function getLegalFactLabel(
+export function getLegalFactLabel(
   category: TimelineCategory,
   legalFactType?: LegalFactType
 ): string {
-  const legalFactLabel = 'Attestazione opponibile a terzi';
+  const legalFactLabel = getLocalizedOrDefaultLabel(
+    'notifications',
+    `detail.legalfact`,
+    'Attestazione opponibile a terzi'
+  );
   // TODO: localize in pn_ga branch
   if (category === TimelineCategory.SEND_PAPER_FEEDBACK) {
-    return 'Ricevuta';
+    return getLocalizedOrDefaultLabel('notifications', `detail.receipt`, 'Ricevuta');
   } else if (legalFactType === LegalFactType.SENDER_ACK) {
-    return `${legalFactLabel}: notifica presa in carico`;
-  } else if (legalFactType === LegalFactType.DIGITAL_DELIVERY) {
-    return `${legalFactLabel}: notifica digitale`;
-  } else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
-    return `${legalFactLabel}: conformità`;
+    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.sender-ack',
+      'notifica presa in carico'
+    )}`;
+  } else if (legalFactType === LegalFactType.DIGITAL_DELIVERY && category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
+    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.digital-delivery-success',
+      'notifica digitale'
+    )}`;
+  } else if (legalFactType === LegalFactType.DIGITAL_DELIVERY && category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW) {
+    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.digital-delivery-failure',
+      'mancato recapito digitale'
+    )}`;
+  }else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
+    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.analog-delivery',
+      'conformità'
+    )}`;
   } else if (legalFactType === LegalFactType.RECIPIENT_ACCESS) {
-    return `${legalFactLabel}: avvenuto accesso`;
+    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.recipient-access',
+      'avvenuto accesso'
+    )}`;
   }
   return legalFactLabel;
 }
@@ -439,8 +465,11 @@ export function getNotificationTimelineStatusInfos(
       };
     case TimelineCategory.DIGITAL_FAILURE_WORKFLOW:
       return {
-        label: 'Invio per via digitale non riuscito',
-        description: `L'invio per via digitale della notifica non è riuscito.`,
+        ...localizeTimelineStatus(
+          'digital-failure-workflow',
+          'Invio per via digitale non riuscito',
+          `L'invio per via digitale della notifica non è riuscito.`
+        ),
         recipient: recipientLabel,
       };
     // PN-1647

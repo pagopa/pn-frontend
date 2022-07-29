@@ -303,6 +303,11 @@ describe('timeline utility functions', () => {
     expect(label).toBe('Attestazione opponibile a terzi: notifica digitale');
   });
 
+  it('return legalFact label - DIGITAL_DELIVERY', () => {
+    const label = getLegalFactLabel(TimelineCategory.DIGITAL_FAILURE_WORKFLOW, LegalFactType.DIGITAL_DELIVERY);
+    expect(label).toBe('Attestazione opponibile a terzi: mancato recapito digitale');
+  });
+
   it('return legalFact label - ANALOG_DELIVERY', () => {
     const label = getLegalFactLabel(TimelineCategory.ANALOG_SUCCESS_WORKFLOW, LegalFactType.ANALOG_DELIVERY);
     expect(label).toBe('Attestazione opponibile a terzi: conformità');
