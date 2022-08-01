@@ -9,6 +9,7 @@ import {
   setPreliminaryInformations,
   uploadNotificationAttachment,
   saveRecipients,
+  setRecipients,
   uploadNotificationPaymentDocument,
   setSenderInfos,
 } from './actions';
@@ -55,6 +56,9 @@ const newNotificationSlice = createSlice({
     });
     builder.addCase(saveRecipients, (state, action) => {
       state.notification.recipients = formatNotificationRecipients(action.payload.recipients);
+    });
+    builder.addCase(setRecipients, (state, action) => {
+      state.notification.recipientsForm = action.payload.recipients;
     });
     builder.addCase(uploadNotificationAttachment.fulfilled, (state, action) => {
       state.notification = { ...state.notification, documents: action.payload };

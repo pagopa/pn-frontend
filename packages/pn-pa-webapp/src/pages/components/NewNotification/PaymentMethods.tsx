@@ -59,10 +59,11 @@ type PaymentObject = {
 type Props = {
   notification: NewNotificationFe;
   onConfirm: () => void;
+  onPreviousStep?: () => void;
   isCompleted: boolean;
 };
 
-const PaymentMethods = ({ notification, onConfirm, isCompleted }: Props) => {
+const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }: Props) => {
   const dispatch = useAppDispatch();
 
   const paymentDocumentSchema = yup.object({
@@ -151,7 +152,13 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted }: Props) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <NewNotificationCard noPaper isContinueDisabled={!formik.isValid}>
+      <NewNotificationCard
+        noPaper
+        isContinueDisabled={!formik.isValid}
+        submitLabel="Invia"
+        previousStepLabel="Torna a Allegati"
+        previousStepOnClick={onPreviousStep}
+      >
         {notification.recipients.map((recipient) => (
           <Paper
             key={recipient.taxId}

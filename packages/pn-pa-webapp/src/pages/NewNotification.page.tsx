@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
@@ -51,6 +52,14 @@ const NewNotification = () => {
     setActiveStep((previousStep) => previousStep + 1);
   };
 
+  const goToPreviousStep = (step?: number) => {
+    if (_.isNumber(step)) {
+      setActiveStep(step);
+    } else {
+      setActiveStep(activeStep - 1);
+    }
+  };
+
   const createNotification = () => {
     // if it is last step, save notification
     if (activeStep === 3 && isCompleted) {
@@ -71,7 +80,9 @@ const NewNotification = () => {
     );
   }, [organization]);
 
-  useEffect(() => () => void dispatch(resetNewNotificationState()), []);
+  useEffect(() => {
+    dispatch(resetNewNotificationState());
+  }, []);
 
   if (activeStep === 4) {
     return <SyncFeedback />;
@@ -82,7 +93,11 @@ const NewNotification = () => {
       <Box p={3}>
         <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
           <Grid item xs={12} lg={8}>
-            <PnBreadcrumb linkRoute={routes.DASHBOARD} linkLabel="Notifiche" currentLocationLabel="Nuova notifica"/>
+            <PnBreadcrumb
+              linkRoute={routes.DASHBOARD}
+              linkLabel="Notifiche"
+              currentLocationLabel="Nuova notifica"
+            />
             <TitleBox
               variantTitle="h4"
               title="Invia una nuova notifica"
@@ -94,8 +109,8 @@ const NewNotification = () => {
               *Campi obbligatori
             </Typography>
             <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
-              {steps.map((label) => (
-                <Step key={label}>
+              {steps.map((label, index) => (
+                <Step key={label} onClick={() => goToPreviousStep(index)}>
                   <StepLabel>{label}</StepLabel>
                 </Step>
               ))}
@@ -103,13 +118,18 @@ const NewNotification = () => {
             {activeStep === 0 && (
               <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
             )}
-            {activeStep === 1 && <Recipient onConfirm={goToNextStep} />}
-            {activeStep === 2 && <Attachments onConfirm={goToNextStep} />}
+            {activeStep === 1 && (
+              <Recipient onConfirm={goToNextStep} onPreviousStep={goToPreviousStep} recipientsData={notification.recipientsForm} />
+            )}
+            {activeStep === 2 && (
+              <Attachments onConfirm={goToNextStep} onPreviousStep={goToPreviousStep} attachmentsData={notification.documents} />
+            )}
             {activeStep === 3 && (
               <PaymentMethods
                 onConfirm={createNotification}
                 notification={notification}
                 isCompleted={isCompleted}
+                onPreviousStep={goToPreviousStep}
               />
             )}
           </Grid>

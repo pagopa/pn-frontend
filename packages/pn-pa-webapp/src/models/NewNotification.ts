@@ -30,6 +30,7 @@ export interface NewNotificationBe {
 
 export interface NewNotificationFe extends NewNotificationBe {
   paymentMode: PaymentModel;
+  recipientsForm?: Array<FormRecipient>;
 }
 
 export interface FormRecipient {

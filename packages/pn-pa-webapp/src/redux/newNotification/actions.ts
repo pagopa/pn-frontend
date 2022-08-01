@@ -27,6 +27,7 @@ export const setPreliminaryInformations = createAction<{
 }>('setPreliminaryInformations');
 
 export const saveRecipients = createAction<{recipients: Array<FormRecipient>}>('saveRecipients');
+export const setRecipients = createAction<{recipients: Array<FormRecipient>}>('setRecipients');
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {

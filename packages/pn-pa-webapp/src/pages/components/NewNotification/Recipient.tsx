@@ -18,7 +18,7 @@ import { Formik, Form } from 'formik';
 import { DigitalDomicileType, fiscalCodeRegex, RecipientType } from '@pagopa-pn/pn-commons';
 
 import { pIvaRegex } from '@pagopa-pn/pn-commons/src/utils/fiscal_code.utility';
-import { saveRecipients } from '../../../redux/newNotification/actions';
+import { saveRecipients, setRecipients } from '../../../redux/newNotification/actions';
 import { useAppDispatch } from '../../../redux/hooks';
 import { FormRecipient } from '../../../models/NewNotification';
 import PhysicalAddress from './PhysicalAddress';
@@ -47,16 +47,24 @@ const singleRecipient = {
   showPhysicalAddress: false,
 };
 
-const initialValues = {
-  recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }],
-};
-
 type Props = {
   onConfirm: () => void;
+  onPreviousStep?: () => void;
+  recipientsData?: Array<FormRecipient>;
 };
 
-const Recipient = ({ onConfirm }: Props) => {
+const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
   const dispatch = useAppDispatch();
+
+  const initialValues = recipientsData && recipientsData.length > 0
+  ? {
+      recipients: recipientsData.map((recipient, index) => ({
+        ...recipient,
+        idx: index,
+        id: `recipient.${index}`,
+      })),
+    }
+  : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
   const validationSchema = yup.object({
     recipients: yup.array().of(
@@ -71,7 +79,10 @@ const Recipient = ({ onConfirm }: Props) => {
           .string()
           .required('Campo obbligatorio')
           .matches(pIvaRegex, 'Il codice fiscale inserito non è corretto'),
-        noticeCode: yup.string().matches(/^\d{18}$/, 'Inserisci un codice di 18 caratteri numerici').required('Campo obbligatorio'),
+        noticeCode: yup
+          .string()
+          .matches(/^\d{18}$/, 'Inserisci un codice di 18 caratteri numerici')
+          .required('Campo obbligatorio'),
         digitalDomicile: yup.string().when('showDigitalDomicile', {
           is: true,
           then: yup.string().email('Indirizzo PEC non valido').required('Campo obbligatorio'),
@@ -117,27 +128,35 @@ const Recipient = ({ onConfirm }: Props) => {
     const name = (event.target as any).name;
     if (!checked && name.endsWith('showPhysicalAddress')) {
       // reset physical address
-      setFieldValue(recipientField, {
-        ...oldValue,
-        showPhysicalAddress: false,
-        at: '',
-        address: '',
-        houseNumber: '',
-        addressDetails: '',
-        zip: '',
-        municipality: '',
-        municipalityDetails: '',
-        province: '',
-        foreignState: '',
-      }, false);
+      setFieldValue(
+        recipientField,
+        {
+          ...oldValue,
+          showPhysicalAddress: false,
+          at: '',
+          address: '',
+          houseNumber: '',
+          addressDetails: '',
+          zip: '',
+          municipality: '',
+          municipalityDetails: '',
+          province: '',
+          foreignState: '',
+        },
+        false
+      );
     }
     if (!checked && name.endsWith('showDigitalDomicile')) {
       // reset digital address
-      setFieldValue(recipientField, {
-        ...oldValue,
-        showDigitalDomicile: false,
-        digitalDomicile: '',
-      }, false);
+      setFieldValue(
+        recipientField,
+        {
+          ...oldValue,
+          showDigitalDomicile: false,
+          digitalDomicile: '',
+        },
+        false
+      );
     }
   };
 
@@ -151,12 +170,21 @@ const Recipient = ({ onConfirm }: Props) => {
 
   const handleSubmit = (values: { recipients: Array<FormRecipient> }) => {
     dispatch(saveRecipients(values));
+    dispatch(setRecipients(values));
     onConfirm();
+  };
+
+  const handlePreviousStep = (values: { recipients: Array<FormRecipient> }) => {
+    dispatch(setRecipients(values));
+    if (onPreviousStep) {
+      onPreviousStep();
+    }
   };
 
   return (
     <Formik
       initialValues={initialValues}
+      enableReinitialize={true}
       validationSchema={validationSchema}
       onSubmit={(values) => handleSubmit(values)}
       validateOnBlur={false}
@@ -165,7 +193,12 @@ const Recipient = ({ onConfirm }: Props) => {
       {({ values, setFieldValue, touched, handleBlur, errors, isValid }) => (
         <>
           <Form>
-            <NewNotificationCard noPaper isContinueDisabled={!isValid}>
+            <NewNotificationCard
+              noPaper
+              isContinueDisabled={!isValid}
+              previousStepLabel="Torna a Informazioni preliminari"
+              previousStepOnClick={() => handlePreviousStep(values)}
+            >
               {values.recipients.map((recipient, index) => (
                 <Paper
                   key={recipient.id}
@@ -193,6 +226,7 @@ const Recipient = ({ onConfirm }: Props) => {
                       />
                     )}
                   </Stack>
+                  <Box>Index is {index} and Nome is {values.recipients[index].firstName}</Box>
                   <Box sx={{ marginTop: '20px' }}>
                     <Stack>
                       <Typography fontWeight="bold">Soggetto giuridico*</Typography>
@@ -314,7 +348,14 @@ const Recipient = ({ onConfirm }: Props) => {
                             <Checkbox
                               checked={values.recipients[index].showDigitalDomicile}
                               name={`recipients[${index}].showDigitalDomicile`}
-                              onChange={(event) => handleAddressTypeChange(event, values.recipients[index], `recipients[${index}]`, setFieldValue)}
+                              onChange={(event) =>
+                                handleAddressTypeChange(
+                                  event,
+                                  values.recipients[index],
+                                  `recipients[${index}]`,
+                                  setFieldValue
+                                )
+                              }
                             />
                             <Typography>Aggiungi un domicilio digitale</Typography>
                           </Stack>
@@ -348,7 +389,7 @@ const Recipient = ({ onConfirm }: Props) => {
                             <Checkbox
                               checked={values.recipients[index].showPhysicalAddress}
                               name={`recipients[${index}].showPhysicalAddress`}
-                              onChange={(event) => handleAddressTypeChange(event, values.recipients[index], `recipients[${index}]`, setFieldValue)}
+                              onChange={(event) => handleAddressTypeChange( event, values.recipients[index], `recipients[${index}]`, setFieldValue )}
                             />
                             <Typography>Aggiungi un indirizzo fisico*</Typography>
                           </Stack>
