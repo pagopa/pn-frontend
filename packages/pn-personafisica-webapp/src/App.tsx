@@ -1,12 +1,12 @@
-import { useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ErrorInfo, useEffect, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem, initLocalization } from '@pagopa-pn/pn-commons';
+import { LoadingOverlay, Layout, AppMessage, SideMenu, SideMenuItem, initLocalization, useUnload } from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
@@ -17,14 +17,16 @@ import { PAGOPA_HELP_EMAIL } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
-import { mixpanelInit } from './utils/mixpanel';
+import { mixpanelInit, trackEventByType } from './utils/mixpanel';
+import { TrackEventType } from "./utils/events";
 import './utils/onetrust';
 
-declare const OneTrust: any;
-declare const OnetrustActiveGroups: string;
-const global = window as any;
-// target cookies (Mixpanel)
-const targCookiesGroup = "C0004";
+// TODO decommentare appena testata la funzionalità di mixpanel
+// declare const OneTrust: any;
+// declare const OnetrustActiveGroups: string;
+// const global = window as any;
+// // target cookies (Mixpanel)
+// const targCookiesGroup = "C0004";
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -45,6 +47,9 @@ const App = () => {
     (state: RootState) => state.generalInfoState
   );
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const path = pathname.split('/');
+  const source = path[path.length - 1];
 
   const sessionToken = loggedUser.sessionToken;
   const jwtUser = useMemo(
@@ -63,6 +68,7 @@ const App = () => {
         id: 'profile',
         label: t('menu.profilo'),
         onClick: () => {
+          trackEventByType(TrackEventType.USER_VIEW_PROFILE);
           navigate(routes.PROFILO);
         },
         icon: <SettingsIcon fontSize="small" color="inherit" />,
@@ -70,35 +76,46 @@ const App = () => {
       {
         id: 'logout',
         label: t('header.logout'),
-        onClick: () => dispatch(logout()),
+        onClick: () => {
+          void dispatch(logout());
+        },
         icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
       },
     ],
     []
   );
 
+  useUnload((e: Event) => {
+    e.preventDefault();
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    e.defaultPrevented;
+    trackEventByType(TrackEventType.APP_UNLOAD);
+  });
+
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, {ns: namespace, ...data}));
     // OneTrust callback at first time
     // eslint-disable-next-line functional/immutable-data
-    global.OptanonWrapper = function () {
-      OneTrust.OnConsentChanged(function () {
-        const activeGroups = OnetrustActiveGroups;
-        if (activeGroups.indexOf(targCookiesGroup) > -1) {
-          mixpanelInit();
-        }
-      });
-    };
-    // check mixpanel cookie consent in cookie
-    const OTCookieValue: string =
-      document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("OptanonConsent=")) || "";
-    const checkValue = `${targCookiesGroup}%3A1`;
-    if (OTCookieValue.indexOf(checkValue) > -1) {
-      mixpanelInit();
-    }
+    mixpanelInit();
+    // TODO testing
+    // global.OptanonWrapper = function () {
+    //   OneTrust.OnConsentChanged(function () {
+    //     const activeGroups = OnetrustActiveGroups;
+    //     if (activeGroups.indexOf(targCookiesGroup) > -1) {
+    //       mixpanelInit();
+    //     }
+    //   });
+    // };
+    // // check mixpanel cookie consent in cookie
+    // const OTCookieValue: string =
+    //   document.cookie
+    //     .split("; ")
+    //     .find((row) => row.startsWith("OptanonConsent=")) || "";
+    // const checkValue = `${targCookiesGroup}%3A1`;
+    // if (OTCookieValue.indexOf(checkValue) > -1) {
+    //   mixpanelInit();
+    // }
   }, []);
 
   useEffect(() => {
@@ -161,17 +178,46 @@ const App = () => {
     await i18n.changeLanguage(langCode);
   };
 
+  const handleAssistanceClick = () => {
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
+    /* eslint-disable-next-line functional/immutable-data */
+    window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  };
+
+  const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
+    trackEventByType(TrackEventType.APP_CRASH, {
+      route: source,
+      stacktrace: { error: e, errorInfo: eInfo },
+    });
+  };
+
+  const handleEventTrackingCallbackFooterChangeLanguage = () => {
+    trackEventByType(TrackEventType.FOOTER_LANG_SWITCH);
+  };
+
+  const handleEventTrackingCallbackProductSwitch = (target: string) => {
+    trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
+  };
+
   return (
     <Layout
-      assistanceEmail={PAGOPA_HELP_EMAIL}
       onExitAction={() => dispatch(logout())}
-      sideMenu={<SideMenu menuItems={menuItems} />}
+      eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
+      eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
+      eventTrackingCallbackProductSwitch={(target) => handleEventTrackingCallbackProductSwitch(target)}
+      sideMenu={
+        <SideMenu
+          menuItems={menuItems}
+          eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, { target })}
+        />
+      }
       showSideMenu={!fetchedTos || tos}
       productsList={productsList}
       loggedUser={jwtUser}
       enableUserDropdown
       userActions={userActions}
       onLanguageChanged={changeLanguageHandler}
+      onAssistanceClick={handleAssistanceClick}
     >
       <AppMessage
         sessionRedirect={() => dispatch(logout())}

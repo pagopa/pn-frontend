@@ -6,6 +6,13 @@ import NewNotificationCard from "../NewNotificationCard";
 const mockNavigateFn = jest.fn();
 
 // mock imports
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigateFn,
@@ -22,8 +29,8 @@ describe('NewNotificationCard Component', () => {
     expect(result.container).toHaveTextContent(/Mocked content/i);
     const buttons = result.container.querySelectorAll('button');
     expect(buttons).toHaveLength(2);
-    expect(buttons[0]).toHaveTextContent(/Torna alle notifiche/i);
-    expect(buttons[1]).toHaveTextContent(/Continua/i);
+    expect(buttons[0]).toHaveTextContent(/new-notification.back-to-notifications/i);
+    expect(buttons[1]).toHaveTextContent(/button.continue/i);
     expect(buttons[1]).toBeDisabled();
   });
 

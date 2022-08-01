@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
   NotificationStatus,
-  NotificationDetail,
   NotificationDetailDocument,
   NotificationDetailRecipient,
   INotificationDetailTimeline,
@@ -10,7 +9,10 @@ import {
   NotificationFeePolicy,
   PaymentAttachmentSName,
   PaymentInfo,
+  RecipientType,
 } from '@pagopa-pn/pn-commons';
+
+import { NotificationDetailForRecipient } from '../../types/NotificationDetail';
 
 import {
   getNotificationPaymentInfo,
@@ -37,8 +39,14 @@ const initialState = {
     sentAt: '',
     notificationStatus: '' as NotificationStatus,
     notificationStatusHistory: [] as Array<NotificationStatusHistory>,
-    timeline: [] as Array<INotificationDetailTimeline>
-  } as NotificationDetail,
+    timeline: [] as Array<INotificationDetailTimeline>,
+    currentRecipient: {
+      recipientType: RecipientType.PF,
+      taxId: '',
+      denomination: '',
+    },
+    currentRecipientIndex: 0
+  } as NotificationDetailForRecipient,
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
   pagopaAttachmentUrl: '',

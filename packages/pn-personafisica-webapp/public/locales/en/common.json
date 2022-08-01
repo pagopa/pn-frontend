@@ -1,9 +1,7 @@
 {
   "button": {
-    "cerca": "Search",
     "filtra": "Filter",
     "annulla filtro": "Remove filters",
-    "annulla ricerca": "Cancel search",
     "indietro": "Back",
     "associa": "Associate",
     "conferma": "Confirm",

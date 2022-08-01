@@ -1,6 +1,8 @@
-import { Box, Stack } from "@mui/material";
-import { HeaderAccount, Footer } from "@pagopa/mui-italia";
+import { Alert, Box, Stack } from "@mui/material";
+import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import { Footer, ButtonNaked } from "@pagopa/mui-italia";
 import { ReactNode, useContext } from "react";
+
 import LangContext from "../../provider/lang-context";
 import {
   companyLegalInfo,
@@ -9,6 +11,9 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from "./footer.constants";
+import { PAGOPA_HOME } from "@utils/constants";
+import NavigationBar from "../components/NavigationBar";
+import {getAppData} from "../../api";
 
 interface Props {
   children?: ReactNode;
@@ -19,13 +24,9 @@ const LandingLayout = ({ children }: Props) => {
 
   const homeLink = {
     label: "PagoPA S.p.A.",
-    href: "#",
+    href: PAGOPA_HOME ?? "",
     ariaLabel: "Titolo",
     title: "PagoPa S.p.A.",
-  };
-
-  const handleAssistanceClick = () => {
-    console.log("go to assistance");
   };
 
   return (
@@ -34,11 +35,53 @@ const LandingLayout = ({ children }: Props) => {
         direction="column"
         sx={{ minHeight: "100vh" }} // 100vh per sticky footer
       >
-        <HeaderAccount
-          enableLogin={false}
-          rootLink={homeLink}
-          onAssistanceClick={handleAssistanceClick}
-        />
+        <Stack
+            direction="row"
+            justifyContent="space-between"
+            sx={{
+              justifyContent: "center",
+              borderBottom: "1px solid",
+              borderColor: "#E3E7EB",
+              backgroundColor: "#FFFFFF",
+              minHeight: "48px",
+              flexDirection: "column"
+            }}
+        >
+          <Stack direction="row" justifyContent="space-between" px={3}>
+            <ButtonNaked
+              sx={{
+                fontWeight: "bold",
+              }}
+              size="small"
+              aria-label={homeLink.ariaLabel}
+              href={homeLink.href}
+              color="text"
+              target="_blank"
+              rel="noreferrer"
+              disableRipple
+              disableTouchRipple
+            >
+              {homeLink.label}
+            </ButtonNaked>
+            <ButtonNaked
+              size="small"
+              aria-label={getAppData()['common'].assistance.ariaLabel}
+              href={getAppData()['common'].assistance.href}
+              color="text"
+              target="_blank"
+              rel="noreferrer"
+              disableRipple
+              disableTouchRipple
+              startIcon={<HelpOutlineOutlinedIcon fontSize="inherit" />}
+            >
+              {getAppData()['common'].assistance.label}
+            </ButtonNaked>
+          </Stack>
+        </Stack>
+        <NavigationBar />
+        <Alert severity="info">
+          {getAppData()['common'].alert}
+        </Alert>
         <Box sx={{ flexGrow: 1 }} component="main">
           {children}
         </Box>

@@ -52,6 +52,11 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
   const navigate = useNavigate();
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
+
+  const handleEventTrackingTooltip = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
+  };
+
   const cardHeader: [CardElement, CardElement] = [
     {
       id: 'notificationReadStatus',
@@ -84,7 +89,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
         );
-        return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;
+        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },
       gridProps: {
         xs: 12,
@@ -152,18 +157,18 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
 
   const EmptyStateProps = {
-    emptyActionLabel: filtersApplied ? undefined : 'Recapiti',
+    emptyActionLabel: filtersApplied ? undefined : 'I tuoi Recapiti',
     emptyActionCallback: filtersApplied
       ? filterNotificationsRef.current.cleanFilters
       : handleRouteContacts,
     emptyMessage: filtersApplied
       ? undefined
-      : 'Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull\'app IO o inserisci un recapito di cortesia nella sezione',
+      : 'Non hai ricevuto nessuna notifica. Vai alla sezione',
     disableSentimentDissatisfied: !filtersApplied,
     secondaryMessage: filtersApplied
       ? undefined
       : {
-          emptyMessage: ': così, se riceverai una notifica, te lo comunicheremo.',
+          emptyMessage: 'e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.',
         },
   };
 
@@ -175,7 +180,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
     // log event
-    trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   const cardActions: Array<CardAction> = [

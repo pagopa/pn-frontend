@@ -1,7 +1,8 @@
-import { useFormik } from 'formik';
 import { Fragment } from 'react';
-import * as yup from 'yup';
 import _ from 'lodash';
+import { useTranslation } from 'react-i18next';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import { Paper, Typography } from '@mui/material';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 
@@ -25,22 +26,26 @@ type PaymentBoxProps = {
   onRemoveFile: (id: string) => void;
 };
 
-const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile }: PaymentBoxProps) => (
-  <Fragment>
-    <Typography fontWeight={600} sx={{ marginTop: '30px' }} data-testid="paymentBox">
-      {title}
-    </Typography>
-    <FileUpload
-      uploadText="Trascina qui il documento"
-      accept="application/pdf"
-      onFileUploaded={(file, sha256) => onFileUploaded(id, file as Uint8Array, sha256)}
-      onRemoveFile={() => onRemoveFile(id)}
-      sx={{ marginTop: '10px' }}
-      fileFormat="uint8Array"
-      calcSha256
-    />
-  </Fragment>
-);
+const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile }: PaymentBoxProps) => {
+  const { t } = useTranslation(['notifiche']);
+
+  return (
+    <Fragment>
+      <Typography fontWeight={600} sx={{ marginTop: '30px' }} data-testid="paymentBox">
+        {title}
+      </Typography>
+      <FileUpload
+        uploadText={t('new-notification.drag-doc')}
+        accept="application/pdf"
+        onFileUploaded={(file, sha256) => onFileUploaded(id, file as Uint8Array, sha256)}
+        onRemoveFile={() => onRemoveFile(id)}
+        sx={{ marginTop: '10px' }}
+        fileFormat="uint8Array"
+        calcSha256
+      />
+    </Fragment>
+  );
+};
 
 type PaymentDocument = {
   name: string;
@@ -65,6 +70,9 @@ type Props = {
 
 const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }: Props) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation(['notifiche'], {
+    keyPrefix: 'new-notification.steps.payment-methods',
+  });
 
   const paymentDocumentSchema = yup.object({
     name: yup.string().required(),
@@ -97,11 +105,11 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
       /* eslint-disable-next-line functional/immutable-data */
       obj[r.taxId] = {
         pagoPaForm: {
-          name: 'Avviso pagoPA',
+          name: t('pagopa-notice'),
           file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
         },
         f24flatRate: {
-          name: 'F24 forfettario',
+          name: t('f24-flatrate'),
           file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
         },
         f24standard: {
@@ -165,17 +173,17 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
             sx={{ padding: '24px', marginTop: '40px' }}
             className="paperContainer"
           >
-            <Typography variant="h6">Modelli di pagamento per {recipient.denomination}</Typography>
+            <Typography variant="h6">{t('payment-models')} {recipient.denomination}</Typography>
             <PaymentBox
               id={`${recipient.taxId}.pagoPaForm.file`}
-              title="Allega Avviso pagoPA*"
+              title={`${t('attach-pagopa-notice')}*`}
               onFileUploaded={fileUploadedHandler}
               onRemoveFile={removeFileHandler}
             />
             {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
               <PaymentBox
                 id={`${recipient.taxId}.f24flatRate.file`}
-                title="Allega Modello F24 forfettario"
+                title={t('attach-f24-flatrate')}
                 onFileUploaded={fileUploadedHandler}
                 onRemoveFile={removeFileHandler}
               />
@@ -183,7 +191,7 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
             {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
               <PaymentBox
                 id={`${recipient.taxId}.f24standard.file`}
-                title="Allega Modello F24"
+                title={t('attach-f24')}
                 onFileUploaded={fileUploadedHandler}
                 onRemoveFile={removeFileHandler}
               />

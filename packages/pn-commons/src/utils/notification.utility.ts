@@ -16,6 +16,7 @@ import {
   NotHandledDetails,
   GetNotificationsParams,
   NotificationStatus,
+  NotificationStatusHistory,
 } from '../types';
 
 function localizeStatus(
@@ -155,7 +156,7 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
   }
 }
 
-export const NotificationAllowedStatus = () => [
+export const getNotificationAllowedStatus = () => [
   {
     value: 'All',
     label: getLocalizedOrDefaultLabel('notifications', 'status.all', 'Tutti gli stati'),
@@ -253,7 +254,7 @@ export function getNotificationTimelineStatusInfos(
         ...localizeTimelineStatus(
           'schedule-analog-workflow',
           'Invio per via cartacea',
-          "È in corso l'invio della notifica per via cartacea."
+          "L'invio della notifica per via cartacea è in preparazione."
         ),
         linkText: legalFactLabel,
         recipient: recipientLabel,
@@ -306,8 +307,7 @@ export function getNotificationTimelineStatusInfos(
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK:
-      const digitalDomicileFeedbackErrors = (step.details as SendDigitalDetails).errors;
-      if (digitalDomicileFeedbackErrors && digitalDomicileFeedbackErrors.length > 0) {
+      if ((step.details as SendDigitalDetails).responseStatus === 'KO') {
         return {
           ...localizeTimelineStatus(
             'send-digital-domicile-error',
@@ -340,8 +340,7 @@ export function getNotificationTimelineStatusInfos(
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_FEEDBACK:
-      const digitalFeedbackErrors = (step.details as SendDigitalDetails).errors;
-      if (digitalFeedbackErrors && digitalFeedbackErrors.length > 0) {
+      if ((step.details as SendDigitalDetails).responseStatus === 'KO') {
         return {
           ...localizeTimelineStatus(
             'send-digital-error',
@@ -432,6 +431,13 @@ export function getNotificationTimelineStatusInfos(
         linkText: receiptLabel,
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
+    case TimelineCategory.DIGITAL_FAILURE_WORKFLOW:
+      return {
+        label: 'Invio per via digitale non riuscito',
+        description: `L'invio per via digitale della notifica non è riuscito.`,
+        linkText: receiptLabel,
+        recipient: recipientLabel,
+      };
     // PN-1647
     case TimelineCategory.NOT_HANDLED:
       if (
@@ -461,9 +467,72 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_PAPER_FEEDBACK,
+  TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
   // PN-1647
   TimelineCategory.NOT_HANDLED,
 ];
+
+/**
+ * Populate timeline macro steps
+ * @param  {NotificationDetail} parsedNotification
+ * @param  {string} timelineElement
+ * @param  {NotificationStatusHistory} status
+ * @param  {Array<string>} acceptedStatusItems
+ */
+function populateMacroStep(
+  parsedNotification: NotificationDetail,
+  timelineElement: string,
+  status: NotificationStatusHistory,
+  acceptedStatusItems: Array<string>
+) {
+  const step = parsedNotification.timeline.find((t) => t.elementId === timelineElement);
+  if (step) {
+    // hide accepted status micro steps
+    if (status.status === NotificationStatus.ACCEPTED) {
+      status.steps!.push({ ...step, hidden: true });
+      // remove legal facts for those microsteps that are releated to accepted status
+    } else if (acceptedStatusItems.length && acceptedStatusItems.indexOf(step.elementId) > -1) {
+      status.steps!.push({ ...step, legalFactsIds: [] });
+      // default case
+    } else {
+      status.steps!.push(step);
+    }
+  }
+}
+
+/**
+ * Populate timeline macro steps
+ * @param  {NotificationDetail} parsedNotification
+ */
+function populateMacroSteps(parsedNotification: NotificationDetail) {
+  let isEffectiveDateStatus = false;
+  let acceptedStatusItems: Array<string> = [];
+  for (const status of parsedNotification.notificationStatusHistory) {
+    // if status accepted has items, move them to the next state, but preserve legalfacts
+    if (status.status === NotificationStatus.ACCEPTED && status.relatedTimelineElements.length) {
+      acceptedStatusItems = status.relatedTimelineElements;
+    } else if (acceptedStatusItems.length) {
+      status.relatedTimelineElements.unshift(...acceptedStatusItems);
+    }
+    status.steps = [];
+    // find timeline steps that are linked with current status
+    for (const timelineElement of status.relatedTimelineElements) {
+      populateMacroStep(parsedNotification, timelineElement, status, acceptedStatusItems);
+    }
+    // order step by time
+    status.steps.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    if (status.status !== NotificationStatus.ACCEPTED && acceptedStatusItems.length) {
+      acceptedStatusItems = [];
+    }
+    // change status if current is VIEWED and before there is a status EFFECTIVE_DATE
+    if (status.status === NotificationStatus.EFFECTIVE_DATE) {
+      isEffectiveDateStatus = true;
+    }
+    if (status.status === NotificationStatus.VIEWED && isEffectiveDateStatus) {
+      status.status = NotificationStatus.VIEWED_AFTER_DEADLINE;
+    }
+  }
+}
 
 /**
  * Parse notification detail repsonse before sent it to fe.
@@ -484,36 +553,8 @@ export function parseNotificationDetail(
     ...t,
     hidden: !TimelineAllowedStatus.includes(t.category),
   }));
-  let isEffectiveDateStatus = false;
-  let acceptedStatusItems: Array<string> = [];
-  // populate notification macro step with corresponding timeline micro steps
-  for (const status of parsedNotification.notificationStatusHistory) {
-    // if status accepted has items, move them to the next state
-    if (status.status === NotificationStatus.ACCEPTED && status.relatedTimelineElements.length) {
-      acceptedStatusItems = status.relatedTimelineElements;
-      status.relatedTimelineElements = [];
-    } else if (acceptedStatusItems.length) {
-      status.relatedTimelineElements.unshift(...acceptedStatusItems);
-      acceptedStatusItems = [];
-    }
-    status.steps = [];
-    // find timeline steps that are linked with current status
-    for (const timelineElement of status.relatedTimelineElements) {
-      const step = parsedNotification.timeline.find((t) => t.elementId === timelineElement);
-      if (step) {
-        status.steps.push(step);
-      }
-    }
-    // order step by time
-    status.steps.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-    // change status if current is VIEWED and before there is a status EFFECTIVE_DATE
-    if (status.status === NotificationStatus.EFFECTIVE_DATE) {
-      isEffectiveDateStatus = true;
-    }
-    if (status.status === NotificationStatus.VIEWED && isEffectiveDateStatus) {
-      status.status = NotificationStatus.VIEWED_AFTER_DEADLINE;
-    }
-  }
+  // populate notification macro steps with corresponding timeline micro steps
+  populateMacroSteps(parsedNotification);
   // order elements by date
   parsedNotification.notificationStatusHistory.sort(
     (a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime()

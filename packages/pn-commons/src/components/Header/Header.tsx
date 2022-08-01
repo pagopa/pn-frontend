@@ -13,8 +13,6 @@ import { getLocalizedOrDefaultLabel } from '../../services/localization.service'
 import { pagoPALink } from '../../utils/costants';
 
 type HeaderProps = {
-  /** Assistance email for the user */
-  assistanceEmail?: string;
   /** List of available products */
   productsList: Array<ProductEntity>;
   /** Current product */
@@ -29,6 +27,10 @@ type HeaderProps = {
   enableDropdown?: boolean;
   /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
+  /** Actions linked to user dropdown */
+  onAssistanceClick?: () => void;
+  /** Track product switch action */
+  eventTrackingCallbackProductSwitch?: (target: string) => void;
 };
 
 const pagoPAHeaderLink: RootLinkType = {
@@ -39,42 +41,46 @@ const pagoPAHeaderLink: RootLinkType = {
 
 const Header = ({
   onExitAction = () => window.location.assign(''),
-  assistanceEmail,
   productsList,
   productId,
   partyList,
   loggedUser,
   enableDropdown,
   userActions,
+  onAssistanceClick,
+  eventTrackingCallbackProductSwitch
 }: HeaderProps) => {
   const handleProductSelection = (product: ProductEntity) => {
+    if (eventTrackingCallbackProductSwitch) {
+      eventTrackingCallbackProductSwitch(product.productUrl)
+    }
     if (product.productUrl) {
       /* eslint-disable-next-line functional/immutable-data */
       window.location.href = product.productUrl;
     }
   };
 
+  const enableHeaderProduct = productsList && productsList.length > 0 || partyList && partyList.length > 0;
+  
   return (
     <AppBar sx={{ boxShadow: 'none', color: 'inherit' }} position="relative">
       <HeaderAccount
         rootLink={pagoPAHeaderLink}
         loggedUser={loggedUser}
-        onAssistanceClick={() => {
-          if (assistanceEmail) {
-            /* eslint-disable-next-line functional/immutable-data */
-            window.location.href = `mailto:${assistanceEmail}`;
-          }
-        }}
+        enableLogin={loggedUser.id !== ''}
+        onAssistanceClick={onAssistanceClick || (() => {})}
         onLogout={onExitAction}
         enableDropdown={enableDropdown}
         userActions={userActions}
       />
-      <HeaderProduct
-        productId={productId}
-        productsList={productsList}
-        partyList={partyList}
-        onSelectedProduct={handleProductSelection}
-      />
+      {enableHeaderProduct && (
+        <HeaderProduct
+          productId={productId}
+          productsList={productsList}
+          partyList={partyList}
+          onSelectedProduct={handleProductSelection}
+        />
+      )}
     </AppBar>
   );
 };

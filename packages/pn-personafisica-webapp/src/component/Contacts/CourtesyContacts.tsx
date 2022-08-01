@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Alert, Box, Typography } from '@mui/material';
-import { IllusSms } from '@pagopa/mui-italia';
+import { IllusEmail } from '@pagopa/mui-italia';
 
 import { DigitalAddress } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
@@ -19,7 +19,10 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
       sectionTitle={t('courtesy-contacts.title', { ns: 'recapiti' })}
       title={t('courtesy-contacts.subtitle', { ns: 'recapiti' })}
       subtitle={t('courtesy-contacts.description', { ns: 'recapiti' })}
-      avatar={<IllusSms />}
+      /** 
+       * Waiting for Mail icon to be available in mui-italia (<IllusSms /> as placeholder)
+       * */
+      avatar={<IllusEmail />}
     >
       <Box sx={{ width: { xs: '100%', lg: '50%' }}}>
         <CourtesyContactsList recipientId={recipientId} contacts={contacts} />

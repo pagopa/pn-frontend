@@ -1,9 +1,7 @@
 {
   "button": {
-    "cerca": "Cerca",
     "filtra": "Filtra",
     "annulla filtro": "Rimuovi filtri",
-    "annulla ricerca": "Annulla Ricerca",
     "indietro": "Indietro",
     "associa": "Associa",
     "conferma": "Conferma",
@@ -21,7 +19,7 @@
     "profilo": "I tuoi dati",
     "contacts": "I tuoi recapiti",
     "aria-label": "piattaforma-notifiche navigazione principale",
-    "aria-label-sender": "piattaforma-notifiche navigazione mittente"
+    "aria-label-inner": "piattaforma-notifiche navigazione destinatario"
   },
   "header": {
     "logout": "Esci",
@@ -66,6 +64,10 @@
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
+  },
+  "leaving-app": {
+    "title": "Stai uscendo da Piattaforma Notifiche",
+    "message": "Verrai reindirizzato"
   },
   "messages": {
     "404-title": "Risorsa non trovata",

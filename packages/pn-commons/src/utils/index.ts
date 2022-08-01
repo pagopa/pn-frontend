@@ -1,7 +1,7 @@
 import { calculatePages } from './pagination.utility';
 import {
     getNotificationStatusInfos,
-    NotificationAllowedStatus,
+    getNotificationAllowedStatus,
     parseNotificationDetail,
     filtersApplied,
     getLegalFactLabel,
@@ -18,14 +18,15 @@ import {
     getNextDay,
     formatToTimezoneString
 } from './date.utility';
-import { formatFiscalCode, fiscalCodeRegex } from './fiscal_code.utility';
+import { formatFiscalCode, fiscalCodeRegex, pIvaRegex } from './fiscal_code.utility';
 import { IUN_regex, formatIun } from './iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import { storageOpsBuilder } from './storage.utility';
 import { compileRoute } from './routes.utility';
+import {URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH} from './costants';
 
 export {
-    NotificationAllowedStatus,
+    getNotificationAllowedStatus,
     getNotificationStatusInfos,
     parseNotificationDetail,
     filtersApplied,
@@ -48,5 +49,8 @@ export {
     tenYearsAgo,
     DATE_FORMAT,
     getLegalFactLabel,
-    getNotificationTimelineStatusInfos
+    getNotificationTimelineStatusInfos,
+    pIvaRegex,
+    URL_DIGITAL_NOTIFICATIONS,
+    PRIVACY_LINK_RELATIVE_PATH
 };

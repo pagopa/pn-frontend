@@ -1,4 +1,5 @@
 import { ChangeEvent, Fragment } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormikErrors, useFormik } from 'formik';
 import * as yup from 'yup';
 import { Box, SxProps, TextField, Typography } from '@mui/material';
@@ -43,41 +44,47 @@ const AttachmentBox = ({
   onFieldTouched,
   onFileUploaded,
   onRemoveFile,
-}: AttachmentBoxProps) => (
-  <Fragment>
-    <Box
-      display="flex"
-      justifyContent="space-between"
-      alignItems="center"
-      sx={sx}
-      data-testid="attachmentBox"
-    >
-      <Typography fontWeight={600}>{title}</Typography>
-      {canBeDeleted && <DeleteIcon color="action" onClick={onDelete} sx={{ cursor: 'pointer' }} />}
-    </Box>
-    <FileUpload
-      uploadText="Trascina qui il documento"
-      accept="application/pdf"
-      onFileUploaded={(file, sha256) => onFileUploaded(`${id}.file`, file, sha256)}
-      onRemoveFile={() => onRemoveFile(`${id}.file`)}
-      sx={{ marginTop: '10px' }}
-      fileFormat="uint8Array"
-      calcSha256
-    />
-    <TextField
-      id={`${id}.name`}
-      label={fieldLabel}
-      fullWidth
-      name={`${id}.name`}
-      value={fieldValue}
-      onChange={onFieldTouched}
-      error={fieldTouched && Boolean(fieldErros)}
-      helperText={fieldTouched && fieldErros}
-      size="small"
-      margin="normal"
-    />
-  </Fragment>
-);
+}: AttachmentBoxProps) => {
+  const { t } = useTranslation(['notifiche']);
+
+  return (
+    <Fragment>
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={sx}
+        data-testid="attachmentBox"
+      >
+        <Typography fontWeight={600}>{title}</Typography>
+        {canBeDeleted && (
+          <DeleteIcon color="action" onClick={onDelete} sx={{ cursor: 'pointer' }} />
+        )}
+      </Box>
+      <FileUpload
+        uploadText={t('new-notification.drag-doc')}
+        accept="application/pdf"
+        onFileUploaded={(file, sha256) => onFileUploaded(`${id}.file`, file, sha256)}
+        onRemoveFile={() => onRemoveFile(`${id}.file`)}
+        sx={{ marginTop: '10px' }}
+        fileFormat="uint8Array"
+        calcSha256
+      />
+      <TextField
+        id={`${id}.name`}
+        label={fieldLabel}
+        fullWidth
+        name={`${id}.name`}
+        value={fieldValue}
+        onChange={onFieldTouched}
+        error={fieldTouched && Boolean(fieldErros)}
+        helperText={fieldTouched && fieldErros}
+        size="small"
+        margin="normal"
+      />
+    </Fragment>
+  );
+};
 
 type Props = {
   onConfirm: () => void;
@@ -85,7 +92,10 @@ type Props = {
 
 const Attachments = ({ onConfirm }: Props) => {
   const dispatch = useAppDispatch();
-
+  const { t } = useTranslation(['notifiche'], {
+    keyPrefix: 'new-notification.steps.attachments',
+  });
+  const { t: tc } = useTranslation(['common']);
   const validationSchema = yup.object({
     documents: yup.array().of(
       yup.object({
@@ -103,7 +113,7 @@ const Attachments = ({ onConfirm }: Props) => {
               .required(),
           })
           .required(),
-        name: yup.string().required("Nome dell'atto obbligatorio"),
+        name: yup.string().required(`${t('act-name')} ${tc('common:required')}`),
       })
     ),
   });
@@ -184,18 +194,15 @@ const Attachments = ({ onConfirm }: Props) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <NewNotificationCard
-        isContinueDisabled={!formik.isValid}
-        title="Allegati per tutti i destinatari"
-      >
+      <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('attach-for-recipients')}>
         {formik.values.documents.map((d, i) => (
           <AttachmentBox
             key={d.id}
             id={d.id}
-            title={i === 0 ? "Allega l'atto*" : 'Allega un altro documento*'}
+            title={i === 0 ? `${t('act-attachment')}*` : `${t('doc-attachment')}*`}
             canBeDeleted={i > 0}
             onDelete={() => deleteDocumentHandler(i)}
-            fieldLabel={i === 0 ? "Nome dell'atto*" : 'Nome del documento*'}
+            fieldLabel={i === 0 ? `${t('act-name')}*` : `${t('doc-name')}*`}
             fieldValue={d.name}
             fieldTouched={
               formik.touched.documents && formik.touched.documents[i]
@@ -219,9 +226,7 @@ const Attachments = ({ onConfirm }: Props) => {
           startIcon={<AddIcon />}
           sx={{ marginTop: '30px' }}
         >
-          {formik.values.documents.length === 1
-            ? 'Aggiungi un documento (per esempio, la lettera d’accompagnamento)'
-            : 'Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)'}
+          {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
         </ButtonNaked>
       </NewNotificationCard>
     </form>
