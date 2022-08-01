@@ -18,7 +18,7 @@ import {
   notificationFromBe,
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
-import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
+import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import {
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
