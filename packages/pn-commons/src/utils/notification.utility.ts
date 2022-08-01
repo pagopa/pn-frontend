@@ -245,19 +245,25 @@ export function getLegalFactLabel(
       'detail.timeline.legalfact.sender-ack',
       'notifica presa in carico'
     )}`;
-  } else if (legalFactType === LegalFactType.DIGITAL_DELIVERY && category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
+  } else if (
+    legalFactType === LegalFactType.DIGITAL_DELIVERY &&
+    category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+  ) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.digital-delivery-success',
       'notifica digitale'
     )}`;
-  } else if (legalFactType === LegalFactType.DIGITAL_DELIVERY && category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW) {
+  } else if (
+    legalFactType === LegalFactType.DIGITAL_DELIVERY &&
+    category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW
+  ) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.digital-delivery-failure',
       'mancato recapito digitale'
     )}`;
-  }else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
+  } else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.analog-delivery',
