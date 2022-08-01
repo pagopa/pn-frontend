@@ -168,9 +168,10 @@ const NotificationDetailTimelineStep = ({
   );
 
   const handleShowMoreClick = () => {
-    eventTrackingCallbackShowMore && collapsed && eventTrackingCallbackShowMore()
-    setCollapsed(!collapsed)
-  }
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    eventTrackingCallbackShowMore && collapsed && eventTrackingCallbackShowMore();
+    setCollapsed(!collapsed);
+  };
 
   const moreLessButton = timelineStepCmp(
     undefined,

@@ -5,20 +5,15 @@ import { formatDate } from '../services';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import {
   INotificationDetailTimeline,
-  SendCourtesyMessageDetails,
-  SendDigitalDetails,
-  AnalogWorkflowDetails,
   TimelineCategory,
-  PhysicalCommunicationType,
-  SendPaperDetails,
   NotificationDetailRecipient,
-  DigitalDomicileType,
   NotificationDetail,
-  NotHandledDetails,
   GetNotificationsParams,
   NotificationStatus,
   NotificationStatusHistory,
 } from '../types';
+import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
+import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
 function localizeStatus(
   status: string,
@@ -204,23 +199,6 @@ export const getNotificationAllowedStatus = () => [
   },
 ];
 
-function localizeTimelineStatus(
-  category: string,
-  defaultLabel: string,
-  defaultDescription: string,
-  data?: { [key: string]: string | undefined }
-): { label: string; description: string } {
-  return {
-    label: getLocalizedOrDefaultLabel('notifications', `detail.timeline.${category}`, defaultLabel),
-    description: getLocalizedOrDefaultLabel(
-      'notifications',
-      `detail.timeline.${category}-description`,
-      defaultDescription,
-      data
-    ),
-  };
-}
-
 /**
  * Get legalFact label based on timeline category and legalfact type.
  * @param {TimelineCategory} category Timeline category
@@ -283,219 +261,20 @@ export function getLegalFactLabel(
  * Returns the mapping between current notification timeline status and its label and descriptive message.
  * @param  {INotificationDetailTimeline} step
  * @param {Array<NotificationDetailRecipient>} recipients
- * @returns object
+ * @returns {TimelineStepInfo | null}
  */
 export function getNotificationTimelineStatusInfos(
   step: INotificationDetailTimeline,
   recipients: Array<NotificationDetailRecipient>
-): {
-  label: string;
-  description: string;
-  recipient?: string;
-} | null {
+): TimelineStepInfo | null {
   const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
   const recipientLabel = `${recipient?.taxId} - ${recipient?.denomination}`;
 
-  switch (step.category) {
-    case TimelineCategory.SCHEDULE_ANALOG_WORKFLOW:
-      return {
-        ...localizeTimelineStatus(
-          'schedule-analog-workflow',
-          'Invio per via cartacea',
-          "L'invio della notifica per via cartacea è in preparazione."
-        ),
-        recipient: recipientLabel,
-      };
-    case TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW:
-      return {
-        ...localizeTimelineStatus(
-          'schedule-digital-workflow',
-          'Invio per via digitale',
-          "È in corso l'invio della notifica per via digitale."
-        ),
-        recipient: recipientLabel,
-      };
-    case TimelineCategory.SEND_COURTESY_MESSAGE:
-      const type =
-        (step.details as SendCourtesyMessageDetails).digitalAddress.type ===
-        DigitalDomicileType.EMAIL
-          ? 'email'
-          : 'sms';
-      return {
-        ...localizeTimelineStatus(
-          'send-courtesy-message',
-          'Invio del messaggio di cortesia',
-          `È in corso l'invio del messaggio di cortesia a ${recipient?.denomination} tramite ${type}`,
-          {
-            name: recipient?.denomination,
-            type,
-          }
-        ),
-        recipient: recipientLabel,
-      };
-    case TimelineCategory.SEND_DIGITAL_DOMICILE:
-      if (!(step.details as SendDigitalDetails).digitalAddress?.address) {
-        // if digital domicile is undefined
-        return null;
-      }
-      return {
-        ...localizeTimelineStatus(
-          'send-digital-domicile',
-          'Invio via PEC',
-          `È in corso l'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
-            (step.details as SendDigitalDetails).digitalAddress?.address
-          }`,
-          {
-            name: recipient?.denomination,
-            address: (step.details as SendDigitalDetails).digitalAddress?.address,
-          }
-        ),
-        recipient: recipientLabel,
-      };
-    case TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK:
-      if ((step.details as SendDigitalDetails).responseStatus === 'KO') {
-        return {
-          ...localizeTimelineStatus(
-            'send-digital-domicile-error',
-            'Invio via PEC fallito',
-            `L'invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
-              (step.details as SendDigitalDetails).digitalAddress?.address
-            } non è riuscito.`,
-            {
-              name: recipient?.denomination,
-              address: (step.details as SendDigitalDetails).digitalAddress?.address,
-            }
-          ),
-          recipient: recipientLabel,
-        };
-      }
-      return {
-        ...localizeTimelineStatus(
-          'send-digital-domicile-success',
-          'Invio via PEC riuscito',
-          `L' invio della notifica a ${recipient?.denomination} all'indirizzo PEC ${
-            (step.details as SendDigitalDetails).digitalAddress?.address
-          } è riuscito.`,
-          {
-            name: recipient?.denomination,
-            address: (step.details as SendDigitalDetails).digitalAddress?.address,
-          }
-        ),
-        recipient: recipientLabel,
-      };
-    case TimelineCategory.SEND_DIGITAL_FEEDBACK:
-      if ((step.details as SendDigitalDetails).responseStatus === 'KO') {
-        return {
-          ...localizeTimelineStatus(
-            'send-digital-error',
-            'Invio per via digitale fallito',
-            `L'invio della notifica a ${recipient?.denomination} per via digitale non è riuscito.`,
-            {
-              name: recipient?.denomination,
-            }
-          ),
-          recipient: recipientLabel,
-        };
-      }
-      return {
-        ...localizeTimelineStatus(
-          'send-digital-success',
-          'Invio per via digitale riuscito',
-          `L'invio della notifica a ${recipient?.denomination} per via digitale è riuscito.`,
-          {
-            name: recipient?.denomination,
-          }
-        ),
-        recipient: recipientLabel,
-      };
-    case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
-      return {
-        ...localizeTimelineStatus(
-          'send-simple-registered-letter',
-          'Invio via raccomandata semplice',
-          `È in corso l'invio della notifica a ${recipient?.denomination} all'indirizzo ${
-            (step.details as AnalogWorkflowDetails).physicalAddress?.address
-          } tramite raccomandata semplice.`,
-          {
-            name: recipient?.denomination,
-            address: (step.details as AnalogWorkflowDetails).physicalAddress?.address,
-          }
-        ),
-        recipient: recipientLabel,
-      };
-    case TimelineCategory.SEND_ANALOG_DOMICILE:
-      if (
-        (step.details as SendPaperDetails).serviceLevel ===
-        PhysicalCommunicationType.REGISTERED_LETTER_890
-      ) {
-        return {
-          ...localizeTimelineStatus(
-            'send-analog-domicile-890',
-            'Invio via raccomandata 890',
-            `È in corso l'invio della notifica a ${recipient?.denomination} all'indirizzo ${
-              (step.details as AnalogWorkflowDetails).physicalAddress?.address
-            } tramite raccomandata 890.`,
-            {
-              name: recipient?.denomination,
-              address: (step.details as AnalogWorkflowDetails).physicalAddress?.address,
-            }
-          ),
-          recipient: recipientLabel,
-        };
-      }
-      return {
-        ...localizeTimelineStatus(
-          'send-analog-domicile-ar',
-          'Invio via raccomandata A/R',
-          `È in corso l'invio della notifica a ${recipient?.denomination} all'indirizzo ${
-            (step.details as AnalogWorkflowDetails).physicalAddress?.address
-          } tramite raccomandata A/R.`,
-          {
-            name: recipient?.denomination,
-            address: (step.details as AnalogWorkflowDetails).physicalAddress?.address,
-          }
-        ),
-        recipient: recipientLabel,
-      };
-    case TimelineCategory.SEND_PAPER_FEEDBACK:
-      return {
-        ...localizeTimelineStatus(
-          'send-paper-feedback',
-          'Aggiornamento stato raccomandata',
-          `Si allega un aggiornamento dello stato della raccomandata.`,
-          {
-            name: recipient?.denomination,
-          }
-        ),
-        recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
-      };
-    case TimelineCategory.DIGITAL_FAILURE_WORKFLOW:
-      return {
-        ...localizeTimelineStatus(
-          'digital-failure-workflow',
-          'Invio per via digitale non riuscito',
-          `L'invio per via digitale della notifica non è riuscito.`
-        ),
-        recipient: recipientLabel,
-      };
-    // PN-1647
-    case TimelineCategory.NOT_HANDLED:
-      if (
-        (step.details as NotHandledDetails).reasonCode === '001' &&
-        (step.details as NotHandledDetails).reason === 'Paper message not handled'
-      ) {
-        return {
-          label: 'Annullata',
-          description: `La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante il collaudo della piattaforma.`,
-        };
-      }
-      return null;
-    default:
-      return {
-        label: 'Non definito',
-        description: 'Stato sconosciuto',
-      };
-  }
+  return TimelineStepFactory.createTimelineStep(step).getTimelineStepInfo({
+    step,
+    recipient,
+    recipientLabel
+  });
 }
 
 const TimelineAllowedStatus = [
