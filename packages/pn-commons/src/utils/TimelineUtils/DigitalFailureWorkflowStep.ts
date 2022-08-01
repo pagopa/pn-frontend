@@ -3,8 +3,11 @@ import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineS
 export class DigitalFailureWorkflowStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
     return {
-      label: 'Invio per via digitale non riuscito',
-      description: `L'invio per via digitale della notifica non è riuscito.`,
+      ...this.localizeTimelineStatus(
+        'digital-failure-workflow',
+        'Invio per via digitale non riuscito',
+        `L'invio per via digitale della notifica non è riuscito.`
+      ),
       linkText: payload.receiptLabel,
       recipient: payload.recipientLabel,
     };
