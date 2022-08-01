@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { sortDelegations } from '../../utils/delegation.utility';
 import {
   getDelegates,
@@ -94,12 +94,6 @@ const delegationsSlice = createSlice({
         (delegator: Delegation) => delegator.mandateId !== action.meta.arg
       );
     });
-    builder.addCase(rejectDelegation.rejected, (state) => {
-      state.modalState.open = false;
-    });
-    builder.addCase(revokeDelegation.rejected, (state) => {
-      state.modalState.open = false;
-    });
     builder.addCase(openAcceptModal, (state, action) => {
       state.acceptModalState.id = action.payload.id;
       state.acceptModalState.name = action.payload.name;
@@ -127,6 +121,9 @@ const delegationsSlice = createSlice({
       );
     });
     builder.addCase(resetDelegationsState, () => initialState);
+    builder.addMatcher(isAnyOf(rejectDelegation.rejected, revokeDelegation.rejected), (state) => {
+      state.modalState.open = false;
+    });
   },
 });
 
