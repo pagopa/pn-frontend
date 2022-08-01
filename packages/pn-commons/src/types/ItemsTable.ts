@@ -2,8 +2,8 @@ import { ReactNode } from 'react';
 
 type Order = 'asc' | 'desc';
 
-export interface Sort {
-  orderBy: string;
+export interface Sort<OrderByOptions> {
+  orderBy: OrderByOptions;
   order: Order;
 }
 
