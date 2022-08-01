@@ -56,7 +56,8 @@
     "domicile_3": "Aggiungi il tuo indirizzo email: ti invieremo un messaggio ogni volta che ricevi una notifica.",
     "domicile_4": "Hai l’app IO? Attiva il servizio per visualizzare e pagare le notifiche direttamente in app.",
     "payment": {
-      "summary": "Da pagare",
+      "summary-pending": "Da pagare",
+      "summary-succeeded": "Pagato",
       "amount": "importo",
       "disclaimer": "Questo importo verrà aggiornato al momento del pagamento. Quindi potrebbe essere diverso.",
       "disclaimer-link": "Come mai?",

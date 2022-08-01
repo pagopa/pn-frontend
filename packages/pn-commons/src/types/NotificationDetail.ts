@@ -1,43 +1,6 @@
 import { ReactNode } from 'react';
 import { NotificationStatus } from './NotificationStatus';
 
-// =========== START TEMP: WAITING FOR PAYMENT APIs DEFINITION ===========
-
-export enum PaymentStatus {
-  REQUIRED = "REQUIRED",
-  SUCCEEDED = "SUCCEEDED",
-  INPROGRESS = "IN_PROGRESS",
-  FAILED = "FAILURE"
-}
-
-export enum PaymentInfoDetail {
-  PAYMENT_UNAVAILABLE = "PAYMENT_UNAVAILABLE",    // Technical Error              *
-  PAYMENT_UNKNOWN = "PAYMENT_UNKNOWN",            // Payment data error           *
-  DOMAIN_UNKNOWN = "DOMAIN_UNKNOWN",              // Creditor institution error   *
-  PAYMENT_ONGOING = "PAYMENT_ONGOING",            // Payment on going             
-  PAYMENT_EXPIRED = "PAYMENT_EXPIRED",            // Payment expired              *
-  PAYMENT_CANCELED = "PAYMENT_CANCELED",          // Payment cancelled            *
-  PAYMENT_DUPLICATED = "PAYMENT_DUPLICATED",      // Payment duplicated           
-  GENERIC_ERROR = "GENERIC_ERROR"                 // Generic error                *
-}
-
-export interface PaymentInfo {
-  status: PaymentStatus;
-  detail?: PaymentInfoDetail;
-  detail_v2?: string;
-  errorCode?: string;
-  amount?: number;
-}
-
-export enum PaymentAttachmentSName {
-  PAGOPA = "PAGOPA",
-  F24 = "F24"
-}
-
-export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
-
-// =========== END TEMP: WAITING FOR PAYMENT APIs DEFINITION ===========
-
 export interface NotificationDetail {
   idempotenceToken?: string;
   paProtocolNumber: string;
@@ -201,6 +164,40 @@ export interface NotificationDetailPayment {
   f24flatRate?: NotificationDetailDocument;
   f24standard?: NotificationDetailDocument;
 }
+
+export enum PaymentStatus {
+  REQUIRED = "REQUIRED",
+  SUCCEEDED = "SUCCEEDED",
+  INPROGRESS = "IN_PROGRESS",
+  FAILED = "FAILURE"
+}
+
+export enum PaymentInfoDetail {
+  PAYMENT_UNAVAILABLE = "PAYMENT_UNAVAILABLE",    // Technical Error
+  PAYMENT_UNKNOWN = "PAYMENT_UNKNOWN",            // Payment data error
+  DOMAIN_UNKNOWN = "DOMAIN_UNKNOWN",              // Creditor institution error
+  PAYMENT_ONGOING = "PAYMENT_ONGOING",            // Payment on going
+  PAYMENT_EXPIRED = "PAYMENT_EXPIRED",            // Payment expired
+  PAYMENT_CANCELED = "PAYMENT_CANCELED",          // Payment canceled
+  PAYMENT_DUPLICATED = "PAYMENT_DUPLICATED",      // Payment duplicated
+  GENERIC_ERROR = "GENERIC_ERROR"                 // Generic error
+}
+
+export interface PaymentInfo {
+  status: PaymentStatus;
+  detail?: PaymentInfoDetail;
+  detail_v2?: string;
+  errorCode?: string;
+  amount?: number;
+  url: string;
+}
+
+export enum PaymentAttachmentSName {
+  PAGOPA = "PAGOPA",
+  F24 = "F24"
+}
+
+export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
 
 export interface NotificationStatusHistory {
   status: NotificationStatus;
