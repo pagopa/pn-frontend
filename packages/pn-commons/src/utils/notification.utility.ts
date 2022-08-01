@@ -1,4 +1,3 @@
-import { LegalFactType } from './../types/NotificationDetail';
 import _ from 'lodash';
 
 import { formatDate } from '../services';
@@ -12,6 +11,7 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
 } from '../types';
+import { LegalFactType } from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
