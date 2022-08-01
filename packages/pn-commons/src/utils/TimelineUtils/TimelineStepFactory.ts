@@ -1,4 +1,3 @@
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { INotificationDetailTimeline, TimelineCategory } from '../../types';
 import { ScheduleDigitalWorkflowStep } from './ScheduleDigitalWorkflowStep';
 import { TimelineStep } from './TimelineStep';
@@ -13,23 +12,6 @@ import { SendAnalogDomicileStep } from './SendAnalogDomicileStep';
 import { SendPaperFeedbackStep } from './SendPaperFeedbackStep';
 import { DigitalFailureWorkflowStep } from './DigitalFailureWorkflowStep';
 import { NotHandledStep } from './NotHandledStep';
-
-export function localizeTimelineStatus(
-  category: string,
-  defaultLabel: string,
-  defaultDescription: string,
-  data?: { [key: string]: string | undefined }
-): { label: string; description: string } {
-  return {
-    label: getLocalizedOrDefaultLabel('notifications', `detail.timeline.${category}`, defaultLabel),
-    description: getLocalizedOrDefaultLabel(
-      'notifications',
-      `detail.timeline.${category}-description`,
-      defaultDescription,
-      data
-    ),
-  };
-}
 
 export class TimelineStepFactory {
   static createTimelineStep(step: INotificationDetailTimeline): TimelineStep {

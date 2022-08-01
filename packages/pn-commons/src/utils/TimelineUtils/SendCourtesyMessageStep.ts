@@ -3,7 +3,6 @@ import {
   SendCourtesyMessageDetails,
 } from '../../types';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
-import { localizeTimelineStatus } from './TimelineStepFactory';
 
 export class SendCourtesyMessageStep extends TimelineStep {
   getTimelineStepInfo(
@@ -15,7 +14,7 @@ export class SendCourtesyMessageStep extends TimelineStep {
         ? 'email'
         : 'sms';
     return {
-      ...localizeTimelineStatus(
+      ...this.localizeTimelineStatus(
         'send-courtesy-message',
         'Invio del messaggio di cortesia',
         `È in corso l'invio del messaggio di cortesia a ${payload.recipient?.denomination} tramite ${type}`,

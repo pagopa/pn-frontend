@@ -1,12 +1,11 @@
 import { SendDigitalDetails } from '../../types';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
-import { localizeTimelineStatus } from './TimelineStepFactory';
 
 export class SendDigitalDomicileFeedbackStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
     if ((payload.step.details as SendDigitalDetails).responseStatus === 'KO') {
       return {
-        ...localizeTimelineStatus(
+        ...this.localizeTimelineStatus(
           'send-digital-domicile-error',
           'Invio via PEC fallito',
           `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
@@ -22,7 +21,7 @@ export class SendDigitalDomicileFeedbackStep extends TimelineStep {
       };
     }
     return {
-      ...localizeTimelineStatus(
+      ...this.localizeTimelineStatus(
         'send-digital-domicile-success',
         'Invio via PEC riuscito',
         `L' invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${

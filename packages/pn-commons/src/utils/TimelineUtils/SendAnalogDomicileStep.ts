@@ -1,6 +1,5 @@
 import { AnalogWorkflowDetails, PhysicalCommunicationType, SendPaperDetails } from '../../types';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
-import { localizeTimelineStatus } from './TimelineStepFactory';
 
 export class SendAnalogDomicileStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
@@ -9,7 +8,7 @@ export class SendAnalogDomicileStep extends TimelineStep {
       PhysicalCommunicationType.REGISTERED_LETTER_890
     ) {
       return {
-        ...localizeTimelineStatus(
+        ...this.localizeTimelineStatus(
           'send-analog-domicile-890',
           'Invio via raccomandata 890',
           `È in corso l'invio della notifica a ${payload.recipient?.denomination} all'indirizzo ${
@@ -25,7 +24,7 @@ export class SendAnalogDomicileStep extends TimelineStep {
       };
     }
     return {
-      ...localizeTimelineStatus(
+      ...this.localizeTimelineStatus(
         'send-analog-domicile-ar',
         'Invio via raccomandata A/R',
         `È in corso l'invio della notifica a ${payload.recipient?.denomination} all'indirizzo ${

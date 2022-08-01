@@ -1,10 +1,9 @@
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
-import { localizeTimelineStatus } from './TimelineStepFactory';
 
 export class SendPaperFeedbackStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
     return {
-      ...localizeTimelineStatus(
+      ...this.localizeTimelineStatus(
         'send-paper-feedback',
         'Aggiornamento stato raccomandata',
         `Si allega un aggiornamento dello stato della raccomandata.`,

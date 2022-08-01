@@ -1,6 +1,5 @@
 import { SendDigitalDetails } from '../../types';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
-import { localizeTimelineStatus } from './TimelineStepFactory';
 
 export class SendDigitalDomicileStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
@@ -9,7 +8,7 @@ export class SendDigitalDomicileStep extends TimelineStep {
       return null;
     }
     return {
-      ...localizeTimelineStatus(
+      ...this.localizeTimelineStatus(
         'send-digital-domicile',
         'Invio via PEC',
         `È in corso l'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
