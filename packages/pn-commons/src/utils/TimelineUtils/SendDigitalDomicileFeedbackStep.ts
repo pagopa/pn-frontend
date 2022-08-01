@@ -16,7 +16,6 @@ export class SendDigitalDomicileFeedbackStep extends TimelineStep {
             address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
           }
         ),
-        linkText: payload.legalFactLabel,
         recipient: payload.recipientLabel,
       };
     }
@@ -32,7 +31,6 @@ export class SendDigitalDomicileFeedbackStep extends TimelineStep {
           address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
         }
       ),
-      linkText: payload.legalFactLabel,
       recipient: payload.recipientLabel,
     };
   }

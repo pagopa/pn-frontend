@@ -11,7 +11,6 @@ export class SendPaperFeedbackStep extends TimelineStep {
           name: payload.recipient?.denomination,
         }
       ),
-      linkText: payload.receiptLabel,
       recipient: `${payload.recipient?.taxId} - ${payload.recipient?.denomination}`,
     };
   }

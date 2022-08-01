@@ -5,8 +5,6 @@ export interface TimelineStepPayload {
   step: INotificationDetailTimeline;
   recipient?: NotificationDetailRecipient;
   recipientLabel?: string;
-  legalFactLabel?: string;
-  receiptLabel?: string;
 }
 
 export interface TimelineStepInfo {

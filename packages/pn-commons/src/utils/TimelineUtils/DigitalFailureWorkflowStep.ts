@@ -5,7 +5,6 @@ export class DigitalFailureWorkflowStep extends TimelineStep {
     return {
       label: 'Invio per via digitale non riuscito',
       description: `L'invio per via digitale della notifica non è riuscito.`,
-      linkText: payload.receiptLabel,
       recipient: payload.recipientLabel,
     };
   }

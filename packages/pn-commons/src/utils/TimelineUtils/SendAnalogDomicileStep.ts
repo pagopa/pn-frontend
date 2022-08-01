@@ -19,7 +19,6 @@ export class SendAnalogDomicileStep extends TimelineStep {
             address: (payload.step.details as AnalogWorkflowDetails).physicalAddress?.address,
           }
         ),
-        linkText: payload.receiptLabel,
         recipient: payload.recipientLabel,
       };
     }
@@ -35,7 +34,6 @@ export class SendAnalogDomicileStep extends TimelineStep {
           address: (payload.step.details as AnalogWorkflowDetails).physicalAddress?.address,
         }
       ),
-      linkText: payload.receiptLabel,
       recipient: payload.recipientLabel,
     };
   }

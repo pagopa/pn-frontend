@@ -8,7 +8,6 @@ export class ScheduleAnalogWorkflowStep extends TimelineStep {
         'Invio per via cartacea',
         "L'invio della notifica per via cartacea è in preparazione."
       ),
-      linkText: payload.legalFactLabel,
       recipient: payload.recipientLabel,
     };
   }

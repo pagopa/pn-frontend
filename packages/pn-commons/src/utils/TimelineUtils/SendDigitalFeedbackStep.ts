@@ -13,7 +13,6 @@ export class SendDigitalFeedbackStep extends TimelineStep {
             name: payload.recipient?.denomination,
           }
         ),
-        linkText: payload.legalFactLabel,
         recipient: payload.recipientLabel,
       };
     }
@@ -26,7 +25,6 @@ export class SendDigitalFeedbackStep extends TimelineStep {
           name: payload.recipient?.denomination,
         }
       ),
-      linkText: payload.legalFactLabel,
       recipient: payload.recipientLabel,
     };
   }

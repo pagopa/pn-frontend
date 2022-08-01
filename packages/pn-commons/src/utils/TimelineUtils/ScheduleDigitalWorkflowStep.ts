@@ -8,7 +8,6 @@ export class ScheduleDigitalWorkflowStep extends TimelineStep {
         'Invio per via digitale',
         "È in corso l'invio della notifica per via digitale."
       ),
-      linkText: payload.legalFactLabel,
       recipient: payload.recipientLabel,
     };
   }

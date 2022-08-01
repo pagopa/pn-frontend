@@ -15,7 +15,6 @@ export class SendSimpleRegisteredLetterStep extends TimelineStep {
           address: (payload.step.details as AnalogWorkflowDetails).physicalAddress?.address,
         }
       ),
-      linkText: payload.legalFactLabel,
       recipient: payload.recipientLabel,
     };
   }
