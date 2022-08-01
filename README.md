@@ -59,14 +59,14 @@ L'analisi sonar sarà disponibile [qui](https://sonarcloud.io/project/overview?i
 
 ### Version
 
-Utilizzare il comando `yarn version` dal branch `main` per rilasciare una nuova versione. Questo script utilizza [lerna version](https://github.com/lerna/lerna/blob/main/commands/version/README.md).
+Utilizzare il comando `yarn run version` dal branch `main` per rilasciare una nuova versione. Questo script utilizza [lerna version](https://github.com/lerna/lerna/blob/main/commands/version/README.md).
 
 Il tool rileva in automatico i package che sono stati modificati a partire dall'ultima versione e si occupa di aggiornare i file delle dipendenze ed eseguire i comandi git commit e tag.
 
 E' possibile procedere in uno dei modi seguenti:
-- `yarn version 1.0.1` per scegliere esplicitamente un numero di versione
-- `yarn version patch` per effettuare l'avanzamento secondo la convenzione SemVer
-- `yarn version`       per scegliere dal prompt
+- `yarn run version 1.0.1` per scegliere esplicitamente un numero di versione
+- `yarn run version patch` per effettuare l'avanzamento secondo la convenzione SemVer
+- `yarn run version`       per scegliere dal prompt
 
 
 Per un elenco e una descrizione più dettagliata delle varie opzioni disponibili fare riferimento alla specifica del comando presente su [github](https://github.com/lerna/lerna/tree/main/commands/version)
