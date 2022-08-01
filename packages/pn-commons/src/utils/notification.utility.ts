@@ -1,3 +1,4 @@
+import { LegalFactType } from './../types/NotificationDetail';
 import _ from 'lodash';
 
 import { formatDate } from '../services';
@@ -221,6 +222,64 @@ function localizeTimelineStatus(
 }
 
 /**
+ * Get legalFact label based on timeline category and legalfact type.
+ * @param {TimelineCategory} category Timeline category
+ * @param {LegalFactType} legalFactType Legalfact type
+ * @returns {string} attestation or receipt
+ */
+export function getLegalFactLabel(
+  category: TimelineCategory,
+  legalFactType?: LegalFactType
+): string {
+  const legalFactLabel = getLocalizedOrDefaultLabel(
+    'notifications',
+    `detail.legalfact`,
+    'Attestazione opponibile a terzi'
+  );
+  // TODO: localize in pn_ga branch
+  if (category === TimelineCategory.SEND_PAPER_FEEDBACK) {
+    return getLocalizedOrDefaultLabel('notifications', `detail.receipt`, 'Ricevuta');
+  } else if (legalFactType === LegalFactType.SENDER_ACK) {
+    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.sender-ack',
+      'notifica presa in carico'
+    )}`;
+  } else if (
+    legalFactType === LegalFactType.DIGITAL_DELIVERY &&
+    category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+  ) {
+    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.digital-delivery-success',
+      'notifica digitale'
+    )}`;
+  } else if (
+    legalFactType === LegalFactType.DIGITAL_DELIVERY &&
+    category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW
+  ) {
+    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.digital-delivery-failure',
+      'mancato recapito digitale'
+    )}`;
+  } else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
+    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.analog-delivery',
+      'conformità'
+    )}`;
+  } else if (legalFactType === LegalFactType.RECIPIENT_ACCESS) {
+    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.recipient-access',
+      'avvenuto accesso'
+    )}`;
+  }
+  return legalFactLabel;
+}
+
+/**
  * Returns the mapping between current notification timeline status and its label and descriptive message.
  * @param  {INotificationDetailTimeline} step
  * @param {Array<NotificationDetailRecipient>} recipients
@@ -232,20 +291,9 @@ export function getNotificationTimelineStatusInfos(
 ): {
   label: string;
   description: string;
-  linkText?: string;
   recipient?: string;
 } | null {
   const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
-  const legalFactLabel = getLocalizedOrDefaultLabel(
-    'notifications',
-    `detail.legalfact`,
-    'Attestazione opponibile a terzi'
-  );
-  const receiptLabel = getLocalizedOrDefaultLabel(
-    'notifications',
-    `detail.timeline.view-receipt`,
-    'Vedi la ricevuta'
-  );
   const recipientLabel = `${recipient?.taxId} - ${recipient?.denomination}`;
 
   switch (step.category) {
@@ -256,7 +304,6 @@ export function getNotificationTimelineStatusInfos(
           'Invio per via cartacea',
           "L'invio della notifica per via cartacea è in preparazione."
         ),
-        linkText: legalFactLabel,
         recipient: recipientLabel,
       };
     case TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW:
@@ -266,7 +313,6 @@ export function getNotificationTimelineStatusInfos(
           'Invio per via digitale',
           "È in corso l'invio della notifica per via digitale."
         ),
-        linkText: legalFactLabel,
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_COURTESY_MESSAGE:
@@ -320,7 +366,6 @@ export function getNotificationTimelineStatusInfos(
               address: (step.details as SendDigitalDetails).digitalAddress?.address,
             }
           ),
-          linkText: legalFactLabel,
           recipient: recipientLabel,
         };
       }
@@ -336,7 +381,6 @@ export function getNotificationTimelineStatusInfos(
             address: (step.details as SendDigitalDetails).digitalAddress?.address,
           }
         ),
-        linkText: legalFactLabel,
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_DIGITAL_FEEDBACK:
@@ -350,7 +394,6 @@ export function getNotificationTimelineStatusInfos(
               name: recipient?.denomination,
             }
           ),
-          linkText: legalFactLabel,
           recipient: recipientLabel,
         };
       }
@@ -363,7 +406,6 @@ export function getNotificationTimelineStatusInfos(
             name: recipient?.denomination,
           }
         ),
-        linkText: legalFactLabel,
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
@@ -379,7 +421,6 @@ export function getNotificationTimelineStatusInfos(
             address: (step.details as AnalogWorkflowDetails).physicalAddress?.address,
           }
         ),
-        linkText: legalFactLabel,
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_ANALOG_DOMICILE:
@@ -399,7 +440,6 @@ export function getNotificationTimelineStatusInfos(
               address: (step.details as AnalogWorkflowDetails).physicalAddress?.address,
             }
           ),
-          linkText: receiptLabel,
           recipient: recipientLabel,
         };
       }
@@ -415,7 +455,6 @@ export function getNotificationTimelineStatusInfos(
             address: (step.details as AnalogWorkflowDetails).physicalAddress?.address,
           }
         ),
-        linkText: receiptLabel,
         recipient: recipientLabel,
       };
     case TimelineCategory.SEND_PAPER_FEEDBACK:
@@ -428,14 +467,15 @@ export function getNotificationTimelineStatusInfos(
             name: recipient?.denomination,
           }
         ),
-        linkText: receiptLabel,
         recipient: `${recipient?.taxId} - ${recipient?.denomination}`,
       };
     case TimelineCategory.DIGITAL_FAILURE_WORKFLOW:
       return {
-        label: 'Invio per via digitale non riuscito',
-        description: `L'invio per via digitale della notifica non è riuscito.`,
-        linkText: receiptLabel,
+        ...localizeTimelineStatus(
+          'digital-failure-workflow',
+          'Invio per via digitale non riuscito',
+          `L'invio per via digitale della notifica non è riuscito.`
+        ),
         recipient: recipientLabel,
       };
     // PN-1647
@@ -565,22 +605,6 @@ export function parseNotificationDetail(
   /* eslint-enable functional/immutable-data */
   /* eslint-enable functional/no-let */
   return parsedNotification;
-}
-
-/**
- * Get legalFact label based on timeline category.
- * @param {TimelineCategory} category Timeline category
- * @param {attestation: string; receipt: string} legalFactLabels Attestation and Receipt
- * @returns {string} attestation or receipt
- */
-export function getLegalFactLabel(
-  category: TimelineCategory,
-  legalFactLabels: { attestation: string; receipt: string }
-): string {
-  if (category === TimelineCategory.SEND_PAPER_FEEDBACK) {
-    return legalFactLabels.receipt;
-  }
-  return legalFactLabels.attestation;
 }
 
 /**
