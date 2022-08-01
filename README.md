@@ -68,5 +68,6 @@ E' possibile procedere in uno dei modi seguenti:
 - `yarn run version patch` per effettuare l'avanzamento secondo la convenzione SemVer
 - `yarn run version`       per scegliere dal prompt
 
+Dopo aver indicato la versione desiderata, terminare con `git push origin --tags` per pushare il nuovo tag creato.
 
 Per un elenco e una descrizione più dettagliata delle varie opzioni disponibili fare riferimento alla specifica del comando presente su [github](https://github.com/lerna/lerna/tree/main/commands/version)
