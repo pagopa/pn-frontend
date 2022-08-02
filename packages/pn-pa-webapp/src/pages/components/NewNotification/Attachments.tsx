@@ -10,6 +10,8 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
+import { setAttachments } from '../../../redux/newNotificationTemp/actions';
+import { FormAttachment } from '../../../models/NewNotification';
 import NewNotificationCard from './NewNotificationCard';
 
 type AttachmentBoxProps = {
@@ -26,9 +28,11 @@ type AttachmentBoxProps = {
   onFileUploaded: (
     id: string,
     file?: Uint8Array,
-    sha256?: { hashBase64: string; hashHex: string }
+    sha256?: { hashBase64: string; hashHex: string },
+    fileUploaded?: any,
   ) => void;
   onRemoveFile: (id: string) => void;
+  attachment?: FormAttachment;
 };
 
 const AttachmentBox = ({
@@ -44,6 +48,7 @@ const AttachmentBox = ({
   onFieldTouched,
   onFileUploaded,
   onRemoveFile,
+  attachment,
 }: AttachmentBoxProps) => {
   const { t } = useTranslation(['notifiche']);
 
@@ -64,11 +69,12 @@ const AttachmentBox = ({
       <FileUpload
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
-        onFileUploaded={(file, sha256) => onFileUploaded(`${id}.file`, file, sha256)}
+        onFileUploaded={(file, sha256, fileUploaded) => onFileUploaded(`${id}.file`, file, sha256, fileUploaded)}
         onRemoveFile={() => onRemoveFile(`${id}.file`)}
         sx={{ marginTop: '10px' }}
         fileFormat="uint8Array"
         calcSha256
+        attachment={attachment}
       />
       <TextField
         id={`${id}.name`}
@@ -88,9 +94,11 @@ const AttachmentBox = ({
 
 type Props = {
   onConfirm: () => void;
+  onPreviousStep?: () => void;
+  attachmentsData?: Array<FormAttachment>;
 };
 
-const Attachments = ({ onConfirm }: Props) => {
+const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.attachments',
@@ -101,6 +109,8 @@ const Attachments = ({ onConfirm }: Props) => {
       yup.object({
         file: yup
           .object({
+            size: yup.number().required(),
+            name: yup.string().required(),
             uint8Array: yup
               .mixed()
               .test((input) => input instanceof Uint8Array)
@@ -118,17 +128,32 @@ const Attachments = ({ onConfirm }: Props) => {
     ),
   });
 
-  const formik = useFormik({
-    initialValues: {
-      documents: [
-        {
-          id: `documents.0`,
-          idx: 0,
-          file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
+  const attachmentsExists = attachmentsData && attachmentsData.length > 0;
+  const initialValues = attachmentsExists
+  ? {
+    documents: attachmentsData
+  }
+  : {
+    documents: [
+      {
+        id: `documents.0`,
+        idx: 0,
+        file: {
+          uint8Array: undefined,
           name: '',
+          size: 0,
+          sha256: {
+            hashBase64: '',
+            hashHex: ''
+          } 
         },
-      ],
-    },
+        name: '',
+      },
+    ],
+  };
+
+  const formik = useFormik({
+    initialValues,
     validationSchema,
     validateOnMount: true,
     onSubmit: (values) => {
@@ -143,11 +168,19 @@ const Attachments = ({ onConfirm }: Props) => {
             }))
           )
         )
-          .unwrap()
-          .then(() => {
-            onConfirm();
-          })
-          .catch(() => {});
+        .unwrap()
+        .then(() => {
+          dispatch(
+            setAttachments({
+              documents: formik.values.documents.map((v) => ({
+                ...v,
+                id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+              })),
+            })
+          );
+          onConfirm();
+        })
+        .catch(() => undefined);
       }
     },
   });
@@ -160,10 +193,16 @@ const Attachments = ({ onConfirm }: Props) => {
   const fileUploadedHandler = async (
     id: string,
     file?: Uint8Array,
-    sha256?: { hashBase64: string; hashHex: string }
+    sha256?: { hashBase64: string; hashHex: string },
+    fileUploaded?: any,
   ) => {
     await formik.setFieldTouched(id, true, false);
-    await formik.setFieldValue(id, { uint8Array: file, sha256 });
+    await formik.setFieldValue(id, {
+      size: fileUploaded.size,
+      uint8Array: file,
+      sha256,
+      name: fileUploaded.name
+    });
   };
 
   const removeFileHandler = async (id: string) => {
@@ -178,7 +217,15 @@ const Attachments = ({ onConfirm }: Props) => {
         {
           id: `documents.${lastDocIdx + 1}`,
           idx: lastDocIdx + 1,
-          file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
+          file: {
+            uint8Array: undefined,
+            size: 0,
+            name: '',
+            sha256: {
+              hashBase64: '',
+              hashHex: ''
+            }
+          },
           name: '',
         },
       ],
@@ -192,9 +239,29 @@ const Attachments = ({ onConfirm }: Props) => {
     });
   };
 
+  const handlePreviousStep = () => {
+    if (onPreviousStep) {
+      dispatch(
+        setAttachments({
+          documents: formik.values.documents.map((v) => ({
+            ...v,
+            id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+          })),
+        })
+       // setAttachments({ documents: formik.values.documents })
+      );
+      onPreviousStep();
+    }
+  };
+
   return (
     <form onSubmit={formik.handleSubmit}>
-      <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('attach-for-recipients')}>
+      <NewNotificationCard
+        isContinueDisabled={!formik.isValid}
+        title={t('attach-for-recipients')}
+        previousStepLabel="Torna a Destinatario"
+        previousStepOnClick={() => handlePreviousStep()}
+      >
         {formik.values.documents.map((d, i) => (
           <AttachmentBox
             key={d.id}
@@ -204,10 +271,15 @@ const Attachments = ({ onConfirm }: Props) => {
             onDelete={() => deleteDocumentHandler(i)}
             fieldLabel={i === 0 ? `${t('act-name')}*` : `${t('doc-name')}*`}
             fieldValue={d.name}
+            attachment={(attachmentsData && attachmentsData[i]) ? attachmentsData[i] : undefined}
             fieldTouched={
+              ((attachmentsData && attachmentsData[i]) ||
+                (formik.touched.documents && formik.touched.documents[i])) as boolean
+              /*
               formik.touched.documents && formik.touched.documents[i]
                 ? formik.touched.documents[i].name
                 : undefined
+              */
             }
             fieldErros={
               formik.errors.documents && formik.errors.documents[i]
