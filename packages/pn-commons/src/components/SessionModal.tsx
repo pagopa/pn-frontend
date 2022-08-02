@@ -39,23 +39,24 @@ const SessionModal = ({
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    if (initTimeout) {
+    if (!initTimeout) {
+      return;
+    }
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(() => {
+      if (handleClose) {
+        handleClose();
+      }
+    }, 2000);
+
+    // clean function
+    return () => {
       if (timeout) {
         clearTimeout(timeout);
       }
-      timeout = setTimeout(() => {
-        if (handleClose) {
-          handleClose();
-        }
-      }, 2000);
-
-      // clean function
-      return () => {
-        if (timeout) {
-          clearTimeout(timeout);
-        }
-      };
-    }
+    };
   }, []);
 
   return (
