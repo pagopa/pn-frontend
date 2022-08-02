@@ -1,7 +1,16 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AppMessage, appStateActions, initLocalization, Layout, LoadingOverlay, SideMenu, useMultiEvent, useUnload } from '@pagopa-pn/pn-commons';
+import {
+  AppMessage,
+  appStateActions,
+  initLocalization,
+  Layout,
+  LoadingOverlay,
+  SideMenu,
+  useMultiEvent,
+  useUnload,
+} from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import { Box } from '@mui/material';
 
@@ -31,7 +40,9 @@ const App = () => {
   });
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const loggedUserOrganizationParty = useAppSelector((state: RootState) => state.userState.organizationParty);
+  const loggedUserOrganizationParty = useAppSelector(
+    (state: RootState) => state.userState.organizationParty
+  );
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -83,7 +94,8 @@ const App = () => {
       {
         id: '0',
         name: loggedUserOrganizationParty.name,
-        productRole: role?.role,
+        // productRole: role?.role,
+        productRole: t(`roles.${role?.role}`),
         logoUrl: undefined,
         // non posso settare un'icona di MUI perché @pagopa/mui-italia accetta solo string o undefined come logoUrl
         // ma fortunatamente, se si passa undefined, fa vedere proprio il logo che ci serve
@@ -119,9 +131,7 @@ const App = () => {
 
   useEffect(() => {
     if (idOrganization) {
-      void dispatch(
-        getOrganizationParty(idOrganization)
-      );
+      void dispatch(getOrganizationParty(idOrganization));
     }
   }, [idOrganization]);
 
@@ -159,10 +169,13 @@ const App = () => {
   };
 
   const [clickVersion] = useMultiEvent({
-    callback: () => dispatch(appStateActions.addSuccess({
-      title: "Current version",
-      message: `v${VERSION}`
-    })),
+    callback: () =>
+      dispatch(
+        appStateActions.addSuccess({
+          title: 'Current version',
+          message: `v${VERSION}`,
+        })
+      ),
   });
 
   return (
