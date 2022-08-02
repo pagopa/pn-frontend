@@ -14,7 +14,6 @@ batch:
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
           REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"
-          REACT_APP_VERSION: "$npm_package_version"
     - identifier: pn_pf_svil_build
       buildspec: cra_buildspec.yaml
       env:
@@ -28,7 +27,6 @@ batch:
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: DUMMY
           REACT_APP_ONETRUST_DOMAIN_ID: "f0f07d38-790f-49af-8253-0794e83e8b68"
-          REACT_APP_VERSION: $npm_package_version
     - identifier: pn_pf_coll_build
       buildspec: cra_buildspec.yaml
       env:
@@ -42,7 +40,6 @@ batch:
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: DUMMY
           REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"
-          REACT_APP_VERSION: $npm_package_version
     # - identifier: pn_pf_prod_build
     #     buildspec: cra_buildspec.yaml
     #     env:
