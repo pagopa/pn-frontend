@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
-import { InactivityHandler, SessionModal } from '@pagopa-pn/pn-commons';
+import { InactivityHandler, SessionModal, useSessionCheck } from '@pagopa-pn/pn-commons';
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 
 import { logout } from '../redux/auth/actions';
@@ -27,21 +27,24 @@ const inactivityTimer = 5 * 60 * 1000;
 const RequireAuth = ({ roles }: Props) => {
   const token = useSelector((state: RootState) => state.userState.user.sessionToken);
   const role = useSelector((state: RootState) => state.userState.user.organization?.roles[0]);
+  const expDate = useSelector((state: RootState) => state.userState.user.desired_exp);
   const userHasRequiredRole = role && roles.includes(role.partyRole);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token || !userHasRequiredRole);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
+  const sessionCheck = useSessionCheck(() => dispatch(logout()));
 
   useEffect(() => {
     if (token === '' || !token) {
       setAccessDenied(true);
       // Redirect them to the selfcare login page
-      goToSelfcareLogin();
+      // goToSelfcareLogin();
     }
     if (token && token !== '' && role && userHasRequiredRole) {
       setAccessDenied(false);
+      sessionCheck(expDate);
     }
-  }, [token, role]);
+  }, [token, role, expDate]);
 
   return (
     <Fragment>
@@ -51,6 +54,7 @@ const RequireAuth = ({ roles }: Props) => {
           title={t('leaving-app.title')}
           message={t('leaving-app.message')}
           handleClose={goToSelfcareLogin}
+          initTimeout
         />
       )}
       {DISABLE_INACTIVITY_HANDLER ? (
