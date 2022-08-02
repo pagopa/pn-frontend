@@ -6,7 +6,7 @@ import {
   IOAllowedValues,
 } from './../../../models/contacts';
 import { ContactsApi } from '../../../api/contacts/Contacts.api';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
   createOrUpdateCourtesyAddress,

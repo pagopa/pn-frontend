@@ -1,6 +1,6 @@
 import { Delegation } from '../types';
 import { store } from '../../store';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { DelegationsApi } from '../../../api/delegations/Delegations.api';
 import {
   acceptDelegation,

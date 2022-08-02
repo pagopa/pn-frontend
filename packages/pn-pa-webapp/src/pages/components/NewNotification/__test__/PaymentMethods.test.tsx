@@ -7,6 +7,14 @@ import { render } from '../../../../__test__/test-utils';
 import PaymentMethods from '../PaymentMethods';
 import { UploadPayementParams } from '../../../../models/NewNotification';
 
+// mock imports
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 const file = new Blob(['mocked content'], { type: 'application/pdf' });
 (file as any).name = 'Mocked file';
 
@@ -48,7 +56,7 @@ describe('PaymentMethods Component', () => {
     const paymentBoxes = result.queryAllByTestId('paymentBox');
     expect(paymentBoxes).toHaveLength(4);
     paymentBoxes.forEach((paymentBox, index) => {
-      expect(paymentBox).toHaveTextContent(index % 2 === 0 ? /Allega Avviso pagoPA/i : /Allega Modello F24/i);
+      expect(paymentBox).toHaveTextContent(index % 2 === 0 ? /attach-pagopa-notice*/i : /attach-f24/i);
       const fileInput = paymentBox.parentNode?.querySelector('[data-testid="fileInput"]');
       expect(fileInput).toBeInTheDocument();
     });
@@ -80,13 +88,13 @@ describe('PaymentMethods Component', () => {
       expect(mockActionFn).toBeCalledWith(newNotification.recipients.reduce((obj: UploadPayementParams, r, index) => {
         obj[r.taxId] = {
           pagoPaForm: {
-            key: 'Avviso pagoPA',
+            key: 'pagopa-notice',
             file: new Uint8Array(),
             sha256: 'mocked-hasBase64',
             contentType: 'application/pdf',
           },
           f24flatRate: {
-            key: 'F24 forfettario',
+            key: 'f24-flatrate',
             file: undefined,
             sha256: '',
             contentType: 'application/pdf',

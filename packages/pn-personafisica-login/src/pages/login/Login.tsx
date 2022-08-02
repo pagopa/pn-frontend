@@ -1,19 +1,21 @@
 import { useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { Trans, useTranslation } from 'react-i18next';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { useIsMobile, Layout } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
 
 import { styled } from '@mui/material/styles';
-import Layout from '../../components/Layout';
 import { IDPS } from '../../utils/IDPS';
 import { ENV } from '../../utils/env';
+import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
 import { storageSpidSelectedOps } from '../../utils/storage';
+import { trackEventByType } from "../../utils/mixpanel";
+import { TrackEventType } from "../../utils/events";
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -26,7 +28,7 @@ const LoginButton = styled(Button)(() => ({
 
 const Login = () => {
   const [showIDPS, setShowIDPS] = useState(false);
-  const { t } = useTranslation(['login']);
+  const { t, i18n } = useTranslation(['login', 'notifiche']);
   const isMobile = useIsMobile();
 
   const goCIE = () => {
@@ -35,26 +37,42 @@ const Login = () => {
     window.location.assign(
       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
     );
-    // TODO track event
-    // trackEvent(
-    //   'LOGIN_IDP_SELECTED',
-    //   {
-    //     SPID_IDP_NAME: 'CIE',
-    //     SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
-    //   },
-    //   () =>
-    //     window.location.assign(
-    //       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
-    //     )
-    // );
+    trackEventByType(
+      TrackEventType.LOGIN_IDP_SELECTED,
+      {
+        SPID_IDP_NAME: 'CIE',
+        SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
+      },
+    );
   };
 
   if (showIDPS) {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
   }
 
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
+
+  const handleAssistanceClick = () => {
+    trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
+    /* eslint-disable-next-line functional/immutable-data */
+    window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+  };
+
   return (
-    <Layout>
+    <Layout
+      productsList={[]}
+      onAssistanceClick={handleAssistanceClick}
+      onLanguageChanged={changeLanguageHandler}
+      showSideMenu={false}
+      loggedUser={{
+        id: '',
+        name: undefined,
+        surname: undefined,
+        email: undefined,
+      }}
+    >
       <Grid container direction="column" my={isMobile ? 4 : 16}>
         <Grid container item justifyContent="center">
           <Grid item>

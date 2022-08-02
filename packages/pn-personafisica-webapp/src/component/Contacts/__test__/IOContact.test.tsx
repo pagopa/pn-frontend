@@ -1,12 +1,12 @@
+/* eslint-disable functional/no-let */
 import {
   fireEvent,
-  RenderResult,
-  waitFor
+  RenderResult
 } from '@testing-library/react';
+import * as redux from 'react-redux';
 import { axe, render } from "../../../__test__/test-utils";
 
 import { CourtesyChannelType, IOAllowedValues } from "../../../models/contacts";
-import * as redux from 'react-redux';
 import * as actions from '../../../redux/contact/actions';
 import IOContact from "../IOContact";
 
@@ -48,7 +48,7 @@ describe('IOContact component', () => {
 
     // mock dispatch
     mockDispatchFn = jest.fn(() => ({
-      unwrap: () => Promise.resolve(),
+      then: () => Promise.resolve(),
     }));
 
     // mock actions
@@ -65,7 +65,7 @@ describe('IOContact component', () => {
     jest.restoreAllMocks();
   });
 
-  describe('test component when IO is unavailable', () => {
+  describe('test component when contacts have not yet been fetched', () => {
     beforeEach(() => {
       result = render(<IOContact recipientId="mocked-recipientId" contact={null} />);
     });
@@ -77,7 +77,35 @@ describe('IOContact component', () => {
     it('renders as expected', () => {
       const cardAvatar = result?.container.querySelector('svg>title');
       expect(cardAvatar).toBeInTheDocument();
-      expect(cardAvatar).toHaveTextContent('Sms'); // to be replaced when the correct icon will be available
+      expect(cardAvatar).toHaveTextContent('Sms');
+
+      const title = result?.getByRole('heading', { name: 'io-contact.subtitle' });
+      expect(title).toBeInTheDocument();
+
+      const ioCheckbox = result?.queryByRole('checkbox', { name: 'io-contact.switch-label'});
+      expect(ioCheckbox).not.toBeInTheDocument();
+
+      const alert = result?.queryByRole('alert');
+      expect(alert).not.toBeInTheDocument();
+
+      const link = result?.container.querySelector('a');
+      expect(link).not.toBeInTheDocument();
+    });
+  });
+
+  describe('test component when IO is unavailable', () => {
+    beforeEach(() => {
+      result = render(<IOContact recipientId="mocked-recipientId" contact={undefined} />);
+    });
+
+    afterEach(() => {
+      result = undefined;
+    });
+
+    it('renders as expected', () => {
+      const cardAvatar = result?.container.querySelector('svg>title');
+      expect(cardAvatar).toBeInTheDocument();
+      expect(cardAvatar).toHaveTextContent('Sms');
 
       const title = result?.getByRole('heading', { name: 'io-contact.subtitle' });
       expect(title).toBeInTheDocument();
@@ -115,7 +143,7 @@ describe('IOContact component', () => {
     it('renders as expected', () => {
       const cardAvatar = result?.container.querySelector('svg>title');
       expect(cardAvatar).toBeInTheDocument();
-      expect(cardAvatar).toHaveTextContent('Sms'); // to be replaced when the correct icon will be available
+      expect(cardAvatar).toHaveTextContent('Sms');
 
       const title = result?.getByRole('heading', { name: 'io-contact.subtitle' });
       expect(title).toBeInTheDocument();
@@ -143,11 +171,9 @@ describe('IOContact component', () => {
       
       fireEvent.click(ioCheckbox!);
 
-      await waitFor(() => {
-        expect(mockDispatchFn).toBeCalledTimes(1);
-        expect(mockEnableActionFn).toBeCalledTimes(1);
-        expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
-      });
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockEnableActionFn).toBeCalledTimes(1);
+      expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
 
       expect(ioCheckbox).toBeInTheDocument();
       expect(ioCheckbox).toBeChecked();
@@ -172,7 +198,7 @@ describe('IOContact component', () => {
     it('renders as expected', () => {
       const cardAvatar = result?.container.querySelector('svg>title');
       expect(cardAvatar).toBeInTheDocument();
-      expect(cardAvatar).toHaveTextContent('Sms'); // to be replaced when the correct icon will be available
+      expect(cardAvatar).toHaveTextContent('Sms');
 
       const title = result?.getByRole('heading', { name: 'io-contact.subtitle' });
       expect(title).toBeInTheDocument();
@@ -200,11 +226,9 @@ describe('IOContact component', () => {
 
       fireEvent.click(ioCheckbox!);
 
-      await waitFor(() => {
-        expect(mockDispatchFn).toBeCalledTimes(1);
-        expect(mockDisableActionFn).toBeCalledTimes(1);
-        expect(mockDisableActionFn).toBeCalledWith('mocked-recipientId');
-      });
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockDisableActionFn).toBeCalledTimes(1);
+      expect(mockDisableActionFn).toBeCalledWith('mocked-recipientId');
 
       expect(ioCheckbox).not.toBeChecked();
     });

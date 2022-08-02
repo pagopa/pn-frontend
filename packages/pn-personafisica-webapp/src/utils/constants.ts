@@ -22,4 +22,4 @@ export const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN || 'DUMMY';
 
 export const OT_DOMAIN_ID = process.env.REACT_APP_ONETRUST_DOMAIN_ID || '';
 
-export const URL_DIGITAL_NOTIFICATIONS = process.env.REACT_APP_URL_DIGITAL_NOTIFICATIONS;
+export const VERSION = process.env.REACT_APP_VERSION ?? "";

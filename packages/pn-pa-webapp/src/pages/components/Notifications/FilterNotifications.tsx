@@ -1,11 +1,12 @@
 import { useEffect, Fragment, useState, forwardRef, useImperativeHandle } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormikValues, useFormik } from 'formik';
 import * as yup from 'yup';
 import _ from 'lodash';
 import { Box, DialogActions, DialogContent } from '@mui/material';
 import {
   fiscalCodeRegex,
-  NotificationAllowedStatus,
+  getNotificationAllowedStatus,
   tenYearsAgo,
   today,
   IUN_regex,
@@ -22,12 +23,16 @@ import {
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
+import { trackEventByType } from '../../../utils/mixpanel';
+import { TrackEventType } from '../../../utils/events';
 import FilterNotificationsFormBody from './FilterNotificationsFormBody';
 import FilterNotificationsFormActions from './FilterNotificationsFormActions';
 
 type Props = {
   showFilters: boolean;
 };
+
+const localizedNotificationStatus = getNotificationAllowedStatus();
 
 const emptyValues = {
   startDate: formatToTimezoneString(tenYearsAgo),
@@ -40,7 +45,7 @@ const emptyValues = {
 const initialEmptyValues = {
   startDate: tenYearsAgo,
   endDate: today,
-  status: NotificationAllowedStatus[0].value,
+  status: localizedNotificationStatus[0].value,
   recipientId: '',
   iunMatch: '',
 };
@@ -52,10 +57,11 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const isMobile = useIsMobile();
+  const { t } = useTranslation(['common', 'notifiche']);
 
   const validationSchema = yup.object({
-    recipientId: yup.string().matches(fiscalCodeRegex, 'Inserisci il codice per intero'),
-    iunMatch: yup.string().matches(IUN_regex, 'Inserisci un codice IUN valido'),
+    recipientId: yup.string().matches(fiscalCodeRegex, t('filters.errors.fiscal-code', {ns: 'notifiche'})),
+    iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', {ns: 'notifiche'})),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
   });
@@ -69,7 +75,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       endDate: new Date(filters.endDate),
       recipientId: getValidValue(filters.recipientId),
       iunMatch: getValidValue(filters.iunMatch),
-      status: getValidValue(filters.status, NotificationAllowedStatus[0].value),
+      status: getValidValue(filters.status, localizedNotificationStatus[0].value),
     };
   };
 
@@ -91,12 +97,14 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       if (_.isEqual(prevFilters, currentFilters)) {
         return;
       }
+      trackEventByType(TrackEventType.NOTIFICATION_FILTER_SEARCH);
       dispatch(setNotificationFilters(currentFilters));
       setPrevFilters(currentFilters);
     },
   });
 
   const cancelSearch = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_FILTER_REMOVE);
     dispatch(setNotificationFilters(emptyValues));
   };
 
@@ -137,9 +145,9 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         hasCounterBadge
         bagdeCount={filtersCount}
       >
-        Filtra
+        {t('button.filtra')}
       </CustomMobileDialogToggle>
-      <CustomMobileDialogContent title="Filtra">
+      <CustomMobileDialogContent title={t('button.filtra')}>
         <form onSubmit={formik.handleSubmit}>
           <DialogContent>
             <FilterNotificationsFormBody

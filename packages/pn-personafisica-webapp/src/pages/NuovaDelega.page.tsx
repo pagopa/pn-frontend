@@ -1,6 +1,6 @@
 import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
@@ -50,6 +50,8 @@ import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import { generateVCode } from '../utils/delegation.utility';
+import { trackEventByType } from "../utils/mixpanel";
+import { TrackEventType } from "../utils/events";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -87,6 +89,7 @@ const NuovaDelega = () => {
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
+    trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
 
   const handleDelegationsClick = () => {
@@ -138,10 +141,24 @@ const NuovaDelega = () => {
 
   const xsValue = isMobile ? 12 : 4;
 
+
   useEffect(() => {
-    void dispatch(getAllEntities());
-    return () => void dispatch(resetNewDelegation());
+    dispatch(resetNewDelegation());
   }, []);
+
+  const [loadAllEntities, setLoadAllEntities] = useState(false);
+
+  useEffect(() => {
+    if (loadAllEntities) {
+      void dispatch(getAllEntities());
+    }
+  }, [loadAllEntities]);
+
+  const handleGetAllEntities = () => {
+    if(!loadAllEntities) {
+      setLoadAllEntities(true);
+    }
+  };
 
   const breadcrumbs = (
     <Fragment>
@@ -214,7 +231,7 @@ const NuovaDelega = () => {
                                 value="pf"
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
-                                label={t('nuovaDelega.form.naturalPerson') as string}
+                                label={t('nuovaDelega.form.naturalPerson')}
                               />
                             </Grid>
                             <Grid item xs={xsValue} className={classes.margin}>
@@ -252,7 +269,7 @@ const NuovaDelega = () => {
                             value="pg"
                             control={<Radio />}
                             name={'selectPersonaFisicaOrPersonaGiuridica'}
-                            label={t('nuovaDelega.form.legalPerson') as string}
+                            label={t('nuovaDelega.form.legalPerson')}
                             disabled
                           />
                         </RadioGroup>
@@ -284,6 +301,9 @@ const NuovaDelega = () => {
                               'selectTuttiEntiOrSelezionati',
                               event.currentTarget.value
                             );
+                            if(event.currentTarget.value === 'entiSelezionati') {
+                              handleGetAllEntities();
+                            }
                           }}
                         >
                           <FormControlLabel
@@ -297,6 +317,7 @@ const NuovaDelega = () => {
                               <FormControlLabel
                                 value="entiSelezionati"
                                 control={<Radio />}
+                                data-testid="radioSelectedEntities"
                                 name={'selectTuttiEntiOrSelezionati'}
                                 label={t('nuovaDelega.form.onlySelected')}
                               />
@@ -342,7 +363,6 @@ const NuovaDelega = () => {
                               value={new Date(values.expirationDate)}
                               minDate={tomorrow}
                               onChange={(value: DatePickerTypes) => {
-                                // setFieldValue('expirationDate', value?.getTime());
                                 setFieldTouched('expirationDate', true, false);
                                 setFieldValue('expirationDate', value);
                               }}

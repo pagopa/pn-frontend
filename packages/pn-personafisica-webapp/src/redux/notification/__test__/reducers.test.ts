@@ -1,6 +1,6 @@
-import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
+import { LegalFactType, NotificationDetail, RecipientType } from '@pagopa-pn/pn-commons';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
   getReceivedNotification,
@@ -30,7 +30,13 @@ describe('Notification detail redux state tests', () => {
         sentAt: '',
         notificationStatus: '',
         notificationStatusHistory: [],
-        timeline: []
+        timeline: [],
+        currentRecipient: {
+          recipientType: RecipientType.PF,
+          taxId: '',
+          denomination: '',
+        },
+        currentRecipientIndex: 0,
       },
       documentDownloadUrl: '',
       legalFactDownloadUrl: '',
@@ -43,7 +49,13 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the notification detail', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotification');
     apiSpy.mockResolvedValue(notificationToFe);
-    const action = await store.dispatch(getReceivedNotification({iun: 'mocked-iun'}));
+    const action = await store.dispatch(
+      getReceivedNotification({
+        iun: 'mocked-iun',
+        currentUserTaxId: 'CGNNMO80A03H501U' ,
+        delegatorsFromStore: []
+      })
+    );
     const payload = action.payload as NotificationDetail;
     expect(action.type).toBe('getReceivedNotification/fulfilled');
     expect(payload).toEqual(notificationToFe);

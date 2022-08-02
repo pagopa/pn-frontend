@@ -13,6 +13,13 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 jest.mock('../FilterNotifications', () => {
   const { forwardRef, useImperativeHandle } = jest.requireActual('react');
   return forwardRef(({ showFilters }: { showFilters: boolean }, ref: any) => {
@@ -25,6 +32,7 @@ jest.mock('../FilterNotifications', () => {
     return <div>Filters</div>;
   });
 });
+
 describe('DesktopNotifications Component', () => {
   it('renders DesktopNotifications', () => {
     // render component
@@ -38,7 +46,7 @@ describe('DesktopNotifications Component', () => {
     );
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).toHaveTextContent(
-      /L'ente non ha ancora inviato nessuna notifica. Usa le Chiavi API o fai un invio manuale/i
+      /empty-state.message menu.api-key empty-state.secondary-message empty-state.secondary-action/i
     );
   });
 

@@ -6,7 +6,7 @@ import { PNRole } from '../models/user';
 import { IS_DEVELOP } from './constants';
 
 const BasicMenuItems: Array<SideMenuItem> = [
-  { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
+  { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
   /**
    * Refers to PN-1741
    * Commented out because beyond MVP scope
@@ -15,13 +15,13 @@ const BasicMenuItems: Array<SideMenuItem> = [
    * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
    * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
    */
-  // { label: 'Chiavi API', icon: VpnKey, route: routes.API_KEYS },
+  // { label: menu.api-key, icon: VpnKey, route: routes.API_KEYS },
 ];
 
 function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
   return [
-    { label: 'Ruoli', icon: People, route: routes.ROLES(idOrganization) },
-    { label: 'Gruppi', icon: SupervisedUserCircle, route: routes.GROUPS(idOrganization) },
+    { label: 'menu.roles', icon: People, route: routes.ROLES(idOrganization) },
+    { label: 'menu.groups', icon: SupervisedUserCircle, route: routes.GROUPS(idOrganization) },
   ];
 }
 

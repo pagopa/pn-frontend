@@ -48,16 +48,20 @@ export const createDelegationResponse = {
 
 export const createDelegationGenericErrorResponse = {
   response: {
-    status: 401
+    data: {
+      status: 401
+    }
   }
 };
 
 export const createDelegationDuplicatedErrorResponse = {
   response: {
-    status: 402,
-    customMessage: {
-      title: 'custom-title',
-      message: 'custom-message'
+    data: {
+      detail: "Non è possibile creare due deleghe per lo stesso delegato",
+      errors: [],
+      status: 400,
+      title: "Delega già presente",
+      traceId: "Self=1-62cfe68e-42c58950706157804fcb5f44;Root=1-62cfe68e-6635717822bd2bb604a51bb2;Parent=618f0c8aa046eb8a;Sampled=1"
     }
   }
 };

@@ -41,6 +41,10 @@ const DesktopNotifications = ({
   const { t } = useTranslation('notifiche');
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
 
+  const handleEventTrackingTooltip = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
+  };
+
   const columns: Array<Column> = [
     {
       id: 'notificationStatus',
@@ -49,8 +53,8 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return getNewNotificationBadge(value);
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
@@ -61,8 +65,8 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
@@ -73,8 +77,8 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
@@ -84,8 +88,8 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
@@ -95,8 +99,8 @@ const DesktopNotifications = ({
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
@@ -105,11 +109,11 @@ const DesktopNotifications = ({
       width: '18%',
       align: 'center',
       sortable: false, // TODO: will be re-enabled in PN-1124
-      getCellLabel(_, row: Item) {
+      getCellLabel(_: string, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
         );
-        return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color}></StatusTooltip>;
+        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },
     },
   ];
@@ -143,14 +147,14 @@ const DesktopNotifications = ({
   const showFilters = notifications?.length > 0 || filtersApplied;
 
   // Navigation handlers
-  const handleRowClick = (row: Item, _column: Column) => {
+  const handleRowClick = (row: Item) => {
     if (currentDelegator) {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId));
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
     // log event
-    trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   return (

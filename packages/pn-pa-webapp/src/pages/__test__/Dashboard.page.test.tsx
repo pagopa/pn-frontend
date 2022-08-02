@@ -15,6 +15,13 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
@@ -93,7 +100,7 @@ describe('Dashboard Page', () => {
     await act(async () => {
       result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
     });
-    expect(screen.getByRole('heading')).toHaveTextContent(/Notifiche/i);
+    expect(screen.getByRole('heading')).toHaveTextContent(/title/i);
     const filterForm = result?.container.querySelector('form');
     expect(filterForm).toBeInTheDocument();
     const notificationsTable = result?.container.querySelector('table');
@@ -160,7 +167,7 @@ describe('Dashboard Page', () => {
       result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
     });
     const newNotificationBtn = result?.queryByTestId('newNotificationBtn');
-    expect(newNotificationBtn).toHaveTextContent('Invia una nuova notifica');
+    expect(newNotificationBtn).toHaveTextContent('new-notification-button');
     fireEvent.click(newNotificationBtn!);
     await waitFor(() => {
       expect(mockNavigateFn).toBeCalledTimes(1);

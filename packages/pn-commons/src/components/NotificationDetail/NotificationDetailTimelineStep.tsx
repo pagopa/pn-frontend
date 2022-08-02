@@ -13,19 +13,20 @@ import {
   ButtonNaked,
 } from '@pagopa/mui-italia';
 
-import { getDay, getMonthString, getTime } from '../../utils/date.utility';
 import {
+  getDay,
+  getMonthString,
+  getTime,
   getLegalFactLabel,
   getNotificationStatusInfos,
-  getNotificationTimelineStatusInfos,
-} from '../../utils/notification.utility';
+  getNotificationTimelineStatusInfos } from '../../utils';
 import {
   LegalFactId,
   INotificationDetailTimeline,
   NotificationDetailRecipient,
   NotificationStatusHistory,
   TimelineCategory,
-} from '../../types/NotificationDetail';
+} from '../../types';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
@@ -38,6 +39,7 @@ type Props = {
   showHistoryButton?: boolean;
   historyButtonLabel?: string;
   historyButtonClickHandler?: () => void;
+  eventTrackingCallbackShowMore?: () => void;
 };
 
 /**
@@ -80,6 +82,7 @@ const timelineStepCmp = (
  * @param historyButtonClickHandler function called when user clicks on the history button
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
+ * @param eventTrackingCallbackShowMore event tracking callback
  */
 const NotificationDetailTimelineStep = ({
   timelineStep,
@@ -92,6 +95,7 @@ const NotificationDetailTimelineStep = ({
   showHistoryButton = false,
   historyButtonLabel,
   historyButtonClickHandler,
+  eventTrackingCallbackShowMore
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -146,7 +150,7 @@ const NotificationDetailTimelineStep = ({
       ) : (
         <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <Typography color="text.primary" variant="caption">
-            {getNotificationStatusInfos(timelineStep.status).description}
+            {notificationStatusInfos.description}
           </Typography>
           {legalFactsIds && legalFactsIds.length > 0 &&
             legalFactsIds.map((lf) => (
@@ -166,6 +170,11 @@ const NotificationDetailTimelineStep = ({
     position
   );
 
+  const handleShowMoreClick = () => {
+    eventTrackingCallbackShowMore && collapsed && eventTrackingCallbackShowMore()
+    setCollapsed(!collapsed)
+  }
+
   const moreLessButton = timelineStepCmp(
     undefined,
     undefined,
@@ -173,7 +182,7 @@ const NotificationDetailTimelineStep = ({
     <Box data-testid="moreLessButton">
       <ButtonNaked
         startIcon={collapsed ? <UnfoldMoreIcon /> : <UnfoldLessIcon />}
-        onClick={() => setCollapsed(!collapsed)}
+        onClick={handleShowMoreClick}
       >
         {collapsed ? showMoreButtonLabel : showLessButtonLabel}
       </ButtonNaked>

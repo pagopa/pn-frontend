@@ -8,8 +8,8 @@ import {
   LegalFactId,
   NotificationStatusHistory,
   NotificationDetailRecipient,
-} from '../../types/NotificationDetail';
-import { useIsMobile } from '../../hooks/IsMobile';
+} from '../../types';
+import { useIsMobile } from '../../hooks';
 import NotificationDetailTimelineStep from './NotificationDetailTimelineStep';
 
 type Props = {
@@ -21,6 +21,7 @@ type Props = {
   historyButtonLabel: string;
   showMoreButtonLabel: string;
   showLessButtonLabel: string;
+  eventTrackingCallbackShowMore?: () => void;
 };
 
 const CustomDrawer = styled(Drawer)(() => ({
@@ -43,6 +44,7 @@ const CustomDrawer = styled(Drawer)(() => ({
  * @param historyButtonLabel label of the history button
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
+ * @param eventTrackingCallbackShowMore event tracking callback
  */
 const NotificationDetailTimeline = ({
   recipients,
@@ -53,6 +55,7 @@ const NotificationDetailTimeline = ({
   historyButtonLabel,
   showMoreButtonLabel,
   showLessButtonLabel,
+  eventTrackingCallbackShowMore
 }: Props) => {
   const [state, setState] = useState(false);
   const isMobile = useIsMobile();
@@ -85,6 +88,7 @@ const NotificationDetailTimeline = ({
       key={'timeline_sep_' + i}
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
+      eventTrackingCallbackShowMore={eventTrackingCallbackShowMore}
     />
   ));
 
