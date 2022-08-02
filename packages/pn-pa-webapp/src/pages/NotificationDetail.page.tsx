@@ -41,9 +41,9 @@ import {
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
-  resetState,
 } from '../redux/notification/actions';
 import { setCancelledIun } from '../redux/newNotification/reducers';
+import { resetState } from '../redux/notification/reducers';
 
 const useStyles = makeStyles(() => ({
   root: {
