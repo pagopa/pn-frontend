@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { DelegatorsColumn, DelegatesColumn } from './../../types/Deleghe';
+import { Sort } from '@pagopa-pn/pn-commons';
 import { sortDelegations } from '../../utils/delegation.utility';
+import { DelegatorsColumn, DelegatesColumn } from './../../types/Deleghe';
 import {
   getDelegates,
   getDelegators,
@@ -16,7 +17,6 @@ import {
   resetDelegationsState,
 } from './actions';
 import { Delegation } from './types';
-import { Sort } from '@pagopa-pn/pn-commons';
 
 const initialState = {
   delegatesError: false,

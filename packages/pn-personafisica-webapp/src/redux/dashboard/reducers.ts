@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { GetNotificationsParams, tenYearsAgo, today, Notification, formatToTimezoneString, getNextDay, Sort } from '@pagopa-pn/pn-commons';
 
-import { NotificationSortField } from '../../types/Notifications';
+import { NotificationColumn } from '../../types/Notifications';
 import {
   getReceivedNotifications,
   setPagination,
@@ -31,7 +31,7 @@ const dashboardSlice = createSlice({
     sort: {
       orderBy: '',
       order: 'asc',
-    } as Sort<NotificationSortField>,
+    } as Sort<NotificationColumn>,
   },
   reducers: {},
   extraReducers: (builder) => {

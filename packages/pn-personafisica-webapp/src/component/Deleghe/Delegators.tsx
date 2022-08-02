@@ -8,8 +8,8 @@ import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { getDelegators, setDelegatorsSorting } from '../../redux/delegation/actions';
 import TableError from '../TableError/TableError';
-import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 import { DelegatorsColumn } from '../../types/Deleghe';
+import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegators = () => {
   const { t } = useTranslation(['deleghe']);

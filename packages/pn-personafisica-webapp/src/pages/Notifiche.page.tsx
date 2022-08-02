@@ -13,7 +13,7 @@ import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { Delegator } from '../redux/delegation/types';
 import { trackEventByType } from "../utils/mixpanel";
 import { TrackEventType } from "../utils/events";
-import { NotificationSortField } from '../types/Notifications';
+import { NotificationColumn } from '../types/Notifications';
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
@@ -54,7 +54,7 @@ const Notifiche = () => {
   };
 
   // Sort handlers
-  const handleChangeSorting = (s: Sort<NotificationSortField>) => {
+  const handleChangeSorting = (s: Sort<NotificationColumn>) => {
     dispatch(setSorting(s));
   };
 
