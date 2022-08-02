@@ -23,13 +23,13 @@ export const mixpanelInit = function (): void {
       debug: true,
       property_blacklist: [],
       // function called after mixpanel has finished loading
-      loaded(mixpanel: Mixpanel) {
+      // loaded(mixpanel: Mixpanel) {
         // this is useful to obtain a new distinct_id every session
         // the distinct_id is the user identifier that mixpanel automatically assign
-        if (sessionStorage.getItem('user') === null) {
-          mixpanel.reset();
-        }
-      },
+        // if (sessionStorage.getItem('user') === null) {
+        //  mixpanel.reset();
+        // }
+      // },
     });
   // }
 };

@@ -22,6 +22,7 @@ export const mixpanelInit = function (): void {
             // names of properties/superproperties which should never
             // be sent with track() calls
             property_blacklist: ["$current_url", "$initial_referrer", "$referrer"],
+            debug: true,
             // function called after mixpanel has finished loading
             // loaded(mixpanel: Mixpanel) {
             //     // this is useful to obtain a new distinct_id every session
