@@ -16,7 +16,7 @@ import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { setPreliminaryInformations } from '../../../redux/newNotification/actions';
+import { setPreliminaryInformations } from '../../../redux/newNotification/reducers';
 import { RootState } from '../../../redux/store';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';

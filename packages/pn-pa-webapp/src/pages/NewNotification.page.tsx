@@ -7,11 +7,8 @@ import { TitleBox, Prompt, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commo
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import {
-  createNewNotification,
-  resetNewNotificationState,
-  setSenderInfos,
-} from '../redux/newNotification/actions';
+import { createNewNotification } from '../redux/newNotification/actions';
+import { setSenderInfos, resetState } from '../redux/newNotification/reducers';
 import * as routes from '../navigation/routes.const';
 import { PARTY_MOCK } from '../utils/constants';
 import { TrackEventType } from '../utils/events';
@@ -52,39 +49,37 @@ const NewNotification = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
   const steps = [
-    t('new-notification.steps.preliminary-informations.title', {ns: 'notifiche'}),
-    t('new-notification.steps.recipient.title', {ns: 'notifiche'}),
-    t('new-notification.steps.attachments.title', {ns: 'notifiche'}),
-    t('new-notification.steps.payment-methods.title', {ns: 'notifiche'}),
+    t('new-notification.steps.preliminary-informations.title', { ns: 'notifiche' }),
+    t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
+    t('new-notification.steps.attachments.title', { ns: 'notifiche' }),
+    t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }),
   ];
 
   const eventStep = [
     TrackEventType.NOTIFICATION_SEND_PRELIMINARY_INFO,
     TrackEventType.NOTIFICATION_SEND_RECIPIENT_INFO,
     TrackEventType.NOTIFICATION_SEND_ATTACHMENTS,
-    TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES
+    TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES,
   ];
 
-  const stepType = [
-    'preliminary info',
-    'recipient',
-    'attachments',
-    'payment modes'
-  ];
+  const stepType = ['preliminary info', 'recipient', 'attachments', 'payment modes'];
 
   const handleEventTrackingCallbackPromptOpened = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_WARNING, {source: stepType[activeStep]});
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_WARNING, {
+      source: stepType[activeStep],
+    });
   };
 
   const handleEventTrackingCallbackCancel = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_CANCEL, {source: stepType[activeStep]});
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_CANCEL, {
+      source: stepType[activeStep],
+    });
   };
 
   const handleEventTrackingCallbackConfirm = () => {
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_FLOW, {source: stepType[activeStep]});
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_FLOW, { source: stepType[activeStep] });
   };
   const goToNextStep = () => {
-
     trackEventByType(eventStep[activeStep]);
     setActiveStep((previousStep) => previousStep + 1);
   };
@@ -109,7 +104,7 @@ const NewNotification = () => {
     );
   }, [organization]);
 
-  useEffect(() => () => void dispatch(resetNewNotificationState()), []);
+  useEffect(() => () => void dispatch(resetState()), []);
 
   if (activeStep === 4) {
     return <SyncFeedback />;

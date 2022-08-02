@@ -18,7 +18,7 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { DigitalDomicileType, fiscalCodeRegex, RecipientType, pIvaRegex } from '@pagopa-pn/pn-commons';
 
-import { saveRecipients } from '../../../redux/newNotification/actions';
+import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
 import { FormRecipient } from '../../../models/NewNotification';
 import { trackEventByType } from '../../../utils/mixpanel';

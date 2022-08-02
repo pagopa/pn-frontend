@@ -15,9 +15,9 @@ import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   getSentNotifications,
-  setPagination,
   // setSorting, // Riabilitare con la issue PN-1124
 } from '../redux/dashboard/actions';
+import { setPagination } from '../redux/dashboard/reducers';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 
