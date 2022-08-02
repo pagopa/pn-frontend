@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { DelegatorsColumn, DelegatesColumn } from './../../types/Deleghe';
 import { sortDelegations } from '../../utils/delegation.utility';
 import {
   getDelegates,
@@ -15,6 +16,7 @@ import {
   resetDelegationsState,
 } from './actions';
 import { Delegation } from './types';
+import { Sort } from '@pagopa-pn/pn-commons';
 
 const initialState = {
   delegatesError: false,
@@ -37,12 +39,12 @@ const initialState = {
   },
   sortDelegators: {
     orderBy: '',
-    order: 'asc' as 'asc' | 'desc',
-  },
+    order: 'asc',
+  } as Sort<DelegatorsColumn>,
   sortDelegates: {
     orderBy: '',
     order: 'asc' as 'asc' | 'desc',
-  },
+  } as Sort<DelegatesColumn>,
 };
 
 /* eslint-disable functional/immutable-data */

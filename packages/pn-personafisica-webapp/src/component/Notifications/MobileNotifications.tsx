@@ -24,14 +24,15 @@ import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotification
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { Delegator } from '../../redux/delegation/types';
+import { NotificationSortField } from '../../types/Notifications';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
   /** Card sort */
-  sort?: Sort;
+  sort?: Sort<NotificationSortField>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort) => void;
+  onChangeSorting?: (s: Sort<NotificationSortField>  ) => void;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -127,9 +128,9 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     id: i.toString(),
   }));
 
-  const sortFields: Array<CardSort> = [
-    { id: 'sentAt', label: t('table.data') },
-    { id: 'senderId', label: t('table.mittente') },
+  const sortFields: Array<CardSort<NotificationSortField>> = [
+    { id: 'sentAt' as NotificationSortField, label: t('table.data') },
+    { id: 'senderId' as NotificationSortField, label: t('table.mittente') },
   ].reduce((arr, item) => {
     /* eslint-disable functional/immutable-data */
     arr.push(
@@ -148,7 +149,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     );
     /* eslint-enable functional/immutable-data */
     return arr;
-  }, [] as Array<CardSort>);
+  }, [] as Array<CardSort<NotificationSortField>>);
 
   const handleRouteContacts = () => {
     navigate(routes.RECAPITI);

@@ -1,4 +1,5 @@
-import { act } from "react-dom/test-utils";
+import React from 'react';
+import { act, RenderResult } from '@testing-library/react';
 import { render } from "../../../test-utils";
 import HelpNotificationDetails from "../HelpNotificationDetails";
 
@@ -12,8 +13,13 @@ import HelpNotificationDetails from "../HelpNotificationDetails";
  * Carlos Lombardi, 2022.08.01 
  */
 describe('tests HelpNotificationDetails component', () => {
+    let result: RenderResult | undefined;
+
+    afterEach(() => {
+        result = undefined;
+    });
+    
     it('renders the component', async () => {
-        let result: any = null;
         await act(async () => {
             result = await render(
                 <HelpNotificationDetails
@@ -27,16 +33,15 @@ describe('tests HelpNotificationDetails component', () => {
             );
         });
 
-        expect(result.container).toHaveTextContent('TEST TITLE')
-        expect(result.container).toHaveTextContent('test subtitle')
-        expect(result.container).toHaveTextContent('test court')
-        expect(result.container).toHaveTextContent('3334455566')
-        expect(result.container).toHaveTextContent('test@test.it')
-        expect(result.container).toHaveTextContent('Vai al sito')
+        expect(result?.container).toHaveTextContent('TEST TITLE')
+        expect(result?.container).toHaveTextContent('test subtitle')
+        expect(result?.container).toHaveTextContent('test court')
+        expect(result?.container).toHaveTextContent('3334455566')
+        expect(result?.container).toHaveTextContent('test@test.it')
+        expect(result?.container).toHaveTextContent('Vai al sito')
     });
 
     it('does not render malformed phone number', async () => {
-        let result: any = null;
         await act(async () => {
             result = await render(
                 <HelpNotificationDetails
@@ -50,17 +55,16 @@ describe('tests HelpNotificationDetails component', () => {
             );
         });
 
-        expect(result.container).toHaveTextContent('TEST TITLE')
-        expect(result.container).toHaveTextContent('test subtitle')
-        expect(result.container).toHaveTextContent('test court')
-        expect(result.container).not.toHaveTextContent('this is not a phone')
-        expect(result.container).toHaveTextContent('test@test.it')
-        expect(result.container).toHaveTextContent('Vai al sito')
+        expect(result?.container).toHaveTextContent('TEST TITLE')
+        expect(result?.container).toHaveTextContent('test subtitle')
+        expect(result?.container).toHaveTextContent('test court')
+        expect(result?.container).not.toHaveTextContent('this is not a phone')
+        expect(result?.container).toHaveTextContent('test@test.it')
+        expect(result?.container).toHaveTextContent('Vai al sito')
     });
 
 
     it('does not render malformed mail or website', async () => {
-        let result: any = null;
         await act(async () => {
             result = await render(
                 <HelpNotificationDetails
@@ -74,11 +78,11 @@ describe('tests HelpNotificationDetails component', () => {
             );
         });
 
-        expect(result.container).toHaveTextContent('TEST TITLE')
-        expect(result.container).toHaveTextContent('test subtitle')
-        expect(result.container).toHaveTextContent('test court')
-        expect(result.container).toHaveTextContent('3334455566')
-        expect(result.container).not.toHaveTextContent('test@test.it')
-        expect(result.container).not.toHaveTextContent('Vai al sito')
+        expect(result?.container).toHaveTextContent('TEST TITLE')
+        expect(result?.container).toHaveTextContent('test subtitle')
+        expect(result?.container).toHaveTextContent('test court')
+        expect(result?.container).toHaveTextContent('3334455566')
+        expect(result?.container).not.toHaveTextContent('test@test.it')
+        expect(result?.container).not.toHaveTextContent('Vai al sito')
     });
 });

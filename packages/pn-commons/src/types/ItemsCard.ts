@@ -12,9 +12,9 @@ export interface CardElement {
   gridProps?: GridProps;
 }
 
-export interface CardSort<OrderByOptions> {
+export interface CardSort<OrderByOption> {
   id: string;
-  field: OrderByOptions;
+  field: OrderByOption;
   label: string;
   value: 'asc' | 'desc';
 }

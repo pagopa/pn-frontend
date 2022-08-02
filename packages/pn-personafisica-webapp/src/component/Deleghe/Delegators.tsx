@@ -9,11 +9,12 @@ import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/
 import { getDelegators, setDelegatorsSorting } from '../../redux/delegation/actions';
 import TableError from '../TableError/TableError';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
+import { DelegatorsColumn } from '../../types/Deleghe';
 
 const Delegators = () => {
   const { t } = useTranslation(['deleghe']);
   const dispatch = useAppDispatch();
-  const delegates = useAppSelector(
+  const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
   );
   const delegatorsError = useAppSelector(
@@ -23,9 +24,9 @@ const Delegators = () => {
     (state: RootState) => state.delegationsState.sortDelegators
   );
 
-  const rows: Array<Item> = delegationToItem(delegates);
+  const rows: Array<Item> = delegationToItem(delegators);
 
-  const delegatorsColumns: Array<Column> = [
+  const delegatorsColumns: Array<Column<DelegatorsColumn>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
@@ -84,7 +85,7 @@ const Delegators = () => {
     },
   ];
 
-  const handleChangeSorting = (s: Sort) => {
+  const handleChangeSorting = (s: Sort<DelegatorsColumn>) => {
     dispatch(setDelegatorsSorting(s));
   };
 
