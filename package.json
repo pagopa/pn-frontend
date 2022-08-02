@@ -23,7 +23,8 @@
     "clean:nx": "rm -rf node_modules",
     "lint": "lerna run --scope @pagopa-pn/* lint",
     "format": "lerna run --scope @pagopa-pn/* format",
-    "sonar": "node sonarqube-scanner.js -Dsonar.login={$SONAR_TOKEN}"
+    "sonar": "node sonarqube-scanner.js -Dsonar.login={$SONAR_TOKEN}",
+    "version": "lerna version --no-push --conventional-commits"
   },
   "workspaces": {
     "packages": [
