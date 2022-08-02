@@ -165,6 +165,7 @@
         "creditor-fiscal-code": "Codice fiscale ente creditore",
         "notice-code": "Codice avviso",
         "add-digital-domicile": "Aggiungi un domicilio digitale",
+        "back-to-preliminary-informations": "Torna a Informazioni preliminari",
         "digital-domicile": "Domicilio digitale",
         "add-physical-domicile": "Aggiungi un indirizzo fisico",
         "address": "Indirizzo",
@@ -186,7 +187,8 @@
         "act-name": "Nome dell'atto",
         "doc-name": "Nome del documento",
         "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
-        "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)"
+        "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
+        "back-to-recipient": "Torna a Destinatario"
       },
       "payment-methods": {
         "title": "Metodi di pagamento",
@@ -195,7 +197,8 @@
         "payment-models": "Modelli di pagamento per",
         "attach-pagopa-notice": "Allega Avviso pagoPA",
         "attach-f24-flatrate": "Allega Modello F24 forfettario",
-        "attach-f24": "Allega Modello F24"
+        "attach-f24": "Allega Modello F24",
+        "back-to-attachments": "Torna a Allegati"
       },
       "sync-feedback": {
         "title": "La notifica è stata correttamente creata",

@@ -206,7 +206,7 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
     >
       {({ values, setFieldValue, touched, handleBlur, errors, isValid }) => (
         <Form>
-          <NewNotificationCard noPaper isContinueDisabled={!isValid} previousStepLabel="Torna a Informazioni preliminari"
+          <NewNotificationCard noPaper isContinueDisabled={!isValid} previousStepLabel={t('back-to-preliminary-informations')}
               previousStepOnClick={() => handlePreviousStep(values)}>
             {values.recipients.map((recipient, index) => (
               <Paper

@@ -78,6 +78,7 @@ describe('Attachments Component', () => {
     const buttons = form?.querySelectorAll('button');
     expect(buttons).toHaveLength(3);
     expect(buttons![2]).toBeDisabled();
+    expect(result.container).toHaveTextContent(/back-to-recipient/i);
   });
 
   it('adds document and click on confirm', async () => {

@@ -12,7 +12,7 @@ type Props = {
   previousStepOnClick?: () => void;
 };
 
-const NewNotificationCard = ({ children, isContinueDisabled, title, noPaper = false, previousStepLabel, previousStepOnClick }: Props) => {
+const NewNotificationCard = ({ children, isContinueDisabled, title, noPaper = false, submitLabel, previousStepLabel, previousStepOnClick }: Props) => {
   const { t } = useTranslation(['common', 'notifiche']);
 
   return (
@@ -34,7 +34,7 @@ const NewNotificationCard = ({ children, isContinueDisabled, title, noPaper = fa
           {previousStepLabel}
         </Button>)}
         <Button variant="contained" type="submit" disabled={isContinueDisabled}>
-          {t('button.continue')}
+          {submitLabel ? submitLabel : t('button.continue')}
         </Button>
       </Box>
     </Fragment>

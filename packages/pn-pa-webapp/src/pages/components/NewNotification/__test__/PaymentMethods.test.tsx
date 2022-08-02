@@ -63,6 +63,7 @@ describe('PaymentMethods Component', () => {
     const buttons = form?.querySelectorAll('button');
     expect(buttons).toHaveLength(2);
     expect(buttons![1]).toBeDisabled();
+    expect(result.container).toHaveTextContent(/back-to-attachments/i);
   });
 
   it('adds first pagoPa document (confirm disabled)', async () => {

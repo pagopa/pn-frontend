@@ -27,7 +27,7 @@ type PaymentBoxProps = {
 };
 
 const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile }: PaymentBoxProps) => {
-  const { t } = useTranslation(['notifiche']);
+  const { t } = useTranslation(['common', 'notifiche']);
 
   return (
     <Fragment>
@@ -163,8 +163,8 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
       <NewNotificationCard
         noPaper
         isContinueDisabled={!formik.isValid}
-        submitLabel="Invia"
-        previousStepLabel="Torna a Allegati"
+        submitLabel={t('button.send')}
+        previousStepLabel={t('back-to-attachments')}
         previousStepOnClick={onPreviousStep}
       >
         {notification.recipients.map((recipient) => (

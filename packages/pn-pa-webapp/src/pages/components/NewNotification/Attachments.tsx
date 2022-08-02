@@ -258,7 +258,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}
-        previousStepLabel="Torna a Destinatario"
+        previousStepLabel={t('back-to-recipient')}
         previousStepOnClick={() => handlePreviousStep()}
       >
         {formik.values.documents.map((d, i) => (
