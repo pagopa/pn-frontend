@@ -24,7 +24,7 @@ batch:
           REACT_APP_URL_API_LOGIN: https://hub-login.ecs.svil.pn.pagopa.it
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: DUMMY
-          REACT_APP_ONETRUST_DOMAIN_ID: "f0f07d38-790f-49af-8253-0794e83e8b68"
+          REACT_APP_ONETRUST_DOMAIN_ID: "f0f07d38-790f-49af-8253-0794e83e8b68"    
     - identifier: pn_login_coll_build
       buildspec: cra_buildspec.yaml
       env:

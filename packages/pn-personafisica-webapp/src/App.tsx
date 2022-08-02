@@ -20,7 +20,7 @@ import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from "./utils/events";
-import './utils/onetrust';
+// import './utils/onetrust';
 
 // TODO decommentare appena testata la funzionalità di mixpanel
 // declare const OneTrust: any;
@@ -94,11 +94,11 @@ const App = () => {
   });
 
   useEffect(() => {
+    mixpanelInit();
     // init localization
     initLocalization((namespace, path, data) => t(path, {ns: namespace, ...data}));
     // OneTrust callback at first time
     // eslint-disable-next-line functional/immutable-data
-    mixpanelInit();
     // TODO testing
     // global.OptanonWrapper = function () {
     //   OneTrust.OnConsentChanged(function () {
