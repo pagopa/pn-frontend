@@ -9,8 +9,7 @@ import { FileUpload } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../../redux/hooks';
-import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
-import { setAttachments } from '../../../redux/newNotificationTemp/actions';
+import { uploadNotificationAttachment, setAttachments } from '../../../redux/newNotification/actions';
 import { FormAttachment } from '../../../models/NewNotification';
 import NewNotificationCard from './NewNotificationCard';
 

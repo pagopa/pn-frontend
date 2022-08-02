@@ -11,6 +11,8 @@ import {
   saveRecipients,
   uploadNotificationPaymentDocument,
   setSenderInfos,
+  setAttachments,
+  setRecipients,
 } from './actions';
 
 const initialState = {
@@ -76,6 +78,18 @@ const newNotificationSlice = createSlice({
       state.isCompleted = true;
     });
     builder.addCase(resetNewNotificationState, () => initialState);
+    builder.addCase(setRecipients, (state, action) => {
+      state.notification = {
+        ...state.notification,
+        recipientsForm: action.payload.recipients,
+      };
+    });
+    builder.addCase(setAttachments, (state, action) => {
+      state.notification = {
+        ...state.notification,
+        documentsForm: action.payload.documents,
+      };
+    });
   },
 });
 

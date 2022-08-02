@@ -48,9 +48,6 @@ const NewNotification = () => {
   const notification = useAppSelector(
     (state: RootState) => state.newNotificationState.notification
   );
-  const notificationTemp = useAppSelector(
-    (state: RootState) => state.newNotificationTempState.notification
-  );
   const isCompleted = useAppSelector((state: RootState) => state.newNotificationState.isCompleted);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const dispatch = useAppDispatch();
@@ -121,9 +118,7 @@ const NewNotification = () => {
     );
   }, [organization]);
 
-  useEffect(() => {
-    dispatch(resetNewNotificationState());
-  }, []);
+  useEffect(() => () => void dispatch(resetNewNotificationState()), []);
 
   if (activeStep === 4) {
     return <SyncFeedback />;
@@ -167,10 +162,10 @@ const NewNotification = () => {
               <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
             )}
             {activeStep === 1 && (
-              <Recipient onConfirm={goToNextStep} onPreviousStep={goToPreviousStep} recipientsData={notificationTemp.recipients} />
+              <Recipient onConfirm={goToNextStep} onPreviousStep={goToPreviousStep} recipientsData={notification.recipientsForm} />
             )}
             {activeStep === 2 && (
-              <Attachments onConfirm={goToNextStep} onPreviousStep={goToPreviousStep} attachmentsData={notificationTemp.documents} />
+              <Attachments onConfirm={goToNextStep} onPreviousStep={goToPreviousStep} attachmentsData={notification.documentsForm} />
             )}
             {activeStep === 3 && (
               <PaymentMethods
