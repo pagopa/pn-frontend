@@ -14,7 +14,7 @@ jest.mock('react-i18next', () => ({
 
 beforeAll(() => {
   // eslint-disable-next-line functional/immutable-data
-  Object.defineProperty(window, 'location', { value: { assign: jest.fn() } });
+  Object.defineProperty(window, 'open', { value: jest.fn() });
 });
 afterAll(() => {
   // eslint-disable-next-line functional/immutable-data
@@ -30,8 +30,6 @@ test('go to the spid url', () => {
     const spidButton = spidSpan!.parentNode;
     fireEvent.click(spidButton!);
     const id = element.entityId;
-    expect(global.window.location.assign).toBeCalledWith(
-      ENV.URL_API.LOGIN + '/login?entityID=' + id + '&authLevel=SpidL2'
-    );
+    expect(global.window.open).toBeCalledWith(ENV.URL_API.LOGIN + '/login?entityID=' + id + '&authLevel=SpidL2');
   });
 });
