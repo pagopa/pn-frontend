@@ -247,7 +247,6 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
             id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
           })),
         })
-       // setAttachments({ documents: formik.values.documents })
       );
       onPreviousStep();
     }
