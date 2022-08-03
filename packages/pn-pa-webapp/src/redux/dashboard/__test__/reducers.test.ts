@@ -81,14 +81,14 @@ describe('Dashboard redux state tests', () => {
   it('Should be able to change sort', () => {
     const action = store.dispatch(
       setSorting({
-        orderBy: 'status',
+        orderBy: 'recipients',
         order: 'desc',
       })
     );
     const payload = action.payload as { orderBy: string; order: 'desc' | 'asc' };
     expect(action.type).toBe('setSorting');
     expect(payload).toEqual({
-      orderBy: 'status',
+      orderBy: 'recipients',
       order: 'desc',
     });
   });

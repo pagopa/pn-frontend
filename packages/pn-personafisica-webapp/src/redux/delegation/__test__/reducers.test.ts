@@ -161,18 +161,18 @@ describe('delegation redux state tests', () => {
   });
 
   it('sets the delegates sorting by test in ascendant order', () => {
-    const action = store.dispatch(setDelegatesSorting({ orderBy: 'test', order: 'asc' }));
+    const action = store.dispatch(setDelegatesSorting({ orderBy: 'startDate', order: 'asc' }));
 
     expect(action.type).toBe('setDelegatesSorting');
     const sortDelegates = store.getState().delegationsState.sortDelegates;
-    expect(sortDelegates).toEqual({ orderBy: 'test', order: 'asc' });
+    expect(sortDelegates).toEqual({ orderBy: 'startDate', order: 'asc' });
   });
 
   it('sets the delegates sorting by test in descendant order', () => {
-    const action = store.dispatch(setDelegatorsSorting({ orderBy: 'test', order: 'desc' }));
+    const action = store.dispatch(setDelegatorsSorting({ orderBy: 'endDate', order: 'desc' }));
 
     expect(action.type).toBe('setDelegatorsSorting');
     const sortDelegators = store.getState().delegationsState.sortDelegators;
-    expect(sortDelegators).toEqual({ orderBy: 'test', order: 'desc' });
+    expect(sortDelegators).toEqual({ orderBy: 'endDate', order: 'desc' });
   });
 });
