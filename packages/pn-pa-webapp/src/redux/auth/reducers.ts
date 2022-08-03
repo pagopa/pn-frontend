@@ -29,6 +29,7 @@ const userSlice = createSlice({
             ],
             fiscal_code: '',
           },
+          desired_exp: 0
         }) as User,
     organizationParty: {
       id: '',
