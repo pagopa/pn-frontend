@@ -18,7 +18,7 @@ const inactivityTimer = 5 * 60 * 1000;
 /* eslint-disable functional/immutable-data */
 const RequireAuth = () => {
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
-  const expDate = useAppSelector((state: RootState) => state.userState.user.desired_exp);
+  const expDate = useAppSelector((state: RootState) => state.userState.user.exp);
   const [accessDenied, setAccessDenied] = useState(token === '' || !token);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
