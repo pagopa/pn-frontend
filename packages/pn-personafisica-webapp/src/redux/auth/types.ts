@@ -12,4 +12,5 @@ export interface User {
   exp: number;
   iss: string;
   jti: string;
+  desired_exp: number;
 }
