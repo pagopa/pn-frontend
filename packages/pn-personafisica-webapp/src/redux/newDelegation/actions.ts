@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { formatToSlicedISOString } from "@pagopa-pn/pn-commons/src/services/date.service";
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
@@ -48,5 +48,3 @@ export const getAllEntities = createAsyncThunk(
     }
   }
 );
-
-export const resetNewDelegation = createAction<void>('resetNewDelegation');

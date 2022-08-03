@@ -1,4 +1,4 @@
-import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { AcceptDelegationResponse, Delegation } from './types';
 
@@ -59,20 +59,3 @@ export const acceptDelegation = createAsyncThunk<
     return rejectWithValue(e);
   }
 });
-
-export const openRevocationModal =
-  createAction<{ id: string; type: string }>('openRevocationModal');
-
-export const closeRevocationModal = createAction<void>('closeRevocationModal');
-
-export const openAcceptModal = createAction<{ id: string; name: string }>('openAcceptModal');
-
-export const closeAcceptModal = createAction<void>('closeAcceptModal');
-
-export const setDelegatorsSorting =
-  createAction<{ orderBy: string; order: 'asc' | 'desc' }>('setDelegatorsSorting');
-
-export const setDelegatesSorting =
-  createAction<{ orderBy: string; order: 'asc' | 'desc' }>('setDelegatesSorting');
-
-export const resetDelegationsState = createAction<void>('resetDelegationsState');

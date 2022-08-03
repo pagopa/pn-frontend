@@ -4,7 +4,8 @@ import { Box } from '@mui/material';
 import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, } from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
-import { getReceivedNotifications, setMandateId, setPagination, setSorting, } from '../redux/dashboard/actions';
+import { getReceivedNotifications } from '../redux/dashboard/actions';
+import { setMandateId, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
