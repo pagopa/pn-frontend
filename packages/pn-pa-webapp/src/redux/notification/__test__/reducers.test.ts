@@ -1,4 +1,3 @@
-import { resetState } from './../actions';
 import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
@@ -9,6 +8,7 @@ import {
   getSentNotificationDocument,
   getSentNotificationLegalfact,
 } from '../actions';
+import { resetState } from '../reducers';
 import { notificationToFe } from './test-utils';
 
 const initialState = {
@@ -76,7 +76,7 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to reset state', () => {
     const action = store.dispatch(resetState());
     const payload = action.payload;
-    expect(action.type).toBe('resetState');
+    expect(action.type).toBe('notificationSlice/resetState');
     expect(payload).toEqual(undefined);
     const state = store.getState().notificationState;
     expect(state).toEqual(initialState);

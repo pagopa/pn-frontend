@@ -167,7 +167,7 @@ describe('Filter Notifications Table Component', () => {
         status: localizedNotificationStatus[2].value,
         iunMatch: '',
       },
-      type: 'setNotificationFilters',
+      type: 'dashboardSlice/setNotificationFilters',
     });
   });
 
@@ -199,7 +199,7 @@ describe('Filter Notifications Table Component', () => {
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
         recipientId: '',
       },
-      type: 'setNotificationFilters',
+      type: 'dashboardSlice/setNotificationFilters',
     });
   });
 
@@ -278,7 +278,7 @@ describe('Filter Notifications Table Component', () => {
           status: '',
           iunMatch: '',
         },
-        type: 'setNotificationFilters',
+        type: 'dashboardSlice/setNotificationFilters',
       });
     });
   });

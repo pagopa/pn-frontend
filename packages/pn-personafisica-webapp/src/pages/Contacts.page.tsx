@@ -5,7 +5,8 @@ import { TitleBox } from '@pagopa-pn/pn-commons';
 
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getDigitalAddresses, resetContactsState } from '../redux/contact/actions';
+import { getDigitalAddresses } from '../redux/contact/actions';
+import { resetState } from '../redux/contact/reducers';
 import { RootState } from '../redux/store';
 import { DigitalContactsCodeVerificationProvider } from '../component/Contacts/DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../component/Contacts/InsertLegalContact';
@@ -33,7 +34,7 @@ const Contacts = () => {
     .then(() => {
       setIsDigitalAddressLoaded(() => true);
     });
-    return () => void dispatch(resetContactsState());
+    return () => void dispatch(resetState());
   }, []);
 
   const handleRedirectToProfilePage = () => {

@@ -10,12 +10,8 @@ import {
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/reducers.test';
 import { store } from '../../store';
-import {
-  getSentNotifications,
-  setNotificationFilters,
-  setPagination,
-  setSorting,
-} from '../actions';
+import { getSentNotifications } from '../actions';
+import { setNotificationFilters, setPagination, setSorting } from '../reducers';
 import { notificationsToFe } from './test-utils';
 
 describe('Dashboard redux state tests', () => {
@@ -71,7 +67,7 @@ describe('Dashboard redux state tests', () => {
       })
     );
     const payload = action.payload as { page: number; size: number };
-    expect(action.type).toBe('setPagination');
+    expect(action.type).toBe('dashboardSlice/setPagination');
     expect(payload).toEqual({
       page: 2,
       size: 50,
@@ -86,7 +82,7 @@ describe('Dashboard redux state tests', () => {
       })
     );
     const payload = action.payload as { orderBy: string; order: 'desc' | 'asc' };
-    expect(action.type).toBe('setSorting');
+    expect(action.type).toBe('dashboardSlice/setSorting');
     expect(payload).toEqual({
       orderBy: 'status',
       order: 'desc',
@@ -105,7 +101,7 @@ describe('Dashboard redux state tests', () => {
       })
     );
     const payload = action.payload;
-    expect(action.type).toBe('setNotificationFilters');
+    expect(action.type).toBe('dashboardSlice/setNotificationFilters');
     expect(payload).toEqual({
       startDate: '2022-02-22T14:20:20.566Z',
       endDate: '2022-02-27T14:20:20.566Z',
