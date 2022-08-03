@@ -37,4 +37,5 @@ export const userResponse: User = {
   exp: 1646397856,
   iss: 'spid-hub-test.dev.pn.pagopa.it',
   jti: 'mocked-jti',
+  desired_exp: 0,
 };
