@@ -4,12 +4,10 @@ import {
   getNextDay,
   GetNotificationsParams,
   Notification,
-  Sort,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 
-import { NotificationColumn } from '../../types/Notifications';
 import { getSentNotifications, setPagination, setSorting, setNotificationFilters } from './actions';
 
 /* eslint-disable functional/immutable-data */
@@ -33,8 +31,8 @@ const dashboardSlice = createSlice({
     },
     sort: {
       orderBy: '',
-      order: 'asc',
-    } as Sort<NotificationColumn>,
+      order: 'asc' as 'asc' | 'desc',
+    },
   },
   reducers: {},
   extraReducers: (builder) => {

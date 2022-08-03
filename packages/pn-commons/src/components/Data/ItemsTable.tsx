@@ -14,24 +14,24 @@ import { visuallyHidden } from '@mui/utils';
 import { Column, Item, Sort, Notification } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
-type Props<ColumnId> = {
+type Props = {
   /** Table columns */
-  columns: Array<Column<ColumnId>>;
+  columns: Array<Column>;
   /** Table rows */
   rows: Array<Item>;
   /** Table sort */
-  sort?: Sort<ColumnId>;
+  sort?: Sort;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<ColumnId>) => void;
+  onChangeSorting?: (s: Sort) => void;
 };
 
-function ItemsTable<ColumnId extends string>({
+function ItemsTable({
   columns,
   rows,
   sort,
   onChangeSorting,
-}: Props<ColumnId>) {
-  const createSortHandler = (property: ColumnId) => () => {
+}: Props) {
+  const createSortHandler = (property: string) => () => {
     if (sort && onChangeSorting) {
       const isAsc = sort.orderBy === property && sort.order === 'asc';
       onChangeSorting({ order: isAsc ? 'desc' : 'asc', orderBy: property });

@@ -18,15 +18,14 @@ import {
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import * as routes from '../../../navigation/routes.const';
-import { NotificationColumn } from '../../../types/Notifications';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort<NotificationColumn>;
+  sort?: Sort;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort<NotificationColumn>) => void;
+  onChangeSorting?: (s: Sort) => void;
   /** The function to be invoked if the user clicks on new notification link */
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
@@ -48,7 +47,7 @@ const DesktopNotifications = ({
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
   };
 
-  const columns: Array<Column<NotificationColumn>> = [
+  const columns: Array<Column> = [
     {
       id: 'sentAt',
       label: t('table.date'),

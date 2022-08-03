@@ -9,12 +9,12 @@ export interface CardElement {
   getLabel(value: string | number | Array<string>, row?: Item): ReactNode;
   notWrappedInTypography?: boolean;
   hideIfEmpty?: boolean;
-  gridProps?: GridProps;
+  gridProps?: GridProps
 }
 
-export interface CardSort<OrderByOption> {
+export interface CardSort {
   id: string;
-  field: OrderByOption;
+  field: string;
   label: string;
   value: 'asc' | 'desc';
 }
