@@ -1,8 +1,18 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AppMessage, initLocalization, Layout, LoadingOverlay, SideMenu, useUnload } from '@pagopa-pn/pn-commons';
+import {
+  AppMessage,
+  appStateActions,
+  initLocalization,
+  Layout,
+  LoadingOverlay,
+  SideMenu,
+  useMultiEvent,
+  useUnload,
+} from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
+import { Box } from '@mui/material';
 
 import Router from './navigation/routes';
 import { getOrganizationParty, logout } from './redux/auth/actions';
@@ -10,7 +20,7 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 
-import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } from './utils/constants';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
@@ -30,7 +40,9 @@ const App = () => {
   });
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const loggedUserOrganizationParty = useAppSelector((state: RootState) => state.userState.organizationParty);
+  const loggedUserOrganizationParty = useAppSelector(
+    (state: RootState) => state.userState.organizationParty
+  );
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -82,7 +94,8 @@ const App = () => {
       {
         id: '0',
         name: loggedUserOrganizationParty.name,
-        productRole: role?.role,
+        // productRole: role?.role,
+        productRole: t(`roles.${role?.role}`),
         logoUrl: undefined,
         // non posso settare un'icona di MUI perché @pagopa/mui-italia accetta solo string o undefined come logoUrl
         // ma fortunatamente, se si passa undefined, fa vedere proprio il logo che ci serve
@@ -118,9 +131,7 @@ const App = () => {
 
   useEffect(() => {
     if (idOrganization) {
-      void dispatch(
-        getOrganizationParty(idOrganization)
-      );
+      void dispatch(getOrganizationParty(idOrganization));
     }
   }, [idOrganization]);
 
@@ -157,37 +168,50 @@ const App = () => {
     await i18n.changeLanguage(langCode);
   };
 
+  const [clickVersion] = useMultiEvent({
+    callback: () =>
+      dispatch(
+        appStateActions.addSuccess({
+          title: 'Current version',
+          message: `v${VERSION}`,
+        })
+      ),
+  });
+
   return (
-    <Layout
-      onExitAction={handleLogout}
-      eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
-      eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
-      eventTrackingCallbackProductSwitch={(target: string) =>
-        handleEventTrackingCallbackProductSwitch(target)
-      }
-      sideMenu={
-        role &&
-        menuItems && (
-          <SideMenu
-            menuItems={menuItems.menuItems}
-            selfCareItems={menuItems.selfCareItems}
-            eventTrackingCallback={(target: string) =>
-              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
-            }
-          />
-        )
-      }
-      productsList={productsList}
-      productId={'0'}
-      partyList={partyList}
-      loggedUser={jwtUser}
-      onLanguageChanged={changeLanguageHandler}
-      onAssistanceClick={handleAssistanceClick}
-    >
-      <AppMessage sessionRedirect={handleLogout} />
-      <LoadingOverlay />
-      <Router />
-    </Layout>
+    <>
+      <Layout
+        onExitAction={handleLogout}
+        eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
+        eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
+        eventTrackingCallbackProductSwitch={(target: string) =>
+          handleEventTrackingCallbackProductSwitch(target)
+        }
+        sideMenu={
+          role &&
+          menuItems && (
+            <SideMenu
+              menuItems={menuItems.menuItems}
+              selfCareItems={menuItems.selfCareItems}
+              eventTrackingCallback={(target: string) =>
+                trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
+              }
+            />
+          )
+        }
+        productsList={productsList}
+        productId={'0'}
+        partyList={partyList}
+        loggedUser={jwtUser}
+        onLanguageChanged={changeLanguageHandler}
+        onAssistanceClick={handleAssistanceClick}
+      >
+        <AppMessage sessionRedirect={handleLogout} />
+        <LoadingOverlay />
+        <Router />
+      </Layout>
+      <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
+    </>
   );
 };
 export default App;

@@ -30,6 +30,7 @@ describe('Auth redux state tests', () => {
               ],
               fiscal_code: '',
             },
+            desired_exp: 0,
           },
       organizationParty: {
         id: '',
@@ -79,13 +80,12 @@ describe('Auth redux state tests', () => {
     const payload = action.payload as Party;
     expect(action.type).toBe('getOrganizationParty/fulfilled');
     expect(payload).toEqual(partyMock);
-    // this kind of restore are not usually needed because most tests integrate the 
+    // this kind of restore are not usually needed because most tests integrate the
     // mockAuthorization function, which clears all mocks/spies after each test file.
-    // As this particular test file involves authorization, then it is not convenient to 
+    // As this particular test file involves authorization, then it is not convenient to
     // call mockAuthorization, hence the mocks/spies must be cleaned in each test.
     // ------------
     // Carlos Lombardi, 2022.07.28
     apiSpy.mockRestore();
   });
-
 });

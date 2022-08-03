@@ -9,7 +9,7 @@ const Component = () => {
     )
 }
 
-describe('test IsMobile hook', () => {
+describe('test useIsMobile hook', () => {
     test('hook should return false', () => {
         Object.assign(window, { innerWidth: 2000 });
         const result = render(<Component />)

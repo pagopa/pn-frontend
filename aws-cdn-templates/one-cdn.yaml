@@ -13,10 +13,9 @@ Parameters:
   HostedZoneId:
     Description: "Hosted Zone Id in which you want to add record"
     Type: String
-  
-  # LambdaEdgeRewriteVersion:
-  #   Description: "Reference to URL rewriting lambda"
-  #   Type: String
+  WebApiUrl:
+    Description: "The Url of web API: useful for content-security-policy"
+    Type: String
   
 Resources:
   # - CloudFront User used for WebApp S3 Bucket access
@@ -90,9 +89,7 @@ Resources:
           TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
           ViewerProtocolPolicy: redirect-to-https
           CachePolicyId: !Ref WebsiteCDNCachingPolicy
-          # LambdaFunctionAssociations:
-          #   - EventType: origin-request
-          #     LambdaFunctionARN: !Ref LambdaEdgeRewriteVersion
+          ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
         DefaultRootObject: index.html
         CustomErrorResponses:
           - ErrorCode: 404
@@ -114,6 +111,43 @@ Resources:
           AcmCertificateArn: !Ref WebCertificateArn
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
+
+  DefaultHeaderPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties: 
+      ResponseHeadersPolicyConfig: 
+        Name: !Sub '${Name}-headerPolicy'
+        SecurityHeadersConfig: 
+          # add_header Content-Security-Policy
+          ContentSecurityPolicy: 
+            ContentSecurityPolicy: !Sub "default-src 'self'; object-src 'none'; \
+              connect-src 'self' https://api-eu.mixpanel.com/track/  \
+                   https://selfcare.pagopa.it/assets/ \
+                   ${WebApiUrl}; 
+              style-src 'self' 'unsafe-inline'; \
+              worker-src 'none'; \
+              font-src 'self'; \
+              frame-ancestors 'self' ; \
+              img-src 'self' https://assets.cdn.io.italia.it/ data:"
+            Override: true
+          # add_header X-Content-Type-Options "nosniff";
+          ContentTypeOptions: 
+            #ContentTypeOptions: "nosniff"
+            Override: true
+          # add_header X-Frame-Options "SAMEORIGIN";
+          FrameOptions: 
+            FrameOption: "SAMEORIGIN"
+            Override: true
+          # add_header Referrer-Policy "no-referrer";
+          ReferrerPolicy: 
+            ReferrerPolicy: "no-referrer"
+            Override: true
+          # add_header Strict-Transport-Security "max-age=31536000";
+          StrictTransportSecurity: 
+            AccessControlMaxAgeSec: 31536000
+            IncludeSubdomains: false
+            Preload: false
+            Override: true
 
   Route53RecordSetGroup:
     Type: AWS::Route53::RecordSet
@@ -138,4 +172,6 @@ Outputs:
   WebDomainUrl:
     Value:  !Sub 'https://${WebDomain}'
     Description: Site access URL
+
+
 
