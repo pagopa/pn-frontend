@@ -37,7 +37,11 @@ export function getLocalizedOrDefaultLabel(
     ? namespaceName.map((nm) => localizationNamespaces[nm as LocalizationNamespacesNames])
     : localizationNamespaces[namespaceName as LocalizationNamespacesNames];
   if (translateFunction) {
-    return translateFunction(namespace, path, data) || defaultLabel;
+    const localizedLabel = translateFunction(namespace, path, data);
+    if (!localizedLabel || localizedLabel === path) {
+      return defaultLabel;
+    }
+    return localizedLabel;
   }
   return defaultLabel;
 }
