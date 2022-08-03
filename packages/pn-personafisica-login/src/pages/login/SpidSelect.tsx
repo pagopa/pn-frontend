@@ -28,7 +28,7 @@ const Login = ({ onBack }: { onBack: () => void }) => {
           SPID_IDP_ID: IDP.entityId,
         }
     );
-    window.location.assign(`${ENV.URL_API.LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`);
+    window.open(`${ENV.URL_API.LOGIN}/login?entityID=${IDP.entityId}&authLevel=SpidL2`);
   };
 
   return (
