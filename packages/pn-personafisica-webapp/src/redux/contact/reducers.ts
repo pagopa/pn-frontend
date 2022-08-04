@@ -45,6 +45,7 @@ const contactsSlice = createSlice({
           (l) => l.senderId === (action.payload as DigitalAddress).senderId
         );
         if (addressIndex > -1) {
+          // update if found
           state.digitalAddresses.legal[addressIndex] = action.payload;
         } else {
           state.digitalAddresses.legal.push(action.payload);

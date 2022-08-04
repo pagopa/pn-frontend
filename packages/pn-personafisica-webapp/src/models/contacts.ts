@@ -34,3 +34,9 @@ export interface SaveDigitalAddressParams {
   value: string;
   code?: string;
 }
+
+export interface DeleteDigitalAddressParams {
+  recipientId: string;
+  senderId: string;
+  channelType: LegalChannelType | CourtesyChannelType;
+}

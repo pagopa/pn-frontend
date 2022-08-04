@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
-import { FormRecipient, NewNotificationFe, PaymentModel } from '../../models/NewNotification';
+import { FormRecipient, NewNotificationFe, PaymentModel, PreliminaryInformationsPayload } from '../../models/NewNotification';
 import { formatNotificationRecipients } from '../../utils/notification.utility';
 import {
   uploadNotificationAttachment,
@@ -36,14 +36,7 @@ const newNotificationSlice = createSlice({
       state.notification.senderDenomination = action.payload.senderDenomination;
       state.notification.senderTaxId = action.payload.senderTaxId;
     },
-    setPreliminaryInformations: (state, action: PayloadAction<{
-      paProtocolNumber: string;
-      subject: string;
-      abstract?: string;
-      physicalCommunicationType: PhysicalCommunicationType;
-      group?: string;
-      paymentMode: PaymentModel;
-    }>) => {
+    setPreliminaryInformations: (state, action: PayloadAction<PreliminaryInformationsPayload>) => {
       // TODO: capire la logica di set della fee policy sia corretta
       state.notification = {
         ...state.notification,

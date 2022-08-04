@@ -6,6 +6,7 @@ import {
   Notification,
   formatToTimezoneString,
   getNextDay,
+  Sort
 } from '@pagopa-pn/pn-commons';
 
 import { getReceivedNotifications } from './actions';
@@ -30,8 +31,8 @@ const dashboardSlice = createSlice({
     },
     sort: {
       orderBy: '',
-      order: 'asc' as 'asc' | 'desc',
-    },
+      order: 'asc',
+    } as Sort,
   },
   reducers: {
     setPagination: (state, action: PayloadAction<{page: number; size: number}>) => {
@@ -43,7 +44,7 @@ const dashboardSlice = createSlice({
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
     },
-    setSorting: (state, action: PayloadAction<{orderBy: string; order: 'asc' | 'desc'}>) => {
+    setSorting: (state, action: PayloadAction<Sort>) => {
       state.sort = action.payload;
     },
     setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams>) => {

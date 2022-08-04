@@ -4,8 +4,17 @@ import {
   NotificationFeePolicy,
   PhysicalCommunicationType,
   RecipientType,
-  NotificationDetailDocument
+  NotificationDetailDocument,
 } from '@pagopa-pn/pn-commons';
+
+export interface PreliminaryInformationsPayload {
+  paProtocolNumber: string;
+  subject: string;
+  abstract?: string;
+  physicalCommunicationType: PhysicalCommunicationType;
+  group?: string;
+  paymentMode: PaymentModel;
+}
 
 export enum PaymentModel {
   PAGO_PA_NOTICE = 'PAGO_PA_NOTICE',
@@ -83,5 +92,3 @@ export interface NewNotificationResponse {
   paProtocolNumber: string;
   idempotenceToken: string;
 }
-
-
