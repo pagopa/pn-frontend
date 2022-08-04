@@ -12,7 +12,7 @@ import {
   RecipientType,
 } from '@pagopa-pn/pn-commons';
 
-import { NotificationDetailForRecipient } from '../../types/NotificationDetail';
+import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 
 import {
   getNotificationPaymentInfo,

@@ -7,15 +7,6 @@ import {
   NotificationDetailDocument,
 } from '@pagopa-pn/pn-commons';
 
-export interface PreliminaryInformationsPayload {
-  paProtocolNumber: string;
-  subject: string;
-  abstract?: string;
-  physicalCommunicationType: PhysicalCommunicationType;
-  group?: string;
-  paymentMode: PaymentModel;
-}
-
 export enum PaymentModel {
   PAGO_PA_NOTICE = 'PAGO_PA_NOTICE',
   PAGO_PA_NOTICE_F24_FLATRATE = 'PAGO_PA_NOTICE_F24_FLATRATE',
@@ -62,29 +53,6 @@ export interface FormRecipient {
   foreignState: string;
   showDigitalDomicile?: boolean;
   showPhysicalAddress?: boolean;
-}
-
-export interface UploadAttachmentParams {
-  key: string;
-  contentType: string;
-  file: Uint8Array | undefined;
-  sha256: string;
-}
-
-export interface UploadPayementParams {
-  [key: string]: {
-    pagoPaForm: UploadAttachmentParams;
-    f24flatRate: UploadAttachmentParams;
-    f24standard: UploadAttachmentParams;
-  };
-}
-
-export interface UpaloadPaymentResponse {
-  [key: string]: {
-    pagoPaForm: NotificationDetailDocument;
-    f24flatRate?: NotificationDetailDocument;
-    f24standard?: NotificationDetailDocument;
-  };
 }
 
 export interface NewNotificationResponse {

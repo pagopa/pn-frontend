@@ -6,10 +6,9 @@ import {
   CourtesyChannelType,
   DigitalAddress,
   DigitalAddresses,
-  SaveDigitalAddressParams,
   LegalChannelType,
-  DeleteDigitalAddressParams,
 } from '../../models/contacts';
+import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   'getDigitalAddresses',
@@ -43,17 +42,14 @@ export const createOrUpdateLegalAddress = createAsyncThunk<
   }
 });
 
-export const deleteLegalAddress = createAsyncThunk<
-  string,
-  DeleteDigitalAddressParams
->(
+export const deleteLegalAddress = createAsyncThunk<string, DeleteDigitalAddressParams>(
   'deleteLegalAddress',
-  async (
-    params: DeleteDigitalAddressParams,
-    { rejectWithValue }
-  ) => {
+  async (params: DeleteDigitalAddressParams, { rejectWithValue }) => {
     try {
-      return await ContactsApi.deleteLegalAddress(params.senderId, params.channelType as LegalChannelType);
+      return await ContactsApi.deleteLegalAddress(
+        params.senderId,
+        params.channelType as LegalChannelType
+      );
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -84,17 +80,14 @@ export const createOrUpdateCourtesyAddress = createAsyncThunk<
   }
 );
 
-export const deleteCourtesyAddress = createAsyncThunk<
-  string,
-  DeleteDigitalAddressParams
->(
+export const deleteCourtesyAddress = createAsyncThunk<string, DeleteDigitalAddressParams>(
   'deleteCourtesyAddress',
-  async (
-    params: DeleteDigitalAddressParams,
-    { rejectWithValue }
-  ) => {
+  async (params: DeleteDigitalAddressParams, { rejectWithValue }) => {
     try {
-      return await ContactsApi.deleteCourtesyAddress(params.senderId, params.channelType as CourtesyChannelType);
+      return await ContactsApi.deleteCourtesyAddress(
+        params.senderId,
+        params.channelType as CourtesyChannelType
+      );
     } catch (e) {
       return rejectWithValue(e);
     }
