@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import { Box } from "@mui/material";
-import { useMultiEvent, useUnload } from "@pagopa-pn/pn-commons";
+import { useMultiEvent } from "@pagopa-pn/pn-commons";
 import Router from './navigation/routes';
-import { mixpanelInit, trackEventByType } from "./utils/mixpanel";
-import { TrackEventType } from "./utils/events";
+import { mixpanelInit } from "./utils/mixpanel";
 import './utils/onetrust';
 import { VERSION } from "./utils/constants";
 
@@ -36,13 +35,6 @@ const App = () => {
       mixpanelInit();
     }
   }, []);
-
-  useUnload((e: Event) => {
-    e.preventDefault();
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    e.defaultPrevented;
-    trackEventByType(TrackEventType.APP_UNLOAD);
-  });
 
   const [clickVersion] = useMultiEvent({
     callback: () => console.log(`v${VERSION}`),

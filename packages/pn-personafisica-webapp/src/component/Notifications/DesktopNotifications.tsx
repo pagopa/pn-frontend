@@ -19,14 +19,15 @@ import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { Delegator } from '../../redux/delegation/types';
 
+import { NotificationColumn } from '../../types/Notifications';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort;
+  sort?: Sort<NotificationColumn>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort) => void;
+  onChangeSorting?: (s: Sort<NotificationColumn>) => void;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -45,7 +46,7 @@ const DesktopNotifications = ({
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
   };
 
-  const columns: Array<Column> = [
+  const columns: Array<Column<NotificationColumn>> = [
     {
       id: 'notificationStatus',
       label: '',

@@ -23,7 +23,6 @@ const userSlice = createSlice({
           exp: 0,
           iss: '',
           jti: '',
-          desired_exp: 0,
         }) as User,
     tos: false,
     fetchedTos: false,
