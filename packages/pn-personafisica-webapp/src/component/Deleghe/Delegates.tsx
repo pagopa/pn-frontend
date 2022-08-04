@@ -14,6 +14,7 @@ import TableError from '../TableError/TableError';
 import { getDelegates, setDelegatesSorting } from '../../redux/delegation/actions';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
+import { DelegatesColumn } from '../../types/Deleghe';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegates = () => {
@@ -31,7 +32,7 @@ const Delegates = () => {
 
   const rows: Array<Item> = delegationToItem(delegates);
 
-  const delegatesColumns: Array<Column> = [
+  const delegatesColumns: Array<Column<DelegatesColumn>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
@@ -103,7 +104,7 @@ const Delegates = () => {
     setShowCodeModal({ ...showCodeModal, open: false });
   };
 
-  const handleChangeSorting = (s: Sort) => {
+  const handleChangeSorting = (s: Sort<DelegatesColumn>) => {
     dispatch(setDelegatesSorting(s));
   };
 

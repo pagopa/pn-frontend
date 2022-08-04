@@ -23,7 +23,6 @@ describe('Auth redux state tests', () => {
             exp: 0,
             iss: '',
             jti: '',
-            desired_exp: 0,
           },
       tos: false,
       fetchedTos: false,

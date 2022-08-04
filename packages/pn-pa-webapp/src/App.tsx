@@ -32,10 +32,7 @@ const global = window as any;
 const targCookiesGroup = 'C0004';
 
 const App = () => {
-  useUnload((e: Event) => {
-    e.preventDefault();
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    e.defaultPrevented;
+  useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
   });
 
