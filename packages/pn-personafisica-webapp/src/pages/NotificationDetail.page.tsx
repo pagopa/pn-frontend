@@ -23,9 +23,9 @@ import { RootState } from '../redux/store';
 import {
   getReceivedNotification,
   getReceivedNotificationDocument,
-  getReceivedNotificationLegalfact,
-  resetState,
+  getReceivedNotificationLegalfact
 } from '../redux/notification/actions';
+import { resetState } from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { trackEventByType } from '../utils/mixpanel';
@@ -244,10 +244,6 @@ const NotificationDetail = () => {
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}
               title={t('detail.timeline-title', { ns: 'notifiche' })}
-              legalFactLabels={{
-                attestation: t('detail.legalfact', { ns: 'notifiche' }),
-                receipt: t('detail.receipt', { ns: 'notifiche' }),
-              }}
               clickHandler={legalFactDownloadHandler}
               historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
               showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}

@@ -41,9 +41,9 @@ import {
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
-  resetState,
 } from '../redux/notification/actions';
-import { setCancelledIun } from '../redux/newNotification/actions';
+import { setCancelledIun } from '../redux/newNotification/reducers';
+import { resetState } from '../redux/notification/reducers';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -382,10 +382,6 @@ const NotificationDetail = () => {
                 statusHistory={notification.notificationStatusHistory}
                 title={t('detail.timeline-title', { ns: 'notifiche' })}
                 clickHandler={legalFactDownloadHandler}
-                legalFactLabels={{
-                  attestation: t('detail.legalfact', { ns: 'notifiche' }),
-                  receipt: t('detail.receipt', { ns: 'notifiche' }),
-                }}
                 historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                 showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                 showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}

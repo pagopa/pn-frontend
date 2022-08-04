@@ -14,7 +14,7 @@ import { Variant } from '@mui/material/styles/createTypography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { useAppDispatch } from '../../redux/hooks';
-import { openAcceptModal, openRevocationModal } from '../../redux/delegation/actions';
+import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
 

@@ -1,10 +1,9 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import { PhysicalCommunicationType, NotificationDetailDocument } from '@pagopa-pn/pn-commons';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { NotificationDetailDocument } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
-  PaymentModel,
   NewNotificationFe,
   NewNotificationResponse,
   FormRecipient,
@@ -14,21 +13,6 @@ import {
   UpaloadPaymentResponse,
   PaymentObject
 } from '../../models/NewNotification';
-
-export const setCancelledIun = createAction<string>('setCancelledIun');
-
-export const setSenderInfos = createAction<{senderDenomination: string; senderTaxId: string}>('setSenderInfos');
-
-export const setPreliminaryInformations = createAction<{
-  paProtocolNumber: string;
-  subject: string;
-  abstract?: string;
-  physicalCommunicationType: PhysicalCommunicationType;
-  group?: string;
-  paymentMode: PaymentModel;
-}>('setPreliminaryInformations');
-
-export const saveRecipients = createAction<{recipients: Array<FormRecipient>}>('saveRecipients');
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {
@@ -139,7 +123,6 @@ export const createNewNotification = createAsyncThunk<NewNotificationResponse, N
   }
 );
 
-export const resetNewNotificationState = createAction<void>('resetNewNotificationState');
 export const setRecipients = createAction<{recipients: Array<FormRecipient>}>('setRecipients');
 export const setAttachments = createAction<{documents: Array<FormAttachment>}>('setAttachments');
 export const setPaymentDocuments = createAction<{paymentMethodsDocuments: {[key: string]: PaymentObject}}>('setPaymentDocuments');

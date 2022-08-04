@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import { useUnload } from "@pagopa-pn/pn-commons";
+import { Box } from "@mui/material";
+import { useMultiEvent } from "@pagopa-pn/pn-commons";
 import Router from './navigation/routes';
-import { mixpanelInit, trackEventByType } from "./utils/mixpanel";
-import { TrackEventType } from "./utils/events";
+import { mixpanelInit } from "./utils/mixpanel";
 import './utils/onetrust';
+import { VERSION } from "./utils/constants";
 
 declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
@@ -35,14 +36,16 @@ const App = () => {
     }
   }, []);
 
-  useUnload((e: Event) => {
-    e.preventDefault();
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    e.defaultPrevented;
-    trackEventByType(TrackEventType.APP_UNLOAD);
+  const [clickVersion] = useMultiEvent({
+    callback: () => console.log(`v${VERSION}`),
   });
 
-  return <Router />;
+  return (
+    <>
+      <Router />
+      <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
+    </>
+  );
 };
 
 export default App;

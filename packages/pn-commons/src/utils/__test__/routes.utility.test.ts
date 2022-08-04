@@ -48,6 +48,17 @@ describe('Routes utility', () => {
     expect(route).toEqual('/prefix?foo=bar&foo2=bar2');
   });
 
+  it('Route with array query param', () => {
+    const route = compileRoute({
+      prefix: 'prefix',
+      query: {
+        foo: 'bar',
+        foo2: ['bar21', 'bar22'],
+      },
+    });
+    expect(route).toEqual('/prefix?foo=bar&foo2=bar21&foo2=bar22');
+  });
+
   it('Route with undefined query params', () => {
     const route = compileRoute({
       prefix: 'prefix',

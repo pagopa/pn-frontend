@@ -1,19 +1,15 @@
-import { setSenderInfos } from './../actions';
 import { DigitalDomicileType, PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { PaymentModel } from '../../../models/NewNotification';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
-  resetNewNotificationState,
-  setCancelledIun,
-  setPreliminaryInformations,
   createNewNotification,
   uploadNotificationAttachment,
   uploadNotificationPaymentDocument,
-  saveRecipients
 } from '../actions';
+import { setCancelledIun, setPreliminaryInformations, setSenderInfos, saveRecipients, resetState } from '../reducers';
 import { newNotification } from './test-utils';
 
 const initialState = {
@@ -43,14 +39,14 @@ describe('New notification redux state tests', () => {
   it('Should be able to set cancelled iun', () => {
     const action = store.dispatch(setCancelledIun('mocked-iun'));
     const payload = action.payload;
-    expect(action.type).toBe('setCancelledIun');
+    expect(action.type).toBe('newNotificationSlice/setCancelledIun');
     expect(payload).toEqual('mocked-iun');
   });
 
   it('Should be able to set sender infos', () => {
     const action = store.dispatch(setSenderInfos({senderDenomination: 'mocked-denomination', senderTaxId: 'mocked-taxId'}));
     const payload = action.payload;
-    expect(action.type).toBe('setSenderInfos');
+    expect(action.type).toBe('newNotificationSlice/setSenderInfos');
     expect(payload).toEqual({senderDenomination: 'mocked-denomination', senderTaxId: 'mocked-taxId'});
   });
 
@@ -65,7 +61,7 @@ describe('New notification redux state tests', () => {
     };
     const action = store.dispatch(setPreliminaryInformations(preliminaryInformations));
     const payload = action.payload;
-    expect(action.type).toBe('setPreliminaryInformations');
+    expect(action.type).toBe('newNotificationSlice/setPreliminaryInformations');
     expect(payload).toEqual(preliminaryInformations);
   });
 
@@ -89,7 +85,7 @@ describe('New notification redux state tests', () => {
     }];
     const action = store.dispatch(saveRecipients({recipients}));
     const payload = action.payload;
-    expect(action.type).toBe('saveRecipients');
+    expect(action.type).toBe('newNotificationSlice/saveRecipients');
     expect(payload).toEqual({recipients});
   });
 
@@ -206,9 +202,9 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to reset state', () => {
-    const action = store.dispatch(resetNewNotificationState());
+    const action = store.dispatch(resetState());
     const payload = action.payload;
-    expect(action.type).toBe('resetNewNotificationState');
+    expect(action.type).toBe('newNotificationSlice/resetState');
     expect(payload).toEqual(undefined);
     const state = store.getState().newNotificationState;
     expect(state).toEqual(initialState);

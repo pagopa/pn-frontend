@@ -5,7 +5,7 @@ import {useLocation, useNavigate} from 'react-router-dom';
 
 import * as routes from '../../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { closeDomicileBanner } from '../../redux/sidemenu/actions';
+import { closeDomicileBanner } from '../../redux/sidemenu/reducers';
 import { RootState } from '../../redux/store';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";

@@ -8,15 +8,10 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
-import {
-  getReceivedNotifications,
-  setNotificationFilters,
-  setPagination,
-  setSorting,
-  setMandateId
-} from '../actions';
+import { getReceivedNotifications } from '../actions';
+import { setMandateId, setNotificationFilters, setPagination, setSorting } from '../reducers';
 import { notificationsToFe } from './test-utils';
 
 describe('Dashbaord redux state tests', () => {
@@ -29,7 +24,7 @@ describe('Dashbaord redux state tests', () => {
       notifications: [],
       filters: {
         startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today))
+        endDate: formatToTimezoneString(getNextDay(today)),
       },
       pagination: {
         nextPagesKey: [],
@@ -50,7 +45,7 @@ describe('Dashbaord redux state tests', () => {
     const action = await store.dispatch(
       getReceivedNotifications({
         startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today))
+        endDate: formatToTimezoneString(getNextDay(today)),
       })
     );
     const payload = action.payload as GetNotificationsResponse;
@@ -66,7 +61,7 @@ describe('Dashbaord redux state tests', () => {
       })
     );
     const payload = action.payload as { page: number; size: number };
-    expect(action.type).toBe('setPagination');
+    expect(action.type).toBe('dashboardSlice/setPagination');
     expect(payload).toEqual({
       page: 2,
       size: 50,
@@ -81,7 +76,7 @@ describe('Dashbaord redux state tests', () => {
       })
     );
     const payload = action.payload as { orderBy: string; order: 'desc' | 'asc' };
-    expect(action.type).toBe('setSorting');
+    expect(action.type).toBe('dashboardSlice/setSorting');
     expect(payload).toEqual({
       orderBy: 'status',
       order: 'desc',
@@ -99,7 +94,7 @@ describe('Dashbaord redux state tests', () => {
       })
     );
     const payload = action.payload;
-    expect(action.type).toBe('setNotificationFilters');
+    expect(action.type).toBe('dashboardSlice/setNotificationFilters');
     expect(payload).toEqual({
       startDate: '2022-02-22T14:20:20.566Z',
       endDate: '2022-02-27T14:20:20.566Z',
@@ -110,11 +105,9 @@ describe('Dashbaord redux state tests', () => {
   });
 
   it('Should be able to set mandate id', () => {
-    const action = store.dispatch(
-      setMandateId('mocked-mandate-id')
-    );
+    const action = store.dispatch(setMandateId('mocked-mandate-id'));
     const payload = action.payload;
-    expect(action.type).toBe('setMandateId');
+    expect(action.type).toBe('dashboardSlice/setMandateId');
     expect(payload).toEqual('mocked-mandate-id');
   });
 });

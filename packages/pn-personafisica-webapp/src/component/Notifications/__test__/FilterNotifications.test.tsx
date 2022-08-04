@@ -149,10 +149,10 @@ describe('Filter Notifications Table Component', () => {
       payload: {
         startDate: formatToTimezoneString(oneYearAgo),
         endDate: formatToTimezoneString(getNextDay(todayM)),
-        status: undefined,
+        mandateId: undefined,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
       },
-      type: 'setNotificationFilters',
+      type: 'dashboardSlice/setNotificationFilters',
     });
   });
 
@@ -192,7 +192,7 @@ describe('Filter Notifications Table Component', () => {
           endDate: formatToTimezoneString(getNextDay(today)),
           iunMatch: undefined,
         },
-        type: 'setNotificationFilters',
+        type: 'dashboardSlice/setNotificationFilters',
       });
     });
   });

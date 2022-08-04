@@ -1,16 +1,26 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AppMessage, initLocalization, Layout, LoadingOverlay, SideMenu, useUnload } from '@pagopa-pn/pn-commons';
+import {
+  AppMessage,
+  appStateActions,
+  initLocalization,
+  Layout,
+  LoadingOverlay,
+  SideMenu,
+  useMultiEvent,
+  useUnload,
+} from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
+import { Box } from '@mui/material';
 
 import Router from './navigation/routes';
-import { logout } from './redux/auth/actions';
+import { getOrganizationParty, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 
-import { PAGOPA_HELP_EMAIL, PARTY_MOCK, SELFCARE_BASE_URL } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } from './utils/constants';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
@@ -22,14 +32,15 @@ const global = window as any;
 const targCookiesGroup = 'C0004';
 
 const App = () => {
-  useUnload((e: Event) => {
-    e.preventDefault();
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    e.defaultPrevented;
+  useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
   });
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const loggedUserOrganizationParty = useAppSelector(
+    (state: RootState) => state.userState.organizationParty
+  );
+
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
 
@@ -75,17 +86,22 @@ const App = () => {
     [idOrganization]
   );
 
-  // TODO: get parties list from be (?)
   const partyList: Array<PartyEntity> = useMemo(
     () => [
       {
         id: '0',
-        name: PARTY_MOCK,
-        productRole: role?.role,
-        logoUrl: `https://assets.cdn.io.italia.it/logos/organizations/1199250158.png`,
+        name: loggedUserOrganizationParty.name,
+        // productRole: role?.role,
+        productRole: t(`roles.${role?.role}`),
+        logoUrl: undefined,
+        // non posso settare un'icona di MUI perché @pagopa/mui-italia accetta solo string o undefined come logoUrl
+        // ma fortunatamente, se si passa undefined, fa vedere proprio il logo che ci serve
+        // ------------------
+        // Carlos Lombardi, 2022.07.28
+        // logoUrl: <AccountBalanceIcon />
       },
     ],
-    [role]
+    [role, loggedUserOrganizationParty]
   );
 
   useEffect(() => {
@@ -110,9 +126,11 @@ const App = () => {
     }
   }, []);
 
-  const changeLanguageHandler = async (langCode: string) => {
-    await i18n.changeLanguage(langCode);
-  };
+  useEffect(() => {
+    if (idOrganization) {
+      void dispatch(getOrganizationParty(idOrganization));
+    }
+  }, [idOrganization]);
 
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -143,37 +161,54 @@ const App = () => {
     window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
   };
 
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
+
+  const [clickVersion] = useMultiEvent({
+    callback: () =>
+      dispatch(
+        appStateActions.addSuccess({
+          title: 'Current version',
+          message: `v${VERSION}`,
+        })
+      ),
+  });
+
   return (
-    <Layout
-      onExitAction={handleLogout}
-      eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
-      eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
-      eventTrackingCallbackProductSwitch={(target) =>
-        handleEventTrackingCallbackProductSwitch(target)
-      }
-      sideMenu={
-        role &&
-        menuItems && (
-          <SideMenu
-            menuItems={menuItems.menuItems}
-            selfCareItems={menuItems.selfCareItems}
-            eventTrackingCallback={(target) =>
-              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
-            }
-          />
-        )
-      }
-      productsList={productsList}
-      productId={'0'}
-      partyList={partyList}
-      loggedUser={jwtUser}
-      onLanguageChanged={changeLanguageHandler}
-      onAssistanceClick={handleAssistanceClick}
-    >
-      <AppMessage sessionRedirect={handleLogout} />
-      <LoadingOverlay />
-      <Router />
-    </Layout>
+    <>
+      <Layout
+        onExitAction={handleLogout}
+        eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
+        eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
+        eventTrackingCallbackProductSwitch={(target: string) =>
+          handleEventTrackingCallbackProductSwitch(target)
+        }
+        sideMenu={
+          role &&
+          menuItems && (
+            <SideMenu
+              menuItems={menuItems.menuItems}
+              selfCareItems={menuItems.selfCareItems}
+              eventTrackingCallback={(target: string) =>
+                trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
+              }
+            />
+          )
+        }
+        productsList={productsList}
+        productId={'0'}
+        partyList={partyList}
+        loggedUser={jwtUser}
+        onLanguageChanged={changeLanguageHandler}
+        onAssistanceClick={handleAssistanceClick}
+      >
+        <AppMessage sessionRedirect={handleLogout} />
+        <LoadingOverlay />
+        <Router />
+      </Layout>
+      <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
+    </>
   );
 };
 export default App;

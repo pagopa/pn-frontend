@@ -1,18 +1,13 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit';
+import { Sort } from '@pagopa-pn/pn-commons';
 import { sortDelegations } from '../../utils/delegation.utility';
+import { DelegatorsColumn, DelegatesColumn } from './../../types/Deleghe';
 import {
   getDelegates,
   getDelegators,
   acceptDelegation,
-  closeRevocationModal,
-  openRevocationModal,
   rejectDelegation,
   revokeDelegation,
-  setDelegatorsSorting,
-  setDelegatesSorting,
-  openAcceptModal,
-  closeAcceptModal,
-  resetDelegationsState,
 } from './actions';
 import { Delegation } from './types';
 
@@ -37,19 +32,56 @@ const initialState = {
   },
   sortDelegators: {
     orderBy: '',
-    order: 'asc' as 'asc' | 'desc',
-  },
+    order: 'asc',
+  } as Sort<DelegatorsColumn>,
   sortDelegates: {
     orderBy: '',
     order: 'asc' as 'asc' | 'desc',
-  },
+  } as Sort<DelegatesColumn>,
 };
 
 /* eslint-disable functional/immutable-data */
 const delegationsSlice = createSlice({
   name: 'delegationsSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    openRevocationModal: (state, action: PayloadAction<{ id: string; type: string }>) => {
+      state.modalState.id = action.payload.id;
+      state.modalState.open = true;
+      state.modalState.type = action.payload.type;
+    },
+    closeRevocationModal: (state) => {
+      state.modalState.id = '';
+      state.modalState.open = false;
+    },
+    openAcceptModal: (state, action: PayloadAction<{ id: string; name: string }>) => {
+      state.acceptModalState.id = action.payload.id;
+      state.acceptModalState.name = action.payload.name;
+      state.acceptModalState.open = true;
+      state.acceptModalState.error = false;
+    },
+    closeAcceptModal: (state) => {
+      state.acceptModalState.open = false;
+      state.acceptModalState.id = '';
+    },
+    setDelegatesSorting: (state, action: PayloadAction<Sort<DelegatesColumn>>) => {
+      state.sortDelegates = action.payload;
+      state.delegations.delegates = sortDelegations(
+        action.payload.order,
+        action.payload.orderBy,
+        state.delegations.delegates
+      );
+    },
+    setDelegatorsSorting: (state, action: PayloadAction<Sort<DelegatorsColumn>>) => {
+      state.sortDelegators = action.payload;
+      state.delegations.delegators = sortDelegations(
+        action.payload.order,
+        action.payload.orderBy,
+        state.delegations.delegators
+      );
+    },
+    resetState: () => initialState,
+  },
   extraReducers: (builder) => {
     builder.addCase(getDelegates.fulfilled, (state, action) => {
       state.delegations.delegates = action.payload;
@@ -73,15 +105,6 @@ const delegationsSlice = createSlice({
     builder.addCase(acceptDelegation.rejected, (state) => {
       state.acceptModalState.error = true;
     });
-    builder.addCase(openRevocationModal, (state, action) => {
-      state.modalState.id = action.payload.id;
-      state.modalState.open = true;
-      state.modalState.type = action.payload.type;
-    });
-    builder.addCase(closeRevocationModal, (state) => {
-      state.modalState.id = '';
-      state.modalState.open = false;
-    });
     builder.addCase(revokeDelegation.fulfilled, (state, action) => {
       state.modalState.open = false;
       state.delegations.delegates = state.delegations.delegates.filter(
@@ -94,40 +117,20 @@ const delegationsSlice = createSlice({
         (delegator: Delegation) => delegator.mandateId !== action.meta.arg
       );
     });
-    builder.addCase(rejectDelegation.rejected, (state) => {
+    builder.addMatcher(isAnyOf(rejectDelegation.rejected, revokeDelegation.rejected), (state) => {
       state.modalState.open = false;
     });
-    builder.addCase(revokeDelegation.rejected, (state) => {
-      state.modalState.open = false;
-    });
-    builder.addCase(openAcceptModal, (state, action) => {
-      state.acceptModalState.id = action.payload.id;
-      state.acceptModalState.name = action.payload.name;
-      state.acceptModalState.open = true;
-      state.acceptModalState.error = false;
-    });
-    builder.addCase(closeAcceptModal, (state) => {
-      state.acceptModalState.open = false;
-      state.acceptModalState.id = '';
-    });
-    builder.addCase(setDelegatesSorting, (state, action) => {
-      state.sortDelegates = action.payload;
-      state.delegations.delegates = sortDelegations(
-        action.payload.order,
-        action.payload.orderBy,
-        state.delegations.delegates,
-      );
-    });
-    builder.addCase(setDelegatorsSorting, (state, action) => {
-      state.sortDelegators = action.payload;
-      state.delegations.delegators = sortDelegations(
-        action.payload.order,
-        action.payload.orderBy,
-        state.delegations.delegators,
-      );
-    });
-    builder.addCase(resetDelegationsState, () => initialState);
   },
 });
+
+export const {
+  setDelegatorsSorting,
+  setDelegatesSorting,
+  openAcceptModal,
+  closeAcceptModal,
+  resetState,
+  closeRevocationModal,
+  openRevocationModal,
+} = delegationsSlice.actions;
 
 export default delegationsSlice;

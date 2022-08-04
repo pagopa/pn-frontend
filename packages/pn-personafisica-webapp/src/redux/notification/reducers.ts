@@ -20,7 +20,6 @@ import {
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
-  resetState,
 } from './actions';
 
 const initialState = {
@@ -45,7 +44,7 @@ const initialState = {
       taxId: '',
       denomination: '',
     },
-    currentRecipientIndex: 0
+    currentRecipientIndex: 0,
   } as NotificationDetailForRecipient,
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
@@ -58,7 +57,9 @@ const initialState = {
 const notificationSlice = createSlice({
   name: 'notificationSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    resetState: () => initialState,
+  },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
@@ -76,7 +77,7 @@ const notificationSlice = createSlice({
     builder.addCase(getPaymentAttachment.fulfilled, (state, action) => {
       if (action.payload.url) {
         const attachmentName = action.meta.arg.attachmentName;
-        if(attachmentName === PaymentAttachmentSName.PAGOPA) {
+        if (attachmentName === PaymentAttachmentSName.PAGOPA) {
           state.pagopaAttachmentUrl = action.payload.url;
         } else if (attachmentName === PaymentAttachmentSName.F24) {
           state.f24AttachmentUrl = action.payload.url;
@@ -88,8 +89,9 @@ const notificationSlice = createSlice({
         state.paymentInfo = action.payload;
       }
     });
-    builder.addCase(resetState, () => initialState);
   },
 });
+
+export const { resetState } = notificationSlice.actions;
 
 export default notificationSlice;

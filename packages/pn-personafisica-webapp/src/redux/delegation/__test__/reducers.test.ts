@@ -1,20 +1,22 @@
 import { Delegation } from '../types';
 import { store } from '../../store';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { DelegationsApi } from '../../../api/delegations/Delegations.api';
 import {
   acceptDelegation,
-  closeAcceptModal,
-  closeRevocationModal,
   getDelegates,
   getDelegators,
-  openAcceptModal,
-  openRevocationModal,
   rejectDelegation,
   revokeDelegation,
+} from '../actions';
+import {
+  closeAcceptModal,
+  closeRevocationModal,
+  openAcceptModal,
+  openRevocationModal,
   setDelegatesSorting,
   setDelegatorsSorting,
-} from '../actions';
+} from '../reducers';
 import { arrayOfDelegates, arrayOfDelegators, initialState } from './test.utils';
 
 describe('delegation redux state tests', () => {
@@ -135,13 +137,13 @@ describe('delegation redux state tests', () => {
   it('sets the confirmation modal state to open and then to close', async () => {
     const openAction = store.dispatch(openRevocationModal({ id: '123', type: 'delegates' }));
 
-    expect(openAction.type).toBe('openRevocationModal');
+    expect(openAction.type).toBe('delegationsSlice/openRevocationModal');
     const openModalState = store.getState().delegationsState.modalState;
     expect(openModalState).toEqual({ id: '123', type: 'delegates', open: true });
 
     const closeAction = store.dispatch(closeRevocationModal());
 
-    expect(closeAction.type).toBe('closeRevocationModal');
+    expect(closeAction.type).toBe('delegationsSlice/closeRevocationModal');
     const closeModalState = store.getState().delegationsState.modalState;
     expect(closeModalState).toEqual({ id: '', type: 'delegates', open: false });
   });
@@ -149,30 +151,30 @@ describe('delegation redux state tests', () => {
   it('sets the accept modal state to open and then to close', async () => {
     const action = store.dispatch(openAcceptModal({ id: '123', name: 'test name' }));
 
-    expect(action.type).toBe('openAcceptModal');
+    expect(action.type).toBe('delegationsSlice/openAcceptModal');
     const confirmModalState = store.getState().delegationsState.acceptModalState;
     expect(confirmModalState).toEqual({ id: '123', open: true, name: 'test name', error: false });
 
     const closeAction = store.dispatch(closeAcceptModal());
 
-    expect(closeAction.type).toBe('closeAcceptModal');
+    expect(closeAction.type).toBe('delegationsSlice/closeAcceptModal');
     const closeModalState = store.getState().delegationsState.acceptModalState;
     expect(closeModalState).toEqual({ id: '', open: false, name: 'test name', error: false });
   });
 
   it('sets the delegates sorting by test in ascendant order', () => {
-    const action = store.dispatch(setDelegatesSorting({ orderBy: 'test', order: 'asc' }));
+    const action = store.dispatch(setDelegatesSorting({ orderBy: 'startDate', order: 'asc' }));
 
-    expect(action.type).toBe('setDelegatesSorting');
+    expect(action.type).toBe('delegationsSlice/setDelegatesSorting');
     const sortDelegates = store.getState().delegationsState.sortDelegates;
-    expect(sortDelegates).toEqual({ orderBy: 'test', order: 'asc' });
+    expect(sortDelegates).toEqual({ orderBy: 'startDate', order: 'asc' });
   });
 
   it('sets the delegates sorting by test in descendant order', () => {
-    const action = store.dispatch(setDelegatorsSorting({ orderBy: 'test', order: 'desc' }));
+    const action = store.dispatch(setDelegatorsSorting({ orderBy: 'endDate', order: 'desc' }));
 
-    expect(action.type).toBe('setDelegatorsSorting');
+    expect(action.type).toBe('delegationsSlice/setDelegatorsSorting');
     const sortDelegators = store.getState().delegationsState.sortDelegators;
-    expect(sortDelegators).toEqual({ orderBy: 'test', order: 'desc' });
+    expect(sortDelegators).toEqual({ orderBy: 'endDate', order: 'desc' });
   });
 });

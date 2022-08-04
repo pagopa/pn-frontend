@@ -15,12 +15,13 @@ import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   getSentNotifications,
-  setPagination,
   // setSorting, // Riabilitare con la issue PN-1124
 } from '../redux/dashboard/actions';
+import { setPagination } from '../redux/dashboard/reducers';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 
+// import { NotificationColumn } from '../types/Notifications';  // Riabilitare con la issue PN-1124
 import DesktopNotifications from './components/Notifications/DesktopNotifications';
 import MobileNotifications from './components/Notifications/MobileNotifications';
 
@@ -57,7 +58,7 @@ const Dashboard = () => {
   // Sort handlers
   // Riabilitare con la issue PN-1124
   /*
-  const handleChangeSorting = (s: Sort) => {
+  const handleChangeSorting = (s: Sort<NotificationColumn>) => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_SORT, {type: s.orderBy});
     dispatch(setSorting(s));
   };

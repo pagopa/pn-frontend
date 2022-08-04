@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { NotificationDetail, LegalFactId } from '@pagopa-pn/pn-commons';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
@@ -34,5 +34,3 @@ export const getSentNotificationDocument = createAsyncThunk<{url: string}, {iun:
     }
   }
 );
-
-export const resetState = createAction<void>('resetState');

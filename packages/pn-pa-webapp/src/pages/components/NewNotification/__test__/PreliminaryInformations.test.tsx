@@ -96,7 +96,7 @@ describe('PreliminaryInformations Component', () => {
           physicalCommunicationType: PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER,
           paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE
         },
-        type: 'setPreliminaryInformations',
+        type: 'newNotificationSlice/setPreliminaryInformations',
       });
       expect(confirmHandlerMk).toBeCalledTimes(1);
     });

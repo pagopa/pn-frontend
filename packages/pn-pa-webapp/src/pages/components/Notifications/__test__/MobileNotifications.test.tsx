@@ -49,7 +49,7 @@ describe('MobileNotifications Component', () => {
     const result = render(
       <MobileNotifications
         notifications={[]}
-        sort={{ orderBy: 'mocked-field', order: 'asc' }}
+        sort={{ orderBy: 'recipients', order: 'asc' }}
         onChangeSorting={() => {}}
         onManualSend={() => {}}
         onApiKeys={() => {}}
@@ -104,7 +104,7 @@ describe('MobileNotifications Component', () => {
     const result = render(
       <MobileNotifications
         notifications={[]}
-        sort={{ orderBy: 'mocked-field', order: 'asc' }}
+        sort={{ orderBy: 'recipients', order: 'asc' }}
         onChangeSorting={() => {}}
         onManualSend={() => {}}
         onApiKeys={() => {}}

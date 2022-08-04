@@ -1,14 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   formatToTimezoneString,
   getNextDay,
   GetNotificationsParams,
   Notification,
+  Sort,
   tenYearsAgo,
   today,
 } from '@pagopa-pn/pn-commons';
 
-import { getSentNotifications, setPagination, setSorting, setNotificationFilters } from './actions';
+import { NotificationColumn } from '../../types/Notifications';
+import { getSentNotifications } from './actions';
 
 /* eslint-disable functional/immutable-data */
 const dashboardSlice = createSlice({
@@ -31,10 +33,30 @@ const dashboardSlice = createSlice({
     },
     sort: {
       orderBy: '',
-      order: 'asc' as 'asc' | 'desc',
+      order: 'asc',
+    } as Sort<NotificationColumn>,
+  },
+  reducers: {
+    setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
+      if (state.pagination.size !== action.payload.size) {
+        // reset pagination
+        state.pagination.nextPagesKey = [];
+        state.pagination.moreResult = false;
+      }
+      state.pagination.size = action.payload.size;
+      state.pagination.page = action.payload.page;
+    },
+    setSorting: (state, action: PayloadAction<Sort<NotificationColumn>>) => {
+      state.sort = action.payload;
+    },
+    setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams>) => {
+      state.filters = action.payload;
+      // reset pagination
+      state.pagination.page = 0;
+      state.pagination.nextPagesKey = [];
+      state.pagination.moreResult = false;
     },
   },
-  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getSentNotifications.fulfilled, (state, action) => {
       state.notifications = action.payload.resultsPage;
@@ -48,26 +70,9 @@ const dashboardSlice = createSlice({
         }
       }
     });
-    builder.addCase(setPagination, (state, action) => {
-      if (state.pagination.size !== action.payload.size) {
-        // reset pagination
-        state.pagination.nextPagesKey = [];
-        state.pagination.moreResult = false;
-      }
-      state.pagination.size = action.payload.size;
-      state.pagination.page = action.payload.page;
-    });
-    builder.addCase(setSorting, (state, action) => {
-      state.sort = action.payload;
-    });
-    builder.addCase(setNotificationFilters, (state, action) => {
-      state.filters = action.payload;
-      // reset pagination
-      state.pagination.page = 0;
-      state.pagination.nextPagesKey = [];
-      state.pagination.moreResult = false;
-    });
   },
 });
+
+export const { setPagination, setSorting, setNotificationFilters } = dashboardSlice.actions;
 
 export default dashboardSlice;

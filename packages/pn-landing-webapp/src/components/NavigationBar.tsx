@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import {useRouter} from "next/router";
 
 const NavigationBar = () => {
-    const { pathname, push } = useRouter();
+    const { pathname } = useRouter();
     const [index, setIndex] = useState(0);
 
     function a11yProps(index: number) {

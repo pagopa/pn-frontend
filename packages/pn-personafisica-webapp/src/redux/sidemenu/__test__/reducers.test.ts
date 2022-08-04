@@ -1,10 +1,11 @@
 /* eslint-disable functional/no-let */
 import { DelegationsApi } from "../../../api/delegations/Delegations.api";
-import { mockAuthentication } from "../../auth/__test__/reducers.test";
+import { mockAuthentication } from "../../auth/__test__/test-utils";
 import { acceptDelegation, rejectDelegation } from "../../delegation/actions";
 import { Delegator } from "../../delegation/types";
 import { store } from "../../store";
-import { closeDomicileBanner, getSidemenuInformation } from "../actions";
+import { getSidemenuInformation } from "../actions";
+import { closeDomicileBanner } from "../reducers";
 import { getMockedDelegators, initialState } from "./test-utils";
 
 describe('Sidemenu redux state tests', () => {
@@ -24,7 +25,7 @@ describe('Sidemenu redux state tests', () => {
 
   it('Should be able to close domicile banner', () => {
     const action = store.dispatch(closeDomicileBanner());
-    expect(action.type).toBe('closeDomicileBanner');
+    expect(action.type).toBe('generalInfoSlice/closeDomicileBanner');
     const state = store.getState().generalInfoState;
     expect(state).toEqual({...initialState, domicileBannerOpened: false});
   });

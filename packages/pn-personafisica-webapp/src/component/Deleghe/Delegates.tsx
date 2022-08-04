@@ -1,19 +1,21 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { Column, ItemsTable as Table, Item, CodeModal, Sort, EmptyState } from '@pagopa-pn/pn-commons';
-import { useTranslation } from 'react-i18next';
 
-import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import TableError from '../TableError/TableError';
-import { getDelegates, setDelegatesSorting } from '../../redux/delegation/actions';
+import { getDelegates } from '../../redux/delegation/actions';
+import { setDelegatesSorting } from '../../redux/delegation/reducers';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
+import { DelegatesColumn } from '../../types/Deleghe';
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegates = () => {
@@ -31,7 +33,7 @@ const Delegates = () => {
 
   const rows: Array<Item> = delegationToItem(delegates);
 
-  const delegatesColumns: Array<Column> = [
+  const delegatesColumns: Array<Column<DelegatesColumn>> = [
     {
       id: 'name',
       label: t('deleghe.table.name'),
@@ -103,7 +105,7 @@ const Delegates = () => {
     setShowCodeModal({ ...showCodeModal, open: false });
   };
 
-  const handleChangeSorting = (s: Sort) => {
+  const handleChangeSorting = (s: Sort<DelegatesColumn>) => {
     dispatch(setDelegatesSorting(s));
   };
 

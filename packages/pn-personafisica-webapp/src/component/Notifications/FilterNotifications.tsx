@@ -21,7 +21,7 @@ import {
 
 import { useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
-import { setNotificationFilters } from '../../redux/dashboard/actions';
+import { setNotificationFilters } from '../../redux/dashboard/reducers';
 import { Delegator } from '../../redux/delegation/types';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";

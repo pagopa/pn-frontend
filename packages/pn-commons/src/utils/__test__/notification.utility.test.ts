@@ -2,6 +2,7 @@ import _ from 'lodash';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
+  LegalFactType,
   NotHandledDetails,
   PhysicalCommunicationType,
   SendCourtesyMessageDetails,
@@ -282,20 +283,39 @@ describe('timeline utility functions', () => {
     expect(calculatedParsedNotification).toStrictEqual(parsedNotification);
   });
 
-  it('return legalFact label - NO SEND_PAPER_FEEDBACK', () => {
-    const label = getLegalFactLabel(TimelineCategory.GET_ADDRESS, {
-      attestation: 'mocked-legalFact-label',
-      receipt: 'mocked-recipient-label',
-    });
-    expect(label).toBe('mocked-legalFact-label');
+  it('return legalFact label - default', () => {
+    const label = getLegalFactLabel(TimelineCategory.GET_ADDRESS);
+    expect(label).toBe('Attestazione opponibile a terzi');
   });
 
   it('return legalFact label - SEND_PAPER_FEEDBACK', () => {
-    const label = getLegalFactLabel(TimelineCategory.SEND_PAPER_FEEDBACK, {
-      attestation: 'mocked-legalFact-label',
-      receipt: 'mocked-recipient-label',
-    });
-    expect(label).toBe('mocked-recipient-label');
+    const label = getLegalFactLabel(TimelineCategory.SEND_PAPER_FEEDBACK);
+    expect(label).toBe('Ricevuta');
+  });
+
+  it('return legalFact label - SENDER_ACK', () => {
+    const label = getLegalFactLabel(TimelineCategory.REQUEST_ACCEPTED, LegalFactType.SENDER_ACK);
+    expect(label).toBe('Attestazione opponibile a terzi: notifica presa in carico');
+  });
+
+  it('return legalFact label - DIGITAL_DELIVERY', () => {
+    const label = getLegalFactLabel(TimelineCategory.DIGITAL_SUCCESS_WORKFLOW, LegalFactType.DIGITAL_DELIVERY);
+    expect(label).toBe('Attestazione opponibile a terzi: notifica digitale');
+  });
+
+  it('return legalFact label - DIGITAL_DELIVERY', () => {
+    const label = getLegalFactLabel(TimelineCategory.DIGITAL_FAILURE_WORKFLOW, LegalFactType.DIGITAL_DELIVERY);
+    expect(label).toBe('Attestazione opponibile a terzi: mancato recapito digitale');
+  });
+
+  it('return legalFact label - ANALOG_DELIVERY', () => {
+    const label = getLegalFactLabel(TimelineCategory.ANALOG_SUCCESS_WORKFLOW, LegalFactType.ANALOG_DELIVERY);
+    expect(label).toBe('Attestazione opponibile a terzi: conformità');
+  });
+
+  it('return legalFact label - RECIPIENT_ACCESS', () => {
+    const label = getLegalFactLabel(TimelineCategory.NOTIFICATION_VIEWED, LegalFactType.RECIPIENT_ACCESS);
+    expect(label).toBe('Attestazione opponibile a terzi: avvenuto accesso');
   });
 
   it('return legalFact label - DIGITAL_FAILURE_WORKFLOW', () => {
