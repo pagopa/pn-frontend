@@ -193,7 +193,8 @@
       "payment-methods": {
         "title": "Metodi di pagamento",
         "pagopa-notice": "Avviso pagoPA",
-        "f24-flatrate": "F24 forfettario",
+        "pagopa-notice-f24-flatrate": "F24 forfettario",
+        "pagopa-notice-f24": "F24",
         "payment-models": "Modelli di pagamento per",
         "attach-pagopa-notice": "Allega Avviso pagoPA",
         "attach-f24-flatrate": "Allega Modello F24 forfettario",

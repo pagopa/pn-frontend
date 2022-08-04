@@ -12,6 +12,7 @@ import {
   UploadAttachmentParams,
   UploadPayementParams,
   UpaloadPaymentResponse,
+  PaymentObject
 } from '../../models/NewNotification';
 
 export const setCancelledIun = createAction<string>('setCancelledIun');
@@ -141,3 +142,4 @@ export const createNewNotification = createAsyncThunk<NewNotificationResponse, N
 export const resetNewNotificationState = createAction<void>('resetNewNotificationState');
 export const setRecipients = createAction<{recipients: Array<FormRecipient>}>('setRecipients');
 export const setAttachments = createAction<{documents: Array<FormAttachment>}>('setAttachments');
+export const setPaymentDocuments = createAction<{paymentMethodsDocuments: {[key: string]: PaymentObject}}>('setPaymentDocuments');

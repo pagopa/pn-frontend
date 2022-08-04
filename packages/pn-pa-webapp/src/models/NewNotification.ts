@@ -28,10 +28,30 @@ export interface NewNotificationBe {
   group?: string;
 }
 
+
+export interface PaymentDocument {
+  name: string;
+  file: {
+    size?: number;
+    name?: string;
+    uint8Array: Uint8Array | undefined;
+    sha256: {
+      hashBase64: string;
+      hashHex: string;
+    };
+  };
+}
+
+export interface PaymentObject {
+  pagoPaForm: PaymentDocument;
+  f24flatRate: PaymentDocument;
+  f24standard: PaymentDocument;
+}
 export interface NewNotificationFe extends NewNotificationBe {
   paymentMode: PaymentModel;
   recipientsForm?: Array<FormRecipient>;
   documentsForm?: Array<FormAttachment>;
+  paymentDocumentsForm?: {[key: string]: PaymentObject};
 }
 
 export interface FormAttachment {

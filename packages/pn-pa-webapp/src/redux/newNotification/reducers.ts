@@ -9,6 +9,7 @@ import {
   setPreliminaryInformations,
   uploadNotificationAttachment,
   saveRecipients,
+  setPaymentDocuments,
   uploadNotificationPaymentDocument,
   setSenderInfos,
   setAttachments,
@@ -88,6 +89,12 @@ const newNotificationSlice = createSlice({
       state.notification = {
         ...state.notification,
         documentsForm: action.payload.documents,
+      };
+    });
+    builder.addCase(setPaymentDocuments, (state, action) => {
+      state.notification = {
+        ...state.notification,
+        paymentDocumentsForm: action.payload.paymentMethodsDocuments,
       };
     });
   },

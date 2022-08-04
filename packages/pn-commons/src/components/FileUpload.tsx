@@ -29,14 +29,13 @@ type Props = {
   sx?: SxProps;
   calcSha256?: boolean;
   fileFormat?: 'base64' | 'uint8Array';
-  attachment?: any;
+  fileUploaded?: any;
 };
 
 enum UploadStatus {
   TO_UPLOAD = 'TO_UPLOAD',
   IN_PROGRESS = 'IN_PROGRESS',
   UPLOADED = 'UPLOADED',
-  PREVIOUSLY_UPLOADED = 'PREVIOUSLY_UPLOADED',
   SENDING = 'SENDING',
 }
 
@@ -73,7 +72,7 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
         sha256: '',
       };
     case 'FILE_PREVIOUSLY_UPLOADED':
-      return { ...state, ...action.payload, status: UploadStatus.PREVIOUSLY_UPLOADED, error: '', sha256: action.payload.file.sha256.hashHex, name: action.payload.name ? action.payload.name : '' };
+      return { ...state, ...action.payload, status: UploadStatus.UPLOADED, error: '', sha256: action.payload.file.sha256.hashHex, name: action.payload.name ? action.payload.name : '' };
     case 'FILE_UPLOADED':
       return { ...state, status: UploadStatus.UPLOADED, error: '', sha256: action.payload };
     case 'REMOVE_FILE':
@@ -109,7 +108,7 @@ const OrientedBox = ({ vertical, children }: { vertical: boolean; children: Reac
  * @param sx style to be addded to the component
  * @param calcSha256 flag to calculate the sha256
  * @param fileFormat format of the file after loading
- * @param attachment attachment previously uploaded
+ * @param fileUploaded file previously uploaded
  * @returns
  */
 const FileUpload = ({
@@ -123,7 +122,7 @@ const FileUpload = ({
   sx,
   calcSha256 = false,
   fileFormat,
-  attachment,
+  fileUploaded,
 }: Props) => {
   const [data, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
@@ -133,7 +132,7 @@ const FileUpload = ({
   });
   const uploadInputRef = useRef();
 
-  const attachmentExists = (attachment != null && attachment.file != null && attachment.file.uint8Array != null);
+  const attachmentExists = (fileUploaded != null && fileUploaded.file != null && fileUploaded.file.uint8Array != null);
 
   const containerStyle = useMemo(() => {
     if (data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) {
@@ -143,7 +142,7 @@ const FileUpload = ({
           height: '24px',
         },
       };
-    } else if (data.status === UploadStatus.UPLOADED || data.status === UploadStatus.PREVIOUSLY_UPLOADED) {
+    } else if (data.status === UploadStatus.UPLOADED) {
       return {
         border: '1px solid',
         borderColor: 'primary.main',
@@ -226,8 +225,8 @@ const FileUpload = ({
   }, [isSending]);
 
   useEffect(() => {
-    if (attachmentExists && data.status !== UploadStatus.PREVIOUSLY_UPLOADED) {
-      dispatch({ type: 'FILE_PREVIOUSLY_UPLOADED', payload: attachment });
+    if (attachmentExists && data.status !== UploadStatus.UPLOADED) {
+      dispatch({ type: 'FILE_PREVIOUSLY_UPLOADED', payload: fileUploaded });
     }
   }, [attachmentExists]);
 
@@ -287,7 +286,7 @@ const FileUpload = ({
           </Typography>
         </OrientedBox>
       )}
-      {(data.status === UploadStatus.UPLOADED || data.status === UploadStatus.PREVIOUSLY_UPLOADED) && (
+      {(data.status === UploadStatus.UPLOADED) && (
         <Fragment>
           <Box
             display="flex"

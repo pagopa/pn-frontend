@@ -89,19 +89,19 @@ describe('PaymentMethods Component', () => {
       expect(mockActionFn).toBeCalledWith(newNotification.recipients.reduce((obj: UploadPayementParams, r, index) => {
         obj[r.taxId] = {
           pagoPaForm: {
-            key: 'pagopa-notice',
+            key: 'new-notification.steps.payment-methods.pagopa-notice',
             file: new Uint8Array(),
             sha256: 'mocked-hasBase64',
             contentType: 'application/pdf',
           },
           f24flatRate: {
-            key: 'f24-flatrate',
+            key: 'new-notification.steps.payment-methods.pagopa-notice-f24-flatrate',
             file: undefined,
             sha256: '',
             contentType: 'application/pdf',
           },
           f24standard: {
-            key: 'F24',
+            key: 'new-notification.steps.payment-methods.pagopa-notice-f24',
             file: index === 0 ? undefined : new Uint8Array(),
             sha256: index === 0 ? '' : 'mocked-hasBase64',
             contentType: 'application/pdf',

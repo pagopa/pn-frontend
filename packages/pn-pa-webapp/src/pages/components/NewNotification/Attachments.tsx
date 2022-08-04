@@ -31,7 +31,7 @@ type AttachmentBoxProps = {
     fileUploaded?: any,
   ) => void;
   onRemoveFile: (id: string) => void;
-  attachment?: FormAttachment;
+  fileUploaded?: FormAttachment;
 };
 
 const AttachmentBox = ({
@@ -47,7 +47,7 @@ const AttachmentBox = ({
   onFieldTouched,
   onFileUploaded,
   onRemoveFile,
-  attachment,
+  fileUploaded,
 }: AttachmentBoxProps) => {
   const { t } = useTranslation(['notifiche']);
 
@@ -68,12 +68,12 @@ const AttachmentBox = ({
       <FileUpload
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
-        onFileUploaded={(file, sha256, fileUploaded) => onFileUploaded(`${id}.file`, file, sha256, fileUploaded)}
+        onFileUploaded={(file, sha256, fileNotFormatted) => onFileUploaded(`${id}.file`, file, sha256, fileNotFormatted)}
         onRemoveFile={() => onRemoveFile(`${id}.file`)}
         sx={{ marginTop: '10px' }}
         fileFormat="uint8Array"
         calcSha256
-        attachment={attachment}
+        fileUploaded={fileUploaded}
       />
       <TextField
         id={`${id}.name`}
@@ -269,7 +269,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
             onDelete={() => deleteDocumentHandler(i)}
             fieldLabel={i === 0 ? `${t('act-name')}*` : `${t('doc-name')}*`}
             fieldValue={d.name}
-            attachment={(attachmentsData && attachmentsData[i]) ? attachmentsData[i] : undefined}
+            fileUploaded={(attachmentsData && attachmentsData[i]) ? attachmentsData[i] : undefined}
             fieldTouched={
               ((attachmentsData && attachmentsData[i]) ||
                 (formik.touched.documents && formik.touched.documents[i])) as boolean
