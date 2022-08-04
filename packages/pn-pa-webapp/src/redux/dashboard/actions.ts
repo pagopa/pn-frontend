@@ -1,7 +1,8 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import { GetNotificationsParams, GetNotificationsResponse } from '@pagopa-pn/pn-commons';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { GetNotificationsParams, GetNotificationsResponse, Sort } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { NotificationColumn } from './../../types/Notifications';
 
 export const getSentNotifications = createAsyncThunk<
   GetNotificationsResponse,
@@ -13,3 +14,10 @@ export const getSentNotifications = createAsyncThunk<
     return rejectWithValue(e);
   }
 });
+
+export const setPagination = createAction<{ page: number; size: number }>('setPagination');
+
+export const setSorting = createAction<Sort<NotificationColumn>>('setSorting');
+
+export const setNotificationFilters =
+  createAction<GetNotificationsParams>('setNotificationFilters');

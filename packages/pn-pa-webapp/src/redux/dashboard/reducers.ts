@@ -4,11 +4,12 @@ import {
   getNextDay,
   GetNotificationsParams,
   Notification,
+  Sort,
   tenYearsAgo,
   today,
-  Sort
 } from '@pagopa-pn/pn-commons';
 
+import { NotificationColumn } from '../../types/Notifications';
 import { getSentNotifications } from './actions';
 
 /* eslint-disable functional/immutable-data */
@@ -33,7 +34,7 @@ const dashboardSlice = createSlice({
     sort: {
       orderBy: '',
       order: 'asc',
-    } as Sort,
+    } as Sort<NotificationColumn>,
   },
   reducers: {
     setPagination: (state, action: PayloadAction<{ page: number; size: number }>) => {
@@ -45,7 +46,7 @@ const dashboardSlice = createSlice({
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
     },
-    setSorting: (state, action: PayloadAction<Sort>) => {
+    setSorting: (state, action: PayloadAction<Sort<NotificationColumn>>) => {
       state.sort = action.payload;
     },
     setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams>) => {
@@ -54,7 +55,7 @@ const dashboardSlice = createSlice({
       state.pagination.page = 0;
       state.pagination.nextPagesKey = [];
       state.pagination.moreResult = false;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getSentNotifications.fulfilled, (state, action) => {
@@ -72,6 +73,6 @@ const dashboardSlice = createSlice({
   },
 });
 
-export const {setPagination, setSorting, setNotificationFilters} = dashboardSlice.actions;
+export const { setPagination, setSorting, setNotificationFilters } = dashboardSlice.actions;
 
 export default dashboardSlice;

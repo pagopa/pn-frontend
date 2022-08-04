@@ -8,6 +8,7 @@ interface CommonUser {
   fiscal_number: string;
   uid: string;
   organization: Organization;
+  desired_exp: number;
 }
 
 export interface Organization {

@@ -2,6 +2,7 @@ import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 import { Sort } from '@pagopa-pn/pn-commons';
 
 import { sortDelegations } from '../../utils/delegation.utility';
+import { DelegatorsColumn, DelegatesColumn } from './../../types/Deleghe';
 import {
   getDelegates,
   getDelegators,
@@ -33,11 +34,11 @@ const initialState = {
   sortDelegators: {
     orderBy: '',
     order: 'asc',
-  } as Sort,
+  } as Sort<DelegatorsColumn>,
   sortDelegates: {
     orderBy: '',
-    order: 'asc',
-  } as Sort,
+    order: 'asc' as 'asc' | 'desc',
+  } as Sort<DelegatesColumn>,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -64,7 +65,7 @@ const delegationsSlice = createSlice({
       state.acceptModalState.open = false;
       state.acceptModalState.id = '';
     },
-    setDelegatesSorting: (state, action: PayloadAction<Sort>) => {
+    setDelegatesSorting: (state, action: PayloadAction<Sort<DelegatesColumn>>) => {
       state.sortDelegates = action.payload;
       state.delegations.delegates = sortDelegations(
         action.payload.order,
@@ -72,7 +73,7 @@ const delegationsSlice = createSlice({
         state.delegations.delegates
       );
     },
-    setDelegatorsSorting: (state, action: PayloadAction<Sort>) => {
+    setDelegatorsSorting: (state, action: PayloadAction<Sort<DelegatorsColumn>>) => {
       state.sortDelegators = action.payload;
       state.delegations.delegators = sortDelegations(
         action.payload.order,
