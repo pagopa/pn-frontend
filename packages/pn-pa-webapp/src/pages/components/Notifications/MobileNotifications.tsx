@@ -22,14 +22,15 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import * as routes from '../../../navigation/routes.const';
+import { NotificationSortField } from '../../../types/Notifications';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort;
+  sort?: Sort<NotificationSortField>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort) => void;
+  onChangeSorting?: (s: Sort<NotificationSortField>) => void;
   /** The function to be invoked if the user clicks on new notification link */
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
@@ -140,10 +141,10 @@ const MobileNotifications = ({
     id: i.toString(),
   }));
 
-  const sortFields: Array<CardSort> = [
-    { id: 'sentAt', label: t('table.date') },
-    { id: 'recipients', label: t('table.recipient') },
-    { id: 'notificationStatus', label: t('table.status') },
+  const sortFields: Array<CardSort<NotificationSortField>> = [
+    { id: 'sentAt' as NotificationSortField, label: t('table.date') },
+    { id: 'recipients' as NotificationSortField, label: t('table.recipient') },
+    { id: 'notificationStatus' as NotificationSortField, label: t('table.status') },
   ].reduce((arr, item) => {
     /* eslint-disable functional/immutable-data */
     arr.push(
@@ -162,7 +163,7 @@ const MobileNotifications = ({
     );
     /* eslint-enable functional/immutable-data */
     return arr;
-  }, [] as Array<CardSort>);
+  }, [] as Array<CardSort<NotificationSortField>>);
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
   const EmptyStateProps = {

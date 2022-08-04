@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Party } from '../../models/party';
 
 import { PartyRole, PNRole } from '../../models/user';
-import { exchangeToken, logout } from './actions';
+import { exchangeToken, logout, getOrganizationParty } from './actions';
 import { User } from './types';
 
 /* eslint-disable functional/immutable-data */
@@ -28,7 +29,12 @@ const userSlice = createSlice({
             ],
             fiscal_code: '',
           },
+          desired_exp: 0
         }) as User,
+    organizationParty: {
+      id: '',
+      name: '',
+    } as Party,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -37,6 +43,9 @@ const userSlice = createSlice({
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = action.payload;
+    });
+    builder.addCase(getOrganizationParty.fulfilled, (state, action) => {
+      state.organizationParty = action.payload;
     });
   },
 });

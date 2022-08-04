@@ -51,7 +51,7 @@ describe('MobileNotifications Component', () => {
     const result = render(
       <MobileNotifications
         notifications={[]}
-        sort={{ orderBy: 'mocked-field', order: 'asc' }}
+        sort={{ orderBy: 'sentAt', order: 'asc' }}
         onChangeSorting={() => {}}
       />
     );
@@ -100,7 +100,7 @@ describe('MobileNotifications Component', () => {
     const result = render(
       <MobileNotifications
         notifications={[]}
-        sort={{ orderBy: 'mocked-field', order: 'asc' }}
+        sort={{ orderBy: 'sentAt', order: 'asc' }}
         onChangeSorting={() => {}}
       />
     );
