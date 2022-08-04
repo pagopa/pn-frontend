@@ -66,12 +66,9 @@ const FilterNotificationsFormBody = ({
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (e.target.id === 'iunMatch') {
-      const newInput = formatIun(formikInstance.values.iunMatch, (e.nativeEvent as any).data);
-      if (newInput) {
-        await formikInstance.setFieldValue('iunMatch', newInput);
-      } else {
-        formikInstance.handleChange(e);
-      }
+      const upperCaseValue = (e.target as HTMLInputElement).value.toUpperCase();
+      const newInput = formatIun(formikInstance.values.iunMatch, (e.nativeEvent as any).data)?.toUpperCase();
+      await formikInstance.setFieldValue('iunMatch', newInput ? newInput : upperCaseValue);
     } else {
       formikInstance.handleChange(e);
     }
