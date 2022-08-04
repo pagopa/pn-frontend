@@ -149,16 +149,16 @@ describe('timeline utility functions', () => {
   it('return timeline status infos - SCHEDULE_ANALOG_WORKFLOW', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_ANALOG_WORKFLOW;
     testTimelineStatusInfosFn(
-      'Invio per via cartacea',
-      "L'invio della notifica per via cartacea è in preparazione."
+      'Invio per via cartacea in preparazione',
+      "L'invio della notifica per via cartacea a Nome Cognome è in preparazione."
     );
   });
 
   it('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
     testTimelineStatusInfosFn(
-      'Invio per via digitale',
-      "È in corso l'invio della notifica per via digitale."
+      'Invio per via digitale in preparazione',
+      "L'invio della notifica per via digitale a Nome Cognome è in preparazione."
     );
   });
 
@@ -201,7 +201,7 @@ describe('timeline utility functions', () => {
     );
   });
 
-  it('return timeline status infos - SEND_DIGITAL_DOMICILE_FAILURE', () => {
+  it('return timeline status infos - SEND_DIGITAL_FEEDBACK (failure)', () => {
     parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
@@ -210,8 +210,22 @@ describe('timeline utility functions', () => {
       address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
-      'Invio per via digitale fallito',
-      "L'invio della notifica a Nome Cognome per via digitale non è riuscito."
+      'Invio per via digitale non riuscito',
+      "Il tentativo di invio della notifica per via digitale a Nome Cognome non è riuscito."
+    );
+  });
+
+  it('return timeline status infos - SEND_DIGITAL_FEEDBACK (success)', () => {
+    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'OK';
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
+      type: DigitalDomicileType.PEC,
+      address: 'nome@cognome.mail',
+    };
+    testTimelineStatusInfosFn(
+      'Invio per via digitale riuscito',
+      "Il tentativo di invio della notifica per via digitale a Nome Cognome è riuscito."
     );
   });
 
@@ -278,6 +292,24 @@ describe('timeline utility functions', () => {
     );
   });
 
+  it('return timeline status infos - SEND_DIGITAL_PROGRESS (failure)', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
+    testTimelineStatusInfosFn(
+      'Invio via PEC non preso in carico',
+      "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail non è stato preso in carico."
+    );
+  });
+
+  it('return timeline status infos - SEND_DIGITAL_PROGRESS (success)', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'OK';
+    testTimelineStatusInfosFn(
+      'Invio via PEC preso in carico',
+      "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail è stato preso in carico."
+    );
+  });
+
   it('return parsed notification detail response', () => {
     const calculatedParsedNotification = parseNotificationDetail(notificationFromBe);
     expect(calculatedParsedNotification).toStrictEqual(parsedNotification);
@@ -321,8 +353,8 @@ describe('timeline utility functions', () => {
   it('return legalFact label - DIGITAL_FAILURE_WORKFLOW', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
     testTimelineStatusInfosFn(
-      'Invio per via digitale non riuscito',
-      `L'invio per via digitale della notifica non è riuscito.`
+      'Invio per via digitale fallito',
+      `L'invio per via digitale della notifica a Nome Cognome è fallito.`
     );
   });
 
