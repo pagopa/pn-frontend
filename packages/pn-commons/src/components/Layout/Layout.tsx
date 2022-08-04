@@ -3,9 +3,10 @@ import { Stack } from '@mui/material';
 import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
 import { Box } from '@mui/system';
 
-import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
+import Footer from '../Footer/Footer';
 import ErrorBoundary from '../ErrorBoundary';
+
 type Props = {
   children?: ReactNode;
   /** Logout/exit action to apply */
@@ -26,6 +27,8 @@ type Props = {
   enableUserDropdown?: boolean;
   /** Actions linked to user dropdown */
   userActions?: Array<UserAction>;
+  /** Function called when user chenge language */
+  onLanguageChanged?: (langCode: string) => void;
   /** event callback on app crash  */
   eventTrackingCallbackAppCrash?: (_error: Error, _errorInfo: ErrorInfo) => void;
   /** event callback on change language */
@@ -47,17 +50,17 @@ export default function Layout({
   loggedUser,
   enableUserDropdown,
   userActions,
+  onLanguageChanged = () => {},
   eventTrackingCallbackAppCrash,
   eventTrackingCallbackFooterChangeLanguage,
   eventTrackingCallbackProductSwitch,
   onAssistanceClick,
 }: Props) {
-
   return (
     <ErrorBoundary sx={{ height: '100vh' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
       <Stack
         direction="column"
-        sx={{ minHeight: '100vh'}} // 100vh per sticky footer
+        sx={{ minHeight: '100vh' }} // 100vh per sticky footer
       >
         <Header
           onExitAction={onExitAction}
@@ -72,16 +75,21 @@ export default function Layout({
         />
         <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
           {showSideMenu && (
-          <Box sx={{ width: { lg: 300 }, flexShrink: '0'}} component="nav">
-            {sideMenu}
-          </Box>
+            <Box sx={{ width: { lg: 300 }, flexShrink: '0' }} component="nav">
+              {sideMenu}
+            </Box>
           )}
           <Box sx={{ flexGrow: 1 }} component="main">
-          <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>{children}</ErrorBoundary>
+            <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
+              {children}
+            </ErrorBoundary>
           </Box>
-
         </Stack>
-        <Footer eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage} />
+        <Footer
+          loggedUser={loggedUser.id !== ''}
+          onLanguageChanged={onLanguageChanged}
+          eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
+        />
       </Stack>
     </ErrorBoundary>
   );

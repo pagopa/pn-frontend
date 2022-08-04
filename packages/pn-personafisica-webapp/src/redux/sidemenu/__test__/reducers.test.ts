@@ -1,6 +1,6 @@
 /* eslint-disable functional/no-let */
 import { DelegationsApi } from "../../../api/delegations/Delegations.api";
-import { mockAuthentication } from "../../auth/__test__/reducers.test";
+import { mockAuthentication } from "../../auth/__test__/test-utils";
 import { acceptDelegation, rejectDelegation } from "../../delegation/actions";
 import { Delegator } from "../../delegation/types";
 import { store } from "../../store";

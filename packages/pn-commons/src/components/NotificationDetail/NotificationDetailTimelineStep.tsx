@@ -13,24 +13,24 @@ import {
   ButtonNaked,
 } from '@pagopa/mui-italia';
 
-import { getDay, getMonthString, getTime } from '../../utils/date.utility';
 import {
+  getDay,
+  getMonthString,
+  getTime,
   getLegalFactLabel,
   getNotificationStatusInfos,
-  getNotificationTimelineStatusInfos,
-} from '../../utils/notification.utility';
+  getNotificationTimelineStatusInfos } from '../../utils';
 import {
   LegalFactId,
   INotificationDetailTimeline,
   NotificationDetailRecipient,
   NotificationStatusHistory,
   TimelineCategory,
-} from '../../types/NotificationDetail';
+} from '../../types';
 
 type Props = {
   timelineStep: NotificationStatusHistory;
   recipients: Array<NotificationDetailRecipient>;
-  legalFactLabels: { attestation: string; receipt: string };
   clickHandler: (legalFactId: LegalFactId) => void;
   position?: 'first' | 'last' | 'middle';
   showMoreButtonLabel?: string;
@@ -74,7 +74,6 @@ const timelineStepCmp = (
  * @param timelineStep data to show
  * @param recipients list of recipients
  * @param clickHandler function called when user clicks on the download button
- * @param legalFactLabels label of the download button
  * @param position step position
  * @param showHistoryButton show history button
  * @param historyButtonLabel label for history button
@@ -86,7 +85,6 @@ const timelineStepCmp = (
 const NotificationDetailTimelineStep = ({
   timelineStep,
   recipients,
-  legalFactLabels,
   clickHandler,
   position = 'middle',
   showMoreButtonLabel,
@@ -149,7 +147,7 @@ const NotificationDetailTimelineStep = ({
       ) : (
         <Box style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
           <Typography color="text.primary" variant="caption">
-            {getNotificationStatusInfos(timelineStep.status).description}
+            {notificationStatusInfos.description}
           </Typography>
           {legalFactsIds && legalFactsIds.length > 0 &&
             legalFactsIds.map((lf) => (
@@ -160,7 +158,7 @@ const NotificationDetailTimelineStep = ({
                 color="primary"
                 sx={{ marginTop: '10px' }}
               >
-                {getLegalFactLabel(lf.category, legalFactLabels)}
+                {getLegalFactLabel(lf.category, lf.file.category)}
               </ButtonNaked>
             ))}
         </Box>
@@ -170,9 +168,10 @@ const NotificationDetailTimelineStep = ({
   );
 
   const handleShowMoreClick = () => {
-    eventTrackingCallbackShowMore && collapsed && eventTrackingCallbackShowMore()
-    setCollapsed(!collapsed)
-  }
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    eventTrackingCallbackShowMore && collapsed && eventTrackingCallbackShowMore();
+    setCollapsed(!collapsed);
+  };
 
   const moreLessButton = timelineStepCmp(
     undefined,
@@ -221,18 +220,19 @@ const NotificationDetailTimelineStep = ({
         <Box sx={{ overflowWrap: 'anywhere' }}>
           <Typography color="text.primary" fontSize={14}>
             {timelineStatusInfos.description}&nbsp;
-            {timelineStatusInfos.linkText && s.legalFactsIds && s.legalFactsIds.length > 0 && (
-              <Typography
+            {s.legalFactsIds && s.legalFactsIds.length > 0 && (
+              s.legalFactsIds.map(lf => <Typography
                 fontSize={14}
                 display="inline"
                 variant="button"
                 color="primary"
                 sx={{ cursor: 'pointer' }}
-                onClick={() => s.legalFactsIds && clickHandler(s.legalFactsIds[0])}
+                onClick={() => s.legalFactsIds && clickHandler(lf)}
+                key={lf.key}
               >
-                {timelineStatusInfos.linkText}
+                {getLegalFactLabel(s.category, lf.category)}
               </Typography>
-            )}
+            ))}
           </Typography>
         </Box>
         {recipients.length > 1 && (

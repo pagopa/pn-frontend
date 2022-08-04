@@ -2,14 +2,15 @@ import _ from 'lodash';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
+  LegalFactType,
   NotHandledDetails,
   PhysicalCommunicationType,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-} from '../../types/NotificationDetail';
-import { NotificationStatus } from '../../types/NotificationStatus';
+  NotificationStatus
+} from '../../types';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -149,7 +150,7 @@ describe('timeline utility functions', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_ANALOG_WORKFLOW;
     testTimelineStatusInfosFn(
       'Invio per via cartacea',
-      "È in corso l'invio della notifica per via cartacea."
+      "L'invio della notifica per via cartacea è in preparazione."
     );
   });
 
@@ -203,7 +204,7 @@ describe('timeline utility functions', () => {
   it('return timeline status infos - SEND_DIGITAL_DOMICILE_FAILURE', () => {
     parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).errors = ['mocked-errors'];
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       type: DigitalDomicileType.PEC,
       address: 'nome@cognome.mail',
@@ -282,20 +283,47 @@ describe('timeline utility functions', () => {
     expect(calculatedParsedNotification).toStrictEqual(parsedNotification);
   });
 
-  it('return legalFact label - NO SEND_PAPER_FEEDBACK', () => {
-    const label = getLegalFactLabel(TimelineCategory.GET_ADDRESS, {
-      attestation: 'mocked-legalFact-label',
-      receipt: 'mocked-recipient-label',
-    });
-    expect(label).toBe('mocked-legalFact-label');
+  it('return legalFact label - default', () => {
+    const label = getLegalFactLabel(TimelineCategory.GET_ADDRESS);
+    expect(label).toBe('Attestazione opponibile a terzi');
   });
 
   it('return legalFact label - SEND_PAPER_FEEDBACK', () => {
-    const label = getLegalFactLabel(TimelineCategory.SEND_PAPER_FEEDBACK, {
-      attestation: 'mocked-legalFact-label',
-      receipt: 'mocked-recipient-label',
-    });
-    expect(label).toBe('mocked-recipient-label');
+    const label = getLegalFactLabel(TimelineCategory.SEND_PAPER_FEEDBACK);
+    expect(label).toBe('Ricevuta');
+  });
+
+  it('return legalFact label - SENDER_ACK', () => {
+    const label = getLegalFactLabel(TimelineCategory.REQUEST_ACCEPTED, LegalFactType.SENDER_ACK);
+    expect(label).toBe('Attestazione opponibile a terzi: notifica presa in carico');
+  });
+
+  it('return legalFact label - DIGITAL_DELIVERY', () => {
+    const label = getLegalFactLabel(TimelineCategory.DIGITAL_SUCCESS_WORKFLOW, LegalFactType.DIGITAL_DELIVERY);
+    expect(label).toBe('Attestazione opponibile a terzi: notifica digitale');
+  });
+
+  it('return legalFact label - DIGITAL_DELIVERY', () => {
+    const label = getLegalFactLabel(TimelineCategory.DIGITAL_FAILURE_WORKFLOW, LegalFactType.DIGITAL_DELIVERY);
+    expect(label).toBe('Attestazione opponibile a terzi: mancato recapito digitale');
+  });
+
+  it('return legalFact label - ANALOG_DELIVERY', () => {
+    const label = getLegalFactLabel(TimelineCategory.ANALOG_SUCCESS_WORKFLOW, LegalFactType.ANALOG_DELIVERY);
+    expect(label).toBe('Attestazione opponibile a terzi: conformità');
+  });
+
+  it('return legalFact label - RECIPIENT_ACCESS', () => {
+    const label = getLegalFactLabel(TimelineCategory.NOTIFICATION_VIEWED, LegalFactType.RECIPIENT_ACCESS);
+    expect(label).toBe('Attestazione opponibile a terzi: avvenuto accesso');
+  });
+
+  it('return legalFact label - DIGITAL_FAILURE_WORKFLOW', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
+    testTimelineStatusInfosFn(
+      'Invio per via digitale non riuscito',
+      `L'invio per via digitale della notifica non è riuscito.`
+    );
   });
 
   // PN-1647

@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect, Fragment, ReactNode, useState } from 'react';
+import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
 import {
   Box,
   Button,
@@ -27,6 +28,7 @@ import {
   TitleBox,
   useIsMobile,
   NotificationDetailRecipient,
+  NotificationStatus,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -64,14 +66,12 @@ const NotificationDetail = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
-
   const { recipients } = notification;
-
   const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
-
   const recipientsWithAltNoticeCode = recipients.filter(
     (recipient) => recipient.payment?.noticeCodeAlternative
   );
+  const { t } = useTranslation(['common', 'notifiche']);
 
   const getRecipientsNoticeCodeField = (
     filteredRecipients: Array<NotificationDetailRecipient>,
@@ -102,17 +102,20 @@ const NotificationDetail = () => {
     value: ReactNode;
   }> = [
     {
-      label: 'Mittente',
+      label: t('detail.sender', { ns: 'notifiche' }),
       rawValue: notification.senderDenomination,
       value: <Box fontWeight={600}>{notification.senderDenomination}</Box>,
     },
     {
-      label: 'Destinatario',
+      label: t('detail.recipient', { ns: 'notifiche' }),
       rawValue: recipients.length > 1 ? '' : recipients[0]?.denomination,
       value: <Box fontWeight={600}>{recipients[0]?.denomination}</Box>,
     },
     {
-      label: recipients.length > 1 ? 'Destinatari' : 'Codice Fiscale destinatario',
+      label:
+        recipients.length > 1
+          ? t('detail.recipients', { ns: 'notifiche' })
+          : t('detail.fiscal-code-recipient', { ns: 'notifiche' }),
       rawValue: recipients.map((recipient) => recipient.denomination).join(', '),
       value: (
         <>
@@ -125,12 +128,12 @@ const NotificationDetail = () => {
       ),
     },
     {
-      label: 'Data di invio',
+      label: t('detail.date', { ns: 'notifiche' }),
       rawValue: notification.sentAt,
       value: <Box fontWeight={600}>{notification.sentAt}</Box>,
     },
     {
-      label: 'Da pagare entro il',
+      label: t('detail.payment-terms', { ns: 'notifiche' }),
       rawValue: notification.paymentExpirationDate,
       value: (
         <Box fontWeight={600} display="inline">
@@ -139,32 +142,32 @@ const NotificationDetail = () => {
       ),
     },
     {
-      label: 'Importo',
+      label: t('detail.amount', { ns: 'notifiche' }),
       rawValue: notification.amount?.toFixed(2),
       value: <Box fontWeight={600}>{notification.amount?.toFixed(2)}</Box>,
     },
     {
-      label: 'Codice IUN',
+      label: t('detail.iun', { ns: 'notifiche' }),
       rawValue: notification.iun,
       value: <Box fontWeight={600}>{notification.iun}</Box>,
     },
     {
-      label: 'Codice IUN annullato',
+      label: t('detail.cancelled-iun', { ns: 'notifiche' }),
       rawValue: notification.cancelledIun,
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
     },
     {
-      label: 'Codice Avviso',
+      label: t('detail.notice-code', { ns: 'notifiche' }),
       rawValue: recipientsWithNoticeCode.join(', '),
       value: getRecipientsNoticeCodeField(recipientsWithNoticeCode),
     },
     {
-      label: 'Codice Avviso Alternativo',
+      label: t('detail.secondary-notice-code', { ns: 'notifiche' }),
       rawValue: recipientsWithAltNoticeCode.join(', '),
       value: getRecipientsNoticeCodeField(recipientsWithAltNoticeCode, true),
     },
     {
-      label: 'Gruppi',
+      label: t('detail.groups', { ns: 'notifiche' }),
       rawValue: notification.group,
       value: notification.group && (
         <TagGroup visibleItems={4}>
@@ -214,6 +217,21 @@ const NotificationDetail = () => {
     navigate(routes.NUOVA_NOTIFICA);
   };
 
+  const isCancelled =
+    notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
+
+  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
+
+  const getDownloadFilesMessage = useCallback((): string => {
+    if (isCancelled) {
+      return "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.";
+    } else if (hasDocumentsAvailable) {
+      return "I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.";
+    } else {
+      return "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, i documenti non sono più disponibili.";
+    }
+  }, [isCancelled, hasDocumentsAvailable]);
+
   // PN-1714
   /*
   const openModal = () => {
@@ -248,10 +266,11 @@ const NotificationDetail = () => {
         linkLabel={
           <Fragment>
             <EmailIcon sx={{ mr: 0.5 }} />
-            Notifiche
+            {t('detail.breadcrumb-root', { ns: 'notifiche' })}
           </Fragment>
         }
-        currentLocationLabel="Dettaglio notifica"
+        currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
+        goBackLabel={t('button.indietro', { ns: 'common' })}
       />
       <TitleBox
         variantTitle="h4"
@@ -285,7 +304,7 @@ const NotificationDetail = () => {
           onClick={openModal}
           data-testid="cancelNotificationBtn"
         >
-          Annulla notifica
+          {t('detail.cancel-notification', { ns: 'notifiche' })}
         </Button>
         )
         */
@@ -313,24 +332,23 @@ const NotificationDetail = () => {
       aria-describedby="dialog-description"
     >
       <DialogTitle id="dialog-title" sx={{ p: 4 }}>
-        Ci siamo quasi
+        {t('detail.cancel-notification-modal.title', { ns: 'notifiche' })}
       </DialogTitle>
       <DialogContent sx={{ px: 4, pb: 4 }}>
         <DialogContentText id="dialog-description">
-          Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la
-          precedente.
+          {t('detail.cancel-notification-modal.message', { ns: 'notifiche' })}
         </DialogContentText>
       </DialogContent>
       <DialogActions sx={{ px: 4, pb: 4 }}>
         <Button onClick={handleModalClose} variant="outlined" data-testid="modalCloseBtnId">
-          Indietro
+          {t('button.indietro')}
         </Button>
         <Button
           onClick={handleModalCloseAndProceed}
           variant="contained"
           data-testid="modalCloseAndProceedBtnId"
         >
-          Invia una nuova notifica
+          {t('new-notification-button', { ns: 'notifiche' })}
         </Button>
       </DialogActions>
     </Dialog>
@@ -347,10 +365,12 @@ const NotificationDetail = () => {
               <NotificationDetailTable rows={detailTableRows} />
               <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                 <NotificationDetailDocuments
-                  title="Documenti allegati"
-                  documents={notification.documents}
+                  title={t('detail.acts', { ns: 'notifiche' })}
+                  documents={notification.documents ?? []}
                   clickHandler={documentDowloadHandler}
-                  documentsAvailable={notification.documentsAvailable as boolean}
+                  documentsAvailable={hasDocumentsAvailable}
+                  downloadFilesMessage={getDownloadFilesMessage()}
+                  downloadFilesLink="Quando si perfeziona una notifica?"
                 />
               </Paper>
             </Stack>
@@ -360,15 +380,11 @@ const NotificationDetail = () => {
               <NotificationDetailTimeline
                 recipients={recipients}
                 statusHistory={notification.notificationStatusHistory}
-                title="Stato della notifica"
+                title={t('detail.timeline-title', { ns: 'notifiche' })}
                 clickHandler={legalFactDownloadHandler}
-                legalFactLabels={{
-                  attestation: 'Attestazione opponibile a terzi',
-                  receipt: 'Ricevuta',
-                }}
-                historyButtonLabel="Mostra storico"
-                showMoreButtonLabel="Mostra di più"
-                showLessButtonLabel="Mostra di meno"
+                historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
+                showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
+                showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
                 eventTrackingCallbackShowMore={() =>
                   trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
                 }

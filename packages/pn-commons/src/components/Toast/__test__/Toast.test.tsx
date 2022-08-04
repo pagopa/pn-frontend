@@ -3,7 +3,7 @@ import { fireEvent, waitFor } from "@testing-library/react";
 
 import { render } from "../../../test-utils";
 import Toast from "../Toast";
-import { MessageType } from "../../../types/MessageType";
+import { MessageType } from "../../../types";
 
 const toastProps = {
   message: 'Toast mocked message',

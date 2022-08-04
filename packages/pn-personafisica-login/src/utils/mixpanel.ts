@@ -40,10 +40,10 @@ export const mixpanelInit = function (): void {
  * @param properties event data
  */
 function trackEvent(event_name: string, properties?: any): void {
-    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-        console.log(event_name, properties);
-    } else if (process.env.NODE_ENV === 'test') {
+    if (process.env.NODE_ENV === 'test') {
         return;
+    } else if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+        console.log(event_name, properties);
     } else {
         try {
             track(event_name, { ...properties, ...{ environment: "DEV" } });

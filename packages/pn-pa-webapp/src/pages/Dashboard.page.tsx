@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
   calculatePages,
@@ -20,6 +21,7 @@ import {
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 
+// import { NotificationColumn } from '../types/Notifications';  // Riabilitare con la issue PN-1124
 import DesktopNotifications from './components/Notifications/DesktopNotifications';
 import MobileNotifications from './components/Notifications/MobileNotifications';
 
@@ -31,6 +33,7 @@ const Dashboard = () => {
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { t } = useTranslation(['notifiche']);
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -55,7 +58,7 @@ const Dashboard = () => {
   // Sort handlers
   // Riabilitare con la issue PN-1124
   /*
-  const handleChangeSorting = (s: Sort) => {
+  const handleChangeSorting = (s: Sort<NotificationColumn>) => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_SORT, {type: s.orderBy});
     dispatch(setSorting(s));
   };
@@ -88,12 +91,11 @@ const Dashboard = () => {
   return (
     <Box p={3}>
       <Typography variant="h4" mb={isMobile ? 3 : undefined}>
-        Notifiche
+        {t('title')}
       </Typography>
       <Box display={isMobile ? 'block' : 'flex'} justifyContent="space-between" alignItems="center">
         <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-          Qui trovi tutte le notifiche inviate dall&apos;ente. Puoi filtrarle per Codice Fiscale,
-          Codice IUN, data di invio e stato.
+        {t('subtitle')}
         </Typography>
         <Button
           variant="contained"
@@ -101,7 +103,7 @@ const Dashboard = () => {
           data-testid="newNotificationBtn"
           sx={{ marginBottom: isMobile ? 3 : undefined }}
         >
-          Invia una nuova notifica
+          {t('new-notification-button')}
         </Button>
       </Box>
       {isMobile ? (

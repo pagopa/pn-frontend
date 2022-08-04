@@ -60,7 +60,7 @@ export interface NotificationDetail {
   notificationStatus: NotificationStatus;
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
-  amount?: number
+  amount?: number;
 }
 
 export interface INotificationDetailTimeline {
@@ -81,7 +81,7 @@ export interface INotificationDetailTimeline {
     | SendDigitalDetails
     | SendPaperDetails
     // PN-1647
-    | NotHandledDetails
+    | NotHandledDetails;
     // only fe
   hidden?: boolean;
 }
@@ -195,7 +195,7 @@ export enum NotificationFeePolicy {
 
 export interface NotificationDetailPayment {
   noticeCode?: string;
-  noticeCodeAlternative?: string,
+  noticeCodeAlternative?: string;
   creditorTaxId: string;
   pagoPaForm: NotificationDetailDocument;
   f24flatRate?: NotificationDetailDocument;

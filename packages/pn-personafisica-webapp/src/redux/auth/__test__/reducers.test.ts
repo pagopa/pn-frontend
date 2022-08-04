@@ -1,35 +1,13 @@
-import { AuthApi } from '../../../api/auth/Auth.api';
+import { store } from '../../store';
+import { User } from '../types';
+
 import { ConsentsApi } from '../../../api/consents/Consents.api';
 import { ConsentType } from '../../../models/consents';
-import { store } from '../../store';
 import {
   acceptToS,
   getToSApproval,
-  exchangeToken,
-  logout
 } from '../actions';
-import { User } from '../types';
-import { userResponse } from './test-utils';
-
-const mockLogin = async (): Promise<any> => {
-  const apiSpy = jest.spyOn(AuthApi, 'exchangeToken');
-  apiSpy.mockResolvedValue(userResponse);
-  return store.dispatch(exchangeToken('mocked-token'));
-};
-
-const mockLogout = async (): Promise<any> => store.dispatch(logout());
-
-export const mockAuthentication = () => {
-  beforeAll(() => {
-    mockLogin();
-  });
-
-  afterAll(() => {
-    mockLogout();
-    jest.resetAllMocks();
-    jest.clearAllMocks();
-  });
-};
+import { mockLogin, mockLogout, userResponse } from './test-utils';
 
 describe('Auth redux state tests', () => {
   const getConsentsApiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');

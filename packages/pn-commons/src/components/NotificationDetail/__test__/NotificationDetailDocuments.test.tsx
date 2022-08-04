@@ -1,7 +1,7 @@
 import { fireEvent, waitFor, RenderResult } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import { NotificationDetailDocument } from '../../../types/NotificationDetail';
+import { NotificationDetailDocument } from '../../../types';
 import NotificationDetailDocuments from '../NotificationDetailDocuments';
 
 const documents: Array<NotificationDetailDocument> = [

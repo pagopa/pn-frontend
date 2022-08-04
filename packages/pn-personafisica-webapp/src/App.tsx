@@ -6,20 +6,21 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { AppMessage, Layout, LoadingOverlay, SideMenu, SideMenuItem, useUnload } from '@pagopa-pn/pn-commons';
+import { AppMessage, appStateActions, initLocalization, Layout, LoadingOverlay, SideMenu, SideMenuItem, useMultiEvent, useUnload } from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
+import { Box } from '@mui/material';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { getToSApproval, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { PAGOPA_HELP_EMAIL } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from "./utils/events";
-import './utils/onetrust';
+// import './utils/onetrust';
 
 // TODO decommentare appena testata la funzionalità di mixpanel
 // declare const OneTrust: any;
@@ -40,7 +41,7 @@ const productsList: Array<ProductSwitchItem> = [
 
 const App = () => {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { fetchedTos, tos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
@@ -85,17 +86,16 @@ const App = () => {
     []
   );
 
-  useUnload((e: Event) => {
-    e.preventDefault();
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    e.defaultPrevented;
+  useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
   });
 
   useEffect(() => {
+    mixpanelInit();
+    // init localization
+    initLocalization((namespace, path, data) => t(path, {ns: namespace, ...data}));
     // OneTrust callback at first time
     // eslint-disable-next-line functional/immutable-data
-    mixpanelInit();
     // TODO testing
     // global.OptanonWrapper = function () {
     //   OneTrust.OnConsentChanged(function () {
@@ -172,6 +172,10 @@ const App = () => {
     },
   ];
 
+  const changeLanguageHandler = async (langCode: string) => {
+    await i18n.changeLanguage(langCode);
+  };
+
   const handleAssistanceClick = () => {
     trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
     /* eslint-disable-next-line functional/immutable-data */
@@ -193,7 +197,15 @@ const App = () => {
     trackEventByType(TrackEventType.USER_PRODUCT_SWITCH, { target });
   };
 
+  const [clickVersion] = useMultiEvent({
+    callback: () => dispatch(appStateActions.addSuccess({
+      title: "Current version",
+      message: `v${VERSION}`
+    })),
+  });
+
   return (
+    <>
     <Layout
       onExitAction={() => dispatch(logout())}
       eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
@@ -210,6 +222,7 @@ const App = () => {
       loggedUser={jwtUser}
       enableUserDropdown
       userActions={userActions}
+      onLanguageChanged={changeLanguageHandler}
       onAssistanceClick={handleAssistanceClick}
     >
       <AppMessage
@@ -218,6 +231,8 @@ const App = () => {
       <LoadingOverlay />
       <Router />
     </Layout>
+    <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
+    </>
   );
 };
 

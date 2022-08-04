@@ -1,6 +1,6 @@
 import MockAdapter from 'axios-mock-adapter';
 
-import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
+import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { digitalAddresses } from '../../../redux/contact/__test__/test-utils';
 import { LegalChannelType, CourtesyChannelType } from '../../../models/contacts';
 import { apiClient } from '../../axios';

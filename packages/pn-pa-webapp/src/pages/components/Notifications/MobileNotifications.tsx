@@ -1,4 +1,5 @@
 import { Fragment, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Typography } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -21,14 +22,15 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import * as routes from '../../../navigation/routes.const';
+import { NotificationSortField } from '../../../types/Notifications';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort;
+  sort?: Sort<NotificationSortField>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort) => void;
+  onChangeSorting?: (s: Sort<NotificationSortField>) => void;
   /** The function to be invoked if the user clicks on new notification link */
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
@@ -44,6 +46,8 @@ const MobileNotifications = ({
 }: Props) => {
   const navigate = useNavigate();
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
+  const { t } = useTranslation(['notifiche', 'common']);
+  
   const handleEventTrackingTooltip = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
   };
@@ -51,7 +55,7 @@ const MobileNotifications = ({
   const cardHeader: [CardElement, CardElement] = [
     {
       id: 'sentAt',
-      label: 'Data',
+      label: t('table.date'),
       getLabel(value: string) {
         return value;
       },
@@ -62,7 +66,7 @@ const MobileNotifications = ({
     },
     {
       id: 'notificationStatus',
-      label: 'Stato',
+      label: t('table.status'),
       getLabel(_, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
@@ -79,7 +83,7 @@ const MobileNotifications = ({
   const cardBody: Array<CardElement> = [
     {
       id: 'recipients',
-      label: 'Destinatario',
+      label: t('table.recipient'),
       getLabel(value: Array<string>) {
         return value.map((v) => (
           <Typography key={v} variant="body2">
@@ -91,21 +95,21 @@ const MobileNotifications = ({
     },
     {
       id: 'subject',
-      label: 'Oggetto',
+      label: t('table.subject'),
       getLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
     },
     {
       id: 'iun',
-      label: 'Codice IUN',
+      label: t('table.iun'),
       getLabel(value: string) {
         return value;
       },
     },
     {
       id: 'group',
-      label: 'Gruppi',
+      label: t('table.groups'),
       getLabel(value: string) {
         return value;
       },
@@ -125,7 +129,7 @@ const MobileNotifications = ({
       id: 'go-to-detail',
       component: (
         <ButtonNaked endIcon={<ArrowForwardIcon />} color="primary">
-          Vedi dettaglio
+          {t('table.show-detail')}
         </ButtonNaked>
       ),
       onClick: handleRowClick,
@@ -137,46 +141,43 @@ const MobileNotifications = ({
     id: i.toString(),
   }));
 
-  const sortFields: Array<CardSort> = [
-    { id: 'sentAt', label: 'Data' },
-    { id: 'recipients', label: 'Destinatario' },
-    { id: 'notificationStatus', label: 'Stato' },
+  const sortFields: Array<CardSort<NotificationSortField>> = [
+    { id: 'sentAt' as NotificationSortField, label: t('table.date') },
+    { id: 'recipients' as NotificationSortField, label: t('table.recipient') },
+    { id: 'notificationStatus' as NotificationSortField, label: t('table.status') },
   ].reduce((arr, item) => {
     /* eslint-disable functional/immutable-data */
     arr.push(
       {
         id: `${item.id}-asc`,
-        label: `${item.label} crescente`,
+        label: `${item.label} ${t('sort.asc')}`,
         field: item.id,
         value: 'asc',
       },
       {
         id: `${item.id}-desc`,
-        label: `${item.label} decrescente`,
+        label: `${item.label} ${t('sort.desc')}`,
         field: item.id,
         value: 'desc',
       }
     );
     /* eslint-enable functional/immutable-data */
     return arr;
-  }, [] as Array<CardSort>);
+  }, [] as Array<CardSort<NotificationSortField>>);
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-  const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
-  const emptyActionLabel: string = 'Chiavi API';
-  const secondaryMessage: object = {
-    emptyMessage: 'o fai un',
-    emptyActionLabel: 'invio manuale',
-    emptyActionCallback: () => {
-      onManualSend();
-    },
-  };
   const EmptyStateProps = {
-    emptyMessage: filtersApplied ? undefined : emptyMessage,
-    emptyActionLabel: filtersApplied ? undefined : emptyActionLabel,
+    emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
+    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', {ns: 'common'}),
     disableSentimentDissatisfied: !filtersApplied,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
-    secondaryMessage: filtersApplied ? undefined : secondaryMessage,
+    secondaryMessage: filtersApplied ? undefined : {
+      emptyMessage: t('empty-state.secondary-message'),
+      emptyActionLabel: t('empty-state.secondary-action'),
+      emptyActionCallback: () => {
+        onManualSend();
+      },
+    },
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;
@@ -190,9 +191,9 @@ const MobileNotifications = ({
         <Grid item xs={6} textAlign="right">
           {sort && showFilters && onChangeSorting && (
             <MobileNotificationsSort
-              title="Ordina"
-              optionsTitle="Opzioni sort"
-              cancelLabel="Annulla ordinamento"
+              title={t('sort.title')}
+              optionsTitle={t('sort.options')}
+              cancelLabel={t('sort.cancel')}
               sortFields={sortFields}
               sort={sort}
               onChangeSorting={onChangeSorting}

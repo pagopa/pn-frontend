@@ -24,14 +24,15 @@ import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotification
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { Delegator } from '../../redux/delegation/types';
+import { NotificationColumn } from '../../types/Notifications';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
   /** Card sort */
-  sort?: Sort;
+  sort?: Sort<NotificationColumn>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort) => void;
+  onChangeSorting?: (s: Sort<NotificationColumn>  ) => void;
   /** Delegator */
   currentDelegator?: Delegator;
 };
@@ -89,7 +90,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
         );
-        return <StatusTooltip label={t(label)} tooltip={t(tooltip)} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
+        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },
       gridProps: {
         xs: 12,
@@ -127,9 +128,9 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     id: i.toString(),
   }));
 
-  const sortFields: Array<CardSort> = [
-    { id: 'sentAt', label: t('table.data') },
-    { id: 'senderId', label: t('table.mittente') },
+  const sortFields: Array<CardSort<NotificationColumn>> = [
+    { id: 'sentAt' as NotificationColumn, label: t('table.data') },
+    { id: 'senderId' as NotificationColumn, label: t('table.mittente') },
   ].reduce((arr, item) => {
     /* eslint-disable functional/immutable-data */
     arr.push(
@@ -148,7 +149,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     );
     /* eslint-enable functional/immutable-data */
     return arr;
-  }, [] as Array<CardSort>);
+  }, [] as Array<CardSort<NotificationColumn>>);
 
   const handleRouteContacts = () => {
     navigate(routes.RECAPITI);

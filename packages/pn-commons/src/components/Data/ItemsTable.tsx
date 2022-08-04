@@ -10,27 +10,28 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
-import { Notification } from '../../types/Notifications';
-import { Column, Item, Sort } from '../../types/ItemsTable';
 
-type Props = {
+import { Column, Item, Sort, Notification } from '../../types';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+
+type Props<ColumnId> = {
   /** Table columns */
-  columns: Array<Column>;
+  columns: Array<Column<ColumnId>>;
   /** Table rows */
   rows: Array<Item>;
   /** Table sort */
-  sort?: Sort;
+  sort?: Sort<ColumnId>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort) => void;
+  onChangeSorting?: (s: Sort<ColumnId>) => void;
 };
 
-function ItemsTable({
+function ItemsTable<ColumnId extends string>({
   columns,
   rows,
   sort,
   onChangeSorting,
-}: Props) {
-  const createSortHandler = (property: string) => () => {
+}: Props<ColumnId>) {
+  const createSortHandler = (property: ColumnId) => () => {
     if (sort && onChangeSorting) {
       const isAsc = sort.orderBy === property && sort.order === 'asc';
       onChangeSorting({ order: isAsc ? 'desc' : 'asc', orderBy: property });
@@ -59,7 +60,7 @@ function ItemsTable({
   return (
     <Root>
       <TableContainer sx={{ marginBottom: '10px' }}>
-        <Table stickyHeader aria-label="Tabella di item">
+        <Table stickyHeader aria-label={getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')}>
           <TableHead>
             <TableRow>
               {columns.map((column) => (

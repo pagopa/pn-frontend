@@ -1,17 +1,17 @@
 import { WalkthroughProps } from "@pagopa/mui-italia";
 import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
-import { CheckmarkIcon, CloudIcon, DelegationIcon, DeliverIcon, DocCheckIcon, EasyIcon, EcologyIcon, FireworksIcon, HourglassIcon, IOIcon, MessageIcon, NotificationIcon, PECIcon, PeopleIcon, PiggyIcon, SendIcon, SyncIcon, UploadIcon, WalletIcon } from "./icons";
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
-import { IAppData, IInfoblockData, IShowcaseData } from "model";
 import { HorizontalNavProps } from "@pagopa/mui-italia";
 import { SvgIcon } from "@mui/material";
 import { Typography } from "@mui/material";
+import { CheckmarkIcon, CloudIcon, DelegationIcon, DeliverIcon, DocCheckIcon, EasyIcon, EcologyIcon, FireworksIcon, HourglassIcon, IOIcon, MessageIcon, NotificationIcon, PECIcon, PeopleIcon, PiggyIcon, SendIcon, SyncIcon, UploadIcon, WalletIcon } from "./icons";
+import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
+import { IAppData, IInfoblockData, IShowcaseData } from "model";
 
 const assistanceLink = {
   label: "Assistenza",
   ariaLabel: "assistenza",
   href: `mailto:${PAGOPA_HELP_EMAIL}`
-}
+};
 
 const onReadClick = () => {
   window.open(PN_URL, '_blank');
@@ -287,7 +287,7 @@ const pfShowcases: Array<IShowcaseData> = [
           icon: <CloudIcon />,
           title: "Spazio",
           subtitle:
-            "Non devi più conservare i documenti stampati",
+            "Non devi più conservare i documenti stampati, grazie alla possibilità di scaricare e archiviare gli atti in digitale",
         },
       ],
     }
@@ -437,6 +437,7 @@ const pfWalkthrough: WalkthroughProps = {
       Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online o 
       a ritirare i documenti allegati in versione cartacea presso qualsiasi Ufficio Postale.
       `,
+      isSequential: false
     },
   ],
 };

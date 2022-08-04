@@ -8,19 +8,19 @@ describe('Footer Component', () => {
 
   it('renders footer', () => {
     // render component
-    const result = render(<Footer/>);
+    const result = render(<Footer loggedUser={true}/>);
     const buttons = result.container.querySelectorAll('button');
 
     expect(buttons).toHaveLength(5);
     buttons.forEach((button, index) => {
       if (index === 0) {
         expect(button).toHaveTextContent('PagoPA');
-        expect(button).toHaveAttribute('aria-label', pagoPALink.ariaLabel);
+        expect(button).toHaveAttribute('aria-label', pagoPALink().ariaLabel);
       } else if (index === 4) {
         expect(button).toHaveTextContent(LANGUAGES.it.it); // language 'it' is default selected
       } else {
-        expect(button).toHaveTextContent(postLoginLinks[index - 1].label);
-        expect(button).toHaveAttribute('aria-label', postLoginLinks[index - 1].ariaLabel);
+        expect(button).toHaveTextContent(postLoginLinks()[index - 1].label);
+        expect(button).toHaveAttribute('aria-label', postLoginLinks()[index - 1].ariaLabel);
       }
     });
   });
@@ -28,7 +28,7 @@ describe('Footer Component', () => {
   it('shows languages dropdown', async () => {
     // render component
     const mockEventTrackingCallbackChangeLanguage = jest.fn();
-    const result = render(<Footer eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage}/>);
+    const result = render(<Footer loggedUser={true} eventTrackingCallbackChangeLanguage={mockEventTrackingCallbackChangeLanguage}/>);
     const buttons = result.container.querySelectorAll('button');
     fireEvent.click(buttons[4]);
     const languageSelector = await waitFor(() => screen.queryByRole('presentation'));

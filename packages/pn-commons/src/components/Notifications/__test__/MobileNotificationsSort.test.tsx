@@ -1,18 +1,21 @@
+import React from 'react';
 import { fireEvent, waitFor, screen, RenderResult, within } from '@testing-library/react';
 import { CardSort, Sort } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../../test-utils';
 import MobileNotificationsSort from '../MobileNotificationsSort';
 
-const sortFields: Array<CardSort> = [
-  { id: 'mocked-id-1-asc', label: 'Mocked label 1 asc', value: 'asc', field: 'mocked-field-1' },
-  { id: 'mocked-id-1-desc', label: 'Mocked label 1 desc', value: 'desc', field: 'mocked-field-1' },
-  { id: 'mocked-id-2-asc', label: 'Mocked label 2 asc', value: 'asc', field: 'mocked-field-2' },
-  { id: 'mocked-id-2-desc', label: 'Mocked label 2 desc', value: 'desc', field: 'mocked-field-2' },
+type MockOrderByFields = 'mocked-field-1' | 'mocked-field-2';
+
+const sortFields: Array<CardSort<MockOrderByFields>> = [
+  { id: 'mocked-field-1-asc', label: 'Mocked label 1 asc', value: 'asc', field: 'mocked-field-1' },
+  { id: 'mocked-field-1-desc', label: 'Mocked label 1 desc', value: 'desc', field: 'mocked-field-1' },
+  { id: 'mocked-field-2-asc', label: 'Mocked label 2 asc', value: 'asc', field: 'mocked-field-2' },
+  { id: 'mocked-field-2-desc', label: 'Mocked label 2 desc', value: 'desc', field: 'mocked-field-2' },
 ];
 
-const sort: Sort = {
-  orderBy: 'mocked-id-1',
+const sort: Sort<MockOrderByFields> = {
+  orderBy: 'mocked-field-1',
   order: 'asc',
 };
 

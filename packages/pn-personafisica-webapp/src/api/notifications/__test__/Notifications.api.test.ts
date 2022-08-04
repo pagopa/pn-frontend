@@ -18,7 +18,7 @@ import {
   notificationFromBe,
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
-import { mockAuthentication } from '../../../redux/auth/__test__/reducers.test';
+import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import {
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
@@ -54,11 +54,7 @@ describe('Notifications api tests', () => {
     const iun = 'mocked-iun';
     const mock = new MockAdapter(apiClient);
     mock.onGet(NOTIFICATION_DETAIL(iun)).reply(200, notificationFromBe);
-    const res = await NotificationsApi.getReceivedNotification(
-      iun,
-      'CGNNMO80A03H501U',
-      []
-    );
+    const res = await NotificationsApi.getReceivedNotification(iun, 'CGNNMO80A03H501U', []);
     expect(res).toStrictEqual(notificationToFe);
     mock.reset();
     mock.restore();
