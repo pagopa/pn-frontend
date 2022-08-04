@@ -9,6 +9,7 @@ import {
   Sort
 } from '@pagopa-pn/pn-commons';
 
+import { NotificationColumn } from '../../types/Notifications';
 import { getReceivedNotifications } from './actions';
 
 /* eslint-disable functional/immutable-data */
@@ -32,7 +33,7 @@ const dashboardSlice = createSlice({
     sort: {
       orderBy: '',
       order: 'asc',
-    } as Sort,
+    } as Sort<NotificationColumn>,
   },
   reducers: {
     setPagination: (state, action: PayloadAction<{page: number; size: number}>) => {
@@ -44,7 +45,7 @@ const dashboardSlice = createSlice({
       state.pagination.size = action.payload.size;
       state.pagination.page = action.payload.page;
     },
-    setSorting: (state, action: PayloadAction<Sort>) => {
+    setSorting: (state, action: PayloadAction<Sort<NotificationColumn>>) => {
       state.sort = action.payload;
     },
     setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams>) => {

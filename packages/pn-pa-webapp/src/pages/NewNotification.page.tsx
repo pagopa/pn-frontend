@@ -10,7 +10,6 @@ import { RootState } from '../redux/store';
 import { createNewNotification } from '../redux/newNotification/actions';
 import { setSenderInfos, resetState } from '../redux/newNotification/reducers';
 import * as routes from '../navigation/routes.const';
-import { PARTY_MOCK } from '../utils/constants';
 import { TrackEventType } from '../utils/events';
 import { trackEventByType } from '../utils/mixpanel';
 import PreliminaryInformations from './components/NewNotification/PreliminaryInformations';
@@ -46,6 +45,7 @@ const NewNotification = () => {
   );
   const isCompleted = useAppSelector((state: RootState) => state.newNotificationState.isCompleted);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
+  const organizationParty = useAppSelector((state: RootState) => state.userState.organizationParty);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
   const steps = [
@@ -100,9 +100,9 @@ const NewNotification = () => {
   useEffect(() => {
     // TODO: in attesa che self care restituisca senderDenomination, questa viene settata come Denomination of + id
     dispatch(
-      setSenderInfos({ senderDenomination: PARTY_MOCK, senderTaxId: organization.fiscal_code })
+      setSenderInfos({ senderDenomination: organizationParty.name, senderTaxId: organization.fiscal_code })
     );
-  }, [organization]);
+  }, [organization, organizationParty]);
 
   useEffect(() => () => void dispatch(resetState()), []);
 

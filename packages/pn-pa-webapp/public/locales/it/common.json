@@ -104,5 +104,9 @@
     "hash-code-descr": "Il codice hash è un codice alfanumerico univoco utilizzato per identificare un determinato file",
     "ext-not-supported": "Estensione file non supportata. Riprovare con un altro file.",
     "loading-error": "Si è verificato un errore durante il caricamento del file. Si prega di riprovare."
+  },
+  "roles": {
+    "operator": "Referente operativo",
+    "admin": "Referente amministrativo"
   }
 }

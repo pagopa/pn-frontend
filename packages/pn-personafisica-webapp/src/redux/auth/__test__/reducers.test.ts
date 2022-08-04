@@ -1,27 +1,6 @@
-import { AuthApi } from '../../../api/auth/Auth.api';
 import { store } from '../../store';
-import { exchangeToken, logout } from '../actions';
 import { User } from '../types';
-import { userResponse } from './test-utils';
-
-const mockLogin = async (): Promise<any> => {
-  const apiSpy = jest.spyOn(AuthApi, 'exchangeToken');
-  apiSpy.mockResolvedValue(userResponse);
-  return store.dispatch(exchangeToken('mocked-token'));
-};
-
-const mockLogout = async (): Promise<any> => store.dispatch(logout());
-
-export const mockAuthentication = () => {
-  beforeAll(() => {
-    mockLogin();
-  });
-
-  afterAll(() => {
-    mockLogout();
-    jest.resetAllMocks();
-  });
-};
+import { mockLogin, mockLogout, userResponse } from './test-utils';
 
 describe('Auth redux state tests', () => {
   it('Initial state', () => {

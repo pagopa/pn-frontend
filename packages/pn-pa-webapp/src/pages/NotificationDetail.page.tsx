@@ -382,10 +382,6 @@ const NotificationDetail = () => {
                 statusHistory={notification.notificationStatusHistory}
                 title={t('detail.timeline-title', { ns: 'notifiche' })}
                 clickHandler={legalFactDownloadHandler}
-                legalFactLabels={{
-                  attestation: t('detail.legalfact', { ns: 'notifiche' }),
-                  receipt: t('detail.receipt', { ns: 'notifiche' }),
-                }}
                 historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
                 showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
                 showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}

@@ -1,18 +1,17 @@
 import { AnyAction, Dispatch, Middleware, PayloadAction } from '@reduxjs/toolkit';
 import { init, track, Mixpanel } from 'mixpanel-browser';
-import { MIXPANEL_TOKEN } from './constants';
 import { events, TrackEventType } from './events';
 /**
  * Function that initialize Mixpanel (must be called once)
  */
 export const mixpanelInit = function (): void {
-  if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
-    // eslint-disable-next-line no-console
-    console.log('Mixpanel events mock on console log.');
-  } else if (process.env.NODE_ENV === 'test') {
-    return;
-  } else {
-    init(MIXPANEL_TOKEN, {
+  // if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+  //   // eslint-disable-next-line no-console
+  //   console.log('Mixpanel events mock on console log.');
+  // } else if (process.env.NODE_ENV === 'test') {
+  //   return;
+  // } else {
+    init("aef0b0d89c3355510e9cdfdb18e7d0b5", {
       api_host: 'https://api-eu.mixpanel.com',
       persistence: 'localStorage',
       // if this is true, Mixpanel will automatically determine
@@ -21,6 +20,7 @@ export const mixpanelInit = function (): void {
       ip: false,
       // names of properties/superproperties which should never
       // be sent with track() calls
+      debug: true,
       property_blacklist: [],
       // function called after mixpanel has finished loading
       loaded(mixpanel: Mixpanel) {
@@ -31,7 +31,7 @@ export const mixpanelInit = function (): void {
         }
       },
     });
-  }
+  // }
 };
 
 /**
@@ -40,19 +40,25 @@ export const mixpanelInit = function (): void {
  * @param properties event data
  */
 function trackEvent(event_name: string, properties?: any): void {
-  if (process.env.NODE_ENV === 'test') {
-    return;
-  } else if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development' || MIXPANEL_TOKEN === 'DUMMY') {
+  try {
+    track(event_name, { ...properties, ...{ environment: "DEV" } });
+  } catch (_) {
     // eslint-disable-next-line no-console
     console.log(event_name, properties);
-  } else {
-    try {
-      track(event_name, { ...properties, ...{ environment: "DEV" } });
-    } catch (_) {
-      // eslint-disable-next-line no-console
-      console.log(event_name, properties);
-    }
   }
+  // if (process.env.NODE_ENV === 'test') {
+  //   return;
+  // } else if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development' || MIXPANEL_TOKEN === 'DUMMY') {
+  //   // eslint-disable-next-line no-console
+  //   console.log(event_name, properties);
+  // } else {
+  //   try {
+  //     track(event_name, { ...properties, ...{ environment: "DEV" } });
+  //   } catch (_) {
+  //     // eslint-disable-next-line no-console
+  //     console.log(event_name, properties);
+  //   }
+  // }
 }
 
 /**
