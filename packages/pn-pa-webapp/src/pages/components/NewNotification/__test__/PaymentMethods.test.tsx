@@ -1,3 +1,5 @@
+/* eslint-disable functional/no-let */
+/* eslint-disable functional/immutable-data */
 import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 
@@ -5,7 +7,7 @@ import { newNotification } from '../../../../redux/newNotification/__test__/test
 import * as actions from '../../../../redux/newNotification/actions';
 import { render } from '../../../../__test__/test-utils';
 import PaymentMethods from '../PaymentMethods';
-import { UploadPayementParams } from '../../../../models/NewNotification';
+import { UploadPayementParams } from '../../../../redux/newNotification/types';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -44,7 +46,11 @@ describe('PaymentMethods Component', () => {
     // render component
     await act(async () => {
       result = render(
-        <PaymentMethods notification={newNotification} onConfirm={confirmHandlerMk} isCompleted={false}/>
+        <PaymentMethods
+          notification={newNotification}
+          onConfirm={confirmHandlerMk}
+          isCompleted={false}
+        />
       );
     });
   });
@@ -56,7 +62,9 @@ describe('PaymentMethods Component', () => {
     const paymentBoxes = result.queryAllByTestId('paymentBox');
     expect(paymentBoxes).toHaveLength(4);
     paymentBoxes.forEach((paymentBox, index) => {
-      expect(paymentBox).toHaveTextContent(index % 2 === 0 ? /attach-pagopa-notice*/i : /attach-f24/i);
+      expect(paymentBox).toHaveTextContent(
+        index % 2 === 0 ? /attach-pagopa-notice*/i : /attach-f24/i
+      );
       const fileInput = paymentBox.parentNode?.querySelector('[data-testid="fileInput"]');
       expect(fileInput).toBeInTheDocument();
     });
@@ -85,29 +93,31 @@ describe('PaymentMethods Component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith(newNotification.recipients.reduce((obj: UploadPayementParams, r, index) => {
-        obj[r.taxId] = {
-          pagoPaForm: {
-            key: 'pagopa-notice',
-            file: new Uint8Array(),
-            sha256: 'mocked-hasBase64',
-            contentType: 'application/pdf',
-          },
-          f24flatRate: {
-            key: 'f24-flatrate',
-            file: undefined,
-            sha256: '',
-            contentType: 'application/pdf',
-          },
-          f24standard: {
-            key: 'F24',
-            file: index === 0 ? undefined : new Uint8Array(),
-            sha256: index === 0 ? '' : 'mocked-hasBase64',
-            contentType: 'application/pdf',
-          },
-        };
-        return obj;
-      }, {}));
+      expect(mockActionFn).toBeCalledWith(
+        newNotification.recipients.reduce((obj: UploadPayementParams, r, index) => {
+          obj[r.taxId] = {
+            pagoPaForm: {
+              key: 'pagopa-notice',
+              file: new Uint8Array(),
+              sha256: 'mocked-hasBase64',
+              contentType: 'application/pdf',
+            },
+            f24flatRate: {
+              key: 'f24-flatrate',
+              file: undefined,
+              sha256: '',
+              contentType: 'application/pdf',
+            },
+            f24standard: {
+              key: 'F24',
+              file: index === 0 ? undefined : new Uint8Array(),
+              sha256: index === 0 ? '' : 'mocked-hasBase64',
+              contentType: 'application/pdf',
+            },
+          };
+          return obj;
+        }, {})
+      );
     });
   });
 });

@@ -1,7 +1,7 @@
 import { Sort } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
-import { DelegatorsColumn, DelegatesColumn } from './../../types/Deleghe';
+import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
 import { AcceptDelegationResponse, Delegation } from './types';
 
 export const getDelegates = createAsyncThunk<Array<Delegation>>(

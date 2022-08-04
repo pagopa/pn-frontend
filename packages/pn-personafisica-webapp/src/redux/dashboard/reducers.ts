@@ -8,8 +8,8 @@ import {
   getNextDay,
   Sort
 } from '@pagopa-pn/pn-commons';
+import { NotificationColumn } from '../../models/Notifications';
 
-import { NotificationColumn } from '../../types/Notifications';
 import { getReceivedNotifications } from './actions';
 
 /* eslint-disable functional/immutable-data */

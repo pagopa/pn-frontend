@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-let */
 import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
@@ -65,7 +66,10 @@ describe('PreliminaryInformations Component', () => {
     testFormElements(form!, 'subject', 'subject*');
     testFormElements(form!, 'abstract', 'abstract');
     testFormElements(form!, 'group', 'group*');
-    testRadioElements(form!, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
+    testRadioElements(form!, 'comunicationTypeRadio', [
+      'registered-letter-890',
+      'simple-registered-letter',
+    ]);
     testRadioElements(form!, 'paymentMethodRadio', [
       'pagopa-notice',
       'pagopa-notice-f24-flatrate',
@@ -80,7 +84,15 @@ describe('PreliminaryInformations Component', () => {
     const form = result.container.querySelector('form');
     await testInput(form!, 'paProtocolNumber', 'mocked-NotificationId');
     await testInput(form!, 'subject', 'mocked-Subject');
-    await testSelect(form!, 'group', [{label: 'Group1', value: 'Group1'}, {label: 'Group2', value: 'Group2'}], 1);
+    await testSelect(
+      form!,
+      'group',
+      [
+        { label: 'Group1', value: 'Group1' },
+        { label: 'Group2', value: 'Group2' },
+      ],
+      1
+    );
     await testRadio(form!, 'comunicationTypeRadio', 1);
     await testRadio(form!, 'paymentMethodRadio', 1);
     const buttons = form?.querySelectorAll('button');
@@ -95,7 +107,7 @@ describe('PreliminaryInformations Component', () => {
           abstract: '',
           group: 'Group2',
           physicalCommunicationType: PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER,
-          paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE
+          paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
         },
         type: 'newNotificationSlice/setPreliminaryInformations',
       });
