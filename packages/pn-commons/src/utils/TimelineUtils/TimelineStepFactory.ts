@@ -7,6 +7,7 @@ import { SendCourtesyMessageStep } from './SendCourtesyMessageStep';
 import { SendDigitalDomicileStep } from './SendDigitalDomicileStep';
 import { SendDigitalDomicileFeedbackStep } from './SendDigitalDomicileFeedbackStep';
 import { SendDigitalFeedbackStep } from './SendDigitalFeedbackStep';
+import { SendDigitalProgressStep } from './SendDigitalProgressStep';
 import { SendSimpleRegisteredLetterStep } from './SendSimpleRegisteredLetterStep';
 import { SendAnalogDomicileStep } from './SendAnalogDomicileStep';
 import { SendPaperFeedbackStep } from './SendPaperFeedbackStep';
@@ -28,6 +29,8 @@ export class TimelineStepFactory {
         return new SendDigitalDomicileFeedbackStep();
       case TimelineCategory.SEND_DIGITAL_FEEDBACK:
         return new SendDigitalFeedbackStep();
+      case TimelineCategory.SEND_DIGITAL_PROGRESS:
+        return new SendDigitalProgressStep();
       case TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER:
          return new SendSimpleRegisteredLetterStep();
       case TimelineCategory.SEND_ANALOG_DOMICILE:
