@@ -113,7 +113,33 @@ const Recipient = ({ onConfirm }: Props) => {
           then: yup.string().required(tc('required-field')),
         }),
       })
-    ),
+    )
+    .test('identicalTaxIds', t('identical-fiscal-codes-error'), (values) => {
+      if (values) {
+        const taxIds = values.map((item) => item.taxId);
+
+        const taxIdsAreIdenticals = taxIds.some(
+          (item, idx) => taxIds.indexOf(item) !== idx && item != null && item !== ''
+        );
+
+        if (taxIdsAreIdenticals) {
+          const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
+          values.forEach((value, idx) => {
+            // eslint-disable-next-line functional/immutable-data
+            errors.push(new yup.ValidationError(
+              t('identical-fiscal-codes-error'), value, `recipients[${idx}].taxId`
+            ));   
+          });
+
+          return (errors.length === 0) ? true : new yup.ValidationError(errors);
+
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    }),
   });
 
   const handleAddressTypeChange = (
@@ -231,7 +257,9 @@ const Recipient = ({ onConfirm }: Props) => {
                             'selectPersonaFisicaOrPersonaGiuridica',
                             event.currentTarget.value
                           );
-                          trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {type: event.currentTarget.value});
+                          trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
+                            type: event.currentTarget.value,
+                          });
                         }}
                       >
                         <Grid container spacing={2}>
