@@ -17,8 +17,11 @@ export const exchangeToken = createAsyncThunk<User, string>(
       sessionStorage.setItem('user', JSON.stringify(user));
       return user;
     } else {
-      const user: User = JSON.parse(sessionStorage.getItem('user') || '');
-      return user;
+      // I prefer to launch an error than return rejectWithValue, since in this way 
+      // the navigation proceeds immediately to the login page.
+      // --------------
+      // Carlos Lombardi, 2022.08.05
+      throw new Error("spidToken must be provided to exchangeToken action");
     }
   }
 );

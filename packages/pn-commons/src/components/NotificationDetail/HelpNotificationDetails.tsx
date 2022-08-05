@@ -7,7 +7,7 @@ import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import WebIcon from '@mui/icons-material/Web';
 
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { phoneNumberRegex } from '../../utils/string.utility';
+import { dataRegex } from '../../utils/string.utility';
 
 interface HelpNotificationDetailsProps {
   title: string;
@@ -49,7 +49,7 @@ const HelpNotificationDetails: React.FC<HelpNotificationDetailsProps> = ({
 
   useEffect(() => {
     const fetchValidatedContactChannels = async () => {
-      const validatedPhoneNumber = (await yup.string().matches(phoneNumberRegex).isValid(phoneNumber)) ? phoneNumber : null;
+      const validatedPhoneNumber = (await yup.string().matches(dataRegex.phoneNumber).isValid(phoneNumber)) ? phoneNumber : null;
       const validatedMail = (await yup.string().email().isValid(mail)) ? mail : null;
       const validatedWebsite = (await yup.string().url().isValid(website)) ? website : null;
       setValidatedContactChannels({ 

@@ -16,8 +16,10 @@ const VerifyUser = () => {
   const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
 
   useEffect(() => {
+    console.log('VerifyUser - primo useEffect');
     const params = new URLSearchParams(location.hash);
     const tokenParam = params.get('#token');
+    console.log({ tokenParam, token });
     if (tokenParam) {
       setSpidToken(tokenParam);
     } else {
@@ -25,11 +27,11 @@ const VerifyUser = () => {
         goToLogin();
       }
     }
-  }, [location]);
+  }, [location, token]);
 
   useEffect(() => {
     if (spidToken !== '') {
-      dispatch(exchangeToken(spidToken)).catch(() => {
+      dispatch(exchangeToken( /* spidToken */ "")).catch(() => {
         goToLogin();
       });
     }

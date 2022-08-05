@@ -1,3 +1,4 @@
+import { dataRegex } from './string.utility';
 import { calculatePages } from './pagination.utility';
 import {
     getNotificationStatusInfos,
@@ -43,6 +44,7 @@ export {
     formatIun,
     formatCurrency,
     formatEurocentToCurrency,
+    dataRegex,
     storageOpsBuilder,
     compileRoute,
     today,
