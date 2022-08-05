@@ -2,7 +2,7 @@ import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { GetNotificationsParams, GetNotificationsResponse, Sort } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
-import { NotificationColumn } from './../../types/Notifications';
+import { NotificationColumn } from '../../models/Notifications';
 
 export const getSentNotifications = createAsyncThunk<
   GetNotificationsResponse,
