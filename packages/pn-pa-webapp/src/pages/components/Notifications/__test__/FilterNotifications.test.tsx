@@ -121,7 +121,7 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test iunMatch input', async () => {
-    await testInput(form!, 'iunMatch', 'mocked-iunMatch');
+    await testInput(form!, 'iunMatch', 'MOCKED-IUNMATCH');
   });
 
   it('test startDate input', async () => {
@@ -239,7 +239,7 @@ describe('Filter Notifications Table Component', () => {
       todayM,
       localizedNotificationStatus[2].value,
       '',
-      '12345678910abcdfghiol'
+      '12345678910ABCDFGHIOL'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeDisabled();

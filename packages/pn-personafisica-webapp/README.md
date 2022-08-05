@@ -29,7 +29,6 @@ E' necessario aggiungere nel proprio file .env.local le seguenti variabili d'amb
 ```
 REACT_APP_URL_FE_LOGIN
 REACT_APP_URL_API
-REACT_APP_CHECKOUT_URL
 REACT_APP_PAYMENT_DISCLAIMER_URL
 REACT_APP_PAGOPA_HELP_EMAIL= email di assistenza, si puo' usare una email fittizia in sviluppo
 REACT_APP_DISABLE_INACTIVITY_HANDLER = true se si vuole disabilitare la gestione dell'inattivita' utente, falsa altrimenti

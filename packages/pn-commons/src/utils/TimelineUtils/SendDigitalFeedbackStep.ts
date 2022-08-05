@@ -7,8 +7,8 @@ export class SendDigitalFeedbackStep extends TimelineStep {
       return {
         ...this.localizeTimelineStatus(
           'send-digital-error',
-          'Invio per via digitale fallito',
-          `L'invio della notifica a ${payload.recipient?.denomination} per via digitale non è riuscito.`,
+          'Invio per via digitale non riuscito',
+          `Il tentativo di invio della notifica per via digitale a ${payload.recipient?.denomination} non è riuscito.`,
           {
             name: payload.recipient?.denomination,
           }
@@ -20,7 +20,7 @@ export class SendDigitalFeedbackStep extends TimelineStep {
       ...this.localizeTimelineStatus(
         'send-digital-success',
         'Invio per via digitale riuscito',
-        `L'invio della notifica a ${payload.recipient?.denomination} per via digitale è riuscito.`,
+        `Il tentativo di invio della notifica per via digitale a ${payload.recipient?.denomination} è riuscito.`,
         {
           name: payload.recipient?.denomination,
         }

@@ -119,7 +119,7 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test iunMatch input', async () => {
-    await testInput(form!, 'iunMatch', 'mocked-iunMatch');
+    await testInput(form!, 'iunMatch', 'MOCKED-IUNMATCH');
   });
 
   it('test startDate input', async () => {
@@ -163,7 +163,7 @@ describe('Filter Notifications Table Component', () => {
     nineYearsAgo.setHours(0, 0, 0, 0);
 
     // wrong id and wrong start date
-    await setFormValues(form!, nineYearsAgo, todayM, '12345678910abcdfghiol');
+    await setFormValues(form!, nineYearsAgo, todayM, '12345678910ABCDFGHIOL');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeDisabled();
     await waitFor(() => {
