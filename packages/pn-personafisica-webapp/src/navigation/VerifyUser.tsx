@@ -31,7 +31,7 @@ const VerifyUser = () => {
 
   useEffect(() => {
     if (spidToken !== '') {
-      dispatch(exchangeToken( /* spidToken */ "")).catch(() => {
+      dispatch(exchangeToken(spidToken)).catch(() => {
         goToLogin();
       });
     }
