@@ -5,8 +5,11 @@ export class DigitalFailureWorkflowStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'digital-failure-workflow',
-        'Invio per via digitale non riuscito',
-        `L'invio per via digitale della notifica non è riuscito.`
+        'Invio per via digitale fallito',
+        `L'invio per via digitale della notifica a ${payload.recipient?.denomination} è fallito.`,
+        {
+          name: payload.recipient?.denomination,
+        }
       ),
       recipient: payload.recipientLabel,
     };

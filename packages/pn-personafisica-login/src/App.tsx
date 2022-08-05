@@ -1,19 +1,18 @@
-import { useEffect } from "react";
-import { Box } from "@mui/material";
-import { useMultiEvent } from "@pagopa-pn/pn-commons";
+import { useEffect } from 'react';
+import { Box } from '@mui/material';
+import { useMultiEvent } from '@pagopa-pn/pn-commons';
 import Router from './navigation/routes';
-import { mixpanelInit } from "./utils/mixpanel";
+import { mixpanelInit } from './utils/mixpanel';
 import './utils/onetrust';
-import { VERSION } from "./utils/constants";
+import { VERSION } from './utils/constants';
 
 declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
 const global = window as any;
 // target cookies (Mixpanel)
-const targCookiesGroup = "C0004";
+const targCookiesGroup = 'C0004';
 
 const App = () => {
-
   useEffect(() => {
     // OneTrust callback at first time
     // eslint-disable-next-line functional/immutable-data
@@ -27,9 +26,7 @@ const App = () => {
     };
     // check mixpanel cookie consent in cookie
     const OTCookieValue: string =
-      document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("OptanonConsent=")) || "";
+      document.cookie.split('; ').find((row) => row.startsWith('OptanonConsent=')) || '';
     const checkValue = `${targCookiesGroup}%3A1`;
     if (OTCookieValue.indexOf(checkValue) > -1) {
       mixpanelInit();
