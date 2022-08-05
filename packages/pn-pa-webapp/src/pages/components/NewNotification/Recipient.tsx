@@ -16,7 +16,12 @@ import {
   Paper,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { DigitalDomicileType, fiscalCodeRegex, RecipientType, pIvaRegex } from '@pagopa-pn/pn-commons';
+import {
+  DigitalDomicileType,
+  fiscalCodeRegex,
+  RecipientType,
+  pIvaRegex,
+} from '@pagopa-pn/pn-commons';
 
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -65,81 +70,82 @@ const Recipient = ({ onConfirm }: Props) => {
   const { t: tc } = useTranslation(['common']);
 
   const validationSchema = yup.object({
-    recipients: yup.array().of(
-      yup.object({
-        firstName: yup.string().required(tc('required-field')),
-        lastName: yup.string().required(tc('required-field')),
-        taxId: yup
-          .string()
-          .required(tc('required-field'))
-          .matches(fiscalCodeRegex, t('fiscal-code-error')),
-        creditorTaxId: yup
-          .string()
-          .required(tc('required-field'))
-          .matches(pIvaRegex, t('fiscal-code-error')),
-        noticeCode: yup
-          .string()
-          .matches(/^\d{18}$/, t('notice-code-error'))
-          .required(tc('required-field')),
-        digitalDomicile: yup.string().when('showDigitalDomicile', {
-          is: true,
-          then: yup.string().email(t('pec-error')).required(tc('required-field')),
-        }),
-        showPhysicalAddress: yup.boolean().isTrue(),
-        address: yup.string().when('showPhysicalAddress', {
-          is: true,
-          then: yup.string().required(tc('required-field')),
-        }),
-        houseNumber: yup.string().when('showPhysicalAddress', {
-          is: true,
-          then: yup.string().required(tc('required-field')),
-        }),
-        /*
+    recipients: yup
+      .array()
+      .of(
+        yup.object({
+          firstName: yup.string().required(tc('required-field')),
+          lastName: yup.string().required(tc('required-field')),
+          taxId: yup
+            .string()
+            .required(tc('required-field'))
+            .matches(fiscalCodeRegex, t('fiscal-code-error')),
+          creditorTaxId: yup
+            .string()
+            .required(tc('required-field'))
+            .matches(pIvaRegex, t('fiscal-code-error')),
+          noticeCode: yup
+            .string()
+            .matches(/^\d{18}$/, t('notice-code-error'))
+            .required(tc('required-field')),
+          digitalDomicile: yup.string().when('showDigitalDomicile', {
+            is: true,
+            then: yup.string().email(t('pec-error')).required(tc('required-field')),
+          }),
+          showPhysicalAddress: yup.boolean().isTrue(),
+          address: yup.string().when('showPhysicalAddress', {
+            is: true,
+            then: yup.string().required(tc('required-field')),
+          }),
+          houseNumber: yup.string().when('showPhysicalAddress', {
+            is: true,
+            then: yup.string().required(tc('required-field')),
+          }),
+          /*
         addressDetails: yup.string().when('showPhysicalAddress', {
           is: true,
           then: yup.string().required(tc('required-field')),
         }),
         */
-        zip: yup.string().when('showPhysicalAddress', {
-          is: true,
-          then: yup.string().required(tc('required-field')),
-        }),
-        province: yup.string().when('showPhysicalAddress', {
-          is: true,
-          then: yup.string().required(tc('required-field')),
-        }),
-        foreignState: yup.string().when('showPhysicalAddress', {
-          is: true,
-          then: yup.string().required(tc('required-field')),
-        }),
-      })
-    )
-    .test('identicalTaxIds', t('identical-fiscal-codes-error'), (values) => {
-      if (values) {
-        const taxIds = values.map((item) => item.taxId);
-
-        const taxIdsAreIdenticals = taxIds.some(
-          (item, idx) => taxIds.indexOf(item) !== idx && item != null && item !== ''
-        );
-
-        if (taxIdsAreIdenticals) {
-          const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
-          values.forEach((value, idx) => {
-            // eslint-disable-next-line functional/immutable-data
-            errors.push(new yup.ValidationError(
-              t('identical-fiscal-codes-error'), value, `recipients[${idx}].taxId`
-            ));   
-          });
-
-          return (errors.length === 0) ? true : new yup.ValidationError(errors);
-
+          zip: yup.string().when('showPhysicalAddress', {
+            is: true,
+            then: yup.string().required(tc('required-field')),
+          }),
+          province: yup.string().when('showPhysicalAddress', {
+            is: true,
+            then: yup.string().required(tc('required-field')),
+          }),
+          foreignState: yup.string().when('showPhysicalAddress', {
+            is: true,
+            then: yup.string().required(tc('required-field')),
+          }),
+        })
+      )
+      .test('identicalTaxIds', t('identical-fiscal-codes-error'), (values) => {
+        if (values) {
+          const duplicatesTaxIds = values.map((item) => item.taxId).filter((e, i, a) => a.indexOf(e) !== i);
+          if (duplicatesTaxIds.length > 0) {
+            const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
+            values.forEach((value, i) => {
+              if (duplicatesTaxIds.includes(value.taxId)) {
+                // eslint-disable-next-line functional/immutable-data
+                errors.push(
+                  new yup.ValidationError(
+                    t('identical-fiscal-codes-error'),
+                    value,
+                    `recipients[${i}].taxId`
+                  )
+                );
+              }
+            });
+            return errors.length === 0 ? true : new yup.ValidationError(errors);
+          } else {
+            return true;
+          }
         } else {
           return true;
         }
-      } else {
-        return true;
-      }
-    }),
+      }),
   });
 
   const handleAddressTypeChange = (
@@ -197,7 +203,9 @@ const Recipient = ({ onConfirm }: Props) => {
       ...values.recipients,
       { ...singleRecipient, idx: lastRecipientIdx + 1, id: `recipient.${lastRecipientIdx + 1}` },
     ]);
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_MULTIPLE_RECIPIENTS, {recipients: lastRecipientIdx + 1});
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_MULTIPLE_RECIPIENTS, {
+      recipients: lastRecipientIdx + 1,
+    });
   };
 
   const handleSubmit = (values: { recipients: Array<FormRecipient> }) => {
