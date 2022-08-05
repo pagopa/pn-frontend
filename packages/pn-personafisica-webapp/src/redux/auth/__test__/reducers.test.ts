@@ -101,10 +101,6 @@ describe('Auth redux state tests', () => {
       accepted: false,
     });
 
-    // const stateBefore = store.getState().userState;
-    // expect(stateBefore.tos).toBe(false);
-    // expect(stateBefore.fetchedTos).toBe(false);
-
     const action = await store.dispatch(getToSApproval());
 
     expect(action.type).toBe('getToSApproval/rejected');
@@ -117,9 +113,6 @@ describe('Auth redux state tests', () => {
   it('Should accept ToS', async () => {
     setConsentsApiSpy.mockResolvedValueOnce('success');
 
-    // const stateBefore = store.getState().userState;
-    // expect(stateBefore.tos).toBe(false);
-
     const action = await store.dispatch(acceptToS());
 
     expect(action.type).toBe('acceptToS/fulfilled');
@@ -130,9 +123,6 @@ describe('Auth redux state tests', () => {
 
   it('Should reject ToS', async () => {
     setConsentsApiSpy.mockRejectedValueOnce('error');
-
-    // const stateBefore = store.getState().userState;
-    // expect(stateBefore.tos).toBe(false);
 
     const action = await store.dispatch(acceptToS());
 
