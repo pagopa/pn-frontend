@@ -18,8 +18,8 @@ import { getNewNotificationBadge } from '../NewNotificationBadge/NewNotification
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { Delegator } from '../../redux/delegation/types';
+import { NotificationColumn } from '../../models/Notifications';
 
-import { NotificationColumn } from '../../types/Notifications';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {

@@ -3,10 +3,8 @@ import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-
 
 import { FormRecipient, NewNotificationFe, PaymentModel } from '../../models/NewNotification';
 import { formatNotificationRecipients } from '../../utils/notification.utility';
-import {
-  uploadNotificationAttachment,
-  uploadNotificationPaymentDocument,
-} from './actions';
+import { uploadNotificationAttachment, uploadNotificationPaymentDocument } from './actions';
+import { PreliminaryInformationsPayload } from './types';
 
 const initialState = {
   loading: false,
@@ -32,18 +30,14 @@ const newNotificationSlice = createSlice({
     setCancelledIun: (state, action: PayloadAction<string>) => {
       state.notification.cancelledIun = action.payload;
     },
-    setSenderInfos: (state, action: PayloadAction<{senderDenomination: string; senderTaxId: string}>) => {
+    setSenderInfos: (
+      state,
+      action: PayloadAction<{ senderDenomination: string; senderTaxId: string }>
+    ) => {
       state.notification.senderDenomination = action.payload.senderDenomination;
       state.notification.senderTaxId = action.payload.senderTaxId;
     },
-    setPreliminaryInformations: (state, action: PayloadAction<{
-      paProtocolNumber: string;
-      subject: string;
-      abstract?: string;
-      physicalCommunicationType: PhysicalCommunicationType;
-      group?: string;
-      paymentMode: PaymentModel;
-    }>) => {
+    setPreliminaryInformations: (state, action: PayloadAction<PreliminaryInformationsPayload>) => {
       // TODO: capire la logica di set della fee policy sia corretta
       state.notification = {
         ...state.notification,
@@ -51,10 +45,10 @@ const newNotificationSlice = createSlice({
         notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
       };
     },
-    saveRecipients: (state, action: PayloadAction<{recipients: Array<FormRecipient>}>) => {
+    saveRecipients: (state, action: PayloadAction<{ recipients: Array<FormRecipient> }>) => {
       state.notification.recipients = formatNotificationRecipients(action.payload.recipients);
     },
-    resetState: () => initialState
+    resetState: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(uploadNotificationAttachment.fulfilled, (state, action) => {
@@ -78,6 +72,12 @@ const newNotificationSlice = createSlice({
   },
 });
 
-export const {setCancelledIun, setSenderInfos, setPreliminaryInformations, saveRecipients, resetState} = newNotificationSlice.actions;
+export const {
+  setCancelledIun,
+  setSenderInfos,
+  setPreliminaryInformations,
+  saveRecipients,
+  resetState,
+} = newNotificationSlice.actions;
 
 export default newNotificationSlice;

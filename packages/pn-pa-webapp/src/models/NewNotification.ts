@@ -4,7 +4,7 @@ import {
   NotificationFeePolicy,
   PhysicalCommunicationType,
   RecipientType,
-  NotificationDetailDocument
+  NotificationDetailDocument,
 } from '@pagopa-pn/pn-commons';
 
 export enum PaymentModel {
@@ -55,33 +55,8 @@ export interface FormRecipient {
   showPhysicalAddress?: boolean;
 }
 
-export interface UploadAttachmentParams {
-  key: string;
-  contentType: string;
-  file: Uint8Array | undefined;
-  sha256: string;
-}
-
-export interface UploadPayementParams {
-  [key: string]: {
-    pagoPaForm: UploadAttachmentParams;
-    f24flatRate: UploadAttachmentParams;
-    f24standard: UploadAttachmentParams;
-  };
-}
-
-export interface UpaloadPaymentResponse {
-  [key: string]: {
-    pagoPaForm: NotificationDetailDocument;
-    f24flatRate?: NotificationDetailDocument;
-    f24standard?: NotificationDetailDocument;
-  };
-}
-
 export interface NewNotificationResponse {
   notificationRequestId: string;
   paProtocolNumber: string;
   idempotenceToken: string;
 }
-
-

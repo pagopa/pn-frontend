@@ -20,11 +20,9 @@ const mockUseParamsFn = jest.fn();
 // mock imports
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
+  useTranslation: () => ({
       t: (str: string) => str,
-    };
-  },
+    }),
 }));
 
 jest.mock('react-router-dom', () => ({

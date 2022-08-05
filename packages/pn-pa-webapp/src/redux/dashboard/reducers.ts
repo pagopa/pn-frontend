@@ -9,7 +9,7 @@ import {
   today,
 } from '@pagopa-pn/pn-commons';
 
-import { NotificationColumn } from '../../types/Notifications';
+import { NotificationColumn } from '../../models/Notifications';
 import { getSentNotifications } from './actions';
 
 /* eslint-disable functional/immutable-data */
