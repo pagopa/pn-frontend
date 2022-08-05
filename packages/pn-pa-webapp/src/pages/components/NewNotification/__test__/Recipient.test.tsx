@@ -31,6 +31,7 @@ const populateForm = async (form: HTMLFormElement) => {
 };
 
 const populateFormMultipleRecipients = async (form: HTMLFormElement) => {
+  // eslint-disable-next-line functional/no-let
   for (let i = 0; i < formRecipients.length; i++) {
     const formRecipient = formRecipients[i];
     await testInput(form, `recipients[${i}].firstName`, formRecipient.firstName);
@@ -49,6 +50,7 @@ const populateFormMultipleRecipients = async (form: HTMLFormElement) => {
 };
 
 describe('Recipient Component', () => {
+  // eslint-disable-next-line functional/no-let
   let result: RenderResult;
 
   beforeEach(async () => {
