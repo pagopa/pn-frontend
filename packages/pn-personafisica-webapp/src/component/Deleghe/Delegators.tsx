@@ -8,8 +8,8 @@ import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
 import { getDelegators } from '../../redux/delegation/actions';
 import { setDelegatorsSorting } from '../../redux/delegation/reducers';
+import { DelegatorsColumn } from '../../models/Deleghe';
 import TableError from '../TableError/TableError';
-import { DelegatorsColumn } from '../../types/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegators = () => {

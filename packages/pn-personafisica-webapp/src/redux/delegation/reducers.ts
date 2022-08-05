@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction, isAnyOf } from '@reduxjs/toolkit';
+import { createSlice, isAnyOf, PayloadAction } from '@reduxjs/toolkit';
 import { Sort } from '@pagopa-pn/pn-commons';
+
 import { sortDelegations } from '../../utils/delegation.utility';
-import { DelegatorsColumn, DelegatesColumn } from './../../types/Deleghe';
+import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
 import {
   getDelegates,
   getDelegators,

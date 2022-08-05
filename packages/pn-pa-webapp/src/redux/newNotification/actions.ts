@@ -6,10 +6,8 @@ import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
   NewNotificationFe,
   NewNotificationResponse,
-  UploadAttachmentParams,
-  UploadPayementParams,
-  UpaloadPaymentResponse,
 } from '../../models/NewNotification';
+import { UploadPaymentResponse, UploadAttachmentParams, UploadPayementParams } from './types';
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {
@@ -63,7 +61,7 @@ export const uploadNotificationAttachment = createAsyncThunk<
 );
 
 export const uploadNotificationPaymentDocument = createAsyncThunk<
-  UpaloadPaymentResponse,
+  UploadPaymentResponse,
   UploadPayementParams
 >('uploadNotificationPaymentDocument', async (items: UploadPayementParams, { rejectWithValue }) => {
   try {
@@ -82,7 +80,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
     const documentsUploaded = await uploadNotificationDocumentCbk(
       _.uniqWith(documentsToUpload, (a, b) => a.sha256 === b.sha256)
     );
-    const response: UpaloadPaymentResponse = {};
+    const response: UploadPaymentResponse = {};
     const getFile = (item: UploadAttachmentParams) => {
       if (item.file && item.sha256) {
         return documentsUploaded.find(

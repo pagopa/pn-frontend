@@ -14,12 +14,13 @@ import {
 import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { CourtesyChannelType, LegalChannelType, SaveDigitalAddressParams, } from '../../models/contacts';
+import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { RootState } from '../../redux/store';
 import { createOrUpdateCourtesyAddress, createOrUpdateLegalAddress, } from '../../redux/contact/actions';
 import { trackEventByType } from "../../utils/mixpanel";
 import { EventActions, TrackEventType } from "../../utils/events";
 import { getContactEventType } from "../../utils/contacts.utility";
+import { SaveDigitalAddressParams } from '../../redux/contact/types';
 
 type ModalProps = {
   labelRoot: string;

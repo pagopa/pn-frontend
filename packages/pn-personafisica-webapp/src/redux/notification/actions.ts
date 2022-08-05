@@ -6,7 +6,7 @@ import {
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
-import { NotificationDetailForRecipient } from '../../types/NotificationDetail';
+import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { GetReceivedNotificationParams } from './types';
 
 export const getReceivedNotification = createAsyncThunk<
