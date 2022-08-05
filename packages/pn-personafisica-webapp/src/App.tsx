@@ -6,7 +6,17 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import { AppMessage, appStateActions, initLocalization, Layout, LoadingOverlay, SideMenu, SideMenuItem, useMultiEvent, useUnload } from '@pagopa-pn/pn-commons';
+import {
+  AppMessage,
+  appStateActions,
+  initLocalization,
+  Layout,
+  LoadingOverlay,
+  SideMenu,
+  SideMenuItem,
+  useMultiEvent,
+  useUnload,
+} from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
 import { Box } from '@mui/material';
 
@@ -19,15 +29,14 @@ import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
-import { TrackEventType } from "./utils/events";
-// import './utils/onetrust';
+import { TrackEventType } from './utils/events';
+import './utils/onetrust';
 
-// TODO decommentare appena testata la funzionalità di mixpanel
-// declare const OneTrust: any;
-// declare const OnetrustActiveGroups: string;
-// const global = window as any;
-// // target cookies (Mixpanel)
-// const targCookiesGroup = "C0004";
+declare const OneTrust: any;
+declare const OnetrustActiveGroups: string;
+const global = window as any;
+// target cookies (Mixpanel)
+const targCookiesGroup = 'C0004';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -91,29 +100,25 @@ const App = () => {
   });
 
   useEffect(() => {
-    mixpanelInit();
     // init localization
-    initLocalization((namespace, path, data) => t(path, {ns: namespace, ...data}));
+    initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
     // OneTrust callback at first time
     // eslint-disable-next-line functional/immutable-data
-    // TODO testing
-    // global.OptanonWrapper = function () {
-    //   OneTrust.OnConsentChanged(function () {
-    //     const activeGroups = OnetrustActiveGroups;
-    //     if (activeGroups.indexOf(targCookiesGroup) > -1) {
-    //       mixpanelInit();
-    //     }
-    //   });
-    // };
+    global.OptanonWrapper = function () {
+      OneTrust.OnConsentChanged(function () {
+        const activeGroups = OnetrustActiveGroups;
+        if (activeGroups.indexOf(targCookiesGroup) > -1) {
+          mixpanelInit();
+        }
+      });
+    };
     // // check mixpanel cookie consent in cookie
-    // const OTCookieValue: string =
-    //   document.cookie
-    //     .split("; ")
-    //     .find((row) => row.startsWith("OptanonConsent=")) || "";
-    // const checkValue = `${targCookiesGroup}%3A1`;
-    // if (OTCookieValue.indexOf(checkValue) > -1) {
-    //   mixpanelInit();
-    // }
+    const OTCookieValue: string =
+      document.cookie.split('; ').find((row) => row.startsWith('OptanonConsent=')) || '';
+    const checkValue = `${targCookiesGroup}%3A1`;
+    if (OTCookieValue.indexOf(checkValue) > -1) {
+      mixpanelInit();
+    }
   }, []);
 
   useEffect(() => {
@@ -134,7 +139,7 @@ const App = () => {
     if (delegators.length > 0) {
       const myNotifications = {
         label: t('title', { ns: 'notifiche' }),
-        route: routes.NOTIFICHE
+        route: routes.NOTIFICHE,
       };
       const mappedDelegators = delegators.map((delegator: Delegation) => ({
         label:
@@ -161,7 +166,7 @@ const App = () => {
       icon: MailOutlineIcon,
       route: routes.NOTIFICHE,
       children: sideMenuDelegators,
-      notSelectable: sideMenuDelegators && sideMenuDelegators.length > 0
+      notSelectable: sideMenuDelegators && sideMenuDelegators.length > 0,
     },
     { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {
@@ -198,40 +203,45 @@ const App = () => {
   };
 
   const [clickVersion] = useMultiEvent({
-    callback: () => dispatch(appStateActions.addSuccess({
-      title: "Current version",
-      message: `v${VERSION}`
-    })),
+    callback: () =>
+      dispatch(
+        appStateActions.addSuccess({
+          title: 'Current version',
+          message: `v${VERSION}`,
+        })
+      ),
   });
 
   return (
     <>
-    <Layout
-      onExitAction={() => dispatch(logout())}
-      eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
-      eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
-      eventTrackingCallbackProductSwitch={(target) => handleEventTrackingCallbackProductSwitch(target)}
-      sideMenu={
-        <SideMenu
-          menuItems={menuItems}
-          eventTrackingCallback={(target) => trackEventByType(TrackEventType.USER_NAV_ITEM, { target })}
-        />
-      }
-      showSideMenu={!fetchedTos || tos}
-      productsList={productsList}
-      loggedUser={jwtUser}
-      enableUserDropdown
-      userActions={userActions}
-      onLanguageChanged={changeLanguageHandler}
-      onAssistanceClick={handleAssistanceClick}
-    >
-      <AppMessage
-        sessionRedirect={() => dispatch(logout())}
-      />
-      <LoadingOverlay />
-      <Router />
-    </Layout>
-    <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
+      <Layout
+        onExitAction={() => dispatch(logout())}
+        eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
+        eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
+        eventTrackingCallbackProductSwitch={(target) =>
+          handleEventTrackingCallbackProductSwitch(target)
+        }
+        sideMenu={
+          <SideMenu
+            menuItems={menuItems}
+            eventTrackingCallback={(target) =>
+              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
+            }
+          />
+        }
+        showSideMenu={!fetchedTos || tos}
+        productsList={productsList}
+        loggedUser={jwtUser}
+        enableUserDropdown
+        userActions={userActions}
+        onLanguageChanged={changeLanguageHandler}
+        onAssistanceClick={handleAssistanceClick}
+      >
+        <AppMessage sessionRedirect={() => dispatch(logout())} />
+        <LoadingOverlay />
+        <Router />
+      </Layout>
+      <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
     </>
   );
 };
