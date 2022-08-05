@@ -107,7 +107,7 @@ describe('NotificationPayment component', () => {
 
   it('renders properly while loading payment info', async () => {
     render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary'});
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending'});
     expect(title).toBeInTheDocument();
 
     const amountLoader = screen.getByTestId("loading-skeleton");
@@ -142,7 +142,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
     
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
@@ -180,7 +180,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
     
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
@@ -214,7 +214,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
     
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-succeeded' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
@@ -252,7 +252,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
     
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
@@ -299,7 +299,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
     
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
@@ -346,7 +346,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
     
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
@@ -393,7 +393,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
     
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
@@ -437,7 +437,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
     
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
@@ -478,7 +478,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
     
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });

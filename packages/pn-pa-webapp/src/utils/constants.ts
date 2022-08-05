@@ -11,6 +11,7 @@ export const PAGOPA_HELP_EMAIL = process.env.REACT_APP_PAGOPA_HELP_EMAIL;
 
 export const DISABLE_INACTIVITY_HANDLER = process.env.REACT_APP_DISABLE_INACTIVITY_HANDLER || true;
 
-export const OT_DOMAIN_ID = process.env.REACT_APP_ONETRUST_DOMAIN_ID || "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c";
-
-export const VERSION = process.env.REACT_APP_VERSION ?? "";
+export const OT_DOMAIN_ID =
+  process.env.REACT_APP_ONETRUST_DOMAIN_ID || 'fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c';
+export const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN || 'DUMMY';
+export const VERSION = process.env.REACT_APP_VERSION ?? '';
