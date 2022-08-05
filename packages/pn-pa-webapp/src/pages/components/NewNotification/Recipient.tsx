@@ -142,9 +142,8 @@ const Recipient = ({ onConfirm }: Props) => {
           } else {
             return true;
           }
-        } else {
-          return true;
         }
+        return true;
       }),
   });
 

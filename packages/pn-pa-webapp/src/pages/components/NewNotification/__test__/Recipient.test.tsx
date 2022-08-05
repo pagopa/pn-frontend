@@ -30,6 +30,24 @@ const populateForm = async (form: HTMLFormElement) => {
   await testInput(form, `recipients[0].foreignState`, formRecipients[0].foreignState);
 };
 
+const populateFormMultipleRecipients = async (form: HTMLFormElement) => {
+  for (let i = 0; i < formRecipients.length; i++) {
+    const formRecipient = formRecipients[i];
+    await testInput(form, `recipients[${i}].firstName`, formRecipient.firstName);
+    await testInput(form, `recipients[${i}].lastName`, formRecipient.lastName);
+    await testInput(form, `recipients[${i}].taxId`, formRecipient.taxId);
+    await testInput(form, `recipients[${i}].creditorTaxId`, formRecipient.creditorTaxId);
+    await testInput(form, `recipients[${i}].noticeCode`, formRecipient.noticeCode);
+    const checkbox = form.querySelector(`input[name="recipients[${i}].showPhysicalAddress"]`);
+    fireEvent.click(checkbox!);
+    await testInput(form, `recipients[${i}].address`, formRecipient.address);
+    await testInput(form, `recipients[${i}].houseNumber`, formRecipient.houseNumber);
+    await testInput(form, `recipients[${i}].zip`, formRecipient.zip);
+    await testInput(form, `recipients[${i}].province`, formRecipient.province);
+    await testInput(form, `recipients[${i}].foreignState`, formRecipient.foreignState);
+  }
+};
+
 describe('Recipient Component', () => {
   let result: RenderResult;
 
@@ -195,6 +213,15 @@ describe('Recipient Component', () => {
     await populateForm(form);
     expect(submitButton).toBeEnabled();
     await testInput(form, `recipients[0].province`, '');
+    expect(submitButton).toBeDisabled();
+  }, 20000);
+
+  it('tests form validation (identical taxId)', async () => {
+    const form = result.container.querySelector('form') as HTMLFormElement;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const addButton = result.queryByText('add-recipient');
+    fireEvent.click(addButton!);
+    await populateFormMultipleRecipients(form);
     expect(submitButton).toBeDisabled();
   }, 20000);
 
