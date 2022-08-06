@@ -71,6 +71,7 @@ describe('Notifiche Page', () => {
     result = undefined;
     jest.resetAllMocks();
     jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   it('renders notifiche page', () => {

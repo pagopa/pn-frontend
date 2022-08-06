@@ -21,15 +21,3 @@ apiClient.interceptors.request.use(
   },
   (error) => Promise.reject(error)
 );
-
-// apiClient.interceptors.request.use(
-//   (config) => {
-//     /* eslint-disable functional/immutable-data */
-//     // const token = JSON.parse(sessionStorage.getItem('user') || '');
-//     if (token && config.headers) {
-//       config.headers.Authorization = 'Bearer ' + (token.sessionToken as string);
-//     }
-//     return config;
-//   },
-//   (error) => Promise.reject(error)
-// );

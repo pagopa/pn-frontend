@@ -46,6 +46,7 @@ export const logout = createAsyncThunk<User>('logout', async () => {
     exp: 0,
     iss: '',
     jti: '',
+    aud: '',
   } as User;
 });
 

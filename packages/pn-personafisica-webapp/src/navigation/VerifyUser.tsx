@@ -16,10 +16,8 @@ const VerifyUser = () => {
   const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
 
   useEffect(() => {
-    console.log('VerifyUser - primo useEffect');
     const params = new URLSearchParams(location.hash);
     const tokenParam = params.get('#token');
-    console.log({ tokenParam, token });
     if (tokenParam) {
       setSpidToken(tokenParam);
     } else {

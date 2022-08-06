@@ -7,6 +7,7 @@ export interface User {
   mobile_phone: string;
   from_aa: boolean;
   uid: string;
+  aud: string;
   level: string;
   iat: number;
   exp: number;

@@ -33,6 +33,7 @@ const noLoggedUserData = {
   exp: 0,
   iss: '',
   jti: '',
+  aud: '',
 } as User;
 
 function initialUserData(): User {
@@ -54,7 +55,7 @@ function initialUserData(): User {
     return noLoggedUserData;
   }
 }
-        
+
 /* eslint-disable functional/immutable-data */
 const userSlice = createSlice({
   name: 'userSlice',
