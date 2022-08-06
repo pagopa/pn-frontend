@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react';
 import { Suspense } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { store } from '../redux/store';
 import App from '../App';
 import i18n from '../i18n';
-import { store } from '../redux/store';
 import { axe } from './test-utils';
 
 const Component = () => (
