@@ -2,6 +2,10 @@ import * as yup from 'yup';
 import { BasicUser } from '../types/User';
 import { dataRegex } from './string.utility';
 
+/**
+ * Yup matcher contents (i.e. a suitable parameter for yup.object())
+ * for the common traits of users.
+ */
 export const basicUserDataMatcherContents = {
   family_name: yup.string().matches(dataRegex.name),
   fiscal_number: yup.string().matches(dataRegex.fiscalCode),
@@ -11,6 +15,15 @@ export const basicUserDataMatcherContents = {
   email: yup.string().email(),
 };
 
+/**
+ * Produces the initial user object to set into the Redux store of a PN webapp.
+ * If there is a (serialized) valid user object in the session storage, then it returns the corresponding (JSON-deserialized) object.
+ * Otherwise, it returns an object which represent "no user logged", and also cleans the session storage.
+ * 
+ * @param yupMatcher the matcher to validate the data in session storage.
+ * @param noLoggedUserData the "no user logged" object to return if there is no, or invalid, data in the session storage.
+ * @returns the suitable User object to set into the initial Redux store.
+ */
 export function basicInitialUserData<T extends BasicUser>(yupMatcher: yup.ObjectSchema<any>, noLoggedUserData: T): T {
   const rawDataFromStorage = sessionStorage.getItem('user');
   if (rawDataFromStorage) {
@@ -19,7 +32,6 @@ export function basicInitialUserData<T extends BasicUser>(yupMatcher: yup.Object
     try {
       userInfoFromSessionStorage = JSON.parse(rawDataFromStorage);
       yupMatcher.validateSync(userInfoFromSessionStorage);
-
     } catch (e) {
       // discard the malformed JSON in session storage
       sessionStorage.clear();
