@@ -1,4 +1,6 @@
-export interface User {
+import { BasicUser } from "@pagopa-pn/pn-commons";
+
+export interface User extends BasicUser {
   sessionToken: string;
   name: string;
   family_name: string;

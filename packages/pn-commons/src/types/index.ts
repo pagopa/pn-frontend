@@ -39,8 +39,10 @@ import {
 } from './NotificationDetail';
 import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
+import { BasicUser, basicNoLoggedUserData } from './User';
 
 export {
+    basicNoLoggedUserData,
     NotificationStatus,
     NotificationFeePolicy,
     TimelineCategory,
@@ -56,6 +58,7 @@ export {
 };
 export type {
     AnalogWorkflowDetails,
+    BasicUser,
     CardAction,
     CardElement,
     CardSort,
