@@ -65,8 +65,7 @@ const newNotificationSlice = createSlice({
         recipients: state.notification.recipients.map((r) => {
           r.payment = {
             ...action.payload[r.taxId],
-            // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-            creditorTaxId: r.payment!.creditorTaxId,
+            creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
             noticeCode: r.payment?.noticeCode,
           };
           return r;

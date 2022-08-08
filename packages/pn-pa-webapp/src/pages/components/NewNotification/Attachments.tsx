@@ -186,9 +186,17 @@ const Attachments = ({ onConfirm }: Props) => {
   };
 
   const deleteDocumentHandler = async (index: number) => {
+    const documents = formik.values.documents.filter((_d, i) => i !== index);
+
+    documents.forEach((document, i) => {
+      // eslint-disable-next-line functional/immutable-data
+      document.idx = i;
+      // eslint-disable-next-line functional/immutable-data
+      document.id = document.id.indexOf('.file') !== -1 ?  `documents.${i}.file` : `documents.${i}`;
+    });
+
     await formik.setValues({
-      /* eslint-disable-next-line functional/immutable-data */
-      documents: formik.values.documents.filter((_d, i) => i !== index),
+      documents
     });
   };
 

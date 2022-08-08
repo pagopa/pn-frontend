@@ -14,9 +14,9 @@ export const useSessionCheck = (timer: number, sessionExpiredCbk: () => void) =>
         // expt is in epoch format
         const expireAt = new Date(0); // The 0 there is the key, which sets the date to the epoch
         expireAt.setUTCSeconds(expt);
-        if (now >= expireAt) {
-          clearInterval(interval);
+        if (now.getTime() >= expireAt.getTime()) {
           sessionExpiredCbk();
+          clearInterval(interval);
         }
       }, timer);
     }
