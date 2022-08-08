@@ -118,15 +118,15 @@ describe('Notification detail redux state tests', () => {
 
   it('Should be able to fetch payment info', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
-    apiSpy.mockResolvedValue({ status: PaymentStatus.REQUIRED, amount: 1200 });
+    apiSpy.mockResolvedValue({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
     const action = await store.dispatch(
       getNotificationPaymentInfo({ noticeCode: 'mocked-notice-code', taxId: 'mocked-tax-id' })
     );
     const payload = action.payload;
     expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
-    expect(payload).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200 });
+    expect(payload).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
 
     const state = store.getState().notificationState;
-    expect(state.paymentInfo).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200 });
+    expect(state.paymentInfo).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
   });
 });

@@ -27,12 +27,12 @@ const initialState = (token: string) => ({
         email: 'mocked-user@mocked-domain.com',
         sessionToken: token,
       },
-        fetchedTos: true,
-        tos: true,
-      },
-      generalInfoState: {
-        pendingDelegators: 0,
-        delegators: []
+      fetchedTos: true,
+      tos: true,
+    },
+    generalInfoState: {
+      pendingDelegators: 0,
+      delegators: [],
     },
   },
 });
@@ -79,7 +79,6 @@ describe('App', () => {
   });
 
   it('Dispatches proper actions when session token is not empty', async () => {
-
     render(<Component />, initialState('mocked-session-token'));
 
     await waitFor(() => {
