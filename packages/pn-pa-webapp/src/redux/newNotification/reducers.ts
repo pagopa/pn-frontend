@@ -65,7 +65,7 @@ const newNotificationSlice = createSlice({
         recipients: state.notification.recipients.map((r) => {
           r.payment = {
             ...action.payload[r.taxId],
-            creditorTaxId: r.payment!.creditorTaxId,
+            creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
             noticeCode: r.payment?.noticeCode,
           };
           return r;
