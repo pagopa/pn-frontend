@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Fragment, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+// PN-2028
+// import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -32,7 +33,12 @@ const SubTitle = () => {
   return (
     <Fragment>
       {t('new-notification.subtitle', { ns: 'notifiche' })}{' '}
-      <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>.
+      {/* PN-2028 */}
+      {t('menu.api-key')}
+      {/*
+        PN-2028
+        <Link to={routes.API_KEYS}>{t('menu.api-key')}</Link>.
+      */}
     </Fragment>
   );
 };

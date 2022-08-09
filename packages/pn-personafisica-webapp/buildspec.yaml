@@ -6,11 +6,10 @@ batch:
       env:
         variables:
           BUILD_ID: dev
-          REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
+          # PN-2029 REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
           REACT_APP_URL_FE_LOGIN: https://portale-login.dev.pn.pagopa.it/
           REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
-          REACT_APP_CHECKOUT_URL: https://uat.checkout.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
           REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"
@@ -19,11 +18,10 @@ batch:
       env:
         variables:
           BUILD_ID: svil
-          REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
+          # PN-2029 REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
           REACT_APP_URL_FE_LOGIN: https://portale-login.svil.pn.pagopa.it/
           REACT_APP_URL_API: https://webapi.svil.pn.pagopa.it/
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
-          REACT_APP_CHECKOUT_URL: https://uat.checkout.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: DUMMY
           REACT_APP_ONETRUST_DOMAIN_ID: "f0f07d38-790f-49af-8253-0794e83e8b68"
@@ -32,11 +30,10 @@ batch:
       env:
         variables:
           BUILD_ID: coll
-          REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
+          #PN-2029 REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
           REACT_APP_URL_FE_LOGIN: https://portale-login.coll.pn.pagopa.it
           REACT_APP_URL_API: https://webapi.coll.pn.pagopa.it/
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
-          REACT_APP_CHECKOUT_URL: https://uat.checkout.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: DUMMY
           REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"
@@ -50,7 +47,6 @@ batch:
     #        REACT_APP_URL_FE_LOGIN: https://login.notifichedigitali.pagopa.it
     #        REACT_APP_URL_API: https://webapi.pn.pagopa.it/
     #        REACT_APP_PAGOPA_HELP_EMAIL: <TBD>
-    #        REACT_APP_CHECKOUT_URL: https://checkout.pagopa.it
     #        REACT_APP_DISABLE_INACTIVITY_HANDLER: false
     #        REACT_APP_MIXPANEL_TOKEN: DUMMY
     #        REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c

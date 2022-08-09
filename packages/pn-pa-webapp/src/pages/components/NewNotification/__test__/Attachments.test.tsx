@@ -1,10 +1,11 @@
+/* eslint-disable functional/no-let */
 import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 
 import { render } from '../../../../__test__/test-utils';
 import * as actions from '../../../../redux/newNotification/actions';
-import { UploadAttachmentParams } from '../../../../models/NewNotification';
 import Attachments from '../Attachments';
+import { UploadAttachmentParams } from '../../../../redux/newNotification/types';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -20,6 +21,7 @@ describe('Attachments Component', () => {
   const confirmHandlerMk = jest.fn();
 
   const file = new Blob(['mocked content'], { type: 'application/pdf' });
+  // eslint-disable-next-line functional/immutable-data
   (file as any).name = 'Mocked file';
 
   function uploadDocument(elem: ParentNode, index: number) {
@@ -30,10 +32,7 @@ describe('Attachments Component', () => {
     fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
   }
 
-  async function testConfirm(
-    button: HTMLButtonElement,
-    documents: Array<UploadAttachmentParams>
-  ) {
+  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadAttachmentParams>) {
     fireEvent.click(button);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
@@ -87,7 +86,7 @@ describe('Attachments Component', () => {
     uploadDocument(attachmentBoxes[0].parentNode!, 0);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
     expect(buttons![2]).toBeEnabled();
-    testConfirm(buttons![2], [
+    void testConfirm(buttons![2], [
       {
         key: 'Doc0',
         contentType: 'application/pdf',
@@ -113,7 +112,7 @@ describe('Attachments Component', () => {
     expect(deleteIcon).toBeInTheDocument();
     uploadDocument(newAttachmentBoxes[1].parentNode!, 1);
     await waitFor(() => expect(buttons![2]).toBeEnabled());
-    testConfirm(buttons![2], [
+    void testConfirm(buttons![2], [
       {
         key: 'Doc0',
         contentType: 'application/pdf',
@@ -141,7 +140,7 @@ describe('Attachments Component', () => {
     newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
     expect(newAttachmentBoxes).toHaveLength(1);
     await waitFor(() => expect(buttons![2]).toBeEnabled());
-    testConfirm(buttons![2], [
+    void testConfirm(buttons![2], [
       {
         key: 'Doc0',
         contentType: 'application/pdf',

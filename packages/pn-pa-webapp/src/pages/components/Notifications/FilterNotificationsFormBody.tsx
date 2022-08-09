@@ -53,25 +53,16 @@ const FilterNotificationsFormBody = ({
   const isMobile = useIsMobile();
   const { t } = useTranslation(['notifiche']);
 
-  // const searchForHandleChange = (e: ChangeEvent) => {
-  //   const value = (e.target as any).value;
-  //   if (value === '0') {
-  //     trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'fiscal code'});
-  //     formikInstance.resetForm({ values: { ...formikInstance.values, iunMatch: '', searchFor: '0' } });
-  //   } else if (value === '1') {
-  //     trackEventByType(TrackEventType.NOTIFICATION_FILTER_TYPE, {target: 'IUN code'});
-  //     formikInstance.resetForm({ values: { ...formikInstance.values, recipientId: '', searchFor: '1' } });
-  //   }
-  // };
-
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (e.target.id === 'iunMatch') {
-      const newInput = formatIun(formikInstance.values.iunMatch, (e.nativeEvent as any).data);
-      if (newInput) {
-        await formikInstance.setFieldValue('iunMatch', newInput);
-      } else {
-        formikInstance.handleChange(e);
-      }
+      const originalEvent = e.target as HTMLInputElement;
+      const cursorPosition = originalEvent.selectionStart || 0;
+      const newInput = formatIun(originalEvent.value);
+      const newCursorPosition = cursorPosition + (originalEvent.value.length !== newInput?.length && cursorPosition >= originalEvent.value.length ? 1 : 0);
+
+      await formikInstance.setFieldValue('iunMatch', newInput);
+
+      originalEvent.setSelectionRange(newCursorPosition, newCursorPosition);
     } else {
       formikInstance.handleChange(e);
     }
@@ -109,6 +100,7 @@ const FilterNotificationsFormBody = ({
         size="small"
         fullWidth={isMobile}
         sx={{ marginBottom: isMobile ? '20px' : '0' }}
+        inputProps={{ maxLength: 25 }}
       />
       <LocalizationProvider
         id="startDate"

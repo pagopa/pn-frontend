@@ -8,15 +8,15 @@ import {
   NewNotificationResponse,
   FormRecipient,
   FormAttachment,
-  UploadAttachmentParams,
-  UploadPayementParams,
-  UpaloadPaymentResponse,
-  PaymentObject
+  PaymentObject,
 } from '../../models/NewNotification';
+import { UploadAttachmentParams, UploadPayementParams, UploadPaymentResponse } from './types';
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {
-    const presignedUrls = await NotificationsApi.preloadNotificationDocument(items.map(item => ({contentType: item.contentType, key: item.key, sha256: item.sha256})));
+    const presignedUrls = await NotificationsApi.preloadNotificationDocument(
+      items.map((item) => ({ contentType: item.contentType, key: item.key, sha256: item.sha256 }))
+    );
     if (presignedUrls.length) {
       const uploadDocumentCalls: Array<Promise<string>> = [];
       // upload document
@@ -42,7 +42,7 @@ const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams
           key: presignedUrls[index].key,
           versionToken: documentsToken[index],
         },
-        title: item.key
+        title: item.key,
       }));
     }
     throw new Error();
@@ -66,7 +66,7 @@ export const uploadNotificationAttachment = createAsyncThunk<
 );
 
 export const uploadNotificationPaymentDocument = createAsyncThunk<
-  UpaloadPaymentResponse,
+  UploadPaymentResponse,
   UploadPayementParams
 >('uploadNotificationPaymentDocument', async (items: UploadPayementParams, { rejectWithValue }) => {
   try {
@@ -85,12 +85,10 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
     const documentsUploaded = await uploadNotificationDocumentCbk(
       _.uniqWith(documentsToUpload, (a, b) => a.sha256 === b.sha256)
     );
-    const response: UpaloadPaymentResponse = {};
+    const response: UploadPaymentResponse = {};
     const getFile = (item: UploadAttachmentParams) => {
       if (item.file && item.sha256) {
-        return documentsUploaded.find(
-          (f) => f.digests.sha256 === item.sha256
-        );
+        return documentsUploaded.find((f) => f.digests.sha256 === item.sha256);
       }
       return undefined;
     };
@@ -123,6 +121,9 @@ export const createNewNotification = createAsyncThunk<NewNotificationResponse, N
   }
 );
 
-export const setRecipients = createAction<{recipients: Array<FormRecipient>}>('setRecipients');
-export const setAttachments = createAction<{documents: Array<FormAttachment>}>('setAttachments');
-export const setPaymentDocuments = createAction<{paymentMethodsDocuments: {[key: string]: PaymentObject}}>('setPaymentDocuments');
+export const setRecipients = createAction<{ recipients: Array<FormRecipient> }>('setRecipients');
+export const setAttachments = createAction<{ documents: Array<FormAttachment> }>('setAttachments');
+export const setPaymentDocuments =
+  createAction<{ paymentMethodsDocuments: { [key: string]: PaymentObject } }>(
+    'setPaymentDocuments'
+  );

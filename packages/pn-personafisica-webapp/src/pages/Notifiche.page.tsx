@@ -14,7 +14,8 @@ import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { Delegator } from '../redux/delegation/types';
 import { trackEventByType } from "../utils/mixpanel";
 import { TrackEventType } from "../utils/events";
-import { NotificationColumn } from '../types/Notifications';
+import { NotificationColumn } from '../models/Notifications';
+
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();

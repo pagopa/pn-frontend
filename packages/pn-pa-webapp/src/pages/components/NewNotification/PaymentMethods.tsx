@@ -8,13 +8,13 @@ import { FileUpload } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotificationFe,
-  UploadPayementParams,
   PaymentModel,
   PaymentDocument,
   PaymentObject,
 } from '../../../models/NewNotification';
 import { useAppDispatch } from '../../../redux/hooks';
 import { setPaymentDocuments, uploadNotificationPaymentDocument } from '../../../redux/newNotification/actions';
+import { UploadPayementParams } from '../../../redux/newNotification/types';
 import NewNotificationCard from './NewNotificationCard';
 
 type PaymentBoxProps = {

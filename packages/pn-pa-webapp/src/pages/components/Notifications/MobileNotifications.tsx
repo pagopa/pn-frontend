@@ -22,7 +22,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import * as routes from '../../../navigation/routes.const';
-import { NotificationSortField } from '../../../types/Notifications';
+import { NotificationSortField } from '../../../models/Notifications';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {

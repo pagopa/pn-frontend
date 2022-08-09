@@ -15,7 +15,8 @@ import { getDelegates } from '../../redux/delegation/actions';
 import { setDelegatesSorting } from '../../redux/delegation/reducers';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
-import { DelegatesColumn } from '../../types/Deleghe';
+import { DelegatesColumn } from '../../models/Deleghe';
+
 import { Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegates = () => {

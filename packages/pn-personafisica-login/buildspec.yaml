@@ -9,7 +9,7 @@ batch:
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
-          REACT_APP_URL_API_LOGIN: https://hub-login.ecs.dev.pn.pagopa.it
+          REACT_APP_URL_API_LOGIN: https://hub-login.spid.dev.pn.pagopa.it
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: aef0b0d89c3355510e9cdfdb18e7d0b5
           REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"
@@ -21,7 +21,7 @@ batch:
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
-          REACT_APP_URL_API_LOGIN: https://hub-login.ecs.svil.pn.pagopa.it
+          REACT_APP_URL_API_LOGIN: https://hub-login.spid.svil.pn.pagopa.it
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: DUMMY
           REACT_APP_ONETRUST_DOMAIN_ID: "f0f07d38-790f-49af-8253-0794e83e8b68"    
@@ -33,7 +33,7 @@ batch:
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
-          REACT_APP_URL_API_LOGIN: https://hub-login.ecs.coll.pn.pagopa.it
+          REACT_APP_URL_API_LOGIN: https://hub-login.spid.coll.pn.pagopa.it
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: DUMMY
           REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"

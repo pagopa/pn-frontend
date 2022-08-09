@@ -1,3 +1,4 @@
+/* eslint-disable functional/no-let */
 import * as redux from 'react-redux';
 import { act, fireEvent, RenderResult, waitFor, screen } from '@testing-library/react';
 
@@ -9,11 +10,9 @@ import { LegalChannelType } from '../../../models/contacts';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: (str: string) => str,
-    };
-  },
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
@@ -54,7 +53,7 @@ describe('InsertLegalContact component', () => {
     expect(cardBody).toHaveTextContent('legal-contacts.description');
     const pecInput = cardBody?.querySelector('input[id="pec"]');
     expect(pecInput!).toHaveValue('');
-    const button = result?.getByRole('button', { name: 'button.conferma'});
+    const button = result?.getByRole('button', { name: 'button.conferma' });
     expect(button).toBeDisabled();
   });
 
@@ -66,7 +65,7 @@ describe('InsertLegalContact component', () => {
     const errorMessage = cardBody?.querySelector('#pec-helper-text');
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
-    const button = result?.getByRole('button', { name: 'button.conferma'});
+    const button = result?.getByRole('button', { name: 'button.conferma' });
     expect(button).toBeDisabled();
   });
 
@@ -77,7 +76,7 @@ describe('InsertLegalContact component', () => {
     await waitFor(() => expect(pecInput!).toHaveValue('mail@valida.mail'));
     const errorMessage = cardBody?.querySelector('#pec-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
-    const button = result?.getByRole('button', { name: 'button.conferma'});
+    const button = result?.getByRole('button', { name: 'button.conferma' });
     expect(button).toBeEnabled();
   });
 
@@ -86,7 +85,7 @@ describe('InsertLegalContact component', () => {
     const pecInput = cardBody?.querySelector('input[id="pec"]');
     fireEvent.change(pecInput!, { target: { value: 'mail@valida.mail' } });
     await waitFor(() => expect(pecInput!).toHaveValue('mail@valida.mail'));
-    const button = result?.getByRole('button', { name: 'button.conferma'});
+    const button = result?.getByRole('button', { name: 'button.conferma' });
     fireEvent.click(button!);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
