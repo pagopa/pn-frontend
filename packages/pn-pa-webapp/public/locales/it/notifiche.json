@@ -95,7 +95,7 @@
       "digital-failure-workflow-description": "L'invio per via digitale della notifica a {{name}} è fallito.",
       "send-digital-progress-error": "Invio via PEC non preso in carico",
       "send-digital-progress-error-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} non è stato preso in carico.",
-      "send-digital-progress-success": "Invio per via digitale riuscito",
+      "send-digital-progress-success": "Invio via PEC preso in carico",
       "send-digital-progress-success-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} è stato preso in carico.",
       "legalfact": {
         "sender-ack": "notifica presa in carico",

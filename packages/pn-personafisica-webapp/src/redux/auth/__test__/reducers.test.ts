@@ -1,8 +1,23 @@
 import { store } from '../../store';
 import { User } from '../types';
+
+import { ConsentsApi } from '../../../api/consents/Consents.api';
+import { ConsentType } from '../../../models/consents';
+import {
+  acceptToS,
+  getToSApproval,
+} from '../actions';
 import { mockLogin, mockLogout, userResponse } from './test-utils';
 
 describe('Auth redux state tests', () => {
+  const getConsentsApiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');
+  const setConsentsApiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
+  
+  afterAll(() => {
+    getConsentsApiSpy.mockRestore();
+    setConsentsApiSpy.mockRestore();
+  });
+
   it('Initial state', () => {
     const state = store.getState().userState;
     expect(state).toEqual({
@@ -57,5 +72,63 @@ describe('Auth redux state tests', () => {
       iss: '',
       jti: '',
     });
+  });
+
+  it('Should fetch ToS approved', async () => {
+    getConsentsApiSpy.mockResolvedValue({
+      recipientId: 'mocked-recipientId',
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+
+    const stateBefore = store.getState().userState;
+    expect(stateBefore.tos).toBe(false);
+    expect(stateBefore.fetchedTos).toBe(false);
+
+    const action = await store.dispatch(getToSApproval());
+
+    expect(action.type).toBe('getToSApproval/fulfilled');
+
+    const stateAfter = store.getState().userState;
+    expect(stateAfter.tos).toBe(true);
+    expect(stateAfter.fetchedTos).toBe(true);
+  });
+
+  it('Should fetch ToS not approved', async () => {
+    getConsentsApiSpy.mockRejectedValue({
+      recipientId: 'mocked-recipientId',
+      consentType: ConsentType.TOS,
+      accepted: false,
+    });
+
+    const action = await store.dispatch(getToSApproval());
+
+    expect(action.type).toBe('getToSApproval/rejected');
+
+    const stateAfter = store.getState().userState;
+    expect(stateAfter.tos).toBe(false);
+    expect(stateAfter.fetchedTos).toBe(true);
+  });
+
+  it('Should accept ToS', async () => {
+    setConsentsApiSpy.mockResolvedValueOnce('success');
+
+    const action = await store.dispatch(acceptToS());
+
+    expect(action.type).toBe('acceptToS/fulfilled');
+
+    const stateAfter = store.getState().userState;
+    expect(stateAfter.tos).toBe(true);
+  });
+
+  it('Should reject ToS', async () => {
+    setConsentsApiSpy.mockRejectedValueOnce('error');
+
+    const action = await store.dispatch(acceptToS());
+
+    expect(action.type).toBe('acceptToS/rejected');
+
+    const stateAfter = store.getState().userState;
+    expect(stateAfter.tos).toBe(false);
   });
 });
