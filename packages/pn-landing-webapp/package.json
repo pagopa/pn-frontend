@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-landing-webapp",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -13,7 +13,7 @@
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/material": "^5.8.6",
-    "@pagopa-pn/pn-commons": "^0.1.6",
+    "@pagopa-pn/pn-commons": "^0.1.7",
     "@pagopa/mui-italia": "^0.6.38",
     "next": "12.1.6",
     "next-i18next": "^11.0.0",
