@@ -89,9 +89,9 @@ const NewNotification = () => {
     setActiveStep((previousStep) => previousStep + 1);
   };
 
-  const goToPreviousStep = (step?: number) => {
-    if (step && !Number.isNaN(step)) {
-      setActiveStep(step);
+  const goToPreviousStep = (selectedStep?: number) => {
+    if (selectedStep && selectedStep < activeStep) {
+      setActiveStep(selectedStep);
     } else {
       setActiveStep(activeStep - 1);
     }
@@ -156,7 +156,10 @@ const NewNotification = () => {
             </Typography>
             <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
               {steps.map((label, index) => (
-                <Step key={label} onClick={() => goToPreviousStep(index)}>
+                <Step
+                  key={label}
+                  onClick={() => (index < activeStep ? goToPreviousStep(index) : undefined)}
+                >
                   <StepLabel>{label}</StepLabel>
                 </Step>
               ))}
