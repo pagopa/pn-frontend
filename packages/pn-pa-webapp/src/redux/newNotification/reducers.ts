@@ -10,6 +10,7 @@ import {
   setRecipients,
   uploadNotificationPaymentDocument,
 } from './actions';
+import { PreliminaryInformationsPayload } from './types';
 
 const initialState = {
   loading: false,

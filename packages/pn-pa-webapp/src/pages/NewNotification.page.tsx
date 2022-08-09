@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { Fragment, useEffect, useState } from 'react';
 // PN-2028
 // import { Link } from 'react-router-dom';
@@ -32,8 +31,7 @@ const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   return (
     <Fragment>
-      {t('new-notification.subtitle', { ns: 'notifiche' })}{' '}
-      {/* PN-2028 */}
+      {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-2028 */}
       {t('menu.api-key')}
       {/*
         PN-2028
@@ -92,7 +90,7 @@ const NewNotification = () => {
   };
 
   const goToPreviousStep = (step?: number) => {
-    if (_.isNumber(step)) {
+    if (step && !Number.isNaN(step)) {
       setActiveStep(step);
     } else {
       setActiveStep(activeStep - 1);
@@ -102,7 +100,9 @@ const NewNotification = () => {
   const createNotification = () => {
     // if it is last step, save notification
     if (activeStep === 3 && isCompleted) {
-      void dispatch(createNewNotification(notification))
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { recipientsForm, documentsForm, ...newNotification } = notification;
+      void dispatch(createNewNotification(newNotification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1));
     }
@@ -113,9 +113,11 @@ const NewNotification = () => {
   }, [isCompleted]);
 
   useEffect(() => {
-    // TODO: in attesa che self care restituisca senderDenomination, questa viene settata come Denomination of + id
     dispatch(
-      setSenderInfos({ senderDenomination: organizationParty.name, senderTaxId: organization.fiscal_code })
+      setSenderInfos({
+        senderDenomination: organizationParty.name,
+        senderTaxId: organization.fiscal_code,
+      })
     );
   }, [organization, organizationParty]);
 
@@ -163,10 +165,18 @@ const NewNotification = () => {
               <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
             )}
             {activeStep === 1 && (
-              <Recipient onConfirm={goToNextStep} onPreviousStep={goToPreviousStep} recipientsData={notification.recipientsForm} />
+              <Recipient
+                onConfirm={goToNextStep}
+                onPreviousStep={goToPreviousStep}
+                recipientsData={notification.recipientsForm}
+              />
             )}
             {activeStep === 2 && (
-              <Attachments onConfirm={goToNextStep} onPreviousStep={goToPreviousStep} attachmentsData={notification.documentsForm} />
+              <Attachments
+                onConfirm={goToNextStep}
+                onPreviousStep={goToPreviousStep}
+                attachmentsData={notification.documentsForm}
+              />
             )}
             {activeStep === 3 && (
               <PaymentMethods
