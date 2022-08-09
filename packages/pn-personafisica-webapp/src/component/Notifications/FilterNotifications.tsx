@@ -16,7 +16,9 @@ import {
   IUN_regex,
   filtersApplied,
   formatToTimezoneString,
-  getNextDay
+  getNextDay,
+  getDefaultDate,
+  getValidValue
 } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
@@ -76,7 +78,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
     return {
       startDate: new Date(filters.startDate),
       endDate: new Date(filters.endDate),
-      iunMatch: filters.iunMatch || '',
+      iunMatch: getValidValue(filters.iunMatch),
     };
   }, []);
 
@@ -120,6 +122,9 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       setStartDate(null);
       setEndDate(null);
       setPrevFilters(emptyValues);
+    } else if (filters) {
+      setStartDate(getDefaultDate(formik.values.startDate, tenYearsAgo, filters.startDate));
+      setEndDate(getDefaultDate(formik.values.endDate, today, filters.endDate));
     }
   }, [filters]);
 

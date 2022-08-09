@@ -16,8 +16,10 @@ import {
   CustomMobileDialogContent,
   filtersApplied,
   getValidValue,
+  getDefaultDate,
   formatToTimezoneString,
   getNextDay,
+  GetNotificationsParams,
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
@@ -50,6 +52,19 @@ const initialEmptyValues = {
   iunMatch: '',
 };
 
+const initialValues = (filters: GetNotificationsParams): FormikValues => {
+  if (!filters || (filters && _.isEqual(filters, emptyValues))) {
+    return initialEmptyValues;
+  }
+  return {
+    startDate: new Date(filters.startDate),
+    endDate: new Date(filters.endDate),
+    recipientId: getValidValue(filters.recipientId),
+    iunMatch: getValidValue(filters.iunMatch),
+    status: getValidValue(filters.status, localizedNotificationStatus[0].value),
+  };
+};
+
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
@@ -66,24 +81,11 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     endDate: yup.date().min(tenYearsAgo),
   });
 
-  const initialValues = (): FormikValues => {
-    if (!filters || (filters && _.isEqual(filters, emptyValues))) {
-      return initialEmptyValues;
-    }
-    return {
-      startDate: new Date(filters.startDate),
-      endDate: new Date(filters.endDate),
-      recipientId: getValidValue(filters.recipientId),
-      iunMatch: getValidValue(filters.iunMatch),
-      status: getValidValue(filters.status, localizedNotificationStatus[0].value),
-    };
-  };
-
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
   const filtersCount = filtersApplied(prevFilters, emptyValues);
 
   const formik = useFormik({
-    initialValues: initialValues(),
+    initialValues: initialValues(filters),
     validationSchema,
     /** onSubmit populates filters */
     onSubmit: (values) => {
@@ -120,6 +122,9 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       setStartDate(null);
       setEndDate(null);
       setPrevFilters(emptyValues);
+    } else {
+      setStartDate(getDefaultDate(formik.values.startDate, tenYearsAgo, filters.startDate));
+      setEndDate(getDefaultDate(formik.values.endDate, today, filters.endDate));
     }
   }, [filters]);
 

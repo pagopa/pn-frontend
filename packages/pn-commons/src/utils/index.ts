@@ -7,7 +7,7 @@ import {
     getLegalFactLabel,
     getNotificationTimelineStatusInfos
 } from './notification.utility';
-import { getValidValue } from './genericFunctions.utility';
+import { getValidValue, getDefaultDate } from './genericFunctions.utility';
 import {
     getMonthString,
     getDay,
@@ -23,7 +23,7 @@ import { IUN_regex, formatIun } from './iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import { storageOpsBuilder } from './storage.utility';
 import { compileRoute } from './routes.utility';
-import {URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH} from './costants';
+import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './costants';
 
 export {
     getNotificationAllowedStatus,
@@ -37,6 +37,7 @@ export {
     getNextDay,
     formatToTimezoneString,
     getValidValue,
+    getDefaultDate,
     formatFiscalCode,
     fiscalCodeRegex,
     IUN_regex,
