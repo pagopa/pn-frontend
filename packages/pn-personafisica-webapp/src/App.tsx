@@ -123,7 +123,6 @@ const App = () => {
 
   useEffect(() => {
     if (sessionToken !== '') {
-      void dispatch(getSidemenuInformation());
       void dispatch(getDomicileInfo());
       void dispatch(getToSApproval());
     }
@@ -133,7 +132,7 @@ const App = () => {
     if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
     }
-  }, [pendingDelegators]);
+  }, [pendingDelegators, sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
     if (delegators.length > 0) {
