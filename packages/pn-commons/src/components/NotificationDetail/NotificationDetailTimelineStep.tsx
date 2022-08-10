@@ -156,7 +156,7 @@ const NotificationDetailTimelineStep = ({
                 startIcon={<AttachFileIcon />}
                 onClick={() => clickHandler(lf.file)}
                 color="primary"
-                sx={{ marginTop: '10px' }}
+                sx={{ marginTop: '10px', textAlign: 'left' }}
               >
                 {getLegalFactLabel(lf.category, lf.file.category)}
               </ButtonNaked>
