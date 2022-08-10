@@ -30,7 +30,10 @@ import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getNotificationPaymentInfo, getPaymentAttachment } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import { PAGOPA_HELP_EMAIL, PAYMENT_DISCLAIMER_URL } from '../../utils/constants';
+import { PAGOPA_HELP_EMAIL,
+  // PN-2029
+  // PAYMENT_DISCLAIMER_URL
+} from '../../utils/constants';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
 
@@ -170,10 +173,12 @@ const NotificationPayment: React.FC<Props> = ({
     );
   };
 
-  const onDisclaimerClick = () => {
-    window.open(PAYMENT_DISCLAIMER_URL);
-  };
-
+  /*
+    PN-2029
+    const onDisclaimerClick = () => {
+      window.open(PAYMENT_DISCLAIMER_URL);
+    };
+  */
   const getAttachmentsData = () => {
     // eslint-disable-next-line functional/no-let
     const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();
@@ -230,9 +235,13 @@ const NotificationPayment: React.FC<Props> = ({
     <>
       {t('detail.payment.disclaimer', { ns: 'notifiche' })}
       &nbsp;
-      <Link href="#" onClick={onDisclaimerClick}>
-        {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
-      </Link>
+      {
+        /* PN-2029
+        <Link href="#" onClick={onDisclaimerClick}>
+          {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
+        </Link>
+        */
+      }
     </>
   );
 
