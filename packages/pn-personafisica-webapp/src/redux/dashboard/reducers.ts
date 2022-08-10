@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { GetNotificationsParams, tenYearsAgo, today, Notification, formatToTimezoneString, getNextDay, Sort } from '@pagopa-pn/pn-commons';
+import { GetNotificationsParams, tenYearsAgo, today, Notification, formatToTimezoneString, Sort } from '@pagopa-pn/pn-commons';
 
 import { NotificationColumn } from '../../types/Notifications';
 import {
@@ -72,7 +72,7 @@ const dashboardSlice = createSlice({
         iunMatch: undefined,
         mandateId: action.payload,
         startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
+        endDate: formatToTimezoneString(today),
       };
       // reset pagination
       state.pagination.size = 10;

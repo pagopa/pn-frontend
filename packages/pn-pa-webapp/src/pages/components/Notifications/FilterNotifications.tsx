@@ -63,7 +63,6 @@ const initialValues = (filters: GetNotificationsParams): FormikValues => {
   };
 };
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
