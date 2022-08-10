@@ -51,7 +51,7 @@ const initialEmptyValues = {
 };
 
 const initialValues = (filters: GetNotificationsParams): FormikValues => {
-  if (!filters || (filters && _.isEqual(filters, emptyValues))) {
+  if (!filters || _.isEqual(filters, emptyValues)) {
     return initialEmptyValues;
   }
   return {
@@ -63,6 +63,10 @@ const initialValues = (filters: GetNotificationsParams): FormikValues => {
   };
 };
 
+function isFilterapplied(filtersCount: number): boolean {
+  return filtersCount > 0;
+}
+
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
@@ -72,8 +76,10 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const { t } = useTranslation(['common', 'notifiche']);
 
   const validationSchema = yup.object({
-    recipientId: yup.string().matches(dataRegex.fiscalCode, t('filters.errors.fiscal-code', {ns: 'notifiche'})),
-    iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', {ns: 'notifiche'})),
+    recipientId: yup
+      .string()
+      .matches(dataRegex.fiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
+    iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
   });
@@ -107,6 +113,15 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     dispatch(setNotificationFilters(emptyValues));
   };
 
+  const setDates = () => {
+    if (!_.isEqual(filters.startDate, formatToTimezoneString(tenYearsAgo))) {
+      setStartDate(formik.values.startDate);
+    }
+    if (!_.isEqual(filters.endDate, formatToTimezoneString(today))) {
+      setEndDate(formik.values.endDate);
+    }
+  };
+
   useEffect(() => {
     void formik.validateForm();
   }, []);
@@ -119,21 +134,20 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       setStartDate(null);
       setEndDate(null);
       setPrevFilters(emptyValues);
-    } else {
-      setStartDate(formik.values.startDate);
-      setEndDate(formik.values.endDate);
+      return;
     }
+    setDates();
   }, [filters]);
 
   useImperativeHandle(ref, () => ({
-    filtersApplied: filtersCount > 0,
+    filtersApplied: isFilterapplied(filtersCount),
     cleanFilters: cancelSearch,
   }));
 
   if (!showFilters) {
     return <></>;
   }
-
+  const isInitialSearch = _.isEqual(formik.values, initialEmptyValues);
   return isMobile ? (
     <CustomMobileDialog>
       <CustomMobileDialogToggle
@@ -164,8 +178,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
             <FilterNotificationsFormActions
               formikInstance={formik}
               cleanFilters={cancelSearch}
-              filtersApplied={filtersCount > 0}
-              isInitialSearch={_.isEqual(formik.values, initialEmptyValues)}
+              filtersApplied={isFilterapplied(filtersCount)}
+              isInitialSearch={isInitialSearch}
               isInDialog
             />
           </DialogActions>
@@ -194,8 +208,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
           <FilterNotificationsFormActions
             formikInstance={formik}
             cleanFilters={cancelSearch}
-            filtersApplied={filtersCount > 0}
-            isInitialSearch={_.isEqual(formik.values, initialEmptyValues)}
+            filtersApplied={isFilterapplied(filtersCount)}
+            isInitialSearch={isInitialSearch}
           />
         </Box>
       </form>
