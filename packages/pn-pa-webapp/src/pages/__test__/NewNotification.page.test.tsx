@@ -105,11 +105,14 @@ describe('NewNotification Page', () => {
     expect(links![0]).toHaveAttribute('href', routes.DASHBOARD);
   });
 
+  /*
+  PN-2028
   test('clicks on the api keys link', async () => {
     const links = result?.getAllByRole('link');
     expect(links![1]).toHaveTextContent(/menu.api-key/i);
     expect(links![1]).toHaveAttribute('href', routes.API_KEYS);
   });
+  */
 
   test('tests step navigation', async () => {
     await testNavigation('PreliminaryInformations', 'Recipient');

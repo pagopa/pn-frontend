@@ -100,6 +100,7 @@ const FilterNotificationsFormBody = ({
         size="small"
         fullWidth={isMobile}
         sx={{ marginBottom: isMobile ? '20px' : '0' }}
+        inputProps={{ maxLength: 25 }}
       />
       <LocalizationProvider
         id="startDate"
