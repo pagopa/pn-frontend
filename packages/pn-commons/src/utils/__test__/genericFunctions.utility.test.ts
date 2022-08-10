@@ -1,6 +1,6 @@
 import { getValidValue } from '../genericFunctions.utility';
-
-describe('get A or B function', () => {
+import { today, tenYearsAgo } from '../index';
+describe('getValidValue function', () => {
     it('return A value', () => {
         const valueA = 'mock-value-a';
         expect(getValidValue(valueA)).toBe('mock-value-a');
