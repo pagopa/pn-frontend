@@ -1,10 +1,9 @@
-import { setSenderInfos } from './../actions';
 import { DigitalDomicileType, PhysicalCommunicationType, RecipientType } from '@pagopa-pn/pn-commons';
 
+import { store } from '../../store';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { PaymentModel } from '../../../models/NewNotification';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
-import { store } from '../../store';
 import {
   resetNewNotificationState,
   setCancelledIun,
@@ -12,7 +11,8 @@ import {
   createNewNotification,
   uploadNotificationAttachment,
   uploadNotificationPaymentDocument,
-  saveRecipients
+  saveRecipients,
+  setSenderInfos,
 } from '../actions';
 import { newNotification } from './test-utils';
 

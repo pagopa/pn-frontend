@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter'; 
 
 import { AuthApi } from '../Auth.api';
-import { userResponse } from '../../../redux/auth/__test__/test-utils';
+import { userResponse } from '../../../redux/auth/__test__/test-users';
 import { authClient } from '../../axios';
 
 export async function mockedExchangeToken() {
