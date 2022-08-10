@@ -50,7 +50,10 @@ const newNotificationSlice = createSlice({
       state.notification = {
         ...state.notification,
         ...action.payload,
-        notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+        // PN-1835
+        // in questa fase la notificationFeePolicy viene assegnata di default a FLAT_RATE
+        // Carlotta Dimatteo 10/08/2022
+        notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
       };
     });
     builder.addCase(saveRecipients, (state, action) => {
