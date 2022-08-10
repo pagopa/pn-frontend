@@ -11,6 +11,11 @@ import * as authActions from '../redux/auth/actions';
 // import { apiClient } from '../api/axios';
 import { axe, render } from './test-utils';
 
+/**
+ * Componente che mette App all'interno di un Suspense, 
+ * necessario per il test che fa solo un render, 
+ * usato anche nel automatic accessibility test. 
+ */
 const Component = () => (
   <Suspense fallback="loading...">
     <App />
@@ -37,6 +42,21 @@ const initialState = (token: string) => ({
   },
 });
 
+
+/**
+ * Questo test suite si separa in due describe diversi, di tests che hanno una differenza
+ * nella inizializzazione di i18n.
+ * - per il test che analizza dettagli di comportamento serve settare react.useSuspense = false
+ *   per evitare messaggi di ECONNREFUSED, cfr. PN-2038.
+ *   Cfr. https://stackoverflow.com/questions/54432861/a-react-component-suspended-while-rendering-but-no-fallback-ui-was-specified .
+ * - per i altri test, serve non passare nessun parametro. Se si fa lo stesso setting che per il
+ *   caso precedente, appaiono messaggi "A future version of React will block javascript: URLs..."
+ *   e "An update to ForwardRef inside a test was not wrapped in act(...)."
+ * 
+ * Lascio la inizializzazione comune nel describe principale.
+ * ---------------------------------
+ * Carlos, 2022.08.10
+ */
 describe('App', () => {
   // let result: RenderResult | undefined;
   let mockDispatchFn: jest.Mock;
@@ -70,6 +90,10 @@ describe('App', () => {
     jest.restoreAllMocks();
   });
 
+
+  /**
+   * Tests che usano Component e inizializzazione "semplice" di i18n.
+   */
   describe("tests che non analizzano dettagli", () => {
     beforeEach(() => {
       void i18n.init();
@@ -89,7 +113,11 @@ describe('App', () => {
     
   });
 
-  describe("tests che analizzano dettagli di comportamento", () => {
+
+  /**
+   * Tests che usano App e inizializzazione di i18n che include react.useSuspense = false.
+   */
+   describe("tests che analizzano dettagli di comportamento", () => {
     beforeEach(() => {
       void i18n.init({
         react: { 
