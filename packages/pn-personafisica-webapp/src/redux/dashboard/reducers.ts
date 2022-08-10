@@ -18,7 +18,7 @@ const dashboardSlice = createSlice({
     notifications: [] as Array<Notification>,
     filters: {
       startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
+      endDate: formatToTimezoneString(today),
       iunMatch: undefined,
       mandateId: undefined,
     } as GetNotificationsParams,

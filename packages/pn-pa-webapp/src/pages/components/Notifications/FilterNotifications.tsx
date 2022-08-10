@@ -16,9 +16,7 @@ import {
   CustomMobileDialogContent,
   filtersApplied,
   getValidValue,
-  getDefaultDate,
   formatToTimezoneString,
-  getNextDay,
   GetNotificationsParams,
 } from '@pagopa-pn/pn-commons';
 
@@ -38,7 +36,7 @@ const localizedNotificationStatus = getNotificationAllowedStatus();
 
 const emptyValues = {
   startDate: formatToTimezoneString(tenYearsAgo),
-  endDate: formatToTimezoneString(getNextDay(today)),
+  endDate: formatToTimezoneString(today),
   status: '',
   recipientId: '',
   iunMatch: '',
@@ -91,7 +89,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     onSubmit: (values) => {
       const currentFilters = {
         startDate: formatToTimezoneString(values.startDate),
-        endDate: formatToTimezoneString(getNextDay(values.endDate)),
+        endDate: formatToTimezoneString(values.endDate),
         recipientId: getValidValue(values.recipientId),
         iunMatch: getValidValue(values.iunMatch),
         status: values.status === 'All' ? '' : values.status,
@@ -123,8 +121,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
       setEndDate(null);
       setPrevFilters(emptyValues);
     } else {
-      setStartDate(getDefaultDate(formik.values.startDate, tenYearsAgo, filters.startDate));
-      setEndDate(getDefaultDate(formik.values.endDate, today, filters.endDate));
+      setStartDate(formik.values.startDate);
+      setEndDate(formik.values.endDate);
     }
   }, [filters]);
 

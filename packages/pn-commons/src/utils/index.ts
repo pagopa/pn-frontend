@@ -7,7 +7,7 @@ import {
     getLegalFactLabel,
     getNotificationTimelineStatusInfos
 } from './notification.utility';
-import { getValidValue, getDefaultDate } from './genericFunctions.utility';
+import { getValidValue } from './genericFunctions.utility';
 import {
     getMonthString,
     getDay,
@@ -37,7 +37,6 @@ export {
     getNextDay,
     formatToTimezoneString,
     getValidValue,
-    getDefaultDate,
     formatFiscalCode,
     fiscalCodeRegex,
     IUN_regex,

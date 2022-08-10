@@ -43,7 +43,7 @@ describe('Dashboard Page', () => {
         notifications,
         filters: {
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
         },
         sort: {
           orderBy: '',

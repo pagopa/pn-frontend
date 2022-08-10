@@ -16,8 +16,6 @@ import {
   IUN_regex,
   filtersApplied,
   formatToTimezoneString,
-  getNextDay,
-  getDefaultDate,
   getValidValue
 } from '@pagopa-pn/pn-commons';
 
@@ -60,7 +58,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
 
   const emptyValues = {
     startDate: formatToTimezoneString(tenYearsAgo),
-    endDate: formatToTimezoneString(getNextDay(today)),
+    endDate: formatToTimezoneString(today),
     iunMatch: undefined,
     mandateId: currentDelegator?.mandateId,
   };
@@ -93,7 +91,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       trackEventByType(TrackEventType.NOTIFICATION_FILTER_SEARCH);
       const currentFilters = {
         startDate: formatToTimezoneString(values.startDate),
-        endDate: formatToTimezoneString(getNextDay(values.endDate)),
+        endDate: formatToTimezoneString(values.endDate),
         iunMatch: values.iunMatch,
         mandateId: currentDelegator?.mandateId,
       };
@@ -122,9 +120,9 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
       setStartDate(null);
       setEndDate(null);
       setPrevFilters(emptyValues);
-    } else if (filters) {
-      setStartDate(getDefaultDate(formik.values.startDate, tenYearsAgo, filters.startDate));
-      setEndDate(getDefaultDate(formik.values.endDate, today, filters.endDate));
+    } else {
+      setStartDate(formik.values.startDate);
+      setEndDate(formik.values.endDate);
     }
   }, [filters]);
 

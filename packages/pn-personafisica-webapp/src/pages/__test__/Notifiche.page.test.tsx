@@ -37,7 +37,7 @@ describe('Notifiche Page', () => {
         notifications: notificationsToFe.resultsPage,
         filters: {
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           recipientId: '',
           status: '',
           subjectRegExp: '',

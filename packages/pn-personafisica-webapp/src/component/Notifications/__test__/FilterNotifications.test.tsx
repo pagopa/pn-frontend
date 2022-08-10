@@ -139,7 +139,7 @@ describe('Filter Notifications Table Component', () => {
     todayM.setHours(0, 0, 0, 0);
     oneYearAgo.setHours(0, 0, 0, 0);
 
-    await setFormValues(form!, oneYearAgo, todayM, 'ABCD-EFGH-ILMN-123456-A-1');
+    await setFormValues(form!, oneYearAgo, getNextDay(todayM), 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
     await waitFor(() => {
@@ -165,7 +165,7 @@ describe('Filter Notifications Table Component', () => {
     nineYearsAgo.setHours(0, 0, 0, 0);
 
     // wrong id and wrong start date
-    await setFormValues(form!, nineYearsAgo, todayM, '1234-5678-910A-BCDFGH-I-OL');
+    await setFormValues(form!, nineYearsAgo, getNextDay(todayM), '1234-5678-910A-BCDFGH-I-OL');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeDisabled();
     await waitFor(() => {
@@ -180,7 +180,7 @@ describe('Filter Notifications Table Component', () => {
     todayM.setHours(0, 0, 0, 0);
     oneYearAgo.setHours(0, 0, 0, 0);
 
-    await setFormValues(form!, oneYearAgo, todayM, 'ABCD-EFGH-ILMN-123456-A-1');
+    await setFormValues(form!, oneYearAgo, getNextDay(todayM), 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
     const cancelButton = await waitFor(() => within(form!).getByTestId('cancelButton'));
@@ -191,7 +191,7 @@ describe('Filter Notifications Table Component', () => {
       expect(mockDispatchFn).toBeCalledWith({
         payload: {
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           iunMatch: undefined,
         },
         type: 'setNotificationFilters',
