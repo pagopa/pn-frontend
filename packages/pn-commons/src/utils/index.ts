@@ -1,3 +1,4 @@
+import { dataRegex, formatFiscalCode } from './string.utility';
 import { calculatePages } from './pagination.utility';
 import {
     getNotificationStatusInfos,
@@ -18,9 +19,9 @@ import {
     getNextDay,
     formatToTimezoneString
 } from './date.utility';
-import { formatFiscalCode, fiscalCodeRegex, pIvaRegex } from './fiscal_code.utility';
 import { IUN_regex, formatIun } from './iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
+import { basicUserDataMatcherContents, basicInitialUserData } from './user.utility';
 import { storageOpsBuilder } from './storage.utility';
 import { compileRoute } from './routes.utility';
 import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './costants';
@@ -38,11 +39,11 @@ export {
     formatToTimezoneString,
     getValidValue,
     formatFiscalCode,
-    fiscalCodeRegex,
     IUN_regex,
     formatIun,
     formatCurrency,
     formatEurocentToCurrency,
+    dataRegex,
     storageOpsBuilder,
     compileRoute,
     today,
@@ -50,7 +51,8 @@ export {
     DATE_FORMAT,
     getLegalFactLabel,
     getNotificationTimelineStatusInfos,
-    pIvaRegex,
+    basicUserDataMatcherContents,
+    basicInitialUserData,
     URL_DIGITAL_NOTIFICATIONS,
     PRIVACY_LINK_RELATIVE_PATH
 };

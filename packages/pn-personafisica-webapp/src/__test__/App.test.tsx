@@ -4,12 +4,12 @@ import MockAdapter from 'axios-mock-adapter';
 import { screen, waitFor } from '@testing-library/react';
 import { Suspense } from 'react';
 import * as redux from 'react-redux';
+import { axe, render } from './test-utils';
 import App from '../App';
 import i18n from '../i18n';
 import * as sidemenuActions from '../redux/sidemenu/actions';
 import * as authActions from '../redux/auth/actions';
 // import { apiClient } from '../api/axios';
-import { axe, render } from './test-utils';
 
 const Component = () => (
   <Suspense fallback="loading...">

@@ -2,8 +2,8 @@ import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-
 import * as redux from 'react-redux';
 import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import * as actions from '../../redux/dashboard/actions';
 import { axe, render } from '../../__test__/test-utils';
+import * as actions from '../../redux/dashboard/actions';
 import * as hooks from '../../redux/hooks';
 import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Notifiche from '../Notifiche.page';
@@ -71,6 +71,7 @@ describe('Notifiche Page', () => {
     result = undefined;
     jest.resetAllMocks();
     jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   it('renders notifiche page', () => {

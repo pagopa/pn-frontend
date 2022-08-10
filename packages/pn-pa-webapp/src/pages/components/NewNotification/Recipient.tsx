@@ -16,7 +16,7 @@ import {
   Paper,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { DigitalDomicileType, fiscalCodeRegex, RecipientType, pIvaRegex } from '@pagopa-pn/pn-commons';
+import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 
 import { saveRecipients } from '../../../redux/newNotification/actions';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -72,11 +72,11 @@ const Recipient = ({ onConfirm }: Props) => {
         taxId: yup
           .string()
           .required(tc('required-field'))
-          .matches(fiscalCodeRegex, t('fiscal-code-error')),
+          .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
         creditorTaxId: yup
           .string()
           .required(tc('required-field'))
-          .matches(pIvaRegex, t('fiscal-code-error')),
+          .matches(dataRegex.pIva, t('fiscal-code-error')),
         noticeCode: yup
           .string()
           .matches(/^\d{18}$/, t('notice-code-error'))

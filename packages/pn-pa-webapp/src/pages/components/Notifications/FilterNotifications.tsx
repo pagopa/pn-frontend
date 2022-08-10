@@ -5,7 +5,6 @@ import * as yup from 'yup';
 import _ from 'lodash';
 import { Box, DialogActions, DialogContent } from '@mui/material';
 import {
-  fiscalCodeRegex,
   getNotificationAllowedStatus,
   tenYearsAgo,
   today,
@@ -18,6 +17,7 @@ import {
   getValidValue,
   formatToTimezoneString,
   GetNotificationsParams,
+  dataRegex,
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/actions';
@@ -72,7 +72,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const { t } = useTranslation(['common', 'notifiche']);
 
   const validationSchema = yup.object({
-    recipientId: yup.string().matches(fiscalCodeRegex, t('filters.errors.fiscal-code', {ns: 'notifiche'})),
+    recipientId: yup.string().matches(dataRegex.fiscalCode, t('filters.errors.fiscal-code', {ns: 'notifiche'})),
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', {ns: 'notifiche'})),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
