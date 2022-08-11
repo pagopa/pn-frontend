@@ -31,6 +31,7 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
+import { goToLogin } from './navigation/navigation.utility';
 
 declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
@@ -236,7 +237,13 @@ const App = () => {
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
       >
-        <AppMessage sessionRedirect={() => dispatch(logout())} />
+        <AppMessage sessionRedirect={async () => { 
+          if (sessionToken) {
+            await dispatch(logout());
+          } else {
+            goToLogin();
+          } 
+        } } showConfirm={!!sessionToken} />
         <LoadingOverlay />
         <Router />
       </Layout>

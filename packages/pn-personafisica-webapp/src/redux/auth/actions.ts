@@ -10,12 +10,23 @@ import { User } from './types';
  */
 export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
-  async (spidToken: string) => {
+  async (spidToken: string, { rejectWithValue }) => {
     // use selfcare token to get autenticated user
     if (spidToken && spidToken !== '') {
-      const user = await AuthApi.exchangeToken(spidToken);
-      sessionStorage.setItem('user', JSON.stringify(user));
-      return user;
+      try {
+        const user = await AuthApi.exchangeToken(spidToken);
+        sessionStorage.setItem('user', JSON.stringify(user));
+        return user;
+      } catch (e: any) {
+        const rejectParameter = e.response.status === 403 ? {
+          ...e, 
+          response: {...e.response, customMessage: {
+            title: "Non sei autorizzato ad accedere", 
+            message: "Stai uscendo da Piattaforma Notifiche",
+          }}
+        } : e;
+        return rejectWithValue(rejectParameter);
+      }
     } else {
       // I prefer to launch an error than return rejectWithValue, since in this way 
       // the navigation proceeds immediately to the login page.
