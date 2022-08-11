@@ -1,4 +1,6 @@
-export interface User {
+import { BasicUser } from "@pagopa-pn/pn-commons";
+
+export interface User extends BasicUser {
   sessionToken: string;
   name: string;
   family_name: string;
@@ -7,6 +9,7 @@ export interface User {
   mobile_phone: string;
   from_aa: boolean;
   uid: string;
+  aud: string;
   level: string;
   iat: number;
   exp: number;

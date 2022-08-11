@@ -24,7 +24,7 @@ describe('Dashbaord redux state tests', () => {
       notifications: [],
       filters: {
         startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
+        endDate: formatToTimezoneString(today)
       },
       pagination: {
         nextPagesKey: [],

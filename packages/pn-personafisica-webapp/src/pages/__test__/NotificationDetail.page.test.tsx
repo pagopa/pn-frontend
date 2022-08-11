@@ -6,13 +6,13 @@ import {
   NotificationDetailTableRow,
   NotificationStatus,
 } from '@pagopa-pn/pn-commons';
+import { axe, render } from '../../__test__/test-utils';
 import * as actions from '../../redux/notification/actions';
 import {
   notificationToFe,
   notificationToFeTwoRecipients,
   overrideNotificationMock,
 } from '../../redux/notification/__test__/test-utils';
-import { axe, render } from '../../__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
 
 const mockUseParamsFn = jest.fn();

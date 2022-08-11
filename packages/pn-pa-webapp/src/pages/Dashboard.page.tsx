@@ -7,6 +7,8 @@ import {
   PaginationData,
   // Sort, // Riabilitare con la issue PN-1124
   useIsMobile,
+  formatToTimezoneString,
+  getNextDay,
 } from '@pagopa-pn/pn-commons';
 import { Box, Button, Typography } from '@mui/material';
 
@@ -81,7 +83,10 @@ const Dashboard = () => {
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
-    void dispatch(getSentNotifications(params));
+    void dispatch(getSentNotifications({
+      ...params,
+      endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
+    }));
   }, [filters, pagination.size, pagination.page, sort]);
 
   const handleEventTrackingCallbackPageSize = (pageSize: number) => {

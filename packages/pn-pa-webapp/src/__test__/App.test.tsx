@@ -1,9 +1,10 @@
-import { screen } from '@testing-library/react';
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
+import { screen } from '@testing-library/react';
 
+/* eslint-disable import/order */
+import { render, axe } from './test-utils';
 import App from '../App';
-import { axe, render } from './test-utils';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -32,3 +33,5 @@ describe('App', () => {
     expect(result).toHaveNoViolations();
   });
 });
+
+export {};

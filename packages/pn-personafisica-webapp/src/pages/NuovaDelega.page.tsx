@@ -32,11 +32,11 @@ import {
   CustomDatePicker,
   DatePickerTypes,
   DATE_FORMAT,
-  fiscalCodeRegex,
   TitleBox,
   useIsMobile,
   PnBreadcrumb,
 } from '@pagopa-pn/pn-commons';
+import { dataRegex } from '@pagopa-pn/pn-commons/src/utils/string.utility';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   createDelegation,
@@ -129,7 +129,7 @@ const NuovaDelega = () => {
     codiceFiscale: yup
       .string()
       .required(t('nuovaDelega.validation.fiscalCode.required'))
-      .matches(fiscalCodeRegex, t('nuovaDelega.validation.fiscalCode.wrong')),
+      .matches(dataRegex.fiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
     nome: yup.string().required(t('nuovaDelega.validation.name.required')),
     cognome: yup.string().required(t('nuovaDelega.validation.surname.required')),
     enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),

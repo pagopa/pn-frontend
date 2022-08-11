@@ -1,8 +1,8 @@
 import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
 
+import { store } from '../../store';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
-import { store } from '../../store';
 import {
   getSentNotification,
   getSentNotificationDocument,

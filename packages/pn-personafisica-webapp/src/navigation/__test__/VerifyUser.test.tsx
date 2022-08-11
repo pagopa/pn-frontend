@@ -1,8 +1,8 @@
 import * as redux from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
+import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/auth/actions';
 import VerifyUser from '../VerifyUser';
-import { render } from '../../__test__/test-utils';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

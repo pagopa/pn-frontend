@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, } from '@pagopa-pn/pn-commons';
+import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString } from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
 import { getReceivedNotifications } from '../redux/dashboard/actions';
@@ -75,7 +75,10 @@ const Notifiche = () => {
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
-    void dispatch(getReceivedNotifications(params));
+    void dispatch(getReceivedNotifications({
+      ...params,
+      endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
+    }));
   }, [filters, pagination.size, pagination.page, sort, currentDelegator]);
 
   return (
