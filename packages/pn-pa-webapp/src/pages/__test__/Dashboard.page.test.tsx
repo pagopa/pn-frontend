@@ -2,8 +2,8 @@ import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-
 import * as redux from 'react-redux';
 import { formatToTimezoneString, getNextDay, tenYearsAgo, today, Notification } from '@pagopa-pn/pn-commons';
 
-import * as actions from '../../redux/dashboard/actions';
 import { render, axe } from '../../__test__/test-utils';
+import * as actions from '../../redux/dashboard/actions';
 import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Dashboard from '../Dashboard.page';
 
@@ -43,7 +43,7 @@ describe('Dashboard Page', () => {
         notifications,
         filters: {
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
         },
         sort: {
           orderBy: '',

@@ -2,7 +2,7 @@ import DateFnsAdapter from "@date-io/date-fns";
 
 const dateFns = new DateFnsAdapter();
 export const DATE_FORMAT = "dd/MM/yyyy";
-const DATE_FORMAT_TIMEZONE = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+const DATE_FORMAT_TIMEZONE = "yyyy-MM-dd'T'00:mm:ss.SSS'Z'";
 
 export const today = new Date();
 export const tenYearsAgo = new Date(new Date().setMonth(today.getMonth() - 120));

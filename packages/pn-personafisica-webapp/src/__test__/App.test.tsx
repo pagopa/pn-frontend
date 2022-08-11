@@ -4,11 +4,11 @@ import MockAdapter from 'axios-mock-adapter';
 import { screen } from '@testing-library/react';
 import { Suspense } from 'react';
 import * as redux from 'react-redux';
+import { axe, render } from './test-utils';
 import App from '../App';
 import i18n from '../i18n';
 import * as sidemenuActions from '../redux/sidemenu/actions';
 import * as authActions from '../redux/auth/actions';
-import { axe, render } from './test-utils';
 
 /**
  * Componente che mette App all'interno di un Suspense, 

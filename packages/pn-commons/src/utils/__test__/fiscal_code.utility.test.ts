@@ -1,4 +1,4 @@
-import { formatFiscalCode } from '../fiscal_code.utility';
+import { formatFiscalCode } from '../string.utility';
 
 const correctFiscalCode = 'MRTMTT91D08F205J';
 

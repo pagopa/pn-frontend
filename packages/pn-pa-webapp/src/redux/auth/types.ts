@@ -1,12 +1,7 @@
+import { BasicUser } from '@pagopa-pn/pn-commons';
 import { Role } from '../../models/user';
 
-interface CommonUser {
-  email: string;
-  sessionToken: string;
-  name: string;
-  family_name: string;
-  fiscal_number: string;
-  uid: string;
+interface CommonUser extends BasicUser {
   organization: Organization;
   desired_exp: number;
 }

@@ -148,7 +148,7 @@ describe('Filter Notifications Table Component', () => {
     await setFormValues(
       form!,
       oneYearAgo,
-      todayM,
+      getNextDay(todayM),
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       ''
@@ -181,7 +181,7 @@ describe('Filter Notifications Table Component', () => {
     await setFormValues(
       form!,
       oneYearAgo,
-      todayM,
+      getNextDay(todayM),
       localizedNotificationStatus[2].value,
       '',
       'ABCD-EFGH-ILMN-123456-A-1'
@@ -214,7 +214,7 @@ describe('Filter Notifications Table Component', () => {
     await setFormValues(
       form!,
       nineYearsAgo,
-      todayM,
+      getNextDay(todayM),
       localizedNotificationStatus[2].value,
       'mocked-wrongId',
       ''
@@ -239,7 +239,7 @@ describe('Filter Notifications Table Component', () => {
     await setFormValues(
       form!,
       nineYearsAgo,
-      todayM,
+      getNextDay(todayM),
       localizedNotificationStatus[2].value,
       '',
       '1234-5678-910A-BCDFGH-I-OL'
@@ -261,7 +261,7 @@ describe('Filter Notifications Table Component', () => {
     await setFormValues(
       form!,
       oneYearAgo,
-      todayM,
+      getNextDay(todayM),
       localizedNotificationStatus[2].value,
       'RSSMRA80A01H501U',
       ''
@@ -276,7 +276,7 @@ describe('Filter Notifications Table Component', () => {
       expect(mockDispatchFn).toBeCalledWith({
         payload: {
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
+          endDate: formatToTimezoneString(today),
           recipientId: '',
           status: '',
           iunMatch: '',

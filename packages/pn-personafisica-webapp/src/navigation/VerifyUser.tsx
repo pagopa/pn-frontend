@@ -25,7 +25,7 @@ const VerifyUser = () => {
         goToLogin();
       }
     }
-  }, [location]);
+  }, [location, token]);
 
   useEffect(() => {
     if (spidToken !== '') {
