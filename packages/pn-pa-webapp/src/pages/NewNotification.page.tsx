@@ -90,7 +90,7 @@ const NewNotification = () => {
   };
 
   const goToPreviousStep = (selectedStep?: number) => {
-    if (selectedStep && selectedStep < activeStep) {
+    if (selectedStep !== undefined && selectedStep >= 0 && selectedStep < activeStep) {
       setActiveStep(selectedStep);
     } else {
       setActiveStep(activeStep - 1);
@@ -159,6 +159,7 @@ const NewNotification = () => {
                 <Step
                   key={label}
                   onClick={() => (index < activeStep ? goToPreviousStep(index) : undefined)}
+                  sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
                 >
                   <StepLabel>{label}</StepLabel>
                 </Step>

@@ -210,6 +210,7 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
   };
 
   const handleSubmit = (values: { recipients: Array<FormRecipient> }) => {
+    // TODO da rifattorizzare: issue PN-2015
     dispatch(saveRecipients(values));
     dispatch(setRecipients(values));
     onConfirm();

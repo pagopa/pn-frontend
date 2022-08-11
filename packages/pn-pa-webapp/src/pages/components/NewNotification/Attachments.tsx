@@ -28,6 +28,7 @@ type AttachmentBoxProps = {
     id: string,
     file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string },
+    // TODO da rifattorizzare: issue PN-2015 non ha senso passarsi il contenuto del file da uno step all'altro.
     fileUploaded?: any,
   ) => void;
   onRemoveFile: (id: string) => void;
