@@ -8,7 +8,6 @@ import App from '../App';
 import i18n from '../i18n';
 import * as sidemenuActions from '../redux/sidemenu/actions';
 import * as authActions from '../redux/auth/actions';
-// import { apiClient } from '../api/axios';
 import { axe, render } from './test-utils';
 
 /**
@@ -94,7 +93,7 @@ describe('App', () => {
   /**
    * Tests che usano Component e inizializzazione "semplice" di i18n.
    */
-  describe("tests che non analizzano dettagli", () => {
+  describe("tests che non analizzano dettagli (test solo di accessibilità e renderizzazione)", () => {
     beforeEach(() => {
       void i18n.init();
     });
@@ -117,7 +116,7 @@ describe('App', () => {
   /**
    * Tests che usano App e inizializzazione di i18n che include react.useSuspense = false.
    */
-   describe("tests che analizzano dettagli di comportamento", () => {
+   describe("tests che analizzano dettagli di comportamento (mock alle chiamate)", () => {
     beforeEach(() => {
       void i18n.init({
         react: { 
