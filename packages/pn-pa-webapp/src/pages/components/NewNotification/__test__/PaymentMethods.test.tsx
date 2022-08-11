@@ -3,9 +3,9 @@
 import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 
+import { render } from '../../../../__test__/test-utils';
 import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
 import * as actions from '../../../../redux/newNotification/actions';
-import { render } from '../../../../__test__/test-utils';
 import PaymentMethods from '../PaymentMethods';
 import { UploadPayementParams } from '../../../../redux/newNotification/types';
 

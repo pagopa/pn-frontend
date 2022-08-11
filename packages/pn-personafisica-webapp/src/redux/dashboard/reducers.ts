@@ -5,7 +5,6 @@ import {
   today,
   Notification,
   formatToTimezoneString,
-  getNextDay,
   Sort
 } from '@pagopa-pn/pn-commons';
 import { NotificationColumn } from '../../models/Notifications';
@@ -20,7 +19,7 @@ const dashboardSlice = createSlice({
     notifications: [] as Array<Notification>,
     filters: {
       startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
+      endDate: formatToTimezoneString(today),
       iunMatch: undefined,
       mandateId: undefined,
     } as GetNotificationsParams,
@@ -61,7 +60,7 @@ const dashboardSlice = createSlice({
         iunMatch: undefined,
         mandateId: action.payload,
         startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
+        endDate: formatToTimezoneString(today),
       };
       // reset pagination
       state.pagination.size = 10;

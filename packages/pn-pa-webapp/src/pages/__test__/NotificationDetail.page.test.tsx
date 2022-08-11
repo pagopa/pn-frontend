@@ -2,12 +2,12 @@ import * as redux from 'react-redux';
 import { NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
 import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 
+import { render, axe } from '../../__test__/test-utils';
 import * as actions from '../../redux/notification/actions';
 import {
   notificationToFe,
   notificationToFeMultiRecipient,
 } from '../../redux/notification/__test__/test-utils';
-import { render, axe } from '../../__test__/test-utils';
 import NotificationDetail from '../NotificationDetail.page';
 
 const mockNavigateFn = jest.fn();

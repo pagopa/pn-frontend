@@ -16,12 +16,7 @@ import {
   Paper,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import {
-  DigitalDomicileType,
-  fiscalCodeRegex,
-  RecipientType,
-  pIvaRegex,
-} from '@pagopa-pn/pn-commons';
+import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 
 import { setRecipients } from '../../../redux/newNotification/actions';
 import { saveRecipients } from '../../../redux/newNotification/reducers';
@@ -79,38 +74,36 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
   : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
   const validationSchema = yup.object({
-    recipients: yup
-      .array()
-      .of(
-        yup.object({
-          firstName: yup.string().required(tc('required-field')),
-          lastName: yup.string().required(tc('required-field')),
-          taxId: yup
-            .string()
-            .required(tc('required-field'))
-            .matches(fiscalCodeRegex, t('fiscal-code-error')),
-          creditorTaxId: yup
-            .string()
-            .required(tc('required-field'))
-            .matches(pIvaRegex, t('fiscal-code-error')),
-          noticeCode: yup
-            .string()
-            .matches(/^\d{18}$/, t('notice-code-error'))
-            .required(tc('required-field')),
-          digitalDomicile: yup.string().when('showDigitalDomicile', {
-            is: true,
-            then: yup.string().email(t('pec-error')).required(tc('required-field')),
-          }),
-          showPhysicalAddress: yup.boolean().isTrue(),
-          address: yup.string().when('showPhysicalAddress', {
-            is: true,
-            then: yup.string().required(tc('required-field')),
-          }),
-          houseNumber: yup.string().when('showPhysicalAddress', {
-            is: true,
-            then: yup.string().required(tc('required-field')),
-          }),
-          /*
+    recipients: yup.array().of(
+      yup.object({
+        firstName: yup.string().required(tc('required-field')),
+        lastName: yup.string().required(tc('required-field')),
+        taxId: yup
+          .string()
+          .required(tc('required-field'))
+          .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
+        creditorTaxId: yup
+          .string()
+          .required(tc('required-field'))
+          .matches(dataRegex.pIva, t('fiscal-code-error')),
+        noticeCode: yup
+          .string()
+          .matches(/^\d{18}$/, t('notice-code-error'))
+          .required(tc('required-field')),
+        digitalDomicile: yup.string().when('showDigitalDomicile', {
+          is: true,
+          then: yup.string().email(t('pec-error')).required(tc('required-field')),
+        }),
+        showPhysicalAddress: yup.boolean().isTrue(),
+        address: yup.string().when('showPhysicalAddress', {
+          is: true,
+          then: yup.string().required(tc('required-field')),
+        }),
+        houseNumber: yup.string().when('showPhysicalAddress', {
+          is: true,
+          then: yup.string().required(tc('required-field')),
+        }),
+        /*
         addressDetails: yup.string().when('showPhysicalAddress', {
           is: true,
           then: yup.string().required(tc('required-field')),

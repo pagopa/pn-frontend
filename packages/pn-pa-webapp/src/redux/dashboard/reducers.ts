@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   formatToTimezoneString,
-  getNextDay,
   GetNotificationsParams,
   Notification,
   Sort,
@@ -20,7 +19,7 @@ const dashboardSlice = createSlice({
     notifications: [] as Array<Notification>,
     filters: {
       startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
+      endDate: formatToTimezoneString(today),
       status: '',
       recipientId: '',
       iunMatch: '',
