@@ -74,7 +74,7 @@ describe('Recipient Component', () => {
     expect(result.container).toHaveTextContent(/add-digital-domicile/i);
     expect(result.container).toHaveTextContent(/add-physical-domicile/i);
     expect(result.container).toHaveTextContent(/add-recipient/i);
-    expect(result.container).toHaveTextContent(/new-notification.back-to-notifications/i);
+    expect(result.container).toHaveTextContent(/back-to-preliminary-informations/i);
     expect(result.container).toHaveTextContent(/button.continue/i);
   });
 

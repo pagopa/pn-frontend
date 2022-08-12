@@ -31,8 +31,7 @@ const SubTitle = () => {
   const { t } = useTranslation(['common', 'notifiche']);
   return (
     <Fragment>
-      {t('new-notification.subtitle', { ns: 'notifiche' })}{' '}
-      {/* PN-2028 */}
+      {t('new-notification.subtitle', { ns: 'notifiche' })} {/* PN-2028 */}
       {t('menu.api-key')}
       {/*
         PN-2028
@@ -90,6 +89,14 @@ const NewNotification = () => {
     setActiveStep((previousStep) => previousStep + 1);
   };
 
+  const goToPreviousStep = (selectedStep?: number) => {
+    if (selectedStep !== undefined && selectedStep >= 0 && selectedStep < activeStep) {
+      setActiveStep(selectedStep);
+    } else {
+      setActiveStep(activeStep - 1);
+    }
+  };
+
   const createNotification = () => {
     // if it is last step, save notification
     if (activeStep === 3 && isCompleted) {
@@ -104,9 +111,11 @@ const NewNotification = () => {
   }, [isCompleted]);
 
   useEffect(() => {
-    // TODO: in attesa che self care restituisca senderDenomination, questa viene settata come Denomination of + id
     dispatch(
-      setSenderInfos({ senderDenomination: organizationParty.name, senderTaxId: organization.fiscal_code })
+      setSenderInfos({
+        senderDenomination: organizationParty.name,
+        senderTaxId: organization.fiscal_code,
+      })
     );
   }, [organization, organizationParty]);
 
@@ -144,8 +153,12 @@ const NewNotification = () => {
               {t('required-fields')}
             </Typography>
             <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
-              {steps.map((label) => (
-                <Step key={label}>
+              {steps.map((label, index) => (
+                <Step
+                  key={label}
+                  onClick={() => (index < activeStep ? goToPreviousStep(index) : undefined)}
+                  sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
+                >
                   <StepLabel>{label}</StepLabel>
                 </Step>
               ))}
@@ -153,13 +166,27 @@ const NewNotification = () => {
             {activeStep === 0 && (
               <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
             )}
-            {activeStep === 1 && <Recipient onConfirm={goToNextStep} />}
-            {activeStep === 2 && <Attachments onConfirm={goToNextStep} />}
+            {activeStep === 1 && (
+              <Recipient
+                onConfirm={goToNextStep}
+                onPreviousStep={goToPreviousStep}
+                recipientsData={notification.recipientsForm}
+              />
+            )}
+            {activeStep === 2 && (
+              <Attachments
+                onConfirm={goToNextStep}
+                onPreviousStep={goToPreviousStep}
+                attachmentsData={notification.documentsForm}
+              />
+            )}
             {activeStep === 3 && (
               <PaymentMethods
                 onConfirm={createNotification}
                 notification={notification}
                 isCompleted={isCompleted}
+                onPreviousStep={goToPreviousStep}
+                paymentDocumentsData={notification.paymentDocumentsForm}
               />
             )}
           </Grid>

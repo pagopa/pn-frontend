@@ -1,17 +1,22 @@
 import _ from 'lodash';
-import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { NotificationDetailDocument } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
   NewNotificationFe,
   NewNotificationResponse,
+  FormRecipient,
+  FormAttachment,
+  PaymentObject,
 } from '../../models/NewNotification';
-import { UploadPaymentResponse, UploadAttachmentParams, UploadPayementParams } from './types';
+import { UploadAttachmentParams, UploadPayementParams, UploadPaymentResponse } from './types';
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {
-    const presignedUrls = await NotificationsApi.preloadNotificationDocument(items.map(item => ({contentType: item.contentType, key: item.key, sha256: item.sha256})));
+    const presignedUrls = await NotificationsApi.preloadNotificationDocument(
+      items.map((item) => ({ contentType: item.contentType, key: item.key, sha256: item.sha256 }))
+    );
     if (presignedUrls.length) {
       const uploadDocumentCalls: Array<Promise<string>> = [];
       // upload document
@@ -37,7 +42,7 @@ const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams
           key: presignedUrls[index].key,
           versionToken: documentsToken[index],
         },
-        title: item.key
+        title: item.key,
       }));
     }
     throw new Error();
@@ -83,9 +88,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
     const response: UploadPaymentResponse = {};
     const getFile = (item: UploadAttachmentParams) => {
       if (item.file && item.sha256) {
-        return documentsUploaded.find(
-          (f) => f.digests.sha256 === item.sha256
-        );
+        return documentsUploaded.find((f) => f.digests.sha256 === item.sha256);
       }
       return undefined;
     };
@@ -110,10 +113,24 @@ export const createNewNotification = createAsyncThunk<NewNotificationResponse, N
   'createNewNotification',
   async (notification: NewNotificationFe, { rejectWithValue }) => {
     try {
-      const notificationToSave = { ...notification, paymentMode: undefined };
+      // Qui vado ad eliminare i campi usati solo per mantenere lo stado di presentazion FE recipientsForm, documentsForm, paymentDocumentsForm
+      // ho riscontrato infatti l'aumento del rischio di errori di tipo 413 (payload too large)
+      // Nella PN-2015 si discute di come rifattorizzare e separare lo stato in modo da avere in redux solo il layer di presentazione
+      // al termine si effettua un mapping tra il DTO di presentazione e il DTO di integrazione
+      // Questo è da intendersi quindi come un fix temporaneo in attesa del refactoring della pn-2015
+      // Carlotta Dimatteo, 12/08/2022
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { recipientsForm, documentsForm, paymentDocumentsForm, paymentMode, ...notificationToSave } = notification;
       return await NotificationsApi.createNewNotification(notificationToSave);
     } catch (e) {
       return rejectWithValue(e);
     }
   }
 );
+
+export const setRecipients = createAction<{ recipients: Array<FormRecipient> }>('setRecipients');
+export const setAttachments = createAction<{ documents: Array<FormAttachment> }>('setAttachments');
+export const setPaymentDocuments =
+  createAction<{ paymentMethodsDocuments: { [key: string]: PaymentObject } }>(
+    'setPaymentDocuments'
+  );

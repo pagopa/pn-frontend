@@ -3,7 +3,13 @@ import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-
 
 import { FormRecipient, NewNotificationFe, PaymentModel } from '../../models/NewNotification';
 import { formatNotificationRecipients } from '../../utils/notification.utility';
-import { uploadNotificationAttachment, uploadNotificationPaymentDocument } from './actions';
+import {
+  uploadNotificationAttachment,
+  setPaymentDocuments,
+  setAttachments,
+  setRecipients,
+  uploadNotificationPaymentDocument,
+} from './actions';
 import { PreliminaryInformationsPayload } from './types';
 
 const initialState = {
@@ -21,6 +27,7 @@ const initialState = {
   } as NewNotificationFe,
   isCompleted: false,
 };
+
 
 /* eslint-disable functional/immutable-data */
 const newNotificationSlice = createSlice({
@@ -70,6 +77,24 @@ const newNotificationSlice = createSlice({
         }),
       };
       state.isCompleted = true;
+    });
+    builder.addCase(setRecipients, (state, action) => {
+      state.notification = {
+        ...state.notification,
+        recipientsForm: action.payload.recipients,
+      };
+    });
+    builder.addCase(setAttachments, (state, action) => {
+      state.notification = {
+        ...state.notification,
+        documentsForm: action.payload.documents,
+      };
+    });
+    builder.addCase(setPaymentDocuments, (state, action) => {
+      state.notification = {
+        ...state.notification,
+        paymentDocumentsForm: action.payload.paymentMethodsDocuments,
+      };
     });
   },
 });

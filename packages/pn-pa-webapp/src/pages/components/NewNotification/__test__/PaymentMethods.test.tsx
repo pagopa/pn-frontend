@@ -70,7 +70,11 @@ describe('PaymentMethods Component', () => {
     });
     const buttons = form?.querySelectorAll('button');
     expect(buttons).toHaveLength(2);
-    expect(buttons![1]).toBeDisabled();
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // vedi flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
+    expect(buttons![0]).toBeDisabled();
+    expect(result.container).toHaveTextContent(/back-to-attachments/i);
   });
 
   it('adds first pagoPa document (confirm disabled)', async () => {
@@ -78,7 +82,10 @@ describe('PaymentMethods Component', () => {
     const paymentBoxes = result.queryAllByTestId('paymentBox');
     uploadDocument(paymentBoxes[0].parentNode!);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
-    expect(buttons![1]).toBeDisabled();
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // vedi flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
+    expect(buttons![0]).toBeDisabled();
   });
 
   it('adds first and second pagoPa documents and clicks on confirm', async () => {
@@ -88,8 +95,11 @@ describe('PaymentMethods Component', () => {
     uploadDocument(paymentBoxes[2].parentNode!);
     uploadDocument(paymentBoxes[3].parentNode!);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
-    expect(buttons![1]).toBeEnabled();
-    fireEvent.click(buttons![1]);
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // vedi flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
+    expect(buttons![0]).toBeEnabled();
+    fireEvent.click(buttons![0]);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);
@@ -97,19 +107,19 @@ describe('PaymentMethods Component', () => {
         newNotification.recipients.reduce((obj: UploadPayementParams, r, index) => {
           obj[r.taxId] = {
             pagoPaForm: {
-              key: 'pagopa-notice',
+              key: 'new-notification.steps.payment-methods.pagopa-notice',
               file: new Uint8Array(),
               sha256: 'mocked-hasBase64',
               contentType: 'application/pdf',
             },
             f24flatRate: {
-              key: 'f24-flatrate',
+              key: 'new-notification.steps.payment-methods.pagopa-notice-f24-flatrate',
               file: undefined,
               sha256: '',
               contentType: 'application/pdf',
             },
             f24standard: {
-              key: 'F24',
+              key: 'new-notification.steps.payment-methods.pagopa-notice-f24',
               file: index === 0 ? undefined : new Uint8Array(),
               sha256: index === 0 ? '' : 'mocked-hasBase64',
               contentType: 'application/pdf',

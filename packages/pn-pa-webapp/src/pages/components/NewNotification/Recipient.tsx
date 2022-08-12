@@ -18,6 +18,7 @@ import {
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 
+import { setRecipients } from '../../../redux/newNotification/actions';
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
 import { FormRecipient } from '../../../models/NewNotification';
@@ -49,20 +50,28 @@ const singleRecipient = {
   showPhysicalAddress: false,
 };
 
-const initialValues = {
-  recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }],
-};
-
 type Props = {
   onConfirm: () => void;
+  onPreviousStep?: () => void;
+  recipientsData?: Array<FormRecipient>;
 };
 
-const Recipient = ({ onConfirm }: Props) => {
+const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.recipient',
   });
   const { t: tc } = useTranslation(['common']);
+
+  const initialValues = recipientsData && recipientsData.length > 0
+  ? {
+      recipients: recipientsData.map((recipient, index) => ({
+        ...recipient,
+        idx: index,
+        id: `recipient.${index}`,
+      })),
+    }
+  : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
   const validationSchema = yup.object({
     recipients: yup.array().of(
@@ -201,13 +210,23 @@ const Recipient = ({ onConfirm }: Props) => {
   };
 
   const handleSubmit = (values: { recipients: Array<FormRecipient> }) => {
+    // TODO da rifattorizzare: issue PN-2015
     dispatch(saveRecipients(values));
+    dispatch(setRecipients(values));
     onConfirm();
+  };
+
+  const handlePreviousStep = (values: { recipients: Array<FormRecipient> }) => {
+    dispatch(setRecipients(values));
+    if (onPreviousStep) {
+      onPreviousStep();
+    }
   };
 
   return (
     <Formik
       initialValues={initialValues}
+      enableReinitialize={true}
       validationSchema={validationSchema}
       onSubmit={(values) => handleSubmit(values)}
       validateOnBlur={false}
@@ -215,7 +234,8 @@ const Recipient = ({ onConfirm }: Props) => {
     >
       {({ values, setFieldValue, touched, handleBlur, errors, isValid }) => (
         <Form>
-          <NewNotificationCard noPaper isContinueDisabled={!isValid}>
+          <NewNotificationCard noPaper isContinueDisabled={!isValid} previousStepLabel={t('back-to-preliminary-informations')}
+              previousStepOnClick={() => handlePreviousStep(values)}>
             {values.recipients.map((recipient, index) => (
               <Paper
                 key={recipient.id}

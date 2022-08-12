@@ -75,9 +75,8 @@ describe('PreliminaryInformations Component', () => {
       'pagopa-notice-f24-flatrate',
       'pagopa-notice-f24',
     ]);
-    const buttons = form?.querySelectorAll('button');
-    expect(buttons).toHaveLength(2);
-    expect(buttons![1]).toBeDisabled();
+    const button = form?.querySelector('button');
+    expect(button!).toBeDisabled();
   });
 
   it('changes form values and clicks on confirm', async () => {
@@ -95,9 +94,9 @@ describe('PreliminaryInformations Component', () => {
     );
     await testRadio(form!, 'comunicationTypeRadio', 1);
     await testRadio(form!, 'paymentMethodRadio', 1);
-    const buttons = form?.querySelectorAll('button');
-    expect(buttons![1]).toBeEnabled();
-    fireEvent.click(buttons![1]);
+    const button = form?.querySelector('button');
+    expect(button).toBeEnabled();
+    fireEvent.click(button!);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockDispatchFn).toBeCalledWith({
