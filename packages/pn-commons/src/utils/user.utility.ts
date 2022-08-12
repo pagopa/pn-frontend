@@ -43,3 +43,48 @@ export function basicInitialUserData<T extends BasicUser>(yupMatcher: yup.Object
     return noLoggedUserData;
   }
 }
+
+type ExchangeTokenApi<T extends BasicUser> = { exchangeToken: (token: string) => Promise<T> };
+
+export async function doExchangeToken<T extends BasicUser>(token: string, tokenName: string, api: ExchangeTokenApi<T>, rejectWithValue: any) {
+  if (token && token !== '') {
+    try {
+      const user = await api.exchangeToken(token);
+      sessionStorage.setItem('user', JSON.stringify(user));
+      return user;
+    } catch (e: any) {
+      console.log('error in doExchangeToken');
+      console.log(e.error);
+      console.log(e.response);
+      const rejectParameter = (e.response?.status === 403) ? {
+        ...e,
+        isUnauthorizedUser: true,
+        response: {
+          ...e.response, customMessage: {
+            title: "Non sei autorizzato ad accedere",
+            message: "Stai uscendo da Piattaforma Notifiche",
+          }
+        }
+      } 
+      : e.response?.data?.error === "Token is not valid" ? {
+        ...e,
+        isUnauthorizedUser: true,
+        response: {
+          ...e.response, status: 403, customMessage: {
+            title: `Non puoi accedere per un problema tecnico - ${tokenName} non valido`,
+            message: "Stai uscendo da Piattaforma Notifiche",
+          }
+        }
+      }
+      : e;
+      return rejectWithValue(rejectParameter);
+    }
+  } else {
+    // I prefer to launch an error than return rejectWithValue, since in this way 
+    // the navigation proceeds immediately to the login page.
+    // --------------
+    // Carlos Lombardi, 2022.08.05
+    throw new Error(`${tokenName} must be provided to exchangeToken action`);
+  }
+}
+

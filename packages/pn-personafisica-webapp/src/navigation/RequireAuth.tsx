@@ -25,6 +25,7 @@ const RequireAuth = () => {
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
 
   useEffect(() => {
+    console.log('inside useEffect in RequireAuth');
     if (token === '' || !token) {
       setAccessDenied(true);
       // Redirect them to the spid-hub login page
