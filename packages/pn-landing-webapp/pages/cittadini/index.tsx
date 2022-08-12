@@ -6,13 +6,13 @@ import {
   Walkthrough,
   Hero,
 } from "@pagopa/mui-italia";
+import { UserType } from "model";
 import {
   getHeroData,
   getInfoblockData,
   getShowcaseData,
   getWalkthroughData,
 } from "../../api";
-import { UserType } from "model";
 
 const USER_TYPE = UserType.PF;
 

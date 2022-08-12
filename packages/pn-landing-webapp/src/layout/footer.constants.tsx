@@ -78,18 +78,12 @@ export const preLoginLinks: PreLoginFooterLinksType = {
         label: "Diritto alla protezione dei dati personali",
         ariaLabel: "Vai al link: Diritto alla protezione dei dati personali",
         linkType: "internal",
-        onClick: () => {
-          console.log("onClick");
-        },
       },
       {
         label: "Preferenze Cookie",
         href: "preferenze-cookie",
         ariaLabel: "Vai al link: Preferenze Cookie",
         linkType: "internal",
-        onClick: () => {
-          console.log("onClick");
-        },
       },
       {
         label: "Termini e Condizioni",
@@ -149,7 +143,7 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Accessibilità",
-        href: "accessibilita",
+        href: "/cittadini/accessibilita",
         ariaLabel: "Vai al link: Accessibilità",
         linkType: "internal",
       },
