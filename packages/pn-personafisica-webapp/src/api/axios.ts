@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { store } from '../redux/store';
 import { API_BASE_URL } from '../utils/constants';
 
 export const authClient = axios.create({
@@ -12,9 +13,9 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     /* eslint-disable functional/immutable-data */
-    const token = JSON.parse(sessionStorage.getItem('user') || '');
+    const token = store.getState().userState.user.sessionToken;
     if (token && config.headers) {
-      config.headers.Authorization = 'Bearer ' + (token.sessionToken as string);
+      config.headers.Authorization = 'Bearer ' + token;
     }
     return config;
   },

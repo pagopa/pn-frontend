@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Typography } from '@mui/material';
-import { IllusSms } from '@pagopa/mui-italia';
+import { Alert, Box, Typography } from '@mui/material';
+import { IllusEmail } from '@pagopa/mui-italia';
 
 import { DigitalAddress } from '../../models/contacts';
-import CourtesyContactsList from './CourtesyContactsList';
 import DigitalContactsCard from './DigitalContactsCard';
+import CourtesyContactsList from './CourtesyContactsList';
 
 interface Props {
   recipientId: string;
@@ -19,12 +19,24 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
       sectionTitle={t('courtesy-contacts.title', { ns: 'recapiti' })}
       title={t('courtesy-contacts.subtitle', { ns: 'recapiti' })}
       subtitle={t('courtesy-contacts.description', { ns: 'recapiti' })}
-      avatar={<IllusSms />}
+      /** 
+       * Waiting for Mail icon to be available in mui-italia (<IllusSms /> as placeholder)
+       * */
+      avatar={<IllusEmail />}
     >
-      <CourtesyContactsList recipientId={recipientId} contacts={contacts} />
-      <Typography color="text.primary" fontWeight={400} fontSize={16}>
-        {t('courtesy-contacts.io-enable', { ns: 'recapiti' })}
-      </Typography>
+      <Box sx={{ width: { xs: '100%', lg: '50%' }}}>
+        <CourtesyContactsList recipientId={recipientId} contacts={contacts} />
+        <Alert
+          sx={{ mt: 4}}
+          severity="info"
+        >
+          <Typography component="span" variant="body1">{t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })} </Typography>
+          {/** 
+           * Waiting for FAQs
+          <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant='body1'>{t('courtesy-contacts.disclaimer-link', { ns: 'recapiti' })}</Link>
+           * */}
+        </Alert>
+      </Box>
     </DigitalContactsCard>
   );
 };

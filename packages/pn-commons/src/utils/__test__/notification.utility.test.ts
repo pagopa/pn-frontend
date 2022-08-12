@@ -2,14 +2,15 @@ import _ from 'lodash';
 import {
   AnalogWorkflowDetails,
   DigitalDomicileType,
+  LegalFactType,
   NotHandledDetails,
   PhysicalCommunicationType,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-} from '../../types/NotificationDetail';
-import { NotificationStatus } from '../../types/NotificationStatus';
+  NotificationStatus
+} from '../../types';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -107,12 +108,21 @@ describe('notification utility functions', () => {
     );
   });
 
+  it('return notification status infos - VIEWED_AFTER_DEADLINE', () => {
+    testNotificationStatusInfosFn(
+        NotificationStatus.VIEWED_AFTER_DEADLINE,
+        'Visualizzata',
+        'success',
+        'Il destinatario ha visualizzato la notifica'
+    );
+  });
+
   it('return notification status infos - CANCELLED', () => {
     testNotificationStatusInfosFn(
-      NotificationStatus.CANCELLED,
-      'Annullata',
-      'warning',
-      "L'ente ha annullato l'invio della notifica"
+        NotificationStatus.CANCELLED,
+        'Annullata',
+        'warning',
+        "L'ente ha annullato l'invio della notifica"
     );
   });
 
@@ -139,16 +149,16 @@ describe('timeline utility functions', () => {
   it('return timeline status infos - SCHEDULE_ANALOG_WORKFLOW', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_ANALOG_WORKFLOW;
     testTimelineStatusInfosFn(
-      'Invio per via cartacea',
-      "È in corso l'invio della notifica per via cartacea."
+      'Invio per via cartacea in preparazione',
+      "L'invio della notifica per via cartacea a Nome Cognome è in preparazione."
     );
   });
 
   it('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
     testTimelineStatusInfosFn(
-      'Invio per via digitale',
-      "È in corso l'invio della notifica per via digitale."
+      'Invio per via digitale in preparazione',
+      "L'invio della notifica per via digitale a Nome Cognome è in preparazione."
     );
   });
 
@@ -191,17 +201,31 @@ describe('timeline utility functions', () => {
     );
   });
 
-  it('return timeline status infos - SEND_DIGITAL_DOMICILE_FAILURE', () => {
+  it('return timeline status infos - SEND_DIGITAL_FEEDBACK (failure)', () => {
     parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).errors = ['mocked-errors'];
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
       type: DigitalDomicileType.PEC,
       address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
-      'Invio per via digitale fallito',
-      "L'invio della notifica a Nome Cognome per via digitale non è riuscito."
+      'Invio per via digitale non riuscito',
+      "Il tentativo di invio della notifica per via digitale a Nome Cognome non è riuscito."
+    );
+  });
+
+  it('return timeline status infos - SEND_DIGITAL_FEEDBACK (success)', () => {
+    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'OK';
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
+      type: DigitalDomicileType.PEC,
+      address: 'nome@cognome.mail',
+    };
+    testTimelineStatusInfosFn(
+      'Invio per via digitale riuscito',
+      "Il tentativo di invio della notifica per via digitale a Nome Cognome è riuscito."
     );
   });
 
@@ -268,25 +292,70 @@ describe('timeline utility functions', () => {
     );
   });
 
+  it('return timeline status infos - SEND_DIGITAL_PROGRESS (failure)', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
+    testTimelineStatusInfosFn(
+      'Invio via PEC non preso in carico',
+      "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail non è stato preso in carico."
+    );
+  });
+
+  it('return timeline status infos - SEND_DIGITAL_PROGRESS (success)', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'OK';
+    testTimelineStatusInfosFn(
+      'Invio via PEC preso in carico',
+      "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail è stato preso in carico."
+    );
+  });
+
   it('return parsed notification detail response', () => {
     const calculatedParsedNotification = parseNotificationDetail(notificationFromBe);
     expect(calculatedParsedNotification).toStrictEqual(parsedNotification);
   });
 
-  it('return legalFact label - NO SEND_PAPER_FEEDBACK', () => {
-    const label = getLegalFactLabel(TimelineCategory.GET_ADDRESS, {
-      attestation: 'mocked-legalFact-label',
-      receipt: 'mocked-recipient-label',
-    });
-    expect(label).toBe('mocked-legalFact-label');
+  it('return legalFact label - default', () => {
+    const label = getLegalFactLabel(TimelineCategory.GET_ADDRESS);
+    expect(label).toBe('Attestazione opponibile a terzi');
   });
 
   it('return legalFact label - SEND_PAPER_FEEDBACK', () => {
-    const label = getLegalFactLabel(TimelineCategory.SEND_PAPER_FEEDBACK, {
-      attestation: 'mocked-legalFact-label',
-      receipt: 'mocked-recipient-label',
-    });
-    expect(label).toBe('mocked-recipient-label');
+    const label = getLegalFactLabel(TimelineCategory.SEND_PAPER_FEEDBACK);
+    expect(label).toBe('Ricevuta');
+  });
+
+  it('return legalFact label - SENDER_ACK', () => {
+    const label = getLegalFactLabel(TimelineCategory.REQUEST_ACCEPTED, LegalFactType.SENDER_ACK);
+    expect(label).toBe('Attestazione opponibile a terzi: notifica presa in carico');
+  });
+
+  it('return legalFact label - DIGITAL_DELIVERY', () => {
+    const label = getLegalFactLabel(TimelineCategory.DIGITAL_SUCCESS_WORKFLOW, LegalFactType.DIGITAL_DELIVERY);
+    expect(label).toBe('Attestazione opponibile a terzi: notifica digitale');
+  });
+
+  it('return legalFact label - DIGITAL_DELIVERY', () => {
+    const label = getLegalFactLabel(TimelineCategory.DIGITAL_FAILURE_WORKFLOW, LegalFactType.DIGITAL_DELIVERY);
+    expect(label).toBe('Attestazione opponibile a terzi: mancato recapito digitale');
+  });
+
+  it('return legalFact label - ANALOG_DELIVERY', () => {
+    const label = getLegalFactLabel(TimelineCategory.ANALOG_SUCCESS_WORKFLOW, LegalFactType.ANALOG_DELIVERY);
+    expect(label).toBe('Attestazione opponibile a terzi: conformità');
+  });
+
+  it('return legalFact label - RECIPIENT_ACCESS', () => {
+    const label = getLegalFactLabel(TimelineCategory.NOTIFICATION_VIEWED, LegalFactType.RECIPIENT_ACCESS);
+    expect(label).toBe('Attestazione opponibile a terzi: avvenuto accesso');
+  });
+
+  it('return legalFact label - DIGITAL_FAILURE_WORKFLOW', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
+    testTimelineStatusInfosFn(
+      'Invio per via digitale fallito',
+      `L'invio per via digitale della notifica a Nome Cognome è fallito.`
+    );
   });
 
   // PN-1647
@@ -296,7 +365,7 @@ describe('timeline utility functions', () => {
     (parsedNotificationCopy.timeline[0].details as NotHandledDetails).reason = 'Paper message not handled';
     testTimelineStatusInfosFn(
       'Annullata',
-      "La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante la sperimentazione della piattaforma."
+      "La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante il collaudo della piattaforma."
     );
   });
 });

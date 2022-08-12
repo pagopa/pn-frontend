@@ -1,6 +1,7 @@
+/* eslint-disable functional/no-let */
 import { act, fireEvent, waitFor, screen, within, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { formatToTimezoneString, getNextDay, NotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { formatToTimezoneString, getNextDay, getNotificationAllowedStatus, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import {
   render,
@@ -18,6 +19,15 @@ jest.mock('@pagopa-pn/pn-commons', () => {
     useIsMobile: () => false,
   };
 });
+
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
+const localizedNotificationStatus = getNotificationAllowedStatus();
 
 function formatDate(date: Date): string {
   const month = `0${date.getMonth() + 1}`.slice(-2);
@@ -49,19 +59,17 @@ async function testCalendar(form: HTMLFormElement, elementName: string) {
 
 async function setFormValues(
   form: HTMLFormElement,
-  searchFor: string,
   startDate: Date,
   endDate: Date,
   status: string,
-  recipientId?: string,
-  iunMatch?: string
+  recipientId: string,
+  iunMatch: string
 ) {
-  await testInput(form, 'searchFor', searchFor);
-  recipientId && (await testInput(form, 'recipientId', recipientId));
+  recipientId !== '' && (await testInput(form, 'recipientId', recipientId));
   await testInput(form, 'startDate', formatDate(startDate));
   await testInput(form, 'endDate', formatDate(endDate));
   await testInput(form, 'status', status);
-  iunMatch && (await testInput(form, 'iunMatch', iunMatch));
+  iunMatch !== '' && (await testInput(form, 'iunMatch', iunMatch));
 }
 
 describe('Filter Notifications Table Component', () => {
@@ -89,39 +97,23 @@ describe('Filter Notifications Table Component', () => {
 
   it('renders filter notifications table', () => {
     expect(form).toBeInTheDocument();
-    testFormElements(form!, 'searchFor', 'Filtra per');
-    testFormElements(form!, 'recipientId', 'Codice Fiscale');
-    testFormElements(form!, 'startDate', 'Da');
-    testFormElements(form!, 'endDate', 'A');
-    testFormElements(form!, 'status', 'Stato');
+    testFormElements(form!, 'recipientId', 'filters.fiscal-code');
+    testFormElements(form!, 'startDate', 'filters.data_da');
+    testFormElements(form!, 'endDate', 'filters.data_a');
+    testFormElements(form!, 'status', 'filters.status');
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeInTheDocument();
-    expect(submitButton).toHaveTextContent(/Filtra/i);
+    expect(submitButton).toHaveTextContent(/button.filtra/i);
     const cancelButton = within(form!).getByTestId('cancelButton');
     expect(cancelButton).toBeInTheDocument();
-    expect(cancelButton).toHaveTextContent(/Rimuovi filtri/i);
+    expect(cancelButton).toHaveTextContent(/button.annulla filtro/i);
   });
 
   it('test filters inital value', () => {
-    testFormElementsValue(form!, 'searchFor', '0');
     testFormElementsValue(form!, 'recipientId', '');
     testFormElementsValue(form!, 'startDate', '');
     testFormElementsValue(form!, 'endDate', '');
-    testFormElementsValue(form!, 'status', NotificationAllowedStatus[0].value);
-  });
-
-  it('test searchFor select', async () => {
-    expect(form!.querySelector(`input[name="recipientId"]`)).toBeInTheDocument();
-    await testSelect(
-      form!,
-      'searchFor',
-      [
-        { label: 'Codice Fiscale', value: '0' },
-        { label: 'Codice IUN', value: '1' },
-      ],
-      1
-    );
-    expect(form!.querySelector(`input[name="iunMatch"]`)).toBeInTheDocument();
+    testFormElementsValue(form!, 'status', localizedNotificationStatus[0].value);
   });
 
   it('test recipientId input', async () => {
@@ -129,14 +121,7 @@ describe('Filter Notifications Table Component', () => {
   });
 
   it('test iunMatch input', async () => {
-    const selectButton = form!.querySelector(`div[id="searchFor"]`);
-    fireEvent.mouseDown(selectButton!);
-    const selectOptionsContainer = await screen.findByRole('presentation');
-    const selectOption = await within(selectOptionsContainer).findByText('Codice IUN');
-    await waitFor(() => {
-      fireEvent.click(selectOption);
-    });
-    await testInput(form!, 'iunMatch', 'mocked-iunMatch');
+    await testInput(form!, 'iunMatch', 'MOCK-EDIU-NMAT-CH');
   });
 
   it('test startDate input', async () => {
@@ -151,10 +136,10 @@ describe('Filter Notifications Table Component', () => {
 
   it('test status select', async () => {
     expect(form!.querySelector(`input[name="status"]`)).toBeInTheDocument();
-    await testSelect(form!, 'status', NotificationAllowedStatus, 2);
+    await testSelect(form!, 'status', localizedNotificationStatus, 2);
   });
 
-  it('test form submission - searchFor codice fiscale (valid)', async () => {
+  it('test form submission - recipientId (valid)', async () => {
     const todayM = new Date();
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
     todayM.setHours(0, 0, 0, 0);
@@ -162,11 +147,11 @@ describe('Filter Notifications Table Component', () => {
 
     await setFormValues(
       form!,
-      '0',
       oneYearAgo,
-      todayM,
-      NotificationAllowedStatus[2].value,
-      'RSSMRA80A01H501U'
+      getNextDay(todayM),
+      localizedNotificationStatus[2].value,
+      'RSSMRA80A01H501U',
+      ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeEnabled();
@@ -179,14 +164,15 @@ describe('Filter Notifications Table Component', () => {
         startDate: formatToTimezoneString(oneYearAgo),
         endDate: formatToTimezoneString(getNextDay(todayM)),
         recipientId: 'RSSMRA80A01H501U',
-        status: NotificationAllowedStatus[2].value,
-        iunMatch: undefined,
+        status: localizedNotificationStatus[2].value,
+        iunMatch: '',
       },
       type: 'setNotificationFilters',
     });
   });
 
-  it('test form submission - searchFor IUN (valid)', async () => {
+  it('test form submission - iunMatch (valid)', async () => {
+    // NOTE: iunMatch field is automatically formatted at input
     const todayM = new Date();
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
     todayM.setHours(0, 0, 0, 0);
@@ -194,11 +180,10 @@ describe('Filter Notifications Table Component', () => {
 
     await setFormValues(
       form!,
-      '1',
       oneYearAgo,
-      todayM,
-      NotificationAllowedStatus[2].value,
-      undefined,
+      getNextDay(todayM),
+      localizedNotificationStatus[2].value,
+      '',
       'ABCD-EFGH-ILMN-123456-A-1'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
@@ -211,15 +196,15 @@ describe('Filter Notifications Table Component', () => {
       payload: {
         startDate: formatToTimezoneString(oneYearAgo),
         endDate: formatToTimezoneString(getNextDay(todayM)),
-        status: NotificationAllowedStatus[2].value,
+        status: localizedNotificationStatus[2].value,
         iunMatch: 'ABCD-EFGH-ILMN-123456-A-1',
-        recipientId: undefined,
+        recipientId: '',
       },
       type: 'setNotificationFilters',
     });
   });
 
-  it('test form submission - search for codice fiscale (invalid)', async () => {
+  it('test form submission - recipientId (invalid)', async () => {
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     todayM.setHours(0, 0, 0, 0);
@@ -228,11 +213,11 @@ describe('Filter Notifications Table Component', () => {
     // wrong id and wrong start date
     await setFormValues(
       form!,
-      '0',
       nineYearsAgo,
-      todayM,
-      NotificationAllowedStatus[2].value,
-      'mocked-wrongId'
+      getNextDay(todayM),
+      localizedNotificationStatus[2].value,
+      'mocked-wrongId',
+      ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeDisabled();
@@ -242,7 +227,9 @@ describe('Filter Notifications Table Component', () => {
     expect(mockDispatchFn).toBeCalledTimes(0);
   });
 
-  it('test form submission - search for codice IUN (invalid)', async () => {
+  it('test form submission - iunMatch (invalid)', async () => {
+    // NOTE: iunMatch field is automatically formatted at input
+
     const todayM = new Date();
     const nineYearsAgo = new Date(new Date().setMonth(todayM.getMonth() - 12 * 9));
     todayM.setHours(0, 0, 0, 0);
@@ -251,12 +238,11 @@ describe('Filter Notifications Table Component', () => {
     // wrong id and wrong start date
     await setFormValues(
       form!,
-      '1',
       nineYearsAgo,
-      todayM,
-      NotificationAllowedStatus[2].value,
-      undefined,
-      '12345678910abcdfghiol'
+      getNextDay(todayM),
+      localizedNotificationStatus[2].value,
+      '',
+      '1234-5678-910A-BCDFGH-I-OL'
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     expect(submitButton).toBeDisabled();
@@ -274,11 +260,11 @@ describe('Filter Notifications Table Component', () => {
 
     await setFormValues(
       form!,
-      '0',
       oneYearAgo,
-      todayM,
-      NotificationAllowedStatus[2].value,
-      'RSSMRA80A01H501U'
+      getNextDay(todayM),
+      localizedNotificationStatus[2].value,
+      'RSSMRA80A01H501U',
+      ''
     );
     const submitButton = form!.querySelector(`button[type="submit"]`);
     fireEvent.click(submitButton!);
@@ -290,10 +276,10 @@ describe('Filter Notifications Table Component', () => {
       expect(mockDispatchFn).toBeCalledWith({
         payload: {
           startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(getNextDay(today)),
-          recipientId: undefined,
-          status: undefined,
-          iunMatch: undefined,
+          endDate: formatToTimezoneString(today),
+          recipientId: '',
+          status: '',
+          iunMatch: '',
         },
         type: 'setNotificationFilters',
       });

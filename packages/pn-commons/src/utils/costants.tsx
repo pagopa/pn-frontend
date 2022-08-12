@@ -1,179 +1,227 @@
 import { PreLoginFooterLinksType, FooterLinksType } from '@pagopa/mui-italia';
 
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+
 export const LANGUAGES = {
   it: { it: 'Italiano', en: 'Inglese' },
   en: { it: 'Italian', en: 'English' },
 };
 
-export const pagoPALink: {href: string; ariaLabel: string} = {
-  href: "https://www.pagopa.it/it/",
-  ariaLabel: "Link: vai al sito di PagoPA S.p.A.",
+// export const URL_DIGITAL_NOTIFICATIONS = 'https://notifichedigitali.it';
+export const URL_DIGITAL_NOTIFICATIONS = 'https://develop.d33g1ea1dgp7a4.amplifyapp.com';
+// export const URL_PRIVACY_LINK = 'https://notifichedigitali.it/cittadini/informativa-privacy'
+export const PRIVACY_LINK_RELATIVE_PATH = '/cittadini/informativa-privacy'
+
+const getFooterLinkLabels = (
+  link: string,
+  defaultLabel: string
+): { label: string; ariaLabel: string } => {
+  const footerLink = `footer.${link}`;
+  return {
+    label: getLocalizedOrDefaultLabel('common', footerLink, defaultLabel),
+    ariaLabel: `${getLocalizedOrDefaultLabel(
+      'common',
+      'footer.go-to',
+      'Vai al link'
+    )}: ${getLocalizedOrDefaultLabel('common', footerLink, defaultLabel)}`,
+  };
 };
 
-export const companyLegalInfo = (
+export const pagoPALink = (): { href: string; ariaLabel: string } => ({
+  href: 'https://www.pagopa.it/it/',
+  ariaLabel: getLocalizedOrDefaultLabel(
+    'common',
+    'footer.go-to-pagopa',
+    'Link: vai al sito di PagoPA S.p.A.'
+  ),
+});
+
+export const companyLegalInfo = () => (
   <>
-    <strong>PagoPA S.p.A.</strong> — società per azioni con socio unico -
-    capitale sociale di euro 1,000,000 interamente versato - sede legale in
-    Roma, Piazza Colonna 370,
+    <strong>PagoPA S.p.A.</strong> —{' '}
+    {getLocalizedOrDefaultLabel(
+      'common',
+      'footer.legal-part-1',
+      'società per azioni con socio unico - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370'
+    )}
+    ,
     <br />
-    CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA
-    15376371009
+    {getLocalizedOrDefaultLabel(
+      'common',
+      'footer.legal-part-2',
+      'CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009'
+    )}
   </>
 );
 
-export const preLoginLinks: PreLoginFooterLinksType = {
+export const preLoginLinks = (): PreLoginFooterLinksType => ({
   // First column
   aboutUs: {
     title: undefined,
     links: [
       {
-        label: "Chi siamo",
-        href: "#chi-siamo",
-        ariaLabel: "Vai al link: Chi siamo",
-        linkType: "internal",
+        ...getFooterLinkLabels('who', 'Chi siamo'),
+        href: `${pagoPALink().href}societa/chi-siamo`,
+        linkType: 'external',
       },
       {
-        label: "PNRR",
-        href: "#pnrr",
-        ariaLabel: "Vai al link: PNRR",
-        linkType: "internal",
+        label: 'PNRR',
+        href: `${pagoPALink().href}opportunita/pnrr/progetti`,
+        ariaLabel: `${getLocalizedOrDefaultLabel('common', 'footer.go-to', 'Vai al link')}: PNRR`,
+        linkType: 'external',
       },
       {
-        label: "Media",
-        href: "#media",
-        ariaLabel: "Vai al link: Media",
-        linkType: "internal",
+        label: 'Media',
+        href: `${pagoPALink().href}media`,
+        ariaLabel: `${getLocalizedOrDefaultLabel('common', 'footer.go-to', 'Vai al link')}: Media`,
+        linkType: 'external',
       },
       {
-        label: "Lavora con noi",
-        href: "#lavora-con-noi",
-        ariaLabel: "Vai al link: Lavora con noi",
-        linkType: "internal",
+        ...getFooterLinkLabels('work', 'Lavora con noi'),
+        href: `${pagoPALink().href}lavora-con-noi`,
+        linkType: 'external',
       },
     ],
   },
   // Third column
   resources: {
-    title: "Risorse",
+    title: getLocalizedOrDefaultLabel('common', 'footer.resources', 'Risorse'),
     links: [
       {
-        label: "Privacy Policy",
-        href: "#privacy-policy",
-        ariaLabel: "Vai al link: Privacy Policy",
-        linkType: "internal",
+        label: 'Privacy Policy',
+        href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+        ariaLabel: `${getLocalizedOrDefaultLabel(
+          'common',
+          'footer.go-to',
+          'Vai al link'
+        )}: Privacy Policy`,
+        linkType: 'external',
       },
       {
-        label: "Certificazioni",
-        href: "#certificazioni",
-        ariaLabel: "Vai al link: Certificazioni",
-        linkType: "internal",
+        ...getFooterLinkLabels('certifications', 'Certificazioni'),
+        href: '#certificazioni',
+        linkType: 'internal',
       },
       {
-        label: "Sicurezza delle informazioni",
-        href: "#sicurezza-delle-informazioni",
-        ariaLabel: "Vai al link: Sicurezza delle informazioni",
-        linkType: "internal",
+        ...getFooterLinkLabels('security', 'Sicurezza delle informazioni'),
+        href: '#sicurezza-delle-informazioni',
+        linkType: 'internal',
       },
       {
-        label: "Diritto alla protezione dei dati personali",
-        ariaLabel: "Vai al link: Diritto alla protezione dei dati personali",
-        linkType: "internal",
+        ...getFooterLinkLabels('personal-data', 'Diritto alla protezione dei dati personali'),
+        linkType: 'internal',
         onClick: () => {
-          console.log("onClick");
+          console.log('onClick');
         },
       },
       {
-        label: "Preferenze Cookie",
-        href: "#preferenze-cookie",
-        ariaLabel: "Vai al link: Preferenze Cookie",
-        linkType: "internal",
+        ...getFooterLinkLabels('cookie', 'Preferenze Cookie'),
+        href: '#preferenze-cookie',
+        linkType: 'internal',
         onClick: () => {
-          console.log("onClick");
+          console.log('onClick');
         },
       },
       {
-        label: "Termini e Condizioni",
-        href: "#terms-conditions",
-        ariaLabel: "Vai al link: Termini e Condizioni",
-        linkType: "internal",
+        ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
+        href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+        linkType: 'external',
       },
       {
-        label: "Società trasparente",
-        href: "#societa-trasparente",
-        ariaLabel: "Vai al link: Società trasparente",
-        linkType: "internal",
+        ...getFooterLinkLabels('company', 'Società trasparente'),
+        href: '#societa-trasparente',
+        linkType: 'internal',
       },
       {
-        label: "Responsible Disclosure Policy",
-        href: "#responsible-disclosure-policy",
-        ariaLabel: "Vai al link: Responsible Disclosure Policy",
-        linkType: "internal",
+        ...getFooterLinkLabels('disclosure', 'Responsible Disclosure Policy'),
+        href: '#responsible-disclosure-policy',
+        linkType: 'internal',
       },
       {
-        label: "Modello 321",
-        href: "#modello-321",
-        ariaLabel: "Vai al link: Modello 321",
-        linkType: "internal",
+        ...getFooterLinkLabels('321-model', 'Modello 321'),
+        href: '#modello-321',
+        linkType: 'internal',
       },
     ],
   },
   // Fourth column
   followUs: {
-    title: "Seguici su",
+    title: getLocalizedOrDefaultLabel('common', 'footer.follow', 'Seguici su'),
     socialLinks: [
       {
-        icon: "linkedin",
-        title: "LinkedIn",
-        href: "https://www.linkedin.com/company/pagopa/",
-        ariaLabel: "Link: vai al sito LinkedIn di PagoPA S.p.A.",
+        icon: 'linkedin',
+        title: 'LinkedIn',
+        href: 'https://www.linkedin.com/company/pagopa/',
+        ariaLabel: getLocalizedOrDefaultLabel(
+          'common',
+          'footer.social',
+          'Link: vai al sito LinkedIn di PagoPA S.p.A.',
+          { social: 'LinkedIn' }
+        ),
       },
       {
-        title: "Twitter",
-        icon: "twitter",
-        href: "https://twitter.com/pagopa",
-        ariaLabel: "Link: vai al sito Twitter di PagoPA S.p.A.",
+        title: 'Twitter',
+        icon: 'twitter',
+        href: 'https://twitter.com/pagopa',
+        ariaLabel: getLocalizedOrDefaultLabel(
+          'common',
+          'footer.social',
+          'Link: vai al sito LinkedIn di PagoPA S.p.A.',
+          { social: 'Twitter' }
+        ),
       },
       {
-        icon: "instagram",
-        title: "Instagram",
-        href: "https://www.instagram.com/pagopa/",
-        ariaLabel: "Link: vai al sito Instagram di PagoPA S.p.A.",
+        icon: 'instagram',
+        title: 'Instagram',
+        href: 'https://www.instagram.com/pagopa/',
+        ariaLabel: getLocalizedOrDefaultLabel(
+          'common',
+          'footer.social',
+          'Link: vai al sito LinkedIn di PagoPA S.p.A.',
+          { social: 'Instagram' }
+        ),
       },
       {
-        icon: "medium",
-        title: "Medium",
-        href: "https://medium.com/pagopa",
-        ariaLabel: "Link: vai al sito Medium di PagoPA S.p.A.",
+        icon: 'medium',
+        title: 'Medium',
+        href: 'https://medium.com/pagopa',
+        ariaLabel: getLocalizedOrDefaultLabel(
+          'common',
+          'footer.social',
+          'Link: vai al sito LinkedIn di PagoPA S.p.A.',
+          { social: 'Medium' }
+        ),
       },
     ],
     links: [
       {
-        label: "Accessibilità",
-        href: "#accessibilità",
-        ariaLabel: "Vai al link: Accessibilità",
-        linkType: "internal",
+        ...getFooterLinkLabels('accessibility', 'Accessibilità'),
+        href: '#accessibilità',
+        linkType: 'internal',
       },
     ],
   },
-};
+});
 
-export const postLoginLinks: Array<FooterLinksType> = [
+export const postLoginLinks = (): Array<FooterLinksType> => ([
   {
-    label: "Privacy policy",
-    href: "#privacy-policy",
-    ariaLabel: "Vai al link: Privacy policy",
-    linkType: "internal",
+    label: 'Privacy policy',
+    href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+    ariaLabel: `${getLocalizedOrDefaultLabel(
+      'common',
+      'footer.go-to',
+      'Vai al link'
+    )}: Privacy Policy`,
+    linkType: 'external',
   },
   {
-    label: "Termini e condizioni",
-    href: "#terms-conditions",
-    ariaLabel: "Vai al link: Termini e condizioni",
-    linkType: "internal",
+    ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
+    href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+    linkType: 'external',
   },
   {
-    label: "Accessibilità",
-    href: "#accessibility",
-    ariaLabel: "Vai al link: Accessibilità",
-    linkType: "internal",
+    ...getFooterLinkLabels('accessibility', 'Accessibilità'),
+    href: '#accessibility',
+    linkType: 'internal',
   },
-];
+]);

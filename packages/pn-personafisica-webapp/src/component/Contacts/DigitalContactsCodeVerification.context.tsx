@@ -1,20 +1,25 @@
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import _ from 'lodash';
-import { Box, Typography, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Typography
+} from '@mui/material';
 import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import {
-  CourtesyChannelType,
-  LegalChannelType,
-  SaveDigitalAddressParams,
-} from '../../models/contacts';
+import { CourtesyChannelType, LegalChannelType, SaveDigitalAddressParams, } from '../../models/contacts';
 import { RootState } from '../../redux/store';
-import {
-  createOrUpdateCourtesyAddress,
-  createOrUpdateLegalAddress,
-} from '../../redux/contact/actions';
+import { createOrUpdateCourtesyAddress, createOrUpdateLegalAddress, } from '../../redux/contact/actions';
+import { trackEventByType } from "../../utils/mixpanel";
+import { EventActions, TrackEventType } from "../../utils/events";
+import { getContactEventType } from "../../utils/contacts.utility";
 
 type ModalProps = {
   labelRoot: string;
@@ -92,11 +97,14 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
     /* eslint-disable functional/no-let */
     let actionToBeDispatched;
+    let eventTypeByChannel;
     /* eslint-enable functional/no-let */
     if (props.digitalDomicileType === LegalChannelType.PEC) {
       actionToBeDispatched = createOrUpdateLegalAddress;
+      eventTypeByChannel = TrackEventType.CONTACT_LEGAL_CONTACT;
     } else {
       actionToBeDispatched = createOrUpdateCourtesyAddress;
+      eventTypeByChannel = getContactEventType(props.digitalDomicileType);
     }
     if (!actionToBeDispatched) {
       return;
@@ -109,6 +117,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       code: verificationCode,
     };
 
+    trackEventByType(eventTypeByChannel, { action: EventActions.ADD });
     dispatch(actionToBeDispatched(digitalAddressParams))
       .unwrap()
       .then((res) => {

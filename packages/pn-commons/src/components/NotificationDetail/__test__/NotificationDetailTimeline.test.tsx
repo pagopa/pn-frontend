@@ -1,9 +1,8 @@
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
-import * as hooks from '../../../hooks/IsMobile';
-import { getDay, getMonthString, getTime } from '../../../utils/date.utility';
-import { getNotificationStatusInfos } from '../../../utils/notification.utility';
+import * as hooks from '../../../hooks/useIsMobile';
+import { getDay, getMonthString, getTime, getNotificationStatusInfos } from '../../../utils';
 import { parsedNotification } from '../../../utils/__test__/test-utils';
 import NotificationDetailTimeline from '../NotificationDetailTimeline';
 
@@ -53,10 +52,6 @@ describe('NotificationDetailTimeline Component', () => {
         recipients={parsedNotification.recipients}
         statusHistory={parsedNotification.notificationStatusHistory}
         clickHandler={jest.fn()}
-        legalFactLabels={{
-          attestation: 'mocked-legalFact-label',
-          receipt: 'mocked-recipient-label',
-        }}
         historyButtonLabel="mocked-history-label"
         showLessButtonLabel="mocked-less-label"
         showMoreButtonLabel="mocked-more-label"
@@ -76,10 +71,6 @@ describe('NotificationDetailTimeline Component', () => {
         recipients={parsedNotification.recipients}
         statusHistory={parsedNotification.notificationStatusHistory}
         clickHandler={jest.fn()}
-        legalFactLabels={{
-          attestation: 'mocked-legalFact-label',
-          receipt: 'mocked-recipient-label',
-        }}
         historyButtonLabel="mocked-history-label"
         showLessButtonLabel="mocked-less-label"
         showMoreButtonLabel="mocked-more-label"
@@ -107,10 +98,6 @@ describe('NotificationDetailTimeline Component', () => {
         recipients={parsedNotification.recipients}
         statusHistory={parsedNotification.notificationStatusHistory}
         clickHandler={jest.fn()}
-        legalFactLabels={{
-          attestation: 'mocked-legalFact-label',
-          receipt: 'mocked-recipient-label',
-        }}
         historyButtonLabel="mocked-history-label"
         showLessButtonLabel="mocked-less-label"
         showMoreButtonLabel="mocked-more-label"

@@ -35,7 +35,9 @@ const DigitalContactsCard = memo(
         />
         {children}
       </CardContent>
-      <CardActions data-testid="DigitalContactsCardActions">{actions}</CardActions>
+      {actions &&
+        <CardActions data-testid="DigitalContactsCardActions">{actions}</CardActions>
+      }
     </Card>
   )
 );

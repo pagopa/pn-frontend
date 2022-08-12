@@ -1,30 +1,104 @@
 {
   "button": {
-    "cerca": "Cerca",
     "filtra": "Filtra",
     "annulla filtro": "Rimuovi filtri",
-    "annulla ricerca": "Annulla Ricerca",
     "indietro": "Indietro",
     "associa": "Associa",
     "conferma": "Conferma",
     "annulla": "Annulla",
     "modifica": "Modifica",
     "salva": "Salva",
-    "rimuovi": "Elimina"
+    "rimuovi": "Elimina",
+    "enter": "Entra",
+    "exit": "Esci",
+    "close": "Chiudi"
   },
   "menu": {
     "notifiche": "Notifiche",
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
-    "contacts": "I tuoi recapiti"
+    "contacts": "I tuoi recapiti",
+    "aria-label": "piattaforma-notifiche navigazione principale",
+    "aria-label-inner": "piattaforma-notifiche navigazione destinatario"
   },
   "header": {
-    "logout": "Esci"
+    "logout": "Esci",
+    "pago-pa-link": "Sito di PagoPA S.p.A."
   },
   "tos": {
     "title": "Piattaforma Notifiche",
     "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
     "switchLabel": "Accetto l'<0>Informativa Privacy</0> e i <1>Termini e condizioni d’uso</1> di Piattaforma Notifiche.",
     "button": "Accedi"
+  },
+  "table": {
+    "aria-label": "Tabella di item"
+  },
+  "paginator": {
+    "aria-label": "Menu Paginazione",
+    "first": "primo elemento",
+    "last": "ultimo elemento",
+    "page": "pagina",
+    "next": "Vai alla pagina successiva",
+    "previous": "Vai alla pagina precedente",
+    "selected": "elemento selezionato",
+    "rows-per-page": "Righe per pagina"
+  },
+  "toast": {
+    "aria-label": "Icona di chisura toast"
+  },
+  "date-picker": {
+    "left-arrow": "Vai al mese precedente",
+    "right-arrow": "Vai al mese successivo",
+    "switch-to-year": "modalità calendario attiva, passa alla modalità di scelta dell'anno",
+    "switch-to-calendar": "modalità di scelta dell'anno attiva, passa alla modalità calendario",
+    "select-date": "Scegli data",
+    "date-selected": "Scegli data, la data selezionata è {{date}}"
+  },
+  "error-boundary": {
+    "title": "Qualcosa è andato storto",
+    "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
+    "action": "Ricarica la pagina"
+  },
+  "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
+  "not-found": {
+    "title": "404: La pagina che stai cercando non esiste",
+    "descpription": "Sei qui per errore, prova ad usare la navigazione."
+  },
+  "leaving-app": {
+    "title": "Stai uscendo da Piattaforma Notifiche",
+    "message": "Verrai reindirizzato"
+  },
+  "messages": {
+    "404-title": "Risorsa non trovata",
+    "404-message": "Si è verificato un errore. Si prega di riprovare più tardi",
+    "403-title": "La sessione è scaduta",
+    "403-message": "Entra e accedi con SPID o CIE.",
+    "401-title": "Utente non autorizzato",
+    "401-message": "L'utente corrente non ha le autorizzazioni",
+    "500-title": "Il servizio non è disponibile",
+    "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
+    "generic-title": "Errore generico",
+    "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi"
+  },
+  "footer": {
+    "go-to-pagopa": "Link: vai al sito di PagoPA S.p.A.",
+    "go-to": "Vai al link",
+    "who": "Chi siamo",
+    "work": "Lavora con noi",
+    "certifications": "Certificazioni",
+    "security": "Sicurezza delle informazioni",
+    "personal-data": "Diritto alla protezione dei dati personali",
+    "cookie": "Preferenze Cookie",
+    "terms-conditions": "Termini e Condizioni",
+    "company": "Società trasparente",
+    "disclosure": "Responsible Disclosure Policy",
+    "321-model": "Modello 321",
+    "accessibility": "Accessibilità",
+    "social": "Link: vai al sito {{social}} di PagoPA S.p.A.",
+    "resources": "Risorse",
+    "follow": "Seguici su",
+    "legal-part-1": "società per azioni con socio unico - capitale sociale di euro 1,000,000 interamente versato - sede legale in Roma, Piazza Colonna 370",
+    "legal-part-2": "CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009"
   }
 }

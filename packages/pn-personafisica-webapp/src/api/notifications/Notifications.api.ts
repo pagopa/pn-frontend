@@ -1,15 +1,17 @@
-import { AxiosResponse } from 'axios';
 import {
   formatDate,
-  LegalFactId,
-  NotificationDetail,
   GetNotificationsParams,
   GetNotificationsResponse,
-  parseNotificationDetail,
-  PaymentInfo,
+  LegalFactId,
+  NotificationDetail,
   PaymentAttachmentNameType,
+  PaymentInfo,
 } from '@pagopa-pn/pn-commons';
+import { AxiosResponse } from 'axios';
 
+import { Delegator } from '../../redux/delegation/types';
+import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
+import { NotificationDetailForRecipient } from '../../types/NotificationDetail';
 import { apiClient } from '../axios';
 import {
   NOTIFICATIONS_LIST,
@@ -24,7 +26,7 @@ const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };
   }
-  return {url: ''};
+  return { url: '' };
 };
 
 export const NotificationsApi = {
@@ -52,33 +54,55 @@ export const NotificationsApi = {
         nextPagesKey: [],
       };
     }),
+
   /**
    * Gets current user notification detail
    * @param  {string} iun
+   * @param  {string} currentUserTaxId
+   * @param  {Array<Delegator>} delegatorsFromStore
    * @param  {string} mandateId
    * @returns Promise
    */
-  getReceivedNotification: (iun: string, mandateId?: string): Promise<NotificationDetail> =>
+  getReceivedNotification: (
+    iun: string,
+    currentUserTaxId: string,
+    delegatorsFromStore: Array<Delegator>,
+    mandateId?: string
+  ): Promise<NotificationDetailForRecipient> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
       if (response.data) {
-        return parseNotificationDetail(response.data);
+        return parseNotificationDetailForRecipient(
+          response.data,
+          currentUserTaxId,
+          delegatorsFromStore,
+          mandateId
+        );
+      } else {
+        return {} as NotificationDetailForRecipient;
       }
-      return {} as NotificationDetail;
     }),
+
   /**
    * Gets current user notification document
    * @param  {string} iun
    * @param  {number} documentIndex
+   * @param  {string} mandateId
    * @returns Promise
    */
-  getReceivedNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
+  getReceivedNotificationDocument: (
+    iun: string,
+    documentIndex: string,
+    mandateId?: string
+  ): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
+      .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex, mandateId))
       .then((response) => getDownloadUrl(response)),
+
   /**
    * Gets current user notification legalfact
    * @param  {string} iun
    * @param  {LegalFactId} legalFact
+   * @param  {string} mandateId
    * @returns Promise
    */
   getReceivedNotificationLegalfact: (
@@ -89,19 +113,25 @@ export const NotificationsApi = {
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_LEGALFACT(iun, legalFact, mandateId))
       .then((response) => getDownloadUrl(response)),
+
   /**
    * Gets current user specified Payment Attachment
    * @param  {string} iun
    * @param  {PaymentAttachmentNameType} attachmentName
+   * @param  {string} mandateId
    * @returns Promise
    */
   getPaymentAttachment: (
     iun: string,
-    attachmentName: PaymentAttachmentNameType
+    attachmentName: PaymentAttachmentNameType,
+    mandateId?: string
   ): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string))
+      .get<{ url: string }>(
+        NOTIFICATION_PAYMENT_ATTACHMENT(iun, attachmentName as string, mandateId)
+      )
       .then((response) => getDownloadUrl(response)),
+
   /**
    * Gets current user's notification payment info
    * @param  {string} noticeCode

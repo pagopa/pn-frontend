@@ -5,13 +5,13 @@ import { Grid, Box, Paper, Stack, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
-  TitleBox,
   LegalFactId,
   NotificationDetailDocuments,
   // HelpNotificationDetails,
   NotificationDetailTableRow,
   NotificationDetailTable,
   NotificationDetailTimeline,
+  TitleBox,
   useIsMobile,
   PnBreadcrumb,
   NotificationStatus,
@@ -28,6 +28,8 @@ import {
 } from '../redux/notification/actions';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -43,24 +45,18 @@ const NotificationDetail = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
+
+  const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const delegatorsFromStore = useAppSelector(
+    (state: RootState) => state.generalInfoState.delegators
+  );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const currentRecipient = notification.recipients[0];
-  /**
-   * REFERS TO: PN-1724
-   * The following code has been commented out and substituted with the line above
-   * due to issue PN-1724 since we currently do not have enough information to pick
-   * the right recipient assuming a multi-recipient notification, but this feature 
-   * is beyond the MVP scope. 
-   * 
-   const currentUser = useAppSelector((state: RootState) => state.userState.user);
-   const currentRecipient = notification.recipients.find(
-     (recipient) => recipient.taxId === currentUser.fiscal_number
-   );
-   */
+
+  const currentRecipient = notification && notification.currentRecipient;
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
-  
+
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -101,7 +97,7 @@ const NotificationDetail = () => {
       label: t('detail.cancelled-iun', { ns: 'notifiche' }),
       rawValue: notification.cancelledIun,
       value: <Box fontWeight={600}>{notification.cancelledIun}</Box>,
-    }
+    },
   ];
   const detailTableRows: Array<NotificationDetailTableRow> = unfilteredDetailTableRows
     .filter((row) => row.rawValue)
@@ -113,12 +109,16 @@ const NotificationDetail = () => {
 
   const documentDowloadHandler = (documentIndex: string | undefined) => {
     if (documentIndex) {
-      void dispatch(getReceivedNotificationDocument({ iun: notification.iun, documentIndex }));
+      void dispatch(
+        getReceivedNotificationDocument({ iun: notification.iun, documentIndex, mandateId })
+      );
     }
   };
-  
+
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
-    void dispatch(getReceivedNotificationLegalfact({ iun: notification.iun, legalFact, mandateId }));
+    void dispatch(
+      getReceivedNotificationLegalfact({ iun: notification.iun, legalFact, mandateId })
+    );
   };
 
   const dowloadDocument = (url: string) => {
@@ -131,12 +131,13 @@ const NotificationDetail = () => {
     /* eslint-enable functional/immutable-data */
   };
 
-  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
+  const isCancelled =
+    notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
 
-  const hasDocumentsAvailable = (isCancelled || !notification.documentsAvailable) ? false : true;
+  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
 
   const getDownloadFilesMessage = useCallback((): string => {
-    if(isCancelled) {
+    if (isCancelled) {
       return t('detail.acts_files.notification_cancelled', { ns: 'notifiche' });
     } else if (hasDocumentsAvailable) {
       return t('detail.acts_files.downloadable_acts', { ns: 'notifiche' });
@@ -145,10 +146,16 @@ const NotificationDetail = () => {
     }
   }, [isCancelled, hasDocumentsAvailable]);
 
-
   useEffect(() => {
     if (id) {
-      void dispatch(getReceivedNotification({iun: id, mandateId}));
+      void dispatch(
+        getReceivedNotification({
+          iun: id,
+          currentUserTaxId: currentUser.fiscal_number,
+          delegatorsFromStore,
+          mandateId,
+        })
+      );
     }
     return () => void dispatch(resetState());
   }, []);
@@ -184,7 +191,9 @@ const NotificationDetail = () => {
         sx={{ pt: 3, mb: 2 }}
         mbTitle={0}
       ></TitleBox>
-      <Typography variant="body1" mb={{xs: 3, md: 4}}>{notification.abstract}</Typography>
+      <Typography variant="body1" mb={{ xs: 3, md: 4 }}>
+        {notification.abstract}
+      </Typography>
     </Fragment>
   );
 
@@ -196,13 +205,14 @@ const NotificationDetail = () => {
           {!isMobile && breadcrumb}
           <Stack spacing={3}>
             <NotificationDetailTable rows={detailTableRows} />
-            {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode &&
+            {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
               <NotificationPayment
                 iun={notification.iun}
                 notificationPayment={currentRecipient.payment}
                 onDocumentDownload={dowloadDocument}
+                mandateId={mandateId}
               />
-            }
+            )}
             <DomicileBanner />
             <Paper sx={{ p: 3 }} className="paperContainer">
               <NotificationDetailDocuments
@@ -211,6 +221,7 @@ const NotificationDetail = () => {
                 clickHandler={documentDowloadHandler}
                 documentsAvailable={hasDocumentsAvailable}
                 downloadFilesMessage={getDownloadFilesMessage()}
+                downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
               />
             </Paper>
             {/* TODO decommentare con pn-841
@@ -233,14 +244,13 @@ const NotificationDetail = () => {
               recipients={notification.recipients}
               statusHistory={notification.notificationStatusHistory}
               title={t('detail.timeline-title', { ns: 'notifiche' })}
-              legalFactLabels={{
-                attestation: t('detail.legalfact', { ns: 'notifiche' }),
-                receipt: t('detail.receipt', { ns: 'notifiche' }),
-              }}
               clickHandler={legalFactDownloadHandler}
               historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
               showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
               showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+              eventTrackingCallbackShowMore={() =>
+                trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
+              }
             />
           </Box>
         </Grid>

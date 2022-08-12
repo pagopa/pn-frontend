@@ -1,4 +1,5 @@
 import { ChangeEvent, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -18,6 +19,8 @@ import { GroupStatus } from '../../../models/user';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { getUserGroups, setPreliminaryInformations } from '../../../redux/newNotification/actions';
 import { RootState } from '../../../redux/store';
+import { trackEventByType } from '../../../utils/mixpanel';
+import { TrackEventType } from '../../../utils/events';
 import NewNotificationCard from './NewNotificationCard';
 
 type Props = {
@@ -28,6 +31,10 @@ type Props = {
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
+  const { t } = useTranslation(['notifiche'], {
+    keyPrefix: 'new-notification.steps.preliminary-informations',
+  });
+  const { t: tc } = useTranslation(['common']);
 
   const initialValues = () => ({
     paProtocolNumber: notification.paProtocolNumber || '',
@@ -39,8 +46,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   });
 
   const validationSchema = yup.object({
-    paProtocolNumber: yup.string().required('Numero di protocollo obbligatorio'),
-    subject: yup.string().required('Oggetto di protocollo obbligatorio'),
+    paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('common:required')}`),
+    subject: yup.string().required(`${t('subject')} ${tc('common:required')}`),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
     group: groups.length > 0 ? yup.string().required() : yup.string(),
@@ -64,6 +71,16 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
+  const handleChangeDeliveryMode = (e: ChangeEvent & { target: { value: any } }) => {
+    formik.handleChange(e);
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_DELIVERY_MODE, { type: e.target.value });
+  };
+
+  const handleChangePaymentMode = (e: ChangeEvent & { target: { value: any } }) => {
+    formik.handleChange(e);
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_PAYMENT_MODE, { target: e.target.value });
+  };
+
   useEffect(() => {
     if (groups.length === 0) {
       void dispatch(getUserGroups(GroupStatus.ACTIVE));
@@ -72,10 +89,10 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <NewNotificationCard isContinueDisabled={!formik.isValid} title="Informazioni preliminari">
+      <NewNotificationCard isContinueDisabled={!formik.isValid} title={t('title')}>
         <TextField
           id="paProtocolNumber"
-          label="Numero di protocollo*"
+          label={`${t('protocol-number')}*`}
           fullWidth
           name="paProtocolNumber"
           value={formik.values.paProtocolNumber}
@@ -87,7 +104,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         />
         <TextField
           id="subject"
-          label="Oggetto della notifica*"
+          label={`${t('subject')}*`}
           fullWidth
           name="subject"
           value={formik.values.subject}
@@ -99,7 +116,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         />
         <TextField
           id="abstract"
-          label="Descrizione"
+          label={t('abstract')}
           fullWidth
           name="abstract"
           value={formik.values.abstract}
@@ -109,7 +126,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         />
         <TextField
           id="group"
-          label={`Gruppo${groups.length > 0 ? '*' : ''}`}
+          label={`${t('group')}${groups.length > 0 ? '*' : ''}`}
           fullWidth
           name="group"
           value={formik.values.group}
@@ -126,15 +143,12 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                 {group.name}
               </MenuItem>
             ))}
-          {groups.length === 0 &&
-              <MenuItem sx={{display: 'none'}}>
-              </MenuItem>
-            }
+          {groups.length === 0 && <MenuItem sx={{ display: 'none' }}></MenuItem>}
         </TextField>
         <FormControl margin="normal" fullWidth>
           <FormLabel id="comunication-type-label">
             <Typography fontWeight={600} fontSize={16}>
-              Modalità di invio*
+              {`${t('comunication-type')}*`}
             </Typography>
           </FormLabel>
           <RadioGroup
@@ -142,18 +156,18 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             name="physicalCommunicationType"
             row
             value={formik.values.physicalCommunicationType}
-            onChange={formik.handleChange}
+            onChange={handleChangeDeliveryMode}
           >
             <FormControlLabel
               value={PhysicalCommunicationType.REGISTERED_LETTER_890}
               control={<Radio />}
-              label="Modello 890"
+              label={t('registered-letter-890')}
               data-testid="comunicationTypeRadio"
             />
             <FormControlLabel
               value={PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER}
               control={<Radio />}
-              label="Raccomandata A/R"
+              label={t('simple-registered-letter')}
               data-testid="comunicationTypeRadio"
             />
           </RadioGroup>
@@ -161,31 +175,31 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
         <FormControl margin="normal" fullWidth>
           <FormLabel id="payment-method-label">
             <Typography fontWeight={600} fontSize={16}>
-              Modello di pagamento*
+              {`${t('payment-method')}*`}
             </Typography>
           </FormLabel>
           <RadioGroup
             aria-labelledby="payment-method-label"
             name="paymentMode"
             value={formik.values.paymentMode}
-            onChange={formik.handleChange}
+            onChange={handleChangePaymentMode}
           >
             <FormControlLabel
               value={PaymentModel.PAGO_PA_NOTICE}
               control={<Radio />}
-              label="Avviso pagoPA"
+              label={t('pagopa-notice')}
               data-testid="paymentMethodRadio"
             />
             <FormControlLabel
               value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
               control={<Radio />}
-              label="Avviso pagoPA e Modello F24 forfettario"
+              label={t('pagopa-notice-f24-flatrate')}
               data-testid="paymentMethodRadio"
             />
             <FormControlLabel
               value={PaymentModel.PAGO_PA_NOTICE_F24}
               control={<Radio />}
-              label="Avviso pagoPA e Modello F24"
+              label={t('pagopa-notice-f24')}
               data-testid="paymentMethodRadio"
             />
           </RadioGroup>

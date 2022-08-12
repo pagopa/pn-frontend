@@ -7,14 +7,14 @@ import * as actions from '../../../redux/contact/actions';
 import { LegalChannelType } from '../../../models/contacts';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
+import * as trackingFunctions from "../../../utils/mixpanel";
+import {TrackEventType} from "../../../utils/events";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
+  useTranslation: () => ({
       t: (str: string) => str,
-    };
-  },
+    }),
   Trans: (props: {i18nKey: string}) => props.i18nKey,
 }));
 
@@ -45,11 +45,15 @@ const fields = [
 
 const deleteMockActionFn = jest.fn();
 const mockDispatchFn = jest.fn();
+// mock tracking
+const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
+const mockTrackEventFn = jest.fn();
 
 describe('DigitalContactElem Component', () => {
   let result: RenderResult | undefined;
 
   beforeEach(() => {
+    createTrackEventSpy.mockImplementation(mockTrackEventFn);
     // mock action
     const deleteActionSpy = jest.spyOn(actions, 'deleteLegalAddress');
     deleteActionSpy.mockImplementation(deleteMockActionFn as any);
@@ -75,6 +79,8 @@ describe('DigitalContactElem Component', () => {
 
   afterEach(() => {
     result = undefined;
+    createTrackEventSpy.mockClear();
+    createTrackEventSpy.mockReset();
   });
 
   it('renders DigitalContactElem (no edit mode)', () => {
@@ -133,6 +139,8 @@ describe('DigitalContactElem Component', () => {
     const dialogButtons = dialog?.querySelectorAll('button');
     fireEvent.click(dialogButtons![1]);
     await waitFor(() => {
+      expect(mockTrackEventFn).toBeCalledTimes(1);
+      expect(mockTrackEventFn).toBeCalledWith(TrackEventType.CONTACT_LEGAL_CONTACT, {action: "delete"});
       expect(dialog).not.toBeInTheDocument();
       expect(deleteMockActionFn).toBeCalledTimes(1);
       expect(deleteMockActionFn).toBeCalledWith({

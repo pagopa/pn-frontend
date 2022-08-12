@@ -51,14 +51,14 @@ describe('MobileNotifications Component', () => {
     const result = render(
       <MobileNotifications
         notifications={[]}
-        sort={{ orderBy: 'mocked-field', order: 'asc' }}
+        sort={{ orderBy: 'sentAt', order: 'asc' }}
         onChangeSorting={() => {}}
       />
     );
     expect(result.container).not.toHaveTextContent(/Filters/i);
     expect(result.container).not.toHaveTextContent(/Sort/i);
     expect(result.container).toHaveTextContent(
-      /Non hai ricevuto nessuna notifica. Attiva il servizio "Piattaforma Notifiche" sull'app IO o inserisci un recapito di cortesia nella sezione Recapiti : così, se riceverai una notifica, te lo comunicheremo./i
+      /Non hai ricevuto nessuna notifica. Vai alla sezione I tuoi recapiti e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo./i
     );
   });
 
@@ -100,7 +100,7 @@ describe('MobileNotifications Component', () => {
     const result = render(
       <MobileNotifications
         notifications={[]}
-        sort={{ orderBy: 'mocked-field', order: 'asc' }}
+        sort={{ orderBy: 'sentAt', order: 'asc' }}
         onChangeSorting={() => {}}
       />
     );

@@ -8,7 +8,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
   getSentNotifications,
@@ -28,10 +28,10 @@ describe('Dashboard redux state tests', () => {
       notifications: [],
       filters: {
         startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
-        status: undefined,
-        recipientId: undefined,
-        iunMatch: undefined,
+        endDate: formatToTimezoneString(today),
+        status: '',
+        recipientId: '',
+        iunMatch: '',
       },
       pagination: {
         nextPagesKey: [],
@@ -53,6 +53,9 @@ describe('Dashboard redux state tests', () => {
       getSentNotifications({
         startDate: formatToTimezoneString(tenYearsAgo),
         endDate: formatToTimezoneString(getNextDay(today)),
+        status: '',
+        recipientId: '',
+        iunMatch: '',
       })
     );
     const payload = action.payload as GetNotificationsResponse;
@@ -78,14 +81,14 @@ describe('Dashboard redux state tests', () => {
   it('Should be able to change sort', () => {
     const action = store.dispatch(
       setSorting({
-        orderBy: 'status',
+        orderBy: 'recipients',
         order: 'desc',
       })
     );
     const payload = action.payload as { orderBy: string; order: 'desc' | 'asc' };
     expect(action.type).toBe('setSorting');
     expect(payload).toEqual({
-      orderBy: 'status',
+      orderBy: 'recipients',
       order: 'desc',
     });
   });
@@ -98,6 +101,7 @@ describe('Dashboard redux state tests', () => {
         recipientId: 'mocked-recipientId',
         status: NotificationStatus.PAID,
         subjectRegExp: 'mocked-regexp',
+        iunMatch: '',
       })
     );
     const payload = action.payload;
@@ -108,6 +112,7 @@ describe('Dashboard redux state tests', () => {
       recipientId: 'mocked-recipientId',
       status: NotificationStatus.PAID,
       subjectRegExp: 'mocked-regexp',
+      iunMatch: '',
     });
   });
 });

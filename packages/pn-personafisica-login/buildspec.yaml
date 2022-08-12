@@ -1,6 +1,18 @@
 version: 0.2
 batch:
   build-list:
+    - identifier: pn_login_dev_build
+      buildspec: cra_buildspec.yaml
+      env:
+        variables:
+          BUILD_ID: dev
+          REACT_APP_ENABLE_ASSISTANCE: true
+          REACT_APP_SPID_TEST_ENV_ENABLED: true
+          REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
+          REACT_APP_URL_API_LOGIN: https://hub-login.spid.dev.pn.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
+          REACT_APP_MIXPANEL_TOKEN: aef0b0d89c3355510e9cdfdb18e7d0b5
+          REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"
     - identifier: pn_login_svil_build
       buildspec: cra_buildspec.yaml
       env:
@@ -9,11 +21,11 @@ batch:
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
-          REACT_APP_URL_API_LOGIN: https://hub-login.ecs.svil.pn.pagopa.it
-          REACT_APP_PAGOPA_HELP_EMAIL: assistenza@pn.it
-          REACT_APP_URL_FILE_PRIVACY_DISCLAIMER: "#privacy-disclaimer"
-          REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: "#terms-and-conditions"
-    - identifier: pn_login_uat_build
+          REACT_APP_URL_API_LOGIN: https://hub-login.spid.svil.pn.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
+          REACT_APP_MIXPANEL_TOKEN: DUMMY
+          REACT_APP_ONETRUST_DOMAIN_ID: "f0f07d38-790f-49af-8253-0794e83e8b68"    
+    - identifier: pn_login_coll_build
       buildspec: cra_buildspec.yaml
       env:
         variables:
@@ -21,7 +33,20 @@ batch:
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
-          REACT_APP_URL_API_LOGIN: https://hub-login.ecs.coll.pn.pagopa.it
-          REACT_APP_PAGOPA_HELP_EMAIL: assistenza@pn.it
-          REACT_APP_URL_FILE_PRIVACY_DISCLAIMER: "#privacy-disclaimer"
-          REACT_APP_URL_FILE_TERMS_AND_CONDITIONS: "#privacy-disclaimer"
+          REACT_APP_URL_API_LOGIN: https://hub-login.spid.coll.pn.pagopa.it
+          REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
+          REACT_APP_MIXPANEL_TOKEN: DUMMY
+          REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"
+    # - identifier: pn_login_prod_build
+    #   buildspec: cra_buildspec.yaml
+    #   env:
+    #     variables:
+    #       BUILD_ID: prod
+    #       REACT_APP_ENABLE_ASSISTANCE: true
+    #       REACT_APP_SPID_TEST_ENV_ENABLED: true
+    #       REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie
+    #       REACT_APP_URL_API_LOGIN: https://hub-login.ecs.pn.pagopa.it
+    #       REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
+    #       REACT_APP_MIXPANEL_TOKEN: DUMMY
+    #       REACT_APP_ONETRUST_DOMAIN_ID: fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c
+

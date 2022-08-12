@@ -2,10 +2,11 @@ import { Email, People, SupervisedUserCircle } from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
-import { PartyRole } from '../models/user';
+import { PNRole } from '../models/user';
+import { IS_DEVELOP } from './constants';
 
 const BasicMenuItems: Array<SideMenuItem> = [
-  { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
+  { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
   /**
    * Refers to PN-1741
    * Commented out because beyond MVP scope
@@ -14,25 +15,33 @@ const BasicMenuItems: Array<SideMenuItem> = [
    * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
    * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
    */
-  // { label: 'Chiavi API', icon: VpnKey, route: routes.API_KEYS },
+  // { label: menu.api-key, icon: VpnKey, route: routes.API_KEYS },
 ];
 
 function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
   return [
-    { label: 'Ruoli', icon: People, route: routes.ROLES(idOrganization) },
-    { label: 'Gruppi', icon: SupervisedUserCircle, route: routes.GROUPS(idOrganization) },
+    { label: 'menu.roles', icon: People, route: routes.ROLES(idOrganization) },
+    { label: 'menu.groups', icon: SupervisedUserCircle, route: routes.GROUPS(idOrganization) },
   ];
 }
 
-/** Get Menu Items based on user role */
-export function getMenuItems(role: PartyRole, idOrganization: string): {
+/**
+ * Get Menu Items based on user role
+ * @param idOrganization 
+ * @param role 
+ * @returns Allowed list of menù items
+ */
+export function getMenuItems(idOrganization: string, role?: PNRole): {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
 } {
+  if (IS_DEVELOP) {
+    return { menuItems: BasicMenuItems, selfCareItems: selfcareMenuItems(idOrganization) };
+  }
   switch (role) {
-    case PartyRole.MANAGER:
+    case PNRole.ADMIN:
       return { menuItems: BasicMenuItems, selfCareItems: selfcareMenuItems(idOrganization) };
-    case PartyRole.OPERATOR:
+    case PNRole.OPERATOR:
       return { menuItems: BasicMenuItems };
     default:
       return { menuItems: BasicMenuItems };

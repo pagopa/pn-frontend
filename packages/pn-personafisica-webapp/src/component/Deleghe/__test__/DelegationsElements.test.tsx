@@ -1,7 +1,6 @@
 import { fireEvent } from '@testing-library/react';
-
-import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 import { axe, render } from '../../../__test__/test-utils';
+import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown

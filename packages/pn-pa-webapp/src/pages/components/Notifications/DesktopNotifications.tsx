@@ -1,5 +1,6 @@
 import { Fragment, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import {
@@ -17,14 +18,15 @@ import {
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import * as routes from '../../../navigation/routes.const';
+import { NotificationColumn } from '../../../types/Notifications';
 import FilterNotifications from './FilterNotifications';
 
 type Props = {
   notifications: Array<Notification>;
   /** Table sort */
-  sort?: Sort;
+  sort?: Sort<NotificationColumn>;
   /** The function to be invoked if the user change sorting */
-  onChangeSorting?: (s: Sort) => void;
+  onChangeSorting?: (s: Sort<NotificationColumn>) => void;
   /** The function to be invoked if the user clicks on new notification link */
   onManualSend: () => void;
   /** The function to be invoked if the user clicks on api keys link */
@@ -40,23 +42,28 @@ const DesktopNotifications = ({
 }: Props) => {
   const navigate = useNavigate();
   const filterNotificationsRef = useRef({ filtersApplied: false, cleanFilters: () => void 0 });
+  const { t } = useTranslation(['notifiche']);
 
-  const columns: Array<Column> = [
+  const handleEventTrackingTooltip = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_TOOLTIP);
+  };
+
+  const columns: Array<Column<NotificationColumn>> = [
     {
       id: 'sentAt',
-      label: 'Data',
+      label: t('table.date'),
       width: '11%',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
       id: 'recipients',
-      label: 'Destinatario',
+      label: t('table.recipient'),
       width: '13%',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: Array<string>) {
@@ -66,35 +73,35 @@ const DesktopNotifications = ({
           </Typography>
         ));
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
       id: 'subject',
-      label: 'Oggetto',
+      label: t('table.subject'),
       width: '23%',
       getCellLabel(value: string) {
         return value.length > 65 ? value.substring(0, 65) + '...' : value;
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
       id: 'iun',
-      label: 'Codice IUN',
+      label: t('table.iun'),
       width: '20%',
       getCellLabel(value: string) {
         return value;
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
       id: 'group',
-      label: 'Gruppi',
+      label: t('table.groups'),
       width: '15%',
       getCellLabel(value: string) {
         return (
@@ -105,19 +112,19 @@ const DesktopNotifications = ({
           )
         );
       },
-      onClick(row: Item, column: Column) {
-        handleRowClick(row, column);
+      onClick(row: Item) {
+        handleRowClick(row);
       },
     },
     {
       id: 'notificationStatus',
-      label: 'Stato',
+      label: t('table.status'),
       width: '18%',
       align: 'center',
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(value: string) {
         const { label, tooltip, color } = getNotificationStatusInfos(value as NotificationStatus);
-        return <StatusTooltip label={label} tooltip={tooltip} color={color}></StatusTooltip>;
+        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },
     },
   ];
@@ -128,28 +135,25 @@ const DesktopNotifications = ({
   }));
 
   // Navigation handlers
-  const handleRowClick = (row: Item, _column: Column) => {
+  const handleRowClick = (row: Item) => {
     navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     // log event
-    trackEventByType(TrackEventType.NOTIFICATIONS_GO_TO_DETAIL);
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_ROW_INTERACTION);
   };
 
   const filtersApplied: boolean = filterNotificationsRef.current.filtersApplied;
-  const emptyMessage: string = "L'ente non ha ancora inviato nessuna notifica. Usa le";
-  const emptyActionLabel: string = 'Chiavi API';
-  const secondaryMessage: object = {
-    emptyMessage: 'o fai un',
-    emptyActionLabel: 'invio manuale',
-    emptyActionCallback: () => {
-      onManualSend();
-    },
-  };
   const EmptyStateProps = {
-    emptyMessage: filtersApplied ? undefined : emptyMessage,
-    emptyActionLabel: filtersApplied ? undefined : emptyActionLabel,
+    emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
+    emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', {ns: 'common'}),
     disableSentimentDissatisfied: !filtersApplied,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
-    secondaryMessage: filtersApplied ? undefined : secondaryMessage,
+    secondaryMessage: filtersApplied ? undefined : {
+      emptyMessage: t('empty-state.secondary-message'),
+      emptyActionLabel: t('empty-state.secondary-action'),
+      emptyActionCallback: () => {
+        onManualSend();
+      },
+    },
   };
 
   const showFilters = notifications?.length > 0 || filtersApplied;

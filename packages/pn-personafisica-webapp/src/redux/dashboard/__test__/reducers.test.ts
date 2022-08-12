@@ -8,7 +8,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
   getReceivedNotifications,
@@ -29,7 +29,7 @@ describe('Dashbaord redux state tests', () => {
       notifications: [],
       filters: {
         startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today))
+        endDate: formatToTimezoneString(today)
       },
       pagination: {
         nextPagesKey: [],

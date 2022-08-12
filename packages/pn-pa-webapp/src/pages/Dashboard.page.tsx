@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
   calculatePages,
   CustomPagination,
   PaginationData,
-  Sort,
+  // Sort, // Riabilitare con la issue PN-1124
   useIsMobile,
+  formatToTimezoneString,
+  getNextDay,
 } from '@pagopa-pn/pn-commons';
 import { Box, Button, Typography } from '@mui/material';
 
@@ -15,8 +18,12 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   getSentNotifications,
   setPagination,
-  setSorting,
+  // setSorting, // Riabilitare con la issue PN-1124
 } from '../redux/dashboard/actions';
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
+
+// import { NotificationColumn } from '../types/Notifications';  // Riabilitare con la issue PN-1124
 import DesktopNotifications from './components/Notifications/DesktopNotifications';
 import MobileNotifications from './components/Notifications/MobileNotifications';
 
@@ -28,33 +35,40 @@ const Dashboard = () => {
   const pagination = useAppSelector((state: RootState) => state.dashboardState.pagination);
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const { t } = useTranslation(['notifiche']);
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
   const totalElements =
     pagination.size *
     (pagination.moreResult
-      ? Math.max(pagination.nextPagesKey.length + 1, 8)
+      ? pagination.nextPagesKey.length + 5
       : pagination.nextPagesKey.length + 1);
   const pagesToShow: Array<number> = calculatePages(
     pagination.size,
     totalElements,
-    Math.min(pagination.nextPagesKey.length, 3),
+    Math.min(pagination.nextPagesKey.length + 1, 3),
     pagination.page + 1
   );
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
   };
 
   // Sort handlers
-  const handleChangeSorting = (s: Sort) => {
+  // Riabilitare con la issue PN-1124
+  /*
+  const handleChangeSorting = (s: Sort<NotificationColumn>) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SORT, {type: s.orderBy});
     dispatch(setSorting(s));
   };
+  */
 
   // route to Manual Send
   const handleRouteManualSend = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_SEND);
     navigate(routes.NUOVA_NOTIFICA);
   };
 
@@ -62,7 +76,6 @@ const Dashboard = () => {
   const handleRouteApiKeys = () => {
     navigate(routes.API_KEYS);
   };
-
   useEffect(() => {
     const params = {
       ...filters,
@@ -70,39 +83,45 @@ const Dashboard = () => {
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
-    void dispatch(getSentNotifications(params));
+    void dispatch(getSentNotifications({
+      ...params,
+      endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
+    }));
   }, [filters, pagination.size, pagination.page, sort]);
+
+  const handleEventTrackingCallbackPageSize = (pageSize: number) => {
+    trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, {pageSize});
+  };
 
   return (
     <Box p={3}>
       <Typography variant="h4" mb={isMobile ? 3 : undefined}>
-        Notifiche
+        {t('title')}
       </Typography>
       <Box display={isMobile ? 'block' : 'flex'} justifyContent="space-between" alignItems="center">
         <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-          Qui trovi tutte le notifiche inviate dall&apos;ente. Puoi filtrarle per Codice Fiscale,
-          Codice IUN, data di invio e stato.
+        {t('subtitle')}
         </Typography>
         <Button
           variant="contained"
-          onClick={() => navigate(routes.NUOVA_NOTIFICA)}
+          onClick={handleRouteManualSend}
           data-testid="newNotificationBtn"
           sx={{ marginBottom: isMobile ? 3 : undefined }}
         >
-          Invia una nuova notifica
+          {t('new-notification-button')}
         </Button>
       </Box>
       {isMobile ? (
         <MobileNotifications
           notifications={notifications}
-          onChangeSorting={handleChangeSorting}
+          // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
           onManualSend={handleRouteManualSend}
           onApiKeys={handleRouteApiKeys}
         />
       ) : (
         <DesktopNotifications
           notifications={notifications}
-          onChangeSorting={handleChangeSorting}
+          // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
           onManualSend={handleRouteManualSend}
           onApiKeys={handleRouteApiKeys}
         />
@@ -115,6 +134,7 @@ const Dashboard = () => {
             totalElements,
           }}
           onPageRequest={handleChangePage}
+          eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
           pagesToShow={pagesToShow}
           sx={{ padding: '0 10px' }}
         />

@@ -3,15 +3,18 @@ import {
   DigitalAddresses,
   LegalChannelType,
   CourtesyChannelType,
+  IOAllowedValues,
 } from './../../../models/contacts';
 import { ContactsApi } from '../../../api/contacts/Contacts.api';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
   createOrUpdateCourtesyAddress,
   createOrUpdateLegalAddress,
   deleteCourtesyAddress,
   deleteLegalAddress,
+  disableIOAddress,
+  enableIOAddress,
   getDigitalAddresses,
   resetContactsState,
 } from '../actions';
@@ -143,6 +146,26 @@ describe('Contacts redux state tests', () => {
     const payload = action.payload as DigitalAddress;
     expect(action.type).toBe('deleteCourtesyAddress/fulfilled');
     expect(payload).toEqual(digitalAddresses.courtesy[0].senderId);
+  });
+
+  it('Should be able to enable App IO', async () => {
+    const ioAddress = { ...digitalAddresses.courtesy[1], value: IOAllowedValues.ENABLED };
+    const apiSpy = jest.spyOn(ContactsApi, 'createOrUpdateCourtesyAddress');
+    apiSpy.mockResolvedValue(ioAddress);
+    const action = await store.dispatch(enableIOAddress(ioAddress.recipientId));
+    const payload = action.payload as DigitalAddress;
+    expect(action.type).toBe('enableIOAddress/fulfilled');
+    expect(payload).toEqual(ioAddress);
+  });
+
+  it('Should be able to disable App IO', async () => {
+    const ioAddress = digitalAddresses.courtesy[1];
+    const apiSpy = jest.spyOn(ContactsApi, 'deleteCourtesyAddress');
+    apiSpy.mockResolvedValue(ioAddress.senderId);
+    const action = await store.dispatch(disableIOAddress(ioAddress.recipientId));
+    const payload = action.payload as DigitalAddress;
+    expect(action.type).toBe('disableIOAddress/fulfilled');
+    expect(payload).toEqual(ioAddress.senderId);
   });
 
   it('Should be able to reset state', () => {

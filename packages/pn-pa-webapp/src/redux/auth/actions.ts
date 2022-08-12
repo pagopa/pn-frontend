@@ -1,6 +1,8 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
-import { PartyRole } from '../../models/user';
+import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
+import { Party } from '../../models/party';
+import { PartyRole, PNRole } from '../../models/user';
 import { User } from './types';
 
 /**
@@ -16,8 +18,30 @@ export const exchangeToken = createAsyncThunk<User, string>(
       sessionStorage.setItem('user', JSON.stringify(user));
       return user;
     } else {
-      const user: User = JSON.parse(sessionStorage.getItem('user') || '');
-      return user;
+      // I prefer to launch an error than return rejectWithValue, since in this way 
+      // the navigation proceeds immediately to the login page.
+      throw new Error("selfCareToken must be provided to exchangeToken action");
+    }
+  }
+);
+
+/**
+ * Obtain the organization party for the given organization id.
+ * NB: in fact, when the corresponding reducer is to be called, the value of the organization id 
+ *     is already in the state of this slice. But given the way the reducer/action pair is defined,
+ *     I could not find to have the state accesible to the code of the thunk. 
+ *     Hence the organizationId is expected as a parameter, whose value will be taken from this very slice.
+ *     ------------------------------
+ *     Carlos Lombardi, 2022.07.27
+ */
+export const getOrganizationParty = createAsyncThunk<Party, string>(
+  'getOrganizationParty',
+  async (params: string, { rejectWithValue }) => {
+    try {
+      const partyFromApi = await ExternalRegistriesAPI.getOrganizationParty(params);
+      return partyFromApi || { id: '', name: 'Ente sconosciuto' };
+    } catch (e) {
+      return rejectWithValue(e);
     }
   }
 );
@@ -40,7 +64,7 @@ export const logout = createAsyncThunk<User>('logout', async () => {
       roles: [
         {
           partyRole: PartyRole.MANAGER,
-          role: '',
+          role: PNRole.ADMIN,
         },
       ],
       fiscal_code: '',

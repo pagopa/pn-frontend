@@ -1,0 +1,177 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Parameters:
+  Name:
+    Description: "CDN Logical Name"
+    Type: String
+  WebDomain:
+    Description: "Domain for webapp"
+    Type: String
+  WebCertificateArn:
+    Description: "ACM Web Certificate ARN"
+    Type: String
+  HostedZoneId:
+    Description: "Hosted Zone Id in which you want to add record"
+    Type: String
+  WebApiUrl:
+    Description: "The Url of web API: useful for content-security-policy"
+    Type: String
+  
+Resources:
+  # - CloudFront User used for WebApp S3 Bucket access
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub 'CloudFront OAI for ${Name} WebApp'
+  # - WebApp S3 Bucket
+  S3BucketForWebsiteContent:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+  # - Webapp S3 Bucket policy
+  S3BucketForWebsiteContentPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref 'S3BucketForWebsiteContent'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Action:
+          - s3:GetObject
+          Effect: Allow
+          Resource: !Sub '${S3BucketForWebsiteContent.Arn}/*'
+          Principal:
+            CanonicalUser:
+              Fn::GetAtt:
+              - CloudFrontOriginAccessIdentity
+              - S3CanonicalUserId
+  # - WebApp caching policy
+  WebsiteCDNCachingPolicy:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub '${Name}-WebsiteCDNCachingPolicy'
+        Comment: 'Keep cache for one minute.' #TODO: one minute is fine for non versioned files; versioned files must live forever
+        DefaultTTL: 30
+        MaxTTL: 60
+        MinTTL: 10
+        ParametersInCacheKeyAndForwardedToOrigin:
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+          CookiesConfig:
+            CookieBehavior: none
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: all
+  # - WebApp CDN
+  WebsiteCDN:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: CDN for S3-backed website
+        Aliases:
+          - !Ref WebDomain
+        Enabled: 'true'
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+          TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+          ViewerProtocolPolicy: redirect-to-https
+          CachePolicyId: !Ref WebsiteCDNCachingPolicy
+          ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+        DefaultRootObject: index.html
+        CustomErrorResponses:
+          - ErrorCode: 404
+            ResponseCode: 200
+            ResponsePagePath: '/index.html'
+          - ErrorCode: 403
+            ResponseCode: 200
+            ResponsePagePath: '/index.html'
+        Origins:
+        - DomainName: !Sub '${S3BucketForWebsiteContent.RegionalDomainName}'
+          Id: !Sub 'S3-${S3BucketForWebsiteContent}'
+          S3OriginConfig:
+            OriginAccessIdentity:
+              Fn::Join:
+              - ''
+              - - origin-access-identity/cloudfront/
+                - Ref: CloudFrontOriginAccessIdentity
+        ViewerCertificate:
+          AcmCertificateArn: !Ref WebCertificateArn
+          MinimumProtocolVersion: TLSv1.2_2021
+          SslSupportMethod: sni-only
+
+  DefaultHeaderPolicy:
+    Type: AWS::CloudFront::ResponseHeadersPolicy
+    Properties: 
+      ResponseHeadersPolicyConfig: 
+        Name: !Sub '${Name}-headerPolicy'
+        SecurityHeadersConfig: 
+          # add_header Content-Security-Policy
+          ContentSecurityPolicy: 
+            ContentSecurityPolicy: !Sub "default-src 'self'; object-src 'none'; \
+              connect-src 'self' https://api-eu.mixpanel.com/track/  \
+                   https://selfcare.pagopa.it/assets/ \
+                   ${WebApiUrl}; 
+              style-src 'self' 'unsafe-inline'; \
+              worker-src 'none'; \
+              font-src 'self'; \
+              frame-ancestors 'self' ; \
+              img-src 'self' https://assets.cdn.io.italia.it/ data:"
+            Override: true
+          # add_header X-Content-Type-Options "nosniff";
+          ContentTypeOptions: 
+            #ContentTypeOptions: "nosniff"
+            Override: true
+          # add_header X-Frame-Options "SAMEORIGIN";
+          FrameOptions: 
+            FrameOption: "SAMEORIGIN"
+            Override: true
+          # add_header Referrer-Policy "no-referrer";
+          ReferrerPolicy: 
+            ReferrerPolicy: "no-referrer"
+            Override: true
+          # add_header Strict-Transport-Security "max-age=31536000";
+          StrictTransportSecurity: 
+            AccessControlMaxAgeSec: 31536000
+            IncludeSubdomains: false
+            Preload: false
+            Override: true
+
+  Route53RecordSetGroup:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Ref WebDomain
+      Type: A
+      HostedZoneId: !Ref HostedZoneId
+      AliasTarget:
+        DNSName: !GetAtt WebsiteCDN.DomainName
+        EvaluateTargetHealth: false
+        HostedZoneId: Z2FDTNDATAQYW2
+
+
+Outputs:
+  # - WebApp Outputs
+  WebAppBucketName:
+    Value: !Ref 'S3BucketForWebsiteContent'
+    Description: Name of S3 bucket to hold website content
+  WebAppCdnUrl:
+    Value:  !Join ['', ['https://', !GetAtt WebsiteCDN.DomainName]] 
+    Description: Site access URL
+  WebDomainUrl:
+    Value:  !Sub 'https://${WebDomain}'
+    Description: Site access URL
+
+
+

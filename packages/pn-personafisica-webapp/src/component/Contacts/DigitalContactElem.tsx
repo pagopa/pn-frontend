@@ -1,14 +1,14 @@
 import { Fragment, memo, ReactChild, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  Grid,
-  Dialog,
-  Typography,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
-  Button,
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Grid,
+    Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -17,6 +17,9 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
+import { trackEventByType } from "../../utils/mixpanel";
+import { EventActions, TrackEventType } from "../../utils/events";
+import { getContactEventType } from "../../utils/contacts.utility";
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
@@ -35,6 +38,7 @@ type Props = {
   value: string;
   onConfirmClick: (status: 'validated' | 'cancelled') => void;
   forceMobileView?: boolean;
+  blockDelete?: boolean;
 };
 
 const DigitalContactElem = memo(
@@ -49,6 +53,7 @@ const DigitalContactElem = memo(
     value,
     onConfirmClick,
     forceMobileView = false,
+    blockDelete,
   }: Props) => {
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
@@ -81,8 +86,10 @@ const DigitalContactElem = memo(
       handleModalClose();
       if (contactType === LegalChannelType.PEC) {
         void dispatch(deleteLegalAddress({ recipientId, senderId, channelType: contactType }));
+        trackEventByType(TrackEventType.CONTACT_LEGAL_CONTACT, { action: EventActions.DELETE });
         return;
       }
+      const eventTypeByChannel = getContactEventType(contactType);
       void dispatch(
         deleteCourtesyAddress({
           recipientId,
@@ -90,6 +97,7 @@ const DigitalContactElem = memo(
           channelType: contactType as CourtesyChannelType,
         })
       );
+       trackEventByType(eventTypeByChannel, { action: EventActions.DELETE });
     };
 
     const editHandler = () => {
@@ -104,6 +112,21 @@ const DigitalContactElem = memo(
         }
       );
     };
+
+    const deleteModalActions = blockDelete ? (
+      <Button onClick={handleModalClose} variant="outlined">
+        {t('button.close')}
+      </Button>
+    ) : (
+      <>
+        <Button onClick={handleModalClose} variant="outlined">
+          {t('button.annulla')}
+        </Button>
+        <Button onClick={confirmHandler} variant="contained">
+          {t('button.conferma')}
+        </Button>
+      </>
+    );
 
     return (
       <Fragment>
@@ -123,12 +146,11 @@ const DigitalContactElem = memo(
           )}
           {mappedChildren}
           <Grid item lg={forceMobileView ? 12 : 2} xs={12} textAlign={isMobile ? 'left' : 'right'}>
-            {!editMode && (
+            {!editMode ? (
               <ButtonNaked color="primary" onClick={toggleEdit} sx={{ marginRight: '10px' }}>
                 {t('button.modifica')}
               </ButtonNaked>
-            )}
-            {editMode && (
+            ) : (
               <ButtonNaked
                 color="primary"
                 disabled={saveDisabled}
@@ -156,14 +178,7 @@ const DigitalContactElem = memo(
           <DialogContent>
             <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleModalClose} variant="outlined">
-              {t('button.annulla')}
-            </Button>
-            <Button onClick={confirmHandler} variant="contained">
-              {t('button.conferma')}
-            </Button>
-          </DialogActions>
+          <DialogActions>{deleteModalActions}</DialogActions>
         </Dialog>
       </Fragment>
     );

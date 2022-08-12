@@ -1,5 +1,5 @@
 export interface Role {
-  role: string;
+  role: PNRole;
   partyRole: PartyRole;
 }
 
@@ -20,4 +20,9 @@ export interface UserGroup {
   name: string;
   description: string;
   status: GroupStatus;
+}
+
+export enum PNRole {
+  ADMIN = 'admin',
+  OPERATOR = 'operator'
 }

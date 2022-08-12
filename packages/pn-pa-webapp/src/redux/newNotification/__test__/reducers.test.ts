@@ -3,7 +3,7 @@ import { DigitalDomicileType, PhysicalCommunicationType, RecipientType } from '@
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
   setSenderInfos,

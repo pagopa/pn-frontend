@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { GetNotificationsParams, tenYearsAgo, today, Notification, formatToTimezoneString, getNextDay } from '@pagopa-pn/pn-commons';
+import { GetNotificationsParams, tenYearsAgo, today, Notification, formatToTimezoneString, Sort } from '@pagopa-pn/pn-commons';
 
+import { NotificationColumn } from '../../types/Notifications';
 import {
   getReceivedNotifications,
   setPagination,
@@ -17,7 +18,9 @@ const dashboardSlice = createSlice({
     notifications: [] as Array<Notification>,
     filters: {
       startDate: formatToTimezoneString(tenYearsAgo),
-      endDate: formatToTimezoneString(getNextDay(today)),
+      endDate: formatToTimezoneString(today),
+      iunMatch: undefined,
+      mandateId: undefined,
     } as GetNotificationsParams,
     pagination: {
       nextPagesKey: [] as Array<string>,
@@ -27,8 +30,8 @@ const dashboardSlice = createSlice({
     },
     sort: {
       orderBy: '',
-      order: 'asc' as 'asc' | 'desc',
-    },
+      order: 'asc',
+    } as Sort<NotificationColumn>,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -69,7 +72,7 @@ const dashboardSlice = createSlice({
         iunMatch: undefined,
         mandateId: action.payload,
         startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(getNextDay(today)),
+        endDate: formatToTimezoneString(today),
       };
       // reset pagination
       state.pagination.size = 10;

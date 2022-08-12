@@ -1,8 +1,10 @@
-import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
+import { LegalFactType, NotificationDetail, PaymentAttachmentSName, PaymentStatus, RecipientType } from '@pagopa-pn/pn-commons';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import { mockAuthentication } from '../../auth/__test__/reducers.test';
+import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
+  getNotificationPaymentInfo,
+  getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
@@ -30,7 +32,13 @@ describe('Notification detail redux state tests', () => {
         sentAt: '',
         notificationStatus: '',
         notificationStatusHistory: [],
-        timeline: []
+        timeline: [],
+        currentRecipient: {
+          recipientType: RecipientType.PF,
+          taxId: '',
+          denomination: '',
+        },
+        currentRecipientIndex: 0,
       },
       documentDownloadUrl: '',
       legalFactDownloadUrl: '',
@@ -43,7 +51,13 @@ describe('Notification detail redux state tests', () => {
   it('Should be able to fetch the notification detail', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotification');
     apiSpy.mockResolvedValue(notificationToFe);
-    const action = await store.dispatch(getReceivedNotification({iun: 'mocked-iun'}));
+    const action = await store.dispatch(
+      getReceivedNotification({
+        iun: 'mocked-iun',
+        currentUserTaxId: 'CGNNMO80A03H501U' ,
+        delegatorsFromStore: []
+      })
+    );
     const payload = action.payload as NotificationDetail;
     expect(action.type).toBe('getReceivedNotification/fulfilled');
     expect(payload).toEqual(notificationToFe);
@@ -72,5 +86,47 @@ describe('Notification detail redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('getReceivedNotificationLegalfact/fulfilled');
     expect(payload).toEqual({ url: 'http://mocked-url.com' });
+  });
+
+  it('Should be able to fetch the pagopa document', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getPaymentAttachment');
+    apiSpy.mockResolvedValue({ url: 'http://pagopa-mocked-url.com' });
+    const action = await store.dispatch(
+      getPaymentAttachment({ iun: 'mocked-iun', attachmentName: PaymentAttachmentSName.PAGOPA })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getPaymentAttachment/fulfilled');
+    expect(payload).toEqual({ url: 'http://pagopa-mocked-url.com' });
+
+    const state = store.getState().notificationState;
+    expect(state.pagopaAttachmentUrl).toEqual('http://pagopa-mocked-url.com');
+  });
+
+  it('Should be able to fetch the f24 document', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getPaymentAttachment');
+    apiSpy.mockResolvedValue({ url: 'http://f24-mocked-url.com' });
+    const action = await store.dispatch(
+      getPaymentAttachment({ iun: 'mocked-iun', attachmentName: PaymentAttachmentSName.F24 })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getPaymentAttachment/fulfilled');
+    expect(payload).toEqual({ url: 'http://f24-mocked-url.com' });
+
+    const state = store.getState().notificationState;
+    expect(state.f24AttachmentUrl).toEqual('http://f24-mocked-url.com');
+  });
+
+  it('Should be able to fetch payment info', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
+    apiSpy.mockResolvedValue({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
+    const action = await store.dispatch(
+      getNotificationPaymentInfo({ noticeCode: 'mocked-notice-code', taxId: 'mocked-tax-id' })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getNotificationPaymentInfo/fulfilled');
+    expect(payload).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
+
+    const state = store.getState().notificationState;
+    expect(state.paymentInfo).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
   });
 });

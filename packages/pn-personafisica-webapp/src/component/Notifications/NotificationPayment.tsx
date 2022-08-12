@@ -11,41 +11,55 @@ import {
   Stack,
   SxProps,
   Theme,
-  Typography
+  Typography,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
-import { CopyToClipboard, formatEurocentToCurrency, NotificationDetailPayment, PaymentAttachmentSName, PaymentInfoDetail, PaymentStatus, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  CopyToClipboard,
+  formatEurocentToCurrency,
+  NotificationDetailPayment,
+  PaymentAttachmentSName,
+  PaymentInfoDetail,
+  PaymentStatus,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { getNotificationPaymentInfo, getPaymentAttachment } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import { CHECKOUT_URL, PAGOPA_HELP_EMAIL, PAYMENT_DISCLAIMER_URL } from '../../utils/constants';
+import { PAGOPA_HELP_EMAIL,
+  // PN-2029
+  // PAYMENT_DISCLAIMER_URL
+} from '../../utils/constants';
+import { TrackEventType } from '../../utils/events';
+import { trackEventByType } from '../../utils/mixpanel';
 
 interface Props {
   iun: string;
   notificationPayment: NotificationDetailPayment;
   onDocumentDownload: (url: string) => void;
+  mandateId?: string;
 }
 
 interface PrimaryAction {
   text: string;
   callback: () => void;
-};
+}
 
 enum MessageActionType {
-  COPY_TO_CLIPBOARD = "COPY_TO_CLIPBOARD",
-  CONTACT_SUPPORT = "CONTACT_SUPPORT"
-};
+  COPY_TO_CLIPBOARD = 'COPY_TO_CLIPBOARD',
+  CONTACT_SUPPORT = 'CONTACT_SUPPORT',
+}
 
 interface PaymentMessageData {
   type: AlertColor;
   body: string | JSX.Element;
   errorCode?: string;
   action?: MessageActionType;
-};
+}
 
 interface PaymentData {
   title: string;
@@ -55,15 +69,24 @@ interface PaymentData {
   action?: PrimaryAction;
 }
 
-const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocumentDownload }) => {
+const NotificationPayment: React.FC<Props> = ({
+  iun,
+  notificationPayment,
+  onDocumentDownload,
+  mandateId,
+}) => {
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const dispatch = useAppDispatch();
   const paymentInfo = useAppSelector((state: RootState) => state.notificationState.paymentInfo);
-  const pagopaAttachmentUrl = useAppSelector((state: RootState) => state.notificationState.pagopaAttachmentUrl);
-  const f24AttachmentUrl = useAppSelector((state: RootState) => state.notificationState.f24AttachmentUrl);
+  const pagopaAttachmentUrl = useAppSelector(
+    (state: RootState) => state.notificationState.pagopaAttachmentUrl
+  );
+  const f24AttachmentUrl = useAppSelector(
+    (state: RootState) => state.notificationState.f24AttachmentUrl
+  );
 
   const alertButtonStyle: SxProps<Theme> = useIsMobile()
     ? { textAlign: 'center' }
@@ -87,15 +110,23 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
 
   const fetchPaymentInfo = () => {
     if (notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
-      dispatch(getNotificationPaymentInfo({ noticeCode: notificationPayment.noticeCode, taxId: notificationPayment.creditorTaxId }))
+      dispatch(
+        getNotificationPaymentInfo({
+          noticeCode: notificationPayment.noticeCode,
+          taxId: notificationPayment.creditorTaxId,
+        })
+      )
         .unwrap()
         .then(() => {
           setLoading(() => false);
-          setError(() => "");
+          setError(() => '');
         })
         .catch(() => {
           setLoading(() => false);
-          setError(() => paymentInfo?.detail || t('detail.payment.message-network-error', { ns: 'notifiche' }));
+          setError(
+            () =>
+              paymentInfo?.detail || t('detail.payment.message-network-error', { ns: 'notifiche' })
+          );
         });
     } else {
       setLoading(() => false);
@@ -104,20 +135,27 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   };
 
   const onPayClick = () => {
-    if (CHECKOUT_URL && notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
-      window.open(`${CHECKOUT_URL}/${notificationPayment.creditorTaxId}${notificationPayment.noticeCode}`);
-    } else if (CHECKOUT_URL) { // do we need to inform the user that NoticeCode and/or creditorTaxId are unavailable and redirect to base checkout url?
-      window.open(CHECKOUT_URL);
+    const paymentUrl = paymentInfo.url;
+    if (paymentUrl && notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
+      window.open(
+        `${paymentUrl}/${notificationPayment.creditorTaxId}${notificationPayment.noticeCode}`
+      );
+    } else if (paymentUrl) {
+      // do we need to inform the user that NoticeCode and/or creditorTaxId are unavailable and redirect to base checkout url?
+      window.open(paymentUrl);
     }
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION);
   };
 
   const contactSupportClick = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_ASSISTANCE);
     if (PAGOPA_HELP_EMAIL) {
       window.open(`mailto:${PAGOPA_HELP_EMAIL}`);
     }
   };
 
   const reloadPage = () => {
+    trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_RELOAD);
     // reset state
     setLoading(() => true);
     setError(() => '');
@@ -125,36 +163,43 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     // refresh paymentInfo
     fetchPaymentInfo();
   };
-  
+
   const onDocumentClick = (name: PaymentAttachmentSName) => {
-    void dispatch(getPaymentAttachment({ iun, attachmentName: name }));
+    void dispatch(getPaymentAttachment({ iun, attachmentName: name, mandateId }));
+    trackEventByType(
+      name === PaymentAttachmentSName.PAGOPA
+        ? TrackEventType.NOTIFICATION_DETAIL_PAYMENT_F24_FILE
+        : TrackEventType.NOTIFICATION_DETAIL_PAYMENT_PAGOPA_FILE
+    );
   };
 
-  const onDisclaimerClick = () => {
-    window.open(PAYMENT_DISCLAIMER_URL);
-  };
-
+  /*
+    PN-2029
+    const onDisclaimerClick = () => {
+      window.open(PAYMENT_DISCLAIMER_URL);
+    };
+  */
   const getAttachmentsData = () => {
     // eslint-disable-next-line functional/no-let
     const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();
-    
-    if(paymentInfo?.status === PaymentStatus.REQUIRED) {
+
+    if (paymentInfo?.status === PaymentStatus.REQUIRED) {
       const pagopaDoc = notificationPayment.pagoPaForm;
       const f24Doc = notificationPayment.f24flatRate || notificationPayment.f24standard;
 
-      if(pagopaDoc) {
+      if (pagopaDoc) {
         // eslint-disable-next-line functional/immutable-data
         attachments.push({
           name: PaymentAttachmentSName.PAGOPA,
-          title: t('detail.payment.download-pagopa-notification', { ns: 'notifiche' })
+          title: t('detail.payment.download-pagopa-notification', { ns: 'notifiche' }),
         });
       }
 
-      if(f24Doc) {
+      if (f24Doc) {
         // eslint-disable-next-line functional/immutable-data
         attachments.push({
           name: PaymentAttachmentSName.F24,
-          title: t('detail.payment.download-f24', { ns: 'notifiche' })
+          title: t('detail.payment.download-f24', { ns: 'notifiche' }),
         });
       }
     }
@@ -163,9 +208,12 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
 
   /** composes Payment Data to be rendered */
   const composePaymentData = (): PaymentData => {
-    const title = t('detail.payment.summary', { ns: 'notifiche' });
+    const title =
+      paymentInfo?.status !== PaymentStatus.SUCCEEDED
+        ? t('detail.payment.summary-pending', { ns: 'notifiche' })
+        : t('detail.payment.summary-succeeded', { ns: 'notifiche' });
 
-    const amount = paymentInfo?.amount ? formatEurocentToCurrency(paymentInfo.amount) : "";
+    const amount = paymentInfo?.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
 
     const disclaimer = amount ? getDisclaimer() : undefined;
 
@@ -178,7 +226,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
       amount,
       disclaimer,
       message,
-      action
+      action,
     };
   };
 
@@ -187,19 +235,22 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
     <>
       {t('detail.payment.disclaimer', { ns: 'notifiche' })}
       &nbsp;
-      <Link href="#" onClick={onDisclaimerClick}>
-        {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
-      </Link>
+      {
+        /* PN-2029
+        <Link href="#" onClick={onDisclaimerClick}>
+          {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
+        </Link>
+        */
+      }
     </>
   );
 
   /** returns message data to be passed into the alert */
   const getMessageData = (): PaymentMessageData | undefined => {
-
     if (error) {
       return {
         type: 'error',
-        body: error
+        body: error,
       };
     }
 
@@ -208,13 +259,13 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
         case PaymentStatus.SUCCEEDED:
           return {
             type: 'success',
-            body: t('detail.payment.message-completed', { ns: 'notifiche' })
+            body: t('detail.payment.message-completed', { ns: 'notifiche' }),
           };
         case PaymentStatus.INPROGRESS:
           return {
             type: 'info',
             body: t('detail.payment.message-in-progress', { ns: 'notifiche' }),
-            action: MessageActionType.CONTACT_SUPPORT
+            action: MessageActionType.CONTACT_SUPPORT,
           };
         case PaymentStatus.FAILED:
           return getFailedMessageData();
@@ -226,14 +277,14 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
   /** returns message data for failed status */
   const getFailedMessageData = (): PaymentMessageData | undefined => {
     // eslint-disable-next-line functional/no-let
-    let body = "";
+    let body = '';
     // eslint-disable-next-line functional/no-let
     let action: MessageActionType | undefined;
 
     const errorCode = paymentInfo.detail_v2;
 
-    switch(paymentInfo.detail) {
-      case PaymentInfoDetail.DOMAIN_UNKNOWN:      // Creditor institution error
+    switch (paymentInfo.detail) {
+      case PaymentInfoDetail.DOMAIN_UNKNOWN: // Creditor institution error
         body = t('detail.payment.error-domain-unknown', { ns: 'notifiche' });
         action = MessageActionType.COPY_TO_CLIPBOARD;
         break;
@@ -243,33 +294,32 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
         action = MessageActionType.COPY_TO_CLIPBOARD;
         break;
 
-      case PaymentInfoDetail.PAYMENT_UNKNOWN:     // Payment data error
+      case PaymentInfoDetail.PAYMENT_UNKNOWN: // Payment data error
         body = t('detail.payment.error-payment-unknown', { ns: 'notifiche' });
         action = MessageActionType.COPY_TO_CLIPBOARD;
         break;
 
-      case PaymentInfoDetail.GENERIC_ERROR:       // Generic error
+      case PaymentInfoDetail.GENERIC_ERROR: // Generic error
         body = t('detail.payment.error-generic', { ns: 'notifiche' });
         action = MessageActionType.CONTACT_SUPPORT;
         break;
 
-      case PaymentInfoDetail.PAYMENT_CANCELED:    // Payment cancelled
+      case PaymentInfoDetail.PAYMENT_CANCELED: // Payment cancelled
         body = t('detail.payment.error-canceled', { ns: 'notifiche' });
         action = undefined;
         break;
 
-      case PaymentInfoDetail.PAYMENT_EXPIRED:     // Payment expired
+      case PaymentInfoDetail.PAYMENT_EXPIRED: // Payment expired
         body = t('detail.payment.error-expired', { ns: 'notifiche' });
         action = undefined;
         break;
-
     }
 
     return {
       type: 'error' as AlertColor,
       body,
       action,
-      errorCode
+      errorCode,
     };
   };
 
@@ -279,7 +329,7 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
       case PaymentStatus.REQUIRED:
         return {
           text: t('detail.payment.submit', { ns: 'notifiche' }) + (amount ? ' ' + amount : ''),
-          callback: onPayClick
+          callback: onPayClick,
         };
       case PaymentStatus.FAILED:
         return getFailedActionData();
@@ -289,22 +339,23 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
 
   /** returns action data for failed status */
   const getFailedActionData = (): PrimaryAction | undefined => {
-    switch(paymentInfo.detail) {
-      case PaymentInfoDetail.DOMAIN_UNKNOWN:      // Creditor institution error
+    switch (paymentInfo.detail) {
+      case PaymentInfoDetail.DOMAIN_UNKNOWN: // Creditor institution error
       case PaymentInfoDetail.PAYMENT_UNAVAILABLE: // Technical Error
-      case PaymentInfoDetail.PAYMENT_UNKNOWN:     // Payment data error
+      case PaymentInfoDetail.PAYMENT_UNKNOWN: // Payment data error
         return {
-            text: t('detail.payment.contact-support', { ns: 'notifiche' }),
-            callback: contactSupportClick
+          text: t('detail.payment.contact-support', { ns: 'notifiche' }),
+          callback: contactSupportClick,
         };
 
-      case PaymentInfoDetail.GENERIC_ERROR:       // Generic error
+      case PaymentInfoDetail.GENERIC_ERROR: // Generic error
         return {
-            text: t('detail.payment.reload-page', { ns: 'notifiche' }),
-            callback: reloadPage
+          text: t('detail.payment.reload-page', { ns: 'notifiche' }),
+          callback: reloadPage,
         };
 
-      default: return undefined;
+      default:
+        return undefined;
     }
   };
 
@@ -323,12 +374,17 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
           </Button>
         );
       case MessageActionType.COPY_TO_CLIPBOARD:
-        return <CopyToClipboard getValue={() => message.errorCode || ""} text={t('detail.payment.copy-to-clipboard', { ns: 'notifiche' })} />;
-      default: return;
+        return (
+          <CopyToClipboard
+            getValue={() => message.errorCode || ''}
+            text={t('detail.payment.copy-to-clipboard', { ns: 'notifiche' })}
+          />
+        );
+      default:
+        return;
     }
   };
 
-  
   const data = composePaymentData();
   const attachments = getAttachmentsData();
 
@@ -341,8 +397,24 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
           </Typography>
         </Grid>
         <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
-          <Typography variant="h6" aria-label={t('detail.payment.amount', { ns: 'notifiche' })} display="inline" fontWeight={600} fontSize={24}>
-            {loading ? <Skeleton data-testid="loading-skeleton" width={100} height={28} aria-label="loading" sx={{ float: 'right' }} /> : data.amount}
+          <Typography
+            variant="h6"
+            aria-label={t('detail.payment.amount', { ns: 'notifiche' })}
+            display="inline"
+            fontWeight={600}
+            fontSize={24}
+          >
+            {loading ? (
+              <Skeleton
+                data-testid="loading-skeleton"
+                width={100}
+                height={28}
+                aria-label="loading"
+                sx={{ float: 'right' }}
+              />
+            ) : (
+              data.amount
+            )}
           </Typography>
         </Grid>
         <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
@@ -358,8 +430,14 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
                 action={isMobile ? undefined : getMessageAction(data.message)}
               >
                 <Typography variant="body1">{data.message.body}</Typography>
-                <Typography variant="body1" fontWeight="bold">{data.message.errorCode}</Typography>
-                {isMobile ? <Box width="100%" display="flex" justifyContent="center" pr={7.5}>{getMessageAction(data.message)}</Box> : null}
+                <Typography variant="body1" fontWeight="bold">
+                  {data.message.errorCode}
+                </Typography>
+                {isMobile ? (
+                  <Box width="100%" display="flex" justifyContent="center" pr={7.5}>
+                    {getMessageAction(data.message)}
+                  </Box>
+                ) : null}
               </Alert>
             )}
           </Box>
@@ -384,21 +462,21 @@ const NotificationPayment: React.FC<Props> = ({ iun, notificationPayment, onDocu
                 </Button>
               </Grid>
               {attachments.length > 0 && (
-              <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-                <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
-              </Grid>
+                <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
+                  <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
+                </Grid>
               )}
-              <Stack direction={{ xs: 'column', lg: 'row' }} sx={{alignSelf: 'center'}}>
+              <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ alignSelf: 'center' }}>
                 {attachments.map((attachment) => (
-                <Button
-                  key={attachment.name}
-                  sx={{ flexGrow: 1 }}
-                  name={`download-${attachment.name.toLowerCase()}-notification`}
-                  startIcon={<DownloadIcon />}
-                  onClick={() => onDocumentClick(attachment.name)}
-                >
-                  {attachment.title}
-                </Button>
+                  <Button
+                    key={attachment.name}
+                    sx={{ flexGrow: 1 }}
+                    name={`download-${attachment.name.toLowerCase()}-notification`}
+                    startIcon={<DownloadIcon />}
+                    onClick={() => onDocumentClick(attachment.name)}
+                  >
+                    {attachment.title}
+                  </Button>
                 ))}
               </Stack>
             </>

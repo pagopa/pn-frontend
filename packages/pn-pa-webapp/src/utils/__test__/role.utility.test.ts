@@ -1,13 +1,14 @@
 import { People, SupervisedUserCircle } from '@mui/icons-material';
 import Email from '@mui/icons-material/Email';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
-import { PartyRole } from '../../models/user';
+import { PNRole } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { getHomePage, getMenuItems } from '../role.utility';
 
+
 const mockedIdOrganization = 'mocked-id';
 const BasicMenuItems: Array<SideMenuItem> = [
-  { label: 'Notifiche', icon: Email, route: routes.DASHBOARD },
+  { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
   /**
   * Refers to PN-1741
   * Commented out because beyond MVP scope
@@ -20,17 +21,17 @@ const BasicMenuItems: Array<SideMenuItem> = [
 ];
 
 const SelfCareItems: Array<SideMenuItem> = [
-  { label: 'Ruoli', icon: People, route: routes.ROLES(mockedIdOrganization) },
-  { label: 'Gruppi', icon: SupervisedUserCircle, route: routes.GROUPS(mockedIdOrganization) },
+  { label: 'menu.roles', icon: People, route: routes.ROLES(mockedIdOrganization) },
+  { label: 'menu.groups', icon: SupervisedUserCircle, route: routes.GROUPS(mockedIdOrganization) },
 ];
 
 test('return menu items for role REFERENTE_AMMINISTRATIVO', () => {
-  const items = getMenuItems(PartyRole.MANAGER, mockedIdOrganization);
+  const items = getMenuItems(mockedIdOrganization, PNRole.ADMIN);
   expect(items).toEqual({ menuItems: BasicMenuItems, selfCareItems: SelfCareItems });
 });
 
 test('return menu items for role REFERENTE_OPERATIVO', () => {
-  const items = getMenuItems(PartyRole.OPERATOR, mockedIdOrganization);
+  const items = getMenuItems(mockedIdOrganization, PNRole.OPERATOR);
   expect(items).toEqual({ menuItems: BasicMenuItems });
 });
 

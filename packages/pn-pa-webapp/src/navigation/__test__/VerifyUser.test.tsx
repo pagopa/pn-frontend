@@ -2,9 +2,9 @@ import { waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
 
+import { render, axe } from '../../__test__/test-utils';
 import * as actions from '../../redux/auth/actions';
 import { PartyRole } from '../../models/user';
-import { render, axe } from '../../__test__/test-utils';
 import VerifyUser from '../VerifyUser';
 
 const mockNavigateFn = jest.fn();

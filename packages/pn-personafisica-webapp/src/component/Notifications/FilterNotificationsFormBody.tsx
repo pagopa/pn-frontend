@@ -50,12 +50,14 @@ const FilterNotificationsFormBody = ({
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     if (e.target.id === 'iunMatch') {
-      const newInput = formatIun(formikInstance.values.iunMatch, (e.nativeEvent as any).data);
-      if (newInput) {
-        await formikInstance.setFieldValue('iunMatch', newInput);
-      } else {
-        formikInstance.handleChange(e);
-      }
+      const originalEvent = e.target as HTMLInputElement;
+      const cursorPosition = originalEvent.selectionStart || 0;
+      const newInput = formatIun(originalEvent.value);
+      const newCursorPosition = cursorPosition + (originalEvent.value.length !== newInput?.length && cursorPosition >= originalEvent.value.length ? 1 : 0);
+
+      await formikInstance.setFieldValue('iunMatch', newInput);
+
+      originalEvent.setSelectionRange(newCursorPosition, newCursorPosition);
     } else {
       formikInstance.handleChange(e);
     }
@@ -106,11 +108,11 @@ const FilterNotificationsFormBody = ({
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 size="small"
-                aria-label="Data inizio ricerca" // aria-label for (TextField + Button) Group
+                aria-label={t('filters.data_da-aria-label')} // aria-label for (TextField + Button) Group
                 inputProps={{
                   ...params.inputProps,
                   inputMode: 'text',
-                  'aria-label': 'Inserisci la data iniziale della ricerca',
+                  'aria-label': t('filters.data_da-input-aria-label'),
                   type: 'text',
                   placeholder: 'gg/mm/aaaa',
                 }}
@@ -148,11 +150,11 @@ const FilterNotificationsFormBody = ({
                 fullWidth
                 sx={{ marginBottom: isMobile ? '20px' : '0' }}
                 size="small"
-                aria-label="Data fine ricerca" // aria-label for (TextField + Button) Group
+                aria-label={t('filters.data_a-aria-label')} // aria-label for (TextField + Button) Group
                 inputProps={{
                   ...params.inputProps,
                   inputMode: 'text',
-                  'aria-label': 'inserisci la data finale della ricerca',
+                  'aria-label': t('filters.data_a-input-aria-label'),
                   type: 'text',
                   placeholder: 'gg/mm/aaaa',
                 }}

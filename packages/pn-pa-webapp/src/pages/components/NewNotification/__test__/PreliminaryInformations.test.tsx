@@ -8,6 +8,13 @@ import { PaymentModel } from '../../../../models/NewNotification';
 import * as hooks from '../../../../redux/hooks';
 import PreliminaryInformations from '../PreliminaryInformations';
 
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
+
 function testRadioElements(form: HTMLFormElement, dataTestId: string, values: Array<string>) {
   const radioButtons = form?.querySelectorAll(`[data-testid="${dataTestId}"]`);
   expect(radioButtons).toHaveLength(values.length);
@@ -55,17 +62,17 @@ describe('PreliminaryInformations Component', () => {
   });
 
   it('renders PreliminaryInformations', () => {
-    expect(result.container).toHaveTextContent(/Informazioni preliminari/i);
+    expect(result.container).toHaveTextContent(/title/i);
     const form = result.container.querySelector('form');
-    testFormElements(form!, 'paProtocolNumber', 'Numero di protocollo*');
-    testFormElements(form!, 'subject', 'Oggetto della notifica*');
-    testFormElements(form!, 'abstract', 'Descrizione');
-    testFormElements(form!, 'group', 'Gruppo*');
-    testRadioElements(form!, 'comunicationTypeRadio', ['Modello 890', 'Raccomandata A/R']);
+    testFormElements(form!, 'paProtocolNumber', 'protocol-number*');
+    testFormElements(form!, 'subject', 'subject*');
+    testFormElements(form!, 'abstract', 'abstract');
+    testFormElements(form!, 'group', 'group*');
+    testRadioElements(form!, 'comunicationTypeRadio', ['registered-letter-890', 'simple-registered-letter']);
     testRadioElements(form!, 'paymentMethodRadio', [
-      'Avviso pagoPA',
-      'Avviso pagoPA e Modello F24 forfettario',
-      'Avviso pagoPA e Modello F24',
+      'pagopa-notice',
+      'pagopa-notice-f24-flatrate',
+      'pagopa-notice-f24',
     ]);
     const buttons = form?.querySelectorAll('button');
     expect(buttons).toHaveLength(2);

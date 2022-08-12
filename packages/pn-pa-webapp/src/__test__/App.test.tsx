@@ -1,9 +1,18 @@
-import { screen } from '@testing-library/react';
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
+import { screen } from '@testing-library/react';
 
+/* eslint-disable import/order */
+import { render, axe } from './test-utils';
 import App from '../App';
-import { axe, render } from './test-utils';
+
+// mock imports
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
 
 const Component = () => (
   <ThemeProvider theme={theme}>
@@ -14,7 +23,7 @@ const Component = () => (
 describe('App', () => {
   it('Piattaforma notifiche', () => {
     render(<Component/>);
-    const welcomeElement = screen.getByText(/Piattaforma notifiche/i);
+    const welcomeElement = screen.getByText(/header.notification-platform/i);
     expect(welcomeElement).toBeInTheDocument();
   });
 
@@ -24,3 +33,5 @@ describe('App', () => {
     expect(result).toHaveNoViolations();
   });
 });
+
+export {};
