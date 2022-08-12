@@ -113,7 +113,14 @@ export const createNewNotification = createAsyncThunk<NewNotificationResponse, N
   'createNewNotification',
   async (notification: NewNotificationFe, { rejectWithValue }) => {
     try {
-      const notificationToSave = { ...notification, paymentMode: undefined };
+      // Qui vado ad eliminare i campi usati solo per mantenere lo stado di presentazion FE recipientsForm, documentsForm, paymentDocumentsForm
+      // ho riscontrato infatti l'aumento del rischio di errori di tipo 413 (payload too large)
+      // Nella PN-2015 si discute di come rifattorizzare e separare lo stato in modo da avere in redux solo il layer di presentazione
+      // al termine si effettua un mapping tra il DTO di presentazione e il DTO di integrazione
+      // Questo è da intendersi quindi come un fix temporaneo in attesa del refactoring della pn-2015
+      // Carlotta Dimatteo, 12/08/2022
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { recipientsForm, documentsForm, paymentDocumentsForm, paymentMode, ...notificationToSave } = notification;
       return await NotificationsApi.createNewNotification(notificationToSave);
     } catch (e) {
       return rejectWithValue(e);

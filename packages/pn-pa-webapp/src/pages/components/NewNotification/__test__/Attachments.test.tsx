@@ -76,7 +76,10 @@ describe('Attachments Component', () => {
     expect(fileInput).toBeInTheDocument();
     const buttons = form?.querySelectorAll('button');
     expect(buttons).toHaveLength(3);
-    expect(buttons![2]).toBeDisabled();
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
+    expect(buttons![1]).toBeDisabled(); 
     expect(result.container).toHaveTextContent(/back-to-recipient/i);
   });
 
@@ -85,8 +88,11 @@ describe('Attachments Component', () => {
     const attachmentBoxes = result.queryAllByTestId('attachmentBox');
     uploadDocument(attachmentBoxes[0].parentNode!, 0);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
-    expect(buttons![2]).toBeEnabled();
-    void testConfirm(buttons![2], [
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
+    expect(buttons![1]).toBeEnabled();
+    void testConfirm(buttons![1], [
       {
         key: 'Doc0',
         contentType: 'application/pdf',
@@ -102,8 +108,11 @@ describe('Attachments Component', () => {
     uploadDocument(attachmentBoxes[0].parentNode!, 0);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
     fireEvent.click(buttons![0]);
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
     await waitFor(() => {
-      expect(buttons![2]).toBeDisabled();
+      expect(buttons![1]).toBeDisabled();
     });
     const newAttachmentBoxes = result.queryAllByTestId('attachmentBox');
     expect(newAttachmentBoxes).toHaveLength(2);
@@ -111,7 +120,7 @@ describe('Attachments Component', () => {
     const deleteIcon = newAttachmentBoxes[1].querySelector('[data-testid="DeleteIcon"]');
     expect(deleteIcon).toBeInTheDocument();
     uploadDocument(newAttachmentBoxes[1].parentNode!, 1);
-    await waitFor(() => expect(buttons![2]).toBeEnabled());
+    await waitFor(() => expect(buttons![1]).toBeEnabled());
     void testConfirm(buttons![2], [
       {
         key: 'Doc0',
@@ -139,8 +148,11 @@ describe('Attachments Component', () => {
     fireEvent.click(deleteIcon!);
     newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
     expect(newAttachmentBoxes).toHaveLength(1);
-    await waitFor(() => expect(buttons![2]).toBeEnabled());
-    void testConfirm(buttons![2], [
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
+    await waitFor(() => expect(buttons![1]).toBeEnabled());
+    void testConfirm(buttons![1], [
       {
         key: 'Doc0',
         contentType: 'application/pdf',

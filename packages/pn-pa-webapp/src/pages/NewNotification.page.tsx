@@ -100,9 +100,7 @@ const NewNotification = () => {
   const createNotification = () => {
     // if it is last step, save notification
     if (activeStep === 3 && isCompleted) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { recipientsForm, documentsForm, ...newNotification } = notification;
-      void dispatch(createNewNotification(newNotification))
+      void dispatch(createNewNotification(notification))
         .unwrap()
         .then(() => setActiveStep((previousStep) => previousStep + 1));
     }
