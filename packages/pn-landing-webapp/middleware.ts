@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-server-import-in-page */
 import { NextResponse, NextRequest } from "next/server";
 
-export async function middleware(req: NextRequest) {
+export default function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   if (pathname === "/") {
     const url = req.nextUrl.clone();
