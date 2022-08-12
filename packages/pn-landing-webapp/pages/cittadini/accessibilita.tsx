@@ -9,8 +9,8 @@ const AccessibilityPage: NextPage = () => (
   <>
     <Head>
       <title>Dichiarazione Accessibilità</title>
-      <meta name="description" content="Landing Piattaforma notifiche" />
-      <link rel="icon" href="static/favicon.svg" />
+      <meta name="description" content="Dichiarazione Accessibilità Piattaforma notifiche" />
+      <link rel="icon" href="/static/favicon.svg" />
     </Head>
 
     <main>

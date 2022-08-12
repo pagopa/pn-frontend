@@ -149,7 +149,7 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Accessibilità",
-        href: "accessibilità",
+        href: "accessibilita",
         ariaLabel: "Vai al link: Accessibilità",
         linkType: "internal",
       },
@@ -172,7 +172,7 @@ export const postLoginLinks: Array<FooterLinksType> = [
   },
   {
     label: "Accessibilità",
-    href: "accessibility",
+    href: "accessibilita",
     ariaLabel: "Vai al link: Accessibilità",
     linkType: "internal",
   },
