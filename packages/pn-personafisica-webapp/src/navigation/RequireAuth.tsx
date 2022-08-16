@@ -18,7 +18,7 @@ const RequireAuth = () => {
   const expDate = useAppSelector((state: RootState) => state.userState.user.exp);
   const isUnauthorizedUser = useAppSelector((state: RootState) => state.userState.isUnauthorizedUser);
   const messageUnauthorizedUser = useAppSelector((state: RootState) => state.userState.messageUnauthorizedUser);
-  const [accessDenied, setAccessDenied] = useState(token === '' || !token);
+  const [accessDenied, setAccessDenied] = useState(false);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));

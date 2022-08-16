@@ -24,7 +24,7 @@ const VerifyUser = () => {
     } else {
       setVerificationDone(true);
     }
-  }, [location, token]);
+  }, [location]);
 
   useEffect(() => {
     if (spidToken !== '') {
@@ -41,7 +41,7 @@ const VerifyUser = () => {
     if (token !== '' && fetchedTos && tos && location.pathname === '/') {
       navigate(routes.NOTIFICHE, {replace: true});
     }
-  }, [fetchedTos, tos]);
+  }, [token, fetchedTos, tos]);
 
   return verificationDone ? <Outlet /> : <div />;
 };

@@ -50,8 +50,6 @@ const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(exchangeToken.rejected, (state, action) => {
-      console.log('in exchangeToken.rejected');
-      console.log(action.payload);
       const adaptedError = adaptedTokenExchangeError(action.payload, "SPID token");
       state.isUnauthorizedUser = adaptedError.isUnauthorizedUser;
       state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser ? adaptedError.response.customMessage : emptyUnauthorizedMessage;

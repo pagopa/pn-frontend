@@ -15,9 +15,9 @@ function Router() {
     <Routes>
       <Route path="/" element={<VerifyUser />}>
         {/* protected routes */}
-        <Route
+        <Route path="/" 
           element={
-            <RequireAuth
+            <RequireAuth 
               roles={[PartyRole.MANAGER, PartyRole.OPERATOR]}
             />
           }

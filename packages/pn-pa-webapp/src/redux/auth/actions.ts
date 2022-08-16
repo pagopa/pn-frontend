@@ -11,16 +11,14 @@ import { User } from './types';
  */
 export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
-  async (selfCareToken: string) => {
+  async (selfCareToken: string, { rejectWithValue }) => {
     // use selfcare token to get autenticated user
-    if (selfCareToken && selfCareToken !== '') {
+    try {
       const user = await AuthApi.exchangeToken(selfCareToken);
       sessionStorage.setItem('user', JSON.stringify(user));
       return user;
-    } else {
-      // I prefer to launch an error than return rejectWithValue, since in this way 
-      // the navigation proceeds immediately to the login page.
-      throw new Error("selfCareToken must be provided to exchangeToken action");
+    } catch (e) {
+      return rejectWithValue(e);
     }
   }
 );
