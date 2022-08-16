@@ -16,10 +16,10 @@ export const AuthApi = {
                     return response.data;
                 }
             })
-            .catch(() => Promise.reject({ response: { 
-                status: 400,
-                data: { error: 'Token is not valid' } 
-            }}))
+            // .catch(() => Promise.reject({ response: { 
+            //     status: 400,
+            //     data: { error: 'Token is not valid' } 
+            // }}))
             ;
             // .then(() => Promise.reject({ response: { 
             //     status: 403, 

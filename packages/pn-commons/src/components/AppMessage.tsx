@@ -9,10 +9,9 @@ import Toast from './Toast/Toast';
 
 type Props = {
   sessionRedirect?: () => void;
-  showConfirm?: boolean;
 };
 
-const AppMessage = ({ sessionRedirect, showConfirm }: Props) => {
+const AppMessage = ({ sessionRedirect }: Props) => {
   const dispatch = useDispatch();
   const errors = useSelector(appStateSelectors.selectErrors);
   const success = useSelector(appStateSelectors.selectSuccess);
@@ -41,9 +40,8 @@ const AppMessage = ({ sessionRedirect, showConfirm }: Props) => {
             title={errorMessage.title}
             message={errorMessage.message}
             handleClose={handleSessionModalClose}
-            onConfirm={showConfirm ? handleSessionModalClose : undefined}
-            onConfirmLabel={showConfirm ? getLocalizedOrDefaultLabel('common', 'button.enter', 'Entra') : ""}
-            initTimeout={!showConfirm}
+            onConfirm={handleSessionModalClose}
+            onConfirmLabel={getLocalizedOrDefaultLabel('common', 'button.enter', 'Entra')}
           />
         ) : (
           <Toast

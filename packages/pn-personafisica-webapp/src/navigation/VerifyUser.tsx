@@ -4,23 +4,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { exchangeToken } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-// import { goToLogin } from './navigation.utility';
 import * as routes from './routes.const';
 
-function isUnauthorizedUser(e: any) {
-  return e.type?.endsWith('rejected') && (e.payload?.isUnauthorizedUser);
-}
-
-function solveExchangeToken(spidToken: string, callExchangeToken: any, setVerificationDone: any) {
-  if (spidToken !== '') {
-    callExchangeToken(spidToken).then((e: any) => {
-      console.log('coming back from exchangeToken, this is the result');
-      console.log(e);
-      console.log(isUnauthorizedUser(e));
-      if (!isUnauthorizedUser(e)) { setVerificationDone(true); } 
-    });
-  }
-}
 
 const VerifyUser = () => {
   const location = useLocation();
@@ -42,15 +27,12 @@ const VerifyUser = () => {
   }, [location, token]);
 
   useEffect(() => {
-    solveExchangeToken(spidToken, (token: string) => dispatch(exchangeToken(token)), setVerificationDone);
-    // if (spidToken !== '') {
-    //   dispatch(exchangeToken(spidToken)).then((e) => {
-    //     if (!isUnauthorizedUser(e)) { setVerificationDone(true); } 
-    //   }).catch(() => {
-    //     goToLogin();
-    //   });
-    // }
-  }, [spidToken]);
+    if (spidToken !== '') {
+      void dispatch(exchangeToken(spidToken)).then(() => {
+        setVerificationDone(true);
+      });
+    }
+    }, [spidToken]);
 
   useEffect(() => {
     if (token !== '' && fetchedTos && !tos) {

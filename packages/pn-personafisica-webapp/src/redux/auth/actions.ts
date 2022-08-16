@@ -1,4 +1,3 @@
-import { doExchangeToken } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
 import { ConsentsApi } from '../../api/consents/Consents.api';
@@ -11,7 +10,15 @@ import { User } from './types';
  */
 export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
-  async (spidToken: string, { rejectWithValue }) => doExchangeToken(spidToken, "spidToken", AuthApi, rejectWithValue)
+  async (spidToken: string, { rejectWithValue }) => {
+    try {
+      const user = await AuthApi.exchangeToken(spidToken);
+      sessionStorage.setItem('user', JSON.stringify(user));
+      return user;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
 );
 
 /**
