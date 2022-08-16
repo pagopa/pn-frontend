@@ -1,9 +1,12 @@
 import { Alert, Box, Stack } from "@mui/material";
-import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { Footer, ButtonNaked } from "@pagopa/mui-italia";
 import { ReactNode, useContext } from "react";
 
+import { PAGOPA_HOME } from "@utils/constants";
 import LangContext from "../../provider/lang-context";
+import NavigationBar from "../components/NavigationBar";
+import { getAppData } from "../../api";
 import {
   companyLegalInfo,
   LANGUAGES,
@@ -11,9 +14,6 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from "./footer.constants";
-import { PAGOPA_HOME } from "@utils/constants";
-import NavigationBar from "../components/NavigationBar";
-import {getAppData} from "../../api";
 
 interface Props {
   children?: ReactNode;
@@ -36,16 +36,16 @@ const LandingLayout = ({ children }: Props) => {
         sx={{ minHeight: "100vh" }} // 100vh per sticky footer
       >
         <Stack
-            direction="row"
-            justifyContent="space-between"
-            sx={{
-              justifyContent: "center",
-              borderBottom: "1px solid",
-              borderColor: "#E3E7EB",
-              backgroundColor: "#FFFFFF",
-              minHeight: "48px",
-              flexDirection: "column"
-            }}
+          direction="row"
+          justifyContent="space-between"
+          sx={{
+            justifyContent: "center",
+            borderBottom: "1px solid",
+            borderColor: "#E3E7EB",
+            backgroundColor: "#FFFFFF",
+            minHeight: "48px",
+            flexDirection: "column",
+          }}
         >
           <Stack direction="row" justifyContent="space-between" px={3}>
             <ButtonNaked
@@ -65,8 +65,8 @@ const LandingLayout = ({ children }: Props) => {
             </ButtonNaked>
             <ButtonNaked
               size="small"
-              aria-label={getAppData()['common'].assistance.ariaLabel}
-              href={getAppData()['common'].assistance.href}
+              aria-label={getAppData().common.assistance.ariaLabel}
+              href={getAppData().common.assistance.href}
               color="text"
               target="_blank"
               rel="noreferrer"
@@ -74,14 +74,12 @@ const LandingLayout = ({ children }: Props) => {
               disableTouchRipple
               startIcon={<HelpOutlineOutlinedIcon fontSize="inherit" />}
             >
-              {getAppData()['common'].assistance.label}
+              {getAppData().common.assistance.label}
             </ButtonNaked>
           </Stack>
         </Stack>
         <NavigationBar />
-        <Alert severity="info">
-          {getAppData()['common'].alert}
-        </Alert>
+        <Alert severity="info">{getAppData().common.alert}</Alert>
         <Box sx={{ flexGrow: 1 }} component="main">
           {children}
         </Box>
