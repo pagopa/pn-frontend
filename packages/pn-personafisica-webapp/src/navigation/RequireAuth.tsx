@@ -1,15 +1,12 @@
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet } from 'react-router-dom';
-import { InactivityHandler, SessionModal, useSessionCheck } from '@pagopa-pn/pn-commons';
+import { HandleAuth, useSessionCheck } from '@pagopa-pn/pn-commons';
 
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 import { logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { goToLogin } from './navigation.utility';
-
-const inactivityTimer = 5 * 60 * 1000;
 
 /**
  * This component returns Outlet if user is logged in.
@@ -35,29 +32,14 @@ const RequireAuth = () => {
     }
   }, [token]);
 
-  return (
-    <Fragment>
-      {accessDenied && (
-        <SessionModal
-          open
-          title={isUnauthorizedUser ? messageUnauthorizedUser.title : t('leaving-app.title')}
-          message={isUnauthorizedUser ? messageUnauthorizedUser.message : t('leaving-app.message')}
-          handleClose={goToLogin}
-          initTimeout
-        />
-      )}
-      {DISABLE_INACTIVITY_HANDLER ? (
-        <Outlet />
-      ) : (
-        <InactivityHandler
-          inactivityTimer={inactivityTimer}
-          onTimerExpired={() => dispatch(logout())}
-        >
-          <Outlet />
-        </InactivityHandler>
-      )}
-    </Fragment>
-  );
+  const goodbyeMessage = {
+    title: isUnauthorizedUser ? messageUnauthorizedUser.title : t('leaving-app.title'),
+    message: isUnauthorizedUser ? messageUnauthorizedUser.message : t('leaving-app.message'),
+  };
+
+  return <HandleAuth
+    accessDenied={accessDenied} goodbyeMessage={goodbyeMessage} disableInactivityHandler={DISABLE_INACTIVITY_HANDLER}
+    goToLogin={goToLogin} doLogout={() => dispatch(logout())} />;
 };
 
 export default RequireAuth;
