@@ -35,8 +35,7 @@ const RequireAuth = ({ roles }: Props) => {
   useEffect(() => {
     if (token === '' || !token || isUnauthorizedUser || !role || !userHasRequiredRole) {
       setAccessDenied(true);
-    }
-    if (token && token !== '' && role && userHasRequiredRole) {
+    } else {
       setAccessDenied(false);
       sessionCheck(expDate);
     }

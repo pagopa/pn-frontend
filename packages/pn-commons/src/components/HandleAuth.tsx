@@ -17,7 +17,7 @@ export function HandleAuth(props: Props) {
 
   return (
     <Fragment>
-      {accessDenied && (
+      {accessDenied && 
         <SessionModal
           open
           title={goodbyeMessage.title}
@@ -25,7 +25,7 @@ export function HandleAuth(props: Props) {
           handleClose={goToLogin}
           initTimeout
         />
-      )}
+      }
       {disableInactivityHandler ? (
         <Outlet />
       ) : (

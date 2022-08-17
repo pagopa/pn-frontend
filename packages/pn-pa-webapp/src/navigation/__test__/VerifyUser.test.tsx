@@ -1,4 +1,4 @@
-import { waitFor } from '@testing-library/react';
+import { act } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
 
@@ -32,7 +32,12 @@ describe('VerifyUser Component', () => {
     jest.resetAllMocks();
   });
 
-  it('checks token and navigation (valid)', async () => {
+  it('checks token and navigation (valid) - and basic accessibility', async () => {
+    // mock Redux store state
+    const reduxStoreState = {
+      userState: { user: { sessionToken: 'suchanicetoken '} },
+    };
+
     // mock action
     const actionSpy = jest.spyOn(actions, 'exchangeToken');
     const mockActionFn = jest.fn();
@@ -42,14 +47,15 @@ describe('VerifyUser Component', () => {
     const mockDispatchFn = jest.fn(() => Promise.resolve()) as Dispatch<any>;
     useDispatchSpy.mockReturnValue(mockDispatchFn);
     // render component
-    const { container } = render(<VerifyUser />);
+    let result: any = null;
+    await act(async () => {result = await render(<VerifyUser />, { preloadedState: reduxStoreState })});
+
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-hash');
-    await waitFor(() => {
-      expect(mockNavigateFn).toBeCalledTimes(1);
-    });
+    expect(mockNavigateFn).toBeCalledTimes(1);
 
+    const { container } = result; 
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });

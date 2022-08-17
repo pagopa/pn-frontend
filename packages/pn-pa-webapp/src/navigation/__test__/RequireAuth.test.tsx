@@ -1,4 +1,5 @@
 import React from 'react';
+import { act } from '@testing-library/react';
 import { PartyRole } from '../../models/user';
 import { render, axe } from '../../__test__/test-utils';
 import RequireAuth from '../RequireAuth';
@@ -13,11 +14,11 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
+jest.mock('@mui/material', () => {
+  const original = jest.requireActual('@mui/material');
   return {
     ...original,
-    SessionModal: () => <div>Session Modal</div>,
+    Dialog: () => <div>Session Modal</div>,
   };
 });
 
@@ -44,17 +45,20 @@ describe('RequireAuth Component', () => {
 
   afterEach(() => {
     jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
-  it('renders RequireAuth (user enabled to access)', () => {
+  it('renders RequireAuth (user enabled to access)', async () => {
     // render component
-    const result = render(<RequireAuth roles={[PartyRole.MANAGER]}/>, initialState('mocked-token'));
+    let result: any = null;
+    await act(async () => {result = await render(<RequireAuth roles={[PartyRole.MANAGER]}/>, initialState('mocked-token'))});
     expect(result?.container).toHaveTextContent(/Generic Page/i);
   });
 
-  it('renders RequireAuth (user not enabled to access - wrong role)', () => {
+  it('renders RequireAuth (user not enabled to access - wrong role)', async () => {
     // render component
-    const result = render(<RequireAuth roles={[PartyRole.OPERATOR]} />, initialState('mocked-token'));
+    let result: any = null;
+    await act(async () => {result = await render(<RequireAuth roles={[PartyRole.OPERATOR]} />, initialState('mocked-token'))});
     expect(result?.container).toHaveTextContent(/Session Modal/i);
   });
 
@@ -70,7 +74,7 @@ describe('RequireAuth Component', () => {
     expect(results).toHaveNoViolations();
   });
 
-  it('renders RequireAuth (user not enabled to access - no token)', () => {
+  it('renders RequireAuth (user not enabled to access - no token) - internal behavior', async () => {
     // useState mock
     const setState = jest.fn();
     const setStateFn: any = (init: any) => [init, setState];
@@ -78,8 +82,14 @@ describe('RequireAuth Component', () => {
     useStateSpy.mockImplementation(setStateFn);
 
     // render component
-    const result = render(<RequireAuth roles={[PartyRole.MANAGER]}/>, initialState(''));
+    await act(async () => {await render(<RequireAuth roles={[PartyRole.MANAGER]}/>, initialState(''))});
     expect(setState).toBeCalledTimes(1);
+  });
+
+  it('renders RequireAuth (user not enabled to access - no token) - what is rendered', async () => {
+    // render component
+    let result: any = null;
+    await act(async () => {result = await render(<RequireAuth roles={[PartyRole.MANAGER]}/>, initialState(''))});
     expect(result?.container).toHaveTextContent(/Session Modal/i);
   });
 });
