@@ -11,19 +11,15 @@ jest.mock('react-router-dom', () => {
   };
 });
 
+// Unfortunately a mock on SessionModal won't work since it is invoked from HandleAuth, which also lies in pn-commons.
+// We mock the Dialog which is used inside SessionModal instead.
+// --------------------
+// Carlos Lombardi, 2022.08.18
 jest.mock('@mui/material', () => {
   const original = jest.requireActual('@mui/material');
   return {
     ...original,
     Dialog: () => <div>Session Modal</div>,
-  };
-});
-
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    SessionModal: () => <div>Session Modal</div>,
   };
 });
 

@@ -14,6 +14,10 @@ jest.mock('react-router-dom', () => {
   };
 });
 
+// Unfortunately a mock on SessionModal won't work since it is invoked from HandleAuth, which also lies in pn-commons.
+// We mock the Dialog which is used inside SessionModal instead.
+// --------------------
+// Carlos Lombardi, 2022.08.18
 jest.mock('@mui/material', () => {
   const original = jest.requireActual('@mui/material');
   return {
@@ -74,6 +78,16 @@ describe('RequireAuth Component', () => {
     expect(results).toHaveNoViolations();
   });
 
+  /*
+   * For the no token case, I had to split the verification in two separate test.
+   * Why: because in order to make the session modal to appear, RequireAuth must change the value of a state.
+   * Hence, if we mock the useState hook, thus preventing the value change to happen, we won't obtain the expected result.
+   * 
+   * Consequently, now there are two separated tests, one to verify that the setter is actually called, and other 
+   * to verify the output of the component.
+   * 
+   * Carlos Lombardi, 2022.08.18
+   */
   it('renders RequireAuth (user not enabled to access - no token) - internal behavior', async () => {
     // useState mock
     const setState = jest.fn();
