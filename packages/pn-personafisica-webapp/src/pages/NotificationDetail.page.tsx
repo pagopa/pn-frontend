@@ -23,9 +23,9 @@ import { RootState } from '../redux/store';
 import {
   getReceivedNotification,
   getReceivedNotificationDocument,
-  getReceivedNotificationLegalfact,
-  resetState,
+  getReceivedNotificationLegalfact
 } from '../redux/notification/actions';
+import { resetState } from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { trackEventByType } from '../utils/mixpanel';

@@ -1,4 +1,4 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
@@ -6,9 +6,9 @@ import {
   CourtesyChannelType,
   DigitalAddress,
   DigitalAddresses,
-  SaveDigitalAddressParams,
   LegalChannelType,
 } from '../../models/contacts';
+import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   'getDigitalAddresses',
@@ -42,17 +42,14 @@ export const createOrUpdateLegalAddress = createAsyncThunk<
   }
 });
 
-export const deleteLegalAddress = createAsyncThunk<
-  string,
-  { recipientId: string; senderId: string; channelType: LegalChannelType }
->(
+export const deleteLegalAddress = createAsyncThunk<string, DeleteDigitalAddressParams>(
   'deleteLegalAddress',
-  async (
-    params: { recipientId: string; senderId: string; channelType: LegalChannelType },
-    { rejectWithValue }
-  ) => {
+  async (params: DeleteDigitalAddressParams, { rejectWithValue }) => {
     try {
-      return await ContactsApi.deleteLegalAddress(params.senderId, params.channelType);
+      return await ContactsApi.deleteLegalAddress(
+        params.senderId,
+        params.channelType as LegalChannelType
+      );
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -83,17 +80,14 @@ export const createOrUpdateCourtesyAddress = createAsyncThunk<
   }
 );
 
-export const deleteCourtesyAddress = createAsyncThunk<
-  string,
-  { recipientId: string; senderId: string; channelType: CourtesyChannelType }
->(
+export const deleteCourtesyAddress = createAsyncThunk<string, DeleteDigitalAddressParams>(
   'deleteCourtesyAddress',
-  async (
-    params: { recipientId: string; senderId: string; channelType: CourtesyChannelType },
-    { rejectWithValue }
-  ) => {
+  async (params: DeleteDigitalAddressParams, { rejectWithValue }) => {
     try {
-      return await ContactsApi.deleteCourtesyAddress(params.senderId, params.channelType);
+      return await ContactsApi.deleteCourtesyAddress(
+        params.senderId,
+        params.channelType as CourtesyChannelType
+      );
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -134,5 +128,3 @@ export const disableIOAddress = createAsyncThunk<string, string>(
 export const getAllActivatedParties = createAsyncThunk('getAllActivatedParties', async () =>
   ExternalRegistriesAPI.getAllActivatedParties()
 );
-
-export const resetContactsState = createAction<void>('resetContactsState');

@@ -1,6 +1,7 @@
 import { store } from '../../store';
 import { DelegationsApi } from '../../../api/delegations/Delegations.api';
-import { createDelegation, resetNewDelegation } from '../actions';
+import { createDelegation } from '../actions';
+import { resetNewDelegation } from '../reducers';
 import {
   createDelegationDuplicatedErrorResponse,
   createDelegationGenericErrorResponse,
@@ -55,7 +56,7 @@ describe('delegation redux state tests', () => {
     const action = store.dispatch(resetNewDelegation());
     const state = store.getState().newDelegationState;
 
-    expect(action.type).toBe('resetNewDelegation');
+    expect(action.type).toBe('newDelegationSlice/resetNewDelegation');
     expect(state).toEqual(initialState);
   });
 });

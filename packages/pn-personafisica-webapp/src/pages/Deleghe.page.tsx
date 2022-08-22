@@ -6,23 +6,21 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import {
-  closeRevocationModal,
   rejectDelegation,
   revokeDelegation,
   getDelegates,
   getDelegators,
-  closeAcceptModal,
   acceptDelegation,
-  resetDelegationsState,
 } from '../redux/delegation/actions';
+import { closeAcceptModal, closeRevocationModal, resetState } from '../redux/delegation/reducers';
 import ConfirmationModal from '../component/Deleghe/ConfirmationModal';
 import MobileDelegates from '../component/Deleghe/MobileDelegates';
 import MobileDelegators from '../component/Deleghe/MobileDelegators';
 import Delegates from '../component/Deleghe/Delegates';
 import Delegators from '../component/Deleghe/Delegators';
 import { getSidemenuInformation } from '../redux/sidemenu/actions';
-import { trackEventByType } from "../utils/mixpanel";
-import { TrackEventType } from "../utils/events";
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -66,7 +64,7 @@ const Deleghe = () => {
     void dispatch(getDelegates());
     void dispatch(getDelegators());
     return () => {
-      dispatch(resetDelegationsState);
+      dispatch(resetState());
     };
   }, []);
 

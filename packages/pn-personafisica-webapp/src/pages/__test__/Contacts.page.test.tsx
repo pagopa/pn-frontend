@@ -1,6 +1,7 @@
+/* eslint-disable functional/no-let */
 import * as redux from 'react-redux';
-import { axe, render } from '../../__test__/test-utils';
 import { act, fireEvent, RenderResult } from '@testing-library/react';
+import { axe, render } from '../../__test__/test-utils';
 import * as actions from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 import { PROFILO } from '../../navigation/routes.const';

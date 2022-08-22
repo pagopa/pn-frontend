@@ -137,7 +137,7 @@ describe('Dashboard Page', () => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockDispatchFn).toBeCalledWith({
         payload: { size: 100, page: 0 },
-        type: 'setPagination',
+        type: 'dashboardSlice/setPagination',
       });
     });
   });
@@ -157,7 +157,7 @@ describe('Dashboard Page', () => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockDispatchFn).toBeCalledWith({
         payload: { size: 10, page: 1 },
-        type: 'setPagination',
+        type: 'dashboardSlice/setPagination',
       });
     });
   });

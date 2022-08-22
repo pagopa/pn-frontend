@@ -13,7 +13,6 @@ import {
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
-  resetState,
 } from './actions';
 
 const initialState = {
@@ -40,13 +39,12 @@ const initialState = {
 const notificationSlice = createSlice({
   name: 'notificationSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    resetState: () => initialState,
+  },
   extraReducers: (builder) => {
     builder.addCase(getSentNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
-    });
-    builder.addCase(getSentNotificationDocument.pending, (state) => {
-      state.loading = true;
     });
     builder.addCase(getSentNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {
@@ -58,8 +56,9 @@ const notificationSlice = createSlice({
         state.legalFactDownloadUrl = action.payload.url;
       }
     });
-    builder.addCase(resetState, () => initialState);
   },
 });
+
+export const {resetState} = notificationSlice.actions;
 
 export default notificationSlice;

@@ -9,43 +9,46 @@ import {
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
 } from '../actions';
+import { resetState } from '../reducers';
 import { notificationToFe } from './test-utils';
+
+const initialState = {
+  loading: false,
+  notification: {
+    paProtocolNumber: '',
+    subject: '',
+    recipients: [],
+    senderDenomination: '',
+    paymentExpirationDate: '',
+    documents: [],
+    notificationFeePolicy: '',
+    physicalCommunicationType: '',
+    senderPaId: '',
+    iun: '',
+    sentAt: '',
+    notificationStatus: '',
+    notificationStatusHistory: [],
+    timeline: [],
+    currentRecipient: {
+      recipientType: RecipientType.PF,
+      taxId: '',
+      denomination: '',
+    },
+    currentRecipientIndex: 0,
+  },
+  documentDownloadUrl: '',
+  legalFactDownloadUrl: '',
+  pagopaAttachmentUrl: '',
+  f24AttachmentUrl: '',
+  paymentInfo: {},
+};
 
 describe('Notification detail redux state tests', () => {
   mockAuthentication();
 
   it('Initial state', () => {
     const state = store.getState().notificationState;
-    expect(state).toEqual({
-      loading: false,
-      notification: {
-        paProtocolNumber: '',
-        subject: '',
-        recipients: [],
-        senderDenomination: '',
-        paymentExpirationDate: '',
-        documents: [],
-        notificationFeePolicy: '',
-        physicalCommunicationType: '',
-        senderPaId: '',
-        iun: '',
-        sentAt: '',
-        notificationStatus: '',
-        notificationStatusHistory: [],
-        timeline: [],
-        currentRecipient: {
-          recipientType: RecipientType.PF,
-          taxId: '',
-          denomination: '',
-        },
-        currentRecipientIndex: 0,
-      },
-      documentDownloadUrl: '',
-      legalFactDownloadUrl: '',
-      pagopaAttachmentUrl: '',
-      f24AttachmentUrl: '',
-      paymentInfo: {},
-    });
+    expect(state).toEqual(initialState);
   });
 
   it('Should be able to fetch the notification detail', async () => {
@@ -86,6 +89,15 @@ describe('Notification detail redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('getReceivedNotificationLegalfact/fulfilled');
     expect(payload).toEqual({ url: 'http://mocked-url.com' });
+  });
+
+  it('Should be able to reset state', () => {
+    const action = store.dispatch(resetState());
+    const payload = action.payload;
+    expect(action.type).toBe('notificationSlice/resetState');
+    expect(payload).toEqual(undefined);
+    const state = store.getState().notificationState;
+    expect(state).toEqual(initialState);
   });
 
   it('Should be able to fetch the pagopa document', async () => {

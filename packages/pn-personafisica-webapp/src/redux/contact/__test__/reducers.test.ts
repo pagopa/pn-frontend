@@ -16,8 +16,8 @@ import {
   disableIOAddress,
   enableIOAddress,
   getDigitalAddresses,
-  resetContactsState,
 } from '../actions';
+import { resetState } from '../reducers';
 import { digitalAddresses } from './test-utils';
 
 const initialState = {
@@ -169,9 +169,9 @@ describe('Contacts redux state tests', () => {
   });
 
   it('Should be able to reset state', () => {
-    const action = store.dispatch(resetContactsState());
+    const action = store.dispatch(resetState());
     const payload = action.payload;
-    expect(action.type).toBe('resetContactsState');
+    expect(action.type).toBe('contactsSlice/resetState');
     expect(payload).toEqual(undefined);
     const state = store.getState().contactsState;
     expect(state).toEqual(initialState);

@@ -20,7 +20,7 @@ import {
   dataRegex,
 } from '@pagopa-pn/pn-commons';
 
-import { setNotificationFilters } from '../../../redux/dashboard/actions';
+import { setNotificationFilters } from '../../../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { RootState } from '../../../redux/store';
 import { trackEventByType } from '../../../utils/mixpanel';

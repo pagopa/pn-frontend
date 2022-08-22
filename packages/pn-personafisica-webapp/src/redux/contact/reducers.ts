@@ -1,7 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Party } from '../../models/party';
 
-import { DigitalAddresses, DigitalAddress, CourtesyChannelType, IOAllowedValues } from './../../models/contacts';
+import {
+  DigitalAddresses,
+  DigitalAddress,
+  CourtesyChannelType,
+  IOAllowedValues,
+} from './../../models/contacts';
 import {
   createOrUpdateCourtesyAddress,
   createOrUpdateLegalAddress,
@@ -11,7 +16,6 @@ import {
   enableIOAddress,
   getAllActivatedParties,
   getDigitalAddresses,
-  resetContactsState,
 } from './actions';
 
 const initialState = {
@@ -27,7 +31,9 @@ const initialState = {
 const contactsSlice = createSlice({
   name: 'contactsSlice',
   initialState,
-  reducers: {},
+  reducers: {
+    resetState: () => initialState,
+  },
   extraReducers: (builder) => {
     builder.addCase(getDigitalAddresses.fulfilled, (state, action) => {
       state.digitalAddresses = action.payload;
@@ -39,6 +45,7 @@ const contactsSlice = createSlice({
           (l) => l.senderId === (action.payload as DigitalAddress).senderId
         );
         if (addressIndex > -1) {
+          // update if found
           state.digitalAddresses.legal[addressIndex] = action.payload;
         } else {
           state.digitalAddresses.legal.push(action.payload);
@@ -83,7 +90,7 @@ const contactsSlice = createSlice({
       const addressIndex = state.digitalAddresses.courtesy.findIndex(
         (address) => address.channelType === CourtesyChannelType.IOMSG
       );
-      if(addressIndex > 0) {
+      if (addressIndex > 0) {
         state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.ENABLED;
       }
     });
@@ -91,15 +98,16 @@ const contactsSlice = createSlice({
       const addressIndex = state.digitalAddresses.courtesy.findIndex(
         (address) => address.channelType === CourtesyChannelType.IOMSG
       );
-      if(addressIndex > 0) {
+      if (addressIndex > 0) {
         state.digitalAddresses.courtesy[addressIndex].value = IOAllowedValues.DISABLED;
       }
     });
-    builder.addCase(resetContactsState, () => initialState);
     builder.addCase(getAllActivatedParties.fulfilled, (state, action) => {
       state.parties = action.payload;
     });
   },
 });
+
+export const { resetState } = contactsSlice.actions;
 
 export default contactsSlice;

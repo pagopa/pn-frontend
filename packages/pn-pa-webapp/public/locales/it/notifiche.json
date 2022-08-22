@@ -165,6 +165,7 @@
       "recipient": {
         "title": "Destinatario",
         "fiscal-code-error": "Il codice fiscale inserito non è corretto",
+        "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
         "legal-entity": "Soggetto giuridico",

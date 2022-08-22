@@ -3,10 +3,10 @@ import {
   PaymentAttachmentNameType,
   PaymentInfo,
 } from '@pagopa-pn/pn-commons';
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
-import { NotificationDetailForRecipient } from '../../types/NotificationDetail';
+import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { GetReceivedNotificationParams } from './types';
 
 export const getReceivedNotification = createAsyncThunk<
@@ -107,5 +107,3 @@ export const getNotificationPaymentInfo = createAsyncThunk<
     }
   }
 );
-
-export const resetState = createAction<void>('resetState');

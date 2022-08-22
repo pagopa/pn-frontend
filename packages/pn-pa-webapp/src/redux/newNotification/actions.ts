@@ -1,23 +1,14 @@
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import _ from 'lodash';
-import { PhysicalCommunicationType, NotificationDetailDocument } from '@pagopa-pn/pn-commons';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { NotificationDetailDocument } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
-  PaymentModel,
   NewNotificationFe,
   NewNotificationResponse,
-  FormRecipient,
-  UploadAttachmentParams,
-  UploadPayementParams,
-  UpaloadPaymentResponse,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
-
-export const setCancelledIun = createAction<string>('setCancelledIun');
-
-export const setSenderInfos =
-  createAction<{ senderDenomination: string; senderTaxId: string }>('setSenderInfos');
+import { UploadAttachmentParams, UploadPayementParams, UploadPaymentResponse } from './types';
 
 export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
   'getUserGroups',
@@ -29,17 +20,6 @@ export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | un
     }
   }
 );
-
-export const setPreliminaryInformations = createAction<{
-  paProtocolNumber: string;
-  subject: string;
-  abstract?: string;
-  physicalCommunicationType: PhysicalCommunicationType;
-  group?: string;
-  paymentMode: PaymentModel;
-}>('setPreliminaryInformations');
-
-export const saveRecipients = createAction<{ recipients: Array<FormRecipient> }>('saveRecipients');
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {
@@ -95,7 +75,7 @@ export const uploadNotificationAttachment = createAsyncThunk<
 );
 
 export const uploadNotificationPaymentDocument = createAsyncThunk<
-  UpaloadPaymentResponse,
+  UploadPaymentResponse,
   UploadPayementParams
 >('uploadNotificationPaymentDocument', async (items: UploadPayementParams, { rejectWithValue }) => {
   try {
@@ -114,7 +94,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
     const documentsUploaded = await uploadNotificationDocumentCbk(
       _.uniqWith(documentsToUpload, (a, b) => a.sha256 === b.sha256)
     );
-    const response: UpaloadPaymentResponse = {};
+    const response: UploadPaymentResponse = {};
     const getFile = (item: UploadAttachmentParams) => {
       if (item.file && item.sha256) {
         return documentsUploaded.find((f) => f.digests.sha256 === item.sha256);
@@ -149,5 +129,3 @@ export const createNewNotification = createAsyncThunk<NewNotificationResponse, N
     }
   }
 );
-
-export const resetNewNotificationState = createAction<void>('resetNewNotificationState');

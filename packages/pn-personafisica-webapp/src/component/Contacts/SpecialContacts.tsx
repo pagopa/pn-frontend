@@ -258,7 +258,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       avatar={null}
     >
       <Typography sx={{ marginTop: '20px' }}>
-        {t('special-contacts.required-fields', { ns: 'recapiti' })}
+        {t('required-fields')}
       </Typography>
       <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
         <Grid container direction="row" spacing={2} alignItems="flex">

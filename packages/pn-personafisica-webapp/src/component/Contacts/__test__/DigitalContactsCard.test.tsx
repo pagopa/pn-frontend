@@ -1,6 +1,5 @@
-
-import { axe, render } from "../../../__test__/test-utils";
-import DigitalContactsCard from "../DigitalContactsCard";
+import { axe, render } from '../../../__test__/test-utils';
+import DigitalContactsCard from '../DigitalContactsCard';
 
 const title = 'Mocked title';
 const subTitle = 'Mocked subtitle';
@@ -9,18 +8,25 @@ const body = <div data-testid="body">Body</div>;
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => {
-    return {
-      t: (str: string) => str,
-    };
-  },
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
 }));
 
 describe('DigitalContactsCard Component', () => {
-
   it('renders DigitalContactsCard', () => {
     // render component
-    const result = render(<DigitalContactsCard sectionTitle={'mocked-sectionTitle'} title={title} subtitle={subTitle} actions={actions} avatar="avatar">{body}</DigitalContactsCard>);
+    const result = render(
+      <DigitalContactsCard
+        sectionTitle={'mocked-sectionTitle'}
+        title={title}
+        subtitle={subTitle}
+        actions={actions}
+        avatar="avatar"
+      >
+        {body}
+      </DigitalContactsCard>
+    );
     const titleEl = result.container.querySelector('h4');
     expect(titleEl).toBeInTheDocument();
     expect(titleEl).toHaveTextContent(title);
@@ -34,7 +40,17 @@ describe('DigitalContactsCard Component', () => {
   });
 
   it('does not have basic accessibility issues', async () => {
-    const { container } = render(<DigitalContactsCard sectionTitle={'mocked-sectionTitle'} title={title} subtitle={subTitle} actions={actions} avatar="avatar">{body}</DigitalContactsCard>);
+    const { container } = render(
+      <DigitalContactsCard
+        sectionTitle={'mocked-sectionTitle'}
+        title={title}
+        subtitle={subTitle}
+        actions={actions}
+        avatar="avatar"
+      >
+        {body}
+      </DigitalContactsCard>
+    );
     const result = await axe(container);
     expect(result).toHaveNoViolations();
   });

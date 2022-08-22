@@ -40,9 +40,9 @@ import { dataRegex } from '@pagopa-pn/pn-commons/src/utils/string.utility';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   createDelegation,
-  resetNewDelegation,
   getAllEntities,
 } from '../redux/newDelegation/actions';
+import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';

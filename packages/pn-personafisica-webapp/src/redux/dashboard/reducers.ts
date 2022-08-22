@@ -1,14 +1,15 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { GetNotificationsParams, tenYearsAgo, today, Notification, formatToTimezoneString, Sort } from '@pagopa-pn/pn-commons';
-
-import { NotificationColumn } from '../../types/Notifications';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  getReceivedNotifications,
-  setPagination,
-  setSorting,
-  setNotificationFilters,
-  setMandateId
-} from './actions';
+  GetNotificationsParams,
+  tenYearsAgo,
+  today,
+  Notification,
+  formatToTimezoneString,
+  Sort
+} from '@pagopa-pn/pn-commons';
+import { NotificationColumn } from '../../models/Notifications';
+
+import { getReceivedNotifications } from './actions';
 
 /* eslint-disable functional/immutable-data */
 const dashboardSlice = createSlice({
@@ -33,7 +34,41 @@ const dashboardSlice = createSlice({
       order: 'asc',
     } as Sort<NotificationColumn>,
   },
-  reducers: {},
+  reducers: {
+    setPagination: (state, action: PayloadAction<{page: number; size: number}>) => {
+      if (state.pagination.size !== action.payload.size) {
+        // reset pagination
+        state.pagination.nextPagesKey = [];
+        state.pagination.moreResult = false;
+      }
+      state.pagination.size = action.payload.size;
+      state.pagination.page = action.payload.page;
+    },
+    setSorting: (state, action: PayloadAction<Sort<NotificationColumn>>) => {
+      state.sort = action.payload;
+    },
+    setNotificationFilters: (state, action: PayloadAction<GetNotificationsParams>) => {
+      state.filters = action.payload;
+      // reset pagination
+      state.pagination.page = 0;
+      state.pagination.nextPagesKey = [];
+      state.pagination.moreResult = false;
+    },
+    setMandateId: (state, action: PayloadAction<string | undefined>) => {
+      state.notifications = [];
+      state.filters = {
+        iunMatch: undefined,
+        mandateId: action.payload,
+        startDate: formatToTimezoneString(tenYearsAgo),
+        endDate: formatToTimezoneString(today),
+      };
+      // reset pagination
+      state.pagination.size = 10;
+      state.pagination.page = 0;
+      state.pagination.nextPagesKey = [];
+      state.pagination.moreResult = false;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotifications.fulfilled, (state, action) => {
       state.notifications = action.payload.resultsPage;
@@ -47,40 +82,10 @@ const dashboardSlice = createSlice({
         }
       }
     });
-    builder.addCase(setPagination, (state, action) => {
-      if (state.pagination.size !== action.payload.size) {
-        // reset pagination
-        state.pagination.nextPagesKey = [];
-        state.pagination.moreResult = false;
-      }
-      state.pagination.size = action.payload.size;
-      state.pagination.page = action.payload.page;
-    });
-    builder.addCase(setSorting, (state, action) => {
-      state.sort = action.payload;
-    });
-    builder.addCase(setNotificationFilters, (state, action) => {
-      state.filters = action.payload;
-      // reset pagination
-      state.pagination.page = 0;
-      state.pagination.nextPagesKey = [];
-      state.pagination.moreResult = false;
-    });
-    builder.addCase(setMandateId, (state, action) => {
-      state.notifications = [];
-      state.filters = {
-        iunMatch: undefined,
-        mandateId: action.payload,
-        startDate: formatToTimezoneString(tenYearsAgo),
-        endDate: formatToTimezoneString(today),
-      };
-      // reset pagination
-      state.pagination.size = 10;
-      state.pagination.page = 0;
-      state.pagination.nextPagesKey = [];
-      state.pagination.moreResult = false;
-    });
   },
 });
+
+export const { setPagination, setSorting, setNotificationFilters, setMandateId } =
+  dashboardSlice.actions;
 
 export default dashboardSlice;

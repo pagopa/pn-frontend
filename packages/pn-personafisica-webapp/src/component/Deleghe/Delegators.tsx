@@ -1,14 +1,15 @@
+import { useTranslation } from 'react-i18next';
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import { Column, ItemsTable, Item, Sort } from '@pagopa-pn/pn-commons';
-import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
-import { getDelegators, setDelegatorsSorting } from '../../redux/delegation/actions';
+import { getDelegators } from '../../redux/delegation/actions';
+import { setDelegatorsSorting } from '../../redux/delegation/reducers';
+import { DelegatorsColumn } from '../../models/Deleghe';
 import TableError from '../TableError/TableError';
-import { DelegatorsColumn } from '../../types/Deleghe';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegators = () => {
