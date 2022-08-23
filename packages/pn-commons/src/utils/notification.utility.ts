@@ -288,6 +288,8 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_PAPER_FEEDBACK,
   TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
+  // PN-2068
+  TimelineCategory.SEND_COURTESY_MESSAGE,
   // PN-1647
   TimelineCategory.NOT_HANDLED,
 ];
