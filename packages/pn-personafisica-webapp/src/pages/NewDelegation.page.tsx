@@ -7,7 +7,7 @@ import { IllusCompleted } from "@pagopa/mui-italia";
 
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
-import { resetNewDelegation } from "../redux/newDelegation/actions";
+import { resetNewDelegation } from "../redux/newDelegation/reducers";
 import * as routes from "../navigation/routes.const";
 import SubHeader from "../component/NewDelegation/SubHeader";
 import NewDelegationForm from "../component/NewDelegation/NewDelegationForm";

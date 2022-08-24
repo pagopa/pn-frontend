@@ -1,4 +1,4 @@
-import { SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import {
   Box, Button,
   Divider,
@@ -54,6 +54,7 @@ const NewDelegationForm = () => {
     getValues,
     setValue,
     register,
+    control,
     handleSubmit,
     formState: { errors, touchedFields }
   } = useForm<NewDelegationFormProps>({
@@ -71,6 +72,7 @@ const NewDelegationForm = () => {
     verificationCode: generateVCode(),
   }
   });
+  console.log('exp date', getValues('expirationDate'));
 
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
@@ -182,7 +184,7 @@ const NewDelegationForm = () => {
       <Typography sx={{ marginTop: '2rem', fontWeight: 'bold' }}>
         {t('nuovaDelega.form.viewFrom')}
       </Typography>
-      {/* <FormControl sx={{ width: '100%' }}>
+      <FormControl sx={{ width: '100%' }}>
         <RadioGroup
           aria-labelledby="radio-buttons-group-pf-pg"
           defaultValue="tuttiGliEnti"
@@ -241,40 +243,39 @@ const NewDelegationForm = () => {
             </Grid>
           </Grid>
         </RadioGroup>
-      </FormControl> */}
+      </FormControl>
       <Box sx={{ marginTop: '1rem', width: '100%' }}>
         <FormControl fullWidth>
           <LocalizationProvider
             dateAdapter={AdapterDateFns}
             adapterLocale={currentLocale}
           >
-            <CustomDatePicker
-              label={t('nuovaDelega.form.endDate')}
-              inputFormat={DATE_FORMAT}
-              value={new Date(getValues("expirationDate"))}
-              minDate={tomorrow}
-              onChange={(value: DatePickerTypes) => {
-                // setFieldTouched('expirationDate', true, false);
-                // setFieldValue('expirationDate', value);
-              }}
-              shouldDisableDate={isToday}
-              renderInput={(params) => (
-                <TextField
-                  id="expirationDate"
-                  name="expirationDate"
-                  {...params}
-                  aria-label="Data termine delega" // aria-label for (TextField + Button) Group
-                  inputProps={{
-                    ...params.inputProps,
-                    inputMode: 'text',
-                    'aria-label': 'Inserisci la data di termine della delega',
-                    type: 'text',
-                  }}
-                  error={touchedFields.expirationDate && Boolean(errors.expirationDate)}
-                  helperText={touchedFields.expirationDate && errors.expirationDate}
-                />
-              )}
-              disablePast={true}
+            <Controller name="expirationDate" control={control} render={({field: { ref, ...rest }}) => (
+              <CustomDatePicker
+                label={t('nuovaDelega.form.endDate')}
+                inputFormat={DATE_FORMAT}
+                minDate={tomorrow}
+                {...rest}
+                shouldDisableDate={isToday}
+                renderInput={(params) => (
+                  <TextField
+                    id="expirationDate"
+                    name="expirationDate"
+                    {...params}
+                    aria-label="Data termine delega" // aria-label for (TextField + Button) Group
+                    inputProps={{
+                      ...params.inputProps,
+                      inputMode: 'text',
+                      'aria-label': 'Inserisci la data di termine della delega',
+                      type: 'text',
+                    }}
+                    error={touchedFields.expirationDate && Boolean(errors.expirationDate)}
+                    helperText={touchedFields.expirationDate && errors.expirationDate}
+                  />
+                )}
+                disablePast={true}
+              />
+            )}
             />
           </LocalizationProvider>
         </FormControl>

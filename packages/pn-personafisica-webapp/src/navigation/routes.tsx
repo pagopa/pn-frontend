@@ -13,6 +13,7 @@ const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.
 const Contacts = React.lazy(() => import('../pages/Contacts.page'));
 const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
 const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
+const NewDelegation = React.lazy(() => import('../pages/NewDelegation.page'));
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
             <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
             <Route path={routes.DELEGHE} element={<Deleghe />} />
             <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
+            <Route path={'/deleghe/new'} element={<NewDelegation />} />
             <Route path={routes.RECAPITI} element={<Contacts/>} />
             <Route path={routes.PROFILO} element={<Profile />} />
           </Route>
