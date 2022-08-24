@@ -8,11 +8,15 @@ export class SendCourtesyMessageStep extends TimelineStep {
   getTimelineStepInfo(
     payload: TimelineStepPayload
   ):  TimelineStepInfo| null {
-    const type =
-      (payload.step?.details as SendCourtesyMessageDetails).digitalAddress.type ===
-      DigitalDomicileType.EMAIL
-        ? 'email'
-        : 'sms';
+     /* eslint-disable-next-line functional/no-let */
+    let type = 'sms';
+    const digitalType = (payload.step?.details as SendCourtesyMessageDetails).digitalAddress.type;
+    if (digitalType === DigitalDomicileType.EMAIL) {
+      type = 'email';
+    }
+    if (digitalType === DigitalDomicileType.APPIO) {
+      type = 'app IO';
+    }
     return {
       ...this.localizeTimelineStatus(
         'send-courtesy-message',

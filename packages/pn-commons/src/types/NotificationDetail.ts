@@ -255,6 +255,7 @@ interface PhysicalAddress {
 export enum DigitalDomicileType {
   PEC = 'PEC',
   EMAIL = 'EMAIL',
+  APPIO = 'APPIO' // PN-2068
 }
 
 export enum RecipientType {
