@@ -15,22 +15,24 @@ import {
   TextField,
   Typography
 } from "@mui/material";
-import { CustomDatePicker, DATE_FORMAT, DatePickerTypes, today, useIsMobile } from "@pagopa-pn/pn-commons";
+import { CustomDatePicker, dataRegex, DATE_FORMAT, today, useIsMobile } from "@pagopa-pn/pn-commons";
 import { useTranslation } from "react-i18next";
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import currentLocale from "date-fns/locale/it";
 
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { NewDelegationFormProps } from "../../redux/delegation/types";
-import {createDelegation, getAllEntities} from "../../redux/newDelegation/actions";
+import { createDelegation, getAllEntities } from "../../redux/newDelegation/actions";
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
 import DropDownPartyMenuItem from "../Party/DropDownParty";
 import VerificationCodeComponent from "../Deleghe/VerificationCodeComponent";
-import {generateVCode} from "../../utils/delegation.utility";
+import { generateVCode } from "../../utils/delegation.utility";
 import ErrorDeleghe from "../Deleghe/ErrorDeleghe";
 
 const NewDelegationForm = () => {
@@ -50,29 +52,48 @@ const NewDelegationForm = () => {
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
 
+  const validationSchema = yup.object({
+    selectPersonaFisicaOrPersonaGiuridica: yup
+      .string()
+      .required(t('nuovaDelega.validation.email.required')),
+    codiceFiscale: yup
+      .string()
+      .required(t('nuovaDelega.validation.fiscalCode.required'))
+      .matches(dataRegex.fiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
+    nome: yup.string().required(t('nuovaDelega.validation.name.required')),
+    cognome: yup.string().required(t('nuovaDelega.validation.surname.required')),
+    enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
+    expirationDate: yup
+      .mixed()
+      .required(t('nuovaDelega.validation.expirationDate.required'))
+      .test('validDate', t('nuovaDelega.validation.expirationDate.wrong'), value => value?.getTime() >= tomorrow.getTime())
+  });
+
   const {
     getValues,
     setValue,
     register,
     control,
     handleSubmit,
-    formState: { errors, touchedFields }
   } = useForm<NewDelegationFormProps>({
-  defaultValues: {
-    selectPersonaFisicaOrPersonaGiuridica: 'pf',
+    defaultValues: {
+      selectPersonaFisicaOrPersonaGiuridica: 'pf',
       codiceFiscale: '',
-    nome: '',
-    cognome: '',
-    selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
-    expirationDate: tomorrow,
-    enteSelect: {
-      name: '',
-      uniqueIdentifier: '',
+      nome: '',
+      cognome: '',
+      selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
+      expirationDate: tomorrow,
+      enteSelect: {
+        name: '',
+        uniqueIdentifier: '',
+      },
+      verificationCode: generateVCode(),
     },
-    verificationCode: generateVCode(),
-  }
+    mode: 'onSubmit',
+    resolver: yupResolver(validationSchema)
   });
-  console.log('exp date', getValues('expirationDate'));
+
+  console.log(getValues());
 
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
@@ -92,8 +113,6 @@ const NewDelegationForm = () => {
       void dispatch(getAllEntities());
     }
   }, [loadAllEntities]);
-
-  console.log('entis', getValues("selectTuttiEntiOrSelezionati"));
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -132,14 +151,26 @@ const NewDelegationForm = () => {
                 }
               }}
             >
-              <TextField
-                sx={{ margin: 'auto' }}
-                id="nome"
-                label={t('nuovaDelega.form.firstName')}
-                {...register("nome")}
-                error={touchedFields.nome && Boolean(errors.nome)}
-                helperText={touchedFields.nome && errors.nome}
-                fullWidth
+              <Controller
+                name="nome"
+                control={control}
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    sx={{ margin: 'auto' }}
+                    id="nome"
+                    type="text"
+                    label={t('nuovaDelega.form.firstName')}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    error={Boolean(error?.message)}
+                    helperText={error?.message}
+                    fullWidth
+                  />
+                )}
               />
             </Grid>
             <Grid
@@ -152,14 +183,26 @@ const NewDelegationForm = () => {
                   }
               }}
             >
-              <TextField
-                sx={{ margin: 'auto', mt: isMobile ? 1 : 0 }}
-                id="cognome"
-                {...register("cognome")}
-                label={t('nuovaDelega.form.lastName')}
-                error={touchedFields.cognome && Boolean(errors.cognome)}
-                helperText={touchedFields.cognome && errors.cognome}
-                fullWidth
+              <Controller
+                name="cognome"
+                control={control}
+                render={({
+                  field: { onChange, onBlur, value },
+                  fieldState: { error },
+                }) => (
+                  <TextField
+                    sx={{ margin: 'auto' }}
+                    id="cognome"
+                    type="text"
+                    label={t('nuovaDelega.form.lastName')}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    error={Boolean(error?.message)}
+                    helperText={error?.message}
+                    fullWidth
+                  />
+                )}
               />
             </Grid>
           </Grid>
@@ -172,16 +215,28 @@ const NewDelegationForm = () => {
           />
         </RadioGroup>
       </FormControl>
-      <TextField
-        sx={{ marginTop: '2rem' }}
-        id="codiceFiscale"
-        {...register("codiceFiscale")}
-        label={t('nuovaDelega.form.fiscalCode')}
-        error={touchedFields.codiceFiscale && Boolean(errors.codiceFiscale)}
-        helperText={touchedFields.codiceFiscale && errors.codiceFiscale}
-        fullWidth
+      <Controller
+        name="codiceFiscale"
+        control={control}
+        render={({
+          field: { onChange, onBlur, value },
+          fieldState: { error },
+        }) => (
+          <TextField
+            sx={{ marginTop: 4 }}
+            id="codiceFiscale"
+            type="text"
+            label={t('nuovaDelega.form.fiscalCode')}
+            onChange={onChange}
+            onBlur={onBlur}
+            value={value}
+            error={Boolean(error?.message)}
+            helperText={error?.message}
+            fullWidth
+          />
+        )}
       />
-      <Typography sx={{ marginTop: '2rem', fontWeight: 'bold' }}>
+      <Typography sx={{ marginTop: 4, fontWeight: 'bold' }}>
         {t('nuovaDelega.form.viewFrom')}
       </Typography>
       <FormControl sx={{ width: '100%' }}>
@@ -220,24 +275,33 @@ const NewDelegationForm = () => {
               {getValues("selectTuttiEntiOrSelezionati") === 'entiSelezionati' && (
                 <FormControl fullWidth>
                   <InputLabel id="ente-select">{t('nuovaDelega.form.selectEntities')}</InputLabel>
-                  <Select
-                    labelId="ente-select"
-                    id="ente-select"
-                    {...register("enteSelect.uniqueIdentifier")}
-                    label={t('nuovaDelega.form.selectEntities')}
-                    onChange={(event: SelectChangeEvent<string>) => {
-                      setValue('enteSelect', {
-                        name: event.target.name,
-                        uniqueIdentifier: event.target.value,
-                      });
-                    }}
-                  >
-                    {entities.map((entity) => (
-                      <MenuItem value={entity.id} key={entity.id}>
-                        <DropDownPartyMenuItem name={entity.name} />
-                      </MenuItem>
-                    ))}
-                  </Select>
+                  <Controller
+                    name="enteSelect"
+                    control={control}
+                    render={({
+                      field: { value },
+                    }) => (
+                      <Select
+                        labelId="ente-select"
+                        id="ente-select"
+                        {...register("enteSelect.uniqueIdentifier")}
+                        value={value.uniqueIdentifier}
+                        label={t('nuovaDelega.form.selectEntities')}
+                        onChange={(event: SelectChangeEvent<string>) => {
+                          setValue('enteSelect', {
+                            name: event.target.name,
+                            uniqueIdentifier: event.target.value,
+                          });
+                        }}
+                      >
+                       {entities && entities.map((entity) => (
+                        <MenuItem value={entity.id ?? ''} key={entity.id ?? ''}>
+                          <DropDownPartyMenuItem name={entity.name} />
+                        </MenuItem>
+                       ))}
+                      </Select>
+                      )}
+                    />
                 </FormControl>
               )}
             </Grid>
@@ -250,12 +314,16 @@ const NewDelegationForm = () => {
             dateAdapter={AdapterDateFns}
             adapterLocale={currentLocale}
           >
-            <Controller name="expirationDate" control={control} render={({field: { ref, ...rest }}) => (
+            <Controller
+              name="expirationDate"
+              control={control}
+              render={({field: { onChange, onBlur, value }, fieldState: { error }}) => (
               <CustomDatePicker
                 label={t('nuovaDelega.form.endDate')}
                 inputFormat={DATE_FORMAT}
                 minDate={tomorrow}
-                {...rest}
+                onChange={onChange}
+                value={value}
                 shouldDisableDate={isToday}
                 renderInput={(params) => (
                   <TextField
@@ -269,11 +337,11 @@ const NewDelegationForm = () => {
                       'aria-label': 'Inserisci la data di termine della delega',
                       type: 'text',
                     }}
-                    error={touchedFields.expirationDate && Boolean(errors.expirationDate)}
-                    helperText={touchedFields.expirationDate && errors.expirationDate}
+                    onBlur={onBlur}
+                    error={Boolean(error?.message)}
+                    helperText={error?.message}
                   />
                 )}
-                disablePast={true}
               />
             )}
             />
