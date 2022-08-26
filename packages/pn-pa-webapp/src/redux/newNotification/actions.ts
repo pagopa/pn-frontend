@@ -7,11 +7,25 @@ import {
   NewNotificationFe,
   NewNotificationResponse,
 } from '../../models/NewNotification';
-import { UploadPaymentResponse, UploadAttachmentParams, UploadPayementParams } from './types';
+import { GroupStatus, UserGroup } from '../../models/user';
+import { UploadAttachmentParams, UploadPayementParams, UploadPaymentResponse } from './types';
+
+export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
+  'getUserGroups',
+  async (status: GroupStatus | undefined, { rejectWithValue }) => {
+    try {
+      return await NotificationsApi.getUserGroups(status);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {
-    const presignedUrls = await NotificationsApi.preloadNotificationDocument(items.map(item => ({contentType: item.contentType, key: item.key, sha256: item.sha256})));
+    const presignedUrls = await NotificationsApi.preloadNotificationDocument(
+      items.map((item) => ({ contentType: item.contentType, key: item.key, sha256: item.sha256 }))
+    );
     if (presignedUrls.length) {
       const uploadDocumentCalls: Array<Promise<string>> = [];
       // upload document
@@ -37,7 +51,7 @@ const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams
           key: presignedUrls[index].key,
           versionToken: documentsToken[index],
         },
-        title: item.key
+        title: item.key,
       }));
     }
     throw new Error();
@@ -83,9 +97,7 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
     const response: UploadPaymentResponse = {};
     const getFile = (item: UploadAttachmentParams) => {
       if (item.file && item.sha256) {
-        return documentsUploaded.find(
-          (f) => f.digests.sha256 === item.sha256
-        );
+        return documentsUploaded.find((f) => f.digests.sha256 === item.sha256);
       }
       return undefined;
     };
