@@ -1,6 +1,6 @@
 import { Rule } from "../Rule";
 
-class IsNumber<TModel, TValue> extends Rule<TModel, TValue> {
+export class IsNumber<TModel, TValue> extends Rule<TModel, TValue> {
     
     constructor() {
         super();
@@ -16,5 +16,3 @@ class IsNumber<TModel, TValue> extends Rule<TModel, TValue> {
         return 'Value must be a number';
     };
 }
-
-export const isNumber = new IsNumber();

@@ -1,6 +1,6 @@
 import { Rule } from "../Rule";
 
-class IsArray<TModel, TValue> extends Rule<TModel, TValue> {
+export class IsArray<TModel, TValue> extends Rule<TModel, TValue> {
     
     constructor() {
         super();
@@ -16,5 +16,3 @@ class IsArray<TModel, TValue> extends Rule<TModel, TValue> {
         return 'Value must be an array';
     };
 }
-
-export const isArray = new IsArray();

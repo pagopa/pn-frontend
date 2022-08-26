@@ -1,6 +1,6 @@
 import { Rule } from "../Rule";
 
-class IsObject<TModel, TValue> extends Rule<TModel, TValue> {
+export class IsObject<TModel, TValue> extends Rule<TModel, TValue> {
     
     constructor() {
         super();
@@ -10,11 +10,9 @@ class IsObject<TModel, TValue> extends Rule<TModel, TValue> {
         if (value === null || value === undefined) {
             return null;
         }
-        if (typeof value === 'object' && !Array.isArray(value)) {
+        if (typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date)) {
             return null;
         }
         return 'Value must be an object';
     };
 }
-
-export const isObject = new IsObject();

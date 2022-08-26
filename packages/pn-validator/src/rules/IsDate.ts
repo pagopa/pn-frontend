@@ -1,6 +1,6 @@
 import { Rule } from "../Rule";
 
-class IsDate<TModel, TValue> extends Rule<TModel, TValue> {
+export class IsDate<TModel, TValue> extends Rule<TModel, TValue> {
     
     constructor() {
         super();
@@ -16,5 +16,3 @@ class IsDate<TModel, TValue> extends Rule<TModel, TValue> {
         return 'Value must be a date';
     };
 }
-
-export const isDate = new IsDate();

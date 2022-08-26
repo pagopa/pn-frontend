@@ -1,6 +1,6 @@
 import { Rule } from "../Rule";
 
-class IsString<TModel, TValue> extends Rule<TModel, TValue> {
+export class IsString<TModel, TValue> extends Rule<TModel, TValue> {
     
     constructor() {
         super();
@@ -16,5 +16,3 @@ class IsString<TModel, TValue> extends Rule<TModel, TValue> {
         return 'Value must be a string';
     };
 }
-
-export const isString = new IsString();
