@@ -13,7 +13,6 @@ import { styled } from '@mui/material/styles';
 import { IDPS } from '../../utils/IDPS';
 import { ENV } from '../../utils/env';
 import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
-import { storageSpidSelectedOps } from '../../utils/storage';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
 import SpidSelect from './SpidSelect';
@@ -32,8 +31,6 @@ const Login = () => {
   const isMobile = useIsMobile();
 
   const goCIE = () => {
-    storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
-    // () =>
     window.location.assign(
       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
     );
