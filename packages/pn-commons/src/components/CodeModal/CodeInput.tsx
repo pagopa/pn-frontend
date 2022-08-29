@@ -33,7 +33,13 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
   }, [hasError]);
 
   const focusInput = (index: number) => {
-    if (index > initialValues.length - 1 || index < 0) {
+    if (index < 0) {
+      return;
+    }
+    if (index > initialValues.length - 1) {
+      setTimeout(() => {
+        inputsRef.current[index - 1].blur();
+      }, 25);
       return;
     }
     setTimeout(() => {
