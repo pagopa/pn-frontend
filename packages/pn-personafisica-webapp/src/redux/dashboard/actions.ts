@@ -9,7 +9,7 @@ export const getReceivedNotifications = createAsyncThunk<
   GetNotificationsParams
 >('getReceivedNotifications', async (params: GetNotificationsParams, { rejectWithValue }) => {
   try {
-    return await NotificationsApi.getReceivedNotifications(params);
+    return await NotificationsApi.getReceivedNotifications({...params, startDate: "toto"});
   } catch (e) {
     return rejectWithValue(e);
   }

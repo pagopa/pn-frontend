@@ -64,7 +64,7 @@ const Notifiche = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
   };
 
-    useEffect(() => {
+  useEffect(() => {
     if (filters.mandateId !== currentDelegator?.mandateId) {
       dispatch(setMandateId(currentDelegator?.mandateId));
       return;
@@ -75,6 +75,7 @@ const Notifiche = () => {
       nextPagesKey:
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
+
     void dispatch(getReceivedNotifications({
       ...params,
       endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))

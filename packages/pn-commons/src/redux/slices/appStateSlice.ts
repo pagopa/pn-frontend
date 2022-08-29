@@ -30,6 +30,10 @@ const isFulfilled = (action: AnyAction) => action.type.endsWith('/fulfilled');
 
 const handleError = (action: AnyAction) => action.type.endsWith('/rejected');
 
+function removeErrorsByAction(action: string, errors: IAppMessage[]) {
+  return errors.filter((e) => e.action !== action);
+}
+
 /* eslint-disable functional/immutable-data */
 export const appStateSlice = createSlice({
   name: 'appState',
@@ -37,6 +41,12 @@ export const appStateSlice = createSlice({
   reducers: {
     removeError(state, action: PayloadAction<string>) {
       state.messages.errors = state.messages.errors.filter((e) => e.id !== action.payload);
+    },
+    setErrorAsAlreadyShown(state, action: PayloadAction<string>) {
+      const theError = state.messages.errors.find((e) => e.id === action.payload);
+      if (theError) {
+        theError.alreadyShown = true;
+      }
     },
     addSuccess(
       state,
@@ -60,15 +70,20 @@ export const appStateSlice = createSlice({
           state.loading.result = true;
         }
       })
-      .addMatcher(isFulfilled, (state) => {
+      .addMatcher(isFulfilled, (state, action) => {
         state.loading.result = false;
+        const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
+        state.messages.errors = removeErrorsByAction(actionBeingRejected, state.messages.errors);
       })
       .addMatcher(handleError, (state, action) => {
+        console.log('in handling generico errore');
+        console.log(action)
         state.loading.result = false;
-        if (!action.payload || !action.payload.blockNotification) {
-          const error = createAppError(action.payload);
-          state.messages.errors.push(error);
-        }
+        const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
+        state.messages.errors = removeErrorsByAction(actionBeingRejected, state.messages.errors);
+        const error = createAppError(
+          {...action.payload, action: actionBeingRejected}, { show: !action.payload.blockNotification });
+        state.messages.errors.push(error);
       });
   },
 });

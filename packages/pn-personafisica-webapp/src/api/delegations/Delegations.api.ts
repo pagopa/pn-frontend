@@ -51,6 +51,11 @@ export const DelegationsApi = {
   getDelegators: (): Promise<Array<Delegator>> =>
     apiClient
       .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATE())
+      .then(() => Promise.reject({ response: { status: 500 }})),
+
+  getDelegators2: (): Promise<Array<Delegator>> =>
+    apiClient
+      .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATE())
       .then((response: AxiosResponse<Array<Delegation>>) =>
         response.data.map((delegation) => ({
           mandateId: delegation.mandateId,
@@ -62,6 +67,7 @@ export const DelegationsApi = {
           delegator: 'delegator' in delegation ? delegation.delegator : null,
         }))
       ),
+  
   /**
    * Removes a delegation that the user created
    * @param id
