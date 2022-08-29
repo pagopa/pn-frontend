@@ -36,27 +36,7 @@ const userSlice = createSlice({
   name: 'userSlice',
   initialState: {
     loading: false,
-<<<<<<< Updated upstream
     user: initialUserData(),
-=======
-    user: (sessionStorage.getItem('user')
-      ? JSON.parse(sessionStorage.getItem('user') || '')
-      : {
-          sessionToken: '',
-          name: '',
-          family_name: '',
-          fiscal_number: '',
-          email: '',
-          mobile_phone: '',
-          from_aa: false,
-          uid: '',
-          level: '',
-          iat: 0,
-          exp: 0,
-          iss: '',
-          jti: ''
-        }) as User,
->>>>>>> Stashed changes
     tos: false,
     fetchedTos: false,
   },

@@ -70,11 +70,7 @@ const newNotificationSlice = createSlice({
         recipients: state.notification.recipients.map((r) => {
           r.payment = {
             ...action.payload[r.taxId],
-<<<<<<< Updated upstream
             creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
-=======
-            creditorTaxId: r.payment!.creditorTaxId,
->>>>>>> Stashed changes
             noticeCode: r.payment?.noticeCode,
           };
           return r;

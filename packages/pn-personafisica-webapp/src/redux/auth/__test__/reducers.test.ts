@@ -50,10 +50,7 @@ describe('Auth redux state tests', () => {
             exp: 0,
             iss: '',
             jti: '',
-<<<<<<< Updated upstream
             aud: '',
-=======
->>>>>>> Stashed changes
           },
       tos: false,
       fetchedTos: false,
