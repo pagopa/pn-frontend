@@ -7,7 +7,7 @@ import { TypeRules } from './types/TypeRules';
 export class Validator<TModel> {
   private validatorBuilders: ValidatorBuilders<TModel> = {};
 
-  protected validate = (model: TModel): ValidationError<TModel> => {
+  public validate = (model: TModel): ValidationError<TModel> => {
     const errors: ValidationError<TModel> = {};
     // loop over all validators
     for (const propertyName of Object.keys(this.validatorBuilders)) {
@@ -29,6 +29,8 @@ export class Validator<TModel> {
   ): TypeRules<TModel, TValue> => {
     const validatorBuilder = new ValidatorBuilder<TModel, TValue>();
     this.validatorBuilders[propertyName] = validatorBuilder as any;
+
+    validatorBuilder.ciao();
 
     return validatorBuilder.getTypeRules();
   };

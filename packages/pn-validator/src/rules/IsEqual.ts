@@ -56,12 +56,12 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
       if (typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date) && value !== null) {
         return this.compareObject(value, valueToCompare);
       }
-    }
-    if (typeof value === 'object' && Array.isArray(value) && value !== null) {
-        return this.compareArray(value, valueToCompare);
-    }
-    if ((value instanceof Date && this.compareDate(value, valueToCompare)) || value === valueToCompare) {
-        return true;
+      if (typeof value === 'object' && Array.isArray(value) && value !== null) {
+          return this.compareArray(value, valueToCompare);
+      }
+      if ((value instanceof Date && this.compareDate(value, valueToCompare)) || value === valueToCompare) {
+          return true;
+      }
     }
     return false;
   };

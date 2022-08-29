@@ -15,6 +15,10 @@ export const useSessionCheck = (timer: number, sessionExpiredCbk: () => void) =>
         const expireAt = new Date(0); // The 0 there is the key, which sets the date to the epoch
         expireAt.setUTCSeconds(expt);
         if (now.getTime() >= expireAt.getTime()) {
+<<<<<<< Updated upstream
+=======
+          console.log('sono dentrooooooo');
+>>>>>>> Stashed changes
           sessionExpiredCbk();
           clearInterval(interval);
         }
