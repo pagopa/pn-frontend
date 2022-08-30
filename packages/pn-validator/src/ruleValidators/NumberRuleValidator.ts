@@ -1,4 +1,7 @@
 import { NumberRules } from '../types/NumberRules';
+import { LessThan } from '../rules/LessThan';
+import { GreaterThan } from '../rules/GreaterThan';
+import { Between } from '../rules/Between';
 import { Rule } from '../Rule';
 import { CommonRuleValidator } from './CommonRuleValidator';
 
@@ -10,33 +13,40 @@ export class NumberRuleValidator<TModel, TValue>
     super(pushRule);
   }
 
-  lessThan = (value: number): NumberRuleValidator<TModel, TValue> => {
+  /**
+   * Check if value is less than provided value
+   * @param  {number} value lower bound value
+   * @param  {boolean} [equalTo] boolean for equality comparison
+   */
+  lessThan = (value: number, equalTo?: boolean): NumberRuleValidator<TModel, TValue> => {
+    this.pushRule(new LessThan(value, equalTo));
     return this;
   };
 
-  lessThanOrEqualTo = (value: number): NumberRuleValidator<TModel, TValue> => {
+  /**
+   * Check if value is greater than provided value
+   * @param  {number} value upper bound value
+   * @param  {boolean} [equalTo] boolean for equality comparison
+   */
+  greaterThan = (value: number, equalTo?: boolean): NumberRuleValidator<TModel, TValue> => {
+    this.pushRule(new GreaterThan(value, equalTo));
     return this;
   };
 
-  greaterThan = (value: number): NumberRuleValidator<TModel, TValue> => {
-    return this;
-  };
-
-  greaterThanOrEqualTo = (value: number): NumberRuleValidator<TModel, TValue> => {
-    return this;
-  };
-
-  exclusiveBetween = (
+  /**
+   * Check if value is between provided values
+   * @param  {number} lowerBound lower bound value
+   * @param  {number} upperBound upper bound value
+   * @param  {boolean} [inclusiveLowerBound] boolean for lower bound inclusive comparison
+   * @param  {boolean} [inclusiveUpperBound] boolean for upper bound inclusive comparison
+   */
+  between = (
     lowerBound: number,
-    upperBound: number
+    upperBound: number,
+    inclusiveLowerBound?: boolean,
+    inclusiveUpperBound?: boolean
   ): NumberRuleValidator<TModel, TValue> => {
-    return this;
-  };
-
-  inclusiveBetween = (
-    lowerBound: number,
-    upperBound: number
-  ): NumberRuleValidator<TModel, TValue> => {
+    this.pushRule(new Between(lowerBound, upperBound, inclusiveLowerBound, inclusiveUpperBound));
     return this;
   };
 }

@@ -13,9 +13,9 @@ export class Length<TModel, TValue> extends Rule<TModel, TValue> {
 
   public valueValidator = (value: TValue) => {
     if (!(value instanceof String) && typeof value !== 'string') {
-      throw new TypeError('A non-string value was passed to the matches rule');
+      throw new TypeError('A non-string value was passed to the length rule');
     }
-    if (isDefined(value)) {
+    if (!isDefined(value)) {
       return null;
     }
     const stringValue = value instanceof String ? value.valueOf() : value;

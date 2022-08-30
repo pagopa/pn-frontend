@@ -50,9 +50,4 @@ export class ValidatorBuilder<TModel, TValue> {
     isObject: () => {},
     isArray: () => {},
   });
-
-  ciao = () => {
-    this.getTypeRules().isString().isNull().length(0, 4);
-    console.log(this.rules);
-  };
 }

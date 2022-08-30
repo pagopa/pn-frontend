@@ -24,13 +24,15 @@ export class Validator<TModel> {
     return errors;
   };
 
+  /**
+   * Add rule for a specific property
+   * @param  {TPropertyName} propertyName property name
+   */
   protected ruleFor = <TPropertyName extends keyof TModel, TValue extends TModel[TPropertyName]>(
     propertyName: TPropertyName
   ): TypeRules<TModel, TValue> => {
     const validatorBuilder = new ValidatorBuilder<TModel, TValue>();
     this.validatorBuilders[propertyName] = validatorBuilder as any;
-
-    validatorBuilder.ciao();
 
     return validatorBuilder.getTypeRules();
   };

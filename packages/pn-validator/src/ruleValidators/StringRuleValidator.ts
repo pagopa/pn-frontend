@@ -13,16 +13,29 @@ export class StringRuleValidator<TModel, TValue>
     super(pushRule);
   }
 
-  isEmpty = (not?: boolean): StringRuleValidator<TModel, TValue>  => {
+  /**
+   * Check if value is empty
+   * @param {boolean} [not] boolean to evaluate negative condition
+   */
+  isEmpty = (not?: boolean): StringRuleValidator<TModel, TValue> => {
     this.pushRule(new IsEmpty<TModel, TValue>(not));
     return this;
   };
 
+  /**
+   * Check if value has the desired length
+   * @param {number} [minLength] min desired length
+   * @param {number} [maxLength] max desired length
+   */
   length = (minLength?: number, maxLength?: number): StringRuleValidator<TModel, TValue> => {
     this.pushRule(new Length<TModel, TValue>(minLength, maxLength));
     return this;
   };
 
+  /**
+   * Check if value matches reqexp provided
+   * @param {boolean} [not] boolean to evaluate negative condition
+   */
   matches = (pattern: RegExp, not?: boolean): StringRuleValidator<TModel, TValue> => {
     this.pushRule(new Matches<TModel, TValue>(pattern, not));
     return this;
