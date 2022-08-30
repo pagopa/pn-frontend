@@ -1,5 +1,5 @@
 import { StringRules } from '../types/StringRules';
-import { IsEmpty } from '../rules/isEmpty';
+import { IsEmpty } from '../rules/IsEmpty';
 import { Length } from '../rules/Length';
 import { Matches } from '../rules/Matches';
 import { Rule } from '../Rule';
