@@ -57,21 +57,21 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       {
         id: LegalChannelType.PEC,
         value: t('special-contacts.pec', { ns: 'recapiti' }),
-        show: !!legalAddresses.find(
+        show: legalAddresses.some(
           (a) => a.senderId === 'default' && a.channelType === LegalChannelType.PEC
         ),
       },
       {
         id: CourtesyChannelType.SMS,
         value: t('special-contacts.phone', { ns: 'recapiti' }),
-        show: !!courtesyAddresses.find(
+        show: courtesyAddresses.some(
           (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
         ),
       },
       {
         id: CourtesyChannelType.EMAIL,
         value: t('special-contacts.mail', { ns: 'recapiti' }),
-        show: !!courtesyAddresses.find(
+        show: courtesyAddresses.some(
           (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.EMAIL
         ),
       },
