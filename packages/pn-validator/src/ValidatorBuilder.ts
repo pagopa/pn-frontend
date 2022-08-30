@@ -40,6 +40,7 @@ export class ValidatorBuilder<TModel, TValue> {
     return null;
   };
 
+  // TODO: capire se è possibile ritornare errore nel caso in cui si provi a usare uno di questi metodi su variabili di diverso tipo
   public getTypeRules = (): TypeRules<TModel, TValue> => ({
     isString: () => {
       this.pushRule(new IsString());
