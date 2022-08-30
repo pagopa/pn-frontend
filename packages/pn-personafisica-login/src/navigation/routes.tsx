@@ -1,12 +1,26 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-
 import { ROUTE_LOGIN, ROUTE_LOGIN_ERROR, ROUTE_LOGOUT } from '../utils/constants';
 import Login from '../pages/login/Login';
 import Logout from '../pages/logout/Logout';
 import LoginError from '../pages/loginError/LoginError';
+import { storageOpsBuilder } from "@pagopa-pn/pn-commons";
 
+const storageOnSuccessOps = storageOpsBuilder<string>('LOGIN:onSuccess', 'string', false);
 /** login request operations */
-const onLoginRequest = () => <Login />;
+const onLoginRequest = () => {
+  storageOnSuccessOps.delete();
+  handleLoginRequestOnSuccessRequest();
+  return <Login />;
+};
+
+const handleLoginRequestOnSuccessRequest = () => {
+  const onSuccess: string | null = new URLSearchParams(window.location.search).get('onSuccess');
+  // mixpanel tracking event
+  // trackEvent('LOGIN_INTENT', { target: onSuccess ?? 'dashboard' });
+  if (onSuccess) {
+    storageOnSuccessOps.write(onSuccess);
+  }
+};
 
 function Router() {
   return (
