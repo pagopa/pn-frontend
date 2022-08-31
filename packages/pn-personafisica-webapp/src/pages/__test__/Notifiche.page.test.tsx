@@ -16,20 +16,37 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const MockApiErrorGuardGeneral = ApiErrorGuardGeneral;
+// const MockApiErrorGuardGeneral = ApiErrorGuardGeneral;
 
+// questo permette che in alcuni tests il componente "normale" sia quello proprio del componente Notifiche
+// e che in altri invece sia un mock tipo <div>Ecco le notifiche</div>
 let mockNotificationComponent: JSX.Element | undefined;
 
 function mockApiErrorGuard(
   mockNormalComponentFn?: () => (JSX.Element | undefined),
   mockApiErrorComponent?: JSX.Element,
 ) { 
-  return ({ apiId, component }: { apiId: string, component: JSX.Element }) => <MockApiErrorGuardGeneral 
+  return ({ apiId, component }: { apiId: string, component: JSX.Element }) => <ApiErrorGuardGeneral 
     apiId={apiId} component={(mockNormalComponentFn && mockNormalComponentFn()) || component} 
     errorComponent={mockApiErrorComponent || <div>Api Error</div>} 
   />;
 }
 
+/**
+ * Per testare un componente che usa ApiErrorGuard, penso che non serve moccare ApiErrorGuard al completo,
+ * perché la logica di renderizzare sia il componente "normale" sia ApiError serve.
+ * Penso che invece sia meglio moccare i componenti "normale" e di errore.
+ * 
+ * Perciò ho creato questa funzione mockApiErrorGuard, che riceve in parametro appunto questi componenti.
+ * - Il componente "normale" l'ho lasciato come funzione, perché a seconda di quello che si vuol testare potrebbe
+ *   essere diverso in ogni test. Definito come funzione, si esegue ad ogni volta che viene invocato il mock 
+ *   di ApiErrorGuard. Se non viene passato, o la funzione ritorna undefined, allora si usa lo stesso
+ *   componente "normale" del componente/page che si sta testando.
+ * - Il componente di errore l'ho lasciato fisso, se non viene passato si usa <div>Api Error</div>
+ * 
+ * Per adesso ho lasciato la definizione locale in questo file, ma si può spostare in pn-commons ... non saprei dove,
+ * sarebbe corretto creare utils/test.utility.ts?
+ */
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
@@ -164,14 +181,32 @@ describe('Notifiche Page - with notifications', () => {
 });
 
 
-describe('Notifiche Page - query for notifications outcome', () => {
+describe('Notifiche Page - query for notification API outcome', () => {
+  beforeEach(() => {
+    mockNotificationComponent = <div>Ecco le notifiche</div>;
+  });
+
+  afterEach(() => {
+    mockNotificationComponent = undefined;
+  });
+
   it('API error', async () => {
-    mockNotificationComponent = <div>Notifiche</div>;
     const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
     apiSpy.mockRejectedValue({ response: { status: 500 } });
     await act(async () => void render(<Notifiche />));
-    const apiErrorComponents = screen.queryAllByText("Api Error");
-    expect(apiErrorComponents).toHaveLength(1);
-    mockNotificationComponent = undefined;
+    const apiErrorComponent = screen.queryByText("Api Error");
+    const notificheComponent = screen.queryByText("Ecco le notifiche");
+    expect(apiErrorComponent).toBeTruthy();
+    expect(notificheComponent).toEqual(null);
+  });
+
+  it('API OK', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
+    apiSpy.mockResolvedValue({ resultsPage: [], moreResult: false, nextPagesKey: [] });
+    await act(async () => void render(<Notifiche />));
+    const apiErrorComponent = screen.queryByText("Api Error");
+    const notificheComponent = screen.queryByText("Ecco le notifiche");
+    expect(apiErrorComponent).toEqual(null);
+    expect(notificheComponent).toBeTruthy();
   });
 });
