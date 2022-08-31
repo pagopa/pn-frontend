@@ -19,7 +19,7 @@ export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
   'getDomicileInfo',
   async () => {
     try {
-      return (await ContactsApi.getDigitalAddresses()).legal;
+      return (await ContactsApi.getDigitalAddresses2()).legal;
     } catch {
       return [];
     }

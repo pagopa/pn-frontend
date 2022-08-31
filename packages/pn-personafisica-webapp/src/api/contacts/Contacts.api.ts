@@ -7,6 +7,9 @@ import {
 import { apiClient } from '../axios';
 import { CONTACTS_LIST, COURTESY_CONTACT, LEGAL_CONTACT } from './contacts.routes';
 
+/* eslint-disable-next-line functional/no-let */
+let niceCounter = 0;
+
 export const ContactsApi = {
   /**
    * Gets current user digital addresses
@@ -14,6 +17,19 @@ export const ContactsApi = {
    * @returns Promise
    */
   getDigitalAddresses: (): Promise<DigitalAddresses> =>
+    apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => {
+      niceCounter++;
+      if (niceCounter % 3 === 0) {
+        return {
+          legal: response.data.legal ? response.data.legal : [],
+          courtesy: response.data.courtesy ? response.data.courtesy : [],
+        };
+      } else {
+        return Promise.reject({ response: { status: 500 } });
+      }
+    }),
+
+  getDigitalAddresses2: (): Promise<DigitalAddresses> =>
     apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => ({
       legal: response.data.legal ? response.data.legal : [],
       courtesy: response.data.courtesy ? response.data.courtesy : [],

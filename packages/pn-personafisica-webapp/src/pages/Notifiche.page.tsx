@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString, useErrors, ApiError } from '@pagopa-pn/pn-commons';
+import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString, ApiErrorGuard } from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
@@ -16,22 +16,6 @@ import { trackEventByType } from "../utils/mixpanel";
 import { TrackEventType } from "../utils/events";
 import { NotificationColumn } from '../models/Notifications';
 
-interface ApiErrorGuardProps {
-  apiId: string;
-  component: JSX.Element;
-  reloadAction: () => void;
-}
-
-const ApiErrorGuard: React.FC<ApiErrorGuardProps> = ({ apiId, component, reloadAction }) => {
-  const { hasApiErrors } = useErrors();
-
-  const hasParticularApiErrors = hasApiErrors(apiId);
-
-  return <>
-      { !hasParticularApiErrors && component }
-      { hasParticularApiErrors && <ApiError onClick={reloadAction} /> }
-  </>;
-};
 
 
 const Notifiche = () => {
@@ -67,7 +51,7 @@ const Notifiche = () => {
     pagination.page + 1
   );
 
-  // API call, this function is passed to the ApiError component
+  // API call, this function is passed to the ApiErrorGuard component
   const fetchNotifications = useCallback(() => {
     const params = {
       ...filters,

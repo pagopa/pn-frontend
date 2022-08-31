@@ -10,8 +10,12 @@ import {
 } from '../../models/contacts';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
+export enum CONTACT_ACTIONS  {
+  GET_DIGITAL_ADDRESSES = 'getDigitalAddresses',
+}
+
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
-  'getDigitalAddresses',
+  CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES,
   async (_params: string, { rejectWithValue }) => {
     try {
       return await ContactsApi.getDigitalAddresses();
