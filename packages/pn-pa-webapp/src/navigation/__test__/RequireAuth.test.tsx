@@ -1,5 +1,5 @@
 import React from 'react';
-import { PartyRole } from '../../models/user';
+import { PartyRole, PNRole } from '../../models/user';
 import { render, axe } from '../../__test__/test-utils';
 import RequireAuth from '../RequireAuth';
 
@@ -48,24 +48,18 @@ describe('RequireAuth Component', () => {
 
   it('renders RequireAuth (user enabled to access)', () => {
     // render component
-    const result = render(<RequireAuth roles={[PartyRole.MANAGER]}/>, initialState('mocked-token'));
+    const result = render(<RequireAuth roles={[PNRole.ADMIN]}/>, initialState('mocked-token'));
     expect(result?.container).toHaveTextContent(/Generic Page/i);
   });
 
   it('renders RequireAuth (user not enabled to access - wrong role)', () => {
     // render component
-    const result = render(<RequireAuth roles={[PartyRole.OPERATOR]} />, initialState('mocked-token'));
+    const result = render(<RequireAuth roles={[PNRole.ADMIN]} />, initialState('mocked-token'));
     expect(result?.container).toHaveTextContent(/Session Modal/i);
   });
 
   it('does not have basic accessibility issues rendering RequireAuth (user enabled to access)', async () => {
-    const { container } = render(<RequireAuth roles={[PartyRole.MANAGER]} />, initialState('mocked-token'));
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
-  });
-
-  it('does not have basic accessibility issues rendering RequireAuth (user not enabled to access - wrong role)', async () => {
-    const { container } = render(<RequireAuth roles={[PartyRole.OPERATOR]} />, initialState('mocked-token'));
+    const { container } = render(<RequireAuth roles={[PNRole.ADMIN]} />, initialState('mocked-token'));
     const results = await axe(container);
     expect(results).toHaveNoViolations();
   });
@@ -78,7 +72,7 @@ describe('RequireAuth Component', () => {
     useStateSpy.mockImplementation(setStateFn);
 
     // render component
-    const result = render(<RequireAuth roles={[PartyRole.MANAGER]}/>, initialState(''));
+    const result = render(<RequireAuth roles={[PNRole.ADMIN]}/>, initialState(''));
     expect(setState).toBeCalledTimes(1);
     expect(result?.container).toHaveTextContent(/Session Modal/i);
   });
