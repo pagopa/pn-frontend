@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.11](https://github.com/pagopa/pn-frontend/compare/v0.1.10...v0.1.11) (2022-08-31)
+
+
+### Bug Fixes
+
+* **pn-2103:** fixed strange loop in contacts page ([#378](https://github.com/pagopa/pn-frontend/issues/378)) ([1406fb4](https://github.com/pagopa/pn-frontend/commit/1406fb4e2c56c029052c3fde636952655a4dba8f))
+
+
+
+
+
 ## [0.1.10](https://github.com/pagopa/pn-frontend/compare/v0.1.9...v0.1.10) (2022-08-26)
 
 

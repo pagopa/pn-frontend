@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-pa-webapp",
   "description": "Backoffice di Piattaforma Notifiche per la Pubblica Amministrazione",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
