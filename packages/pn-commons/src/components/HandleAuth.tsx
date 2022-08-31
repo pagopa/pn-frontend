@@ -12,7 +12,8 @@ interface Props {
   goToLogin: () => void,
   doLogout: () => void,
 }
-export function HandleAuth(props: Props) {
+
+const HandleAuth = (props: Props) => {
   const { accessDenied, goodbyeMessage, goToLogin, disableInactivityHandler, doLogout } = props;
 
   return (
@@ -39,3 +40,5 @@ export function HandleAuth(props: Props) {
     </Fragment>
   );
 }
+
+export default HandleAuth;

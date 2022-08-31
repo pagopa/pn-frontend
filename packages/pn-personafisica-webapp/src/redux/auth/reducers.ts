@@ -50,7 +50,7 @@ const userSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(exchangeToken.rejected, (state, action) => {
-      const adaptedError = adaptedTokenExchangeError(action.payload, "SPID token");
+      const adaptedError = adaptedTokenExchangeError(action.payload);
       state.isUnauthorizedUser = adaptedError.isUnauthorizedUser;
       state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser ? adaptedError.response.customMessage : emptyUnauthorizedMessage;
     });
