@@ -1,12 +1,13 @@
 import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { ApiErrorGuardGeneral, formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import { axe, render } from '../../__test__/test-utils';
 import * as actions from '../../redux/dashboard/actions';
 import * as hooks from '../../redux/hooks';
 import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Notifiche from '../Notifiche.page';
+import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -15,15 +16,33 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
+const MockApiErrorGuardGeneral = ApiErrorGuardGeneral;
+
+let mockNotificationComponent: JSX.Element | undefined;
+
+function mockApiErrorGuard(
+  mockNormalComponentFn?: () => (JSX.Element | undefined),
+  mockApiErrorComponent?: JSX.Element,
+) { 
+  return ({ apiId, component }: { apiId: string, component: JSX.Element }) => <MockApiErrorGuardGeneral 
+    apiId={apiId} component={(mockNormalComponentFn && mockNormalComponentFn()) || component} 
+    errorComponent={mockApiErrorComponent || <div>Api Error</div>} 
+  />;
+}
+
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
     useIsMobile: () => false,
+    ApiErrorGuard: mockApiErrorGuard(() => mockNotificationComponent),
+    // ApiErrorGuard: ({ apiId, component }: { apiId: string, component: JSX.Element }) => <MockApiErrorGuardGeneral 
+    //   apiId={apiId} component={mockNotificationComponent || component} errorComponent={<div>Api Error</div>} 
+    // />,
   };
 });
 
-describe('Notifiche Page', () => {
+describe('Notifiche Page - with notifications', () => {
   let result: RenderResult | undefined;
 
   const mockDispatchFn = jest.fn();
@@ -142,4 +161,17 @@ describe('Notifiche Page', () => {
       fail("render() returned undefined!");
     }
   }, 15000);
+});
+
+
+describe('Notifiche Page - query for notifications outcome', () => {
+  it('API error', async () => {
+    mockNotificationComponent = <div>Notifiche</div>;
+    const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
+    apiSpy.mockRejectedValue({ response: { status: 500 } });
+    await act(async () => void render(<Notifiche />));
+    const apiErrorComponents = screen.queryAllByText("Api Error");
+    expect(apiErrorComponents).toHaveLength(1);
+    mockNotificationComponent = undefined;
+  });
 });
