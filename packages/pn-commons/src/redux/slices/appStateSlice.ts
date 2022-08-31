@@ -34,6 +34,10 @@ function removeErrorsByAction(action: string, errors: IAppMessage[]) {
   return errors.filter((e) => e.action !== action);
 }
 
+function actionProperType(action: AnyAction): string {
+  return action.type.slice(0, action.type.indexOf("/"));
+}
+
 /* eslint-disable functional/immutable-data */
 export const appStateSlice = createSlice({
   name: 'appState',
@@ -72,14 +76,13 @@ export const appStateSlice = createSlice({
       })
       .addMatcher(isFulfilled, (state, action) => {
         state.loading.result = false;
-        const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
-        state.messages.errors = removeErrorsByAction(actionBeingRejected, state.messages.errors);
+        state.messages.errors = removeErrorsByAction(actionProperType(action), state.messages.errors);
       })
       .addMatcher(handleError, (state, action) => {
         console.log('in handling generico errore');
         console.log(action)
         state.loading.result = false;
-        const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
+        const actionBeingRejected = actionProperType(action);
         state.messages.errors = removeErrorsByAction(actionBeingRejected, state.messages.errors);
         const error = createAppError(
           {...action.payload, action: actionBeingRejected}, { show: !action.payload.blockNotification });

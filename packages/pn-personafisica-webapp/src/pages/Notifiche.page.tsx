@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString } from '@pagopa-pn/pn-commons';
+import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString, useErrors, ApiError } from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
-import { getReceivedNotifications } from '../redux/dashboard/actions';
+import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setMandateId, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -16,11 +16,29 @@ import { trackEventByType } from "../utils/mixpanel";
 import { TrackEventType } from "../utils/events";
 import { NotificationColumn } from '../models/Notifications';
 
+interface ApiErrorGuardProps {
+  apiId: string;
+  component: JSX.Element;
+  reloadAction: () => void;
+}
+
+const ApiErrorGuard: React.FC<ApiErrorGuardProps> = ({ apiId, component, reloadAction }) => {
+  const { hasApiErrors } = useErrors();
+
+  const hasParticularApiErrors = hasApiErrors(apiId);
+
+  return <>
+      { !hasParticularApiErrors && component }
+      { hasParticularApiErrors && <ApiError onClick={reloadAction} /> }
+  </>;
+};
+
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const { mandateId } = useParams();
+  
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
@@ -49,6 +67,23 @@ const Notifiche = () => {
     pagination.page + 1
   );
 
+  // API call, this function is passed to the ApiError component
+  const fetchNotifications = useCallback(() => {
+    const params = {
+      ...filters,
+      size: pagination.size,
+      nextPagesKey:
+        pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
+    };
+
+    void dispatch(getReceivedNotifications({
+      ...params,
+      endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
+    }));
+  }, [filters, pagination.size, pagination.page, pagination.nextPagesKey]);
+  
+
+
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
@@ -69,61 +104,55 @@ const Notifiche = () => {
       dispatch(setMandateId(currentDelegator?.mandateId));
       return;
     }
-    const params = {
-      ...filters,
-      size: pagination.size,
-      nextPagesKey:
-        pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
-    };
+    fetchNotifications();
+  }, [fetchNotifications, currentDelegator]);
 
-    void dispatch(getReceivedNotifications({
-      ...params,
-      endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
-    }));
-  }, [filters, pagination.size, pagination.page, sort, currentDelegator]);
+  const notificationList = <>
+    {isMobile ? (
+      <MobileNotifications
+        notifications={notifications}
+        sort={sort}
+        onChangeSorting={handleChangeSorting}
+        currentDelegator={currentDelegator}
+      />
+    ) : (
+      <DesktopNotifications
+        notifications={notifications}
+        sort={sort}
+        onChangeSorting={handleChangeSorting}
+        currentDelegator={currentDelegator}
+      />
+    )}
+    {notifications.length > 0 && (
+      <CustomPagination
+        paginationData={{
+          size: pagination.size,
+          page: pagination.page,
+          totalElements,
+        }}
+        onPageRequest={handleChangePage}
+        pagesToShow={pagesToShow}
+        eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
+        sx={
+          isMobile
+            ? {
+                padding: '0',
+                '& .items-per-page-selector button': {
+                  paddingLeft: 0,
+                  height: '24px',
+                },
+              }
+            : { padding: '0 10px' }
+        }
+      />
+    )}
+  </>;
 
   return (
     <Box p={3}>
       <DomicileBanner />
       <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
-      {isMobile ? (
-        <MobileNotifications
-          notifications={notifications}
-          sort={sort}
-          onChangeSorting={handleChangeSorting}
-          currentDelegator={currentDelegator}
-        />
-      ) : (
-        <DesktopNotifications
-          notifications={notifications}
-          sort={sort}
-          onChangeSorting={handleChangeSorting}
-          currentDelegator={currentDelegator}
-        />
-      )}
-      {notifications.length > 0 && (
-        <CustomPagination
-          paginationData={{
-            size: pagination.size,
-            page: pagination.page,
-            totalElements,
-          }}
-          onPageRequest={handleChangePage}
-          pagesToShow={pagesToShow}
-          eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
-          sx={
-            isMobile
-              ? {
-                  padding: '0',
-                  '& .items-per-page-selector button': {
-                    paddingLeft: 0,
-                    height: '24px',
-                  },
-                }
-              : { padding: '0 10px' }
-          }
-        />
-      )}
+      <ApiErrorGuard component={notificationList} apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS} reloadAction={fetchNotifications} />
     </Box>
   );
 };
