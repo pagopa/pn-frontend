@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Link, Stack, Typography } from '@mui/material';
 import { TitleBox } from '@pagopa-pn/pn-commons';
@@ -25,14 +25,14 @@ const Contacts = () => {
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
   const digitalAddresses = useAppSelector((state: RootState) => state.contactsState.digitalAddresses);
 
-  const contactIO = isDigitalAddressLoaded ? digitalAddresses.courtesy.find(
+  const contactIO = useMemo(() => isDigitalAddressLoaded ? digitalAddresses.courtesy.find(
     (address) => address.channelType === CourtesyChannelType.IOMSG
-  ) : null;
+  ) : null, [isDigitalAddressLoaded]);
 
   useEffect(() => {
     void dispatch(getDigitalAddresses(recipientId))
     .then(() => {
-      setIsDigitalAddressLoaded(() => true);
+      setIsDigitalAddressLoaded(true);
     });
     return () => void dispatch(resetState());
   }, []);
@@ -64,7 +64,7 @@ const Contacts = () => {
         <Stack direction="column" spacing={8} mt={8}>
           <Stack spacing={3}>
             <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>   
                 {digitalAddresses.legal.length === 0 ? (
                   <InsertLegalContact recipientId={recipientId} />
                 ) : (
