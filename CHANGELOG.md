@@ -3,6 +3,84 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.11](https://github.com/pagopa/pn-frontend/compare/v0.1.10...v0.1.11) (2022-08-31)
+
+
+### Bug Fixes
+
+* changed PartyRole to PnRole to manage access for PA users ([9e43e5e](https://github.com/pagopa/pn-frontend/commit/9e43e5eb70aa74e8bdbc6f2e6443a9a9a64be292))
+* fixed test on requireAuth component ([74aed26](https://github.com/pagopa/pn-frontend/commit/74aed26c9864e16cf9b5793b6c2a11d5abee4151))
+* **pn-2103:** fixed strange loop in contacts page ([#378](https://github.com/pagopa/pn-frontend/issues/378)) ([1406fb4](https://github.com/pagopa/pn-frontend/commit/1406fb4e2c56c029052c3fde636952655a4dba8f))
+
+
+
+
+
+## [0.1.10](https://github.com/pagopa/pn-frontend/compare/v0.1.9...v0.1.10) (2022-08-26)
+
+
+### Bug Fixes
+
+* pn-2068 timeline - visualizzazione stato "invio messaggio di cortesia" ([c3f8ca8](https://github.com/pagopa/pn-frontend/commit/c3f8ca897d09c8ade4ac143ac0e03e6f49ca1902))
+
+
+### Features
+
+* pn-1374 lista gruppi per creazione nuova notifica ([b99ea09](https://github.com/pagopa/pn-frontend/commit/b99ea09059fbcc1d4d3f5ff6f445cce5c26b1071))
+
+
+
+
+
+
+## [0.1.9](https://github.com/pagopa/pn-frontend/compare/v0.1.8...v0.1.9) (2022-08-12)
+
+
+### Bug Fixes
+
+* **Pn-2013:** avoid identical taxId input in manual notification form ([#361](https://github.com/pagopa/pn-frontend/issues/361)) ([c0be535](https://github.com/pagopa/pn-frontend/commit/c0be535d7db6244980107bc64ea820f69b24492f))
+* **pn-2052:** Fixed CSS alignment or legal facts in timeline ([#370](https://github.com/pagopa/pn-frontend/issues/370)) ([cfa48da](https://github.com/pagopa/pn-frontend/commit/cfa48dab951e40169c498087bcec1472524c1977))
+* removed config from next.config ([b31be4b](https://github.com/pagopa/pn-frontend/commit/b31be4b277e1186ab1d990223bb1ee3bdf97e45b))
+* trying to use middleware for redirects ([65fd334](https://github.com/pagopa/pn-frontend/commit/65fd334364cb4c882e271b226face054d997ea94))
+
+
+### Features
+
+* **PN-1948:** reducers refactoring ([#352](https://github.com/pagopa/pn-frontend/issues/352)) ([0194539](https://github.com/pagopa/pn-frontend/commit/019453949a6bbbc6270f615dac9c004fe2f92ce2))
+* **PN-2030:** Added new page 'Dichiarazione Accessibilità' to landing webapp, replaced link in footer ([#371](https://github.com/pagopa/pn-frontend/issues/371)) ([5196998](https://github.com/pagopa/pn-frontend/commit/5196998a9b34bc8e0d39d0853ffb4220bce968d9))
+* **PN-2030:** fixed dichiarazione di accessibilità path ([32b5fde](https://github.com/pagopa/pn-frontend/commit/32b5fde02e03fe03f4dcd3fa60d024889de4def8))
+* trying to use middleware to redirect pages ([183a7bf](https://github.com/pagopa/pn-frontend/commit/183a7bf05308398f92c3b3ca14d54f61c1109f7a))
+
+
+### Reverts
+
+* Revert "chore: dependencies upgrade" ([b1f0e97](https://github.com/pagopa/pn-frontend/commit/b1f0e978129fa73fd1547269c1fb6d6e057d9509))
+
+
+
+
+
+## [0.1.8](https://github.com/pagopa/pn-frontend/compare/v0.1.7...v0.1.8) (2022-08-10)
+
+
+### Bug Fixes
+
+* fixed wrong mapping in localization files ([6f790d5](https://github.com/pagopa/pn-frontend/commit/6f790d5ea9690f1ae6d7ebe519b74ae67d77d635))
+* **PN-1835:** added FLAT_RATE as notificationFeePolicy ([1c3de05](https://github.com/pagopa/pn-frontend/commit/1c3de058fdb876a28bbdd7e106dc06909648ee00))
+* **Pn-2026:** filters date are set after checkin notification detail ([#365](https://github.com/pagopa/pn-frontend/issues/365)) ([4154e56](https://github.com/pagopa/pn-frontend/commit/4154e56a2c68181d037b84aeb582d85d5d44e7be))
+* **PN-2028:** Commented out code link and test for API-KEYS ([#366](https://github.com/pagopa/pn-frontend/issues/366)) ([347ccf8](https://github.com/pagopa/pn-frontend/commit/347ccf8984e521255d0458df220bd1b03b8e7d4e))
+* **pn-2029:** Commented out code link to FAQ in payment section ([#367](https://github.com/pagopa/pn-frontend/issues/367)) ([51f5f3a](https://github.com/pagopa/pn-frontend/commit/51f5f3a05a9093c8111747b263752477a503c4bc))
+* **pn-2044:** Added maxLength limit to 25 to iunMatch input in PA ([#368](https://github.com/pagopa/pn-frontend/issues/368)) ([e391390](https://github.com/pagopa/pn-frontend/commit/e3913906679fab42b332935e57d93627dfd15e2c))
+
+
+### Features
+
+* **PN-1947:** user validation in sessionStorage ([#360](https://github.com/pagopa/pn-frontend/issues/360)) ([6a2922c](https://github.com/pagopa/pn-frontend/commit/6a2922c0f442d8433e3fce049645a2bb99811d1f))
+
+
+
+
+
 ## [0.1.7](https://github.com/pagopa/pn-frontend/compare/v0.1.6...v0.1.7) (2022-08-09)
 
 

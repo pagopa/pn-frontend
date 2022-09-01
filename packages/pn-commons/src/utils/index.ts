@@ -21,7 +21,7 @@ import {
 } from './date.utility';
 import { IUN_regex, formatIun } from './iun.utility';
 import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
-import { basicUserDataMatcherContents, basicInitialUserData } from './user.utility';
+import { basicUserDataMatcherContents, basicInitialUserData, adaptedTokenExchangeError } from './user.utility';
 import { storageOpsBuilder } from './storage.utility';
 import { compileRoute } from './routes.utility';
 import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './costants';
@@ -53,6 +53,7 @@ export {
     getNotificationTimelineStatusInfos,
     basicUserDataMatcherContents,
     basicInitialUserData,
+    adaptedTokenExchangeError, 
     URL_DIGITAL_NOTIFICATIONS,
     PRIVACY_LINK_RELATIVE_PATH
 };
