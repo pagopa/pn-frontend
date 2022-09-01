@@ -22,7 +22,7 @@ const VerifyUser = () => {
       setSpidToken(tokenParam);
     } else {
       if (token === '') {
-        goToLogin();
+        goToLogin(window.location.href);
       }
     }
   }, [location, token]);
