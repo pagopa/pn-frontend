@@ -1,3 +1,4 @@
+/* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
 import { IAppMessage } from '../types';
@@ -19,14 +20,26 @@ interface IAppErrorProps {
  * @param  {string} defaultTitle
  * @param  {string} defaultMessage
  */
-const getErrorTitleAndMessage = (error: IAppMessage, defaultTitle: string, defaultMessage: string) => {
-  error.title = getLocalizedOrDefaultLabel('common', `messages.${error.status}-title`, defaultTitle);
-  error.message = getLocalizedOrDefaultLabel('common', `messages.${error.status}-message`, defaultMessage);
-}
+const getErrorTitleAndMessage = (
+  error: IAppMessage,
+  defaultTitle: string,
+  defaultMessage: string
+) => {
+  error.title = getLocalizedOrDefaultLabel(
+    'common',
+    `messages.${error.status}-title`,
+    defaultTitle
+  );
+  error.message = getLocalizedOrDefaultLabel(
+    'common',
+    `messages.${error.status}-message`,
+    defaultMessage
+  );
+};
 
 /**
  * This method get an http error code and an optional custom message as params and return a formatted IAppMessage message.
- * If customMessage is set than its title and message fields are used into the returned IAppMessage message otherwise a 
+ * If customMessage is set than its title and message fields are used into the returned IAppMessage message otherwise a
  * default title and message body are set based on the message status
  * @param  {IAppErrorProps} error
  * @returns IAppMessage
@@ -45,16 +58,32 @@ export const createAppError = (error: IAppErrorProps): IAppMessage => {
     e.title = error.response.customMessage.title;
     e.message = error.response.customMessage.message;
   } else if (error.response?.status === 404) {
-    getErrorTitleAndMessage(e, 'Risorsa non trovata', 'Si è verificato un errore. Si prega di riprovare più tardi')
+    getErrorTitleAndMessage(
+      e,
+      'Risorsa non trovata',
+      'Si è verificato un errore. Si prega di riprovare più tardi'
+    );
   } else if (error.response?.status === 403) {
-    getErrorTitleAndMessage(e, 'La sessione è scaduta', 'Entra e accedi con SPID o CIE.')
+    getErrorTitleAndMessage(e, 'La sessione è scaduta', 'Entra e accedi con SPID o CIE.');
   } else if (error.response?.status === 401) {
-    getErrorTitleAndMessage(e, 'Utente non autorizzato', "L'utente corrente non ha le autorizzazioni")
+    getErrorTitleAndMessage(
+      e,
+      'Utente non autorizzato',
+      "L'utente corrente non ha le autorizzazioni"
+    );
   } else if (error.response?.status === 500) {
-    getErrorTitleAndMessage(e, 'Il servizio non è disponibile', 'Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.')
+    getErrorTitleAndMessage(
+      e,
+      'Il servizio non è disponibile',
+      'Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.'
+    );
   } else {
     e.title = getLocalizedOrDefaultLabel('common', `messages.generic-title`, 'Errore generico');
-    e.message = getLocalizedOrDefaultLabel('common', `messages.generic-message`, 'Si è verificato un errore. Si prega di riprovare più tardi');
+    e.message = getLocalizedOrDefaultLabel(
+      'common',
+      `messages.generic-message`,
+      'Si è verificato un errore. Si prega di riprovare più tardi'
+    );
   }
   return e;
 };

@@ -20,7 +20,7 @@ function Router() {
       <Routes>
         <Route path="/" element={<VerifyUser />}>
           {/* protected routes */}
-          <Route element={<RequireAuth />}>
+          <Route path="/" element={<RequireAuth />}>
             <Route path={routes.TOS} element={<TermsOfService />} />
             <Route path={routes.NOTIFICHE} element={<Notifiche />} />
             <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />

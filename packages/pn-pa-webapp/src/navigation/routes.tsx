@@ -15,7 +15,7 @@ function Router() {
     <Routes>
       <Route path="/" element={<VerifyUser />}>
         {/* protected routes */}
-        <Route element={<RequireAuth roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
+        <Route path="/"  element={<RequireAuth  roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
           <Route path={routes.DASHBOARD} element={<Dashboard />} />
           <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
           <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />

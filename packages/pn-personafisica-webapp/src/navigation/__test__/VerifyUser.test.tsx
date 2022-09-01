@@ -1,5 +1,6 @@
 import * as redux from 'react-redux';
 import { Dispatch } from '@reduxjs/toolkit';
+import { act } from '@testing-library/react';
 import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/auth/actions';
 import VerifyUser from '../VerifyUser';
@@ -36,7 +37,7 @@ describe('VerifyUser Component', () => {
     const mockDispatchFn = jest.fn(() => Promise.resolve()) as Dispatch<any>;
     useDispatchSpy.mockReturnValue(mockDispatchFn);
     // render component
-    render(<VerifyUser />);
+    await act( async () => { render(<VerifyUser />) } );
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-hash');
