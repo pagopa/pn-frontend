@@ -4,8 +4,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { exchangeToken } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { goToLogin } from './navigation.utility';
 import * as routes from './routes.const';
+
 
 const VerifyUser = () => {
   const location = useLocation();
@@ -14,6 +14,7 @@ const VerifyUser = () => {
   const dispatch = useAppDispatch();
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
   const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
+  const [verificationDone, setVerificationDone] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.hash);
@@ -21,19 +22,17 @@ const VerifyUser = () => {
     if (tokenParam) {
       setSpidToken(tokenParam);
     } else {
-      if (token === '') {
-        goToLogin();
-      }
+      setVerificationDone(true);
     }
-  }, [location, token]);
+  }, [location]);
 
   useEffect(() => {
     if (spidToken !== '') {
-      dispatch(exchangeToken(spidToken)).catch(() => {
-        goToLogin();
+      void dispatch(exchangeToken(spidToken)).then(() => {
+        setVerificationDone(true);
       });
     }
-  }, [spidToken]);
+    }, [spidToken]);
 
   useEffect(() => {
     if (token !== '' && fetchedTos && !tos) {
@@ -42,9 +41,9 @@ const VerifyUser = () => {
     if (token !== '' && fetchedTos && tos && location.pathname === '/') {
       navigate(routes.NOTIFICHE, {replace: true});
     }
-  }, [fetchedTos, tos]);
+  }, [token, fetchedTos, tos]);
 
-  return <Outlet />;
+  return verificationDone ? <Outlet /> : <div />;
 };
 
 export default VerifyUser;
