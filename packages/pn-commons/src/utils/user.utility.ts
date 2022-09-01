@@ -48,9 +48,6 @@ export function basicInitialUserData<T extends BasicUser>(
   }
 }
 
-
-
-
 export function adaptedTokenExchangeError(originalError: any) {
   // status 403 - l'utente non ha i grants che servono per entrare nell'app
   // ------------------------
@@ -61,55 +58,40 @@ export function adaptedTokenExchangeError(originalError: any) {
         response: {
           ...originalError.response,
           customMessage: {
-            title: getLocalizedOrDefaultLabel('common',
+            title: getLocalizedOrDefaultLabel(
+              'common',
               `messages.lacking-grants-for-app-title`,
               'Non sei autorizzato ad accedere ...'
             ),
-            message: getLocalizedOrDefaultLabel('common',
+            message: getLocalizedOrDefaultLabel(
+              'common',
               `leaving-app.title`,
               'Stai uscendo da Piattaforma Notifiche ...'
             ),
           },
         },
       }
-    // se il token non è valido, sia pa che pf forniscono una response
-    // con status 400 e data.error 'Token is not valid'
-    // ho pensato ad approfittarne per rendere un messaggio specifico
-    // ma nella review è stato chiesto di gestire in modo particolare
-    // solo lo status 403.
-    // ---------------------------------------------
-    // Carlos Lombardi, 2022.08.31
-    // ------------------------
-
-    // : originalError.response?.data?.error === 'Token is not valid'
-    // ? {
-    //     ...originalError,
-    //     isUnauthorizedUser: true,
-    //     response: {
-    //       ...originalError.response,
-    //       customMessage: {
-    //         title: getLocalizedOrDefaultLabel('common',
-    //           `messages.invalid-token-title`,
-    //           `Non puoi accedere per un problema tecnico - token non valido`
-    //         ),
-    //         message: getLocalizedOrDefaultLabel('common',
-    //           `leaving-app.title`,
-    //           'Stai uscendo da Piattaforma Notifiche ...'
-    //         ),
-    //       },
-    //     },
-    //   }
-    : {
+    : // se il token non è valido, sia pa che pf forniscono una response
+      // con status 400 e data.error 'Token is not valid'
+      // ho pensato ad approfittarne per rendere un messaggio specifico
+      // ma nella review è stato chiesto di gestire in modo particolare
+      // solo lo status 403.
+      // ---------------------------------------------
+      // Carlos Lombardi, 2022.08.31
+      // ------------------------
+      {
         ...originalError,
         isUnauthorizedUser: true,
         response: {
           ...originalError.response,
           customMessage: {
-            title: getLocalizedOrDefaultLabel('common',
+            title: getLocalizedOrDefaultLabel(
+              'common',
               `messages.generic-token-exchange-problem`,
               "Non è stato possibile completare l'accesso ..."
             ),
-            message: getLocalizedOrDefaultLabel('common',
+            message: getLocalizedOrDefaultLabel(
+              'common',
               `leaving-app.title`,
               'Stai uscendo da Piattaforma Notifiche ...'
             ),

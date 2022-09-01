@@ -6,18 +6,18 @@ import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 import { logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { PartyRole } from '../models/user';
+import { PNRole } from '../models/user';
 import { goToSelfcareLogin } from './navigation.utility';
 
 interface Props {
-  roles: Array<PartyRole>;
+  roles: Array<PNRole>;
 }
 
 /**
  * This component returns Outlet if user is logged in and has privileges to access some areas.
  * Then all private routes can be accessed
  * 
- * @param roles: List of PartyRole allowed to access some areas
+ * @param roles: List of PNRole allowed to access some areas
  */
 /* eslint-disable functional/immutable-data */
 const RequireAuth = ({ roles }: Props) => {
@@ -26,7 +26,7 @@ const RequireAuth = ({ roles }: Props) => {
   const expDate = useAppSelector((state: RootState) => state.userState.user.desired_exp);
   const isUnauthorizedUser = useAppSelector((state: RootState) => state.userState.isUnauthorizedUser);
   const messageUnauthorizedUser = useAppSelector((state: RootState) => state.userState.messageUnauthorizedUser);
-  const userHasRequiredRole = role && roles.includes(role.partyRole);
+  const userHasRequiredRole = role && roles.includes(role.role);
   const [accessDenied, setAccessDenied] = useState(false);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
