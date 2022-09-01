@@ -1,10 +1,11 @@
 /* eslint-disable functional/no-let */
 import * as redux from 'react-redux';
-import { act, fireEvent, RenderResult } from '@testing-library/react';
+import { act, fireEvent, RenderResult, screen } from '@testing-library/react';
 import { axe, render } from '../../__test__/test-utils';
 import * as actions from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 import { PROFILO } from '../../navigation/routes.const';
+import { ContactsApi } from '../../api/contacts/Contacts.api';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -14,12 +15,29 @@ jest.mock('react-i18next', () => ({
   Trans: () => 'mocked verify description',
 }));
 
+
 const mockNavigateFn = jest.fn();
 // mock imports
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigateFn,
 }));
+
+// questo permette che in alcuni tests il componente "normale" sia quello proprio del componente Contacts
+// e che in altri invece sia un mock tipo <div>Ecco i contacts</div>
+let mockContactsComponent: JSX.Element | undefined;
+
+/**
+ * Vedi commenti nella definizione di mockApiErrorGuard
+ */
+jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
+  return {
+    ...original,
+    ApiErrorGuard: original.mockApiErrorGuard(() => mockContactsComponent),
+  };
+});
+
 
 jest.mock('../../component/Contacts/InsertLegalContact', () => () => <div>InsertLegalContact</div>);
 jest.mock('../../component/Contacts/CourtesyContacts', () => () => <div>CourtesyContacts</div>);
@@ -41,7 +59,7 @@ const initialState =  {
   }
 };
 
-describe('Contacts page', () => {
+describe('Contacts page - assuming contact API works properly', () => {
   let result: RenderResult;
   let mockDispatchFn: jest.Mock;
   const mockActionFn = jest.fn();
@@ -91,5 +109,36 @@ describe('Contacts page', () => {
     const { container } = result;
     const results = await axe(container);
     expect(results).toHaveNoViolations();
+  });
+});
+
+
+describe('Contacts Page - different contact API behaviors', () => {
+  beforeEach(() => {
+    mockContactsComponent = <div>Ecco i contatti</div>;
+  });
+
+  afterEach(() => {
+    mockContactsComponent = undefined;
+  });
+
+  it('API error', async () => {
+    const apiSpy = jest.spyOn(ContactsApi, 'getDigitalAddresses');
+    apiSpy.mockRejectedValue({ response: { status: 500 } });
+    await act(async () => void render(<Contacts />));
+    const apiErrorComponent = screen.queryByText("Api Error");
+    const notificheComponent = screen.queryByText("Ecco i contatti");
+    expect(apiErrorComponent).toBeTruthy();
+    expect(notificheComponent).toEqual(null);
+  });
+
+  it('API OK', async () => {
+    const apiSpy = jest.spyOn(ContactsApi, 'getDigitalAddresses');
+    apiSpy.mockResolvedValue({ legal: [], courtesy: [] });
+    await act(async () => void render(<Contacts />));
+    const apiErrorComponent = screen.queryByText("Api Error");
+    const notificheComponent = screen.queryByText("Ecco i contatti");
+    expect(apiErrorComponent).toEqual(null);
+    expect(notificheComponent).toBeTruthy();
   });
 });

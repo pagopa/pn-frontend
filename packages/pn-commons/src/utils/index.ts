@@ -25,6 +25,7 @@ import { basicUserDataMatcherContents, basicInitialUserData } from './user.utili
 import { storageOpsBuilder } from './storage.utility';
 import { compileRoute } from './routes.utility';
 import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './costants';
+import { mockApiErrorGuard } from './test.utility';
 
 export {
     getNotificationAllowedStatus,
@@ -54,5 +55,6 @@ export {
     basicUserDataMatcherContents,
     basicInitialUserData,
     URL_DIGITAL_NOTIFICATIONS,
-    PRIVACY_LINK_RELATIVE_PATH
+    PRIVACY_LINK_RELATIVE_PATH,
+    mockApiErrorGuard,
 };

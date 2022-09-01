@@ -6,6 +6,7 @@ import * as actions from '../../../redux/contact/actions';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
+import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -14,6 +15,19 @@ jest.mock('react-i18next', () => ({
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
+
+// Vedi commenti nella definizione di mockApiErrorGuard
+let mockSpecialContactsComponent: JSX.Element | undefined;
+
+jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
+  return {
+    ...original,
+    ApiErrorGuard: original.mockApiErrorGuard(() => mockSpecialContactsComponent),
+  };
+});
+
+
 
 jest.mock('../SpecialContactElem', () => () => <div>SpecialContactElem</div>);
 
@@ -170,9 +184,12 @@ async function testContactAddition(
   await waitFor(() => {
     expect(dialog).not.toBeInTheDocument();
   });
+  // clear mocks - again
+  mockDispatchFn.mockReset();
+  mockDispatchFn.mockClear();
 }
 
-describe('SpecialContacts Component', () => {
+describe('SpecialContacts Component - assuming parties API works properly', () => {
   let result: RenderResult;
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
@@ -244,6 +261,11 @@ describe('SpecialContacts Component', () => {
   afterEach(() => {
     jest.resetAllMocks();
     jest.clearAllMocks();
+    // restore sembra di essere appunto necessario per restituire il comportamento originale 
+    // alle funzoni/oggetti moccati
+    // ------------------
+    // Carlos Lombardi, 2022.09.01
+    jest.restoreAllMocks();  
   });
 
   it('renders SpecialContacts', () => {
@@ -422,3 +444,43 @@ describe('SpecialContacts Component', () => {
     }
   }, 10000);
 });
+
+
+describe('Contacts Page - different contact API behaviors', () => {
+  beforeEach(() => {
+    mockSpecialContactsComponent = <div>Ecco il form</div>;
+  });
+
+  afterEach(() => {
+    mockSpecialContactsComponent = undefined;
+  });
+
+  it('API error', async () => {
+    const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
+    apiSpy.mockRejectedValue({ response: { status: 500 } });
+    await act(async () => void render(        
+      <DigitalContactsCodeVerificationProvider>
+        <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
+      </DigitalContactsCodeVerificationProvider>
+    ));
+    const apiErrorComponent = screen.queryByText("Api Error");
+    const notificheComponent = screen.queryByText("Ecco il form");
+    expect(apiErrorComponent).toBeTruthy();
+    expect(notificheComponent).toEqual(null);
+  });
+
+  it('API OK', async () => {
+    const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
+    apiSpy.mockResolvedValue([]);
+    await act(async () => void render(        
+      <DigitalContactsCodeVerificationProvider>
+        <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
+      </DigitalContactsCodeVerificationProvider>
+    ));
+    const apiErrorComponent = screen.queryByText("Api Error");
+    const notificheComponent = screen.queryByText("Ecco il form");
+    expect(apiErrorComponent).toEqual(null);
+    expect(notificheComponent).toBeTruthy();
+  });
+});
+

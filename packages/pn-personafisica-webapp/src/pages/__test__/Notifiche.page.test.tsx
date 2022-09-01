@@ -1,7 +1,6 @@
-import React from 'react';
 import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { ApiErrorGuardGeneral, formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import { axe, render } from '../../__test__/test-utils';
 import * as actions from '../../redux/dashboard/actions';
@@ -17,48 +16,19 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-// const MockApiErrorGuardGeneral = ApiErrorGuardGeneral;
-
 // questo permette che in alcuni tests il componente "normale" sia quello proprio del componente Notifiche
 // e che in altri invece sia un mock tipo <div>Ecco le notifiche</div>
 let mockNotificationComponent: JSX.Element | undefined;
 
-function mockApiErrorGuard(
-  mockNormalComponentFn?: () => (JSX.Element | undefined),
-  mockApiErrorComponent?: JSX.Element,
-) { 
-  return ({ apiId, children }: { apiId: string, children: React.ReactNode }) => <ApiErrorGuardGeneral 
-    apiId={apiId} 
-    errorComponent={mockApiErrorComponent || <div>Api Error</div>} 
-  >
-    {(mockNormalComponentFn && mockNormalComponentFn()) || children } 
-  </ApiErrorGuardGeneral>;
-}
-
 /**
- * Per testare un componente che usa ApiErrorGuard, penso che non serve moccare ApiErrorGuard al completo,
- * perché la logica di renderizzare sia il componente "normale" sia ApiError serve.
- * Penso che invece sia meglio moccare i componenti "normale" e di errore.
- * 
- * Perciò ho creato questa funzione mockApiErrorGuard, che riceve in parametro appunto questi componenti.
- * - Il componente "normale" l'ho lasciato come funzione, perché a seconda di quello che si vuol testare potrebbe
- *   essere diverso in ogni test. Definito come funzione, si esegue ad ogni volta che viene invocato il mock 
- *   di ApiErrorGuard. Se non viene passato, o la funzione ritorna undefined, allora si usa lo stesso
- *   componente "normale" del componente/page che si sta testando.
- * - Il componente di errore l'ho lasciato fisso, se non viene passato si usa <div>Api Error</div>
- * 
- * Per adesso ho lasciato la definizione locale in questo file, ma si può spostare in pn-commons ... non saprei dove,
- * sarebbe corretto creare utils/test.utility.ts?
+ * Vedi commenti nella definizione di mockApiErrorGuard
  */
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
     useIsMobile: () => false,
-    ApiErrorGuard: mockApiErrorGuard(() => mockNotificationComponent),
-    // ApiErrorGuard: ({ apiId, component }: { apiId: string, component: JSX.Element }) => <MockApiErrorGuardGeneral 
-    //   apiId={apiId} component={mockNotificationComponent || component} errorComponent={<div>Api Error</div>} 
-    // />,
+    ApiErrorGuard: original.mockApiErrorGuard(() => mockNotificationComponent),
   };
 });
 
