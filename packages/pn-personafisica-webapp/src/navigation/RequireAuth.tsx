@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
-import { InactivityHandler, SessionModal /* , useErrors */ , useSessionCheck } from '@pagopa-pn/pn-commons';
+import { InactivityHandler, SessionModal, useErrors, useSessionCheck } from '@pagopa-pn/pn-commons';
 
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 import { logout } from '../redux/auth/actions';
@@ -23,21 +23,21 @@ const RequireAuth = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
-  // const { hasApiErrors } = useErrors();
+  const { hasApiErrors } = useErrors();
 
-  // const hasTosApiErrors = hasApiErrors('getToSApproval');
+  const hasTosApiErrors = hasApiErrors('getToSApproval');
 
   useEffect(() => {
-    if (token === '' || !token /* || hasTosApiErrors */ ) {
+    if (token === '' || !token || hasTosApiErrors ) {
       setAccessDenied(true);
       // Redirect them to the spid-hub login page
       // goToLogin();
     }
-    if (token && token !== '' /* && !hasTosApiErrors */ ) {
+    if (token && token !== '' && !hasTosApiErrors ) {
       setAccessDenied(false);
       sessionCheck(expDate);
     }
-  }, [token /* , hasTosApiErrors */ ]);
+  }, [token, hasTosApiErrors ]);
 
   return (
     <Fragment>
