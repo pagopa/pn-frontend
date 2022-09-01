@@ -64,8 +64,8 @@
     "legalfact": "Attestazione opponibile a terzi",
     "receipt": "Ricevuta",
     "show-history": "Mostra storico",
-    "show-more": "Mostra di più",
-    "show-less": "Mostra di meno",
+    "show-more": "Vedi più dettagli",
+    "show-less": "Mostra meno dettagli",
     "timeline": {
       "schedule-analog-workflow": "Invio per via cartacea in preparazione",
       "schedule-analog-workflow-description": "L'invio della notifica per via cartacea a {{name}} è in preparazione.",
@@ -202,7 +202,7 @@
         "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)"
       },
       "payment-methods": {
-        "title": "Metodi di pagamento",
+        "title": "Modelli di pagamento",
         "pagopa-notice": "Avviso pagoPA",
         "f24-flatrate": "F24 forfettario",
         "payment-models": "Modelli di pagamento per",
