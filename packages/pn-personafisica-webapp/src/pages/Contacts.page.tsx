@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useMemo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Link, Stack, Typography } from '@mui/material';
 import { ApiErrorGuard, TitleBox } from '@pagopa-pn/pn-commons';
@@ -25,14 +25,14 @@ const Contacts = () => {
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
   const digitalAddresses = useAppSelector((state: RootState) => state.contactsState.digitalAddresses);
 
-  const contactIO = isDigitalAddressLoaded ? digitalAddresses.courtesy.find(
+  const contactIO = useMemo(() => isDigitalAddressLoaded ? digitalAddresses.courtesy.find(
     (address) => address.channelType === CourtesyChannelType.IOMSG
-  ) : null;
+  ) : null, [isDigitalAddressLoaded]);
 
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses(recipientId))
     .then(() => {
-      setIsDigitalAddressLoaded(() => true);
+      setIsDigitalAddressLoaded(true);
     });
   }, []);
 

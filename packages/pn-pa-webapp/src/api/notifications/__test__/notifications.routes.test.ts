@@ -2,6 +2,7 @@ import { LegalFactType } from '@pagopa-pn/pn-commons';
 
 import {
   CREATE_NOTIFICATION,
+  GET_USER_GROUPS,
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
@@ -39,6 +40,11 @@ describe('Notifications routes', () => {
       category: LegalFactType.SENDER_ACK,
     });
     expect(route).toEqual('/delivery-push/mocked-iun/legal-facts/SENDER_ACK/mocked-key');
+  });
+
+  it('should compile GET_USER_GROUPS', () => {
+    const route = GET_USER_GROUPS();
+    expect(route).toEqual('/ext-registry/pa/v1/groups');
   });
 
   it('should compile NOTIFICATION_PRELOAD_DOCUMENT', () => {

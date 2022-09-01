@@ -50,7 +50,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
-
   const isMobile = useIsMobile();
 
   const addressTypes = useMemo(
@@ -58,30 +57,28 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       {
         id: LegalChannelType.PEC,
         value: t('special-contacts.pec', { ns: 'recapiti' }),
-        show:
-          legalAddresses.filter(
-            (a) => a.senderId === 'default' && a.channelType === LegalChannelType.PEC
-          ).length > 0,
+        show: legalAddresses.some(
+          (a) => a.senderId === 'default' && a.channelType === LegalChannelType.PEC
+        ),
       },
       {
         id: CourtesyChannelType.SMS,
         value: t('special-contacts.phone', { ns: 'recapiti' }),
-        show:
-          courtesyAddresses.filter(
-            (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
-          ).length > 0,
+        show: courtesyAddresses.some(
+          (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.SMS
+        ),
       },
       {
         id: CourtesyChannelType.EMAIL,
         value: t('special-contacts.mail', { ns: 'recapiti' }),
-        show:
-          courtesyAddresses.filter(
-            (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.EMAIL
-          ).length > 0,
+        show: courtesyAddresses.some(
+          (a) => a.senderId === 'default' && a.channelType === CourtesyChannelType.EMAIL
+        ),
       },
     ],
     [legalAddresses, courtesyAddresses]
   );
+
   const listHeaders = useMemo(
     () => [
       {
@@ -136,20 +133,25 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     }),
   });
 
-  const formik = useFormik({
-    initialValues: {
+  const initialValues = useMemo(
+    () => ({
       sender: '',
-      addressType: addressTypes.find(a => a.show)?.id as LegalChannelType | CourtesyChannelType,
+      addressType: addressTypes.find((a) => a.show)?.id as LegalChannelType | CourtesyChannelType,
       s_pec: '',
       s_mail: '',
       s_phone: '',
-    },
+    }),
+    [addressTypes]
+  );
+
+  const formik = useFormik({
+    initialValues,
     validateOnMount: true,
     validationSchema,
     onSubmit: (values) => {
       initValidation(
         values.addressType,
-        values.s_pec || values.s_mail || (internationalPhonePrefix + values.s_phone),
+        values.s_pec || values.s_mail || internationalPhonePrefix + values.s_phone,
         recipientId,
         values.sender,
         (status: 'validated' | 'cancelled') => {
@@ -162,9 +164,9 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     },
   });
 
-  const handleChangeTouched = (e: ChangeEvent) => {
-    void formik.setFieldTouched(e.target.id, true, false);
+  const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
+    await formik.setFieldTouched(e.target.id, true, false);
   };
 
   const senderChangeHandler = (e: ChangeEvent) => {
@@ -248,9 +250,16 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       }
     }
     /* eslint-enable functional/immutable-data */
-
     setAddresses(addressesList);
   }, [legalAddresses, courtesyAddresses]);
+
+  useEffect(() => {
+    // set form value
+    if (!addressTypes.find((a) => a.show && a.id === formik.values.addressType)) {
+      const type = addressTypes.find((a) => a.show)?.id as LegalChannelType | CourtesyChannelType;
+      void formik.setFieldValue('addressType', type);
+    }
+  }, [addressTypes]);
 
   return <ApiErrorGuard 
     apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES} 
@@ -263,9 +272,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       subtitle={t('special-contacts.subtitle', { ns: 'recapiti' })}
       avatar={null}
     >
-      <Typography sx={{ marginTop: '20px' }}>
-        {t('required-fields')}
-      </Typography>
+      <Typography sx={{ marginTop: '20px' }}>{t('required-fields')}</Typography>
       <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
         <Grid container direction="row" spacing={2} alignItems="flex">
           <Grid item lg xs={12}>
@@ -297,11 +304,13 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
               fullWidth
               size="small"
             >
-              {addressTypes.filter(a => a.show).map((a) => (
-                <MenuItem key={a.id} value={a.id}>
-                  {a.value}
-                </MenuItem>
-              ))}
+              {addressTypes
+                .filter((a) => a.show)
+                .map((a) => (
+                  <MenuItem key={a.id} value={a.id}>
+                    {a.value}
+                  </MenuItem>
+                ))}
             </TextField>
           </Grid>
           <Grid item lg xs={12}>

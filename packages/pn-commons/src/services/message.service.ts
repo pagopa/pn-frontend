@@ -1,3 +1,4 @@
+/* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
 import { IAppMessage } from '../types';
