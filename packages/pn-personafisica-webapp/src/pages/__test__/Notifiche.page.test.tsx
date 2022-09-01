@@ -1,3 +1,4 @@
+import React from 'react';
 import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { ApiErrorGuardGeneral, formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
@@ -26,10 +27,12 @@ function mockApiErrorGuard(
   mockNormalComponentFn?: () => (JSX.Element | undefined),
   mockApiErrorComponent?: JSX.Element,
 ) { 
-  return ({ apiId, component }: { apiId: string, component: JSX.Element }) => <ApiErrorGuardGeneral 
-    apiId={apiId} component={(mockNormalComponentFn && mockNormalComponentFn()) || component} 
+  return ({ apiId, children }: { apiId: string, children: React.ReactNode }) => <ApiErrorGuardGeneral 
+    apiId={apiId} 
     errorComponent={mockApiErrorComponent || <div>Api Error</div>} 
-  />;
+  >
+    {(mockNormalComponentFn && mockNormalComponentFn()) || children } 
+  </ApiErrorGuardGeneral>;
 }
 
 /**

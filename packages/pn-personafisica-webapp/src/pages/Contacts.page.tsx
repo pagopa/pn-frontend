@@ -55,41 +55,6 @@ const Contacts = () => {
     </>
   );
 
-  const addressesRendering = <>
-    <Stack direction="column" spacing={8} mt={8}>
-      <Stack spacing={3}>
-        <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-          <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-            {digitalAddresses.legal.length === 0 ? (
-              <InsertLegalContact recipientId={recipientId} />
-            ) : (
-              <LegalContactsList
-                recipientId={recipientId}
-                legalAddresses={digitalAddresses.legal}
-              />
-            )}
-          </Box>
-          <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-            <IOContact recipientId={recipientId} contact={contactIO} />
-          </Box>
-        </Stack>
-        <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
-      </Stack>
-      {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
-        <Stack spacing={2}>
-          <Typography variant="h5" fontWeight={600} fontSize={28}>
-            {t('special-contacts-title')}
-          </Typography>
-          <SpecialContacts
-            recipientId={recipientId}
-            legalAddresses={digitalAddresses.legal}
-            courtesyAddresses={digitalAddresses.courtesy}
-          />
-        </Stack>
-      )}
-    </Stack>
-  </>;
-
   return (
     <DigitalContactsCodeVerificationProvider>
       <Box p={3}>
@@ -99,7 +64,40 @@ const Contacts = () => {
           subTitle={subtitle}
           variantSubTitle={'body1'}
         />
-        <ApiErrorGuard component={addressesRendering} apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses} mt={2} />
+        <ApiErrorGuard apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses} mt={2}>
+          <Stack direction="column" spacing={8} mt={8}>
+            <Stack spacing={3}>
+              <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
+                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  {digitalAddresses.legal.length === 0 ? (
+                    <InsertLegalContact recipientId={recipientId} />
+                  ) : (
+                    <LegalContactsList
+                      recipientId={recipientId}
+                      legalAddresses={digitalAddresses.legal}
+                    />
+                  )}
+                </Box>
+                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  <IOContact recipientId={recipientId} contact={contactIO} />
+                </Box>
+              </Stack>
+              <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
+            </Stack>
+            {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
+              <Stack spacing={2}>
+                <Typography variant="h5" fontWeight={600} fontSize={28}>
+                  {t('special-contacts-title')}
+                </Typography>
+                <SpecialContacts
+                  recipientId={recipientId}
+                  legalAddresses={digitalAddresses.legal}
+                  courtesyAddresses={digitalAddresses.courtesy}
+                />
+              </Stack>
+            )}
+          </Stack>
+        </ApiErrorGuard>
       </Box>
     </DigitalContactsCodeVerificationProvider>
   );

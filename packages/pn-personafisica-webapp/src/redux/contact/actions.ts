@@ -12,6 +12,7 @@ import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
 export enum CONTACT_ACTIONS  {
   GET_DIGITAL_ADDRESSES = 'getDigitalAddresses',
+  GET_ALL_ACTIVATED_PARTIES = 'getAllActivatedParties',
 }
 
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
@@ -129,6 +130,14 @@ export const disableIOAddress = createAsyncThunk<string, string>(
   }
 );
 
-export const getAllActivatedParties = createAsyncThunk('getAllActivatedParties', async () =>
-  ExternalRegistriesAPI.getAllActivatedParties()
+export const getAllActivatedParties = createAsyncThunk(
+  CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES, 
+  async (_, { rejectWithValue }) => {
+    try {
+      return await ExternalRegistriesAPI.getAllActivatedParties();
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+  // async () => ExternalRegistriesAPI.getAllActivatedParties()
 );

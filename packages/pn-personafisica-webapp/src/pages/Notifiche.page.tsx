@@ -91,52 +91,50 @@ const Notifiche = () => {
     fetchNotifications();
   }, [fetchNotifications, currentDelegator]);
 
-  const notificationList = <>
-    {isMobile ? (
-      <MobileNotifications
-        notifications={notifications}
-        sort={sort}
-        onChangeSorting={handleChangeSorting}
-        currentDelegator={currentDelegator}
-      />
-    ) : (
-      <DesktopNotifications
-        notifications={notifications}
-        sort={sort}
-        onChangeSorting={handleChangeSorting}
-        currentDelegator={currentDelegator}
-      />
-    )}
-    {notifications.length > 0 && (
-      <CustomPagination
-        paginationData={{
-          size: pagination.size,
-          page: pagination.page,
-          totalElements,
-        }}
-        onPageRequest={handleChangePage}
-        pagesToShow={pagesToShow}
-        eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
-        sx={
-          isMobile
-            ? {
-                padding: '0',
-                '& .items-per-page-selector button': {
-                  paddingLeft: 0,
-                  height: '24px',
-                },
-              }
-            : { padding: '0 10px' }
-        }
-      />
-    )}
-  </>;
-
   return (
     <Box p={3}>
       <DomicileBanner />
       <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
-      <ApiErrorGuard component={notificationList} apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS} reloadAction={fetchNotifications} />
+      <ApiErrorGuard apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS} reloadAction={fetchNotifications}>
+        {isMobile ? (
+          <MobileNotifications
+            notifications={notifications}
+            sort={sort}
+            onChangeSorting={handleChangeSorting}
+            currentDelegator={currentDelegator}
+          />
+        ) : (
+          <DesktopNotifications
+            notifications={notifications}
+            sort={sort}
+            onChangeSorting={handleChangeSorting}
+            currentDelegator={currentDelegator}
+          />
+        )}
+        {notifications.length > 0 && (
+          <CustomPagination
+            paginationData={{
+              size: pagination.size,
+              page: pagination.page,
+              totalElements,
+            }}
+            onPageRequest={handleChangePage}
+            pagesToShow={pagesToShow}
+            eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
+            sx={
+              isMobile
+                ? {
+                    padding: '0',
+                    '& .items-per-page-selector button': {
+                      paddingLeft: 0,
+                      height: '24px',
+                    },
+                  }
+                : { padding: '0 10px' }
+            }
+          />
+        )}
+      </ApiErrorGuard>
     </Box>
   );
 };
