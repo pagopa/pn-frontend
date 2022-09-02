@@ -28,6 +28,8 @@ phases:
       - apt install --no-install-recommends yarn
   pre_build:
     commands:
+      - echo launching yarn install in $SUB_PRJ_NAME...
+      - cd $SUB_PRJ_NAME
       - echo Installing..
       - yarn install
   build:
@@ -39,9 +41,9 @@ phases:
       - echo Saving commit id to file
       - cd ../..
       - export COMMIT_ID=$(git rev-parse --verify HEAD)
-      - echo $COMMIT_ID > out/commit_id.txt
+      - echo $COMMIT_ID > $SUB_PRJ_NAME/out/commit_id.txt
       - echo gzipping and pushing artifact to s3
-      - cd out
+      - cd $SUB_PRJ_NAME/out
       - tar c * | gzip | aws s3 cp - "s3://${CI_ARTIFACT_BUCKET}/${GITHUB_PRJ_NAME}/commits/${COMMIT_ID}/${PACKAGE_NAME}_${BUILD_ID}.tar.gz"
       - |
         BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
