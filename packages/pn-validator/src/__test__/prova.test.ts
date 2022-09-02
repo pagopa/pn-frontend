@@ -12,7 +12,7 @@ class Prova {
 class SubProvaValidator extends Validator<ProvaSub> {
     constructor() {
         super();
-        this.ruleFor('hola').isString().isEqual('bb')
+        this.ruleFor('hola').isEqual('bbbb')
     }
 }
 
@@ -20,8 +20,8 @@ class ProvaValidator extends Validator<Prova> {
     constructor() {
         super();
 
-        this.ruleFor('ciao').isString().isEqual('aa');
-        this.ruleFor('prova_sub').isObject().isEqual([{hola: 'bb'}]);
+        this.ruleFor('ciao').isEqual('aa');
+        this.ruleFor('prova_sub').isEqual([{hola: 'bb'}]);
     }
 }
 

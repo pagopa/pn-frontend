@@ -1,3 +1,4 @@
+import { isString } from '../utility/IsString';
 import { isDefined } from '../utility/IsDefined';
 import { Rule } from '../Rule';
 
@@ -12,11 +13,11 @@ export class Length<TModel, TValue> extends Rule<TModel, TValue> {
   }
 
   public valueValidator = (value: TValue) => {
-    if (!(value instanceof String) && typeof value !== 'string') {
-      throw new TypeError('A non-string value was passed to the length rule');
-    }
     if (!isDefined(value)) {
       return null;
+    }
+    if (!isString<unknown, String>(value)) {
+      throw new TypeError('A non-string value was passed to the length rule');
     }
     const stringValue = value instanceof String ? value.valueOf() : value;
     if (isDefined(this.minLength) && !isDefined(this.maxLength)) {

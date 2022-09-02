@@ -1,3 +1,3 @@
-export const isDefined = (value: any): boolean => {
-    return value !== null && value !== undefined;
-  }
+export const isDefined = <TValue>(value: TValue): boolean => {
+  return value !== null && value !== undefined;
+};

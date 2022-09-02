@@ -1,3 +1,4 @@
+import { isString } from '../utility/IsString';
 import { Rule } from '../Rule';
 
 export class Matches<TModel, TValue> extends Rule<TModel, TValue> {
@@ -11,11 +12,11 @@ export class Matches<TModel, TValue> extends Rule<TModel, TValue> {
   }
 
   public valueValidator = (value: TValue) => {
-    if (!(value instanceof String) && typeof value !== 'string') {
-      throw new TypeError('A non-string value was passed to the matches rule');
-    }
     if (value === null || value === undefined) {
       return null;
+    }
+    if (!isString<unknown, String>(value)) {
+      throw new TypeError('A non-string value was passed to the matches rule');
     }
     const stringValue = value instanceof String ? value.valueOf() : value;
     if (this.pattern.test(stringValue)) {

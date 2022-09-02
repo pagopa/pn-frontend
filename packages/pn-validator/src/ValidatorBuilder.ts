@@ -1,10 +1,5 @@
 import { ValidationResult } from './types/ValidationResult';
 import { TypeRules } from './types/TypeRules';
-import { IsArray } from './rules/IsArray';
-import { IsObject } from './rules/IsObject';
-import { IsNumber } from './rules/IsNumber';
-import { IsString } from './rules/IsString';
-import { IsDate } from './rules/IsDate';
 import { StringRuleValidator } from './ruleValidators/StringRuleValidator';
 import { NumberRuleValidator } from './ruleValidators/NumberRuleValidator';
 import { DateRuleValidator } from './ruleValidators/DateRuleValidator';
@@ -40,27 +35,11 @@ export class ValidatorBuilder<TModel, TValue> {
     return null;
   };
 
-  // TODO: capire se è possibile ritornare errore nel caso in cui si provi a usare uno di questi metodi su variabili di diverso tipo
   public getTypeRules = (): TypeRules<TModel, TValue> => ({
-    isString: () => {
-      this.pushRule(new IsString());
-      return new StringRuleValidator<TModel, TValue>(this.pushRule);
-    },
-    isNumber: () => {
-      this.pushRule(new IsNumber());
-      return new NumberRuleValidator<TModel, TValue>(this.pushRule);
-    },
-    isDate: () => {
-      this.pushRule(new IsDate());
-      return new DateRuleValidator<TModel, TValue>(this.pushRule);
-    },
-    isObject: () => {
-      this.pushRule(new IsObject());
-      return new ObjectRuleValidator<TModel, TValue>(this.pushRule);
-    },
-    isArray: () => {
-      this.pushRule(new IsArray());
-      return new ArrayRuleValidator<TModel, TValue>(this.pushRule);
-    },
-  });
+    ...new StringRuleValidator<TModel, TValue>(this.pushRule),
+    ...new NumberRuleValidator<TModel, TValue>(this.pushRule),
+    ...new DateRuleValidator<TModel, TValue>(this.pushRule),
+    ...new ObjectRuleValidator<TModel, TValue>(this.pushRule),
+    ...new ArrayRuleValidator<TModel, TValue>(this.pushRule),
+  }) as unknown as TypeRules<TModel, TValue>;
 }

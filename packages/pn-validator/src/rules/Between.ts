@@ -1,3 +1,4 @@
+import { isNumber } from '../utility/IsNumber';
 import { isDefined } from '../utility/IsDefined';
 import { Rule } from '../Rule';
 
@@ -21,11 +22,11 @@ export class Between<TModel, TValue> extends Rule<TModel, TValue> {
   }
 
   public valueValidator = (value: TValue) => {
-    if (!(value instanceof Number) && typeof value !== 'number') {
-      throw new TypeError('A non-number value was passed to the betwen rule');
-    }
     if (!isDefined(value)) {
       return null;
+    }
+    if (!isNumber<unknown, Number>(value)) {
+      throw new TypeError('A non-number value was passed to the betwen rule');
     }
     const numberValue = value instanceof Number ? value.valueOf() : value;
     if (this.inclusiveLowerBound && !this.inclusiveUpperBound) {

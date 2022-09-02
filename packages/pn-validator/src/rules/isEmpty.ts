@@ -1,3 +1,6 @@
+import { isArray } from '../utility/IsArray';
+import { isDefined } from '../utility/IsDefined';
+import { isObject } from '../utility/IsObject';
 import { Rule } from '../Rule';
 
 export class IsEmpty<TModel, TValue> extends Rule<TModel, TValue> {
@@ -9,7 +12,7 @@ export class IsEmpty<TModel, TValue> extends Rule<TModel, TValue> {
   }
 
   public valueValidator = (value: TValue) => {
-    if (value === null || value === undefined) {
+    if (!isDefined(value)) {
         return null;
     }
     if ((typeof value === 'string') && value === '') {
@@ -18,10 +21,10 @@ export class IsEmpty<TModel, TValue> extends Rule<TModel, TValue> {
     if (value instanceof String && value.valueOf() === '') {
         return !this.not ? null : 'Value mustn\'t be empty';
     }
-    if (typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) {
+    if (isObject<unknown, object>(value) && Object.keys(value).length === 0) {
         return !this.not ? null : 'Value mustn\'t be empty';
     }
-    if (typeof value === 'object' && Array.isArray(value) && value.length === 0) {
+    if (isArray<unknown, Array<unknown>>(value) && value.length === 0) {
         return !this.not ? null : 'Value mustn\'t be empty';
     }
 

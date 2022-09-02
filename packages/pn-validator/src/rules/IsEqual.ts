@@ -1,3 +1,6 @@
+import { isDate } from './../utility/IsDate';
+import { isArray } from './../utility/IsArray';
+import { isObject } from '../utility/IsObject';
 import { Rule } from '../Rule';
 
 export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
@@ -11,22 +14,23 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
   }
 
   private compareDate = <TArg>(value: TArg, valueToCompare: TArg): boolean => {
-    if (value instanceof Date && valueToCompare instanceof Date) {
+    if (isDate<unknown, Date>(value) && isDate<unknown, Date>(valueToCompare)) {
       return value.getTime() === valueToCompare.getTime();
     }
     return false;
   };
 
-  private compareObject = <TPropertyName extends keyof TArg, TArg>(value: TArg, valueToCompare: TArg): boolean => {
-    if (
-      typeof value === 'object' &&
-      !Array.isArray(value) &&
-      typeof valueToCompare === 'object' &&
-      !Array.isArray(valueToCompare)
-    ) {
+  private compareObject = <TPropertyName extends keyof TArg, TArg>(
+    value: TArg,
+    valueToCompare: TArg
+  ): boolean => {
+    if (isObject<unknown, object>(value) && isObject<unknown, object>(valueToCompare)) {
       if (Object.keys(value).length === Object.keys(valueToCompare).length) {
         return Object.keys(value).every((key) => {
-          return (valueToCompare as Object).hasOwnProperty(key) && this.compare(value[key as TPropertyName], valueToCompare[key as TPropertyName]);
+          return (
+            (valueToCompare as Object).hasOwnProperty(key) &&
+            this.compare(value[key as TPropertyName], valueToCompare[key as TPropertyName])
+          );
         });
       }
       return false;
@@ -36,10 +40,8 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
 
   private compareArray = <TArg>(value: TArg, valueToCompare: TArg): boolean => {
     if (
-      typeof value === 'object' &&
-      Array.isArray(value) &&
-      typeof valueToCompare === 'object' &&
-      Array.isArray(valueToCompare)
+      isArray<unknown, Array<unknown>>(value) &&
+      isArray<unknown, Array<unknown>>(valueToCompare)
     ) {
       if (value.length === valueToCompare.length) {
         return value.every((elem, index) => {
@@ -53,35 +55,38 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
 
   private compare = <TArg>(value: TArg, valueToCompare: TArg): boolean => {
     if (typeof value === typeof valueToCompare) {
-      if (typeof value === 'object' && !Array.isArray(value) && !(value instanceof Date) && value !== null) {
+      if (isObject<unknown, object>(value)) {
         return this.compareObject(value, valueToCompare);
       }
-      if (typeof value === 'object' && Array.isArray(value) && value !== null) {
-          return this.compareArray(value, valueToCompare);
+      if (isArray<unknown, Array<unknown>>(value)) {
+        return this.compareArray(value, valueToCompare);
       }
-      if ((value instanceof Date && this.compareDate(value, valueToCompare)) || value === valueToCompare) {
-          return true;
+      if (
+        (isDate<unknown, Date>(value) && this.compareDate(value, valueToCompare)) ||
+        value === valueToCompare
+      ) {
+        return true;
       }
     }
     return false;
   };
 
   private printValue = () => {
-    if (typeof this.valueToCompare === 'object' && !Array.isArray(this.valueToCompare) && !(this.valueToCompare instanceof Date) && this.valueToCompare !== null) {
+    if (isObject<unknown, object>(this.valueToCompare)) {
       return JSON.stringify(this.valueToCompare);
     }
-    if (typeof this.valueToCompare === 'object' && Array.isArray(this.valueToCompare) && this.valueToCompare !== null) {
-        return this.valueToCompare.toString();
+    if (isArray<unknown, Array<unknown>>(this.valueToCompare)) {
+      return this.valueToCompare.toString();
     }
-    if (this.valueToCompare instanceof Date) {
-        return this.valueToCompare.toISOString();
+    if (isDate<unknown, Date>(this.valueToCompare)) {
+      return this.valueToCompare.toISOString();
     }
     return this.valueToCompare;
-  }
+  };
 
-  public valueValidator = (value: TValue) => {    
+  public valueValidator = (value: TValue) => {
     if (this.compare(value, this.valueToCompare)) {
-        return !this.not ? null : `Value mustn\'t be equal to ${this.printValue()}`;
+      return !this.not ? null : `Value mustn\'t be equal to ${this.printValue()}`;
     }
     return !this.not ? `Value must be equal to ${this.printValue()}` : null;
   };

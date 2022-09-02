@@ -34,6 +34,6 @@ export class Validator<TModel> {
     const validatorBuilder = new ValidatorBuilder<TModel, TValue>();
     this.validatorBuilders[propertyName] = validatorBuilder as any;
 
-    return validatorBuilder.getTypeRules();
+    return validatorBuilder.getTypeRules() as unknown as TypeRules<TModel, TValue>;
   };
 }

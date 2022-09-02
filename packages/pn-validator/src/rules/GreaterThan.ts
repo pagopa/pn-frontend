@@ -1,4 +1,6 @@
+import { isDate } from '../utility/IsDate';
 import { isDefined } from '../utility/IsDefined';
+import { isNumber } from '../utility/IsNumber';
 import { Rule } from '../Rule';
 
 export class GreaterThan<TModel, TValue> extends Rule<TModel, TValue> {
@@ -33,16 +35,16 @@ export class GreaterThan<TModel, TValue> extends Rule<TModel, TValue> {
   };
 
   public valueValidator = (value: TValue) => {
-    if (!(value instanceof Number) && typeof value !== 'number' && !(value instanceof Date)) {
+    if (!isNumber<unknown, Number>(value) && !isDate<unknown, Date>(value)) {
       throw new TypeError('A value with wrong type was passed to the greaterThan rule');
     }
     if (!isDefined(value)) {
       return null;
     }
-    if (value instanceof Number || typeof value === 'number') {
+    if (isNumber<unknown, Number>(value)) {
       return this.compareNumber(value);
     }
-    if (value instanceof Date) {
+    if (isDate<unknown, Date>(value)) {
       return this.comapreDate(value);
     }
     return null;

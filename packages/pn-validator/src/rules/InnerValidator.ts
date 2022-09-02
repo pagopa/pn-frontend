@@ -1,4 +1,5 @@
 import { ValidationResult } from "../types/ValidationResult";
+import { isDefined } from "../utility/IsDefined";
 import { Rule } from "../Rule";
 import { Validator } from "../Validator";
 
@@ -12,7 +13,7 @@ export class InnerValidator<TModel, TValue> extends Rule<TModel, TValue> {
     }
 
     public valueValidator = (value: TValue) => {
-        if (value === null || value === undefined) {
+        if (!isDefined(value)) {
             return null;
         }
         return this.validator.validate(value) as ValidationResult<TValue>;
