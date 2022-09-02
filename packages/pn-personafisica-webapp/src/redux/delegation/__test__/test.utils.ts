@@ -116,7 +116,6 @@ export const arrayOfDelegators = [
 
 export const mockDelegationsState = {
   delegatesError: false,
-  delegatorsError: false,
   delegations: {
     delegators: arrayOfDelegators,
     delegates: arrayOfDelegates,
@@ -145,7 +144,6 @@ export const mockDelegationsState = {
 
 export const initialState = {
   delegatesError: false,
-  delegatorsError: false,
   delegations: {
     delegators: [] as Array<Delegation>,
     delegates: [] as Array<Delegation>,

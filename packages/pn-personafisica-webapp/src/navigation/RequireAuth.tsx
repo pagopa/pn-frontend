@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { HandleAuth, useErrors, useSessionCheck } from '@pagopa-pn/pn-commons';
 
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
-import { logout } from '../redux/auth/actions';
+import { AUTH_ACTIONS, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { goToLogin } from './navigation.utility';
@@ -24,7 +24,7 @@ const RequireAuth = () => {
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
   const { hasApiErrors } = useErrors();
 
-  const hasTosApiErrors = hasApiErrors('getToSApproval');
+  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
 
   useEffect(() => {
     if (token === '' || !token || isUnauthorizedUser || hasTosApiErrors) {

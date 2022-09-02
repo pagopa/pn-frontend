@@ -24,6 +24,9 @@ function checkResponseStatus(response: AxiosResponse, id: string) {
   return { id: '-1' };
 }
 
+/* eslint-disable-next-line functional/no-let */
+let niceCounter = 0;
+
 export const DelegationsApi = {
   /**
    * Get all the delegates for the authenticated user
@@ -51,13 +54,14 @@ export const DelegationsApi = {
   getDelegators: (): Promise<Array<Delegator>> =>
     apiClient
       .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATE())
-      .then(() => Promise.reject({ response: { status: 500 }})),
-
-  getDelegators2: (): Promise<Array<Delegator>> =>
-    apiClient
-      .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATE())
-      .then((response: AxiosResponse<Array<Delegation>>) =>
-        response.data.map((delegation) => ({
+      .then((response: AxiosResponse<Array<Delegation>>) => {
+        niceCounter++;
+        console.log('Delegations.api.getDelegators');
+        console.log({ niceCounter, status: response.status });
+        if (niceCounter % 3 !== 0) {
+          return Promise.reject({ response: { status: 500 } });
+        }
+        return response.data.map((delegation) => ({
           mandateId: delegation.mandateId,
           status: delegation.status,
           visibilityIds: delegation.visibilityIds,
@@ -65,8 +69,8 @@ export const DelegationsApi = {
           datefrom: delegation.datefrom,
           dateto: delegation.dateto,
           delegator: 'delegator' in delegation ? delegation.delegator : null,
-        }))
-      ),
+        }));
+      }),
   
   /**
    * Removes a delegation that the user created

@@ -14,8 +14,8 @@ const StyledStack = styled(Stack)`
 `;
 
 const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText }) => {
-  const testo = mainText || 'Non siamo riusciti a recuperare questi dati.';
-  const testoAzione = 'Ricarica';
+  const text = mainText || 'Non siamo riusciti a recuperare questi dati.';
+  const actionLaunchText = 'Ricarica';
 
   return (
     <StyledStack
@@ -28,9 +28,9 @@ const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText }) => {
         fontSize={'small'}
         sx={{ verticalAlign: 'middle', margin: '0 20px' }}
       />
-      <Typography sx={{ marginRight: '8px' }}>{testo}</Typography>
+      <Typography sx={{ marginRight: '8px' }}>{text}</Typography>
       <Typography color="primary" fontWeight="bold" sx={{ cursor: 'pointer' }} onClick={onClick}>
-        {testoAzione}
+        {actionLaunchText}
       </Typography>
     </StyledStack>
   );

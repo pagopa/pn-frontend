@@ -48,20 +48,24 @@ function EmptyState({
       <Typography variant="body2" sx={{ display: 'inline' }}>
         {emptyMessage}
       </Typography>
-      &nbsp;
-      <Typography
-        color="primary"
-        variant="body2"
-        fontWeight={'bold'}
-        data-testid="callToActionFirst"
-        sx={{
-          cursor: 'pointer',
-          display: 'inline',
-        }}
-        onClick={emptyActionCallback}
-      >
-        {emptyActionLabel}
-      </Typography>
+      { emptyActionCallback && 
+        <>
+          &nbsp;
+          <Typography
+            color="primary"
+            variant="body2"
+            fontWeight={'bold'}
+            data-testid="callToActionFirst"
+            sx={{
+              cursor: 'pointer',
+              display: 'inline',
+            }}
+            onClick={emptyActionCallback}
+          >
+            {emptyActionLabel}
+          </Typography>
+        </> 
+      }
       &nbsp;
       <Typography variant="body2" sx={{ display: 'inline' }}>
         {secondaryMessage.emptyMessage}

@@ -59,19 +59,6 @@ describe('delegation redux state tests', () => {
     expect(errorState.delegatesError).toEqual(true);
   });
 
-  it('should not be able to fetch the delegators', async () => {
-    const apiSpy = jest.spyOn(DelegationsApi, 'getDelegators');
-    apiSpy.mockRejectedValue('error');
-    const action = await store.dispatch(getDelegators());
-    const payload = action.payload;
-
-    expect(action.type).toBe('getDelegators/rejected');
-    expect(payload).toEqual('error');
-
-    const errorState = store.getState().delegationsState;
-    expect(errorState.delegatorsError).toEqual(true);
-  });
-
   it('should accept a delegation request', async () => {
     const apiSpy = jest.spyOn(DelegationsApi, 'acceptDelegation');
     apiSpy.mockResolvedValue({ id: '1' });

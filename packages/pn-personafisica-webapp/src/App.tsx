@@ -14,6 +14,7 @@ import {
   LoadingOverlay,
   SideMenu,
   SideMenuItem,
+  useErrors,
   useMultiEvent,
   useUnload,
 } from '@pagopa-pn/pn-commons';
@@ -27,7 +28,7 @@ import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
-import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
+import { getDomicileInfo, getSidemenuInformation, SIDEMENU_ACTIONS } from './redux/sidemenu/actions';
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
@@ -56,6 +57,7 @@ const App = () => {
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
+  const { hasApiErrors } = useErrors();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -135,7 +137,13 @@ const App = () => {
   }, [pendingDelegators, sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
-    if (delegators.length > 0) {
+    if (hasApiErrors(SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION)) {
+      return [{
+        label: "Qualcuno/a ha delegato su di te?",
+        route: "",
+        action: () => dispatch(getSidemenuInformation()),
+      }];
+    } else if (delegators.length > 0) {
       const myNotifications = {
         label: t('title', { ns: 'notifiche' }),
         route: routes.NOTIFICHE,
@@ -165,7 +173,7 @@ const App = () => {
       icon: MailOutlineIcon,
       route: routes.NOTIFICHE,
       children: sideMenuDelegators,
-      notSelectable: sideMenuDelegators && sideMenuDelegators.length > 0,
+      notSelectable: sideMenuDelegators && sideMenuDelegators.length > 1,
     },
     { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {

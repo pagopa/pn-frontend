@@ -20,6 +20,9 @@ export const ApiErrorGuardGeneral: React.FC<ApiErrorGuardGeneralProps> = ({ apiI
 
   const hasParticularApiErrors = hasApiErrors(apiId);
 
+  console.log('in ApiErrorGuardGeneral');
+  console.log({ apiId, hasParticularApiErrors });
+
   return <>
       { !hasParticularApiErrors && children }
       { hasParticularApiErrors && errorComponent }

@@ -4,8 +4,12 @@ import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
 import { AcceptDelegationResponse, Delegation } from './types';
 
+export enum DELEGATION_ACTIONS {
+  GET_DELEGATES = 'getDelegates',
+  GET_DELEGATORS = 'getDelegators',
+}
 export const getDelegates = createAsyncThunk<Array<Delegation>>(
-  'getDelegates',
+  DELEGATION_ACTIONS.GET_DELEGATES,
   async (_, { rejectWithValue }) => {
     try {
       return await DelegationsApi.getDelegates();
@@ -16,7 +20,7 @@ export const getDelegates = createAsyncThunk<Array<Delegation>>(
 );
 
 export const getDelegators = createAsyncThunk<Array<Delegation>>(
-  'getDelegators',
+  DELEGATION_ACTIONS.GET_DELEGATORS,
   async (_, { rejectWithValue }) => {
     try {
       return await DelegationsApi.getDelegators();

@@ -17,7 +17,7 @@ export enum CONTACT_ACTIONS  {
 
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES,
-  async (_params: string, { rejectWithValue }) => {
+  async (_, { rejectWithValue }) => {
     try {
       return await ContactsApi.getDigitalAddresses();
     } catch (e) {
@@ -130,6 +130,7 @@ export const disableIOAddress = createAsyncThunk<string, string>(
   }
 );
 
+
 export const getAllActivatedParties = createAsyncThunk(
   CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES, 
   async (_, { rejectWithValue }) => {
@@ -139,5 +140,4 @@ export const getAllActivatedParties = createAsyncThunk(
       return rejectWithValue(e);
     }
   }
-  // async () => ExternalRegistriesAPI.getAllActivatedParties()
 );
