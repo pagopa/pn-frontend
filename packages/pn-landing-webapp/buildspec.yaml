@@ -15,7 +15,7 @@ batch:
       env:
         variables:
           BUILD_ID: coll
-          NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.svil.pn.pagopa.it/"
+          NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.coll.pn.pagopa.it/"
 phases:
   install:
     runtime-versions:
