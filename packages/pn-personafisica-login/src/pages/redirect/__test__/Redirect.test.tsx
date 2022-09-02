@@ -3,6 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 import { render } from "@testing-library/react";
 import RedirectPage from "../Redirect";
 import '../../../locales/i18n';
+import { storageOriginOps } from "../../../utils/storage";
 
 const mockLocationAssign = jest.fn();
 
@@ -20,7 +21,7 @@ afterAll(() => {
 });
 
 test('test redirect', () => {
-  sessionStorage.setItem('redirectUrl', 'https://localhost:3000/login');
+  storageOriginOps.write('testurl');
   render(
     <BrowserRouter>
       <RedirectPage />

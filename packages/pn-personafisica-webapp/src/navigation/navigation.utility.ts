@@ -1,13 +1,9 @@
 import { URL_FE_LOGIN } from '../utils/constants';
 
-export function goToLogin(pathname?: string) {
+export function goToLogin(origin: string) {
   const baseUrl = URL_FE_LOGIN ?? '';
-  if (pathname) {
-    const encodedPathname = encodeURIComponent(pathname);
+  const encodedPathname = encodeURIComponent(origin);
 
-    /* eslint-disable functional/immutable-data */
-    window.location.href = baseUrl + 'login' + `?path=${encodedPathname}`;
-  } else {
-    window.location.href = baseUrl;
-  }
+  /* eslint-disable functional/immutable-data */
+  window.location.replace(baseUrl + 'login' + `?origin=${encodedPathname}`);
 }

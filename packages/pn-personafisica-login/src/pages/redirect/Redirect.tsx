@@ -1,15 +1,16 @@
 import { useEffect } from "react";
+import { storageOriginOps } from "../../utils/storage";
 
 const RedirectPage = () => {
-  const redirectUrl = sessionStorage.getItem('redirectUrl');
+  const originUrl = storageOriginOps.read();
   const token = window.location.hash;
 
   useEffect(() => {
-    if (redirectUrl) {
-      sessionStorage.clear();
+    if (originUrl) {
+      storageOriginOps.delete();
 
       /* eslint-disable-next-line functional/immutable-data */
-      window.location.replace(redirectUrl + token);
+      window.location.replace(originUrl + token);
     }
   }, []);
 

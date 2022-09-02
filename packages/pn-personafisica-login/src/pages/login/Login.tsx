@@ -14,7 +14,7 @@ import { useSearchParams } from "react-router-dom";
 import { IDPS } from '../../utils/IDPS';
 import { ENV } from '../../utils/env';
 import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
-import { storageSpidSelectedOps } from '../../utils/storage';
+import { storageOriginOps, storageSpidSelectedOps } from '../../utils/storage';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
 import SpidSelect from './SpidSelect';
@@ -33,7 +33,7 @@ const Login = () => {
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
 
-  sessionStorage.setItem('redirectUrl', params.get('path') ?? '');
+  storageOriginOps.write(params.get('origin') ?? '');
 
   const goCIE = () => {
     storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
