@@ -6,13 +6,12 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  MenuItem,
   Radio,
   RadioGroup,
   TextField,
   Typography,
 } from '@mui/material';
-import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType, CustomDropdown } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
@@ -68,6 +67,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   });
 
   const handleChangeTouched = async (e: ChangeEvent) => {
+    console.log('blah');
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
@@ -125,7 +125,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           size="small"
           margin="normal"
         />
-        <TextField
+        <CustomDropdown
           id="group"
           label={`${t('group')}${groups.length > 0 ? '*' : ''}`}
           fullWidth
@@ -134,18 +134,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           onChange={handleChangeTouched}
           error={formik.touched.group && Boolean(formik.errors.group)}
           helperText={formik.touched.group && formik.errors.group}
-          size="small"
-          margin="normal"
-          select
-        >
-          {groups.length > 0 &&
-            groups.map((group) => (
-              <MenuItem key={group.id} value={group.id}>
-                {group.name}
-              </MenuItem>
-            ))}
-          {groups.length === 0 && <MenuItem sx={{ display: 'none' }}></MenuItem>}
-        </TextField>
+          items={groups.map((g) => ({ key: g.id, value: g.id, label: g.name }))}
+        />
         <FormControl margin="normal" fullWidth>
           <FormLabel id="comunication-type-label">
             <Typography fontWeight={600} fontSize={16}>
