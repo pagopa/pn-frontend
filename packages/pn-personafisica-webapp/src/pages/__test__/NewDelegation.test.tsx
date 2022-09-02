@@ -45,7 +45,7 @@ const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
 
 async function testInput(form: HTMLFormElement, elementName: string, value: string | number) {
-  const input = form.querySelector(`input[name="${elementName}"]`);
+  const input = form.querySelector(`input[id="${elementName}"]`);
   fireEvent.change(input!, { target: { value } });
   await waitFor(() => {
     expect(input).toHaveValue(value);
