@@ -8,12 +8,13 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useIsMobile, Layout } from '@pagopa-pn/pn-commons';
 import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
-
 import { styled } from '@mui/material/styles';
+import { useSearchParams } from "react-router-dom";
+
 import { IDPS } from '../../utils/IDPS';
 import { ENV } from '../../utils/env';
 import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
-import { storageSpidSelectedOps } from '../../utils/storage';
+import { storageOriginOps, storageSpidSelectedOps } from '../../utils/storage';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
 import SpidSelect from './SpidSelect';
@@ -30,6 +31,9 @@ const Login = () => {
   const [showIDPS, setShowIDPS] = useState(false);
   const { t, i18n } = useTranslation(['login', 'notifiche']);
   const isMobile = useIsMobile();
+  const [params] = useSearchParams();
+
+  storageOriginOps.write(params.get('origin') ?? '');
 
   const goCIE = () => {
     storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
