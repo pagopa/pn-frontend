@@ -1,6 +1,5 @@
 import { MouseEventHandler, ReactNode, useEffect } from 'react';
-import { Button, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
+import { Button, Dialog, DialogTitle, DialogContentText, DialogActions } from '@mui/material';
 
 import { useIsMobile } from '../hooks';
 

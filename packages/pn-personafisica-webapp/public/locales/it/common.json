@@ -78,6 +78,9 @@
     "401-message": "L'utente corrente non ha le autorizzazioni",
     "500-title": "Il servizio non è disponibile",
     "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
+    "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",
+    "invalid-token-title": "Non puoi accedere per un problema tecnico - token non valido",
+    "generic-token-exchange-problem": "Non è stato possibile completare l'accesso",
     "generic-title": "Errore generico",
     "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi"
   },
