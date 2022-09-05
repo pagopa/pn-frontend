@@ -1,6 +1,8 @@
 import { IsEqual } from "../rules/IsEqual";
 import { IsNull } from "../rules/IsNull";
 import { IsUndefined } from "../rules/IsUndefined";
+import { CustomValidator } from "../rules/CustomValidator";
+import { ValidationResult } from "../types/ValidationResult";
 import { Rule } from "../Rule";
 
 export abstract class CommonRuleValidator<TModel, TValue> {
@@ -36,6 +38,15 @@ export abstract class CommonRuleValidator<TModel, TValue> {
      */
     public isEqual = (value: TValue, not?: boolean) => {
         this.pushRule(new IsEqual<TModel, TValue>(value, not));
+        return this;
+    }
+
+    /**
+     * Run custom validator
+     * @param {boolean} validator custom validator
+     */
+     public customValidator = (validator: (value: TValue, model: TModel) => ValidationResult<TValue>) => {
+        this.pushRule(new CustomValidator<TModel, TValue>(validator));
         return this;
     }
 }

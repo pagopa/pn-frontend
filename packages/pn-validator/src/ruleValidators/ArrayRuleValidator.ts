@@ -1,6 +1,8 @@
-import { ArrayRules } from '../types/ArrayRules';
+import { ArrayRules, TElemValue } from '../types/ArrayRules';
 import { IsEmpty } from '../rules/IsEmpty';
+import { ForEachElement } from '../rules/ForEachElement';
 import { Rule } from '../Rule';
+import { TypeRules } from '../types/TypeRules';
 import { CommonRuleValidator } from './CommonRuleValidator';
 
 export class ArrayRuleValidator<TModel, TValue>
@@ -17,6 +19,14 @@ export class ArrayRuleValidator<TModel, TValue>
    */
   isEmpty = (not?: boolean): ArrayRuleValidator<TModel, TValue> => {
     this.pushRule(new IsEmpty<TModel, TValue>(not));
+    return this;
+  };
+
+  /**
+   * Check rules for each element of the array
+   */
+   forEachElement = (elementValidator: (availableRules: TypeRules<TModel, TElemValue<TValue>>) => void): ArrayRuleValidator<TModel, TValue> => {
+    this.pushRule(new ForEachElement<TModel, TValue>(elementValidator));
     return this;
   };
 }

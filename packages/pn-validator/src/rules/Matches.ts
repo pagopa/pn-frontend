@@ -1,4 +1,5 @@
 import { isString } from '../utility/IsString';
+import { isDefined } from '../utility/IsDefined';
 import { Rule } from '../Rule';
 
 export class Matches<TModel, TValue> extends Rule<TModel, TValue> {
@@ -12,7 +13,7 @@ export class Matches<TModel, TValue> extends Rule<TModel, TValue> {
   }
 
   public valueValidator = (value: TValue) => {
-    if (value === null || value === undefined) {
+    if (!isDefined(value)) {
       return null;
     }
     if (!isString<unknown, String>(value)) {

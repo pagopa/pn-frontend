@@ -15,4 +15,5 @@ export interface CommonRules<TModel, TValue> {
   isNull: (not?: boolean) => RuleValidators<TModel, TValue>;
   isUndefined: (not?: boolean) => RuleValidators<TModel, TValue>;
   isEqual: (value: TValue, not?: boolean) => RuleValidators<TModel, TValue>;
+  customValidator: (value: TValue, model: TModel) => RuleValidators<TModel, TValue>;
 }

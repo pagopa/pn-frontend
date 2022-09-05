@@ -35,11 +35,11 @@ export class GreaterThan<TModel, TValue> extends Rule<TModel, TValue> {
   };
 
   public valueValidator = (value: TValue) => {
-    if (!isNumber<unknown, Number>(value) && !isDate<unknown, Date>(value)) {
-      throw new TypeError('A value with wrong type was passed to the greaterThan rule');
-    }
     if (!isDefined(value)) {
       return null;
+    }
+    if (!isNumber<unknown, Number>(value) && !isDate<unknown, Date>(value)) {
+      throw new TypeError('A value with wrong type was passed to the greaterThan rule');
     }
     if (isNumber<unknown, Number>(value)) {
       return this.compareNumber(value);
