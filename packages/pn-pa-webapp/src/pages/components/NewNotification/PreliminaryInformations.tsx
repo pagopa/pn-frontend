@@ -10,6 +10,7 @@ import {
   RadioGroup,
   TextField,
   Typography,
+  MenuItem,
 } from '@mui/material';
 import { PhysicalCommunicationType, CustomDropdown } from '@pagopa-pn/pn-commons';
 
@@ -130,12 +131,19 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           label={`${t('group')}${groups.length > 0 ? '*' : ''}`}
           fullWidth
           name="group"
+          size="small"
+          margin="normal"
           value={formik.values.group}
           onChange={handleChangeTouched}
           error={formik.touched.group && Boolean(formik.errors.group)}
-          helperText={formik.touched.group && formik.errors.group}
-          items={groups.map((g) => ({ key: g.id, value: g.id, label: g.name }))}
-        />
+          helperText={formik.touched.group && formik.errors.group}>
+          {groups.length > 0 &&
+            groups.map((group) => (
+              <MenuItem key={group.id} value={group.id}>
+                {group.name}
+              </MenuItem>
+            ))}
+        </CustomDropdown>
         <FormControl margin="normal" fullWidth>
           <FormLabel id="comunication-type-label">
             <Typography fontWeight={600} fontSize={16}>

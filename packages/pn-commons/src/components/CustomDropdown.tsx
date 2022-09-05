@@ -1,25 +1,29 @@
-import { ChangeEvent } from 'react';
+import { ReactNode } from 'react';
 import { TextField, SxProps, MenuItem } from '@mui/material';
 
 type Props = {
+  /** children wrapper */
+  children?: ReactNode;
   /** id */
   id: string;
   /** value */
   value: any;
   /** name */
-  name: string;
+  name?: string;
   /** label */
   label?: string;
   /** on change event handler */
-  onChange?: (e: ChangeEvent) => void;
+  onChange?: (e?: any) => void;
   /** set to true to have full width dropdown */
   fullWidth?: boolean;
   /** style costumization */
   sx?: SxProps;
+  /** size option */
+  size?: "small" | "medium";
+  /** margin option */
+  margin?: "none" | "dense" | "normal";
   /** empty message when no items are available */
-  emptyState?: string;
-  /** items for dropdown */
-  items: Array<CustomDropdownItemType> | undefined;
+  emptyStateMessage?: string;
   /** error status toggle */
   error?: boolean;
   /** helper text context */
@@ -34,13 +38,8 @@ type Props = {
   emptyItemLabel?: string;
 };
 
-export interface CustomDropdownItemType {
-  key: string;
-  value: string;
-  label: string;
-}
-
-export const CustomDropdown = ({
+const CustomDropdown = ({
+  children,
   id,
   value,
   name,
@@ -48,8 +47,9 @@ export const CustomDropdown = ({
   onChange,
   fullWidth,
   sx,
-  emptyState = 'Non ci sono elementi',
-  items,
+  size,
+  margin,
+  emptyStateMessage = 'Non ci sono elementi',
   error,
   helperText,
   required = true,
@@ -58,7 +58,7 @@ export const CustomDropdown = ({
   emptyItemLabel = '------',
 }: Props) => (
   <>
-    {items && items.length > 0 ? (
+    {children ? (
       <TextField
         id={id}
         value={value}
@@ -68,8 +68,8 @@ export const CustomDropdown = ({
         onChange={onChange}
         sx={sx}
         select
-        size="small"
-        margin="normal"
+        size={size}
+        margin={margin}
         error={error}
         helperText={helperText}
       >
@@ -78,26 +78,21 @@ export const CustomDropdown = ({
             {emptyItemLabel}
           </MenuItem>
         )}
-        {items.map((item: CustomDropdownItemType) => (
-          <MenuItem key={item.key} value={item.value}>
-            {item.label}
-          </MenuItem>
-        ))}
+        {children}
       </TextField>
     ) : (
-      <>
-        <TextField 
-          id={id}
-          name={name}
-          disabled
-          placeholder={emptyState}
-          InputLabelProps={{ shrink: true }}
-          size="small"
-          margin="normal"
-          label={label}
-          fullWidth={fullWidth}
-        />
-      </>
+      <TextField
+        id={id}
+        name={name}
+        disabled
+        placeholder={emptyStateMessage}
+        InputLabelProps={{ shrink: true }}
+        size="small"
+        margin="normal"
+        label={label}
+        fullWidth={fullWidth}
+      />
     )}
   </>
 );
+export default CustomDropdown;

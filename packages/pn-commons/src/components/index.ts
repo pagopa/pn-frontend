@@ -12,7 +12,7 @@ import StatusTooltip from './Notifications/StatusTooltip';
 import MobileNotificationsSort from './Notifications/MobileNotificationsSort';
 import ItemsTable from './Data/ItemsTable';
 import EmptyState from './EmptyState';
-import { CustomDropdown } from './CustomDropdown';
+import CustomDropdown from './CustomDropdown';
 import ItemsCard from './Data/ItemsCard';
 import CustomMobileDialog from './CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogToggle from './CustomMobileDialog/CustomMobileDialogToggle';
