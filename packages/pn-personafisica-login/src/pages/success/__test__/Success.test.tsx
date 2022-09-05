@@ -1,7 +1,7 @@
 /* eslint-disable functional/immutable-data */
 import { BrowserRouter } from "react-router-dom";
 import { render } from "@testing-library/react";
-import RedirectPage from "../Redirect";
+import SuccessPage from "../Success";
 import '../../../locales/i18n';
 import { storageOriginOps } from "../../../utils/storage";
 
@@ -24,7 +24,7 @@ test('test redirect', () => {
   storageOriginOps.write('testurl');
   render(
     <BrowserRouter>
-      <RedirectPage />
+      <SuccessPage />
     </BrowserRouter>
   );
 

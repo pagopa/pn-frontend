@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { storageOriginOps } from "../../utils/storage";
 
-const RedirectPage = () => {
+const SuccessPage = () => {
   const originUrl = storageOriginOps.read();
   const token = window.location.hash;
 
@@ -17,4 +17,4 @@ const RedirectPage = () => {
   return null;
 };
 
-export default RedirectPage;
+export default SuccessPage;
