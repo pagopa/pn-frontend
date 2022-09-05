@@ -16,6 +16,10 @@ export class InnerValidator<TModel, TValue> extends Rule<TModel, TValue> {
         if (!isDefined(value)) {
             return null;
         }
-        return this.validator.validate(value) as ValidationResult<TValue>;
+        const result = this.validator.validate(value);
+        if (Object.keys(result).length > 0) {
+            return result as ValidationResult<TValue>;
+        }
+        return null;
     };
 }

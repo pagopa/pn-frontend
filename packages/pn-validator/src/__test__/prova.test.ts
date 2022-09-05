@@ -27,7 +27,7 @@ class ProvaValidator extends Validator<Prova> {
     }
 }
 
-it('prova test', () => {
+it.skip('prova test', () => {
     const validator = new ProvaValidator();
     const result = validator.validate({ciao: 'a', prova_sub: [{hola: 'b', hi: 'c'}, {hola: 'bb', hi: 'cc'}]});
     console.log(result);
