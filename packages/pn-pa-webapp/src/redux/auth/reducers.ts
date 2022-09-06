@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 import { createSlice } from '@reduxjs/toolkit';
-import { basicInitialUserData, basicNoLoggedUserData, basicUserDataMatcherContents, dataRegex } from '@pagopa-pn/pn-commons';
+import { adaptedTokenExchangeError, basicInitialUserData, basicNoLoggedUserData, basicUserDataMatcherContents, dataRegex } from '@pagopa-pn/pn-commons';
 import { Party } from '../../models/party';
 
 import { PartyRole, PNRole } from '../../models/user';
@@ -41,6 +41,8 @@ const noLoggedUserData = {
   desired_exp: 0,
 } as User;
 
+const emptyUnauthorizedMessage = { title: '', message: '' };
+
 function initialUserData(): User {
   return basicInitialUserData(userDataMatcher, noLoggedUserData);
 }
@@ -55,11 +57,18 @@ const userSlice = createSlice({
       id: '',
       name: '',
     } as Party,
+    isUnauthorizedUser: false,
+    messageUnauthorizedUser: emptyUnauthorizedMessage,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
       state.user = action.payload;
+    });
+    builder.addCase(exchangeToken.rejected, (state, action) => {
+      const adaptedError = adaptedTokenExchangeError(action.payload);
+      state.isUnauthorizedUser = adaptedError.isUnauthorizedUser;
+      state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser ? adaptedError.response.customMessage : emptyUnauthorizedMessage;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = action.payload;

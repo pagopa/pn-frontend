@@ -10,6 +10,18 @@ export enum PartyRole {
   SUB_DELEGATE = 'SUB_DELEGATE', // not managed by PN
 }
 
+export enum GroupStatus {
+  ACTIVE = 'ACTIVE',
+  SUSPENDED = 'SUSPENDED'
+}
+
+export interface UserGroup {
+  id: string;
+  name: string;
+  description: string;
+  status: GroupStatus;
+}
+
 export enum PNRole {
   ADMIN = 'admin',
   OPERATOR = 'operator'

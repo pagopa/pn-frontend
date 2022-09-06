@@ -236,7 +236,7 @@ const App = () => {
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
       >
-        <AppMessage sessionRedirect={() => dispatch(logout())} />
+        <AppMessage sessionRedirect={async () => await dispatch(logout())} />
         <LoadingOverlay />
         <Router />
       </Layout>

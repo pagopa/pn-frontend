@@ -4,13 +4,13 @@ module.exports = withTM({
   reactStrictMode: true,
   trailingSlash: true,
 
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/cittadini',
-        permanent: true,
-      },
-    ]
-  }
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: '/cittadini',
+  //       permanent: true,
+  //     },
+  //   ]
+  // }
 });

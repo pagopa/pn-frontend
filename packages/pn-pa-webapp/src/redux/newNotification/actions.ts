@@ -10,7 +10,19 @@ import {
   FormAttachment,
   PaymentObject,
 } from '../../models/NewNotification';
+import { GroupStatus, UserGroup } from '../../models/user';
 import { UploadAttachmentParams, UploadPayementParams, UploadPaymentResponse } from './types';
+
+export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
+  'getUserGroups',
+  async (status: GroupStatus | undefined, { rejectWithValue }) => {
+    try {
+      return await NotificationsApi.getUserGroups(status);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
 
 const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
   try {
