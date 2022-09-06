@@ -66,7 +66,7 @@ describe('Test greater than rule', () => {
     expect(result).toBe(null);
   });
 
-  it('value not greater than (nudatember - equal)', () => {
+  it('value not greater than (date - equal)', () => {
     const rule = new GreaterThan<any, Date>(today, true);
     const result = rule.valueValidator(yesterday);
     expect(result).toBe(`Value must be greater than or equal to ${today.toISOString()}`);

@@ -20,9 +20,9 @@ export class Matches<TModel, TValue> extends Rule<TModel, TValue> {
       throw new TypeError('A non-string value was passed to the matches rule');
     }
     const stringValue = value instanceof String ? value.valueOf() : value;
-    if (this.pattern.test(stringValue)) {
-      return !this.not ? null : 'Value does not match the required pattern';
+    if (stringValue.match(this.pattern)) {
+      return !this.not ? null : 'Value matches the forbidden pattern';
     }
-    return !this.not ? 'Value does match the forbidden pattern' : null;
+    return !this.not ? 'Value doesn\'t match the required pattern' : null;
   };
 }

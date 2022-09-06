@@ -21,12 +21,12 @@ export class Length<TModel, TValue> extends Rule<TModel, TValue> {
     }
     const stringValue = value instanceof String ? value.valueOf() : value;
     if (isDefined(this.minLength) && !isDefined(this.maxLength)) {
-      return stringValue.length < this.minLength!
+      return stringValue.length >= this.minLength!
         ? null
         : `Value mustn\'t have length less than ${this.minLength}`;
     }
     if (isDefined(this.maxLength) && !isDefined(this.minLength)) {
-      return stringValue.length > this.maxLength!
+      return stringValue.length <= this.maxLength!
         ? null
         : `Value mustn\'t have length greater than ${this.maxLength}`;
     }
