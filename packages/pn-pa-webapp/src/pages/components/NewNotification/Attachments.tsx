@@ -10,7 +10,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationAttachment, setAttachments } from '../../../redux/newNotification/actions';
-import { FormAttachment } from '../../../models/NewNotification';
+import { NewNotificationAttachment } from '../../../models/NewNotification';
 import NewNotificationCard from './NewNotificationCard';
 
 type AttachmentBoxProps = {
@@ -32,7 +32,7 @@ type AttachmentBoxProps = {
     fileUploaded?: any,
   ) => void;
   onRemoveFile: (id: string) => void;
-  fileUploaded?: FormAttachment;
+  fileUploaded?: NewNotificationAttachment;
 };
 
 const AttachmentBox = ({
@@ -95,7 +95,7 @@ const AttachmentBox = ({
 type Props = {
   onConfirm: () => void;
   onPreviousStep?: () => void;
-  attachmentsData?: Array<FormAttachment>;
+  attachmentsData?: Array<NewNotificationAttachment>;
 };
 
 const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {

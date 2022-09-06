@@ -4,11 +4,10 @@ import { NotificationDetailDocument } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
-  NewNotificationFe,
   NewNotificationResponse,
-  FormRecipient,
-  FormAttachment,
+  NewNotificationAttachment,
   PaymentObject,
+  NewNotification,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
 import { UploadAttachmentParams, UploadPayementParams, UploadPaymentResponse } from './types';
@@ -121,27 +120,19 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
   }
 });
 
-export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotificationFe>(
+export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotification>(
   'createNewNotification',
-  async (notification: NewNotificationFe, { rejectWithValue }) => {
+  async (notification: NewNotification, { rejectWithValue }) => {
     try {
-      // Qui vado ad eliminare i campi usati solo per mantenere lo stado di presentazion FE recipientsForm, documentsForm, paymentDocumentsForm
-      // ho riscontrato infatti l'aumento del rischio di errori di tipo 413 (payload too large)
-      // Nella PN-2015 si discute di come rifattorizzare e separare lo stato in modo da avere in redux solo il layer di presentazione
-      // al termine si effettua un mapping tra il DTO di presentazione e il DTO di integrazione
-      // Questo è da intendersi quindi come un fix temporaneo in attesa del refactoring della pn-2015
-      // Carlotta Dimatteo, 12/08/2022
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { recipientsForm, documentsForm, paymentDocumentsForm, paymentMode, ...notificationToSave } = notification;
-      return await NotificationsApi.createNewNotification(notificationToSave);
+      return await NotificationsApi.createNewNotification(notification);
     } catch (e) {
       return rejectWithValue(e);
     }
   }
 );
 
-export const setRecipients = createAction<{ recipients: Array<FormRecipient> }>('setRecipients');
-export const setAttachments = createAction<{ documents: Array<FormAttachment> }>('setAttachments');
+export const setAttachments = createAction<{ documents: Array<NewNotificationAttachment> }>('setAttachments');
+
 export const setPaymentDocuments =
   createAction<{ paymentMethodsDocuments: { [key: string]: PaymentObject } }>(
     'setPaymentDocuments'

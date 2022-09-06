@@ -170,7 +170,7 @@ const NewNotification = () => {
               <Recipient
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
-                recipientsData={notification.recipientsForm}
+                recipientsData={notification.recipients}
               />
             )}
             {activeStep === 2 && (

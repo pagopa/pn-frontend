@@ -1,8 +1,7 @@
 import { NotificationDetailRecipient } from '@pagopa-pn/pn-commons';
+import { NewNotificationRecipient, NewNotificationDTO, NewNotification } from '../models/NewNotification';
 
-import { FormRecipient } from '../models/NewNotification';
-
-const checkFisicalAddress = (recipient: FormRecipient) => {
+const checkFisicalAddress = (recipient: NewNotificationRecipient) => {
   if (
     recipient.address &&
     recipient.houseNumber &&
@@ -25,8 +24,8 @@ const checkFisicalAddress = (recipient: FormRecipient) => {
   return undefined;
 };
 
-export const formatNotificationRecipients = (
-  recipients: Array<FormRecipient>
+const newNotificationRecipientsMapper = (
+  recipients: Array<NewNotificationRecipient>
 ): Array<NotificationDetailRecipient> =>
   recipients.map((recipient) => {
     const digitalDomicile = recipient.digitalDomicile
@@ -57,3 +56,12 @@ export const formatNotificationRecipients = (
       physicalAddress: checkFisicalAddress(recipient),
     };
   });
+
+  export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
+    const newNotificationParsed: NewNotificationDTO = {...newNotification, recipients: []};
+    /* eslint-disable functional/immutable-data */
+    // format recipients
+    newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients);
+    /* eslint-enable functional/immutable-data */
+    return newNotificationParsed;
+  };

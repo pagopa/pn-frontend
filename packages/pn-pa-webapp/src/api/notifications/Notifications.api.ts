@@ -8,8 +8,9 @@ import {
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationBe, NewNotificationResponse } from '../../models/NewNotification';
+import { NewNotification, NewNotificationResponse } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
+import { newNotificationMapper } from '../../utils/notification.utility';
 import { apiClient, externalClient } from '../axios';
 import {
   CREATE_NOTIFICATION,
@@ -145,12 +146,12 @@ export const NotificationsApi = {
 
   /**
    * create new notification
-   * @param  {NewNotificationBe} notification
+   * @param  {NewNotification} notification
    * @returns Promise
    */
-  createNewNotification: (notification: NewNotificationBe): Promise<NewNotificationResponse> =>
+  createNewNotification: (notification: NewNotification): Promise<NewNotificationResponse> =>
     apiClient
-      .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
+      .post<NewNotificationResponse>(CREATE_NOTIFICATION(), newNotificationMapper(notification))
       .then((response) => response.data),
 };
 

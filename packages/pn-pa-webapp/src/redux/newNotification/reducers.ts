@@ -1,14 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
-import { FormRecipient, NewNotificationFe, PaymentModel } from '../../models/NewNotification';
+import { NewNotificationRecipient, NewNotification, PaymentModel } from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
-import { formatNotificationRecipients } from '../../utils/notification.utility';
 import {
   uploadNotificationAttachment,
   setPaymentDocuments,
   setAttachments,
-  setRecipients,
   uploadNotificationPaymentDocument,
   getUserGroups,
 } from './actions';
@@ -26,7 +24,7 @@ const initialState = {
     group: '',
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
-  } as NewNotificationFe,
+  } as NewNotification,
   groups: [] as Array<UserGroup>,
   isCompleted: false,
 };
@@ -58,8 +56,8 @@ const newNotificationSlice = createSlice({
         notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
       };
     },
-    saveRecipients: (state, action: PayloadAction<{ recipients: Array<FormRecipient> }>) => {
-      state.notification.recipients = formatNotificationRecipients(action.payload.recipients);
+    saveRecipients: (state, action: PayloadAction<{ recipients: Array<NewNotificationRecipient> }>) => {
+      state.notification.recipients = action.payload.recipients;
     },
     resetState: () => initialState,
   },
@@ -84,16 +82,10 @@ const newNotificationSlice = createSlice({
       };
       state.isCompleted = true;
     });
-    builder.addCase(setRecipients, (state, action) => {
-      state.notification = {
-        ...state.notification,
-        recipientsForm: action.payload.recipients,
-      };
-    });
     builder.addCase(setAttachments, (state, action) => {
       state.notification = {
         ...state.notification,
-        documentsForm: action.payload.documents,
+        documents: action.payload.documents,
       };
     });
     builder.addCase(setPaymentDocuments, (state, action) => {

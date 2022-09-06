@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { PhysicalCommunicationType, CustomDropdown } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification';
+import { NewNotification, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setPreliminaryInformations } from '../../../redux/newNotification/reducers';
@@ -25,7 +25,7 @@ import { TrackEventType } from '../../../utils/events';
 import NewNotificationCard from './NewNotificationCard';
 
 type Props = {
-  notification: NewNotificationFe;
+  notification: NewNotification;
   onConfirm: () => void;
 };
 
