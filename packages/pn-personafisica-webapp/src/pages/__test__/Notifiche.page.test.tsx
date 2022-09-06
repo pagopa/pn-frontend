@@ -1,6 +1,6 @@
 import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
+import { formatToTimezoneString, getNextDay, apiOutcomeTestHelper, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
 import { axe, render } from '../../__test__/test-utils';
 import * as actions from '../../redux/dashboard/actions';
@@ -16,21 +16,19 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-// questo permette che in alcuni tests il componente "normale" sia quello proprio del componente Notifiche
-// e che in altri invece sia un mock tipo <div>Ecco le notifiche</div>
-let mockNotificationComponent: JSX.Element | undefined;
 
 /**
- * Vedi commenti nella definizione di mockApiErrorGuard
+ * Vedi commenti nella definizione di simpleMockForApiErrorGuard
  */
-jest.mock('@pagopa-pn/pn-commons', () => {
+ jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
     useIsMobile: () => false,
-    ApiErrorGuard: original.mockApiErrorGuard(() => mockNotificationComponent),
+    ApiErrorGuard: original.simpleMockForApiErrorGuard,
   };
 });
+
 
 describe('Notifiche Page - with notifications', () => {
   let result: RenderResult | undefined;
@@ -156,30 +154,24 @@ describe('Notifiche Page - with notifications', () => {
 
 describe('Notifiche Page - query for notification API outcome', () => {
   beforeEach(() => {
-    mockNotificationComponent = <div>Ecco le notifiche</div>;
+    apiOutcomeTestHelper.setStandardMock();
   });
 
   afterEach(() => {
-    mockNotificationComponent = undefined;
+    apiOutcomeTestHelper.clearMock();
   });
 
   it('API error', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
     apiSpy.mockRejectedValue({ response: { status: 500 } });
     await act(async () => void render(<Notifiche />));
-    const apiErrorComponent = screen.queryByText("Api Error");
-    const notificheComponent = screen.queryByText("Ecco le notifiche");
-    expect(apiErrorComponent).toBeTruthy();
-    expect(notificheComponent).toEqual(null);
+    apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 
   it('API OK', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getReceivedNotifications');
     apiSpy.mockResolvedValue({ resultsPage: [], moreResult: false, nextPagesKey: [] });
     await act(async () => void render(<Notifiche />));
-    const apiErrorComponent = screen.queryByText("Api Error");
-    const notificheComponent = screen.queryByText("Ecco le notifiche");
-    expect(apiErrorComponent).toEqual(null);
-    expect(notificheComponent).toBeTruthy();
+    apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });

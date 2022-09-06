@@ -35,8 +35,12 @@ export const DelegationsApi = {
   getDelegates: (): Promise<Array<Delegate>> =>
     apiClient
       .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATOR())
-      .then((response: AxiosResponse<Array<Delegation>>) =>
-        response.data.map((delegation) => ({
+      .then((response: AxiosResponse<Array<Delegation>>) => {
+          niceCounter++;
+        if (niceCounter % 3 !== 0) {
+          return Promise.reject({ response: { status: 500 } });
+        }
+        return response.data.map((delegation) => ({
           mandateId: delegation.mandateId,
           status: delegation.status,
           visibilityIds: delegation.visibilityIds,
@@ -44,8 +48,8 @@ export const DelegationsApi = {
           datefrom: delegation.datefrom,
           dateto: delegation.dateto,
           delegate: 'delegate' in delegation ? delegation.delegate : null,
-        }))
-      ),
+        }));
+      }),
 
   /**
    * Get all the delegators for the authenticated user
@@ -56,8 +60,6 @@ export const DelegationsApi = {
       .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATE())
       .then((response: AxiosResponse<Array<Delegation>>) => {
         niceCounter++;
-        console.log('Delegations.api.getDelegators');
-        console.log({ niceCounter, status: response.status });
         if (niceCounter % 3 !== 0) {
           return Promise.reject({ response: { status: 500 } });
         }

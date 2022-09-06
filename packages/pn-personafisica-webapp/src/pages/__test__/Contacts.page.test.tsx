@@ -6,6 +6,7 @@ import * as actions from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 import { PROFILO } from '../../navigation/routes.const';
 import { ContactsApi } from '../../api/contacts/Contacts.api';
+import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -23,18 +24,14 @@ jest.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigateFn,
 }));
 
-// questo permette che in alcuni tests il componente "normale" sia quello proprio del componente Contacts
-// e che in altri invece sia un mock tipo <div>Ecco i contacts</div>
-let mockContactsComponent: JSX.Element | undefined;
-
 /**
- * Vedi commenti nella definizione di mockApiErrorGuard
+ * Vedi commenti nella definizione di simpleMockForApiErrorGuard
  */
-jest.mock('@pagopa-pn/pn-commons', () => {
+ jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
-    ApiErrorGuard: original.mockApiErrorGuard(() => mockContactsComponent),
+    ApiErrorGuard: original.simpleMockForApiErrorGuard,
   };
 });
 
@@ -115,30 +112,24 @@ describe('Contacts page - assuming contact API works properly', () => {
 
 describe('Contacts Page - different contact API behaviors', () => {
   beforeEach(() => {
-    mockContactsComponent = <div>Ecco i contatti</div>;
+    apiOutcomeTestHelper.setStandardMock();
   });
 
   afterEach(() => {
-    mockContactsComponent = undefined;
+    apiOutcomeTestHelper.clearMock();
   });
 
   it('API error', async () => {
     const apiSpy = jest.spyOn(ContactsApi, 'getDigitalAddresses');
     apiSpy.mockRejectedValue({ response: { status: 500 } });
     await act(async () => void render(<Contacts />));
-    const apiErrorComponent = screen.queryByText("Api Error");
-    const notificheComponent = screen.queryByText("Ecco i contatti");
-    expect(apiErrorComponent).toBeTruthy();
-    expect(notificheComponent).toEqual(null);
+    apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 
   it('API OK', async () => {
     const apiSpy = jest.spyOn(ContactsApi, 'getDigitalAddresses');
     apiSpy.mockResolvedValue({ legal: [], courtesy: [] });
     await act(async () => void render(<Contacts />));
-    const apiErrorComponent = screen.queryByText("Api Error");
-    const notificheComponent = screen.queryByText("Ecco i contatti");
-    expect(apiErrorComponent).toEqual(null);
-    expect(notificheComponent).toBeTruthy();
+    apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });

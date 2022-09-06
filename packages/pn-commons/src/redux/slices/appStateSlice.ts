@@ -79,8 +79,6 @@ export const appStateSlice = createSlice({
         state.messages.errors = removeErrorsByAction(actionProperType(action), state.messages.errors);
       })
       .addMatcher(handleError, (state, action) => {
-        console.log('in handling generico errore');
-        console.log(action)
         state.loading.result = false;
         const actionBeingRejected = actionProperType(action);
         state.messages.errors = removeErrorsByAction(actionBeingRejected, state.messages.errors);

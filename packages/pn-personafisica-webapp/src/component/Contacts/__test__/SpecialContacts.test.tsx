@@ -7,6 +7,7 @@ import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts'
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
 import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
+import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -16,17 +17,17 @@ jest.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-// Vedi commenti nella definizione di mockApiErrorGuard
-let mockSpecialContactsComponent: JSX.Element | undefined;
 
-jest.mock('@pagopa-pn/pn-commons', () => {
+/**
+ * Vedi commenti nella definizione di simpleMockForApiErrorGuard
+ */
+ jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
-    ApiErrorGuard: original.mockApiErrorGuard(() => mockSpecialContactsComponent),
+    ApiErrorGuard: original.simpleMockForApiErrorGuard,
   };
 });
-
 
 
 jest.mock('../SpecialContactElem', () => () => <div>SpecialContactElem</div>);
@@ -448,11 +449,12 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
 
 describe('Contacts Page - different contact API behaviors', () => {
   beforeEach(() => {
-    mockSpecialContactsComponent = <div>Ecco il form</div>;
+    apiOutcomeTestHelper.setStandardMock();
   });
 
   afterEach(() => {
-    mockSpecialContactsComponent = undefined;
+    apiOutcomeTestHelper.clearMock();
+    jest.restoreAllMocks();
   });
 
   it('API error', async () => {
@@ -463,10 +465,7 @@ describe('Contacts Page - different contact API behaviors', () => {
         <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
       </DigitalContactsCodeVerificationProvider>
     ));
-    const apiErrorComponent = screen.queryByText("Api Error");
-    const notificheComponent = screen.queryByText("Ecco il form");
-    expect(apiErrorComponent).toBeTruthy();
-    expect(notificheComponent).toEqual(null);
+    apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 
   it('API OK', async () => {
@@ -477,10 +476,7 @@ describe('Contacts Page - different contact API behaviors', () => {
         <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
       </DigitalContactsCodeVerificationProvider>
     ));
-    const apiErrorComponent = screen.queryByText("Api Error");
-    const notificheComponent = screen.queryByText("Ecco il form");
-    expect(apiErrorComponent).toEqual(null);
-    expect(notificheComponent).toBeTruthy();
+    apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
 

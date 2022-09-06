@@ -3,15 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { Column, ItemsTable as Table, Item, CodeModal, Sort, EmptyState } from '@pagopa-pn/pn-commons';
+import { Column, ItemsTable as Table, Item, CodeModal, Sort, EmptyState, ApiErrorGuard } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
-import TableError from '../TableError/TableError';
-import { getDelegates } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { setDelegatesSorting } from '../../redux/delegation/reducers';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
@@ -25,9 +24,6 @@ const Delegates = () => {
   const dispatch = useAppDispatch();
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
-  );
-  const delegatesError = useAppSelector(
-    (state: RootState) => state.delegationsState.delegatesError
   );
   const sortDelegates = useAppSelector((state: RootState) => state.delegationsState.sortDelegates);
   const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
@@ -133,8 +129,7 @@ const Delegates = () => {
             </Button>
           </Box>
         </Stack>
-        {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
-        {!delegatesError && (
+        <ApiErrorGuard apiId={DELEGATION_ACTIONS.GET_DELEGATES} reloadAction={() => dispatch(getDelegates())}>
           <>
             {rows.length > 0 ? (
               <Table
@@ -151,7 +146,7 @@ const Delegates = () => {
               />
             )}
           </>
-        )}
+        </ApiErrorGuard>
       </Box>
     </>
   );

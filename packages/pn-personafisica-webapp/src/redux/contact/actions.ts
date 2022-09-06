@@ -1,3 +1,4 @@
+import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
@@ -8,6 +9,7 @@ import {
   DigitalAddresses,
   LegalChannelType,
 } from '../../models/contacts';
+import { Party } from '../../models/party';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
 export enum CONTACT_ACTIONS  {
@@ -17,13 +19,7 @@ export enum CONTACT_ACTIONS  {
 
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
   CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES,
-  async (_, { rejectWithValue }) => {
-    try {
-      return await ContactsApi.getDigitalAddresses();
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction(() => ContactsApi.getDigitalAddresses())
 );
 
 export const createOrUpdateLegalAddress = createAsyncThunk<
@@ -131,13 +127,7 @@ export const disableIOAddress = createAsyncThunk<string, string>(
 );
 
 
-export const getAllActivatedParties = createAsyncThunk(
+export const getAllActivatedParties = createAsyncThunk<Array<Party>,void>(
   CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES, 
-  async (_, { rejectWithValue }) => {
-    try {
-      return await ExternalRegistriesAPI.getAllActivatedParties();
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction(() => ExternalRegistriesAPI.getAllActivatedParties())
 );

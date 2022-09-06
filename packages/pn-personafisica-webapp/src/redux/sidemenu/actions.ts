@@ -1,3 +1,4 @@
+import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ContactsApi } from '../../api/contacts/Contacts.api';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
@@ -10,22 +11,10 @@ export enum SIDEMENU_ACTIONS  {
 
 export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
   SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION,
-  async (_, { rejectWithValue }) => {
-    try {
-      return await DelegationsApi.getDelegators();
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction(() => DelegationsApi.getDelegators())
 );
 
 export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
   'getDomicileInfo',
-  async () => {
-    try {
-      return (await ContactsApi.getDigitalAddresses()).legal;
-    } catch {
-      return [];
-    }
-  }
+  performThunkAction(async () => (await ContactsApi.getDigitalAddresses()).legal)
 );

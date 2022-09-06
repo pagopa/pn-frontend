@@ -25,7 +25,8 @@ import { basicUserDataMatcherContents, basicInitialUserData, adaptedTokenExchang
 import { storageOpsBuilder } from './storage.utility';
 import { compileRoute } from './routes.utility';
 import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './costants';
-import { mockApiErrorGuard } from './test.utility';
+import { mockApiErrorGuard, simpleMockForApiErrorGuard, apiOutcomeTestHelper } from './test.utility';
+import { performThunkAction } from './redux.utility';
 
 export {
     getNotificationAllowedStatus,
@@ -58,4 +59,7 @@ export {
     URL_DIGITAL_NOTIFICATIONS,
     PRIVACY_LINK_RELATIVE_PATH,
     mockApiErrorGuard,
+    apiOutcomeTestHelper,
+    simpleMockForApiErrorGuard,
+    performThunkAction,
 };

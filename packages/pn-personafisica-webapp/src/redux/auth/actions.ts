@@ -1,3 +1,4 @@
+import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
 import { ConsentsApi } from '../../api/consents/Consents.api';
@@ -55,13 +56,7 @@ export const logout = createAsyncThunk<User>('logout', async () => {
  */
 export const getToSApproval = createAsyncThunk<Consent>(
   AUTH_ACTIONS.GET_TOS_APPROVAL,
-  async (_, { rejectWithValue }) => {
-    try {
-      return await ConsentsApi.getConsentByType(ConsentType.TOS);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction(() => ConsentsApi.getConsentByType(ConsentType.TOS))
 );
 
 export const acceptToS = createAsyncThunk<string>('acceptToS', async (_, { rejectWithValue }) => {

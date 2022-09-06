@@ -16,10 +16,10 @@ export const ContactsApi = {
    * @param  {string} recipientId
    * @returns Promise
    */
-  getDigitalAddresses: (): Promise<DigitalAddresses> =>
+  getDigitalAddresses: (): Promise<DigitalAddresses> => 
     apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => {
       niceCounter++;
-      if (niceCounter % 3 === 0) {
+      if (niceCounter % 3 === 1) {
         return {
           legal: response.data.legal ? response.data.legal : [],
           courtesy: response.data.courtesy ? response.data.courtesy : [],

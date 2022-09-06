@@ -1,4 +1,4 @@
-import { Sort } from '@pagopa-pn/pn-commons';
+import { performThunkAction, Sort } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk, createAction } from '@reduxjs/toolkit';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { DelegatorsColumn, DelegatesColumn } from '../../models/Deleghe';
@@ -8,63 +8,38 @@ export enum DELEGATION_ACTIONS {
   GET_DELEGATES = 'getDelegates',
   GET_DELEGATORS = 'getDelegators',
 }
+
 export const getDelegates = createAsyncThunk<Array<Delegation>>(
   DELEGATION_ACTIONS.GET_DELEGATES,
-  async (_, { rejectWithValue }) => {
-    try {
-      return await DelegationsApi.getDelegates();
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction(() => DelegationsApi.getDelegates())
 );
 
 export const getDelegators = createAsyncThunk<Array<Delegation>>(
   DELEGATION_ACTIONS.GET_DELEGATORS,
-  async (_, { rejectWithValue }) => {
-    try {
-      return await DelegationsApi.getDelegators();
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction(() => DelegationsApi.getDelegators())
 );
 
 export const revokeDelegation = createAsyncThunk<{ id: string }, string>(
   'revokeDelegation',
-  async (id: string, { rejectWithValue }) => {
-    try {
-      return await DelegationsApi.revokeDelegation(id);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction((id) => DelegationsApi.revokeDelegation(id))
 );
 
 export const rejectDelegation = createAsyncThunk<{ id: string }, string>(
   'rejectDelegation',
-  async (id: string, { rejectWithValue }) => {
-    try {
-      return await DelegationsApi.rejectDelegation(id);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction((id) => DelegationsApi.rejectDelegation(id))
 );
 
 export const acceptDelegation = createAsyncThunk<
   AcceptDelegationResponse,
   { id: string; code: string }
->('acceptDelegation', async ({ id, code }, { rejectWithValue }) => {
-  const data = {
-    verificationCode: code,
-  };
-  try {
+>('acceptDelegation', 
+  performThunkAction(async ({id, code}: { id: string; code: string }) => {
+    const data = {
+      verificationCode: code,
+    };
     return await DelegationsApi.acceptDelegation(id, data);
-  } catch (e) {
-    return rejectWithValue(e);
-  }
-});
+  })
+);
 
 export const openRevocationModal =
   createAction<{ id: string; type: string }>('openRevocationModal');
