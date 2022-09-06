@@ -7,8 +7,8 @@ export class GreaterThan<TModel, TValue> extends Rule<TModel, TValue> {
   private threshold: number | Date;
   private equalTo?: boolean;
 
-  constructor(value: number | Date, equalTo?: boolean) {
-    super();
+  constructor(value: number | Date, equalTo?: boolean, customErrorMessage?: string) {
+    super(customErrorMessage);
     this.threshold = value;
     this.equalTo = equalTo;
   }

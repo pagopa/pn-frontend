@@ -12,9 +12,10 @@ export class Between<TModel, TValue> extends Rule<TModel, TValue> {
     lowerBound: number,
     upperBound: number,
     inclusiveLowerBound?: boolean,
-    inclusiveUpperBound?: boolean
+    inclusiveUpperBound?: boolean,
+    customErrorMessage?: string
   ) {
-    super();
+    super(customErrorMessage);
     this.lowerBound = lowerBound;
     this.upperBound = upperBound;
     this.inclusiveLowerBound = inclusiveLowerBound;

@@ -16,18 +16,20 @@ export abstract class CommonRuleValidator<TModel, TValue> {
     /**
      * Check if value is null
      * @param {boolean} [not] boolean to evaluate negative condition
+     * @param {string} [customErrorMessage] custom message to show when validation fails
      */
-    public isNull = (not?: boolean) => {
-        this.pushRule(new IsNull<TModel, TValue>(not));
+    public isNull = (not?: boolean, customErrorMessage?: string) => {
+        this.pushRule(new IsNull<TModel, TValue>(not, customErrorMessage));
         return this;
     }
     
     /**
      * Check if value is undefined
      * @param {boolean} [not] boolean to evaluate negative condition
+     * @param {string} [customErrorMessage] custom message to show when validation fails
      */
-    public isUndefined = (not?: boolean) => {
-        this.pushRule(new IsUndefined<TModel, TValue>(not));
+    public isUndefined = (not?: boolean, customErrorMessage?: string) => {
+        this.pushRule(new IsUndefined<TModel, TValue>(not, customErrorMessage));
         return this;
     }
 
@@ -35,9 +37,10 @@ export abstract class CommonRuleValidator<TModel, TValue> {
      * Check if value is equal to one provided
      * @param {boolean} value value to compare
      * @param {boolean} [not] boolean to evaluate negative condition
+     * @param {string} [customErrorMessage] custom message to show when validation fails
      */
-    public isEqual = (value: TValue, not?: boolean) => {
-        this.pushRule(new IsEqual<TModel, TValue>(value, not));
+    public isEqual = (value: TValue, not?: boolean, customErrorMessage?: string) => {
+        this.pushRule(new IsEqual<TModel, TValue>(value, not, customErrorMessage));
         return this;
     }
 

@@ -7,8 +7,8 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
   private not?: boolean;
   private valueToCompare: TValue;
 
-  constructor(value: TValue, not?: boolean) {
-    super();
+  constructor(value: TValue, not?: boolean, customErrorMessage?: string) {
+    super(customErrorMessage);
     this.not = not;
     this.valueToCompare = value;
   }

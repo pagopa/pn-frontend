@@ -6,8 +6,8 @@ export class Matches<TModel, TValue> extends Rule<TModel, TValue> {
   private pattern: RegExp;
   private not?: boolean;
 
-  constructor(pattern: RegExp, not?: boolean) {
-    super();
+  constructor(pattern: RegExp, not?: boolean, customErrorMessage?: string) {
+    super(customErrorMessage);
     this.pattern = pattern;
     this.not = not;
   }

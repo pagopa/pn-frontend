@@ -6,8 +6,8 @@ export class Length<TModel, TValue> extends Rule<TModel, TValue> {
   private minLength?: number;
   private maxLength?: number;
 
-  constructor(minLength?: number, maxLength?: number) {
-    super();
+  constructor(minLength?: number, maxLength?: number, customErrorMessage?: string) {
+    super(customErrorMessage);
     this.minLength = minLength;
     this.maxLength = maxLength;
   }

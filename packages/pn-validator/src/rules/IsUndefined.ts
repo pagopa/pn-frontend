@@ -4,8 +4,8 @@ export class IsUndefined<TModel, TValue> extends Rule<TModel, TValue> {
     
     private not?: boolean;
 
-    constructor(not?: boolean) {
-        super();
+    constructor(not?: boolean, customErrorMessage?: string) {
+        super(customErrorMessage);
         this.not = not;
     }
 

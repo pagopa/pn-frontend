@@ -17,7 +17,7 @@ export class InnerValidator<TModel, TValue> extends Rule<TModel, TValue> {
             return null;
         }
         const result = this.validator.validate(value);
-        if (Object.keys(result).length > 0) {
+        if (result && Object.keys(result).length > 0) {
             return result as ValidationResult<TValue>;
         }
         return null;

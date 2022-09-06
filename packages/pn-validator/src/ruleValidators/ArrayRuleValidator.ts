@@ -16,9 +16,10 @@ export class ArrayRuleValidator<TModel, TValue>
   /**
    * Check if value is empty
    * @param {boolean} [not] boolean to evaluate negative condition
+   * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  isEmpty = (not?: boolean): ArrayRuleValidator<TModel, TValue> => {
-    this.pushRule(new IsEmpty<TModel, TValue>(not));
+  isEmpty = (not?: boolean, customErrorMessage?: string): ArrayRuleValidator<TModel, TValue> => {
+    this.pushRule(new IsEmpty<TModel, TValue>(not, customErrorMessage));
     return this;
   };
 
