@@ -1,11 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { storageOpsBuilder } from "@pagopa-pn/pn-commons";
 
 import { ROUTE_LOGIN, ROUTE_LOGIN_ERROR, ROUTE_LOGOUT } from '../utils/constants';
-import { storageOnSuccessOps } from "../utils/storage";
 import Login from '../pages/login/Login';
 import Logout from '../pages/logout/Logout';
 import LoginError from '../pages/loginError/LoginError';
 
+const storageOnSuccessOps = storageOpsBuilder<string>('LOGIN:onSuccess', 'string', false);
 /** login request operations */
 const onLoginRequest = () => {
   storageOnSuccessOps.delete();
