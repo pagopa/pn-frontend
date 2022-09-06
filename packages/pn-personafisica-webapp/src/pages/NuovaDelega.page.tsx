@@ -15,9 +15,7 @@ import {
   Button,
   Divider,
   Grid,
-  Select,
   MenuItem,
-  InputLabel,
   SelectChangeEvent,
   Stack,
   Paper,
@@ -35,6 +33,7 @@ import {
   TitleBox,
   useIsMobile,
   PnBreadcrumb,
+  CustomDropdown,
 } from '@pagopa-pn/pn-commons';
 import { dataRegex } from '@pagopa-pn/pn-commons/src/utils/string.utility';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -325,12 +324,11 @@ const NuovaDelega = () => {
                             <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
                               {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                                 <FormControl fullWidth>
-                                  <InputLabel id="ente-select">{t('nuovaDelega.form.selectEntities')}</InputLabel>
-                                  <Select
-                                    labelId="ente-select"
+                                  <CustomDropdown
                                     id="ente-select"
-                                    value={values.enteSelect.uniqueIdentifier}
                                     label={t('nuovaDelega.form.selectEntities')}
+                                    fullWidth
+                                    value={values.enteSelect.uniqueIdentifier}
                                     onChange={(event: SelectChangeEvent<string>) => {
                                       setFieldValue('enteSelect', {
                                         name: event.target.name,
@@ -343,7 +341,7 @@ const NuovaDelega = () => {
                                         <DropDownPartyMenuItem name={entity.name} />
                                       </MenuItem>
                                     ))}
-                                  </Select>
+                                  </CustomDropdown>
                                 </FormControl>
                               )}
                             </Grid>

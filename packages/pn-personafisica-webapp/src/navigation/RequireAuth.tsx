@@ -26,6 +26,7 @@ const RequireAuth = () => {
 
   const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
 
+
   useEffect(() => {
     if (token === '' || !token || isUnauthorizedUser || hasTosApiErrors) {
       setAccessDenied(true);
@@ -42,7 +43,7 @@ const RequireAuth = () => {
 
   return <HandleAuth
     accessDenied={accessDenied} goodbyeMessage={goodbyeMessage} disableInactivityHandler={DISABLE_INACTIVITY_HANDLER}
-    goToLogin={goToLogin} doLogout={() => dispatch(logout())} />;
+    goToLogin={() => goToLogin(window.location.href)} doLogout={() => dispatch(logout())} />;
 };
 
 export default RequireAuth;
