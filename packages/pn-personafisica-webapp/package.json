@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-personafisica-webapp",
   "description": "Piattaforma Notifiche per il cittadino",
-  "version": "0.1.11",
+  "version": "0.2.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -9,7 +9,7 @@
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.6",
     "@mui/x-date-pickers": "^5.0.0-alpha.5",
-    "@pagopa-pn/pn-commons": "^0.1.10",
+    "@pagopa-pn/pn-commons": "^0.2.0",
     "@pagopa/mui-italia": "^0.6.38",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
