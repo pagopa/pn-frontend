@@ -1,4 +1,13 @@
-import { memo, useMemo, useRef, KeyboardEvent, Fragment, useState, ChangeEvent, useEffect } from 'react';
+import {
+  memo,
+  useMemo,
+  useRef,
+  KeyboardEvent,
+  Fragment,
+  useState,
+  ChangeEvent,
+  useEffect,
+} from 'react';
 import { TextField } from '@mui/material';
 
 type Props = {
@@ -43,19 +52,16 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
       return;
     }
     setTimeout(() => {
-      // focus next input
+      // focus input
       inputsRef.current[index].focus();
       // set cursor position
       if (inputsRef.current[index].setSelectionRange) {
-        inputsRef.current[index].setSelectionRange(
-          inputsRef.current[index].value,
-          inputsRef.current[index].value
-        );
+        inputsRef.current[index].setSelectionRange(1, 1);
       } else if (inputsRef.current[index].createTextRange) {
         const t = inputsRef.current[index].createTextRange();
         t.collapse(true);
-        t.moveEnd('character', inputsRef.current[index].value);
-        t.moveStart('character', inputsRef.current[index].value);
+        t.moveEnd('character', 1);
+        t.moveStart('character', 1);
         t.select();
       }
     }, 25);
