@@ -2,6 +2,7 @@ import {
   LegalFactId,
   PaymentAttachmentNameType,
   PaymentInfo,
+  performThunkAction,
 } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -9,26 +10,25 @@ import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 import { GetReceivedNotificationParams } from './types';
 
+export enum NOTIFICATION_ACTIONS  {
+  GET_RECEIVED_INFORMATION = 'getReceivedNotification',
+  GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
+}
+
+
 export const getReceivedNotification = createAsyncThunk<
   NotificationDetailForRecipient,
   GetReceivedNotificationParams
 >(
-  'getReceivedNotification',
-  async (
-    params: GetReceivedNotificationParams,
-    { rejectWithValue }
-  ) => {
-    try {
-      return await NotificationsApi.getReceivedNotification(
-        params.iun,
-        params.currentUserTaxId,
-        params.delegatorsFromStore,
-        params.mandateId
-      );
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMATION,
+  performThunkAction((params: GetReceivedNotificationParams) => 
+    NotificationsApi.getReceivedNotification(
+      params.iun,
+      params.currentUserTaxId,
+      params.delegatorsFromStore,
+      params.mandateId
+    )
+  )
 );
 
 export const getReceivedNotificationLegalfact = createAsyncThunk<
@@ -98,12 +98,8 @@ export const getNotificationPaymentInfo = createAsyncThunk<
   PaymentInfo,
   { noticeCode: string; taxId: string }
 >(
-  'getNotificationPaymentInfo',
-  async (params: { noticeCode: string; taxId: string }, { rejectWithValue }) => {
-    try {
-      return await NotificationsApi.getNotificationPaymentInfo(params.noticeCode, params.taxId);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO,
+  performThunkAction((params: { noticeCode: string; taxId: string }) => 
+    NotificationsApi.getNotificationPaymentInfo(params.noticeCode, params.taxId)
+  )
 );

@@ -30,7 +30,7 @@ const isFulfilled = (action: AnyAction) => action.type.endsWith('/fulfilled');
 
 const handleError = (action: AnyAction) => action.type.endsWith('/rejected');
 
-function removeErrorsByAction(action: string, errors: IAppMessage[]) {
+function doRemoveErrorsByAction(action: string, errors: IAppMessage[]) {
   return errors.filter((e) => e.action !== action);
 }
 
@@ -45,6 +45,9 @@ export const appStateSlice = createSlice({
   reducers: {
     removeError(state, action: PayloadAction<string>) {
       state.messages.errors = state.messages.errors.filter((e) => e.id !== action.payload);
+    },
+    removeErrorsByAction(state, action: PayloadAction<string>) {
+      state.messages.errors = doRemoveErrorsByAction(action.payload, state.messages.errors);
     },
     setErrorAsAlreadyShown(state, action: PayloadAction<string>) {
       const theError = state.messages.errors.find((e) => e.id === action.payload);
@@ -76,12 +79,12 @@ export const appStateSlice = createSlice({
       })
       .addMatcher(isFulfilled, (state, action) => {
         state.loading.result = false;
-        state.messages.errors = removeErrorsByAction(actionProperType(action), state.messages.errors);
+        state.messages.errors = doRemoveErrorsByAction(actionProperType(action), state.messages.errors);
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
         const actionBeingRejected = actionProperType(action);
-        state.messages.errors = removeErrorsByAction(actionBeingRejected, state.messages.errors);
+        state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         const error = createAppError(
           {...action.payload, action: actionBeingRejected}, { show: !action.payload.blockNotification });
         state.messages.errors.push(error);

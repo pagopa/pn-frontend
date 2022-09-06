@@ -15,6 +15,8 @@ import {
   useIsMobile,
   PnBreadcrumb,
   NotificationStatus,
+  useErrors,
+  ApiError,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -23,7 +25,8 @@ import { RootState } from '../redux/store';
 import {
   getReceivedNotification,
   getReceivedNotificationDocument,
-  getReceivedNotificationLegalfact
+  getReceivedNotificationLegalfact,
+  NOTIFICATION_ACTIONS
 } from '../redux/notification/actions';
 import { resetState } from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
@@ -45,6 +48,7 @@ const NotificationDetail = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
+  const { hasApiErrors } = useErrors();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const delegatorsFromStore = useAppSelector(
@@ -136,6 +140,8 @@ const NotificationDetail = () => {
 
   const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
 
+  const hasNotificationReceivedApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMATION);
+
   const getDownloadFilesMessage = useCallback((): string => {
     if (isCancelled) {
       return t('detail.acts_files.notification_cancelled', { ns: 'notifiche' });
@@ -146,7 +152,7 @@ const NotificationDetail = () => {
     }
   }, [isCancelled, hasDocumentsAvailable]);
 
-  useEffect(() => {
+  const fetchReceivedNotification = useCallback(() => {
     if (id) {
       void dispatch(
         getReceivedNotification({
@@ -157,6 +163,10 @@ const NotificationDetail = () => {
         })
       );
     }
+  }, []);
+
+  useEffect(() => {
+    fetchReceivedNotification();
     return () => void dispatch(resetState());
   }, []);
 
@@ -172,19 +182,22 @@ const NotificationDetail = () => {
     }
   }, [legalFactDownloadUrl]);
 
+  const properBreadcrumb = (
+    <PnBreadcrumb
+      goBackLabel={t('button.indietro', { ns: 'common' })}
+      linkRoute={routes.NOTIFICHE}
+      linkLabel={
+        <Fragment>
+          <EmailIcon sx={{ mr: 0.5 }} />
+          {t('detail.breadcrumb-root', { ns: 'notifiche' })}
+        </Fragment>
+      }
+      currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
+    />
+  );
   const breadcrumb = (
     <Fragment>
-      <PnBreadcrumb
-        goBackLabel={t('button.indietro', { ns: 'common' })}
-        linkRoute={routes.NOTIFICHE}
-        linkLabel={
-          <Fragment>
-            <EmailIcon sx={{ mr: 0.5 }} />
-            {t('detail.breadcrumb-root', { ns: 'notifiche' })}
-          </Fragment>
-        }
-        currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
-      />
+      {properBreadcrumb}
       <TitleBox
         variantTitle="h4"
         title={notification.subject}
@@ -197,66 +210,72 @@ const NotificationDetail = () => {
     </Fragment>
   );
 
-  return (
-    <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
-      {isMobile && breadcrumb}
-      <Grid container direction={isMobile ? 'column-reverse' : 'row'} spacing={isMobile ? 3 : 0}>
-        <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
-          {!isMobile && breadcrumb}
-          <Stack spacing={3}>
-            <NotificationDetailTable rows={detailTableRows} />
-            {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
-              <NotificationPayment
-                iun={notification.iun}
-                notificationPayment={currentRecipient.payment}
-                onDocumentDownload={dowloadDocument}
-                mandateId={mandateId}
-              />
-            )}
-            <DomicileBanner />
+  return (<>
+    {hasNotificationReceivedApiError && <Box className={classes.root} sx={{ p: 3 }}>
+      {properBreadcrumb}
+      <ApiError onClick={fetchReceivedNotification} mt={3} />
+    </Box>}
+    {!hasNotificationReceivedApiError && 
+      <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
+        {isMobile && breadcrumb}
+        <Grid container direction={isMobile ? 'column-reverse' : 'row'} spacing={isMobile ? 3 : 0}>
+          <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
+            {!isMobile && breadcrumb}
+            <Stack spacing={3}>
+              <NotificationDetailTable rows={detailTableRows} />
+              {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
+                <NotificationPayment
+                  iun={notification.iun}
+                  notificationPayment={notification.iun === "PNGR-KGRE-MYGL-202209-A-1" ? {...currentRecipient.payment, noticeCode: undefined} : currentRecipient.payment}
+                  onDocumentDownload={dowloadDocument}
+                  mandateId={mandateId}
+                />
+              )}
+              <DomicileBanner />
+              <Paper sx={{ p: 3 }} className="paperContainer">
+                <NotificationDetailDocuments
+                  title={t('detail.acts', { ns: 'notifiche' })}
+                  documents={isCancelled ? [] : notification.documents}
+                  clickHandler={documentDowloadHandler}
+                  documentsAvailable={hasDocumentsAvailable}
+                  downloadFilesMessage={getDownloadFilesMessage()}
+                  downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                />
+              </Paper>
+              {/* TODO decommentare con pn-841
             <Paper sx={{ p: 3 }} className="paperContainer">
-              <NotificationDetailDocuments
-                title={t('detail.acts', { ns: 'notifiche' })}
-                documents={isCancelled ? [] : notification.documents}
-                clickHandler={documentDowloadHandler}
-                documentsAvailable={hasDocumentsAvailable}
-                downloadFilesMessage={getDownloadFilesMessage()}
-                downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
-              />
+              <HelpNotificationDetails 
+                title="Hai bisogno di aiuto?"
+                subtitle="Se hai domande relative al contenuto della notifica, contatta il"
+                courtName="Tribunale di Milano"
+                phoneNumber="848.800.444"
+                mail="nome.cognome@email.it"
+                website="https://www.tribunale.milano.it/"
+              />              
             </Paper>
-            {/* TODO decommentare con pn-841
-          <Paper sx={{ p: 3 }} className="paperContainer">
-            <HelpNotificationDetails 
-              title="Hai bisogno di aiuto?"
-              subtitle="Se hai domande relative al contenuto della notifica, contatta il"
-              courtName="Tribunale di Milano"
-              phoneNumber="848.800.444"
-              mail="nome.cognome@email.it"
-              website="https://www.tribunale.milano.it/"
-            />              
-          </Paper>
-              */}
-          </Stack>
+                */}
+            </Stack>
+          </Grid>
+          <Grid item lg={5} xs={12}>
+            <Box component="section" sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
+              <NotificationDetailTimeline
+                recipients={notification.recipients}
+                statusHistory={notification.notificationStatusHistory}
+                title={t('detail.timeline-title', { ns: 'notifiche' })}
+                clickHandler={legalFactDownloadHandler}
+                historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
+                showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
+                showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
+                eventTrackingCallbackShowMore={() =>
+                  trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
+                }
+              />
+            </Box>
+          </Grid>
         </Grid>
-        <Grid item lg={5} xs={12}>
-          <Box component="section" sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
-            <NotificationDetailTimeline
-              recipients={notification.recipients}
-              statusHistory={notification.notificationStatusHistory}
-              title={t('detail.timeline-title', { ns: 'notifiche' })}
-              clickHandler={legalFactDownloadHandler}
-              historyButtonLabel={t('detail.show-history', { ns: 'notifiche' })}
-              showMoreButtonLabel={t('detail.show-more', { ns: 'notifiche' })}
-              showLessButtonLabel={t('detail.show-less', { ns: 'notifiche' })}
-              eventTrackingCallbackShowMore={() =>
-                trackEventByType(TrackEventType.NOTIFICATION_TIMELINE_VIEW_MORE)
-              }
-            />
-          </Box>
-        </Grid>
-      </Grid>
-    </Box>
-  );
+      </Box>
+    }
+  </>);
 };
 
 export default NotificationDetail;

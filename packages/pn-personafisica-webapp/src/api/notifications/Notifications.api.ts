@@ -29,6 +29,9 @@ const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   return { url: '' };
 };
 
+/* eslint-disable-next-line functional/no-let */
+let niceCounter = 0;
+
 export const NotificationsApi = {
   /**
    * Gets current user notifications
@@ -70,6 +73,10 @@ export const NotificationsApi = {
     mandateId?: string
   ): Promise<NotificationDetailForRecipient> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun, mandateId)).then((response) => {
+      niceCounter++;
+      if (niceCounter % 5 === 0) {
+        return Promise.reject({ response: { status: 500 } });
+      }
       if (response.data) {
         return parseNotificationDetailForRecipient(
           response.data,
@@ -141,5 +148,11 @@ export const NotificationsApi = {
   getNotificationPaymentInfo: (noticeCode: string, taxId: string): Promise<PaymentInfo> =>
     apiClient
       .get<PaymentInfo>(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
-      .then((response) => response.data),
+      .then((response) => {
+        niceCounter++;
+        if (niceCounter % 4 === 2) {
+          return Promise.reject({ response: { status: 500 } });
+        }
+        return response.data;
+      }),
 };
