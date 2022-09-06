@@ -11,7 +11,7 @@ import { NotificationDetailForRecipient } from '../../models/NotificationDetail'
 import { GetReceivedNotificationParams } from './types';
 
 export enum NOTIFICATION_ACTIONS  {
-  GET_RECEIVED_INFORMATION = 'getReceivedNotification',
+  GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
   GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
 }
 
@@ -20,7 +20,7 @@ export const getReceivedNotification = createAsyncThunk<
   NotificationDetailForRecipient,
   GetReceivedNotificationParams
 >(
-  NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMATION,
+  NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION,
   performThunkAction((params: GetReceivedNotificationParams) => 
     NotificationsApi.getReceivedNotification(
       params.iun,

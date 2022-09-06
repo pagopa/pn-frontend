@@ -140,7 +140,7 @@ const NotificationDetail = () => {
 
   const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
 
-  const hasNotificationReceivedApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_RECEIVED_INFORMATION);
+  const hasNotificationReceivedApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION);
 
   const getDownloadFilesMessage = useCallback((): string => {
     if (isCancelled) {
