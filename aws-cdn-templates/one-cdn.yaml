@@ -16,6 +16,12 @@ Parameters:
   WebApiUrl:
     Description: "The Url of web API: useful for content-security-policy"
     Type: String
+
+Conditions:
+  IsLanding: 
+    Fn::And:
+      - !Not [ !Equals [ !Ref Name, "" ]]
+      - !Equals [ !Select [ 0, !Split [ web-landing-cdn-, !Ref Name ]], "" ]
   
 Resources:
   # - CloudFront User used for WebApp S3 Bucket access
@@ -90,7 +96,7 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
           CachePolicyId: !Ref WebsiteCDNCachingPolicy
           ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
-        DefaultRootObject: index.html
+        DefaultRootObject: !If [ IsLanding, 'cittadini/index.html', 'index.html'] 
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200
