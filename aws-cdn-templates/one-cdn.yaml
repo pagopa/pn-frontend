@@ -18,7 +18,7 @@ Parameters:
     Type: String
 
 Conditions:
-  IsLanding: 
+  IsLanding: # Name startsWith 'web-landing-cdn-'
     Fn::And:
       - !Not [ !Equals [ !Ref Name, "" ]]
       - !Equals [ !Select [ 0, !Split [ web-landing-cdn-, !Ref Name ]], "" ]
