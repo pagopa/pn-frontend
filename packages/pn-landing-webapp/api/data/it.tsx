@@ -3,9 +3,9 @@ import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
 import { HorizontalNavProps } from "@pagopa/mui-italia";
 import { SvgIcon } from "@mui/material";
 import { Typography } from "@mui/material";
-import { CheckmarkIcon, CloudIcon, DelegationIcon, DeliverIcon, DocCheckIcon, EasyIcon, EcologyIcon, FireworksIcon, HourglassIcon, IOIcon, MessageIcon, NotificationIcon, PECIcon, PeopleIcon, PiggyIcon, SendIcon, SyncIcon, UploadIcon, WalletIcon } from "./icons";
 import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
 import { IAppData, IInfoblockData, IShowcaseData } from "model";
+import { CheckmarkIcon, CloudIcon, DelegationIcon, DeliverIcon, DocCheckIcon, EasyIcon, EcologyIcon, FireworksIcon, HourglassIcon, IOIcon, MessageIcon, NotificationIcon, PECIcon, PeopleIcon, PiggyIcon, SendIcon, SyncIcon, UploadIcon, WalletIcon } from "./icons";
 
 const assistanceLink = {
   label: "Assistenza",
@@ -311,6 +311,7 @@ const pfShowcases: Array<IShowcaseData> = [
            * Waiting for IOIcon
            */
           // icon: <IOIcon />,
+          // icon: <IOIcon  height="60px" width="60px" src={`${IMAGES_PATH}/IOIcon.png`} />,
           icon: <img src={`${IMAGES_PATH}/IOIcon.png`} />,
           title: "App IO",
           subtitle: <Typography variant="body2">
