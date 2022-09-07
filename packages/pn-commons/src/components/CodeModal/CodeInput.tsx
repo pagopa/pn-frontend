@@ -99,6 +99,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
   const changeInputValue = (value: string, index: number) => {
     setCurrentValues((previousValues) => {
       const inputsValues = [...previousValues];
+      // eslint-disable-next-line functional/immutable-data
       inputsValues[index] = value;
       return inputsValues;
     });
@@ -135,6 +136,7 @@ const CodeInput = ({ initialValues, isReadOnly, hasError, onChange }: Props) => 
           onKeyDown={(event) => keyDownHandler(event, index)}
           onChange={(event) => changeHandler(event, index)}
           value={currentValues[index]}
+          // eslint-disable-next-line functional/immutable-data
           inputRef={(node) => (inputsRef.current[index] = node)}
           color={hasError ? 'error' : 'primary'}
           error={hasError}
