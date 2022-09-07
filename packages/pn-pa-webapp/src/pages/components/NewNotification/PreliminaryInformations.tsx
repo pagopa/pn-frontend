@@ -19,6 +19,7 @@ import { GroupStatus } from '../../../models/user';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setPreliminaryInformations } from '../../../redux/newNotification/reducers';
 import { getUserGroups } from '../../../redux/newNotification/actions';
+import { PreliminaryInformationsPayload } from '../../../redux/newNotification/types';
 import { RootState } from '../../../redux/store';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
@@ -61,14 +62,13 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     /** onSubmit validate */
     onSubmit: (values) => {
       if (formik.isValid) {
-        dispatch(setPreliminaryInformations(values));
+        dispatch(setPreliminaryInformations(values as PreliminaryInformationsPayload));
         onConfirm();
       }
     },
   });
 
   const handleChangeTouched = async (e: ChangeEvent) => {
-    console.log('blah');
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };

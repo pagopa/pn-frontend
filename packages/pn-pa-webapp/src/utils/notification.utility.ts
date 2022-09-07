@@ -1,5 +1,13 @@
-import { NotificationDetailRecipient } from '@pagopa-pn/pn-commons';
-import { NewNotificationRecipient, NewNotificationDTO, NewNotification } from '../models/NewNotification';
+import _ from 'lodash';
+import { NotificationDetailRecipient, NotificationDetailDocument } from '@pagopa-pn/pn-commons';
+
+import {
+  NewNotificationRecipient,
+  NewNotificationDocument,
+  NewNotificationDTO,
+  NewNotification,
+  PaymentObject,
+} from '../models/NewNotification';
 
 const checkFisicalAddress = (recipient: NewNotificationRecipient) => {
   if (
@@ -43,25 +51,89 @@ const newNotificationRecipientsMapper = (
         noticeCode: recipient.noticeCode,
         pagoPaForm: {
           digests: {
-            sha256: ''
+            sha256: '',
           },
           contentType: '',
           ref: {
             key: '',
-            versionToken: ''
-          }
-        }
+            versionToken: '',
+          },
+        },
       },
       digitalDomicile,
       physicalAddress: checkFisicalAddress(recipient),
     };
   });
 
-  export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
-    const newNotificationParsed: NewNotificationDTO = {...newNotification, recipients: []};
+const newNotificationDocumentMapper = (
+  document: NewNotificationDocument
+): NotificationDetailDocument => ({
+  digests: {
+    sha256: document.file.sha256.hashBase64,
+  },
+  contentType: document.file.contentType,
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+  title: document.name,
+});
+
+const newNotificationAttachmentsMapper = (
+  documents: Array<NewNotificationDocument>
+): Array<NotificationDetailDocument> =>
+  documents.map((document) => newNotificationDocumentMapper(document));
+
+const newNotificationPaymentDocumentsMapper = (
+  recipients: Array<NotificationDetailRecipient>,
+  paymentDocuments: { [key: string]: PaymentObject }
+): Array<NotificationDetailRecipient> =>
+  recipients.map((r) => {
+    const documents: {
+      pagoPaForm: NotificationDetailDocument;
+      f24flatRate?: NotificationDetailDocument;
+      f24standard?: NotificationDetailDocument;
+    } = {
+      pagoPaForm: newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPaForm),
+    };
     /* eslint-disable functional/immutable-data */
-    // format recipients
-    newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients);
+    if (paymentDocuments[r.taxId].f24flatRate && paymentDocuments[r.taxId].f24flatRate.file && paymentDocuments[r.taxId].f24flatRate.file.uint8Array) {
+      documents.f24flatRate = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24flatRate);
+    }
+    if (paymentDocuments[r.taxId].f24standard && paymentDocuments[r.taxId].f24standard.file && paymentDocuments[r.taxId].f24standard.file.uint8Array) {
+      documents.f24standard = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24standard);
+    }
+    r.payment = {
+      ...documents,
+      creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
+      noticeCode: r.payment?.noticeCode,
+    };
     /* eslint-enable functional/immutable-data */
-    return newNotificationParsed;
+    return r;
+  });
+
+export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
+  const clonedNotification = _.cloneDeep(newNotification);
+  /* eslint-disable functional/immutable-data */
+  // remove useless data
+  delete clonedNotification.paymentMode;
+  delete clonedNotification.payment;
+  const newNotificationParsed: NewNotificationDTO = {
+    ...clonedNotification,
+    recipients: [],
+    documents: [],
   };
+  // format recipients
+  newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients);
+  // format attachments
+  newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
+  // format payments
+  if (newNotification.payment) {
+    newNotificationParsed.recipients = newNotificationPaymentDocumentsMapper(
+      newNotificationParsed.recipients,
+      newNotification.payment
+    );
+  }
+  /* eslint-enable functional/immutable-data */
+  return newNotificationParsed;
+}

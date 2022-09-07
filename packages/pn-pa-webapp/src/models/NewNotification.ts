@@ -56,7 +56,7 @@ export interface NewNotificationRecipient {
   showPhysicalAddress?: boolean;
 }
 
-export interface NewNotificationAttachment {
+export interface NewNotificationDocument {
   id: string;
   idx: number;
   name: string;
@@ -68,33 +68,25 @@ export interface NewNotificationAttachment {
       hashBase64: string;
       hashHex: string;
     };
+    contentType: string;
+  };
+  ref: {
+    key: string;
+    versionToken: string;
   };
 }
 
 export interface NewNotification extends BaseNewNotification {
-  paymentMode: PaymentModel;
+  paymentMode?: PaymentModel;
   recipients: Array<NewNotificationRecipient>;
-  documents: Array<NewNotificationAttachment>;
-  paymentDocumentsForm?: {[key: string]: PaymentObject};
-}
-
-export interface PaymentDocument {
-  name: string;
-  file: {
-    size?: number;
-    name?: string;
-    uint8Array: Uint8Array | undefined;
-    sha256: {
-      hashBase64: string;
-      hashHex: string;
-    };
-  };
+  documents: Array<NewNotificationDocument>;
+  payment?: { [key: string]: PaymentObject };
 }
 
 export interface PaymentObject {
-  pagoPaForm: PaymentDocument;
-  f24flatRate: PaymentDocument;
-  f24standard: PaymentDocument;
+  pagoPaForm: NewNotificationDocument;
+  f24flatRate: NewNotificationDocument;
+  f24standard: NewNotificationDocument;
 }
 
 export interface NewNotificationResponse {

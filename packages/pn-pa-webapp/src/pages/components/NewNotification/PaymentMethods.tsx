@@ -7,14 +7,14 @@ import { Paper, Typography } from '@mui/material';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 
 import {
-  NewNotificationFe,
+  NewNotification,
+  NewNotificationDocument,
   PaymentModel,
-  PaymentDocument,
   PaymentObject,
 } from '../../../models/NewNotification';
 import { useAppDispatch } from '../../../redux/hooks';
-import { setPaymentDocuments, uploadNotificationPaymentDocument } from '../../../redux/newNotification/actions';
-import { UploadPayementParams } from '../../../redux/newNotification/types';
+import { uploadNotificationPaymentDocument } from '../../../redux/newNotification/actions';
+import { setPaymentDocuments } from '../../../redux/newNotification/reducers';
 import NewNotificationCard from './NewNotificationCard';
 
 type PaymentBoxProps = {
@@ -24,10 +24,11 @@ type PaymentBoxProps = {
     id: string,
     file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string },
-    FileUpload?: any
+    name?: string,
+    size?: number
   ) => void;
   onRemoveFile: (id: string) => void;
-  fileUploaded?: PaymentDocument;
+  fileUploaded?: NewNotificationDocument;
 };
 
 const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile, fileUploaded }: PaymentBoxProps) => {
@@ -41,7 +42,9 @@ const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile, fileUploaded }: P
       <FileUpload
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
-        onFileUploaded={(file, sha256, fileNotFormatted) => onFileUploaded(id, file as Uint8Array, sha256, fileNotFormatted)}
+        onFileUploaded={(file, sha256, name, size) =>
+          onFileUploaded(id, file as Uint8Array, sha256, name, size)
+        }
         onRemoveFile={() => onRemoveFile(id)}
         sx={{ marginTop: '10px' }}
         fileFormat="uint8Array"
@@ -53,14 +56,20 @@ const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile, fileUploaded }: P
 };
 
 type Props = {
-  notification: NewNotificationFe;
+  notification: NewNotification;
   onConfirm: () => void;
   onPreviousStep?: () => void;
   isCompleted: boolean;
   paymentDocumentsData?: { [key: string]: PaymentObject };
 };
 
-const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep, paymentDocumentsData }: Props) => {
+const PaymentMethods = ({
+  notification,
+  onConfirm,
+  isCompleted,
+  onPreviousStep,
+  paymentDocumentsData,
+}: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche', 'common']);
 
@@ -69,85 +78,140 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep, 
     /* eslint-disable-next-line functional/immutable-data */
     obj[r.taxId] = {
       pagoPaForm: {
+        id: `${r.taxId}-pagoPaDoc`,
+        idx: 0,
         name: t('new-notification.steps.payment-methods.pagopa-notice'),
-        file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
+        file: {
+          uint8Array: undefined,
+          sha256: { hashBase64: '', hashHex: '' },
+          contentType: 'application/pdf',
+          name: '',
+          size: 0,
+        },
+        ref: {
+          key: '',
+          versionToken: '',
+        },
       },
       f24flatRate: {
+        id: `${r.taxId}-f24flatRateDoc`,
+        idx: 0,
         name: t('new-notification.steps.payment-methods.pagopa-notice-f24-flatrate'),
-        file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
+        file: {
+          uint8Array: undefined,
+          sha256: { hashBase64: '', hashHex: '' },
+          contentType: 'application/pdf',
+          name: '',
+          size: 0,
+        },
+        ref: {
+          key: '',
+          versionToken: '',
+        },
       },
       f24standard: {
+        id: `${r.taxId}-f24standardDoc`,
+        idx: 0,
         name: 'new-notification.steps.payment-methods.pagopa-notice-f24',
-        file: { uint8Array: undefined, sha256: { hashBase64: '', hashHex: '' } },
+        file: {
+          uint8Array: undefined,
+          sha256: { hashBase64: '', hashHex: '' },
+          contentType: 'application/pdf',
+          name: '',
+          size: 0,
+        },
+        ref: {
+          key: '',
+          versionToken: '',
+        },
       },
     };
     return obj;
   }, {});
 
   const initialValues = paymentDocumentsExists
-  ? {
-    ...paymentDocumentsData
-  } : {
-    ...emptyValues
-  };
+    ? {
+        ...paymentDocumentsData,
+      }
+    : {
+        ...emptyValues,
+      };
 
-  const formatPaymentDocuments = () => notification.recipients.reduce((obj: { [key: string]: PaymentObject }, r) => {
-    const formikPagoPaForm = formik.values[r.taxId].pagoPaForm;
-    const formikF24flatRate = formik.values[r.taxId].f24flatRate;
-    const formikF24standard = formik.values[r.taxId].f24standard;
-    // eslint-disable-next-line functional/immutable-data
-    obj[r.taxId] = {
-      pagoPaForm: {
-        name: t('new-notification.steps.payment-methods.pagopa-notice'),
-        file: {
-          uint8Array: formikPagoPaForm.file.uint8Array,
-          size: formikPagoPaForm.file.size,
-          name: formikPagoPaForm.file.name,
-          sha256: {
-            hashBase64: formikPagoPaForm.file.sha256.hashBase64,
-            hashHex: formikPagoPaForm.file.sha256.hashHex,
+  const formatPaymentDocuments = () =>
+    notification.recipients.reduce((obj: { [key: string]: PaymentObject }, r) => {
+      const formikPagoPaForm = formik.values[r.taxId].pagoPaForm;
+      const formikF24flatRate = formik.values[r.taxId].f24flatRate;
+      const formikF24standard = formik.values[r.taxId].f24standard;
+      // eslint-disable-next-line functional/immutable-data
+      obj[r.taxId] = {
+        pagoPaForm: {
+          id: `${r.taxId}-pagoPaDoc`,
+          idx: 0,
+          name: t('new-notification.steps.payment-methods.pagopa-notice'),
+          file: {
+            contentType: formikPagoPaForm.file.contentType,
+            uint8Array: formikPagoPaForm.file.uint8Array,
+            size: formikPagoPaForm.file.size,
+            name: formikPagoPaForm.file.name,
+            sha256: {
+              hashBase64: formikPagoPaForm.file.sha256.hashBase64,
+              hashHex: formikPagoPaForm.file.sha256.hashHex,
+            },
+          },
+          ref: {
+            key: '',
+            versionToken: '',
           },
         },
-      },
-      f24flatRate: {
-        name: t('new-notification.steps.payment-methods.pagopa-notice-f24-flatrate'),
-        file: {
-          uint8Array: formikF24flatRate.file.uint8Array,
-          size: formikF24flatRate.file.size,
-          name: formikF24flatRate.file.name,
-          sha256: {
-            hashBase64: formikF24flatRate.file.sha256.hashBase64,
-            hashHex: formikF24flatRate.file.sha256.hashHex,
+        f24flatRate: {
+          id: `${r.taxId}-f24flatRateDoc`,
+          idx: 0,
+          name: t('new-notification.steps.payment-methods.pagopa-notice-f24-flatrate'),
+          file: {
+            contentType: formikF24flatRate.file.contentType,
+            uint8Array: formikF24flatRate.file.uint8Array,
+            size: formikF24flatRate.file.size,
+            name: formikF24flatRate.file.name,
+            sha256: {
+              hashBase64: formikF24flatRate.file.sha256.hashBase64,
+              hashHex: formikF24flatRate.file.sha256.hashHex,
+            },
+          },
+          ref: {
+            key: '',
+            versionToken: '',
           },
         },
-      },
-      f24standard: {
-        name: t('new-notification.steps.payment-methods.pagopa-notice-f24'),
-        file: {
-          uint8Array: formikF24standard.file.uint8Array,
-          size: formikF24standard.file.size,
-          name: formikF24standard.file.name,
-          sha256: {
-            hashBase64: formikF24standard.file.sha256.hashBase64,
-            hashHex: formikF24standard.file.sha256.hashHex,
+        f24standard: {
+          id: `${r.taxId}-f24standardDoc`,
+          idx: 0,
+          name: t('new-notification.steps.payment-methods.pagopa-notice-f24'),
+          file: {
+            contentType: formikF24standard.file.contentType,
+            uint8Array: formikF24standard.file.uint8Array,
+            size: formikF24standard.file.size,
+            name: formikF24standard.file.name,
+            sha256: {
+              hashBase64: formikF24standard.file.sha256.hashBase64,
+              hashHex: formikF24standard.file.sha256.hashHex,
+            },
+          },
+          ref: {
+            key: '',
+            versionToken: '',
           },
         },
-      },
-    };
-    return obj;
-  }, {});
+      };
+      return obj;
+    }, {});
 
   const handlePreviousStep = () => {
     if (onPreviousStep) {
-      dispatch(
-        setPaymentDocuments({
-          paymentMethodsDocuments: formatPaymentDocuments()
-        })
-      );
+      dispatch(setPaymentDocuments({ paymentDocuments: formatPaymentDocuments() }));
       onPreviousStep();
     }
   };
-    
+
   const paymentDocumentSchema = yup.object({
     name: yup.string().required(),
     file: yup.object({
@@ -185,22 +249,7 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep, 
         onConfirm();
         return;
       }
-      const valuesToSend: UploadPayementParams = {};
-      const getSingleValueToSend = (value: PaymentDocument) => ({
-        key: value.name,
-        file: value.file.uint8Array,
-        sha256: value.file.sha256.hashBase64,
-        contentType: 'application/pdf',
-      });
-      for (const [key, value] of Object.entries(values)) {
-        /* eslint-disable-next-line functional/immutable-data */
-        valuesToSend[key] = {
-          pagoPaForm: getSingleValueToSend(value.pagoPaForm),
-          f24flatRate: getSingleValueToSend(value.f24flatRate),
-          f24standard: getSingleValueToSend(value.f24standard),
-        };
-      }
-      await dispatch(uploadNotificationPaymentDocument(valuesToSend));
+      await dispatch(uploadNotificationPaymentDocument(values));
     },
   });
 
@@ -215,7 +264,7 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep, 
       size: fileUploaded.size,
       uint8Array: file,
       sha256,
-      name: fileUploaded.name
+      name: fileUploaded.name,
     });
   };
 
@@ -238,7 +287,9 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep, 
             sx={{ padding: '24px', marginTop: '40px' }}
             className="paperContainer"
           >
-            <Typography variant="h6">{t('new-notification.steps.payment-methods.payment-models')} {recipient.denomination}</Typography>
+            <Typography variant="h6">
+              {t('new-notification.steps.payment-methods.payment-models')} {recipient.firstName} {recipient.lastName}
+            </Typography>
             <PaymentBox
               id={`${recipient.taxId}.pagoPaForm.file`}
               title={`${t('new-notification.steps.payment-methods.attach-pagopa-notice')}*`}

@@ -9,8 +9,9 @@ import { FileUpload } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../../redux/hooks';
-import { uploadNotificationAttachment, setAttachments } from '../../../redux/newNotification/actions';
-import { NewNotificationAttachment } from '../../../models/NewNotification';
+import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
+import { setAttachments } from '../../../redux/newNotification/reducers';
+import { NewNotificationDocument } from '../../../models/NewNotification';
 import NewNotificationCard from './NewNotificationCard';
 
 type AttachmentBoxProps = {
@@ -28,11 +29,11 @@ type AttachmentBoxProps = {
     id: string,
     file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string },
-    // TODO da rifattorizzare: issue PN-2015 non ha senso passarsi il contenuto del file da uno step all'altro
-    fileUploaded?: any,
+    name?: string,
+    size?: number
   ) => void;
   onRemoveFile: (id: string) => void;
-  fileUploaded?: NewNotificationAttachment;
+  fileUploaded?: NewNotificationDocument;
 };
 
 const AttachmentBox = ({
@@ -69,7 +70,9 @@ const AttachmentBox = ({
       <FileUpload
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
-        onFileUploaded={(file, sha256, fileNotFormatted) => onFileUploaded(`${id}.file`, file, sha256, fileNotFormatted)}
+        onFileUploaded={(file, sha256, name, size) =>
+          onFileUploaded(`${id}.file`, file, sha256, name, size)
+        }
         onRemoveFile={() => onRemoveFile(`${id}.file`)}
         sx={{ marginTop: '10px' }}
         fileFormat="uint8Array"
@@ -95,7 +98,7 @@ const AttachmentBox = ({
 type Props = {
   onConfirm: () => void;
   onPreviousStep?: () => void;
-  attachmentsData?: Array<NewNotificationAttachment>;
+  attachmentsData?: Array<NewNotificationDocument>;
 };
 
 const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
@@ -130,27 +133,32 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
 
   const attachmentsExists = attachmentsData && attachmentsData.length > 0;
   const initialValues = attachmentsExists
-  ? {
-    documents: attachmentsData
-  }
-  : {
-    documents: [
-      {
-        id: `documents.0`,
-        idx: 0,
-        file: {
-          uint8Array: undefined,
-          name: '',
-          size: 0,
-          sha256: {
-            hashBase64: '',
-            hashHex: ''
-          } 
-        },
-        name: '',
-      },
-    ],
-  };
+    ? {
+        documents: attachmentsData,
+      }
+    : {
+        documents: [
+          {
+            id: `documents.0`,
+            idx: 0,
+            file: {
+              contentType: 'application/pdf',
+              uint8Array: undefined,
+              name: '',
+              size: 0,
+              sha256: {
+                hashBase64: '',
+                hashHex: '',
+              },
+            },
+            name: '',
+            ref: {
+              key: '',
+              versionToken: '',
+            },
+          },
+        ],
+      };
 
   const formik = useFormik({
     initialValues,
@@ -158,29 +166,24 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
     validateOnMount: true,
     onSubmit: (values) => {
       if (formik.isValid) {
+        // store attachments
         dispatch(
-          uploadNotificationAttachment(
-            values.documents.map((v) => ({
-              key: v.name,
-              file: v.file.uint8Array,
-              sha256: v.file.sha256.hashBase64,
-              contentType: 'application/pdf',
-            }))
-          )
-        )
-        .unwrap()
-        .then(() => {
-          dispatch(
-            setAttachments({
-              documents: formik.values.documents.map((v) => ({
-                ...v,
-                id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-              })),
-            })
-          );
-          onConfirm();
-        })
-        .catch(() => undefined);
+          setAttachments({
+            documents: formik.values.documents.map((v) => ({
+              ...v,
+              id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+            })),
+          })
+        );
+        // upload attachments
+        // before upload, filter documents already uploaded
+        const documentsToUpload = values.documents.filter(d => !d.ref.key && !d.ref.versionToken);
+        dispatch(uploadNotificationAttachment(documentsToUpload))
+          .unwrap()
+          .then(() => {
+            onConfirm();
+          })
+          .catch(() => undefined);
       }
     },
   });
@@ -194,14 +197,15 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
     id: string,
     file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string },
-    fileUploaded?: any,
+    name?: string,
+    size?: number
   ) => {
     await formik.setFieldTouched(id, true, false);
     await formik.setFieldValue(id, {
-      size: fileUploaded.size,
+      size,
       uint8Array: file,
       sha256,
-      name: fileUploaded.name
+      name,
     });
   };
 
@@ -218,15 +222,20 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
           id: `documents.${lastDocIdx + 1}`,
           idx: lastDocIdx + 1,
           file: {
+            contentType: 'application/pdf',
             uint8Array: undefined,
             size: 0,
             name: '',
             sha256: {
               hashBase64: '',
-              hashHex: ''
-            }
+              hashHex: '',
+            },
           },
           name: '',
+          ref: {
+            key: '',
+            versionToken: '',
+          },
         },
       ],
     });
@@ -239,11 +248,11 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
       // eslint-disable-next-line functional/immutable-data
       document.idx = i;
       // eslint-disable-next-line functional/immutable-data
-      document.id = document.id.indexOf('.file') !== -1 ?  `documents.${i}.file` : `documents.${i}`;
+      document.id = document.id.indexOf('.file') !== -1 ? `documents.${i}.file` : `documents.${i}`;
     });
 
     await formik.setValues({
-      documents
+      documents,
     });
   };
 
@@ -278,15 +287,11 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
             onDelete={() => deleteDocumentHandler(i)}
             fieldLabel={i === 0 ? `${t('act-name')}*` : `${t('doc-name')}*`}
             fieldValue={d.name}
-            fileUploaded={(attachmentsData && attachmentsData[i]) ? attachmentsData[i] : undefined}
+            fileUploaded={attachmentsData && attachmentsData[i] ? attachmentsData[i] : undefined}
             fieldTouched={
-              ((attachmentsData && attachmentsData[i]) ||
-                (formik.touched.documents && formik.touched.documents[i])) as boolean
-              /*
               formik.touched.documents && formik.touched.documents[i]
                 ? formik.touched.documents[i].name
                 : undefined
-              */
             }
             fieldErros={
               formik.errors.documents && formik.errors.documents[i]

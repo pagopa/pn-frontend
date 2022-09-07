@@ -7,7 +7,6 @@ import { render } from '../../../../__test__/test-utils';
 import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
 import * as actions from '../../../../redux/newNotification/actions';
 import PaymentMethods from '../PaymentMethods';
-import { UploadPayementParams } from '../../../../redux/newNotification/types';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -56,8 +55,12 @@ describe('PaymentMethods Component', () => {
   });
 
   it('renders PaymentMethods', () => {
-    expect(result.container).toHaveTextContent(newNotification.recipients[0].denomination);
-    expect(result.container).toHaveTextContent(newNotification.recipients[1].denomination);
+    expect(result.container).toHaveTextContent(
+      `${newNotification.recipients[0].firstName} ${newNotification.recipients[0].lastName}`
+    );
+    expect(result.container).toHaveTextContent(
+      `${newNotification.recipients[1].firstName} ${newNotification.recipients[1].lastName}`
+    );
     const form = result.container.querySelector('form');
     const paymentBoxes = result.queryAllByTestId('paymentBox');
     expect(paymentBoxes).toHaveLength(4);
@@ -103,31 +106,7 @@ describe('PaymentMethods Component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith(
-        newNotification.recipients.reduce((obj: UploadPayementParams, r, index) => {
-          obj[r.taxId] = {
-            pagoPaForm: {
-              key: 'new-notification.steps.payment-methods.pagopa-notice',
-              file: new Uint8Array(),
-              sha256: 'mocked-hasBase64',
-              contentType: 'application/pdf',
-            },
-            f24flatRate: {
-              key: 'new-notification.steps.payment-methods.pagopa-notice-f24-flatrate',
-              file: undefined,
-              sha256: '',
-              contentType: 'application/pdf',
-            },
-            f24standard: {
-              key: 'new-notification.steps.payment-methods.pagopa-notice-f24',
-              file: index === 0 ? undefined : new Uint8Array(),
-              sha256: index === 0 ? '' : 'mocked-hasBase64',
-              contentType: 'application/pdf',
-            },
-          };
-          return obj;
-        }, {})
-      );
+      expect(mockActionFn).toBeCalledWith(newNotification.payment);
     });
   });
 });

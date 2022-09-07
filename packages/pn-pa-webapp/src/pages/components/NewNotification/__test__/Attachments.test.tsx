@@ -5,7 +5,7 @@ import * as redux from 'react-redux';
 import { render } from '../../../../__test__/test-utils';
 import * as actions from '../../../../redux/newNotification/actions';
 import Attachments from '../Attachments';
-import { UploadAttachmentParams } from '../../../../redux/newNotification/types';
+import { UploadDocumentParams } from '../../../../redux/newNotification/types';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -32,7 +32,7 @@ describe('Attachments Component', () => {
     fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
   }
 
-  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadAttachmentParams>) {
+  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadDocumentParams>) {
     fireEvent.click(button);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
