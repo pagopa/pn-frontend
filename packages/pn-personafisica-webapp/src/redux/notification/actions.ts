@@ -36,20 +36,13 @@ export const getReceivedNotificationLegalfact = createAsyncThunk<
   { iun: string; legalFact: LegalFactId; mandateId?: string }
 >(
   'getReceivedNotificationLegalfact',
-  async (
-    params: { iun: string; legalFact: LegalFactId; mandateId?: string },
-    { rejectWithValue }
-  ) => {
-    try {
-      return await NotificationsApi.getReceivedNotificationLegalfact(
-        params.iun,
-        params.legalFact,
-        params.mandateId
-      );
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction((params: { iun: string; legalFact: LegalFactId; mandateId?: string }) => 
+    NotificationsApi.getReceivedNotificationLegalfact(
+      params.iun,
+      params.legalFact,
+      params.mandateId
+    ) 
+  )
 );
 
 export const getReceivedNotificationDocument = createAsyncThunk<
@@ -57,20 +50,11 @@ export const getReceivedNotificationDocument = createAsyncThunk<
   { iun: string; documentIndex: string; mandateId?: string }
 >(
   'getReceivedNotificationDocument',
-  async (
-    params: { iun: string; documentIndex: string; mandateId?: string },
-    { rejectWithValue }
-  ) => {
-    try {
-      return await NotificationsApi.getReceivedNotificationDocument(
-        params.iun,
-        params.documentIndex,
-        params.mandateId
-      );
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction((params: { iun: string; documentIndex: string; mandateId?: string }) => NotificationsApi.getReceivedNotificationDocument(
+    params.iun,
+    params.documentIndex,
+    params.mandateId
+  ))
 );
 
 export const getPaymentAttachment = createAsyncThunk<
@@ -78,20 +62,13 @@ export const getPaymentAttachment = createAsyncThunk<
   { iun: string; attachmentName: PaymentAttachmentNameType; mandateId?: string }
 >(
   'getPaymentAttachment',
-  async (
-    params: { iun: string; attachmentName: PaymentAttachmentNameType; mandateId?: string },
-    { rejectWithValue }
-  ) => {
-    try {
-      return await NotificationsApi.getPaymentAttachment(
-        params.iun,
-        params.attachmentName,
-        params.mandateId
-      );
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction((params: { iun: string; attachmentName: PaymentAttachmentNameType; mandateId?: string }) => 
+    NotificationsApi.getPaymentAttachment(
+      params.iun,
+      params.attachmentName,
+      params.mandateId
+    )
+  )
 );
 
 export const getNotificationPaymentInfo = createAsyncThunk<

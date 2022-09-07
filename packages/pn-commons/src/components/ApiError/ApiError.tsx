@@ -1,5 +1,6 @@
 import { Stack, styled, Typography } from '@mui/material';
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 type ApiErrorProps = {
   onClick: () => void;
@@ -14,8 +15,16 @@ const StyledStack = styled(Stack)`
 `;
 
 const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText }) => {
-  const text = mainText || 'Non siamo riusciti a recuperare questi dati.';
-  const actionLaunchText = 'Ricarica';
+  const text = mainText || getLocalizedOrDefaultLabel(
+    'common',
+    `messages.generic-api-error-main-text`,
+    'Non siamo riusciti a recuperare questi dati.'
+  );
+  const actionLaunchText = getLocalizedOrDefaultLabel(
+    'common',
+    `messages.generic-api-error-action-text`,
+    'Ricarica'
+  );
 
   return (
     <StyledStack

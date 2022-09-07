@@ -11,14 +11,14 @@ export enum DASHBOARD_ACTIONS  {
   GET_RECEIVED_NOTIFICATIONS = 'getReceivedNotifications',
 }
 
-export const getReceivedNotifications = createAsyncThunk<
+export const getReceivedNotifications2 = createAsyncThunk<
   GetNotificationsResponse,
   GetNotificationsParams
 >(DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS, 
   performThunkAction((params) => NotificationsApi.getReceivedNotifications(params))
 );
 
-export const getReceivedNotifications2 = createAsyncThunk<
+export const getReceivedNotifications = createAsyncThunk<
   GetNotificationsResponse,
   GetNotificationsParams
 >(DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS, 
