@@ -117,9 +117,19 @@ const NotificationPayment: React.FC<Props> = ({
           taxId: notificationPayment.creditorTaxId,
         })
       )
+        // PN-1942 - gestione generica di disservizio API
+        // si toglie la gestione ad-hoc che veniva fatta in questo componente, perciò il catch che era
+        // presente non c'è più. 
+        // Di conseguenza, questo unwrap infatti non è necessario per il funzionamento dell'app.
+        // Però lascio sia unwrap sia un catch vuoto, perché se l'unwrap viene tolto, falliscono tutti i test di NotificationPayment,
+        // e se c'è unwrap allora si deve fare un catch.
+        // -------------------------------------
+        // Carlos Lombardi, 2022.09.07
+        .unwrap()
         .then(() => {
           setLoading(() => false);
-        });
+        })
+        .catch(() => {});
     } else {
       setLoading(() => false);
       dispatch(appStateActions.removeErrorsByAction(NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO));
