@@ -70,10 +70,7 @@ const newNotificationSlice = createSlice({
       state,
       action: PayloadAction<{ documents: Array<NewNotificationDocument> }>
     ) => {
-      state.notification = {
-        ...state.notification,
-        documents: action.payload.documents,
-      };
+      state.notification.documents = action.payload.documents;
     },
     setPaymentDocuments: (
       state,

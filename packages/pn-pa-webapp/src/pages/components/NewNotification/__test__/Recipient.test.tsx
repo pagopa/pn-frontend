@@ -1,7 +1,7 @@
 import { act, fireEvent, RenderResult, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 
-import { newNotificationRecipients } from '../../../../redux/newNotification/__test__/test-utils';
+import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
 import { render, testInput } from '../../../../__test__/test-utils';
 import Recipient from '../Recipient';
 
@@ -16,24 +16,24 @@ const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
 
 const populateForm = async (form: HTMLFormElement) => {
-  await testInput(form, `recipients[0].firstName`, newNotificationRecipients[0].firstName);
-  await testInput(form, `recipients[0].lastName`, newNotificationRecipients[0].lastName);
-  await testInput(form, `recipients[0].taxId`, newNotificationRecipients[0].taxId);
-  await testInput(form, `recipients[0].creditorTaxId`, newNotificationRecipients[0].creditorTaxId);
-  await testInput(form, `recipients[0].noticeCode`, newNotificationRecipients[0].noticeCode);
+  await testInput(form, `recipients[0].firstName`, newNotification.recipients[0].firstName);
+  await testInput(form, `recipients[0].lastName`, newNotification.recipients[0].lastName);
+  await testInput(form, `recipients[0].taxId`, newNotification.recipients[0].taxId);
+  await testInput(form, `recipients[0].creditorTaxId`, newNotification.recipients[0].creditorTaxId);
+  await testInput(form, `recipients[0].noticeCode`, newNotification.recipients[0].noticeCode);
   const checkbox = form.querySelector(`input[name="recipients[0].showPhysicalAddress"]`);
   fireEvent.click(checkbox!);
-  await testInput(form, `recipients[0].address`, newNotificationRecipients[0].address);
-  await testInput(form, `recipients[0].houseNumber`, newNotificationRecipients[0].houseNumber);
-  await testInput(form, `recipients[0].zip`, newNotificationRecipients[0].zip);
-  await testInput(form, `recipients[0].province`, newNotificationRecipients[0].province);
-  await testInput(form, `recipients[0].foreignState`, newNotificationRecipients[0].foreignState);
+  await testInput(form, `recipients[0].address`, newNotification.recipients[0].address);
+  await testInput(form, `recipients[0].houseNumber`, newNotification.recipients[0].houseNumber);
+  await testInput(form, `recipients[0].zip`, newNotification.recipients[0].zip);
+  await testInput(form, `recipients[0].province`, newNotification.recipients[0].province);
+  await testInput(form, `recipients[0].foreignState`, newNotification.recipients[0].foreignState);
 };
 
 const populateFormMultipleRecipients = async (form: HTMLFormElement) => {
   // eslint-disable-next-line functional/no-let
-  for (let i = 0; i < newNotificationRecipients.length; i++) {
-    const formRecipient = newNotificationRecipients[i];
+  for (let i = 0; i < newNotification.recipients.length; i++) {
+    const formRecipient = newNotification.recipients[i];
     await testInput(form, `recipients[${i}].firstName`, formRecipient.firstName);
     await testInput(form, `recipients[${i}].lastName`, formRecipient.lastName);
     await testInput(form, `recipients[${i}].taxId`, formRecipient.taxId);

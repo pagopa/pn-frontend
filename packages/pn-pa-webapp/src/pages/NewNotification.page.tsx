@@ -187,7 +187,6 @@ const NewNotification = () => {
                 notification={notification}
                 isCompleted={isCompleted}
                 onPreviousStep={goToPreviousStep}
-                paymentDocumentsData={notification.payment}
               />
             )}
           </Grid>

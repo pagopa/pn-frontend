@@ -16,9 +16,10 @@ import {
   notificationFromBe,
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
-import { newNotification, newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
+import { newNotification } from '../../../redux/newNotification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { apiClient, externalClient } from '../../axios';
+import { newNotificationMapper } from '../../../utils/notification.utility';
 import { NotificationsApi } from '../Notifications.api';
 import {
   CREATE_NOTIFICATION,
@@ -141,9 +142,10 @@ describe('Notifications api tests', () => {
     mock.restore();
   });
 
-  it('createNewNotification', async () => {
+  it.only('createNewNotification', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPost(CREATE_NOTIFICATION(), newNotificationDTO).reply(200, {
+    const mappedNotification = newNotificationMapper(newNotification);
+    mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(200, {
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',

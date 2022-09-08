@@ -71,7 +71,7 @@ const newNotificationDocumentMapper = (
   digests: {
     sha256: document.file.sha256.hashBase64,
   },
-  contentType: document.file.contentType,
+  contentType: document.contentType,
   ref: {
     key: '',
     versionToken: '',
@@ -97,11 +97,11 @@ const newNotificationPaymentDocumentsMapper = (
       pagoPaForm: newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPaForm),
     };
     /* eslint-disable functional/immutable-data */
-    if (paymentDocuments[r.taxId].f24flatRate && paymentDocuments[r.taxId].f24flatRate.file && paymentDocuments[r.taxId].f24flatRate.file.uint8Array) {
-      documents.f24flatRate = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24flatRate);
+    if (paymentDocuments[r.taxId].f24flatRate) {
+      documents.f24flatRate = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24flatRate as NewNotificationDocument);
     }
-    if (paymentDocuments[r.taxId].f24standard && paymentDocuments[r.taxId].f24standard.file && paymentDocuments[r.taxId].f24standard.file.uint8Array) {
-      documents.f24standard = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24standard);
+    if (paymentDocuments[r.taxId].f24standard) {
+      documents.f24standard = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24standard as NewNotificationDocument);
     }
     r.payment = {
       ...documents,

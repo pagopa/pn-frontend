@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useMemo } from 'react';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -60,96 +60,71 @@ type Props = {
   onConfirm: () => void;
   onPreviousStep?: () => void;
   isCompleted: boolean;
-  paymentDocumentsData?: { [key: string]: PaymentObject };
 };
 
-const PaymentMethods = ({
-  notification,
-  onConfirm,
-  isCompleted,
-  onPreviousStep,
-  paymentDocumentsData,
-}: Props) => {
+const newPaymentDocument = (id: string, name: string): NewNotificationDocument => ({
+  id,
+  idx: 0,
+  name,
+  contentType: 'application/pdf',
+  file: {
+    uint8Array: undefined,
+    sha256: { hashBase64: '', hashHex: '' },
+    name: '',
+    size: 0,
+  },
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+});
+
+const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }: Props) => {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['notifiche', 'common']);
+  const { t } = useTranslation(['notifiche'], {
+    keyPrefix: 'new-notification.steps.payment-methods',
+  });
+  const { t: tc } = useTranslation(['common']);
 
-  const paymentDocumentsExists = paymentDocumentsData;
-  const emptyValues = notification.recipients.reduce((obj: { [key: string]: PaymentObject }, r) => {
-    /* eslint-disable-next-line functional/immutable-data */
-    obj[r.taxId] = {
-      pagoPaForm: {
-        id: `${r.taxId}-pagoPaDoc`,
-        idx: 0,
-        name: t('new-notification.steps.payment-methods.pagopa-notice'),
-        file: {
-          uint8Array: undefined,
-          sha256: { hashBase64: '', hashHex: '' },
-          contentType: 'application/pdf',
-          name: '',
-          size: 0,
-        },
-        ref: {
-          key: '',
-          versionToken: '',
-        },
-      },
-      f24flatRate: {
-        id: `${r.taxId}-f24flatRateDoc`,
-        idx: 0,
-        name: t('new-notification.steps.payment-methods.pagopa-notice-f24-flatrate'),
-        file: {
-          uint8Array: undefined,
-          sha256: { hashBase64: '', hashHex: '' },
-          contentType: 'application/pdf',
-          name: '',
-          size: 0,
-        },
-        ref: {
-          key: '',
-          versionToken: '',
-        },
-      },
-      f24standard: {
-        id: `${r.taxId}-f24standardDoc`,
-        idx: 0,
-        name: 'new-notification.steps.payment-methods.pagopa-notice-f24',
-        file: {
-          uint8Array: undefined,
-          sha256: { hashBase64: '', hashHex: '' },
-          contentType: 'application/pdf',
-          name: '',
-          size: 0,
-        },
-        ref: {
-          key: '',
-          versionToken: '',
-        },
-      },
-    };
-    return obj;
-  }, {});
-
-  const initialValues = paymentDocumentsExists
-    ? {
-        ...paymentDocumentsData,
-      }
-    : {
-        ...emptyValues,
+  const paymentDocumentsExists = !_.isNil(notification.payment) && !_.isEmpty(notification.payment);
+  const initialValues = useMemo(() => notification.recipients.reduce(
+    (obj: { [key: string]: PaymentObject }, r) => {
+      /* eslint-disable functional/immutable-data */
+      const recipientPayment = paymentDocumentsExists ? (notification.payment as {[key: string]: PaymentObject})[r.taxId] : undefined;
+      const pagoPaForm = recipientPayment?.pagoPaForm;
+      const f24flatRate = recipientPayment?.f24flatRate;
+      const f24standard = recipientPayment?.f24standard;
+      obj[r.taxId] = {
+        pagoPaForm: pagoPaForm
+          ? pagoPaForm
+          : newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
       };
+      if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE) {
+        obj[r.taxId].f24flatRate = f24flatRate
+          ? f24flatRate
+          : newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate'));
+      }
+      if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24) {
+        obj[r.taxId].f24standard = f24standard
+          ? f24standard
+          : newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24'));
+      }
+      /* eslint-enable functional/immutable-data */
+      return obj;
+    },
+    {}
+  ), []);
 
   const formatPaymentDocuments = () =>
     notification.recipients.reduce((obj: { [key: string]: PaymentObject }, r) => {
       const formikPagoPaForm = formik.values[r.taxId].pagoPaForm;
       const formikF24flatRate = formik.values[r.taxId].f24flatRate;
       const formikF24standard = formik.values[r.taxId].f24standard;
-      // eslint-disable-next-line functional/immutable-data
+      /* eslint-disable functional/immutable-data */
       obj[r.taxId] = {
         pagoPaForm: {
-          id: `${r.taxId}-pagoPaDoc`,
-          idx: 0,
-          name: t('new-notification.steps.payment-methods.pagopa-notice'),
+          ...newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
           file: {
-            contentType: formikPagoPaForm.file.contentType,
             uint8Array: formikPagoPaForm.file.uint8Array,
             size: formikPagoPaForm.file.size,
             name: formikPagoPaForm.file.name,
@@ -158,17 +133,12 @@ const PaymentMethods = ({
               hashHex: formikPagoPaForm.file.sha256.hashHex,
             },
           },
-          ref: {
-            key: '',
-            versionToken: '',
-          },
         },
-        f24flatRate: {
-          id: `${r.taxId}-f24flatRateDoc`,
-          idx: 0,
-          name: t('new-notification.steps.payment-methods.pagopa-notice-f24-flatrate'),
+      };
+      if (formikF24flatRate) {
+        obj[r.taxId].f24flatRate = {
+          ...newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate')),
           file: {
-            contentType: formikF24flatRate.file.contentType,
             uint8Array: formikF24flatRate.file.uint8Array,
             size: formikF24flatRate.file.size,
             name: formikF24flatRate.file.name,
@@ -177,17 +147,12 @@ const PaymentMethods = ({
               hashHex: formikF24flatRate.file.sha256.hashHex,
             },
           },
-          ref: {
-            key: '',
-            versionToken: '',
-          },
-        },
-        f24standard: {
-          id: `${r.taxId}-f24standardDoc`,
-          idx: 0,
-          name: t('new-notification.steps.payment-methods.pagopa-notice-f24'),
+        };
+      }
+      if (formikF24standard) {
+        obj[r.taxId].f24standard = {
+          ...newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
           file: {
-            contentType: formikF24standard.file.contentType,
             uint8Array: formikF24standard.file.uint8Array,
             size: formikF24standard.file.size,
             name: formikF24standard.file.name,
@@ -196,12 +161,9 @@ const PaymentMethods = ({
               hashHex: formikF24standard.file.sha256.hashHex,
             },
           },
-          ref: {
-            key: '',
-            versionToken: '',
-          },
-        },
-      };
+        };
+      }
+      /* eslint-enable functional/immutable-data */
       return obj;
     }, {});
 
@@ -257,14 +219,15 @@ const PaymentMethods = ({
     id: string,
     file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string },
-    fileUploaded?: any
+    name?: string,
+    size?: number
   ) => {
     await formik.setFieldTouched(id, true, false);
     await formik.setFieldValue(id, {
-      size: fileUploaded.size,
+      size,
       uint8Array: file,
       sha256,
-      name: fileUploaded.name,
+      name,
     });
   };
 
@@ -277,8 +240,8 @@ const PaymentMethods = ({
       <NewNotificationCard
         noPaper
         isContinueDisabled={!formik.isValid}
-        submitLabel={t('button.send', { ns: 'common' })}
-        previousStepLabel={t('new-notification.steps.payment-methods.back-to-attachments')}
+        submitLabel={tc('button.send')}
+        previousStepLabel={t('back-to-attachments')}
         previousStepOnClick={() => handlePreviousStep()}
       >
         {notification.recipients.map((recipient) => (
@@ -288,11 +251,11 @@ const PaymentMethods = ({
             className="paperContainer"
           >
             <Typography variant="h6">
-              {t('new-notification.steps.payment-methods.payment-models')} {recipient.firstName} {recipient.lastName}
+              {t('payment-models')} {recipient.firstName} {recipient.lastName}
             </Typography>
             <PaymentBox
               id={`${recipient.taxId}.pagoPaForm.file`}
-              title={`${t('new-notification.steps.payment-methods.attach-pagopa-notice')}*`}
+              title={`${t('attach-pagopa-notice')}*`}
               onFileUploaded={fileUploadedHandler}
               onRemoveFile={removeFileHandler}
               fileUploaded={formik.values[recipient.taxId].pagoPaForm}
@@ -300,7 +263,7 @@ const PaymentMethods = ({
             {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
               <PaymentBox
                 id={`${recipient.taxId}.f24flatRate.file`}
-                title={t('new-notification.steps.payment-methods.attach-f24-flatrate')}
+                title={t('attach-f24-flatrate')}
                 onFileUploaded={fileUploadedHandler}
                 onRemoveFile={removeFileHandler}
                 fileUploaded={formik.values[recipient.taxId].f24flatRate}
@@ -309,7 +272,7 @@ const PaymentMethods = ({
             {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
               <PaymentBox
                 id={`${recipient.taxId}.f24standard.file`}
-                title={t('new-notification.steps.payment-methods.attach-f24')}
+                title={t('attach-f24')}
                 onFileUploaded={fileUploadedHandler}
                 onRemoveFile={removeFileHandler}
                 fileUploaded={formik.values[recipient.taxId].f24standard}

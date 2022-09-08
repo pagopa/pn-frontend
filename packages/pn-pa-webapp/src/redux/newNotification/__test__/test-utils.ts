@@ -13,15 +13,15 @@ import {
   NewNotificationRecipient,
 } from '../../../models/NewNotification';
 
-export const newNotificationRecipients: Array<NewNotificationRecipient> = [
+const newNotificationRecipients: Array<NewNotificationRecipient> = [
   {
     idx: 0,
-    taxId: 'mocked-taxId1',
+    taxId: 'MRARSS90P08H501Q',
     firstName: 'Mario',
     lastName: 'Rossi',
     recipientType: RecipientType.PF,
-    creditorTaxId: 'mocked-creditorTaxId',
-    noticeCode: 'mocked-noticeCode',
+    creditorTaxId: '12345678910',
+    noticeCode: '123456789123456789',
     type: DigitalDomicileType.PEC,
     digitalDomicile: 'mocked@mail.it',
     address: 'address',
@@ -33,12 +33,12 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
   },
   {
     idx: 1,
-    taxId: 'mocked-taxId2',
+    taxId: 'SRAGLL00P48H501U',
     firstName: 'Sara',
     lastName: 'Giallo',
     recipientType: RecipientType.PF,
-    creditorTaxId: 'mocked-creditorTaxId',
-    noticeCode: 'mocked-noticeCode',
+    creditorTaxId: '12345678910',
+    noticeCode: '123456789123456789',
     type: DigitalDomicileType.PEC,
     digitalDomicile: 'mocked@mail.it',
     address: '',
@@ -50,16 +50,53 @@ export const newNotificationRecipients: Array<NewNotificationRecipient> = [
   },
 ];
 
-export const newNotificationDocument: NewNotificationDocument = {
+const newNotificationDocument: NewNotificationDocument = {
   id: 'mocked-id',
   idx: 0,
   name: 'mocked-name',
+  contentType: 'text/plain',
   file: {
+    uint8Array: new Uint8Array(),
     sha256: {
-      hashBase64: '',
+      hashBase64: 'mocked-sha256',
       hashHex: '',
     },
-    contentType: '',
+  },
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+};
+
+const newNotificationPagoPa: NewNotificationDocument = {
+  id: 'mocked-pagopa-id',
+  idx: 0,
+  name: 'mocked-name',
+  contentType: 'text/plain',
+  file: {
+    uint8Array: new Uint8Array(),
+    sha256: {
+      hashBase64: 'mocked-pa-sha256',
+      hashHex: '',
+    },
+  },
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+};
+
+const newNotificationF24Standard: NewNotificationDocument = {
+  id: 'mocked-f24standard-id',
+  idx: 0,
+  name: 'mocked-name',
+  contentType: 'text/plain',
+  file: {
+    uint8Array: new Uint8Array(),
+    sha256: {
+      hashBase64: 'mocked-f24standard-sha256',
+      hashHex: '',
+    },
   },
   ref: {
     key: '',
@@ -72,17 +109,14 @@ export const newNotification: NewNotification = {
   subject: '',
   cancelledIun: '',
   recipients: newNotificationRecipients,
-  documents: [],
+  documents: [newNotificationDocument],
   payment: {
-    'mocked-taxId1': {
-      pagoPaForm: newNotificationDocument,
-      f24flatRate: newNotificationDocument,
-      f24standard: newNotificationDocument,
+    'MRARSS90P08H501Q': {
+      pagoPaForm: {...newNotificationPagoPa},
     },
-    'mocked-taxId2': {
-      pagoPaForm: newNotificationDocument,
-      f24flatRate: newNotificationDocument,
-      f24standard: newNotificationDocument,
+    'SRAGLL00P48H501U': {
+      pagoPaForm: {...newNotificationPagoPa},
+      f24standard: {...newNotificationF24Standard},
     },
   },
   physicalCommunicationType: '' as PhysicalCommunicationType,
@@ -97,7 +131,7 @@ export const newNotificationDTO: NewNotificationDTO = {
   cancelledIun: '',
   recipients: [
     {
-      taxId: 'mocked-taxId1',
+      taxId: 'MRARSS90P08H501Q',
       denomination: 'Mario Rossi',
       recipientType: RecipientType.PF,
       digitalDomicile: {
@@ -115,14 +149,14 @@ export const newNotificationDTO: NewNotificationDTO = {
         foreignState: 'foreignState',
       },
       payment: {
-        creditorTaxId: 'mocked-creditorTaxId',
-        noticeCode: 'mocked-noticeCode',
+        creditorTaxId: '12345678910',
+        noticeCode: '123456789123456789',
         pagoPaForm: {
           title: 'mocked-name',
           digests: {
-            sha256: '',
+            sha256: 'mocked-pa-sha256',
           },
-          contentType: '',
+          contentType: 'text/plain',
           ref: {
             key: '',
             versionToken: '',
@@ -131,7 +165,7 @@ export const newNotificationDTO: NewNotificationDTO = {
       },
     },
     {
-      taxId: 'mocked-taxId2',
+      taxId: 'SRAGLL00P48H501U',
       denomination: 'Sara Giallo',
       recipientType: RecipientType.PF,
       digitalDomicile: {
@@ -140,23 +174,46 @@ export const newNotificationDTO: NewNotificationDTO = {
       },
       physicalAddress: undefined,
       payment: {
-        creditorTaxId: 'mocked-creditorTaxId',
-        noticeCode: 'mocked-noticeCode',
+        creditorTaxId: '12345678910',
+        noticeCode: '123456789123456789',
         pagoPaForm: {
           title: 'mocked-name',
           digests: {
-            sha256: '',
+            sha256: 'mocked-pa-sha256',
           },
-          contentType: '',
+          contentType: 'text/plain',
           ref: {
             key: '',
             versionToken: '',
           },
         },
+        f24standard: {
+          title: 'mocked-name',
+          digests: {
+            sha256: 'mocked-f24standard-sha256',
+          },
+          contentType: 'text/plain',
+          ref: {
+            key: '',
+            versionToken: '',
+          },
+        }
       },
     },
   ],
-  documents: [],
+  documents: [
+    {
+      title: 'mocked-name',
+      digests: {
+        sha256: 'mocked-sha256',
+      },
+      contentType: 'text/plain',
+      ref: {
+        key: '',
+        versionToken: '',
+      },
+    }
+  ],
   physicalCommunicationType: '' as PhysicalCommunicationType,
   group: '',
   notificationFeePolicy: '' as NotificationFeePolicy,

@@ -149,10 +149,12 @@ export const NotificationsApi = {
    * @param  {NewNotification} notification
    * @returns Promise
    */
-  createNewNotification: (notification: NewNotification): Promise<NewNotificationResponse> =>
-    apiClient
-      .post<NewNotificationResponse>(CREATE_NOTIFICATION(), newNotificationMapper(notification))
-      .then((response) => response.data),
+  createNewNotification: (notification: NewNotification): Promise<NewNotificationResponse> => {
+    const mappedNotification = newNotificationMapper(notification);
+    return apiClient
+      .post<NewNotificationResponse>(CREATE_NOTIFICATION(), mappedNotification)
+      .then((response) => response.data);
+  },
 };
 
 // 'x-amz-sdk-checksum-algorithm': 'SHA256',

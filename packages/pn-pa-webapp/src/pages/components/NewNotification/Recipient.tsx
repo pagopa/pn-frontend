@@ -17,7 +17,6 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
-
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
 import { NewNotificationRecipient } from '../../../models/NewNotification';

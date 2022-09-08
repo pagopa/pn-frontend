@@ -60,6 +60,7 @@ export interface NewNotificationDocument {
   id: string;
   idx: number;
   name: string;
+  contentType: string;
   file: {
     size?: number;
     name?: string;
@@ -68,7 +69,6 @@ export interface NewNotificationDocument {
       hashBase64: string;
       hashHex: string;
     };
-    contentType: string;
   };
   ref: {
     key: string;
@@ -85,8 +85,8 @@ export interface NewNotification extends BaseNewNotification {
 
 export interface PaymentObject {
   pagoPaForm: NewNotificationDocument;
-  f24flatRate: NewNotificationDocument;
-  f24standard: NewNotificationDocument;
+  f24flatRate?: NewNotificationDocument;
+  f24standard?: NewNotificationDocument;
 }
 
 export interface NewNotificationResponse {

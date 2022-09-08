@@ -9,10 +9,7 @@ import {
   PaymentObject,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
-import {
-  UploadDocumentParams,
-  UploadDocumentsResponse,
-} from './types';
+import { UploadDocumentParams, UploadDocumentsResponse } from './types';
 
 export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
   'getUserGroups',
@@ -28,7 +25,7 @@ export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | un
 const createPayloadToUpload = (item: NewNotificationDocument): UploadDocumentParams => ({
   id: item.id,
   key: item.name,
-  contentType: item.file.contentType,
+  contentType: item.contentType,
   file: item.file.uint8Array,
   sha256: item.file.sha256.hashBase64,
 });
@@ -78,59 +75,80 @@ export const uploadNotificationAttachment = createAsyncThunk<
   'uploadNotificationAttachment',
   async (items: Array<NewNotificationDocument>, { rejectWithValue }) => {
     try {
-      const itemsToUpload = items.map((item) => createPayloadToUpload(item));
+      // before upload, filter out documents already uploaded
+      const itemsToUpload = items
+        .filter((item) => !item.ref.key && !item.ref.versionToken)
+        .map((item) => createPayloadToUpload(item));
       const itemsUploaded = await uploadNotificationDocumentCbk(itemsToUpload);
-      return items.map((item) => ({
-        ...item,
-        ref: {
-          key: itemsUploaded[item.id].key,
-          versionToken: itemsUploaded[item.id].versionToken
+      return items.map((item) => {
+        if (!itemsUploaded[item.id]) {
+          return item;
         }
-      }));
+        return {
+          ...item,
+          ref: {
+            key: itemsUploaded[item.id].key,
+            versionToken: itemsUploaded[item.id].versionToken,
+          },
+        };
+      });
     } catch (e) {
       return rejectWithValue(e);
     }
   }
 );
 
-export const uploadNotificationPaymentDocument = createAsyncThunk<
-  {[key: string]: PaymentObject},
-  {[key: string]: PaymentObject}
->('uploadNotificationPaymentDocument', async (items: {[key: string]: PaymentObject}, { rejectWithValue }) => {
-  try {
-    const documentsToUpload = Object.values(items).reduce((arr, item) => {
-      /* eslint-disable functional/immutable-data */
+const getPaymentDocumentsToUpload = (items: {
+  [key: string]: PaymentObject;
+}): Array<UploadDocumentParams> =>
+  Object.values(items).reduce((arr, item) => {
+    /* eslint-disable functional/immutable-data */
+    if (!item.pagoPaForm.ref.key && !item.pagoPaForm.ref.versionToken) {
       arr.push(createPayloadToUpload(item.pagoPaForm));
-      if (item.f24flatRate.file && item.f24flatRate.file.uint8Array) {
-        arr.push(createPayloadToUpload(item.f24flatRate));
-      }
-      if (item.f24standard.file && item.f24standard.file.uint8Array) {
-        arr.push(createPayloadToUpload(item.f24standard));
-      }
-      /* eslint-enable functional/immutable-data */
-      return arr;
-    }, [] as Array<UploadDocumentParams>);
-    const documentsUploaded = await uploadNotificationDocumentCbk(documentsToUpload);
-    const updatedItems = _.cloneDeep(items);
-    for (const item of Object.values(updatedItems)) {
-      /* eslint-disable functional/immutable-data */
-      item.pagoPaForm.ref.key = documentsUploaded[item.pagoPaForm.id].key;
-      item.pagoPaForm.ref.versionToken = documentsUploaded[item.pagoPaForm.id].versionToken;
-      if (item.f24flatRate.file && item.f24flatRate.file.uint8Array) {
-        item.f24flatRate.ref.key = documentsUploaded[item.f24flatRate.id].key;
-        item.f24flatRate.ref.versionToken = documentsUploaded[item.f24flatRate.id].versionToken;
-      }
-      if (item.f24standard.file && item.f24standard.file.uint8Array) {
-        item.f24standard.ref.key = documentsUploaded[item.f24standard.id].key;
-        item.f24standard.ref.versionToken = documentsUploaded[item.f24standard.id].versionToken;
-      }
-      /* eslint-enable functional/immutable-data */
     }
-    return updatedItems;
-  } catch (e) {
-    return rejectWithValue(e);
+    if (item.f24flatRate && !item.f24flatRate.ref.key && !item.f24flatRate.ref.versionToken) {
+      arr.push(createPayloadToUpload(item.f24flatRate));
+    }
+    if (item.f24standard && !item.f24standard.ref.key && !item.f24standard.ref.versionToken) {
+      arr.push(createPayloadToUpload(item.f24standard));
+    }
+    /* eslint-enable functional/immutable-data */
+    return arr;
+  }, [] as Array<UploadDocumentParams>);
+
+export const uploadNotificationPaymentDocument = createAsyncThunk<
+  { [key: string]: PaymentObject },
+  { [key: string]: PaymentObject }
+>(
+  'uploadNotificationPaymentDocument',
+  async (items: { [key: string]: PaymentObject }, { rejectWithValue }) => {
+    try {
+      // before upload, filter out documents already uploaded
+      const documentsToUpload = getPaymentDocumentsToUpload(items);
+      const documentsUploaded = await uploadNotificationDocumentCbk(documentsToUpload);
+      const updatedItems = _.cloneDeep(items);
+      for (const item of Object.values(updatedItems)) {
+        /* eslint-disable functional/immutable-data */
+        if (documentsUploaded[item.pagoPaForm.id]) {
+          item.pagoPaForm.ref.key = documentsUploaded[item.pagoPaForm.id].key;
+          item.pagoPaForm.ref.versionToken = documentsUploaded[item.pagoPaForm.id].versionToken;
+        }
+        if (item.f24flatRate && documentsUploaded[item.f24flatRate.id]) {
+          item.f24flatRate.ref.key = documentsUploaded[item.f24flatRate.id].key;
+          item.f24flatRate.ref.versionToken = documentsUploaded[item.f24flatRate.id].versionToken;
+        }
+        if (item.f24standard && documentsUploaded[item.f24standard.id]) {
+          item.f24standard.ref.key = documentsUploaded[item.f24standard.id].key;
+          item.f24standard.ref.versionToken = documentsUploaded[item.f24standard.id].versionToken;
+        }
+        /* eslint-enable functional/immutable-data */
+      }
+      return updatedItems;
+    } catch (e) {
+      return rejectWithValue(e);
+    }
   }
-});
+);
 
 export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotification>(
   'createNewNotification',

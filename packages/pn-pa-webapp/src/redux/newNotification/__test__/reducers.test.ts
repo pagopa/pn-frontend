@@ -1,8 +1,4 @@
-import {
-  DigitalDomicileType,
-  PhysicalCommunicationType,
-  RecipientType,
-} from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { PaymentModel } from '../../../models/NewNotification';
@@ -24,7 +20,7 @@ import {
   resetState,
   setPaymentDocuments,
 } from '../reducers';
-import { newNotification, newNotificationDocument } from './test-utils';
+import { newNotification } from './test-utils';
 
 const initialState = {
   loading: false,
@@ -100,50 +96,17 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to save recipients', () => {
-    const recipients = [
-      {
-        idx: 0,
-        recipientType: RecipientType.PF,
-        taxId: 'mocked-taxId',
-        creditorTaxId: 'mocked-creditorTaxId',
-        noticeCode: 'mocked-noticeCode',
-        firstName: 'mocked-firstName',
-        lastName: 'mocked-lastName',
-        type: DigitalDomicileType.EMAIL,
-        digitalDomicile: 'mocked@mail.com',
-        address: 'mocked-address',
-        houseNumber: 'mocked-houseNumber',
-        zip: 'mocked-zip',
-        municipality: 'mocked-municipality',
-        province: 'mocked-province',
-        foreignState: 'mocked-foreignState',
-      },
-    ];
-    const action = store.dispatch(saveRecipients({ recipients }));
+    const action = store.dispatch(saveRecipients({ recipients: newNotification.recipients }));
     const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/saveRecipients');
-    expect(payload).toEqual({ recipients });
+    expect(payload).toEqual({ recipients: newNotification.recipients });
   });
 
   it('Should be able to save attachemnts', () => {
-    const documents = [
-      {
-        ...newNotificationDocument,
-        file: {
-          ...newNotificationDocument.file,
-          uint8Array: new Uint8Array(),
-          contentType: 'text/plain',
-          sha256: {
-            ...newNotificationDocument.file.sha256,
-            hashBase64: 'mocked-sha256',
-          },
-        },
-      },
-    ];
-    const action = store.dispatch(setAttachments({ documents }));
+    const action = store.dispatch(setAttachments({ documents: newNotification.documents }));
     const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setAttachments');
-    expect(payload).toEqual({ documents });
+    expect(payload).toEqual({ documents: newNotification.documents });
   });
 
   it('Should be able to upload attachment', async () => {
@@ -153,36 +116,12 @@ describe('New notification redux state tests', () => {
     ]);
     const nextApiSpy = jest.spyOn(NotificationsApi, 'uploadNotificationAttachment');
     nextApiSpy.mockResolvedValue('mocked-versionToken');
-    const action = await store.dispatch(
-      uploadNotificationAttachment([
-        {
-          ...newNotificationDocument,
-          file: {
-            ...newNotificationDocument.file,
-            uint8Array: new Uint8Array(),
-            contentType: 'text/plain',
-            sha256: {
-              ...newNotificationDocument.file.sha256,
-              hashBase64: 'mocked-sha256',
-            },
-          },
-        },
-      ])
-    );
+    const action = await store.dispatch(uploadNotificationAttachment(newNotification.documents));
     const payload = action.payload;
     expect(action.type).toBe('uploadNotificationAttachment/fulfilled');
     expect(payload).toEqual([
       {
-        ...newNotificationDocument,
-        file: {
-          ...newNotificationDocument.file,
-          uint8Array: new Uint8Array(),
-          contentType: 'text/plain',
-          sha256: {
-            ...newNotificationDocument.file.sha256,
-            hashBase64: 'mocked-sha256',
-          },
-        },
+        ...newNotification.documents[0],
         ref: {
           key: 'mocked-preload-key',
           versionToken: 'mocked-versionToken',
@@ -192,28 +131,12 @@ describe('New notification redux state tests', () => {
   });
 
   it('Should be able to save payment documents', () => {
-    const paymentDocuments = {
-      'mocked-taxId': {
-        pagoPaForm: {
-          ...newNotificationDocument,
-          file: {
-            ...newNotificationDocument.file,
-            uint8Array: new Uint8Array(),
-            contentType: 'text/plain',
-            sha256: {
-              ...newNotificationDocument.file.sha256,
-              hashBase64: 'mocked-sha256',
-            },
-          },
-        },
-        f24flatRate: {...newNotificationDocument},
-        f24standard: {...newNotificationDocument},
-      },
-    };
-    const action = store.dispatch(setPaymentDocuments({ paymentDocuments }));
+    const action = store.dispatch(
+      setPaymentDocuments({ paymentDocuments: newNotification.payment! })
+    );
     const payload = action.payload;
     expect(action.type).toBe('newNotificationSlice/setPaymentDocuments');
-    expect(payload).toEqual({ paymentDocuments });
+    expect(payload).toEqual({ paymentDocuments: newNotification.payment! });
   });
 
   it('Should be able to upload payment document', async () => {
@@ -221,89 +144,42 @@ describe('New notification redux state tests', () => {
     apiSpy.mockResolvedValue([
       { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST', key: 'mocked-preload-key' },
       { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST', key: 'mocked-preload-key' },
+      { url: 'mocked-url', secret: 'mocked-secret', httpMethod: 'POST', key: 'mocked-preload-key' },
     ]);
     const nextApiSpy = jest.spyOn(NotificationsApi, 'uploadNotificationAttachment');
     nextApiSpy.mockResolvedValue('mocked-versionToken');
     const action = await store.dispatch(
-      uploadNotificationPaymentDocument({
-        'mocked-taxId': {
-          pagoPaForm: {
-            ...newNotificationDocument,
-            file: {
-              ...newNotificationDocument.file,
-              uint8Array: new Uint8Array(),
-              contentType: 'text/plain',
-              sha256: {
-                ...newNotificationDocument.file.sha256,
-                hashBase64: 'mocked-pa-sha256',
-              },
-            },
-            ref: {
-              versionToken: '',
-              key: ''
-            }
-          },
-          f24flatRate: {...newNotificationDocument},
-          f24standard: {
-            ...newNotificationDocument,
-            file: {
-              ...newNotificationDocument.file,
-              uint8Array: new Uint8Array(),
-              contentType: 'text/plain',
-              sha256: {
-                ...newNotificationDocument.file.sha256,
-                hashBase64: 'mocked-f24-sha256',
-              },
-            },
-            ref: {
-              versionToken: '',
-              key: ''
-            }
-          },
-        },
-      })
+      uploadNotificationPaymentDocument(newNotification.payment!)
     );
     const payload = action.payload;
     expect(action.type).toBe('uploadNotificationPaymentDocument/fulfilled');
-    expect(payload).toEqual(
-      {
-        'mocked-taxId': {
-          pagoPaForm: {
-            ...newNotificationDocument,
-            file: {
-              ...newNotificationDocument.file,
-              uint8Array: new Uint8Array(),
-              contentType: 'text/plain',
-              sha256: {
-                ...newNotificationDocument.file.sha256,
-                hashBase64: 'mocked-pa-sha256',
-              },
-            },
-            ref: {
-              key: 'mocked-preload-key',
-              versionToken: 'mocked-versionToken',
-            },
-          },
-          f24flatRate: {...newNotificationDocument},
-          f24standard: {
-            ...newNotificationDocument,
-            file: {
-              ...newNotificationDocument.file,
-              uint8Array: new Uint8Array(),
-              contentType: 'text/plain',
-              sha256: {
-                ...newNotificationDocument.file.sha256,
-                hashBase64: 'mocked-f24-sha256',
-              },
-            },
-            ref: {
-              key: 'mocked-preload-key',
-              versionToken: 'mocked-versionToken',
-            },
+    expect(payload).toEqual({
+      'MRARSS90P08H501Q': {
+        pagoPaForm: {
+          ...newNotification.payment!['MRARSS90P08H501Q'].pagoPaForm,
+          ref: {
+            key: 'mocked-preload-key',
+            versionToken: 'mocked-versionToken',
           },
         },
-      }
-    );
+      },
+      'SRAGLL00P48H501U': {
+        pagoPaForm: {
+          ...newNotification.payment!['SRAGLL00P48H501U'].pagoPaForm,
+          ref: {
+            key: 'mocked-preload-key',
+            versionToken: 'mocked-versionToken',
+          },
+        },
+        f24standard: {
+          ...newNotification.payment!['SRAGLL00P48H501U'].f24standard,
+          ref: {
+            key: 'mocked-preload-key',
+            versionToken: 'mocked-versionToken',
+          },
+        },
+      },
+    });
   });
 
   it('Should be able to create new notification', async () => {

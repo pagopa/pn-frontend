@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment } from 'react';
+import { ChangeEvent, Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormikErrors, useFormik } from 'formik';
 import * as yup from 'yup';
@@ -101,6 +101,26 @@ type Props = {
   attachmentsData?: Array<NewNotificationDocument>;
 };
 
+const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument => ({
+  id,
+  idx,
+  contentType: 'application/pdf',
+  file: {
+    uint8Array: undefined,
+    name: '',
+    size: 0,
+    sha256: {
+      hashBase64: '',
+      hashHex: '',
+    },
+  },
+  name: '',
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+});
+
 const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
@@ -132,33 +152,17 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
   });
 
   const attachmentsExists = attachmentsData && attachmentsData.length > 0;
-  const initialValues = attachmentsExists
-    ? {
-        documents: attachmentsData,
-      }
-    : {
-        documents: [
-          {
-            id: `documents.0`,
-            idx: 0,
-            file: {
-              contentType: 'application/pdf',
-              uint8Array: undefined,
-              name: '',
-              size: 0,
-              sha256: {
-                hashBase64: '',
-                hashHex: '',
-              },
-            },
-            name: '',
-            ref: {
-              key: '',
-              versionToken: '',
-            },
+  const initialValues = useMemo(
+    () =>
+      attachmentsExists
+        ? {
+            documents: attachmentsData,
+          }
+        : {
+            documents: [newAttachmentDocument(`documents.0`, 0)],
           },
-        ],
-      };
+    []
+  );
 
   const formik = useFormik({
     initialValues,
@@ -169,16 +173,14 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
         // store attachments
         dispatch(
           setAttachments({
-            documents: formik.values.documents.map((v) => ({
+            documents: values.documents.map((v) => ({
               ...v,
               id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
             })),
           })
         );
         // upload attachments
-        // before upload, filter documents already uploaded
-        const documentsToUpload = values.documents.filter(d => !d.ref.key && !d.ref.versionToken);
-        dispatch(uploadNotificationAttachment(documentsToUpload))
+        dispatch(uploadNotificationAttachment(values.documents))
           .unwrap()
           .then(() => {
             onConfirm();
@@ -218,25 +220,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
     await formik.setValues({
       documents: [
         ...formik.values.documents,
-        {
-          id: `documents.${lastDocIdx + 1}`,
-          idx: lastDocIdx + 1,
-          file: {
-            contentType: 'application/pdf',
-            uint8Array: undefined,
-            size: 0,
-            name: '',
-            sha256: {
-              hashBase64: '',
-              hashHex: '',
-            },
-          },
-          name: '',
-          ref: {
-            key: '',
-            versionToken: '',
-          },
-        },
+        newAttachmentDocument(`documents.${lastDocIdx + 1}`, lastDocIdx + 1),
       ],
     });
   };
