@@ -1,8 +1,8 @@
 import { WalkthroughProps } from "@pagopa/mui-italia";
 import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
-import { Typography } from "@mui/material";
 import { HorizontalNavProps } from "@pagopa/mui-italia";
 import { SvgIcon } from "@mui/material";
+import { Typography } from "@mui/material";
 import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
 import { IAppData, IInfoblockData, IShowcaseData } from "model";
 import { CheckmarkIcon, CloudIcon, DelegationIcon, DeliverIcon, DocCheckIcon, EasyIcon, EcologyIcon, FireworksIcon, HourglassIcon, IOIcon, MessageIcon, NotificationIcon, PECIcon, PeopleIcon, PiggyIcon, SendIcon, SyncIcon, UploadIcon, WalletIcon } from "./icons";
@@ -311,7 +311,7 @@ const pfShowcases: Array<IShowcaseData> = [
            * Waiting for IOIcon
            */
           // icon: <IOIcon />,
-          icon: <img src={`${IMAGES_PATH}/IOIcon.png`} />,
+          icon: <img src={`${IMAGES_PATH}/IOIcon.svg`} />,
           title: "App IO",
           subtitle: <Typography variant="body2">
             Se attivi il servizio “Avvisi di cortesia” di Piattaforma Notifiche, puoi ricevere e 
