@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -6,17 +6,19 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  MenuItem,
   Radio,
   RadioGroup,
   TextField,
   Typography,
+  MenuItem,
 } from '@mui/material';
-import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType, CustomDropdown } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification';
+import { GroupStatus } from '../../../models/user';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setPreliminaryInformations } from '../../../redux/newNotification/reducers';
+import { getUserGroups } from '../../../redux/newNotification/actions';
 import { RootState } from '../../../redux/store';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
@@ -29,8 +31,7 @@ type Props = {
 
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
-  const userGroups = useAppSelector((state: RootState) => state.userState.user.groups);
-  const [groups] = useState(userGroups);
+  const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
@@ -50,7 +51,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     subject: yup.string().required(`${t('subject')} ${tc('common:required')}`),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
-    group: groups ? yup.string().required() : yup.string(),
+    group: groups.length > 0 ? yup.string().required() : yup.string(),
   });
 
   const formik = useFormik({
@@ -67,24 +68,24 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   });
 
   const handleChangeTouched = async (e: ChangeEvent) => {
+    console.log('blah');
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const handleChangeDeliveryMode = (e: ChangeEvent & {target: {value: any}}) => {
+  const handleChangeDeliveryMode = (e: ChangeEvent & { target: { value: any } }) => {
     formik.handleChange(e);
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_DELIVERY_MODE, {type: e.target.value});
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_DELIVERY_MODE, { type: e.target.value });
   };
 
-  const handleChangePaymentMode = (e: ChangeEvent & {target: {value: any}}) => {
+  const handleChangePaymentMode = (e: ChangeEvent & { target: { value: any } }) => {
     formik.handleChange(e);
-    trackEventByType(TrackEventType.NOTIFICATION_SEND_PAYMENT_MODE, {target: e.target.value});
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_PAYMENT_MODE, { target: e.target.value });
   };
-  
+
   useEffect(() => {
-    if (!groups) {
-      // TODO: chiamata al be per prendere gruppi associati con self care
-      // setGroups(['Group1', 'Group2']);
+    if (groups.length === 0) {
+      void dispatch(getUserGroups(GroupStatus.ACTIVE));
     }
   }, []);
 
@@ -125,27 +126,24 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           size="small"
           margin="normal"
         />
-        <TextField
+        <CustomDropdown
           id="group"
-          label={`${t('group')}${groups ? '*' : ''}`}
+          label={`${t('group')}${groups.length > 0 ? '*' : ''}`}
           fullWidth
           name="group"
+          size="small"
+          margin="normal"
           value={formik.values.group}
           onChange={handleChangeTouched}
           error={formik.touched.group && Boolean(formik.errors.group)}
-          helperText={formik.touched.group && formik.errors.group}
-          size="small"
-          margin="normal"
-          select
-        >
-          {groups &&
+          helperText={formik.touched.group && formik.errors.group}>
+          {groups.length > 0 &&
             groups.map((group) => (
-              <MenuItem key={group} value={group}>
-                {group}
+              <MenuItem key={group.id} value={group.id}>
+                {group.name}
               </MenuItem>
             ))}
-          {!groups && <MenuItem sx={{ display: 'none' }}></MenuItem>}
-        </TextField>
+        </CustomDropdown>
         <FormControl margin="normal" fullWidth>
           <FormLabel id="comunication-type-label">
             <Typography fontWeight={600} fontSize={16}>

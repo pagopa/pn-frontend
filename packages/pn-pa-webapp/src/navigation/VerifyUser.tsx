@@ -5,7 +5,6 @@ import { exchangeToken } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getHomePage } from '../utils/role.utility';
-import { goToSelfcareLogin } from './navigation.utility';
 
 const VerifyUser = () => {
   const location = useLocation();
@@ -13,6 +12,7 @@ const VerifyUser = () => {
   const dispatch = useAppDispatch();
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
   const navigate = useNavigate();
+  const [verificationDone, setVerificationDone] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(location.hash);
@@ -20,25 +20,25 @@ const VerifyUser = () => {
     if (selfCareTokenParam) {
       setSelfCareToken(selfCareTokenParam);
     } else {
-      if (token === '') {
-        goToSelfcareLogin();
-      }
+      setVerificationDone(true);
     }
   }, [location]);
 
   useEffect(() => {
     if (selfCareToken !== '') {
-      dispatch(exchangeToken(selfCareToken))
-        .then(() => {
-          navigate(getHomePage(), {replace: true});
-        })
-        .catch(() => {
-          goToSelfcareLogin();
-        });
+      void dispatch(exchangeToken(selfCareToken)).then(() => {
+        setVerificationDone(true);
+      });
     }
   }, [selfCareToken]);
 
-  return <Outlet />;
+  useEffect(() => {
+    if (token !== '') {
+      navigate(getHomePage(), {replace: true});
+    }
+  }, [token]);
+
+  return verificationDone ? <Outlet /> : <div />;
 };
 
 export default VerifyUser;

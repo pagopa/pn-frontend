@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
 import { FormRecipient, NewNotificationFe, PaymentModel } from '../../models/NewNotification';
+import { UserGroup } from '../../models/user';
 import { formatNotificationRecipients } from '../../utils/notification.utility';
 import {
   uploadNotificationAttachment,
@@ -9,6 +10,7 @@ import {
   setAttachments,
   setRecipients,
   uploadNotificationPaymentDocument,
+  getUserGroups,
 } from './actions';
 import { PreliminaryInformationsPayload } from './types';
 
@@ -25,6 +27,7 @@ const initialState = {
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
   } as NewNotificationFe,
+  groups: [] as Array<UserGroup>,
   isCompleted: false,
 };
 
@@ -61,6 +64,9 @@ const newNotificationSlice = createSlice({
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
+    builder.addCase(getUserGroups.fulfilled, (state, action) => {
+      state.groups = action.payload;
+    });
     builder.addCase(uploadNotificationAttachment.fulfilled, (state, action) => {
       state.notification = { ...state.notification, documents: action.payload };
     });
