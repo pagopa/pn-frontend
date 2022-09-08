@@ -19,10 +19,10 @@ const NavigationBar = () => {
   }
 
   useEffect(() => {
-    if (pathname === cittadiniPath) {
+    if (pathname === "/cittadini") {
       setIndex(0);
     }
-    if (pathname === paPath) {
+    if (pathname === "/pubbliche-amministrazioni") {
       setIndex(1);
     }
   }, [pathname]);
