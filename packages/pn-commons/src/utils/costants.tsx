@@ -7,11 +7,14 @@ export const LANGUAGES = {
   en: { it: 'Italian', en: 'English' },
 };
 
+const isDev = process.env.NODE_ENV === "development";
+const pathEnd = isDev ? "": "index.html";
+
 // export const URL_DIGITAL_NOTIFICATIONS = 'https://notifichedigitali.it';
-export const URL_DIGITAL_NOTIFICATIONS = 'https://develop.d33g1ea1dgp7a4.amplifyapp.com';
+export const URL_DIGITAL_NOTIFICATIONS = 'https://www.notifichedigitali.pagopa.it/';
 // export const URL_PRIVACY_LINK = 'https://notifichedigitali.it/cittadini/informativa-privacy'
-export const PRIVACY_LINK_RELATIVE_PATH = '/cittadini/informativa-privacy';
-const ACCESSIBILITY_LINK_RELATIVE_PATH = '/cittadini/accessibilita';
+export const PRIVACY_LINK_RELATIVE_PATH = '/cittadini/informativa-privacy/' + pathEnd;
+const ACCESSIBILITY_LINK_RELATIVE_PATH = '/cittadini/accessibilita/' + pathEnd;
 
 const getFooterLinkLabels = (
   link: string,
