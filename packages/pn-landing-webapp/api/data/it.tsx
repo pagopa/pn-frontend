@@ -311,7 +311,6 @@ const pfShowcases: Array<IShowcaseData> = [
            * Waiting for IOIcon
            */
           // icon: <IOIcon />,
-          // icon: <IOIcon  height="60px" width="60px" src={`${IMAGES_PATH}/IOIcon.png`} />,
           icon: <img src={`${IMAGES_PATH}/IOIcon.png`} />,
           title: "App IO",
           subtitle: <Typography variant="body2">
