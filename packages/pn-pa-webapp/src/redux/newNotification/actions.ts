@@ -9,6 +9,7 @@ import {
   PaymentObject,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
+import { newNotificationMapper } from '../../utils/notification.utility';
 import { UploadDocumentParams, UploadDocumentsResponse } from './types';
 
 export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
@@ -154,7 +155,8 @@ export const createNewNotification = createAsyncThunk<NewNotificationResponse, N
   'createNewNotification',
   async (notification: NewNotification, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.createNewNotification(notification);
+      const mappedNotification = newNotificationMapper(notification);
+      return await NotificationsApi.createNewNotification(mappedNotification);
     } catch (e) {
       return rejectWithValue(e);
     }

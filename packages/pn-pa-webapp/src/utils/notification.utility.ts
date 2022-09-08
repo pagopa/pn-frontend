@@ -72,10 +72,7 @@ const newNotificationDocumentMapper = (
     sha256: document.file.sha256.hashBase64,
   },
   contentType: document.contentType,
-  ref: {
-    key: '',
-    versionToken: '',
-  },
+  ref: document.ref,
   title: document.name,
 });
 

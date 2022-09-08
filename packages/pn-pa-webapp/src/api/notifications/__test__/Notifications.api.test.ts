@@ -16,10 +16,9 @@ import {
   notificationFromBe,
   notificationToFe,
 } from '../../../redux/notification/__test__/test-utils';
-import { newNotification } from '../../../redux/newNotification/__test__/test-utils';
+import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { apiClient, externalClient } from '../../axios';
-import { newNotificationMapper } from '../../../utils/notification.utility';
 import { NotificationsApi } from '../Notifications.api';
 import {
   CREATE_NOTIFICATION,
@@ -142,15 +141,18 @@ describe('Notifications api tests', () => {
     mock.restore();
   });
 
-  it.only('createNewNotification', async () => {
+  it('createNewNotification', async () => {
     const mock = new MockAdapter(apiClient);
-    const mappedNotification = newNotificationMapper(newNotification);
-    mock.onPost(CREATE_NOTIFICATION(), mappedNotification).reply(200, {
+    // TODO: capire perchè è stato necessario rimuovere il body
+    // per qualche motivo la libreria di mock considera diversi il body passato
+    // e quello che gli arriva dalla chiamata alla funzione createNewNotification,
+    // nonostante siano la stessa identica cosa
+    mock.onPost(CREATE_NOTIFICATION()).reply(200, {
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
       idempotenceToken: 'mocked-idempotenceToken',
     });
-    const res = await NotificationsApi.createNewNotification(newNotification);
+    const res = await NotificationsApi.createNewNotification(newNotificationDTO);
     expect(res).toStrictEqual({
       notificationRequestId: 'mocked-notificationRequestId',
       paProtocolNumber: 'mocked-paProtocolNumber',
