@@ -14,7 +14,6 @@ import {
 } from "../../api";
 import { UserType } from "model";
 
-
 const USER_TYPE = UserType.PF;
 
 const CittadiniPage: NextPage = () => (
