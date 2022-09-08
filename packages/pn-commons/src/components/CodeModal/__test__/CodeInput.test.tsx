@@ -40,7 +40,7 @@ describe('CodeInput Component', () => {
     fireEvent.change(codeInputs[2], {target: {value: '3'}});
     expect(codeInputs[2]).toHaveValue('3');
     await waitFor(() => {
-      expect(handleChangeMock).toBeCalledTimes(1);
+      expect(handleChangeMock).toBeCalledTimes(2);
     })
   });
 });
