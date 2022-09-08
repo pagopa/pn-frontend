@@ -6,6 +6,11 @@ const NavigationBar = () => {
   const { pathname } = useRouter();
   const [index, setIndex] = useState(0);
 
+  const isDev = process.env.NODE_ENV === "development";
+  const pathEnding = isDev ? "" : "index.html";
+  const cittadiniPath = "/cittadini/" + pathEnding;
+  const paPath = "/pubbliche-amministrazioni/" + pathEnding;
+
   function a11yProps(index: number) {
     return {
       id: `page-${index}`,
@@ -14,10 +19,10 @@ const NavigationBar = () => {
   }
 
   useEffect(() => {
-    if (pathname === "/cittadini") {
+    if (pathname === cittadiniPath) {
       setIndex(0);
     }
-    if (pathname === "/pubbliche-amministrazioni") {
+    if (pathname === paPath) {
       setIndex(1);
     }
   }, [pathname]);
@@ -38,13 +43,13 @@ const NavigationBar = () => {
             onClick={(
               event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
             ) => {
-              if (pathname === "/cittadini") {
+              if (pathname === cittadiniPath) {
                 event.preventDefault();
               }
             }}
             key="Cittadini"
             label="Cittadini"
-            href="/cittadini"
+            href={cittadiniPath}
             {...a11yProps(0)}
           />
           <Tab
@@ -53,13 +58,13 @@ const NavigationBar = () => {
             onClick={(
               event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
             ) => {
-              if (pathname === "/pubbliche-amministrazioni") {
+              if (pathname === paPath) {
                 event.preventDefault();
               }
             }}
             key="Enti"
             label="Enti"
-            href="/pubbliche-amministrazioni"
+            href={paPath}
             {...a11yProps(1)}
           />
         </Tabs>
