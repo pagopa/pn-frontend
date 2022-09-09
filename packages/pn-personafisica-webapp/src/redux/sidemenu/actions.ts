@@ -11,7 +11,14 @@ export enum SIDEMENU_ACTIONS  {
 
 export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
   SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION,
-  performThunkAction(() => DelegationsApi.getDelegators())
+  // performThunkAction(() => DelegationsApi.getDelegators())
+  async () => {
+    try {
+      return DelegationsApi.getDelegators();
+    } catch (e) {
+      return [];
+    }
+  }
 );
 
 export const getDomicileInfo = createAsyncThunk<Array<DigitalAddress>>(
