@@ -22,13 +22,14 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
     try {
       return await DelegationsApi.createDelegation(payload);
     } catch (e: any) {
-      if (e.response.status === 400 && e.response.data.title === "Delega già presente") {
+      if (e.response.status === 409 && e.response.data.title === "Delega già presente") {
+        const message = e.response.data.errors[0]?.code  === "PN_MANDATE_DELEGATEHIMSELF" ? "Non è possibile delegare se stessi" : "La persona che hai indicato ha già una delega per questo ente.";
         return rejectWithValue({
           response: {
             ...e.response,
             customMessage: {
               title: "Delega già presente",
-              message: "La persona che hai indicato ha già una delega per questo ente."
+              message
             }
           }
         });
