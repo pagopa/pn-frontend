@@ -54,8 +54,10 @@ export const createAppError = (error: IAppErrorProps, options: { show: boolean }
     blocking: false,
     toNotify: true,
     alreadyShown: !options.show,    // if the error is not to be shown, then we set as already shown just from the start
-    action: error.action,
   };
+  if (error.action) {
+    e.action = error.action;
+  }
   e.status = error.response?.status;
   if (error.response?.customMessage) {
     e.title = error.response.customMessage.title;

@@ -226,7 +226,7 @@ const NotificationDetail = () => {
               {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
                 <NotificationPayment
                   iun={notification.iun}
-                  notificationPayment={notification.iun === "PNGR-KGRE-MYGL-202209-A-1" ? {...currentRecipient.payment, noticeCode: undefined} : currentRecipient.payment}
+                  notificationPayment={currentRecipient.payment}
                   onDocumentDownload={dowloadDocument}
                   mandateId={mandateId}
                 />

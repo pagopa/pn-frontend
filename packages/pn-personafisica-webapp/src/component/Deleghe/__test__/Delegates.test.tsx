@@ -64,7 +64,11 @@ describe('Delegates Component - assuming delegates API works properly', () => {
 });
 
 
-describe('Contacts Page - different delegates API behaviors', () => {
+describe('Delegates Component - different delegates API behaviors', () => {
+  beforeAll(() => {
+    jest.restoreAllMocks();
+  });
+
   beforeEach(() => {
     apiOutcomeTestHelper.setStandardMock();
   });

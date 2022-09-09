@@ -4,9 +4,6 @@ import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationColumn } from '../../models/Notifications';
 
-/* eslint-disable-next-line functional/no-let */
-let niceCounter = 0;
-
 export enum DASHBOARD_ACTIONS  {
   GET_RECEIVED_NOTIFICATIONS = 'getReceivedNotifications',
 }
@@ -22,13 +19,7 @@ export const getReceivedNotifications = createAsyncThunk<
   GetNotificationsResponse,
   GetNotificationsParams
 >(DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS, 
-  performThunkAction((params: GetNotificationsParams) => {
-    console.log('in action getReceivedNotifications, niceCounter');
-    console.log(niceCounter);
-    const paramsToAdd = niceCounter % 4 === 0 ? { startDate: "toto" } : {};
-    niceCounter++;
-    return NotificationsApi.getReceivedNotifications({...params, ...paramsToAdd});
-  })
+  performThunkAction((params: GetNotificationsParams) => NotificationsApi.getReceivedNotifications(params))
 );
 
 
