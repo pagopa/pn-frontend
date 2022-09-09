@@ -31,6 +31,7 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { mixpanelInit, trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
+import {goToLoginPortal} from "./navigation/navigation.utility";
 
 declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
@@ -211,10 +212,16 @@ const App = () => {
       ),
   });
 
+  const handleLogout = () => {
+    void dispatch(logout());
+
+    goToLoginPortal(window.location.origin, true);
+  };
+
   return (
     <>
       <Layout
-        onExitAction={() => dispatch(logout())}
+        onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>

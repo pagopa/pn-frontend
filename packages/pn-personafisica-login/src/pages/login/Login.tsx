@@ -32,8 +32,11 @@ const Login = () => {
   const { t, i18n } = useTranslation(['login', 'notifiche']);
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
+  const origin = params.get('origin');
 
-  storageOriginOps.write(params.get('origin') ?? '');
+  if (origin !== null && origin !== '') {
+    storageOriginOps.write(origin);
+  }
 
   const goCIE = () => {
     storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);

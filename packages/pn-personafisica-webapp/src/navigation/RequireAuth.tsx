@@ -6,7 +6,7 @@ import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 import { logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { goToLogin } from './navigation.utility';
+import { goToLoginPortal } from './navigation.utility';
 
 /**
  * This component returns Outlet if user is logged in.
@@ -21,7 +21,14 @@ const RequireAuth = () => {
   const [accessDenied, setAccessDenied] = useState(false);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
-  const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
+
+  const handleLogout = () => {
+    void dispatch(logout());
+
+    goToLoginPortal(window.location.href, true);
+  };
+
+  const sessionCheck = useSessionCheck(200, handleLogout);
 
 
   useEffect(() => {
@@ -40,7 +47,7 @@ const RequireAuth = () => {
 
   return <HandleAuth
     accessDenied={accessDenied} goodbyeMessage={goodbyeMessage} disableInactivityHandler={DISABLE_INACTIVITY_HANDLER}
-    goToLogin={() => goToLogin(window.location.href)} doLogout={() => dispatch(logout())} />;
+    goToLogin={() => goToLoginPortal(window.location.href)} doLogout={handleLogout} />;
 };
 
 export default RequireAuth;
