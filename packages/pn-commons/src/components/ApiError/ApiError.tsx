@@ -3,7 +3,7 @@ import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 type ApiErrorProps = {
-  onClick: () => void;
+  onClick?: () => void;
   mt?: number;
   mainText?: string;
 };
@@ -26,6 +26,7 @@ const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText }) => {
     'Ricarica'
   );
 
+
   return (
     <StyledStack
       sx={{ fontSize: '16px', mt }}
@@ -38,7 +39,7 @@ const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText }) => {
         sx={{ verticalAlign: 'middle', margin: '0 20px' }}
       />
       <Typography sx={{ marginRight: '8px' }}>{text}</Typography>
-      <Typography color="primary" fontWeight="bold" sx={{ cursor: 'pointer' }} onClick={onClick}>
+      <Typography color="primary" fontWeight="bold" sx={{ cursor: 'pointer' }} onClick={onClick || (() => window.location.reload()) }>
         {actionLaunchText}
       </Typography>
     </StyledStack>

@@ -2,11 +2,11 @@ import { useErrors } from "../../hooks";
 import ApiError from "./ApiError";
 
 interface ApiErrorGuardCommonProps {
-  apiId: string;
+  apiId?: string;
 }
 
 interface ApiErrorGuardProps extends ApiErrorGuardCommonProps {
-  reloadAction: () => void;
+  reloadAction?: () => void;
   mt?: number;
   mainText?: string;
 }
