@@ -33,7 +33,7 @@ const VerifyUser = () => {
   }, [selfCareToken]);
 
   useEffect(() => {
-    if (token !== '') {
+    if (token !== '' && location.pathname === '/') {
       navigate(getHomePage(), {replace: true});
     }
   }, [token]);
