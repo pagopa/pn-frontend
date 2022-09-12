@@ -22,14 +22,13 @@ const RequireAuth = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
 
-  const handleLogout = () => {
+  const handleAuthLogout = () => {
     void dispatch(logout());
 
-    goToLoginPortal(window.location.href, true);
+    goToLoginPortal(window.location.href);
   };
 
-  const sessionCheck = useSessionCheck(200, handleLogout);
-
+  const sessionCheck = useSessionCheck(200, handleAuthLogout);
 
   useEffect(() => {
     if (token === '' || !token || isUnauthorizedUser) {
@@ -47,7 +46,7 @@ const RequireAuth = () => {
 
   return <HandleAuth
     accessDenied={accessDenied} goodbyeMessage={goodbyeMessage} disableInactivityHandler={DISABLE_INACTIVITY_HANDLER}
-    goToLogin={() => goToLoginPortal(window.location.href)} doLogout={handleLogout} />;
+    goToLogin={() => goToLoginPortal(window.location.href)} doLogout={handleAuthLogout} />;
 };
 
 export default RequireAuth;

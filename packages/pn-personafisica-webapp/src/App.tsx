@@ -212,16 +212,16 @@ const App = () => {
       ),
   });
 
-  const handleLogout = () => {
+  const handleUserLogout = () => {
     void dispatch(logout());
 
-    goToLoginPortal(window.location.origin, true);
+    goToLoginPortal(window.location.origin, false);
   };
 
   return (
     <>
       <Layout
-        onExitAction={handleLogout}
+        onExitAction={handleUserLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>
