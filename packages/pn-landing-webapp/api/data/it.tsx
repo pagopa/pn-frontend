@@ -394,7 +394,7 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "App IO",
           subtitle: (
             <Typography variant="body2">
-              Se attivi il servizio “Avvisi di cortesia” di Piattaforma
+              Se attivi il servizio “Notifiche digitali” di Piattaforma
               Notifiche, puoi ricevere e gestire{" "}
               <strong>direttamente in app</strong> le comunicazioni a valore
               legale. Se non hai la PEC e leggi subito il messaggio, non
