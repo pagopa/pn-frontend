@@ -32,6 +32,10 @@ const VerifyUser = () => {
     }
   }, [selfCareToken]);
 
+  /** 
+   * definisce la pagina iniziale. Si deve attivare soltanto se il pathname è '/', 
+   * altrimenti rindizzerebbe sulla pagina iniziale ad ogni ricarica (F5).
+   */
   useEffect(() => {
     if (token !== '' && location.pathname === '/') {
       navigate(getHomePage(), {replace: true});
