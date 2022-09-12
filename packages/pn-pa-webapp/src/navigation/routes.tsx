@@ -4,7 +4,7 @@ import { NotFound } from '@pagopa-pn/pn-commons';
 import Dashboard from '../pages/Dashboard.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
 import NewNotification from '../pages/NewNotification.page';
-// import ApiKeys from '../pages/ApiKeys.page';
+import ApiKeys from '../pages/ApiKeys.page';
 import { PNRole } from '../models/user';
 import RequireAuth from './RequireAuth';
 import VerifyUser from './VerifyUser';
@@ -19,16 +19,7 @@ function Router() {
           <Route path={routes.DASHBOARD} element={<Dashboard />} />
           <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
           <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
-          {/**
-           * Refers to PN-1741
-           * Commented out because beyond MVP scope
-           *
-           * LINKED TO:
-           * - "const BasicMenuItems" in packages/pn-pa-webapp/src/utils/role.utility.ts
-           * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
-           *
-           * <Route path={routes.API_KEYS} element={<ApiKeys />} />
-           * */}
+          <Route path={routes.API_KEYS} element={<ApiKeys />} />
         </Route>
       </Route>
       <Route path="*" element={<NotFound />} />

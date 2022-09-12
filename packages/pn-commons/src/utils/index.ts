@@ -1,5 +1,7 @@
 import { dataRegex, formatFiscalCode } from './string.utility';
 import { calculatePages } from './pagination.utility';
+import { getApiKeyStatusInfos } from './apikeys.utility';
+
 import {
     getNotificationStatusInfos,
     getNotificationAllowedStatus,
@@ -27,6 +29,7 @@ import { compileRoute } from './routes.utility';
 import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './costants';
 
 export {
+    getApiKeyStatusInfos,
     getNotificationAllowedStatus,
     getNotificationStatusInfos,
     parseNotificationDetail,

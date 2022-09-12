@@ -1,4 +1,4 @@
-type LocalizationNamespacesNames = 'common' | 'notifications';
+type LocalizationNamespacesNames = 'common' | 'notifications' | 'apikeys';
 
 type LocalizationNamespaces = {
   [key in LocalizationNamespacesNames]: string;
@@ -10,6 +10,7 @@ type LocalizationFunction = (namespace: string | Array<string>, path: string, da
 let localizationNamespaces: LocalizationNamespaces = {
   common: 'common',
   notifications: 'notifiche',
+  apikeys: 'apikeys'
 };
 
 /* eslint-disable-next-line functional/no-let */

@@ -1,0 +1,30 @@
+{
+  "title": "API Key",
+  "subtitle": {
+    "text1": "Piattaforma Notifiche offre API di ",
+    "text2": "invio notifiche",
+    "text3": " e ",
+    "text4": "accesso alle informazioni",
+    "text5": " sul loro stato. Qui puoi generare e gestire le API Key da utilizzare per autenticare le richieste dell’ente."
+  },
+  "generated-api-keys": "API Key generate",
+  "new-api-key-button": "Genera API Key",
+  "table": {
+    "name": "Nome",
+    "api-key": "API Key",
+    "last-modify": "Ultima modifica",
+    "groups": "Gruppi",
+    "status": "Stato"
+  },
+  "status": {
+    "enabled": "Attiva",
+    "blocked": "Bloccata",
+    "rotated": "Ruotata",
+    "enabled-tooltip": "L'API Key è attiva",
+    "blocked-tooltip": "L'API Key è bloccata",
+    "rotated-tooltip": "L'API Key è ruotata",
+    "enabled-description": "L'API Key è attiva",
+    "blocked-description": "L'API Key è bloccata",
+    "rotated-description": "L'API Key è ruotata"
+  }
+}
