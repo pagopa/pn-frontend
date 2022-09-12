@@ -26,6 +26,7 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import Link from "next/link";
 
 const assistanceLink = {
   label: "Assistenza",
@@ -174,6 +175,21 @@ const paInfoBlocks: Array<IInfoblockData> = [
           <Typography variant="body2">
             Quando sarà operativa, anche il tuo ente potrà fare richiesta di
             adesione e adottarla per digitalizzare il processo di notificazione.
+          </Typography>
+          <Typography variant="body2">
+            Nel frattempo, gli enti possono consultare il{" "}
+            <Link href="https://www.pagopa.it/static/7ae1cda16663a9fe201273e8150f0958/PN-ManualeOperativo.pdf">
+              manuale operativo
+            </Link>
+            {" "}(aggiornato al 28/06/2022),{" "}
+            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
+              le API b2b per le pubbliche amministrazioni
+            </Link>
+            {" "}e{" "}
+            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
+              le API b2b per l'avanzamento delle notifiche
+            </Link>
+            .
           </Typography>
         </>
       ),
