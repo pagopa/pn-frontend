@@ -7,11 +7,14 @@ export const LANGUAGES = {
   en: { it: 'Italian', en: 'English' },
 };
 
+const isDev = process.env.NODE_ENV === 'development';
+const pathEnd = isDev ? '' : 'index.html';
+
 // export const URL_DIGITAL_NOTIFICATIONS = 'https://notifichedigitali.it';
-export const URL_DIGITAL_NOTIFICATIONS = 'https://develop.d33g1ea1dgp7a4.amplifyapp.com';
+export const URL_DIGITAL_NOTIFICATIONS = 'https://www.notifichedigitali.pagopa.it/';
 // export const URL_PRIVACY_LINK = 'https://notifichedigitali.it/cittadini/informativa-privacy'
-export const PRIVACY_LINK_RELATIVE_PATH = '/cittadini/informativa-privacy';
-const ACCESSIBILITY_LINK_RELATIVE_PATH = '/cittadini/accessibilita';
+export const PRIVACY_LINK_RELATIVE_PATH = '/cittadini/informativa-privacy/' + pathEnd;
+const ACCESSIBILITY_LINK_RELATIVE_PATH = '/cittadini/accessibilita/' + pathEnd;
 
 const getFooterLinkLabels = (
   link: string,
@@ -100,28 +103,27 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
       },
       {
         ...getFooterLinkLabels('certifications', 'Certificazioni'),
-        href: '#certificazioni',
+        href: 'https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf',
+        ariaLabel: 'Vai al link: Certificazioni',
         linkType: 'internal',
       },
       {
         ...getFooterLinkLabels('security', 'Sicurezza delle informazioni'),
-        href: '#sicurezza-delle-informazioni',
+        href: 'https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf',
+        ariaLabel: 'Vai al link: Sicurezza delle informazioni',
         linkType: 'internal',
       },
       {
         ...getFooterLinkLabels('personal-data', 'Diritto alla protezione dei dati personali'),
+        href: 'https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8',
+        ariaLabel: 'Vai al link: Diritto alla protezione dei dati personali',
         linkType: 'internal',
-        onClick: () => {
-          console.log('onClick');
-        },
       },
       {
         ...getFooterLinkLabels('cookie', 'Preferenze Cookie'),
-        href: '#preferenze-cookie',
+        ariaLabel: 'Vai al link: Preferenze Cookie',
+        href: 'https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8',
         linkType: 'internal',
-        onClick: () => {
-          console.log('onClick');
-        },
       },
       {
         ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
@@ -130,18 +132,21 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
       },
       {
         ...getFooterLinkLabels('company', 'Società trasparente'),
-        href: '#societa-trasparente',
+        href: 'https://pagopa.portaleamministrazionetrasparente.it',
+        ariaLabel: 'Vai al link: Società trasparente',
         linkType: 'internal',
       },
       {
         ...getFooterLinkLabels('disclosure', 'Responsible Disclosure Policy'),
-        href: '#responsible-disclosure-policy',
+        href: 'https://www.pagopa.it/it/responsible-disclosure-policy/',
+        ariaLabel: 'Vai al link: Responsible Disclosure Policy',
         linkType: 'internal',
       },
       {
         ...getFooterLinkLabels('321-model', 'Modello 321'),
-        href: '#modello-321',
+        href: 'https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls',
         linkType: 'internal',
+        ariaLabel: 'Vai al link: Modello 321',
       },
     ],
   },
@@ -204,7 +209,7 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
   },
 });
 
-export const postLoginLinks = (): Array<FooterLinksType> => ([
+export const postLoginLinks = (): Array<FooterLinksType> => [
   {
     label: 'Privacy policy',
     href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
@@ -225,4 +230,4 @@ export const postLoginLinks = (): Array<FooterLinksType> => ([
     href: `${URL_DIGITAL_NOTIFICATIONS}${ACCESSIBILITY_LINK_RELATIVE_PATH}`,
     linkType: 'external',
   },
-]);
+];
