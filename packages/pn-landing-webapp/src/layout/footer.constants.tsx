@@ -83,12 +83,12 @@ export const preLoginLinks: PreLoginFooterLinksType = {
         ariaLabel: "Vai al link: Diritto alla protezione dei dati personali",
         linkType: "internal",
       },
-      {
-        label: "Preferenze Cookie",
-        href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
-        ariaLabel: "Vai al link: Preferenze Cookie",
-        linkType: "internal",
-      },
+      // {
+      //   label: "Preferenze Cookie",
+      //   href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
+      //   ariaLabel: "Vai al link: Preferenze Cookie",
+      //   linkType: "internal",
+      // },
       {
         label: "Termini e Condizioni",
         href: "/cittadini/informativa-privacy/" + pathEnding,
@@ -122,7 +122,7 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       {
         icon: "linkedin",
         title: "LinkedIn",
-        href: "https://www.linkedin.com/company/pagopa/",
+        href: "https://it.linkedin.com/company/pagopa",
         ariaLabel: "Link: vai al sito LinkedIn di PagoPA S.p.A.",
       },
       {
@@ -134,13 +134,13 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       {
         icon: "instagram",
         title: "Instagram",
-        href: "https://www.instagram.com/pagopa/",
+        href: "https://www.instagram.com/pagopaspa/?hl=en",
         ariaLabel: "Link: vai al sito Instagram di PagoPA S.p.A.",
       },
       {
         icon: "medium",
         title: "Medium",
-        href: "https://medium.com/pagopa",
+        href: "https://medium.com/pagopa-spa",
         ariaLabel: "Link: vai al sito Medium di PagoPA S.p.A.",
       },
     ],
