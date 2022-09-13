@@ -31,7 +31,7 @@ batch:
         variables:
           BUILD_ID: coll
           #PN-2029 REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
-          REACT_APP_URL_FE_LOGIN: https://portale-login.coll.pn.pagopa.it
+          REACT_APP_URL_FE_LOGIN: https://portale-login.coll.pn.pagopa.it/
           REACT_APP_URL_API: https://webapi.coll.pn.pagopa.it/
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false

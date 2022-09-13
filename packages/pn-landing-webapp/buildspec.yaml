@@ -16,6 +16,10 @@ batch:
         variables:
           BUILD_ID: coll
           NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.coll.pn.pagopa.it/"
+    - identifier: pn_landing_preview_build
+      env:
+        variables:
+          BUILD_ID: preview
 phases:
   install:
     runtime-versions:

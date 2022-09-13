@@ -1,11 +1,14 @@
-import { PreLoginFooterLinksType, FooterLinksType } from '@pagopa/mui-italia';
+import { PreLoginFooterLinksType, FooterLinksType } from "@pagopa/mui-italia";
+
+const isDev = process.env.NODE_ENV === "development";
+const pathEnding = isDev ? "" : "index.html";
 
 export const LANGUAGES = {
-  it: { it: 'Italiano', en: 'Inglese' },
-  en: { it: 'Italian', en: 'English' },
+  it: { it: "Italiano", en: "Inglese" },
+  en: { it: "Italian", en: "English" },
 };
 
-export const pagoPALink: {href: string; ariaLabel: string} = {
+export const pagoPALink: { href: string; ariaLabel: string } = {
   href: "https://www.pagopa.it/it/",
   ariaLabel: "Link: vai al sito di PagoPA S.p.A.",
 };
@@ -58,54 +61,55 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Privacy Policy",
-        href: "/cittadini/informativa-privacy",
+        href: "/cittadini/informativa-privacy/" + pathEnding,
         ariaLabel: "Vai al link: Privacy Policy",
         linkType: "internal",
       },
       {
         label: "Certificazioni",
-        href: "certificazioni",
+        href: "https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf",
         ariaLabel: "Vai al link: Certificazioni",
         linkType: "internal",
       },
       {
         label: "Sicurezza delle informazioni",
-        href: "sicurezza-delle-informazioni",
+        href: "https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf",
         ariaLabel: "Vai al link: Sicurezza delle informazioni",
         linkType: "internal",
       },
       {
         label: "Diritto alla protezione dei dati personali",
+        href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
         ariaLabel: "Vai al link: Diritto alla protezione dei dati personali",
         linkType: "internal",
       },
       {
         label: "Preferenze Cookie",
-        href: "preferenze-cookie",
+        href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
         ariaLabel: "Vai al link: Preferenze Cookie",
         linkType: "internal",
       },
       {
         label: "Termini e Condizioni",
-        href: "/cittadini/informativa-privacy",
+        href: "/cittadini/informativa-privacy/" + pathEnding,
         ariaLabel: "Vai al link: Termini e Condizioni",
         linkType: "internal",
       },
       {
         label: "Società trasparente",
-        href: "societa-trasparente",
+        href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.html",
         ariaLabel: "Vai al link: Società trasparente",
         linkType: "internal",
       },
       {
         label: "Responsible Disclosure Policy",
-        href: "responsible-disclosure-policy",
+        href: "https://www.pagopa.it/it/responsible-disclosure-policy/",
         ariaLabel: "Vai al link: Responsible Disclosure Policy",
         linkType: "internal",
       },
       {
         label: "Modello 321",
-        href: "modello-321",
+        href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls",
         ariaLabel: "Vai al link: Modello 321",
         linkType: "internal",
       },
@@ -143,7 +147,7 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Accessibilità",
-        href: "/cittadini/accessibilita",
+        href: "/cittadini/accessibilita/" + pathEnding,
         ariaLabel: "Vai al link: Accessibilità",
         linkType: "internal",
       },
