@@ -1,14 +1,7 @@
 import { Validator } from '@pagopa-pn/pn-validator';
 
-import { CreateDelegationProps, Person } from '../redux/delegation/types';
-
-class PersonValidator extends Validator<Person> {
-  constructor() {
-    super();
-    this.ruleFor('firstName').isEqual('Mario');
-    this.ruleFor('lastName').isEmpty(true);
-  }
-}
+import { CreateDelegationProps } from '../redux/delegation/types';
+import { PersonValidator } from './PersonValidator';
 
 class CreateDelegationValidator extends Validator<CreateDelegationProps> {
   constructor() {
