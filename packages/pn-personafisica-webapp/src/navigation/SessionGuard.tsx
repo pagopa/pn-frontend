@@ -1,4 +1,4 @@
-import { appStateActions, InactivityHandler, SessionModal, useSessionCheck } from "@pagopa-pn/pn-commons";
+import { appStateActions, InactivityHandler, SessionModal, useProcess, useSessionCheck } from "@pagopa-pn/pn-commons";
 import { useCallback, useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { exchangeToken, getToSApproval, logout } from "../redux/auth/actions";
@@ -8,25 +8,14 @@ import { DISABLE_INACTIVITY_HANDLER } from "../utils/constants";
 import { goToLogin } from "./navigation.utility";
 import * as routes from './routes.const';
 
-// enum INITIALIZATION_STAGES_2 {
-//   NON_STARTED = 'NonStarted',
-//   USER_DETERMINATION_STARTED = "UserDeterminationStarted",
-//   USER_DETERMINATION_FINISHED = "UserDeterminationFinished",
-//   INITIAL_PAGE_DETERMINATION_STARTED = "InitialPageDeterminationStarted",
-//   INITIAL_PAGE_DETERMINATION_FINISHED = "InitialPageDeterminationFinished",
-//   SESSION_CHECK_STARTED = "SessionCheckStarted",
-//   INITIALIZATION_FINISHED = "InitializationFinished",
-// }
-
 enum INITIALIZATION_STEPS {
-  NOT_STARTED = 'NotStarted',
   USER_DETERMINATION = "UserDetermination",
   INITIAL_PAGE_DETERMINATION = "InitialPageDetermination",
   SESSION_CHECK = "SessionCheck",
 }
 
 const INITIALIZATION_SEQUENCE = [
-  INITIALIZATION_STEPS.NOT_STARTED, INITIALIZATION_STEPS.USER_DETERMINATION, 
+  INITIALIZATION_STEPS.USER_DETERMINATION, 
   INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, INITIALIZATION_STEPS.SESSION_CHECK
 ];
 
@@ -43,34 +32,13 @@ const SessionGuard = () => {
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
 
-  // const [initializationStage, setInitializationStage] = useState(INITIALIZATION_STAGES_2.NON_STARTED);
-  const [currentSituation, setCurrentSituation] = useState({ step: INITIALIZATION_STEPS.NOT_STARTED, isActive: false });
+  const {isFinished, performStep} = useProcess(INITIALIZATION_SEQUENCE);
 
   // se un utente loggato fa reload, si deve evitare il navigate verso notifiche
   // questo si determina appena cominciata l'inizializzazione, se c'è già un sessionToken 
   // questo vuol dire che è stato preso da session storage, 
   // cioè siamo in presenza di un reload di un utente loggato
   const [isSessionReload, setIsSessionReload] = useState(false);
-
-  /* eslint-disable-next-line arrow-body-style */
-  const mustProceedToStep = useCallback((step: INITIALIZATION_STEPS) => {
-    return INITIALIZATION_SEQUENCE.indexOf(currentSituation.step) === INITIALIZATION_SEQUENCE.indexOf(step) - 1
-      && !currentSituation.isActive;
-  }, [currentSituation]);
-
-  /* eslint-disable-next-line arrow-body-style */
-  const isFinished = useCallback(() => {
-    return INITIALIZATION_SEQUENCE.indexOf(currentSituation.step) === INITIALIZATION_SEQUENCE.length - 1
-      && !currentSituation.isActive;
-  }, [currentSituation]);
-
-  const startStep = useCallback((step: INITIALIZATION_STEPS) => {
-    setCurrentSituation({ step, isActive: true });
-  }, []);
-
-  const endCurrentStep = useCallback(() => {
-    setCurrentSituation(currentValue => ({...currentValue, isActive: false }));
-  }, []);
 
   const getTokenParam = useCallback(() => {
     const params = new URLSearchParams(location.hash);
@@ -82,8 +50,6 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     const doUserDetermination = async () => {
-      // setInitializationStage(INITIALIZATION_STAGES_2.USER_DETERMINATION_STARTED);
-      startStep(INITIALIZATION_STEPS.USER_DETERMINATION);
       // se i dati del utente sono stati presi da session storage, 
       // si deve saltare la user determination e settare l'indicativo di session reload
       // che verrà usato nella initial page determination
@@ -97,24 +63,15 @@ const SessionGuard = () => {
           await dispatch(exchangeToken(spidToken));
         }
       }
-      // sia perché fatta perché non necessaria,
-      // a questo punto la user determination può considerarsi finita
-      // setInitializationStage(INITIALIZATION_STAGES_2.USER_DETERMINATION_FINISHED);
-      endCurrentStep();
     };
-    if (mustProceedToStep(INITIALIZATION_STEPS.USER_DETERMINATION)) {
-      void doUserDetermination();
-    }
-  // }, [initializationStage, getTokenParam]);
-  }, [mustProceedToStep, startStep, endCurrentStep, getTokenParam]);
+    void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, doUserDetermination);
+  }, [performStep, getTokenParam]);
 
   /**
    * Step 2 - determinazione pagina iniziale
    */
   useEffect(() => {
     const doInitalPageDetermination = async () => {
-      // setInitializationStage(INITIALIZATION_STAGES_2.INITIAL_PAGE_DETERMINATION_STARTED);
-      startStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION);
       // l'analisi delle TOS ha senso solo se c'è un utente
       if (sessionToken) {
         console.log("SessionGuard - in initial page determination - about to query TOS");
@@ -130,42 +87,30 @@ const SessionGuard = () => {
           navigate(initialPage, {replace: true});
         }
       }
-      // setInitializationStage(INITIALIZATION_STAGES_2.INITIAL_PAGE_DETERMINATION_FINISHED);
-      endCurrentStep();
     };
-    // if (initializationStage === INITIALIZATION_STAGES_2.USER_DETERMINATION_FINISHED) {
-    if (mustProceedToStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION)) {
-      void doInitalPageDetermination();
-    }
-  // }, [initializationStage]);
-   }, [mustProceedToStep, startStep, endCurrentStep]);
+    void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
+   }, [performStep]);
 
   /**
    * Step 3 - lancio del sessionCheck
    */
   useEffect(() => {
-    // if (initializationStage === INITIALIZATION_STAGES_2.INITIAL_PAGE_DETERMINATION_FINISHED) {
-    //   setInitializationStage(INITIALIZATION_STAGES_2.SESSION_CHECK_STARTED);
-    if (mustProceedToStep(INITIALIZATION_STEPS.SESSION_CHECK)) {
-      startStep(INITIALIZATION_STEPS.SESSION_CHECK);
+    void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
       console.log("SessionGuard - in session check launching");
       if (sessionToken) {
         sessionCheck(expDate);
       }
-      endCurrentStep();
-      // setInitializationStage(INITIALIZATION_STAGES_2.INITIALIZATION_FINISHED);
-    }
-  // }, [initializationStage]);
-  }, [mustProceedToStep, startStep, endCurrentStep]);
+    });
+  }, [performStep]);
 
   /**
    * Fine processo inizializzazione
    */
    useEffect(() => {
-    if (!isInitialized && isFinished() /* initializationStage === INITIALIZATION_STAGES_2.INITIALIZATION_FINISHED */ ) {
+    if (!isInitialized && isFinished() ) {
       dispatch(appStateActions.finishInitialization());
     }
-  }, [isInitialized, /* initializationStage */ isFinished]);
+  }, [isInitialized, isFinished]);
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
 

@@ -22,7 +22,7 @@ import { Box } from '@mui/material';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
-import { getToSApproval, logout } from './redux/auth/actions';
+import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
 import { RootState } from './redux/store';
@@ -124,7 +124,6 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getDomicileInfo());
-      void dispatch(getToSApproval());
     }
   }, [sessionToken]);
 
@@ -132,7 +131,7 @@ const App = () => {
     if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
     }
-  }, [pendingDelegators, sessionToken]);
+  }, [sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
     if (delegators.length > 0) {
