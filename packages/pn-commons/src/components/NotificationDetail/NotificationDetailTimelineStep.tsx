@@ -25,7 +25,6 @@ import {
   INotificationDetailTimeline,
   NotificationDetailRecipient,
   NotificationStatusHistory,
-  TimelineCategory,
 } from '../../types';
 
 type Props = {
@@ -96,7 +95,7 @@ const NotificationDetailTimelineStep = ({
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
-  let legalFactsIds: Array<{ file: LegalFactId; category: TimelineCategory }> = [];
+  let legalFactsIds: Array<{ file: LegalFactId; step: INotificationDetailTimeline }> = [];
   let visibleSteps: Array<INotificationDetailTimeline> = [];
   /* eslint-enable functional/no-let */
   const notificationStatusInfos = getNotificationStatusInfos(timelineStep.status);
@@ -105,10 +104,10 @@ const NotificationDetailTimelineStep = ({
     /* eslint-disable functional/immutable-data */
     legalFactsIds = timelineStep.steps.reduce((arr, s) => {
       if (s.legalFactsIds) {
-        return arr.concat(s.legalFactsIds.map((lf) => ({ file: lf, category: s.category })));
+        return arr.concat(s.legalFactsIds.map((lf) => ({ file: lf, step: s })));
       }
       return arr;
-    }, [] as Array<{ file: LegalFactId; category: TimelineCategory }>);
+    }, [] as Array<{ file: LegalFactId; step: INotificationDetailTimeline }>);
 
     visibleSteps = timelineStep.steps.filter((s) => !s.hidden);
     /* eslint-enable functional/immutable-data */
@@ -158,7 +157,7 @@ const NotificationDetailTimelineStep = ({
                 color="primary"
                 sx={{ marginTop: '10px', textAlign: 'left' }}
               >
-                {getLegalFactLabel(lf.category, lf.file.category)}
+                {getLegalFactLabel(lf.step, lf.file.category)}
               </ButtonNaked>
             ))}
         </Box>
@@ -230,7 +229,7 @@ const NotificationDetailTimelineStep = ({
                 onClick={() => s.legalFactsIds && clickHandler(lf)}
                 key={lf.key}
               >
-                {getLegalFactLabel(s.category, lf.category)}
+                {getLegalFactLabel(s, lf.category)}
               </Typography>
             ))}
           </Typography>
