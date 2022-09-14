@@ -100,10 +100,10 @@ Resources:
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200
-            ResponsePagePath: '/index.html'
+            ResponsePagePath: !If [ IsLanding, '/404/index.html', '/index.html' ]
           - ErrorCode: 403
             ResponseCode: 200
-            ResponsePagePath: '/index.html'
+            ResponsePagePath: !If [ IsLanding, '/404/index.html', '/index.html' ]
         Origins:
         - DomainName: !Sub '${S3BucketForWebsiteContent.RegionalDomainName}'
           Id: !Sub 'S3-${S3BucketForWebsiteContent}'
@@ -126,15 +126,19 @@ Resources:
         SecurityHeadersConfig: 
           # add_header Content-Security-Policy
           ContentSecurityPolicy: 
-            ContentSecurityPolicy: !Sub "default-src 'self'; object-src 'none'; \
-              connect-src 'self' https://api-eu.mixpanel.com/track/  \
-                   https://selfcare.pagopa.it/assets/ \
-                   ${WebApiUrl}; 
-              style-src 'self' 'unsafe-inline'; \
-              worker-src 'none'; \
-              font-src 'self'; \
-              frame-ancestors 'self' ; \
-              img-src 'self' https://assets.cdn.io.italia.it/ data:"
+            ContentSecurityPolicy: 
+              Fn::Join:
+                - " "
+                - - "default-src 'self';"
+                  - !If [ IsLanding, "object-src 'self' https://www.notifichedigitali.pagopa.it/ https://notifichedigitali.pagopa.it ;", "object-src 'none';" ] 
+                  - !Sub " connect-src 'self' https://api-eu.mixpanel.com/track/  \
+                           https://selfcare.pagopa.it/assets/ \
+                           ${WebApiUrl}; \
+                           style-src 'self' 'unsafe-inline'; \
+                           worker-src 'none'; \
+                           font-src 'self'; \
+                           frame-ancestors 'self' ; \
+                           img-src 'self' https://assets.cdn.io.italia.it/ data:"
             Override: true
           # add_header X-Content-Type-Options "nosniff";
           ContentTypeOptions: 
