@@ -145,12 +145,12 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
     ],
     links: [
-      {
-        label: "Accessibilità",
-        href: "/cittadini/accessibilita/" + pathEnding,
-        ariaLabel: "Vai al link: Accessibilità",
-        linkType: "internal",
-      },
+      // {
+      //   label: "Accessibilità",
+      //   href: "/cittadini/accessibilita/" + pathEnding,
+      //   ariaLabel: "Vai al link: Accessibilità",
+      //   linkType: "internal",
+      // },
     ],
   },
 };
