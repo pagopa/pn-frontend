@@ -11,7 +11,7 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
 } from '../types';
-import { LegalFactType } from '../types/NotificationDetail';
+import { LegalFactType, SendDigitalDetails } from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
@@ -200,13 +200,13 @@ export const getNotificationAllowedStatus = () => [
 ];
 
 /**
- * Get legalFact label based on timeline category and legalfact type.
- * @param {TimelineCategory} category Timeline category
+ * Get legalFact label based on timeline step and legalfact type.
+ * @param {INotificationDetailTimeline} timelineStep Timeline step
  * @param {LegalFactType} legalFactType Legalfact type
  * @returns {string} attestation or receipt
  */
 export function getLegalFactLabel(
-  category: TimelineCategory,
+  timelineStep: INotificationDetailTimeline,
   legalFactType?: LegalFactType
 ): string {
   const legalFactLabel = getLocalizedOrDefaultLabel(
@@ -214,9 +214,52 @@ export function getLegalFactLabel(
     `detail.legalfact`,
     'Attestazione opponibile a terzi'
   );
+  const receiptLabel = getLocalizedOrDefaultLabel('notifications', `detail.receipt`, 'Ricevuta');
   // TODO: localize in pn_ga branch
-  if (category === TimelineCategory.SEND_PAPER_FEEDBACK) {
-    return getLocalizedOrDefaultLabel('notifications', `detail.receipt`, 'Ricevuta');
+  if (timelineStep.category === TimelineCategory.SEND_PAPER_FEEDBACK) {
+    return receiptLabel;
+  } else if (
+    timelineStep.category === TimelineCategory.SEND_DIGITAL_PROGRESS &&
+    legalFactType === LegalFactType.PEC_RECEIPT &&
+    ((timelineStep.details as SendDigitalDetails).eventCode === 'C001' ||
+      (timelineStep.details as SendDigitalDetails).eventCode === 'DP00')
+  ) {
+    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.pec-receipt-accepted',
+      'di accettazione PEC'
+    )}`;
+  } else if (
+    timelineStep.category === TimelineCategory.SEND_DIGITAL_PROGRESS &&
+    legalFactType === LegalFactType.PEC_RECEIPT &&
+    ((timelineStep.details as SendDigitalDetails).eventCode === 'C008' ||
+      (timelineStep.details as SendDigitalDetails).eventCode === 'C010')
+  ) {
+    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.pec-receipt-not-accepted',
+      'di mancata accettazione PEC'
+    )}`;
+  } else if (
+    timelineStep.category === TimelineCategory.SEND_DIGITAL_FEEDBACK &&
+    legalFactType === LegalFactType.PEC_RECEIPT &&
+    (timelineStep.details as SendDigitalDetails).responseStatus === 'OK'
+  ) {
+    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.pec-receipt-delivered',
+      'di consegna PEC'
+    )}`;
+  } else if (
+    timelineStep.category === TimelineCategory.SEND_DIGITAL_FEEDBACK &&
+    legalFactType === LegalFactType.PEC_RECEIPT &&
+    (timelineStep.details as SendDigitalDetails).responseStatus === 'KO'
+  ) {
+    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.pec-receipt-not-delivered',
+      'di mancata consegna PEC'
+    )}`;
   } else if (legalFactType === LegalFactType.SENDER_ACK) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
@@ -225,7 +268,7 @@ export function getLegalFactLabel(
     )}`;
   } else if (
     legalFactType === LegalFactType.DIGITAL_DELIVERY &&
-    category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+    timelineStep.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
   ) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
@@ -234,7 +277,7 @@ export function getLegalFactLabel(
     )}`;
   } else if (
     legalFactType === LegalFactType.DIGITAL_DELIVERY &&
-    category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW
+    timelineStep.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW
   ) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
@@ -273,7 +316,7 @@ export function getNotificationTimelineStatusInfos(
   return TimelineStepFactory.createTimelineStep(step).getTimelineStepInfo({
     step,
     recipient,
-    recipientLabel
+    recipientLabel,
   });
 }
 
@@ -342,7 +385,12 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
       populateMacroStep(parsedNotification, timelineElement, status, acceptedStatusItems);
     }
     // order step by time
-    status.steps.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    status.steps.sort((a, b) => {
+      if (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime() >= 0) {
+        return 1;
+      }
+      return -1;
+    });
     if (status.status !== NotificationStatus.ACCEPTED && acceptedStatusItems.length) {
       acceptedStatusItems = [];
     }
@@ -378,12 +426,21 @@ export function parseNotificationDetail(
   // populate notification macro steps with corresponding timeline micro steps
   populateMacroSteps(parsedNotification);
   // order elements by date
-  parsedNotification.notificationStatusHistory.sort(
-    (a, b) => new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime()
-  );
-  parsedNotification.timeline.sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  );
+  parsedNotification.notificationStatusHistory.sort((a, b) => {
+    if (new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime() >= 0) {
+      return 1;
+    }
+    return -1;
+  });
+  // Non dovrebbe essere necessario perchè l'oggetto timeline non viene usato nel layer di presentazione.
+  /*
+  parsedNotification.timeline.sort((a, b) => {
+    if (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime() >= 0) {
+      return 1;
+    }
+    return -1;
+  });
+  */
   /* eslint-enable functional/immutable-data */
   /* eslint-enable functional/no-let */
   return parsedNotification;

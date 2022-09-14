@@ -294,7 +294,7 @@ describe('timeline utility functions', () => {
 
   it('return timeline status infos - SEND_DIGITAL_PROGRESS (failure)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C008';
     testTimelineStatusInfosFn(
       'Invio via PEC non preso in carico',
       "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail non è stato preso in carico."
@@ -303,7 +303,7 @@ describe('timeline utility functions', () => {
 
   it('return timeline status infos - SEND_DIGITAL_PROGRESS (success)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'OK';
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C001';
     testTimelineStatusInfosFn(
       'Invio via PEC preso in carico',
       "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail è stato preso in carico."
@@ -316,38 +316,73 @@ describe('timeline utility functions', () => {
   });
 
   it('return legalFact label - default', () => {
-    const label = getLegalFactLabel(TimelineCategory.GET_ADDRESS);
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.GET_ADDRESS;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
     expect(label).toBe('Attestazione opponibile a terzi');
   });
 
   it('return legalFact label - SEND_PAPER_FEEDBACK', () => {
-    const label = getLegalFactLabel(TimelineCategory.SEND_PAPER_FEEDBACK);
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_PAPER_FEEDBACK;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
     expect(label).toBe('Ricevuta');
   });
 
   it('return legalFact label - SENDER_ACK', () => {
-    const label = getLegalFactLabel(TimelineCategory.REQUEST_ACCEPTED, LegalFactType.SENDER_ACK);
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.REQUEST_ACCEPTED;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.SENDER_ACK);
     expect(label).toBe('Attestazione opponibile a terzi: notifica presa in carico');
   });
 
   it('return legalFact label - DIGITAL_DELIVERY', () => {
-    const label = getLegalFactLabel(TimelineCategory.DIGITAL_SUCCESS_WORKFLOW, LegalFactType.DIGITAL_DELIVERY);
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_SUCCESS_WORKFLOW;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.DIGITAL_DELIVERY);
     expect(label).toBe('Attestazione opponibile a terzi: notifica digitale');
   });
 
   it('return legalFact label - DIGITAL_DELIVERY', () => {
-    const label = getLegalFactLabel(TimelineCategory.DIGITAL_FAILURE_WORKFLOW, LegalFactType.DIGITAL_DELIVERY);
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.DIGITAL_DELIVERY);
     expect(label).toBe('Attestazione opponibile a terzi: mancato recapito digitale');
   });
 
   it('return legalFact label - ANALOG_DELIVERY', () => {
-    const label = getLegalFactLabel(TimelineCategory.ANALOG_SUCCESS_WORKFLOW, LegalFactType.ANALOG_DELIVERY);
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.ANALOG_SUCCESS_WORKFLOW;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.ANALOG_DELIVERY);
     expect(label).toBe('Attestazione opponibile a terzi: conformità');
   });
 
   it('return legalFact label - RECIPIENT_ACCESS', () => {
-    const label = getLegalFactLabel(TimelineCategory.NOTIFICATION_VIEWED, LegalFactType.RECIPIENT_ACCESS);
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_VIEWED;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.RECIPIENT_ACCESS);
     expect(label).toBe('Attestazione opponibile a terzi: avvenuto accesso');
+  });
+
+  it('return legalFact label - SEND_DIGITAL_PROGRESS (success)', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C001';
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
+    expect(label).toBe('Ricevuta di accettazione PEC');
+  });
+
+  it('return legalFact label - SEND_DIGITAL_PROGRESS (failure)', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C008';
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
+    expect(label).toBe('Ricevuta di mancata accettazione PEC');
+  });
+
+  it('return legalFact label - SEND_DIGITAL_FEEDBACK (success)', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'OK';
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
+    expect(label).toBe('Ricevuta di consegna PEC');
+  });
+
+  it('return legalFact label - SEND_DIGITAL_FEEDBACK (failure)', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
+    expect(label).toBe('Ricevuta di mancata consegna PEC');
   });
 
   it('return legalFact label - DIGITAL_FAILURE_WORKFLOW', () => {
