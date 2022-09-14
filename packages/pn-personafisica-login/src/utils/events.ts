@@ -1,3 +1,5 @@
+import { EventsType } from '@pagopa-pn/pn-commons/src/types/MixpanelEvents';
+
 export enum TrackEventType {
   APP_UNLOAD = 'APP_UNLOAD',
   LOGIN_FAILURE = 'LOGIN_FAILURE',
@@ -8,12 +10,7 @@ export enum TrackEventType {
   CUSTOMER_CARE_MAILTO = 'CUSTOMER_CARE_MAILTO'
 }
 
-export const events: {
-  [key: string]: {
-    category: string;
-    action: string;
-  };
-} = {
+export const events: EventsType = {
   [TrackEventType.APP_UNLOAD]: {
     category: 'app',
     action: 'app unloaded'

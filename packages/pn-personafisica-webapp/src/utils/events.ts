@@ -1,3 +1,5 @@
+import { EventsType } from '@pagopa-pn/pn-commons/src/types/MixpanelEvents';
+
 export enum TrackEventType {
   APP_CRASH = 'APP_CRASH',
   APP_UNLOAD = 'APP_UNLOAD',
@@ -9,10 +11,10 @@ export enum TrackEventType {
   CUSTOMER_CARE_MAILTO = 'CUSTOMER_CARE_MAILTO',
   DELEGATION_DELEGATE_ADD_ACTION = 'DELEGATION_DELEGATE_ADD_ACTION',
   DELEGATION_DELEGATE_ADD_CTA = 'DELEGATION_DELEGATE_ADD_CTA',
-  DELEGATION_DELEGATE_ADD_ERROR = 'createDelegation/rejected',
+  DELEGATION_DELEGATE_ADD_ERROR = 'delegationsSlice/createDelegation/rejected',
   DELEGATION_DELEGATE_REVOKE = 'DELEGATION_DELEGATE_REVOKE',
   DELEGATION_DELEGATE_VIEW_CODE = 'DELEGATION_DELEGATE_VIEW_CODE',
-  DELEGATION_DELEGATOR_ACCEPT = 'openAcceptModal',
+  DELEGATION_DELEGATOR_ACCEPT = 'delegationsSlice/openAcceptModal',
   DELEGATION_DELEGATOR_REJECT = 'DELEGATION_DELEGATOR_REJECT',
   DIGITAL_DOMICILE_BANNER_CLOSE = 'DIGITAL_DOMICILE_BANNER_CLOSE',
   DIGITAL_DOMICILE_LINK = 'DIGITAL_DOMICILE_LINK',
@@ -44,13 +46,7 @@ export enum TrackEventType {
   USER_VIEW_PROFILE = 'USER_VIEW_PROFILE'
 }
 
-export const events: {
-  [key: string]: {
-    category: string;
-    action: string;
-    getAttributes?: (payload: { [key: string]: string }) => { [key: string]: string };
-  };
-} = {
+export const events: EventsType = {
   [TrackEventType.APP_CRASH]: {
     category: 'app',
     action: 'app crashed'
