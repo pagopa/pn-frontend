@@ -22,6 +22,7 @@ const VerifyUser = () => {
     if (tokenParam) {
       setSpidToken(tokenParam);
     } else {
+      console.log('VerifyUser - no token found');
       setVerificationDone(true);
     }
   }, [location]);

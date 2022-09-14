@@ -11,6 +11,7 @@ export interface AppStateState {
     errors: Array<IAppMessage>;
     success: Array<IAppMessage>;
   };
+  isInitialized: boolean;
 }
 
 const initialState: AppStateState = {
@@ -22,6 +23,7 @@ const initialState: AppStateState = {
     errors: [],
     success: [],
   },
+  isInitialized: false,
 };
 
 const isLoading = (action: AnyAction) => action.type.endsWith('/pending');
@@ -52,6 +54,9 @@ export const appStateSlice = createSlice({
     removeSuccess(state, action: PayloadAction<string>) {
       state.messages.success = state.messages.success.filter((e) => e.id !== action.payload);
     },
+    finishInitialization(state, _: PayloadAction<void>) {
+      state.isInitialized = true;
+    }
   },
   extraReducers: (builder) => {
     builder
