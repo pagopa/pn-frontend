@@ -85,4 +85,5 @@ export const appStateSelectors = {
   selectLoading: (state: any) => state.appState.loading.result,
   selectErrors: (state: any) => state.appState.messages.errors,
   selectSuccess: (state: any) => state.appState.messages.success,
+  selectIsInitialized: (state: any) => state.appState.isInitialized,
 };

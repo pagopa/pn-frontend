@@ -1,5 +1,6 @@
 import { appStateActions, InactivityHandler, SessionModal, useProcess, useSessionCheck } from "@pagopa-pn/pn-commons";
 import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { exchangeToken, logout } from "../redux/auth/actions";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
@@ -27,10 +28,11 @@ const SessionGuard = () => {
   const location = useLocation();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken, desired_exp: expDate  } = useAppSelector((state: RootState) => state.userState.user);
-  const { isUnauthorizedUser, isClosedSession } = useAppSelector((state: RootState) => state.userState);
+  const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector((state: RootState) => state.userState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
+  const { t } = useTranslation(['common']);
 
   const {isFinished, performStep} = useProcess(INITIALIZATION_SEQUENCE);
 
@@ -109,12 +111,17 @@ const SessionGuard = () => {
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
 
+  const goodbyeMessage = {
+    title: isUnauthorizedUser ? messageUnauthorizedUser.title : t('leaving-app.title'),
+    message: isUnauthorizedUser ? messageUnauthorizedUser.message : t('leaving-app.message'),
+  };
+
   return isInitialized 
     ? ( isUnauthorizedUser || isClosedSession
       ? <SessionModal
           open
-          title="Cosa fai qua?"
-          message="Vattene via dai"
+          title={goodbyeMessage.title}
+          message={goodbyeMessage.message}
           handleClose={goToSelfcareLogin}
           initTimeout
         />
