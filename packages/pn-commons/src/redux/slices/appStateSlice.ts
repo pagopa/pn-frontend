@@ -34,10 +34,6 @@ function doRemoveErrorsByAction(action: string, errors: IAppMessage[]) {
   return errors.filter((e) => e.action !== action);
 }
 
-function actionProperType(action: AnyAction): string {
-  return action.type.slice(0, action.type.indexOf("/"));
-}
-
 /* eslint-disable functional/immutable-data */
 export const appStateSlice = createSlice({
   name: 'appState',
@@ -50,9 +46,9 @@ export const appStateSlice = createSlice({
       state.messages.errors = doRemoveErrorsByAction(action.payload, state.messages.errors);
     },
     setErrorAsAlreadyShown(state, action: PayloadAction<string>) {
-      const theError = state.messages.errors.find((e) => e.id === action.payload);
-      if (theError) {
-        theError.alreadyShown = true;
+      const error = state.messages.errors.find((e) => e.id === action.payload);
+      if (error) {
+        error.alreadyShown = true;
       }
     },
     addSuccess(
@@ -79,11 +75,12 @@ export const appStateSlice = createSlice({
       })
       .addMatcher(isFulfilled, (state, action) => {
         state.loading.result = false;
-        state.messages.errors = doRemoveErrorsByAction(actionProperType(action), state.messages.errors);
+        const actionBeingFulfilled = action.type.slice(0, action.type.indexOf("/"));
+        state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
-        const actionBeingRejected = actionProperType(action);
+        const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         const error = createAppError(
           {...action.payload, action: actionBeingRejected}, { show: !action.payload.blockNotification });

@@ -14,7 +14,7 @@ export const getSidemenuInformation = createAsyncThunk<Array<Delegator>>(
   // performThunkAction(() => DelegationsApi.getDelegators())
   async () => {
     try {
-      return DelegationsApi.getDelegators();
+      return await DelegationsApi.getDelegators();
     } catch (e) {
       return [];
     }

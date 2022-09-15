@@ -33,7 +33,7 @@ import Prompt from './Prompt';
 import CopyToClipboard from './CopyToClipboard';
 import LoadingPage from './LoadingPage';
 import ApiError from './ApiError/ApiError';
-import ApiErrorGuard, { ApiErrorGuardGeneral } from './ApiError/ApiErrorGuard';
+import ApiErrorGuard from './ApiError/ApiErrorGuard';
 
 export {
     LoadingOverlay,
@@ -49,7 +49,6 @@ export {
     EmptyState,
     ApiError,
     ApiErrorGuard,
-    ApiErrorGuardGeneral,
     CustomDropdown,
     StatusTooltip,
     MobileNotificationsSort,

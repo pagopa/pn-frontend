@@ -8,6 +8,5 @@ export const ExternalRegistriesAPI = {
   getAllActivatedParties: (): Promise<Array<Party>> =>
     apiClient
       .get<Array<Party>>(GET_ALL_ACTIVATED_PARTIES())
-      // .then((response: AxiosResponse<Array<Party>>) => response.data),
       .then((response: AxiosResponse<Array<Party>>) => response.data),
 };
