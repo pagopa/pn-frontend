@@ -6,16 +6,16 @@ import NotificationDetail from '../pages/NotificationDetail.page';
 import NewNotification from '../pages/NewNotification.page';
 // import ApiKeys from '../pages/ApiKeys.page';
 import { PNRole } from '../models/user';
-import RequireAuth from './RequireAuth';
-import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
+import SessionGuard from './SessionGuard';
+import RouteGuard from './RouteGuard';
 
 function Router() {
   return (
     <Routes>
-      <Route path="/" element={<VerifyUser />}>
+      <Route path="/" element={<SessionGuard />}>
         {/* protected routes */}
-        <Route path="/"  element={<RequireAuth  roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
+        <Route path="/"  element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
           <Route path={routes.DASHBOARD} element={<Dashboard />} />
           <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
           <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
@@ -29,6 +29,9 @@ function Router() {
            *
            * <Route path={routes.API_KEYS} element={<ApiKeys />} />
            * */}
+        </Route>
+        <Route path="/toto"  element={<RouteGuard roles={[PNRole.TOTO]} />}>
+          <Route path="/toto/totito" element={<div>Toto totito</div>} />
         </Route>
       </Route>
       <Route path="*" element={<NotFound />} />
