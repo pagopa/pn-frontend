@@ -1,4 +1,4 @@
-import { EventsType } from '@pagopa-pn/pn-commons/src/types/MixpanelEvents';
+import { EventsType } from '@pagopa-pn/pn-commons';
 
 export enum TrackEventType {
   APP_CRASH = 'APP_CRASH',

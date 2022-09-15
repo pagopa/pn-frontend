@@ -27,7 +27,5 @@ export function useTracking(mixpanelToken: string, nodeEnv: string) {
     if (OTCookieValue.indexOf(checkValue) > -1) {
       mixpanelInit(mixpanelToken, nodeEnv);
     }
-    // TODO: rimuovere
-    mixpanelInit(mixpanelToken, nodeEnv);
   }, []);
 }

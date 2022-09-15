@@ -40,6 +40,7 @@ import {
 import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
 import { BasicUser, basicNoLoggedUserData } from './User';
+import { EventsType } from "./MixpanelEvents";
 
 export {
     basicNoLoggedUserData,
@@ -64,6 +65,7 @@ export type {
     CardSort,
     Column,
     DatePickerTypes,
+    EventsType,
     GetNotificationsParams,
     GetNotificationsResponse,
     IAppMessage,
