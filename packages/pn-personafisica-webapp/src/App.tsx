@@ -87,9 +87,7 @@ const App = () => {
       {
         id: 'logout',
         label: t('header.logout'),
-        onClick: () => {
-          void dispatch(logout());
-        },
+        onClick: () => handleUserLogout(),
         icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
       },
     ],
@@ -215,13 +213,12 @@ const App = () => {
   const handleUserLogout = () => {
     void dispatch(logout());
 
-    goToLoginPortal(window.location.origin, false);
+    goToLoginPortal(window.location.origin);
   };
 
   return (
     <>
       <Layout
-        onExitAction={handleUserLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>
