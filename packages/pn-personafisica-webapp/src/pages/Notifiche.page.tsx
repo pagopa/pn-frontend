@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString, ApiErrorGuard } from '@pagopa-pn/pn-commons';
+import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
@@ -51,7 +51,7 @@ const Notifiche = () => {
     pagination.page + 1
   );
 
-  // API call, this function is passed to the ApiErrorGuard component
+  // API call, this function is passed to the ApiErrorWrapper component
   const fetchNotifications = useCallback(() => {
     const params = {
       ...filters,
@@ -95,7 +95,7 @@ const Notifiche = () => {
     <Box p={3}>
       <DomicileBanner />
       <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
-      <ApiErrorGuard apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS} reloadAction={fetchNotifications}>
+      <ApiErrorWrapper apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS} reloadAction={fetchNotifications}>
         {isMobile ? (
           <MobileNotifications
             notifications={notifications}
@@ -134,7 +134,7 @@ const Notifiche = () => {
             }
           />
         )}
-      </ApiErrorGuard>
+      </ApiErrorWrapper>
     </Box>
   );
 };

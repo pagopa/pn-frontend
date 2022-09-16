@@ -1,21 +1,21 @@
 import { useErrors } from "../../hooks";
 import ApiError from "./ApiError";
 
-interface ApiErrorGuardCommonProps {
+interface ApiErrorWrapperCommonProps {
   apiId?: string;
 }
 
-interface ApiErrorGuardProps extends ApiErrorGuardCommonProps {
+interface ApiErrorWrapperProps extends ApiErrorWrapperCommonProps {
   reloadAction?: () => void;
   mt?: number;
   mainText?: string;
 }
 
-interface ApiErrorGuardGeneralProps extends ApiErrorGuardCommonProps  {
+interface ApiErrorWrapperGeneralProps extends ApiErrorWrapperCommonProps  {
   errorComponent: JSX.Element;
 }
 
-export const ApiErrorGuardGeneral: React.FC<ApiErrorGuardGeneralProps> = ({ apiId, children, errorComponent }) => {
+export const ApiErrorWrapperGeneral: React.FC<ApiErrorWrapperGeneralProps> = ({ apiId, children, errorComponent }) => {
   const { hasApiErrors } = useErrors();
 
   const hasParticularApiErrors = hasApiErrors(apiId);
@@ -26,13 +26,13 @@ export const ApiErrorGuardGeneral: React.FC<ApiErrorGuardGeneralProps> = ({ apiI
   </>;
 };
 
-const ApiErrorGuard: React.FC<ApiErrorGuardProps> = ({ apiId, children, reloadAction, mt, mainText }) => {
-  return <ApiErrorGuardGeneral 
+const ApiErrorWrapper: React.FC<ApiErrorWrapperProps> = ({ apiId, children, reloadAction, mt, mainText }) => {
+  return <ApiErrorWrapperGeneral 
     apiId={apiId} 
     errorComponent={<ApiError onClick={reloadAction} mt={mt} mainText={mainText} />} 
   >
     {children}
-  </ApiErrorGuardGeneral>
+  </ApiErrorWrapperGeneral>
 };
 
-export default ApiErrorGuard;
+export default ApiErrorWrapper;
