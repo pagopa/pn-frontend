@@ -4,25 +4,43 @@ Parameters:
   Name:
     Description: "CDN Logical Name"
     Type: String
+
   WebDomain:
     Description: "Domain for webapp"
     Type: String
+
+  AlternateWebDomain:
+    Description: "Alternate Domain name for the webapp"
+    Type: String
+
+  AlternateHostedZoneId:
+    Description: Hosted Zone Id in which you want to add alternate DNS
+    Type: String
+
   WebCertificateArn:
     Description: "ACM Web Certificate ARN"
     Type: String
+
   HostedZoneId:
     Description: "Hosted Zone Id in which you want to add record"
     Type: String
+
   WebApiUrl:
     Description: "The Url of web API: useful for content-security-policy"
     Type: String
 
 Conditions:
-  IsLanding: # Name startsWith 'web-landing-cdn-'
+
+  IsLanding: # Is landing site if name startsWith 'web-landing-cdn-'
     Fn::And:
       - !Not [ !Equals [ !Ref Name, "" ]]
       - !Equals [ !Select [ 0, !Split [ web-landing-cdn-, !Ref Name ]], "" ]
   
+  CreateAlternateDNSname: !Not #If alternate domain is provided, add this domain to CloudFront
+    - !Equals
+      - !Ref AlternateWebDomain
+      - ""
+
 Resources:
   # - CloudFront User used for WebApp S3 Bucket access
   CloudFrontOriginAccessIdentity:
@@ -84,6 +102,10 @@ Resources:
         Comment: CDN for S3-backed website
         Aliases:
           - !Ref WebDomain
+          - !If
+            - CreateAlternateDNSname
+            - !Ref AlternateWebDomain
+            - !Ref "AWS::NoValue"
         Enabled: 'true'
         DefaultCacheBehavior:
           AllowedMethods:
@@ -170,8 +192,21 @@ Resources:
         EvaluateTargetHealth: false
         HostedZoneId: Z2FDTNDATAQYW2
 
+  #Alternate domain Route53 record
+  AlternateRoute53RecordSetGroup:
+    Condition: CreateAlternateDNSname
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Ref AlternateWebDomain
+      Type: A
+      HostedZoneId: !Ref AlternateHostedZoneId
+      AliasTarget:
+        DNSName: !GetAtt WebsiteCDN.DomainName
+        EvaluateTargetHealth: false
+        HostedZoneId: Z2FDTNDATAQYW2
 
 Outputs:
+
   # - WebApp Outputs
   WebAppBucketName:
     Value: !Ref 'S3BucketForWebsiteContent'
@@ -182,6 +217,7 @@ Outputs:
   WebDomainUrl:
     Value:  !Sub 'https://${WebDomain}'
     Description: Site access URL
-
-
-
+  AlternateWebDomainUrl:
+    Condition: CreateAlternateDNSname
+    Value: !Sub 'http://${AlternateWebDomain}'
+    Description: Alternate site access URL
