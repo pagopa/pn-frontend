@@ -7,14 +7,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { useIsMobile, Layout } from '@pagopa-pn/pn-commons';
-import { CieIcon, SpidIcon } from '@pagopa/mui-italia/dist/icons';
+import { SpidIcon } from '@pagopa/mui-italia/dist/icons';
 import { styled } from '@mui/material/styles';
 import { useSearchParams } from "react-router-dom";
 
 import { IDPS } from '../../utils/IDPS';
-import { ENV } from '../../utils/env';
 import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
-import { storageOriginOps, storageSpidSelectedOps } from '../../utils/storage';
+import { storageOriginOps } from '../../utils/storage';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
 import SpidSelect from './SpidSelect';
@@ -35,7 +34,8 @@ const Login = () => {
 
   storageOriginOps.write(params.get('origin') ?? '');
 
-  const goCIE = () => {
+  // PN-2195 hide CIE button
+  /* const goCIE = () => {
     storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
     // () =>
     window.location.assign(
@@ -48,7 +48,7 @@ const Login = () => {
         SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
       },
     );
-  };
+  }; */
 
   if (showIDPS) {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
@@ -150,6 +150,7 @@ const Login = () => {
                 </LoginButton>
               </Box>
 
+              {/* PN-2195 hide CIE button
               <Box display="flex" justifyContent="center" alignItems="center">
                 <LoginButton
                   sx={{
@@ -164,7 +165,7 @@ const Login = () => {
                 >
                   {t('loginPage.loginBox.cieLogin')}
                 </LoginButton>
-              </Box>
+              </Box> */}
 
               <Box mt={4}>
                 <Divider variant="middle" />
