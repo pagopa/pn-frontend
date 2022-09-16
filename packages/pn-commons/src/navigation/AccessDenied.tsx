@@ -1,13 +1,30 @@
-import { Fragment } from 'react';
-import { Typography } from '@mui/material';
+import { Box, Button, Stack, Typography } from '@mui/material';
 
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
-const AccessDenied = () => (
-  <Fragment>
-    <Typography align="center" color="textPrimary" variant="h4">
+
+type Props = {
+  isLogged: boolean;
+  goToLogin: () => void;
+  goToHomePage: () => void;
+};
+
+const AccessDenied = ({ isLogged, goToLogin, goToHomePage }: Props) => (
+  <Stack direction="column" alignItems="center" my={4}>
+    <Typography color="textPrimary" variant="h4">
       {getLocalizedOrDefaultLabel('common', 'access-denied', 'Non hai le autorizzazioni necessarie per accedere a questa pagina')}
     </Typography>
-  </Fragment>
+    <Box my={4}>
+        <Button
+          variant="contained"
+          onClick={() => { isLogged ? goToHomePage() : goToLogin() }}
+        >
+          { isLogged 
+            ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Torna alla home page ...') 
+            : getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Procedi al login ...') 
+          }
+        </Button>      
+    </Box>
+  </Stack>
 );
 export default AccessDenied;
