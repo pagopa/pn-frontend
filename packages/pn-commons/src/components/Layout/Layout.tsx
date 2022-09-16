@@ -37,6 +37,8 @@ type Props = {
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** event on assistance click button */
   onAssistanceClick?: () => void;
+  /** Whether there is a logged user */
+  isLogged?: boolean;
 };
 
 export default function Layout({
@@ -55,6 +57,7 @@ export default function Layout({
   eventTrackingCallbackFooterChangeLanguage,
   eventTrackingCallbackProductSwitch,
   onAssistanceClick,
+  isLogged,
 }: Props) {
   return (
     <ErrorBoundary sx={{ height: '100vh' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
@@ -72,6 +75,7 @@ export default function Layout({
           userActions={userActions}
           onAssistanceClick={onAssistanceClick}
           eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
+          isLogged={isLogged}
         />
         <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
           {showSideMenu && (

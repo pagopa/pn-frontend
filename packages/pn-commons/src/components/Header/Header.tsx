@@ -31,6 +31,8 @@ type HeaderProps = {
   onAssistanceClick?: () => void;
   /** Track product switch action */
   eventTrackingCallbackProductSwitch?: (target: string) => void;
+  /** Whether there is a logged user */
+  isLogged?: boolean;
 };
 
 const pagoPAHeaderLink: RootLinkType = {
@@ -48,7 +50,8 @@ const Header = ({
   enableDropdown,
   userActions,
   onAssistanceClick,
-  eventTrackingCallbackProductSwitch
+  eventTrackingCallbackProductSwitch,
+  isLogged
 }: HeaderProps) => {
   const handleProductSelection = (product: ProductEntity) => {
     if (eventTrackingCallbackProductSwitch) {
@@ -60,7 +63,7 @@ const Header = ({
     }
   };
 
-  const enableHeaderProduct = productsList && productsList.length > 0 || partyList && partyList.length > 0;
+  const enableHeaderProduct = (isLogged || isLogged === undefined) && (productsList && productsList.length > 0 || partyList && partyList.length > 0);
   
   return (
     <AppBar sx={{ boxShadow: 'none', color: 'inherit' }} position="relative">

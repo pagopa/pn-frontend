@@ -33,8 +33,10 @@ function Router() {
         <Route path="/toto"  element={<RouteGuard roles={[PNRole.TOTO]} />}>
           <Route path="/toto/totito" element={<div>Toto totito</div>} />
         </Route>
+        <Route path="*" element={<RouteGuard roles={null} />}>
+          <Route path="*" element={<NotFound />} />
+        </Route>
       </Route>
-      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
