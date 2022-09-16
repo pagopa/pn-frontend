@@ -11,7 +11,9 @@
     "rimuovi": "Elimina",
     "enter": "Entra",
     "exit": "Esci",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "go-to-home": "Torna alla home page",
+    "go-to-login": "Procedi al login"
   },
   "menu": {
     "notifiche": "Notifiche",

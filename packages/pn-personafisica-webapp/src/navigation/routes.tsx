@@ -35,8 +35,11 @@ function Router() {
           </Route>
           {/* Public routes */}
           <Route path="/totoPublic" element={<div>Pagina pubblica</div>} />
+          {/* protected routes */}
+          <Route path="*" element={<RouteGuard />}>
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Route>
-        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
