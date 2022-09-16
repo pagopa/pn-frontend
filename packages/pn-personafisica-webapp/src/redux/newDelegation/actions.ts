@@ -4,7 +4,6 @@ import { formatToSlicedISOString } from "@pagopa-pn/pn-commons/src/services/date
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { CreateDelegationResponse, NewDelegationFormProps } from '../delegation/types';
-import { createDelegationValidator } from '../../validators/CreateDelegationValidator';
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
   'createDelegation',
@@ -21,7 +20,6 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
         dateto: formatToSlicedISOString(data.expirationDate),
     };
     try {
-      console.log(createDelegationValidator.validate(payload));
       return await DelegationsApi.createDelegation(payload);
     } catch (e: any) {
       if (e.response.status === 409 && e.response.data.title === "Delega già presente") {
