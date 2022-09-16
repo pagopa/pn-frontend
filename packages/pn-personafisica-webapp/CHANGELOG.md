@@ -3,6 +3,53 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/pagopa/pn-frontend/compare/v0.2.2...v1.2.2) (2022-09-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+## [0.2.2](https://github.com/pagopa/pn-frontend/compare/v0.2.1...v0.2.2) (2022-09-13)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
+
+
+
+
+
+## [0.2.1](https://github.com/pagopa/pn-frontend/compare/v0.2.0...v0.2.1) (2022-09-12)
+
+
+### Bug Fixes
+
+* change http code for delegation creation errors (duplicated and self-delegation) ([#395](https://github.com/pagopa/pn-frontend/issues/395)) ([b6f0c61](https://github.com/pagopa/pn-frontend/commit/b6f0c61970a72e978b9f5f5b48fd21f79d7652b8))
+* fixed new http code for verification code ([cc4914b](https://github.com/pagopa/pn-frontend/commit/cc4914bbef1bda62e245e70e8018262b4e1ec9c5))
+* fixed rediret to portale-login in coll environment ([7974d25](https://github.com/pagopa/pn-frontend/commit/7974d2588176f92e028abaaa518fd6808b58d668))
+* **pn-1700:** Modified text error title when verification code is wrong ([#390](https://github.com/pagopa/pn-frontend/issues/390)) ([acf3a02](https://github.com/pagopa/pn-frontend/commit/acf3a02957984d0dda7b2a8a8f5096e01e25f2ac))
+
+
+
+
+
+# [0.2.0](https://github.com/pagopa/pn-frontend/compare/v0.1.11...v0.2.0) (2022-09-06)
+
+
+### Bug Fixes
+
+* **PN-2107:** modified copy about timeline and sending manual notification ([#383](https://github.com/pagopa/pn-frontend/issues/383)) ([a4a5445](https://github.com/pagopa/pn-frontend/commit/a4a544501f8d43b037a94889b15d2fd9f598b3b0))
+
+
+### Features
+
+* **PN-1754:** implement relative path login (link di accesso rapido) ([#380](https://github.com/pagopa/pn-frontend/issues/380)) ([1cf7583](https://github.com/pagopa/pn-frontend/commit/1cf758304a7b5dc0d424c671d5cedfd424aa01e3))
+* **PN-2047:** particular handle of status 403 in the response of the exchangeToken BE call ([#372](https://github.com/pagopa/pn-frontend/issues/372)) ([a5fa5f2](https://github.com/pagopa/pn-frontend/commit/a5fa5f22519cbffdc2134e2b74af62779db43045))
+
+
+
+
+
 ## [0.1.11](https://github.com/pagopa/pn-frontend/compare/v0.1.10...v0.1.11) (2022-08-31)
 
 

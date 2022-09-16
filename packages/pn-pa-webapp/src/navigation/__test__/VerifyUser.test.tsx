@@ -15,7 +15,7 @@ jest.mock('react-router-dom', () => ({
     hash: '#selfCareToken=mocked-hash',
     state: '',
     key: '',
-    pathname: '',
+    pathname: '/',
     search: '',
   }),
   useNavigate: () => mockNavigateFn,
