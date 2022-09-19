@@ -5,7 +5,7 @@ import { IAppMessage } from './AppMessage';
 import { NotificationStatus } from './NotificationStatus';
 import { SideMenuItem } from './SideMenuItem';
 import { Column, Item, Sort } from './ItemsTable';
-import { ApiKey, ApiKeyColumn, ApiKeyStatus } from './ApiKeys';
+import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory } from './ApiKeys';
 import {
     Notification,
     GetNotificationsResponse,
@@ -60,6 +60,7 @@ export {
 };
 export type {
     ApiKey,
+    ApiKeyStatusHistory,
     ApiKeyColumn,
     AnalogWorkflowDetails,
     BasicUser,

@@ -1,38 +1,47 @@
-import { Box, Typography, Button, Link } from '@mui/material';
-import { useIsMobile, ApiKeyStatus } from '@pagopa-pn/pn-commons';
-import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from 'react';
+import {
+  Box,
+  Typography,
+  Button,
+  Link,
+  Dialog,
+  TextField,
+  InputAdornment,
+  Grid,
+} from '@mui/material';
 import { Add } from '@mui/icons-material';
+import { useIsMobile, ApiKey, CopyToClipboard } from '@pagopa-pn/pn-commons';
+import { useTranslation } from 'react-i18next';
+import { RootState } from '../redux/store';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { getApiKeys } from '../redux/apiKeys/actions';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 
 const ApiKeys = () => {
+  const dispatch = useAppDispatch();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['apikeys']);
 
-  // In attesa del BE, è stato creato un mock di dati
-  // Da rimuovere e introdurre i vari dispatch opportuni quando sarà pronto il BE
-  const mockApiKeys = [
-    {
-      name: 'Rimborso e multe',
-      apiKey: '34938493489313493849348932',
-      lastModify: '21/09/2022',
-      groups: 'bla bla',
-      status: ApiKeyStatus.ENABLED,
-    },
-    {
-      name: 'Cartelle esattoriali',
-      apiKey: '34938493489323493849348932',
-      lastModify: '22/09/2022',
-      groups: 'bla bla bla',
-      status: ApiKeyStatus.BLOCKED,
-    },
-    {
-      name: 'Rimborsi',
-      apiKey: '34938493489333493849348932',
-      lastModify: '22/09/2022',
-      groups: 'bla bla bla',
-      status: ApiKeyStatus.ROTATED,
-    },
-  ];
+  const mockApiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
+
+  const [openModal, setModal] = useState(false);
+  const [viewApiKey, setViewApiKey] = useState<null | ApiKey>();
+  const handleOpenModal = () => setModal(true);
+  const handleCloseModal = () => setModal(false);
+
+  const handleViewApiKeyClick = (apiKeyId: string) => {
+    setViewApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
+    handleOpenModal();
+  };
+
+  const handleRotateApiKeyClick = () => undefined;
+  const handleToggleBlockApiKeyClick = () => undefined;
+  const handleDeleteApiKeyClick = () => undefined;
+
+  useEffect(() => {
+    void dispatch(getApiKeys());
+  }, []);
+  
 
   return (
     <Box p={3}>
@@ -57,7 +66,53 @@ const ApiKeys = () => {
           {t('new-api-key-button')}
         </Button>
       </Box>
-      <DesktopApiKeys apiKeys={mockApiKeys} />
+      <DesktopApiKeys
+        apiKeys={mockApiKeys}
+        handleViewApiKeyClick={handleViewApiKeyClick}
+        handleRotateApiKeyClick={handleRotateApiKeyClick}
+        handleToggleBlockApiKeyClick={handleToggleBlockApiKeyClick}
+        handleDeleteApiKeyClick={handleDeleteApiKeyClick}
+      />
+      {viewApiKey && (
+        <Dialog open={openModal} onClose={handleCloseModal}>
+          <Box
+            sx={{
+              padding: 3,
+              minWidth: isMobile ? '0' : '600px',
+            }}
+          >
+            <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+              API Key {viewApiKey.name}
+            </Typography>
+            <Typography variant="body1" sx={{ marginBottom: 3 }}>
+              {t('copy-api-key-info')}
+            </Typography>
+            {
+              <TextField
+                value={viewApiKey.apiKey}
+                fullWidth={true}
+                InputProps={{
+                  readOnly: true,
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <CopyToClipboard
+                        tooltipMode={true}
+                        tooltip={t('api-key-copied')}
+                        getValue={() => viewApiKey.apiKey || ''}
+                      />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            }
+            <Grid container justifyContent="flex-end">
+              <Button variant="outlined" sx={{ marginTop: 3 }} onClick={handleCloseModal}>
+                {t('close-button')}
+              </Button>
+            </Grid>
+          </Box>
+        </Dialog>
+      )}
     </Box>
   );
 };

@@ -9,12 +9,24 @@
   },
   "generated-api-keys": "API Key generate",
   "new-api-key-button": "Genera API Key",
+  "close-button": "Chiudi",
+  "copy-api-key-info": "Copia il codice e inseriscilo nella piattaforma dell'ente",
+  "empty-message": "Non è stata ancora generata nessuna API Key per questo ente.",
+  "empty-action-label": "Genera API Key",
+  "api-key-copied": "API Key copiata",
   "table": {
     "name": "Nome",
     "api-key": "API Key",
     "last-modify": "Ultima modifica",
     "groups": "Gruppi",
     "status": "Stato"
+  },
+  "context-menu": {
+    "enable": "Attiva",
+    "block": "Blocca",
+    "rotate": "Ruota",
+    "delete": "Elimina",
+    "view": "Visualizza"
   },
   "status": {
     "enabled": "Attiva",
@@ -26,5 +38,12 @@
     "enabled-description": "L'API Key è attiva",
     "blocked-description": "L'API Key è bloccata",
     "rotated-description": "L'API Key è ruotata"
+  },
+  "tooltip": {
+    "created-in": "Creata il",
+    "blocked-in": "Bloccata il",
+    "enabled-in": "Attivata il",
+    "rotated-in": "Ruotata il",
+    "from": "da"
   }
 }
