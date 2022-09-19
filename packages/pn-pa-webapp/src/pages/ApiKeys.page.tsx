@@ -11,10 +11,10 @@ import {
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useIsMobile, ApiKey, CopyToClipboard } from '@pagopa-pn/pn-commons';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getApiKeys } from '../redux/apiKeys/actions';
+import { getApiKeys, setApiKeyBlocked, setApiKeyEnabled } from '../redux/apiKeys/actions';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 
 const ApiKeys = () => {
@@ -26,8 +26,15 @@ const ApiKeys = () => {
 
   const [openModal, setModal] = useState(false);
   const [viewApiKey, setViewApiKey] = useState<null | ApiKey>();
+  const [blockApiKey, setBlockApiKey] = useState<null | ApiKey>();
+  const [enableApiKey, setEnableApiKey] = useState<null | ApiKey>();
   const handleOpenModal = () => setModal(true);
-  const handleCloseModal = () => setModal(false);
+  const handleCloseModal = () => {
+    setModal(false);
+    setViewApiKey(null);
+    setBlockApiKey(null);
+    setEnableApiKey(null);
+  };
 
   const handleViewApiKeyClick = (apiKeyId: string) => {
     setViewApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
@@ -35,13 +42,29 @@ const ApiKeys = () => {
   };
 
   const handleRotateApiKeyClick = () => undefined;
-  const handleToggleBlockApiKeyClick = () => undefined;
+  const handleBlockApiKeyClick = (apiKeyId: string) => {
+    setBlockApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
+    handleOpenModal();
+  };
+  const handleEnableApiKeyClick = (apiKeyId: string) => {
+    setEnableApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
+    handleOpenModal();
+  };
   const handleDeleteApiKeyClick = () => undefined;
 
   useEffect(() => {
     void dispatch(getApiKeys());
   }, []);
-  
+
+  const apiKeyBlocked = (apiKeyId: string) => {
+    handleCloseModal();
+    void dispatch(setApiKeyBlocked(apiKeyId));
+  };
+
+  const apiKeyEnabled = (apiKeyId: string) => {
+    handleCloseModal();
+    void dispatch(setApiKeyEnabled(apiKeyId));
+  };
 
   return (
     <Box p={3}>
@@ -68,51 +91,94 @@ const ApiKeys = () => {
       </Box>
       <DesktopApiKeys
         apiKeys={mockApiKeys}
+        handleEnableApiKeyClick={handleEnableApiKeyClick}
         handleViewApiKeyClick={handleViewApiKeyClick}
         handleRotateApiKeyClick={handleRotateApiKeyClick}
-        handleToggleBlockApiKeyClick={handleToggleBlockApiKeyClick}
+        handleBlockApiKeyClick={handleBlockApiKeyClick}
         handleDeleteApiKeyClick={handleDeleteApiKeyClick}
       />
-      {viewApiKey && (
-        <Dialog open={openModal} onClose={handleCloseModal}>
-          <Box
-            sx={{
-              padding: 3,
-              minWidth: isMobile ? '0' : '600px',
-            }}
-          >
-            <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-              API Key {viewApiKey.name}
-            </Typography>
-            <Typography variant="body1" sx={{ marginBottom: 3 }}>
-              {t('copy-api-key-info')}
-            </Typography>
-            {
-              <TextField
-                value={viewApiKey.apiKey}
-                fullWidth={true}
-                InputProps={{
-                  readOnly: true,
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <CopyToClipboard
-                        tooltipMode={true}
-                        tooltip={t('api-key-copied')}
-                        getValue={() => viewApiKey.apiKey || ''}
-                      />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            }
-            <Grid container justifyContent="flex-end">
-              <Button variant="outlined" sx={{ marginTop: 3 }} onClick={handleCloseModal}>
-                {t('close-button')}
-              </Button>
-            </Grid>
-          </Box>
-        </Dialog>
-      )}
+
+      <Dialog open={openModal} onClose={handleCloseModal}>
+        <Box
+          sx={{
+            padding: 3,
+            minWidth: isMobile ? '0' : '600px',
+          }}
+        >
+          {viewApiKey && (
+            <>
+              <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+                API Key {viewApiKey.name}
+              </Typography>
+              <Typography variant="body1" sx={{ marginBottom: 3 }}>
+                {t('copy-api-key-info')}
+              </Typography>
+              {
+                <TextField
+                  value={viewApiKey.apiKey}
+                  fullWidth={true}
+                  InputProps={{
+                    readOnly: true,
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <CopyToClipboard
+                          tooltipMode={true}
+                          tooltip={t('api-key-copied')}
+                          getValue={() => viewApiKey.apiKey || ''}
+                        />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              }
+              <Grid container justifyContent="flex-end">
+                <Button variant="outlined" sx={{ marginTop: 3 }} onClick={handleCloseModal}>
+                  {t('close-button')}
+                </Button>
+              </Grid>
+            </>
+          )}
+
+          {blockApiKey && (
+            <>
+              <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                {t('block-api-key')}
+              </Typography>
+              <Typography variant="body1" sx={{ marginBottom: 3 }}>
+                <Trans>{t('block-warning1', { apiKeyName: blockApiKey.name })}</Trans>
+              </Typography>
+              <Typography>{t('block-warning2')}</Typography>
+              <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
+                <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
+                  {t('cancel-button')}
+                </Button>
+                <Button variant="contained" onClick={() => apiKeyBlocked(blockApiKey.apiKey)}>
+                  {t('block-button')}
+                </Button>
+              </Grid>
+            </>
+          )}
+
+          {enableApiKey && (
+            <>
+              <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                {t('enable-api-key')}
+              </Typography>
+              <Typography variant="body1" sx={{ marginBottom: 3 }}>
+                <Trans>{t('enable-warning', { apiKeyName: enableApiKey.name })}</Trans>
+              </Typography>
+              <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
+                <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
+                  {t('cancel-button')}
+                </Button>
+                <Button variant="contained" onClick={() => apiKeyEnabled(enableApiKey.apiKey)}>
+                  {t('enable-button')}
+                </Button>
+              </Grid>
+            </>
+          )}
+        </Box>
+      </Dialog>
     </Box>
   );
 };

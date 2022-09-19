@@ -90,7 +90,12 @@ export const getApiKeys = createAsyncThunk<Array<ApiKey>>('getApiKeys', async (_
   }
 });
 
-export const setApiKeyBlocked = createAsyncThunk('setApiKeyBlocked', async (_param, { rejectWithValue }) => {
+export const setApiKeyBlocked = createAsyncThunk<undefined, string>('setApiKeyBlocked', async (apiKey: string, { rejectWithValue }) => {
+  /*
+    Rimuovere undefined e mettere il type appropriato in base alla risposta del BE
+    Rimuovere console.log anche
+  */
+  console.log(apiKey);
   try {
     return undefined;
   } catch(e) {
@@ -98,7 +103,12 @@ export const setApiKeyBlocked = createAsyncThunk('setApiKeyBlocked', async (_par
   }
 });
 
-export const setApiKeyEnabled = createAsyncThunk('setApiKeyEnabled', async (_param, { rejectWithValue }) => {
+export const setApiKeyEnabled = createAsyncThunk<undefined, string>('setApiKeyEnabled', async (apiKey: string, { rejectWithValue }) => {
+  /*
+    Rimuovere undefined e mettere il type appropriato in base alla risposta del BE
+    Rimuovere console.log anche
+  */
+    console.log(apiKey);
   try {
     return undefined;
   } catch(e) {
