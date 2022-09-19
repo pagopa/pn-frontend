@@ -115,6 +115,20 @@ const App = () => {
   }, [pendingDelegators, sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
+    // implementazione esplorativa su come potrebbe gestirse l'errore dell'API
+    // che restituisce i delegators per il sideMenu.
+    //
+    // attenzione - per far funzionare questo si deve cambiare dove dice
+    //     sideMenuDelegators.length > 0,  deve cambiarsi per ... > 1
+    // si deve anche abilitare la gestione errori nell'action di getSidemenuInformation
+    // 
+    // if (hasApiErrors(SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION)) {
+    //   return [{
+    //     label: "Qualcuno/a ha delegato su di te?",
+    //     route: "",
+    //     action: () => dispatch(getSidemenuInformation()),
+    //   }];
+    // } else 
     if (delegators.length > 0) {
       const myNotifications = {
         label: t('title', { ns: 'notifiche' }),

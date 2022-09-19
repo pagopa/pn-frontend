@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -18,8 +18,8 @@ import {
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useIsMobile, CustomDropdown } from '@pagopa-pn/pn-commons';
-import { getAllActivatedParties } from '../../redux/contact/actions';
+import { ApiErrorWrapper, useIsMobile, CustomDropdown } from '@pagopa-pn/pn-commons';
+import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 
@@ -101,9 +101,11 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     []
   );
 
-  useEffect(() => {
+  const fetchAllActivatedParties = useCallback(() => {
     void dispatch(getAllActivatedParties());
   }, []);
+
+  useEffect(() => fetchAllActivatedParties(), [fetchAllActivatedParties]);
 
   const validationSchema = yup.object({
     sender: yup.string().required(),
@@ -259,7 +261,11 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     }
   }, [addressTypes]);
 
-  return (
+  return <ApiErrorWrapper 
+    apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES} 
+    reloadAction={fetchAllActivatedParties} 
+    mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
+  >
     <DigitalContactsCard
       sectionTitle=""
       title=""
@@ -421,7 +427,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         </Fragment>
       )}
     </DigitalContactsCard>
-  );
+  </ApiErrorWrapper>;
 };
 
 export default SpecialContacts;
