@@ -60,7 +60,7 @@ function ItemsTable<ColumnId extends string>({
   return (
     <Root>
       <TableContainer sx={{ marginBottom: '10px' }}>
-        <Table stickyHeader aria-label={getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')}>
+        <Table stickyHeader aria-label={getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')} data-cy="table(notifications)">
           <TableHead>
             <TableRow>
               {columns.map((column) => (
