@@ -1,14 +1,13 @@
-import { Box, Chip, Stack, Typography } from '@mui/material';
+import { Box, Chip, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { CardElement, ItemsCard, Item } from '@pagopa-pn/pn-commons';
+import { CardElement, ItemsCard, Item, ApiErrorWrapper, EmptyState } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
-import TableError from '../TableError/TableError';
-import { getDelegators } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const MobileDelegators = () => {
@@ -16,9 +15,6 @@ const MobileDelegators = () => {
   const dispatch = useAppDispatch();
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
-  );
-  const delegatorsError = useAppSelector(
-    (state: RootState) => state.delegationsState.delegatorsError
   );
 
   const cardData: Array<Item> = delegationToItem(delegators);
@@ -92,22 +88,17 @@ const MobileDelegators = () => {
 
   return (
     <>
-      {delegatorsError && (
-        <Box>
-          <Stack mb={3} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <Typography variant="h6">Deleghe a tuo carico</Typography>
-          </Stack>
-          <TableError onClick={() => dispatch(getDelegators())} />
-        </Box>
-      )}
-      {!delegatorsError && delegators.length > 0 && (
-        <Box>
-          <Typography variant="h4" mb={3}>
-            {t('deleghe.delegatorsTitle')}
-          </Typography>
-          <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
-        </Box>
-      )}
+      <Box>
+        <Typography variant="h4" mb={3}>
+          {t('deleghe.delegatorsTitle')}
+        </Typography>
+        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATORS} reloadAction={() => dispatch(getDelegators())}>
+          { delegators.length > 0 
+            ? <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+            : <EmptyState disableSentimentDissatisfied emptyMessage={t('deleghe.no_delegators')} />
+          }
+        </ApiErrorWrapper>
+      </Box>
     </>
   );
 };

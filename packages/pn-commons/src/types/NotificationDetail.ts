@@ -120,6 +120,7 @@ export interface SendDigitalDetails extends BaseDetails {
   responseStatus?: 'OK' | 'KO';
   notificationDate?: string;
   errors?: Array<string>;
+  eventCode?: string;
 }
 
 // PN-1647
@@ -279,6 +280,7 @@ export enum LegalFactType {
   DIGITAL_DELIVERY = 'DIGITAL_DELIVERY',
   ANALOG_DELIVERY = 'ANALOG_DELIVERY',
   RECIPIENT_ACCESS = 'RECIPIENT_ACCESS',
+  PEC_RECEIPT = 'PEC_RECEIPT', // PN-2107
 }
 
 export interface LegalFactId {

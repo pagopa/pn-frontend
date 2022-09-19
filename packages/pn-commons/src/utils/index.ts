@@ -27,6 +27,8 @@ import { basicUserDataMatcherContents, basicInitialUserData, adaptedTokenExchang
 import { storageOpsBuilder } from './storage.utility';
 import { compileRoute } from './routes.utility';
 import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './costants';
+import { mockApiErrorWrapper, simpleMockForApiErrorWrapper, apiOutcomeTestHelper } from './test.utility';
+import { performThunkAction } from './redux.utility';
 
 export {
     getApiKeyStatusInfos,
@@ -58,5 +60,9 @@ export {
     basicInitialUserData,
     adaptedTokenExchangeError, 
     URL_DIGITAL_NOTIFICATIONS,
-    PRIVACY_LINK_RELATIVE_PATH
+    PRIVACY_LINK_RELATIVE_PATH,
+    mockApiErrorWrapper,
+    apiOutcomeTestHelper,
+    simpleMockForApiErrorWrapper,
+    performThunkAction,
 };
