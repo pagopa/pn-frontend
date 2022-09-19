@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { CardElement, ItemsCard, Item, CodeModal, EmptyState, ApiErrorGuard } from '@pagopa-pn/pn-commons';
+import { CardElement, ItemsCard, Item, CodeModal, EmptyState, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
@@ -128,7 +128,7 @@ const MobileDelegates = () => {
             {t('deleghe.add')}
           </Button>
         </Box>
-        <ApiErrorGuard apiId={DELEGATION_ACTIONS.GET_DELEGATES} reloadAction={() => dispatch(getDelegates())}>
+        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATES} reloadAction={() => dispatch(getDelegates())}>
           {cardData.length ? (
             <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
           ) : (
@@ -138,7 +138,7 @@ const MobileDelegates = () => {
               emptyActionLabel={t('deleghe.add')}
             />
           )}
-        </ApiErrorGuard>
+        </ApiErrorWrapper>
       </Box>
     </>
   );

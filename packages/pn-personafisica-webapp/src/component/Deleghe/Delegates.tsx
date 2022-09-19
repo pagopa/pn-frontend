@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { Column, ItemsTable as Table, Item, CodeModal, Sort, EmptyState, ApiErrorGuard } from '@pagopa-pn/pn-commons';
+import { Column, ItemsTable as Table, Item, CodeModal, Sort, EmptyState, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -129,7 +129,7 @@ const Delegates = () => {
             </Button>
           </Box>
         </Stack>
-        <ApiErrorGuard apiId={DELEGATION_ACTIONS.GET_DELEGATES} reloadAction={() => dispatch(getDelegates())}>
+        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATES} reloadAction={() => dispatch(getDelegates())}>
           <>
             {rows.length > 0 ? (
               <Table
@@ -146,7 +146,7 @@ const Delegates = () => {
               />
             )}
           </>
-        </ApiErrorGuard>
+        </ApiErrorWrapper>
       </Box>
     </>
   );

@@ -25,13 +25,13 @@ jest.mock('react-router-dom', () => ({
 }));
 
 /**
- * Vedi commenti nella definizione di simpleMockForApiErrorGuard
+ * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
  */
  jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
-    ApiErrorGuard: original.simpleMockForApiErrorGuard,
+    ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
   };
 });
 

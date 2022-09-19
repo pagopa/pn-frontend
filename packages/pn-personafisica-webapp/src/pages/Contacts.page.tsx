@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Link, Stack, Typography } from '@mui/material';
-import { ApiErrorGuard, TitleBox } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -64,7 +64,7 @@ const Contacts = () => {
           subTitle={subtitle}
           variantSubTitle={'body1'}
         />
-        <ApiErrorGuard apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses} mt={2}>
+        <ApiErrorWrapper apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses} mt={2}>
           <Stack direction="column" spacing={8} mt={8}>
             <Stack spacing={3}>
               <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
@@ -97,7 +97,7 @@ const Contacts = () => {
               </Stack>
             )}
           </Stack>
-        </ApiErrorGuard>
+        </ApiErrorWrapper>
       </Box>
     </DigitalContactsCodeVerificationProvider>
   );

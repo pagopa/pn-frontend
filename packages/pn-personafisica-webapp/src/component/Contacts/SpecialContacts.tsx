@@ -18,7 +18,7 @@ import {
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { ApiErrorGuard, useIsMobile, CustomDropdown } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, useIsMobile, CustomDropdown } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -261,7 +261,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     }
   }, [addressTypes]);
 
-  return <ApiErrorGuard 
+  return <ApiErrorWrapper 
     apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES} 
     reloadAction={fetchAllActivatedParties} 
     mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
@@ -427,7 +427,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         </Fragment>
       )}
     </DigitalContactsCard>
-  </ApiErrorGuard>;
+  </ApiErrorWrapper>;
 };
 
 export default SpecialContacts;

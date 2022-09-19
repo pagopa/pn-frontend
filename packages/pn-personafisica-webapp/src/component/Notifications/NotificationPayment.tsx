@@ -17,7 +17,7 @@ import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import {
-  ApiErrorGuard,
+  ApiErrorWrapper,
   CopyToClipboard,
   formatEurocentToCurrency,
   NotificationDetailPayment,
@@ -390,7 +390,7 @@ const NotificationPayment: React.FC<Props> = ({
   const attachments = getAttachmentsData();
 
   return (
-    <ApiErrorGuard 
+    <ApiErrorWrapper 
       apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO} reloadAction={fetchPaymentInfo} 
       mainText={t('detail.payment.message-error-fetch-payment', { ns: 'notifiche' })}
     >
@@ -489,7 +489,7 @@ const NotificationPayment: React.FC<Props> = ({
           </Stack>
         </Grid>
       </Paper>
-    </ApiErrorGuard>
+    </ApiErrorWrapper>
   );
 };
 

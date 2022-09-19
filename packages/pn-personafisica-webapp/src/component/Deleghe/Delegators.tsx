@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Chip, Stack, Typography } from '@mui/material';
-import { Column, ItemsTable, Item, Sort, ApiErrorGuard, EmptyState } from '@pagopa-pn/pn-commons';
+import { Column, ItemsTable, Item, Sort, ApiErrorWrapper, EmptyState } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -92,7 +92,7 @@ const Delegators = () => {
         <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
           <Typography variant="h6">{t('deleghe.delegatorsTitle')}</Typography>
         </Stack>
-        <ApiErrorGuard apiId={DELEGATION_ACTIONS.GET_DELEGATORS} reloadAction={() => dispatch(getDelegators())} 
+        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATORS} reloadAction={() => dispatch(getDelegators())} 
           mainText={t('deleghe.delegatorsApiErrorMessage')}
         >
           { rows.length > 0 
@@ -104,7 +104,7 @@ const Delegators = () => {
             />
             : <EmptyState disableSentimentDissatisfied emptyMessage={t('deleghe.no_delegators')} />
           }
-        </ApiErrorGuard>
+        </ApiErrorWrapper>
       </Box>
     </>
   );
