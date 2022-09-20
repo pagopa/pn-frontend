@@ -88,7 +88,8 @@
     "mail": "Indirizzo mail",
     "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "phone-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
-    "email-already-exists": "Questo ente è già associato a un indirizzo email. Se premi “Continua”, verrà sostituito da quello che hai appena indicato."
+    "email-already-exists": "Questo ente è già associato a un indirizzo email. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
+    "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

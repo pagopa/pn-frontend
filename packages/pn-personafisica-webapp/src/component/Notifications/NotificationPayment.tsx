@@ -17,6 +17,7 @@ import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import {
+  ApiErrorWrapper,
   CopyToClipboard,
   formatEurocentToCurrency,
   NotificationDetailPayment,
@@ -24,11 +25,12 @@ import {
   PaymentInfoDetail,
   PaymentStatus,
   useIsMobile,
+  appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getNotificationPaymentInfo, getPaymentAttachment } from '../../redux/notification/actions';
+import { getNotificationPaymentInfo, getPaymentAttachment, NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
 import { PAGOPA_HELP_EMAIL,
   // PN-2029
@@ -78,7 +80,6 @@ const NotificationPayment: React.FC<Props> = ({
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
   const dispatch = useAppDispatch();
   const paymentInfo = useAppSelector((state: RootState) => state.notificationState.paymentInfo);
   const pagopaAttachmentUrl = useAppSelector(
@@ -110,27 +111,28 @@ const NotificationPayment: React.FC<Props> = ({
 
   const fetchPaymentInfo = () => {
     if (notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
-      dispatch(
+      void dispatch(
         getNotificationPaymentInfo({
           noticeCode: notificationPayment.noticeCode,
           taxId: notificationPayment.creditorTaxId,
         })
       )
+        // PN-1942 - gestione generica di disservizio API
+        // si toglie la gestione ad-hoc che veniva fatta in questo componente, perciò il catch che era
+        // presente non c'è più. 
+        // Di conseguenza, questo unwrap infatti non è necessario per il funzionamento dell'app.
+        // Però lascio sia unwrap sia un catch vuoto, perché se l'unwrap viene tolto, falliscono tutti i test di NotificationPayment,
+        // e se c'è unwrap allora si deve fare un catch.
+        // -------------------------------------
+        // Carlos Lombardi, 2022.09.07
         .unwrap()
         .then(() => {
           setLoading(() => false);
-          setError(() => '');
         })
-        .catch(() => {
-          setLoading(() => false);
-          setError(
-            () =>
-              paymentInfo?.detail || t('detail.payment.message-network-error', { ns: 'notifiche' })
-          );
-        });
+        .catch(() => {});
     } else {
       setLoading(() => false);
-      setError(() => t('detail.payment.message-missing-parameter', { ns: 'notifiche' }));
+      dispatch(appStateActions.removeErrorsByAction(NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO));
     }
   };
 
@@ -158,7 +160,6 @@ const NotificationPayment: React.FC<Props> = ({
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_RELOAD);
     // reset state
     setLoading(() => true);
-    setError(() => '');
 
     // refresh paymentInfo
     fetchPaymentInfo();
@@ -247,10 +248,10 @@ const NotificationPayment: React.FC<Props> = ({
 
   /** returns message data to be passed into the alert */
   const getMessageData = (): PaymentMessageData | undefined => {
-    if (error) {
+    if (!(notificationPayment.noticeCode && notificationPayment.creditorTaxId)) {
       return {
         type: 'error',
-        body: error,
+        body: t('detail.payment.message-missing-parameter', { ns: 'notifiche' }),
       };
     }
 
@@ -389,101 +390,106 @@ const NotificationPayment: React.FC<Props> = ({
   const attachments = getAttachmentsData();
 
   return (
-    <Paper sx={{ p: 3, mb: '1rem' }} className="paperContainer">
-      <Grid container direction="row" justifyContent="space-between">
-        <Grid item xs={8} lg={8}>
-          <Typography variant="h6" display="inline" fontWeight={600} fontSize={24}>
-            {data.title}
-          </Typography>
-        </Grid>
-        <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
-          <Typography
-            variant="h6"
-            aria-label={t('detail.payment.amount', { ns: 'notifiche' })}
-            display="inline"
-            fontWeight={600}
-            fontSize={24}
-          >
-            {loading ? (
-              <Skeleton
-                data-testid="loading-skeleton"
-                width={100}
-                height={28}
-                aria-label="loading"
-                sx={{ float: 'right' }}
-              />
-            ) : (
-              data.amount
-            )}
-          </Typography>
-        </Grid>
-        <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-          <Typography variant="body2" display="inline">
-            {data.amount && data.disclaimer}
-          </Typography>
-        </Grid>
-        <Stack spacing={2} width="100%">
-          <Box width="100%">
-            {data.message && (
-              <Alert
-                severity={data.message.type}
-                action={isMobile ? undefined : getMessageAction(data.message)}
-              >
-                <Typography variant="body1">{data.message.body}</Typography>
-                <Typography variant="body1" fontWeight="bold">
-                  {data.message.errorCode}
-                </Typography>
-                {isMobile ? (
-                  <Box width="100%" display="flex" justifyContent="center" pr={7.5}>
-                    {getMessageAction(data.message)}
-                  </Box>
-                ) : null}
-              </Alert>
-            )}
-          </Box>
-          {loading && (
-            <Grid item xs={12} lg={12}>
-              <LoadingButton
-                loading={loading}
-                variant="contained"
-                loadingPosition="end"
-                endIcon={<SendIcon />}
-                fullWidth
-              >
-                {t('detail.payment.submit', { ns: 'notifiche' })}
-              </LoadingButton>
-            </Grid>
-          )}
-          {!loading && data.action && (
-            <>
-              <Grid item xs={12} lg={12}>
-                <Button onClick={data.action.callback} variant="contained" fullWidth>
-                  {data.action.text}
-                </Button>
-              </Grid>
-              {attachments.length > 0 && (
-                <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
-                  <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
-                </Grid>
+    <ApiErrorWrapper 
+      apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO} reloadAction={fetchPaymentInfo} 
+      mainText={t('detail.payment.message-error-fetch-payment', { ns: 'notifiche' })}
+    >
+      <Paper sx={{ p: 3, mb: '1rem' }} className="paperContainer">
+        <Grid container direction="row" justifyContent="space-between">
+          <Grid item xs={8} lg={8}>
+            <Typography variant="h6" display="inline" fontWeight={600} fontSize={24}>
+              {data.title}
+            </Typography>
+          </Grid>
+          <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
+            <Typography
+              variant="h6"
+              aria-label={t('detail.payment.amount', { ns: 'notifiche' })}
+              display="inline"
+              fontWeight={600}
+              fontSize={24}
+            >
+              {loading ? (
+                <Skeleton
+                  data-testid="loading-skeleton"
+                  width={100}
+                  height={28}
+                  aria-label="loading"
+                  sx={{ float: 'right' }}
+                />
+              ) : (
+                data.amount
               )}
-              <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ alignSelf: 'center' }}>
-                {attachments.map((attachment) => (
-                  <Button
-                    key={attachment.name}
-                    sx={{ flexGrow: 1 }}
-                    name={`download-${attachment.name.toLowerCase()}-notification`}
-                    startIcon={<DownloadIcon />}
-                    onClick={() => onDocumentClick(attachment.name)}
-                  >
-                    {attachment.title}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
+            <Typography variant="body2" display="inline">
+              {data.amount && data.disclaimer}
+            </Typography>
+          </Grid>
+          <Stack spacing={2} width="100%">
+            <Box width="100%">
+              {data.message && (
+                <Alert
+                  severity={data.message.type}
+                  action={isMobile ? undefined : getMessageAction(data.message)}
+                >
+                  <Typography variant="body1">{data.message.body}</Typography>
+                  <Typography variant="body1" fontWeight="bold">
+                    {data.message.errorCode}
+                  </Typography>
+                  {isMobile ? (
+                    <Box width="100%" display="flex" justifyContent="center" pr={7.5}>
+                      {getMessageAction(data.message)}
+                    </Box>
+                  ) : null}
+                </Alert>
+              )}
+            </Box>
+            {loading && (
+              <Grid item xs={12} lg={12}>
+                <LoadingButton
+                  loading={loading}
+                  variant="contained"
+                  loadingPosition="end"
+                  endIcon={<SendIcon />}
+                  fullWidth
+                >
+                  {t('detail.payment.submit', { ns: 'notifiche' })}
+                </LoadingButton>
+              </Grid>
+            )}
+            {!loading && data.action && (
+              <>
+                <Grid item xs={12} lg={12}>
+                  <Button onClick={data.action.callback} variant="contained" fullWidth>
+                    {data.action.text}
                   </Button>
-                ))}
-              </Stack>
-            </>
-          )}
-        </Stack>
-      </Grid>
-    </Paper>
+                </Grid>
+                {attachments.length > 0 && (
+                  <Grid item xs={12} lg={12} sx={{ my: '1rem' }}>
+                    <Divider>{t('detail.payment.divider-text', { ns: 'notifiche' })}</Divider>
+                  </Grid>
+                )}
+                <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ alignSelf: 'center' }}>
+                  {attachments.map((attachment) => (
+                    <Button
+                      key={attachment.name}
+                      sx={{ flexGrow: 1 }}
+                      name={`download-${attachment.name.toLowerCase()}-notification`}
+                      startIcon={<DownloadIcon />}
+                      onClick={() => onDocumentClick(attachment.name)}
+                    >
+                      {attachment.title}
+                    </Button>
+                  ))}
+                </Stack>
+              </>
+            )}
+          </Stack>
+        </Grid>
+      </Paper>
+    </ApiErrorWrapper>
   );
 };
 

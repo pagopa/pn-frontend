@@ -36,7 +36,7 @@ export const NotificationsApi = {
    * @param  {string} endDate
    * @returns Promise
    */
-  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
+  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => 
     apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
       if (response.data && response.data.resultsPage) {
         const notifications = response.data.resultsPage.map((d) => ({

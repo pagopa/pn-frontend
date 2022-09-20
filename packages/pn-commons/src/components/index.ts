@@ -32,6 +32,8 @@ import FileUpload from './FileUpload';
 import Prompt from './Prompt';
 import CopyToClipboard from './CopyToClipboard';
 import LoadingPage from './LoadingPage';
+import ApiError from './ApiError/ApiError';
+import ApiErrorWrapper from './ApiError/ApiErrorWrapper';
 
 export {
     LoadingOverlay,
@@ -45,6 +47,8 @@ export {
     SideMenu,
     ItemsTable,
     EmptyState,
+    ApiError,
+    ApiErrorWrapper,
     CustomDropdown,
     StatusTooltip,
     MobileNotificationsSort,

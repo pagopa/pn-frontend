@@ -3,6 +3,56 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.2.2](https://github.com/pagopa/pn-frontend/compare/v0.2.2...v1.2.2) (2022-09-14)
+
+
+### Bug Fixes
+
+* **pn-2000:** added correct Tos file and hidden accessibility page ([1cf42c5](https://github.com/pagopa/pn-frontend/commit/1cf42c58c1c18041ccddd9af4347fd7204b957b3))
+
+
+
+
+
+## [0.2.2](https://github.com/pagopa/pn-frontend/compare/v0.2.1...v0.2.2) (2022-09-13)
+
+
+### Bug Fixes
+
+* **PN-2170:** fixed social links in footer ([2276b30](https://github.com/pagopa/pn-frontend/commit/2276b307ec2893473502307d41ce78ca0dbfab8a))
+* renamed Avviso di cortesia to notifiche digitali on website ([cbe5596](https://github.com/pagopa/pn-frontend/commit/cbe5596a50d662b3c44c48dad45b5a5f3dcbab8e))
+
+
+
+
+
+## [0.2.1](https://github.com/pagopa/pn-frontend/compare/v0.2.0...v0.2.1) (2022-09-12)
+
+
+### Bug Fixes
+
+* **PN-2000:** added preview env and removed PN-CTA for such environment ([bff15d9](https://github.com/pagopa/pn-frontend/commit/bff15d9a62ef3e271b65866d0f00e40624c41648))
+* **PN-2000:** fix for navigation on cloudfront ([db7b016](https://github.com/pagopa/pn-frontend/commit/db7b0162f8f37b7b059a74b2a90c0fe6a9a88724))
+* **pn-2000:** fix on footer links for pn-website ([c8622ee](https://github.com/pagopa/pn-frontend/commit/c8622eef1cf49cd1ae9920227c9b13464d2bb221))
+* **pn-2146:** pn-website settare immagini e icon giuste ([#392](https://github.com/pagopa/pn-frontend/issues/392)) ([df9889f](https://github.com/pagopa/pn-frontend/commit/df9889fb1ce37dce20b60ebf11331cbcdb1665a9))
+* **pn-2146:** setting images and icons ([#388](https://github.com/pagopa/pn-frontend/issues/388)) ([f61f1b5](https://github.com/pagopa/pn-frontend/commit/f61f1b5694467530b823c6f36ccc4586a0787f38))
+* **PN-2153:** fix copy for enti ([bfcb5e7](https://github.com/pagopa/pn-frontend/commit/bfcb5e738a94651d5a694055f8382c130a03e105))
+
+
+
+
+
+# [0.2.0](https://github.com/pagopa/pn-frontend/compare/v0.1.11...v0.2.0) (2022-09-06)
+
+
+### Features
+
+* **pn-1572:** landing ci cd ([#381](https://github.com/pagopa/pn-frontend/issues/381)) ([5ff7063](https://github.com/pagopa/pn-frontend/commit/5ff7063cc6ef2dce4b504ed70a57f4c78c255de5))
+
+
+
+
+
 ## [0.1.10](https://github.com/pagopa/pn-frontend/compare/v0.1.9...v0.1.10) (2022-08-26)
 
 **Note:** Version bump only for package @pagopa-pn/pn-landing-webapp

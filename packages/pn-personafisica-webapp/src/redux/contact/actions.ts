@@ -1,3 +1,4 @@
+import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { ContactsApi } from '../../api/contacts/Contacts.api';
@@ -8,17 +9,17 @@ import {
   DigitalAddresses,
   LegalChannelType,
 } from '../../models/contacts';
+import { Party } from '../../models/party';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
+export enum CONTACT_ACTIONS  {
+  GET_DIGITAL_ADDRESSES = 'getDigitalAddresses',
+  GET_ALL_ACTIVATED_PARTIES = 'getAllActivatedParties',
+}
+
 export const getDigitalAddresses = createAsyncThunk<DigitalAddresses, string>(
-  'getDigitalAddresses',
-  async (_params: string, { rejectWithValue }) => {
-    try {
-      return await ContactsApi.getDigitalAddresses();
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES,
+  performThunkAction(() => ContactsApi.getDigitalAddresses())
 );
 
 export const createOrUpdateLegalAddress = createAsyncThunk<
@@ -33,7 +34,7 @@ export const createOrUpdateLegalAddress = createAsyncThunk<
       { value: params.value, verificationCode: params.code }
     );
   } catch (e: any) {
-    if (e.response.status === 406) {
+    if (e.response.status === 422) {
       // { response: { status: 406 }, blockNotification: true }
       return rejectWithValue({ response: e.response, blockNotification: true });
     } else {
@@ -70,7 +71,7 @@ export const createOrUpdateCourtesyAddress = createAsyncThunk<
         { value: params.value, verificationCode: params.code }
       );
     } catch (e: any) {
-      if (e.response.status === 406) {
+      if (e.response.status === 422) {
         // { response: { status: 406 }, blockNotification: true }
         return rejectWithValue({ response: e.response, blockNotification: true });
       } else {
@@ -105,7 +106,7 @@ export const enableIOAddress = createAsyncThunk<DigitalAddress | void, string>(
         { value: 'APPIO', verificationCode: '00000' }
       );
     } catch (e: any) {
-      if (e.response.status === 406) {
+      if (e.response.status === 422) {
         return rejectWithValue({ response: e.response, blockNotification: true });
       } else {
         return rejectWithValue({ response: e.response });
@@ -125,6 +126,8 @@ export const disableIOAddress = createAsyncThunk<string, string>(
   }
 );
 
-export const getAllActivatedParties = createAsyncThunk('getAllActivatedParties', async () =>
-  ExternalRegistriesAPI.getAllActivatedParties()
+
+export const getAllActivatedParties = createAsyncThunk<Array<Party>,void>(
+  CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES, 
+  performThunkAction(() => ExternalRegistriesAPI.getAllActivatedParties())
 );

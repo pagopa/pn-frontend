@@ -1,3 +1,5 @@
+import { EventsType } from '@pagopa-pn/pn-commons';
+
 export enum TrackEventType {
   NOTIFICATIONS_CHANGE_PAGE = 'setPagination',
   NOTIFICATION_FILTER_TYPE = 'NOTIFICATION_FILTER_TYPE',
@@ -46,13 +48,7 @@ export enum TrackEventType {
   FOOTER_LANG_SWITCH = 'FOOTER_LANG_SWITCH',
 }
 
-export const events: {
-  [key: string]: {
-    category: string;
-    action: string;
-    getAttributes?: (payload: { [key: string]: string }) => { [key: string]: string };
-  };
-} = {
+export const events: EventsType = {
   [TrackEventType.NOTIFICATIONS_CHANGE_PAGE]: {
     category: 'notifications',
     action: 'change page',

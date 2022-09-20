@@ -143,7 +143,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         }
       })
       .catch((error) => {
-        if(error.response.status === 406) {
+        if(error.response.status === 422) {
           setCodeNotValid(true);
         }
       });

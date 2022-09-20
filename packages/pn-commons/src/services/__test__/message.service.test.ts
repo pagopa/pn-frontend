@@ -7,7 +7,8 @@ const _404error: IAppMessage = {
   message: 'Si è verificato un errore. Si prega di riprovare più tardi',
   blocking: false,
   toNotify: true,
-  status: 404
+  status: 404,
+  alreadyShown: false
 };
 
 const _403error: IAppMessage = {
@@ -16,7 +17,8 @@ const _403error: IAppMessage = {
   message: "Entra e accedi con SPID o CIE.",
   blocking: false,
   toNotify: true,
-  status: 403
+  status: 403,
+  alreadyShown: false
 };
 
 const _401error: IAppMessage = {
@@ -25,7 +27,8 @@ const _401error: IAppMessage = {
   message: "L'utente corrente non ha le autorizzazioni",
   blocking: false,
   toNotify: true,
-  status: 401
+  status: 401,
+  alreadyShown: false
 };
 
 const _500error: IAppMessage = {
@@ -34,7 +37,8 @@ const _500error: IAppMessage = {
   message: "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
   blocking: false,
   toNotify: true,
-  status: 500
+  status: 500,
+  alreadyShown: false
 };
 
 const _genericError: IAppMessage = {
@@ -43,7 +47,8 @@ const _genericError: IAppMessage = {
   message: 'Si è verificato un errore. Si prega di riprovare più tardi',
   blocking: false,
   toNotify: true,
-  status: 501
+  status: 501,
+  alreadyShown: false
 };
 
 const _genericMessage: IAppMessage = {
@@ -52,7 +57,8 @@ const _genericMessage: IAppMessage = {
   message: 'mocked-message',
   blocking: false,
   toNotify: true,
-  status: undefined
+  status: undefined,
+  alreadyShown: false
 };
 
 const _customMessage: IAppMessage = {
@@ -61,7 +67,8 @@ const _customMessage: IAppMessage = {
   message: 'custom-message',
   blocking: false,
   toNotify: true,
-  status: 401
+  status: 401,
+  alreadyShown: false
 };
 
 test('return 404 error message', () => {
