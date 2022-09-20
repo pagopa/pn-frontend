@@ -14,7 +14,12 @@ import { useIsMobile, ApiKey, CopyToClipboard } from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getApiKeys, setApiKeyBlocked, setApiKeyEnabled } from '../redux/apiKeys/actions';
+import {
+  getApiKeys,
+  setApiKeyBlocked,
+  setApiKeyEnabled,
+  setApiKeyRotated,
+} from '../redux/apiKeys/actions';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 
 const ApiKeys = () => {
@@ -28,12 +33,14 @@ const ApiKeys = () => {
   const [viewApiKey, setViewApiKey] = useState<null | ApiKey>();
   const [blockApiKey, setBlockApiKey] = useState<null | ApiKey>();
   const [enableApiKey, setEnableApiKey] = useState<null | ApiKey>();
+  const [rotateApiKey, setRotateApiKey] = useState<null | ApiKey>();
   const handleOpenModal = () => setModal(true);
   const handleCloseModal = () => {
     setModal(false);
     setViewApiKey(null);
     setBlockApiKey(null);
     setEnableApiKey(null);
+    setRotateApiKey(null);
   };
 
   const handleViewApiKeyClick = (apiKeyId: string) => {
@@ -41,7 +48,11 @@ const ApiKeys = () => {
     handleOpenModal();
   };
 
-  const handleRotateApiKeyClick = () => undefined;
+  const handleRotateApiKeyClick = (apiKeyId: string) => {
+    setRotateApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
+    handleOpenModal();
+  };
+
   const handleBlockApiKeyClick = (apiKeyId: string) => {
     setBlockApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
     handleOpenModal();
@@ -64,6 +75,11 @@ const ApiKeys = () => {
   const apiKeyEnabled = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyEnabled(apiKeyId));
+  };
+
+  const apiKeyRotated = (apiKeyId: string) => {
+    handleCloseModal();
+    void dispatch(setApiKeyRotated(apiKeyId));
   };
 
   return (
@@ -145,7 +161,9 @@ const ApiKeys = () => {
                 {t('block-api-key')}
               </Typography>
               <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                <Trans>{t('block-warning1', { apiKeyName: blockApiKey.name })}</Trans>
+                <Trans i18nKey="block-warning1" values={{ apiKeyName: blockApiKey.name }}>
+                  {t('block-warning1', { apiKeyName: blockApiKey.name })}
+                  </Trans>
               </Typography>
               <Typography>{t('block-warning2')}</Typography>
               <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
@@ -173,6 +191,26 @@ const ApiKeys = () => {
                 </Button>
                 <Button variant="contained" onClick={() => apiKeyEnabled(enableApiKey.apiKey)}>
                   {t('enable-button')}
+                </Button>
+              </Grid>
+            </>
+          )}
+
+          {rotateApiKey && (
+            <>
+              <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                {t('rotate-api-key')}
+              </Typography>
+              <Typography variant="body1" sx={{ marginBottom: 3 }}>
+                <Trans>{t('rotate-warning1', { apiKeyName: rotateApiKey.name })}</Trans>
+              </Typography>
+              <Typography>{t('rotate-warning2')}</Typography>
+              <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
+                <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
+                  {t('cancel-button')}
+                </Button>
+                <Button variant="contained" onClick={() => apiKeyRotated(rotateApiKey.apiKey)}>
+                  {t('rotate-button')}
                 </Button>
               </Grid>
             </>
