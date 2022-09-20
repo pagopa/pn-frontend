@@ -1,4 +1,5 @@
 import mixpanel, { Mixpanel} from 'mixpanel-browser';
+// PN-1369 leave default import for mixpanel, using named once it won't work
 import { MIXPANEL_TOKEN } from './constants';
 import { events, TrackEventType } from './events';
 /**
