@@ -10,7 +10,7 @@ declare const OneTrust: any;
 declare const OnetrustActiveGroups: string;
 const global = window as any;
 // target cookies (Mixpanel)
-const targCookiesGroup = 'C0004';
+const targCookiesGroup = 'C0002';
 
 const App = () => {
   useEffect(() => {
