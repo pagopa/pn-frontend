@@ -129,7 +129,12 @@ export const setApiKeyRotated = createAsyncThunk<undefined, string>('setApiKeyRo
   }
 });
 
-export const deleteApiKey = createAsyncThunk('deleteApiKey', async (_param, { rejectWithValue }) => {
+export const setApiKeyDeleted = createAsyncThunk<undefined, string>('deleteApiKey', async (apiKey: string, { rejectWithValue }) => {
+  /*
+    Rimuovere undefined e mettere il type appropriato in base alla risposta del BE
+    Rimuovere console.log anche
+  */
+    console.log(apiKey);
   try {
     return undefined;
   } catch(e) {

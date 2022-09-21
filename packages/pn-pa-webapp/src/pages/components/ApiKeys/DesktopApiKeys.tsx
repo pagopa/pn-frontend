@@ -25,7 +25,7 @@ type Props = {
   handleRotateApiKeyClick: (apiKeyId: string) => void;
   handleBlockApiKeyClick: (apiKeyId: string) => void;
   handleEnableApiKeyClick: (apiKeyId: string) => void;
-  handleDeleteApiKeyClick: () => void;
+  handleDeleteApiKeyClick: (apiKeyId: string) => void;
 };
 
 const DesktopApiKeys = ({
@@ -86,7 +86,7 @@ const DesktopApiKeys = ({
           {row.status !== ApiKeyStatus.ROTATED && <MenuItem onClick={() => handleViewApiKeyClick(apiKeyId)}>{t('context-menu.view')}</MenuItem>}
           {(row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED) && <MenuItem onClick={() => handleRotateApiKeyClick(apiKeyId)}>{t('context-menu.rotate')}</MenuItem>}
           {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && <MenuItem onClick={() => handleBlockApiKeyClick(apiKeyId)}>{t('context-menu.block')}</MenuItem>}
-          {row.status === ApiKeyStatus.BLOCKED && <MenuItem onClick={handleDeleteApiKeyClick}>{t('context-menu.delete')}</MenuItem>}
+          {row.status === ApiKeyStatus.BLOCKED && <MenuItem onClick={() => handleDeleteApiKeyClick(apiKeyId)}>{t('context-menu.delete')}</MenuItem>}
           {row.status === ApiKeyStatus.BLOCKED && <MenuItem onClick={() => handleEnableApiKeyClick(apiKeyId)}>{t('context-menu.enable')}</MenuItem>}
         </Menu>
       </>

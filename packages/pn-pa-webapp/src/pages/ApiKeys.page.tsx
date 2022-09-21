@@ -19,6 +19,7 @@ import {
   setApiKeyBlocked,
   setApiKeyEnabled,
   setApiKeyRotated,
+  setApiKeyDeleted,
 } from '../redux/apiKeys/actions';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 
@@ -34,6 +35,7 @@ const ApiKeys = () => {
   const [blockApiKey, setBlockApiKey] = useState<null | ApiKey>();
   const [enableApiKey, setEnableApiKey] = useState<null | ApiKey>();
   const [rotateApiKey, setRotateApiKey] = useState<null | ApiKey>();
+  const [deleteApiKey, setDeleteApiKey] = useState<null | ApiKey>();
   const handleOpenModal = () => setModal(true);
   const handleCloseModal = () => {
     setModal(false);
@@ -41,6 +43,7 @@ const ApiKeys = () => {
     setBlockApiKey(null);
     setEnableApiKey(null);
     setRotateApiKey(null);
+    setDeleteApiKey(null);
   };
 
   const handleViewApiKeyClick = (apiKeyId: string) => {
@@ -61,7 +64,11 @@ const ApiKeys = () => {
     setEnableApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
     handleOpenModal();
   };
-  const handleDeleteApiKeyClick = () => undefined;
+
+  const handleDeleteApiKeyClick = (apiKeyId: string) => {
+    setDeleteApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
+    handleOpenModal();
+  };
 
   useEffect(() => {
     void dispatch(getApiKeys());
@@ -80,6 +87,11 @@ const ApiKeys = () => {
   const apiKeyRotated = (apiKeyId: string) => {
     handleCloseModal();
     void dispatch(setApiKeyRotated(apiKeyId));
+  };
+
+  const apiKeyDeleted = (apiKeyId: string) => {
+    handleCloseModal();
+    void dispatch(setApiKeyDeleted(apiKeyId));
   };
 
   return (
@@ -211,6 +223,25 @@ const ApiKeys = () => {
                 </Button>
                 <Button variant="contained" onClick={() => apiKeyRotated(rotateApiKey.apiKey)}>
                   {t('rotate-button')}
+                </Button>
+              </Grid>
+            </>
+          )}
+
+          {deleteApiKey && (
+            <>
+              <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                {t('delete-api-key')}
+              </Typography>
+              <Typography variant="body1" sx={{ marginBottom: 3 }}>
+                <Trans>{t('delete-warning', { apiKeyName: deleteApiKey.name })}</Trans>
+              </Typography>
+              <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
+                <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
+                  {t('cancel-button')}
+                </Button>
+                <Button variant="contained" onClick={() => apiKeyDeleted(deleteApiKey.apiKey)}>
+                  {t('delete-button')}
                 </Button>
               </Grid>
             </>
