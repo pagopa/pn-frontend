@@ -3,9 +3,7 @@ import { authClient } from "../axios";
 import { AUTH_TOKEN_EXCHANGE } from "./auth.routes";
 
 export const AuthApi = {
-    exchangeToken: (selfCareToken: string): Promise<User> => {
-        const params = new URLSearchParams([['authorizationToken', selfCareToken]]);
-        return authClient.post<User>(AUTH_TOKEN_EXCHANGE(), params)
-            .then((response) => response.data);
-    }
+    exchangeToken: (selfCareToken: string): Promise<User> =>
+        authClient.post<User>(AUTH_TOKEN_EXCHANGE(), {authorizationToken: selfCareToken})
+          .then((response) => response.data)
 };
