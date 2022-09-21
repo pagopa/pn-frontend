@@ -80,6 +80,9 @@ export const uploadNotificationAttachment = createAsyncThunk<
       const itemsToUpload = items
         .filter((item) => !item.ref.key && !item.ref.versionToken)
         .map((item) => createPayloadToUpload(item));
+      if (itemsToUpload.length === 0) {
+        return items;
+      }
       const itemsUploaded = await uploadNotificationDocumentCbk(itemsToUpload);
       return items.map((item) => {
         if (!itemsUploaded[item.id]) {
@@ -126,6 +129,9 @@ export const uploadNotificationPaymentDocument = createAsyncThunk<
     try {
       // before upload, filter out documents already uploaded
       const documentsToUpload = getPaymentDocumentsToUpload(items);
+      if (documentsToUpload.length === 0) {
+        return items;
+      }
       const documentsUploaded = await uploadNotificationDocumentCbk(documentsToUpload);
       const updatedItems = _.cloneDeep(items);
       for (const item of Object.values(updatedItems)) {
