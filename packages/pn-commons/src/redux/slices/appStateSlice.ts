@@ -1,6 +1,9 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createAppError, createAppMessage } from '../../services/message.service';
 import { IAppMessage } from '../../types';
+import { AppErrorTypes } from '../../types/AppError';
+import AppErrorFactory from '../../utils/AppError/AppErrorFactory';
+import AppErrorPublisher from '../../utils/AppError/AppErrorPublisher';
 
 export interface AppStateState {
   loading: {
@@ -79,10 +82,26 @@ export const appStateSlice = createSlice({
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
       })
       .addMatcher(handleError, (state, action) => {
-        console.log("APP SLICE:",action.type, action.payload.response.data);
         state.loading.result = false;
         const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
+        
+        const resData = action.payload.response.data;
+        if(resData) {
+          console.log("[HANDLE ERROR] resData:", resData);
+          const err = {
+            status: resData.status,
+            code: resData.errors[0].code,
+            traceId: resData.traceId,
+            timestamp: resData.timestamp,
+            element: resData.errors[0].element
+          };
+          console.log(err);
+          const appError = AppErrorFactory.createAppError(err);
+
+          AppErrorPublisher.publish(AppErrorTypes.PN_MANDATE_DELEGATEHIMSELF, appError);
+        }
+        
         const error = createAppError(
           {...action.payload, action: actionBeingRejected}, { show: !action.payload.blockNotification });
         state.messages.errors.push(error);
