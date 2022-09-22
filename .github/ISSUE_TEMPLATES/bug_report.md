@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Segnalaci un problema per aiutarci a migliorare l'app
+about: Segnalaci un problema per aiutarci a migliorare
 title: ''
 labels: ''
 assignees: ''
