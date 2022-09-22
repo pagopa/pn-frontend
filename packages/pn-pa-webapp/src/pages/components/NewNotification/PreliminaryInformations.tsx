@@ -14,18 +14,19 @@ import {
 } from '@mui/material';
 import { PhysicalCommunicationType, CustomDropdown } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification';
+import { NewNotification, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setPreliminaryInformations } from '../../../redux/newNotification/reducers';
 import { getUserGroups } from '../../../redux/newNotification/actions';
+import { PreliminaryInformationsPayload } from '../../../redux/newNotification/types';
 import { RootState } from '../../../redux/store';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import NewNotificationCard from './NewNotificationCard';
 
 type Props = {
-  notification: NewNotificationFe;
+  notification: NewNotification;
   onConfirm: () => void;
 };
 
@@ -61,7 +62,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     /** onSubmit validate */
     onSubmit: (values) => {
       if (formik.isValid) {
-        dispatch(setPreliminaryInformations(values));
+        dispatch(setPreliminaryInformations(values as PreliminaryInformationsPayload));
         onConfirm();
       }
     },

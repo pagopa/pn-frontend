@@ -23,7 +23,7 @@ type Props = {
   vertical?: boolean;
   accept: string;
   uploadFn?: (file: any, sha256?: { hashBase64: string; hashHex: string }) => Promise<void>;
-  onFileUploaded: (file: any, sha256?: { hashBase64: string; hashHex: string }, fileUploaded?: any) => void;
+  onFileUploaded: (file: any, sha256?: { hashBase64: string; hashHex: string }, name?: string, size?: number) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
   sx?: SxProps;
@@ -176,7 +176,7 @@ const FileUpload = ({
           await uploadFn(fileFormatted, sha256);
         }
         dispatch({ type: 'FILE_UPLOADED', payload: sha256?.hashHex });
-        onFileUploaded(fileFormatted, sha256, file);
+        onFileUploaded(fileFormatted, sha256, file.name, file.size);
       } catch {
         dispatch({ type: 'UPLOAD_IN_ERROR' });
       }

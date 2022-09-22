@@ -84,6 +84,7 @@ const NewNotification = () => {
   const handleEventTrackingCallbackConfirm = () => {
     trackEventByType(TrackEventType.NOTIFICATION_SEND_EXIT_FLOW, { source: stepType[activeStep] });
   };
+
   const goToNextStep = () => {
     trackEventByType(eventStep[activeStep]);
     setActiveStep((previousStep) => previousStep + 1);
@@ -170,14 +171,14 @@ const NewNotification = () => {
               <Recipient
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
-                recipientsData={notification.recipientsForm}
+                recipientsData={notification.recipients}
               />
             )}
             {activeStep === 2 && (
               <Attachments
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
-                attachmentsData={notification.documentsForm}
+                attachmentsData={notification.documents}
               />
             )}
             {activeStep === 3 && (
@@ -186,7 +187,6 @@ const NewNotification = () => {
                 notification={notification}
                 isCompleted={isCompleted}
                 onPreviousStep={goToPreviousStep}
-                paymentDocumentsData={notification.paymentDocumentsForm}
               />
             )}
           </Grid>
