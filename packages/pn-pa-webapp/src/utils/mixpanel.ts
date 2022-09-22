@@ -1,5 +1,6 @@
 import { AnyAction, Dispatch, Middleware, PayloadAction } from '@reduxjs/toolkit';
-import { init, track, Mixpanel } from 'mixpanel-browser';
+// PN-1369 leave default import for mixpanel, using named once it won't work
+import mixpanel, { Mixpanel } from 'mixpanel-browser';
 import { MIXPANEL_TOKEN } from './constants';
 import { events, TrackEventType } from './events';
 /**
@@ -12,7 +13,7 @@ export const mixpanelInit = function (): void {
   } else if (process.env.NODE_ENV === 'test') {
     return;
   } else {
-    init(MIXPANEL_TOKEN, {
+    mixpanel.init(MIXPANEL_TOKEN, {
       api_host: 'https://api-eu.mixpanel.com',
       persistence: 'localStorage',
       // if this is true, Mixpanel will automatically determine
@@ -48,7 +49,7 @@ function trackEvent(event_name: string, properties?: any): void {
     console.log(event_name, properties);
   } else {
     try {
-      track(event_name, properties);
+      mixpanel.track(event_name, properties);
     } catch (_) {
       // eslint-disable-next-line no-console
       console.log(event_name, properties);
