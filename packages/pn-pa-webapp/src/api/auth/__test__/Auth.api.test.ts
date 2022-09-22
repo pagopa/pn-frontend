@@ -8,7 +8,7 @@ import { AUTH_TOKEN_EXCHANGE } from '../auth.routes';
 export async function mockedExchangeToken() {
   const token = 'mocked-token';
   const axiosMock = new MockAdapter(authClient);
-  axiosMock.onGet(AUTH_TOKEN_EXCHANGE()).reply(200, userResponse);
+  axiosMock.onPost(AUTH_TOKEN_EXCHANGE()).reply(200, userResponse);
   const res = await AuthApi.exchangeToken(token);
   axiosMock.reset();
   axiosMock.restore();
