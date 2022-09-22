@@ -79,6 +79,7 @@ export const appStateSlice = createSlice({
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
       })
       .addMatcher(handleError, (state, action) => {
+        console.log("APP SLICE:",action.type, action.payload.response.data);
         state.loading.result = false;
         const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
