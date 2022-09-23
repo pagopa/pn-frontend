@@ -86,7 +86,7 @@ export const appStateSlice = createSlice({
         const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         
-        const resData = action.payload.response.data;
+        const resData = action.payload.response?.data;
         if(resData) {
           console.log("[HANDLE ERROR] resData:", resData);
           const err = {
@@ -97,7 +97,7 @@ export const appStateSlice = createSlice({
             element: resData.errors[0].element
           };
           console.log(err);
-          const appError = AppErrorFactory.createAppError(err);
+          const appError = AppErrorFactory.create(err);
 
           AppErrorPublisher.publish(AppErrorTypes.PN_MANDATE_DELEGATEHIMSELF, appError);
         }

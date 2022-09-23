@@ -1,6 +1,7 @@
 import { AppErrorDetail, AppErrorTypes } from "../../types/AppError";
 import { AppError } from "./AppError";
-import { DefaultAppError } from "./DefaultAppError";
+import { UnknownAppError } from "./UnknownAppError";
+import GenericAppErrorFactory from "./GenericError/GenericAppErrorFactory";
 import { MandateAlreadyExistsAppError } from "./MandateAlreadyExistsAppError";
 import { MandateDelegateHimselfAppError } from "./MandateDelegateHimselfAppError";
 import { MandateInvalidVerificationCodeAppError } from "./MandateInvalidVerificationCodeAppError";
@@ -8,9 +9,10 @@ import { MandateNotAcceptableAppError } from "./MandateNotAcceptableAppError";
 import { MandateNotFoundAppError } from "./MandateNotFoundAppError";
 
 class AppErrorFactory {
-  static createAppError(error: AppErrorDetail): AppError {
-    console.log("APPERROR_FACTORY: createAppError()");
-    console.log(error);
+  static create(error: AppErrorDetail): AppError {
+    if(!error.code) {
+      return GenericAppErrorFactory.create(error);
+    }
     switch (error.code) {
       case AppErrorTypes.PN_MANDATE_NOTFOUND:
         return new MandateNotFoundAppError(error);
@@ -23,7 +25,7 @@ class AppErrorFactory {
       case AppErrorTypes.PN_MANDATE_INVALIDVERIFICATIONCODE:
         return new MandateInvalidVerificationCodeAppError(error);
       default:
-        return new DefaultAppError(error);
+        return new UnknownAppError(error);
     }
   }
 }

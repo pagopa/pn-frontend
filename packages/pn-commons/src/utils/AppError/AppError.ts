@@ -2,6 +2,7 @@ import { AppErrorDetail, AppErrorTypes, ErrorMessage } from '../../types/AppErro
 
 export abstract class AppError {
   protected abstract type: AppErrorTypes;
+  
   protected detail: AppErrorDetail;
 
   constructor(error: AppErrorDetail) {
