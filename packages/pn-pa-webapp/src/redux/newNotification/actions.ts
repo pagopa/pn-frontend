@@ -1,17 +1,16 @@
 import _ from 'lodash';
-import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { NotificationDetailDocument } from '@pagopa-pn/pn-commons';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
-  NewNotificationFe,
   NewNotificationResponse,
-  FormRecipient,
-  FormAttachment,
+  NewNotification,
+  NewNotificationDocument,
   PaymentObject,
 } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
-import { UploadAttachmentParams, UploadPayementParams, UploadPaymentResponse } from './types';
+import { newNotificationMapper } from '../../utils/notification.utility';
+import { UploadDocumentParams, UploadDocumentsResponse } from './types';
 
 export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
   'getUserGroups',
@@ -24,7 +23,17 @@ export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | un
   }
 );
 
-const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams>) => {
+const createPayloadToUpload = (item: NewNotificationDocument): UploadDocumentParams => ({
+  id: item.id,
+  key: item.name,
+  contentType: item.contentType,
+  file: item.file.uint8Array,
+  sha256: item.file.sha256.hashBase64,
+});
+
+const uploadNotificationDocumentCbk = async (
+  items: Array<UploadDocumentParams>
+): Promise<UploadDocumentsResponse> => {
   try {
     const presignedUrls = await NotificationsApi.preloadNotificationDocument(
       items.map((item) => ({ contentType: item.contentType, key: item.key, sha256: item.sha256 }))
@@ -45,17 +54,14 @@ const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams
         );
       });
       const documentsToken = await Promise.all(uploadDocumentCalls);
-      return items.map((item, index) => ({
-        digests: {
-          sha256: item.sha256,
-        },
-        contentType: item.contentType,
-        ref: {
+      return items.reduce((obj, item, index) => {
+        /* eslint-disable-next-line functional/immutable-data */
+        obj[item.id] = {
           key: presignedUrls[index].key,
           versionToken: documentsToken[index],
-        },
-        title: item.key,
-      }));
+        };
+        return obj;
+      }, {} as UploadDocumentsResponse);
     }
     throw new Error();
   } catch (e) {
@@ -64,85 +70,101 @@ const uploadNotificationDocumentCbk = async (items: Array<UploadAttachmentParams
 };
 
 export const uploadNotificationAttachment = createAsyncThunk<
-  Array<NotificationDetailDocument>,
-  Array<UploadAttachmentParams>
+  Array<NewNotificationDocument>,
+  Array<NewNotificationDocument>
 >(
   'uploadNotificationAttachment',
-  async (items: Array<UploadAttachmentParams>, { rejectWithValue }) => {
+  async (items: Array<NewNotificationDocument>, { rejectWithValue }) => {
     try {
-      return await uploadNotificationDocumentCbk(items);
+      // before upload, filter out documents already uploaded
+      const itemsToUpload = items
+        .filter((item) => !item.ref.key && !item.ref.versionToken)
+        .map((item) => createPayloadToUpload(item));
+      if (itemsToUpload.length === 0) {
+        return items;
+      }
+      const itemsUploaded = await uploadNotificationDocumentCbk(itemsToUpload);
+      return items.map((item) => {
+        if (!itemsUploaded[item.id]) {
+          return item;
+        }
+        return {
+          ...item,
+          ref: {
+            key: itemsUploaded[item.id].key,
+            versionToken: itemsUploaded[item.id].versionToken,
+          },
+        };
+      });
     } catch (e) {
       return rejectWithValue(e);
     }
   }
 );
+
+const getPaymentDocumentsToUpload = (items: {
+  [key: string]: PaymentObject;
+}): Array<UploadDocumentParams> =>
+  Object.values(items).reduce((arr, item) => {
+    /* eslint-disable functional/immutable-data */
+    if (!item.pagoPaForm.ref.key && !item.pagoPaForm.ref.versionToken) {
+      arr.push(createPayloadToUpload(item.pagoPaForm));
+    }
+    if (item.f24flatRate && !item.f24flatRate.ref.key && !item.f24flatRate.ref.versionToken) {
+      arr.push(createPayloadToUpload(item.f24flatRate));
+    }
+    if (item.f24standard && !item.f24standard.ref.key && !item.f24standard.ref.versionToken) {
+      arr.push(createPayloadToUpload(item.f24standard));
+    }
+    /* eslint-enable functional/immutable-data */
+    return arr;
+  }, [] as Array<UploadDocumentParams>);
 
 export const uploadNotificationPaymentDocument = createAsyncThunk<
-  UploadPaymentResponse,
-  UploadPayementParams
->('uploadNotificationPaymentDocument', async (items: UploadPayementParams, { rejectWithValue }) => {
-  try {
-    const documentsToUpload = Object.values(items).reduce((arr, item) => {
-      /* eslint-disable functional/immutable-data */
-      arr.push(item.pagoPaForm);
-      if (item.f24flatRate.file && item.f24flatRate.sha256) {
-        arr.push(item.f24flatRate);
-      }
-      if (item.f24standard.file && item.f24standard.sha256) {
-        arr.push(item.f24standard);
-      }
-      /* eslint-enable functional/immutable-data */
-      return arr;
-    }, [] as Array<UploadAttachmentParams>);
-    const documentsUploaded = await uploadNotificationDocumentCbk(
-      _.uniqWith(documentsToUpload, (a, b) => a.sha256 === b.sha256)
-    );
-    const response: UploadPaymentResponse = {};
-    const getFile = (item: UploadAttachmentParams) => {
-      if (item.file && item.sha256) {
-        return documentsUploaded.find((f) => f.digests.sha256 === item.sha256);
-      }
-      return undefined;
-    };
-    for (const [key, item] of Object.entries(items)) {
-      /* eslint-disable functional/immutable-data */
-      const pagoPaFile = getFile(item.pagoPaForm);
-      if (!pagoPaFile) {
-        throw new Error('Invalid file for pagoPa document');
-      }
-      response[key] = { pagoPaForm: pagoPaFile };
-      response[key].f24flatRate = getFile(item.f24flatRate);
-      response[key].f24standard = getFile(item.f24standard);
-      /* eslint-enable functional/immutable-data */
-    }
-    return response;
-  } catch (e) {
-    return rejectWithValue(e);
-  }
-});
-
-export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotificationFe>(
-  'createNewNotification',
-  async (notification: NewNotificationFe, { rejectWithValue }) => {
+  { [key: string]: PaymentObject },
+  { [key: string]: PaymentObject }
+>(
+  'uploadNotificationPaymentDocument',
+  async (items: { [key: string]: PaymentObject }, { rejectWithValue }) => {
     try {
-      // Qui vado ad eliminare i campi usati solo per mantenere lo stado di presentazion FE recipientsForm, documentsForm, paymentDocumentsForm
-      // ho riscontrato infatti l'aumento del rischio di errori di tipo 413 (payload too large)
-      // Nella PN-2015 si discute di come rifattorizzare e separare lo stato in modo da avere in redux solo il layer di presentazione
-      // al termine si effettua un mapping tra il DTO di presentazione e il DTO di integrazione
-      // Questo è da intendersi quindi come un fix temporaneo in attesa del refactoring della pn-2015
-      // Carlotta Dimatteo, 12/08/2022
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { recipientsForm, documentsForm, paymentDocumentsForm, paymentMode, ...notificationToSave } = notification;
-      return await NotificationsApi.createNewNotification(notificationToSave);
+      // before upload, filter out documents already uploaded
+      const documentsToUpload = getPaymentDocumentsToUpload(items);
+      if (documentsToUpload.length === 0) {
+        return items;
+      }
+      const documentsUploaded = await uploadNotificationDocumentCbk(documentsToUpload);
+      const updatedItems = _.cloneDeep(items);
+      for (const item of Object.values(updatedItems)) {
+        /* eslint-disable functional/immutable-data */
+        if (documentsUploaded[item.pagoPaForm.id]) {
+          item.pagoPaForm.ref.key = documentsUploaded[item.pagoPaForm.id].key;
+          item.pagoPaForm.ref.versionToken = documentsUploaded[item.pagoPaForm.id].versionToken;
+        }
+        if (item.f24flatRate && documentsUploaded[item.f24flatRate.id]) {
+          item.f24flatRate.ref.key = documentsUploaded[item.f24flatRate.id].key;
+          item.f24flatRate.ref.versionToken = documentsUploaded[item.f24flatRate.id].versionToken;
+        }
+        if (item.f24standard && documentsUploaded[item.f24standard.id]) {
+          item.f24standard.ref.key = documentsUploaded[item.f24standard.id].key;
+          item.f24standard.ref.versionToken = documentsUploaded[item.f24standard.id].versionToken;
+        }
+        /* eslint-enable functional/immutable-data */
+      }
+      return updatedItems;
     } catch (e) {
       return rejectWithValue(e);
     }
   }
 );
 
-export const setRecipients = createAction<{ recipients: Array<FormRecipient> }>('setRecipients');
-export const setAttachments = createAction<{ documents: Array<FormAttachment> }>('setAttachments');
-export const setPaymentDocuments =
-  createAction<{ paymentMethodsDocuments: { [key: string]: PaymentObject } }>(
-    'setPaymentDocuments'
-  );
+export const createNewNotification = createAsyncThunk<NewNotificationResponse, NewNotification>(
+  'createNewNotification',
+  async (notification: NewNotification, { rejectWithValue }) => {
+    try {
+      const mappedNotification = newNotificationMapper(notification);
+      return await NotificationsApi.createNewNotification(mappedNotification);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);

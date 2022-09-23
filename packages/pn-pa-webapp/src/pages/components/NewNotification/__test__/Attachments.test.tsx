@@ -3,9 +3,9 @@ import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 
 import { render } from '../../../../__test__/test-utils';
+import { UploadDocumentParams } from '../../../../redux/newNotification/types';
 import * as actions from '../../../../redux/newNotification/actions';
 import Attachments from '../Attachments';
-import { UploadAttachmentParams } from '../../../../redux/newNotification/types';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -32,7 +32,7 @@ describe('Attachments Component', () => {
     fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
   }
 
-  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadAttachmentParams>) {
+  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadDocumentParams>) {
     fireEvent.click(button);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
@@ -94,6 +94,7 @@ describe('Attachments Component', () => {
     expect(buttons![1]).toBeEnabled();
     void testConfirm(buttons![1], [
       {
+        id: 'documents.0',
         key: 'Doc0',
         contentType: 'application/pdf',
         file: new Uint8Array(),
@@ -123,12 +124,14 @@ describe('Attachments Component', () => {
     await waitFor(() => expect(buttons![1]).toBeEnabled());
     void testConfirm(buttons![2], [
       {
+        id: 'documents.0',
         key: 'Doc0',
         contentType: 'application/pdf',
         file: new Uint8Array(),
         sha256: 'mocked-hasBase64',
       },
       {
+        id: 'documents.1',
         key: 'Doc1',
         contentType: 'application/pdf',
         file: new Uint8Array(),
@@ -154,6 +157,7 @@ describe('Attachments Component', () => {
     await waitFor(() => expect(buttons![1]).toBeEnabled());
     void testConfirm(buttons![1], [
       {
+        id: 'documents.0',
         key: 'Doc0',
         contentType: 'application/pdf',
         file: new Uint8Array(),
