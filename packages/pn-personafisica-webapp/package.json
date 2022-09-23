@@ -44,7 +44,9 @@
     "test:coverage": "craco test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "eject": "craco eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
-    "format": "prettier \"./**/*.{ts,tsx}\" --write"
+    "format": "prettier \"./**/*.{ts,tsx}\" --write",
+    "cy-open": "yarn cypress open",
+    "cy-run": "yarn cypress run"
   },
   "eslintConfig": {
     "extends": [
@@ -65,6 +67,7 @@
     ]
   },
   "devDependencies": {
+    "@cypress/webpack-preprocessor": "^5.12.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -72,10 +75,12 @@
     "@types/mixpanel-browser": "^2.38.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
+    "cypress": "^10.7.0",
     "danger": "^10.5.3",
     "danger-plugin-digitalcitizenship": "^1.0.0",
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-cypress": "^2.12.1",
     "eslint-plugin-functional": "^3.7.2",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-react": "^7.26.1",
