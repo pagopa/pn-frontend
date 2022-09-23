@@ -4,7 +4,7 @@ const domainScript = process.env.NODE_ENV === "development" ? "-test" : "";
 const scriptEl = document.createElement('script');
 scriptEl.setAttribute(
   'src',
-  '/oneTrust/scripttemplates/otSDKStub.js'
+  '/onetrust/scripttemplates/otSDKStub.js'
 );
 scriptEl.setAttribute('type', 'text/javascript');
 scriptEl.setAttribute('charset', 'UTF-8');
