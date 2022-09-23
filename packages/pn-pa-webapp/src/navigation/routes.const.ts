@@ -5,7 +5,7 @@ const NOTIFICA = '/notifica';
 export const DETTAGLIO_NOTIFICA = `${DASHBOARD}/:id${NOTIFICA}`;
 export const NUOVA_NOTIFICA = `${DASHBOARD}/nuova-notifica`;
 export const API_KEYS = '/api-keys';
-
+export const NUOVA_API_KEY = '/nuova-api-key';
 export const ROLES_SEGMENT = '/users';
 export const ID_PN_SEGMENT = 'prod-pn';
 export const GROUPS_SEGMENT = '/groups';
