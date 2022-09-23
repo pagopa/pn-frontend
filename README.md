@@ -75,7 +75,8 @@ Per un elenco e una descrizione più dettagliata delle varie opzioni disponibili
 
 ### Cypress
 
-Per eseguire i test accertarsi che la particolare applicazione sia in esecuzione.
+Per eseguire i test in locale, durante lo sviluppo degli stessi, accertarsi che la particolare applicazione sia in esecuzione in locale.
+
 Per avviare il tool con GUI, in maniera simile a come vengono avviate le varie applicazioni, lanciare:
 
 - `yarn cy-open:pf` dalla root di progetto, o `yarn cy-open` da dentro il package.
