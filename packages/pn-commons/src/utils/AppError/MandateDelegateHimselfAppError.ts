@@ -1,10 +1,10 @@
-import { AppErrorDetail, AppErrorTypes } from "../../types/AppError";
-import { AppError } from "./AppError";
+import { ServerResponseError, ServerResponseErrorCode } from "../../types/AppError";
+import AppError from "./AppError";
 
 export class MandateDelegateHimselfAppError extends AppError {
-  type = AppErrorTypes.PN_MANDATE_DELEGATEHIMSELF;
+  type = ServerResponseErrorCode.PN_MANDATE_DELEGATEHIMSELF;
 
-  constructor(error: AppErrorDetail) {
+  constructor(error: ServerResponseError) {
     super(error);
   }
 

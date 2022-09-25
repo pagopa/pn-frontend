@@ -1,10 +1,10 @@
-import { AppErrorDetail, AppErrorTypes } from "../../types/AppError";
-import { AppError } from "./AppError";
+import { ServerResponseError, ServerResponseErrorCode } from "../../types/AppError";
+import AppError from "./AppError";
 
 export class MandateInvalidVerificationCodeAppError extends AppError {
-  type = AppErrorTypes.PN_MANDATE_INVALIDVERIFICATIONCODE;
+  type = ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE;
 
-  constructor(error: AppErrorDetail) {
+  constructor(error: ServerResponseError) {
     super(error);
   }
 

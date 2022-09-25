@@ -3,9 +3,7 @@ import { authClient } from "../axios";
 import { AUTH_TOKEN_EXCHANGE } from "./auth.routes";
 
 export const AuthApi = {
-    exchangeToken: (spidToken: string): Promise<User> => {
-        const params = new URLSearchParams([['authorizationToken', spidToken]]);
-        return authClient.get<User>(AUTH_TOKEN_EXCHANGE(), { params })
-            .then((response) => response.data);
-    }
+    exchangeToken: (spidToken: string): Promise<User> =>
+        authClient.post<User>(AUTH_TOKEN_EXCHANGE(), {authorizationToken: spidToken})
+            .then((response) => response.data)
 };

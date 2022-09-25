@@ -1,9 +1,8 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createAppError, createAppMessage } from '../../services/message.service';
 import { IAppMessage } from '../../types';
-import { AppErrorTypes } from '../../types/AppError';
-import AppErrorFactory from '../../utils/AppError/AppErrorFactory';
 import AppErrorPublisher from '../../utils/AppError/AppErrorPublisher';
+import createAppResponse from '../../utils/AppError/AppResponse';
 
 export interface AppStateState {
   loading: {
@@ -33,7 +32,7 @@ const isFulfilled = (action: AnyAction) => action.type.endsWith('/fulfilled');
 
 const handleError = (action: AnyAction) => action.type.endsWith('/rejected');
 
-function doRemoveErrorsByAction(action: string, errors: IAppMessage[]) {
+function doRemoveErrorsByAction(action: string, errors: Array<IAppMessage>) {
   return errors.filter((e) => e.action !== action);
 }
 
@@ -86,24 +85,13 @@ export const appStateSlice = createSlice({
         const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         
-        const resData = action.payload.response?.data;
-        if(resData) {
-          console.log("[HANDLE ERROR] resData:", resData);
-          const err = {
-            status: resData.status,
-            code: resData.errors[0].code,
-            traceId: resData.traceId,
-            timestamp: resData.timestamp,
-            element: resData.errors[0].element
-          };
-          console.log(err);
-          const appError = AppErrorFactory.create(err);
-
-          AppErrorPublisher.publish(AppErrorTypes.PN_MANDATE_DELEGATEHIMSELF, appError);
-        }
+        // create AppResponseError object
+        const response = createAppResponse(action.payload.response);
+        // publish the response connected to the specific action
+        AppErrorPublisher.publish(actionBeingRejected, response);
         
         const error = createAppError(
-          {...action.payload, action: actionBeingRejected}, { show: !action.payload.blockNotification });
+          { ...action.payload, action: actionBeingRejected }, { show: !action.payload.blockNotification });
         state.messages.errors.push(error);
       });
   },

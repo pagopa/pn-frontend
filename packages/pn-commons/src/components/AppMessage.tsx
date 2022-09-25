@@ -1,9 +1,12 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import AppErrorPublisher from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
 
 import { appStateActions, appStateSelectors } from '../redux';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import { IAppMessage, MessageType } from '../types';
+import { AppResponse } from '../types/AppError';
 import SessionModal from './SessionModal';
 import Toast from './Toast/Toast';
 
@@ -16,6 +19,17 @@ const AppMessage = ({ sessionRedirect }: Props) => {
   const errors = useSelector(appStateSelectors.selectErrors);
   const success = useSelector(appStateSelectors.selectSuccess);
   const [open, setOpen] = useState(true);
+
+  const testPublishMessage = (response: AppResponse) => {
+    console.log("[AppMessage] Handled Event!");
+    console.log("[AppMessage] Response: ", response);
+  };
+
+  useEffect(() => {
+    AppErrorPublisher.subscribe(testPublishMessage);
+    
+    return () => AppErrorPublisher.unsubscribe(testPublishMessage);
+  }, []);
 
   const onCloseErrorToast = (id: string) => {
     // dispatch(appStateActions.removeError(id));

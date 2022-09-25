@@ -1,20 +1,22 @@
-import { AppErrorDetail, AppErrorTypes, ErrorMessage } from '../../types/AppError';
+import { ServerResponseError, ServerResponseErrorCode, ErrorMessage } from '../../types/AppError';
 
-export abstract class AppError {
-  protected abstract type: AppErrorTypes;
-  
-  protected detail: AppErrorDetail;
+abstract class AppError {
+  protected code: ServerResponseErrorCode;
+  protected element: string;
 
-  constructor(error: AppErrorDetail) {
-    this.detail = error;
+  constructor(error: ServerResponseError) {
+    this.code = error.code;
+    this.element = error.element || "";
   }
 
-  getErrorDetail(): {type: string, detail: AppErrorDetail} {
+  getErrorDetail(): ServerResponseError {
     return {
-      type: this.type,
-      detail: this.detail
-    }
+      code: this.code,
+      element: this.element
+    };
   }
 
   abstract getMessage(): ErrorMessage;
 }
+
+export default AppError;

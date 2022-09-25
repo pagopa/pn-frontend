@@ -1,24 +1,38 @@
-export interface AppResponseError {
+import AppError from "../utils/AppError/AppError";
+
+export interface ServerResponse {
   status: number;
-  title?: string;
-  detail?: string;
-  traceId?: string;
-  timestamp?: string;
-  errors?: Array<AppErrorDetail>
+  data?: ServerResponseData;
 }
 
-export interface AppErrorDetail {
-  code: string;
+export interface ServerResponseData {
+  status: number;
+  // title?: string;
+  // detail?: string;
+  traceId?: string;
+  timestamp?: string;
+  errors?: Array<ServerResponseError>;
+}
+
+export interface ServerResponseError {
+  code: ServerResponseErrorCode;
   element?: string;
-  detail?: string;
+  // detail?: string;
+}
+
+export interface AppResponse {
+  status: number;
+  traceId?: string;
+  timestamp?: string;
+  errors?: Array<AppError>;
 }
 
 export interface ErrorMessage {
   title: string;
-  message: string
+  message: string;
 }
 
-export enum AppErrorTypes {
+export enum ServerResponseErrorCode {
   PN_MANDATE_NOTFOUND = 'PN_MANDATE_NOTFOUND',
   PN_MANDATE_ALREADYEXISTS = 'PN_MANDATE_ALREADYEXISTS',
   PN_MANDATE_NOTACCEPTABLE = 'PN_MANDATE_NOTACCEPTABLE',

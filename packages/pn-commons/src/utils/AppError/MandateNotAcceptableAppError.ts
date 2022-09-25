@@ -1,10 +1,10 @@
-import { AppErrorDetail, AppErrorTypes } from "../../types/AppError";
-import { AppError } from "./AppError";
+import { ServerResponseError, ServerResponseErrorCode } from "../../types/AppError";
+import AppError from "./AppError";
 
 export class MandateNotAcceptableAppError extends AppError {
-  type = AppErrorTypes.PN_MANDATE_NOTACCEPTABLE;
+  type = ServerResponseErrorCode.PN_MANDATE_NOTACCEPTABLE;
   
-  constructor(error: AppErrorDetail) {
+  constructor(error: ServerResponseError) {
     super(error);
   }
 

@@ -1,4 +1,4 @@
-import AppErrorPublisher from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
+// import AppErrorPublisher from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
 import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect, useState } from 'react';
@@ -37,8 +37,7 @@ import {
   CustomDropdown,
 } from '@pagopa-pn/pn-commons';
 import { dataRegex } from '@pagopa-pn/pn-commons/src/utils/string.utility';
-import { AppErrorTypes } from '@pagopa-pn/pn-commons/src/types/AppError';
-import { AppError } from '@pagopa-pn/pn-commons/src/utils/AppError/AppError';
+// import { AppResponse } from '@pagopa-pn/pn-commons/src/types/AppError';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   createDelegation,
@@ -143,15 +142,16 @@ const NuovaDelega = () => {
 
   const xsValue = isMobile ? 12 : 4;
 
-  const testPublishMessage = (error: AppError) => {
-    console.log("Error!", error);
-  };
+  // const testPublishMessage = (errorResponse: AppResponse) => {
+  //   console.log("[NuovaDelega] Handled Event!");
+  //   console.log("[NuovaDelega] Response: ", errorResponse);
+  // };
   
-  useEffect(() => {
-    AppErrorPublisher.subscribe(AppErrorTypes.PN_MANDATE_DELEGATEHIMSELF, testPublishMessage);
+  // useEffect(() => {
+  //   AppErrorPublisher.subscribe("createDelegation", testPublishMessage);
     
-    return () => AppErrorPublisher.unsubscribe(AppErrorTypes.PN_MANDATE_DELEGATEHIMSELF, testPublishMessage);
-  }, []);
+  //   return () => AppErrorPublisher.unsubscribe("createDelegation", testPublishMessage);
+  // }, []);
 
   useEffect(() => {
     dispatch(resetNewDelegation());
