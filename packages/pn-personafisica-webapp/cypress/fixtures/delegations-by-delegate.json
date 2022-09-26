@@ -1,0 +1,120 @@
+{
+  "resultsPage": [
+    {
+      "iun": "GLQL-VTQM-EXVE-202209-Y-1",
+      "paProtocolNumber": "1663344513138",
+      "sender": "comune di milano",
+      "sentAt": "2022-09-16T16:08:33.579865Z",
+      "subject": "invio notifica con cucumber 16-09-2022 16:08:33",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-09-16T16:08:33.579865Z",
+      "group": ""
+    },
+    {
+      "iun": "QMNL-PXQN-NTJQ-202209-L-1",
+      "paProtocolNumber": "1663344480339",
+      "sender": "comune di milano",
+      "sentAt": "2022-09-16T16:08:00.818724Z",
+      "subject": "invio notifica con cucumber 16-09-2022 16:08:00",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-09-16T16:08:00.818724Z",
+      "group": ""
+    },
+    {
+      "iun": "LVXD-RJQD-UQKZ-202209-K-1",
+      "paProtocolNumber": "1663344447982",
+      "sender": "comune di milano",
+      "sentAt": "2022-09-16T16:07:28.486663Z",
+      "subject": "invio notifica con cucumber 16-09-2022 16:06:55 16-09-2022 16:07:27",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-09-16T16:07:28.486663Z",
+      "group": ""
+    },
+    {
+      "iun": "KXHA-GEJD-HDKA-202209-W-1",
+      "paProtocolNumber": "1663344415684",
+      "sender": "comune di milano",
+      "sentAt": "2022-09-16T16:06:56.166757Z",
+      "subject": "invio notifica con cucumber 16-09-2022 16:06:55",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-09-16T16:06:56.166757Z",
+      "group": ""
+    },
+    {
+      "iun": "MXLR-KUPL-YPMY-202209-E-1",
+      "paProtocolNumber": "1663344382666",
+      "sender": "comune di milano",
+      "sentAt": "2022-09-16T16:06:23.163696Z",
+      "subject": "invio notifica con cucumber 16-09-2022 16:06:22",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-09-16T16:06:23.163696Z",
+      "group": ""
+    },
+    {
+      "iun": "ZQJR-GTQV-PUHA-202209-H-1",
+      "paProtocolNumber": "1663344318133",
+      "sender": "comune di milano",
+      "sentAt": "2022-09-16T16:05:50.970577Z",
+      "subject": "invio notifica con cucumber 16-09-2022 16:05:18 16-09-2022 16:05:50",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-09-16T16:05:50.970577Z",
+      "group": ""
+    },
+    {
+      "iun": "LXLN-MTPN-LWMJ-202209-G-1",
+      "paProtocolNumber": "1663344318133",
+      "sender": "comune di milano",
+      "sentAt": "2022-09-16T16:05:18.705693Z",
+      "subject": "invio notifica con cucumber 16-09-2022 16:05:18",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-09-16T16:05:18.705693Z",
+      "group": ""
+    },
+    {
+      "iun": "KRHT-MJYJ-JVDN-202209-M-1",
+      "paProtocolNumber": "1663344279602",
+      "sender": "comune di milano",
+      "sentAt": "2022-09-16T16:04:45.014149Z",
+      "subject": "invio notifica con cucumber 16-09-2022 16:04:39",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-09-16T16:04:45.014149Z",
+      "group": ""
+    },
+    {
+      "iun": "VDMJ-HULT-RZLX-202209-N-1",
+      "paProtocolNumber": "1663343181742",
+      "sender": "comune di milano",
+      "sentAt": "2022-09-16T15:46:22.151226Z",
+      "subject": "invio notifica con cucumber 16-09-2022 15:46:21",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-09-16T15:46:22.151226Z",
+      "group": ""
+    },
+    {
+      "iun": "YNLR-RQEQ-RPGL-202209-D-1",
+      "paProtocolNumber": "1663343148772",
+      "sender": "comune di milano",
+      "sentAt": "2022-09-16T15:45:49.292706Z",
+      "subject": "invio notifica con cucumber 16-09-2022 15:45:48",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-09-16T15:45:49.292706Z",
+      "group": ""
+    }
+  ],
+  "moreResult": true,
+  "nextPagesKey": [
+    "eyJlayI6IlBGLTRmYzc1ZGYzLTA5MTMtNDA3ZS1iZGFhLWU1MDMyOTcwOGI3ZCMjMjAyMjA5IiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiWU5MUi1SUUVRLVJQR0wtMjAyMjA5LUQtMSMjUEYtNGZjNzVkZjMtMDkxMy00MDdlLWJkYWEtZTUwMzI5NzA4YjdkIiwicmVjaXBpZW50SWRfY3JlYXRpb25Nb250aCI6IlBGLTRmYzc1ZGYzLTA5MTMtNDA3ZS1iZGFhLWU1MDMyOTcwOGI3ZCMjMjAyMjA5Iiwic2VudEF0IjoiMjAyMi0wOS0xNlQxNTo0NTo0OS4yOTI3MDZaIn19",
+    "eyJlayI6IlBGLTRmYzc1ZGYzLTA5MTMtNDA3ZS1iZGFhLWU1MDMyOTcwOGI3ZCMjMjAyMjA5IiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiS0VIWi1SSk1ILVpNUEwtMjAyMjA5LVEtMSMjUEYtNGZjNzVkZjMtMDkxMy00MDdlLWJkYWEtZTUwMzI5NzA4YjdkIiwicmVjaXBpZW50SWRfY3JlYXRpb25Nb250aCI6IlBGLTRmYzc1ZGYzLTA5MTMtNDA3ZS1iZGFhLWU1MDMyOTcwOGI3ZCMjMjAyMjA5Iiwic2VudEF0IjoiMjAyMi0wOS0xNlQxNTowNToyNC43OTAyNDBaIn19",
+    "eyJlayI6IlBGLTRmYzc1ZGYzLTA5MTMtNDA3ZS1iZGFhLWU1MDMyOTcwOGI3ZCMjMjAyMjA5IiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiUVdOTS1LWFVYLVFVWlItMjAyMjA5LUQtMSMjUEYtNGZjNzVkZjMtMDkxMy00MDdlLWJkYWEtZTUwMzI5NzA4YjdkIiwicmVjaXBpZW50SWRfY3JlYXRpb25Nb250aCI6IlBGLTRmYzc1ZGYzLTA5MTMtNDA3ZS1iZGFhLWU1MDMyOTcwOGI3ZCMjMjAyMjA5Iiwic2VudEF0IjoiMjAyMi0wOS0xNlQxNDo0NTozOS45ODcxMTVaIn19"
+  ]
+}

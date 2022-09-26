@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Link, Stack, Typography } from '@mui/material';
-import { TitleBox } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getDigitalAddresses } from '../redux/contact/actions';
+import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { resetState } from '../redux/contact/reducers';
 import { RootState } from '../redux/store';
 import { DigitalContactsCodeVerificationProvider } from '../component/Contacts/DigitalContactsCodeVerification.context';
@@ -29,11 +29,15 @@ const Contacts = () => {
     (address) => address.channelType === CourtesyChannelType.IOMSG
   ) : null, [isDigitalAddressLoaded]);
 
-  useEffect(() => {
+  const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses(recipientId))
     .then(() => {
       setIsDigitalAddressLoaded(true);
     });
+  }, []);
+
+  useEffect(() => {
+    fetchAddresses();
     return () => void dispatch(resetState());
   }, []);
 
@@ -60,39 +64,40 @@ const Contacts = () => {
           subTitle={subtitle}
           variantSubTitle={'body1'}
         />
-
-        <Stack direction="column" spacing={8} mt={8}>
-          <Stack spacing={3}>
-            <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>   
-                {digitalAddresses.legal.length === 0 ? (
-                  <InsertLegalContact recipientId={recipientId} />
-                ) : (
-                  <LegalContactsList
-                    recipientId={recipientId}
-                    legalAddresses={digitalAddresses.legal}
-                  />
-                )}
-              </Box>
-              <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                <IOContact recipientId={recipientId} contact={contactIO} />
-              </Box>
+        <ApiErrorWrapper apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses} mt={2}>
+          <Stack direction="column" spacing={8} mt={8}>
+            <Stack spacing={3}>
+              <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
+                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  {digitalAddresses.legal.length === 0 ? (
+                    <InsertLegalContact recipientId={recipientId} />
+                  ) : (
+                    <LegalContactsList
+                      recipientId={recipientId}
+                      legalAddresses={digitalAddresses.legal}
+                    />
+                  )}
+                </Box>
+                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  <IOContact recipientId={recipientId} contact={contactIO} />
+                </Box>
+              </Stack>
+              <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
             </Stack>
-            <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
+            {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
+              <Stack spacing={2}>
+                <Typography variant="h5" fontWeight={600} fontSize={28}>
+                  {t('special-contacts-title')}
+                </Typography>
+                <SpecialContacts
+                  recipientId={recipientId}
+                  legalAddresses={digitalAddresses.legal}
+                  courtesyAddresses={digitalAddresses.courtesy}
+                />
+              </Stack>
+            )}
           </Stack>
-          {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
-            <Stack spacing={2}>
-              <Typography variant="h5" fontWeight={600} fontSize={28}>
-                {t('special-contacts-title')}
-              </Typography>
-              <SpecialContacts
-                recipientId={recipientId}
-                legalAddresses={digitalAddresses.legal}
-                courtesyAddresses={digitalAddresses.courtesy}
-              />
-            </Stack>
-          )}
-        </Stack>
+        </ApiErrorWrapper>
       </Box>
     </DigitalContactsCodeVerificationProvider>
   );

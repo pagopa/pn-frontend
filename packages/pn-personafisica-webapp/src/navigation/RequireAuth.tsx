@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { HandleAuth, useSessionCheck } from '@pagopa-pn/pn-commons';
+import { HandleAuth, useErrors, useSessionCheck } from '@pagopa-pn/pn-commons';
 
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
-import { logout } from '../redux/auth/actions';
+import { AUTH_ACTIONS, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { goToLogin } from './navigation.utility';
+import { goToLoginPortal } from './navigation.utility';
 
 /**
  * This component returns Outlet if user is logged in.
@@ -21,17 +21,26 @@ const RequireAuth = () => {
   const [accessDenied, setAccessDenied] = useState(false);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
-  const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
 
+  const handleAuthLogout = () => {
+    void dispatch(logout());
+
+    goToLoginPortal(window.location.href);
+  };
+  const { hasApiErrors } = useErrors();
+
+  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
+
+  const sessionCheck = useSessionCheck(200, handleAuthLogout);
 
   useEffect(() => {
-    if (token === '' || !token || isUnauthorizedUser) {
+    if (token === '' || !token || isUnauthorizedUser || hasTosApiErrors) {
       setAccessDenied(true);
     } else {
       setAccessDenied(false);
       sessionCheck(expDate);
     }
-  }, [token]);
+  }, [token, hasTosApiErrors ]);
 
   const goodbyeMessage = {
     title: isUnauthorizedUser ? messageUnauthorizedUser.title : t('leaving-app.title'),
@@ -40,7 +49,7 @@ const RequireAuth = () => {
 
   return <HandleAuth
     accessDenied={accessDenied} goodbyeMessage={goodbyeMessage} disableInactivityHandler={DISABLE_INACTIVITY_HANDLER}
-    goToLogin={() => goToLogin(window.location.href)} doLogout={() => dispatch(logout())} />;
+    goToLogin={() => goToLoginPortal(window.location.href)} doLogout={handleAuthLogout} />;
 };
 
 export default RequireAuth;

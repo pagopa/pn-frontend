@@ -168,7 +168,7 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
       {
         title: 'Twitter',
         icon: 'twitter',
-        href: 'https://twitter.com/pagopa',
+        href: 'https://it.linkedin.com/company/pagopa',
         ariaLabel: getLocalizedOrDefaultLabel(
           'common',
           'footer.social',
@@ -179,7 +179,7 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
       {
         icon: 'instagram',
         title: 'Instagram',
-        href: 'https://www.instagram.com/pagopa/',
+        href: 'https://www.instagram.com/pagopaspa/?hl=en',
         ariaLabel: getLocalizedOrDefaultLabel(
           'common',
           'footer.social',
@@ -190,7 +190,7 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
       {
         icon: 'medium',
         title: 'Medium',
-        href: 'https://medium.com/pagopa',
+        href: 'https://medium.com/pagopa-spa',
         ariaLabel: getLocalizedOrDefaultLabel(
           'common',
           'footer.social',

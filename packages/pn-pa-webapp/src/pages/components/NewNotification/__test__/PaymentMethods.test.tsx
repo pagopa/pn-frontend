@@ -5,9 +5,9 @@ import * as redux from 'react-redux';
 
 import { render } from '../../../../__test__/test-utils';
 import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
+import { PaymentObject } from '../../../../models/NewNotification';
 import * as actions from '../../../../redux/newNotification/actions';
 import PaymentMethods from '../PaymentMethods';
-import { UploadPayementParams } from '../../../../redux/newNotification/types';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -45,9 +45,10 @@ describe('PaymentMethods Component', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     // render component
     await act(async () => {
+      const notification = {...newNotification, payment: undefined};
       result = render(
         <PaymentMethods
-          notification={newNotification}
+          notification={notification}
           onConfirm={confirmHandlerMk}
           isCompleted={false}
         />
@@ -56,8 +57,12 @@ describe('PaymentMethods Component', () => {
   });
 
   it('renders PaymentMethods', () => {
-    expect(result.container).toHaveTextContent(newNotification.recipients[0].denomination);
-    expect(result.container).toHaveTextContent(newNotification.recipients[1].denomination);
+    expect(result.container).toHaveTextContent(
+      `${newNotification.recipients[0].firstName} ${newNotification.recipients[0].lastName}`
+    );
+    expect(result.container).toHaveTextContent(
+      `${newNotification.recipients[1].firstName} ${newNotification.recipients[1].lastName}`
+    );
     const form = result.container.querySelector('form');
     const paymentBoxes = result.queryAllByTestId('paymentBox');
     expect(paymentBoxes).toHaveLength(4);
@@ -103,31 +108,49 @@ describe('PaymentMethods Component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith(
-        newNotification.recipients.reduce((obj: UploadPayementParams, r, index) => {
-          obj[r.taxId] = {
-            pagoPaForm: {
-              key: 'new-notification.steps.payment-methods.pagopa-notice',
-              file: new Uint8Array(),
-              sha256: 'mocked-hasBase64',
-              contentType: 'application/pdf',
+      expect(mockActionFn).toBeCalledWith(newNotification.recipients.reduce((obj: { [key: string]: PaymentObject }, r, index) => {
+        obj[r.taxId] = {
+          pagoPaForm: {
+            id: index === 0 ? 'MRARSS90P08H501Q-pagoPaDoc' : 'SRAGLL00P48H501U-pagoPaDoc',
+            idx: 0,
+            name: 'pagopa-notice',
+            file: {
+              name: 'Mocked file',
+              sha256: {
+                hashBase64: 'mocked-hasBase64',
+                hashHex: 'mocked-hashHex'
+              },
+              size: 14,
+              uint8Array: new Uint8Array()
             },
-            f24flatRate: {
-              key: 'new-notification.steps.payment-methods.pagopa-notice-f24-flatrate',
-              file: undefined,
-              sha256: '',
-              contentType: 'application/pdf',
+            contentType: 'application/pdf',
+            ref: {
+              key: '',
+              versionToken: ''
+            }
+          },
+          f24standard: {
+            id: index === 0 ? 'MRARSS90P08H501Q-f24standardDoc' : 'SRAGLL00P48H501U-f24standardDoc',
+            idx: 0,
+            name: 'pagopa-notice-f24',
+            file: {
+              name: index === 0 ? '' : 'Mocked file',
+              sha256: {
+                hashBase64: index === 0 ? '' : 'mocked-hasBase64',
+                hashHex: index === 0 ? '' : 'mocked-hashHex'
+              },
+              size: index === 0 ? 0 : 14,
+              uint8Array: index === 0 ? undefined : new Uint8Array()
             },
-            f24standard: {
-              key: 'new-notification.steps.payment-methods.pagopa-notice-f24',
-              file: index === 0 ? undefined : new Uint8Array(),
-              sha256: index === 0 ? '' : 'mocked-hasBase64',
-              contentType: 'application/pdf',
-            },
-          };
-          return obj;
-        }, {})
-      );
+            contentType: 'application/pdf',
+            ref: {
+              key: '',
+              versionToken: ''
+            }
+          },
+        };
+        return obj;
+      }, {}));
     });
   });
 });

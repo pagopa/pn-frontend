@@ -46,7 +46,7 @@
     "receipt": "Ricevuta",
     "show-history": "Mostra storico",
     "show-more": "Vedi più dettagli",
-    "show-less": "Mostra meno dettagli",
+    "show-less": "Vedi meno dettagli",
     "add_domicile_1": "Aggiungi PEC",
     "add_domicile_2": "Aggiungi cellulare",
     "add_domicile_3": "Aggiungi email",
@@ -65,6 +65,7 @@
       "divider-text": "oppure",
       "download-pagopa-notification": "Scarica l'avviso pagoPA",
       "download-f24": "Scarica il modello F24",
+      "message-error-fetch-payment": "Non siamo riusciti a recuperare i dati di pagamento per questa notifica.",
       "message-completed": "Il pagamento è stato effettuato con successo.",
       "message-in-progress": "Il pagamento è già in corso, riprova tra qualche minuto. Se è passato troppo tempo, segnalacelo!",
       "message-failed": "Il pagamento non è andato a buon fine. Premi \"Paga\" per riprovare.",
@@ -122,7 +123,11 @@
         "digital-delivery-success": "notifica digitale",
         "digital-delivery-failure": "mancato recapito digitale",
         "analog-delivery": "conformità",
-        "recipient-access": "avvenuto accesso"
+        "recipient-access": "avvenuto accesso",
+        "pec-receipt-accepted": "di accettazione PEC",
+        "pec-receipt-not-accepted": "di mancata accettazione PEC",
+        "pec-receipt-delivered": "di consegna PEC",
+        "pec-receipt-not-delivered": "di mancata consegna PEC"
       }
     },
     "help": {
