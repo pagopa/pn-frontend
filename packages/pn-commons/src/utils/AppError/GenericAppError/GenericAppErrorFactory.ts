@@ -1,7 +1,8 @@
 import { ServerResponseErrorCode } from "../../../types/AppError";
 import AppError from "../AppError";
+import { BadRequestAppError } from "./BadRequestError";
 import { ForbiddenAppError } from "./ForbiddenAppError";
-import { InternalServerAppError } from "./InternalServerError";
+import { InternalServerAppError } from "./InternalServerAppError";
 import { NotFoundAppError } from "./NotFoundAppError";
 import { UnauthorizedAppError } from "./UnauthorizedAppError";
 import { UnhandledAppError } from "./UnhandledAppError";
@@ -10,7 +11,9 @@ class GenericAppErrorFactory {
   static create(status: number): AppError {
     // switch (error.status) {
     switch (status) {
-    case 401 || "401":
+      case 400 || "400":
+        return new BadRequestAppError({ code: ServerResponseErrorCode.BAD_REQUEST_ERROR });
+      case 401 || "401":
         return new UnauthorizedAppError({ code: ServerResponseErrorCode.UNAUTHORIZED_ERROR });
       case 403 || "403":
         return new ForbiddenAppError({ code: ServerResponseErrorCode.FORBIDDEN_ERROR });
