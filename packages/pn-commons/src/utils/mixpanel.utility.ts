@@ -1,5 +1,5 @@
-import { init, Mixpanel } from "mixpanel-browser";
-
+// PN-1369 leave default import for mixpanel, using named once it won't work
+import mixpanel, { Mixpanel } from 'mixpanel-browser';
 /**
  * Function that initialize Mixpanel (must be called once)
  */
@@ -10,7 +10,7 @@ export function mixpanelInit(mixpanelToken: string, nodeEnv: string): void {
   } else if (nodeEnv === 'test') {
     return;
   } else {
-    init(mixpanelToken, {
+    mixpanel.init(mixpanelToken, {
       api_host: 'https://api-eu.mixpanel.com',
       persistence: 'localStorage',
       // if this is true, Mixpanel will automatically determine

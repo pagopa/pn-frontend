@@ -17,11 +17,9 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
-
-import { setRecipients } from '../../../redux/newNotification/actions';
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
-import { FormRecipient } from '../../../models/NewNotification';
+import { NewNotificationRecipient } from '../../../models/NewNotification';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import PhysicalAddress from './PhysicalAddress';
@@ -53,7 +51,7 @@ const singleRecipient = {
 type Props = {
   onConfirm: () => void;
   onPreviousStep?: () => void;
-  recipientsData?: Array<FormRecipient>;
+  recipientsData?: Array<NewNotificationRecipient>;
 };
 
 const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
@@ -151,7 +149,7 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
 
   const handleAddressTypeChange = (
     event: ChangeEvent,
-    oldValue: FormRecipient,
+    oldValue: NewNotificationRecipient,
     recipientField: string,
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
   ) => {
@@ -198,7 +196,7 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
     }
   };
 
-  const handleAddRecipient = (values: { recipients: Array<FormRecipient> }, setFieldValue: any) => {
+  const handleAddRecipient = (values: { recipients: Array<NewNotificationRecipient> }, setFieldValue: any) => {
     const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx;
     setFieldValue('recipients', [
       ...values.recipients,
@@ -209,15 +207,13 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
     });
   };
 
-  const handleSubmit = (values: { recipients: Array<FormRecipient> }) => {
-    // TODO da rifattorizzare: issue PN-2015
+  const handleSubmit = (values: { recipients: Array<NewNotificationRecipient> }) => {
     dispatch(saveRecipients(values));
-    dispatch(setRecipients(values));
     onConfirm();
   };
 
-  const handlePreviousStep = (values: { recipients: Array<FormRecipient> }) => {
-    dispatch(setRecipients(values));
+  const handlePreviousStep = (values: { recipients: Array<NewNotificationRecipient> }) => {
+    dispatch(saveRecipients(values));
     if (onPreviousStep) {
       onPreviousStep();
     }

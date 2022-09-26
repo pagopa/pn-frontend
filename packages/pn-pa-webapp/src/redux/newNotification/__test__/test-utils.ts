@@ -1,54 +1,220 @@
-import { PhysicalCommunicationType, RecipientType, NotificationFeePolicy } from '@pagopa-pn/pn-commons';
+import {
+  PhysicalCommunicationType,
+  RecipientType,
+  NotificationFeePolicy,
+  DigitalDomicileType,
+} from '@pagopa-pn/pn-commons';
 
-import { NewNotificationFe, PaymentModel } from '../../../models/NewNotification';
+import {
+  NewNotification,
+  NewNotificationDTO,
+  PaymentModel,
+  NewNotificationDocument,
+  NewNotificationRecipient,
+} from '../../../models/NewNotification';
 
-export const newNotification: NewNotificationFe = {
+const newNotificationRecipients: Array<NewNotificationRecipient> = [
+  {
+    idx: 0,
+    taxId: 'MRARSS90P08H501Q',
+    firstName: 'Mario',
+    lastName: 'Rossi',
+    recipientType: RecipientType.PF,
+    creditorTaxId: '12345678910',
+    noticeCode: '123456789123456789',
+    type: DigitalDomicileType.PEC,
+    digitalDomicile: 'mocked@mail.it',
+    address: 'address',
+    houseNumber: 'houseNumber',
+    zip: 'zip',
+    municipality: 'municipality',
+    province: 'province',
+    foreignState: 'foreignState',
+  },
+  {
+    idx: 1,
+    taxId: 'SRAGLL00P48H501U',
+    firstName: 'Sara',
+    lastName: 'Giallo',
+    recipientType: RecipientType.PF,
+    creditorTaxId: '12345678910',
+    noticeCode: '123456789123456789',
+    type: DigitalDomicileType.PEC,
+    digitalDomicile: 'mocked@mail.it',
+    address: '',
+    houseNumber: '',
+    zip: '',
+    municipality: '',
+    province: '',
+    foreignState: '',
+  },
+];
+
+const newNotificationDocument: NewNotificationDocument = {
+  id: 'mocked-id',
+  idx: 0,
+  name: 'mocked-name',
+  contentType: 'text/plain',
+  file: {
+    uint8Array: new Uint8Array(),
+    sha256: {
+      hashBase64: 'mocked-sha256',
+      hashHex: '',
+    },
+  },
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+};
+
+const newNotificationPagoPa: NewNotificationDocument = {
+  id: 'mocked-pagopa-id',
+  idx: 0,
+  name: 'mocked-name',
+  contentType: 'text/plain',
+  file: {
+    uint8Array: new Uint8Array(),
+    sha256: {
+      hashBase64: 'mocked-pa-sha256',
+      hashHex: '',
+    },
+  },
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+};
+
+const newNotificationF24Standard: NewNotificationDocument = {
+  id: 'mocked-f24standard-id',
+  idx: 0,
+  name: 'mocked-name',
+  contentType: 'text/plain',
+  file: {
+    uint8Array: new Uint8Array(),
+    sha256: {
+      hashBase64: 'mocked-f24standard-sha256',
+      hashHex: '',
+    },
+  },
+  ref: {
+    key: '',
+    versionToken: '',
+  },
+};
+
+export const newNotification: NewNotification = {
+  paProtocolNumber: '',
+  subject: '',
+  cancelledIun: '',
+  recipients: newNotificationRecipients,
+  documents: [newNotificationDocument],
+  payment: {
+    'MRARSS90P08H501Q': {
+      pagoPaForm: {...newNotificationPagoPa},
+    },
+    'SRAGLL00P48H501U': {
+      pagoPaForm: {...newNotificationPagoPa},
+      f24standard: {...newNotificationF24Standard},
+    },
+  },
+  physicalCommunicationType: '' as PhysicalCommunicationType,
+  paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
+  group: '',
+  notificationFeePolicy: '' as NotificationFeePolicy,
+};
+
+export const newNotificationDTO: NewNotificationDTO = {
   paProtocolNumber: '',
   subject: '',
   cancelledIun: '',
   recipients: [
     {
-      taxId: 'mocked-taxId1',
-      denomination: 'Mario Rossi',  
+      taxId: 'MRARSS90P08H501Q',
+      denomination: 'Mario Rossi',
       recipientType: RecipientType.PF,
+      digitalDomicile: {
+        type: DigitalDomicileType.PEC,
+        address: 'mocked@mail.it',
+      },
+      physicalAddress: {
+        address: 'address houseNumber',
+        addressDetails: undefined,
+        at: undefined,
+        zip: 'zip',
+        municipality: 'municipality',
+        municipalityDetails: undefined,
+        province: 'province',
+        foreignState: 'foreignState',
+      },
       payment: {
-        creditorTaxId: 'mocked-creditorTaxId1',
-        noticeCode: 'mocked-token1',
+        creditorTaxId: '12345678910',
+        noticeCode: '123456789123456789',
         pagoPaForm: {
+          title: 'mocked-name',
           digests: {
-            sha256: ''
+            sha256: 'mocked-pa-sha256',
           },
-          contentType: '',
+          contentType: 'text/plain',
           ref: {
             key: '',
-            versionToken: ''
-          }
-        }
-      }
+            versionToken: '',
+          },
+        },
+      },
     },
     {
-      taxId: 'mocked-taxId2',
+      taxId: 'SRAGLL00P48H501U',
       denomination: 'Sara Giallo',
       recipientType: RecipientType.PF,
+      digitalDomicile: {
+        type: DigitalDomicileType.PEC,
+        address: 'mocked@mail.it',
+      },
+      physicalAddress: undefined,
       payment: {
-        creditorTaxId: 'mocked-creditorTaxId2',
-        noticeCode: 'mocked-token2',
+        creditorTaxId: '12345678910',
+        noticeCode: '123456789123456789',
         pagoPaForm: {
+          title: 'mocked-name',
           digests: {
-            sha256: ''
+            sha256: 'mocked-pa-sha256',
           },
-          contentType: '',
+          contentType: 'text/plain',
           ref: {
             key: '',
-            versionToken: ''
-          }
+            versionToken: '',
+          },
+        },
+        f24standard: {
+          title: 'mocked-name',
+          digests: {
+            sha256: 'mocked-f24standard-sha256',
+          },
+          contentType: 'text/plain',
+          ref: {
+            key: '',
+            versionToken: '',
+          },
         }
-      }
+      },
     },
   ],
-  documents: [],
+  documents: [
+    {
+      title: 'mocked-name',
+      digests: {
+        sha256: 'mocked-sha256',
+      },
+      contentType: 'text/plain',
+      ref: {
+        key: '',
+        versionToken: '',
+      },
+    }
+  ],
   physicalCommunicationType: '' as PhysicalCommunicationType,
-  paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
   group: '',
-  notificationFeePolicy: '' as NotificationFeePolicy
+  notificationFeePolicy: '' as NotificationFeePolicy,
 };

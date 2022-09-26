@@ -36,7 +36,7 @@ describe('test login page', () => {
     expect(screen.getAllByRole('img')[0]).toHaveAttribute('src', 'spid_big.svg');
   });
 
-  test('renders button Entra con CIE', () => {
+  test.skip('renders button Entra con CIE', () => {
     render(<BrowserRouter><Login /></BrowserRouter>);
 
     const ButtonCIE = screen.getByRole(/Button/i, {
