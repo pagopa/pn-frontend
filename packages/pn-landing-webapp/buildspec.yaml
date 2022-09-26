@@ -20,6 +20,11 @@ batch:
       env:
         variables:
           BUILD_ID: preview
+    - identifier: pn_landing_cert_build
+      env:
+        variables:
+          BUILD_ID: cert
+          NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.cert.pn.pagopa.it/"          
 phases:
   install:
     runtime-versions:
