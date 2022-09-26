@@ -7,7 +7,7 @@ import { authClient } from '../../axios';
 export async function mockedExchangeToken() {
   const token = 'mocked-token';
   const axiosMock = new MockAdapter(authClient);
-  axiosMock.onGet(`/token-exchange`).reply(200, userResponse);
+  axiosMock.onPost(`/token-exchange`).reply(200, userResponse);
   const res = await AuthApi.exchangeToken(token);
   axiosMock.reset();
   axiosMock.restore();

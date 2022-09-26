@@ -24,7 +24,9 @@
     "lint": "lerna run --scope @pagopa-pn/* lint",
     "format": "lerna run --scope @pagopa-pn/* format",
     "sonar": "node sonarqube-scanner.js -Dsonar.login={$SONAR_TOKEN}",
-    "version": "lerna version --no-push --conventional-commits"
+    "version": "lerna version --no-push --conventional-commits",
+    "cy-open:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn cypress open",
+    "cy-run:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn cypress run"
   },
   "workspaces": {
     "packages": [
