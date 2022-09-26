@@ -1,0 +1,50 @@
+[
+  {
+    "mandateId": "c7f9d779-b6e6-4934-a92a-e6fc85e4d7df",
+    "delegator": {
+      "displayName": "Dino De Sauro",
+      "firstName": null,
+      "lastName": null,
+      "companyName": null,
+      "fiscalCode": "DSRDNI00A01A225I",
+      "person": true
+    },
+    "delegate": {
+      "displayName": null,
+      "firstName": null,
+      "lastName": null,
+      "companyName": null,
+      "fiscalCode": null,
+      "person": true
+    },
+    "status": "pending",
+    "visibilityIds": [],
+    "verificationCode": null,
+    "datefrom": "2022-05-18",
+    "dateto": "2023-02-17"
+  },
+  {
+    "mandateId": "793824bd-a5f5-436e-9b8d-3a3851fbfd3d",
+    "delegator": {
+      "displayName": "Ettore Fieramosca",
+      "firstName": null,
+      "lastName": null,
+      "companyName": null,
+      "fiscalCode": "FRMTTR76M06B715E",
+      "person": true
+    },
+    "delegate": {
+      "displayName": null,
+      "firstName": null,
+      "lastName": null,
+      "companyName": null,
+      "fiscalCode": null,
+      "person": true
+    },
+    "status": "active",
+    "visibilityIds": [],
+    "verificationCode": null,
+    "datefrom": "2022-05-19",
+    "dateto": "2022-09-17"
+  }
+]
