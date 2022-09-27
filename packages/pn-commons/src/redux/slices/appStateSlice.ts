@@ -1,7 +1,9 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { createAppError, createAppMessage } from '../../services/message.service';
+// import { createAppError, createAppMessage } from '../../services/message.service';
+import { createAppMessage } from '../../services/message.service';
 import { IAppMessage } from '../../types';
-import AppErrorPublisher from '../../utils/AppError/AppErrorPublisher';
+import { AppResponse } from '../../types/AppError';
+// import AppErrorPublisher from '../../utils/AppError/AppErrorPublisher';
 import createAppResponse from '../../utils/AppError/AppResponse';
 
 export interface AppStateState {
@@ -13,6 +15,10 @@ export interface AppStateState {
     errors: Array<IAppMessage>;
     success: Array<IAppMessage>;
   };
+  responseEvent: {
+    name: string;
+    response: AppResponse
+   } | null;
 }
 
 const initialState: AppStateState = {
@@ -24,6 +30,7 @@ const initialState: AppStateState = {
     errors: [],
     success: [],
   },
+  responseEvent: null
 };
 
 const isLoading = (action: AnyAction) => action.type.endsWith('/pending');
@@ -87,12 +94,11 @@ export const appStateSlice = createSlice({
         
         // create AppResponseError object
         const response = createAppResponse(action.payload.response);
-        // publish the response connected to the specific action
-        AppErrorPublisher.publish(actionBeingRejected, response);
+        state.responseEvent = { name: actionBeingRejected, response };
         
-        const error = createAppError(
-          { ...action.payload, action: actionBeingRejected }, { show: !action.payload.blockNotification });
-        state.messages.errors.push(error);
+        // const error = createAppError(
+        //   { ...action.payload, action: actionBeingRejected }, { show: !action.payload.blockNotification });
+        // state.messages.errors.push(error);
       });
   },
 });

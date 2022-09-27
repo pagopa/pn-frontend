@@ -1,4 +1,5 @@
-// import AppErrorPublisher from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
+import AppErrorPublisher from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
+import { AppResponse } from '@pagopa-pn/pn-commons/src/types/AppError';
 import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect, useState } from 'react';
@@ -37,7 +38,6 @@ import {
   CustomDropdown,
 } from '@pagopa-pn/pn-commons';
 import { dataRegex } from '@pagopa-pn/pn-commons/src/utils/string.utility';
-// import { AppResponse } from '@pagopa-pn/pn-commons/src/types/AppError';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   createDelegation,
@@ -142,16 +142,18 @@ const NuovaDelega = () => {
 
   const xsValue = isMobile ? 12 : 4;
 
-  // const testPublishMessage = (errorResponse: AppResponse) => {
-  //   console.log("[NuovaDelega] Handled Event!");
-  //   console.log("[NuovaDelega] Response: ", errorResponse);
-  // };
+  const testPublishMessage = (errorResponse: AppResponse) => {
+    const error = errorResponse.errors ? errorResponse.errors[0] : null;
+    console.log("[NuovaDelega] Handled Event!");
+    console.log("[NuovaDelega] Response: ", errorResponse);
+    console.log("[NuovaDelega] Message: ", error?.getMessage());
+  };
   
-  // useEffect(() => {
-  //   AppErrorPublisher.subscribe("createDelegation", testPublishMessage);
+  useEffect(() => {
+    AppErrorPublisher.subscribe("createDelegation", testPublishMessage);
     
-  //   return () => AppErrorPublisher.unsubscribe("createDelegation", testPublishMessage);
-  // }, []);
+    return () => AppErrorPublisher.unsubscribe("createDelegation", testPublishMessage);
+  }, []);
 
   useEffect(() => {
     dispatch(resetNewDelegation());

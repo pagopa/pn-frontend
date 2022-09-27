@@ -34,12 +34,13 @@ export const createOrUpdateLegalAddress = createAsyncThunk<
       { value: params.value, verificationCode: params.code }
     );
   } catch (e: any) {
-    if (e.response.status === 422) {
-      // { response: { status: 406 }, blockNotification: true }
-      return rejectWithValue({ response: e.response, blockNotification: true });
-    } else {
-      return rejectWithValue({ response: e.response });
-    }
+    return rejectWithValue({ response: e.response });
+    // if (e.response.status === 422) {
+    //   // { response: { status: 406 }, blockNotification: true }
+    //   return rejectWithValue({ response: e.response, blockNotification: true });
+    // } else {
+    //   return rejectWithValue({ response: e.response });
+    // }
   }
 });
 
@@ -71,12 +72,13 @@ export const createOrUpdateCourtesyAddress = createAsyncThunk<
         { value: params.value, verificationCode: params.code }
       );
     } catch (e: any) {
-      if (e.response.status === 422) {
-        // { response: { status: 406 }, blockNotification: true }
-        return rejectWithValue({ response: e.response, blockNotification: true });
-      } else {
-        return rejectWithValue({ response: e.response });
-      }
+      return rejectWithValue({ response: e.response });
+      // if (e.response.status === 422) {
+      //   // { response: { status: 406 }, blockNotification: true }
+      //   return rejectWithValue({ response: e.response, blockNotification: true });
+      // } else {
+      //   return rejectWithValue({ response: e.response });
+      // }
     }
   }
 );

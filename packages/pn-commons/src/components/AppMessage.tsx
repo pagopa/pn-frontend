@@ -1,9 +1,11 @@
 import { Fragment, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-
 import AppErrorPublisher from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
+// import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { appStateActions, appStateSelectors } from '../redux';
+// import { appStateActions, appStateSelectors } from '../redux';
+import { appStateActions } from '../redux';
+
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import { IAppMessage, MessageType } from '../types';
 import { AppResponse } from '../types/AppError';
@@ -16,13 +18,23 @@ type Props = {
 
 const AppMessage = ({ sessionRedirect }: Props) => {
   const dispatch = useDispatch();
-  const errors = useSelector(appStateSelectors.selectErrors);
-  const success = useSelector(appStateSelectors.selectSuccess);
+  // const errors = useSelector(appStateSelectors.selectErrors);
+  const [errors, setErrors] = useState<Array<IAppMessage>>([]);
+  // const success = useSelector(appStateSelectors.selectSuccess);
+  const success: Array<IAppMessage> = [];
   const [open, setOpen] = useState(true);
 
   const testPublishMessage = (response: AppResponse) => {
-    console.log("[AppMessage] Handled Event!");
-    console.log("[AppMessage] Response: ", response);
+    const errors = response.errors || [];
+    const appMessages = errors.map(error => ({
+      id: "a",
+      blocking: false,
+      message: error.getMessage().message,
+      title: error.getMessage().title,
+      toNotify: true,
+      alreadyShown: false
+    }));
+    setErrors(appMessages);
   };
 
   useEffect(() => {

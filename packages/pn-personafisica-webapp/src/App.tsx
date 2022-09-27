@@ -21,6 +21,7 @@ import {
 import { ProductSwitchItem } from '@pagopa/mui-italia';
 import { Box } from '@mui/material';
 
+import { ResponsePublisher } from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { getToSApproval, logout } from './redux/auth/actions';
@@ -212,6 +213,7 @@ const App = () => {
 
   return (
     <>
+      <ResponsePublisher />
       <Layout
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}

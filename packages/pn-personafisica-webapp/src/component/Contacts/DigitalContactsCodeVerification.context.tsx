@@ -12,6 +12,7 @@ import {
   Typography
 } from '@mui/material';
 import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
+import AppErrorPublisher from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
@@ -142,10 +143,11 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           setOpen(true);
         }
       })
-      .catch((error) => {
-        if(error.response.status === 422) {
-          setCodeNotValid(true);
-        }
+      .catch(() => {
+      // .catch((error) => {
+        // if(error.response.status === 422) {
+        //   setCodeNotValid(true);
+        // }
       });
   };
 
@@ -185,6 +187,20 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       setIsConfirmationModalVisible(true);
     }
   }, [props]);
+  
+  const handleAddressUpdateError = () => {
+    setCodeNotValid(true);
+  };
+  
+  useEffect(() => {
+    AppErrorPublisher.subscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
+    AppErrorPublisher.subscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+    
+    return () => {
+      AppErrorPublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+      AppErrorPublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+    };
+  }, []);
 
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
