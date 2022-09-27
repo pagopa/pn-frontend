@@ -4,7 +4,7 @@ import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineS
 export class SendDigitalProgressStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
     const eventCode = (payload.step.details as SendDigitalDetails).eventCode;
-    if (eventCode === 'C008' || eventCode === 'C010') {
+    if (eventCode === 'C008' || eventCode === 'C010' || eventCode === 'DP10') {
       return {
         ...this.localizeTimelineStatus(
           'send-digital-progress-error',
