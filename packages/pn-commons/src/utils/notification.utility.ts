@@ -1,3 +1,4 @@
+/* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
 import { formatDate } from '../services';
@@ -220,46 +221,44 @@ export function getLegalFactLabel(
     return receiptLabel;
   } else if (
     timelineStep.category === TimelineCategory.SEND_DIGITAL_PROGRESS &&
-    legalFactType === LegalFactType.PEC_RECEIPT &&
-    ((timelineStep.details as SendDigitalDetails).eventCode === 'C001' ||
-      (timelineStep.details as SendDigitalDetails).eventCode === 'DP00')
+    legalFactType === LegalFactType.PEC_RECEIPT
   ) {
-    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
-      'notifications',
-      'detail.timeline.legalfact.pec-receipt-accepted',
-      'di accettazione PEC'
-    )}`;
-  } else if (
-    timelineStep.category === TimelineCategory.SEND_DIGITAL_PROGRESS &&
-    legalFactType === LegalFactType.PEC_RECEIPT &&
-    ((timelineStep.details as SendDigitalDetails).eventCode === 'C008' ||
-      (timelineStep.details as SendDigitalDetails).eventCode === 'C010')
-  ) {
-    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
-      'notifications',
-      'detail.timeline.legalfact.pec-receipt-not-accepted',
-      'di mancata accettazione PEC'
-    )}`;
-  } else if (
-    timelineStep.category === TimelineCategory.SEND_DIGITAL_FEEDBACK &&
-    legalFactType === LegalFactType.PEC_RECEIPT &&
-    (timelineStep.details as SendDigitalDetails).responseStatus === 'OK'
-  ) {
-    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
-      'notifications',
-      'detail.timeline.legalfact.pec-receipt-delivered',
-      'di consegna PEC'
-    )}`;
+    if (
+      (timelineStep.details as SendDigitalDetails).eventCode === 'C001' ||
+      (timelineStep.details as SendDigitalDetails).eventCode === 'DP00'
+    ) {
+      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.legalfact.pec-receipt-accepted',
+        'di accettazione PEC'
+      )}`;
+    } else if (
+      (timelineStep.details as SendDigitalDetails).eventCode === 'C008' ||
+      (timelineStep.details as SendDigitalDetails).eventCode === 'C010'
+    ) {
+      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.legalfact.pec-receipt-not-accepted',
+        'di mancata accettazione PEC'
+      )}`;
+    }
   } else if (
     timelineStep.category === TimelineCategory.SEND_DIGITAL_FEEDBACK &&
-    legalFactType === LegalFactType.PEC_RECEIPT &&
-    (timelineStep.details as SendDigitalDetails).responseStatus === 'KO'
+    legalFactType === LegalFactType.PEC_RECEIPT
   ) {
-    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
-      'notifications',
-      'detail.timeline.legalfact.pec-receipt-not-delivered',
-      'di mancata consegna PEC'
-    )}`;
+    if ((timelineStep.details as SendDigitalDetails).responseStatus === 'OK') {
+      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.legalfact.pec-receipt-delivered',
+        'di consegna PEC'
+      )}`;
+    } else if ((timelineStep.details as SendDigitalDetails).responseStatus === 'KO') {
+      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.legalfact.pec-receipt-not-delivered',
+        'di mancata consegna PEC'
+      )}`;
+    }
   } else if (legalFactType === LegalFactType.SENDER_ACK) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',

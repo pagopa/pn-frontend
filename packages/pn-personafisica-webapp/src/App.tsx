@@ -32,6 +32,7 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
+import {goToLoginPortal} from "./navigation/navigation.utility";
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -81,9 +82,7 @@ const App = () => {
       {
         id: 'logout',
         label: t('header.logout'),
-        onClick: () => {
-          void dispatch(logout());
-        },
+        onClick: () => handleUserLogout(),
         icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
       },
     ],
@@ -205,10 +204,15 @@ const App = () => {
       ),
   });
 
+  const handleUserLogout = () => {
+    void dispatch(logout());
+
+    goToLoginPortal(window.location.origin);
+  };
+
   return (
     <>
       <Layout
-        onExitAction={() => dispatch(logout())}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>

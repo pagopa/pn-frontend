@@ -5,6 +5,7 @@ import Dashboard from '../pages/Dashboard.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
 import NewNotification from '../pages/NewNotification.page';
 import ApiKeys from '../pages/ApiKeys.page';
+import NewApiKey from '../pages/NewApiKey.page';
 import { PNRole } from '../models/user';
 import RequireAuth from './RequireAuth';
 import VerifyUser from './VerifyUser';
@@ -20,6 +21,7 @@ function Router() {
           <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
           <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
           <Route path={routes.API_KEYS} element={<ApiKeys />} />
+          <Route path={routes.NUOVA_API_KEY} element={<NewApiKey />} />
         </Route>
       </Route>
       <Route path="*" element={<NotFound />} />

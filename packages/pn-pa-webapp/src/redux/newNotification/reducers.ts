@@ -1,14 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { NotificationFeePolicy, PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 
-import { FormRecipient, NewNotificationFe, PaymentModel } from '../../models/NewNotification';
+import {
+  NewNotificationRecipient,
+  NewNotification,
+  PaymentModel,
+  NewNotificationDocument,
+  PaymentObject,
+} from '../../models/NewNotification';
 import { UserGroup } from '../../models/user';
-import { formatNotificationRecipients } from '../../utils/notification.utility';
 import {
   uploadNotificationAttachment,
-  setPaymentDocuments,
-  setAttachments,
-  setRecipients,
   uploadNotificationPaymentDocument,
   getUserGroups,
 } from './actions';
@@ -22,15 +24,15 @@ const initialState = {
     cancelledIun: '',
     recipients: [],
     documents: [],
+    payment: {},
     physicalCommunicationType: '' as PhysicalCommunicationType,
     group: '',
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
-  } as NewNotificationFe,
+  } as NewNotification,
   groups: [] as Array<UserGroup>,
   isCompleted: false,
 };
-
 
 /* eslint-disable functional/immutable-data */
 const newNotificationSlice = createSlice({
@@ -58,8 +60,26 @@ const newNotificationSlice = createSlice({
         notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
       };
     },
-    saveRecipients: (state, action: PayloadAction<{ recipients: Array<FormRecipient> }>) => {
-      state.notification.recipients = formatNotificationRecipients(action.payload.recipients);
+    saveRecipients: (
+      state,
+      action: PayloadAction<{ recipients: Array<NewNotificationRecipient> }>
+    ) => {
+      state.notification.recipients = action.payload.recipients;
+    },
+    setAttachments: (
+      state,
+      action: PayloadAction<{ documents: Array<NewNotificationDocument> }>
+    ) => {
+      state.notification.documents = action.payload.documents;
+    },
+    setPaymentDocuments: (
+      state,
+      action: PayloadAction<{ paymentDocuments: { [key: string]: PaymentObject } }>
+    ) => {
+      state.notification = {
+        ...state.notification,
+        payment: action.payload.paymentDocuments,
+      };
     },
     resetState: () => initialState,
   },
@@ -68,39 +88,11 @@ const newNotificationSlice = createSlice({
       state.groups = action.payload;
     });
     builder.addCase(uploadNotificationAttachment.fulfilled, (state, action) => {
-      state.notification = { ...state.notification, documents: action.payload };
+      state.notification.documents = action.payload;
     });
     builder.addCase(uploadNotificationPaymentDocument.fulfilled, (state, action) => {
-      state.notification = {
-        ...state.notification,
-        recipients: state.notification.recipients.map((r) => {
-          r.payment = {
-            ...action.payload[r.taxId],
-            creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
-            noticeCode: r.payment?.noticeCode,
-          };
-          return r;
-        }),
-      };
+      state.notification.payment = action.payload;
       state.isCompleted = true;
-    });
-    builder.addCase(setRecipients, (state, action) => {
-      state.notification = {
-        ...state.notification,
-        recipientsForm: action.payload.recipients,
-      };
-    });
-    builder.addCase(setAttachments, (state, action) => {
-      state.notification = {
-        ...state.notification,
-        documentsForm: action.payload.documents,
-      };
-    });
-    builder.addCase(setPaymentDocuments, (state, action) => {
-      state.notification = {
-        ...state.notification,
-        paymentDocumentsForm: action.payload.paymentMethodsDocuments,
-      };
     });
   },
 });
@@ -110,6 +102,8 @@ export const {
   setSenderInfos,
   setPreliminaryInformations,
   saveRecipients,
+  setAttachments,
+  setPaymentDocuments,
   resetState,
 } = newNotificationSlice.actions;
 

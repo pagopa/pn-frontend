@@ -1,0 +1,179 @@
+import { ChangeEvent, useEffect, useState } from 'react';
+import { makeStyles } from '@mui/styles';
+import { useIsMobile, Prompt, PnBreadcrumb } from '@pagopa-pn/pn-commons';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import {
+  Box,
+  Typography,
+  TextField,
+  Autocomplete,
+  Paper,
+  Grid,
+  Button,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Checkbox,
+} from '@mui/material';
+import * as routes from '../navigation/routes.const';
+import { RootState } from '../redux/store';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { getApiKeyGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
+import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
+
+const useStyles = makeStyles(() => ({
+  root: {
+    '& .paperContainer': {
+      boxShadow: 'none',
+    },
+  },
+}));
+
+const NewApiKey = () => {
+  const dispatch = useAppDispatch();
+  const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState.apiKey);
+  const isMobile = useIsMobile();
+  const groups = useAppSelector((state: RootState) => state.newApiKeyState.groups);
+
+  const [apiKeySent, setApiKeySent] = useState<boolean>(false);
+
+  const initialValues = () => ({
+    name: '',
+    groups: [] as Array<string>,
+  });
+
+  const validationSchema = yup.object({
+    name: yup.string().required("Definire un nome per l'API Key"),
+    groups: yup.array().min(1, 'Selezionare almeno un gruppo'),
+  });
+
+  useEffect(() => {
+    if (groups.length === 0) {
+      void dispatch(getApiKeyGroups());
+    }
+  }, []);
+  
+  const formik = useFormik({
+    initialValues: initialValues(),
+    validateOnMount: true,
+    validationSchema,
+    onSubmit: (values) => {
+      if (formik.isValid) {
+        void dispatch(saveNewApiKey({ ...values }));
+        setApiKeySent(true);
+      }
+    },
+  });
+
+  const handleChangeTouched = async (e: ChangeEvent) => {
+    formik.handleChange(e);
+    await formik.setFieldTouched(e.target.id, true, false);
+  };
+
+  const classes = useStyles();
+
+  const handleGroupClick = async (_event: any, value: Array<string>) => {
+    await formik.setFieldValue('groups', value);
+    await formik.setFieldTouched('groups', true, false);
+  };
+
+  return (
+    <>
+      {!apiKeySent && (
+        <Prompt
+          title="Genera API Key"
+          message="Annullare l'operazione?"
+          eventTrackingCallbackPromptOpened={() => {}} // impostare eventi tracking previsti
+          eventTrackingCallbackCancel={() => {}} // impostare eventi tracking previsti
+          eventTrackingCallbackConfirm={() => {}} // impostare eventi tracking previsti
+        >
+          <Box p={3}>
+            <Grid container className={classes.root} sx={{ padding: isMobile ? '0 20px' : 0 }}>
+              <Grid item xs={12} lg={8}>
+                <PnBreadcrumb
+                  linkRoute={routes.API_KEYS}
+                  linkLabel="API Keys"
+                  currentLocationLabel="Genera API Key"
+                  goBackLabel="indietro"
+                />
+                <Typography variant="h4" my={3}>
+                  Genera una API Key
+                </Typography>
+                <Box
+                  display={isMobile ? 'block' : 'flex'}
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Typography variant="body1" sx={{ marginBottom: 4 }}>
+                    Piattaforma Notifiche ha generato il codice della API Key. Ora, inserisci un
+                    nome identificativo e assegnala a uno o più gruppi.
+                  </Typography>
+                </Box>
+                <form onSubmit={formik.handleSubmit}>
+                  <Typography sx={{ marginTop: 4 }} variant="body2">
+                    * Campi obbligatori
+                  </Typography>
+                  <Box>
+                    <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
+                      <Typography variant="h5">Altre informazioni</Typography>
+                      <Box sx={{ marginTop: '20px' }}>
+                        <Typography fontWeight="bold">Dai un nome alla tua API Key*</Typography>
+                        <TextField
+                          id="name"
+                          label="Inserisci un nome"
+                          fullWidth
+                          name="name"
+                          value={formik.values.name}
+                          onChange={handleChangeTouched}
+                          error={formik.touched.name && Boolean(formik.errors.name)}
+                          helperText={formik.touched.name && formik.errors.name}
+                          size="small"
+                          margin="normal"
+                          sx={{ mb: 3 }}
+                        />
+                        <Typography fontWeight="bold" mb={2}>
+                          Scegli i gruppi a cui assegnare l’API Key*
+                        </Typography>
+                        <Autocomplete
+                          disableCloseOnSelect
+                          multiple
+                          value={formik.values.groups}
+                          options={groups.map((g) => g.title)}
+                          id="groups"
+                          getOptionLabel={(option) => option}
+                          isOptionEqualToValue={(option: any, value: any) => option === value}
+                          onChange={handleGroupClick}
+                          renderOption={(props, option) => (
+                            <MenuItem {...props}>
+                              <ListItemIcon>
+                                <Checkbox checked={formik.values.groups.indexOf(option) > -1} />
+                              </ListItemIcon>
+                              <ListItemText primary={option} />
+                            </MenuItem>
+                          )}
+                          renderInput={(params) => (
+                            <TextField {...params} label="Cerca un gruppo" />
+                          )}
+                        />
+                      </Box>
+                    </Paper>
+                    <Box mt={3}>
+                      <Button variant="contained" type="submit" disabled={!formik.isValid}>
+                        Continua
+                      </Button>
+                    </Box>
+                  </Box>
+                </form>
+              </Grid>
+            </Grid>
+          </Box>
+        </Prompt>
+      )}
+
+      {(apiKeySent && newApiKey !== '') && <SyncFeedbackApiKey newApiKeyId={newApiKey} />}
+    </>
+  );
+};
+
+export default NewApiKey;
