@@ -32,6 +32,10 @@ const isFulfilled = (action: AnyAction) => action.type.endsWith('/fulfilled');
 
 const handleError = (action: AnyAction) => action.type.endsWith('/rejected');
 
+function doRemoveErrorsByAction(action: string, errors: IAppMessage[]) {
+  return errors.filter((e) => e.action !== action);
+}
+
 /* eslint-disable functional/immutable-data */
 export const appStateSlice = createSlice({
   name: 'appState',
@@ -39,6 +43,15 @@ export const appStateSlice = createSlice({
   reducers: {
     removeError(state, action: PayloadAction<string>) {
       state.messages.errors = state.messages.errors.filter((e) => e.id !== action.payload);
+    },
+    removeErrorsByAction(state, action: PayloadAction<string>) {
+      state.messages.errors = doRemoveErrorsByAction(action.payload, state.messages.errors);
+    },
+    setErrorAsAlreadyShown(state, action: PayloadAction<string>) {
+      const error = state.messages.errors.find((e) => e.id === action.payload);
+      if (error) {
+        error.alreadyShown = true;
+      }
     },
     addSuccess(
       state,
@@ -65,15 +78,18 @@ export const appStateSlice = createSlice({
           state.loading.result = true;
         }
       })
-      .addMatcher(isFulfilled, (state) => {
+      .addMatcher(isFulfilled, (state, action) => {
         state.loading.result = false;
+        const actionBeingFulfilled = action.type.slice(0, action.type.indexOf("/"));
+        state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
-        if (!action.payload || !action.payload.blockNotification) {
-          const error = createAppError(action.payload);
-          state.messages.errors.push(error);
-        }
+        const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
+        state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
+        const error = createAppError(
+          {...action.payload, action: actionBeingRejected}, { show: !action.payload.blockNotification });
+        state.messages.errors.push(error);
       });
   },
 });

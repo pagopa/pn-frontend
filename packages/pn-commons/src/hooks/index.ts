@@ -3,5 +3,7 @@ import { useMultiEvent } from './useMultiEvent';
 import { useSessionCheck } from './useSessionCheck';
 import { useUnload } from './useUnload';
 import { useProcess } from './useProcess';
+import { useErrors } from './useErrors';
+import { useTracking } from "./useTracking";
 
-export { useIsMobile, useMultiEvent, useUnload, useSessionCheck, useProcess };
+export { useIsMobile, useMultiEvent, useUnload, useSessionCheck, useErrors, useTracking, useProcess };

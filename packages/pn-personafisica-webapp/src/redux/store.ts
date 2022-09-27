@@ -2,7 +2,7 @@ import { appStateReducer } from '@pagopa-pn/pn-commons';
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { LOG_REDUX_ACTIONS } from '../utils/constants';
-import { trackingMiddleware } from '../utils/mixpanel';
+import { trackingMiddleware } from "../utils/mixpanel";
 import userSlice from './auth/reducers';
 import dashboardSlice from './dashboard/reducers';
 import notificationSlice from './notification/reducers';

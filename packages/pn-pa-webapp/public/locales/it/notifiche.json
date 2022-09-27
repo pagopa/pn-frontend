@@ -65,7 +65,7 @@
     "receipt": "Ricevuta",
     "show-history": "Mostra storico",
     "show-more": "Vedi più dettagli",
-    "show-less": "Mostra meno dettagli",
+    "show-less": "Vedi meno dettagli",
     "timeline": {
       "schedule-analog-workflow": "Invio per via cartacea in preparazione",
       "schedule-analog-workflow-description": "L'invio della notifica per via cartacea a {{name}} è in preparazione.",
@@ -102,7 +102,11 @@
         "digital-delivery-success": "notifica digitale",
         "digital-delivery-failure": "mancato recapito digitale",
         "analog-delivery": "conformità",
-        "recipient-access": "avvenuto accesso"
+        "recipient-access": "avvenuto accesso",
+        "pec-receipt-accepted": "di accettazione PEC",
+        "pec-receipt-not-accepted": "di mancata accettazione PEC",
+        "pec-receipt-delivered": "di consegna PEC",
+        "pec-receipt-not-delivered": "di mancata consegna PEC"
       }
     }
   },
