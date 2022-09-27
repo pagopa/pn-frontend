@@ -89,6 +89,7 @@ export default function Layout({
           loggedUser={loggedUser.id !== ''}
           onLanguageChanged={onLanguageChanged}
           eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
+          appType='pf'
         />
       </Stack>
     </ErrorBoundary>
