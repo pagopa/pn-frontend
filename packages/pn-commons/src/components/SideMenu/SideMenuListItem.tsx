@@ -54,7 +54,7 @@ const SideMenuListItem = ({
           )}
         </ListItemIcon>
       )}
-      <ListItemText primary={item.label} />
+      <ListItemText primary={item.label} data-cy={`menu-item(${(item.label).toLowerCase()})`} />
       {item.rightBadgeNotification && (
         <NotificationBadge numberOfNotification={item.rightBadgeNotification} />
       )}
