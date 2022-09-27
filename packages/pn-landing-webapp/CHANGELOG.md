@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/pagopa/pn-frontend/compare/v1.3.0...v1.3.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* **pn-2242:** add link to accessibility page ([#412](https://github.com/pagopa/pn-frontend/issues/412)) ([3e67199](https://github.com/pagopa/pn-frontend/commit/3e67199902c14536ef38d82ce75705c2bc12e9ff))
+
+
+
+
+
 # [1.3.0](https://github.com/pagopa/pn-frontend/compare/v1.2.2...v1.3.0) (2022-09-23)
 
 
