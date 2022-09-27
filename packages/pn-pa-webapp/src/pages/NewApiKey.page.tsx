@@ -1,27 +1,25 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import { useIsMobile, Prompt, PnBreadcrumb } from '@pagopa-pn/pn-commons';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import CancelIcon from '@mui/icons-material/Cancel';
 import {
   Box,
   Typography,
   TextField,
+  Autocomplete,
   Paper,
   Grid,
   Button,
-  Select,
-  Checkbox,
   MenuItem,
   ListItemIcon,
   ListItemText,
-  SelectChangeEvent,
-  InputLabel,
-  FormControl,
-  Chip,
+  Checkbox,
 } from '@mui/material';
 import * as routes from '../navigation/routes.const';
+import { RootState } from '../redux/store';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { getApiKeyGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
 const useStyles = makeStyles(() => ({
@@ -33,10 +31,12 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NewApiKey = () => {
+  const dispatch = useAppDispatch();
+  const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState.apiKey);
   const isMobile = useIsMobile();
-  const apiKeyId = '0000002340000011234000000077781546453728'; // mock
-  const groups = ['Gruppo 1', 'Gruppo 2', 'Gruppo 3', 'Gruppo 4']; // mock
-  const [apiKeySent, setApiKeySent] = useState(false);
+  const groups = useAppSelector((state: RootState) => state.newApiKeyState.groups);
+
+  const [apiKeySent, setApiKeySent] = useState<boolean>(false);
 
   const initialValues = () => ({
     name: '',
@@ -48,13 +48,19 @@ const NewApiKey = () => {
     groups: yup.array().min(1, 'Selezionare almeno un gruppo'),
   });
 
+  useEffect(() => {
+    if (groups.length === 0) {
+      void dispatch(getApiKeyGroups());
+    }
+  }, []);
+  
   const formik = useFormik({
     initialValues: initialValues(),
     validateOnMount: true,
     validationSchema,
     onSubmit: (values) => {
       if (formik.isValid) {
-        console.log(values);
+        void dispatch(saveNewApiKey({ ...values }));
         setApiKeySent(true);
       }
     },
@@ -67,14 +73,8 @@ const NewApiKey = () => {
 
   const classes = useStyles();
 
-  const handleGroupClick = async (event: SelectChangeEvent<typeof formik.values.groups>) => {
-    formik.handleChange(event);
-    await formik.setFieldTouched(event.target.name, true, false);
-  };
-
-  const handleUncheckChipClick = async (g: string) => {
-    // eslint-disable-next-line functional/immutable-data
-    formik.values.groups = formik.values.groups.filter(group => group !== g);
+  const handleGroupClick = async (_event: any, value: Array<string>) => {
+    await formik.setFieldValue('groups', value);
     await formik.setFieldTouched('groups', true, false);
   };
 
@@ -110,22 +110,11 @@ const NewApiKey = () => {
                     nome identificativo e assegnala a uno o più gruppi.
                   </Typography>
                 </Box>
-                <Box>
-                  <Typography fontWeight="bold">API Key</Typography>
-                  <TextField
-                    size="small"
-                    id="apiKeyId"
-                    value={apiKeyId}
-                    name="apiKeyId"
-                    fullWidth
-                    inputProps={{ readOnly: true }}
-                  />
-                </Box>
-                <Typography sx={{ marginTop: 4 }} variant="body2">
-                  * Campi obbligatori
-                </Typography>
-                <Box>
-                  <form onSubmit={formik.handleSubmit}>
+                <form onSubmit={formik.handleSubmit}>
+                  <Typography sx={{ marginTop: 4 }} variant="body2">
+                    * Campi obbligatori
+                  </Typography>
+                  <Box>
                     <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
                       <Typography variant="h5">Altre informazioni</Typography>
                       <Box sx={{ marginTop: '20px' }}>
@@ -146,42 +135,27 @@ const NewApiKey = () => {
                         <Typography fontWeight="bold" mb={2}>
                           Scegli i gruppi a cui assegnare l’API Key*
                         </Typography>
-                        <FormControl fullWidth size="small">
-                          <InputLabel id="select-label">Cerca un gruppo</InputLabel>
-                          <Select
-                            multiple
-                            value={formik.values.groups}
-                            name="groups"
-                            id="groups"
-                            labelId="select-label"
-                            label="Cerca un gruppo"
-                            fullWidth
-                            size="small"
-                            onChange={handleGroupClick}
-                            renderValue={() => ''}
-                          >
-                            {groups.map((g) => (
-                              <MenuItem key={g} value={g}>
-                                <ListItemIcon>
-                                  <Checkbox checked={formik.values.groups.indexOf(g) > -1} />
-                                </ListItemIcon>
-                                <ListItemText primary={g} />
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                        <Box mt={1}>
-                          {formik.values.groups.map((g) => (
-                            <Chip
-                              sx={{ mr: 1 }}
-                              key={g}
-                              label={g}
-                              onDelete={() => handleUncheckChipClick(g)}
-                              variant="outlined"
-                              deleteIcon={<CancelIcon />}
-                            />
-                          ))}
-                        </Box>
+                        <Autocomplete
+                          disableCloseOnSelect
+                          multiple
+                          value={formik.values.groups}
+                          options={groups.map((g) => g.title)}
+                          id="groups"
+                          getOptionLabel={(option) => option}
+                          isOptionEqualToValue={(option: any, value: any) => option === value}
+                          onChange={handleGroupClick}
+                          renderOption={(props, option) => (
+                            <MenuItem {...props}>
+                              <ListItemIcon>
+                                <Checkbox checked={formik.values.groups.indexOf(option) > -1} />
+                              </ListItemIcon>
+                              <ListItemText primary={option} />
+                            </MenuItem>
+                          )}
+                          renderInput={(params) => (
+                            <TextField {...params} label="Cerca un gruppo" />
+                          )}
+                        />
                       </Box>
                     </Paper>
                     <Box mt={3}>
@@ -189,15 +163,15 @@ const NewApiKey = () => {
                         Continua
                       </Button>
                     </Box>
-                  </form>
-                </Box>
+                  </Box>
+                </form>
               </Grid>
             </Grid>
           </Box>
         </Prompt>
       )}
 
-      {apiKeySent && <SyncFeedbackApiKey />}
+      {(apiKeySent && newApiKey !== '') && <SyncFeedbackApiKey newApiKeyId={newApiKey} />}
     </>
   );
 };
