@@ -8,10 +8,24 @@ Parameters:
   WebDomain:
     Description: "Domain for webapp"
     Type: String
+  
+  WebDomainReferenceToSite:
+    Description: true if the website must be reachable using the WebDomain
+    Type: String
+    Default: 'true'
+
+  HostedZoneId:
+    Description: "Hosted Zone Id in which you want to add record"
+    Type: String
 
   AlternateWebDomain:
     Description: "Alternate Domain name for the webapp"
     Type: String
+
+  AlternateWebDomainReferenceToSite:
+    Description: true if the website must be reachable using the AlternateWebDomain
+    Type: String
+    Default: 'true'
 
   AlternateHostedZoneId:
     Description: Hosted Zone Id in which you want to add alternate DNS
@@ -21,24 +35,43 @@ Parameters:
     Description: "ACM Web Certificate ARN"
     Type: String
 
-  HostedZoneId:
-    Description: "Hosted Zone Id in which you want to add record"
-    Type: String
-
+  
   WebApiUrl:
     Description: "The Url of web API: useful for content-security-policy"
     Type: String
 
 Conditions:
 
-  IsLanding: # Is landing site if name startsWith 'web-landing-cdn-'
+  # Is landing site if name startsWith 'web-landing-cdn-'
+  IsLanding: 
     Fn::And:
       - !Not [ !Equals [ !Ref Name, "" ]]
       - !Equals [ !Select [ 0, !Split [ web-landing-cdn-, !Ref Name ]], "" ]
   
-  CreateAlternateDNSname: !Not #If alternate domain is provided, add this domain to CloudFront
+  # If domain is used in certificate, add this domain to CloudFront
+  CreateDNSname: !Equals
+        - !Ref WebDomainReferenceToSite
+        - 'true'
+  
+  # If alternate domain is provided and is used in certificate, add this domain to CloudFront
+  CreateAlternateDNSname: 
+    Fn::And:
+      - Fn::Not: 
+        - Fn::Equals:
+          - !Ref AlternateWebDomain
+          - ""
+      - !Equals
+        - !Ref AlternateWebDomainReferenceToSite
+        - 'true'
+  
+  CreatePrimaryAliasRecord: !Not 
     - !Equals
-      - !Ref AlternateWebDomain
+      - !Ref HostedZoneId
+      - ""
+  
+  CreateAlternateAliasRecord: !Not 
+    - !Equals
+      - !Ref AlternateHostedZoneId
       - ""
 
 Resources:
@@ -75,13 +108,14 @@ Resources:
               Fn::GetAtt:
               - CloudFrontOriginAccessIdentity
               - S3CanonicalUserId
-  # - WebApp caching policy
+  
+  # - WebApp default one minute caching policy
   WebsiteCDNCachingPolicy:
     Type: AWS::CloudFront::CachePolicy
     Properties:
       CachePolicyConfig:
         Name: !Sub '${Name}-WebsiteCDNCachingPolicy'
-        Comment: 'Keep cache for one minute.' #TODO: one minute is fine for non versioned files; versioned files must live forever
+        Comment: 'Keep cache for one minute.' 
         DefaultTTL: 30
         MaxTTL: 60
         MinTTL: 10
@@ -94,6 +128,48 @@ Resources:
             HeaderBehavior: none
           QueryStringsConfig:
             QueryStringBehavior: all
+  
+  # - WebApp default one hour caching policy
+  WebsiteCDNCachingPolicyOneHour:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub '${Name}-WebsiteCDNCachingPolicyOneHour'
+        Comment: 'Keep cache for one hour.'
+        DefaultTTL: 3600 ## 1 hour
+        MaxTTL: 3600
+        MinTTL: 1
+        ParametersInCacheKeyAndForwardedToOrigin:
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+          CookiesConfig:
+            CookieBehavior: none
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: all                         
+
+  # - WebApp default five minutes caching policy
+  WebsiteCDNCachingPolicyFiveMinutes:
+    Type: AWS::CloudFront::CachePolicy
+    Properties:
+      CachePolicyConfig:
+        Name: !Sub '${Name}-WebsiteCDNCachingPolicyFiveMinutes'
+        Comment: 'Keep cache for five minutes.'
+        DefaultTTL: 300 
+        MaxTTL: 300
+        MinTTL: 1
+        ParametersInCacheKeyAndForwardedToOrigin:
+          EnableAcceptEncodingBrotli: true
+          EnableAcceptEncodingGzip: true
+          CookiesConfig:
+            CookieBehavior: none
+          HeadersConfig:
+            HeaderBehavior: none
+          QueryStringsConfig:
+            QueryStringBehavior: none  
+
+  
   # - WebApp CDN
   WebsiteCDN:
     Type: AWS::CloudFront::Distribution
@@ -101,12 +177,71 @@ Resources:
       DistributionConfig:
         Comment: CDN for S3-backed website
         Aliases:
-          - !Ref WebDomain
+          - !If
+            - CreateDNSname
+            - !Ref WebDomain
+            - !Ref "AWS::NoValue"
           - !If
             - CreateAlternateDNSname
             - !Ref AlternateWebDomain
             - !Ref "AWS::NoValue"
         Enabled: 'true'
+        CacheBehaviors:
+          - AllowedMethods:
+              - GET
+              - HEAD
+            CachedMethods:
+              - GET
+              - HEAD
+            TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+            ViewerProtocolPolicy: redirect-to-https
+            CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
+            ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+            PathPattern: index.html
+          - AllowedMethods:
+              - GET
+              - HEAD
+            CachedMethods:
+              - GET
+              - HEAD
+            TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+            ViewerProtocolPolicy: redirect-to-https
+            CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d ## CachingOptimizedForUncompressedObjects - Default TTL: 86,400 seconds (24 hours) - https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policies-list
+            ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+            PathPattern: static/*
+          - AllowedMethods:
+              - GET
+              - HEAD
+            CachedMethods:
+              - GET
+              - HEAD
+            TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+            ViewerProtocolPolicy: redirect-to-https
+            CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d ## CachingOptimizedForUncompressedObjects - Default TTL: 86,400 seconds (24 hours) - https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policies-list
+            ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+            PathPattern: oneTrust/*
+          - AllowedMethods:
+              - GET
+              - HEAD
+            CachedMethods:
+              - GET
+              - HEAD
+            TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+            ViewerProtocolPolicy: redirect-to-https
+            CachePolicyId: !Ref WebsiteCDNCachingPolicyOneHour
+            ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+            PathPattern: locales/*
+          - AllowedMethods:
+              - GET
+              - HEAD
+            CachedMethods:
+              - GET
+              - HEAD
+            TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+            ViewerProtocolPolicy: redirect-to-https
+            CachePolicyId: !Ref WebsiteCDNCachingPolicyOneHour
+            ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+            PathPattern: icons/*
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -118,6 +253,13 @@ Resources:
           ViewerProtocolPolicy: redirect-to-https
           CachePolicyId: !Ref WebsiteCDNCachingPolicy
           ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
+          FunctionAssociations:
+            Fn::If:
+              - IsLanding
+              - 
+                - EventType: viewer-request
+                  FunctionARN: !GetAtt RewriteFunction.FunctionMetadata.FunctionARN
+              - !Ref "AWS::NoValue"   
         DefaultRootObject: !If [ IsLanding, 'cittadini/index.html', 'index.html'] 
         CustomErrorResponses:
           - ErrorCode: 404
@@ -182,6 +324,7 @@ Resources:
             Override: true
 
   Route53RecordSetGroup:
+    Condition: CreatePrimaryAliasRecord
     Type: AWS::Route53::RecordSet
     Properties:
       Name: !Ref WebDomain
@@ -194,7 +337,7 @@ Resources:
 
   #Alternate domain Route53 record
   AlternateRoute53RecordSetGroup:
-    Condition: CreateAlternateDNSname
+    Condition: CreateAlternateAliasRecord
     Type: AWS::Route53::RecordSet
     Properties:
       Name: !Ref AlternateWebDomain
@@ -204,6 +347,36 @@ Resources:
         DNSName: !GetAtt WebsiteCDN.DomainName
         EvaluateTargetHealth: false
         HostedZoneId: Z2FDTNDATAQYW2
+
+  ## 
+  ## Rewrite rule based on example provided by aws at https://github.com/aws-samples/amazon-cloudfront-functions/blob/main/url-rewrite-single-page-apps/index.js
+  RewriteFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      AutoPublish: true
+      FunctionCode: |
+        function handler(event) {
+            var request = event.request;
+            var uri = request.uri;
+            
+            if( uri != '/' && uri != '' ) { // Do not override default root object
+              
+              // Check whether the URI is missing a file name.
+              if (uri.endsWith('/')) {
+                request.uri += 'index.html';
+              } 
+              // Check whether the URI is missing a file extension.
+              else if (!uri.includes('.')) {
+                request.uri += '/index.html';
+              }
+            }
+            
+            return request;
+        }
+      FunctionConfig:
+        Comment: 'Rewriting the request between a CloudFront Distribution and an origin'
+        Runtime: cloudfront-js-1.0
+      Name: !Sub "${AWS::StackName}-RewriteDefaultIndexRequest"
 
 Outputs:
 
