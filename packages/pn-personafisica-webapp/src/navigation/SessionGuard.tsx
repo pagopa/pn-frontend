@@ -70,6 +70,10 @@ const SessionGuard = () => {
 
   /**
    * Step 2 - ottenere TOS status
+   * NB: questo l'ho definito in uno step separato, per essere sicuro che nello step successivo 
+   *     l'attributo tos dello store sia settato.
+   *     Avevo fatto un'altra implementazione nella cui si prendeva il risultato del dispatch,
+   *     ma questo faceva andare alcuni tests in errore. Perciò ho adottato questa soluzione.
    */
   useEffect(() => {
     const doFetchTOSStatus = async () => {
@@ -79,7 +83,7 @@ const SessionGuard = () => {
       }
     };
     void performStep(INITIALIZATION_STEPS.FETCH_TOS_STATUS, doFetchTOSStatus);
-  }, [performStep]);
+  }, [performStep, sessionToken, isClosedSession]);
   
   /**
    * Step 3 - determinazione pagina iniziale
@@ -99,7 +103,7 @@ const SessionGuard = () => {
       }
     };
     void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
-   }, [performStep]);
+   }, [performStep, isSessionReload, sessionToken, isClosedSession, tos]);
 
   /**
    * Step 4 - lancio del sessionCheck
@@ -110,7 +114,7 @@ const SessionGuard = () => {
         sessionCheck(expDate);
       }
     });
-  }, [performStep]);
+  }, [performStep, sessionToken, isClosedSession]);
 
   /**
    * Fine processo inizializzazione

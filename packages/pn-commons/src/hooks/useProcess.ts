@@ -61,7 +61,7 @@ export function useProcess<T>(sequence: Array<T>) {
 
   const endCurrentStep = useCallback(() => {
     setCurrentSituation(currentValue => ({...currentValue, isActive: false }));
-  }, [currentSituation]);
+  }, []);
 
   const performStep = useCallback(async (step: T, action: () => Promise<void> | void) => {
     if (mustProceedToStep(step)) {

@@ -65,7 +65,7 @@ const SessionGuard = () => {
       }
     };
     void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, doUserDetermination);
-  }, [performStep, getTokenParam]);
+  }, [performStep, getTokenParam, sessionToken]);
 
   /**
    * Step 2 - determinazione pagina iniziale
@@ -79,7 +79,7 @@ const SessionGuard = () => {
       }
     };
     void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
-   }, [performStep]);
+   }, [performStep, sessionToken, isClosedSession, isSessionReload]);
 
   /**
    * Step 3 - lancio del sessionCheck
@@ -90,7 +90,7 @@ const SessionGuard = () => {
         sessionCheck(expDate);
       }
     });
-  }, [performStep]);
+  }, [performStep, sessionToken, isClosedSession]);
 
   /**
    * Fine processo inizializzazione
