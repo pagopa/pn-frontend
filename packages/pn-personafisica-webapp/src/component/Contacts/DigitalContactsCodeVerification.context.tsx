@@ -192,9 +192,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   const handleAddressUpdateError = (responseError: AppResponse) => {
     if(Array.isArray(responseError.errors)){
       const err_code = responseError.errors[0].getErrorDetail().code;
-      if (err_code === ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE ||
-          err_code === ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE
-      ) {
+      if (err_code === ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE) {
         setCodeNotValid(true);
       }
     }
@@ -203,12 +201,10 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   useEffect(() => {
     AppErrorPublisher.subscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
     AppErrorPublisher.subscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
-    AppErrorPublisher.subscribe("acceptDelegation", handleAddressUpdateError);
     
     return () => {
       AppErrorPublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
       AppErrorPublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
-      AppErrorPublisher.unsubscribe("acceptDelegation", handleAddressUpdateError);
     };
   }, []);
 
