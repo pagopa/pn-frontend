@@ -1,8 +1,8 @@
-import { ServerResponseError, ServerResponseErrorCode } from "../../../types/AppError";
+import { getLocalizedOrDefaultLabel } from "../../../services/localization.service";
+import { ServerResponseError } from "../../../types/AppError";
 import AppError from "../AppError";
 
 export class UnhandledAppError extends AppError {
-  type = ServerResponseErrorCode.UNHANDLED_ERROR;
 
   constructor(error: ServerResponseError) {
     super(error);
@@ -10,8 +10,16 @@ export class UnhandledAppError extends AppError {
 
   getMessage() {
     return {
-      title: "%UNHANDLED_ERROR_TITLE%",
-      message: "%UNHANDLED_ERROR_MESSAGE%"
+      title: getLocalizedOrDefaultLabel(
+        "common",
+        "errors.unhandled.title",
+        "Errore generico"
+      ),
+      message: getLocalizedOrDefaultLabel(
+        "common",
+        "errors.unhandled.message",
+        "Si è verificato un errore. Si prega di riprovare più tardi."
+      )
     };
   }
 }

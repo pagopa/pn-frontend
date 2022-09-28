@@ -1,17 +1,24 @@
-import { ServerResponseError, ServerResponseErrorCode } from "../../../types/AppError";
-import AppError from "../AppError";
+import { getLocalizedOrDefaultLabel } from '../../../services/localization.service';
+import { ServerResponseError } from '../../../types/AppError';
+import AppError from '../AppError';
 
 export class BadRequestAppError extends AppError {
-  type = ServerResponseErrorCode.BAD_REQUEST_ERROR;
-
   constructor(error: ServerResponseError) {
     super(error);
   }
 
   getMessage() {
     return {
-      title: "%BAD_REQUEST_ERROR_TITLE%",
-      message: "%BAD_REQUEST_ERROR_MESSAGE%"
+      title: getLocalizedOrDefaultLabel(
+        "common",
+        "errors.bad_request.title",
+        "Errore nell'invio dei dati"
+      ),
+      message: getLocalizedOrDefaultLabel(
+        "common",
+        "errors.bad_request.message",
+        "Il formato della richiesta non è valido."
+      ),
     };
   }
 }

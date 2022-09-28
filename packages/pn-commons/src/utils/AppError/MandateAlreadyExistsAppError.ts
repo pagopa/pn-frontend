@@ -1,8 +1,8 @@
-import { ServerResponseError, ServerResponseErrorCode } from "../../types/AppError";
+import { getLocalizedOrDefaultLabel } from "../../services/localization.service";
+import { ServerResponseError } from "../../types/AppError";
 import AppError from "./AppError";
 
 export class MandateAlreadyExistsAppError extends AppError {
-  type = ServerResponseErrorCode.PN_MANDATE_ALREADYEXISTS;
   
   constructor(error: ServerResponseError) {
     super(error);
@@ -10,8 +10,16 @@ export class MandateAlreadyExistsAppError extends AppError {
 
   getMessage() {
     return {
-      title: "%MANDATE_ALREADY_EXISTS_TITLE%",
-      message: "%MANDATE_ALREADY_EXISTS_MESSAGE%"
+      title: getLocalizedOrDefaultLabel(
+        "delegations",
+        "errors.already_exists.title",
+        "Errore"
+      ),
+      message: getLocalizedOrDefaultLabel(
+        "delegations",
+        "errors.already_exists.message",
+        "La persona che hai indicato ha già una delega per questo ente."
+      )
     };
   }
 }

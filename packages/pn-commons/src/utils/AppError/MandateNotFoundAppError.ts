@@ -1,8 +1,8 @@
-import { ServerResponseError, ServerResponseErrorCode } from "../../types/AppError";
+import { getLocalizedOrDefaultLabel } from "../../services/localization.service";
+import { ServerResponseError } from "../../types/AppError";
 import AppError from "./AppError";
 
 export class MandateNotFoundAppError extends AppError {
-  type = ServerResponseErrorCode.PN_MANDATE_ALREADYEXISTS;
   
   constructor(error: ServerResponseError) {
     super(error);
@@ -10,8 +10,16 @@ export class MandateNotFoundAppError extends AppError {
 
   getMessage() {
     return {
-      title: "%MANDATE_NOT_FOUND_TITLE%",
-      message: "%MANDATE_NOT_FOUND_MESSAGE%"
+      title: getLocalizedOrDefaultLabel(
+        "delegations",
+        "errors.invalid_verification_code.title",
+        "Errore"
+      ),
+      message: getLocalizedOrDefaultLabel(
+        "delegations",
+        "errors.invalid_verification_code.message",
+        "Delega non trovata."
+      )
     };
   }
 }

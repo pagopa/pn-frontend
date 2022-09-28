@@ -1,8 +1,8 @@
-import { ServerResponseError, ServerResponseErrorCode } from "../../../types/AppError";
+import { getLocalizedOrDefaultLabel } from "../../../services/localization.service";
+import { ServerResponseError } from "../../../types/AppError";
 import AppError from "../AppError";
 
 export class InternalServerAppError extends AppError {
-  type = ServerResponseErrorCode.INTERNAL_SERVER_ERROR;
 
   constructor(error: ServerResponseError) {
     super(error);
@@ -10,8 +10,16 @@ export class InternalServerAppError extends AppError {
 
   getMessage() {
     return {
-      title: "%INTERNAL_SERVER_ERROR_TITLE%",
-      message: "%INTERNAL_SERVER_ERROR_MESSAGE%"
+      title: getLocalizedOrDefaultLabel(
+        "common",
+        "errors.internal_server.title",
+        "Il servizio non è disponibile"
+      ),
+      message: getLocalizedOrDefaultLabel(
+        "common",
+        "errors.internal_server.message",
+        "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi."
+      )
     };
   }
 }

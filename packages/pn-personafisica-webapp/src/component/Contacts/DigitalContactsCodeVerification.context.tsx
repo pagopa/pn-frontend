@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
 import AppErrorPublisher from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
+import { AppResponse, ServerResponseErrorCode } from '@pagopa-pn/pn-commons/src/types/AppError';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
@@ -188,17 +189,26 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     }
   }, [props]);
   
-  const handleAddressUpdateError = () => {
-    setCodeNotValid(true);
+  const handleAddressUpdateError = (responseError: AppResponse) => {
+    if(Array.isArray(responseError.errors)){
+      const err_code = responseError.errors[0].getErrorDetail().code;
+      if (err_code === ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE ||
+          err_code === ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE
+      ) {
+        setCodeNotValid(true);
+      }
+    }
   };
   
   useEffect(() => {
     AppErrorPublisher.subscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
     AppErrorPublisher.subscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+    AppErrorPublisher.subscribe("acceptDelegation", handleAddressUpdateError);
     
     return () => {
       AppErrorPublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
       AppErrorPublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+      AppErrorPublisher.unsubscribe("acceptDelegation", handleAddressUpdateError);
     };
   }, []);
 
