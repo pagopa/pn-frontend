@@ -2,8 +2,6 @@ import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
-import RequireAuth from './RequireAuth';
-import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -33,37 +31,11 @@ function Router() {
             <Route path={routes.RECAPITI} element={<Contacts/>} />
             <Route path={routes.PROFILO} element={<Profile />} />
           </Route>
-          {/* Public routes */}
-          <Route path="/totoPublic" element={<div>Pagina pubblica</div>} />
-          {/* protected routes */}
+          {/* not found - non-logged users will see the common AccessDenied component */}
           <Route path="*" element={<RouteGuard />}>
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
-      </Routes>
-    </Suspense>
-  );
-}
-
-export function Router2() {
-  return (
-    <Suspense fallback={<LoadingPage />}>
-      <Routes>
-        <Route path="/" element={<VerifyUser />}>
-          {/* protected routes */}
-          <Route path="/" element={<RequireAuth />}>
-            <Route path={routes.TOS} element={<TermsOfService />} />
-            <Route path={routes.NOTIFICHE} element={<Notifiche />} />
-            <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
-            <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-            <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
-            <Route path={routes.DELEGHE} element={<Deleghe />} />
-            <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
-            <Route path={routes.RECAPITI} element={<Contacts/>} />
-            <Route path={routes.PROFILO} element={<Profile />} />
-          </Route>
-        </Route>
-        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

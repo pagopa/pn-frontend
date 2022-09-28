@@ -30,12 +30,7 @@ function Router() {
            * <Route path={routes.API_KEYS} element={<ApiKeys />} />
            * */}
         </Route>
-        <Route path="/toto"  element={<RouteGuard roles={[PNRole.TOTO]} />}>
-          <Route path="/toto/totito" element={<div>Toto totito</div>} />
-        </Route>
-        {/* Public route */}
-        <Route path="/public/route" element={<div>Public route</div>} />
-        {/* not found */}
+        {/* not found - non-logged users will see the common AccessDenied component */}
         <Route path="*" element={<RouteGuard roles={null} />}>
           <Route path="*" element={<NotFound />} />
         </Route>

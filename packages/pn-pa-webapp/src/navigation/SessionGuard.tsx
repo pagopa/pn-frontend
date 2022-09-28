@@ -56,10 +56,8 @@ const SessionGuard = () => {
       // si deve saltare la user determination e settare l'indicativo di session reload
       // che verrà usato nella initial page determination
       if (sessionToken) {
-        console.log("SessionGuard - session reload detected");
         setIsSessionReload(true);
       } else {
-        console.log("SessionGuard - in user determination");
         const selfCareToken = getTokenParam();
         if (selfCareToken) {
           await dispatch(exchangeToken(selfCareToken));
@@ -76,7 +74,6 @@ const SessionGuard = () => {
     const doInitalPageDetermination = async () => {
       // non si setta initial page se è un session reload
       if (sessionToken && !isClosedSession && !isSessionReload) {
-        console.log("SessionGuard - in initial page determination");
 
         navigate(getHomePage(), {replace: true});
       }
@@ -89,7 +86,6 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
-      console.log("SessionGuard - in session check launching");
       if (sessionToken && !isClosedSession) {
         sessionCheck(expDate);
       }

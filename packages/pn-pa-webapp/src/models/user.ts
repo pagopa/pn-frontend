@@ -25,5 +25,4 @@ export interface UserGroup {
 export enum PNRole {
   ADMIN = 'admin',
   OPERATOR = 'operator',
-  TOTO = 'toto',
 }

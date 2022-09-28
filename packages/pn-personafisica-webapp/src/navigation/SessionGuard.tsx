@@ -56,10 +56,8 @@ const SessionGuard = () => {
       // si deve saltare la user determination e settare l'indicativo di session reload
       // che verrà usato nella initial page determination
       if (sessionToken) {
-        console.log("SessionGuard - session reload detected");
         setIsSessionReload(true);
       } else {
-        console.log("SessionGuard - in user determination");
         const spidToken = getTokenParam();
         if (spidToken) {
           await dispatch(exchangeToken(spidToken));
@@ -76,15 +74,12 @@ const SessionGuard = () => {
     const doInitalPageDetermination = async () => {
       // l'analisi delle TOS ha senso solo se c'è un utente
       if (sessionToken && !isClosedSession) {
-        console.log("SessionGuard - in initial page determination - about to query TOS");
         const tosResult: any = await dispatch(getToSApproval());
 
         // non si setta initial page se è un session reload di un utente che ha già accettato i TOS
         const initialPage = tosResult.payload.accepted 
           ? (isSessionReload ? undefined : routes.NOTIFICHE) 
           : routes.TOS;
-        console.log("SessionGuard - in initial page determination - TOS result");
-        console.log({ tosResult, initialPage });
         if (initialPage) {
           navigate(initialPage, {replace: true});
         }
@@ -98,7 +93,6 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
-      console.log("SessionGuard - in session check launching");
       if (sessionToken && !isClosedSession) {
         sessionCheck(expDate);
       }
