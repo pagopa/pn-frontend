@@ -8,7 +8,7 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from '../../utils/costants';
-import { AppType } from "../../types/AppType";
+import { AppType } from "../../types";
 
 const localizedPagoPALink = pagoPALink();
 
