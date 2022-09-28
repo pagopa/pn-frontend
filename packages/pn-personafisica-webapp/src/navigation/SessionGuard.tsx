@@ -11,12 +11,13 @@ import * as routes from './routes.const';
 
 enum INITIALIZATION_STEPS {
   USER_DETERMINATION = "UserDetermination",
+  FETCH_TOS_STATUS = "ObtainTosStatus",
   INITIAL_PAGE_DETERMINATION = "InitialPageDetermination",
   SESSION_CHECK = "SessionCheck",
 }
 
 const INITIALIZATION_SEQUENCE = [
-  INITIALIZATION_STEPS.USER_DETERMINATION, 
+  INITIALIZATION_STEPS.USER_DETERMINATION, INITIALIZATION_STEPS.FETCH_TOS_STATUS,
   INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, INITIALIZATION_STEPS.SESSION_CHECK
 ];
 
@@ -28,7 +29,7 @@ const SessionGuard = () => {
   const location = useLocation();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken, exp: expDate  } = useAppSelector((state: RootState) => state.userState.user);
-  const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector((state: RootState) => state.userState);
+  const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession, tos } = useAppSelector((state: RootState) => state.userState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
@@ -68,16 +69,28 @@ const SessionGuard = () => {
   }, [performStep, getTokenParam]);
 
   /**
-   * Step 2 - determinazione pagina iniziale
+   * Step 2 - ottenere TOS status
+   */
+  useEffect(() => {
+    const doFetchTOSStatus = async () => {
+      // l'analisi delle TOS ha senso solo se c'è un utente
+      if (sessionToken && !isClosedSession) {
+        await dispatch(getToSApproval());
+      }
+    };
+    void performStep(INITIALIZATION_STEPS.FETCH_TOS_STATUS, doFetchTOSStatus);
+  }, [performStep]);
+  
+  /**
+   * Step 3 - determinazione pagina iniziale
    */
   useEffect(() => {
     const doInitalPageDetermination = async () => {
       // l'analisi delle TOS ha senso solo se c'è un utente
       if (sessionToken && !isClosedSession) {
-        const tosResult: any = await dispatch(getToSApproval());
 
         // non si setta initial page se è un session reload di un utente che ha già accettato i TOS
-        const initialPage = tosResult.payload.accepted 
+        const initialPage = tos
           ? (isSessionReload ? undefined : routes.NOTIFICHE) 
           : routes.TOS;
         if (initialPage) {
@@ -89,7 +102,7 @@ const SessionGuard = () => {
    }, [performStep]);
 
   /**
-   * Step 3 - lancio del sessionCheck
+   * Step 4 - lancio del sessionCheck
    */
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
