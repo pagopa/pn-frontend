@@ -16,6 +16,7 @@ import {
   ListItemText,
   Checkbox,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -35,7 +36,8 @@ const NewApiKey = () => {
   const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState.apiKey);
   const isMobile = useIsMobile();
   const groups = useAppSelector((state: RootState) => state.newApiKeyState.groups);
-
+  const { t } = useTranslation(['apikeys'], { keyPrefix: 'new-api-key' });
+  const { t: tc} = useTranslation(['common']);
   const [apiKeySent, setApiKeySent] = useState<boolean>(false);
 
   const initialValues = () => ({
@@ -44,8 +46,8 @@ const NewApiKey = () => {
   });
 
   const validationSchema = yup.object({
-    name: yup.string().required("Definire un nome per l'API Key"),
-    groups: yup.array().min(1, 'Selezionare almeno un gruppo'),
+    name: yup.string().required(t('form-error-name')),
+    groups: yup.array().min(1, t('form-error-groups')),
   });
 
   useEffect(() => {
@@ -60,6 +62,11 @@ const NewApiKey = () => {
     validationSchema,
     onSubmit: (values) => {
       if (formik.isValid) {
+        /*
+          Integrare logica di success / failure ed eventuale callback relativa.
+          Il setState setApiKeySent(true) mostra la schermata di avvenuto successo.
+        */
+
         void dispatch(saveNewApiKey({ ...values }));
         setApiKeySent(true);
       }
@@ -82,8 +89,8 @@ const NewApiKey = () => {
     <>
       {!apiKeySent && (
         <Prompt
-          title="Genera API Key"
-          message="Annullare l'operazione?"
+          title={t('page-title')}
+          message={t('cancel-prompt')}
           eventTrackingCallbackPromptOpened={() => {}} // impostare eventi tracking previsti
           eventTrackingCallbackCancel={() => {}} // impostare eventi tracking previsti
           eventTrackingCallbackConfirm={() => {}} // impostare eventi tracking previsti
@@ -94,11 +101,11 @@ const NewApiKey = () => {
                 <PnBreadcrumb
                   linkRoute={routes.API_KEYS}
                   linkLabel="API Keys"
-                  currentLocationLabel="Genera API Key"
-                  goBackLabel="indietro"
+                  currentLocationLabel={t('page-title')}
+                  goBackLabel={tc('button.indietro')}
                 />
                 <Typography variant="h4" my={3}>
-                  Genera una API Key
+                  {t('page-title')}
                 </Typography>
                 <Box
                   display={isMobile ? 'block' : 'flex'}
@@ -106,22 +113,21 @@ const NewApiKey = () => {
                   alignItems="center"
                 >
                   <Typography variant="body1" sx={{ marginBottom: 4 }}>
-                    Piattaforma Notifiche ha generato il codice della API Key. Ora, inserisci un
-                    nome identificativo e assegnala a uno o più gruppi.
+                  {t('page-description')}
                   </Typography>
                 </Box>
                 <form onSubmit={formik.handleSubmit}>
                   <Typography sx={{ marginTop: 4 }} variant="body2">
-                    * Campi obbligatori
+                    * {t('required-fields')}
                   </Typography>
                   <Box>
                     <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
                       <Typography variant="h5">Altre informazioni</Typography>
                       <Box sx={{ marginTop: '20px' }}>
-                        <Typography fontWeight="bold">Dai un nome alla tua API Key*</Typography>
+                        <Typography fontWeight="bold">{t('form-label-name')}*</Typography>
                         <TextField
                           id="name"
-                          label="Inserisci un nome"
+                          label={t('form-placeholder-name')}
                           fullWidth
                           name="name"
                           value={formik.values.name}
@@ -133,7 +139,7 @@ const NewApiKey = () => {
                           sx={{ mb: 3 }}
                         />
                         <Typography fontWeight="bold" mb={2}>
-                          Scegli i gruppi a cui assegnare l’API Key*
+                          {t('form-label-groups')}*
                         </Typography>
                         <Autocomplete
                           disableCloseOnSelect
@@ -153,14 +159,14 @@ const NewApiKey = () => {
                             </MenuItem>
                           )}
                           renderInput={(params) => (
-                            <TextField {...params} label="Cerca un gruppo" />
+                            <TextField {...params} label={t('form-placeholder-groups')} />
                           )}
                         />
                       </Box>
                     </Paper>
                     <Box mt={3}>
                       <Button variant="contained" type="submit" disabled={!formik.isValid}>
-                        Continua
+                      {t('continue-button')}
                       </Button>
                     </Box>
                   </Box>

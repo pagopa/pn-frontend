@@ -13,7 +13,7 @@
     "notifications": "Notifiche",
     "roles": "Ruoli",
     "groups": "Gruppi",
-    "api-key": "Chiavi API",
+    "api-key": "API Key",
     "aria-label": "piattaforma-notifiche navigazione principale",
     "aria-label-inner": "piattaforma-notifiche navigazione mittente"
   },

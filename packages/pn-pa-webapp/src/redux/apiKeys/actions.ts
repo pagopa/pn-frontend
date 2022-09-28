@@ -9,7 +9,7 @@
 
 import { ApiKey, ApiKeyStatus } from "@pagopa-pn/pn-commons";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
+import { ApiKeyStatusBE } from "./types";
 
 export const getApiKeys = createAsyncThunk<Array<ApiKey>>('getApiKeys', async (_param, { rejectWithValue }) => {
   try {
@@ -90,7 +90,7 @@ export const getApiKeys = createAsyncThunk<Array<ApiKey>>('getApiKeys', async (_
   }
 });
 
-export const setApiKeyBlocked = createAsyncThunk<undefined, string>('setApiKeyBlocked', async (apiKey: string, { rejectWithValue }) => {
+export const setApiKeyStatus = createAsyncThunk<undefined, ApiKeyStatusBE>('setApiKeyStatus', async (apiKey: ApiKeyStatusBE, { rejectWithValue }) => {
   /*
     Rimuovere undefined e mettere il type appropriato in base alla risposta del BE
     Rimuovere console.log anche
@@ -103,38 +103,12 @@ export const setApiKeyBlocked = createAsyncThunk<undefined, string>('setApiKeyBl
   }
 });
 
-export const setApiKeyEnabled = createAsyncThunk<undefined, string>('setApiKeyEnabled', async (apiKey: string, { rejectWithValue }) => {
+export const setApiKeyDeleted = createAsyncThunk<undefined, string>('setApiKeyDeleted', async (apiKey: string, { rejectWithValue }) => {
   /*
     Rimuovere undefined e mettere il type appropriato in base alla risposta del BE
     Rimuovere console.log anche
   */
-    console.log(apiKey);
-  try {
-    return undefined;
-  } catch(e) {
-    return rejectWithValue(e);
-  }
-});
-
-export const setApiKeyRotated = createAsyncThunk<undefined, string>('setApiKeyRotated', async (apiKey: string, { rejectWithValue }) => {
-  /*
-    Rimuovere undefined e mettere il type appropriato in base alla risposta del BE
-    Rimuovere console.log anche
-  */
-    console.log(apiKey);
-  try {
-    return undefined;
-  } catch(e) {
-    return rejectWithValue(e);
-  }
-});
-
-export const setApiKeyDeleted = createAsyncThunk<undefined, string>('deleteApiKey', async (apiKey: string, { rejectWithValue }) => {
-  /*
-    Rimuovere undefined e mettere il type appropriato in base alla risposta del BE
-    Rimuovere console.log anche
-  */
-    console.log(apiKey);
+  console.log(apiKey);
   try {
     return undefined;
   } catch(e) {

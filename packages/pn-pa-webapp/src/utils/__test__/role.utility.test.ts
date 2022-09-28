@@ -8,7 +8,7 @@ import { getHomePage, getMenuItems } from '../role.utility';
 const mockedIdOrganization = 'mocked-id';
 const BasicMenuItems: Array<SideMenuItem> = [
   { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
-  { label: 'Chiavi API', icon: VpnKey, route: routes.API_KEYS },
+  { label: 'API Key', icon: VpnKey, route: routes.API_KEYS },
 ];
 
 const SelfCareItems: Array<SideMenuItem> = [

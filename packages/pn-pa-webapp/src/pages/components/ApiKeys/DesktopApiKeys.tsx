@@ -21,11 +21,11 @@ import {
 
 type Props = {
   apiKeys: Array<ApiKey>;
-  handleViewApiKeyClick: (apiKeyId: string) => void;
-  handleRotateApiKeyClick: (apiKeyId: string) => void;
-  handleBlockApiKeyClick: (apiKeyId: string) => void;
-  handleEnableApiKeyClick: (apiKeyId: string) => void;
-  handleDeleteApiKeyClick: (apiKeyId: string) => void;
+  handleViewApiKeyClick: (apiKeyId: number) => void;
+  handleRotateApiKeyClick: (apiKeyId: number) => void;
+  handleBlockApiKeyClick: (apiKeyId: number) => void;
+  handleEnableApiKeyClick: (apiKeyId: number) => void;
+  handleDeleteApiKeyClick: (apiKeyId: number) => void;
 };
 
 const DesktopApiKeys = ({
@@ -44,7 +44,7 @@ const DesktopApiKeys = ({
   };
 
   const ApiKeyContextMenu = ({ row }: ApiKeyContextMenuProps) => {
-    const apiKeyId = row.id;
+    const apiKeyId = Number(row.id);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: MouseEvent<HTMLElement>) => {

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Typography,
@@ -10,25 +11,25 @@ import {
   Grid,
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useIsMobile, ApiKey, CopyToClipboard } from '@pagopa-pn/pn-commons';
+import { useIsMobile, ApiKey, CopyToClipboard, ApiKeyStatus } from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
+import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   getApiKeys,
-  setApiKeyBlocked,
-  setApiKeyEnabled,
-  setApiKeyRotated,
+  setApiKeyStatus,
   setApiKeyDeleted,
 } from '../redux/apiKeys/actions';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 
 const ApiKeys = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['apikeys']);
 
-  const mockApiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
+  const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
 
   const [openModal, setModal] = useState(false);
   const [viewApiKey, setViewApiKey] = useState<null | ApiKey>();
@@ -36,6 +37,7 @@ const ApiKeys = () => {
   const [enableApiKey, setEnableApiKey] = useState<null | ApiKey>();
   const [rotateApiKey, setRotateApiKey] = useState<null | ApiKey>();
   const [deleteApiKey, setDeleteApiKey] = useState<null | ApiKey>();
+
   const handleOpenModal = () => setModal(true);
   const handleCloseModal = () => {
     setModal(false);
@@ -46,27 +48,31 @@ const ApiKeys = () => {
     setDeleteApiKey(null);
   };
 
-  const handleViewApiKeyClick = (apiKeyId: string) => {
-    setViewApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
+  const handleNewApiKeyClick = () => {
+    navigate(routes.NUOVA_API_KEY);
+  };
+
+  const handleViewApiKeyClick = (apiKeyId: number) => {
+    setViewApiKey(apiKeys[apiKeyId]);
     handleOpenModal();
   };
 
-  const handleRotateApiKeyClick = (apiKeyId: string) => {
-    setRotateApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
+  const handleRotateApiKeyClick = (apiKeyId: number) => {
+    setRotateApiKey(apiKeys[apiKeyId]);
     handleOpenModal();
   };
 
-  const handleBlockApiKeyClick = (apiKeyId: string) => {
-    setBlockApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
+  const handleBlockApiKeyClick = (apiKeyId: number) => {
+    setBlockApiKey(apiKeys[apiKeyId]);
     handleOpenModal();
   };
-  const handleEnableApiKeyClick = (apiKeyId: string) => {
-    setEnableApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
+  const handleEnableApiKeyClick = (apiKeyId: number) => {
+    setEnableApiKey(apiKeys[apiKeyId]);
     handleOpenModal();
   };
 
-  const handleDeleteApiKeyClick = (apiKeyId: string) => {
-    setDeleteApiKey(mockApiKeys[parseInt(apiKeyId, 10)]);
+  const handleDeleteApiKeyClick = (apiKeyId: number) => {
+    setDeleteApiKey(apiKeys[apiKeyId]);
     handleOpenModal();
   };
 
@@ -76,21 +82,25 @@ const ApiKeys = () => {
 
   const apiKeyBlocked = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyBlocked(apiKeyId));
+    // Integrare logica di success / failure e eventuale callback relativa (aggiornamento tabella per esempio)
+    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeyStatus.BLOCKED }));
   };
 
   const apiKeyEnabled = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyEnabled(apiKeyId));
+    // Integrare logica di success / failure e eventuale callback relativa (aggiornamento tabella per esempio)
+    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeyStatus.ENABLED }));
   };
 
   const apiKeyRotated = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyRotated(apiKeyId));
+    // Integrare logica di success / failure e eventuale callback relativa (aggiornamento tabella per esempio)
+    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeyStatus.ROTATED }));
   };
 
   const apiKeyDeleted = (apiKeyId: string) => {
     handleCloseModal();
+    // Integrare logica di success / failure e eventuale callback relativa (aggiornamento tabella per esempio)
     void dispatch(setApiKeyDeleted(apiKeyId));
   };
 
@@ -112,13 +122,17 @@ const ApiKeys = () => {
         <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
           {t('generated-api-keys')}
         </Typography>
-        <Button variant="outlined" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+        <Button
+          variant="outlined"
+          sx={{ marginBottom: isMobile ? 3 : undefined }}
+          onClick={handleNewApiKeyClick}
+        >
           <Add />
           {t('new-api-key-button')}
         </Button>
       </Box>
       <DesktopApiKeys
-        apiKeys={mockApiKeys}
+        apiKeys={apiKeys}
         handleEnableApiKeyClick={handleEnableApiKeyClick}
         handleViewApiKeyClick={handleViewApiKeyClick}
         handleRotateApiKeyClick={handleRotateApiKeyClick}
@@ -175,7 +189,7 @@ const ApiKeys = () => {
               <Typography variant="body1" sx={{ marginBottom: 3 }}>
                 <Trans i18nKey="block-warning1" values={{ apiKeyName: blockApiKey.name }}>
                   {t('block-warning1', { apiKeyName: blockApiKey.name })}
-                  </Trans>
+                </Trans>
               </Typography>
               <Typography>{t('block-warning2')}</Typography>
               <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
