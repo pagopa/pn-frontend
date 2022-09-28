@@ -6,7 +6,7 @@ import { exchangeToken, getToSApproval, logout } from "../redux/auth/actions";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { DISABLE_INACTIVITY_HANDLER } from "../utils/constants";
-import { goToLogin } from "./navigation.utility";
+import { goToLoginPortal } from "./navigation.utility";
 import * as routes from './routes.const';
 
 enum INITIALIZATION_STEPS {
@@ -75,7 +75,7 @@ const SessionGuard = () => {
   useEffect(() => {
     const doInitalPageDetermination = async () => {
       // l'analisi delle TOS ha senso solo se c'è un utente
-      if (sessionToken) {
+      if (sessionToken && !isClosedSession) {
         console.log("SessionGuard - in initial page determination - about to query TOS");
         const tosResult: any = await dispatch(getToSApproval());
 
@@ -99,7 +99,7 @@ const SessionGuard = () => {
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
       console.log("SessionGuard - in session check launching");
-      if (sessionToken) {
+      if (sessionToken && !isClosedSession) {
         sessionCheck(expDate);
       }
     });
@@ -127,7 +127,7 @@ const SessionGuard = () => {
           open
           title={goodbyeMessage.title}
           message={goodbyeMessage.message}
-          handleClose={() => goToLogin(window.location.href)}
+          handleClose={() => goToLoginPortal(window.location.href)}
           initTimeout
         />
       : isAnonymousUser || DISABLE_INACTIVITY_HANDLER 

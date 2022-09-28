@@ -74,15 +74,11 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     const doInitalPageDetermination = async () => {
-      // l'analisi delle TOS ha senso solo se c'è un utente
-      if (sessionToken) {
+      // non si setta initial page se è un session reload
+      if (sessionToken && !isClosedSession && !isSessionReload) {
         console.log("SessionGuard - in initial page determination");
 
-        // non si setta initial page se è un session reload
-        const initialPage = isSessionReload ? undefined : getHomePage();
-        if (initialPage) {
-          navigate(initialPage, {replace: true});
-        }
+        navigate(getHomePage(), {replace: true});
       }
     };
     void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
@@ -94,7 +90,7 @@ const SessionGuard = () => {
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
       console.log("SessionGuard - in session check launching");
-      if (sessionToken) {
+      if (sessionToken && !isClosedSession) {
         sessionCheck(expDate);
       }
     });
