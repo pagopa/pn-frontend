@@ -1,4 +1,4 @@
-import { ServerResponseErrorCode } from "../../../types/AppError";
+import { ServerResponseErrorCode } from "../../../types/AppResponse";
 import AppError from "../AppError";
 import { BadRequestAppError } from "./BadRequestError";
 import { ForbiddenAppError } from "./ForbiddenAppError";
@@ -8,7 +8,7 @@ import { UnauthorizedAppError } from "./UnauthorizedAppError";
 import { UnhandledAppError } from "./UnhandledAppError";
 
 class GenericAppErrorFactory {
-  static create(status: number): AppError {
+  static create(status: number | string): AppError {
     // switch (error.status) {
     switch (status) {
       case 400 || "400":

@@ -1,4 +1,4 @@
-import { ServerResponseError, ServerResponseErrorCode } from "../../types/AppError";
+import { ServerResponseError, ServerResponseErrorCode } from "../../types/AppResponse";
 import AppError from "./AppError";
 import { UnknownAppError } from "./UnknownAppError";
 import { MandateAlreadyExistsAppError } from "./MandateAlreadyExistsAppError";
@@ -6,9 +6,13 @@ import { MandateDelegateHimselfAppError } from "./MandateDelegateHimselfAppError
 import { MandateInvalidVerificationCodeAppError } from "./MandateInvalidVerificationCodeAppError";
 import { MandateNotAcceptableAppError } from "./MandateNotAcceptableAppError";
 import { MandateNotFoundAppError } from "./MandateNotFoundAppError";
+import GenericAppErrorFactory from "./GenericAppError/GenericAppErrorFactory";
 
 class AppErrorFactory {
-  static create(error: ServerResponseError): AppError {
+  static create(error: ServerResponseError | string | number): AppError {
+    if(typeof error !== 'object') {
+      return GenericAppErrorFactory.create(error);
+    }
     switch (error.code) {
       case ServerResponseErrorCode.PN_MANDATE_NOTFOUND:
         return new MandateNotFoundAppError(error);

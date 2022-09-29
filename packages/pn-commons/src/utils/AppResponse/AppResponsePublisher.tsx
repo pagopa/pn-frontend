@@ -1,7 +1,8 @@
 /* eslint-disable functional/immutable-data */
-import { AppResponse } from "../../types/AppError";
 import { useSelector } from 'react-redux';
 import { useEffect } from "react";
+
+import { AppResponse } from "../../types/AppResponse";
 
 type CallBackFunction = (err: AppResponse) => void;
 
@@ -15,16 +16,16 @@ type EventsList = {
  * - fallback subscribers register to be notified if there's no
  *   subscribers for the particular event to be published
  */
-class AppErrorPublisher {
-  private static instance: AppErrorPublisher;
+class AppResponsePublisher {
+  private static instance: AppResponsePublisher;
   private regularQueue: EventsList = {};
   private fallbackQueue: Array<CallBackFunction> = [];
   
   constructor () {
-    if (!AppErrorPublisher.instance) {
-      AppErrorPublisher.instance = this;
+    if (!AppResponsePublisher.instance) {
+      AppResponsePublisher.instance = this;
     }
-    return AppErrorPublisher.instance;
+    return AppResponsePublisher.instance;
   }
   /**
    * simulate overloading allowing two possible usage:
@@ -93,7 +94,7 @@ class AppErrorPublisher {
   }
 }
 
-const instance = new AppErrorPublisher();
+const instance = new AppResponsePublisher();
 
 export const ResponsePublisher = () => {
   const responseEvent = useSelector((state: any) => state.appState.responseEvent);

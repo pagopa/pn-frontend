@@ -36,6 +36,8 @@ import {
   useIsMobile,
   PnBreadcrumb,
   CustomDropdown,
+  // AppResponse,
+  // AppResponsePublisher,
 } from '@pagopa-pn/pn-commons';
 import { dataRegex } from '@pagopa-pn/pn-commons/src/utils/string.utility';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -150,9 +152,9 @@ const NuovaDelega = () => {
   // };
   
   // useEffect(() => {
-  //   AppErrorPublisher.subscribe("createDelegation", testPublishMessage);
+  //   AppResponsePublisher.subscribe("createDelegation", testPublishMessage);
     
-  //   return () => AppErrorPublisher.unsubscribe("createDelegation", testPublishMessage);
+  //   return () => AppResponsePublisher.unsubscribe("createDelegation", testPublishMessage);
   // }, []);
 
   useEffect(() => {

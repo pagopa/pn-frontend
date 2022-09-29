@@ -1,11 +1,17 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { Box } from '@mui/material';
+
+import { ProductSwitchItem } from '@pagopa/mui-italia';
+
+import { ResponsePublisher } from '@pagopa-pn/pn-commons/src/utils/AppResponse/AppResponsePublisher';
 import {
   AppMessage,
   appStateActions,
@@ -18,10 +24,7 @@ import {
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { ProductSwitchItem } from '@pagopa/mui-italia';
-import { Box } from '@mui/material';
 
-import { ResponsePublisher } from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { getToSApproval, logout } from './redux/auth/actions';

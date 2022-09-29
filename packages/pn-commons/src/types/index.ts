@@ -41,6 +41,7 @@ import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
 import { BasicUser, basicNoLoggedUserData } from './User';
 import { EventsType } from "./MixpanelEvents";
+import { AppResponse, ServerResponse,ServerResponseData, ServerResponseError, ErrorMessage } from './AppResponse';
 
 export {
     basicNoLoggedUserData,
@@ -88,4 +89,9 @@ export type {
     SendPaperDetails,
     SideMenuItem,
     Sort,
+    AppResponse,
+    ServerResponse,
+    ServerResponseData,
+    ServerResponseError,
+    ErrorMessage
 };

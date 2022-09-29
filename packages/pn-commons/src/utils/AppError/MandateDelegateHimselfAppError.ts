@@ -1,5 +1,5 @@
 import { getLocalizedOrDefaultLabel } from "../../services/localization.service";
-import { ServerResponseError } from "../../types/AppError";
+import { ServerResponseError } from "../../types/AppResponse";
 import AppError from "./AppError";
 
 export class MandateDelegateHimselfAppError extends AppError {

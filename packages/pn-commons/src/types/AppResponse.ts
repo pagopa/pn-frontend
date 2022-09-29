@@ -1,12 +1,12 @@
-import AppError from "../utils/AppError/AppError";
+import { AppError } from "../utils/AppError";
 
 export interface ServerResponse {
-  status: number;
+  status: number | string;
   data?: ServerResponseData;
 }
 
 export interface ServerResponseData {
-  status: number;
+  status: number | string;
   // title?: string;
   // detail?: string;
   traceId?: string;
@@ -21,7 +21,8 @@ export interface ServerResponseError {
 }
 
 export interface AppResponse {
-  status: number;
+  action: string;
+  status: number | string;
   traceId?: string;
   timestamp?: string;
   errors?: Array<AppError>;

@@ -2,9 +2,8 @@ import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { createAppError, createAppMessage } from '../../services/message.service';
 import { createAppMessage } from '../../services/message.service';
 import { IAppMessage } from '../../types';
-import { AppResponse } from '../../types/AppError';
-// import AppErrorPublisher from '../../utils/AppError/AppErrorPublisher';
-import createAppResponse from '../../utils/AppError/AppResponse';
+import { AppResponse } from '../../types/AppResponse';
+import { createAppResponseError, createAppResponseSuccess } from '../../utils/AppResponse/AppResponse';
 
 export interface AppStateState {
   loading: {
@@ -17,7 +16,7 @@ export interface AppStateState {
   };
   responseEvent: {
     name: string;
-    response: AppResponse
+    response: AppResponse;
    } | null;
 }
 
@@ -86,6 +85,11 @@ export const appStateSlice = createSlice({
         state.loading.result = false;
         const actionBeingFulfilled = action.type.slice(0, action.type.indexOf("/"));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
+
+        const response = createAppResponseSuccess(actionBeingFulfilled, action.payload.response);
+        console.log("[AppSlice]");
+        console.log(action.payload.response);
+        state.responseEvent = { name: actionBeingFulfilled, response };
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
@@ -93,7 +97,9 @@ export const appStateSlice = createSlice({
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         
         // create AppResponseError object
-        const response = createAppResponse(action.payload.response);
+        const response = createAppResponseError(actionBeingRejected, action.payload.response);
+        console.log("[AppSlice]");
+        console.log(action.payload.response);
         state.responseEvent = { name: actionBeingRejected, response };
         
         // const error = createAppError(

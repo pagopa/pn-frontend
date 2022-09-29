@@ -1,5 +1,6 @@
 import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+
 import _ from 'lodash';
 import {
   Box,
@@ -11,9 +12,8 @@ import {
   DialogTitle,
   Typography
 } from '@mui/material';
-import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
-import AppErrorPublisher from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
-import { AppResponse, ServerResponseErrorCode } from '@pagopa-pn/pn-commons/src/types/AppError';
+
+import { appStateActions, CodeModal, AppResponsePublisher,  AppResponse, ServerResponseErrorCode } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
@@ -199,12 +199,12 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   };
   
   useEffect(() => {
-    AppErrorPublisher.subscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
-    AppErrorPublisher.subscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+    AppResponsePublisher.subscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
+    AppResponsePublisher.subscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
     
     return () => {
-      AppErrorPublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
-      AppErrorPublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+      AppResponsePublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+      AppResponsePublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
     };
   }, []);
 
