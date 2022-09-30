@@ -207,6 +207,8 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
     validationSchema,
     validateOnMount: true,
     onSubmit: async (values) => {
+      console.log("PaymentMethods - dentro il onSubmit");
+      console.log({ isCompleted });
       if (isCompleted) {
         onConfirm();
         return;

@@ -21,6 +21,11 @@ import {
   GET_USER_GROUPS,
 } from './notifications.routes';
 
+
+/* eslint-disable-next-line functional/no-let */
+let callCounter = 0;
+
+
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };
@@ -37,6 +42,10 @@ export const NotificationsApi = {
    */
   getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
     apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
+      callCounter++;
+      if (callCounter % 3 === 0) {
+        return Promise.reject({ response: { status: 500 }});
+      }
       if (response.data && response.data.resultsPage) {
         const notifications = response.data.resultsPage.map((d) => ({
           ...d,
