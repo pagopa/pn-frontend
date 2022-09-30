@@ -1,13 +1,9 @@
-import { Fragment, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { appStateActions } from '../redux';
+import { Fragment, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { AppResponsePublisher } from '../utils/AppResponse';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { appStateActions, appStateSelectors } from '../redux';
+import { appStateActions, appStateSelectors } from '../redux';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import { IAppMessage, MessageType } from '../types';
-import { AppResponse } from '../types/AppResponse';
 import SessionModal from './SessionModal';
 import Toast from './Toast/Toast';
 
@@ -17,34 +13,12 @@ type Props = {
 
 const AppMessage = ({ sessionRedirect }: Props) => {
   const dispatch = useDispatch();
-  // const errors = useSelector(appStateSelectors.selectErrors);
-  const [errors, setErrors] = useState<Array<IAppMessage>>([]);
-  // const success = useSelector(appStateSelectors.selectSuccess);
-  const success: Array<IAppMessage> = [];
+  const errors = useSelector(appStateSelectors.selectErrors);
+  const success = useSelector(appStateSelectors.selectSuccess);
   const [open, setOpen] = useState(true);
 
-  const testPublishMessage = (response: AppResponse) => {
-    const errors = response.errors || [];
-    const appMessages = errors.map(error => ({
-      id: "a",
-      blocking: false,
-      message: error.getMessage().message,
-      title: error.getMessage().title,
-      toNotify: true,
-      alreadyShown: false
-    }));
-    setErrors(appMessages);
-  };
-
-  useEffect(() => {
-    AppResponsePublisher.subscribe(testPublishMessage);
-    
-    return () => AppResponsePublisher.unsubscribe(testPublishMessage);
-  }, []);
-
   const onCloseErrorToast = (id: string) => {
-    // dispatch(appStateActions.removeError(id));
-    dispatch(appStateActions.setErrorAsAlreadyShown(id));
+    dispatch(appStateActions.removeError(id));
   };
 
   const onCloseSuccessToast = (id: string) => {
@@ -58,7 +32,7 @@ const AppMessage = ({ sessionRedirect }: Props) => {
 
   return (
     <Fragment>
-      {errors.filter((errorMessage: IAppMessage) => !errorMessage.alreadyShown).map((errorMessage: IAppMessage) =>
+      {errors.map((errorMessage: IAppMessage) =>
         errorMessage.status === 403 ? (
           <SessionModal
             open={open}
