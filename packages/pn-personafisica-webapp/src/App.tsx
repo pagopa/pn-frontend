@@ -14,6 +14,7 @@ import { ProductSwitchItem } from '@pagopa/mui-italia';
 import { ResponsePublisher } from '@pagopa-pn/pn-commons/src/utils/AppResponse/AppResponsePublisher';
 import {
   AppMessage,
+  AppResponseMessage,
   appStateActions,
   initLocalization,
   Layout,
@@ -240,6 +241,7 @@ const App = () => {
         onAssistanceClick={handleAssistanceClick}
       >
         <AppMessage sessionRedirect={async () => await dispatch(logout())} />
+        <AppResponseMessage />
         <LoadingOverlay />
         <Router />
       </Layout>

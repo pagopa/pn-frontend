@@ -2,33 +2,37 @@ import { AppResponse, ServerResponse } from '../../types';
 import { AppErrorFactory } from '../AppError';
 
 export const createAppResponseError = (action: string, response: ServerResponse): AppResponse => {
-  const data = response?.data;
+  const { data, status } = response;
 
-  if(!data){
-    return {
-      action,
-      status: response?.status || 0
-    };
+  if(data) {
+    const { traceId, timestamp, errors: serverErrors } = data;
+
+    const retVal = { action, status, traceId, timestamp };
+    
+    if(Array.isArray(data.errors)) {
+  
+      const errors = serverErrors?.map((error) => AppErrorFactory.create(error));
+  
+      return { ...retVal, errors };
+    } else {
+      const errors = status ? [AppErrorFactory.create(status)] : undefined;
+  
+      return { ...retVal, errors };
+    }
+  } else {
+    const errors = status ? [AppErrorFactory.create(status)] : undefined;
+  
+    return { action, errors };
   }
-
-  const { traceId, timestamp } = data;
-  const resErrors = Array.isArray(data.errors) ? data.errors : [response.status];
-
-  const errors = resErrors.map((error) => AppErrorFactory.create(error));
-
-  return {
-    action,
-    status: response.status,
-    traceId,
-    timestamp,
-    errors,
-  };
 };
 
 export const createAppResponseSuccess = (action: string, response: ServerResponse): AppResponse => {
-  const status = response?.status;
-  return {
-    action,
-    status: status || 0
-  };
+  if(response) {
+    const { status } = response;
+    return {
+      action,
+      status
+    };
+  }
+  return { action };
 };

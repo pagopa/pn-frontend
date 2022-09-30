@@ -2,7 +2,7 @@ import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import { createAppError, createAppMessage } from '../../services/message.service';
 import { createAppMessage } from '../../services/message.service';
 import { IAppMessage } from '../../types';
-import { AppResponse } from '../../types/AppResponse';
+import { AppResponse, AppResponseOutcome } from '../../types/AppResponse';
 import { createAppResponseError, createAppResponseSuccess } from '../../utils/AppResponse/AppResponse';
 
 export interface AppStateState {
@@ -15,6 +15,7 @@ export interface AppStateState {
     success: Array<IAppMessage>;
   };
   responseEvent: {
+    outcome: AppResponseOutcome;
     name: string;
     response: AppResponse;
    } | null;
@@ -47,6 +48,17 @@ export const appStateSlice = createSlice({
   name: 'appState',
   initialState,
   reducers: {
+    addError(
+      state,
+      action: PayloadAction<{ title: string; message: string; status?: number }>
+    ) {
+      const message = createAppMessage(
+        action.payload.title,
+        action.payload.message,
+        action.payload.status
+      );
+      state.messages.errors.push(message);
+    },
     removeError(state, action: PayloadAction<string>) {
       state.messages.errors = state.messages.errors.filter((e) => e.id !== action.payload);
     },
@@ -86,10 +98,8 @@ export const appStateSlice = createSlice({
         const actionBeingFulfilled = action.type.slice(0, action.type.indexOf("/"));
         state.messages.errors = doRemoveErrorsByAction(actionBeingFulfilled, state.messages.errors);
 
-        const response = createAppResponseSuccess(actionBeingFulfilled, action.payload.response);
-        console.log("[AppSlice]");
-        console.log(action.payload.response);
-        state.responseEvent = { name: actionBeingFulfilled, response };
+        const response = createAppResponseSuccess(actionBeingFulfilled, action.payload?.response);
+        state.responseEvent = { outcome: 'success', name: actionBeingFulfilled, response };
       })
       .addMatcher(handleError, (state, action) => {
         state.loading.result = false;
@@ -98,10 +108,9 @@ export const appStateSlice = createSlice({
         
         // create AppResponseError object
         const response = createAppResponseError(actionBeingRejected, action.payload.response);
-        console.log("[AppSlice]");
-        console.log(action.payload.response);
-        state.responseEvent = { name: actionBeingRejected, response };
+        state.responseEvent = { outcome: 'error', name: actionBeingRejected, response };
         
+        // commented out to test the new pub/sub mechanism
         // const error = createAppError(
         //   { ...action.payload, action: actionBeingRejected }, { show: !action.payload.blockNotification });
         // state.messages.errors.push(error);

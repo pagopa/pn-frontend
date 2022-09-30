@@ -199,12 +199,12 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   };
   
   useEffect(() => {
-    AppResponsePublisher.subscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
-    AppResponsePublisher.subscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+    AppResponsePublisher.error.subscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
+    AppResponsePublisher.error.subscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
     
     return () => {
-      AppResponsePublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
-      AppResponsePublisher.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+      AppResponsePublisher.error.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+      AppResponsePublisher.error.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
     };
   }, []);
 

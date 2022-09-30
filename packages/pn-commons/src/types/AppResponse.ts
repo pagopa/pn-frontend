@@ -1,12 +1,16 @@
 import { AppError } from "../utils/AppError";
 
+export type HTTPStatusCode = number | string;
+
+export type AppResponseOutcome = 'success' | 'error';
+
 export interface ServerResponse {
-  status: number | string;
+  status?: HTTPStatusCode;
   data?: ServerResponseData;
 }
 
 export interface ServerResponseData {
-  status: number | string;
+  status?: HTTPStatusCode;
   // title?: string;
   // detail?: string;
   traceId?: string;
@@ -22,7 +26,7 @@ export interface ServerResponseError {
 
 export interface AppResponse {
   action: string;
-  status: number | string;
+  status?: HTTPStatusCode;
   traceId?: string;
   timestamp?: string;
   errors?: Array<AppError>;

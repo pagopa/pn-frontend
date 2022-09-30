@@ -2,7 +2,7 @@
 import { useSelector } from 'react-redux';
 import { useEffect } from "react";
 
-import { AppResponse } from "../../types/AppResponse";
+import { AppResponse, AppResponseOutcome } from "../../types/AppResponse";
 
 type CallBackFunction = (err: AppResponse) => void;
 
@@ -17,23 +17,32 @@ type EventsList = {
  *   subscribers for the particular event to be published
  */
 class AppResponsePublisher {
-  private static instance: AppResponsePublisher;
+  private static instance: {
+    success: AppResponsePublisher | undefined;
+    error: AppResponsePublisher | undefined;
+  };
   private regularQueue: EventsList = {};
   private fallbackQueue: Array<CallBackFunction> = [];
   
-  constructor () {
-    if (!AppResponsePublisher.instance) {
-      AppResponsePublisher.instance = this;
+  constructor (type: AppResponseOutcome) {
+    if(!AppResponsePublisher.instance) {
+      AppResponsePublisher.instance = {
+        success: undefined,
+        error: undefined
+      };
     }
-    return AppResponsePublisher.instance;
+    if (!AppResponsePublisher.instance[type]) {
+      AppResponsePublisher.instance[type] = this;
+    }
+    return AppResponsePublisher.instance[type] || this;
   }
   /**
    * simulate overloading allowing two possible usage:
-   * - subscribe('eventName', func) to register a regular subscriber
+   * - subscribe(eventName, func) to register a regular subscriber
    * - subscribe(func): to register a fallback subscriber
    */
   subscribe (a: string | CallBackFunction, b: CallBackFunction | null = null) {
-    if( typeof a === 'string' && b){
+    if(typeof a === 'string' && b){
       this.regularSubscribe(a, b);
     } else if ( typeof a === 'function') {
       this.fallbackSubscribe(a);
@@ -47,7 +56,7 @@ class AppResponsePublisher {
    * same as subscribe()
    */
   unsubscribe(a: string | CallBackFunction, b: CallBackFunction | null = null) {
-    if( typeof a === 'string' && b){
+    if(typeof a === 'string' && b){
       this.regularUnsubscribe(a, b);
     } else if ( typeof a === 'function') {
       this.fallbackUnsubscribe(a);
@@ -94,14 +103,19 @@ class AppResponsePublisher {
   }
 }
 
-const instance = new AppResponsePublisher();
+const success = new AppResponsePublisher('success');
+const error = new AppResponsePublisher('error');
 
 export const ResponsePublisher = () => {
   const responseEvent = useSelector((state: any) => state.appState.responseEvent);
 
   useEffect(() => {
     if(responseEvent) {
-      instance.publish(responseEvent.name, responseEvent.response);
+      if(responseEvent.outcome === 'success') {
+        success.publish(responseEvent.name, responseEvent.response);
+      } else {
+        error.publish(responseEvent.name, responseEvent.response);
+      }
       // TODO: dispatch the action to reset the store (state.appState.responseEvent = null)
     }
 
@@ -110,4 +124,7 @@ export const ResponsePublisher = () => {
   return <></>;
 };
 
-export default instance;
+export default {
+  success,
+  error
+};
