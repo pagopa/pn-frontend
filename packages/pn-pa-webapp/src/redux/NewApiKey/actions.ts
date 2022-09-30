@@ -7,7 +7,9 @@
   Rimuovere tutti i commenti eslint quando pronto.
 */
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { NewApiKeyType, ApiKeysGroupType } from "./types";
+import { ApiKeysApi } from "../../api/apiKeys/ApiKeys.api";
+import { UserGroup, GroupStatus } from "../../models/user";
+import { NewApiKeyType } from "./types";
 
 export const saveNewApiKey = createAsyncThunk<string, NewApiKeyType>('saveNewApiKey', async (param: NewApiKeyType, { rejectWithValue }) => {
   try {
@@ -18,15 +20,13 @@ export const saveNewApiKey = createAsyncThunk<string, NewApiKeyType>('saveNewApi
   }
 });
 
-export const getApiKeyGroups = createAsyncThunk<Array<ApiKeysGroupType>>('getApiKeyGroups', async (_param: any, { rejectWithValue }) => {
-  try {
-    return [
-      { id: 1, title: 'Gruppo 1' },
-      { id: 2, title: 'Gruppo 2' },
-      { id: 3, title: 'Gruppo 3' },
-      { id: 4, title: 'Gruppo 4' },
-    ];
-  } catch(e) {
-    return rejectWithValue(e);
+export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
+  'getUserGroups',
+  async (status: GroupStatus | undefined, { rejectWithValue }) => {
+    try {
+      return await ApiKeysApi.getUserGroups(status);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
   }
-});
+);

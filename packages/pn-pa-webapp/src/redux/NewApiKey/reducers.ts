@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { saveNewApiKey, getApiKeyGroups } from './actions';
-import { ApiKeysGroupType } from "./types";
+import { UserGroup } from '../../models/user';
+import { saveNewApiKey, getUserGroups } from './actions';
 
 const initialState = {
   loading: false,
   apiKey: '',
-  groups: [] as Array<ApiKeysGroupType>,
+  groups: [] as Array<UserGroup>,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -19,7 +19,7 @@ const NewApiKeySlice = createSlice({
     builder.addCase(saveNewApiKey.fulfilled, (state, action) => {
       state.apiKey = action.payload;
     });
-    builder.addCase(getApiKeyGroups.fulfilled, (state, action) => {
+    builder.addCase(getUserGroups.fulfilled, (state, action) => {
       state.groups = action.payload;
     });
   }

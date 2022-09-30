@@ -193,9 +193,9 @@ const DesktopApiKeys = ({
     },
   ];
 
-  const rows: Array<Item> = apiKeys.map((n: ApiKey, i: number) => ({
+  const rows: Array<Item> = apiKeys.map((n: ApiKey) => ({
     ...n,
-    id: i.toString(),
+    id: n.apiKey
   }));
 
   return (
@@ -203,7 +203,10 @@ const DesktopApiKeys = ({
       {apiKeys && (
         <Fragment>
           {apiKeys.length > 0 ? (
+            <>
+            {JSON.stringify(rows)}
             <ItemsTable columns={columns} rows={rows} />
+            </>
           ) : (
             <EmptyState
               emptyMessage={t('empty-message')}

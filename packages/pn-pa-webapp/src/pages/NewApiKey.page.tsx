@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getApiKeyGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
+import { getUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
 const useStyles = makeStyles(() => ({
@@ -52,7 +52,7 @@ const NewApiKey = () => {
 
   useEffect(() => {
     if (groups.length === 0) {
-      void dispatch(getApiKeyGroups());
+      void dispatch(getUserGroups());
     }
   }, []);
   
@@ -145,7 +145,7 @@ const NewApiKey = () => {
                           disableCloseOnSelect
                           multiple
                           value={formik.values.groups}
-                          options={groups.map((g) => g.title)}
+                          options={groups.map((g) => g.name)}
                           id="groups"
                           getOptionLabel={(option) => option}
                           isOptionEqualToValue={(option: any, value: any) => option === value}
