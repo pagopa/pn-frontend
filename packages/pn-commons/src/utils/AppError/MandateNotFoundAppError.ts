@@ -12,12 +12,12 @@ export class MandateNotFoundAppError extends AppError {
     return {
       title: getLocalizedOrDefaultLabel(
         "delegations",
-        "errors.invalid_verification_code.title",
+        "errors.not_found.title",
         "Errore"
       ),
       message: getLocalizedOrDefaultLabel(
         "delegations",
-        "errors.invalid_verification_code.message",
+        "errors.not_found.message",
         "Delega non trovata."
       )
     };

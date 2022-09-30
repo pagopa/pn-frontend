@@ -12,12 +12,12 @@ export class MandateNotAcceptableAppError extends AppError {
     return {
       title: getLocalizedOrDefaultLabel(
         "delegations",
-        "errors.invalid_verification_code.title",
+        "errors.not_acceptable.title",
         "Errore"
       ),
       message: getLocalizedOrDefaultLabel(
         "delegations",
-        "errors.invalid_verification_code.message",
+        "errors.not_acceptable.message",
         "Delega non inseribile."
       )
     };

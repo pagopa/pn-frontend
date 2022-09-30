@@ -1,5 +1,5 @@
-// import AppErrorPublisher from '@pagopa-pn/pn-commons/src/utils/AppError/AppErrorPublisher';
-// import { AppResponse } from '@pagopa-pn/pn-commons/src/types/AppError';
+
+
 import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect, useState } from 'react';
@@ -152,9 +152,9 @@ const NuovaDelega = () => {
   // };
   
   // useEffect(() => {
-  //   AppResponsePublisher.subscribe("createDelegation", testPublishMessage);
+  //   AppResponsePublisher.error.subscribe("createDelegation", testPublishMessage);
     
-  //   return () => AppResponsePublisher.unsubscribe("createDelegation", testPublishMessage);
+  //   return () => AppResponsePublisher.error.unsubscribe("createDelegation", testPublishMessage);
   // }, []);
 
   useEffect(() => {
