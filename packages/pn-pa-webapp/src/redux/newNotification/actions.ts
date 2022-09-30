@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { performThunkAction } from '@pagopa-pn/pn-commons';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import {
@@ -12,15 +13,12 @@ import { GroupStatus, UserGroup } from '../../models/user';
 import { newNotificationMapper } from '../../utils/notification.utility';
 import { UploadDocumentParams, UploadDocumentsResponse } from './types';
 
+export enum NEW_NOTIFICATION_ACTIONS {
+  GET_USER_GROUPS = 'getUserGroups'
+}
 export const getUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
-  'getUserGroups',
-  async (status: GroupStatus | undefined, { rejectWithValue }) => {
-    try {
-      return await NotificationsApi.getUserGroups(status);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS,
+  performThunkAction((status: GroupStatus | undefined) => NotificationsApi.getUserGroups(status))
 );
 
 const createPayloadToUpload = (item: NewNotificationDocument): UploadDocumentParams => ({

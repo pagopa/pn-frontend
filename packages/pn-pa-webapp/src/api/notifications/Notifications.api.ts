@@ -70,6 +70,10 @@ export const NotificationsApi = {
    */
   getSentNotification: (iun: string): Promise<NotificationDetail> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
+      callCounter++;
+      if (callCounter % 5 === 0) {
+        return Promise.reject({ response: { status: 500 } });
+      }
       if (response.data) {
         return parseNotificationDetail(response.data);
       }
@@ -104,7 +108,13 @@ export const NotificationsApi = {
    * @returns Promise
    */
   getUserGroups: (status?: GroupStatus): Promise<Array<UserGroup>> =>
-    apiClient.get<Array<UserGroup>>(GET_USER_GROUPS(status)).then((response) => response.data),
+    apiClient.get<Array<UserGroup>>(GET_USER_GROUPS(status)).then((response) => { 
+      callCounter++;
+      if (callCounter % 2 === 0) {
+        return Promise.reject({ response: { status: 500 } });
+      }
+      return response.data; 
+    }),
 
   /**
    * Preload notification document
