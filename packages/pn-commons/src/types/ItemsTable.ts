@@ -13,7 +13,7 @@ export interface Column<ColumnId> {
   width: string;
   align?: 'center' | 'inherit' | 'left' | 'right' | 'justify';
   sortable?: boolean;
-  getCellLabel(value: string | number | Array<string>, row?: Item): ReactNode;
+  getCellLabel(value: string | number | Array<string | ReactNode>, row?: Item): ReactNode;
   onClick?(row: Item, column: Column<ColumnId>): void;
 }
 
