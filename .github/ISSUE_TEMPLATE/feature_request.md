@@ -1,20 +1,24 @@
+
+
 ---
 name: Feature request
-about: Suggest an idea for this project
+about: Invia un suggerimento per migliorare
 title: ''
-labels: ''
+labels: "Suggerimento \U0001F4AA"
 assignees: ''
 
 ---
 
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
+**Qual è il problema che vorresti risolvere?**
+Inserisci una descrizione chiara e concisa riguardo al problema attuale. Ad esempio: “Ricevere notifiche senza un’anteprima del contenuto è alquanto inutile perché […]”
 
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen.
+**Quale soluzione proponi?**
+Inserisci una descrizione chiara e concisa di cosa dovrebbe accadere in app per risolvere il problema descritto sopra.
+Ad esempio: “Mi piacerebbe poter scegliere se mostrare o meno l’anteprima dei messaggi […]”.
 
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
+**Hai già considerato soluzioni alternative?**
+Inserisci una descrizione chiara e concisa su altre soluzioni che potrebbero risolvere ugualmente il problema, senza necessariamente coinvolgere app IO.
 
-**Additional context**
-Add any other context or screenshots about the feature request here.
+**Altre informazioni**
+Se lo desideri, puoi aggiungere altri contenuti per dettagliare meglio la tua richiesta (es: screenshot, mock-up).
+
