@@ -16,7 +16,6 @@ const initialState = {
   notification: {
     paProtocolNumber: '',
     subject: '',
-    cancelledIun: '',
     recipients: [],
     documents: [],
     physicalCommunicationType: '' as PhysicalCommunicationType,
