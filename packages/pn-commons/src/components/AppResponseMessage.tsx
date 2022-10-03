@@ -9,13 +9,14 @@ const AppResponseMessage = () => {
   const dispatch = useDispatch();
   
   const showErrorMessage = (response: AppResponse) => {
-    const { errors } = response;
+    const { errors, action } = response;
     
     errors?.forEach(error => {
       dispatch(
         appStateActions.addError({
           title: error.message.title,
           message:error.message.content,
+          action
         }),
         );
       });

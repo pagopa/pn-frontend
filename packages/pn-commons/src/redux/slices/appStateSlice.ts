@@ -50,12 +50,13 @@ export const appStateSlice = createSlice({
   reducers: {
     addError(
       state,
-      action: PayloadAction<{ title: string; message: string; status?: number }>
+      action: PayloadAction<{ title: string; message: string; status?: number, action?: string }>
     ) {
       const message = createAppMessage(
         action.payload.title,
         action.payload.message,
-        action.payload.status
+        action.payload.status,
+        action.payload.action
       );
       state.messages.errors.push(message);
     },
