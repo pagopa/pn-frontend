@@ -1,5 +1,5 @@
-import { ApiKey } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
+import { ApiKey } from '../../models/ApiKeys';
 import { getApiKeys } from './actions';
 
 const initialState = {

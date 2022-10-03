@@ -5,7 +5,6 @@ import { IAppMessage } from './AppMessage';
 import { NotificationStatus } from './NotificationStatus';
 import { SideMenuItem } from './SideMenuItem';
 import { Column, Item, Sort } from './ItemsTable';
-import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory } from './ApiKeys';
 import {
     Notification,
     GetNotificationsResponse,
@@ -44,7 +43,6 @@ import { BasicUser, basicNoLoggedUserData } from './User';
 import { EventsType } from "./MixpanelEvents";
 
 export {
-    ApiKeyStatus,
     basicNoLoggedUserData,
     NotificationStatus,
     NotificationFeePolicy,
@@ -60,9 +58,6 @@ export {
     MessageType
 };
 export type {
-    ApiKey,
-    ApiKeyStatusHistory,
-    ApiKeyColumn,
     AnalogWorkflowDetails,
     BasicUser,
     CardAction,

@@ -1,6 +1,5 @@
 import { dataRegex, formatFiscalCode } from './string.utility';
 import { calculatePages } from './pagination.utility';
-import { getApiKeyStatusInfos } from './apikeys.utility';
 
 import {
     getNotificationStatusInfos,
@@ -31,7 +30,6 @@ import { mockApiErrorWrapper, simpleMockForApiErrorWrapper, apiOutcomeTestHelper
 import { performThunkAction } from './redux.utility';
 
 export {
-    getApiKeyStatusInfos,
     getNotificationAllowedStatus,
     getNotificationStatusInfos,
     parseNotificationDetail,

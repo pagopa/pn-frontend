@@ -8,7 +8,7 @@ export interface ApiKey {
 }
 
 export interface ApiKeyStatusHistory {
-  status: string;
+  status: ApiKeyStatus;
   by: string;
   date: string;
 }

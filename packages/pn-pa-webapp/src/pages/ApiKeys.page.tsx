@@ -11,7 +11,7 @@ import {
   Grid,
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useIsMobile, ApiKey, CopyToClipboard, ApiKeyStatus } from '@pagopa-pn/pn-commons';
+import { useIsMobile, CopyToClipboard } from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
@@ -21,6 +21,7 @@ import {
   setApiKeyStatus,
   setApiKeyDeleted,
 } from '../redux/apiKeys/actions';
+import { ApiKey, ApiKeyStatus } from '../models/ApiKeys';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 
 const ApiKeys = () => {

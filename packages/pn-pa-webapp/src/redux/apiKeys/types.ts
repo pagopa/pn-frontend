@@ -1,4 +1,4 @@
-import { ApiKeyStatus } from "@pagopa-pn/pn-commons";
+import { ApiKeyStatus } from "../../models/ApiKeys";
 
 export type ApiKeyStatusBE = {
   apiKey: string;

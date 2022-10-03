@@ -7,8 +7,8 @@
   Rimuovere tutti i commenti eslint quando pronto.
 */
 
-import { ApiKey, ApiKeyStatus } from "@pagopa-pn/pn-commons";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { ApiKey, ApiKeyStatus } from "../../models/ApiKeys";
 import { ApiKeyStatusBE } from "./types";
 
 export const getApiKeys = createAsyncThunk<Array<ApiKey>>('getApiKeys', async (_param, { rejectWithValue }) => {

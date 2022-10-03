@@ -2,22 +2,18 @@ import { Fragment, useState, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
-
 import { MoreVert } from '@mui/icons-material';
 import {
-  ApiKey,
-  ApiKeyColumn,
-  ApiKeyStatus,
   Column,
   Item,
   ItemsTable,
   StatusTooltip,
   EmptyState,
-  getApiKeyStatusInfos,
   CopyToClipboard,
-  ApiKeyStatusHistory,
   // GroupsApiKey,
 } from '@pagopa-pn/pn-commons';
+import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory } from '../../../models/ApiKeys';
+import { getApiKeyStatusInfos } from '../../../utils/apikeys.utility';
 
 type Props = {
   apiKeys: Array<ApiKey>;
@@ -203,10 +199,7 @@ const DesktopApiKeys = ({
       {apiKeys && (
         <Fragment>
           {apiKeys.length > 0 ? (
-            <>
-            {JSON.stringify(rows)}
             <ItemsTable columns={columns} rows={rows} />
-            </>
           ) : (
             <EmptyState
               emptyMessage={t('empty-message')}

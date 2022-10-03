@@ -1,8 +1,8 @@
 import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getLocalizedOrDefaultLabel } from '../services/localization.service';
-import { ApiKeyStatus, ApiKeyStatusHistory } from '../types/ApiKeys';
+import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/services/localization.service';
+import { ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
 
 function localizeStatus(
   status: string,
@@ -36,66 +36,32 @@ const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
       }}
     >
       {history.map((h) => {
+        const output = (p: string, h: ApiKeyStatusHistory) => (
+          <Box sx={{textAlign: 'left'}}>
+            <Box>
+              {t(`tooltip.${p}`)} {h.date} {t('tooltip.from')}
+            </Box>
+            <Box>
+              <b>{h.by}</b>
+            </Box>
+          </Box>
+        );
         switch (h.status) {
           case ApiKeyStatus.ENABLED:
             return (
-              <Box
-                sx={{
-                  textAlign: 'left',
-                }}
-              >
-                <Box>
-                  {t('tooltip.enabled-in')} {h.date} {t('tooltip.from')}
-                </Box>
-                <Box>
-                  <b>{h.by}</b>
-                </Box>
-              </Box>
+              output('enabled-in', h)
             );
           case ApiKeyStatus.CREATED:
             return (
-              <Box
-                sx={{
-                  textAlign: 'left',
-                }}
-              >
-                <Box>
-                  {t('tooltip.created-in')} {h.date} {t('tooltip.from')}
-                </Box>
-                <Box>
-                  <b>{h.by}</b>
-                </Box>
-              </Box>
+              output('created-in', h)
             );
           case ApiKeyStatus.BLOCKED:
             return (
-              <Box
-                sx={{
-                  textAlign: 'left',
-                }}
-              >
-                <Box>
-                  {t('tooltip.blocked-in')} {h.date} {t('tooltip.from')}
-                </Box>
-                <Box>
-                  <b>{h.by}</b>
-                </Box>
-              </Box>
+              output('blocked-in', h)
             );
           case ApiKeyStatus.ROTATED:
             return (
-              <Box
-                sx={{
-                  textAlign: 'left',
-                }}
-              >
-                <Box>
-                  {t('tooltip.rotated-in')} {h.date} {t('tooltip.from')}
-                </Box>
-                <Box>
-                  <b>{h.by}</b>
-                </Box>
-              </Box>
+              output('rotated-in', h)
             );
           default:
             return <></>;

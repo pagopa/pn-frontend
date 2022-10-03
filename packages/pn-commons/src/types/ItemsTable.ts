@@ -19,5 +19,5 @@ export interface Column<ColumnId> {
 
 export interface Item {
   id: string;
-  [key: string]: string | number | Array<any>;
+  [key: string]: string | number | Array<string | ReactNode>;
 }
