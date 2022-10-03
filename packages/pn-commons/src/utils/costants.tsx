@@ -1,6 +1,7 @@
-import { PreLoginFooterLinksType, FooterLinksType } from '@pagopa/mui-italia';
+import { FooterLinksType, PreLoginFooterLinksType } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { AppType } from "../types/AppType";
 
 export const LANGUAGES = {
   it: { it: 'Italiano', en: 'Inglese' },
@@ -10,11 +11,10 @@ export const LANGUAGES = {
 const isDev = process.env.NODE_ENV === 'development';
 const pathEnd = isDev ? '' : 'index.html';
 
-// export const URL_DIGITAL_NOTIFICATIONS = 'https://notifichedigitali.it';
 export const URL_DIGITAL_NOTIFICATIONS = 'https://www.notifichedigitali.pagopa.it/';
-// export const URL_PRIVACY_LINK = 'https://notifichedigitali.it/cittadini/informativa-privacy'
-export const PRIVACY_LINK_RELATIVE_PATH = '/cittadini/informativa-privacy/' + pathEnd;
-const ACCESSIBILITY_LINK_RELATIVE_PATH = '/cittadini/accessibilita/' + pathEnd;
+export const PRIVACY_LINK_RELATIVE_PATH = 'cittadini/informativa-privacy/' + pathEnd;
+export const PA_PRIVACY_LINK_RELATIVE_PATH = 'pubbliche-amministrazioni/informativa-privacy/' + pathEnd;
+const ACCESSIBILITY_LINK_RELATIVE_PATH = 'cittadini/accessibilita/' + pathEnd;
 
 const getFooterLinkLabels = (
   link: string,
@@ -209,10 +209,10 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
   },
 });
 
-export const postLoginLinks = (): Array<FooterLinksType> => [
+export const postLoginLinks = (appType: AppType): Array<FooterLinksType> => [
   {
     label: 'Privacy policy',
-    href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+    href: `${URL_DIGITAL_NOTIFICATIONS}${appType === AppType.PF ? PRIVACY_LINK_RELATIVE_PATH : PA_PRIVACY_LINK_RELATIVE_PATH}`,
     ariaLabel: `${getLocalizedOrDefaultLabel(
       'common',
       'footer.go-to',
@@ -222,7 +222,7 @@ export const postLoginLinks = (): Array<FooterLinksType> => [
   },
   {
     ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
-    href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+    href: `${URL_DIGITAL_NOTIFICATIONS}${appType === AppType.PF ? PRIVACY_LINK_RELATIVE_PATH : PA_PRIVACY_LINK_RELATIVE_PATH}`,
     linkType: 'external',
   },
   {

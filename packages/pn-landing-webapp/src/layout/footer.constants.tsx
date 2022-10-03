@@ -24,7 +24,7 @@ export const companyLegalInfo = (
   </>
 );
 
-export const preLoginLinks: PreLoginFooterLinksType = {
+export const preLoginLinks = (pageType: string): PreLoginFooterLinksType => ({
   // First column
   aboutUs: {
     title: undefined,
@@ -61,7 +61,7 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Privacy Policy",
-        href: "/cittadini/informativa-privacy/" + pathEnding,
+        href: `/${pageType}/informativa-privacy/` + pathEnding,
         ariaLabel: "Vai al link: Privacy Policy",
         linkType: "internal",
       },
@@ -145,15 +145,15 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       },
     ],
     links: [
-      // {
-      //   label: "Accessibilità",
-      //   href: "/cittadini/accessibilita/" + pathEnding,
-      //   ariaLabel: "Vai al link: Accessibilità",
-      //   linkType: "internal",
-      // },
+      {
+        label: "Accessibilità",
+        href: "https://form.agid.gov.it/view/eca3487c-f3cb-40be-a590-212eafc70058/",
+        ariaLabel: "Vai al link: Accessibilità",
+        linkType: "internal",
+      },
     ],
   },
-};
+});
 
 export const postLoginLinks: Array<FooterLinksType> = [
   {
