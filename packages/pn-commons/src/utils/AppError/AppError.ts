@@ -1,4 +1,4 @@
-import { ServerResponseError, ServerResponseErrorCode, ErrorMessage } from '../../types/AppResponse';
+import { ServerResponseError, ServerResponseErrorCode, ErrorMessage, AppResponseError } from '../../types/AppResponse';
 
 abstract class AppError {
   protected code: ServerResponseErrorCode;
@@ -14,6 +14,17 @@ abstract class AppError {
       code: this.code,
       element: this.element
     };
+  }
+
+  getResponseError(): AppResponseError {
+    return {
+      code: this.code,
+      element: this.element,
+      message: {
+        title: this.getMessage().title,
+        content: this.getMessage().message
+      }
+    }
   }
 
   abstract getMessage(): ErrorMessage;

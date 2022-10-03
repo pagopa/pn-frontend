@@ -148,7 +148,7 @@ const NuovaDelega = () => {
   //   const error = errorResponse.errors ? errorResponse.errors[0] : null;
   //   console.log("[NuovaDelega] Handled Event!");
   //   console.log("[NuovaDelega] Response: ", errorResponse);
-  //   console.log("[NuovaDelega] Message: ", error?.getMessage());
+  //   console.log("[NuovaDelega] Message: ", error?.message.content);
   // };
   
   // useEffect(() => {

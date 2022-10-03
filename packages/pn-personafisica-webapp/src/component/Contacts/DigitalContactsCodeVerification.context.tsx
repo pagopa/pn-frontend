@@ -191,8 +191,12 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   
   const handleAddressUpdateError = (responseError: AppResponse) => {
     if(Array.isArray(responseError.errors)){
-      const err_code = responseError.errors[0].getErrorDetail().code;
+      const err_code = responseError.errors[0].code;
       if (err_code === ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE) {
+        console.log(`ERROR CODE: ${ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE}`);
+        if(responseError.status) {
+          console.log(`STATUS: ${responseError.status}`);
+        }
         setCodeNotValid(true);
       }
     }

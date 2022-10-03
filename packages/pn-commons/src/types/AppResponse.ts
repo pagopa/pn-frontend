@@ -1,5 +1,3 @@
-import { AppError } from "../utils/AppError";
-
 export type HTTPStatusCode = number | string;
 
 export type AppResponseOutcome = 'success' | 'error';
@@ -24,12 +22,21 @@ export interface ServerResponseError {
   // detail?: string;
 }
 
+export interface AppResponseError {
+  code: ServerResponseErrorCode;
+  element?: string;
+  message: {
+    title: string;
+    content: string;
+  }
+}
+
 export interface AppResponse {
   action: string;
   status?: HTTPStatusCode;
   traceId?: string;
   timestamp?: string;
-  errors?: Array<AppError>;
+  errors?: Array<AppResponseError>;
 }
 
 export interface ErrorMessage {

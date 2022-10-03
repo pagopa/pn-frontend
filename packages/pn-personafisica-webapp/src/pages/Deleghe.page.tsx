@@ -72,7 +72,7 @@ const Deleghe = () => {
 
   const handleAcceptDelegationError = (errorResponse: AppResponse) => {
     const error = errorResponse.errors ? errorResponse.errors[0] : null;
-    setErrorText(error?.getMessage().message || "");
+    setErrorText(error?.message.content || "");
   };
   
   useEffect(() => {

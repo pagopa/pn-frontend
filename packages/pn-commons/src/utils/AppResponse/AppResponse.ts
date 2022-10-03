@@ -2,27 +2,31 @@ import { AppResponse, ServerResponse } from '../../types';
 import { AppErrorFactory } from '../AppError';
 
 export const createAppResponseError = (action: string, response: ServerResponse): AppResponse => {
-  const { data, status } = response;
+  if(response){
+    const { data, status } = response;
 
-  if(data) {
-    const { traceId, timestamp, errors: serverErrors } = data;
+    if(data) {
+      const { traceId, timestamp, errors: serverErrors } = data;
 
-    const retVal = { action, status, traceId, timestamp };
+      const retVal = { action, status, traceId, timestamp };
+      
+      if(Array.isArray(data.errors)) {
     
-    if(Array.isArray(data.errors)) {
-  
-      const errors = serverErrors?.map((error) => AppErrorFactory.create(error));
-  
-      return { ...retVal, errors };
+        const errors = serverErrors?.map((error) => AppErrorFactory.create(error).getResponseError());
+    
+        return { ...retVal, errors };
+      } else {
+        const errors = status ? [AppErrorFactory.create(status).getResponseError()] : undefined;
+    
+        return { ...retVal, errors };
+      }
     } else {
-      const errors = status ? [AppErrorFactory.create(status)] : undefined;
-  
-      return { ...retVal, errors };
+      const errors = status ? [AppErrorFactory.create(status).getResponseError()] : undefined;
+    
+      return { action, errors };
     }
   } else {
-    const errors = status ? [AppErrorFactory.create(status)] : undefined;
-  
-    return { action, errors };
+    return { action };
   }
 };
 

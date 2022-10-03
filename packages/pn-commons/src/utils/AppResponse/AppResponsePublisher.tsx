@@ -68,7 +68,7 @@ class AppResponsePublisher {
 
   publish(eventName: string, error: AppResponse) {
     const callbacks = this.regularQueue[eventName];
-    console.log(callbacks);
+    // console.log(callbacks);
     if (Array.isArray(callbacks) && callbacks.length > 0) {
       callbacks.forEach((callback) => {
         callback.apply(null, [error]);

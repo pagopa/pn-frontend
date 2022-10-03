@@ -14,8 +14,8 @@ const AppResponseMessage = () => {
     errors?.forEach(error => {
       dispatch(
         appStateActions.addError({
-          title: error.getMessage().title,
-          message:error.getMessage().message,
+          title: error.message.title,
+          message:error.message.content,
         }),
         );
       });
