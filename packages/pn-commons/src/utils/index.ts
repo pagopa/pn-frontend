@@ -27,6 +27,7 @@ import { compileRoute } from './routes.utility';
 import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './costants';
 import { mockApiErrorWrapper, simpleMockForApiErrorWrapper, apiOutcomeTestHelper } from './test.utility';
 import { performThunkAction } from './redux.utility';
+import { responseMap } from "./responseMap.utility";
 
 export {
     getNotificationAllowedStatus,
@@ -62,4 +63,5 @@ export {
     apiOutcomeTestHelper,
     simpleMockForApiErrorWrapper,
     performThunkAction,
+    responseMap
 };
