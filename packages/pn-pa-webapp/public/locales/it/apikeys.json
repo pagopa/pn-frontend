@@ -74,6 +74,7 @@
     "form-placeholder-groups": "Cerca un gruppo",
     "form-error-groups": "Selezionare almeno un gruppo",
     "continue-button": "Continua",
-    "required-fields": "Campi obbligatori"
+    "required-fields": "Campi obbligatori",
+    "no-groups": "Nessun gruppo disponibile"
   }
 }

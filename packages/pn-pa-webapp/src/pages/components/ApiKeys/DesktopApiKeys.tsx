@@ -189,9 +189,9 @@ const DesktopApiKeys = ({
     },
   ];
 
-  const rows: Array<Item> = apiKeys.map((n: ApiKey) => ({
+  const rows: Array<Item> = apiKeys.map((n: ApiKey, index) => ({
     ...n,
-    id: n.apiKey
+    id: index.toString()
   }));
 
   return (

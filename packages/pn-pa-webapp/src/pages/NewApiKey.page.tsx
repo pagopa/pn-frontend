@@ -47,7 +47,7 @@ const NewApiKey = () => {
 
   const validationSchema = yup.object({
     name: yup.string().required(t('form-error-name')),
-    groups: yup.array().min(1, t('form-error-groups')),
+    groups: yup.array(),
   });
 
   useEffect(() => {
@@ -144,6 +144,7 @@ const NewApiKey = () => {
                         <Autocomplete
                           disableCloseOnSelect
                           multiple
+                          noOptionsText={t('no-groups')}
                           value={formik.values.groups}
                           options={groups.map((g) => g.name)}
                           id="groups"
