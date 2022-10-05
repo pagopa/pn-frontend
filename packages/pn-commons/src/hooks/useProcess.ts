@@ -33,6 +33,10 @@ enum GENERAL_STEPS {
  *   return isFinished() ? ...real stuff... : <div>initializing ...</div>;
  * }
  * 
+ * The dependency on performStep should suffice, since the definition of performStep depends in turn 
+ * on the current status of the process, and hence the useEffect blocks will be recomputed each time
+ * such status changes, namely at the beginning and at the end of each step.
+ * 
  * The startStep / endCurrentStep / mustProceedToStep functions allow to manually control the perform of a step.
  */
 export function useProcess<T>(sequence: Array<T>) {
