@@ -74,8 +74,9 @@ const App = () => {
   );
 
   const userActions = useMemo(
-    () => [
-      {
+
+    () => {
+      const profiloAction = {
         id: 'profile',
         label: t('menu.profilo'),
         onClick: () => {
@@ -83,15 +84,16 @@ const App = () => {
           navigate(routes.PROFILO);
         },
         icon: <SettingsIcon fontSize="small" color="inherit" />,
-      },
-      {
+      };
+      const logoutAction = {
         id: 'logout',
         label: t('header.logout'),
         onClick: () => handleUserLogout(),
         icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
-      },
-    ],
-    []
+      };
+      return tos ? [ profiloAction, logoutAction ] : [ logoutAction ];
+    },
+    [tos]
   );
 
   useUnload(() => {
