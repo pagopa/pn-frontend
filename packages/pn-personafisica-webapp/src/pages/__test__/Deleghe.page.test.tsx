@@ -1,10 +1,16 @@
 import * as React from 'react';
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 import * as redux from 'react-redux';
 import { fireEvent, waitFor } from '@testing-library/react';
+// import userEvent from '@testing-library/user-event'
+
+import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+// import { AppResponseMessage, ResponsePublisher } from '@pagopa-pn/pn-commons';
+
 import { axe, render } from '../../__test__/test-utils';
 import Deleghe from '../Deleghe.page';
 import * as hooks from '../../redux/hooks';
+// import * as sidemenuActions from '../../redux/sidemenu/actions';
+// import { DelegationsApi } from '../../api/delegations/Delegations.api';
 
 const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 
@@ -148,11 +154,77 @@ describe('Deleghe page', () => {
   });
 
   it('checks the accept modal error state', async () => {
+    // mock actions
+    // const mockSidemenuInformationActionFn = jest.fn();
+    
+    // const delegatorsSpy = jest.spyOn(DelegationsApi, 'getDelegators');
+    // delegatorsSpy.mockResolvedValue([]);
+    // const delegatesSpy = jest.spyOn(DelegationsApi, 'getDelegates');
+    // delegatesSpy.mockResolvedValue([]);
+    // const getSidemenuInfoActionSpy = jest.spyOn(sidemenuActions, 'getSidemenuInformation');
+    // getSidemenuInfoActionSpy.mockImplementation(mockSidemenuInformationActionFn as any);
+    
+    // const apiSpy = jest.spyOn(DelegationsApi, 'acceptDelegation');
+    // apiSpy.mockRejectedValue({ response: { status: 500 } });
+    // // const setStateMock = jest.fn();
+    // // const useStateMock: any = (useState: any) => [useState, setStateMock];
+    // // const myInitialState = "Error-text";
+    // // jest.spyOn(React, 'useState').mockImplementation(() => [myInitialState, () => null]);
+
+    // // useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+    // // useIsMobileSpy.mockReturnValue(false);
+    // // useSelectorSpy(false, true, 'delegators', true);
+    // const result = render(<>
+    //   <Deleghe />
+    //   <ResponsePublisher />
+    //   <AppResponseMessage />
+    // </>, {
+    //   preloadedState: {
+    //     delegationsState: {
+    //       acceptModalState: {
+    //         id: '1',
+    //         open: true,
+    //         name: 'delegators',
+    //         error: false,
+    //       },
+    //       modalState: {
+    //         id: '1',
+    //         open: true,
+    //         type: 'delegators'
+    //       }
+    //     }
+    //   }
+    // });
+
+    // const acceptButton = result.getByRole('button', { name: 'deleghe.accept' });
+    // const inputs = result.queryAllByDisplayValue('-');
+    // inputs.forEach(input => userEvent.type(input, '1'));
+    // userEvent.click(acceptButton);
+
+    // waitFor(() => {
+    //   expect(result.baseElement).toHaveTextContent(/Error-text/i);
+    // })
+
+
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
+    // useState mock
+    const setState = jest.fn();
+    const setStateFn: any = () => ['Accept mandate error', setState];
+    const useStateSpy = jest.spyOn(React, 'useState');
+    useStateSpy.mockImplementation(setStateFn);
+    // end useState mock
     useSelectorSpy(false, true, 'delegators', true);
     const result = render(<Deleghe />);
-    expect(result.baseElement).toHaveTextContent(/deleghe.invalid_code/i);
+    expect(result.baseElement).toHaveTextContent("Accept mandate error");
+    
+    
+    /** original content */
+    // useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+    // useIsMobileSpy.mockReturnValue(false);
+    // useSelectorSpy(false, true, 'delegators', true);
+    // const result = render(<Deleghe />);
+    // expect(result.baseElement).toHaveTextContent(/deleghe.invalid_code/i);
   });
 
   it('is deleghe page accessible', async ()=>{

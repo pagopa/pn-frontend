@@ -1,5 +1,5 @@
 /* eslint-disable functional/no-let */
-import { apiOutcomeTestHelper, NotificationDetailPayment } from "@pagopa-pn/pn-commons";
+import { apiOutcomeTestHelper, AppResponseMessage, NotificationDetailPayment, ResponsePublisher } from "@pagopa-pn/pn-commons";
 import { act, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { PaymentStatus, PaymentInfoDetail } from "@pagopa-pn/pn-commons";
@@ -557,18 +557,22 @@ describe('NotificationPayment - different payment fetch API behaviors', () => {
   it('API error', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
     apiSpy.mockRejectedValue({ response: { status: 500 } });
-    await act(async () => void render(
+    await act(async () => void render(<>
+      <ResponsePublisher />
+      <AppResponseMessage />
       <NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={() => {}}/>
-    ));
+    </>));
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 
   it('API OK', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
     apiSpy.mockResolvedValue({ status: PaymentStatus.SUCCEEDED, url: "https://react.org" });
-    await act(async () => void render(
+    await act(async () => void render(<>
+      <ResponsePublisher />
+      <AppResponseMessage />
       <NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={() => {}}/>
-    ));
+    </>));
     apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
