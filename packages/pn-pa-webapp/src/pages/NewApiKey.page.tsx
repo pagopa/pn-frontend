@@ -33,9 +33,10 @@ const useStyles = makeStyles(() => ({
 
 const NewApiKey = () => {
   const dispatch = useAppDispatch();
-  const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState.apiKey);
+  const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState);
+  // const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState.apiKey);
   const isMobile = useIsMobile();
-  const groups = useAppSelector((state: RootState) => state.newApiKeyState.groups);
+  // const groups = useAppSelector((state: RootState) => state.newApiKeyState.groups);
   const { t } = useTranslation(['apikeys'], { keyPrefix: 'new-api-key' });
   const { t: tc} = useTranslation(['common']);
   const [apiKeySent, setApiKeySent] = useState<boolean>(false);
@@ -51,7 +52,7 @@ const NewApiKey = () => {
   });
 
   useEffect(() => {
-    if (groups.length === 0) {
+    if (newApiKey.groups.length === 0) {
       void dispatch(getUserGroups());
     }
   }, []);
@@ -146,7 +147,7 @@ const NewApiKey = () => {
                           multiple
                           noOptionsText={t('no-groups')}
                           value={formik.values.groups}
-                          options={groups.map((g) => g.name)}
+                          options={newApiKey.groups.map((g) => g.name)}
                           id="groups"
                           getOptionLabel={(option) => option}
                           isOptionEqualToValue={(option: any, value: any) => option === value}
@@ -166,7 +167,7 @@ const NewApiKey = () => {
                       </Box>
                     </Paper>
                     <Box mt={3}>
-                      <Button variant="contained" type="submit" disabled={!formik.isValid}>
+                      <Button variant="contained" type="submit" qnClick={() => formik.submitForm()} disabled={!formik.isValid}>
                       {t('continue-button')}
                       </Button>
                     </Box>
@@ -178,7 +179,7 @@ const NewApiKey = () => {
         </Prompt>
       )}
 
-      {(apiKeySent && newApiKey !== '') && <SyncFeedbackApiKey newApiKeyId={newApiKey} />}
+      {(apiKeySent && newApiKey.apiKey !== '') && <SyncFeedbackApiKey newApiKeyId={newApiKey.apiKey} />}
     </>
   );
 };

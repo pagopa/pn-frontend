@@ -5,28 +5,25 @@
   Ci sono un paio di test dove si è provveduti a skipparli per evitare il fallimento dei test di tutta la webapp
 */
 
-import { RenderResult } from '@testing-library/react';
-import { render, axe } from '../../__test__/test-utils';
+import { act, RenderResult } from '@testing-library/react';
+import { render } from '../../__test__/test-utils';
 import ApiKeys from '../ApiKeys.page';
+
+jest.mock('react-i18next', () => ({
+  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  useTranslation: () => ({
+    t: (str: string) => str,
+  }),
+}));
 
 describe('ApiKeys Page', () => {
   // eslint-disable-next-line functional/no-let
   let result: RenderResult | undefined;
 
-  beforeEach(async () => {
-    // render component
-    result = render(<ApiKeys />);
+  it('renders the page', async () => {
+    await act(async () => {
+      result = render(<ApiKeys />);
+    });
+    expect(result?.getAllByRole('heading')[0]).toHaveTextContent(/title/i);
   });
-
-  it.skip('renders the page', () => {
-    result?.getByRole('heading', { name: /api keys/i });
-  });
-
-  it.skip('does not have basic accessibility issues rendering the page', async () => {
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
-  });
-
 });

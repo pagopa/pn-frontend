@@ -35,9 +35,9 @@ const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
         },
       }}
     >
-      {history.map((h) => {
+      {history.map((h, index) => {
         const output = (p: string, h: ApiKeyStatusHistory) => (
-          <Box sx={{textAlign: 'left'}}>
+          <Box sx={{textAlign: 'left'}} key={index}>
             <Box>
               {t(`tooltip.${p}`)} {h.date} {t('tooltip.from')}
             </Box>
