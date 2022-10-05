@@ -13,18 +13,62 @@ enum INITIALIZATION_STEPS {
   USER_DETERMINATION = "UserDetermination",
   FETCH_TOS_STATUS = "ObtainTosStatus",
   INITIAL_PAGE_DETERMINATION = "InitialPageDetermination",
-  SESSION_CHECK = "SessionCheck",
 }
 
 const INITIALIZATION_SEQUENCE = [
   INITIALIZATION_STEPS.USER_DETERMINATION, INITIALIZATION_STEPS.FETCH_TOS_STATUS,
-  INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, INITIALIZATION_STEPS.SESSION_CHECK
+  INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION
 ];
 
 
 const inactivityTimer = 5 * 60 * 1000;
 
-/* eslint-disable sonarjs/cognitive-complexity */
+async function doUserDeterminationIndependent(sessionToken: string, setIsSessionReload: (b: boolean) => void, getTokenParam: () => string | null, doExchangeToken: (st: string) => Promise<any>) {
+  // se i dati del utente sono stati presi da session storage, 
+  // si deve saltare la user determination e settare l'indicativo di session reload
+  // che verrà usato nella initial page determination
+  if (sessionToken) {
+    setIsSessionReload(true);
+  } else {
+    const spidToken = getTokenParam();
+    if (spidToken) {
+      await doExchangeToken(spidToken);
+    }
+  }
+}
+
+async function doInitalPageDetermination(sessionToken: string, isClosedSession: boolean, tos: boolean, isSessionReload: boolean, navigate: any, sessionCheck: any, expDate: any) {
+  // l'analisi delle TOS ha senso solo se c'è un utente
+  if (sessionToken && !isClosedSession) {
+
+    // non si setta initial page se è un session reload di un utente che ha già accettato i TOS
+    const initialPage = tos
+      ? (isSessionReload ? undefined : routes.NOTIFICHE) 
+      : routes.TOS;
+    if (initialPage) {
+      navigate(initialPage, {replace: true});
+    }
+    sessionCheck(expDate);
+  }
+}
+
+const SessionGuardGraphical = ({ isInitialized, isUnauthorizedUser, isClosedSession, goodbyeMessage, isAnonymousUser}: { isInitialized: boolean, isUnauthorizedUser: boolean, isClosedSession: boolean, goodbyeMessage: { title: string, message: string}, isAnonymousUser: boolean }) => isInitialized 
+? ( isUnauthorizedUser || isClosedSession
+  ? <SessionModal
+      open
+      title={goodbyeMessage.title}
+      message={goodbyeMessage.message}
+      handleClose={() => goToLoginPortal(window.location.href)}
+      initTimeout
+    />
+  : isAnonymousUser || DISABLE_INACTIVITY_HANDLER 
+    ? <Outlet />
+    : <InactivityHandler inactivityTimer={inactivityTimer} onTimerExpired={() => dispatch(logout())}>
+        <Outlet />
+      </InactivityHandler>
+  )
+: <div>Avviando app ...</div>;
+
 const SessionGuard = () => {
   const location = useLocation();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
@@ -48,25 +92,17 @@ const SessionGuard = () => {
     return params.get('#token');
   }, [location]);
 
+
   /**
    * Step 1 - determinazione dell'utente - token exchange
    */
+
   useEffect(() => {
-    const doUserDetermination = async () => {
-      // se i dati del utente sono stati presi da session storage, 
-      // si deve saltare la user determination e settare l'indicativo di session reload
-      // che verrà usato nella initial page determination
-      if (sessionToken) {
-        setIsSessionReload(true);
-      } else {
-        const spidToken = getTokenParam();
-        if (spidToken) {
-          await dispatch(exchangeToken(spidToken));
-        }
-      }
-    };
-    void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, doUserDetermination);
-  }, [performStep, getTokenParam]);
+    void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, () => doUserDeterminationIndependent(
+      sessionToken, setIsSessionReload, getTokenParam, t => dispatch(exchangeToken(t))
+    ));
+  }, [performStep]);
+
 
   /**
    * Step 2 - ottenere TOS status
@@ -75,48 +111,28 @@ const SessionGuard = () => {
    *     Avevo fatto un'altra implementazione nella cui si prendeva il risultato del dispatch,
    *     ma questo faceva andare alcuni tests in errore. Perciò ho adottato questa soluzione.
    */
+
+  const doFetchTOSStatus = async () => {
+    // l'analisi delle TOS ha senso solo se c'è un utente
+    if (sessionToken && !isClosedSession) {
+      await dispatch(getToSApproval());
+    }
+  };
+
   useEffect(() => {
-    const doFetchTOSStatus = async () => {
-      // l'analisi delle TOS ha senso solo se c'è un utente
-      if (sessionToken && !isClosedSession) {
-        await dispatch(getToSApproval());
-      }
-    };
     void performStep(INITIALIZATION_STEPS.FETCH_TOS_STATUS, doFetchTOSStatus);
-  }, [performStep, sessionToken, isClosedSession]);
+  }, [performStep]);
   
   /**
-   * Step 3 - determinazione pagina iniziale
+   * Step 3 - determinazione pagina iniziale + sessionCheck
    */
+
   useEffect(() => {
-    const doInitalPageDetermination = async () => {
-      // l'analisi delle TOS ha senso solo se c'è un utente
-      if (sessionToken && !isClosedSession) {
+    void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, () => doInitalPageDetermination(sessionToken, isClosedSession, tos, isSessionReload, navigate, sessionCheck, expDate));
+   }, [performStep]);
 
-        // non si setta initial page se è un session reload di un utente che ha già accettato i TOS
-        const initialPage = tos
-          ? (isSessionReload ? undefined : routes.NOTIFICHE) 
-          : routes.TOS;
-        if (initialPage) {
-          navigate(initialPage, {replace: true});
-        }
-      }
-    };
-    void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
-   }, [performStep, isSessionReload, sessionToken, isClosedSession, tos]);
 
-  /**
-   * Step 4 - lancio del sessionCheck
-   */
-  useEffect(() => {
-    void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
-      if (sessionToken && !isClosedSession) {
-        sessionCheck(expDate);
-      }
-    });
-  }, [performStep, sessionToken, isClosedSession]);
-
-  /**
+   /**
    * Fine processo inizializzazione
    */
    useEffect(() => {
@@ -132,22 +148,7 @@ const SessionGuard = () => {
     message: isUnauthorizedUser ? messageUnauthorizedUser.message : t('leaving-app.message'),
   };
 
-  return isInitialized 
-    ? ( isUnauthorizedUser || isClosedSession
-      ? <SessionModal
-          open
-          title={goodbyeMessage.title}
-          message={goodbyeMessage.message}
-          handleClose={() => goToLoginPortal(window.location.href)}
-          initTimeout
-        />
-      : isAnonymousUser || DISABLE_INACTIVITY_HANDLER 
-        ? <Outlet />
-        : <InactivityHandler inactivityTimer={inactivityTimer} onTimerExpired={() => dispatch(logout())}>
-            <Outlet />
-          </InactivityHandler>
-      )
-    : <div>Avviando app ...</div>;
+  return <SessionGuardGraphical goodbyeMessage={goodbyeMessage} isAnonymousUser={isAnonymousUser} isClosedSession={isClosedSession}>
 };
 
 export default SessionGuard;
