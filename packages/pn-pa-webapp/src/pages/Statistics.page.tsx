@@ -6,13 +6,6 @@ import { Download} from "@mui/icons-material";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 
-jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
-  useTranslation: () => ({
-    t: (str: string) => str,
-  }),
-}));
-
 const Statistics = () => {
   const { t } = useTranslation(['statistics']);
   const loggedUserOrganizationParty = useAppSelector(
@@ -20,9 +13,9 @@ const Statistics = () => {
   );
 
   const Subtitle = (
-    <Grid item display="flex" direction="row">
+    <Grid item display="flex" flexDirection="row">
       <Typography>{t('subtitle', { organization: loggedUserOrganizationParty.name })}</Typography>
-      <Button variant="outlined" endIcon={<Download />}>{t('export_all')}</Button>
+      <Button variant="outlined" endIcon={<Download />} sx={{whiteSpace:"nowrap"}}>{t('export_all')}</Button>
     </Grid>
   );
 
