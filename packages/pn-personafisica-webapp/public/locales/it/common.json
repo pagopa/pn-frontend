@@ -109,32 +109,32 @@
   "required-fields": "*Campi obbligatori",
   "errors": {
     "bad_request": {
-      "title": "%Errore nell'invio dei dati%",
-      "message": "%Il formato della richiesta non è valido.%"
+      "title": "Errore nell'invio dei dati",
+      "message": "Il formato della richiesta non è valido."
     },
     "unauthorized": {
-      "title": "%Utente non autorizzato%",
-      "message": "%L'utente corrente non ha le autorizzazioni.%"
+      "title": "Utente non autorizzato",
+      "message": "L'utente corrente non ha le autorizzazioni."
     },
     "forbidden": {
-      "title": "%La sessione è scaduta%",
-      "message": "%Entra e accedi con SPID o CIE.%"
+      "title": "La sessione è scaduta",
+      "message": "Entra e accedi con SPID o CIE."
     },
     "not_found": {
-      "title": "%Risorsa non trovata%",
-      "message": "%Si è verificato un errore. Si prega di riprovare più tardi.%"
+      "title": "Risorsa non trovata",
+      "message": "Si è verificato un errore. Si prega di riprovare più tardi."
     },
     "internal_server": {
-      "title": "%Il servizio non è disponibile%",
-      "message": "%Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.%"
+      "title": "Il servizio non è disponibile",
+      "message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi."
     },
     "unhandled": {
-      "title": "%Errore generico%",
-      "message": "%Si è verificato un errore. Si prega di riprovare più tardi.%"
+      "title": "Errore generico",
+      "message": "Si è verificato un errore. Si prega di riprovare più tardi."
     },
     "unknown": {
-      "title": "%Errore%",
-      "message": "%Errore non previsto%"
+      "title": "Errore",
+      "message": "Errore non previsto"
     }
   }
 }

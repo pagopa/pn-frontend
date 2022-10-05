@@ -15,7 +15,7 @@ export class UnauthorizedAppError extends AppError {
         "errors.unauthorized.title",
         "Utente non autorizzato"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "common",
         "errors.unauthorized.message",
         "L'utente corrente non ha le autorizzazioni."

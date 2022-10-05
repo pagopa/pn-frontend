@@ -15,7 +15,7 @@ export class UnhandledAppError extends AppError {
         "errors.unhandled.title",
         "Errore generico"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "common",
         "errors.unhandled.message",
         "Si è verificato un errore. Si prega di riprovare più tardi."

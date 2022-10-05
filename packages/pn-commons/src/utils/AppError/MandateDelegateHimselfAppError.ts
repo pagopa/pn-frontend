@@ -15,7 +15,7 @@ export class MandateDelegateHimselfAppError extends AppError {
         "errors.delegate_himself.title",
         "Errore"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "delegations",
         "errors.delegate_himself.message",
         "Non è possibile delegare se stessi!"

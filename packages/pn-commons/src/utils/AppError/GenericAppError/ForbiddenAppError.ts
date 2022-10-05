@@ -15,7 +15,7 @@ export class ForbiddenAppError extends AppError {
         "errors.forbidden.title",
         "La sessione è scaduta"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "common",
         "errors.forbidden.message",
         "Entra e accedi con SPID o CIE."

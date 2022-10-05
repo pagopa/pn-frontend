@@ -2,6 +2,10 @@ export type HTTPStatusCode = number | string;
 
 export type AppResponseOutcome = 'success' | 'error';
 
+/**
+ * The following ServerResponse interfaces is used to model DTO
+ * received after any webapi call
+ */
 export interface ServerResponse {
   status?: HTTPStatusCode;
   data?: ServerResponseData;
@@ -22,6 +26,14 @@ export interface ServerResponseError {
   // detail?: string;
 }
 
+export interface AppResponse {
+  action: string;
+  status?: HTTPStatusCode;
+  traceId?: string;
+  timestamp?: string;
+  errors?: Array<AppResponseError>;
+}
+
 export interface AppResponseError {
   code: ServerResponseErrorCode;
   element?: string;
@@ -31,17 +43,9 @@ export interface AppResponseError {
   }
 }
 
-export interface AppResponse {
-  action: string;
-  status?: HTTPStatusCode;
-  traceId?: string;
-  timestamp?: string;
-  errors?: Array<AppResponseError>;
-}
-
 export interface ErrorMessage {
   title: string;
-  message: string;
+  content: string;
 }
 
 export enum ServerResponseErrorCode {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import * as React from 'react';
 import { Box, Stack } from '@mui/material';
 import { AppResponse, AppResponsePublisher, CodeModal, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -35,7 +35,7 @@ const Deleghe = () => {
     error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
 
-  const [errorText, setErrorText] = useState("");
+  const [errorText, setErrorText] = React.useState("");
 
   const dispatch = useAppDispatch();
 
@@ -62,7 +62,7 @@ const Deleghe = () => {
     trackEventByType(TrackEventType.DELEGATION_DELEGATOR_ACCEPT);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     void dispatch(getDelegates());
     void dispatch(getDelegators());
     return () => {
@@ -75,7 +75,7 @@ const Deleghe = () => {
     setErrorText(error?.message.content || "");
   };
   
-  useEffect(() => {
+  React.useEffect(() => {
     AppResponsePublisher.error.subscribe("acceptDelegation", handleAcceptDelegationError);
     
     return () => AppResponsePublisher.error.unsubscribe("acceptDelegation", handleAcceptDelegationError);

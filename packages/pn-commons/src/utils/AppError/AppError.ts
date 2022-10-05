@@ -22,7 +22,7 @@ abstract class AppError {
       element: this.element,
       message: {
         title: this.getMessage().title,
-        content: this.getMessage().message
+        content: this.getMessage().content
       }
     }
   }

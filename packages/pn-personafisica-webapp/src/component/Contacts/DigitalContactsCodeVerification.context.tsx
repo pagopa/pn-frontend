@@ -13,7 +13,7 @@ import {
   Typography
 } from '@mui/material';
 
-import { appStateActions, CodeModal, AppResponsePublisher,  AppResponse, ServerResponseErrorCode } from '@pagopa-pn/pn-commons';
+import { appStateActions, CodeModal, AppResponsePublisher,  AppResponse, ErrorMessage } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
@@ -57,6 +57,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     ? digitalAddresses.legal.concat(digitalAddresses.courtesy)
     : [];
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
 
   const initialProps = {
     labelRoot: '',
@@ -191,14 +192,12 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   
   const handleAddressUpdateError = (responseError: AppResponse) => {
     if(Array.isArray(responseError.errors)){
-      const err_code = responseError.errors[0].code;
-      if (err_code === ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE) {
-        console.log(`ERROR CODE: ${ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE}`);
-        if(responseError.status) {
-          console.log(`STATUS: ${responseError.status}`);
-        }
-        setCodeNotValid(true);
-      }
+      const error = responseError.errors[0];
+      setErrorMessage({
+        title: error.message.title,
+        content: error.message.content
+      });
+      setCodeNotValid(true);
     }
   };
   
@@ -207,7 +206,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     AppResponsePublisher.error.subscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
     
     return () => {
-      AppResponsePublisher.error.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+      AppResponsePublisher.error.unsubscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
       AppResponsePublisher.error.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
     };
   }, []);
@@ -249,8 +248,10 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           cancelCallback={() => handleClose('cancelled')}
           confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
           hasError={codeNotValid}
-          errorTitle={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
-          errorMessage={t(`${props.labelRoot}.wrong-code-message`, { ns: 'recapiti' })}
+          // errorTitle={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
+          // errorMessage={t(`${props.labelRoot}.wrong-code-message`, { ns: 'recapiti' })}
+          errorTitle={errorMessage?.title}
+          errorMessage={errorMessage?.content}
         />
       )}
       <Dialog

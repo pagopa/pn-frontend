@@ -15,7 +15,7 @@ export class MandateAlreadyExistsAppError extends AppError {
         "errors.already_exists.title",
         "Errore"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "delegations",
         "errors.already_exists.message",
         "La persona che hai indicato ha già una delega per questo ente."

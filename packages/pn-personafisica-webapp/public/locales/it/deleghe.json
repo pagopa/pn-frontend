@@ -102,24 +102,24 @@
   },
   "errors": {
     "not_found": {
-      "title": "%Errore%",
-      "message": "%Delega non trovata%"
+      "title": "Errore",
+      "message": "Delega non trovata"
     },
     "already_exists": {
-      "title": "%Delega già presente%",
-      "message": "%La persona che hai indicato ha già una delega per questo ente.%"
+      "title": "Delega già presente",
+      "message": "La persona che hai indicato ha già una delega per questo ente."
     },
     "not_acceptable": {
-      "title": "%Delega non valida%",
-      "message": "%La delega inserita non è valida%"
+      "title": "Delega non valida",
+      "message": "La delega inserita non è valida"
     },
     "delegate_himself": {
-      "title": "%Errore inserimento delega%",
-      "message": "%Non è possibile delegare se stessi%"
+      "title": "Errore inserimento delega",
+      "message": "Non è possibile delegare se stessi"
     },
     "invalid_verification_code": {
-      "title": "%Codice non valido%",
-      "message": "%Codice di verifica non valido%"
+      "title": "Codice non valido",
+      "message": "Codice di verifica non valido"
     }
   }
 }

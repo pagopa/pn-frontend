@@ -15,7 +15,7 @@ export class InternalServerAppError extends AppError {
         "errors.internal_server.title",
         "Il servizio non è disponibile"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "common",
         "errors.internal_server.message",
         "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi."

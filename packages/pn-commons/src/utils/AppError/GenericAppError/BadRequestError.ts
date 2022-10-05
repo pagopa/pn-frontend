@@ -14,7 +14,7 @@ export class BadRequestAppError extends AppError {
         "errors.bad_request.title",
         "Errore nell'invio dei dati"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "common",
         "errors.bad_request.message",
         "Il formato della richiesta non è valido."

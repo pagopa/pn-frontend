@@ -94,5 +94,11 @@
   "common": {
     "duplicate-contact-title": "Recapito già presente",
     "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?"
+  },
+  "errors": {
+    "invalid_verification_code": {
+      "title": "Il codice inserito non è corretto",
+      "message": "Prova a reinserirlo, oppure genera un nuovo codice."
+    }
   }
 }

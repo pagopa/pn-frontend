@@ -15,7 +15,7 @@ export class MandateInvalidVerificationCodeAppError extends AppError {
         "errors.invalid_verification_code.title",
         "Errore"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "delegations",
         "errors.invalid_verification_code.message",
         "Codice di verifica non valido."

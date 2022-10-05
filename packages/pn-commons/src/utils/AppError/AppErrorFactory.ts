@@ -7,6 +7,7 @@ import { MandateInvalidVerificationCodeAppError } from "./MandateInvalidVerifica
 import { MandateNotAcceptableAppError } from "./MandateNotAcceptableAppError";
 import { MandateNotFoundAppError } from "./MandateNotFoundAppError";
 import GenericAppErrorFactory from "./GenericAppError/GenericAppErrorFactory";
+import { UserAttributesInvalidVerificationCodeAppError } from "./UserAttributesInvalidVerificationCodeAppError";
 
 class AppErrorFactory {
   static create(error: ServerResponseError | string | number): AppError {
@@ -24,6 +25,8 @@ class AppErrorFactory {
         return new MandateDelegateHimselfAppError(error);
       case ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE:
         return new MandateInvalidVerificationCodeAppError(error);
+        case ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE:
+          return new UserAttributesInvalidVerificationCodeAppError(error);
       default:
         return new UnknownAppError(error);
     }

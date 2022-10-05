@@ -15,7 +15,7 @@ export class NotFoundAppError extends AppError {
         "errors.not_found.title",
         "Risorsa non trovata"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "common",
         "errors.not_found.message",
         "Si è verificato un errore. Si prega di riprovare più tardi."

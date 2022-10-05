@@ -15,7 +15,7 @@ export class MandateNotFoundAppError extends AppError {
         "errors.not_found.title",
         "Errore"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "delegations",
         "errors.not_found.message",
         "Delega non trovata."

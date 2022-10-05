@@ -15,7 +15,7 @@ export class MandateNotAcceptableAppError extends AppError {
         "errors.not_acceptable.title",
         "Errore"
       ),
-      message: getLocalizedOrDefaultLabel(
+      content: getLocalizedOrDefaultLabel(
         "delegations",
         "errors.not_acceptable.message",
         "Delega non inseribile."
