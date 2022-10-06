@@ -75,5 +75,5 @@ export function useProcess<T>(sequence: Array<T>) {
     }
   }, [mustProceedToStep, startStep, endCurrentStep]);
 
-  return { mustProceedToStep, isFinished, startStep, endCurrentStep, performStep };
+  return { mustProceedToStep, isFinished, startStep, endCurrentStep, performStep, currentSituation };
 } 
