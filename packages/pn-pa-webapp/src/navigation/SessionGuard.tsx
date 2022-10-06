@@ -20,19 +20,62 @@ const INITIALIZATION_SEQUENCE = [
   INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, INITIALIZATION_STEPS.SESSION_CHECK
 ];
 
-
 const inactivityTimer = 5 * 60 * 1000;
 
-/* eslint-disable sonarjs/cognitive-complexity */
+
+// riguardo alla definizione di due componenti separati, 
+// cfr. il commento in merito nel file SessionGuard.tsx in pn-personafisica-webapp
+
+/**
+ * SessionGuardRender: logica di renderizzazione
+ */
+ const SessionGuardRender = () => {
+  const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
+  const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
+  const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector((state: RootState) => state.userState);
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation(['common']);
+
+  const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
+
+  const goodbyeMessage = {
+    title: isUnauthorizedUser ? messageUnauthorizedUser.title : t('leaving-app.title'),
+    message: isUnauthorizedUser ? messageUnauthorizedUser.message : t('leaving-app.message'),
+  };
+
+  const renderIfInitialized = () => isUnauthorizedUser || isClosedSession
+    ? <SessionModal
+        open
+        title={goodbyeMessage.title}
+        message={goodbyeMessage.message}
+        handleClose={goToSelfcareLogin}
+        initTimeout
+      />
+    : isAnonymousUser || DISABLE_INACTIVITY_HANDLER 
+      ? <Outlet />
+      : <InactivityHandler inactivityTimer={inactivityTimer} onTimerExpired={() => dispatch(logout())}>
+          <Outlet />
+        </InactivityHandler>
+    ;
+  
+  // mi sarebbe piaciuto lasciare il isInitialized ? ...real thing... : <div>Avviando app ...</div>
+  // in SessionGuard, mi sa che SessionGuardRender si dovrebbe attivare soltanto quando c'è qualcosa da 
+  // veramente renderizzare. 
+  // Ma se faccio questo, la cognitive complexity di SessionGuard salta a 37 (!!) almeno in in pf-webapp,
+  // perciò faccio il bravo riguardo Sonar e lo lascio così.
+  // -----------------------
+  // Carlos Lombardi, 2022.10.06
+  return isInitialized ? renderIfInitialized() : <div>Avviando app ...</div>;
+};
+
 const SessionGuard = () => {
   const location = useLocation();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken, desired_exp: expDate  } = useAppSelector((state: RootState) => state.userState.user);
-  const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector((state: RootState) => state.userState);
+  const { isClosedSession } = useAppSelector((state: RootState) => state.userState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
-  const { t } = useTranslation(['common']);
 
   const {isFinished, performStep} = useProcess(INITIALIZATION_SEQUENCE);
 
@@ -101,29 +144,7 @@ const SessionGuard = () => {
     }
   }, [isInitialized, isFinished]);
 
-  const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
-
-  const goodbyeMessage = {
-    title: isUnauthorizedUser ? messageUnauthorizedUser.title : t('leaving-app.title'),
-    message: isUnauthorizedUser ? messageUnauthorizedUser.message : t('leaving-app.message'),
-  };
-
-  return isInitialized 
-    ? ( isUnauthorizedUser || isClosedSession
-      ? <SessionModal
-          open
-          title={goodbyeMessage.title}
-          message={goodbyeMessage.message}
-          handleClose={goToSelfcareLogin}
-          initTimeout
-        />
-      : isAnonymousUser || DISABLE_INACTIVITY_HANDLER 
-        ? <Outlet />
-        : <InactivityHandler inactivityTimer={inactivityTimer} onTimerExpired={() => dispatch(logout())}>
-            <Outlet />
-          </InactivityHandler>
-      )
-    : <div>Avviando app ...</div>;
+  return <SessionGuardRender />;
 };
 
 export default SessionGuard;
