@@ -1,6 +1,6 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, Fragment, useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
-import { useIsMobile, Prompt, PnBreadcrumb } from '@pagopa-pn/pn-commons';
+import { useIsMobile, Prompt, PnBreadcrumb, TitleBox } from '@pagopa-pn/pn-commons';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -30,6 +30,15 @@ const useStyles = makeStyles(() => ({
     },
   },
 }));
+
+const SubTitle = () => {
+  const { t } = useTranslation(['apikeys'], { keyPrefix: 'new-api-key' });
+  return (
+    <Fragment>
+      {t('page-description')}
+    </Fragment>
+  );
+};
 
 const NewApiKey = () => {
   const dispatch = useAppDispatch();
@@ -105,18 +114,13 @@ const NewApiKey = () => {
                   currentLocationLabel={t('page-title')}
                   goBackLabel={tc('button.indietro')}
                 />
-                <Typography variant="h4" my={3}>
-                  {t('page-title')}
-                </Typography>
-                <Box
-                  display={isMobile ? 'block' : 'flex'}
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography variant="body1" sx={{ marginBottom: 4 }}>
-                  {t('page-description')}
-                  </Typography>
-                </Box>
+                <TitleBox
+                  variantTitle="h4"
+                  title={t('page-title')}
+                  sx={{ pt: '20px', marginBottom: 4 }}
+                  subTitle={<SubTitle />}
+                  variantSubTitle="body1"
+                ></TitleBox>
                 <form onSubmit={formik.handleSubmit}>
                   <Typography sx={{ marginTop: 4 }} variant="body2">
                     * {t('required-fields')}
@@ -140,7 +144,7 @@ const NewApiKey = () => {
                           sx={{ mb: 3 }}
                         />
                         <Typography fontWeight="bold" mb={2}>
-                          {t('form-label-groups')}*
+                          {t('form-label-groups')}
                         </Typography>
                         <Autocomplete
                           disableCloseOnSelect

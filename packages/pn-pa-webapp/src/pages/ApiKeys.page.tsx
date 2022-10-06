@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
@@ -11,7 +11,7 @@ import {
   Grid,
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useIsMobile, CopyToClipboard } from '@pagopa-pn/pn-commons';
+import { useIsMobile, CopyToClipboard, TitleBox } from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
@@ -23,6 +23,23 @@ import {
 } from '../redux/apiKeys/actions';
 import { ApiKey, ApiKeyStatus } from '../models/ApiKeys';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
+
+const SubTitle = () => {
+  const { t } = useTranslation(['apiKeys']);
+  return (
+    <Fragment>
+      {t('subtitle.text1')}
+      <Link
+        href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/NewNotification/sendNewNotification"
+      >{t('subtitle.text2')}</Link>
+      {t('subtitle.text3')}
+      <Link
+        href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/SenderReadB2B/getNotificationRequestStatus"
+      >{t('subtitle.text4')}</Link>
+      {t('subtitle.text5')}
+    </Fragment>
+  );
+};
 
 const ApiKeys = () => {
   const dispatch = useAppDispatch();
@@ -107,19 +124,21 @@ const ApiKeys = () => {
 
   return (
     <Box p={3}>
-      <Typography variant="h4" mb={isMobile ? 3 : 2}>
-        {t('title')}
-      </Typography>
-      <Box display={isMobile ? 'block' : 'flex'} justifyContent="space-between" alignItems="center">
-        <Typography variant="body1" sx={{ marginBottom: isMobile ? 3 : 10 }}>
-          {t('subtitle.text1')}
-          <Link>{t('subtitle.text2')}</Link>
-          {t('subtitle.text3')}
-          <Link>{t('subtitle.text4')}</Link>
-          {t('subtitle.text5')}
-        </Typography>
-      </Box>
-      <Box display={isMobile ? 'block' : 'flex'} justifyContent="space-between" alignItems="center">
+      <TitleBox
+        variantTitle="h4"
+        title={t('title')}
+        sx={{ pt: '20px' }}
+        subTitle={<SubTitle />}
+        variantSubTitle="body1"
+      ></TitleBox>
+      <Box
+       sx={{
+        display: isMobile ? 'block' : 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: isMobile ? 3 : 10
+       }}
+      >
         <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
           {t('generated-api-keys')}
         </Typography>
