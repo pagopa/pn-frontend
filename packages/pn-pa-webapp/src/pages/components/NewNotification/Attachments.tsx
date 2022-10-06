@@ -226,17 +226,18 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
   };
 
   const deleteDocumentHandler = async (index: number) => {
-    const documents = formik.values.documents.filter((_d, i) => i !== index);
-
-    documents.forEach((document, i) => {
-      // eslint-disable-next-line functional/immutable-data
-      document.idx = i;
-      // eslint-disable-next-line functional/immutable-data
-      document.id = document.id.indexOf('.file') !== -1 ? `documents.${i}.file` : `documents.${i}`;
-    });
+    const documents = formik
+      .values
+      .documents
+      .filter((_d, i) => i !== index)
+      .map((document, i) => ({
+        ...document,
+        idx: i,
+        id: document.id.indexOf('.file') !== -1 ? `documents.${i}.file` : `documents.${i}`
+      }));
 
     await formik.setValues({
-      documents,
+      documents
     });
   };
 
