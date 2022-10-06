@@ -11,7 +11,7 @@ type Props = {
   children?: ReactNode;
   /** Logout/exit action to apply */
   onExitAction?: () => void;
-  /** Side Menu */
+  /** Side Menu  */
   sideMenu?: React.ReactElement;
   /** Show Side Menu */
   showSideMenu?: boolean;

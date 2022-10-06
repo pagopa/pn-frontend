@@ -1,29 +1,35 @@
-import { appStateActions, InactivityHandler, SessionModal, useProcess, useSessionCheck } from "@pagopa-pn/pn-commons";
-import { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { exchangeToken, getToSApproval, logout } from "../redux/auth/actions";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { RootState } from "../redux/store";
-import { DISABLE_INACTIVITY_HANDLER } from "../utils/constants";
-import { goToLoginPortal } from "./navigation.utility";
+import {
+  appStateActions,
+  InactivityHandler,
+  SessionModal,
+  useProcess,
+  useSessionCheck,
+} from '@pagopa-pn/pn-commons';
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { exchangeToken, getToSApproval, logout } from '../redux/auth/actions';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
+import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
+import { goToLoginPortal } from './navigation.utility';
 import * as routes from './routes.const';
 
 enum INITIALIZATION_STEPS {
-  USER_DETERMINATION = "UserDetermination",
-  FETCH_TOS_STATUS = "ObtainTosStatus",
-  INITIAL_PAGE_DETERMINATION = "InitialPageDetermination",
-  SESSION_CHECK = "SessionCheck",
+  USER_DETERMINATION = 'UserDetermination',
+  FETCH_TOS_STATUS = 'ObtainTosStatus',
+  INITIAL_PAGE_DETERMINATION = 'InitialPageDetermination',
+  SESSION_CHECK = 'SessionCheck',
 }
 
 const INITIALIZATION_SEQUENCE = [
-  INITIALIZATION_STEPS.USER_DETERMINATION, INITIALIZATION_STEPS.FETCH_TOS_STATUS,
-  INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, INITIALIZATION_STEPS.SESSION_CHECK
+  INITIALIZATION_STEPS.USER_DETERMINATION,
+  INITIALIZATION_STEPS.FETCH_TOS_STATUS,
+  INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION,
+  INITIALIZATION_STEPS.SESSION_CHECK,
 ];
 
-
 const inactivityTimer = 5 * 60 * 1000;
-
 
 // Perché ci sono due componenti.
 // Il codice in SessionGuard implementa i steps necessari per determinare se c'è sessione, se è utente abilitato, se è sessione anonima, ecc..
@@ -32,14 +38,15 @@ const inactivityTimer = 5 * 60 * 1000;
 // -----------------------------
 // Carlos Lombardi, 2022.10.05
 
-
 /**
  * SessionGuardRender: logica di renderizzazione
  */
 const SessionGuardRender = () => {
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
-  const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector((state: RootState) => state.userState);
+  const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector(
+    (state: RootState) => state.userState
+  );
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
 
@@ -50,50 +57,53 @@ const SessionGuardRender = () => {
     message: isUnauthorizedUser ? messageUnauthorizedUser.message : t('leaving-app.message'),
   };
 
-  const renderIfInitialized = () => isUnauthorizedUser || isClosedSession
-    ? <SessionModal
+  const renderIfInitialized = () =>
+    isUnauthorizedUser || isClosedSession ? (
+      <SessionModal
         open
         title={goodbyeMessage.title}
         message={goodbyeMessage.message}
         handleClose={() => goToLoginPortal(window.location.href)}
         initTimeout
       />
-    : isAnonymousUser || DISABLE_INACTIVITY_HANDLER 
-      ? <Outlet />
-      : <InactivityHandler inactivityTimer={inactivityTimer} onTimerExpired={() => dispatch(logout())}>
-          <Outlet />
-        </InactivityHandler>
-    ;
-  
+    ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (
+      <Outlet />
+    ) : (
+      <InactivityHandler
+        inactivityTimer={inactivityTimer}
+        onTimerExpired={() => dispatch(logout())}
+      >
+        <Outlet />
+      </InactivityHandler>
+    );
   // mi sarebbe piaciuto lasciare il isInitialized ? ...real thing... : <div>Avviando app ...</div>
-  // in SessionGuard, mi sa che SessionGuardRender si dovrebbe attivare soltanto quando c'è qualcosa da 
-  // veramente renderizzare. 
+  // in SessionGuard, mi sa che SessionGuardRender si dovrebbe attivare soltanto quando c'è qualcosa da
+  // veramente renderizzare.
   // Ma se faccio questo, la cognitive complexity di SessionGuard salta a 37 (!!)
   // perciò faccio il bravo riguardo Sonar e lo lascio così.
   // -----------------------
   // Carlos Lombardi, 2022.10.05
-  return isInitialized ? renderIfInitialized() : <div>Avviando app ...</div>;
+  return isInitialized ? renderIfInitialized() : <Fragment></Fragment>;
 };
-
 
 /**
  * SessionGuard: logica di determinazione, in quale situazione siamo?
  */
- const SessionGuard = () => {
+const SessionGuard = () => {
   const location = useLocation();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
-  const { sessionToken, exp: expDate  } = useAppSelector((state: RootState) => state.userState.user);
+  const { sessionToken, exp: expDate } = useAppSelector((state: RootState) => state.userState.user);
   const { isClosedSession, tos } = useAppSelector((state: RootState) => state.userState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
 
   // vedi il commentone in useProcess
-  const {isFinished, performStep} = useProcess(INITIALIZATION_SEQUENCE);
+  const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
 
   // se un utente loggato fa reload, si deve evitare il navigate verso notifiche
-  // questo si determina appena cominciata l'inizializzazione, se c'è già un sessionToken 
-  // questo vuol dire che è stato preso da session storage, 
+  // questo si determina appena cominciata l'inizializzazione, se c'è già un sessionToken
+  // questo vuol dire che è stato preso da session storage,
   // cioè siamo in presenza di un reload di un utente loggato
   const [isSessionReload, setIsSessionReload] = useState(false);
 
@@ -107,7 +117,7 @@ const SessionGuardRender = () => {
    */
   useEffect(() => {
     const doUserDetermination = async () => {
-      // se i dati del utente sono stati presi da session storage, 
+      // se i dati del utente sono stati presi da session storage,
       // si deve saltare la user determination e settare l'indicativo di session reload
       // che verrà usato nella initial page determination
       if (sessionToken) {
@@ -124,7 +134,7 @@ const SessionGuardRender = () => {
 
   /**
    * Step 2 - ottenere TOS status
-   * NB: questo l'ho definito in uno step separato, per essere sicuro che nello step successivo 
+   * NB: questo l'ho definito in uno step separato, per essere sicuro che nello step successivo
    *     l'attributo tos dello store sia settato.
    *     Avevo fatto un'altra implementazione nella cui si prendeva il risultato del dispatch,
    *     ma questo faceva andare alcuni tests in errore. Perciò ho adottato questa soluzione.
@@ -138,7 +148,7 @@ const SessionGuardRender = () => {
     };
     void performStep(INITIALIZATION_STEPS.FETCH_TOS_STATUS, doFetchTOSStatus);
   }, [performStep]);
-  
+
   /**
    * Step 3 - determinazione pagina iniziale
    */
@@ -146,18 +156,15 @@ const SessionGuardRender = () => {
     const doInitalPageDetermination = async () => {
       // l'analisi delle TOS ha senso solo se c'è un utente
       if (sessionToken && !isClosedSession) {
-
         // non si setta initial page se è un session reload di un utente che ha già accettato i TOS
-        const initialPage = tos
-          ? (isSessionReload ? undefined : routes.NOTIFICHE) 
-          : routes.TOS;
+        const initialPage = tos ? (isSessionReload ? undefined : routes.NOTIFICHE) : routes.TOS;
         if (initialPage) {
-          navigate(initialPage, {replace: true});
+          navigate(initialPage, { replace: true });
         }
       }
     };
     void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
-   }, [performStep]);
+  }, [performStep]);
 
   /**
    * Step 4 - lancio del sessionCheck
@@ -173,14 +180,13 @@ const SessionGuardRender = () => {
   /**
    * Fine processo inizializzazione
    */
-   useEffect(() => {
-    if (!isInitialized && isFinished() ) {
+  useEffect(() => {
+    if (!isInitialized && isFinished()) {
       dispatch(appStateActions.finishInitialization());
     }
   }, [isInitialized, isFinished]);
 
   return <SessionGuardRender />;
 };
-
 
 export default SessionGuard;

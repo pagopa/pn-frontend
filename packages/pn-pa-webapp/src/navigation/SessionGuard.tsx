@@ -1,38 +1,46 @@
-import { appStateActions, InactivityHandler, SessionModal, useProcess, useSessionCheck } from "@pagopa-pn/pn-commons";
-import { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { exchangeToken, logout } from "../redux/auth/actions";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { RootState } from "../redux/store";
-import { DISABLE_INACTIVITY_HANDLER } from "../utils/constants";
-import { getHomePage } from "../utils/role.utility";
-import { goToSelfcareLogin } from "./navigation.utility";
+import {
+  appStateActions,
+  InactivityHandler,
+  SessionModal,
+  useProcess,
+  useSessionCheck,
+} from '@pagopa-pn/pn-commons';
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { exchangeToken, logout } from '../redux/auth/actions';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
+import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
+import { getHomePage } from '../utils/role.utility';
+import { goToSelfcareLogin } from './navigation.utility';
 
 enum INITIALIZATION_STEPS {
-  USER_DETERMINATION = "UserDetermination",
-  INITIAL_PAGE_DETERMINATION = "InitialPageDetermination",
-  SESSION_CHECK = "SessionCheck",
+  USER_DETERMINATION = 'UserDetermination',
+  INITIAL_PAGE_DETERMINATION = 'InitialPageDetermination',
+  SESSION_CHECK = 'SessionCheck',
 }
 
 const INITIALIZATION_SEQUENCE = [
-  INITIALIZATION_STEPS.USER_DETERMINATION, 
-  INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, INITIALIZATION_STEPS.SESSION_CHECK
+  INITIALIZATION_STEPS.USER_DETERMINATION,
+  INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION,
+  INITIALIZATION_STEPS.SESSION_CHECK,
 ];
 
 const inactivityTimer = 5 * 60 * 1000;
 
-
-// riguardo alla definizione di due componenti separati, 
+// riguardo alla definizione di due componenti separati,
 // cfr. il commento in merito nel file SessionGuard.tsx in pn-personafisica-webapp
 
 /**
  * SessionGuardRender: logica di renderizzazione
  */
- const SessionGuardRender = () => {
+const SessionGuardRender = () => {
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
-  const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector((state: RootState) => state.userState);
+  const { isUnauthorizedUser, messageUnauthorizedUser, isClosedSession } = useAppSelector(
+    (state: RootState) => state.userState
+  );
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
 
@@ -43,45 +51,51 @@ const inactivityTimer = 5 * 60 * 1000;
     message: isUnauthorizedUser ? messageUnauthorizedUser.message : t('leaving-app.message'),
   };
 
-  const renderIfInitialized = () => isUnauthorizedUser || isClosedSession
-    ? <SessionModal
+  const renderIfInitialized = () =>
+    isUnauthorizedUser || isClosedSession ? (
+      <SessionModal
         open
         title={goodbyeMessage.title}
         message={goodbyeMessage.message}
         handleClose={goToSelfcareLogin}
         initTimeout
       />
-    : isAnonymousUser || DISABLE_INACTIVITY_HANDLER 
-      ? <Outlet />
-      : <InactivityHandler inactivityTimer={inactivityTimer} onTimerExpired={() => dispatch(logout())}>
-          <Outlet />
-        </InactivityHandler>
-    ;
-  
+    ) : isAnonymousUser || DISABLE_INACTIVITY_HANDLER ? (
+      <Outlet />
+    ) : (
+      <InactivityHandler
+        inactivityTimer={inactivityTimer}
+        onTimerExpired={() => dispatch(logout())}
+      >
+        <Outlet />
+      </InactivityHandler>
+    );
   // mi sarebbe piaciuto lasciare il isInitialized ? ...real thing... : <div>Avviando app ...</div>
-  // in SessionGuard, mi sa che SessionGuardRender si dovrebbe attivare soltanto quando c'è qualcosa da 
-  // veramente renderizzare. 
+  // in SessionGuard, mi sa che SessionGuardRender si dovrebbe attivare soltanto quando c'è qualcosa da
+  // veramente renderizzare.
   // Ma se faccio questo, la cognitive complexity di SessionGuard salta a 37 (!!) almeno in in pf-webapp,
   // perciò faccio il bravo riguardo Sonar e lo lascio così.
   // -----------------------
   // Carlos Lombardi, 2022.10.06
-  return isInitialized ? renderIfInitialized() : <div>Avviando app ...</div>;
+  return isInitialized ? renderIfInitialized() : <Fragment></Fragment>;
 };
 
 const SessionGuard = () => {
   const location = useLocation();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
-  const { sessionToken, desired_exp: expDate  } = useAppSelector((state: RootState) => state.userState.user);
+  const { sessionToken, desired_exp: expDate } = useAppSelector(
+    (state: RootState) => state.userState.user
+  );
   const { isClosedSession } = useAppSelector((state: RootState) => state.userState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
 
-  const {isFinished, performStep} = useProcess(INITIALIZATION_SEQUENCE);
+  const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
 
   // se un utente loggato fa reload, si deve evitare il navigate iniziale
-  // questo si determina appena cominciata l'inizializzazione, se c'è già un sessionToken 
-  // questo vuol dire che è stato preso da session storage, 
+  // questo si determina appena cominciata l'inizializzazione, se c'è già un sessionToken
+  // questo vuol dire che è stato preso da session storage,
   // cioè siamo in presenza di un reload di un utente loggato
   const [isSessionReload, setIsSessionReload] = useState(false);
 
@@ -95,7 +109,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     const doUserDetermination = async () => {
-      // se i dati del utente sono stati presi da session storage, 
+      // se i dati del utente sono stati presi da session storage,
       // si deve saltare la user determination e settare l'indicativo di session reload
       // che verrà usato nella initial page determination
       if (sessionToken) {
@@ -117,12 +131,11 @@ const SessionGuard = () => {
     const doInitalPageDetermination = async () => {
       // non si setta initial page se è un session reload
       if (sessionToken && !isClosedSession && !isSessionReload) {
-
-        navigate(getHomePage(), {replace: true});
+        navigate(getHomePage(), { replace: true });
       }
     };
     void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
-   }, [performStep, sessionToken, isClosedSession, isSessionReload]);
+  }, [performStep, sessionToken, isClosedSession, isSessionReload]);
 
   /**
    * Step 3 - lancio del sessionCheck
@@ -138,8 +151,8 @@ const SessionGuard = () => {
   /**
    * Fine processo inizializzazione
    */
-   useEffect(() => {
-    if (!isInitialized && isFinished() ) {
+  useEffect(() => {
+    if (!isInitialized && isFinished()) {
       dispatch(appStateActions.finishInitialization());
     }
   }, [isInitialized, isFinished]);

@@ -55,6 +55,7 @@
     "action": "Ricarica la pagina"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
+  "not-logged": "Piattaforma Notifiche, effettua il login",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
