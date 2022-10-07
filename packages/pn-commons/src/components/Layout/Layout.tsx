@@ -6,7 +6,7 @@ import { Box } from '@mui/system';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import ErrorBoundary from '../ErrorBoundary';
-import { AppType } from "../../types/AppType";
+import { AppType } from '../../types/AppType';
 
 type Props = {
   children?: ReactNode;
@@ -61,7 +61,7 @@ export default function Layout({
   eventTrackingCallbackProductSwitch,
   onAssistanceClick,
   isLogged,
-  appType = AppType.PF
+  appType = AppType.PF,
 }: Props) {
   return (
     <ErrorBoundary sx={{ height: '100vh' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
