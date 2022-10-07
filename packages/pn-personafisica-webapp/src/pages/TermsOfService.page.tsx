@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect } from 'react';
 import { Grid, Typography } from '@mui/material';
 
-import { PRIVACY_LINK_RELATIVE_PATH, TermsOfServiceHandler, URL_DIGITAL_NOTIFICATIONS, useIsMobile } from '@pagopa-pn/pn-commons';
+import { TermsOfServiceHandler, useIsMobile } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
@@ -15,10 +15,6 @@ const TermsOfService = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const tos = useAppSelector((state: RootState) => state.userState.tos);
-
-  const redirectPrivacyLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`);
-
-  const redirectToSLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`);
 
   const handleAccept = () => {
     void dispatch(acceptToS()).unwrap()
@@ -44,8 +40,6 @@ const TermsOfService = () => {
             {t('tos.title')}
           </Typography>
           <TermsOfServiceHandler
-            handleRedirectPrivacyLink={redirectPrivacyLink}
-            handleRedirectTosLink={redirectToSLink}
             handleAcceptTos={handleAccept}
           />
         </Grid>

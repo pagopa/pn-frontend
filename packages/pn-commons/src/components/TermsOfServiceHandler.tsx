@@ -1,20 +1,20 @@
 import { Box, Typography, Switch, Link, Button } from '@mui/material';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { PRIVACY_LINK_RELATIVE_PATH, URL_DIGITAL_NOTIFICATIONS } from '../utils';
 
 type Props = {
   handleAcceptTos: () => void;
-  handleRedirectPrivacyLink: () => void;
-  handleRedirectTosLink: () => void;
 };
 
 const TermsOfServiceHandler = ({
   handleAcceptTos,
-  handleRedirectPrivacyLink,
-  handleRedirectTosLink,
 }: Props) => {
   const { t } = useTranslation(['common']);
   const [accepted, setAccepted] = useState(false);
+
+  const redirectPrivacyLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}#privacy`);
+  const redirectToSLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}#tos`);
 
   return (
     <Box>
@@ -33,27 +33,27 @@ const TermsOfServiceHandler = ({
               <Link
                 key="privacy-link"
                 sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                onClick={handleRedirectPrivacyLink}
+                onClick={redirectPrivacyLink}
               />,
               <Link
                 key={'tos-link'}
                 data-testid="terms-and-conditions"
                 sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                onClick={handleRedirectTosLink}
+                onClick={redirectToSLink}
               />,
             ]}
           >
             Accetto l&apos;
             <Link
               sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-              onClick={handleRedirectPrivacyLink}
+              onClick={redirectPrivacyLink}
             >
               Informativa Privacy
             </Link>
             {' e i '}
             <Link
               sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-              onClick={handleRedirectTosLink}
+              onClick={redirectToSLink}
             >
               Termini e condizioni d&apos;uso
             </Link>
