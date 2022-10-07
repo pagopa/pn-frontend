@@ -1,9 +1,9 @@
 import {createAppResponseError, createAppResponseSuccess} from "./AppResponse";
-import AppResponsePublisher, { ResponsePublisher } from "./AppResponsePublisher";
+import AppResponsePublisher, { ResponseEventDispatcher } from "./AppResponsePublisher";
 
 export {
   createAppResponseError,
   createAppResponseSuccess,
-  ResponsePublisher,
+  ResponseEventDispatcher,
   AppResponsePublisher
 };

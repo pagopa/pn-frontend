@@ -7,7 +7,7 @@ import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts'
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
 import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
-import { apiOutcomeTestHelper, AppResponseMessage, ResponsePublisher } from '@pagopa-pn/pn-commons';
+import { apiOutcomeTestHelper, AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -461,7 +461,7 @@ describe('Contacts Page - different contact API behaviors', () => {
     const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
     apiSpy.mockRejectedValue({ response: { status: 500 } });
     await act(async () => void render(<>
-      <ResponsePublisher />
+      <ResponseEventDispatcher />
       <AppResponseMessage />
       <DigitalContactsCodeVerificationProvider>
         <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
@@ -474,7 +474,7 @@ describe('Contacts Page - different contact API behaviors', () => {
     const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
     apiSpy.mockResolvedValue([]);
     await act(async () => void render(<>
-      <ResponsePublisher />
+      <ResponseEventDispatcher />
       <AppResponseMessage />
       <DigitalContactsCodeVerificationProvider>
         <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />

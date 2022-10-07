@@ -1,16 +1,12 @@
 import * as React from 'react';
 import * as redux from 'react-redux';
 import { fireEvent, waitFor } from '@testing-library/react';
-// import userEvent from '@testing-library/user-event'
 
 import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
-// import { AppResponseMessage, ResponsePublisher } from '@pagopa-pn/pn-commons';
 
 import { axe, render } from '../../__test__/test-utils';
 import Deleghe from '../Deleghe.page';
 import * as hooks from '../../redux/hooks';
-// import * as sidemenuActions from '../../redux/sidemenu/actions';
-// import { DelegationsApi } from '../../api/delegations/Delegations.api';
 
 const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 
@@ -62,13 +58,10 @@ describe('Deleghe page', () => {
   afterEach(() => {
     mockSelectorSpy.mockClear();
     mockSelectorSpy.mockReset();
-    // mockSelectorSpy.mockRestore();
     useIsMobileSpy.mockClear();
     useIsMobileSpy.mockReset();
-    // useIsMobileSpy.mockRestore();
     useDispatchSpy.mockClear();
     useDispatchSpy.mockReset();
-    // useDispatchSpy.mockRestore();
   });
 
   it('renders the desktop view of the deleghe page', async () => {

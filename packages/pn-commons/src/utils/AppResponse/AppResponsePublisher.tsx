@@ -13,7 +13,7 @@ type EventsList = {
 /**
  * Singleton managing two different types of subscriptions:
  * - regular subscribers register for a particular event publication
- * - fallback subscribers register to be notified if there's no
+ * - fallback subscribers register to be notified if there's no regular
  *   subscribers for the particular event to be published
  */
 class AppResponsePublisher {
@@ -106,7 +106,7 @@ class AppResponsePublisher {
 const success = new AppResponsePublisher('success');
 const error = new AppResponsePublisher('error');
 
-export const ResponsePublisher = () => {
+export const ResponseEventDispatcher = () => {
   const responseEvent = useSelector((state: any) => state.appState.responseEvent);
 
   useEffect(() => {

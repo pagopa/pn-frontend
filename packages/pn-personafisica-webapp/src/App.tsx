@@ -11,7 +11,7 @@ import { Box } from '@mui/material';
 
 import { ProductSwitchItem } from '@pagopa/mui-italia';
 
-import { ResponsePublisher } from '@pagopa-pn/pn-commons/src/utils/AppResponse/AppResponsePublisher';
+import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons/src/utils/AppResponse/AppResponsePublisher';
 import {
   AppMessage,
   AppResponseMessage,
@@ -217,7 +217,7 @@ const App = () => {
 
   return (
     <>
-      <ResponsePublisher />
+      <ResponseEventDispatcher />
       <Layout
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
@@ -240,7 +240,8 @@ const App = () => {
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
       >
-        <AppMessage sessionRedirect={async () => await dispatch(logout())} />
+        {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
+        <AppMessage />
         <AppResponseMessage />
         <LoadingOverlay />
         <Router />

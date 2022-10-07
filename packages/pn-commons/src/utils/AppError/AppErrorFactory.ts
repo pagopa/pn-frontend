@@ -1,4 +1,4 @@
-import { ServerResponseError, ServerResponseErrorCode } from "../../types/AppResponse";
+import { HTTPStatusCode, ServerResponseError, ServerResponseErrorCode } from "../../types/AppResponse";
 import AppError from "./AppError";
 import { UnknownAppError } from "./UnknownAppError";
 import { MandateAlreadyExistsAppError } from "./MandateAlreadyExistsAppError";
@@ -10,7 +10,7 @@ import GenericAppErrorFactory from "./GenericAppError/GenericAppErrorFactory";
 import { UserAttributesInvalidVerificationCodeAppError } from "./UserAttributesInvalidVerificationCodeAppError";
 
 class AppErrorFactory {
-  static create(error: ServerResponseError | string | number): AppError {
+  static create(error: ServerResponseError | HTTPStatusCode): AppError {
     if(typeof error !== 'object') {
       return GenericAppErrorFactory.create(error);
     }
@@ -25,8 +25,8 @@ class AppErrorFactory {
         return new MandateDelegateHimselfAppError(error);
       case ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE:
         return new MandateInvalidVerificationCodeAppError(error);
-        case ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE:
-          return new UserAttributesInvalidVerificationCodeAppError(error);
+      case ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE:
+        return new UserAttributesInvalidVerificationCodeAppError(error);
       default:
         return new UnknownAppError(error);
     }

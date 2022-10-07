@@ -6,7 +6,7 @@ import * as actions from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 import { PROFILO } from '../../navigation/routes.const';
 import { ContactsApi } from '../../api/contacts/Contacts.api';
-import { apiOutcomeTestHelper, AppResponseMessage, ResponsePublisher } from '@pagopa-pn/pn-commons';
+import { apiOutcomeTestHelper, AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -123,7 +123,7 @@ describe('Contacts Page - different contact API behaviors', () => {
     const apiSpy = jest.spyOn(ContactsApi, 'getDigitalAddresses');
     apiSpy.mockRejectedValue({ response: { status: 500 } });
     await act(async () => void render(<>
-      <ResponsePublisher />
+      <ResponseEventDispatcher />
       <AppResponseMessage />
       <Contacts />
     </>));
@@ -134,7 +134,7 @@ describe('Contacts Page - different contact API behaviors', () => {
     const apiSpy = jest.spyOn(ContactsApi, 'getDigitalAddresses');
     apiSpy.mockResolvedValue({ legal: [], courtesy: [] });
     await act(async () => void render(<>
-      <ResponsePublisher />
+      <ResponseEventDispatcher />
       <AppResponseMessage />
       <Contacts />
     </>));

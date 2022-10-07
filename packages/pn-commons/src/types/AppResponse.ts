@@ -13,8 +13,6 @@ export interface ServerResponse {
 
 export interface ServerResponseData {
   status?: HTTPStatusCode;
-  // title?: string;
-  // detail?: string;
   traceId?: string;
   timestamp?: string;
   errors?: Array<ServerResponseError>;
@@ -22,8 +20,12 @@ export interface ServerResponseData {
 
 export interface ServerResponseError {
   code: ServerResponseErrorCode;
+  /**
+   * if present contains a string useful to identify the element
+   * that caused the error (can be useful on form submission and
+   * other requests having many fields that need to be validated)
+   */
   element?: string;
-  // detail?: string;
 }
 
 export interface AppResponse {
@@ -48,6 +50,13 @@ export interface ErrorMessage {
   content: string;
 }
 
+/**
+ * These codes have been retrived accessing the source code available
+ * inside the exception package of every BE project on github.
+ * Currently there's no centralized documentation that explains how
+ * and under which circumstances a particular error is thrown.
+ * Maurizio Flauti 22.09.2022
+ */
 export enum ServerResponseErrorCode {
   PN_MANDATE_NOTFOUND = 'PN_MANDATE_NOTFOUND',
   PN_MANDATE_ALREADYEXISTS = 'PN_MANDATE_ALREADYEXISTS',
@@ -57,6 +66,11 @@ export enum ServerResponseErrorCode {
   
   PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE = 'PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE',
   
+  /**
+   * The following codes have been reported here for completeness
+   * but not yet used to generate a specific message.
+   * Both BE documentation and text/copy availability are needed.
+   */
   PN_DELIVERY_MANDATENOTFOUND = 'PN_DELIVERY_MANDATENOTFOUND',
   PN_DELIVERY_NOTIFICATIONNOTFOUND = 'PN_DELIVERY_NOTIFICATIONNOTFOUND',
   PN_DELIVERY_FILEINFONOTFOUND = 'PN_DELIVERY_FILEINFONOTFOUND',
@@ -82,6 +96,10 @@ export enum ServerResponseErrorCode {
   PN_WEBHOOK_UPDATEEVENTSTREAM = 'PN_WEBHOOK_UPDATEEVENTSTREAM',
   PN_WEBHOOK_CONSUMEEVENTSTREAM = 'PN_WEBHOOK_CONSUMEEVENTSTREAM',
 
+  /**
+   * Used by AppErrorFactory as default when the received error code
+   * has no correspondent subtype to be mapped to
+   */
   UNKNOWN_ERROR = "UNKNOWN_ERROR",
   
   // GENERIC ERROR
