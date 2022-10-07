@@ -70,13 +70,7 @@ const SessionGuardRender = () => {
         <Outlet />
       </InactivityHandler>
     );
-  // mi sarebbe piaciuto lasciare il isInitialized ? ...real thing... : <div>Avviando app ...</div>
-  // in SessionGuard, mi sa che SessionGuardRender si dovrebbe attivare soltanto quando c'è qualcosa da
-  // veramente renderizzare.
-  // Ma se faccio questo, la cognitive complexity di SessionGuard salta a 37 (!!) almeno in in pf-webapp,
-  // perciò faccio il bravo riguardo Sonar e lo lascio così.
-  // -----------------------
-  // Carlos Lombardi, 2022.10.06
+
   return isInitialized ? renderIfInitialized() : <Fragment></Fragment>;
 };
 
