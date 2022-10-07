@@ -143,6 +143,7 @@ const ApiKeys = () => {
           {t('generated-api-keys')}
         </Typography>
         <Button
+          data-testid="generateApiKey"
           variant="outlined"
           sx={{ marginBottom: isMobile ? 3 : undefined }}
           onClick={handleNewApiKeyClick}

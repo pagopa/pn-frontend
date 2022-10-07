@@ -21,4 +21,6 @@ const apiKeysSlice = createSlice({
   }
 });
 
+export const { resetState } = apiKeysSlice.actions;
+
 export default apiKeysSlice;

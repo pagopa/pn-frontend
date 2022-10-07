@@ -5,7 +5,7 @@ import { LOG_REDUX_ACTIONS } from '../utils/constants';
 import { trackingMiddleware } from '../utils/mixpanel';
 import userSlice from './auth/reducers';
 import dashboardSlice from './dashboard/reducers';
-import NewApiKeySlice from './NewApiKey/reducers';
+import newApiKeySlice from './NewApiKey/reducers';
 import newNotificationSlice from './newNotification/reducers';
 import notificationSlice from './notification/reducers';
 import apiKeysSlice from './apiKeys/reducers';
@@ -19,7 +19,7 @@ export const appReducers = {
   notificationState: notificationSlice.reducer,
   newNotificationState: newNotificationSlice.reducer,
   apiKeysState: apiKeysSlice.reducer,
-  newApiKeyState: NewApiKeySlice.reducer,
+  newApiKeyState: newApiKeySlice.reducer,
 };
 
 export const createStore = () =>

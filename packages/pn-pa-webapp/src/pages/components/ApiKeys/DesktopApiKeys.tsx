@@ -1,6 +1,6 @@
 import { Fragment, useState, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, Button, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { MoreVert } from '@mui/icons-material';
 import {
@@ -10,7 +10,6 @@ import {
   StatusTooltip,
   EmptyState,
   CopyToClipboard,
-  // GroupsApiKey,
 } from '@pagopa-pn/pn-commons';
 import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory } from '../../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../../utils/apikeys.utility';
@@ -57,6 +56,7 @@ const DesktopApiKeys = ({
             onClick={handleClick}
             size="small"
             data-testid="contextMenuButton"
+            aria-label="context menu"
             aria-controls={open ? 'context-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
@@ -82,28 +82,38 @@ const DesktopApiKeys = ({
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
           {row.status !== ApiKeyStatus.ROTATED && (
-            <MenuItem data-testid="buttonView" onClick={() => handleViewApiKeyClick(apiKeyId)}>
-              {t('context-menu.view')}
+            <MenuItem>
+              <Button data-testid="buttonView" onClick={() => handleViewApiKeyClick(apiKeyId)}>
+                {t('context-menu.view')}
+              </Button>
             </MenuItem>
           )}
           {row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED && (
-            <MenuItem data-testid="buttonRotate" onClick={() => handleRotateApiKeyClick(apiKeyId)}>
-              {t('context-menu.rotate')}
+            <MenuItem>
+              <Button data-testid="buttonRotate" onClick={() => handleRotateApiKeyClick(apiKeyId)}>
+                {t('context-menu.rotate')}
+              </Button>
             </MenuItem>
           )}
           {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && (
-            <MenuItem data-testid="buttonBlock" onClick={() => handleBlockApiKeyClick(apiKeyId)}>
-              {t('context-menu.block')}
+            <MenuItem>
+              <Button data-testid="buttonBlock" onClick={() => handleBlockApiKeyClick(apiKeyId)}>
+                {t('context-menu.block')}
+              </Button>
             </MenuItem>
           )}
           {row.status === ApiKeyStatus.BLOCKED && (
-            <MenuItem data-testid="buttonDelete" onClick={() => handleDeleteApiKeyClick(apiKeyId)}>
-              {t('context-menu.delete')}
+            <MenuItem>
+              <Button data-testid="buttonDelete" onClick={() => handleDeleteApiKeyClick(apiKeyId)}>
+                {t('context-menu.delete')}
+              </Button>
             </MenuItem>
           )}
           {row.status === ApiKeyStatus.BLOCKED && (
-            <MenuItem data-testid="buttonEnable" onClick={() => handleEnableApiKeyClick(apiKeyId)}>
-              {t('context-menu.enable')}
+            <MenuItem>
+              <Button data-testid="buttonEnable" onClick={() => handleEnableApiKeyClick(apiKeyId)}>
+                {t('context-menu.enable')}
+              </Button>
             </MenuItem>
           )}
         </Menu>

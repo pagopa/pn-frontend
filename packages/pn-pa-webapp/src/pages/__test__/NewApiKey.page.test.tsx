@@ -2,6 +2,7 @@
 import * as redux from 'react-redux';
 import { render, act, RenderResult, testFormElements, testInput, fireEvent, waitFor } from '../../__test__/test-utils';
 import * as hooks from '../../redux/hooks';
+import * as routes from '../../navigation/routes.const';
 
 import NewApiKey from '../NewApiKey.page';
 jest.mock('react-i18next', () => ({
@@ -14,7 +15,6 @@ jest.mock('react-i18next', () => ({
 describe('NewApiKey component', () => {
   let result: RenderResult;
   let mockDispatchFn: jest.Mock;
-  const confirmHandlerMk = jest.fn();
 
   beforeEach(async () =>{
     const useAppSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
@@ -28,7 +28,7 @@ describe('NewApiKey component', () => {
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     mockDispatchFn = jest.fn();
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
 
     // render component
     await act(async () => {
@@ -54,23 +54,21 @@ describe('NewApiKey component', () => {
 
   it('changes form values and clicks on confirm', async () => {
     // mock dispatch
-    const form = result.container.querySelector('form');
-    await testInput(form!, 'name', 'mock-name');
-    const button = form?.querySelector('button[type="submit"]');
+    const form = result.container.querySelector('form') as HTMLFormElement;
+    await testInput(form, 'name', 'mock-name');
+    const button = form.querySelector('button[type="submit"]');
     expect(button).toBeEnabled();
-    // await waitFor(() => fireEvent.click(button!));
-    await waitFor(() => form?.submit());
+    fireEvent.click(button!);
+
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      /* expect(mockDispatchFn).toBeCalledWith({
-        payload: {
-          name: 'mock-name',
-          groups: [],
-        },
-        type: 'newApiKeyState/saveNewApiKey',
-      }); */
-      expect(confirmHandlerMk).toBeCalledTimes(1);
     });
+  });
+
+  test('clicks on the breadcrumb button', async () => {
+    const links = result?.getAllByRole('link');
+    expect(links![0]).toHaveTextContent(/page-title/i);
+    expect(links![0]).toHaveAttribute('href', routes.API_KEYS);
   });
 
 });

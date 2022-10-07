@@ -9,8 +9,8 @@ const initialState = {
 };
 
 /* eslint-disable functional/immutable-data */
-const NewApiKeySlice = createSlice({
-  name: 'apiKeysSlice',
+const newApiKeySlice = createSlice({
+  name: 'newApiKeySlice',
   initialState,
   reducers: {
     resetState: () => initialState,
@@ -24,5 +24,5 @@ const NewApiKeySlice = createSlice({
     });
   }
 });
-
-export default NewApiKeySlice;
+export const { resetState } = newApiKeySlice.actions;
+export default newApiKeySlice;

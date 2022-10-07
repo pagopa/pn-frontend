@@ -43,9 +43,7 @@ const SubTitle = () => {
 const NewApiKey = () => {
   const dispatch = useAppDispatch();
   const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState);
-  // const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState.apiKey);
   const isMobile = useIsMobile();
-  // const groups = useAppSelector((state: RootState) => state.newApiKeyState.groups);
   const { t } = useTranslation(['apikeys'], { keyPrefix: 'new-api-key' });
   const { t: tc} = useTranslation(['common']);
   const [apiKeySent, setApiKeySent] = useState<boolean>(false);
@@ -110,7 +108,7 @@ const NewApiKey = () => {
               <Grid item xs={12} lg={8}>
                 <PnBreadcrumb
                   linkRoute={routes.API_KEYS}
-                  linkLabel="API Keys"
+                  linkLabel={t('page-title')}
                   currentLocationLabel={t('page-title')}
                   goBackLabel={tc('button.indietro')}
                 />
@@ -171,7 +169,7 @@ const NewApiKey = () => {
                       </Box>
                     </Paper>
                     <Box mt={3}>
-                      <Button variant="contained" type="submit" qnClick={() => formik.submitForm()} disabled={!formik.isValid}>
+                      <Button variant="contained" type="submit" disabled={!formik.isValid}>
                       {t('continue-button')}
                       </Button>
                     </Box>
