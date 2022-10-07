@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/pagopa/pn-frontend/compare/v1.3.0...v1.3.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* **pn-2164:** change copy for activate service banner ([#411](https://github.com/pagopa/pn-frontend/issues/411)) ([7fc83e7](https://github.com/pagopa/pn-frontend/commit/7fc83e788caeff90a47211c39201e5d411137445))
+
+
+
+
+
+# [1.3.0](https://github.com/pagopa/pn-frontend/compare/v1.2.2...v1.3.0) (2022-09-23)
+
+
+### Bug Fixes
+
+* **pn-1368:** change mixpanel imports and target cookies ([#403](https://github.com/pagopa/pn-frontend/issues/403)) ([daf07e9](https://github.com/pagopa/pn-frontend/commit/daf07e98c8aef983b10813d56e6f1f671664aafc))
+* pn-2216 change tokenExchange from get to post ([4b75578](https://github.com/pagopa/pn-frontend/commit/4b7557818eece06eddb8b08bf76401c2bd575c4d))
+
+
+### Features
+
+* **Pn-1851:** cookie script  ([#408](https://github.com/pagopa/pn-frontend/issues/408)) ([7c8021d](https://github.com/pagopa/pn-frontend/commit/7c8021d5fcc326bfb1d0a1a7ce8088e9538e5f8d))
+* **PN-2145:** redirect to logout  route when doing logout ([#396](https://github.com/pagopa/pn-frontend/issues/396)) ([6d5509a](https://github.com/pagopa/pn-frontend/commit/6d5509a9931f4aaa1463a5a70aa3d4e5435e5eab))
+
+
+
+
+
 ## [1.2.2](https://github.com/pagopa/pn-frontend/compare/v0.2.2...v1.2.2) (2022-09-14)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-webapp
