@@ -43,19 +43,24 @@ const userSlice = createSlice({
     fetchedTos: false,
     isUnauthorizedUser: false,
     messageUnauthorizedUser: emptyUnauthorizedMessage,
+    isClosedSession: false,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
       state.user = action.payload;
+      state.isClosedSession = false;
     });
     builder.addCase(exchangeToken.rejected, (state, action) => {
       const adaptedError = adaptedTokenExchangeError(action.payload);
       state.isUnauthorizedUser = adaptedError.isUnauthorizedUser;
       state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser ? adaptedError.response.customMessage : emptyUnauthorizedMessage;
+      state.isClosedSession = false;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = action.payload;
+      state.isUnauthorizedUser = false;
+      state.isClosedSession = true;
     });
     builder.addCase(getToSApproval.fulfilled, (state, action) => {
       state.tos = action.payload.accepted;

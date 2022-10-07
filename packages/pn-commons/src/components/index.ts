@@ -5,7 +5,6 @@ import { LoadingOverlay } from './Loading/LoadingOverlay';
 import CustomPagination from './Pagination/CustomPagination';
 import CustomTooltip from './CustomTooltip';
 import AppMessage from './AppMessage';
-import HandleAuth from './HandleAuth';
 import SessionModal from './SessionModal';
 import SideMenu from './SideMenu/SideMenu';
 import StatusTooltip from './Notifications/StatusTooltip';
@@ -43,7 +42,6 @@ export {
     CustomPagination,
     CustomTooltip,
     AppMessage,
-    HandleAuth,
     SideMenu,
     ItemsTable,
     EmptyState,

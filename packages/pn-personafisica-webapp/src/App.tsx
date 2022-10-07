@@ -111,7 +111,7 @@ const App = () => {
     if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
     }
-  }, [pendingDelegators, sessionToken]);
+  }, [sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
     // implementazione esplorativa su come potrebbe gestirse l'errore dell'API
@@ -226,13 +226,14 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!fetchedTos || tos}
+        showSideMenu={!!sessionToken && (!fetchedTos || tos)}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown
         userActions={userActions}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
+        isLogged={!!sessionToken}
       >
         <AppMessage sessionRedirect={async () => await dispatch(logout())} />
         <LoadingOverlay />
