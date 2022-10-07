@@ -1,11 +1,12 @@
-import { ReactNode, ErrorInfo } from 'react';
+import { ErrorInfo, ReactNode } from 'react';
 import { Stack } from '@mui/material';
-import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
+import { JwtUser, PartyEntity, ProductEntity, UserAction } from '@pagopa/mui-italia';
 import { Box } from '@mui/system';
 
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import ErrorBoundary from '../ErrorBoundary';
+import { AppType } from "../../types/AppType";
 
 type Props = {
   children?: ReactNode;
@@ -39,6 +40,8 @@ type Props = {
   onAssistanceClick?: () => void;
   /** Whether there is a logged user */
   isLogged?: boolean;
+  /** Type of the current application */
+  appType?: AppType;
 };
 
 export default function Layout({
@@ -58,6 +61,7 @@ export default function Layout({
   eventTrackingCallbackProductSwitch,
   onAssistanceClick,
   isLogged,
+  appType = AppType.PF
 }: Props) {
   return (
     <ErrorBoundary sx={{ height: '100vh' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
@@ -93,6 +97,7 @@ export default function Layout({
           loggedUser={loggedUser.id !== ''}
           onLanguageChanged={onLanguageChanged}
           eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
+          appType={appType}
         />
       </Stack>
     </ErrorBoundary>

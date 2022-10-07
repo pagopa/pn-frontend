@@ -39,6 +39,7 @@ import {
 } from './NotificationDetail';
 import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
+import { AppType } from './AppType';
 import { BasicUser, basicNoLoggedUserData } from './User';
 import { EventsType } from "./MixpanelEvents";
 
@@ -55,7 +56,8 @@ export {
     PaymentInfoDetail,
     PaymentStatus,
     PaymentAttachmentSName,
-    MessageType
+    MessageType,
+    AppType
 };
 export type {
     AnalogWorkflowDetails,
