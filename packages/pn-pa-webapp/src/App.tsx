@@ -184,7 +184,8 @@ const App = () => {
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
       >
-        <AppMessage sessionRedirect={handleLogout} />
+        {/* <AppMessage sessionRedirect={handleLogout} /> */}
+        <AppMessage />
         <LoadingOverlay />
         <Router />
       </Layout>

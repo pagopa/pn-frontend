@@ -6,8 +6,8 @@ import { IAppMessage, MessageType } from '../types';
 import Toast from './Toast/Toast';
 
 type EnqueuedMessage = {
-  type: 'error' | 'success',
-  message: IAppMessage
+  type: 'error' | 'success';
+  message: IAppMessage;
 };
 
 const AppMessage = () => {
@@ -33,7 +33,7 @@ const AppMessage = () => {
   useEffect(() => {
     if(!currentMessage && queue.length > 0) {
       setCurrentMessage(queue[0]);
-      queue.shift();
+      setQueue(() => queue.filter((message, index) => index !== 0 ? message : null));
       // setShowMessage(true);
     }
   }, [currentMessage, queue]);

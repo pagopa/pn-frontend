@@ -144,19 +144,6 @@ const NuovaDelega = () => {
 
   const xsValue = isMobile ? 12 : 4;
 
-  // const testPublishMessage = (errorResponse: AppResponse) => {
-  //   const error = errorResponse.errors ? errorResponse.errors[0] : null;
-  //   console.log("[NuovaDelega] Handled Event!");
-  //   console.log("[NuovaDelega] Response: ", errorResponse);
-  //   console.log("[NuovaDelega] Message: ", error?.message.content);
-  // };
-  
-  // useEffect(() => {
-  //   AppResponsePublisher.error.subscribe("createDelegation", testPublishMessage);
-    
-  //   return () => AppResponsePublisher.error.unsubscribe("createDelegation", testPublishMessage);
-  // }, []);
-
   useEffect(() => {
     dispatch(resetNewDelegation());
   }, []);

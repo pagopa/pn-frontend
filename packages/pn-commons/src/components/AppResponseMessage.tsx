@@ -10,9 +10,6 @@ const AppResponseMessage = () => {
   
   const showErrorMessage = (response: AppResponse) => {
     const { errors, action } = response;
-
-    console.log("============ ERRORS ============");
-    console.log(errors);
     
     errors?.forEach(error => {
       dispatch(

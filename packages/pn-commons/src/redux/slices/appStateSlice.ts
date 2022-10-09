@@ -1,5 +1,4 @@
 import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
-// import { createAppError, createAppMessage } from '../../services/message.service';
 import { createAppMessage } from '../../services/message.service';
 import { IAppMessage } from '../../types';
 import { AppResponse, AppResponseOutcome } from '../../types/AppResponse';
@@ -107,14 +106,8 @@ export const appStateSlice = createSlice({
         const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
         
-        // create AppResponseError object
         const response = createAppResponseError(actionBeingRejected, action.payload.response);
         state.responseEvent = { outcome: 'error', name: actionBeingRejected, response };
-        
-        // commented out to test the new pub/sub mechanism
-        // const error = createAppError(
-        //   { ...action.payload, action: actionBeingRejected }, { show: !action.payload.blockNotification });
-        // state.messages.errors.push(error);
       });
   },
 });

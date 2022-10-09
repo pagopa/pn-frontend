@@ -20,7 +20,8 @@ describe('App state slice tests', () => {
       messages: {
         errors: [],
         success: []
-      }
+      },
+      responseEvent: null
     });
   });
 });
