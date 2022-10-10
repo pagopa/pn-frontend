@@ -93,15 +93,8 @@ const Recipient = ({ onConfirm }: Props) => {
         // la lunghezza non può superare i 80 caratteri
         firstName: yup.string().required(tc('required-field')).test(
           'denominationTotalLength',
-          // params => {
-          //   console.log('generating the message for the firstName validation');
-          //   console.log(params);
-          //   return 'La lunghezza totale da nome e cognome non può superare gli 80 caratteri';
-          // },
-          tc(denominationTooLongErrorMessage),
+          t(denominationTooLongErrorMessage),
           function(value) {
-            console.log('in custom validation firstName');
-            console.log({ firstName: value, lastName: this.parent.lastName, recipientType: this.parent.recipientType });
             const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
             return (value || "").length + (this.parent.lastName as string || "").length <= maxLength;
           }
@@ -112,7 +105,6 @@ const Recipient = ({ onConfirm }: Props) => {
           is: (value: string) => value !== RecipientType.PG,
           then: yup.string().required(tc('required-field')),
         })
-        /* .required(tc('required-field')) */ 
         ,
         taxId: yup
           .string()
@@ -122,9 +114,7 @@ const Recipient = ({ onConfirm }: Props) => {
             'taxIdDependingOnRecipientType',
             t('fiscal-code-error'),
             function(value) {
-              console.log('in custom validation CF');
-              console.log({ cf: value, recipientType: this.parent.recipientType });
-                if (!value) {
+              if (!value) {
                 return true;
               }
               const isCF16 = dataRegex.fiscalCode.test(value);
@@ -314,17 +304,6 @@ const Recipient = ({ onConfirm }: Props) => {
                         name={`recipients[${index}].recipientType`}
                         value={values.recipients[index].recipientType}
                         onChange={(event) => {
-                          const valuesToUpdate: { recipientType: RecipientType; firstName: string; lastName?: string} = {
-                            recipientType: event.currentTarget.value as RecipientType, 
-                            firstName: '', 
-                          };
-                          if (event.currentTarget.value === RecipientType.PG) {
-                            console.log("actually cleaning the lastName");
-                            /* eslint-disable-next-line functional/immutable-data */
-                            valuesToUpdate.lastName = '';
-                          }
-                          console.log(`setting recipient type to ${event.currentTarget.value}`);
-                          console.log({ firstName: values.recipients[0].firstName, lastName: values.recipients[0].lastName, valuesToUpdate });
                           // Si accorpano tutte le modifiche da effettuare sullo stato di Formik in un unico setValues
                           // invece di chiamare più volte setFieldValue.
                           // Ho fatto così perché altrimenti il componente Recipient viene re-renderizzato ad ogni setFieldValue,
@@ -332,6 +311,14 @@ const Recipient = ({ onConfirm }: Props) => {
                           // per cui si ha fatto setFieldValue, ed il vecchio per gli altri.
                           // Cfr. https://github.com/jaredpalmer/formik/issues/581#issuecomment-1198510807.
                           // ...
+                          const valuesToUpdate: { recipientType: RecipientType; firstName: string; lastName?: string} = {
+                            recipientType: event.currentTarget.value as RecipientType, 
+                            firstName: '', 
+                          };
+                          if (event.currentTarget.value === RecipientType.PG) {
+                            /* eslint-disable-next-line functional/immutable-data */
+                            valuesToUpdate.lastName = '';
+                          }
                           setValues(currentValues => {
                             // ...
                             // Ma si deve fare attenzione ad un punto: il setValues non prevede la funzionalità invece 
@@ -352,20 +339,9 @@ const Recipient = ({ onConfirm }: Props) => {
                               updatedRecipient, 
                               ...currentValues.recipients.slice(index+1)
                             ];
-                            console.log('inside setValues');
-                            console.log({currentValues, newValues: {...currentValues, recipients: updatedRecipients}});
                             return ({...currentValues, recipients: updatedRecipients});
                           });
                           setDenominationTooLongErrorMessage(getDenominationTooLongErrorMessage(event.currentTarget.value as RecipientType));
-                          // setFieldValue(`recipients[${index}].firstName`, '');
-                          // if (event.currentTarget.value === RecipientType.PG) {
-                          //   console.log("actually cleaning the lastName");
-                          //   setFieldValue(`recipients[${index}].lastName`, '');
-                          // }
-                          // setFieldValue(
-                          //   `recipients[${index}].recipientType`,
-                          //   event.currentTarget.value
-                          // );
                           trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
                             type: event.currentTarget.value,
                           });
@@ -413,7 +389,7 @@ const Recipient = ({ onConfirm }: Props) => {
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
                               label={t('legal-person')}
-                              // disabled
+                              disabled
                             />
                           </Grid>
                           {values.recipients[index].recipientType === RecipientType.PG && (

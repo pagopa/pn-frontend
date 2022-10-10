@@ -1,6 +1,5 @@
 import { Grid, TextField } from '@mui/material';
 import { FormikErrors, FormikTouched, FormikValues, getIn } from 'formik';
-// import { useEffect, useState } from 'react';
 
 type Props = {
   keyName: string;
@@ -22,28 +21,12 @@ const FormTextField = ({
   errors,
   handleBlur,
   width = 12,
-}: Props) => {
-
-  // const [fakeValue, setFakeValue] = useState(undefined);
-
-  // useEffect(() => {
-  //   setFakeValue(undefined);
-  // }, []);
-
-  // if (keyName === 'recipients[0].firstName') {
-  //   console.log('showing the firstName field');
-  //   console.log({ currentValue: values[keyName], allValues: values });
-  // }
-
-  if (keyName === 'toto') {
-    console.log('this should never happen, added just to avoid a silly error');
-  }
-  return <Grid item xs={width}>
+}: Props) => (
+  <Grid item xs={width}>
     <TextField
       size="small"
       id={keyName}
       value={values[keyName]}
-      // value={fakeValue}
       onChange={(event) => {
         setFieldValue(keyName, event.currentTarget.value);
       }}
@@ -54,7 +37,7 @@ const FormTextField = ({
       helperText={getIn(touched, keyName) && getIn(errors, keyName)}
       fullWidth
     />
-  </Grid>;
-};
+  </Grid>
+);
 
 export default FormTextField;
