@@ -18,6 +18,7 @@ export interface AppStateState {
     name: string;
     response: AppResponse;
    } | null;
+  isInitialized: boolean;
 }
 
 const initialState: AppStateState = {
@@ -29,7 +30,8 @@ const initialState: AppStateState = {
     errors: [],
     success: [],
   },
-  responseEvent: null
+  responseEvent: null,
+  isInitialized: false,
 };
 
 const isLoading = (action: AnyAction) => action.type.endsWith('/pending');
@@ -85,6 +87,9 @@ export const appStateSlice = createSlice({
     removeSuccess(state, action: PayloadAction<string>) {
       state.messages.success = state.messages.success.filter((e) => e.id !== action.payload);
     },
+    finishInitialization(state, _: PayloadAction<void>) {
+      state.isInitialized = true;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -119,4 +124,5 @@ export const appStateSelectors = {
   selectLoading: (state: any) => state.appState.loading.result,
   selectErrors: (state: any) => state.appState.messages.errors,
   selectSuccess: (state: any) => state.appState.messages.success,
+  selectIsInitialized: (state: any) => state.appState.isInitialized,
 };

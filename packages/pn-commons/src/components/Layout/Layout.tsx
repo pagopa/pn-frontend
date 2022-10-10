@@ -1,17 +1,18 @@
-import { ReactNode, ErrorInfo } from 'react';
+import { ErrorInfo, ReactNode } from 'react';
 import { Stack } from '@mui/material';
-import { ProductEntity, JwtUser, PartyEntity, UserAction } from '@pagopa/mui-italia';
+import { JwtUser, PartyEntity, ProductEntity, UserAction } from '@pagopa/mui-italia';
 import { Box } from '@mui/system';
 
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import ErrorBoundary from '../ErrorBoundary';
+import { AppType } from '../../types/AppType';
 
 type Props = {
   children?: ReactNode;
   /** Logout/exit action to apply */
   onExitAction?: () => void;
-  /** Side Menu */
+  /** Side Menu  */
   sideMenu?: React.ReactElement;
   /** Show Side Menu */
   showSideMenu?: boolean;
@@ -37,6 +38,10 @@ type Props = {
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** event on assistance click button */
   onAssistanceClick?: () => void;
+  /** Whether there is a logged user */
+  isLogged?: boolean;
+  /** Type of the current application */
+  appType?: AppType;
 };
 
 export default function Layout({
@@ -55,6 +60,8 @@ export default function Layout({
   eventTrackingCallbackFooterChangeLanguage,
   eventTrackingCallbackProductSwitch,
   onAssistanceClick,
+  isLogged,
+  appType = AppType.PF,
 }: Props) {
   return (
     <ErrorBoundary sx={{ height: '100vh' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
@@ -72,6 +79,7 @@ export default function Layout({
           userActions={userActions}
           onAssistanceClick={onAssistanceClick}
           eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
+          isLogged={isLogged}
         />
         <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
           {showSideMenu && (
@@ -89,6 +97,7 @@ export default function Layout({
           loggedUser={loggedUser.id !== ''}
           onLanguageChanged={onLanguageChanged}
           eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
+          appType={appType}
         />
       </Stack>
     </ErrorBoundary>

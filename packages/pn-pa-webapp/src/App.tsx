@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   AppMessage,
   appStateActions,
+  AppType,
   initLocalization,
   Layout,
   LoadingOverlay,
@@ -43,6 +44,7 @@ const App = () => {
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
+  const sessionToken = loggedUser.sessionToken;
   const menuItems = useMemo(() => {
     // localize menu items
     const items = { ...getMenuItems(idOrganization, role?.role) };
@@ -177,12 +179,15 @@ const App = () => {
             />
           )
         }
+        showSideMenu={!!sessionToken}
         productsList={productsList}
         productId={'0'}
         partyList={partyList}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
+        appType={AppType.PA}
+        isLogged={!!sessionToken}
       >
         {/* <AppMessage sessionRedirect={handleLogout} /> */}
         <AppMessage />

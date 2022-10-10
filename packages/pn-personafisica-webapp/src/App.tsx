@@ -74,8 +74,9 @@ const App = () => {
   );
 
   const userActions = useMemo(
-    () => [
-      {
+
+    () => {
+      const profiloAction = {
         id: 'profile',
         label: t('menu.profilo'),
         onClick: () => {
@@ -83,15 +84,16 @@ const App = () => {
           navigate(routes.PROFILO);
         },
         icon: <SettingsIcon fontSize="small" color="inherit" />,
-      },
-      {
+      };
+      const logoutAction = {
         id: 'logout',
         label: t('header.logout'),
         onClick: () => handleUserLogout(),
         icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
-      },
-    ],
-    []
+      };
+      return tos ? [ profiloAction, logoutAction ] : [ logoutAction ];
+    },
+    [tos]
   );
 
   useUnload(() => {
@@ -116,7 +118,7 @@ const App = () => {
     if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
     }
-  }, [pendingDelegators, sessionToken]);
+  }, [sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
     // implementazione esplorativa su come potrebbe gestirse l'errore dell'API
@@ -232,13 +234,14 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!fetchedTos || tos}
+        showSideMenu={!!sessionToken && (!fetchedTos || tos)}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown
         userActions={userActions}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
+        isLogged={!!sessionToken}
       >
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <AppMessage />

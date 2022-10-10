@@ -2,8 +2,8 @@ import { Alert, Box, Stack } from "@mui/material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { Footer, ButtonNaked } from "@pagopa/mui-italia";
 import { ReactNode, useContext } from "react";
+import { useRouter } from "next/router";
 
-import { PAGOPA_HOME } from "@utils/constants";
 import LangContext from "../../provider/lang-context";
 import NavigationBar from "../components/NavigationBar";
 import { getAppData } from "../../api";
@@ -14,6 +14,7 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from "./footer.constants";
+import { PAGOPA_HOME } from "@utils/constants";
 
 interface Props {
   children?: ReactNode;
@@ -21,6 +22,8 @@ interface Props {
 
 const LandingLayout = ({ children }: Props) => {
   const lang = useContext(LangContext);
+  const { pathname } = useRouter();
+  const pageType = pathname.split("/")[1];
 
   const homeLink = {
     label: "PagoPA S.p.A.",
@@ -91,7 +94,7 @@ const LandingLayout = ({ children }: Props) => {
           }}
           legalInfo={companyLegalInfo}
           postLoginLinks={postLoginLinks}
-          preLoginLinks={preLoginLinks}
+          preLoginLinks={preLoginLinks(pageType)}
           currentLangCode={lang.selectedLanguage}
           onLanguageChanged={lang.changeLanguage}
           languages={LANGUAGES}
