@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
+import PrivacyTOSPage from "../pages/PrivacyTOS.page";
 import RequireAuth from './RequireAuth';
 import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
@@ -32,6 +33,7 @@ function Router() {
             <Route path={routes.PROFILO} element={<Profile />} />
           </Route>
         </Route>
+        <Route path={routes.PRIVACY_TOS} element={<PrivacyTOSPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
