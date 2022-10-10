@@ -221,6 +221,7 @@ const App = () => {
   return (
     <>
       <Layout
+        showLayout={path[1] !== 'privacy-tos'}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>

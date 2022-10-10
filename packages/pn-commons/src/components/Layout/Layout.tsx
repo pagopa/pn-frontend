@@ -37,7 +37,8 @@ type Props = {
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** event on assistance click button */
   onAssistanceClick?: () => void;
-  /** Type of the current application */
+  /** Show the layout */
+  showLayout: boolean;
 };
 
 export default function Layout({
@@ -56,6 +57,7 @@ export default function Layout({
   eventTrackingCallbackFooterChangeLanguage,
   eventTrackingCallbackProductSwitch,
   onAssistanceClick,
+  showLayout = true
 }: Props) {
   return (
     <ErrorBoundary sx={{ height: '100vh' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
@@ -63,34 +65,39 @@ export default function Layout({
         direction="column"
         sx={{ minHeight: '100vh' }} // 100vh per sticky footer
       >
-        <Header
-          onExitAction={onExitAction}
-          productsList={productsList}
-          productId={productId}
-          partyList={partyList}
-          loggedUser={loggedUser}
-          enableDropdown={enableUserDropdown}
-          userActions={userActions}
-          onAssistanceClick={onAssistanceClick}
-          eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
-        />
-        <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
-          {showSideMenu && (
-            <Box sx={{ width: { lg: 300 }, flexShrink: '0' }} component="nav">
-              {sideMenu}
-            </Box>
-          )}
-          <Box sx={{ flexGrow: 1 }} component="main">
-            <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
-              {children}
-            </ErrorBoundary>
-          </Box>
-        </Stack>
-        <Footer
-          loggedUser={loggedUser.id !== ''}
-          onLanguageChanged={onLanguageChanged}
-          eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
-        />
+        {showLayout &&
+          <>
+            <Header
+              onExitAction={onExitAction}
+              productsList={productsList}
+              productId={productId}
+              partyList={partyList}
+              loggedUser={loggedUser}
+              enableDropdown={enableUserDropdown}
+              userActions={userActions}
+              onAssistanceClick={onAssistanceClick}
+              eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
+            />
+              <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
+                {showSideMenu && (
+                  <Box sx={{ width: { lg: 300 }, flexShrink: '0' }} component="nav">
+                    {sideMenu}
+                  </Box>
+                )}
+                <Box sx={{ flexGrow: 1 }} component="main">
+                <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
+                  {children}
+                </ErrorBoundary>
+              </Box>
+            </Stack>
+            <Footer
+              loggedUser={loggedUser.id !== ''}
+              onLanguageChanged={onLanguageChanged}
+              eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
+            />
+          </>
+        }
+        {!showLayout && children}
       </Stack>
     </ErrorBoundary>
   );
