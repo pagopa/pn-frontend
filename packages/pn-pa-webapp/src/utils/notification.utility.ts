@@ -1,4 +1,4 @@
-import { NotificationDetailRecipient } from '@pagopa-pn/pn-commons';
+import { NotificationDetailRecipient, RecipientType } from '@pagopa-pn/pn-commons';
 
 import { FormRecipient } from '../models/NewNotification';
 
@@ -36,7 +36,7 @@ export const formatNotificationRecipients = (
         }
       : undefined;
     return {
-      denomination: `${recipient.firstName} ${recipient.lastName}`,
+      denomination: recipient.recipientType === RecipientType.PG ? recipient.firstName : `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
       payment: {

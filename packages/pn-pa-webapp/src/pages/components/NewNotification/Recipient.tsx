@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
@@ -57,22 +57,65 @@ type Props = {
   onConfirm: () => void;
 };
 
+function getDenominationTooLongErrorMessage(recipientType: RecipientType) {
+  return recipientType === RecipientType.PG
+    ? 'too-long-denomination-error-PG'
+    : 'too-long-denomination-error-PF';
+}
+
 const Recipient = ({ onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.recipient',
   });
   const { t: tc } = useTranslation(['common']);
+  const [denominationTooLongErrorMessage, setDenominationTooLongErrorMessage] = useState(
+    getDenominationTooLongErrorMessage(RecipientType.PF)
+  );
 
   const validationSchema = yup.object({
     recipients: yup.array().of(
       yup.object({
-        firstName: yup.string().required(tc('required-field')),
-        lastName: yup.string().required(tc('required-field')),
+        recipientType: yup.string(),
+        firstName: yup.string().required(tc('required-field')).test(
+          'denominationTotalLength',
+          // params => {
+          //   console.log('generating the message for the firstName validation');
+          //   console.log(params);
+          //   return 'La lunghezza totale da nome e cognome non può superare gli 80 caratteri';
+          // },
+          tc(denominationTooLongErrorMessage),
+          function(value) {
+            console.log('in custom validation firstName');
+            console.log({ firstName: value, lastName: this.parent.lastName, recipientType: this.parent.recipientType });
+            const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
+            return (value || "").length + (this.parent.lastName as string || "").length <= maxLength;
+          }
+        ),
+        lastName: yup.string().when('recipientType', {
+          is: (value: string) => value !== RecipientType.PG,
+          then: yup.string().required(tc('required-field')),
+        })
+        /* .required(tc('required-field')) */ 
+        ,
         taxId: yup
           .string()
           .required(tc('required-field'))
-          .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
+          .test(
+            'taxIdDependingOnRecipientType',
+            t('fiscal-code-error'),
+            function(value) {
+              console.log('in custom validation CF');
+              console.log({ cf: value, recipientType: this.parent.recipientType });
+                if (!value) {
+                return true;
+              }
+              const isCF16 = dataRegex.fiscalCode.test(value);
+              const isCF11 = dataRegex.pIva.test(value);
+              return isCF16 || (this.parent.recipientType === RecipientType.PG && isCF11);
+            }
+          ),
+            // .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
         creditorTaxId: yup
           .string()
           .required(tc('required-field'))
@@ -205,6 +248,7 @@ const Recipient = ({ onConfirm }: Props) => {
     onConfirm();
   };
 
+
   return (
     <Formik
       initialValues={initialValues}
@@ -213,7 +257,7 @@ const Recipient = ({ onConfirm }: Props) => {
       validateOnBlur={false}
       validateOnMount
     >
-      {({ values, setFieldValue, touched, handleBlur, errors, isValid }) => (
+      {({ values, setFieldValue, touched, handleBlur, errors, isValid, setValues }) => (
         <Form>
           <NewNotificationCard noPaper isContinueDisabled={!isValid}>
             {values.recipients.map((recipient, index) => (
@@ -253,10 +297,34 @@ const Recipient = ({ onConfirm }: Props) => {
                         name={`recipients[${index}].recipientType`}
                         value={values.recipients[index].recipientType}
                         onChange={(event) => {
-                          setFieldValue(
-                            'selectPersonaFisicaOrPersonaGiuridica',
-                            event.currentTarget.value
-                          );
+                          const valuesToUpdate: { recipientType: RecipientType; firstName: string; lastName?: string} = {
+                            recipientType: event.currentTarget.value as RecipientType, 
+                            firstName: '', 
+                          };
+                          if (event.currentTarget.value === RecipientType.PG) {
+                            console.log("actually cleaning the lastName");
+                            /* eslint-disable-next-line functional/immutable-data */
+                            valuesToUpdate.lastName = '';
+                          }
+                          console.log(`setting recipient type to ${event.currentTarget.value}`);
+                          console.log({ firstName: values.recipients[0].firstName, lastName: values.recipients[0].lastName, valuesToUpdate });
+                          setValues(currentValues => {
+                            const updatedRecipient = {...currentValues.recipients[index], ...valuesToUpdate};
+                            const updatedRecipients = [...currentValues.recipients.slice(0, index-1), updatedRecipient, ...currentValues.recipients.slice(index+1)];
+                            console.log('inside setValues');
+                            console.log({currentValues, newValues: {...currentValues, recipients: updatedRecipients}});
+                            return ({...currentValues, recipients: updatedRecipients});
+                          });
+                          setDenominationTooLongErrorMessage(getDenominationTooLongErrorMessage(event.currentTarget.value as RecipientType));
+                          // setFieldValue(`recipients[${index}].firstName`, '');
+                          // if (event.currentTarget.value === RecipientType.PG) {
+                          //   console.log("actually cleaning the lastName");
+                          //   setFieldValue(`recipients[${index}].lastName`, '');
+                          // }
+                          // setFieldValue(
+                          //   `recipients[${index}].recipientType`,
+                          //   event.currentTarget.value
+                          // );
                           trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
                             type: event.currentTarget.value,
                           });
@@ -282,6 +350,7 @@ const Recipient = ({ onConfirm }: Props) => {
                                 setFieldValue={setFieldValue}
                                 handleBlur={handleBlur}
                                 width={4}
+                                
                               />
                               <FormTextField
                                 keyName={`recipients[${index}].lastName`}
@@ -296,30 +365,30 @@ const Recipient = ({ onConfirm }: Props) => {
                             </>
                           )}
                         </Grid>
-                      </RadioGroup>
-                      <Grid container sx={{ width: '100%' }}>
-                        <Grid item xs={4}>
-                          <FormControlLabel
-                            value={RecipientType.PG}
-                            control={<Radio />}
-                            name={`recipients[${index}].recipientType`}
-                            label={t('legal-person')}
-                            disabled
-                          />
+                        <Grid container sx={{ width: '100%' }}>
+                          <Grid item xs={4}>
+                            <FormControlLabel
+                              value={RecipientType.PG}
+                              control={<Radio />}
+                              name={`recipients[${index}].recipientType`}
+                              label={t('legal-person')}
+                              // disabled
+                            />
+                          </Grid>
+                          {values.recipients[index].recipientType === RecipientType.PG && (
+                            <FormTextField
+                              keyName={`recipients[${index}].firstName`}
+                              label={`${t('business-name')}*`}
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleBlur={handleBlur}
+                              width={8}
+                            />
+                          )}
                         </Grid>
-                        {values.recipients[index].recipientType === RecipientType.PG && (
-                          <FormTextField
-                            keyName={`recipients[${index}].firstName`}
-                            label={`${t('business-name')}*`}
-                            values={values}
-                            touched={touched}
-                            errors={errors}
-                            setFieldValue={setFieldValue}
-                            handleBlur={handleBlur}
-                            width={8}
-                          />
-                        )}
-                      </Grid>
+                      </RadioGroup>
                     </FormControl>
                     <Grid container spacing={2} mt={2}>
                       <FormTextField
