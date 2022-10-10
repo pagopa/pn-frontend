@@ -3,11 +3,13 @@ import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   AppMessage,
+  AppResponseMessage,
   appStateActions,
   AppType,
   initLocalization,
   Layout,
   LoadingOverlay,
+  ResponseEventDispatcher,
   SideMenu,
   useMultiEvent,
   useTracking,
@@ -160,6 +162,7 @@ const App = () => {
 
   return (
     <>
+      <ResponseEventDispatcher />
       <Layout
         onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
@@ -189,8 +192,8 @@ const App = () => {
         appType={AppType.PA}
         isLogged={!!sessionToken}
       >
-        {/* <AppMessage sessionRedirect={handleLogout} /> */}
         <AppMessage />
+        <AppResponseMessage />
         <LoadingOverlay />
         <Router />
       </Layout>
