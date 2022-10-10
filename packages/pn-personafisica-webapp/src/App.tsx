@@ -234,7 +234,7 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!fetchedTos || tos}
+        showSideMenu={jwtUser.id !== '' && (!fetchedTos || tos)}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown

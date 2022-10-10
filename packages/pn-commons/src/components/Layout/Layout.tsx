@@ -6,7 +6,6 @@ import { Box } from '@mui/system';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import ErrorBoundary from '../ErrorBoundary';
-import { AppType } from "../../types/AppType";
 
 type Props = {
   children?: ReactNode;
@@ -39,7 +38,6 @@ type Props = {
   /** event on assistance click button */
   onAssistanceClick?: () => void;
   /** Type of the current application */
-  appType?: AppType;
 };
 
 export default function Layout({
@@ -58,7 +56,6 @@ export default function Layout({
   eventTrackingCallbackFooterChangeLanguage,
   eventTrackingCallbackProductSwitch,
   onAssistanceClick,
-  appType = AppType.PF
 }: Props) {
   return (
     <ErrorBoundary sx={{ height: '100vh' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
@@ -93,7 +90,6 @@ export default function Layout({
           loggedUser={loggedUser.id !== ''}
           onLanguageChanged={onLanguageChanged}
           eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
-          appType={appType}
         />
       </Stack>
     </ErrorBoundary>
