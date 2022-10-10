@@ -97,11 +97,6 @@ export const enableIOAddress = createAsyncThunk<DigitalAddress | void, string>(
       );
     } catch (e: any) {
       return rejectWithValue(e);
-      // if (e.response.status === 422) {
-      //   return rejectWithValue({ response: e.response, blockNotification: true });
-      // } else {
-      //   return rejectWithValue({ response: e.response });
-      // }
     }
   }
 );

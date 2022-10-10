@@ -16,7 +16,6 @@ const AppMessage = () => {
   const success = useSelector(appStateSelectors.selectSuccess);
   const [currentMessage, setCurrentMessage] = useState<EnqueuedMessage | null>(null);
   const [queue, setQueue] = useState<Array<EnqueuedMessage>>([]);
-  // const [showMessage, setShowMessage] = useState(false);
 
   const onCloseToast = (message: EnqueuedMessage) => {
     if(message.type === MessageType.ERROR) {
@@ -33,36 +32,32 @@ const AppMessage = () => {
   useEffect(() => {
     if(!currentMessage && queue.length > 0) {
       setCurrentMessage(queue[0]);
-      setQueue(() => queue.filter((message, index) => index !== 0 ? message : null));
-      // setShowMessage(true);
+      setQueue(currentValue => currentValue.slice(1));
     }
   }, [currentMessage, queue]);
 
-  // useEffect(() => {
-  //   setShowMessage(false);
-  // },[showMessage]);
-
   useEffect(() => {
-    const newErrors: Array<EnqueuedMessage> = errors.filter((message: IAppMessage) => !message.alreadyShown).map((message: IAppMessage) => ({
+    const alreadyEnqueuedIds = queue.map(elem => elem.message.id);
+    const newErrors: Array<EnqueuedMessage> = errors.filter((message: IAppMessage) => !message.alreadyShown && !alreadyEnqueuedIds.includes(message.id)).map((message: IAppMessage) => ({
       type: 'error',
       message
     }));
 
-    setQueue(() => queue.concat(newErrors));
+    setQueue((currentValue) => currentValue.concat(newErrors));
   }, [errors]);
 
   useEffect(() => {
-    const newSuccesses: Array<EnqueuedMessage> = success.filter((message: IAppMessage) => !message.alreadyShown).map((message: IAppMessage) => ({
+    const alreadyEnqueuedIds = queue.map(elem => elem.message.id);
+    const newSuccesses: Array<EnqueuedMessage> = success.filter((message: IAppMessage) => !message.alreadyShown && !alreadyEnqueuedIds.includes(message.id)).map((message: IAppMessage) => ({
       type: 'success',
       message
     }));
     
-    setQueue(() => queue.concat(newSuccesses));
+    setQueue((currentValue) => currentValue.concat(newSuccesses));
   }, [success]);
 
   return (
     <>
-    {/* {(currentMessage && showMessage) && */}
     {currentMessage &&
       <Toast
       key={currentMessage.message.id}

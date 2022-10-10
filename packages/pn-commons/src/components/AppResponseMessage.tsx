@@ -18,9 +18,9 @@ const AppResponseMessage = () => {
           message:error.message.content,
           action
         }),
-        );
-      });
-    };
+      );
+    });
+  };
 
   // const showSuccessMessage = (response: AppResponse) => {
   //   console.log("Operazione eseguita correttamente");

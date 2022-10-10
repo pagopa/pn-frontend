@@ -19,7 +19,7 @@ const errors: Array<IAppMessage> = [
 
 describe('AppMessage Component', () => {
 
-  it.skip('renders toast and dispacthes event on close', async () => {
+  it('renders toast and dispacthes event on close', async () => {
     // mock useSelector
     const useSelectorSpy = jest.spyOn(redux, 'useSelector');
     useSelectorSpy.mockReturnValueOnce(errors);
