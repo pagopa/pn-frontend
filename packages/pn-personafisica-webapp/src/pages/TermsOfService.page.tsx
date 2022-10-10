@@ -2,9 +2,9 @@ import { Box, Button, Grid, Switch, Typography } from '@mui/material';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Fragment, useEffect, useState } from 'react';
-import Link from '@mui/material/Link';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
 
+import Link from '@mui/material/Link';
+import { PRIVACY_LINK_RELATIVE_PATH, URL_DIGITAL_NOTIFICATIONS, useIsMobile } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
@@ -18,7 +18,9 @@ const TermsOfService = () => {
   const navigate = useNavigate();
   const tos = useAppSelector((state: RootState) => state.userState.tos);
 
-  const redirectToPrivacyAndTOS = (section: "#privacy" | "#tos") => navigate(routes.PRIVACY_TOS + section);
+  const redirectPrivacyLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`);
+
+  const redirectToSLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`);
 
   const handleAccept = () => {
     void dispatch(acceptToS()).unwrap()
@@ -63,27 +65,27 @@ const TermsOfService = () => {
                   <Link
                     key="privacy-link"
                     sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                    onClick={() => redirectToPrivacyAndTOS('#privacy')}
+                    onClick={redirectPrivacyLink}
                   />,
                   <Link
                     key={'tos-link'}
                     data-testid="terms-and-conditions"
                     sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                    onClick={() => redirectToPrivacyAndTOS('#tos')}
+                    onClick={redirectToSLink}
                   />,
                 ]}
               >
                 Accetto l&apos;
                 <Link
                   sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                  onClick={() => redirectToPrivacyAndTOS('#privacy')}
+                  onClick={redirectPrivacyLink}
                 >
                   Informativa Privacy
                 </Link>
                 {' e i '}
                 <Link
                   sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                  onClick={() => redirectToPrivacyAndTOS('#privacy')}
+                  onClick={redirectToSLink}
                 >
                   Termini e condizioni d&apos;uso
                 </Link>
