@@ -69,6 +69,18 @@ const Recipient = ({ onConfirm }: Props) => {
     keyPrefix: 'new-notification.steps.recipient',
   });
   const { t: tc } = useTranslation(['common']);
+
+  // Questo stato registra il codice del fa vedere se la lunghezza della denominazione del destinatario
+  // (sia nome + " " + cognome sia ragione sociale) supera gli 80 caratteri.
+  // Cfr. PN-2269.
+  // L'ho dovuto modellare in questo modo perché il messaggio di errore nel test può essere una funzione
+  // ... ma a questa funzione non arrivano negli parametri il valore degli altri campi,
+  // mentre che in questo caso il messaggio sulla denominazione dipende del valore di RecipientType.
+  //
+  // Poi ho definito getDenominationTooLongErrorMessage per concentrare in un unico posto 
+  // la definizione dei codici di messaggio.
+  // ----------------
+  // Carlos Lombardi, 2022.10.10
   const [denominationTooLongErrorMessage, setDenominationTooLongErrorMessage] = useState(
     getDenominationTooLongErrorMessage(RecipientType.PF)
   );
@@ -77,6 +89,8 @@ const Recipient = ({ onConfirm }: Props) => {
     recipients: yup.array().of(
       yup.object({
         recipientType: yup.string(),
+        // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
+        // la lunghezza non può superare i 80 caratteri
         firstName: yup.string().required(tc('required-field')).test(
           'denominationTotalLength',
           // params => {
@@ -92,6 +106,8 @@ const Recipient = ({ onConfirm }: Props) => {
             return (value || "").length + (this.parent.lastName as string || "").length <= maxLength;
           }
         ),
+        // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
+        // non viene richiesto
         lastName: yup.string().when('recipientType', {
           is: (value: string) => value !== RecipientType.PG,
           then: yup.string().required(tc('required-field')),
@@ -101,6 +117,7 @@ const Recipient = ({ onConfirm }: Props) => {
         taxId: yup
           .string()
           .required(tc('required-field'))
+          // validazione su CF: deve accettare solo formato a 16 caratteri per PF, e sia 16 sia 11 caratteri per PG
           .test(
             'taxIdDependingOnRecipientType',
             t('fiscal-code-error'),
@@ -308,9 +325,33 @@ const Recipient = ({ onConfirm }: Props) => {
                           }
                           console.log(`setting recipient type to ${event.currentTarget.value}`);
                           console.log({ firstName: values.recipients[0].firstName, lastName: values.recipients[0].lastName, valuesToUpdate });
+                          // Si accorpano tutte le modifiche da effettuare sullo stato di Formik in un unico setValues
+                          // invece di chiamare più volte setFieldValue.
+                          // Ho fatto così perché altrimenti il componente Recipient viene re-renderizzato ad ogni setFieldValue,
+                          // e di conseguenza vengono eseguite le validazioni, ma ogni volta col nuovo valore del attributo
+                          // per cui si ha fatto setFieldValue, ed il vecchio per gli altri.
+                          // Cfr. https://github.com/jaredpalmer/formik/issues/581#issuecomment-1198510807.
+                          // ...
                           setValues(currentValues => {
+                            // ...
+                            // Ma si deve fare attenzione ad un punto: il setValues non prevede la funzionalità invece 
+                            // inclusa nel setFieldValue, di analizzare un nome di attributo relativo ad una struttura complessa
+                            // specificato come una stringa, ad es. "recipients[0].firstName", e settare il valore indicato
+                            // (nel esempio, l'attributo firstName della prima posizione dentro l'array recipients).
+                            // Di conseguenza, si deve definire il nuovo valore dello stato in modo ben curato.
+                            // 
+                            // Qui sarebbe stato comodo l'utilizzo della libreria immer, che avrebbe permesso di far così
+                            // return produce(currentState, state => {
+                            //   state.recipients[index] = {...state.recipients[index], valuesToUpdate}
+                            // })
+                            // ----------------
+                            // Carlos Lombardi, 2022.10.10
                             const updatedRecipient = {...currentValues.recipients[index], ...valuesToUpdate};
-                            const updatedRecipients = [...currentValues.recipients.slice(0, index-1), updatedRecipient, ...currentValues.recipients.slice(index+1)];
+                            const updatedRecipients = [
+                              ...currentValues.recipients.slice(0, index-1), 
+                              updatedRecipient, 
+                              ...currentValues.recipients.slice(index+1)
+                            ];
                             console.log('inside setValues');
                             console.log({currentValues, newValues: {...currentValues, recipients: updatedRecipients}});
                             return ({...currentValues, recipients: updatedRecipients});
