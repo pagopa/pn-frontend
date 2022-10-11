@@ -97,6 +97,8 @@ const Recipient = ({ onConfirm }: Props) => {
         firstName: yup.string().required(tc('required-field')).test({
           name: 'denominationTotalLength',
           test(value) {
+            console.log('eseguendo la validazione di firstName');
+            console.log({ firstName: value, lastName: this.parent.lastName, recipientType: this.parent.recipientType });
             const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
             const isAcceptableLength =  (value || "").length + (this.parent.lastName as string || "").length <= maxLength;
             if (isAcceptableLength) {
@@ -265,6 +267,8 @@ const Recipient = ({ onConfirm }: Props) => {
   };
 
 
+  console.log('renderizzando Recipient');
+
   return (
     <Formik
       initialValues={initialValues}
@@ -313,13 +317,6 @@ const Recipient = ({ onConfirm }: Props) => {
                         name={`recipients[${index}].recipientType`}
                         value={values.recipients[index].recipientType}
                         onChange={(event) => {
-                          // Si accorpano tutte le modifiche da effettuare sullo stato di Formik in un unico setValues
-                          // invece di chiamare più volte setFieldValue.
-                          // Ho fatto così perché altrimenti il componente Recipient viene re-renderizzato ad ogni setFieldValue,
-                          // e di conseguenza vengono eseguite le validazioni, ma ogni volta col nuovo valore del attributo
-                          // per cui si ha fatto setFieldValue, ed il vecchio per gli altri.
-                          // Cfr. https://github.com/jaredpalmer/formik/issues/581#issuecomment-1198510807.
-                          // ...
                           const valuesToUpdate: { recipientType: RecipientType; firstName: string; lastName?: string} = {
                             recipientType: event.currentTarget.value as RecipientType, 
                             firstName: '', 
@@ -350,11 +347,20 @@ const Recipient = ({ onConfirm }: Props) => {
                             ];
                             return ({...currentValues, recipients: updatedRecipients});
                           });
-                          // setDenominationTooLongErrorMessage(getDenominationTooLongErrorMessage(event.currentTarget.value as RecipientType));
                           trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
                             type: event.currentTarget.value,
                           });
                         }}
+                        // onChange={(event) => {
+                        //   setFieldValue(`recipients[${index}].firstName`, "", false);
+                        //   if (event.currentTarget.value === RecipientType.PG) {
+                        //     setFieldValue(`recipients[${index}].lastName`, "", false);
+                        //   }
+                        //   setFieldValue(`recipients[${index}].recipientType`, event.currentTarget.value as RecipientType);
+                        //   trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
+                        //     type: event.currentTarget.value,
+                        //   });
+                        // }}
                       >
                         <Grid container spacing={2}>
                           <Grid item xs={4}>
