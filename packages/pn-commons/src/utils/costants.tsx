@@ -11,7 +11,7 @@ const isDev = process.env.NODE_ENV === 'development';
 const pathEnd = isDev ? '' : 'index.html';
 
 export const URL_DIGITAL_NOTIFICATIONS = 'https://www.notifichedigitali.pagopa.it/';
-export const PRIVACY_LINK_RELATIVE_PATH = '/privacy-tos/';
+export const PRIVACY_LINK_RELATIVE_PATH = '/privacy-tos';
 const ACCESSIBILITY_LINK_RELATIVE_PATH = 'cittadini/accessibilita/' + pathEnd;
 
 const getFooterLinkLabels = (

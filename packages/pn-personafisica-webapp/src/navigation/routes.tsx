@@ -2,7 +2,6 @@ import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
-import PrivacyTOSPage from "../pages/PrivacyTOS.page";
 import RequireAuth from './RequireAuth';
 import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
@@ -14,6 +13,7 @@ const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.
 const Contacts = React.lazy(() => import('../pages/Contacts.page'));
 const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
 const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
+const PrivacyTOSPage = React.lazy(() => import('../pages/PrivacyTOS.page'));
 
 function Router() {
   return (
