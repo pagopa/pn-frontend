@@ -1,4 +1,3 @@
-import * as redux from "react-redux";
 import Statistics from "../Statistics.page";
 import { render } from "../../__test__/test-utils";
 
@@ -10,13 +9,6 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('Statistics Page tests', () => {
-  const mockDispatchFn = jest.fn();
-
-  beforeEach(async () => {
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
-  });
-
   test('renders Statistics Page', () => {
     const result = render(<Statistics />, {
       preloadedState: {
