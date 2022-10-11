@@ -9,6 +9,7 @@ export const API_KEYS = '/api-keys';
 export const ROLES_SEGMENT = '/users';
 export const ID_PN_SEGMENT = 'prod-pn';
 export const GROUPS_SEGMENT = '/groups';
+export const TOS = '/tos';
 
 /** ROLES navigation link to SelfCare "Referenti" section for Piattaforma Notifiche
  * @param idOrganization

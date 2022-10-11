@@ -35,7 +35,11 @@ describe('VerifyUser Component', () => {
   it('checks token and navigation (valid) - and basic accessibility', async () => {
     // mock Redux store state, needed to make VerifyUser actually trigger a navigation
     const reduxStoreState = {
-      userState: { user: { sessionToken: 'suchanicetoken '} },
+      userState: {
+        user: { sessionToken: 'suchanicetoken '},
+        tos: false,
+        fetchedTos: true,
+      },
     };
 
     // mock action

@@ -17,7 +17,7 @@ const TermsOfService = () => {
   const handleAccept = () => {
     void dispatch(acceptToS()).unwrap()
     .then(() => {
-      navigate(routes.NOTIFICHE);
+      navigate(routes.DASHBOARD);
     })
     .catch(_ => {
       console.error(_);
@@ -26,7 +26,7 @@ const TermsOfService = () => {
 
   useEffect(() => {
     if (tos) {
-      navigate(routes.NOTIFICHE);
+      navigate(routes.DASHBOARD);
     }
   }, [tos]);
 

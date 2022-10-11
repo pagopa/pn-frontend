@@ -16,7 +16,7 @@ import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import { Box } from '@mui/material';
 
 import Router from './navigation/routes';
-import { getOrganizationParty, logout } from './redux/auth/actions';
+import { getOrganizationParty, getToSApproval, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
@@ -38,6 +38,7 @@ const App = () => {
   });
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const { fetchedTos, tos } = useAppSelector((state: RootState) => state.userState);
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.organizationParty
   );
@@ -48,6 +49,7 @@ const App = () => {
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
+  const sessionToken = loggedUser.sessionToken;
   const menuItems = useMemo(() => {
     // localize menu items
     const items = { ...getMenuItems(idOrganization, role?.role) };
@@ -133,6 +135,12 @@ const App = () => {
     }
   }, [idOrganization]);
 
+  useEffect(() => {
+    if (sessionToken !== '') {
+      void dispatch(getToSApproval());
+    }
+  }, [sessionToken]);
+
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
@@ -197,6 +205,7 @@ const App = () => {
             />
           )
         }
+        showSideMenu={!fetchedTos || tos}
         productsList={productsList}
         productId={'0'}
         partyList={partyList}

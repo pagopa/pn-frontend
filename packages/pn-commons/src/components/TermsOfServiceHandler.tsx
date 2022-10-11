@@ -18,6 +18,9 @@ const TermsOfServiceHandler = ({
 
   return (
     <Box>
+      <Typography mb={2} variant="h2" color="textPrimary" textAlign="center">
+        {t('tos.title')}
+      </Typography>
       <Typography textAlign="center" variant="body1">
         <Trans i18nKey={'tos.body'}>
           Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.
