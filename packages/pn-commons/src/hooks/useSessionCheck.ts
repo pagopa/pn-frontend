@@ -22,14 +22,16 @@ export const useSessionCheck = (timer: number, sessionExpiredCbk: () => void) =>
     }
   };
 
-  useEffect(() => {
-    // cleanup function
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    }
-  }, []);
+  useEffect(
+    () =>
+      // cleanup function
+      () => {
+        if (interval) {
+          clearInterval(interval);
+        }
+      },
+    []
+  );
 
   return initSessionCheck;
 };

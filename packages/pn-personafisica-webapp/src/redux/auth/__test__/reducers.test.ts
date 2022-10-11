@@ -54,6 +54,7 @@ describe('Auth redux state tests', () => {
           },
       tos: false,
       fetchedTos: false,
+      isClosedSession: false,
       isUnauthorizedUser: false,
       messageUnauthorizedUser: { title: '', message: '' },
     });
