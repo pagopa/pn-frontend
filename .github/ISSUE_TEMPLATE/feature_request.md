@@ -21,3 +21,4 @@ Inserisci una descrizione chiara e concisa su altre soluzioni che potrebbero ris
 
 **Altre informazioni**
 Se lo desideri, puoi aggiungere altri contenuti per dettagliare meglio la tua richiesta (es: screenshot, mock-up).
+

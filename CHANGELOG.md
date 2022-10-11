@@ -3,6 +3,40 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/pagopa/pn-frontend/compare/v1.3.0...v1.3.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* **pn-2164:** change copy for activate service banner ([#411](https://github.com/pagopa/pn-frontend/issues/411)) ([7fc83e7](https://github.com/pagopa/pn-frontend/commit/7fc83e788caeff90a47211c39201e5d411137445))
+* **pn-2242:** add link to accessibility page ([#412](https://github.com/pagopa/pn-frontend/issues/412)) ([3e67199](https://github.com/pagopa/pn-frontend/commit/3e67199902c14536ef38d82ce75705c2bc12e9ff))
+* **PN-2248:** added new eventcode to manage a KO in digitalprogress (timeline) ([c5ca9fe](https://github.com/pagopa/pn-frontend/commit/c5ca9fe18f545ab6f3e18d8413215071e1e0d2e1))
+
+
+
+
+
+# [1.3.0](https://github.com/pagopa/pn-frontend/compare/v1.2.2...v1.3.0) (2022-09-23)
+
+
+### Bug Fixes
+
+* **pn-1368:** change mixpanel imports and target cookies ([#403](https://github.com/pagopa/pn-frontend/issues/403)) ([daf07e9](https://github.com/pagopa/pn-frontend/commit/daf07e98c8aef983b10813d56e6f1f671664aafc))
+* **PN-2107:** fixed copy in timeline and some refactoring to reduce cognitive complex ([e776461](https://github.com/pagopa/pn-frontend/commit/e7764611ff769c7c7395472f82463047d44ff8a8))
+* pn-2216 change tokenExchange from get to post ([4b75578](https://github.com/pagopa/pn-frontend/commit/4b7557818eece06eddb8b08bf76401c2bd575c4d))
+
+
+### Features
+
+* **Pn-1851:** cookie script  ([#408](https://github.com/pagopa/pn-frontend/issues/408)) ([7c8021d](https://github.com/pagopa/pn-frontend/commit/7c8021d5fcc326bfb1d0a1a7ce8088e9538e5f8d))
+* **PN-2145:** redirect to logout  route when doing logout ([#396](https://github.com/pagopa/pn-frontend/issues/396)) ([6d5509a](https://github.com/pagopa/pn-frontend/commit/6d5509a9931f4aaa1463a5a70aa3d4e5435e5eab))
+* pn-2195 bottone CIE nascosto ([d3322d8](https://github.com/pagopa/pn-frontend/commit/d3322d8355439df14ad3d8773a1bd0067c2fc9c7))
+* **pn-2209:** add issue templates ([#404](https://github.com/pagopa/pn-frontend/issues/404)) ([97353c5](https://github.com/pagopa/pn-frontend/commit/97353c58211e2d472afcc65aa64dc574cd9ade5e))
+
+
+
+
+
 ## [1.2.2](https://github.com/pagopa/pn-frontend/compare/v0.2.2...v1.2.2) (2022-09-14)
 
 

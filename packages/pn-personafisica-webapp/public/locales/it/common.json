@@ -11,7 +11,9 @@
     "rimuovi": "Elimina",
     "enter": "Entra",
     "exit": "Esci",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "go-to-home": "Torna alla home page",
+    "go-to-login": "Procedi al login"
   },
   "menu": {
     "notifiche": "Notifiche",
@@ -61,6 +63,7 @@
     "action": "Ricarica la pagina"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
+  "not-logged": "Piattaforma Notifiche, effettua il login",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
