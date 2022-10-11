@@ -7,6 +7,7 @@ export const ConsentsApi = {
     apiClient
       .get<Consent>(CONSENTS(consentType))
       .then((response) => response.data),
+      // .then(() => Promise.reject({ response: { status: 500 } })),
 
   setConsentByType: (
     consentType: ConsentType,
