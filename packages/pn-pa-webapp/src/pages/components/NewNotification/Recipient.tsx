@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
@@ -57,11 +57,11 @@ type Props = {
   onConfirm: () => void;
 };
 
-function getDenominationTooLongErrorMessage(recipientType: RecipientType) {
-  return recipientType === RecipientType.PG
-    ? 'too-long-denomination-error-PG'
-    : 'too-long-denomination-error-PF';
-}
+// function getDenominationTooLongErrorMessage(recipientType: RecipientType) {
+//   return recipientType === RecipientType.PG
+//     ? 'too-long-denomination-error-PG'
+//     : 'too-long-denomination-error-PF';
+// }
 
 const Recipient = ({ onConfirm }: Props) => {
   const dispatch = useAppDispatch();
@@ -81,9 +81,9 @@ const Recipient = ({ onConfirm }: Props) => {
   // la definizione dei codici di messaggio.
   // ----------------
   // Carlos Lombardi, 2022.10.10
-  const [denominationTooLongErrorMessage, setDenominationTooLongErrorMessage] = useState(
-    getDenominationTooLongErrorMessage(RecipientType.PF)
-  );
+  // const [denominationTooLongErrorMessage, setDenominationTooLongErrorMessage] = useState(
+  //   getDenominationTooLongErrorMessage(RecipientType.PF)
+  // );
 
   const validationSchema = yup.object({
     recipients: yup.array().of(
@@ -91,14 +91,23 @@ const Recipient = ({ onConfirm }: Props) => {
         recipientType: yup.string(),
         // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
         // la lunghezza non può superare i 80 caratteri
-        firstName: yup.string().required(tc('required-field')).test(
-          'denominationTotalLength',
-          t(denominationTooLongErrorMessage),
-          function(value) {
+
+        // t(denominationTooLongErrorMessage),
+
+        firstName: yup.string().required(tc('required-field')).test({
+          name: 'denominationTotalLength',
+          test(value) {
             const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
-            return (value || "").length + (this.parent.lastName as string || "").length <= maxLength;
+            const isAcceptableLength =  (value || "").length + (this.parent.lastName as string || "").length <= maxLength;
+            if (isAcceptableLength) {
+              return true;
+            } else {
+              // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
+              const messageKey = `too-long-denomination-error-${this.parent.recipientType || "PF"}`;
+              return this.createError({ message: t(messageKey), path: this.path });
+            }
           }
-        ),
+        }),
         // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
         // non viene richiesto
         lastName: yup.string().when('recipientType', {
@@ -341,7 +350,7 @@ const Recipient = ({ onConfirm }: Props) => {
                             ];
                             return ({...currentValues, recipients: updatedRecipients});
                           });
-                          setDenominationTooLongErrorMessage(getDenominationTooLongErrorMessage(event.currentTarget.value as RecipientType));
+                          // setDenominationTooLongErrorMessage(getDenominationTooLongErrorMessage(event.currentTarget.value as RecipientType));
                           trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
                             type: event.currentTarget.value,
                           });
@@ -389,7 +398,7 @@ const Recipient = ({ onConfirm }: Props) => {
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
                               label={t('legal-person')}
-                              disabled
+                              // disabled
                             />
                           </Grid>
                           {values.recipients[index].recipientType === RecipientType.PG && (
