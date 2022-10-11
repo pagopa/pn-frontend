@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import {
   AppMessage,
   appStateActions,
-  AppType,
   initLocalization,
   Layout,
   LoadingOverlay,
@@ -179,6 +178,7 @@ const App = () => {
   return (
     <>
       <Layout
+        showLayout={path[1] !== 'privacy-tos'}
         onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
@@ -203,7 +203,6 @@ const App = () => {
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
-        appType={AppType.PA}
       >
         <AppMessage sessionRedirect={handleLogout} />
         <LoadingOverlay />

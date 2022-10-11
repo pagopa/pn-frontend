@@ -7,8 +7,8 @@ import {
   Typography
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {useLocation} from "react-router-dom";
-import {useState} from "react";
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
 
 const PrivacyTOSPage = () => {
   const { hash } = useLocation();
@@ -473,7 +473,7 @@ const PrivacyTOSPage = () => {
                   <li><u>OneTrust Technology Limited</u> - per la gestione delle richieste degli interessati, con sede
                     in 82 St John Street, London, England, EC1M 4JN, n. di iscrizione al Registro Imprese Great England
                     and Wales n. 04156317. Gli interessati possono contattare il responsabile della protezione dei dati
-                    scrivendo all’indirizzo e-mail: <Link href="dpo@onetrust.com">dpo@onetrust.com.</Link></li>
+                    scrivendo all’indirizzo e-mail: <Link href="mailto:dpo@onetrust.com">dpo@onetrust.com.</Link></li>
                 </ul>
               </Typography>
               <br/>
