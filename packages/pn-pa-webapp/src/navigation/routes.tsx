@@ -16,11 +16,13 @@ function Router() {
     <Routes>
       <Route path="/" element={<SessionGuard />}>
         {/* protected routes */}
+        <Route path={routes.STATISTICHE} element={<RouteGuard roles={[PNRole.ADMIN]} />}>
+          <Route path={routes.STATISTICHE} element={<Statistics/>} />
+        </Route>
         <Route path="/"  element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
           <Route path={routes.DASHBOARD} element={<Dashboard />} />
           <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
           <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
-          <Route path={routes.STATISTICHE} element={<Statistics />} />
           {/**
            * Refers to PN-1741
            * Commented out because beyond MVP scope
