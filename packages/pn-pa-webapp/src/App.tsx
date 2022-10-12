@@ -181,6 +181,7 @@ const App = () => {
       <Layout
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
+        showSideMenu={!isPrivacyPage || jwtUser.id !== ''}
         onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
