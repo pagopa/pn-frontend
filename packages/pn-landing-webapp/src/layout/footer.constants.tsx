@@ -1,4 +1,4 @@
-import { PreLoginFooterLinksType, FooterLinksType } from "@pagopa/mui-italia";
+import { FooterLinksType } from "@pagopa/mui-italia";
 
 const isDev = process.env.NODE_ENV === "development";
 const pathEnding = isDev ? "" : "index.html";
@@ -24,7 +24,7 @@ export const companyLegalInfo = (
   </>
 );
 
-export const preLoginLinks = (pageType: string): PreLoginFooterLinksType => ({
+export const preLoginLinks = () => ({
   // First column
   aboutUs: {
     title: undefined,
@@ -61,7 +61,7 @@ export const preLoginLinks = (pageType: string): PreLoginFooterLinksType => ({
     links: [
       {
         label: "Privacy Policy",
-        href: `/${pageType}/informativa-privacy/` + pathEnding,
+        href: `/informativa-privacy/` + pathEnding,
         ariaLabel: "Vai al link: Privacy Policy",
         linkType: "internal",
       },
