@@ -97,8 +97,6 @@ const Recipient = ({ onConfirm }: Props) => {
         firstName: yup.string().required(tc('required-field')).test({
           name: 'denominationTotalLength',
           test(value) {
-            console.log('eseguendo la validazione di firstName');
-            console.log({ firstName: value, lastName: this.parent.lastName, recipientType: this.parent.recipientType });
             const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
             const isAcceptableLength =  (value || "").length + (this.parent.lastName as string || "").length <= maxLength;
             if (isAcceptableLength) {
@@ -267,8 +265,6 @@ const Recipient = ({ onConfirm }: Props) => {
   };
 
 
-  console.log('renderizzando Recipient');
-
   return (
     <Formik
       initialValues={initialValues}
@@ -325,30 +321,13 @@ const Recipient = ({ onConfirm }: Props) => {
                             /* eslint-disable-next-line functional/immutable-data */
                             valuesToUpdate.lastName = '';
                           }
+                          
+                          // I take profit that any level in the value structure can be used in setFieldValue ...
                           setFieldValue(`recipients[${index}]`, {...values.recipients[index], ...valuesToUpdate});
-                          // setFieldValue(`recipients[${index}]`, (currentValue: any) => ({...currentValue, ...valuesToUpdate}));
-                          // setValues(currentValues => {
-                          //   // ...
-                          //   // Ma si deve fare attenzione ad un punto: il setValues non prevede la funzionalità invece 
-                          //   // inclusa nel setFieldValue, di analizzare un nome di attributo relativo ad una struttura complessa
-                          //   // specificato come una stringa, ad es. "recipients[0].firstName", e settare il valore indicato
-                          //   // (nel esempio, l'attributo firstName della prima posizione dentro l'array recipients).
-                          //   // Di conseguenza, si deve definire il nuovo valore dello stato in modo ben curato.
-                          //   // 
-                          //   // Qui sarebbe stato comodo l'utilizzo della libreria immer, che avrebbe permesso di far così
-                          //   // return produce(currentState, state => {
-                          //   //   state.recipients[index] = {...state.recipients[index], valuesToUpdate}
-                          //   // })
-                          //   // ----------------
-                          //   // Carlos Lombardi, 2022.10.10
-                          //   const updatedRecipient = {...currentValues.recipients[index], ...valuesToUpdate};
-                          //   const updatedRecipients = [
-                          //     ...currentValues.recipients.slice(0, index-1), 
-                          //     updatedRecipient, 
-                          //     ...currentValues.recipients.slice(index+1)
-                          //   ];
-                          //   return ({...currentValues, recipients: updatedRecipients});
-                          // });
+                          // In fact, I would have liked to specify the change through a function, i.e.
+                          //   setFieldValue(`recipients[${index}]`, (currentValue: any) => ({...currentValue, ...valuesToUpdate}));
+                          // but unfortunately Formik' setFieldValue is not capable of handling such kind of updates.
+
                           trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
                             type: event.currentTarget.value,
                           });
@@ -396,7 +375,7 @@ const Recipient = ({ onConfirm }: Props) => {
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
                               label={t('legal-person')}
-                              // disabled
+                              disabled
                             />
                           </Grid>
                           {values.recipients[index].recipientType === RecipientType.PG && (
