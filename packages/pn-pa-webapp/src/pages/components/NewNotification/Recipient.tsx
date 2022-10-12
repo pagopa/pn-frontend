@@ -277,7 +277,7 @@ const Recipient = ({ onConfirm }: Props) => {
       validateOnBlur={false}
       validateOnMount
     >
-      {({ values, setFieldValue, touched, handleBlur, errors, isValid, setValues }) => (
+      {({ values, setFieldValue, touched, handleBlur, errors, isValid, /* setValues */ }) => (
         <Form>
           <NewNotificationCard noPaper isContinueDisabled={!isValid}>
             {values.recipients.map((recipient, index) => (
@@ -325,42 +325,34 @@ const Recipient = ({ onConfirm }: Props) => {
                             /* eslint-disable-next-line functional/immutable-data */
                             valuesToUpdate.lastName = '';
                           }
-                          setValues(currentValues => {
-                            // ...
-                            // Ma si deve fare attenzione ad un punto: il setValues non prevede la funzionalità invece 
-                            // inclusa nel setFieldValue, di analizzare un nome di attributo relativo ad una struttura complessa
-                            // specificato come una stringa, ad es. "recipients[0].firstName", e settare il valore indicato
-                            // (nel esempio, l'attributo firstName della prima posizione dentro l'array recipients).
-                            // Di conseguenza, si deve definire il nuovo valore dello stato in modo ben curato.
-                            // 
-                            // Qui sarebbe stato comodo l'utilizzo della libreria immer, che avrebbe permesso di far così
-                            // return produce(currentState, state => {
-                            //   state.recipients[index] = {...state.recipients[index], valuesToUpdate}
-                            // })
-                            // ----------------
-                            // Carlos Lombardi, 2022.10.10
-                            const updatedRecipient = {...currentValues.recipients[index], ...valuesToUpdate};
-                            const updatedRecipients = [
-                              ...currentValues.recipients.slice(0, index-1), 
-                              updatedRecipient, 
-                              ...currentValues.recipients.slice(index+1)
-                            ];
-                            return ({...currentValues, recipients: updatedRecipients});
-                          });
+                          setFieldValue(`recipients[${index}]`, {...values.recipients[index], ...valuesToUpdate});
+                          // setFieldValue(`recipients[${index}]`, (currentValue: any) => ({...currentValue, ...valuesToUpdate}));
+                          // setValues(currentValues => {
+                          //   // ...
+                          //   // Ma si deve fare attenzione ad un punto: il setValues non prevede la funzionalità invece 
+                          //   // inclusa nel setFieldValue, di analizzare un nome di attributo relativo ad una struttura complessa
+                          //   // specificato come una stringa, ad es. "recipients[0].firstName", e settare il valore indicato
+                          //   // (nel esempio, l'attributo firstName della prima posizione dentro l'array recipients).
+                          //   // Di conseguenza, si deve definire il nuovo valore dello stato in modo ben curato.
+                          //   // 
+                          //   // Qui sarebbe stato comodo l'utilizzo della libreria immer, che avrebbe permesso di far così
+                          //   // return produce(currentState, state => {
+                          //   //   state.recipients[index] = {...state.recipients[index], valuesToUpdate}
+                          //   // })
+                          //   // ----------------
+                          //   // Carlos Lombardi, 2022.10.10
+                          //   const updatedRecipient = {...currentValues.recipients[index], ...valuesToUpdate};
+                          //   const updatedRecipients = [
+                          //     ...currentValues.recipients.slice(0, index-1), 
+                          //     updatedRecipient, 
+                          //     ...currentValues.recipients.slice(index+1)
+                          //   ];
+                          //   return ({...currentValues, recipients: updatedRecipients});
+                          // });
                           trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
                             type: event.currentTarget.value,
                           });
                         }}
-                        // onChange={(event) => {
-                        //   setFieldValue(`recipients[${index}].firstName`, "", false);
-                        //   if (event.currentTarget.value === RecipientType.PG) {
-                        //     setFieldValue(`recipients[${index}].lastName`, "", false);
-                        //   }
-                        //   setFieldValue(`recipients[${index}].recipientType`, event.currentTarget.value as RecipientType);
-                        //   trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
-                        //     type: event.currentTarget.value,
-                        //   });
-                        // }}
                       >
                         <Grid container spacing={2}>
                           <Grid item xs={4}>
