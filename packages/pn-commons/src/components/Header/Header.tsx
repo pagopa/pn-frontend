@@ -31,12 +31,14 @@ type HeaderProps = {
   onAssistanceClick?: () => void;
   /** Track product switch action */
   eventTrackingCallbackProductSwitch?: (target: string) => void;
+  /** Whether there is a logged user */
+  isLogged?: boolean;
 };
 
 const pagoPAHeaderLink: RootLinkType = {
   ...pagoPALink(),
   label: 'PagoPA S.p.A.',
-  title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.')
+  title: getLocalizedOrDefaultLabel('common', 'header.pago-pa-link', 'Sito di PagoPA S.p.A.'),
 };
 
 const Header = ({
@@ -48,11 +50,12 @@ const Header = ({
   enableDropdown,
   userActions,
   onAssistanceClick,
-  eventTrackingCallbackProductSwitch
+  eventTrackingCallbackProductSwitch,
+  isLogged,
 }: HeaderProps) => {
   const handleProductSelection = (product: ProductEntity) => {
     if (eventTrackingCallbackProductSwitch) {
-      eventTrackingCallbackProductSwitch(product.productUrl)
+      eventTrackingCallbackProductSwitch(product.productUrl);
     }
     if (product.productUrl) {
       /* eslint-disable-next-line functional/immutable-data */
@@ -60,8 +63,10 @@ const Header = ({
     }
   };
 
-  const enableHeaderProduct = productsList && productsList.length > 0 || partyList && partyList.length > 0;
-  
+  const enableHeaderProduct =
+    (isLogged || isLogged === undefined) &&
+    ((productsList && productsList.length > 0) || (partyList && partyList.length > 0));
+
   return (
     <AppBar sx={{ boxShadow: 'none', color: 'inherit' }} position="relative">
       <HeaderAccount
