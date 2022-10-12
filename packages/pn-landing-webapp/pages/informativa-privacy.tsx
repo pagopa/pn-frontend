@@ -32,7 +32,7 @@ const PrivacyPage: NextPage = () => (
           },
         }}
       >
-        <Grid container xs={9} direction="column" sx={{ mx: 'auto' }}>
+        <Grid container item xs={9} direction="column" sx={{ mx: 'auto' }}>
           <Grid item>
             <Typography sx={{ mb: 2 }} variant="h1">
               Policy Privacy
