@@ -94,7 +94,7 @@ const LandingLayout = ({ children }: Props) => {
           }}
           legalInfo={companyLegalInfo}
           postLoginLinks={postLoginLinks}
-          preLoginLinks={preLoginLinks(pageType)}
+          preLoginLinks={preLoginLinks()}
           currentLangCode={lang.selectedLanguage}
           onLanguageChanged={lang.changeLanguage}
           languages={LANGUAGES}

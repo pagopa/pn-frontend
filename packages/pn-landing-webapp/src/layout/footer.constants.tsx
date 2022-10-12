@@ -1,4 +1,4 @@
-import { FooterLinksType } from "@pagopa/mui-italia";
+import { FooterLinksType, PreLoginFooterLinksType } from "@pagopa/mui-italia";
 
 const isDev = process.env.NODE_ENV === "development";
 const pathEnding = isDev ? "" : "index.html";
@@ -24,7 +24,7 @@ export const companyLegalInfo = (
   </>
 );
 
-export const preLoginLinks = () => ({
+export const preLoginLinks = (): PreLoginFooterLinksType => ({
   // First column
   aboutUs: {
     title: undefined,
