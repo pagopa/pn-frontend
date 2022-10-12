@@ -73,6 +73,8 @@ const App = () => {
     [loggedUser]
   );
 
+  const isPrivacyPage = path[1] === 'privacy-tos';
+
   const userActions = useMemo(
 
     () => {
@@ -221,7 +223,8 @@ const App = () => {
   return (
     <>
       <Layout
-        showLayout={path[1] !== 'privacy-tos'}
+        showHeader={!isPrivacyPage}
+        showFooter={!isPrivacyPage}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>
