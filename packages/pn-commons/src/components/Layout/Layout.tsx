@@ -38,7 +38,7 @@ type Props = {
   /** event on assistance click button */
   onAssistanceClick?: () => void;
   /** Show the layout */
-  showLayout: boolean;
+  showLayout?: boolean;
 };
 
 export default function Layout({
@@ -85,11 +85,11 @@ export default function Layout({
                   </Box>
                 )}
                 <Box sx={{ flexGrow: 1 }} component="main">
-                <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
-                  {children}
-                </ErrorBoundary>
-              </Box>
-            </Stack>
+                  <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
+                    {children}
+                  </ErrorBoundary>
+                </Box>
+              </Stack>
             <Footer
               loggedUser={loggedUser.id !== ''}
               onLanguageChanged={onLanguageChanged}

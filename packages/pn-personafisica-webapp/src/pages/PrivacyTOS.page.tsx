@@ -2,7 +2,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Box,
+  Box, Container,
   Link,
   Typography
 } from "@mui/material";
@@ -24,7 +24,16 @@ const PrivacyTOSPage = () => {
 
   return (
     <>
-      <Box p={3}>
+      <Container
+        maxWidth="xl"
+        sx={{
+        py: {
+          xs: 4,
+          sm: 4,
+          md: 8,
+        },
+      }}
+        >
         <Typography variant="h3">Piattaforma Notifiche Digitali</Typography>
         <Typography variant="h4">Destinatari persone fisiche</Typography>
         <Box mt={3}>
@@ -775,7 +784,7 @@ const PrivacyTOSPage = () => {
             </AccordionDetails>
           </Accordion>
         </Box>
-      </Box>
+      </Container>
     </>);
 };
 
