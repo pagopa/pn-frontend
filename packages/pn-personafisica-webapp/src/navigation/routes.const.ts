@@ -11,3 +11,4 @@ export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: stri
 export const RECAPITI = '/recapiti';
 export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/${mandateId}`;
 export const TOS = `/tos`;
+export const PRIVACY_TOS = `/privacy-tos`;

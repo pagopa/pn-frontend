@@ -73,6 +73,8 @@ const App = () => {
     [loggedUser]
   );
 
+  const isPrivacyPage = path[1] === 'privacy-tos';
+
   const userActions = useMemo(
 
     () => {
@@ -221,6 +223,8 @@ const App = () => {
   return (
     <>
       <Layout
+        showHeader={!isPrivacyPage}
+        showFooter={!isPrivacyPage}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>
@@ -234,7 +238,7 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!fetchedTos || tos}
+        showSideMenu={jwtUser.id !== '' && (!fetchedTos || tos) && !isPrivacyPage}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import {
   AppMessage,
   appStateActions,
-  AppType,
   initLocalization,
   Layout,
   LoadingOverlay,
@@ -212,7 +211,6 @@ const App = () => {
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
-        appType={AppType.PA}
       >
         <AppMessage sessionRedirect={handleLogout} />
         <LoadingOverlay />
