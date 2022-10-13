@@ -73,7 +73,7 @@ const AttachmentBox = ({
         onFileUploaded={(file, sha256, name, size) =>
           onFileUploaded(`${id}.file`, file, sha256, name, size)
         }
-        onRemoveFile={() => onRemoveFile(`${id}.file`)}
+        onRemoveFile={() => onRemoveFile(id)}
         sx={{ marginTop: '10px' }}
         fileFormat="uint8Array"
         calcSha256
@@ -207,12 +207,16 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
       size,
       uint8Array: file,
       sha256,
-      name,
+      name
     });
   };
 
   const removeFileHandler = async (id: string) => {
-    await formik.setFieldValue(id, '');
+    await formik.setFieldValue(`${id}.ref`, {
+      key: '',
+      versionToken: '',
+    });
+    await formik.setFieldValue(`${id}.file`, '');
   };
 
   const addDocumentHandler = async () => {
