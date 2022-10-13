@@ -11,7 +11,9 @@
     "rimuovi": "Elimina",
     "enter": "Entra",
     "exit": "Esci",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "go-to-home": "Torna alla home page",
+    "go-to-login": "Procedi al login"
   },
   "menu": {
     "notifiche": "Notifiche",
@@ -61,6 +63,7 @@
     "action": "Ricarica la pagina"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
+  "not-logged": "Piattaforma Notifiche, effettua il login",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
@@ -82,7 +85,9 @@
     "invalid-token-title": "Non puoi accedere per un problema tecnico - token non valido",
     "generic-token-exchange-problem": "Non è stato possibile completare l'accesso",
     "generic-title": "Errore generico",
-    "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi"
+    "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi",
+    "generic-api-error-main-text": "Non siamo riusciti a recuperare questi dati.",
+    "generic-api-error-action-text": "Ricarica"
   },
   "footer": {
     "go-to-pagopa": "Link: vai al sito di PagoPA S.p.A.",

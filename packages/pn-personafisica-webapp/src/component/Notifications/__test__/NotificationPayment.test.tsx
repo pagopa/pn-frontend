@@ -1,12 +1,13 @@
 /* eslint-disable functional/no-let */
-import { NotificationDetailPayment } from "@pagopa-pn/pn-commons";
-import { waitFor } from '@testing-library/react';
+import { apiOutcomeTestHelper, NotificationDetailPayment } from "@pagopa-pn/pn-commons";
+import { act, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { PaymentStatus, PaymentInfoDetail } from "@pagopa-pn/pn-commons";
 import { axe, render, screen } from "../../../__test__/test-utils";
 import * as actions from '../../../redux/notification/actions';
 import * as hooks from '../../../redux/hooks';
 import NotificationPayment from "../NotificationPayment";
+import { NotificationsApi } from "../../../api/notifications/Notifications.api";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -15,6 +16,17 @@ jest.mock('react-i18next', () => ({
     }),
     Trans: () => "mocked-text",
 }));
+
+/**
+ * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
+ */
+ jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
+  return {
+    ...original,
+    ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
+  };
+});
 
 const mockedNotificationDetailPayment = {
   notificationFeePolicy: 'FLAT_RATE',
@@ -528,3 +540,37 @@ describe('NotificationPayment component', () => {
     }
   });
 });
+
+describe('NotificationPayment - different payment fetch API behaviors', () => {
+  beforeAll(() => {
+    jest.restoreAllMocks();
+  });
+
+  beforeEach(() => {
+    apiOutcomeTestHelper.setStandardMock();
+  });
+
+  afterEach(() => {
+    apiOutcomeTestHelper.clearMock();
+  });
+
+  it('API error', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
+    apiSpy.mockRejectedValue({ response: { status: 500 } });
+    await act(async () => void render(
+      <NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={() => {}}/>
+    ));
+    apiOutcomeTestHelper.expectApiErrorComponent(screen);
+  });
+
+  it('API OK', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
+    apiSpy.mockResolvedValue({ status: PaymentStatus.SUCCEEDED, url: "https://react.org" });
+    await act(async () => void render(
+      <NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={() => {}}/>
+    ));
+    apiOutcomeTestHelper.expectApiOKComponent(screen);
+  });
+});
+
+

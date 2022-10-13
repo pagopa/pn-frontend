@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -18,8 +18,8 @@ import {
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { getAllActivatedParties } from '../../redux/contact/actions';
+import { ApiErrorWrapper, useIsMobile, CustomDropdown } from '@pagopa-pn/pn-commons';
+import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 
@@ -101,9 +101,11 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     []
   );
 
-  useEffect(() => {
+  const fetchAllActivatedParties = useCallback(() => {
     void dispatch(getAllActivatedParties());
   }, []);
+
+  useEffect(() => fetchAllActivatedParties(), [fetchAllActivatedParties]);
 
   const validationSchema = yup.object({
     sender: yup.string().required(),
@@ -259,7 +261,11 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     }
   }, [addressTypes]);
 
-  return (
+  return <ApiErrorWrapper 
+    apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES} 
+    reloadAction={fetchAllActivatedParties} 
+    mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
+  >
     <DigitalContactsCard
       sectionTitle=""
       title=""
@@ -270,13 +276,12 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
         <Grid container direction="row" spacing={2} alignItems="flex">
           <Grid item lg xs={12}>
-            <TextField
+            <CustomDropdown
               id="sender"
               label={`${t('special-contacts.sender', { ns: 'recapiti' })}*`}
               name="sender"
               value={formik.values.sender}
               onChange={senderChangeHandler}
-              select
               fullWidth
               size="small"
             >
@@ -285,16 +290,15 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   <DropDownPartyMenuItem name={party.name} />
                 </MenuItem>
               ))}
-            </TextField>
+            </CustomDropdown>
           </Grid>
           <Grid item lg xs={12}>
-            <TextField
+            <CustomDropdown
               id="addressType"
               label={`${t('special-contacts.address-type', { ns: 'recapiti' })}*`}
               name="addressType"
               value={formik.values.addressType}
               onChange={addressTypeChangeHandler}
-              select
               fullWidth
               size="small"
             >
@@ -305,7 +309,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                     {a.value}
                   </MenuItem>
                 ))}
-            </TextField>
+            </CustomDropdown>
           </Grid>
           <Grid item lg xs={12}>
             {formik.values.addressType === LegalChannelType.PEC && (
@@ -423,7 +427,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         </Fragment>
       )}
     </DigitalContactsCard>
-  );
+  </ApiErrorWrapper>;
 };
 
 export default SpecialContacts;

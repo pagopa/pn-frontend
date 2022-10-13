@@ -1,19 +1,20 @@
-import { GetNotificationsParams, GetNotificationsResponse, Sort } from '@pagopa-pn/pn-commons';
+import { GetNotificationsParams, GetNotificationsResponse, performThunkAction, Sort } from '@pagopa-pn/pn-commons';
 import { createAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationColumn } from '../../models/Notifications';
 
+export enum DASHBOARD_ACTIONS  {
+  GET_RECEIVED_NOTIFICATIONS = 'getReceivedNotifications',
+}
+
 export const getReceivedNotifications = createAsyncThunk<
   GetNotificationsResponse,
   GetNotificationsParams
->('getReceivedNotifications', async (params: GetNotificationsParams, { rejectWithValue }) => {
-  try {
-    return await NotificationsApi.getReceivedNotifications(params);
-  } catch (e) {
-    return rejectWithValue(e);
-  }
-});
+>(DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS, 
+  performThunkAction((params: GetNotificationsParams) => NotificationsApi.getReceivedNotifications(params))
+);
+
 
 export const setPagination = createAction<{ page: number; size: number }>('setPagination');
 

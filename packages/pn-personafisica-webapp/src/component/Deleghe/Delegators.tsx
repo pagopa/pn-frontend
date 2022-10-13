@@ -1,15 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Chip, Stack, Typography } from '@mui/material';
-import { Column, ItemsTable, Item, Sort } from '@pagopa-pn/pn-commons';
+import { Column, ItemsTable, Item, Sort, ApiErrorWrapper, EmptyState } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
-import { getDelegators } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, getDelegators } from '../../redux/delegation/actions';
 import { setDelegatorsSorting } from '../../redux/delegation/reducers';
 import { DelegatorsColumn } from '../../models/Deleghe';
-import TableError from '../TableError/TableError';
 import { AcceptButton, Menu, OrganizationsList } from './DelegationsElements';
 
 const Delegators = () => {
@@ -17,9 +16,6 @@ const Delegators = () => {
   const dispatch = useAppDispatch();
   const delegators = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegators
-  );
-  const delegatorsError = useAppSelector(
-    (state: RootState) => state.delegationsState.delegatorsError
   );
   const sortDelegators = useAppSelector(
     (state: RootState) => state.delegationsState.sortDelegators
@@ -92,27 +88,24 @@ const Delegators = () => {
 
   return (
     <>
-      {delegatorsError && (
-        <Box mb={8}>
-          <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <Typography variant="h6">{t('deleghe.delegatorsTitle')}</Typography>
-          </Stack>
-          <TableError onClick={() => dispatch(getDelegators())} />
-        </Box>
-      )}
-      {!delegatorsError && rows.length > 0 && (
-        <Box mb={8}>
-          <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-            <Typography variant="h6">{t('deleghe.delegatorsTitle')}</Typography>
-          </Stack>
-          <ItemsTable
-            columns={delegatorsColumns}
-            rows={rows}
-            sort={sortDelegators}
-            onChangeSorting={handleChangeSorting}
-          />
-        </Box>
-      )}
+      <Box mb={8}>
+        <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+          <Typography variant="h6">{t('deleghe.delegatorsTitle')}</Typography>
+        </Stack>
+        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATORS} reloadAction={() => dispatch(getDelegators())} 
+          mainText={t('deleghe.delegatorsApiErrorMessage')}
+        >
+          { rows.length > 0 
+            ? <ItemsTable
+              columns={delegatorsColumns}
+              rows={rows}
+              sort={sortDelegators}
+              onChangeSorting={handleChangeSorting}
+            />
+            : <EmptyState disableSentimentDissatisfied emptyMessage={t('deleghe.no_delegators')} />
+          }
+        </ApiErrorWrapper>
+      </Box>
     </>
   );
 };

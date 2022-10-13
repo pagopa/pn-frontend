@@ -5,13 +5,13 @@ import { LoadingOverlay } from './Loading/LoadingOverlay';
 import CustomPagination from './Pagination/CustomPagination';
 import CustomTooltip from './CustomTooltip';
 import AppMessage from './AppMessage';
-import HandleAuth from './HandleAuth';
 import SessionModal from './SessionModal';
 import SideMenu from './SideMenu/SideMenu';
 import StatusTooltip from './Notifications/StatusTooltip';
 import MobileNotificationsSort from './Notifications/MobileNotificationsSort';
 import ItemsTable from './Data/ItemsTable';
 import EmptyState from './EmptyState';
+import CustomDropdown from './CustomDropdown';
 import ItemsCard from './Data/ItemsCard';
 import CustomMobileDialog from './CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogToggle from './CustomMobileDialog/CustomMobileDialogToggle';
@@ -31,6 +31,8 @@ import FileUpload from './FileUpload';
 import Prompt from './Prompt';
 import CopyToClipboard from './CopyToClipboard';
 import LoadingPage from './LoadingPage';
+import ApiError from './ApiError/ApiError';
+import ApiErrorWrapper from './ApiError/ApiErrorWrapper';
 
 export {
     LoadingOverlay,
@@ -40,10 +42,12 @@ export {
     CustomPagination,
     CustomTooltip,
     AppMessage,
-    HandleAuth,
     SideMenu,
     ItemsTable,
     EmptyState,
+    ApiError,
+    ApiErrorWrapper,
+    CustomDropdown,
     StatusTooltip,
     MobileNotificationsSort,
     SessionModal,

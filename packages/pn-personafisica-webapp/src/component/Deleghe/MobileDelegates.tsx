@@ -3,14 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Chip, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { CardElement, ItemsCard, Item, CodeModal, EmptyState } from '@pagopa-pn/pn-commons';
+import { CardElement, ItemsCard, Item, CodeModal, EmptyState, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 import * as routes from '../../navigation/routes.const';
 import delegationToItem from '../../utils/delegation.utility';
 import { DelegationStatus, getDelegationStatusLabelAndColor } from '../../utils/status.utility';
-import TableError from '../TableError/TableError';
-import { getDelegates } from '../../redux/delegation/actions';
+import { DELEGATION_ACTIONS, getDelegates } from '../../redux/delegation/actions';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
 import { Menu, OrganizationsList } from './DelegationsElements';
@@ -21,9 +20,6 @@ const MobileDelegates = () => {
   const dispatch = useAppDispatch();
   const delegates = useAppSelector(
     (state: RootState) => state.delegationsState.delegations.delegates
-  );
-  const delegatesError = useAppSelector(
-    (state: RootState) => state.delegationsState.delegatesError
   );
   const [showCodeModal, setShowCodeModal] = useState({ open: false, name: '', code: '' });
 
@@ -126,26 +122,23 @@ const MobileDelegates = () => {
         <Typography variant="h4" mb={3}>
           {t('deleghe.delegatesTitle')}
         </Typography>
-        {delegatesError && <TableError onClick={() => dispatch(getDelegates())} />}
-        {!delegatesError && (
-          <>
-            <Box mb={2}>
-              <Button variant="outlined" onClick={(_e, source='default') => handleAddDelegationClick(source)}>
-                <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
-                {t('deleghe.add')}
-              </Button>
-            </Box>
-            {cardData.length ? (
-              <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
-            ) : (
-              <EmptyState
-                emptyActionCallback={(_e, source='empty_state') => handleAddDelegationClick(source)}
-                emptyMessage={t('deleghe.no_delegates')}
-                emptyActionLabel={t('deleghe.add')}
-              />
-            )}
-          </>
-        )}
+        <Box mb={2}>
+          <Button variant="outlined" onClick={(_e, source='default') => handleAddDelegationClick(source)} sx={{mb: 1}}>
+            <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />
+            {t('deleghe.add')}
+          </Button>
+        </Box>
+        <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATES} reloadAction={() => dispatch(getDelegates())}>
+          {cardData.length ? (
+            <ItemsCard cardHeader={cardHeader} cardBody={cardBody} cardData={cardData} />
+          ) : (
+            <EmptyState
+              emptyActionCallback={(_e, source='empty_state') => handleAddDelegationClick(source)}
+              emptyMessage={t('deleghe.no_delegates')}
+              emptyActionLabel={t('deleghe.add')}
+            />
+          )}
+        </ApiErrorWrapper>
       </Box>
     </>
   );

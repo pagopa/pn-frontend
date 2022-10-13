@@ -1,24 +1,27 @@
 import { Fragment, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import { Box, Button, Paper, Typography } from '@mui/material';
-
-import * as routes from '../../../navigation/routes.const';
 
 type Props = {
   children: ReactNode;
   isContinueDisabled: boolean;
   title?: string;
   noPaper?: boolean;
+  submitLabel?: string;
+  previousStepLabel?: string;
+  previousStepOnClick?: () => void;
 };
 
-const NewNotificationCard = ({ children, isContinueDisabled, title, noPaper = false }: Props) => {
-  const navigate = useNavigate();
+const NewNotificationCard = ({
+  children,
+  isContinueDisabled,
+  title,
+  noPaper = false,
+  submitLabel,
+  previousStepLabel,
+  previousStepOnClick,
+}: Props) => {
   const { t } = useTranslation(['common', 'notifiche']);
-
-  const handleGoBack = () => {
-    navigate(routes.DASHBOARD);
-  };
 
   return (
     <Fragment>
@@ -31,16 +34,19 @@ const NewNotificationCard = ({ children, isContinueDisabled, title, noPaper = fa
       {noPaper && <Box>{children}</Box>}
       <Box
         display="flex"
+        flexDirection="row-reverse"
         justifyContent="space-between"
         alignItems="center"
         sx={{ marginTop: '40px', marginBottom: '20px' }}
       >
-        <Button variant="outlined" type="button" onClick={handleGoBack}>
-        {t('new-notification.back-to-notifications', {ns: 'notifiche'})}
-        </Button>
         <Button variant="contained" type="submit" disabled={isContinueDisabled}>
-          {t('button.continue')}
+          {submitLabel ? submitLabel : t('button.continue')}
         </Button>
+        {previousStepLabel && (
+          <Button variant="outlined" type="button" onClick={previousStepOnClick}>
+            {previousStepLabel}
+          </Button>
+        )}
       </Box>
     </Fragment>
   );

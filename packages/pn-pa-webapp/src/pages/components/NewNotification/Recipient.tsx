@@ -17,10 +17,9 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
-
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
-import { FormRecipient } from '../../../models/NewNotification';
+import { NewNotificationRecipient } from '../../../models/NewNotification';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import PhysicalAddress from './PhysicalAddress';
@@ -49,20 +48,28 @@ const singleRecipient = {
   showPhysicalAddress: false,
 };
 
-const initialValues = {
-  recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }],
-};
-
 type Props = {
   onConfirm: () => void;
+  onPreviousStep?: () => void;
+  recipientsData?: Array<NewNotificationRecipient>;
 };
 
-const Recipient = ({ onConfirm }: Props) => {
+const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.recipient',
   });
   const { t: tc } = useTranslation(['common']);
+
+  const initialValues = recipientsData && recipientsData.length > 0
+  ? {
+      recipients: recipientsData.map((recipient, index) => ({
+        ...recipient,
+        idx: index,
+        id: `recipient.${index}`,
+      })),
+    }
+  : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
   const validationSchema = yup.object({
     recipients: yup
@@ -183,7 +190,7 @@ const Recipient = ({ onConfirm }: Props) => {
 
   const handleAddressTypeChange = (
     event: ChangeEvent,
-    oldValue: FormRecipient,
+    oldValue: NewNotificationRecipient,
     recipientField: string,
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
   ) => {
@@ -230,7 +237,7 @@ const Recipient = ({ onConfirm }: Props) => {
     }
   };
 
-  const handleAddRecipient = (values: { recipients: Array<FormRecipient> }, setFieldValue: any) => {
+  const handleAddRecipient = (values: { recipients: Array<NewNotificationRecipient> }, setFieldValue: any) => {
     const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx;
     setFieldValue('recipients', [
       ...values.recipients,
@@ -241,14 +248,22 @@ const Recipient = ({ onConfirm }: Props) => {
     });
   };
 
-  const handleSubmit = (values: { recipients: Array<FormRecipient> }) => {
+  const handleSubmit = (values: { recipients: Array<NewNotificationRecipient> }) => {
     dispatch(saveRecipients(values));
     onConfirm();
+  };
+
+  const handlePreviousStep = (values: { recipients: Array<NewNotificationRecipient> }) => {
+    dispatch(saveRecipients(values));
+    if (onPreviousStep) {
+      onPreviousStep();
+    }
   };
 
   return (
     <Formik
       initialValues={initialValues}
+      enableReinitialize={true}
       validationSchema={validationSchema}
       onSubmit={(values) => handleSubmit(values)}
       validateOnBlur={false}
@@ -256,7 +271,8 @@ const Recipient = ({ onConfirm }: Props) => {
     >
       {({ values, setFieldValue, touched, handleBlur, errors, isValid /* setValues */ }) => (
         <Form>
-          <NewNotificationCard noPaper isContinueDisabled={!isValid}>
+          <NewNotificationCard noPaper isContinueDisabled={!isValid} previousStepLabel={t('back-to-preliminary-informations')}
+              previousStepOnClick={() => handlePreviousStep(values)}>
             {values.recipients.map((recipient, index) => (
               <Paper
                 key={recipient.id}

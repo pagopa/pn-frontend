@@ -10,7 +10,6 @@ import { Trans, useTranslation } from 'react-i18next';
 import { IdentityProvider, IDPS } from '../../utils/IDPS';
 import SpidBig from '../../assets/spid_big.svg';
 import { ENV } from '../../utils/env';
-import { storageSpidSelectedOps } from '../../utils/storage';
 import { shuffleList } from '../../utils/utils';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
@@ -20,7 +19,6 @@ const Login = ({ onBack }: { onBack: () => void }) => {
   const shuffledIDPS = shuffleList(IDPS.identityProviders);
 
   const getSPID = (IDP: IdentityProvider) => {
-    storageSpidSelectedOps.write(IDP.entityId);
     trackEventByType(
         TrackEventType.LOGIN_IDP_SELECTED,
         {

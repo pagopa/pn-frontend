@@ -84,7 +84,11 @@ const SideMenu: FC<Props> = ({ menuItems, selfCareItems, eventTrackingCallback }
       setState(false);
     }
     if (!item.notSelectable) {
-      navigate(item.route);
+      if (item.route && item.route.length > 0) { 
+        navigate(item.route);
+      } else if (item.action) {
+        item.action();
+      }
     }
   };
 

@@ -2,8 +2,8 @@
   "name": "piattaforma-notifiche-monorepo",
   "private": true,
   "devDependencies": {
-    "craco": "^0.0.3",
-    "lerna": "^4.0.0",
+    "@craco/craco": "^6.4.5",
+    "lerna": "^5.5.2",
     "sonarqube-scanner": "^2.8.1"
   },
   "scripts": {
@@ -12,11 +12,11 @@
     "start:pf": "lerna exec --scope @pagopa-pn/pn-personafisica-webapp -- yarn start",
     "start:login": "lerna exec --scope @pagopa-pn/pn-personafisica-login -- yarn start",
     "build:pa": "lerna run build --include-dependencies --scope @pagopa-pn/pn-pa-webapp --scope @pagopa-pn/pn-commons",
-    "build:pf": "lerna run build --include-dependencies --scope @pagopa-pn/pn-personafisica-webapp --scope @pagopa-pn/pn-commons",
+    "build:pf": "lerna run build --include-dependencies --scope @pagopa-pn/pn-personafisica-webapp --scope @pagopa-pn/pn-commons --scope @pagopa-pn/pn-validator",
     "build:login": "lerna run build --include-dependencies --scope @pagopa-pn/pn-personafisica-login --scope @pagopa-pn/pn-commons",
     "start:landing": "lerna exec --scope @pagopa-pn/pn-landing-webapp -- yarn dev",
     "build": "lerna run --scope @pagopa-pn/pn-pa-webapp --scope @pagopa-pn/pn-personafisica-webapp build",
-    "test": "lerna run --scope @pagopa-pn/* --parallel test",
+    "test": "lerna run --scope @pagopa-pn/* test",
     "test:coverage": "lerna run --scope @pagopa-pn/* test:coverage",
     "refresh:monorepo": "lerna clean -y && yarn install",
     "clean:win": "rmdir node_modules /s",
