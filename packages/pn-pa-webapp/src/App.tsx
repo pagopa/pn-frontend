@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import {
   AppMessage,
   appStateActions,
-  AppType,
   initLocalization,
   Layout,
   LoadingOverlay,
@@ -136,6 +135,7 @@ const App = () => {
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
+  const isPrivacyPage = path[1] === 'privacy-tos';
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
     trackEventByType(TrackEventType.APP_CRASH, {
@@ -179,6 +179,9 @@ const App = () => {
   return (
     <>
       <Layout
+        showHeader={!isPrivacyPage}
+        showFooter={!isPrivacyPage}
+        showSideMenu={!isPrivacyPage}
         onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
@@ -203,7 +206,6 @@ const App = () => {
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
-        appType={AppType.PA}
       >
         <AppMessage sessionRedirect={handleLogout} />
         <LoadingOverlay />
