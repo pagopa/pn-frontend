@@ -4,6 +4,7 @@ import { NotFound } from '@pagopa-pn/pn-commons';
 import Dashboard from '../pages/Dashboard.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
 import NewNotification from '../pages/NewNotification.page';
+import Statistics from "../pages/Statistics.page";
 // import ApiKeys from '../pages/ApiKeys.page';
 import { PNRole } from '../models/user';
 import * as routes from './routes.const';
@@ -15,6 +16,9 @@ function Router() {
     <Routes>
       <Route path="/" element={<SessionGuard />}>
         {/* protected routes */}
+        <Route path={routes.STATISTICHE} element={<RouteGuard roles={[PNRole.ADMIN]} />}>
+          <Route path={routes.STATISTICHE} element={<Statistics/>} />
+        </Route>
         <Route path="/"  element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
           <Route path={routes.DASHBOARD} element={<Dashboard />} />
           <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />

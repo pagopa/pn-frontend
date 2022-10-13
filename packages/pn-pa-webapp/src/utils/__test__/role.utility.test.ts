@@ -1,4 +1,4 @@
-import { People, SupervisedUserCircle } from '@mui/icons-material';
+import {People, ShowChart, SupervisedUserCircle} from '@mui/icons-material';
 import Email from '@mui/icons-material/Email';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 import { PNRole } from '../../models/user';
@@ -27,7 +27,7 @@ const SelfCareItems: Array<SideMenuItem> = [
 
 test('return menu items for role REFERENTE_AMMINISTRATIVO', () => {
   const items = getMenuItems(mockedIdOrganization, PNRole.ADMIN);
-  expect(items).toEqual({ menuItems: BasicMenuItems, selfCareItems: SelfCareItems });
+  expect(items).toEqual({ menuItems: [...BasicMenuItems, { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE }], selfCareItems: SelfCareItems });
 });
 
 test('return menu items for role REFERENTE_OPERATIVO', () => {
