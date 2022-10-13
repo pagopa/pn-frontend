@@ -40,8 +40,8 @@ const PrivacyTOSPage = () => {
           <Accordion expanded={privacyExpanded} onChange={handlePrivacy}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon/>}
-              aria-controls="tos-content"
-              id="tos-accordion-summary"
+              aria-controls="privacy-content"
+              id="privacy-accordion-summary"
             >
               <Typography variant="h6">DOCUMENTO INFORMATIVO SUL TRATTAMENTO DEI DATI PERSONALI</Typography>
             </AccordionSummary>
@@ -421,8 +421,8 @@ const PrivacyTOSPage = () => {
           <Accordion expanded={tosExpanded} onChange={handleTos}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon/>}
-              aria-controls="privacy-content"
-              id="privacy-accordion-summary"
+              aria-controls="tos-content"
+              id="tos-accordion-summary"
             >
               <Typography variant="h6">Termini e condizioni d’uso</Typography>
             </AccordionSummary>
