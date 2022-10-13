@@ -238,7 +238,7 @@ const App = () => {
             }
           />
         }
-        showSideMenu={jwtUser.id !== '' && (!fetchedTos || tos)}
+        showSideMenu={jwtUser.id !== '' && (!fetchedTos || tos) && !isPrivacyPage}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown
