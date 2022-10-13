@@ -1,20 +1,49 @@
+import { ReactNode, useState } from 'react';
 import { Box, Typography, Switch, Link, Button } from '@mui/material';
-import { useState } from 'react';
-import { Trans } from 'react-i18next';
+
 import { PRIVACY_LINK_RELATIVE_PATH, URL_DIGITAL_NOTIFICATIONS } from '../utils';
-import { getLocalizedOrDefaultLabel } from "../services/localization.service";
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 type Props = {
   handleAcceptTos: () => void;
+  transComponent?: (path: string, components: Array<ReactNode>, defaultLoaclization: ReactNode) => ReactNode;
 };
 
-const TermsOfServiceHandler = ({
-  handleAcceptTos,
-}: Props) => {
+const TermsOfServiceHandler = ({ handleAcceptTos, transComponent }: Props) => {
   const [accepted, setAccepted] = useState(false);
 
-  const redirectPrivacyLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}#privacy`);
-  const redirectToSLink = () => window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}#tos`);
+  const redirectPrivacyLink = () =>
+    window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}#privacy`);
+  const redirectToSLink = () =>
+    window.location.assign(`${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}#tos`);
+
+  const PrivacyLink = ({ children }: { children?: ReactNode }) => (
+    <Link
+      key="privacy-link"
+      sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
+      onClick={redirectPrivacyLink}
+    >
+      {children}
+    </Link>
+  );
+
+  const TosLink = ({ children }: { children?: ReactNode }) => (
+    <Link
+      key="tos-link"
+      data-testid="terms-and-conditions"
+      sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
+      onClick={redirectToSLink}
+    >
+      {children}
+    </Link>
+  );
+
+  const UnlocalizedSwitchLabel = () => (
+    <>
+      Accetto l&apos;<PrivacyLink>Informativa Privacy</PrivacyLink>&nbsp;e&nbsp;i&nbsp;
+      <TosLink>Termini e condizioni d&apos;uso</TosLink>&nbsp;di Piattaforma Notifiche.
+    </>
+  );
 
   return (
     <Box>
@@ -22,44 +51,17 @@ const TermsOfServiceHandler = ({
         {getLocalizedOrDefaultLabel('common', 'tos.title', 'Piattaforma Notifiche')}
       </Typography>
       <Typography textAlign="center" variant="body1">
-        {getLocalizedOrDefaultLabel('common', 'tos.body', 'Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.')}
+        {getLocalizedOrDefaultLabel(
+          'common',
+          'tos.body',
+          'Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.'
+        )}
       </Typography>
       <Box display="flex" alignItems="center" mt={8}>
         <Switch value={accepted} onClick={() => setAccepted(!accepted)} data-testid="tosSwitch" />
         <Typography color="text.secondary" variant="body1">
-          <Trans
-            i18nKey="tos.switchLabel"
-            shouldUnescape
-            components={[
-              <Link
-                key="privacy-link"
-                sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                onClick={redirectPrivacyLink}
-              />,
-              <Link
-                key={'tos-link'}
-                data-testid="terms-and-conditions"
-                sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-                onClick={redirectToSLink}
-              />,
-            ]}
-          >
-            Accetto l&apos;
-            <Link
-              sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-              onClick={redirectPrivacyLink}
-            >
-              Informativa Privacy
-            </Link>
-            {' e i '}
-            <Link
-              sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
-              onClick={redirectToSLink}
-            >
-              Termini e condizioni d&apos;uso
-            </Link>
-            di Piattaforma Notifiche.
-          </Trans>
+          {transComponent && transComponent("tos.switchLabel", [<PrivacyLink />, <TosLink />], <UnlocalizedSwitchLabel />)}
+          {!transComponent && <UnlocalizedSwitchLabel />}
         </Typography>
       </Box>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -70,7 +72,7 @@ const TermsOfServiceHandler = ({
           onClick={handleAcceptTos}
           data-testid="accessButton"
         >
-          {getLocalizedOrDefaultLabel('common','tos.button', 'Accedi')}
+          {getLocalizedOrDefaultLabel('common', 'tos.button', 'Accedi')}
         </Button>
       </Box>
     </Box>
