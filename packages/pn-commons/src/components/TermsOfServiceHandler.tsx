@@ -2,6 +2,7 @@ import { Box, Typography, Switch, Link, Button } from '@mui/material';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { PRIVACY_LINK_RELATIVE_PATH, URL_DIGITAL_NOTIFICATIONS } from '../utils';
+import { getLocalizedOrDefaultLabel } from "../services/localization.service";
 
 type Props = {
   handleAcceptTos: () => void;
@@ -19,16 +20,15 @@ const TermsOfServiceHandler = ({
   return (
     <Box>
       <Typography mb={2} variant="h2" color="textPrimary" textAlign="center">
-        {t('tos.title')}
+        {getLocalizedOrDefaultLabel('common', 'tos.title', 'Piattaforma Notifiche')}
       </Typography>
       <Typography textAlign="center" variant="body1">
-        <Trans i18nKey={'tos.body'}>
-          Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.
-        </Trans>
+        {getLocalizedOrDefaultLabel('common', 'tos.title', 'Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.')}
       </Typography>
       <Box display="flex" alignItems="center" mt={8}>
         <Switch value={accepted} onClick={() => setAccepted(!accepted)} data-testid="tosSwitch" />
         <Typography color="text.secondary" variant="body1">
+          {getLocalizedOrDefaultLabel('common', 'tos.switchLabel', 'Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.')}
           <Trans
             i18nKey="tos.switchLabel"
             shouldUnescape
