@@ -189,7 +189,6 @@ const App = () => {
       <Layout
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
-        showSideMenu={!isPrivacyPage}
         onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
@@ -208,7 +207,7 @@ const App = () => {
             />
           )
         }
-        showSideMenu={!fetchedTos || tos}
+        showSideMenu={(!fetchedTos || tos) && !isPrivacyPage}
         productsList={productsList}
         productId={'0'}
         partyList={partyList}
