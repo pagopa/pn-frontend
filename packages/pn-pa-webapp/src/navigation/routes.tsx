@@ -8,6 +8,7 @@ import NewNotification from '../pages/NewNotification.page';
 import PrivacyTOSPage from "../pages/PrivacyTOS.page";
 
 import { PNRole } from '../models/user';
+import TermsOfService from '../pages/TermsOfService.page';
 import RequireAuth from './RequireAuth';
 import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/" element={<VerifyUser />}>
         {/* protected routes */}
         <Route path="/"  element={<RequireAuth  roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
+          <Route path={routes.TOS} element={<TermsOfService />} />
           <Route path={routes.DASHBOARD} element={<Dashboard />} />
           <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
           <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
