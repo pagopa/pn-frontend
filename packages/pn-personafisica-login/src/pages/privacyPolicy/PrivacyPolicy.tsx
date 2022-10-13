@@ -102,7 +102,7 @@ const PrivacyPolicy = () => (
           <br/>
           <Typography variant="body1"><strong>Data di ultima modifica</strong>: 1 febbraio 2022</Typography>
           <br/>
-          <Typography variant="body1" fontWeight="bold" textAlign="center">Cookie policy</Typography>
+          <Typography variant="h2" textAlign="center">Cookie policy</Typography>
           <Typography variant="body1">
             Il presente Avviso Cookie è parte della nostra Informativa sulla privacy. Per ulteriori informazioni su
             di noi, e su come proteggiamo informazioni degli Utenti, si prega di consultare la nostra Informativa
@@ -145,6 +145,7 @@ const PrivacyPolicy = () => (
               </li>
               <li><Link href="https://help.opera.com/en/latest/web-preferences/#cookies">Opera</Link></li>
           </Typography>
+          <br/>
           <Typography variant="body1"><strong>Data di ultimo aggiornamento</strong>: 24.08.2022</Typography>
         </Box>
       </Container>
