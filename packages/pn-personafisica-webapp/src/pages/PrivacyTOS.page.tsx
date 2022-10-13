@@ -3,12 +3,13 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Container,
   Link,
   Typography
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {useLocation} from "react-router-dom";
-import {useState} from "react";
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
 
 const PrivacyTOSPage = () => {
   const { hash } = useLocation();
@@ -24,7 +25,16 @@ const PrivacyTOSPage = () => {
 
   return (
     <>
-      <Box p={3}>
+      <Container
+        maxWidth="xl"
+        sx={{
+        py: {
+          xs: 4,
+          sm: 4,
+          md: 8,
+        },
+      }}
+        >
         <Typography variant="h3">Piattaforma Notifiche Digitali</Typography>
         <Typography variant="h4">Destinatari persone fisiche</Typography>
         <Box mt={3}>
@@ -473,7 +483,7 @@ const PrivacyTOSPage = () => {
                   <li><u>OneTrust Technology Limited</u> - per la gestione delle richieste degli interessati, con sede
                     in 82 St John Street, London, England, EC1M 4JN, n. di iscrizione al Registro Imprese Great England
                     and Wales n. 04156317. Gli interessati possono contattare il responsabile della protezione dei dati
-                    scrivendo all’indirizzo e-mail: <Link href="dpo@onetrust.com">dpo@onetrust.com.</Link></li>
+                    scrivendo all’indirizzo e-mail: <Link href="mailto:dpo@onetrust.com">dpo@onetrust.com.</Link></li>
                 </ul>
               </Typography>
               <br/>
@@ -775,7 +785,7 @@ const PrivacyTOSPage = () => {
             </AccordionDetails>
           </Accordion>
         </Box>
-      </Box>
+      </Container>
     </>);
 };
 

@@ -135,6 +135,7 @@ const App = () => {
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
+  const isPrivacyPage = path[1] === 'privacy-tos';
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
     trackEventByType(TrackEventType.APP_CRASH, {
@@ -178,6 +179,9 @@ const App = () => {
   return (
     <>
       <Layout
+        showHeader={!isPrivacyPage}
+        showFooter={!isPrivacyPage}
+        showSideMenu={!isPrivacyPage}
         onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
