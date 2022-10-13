@@ -1,27 +1,21 @@
 import { Box } from '@mui/material';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getLocalizedOrDefaultLabel } from '@pagopa-pn/pn-commons/src/services/localization.service';
 import { ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
 
-function localizeStatus(
+function LocalizeStatus(
   status: string,
-  defaultLabel: string,
-  defaultDescription: string,
   history: Array<ApiKeyStatusHistory>
 ): {
   label: string;
   tooltip: ReactNode;
   description: string;
 } {
+  const { t } = useTranslation(['apikeys']);
   return {
-    label: getLocalizedOrDefaultLabel('apikeys', `status.${status}`, defaultLabel),
+    label: t(`status.${status}`),
     tooltip: TooltipApiKey(history),
-    description: getLocalizedOrDefaultLabel(
-      'apikeys',
-      `status.${status}-description`,
-      defaultDescription
-    ),
+    description: t(`status.${status}-description`),
   };
 }
 
@@ -84,17 +78,17 @@ export function getApiKeyStatusInfos(
     case ApiKeyStatus.ENABLED:
       return {
         color: 'success',
-        ...localizeStatus('enabled', 'Attiva', "L'API Key è attiva", statusHistory),
+        ...LocalizeStatus('enabled', statusHistory),
       };
     case ApiKeyStatus.BLOCKED:
       return {
         color: 'default',
-        ...localizeStatus('blocked', 'Bloccata', "L'API Key è bloccata", statusHistory),
+        ...LocalizeStatus('blocked', statusHistory),
       };
     case ApiKeyStatus.ROTATED:
       return {
         color: 'warning',
-        ...localizeStatus('rotated', 'Ruotata', "L'API Key è ruotata", statusHistory),
+        ...LocalizeStatus('rotated', statusHistory),
       };
     default:
       return {

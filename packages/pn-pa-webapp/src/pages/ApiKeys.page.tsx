@@ -21,7 +21,7 @@ import {
   setApiKeyStatus,
   setApiKeyDeleted,
 } from '../redux/apiKeys/actions';
-import { ApiKey, ApiKeyStatus } from '../models/ApiKeys';
+import { ApiKey, ApiKeyStatus, modalApiKeyView } from '../models/ApiKeys';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 
 const SubTitle = () => {
@@ -49,49 +49,25 @@ const ApiKeys = () => {
 
   const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
 
-  const [openModal, setModal] = useState(false);
-  const [viewApiKey, setViewApiKey] = useState<null | ApiKey>();
-  const [blockApiKey, setBlockApiKey] = useState<null | ApiKey>();
-  const [enableApiKey, setEnableApiKey] = useState<null | ApiKey>();
-  const [rotateApiKey, setRotateApiKey] = useState<null | ApiKey>();
-  const [deleteApiKey, setDeleteApiKey] = useState<null | ApiKey>();
+  type modalType = {
+    view: modalApiKeyView;
+    apiKey?: ApiKey;
+  };
 
-  const handleOpenModal = () => setModal(true);
+  const [modal, setModal] = useState<modalType>({ view: modalApiKeyView.NONE });
+
+
+
   const handleCloseModal = () => {
-    setModal(false);
-    setViewApiKey(null);
-    setBlockApiKey(null);
-    setEnableApiKey(null);
-    setRotateApiKey(null);
-    setDeleteApiKey(null);
+    setModal({ view: modalApiKeyView.NONE });
+  };
+
+  const handleModalClick = (view: modalApiKeyView, apiKeyId: number) => {
+    setModal({ view, apiKey: apiKeys[apiKeyId]} );
   };
 
   const handleNewApiKeyClick = () => {
     navigate(routes.NUOVA_API_KEY);
-  };
-
-  const handleViewApiKeyClick = (apiKeyId: number) => {
-    setViewApiKey(apiKeys[apiKeyId]);
-    handleOpenModal();
-  };
-
-  const handleRotateApiKeyClick = (apiKeyId: number) => {
-    setRotateApiKey(apiKeys[apiKeyId]);
-    handleOpenModal();
-  };
-
-  const handleBlockApiKeyClick = (apiKeyId: number) => {
-    setBlockApiKey(apiKeys[apiKeyId]);
-    handleOpenModal();
-  };
-  const handleEnableApiKeyClick = (apiKeyId: number) => {
-    setEnableApiKey(apiKeys[apiKeyId]);
-    handleOpenModal();
-  };
-
-  const handleDeleteApiKeyClick = (apiKeyId: number) => {
-    setDeleteApiKey(apiKeys[apiKeyId]);
-    handleOpenModal();
   };
 
   useEffect(() => {
@@ -153,31 +129,27 @@ const ApiKeys = () => {
       </Box>
       <DesktopApiKeys
         apiKeys={apiKeys}
-        handleEnableApiKeyClick={handleEnableApiKeyClick}
-        handleViewApiKeyClick={handleViewApiKeyClick}
-        handleRotateApiKeyClick={handleRotateApiKeyClick}
-        handleBlockApiKeyClick={handleBlockApiKeyClick}
-        handleDeleteApiKeyClick={handleDeleteApiKeyClick}
+        handleModalClick={handleModalClick}
       />
 
-      <Dialog open={openModal} onClose={handleCloseModal}>
+      <Dialog open={modal.view !== modalApiKeyView.NONE} onClose={handleCloseModal}>
         <Box
           sx={{
             padding: 3,
             minWidth: isMobile ? '0' : '600px',
           }}
         >
-          {viewApiKey && (
+          {modal.view === modalApiKeyView.VIEW && (
             <>
               <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-                API Key {viewApiKey.name}
+                API Key {modal.apiKey?.name}
               </Typography>
               <Typography variant="body1" sx={{ marginBottom: 3 }}>
                 {t('copy-api-key-info')}
               </Typography>
               {
                 <TextField
-                  value={viewApiKey.apiKey}
+                  value={modal.apiKey?.apiKey}
                   fullWidth={true}
                   InputProps={{
                     readOnly: true,
@@ -186,7 +158,7 @@ const ApiKeys = () => {
                         <CopyToClipboard
                           tooltipMode={true}
                           tooltip={t('api-key-copied')}
-                          getValue={() => viewApiKey.apiKey || ''}
+                          getValue={() => modal.apiKey?.apiKey || ''}
                         />
                       </InputAdornment>
                     ),
@@ -201,14 +173,14 @@ const ApiKeys = () => {
             </>
           )}
 
-          {blockApiKey && (
+          {modal.view === modalApiKeyView.BLOCK && (
             <>
               <Typography variant="h5" sx={{ marginBottom: 2 }}>
                 {t('block-api-key')}
               </Typography>
               <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                <Trans i18nKey="block-warning1" values={{ apiKeyName: blockApiKey.name }}>
-                  {t('block-warning1', { apiKeyName: blockApiKey.name })}
+                <Trans i18nKey="block-warning1" values={{ apiKeyName: modal.apiKey?.name }}>
+                  {t('block-warning1', { apiKeyName: modal.apiKey?.name })}
                 </Trans>
               </Typography>
               <Typography>{t('block-warning2')}</Typography>
@@ -216,65 +188,65 @@ const ApiKeys = () => {
                 <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
                   {t('cancel-button')}
                 </Button>
-                <Button variant="contained" onClick={() => apiKeyBlocked(blockApiKey.apiKey)}>
+                <Button variant="contained" onClick={() => apiKeyBlocked(modal.apiKey?.apiKey as string)}>
                   {t('block-button')}
                 </Button>
               </Grid>
             </>
           )}
 
-          {enableApiKey && (
+          {modal.view === modalApiKeyView.ENABLE && (
             <>
               <Typography variant="h5" sx={{ marginBottom: 2 }}>
                 {t('enable-api-key')}
               </Typography>
               <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                <Trans>{t('enable-warning', { apiKeyName: enableApiKey.name })}</Trans>
+                <Trans>{t('enable-warning', { apiKeyName: modal.apiKey?.name })}</Trans>
               </Typography>
               <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
                 <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
                   {t('cancel-button')}
                 </Button>
-                <Button variant="contained" onClick={() => apiKeyEnabled(enableApiKey.apiKey)}>
+                <Button variant="contained" onClick={() => apiKeyEnabled(modal.apiKey?.apiKey as string)}>
                   {t('enable-button')}
                 </Button>
               </Grid>
             </>
           )}
 
-          {rotateApiKey && (
+          {modal.view === modalApiKeyView.ROTATE && (
             <>
               <Typography variant="h5" sx={{ marginBottom: 2 }}>
                 {t('rotate-api-key')}
               </Typography>
               <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                <Trans>{t('rotate-warning1', { apiKeyName: rotateApiKey.name })}</Trans>
+                <Trans>{t('rotate-warning1', { apiKeyName: modal.apiKey?.name })}</Trans>
               </Typography>
               <Typography>{t('rotate-warning2')}</Typography>
               <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
                 <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
                   {t('cancel-button')}
                 </Button>
-                <Button variant="contained" onClick={() => apiKeyRotated(rotateApiKey.apiKey)}>
+                <Button variant="contained" onClick={() => apiKeyRotated(modal.apiKey?.apiKey as string)}>
                   {t('rotate-button')}
                 </Button>
               </Grid>
             </>
           )}
 
-          {deleteApiKey && (
+          {modal.view === modalApiKeyView.DELETE && (
             <>
               <Typography variant="h5" sx={{ marginBottom: 2 }}>
                 {t('delete-api-key')}
               </Typography>
               <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                <Trans>{t('delete-warning', { apiKeyName: deleteApiKey.name })}</Trans>
+                <Trans>{t('delete-warning', { apiKeyName: modal.apiKey?.name })}</Trans>
               </Typography>
               <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
                 <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
                   {t('cancel-button')}
                 </Button>
-                <Button variant="contained" onClick={() => apiKeyDeleted(deleteApiKey.apiKey)}>
+                <Button variant="contained" onClick={() => apiKeyDeleted(modal.apiKey?.apiKey as string)}>
                   {t('delete-button')}
                 </Button>
               </Grid>

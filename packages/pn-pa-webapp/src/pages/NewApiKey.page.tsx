@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
+import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
 const useStyles = makeStyles(() => ({
@@ -61,7 +61,7 @@ const NewApiKey = () => {
 
   useEffect(() => {
     if (groups.length === 0) {
-      void dispatch(getUserGroups());
+      void dispatch(getApiKeyUserGroups());
     }
   }, []);
   
