@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { AppType, Footer, Header, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Layout, useIsMobile } from '@pagopa-pn/pn-commons';
 import { SpidIcon } from '@pagopa/mui-italia/dist/icons';
 import { styled } from '@mui/material/styles';
 import { useSearchParams } from "react-router-dom";
@@ -80,15 +80,6 @@ const Login = () => {
         email: undefined,
       }}
     >
-      <Header
-        productsList={[]}
-        loggedUser={{
-          id: '',
-          name: undefined,
-          surname: undefined,
-          email: undefined,
-        }}
-      />
       <Grid container direction="column" my={isMobile ? 4 : 16}>
         <Grid container item justifyContent="center">
           <Grid item>
@@ -204,7 +195,6 @@ const Login = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Footer appType={AppType.PF} />
     </Layout>
   );
 };
