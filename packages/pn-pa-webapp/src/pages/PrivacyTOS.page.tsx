@@ -37,7 +37,7 @@ const PrivacyTOSPage = () => {
         <Typography variant="h3">Piattaforma Notifiche Digitali</Typography>
         <Typography variant="h4">Portale back office “Area Riservata”</Typography>
         <Box mt={3}>
-          <Accordion expanded={tosExpanded} onChange={handleTos}>
+          <Accordion expanded={privacyExpanded} onChange={handlePrivacy}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon/>}
               aria-controls="tos-content"
@@ -140,7 +140,7 @@ const PrivacyTOSPage = () => {
               <Typography variant="body1" fontWeight="bold">
                 Dati personali trattati e finalità del trattamento
               </Typography>
-              <Typography variant="body1">
+              <Typography variant="body1" component="span">
                 In aggiunta a quanto già riportato nell’informativa privacy e nei termini e condizioni relativi
                 all’utilizzo del Portale, di seguito gli ulteriori dati personali trattati sul Sito, a titolo
                 esemplificativo e non esaustivo:
@@ -408,8 +408,7 @@ const PrivacyTOSPage = () => {
                   <li><Link
                     href="https://support.microsoft.com/it-it/help/17442/windows-internet-explorer-delete-manage-cookies">Internet
                     Explorer</Link></li>
-                  <li><Link href="https://support.microsoft.com/it-it/help/4027947/windows-delete-cookies">Edge</Link>
-                  </li>
+                  <li><Link href="https://support.microsoft.com/it-it/help/4027947/windows-delete-cookies">Edge</Link></li>
                   <li><Link href="https://help.opera.com/en/latest/web-preferences/#cookies">Opera</Link></li>
                 </ul>
                 <Typography variant="body1">Data di ultimo aggiornamento: 24.08.2022</Typography>
@@ -419,7 +418,7 @@ const PrivacyTOSPage = () => {
           </Accordion>
         </Box>
         <Box mt={2}>
-          <Accordion expanded={privacyExpanded} onChange={handlePrivacy}>
+          <Accordion expanded={tosExpanded} onChange={handleTos}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon/>}
               aria-controls="privacy-content"
@@ -508,22 +507,22 @@ const PrivacyTOSPage = () => {
                       <li>accedere attraverso programmi o metodi diversi da quelli ufficialmente rilasciati e gestiti dalla Società;</li>
                       <li>farne un uso in violazione o sovraccarico della capacità di rete.</li>
                     </ul>
-                    <li>
-                      <i>Responsabilità Utente, indennizzo e manleva</i>
-                      <br/>
-                      L’Utente è tenuto ad avvisare tempestivamente la Società nel caso venga a conoscenza di uso o accesso non autorizzato al Sito o di qualsiasi violazione, malfunzionamento o incidente di sicurezza. Qualora tali eventi comportino violazioni e intrusioni nei dati personali, l’Utente ne informerà tempestivamente la Società entro 24 ore dal verificarsi dell’evento. La Società non potrà essere considerata responsabile per eventuali danni o disservizi derivanti da usi ed accessi non autorizzati effettuati tramite l’utilizzo delle credenziali in possesso dell’Utente.
-                      <br/>
-                      Fermi restando gli altri rimedi a disposizione della Società ai sensi della normativa applicabile, nel caso di violazioni ripetute, gravi o sostanziali dei ToS la Società si riserva il diritto di sospendere o disattivare permanentemente l’utenza del responsabile della violazione.
-                      <br/>
-                      Inoltre, l’Utente riconosce che le credenziali di autenticazione sono strettamente personali, devono essere mantenute riservate e non sono condivisibili con terzi, se non negli eventuali casi espressamente previsti dalla legge.
-                      <br/>
-                      L’Utente si obbliga a manlevare e tenere indenne la Società e i suoi dipendenti, dirigenti e amministratori da qualsiasi domanda, richiesta, reclamo, pretesa o azione legale da parte di terzi, nonché da qualsiasi danno, perdita o spesa (incluse le ragionevoli spese legali necessarie per resistere le predette azioni) da chiunque subiti, direttamente o indirettamente, in relazione, in conseguenza o in connessione:
-                      <ul style={{listStyleType: "lower-roman"}}>
-                        <li>alle attività e alla condotta dell’Utente nell’utilizzo del Sito e delle sue funzionalità;</li>
-                        <li>alle dichiarazioni, ai dati e alle informazioni comunque fornite dall’Utente;</li>
-                        <li>alle violazioni dei ToS o della legge applicabile da parte dell’Utente.</li>
-                      </ul>
-                    </li>
+                  </li>
+                  <li>
+                    <i>Responsabilità Utente, indennizzo e manleva</i>
+                    <br/>
+                    L’Utente è tenuto ad avvisare tempestivamente la Società nel caso venga a conoscenza di uso o accesso non autorizzato al Sito o di qualsiasi violazione, malfunzionamento o incidente di sicurezza. Qualora tali eventi comportino violazioni e intrusioni nei dati personali, l’Utente ne informerà tempestivamente la Società entro 24 ore dal verificarsi dell’evento. La Società non potrà essere considerata responsabile per eventuali danni o disservizi derivanti da usi ed accessi non autorizzati effettuati tramite l’utilizzo delle credenziali in possesso dell’Utente.
+                    <br/>
+                    Fermi restando gli altri rimedi a disposizione della Società ai sensi della normativa applicabile, nel caso di violazioni ripetute, gravi o sostanziali dei ToS la Società si riserva il diritto di sospendere o disattivare permanentemente l’utenza del responsabile della violazione.
+                    <br/>
+                    Inoltre, l’Utente riconosce che le credenziali di autenticazione sono strettamente personali, devono essere mantenute riservate e non sono condivisibili con terzi, se non negli eventuali casi espressamente previsti dalla legge.
+                    <br/>
+                    L’Utente si obbliga a manlevare e tenere indenne la Società e i suoi dipendenti, dirigenti e amministratori da qualsiasi domanda, richiesta, reclamo, pretesa o azione legale da parte di terzi, nonché da qualsiasi danno, perdita o spesa (incluse le ragionevoli spese legali necessarie per resistere le predette azioni) da chiunque subiti, direttamente o indirettamente, in relazione, in conseguenza o in connessione:
+                    <ul style={{listStyleType: "lower-roman"}}>
+                      <li>alle attività e alla condotta dell’Utente nell’utilizzo del Sito e delle sue funzionalità;</li>
+                      <li>alle dichiarazioni, ai dati e alle informazioni comunque fornite dall’Utente;</li>
+                      <li>alle violazioni dei ToS o della legge applicabile da parte dell’Utente.</li>
+                    </ul>
                   </li>
                 </ul>
               </Typography>
