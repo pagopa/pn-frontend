@@ -57,12 +57,6 @@ type Props = {
   onConfirm: () => void;
 };
 
-// function getDenominationTooLongErrorMessage(recipientType: RecipientType) {
-//   return recipientType === RecipientType.PG
-//     ? 'too-long-denomination-error-PG'
-//     : 'too-long-denomination-error-PF';
-// }
-
 const Recipient = ({ onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
@@ -70,90 +64,76 @@ const Recipient = ({ onConfirm }: Props) => {
   });
   const { t: tc } = useTranslation(['common']);
 
-  // Questo stato registra il codice del fa vedere se la lunghezza della denominazione del destinatario
-  // (sia nome + " " + cognome sia ragione sociale) supera gli 80 caratteri.
-  // Cfr. PN-2269.
-  // L'ho dovuto modellare in questo modo perché il messaggio di errore nel test può essere una funzione
-  // ... ma a questa funzione non arrivano negli parametri il valore degli altri campi,
-  // mentre che in questo caso il messaggio sulla denominazione dipende del valore di RecipientType.
-  //
-  // Poi ho definito getDenominationTooLongErrorMessage per concentrare in un unico posto 
-  // la definizione dei codici di messaggio.
-  // ----------------
-  // Carlos Lombardi, 2022.10.10
-  // const [denominationTooLongErrorMessage, setDenominationTooLongErrorMessage] = useState(
-  //   getDenominationTooLongErrorMessage(RecipientType.PF)
-  // );
-
   const validationSchema = yup.object({
-    recipients: yup.array().of(
-      yup.object({
-        recipientType: yup.string(),
-        // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
-        // la lunghezza non può superare i 80 caratteri
-
-        // t(denominationTooLongErrorMessage),
-
-        firstName: yup.string().required(tc('required-field')).test({
-          name: 'denominationTotalLength',
-          test(value) {
-            const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
-            const isAcceptableLength =  (value || "").length + (this.parent.lastName as string || "").length <= maxLength;
-            if (isAcceptableLength) {
-              return true;
-            } else {
-              // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
-              const messageKey = `too-long-denomination-error-${this.parent.recipientType || "PF"}`;
-              return this.createError({ message: t(messageKey), path: this.path });
-            }
-          }
-        }),
-        // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
-        // non viene richiesto
-        lastName: yup.string().when('recipientType', {
-          is: (value: string) => value !== RecipientType.PG,
-          then: yup.string().required(tc('required-field')),
-        })
-        ,
-        taxId: yup
-          .string()
-          .required(tc('required-field'))
-          // validazione su CF: deve accettare solo formato a 16 caratteri per PF, e sia 16 sia 11 caratteri per PG
-          .test(
-            'taxIdDependingOnRecipientType',
-            t('fiscal-code-error'),
-            function(value) {
+    recipients: yup
+      .array()
+      .of(
+        yup.object({
+          recipientType: yup.string(),
+          // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
+          // la lunghezza non può superare i 80 caratteri
+          firstName: yup
+            .string()
+            .required(tc('required-field'))
+            .test({
+              name: 'denominationTotalLength',
+              test(value) {
+                const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
+                const isAcceptableLength =
+                  (value || '').length + ((this.parent.lastName as string) || '').length <=
+                  maxLength;
+                if (isAcceptableLength) {
+                  return true;
+                } else {
+                  // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
+                  const messageKey = `too-long-denomination-error-${
+                    this.parent.recipientType || 'PF'
+                  }`;
+                  return this.createError({ message: t(messageKey), path: this.path });
+                }
+              },
+            }),
+          // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
+          // non viene richiesto
+          lastName: yup.string().when('recipientType', {
+            is: (value: string) => value !== RecipientType.PG,
+            then: yup.string().required(tc('required-field')),
+          }),
+          taxId: yup
+            .string()
+            .required(tc('required-field'))
+            // validazione su CF: deve accettare solo formato a 16 caratteri per PF, e sia 16 sia 11 caratteri per PG
+            .test('taxIdDependingOnRecipientType', t('fiscal-code-error'), function (value) {
               if (!value) {
                 return true;
               }
               const isCF16 = dataRegex.fiscalCode.test(value);
               const isCF11 = dataRegex.pIva.test(value);
               return isCF16 || (this.parent.recipientType === RecipientType.PG && isCF11);
-            }
-          ),
-            // .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
-        creditorTaxId: yup
-          .string()
-          .required(tc('required-field'))
-          .matches(dataRegex.pIva, t('fiscal-code-error')),
-        noticeCode: yup
-          .string()
-          .matches(/^\d{18}$/, t('notice-code-error'))
-          .required(tc('required-field')),
-        digitalDomicile: yup.string().when('showDigitalDomicile', {
-          is: true,
-          then: yup.string().email(t('pec-error')).required(tc('required-field')),
-        }),
-        showPhysicalAddress: yup.boolean().isTrue(),
-        address: yup.string().when('showPhysicalAddress', {
-          is: true,
-          then: yup.string().required(tc('required-field')),
-        }),
-        houseNumber: yup.string().when('showPhysicalAddress', {
-          is: true,
-          then: yup.string().required(tc('required-field')),
-        }),
-        /*
+            }),
+          // .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
+          creditorTaxId: yup
+            .string()
+            .required(tc('required-field'))
+            .matches(dataRegex.pIva, t('fiscal-code-error')),
+          noticeCode: yup
+            .string()
+            .matches(/^\d{18}$/, t('notice-code-error'))
+            .required(tc('required-field')),
+          digitalDomicile: yup.string().when('showDigitalDomicile', {
+            is: true,
+            then: yup.string().email(t('pec-error')).required(tc('required-field')),
+          }),
+          showPhysicalAddress: yup.boolean().isTrue(),
+          address: yup.string().when('showPhysicalAddress', {
+            is: true,
+            then: yup.string().required(tc('required-field')),
+          }),
+          houseNumber: yup.string().when('showPhysicalAddress', {
+            is: true,
+            then: yup.string().required(tc('required-field')),
+          }),
+          /*
         addressDetails: yup.string().when('showPhysicalAddress', {
           is: true,
           then: yup.string().required(tc('required-field')),
@@ -175,7 +155,9 @@ const Recipient = ({ onConfirm }: Props) => {
       )
       .test('identicalTaxIds', t('identical-fiscal-codes-error'), (values) => {
         if (values) {
-          const duplicatesTaxIds = values.map((item) => item.taxId).filter((e, i, a) => a.indexOf(e) !== i);
+          const duplicatesTaxIds = values
+            .map((item) => item.taxId)
+            .filter((e, i, a) => a.indexOf(e) !== i);
           if (duplicatesTaxIds.length > 0) {
             const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
             values.forEach((value, i) => {
@@ -264,7 +246,6 @@ const Recipient = ({ onConfirm }: Props) => {
     onConfirm();
   };
 
-
   return (
     <Formik
       initialValues={initialValues}
@@ -273,7 +254,7 @@ const Recipient = ({ onConfirm }: Props) => {
       validateOnBlur={false}
       validateOnMount
     >
-      {({ values, setFieldValue, touched, handleBlur, errors, isValid, /* setValues */ }) => (
+      {({ values, setFieldValue, touched, handleBlur, errors, isValid /* setValues */ }) => (
         <Form>
           <NewNotificationCard noPaper isContinueDisabled={!isValid}>
             {values.recipients.map((recipient, index) => (
@@ -313,17 +294,24 @@ const Recipient = ({ onConfirm }: Props) => {
                         name={`recipients[${index}].recipientType`}
                         value={values.recipients[index].recipientType}
                         onChange={(event) => {
-                          const valuesToUpdate: { recipientType: RecipientType; firstName: string; lastName?: string} = {
-                            recipientType: event.currentTarget.value as RecipientType, 
-                            firstName: '', 
+                          const valuesToUpdate: {
+                            recipientType: RecipientType;
+                            firstName: string;
+                            lastName?: string;
+                          } = {
+                            recipientType: event.currentTarget.value as RecipientType,
+                            firstName: '',
                           };
                           if (event.currentTarget.value === RecipientType.PG) {
                             /* eslint-disable-next-line functional/immutable-data */
                             valuesToUpdate.lastName = '';
                           }
-                          
+
                           // I take profit that any level in the value structure can be used in setFieldValue ...
-                          setFieldValue(`recipients[${index}]`, {...values.recipients[index], ...valuesToUpdate});
+                          setFieldValue(`recipients[${index}]`, {
+                            ...values.recipients[index],
+                            ...valuesToUpdate,
+                          });
                           // In fact, I would have liked to specify the change through a function, i.e.
                           //   setFieldValue(`recipients[${index}]`, (currentValue: any) => ({...currentValue, ...valuesToUpdate}));
                           // but unfortunately Formik' setFieldValue is not capable of handling such kind of updates.
@@ -353,7 +341,6 @@ const Recipient = ({ onConfirm }: Props) => {
                                 setFieldValue={setFieldValue}
                                 handleBlur={handleBlur}
                                 width={4}
-                                
                               />
                               <FormTextField
                                 keyName={`recipients[${index}].lastName`}
