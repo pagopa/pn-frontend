@@ -28,9 +28,9 @@ describe('test Terms of Service page', () => {
   it('checks the texts in the page', () => {
     const result = render(<TermsOfService />);
 
-    expect(result.container).toHaveTextContent(/tos.title/i);
-    expect(result.container).toHaveTextContent(/tos.body/i);
+    expect(result.container).toHaveTextContent(/Piattaforma Notifiche/i);
+    expect(result.container).toHaveTextContent(/Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso./i);
     expect(result.container).toHaveTextContent(/tos.switchLabel/i);
-    expect(result.container).toHaveTextContent(/tos.button/i);
+    expect(result.container).toHaveTextContent(/Accedi/i);
   });
 });
