@@ -2,7 +2,6 @@ import { Alert, Box, Stack } from "@mui/material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { Footer, ButtonNaked } from "@pagopa/mui-italia";
 import { ReactNode, useContext } from "react";
-import { useRouter } from "next/router";
 
 import LangContext from "../../provider/lang-context";
 import NavigationBar from "../components/NavigationBar";
@@ -22,8 +21,6 @@ interface Props {
 
 const LandingLayout = ({ children }: Props) => {
   const lang = useContext(LangContext);
-  const { pathname } = useRouter();
-  const pageType = pathname.split("/")[1];
 
   const homeLink = {
     label: "PagoPA S.p.A.",
