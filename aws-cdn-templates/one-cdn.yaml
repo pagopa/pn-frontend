@@ -21,6 +21,7 @@ Parameters:
   AlternateWebDomain:
     Description: "Alternate Domain name for the webapp"
     Type: String
+    Default: ''
 
   AlternateWebDomainReferenceToSite:
     Description: true if the website must be reachable using the AlternateWebDomain
@@ -30,6 +31,7 @@ Parameters:
   AlternateHostedZoneId:
     Description: Hosted Zone Id in which you want to add alternate DNS
     Type: String
+    Default: ''
 
   WebCertificateArn:
     Description: "ACM Web Certificate ARN"
