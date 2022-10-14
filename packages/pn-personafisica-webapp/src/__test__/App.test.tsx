@@ -8,7 +8,6 @@ import { axe, render } from './test-utils';
 import App from '../App';
 import i18n from '../i18n';
 import * as sidemenuActions from '../redux/sidemenu/actions';
-import * as authActions from '../redux/auth/actions';
 
 
 // mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch; 
