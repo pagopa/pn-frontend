@@ -32,7 +32,7 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
-import {goToLoginPortal} from "./navigation/navigation.utility";
+import { goToLoginPortal } from "./navigation/navigation.utility";
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
