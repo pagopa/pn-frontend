@@ -8,7 +8,6 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from '../../utils/costants';
-import { AppType } from "../../types";
 
 const localizedPagoPALink = pagoPALink();
 
@@ -17,10 +16,9 @@ type Props = {
   loggedUser?: boolean;
   /** Event tracking callback on change language */
   eventTrackingCallbackChangeLanguage?: () => void;
-  appType: AppType;
 };
 
-const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackingCallbackChangeLanguage, appType }: Props) => {
+const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackingCallbackChangeLanguage }: Props) => {
   const [currentLangCode, setCurrentLangCode] = useState<'it' | 'en'>('it');
 
   const changeLanguageHandler = (langCode: 'it' | 'en') => {
@@ -39,7 +37,7 @@ const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackin
         onClick: () => window.open(localizedPagoPALink.href, '_blank'),
       }}
       legalInfo={companyLegalInfo()}
-      postLoginLinks={postLoginLinks(appType)}
+      postLoginLinks={postLoginLinks()}
       preLoginLinks={preLoginLinks()}
       languages={LANGUAGES}
       onLanguageChanged={changeLanguageHandler}
