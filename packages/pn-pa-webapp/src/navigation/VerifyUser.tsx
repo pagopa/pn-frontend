@@ -5,6 +5,7 @@ import { exchangeToken } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { getHomePage } from '../utils/role.utility';
+import * as routes from './routes.const';
 
 const VerifyUser = () => {
   const location = useLocation();
@@ -13,6 +14,7 @@ const VerifyUser = () => {
   const token = useAppSelector((state: RootState) => state.userState.user.sessionToken);
   const navigate = useNavigate();
   const [verificationDone, setVerificationDone] = useState(false);
+  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
 
   useEffect(() => {
     const params = new URLSearchParams(location.hash);
@@ -37,10 +39,13 @@ const VerifyUser = () => {
    * altrimenti rindizzerebbe sulla pagina iniziale ad ogni ricarica (F5).
    */
   useEffect(() => {
-    if (token !== '' && location.pathname === '/') {
+    if (token !== '' && fetchedTos && !tos) {
+      navigate(routes.TOS, {replace: true});
+    }
+    if (token !== '' && fetchedTos && tos && location.pathname === '/') {
       navigate(getHomePage(), {replace: true});
     }
-  }, [token]);
+  }, [token, fetchedTos, tos]);
 
   return verificationDone ? <Outlet /> : <div />;
 };
