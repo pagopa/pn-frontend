@@ -61,7 +61,7 @@ jest.mock('../../api/consents/Consents.api', () => {
       getConsentByType: () => mockMakeTosCallFail
         ? Promise.reject({ response: { status: 500 } })
         : Promise.resolve({
-            recipientId: "mock-cosent-id",
+            recipientId: "mock-consent-id",
             consentType: "TOS",
             accepted: mockTosValue,
           })
@@ -127,6 +127,7 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
+    expect((mockNavigateFn.mock.calls[0] as any)[0]).toBe(routes.NOTIFICHE);
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
