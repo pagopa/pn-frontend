@@ -75,6 +75,7 @@
     "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
     "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",
     "generic-token-exchange-problem": "Non è stato possibile completare l'accesso",
+    "error-in-initial-info-loading": "Non siamo riusciti a recuperare dati necessari per l'avvio dell'applicazione",
     "invalid-token-title": "Non puoi accedere per un problema tecnico - token non valido",
     "generic-title": "Errore generico",
     "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi",

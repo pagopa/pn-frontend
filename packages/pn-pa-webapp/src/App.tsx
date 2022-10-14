@@ -9,6 +9,7 @@ import {
   Layout,
   LoadingOverlay,
   SideMenu,
+  useErrors,
   useMultiEvent,
   useTracking,
   useUnload,
@@ -18,7 +19,7 @@ import { Box } from '@mui/material';
 
 import { MIXPANEL_TOKEN } from "@pagopa-pn/pn-personafisica-webapp/src/utils/constants";
 import Router from './navigation/routes';
-import { getOrganizationParty, logout } from './redux/auth/actions';
+import { AUTH_ACTIONS, getOrganizationParty, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
@@ -40,6 +41,7 @@ const App = () => {
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
+  const { hasApiErrors } = useErrors();
 
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
@@ -101,7 +103,7 @@ const App = () => {
     ],
     [role, loggedUserOrganizationParty]
   );
-
+  
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
@@ -118,6 +120,8 @@ const App = () => {
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
+
+  const hasFetchOrganizationPartyError = hasApiErrors(AUTH_ACTIONS.GET_ORGANIZATION_PARTY);
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
     trackEventByType(TrackEventType.APP_CRASH, {
@@ -179,7 +183,7 @@ const App = () => {
             />
           )
         }
-        showSideMenu={!!sessionToken}
+        showSideMenu={!!sessionToken && !hasFetchOrganizationPartyError}
         productsList={productsList}
         productId={'0'}
         partyList={partyList}
@@ -187,7 +191,7 @@ const App = () => {
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
         appType={AppType.PA}
-        isLogged={!!sessionToken}
+        isLogged={!!sessionToken && !hasFetchOrganizationPartyError}
       >
         <AppMessage sessionRedirect={handleLogout} />
         <LoadingOverlay />

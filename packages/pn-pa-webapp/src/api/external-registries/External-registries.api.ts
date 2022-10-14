@@ -4,6 +4,9 @@ import { apiClient } from '../axios';
 
 import { GET_PARTY_FOR_ORGANIZATION } from './external-registries-routes';
 
+/* eslint-disable functional/no-let */
+let mockCounter = 0;
+
 export const ExternalRegistriesAPI = {
   /**
    * Gets the Party object for the organization whose id is given.
@@ -17,5 +20,13 @@ export const ExternalRegistriesAPI = {
   getOrganizationParty: (organizationId: string): Promise<Party> =>
     apiClient
       .get<Array<Party>>(GET_PARTY_FOR_ORGANIZATION(organizationId))
-      .then((response: AxiosResponse<Array<Party>>) => response.data[0]),
+      .then((response: AxiosResponse<Array<Party>>) => {
+        mockCounter++;
+        if (mockCounter % 3 === 1) {
+          return Promise.reject({ response: { status: 500 } });
+        }
+        return response.data[0];
+      }),
+      // .then(() => Promise.reject({ response: { status: 500 } })),
+      // .then((response: AxiosResponse<Array<Party>>) => response.data[0]),
 };
