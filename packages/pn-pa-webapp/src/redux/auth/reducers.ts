@@ -4,7 +4,7 @@ import { adaptedTokenExchangeError, basicInitialUserData, basicNoLoggedUserData,
 import { Party } from '../../models/party';
 
 import { PartyRole, PNRole } from '../../models/user';
-import { exchangeToken, logout, getOrganizationParty } from './actions';
+import { exchangeToken, logout, getOrganizationParty, acceptToS, getToSApproval } from './actions';
 import { User } from './types';
 
 const roleMatcher = yup.object({
@@ -53,6 +53,8 @@ const userSlice = createSlice({
   initialState: {
     loading: false,
     user: initialUserData(),
+    tos: false,
+    fetchedTos: false,
     organizationParty: {
       id: '',
       name: '',
@@ -79,6 +81,20 @@ const userSlice = createSlice({
     });
     builder.addCase(getOrganizationParty.fulfilled, (state, action) => {
       state.organizationParty = action.payload;
+    });
+    builder.addCase(getToSApproval.fulfilled, (state, action) => {
+      state.tos = action.payload.accepted;
+      state.fetchedTos = true;
+    });
+    builder.addCase(getToSApproval.rejected, (state) => {
+      state.tos = false;
+      state.fetchedTos = true;
+    });
+    builder.addCase(acceptToS.fulfilled, (state) => {
+      state.tos = true;
+    });
+    builder.addCase(acceptToS.rejected, (state) => {
+      state.tos = false;
     });
   },
 });

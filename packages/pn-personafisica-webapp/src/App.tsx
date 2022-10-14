@@ -32,7 +32,7 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
-import {goToLoginPortal} from "./navigation/navigation.utility";
+import { goToLoginPortal } from "./navigation/navigation.utility";
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -67,6 +67,8 @@ const App = () => {
     }),
     [loggedUser]
   );
+
+  const isPrivacyPage = path[1] === 'privacy-tos';
 
   const userActions = useMemo(
 
@@ -122,14 +124,14 @@ const App = () => {
     // attenzione - per far funzionare questo si deve cambiare dove dice
     //     sideMenuDelegators.length > 0,  deve cambiarsi per ... > 1
     // si deve anche abilitare la gestione errori nell'action di getSidemenuInformation
-    // 
+    //
     // if (hasApiErrors(SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION)) {
     //   return [{
     //     label: "Qualcuno/a ha delegato su di te?",
     //     route: "",
     //     action: () => dispatch(getSidemenuInformation()),
     //   }];
-    // } else 
+    // } else
     if (delegators.length > 0) {
       const myNotifications = {
         label: t('title', { ns: 'notifiche' }),
@@ -215,6 +217,8 @@ const App = () => {
   return (
     <>
       <Layout
+        showHeader={!isPrivacyPage}
+        showFooter={!isPrivacyPage}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>
@@ -228,7 +232,7 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!!sessionToken && (!fetchedTos || tos)}
+        showSideMenu={!!sessionToken && (!fetchedTos || tos) && !isPrivacyPage}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown

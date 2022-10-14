@@ -1,6 +1,6 @@
 import { Fragment, ReactNode, useEffect } from 'react';
-import { Trans } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Trans } from 'react-i18next';
 import { Grid } from '@mui/material';
 import { TermsOfServiceHandler, useIsMobile } from '@pagopa-pn/pn-commons';
 
@@ -16,18 +16,19 @@ const TermsOfService = () => {
   const tos = useAppSelector((state: RootState) => state.userState.tos);
 
   const handleAccept = () => {
-    void dispatch(acceptToS()).unwrap()
-    .then(() => {
-      navigate(routes.NOTIFICHE);
-    })
-    .catch(_ => {
-      console.error(_);
-    });
+    void dispatch(acceptToS())
+      .unwrap()
+      .then(() => {
+        navigate(routes.DASHBOARD);
+      })
+      .catch((_) => {
+        console.error(_);
+      });
   };
 
   useEffect(() => {
     if (tos) {
-      navigate(routes.NOTIFICHE);
+      navigate(routes.DASHBOARD);
     }
   }, [tos]);
 

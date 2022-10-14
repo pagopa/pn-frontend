@@ -1,11 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import {ROUTE_LOGIN, ROUTE_LOGIN_ERROR, ROUTE_LOGOUT, ROUTE_SUCCESS} from '../utils/constants';
+import {ROUTE_LOGIN, ROUTE_LOGIN_ERROR, ROUTE_LOGOUT, ROUTE_PRIVACY_POLICY, ROUTE_SUCCESS} from '../utils/constants';
 import { storageOnSuccessOps } from "../utils/storage";
 import Login from '../pages/login/Login';
 import Logout from '../pages/logout/Logout';
 import LoginError from '../pages/loginError/LoginError';
 import SuccessPage from "../pages/success/Success";
+import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy";
 
 /** login request operations */
 const onLoginRequest = () => {
@@ -30,6 +31,7 @@ function Router() {
       <Route path={ROUTE_LOGIN_ERROR} element={<LoginError />} />
       <Route path={ROUTE_LOGOUT} element={<Logout />} />
       <Route path={ROUTE_SUCCESS} element={<SuccessPage />} />
+      <Route path={ROUTE_PRIVACY_POLICY} element={<PrivacyPolicy />} />
       <Route path="*" element={<Navigate to={ROUTE_LOGIN} replace />} />
     </Routes>
   );

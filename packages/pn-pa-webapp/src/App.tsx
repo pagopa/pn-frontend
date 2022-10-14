@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import {
   AppMessage,
   appStateActions,
-  AppType,
   initLocalization,
   Layout,
   LoadingOverlay,
@@ -18,7 +17,7 @@ import { Box } from '@mui/material';
 
 import { MIXPANEL_TOKEN } from "@pagopa-pn/pn-personafisica-webapp/src/utils/constants";
 import Router from './navigation/routes';
-import { getOrganizationParty, logout } from './redux/auth/actions';
+import { getOrganizationParty, getToSApproval, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
@@ -115,9 +114,16 @@ const App = () => {
     }
   }, [idOrganization]);
 
+  useEffect(() => {
+    if (sessionToken !== '') {
+      void dispatch(getToSApproval());
+    }
+  }, [sessionToken]);
+
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
+  const isPrivacyPage = path[1] === 'privacy-tos';
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
     trackEventByType(TrackEventType.APP_CRASH, {
@@ -161,6 +167,8 @@ const App = () => {
   return (
     <>
       <Layout
+        showHeader={!isPrivacyPage}
+        showFooter={!isPrivacyPage}
         onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
@@ -179,14 +187,13 @@ const App = () => {
             />
           )
         }
-        showSideMenu={!!sessionToken}
+        showSideMenu={!!sessionToken && !isPrivacyPage}
         productsList={productsList}
         productId={'0'}
         partyList={partyList}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
-        appType={AppType.PA}
         isLogged={!!sessionToken}
       >
         <AppMessage sessionRedirect={handleLogout} />
