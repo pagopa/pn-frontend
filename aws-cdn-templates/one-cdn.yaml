@@ -43,7 +43,7 @@ Parameters:
 Conditions:
 
   # Is landing site if name startsWith 'web-landing-cdn-'
-  IsLanding: 
+  IsLanding:
     Fn::And:
       - !Not [ !Equals [ !Ref Name, "" ]]
       - !Equals [ !Select [ 0, !Split [ web-landing-cdn-, !Ref Name ]], "" ]
