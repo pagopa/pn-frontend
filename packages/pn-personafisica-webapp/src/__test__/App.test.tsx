@@ -38,7 +38,6 @@ const initialState = (token: string) => ({
         email: 'mocked-user@mocked-domain.com',
         sessionToken: token,
       },
-      fetchedTos: true,
       tos: true,
     },
     generalInfoState: {

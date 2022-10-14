@@ -10,7 +10,7 @@ const RouteGuard = () => {
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const { tos } = useAppSelector((state: RootState) => state.userState);
 
-  return sessionToken 
+  return !!sessionToken 
     ? <Outlet /> 
     : <AccessDenied isLogged={!!sessionToken} 
         goToHomePage={() => navigate(tos ? routes.NOTIFICHE : routes.TOS, {replace: true})}

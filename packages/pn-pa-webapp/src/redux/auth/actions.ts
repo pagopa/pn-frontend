@@ -1,3 +1,4 @@
+import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
 import { ConsentsApi } from '../../api/consents/Consents.api';
@@ -6,6 +7,10 @@ import { Consent, ConsentActionType, ConsentType } from '../../models/consents';
 import { Party } from '../../models/party';
 import { PartyRole, PNRole } from '../../models/user';
 import { User } from './types';
+
+export enum AUTH_ACTIONS  {
+  GET_TOS_APPROVAL = 'getToSApproval',
+}
 
 /**
  * Exchange token action between selfcare and pn.
@@ -75,15 +80,9 @@ export const logout = createAsyncThunk<User>('logout', async () => {
 /**
  * Retrieves if the terms of service are already approved
  */
- export const getToSApproval = createAsyncThunk<Consent>(
-  'getToSApproval',
-  async (_, { rejectWithValue }) => {
-    try {
-      return await ConsentsApi.getConsentByType(ConsentType.TOS);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+export const getToSApproval = createAsyncThunk<Consent>(
+  AUTH_ACTIONS.GET_TOS_APPROVAL,
+  performThunkAction(() => ConsentsApi.getConsentByType(ConsentType.TOS))
 );
 
 export const acceptToS = createAsyncThunk<string>('acceptToS', async (_, { rejectWithValue }) => {

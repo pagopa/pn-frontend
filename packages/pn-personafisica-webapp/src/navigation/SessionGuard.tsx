@@ -85,14 +85,7 @@ const SessionGuardRender = () => {
   return isInitialized ? renderIfInitialized() : <Fragment></Fragment>;
 };
 
-/*
- * Define the function outside SessionGuard in order to keep cognitive complexity low
- */
-function getInitialPage(hasTosApiErrors: boolean, tos: boolean, isSessionReload: boolean) {
-  console.log("in getInitialPage");
-  console.log({ hasTosApiErrors, tos, isSessionReload });
-  return hasTosApiErrors ? undefined : (tos ? (isSessionReload ? undefined : routes.NOTIFICHE) : routes.TOS);
-}
+
 
 /**
  * SessionGuard: logica di determinazione, in quale situazione siamo?
@@ -166,9 +159,9 @@ const SessionGuard = () => {
   useEffect(() => {
     const doInitalPageDetermination = async () => {
       // l'analisi delle TOS ha senso solo se c'è un utente
-      if (sessionToken && !isClosedSession) {
+      if (sessionToken && !isClosedSession && !hasTosApiErrors) {
         // non si setta initial page se è un session reload di un utente che ha già accettato i TOS
-        const initialPage = getInitialPage(hasTosApiErrors, tos, isSessionReload);
+        const initialPage = tos ? (isSessionReload ? undefined : routes.NOTIFICHE) : routes.TOS;
         if (initialPage) {
           navigate(initialPage, { replace: true });
         }
