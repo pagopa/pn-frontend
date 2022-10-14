@@ -3,9 +3,9 @@ import { RenderResult, act, fireEvent, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 
 import { render } from '../../../../__test__/test-utils';
+import { UploadDocumentParams } from '../../../../redux/newNotification/types';
 import * as actions from '../../../../redux/newNotification/actions';
 import Attachments from '../Attachments';
-import { UploadAttachmentParams } from '../../../../redux/newNotification/types';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -32,7 +32,7 @@ describe('Attachments Component', () => {
     fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
   }
 
-  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadAttachmentParams>) {
+  async function testConfirm(button: HTMLButtonElement, documents: Array<UploadDocumentParams>) {
     fireEvent.click(button);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
@@ -76,7 +76,11 @@ describe('Attachments Component', () => {
     expect(fileInput).toBeInTheDocument();
     const buttons = form?.querySelectorAll('button');
     expect(buttons).toHaveLength(3);
-    expect(buttons![2]).toBeDisabled();
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
+    expect(buttons![1]).toBeDisabled(); 
+    expect(result.container).toHaveTextContent(/back-to-recipient/i);
   });
 
   it('adds document and click on confirm', async () => {
@@ -84,9 +88,13 @@ describe('Attachments Component', () => {
     const attachmentBoxes = result.queryAllByTestId('attachmentBox');
     uploadDocument(attachmentBoxes[0].parentNode!, 0);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
-    expect(buttons![2]).toBeEnabled();
-    void testConfirm(buttons![2], [
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
+    expect(buttons![1]).toBeEnabled();
+    void testConfirm(buttons![1], [
       {
+        id: 'documents.0',
         key: 'Doc0',
         contentType: 'application/pdf',
         file: new Uint8Array(),
@@ -101,8 +109,11 @@ describe('Attachments Component', () => {
     uploadDocument(attachmentBoxes[0].parentNode!, 0);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
     fireEvent.click(buttons![0]);
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
     await waitFor(() => {
-      expect(buttons![2]).toBeDisabled();
+      expect(buttons![1]).toBeDisabled();
     });
     const newAttachmentBoxes = result.queryAllByTestId('attachmentBox');
     expect(newAttachmentBoxes).toHaveLength(2);
@@ -110,15 +121,17 @@ describe('Attachments Component', () => {
     const deleteIcon = newAttachmentBoxes[1].querySelector('[data-testid="DeleteIcon"]');
     expect(deleteIcon).toBeInTheDocument();
     uploadDocument(newAttachmentBoxes[1].parentNode!, 1);
-    await waitFor(() => expect(buttons![2]).toBeEnabled());
+    await waitFor(() => expect(buttons![1]).toBeEnabled());
     void testConfirm(buttons![2], [
       {
+        id: 'documents.0',
         key: 'Doc0',
         contentType: 'application/pdf',
         file: new Uint8Array(),
         sha256: 'mocked-hasBase64',
       },
       {
+        id: 'documents.1',
         key: 'Doc1',
         contentType: 'application/pdf',
         file: new Uint8Array(),
@@ -138,9 +151,13 @@ describe('Attachments Component', () => {
     fireEvent.click(deleteIcon!);
     newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
     expect(newAttachmentBoxes).toHaveLength(1);
-    await waitFor(() => expect(buttons![2]).toBeEnabled());
-    void testConfirm(buttons![2], [
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
+    await waitFor(() => expect(buttons![1]).toBeEnabled());
+    void testConfirm(buttons![1], [
       {
+        id: 'documents.0',
         key: 'Doc0',
         contentType: 'application/pdf',
         file: new Uint8Array(),

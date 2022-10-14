@@ -1,8 +1,15 @@
-import { NotificationDetailRecipient } from '@pagopa-pn/pn-commons';
+import _ from 'lodash';
+import { NotificationDetailRecipient, NotificationDetailDocument, RecipientType } from '@pagopa-pn/pn-commons';
 
-import { FormRecipient } from '../models/NewNotification';
+import {
+  NewNotificationRecipient,
+  NewNotificationDocument,
+  NewNotificationDTO,
+  NewNotification,
+  PaymentObject,
+} from '../models/NewNotification';
 
-const checkFisicalAddress = (recipient: FormRecipient) => {
+const checkFisicalAddress = (recipient: NewNotificationRecipient) => {
   if (
     recipient.address &&
     recipient.houseNumber &&
@@ -25,8 +32,8 @@ const checkFisicalAddress = (recipient: FormRecipient) => {
   return undefined;
 };
 
-export const formatNotificationRecipients = (
-  recipients: Array<FormRecipient>
+const newNotificationRecipientsMapper = (
+  recipients: Array<NewNotificationRecipient>
 ): Array<NotificationDetailRecipient> =>
   recipients.map((recipient) => {
     const digitalDomicile = recipient.digitalDomicile
@@ -36,7 +43,7 @@ export const formatNotificationRecipients = (
         }
       : undefined;
     return {
-      denomination: `${recipient.firstName} ${recipient.lastName}`,
+      denomination: recipient.recipientType === RecipientType.PG ? recipient.firstName : `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
       payment: {
@@ -44,16 +51,86 @@ export const formatNotificationRecipients = (
         noticeCode: recipient.noticeCode,
         pagoPaForm: {
           digests: {
-            sha256: ''
+            sha256: '',
           },
           contentType: '',
           ref: {
             key: '',
-            versionToken: ''
-          }
-        }
+            versionToken: '',
+          },
+        },
       },
       digitalDomicile,
       physicalAddress: checkFisicalAddress(recipient),
     };
   });
+
+const newNotificationDocumentMapper = (
+  document: NewNotificationDocument
+): NotificationDetailDocument => ({
+  digests: {
+    sha256: document.file.sha256.hashBase64,
+  },
+  contentType: document.contentType,
+  ref: document.ref,
+  title: document.name,
+});
+
+const newNotificationAttachmentsMapper = (
+  documents: Array<NewNotificationDocument>
+): Array<NotificationDetailDocument> =>
+  documents.map((document) => newNotificationDocumentMapper(document));
+
+const newNotificationPaymentDocumentsMapper = (
+  recipients: Array<NotificationDetailRecipient>,
+  paymentDocuments: { [key: string]: PaymentObject }
+): Array<NotificationDetailRecipient> =>
+  recipients.map((r) => {
+    const documents: {
+      pagoPaForm: NotificationDetailDocument;
+      f24flatRate?: NotificationDetailDocument;
+      f24standard?: NotificationDetailDocument;
+    } = {
+      pagoPaForm: newNotificationDocumentMapper(paymentDocuments[r.taxId].pagoPaForm),
+    };
+    /* eslint-disable functional/immutable-data */
+    if (paymentDocuments[r.taxId].f24flatRate) {
+      documents.f24flatRate = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24flatRate as NewNotificationDocument);
+    }
+    if (paymentDocuments[r.taxId].f24standard) {
+      documents.f24standard = newNotificationDocumentMapper(paymentDocuments[r.taxId].f24standard as NewNotificationDocument);
+    }
+    r.payment = {
+      ...documents,
+      creditorTaxId: r.payment ? r.payment.creditorTaxId : '',
+      noticeCode: r.payment?.noticeCode,
+    };
+    /* eslint-enable functional/immutable-data */
+    return r;
+  });
+
+export function newNotificationMapper(newNotification: NewNotification): NewNotificationDTO {
+  const clonedNotification = _.cloneDeep(newNotification);
+  /* eslint-disable functional/immutable-data */
+  // remove useless data
+  delete clonedNotification.paymentMode;
+  delete clonedNotification.payment;
+  const newNotificationParsed: NewNotificationDTO = {
+    ...clonedNotification,
+    recipients: [],
+    documents: [],
+  };
+  // format recipients
+  newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients);
+  // format attachments
+  newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
+  // format payments
+  if (newNotification.payment) {
+    newNotificationParsed.recipients = newNotificationPaymentDocumentsMapper(
+      newNotificationParsed.recipients,
+      newNotification.payment
+    );
+  }
+  /* eslint-enable functional/immutable-data */
+  return newNotificationParsed;
+}

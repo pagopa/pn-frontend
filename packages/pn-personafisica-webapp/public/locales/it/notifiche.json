@@ -65,6 +65,7 @@
       "divider-text": "oppure",
       "download-pagopa-notification": "Scarica l'avviso pagoPA",
       "download-f24": "Scarica il modello F24",
+      "message-error-fetch-payment": "Non siamo riusciti a recuperare i dati di pagamento per questa notifica.",
       "message-completed": "Il pagamento è stato effettuato con successo.",
       "message-in-progress": "Il pagamento è già in corso, riprova tra qualche minuto. Se è passato troppo tempo, segnalacelo!",
       "message-failed": "Il pagamento non è andato a buon fine. Premi \"Paga\" per riprovare.",

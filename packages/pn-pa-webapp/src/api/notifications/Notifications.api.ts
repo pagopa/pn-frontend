@@ -8,7 +8,7 @@ import {
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
-import { NewNotificationBe, NewNotificationResponse } from '../../models/NewNotification';
+import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
 import { apiClient, externalClient } from '../axios';
 import {
@@ -145,13 +145,11 @@ export const NotificationsApi = {
 
   /**
    * create new notification
-   * @param  {NewNotificationBe} notification
+   * @param  {NewNotificationDTO} notification
    * @returns Promise
    */
-  createNewNotification: (notification: NewNotificationBe): Promise<NewNotificationResponse> =>
+  createNewNotification: (notification: NewNotificationDTO): Promise<NewNotificationResponse> =>
     apiClient
       .post<NewNotificationResponse>(CREATE_NOTIFICATION(), notification)
       .then((response) => response.data),
 };
-
-// 'x-amz-sdk-checksum-algorithm': 'SHA256',

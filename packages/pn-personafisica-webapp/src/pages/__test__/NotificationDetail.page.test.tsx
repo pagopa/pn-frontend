@@ -1,7 +1,9 @@
 import * as redux from 'react-redux';
-import { RenderResult } from '@testing-library/react';
+import { RenderResult, screen } from '@testing-library/react';
+import { act } from 'react-dom/test-utils';
 
 import {
+  apiOutcomeTestHelper,
   NotificationDetail as INotificationDetail,
   NotificationDetailTableRow,
   NotificationStatus,
@@ -37,6 +39,7 @@ jest.mock('@pagopa-pn/pn-commons', () => ({
   ),
   // NotificationDetailDocuments: () => <div>Documents</div>,
   NotificationDetailTimeline: () => <div>Timeline</div>,
+  ApiError: () => <div>Api Error</div>,
 }));
 
 jest.mock('../../component/Notifications/NotificationPayment', () => () => <div>Payment</div>);
@@ -247,5 +250,16 @@ describe('NotificationDetail Page', () => {
     expect(result.container).toHaveTextContent('Analogico Ok');
     expect(result.container).not.toHaveTextContent('Totito');
     expect(await axe(result.container as Element)).toHaveNoViolations(); // Accesibility test
+  });
+
+  it('Notification detailAPI error', async () => {
+    jest.restoreAllMocks();
+    mockUseParamsFn.mockReturnValue({ id: 'mocked-id' });
+    await act(async () => void render(
+      <NotificationDetail />, 
+      { preloadedState: { appState: apiOutcomeTestHelper.appStateWithMessageForAction(actions.NOTIFICATION_ACTIONS.GET_RECEIVED_NOTIFICATION) } } 
+    ));
+    const apiErrorComponent = screen.queryByText("Api Error");
+    expect(apiErrorComponent).toBeTruthy();
   });
 });

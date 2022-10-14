@@ -18,7 +18,8 @@ const AppMessage = ({ sessionRedirect }: Props) => {
   const [open, setOpen] = useState(true);
 
   const onCloseErrorToast = (id: string) => {
-    dispatch(appStateActions.removeError(id));
+    // dispatch(appStateActions.removeError(id));
+    dispatch(appStateActions.setErrorAsAlreadyShown(id));
   };
 
   const onCloseSuccessToast = (id: string) => {
@@ -32,7 +33,7 @@ const AppMessage = ({ sessionRedirect }: Props) => {
 
   return (
     <Fragment>
-      {errors.map((errorMessage: IAppMessage) =>
+      {errors.filter((errorMessage: IAppMessage) => !errorMessage.alreadyShown).map((errorMessage: IAppMessage) =>
         errorMessage.status === 403 ? (
           <SessionModal
             open={open}

@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString } from '@pagopa-pn/pn-commons';
+import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
-import { getReceivedNotifications } from '../redux/dashboard/actions';
+import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
 import { setMandateId, setPagination, setSorting } from '../redux/dashboard/reducers';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -17,10 +17,12 @@ import { TrackEventType } from "../utils/events";
 import { NotificationColumn } from '../models/Notifications';
 
 
+
 const Notifiche = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const { mandateId } = useParams();
+  
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
@@ -49,6 +51,23 @@ const Notifiche = () => {
     pagination.page + 1
   );
 
+  // API call, this function is passed to the ApiErrorWrapper component
+  const fetchNotifications = useCallback(() => {
+    const params = {
+      ...filters,
+      size: pagination.size,
+      nextPagesKey:
+        pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
+    };
+
+    void dispatch(getReceivedNotifications({
+      ...params,
+      endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
+    }));
+  }, [filters, pagination.size, pagination.page, pagination.nextPagesKey]);
+  
+
+
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_PAGINATION);
@@ -64,65 +83,58 @@ const Notifiche = () => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, { pageSize });
   };
 
-    useEffect(() => {
+  useEffect(() => {
     if (filters.mandateId !== currentDelegator?.mandateId) {
       dispatch(setMandateId(currentDelegator?.mandateId));
       return;
     }
-    const params = {
-      ...filters,
-      size: pagination.size,
-      nextPagesKey:
-        pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
-    };
-    void dispatch(getReceivedNotifications({
-      ...params,
-      endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
-    }));
-  }, [filters, pagination.size, pagination.page, sort, currentDelegator]);
+    fetchNotifications();
+  }, [fetchNotifications, currentDelegator]);
 
   return (
     <Box p={3}>
       <DomicileBanner />
       <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
-      {isMobile ? (
-        <MobileNotifications
-          notifications={notifications}
-          sort={sort}
-          onChangeSorting={handleChangeSorting}
-          currentDelegator={currentDelegator}
-        />
-      ) : (
-        <DesktopNotifications
-          notifications={notifications}
-          sort={sort}
-          onChangeSorting={handleChangeSorting}
-          currentDelegator={currentDelegator}
-        />
-      )}
-      {notifications.length > 0 && (
-        <CustomPagination
-          paginationData={{
-            size: pagination.size,
-            page: pagination.page,
-            totalElements,
-          }}
-          onPageRequest={handleChangePage}
-          pagesToShow={pagesToShow}
-          eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
-          sx={
-            isMobile
-              ? {
-                  padding: '0',
-                  '& .items-per-page-selector button': {
-                    paddingLeft: 0,
-                    height: '24px',
-                  },
-                }
-              : { padding: '0 10px' }
-          }
-        />
-      )}
+      <ApiErrorWrapper apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS} reloadAction={fetchNotifications}>
+        {isMobile ? (
+          <MobileNotifications
+            notifications={notifications}
+            sort={sort}
+            onChangeSorting={handleChangeSorting}
+            currentDelegator={currentDelegator}
+          />
+        ) : (
+          <DesktopNotifications
+            notifications={notifications}
+            sort={sort}
+            onChangeSorting={handleChangeSorting}
+            currentDelegator={currentDelegator}
+          />
+        )}
+        {notifications.length > 0 && (
+          <CustomPagination
+            paginationData={{
+              size: pagination.size,
+              page: pagination.page,
+              totalElements,
+            }}
+            onPageRequest={handleChangePage}
+            pagesToShow={pagesToShow}
+            eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
+            sx={
+              isMobile
+                ? {
+                    padding: '0',
+                    '& .items-per-page-selector button': {
+                      paddingLeft: 0,
+                      height: '24px',
+                    },
+                  }
+                : { padding: '0 10px' }
+            }
+          />
+        )}
+      </ApiErrorWrapper>
     </Box>
   );
 };

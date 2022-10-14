@@ -8,4 +8,5 @@ export interface SideMenuItem {
   dotBadge?: boolean;
   rightBadgeNotification? : number;
   notSelectable?: boolean;
+  action?: () => void;
 }

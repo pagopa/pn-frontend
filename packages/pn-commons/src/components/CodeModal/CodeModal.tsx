@@ -1,4 +1,4 @@
-import { ReactNode, useState, memo, useRef, useMemo } from 'react';
+import { ReactNode, useState, memo, useMemo, useCallback } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -68,25 +68,20 @@ const CodeModal = memo(
     errorTitle,
     errorMessage,
   }: Props) => {
-    const [codeIsValid, setCodeIsValid] = useState(initialValues.every((v) => v));
+    const [code, setCode] = useState(initialValues);
     const isMobile = useIsMobile();
-    const inputsRef = useRef({ inputsValues: new Array(initialValues.length).fill(undefined) });
-
     const textPosition = useMemo(() => isMobile ? 'center' : 'left', [isMobile]);
+    const codeIsValid = code.every((v) => v);
 
-    const changeHandler = (inputsValues: Array<string>) => {
-      const isValid = inputsValues.every((v) => v);
-      if (isValid === codeIsValid) {
-        return;
-      }
-      setCodeIsValid(isValid);
-    };
+    const changeHandler = useCallback((inputsValues: Array<string>) => {
+      setCode(inputsValues);
+    }, []);
 
     const confirmHandler = () => {
       if (!confirmCallback) {
         return;
       }
-      confirmCallback(inputsRef.current.inputsValues);
+      confirmCallback(code);
     };
 
     return (
@@ -117,7 +112,6 @@ const CodeModal = memo(
           </Typography>
           <Box sx={{ marginTop: '10px', textAlign: textPosition }}>
             <CodeInput
-              ref={inputsRef}
               initialValues={initialValues}
               isReadOnly={isReadOnly}
               hasError={hasError}

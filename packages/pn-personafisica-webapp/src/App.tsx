@@ -15,6 +15,7 @@ import {
   SideMenu,
   SideMenuItem,
   useMultiEvent,
+  useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
@@ -24,20 +25,14 @@ import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { getToSApproval, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
+import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
 import { RootState } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
-import { mixpanelInit, trackEventByType } from './utils/mixpanel';
+import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
 import {goToLoginPortal} from "./navigation/navigation.utility";
-
-declare const OneTrust: any;
-declare const OnetrustActiveGroups: string;
-const global = window as any;
-// target cookies (Mixpanel)
-const targCookiesGroup = 'C0002';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -102,26 +97,11 @@ const App = () => {
     trackEventByType(TrackEventType.APP_UNLOAD);
   });
 
+  useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
+
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
-    // OneTrust callback at first time
-    // eslint-disable-next-line functional/immutable-data
-    global.OptanonWrapper = function () {
-      OneTrust.OnConsentChanged(function () {
-        const activeGroups = OnetrustActiveGroups;
-        if (activeGroups.indexOf(targCookiesGroup) > -1) {
-          mixpanelInit();
-        }
-      });
-    };
-    // // check mixpanel cookie consent in cookie
-    const OTCookieValue: string =
-      document.cookie.split('; ').find((row) => row.startsWith('OptanonConsent=')) || '';
-    const checkValue = `${targCookiesGroup}%3A1`;
-    if (OTCookieValue.indexOf(checkValue) > -1) {
-      mixpanelInit();
-    }
   }, []);
 
   useEffect(() => {
@@ -135,9 +115,23 @@ const App = () => {
     if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
     }
-  }, [pendingDelegators, sessionToken]);
+  }, [sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
+    // implementazione esplorativa su come potrebbe gestirse l'errore dell'API
+    // che restituisce i delegators per il sideMenu.
+    //
+    // attenzione - per far funzionare questo si deve cambiare dove dice
+    //     sideMenuDelegators.length > 0,  deve cambiarsi per ... > 1
+    // si deve anche abilitare la gestione errori nell'action di getSidemenuInformation
+    //
+    // if (hasApiErrors(SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION)) {
+    //   return [{
+    //     label: "Qualcuno/a ha delegato su di te?",
+    //     route: "",
+    //     action: () => dispatch(getSidemenuInformation()),
+    //   }];
+    // } else
     if (delegators.length > 0) {
       const myNotifications = {
         label: t('title', { ns: 'notifiche' }),
@@ -238,13 +232,14 @@ const App = () => {
             }
           />
         }
-        showSideMenu={jwtUser.id !== '' && (!fetchedTos || tos) && !isPrivacyPage}
+        showSideMenu={!!sessionToken && (!fetchedTos || tos) && !isPrivacyPage}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown
         userActions={userActions}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
+        isLogged={!!sessionToken}
       >
         <AppMessage sessionRedirect={async () => await dispatch(logout())} />
         <LoadingOverlay />

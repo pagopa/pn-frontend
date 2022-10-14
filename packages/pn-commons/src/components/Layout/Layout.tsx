@@ -11,7 +11,7 @@ type Props = {
   children?: ReactNode;
   /** Logout/exit action to apply */
   onExitAction?: () => void;
-  /** Side Menu */
+  /** Side Menu  */
   sideMenu?: React.ReactElement;
   /** Show Side Menu */
   showSideMenu?: boolean;
@@ -37,6 +37,8 @@ type Props = {
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** event on assistance click button */
   onAssistanceClick?: () => void;
+  /** Whether there is a logged user */
+  isLogged?: boolean;
   /** Layout visibility conditions */
   showHeader?: boolean;
   showFooter?: boolean;
@@ -58,6 +60,7 @@ export default function Layout({
   eventTrackingCallbackFooterChangeLanguage,
   eventTrackingCallbackProductSwitch,
   onAssistanceClick,
+  isLogged,
   showHeader = true,
   showFooter = true
 }: Props) {
@@ -79,6 +82,7 @@ export default function Layout({
               userActions={userActions}
               onAssistanceClick={onAssistanceClick}
               eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
+              isLogged={isLogged}
             />}
               <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
                 {showSideMenu && (
