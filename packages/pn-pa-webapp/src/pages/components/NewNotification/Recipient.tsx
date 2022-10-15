@@ -17,10 +17,9 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
-
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
-import { FormRecipient } from '../../../models/NewNotification';
+import { NewNotificationRecipient } from '../../../models/NewNotification';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import PhysicalAddress from './PhysicalAddress';
@@ -49,52 +48,99 @@ const singleRecipient = {
   showPhysicalAddress: false,
 };
 
-const initialValues = {
-  recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }],
-};
-
 type Props = {
   onConfirm: () => void;
+  onPreviousStep?: () => void;
+  recipientsData?: Array<NewNotificationRecipient>;
 };
 
-const Recipient = ({ onConfirm }: Props) => {
+const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.recipient',
   });
   const { t: tc } = useTranslation(['common']);
 
+  const initialValues = recipientsData && recipientsData.length > 0
+  ? {
+      recipients: recipientsData.map((recipient, index) => ({
+        ...recipient,
+        idx: index,
+        id: `recipient.${index}`,
+      })),
+    }
+  : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
+
   const validationSchema = yup.object({
-    recipients: yup.array().of(
-      yup.object({
-        firstName: yup.string().required(tc('required-field')),
-        lastName: yup.string().required(tc('required-field')),
-        taxId: yup
-          .string()
-          .required(tc('required-field'))
-          .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
-        creditorTaxId: yup
-          .string()
-          .required(tc('required-field'))
-          .matches(dataRegex.pIva, t('fiscal-code-error')),
-        noticeCode: yup
-          .string()
-          .matches(/^\d{18}$/, t('notice-code-error'))
-          .required(tc('required-field')),
-        digitalDomicile: yup.string().when('showDigitalDomicile', {
-          is: true,
-          then: yup.string().email(t('pec-error')).required(tc('required-field')),
-        }),
-        showPhysicalAddress: yup.boolean().isTrue(),
-        address: yup.string().when('showPhysicalAddress', {
-          is: true,
-          then: yup.string().required(tc('required-field')),
-        }),
-        houseNumber: yup.string().when('showPhysicalAddress', {
-          is: true,
-          then: yup.string().required(tc('required-field')),
-        }),
-        /*
+    recipients: yup
+      .array()
+      .of(
+        yup.object({
+          recipientType: yup.string(),
+          // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
+          // la lunghezza non può superare i 80 caratteri
+          firstName: yup
+            .string()
+            .required(tc('required-field'))
+            .test({
+              name: 'denominationTotalLength',
+              test(value) {
+                const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
+                const isAcceptableLength =
+                  (value || '').length + ((this.parent.lastName as string) || '').length <=
+                  maxLength;
+                if (isAcceptableLength) {
+                  return true;
+                } else {
+                  // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
+                  const messageKey = `too-long-denomination-error-${
+                    this.parent.recipientType || 'PF'
+                  }`;
+                  return this.createError({ message: t(messageKey), path: this.path });
+                }
+              },
+            }),
+          // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
+          // non viene richiesto
+          lastName: yup.string().when('recipientType', {
+            is: (value: string) => value !== RecipientType.PG,
+            then: yup.string().required(tc('required-field')),
+          }),
+          taxId: yup
+            .string()
+            .required(tc('required-field'))
+            // validazione su CF: deve accettare solo formato a 16 caratteri per PF, e sia 16 sia 11 caratteri per PG
+            .test('taxIdDependingOnRecipientType', t('fiscal-code-error'), function (value) {
+              if (!value) {
+                return true;
+              }
+              const isCF16 = dataRegex.fiscalCode.test(value);
+              const isCF11 = dataRegex.pIva.test(value);
+              return isCF16 || (this.parent.recipientType === RecipientType.PG && isCF11);
+            }),
+          // .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
+          creditorTaxId: yup
+            .string()
+            .required(tc('required-field'))
+            .matches(dataRegex.pIva, t('fiscal-code-error')),
+          noticeCode: yup
+            .string()
+            .matches(/^\d{18}$/, t('notice-code-error'))
+            .required(tc('required-field')),
+          digitalDomicile: yup.string().when('showDigitalDomicile', {
+            is: true,
+            then: yup.string().email(t('pec-error')).required(tc('required-field')),
+          }),
+          showPhysicalAddress: yup.boolean().isTrue(),
+          address: yup.string().when('showPhysicalAddress', {
+            is: true,
+            then: yup.string().required(tc('required-field')),
+          }),
+          houseNumber: yup.string().when('showPhysicalAddress', {
+            is: true,
+            then: yup.string().required(tc('required-field')),
+          }),
+          /*
         addressDetails: yup.string().when('showPhysicalAddress', {
           is: true,
           then: yup.string().required(tc('required-field')),
@@ -116,7 +162,9 @@ const Recipient = ({ onConfirm }: Props) => {
       )
       .test('identicalTaxIds', t('identical-fiscal-codes-error'), (values) => {
         if (values) {
-          const duplicatesTaxIds = values.map((item) => item.taxId).filter((e, i, a) => a.indexOf(e) !== i);
+          const duplicatesTaxIds = values
+            .map((item) => item.taxId)
+            .filter((e, i, a) => a.indexOf(e) !== i);
           if (duplicatesTaxIds.length > 0) {
             const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
             values.forEach((value, i) => {
@@ -142,7 +190,7 @@ const Recipient = ({ onConfirm }: Props) => {
 
   const handleAddressTypeChange = (
     event: ChangeEvent,
-    oldValue: FormRecipient,
+    oldValue: NewNotificationRecipient,
     recipientField: string,
     setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void
   ) => {
@@ -189,7 +237,7 @@ const Recipient = ({ onConfirm }: Props) => {
     }
   };
 
-  const handleAddRecipient = (values: { recipients: Array<FormRecipient> }, setFieldValue: any) => {
+  const handleAddRecipient = (values: { recipients: Array<NewNotificationRecipient> }, setFieldValue: any) => {
     const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx;
     setFieldValue('recipients', [
       ...values.recipients,
@@ -200,22 +248,31 @@ const Recipient = ({ onConfirm }: Props) => {
     });
   };
 
-  const handleSubmit = (values: { recipients: Array<FormRecipient> }) => {
+  const handleSubmit = (values: { recipients: Array<NewNotificationRecipient> }) => {
     dispatch(saveRecipients(values));
     onConfirm();
+  };
+
+  const handlePreviousStep = (values: { recipients: Array<NewNotificationRecipient> }) => {
+    dispatch(saveRecipients(values));
+    if (onPreviousStep) {
+      onPreviousStep();
+    }
   };
 
   return (
     <Formik
       initialValues={initialValues}
+      enableReinitialize={true}
       validationSchema={validationSchema}
       onSubmit={(values) => handleSubmit(values)}
       validateOnBlur={false}
       validateOnMount
     >
-      {({ values, setFieldValue, touched, handleBlur, errors, isValid }) => (
+      {({ values, setFieldValue, touched, handleBlur, errors, isValid /* setValues */ }) => (
         <Form>
-          <NewNotificationCard noPaper isContinueDisabled={!isValid}>
+          <NewNotificationCard noPaper isContinueDisabled={!isValid} previousStepLabel={t('back-to-preliminary-informations')}
+              previousStepOnClick={() => handlePreviousStep(values)}>
             {values.recipients.map((recipient, index) => (
               <Paper
                 key={recipient.id}
@@ -253,10 +310,28 @@ const Recipient = ({ onConfirm }: Props) => {
                         name={`recipients[${index}].recipientType`}
                         value={values.recipients[index].recipientType}
                         onChange={(event) => {
-                          setFieldValue(
-                            'selectPersonaFisicaOrPersonaGiuridica',
-                            event.currentTarget.value
-                          );
+                          const valuesToUpdate: {
+                            recipientType: RecipientType;
+                            firstName: string;
+                            lastName?: string;
+                          } = {
+                            recipientType: event.currentTarget.value as RecipientType,
+                            firstName: '',
+                          };
+                          if (event.currentTarget.value === RecipientType.PG) {
+                            /* eslint-disable-next-line functional/immutable-data */
+                            valuesToUpdate.lastName = '';
+                          }
+
+                          // I take profit that any level in the value structure can be used in setFieldValue ...
+                          setFieldValue(`recipients[${index}]`, {
+                            ...values.recipients[index],
+                            ...valuesToUpdate,
+                          });
+                          // In fact, I would have liked to specify the change through a function, i.e.
+                          //   setFieldValue(`recipients[${index}]`, (currentValue: any) => ({...currentValue, ...valuesToUpdate}));
+                          // but unfortunately Formik' setFieldValue is not capable of handling such kind of updates.
+
                           trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
                             type: event.currentTarget.value,
                           });
@@ -296,30 +371,30 @@ const Recipient = ({ onConfirm }: Props) => {
                             </>
                           )}
                         </Grid>
-                      </RadioGroup>
-                      <Grid container sx={{ width: '100%' }}>
-                        <Grid item xs={4}>
-                          <FormControlLabel
-                            value={RecipientType.PG}
-                            control={<Radio />}
-                            name={`recipients[${index}].recipientType`}
-                            label={t('legal-person')}
-                            disabled
-                          />
+                        <Grid container sx={{ width: '100%' }}>
+                          <Grid item xs={4}>
+                            <FormControlLabel
+                              value={RecipientType.PG}
+                              control={<Radio />}
+                              name={`recipients[${index}].recipientType`}
+                              label={t('legal-person')}
+                              disabled
+                            />
+                          </Grid>
+                          {values.recipients[index].recipientType === RecipientType.PG && (
+                            <FormTextField
+                              keyName={`recipients[${index}].firstName`}
+                              label={`${t('business-name')}*`}
+                              values={values}
+                              touched={touched}
+                              errors={errors}
+                              setFieldValue={setFieldValue}
+                              handleBlur={handleBlur}
+                              width={8}
+                            />
+                          )}
                         </Grid>
-                        {values.recipients[index].recipientType === RecipientType.PG && (
-                          <FormTextField
-                            keyName={`recipients[${index}].firstName`}
-                            label={`${t('business-name')}*`}
-                            values={values}
-                            touched={touched}
-                            errors={errors}
-                            setFieldValue={setFieldValue}
-                            handleBlur={handleBlur}
-                            width={8}
-                          />
-                        )}
-                      </Grid>
+                      </RadioGroup>
                     </FormControl>
                     <Grid container spacing={2} mt={2}>
                       <FormTextField

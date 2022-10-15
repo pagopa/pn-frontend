@@ -4,7 +4,7 @@ import { adaptedTokenExchangeError, basicInitialUserData, basicNoLoggedUserData,
 import { Party } from '../../models/party';
 
 import { PartyRole, PNRole } from '../../models/user';
-import { exchangeToken, logout, getOrganizationParty } from './actions';
+import { exchangeToken, logout, getOrganizationParty, acceptToS, getToSApproval } from './actions';
 import { User } from './types';
 
 const roleMatcher = yup.object({
@@ -53,28 +53,48 @@ const userSlice = createSlice({
   initialState: {
     loading: false,
     user: initialUserData(),
+    tos: false,
+    fetchedTos: false,
     organizationParty: {
       id: '',
       name: '',
     } as Party,
     isUnauthorizedUser: false,
     messageUnauthorizedUser: emptyUnauthorizedMessage,
+    isClosedSession: false,
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
       state.user = action.payload;
+      state.isClosedSession = false;
     });
     builder.addCase(exchangeToken.rejected, (state, action) => {
       const adaptedError = adaptedTokenExchangeError(action.payload);
       state.isUnauthorizedUser = adaptedError.isUnauthorizedUser;
       state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser ? adaptedError.response.customMessage : emptyUnauthorizedMessage;
+      state.isClosedSession = false;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = action.payload;
+      state.isClosedSession = true;
     });
     builder.addCase(getOrganizationParty.fulfilled, (state, action) => {
       state.organizationParty = action.payload;
+    });
+    builder.addCase(getToSApproval.fulfilled, (state, action) => {
+      state.tos = action.payload.accepted;
+      state.fetchedTos = true;
+    });
+    builder.addCase(getToSApproval.rejected, (state) => {
+      state.tos = false;
+      state.fetchedTos = true;
+    });
+    builder.addCase(acceptToS.fulfilled, (state) => {
+      state.tos = true;
+    });
+    builder.addCase(acceptToS.rejected, (state) => {
+      state.tos = false;
     });
   },
 });

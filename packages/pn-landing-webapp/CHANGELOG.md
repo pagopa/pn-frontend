@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/pagopa/pn-frontend/compare/v1.3.0...v1.3.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* **pn-2242:** add link to accessibility page ([#412](https://github.com/pagopa/pn-frontend/issues/412)) ([3e67199](https://github.com/pagopa/pn-frontend/commit/3e67199902c14536ef38d82ce75705c2bc12e9ff))
+
+
+
+
+
+# [1.3.0](https://github.com/pagopa/pn-frontend/compare/v1.2.2...v1.3.0) (2022-09-23)
+
+
+### Features
+
+* **Pn-1851:** cookie script  ([#408](https://github.com/pagopa/pn-frontend/issues/408)) ([7c8021d](https://github.com/pagopa/pn-frontend/commit/7c8021d5fcc326bfb1d0a1a7ce8088e9538e5f8d))
+
+
+
+
+
+## [1.2.2](https://github.com/pagopa/pn-frontend/compare/v0.2.2...v1.2.2) (2022-09-14)
+
+
+### Bug Fixes
+
+* **pn-2000:** added correct Tos file and hidden accessibility page ([1cf42c5](https://github.com/pagopa/pn-frontend/commit/1cf42c58c1c18041ccddd9af4347fd7204b957b3))
+
+
+
+
+
 ## [0.2.2](https://github.com/pagopa/pn-frontend/compare/v0.2.1...v0.2.2) (2022-09-13)
 
 

@@ -65,7 +65,7 @@
     "receipt": "Ricevuta",
     "show-history": "Mostra storico",
     "show-more": "Vedi più dettagli",
-    "show-less": "Mostra meno dettagli",
+    "show-less": "Vedi meno dettagli",
     "timeline": {
       "schedule-analog-workflow": "Invio per via cartacea in preparazione",
       "schedule-analog-workflow-description": "L'invio della notifica per via cartacea a {{name}} è in preparazione.",
@@ -102,7 +102,11 @@
         "digital-delivery-success": "notifica digitale",
         "digital-delivery-failure": "mancato recapito digitale",
         "analog-delivery": "conformità",
-        "recipient-access": "avvenuto accesso"
+        "recipient-access": "avvenuto accesso",
+        "pec-receipt-accepted": "di accettazione PEC",
+        "pec-receipt-not-accepted": "di mancata accettazione PEC",
+        "pec-receipt-delivered": "di consegna PEC",
+        "pec-receipt-not-delivered": "di mancata consegna PEC"
       }
     }
   },
@@ -168,6 +172,8 @@
         "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
+        "too-long-denomination-error-PF": "La lunghezza totale di nome e cognome non può superare gli 80 caratteri",
+        "too-long-denomination-error-PG": "La lunghezza della ragione sociale non può superare gli 80 caratteri",
         "legal-entity": "Soggetto giuridico",
         "physical-person": "Persona fisica",
         "name": "Nome",
@@ -178,6 +184,7 @@
         "creditor-fiscal-code": "Codice fiscale ente creditore",
         "notice-code": "Codice avviso",
         "add-digital-domicile": "Aggiungi un domicilio digitale",
+        "back-to-preliminary-informations": "Torna a Informazioni preliminari",
         "digital-domicile": "Domicilio digitale",
         "add-physical-domicile": "Aggiungi un indirizzo fisico",
         "address": "Indirizzo",
@@ -199,16 +206,19 @@
         "act-name": "Nome dell'atto",
         "doc-name": "Nome del documento",
         "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
-        "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)"
+        "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
+        "back-to-recipient": "Torna a Destinatario"
       },
       "payment-methods": {
         "title": "Modelli di pagamento",
         "pagopa-notice": "Avviso pagoPA",
-        "f24-flatrate": "F24 forfettario",
+        "pagopa-notice-f24-flatrate": "F24 forfettario",
+        "pagopa-notice-f24": "F24",
         "payment-models": "Modelli di pagamento per",
         "attach-pagopa-notice": "Allega Avviso pagoPA",
         "attach-f24-flatrate": "Allega Modello F24 forfettario",
-        "attach-f24": "Allega Modello F24"
+        "attach-f24": "Allega Modello F24",
+        "back-to-attachments": "Torna a Allegati"
       },
       "sync-feedback": {
         "title": "La notifica è stata correttamente creata",

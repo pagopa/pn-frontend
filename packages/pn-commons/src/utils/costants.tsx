@@ -1,4 +1,4 @@
-import { PreLoginFooterLinksType, FooterLinksType } from '@pagopa/mui-italia';
+import { FooterLinksType, PreLoginFooterLinksType } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
@@ -10,11 +10,10 @@ export const LANGUAGES = {
 const isDev = process.env.NODE_ENV === 'development';
 const pathEnd = isDev ? '' : 'index.html';
 
-// export const URL_DIGITAL_NOTIFICATIONS = 'https://notifichedigitali.it';
 export const URL_DIGITAL_NOTIFICATIONS = 'https://www.notifichedigitali.pagopa.it/';
-// export const URL_PRIVACY_LINK = 'https://notifichedigitali.it/cittadini/informativa-privacy'
-export const PRIVACY_LINK_RELATIVE_PATH = '/cittadini/informativa-privacy/' + pathEnd;
-const ACCESSIBILITY_LINK_RELATIVE_PATH = '/cittadini/accessibilita/' + pathEnd;
+export const PRIVACY_LINK_RELATIVE_PATH = '/privacy-tos';
+export const PRELOGIN_PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
+const ACCESSIBILITY_LINK_RELATIVE_PATH = 'cittadini/accessibilita/' + pathEnd;
 
 const getFooterLinkLabels = (
   link: string,
@@ -93,7 +92,7 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
     links: [
       {
         label: 'Privacy Policy',
-        href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+        href: `${window.location.origin}${PRELOGIN_PRIVACY_LINK_RELATIVE_PATH}`,
         ariaLabel: `${getLocalizedOrDefaultLabel(
           'common',
           'footer.go-to',
@@ -124,11 +123,6 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
         ariaLabel: 'Vai al link: Preferenze Cookie',
         href: 'https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8',
         linkType: 'internal',
-      },
-      {
-        ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
-        href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
-        linkType: 'external',
       },
       {
         ...getFooterLinkLabels('company', 'Società trasparente'),
@@ -212,7 +206,7 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
 export const postLoginLinks = (): Array<FooterLinksType> => [
   {
     label: 'Privacy policy',
-    href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+    href: `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}#privacy`,
     ariaLabel: `${getLocalizedOrDefaultLabel(
       'common',
       'footer.go-to',
@@ -222,7 +216,7 @@ export const postLoginLinks = (): Array<FooterLinksType> => [
   },
   {
     ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
-    href: `${URL_DIGITAL_NOTIFICATIONS}${PRIVACY_LINK_RELATIVE_PATH}`,
+    href: `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}#tos`,
     linkType: 'external',
   },
   {

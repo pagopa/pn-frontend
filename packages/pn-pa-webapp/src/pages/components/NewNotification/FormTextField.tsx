@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Grid, TextField } from '@mui/material';
 import { FormikErrors, FormikTouched, FormikValues, getIn } from 'formik';
 
@@ -26,7 +27,7 @@ const FormTextField = ({
     <TextField
       size="small"
       id={keyName}
-      value={values[keyName]}
+      value={_.get(values, keyName)}
       onChange={(event) => {
         setFieldValue(keyName, event.currentTarget.value);
       }}

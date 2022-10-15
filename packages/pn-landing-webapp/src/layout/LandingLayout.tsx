@@ -3,7 +3,6 @@ import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import { Footer, ButtonNaked } from "@pagopa/mui-italia";
 import { ReactNode, useContext } from "react";
 
-import { PAGOPA_HOME } from "@utils/constants";
 import LangContext from "../../provider/lang-context";
 import NavigationBar from "../components/NavigationBar";
 import { getAppData } from "../../api";
@@ -14,6 +13,7 @@ import {
   postLoginLinks,
   preLoginLinks,
 } from "./footer.constants";
+import { PAGOPA_HOME } from "@utils/constants";
 
 interface Props {
   children?: ReactNode;
@@ -91,7 +91,7 @@ const LandingLayout = ({ children }: Props) => {
           }}
           legalInfo={companyLegalInfo}
           postLoginLinks={postLoginLinks}
-          preLoginLinks={preLoginLinks}
+          preLoginLinks={preLoginLinks()}
           currentLangCode={lang.selectedLanguage}
           onLanguageChanged={lang.changeLanguage}
           languages={LANGUAGES}

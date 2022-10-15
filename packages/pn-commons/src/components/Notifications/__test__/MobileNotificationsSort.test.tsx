@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, waitFor, screen, RenderResult, within } from '@testing-library/react';
-import { CardSort, Sort } from '@pagopa-pn/pn-commons';
+import { CardSort, Sort } from '../../../types';
 
 import { render } from '../../../test-utils';
 import MobileNotificationsSort from '../MobileNotificationsSort';

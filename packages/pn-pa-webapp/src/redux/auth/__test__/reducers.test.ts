@@ -37,7 +37,10 @@ describe('Auth redux state tests', () => {
         name: '',
       } as Party,
       isUnauthorizedUser: false,
+      tos: false,
+      fetchedTos: false,
       messageUnauthorizedUser: { title: '', message: '' },
+      isClosedSession: false,
     });
   });
 

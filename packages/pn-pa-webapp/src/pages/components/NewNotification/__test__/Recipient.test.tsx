@@ -1,9 +1,9 @@
 import { act, fireEvent, RenderResult, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 
+import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
 import { render, testInput } from '../../../../__test__/test-utils';
 import Recipient from '../Recipient';
-import { formRecipients } from '../../../../utils/__test__/test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -16,24 +16,24 @@ const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
 const mockDispatchFn = jest.fn();
 
 const populateForm = async (form: HTMLFormElement) => {
-  await testInput(form, `recipients[0].firstName`, formRecipients[0].firstName);
-  await testInput(form, `recipients[0].lastName`, formRecipients[0].lastName);
-  await testInput(form, `recipients[0].taxId`, formRecipients[0].taxId);
-  await testInput(form, `recipients[0].creditorTaxId`, formRecipients[0].creditorTaxId);
-  await testInput(form, `recipients[0].noticeCode`, formRecipients[0].noticeCode);
+  await testInput(form, `recipients[0].firstName`, newNotification.recipients[0].firstName);
+  await testInput(form, `recipients[0].lastName`, newNotification.recipients[0].lastName);
+  await testInput(form, `recipients[0].taxId`, newNotification.recipients[0].taxId);
+  await testInput(form, `recipients[0].creditorTaxId`, newNotification.recipients[0].creditorTaxId);
+  await testInput(form, `recipients[0].noticeCode`, newNotification.recipients[0].noticeCode);
   const checkbox = form.querySelector(`input[name="recipients[0].showPhysicalAddress"]`);
   fireEvent.click(checkbox!);
-  await testInput(form, `recipients[0].address`, formRecipients[0].address);
-  await testInput(form, `recipients[0].houseNumber`, formRecipients[0].houseNumber);
-  await testInput(form, `recipients[0].zip`, formRecipients[0].zip);
-  await testInput(form, `recipients[0].province`, formRecipients[0].province);
-  await testInput(form, `recipients[0].foreignState`, formRecipients[0].foreignState);
+  await testInput(form, `recipients[0].address`, newNotification.recipients[0].address);
+  await testInput(form, `recipients[0].houseNumber`, newNotification.recipients[0].houseNumber);
+  await testInput(form, `recipients[0].zip`, newNotification.recipients[0].zip);
+  await testInput(form, `recipients[0].province`, newNotification.recipients[0].province);
+  await testInput(form, `recipients[0].foreignState`, newNotification.recipients[0].foreignState);
 };
 
 const populateFormMultipleRecipients = async (form: HTMLFormElement) => {
   // eslint-disable-next-line functional/no-let
-  for (let i = 0; i < formRecipients.length; i++) {
-    const formRecipient = formRecipients[i];
+  for (let i = 0; i < newNotification.recipients.length; i++) {
+    const formRecipient = newNotification.recipients[i];
     await testInput(form, `recipients[${i}].firstName`, formRecipient.firstName);
     await testInput(form, `recipients[${i}].lastName`, formRecipient.lastName);
     await testInput(form, `recipients[${i}].taxId`, formRecipient.taxId);
@@ -74,7 +74,7 @@ describe('Recipient Component', () => {
     expect(result.container).toHaveTextContent(/add-digital-domicile/i);
     expect(result.container).toHaveTextContent(/add-physical-domicile/i);
     expect(result.container).toHaveTextContent(/add-recipient/i);
-    expect(result.container).toHaveTextContent(/new-notification.back-to-notifications/i);
+    expect(result.container).toHaveTextContent(/back-to-preliminary-informations/i);
     expect(result.container).toHaveTextContent(/button.continue/i);
   });
 

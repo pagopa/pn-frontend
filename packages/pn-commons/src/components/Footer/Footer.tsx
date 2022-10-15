@@ -22,7 +22,9 @@ const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackin
   const [currentLangCode, setCurrentLangCode] = useState<'it' | 'en'>('it');
 
   const changeLanguageHandler = (langCode: 'it' | 'en') => {
-    if (eventTrackingCallbackChangeLanguage) eventTrackingCallbackChangeLanguage();
+    if (eventTrackingCallbackChangeLanguage) {
+      eventTrackingCallbackChangeLanguage();
+    }
     setCurrentLangCode(langCode);
     onLanguageChanged(langCode);
   };
@@ -42,6 +44,6 @@ const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackin
       currentLangCode={currentLangCode}
     />
   );
-}
+};
 
 export default Footer;

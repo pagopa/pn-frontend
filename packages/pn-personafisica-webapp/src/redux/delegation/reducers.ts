@@ -13,8 +13,6 @@ import {
 import { Delegation } from './types';
 
 const initialState = {
-  delegatesError: false,
-  delegatorsError: false,
   delegations: {
     delegators: [] as Array<Delegation>,
     delegates: [] as Array<Delegation>,
@@ -89,12 +87,6 @@ const delegationsSlice = createSlice({
     });
     builder.addCase(getDelegators.fulfilled, (state, action) => {
       state.delegations.delegators = action.payload;
-    });
-    builder.addCase(getDelegates.rejected, (state) => {
-      state.delegatesError = true;
-    });
-    builder.addCase(getDelegators.rejected, (state) => {
-      state.delegatorsError = true;
     });
     builder.addCase(acceptDelegation.fulfilled, (state, action) => {
       state.delegations.delegators = state.delegations.delegators.map((delegator: Delegation) =>

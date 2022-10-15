@@ -3,7 +3,7 @@ import { fireEvent } from '@testing-library/react';
 import { render } from "../../../../__test__/test-utils";
 import NewNotificationCard from "../NewNotificationCard";
 
-const mockNavigateFn = jest.fn();
+const mockStepBackFn = jest.fn();
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -13,14 +13,9 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigateFn,
-}));
-
 describe('NewNotificationCard Component', () => {
 
-  const Component = (isContinueDisabled: boolean) => <NewNotificationCard title="Mocked title" isContinueDisabled={isContinueDisabled}>Mocked content</NewNotificationCard>
+  const Component = (isContinueDisabled: boolean) => <NewNotificationCard title="Mocked title" previousStepOnClick={mockStepBackFn} previousStepLabel="mock-previous-step-label" isContinueDisabled={isContinueDisabled}>Mocked content</NewNotificationCard>
 
   it('renders NewNotificationCard (continue disabled)', () => {
     // render component
@@ -29,23 +24,26 @@ describe('NewNotificationCard Component', () => {
     expect(result.container).toHaveTextContent(/Mocked content/i);
     const buttons = result.container.querySelectorAll('button');
     expect(buttons).toHaveLength(2);
-    expect(buttons[0]).toHaveTextContent(/new-notification.back-to-notifications/i);
-    expect(buttons[1]).toHaveTextContent(/button.continue/i);
-    expect(buttons[1]).toBeDisabled();
+    // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
+    // vedi flexDirection row-reverse
+    // PN-1843 Carlotta Dimatteo 12/08/2022
+    expect(buttons[1]).toHaveTextContent(/mock-previous-step-label/i);
+    expect(buttons[0]).toHaveTextContent(/button.continue/i);
+    expect(buttons[0]).toBeDisabled();
   });
 
   it('renders NewNotificationCard (continue enabled)', () => {
     // render component
     const result = render(Component(false));
     const buttons = result.container.querySelectorAll('button');
-    expect(buttons[1]).toBeEnabled();
+    expect(buttons[0]).toBeEnabled();
   });
 
   it('clicks on back button', () => {
     // render component
     const result = render(Component(false));
     const buttons = result.container.querySelectorAll('button');
-    fireEvent.click(buttons[0]);
-    expect(mockNavigateFn).toBeCalledTimes(1);
+    fireEvent.click(buttons[1]);
+    expect(mockStepBackFn).toBeCalledTimes(1);
   });
 });

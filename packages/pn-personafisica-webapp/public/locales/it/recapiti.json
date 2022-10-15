@@ -40,7 +40,7 @@
     "disclaimer-message": "Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
     "disclaimer-link": "Scopri di più",
     "switch-label": "Avvisami con un messaggio su IO",
-    "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Avvisi di cortesia\" di Piattaforma Notifiche sia attivo"
+    "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Notifiche digitali\" di Piattaforma Notifiche sia attivo"
   },
   "courtesy-contacts": {
     "title": "",
@@ -88,7 +88,8 @@
     "mail": "Indirizzo mail",
     "pec-already-exists": "Questo ente è già associato a un indirizzo PEC. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
     "phone-already-exists": "Questo ente è già associato a un numero di cellulare. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
-    "email-already-exists": "Questo ente è già associato a un indirizzo email. Se premi “Continua”, verrà sostituito da quello che hai appena indicato."
+    "email-already-exists": "Questo ente è già associato a un indirizzo email. Se premi “Continua”, verrà sostituito da quello che hai appena indicato.",
+    "fetch-party-error": "Non siamo riusciti a recuperare i dati che servono per poter creare un nuovo recapito."
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",

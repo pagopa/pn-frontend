@@ -23,12 +23,13 @@ type Props = {
   vertical?: boolean;
   accept: string;
   uploadFn?: (file: any, sha256?: { hashBase64: string; hashHex: string }) => Promise<void>;
-  onFileUploaded: (file: any, sha256?: { hashBase64: string; hashHex: string }) => void;
+  onFileUploaded: (file: any, sha256?: { hashBase64: string; hashHex: string }, name?: string, size?: number) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
   sx?: SxProps;
   calcSha256?: boolean;
   fileFormat?: 'base64' | 'uint8Array';
+  fileUploaded?: any;
 };
 
 enum UploadStatus {
@@ -70,6 +71,8 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
         ),
         sha256: '',
       };
+    case 'FILE_PREVIOUSLY_UPLOADED':
+      return { ...state, ...action.payload, status: UploadStatus.UPLOADED, error: '', sha256: action.payload.file.sha256.hashHex, name: action.payload.name ? action.payload.name : '' };
     case 'FILE_UPLOADED':
       return { ...state, status: UploadStatus.UPLOADED, error: '', sha256: action.payload };
     case 'REMOVE_FILE':
@@ -105,6 +108,7 @@ const OrientedBox = ({ vertical, children }: { vertical: boolean; children: Reac
  * @param sx style to be addded to the component
  * @param calcSha256 flag to calculate the sha256
  * @param fileFormat format of the file after loading
+ * @param fileUploaded file previously uploaded
  * @returns
  */
 const FileUpload = ({
@@ -118,6 +122,7 @@ const FileUpload = ({
   sx,
   calcSha256 = false,
   fileFormat,
+  fileUploaded,
 }: Props) => {
   const [data, dispatch] = useReducer(reducer, {
     status: UploadStatus.TO_UPLOAD,
@@ -126,6 +131,8 @@ const FileUpload = ({
     sha256: '',
   });
   const uploadInputRef = useRef();
+
+  const attachmentExists = (fileUploaded != null && fileUploaded.file != null && fileUploaded.file.uint8Array != null);
 
   const containerStyle = useMemo(() => {
     if (data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) {
@@ -169,7 +176,7 @@ const FileUpload = ({
           await uploadFn(fileFormatted, sha256);
         }
         dispatch({ type: 'FILE_UPLOADED', payload: sha256?.hashHex });
-        onFileUploaded(fileFormatted, sha256);
+        onFileUploaded(fileFormatted, sha256, file.name, file.size);
       } catch {
         dispatch({ type: 'UPLOAD_IN_ERROR' });
       }
@@ -179,7 +186,7 @@ const FileUpload = ({
   };
 
   const uploadFileHandler = (e: ChangeEvent) => {
-    uploadFile((e.target as any).files[0]);
+    void uploadFile((e.target as any).files[0]);
   };
 
   const removeFileHandler = () => {
@@ -206,7 +213,7 @@ const FileUpload = ({
   const handleDrop = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    uploadFile(e.dataTransfer.files[0]);
+    void uploadFile(e.dataTransfer.files[0]);
     e.dataTransfer.clearData();
   };
 
@@ -216,6 +223,12 @@ const FileUpload = ({
     }
     dispatch(isSending ? { type: 'IS_SENDING' } : { type: 'FILE_UPLOADED' });
   }, [isSending]);
+
+  useEffect(() => {
+    if (attachmentExists && data.status !== UploadStatus.UPLOADED) {
+      dispatch({ type: 'FILE_PREVIOUSLY_UPLOADED', payload: fileUploaded });
+    }
+  }, [attachmentExists]);
 
   return (
     <Box
@@ -273,7 +286,7 @@ const FileUpload = ({
           </Typography>
         </OrientedBox>
       )}
-      {data.status === UploadStatus.UPLOADED && (
+      {(data.status === UploadStatus.UPLOADED) && (
         <Fragment>
           <Box
             display="flex"

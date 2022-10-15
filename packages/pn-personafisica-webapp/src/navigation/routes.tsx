@@ -2,9 +2,9 @@ import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
-import RequireAuth from './RequireAuth';
-import VerifyUser from './VerifyUser';
 import * as routes from './routes.const';
+import SessionGuard from './SessionGuard';
+import RouteGuard from './RouteGuard';
 
 const Profile = React.lazy(() => import('../pages/Profile.page'));
 const TermsOfService = React.lazy(() => import('../pages/TermsOfService.page'));
@@ -13,14 +13,15 @@ const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.
 const Contacts = React.lazy(() => import('../pages/Contacts.page'));
 const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
 const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
+const PrivacyTOSPage = React.lazy(() => import('../pages/PrivacyTOS.page'));
 
 function Router() {
   return (
     <Suspense fallback={<LoadingPage />}>
       <Routes>
-        <Route path="/" element={<VerifyUser />}>
+        <Route path="/" element={<SessionGuard />}>
           {/* protected routes */}
-          <Route path="/" element={<RequireAuth />}>
+          <Route path="/" element={<RouteGuard />}>
             <Route path={routes.TOS} element={<TermsOfService />} />
             <Route path={routes.NOTIFICHE} element={<Notifiche />} />
             <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
@@ -31,7 +32,12 @@ function Router() {
             <Route path={routes.RECAPITI} element={<Contacts/>} />
             <Route path={routes.PROFILO} element={<Profile />} />
           </Route>
+          {/* not found - non-logged users will see the common AccessDenied component */}
+          <Route path="*" element={<RouteGuard />}>
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </Route>
+        <Route path={routes.PRIVACY_TOS} element={<PrivacyTOSPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

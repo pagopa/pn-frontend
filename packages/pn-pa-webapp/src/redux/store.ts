@@ -15,7 +15,7 @@ export const appReducers = {
   userState: userSlice.reducer,
   dashboardState: dashboardSlice.reducer,
   notificationState: notificationSlice.reducer,
-  newNotificationState: newNotificationSlice.reducer
+  newNotificationState: newNotificationSlice.reducer,
 };
 
 export const createStore = () =>

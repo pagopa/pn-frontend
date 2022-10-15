@@ -71,3 +71,20 @@ E' possibile procedere in uno dei modi seguenti:
 Dopo aver indicato la versione desiderata, terminare con `git push origin --tags` per pushare il nuovo tag creato.
 
 Per un elenco e una descrizione più dettagliata delle varie opzioni disponibili fare riferimento alla specifica del comando presente su [github](https://github.com/lerna/lerna/tree/main/commands/version)
+
+
+### Cypress
+
+Per eseguire i test in locale, durante lo sviluppo degli stessi, accertarsi che la particolare applicazione sia in esecuzione in locale.
+
+Per avviare il tool con GUI, in maniera simile a come vengono avviate le varie applicazioni, lanciare:
+
+- `yarn cy-open:pf` dalla root di progetto, o `yarn cy-open` da dentro il package.
+
+per eseguire tutti i test a riga di comando sostituire "open" con "run" (es. `yarn cy-run:pf`)
+
+per ottenere una sessione valida e poter quindi testare tutte le funzionalità che richiedono l'autenticazione si può utilizzare il comando custom `cy.login()` che effettua il login programmatico e risulta decisamente più performate rispetto al `cy.loginWithUI()` (usato solo per testare la procedura di login).
+
+Per utilizzare i comandi di login occorre definire un file env nella root del package seguendo le istruzioni presenti nel file di configurazione front-end su confluence.
+
+Al momento il comando di login non consente di specificare un particolare utente e dovrà essere meglio definito nel momento in cui verrà impostato uno specifico ambiente per l'esecuzione dei test e2e.

@@ -1,4 +1,4 @@
-import { PreLoginFooterLinksType, FooterLinksType } from "@pagopa/mui-italia";
+import { FooterLinksType, PreLoginFooterLinksType } from "@pagopa/mui-italia";
 
 const isDev = process.env.NODE_ENV === "development";
 const pathEnding = isDev ? "" : "index.html";
@@ -24,7 +24,7 @@ export const companyLegalInfo = (
   </>
 );
 
-export const preLoginLinks: PreLoginFooterLinksType = {
+export const preLoginLinks = (): PreLoginFooterLinksType => ({
   // First column
   aboutUs: {
     title: undefined,
@@ -61,7 +61,7 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Privacy Policy",
-        href: "/cittadini/informativa-privacy/" + pathEnding,
+        href: `/informativa-privacy/` + pathEnding,
         ariaLabel: "Vai al link: Privacy Policy",
         linkType: "internal",
       },
@@ -89,12 +89,6 @@ export const preLoginLinks: PreLoginFooterLinksType = {
       //   ariaLabel: "Vai al link: Preferenze Cookie",
       //   linkType: "internal",
       // },
-      {
-        label: "Termini e Condizioni",
-        href: "/cittadini/informativa-privacy/" + pathEnding,
-        ariaLabel: "Vai al link: Termini e Condizioni",
-        linkType: "internal",
-      },
       {
         label: "Società trasparente",
         href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.html",
@@ -147,25 +141,19 @@ export const preLoginLinks: PreLoginFooterLinksType = {
     links: [
       {
         label: "Accessibilità",
-        href: "/cittadini/accessibilita/" + pathEnding,
+        href: "https://form.agid.gov.it/view/eca3487c-f3cb-40be-a590-212eafc70058/",
         ariaLabel: "Vai al link: Accessibilità",
         linkType: "internal",
       },
     ],
   },
-};
+});
 
 export const postLoginLinks: Array<FooterLinksType> = [
   {
     label: "Privacy policy",
     href: "privacy-policy",
     ariaLabel: "Vai al link: Privacy policy",
-    linkType: "internal",
-  },
-  {
-    label: "Termini e condizioni",
-    href: "terms-conditions",
-    ariaLabel: "Vai al link: Termini e condizioni",
     linkType: "internal",
   },
   {

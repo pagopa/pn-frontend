@@ -5,17 +5,17 @@ interface Parameters {
 }
 
 interface QueryParameters {
-  [key: string]: ParameterValue | string[];
+  [key: string]: ParameterValue | Array<string>;
 }
 
 interface Route {
-  prefix: string | string[];
+  prefix: string | Array<string>;
   path?: string;
   params?: Parameters;
   query?: QueryParameters;
 }
 
-function compilePrefix(prefix: string | string[]) {
+function compilePrefix(prefix: string | Array<string>) {
   return prefix instanceof Array ? prefix.join('/') : prefix;
 }
 
@@ -32,7 +32,7 @@ function formatQueryParam(key: string, value: ParameterValue) {
  *     key=value1&key=value2&...
  *     As indicated in https://medium.com/@AADota/spring-passing-list-and-array-of-values-as-url-parameters-1ed9bbdf0cb2,
  *     this format is accepted by SpringBoot.
- * 
+ *
  * @param route a route spec
  * @returns the URL to call for the given route
  */
@@ -52,7 +52,10 @@ export function compileRoute(route: Route) {
       .filter(([, v]) => v)
       .reduce((agg, [k, v]) => {
         const paramsToAdd = Array.isArray(v)
-          ? v.reduce((arrayQueryParam, elem) => arrayQueryParam.concat(formatQueryParam(k, elem)), "")
+          ? v.reduce(
+              (arrayQueryParam, elem) => arrayQueryParam.concat(formatQueryParam(k, elem)),
+              ''
+            )
           : formatQueryParam(k, v);
         return agg.concat(paramsToAdd);
       }, `${result}?`)

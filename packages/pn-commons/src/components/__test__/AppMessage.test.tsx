@@ -1,3 +1,4 @@
+import React from "react";
 import { waitFor } from "@testing-library/react";
 import * as redux from 'react-redux';
 
@@ -11,7 +12,8 @@ const errors: Array<IAppMessage> = [
     blocking: false,
     message: 'Mocked message',
     title: 'Mocked title',
-    toNotify: true
+    toNotify: true,
+    alreadyShown: false,
   }
 ]
 
@@ -20,7 +22,8 @@ describe('AppMessage Component', () => {
   it('renders toast and dispacthes event on close', async () => {
     // mock useSelector
     const useSelectorSpy = jest.spyOn(redux, 'useSelector');
-    useSelectorSpy.mockReturnValue(errors);
+    useSelectorSpy.mockReturnValueOnce(errors);
+    useSelectorSpy.mockReturnValueOnce([]);
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     const mockDispatchFn = jest.fn();
@@ -31,7 +34,7 @@ describe('AppMessage Component', () => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockDispatchFn).toBeCalledWith({
         payload: errors[0].id,
-        type: 'appState/removeError',
+        type: 'appState/setErrorAsAlreadyShown',
       });
     }, {
       timeout: 5000

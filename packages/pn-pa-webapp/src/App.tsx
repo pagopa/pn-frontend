@@ -9,27 +9,23 @@ import {
   LoadingOverlay,
   SideMenu,
   useMultiEvent,
+  useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import { Box } from '@mui/material';
 
+import { MIXPANEL_TOKEN } from "@pagopa-pn/pn-personafisica-webapp/src/utils/constants";
 import Router from './navigation/routes';
-import { getOrganizationParty, logout } from './redux/auth/actions';
+import { getOrganizationParty, getToSApproval, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 
 import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } from './utils/constants';
-import { mixpanelInit, trackEventByType } from './utils/mixpanel';
+import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
-
-declare const OneTrust: any;
-declare const OnetrustActiveGroups: string;
-const global = window as any;
-// target cookies (Mixpanel)
-const targCookiesGroup = 'C0004';
 
 const App = () => {
   useUnload(() => {
@@ -47,6 +43,7 @@ const App = () => {
   // TODO check if it can exist more than one role on user
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
+  const sessionToken = loggedUser.sessionToken;
   const menuItems = useMemo(() => {
     // localize menu items
     const items = { ...getMenuItems(idOrganization, role?.role) };
@@ -107,24 +104,9 @@ const App = () => {
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
-    // OneTrust callback at first time
-    // eslint-disable-next-line functional/immutable-data
-    global.OptanonWrapper = function () {
-      OneTrust.OnConsentChanged(function () {
-        const activeGroups = OnetrustActiveGroups;
-        if (activeGroups.indexOf(targCookiesGroup) > -1) {
-          mixpanelInit();
-        }
-      });
-    };
-    // check mixpanel cookie consent in cookie
-    const OTCookieValue: string =
-      document.cookie.split('; ').find((row) => row.startsWith('OptanonConsent=')) || '';
-    const checkValue = `${targCookiesGroup}%3A1`;
-    if (OTCookieValue.indexOf(checkValue) > -1) {
-      mixpanelInit();
-    }
   }, []);
+
+  useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   useEffect(() => {
     if (idOrganization) {
@@ -132,9 +114,16 @@ const App = () => {
     }
   }, [idOrganization]);
 
+  useEffect(() => {
+    if (sessionToken !== '') {
+      void dispatch(getToSApproval());
+    }
+  }, [sessionToken]);
+
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
+  const isPrivacyPage = path[1] === 'privacy-tos';
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
     trackEventByType(TrackEventType.APP_CRASH, {
@@ -178,6 +167,8 @@ const App = () => {
   return (
     <>
       <Layout
+        showHeader={!isPrivacyPage}
+        showFooter={!isPrivacyPage}
         onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
@@ -196,12 +187,14 @@ const App = () => {
             />
           )
         }
+        showSideMenu={!!sessionToken && !isPrivacyPage}
         productsList={productsList}
         productId={'0'}
         partyList={partyList}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
+        isLogged={!!sessionToken}
       >
         <AppMessage sessionRedirect={handleLogout} />
         <LoadingOverlay />

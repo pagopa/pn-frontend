@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { BasicUser } from '../types/User';
-import { dataRegex } from './string.utility';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { dataRegex } from './string.utility';
 
 /**
  * Yup matcher contents (i.e. a suitable parameter for yup.object())
