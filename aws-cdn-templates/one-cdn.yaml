@@ -66,6 +66,11 @@ Conditions:
         - !Ref AlternateWebDomainReferenceToSite
         - 'true'
   
+  # Condition combination to handle CDN alias array without NoValue
+  BothDNSNames: !And [ !Condition CreateDNSname, !Condition CreateAlternateDNSname ]
+  OnlyPrimaryDNSName: !And [ !Condition CreateDNSname, !Not [ !Condition CreateAlternateDNSname ] ]
+  OnlyAlternateDNSName: !And [ !Not [ !Condition CreateDNSname ], !Condition CreateAlternateDNSname ]
+  
   CreatePrimaryAliasRecord: !Not 
     - !Equals
       - !Ref HostedZoneId
@@ -179,14 +184,17 @@ Resources:
       DistributionConfig:
         Comment: CDN for S3-backed website
         Aliases:
-          - !If
-            - CreateDNSname
-            - !Ref WebDomain
-            - !Ref "AWS::NoValue"
-          - !If
-            - CreateAlternateDNSname
-            - !Ref AlternateWebDomain
-            - !Ref "AWS::NoValue"
+          !If
+            - BothDNSNames
+            - - !Ref WebDomain
+              - !Ref AlternateWebDomain
+            - !If
+                - OnlyPrimaryDNSName
+                - - !Ref WebDomain
+                - !If
+                    - OnlyAlternateDNSName
+                    - - !Ref AlternateWebDomain
+                    - !Ref AWS::NoValue
         Enabled: 'true'
         CacheBehaviors:
           - AllowedMethods:
