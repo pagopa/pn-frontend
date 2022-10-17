@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { useIsMobile, Layout } from '@pagopa-pn/pn-commons';
+import { Layout, useIsMobile } from '@pagopa-pn/pn-commons';
 import { SpidIcon } from '@pagopa/mui-italia/dist/icons';
 import { styled } from '@mui/material/styles';
 import { useSearchParams } from "react-router-dom";
 
-import { IDPS } from '../../utils/IDPS';
+import { IDPS} from '../../utils/IDPS';
 import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
 import { storageOriginOps } from '../../utils/storage';
 import { trackEventByType } from "../../utils/mixpanel";

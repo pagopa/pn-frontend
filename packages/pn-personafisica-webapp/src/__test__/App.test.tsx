@@ -1,14 +1,20 @@
 /* eslint-disable functional/no-let */
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import { Suspense } from 'react';
 import * as redux from 'react-redux';
 import { axe, render } from './test-utils';
 import App from '../App';
 import i18n from '../i18n';
 import * as sidemenuActions from '../redux/sidemenu/actions';
-import * as authActions from '../redux/auth/actions';
+
+
+// mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch; 
+// questo totale viene verificato in un test
+jest.mock('../navigation/SessionGuard', () => () => <div>Session Guard</div>);
+
+
 
 /**
  * Componente che mette App all'interno di un Suspense, 
@@ -31,7 +37,6 @@ const initialState = (token: string) => ({
         email: 'mocked-user@mocked-domain.com',
         sessionToken: token,
       },
-      fetchedTos: true,
       tos: true,
     },
     generalInfoState: {
@@ -58,10 +63,9 @@ const initialState = (token: string) => ({
  */
 describe('App', () => {
   // let result: RenderResult | undefined;
-  let mockDispatchFn: jest.Mock;
+  let mockUseDispatchFn: jest.Mock;
   let mockSidemenuInformationActionFn: jest.Mock;
   let mockDomicileInfoActionFn: jest.Mock;
-  let mockToSApprovalActionFn: jest.Mock;
   let axiosMock: MockAdapter;
 
   beforeEach(() => {
@@ -70,18 +74,17 @@ describe('App', () => {
 
     mockSidemenuInformationActionFn = jest.fn();
     mockDomicileInfoActionFn = jest.fn();
-    mockToSApprovalActionFn = jest.fn();
-    mockDispatchFn = jest.fn();
+    mockUseDispatchFn = jest.fn(() => (action: any, state: any) => {
+      console.log({ action, state });
+    });
 
     // mock actions
     const getSidemenuInfoActionSpy = jest.spyOn(sidemenuActions, 'getSidemenuInformation');
     getSidemenuInfoActionSpy.mockImplementation(mockSidemenuInformationActionFn as any);
     const getDomicileInfoActionSpy = jest.spyOn(sidemenuActions, 'getDomicileInfo');
     getDomicileInfoActionSpy.mockImplementation(mockDomicileInfoActionFn as any);
-    const getToSApprovalActionSpy = jest.spyOn(authActions, 'getToSApproval');
-    getToSApprovalActionSpy.mockImplementation(mockToSApprovalActionFn as any);
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+    useDispatchSpy.mockReturnValue(mockUseDispatchFn as any);
   });
 
   afterEach(() => {
@@ -116,7 +119,7 @@ describe('App', () => {
   /**
    * Tests che usano App e inizializzazione di i18n che include react.useSuspense = false.
    */
-   describe("tests che analizzano dettagli di comportamento (mock alle chiamate)", () => {
+  describe("tests che analizzano dettagli di comportamento (mock alle chiamate)", () => {
     beforeEach(() => {
       void i18n.init({
         react: { 
@@ -126,12 +129,11 @@ describe('App', () => {
     });
 
     it('Dispatches proper actions when session token is not empty', async () => {
-      render(<App />, initialState('mocked-session-token'));
+      await act(async () => void render(<App />, initialState('mocked-session-token')));
 
-      expect(mockDispatchFn).toBeCalledTimes(3);
+      expect(mockUseDispatchFn).toBeCalledTimes(2);
       expect(mockSidemenuInformationActionFn).toBeCalledTimes(1);
       expect(mockDomicileInfoActionFn).toBeCalledTimes(1);
-      expect(mockToSApprovalActionFn).toBeCalledTimes(1);
     });
   });
   

@@ -6,13 +6,12 @@ import { Box } from '@mui/system';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import ErrorBoundary from '../ErrorBoundary';
-import { AppType } from "../../types/AppType";
 
 type Props = {
   children?: ReactNode;
   /** Logout/exit action to apply */
   onExitAction?: () => void;
-  /** Side Menu */
+  /** Side Menu  */
   sideMenu?: React.ReactElement;
   /** Show Side Menu */
   showSideMenu?: boolean;
@@ -38,8 +37,11 @@ type Props = {
   eventTrackingCallbackProductSwitch?: (target: string) => void;
   /** event on assistance click button */
   onAssistanceClick?: () => void;
-  /** Type of the current application */
-  appType?: AppType;
+  /** Whether there is a logged user */
+  isLogged?: boolean;
+  /** Layout visibility conditions */
+  showHeader?: boolean;
+  showFooter?: boolean;
 };
 
 export default function Layout({
@@ -58,43 +60,48 @@ export default function Layout({
   eventTrackingCallbackFooterChangeLanguage,
   eventTrackingCallbackProductSwitch,
   onAssistanceClick,
-  appType = AppType.PF
+  isLogged,
+  showHeader = true,
+  showFooter = true
 }: Props) {
   return (
-    <ErrorBoundary sx={{ height: '100vh' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
+    <ErrorBoundary sx={{ height: 'calc(100vh - 5px)' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
+      {/* calc fixes the layout discrepancy given by the version box */}
       <Stack
         direction="column"
-        sx={{ minHeight: '100vh' }} // 100vh per sticky footer
+        sx={{ minHeight: 'calc(100vh - 5px)' }} // 100vh per sticky footer
       >
-        <Header
-          onExitAction={onExitAction}
-          productsList={productsList}
-          productId={productId}
-          partyList={partyList}
-          loggedUser={loggedUser}
-          enableDropdown={enableUserDropdown}
-          userActions={userActions}
-          onAssistanceClick={onAssistanceClick}
-          eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
-        />
-        <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
-          {showSideMenu && (
-            <Box sx={{ width: { lg: 300 }, flexShrink: '0' }} component="nav">
-              {sideMenu}
-            </Box>
-          )}
-          <Box sx={{ flexGrow: 1 }} component="main">
-            <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
-              {children}
-            </ErrorBoundary>
-          </Box>
-        </Stack>
-        <Footer
-          loggedUser={loggedUser.id !== ''}
-          onLanguageChanged={onLanguageChanged}
-          eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
-          appType={appType}
-        />
+          <>
+            {showHeader && <Header
+              onExitAction={onExitAction}
+              productsList={productsList}
+              productId={productId}
+              partyList={partyList}
+              loggedUser={loggedUser}
+              enableDropdown={enableUserDropdown}
+              userActions={userActions}
+              onAssistanceClick={onAssistanceClick}
+              eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
+              isLogged={isLogged}
+            />}
+              <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
+                {showSideMenu && (
+                  <Box sx={{ width: { lg: 300 }, flexShrink: '0' }} component="nav">
+                    {sideMenu}
+                  </Box>
+                )}
+                <Box sx={{ flexGrow: 1 }} component="main">
+                <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
+                  {children}
+                </ErrorBoundary>
+              </Box>
+            </Stack>
+            {showFooter && <Footer
+              loggedUser={loggedUser.id !== ''}
+              onLanguageChanged={onLanguageChanged}
+              eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
+            />}
+          </>
       </Stack>
     </ErrorBoundary>
   );

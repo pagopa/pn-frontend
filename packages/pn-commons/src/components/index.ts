@@ -5,7 +5,6 @@ import { LoadingOverlay } from './Loading/LoadingOverlay';
 import CustomPagination from './Pagination/CustomPagination';
 import CustomTooltip from './CustomTooltip';
 import AppMessage from './AppMessage';
-import HandleAuth from './HandleAuth';
 import SessionModal from './SessionModal';
 import SideMenu from './SideMenu/SideMenu';
 import StatusTooltip from './Notifications/StatusTooltip';
@@ -34,6 +33,7 @@ import CopyToClipboard from './CopyToClipboard';
 import LoadingPage from './LoadingPage';
 import ApiError from './ApiError/ApiError';
 import ApiErrorWrapper from './ApiError/ApiErrorWrapper';
+import TermsOfServiceHandler from './TermsOfServiceHandler';
 
 export {
     LoadingOverlay,
@@ -43,7 +43,6 @@ export {
     CustomPagination,
     CustomTooltip,
     AppMessage,
-    HandleAuth,
     SideMenu,
     ItemsTable,
     EmptyState,
@@ -71,5 +70,6 @@ export {
     FileUpload,
     Prompt,
     CopyToClipboard,
-    LoadingPage
+    LoadingPage,
+    TermsOfServiceHandler
 };

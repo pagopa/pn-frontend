@@ -8,7 +8,9 @@
     "annulla": "Cancel",
     "modifica": "Edit",
     "salva": "Save",
-    "rimuovi": "Delete"
+    "rimuovi": "Delete",
+    "go-to-home": "Torna alla home page",
+    "go-to-login": "Procedi al login"
   },
   "menu": {
     "notifiche": "Notifications",

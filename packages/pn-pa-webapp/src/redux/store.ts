@@ -9,6 +9,7 @@ import newApiKeySlice from './NewApiKey/reducers';
 import newNotificationSlice from './newNotification/reducers';
 import notificationSlice from './notification/reducers';
 import apiKeysSlice from './apiKeys/reducers';
+import statisticsSlice from "./statistics/reducers";
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined, trackingMiddleware];
 
@@ -20,6 +21,7 @@ export const appReducers = {
   newNotificationState: newNotificationSlice.reducer,
   apiKeysState: apiKeysSlice.reducer,
   newApiKeyState: newApiKeySlice.reducer,
+  statisticsState: statisticsSlice.reducer,
 };
 
 export const createStore = () =>
