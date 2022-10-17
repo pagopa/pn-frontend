@@ -6,7 +6,10 @@ import NotificationDetail from '../pages/NotificationDetail.page';
 import NewNotification from '../pages/NewNotification.page';
 import Statistics from "../pages/Statistics.page";
 // import ApiKeys from '../pages/ApiKeys.page';
+import PrivacyTOSPage from "../pages/PrivacyTOS.page";
+
 import { PNRole } from '../models/user';
+import TermsOfService from '../pages/TermsOfService.page';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -20,6 +23,7 @@ function Router() {
           <Route path={routes.STATISTICHE} element={<Statistics/>} />
         </Route>
         <Route path="/"  element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
+          <Route path={routes.TOS} element={<TermsOfService />} />
           <Route path={routes.DASHBOARD} element={<Dashboard />} />
           <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
           <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
@@ -39,6 +43,8 @@ function Router() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Route>
+      <Route path="*" element={<NotFound />} />
+      <Route path={routes.PRIVACY_TOS} element={<PrivacyTOSPage />} />
     </Routes>
   );
 }
