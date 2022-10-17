@@ -17,7 +17,7 @@ import { Box } from '@mui/material';
 
 import { MIXPANEL_TOKEN } from "@pagopa-pn/pn-personafisica-webapp/src/utils/constants";
 import Router from './navigation/routes';
-import { getOrganizationParty, getToSApproval, logout } from './redux/auth/actions';
+import { getOrganizationParty, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
@@ -36,6 +36,7 @@ const App = () => {
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.organizationParty
   );
+  const { tos } = useAppSelector((state: RootState) => state.userState);
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -114,12 +115,6 @@ const App = () => {
     }
   }, [idOrganization]);
 
-  useEffect(() => {
-    if (sessionToken !== '') {
-      void dispatch(getToSApproval());
-    }
-  }, [sessionToken]);
-
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
@@ -187,7 +182,7 @@ const App = () => {
             />
           )
         }
-        showSideMenu={!!sessionToken && !isPrivacyPage}
+        showSideMenu={!!sessionToken && tos && !isPrivacyPage}
         productsList={productsList}
         productId={'0'}
         partyList={partyList}

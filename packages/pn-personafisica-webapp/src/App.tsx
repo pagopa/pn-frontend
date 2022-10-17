@@ -23,7 +23,7 @@ import { Box } from '@mui/material';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
-import { getToSApproval, logout } from './redux/auth/actions';
+import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
 import { RootState } from './redux/store';
@@ -48,7 +48,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { fetchedTos, tos } = useAppSelector((state: RootState) => state.userState);
+  const { tos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
@@ -71,7 +71,6 @@ const App = () => {
   const isPrivacyPage = path[1] === 'privacy-tos';
 
   const userActions = useMemo(
-
     () => {
       const profiloAction = {
         id: 'profile',
@@ -107,7 +106,6 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getDomicileInfo());
-      void dispatch(getToSApproval());
     }
   }, [sessionToken]);
 
@@ -232,7 +230,7 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!!sessionToken && (!fetchedTos || tos) && !isPrivacyPage}
+        showSideMenu={!!sessionToken && tos && !isPrivacyPage}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown

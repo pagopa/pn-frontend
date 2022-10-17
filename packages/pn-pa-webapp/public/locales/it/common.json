@@ -70,6 +70,10 @@
     "title": "Stai uscendo da Piattaforma Notifiche",
     "message": "Verrai reindirizzato"
   },
+  "error-when-fetching-tos-status": {
+    "title": "Problemi nell'accesso in Piattaforma Notifiche",
+    "message": "Riprova più tardi"
+  },
   "messages": {
     "404-title": "Risorsa non trovata",
     "404-message": "Si è verificato un errore. Si prega di riprovare più tardi",
