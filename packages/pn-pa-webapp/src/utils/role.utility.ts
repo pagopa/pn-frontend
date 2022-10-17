@@ -1,4 +1,4 @@
-import { Email, People, SupervisedUserCircle, VpnKey } from '@mui/icons-material';
+import { Email, People, ShowChart, SupervisedUserCircle, VpnKey } from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -9,6 +9,8 @@ const BasicMenuItems: Array<SideMenuItem> = [
   { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
   { label: 'menu.api-key', icon: VpnKey, route: routes.API_KEYS },
 ];
+
+const statisticsMenuItem = { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE };
 
 function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
   return [
@@ -28,11 +30,11 @@ export function getMenuItems(idOrganization: string, role?: PNRole): {
   selfCareItems?: Array<SideMenuItem>;
 } {
   if (IS_DEVELOP) {
-    return { menuItems: BasicMenuItems, selfCareItems: selfcareMenuItems(idOrganization) };
+    return { menuItems: [...BasicMenuItems, statisticsMenuItem], selfCareItems: selfcareMenuItems(idOrganization) };
   }
   switch (role) {
     case PNRole.ADMIN:
-      return { menuItems: BasicMenuItems, selfCareItems: selfcareMenuItems(idOrganization) };
+      return { menuItems: [...BasicMenuItems, statisticsMenuItem], selfCareItems: selfcareMenuItems(idOrganization) };
     case PNRole.OPERATOR:
       return { menuItems: BasicMenuItems };
     default:
