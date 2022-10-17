@@ -195,6 +195,7 @@ const App = () => {
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
+        hasTermsOfService={true}
       >
         <AppMessage sessionRedirect={handleLogout} />
         <LoadingOverlay />

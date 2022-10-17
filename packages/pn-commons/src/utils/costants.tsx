@@ -11,8 +11,8 @@ const isDev = process.env.NODE_ENV === 'development';
 const pathEnd = isDev ? '' : 'index.html';
 
 export const URL_DIGITAL_NOTIFICATIONS = 'https://www.notifichedigitali.pagopa.it/';
-export const PRIVACY_LINK_RELATIVE_PATH = '/privacy-tos';
-export const PRELOGIN_PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
+export const PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
+export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
 const ACCESSIBILITY_LINK_RELATIVE_PATH = 'cittadini/accessibilita/' + pathEnd;
 
 const getFooterLinkLabels = (
@@ -57,7 +57,8 @@ export const companyLegalInfo = () => (
   </>
 );
 
-export const preLoginLinks = (): PreLoginFooterLinksType => ({
+
+export const preLoginLinks = (hasTermsOfService:boolean=false, privacyPolicyHref?:string, termsOfServiceHref?:string): PreLoginFooterLinksType => ({
   // First column
   aboutUs: {
     title: undefined,
@@ -92,13 +93,13 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
     links: [
       {
         label: 'Privacy Policy',
-        href: `${window.location.origin}${PRELOGIN_PRIVACY_LINK_RELATIVE_PATH}`,
+        href: privacyPolicyHref ?? `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
         ariaLabel: `${getLocalizedOrDefaultLabel(
           'common',
           'footer.go-to',
           'Vai al link'
         )}: Privacy Policy`,
-        linkType: 'external',
+        linkType: 'internal',
       },
       {
         ...getFooterLinkLabels('certifications', 'Certificazioni'),
@@ -124,6 +125,11 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
         href: 'https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8',
         linkType: 'internal',
       },
+      ...hasTermsOfService ? [{
+        ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
+        href: termsOfServiceHref ?? `${window.location.origin}${TOS_LINK_RELATIVE_PATH}`,
+        linkType: 'internal' as const,
+      }] : [],
       {
         ...getFooterLinkLabels('company', 'Società trasparente'),
         href: 'https://pagopa.portaleamministrazionetrasparente.it',
@@ -203,21 +209,21 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
   },
 });
 
-export const postLoginLinks = (): Array<FooterLinksType> => [
+export const postLoginLinks = (privacyPolicyHref?:string, termsOfServiceHref?:string): Array<FooterLinksType> => [
   {
     label: 'Privacy policy',
-    href: `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}#privacy`,
+    href: privacyPolicyHref ?? `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
     ariaLabel: `${getLocalizedOrDefaultLabel(
       'common',
       'footer.go-to',
       'Vai al link'
     )}: Privacy Policy`,
-    linkType: 'external',
+    linkType: 'internal',
   },
   {
     ...getFooterLinkLabels('terms-conditions', 'Termini e Condizioni'),
-    href: `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}#tos`,
-    linkType: 'external',
+    href: termsOfServiceHref ?? `${window.location.origin}${TOS_LINK_RELATIVE_PATH}`,
+    linkType: 'internal',
   },
   {
     ...getFooterLinkLabels('accessibility', 'Accessibilità'),

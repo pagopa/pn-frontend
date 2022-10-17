@@ -240,6 +240,7 @@ const App = () => {
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
+        hasTermsOfService={true}
       >
         <AppMessage sessionRedirect={async () => await dispatch(logout())} />
         <LoadingOverlay />
