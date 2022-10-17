@@ -16,6 +16,7 @@
     "roles": "Ruoli",
     "groups": "Gruppi",
     "api-key": "Chiavi API",
+    "statistics": "Statistiche",
     "aria-label": "piattaforma-notifiche navigazione principale",
     "aria-label-inner": "piattaforma-notifiche navigazione mittente"
   },

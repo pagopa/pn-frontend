@@ -68,6 +68,7 @@ const AttachmentBox = ({
         )}
       </Box>
       <FileUpload
+        key={`${new Date()}`}
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
         onFileUploaded={(file, sha256, name, size) =>
@@ -276,7 +277,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
             onDelete={() => deleteDocumentHandler(i)}
             fieldLabel={i === 0 ? `${t('act-name')}*` : `${t('doc-name')}*`}
             fieldValue={d.name}
-            fileUploaded={attachmentsData && attachmentsData[i] ? attachmentsData[i] : undefined}
+            fileUploaded={d}
             fieldTouched={
               formik.touched.documents && formik.touched.documents[i]
                 ? formik.touched.documents[i].name
