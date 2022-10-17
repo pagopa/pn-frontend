@@ -170,6 +170,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
               formikInstance={formik}
               startDate={startDate}
               endDate={endDate}
+              defaultStartDate={tenYearsAgo}
+              defaultEndDate={today}
               setStartDate={(value) => setStartDate(value)}
               setEndDate={(value) => setEndDate(value)}
             />
@@ -202,6 +204,8 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
             formikInstance={formik}
             startDate={startDate}
             endDate={endDate}
+            defaultStartDate={tenYearsAgo}
+            defaultEndDate={today}
             setStartDate={(value) => setStartDate(value)}
             setEndDate={(value) => setEndDate(value)}
           />

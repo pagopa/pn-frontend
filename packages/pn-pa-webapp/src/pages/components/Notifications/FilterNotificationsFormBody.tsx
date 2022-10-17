@@ -37,6 +37,8 @@ type Props = {
   };
   startDate: Date | null;
   endDate: Date | null;
+  defaultStartDate: Date | null;
+  defaultEndDate: Date | null;
   setStartDate: (value: Date | null) => void;
   setEndDate: (value: Date | null) => void;
 };
@@ -47,6 +49,8 @@ const FilterNotificationsFormBody = ({
   formikInstance,
   startDate,
   endDate,
+  defaultStartDate,
+  defaultEndDate,
   setStartDate,
   setEndDate,
 }: Props) => {
@@ -113,8 +117,9 @@ const FilterNotificationsFormBody = ({
           inputFormat={DATE_FORMAT}
           value={startDate}
           onChange={(value: DatePickerTypes) => {
-            void formikInstance.setFieldValue('startDate', value).then(() => {
-              setStartDate(value);
+            const value2 = value ? value : defaultStartDate;
+            void formikInstance.setFieldValue('startDate', value2).then(() => {
+              setStartDate(value2);
               trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'from date' });
             });
           }}
@@ -152,9 +157,10 @@ const FilterNotificationsFormBody = ({
           inputFormat={DATE_FORMAT}
           value={endDate}
           onChange={(value: DatePickerTypes) => {
-            void formikInstance.setFieldValue('endDate', value).then(() => {
+            const value2 = value ? value : defaultEndDate;
+            void formikInstance.setFieldValue('endDate', value2).then(() => {
               trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'to date' });
-              setEndDate(value);
+              setEndDate(value2);
             });
           }}
           renderInput={(params) => (
