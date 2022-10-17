@@ -9,7 +9,7 @@ type LocalizationFunction = (namespace: string | Array<string>, path: string, da
 /* eslint-disable-next-line functional/no-let */
 let localizationNamespaces: LocalizationNamespaces = {
   common: 'common',
-  notifications: 'notifiche',
+  notifications: 'notifiche'
 };
 
 /* eslint-disable-next-line functional/no-let */

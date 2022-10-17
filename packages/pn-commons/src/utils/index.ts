@@ -1,5 +1,6 @@
 import { dataRegex, formatFiscalCode } from './string.utility';
 import { calculatePages } from './pagination.utility';
+
 import {
     getNotificationStatusInfos,
     getNotificationAllowedStatus,
