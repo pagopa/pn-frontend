@@ -1,11 +1,13 @@
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
+import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 
 /* eslint-disable import/order */
 import { render, axe } from './test-utils';
 import App from '../App';
 import { Party } from '../models/party';
+import { AUTH_ACTIONS } from '../redux/auth/actions';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -14,6 +16,19 @@ jest.mock('react-i18next', () => ({
     t: (str: string) => str,
   }),
 }));
+
+let mockLayout = false;
+
+jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
+  const OriginalLayout = original.Layout;
+  return {
+    ...original,
+    Layout: (props: any) => mockLayout
+      ? <div>{ props.showSideMenu ? "sidemenu" : ""}</div>
+      : <OriginalLayout {...props} />,
+  };
+});
 
 // mocko SessionGuard perché produce problemi nel test
 jest.mock('../navigation/SessionGuard', () => () => <div>Session Guard</div>);
@@ -41,6 +56,10 @@ const reduxInitialState = {
 };
 
 describe('App', () => {
+  beforeAll(() => {
+    mockLayout = false;
+  });
+
   it('Piattaforma notifiche', () => {
     render(<Component/>, { preloadedState: reduxInitialState });
     const welcomeElement = screen.getByText(/header.notification-platform/i);
@@ -51,6 +70,17 @@ describe('App', () => {
     const { container } = render(<Component/>);
     const result = await axe(container);
     expect(result).toHaveNoViolations();
+  });
+
+  it('Sidemenu not included if error in API call to fetch organization', async () => {
+    mockLayout = true;
+    const mockReduxStateWithApiError = {
+      ...reduxInitialState, 
+      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_ORGANIZATION_PARTY) 
+    };
+    await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
+    const sidemenuComponent = screen.queryByText("sidemenu");
+    expect(sidemenuComponent).toBeNull();
   });
 });
 
