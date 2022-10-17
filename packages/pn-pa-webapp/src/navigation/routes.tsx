@@ -40,7 +40,9 @@ function Router() {
         </Route>
       </Route>
       <Route path="*" element={<NotFound />} />
-      <Route path={routes.PRIVACY_TOS} element={<PrivacyTOSPage />} />
+      {/* PN-2391 element will be fixed in PN-2394 */}
+      <Route path={routes.PRIVACY_POLICY} element={<PrivacyTOSPage />} />
+      <Route path={routes.TERMS_OF_SERVICE} element={<PrivacyTOSPage />} />
     </Routes>
   );
 }
