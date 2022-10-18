@@ -5,6 +5,7 @@ import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
+import LoadingGuard from './LoadingGuard';
 
 const Profile = React.lazy(() => import('../pages/Profile.page'));
 const TermsOfService = React.lazy(() => import('../pages/TermsOfService.page'));
@@ -22,15 +23,17 @@ function Router() {
         <Route path="/" element={<SessionGuard />}>
           {/* protected routes */}
           <Route path="/" element={<RouteGuard />}>
-            <Route path={routes.TOS} element={<TermsOfService />} />
-            <Route path={routes.NOTIFICHE} element={<Notifiche />} />
-            <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
-            <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-            <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
-            <Route path={routes.DELEGHE} element={<Deleghe />} />
-            <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
-            <Route path={routes.RECAPITI} element={<Contacts/>} />
-            <Route path={routes.PROFILO} element={<Profile />} />
+            <Route path="/" element={<LoadingGuard />}>
+              <Route path={routes.TOS} element={<TermsOfService />} />
+              <Route path={routes.NOTIFICHE} element={<Notifiche />} />
+              <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
+              <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+              <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
+              <Route path={routes.DELEGHE} element={<Deleghe />} />
+              <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
+              <Route path={routes.RECAPITI} element={<Contacts />} />
+              <Route path={routes.PROFILO} element={<Profile />} />
+            </Route>
           </Route>
           {/* not found - non-logged users will see the common AccessDenied component */}
           <Route path="*" element={<RouteGuard />}>

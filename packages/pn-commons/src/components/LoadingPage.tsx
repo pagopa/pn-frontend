@@ -1,4 +1,4 @@
-import { Skeleton, Box, Stack, Grid, GridSize } from '@mui/material';
+import { Skeleton, Box, Stack, Grid, GridSize, SxProps } from '@mui/material';
 
 type Props = {
   renderType?: 'whole' | 'part';
@@ -10,16 +10,17 @@ type Props = {
     xl?: boolean | GridSize;
     xs?: boolean | GridSize;
   }>;
+  sx?: SxProps;
 };
 
 const headerHeight = '128px';
 const footerHeight = '139px';
 const titleHeight = '36px';
 
-const LoadingPage = ({ renderType = 'part', layout }: Props) => {
+const LoadingPage = ({ renderType = 'part', layout, sx }: Props) => {
   if (renderType === 'whole') {
     return (
-      <Box p={1} height="100vh">
+      <Box p={1} height="100vh" sx={sx}>
         <Skeleton
           variant="rectangular"
           width="100%"
@@ -57,7 +58,7 @@ const LoadingPage = ({ renderType = 'part', layout }: Props) => {
   ) : <Skeleton variant="rectangular" width="100%" height={`calc(100% - ${titleHeight} - 80px)`} data-testid="content"/>
 
   return (
-    <Box p={2} height="100%">
+    <Box p={2} height="100%" sx={sx}>
       <Skeleton variant="rectangular" height={titleHeight} sx={{ marginBottom: 2 }} data-testid="title"/>
       <Skeleton sx={{ marginBottom: 4 }} data-testid="subTitle"/>
       {pageLayout}
