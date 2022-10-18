@@ -1,6 +1,6 @@
 import * as redux from 'react-redux';
 import { render } from '../../__test__/test-utils';
-import TermsOfService from '../TermsOfService.page';
+import TermsOfService from '../ToSAcceptance.page';
 
 const mockNavigateFn = jest.fn();
 const mockDispatchFn = jest.fn();
