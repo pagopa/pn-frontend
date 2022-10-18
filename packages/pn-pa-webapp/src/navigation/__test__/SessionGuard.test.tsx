@@ -1,6 +1,7 @@
 import { act, screen } from '@testing-library/react';
 import { render } from '../../__test__/test-utils';
 import SessionGuard from '../SessionGuard';
+import * as routes from '../routes.const';
 
 
 const mockNavigateFn = jest.fn(() => { });
@@ -48,6 +49,27 @@ jest.mock('../../utils/constants', () => {
   };
 });
 
+/* eslint-disable functional/no-let */
+let mockTosValue: boolean;
+let mockMakeTosCallFail: boolean;
+
+jest.mock('../../api/consents/Consents.api', () => {
+  const original = jest.requireActual('../../api/consents/Consents.api');
+  return {
+    ...original,
+    ConsentsApi: {
+      getConsentByType: () => mockMakeTosCallFail
+        ? Promise.reject({ response: { status: 500 } })
+        : Promise.resolve({
+            recipientId: "mock-consent-id",
+            consentType: "TOS",
+            consentVersion: "V001",
+            accepted: mockTosValue,
+          })
+    },
+  };
+});
+
 jest.mock('../../api/auth/Auth.api', () => {
   const original = jest.requireActual('../../api/auth/Auth.api');
   return {
@@ -63,6 +85,8 @@ jest.mock('../../api/auth/Auth.api', () => {
 
 describe('SessionGuard Component', () => {
   beforeEach(() => {
+    mockTosValue = true;
+    mockMakeTosCallFail = false;
     mockLocationHash = "";
   });
 
@@ -96,7 +120,7 @@ describe('SessionGuard Component', () => {
   });
 
   // cosa si aspetta: entra nell'app, fa navigate verso notifiche, lancia il sessionCheck
-  it('utente riconosciuto', async () => {
+  it('utente riconosciuto - TOS accettate', async () => {
     mockLocationHash = "#selfCareToken=good_token";
 
     await act(async () => void render(<SessionGuard />));
@@ -104,7 +128,39 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
+    expect((mockNavigateFn.mock.calls[0] as any)[0]).toBe(routes.DASHBOARD);
     expect(mockSessionCheckFn).toBeCalledTimes(1);
+  });
+
+  // cosa si aspetta: entra nell'app, fa navigate verso ToS, lancia il session check
+  it('utente riconosciuto - TOS non ancora accettate', async () => {
+    mockLocationHash = "#selfCareToken=good_token";
+    mockTosValue = false;
+
+    await act(async () => void render(<SessionGuard />));
+    const pageComponent = screen.queryByText("Generic Page");
+    expect(pageComponent).toBeTruthy();
+
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect((mockNavigateFn.mock.calls[0] as any)[0]).toBe(routes.TOS);
+    expect(mockSessionCheckFn).toBeCalledTimes(1);
+  });
+
+  // cosa si aspetta: non entra nell'app, non lancia il session check
+  it('utente riconosciuto - fallisce la chiamata a TOS', async () => {
+    mockLocationHash = "#selfCareToken=good_token";
+    mockMakeTosCallFail = true;
+
+    await act(async () => void render(<SessionGuard />));
+    const logoutComponent = screen.queryByText('Session Modal');
+    expect(logoutComponent).toBeTruthy();
+    const logoutTitleComponent = screen.queryByText("leaving-app.title");
+    expect(logoutTitleComponent).toBeNull();
+    const tosErrorTitleComponent = screen.queryByText("error-when-fetching-tos-status.title");
+    expect(tosErrorTitleComponent).toBeTruthy();
+
+    expect(mockNavigateFn).toBeCalledTimes(0);
+    expect(mockSessionCheckFn).toBeCalledTimes(0);
   });
 
   // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken

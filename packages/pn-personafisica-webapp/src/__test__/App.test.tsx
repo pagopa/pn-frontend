@@ -8,7 +8,6 @@ import { axe, render } from './test-utils';
 import App from '../App';
 import i18n from '../i18n';
 import * as sidemenuActions from '../redux/sidemenu/actions';
-import * as authActions from '../redux/auth/actions';
 
 
 // mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch; 
@@ -38,7 +37,6 @@ const initialState = (token: string) => ({
         email: 'mocked-user@mocked-domain.com',
         sessionToken: token,
       },
-      fetchedTos: true,
       tos: true,
     },
     generalInfoState: {
@@ -68,7 +66,6 @@ describe('App', () => {
   let mockUseDispatchFn: jest.Mock;
   let mockSidemenuInformationActionFn: jest.Mock;
   let mockDomicileInfoActionFn: jest.Mock;
-  let mockToSApprovalActionFn: jest.Mock;
   let axiosMock: MockAdapter;
 
   beforeEach(() => {
@@ -77,7 +74,6 @@ describe('App', () => {
 
     mockSidemenuInformationActionFn = jest.fn();
     mockDomicileInfoActionFn = jest.fn();
-    mockToSApprovalActionFn = jest.fn();
     mockUseDispatchFn = jest.fn(() => (action: any, state: any) => {
       console.log({ action, state });
     });
@@ -87,8 +83,6 @@ describe('App', () => {
     getSidemenuInfoActionSpy.mockImplementation(mockSidemenuInformationActionFn as any);
     const getDomicileInfoActionSpy = jest.spyOn(sidemenuActions, 'getDomicileInfo');
     getDomicileInfoActionSpy.mockImplementation(mockDomicileInfoActionFn as any);
-    const getToSApprovalActionSpy = jest.spyOn(authActions, 'getToSApproval');
-    getToSApprovalActionSpy.mockImplementation(mockToSApprovalActionFn as any);
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockUseDispatchFn as any);
   });
@@ -137,10 +131,9 @@ describe('App', () => {
     it('Dispatches proper actions when session token is not empty', async () => {
       await act(async () => void render(<App />, initialState('mocked-session-token')));
 
-      expect(mockUseDispatchFn).toBeCalledTimes(3);
+      expect(mockUseDispatchFn).toBeCalledTimes(2);
       expect(mockSidemenuInformationActionFn).toBeCalledTimes(1);
       expect(mockDomicileInfoActionFn).toBeCalledTimes(1);
-      expect(mockToSApprovalActionFn).toBeCalledTimes(1);
     });
   });
   
