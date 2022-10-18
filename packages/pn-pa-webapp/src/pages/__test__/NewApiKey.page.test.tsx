@@ -1,10 +1,10 @@
 /* eslint-disable functional/no-let */
 import * as redux from 'react-redux';
-import { render, act, RenderResult, testFormElements, testInput, fireEvent, waitFor } from '../../__test__/test-utils';
-import * as hooks from '../../redux/hooks';
-import * as routes from '../../navigation/routes.const';
 
+import { render, act, RenderResult, testFormElements, testInput, fireEvent, waitFor } from '../../__test__/test-utils';
+import * as routes from '../../navigation/routes.const';
 import NewApiKey from '../NewApiKey.page';
+
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
@@ -17,14 +17,6 @@ describe('NewApiKey component', () => {
   let mockDispatchFn: jest.Mock;
 
   beforeEach(async () =>{
-    const useAppSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
-    useAppSelectorSpy.mockReturnValue({
-      groups: [
-        { id: '1', name: 'mock-Group1', description: '', status: 'ACTIVE' },
-        { id: '2', name: 'mock-Group2', description: '', status: 'ACTIVE' },
-      ],
-      apiKey: ''
-    });
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     mockDispatchFn = jest.fn();
@@ -33,7 +25,15 @@ describe('NewApiKey component', () => {
     // render component
     await act(async () => {
       result = render(
-        <NewApiKey />
+        <NewApiKey />, {preloadedState: {
+          newApiKeyState: {
+            groups: [
+              { id: '1', name: 'mock-Group1', description: '', status: 'ACTIVE' },
+              { id: '2', name: 'mock-Group2', description: '', status: 'ACTIVE' },
+            ],
+            apiKey: ''
+          }
+        }}
       );
     });
   });

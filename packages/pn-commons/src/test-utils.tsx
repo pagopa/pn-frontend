@@ -40,8 +40,8 @@ export async function testSelect(
   selectOptionsListItems.forEach((opt, index) => {
     expect(opt).toHaveTextContent(options[index].label);
   });
+  fireEvent.click(selectOptionsListItems[optToSelect]);
   await waitFor(() => {
-    fireEvent.click(selectOptionsListItems[optToSelect]);
     expect(selectInput).toHaveValue(options[optToSelect].value);
   });
 }

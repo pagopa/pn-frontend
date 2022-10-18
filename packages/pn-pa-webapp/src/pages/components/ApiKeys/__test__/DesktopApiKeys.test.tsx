@@ -9,18 +9,10 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-const mockHandleViewApiKeyClick = jest.fn();
-const mockHandleRotateApiKeyClick = jest.fn();
-const mockHandleBlockApiKeyClick = jest.fn();
-const mockHandleEnableApiKeyClick = jest.fn();
-const mockHandleDeleteApiKeyClick = jest.fn();
+const mockHandleModalClick = jest.fn();
 
 const defaultProps = {
-  handleBlockApiKeyClick: mockHandleBlockApiKeyClick,
-  handleDeleteApiKeyClick: mockHandleDeleteApiKeyClick,
-  handleEnableApiKeyClick: mockHandleEnableApiKeyClick,
-  handleRotateApiKeyClick: mockHandleRotateApiKeyClick,
-  handleViewApiKeyClick: mockHandleViewApiKeyClick,
+  handleModalClick: mockHandleModalClick,
   apiKeys: mockApiKeysForFE,
 };
 
@@ -62,7 +54,7 @@ describe('DesktopApiKeys component', () => {
     await waitFor(() => fireEvent.click(contextMenuButton));
     const viewButton = screen.getByTestId('buttonView');
     await waitFor(() => fireEvent.click(viewButton));
-    expect(mockHandleViewApiKeyClick).toBeCalledTimes(1);
+    expect(mockHandleModalClick).toBeCalledTimes(1);
   });
 
   it('Check click block api key', async () => {
@@ -73,7 +65,7 @@ describe('DesktopApiKeys component', () => {
     await waitFor(() => fireEvent.click(contextMenuButton));
     const viewButton = screen.getByTestId('buttonBlock');
     await waitFor(() => fireEvent.click(viewButton));
-    expect(mockHandleBlockApiKeyClick).toBeCalledTimes(1);
+    expect(mockHandleModalClick).toBeCalledTimes(1);
   });
 
   it('Check click delete api key', async () => {
@@ -84,7 +76,7 @@ describe('DesktopApiKeys component', () => {
     await waitFor(() => fireEvent.click(contextMenuButton));
     const viewButton = screen.getByTestId('buttonDelete');
     await waitFor(() => fireEvent.click(viewButton));
-    expect(mockHandleDeleteApiKeyClick).toBeCalledTimes(1);
+    expect(mockHandleModalClick).toBeCalledTimes(1);
   });
 
   it('Check click enable api key', async () => {
@@ -95,7 +87,7 @@ describe('DesktopApiKeys component', () => {
     await waitFor(() => fireEvent.click(contextMenuButton));
     const viewButton = screen.getByTestId('buttonEnable');
     await waitFor(() => fireEvent.click(viewButton));
-    expect(mockHandleEnableApiKeyClick).toBeCalledTimes(1);
+    expect(mockHandleModalClick).toBeCalledTimes(1);
   });
 
   it('Check click rotate api key', async () => {
@@ -106,6 +98,6 @@ describe('DesktopApiKeys component', () => {
     await waitFor(() => fireEvent.click(contextMenuButton));
     const viewButton = screen.getByTestId('buttonRotate');
     await waitFor(() => fireEvent.click(viewButton));
-    expect(mockHandleRotateApiKeyClick).toBeCalledTimes(1);
+    expect(mockHandleModalClick).toBeCalledTimes(1);
   });
 });
