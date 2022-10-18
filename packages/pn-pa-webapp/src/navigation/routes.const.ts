@@ -5,7 +5,7 @@ const NOTIFICA = '/notifica';
 export const DETTAGLIO_NOTIFICA = `${DASHBOARD}/:id${NOTIFICA}`;
 export const NUOVA_NOTIFICA = `${DASHBOARD}/nuova-notifica`;
 export const API_KEYS = '/api-keys';
-export const NUOVA_API_KEY = '/api-keys/nuova-api-key';
+export const NUOVA_API_KEY = `${API_KEYS}/nuova-api-key`;
 export const STATISTICHE = '/statistiche';
 
 export const ROLES_SEGMENT = '/users';

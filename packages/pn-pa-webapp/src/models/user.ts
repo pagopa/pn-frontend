@@ -24,5 +24,5 @@ export interface UserGroup {
 
 export enum PNRole {
   ADMIN = 'admin', // ref amministrativo
-  OPERATOR = 'operator' // ref tecnico
+  OPERATOR = 'operator', // ref tecnico
 }

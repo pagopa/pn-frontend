@@ -1,6 +1,6 @@
 import { Fragment, useState, MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, IconButton, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { MoreVert } from '@mui/icons-material';
 import {
@@ -10,26 +10,19 @@ import {
   StatusTooltip,
   EmptyState,
   CopyToClipboard,
+  // GroupsApiKey,
 } from '@pagopa-pn/pn-commons';
-import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory } from '../../../models/ApiKeys';
+import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory, modalApiKeyView } from '../../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../../utils/apikeys.utility';
 
 type Props = {
   apiKeys: Array<ApiKey>;
-  handleViewApiKeyClick: (apiKeyId: number) => void;
-  handleRotateApiKeyClick: (apiKeyId: number) => void;
-  handleBlockApiKeyClick: (apiKeyId: number) => void;
-  handleEnableApiKeyClick: (apiKeyId: number) => void;
-  handleDeleteApiKeyClick: (apiKeyId: number) => void;
+  handleModalClick: (view: modalApiKeyView, apiKeyId: number) => void;
 };
 
 const DesktopApiKeys = ({
   apiKeys,
-  handleViewApiKeyClick,
-  handleRotateApiKeyClick,
-  handleBlockApiKeyClick,
-  handleEnableApiKeyClick,
-  handleDeleteApiKeyClick,
+  handleModalClick,
 }: Props) => {
   const { t } = useTranslation(['apikeys']);
   const handleEventTrackingTooltip = () => undefined;
@@ -81,41 +74,11 @@ const DesktopApiKeys = ({
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          {row.status !== ApiKeyStatus.ROTATED && (
-            <MenuItem>
-              <Button data-testid="buttonView" onClick={() => handleViewApiKeyClick(apiKeyId)}>
-                {t('context-menu.view')}
-              </Button>
-            </MenuItem>
-          )}
-          {row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED && (
-            <MenuItem>
-              <Button data-testid="buttonRotate" onClick={() => handleRotateApiKeyClick(apiKeyId)}>
-                {t('context-menu.rotate')}
-              </Button>
-            </MenuItem>
-          )}
-          {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && (
-            <MenuItem>
-              <Button data-testid="buttonBlock" onClick={() => handleBlockApiKeyClick(apiKeyId)}>
-                {t('context-menu.block')}
-              </Button>
-            </MenuItem>
-          )}
-          {row.status === ApiKeyStatus.BLOCKED && (
-            <MenuItem>
-              <Button data-testid="buttonDelete" onClick={() => handleDeleteApiKeyClick(apiKeyId)}>
-                {t('context-menu.delete')}
-              </Button>
-            </MenuItem>
-          )}
-          {row.status === ApiKeyStatus.BLOCKED && (
-            <MenuItem>
-              <Button data-testid="buttonEnable" onClick={() => handleEnableApiKeyClick(apiKeyId)}>
-                {t('context-menu.enable')}
-              </Button>
-            </MenuItem>
-          )}
+          {row.status !== ApiKeyStatus.ROTATED && <MenuItem data-testid="buttonView" onClick={() => handleModalClick(modalApiKeyView.VIEW, apiKeyId)}>{t('context-menu.view')}</MenuItem>}
+          {(row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED) && <MenuItem data-testid="buttonRotate" onClick={() => handleModalClick(modalApiKeyView.ROTATE, apiKeyId)}>{t('context-menu.rotate')}</MenuItem>}
+          {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && <MenuItem data-testid="buttonBlock" onClick={() => handleModalClick(modalApiKeyView.BLOCK, apiKeyId)}>{t('context-menu.block')}</MenuItem>}
+          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonDelete" onClick={() => handleModalClick(modalApiKeyView.DELETE, apiKeyId)}>{t('context-menu.delete')}</MenuItem>}
+          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonEnable" onClick={() => handleModalClick(modalApiKeyView.ENABLE, apiKeyId)}>{t('context-menu.enable')}</MenuItem>}
         </Menu>
       </Box>
     );

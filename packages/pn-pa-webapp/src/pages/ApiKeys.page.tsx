@@ -8,7 +8,6 @@ import {
   Dialog,
   TextField,
   InputAdornment,
-  Grid,
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useIsMobile, CopyToClipboard, TitleBox } from '@pagopa-pn/pn-commons';
@@ -21,21 +20,22 @@ import {
   setApiKeyStatus,
   setApiKeyDeleted,
 } from '../redux/apiKeys/actions';
-import { ApiKey, ApiKeyStatus } from '../models/ApiKeys';
+import { ApiKey, ApiKeyStatus, modalApiKeyView } from '../models/ApiKeys';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
+import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
 
 const SubTitle = () => {
   const { t } = useTranslation(['apiKeys']);
   return (
     <Fragment>
       {t('subtitle.text1')}
-      <Link
-        href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/NewNotification/sendNewNotification"
-      >{t('subtitle.text2')}</Link>
+      <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/NewNotification/sendNewNotification">
+        {t('subtitle.text2')}
+      </Link>
       {t('subtitle.text3')}
-      <Link
-        href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/SenderReadB2B/getNotificationRequestStatus"
-      >{t('subtitle.text4')}</Link>
+      <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml#/SenderReadB2B/getNotificationRequestStatus">
+        {t('subtitle.text4')}
+      </Link>
       {t('subtitle.text5')}
     </Fragment>
   );
@@ -49,49 +49,23 @@ const ApiKeys = () => {
 
   const apiKeys = useAppSelector((state: RootState) => state.apiKeysState.apiKeys);
 
-  const [openModal, setModal] = useState(false);
-  const [viewApiKey, setViewApiKey] = useState<null | ApiKey>();
-  const [blockApiKey, setBlockApiKey] = useState<null | ApiKey>();
-  const [enableApiKey, setEnableApiKey] = useState<null | ApiKey>();
-  const [rotateApiKey, setRotateApiKey] = useState<null | ApiKey>();
-  const [deleteApiKey, setDeleteApiKey] = useState<null | ApiKey>();
+  type modalType = {
+    view: modalApiKeyView;
+    apiKey?: ApiKey;
+  };
 
-  const handleOpenModal = () => setModal(true);
+  const [modal, setModal] = useState<modalType>({ view: modalApiKeyView.NONE });
+
   const handleCloseModal = () => {
-    setModal(false);
-    setViewApiKey(null);
-    setBlockApiKey(null);
-    setEnableApiKey(null);
-    setRotateApiKey(null);
-    setDeleteApiKey(null);
+    setModal({ view: modalApiKeyView.NONE });
+  };
+
+  const handleModalClick = (view: modalApiKeyView, apiKeyId: number) => {
+    setModal({ view, apiKey: apiKeys[apiKeyId] });
   };
 
   const handleNewApiKeyClick = () => {
     navigate(routes.NUOVA_API_KEY);
-  };
-
-  const handleViewApiKeyClick = (apiKeyId: number) => {
-    setViewApiKey(apiKeys[apiKeyId]);
-    handleOpenModal();
-  };
-
-  const handleRotateApiKeyClick = (apiKeyId: number) => {
-    setRotateApiKey(apiKeys[apiKeyId]);
-    handleOpenModal();
-  };
-
-  const handleBlockApiKeyClick = (apiKeyId: number) => {
-    setBlockApiKey(apiKeys[apiKeyId]);
-    handleOpenModal();
-  };
-  const handleEnableApiKeyClick = (apiKeyId: number) => {
-    setEnableApiKey(apiKeys[apiKeyId]);
-    handleOpenModal();
-  };
-
-  const handleDeleteApiKeyClick = (apiKeyId: number) => {
-    setDeleteApiKey(apiKeys[apiKeyId]);
-    handleOpenModal();
   };
 
   useEffect(() => {
@@ -132,12 +106,12 @@ const ApiKeys = () => {
         variantSubTitle="body1"
       ></TitleBox>
       <Box
-       sx={{
-        display: isMobile ? 'block' : 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: isMobile ? 3 : 10
-       }}
+        sx={{
+          display: isMobile ? 'block' : 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginTop: isMobile ? 3 : 10,
+        }}
       >
         <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
           {t('generated-api-keys')}
@@ -152,33 +126,23 @@ const ApiKeys = () => {
           {t('new-api-key-button')}
         </Button>
       </Box>
-      <DesktopApiKeys
-        apiKeys={apiKeys}
-        handleEnableApiKeyClick={handleEnableApiKeyClick}
-        handleViewApiKeyClick={handleViewApiKeyClick}
-        handleRotateApiKeyClick={handleRotateApiKeyClick}
-        handleBlockApiKeyClick={handleBlockApiKeyClick}
-        handleDeleteApiKeyClick={handleDeleteApiKeyClick}
-      />
+      <DesktopApiKeys apiKeys={apiKeys} handleModalClick={handleModalClick} />
 
-      <Dialog open={openModal} onClose={handleCloseModal}>
+      <Dialog open={modal.view !== modalApiKeyView.NONE} onClose={handleCloseModal}>
         <Box
           sx={{
             padding: 3,
             minWidth: isMobile ? '0' : '600px',
           }}
         >
-          {viewApiKey && (
-            <>
-              <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-                API Key {viewApiKey.name}
-              </Typography>
-              <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                {t('copy-api-key-info')}
-              </Typography>
-              {
+          {modal.view === modalApiKeyView.VIEW && (
+            <ApiKeyModal
+              titleSx={{ marginBottom: isMobile ? 3 : undefined }}
+              title={`API Key ${modal.apiKey?.name}`}
+              subTitle={t('copy-api-key-info')}
+              content={
                 <TextField
-                  value={viewApiKey.apiKey}
+                  value={modal.apiKey?.apiKey}
                   fullWidth={true}
                   InputProps={{
                     readOnly: true,
@@ -187,99 +151,66 @@ const ApiKeys = () => {
                         <CopyToClipboard
                           tooltipMode={true}
                           tooltip={t('api-key-copied')}
-                          getValue={() => viewApiKey.apiKey || ''}
+                          getValue={() => modal.apiKey?.apiKey || ''}
                         />
                       </InputAdornment>
                     ),
                   }}
                 />
               }
-              <Grid container justifyContent="flex-end">
-                <Button variant="outlined" sx={{ marginTop: 3 }} onClick={handleCloseModal}>
-                  {t('close-button')}
-                </Button>
-              </Grid>
-            </>
+              closeButtonLabel={t('close-button')}
+              closeModalHandler={handleCloseModal}
+            />
           )}
-
-          {blockApiKey && (
-            <>
-              <Typography variant="h5" sx={{ marginBottom: 2 }}>
-                {t('block-api-key')}
-              </Typography>
-              <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                <Trans i18nKey="block-warning1" values={{ apiKeyName: blockApiKey.name }}>
-                  {t('block-warning1', { apiKeyName: blockApiKey.name })}
+          {modal.view === modalApiKeyView.BLOCK && (
+            <ApiKeyModal
+              titleSx={{ marginBottom: 2 }}
+              title={t('block-api-key')}
+              subTitle={
+                <Trans i18nKey="block-warning1" values={{ apiKeyName: modal.apiKey?.name }}>
+                  {t('block-warning1', { apiKeyName: modal.apiKey?.name })}
                 </Trans>
-              </Typography>
-              <Typography>{t('block-warning2')}</Typography>
-              <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
-                <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
-                  {t('cancel-button')}
-                </Button>
-                <Button variant="contained" onClick={() => apiKeyBlocked(blockApiKey.apiKey)}>
-                  {t('block-button')}
-                </Button>
-              </Grid>
-            </>
+              }
+              content={<Typography>{t('block-warning2')}</Typography>}
+              closeButtonLabel={t('cancel-button')}
+              closeModalHandler={handleCloseModal}
+              actionButtonLabel={t('block-button')}
+              actionHandler={() => apiKeyBlocked(modal.apiKey?.apiKey as string)}
+            />
           )}
-
-          {enableApiKey && (
-            <>
-              <Typography variant="h5" sx={{ marginBottom: 2 }}>
-                {t('enable-api-key')}
-              </Typography>
-              <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                <Trans>{t('enable-warning', { apiKeyName: enableApiKey.name })}</Trans>
-              </Typography>
-              <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
-                <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
-                  {t('cancel-button')}
-                </Button>
-                <Button variant="contained" onClick={() => apiKeyEnabled(enableApiKey.apiKey)}>
-                  {t('enable-button')}
-                </Button>
-              </Grid>
-            </>
+          {modal.view === modalApiKeyView.ENABLE && (
+            <ApiKeyModal
+              titleSx={{ marginBottom: 2 }}
+              title={t('enable-api-key')}
+              subTitle={<Trans>{t('enable-warning', { apiKeyName: modal.apiKey?.name })}</Trans>}
+              closeButtonLabel={t('cancel-button')}
+              closeModalHandler={handleCloseModal}
+              actionButtonLabel={t('enable-button')}
+              actionHandler={() => apiKeyEnabled(modal.apiKey?.apiKey as string)}
+            />
           )}
-
-          {rotateApiKey && (
-            <>
-              <Typography variant="h5" sx={{ marginBottom: 2 }}>
-                {t('rotate-api-key')}
-              </Typography>
-              <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                <Trans>{t('rotate-warning1', { apiKeyName: rotateApiKey.name })}</Trans>
-              </Typography>
-              <Typography>{t('rotate-warning2')}</Typography>
-              <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
-                <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
-                  {t('cancel-button')}
-                </Button>
-                <Button variant="contained" onClick={() => apiKeyRotated(rotateApiKey.apiKey)}>
-                  {t('rotate-button')}
-                </Button>
-              </Grid>
-            </>
+          {modal.view === modalApiKeyView.ROTATE && (
+            <ApiKeyModal
+              titleSx={{ marginBottom: 2 }}
+              title={t('rotate-api-key')}
+              subTitle={<Trans>{t('rotate-warning1', { apiKeyName: modal.apiKey?.name })}</Trans>}
+              content={<Typography>{t('rotate-warning2')}</Typography>}
+              closeButtonLabel={t('cancel-button')}
+              closeModalHandler={handleCloseModal}
+              actionButtonLabel={t('rotate-button')}
+              actionHandler={() => apiKeyRotated(modal.apiKey?.apiKey as string)}
+            />
           )}
-
-          {deleteApiKey && (
-            <>
-              <Typography variant="h5" sx={{ marginBottom: 2 }}>
-                {t('delete-api-key')}
-              </Typography>
-              <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                <Trans>{t('delete-warning', { apiKeyName: deleteApiKey.name })}</Trans>
-              </Typography>
-              <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
-                <Button variant="outlined" onClick={handleCloseModal} sx={{ mr: 2 }}>
-                  {t('cancel-button')}
-                </Button>
-                <Button variant="contained" onClick={() => apiKeyDeleted(deleteApiKey.apiKey)}>
-                  {t('delete-button')}
-                </Button>
-              </Grid>
-            </>
+          {modal.view === modalApiKeyView.DELETE && (
+            <ApiKeyModal
+              titleSx={{ marginBottom: 2 }}
+              title={t('delete-api-key')}
+              subTitle={<Trans>{t('delete-warning', { apiKeyName: modal.apiKey?.name })}</Trans>}
+              closeButtonLabel={t('cancel-button')}
+              closeModalHandler={handleCloseModal}
+              actionButtonLabel={t('delete-button')}
+              actionHandler={() => apiKeyDeleted(modal.apiKey?.apiKey as string)}
+            />
           )}
         </Box>
       </Dialog>

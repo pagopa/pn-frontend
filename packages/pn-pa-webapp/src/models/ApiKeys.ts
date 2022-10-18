@@ -21,3 +21,12 @@ export enum ApiKeyStatus {
   BLOCKED = 'BLOCKED',
   ROTATED = 'ROTATED',
 }
+
+export enum modalApiKeyView {
+  NONE = 'NONE',
+  VIEW = 'VIEW',
+  BLOCK = 'BLOCK',
+  ENABLE = 'ENABLE',
+  ROTATE = 'ROTATE',
+  DELETE = 'DELETE',
+}

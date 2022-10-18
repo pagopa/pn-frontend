@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
+import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
 const useStyles = makeStyles(() => ({
@@ -42,8 +42,9 @@ const SubTitle = () => {
 
 const NewApiKey = () => {
   const dispatch = useAppDispatch();
-  const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState);
+  const newApiKey = useAppSelector((state: RootState) => state.newApiKeyState.apiKey);
   const isMobile = useIsMobile();
+  const groups = useAppSelector((state: RootState) => state.newApiKeyState.groups);
   const { t } = useTranslation(['apikeys'], { keyPrefix: 'new-api-key' });
   const { t: tc} = useTranslation(['common']);
   const [apiKeySent, setApiKeySent] = useState<boolean>(false);
@@ -59,8 +60,8 @@ const NewApiKey = () => {
   });
 
   useEffect(() => {
-    if (newApiKey.groups.length === 0) {
-      void dispatch(getUserGroups());
+    if (groups.length === 0) {
+      void dispatch(getApiKeyUserGroups());
     }
   }, []);
   
@@ -149,7 +150,7 @@ const NewApiKey = () => {
                           multiple
                           noOptionsText={t('no-groups')}
                           value={formik.values.groups}
-                          options={newApiKey.groups.map((g) => g.name)}
+                          options={groups.map((g) => g.name)}
                           id="groups"
                           getOptionLabel={(option) => option}
                           isOptionEqualToValue={(option: any, value: any) => option === value}
@@ -181,7 +182,7 @@ const NewApiKey = () => {
         </Prompt>
       )}
 
-      {(apiKeySent && newApiKey.apiKey !== '') && <SyncFeedbackApiKey newApiKeyId={newApiKey.apiKey} />}
+      {(apiKeySent && newApiKey !== '') && <SyncFeedbackApiKey newApiKeyId={newApiKey} />}
     </>
   );
 };
