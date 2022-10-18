@@ -39,7 +39,12 @@ const Component = () => (
   </ThemeProvider>
 );
 
-const reduxInitialState = {
+
+/* eslint-disable functional/no-let */
+let mockFetchedTosStatus = false;
+let mockTosStatus = false;
+
+const reduxInitialState = () => ({
   userState: {
     user: {
       fiscal_number: 'mocked-fiscal-number',
@@ -52,16 +57,20 @@ const reduxInitialState = {
       id: '',
       name: '',
     } as Party,
+    fetchedTos: mockFetchedTosStatus,
+    tos: mockTosStatus,
   },
-};
+});
 
 describe('App', () => {
-  beforeAll(() => {
+  beforeEach(() => {
     mockLayout = false;
+    mockFetchedTosStatus = false;
+    mockTosStatus = false;
   });
 
   it('Piattaforma notifiche', () => {
-    render(<Component/>, { preloadedState: reduxInitialState });
+    render(<Component/>, { preloadedState: reduxInitialState() });
     const welcomeElement = screen.getByText(/header.notification-platform/i);
     expect(welcomeElement).toBeInTheDocument();
   });
@@ -74,13 +83,44 @@ describe('App', () => {
 
   it('Sidemenu not included if error in API call to fetch organization', async () => {
     mockLayout = true;
+    mockFetchedTosStatus = true;
+    mockTosStatus = true;
     const mockReduxStateWithApiError = {
-      ...reduxInitialState, 
+      ...reduxInitialState(), 
       appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_ORGANIZATION_PARTY) 
     };
     await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
     const sidemenuComponent = screen.queryByText("sidemenu");
     expect(sidemenuComponent).toBeNull();
+  });
+
+  it('Sidemenu not included if error in API call to fetch TOS', async () => {
+    mockLayout = true;
+    const mockReduxStateWithApiError = {
+      ...reduxInitialState(), 
+      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_TOS_APPROVAL) 
+    };
+    await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
+    const sidemenuComponent = screen.queryByText("sidemenu");
+    expect(sidemenuComponent).toBeNull();
+  });
+
+  it('Sidemenu not included if user has not accepted the TOS', async () => {
+    mockLayout = true;
+    mockFetchedTosStatus = true;
+    mockTosStatus = false;
+    await act(async () => void render(<Component />, { preloadedState: reduxInitialState() }));
+    const sidemenuComponent = screen.queryByText("sidemenu");
+    expect(sidemenuComponent).toBeNull();
+  });
+
+  it('Sidemenu included if user has accepted the TOS', async () => {
+    mockLayout = true;
+    mockFetchedTosStatus = true;
+    mockTosStatus = true;
+    await act(async () => void render(<Component />, { preloadedState: reduxInitialState() }));
+    const sidemenuComponent = screen.queryByText("sidemenu");
+    expect(sidemenuComponent).toBeTruthy();
   });
 });
 

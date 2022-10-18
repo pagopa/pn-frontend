@@ -146,6 +146,22 @@ describe('SessionGuard Component', () => {
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
+  // cosa si aspetta: entra nell'app, fa navigate verso ToS, lancia il session check
+  it('reload - session token presente - TOS non ancora accettate', async () => {
+    const mockReduxState = {
+      userState: { user: { sessionToken: 'mocked-token' } },
+    };
+    mockTosValue = false;
+
+    await act(async () => void render(<SessionGuard />, { preloadedState: mockReduxState }));
+    const pageComponent = screen.queryByText("Generic Page");
+    expect(pageComponent).toBeTruthy();
+
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect((mockNavigateFn.mock.calls[0] as any)[0]).toBe(routes.TOS);
+    expect(mockSessionCheckFn).toBeCalledTimes(1);
+  });
+  
   // cosa si aspetta: non entra nell'app, non lancia il session check
   it('utente riconosciuto - fallisce la chiamata a TOS', async () => {
     mockLocationHash = "#selfCareToken=good_token";
