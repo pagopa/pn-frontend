@@ -15,7 +15,11 @@ import { useTranslation, Trans } from 'react-i18next';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { getApiKeys, setApiKeyStatus, setApiKeyDeleted } from '../redux/apiKeys/actions';
+import {
+  getApiKeys,
+  setApiKeyStatus,
+  setApiKeyDeleted,
+} from '../redux/apiKeys/actions';
 import { ApiKey, ApiKeyStatus, modalApiKeyView } from '../models/ApiKeys';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
@@ -113,6 +117,7 @@ const ApiKeys = () => {
           {t('generated-api-keys')}
         </Typography>
         <Button
+          data-testid="generateApiKey"
           variant="outlined"
           sx={{ marginBottom: isMobile ? 3 : undefined }}
           onClick={handleNewApiKeyClick}

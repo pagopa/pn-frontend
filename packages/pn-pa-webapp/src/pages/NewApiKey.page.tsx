@@ -109,7 +109,7 @@ const NewApiKey = () => {
               <Grid item xs={12} lg={8}>
                 <PnBreadcrumb
                   linkRoute={routes.API_KEYS}
-                  linkLabel="API Keys"
+                  linkLabel={t('page-title')}
                   currentLocationLabel={t('page-title')}
                   goBackLabel={tc('button.indietro')}
                 />

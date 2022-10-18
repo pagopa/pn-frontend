@@ -48,6 +48,7 @@ const CopyToClipboard: React.FC<Props> = ({ getValue, text, tooltipMode, tooltip
       sx={alertButtonStyle}
       onClick={doCopyToClipboard}
       disabled={disabled}
+      aria-label={tooltip}
     >
       {copied && (        
         <Tooltip

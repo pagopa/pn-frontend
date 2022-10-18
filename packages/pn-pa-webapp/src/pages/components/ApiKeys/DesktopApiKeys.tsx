@@ -43,11 +43,13 @@ const DesktopApiKeys = ({
     };
 
     return (
-      <>
+      <Box data-testid="contextMenu">
         <Box>
           <IconButton
             onClick={handleClick}
             size="small"
+            data-testid="contextMenuButton"
+            aria-label="context menu"
             aria-controls={open ? 'context-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
@@ -56,6 +58,7 @@ const DesktopApiKeys = ({
           </IconButton>
         </Box>
         <Menu
+          data-testid="menuContext"
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
@@ -71,13 +74,13 @@ const DesktopApiKeys = ({
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          {row.status !== ApiKeyStatus.ROTATED && <MenuItem onClick={() => handleModalClick(modalApiKeyView.VIEW, apiKeyId)}>{t('context-menu.view')}</MenuItem>}
-          {(row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED) && <MenuItem onClick={() => handleModalClick(modalApiKeyView.ROTATE, apiKeyId)}>{t('context-menu.rotate')}</MenuItem>}
-          {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && <MenuItem onClick={() => handleModalClick(modalApiKeyView.BLOCK, apiKeyId)}>{t('context-menu.block')}</MenuItem>}
-          {row.status === ApiKeyStatus.BLOCKED && <MenuItem onClick={() => handleModalClick(modalApiKeyView.DELETE, apiKeyId)}>{t('context-menu.delete')}</MenuItem>}
-          {row.status === ApiKeyStatus.BLOCKED && <MenuItem onClick={() => handleModalClick(modalApiKeyView.ENABLE, apiKeyId)}>{t('context-menu.enable')}</MenuItem>}
+          {row.status !== ApiKeyStatus.ROTATED && <MenuItem data-testid="buttonView" onClick={() => handleModalClick(modalApiKeyView.VIEW, apiKeyId)}>{t('context-menu.view')}</MenuItem>}
+          {(row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED) && <MenuItem data-testid="buttonRotate" onClick={() => handleModalClick(modalApiKeyView.ROTATE, apiKeyId)}>{t('context-menu.rotate')}</MenuItem>}
+          {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && <MenuItem data-testid="buttonBlock" onClick={() => handleModalClick(modalApiKeyView.BLOCK, apiKeyId)}>{t('context-menu.block')}</MenuItem>}
+          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonDelete" onClick={() => handleModalClick(modalApiKeyView.DELETE, apiKeyId)}>{t('context-menu.delete')}</MenuItem>}
+          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonEnable" onClick={() => handleModalClick(modalApiKeyView.ENABLE, apiKeyId)}>{t('context-menu.enable')}</MenuItem>}
         </Menu>
-      </>
+      </Box>
     );
   };
 
@@ -112,6 +115,7 @@ const DesktopApiKeys = ({
           >
             {`${value.substring(0, 10)}...`}
             <CopyToClipboard
+              data-testid="copyToClipboard"
               disabled={row.status === ApiKeyStatus.ROTATED}
               tooltipMode={true}
               tooltip={t('api-key-copied')}
@@ -183,7 +187,7 @@ const DesktopApiKeys = ({
 
   const rows: Array<Item> = apiKeys.map((n: ApiKey, index) => ({
     ...n,
-    id: index.toString()
+    id: index.toString(),
   }));
 
   return (
@@ -191,9 +195,10 @@ const DesktopApiKeys = ({
       {apiKeys && (
         <Fragment>
           {apiKeys.length > 0 ? (
-            <ItemsTable columns={columns} rows={rows} />
+            <ItemsTable data-testid="tableApiKeys" columns={columns} rows={rows} />
           ) : (
             <EmptyState
+              data-testid="emptyState"
               emptyMessage={t('empty-message')}
               emptyActionLabel={t('empty-action-label')}
               emptyActionCallback={() => alert('Nuova API Key routing da fare')}
