@@ -68,12 +68,13 @@ const AttachmentBox = ({
         )}
       </Box>
       <FileUpload
+        key={`${new Date()}`}
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
         onFileUploaded={(file, sha256, name, size) =>
           onFileUploaded(`${id}.file`, file, sha256, name, size)
         }
-        onRemoveFile={() => onRemoveFile(`${id}.file`)}
+        onRemoveFile={() => onRemoveFile(id)}
         sx={{ marginTop: '10px' }}
         fileFormat="uint8Array"
         calcSha256
@@ -207,12 +208,16 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
       size,
       uint8Array: file,
       sha256,
-      name,
+      name
     });
   };
 
   const removeFileHandler = async (id: string) => {
-    await formik.setFieldValue(id, '');
+    await formik.setFieldValue(`${id}.ref`, {
+      key: '',
+      versionToken: '',
+    });
+    await formik.setFieldValue(`${id}.file`, '');
   };
 
   const addDocumentHandler = async () => {
@@ -272,7 +277,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
             onDelete={() => deleteDocumentHandler(i)}
             fieldLabel={i === 0 ? `${t('act-name')}*` : `${t('doc-name')}*`}
             fieldValue={d.name}
-            fileUploaded={attachmentsData && attachmentsData[i] ? attachmentsData[i] : undefined}
+            fileUploaded={d}
             fieldTouched={
               formik.touched.documents && formik.touched.documents[i]
                 ? formik.touched.documents[i].name

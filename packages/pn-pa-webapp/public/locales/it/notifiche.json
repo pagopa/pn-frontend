@@ -173,6 +173,8 @@
         "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
+        "too-long-denomination-error-PF": "La lunghezza totale di nome e cognome non può superare gli 80 caratteri",
+        "too-long-denomination-error-PG": "La lunghezza della ragione sociale non può superare gli 80 caratteri",
         "legal-entity": "Soggetto giuridico",
         "physical-person": "Persona fisica",
         "name": "Nome",

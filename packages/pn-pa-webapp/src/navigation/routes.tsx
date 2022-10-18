@@ -7,10 +7,13 @@ import Dashboard from '../pages/Dashboard.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
 import NewNotification from '../pages/NewNotification.page';
 // import ApiKeys from '../pages/ApiKeys.page';
+import PrivacyTOSPage from "../pages/PrivacyTOS.page";
+
 import { PNRole } from '../models/user';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { AUTH_ACTIONS, getOrganizationParty } from '../redux/auth/actions';
+import TermsOfService from '../pages/TermsOfService.page';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
 import * as routes from './routes.const';
@@ -46,6 +49,7 @@ function Router() {
         <Route path="/" element={<OrganizationPartyGuard />}>
           {/* protected routes */}
           <Route path="/"  element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
+            <Route path={routes.TOS} element={<TermsOfService />} />
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
             <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
@@ -66,6 +70,8 @@ function Router() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Route>
+      <Route path="*" element={<NotFound />} />
+      <Route path={routes.PRIVACY_TOS} element={<PrivacyTOSPage />} />
     </Routes>
   );
 }

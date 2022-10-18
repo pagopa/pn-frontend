@@ -43,7 +43,7 @@ const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile, fileUploaded }: P
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
         onFileUploaded={(file, sha256, name, size) =>
-          onFileUploaded(id, file as Uint8Array, sha256, name, size)
+          onFileUploaded(`${id}.file`, file as Uint8Array, sha256, name, size)
         }
         onRemoveFile={() => onRemoveFile(id)}
         sx={{ marginTop: '10px' }}
@@ -234,7 +234,11 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
   };
 
   const removeFileHandler = async (id: string) => {
-    await formik.setFieldValue(id, '');
+    await formik.setFieldValue(`${id}.ref`, {
+      key: '',
+      versionToken: '',
+    });
+    await formik.setFieldValue(`${id}.file`, '');
   };
 
   return (
@@ -256,7 +260,7 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
               {t('payment-models')} {recipient.firstName} {recipient.lastName}
             </Typography>
             <PaymentBox
-              id={`${recipient.taxId}.pagoPaForm.file`}
+              id={`${recipient.taxId}.pagoPaForm`}
               title={`${t('attach-pagopa-notice')}*`}
               onFileUploaded={fileUploadedHandler}
               onRemoveFile={removeFileHandler}
@@ -264,7 +268,7 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
             />
             {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
               <PaymentBox
-                id={`${recipient.taxId}.f24flatRate.file`}
+                id={`${recipient.taxId}.f24flatRate`}
                 title={t('attach-f24-flatrate')}
                 onFileUploaded={fileUploadedHandler}
                 onRemoveFile={removeFileHandler}
@@ -273,7 +277,7 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
             )}
             {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
               <PaymentBox
-                id={`${recipient.taxId}.f24standard.file`}
+                id={`${recipient.taxId}.f24standard`}
                 title={t('attach-f24')}
                 onFileUploaded={fileUploadedHandler}
                 onRemoveFile={removeFileHandler}
