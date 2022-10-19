@@ -9,30 +9,8 @@ describe('LoadingPageWrapper component', () => {
     expect(skeleton).toBeInTheDocument();
   });
 
-  it('renders the loading spinner component', () => {
-    const result = render(<LoadingPageWrapper isInitialized>test</LoadingPageWrapper>, {
-        preloadedState: {
-            appState: {
-                loading: {
-                    result: true
-                }
-            }
-        }
-    });
-    const spinner = result.getByTestId('loading-spinner')
-    expect(spinner).toBeInTheDocument();
-  });
-
   it('renders the inner component', () => {
-    const result = render(<LoadingPageWrapper isInitialized><div data-testid="inner-component">test</div></LoadingPageWrapper>, {
-        preloadedState: {
-            appState: {
-                loading: {
-                    result: false
-                }
-            }
-        }
-    });
+    const result = render(<LoadingPageWrapper isInitialized><div data-testid="inner-component">test</div></LoadingPageWrapper>);
     const innerComponent = result.getByTestId('inner-component')
     expect(innerComponent).toBeInTheDocument();
   });
