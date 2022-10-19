@@ -20,7 +20,7 @@ const titleHeight = '36px';
 const LoadingPage = ({ renderType = 'part', layout, sx }: Props) => {
   if (renderType === 'whole') {
     return (
-      <Box p={1} height="100vh" sx={sx}>
+      <Box p={1} height="100vh" sx={sx} data-testid="loading-skeleton">
         <Skeleton
           variant="rectangular"
           width="100%"
@@ -58,7 +58,7 @@ const LoadingPage = ({ renderType = 'part', layout, sx }: Props) => {
   ) : <Skeleton variant="rectangular" width="100%" height={`calc(100% - ${titleHeight} - 80px)`} data-testid="content"/>
 
   return (
-    <Box p={2} height="100%" sx={sx}>
+    <Box p={2} height="100%" sx={sx} data-testid="loading-skeleton">
       <Skeleton variant="rectangular" height={titleHeight} sx={{ marginBottom: 2 }} data-testid="title"/>
       <Skeleton sx={{ marginBottom: 4 }} data-testid="subTitle"/>
       {pageLayout}

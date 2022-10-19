@@ -1,7 +1,17 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import {
+  calculatePages,
+  CustomPagination,
+  PaginationData,
+  Sort,
+  TitleBox,
+  useIsMobile,
+  getNextDay,
+  formatToTimezoneString,
+  ApiErrorWrapper,
+} from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
@@ -11,18 +21,18 @@ import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { Delegator } from '../redux/delegation/types';
-import { trackEventByType } from "../utils/mixpanel";
-import { TrackEventType } from "../utils/events";
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 import { NotificationColumn } from '../models/Notifications';
-
-
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const { mandateId } = useParams();
-  
+  const [pageReady, setPageReady] = useState(false);
+
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
@@ -60,13 +70,13 @@ const Notifiche = () => {
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
 
-    void dispatch(getReceivedNotifications({
-      ...params,
-      endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
-    }));
+    void dispatch(
+      getReceivedNotifications({
+        ...params,
+        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
+      })
+    ).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page, pagination.nextPagesKey]);
-  
-
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -92,50 +102,55 @@ const Notifiche = () => {
   }, [fetchNotifications, currentDelegator]);
 
   return (
-    <Box p={3}>
-      <DomicileBanner />
-      <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
-      <ApiErrorWrapper apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS} reloadAction={fetchNotifications}>
-        {isMobile ? (
-          <MobileNotifications
-            notifications={notifications}
-            sort={sort}
-            onChangeSorting={handleChangeSorting}
-            currentDelegator={currentDelegator}
-          />
-        ) : (
-          <DesktopNotifications
-            notifications={notifications}
-            sort={sort}
-            onChangeSorting={handleChangeSorting}
-            currentDelegator={currentDelegator}
-          />
-        )}
-        {notifications.length > 0 && (
-          <CustomPagination
-            paginationData={{
-              size: pagination.size,
-              page: pagination.page,
-              totalElements,
-            }}
-            onPageRequest={handleChangePage}
-            pagesToShow={pagesToShow}
-            eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
-            sx={
-              isMobile
-                ? {
-                    padding: '0',
-                    '& .items-per-page-selector button': {
-                      paddingLeft: 0,
-                      height: '24px',
-                    },
-                  }
-                : { padding: '0 10px' }
-            }
-          />
-        )}
-      </ApiErrorWrapper>
-    </Box>
+    <LoadingPageWrapper isInitialized={pageReady}>
+      <Box p={3}>
+        <DomicileBanner />
+        <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
+        <ApiErrorWrapper
+          apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
+          reloadAction={fetchNotifications}
+        >
+          {isMobile ? (
+            <MobileNotifications
+              notifications={notifications}
+              sort={sort}
+              onChangeSorting={handleChangeSorting}
+              currentDelegator={currentDelegator}
+            />
+          ) : (
+            <DesktopNotifications
+              notifications={notifications}
+              sort={sort}
+              onChangeSorting={handleChangeSorting}
+              currentDelegator={currentDelegator}
+            />
+          )}
+          {notifications.length > 0 && (
+            <CustomPagination
+              paginationData={{
+                size: pagination.size,
+                page: pagination.page,
+                totalElements,
+              }}
+              onPageRequest={handleChangePage}
+              pagesToShow={pagesToShow}
+              eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
+              sx={
+                isMobile
+                  ? {
+                      padding: '0',
+                      '& .items-per-page-selector button': {
+                        paddingLeft: 0,
+                        height: '24px',
+                      },
+                    }
+                  : { padding: '0 10px' }
+              }
+            />
+          )}
+        </ApiErrorWrapper>
+      </Box>
+    </LoadingPageWrapper>
   );
 };
 
