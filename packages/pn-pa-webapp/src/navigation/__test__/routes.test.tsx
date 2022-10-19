@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
-import { act, fireEvent, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { act, screen } from '@testing-library/react';
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 import { render, renderWithoutRouter } from '../../__test__/test-utils';
 import { AUTH_ACTIONS } from '../../redux/auth/actions';
@@ -49,42 +48,8 @@ jest.mock('../../pages/Dashboard.page', () =>
 );
 
 
-const FakeComponent = () => {
-  const [status, setStatus] = useState("Closed");
-
-  return <>
-    <div data-testid="statusDisplay">{status}</div>
-    <button data-testid="changeStatus" onClick={() => setStatus("Open")}>Change status</button>
-  </>;
-};
-
-const FakeRouter = () => {
-  // const navigate = useNavigate();
-  const location = useLocation();
-   
-  useEffect(() => {
-    console.log("in FakeRouter");
-    console.log({href: window.location.href, toString: window.location.toString(), host: window.location.host, pathname: window.location.pathname });
-    console.log(location);
-    // if (location.pathname === "/") {
-    //   navigate("/a");
-    // }
-  }, []);
-  
-  return <>
-    <div data-testid="title">The title</div>;
-    
-    <Routes>
-      <Route path="/a" element={<div data-testid="route-a">Route A</div>} />
-      <Route path="/b" element={<div data-testid="route-b">Route B</div>} />
-      <Route path="*" element={<div data-testid="route-not-found">Not found</div>} />
-    </Routes>
-  </>;
-}
-
 describe("router", () => {
   beforeEach(() => {
-    // mockLocationPathname = "/";
     mockTosValue = true;
   });
 
@@ -97,36 +62,6 @@ describe("router", () => {
   
     await act(async () => void render(<Router />, { preloadedState: mockReduxState }));
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
-  });
-
-  it.skip("interaction example", async () => {
-    await act(async () => void render(<FakeComponent />));
-    const statusDisplayComponent = screen.getByTestId("statusDisplay"); 
-    const statusChangeButton = screen.getByTestId("changeStatus");  
-    expect(statusDisplayComponent).toHaveTextContent("Closed");
-    fireEvent.click(statusChangeButton);
-    expect(statusDisplayComponent).toHaveTextContent("Open");
-  });
-
-  it.skip("router example - doesn't work this way", async () => {
-    // mockLocationPathname = "/a";
-    // window.location = {...window.location, pathname: "/a"};
-    // window.location.assign("http://localhost/a");
-    // console.log("in test");
-    console.log({href: window.location.href, toString: window.location.toString(), host: window.location.host, pathname: window.location.pathname });
-    await act(async () => void render(<FakeRouter />));
-    const routeAComponent = screen.queryByTestId("route-a"); 
-    const routeBComponent = screen.queryByTestId("route-b"); 
-    expect(routeAComponent).toBeInTheDocument();
-    expect(routeBComponent).not.toBeInTheDocument();
-  });
-
-  it.skip("router example - attempt using MemoryRouter", async () => {
-    await act(async () => void renderWithoutRouter(<MemoryRouter initialEntries={["/a"]}><FakeRouter /></MemoryRouter>));
-    const routeAComponent = screen.queryByTestId("route-a"); 
-    const routeBComponent = screen.queryByTestId("route-b"); 
-    expect(routeAComponent).toBeInTheDocument();
-    expect(routeBComponent).not.toBeInTheDocument();
   });
 
   // expected behavior: to be redirected automatically to /dashboard

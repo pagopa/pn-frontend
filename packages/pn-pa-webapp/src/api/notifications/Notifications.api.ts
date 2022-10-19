@@ -22,10 +22,6 @@ import {
 } from './notifications.routes';
 
 
-/* eslint-disable-next-line functional/no-let */
-let callCounter = 0;
-
-
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };
@@ -42,10 +38,6 @@ export const NotificationsApi = {
    */
   getSentNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
     apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
-      callCounter++;
-      if (callCounter % 3 === 0) {
-        return Promise.reject({ response: { status: 500 }});
-      }
       if (response.data && response.data.resultsPage) {
         const notifications = response.data.resultsPage.map((d) => ({
           ...d,
@@ -70,10 +62,6 @@ export const NotificationsApi = {
    */
   getSentNotification: (iun: string): Promise<NotificationDetail> =>
     apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
-      callCounter++;
-      if (callCounter % 5 === 0) {
-        return Promise.reject({ response: { status: 500 } });
-      }
       if (response.data) {
         return parseNotificationDetail(response.data);
       }
@@ -108,13 +96,7 @@ export const NotificationsApi = {
    * @returns Promise
    */
   getUserGroups: (status?: GroupStatus): Promise<Array<UserGroup>> =>
-    apiClient.get<Array<UserGroup>>(GET_USER_GROUPS(status)).then((response) => { 
-      callCounter++;
-      if (callCounter % 2 === 0) {
-        return Promise.reject({ response: { status: 500 } });
-      }
-      return response.data; 
-    }),
+    apiClient.get<Array<UserGroup>>(GET_USER_GROUPS(status)).then((response) => response.data),
 
   /**
    * Preload notification document

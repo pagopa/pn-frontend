@@ -161,12 +161,7 @@ export const createNewNotification = createAsyncThunk<NewNotificationResponse, N
     try {
       const mappedNotification = newNotificationMapper(notification);
       console.log(mappedNotification);
-      // return await NotificationsApi.createNewNotification(mappedNotification);
-      return Promise.resolve({
-        notificationRequestId: "ID-1",
-        paProtocolNumber: "PROTOCOL-1",
-        idempotenceToken: "TOKEN-1"
-      });
+      return await NotificationsApi.createNewNotification(mappedNotification);
     } catch (e) {
       return rejectWithValue(e);
     }
