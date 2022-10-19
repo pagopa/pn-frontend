@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
-import { LoadingPage } from '@pagopa-pn/pn-commons';
+import { appStateSelectors, LoadingOverlay, LoadingPage } from '@pagopa-pn/pn-commons';
+import { useAppSelector } from '../../redux/hooks';
 
 const LoadingPageWrapper = ({
   children,
@@ -7,15 +8,20 @@ const LoadingPageWrapper = ({
 }: {
   children: ReactNode;
   isInitialized?: boolean;
-}) => (
-  <>
-    {!isInitialized && (
-      <LoadingPage
-        sx={{ position: 'absolute', width: '100%', zIndex: 3, backgroundColor: 'white' }}
-      />
-    )}
-    {children}
-  </>
-);
+}) => {
+  const loading = useAppSelector(appStateSelectors.selectLoading);
+  
+  return (
+    <>
+      {!isInitialized && (
+        <LoadingPage
+          sx={{ position: 'absolute', width: '100%', zIndex: 3, backgroundColor: 'white' }}
+        />
+      )}
+      {isInitialized && loading && <LoadingOverlay />}
+      {children}
+    </>
+  );
+};
 
 export default LoadingPageWrapper;

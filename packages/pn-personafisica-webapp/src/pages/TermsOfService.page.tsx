@@ -1,9 +1,10 @@
-import { Fragment, ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Trans } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Grid } from '@mui/material';
 import { TermsOfServiceHandler, useIsMobile } from '@pagopa-pn/pn-commons';
 
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
@@ -32,7 +33,7 @@ const TermsOfService = () => {
   }, [tos]);
 
   return (
-    <Fragment>
+    <LoadingPageWrapper isInitialized>
       <Grid container justifyContent="center" my={isMobile ? 4 : 16}>
         <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
           <TermsOfServiceHandler
@@ -45,7 +46,7 @@ const TermsOfService = () => {
           />
         </Grid>
       </Grid>
-    </Fragment>
+    </LoadingPageWrapper>
   );
 };
 
