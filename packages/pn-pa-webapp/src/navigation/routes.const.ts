@@ -11,7 +11,7 @@ export const ID_PN_SEGMENT = 'prod-pn';
 export const GROUPS_SEGMENT = '/groups';
 export const TOS = '/tos';
 export const PRIVACY_POLICY = `/informativa-privacy`;
-export const TERMS_OF_SERVICE = `/informativa-privacy`;
+export const TERMS_OF_SERVICE = `/termini-di-servizio`;
 
 /** ROLES navigation link to SelfCare "Referenti" section for Piattaforma Notifiche
  * @param idOrganization

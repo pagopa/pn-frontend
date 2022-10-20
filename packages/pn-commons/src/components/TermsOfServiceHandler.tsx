@@ -1,9 +1,8 @@
 import { ReactNode, useState } from 'react';
 import { Box, Typography, Switch, Link, Button } from '@mui/material';
 
-import { PRIVACY_LINK_RELATIVE_PATH } from '../utils';
+import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from '../utils';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
-import { TOS_LINK_RELATIVE_PATH } from "../utils/costants";
 
 type Props = {
   handleAcceptTos: () => void;
