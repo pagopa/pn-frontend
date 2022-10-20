@@ -24,7 +24,7 @@ import { formatCurrency, formatEurocentToCurrency } from './currency.utility';
 import { basicUserDataMatcherContents, basicInitialUserData, adaptedTokenExchangeError } from './user.utility';
 import { storageOpsBuilder } from './storage.utility';
 import { compileRoute } from './routes.utility';
-import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './costants';
+import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import { mockApiErrorWrapper, simpleMockForApiErrorWrapper, apiOutcomeTestHelper } from './test.utility';
 import { performThunkAction } from './redux.utility';
 
@@ -58,6 +58,7 @@ export {
     adaptedTokenExchangeError, 
     URL_DIGITAL_NOTIFICATIONS,
     PRIVACY_LINK_RELATIVE_PATH,
+    TOS_LINK_RELATIVE_PATH,
     mockApiErrorWrapper,
     apiOutcomeTestHelper,
     simpleMockForApiErrorWrapper,
