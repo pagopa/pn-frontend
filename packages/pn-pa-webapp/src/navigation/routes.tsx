@@ -40,10 +40,9 @@ function Router() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Route>
-      <Route path="*" element={<NotFound />} />
-      {/* PN-2391 element will be fixed in PN-2394 */}
       <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
       <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
