@@ -7,13 +7,10 @@ export const LANGUAGES = {
   en: { it: 'Italian', en: 'English' },
 };
 
-const isDev = process.env.NODE_ENV === 'development';
-const pathEnd = isDev ? '' : 'index.html';
-
 export const URL_DIGITAL_NOTIFICATIONS = 'https://www.notifichedigitali.pagopa.it/';
 export const PRIVACY_LINK_RELATIVE_PATH = '/informativa-privacy';
 export const TOS_LINK_RELATIVE_PATH = '/termini-di-servizio';
-const ACCESSIBILITY_LINK_RELATIVE_PATH = 'cittadini/accessibilita/' + pathEnd;
+const ACCESSIBILITY_LINK_RELATIVE_PATH = 'cittadini/accessibilita/';
 
 const getFooterLinkLabels = (
   link: string,
