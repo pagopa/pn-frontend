@@ -9,12 +9,11 @@ import {
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { AUTH_ACTIONS, exchangeToken, getToSApproval, logout } from '../redux/auth/actions';
+import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
 import { getHomePage } from '../utils/role.utility';
-import * as routes from './routes.const';
 import { goToSelfcareLogin } from './navigation.utility';
 
 enum INITIALIZATION_STEPS {
@@ -26,7 +25,6 @@ enum INITIALIZATION_STEPS {
 
 const INITIALIZATION_SEQUENCE = [
   INITIALIZATION_STEPS.USER_DETERMINATION,
-  INITIALIZATION_STEPS.FETCH_TOS_STATUS,
   INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION,
   INITIALIZATION_STEPS.SESSION_CHECK,
 ];
@@ -88,7 +86,7 @@ const SessionGuard = () => {
   const { sessionToken, desired_exp: expDate } = useAppSelector(
     (state: RootState) => state.userState.user
   );
-  const { isClosedSession, tos } = useAppSelector((state: RootState) => state.userState);
+  const { isClosedSession } = useAppSelector((state: RootState) => state.userState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
@@ -130,31 +128,14 @@ const SessionGuard = () => {
   }, [performStep, getTokenParam, sessionToken]);
 
   /**
-   * Step 2 - ottenere TOS status
-   * NB: questo l'ho definito in uno step separato, per essere sicuro che nello step successivo
-   *     l'attributo tos dello store sia settato.
-   *     Avevo fatto un'altra implementazione nella cui si prendeva il risultato del dispatch,
-   *     ma questo faceva andare alcuni tests in errore. Perciò ho adottato questa soluzione.
-   */
-   useEffect(() => {
-    const doFetchTOSStatus = async () => {
-      // l'analisi delle TOS ha senso solo se c'è un utente
-      if (sessionToken && !isClosedSession) {
-        await dispatch(getToSApproval());
-      }
-    };
-    void performStep(INITIALIZATION_STEPS.FETCH_TOS_STATUS, doFetchTOSStatus);
-  }, [performStep]);
-
-  /**
-   * Step 3 - determinazione pagina iniziale
+   * Step 2 - determinazione pagina iniziale
    */
   useEffect(() => {
     const doInitalPageDetermination = async () => {
       // non si setta initial page se è un session reload
       if (sessionToken && !isClosedSession && !hasTosApiErrors) {
         // non si setta initial page se è un session reload di un utente che ha già accettato i TOS
-        const initialPage = tos ? (isSessionReload ? undefined : getHomePage()) : routes.TOS;
+        const initialPage = isSessionReload ? undefined : getHomePage();
         if (initialPage) {
           navigate(initialPage, { replace: true });
         }
@@ -164,7 +145,7 @@ const SessionGuard = () => {
   }, [performStep, sessionToken, isClosedSession, isSessionReload]);
 
   /**
-   * Step 4 - lancio del sessionCheck
+   * Step 3 - lancio del sessionCheck
    */
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {

@@ -23,7 +23,7 @@ import { Box } from '@mui/material';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
-import { logout } from './redux/auth/actions';
+import { getToSApproval, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
 import { RootState } from './redux/store';
@@ -106,17 +106,13 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getDomicileInfo());
-    }
-  }, [sessionToken]);
-
-  useEffect(() => {
-    if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
+      void dispatch(getToSApproval());
     }
   }, [sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
-    // implementazione esplorativa su come potrebbe gestirse l'errore dell'API
+    // Implementazione esplorativa su come potrebbe gestire l'errore dell'API
     // che restituisce i delegators per il sideMenu.
     //
     // attenzione - per far funzionare questo si deve cambiare dove dice

@@ -1,5 +1,6 @@
 import { AccessDenied } from "@pagopa-pn/pn-commons";
 import { Outlet, useNavigate } from "react-router-dom";
+
 import { PNRole } from "../models/user";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
@@ -20,11 +21,12 @@ const RouteGuard = ({ roles }: Props) => {
   const role = useAppSelector((state: RootState) => state.userState.user.organization?.roles[0]);
 
   const userHasRequiredRole = !roles || (role && roles.includes(role.role));
+  console.debug('user has role and session token', !userHasRequiredRole, !sessionToken);
 
-  if (!sessionToken && !userHasRequiredRole) {
+  if (!sessionToken || !userHasRequiredRole) {
     return (
       <AccessDenied
-        isLogged={false}
+        isLogged={!!sessionToken}
         goToHomePage={() => navigate(getHomePage(), {replace: true})}
         goToLogin={() => goToSelfcareLogin()}
       />
