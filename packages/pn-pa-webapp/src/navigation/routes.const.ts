@@ -1,3 +1,4 @@
+import { PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY, TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE } from "@pagopa-pn/pn-commons";
 import { SELFCARE_BASE_URL } from '../utils/constants';
 
 export const DASHBOARD = '/dashboard';
@@ -10,7 +11,7 @@ export const ROLES_SEGMENT = '/users';
 export const ID_PN_SEGMENT = 'prod-pn';
 export const GROUPS_SEGMENT = '/groups';
 export const TOS = '/tos';
-export const PRIVACY_TOS = `/privacy-tos`;
+export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 
 /** ROLES navigation link to SelfCare "Referenti" section for Piattaforma Notifiche
  * @param idOrganization
