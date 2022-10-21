@@ -1,3 +1,5 @@
+import { PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY, TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE } from "@pagopa-pn/pn-commons";
+
 export const NOTIFICHE = '/notifiche';
 export const NOTIFICHE_DELEGATO = `${NOTIFICHE}/:mandateId`;
 export const DELEGHE = '/deleghe';
@@ -11,5 +13,5 @@ export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: stri
 export const RECAPITI = '/recapiti';
 export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/${mandateId}`;
 export const TOS = `/tos`;
-export const PRIVACY_POLICY = `/informativa-privacy`;
-export const TERMS_OF_SERVICE = `/termini-di-servizio`;
+export { PRIVACY_POLICY, TERMS_OF_SERVICE };
+

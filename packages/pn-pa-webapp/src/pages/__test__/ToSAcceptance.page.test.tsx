@@ -1,6 +1,6 @@
 import * as redux from 'react-redux';
 import { render } from '../../__test__/test-utils';
-import TermsOfService from '../TermsOfService.page';
+import ToSAcceptance from '../ToSAcceptance.page';
 
 const mockNavigateFn = jest.fn();
 const mockDispatchFn = jest.fn();
@@ -26,7 +26,7 @@ describe('test Terms of Service page', () => {
   });
 
   it('checks the texts in the page', () => {
-    const result = render(<TermsOfService />);
+    const result = render(<ToSAcceptance />);
 
     expect(result.container).toHaveTextContent(/Piattaforma Notifiche/i);
     expect(result.container).toHaveTextContent(/Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso./i);
