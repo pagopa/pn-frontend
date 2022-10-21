@@ -4,7 +4,6 @@ import { PNRole } from "../models/user";
 import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { getHomePage } from "../utils/role.utility";
-import * as routes from './routes.const';
 import { goToSelfcareLogin } from "./navigation.utility";
 
 /**
@@ -19,17 +18,19 @@ const RouteGuard = ({ roles }: Props) => {
   const navigate = useNavigate();
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
   const role = useAppSelector((state: RootState) => state.userState.user.organization?.roles[0]);
-  const { tos } = useAppSelector((state: RootState) => state.userState);
 
   const userHasRequiredRole = !roles || (role && roles.includes(role.role));
 
-  return !!sessionToken && userHasRequiredRole 
-    ? <Outlet /> 
-    : <AccessDenied isLogged={!!sessionToken} 
-        goToHomePage={() => navigate(tos ? getHomePage() : routes.TOS, {replace: true})}
+  if (!sessionToken && !userHasRequiredRole) {
+    return (
+      <AccessDenied
+        isLogged={false}
+        goToHomePage={() => navigate(getHomePage(), {replace: true})}
         goToLogin={() => goToSelfcareLogin()}
       />
-  ;
+    );}
+
+  return <Outlet />;
 };
 
 export default RouteGuard;
