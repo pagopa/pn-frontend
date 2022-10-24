@@ -48,7 +48,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { tos } = useAppSelector((state: RootState) => state.userState);
+  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
@@ -226,7 +226,7 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!!sessionToken && tos && !isPrivacyPage}
+        showSideMenu={!!sessionToken && tos && fetchedTos && !isPrivacyPage}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown
