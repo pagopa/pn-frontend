@@ -201,6 +201,12 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               label={t('pagopa-notice-f24')}
               data-testid="paymentMethodRadio"
             />
+            <FormControlLabel
+              value={PaymentModel.NOTHING}
+              control={<Radio />}
+              label={t('nothing')}
+              data-testid="paymentMethodRadio"
+            />
           </RadioGroup>
         </FormControl>
       </NewNotificationCard>
