@@ -1,7 +1,17 @@
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { calculatePages, CustomPagination, PaginationData, Sort, TitleBox, useIsMobile, getNextDay, formatToTimezoneString, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import {
+  calculatePages,
+  CustomPagination,
+  PaginationData,
+  Sort,
+  TitleBox,
+  useIsMobile,
+  getNextDay,
+  formatToTimezoneString,
+  ApiErrorWrapper,
+} from '@pagopa-pn/pn-commons';
 
 import { useParams } from 'react-router-dom';
 import { DASHBOARD_ACTIONS, getReceivedNotifications } from '../redux/dashboard/actions';
@@ -12,17 +22,15 @@ import DesktopNotifications from '../component/Notifications/DesktopNotification
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { Delegator } from '../redux/delegation/types';
-import { trackEventByType } from "../utils/mixpanel";
-import { TrackEventType } from "../utils/events";
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 import { NotificationColumn } from '../models/Notifications';
-
-
 
 const Notifiche = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const { mandateId } = useParams();
-  
+
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
   );
@@ -60,13 +68,19 @@ const Notifiche = () => {
         pagination.page === 0 ? undefined : pagination.nextPagesKey[pagination.page - 1],
     };
 
-    void dispatch(getReceivedNotifications({
-      ...params,
-      endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
-    }));
-  }, [filters, pagination.size, pagination.page, pagination.nextPagesKey]);
-  
-
+    void dispatch(
+      getReceivedNotifications({
+        ...params,
+        endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
+      })
+    );
+  }, [filters, pagination.size, pagination.page]);
+  // PN-2433
+  /*
+  From dependencies of useCallback has been removed pagination.nextPagesKey.
+  This parameters can be updated when the notification list api is called and this can causes an update of the function and another api call.
+  Because this parameter is closely related to other dependencies and never change alone, it can be removed from dependency array.
+  */
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -95,7 +109,10 @@ const Notifiche = () => {
     <Box p={3}>
       <DomicileBanner />
       <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
-      <ApiErrorWrapper apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS} reloadAction={fetchNotifications}>
+      <ApiErrorWrapper
+        apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
+        reloadAction={fetchNotifications}
+      >
         {isMobile ? (
           <MobileNotifications
             notifications={notifications}
