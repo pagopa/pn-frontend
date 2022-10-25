@@ -11,6 +11,8 @@ import {
   DATE_FORMAT,
   formatIun,
   getNotificationAllowedStatus,
+  tenYearsAgo,
+  today,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
 
@@ -113,8 +115,9 @@ const FilterNotificationsFormBody = ({
           inputFormat={DATE_FORMAT}
           value={startDate}
           onChange={(value: DatePickerTypes) => {
-            void formikInstance.setFieldValue('startDate', value).then(() => {
-              setStartDate(value);
+            const value2 = value || tenYearsAgo;
+            void formikInstance.setFieldValue('startDate', value2).then(() => {
+              setStartDate(value2);
               trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'from date' });
             });
           }}
@@ -152,9 +155,10 @@ const FilterNotificationsFormBody = ({
           inputFormat={DATE_FORMAT}
           value={endDate}
           onChange={(value: DatePickerTypes) => {
-            void formikInstance.setFieldValue('endDate', value).then(() => {
+            const value2 = value || today;
+            void formikInstance.setFieldValue('endDate', value2).then(() => {
               trackEventByType(TrackEventType.NOTIFICATION_FILTER_DATE, { source: 'to date' });
-              setEndDate(value);
+              setEndDate(value2);
             });
           }}
           renderInput={(params) => (

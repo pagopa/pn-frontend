@@ -57,7 +57,7 @@ const initialValues = (
   emptyValues: {
     startDate: string;
     endDate: string;
-    iunMatch: undefined;
+    iunMatch: string;
     mandateId: string | undefined;
   }
 ) => {
@@ -83,7 +83,7 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
   const emptyValues = {
     startDate: formatToTimezoneString(tenYearsAgo),
     endDate: formatToTimezoneString(today),
-    iunMatch: undefined,
+    iunMatch: '',
     mandateId: currentDelegator?.mandateId,
   };
 

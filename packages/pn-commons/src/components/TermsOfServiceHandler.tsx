@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { Box, Typography, Switch, Link, Button } from '@mui/material';
 
-import { PRIVACY_LINK_RELATIVE_PATH } from '../utils';
+import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from '../utils';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 type Props = {
@@ -13,9 +13,9 @@ const TermsOfServiceHandler = ({ handleAcceptTos, transComponent }: Props) => {
   const [accepted, setAccepted] = useState(false);
 
   const redirectPrivacyLink = () =>
-    window.location.assign(`${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}#privacy`);
+    window.location.assign(`${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`);
   const redirectToSLink = () =>
-    window.location.assign(`${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}#tos`);
+    window.location.assign(`${window.location.origin}${TOS_LINK_RELATIVE_PATH}`);
 
   const PrivacyLink = ({ children }: { children?: ReactNode }) => (
     <Link

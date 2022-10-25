@@ -42,6 +42,8 @@ type Props = {
   /** Layout visibility conditions */
   showHeader?: boolean;
   showFooter?: boolean;
+  /** Shows or hides terms of service */
+  hasTermsOfService?: boolean;
 };
 
 export default function Layout({
@@ -62,7 +64,8 @@ export default function Layout({
   onAssistanceClick,
   isLogged,
   showHeader = true,
-  showFooter = true
+  showFooter = true,
+  hasTermsOfService
 }: Props) {
   return (
     <ErrorBoundary sx={{ height: 'calc(100vh - 5px)' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
@@ -100,6 +103,7 @@ export default function Layout({
               loggedUser={loggedUser.id !== ''}
               onLanguageChanged={onLanguageChanged}
               eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
+              hasTermsOfService={hasTermsOfService}
             />}
           </>
       </Stack>
