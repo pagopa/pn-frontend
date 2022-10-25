@@ -1,5 +1,5 @@
 import { compileRoute } from "@pagopa-pn/pn-commons";
-import { GetDowntimeHistoryParams } from "./appStatus.api.types";
+import { GetDowntimeHistoryParams } from "../../models/appStatus";
 
 const API_DOWNTIME_PREFIX = 'downtime';
 const API_VERSION_SEGMENT = 'v1';

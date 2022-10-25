@@ -1,4 +1,4 @@
-import { KnownFunctionality } from "../appStatus.api.types";
+import { KnownFunctionality } from "../../../models/appStatus";
 import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from "../appStatus.routes";
 
 describe("AppStatus routes", () => {
