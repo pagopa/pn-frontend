@@ -1,4 +1,4 @@
-import { BEIncident, BEIncidentValidator, BEStatus, BEStatusValidator } from "../appStatus";
+import { BEDowntimePage, BEDowntimePageValidator, BEIncident, BEIncidentValidator, BEStatus, BEStatusValidator } from "../appStatus";
 
 describe("App Status model test", () => {
   it("incident validator - minimal valid incident", () => {
@@ -203,4 +203,98 @@ describe("App Status model test", () => {
     expect(validationResult?.functionalities).toBeUndefined();
     expect(validationResult?.openIncidents).not.toBeUndefined();
   });
+
+  it("downtime page validator - valid page with no downtime events", () => {
+    const downtimePage: BEDowntimePage = {
+      result: [],
+    };
+    expect(new BEDowntimePageValidator().validate(downtimePage)).toBeNull(); 
+  });
+
+  it("downtime page validator - valid page with three downtime events", () => {
+    const downtimePage: BEDowntimePage = {
+      result: [
+        {
+          functionality: "NOTIFICATION_CREATE",
+          status: "OK",
+          startDate: "2022-10-21T06:07:08Z",
+          endDate: "2022-10-21T06:07:12Z",
+          legalFactId: "some-legal-fact-id",
+          fileAvailable: true,
+        },
+        {
+          functionality: "NOTIFICATION_CREATE",
+          status: "OK",
+          startDate: "2022-10-21T06:07:15Z",
+          endDate: "2022-10-21T06:07:17Z",
+          fileAvailable: false,
+        },
+        {
+          functionality: "NOTIFICATION_WORKFLOW",
+          status: "KO",
+          startDate: "2022-10-21T08:15:25Z",
+        }
+      ],
+      nextPage: "some-next-page",
+    };
+    expect(new BEDowntimePageValidator().validate(downtimePage)).toBeNull(); 
+  });
+
+  it("downtime page validator - invalid page - ill-formed incident", () => {
+    const downtimePage: any = {
+      result: [
+        {
+          functionality: "NOTIFICATION_CREATE",
+          status: "OK",
+          startDate: "2022-10-21T06:07:08Z",
+          endDate: "2022-10-21T06:07:12Z",
+          legalFactId: "some-legal-fact-id",
+          fileAvailable: true,
+        },
+        {
+          functionality: 45,
+          status: "OK",
+          startDate: "2022-10-21T06:07:15Z",
+          endDate: "2022-10-21T06:07:17Z",
+          fileAvailable: false,
+        },
+        {
+          functionality: "NOTIFICATION_WORKFLOW",
+          status: "KO",
+          startDate: "2022-10-21T08:15:25Z",
+        }
+      ],
+      nextPage: "some-next-page",
+    };
+    const validationResult = new BEDowntimePageValidator().validate(downtimePage);
+    expect(validationResult).not.toBeNull();
+    expect(validationResult?.result).not.toBeUndefined();
+    expect(validationResult?.nextPage).toBeUndefined();
+  });
+
+  it("downtime page validator - invalid page - wrong-type nextPage", () => {
+    const downtimePage: any = {
+      result: [
+        {
+          functionality: "NOTIFICATION_CREATE",
+          status: "OK",
+          startDate: "2022-10-21T06:07:08Z",
+          endDate: "2022-10-21T06:07:12Z",
+          legalFactId: "some-legal-fact-id",
+          fileAvailable: true,
+        },
+        {
+          functionality: "NOTIFICATION_WORKFLOW",
+          status: "KO",
+          startDate: "2022-10-21T08:15:25Z",
+        }
+      ],
+      nextPage: {a: 4, b: 28},
+    };
+    const validationResult = new BEDowntimePageValidator().validate(downtimePage);
+    expect(validationResult).not.toBeNull();
+    expect(validationResult?.result).toBeUndefined();
+    expect(validationResult?.nextPage).not.toBeUndefined();
+  });
+
 });

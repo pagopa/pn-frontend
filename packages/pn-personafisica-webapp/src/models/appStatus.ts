@@ -64,6 +64,12 @@ export interface BEStatus {
   openIncidents: BEIncident[];
 }
 
+export interface BEDowntimePage {
+  result: BEIncident[];
+  nextPage?: string;
+}
+
+
 
 /* ------------------------------------------------------------------------
    validation - custom validators
@@ -112,6 +118,13 @@ export class BEStatusValidator extends Validator<BEStatus> {
   }
 }
 
+export class BEDowntimePageValidator extends Validator<BEDowntimePage> {
+  constructor() {
+    super();
+    this.ruleFor('result').forEachElement(rules => rules.setValidator(new BEIncidentValidator())).isUndefined(true);
+    this.ruleFor('nextPage').customValidator(validateString);
+  }
+}
 
 
 /* ------------------------------------------------------------------------
@@ -140,4 +153,7 @@ export interface AppCurrentStatus {
   statusByFunctionality: FunctionalityStatus[];
 }
 
-
+export interface IncidentPage {
+  incidents: Incident[];
+  nextPage?: string;
+}

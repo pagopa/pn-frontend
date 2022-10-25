@@ -1,9 +1,7 @@
-import * as yup from 'yup';
-import { dataRegex, minutesBeforeNow } from '@pagopa-pn/pn-commons';
-import { AppCurrentStatus, BEIncident, BEStatus, BEStatusValidator, FunctionalityStatus, Incident, IncidentStatus, isKnownFunctionality, KnownFunctionality } from '../../models/appStatus';
+import { minutesBeforeNow } from '@pagopa-pn/pn-commons';
+import { AppCurrentStatus, BEDowntimePageValidator, BEIncident, BEStatus, BEStatusValidator, FunctionalityStatus, GetDowntimeHistoryParams, Incident, IncidentPage, IncidentStatus, isKnownFunctionality, KnownFunctionality } from '../../models/appStatus';
 import { apiClient } from '../axios';
-import { DOWNTIME_STATUS } from './appStatus.routes';
-import { Validator } from '@pagopa-pn/pn-validator';
+import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from './appStatus.routes';
 
 interface BEDowntimePage {
   result: BEIncident[];
@@ -32,35 +30,30 @@ const statusResponseExample: BEStatus = {
   }],
 };
   
-  
-  // const beIncidentMatcher = yup.object({
-//   functionality: yup.string().required(),
-//   status: yup.string().oneOf(Object.values(IncidentStatus) as string[]).required(),
-//   startDate: yup.string().matches(dataRegex.isoDate).test(
-//     'is-real-date',
-//     "is not a real date",
-//     (value) => !value || !Number.isNaN(Date.parse(value))
-//   ).required(),
-//   endDate: yup.string().matches(dataRegex.isoDate).test(
-//     'is-real-date',
-//     "is not a real date",
-//     (value) => !value || !Number.isNaN(Date.parse(value))
-//   ).notRequired(),
-//   legalFactId: yup.string().notRequired(),
-//   fileAvailable: yup.boolean().notRequired(),
-// });
-
-// const beStatusMatcher = yup.object({
-//   functionalities: yup.array().of(yup.string()).required(),
-//   openIncidents: yup.array().of(beIncidentMatcher).required(),
-// });
-
-// const beDowntimePageMatcher = yup.object({
-//   result: yup.array().of(beIncidentMatcher).required(),
-//   nextPage: yup.string().notRequired(),
-// });
-
-
+const downtimePageResponseExample: BEDowntimePage = {
+  result: [
+    {
+      functionality: "NOTIFICATION_CREATE",
+      status: "OK",
+      startDate: minutesBeforeNow(20).toISOString(),
+      endDate: minutesBeforeNow(16).toISOString(),
+      legalFactId: "some-legal-fact-id",
+      fileAvailable: true,
+    },
+    {
+      functionality: "NOTIFICATION_CREATE",
+      status: "OK",
+      startDate: minutesBeforeNow(5).toISOString(),
+      endDate: minutesBeforeNow(3).toISOString(),
+      fileAvailable: false,
+    },
+    {
+      functionality: "NOTIFICATION_WORKFLOW",
+      status: "KO",
+      startDate: minutesBeforeNow(1).toISOString(),
+    }
+  ],
+}  
 
 /* ------------------------------------------------------------------------
    BE-FE transformations
@@ -130,6 +123,15 @@ function beDowntimeStatusToFeAppStatus(beStatus: BEStatus): AppCurrentStatus {
   }
 }
 
+function beDowntimePageToFeIncidentPage(beDowntimePage: BEDowntimePage): IncidentPage {
+  const result: IncidentPage = {
+    incidents: beDowntimePage.result.map(beIncidentToFeIncident),
+  };
+  if (beDowntimePage.nextPage) {
+    result.nextPage = beDowntimePage.nextPage;
+  }
+  return result;
+}
 
 
 /* ------------------------------------------------------------------------
@@ -139,9 +141,6 @@ function beDowntimeStatusToFeAppStatus(beStatus: BEStatus): AppCurrentStatus {
 const useMockResponseData = false;
 
 export const AppStatusApi = {
-  /**
-   * Specific possible error: obtaining an open incident with status "OK"
-   */
   getCurrentStatus: async (): Promise<AppCurrentStatus> => {
     /* eslint-disable functional/no-let */
     let apiResponse: BEStatus;
@@ -167,5 +166,26 @@ export const AppStatusApi = {
     // finally the response
     return beDowntimeStatusToFeAppStatus(apiResponse);
   },
+
+  getStatusHistory: async (params: GetDowntimeHistoryParams): Promise<IncidentPage> => {
+    /* eslint-disable functional/no-let */
+    let apiResponse: BEDowntimePage;
+
+    if (useMockResponseData) {
+      apiResponse = downtimePageResponseExample;
+    } else {
+      const realApiResponse = await apiClient.get<BEDowntimePage>(DOWNTIME_HISTORY(params));
+      apiResponse = realApiResponse.data;
+    }
+
+    // pn-validator validation
+    const validationResult = new BEDowntimePageValidator().validate(apiResponse);
+    if (validationResult != null) {
+      throw new BadApiDataException('Wrong-formed data', validationResult);
+    }
+
+    // finally the response
+    return beDowntimePageToFeIncidentPage(apiResponse);
+  }
 }
 
