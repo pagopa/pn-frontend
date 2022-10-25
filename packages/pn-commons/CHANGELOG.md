@@ -3,6 +3,80 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.1](https://github.com/pagopa/pn-frontend/compare/v1.3.1...v1.4.1) (2022-10-18)
+
+
+### Bug Fixes
+
+* **pn-2048:** Hide legalfacts under macro status when timeline is expanded ([#410](https://github.com/pagopa/pn-frontend/issues/410)) ([7ea4434](https://github.com/pagopa/pn-frontend/commit/7ea4434ba1215349bb19abf636b0a7882c1ed725))
+* removed cancelledIun as empty string ([cc58767](https://github.com/pagopa/pn-frontend/commit/cc58767141173d2e76f17e7e8b0f5dfa9b696c1b))
+
+
+### Code Refactoring
+
+* **PN-1994:** refactor VerifyUser e RequireAuth ([#400](https://github.com/pagopa/pn-frontend/issues/400)) ([50316d1](https://github.com/pagopa/pn-frontend/commit/50316d1ee17a6ebc732fa6774473bdf4db48d79a))
+
+
+### Features
+
+* **PN-1843:** rework notification sender page in order to make it navigable ([#350](https://github.com/pagopa/pn-frontend/issues/350)) ([67a96c8](https://github.com/pagopa/pn-frontend/commit/67a96c8129d1f0eb60feb5f392bd1ff7c52bdbfe))
+* pn-1852 ottimizzare script mixpanel ([d1d7945](https://github.com/pagopa/pn-frontend/commit/d1d79455205a43c13dabaab9e4670339beed7967))
+* pn-1942 gestione disservizio e informazioni corrette all'utente ([bc3918a](https://github.com/pagopa/pn-frontend/commit/bc3918a4c34a88fd8fdad9776e40313a85cd4dfe))
+* **pn-2007:** update dependencies and move to devDependencies react-scripts p… ([#393](https://github.com/pagopa/pn-frontend/issues/393)) ([a28f16d](https://github.com/pagopa/pn-frontend/commit/a28f16d95ec08aac577204e666773aba0733a765))
+* **Pn-2091:** enhanced dropdown usability ([#382](https://github.com/pagopa/pn-frontend/issues/382)) ([f639b02](https://github.com/pagopa/pn-frontend/commit/f639b0297d6128d87c6d6013e5f6d6c5db52ca25))
+* **pn-2247:** add PA privacy policy ([#413](https://github.com/pagopa/pn-frontend/issues/413)) ([30decda](https://github.com/pagopa/pn-frontend/commit/30decda962104aefc09ff08d58612950c4405ca1))
+
+
+### BREAKING CHANGES
+
+* **PN-1994:** this refactoring improves authentication and navigation management, but changes VerifyUser and RequireAuth names and API
+
+* PN-1994 - SessionGuard + RouteGuard working in pf-webapp
+
+* PN-1994 - hook per processo di inizializzazione in steps, aggiunto a pn-commons
+
+* PN-1994 - SessionGuard e RouteGuard operativi in pa-webapp
+
+* PN-1994 - aggiusto messaggio per pa-webapp (manca farlo in pf-webapp)
+
+* PN-1994 - messaggi OK in SessionGuard in pf-webapp
+
+* PN-1994 - pulsanti a AccessDenied
+
+* PN-1994 - pa-webapp, va a AccessDenied in tutti gli accessi senza utente loggato, e non si vedono sidemenu e HeaderProduct
+
+* PN-1994 - gestione utente non loggato in pf-webapp
+
+* PN-1994 - tests degli nuovi componenti RouteGuard e SessionGuard, sia in pf-webapp che in pa-webapp
+
+* PN-1994 - tests (adesso si ci sono)
+
+* PN-1994 - pulizia mocks, componenti deprecati e console.log
+
+* PN-1994 - ultimi aggiustamenti, versione pronta per review
+
+* PN-1994 - ultimi-ultimi aggiustamenti, mo' la smetto davvero
+
+* PN-1994 - modifiche per ridurre cognitive complexity - a meta
+
+* PN-1994 - refactor in SessionGuard di pf-webapp in base a commenti di Carlotta ... eh si, manca farlo in pa-webapp, mi rendo conto solo adesso
+
+* PN-1994 - replico in pa-webapp il refactor su SessionGuard fatto precedentemente in pf-webapp
+
+* PN-1994 - piccolissimo miglioramento a useProcess
+
+* chore: some copy, minimal refactoring and linting
+
+* chore: some linting and some comments removed
+
+* chore: some linting
+
+Co-authored-by: Carlotta Dimatteo <carlotta.dimatteo@pagopa.it>
+
+
+
+
+
 ## [1.3.1](https://github.com/pagopa/pn-frontend/compare/v1.3.0...v1.3.1) (2022-09-27)
 
 
