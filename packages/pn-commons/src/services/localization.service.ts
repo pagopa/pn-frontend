@@ -1,4 +1,5 @@
-type LocalizationNamespacesNames = 'common' | 'delegations' | 'notifications' | 'contacts';
+// type LocalizationNamespacesNames = 'common' | 'delegations' | 'notifications' | 'contacts';
+type LocalizationNamespacesNames = 'common' | 'notifications';
 
 type LocalizationNamespaces = {
   [key in LocalizationNamespacesNames]: string;
@@ -9,9 +10,9 @@ type LocalizationFunction = (namespace: string | Array<string>, path: string, da
 /* eslint-disable-next-line functional/no-let */
 let localizationNamespaces: LocalizationNamespaces = {
   common: 'common',
-  delegations: 'deleghe',
+  // delegations: 'deleghe',
   notifications: 'notifiche',
-  contacts: 'recapiti',
+  // contacts: 'recapiti',
 };
 
 /* eslint-disable-next-line functional/no-let */

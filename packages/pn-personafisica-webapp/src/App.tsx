@@ -11,14 +11,15 @@ import { Box } from '@mui/material';
 
 import { ProductSwitchItem } from '@pagopa/mui-italia';
 
-import { ResponseEventDispatcher } from '@pagopa-pn/pn-commons/src/utils/AppResponse/AppResponsePublisher';
 import {
   AppMessage,
   AppResponseMessage,
   appStateActions,
+  errorFactoryManager,
   initLocalization,
   Layout,
   LoadingOverlay,
+  ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
   useMultiEvent,
@@ -38,6 +39,7 @@ import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
 import {goToLoginPortal} from "./navigation/navigation.utility";
+import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -105,6 +107,8 @@ const App = () => {
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+    // eslint-disable-next-line functional/immutable-data
+    errorFactoryManager.factory = new PFAppErrorFactory((path, ns) => t(path, { ns }));
   }, []);
 
   useEffect(() => {

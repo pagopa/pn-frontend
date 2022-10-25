@@ -1,7 +1,8 @@
-import { AppResponse, ServerResponse } from '../../types';
-import { AppErrorFactory } from '../AppError';
+import { AppResponse, ServerResponse } from '../../types/AppResponse';
+import errorFactoryManager from '../AppError/ErrorFactoryManager';
 
 export const createAppResponseError = (action: string, response: ServerResponse): AppResponse => {
+  const factory = errorFactoryManager.factory;
   if(response){
     const { data, status } = response;
 
@@ -12,16 +13,16 @@ export const createAppResponseError = (action: string, response: ServerResponse)
       
       if(Array.isArray(data.errors)) {
     
-        const errors = serverErrors?.map((error) => AppErrorFactory.create(error).getResponseError());
+        const errors = serverErrors?.map((error) => factory.create(error).getResponseError());
     
         return { ...retVal, errors };
       } else {
-        const errors = status ? [AppErrorFactory.create(status).getResponseError()] : undefined;
+        const errors = status ? [factory.create(status).getResponseError()] : undefined;
     
         return { ...retVal, errors };
       }
     } else {
-      const errors = status ? [AppErrorFactory.create(status).getResponseError()] : undefined;
+      const errors = status ? [factory.create(status).getResponseError()] : undefined;
     
       return { action, errors };
     }

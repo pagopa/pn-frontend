@@ -2,7 +2,7 @@ import { AnyAction, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { createAppMessage } from '../../services/message.service';
 import { IAppMessage } from '../../types';
 import { AppResponse, AppResponseOutcome } from '../../types/AppResponse';
-import { createAppResponseError, createAppResponseSuccess } from '../../utils/AppResponse/AppResponse';
+import { createAppResponseError, createAppResponseSuccess } from '../../utils/AppResponse';
 
 export interface AppStateState {
   loading: {
@@ -51,7 +51,7 @@ export const appStateSlice = createSlice({
   reducers: {
     addError(
       state,
-      action: PayloadAction<{ title: string; message: string; status?: number, action?: string }>
+      action: PayloadAction<{ title: string; message: string; status?: number; action?: string }>
     ) {
       const message = createAppMessage(
         action.payload.title,

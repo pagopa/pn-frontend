@@ -28,7 +28,7 @@ import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH } from './costant
 import { mockApiErrorWrapper, simpleMockForApiErrorWrapper, apiOutcomeTestHelper } from './test.utility';
 import { performThunkAction } from './redux.utility';
 import { ResponseEventDispatcher, AppResponsePublisher } from './AppResponse';
-import { ServerResponseErrorCode } from '../types/AppResponse';
+import { AppError, AppErrorFactory, errorFactoryManager, UnknownAppError } from './AppError';
 
 export {
     getNotificationAllowedStatus,
@@ -66,5 +66,8 @@ export {
     performThunkAction,
     AppResponsePublisher,
     ResponseEventDispatcher,
-    ServerResponseErrorCode
+    AppError,
+    AppErrorFactory,
+    errorFactoryManager,
+    UnknownAppError
 };

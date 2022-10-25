@@ -17,6 +17,8 @@ const AppMessage = () => {
   const [currentMessage, setCurrentMessage] = useState<EnqueuedMessage | null>(null);
   const [queue, setQueue] = useState<Array<EnqueuedMessage>>([]);
 
+  const isMessageEnqueued = (message: IAppMessage): boolean => queue.findIndex(elem => elem.message.id === message.id) >= 0 ? true : false;
+
   const onCloseToast = (message: EnqueuedMessage) => {
     if(message.type === MessageType.ERROR) {
       // dispatch(appStateActions.removeError(id));
@@ -37,8 +39,9 @@ const AppMessage = () => {
   }, [currentMessage, queue]);
 
   useEffect(() => {
-    const alreadyEnqueuedIds = queue.map(elem => elem.message.id);
-    const newErrors: Array<EnqueuedMessage> = errors.filter((message: IAppMessage) => !message.alreadyShown && !alreadyEnqueuedIds.includes(message.id)).map((message: IAppMessage) => ({
+    // const alreadyEnqueuedIds = queue.map(elem => elem.message.id);
+    // const newErrors: Array<EnqueuedMessage> = errors.filter((message: IAppMessage) => !message.alreadyShown && !alreadyEnqueuedIds.includes(message.id)).map((message: IAppMessage) => ({
+    const newErrors: Array<EnqueuedMessage> = errors.filter((message: IAppMessage) => !message.alreadyShown && !isMessageEnqueued(message)).map((message: IAppMessage) => ({
       type: 'error',
       message
     }));
@@ -47,8 +50,7 @@ const AppMessage = () => {
   }, [errors]);
 
   useEffect(() => {
-    const alreadyEnqueuedIds = queue.map(elem => elem.message.id);
-    const newSuccesses: Array<EnqueuedMessage> = success.filter((message: IAppMessage) => !message.alreadyShown && !alreadyEnqueuedIds.includes(message.id)).map((message: IAppMessage) => ({
+    const newSuccesses: Array<EnqueuedMessage> = success.filter((message: IAppMessage) => !message.alreadyShown && !isMessageEnqueued(message)).map((message: IAppMessage) => ({
       type: 'success',
       message
     }));
