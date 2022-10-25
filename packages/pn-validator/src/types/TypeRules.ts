@@ -4,7 +4,6 @@ import { DateRuleValidator } from './../ruleValidators/DateRuleValidator';
 import { ObjectRuleValidator } from '../ruleValidators/ObjectRuleValidator';
 import { ArrayRuleValidator } from './../ruleValidators/ArrayRuleValidator';
 import { CommonRuleValidator } from '../ruleValidators/CommonRuleValidator';
-import { Validator } from '../Validator';
 
 type MixedType = String | Number | Date | Boolean;
 
