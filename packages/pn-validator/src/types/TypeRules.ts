@@ -1,4 +1,3 @@
-import { Validator } from '@pagopa-pn/pn-validator';
 import { NumberRuleValidator } from './../ruleValidators/NumberRuleValidator';
 import { StringRuleValidator } from './../ruleValidators/StringRuleValidator';
 import { DateRuleValidator } from './../ruleValidators/DateRuleValidator';
