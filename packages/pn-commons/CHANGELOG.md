@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.4.2](https://github.com/pagopa/pn-frontend/compare/v1.4.1...v1.4.2) (2022-10-25)
+
+
+### Bug Fixes
+
+* **pn-2204:** remove index.html ending from landing app links ([#440](https://github.com/pagopa/pn-frontend/issues/440)) ([faa5c23](https://github.com/pagopa/pn-frontend/commit/faa5c234bd542f79d4404f9880b411baf135a25d))
+
+
+### Features
+
+* **2391:** refactoring footer links ([9fc71f5](https://github.com/pagopa/pn-frontend/commit/9fc71f5336848f8cd08ce22b373b2d25874f8300))
+
+
+
+
+
 ## [1.4.1](https://github.com/pagopa/pn-frontend/compare/v1.3.1...v1.4.1) (2022-10-18)
 
 
