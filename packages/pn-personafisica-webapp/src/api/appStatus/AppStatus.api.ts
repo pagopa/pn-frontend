@@ -1,5 +1,5 @@
 import { minutesBeforeNow } from '@pagopa-pn/pn-commons';
-import { AppCurrentStatus, BEDowntimePageValidator, BEIncident, BEStatus, BEStatusValidator, FunctionalityStatus, GetDowntimeHistoryParams, Incident, IncidentPage, IncidentStatus, isKnownFunctionality, KnownFunctionality } from '../../models/appStatus';
+import { AppCurrentStatus, BEDowntimePageValidator, BEIncident, BEStatus, BEStatusValidator, FunctionalityStatus, GetDowntimeHistoryParams, Incident, IncidentsPage, IncidentStatus, isKnownFunctionality, KnownFunctionality } from '../../models/appStatus';
 import { apiClient } from '../axios';
 import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from './appStatus.routes';
 
@@ -54,6 +54,63 @@ const downtimePageResponseExample: BEDowntimePage = {
     }
   ],
 }  
+
+
+/* ------------------------------------------------------------------------
+   the API
+   ------------------------------------------------------------------------ */
+
+const useMockResponseData = false;
+
+export const AppStatusApi = {
+  getCurrentStatus: async (): Promise<AppCurrentStatus> => {
+    /* eslint-disable functional/no-let */
+    let apiResponse: BEStatus;
+
+    if (useMockResponseData) {
+      apiResponse = statusResponseExample;
+    } else {
+      const realApiResponse = await apiClient.get<BEStatus>(DOWNTIME_STATUS());
+      apiResponse = realApiResponse.data;
+    }
+
+    // pn-validator validation
+    const validationResult = new BEStatusValidator().validate(apiResponse);
+    if (validationResult != null) {
+      throw new BadApiDataException('Wrong-formed data', validationResult);
+    }
+
+    // extra validation: open incident with status "OK"
+    if (apiResponse.openIncidents.some(incident => incident.status === IncidentStatus.OK)) {
+      throw new BadApiDataException('Wrong data - an open incident cannot have status OK', {});
+    }
+
+    // finally the response
+    return beDowntimeStatusToFeAppStatus(apiResponse);
+  },
+
+  getDowntimePage: async (params: GetDowntimeHistoryParams): Promise<IncidentsPage> => {
+    /* eslint-disable functional/no-let */
+    let apiResponse: BEDowntimePage;
+
+    if (useMockResponseData) {
+      apiResponse = downtimePageResponseExample;
+    } else {
+      const realApiResponse = await apiClient.get<BEDowntimePage>(DOWNTIME_HISTORY(params));
+      apiResponse = realApiResponse.data;
+    }
+
+    // pn-validator validation
+    const validationResult = new BEDowntimePageValidator().validate(apiResponse);
+    if (validationResult != null) {
+      throw new BadApiDataException('Wrong-formed data', validationResult);
+    }
+
+    // finally the response
+    return beDowntimePageToFeIncidentPage(apiResponse);
+  }
+}
+
 
 /* ------------------------------------------------------------------------
    BE-FE transformations
@@ -123,69 +180,13 @@ function beDowntimeStatusToFeAppStatus(beStatus: BEStatus): AppCurrentStatus {
   }
 }
 
-function beDowntimePageToFeIncidentPage(beDowntimePage: BEDowntimePage): IncidentPage {
-  const result: IncidentPage = {
+function beDowntimePageToFeIncidentPage(beDowntimePage: BEDowntimePage): IncidentsPage {
+  const result: IncidentsPage = {
     incidents: beDowntimePage.result.map(beIncidentToFeIncident),
   };
   if (beDowntimePage.nextPage) {
     result.nextPage = beDowntimePage.nextPage;
   }
   return result;
-}
-
-
-/* ------------------------------------------------------------------------
-   ... and finally the API ...
-   ------------------------------------------------------------------------ */
-
-const useMockResponseData = false;
-
-export const AppStatusApi = {
-  getCurrentStatus: async (): Promise<AppCurrentStatus> => {
-    /* eslint-disable functional/no-let */
-    let apiResponse: BEStatus;
-
-    if (useMockResponseData) {
-      apiResponse = statusResponseExample;
-    } else {
-      const realApiResponse = await apiClient.get<BEStatus>(DOWNTIME_STATUS());
-      apiResponse = realApiResponse.data;
-    }
-
-    // pn-validator validation
-    const validationResult = new BEStatusValidator().validate(apiResponse);
-    if (validationResult != null) {
-      throw new BadApiDataException('Wrong-formed data', validationResult);
-    }
-
-    // extra validation: open incident with status "OK"
-    if (apiResponse.openIncidents.some(incident => incident.status === IncidentStatus.OK)) {
-      throw new BadApiDataException('Wrong data - an open incident cannot have status OK', {});
-    }
-
-    // finally the response
-    return beDowntimeStatusToFeAppStatus(apiResponse);
-  },
-
-  getStatusHistory: async (params: GetDowntimeHistoryParams): Promise<IncidentPage> => {
-    /* eslint-disable functional/no-let */
-    let apiResponse: BEDowntimePage;
-
-    if (useMockResponseData) {
-      apiResponse = downtimePageResponseExample;
-    } else {
-      const realApiResponse = await apiClient.get<BEDowntimePage>(DOWNTIME_HISTORY(params));
-      apiResponse = realApiResponse.data;
-    }
-
-    // pn-validator validation
-    const validationResult = new BEDowntimePageValidator().validate(apiResponse);
-    if (validationResult != null) {
-      throw new BadApiDataException('Wrong-formed data', validationResult);
-    }
-
-    // finally the response
-    return beDowntimePageToFeIncidentPage(apiResponse);
-  }
 }
 

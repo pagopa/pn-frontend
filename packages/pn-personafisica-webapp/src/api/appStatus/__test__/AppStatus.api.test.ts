@@ -4,7 +4,7 @@ import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from '../appStatus.routes';
 import { beAppStatusNoIncidents, beAppStatusOneIncident, beAppStatusOneIncidentOK, beAppStatusOneIncidentWithError, beAppStatusTwoIncidentsNormalCase, beAppStatusTwoIncidentsOneUnknownFunctionality, beDowntimeHistoryNoIncidents, beDowntimeHistoryThreeIncidents, downStatusOnKnownFunctionality, downStatusOnUnknownFunctionality, downtimeHistoryEmptyQueryParams, incidentTimestamps, statusByFunctionalityOk } from './test-utils';
 import { AppStatusApi, BadApiDataException } from '../AppStatus.api';
-import { BEDowntimePage, IncidentPage, IncidentStatus, KnownFunctionality } from '../../../models/appStatus';
+import { BEDowntimePage, IncidentsPage, IncidentStatus, KnownFunctionality } from '../../../models/appStatus';
 
 
 /* ------------------------------------------------------------------------
@@ -99,12 +99,12 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beDowntimeHistoryNoIncidents);
-    const res = await AppStatusApi.getStatusHistory(downtimeHistoryEmptyQueryParams);
+    const res = await AppStatusApi.getDowntimePage(downtimeHistoryEmptyQueryParams);
     expect(res).toEqual({ incidents: [] });
   });
 
   it('get downtime history - three incidents', async () => {
-    const expectedOutput: IncidentPage = {
+    const expectedOutput: IncidentsPage = {
       incidents: [
         {
           rawFunctionality: KnownFunctionality.NotificationCreate,
@@ -134,7 +134,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beDowntimeHistoryThreeIncidents);
-    const res = await AppStatusApi.getStatusHistory(downtimeHistoryEmptyQueryParams);
+    const res = await AppStatusApi.getDowntimePage(downtimeHistoryEmptyQueryParams);
     expect(res).toEqual(expectedOutput);
   });
 
@@ -150,7 +150,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beDowntimeHistoryWithDateFormatError);
-    await expect(AppStatusApi.getStatusHistory(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
+    await expect(AppStatusApi.getDowntimePage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
   });
 
   it('get downtime history - incident with date format - functionality missing', async () => {
@@ -168,6 +168,6 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beDowntimeHistoryWithDateFormatError);
-    await expect(AppStatusApi.getStatusHistory(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
+    await expect(AppStatusApi.getDowntimePage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
   });
 });

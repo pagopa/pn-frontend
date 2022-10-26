@@ -33,6 +33,38 @@ export interface GetDowntimeHistoryParams {
 
 
 /* ------------------------------------------------------------------------
+   Internal model
+   ------------------------------------------------------------------------ */
+
+export interface Incident {
+  rawFunctionality: string;
+  knownFunctionality?: KnownFunctionality;
+  status: IncidentStatus;
+  startDate: string;
+  endDate?: string;
+  legalFactId?: string;
+  fileAvailable?: boolean;
+}
+
+export interface FunctionalityStatus {
+  rawFunctionality: string;
+  knownFunctionality?: KnownFunctionality;
+  isOperative: boolean;
+  currentIncident?: Incident;
+}
+
+export interface AppCurrentStatus {
+  appIsFullyOperative: boolean;
+  statusByFunctionality: FunctionalityStatus[];
+}
+
+export interface IncidentsPage {
+  incidents: Incident[];
+  nextPage?: string;
+}
+
+
+/* ------------------------------------------------------------------------
    BE responses
    ------------------------------------------------------------------------ */
 
@@ -47,7 +79,7 @@ export interface GetDowntimeHistoryParams {
  * - startDate not a valid date
  * - endDate, if present, not a valid date
  */
-export interface BEIncident {
+ export interface BEIncident {
   functionality: string;
   status: string;
   startDate: string;
@@ -74,86 +106,57 @@ export interface BEDowntimePage {
 /* ------------------------------------------------------------------------
    validation - custom validators
    ------------------------------------------------------------------------ */
-function validateIsoDate(required: boolean) {
-  return (value: string | undefined) => {
-    const isOK = value 
-      ? dataRegex.isoDate.test(value) && !Number.isNaN(Date.parse(value)) 
-      : !required;
-    return isOK ? null : "A date in ISO format is expected";
+   function validateIsoDate(required: boolean) {
+    return (value: string | undefined) => {
+      const isOK = value 
+        ? dataRegex.isoDate.test(value) && !Number.isNaN(Date.parse(value)) 
+        : !required;
+      return isOK ? null : "A date in ISO format is expected";
+    }
   }
-}
-
-function validateString(value: string | undefined): string | null {
-  const isOK = value === undefined || typeof value === 'string';
-  return isOK ? null : "A string is expected";
-}
-
-function validateBoolean(value: boolean | undefined): string | null {
-  const isOK = value === undefined || typeof value === 'boolean';
-  return isOK ? null : "A boolean is expected";
-}
+  
+  function validateString(value: string | undefined): string | null {
+    const isOK = value === undefined || typeof value === 'string';
+    return isOK ? null : "A string is expected";
+  }
+  
+  function validateBoolean(value: boolean | undefined): string | null {
+    const isOK = value === undefined || typeof value === 'boolean';
+    return isOK ? null : "A boolean is expected";
+  }
+    
+    
+  /* ------------------------------------------------------------------------
+     validation - BE response validators
+     ------------------------------------------------------------------------ */
+  export class BEIncidentValidator extends Validator<BEIncident> {
+    constructor() {
+      super();
+      this.ruleFor('functionality').customValidator(validateString).isUndefined(true);
+      // this.ruleFor('functionality').isUndefined(true);
+      this.ruleFor('status').isOneOf(Object.values(IncidentStatus) as string[]).isUndefined(true);
+      this.ruleFor('startDate').customValidator(validateIsoDate(true));
+      this.ruleFor('endDate').customValidator(validateIsoDate(false));
+      this.ruleFor('legalFactId').customValidator(validateString);
+      this.ruleFor('fileAvailable').customValidator(validateBoolean);
+    }
+  }
+  
+  export class BEStatusValidator extends Validator<BEStatus> {
+    constructor() {
+      super();
+      this.ruleFor("functionalities").isEmpty(true).forEachElement(rules => rules.customValidator(validateString));
+      this.ruleFor("openIncidents").forEachElement(rules => rules.setValidator(new BEIncidentValidator()));
+    }
+  }
+  
+  export class BEDowntimePageValidator extends Validator<BEDowntimePage> {
+    constructor() {
+      super();
+      this.ruleFor('result').forEachElement(rules => rules.setValidator(new BEIncidentValidator())).isUndefined(true);
+      this.ruleFor('nextPage').customValidator(validateString);
+    }
+  }
   
   
-/* ------------------------------------------------------------------------
-   validation - BE response validators
-   ------------------------------------------------------------------------ */
-export class BEIncidentValidator extends Validator<BEIncident> {
-  constructor() {
-    super();
-    this.ruleFor('functionality').customValidator(validateString).isUndefined(true);
-    // this.ruleFor('functionality').isUndefined(true);
-    this.ruleFor('status').isOneOf(Object.values(IncidentStatus) as string[]).isUndefined(true);
-    this.ruleFor('startDate').customValidator(validateIsoDate(true));
-    this.ruleFor('endDate').customValidator(validateIsoDate(false));
-    this.ruleFor('legalFactId').customValidator(validateString);
-    this.ruleFor('fileAvailable').customValidator(validateBoolean);
-  }
-}
-
-export class BEStatusValidator extends Validator<BEStatus> {
-  constructor() {
-    super();
-    this.ruleFor("functionalities").isEmpty(true).forEachElement(rules => rules.customValidator(validateString));
-    this.ruleFor("openIncidents").forEachElement(rules => rules.setValidator(new BEIncidentValidator()));
-  }
-}
-
-export class BEDowntimePageValidator extends Validator<BEDowntimePage> {
-  constructor() {
-    super();
-    this.ruleFor('result').forEachElement(rules => rules.setValidator(new BEIncidentValidator())).isUndefined(true);
-    this.ruleFor('nextPage').customValidator(validateString);
-  }
-}
-
-
-/* ------------------------------------------------------------------------
-   Internal model
-   ------------------------------------------------------------------------ */
-
-export interface Incident {
-  rawFunctionality: string;
-  knownFunctionality?: KnownFunctionality;
-  status: IncidentStatus;
-  startDate: string;
-  endDate?: string;
-  legalFactId?: string;
-  fileAvailable?: boolean;
-}
-
-export interface FunctionalityStatus {
-  rawFunctionality: string;
-  knownFunctionality?: KnownFunctionality;
-  isOperative: boolean;
-  currentIncident?: Incident;
-}
-
-export interface AppCurrentStatus {
-  appIsFullyOperative: boolean;
-  statusByFunctionality: FunctionalityStatus[];
-}
-
-export interface IncidentPage {
-  incidents: Incident[];
-  nextPage?: string;
-}
+  
