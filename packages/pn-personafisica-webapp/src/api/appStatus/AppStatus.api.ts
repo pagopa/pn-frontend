@@ -1,12 +1,7 @@
 import { minutesBeforeNow } from '@pagopa-pn/pn-commons';
-import { AppCurrentStatus, BEDowntimePageValidator, BEIncident, BEStatus, BEStatusValidator, FunctionalityStatus, GetDowntimeHistoryParams, Incident, IncidentsPage, IncidentStatus, isKnownFunctionality, KnownFunctionality } from '../../models/appStatus';
+import { AppCurrentStatus, BEDowntimeLogPageValidator, BEDowntime, BEStatus, BEStatusValidator, FunctionalityStatus, GetDowntimeHistoryParams, Downtime, DowntimeLogPage, DowntimeStatus, isKnownFunctionality, KnownFunctionality, BEDowntimeLogPage } from '../../models/appStatus';
 import { apiClient } from '../axios';
 import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from './appStatus.routes';
-
-interface BEDowntimePage {
-  result: Array<BEIncident>;
-  nextPage?: string;
-}
 
 export class BadApiDataException extends Error {
   constructor(message: string, public details: any) {
@@ -24,15 +19,15 @@ const statusResponseExample: BEStatus = {
     "NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZZATION", "NOTIFICATION_WORKFLOW"
   ],
   openIncidents: [
-    // {
-    //   functionality: "NOTIFICATION_WORKFLOW",
-    //   status: "KO",
-    //   startDate: minutesBeforeNow(1).toISOString(),
-    // }
+    {
+      functionality: "NOTIFICATION_WORKFLOW",
+      status: "KO",
+      startDate: minutesBeforeNow(1).toISOString(),
+    }
   ],
 };
   
-const downtimePageResponseExample: BEDowntimePage = {
+const downtimeLogPageResponseExample: BEDowntimeLogPage = {
   result: [
     {
       functionality: "NOTIFICATION_CREATE",
@@ -62,7 +57,7 @@ const downtimePageResponseExample: BEDowntimePage = {
    the API
    ------------------------------------------------------------------------ */
 
-const useMockResponseData = true;
+const useMockResponseData = process.env.NODE_ENV === 'development';
 
 export const AppStatusApi = {
   getCurrentStatus: async (): Promise<AppCurrentStatus> => {
@@ -83,7 +78,7 @@ export const AppStatusApi = {
     }
 
     // extra validation: open incident with status "OK"
-    if (apiResponse.openIncidents.some(incident => incident.status === IncidentStatus.OK)) {
+    if (apiResponse.openIncidents.some(downtime => downtime.status === DowntimeStatus.OK)) {
       throw new BadApiDataException('Wrong data - an open incident cannot have status OK', {});
     }
 
@@ -91,25 +86,25 @@ export const AppStatusApi = {
     return beDowntimeStatusToFeAppStatus(apiResponse);
   },
 
-  getDowntimePage: async (params: GetDowntimeHistoryParams): Promise<IncidentsPage> => {
+  getDowntimeLogPage: async (params: GetDowntimeHistoryParams): Promise<DowntimeLogPage> => {
     /* eslint-disable functional/no-let */
-    let apiResponse: BEDowntimePage;
+    let apiResponse: BEDowntimeLogPage;
 
     if (useMockResponseData) {
-      apiResponse = downtimePageResponseExample;
+      apiResponse = downtimeLogPageResponseExample;
     } else {
-      const realApiResponse = await apiClient.get<BEDowntimePage>(DOWNTIME_HISTORY(params));
+      const realApiResponse = await apiClient.get<BEDowntimeLogPage>(DOWNTIME_HISTORY(params));
       apiResponse = realApiResponse.data;
     }
 
     // pn-validator validation
-    const validationResult = new BEDowntimePageValidator().validate(apiResponse);
+    const validationResult = new BEDowntimeLogPageValidator().validate(apiResponse);
     if (validationResult != null) {
       throw new BadApiDataException('Wrong-formed data', validationResult);
     }
 
     // finally the response
-    return beDowntimePageToFeIncidentPage(apiResponse);
+    return beDowntimeLogPageToFeDowntimeLogPage(apiResponse);
   }
 };
 
@@ -118,39 +113,39 @@ export const AppStatusApi = {
    BE-FE transformations
    ------------------------------------------------------------------------ */
 
-function beIncidentToFeIncident(incident: BEIncident): Incident {
+function beDowntimeToFeDowntime(downtime: BEDowntime): Downtime {
   /* eslint-disable functional/immutable-data */
-  const result: Incident = {
-    rawFunctionality: incident.functionality,
-    status: incident.status as IncidentStatus,
-    startDate: incident.startDate,
+  const result: Downtime = {
+    rawFunctionality: downtime.functionality,
+    status: downtime.status as DowntimeStatus,
+    startDate: downtime.startDate,
   };
      
-  if (isKnownFunctionality(incident.functionality)) {
+  if (isKnownFunctionality(downtime.functionality)) {
     // cfr. https://github.com/microsoft/TypeScript/issues/33200#issuecomment-527670779
-    result.knownFunctionality = incident.functionality as KnownFunctionality;
+    result.knownFunctionality = downtime.functionality as KnownFunctionality;
   }
-  if (incident.endDate !== undefined) {
-    result.endDate = incident.endDate;
+  if (downtime.endDate !== undefined) {
+    result.endDate = downtime.endDate;
   }
-  if (incident.legalFactId !== undefined) {
-    result.legalFactId = incident.legalFactId;
+  if (downtime.legalFactId !== undefined) {
+    result.legalFactId = downtime.legalFactId;
   }
-  if (incident.fileAvailable !== undefined) {
-    result.fileAvailable = incident.fileAvailable;
+  if (downtime.fileAvailable !== undefined) {
+    result.fileAvailable = downtime.fileAvailable;
   }
 
   return result;
 }
 
 function beDowntimeStatusToFunctionalityCurrentStatus(functionality: KnownFunctionality, beStatus: BEStatus): FunctionalityStatus {
-  const currentIncident = beStatus.openIncidents.find(incident => incident.functionality === functionality);
+  const currentIncident = beStatus.openIncidents.find(downtime => downtime.functionality === functionality);
   if (currentIncident) {
     return {
       rawFunctionality: functionality as string,
       knownFunctionality: functionality,
       isOperative: false,
-      currentIncident: beIncidentToFeIncident(currentIncident),
+      currentDowntime: beDowntimeToFeDowntime(currentIncident),
     };
   } else {
     return {
@@ -161,11 +156,11 @@ function beDowntimeStatusToFunctionalityCurrentStatus(functionality: KnownFuncti
   }
 }
 
-function unknownIncidentToFunctionalityCurrentStatus(incident: BEIncident): FunctionalityStatus {
+function unknownDowntimeToFunctionalityCurrentStatus(downtime: BEDowntime): FunctionalityStatus {
   return {
-    rawFunctionality: incident.functionality,
+    rawFunctionality: downtime.functionality,
     isOperative: false,
-    currentIncident: beIncidentToFeIncident(incident),
+    currentDowntime: beDowntimeToFeDowntime(downtime),
   };
 }
 
@@ -173,8 +168,8 @@ function beDowntimeStatusToFeAppStatus(beStatus: BEStatus): AppCurrentStatus {
   const statusByFunctionality = [
     ...Object.values(KnownFunctionality).map(funct => beDowntimeStatusToFunctionalityCurrentStatus(funct, beStatus)),
     ...beStatus.openIncidents
-      .filter(incident => !isKnownFunctionality(incident.functionality))
-      .map(incident => unknownIncidentToFunctionalityCurrentStatus(incident))
+      .filter(downtime => !isKnownFunctionality(downtime.functionality))
+      .map(downtime => unknownDowntimeToFunctionalityCurrentStatus(downtime))
   ];
 
   return {
@@ -183,13 +178,13 @@ function beDowntimeStatusToFeAppStatus(beStatus: BEStatus): AppCurrentStatus {
   };
 }
 
-function beDowntimePageToFeIncidentPage(beDowntimePage: BEDowntimePage): IncidentsPage {
+function beDowntimeLogPageToFeDowntimeLogPage(beDowntimeLogPage: BEDowntimeLogPage): DowntimeLogPage {
   /* eslint-disable functional/immutable-data */
-  const result: IncidentsPage = {
-    incidents: beDowntimePage.result.map(beIncidentToFeIncident),
+  const result: DowntimeLogPage = {
+    downtimes: beDowntimeLogPage.result.map(beDowntimeToFeDowntime),
   };
-  if (beDowntimePage.nextPage) {
-    result.nextPage = beDowntimePage.nextPage;
+  if (beDowntimeLogPage.nextPage) {
+    result.nextPage = beDowntimeLogPage.nextPage;
   }
   return result;
 }

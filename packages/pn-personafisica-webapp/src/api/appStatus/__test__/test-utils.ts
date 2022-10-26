@@ -1,4 +1,4 @@
-import { BEDowntimePage, BEStatus, FunctionalityStatus, GetDowntimeHistoryParams, IncidentStatus, KnownFunctionality } from "../../../models/appStatus";
+import { BEDowntimeLogPage, BEStatus, FunctionalityStatus, GetDowntimeHistoryParams, DowntimeStatus, KnownFunctionality } from "../../../models/appStatus";
 
 /* ------------------------------------------------------------------------
    auxiliary functions and constants
@@ -33,10 +33,10 @@ export function downStatusOnKnownFunctionality(func: KnownFunctionality, inciden
 		rawFunctionality: func,
 		knownFunctionality: func,
 		isOperative: false,
-		currentIncident: {
+		currentDowntime: {
 			rawFunctionality: func,
 			knownFunctionality: func,
-			status: IncidentStatus.KO,
+			status: DowntimeStatus.KO,
 			startDate: incidentTimestamp,
 		}
 	};
@@ -46,9 +46,9 @@ export function downStatusOnUnknownFunctionality(func: string, incidentTimestamp
 	return 				{
 		rawFunctionality: func,
 		isOperative: false,
-		currentIncident: {
+		currentDowntime: {
 			rawFunctionality: func,
-			status: IncidentStatus.KO,
+			status: DowntimeStatus.KO,
 			startDate: incidentTimestamp,
 		}
 	};
@@ -142,11 +142,11 @@ export const beAppStatusOneIncidentWithError: BEStatus = {
   ],
 };
 
-export const beDowntimeHistoryNoIncidents: BEDowntimePage = {
+export const beDowntimeHistoryNoIncidents: BEDowntimeLogPage = {
   result: []
 };
 
-export const beDowntimeHistoryThreeIncidents: BEDowntimePage = {
+export const beDowntimeHistoryThreeIncidents: BEDowntimeLogPage = {
   result: [
     {
       functionality: "NOTIFICATION_CREATE",

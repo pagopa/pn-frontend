@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AppCurrentStatus, IncidentsPage } from "../../models/appStatus";
-import { getCurrentStatus, getIncidentsPage } from "./actions";
+import { AppCurrentStatus, DowntimeLogPage } from "../../models/appStatus";
+import { getCurrentStatus, getDowntimeLogPage } from "./actions";
 
 interface AppStatusData {
   currentStatus?: AppCurrentStatus;
-  incidentsPage?: IncidentsPage;
+  incidentsPage?: DowntimeLogPage;
 };
 
 /* eslint-disable functional/immutable-data */
@@ -16,7 +16,7 @@ const appStatusSlice = createSlice<AppStatusData, any>({
     builder.addCase(getCurrentStatus.fulfilled, (state, action) => {
       state.currentStatus = action.payload;
     });
-    builder.addCase(getIncidentsPage.fulfilled, (state, action) => {
+    builder.addCase(getDowntimeLogPage.fulfilled, (state, action) => {
       state.incidentsPage = action.payload;
     });
   }

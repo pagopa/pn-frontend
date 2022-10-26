@@ -1,9 +1,9 @@
 import { AppStatusApi } from "../../../api/appStatus/AppStatus.api";
-import { AppCurrentStatus, IncidentsPage } from "../../../models/appStatus";
+import { AppCurrentStatus, DowntimeLogPage,  } from "../../../models/appStatus";
 import { mockAuthentication } from "../../auth/__test__/test-utils";
 import { store } from '../../store';
-import { getCurrentStatus, getIncidentsPage } from "../actions";
-import { currentStatusOk, simpleDowntimePage } from "./test-utils";
+import { getCurrentStatus, getDowntimeLogPage } from "../actions";
+import { currentStatusOk, simpleDowntimeLogPage } from "./test-utils";
 
 
 describe('App Status redux state tests', () => {
@@ -26,14 +26,14 @@ describe('App Status redux state tests', () => {
   });
 
   it('Should be able to fetch a downtime page', async () => {
-    const apiSpy = jest.spyOn(AppStatusApi, 'getDowntimePage');
-    apiSpy.mockResolvedValue(simpleDowntimePage);
+    const apiSpy = jest.spyOn(AppStatusApi, 'getDowntimeLogPage');
+    apiSpy.mockResolvedValue(simpleDowntimeLogPage);
     const action = await store.dispatch(
-      getIncidentsPage({ startDate: '2012-11-01T00:00:00Z' })
+      getDowntimeLogPage({ startDate: '2012-11-01T00:00:00Z' })
     );
-    const payload = action.payload as IncidentsPage;
-    expect(action.type).toBe('getIncidentsPage/fulfilled');
-    expect(payload).toEqual(simpleDowntimePage);
+    const payload = action.payload as DowntimeLogPage;
+    expect(action.type).toBe('getDowntimeLogPage/fulfilled');
+    expect(payload).toEqual(simpleDowntimeLogPage);
   });
 
 });

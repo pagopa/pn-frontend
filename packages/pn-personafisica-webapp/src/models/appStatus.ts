@@ -6,7 +6,7 @@ import { Validator } from "@pagopa-pn/pn-validator";
 /* ------------------------------------------------------------------------
    Types for specific attributes
    ------------------------------------------------------------------------ */
-export enum IncidentStatus {
+export enum DowntimeStatus {
   OK = "OK",
   KO = "KO",
 }
@@ -38,10 +38,10 @@ export interface GetDowntimeHistoryParams {
    Internal model
    ------------------------------------------------------------------------ */
 
-export interface Incident {
+export interface Downtime {
   rawFunctionality: string;
   knownFunctionality?: KnownFunctionality;
-  status: IncidentStatus;
+  status: DowntimeStatus;
   startDate: string;
   endDate?: string;
   legalFactId?: string;
@@ -52,7 +52,7 @@ export interface FunctionalityStatus {
   rawFunctionality: string;
   knownFunctionality?: KnownFunctionality;
   isOperative: boolean;
-  currentIncident?: Incident;
+  currentDowntime?: Downtime;
 }
 
 export interface AppCurrentStatus {
@@ -60,8 +60,8 @@ export interface AppCurrentStatus {
   statusByFunctionality: Array<FunctionalityStatus>;
 }
 
-export interface IncidentsPage {
-  incidents: Array<Incident>;
+export interface DowntimeLogPage {
+  downtimes: Array<Downtime>;
   nextPage?: string;
 }
 
@@ -75,13 +75,13 @@ export interface IncidentsPage {
  * - functionality not in the expected set 
  *   (if possible, taken from the response from /downtime/v1/status)
  *   but in order to verify it, I should be able to access the Redux store
- *   (to avoid re-fetching the set of functionalities each time incidents are retrieved).
+ *   (to avoid re-fetching the set of functionalities each time downtimes are retrieved).
  *   Hence I won't validate, and rather indicate "unknown functionality" in the FE.
- * - status not in the IncidentStatus set
+ * - status not in the DowntimeStatus set
  * - startDate not a valid date
  * - endDate, if present, not a valid date
  */
- export interface BEIncident {
+ export interface BEDowntime {
   functionality: string;
   status: string;
   startDate: string;
@@ -91,15 +91,15 @@ export interface IncidentsPage {
 }
 
 /**
- * Possible errors: just those of incidents
+ * Possible errors: just those of open incidents
  */
 export interface BEStatus {
   functionalities: Array<string>;
-  openIncidents: Array<BEIncident>;
+  openIncidents: Array<BEDowntime>;
 }
 
-export interface BEDowntimePage {
-  result: Array<BEIncident>;
+export interface BEDowntimeLogPage {
+  result: Array<BEDowntime>;
   nextPage?: string;
 }
 
@@ -132,12 +132,12 @@ function validateBoolean(value: boolean | undefined): string | null {
     validation - BE response validators
     ------------------------------------------------------------------------ */
 
-export class BEIncidentValidator extends Validator<BEIncident> {
+export class BEDowntimeValidator extends Validator<BEDowntime> {
   constructor() {
     super();
     this.ruleFor('functionality').customValidator(validateString).isUndefined(true);
     // this.ruleFor('functionality').isUndefined(true);
-    this.ruleFor('status').isOneOf(Object.values(IncidentStatus) as Array<string>).isUndefined(true);
+    this.ruleFor('status').isOneOf(Object.values(DowntimeStatus) as Array<string>).isUndefined(true);
     this.ruleFor('startDate').customValidator(validateIsoDate(true));
     this.ruleFor('endDate').customValidator(validateIsoDate(false));
     this.ruleFor('legalFactId').customValidator(validateString);
@@ -149,14 +149,14 @@ export class BEStatusValidator extends Validator<BEStatus> {
   constructor() {
     super();
     this.ruleFor("functionalities").isEmpty(true).forEachElement(rules => rules.customValidator(validateString));
-    this.ruleFor("openIncidents").forEachElement(rules => rules.setValidator(new BEIncidentValidator()));
+    this.ruleFor("openIncidents").forEachElement(rules => rules.setValidator(new BEDowntimeValidator()));
   }
 }
 
-export class BEDowntimePageValidator extends Validator<BEDowntimePage> {
+export class BEDowntimeLogPageValidator extends Validator<BEDowntimeLogPage> {
   constructor() {
     super();
-    this.ruleFor('result').forEachElement(rules => rules.setValidator(new BEIncidentValidator())).isUndefined(true);
+    this.ruleFor('result').forEachElement(rules => rules.setValidator(new BEDowntimeValidator())).isUndefined(true);
     this.ruleFor('nextPage').customValidator(validateString);
   }
 }

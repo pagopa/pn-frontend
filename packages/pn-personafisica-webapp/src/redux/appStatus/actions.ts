@@ -1,11 +1,11 @@
 import { performThunkAction } from "@pagopa-pn/pn-commons";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AppStatusApi } from "../../api/appStatus/AppStatus.api";
-import { AppCurrentStatus, GetDowntimeHistoryParams, IncidentsPage } from "../../models/appStatus";
+import { AppCurrentStatus, GetDowntimeHistoryParams, DowntimeLogPage } from "../../models/appStatus";
 
 export enum APP_STATUS_ACTIONS {
     GET_CURRENT_STATUS = 'getCurrentStatus',
-    GET_INCIDENTS_PAGE = 'getIncidentsPage',
+    GET_DOWNTIME_LOG_PAGE = 'getDowntimeLogPage',
 }
 
 export const getCurrentStatus = createAsyncThunk<AppCurrentStatus>(
@@ -13,7 +13,7 @@ export const getCurrentStatus = createAsyncThunk<AppCurrentStatus>(
     performThunkAction(() => AppStatusApi.getCurrentStatus())
 );
 
-export const getIncidentsPage = createAsyncThunk<IncidentsPage, GetDowntimeHistoryParams>(
-    APP_STATUS_ACTIONS.GET_INCIDENTS_PAGE,
-    performThunkAction((params: GetDowntimeHistoryParams) => AppStatusApi.getDowntimePage(params))
+export const getDowntimeLogPage = createAsyncThunk<DowntimeLogPage, GetDowntimeHistoryParams>(
+    APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE,
+    performThunkAction((params: GetDowntimeHistoryParams) => AppStatusApi.getDowntimeLogPage(params))
 );

@@ -1,18 +1,18 @@
-import { BEDowntimePage, BEDowntimePageValidator, BEIncident, BEIncidentValidator, BEStatus, BEStatusValidator } from "../appStatus";
+import { BEDowntimeLogPage, BEDowntimeLogPageValidator, BEDowntime, BEDowntimeValidator, BEStatus, BEStatusValidator } from "../appStatus";
 
 describe("App Status model test", () => {
-  it("incident validator - minimal valid incident", () => {
-    const incident: BEIncident = {
+  it("downtime validator - minimal valid downtime", () => {
+    const downtime: BEDowntime = {
       functionality: "NOTIFICATION_CREATE",
       status: "OK",
       startDate: "2022-10-21T06:07:08Z",
     };
 
-    expect(new BEIncidentValidator().validate(incident)).toBeNull();
+    expect(new BEDowntimeValidator().validate(downtime)).toBeNull();
   });
 
-  it("incident validator - valid incident with full data", () => {
-    const incident: BEIncident = {
+  it("downtime validator - valid downtime with full data", () => {
+    const downtime: BEDowntime = {
       functionality: "NOTIFICATION_CREATE",
       status: "KO",
       startDate: "2022-10-21T06:07:08Z",
@@ -21,45 +21,45 @@ describe("App Status model test", () => {
       fileAvailable: true,
     };
 
-    expect(new BEIncidentValidator().validate(incident)).toBeNull();
+    expect(new BEDowntimeValidator().validate(downtime)).toBeNull();
   });
 
-  it("incident validator - bad status", () => {
-    const incident: BEIncident = {
+  it("downtime validator - bad status", () => {
+    const downtime: BEDowntime = {
       functionality: "NOTIFICATION_CREATE",
       status: "INVALID_STATUS",
       startDate: "2022-10-21T06:07:08Z",
     };
 
-    const validationResult = new BEIncidentValidator().validate(incident);
+    const validationResult = new BEDowntimeValidator().validate(downtime);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.status).not.toBeUndefined();
     expect(validationResult?.startDate).toBeUndefined();
     expect(validationResult?.endDate).toBeUndefined();
   });
 
-  it("incident validator - missing functionality", () => {
-    const incident: any = {
+  it("downtime validator - missing functionality", () => {
+    const downtime: any = {
       status: "OK",
       startDate: "2022-10-21T06:07:08Z",
     };
 
-    const validationResult = new BEIncidentValidator().validate(incident);
+    const validationResult = new BEDowntimeValidator().validate(downtime);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.functionality).not.toBeUndefined();
     expect(validationResult?.status).toBeUndefined();
     expect(validationResult?.endDate).toBeUndefined();
   });
 
-  it("incident validator - bad-typed data", () => {
-    const incident: any = {
+  it("downtime validator - bad-typed data", () => {
+    const downtime: any = {
       functionality: true,
       status: 4,
       startDate: "2022-10-21T06:07:08Z",
       fileAvailable: "toto",
     };
 
-    const validationResult = new BEIncidentValidator().validate(incident);
+    const validationResult = new BEDowntimeValidator().validate(downtime);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.functionality).not.toBeUndefined();
     expect(validationResult?.status).not.toBeUndefined();
@@ -68,8 +68,8 @@ describe("App Status model test", () => {
     expect(validationResult?.fileAvailable).not.toBeUndefined();
   });
 
-  it("incident validator - just bad-typed legalFactId", () => {
-    const incident: any = {
+  it("downtime validator - just bad-typed legalFactId", () => {
+    const downtime: any = {
       functionality: "NOTIFICATION_CREATE",
       status: "OK",
       startDate: "2022-10-21T06:07:08Z",
@@ -78,7 +78,7 @@ describe("App Status model test", () => {
       fileAvailable: true,
     };
 
-    const validationResult = new BEIncidentValidator().validate(incident);
+    const validationResult = new BEDowntimeValidator().validate(downtime);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.functionality).toBeUndefined();
     expect(validationResult?.status).toBeUndefined();
@@ -88,8 +88,8 @@ describe("App Status model test", () => {
     expect(validationResult?.fileAvailable).toBeUndefined();
   });
 
-  it("incident validator - ill-formed start date", () => {
-    const incident: BEIncident = {
+  it("downtime validator - ill-formed start date", () => {
+    const downtime: BEDowntime = {
       functionality: "NOTIFICATION_WORKFLOW",
       status: "KO",
       startDate: "not-a-date",
@@ -97,7 +97,7 @@ describe("App Status model test", () => {
       fileAvailable: true,
     };
 
-    const validationResult = new BEIncidentValidator().validate(incident);
+    const validationResult = new BEDowntimeValidator().validate(downtime);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.functionality).toBeUndefined();
     expect(validationResult?.status).toBeUndefined();
@@ -106,8 +106,8 @@ describe("App Status model test", () => {
     expect(validationResult?.fileAvailable).toBeUndefined();
   });
 
-  it("incident validator - ill-formed end date", () => {
-    const incident: BEIncident = {
+  it("downtime validator - ill-formed end date", () => {
+    const downtime: BEDowntime = {
       functionality: "NOTIFICATION_WORKFLOW",
       status: "KO",
       startDate: "2022-10-21T06:07:05Z",
@@ -115,13 +115,13 @@ describe("App Status model test", () => {
       fileAvailable: true,
     };
 
-    const validationResult = new BEIncidentValidator().validate(incident);
+    const validationResult = new BEDowntimeValidator().validate(downtime);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.startDate).toBeUndefined();
     expect(validationResult?.endDate).not.toBeUndefined();
   });
 
-  it("status validator - valid data with no incidents", () => {
+  it("status validator - valid data with no open incidents", () => {
     const status: BEStatus = {
       functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZZATION", "NOTIFICATION_WORKFLOW"],
       openIncidents: [],
@@ -129,7 +129,7 @@ describe("App Status model test", () => {
     expect(new BEStatusValidator().validate(status)).toBeNull();
   });
 
-  it("status validator - valid data with two incidents", () => {
+  it("status validator - valid data with two open incidents", () => {
     const status: BEStatus = {
       functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZZATION", "NOTIFICATION_WORKFLOW"],
       openIncidents: [
@@ -178,7 +178,7 @@ describe("App Status model test", () => {
     expect(validationResult?.openIncidents).toBeUndefined();
   });
 
-  it("status validator - bad-typed start date in one incident", () => {
+  it("status validator - bad-typed start date in one open incident", () => {
     const status: BEStatus = {
       functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZZATION", "NOTIFICATION_WORKFLOW"],
       openIncidents: [
@@ -205,14 +205,14 @@ describe("App Status model test", () => {
   });
 
   it("downtime page validator - valid page with no downtime events", () => {
-    const downtimePage: BEDowntimePage = {
+    const downtimeLogPage: BEDowntimeLogPage = {
       result: [],
     };
-    expect(new BEDowntimePageValidator().validate(downtimePage)).toBeNull(); 
+    expect(new BEDowntimeLogPageValidator().validate(downtimeLogPage)).toBeNull(); 
   });
 
   it("downtime page validator - valid page with three downtime events", () => {
-    const downtimePage: BEDowntimePage = {
+    const downtimeLogPage: BEDowntimeLogPage = {
       result: [
         {
           functionality: "NOTIFICATION_CREATE",
@@ -237,11 +237,11 @@ describe("App Status model test", () => {
       ],
       nextPage: "some-next-page",
     };
-    expect(new BEDowntimePageValidator().validate(downtimePage)).toBeNull(); 
+    expect(new BEDowntimeLogPageValidator().validate(downtimeLogPage)).toBeNull(); 
   });
 
-  it("downtime page validator - invalid page - ill-formed incident", () => {
-    const downtimePage: any = {
+  it("downtime page validator - invalid page - ill-formed downtime", () => {
+    const downtimeLogPage: any = {
       result: [
         {
           functionality: "NOTIFICATION_CREATE",
@@ -266,14 +266,14 @@ describe("App Status model test", () => {
       ],
       nextPage: "some-next-page",
     };
-    const validationResult = new BEDowntimePageValidator().validate(downtimePage);
+    const validationResult = new BEDowntimeLogPageValidator().validate(downtimeLogPage);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.result).not.toBeUndefined();
     expect(validationResult?.nextPage).toBeUndefined();
   });
 
   it("downtime page validator - invalid page - wrong-type nextPage", () => {
-    const downtimePage: any = {
+    const downtimeLogPage: any = {
       result: [
         {
           functionality: "NOTIFICATION_CREATE",
@@ -291,7 +291,7 @@ describe("App Status model test", () => {
       ],
       nextPage: {a: 4, b: 28},
     };
-    const validationResult = new BEDowntimePageValidator().validate(downtimePage);
+    const validationResult = new BEDowntimeLogPageValidator().validate(downtimeLogPage);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.result).toBeUndefined();
     expect(validationResult?.nextPage).not.toBeUndefined();

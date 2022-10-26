@@ -1,4 +1,4 @@
-import { AppCurrentStatus, IncidentsPage, IncidentStatus, KnownFunctionality } from "../../../models/appStatus";
+import { AppCurrentStatus, DowntimeLogPage, DowntimeStatus, KnownFunctionality } from "../../../models/appStatus";
 
 export const currentStatusOk: AppCurrentStatus = {
   appIsFullyOperative: true,
@@ -9,12 +9,12 @@ export const currentStatusOk: AppCurrentStatus = {
   }]
 };
 
-export const simpleDowntimePage: IncidentsPage = {
-  incidents: [
+export const simpleDowntimeLogPage: DowntimeLogPage = {
+  downtimes: [
     {
       rawFunctionality: KnownFunctionality.NotificationCreate,
       knownFunctionality: KnownFunctionality.NotificationCreate,
-      status: IncidentStatus.OK,
+      status: DowntimeStatus.OK,
       startDate: '2022-10-23T15:50:04Z',
       endDate: '2022-10-23T15:51:12Z',
       legalFactId: 'some-legal-fact-id',
@@ -23,7 +23,7 @@ export const simpleDowntimePage: IncidentsPage = {
     {
       rawFunctionality: KnownFunctionality.NotificationWorkflow,
       knownFunctionality: KnownFunctionality.NotificationWorkflow,
-      status: IncidentStatus.KO,
+      status: DowntimeStatus.KO,
       startDate: '2022-10-28T19:24:08Z',
     }
   ]
