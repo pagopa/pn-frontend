@@ -7,7 +7,7 @@
  * Carlos Lombardi, 2022.08.05
  */
 export const dataRegex = {
-  phoneNumber: /^[0-9\-()+.\s]+$/,
+  phoneNumber: /^3\d{2}[. ]??\d{6,7}/g,
   name: /^[A-Za-zÀ-ÿ\-'" 0-9\.]+$/,
   lettersAndNumbers: /^[A-Za-z0-9]+$/,
   simpleServer: /^[A-Za-z0-9.\-/]+$/, // the server part of an URL, no protocol, no query params
