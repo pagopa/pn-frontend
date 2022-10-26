@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
@@ -169,6 +170,7 @@ const App = () => {
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     },
+    { label: t('menu.app-status'), icon: CheckCircleIcon, route: routes.APP_STATUS },
   ];
 
   const changeLanguageHandler = async (langCode: string) => {
