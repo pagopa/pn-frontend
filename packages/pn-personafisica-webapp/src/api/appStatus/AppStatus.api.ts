@@ -23,11 +23,13 @@ const statusResponseExample: BEStatus = {
   functionalities: [
     "NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZZATION", "NOTIFICATION_WORKFLOW"
   ],
-  openIncidents: [{
-    functionality: "NOTIFICATION_WORKFLOW",
-    status: "KO",
-    startDate: minutesBeforeNow(1).toISOString(),
-  }],
+  openIncidents: [
+    // {
+    //   functionality: "NOTIFICATION_WORKFLOW",
+    //   status: "KO",
+    //   startDate: minutesBeforeNow(1).toISOString(),
+    // }
+  ],
 };
   
 const downtimePageResponseExample: BEDowntimePage = {
@@ -60,7 +62,7 @@ const downtimePageResponseExample: BEDowntimePage = {
    the API
    ------------------------------------------------------------------------ */
 
-const useMockResponseData = false;
+const useMockResponseData = true;
 
 export const AppStatusApi = {
   getCurrentStatus: async (): Promise<AppCurrentStatus> => {

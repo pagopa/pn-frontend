@@ -23,7 +23,8 @@ export function DOWNTIME_STATUS() {
 }
 
 export function DOWNTIME_HISTORY(params: GetDowntimeHistoryParams) {
-  let queryParams: any = { [API_DOWNTIME_FROM_TIME_PARAMETER]: params.startDate };
+  /* eslint-disable functional/immutable-data */
+  const queryParams: any = { [API_DOWNTIME_FROM_TIME_PARAMETER]: params.startDate };
 
   const conditionallyAddParam = (name: string, value: any) => {
     if (value != null) {
