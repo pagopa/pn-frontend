@@ -21,10 +21,10 @@ export class IsEmpty<TModel, TValue> extends Rule<TModel, TValue> {
     if (value instanceof String && value.valueOf() === '') {
         return !this.not ? null : 'Value mustn\'t be empty';
     }
-    if (isObject<unknown, object>(value) && Object.keys(value).length === 0) {
+    if (isObject(value) && Object.keys(value).length === 0) {
         return !this.not ? null : 'Value mustn\'t be empty';
     }
-    if (isArray<unknown, Array<unknown>>(value) && value.length === 0) {
+    if (isArray(value) && value.length === 0) {
         return !this.not ? null : 'Value mustn\'t be empty';
     }
 

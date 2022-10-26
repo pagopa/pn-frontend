@@ -38,13 +38,13 @@ export class GreaterThan<TModel, TValue> extends Rule<TModel, TValue> {
     if (!isDefined(value)) {
       return null;
     }
-    if (!isNumber<unknown, Number>(value) && !isDate<unknown, Date>(value)) {
+    if (!isNumber(value) && !isDate<(value)) {
       throw new TypeError('A value with wrong type was passed to the greaterThan rule');
     }
-    if (isNumber<unknown, Number>(value)) {
+    if (isNumber(value)) {
       return this.compareNumber(value);
     }
-    if (isDate<unknown, Date>(value)) {
+    if (isDate(value)) {
       return this.comapreDate(value);
     }
     return null;
