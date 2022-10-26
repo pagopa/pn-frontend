@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 import { dataRegex } from "@pagopa-pn/pn-commons";
 import { Validator } from "@pagopa-pn/pn-validator";
 
@@ -26,7 +28,7 @@ export function isKnownFunctionality(functionality: string): boolean {
 export interface GetDowntimeHistoryParams {
   startDate: string;
   endDate?: string;
-  functionality?: KnownFunctionality[];
+  functionality?: Array<KnownFunctionality>;
   page?: string;
   size?: string;
 }
@@ -55,11 +57,11 @@ export interface FunctionalityStatus {
 
 export interface AppCurrentStatus {
   appIsFullyOperative: boolean;
-  statusByFunctionality: FunctionalityStatus[];
+  statusByFunctionality: Array<FunctionalityStatus>;
 }
 
 export interface IncidentsPage {
-  incidents: Incident[];
+  incidents: Array<Incident>;
   nextPage?: string;
 }
 
@@ -92,12 +94,12 @@ export interface IncidentsPage {
  * Possible errors: just those of incidents
  */
 export interface BEStatus {
-  functionalities: string[];
-  openIncidents: BEIncident[];
+  functionalities: Array<string>;
+  openIncidents: Array<BEIncident>;
 }
 
 export interface BEDowntimePage {
-  result: BEIncident[];
+  result: Array<BEIncident>;
   nextPage?: string;
 }
 
@@ -106,57 +108,57 @@ export interface BEDowntimePage {
 /* ------------------------------------------------------------------------
    validation - custom validators
    ------------------------------------------------------------------------ */
-   function validateIsoDate(required: boolean) {
-    return (value: string | undefined) => {
-      const isOK = value 
-        ? dataRegex.isoDate.test(value) && !Number.isNaN(Date.parse(value)) 
-        : !required;
-      return isOK ? null : "A date in ISO format is expected";
-    }
-  }
-  
-  function validateString(value: string | undefined): string | null {
-    const isOK = value === undefined || typeof value === 'string';
-    return isOK ? null : "A string is expected";
-  }
-  
-  function validateBoolean(value: boolean | undefined): string | null {
-    const isOK = value === undefined || typeof value === 'boolean';
-    return isOK ? null : "A boolean is expected";
-  }
+function validateIsoDate(required: boolean) {
+  return (value: string | undefined) => {
+    const isOK = value 
+      ? dataRegex.isoDate.test(value) && !Number.isNaN(Date.parse(value)) 
+      : !required;
+    return isOK ? null : "A date in ISO format is expected";
+  };
+}
+
+function validateString(value: string | undefined): string | null {
+  const isOK = value === undefined || typeof value === 'string';
+  return isOK ? null : "A string is expected";
+}
+
+function validateBoolean(value: boolean | undefined): string | null {
+  const isOK = value === undefined || typeof value === 'boolean';
+  return isOK ? null : "A boolean is expected";
+}
     
     
-  /* ------------------------------------------------------------------------
-     validation - BE response validators
-     ------------------------------------------------------------------------ */
-  export class BEIncidentValidator extends Validator<BEIncident> {
-    constructor() {
-      super();
-      this.ruleFor('functionality').customValidator(validateString).isUndefined(true);
-      // this.ruleFor('functionality').isUndefined(true);
-      this.ruleFor('status').isOneOf(Object.values(IncidentStatus) as string[]).isUndefined(true);
-      this.ruleFor('startDate').customValidator(validateIsoDate(true));
-      this.ruleFor('endDate').customValidator(validateIsoDate(false));
-      this.ruleFor('legalFactId').customValidator(validateString);
-      this.ruleFor('fileAvailable').customValidator(validateBoolean);
-    }
+/* ------------------------------------------------------------------------
+    validation - BE response validators
+    ------------------------------------------------------------------------ */
+
+export class BEIncidentValidator extends Validator<BEIncident> {
+  constructor() {
+    super();
+    this.ruleFor('functionality').customValidator(validateString).isUndefined(true);
+    // this.ruleFor('functionality').isUndefined(true);
+    this.ruleFor('status').isOneOf(Object.values(IncidentStatus) as Array<string>).isUndefined(true);
+    this.ruleFor('startDate').customValidator(validateIsoDate(true));
+    this.ruleFor('endDate').customValidator(validateIsoDate(false));
+    this.ruleFor('legalFactId').customValidator(validateString);
+    this.ruleFor('fileAvailable').customValidator(validateBoolean);
   }
-  
-  export class BEStatusValidator extends Validator<BEStatus> {
-    constructor() {
-      super();
-      this.ruleFor("functionalities").isEmpty(true).forEachElement(rules => rules.customValidator(validateString));
-      this.ruleFor("openIncidents").forEachElement(rules => rules.setValidator(new BEIncidentValidator()));
-    }
+}
+
+export class BEStatusValidator extends Validator<BEStatus> {
+  constructor() {
+    super();
+    this.ruleFor("functionalities").isEmpty(true).forEachElement(rules => rules.customValidator(validateString));
+    this.ruleFor("openIncidents").forEachElement(rules => rules.setValidator(new BEIncidentValidator()));
   }
-  
-  export class BEDowntimePageValidator extends Validator<BEDowntimePage> {
-    constructor() {
-      super();
-      this.ruleFor('result').forEachElement(rules => rules.setValidator(new BEIncidentValidator())).isUndefined(true);
-      this.ruleFor('nextPage').customValidator(validateString);
-    }
+}
+
+export class BEDowntimePageValidator extends Validator<BEDowntimePage> {
+  constructor() {
+    super();
+    this.ruleFor('result').forEachElement(rules => rules.setValidator(new BEIncidentValidator())).isUndefined(true);
+    this.ruleFor('nextPage').customValidator(validateString);
   }
-  
-  
-  
+}
+
+

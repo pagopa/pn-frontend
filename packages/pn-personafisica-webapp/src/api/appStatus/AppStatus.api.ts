@@ -4,7 +4,7 @@ import { apiClient } from '../axios';
 import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from './appStatus.routes';
 
 interface BEDowntimePage {
-  result: BEIncident[];
+  result: Array<BEIncident>;
   nextPage?: string;
 }
 
@@ -53,7 +53,7 @@ const downtimePageResponseExample: BEDowntimePage = {
       startDate: minutesBeforeNow(1).toISOString(),
     }
   ],
-}  
+};
 
 
 /* ------------------------------------------------------------------------
@@ -109,7 +109,7 @@ export const AppStatusApi = {
     // finally the response
     return beDowntimePageToFeIncidentPage(apiResponse);
   }
-}
+};
 
 
 /* ------------------------------------------------------------------------
@@ -117,6 +117,7 @@ export const AppStatusApi = {
    ------------------------------------------------------------------------ */
 
 function beIncidentToFeIncident(incident: BEIncident): Incident {
+  /* eslint-disable functional/immutable-data */
   const result: Incident = {
     rawFunctionality: incident.functionality,
     status: incident.status as IncidentStatus,
@@ -163,7 +164,7 @@ function unknownIncidentToFunctionalityCurrentStatus(incident: BEIncident): Func
     rawFunctionality: incident.functionality,
     isOperative: false,
     currentIncident: beIncidentToFeIncident(incident),
-  }
+  };
 }
 
 function beDowntimeStatusToFeAppStatus(beStatus: BEStatus): AppCurrentStatus {
@@ -177,10 +178,11 @@ function beDowntimeStatusToFeAppStatus(beStatus: BEStatus): AppCurrentStatus {
   return {
     appIsFullyOperative: beStatus.openIncidents.length === 0,
     statusByFunctionality
-  }
+  };
 }
 
 function beDowntimePageToFeIncidentPage(beDowntimePage: BEDowntimePage): IncidentsPage {
+  /* eslint-disable functional/immutable-data */
   const result: IncidentsPage = {
     incidents: beDowntimePage.result.map(beIncidentToFeIncident),
   };
