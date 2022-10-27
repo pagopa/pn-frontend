@@ -4,7 +4,11 @@ phases:
     runtime-versions:
       nodejs: 14
     commands:
-      #install yarn
+      # workaround to reduce allarms-noise due tu an eccessive amount of build in non-dev environment during development (eg. draft-PR or development branch)
+      - echo check if current env is dev and current branch is main
+      - |
+        
+      # install yarn
       - echo installing yarn
       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
       - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
