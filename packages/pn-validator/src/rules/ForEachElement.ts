@@ -36,7 +36,7 @@ export class ForEachElement<TModel, TValue> extends Rule<TModel, TValue> {
     if (!isDefined(value)) {
       return null;
     }
-    if (isArray<unknown, Array<unknown>>(value)) {
+    if (isArray(value)) {
       const results: Array<ValidationResult<TElemValue<TValue>>> = [];
       // eval rules for each element
       for (const rule of this.rules) {

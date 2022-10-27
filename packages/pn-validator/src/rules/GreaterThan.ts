@@ -23,7 +23,7 @@ export class GreaterThan<TModel, TValue> extends Rule<TModel, TValue> {
     return numberValue > this.threshold ? null : `Value must be greater than ${this.threshold}`;
   };
 
-  private comapreDate = (value: Date) => {
+  private compareDate = (value: Date) => {
     if (this.equalTo) {
       return value.getTime() >= (this.threshold as Date).getTime()
         ? null
@@ -38,14 +38,14 @@ export class GreaterThan<TModel, TValue> extends Rule<TModel, TValue> {
     if (!isDefined(value)) {
       return null;
     }
-    if (!isNumber(value) && !isDate<(value)) {
+    if (!isNumber(value) && !isDate(value)) {
       throw new TypeError('A value with wrong type was passed to the greaterThan rule');
     }
     if (isNumber(value)) {
       return this.compareNumber(value);
     }
     if (isDate(value)) {
-      return this.comapreDate(value);
+      return this.compareDate(value);
     }
     return null;
   };

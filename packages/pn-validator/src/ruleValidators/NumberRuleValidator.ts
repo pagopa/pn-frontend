@@ -19,10 +19,14 @@ export class NumberRuleValidator<TModel, TValue>
    * @param  {boolean} [equalTo] boolean for equality comparison
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  lessThan = (value: number, equalTo?: boolean, customErrorMessage?: string): NumberRuleValidator<TModel, TValue> => {
+  public lessThan(
+    value: number,
+    equalTo?: boolean,
+    customErrorMessage?: string
+  ): NumberRuleValidator<TModel, TValue> {
     this.pushRule(new LessThan(value, equalTo, customErrorMessage));
     return this;
-  };
+  }
 
   /**
    * Check if value is greater than provided value
@@ -30,7 +34,11 @@ export class NumberRuleValidator<TModel, TValue>
    * @param  {boolean} [equalTo] boolean for equality comparison
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  greaterThan = (value: number, equalTo?: boolean, customErrorMessage?: string): NumberRuleValidator<TModel, TValue> => {
+  public readonly greaterThan = (
+    value: number,
+    equalTo?: boolean,
+    customErrorMessage?: string
+  ): NumberRuleValidator<TModel, TValue> => {
     this.pushRule(new GreaterThan(value, equalTo, customErrorMessage));
     return this;
   };
@@ -43,14 +51,22 @@ export class NumberRuleValidator<TModel, TValue>
    * @param  {boolean} [inclusiveUpperBound] boolean for upper bound inclusive comparison
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  between = (
+  public readonly between = (
     lowerBound: number,
     upperBound: number,
     inclusiveLowerBound?: boolean,
     inclusiveUpperBound?: boolean,
     customErrorMessage?: string
   ): NumberRuleValidator<TModel, TValue> => {
-    this.pushRule(new Between(lowerBound, upperBound, inclusiveLowerBound, inclusiveUpperBound, customErrorMessage));
+    this.pushRule(
+      new Between(
+        lowerBound,
+        upperBound,
+        inclusiveLowerBound,
+        inclusiveUpperBound,
+        customErrorMessage
+      )
+    );
     return this;
   };
 }

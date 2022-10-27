@@ -7,7 +7,7 @@ import { TypeRules } from './types/TypeRules';
 export class Validator<TModel> {
   private validatorBuilders: ValidatorBuilders<TModel> = {};
 
-  public validate = (model: TModel, strict: boolean = false): ValidationError<TModel> | null => {
+  public readonly validate = (model: TModel, strict: boolean = false): ValidationError<TModel> | null => {
     let errors: ValidationError<TModel> | null = null;
     // if strict = true, first check that input model doesn't have keys not defined in TModel
     
@@ -33,7 +33,7 @@ export class Validator<TModel> {
    * Add rule for a specific property
    * @param  {TPropertyName} propertyName property name
    */
-  protected ruleFor = <TPropertyName extends keyof TModel, TValue extends TModel[TPropertyName]>(
+  public readonly ruleFor = <TPropertyName extends keyof TModel, TValue extends TModel[TPropertyName]>(
     propertyName: TPropertyName
   ): TypeRules<TModel, TValue> => {
     const validatorBuilder = new ValidatorBuilder<TModel, TValue>();

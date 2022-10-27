@@ -42,4 +42,5 @@ export class ValidatorBuilder<TModel, TValue> {
     ...new ObjectRuleValidator<TModel, TValue>(this.pushRule),
     ...new ArrayRuleValidator<TModel, TValue>(this.pushRule),
   }) as unknown as TypeRules<TModel, TValue>;
+
 }

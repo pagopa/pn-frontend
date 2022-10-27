@@ -15,11 +15,10 @@ export class ObjectRuleValidator<TModel, TValue>
 
   /**
    * Check if value is empty
-   * @param {boolean} [not] boolean to evaluate negative condition
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  isEmpty = (not?: boolean, customErrorMessage?: string): ObjectRuleValidator<TModel, TValue> => {
-    this.pushRule(new IsEmpty<TModel, TValue>(not, customErrorMessage));
+   public readonly isEmpty = (customErrorMessage?: string): ObjectRuleValidator<TModel, TValue> => {
+    this.pushRule(new IsEmpty<TModel, TValue>(false, customErrorMessage));
     return this;
   };
 
@@ -27,7 +26,9 @@ export class ObjectRuleValidator<TModel, TValue>
    * Set validator to validate properties of type object
    * @param {Validator} [validator] validator
    */
-   setValidator = (validator: Validator<TValue>): ObjectRuleValidator<TModel, TValue> => {
+   public readonly  setValidator = (
+    validator: Validator<TValue>
+  ): ObjectRuleValidator<TModel, TValue> => {
     this.pushRule(new InnerValidator<TModel, TValue>(validator));
     return this;
   };

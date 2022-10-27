@@ -15,11 +15,10 @@ export class StringRuleValidator<TModel, TValue>
 
   /**
    * Check if value is empty
-   * @param {boolean} [not] boolean to evaluate negative condition
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  isEmpty = (not?: boolean, customErrorMessage?: string): StringRuleValidator<TModel, TValue> => {
-    this.pushRule(new IsEmpty<TModel, TValue>(not, customErrorMessage));
+  public readonly isEmpty = (customErrorMessage?: string): StringRuleValidator<TModel, TValue> => {
+    this.pushRule(new IsEmpty<TModel, TValue>(false, customErrorMessage));
     return this;
   };
 
@@ -29,18 +28,25 @@ export class StringRuleValidator<TModel, TValue>
    * @param {number} [maxLength] max desired length
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  length = (minLength?: number, maxLength?: number, customErrorMessage?: string): StringRuleValidator<TModel, TValue> => {
+  public readonly length = (
+    minLength?: number,
+    maxLength?: number,
+    customErrorMessage?: string
+  ): StringRuleValidator<TModel, TValue> => {
     this.pushRule(new Length<TModel, TValue>(minLength, maxLength, customErrorMessage));
     return this;
   };
 
   /**
    * Check if value matches reqexp provided
-   * @param {boolean} [not] boolean to evaluate negative condition
+   * @param {RegExp} pattern regexp to test
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
-  matches = (pattern: RegExp, not?: boolean, customErrorMessage?: string): StringRuleValidator<TModel, TValue> => {
-    this.pushRule(new Matches<TModel, TValue>(pattern, not, customErrorMessage));
+  public readonly matches = (
+    pattern: RegExp,
+    customErrorMessage?: string
+  ): StringRuleValidator<TModel, TValue> => {
+    this.pushRule(new Matches<TModel, TValue>(pattern, false, customErrorMessage));
     return this;
   };
 }

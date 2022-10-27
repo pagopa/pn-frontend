@@ -75,7 +75,7 @@ describe('Test ValidatorBuilder', () => {
   it('check if validate works (value invalid and custom error message)', () => {
     const dummyValidatorBuilder = new ValidatorBuilder<any, String>();
     const rules = dummyValidatorBuilder.getTypeRules();
-    rules.isEqual('prova', false, 'Custom error message');
+    rules.isEqual('prova', 'Custom error message');
     const results = dummyValidatorBuilder.validate('no match', {});
     expect(results).toBe('Custom error message');
   });

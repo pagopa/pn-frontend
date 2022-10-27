@@ -24,7 +24,8 @@ class DummyValidator extends Validator<DummyClass> {
 
     this.ruleFor('property').isEqual('value');
     this.ruleFor('subProperty')
-      .isEmpty(true)
+      .not()
+      .isEmpty()
       .forEachElement((rules) => {
         rules.setValidator(new SubDummyValidator());
       });

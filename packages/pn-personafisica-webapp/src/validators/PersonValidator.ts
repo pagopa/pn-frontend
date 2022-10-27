@@ -9,7 +9,8 @@ export class PersonValidator extends Validator<Person> {
     constructor() {
       super();
       this.ruleFor('firstName').isEqual('Mario');
-      this.ruleFor('lastName').isEmpty(true);
+      this.ruleFor('lastName').isEmpty();
+      this.ruleFor('displayName').length(3, 4);
     }
   }
   
