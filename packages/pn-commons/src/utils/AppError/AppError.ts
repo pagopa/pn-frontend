@@ -1,11 +1,9 @@
 import {
   ServerResponseError,
-  // ServerResponseErrorCode,
   ErrorMessage,
   AppResponseError } from '../../types/AppResponse';
 
 abstract class AppError {
-  // protected code: ServerResponseErrorCode;
   protected code: string;
   protected element: string;
 

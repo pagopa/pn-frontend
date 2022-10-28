@@ -15,22 +15,6 @@ class AppErrorFactory {
     }
 
     return this.getCustomError(error);
-    // switch (error.code) {
-    //   case ServerResponseErrorCode.PN_MANDATE_NOTFOUND:
-    //     return new MandateNotFoundAppError(error);
-    //   case ServerResponseErrorCode.PN_MANDATE_ALREADYEXISTS:
-    //     return new MandateAlreadyExistsAppError(error);
-    //   case ServerResponseErrorCode.PN_MANDATE_NOTACCEPTABLE:
-    //     return new MandateNotAcceptableAppError(error);
-    //   case ServerResponseErrorCode.PN_MANDATE_DELEGATEHIMSELF:
-    //     return new MandateDelegateHimselfAppError(error);
-    //   case ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE:
-    //     return new MandateInvalidVerificationCodeAppError(error);
-    //   case ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE:
-    //     return new UserAttributesInvalidVerificationCodeAppError(error);
-    //   default:
-    //     return new UnknownAppError(error);
-    // }
   }
 }
 

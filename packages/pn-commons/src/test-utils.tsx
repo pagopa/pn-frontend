@@ -1,23 +1,55 @@
-import { render, RenderOptions, fireEvent, waitFor, within, screen } from '@testing-library/react';
 import { ReactElement, ReactNode } from 'react';
+import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
+import { render, RenderOptions, fireEvent, waitFor, within, screen } from '@testing-library/react';
+import { configureStore, Store } from '@reduxjs/toolkit';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { appStateSlice } from './redux/slices/appStateSlice';
 
-const AllTheProviders = ({children}: {children: ReactNode}) => {
+// const AllTheProviders = ({children}: {children: ReactNode}) => {
+//   const theme = createTheme({});
+//   return (
+//     <BrowserRouter>
+//       <ThemeProvider theme={theme}>
+//         {children}
+//       </ThemeProvider>
+//     </BrowserRouter>
+//   )
+// }
+const AllTheProviders = ({ children, testStore }: { children: ReactNode; testStore: Store }) => {
   const theme = createTheme({});
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        {children}
+        <Provider store={testStore}>
+          {children}
+        </Provider>
       </ThemeProvider>
     </BrowserRouter>
-  )
+  );
 }
+
+// const customRender = (
+//   ui: ReactElement,
+//   options?: Omit<RenderOptions, 'wrapper'>,
+// ) => render(ui, {wrapper: AllTheProviders, ...options})
 
 const customRender = (
   ui: ReactElement,
-  options?: Omit<RenderOptions, 'wrapper'>,
-) => render(ui, {wrapper: AllTheProviders, ...options})
+  {
+    preloadedState,
+    renderOptions,
+  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
+) => {
+  const testStore = configureStore({
+    reducer: appStateSlice.reducer,
+    preloadedState,
+  });
+  return render(ui, {
+    wrapper: ({ children }) => <AllTheProviders testStore={testStore}>{children}</AllTheProviders>,
+    ...renderOptions,
+  });
+};
 
 export * from '@testing-library/react'
 export {customRender as render}

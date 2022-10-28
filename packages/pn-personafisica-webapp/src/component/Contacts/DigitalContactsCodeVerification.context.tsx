@@ -1,4 +1,4 @@
-import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, FC, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import _ from 'lodash';
@@ -76,6 +76,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   const handleClose = (status: 'validated' | 'cancelled' = 'cancelled') => {
     setCodeNotValid(false);
     setOpen(false);
+    
     setProps(initialProps);
     if (props.callbackOnValidation) {
       props.callbackOnValidation(status);
@@ -190,7 +191,11 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     }
   }, [props]);
   
-  const handleAddressUpdateError = (responseError: AppResponse) => {
+  const handleAddressUpdateError = useCallback((responseError: AppResponse) => {
+    if(!open) {
+      // notify the publisher we are not handling the error
+      return true;
+    } 
     if(Array.isArray(responseError.errors)){
       const error = responseError.errors[0];
       setErrorMessage({
@@ -199,7 +204,8 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       });
       setCodeNotValid(true);
     }
-  };
+    return false;
+  }, [open]);
   
   useEffect(() => {
     AppResponsePublisher.error.subscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
@@ -209,7 +215,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       AppResponsePublisher.error.unsubscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
       AppResponsePublisher.error.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
     };
-  }, []);
+  }, [handleAddressUpdateError]);
 
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
@@ -225,7 +231,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           }
           open={open}
           initialValues={new Array(5).fill('')}
-          handleClose={() => setOpen(false)}
+          handleClose={() => handleClose()}
           codeSectionTitle={t(`${props.labelRoot}.insert-code`, { ns: 'recapiti' })}
           codeSectionAdditional={
             <Box>

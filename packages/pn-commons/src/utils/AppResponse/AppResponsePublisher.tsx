@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 import { AppResponse, AppResponseOutcome } from "../../types/AppResponse";
 
-type CallBackFunction = (err: AppResponse) => void;
+type CallBackFunction = (err: AppResponse) => void | boolean;
 
 type EventsList = {
   [index: string]: Array<CallBackFunction>;
@@ -66,16 +66,21 @@ class AppResponsePublisher {
     }
   }
 
-  publish(eventName: string, error: AppResponse) {
+  publish(eventName: string, response: AppResponse) {
     const callbacks = this.regularQueue[eventName];
-    // console.log(callbacks);
-    if (Array.isArray(callbacks) && callbacks.length > 0) {
+    // eslint-disable-next-line functional/no-let
+    let published = false;
+    if (Array.isArray(callbacks)) {
       callbacks.forEach((callback) => {
-        callback.apply(null, [error]);
+        const ignored = callback.apply(null, [response]);
+        if(!ignored && !published) {
+          published = true;
+        }
       });
-    } else {
+    }
+    if(!published) {
       this.fallbackQueue.forEach((func) => {
-        func.apply(null, [error]);
+        func.apply(null, [response]);
       });
     }
   }
@@ -116,7 +121,6 @@ export const ResponseEventDispatcher = () => {
       } else {
         error.publish(responseEvent.name, responseEvent.response);
       }
-      // TODO: dispatch the action to reset the store (state.appState.responseEvent = null)
     }
 
   }, [responseEvent]);

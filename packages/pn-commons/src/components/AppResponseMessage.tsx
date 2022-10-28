@@ -22,20 +22,11 @@ const AppResponseMessage = () => {
     });
   };
 
-  // const showSuccessMessage = (response: AppResponse) => {
-  //   console.log("Operazione eseguita correttamente");
-  //   console.log(response);
-  // };
-
   useEffect(() => {
     AppResponsePublisher.error.subscribe(showErrorMessage);
-    // AppResponsePublisher.success.subscribe(showSuccessMessage);
-    // AppResponsePublisher.success.subscribe('getReceivedNotifications', showSuccessMessage);
     
     return () => {
       AppResponsePublisher.error.unsubscribe(showErrorMessage);
-      // AppResponsePublisher.success.unsubscribe(showSuccessMessage);
-      // AppResponsePublisher.success.unsubscribe('getReceivedNotifications', showSuccessMessage);
     };
   }, []);
 

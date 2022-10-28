@@ -21,6 +21,10 @@ const AppMessage = () => {
 
   const onCloseToast = (message: EnqueuedMessage) => {
     if(message.type === MessageType.ERROR) {
+      /**
+       * keep "alreadyShown" property on IAppMessage to ensure back-compatibility with ApiErrorWrapper Component
+       * this property can be removed and ApiErrorWrapper refactored to take advantage of the pub/sub mechanism
+       */
       // dispatch(appStateActions.removeError(id));
       dispatch(appStateActions.setErrorAsAlreadyShown(message.message.id));
     }
@@ -31,6 +35,15 @@ const AppMessage = () => {
     setCurrentMessage(null);
   };
 
+  const enqueueMessages = (messages: Array<IAppMessage>, type: 'success' | 'error') => {
+    const newQueue: Array<EnqueuedMessage> = messages.filter((message: IAppMessage) => !message.alreadyShown && !isMessageEnqueued(message)).map((message: IAppMessage) => ({
+      type,
+      message
+    }));
+
+    setQueue((currentValue) => currentValue.concat(newQueue));
+  };
+
   useEffect(() => {
     if(!currentMessage && queue.length > 0) {
       setCurrentMessage(queue[0]);
@@ -39,23 +52,11 @@ const AppMessage = () => {
   }, [currentMessage, queue]);
 
   useEffect(() => {
-    // const alreadyEnqueuedIds = queue.map(elem => elem.message.id);
-    // const newErrors: Array<EnqueuedMessage> = errors.filter((message: IAppMessage) => !message.alreadyShown && !alreadyEnqueuedIds.includes(message.id)).map((message: IAppMessage) => ({
-    const newErrors: Array<EnqueuedMessage> = errors.filter((message: IAppMessage) => !message.alreadyShown && !isMessageEnqueued(message)).map((message: IAppMessage) => ({
-      type: 'error',
-      message
-    }));
-
-    setQueue((currentValue) => currentValue.concat(newErrors));
+    enqueueMessages(errors, "error");
   }, [errors]);
 
   useEffect(() => {
-    const newSuccesses: Array<EnqueuedMessage> = success.filter((message: IAppMessage) => !message.alreadyShown && !isMessageEnqueued(message)).map((message: IAppMessage) => ({
-      type: 'success',
-      message
-    }));
-    
-    setQueue((currentValue) => currentValue.concat(newSuccesses));
+    enqueueMessages(success, "success");
   }, [success]);
 
   return (

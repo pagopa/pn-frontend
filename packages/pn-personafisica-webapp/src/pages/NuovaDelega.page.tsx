@@ -35,7 +35,7 @@ import {
   PnBreadcrumb,
   CustomDropdown,
 } from '@pagopa-pn/pn-commons';
-import { dataRegex } from '@pagopa-pn/pn-commons/src/utils/string.utility';
+import { dataRegex } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
 import { resetNewDelegation } from '../redux/newDelegation/reducers';
