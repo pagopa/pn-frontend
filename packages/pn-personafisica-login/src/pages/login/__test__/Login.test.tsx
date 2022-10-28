@@ -19,12 +19,8 @@ describe('test login page', () => {
   });
 
   test('rendering test', () => {
-    render(<BrowserRouter><Login /></BrowserRouter>);
-    const LinkName = screen.getByText(/Scopri di più/i);
-    expect(LinkName).toHaveAttribute(
-      'href',
-      'https://www.spid.gov.it/cos-e-spid/come-attivare-spid/'
-    );
+    const result = render(<BrowserRouter><Login /></BrowserRouter>);
+    expect(result.container).toHaveTextContent(/Come vuoi accedere/i);
   });
 
   test('renders button Entra con Spid', () => {
