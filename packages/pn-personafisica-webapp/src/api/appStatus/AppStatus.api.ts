@@ -16,7 +16,7 @@ export class BadApiDataException extends Error {
 
 const statusResponseExample: BEStatus = {
   functionalities: [
-    "NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZZATION", "NOTIFICATION_WORKFLOW"
+    "NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"
   ],
   openIncidents: [
     {
@@ -30,12 +30,9 @@ const statusResponseExample: BEStatus = {
 const downtimeLogPageResponseExample: BEDowntimeLogPage = {
   result: [
     {
-      functionality: "NOTIFICATION_CREATE",
-      status: "OK",
-      startDate: minutesBeforeNow(20).toISOString(),
-      endDate: minutesBeforeNow(16).toISOString(),
-      legalFactId: "some-legal-fact-id",
-      fileAvailable: true,
+      functionality: "NOTIFICATION_WORKFLOW",
+      status: "KO",
+      startDate: minutesBeforeNow(1).toISOString(),
     },
     {
       functionality: "NOTIFICATION_CREATE",
@@ -45,10 +42,13 @@ const downtimeLogPageResponseExample: BEDowntimeLogPage = {
       fileAvailable: false,
     },
     {
-      functionality: "NOTIFICATION_WORKFLOW",
-      status: "KO",
-      startDate: minutesBeforeNow(1).toISOString(),
-    }
+      functionality: "NOTIFICATION_CREATE",
+      status: "OK",
+      startDate: minutesBeforeNow(20).toISOString(),
+      endDate: minutesBeforeNow(16).toISOString(),
+      legalFactId: "some-legal-fact-id",
+      fileAvailable: true,
+    },
   ],
 };
 
@@ -57,7 +57,7 @@ const downtimeLogPageResponseExample: BEDowntimeLogPage = {
    the API
    ------------------------------------------------------------------------ */
 
-const useMockResponseData = process.env.NODE_ENV === 'development';
+const useMockResponseData = false;  // process.env.NODE_ENV === 'development';
 
 export const AppStatusApi = {
   getCurrentStatus: async (): Promise<AppCurrentStatus> => {

@@ -6,5 +6,15 @@
       "ok": "Tutti i servizi di Piattaforma Notifiche sono operativi.",
       "not-ok": "C'è un disservizio in corso. Per maggiori dettagli, consulta la tabella qui sotto."
     }
+  },
+  "downtimeList": {
+    "title": "Storico dei disservizi",
+    "columnHeader": {
+      "startDate": "Data di inizio",
+      "endDate": "Data di fine",
+      "functionality": "Servizio coinvolto",
+      "legalFactId": "Attestazioni opponibili a terzi",
+      "status": "Stato"
+    }
   }
 }

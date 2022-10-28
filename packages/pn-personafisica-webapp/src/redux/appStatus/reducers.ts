@@ -4,7 +4,7 @@ import { getCurrentStatus, getDowntimeLogPage } from "./actions";
 
 interface AppStatusData {
   currentStatus?: AppCurrentStatus;
-  incidentsPage?: DowntimeLogPage;
+  downtimeLogPage?: DowntimeLogPage;
 };
 
 /* eslint-disable functional/immutable-data */
@@ -17,7 +17,7 @@ const appStatusSlice = createSlice<AppStatusData, any>({
       state.currentStatus = action.payload;
     });
     builder.addCase(getDowntimeLogPage.fulfilled, (state, action) => {
-      state.incidentsPage = action.payload;
+      state.downtimeLogPage = action.payload;
     });
   }
 });

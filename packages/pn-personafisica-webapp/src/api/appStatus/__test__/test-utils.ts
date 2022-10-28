@@ -4,7 +4,7 @@ import { BEDowntimeLogPage, BEStatus, FunctionalityStatus, GetDowntimeHistoryPar
    auxiliary functions and constants
    ------------------------------------------------------------------------ */
 export const knownFunctionalities = [
-  "NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZZATION", "NOTIFICATION_WORKFLOW"
+  "NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"
 ];
 
 export const incidentTimestamps = [
@@ -98,7 +98,7 @@ export const beAppStatusTwoIncidentsOneUnknownFunctionality: BEStatus = {
   functionalities: knownFunctionalities,
   openIncidents: [
     {
-      functionality: "NOTIFICATION_VISUALIZZATION",
+      functionality: "NOTIFICATION_VISUALIZATION",
       status: "KO",
       startDate: incidentTimestamps[1],
     },

@@ -13,7 +13,7 @@ export enum DowntimeStatus {
 
 export enum KnownFunctionality {
   NotificationCreate = "NOTIFICATION_CREATE",
-  NotificationVisualization = "NOTIFICATION_VISUALIZZATION",
+  NotificationVisualization = "NOTIFICATION_VISUALIZATION",
   NotificationWorkflow = "NOTIFICATION_WORKFLOW",
 }
 
@@ -117,13 +117,13 @@ function validateIsoDate(required: boolean) {
   };
 }
 
-function validateString(value: string | undefined): string | null {
-  const isOK = value === undefined || typeof value === 'string';
+function validateString(value: string | undefined | null): string | null {
+  const isOK = value === undefined || value === null || typeof value === 'string';
   return isOK ? null : "A string is expected";
 }
 
-function validateBoolean(value: boolean | undefined): string | null {
-  const isOK = value === undefined || typeof value === 'boolean';
+function validateBoolean(value: boolean | undefined | null): string | null {
+  const isOK = value === undefined || value === null || typeof value === 'boolean';
   return isOK ? null : "A boolean is expected";
 }
     

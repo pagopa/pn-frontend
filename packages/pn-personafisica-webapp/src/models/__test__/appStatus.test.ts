@@ -123,7 +123,7 @@ describe("App Status model test", () => {
 
   it("status validator - valid data with no open incidents", () => {
     const status: BEStatus = {
-      functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZZATION", "NOTIFICATION_WORKFLOW"],
+      functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"],
       openIncidents: [],
     }
     expect(new BEStatusValidator().validate(status)).toBeNull();
@@ -131,7 +131,7 @@ describe("App Status model test", () => {
 
   it("status validator - valid data with two open incidents", () => {
     const status: BEStatus = {
-      functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZZATION", "NOTIFICATION_WORKFLOW"],
+      functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"],
       openIncidents: [
         {
           functionality: "NOTIFICATION_CREATE",
@@ -180,7 +180,7 @@ describe("App Status model test", () => {
 
   it("status validator - bad-typed start date in one open incident", () => {
     const status: BEStatus = {
-      functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZZATION", "NOTIFICATION_WORKFLOW"],
+      functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"],
       openIncidents: [
         {
           functionality: "NOTIFICATION_CREATE",
