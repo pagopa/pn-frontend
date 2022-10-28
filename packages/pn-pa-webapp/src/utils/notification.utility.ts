@@ -7,6 +7,7 @@ import {
   NewNotificationDTO,
   NewNotification,
   PaymentObject,
+  PaymentModel
 } from '../models/NewNotification';
 
 const checkFisicalAddress = (recipient: NewNotificationRecipient) => {
@@ -33,7 +34,8 @@ const checkFisicalAddress = (recipient: NewNotificationRecipient) => {
 };
 
 const newNotificationRecipientsMapper = (
-  recipients: Array<NewNotificationRecipient>
+  recipients: Array<NewNotificationRecipient>,
+  paymentMethod?: PaymentModel
 ): Array<NotificationDetailRecipient> =>
   recipients.map((recipient) => {
     const digitalDomicile = recipient.digitalDomicile
@@ -46,7 +48,7 @@ const newNotificationRecipientsMapper = (
       denomination: recipient.recipientType === RecipientType.PG ? recipient.firstName : `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
-      payment: {
+      payment: paymentMethod === PaymentModel.NOTHING ? undefined : {
         creditorTaxId: recipient.creditorTaxId,
         noticeCode: recipient.noticeCode,
         pagoPaForm: {
@@ -121,11 +123,11 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
     documents: [],
   };
   // format recipients
-  newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients);
+  newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients, newNotification.paymentMode);
   // format attachments
   newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
   // format payments
-  if (newNotification.payment) {
+  if (newNotification.payment && Object.keys(newNotification.payment).length > 0) {
     newNotificationParsed.recipients = newNotificationPaymentDocumentsMapper(
       newNotificationParsed.recipients,
       newNotification.payment

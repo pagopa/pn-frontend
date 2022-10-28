@@ -11,6 +11,7 @@ export enum PaymentModel {
   PAGO_PA_NOTICE = 'PAGO_PA_NOTICE',
   PAGO_PA_NOTICE_F24_FLATRATE = 'PAGO_PA_NOTICE_F24_FLATRATE',
   PAGO_PA_NOTICE_F24 = 'PAGO_PA_NOTICE_F24',
+  NOTHING = 'NOTHING'
 }
 
 interface BaseNewNotification {
