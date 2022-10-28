@@ -13,6 +13,7 @@ const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.
 const Contacts = React.lazy(() => import('../pages/Contacts.page'));
 const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
 const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
+const PrivacyTOSPage = React.lazy(() => import('../pages/PrivacyTOS.page'));
 
 function Router() {
   return (
@@ -36,6 +37,8 @@ function Router() {
             <Route path="*" element={<NotFound />} />
           </Route>
         </Route>
+        <Route path={routes.PRIVACY_TOS} element={<PrivacyTOSPage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );

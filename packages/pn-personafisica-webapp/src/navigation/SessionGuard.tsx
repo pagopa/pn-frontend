@@ -2,13 +2,14 @@ import {
   appStateActions,
   InactivityHandler,
   SessionModal,
+  useErrors,
   useProcess,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { exchangeToken, getToSApproval, logout } from '../redux/auth/actions';
+import { AUTH_ACTIONS, exchangeToken, getToSApproval, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
@@ -49,16 +50,20 @@ const SessionGuardRender = () => {
   );
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common']);
+  const { hasApiErrors } = useErrors();
 
   const isAnonymousUser = !isUnauthorizedUser && !sessionToken;
+  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
 
   const goodbyeMessage = {
-    title: isUnauthorizedUser ? messageUnauthorizedUser.title : t('leaving-app.title'),
-    message: isUnauthorizedUser ? messageUnauthorizedUser.message : t('leaving-app.message'),
+    title: isUnauthorizedUser ? messageUnauthorizedUser.title : 
+      hasTosApiErrors ? t('error-when-fetching-tos-status.title') : t('leaving-app.title'),
+    message: isUnauthorizedUser ? messageUnauthorizedUser.message : 
+      hasTosApiErrors ? t('error-when-fetching-tos-status.message') : t('leaving-app.message'),
   };
 
   const renderIfInitialized = () =>
-    isUnauthorizedUser || isClosedSession ? (
+    isUnauthorizedUser || hasTosApiErrors || isClosedSession ? (
       <SessionModal
         open
         title={goodbyeMessage.title}
@@ -80,6 +85,8 @@ const SessionGuardRender = () => {
   return isInitialized ? renderIfInitialized() : <Fragment></Fragment>;
 };
 
+
+
 /**
  * SessionGuard: logica di determinazione, in quale situazione siamo?
  */
@@ -91,6 +98,7 @@ const SessionGuard = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
+  const { hasApiErrors } = useErrors();
 
   // vedi il commentone in useProcess
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
@@ -100,6 +108,8 @@ const SessionGuard = () => {
   // questo vuol dire che è stato preso da session storage,
   // cioè siamo in presenza di un reload di un utente loggato
   const [isSessionReload, setIsSessionReload] = useState(false);
+
+  const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
 
   const getTokenParam = useCallback(() => {
     const params = new URLSearchParams(location.hash);
@@ -149,7 +159,7 @@ const SessionGuard = () => {
   useEffect(() => {
     const doInitalPageDetermination = async () => {
       // l'analisi delle TOS ha senso solo se c'è un utente
-      if (sessionToken && !isClosedSession) {
+      if (sessionToken && !isClosedSession && !hasTosApiErrors) {
         // non si setta initial page se è un session reload di un utente che ha già accettato i TOS
         const initialPage = tos ? (isSessionReload ? undefined : routes.NOTIFICHE) : routes.TOS;
         if (initialPage) {
@@ -165,7 +175,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
-      if (sessionToken && !isClosedSession) {
+      if (sessionToken && !isClosedSession && !hasTosApiErrors) {
         sessionCheck(expDate);
       }
     });

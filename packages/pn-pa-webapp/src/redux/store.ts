@@ -5,8 +5,11 @@ import { LOG_REDUX_ACTIONS } from '../utils/constants';
 import { trackingMiddleware } from '../utils/mixpanel';
 import userSlice from './auth/reducers';
 import dashboardSlice from './dashboard/reducers';
+import newApiKeySlice from './NewApiKey/reducers';
 import newNotificationSlice from './newNotification/reducers';
 import notificationSlice from './notification/reducers';
+import apiKeysSlice from './apiKeys/reducers';
+import statisticsSlice from "./statistics/reducers";
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined, trackingMiddleware];
 
@@ -16,6 +19,9 @@ export const appReducers = {
   dashboardState: dashboardSlice.reducer,
   notificationState: notificationSlice.reducer,
   newNotificationState: newNotificationSlice.reducer,
+  apiKeysState: apiKeysSlice.reducer,
+  newApiKeyState: newApiKeySlice.reducer,
+  statisticsState: statisticsSlice.reducer,
 };
 
 export const createStore = () =>

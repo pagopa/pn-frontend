@@ -5,7 +5,6 @@ import {
   AppMessage,
   AppResponseMessage,
   appStateActions,
-  AppType,
   initLocalization,
   Layout,
   LoadingOverlay,
@@ -39,6 +38,7 @@ const App = () => {
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.organizationParty
   );
+  const { tos } = useAppSelector((state: RootState) => state.userState);
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -120,6 +120,7 @@ const App = () => {
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
+  const isPrivacyPage = path[1] === 'privacy-tos';
 
   const handleEventTrackingCallbackAppCrash = (e: Error, eInfo: ErrorInfo) => {
     trackEventByType(TrackEventType.APP_CRASH, {
@@ -164,6 +165,8 @@ const App = () => {
     <>
       <ResponseEventDispatcher />
       <Layout
+        showHeader={!isPrivacyPage}
+        showFooter={!isPrivacyPage}
         onExitAction={handleLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
@@ -182,14 +185,13 @@ const App = () => {
             />
           )
         }
-        showSideMenu={!!sessionToken}
+        showSideMenu={!!sessionToken && tos && !isPrivacyPage}
         productsList={productsList}
         productId={'0'}
         partyList={partyList}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
-        appType={AppType.PA}
         isLogged={!!sessionToken}
       >
         <AppMessage />

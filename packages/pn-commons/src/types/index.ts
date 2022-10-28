@@ -35,26 +35,24 @@ import {
 } from './NotificationDetail';
 import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
-import { AppType } from './AppType';
 import { BasicUser, basicNoLoggedUserData } from './User';
 import { EventsType } from './MixpanelEvents';
 import { AppResponse, ServerResponseError, ErrorMessage } from './AppResponse';
 
 export {
-  basicNoLoggedUserData,
-  NotificationStatus,
-  NotificationFeePolicy,
-  TimelineCategory,
-  DigitalDomicileType,
-  RecipientType,
-  AddressSource,
-  LegalFactType,
-  PhysicalCommunicationType,
-  PaymentInfoDetail,
-  PaymentStatus,
-  PaymentAttachmentSName,
-  MessageType,
-  AppType,
+    basicNoLoggedUserData,
+    NotificationStatus,
+    NotificationFeePolicy,
+    TimelineCategory,
+    DigitalDomicileType,
+    RecipientType,
+    AddressSource,
+    LegalFactType,
+    PhysicalCommunicationType,
+    PaymentInfoDetail,
+    PaymentStatus,
+    PaymentAttachmentSName,
+    MessageType
 };
 export type {
   AnalogWorkflowDetails,

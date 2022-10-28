@@ -29,7 +29,7 @@ import {
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
-import { getToSApproval, logout } from './redux/auth/actions';
+import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
 import { RootState } from './redux/store';
@@ -55,7 +55,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { fetchedTos, tos } = useAppSelector((state: RootState) => state.userState);
+  const { tos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
@@ -75,8 +75,9 @@ const App = () => {
     [loggedUser]
   );
 
-  const userActions = useMemo(
+  const isPrivacyPage = path[1] === 'privacy-tos';
 
+  const userActions = useMemo(
     () => {
       const profiloAction = {
         id: 'profile',
@@ -114,7 +115,6 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getDomicileInfo());
-      void dispatch(getToSApproval());
     }
   }, [sessionToken]);
 
@@ -131,14 +131,14 @@ const App = () => {
     // attenzione - per far funzionare questo si deve cambiare dove dice
     //     sideMenuDelegators.length > 0,  deve cambiarsi per ... > 1
     // si deve anche abilitare la gestione errori nell'action di getSidemenuInformation
-    // 
+    //
     // if (hasApiErrors(SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION)) {
     //   return [{
     //     label: "Qualcuno/a ha delegato su di te?",
     //     route: "",
     //     action: () => dispatch(getSidemenuInformation()),
     //   }];
-    // } else 
+    // } else
     if (delegators.length > 0) {
       const myNotifications = {
         label: t('title', { ns: 'notifiche' }),
@@ -225,6 +225,8 @@ const App = () => {
     <>
       <ResponseEventDispatcher />
       <Layout
+        showHeader={!isPrivacyPage}
+        showFooter={!isPrivacyPage}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>
@@ -238,7 +240,7 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!!sessionToken && (!fetchedTos || tos)}
+        showSideMenu={!!sessionToken && tos && !isPrivacyPage}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown
