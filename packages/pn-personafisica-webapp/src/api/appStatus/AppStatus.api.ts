@@ -77,9 +77,9 @@ export const AppStatusApi = {
       throw new BadApiDataException('Wrong-formed data', validationResult);
     }
 
-    // extra validation: open incident with status "OK"
-    if (apiResponse.openIncidents.some(downtime => downtime.status === DowntimeStatus.OK)) {
-      throw new BadApiDataException('Wrong data - an open incident cannot have status OK', {});
+    // extra validation: open incident with end date
+    if (apiResponse.openIncidents.some(downtime => downtime.endDate)) {
+      throw new BadApiDataException('Wrong data - a finished downtime is reported as open incident', {});
     }
 
     // finally the response

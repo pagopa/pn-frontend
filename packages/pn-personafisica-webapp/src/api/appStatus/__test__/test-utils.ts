@@ -110,13 +110,14 @@ export const beAppStatusTwoIncidentsOneUnknownFunctionality: BEStatus = {
   ],
 };
 
-export const beAppStatusOneIncidentOK: BEStatus = {
+export const beAppStatusOneFinishedDowntimeAsOpenIncident: BEStatus = {
   functionalities: knownFunctionalities,
   openIncidents: [
     {
       functionality: "NOTIFICATION_WORKFLOW",
-      status: "OK",
-      startDate: incidentTimestamps[1],
+      status: "KO",
+      startDate: incidentTimestamps[2],
+      endDate: incidentTimestamps[3],
     },
     {
       functionality: "NOTIFICATION_CREATE",

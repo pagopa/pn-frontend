@@ -2,7 +2,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { apiClient } from '../../axios';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
 import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from '../appStatus.routes';
-import { beAppStatusNoIncidents, beAppStatusOneIncident, beAppStatusOneIncidentOK, beAppStatusOneIncidentWithError, beAppStatusTwoIncidentsNormalCase, beAppStatusTwoIncidentsOneUnknownFunctionality, beDowntimeHistoryNoIncidents, beDowntimeHistoryThreeIncidents, downStatusOnKnownFunctionality, downStatusOnUnknownFunctionality, downtimeHistoryEmptyQueryParams, incidentTimestamps, statusByFunctionalityOk } from './test-utils';
+import { beAppStatusNoIncidents, beAppStatusOneIncident, beAppStatusOneFinishedDowntimeAsOpenIncident, beAppStatusOneIncidentWithError, beAppStatusTwoIncidentsNormalCase, beAppStatusTwoIncidentsOneUnknownFunctionality, beDowntimeHistoryNoIncidents, beDowntimeHistoryThreeIncidents, downStatusOnKnownFunctionality, downStatusOnUnknownFunctionality, downtimeHistoryEmptyQueryParams, incidentTimestamps, statusByFunctionalityOk } from './test-utils';
 import { AppStatusApi, BadApiDataException } from '../AppStatus.api';
 import { BEDowntimeLogPage, DowntimeLogPage, DowntimeStatus, KnownFunctionality } from '../../../models/appStatus';
 
@@ -79,10 +79,10 @@ describe("AppStatus api tests", () => {
     expect(new Set(res.statusByFunctionality)).toEqual(new Set(expectedStatusByFunctionality));
   });
 
-  it('get status - one open incident with status OK - API call fails', async () => {
+  it('get status - one open incident with end date set - API call fails', async () => {
     mock
       .onGet(DOWNTIME_STATUS())
-      .reply(200, beAppStatusOneIncidentOK);
+      .reply(200, beAppStatusOneFinishedDowntimeAsOpenIncident);
     ;
     await expect(AppStatusApi.getCurrentStatus()).rejects.toThrow(BadApiDataException);
   });
