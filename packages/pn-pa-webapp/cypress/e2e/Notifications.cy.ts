@@ -30,7 +30,7 @@ describe("Notifications", () => {
     const pdfTest4 = './cypress/fixtures/pdf_test_4.pdf';
 
     cy.logout();
-    cy.login();
+    cy.loginWithTokenExchange();
 
     cy.visit('/dashboard/nuova-notifica');
 

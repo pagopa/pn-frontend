@@ -52,6 +52,13 @@ Cypress.Commands.add('login', () => {
   });
 });
 
+/*
+  * Login with token exchange
+  */
+Cypress.Commands.add('loginWithTokenExchange', () => {
+  cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
+});
+
 /**
  * Logout programmatically
  */

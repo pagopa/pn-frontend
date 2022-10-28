@@ -8,5 +8,6 @@ declare namespace Cypress {
      login(): void;
      logout(): void;
      loginWithUI(): void;
+     loginWithTokenExchange(): void;
   }
 }
