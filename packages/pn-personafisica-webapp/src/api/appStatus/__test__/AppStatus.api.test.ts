@@ -127,6 +127,7 @@ describe("AppStatus api tests", () => {
           knownFunctionality: KnownFunctionality.NotificationWorkflow,
           status: DowntimeStatus.KO,
           startDate: incidentTimestamps[6],
+          fileAvailable: false,    
         },
       ],
       nextPage: "some-next-page",
@@ -169,5 +170,27 @@ describe("AppStatus api tests", () => {
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beDowntimeHistoryWithDateFormatError);
     await expect(AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
+  });
+
+  it('get downtime history - preeminence (endDate over status, legalFactId over fileAvailable)', async () => {
+    const incoherentDowntimeRecords = [...beDowntimeHistoryThreeIncidents.result];
+    // first downtime has legalFactId, so fileAvailable should be true
+    incoherentDowntimeRecords[0].fileAvailable = false;
+    // second downtime has endDate, so status should be OK
+    incoherentDowntimeRecords[1].status = "KO";
+    // third downtime hasn't endDate, so status should be KO
+    incoherentDowntimeRecords[2].status = "OK";
+
+    const beIncoherentDowntimeHistory: any = {
+      result: incoherentDowntimeRecords,
+      nextPage: "some-next-page",
+    }
+    mock
+      .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
+      .reply(200, beIncoherentDowntimeHistory);
+    const downtimeLogPage = await AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams);
+    expect(downtimeLogPage.downtimes[0].fileAvailable).toBe(true);
+    expect(downtimeLogPage.downtimes[1].status).toBe(DowntimeStatus.OK);
+    expect(downtimeLogPage.downtimes[2].status).toBe(DowntimeStatus.KO);
   });
 });

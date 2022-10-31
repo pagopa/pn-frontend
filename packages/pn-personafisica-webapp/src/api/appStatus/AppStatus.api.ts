@@ -46,7 +46,7 @@ const downtimeLogPageResponseExample: BEDowntimeLogPage = {
       status: "OK",
       startDate: minutesBeforeNow(20).toISOString(),
       endDate: minutesBeforeNow(16).toISOString(),
-      legalFactId: "some-legal-fact-id",
+      legalFactId: "some-legal-fact-id-1",
       fileAvailable: true,
     },
     {
@@ -54,7 +54,7 @@ const downtimeLogPageResponseExample: BEDowntimeLogPage = {
       status: "OK",
       startDate: minutesBeforeNow(120040).toISOString(),
       endDate: minutesBeforeNow(120020).toISOString(),
-      legalFactId: "some-legal-fact-id",
+      legalFactId: "some-legal-fact-id-2",
       fileAvailable: true,
     },
   ],
@@ -65,8 +65,8 @@ const downtimeLogPageResponseExample: BEDowntimeLogPage = {
    the API
    ------------------------------------------------------------------------ */
 
-// const useMockResponseData = false;
-const useMockResponseData = process.env.NODE_ENV === 'development';
+const useMockResponseData = false;
+// const useMockResponseData = process.env.NODE_ENV === 'development';
 
 export const AppStatusApi = {
   getCurrentStatus: async (): Promise<AppCurrentStatus> => {
@@ -147,7 +147,6 @@ function beDowntimeToFeDowntime(downtime: BEDowntime): Downtime {
   }
   // existence of legalFactId is taken as source for fileAvailable, takes preeminence over the fileAvailable attribute
   // which is redundant
-  // status: downtime.status as DowntimeStatus,
   // if (downtime.fileAvailable !== undefined) {
   //   result.fileAvailable = downtime.fileAvailable;
   // }

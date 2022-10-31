@@ -38,6 +38,7 @@ export function downStatusOnKnownFunctionality(func: KnownFunctionality, inciden
 			knownFunctionality: func,
 			status: DowntimeStatus.KO,
 			startDate: incidentTimestamp,
+      fileAvailable: false,
 		}
 	};
 }
@@ -50,6 +51,7 @@ export function downStatusOnUnknownFunctionality(func: string, incidentTimestamp
 			rawFunctionality: func,
 			status: DowntimeStatus.KO,
 			startDate: incidentTimestamp,
+      fileAvailable: false,
 		}
 	};
 }

@@ -1,6 +1,7 @@
-import { Box, Stack, Typography, Chip, useTheme } from '@mui/material';
+import { Box, Stack, Typography, Chip, Button, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import DownloadIcon from '@mui/icons-material/Download';
 import ErrorIcon from '@mui/icons-material/Error';
 import { Column, formatDate, formatTimeHHMM, Item, ItemsTable, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { useCallback, useEffect } from 'react';
@@ -40,6 +41,9 @@ type DowntimeLogColumn =
   | 'status'
   | '';
 
+function booleanStringToBoolean(booleanString: string): boolean {
+  return booleanString.toLowerCase() === "true";
+}
 
 /* eslint-disable-next-line arrow-body-style */
 const DateAndTimeInTwoLines = ({ date }: { date: string }) => {
@@ -91,8 +95,26 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
       label: t('downtimeList.columnHeader.legalFactId'),
       width: '30%',
       sortable: false, 
-      getCellLabel() {
-        return "L'attestazione sarà disponibile al termine del disservizio";
+      getCellLabel(value: string, i: Item) {
+        if (booleanStringToBoolean(i.fileAvailable as string)) {
+          return <Button
+            startIcon={<DownloadIcon />}
+            onClick={() => console.log(`Clicked on legalFactId ${value}`) }
+          >
+            {t("legends.legalFactDownload")}
+          </Button>;
+        } else {
+          return <Box sx={{ 
+            fontFamily: theme.typography.button.fontFamily,
+            fontWeight: 400,
+            fontSize: "14px",
+            lineHeight: "18px",
+            letterSpacing: "0.3px",
+            color: theme.palette.text.secondary,
+          }}>
+            {t(`legends.noFileAvailableByStatus.${i.status}`)}
+          </Box>;
+        }
       },
       // onClick(row: Item) {
       //   handleRowClick(row);
@@ -104,19 +126,12 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
       width: '15%',
       align: 'center',
       sortable: false, 
-      getCellLabel(_: string, i: Item) {
-        const isClosedDowntime = !!i.endDate;
+      getCellLabel(value: string) {
         return <Chip 
-          label={t(`legends.status.${isClosedDowntime ? DowntimeStatus.OK : DowntimeStatus.KO }`)}
-          sx={{backgroundColor: isClosedDowntime ? theme.palette.error.light : theme.palette.success.light}}
+          label={t(`legends.status.${value}`)}
+          sx={{backgroundColor: value === DowntimeStatus.OK ? theme.palette.error.light : theme.palette.success.light}}
         />;
       },
-      // getCellLabel(_: string, row: Item) {
-      //   const { label, tooltip, color } = getNotificationStatusInfos(
-      //     row.notificationStatus as NotificationStatus
-      //   );
-      //   return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
-      // },
     },
   ];
 
