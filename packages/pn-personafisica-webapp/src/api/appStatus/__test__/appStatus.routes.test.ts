@@ -1,5 +1,5 @@
 import { KnownFunctionality } from "../../../models/appStatus";
-import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from "../appStatus.routes";
+import { DOWNTIME_HISTORY, DOWNTIME_LEGAL_FACT_DETAILS, DOWNTIME_STATUS } from "../appStatus.routes";
 
 describe("AppStatus routes", () => {
   it("should compile DOWNTIME_STATUS", () => {
@@ -32,6 +32,10 @@ describe("AppStatus routes", () => {
     })).toEqual(
       `/downtime/v1/history?fromTime=${encodeURIComponent('2022-10-18T09:34:51Z')}&functionality=NOTIFICATION_WORKFLOW&functionality=NOTIFICATION_CREATE&size=54`
     );
+  });
+
+  it("should compile DOWNTIME_LEGAL_FACT_DETAILS for a given legalFactId", () => {
+    expect(DOWNTIME_LEGAL_FACT_DETAILS('some-legal-fact')).toEqual("/downtime/v1/legal-facts/some-legal-fact");
   });
 });
 

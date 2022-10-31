@@ -1,7 +1,7 @@
 import { minutesBeforeNow } from '@pagopa-pn/pn-commons';
-import { AppCurrentStatus, BEDowntimeLogPageValidator, BEDowntime, BEStatus, BEStatusValidator, FunctionalityStatus, GetDowntimeHistoryParams, Downtime, DowntimeLogPage, DowntimeStatus, isKnownFunctionality, KnownFunctionality, BEDowntimeLogPage } from '../../models/appStatus';
+import { AppCurrentStatus, BEDowntimeLogPageValidator, BEDowntime, BEStatus, BEStatusValidator, FunctionalityStatus, GetDowntimeHistoryParams, Downtime, DowntimeLogPage, DowntimeStatus, isKnownFunctionality, KnownFunctionality, BEDowntimeLogPage, LegalFactDocumentDetails } from '../../models/appStatus';
 import { apiClient } from '../axios';
-import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from './appStatus.routes';
+import { DOWNTIME_HISTORY, DOWNTIME_LEGAL_FACT_DETAILS, DOWNTIME_STATUS } from './appStatus.routes';
 
 export class BadApiDataException extends Error {
   constructor(message: string, public details: any) {
@@ -60,6 +60,14 @@ const downtimeLogPageResponseExample: BEDowntimeLogPage = {
   ],
 };
 
+function mockLegalFactDetails(legalFactId: string): LegalFactDocumentDetails {
+  return {
+    filename: `downtime_${legalFactId}.pdf`,
+    contentLength: 3456,
+    url: `https://s3.amazon.com/downtime_${legalFactId}.pdf`,
+  };
+}
+
 
 /* ------------------------------------------------------------------------
    the API
@@ -114,7 +122,17 @@ export const AppStatusApi = {
 
     // finally the response
     return beDowntimeLogPageToFeDowntimeLogPage(apiResponse);
-  }
+  },
+
+    /* eslint-disable-next-line arrow-body-style */
+    getLegalFactDetails: async(legalFactId: string): Promise<LegalFactDocumentDetails> => {
+    if (useMockResponseData) {
+      return mockLegalFactDetails(legalFactId);
+    } else {
+      const realApiResponse = await apiClient.get<LegalFactDocumentDetails>(DOWNTIME_LEGAL_FACT_DETAILS(legalFactId));
+      return realApiResponse.data;
+    }
+  },
 };
 
 

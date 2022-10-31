@@ -10,6 +10,7 @@ import { AppCurrentStatus, DowntimeLogPage, DowntimeStatus, KnownFunctionality }
 import { getCurrentStatus, getDowntimeLogPage } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { AppStatusApi } from '../api/appStatus/AppStatus.api';
 
 
 const StatusBar = ({ status }: { status: AppCurrentStatus }) => {
@@ -30,6 +31,18 @@ const StatusBar = ({ status }: { status: AppCurrentStatus }) => {
       </Typography>
     </Stack>
   );
+};
+
+
+
+function dowloadDocument(url: string) {
+  /* eslint-disable functional/immutable-data */
+  const link = document.createElement('a');
+  link.href = url;
+  link.target = '_blank';
+  link.rel = 'noreferrer';
+  link.click();
+  /* eslint-enable functional/immutable-data */
 };
 
 
@@ -95,30 +108,33 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
       label: t('downtimeList.columnHeader.legalFactId'),
       width: '30%',
       sortable: false, 
-      getCellLabel(value: string, i: Item) {
+      getCellLabel(_: string, i: Item) {
         if (booleanStringToBoolean(i.fileAvailable as string)) {
           return <Button
             startIcon={<DownloadIcon />}
-            onClick={() => console.log(`Clicked on legalFactId ${value}`) }
+            onClick={() => {} }
           >
             {t("legends.legalFactDownload")}
           </Button>;
         } else {
           return <Box sx={{ 
             fontFamily: theme.typography.button.fontFamily,
-            fontWeight: 400,
-            fontSize: "14px",
-            lineHeight: "18px",
-            letterSpacing: "0.3px",
+            fontWeight: 400, fontSize: "14px", lineHeight: "18px", letterSpacing: "0.3px",
             color: theme.palette.text.secondary,
           }}>
             {t(`legends.noFileAvailableByStatus.${i.status}`)}
           </Box>;
         }
       },
-      // onClick(row: Item) {
-      //   handleRowClick(row);
-      // },
+      onClick(row: Item) {
+        const fetchAndDownloadDocument = async () => {
+          const documentData = await AppStatusApi.getLegalFactDetails(row.legalFactId as string);
+          console.log(`should download ${documentData.url}, full document record`);
+          console.log({legalFactId: row.legalFactId, ...documentData});
+          dowloadDocument(documentData.url);
+        };
+        void fetchAndDownloadDocument();
+      },
     },
     {
       id: 'status',

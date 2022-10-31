@@ -65,6 +65,14 @@ export interface DowntimeLogPage {
   nextPage?: string;
 }
 
+// use in internal model the same format for legal fact documents 
+// as in the BE response
+export interface LegalFactDocumentDetails {
+  filename: string;
+  contentLength: number;
+  url: string;
+}
+
 
 /* ------------------------------------------------------------------------
    BE responses
