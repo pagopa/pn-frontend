@@ -42,10 +42,18 @@ const downtimeLogPageResponseExample: BEDowntimeLogPage = {
       fileAvailable: false,
     },
     {
-      functionality: "NOTIFICATION_CREATE",
+      functionality: "DEEP_THINKING",
       status: "OK",
       startDate: minutesBeforeNow(20).toISOString(),
       endDate: minutesBeforeNow(16).toISOString(),
+      legalFactId: "some-legal-fact-id",
+      fileAvailable: true,
+    },
+    {
+      functionality: "NOTIFICATION_VISUALIZATION",
+      status: "OK",
+      startDate: minutesBeforeNow(120040).toISOString(),
+      endDate: minutesBeforeNow(120020).toISOString(),
       legalFactId: "some-legal-fact-id",
       fileAvailable: true,
     },
@@ -57,7 +65,8 @@ const downtimeLogPageResponseExample: BEDowntimeLogPage = {
    the API
    ------------------------------------------------------------------------ */
 
-const useMockResponseData = false;  // process.env.NODE_ENV === 'development';
+// const useMockResponseData = false;
+const useMockResponseData = process.env.NODE_ENV === 'development';
 
 export const AppStatusApi = {
   getCurrentStatus: async (): Promise<AppCurrentStatus> => {
@@ -117,8 +126,13 @@ function beDowntimeToFeDowntime(downtime: BEDowntime): Downtime {
   /* eslint-disable functional/immutable-data */
   const result: Downtime = {
     rawFunctionality: downtime.functionality,
-    status: downtime.status as DowntimeStatus,
     startDate: downtime.startDate,
+
+    // existence of endDate is taken as source for status, takes preeminence over the status attribute
+    // which is redundant
+    // status: downtime.status as DowntimeStatus,
+    /* eslint-disable-next-line no-extra-boolean-cast */
+    status: !!downtime.endDate ? DowntimeStatus.OK : DowntimeStatus.KO,
   };
      
   if (isKnownFunctionality(downtime.functionality)) {
@@ -131,9 +145,13 @@ function beDowntimeToFeDowntime(downtime: BEDowntime): Downtime {
   if (downtime.legalFactId !== undefined) {
     result.legalFactId = downtime.legalFactId;
   }
-  if (downtime.fileAvailable !== undefined) {
-    result.fileAvailable = downtime.fileAvailable;
-  }
+  // existence of legalFactId is taken as source for fileAvailable, takes preeminence over the fileAvailable attribute
+  // which is redundant
+  // status: downtime.status as DowntimeStatus,
+  // if (downtime.fileAvailable !== undefined) {
+  //   result.fileAvailable = downtime.fileAvailable;
+  // }
+  result.fileAvailable = !!downtime.legalFactId;
 
   return result;
 }

@@ -14,6 +14,13 @@ export function formatDate(dateString: string): string {
   return isToday(date) ? 'Oggi' : `${day}/${month}/${date.getFullYear()}`;
 }
 
+export function formatTimeHHMM(dateString: string): string {
+  const date = new Date(dateString);
+  const hour = `0${date.getHours() + 1}`.slice(-2);
+  const minute = `0${date.getMinutes()}`.slice(-2);
+  return `${hour}:${minute}`;
+}
+
 export function formatToSlicedISOString(date: Date): string {
   const month = `0${date.getMonth() + 1}`.slice(-2);
   const day = `0${date.getDate()}`.slice(-2);

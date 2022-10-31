@@ -1,11 +1,11 @@
-import { Box, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Stack, Typography, Chip, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
-import { Column, Item, ItemsTable, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Column, formatDate, formatTimeHHMM, Item, ItemsTable, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AppCurrentStatus, DowntimeLogPage, KnownFunctionality } from '../models/appStatus';
+import { AppCurrentStatus, DowntimeLogPage, DowntimeStatus, KnownFunctionality } from '../models/appStatus';
 import { getCurrentStatus, getDowntimeLogPage } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -40,8 +40,22 @@ type DowntimeLogColumn =
   | 'status'
   | '';
 
+
+/* eslint-disable-next-line arrow-body-style */
+const DateAndTimeInTwoLines = ({ date }: { date: string }) => {
+  return date ? 
+    <Stack direction="column">
+      <Typography variant="body2">{formatDate(date)},</Typography>
+      <Typography variant="body2">ore {formatTimeHHMM(date)}</Typography>
+    </Stack> 
+  : <Typography variant="body2">-</Typography>;
+};
+
+
 const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) => {
   const { t } = useTranslation(['appStatus']);
+  const theme = useTheme();
+
   const columns: Array<Column<DowntimeLogColumn>> = [
     {
       id: 'startDate',
@@ -49,7 +63,7 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
       width: '15%',
       sortable: false, 
       getCellLabel(value: string) {
-        return value;
+        return <DateAndTimeInTwoLines date={value} />;
       },
     },
     {
@@ -58,7 +72,7 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
       width: '15%',
       sortable: false, 
       getCellLabel(value: string) {
-        return value;
+        return <DateAndTimeInTwoLines date={value} />;
       },
     },
     {
@@ -67,7 +81,9 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
       width: '30%',
       sortable: false, 
       getCellLabel(_: string, i: Item) {
-        return i.rawFunctionality;
+        return i.knownFunctionality 
+          ? t(`legends.knownFunctionality.${i.knownFunctionality}`)
+          : t('legends.unknownFunctionalityLegend', { functionality: i.rawFunctionality });
       },
     },
     {
@@ -88,8 +104,12 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
       width: '15%',
       align: 'center',
       sortable: false, 
-      getCellLabel(value: string) {
-        return value;
+      getCellLabel(_: string, i: Item) {
+        const isClosedDowntime = !!i.endDate;
+        return <Chip 
+          label={t(`legends.status.${isClosedDowntime ? DowntimeStatus.OK : DowntimeStatus.KO }`)}
+          sx={{backgroundColor: isClosedDowntime ? theme.palette.error.light : theme.palette.success.light}}
+        />;
       },
       // getCellLabel(_: string, row: Item) {
       //   const { label, tooltip, color } = getNotificationStatusInfos(

@@ -16,5 +16,17 @@
       "legalFactId": "Attestazioni opponibili a terzi",
       "status": "Stato"
     }
+  },
+  "legends": {
+    "knownFunctionality": {
+      "NOTIFICATION_CREATE": "Invio delle notifiche",
+      "NOTIFICATION_VISUALIZATION": "Visualizzazione notifiche e download allegati",
+      "NOTIFICATION_WORKFLOW": "Cambio di stato delle notifiche"
+    },
+    "unknownFunctionality": "Servizio sconosciuto ({{functionality}})",
+    "status": {
+      "OK": "Risolto",
+      "KO": "In corso"
+    }
   }
 }
