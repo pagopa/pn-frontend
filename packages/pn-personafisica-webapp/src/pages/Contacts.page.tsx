@@ -14,6 +14,7 @@ import LegalContactsList from '../component/Contacts/LegalContactsList';
 import IOContact from '../component/Contacts/IOContact';
 import CourtesyContacts from '../component/Contacts/CourtesyContacts';
 import SpecialContacts from '../component/Contacts/SpecialContacts';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { PROFILO } from '../navigation/routes.const';
 import { CourtesyChannelType } from '../models/contacts';
 
@@ -24,6 +25,7 @@ const Contacts = () => {
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
   const digitalAddresses = useAppSelector((state: RootState) => state.contactsState.digitalAddresses);
+  const [pageReady, setPageReady] = useState(false);
 
   const contactIO = useMemo(() => isDigitalAddressLoaded ? digitalAddresses.courtesy.find(
     (address) => address.channelType === CourtesyChannelType.IOMSG
@@ -33,6 +35,7 @@ const Contacts = () => {
     void dispatch(getDigitalAddresses(recipientId))
     .then(() => {
       setIsDigitalAddressLoaded(true);
+      setPageReady(true);
     });
   }, []);
 
@@ -56,50 +59,52 @@ const Contacts = () => {
   );
 
   return (
-    <DigitalContactsCodeVerificationProvider>
-      <Box p={3}>
-        <TitleBox
-          variantTitle="h4"
-          title={t('title')}
-          subTitle={subtitle}
-          variantSubTitle={'body1'}
-        />
-        <ApiErrorWrapper apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses} mt={2}>
-          <Stack direction="column" spacing={8} mt={8}>
-            <Stack spacing={3}>
-              <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                  {digitalAddresses.legal.length === 0 ? (
-                    <InsertLegalContact recipientId={recipientId} />
-                  ) : (
-                    <LegalContactsList
-                      recipientId={recipientId}
-                      legalAddresses={digitalAddresses.legal}
-                    />
-                  )}
-                </Box>
-                <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                  <IOContact recipientId={recipientId} contact={contactIO} />
-                </Box>
+    <LoadingPageWrapper isInitialized={pageReady}>
+      <DigitalContactsCodeVerificationProvider>
+        <Box p={3}>
+          <TitleBox
+            variantTitle="h4"
+            title={t('title')}
+            subTitle={subtitle}
+            variantSubTitle={'body1'}
+          />
+          <ApiErrorWrapper apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses} mt={2}>
+            <Stack direction="column" spacing={8} mt={8}>
+              <Stack spacing={3}>
+                <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
+                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                    {digitalAddresses.legal.length === 0 ? (
+                      <InsertLegalContact recipientId={recipientId} />
+                    ) : (
+                      <LegalContactsList
+                        recipientId={recipientId}
+                        legalAddresses={digitalAddresses.legal}
+                      />
+                    )}
+                  </Box>
+                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                    <IOContact recipientId={recipientId} contact={contactIO} />
+                  </Box>
+                </Stack>
+                <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
               </Stack>
-              <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
+              {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
+                <Stack spacing={2}>
+                  <Typography variant="h5" fontWeight={600} fontSize={28}>
+                    {t('special-contacts-title')}
+                  </Typography>
+                  <SpecialContacts
+                    recipientId={recipientId}
+                    legalAddresses={digitalAddresses.legal}
+                    courtesyAddresses={digitalAddresses.courtesy}
+                  />
+                </Stack>
+              )}
             </Stack>
-            {(digitalAddresses.legal.length > 0 || digitalAddresses.courtesy.length > 0) && (
-              <Stack spacing={2}>
-                <Typography variant="h5" fontWeight={600} fontSize={28}>
-                  {t('special-contacts-title')}
-                </Typography>
-                <SpecialContacts
-                  recipientId={recipientId}
-                  legalAddresses={digitalAddresses.legal}
-                  courtesyAddresses={digitalAddresses.courtesy}
-                />
-              </Stack>
-            )}
-          </Stack>
-        </ApiErrorWrapper>
-      </Box>
-    </DigitalContactsCodeVerificationProvider>
+          </ApiErrorWrapper>
+        </Box>
+      </DigitalContactsCodeVerificationProvider>
+    </LoadingPageWrapper>
   );
 };
 
