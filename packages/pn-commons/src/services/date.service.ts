@@ -16,7 +16,7 @@ export function formatDate(dateString: string): string {
 
 export function formatTimeHHMM(dateString: string): string {
   const date = new Date(dateString);
-  const hour = `0${date.getHours() + 1}`.slice(-2);
+  const hour = `0${date.getHours()}`.slice(-2);
   const minute = `0${date.getMinutes()}`.slice(-2);
   return `${hour}:${minute}`;
 }

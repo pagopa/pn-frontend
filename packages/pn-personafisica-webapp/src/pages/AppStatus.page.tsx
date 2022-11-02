@@ -7,10 +7,10 @@ import { Column, formatDate, formatTimeHHMM, Item, ItemsTable, TitleBox, useIsMo
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppCurrentStatus, DowntimeLogPage, DowntimeStatus, KnownFunctionality } from '../models/appStatus';
-import { getCurrentStatus, getDowntimeLogPage } from '../redux/appStatus/actions';
+import { getCurrentStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { AppStatusApi } from '../api/appStatus/AppStatus.api';
+import { clearLegalFactDocumentData } from '../redux/appStatus/reducers';
 
 
 const StatusBar = ({ status }: { status: AppCurrentStatus }) => {
@@ -35,7 +35,7 @@ const StatusBar = ({ status }: { status: AppCurrentStatus }) => {
 
 
 
-function dowloadDocument(url: string) {
+function downloadDocument(url: string) {
   /* eslint-disable functional/immutable-data */
   const link = document.createElement('a');
   link.href = url;
@@ -60,6 +60,9 @@ function booleanStringToBoolean(booleanString: string): boolean {
 
 /* eslint-disable-next-line arrow-body-style */
 const DateAndTimeInTwoLines = ({ date }: { date: string }) => {
+  console.log('in DateAndTimeInTwoLines per questo date');
+  console.log(date);
+
   return date ? 
     <Stack direction="column">
       <Typography variant="body2">{formatDate(date)},</Typography>
@@ -70,8 +73,17 @@ const DateAndTimeInTwoLines = ({ date }: { date: string }) => {
 
 
 const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation(['appStatus']);
   const theme = useTheme();
+  const legalFactDocumentDetails = useAppSelector((state: RootState) => state.appStatus.legalFactDocumentData);
+
+  useEffect(() => {
+    if (legalFactDocumentDetails && legalFactDocumentDetails.url) {
+      downloadDocument(legalFactDocumentDetails.url);
+      dispatch(clearLegalFactDocumentData());
+    }
+  }, [legalFactDocumentDetails]);
 
   const columns: Array<Column<DowntimeLogColumn>> = [
     {
@@ -100,7 +112,7 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
       getCellLabel(_: string, i: Item) {
         return i.knownFunctionality 
           ? t(`legends.knownFunctionality.${i.knownFunctionality}`)
-          : t('legends.unknownFunctionalityLegend', { functionality: i.rawFunctionality });
+          : t('legends.unknownFunctionality', { functionality: i.rawFunctionality });
       },
     },
     {
@@ -128,10 +140,11 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
       },
       onClick(row: Item) {
         const fetchAndDownloadDocument = async () => {
-          const documentData = await AppStatusApi.getLegalFactDetails(row.legalFactId as string);
-          console.log(`should download ${documentData.url}, full document record`);
-          console.log({legalFactId: row.legalFactId, ...documentData});
-          dowloadDocument(documentData.url);
+          void dispatch(getDowntimeLegalFactDocumentDetails(row.legalFactId as string));
+          // const documentData = await AppStatusApi.getLegalFactDetails(row.legalFactId as string);
+          // console.log(`should download ${documentData.url}, full document record`);
+          // console.log({legalFactId: row.legalFactId, ...documentData});
+          // dowloadDocument(documentData.url);
         };
         void fetchAndDownloadDocument();
       },

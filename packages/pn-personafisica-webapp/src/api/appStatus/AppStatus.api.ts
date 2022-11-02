@@ -124,14 +124,23 @@ export const AppStatusApi = {
     return beDowntimeLogPageToFeDowntimeLogPage(apiResponse);
   },
 
-    /* eslint-disable-next-line arrow-body-style */
-    getLegalFactDetails: async(legalFactId: string): Promise<LegalFactDocumentDetails> => {
+  /* eslint-disable-next-line arrow-body-style */
+  getLegalFactDetails: async(legalFactId: string): Promise<LegalFactDocumentDetails> => {
     if (useMockResponseData) {
       return mockLegalFactDetails(legalFactId);
     } else {
       const realApiResponse = await apiClient.get<LegalFactDocumentDetails>(DOWNTIME_LEGAL_FACT_DETAILS(legalFactId));
+
+      // validation: the response must include an actual value for url
+      if (!realApiResponse.data.url) {
+        throw new BadApiDataException('The response must include a URL', {});
+      }
+
       return realApiResponse.data;
     }
+
+    // } else if (legalFactId === "PN_DOWNTIME_LEGAL_FACTS-0004-73Z9-67GF-24F5-D5MO") {
+    //   return Promise.reject({ response: { status: 500 } });
   },
 };
 

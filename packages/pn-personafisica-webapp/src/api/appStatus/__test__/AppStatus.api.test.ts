@@ -1,10 +1,10 @@
 import MockAdapter from 'axios-mock-adapter';
 import { apiClient } from '../../axios';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
-import { DOWNTIME_HISTORY, DOWNTIME_STATUS } from '../appStatus.routes';
+import { DOWNTIME_HISTORY, DOWNTIME_LEGAL_FACT_DETAILS, DOWNTIME_STATUS } from '../appStatus.routes';
 import { beAppStatusNoIncidents, beAppStatusOneIncident, beAppStatusOneFinishedDowntimeAsOpenIncident, beAppStatusOneIncidentWithError, beAppStatusTwoIncidentsNormalCase, beAppStatusTwoIncidentsOneUnknownFunctionality, beDowntimeHistoryNoIncidents, beDowntimeHistoryThreeIncidents, downStatusOnKnownFunctionality, downStatusOnUnknownFunctionality, downtimeHistoryEmptyQueryParams, incidentTimestamps, statusByFunctionalityOk } from './test-utils';
 import { AppStatusApi, BadApiDataException } from '../AppStatus.api';
-import { BEDowntimeLogPage, DowntimeLogPage, DowntimeStatus, KnownFunctionality } from '../../../models/appStatus';
+import { BEDowntimeLogPage, DowntimeLogPage, DowntimeStatus, KnownFunctionality, LegalFactDocumentDetails } from '../../../models/appStatus';
 
 
 /* ------------------------------------------------------------------------
@@ -192,5 +192,37 @@ describe("AppStatus api tests", () => {
     expect(downtimeLogPage.downtimes[0].fileAvailable).toBe(true);
     expect(downtimeLogPage.downtimes[1].status).toBe(DowntimeStatus.OK);
     expect(downtimeLogPage.downtimes[2].status).toBe(DowntimeStatus.KO);
+  });
+
+  it('get legal fact details - happy case', async () => {
+    const legalFactData: LegalFactDocumentDetails = {
+      filename: 'some-filename',
+      contentLength: 35000,
+      url: 'https://what-a-nice-document.pdf',
+    };
+    const otherLegalFactData: LegalFactDocumentDetails = {
+      filename: 'some-other-filename',
+      contentLength: 53000,
+      url: 'https://what-a-different-nice-document.pdf',
+    };
+    mock
+      .onGet(DOWNTIME_LEGAL_FACT_DETAILS('some-legal-fact-id'))
+      .reply(200, legalFactData);
+    mock
+      .onGet(DOWNTIME_LEGAL_FACT_DETAILS('some-other-legal-fact-id'))
+      .reply(200, otherLegalFactData);
+    const downtimeLegalFactDetails = await AppStatusApi.getLegalFactDetails('some-legal-fact-id');
+    expect(downtimeLegalFactDetails).toEqual(legalFactData);
+  });
+
+  it('get legal fact details - lacking URL', async () => {
+    const legalFactData: any = {
+      filename: 'some-filename',
+      contentLength: 35000,
+    };
+    mock
+      .onGet(DOWNTIME_LEGAL_FACT_DETAILS('some-legal-fact-id'))
+      .reply(200, legalFactData);
+    await expect(AppStatusApi.getLegalFactDetails("some-legal-fact-id")).rejects.toThrow(BadApiDataException);
   });
 });

@@ -1,17 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AppCurrentStatus, DowntimeLogPage } from "../../models/appStatus";
-import { getCurrentStatus, getDowntimeLogPage } from "./actions";
+import { AppCurrentStatus, DowntimeLogPage, LegalFactDocumentDetails } from "../../models/appStatus";
+import { getCurrentStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from "./actions";
 
 interface AppStatusData {
   currentStatus?: AppCurrentStatus;
   downtimeLogPage?: DowntimeLogPage;
+  legalFactDocumentData?: LegalFactDocumentDetails;
 };
 
 /* eslint-disable functional/immutable-data */
-const appStatusSlice = createSlice<AppStatusData, any>({
+const appStatusSlice = createSlice({
   name: "appStatusSlice",
-  initialState: {},
-  reducers: {},
+  initialState: {} as AppStatusData,
+  reducers: {
+    clearLegalFactDocumentData: (state) => {
+      delete state.legalFactDocumentData;
+    }
+  },
   extraReducers: (builder) => {
     builder.addCase(getCurrentStatus.fulfilled, (state, action) => {
       state.currentStatus = action.payload;
@@ -19,7 +24,12 @@ const appStatusSlice = createSlice<AppStatusData, any>({
     builder.addCase(getDowntimeLogPage.fulfilled, (state, action) => {
       state.downtimeLogPage = action.payload;
     });
+    builder.addCase(getDowntimeLegalFactDocumentDetails.fulfilled, (state, action) => {
+      state.legalFactDocumentData = action.payload;
+    });
   }
 });
+
+export const { clearLegalFactDocumentData } = appStatusSlice.actions;
 
 export default appStatusSlice;
