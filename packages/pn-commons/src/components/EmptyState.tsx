@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Typography, Box } from '@mui/material';
-import { SentimentDissatisfied } from '@mui/icons-material';
+import { SentimentDissatisfied, InsertEmoticon } from '@mui/icons-material';
 
 type Props = {
   /** Callback to be called when performing an empty action */
@@ -11,6 +11,8 @@ type Props = {
   emptyActionLabel?: string;
   /** Disable sad emoticon */
   disableSentimentDissatisfied?: boolean;
+  /** Enable happy emoticon */
+  enableSentimentSatisfied?: boolean;
   /** Secondary Message */
   secondaryMessage?: Message;
 };
@@ -26,6 +28,7 @@ function EmptyState({
   emptyMessage = 'I filtri che hai aggiunto non hanno dato nessun risultato.',
   emptyActionLabel = 'Rimuovi filtri',
   disableSentimentDissatisfied = false,
+  enableSentimentSatisfied = false,
   secondaryMessage = {
     emptyMessage: '',
     emptyActionLabel: '',
@@ -43,7 +46,10 @@ function EmptyState({
       }}
     >
       {!disableSentimentDissatisfied && (
-        <SentimentDissatisfied sx={{ verticalAlign: 'middle', margin: '0 20px' }} />
+        <SentimentDissatisfied sx={{ verticalAlign: 'middle', mr: '20px', mb: '2px', fontSize: "1.25rem" }} />
+      )}
+      {enableSentimentSatisfied && (
+        <InsertEmoticon sx={{ verticalAlign: 'middle', mr: '20px', mb: '2px', fontSize: "1.25rem" }} />
       )}
       <Typography variant="body2" sx={{ display: 'inline' }}>
         {emptyMessage}

@@ -15,7 +15,8 @@
       "functionality": "Servizio coinvolto",
       "legalFactId": "Attestazioni opponibili a terzi",
       "status": "Stato"
-    }
+    },
+    "emptyMessage": "Non sono stati registrati disservizi"
   },
   "legends": {
     "knownFunctionality": {

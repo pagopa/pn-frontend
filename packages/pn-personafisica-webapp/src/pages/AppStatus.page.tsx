@@ -3,7 +3,7 @@ import { alpha } from '@mui/material/styles';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DownloadIcon from '@mui/icons-material/Download';
 import ErrorIcon from '@mui/icons-material/Error';
-import { Column, formatDate, formatTimeHHMM, Item, ItemsTable, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { CardElement, Column, EmptyState, formatDate, formatTimeHHMM, Item, ItemsCard, ItemsTable, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppCurrentStatus, DowntimeLogPage, DowntimeStatus, KnownFunctionality } from '../models/appStatus';
@@ -21,7 +21,7 @@ const StatusBar = ({ status }: { status: AppCurrentStatus }) => {
   const IconComponent = status.appIsFullyOperative ? CheckCircleIcon : ErrorIcon;
   return (
     <Stack component="div" direction="row" justifyContent='center' alignItems="center" sx={(theme) => ({
-      mt: '42px', py: '21px', width: '100%',
+      mt: '42px', py: '21px', px: '35px', width: '100%',
       backgroundColor: alpha(mainColor, theme.palette.action.hoverOpacity),
       borderColor: mainColor, borderWidth: '1px', borderStyle: 'solid', borderRadius: "10px",
     })}>
@@ -123,30 +123,17 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
       getCellLabel(_: string, i: Item) {
         if (booleanStringToBoolean(i.fileAvailable as string)) {
           return <Button
+            sx={{ px: 0 }}
             startIcon={<DownloadIcon />}
-            onClick={() => {} }
+            onClick={() => { void dispatch(getDowntimeLegalFactDocumentDetails(i.legalFactId as string)); } }
           >
             {t("legends.legalFactDownload")}
           </Button>;
         } else {
-          return <Box sx={{ 
-            fontFamily: theme.typography.button.fontFamily,
-            fontWeight: 400, fontSize: "14px", lineHeight: "18px", letterSpacing: "0.3px",
-            color: theme.palette.text.secondary,
-          }}>
+          return <Typography variant="body2" sx={{ color: theme.palette.text.secondary, }}>
             {t(`legends.noFileAvailableByStatus.${i.status}`)}
-          </Box>;
+          </Typography>;
         }
-      },
-      onClick(row: Item) {
-        const fetchAndDownloadDocument = async () => {
-          void dispatch(getDowntimeLegalFactDocumentDetails(row.legalFactId as string));
-          // const documentData = await AppStatusApi.getLegalFactDetails(row.legalFactId as string);
-          // console.log(`should download ${documentData.url}, full document record`);
-          // console.log({legalFactId: row.legalFactId, ...documentData});
-          // dowloadDocument(documentData.url);
-        };
-        void fetchAndDownloadDocument();
       },
     },
     {
@@ -172,12 +159,71 @@ const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) 
 
   return (downtimeLog && rows && downtimeLog.downtimes.length > 0) 
     ? <ItemsTable rows={rows} columns={columns} /> 
-    : <div>Non trovo downtime</div>
+    : <EmptyState disableSentimentDissatisfied enableSentimentSatisfied emptyMessage={t('downtimeList.emptyMessage')} />
   ;
 };
 
 
-const MobileDowntimeLog = () => <div>Go mobile go</div>;
+const MobileDowntimeLog = ({ downtimeLog }: { downtimeLog?: DowntimeLogPage }) => {
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation(['appStatus']);
+  const theme = useTheme();
+  // const legalFactDocumentDetails = useAppSelector((state: RootState) => state.appStatus.legalFactDocumentData);
+
+  const cardHeader: [CardElement, CardElement | null] = [
+    {
+      id: 'status',
+      label: '',
+      /* eslint-disable-next-line sonarjs/no-identical-functions */
+      getLabel(value: string) {
+        return <Chip 
+          label={t(`legends.status.${value}`)}
+          sx={{backgroundColor: value === DowntimeStatus.OK ? theme.palette.error.light : theme.palette.success.light}}
+        />;
+      },
+    },
+    null,
+  ];
+
+  const cardBody: Array<CardElement> = [
+    {
+      id: 'downtimeList.columnHeader.legalFactId',
+      label: t('downtimeList.columnHeader.legalFactId'),
+      /* eslint-disable-next-line sonarjs/no-identical-functions */
+      getLabel(_: string, i: Item) {
+        if (booleanStringToBoolean(i.fileAvailable as string)) {
+          return <Button
+            sx={{ px: 0 }}
+            startIcon={<DownloadIcon />}
+            onClick={() => { void dispatch(getDowntimeLegalFactDocumentDetails(i.legalFactId as string)); } }
+          >
+            {t("legends.legalFactDownload")}
+          </Button>;
+        } else {
+          return <Typography variant="body2" sx={{ color: theme.palette.text.secondary, }}>
+            {t(`legends.noFileAvailableByStatus.${i.status}`)}
+          </Typography>;
+        }
+      },
+    }
+  ];
+
+  /* eslint-disable-next-line sonarjs/no-identical-functions */
+  const rows: Array<Item> | undefined = downtimeLog?.downtimes.map((n, i) => ({
+    ...n,
+    fileAvailable: n.fileAvailable ? "true" : "false",
+    id: n.startDate + i.toString(),
+  }));
+
+  return rows 
+    ? <ItemsCard
+        cardHeader={cardHeader}
+        cardBody={cardBody}
+        cardData={rows}
+        headerGridProps={{ justifyContent: "center" }}
+      />
+    : null;
+};
 
 
 /* eslint-disable-next-line arrow-body-style */
@@ -215,7 +261,7 @@ const AppStatus = () => {
 
       <Typography variant="h6" sx={{ mt: "36px" }}>{t('downtimeList.title')}</Typography>
 
-      { downtimeLog && (isMobile ? <MobileDowntimeLog/> : <DesktopDowntimeLog downtimeLog={downtimeLog}/>) }
+      { downtimeLog && (isMobile ? <MobileDowntimeLog downtimeLog={downtimeLog}/> : <DesktopDowntimeLog downtimeLog={downtimeLog}/>) }
     </Stack>
   </Box>;
 };
