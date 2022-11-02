@@ -76,7 +76,7 @@ const Notifiche = () => {
         endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
       })
     ).then(() => setPageReady(true));
-  }, [filters, pagination.size, pagination.page, pagination.nextPagesKey]);
+  }, [filters, pagination.size, pagination.page]);
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {

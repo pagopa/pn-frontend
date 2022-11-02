@@ -6,10 +6,8 @@ const NavigationBar = () => {
   const { pathname } = useRouter();
   const [index, setIndex] = useState(0);
 
-  const isDev = process.env.NODE_ENV === "development";
-  const pathEnding = isDev ? "" : "index.html";
-  const cittadiniPath = "/cittadini/" + pathEnding;
-  const paPath = "/pubbliche-amministrazioni/" + pathEnding;
+  const cittadiniPath = "/cittadini/";
+  const paPath = "/pubbliche-amministrazioni/";
 
   function a11yProps(index: number) {
     return {

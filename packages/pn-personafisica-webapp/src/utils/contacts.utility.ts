@@ -1,7 +1,8 @@
+import { dataRegex } from '@pagopa-pn/pn-commons';
 import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../models/contacts';
 import { TrackEventType } from './events';
 
-export const phoneRegExp = /3\d{2}[. ]??\d{6,7}/g;
+export const phoneRegExp = dataRegex.phoneNumber;
 export const internationalPhonePrefix = '+39';
 
 export function countContactsByType(contacts: Array<DigitalAddress>, type: CourtesyChannelType) {

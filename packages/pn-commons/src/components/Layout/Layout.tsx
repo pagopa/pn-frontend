@@ -42,6 +42,8 @@ type Props = {
   /** Layout visibility conditions */
   showHeader?: boolean;
   showFooter?: boolean;
+  /** Shows or hides terms of service */
+  hasTermsOfService?: boolean;
 };
 
 export default function Layout({
@@ -63,6 +65,7 @@ export default function Layout({
   isLogged,
   showHeader = true,
   showFooter = true,
+  hasTermsOfService
 }: Props) {
   return (
     <ErrorBoundary
@@ -106,9 +109,9 @@ export default function Layout({
               loggedUser={loggedUser.id !== ''}
               onLanguageChanged={onLanguageChanged}
               eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
-            />
-          )}
-        </>
+              hasTermsOfService={hasTermsOfService}
+            />)}
+          </>
       </Stack>
     </ErrorBoundary>
   );
