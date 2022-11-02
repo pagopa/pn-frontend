@@ -1,7 +1,9 @@
 import * as React from 'react';
-import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 import * as redux from 'react-redux';
 import { fireEvent, waitFor } from '@testing-library/react';
+
+import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+
 import { axe, render } from '../../__test__/test-utils';
 import Deleghe from '../Deleghe.page';
 import * as hooks from '../../redux/hooks';
@@ -150,9 +152,15 @@ describe('Deleghe page', () => {
   it('checks the accept modal error state', async () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
+    const setState = jest.fn();
+    const setStateFn: any = () => ['Accept mandate error', setState];
+    const useStateSpy = jest.spyOn(React, 'useState');
+    useStateSpy.mockImplementation(setStateFn);
     useSelectorSpy(false, true, 'delegators', true);
     const result = render(<Deleghe />);
-    expect(result.baseElement).toHaveTextContent(/deleghe.invalid_code/i);
+    expect(result.baseElement).toHaveTextContent("Accept mandate error");
+    
+    useStateSpy.mockRestore();
   });
 
   it('is deleghe page accessible', async ()=>{

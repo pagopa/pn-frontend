@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import * as React from 'react';
 import { Box, Stack } from '@mui/material';
-import { CodeModal, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { AppResponse, AppResponsePublisher, CodeModal, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -35,6 +35,8 @@ const Deleghe = () => {
     error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
 
+  const [errorText, setErrorText] = React.useState("");
+
   const dispatch = useAppDispatch();
 
   const handleCloseModal = () => {
@@ -60,12 +62,23 @@ const Deleghe = () => {
     trackEventByType(TrackEventType.DELEGATION_DELEGATOR_ACCEPT);
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     void dispatch(getDelegates());
     void dispatch(getDelegators());
     return () => {
       dispatch(resetState());
     };
+  }, []);
+
+  const handleAcceptDelegationError = (errorResponse: AppResponse) => {
+    const error = errorResponse.errors ? errorResponse.errors[0] : null;
+    setErrorText(error?.message.content || "");
+  };
+  
+  React.useEffect(() => {
+    AppResponsePublisher.error.subscribe("acceptDelegation", handleAcceptDelegationError);
+    
+    return () => AppResponsePublisher.error.unsubscribe("acceptDelegation", handleAcceptDelegationError);
   }, []);
 
   return (
@@ -83,7 +96,8 @@ const Deleghe = () => {
           confirmLabel={t('deleghe.accept')}
           codeSectionTitle={t('deleghe.verification_code')}
           hasError={acceptError}
-          errorMessage={t('deleghe.invalid_code')}
+          // errorMessage={t('deleghe.invalid_code')}
+          errorMessage={errorText}
         />
         <ConfirmationModal
           open={open}

@@ -1,25 +1,31 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { Box } from '@mui/material';
+
+import { ProductSwitchItem } from '@pagopa/mui-italia';
+
 import {
   AppMessage,
+  AppResponseMessage,
   appStateActions,
+  errorFactoryManager,
   initLocalization,
   Layout,
   LoadingOverlay,
+  ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
   useMultiEvent,
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { ProductSwitchItem } from '@pagopa/mui-italia';
-import { Box } from '@mui/material';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
@@ -32,7 +38,8 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
-import { goToLoginPortal } from "./navigation/navigation.utility";
+import {goToLoginPortal} from "./navigation/navigation.utility";
+import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -101,6 +108,8 @@ const App = () => {
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+    // eslint-disable-next-line functional/immutable-data
+    errorFactoryManager.factory = new PFAppErrorFactory((path, ns) => t(path, { ns }));
   }, []);
 
   useEffect(() => {
@@ -214,6 +223,7 @@ const App = () => {
 
   return (
     <>
+      <ResponseEventDispatcher />
       <Layout
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
@@ -239,7 +249,9 @@ const App = () => {
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
       >
-        <AppMessage sessionRedirect={async () => await dispatch(logout())} />
+        {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
+        <AppMessage />
+        <AppResponseMessage />
         <LoadingOverlay />
         <Router />
       </Layout>

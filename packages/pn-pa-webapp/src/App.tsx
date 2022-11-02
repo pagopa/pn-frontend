@@ -3,10 +3,12 @@ import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   AppMessage,
+  AppResponseMessage,
   appStateActions,
   initLocalization,
   Layout,
   LoadingOverlay,
+  ResponseEventDispatcher,
   SideMenu,
   useMultiEvent,
   useTracking,
@@ -161,6 +163,7 @@ const App = () => {
 
   return (
     <>
+      <ResponseEventDispatcher />
       <Layout
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
@@ -191,7 +194,8 @@ const App = () => {
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
       >
-        <AppMessage sessionRedirect={handleLogout} />
+        <AppMessage />
+        <AppResponseMessage />
         <LoadingOverlay />
         <Router />
       </Layout>

@@ -1,11 +1,13 @@
-import { fireEvent } from '@testing-library/react';
-import * as hooks from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 import * as React from 'react';
-import { axe, render } from '../../../__test__/test-utils';
 
+import { fireEvent } from '@testing-library/react';
+
+import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
+
+import { axe, render } from '../../../__test__/test-utils';
 import ConfirmationModal from '../ConfirmationModal';
 
-const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
+const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
 
 const mockCancelFunction = jest.fn();
 const mockConfirmFunction = jest.fn();

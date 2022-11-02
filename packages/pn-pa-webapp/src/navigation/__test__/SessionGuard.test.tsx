@@ -1,7 +1,18 @@
 import { act, screen } from '@testing-library/react';
+
+import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
 import { render } from '../../__test__/test-utils';
 import SessionGuard from '../SessionGuard';
 import * as routes from '../routes.const';
+
+const SessionGuardWithErrorPublisher = () => (
+  <>
+    <ResponseEventDispatcher />
+    <AppResponseMessage />
+    <SessionGuard />
+  </>
+);
 
 
 const mockNavigateFn = jest.fn(() => { });
@@ -101,7 +112,7 @@ describe('SessionGuard Component', () => {
       userState: { user: { sessionToken: 'mocked-token' } },
     };
 
-    await act(async () => void render(<SessionGuard />, { preloadedState: mockReduxState }));
+    await act(async () => void render(<SessionGuardWithErrorPublisher />, { preloadedState: mockReduxState }));
     const pageComponent = screen.queryByText("Generic Page");
     expect(pageComponent).toBeTruthy();
 
@@ -111,7 +122,7 @@ describe('SessionGuard Component', () => {
 
   // cosa si aspetta: entra nell'app, non fa nessun navigate, non lancia il sessionCheck
   it('senza spid token - ingresso anonimo', async () => {
-    await act(async () => void render(<SessionGuard />));
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const pageComponent = screen.queryByText("Generic Page");
     expect(pageComponent).toBeTruthy();
 
@@ -123,7 +134,7 @@ describe('SessionGuard Component', () => {
   it('utente riconosciuto - TOS accettate', async () => {
     mockLocationHash = "#selfCareToken=good_token";
 
-    await act(async () => void render(<SessionGuard />));
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const pageComponent = screen.queryByText("Generic Page");
     expect(pageComponent).toBeTruthy();
 
@@ -137,7 +148,7 @@ describe('SessionGuard Component', () => {
     mockLocationHash = "#selfCareToken=good_token";
     mockTosValue = false;
 
-    await act(async () => void render(<SessionGuard />));
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const pageComponent = screen.queryByText("Generic Page");
     expect(pageComponent).toBeTruthy();
 
@@ -151,7 +162,7 @@ describe('SessionGuard Component', () => {
     mockLocationHash = "#selfCareToken=good_token";
     mockMakeTosCallFail = true;
 
-    await act(async () => void render(<SessionGuard />));
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const logoutComponent = screen.queryByText('Session Modal');
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText("leaving-app.title");
@@ -167,7 +178,7 @@ describe('SessionGuard Component', () => {
   it('errore nel selfCare token', async () => {
     mockLocationHash = "#selfCareToken=bad_token";
 
-    await act(async () => void render(<SessionGuard />));
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const logoutComponent = screen.queryByText('Session Modal');
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText("leaving-app.title");
@@ -183,7 +194,7 @@ describe('SessionGuard Component', () => {
       userState: { user: { sessionToken: 'mocked-token' }, isClosedSession: true },
     };
 
-    await act(async () => void render(<SessionGuard />, { preloadedState: mockReduxState }));
+    await act(async () => void render(<SessionGuardWithErrorPublisher />, { preloadedState: mockReduxState }));
     const logoutComponent = screen.queryByText('Session Modal');
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText("leaving-app.title");
