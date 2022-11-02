@@ -377,7 +377,7 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       ],
       1
     );
-    await testValidFiled(form!, 's_phone', '+393494568016');
+    await testValidFiled(form!, 's_phone', '3494568016');
   });
 
   it('adds pec', async () => {
