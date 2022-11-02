@@ -12,8 +12,8 @@
     "enter": "Entra",
     "exit": "Esci",
     "close": "Chiudi",
-    "go-to-home": "Torna alla home page",
-    "go-to-login": "Procedi al login"
+    "go-to-home": "Vai alla home page",
+    "go-to-login": "Accedi"
   },
   "menu": {
     "notifiche": "Notifiche",
@@ -63,7 +63,8 @@
     "action": "Ricarica la pagina"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
-  "not-logged": "Piattaforma Notifiche, effettua il login",
+  "not-logged": "Accedi a Piattaforma Notifiche",
+  "not-logged-subtitle": "Per vedere e gestire le tue notifiche, accedi con SPID o CIE.",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
