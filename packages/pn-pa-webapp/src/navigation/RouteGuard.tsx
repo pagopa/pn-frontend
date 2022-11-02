@@ -21,7 +21,6 @@ const RouteGuard = ({ roles }: Props) => {
   const role = useAppSelector((state: RootState) => state.userState.user.organization?.roles[0]);
 
   const userHasRequiredRole = !roles || (role && roles.includes(role.role));
-  console.debug('user has role and session token', !userHasRequiredRole, !sessionToken);
 
   if (!sessionToken || !userHasRequiredRole) {
     return (
