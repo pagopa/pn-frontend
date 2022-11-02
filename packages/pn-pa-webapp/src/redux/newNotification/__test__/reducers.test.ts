@@ -19,6 +19,7 @@ import {
   setAttachments,
   resetState,
   setPaymentDocuments,
+  setIsCompleted
 } from '../reducers';
 import { newNotification } from './test-utils';
 
@@ -179,6 +180,13 @@ describe('New notification redux state tests', () => {
         },
       },
     });
+  });
+
+  it('Should be able to set isCompleted status', () => {
+    const action = store.dispatch(setIsCompleted());
+    const payload = action.payload;
+    expect(action.type).toBe('newNotificationSlice/setIsCompleted');
+    expect(payload).toEqual(void 0);
   });
 
   it('Should be able to create new notification', async () => {

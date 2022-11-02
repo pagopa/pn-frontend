@@ -1,9 +1,9 @@
 import { Fragment, useMemo } from 'react';
 import _ from 'lodash';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Paper, Typography } from '@mui/material';
+import { Link, Paper, Typography } from '@mui/material';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 
 import {
@@ -14,6 +14,7 @@ import {
 } from '../../../models/NewNotification';
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../../redux/newNotification/actions';
+import { setIsCompleted } from '../../../redux/newNotification/reducers';
 import { setPaymentDocuments } from '../../../redux/newNotification/reducers';
 import NewNotificationCard from './NewNotificationCard';
 
@@ -58,7 +59,7 @@ const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile, fileUploaded }: P
 type Props = {
   notification: NewNotification;
   onConfirm: () => void;
-  onPreviousStep?: () => void;
+  onPreviousStep?: (step?: number) => void;
   isCompleted: boolean;
 };
 
@@ -87,33 +88,36 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
   const { t: tc } = useTranslation(['common']);
 
   const paymentDocumentsExists = !_.isNil(notification.payment) && !_.isEmpty(notification.payment);
-  const initialValues = useMemo(() => notification.recipients.reduce(
-    (obj: { [key: string]: PaymentObject }, r) => {
-      /* eslint-disable functional/immutable-data */
-      const recipientPayment = paymentDocumentsExists ? (notification.payment as {[key: string]: PaymentObject})[r.taxId] : undefined;
-      const pagoPaForm = recipientPayment?.pagoPaForm;
-      const f24flatRate = recipientPayment?.f24flatRate;
-      const f24standard = recipientPayment?.f24standard;
-      obj[r.taxId] = {
-        pagoPaForm: pagoPaForm
-          ? pagoPaForm
-          : newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
-      };
-      if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE) {
-        obj[r.taxId].f24flatRate = f24flatRate
-          ? f24flatRate
-          : newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate'));
-      }
-      if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24) {
-        obj[r.taxId].f24standard = f24standard
-          ? f24standard
-          : newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24'));
-      }
-      /* eslint-enable functional/immutable-data */
-      return obj;
-    },
-    {}
-  ), []);
+  const initialValues = useMemo(
+    () =>
+      notification.recipients.reduce((obj: { [key: string]: PaymentObject }, r) => {
+        /* eslint-disable functional/immutable-data */
+        const recipientPayment = paymentDocumentsExists
+          ? (notification.payment as { [key: string]: PaymentObject })[r.taxId]
+          : undefined;
+        const pagoPaForm = recipientPayment?.pagoPaForm;
+        const f24flatRate = recipientPayment?.f24flatRate;
+        const f24standard = recipientPayment?.f24standard;
+        obj[r.taxId] = {
+          pagoPaForm: pagoPaForm
+            ? pagoPaForm
+            : newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
+        };
+        if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE) {
+          obj[r.taxId].f24flatRate = f24flatRate
+            ? f24flatRate
+            : newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate'));
+        }
+        if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24) {
+          obj[r.taxId].f24standard = f24standard
+            ? f24standard
+            : newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24'));
+        }
+        /* eslint-enable functional/immutable-data */
+        return obj;
+      }, {}),
+    []
+  );
 
   const formatPaymentDocuments = () =>
     notification.recipients.reduce((obj: { [key: string]: PaymentObject }, r) => {
@@ -204,14 +208,18 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
+    validationSchema: notification.paymentMode !== PaymentModel.NOTHING ? validationSchema : null,
     validateOnMount: true,
     onSubmit: async (values) => {
       if (isCompleted) {
         onConfirm();
         return;
       }
-      await dispatch(uploadNotificationPaymentDocument(values));
+      if (notification.paymentMode !== PaymentModel.NOTHING) {
+        await dispatch(uploadNotificationPaymentDocument(values));
+      } else {
+        dispatch(setIsCompleted());
+      }
     },
   });
 
@@ -248,42 +256,79 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
         previousStepLabel={t('back-to-attachments')}
         previousStepOnClick={() => handlePreviousStep()}
       >
-        {notification.recipients.map((recipient) => (
-          <Paper
-            key={recipient.taxId}
-            sx={{ padding: '24px', marginTop: '40px' }}
-            className="paperContainer"
-          >
-            <Typography variant="h6">
-              {t('payment-models')} {recipient.firstName} {recipient.lastName}
-            </Typography>
-            <PaymentBox
-              id={`${recipient.taxId}.pagoPaForm`}
-              title={`${t('attach-pagopa-notice')}*`}
-              onFileUploaded={fileUploadedHandler}
-              onRemoveFile={removeFileHandler}
-              fileUploaded={formik.values[recipient.taxId].pagoPaForm}
-            />
-            {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
+        {notification.paymentMode !== PaymentModel.NOTHING &&
+          notification.recipients.map((recipient) => (
+            <Paper
+              key={recipient.taxId}
+              sx={{ padding: '24px', marginTop: '40px' }}
+              className="paperContainer"
+            >
+              <Typography variant="h6">
+                {t('payment-models')} {recipient.firstName} {recipient.lastName}
+              </Typography>
               <PaymentBox
-                id={`${recipient.taxId}.f24flatRate`}
-                title={t('attach-f24-flatrate')}
+                id={`${recipient.taxId}.pagoPaForm`}
+                title={`${t('attach-pagopa-notice')}*`}
                 onFileUploaded={fileUploadedHandler}
                 onRemoveFile={removeFileHandler}
-                fileUploaded={formik.values[recipient.taxId].f24flatRate}
+                fileUploaded={formik.values[recipient.taxId].pagoPaForm}
               />
-            )}
-            {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
-              <PaymentBox
-                id={`${recipient.taxId}.f24standard`}
-                title={t('attach-f24')}
-                onFileUploaded={fileUploadedHandler}
-                onRemoveFile={removeFileHandler}
-                fileUploaded={formik.values[recipient.taxId].f24standard}
-              />
-            )}
+              {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
+                <PaymentBox
+                  id={`${recipient.taxId}.f24flatRate`}
+                  title={t('attach-f24-flatrate')}
+                  onFileUploaded={fileUploadedHandler}
+                  onRemoveFile={removeFileHandler}
+                  fileUploaded={formik.values[recipient.taxId].f24flatRate}
+                />
+              )}
+              {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
+                <PaymentBox
+                  id={`${recipient.taxId}.f24standard`}
+                  title={t('attach-f24')}
+                  onFileUploaded={fileUploadedHandler}
+                  onRemoveFile={removeFileHandler}
+                  fileUploaded={formik.values[recipient.taxId].f24standard}
+                />
+              )}
+            </Paper>
+          ))}
+        {notification.paymentMode === PaymentModel.NOTHING && (
+          <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
+            <Trans
+              i18nKey="nothing"
+              components={[
+                <Typography key="pre-link" fontWeight={400} fontSize={16} display="inline" />,
+                <Link
+                  key="go-to-preliminary-infos"
+                  color="primary"
+                  fontWeight={600}
+                  fontSize={16}
+                  onClick={() => onPreviousStep && onPreviousStep(0)}
+                  sx={{ cursor: 'pointer' }}
+                />,
+                <Typography key="post-link" fontWeight={400} fontSize={16} display="inline" />,
+              ]}
+              t={t}
+            >
+              <Typography fontWeight={400} fontSize={16} display="inline">
+                Se questa notifica prevede un pagamento, torna a&nbsp;
+              </Typography>
+              <Link
+                color="primary"
+                fontWeight={600}
+                fontSize={16}
+                onClick={() => onPreviousStep && onPreviousStep(0)}
+                sx={{ cursor: 'pointer' }}
+              >
+                Informazioni preliminari
+              </Link>
+              <Typography fontWeight={400} fontSize={16} display="inline">
+                &nbsp;e seleziona un modello. Poi, torna qui per caricarlo.
+              </Typography>
+            </Trans>
           </Paper>
-        ))}
+        )}
       </NewNotificationCard>
     </form>
   );
