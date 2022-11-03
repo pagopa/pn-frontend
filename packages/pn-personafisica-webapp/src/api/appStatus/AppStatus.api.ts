@@ -19,11 +19,11 @@ const statusResponseExample: BEStatus = {
     "NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"
   ],
   openIncidents: [
-    // {
-    //   functionality: "NOTIFICATION_WORKFLOW",
-    //   status: "KO",
-    //   startDate: minutesBeforeNow(1).toISOString(),
-    // }
+    {
+      functionality: "NOTIFICATION_WORKFLOW",
+      status: "KO",
+      startDate: minutesBeforeNow(1).toISOString(),
+    }
   ],
 };
   
