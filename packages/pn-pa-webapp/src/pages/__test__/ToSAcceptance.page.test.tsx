@@ -29,7 +29,6 @@ describe('test Terms of Service page', () => {
     const result = render(<ToSAcceptance />);
 
     expect(result.container).toHaveTextContent(/tos.title/i);
-    expect(result.container).toHaveTextContent(/tos.body/i);
     expect(result.container).toHaveTextContent(/tos.switch-label/i);
     expect(result.container).toHaveTextContent(/tos.button/i);
   });

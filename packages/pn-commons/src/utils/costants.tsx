@@ -97,13 +97,13 @@ export const preLoginLinks = (
       title: getLocalizedOrDefaultLabel('common', 'footer.resources', 'Risorse'),
       links: [
         {
-          label: 'Privacy Policy',
+          label: 'Informativa Privacy',
           href: privacyPolicyHref ?? `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
           ariaLabel: `${getLocalizedOrDefaultLabel(
             'common',
             'footer.go-to',
             'Vai al link'
-          )}: Privacy Policy`,
+          )}: Informativa Privacy`,
           linkType: 'internal',
         },
         {
@@ -228,13 +228,13 @@ export const postLoginLinks = (
   termsOfServiceHref?: string
 ): Array<FooterLinksType> => [
   {
-    label: 'Privacy policy',
+    label: 'Informativa Privacy',
     href: privacyPolicyHref ?? `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
     ariaLabel: `${getLocalizedOrDefaultLabel(
       'common',
       'footer.go-to',
       'Vai al link'
-    )}: Privacy Policy`,
+    )}: Informativa Privacy`,
     linkType: 'internal',
   },
   {
