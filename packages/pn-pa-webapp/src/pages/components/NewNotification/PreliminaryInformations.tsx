@@ -88,10 +88,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   };
 
   const fetchGroups = useCallback(() => {
-    if (groups.length === 0) {
-      void dispatch(getUserGroups(GroupStatus.ACTIVE));
-    }
-  }, [groups]);
+    void dispatch(getUserGroups(GroupStatus.ACTIVE));
+  }, []);
 
   useEffect(() => {
     fetchGroups();

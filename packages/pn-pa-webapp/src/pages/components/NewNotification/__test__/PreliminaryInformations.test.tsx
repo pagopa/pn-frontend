@@ -102,7 +102,10 @@ describe('PreliminaryInformations Component', () => {
     expect(button).toBeEnabled();
     fireEvent.click(button!);
     await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
+      // infatti vengono eseguiti due dispatch, uno all'inizio per getUserGroups, l'altro nel submit per setPreliminaryInformations
+      // del dispatch per getUserGroups non so' come recuperare l'informazione relativa, 
+      // perché essendo un asyncThunk il valore con cui viene chiamato il dispatch è infatti una funzione, di cui non so' come ottenere dettagli
+      expect(mockDispatchFn).toBeCalledTimes(2);
       expect(mockDispatchFn).toBeCalledWith({
         payload: {
           paProtocolNumber: 'mocked-NotificationId',

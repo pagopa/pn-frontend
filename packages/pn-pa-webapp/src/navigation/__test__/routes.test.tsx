@@ -10,10 +10,19 @@ const mockSessionCheckFn = jest.fn(() => { });
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
   useTranslation: () => ({
     t: (str: string) => str,
   }),
 }));
+
+jest.mock('@pagopa/mui-italia', () => {
+  const original = jest.requireActual('@pagopa/mui-italia');
+  return {
+    ...original,
+    TOSAgreement: () => <div data-testid="mock-tos-agreement">Terms of Service agreement component</div>,
+  };
+});
 
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
@@ -21,7 +30,6 @@ jest.mock('@pagopa-pn/pn-commons', () => {
     ...original,
     useSessionCheck: () => mockSessionCheckFn,
     ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
-    TermsOfServiceHandler: () => <div data-testid="mock-tos-handler">Terms of Service handler</div>,
   };
 });
 
@@ -73,7 +81,7 @@ describe("router", () => {
     await act(async () => void renderWithoutRouter(
       <MemoryRouter initialEntries={["/tos"]}><Router /></MemoryRouter>, { preloadedState: mockReduxState }
     ));
-    expect(screen.queryByTestId("mock-tos-handler")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("mock-tos-agreement")).not.toBeInTheDocument();
     expect(screen.queryByTestId("mock-dashboard")).toBeInTheDocument();
   });
 
@@ -87,7 +95,7 @@ describe("router", () => {
     await act(async () => void renderWithoutRouter(
       <MemoryRouter initialEntries={["/tos"]}><Router /></MemoryRouter>, { preloadedState: mockReduxState }
     ));
-    expect(screen.queryByTestId("mock-tos-handler")).toBeInTheDocument();
+    expect(screen.queryByTestId("mock-tos-agreement")).toBeInTheDocument();
     expect(screen.queryByTestId("mock-dashboard")).not.toBeInTheDocument();
   });
 });
