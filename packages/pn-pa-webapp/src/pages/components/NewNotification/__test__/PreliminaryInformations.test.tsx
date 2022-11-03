@@ -77,6 +77,7 @@ describe('PreliminaryInformations Component', () => {
       'pagopa-notice',
       'pagopa-notice-f24-flatrate',
       'pagopa-notice-f24',
+      'nothing'
     ]);
     const button = form?.querySelector('button');
     expect(button!).toBeDisabled();

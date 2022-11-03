@@ -16,9 +16,11 @@ type Props = {
   loggedUser?: boolean;
   /** Event tracking callback on change language */
   eventTrackingCallbackChangeLanguage?: () => void;
+  /** Enables the Terms of Service Link */
+  hasTermsOfService?: boolean;
 };
 
-const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackingCallbackChangeLanguage }: Props) => {
+const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackingCallbackChangeLanguage, hasTermsOfService }: Props) => {
   const [currentLangCode, setCurrentLangCode] = useState<'it' | 'en'>('it');
 
   const changeLanguageHandler = (langCode: 'it' | 'en') => {
@@ -38,7 +40,7 @@ const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackin
       }}
       legalInfo={companyLegalInfo()}
       postLoginLinks={postLoginLinks()}
-      preLoginLinks={preLoginLinks()}
+      preLoginLinks={preLoginLinks(hasTermsOfService)}
       languages={LANGUAGES}
       onLanguageChanged={changeLanguageHandler}
       currentLangCode={currentLangCode}

@@ -15,7 +15,7 @@ import {
 import { PhysicalCommunicationType, CustomDropdown, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 
 import { NewNotification, PaymentModel } from '../../../models/NewNotification';
-import { GroupStatus } from '../../../models/user';
+import { GroupStatus, PNRole } from '../../../models/user';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setPreliminaryInformations } from '../../../redux/newNotification/reducers';
 import { getUserGroups, NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
@@ -33,6 +33,10 @@ type Props = {
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
+
+  const loggedUser = useAppSelector((state: RootState) => state.userState.user);
+  const isAdmin = loggedUser.organization?.roles[0].role === PNRole.ADMIN;
+
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
   });
@@ -52,7 +56,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     subject: yup.string().required(`${t('subject')} ${tc('common:required')}`),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
-    group: groups.length > 0 ? yup.string().required() : yup.string(),
+    group: groups.length > 0 && !isAdmin ? yup.string().required() : yup.string(),
   });
 
   const formik = useFormik({
@@ -94,6 +98,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   }, [fetchGroups]);
 
   return (
+
     <ApiErrorWrapper
       apiId={NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}
       reloadAction={() => fetchGroups()}
@@ -138,7 +143,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           />
           <CustomDropdown
             id="group"
-            label={`${t('group')}${groups.length > 0 ? '*' : ''}`}
+            label={`${t('group')}${groups.length > 0 && !isAdmin ? '*' : ''}`}
             fullWidth
             name="group"
             size="small"
@@ -209,6 +214,12 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                 value={PaymentModel.PAGO_PA_NOTICE_F24}
                 control={<Radio />}
                 label={t('pagopa-notice-f24')}
+                data-testid="paymentMethodRadio"
+              />
+              <FormControlLabel
+                value={PaymentModel.NOTHING}
+                control={<Radio />}
+                label={t('nothing')}
                 data-testid="paymentMethodRadio"
               />
             </RadioGroup>

@@ -7,16 +7,17 @@ import Dashboard from '../pages/Dashboard.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
 import NewNotification from '../pages/NewNotification.page';
 // import ApiKeys from '../pages/ApiKeys.page';
-import PrivacyTOSPage from "../pages/PrivacyTOS.page";
+import PrivacyPolicyPage from "../pages/PrivacyPolicy.page";
+import TermsOfServicePage from "../pages/TermsOfService.page";
 
 import { PNRole } from '../models/user';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { AUTH_ACTIONS, getOrganizationParty } from '../redux/auth/actions';
-import TermsOfService from '../pages/TermsOfService.page';
+import ToSAcceptance from '../pages/ToSAcceptance.page';
+import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
-import * as routes from './routes.const';
 
 function OrganizationPartyGuard() {
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
@@ -49,7 +50,7 @@ function Router() {
         <Route path="/" element={<OrganizationPartyGuard />}>
           {/* protected routes */}
           <Route path="/"  element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
-            <Route path={routes.TOS} element={<TermsOfService />} />
+            <Route path={routes.TOS} element={<ToSAcceptance />} />
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
             <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
@@ -70,8 +71,9 @@ function Router() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Route>
+      <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
+      <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
       <Route path="*" element={<NotFound />} />
-      <Route path={routes.PRIVACY_TOS} element={<PrivacyTOSPage />} />
     </Routes>
   );
 }
