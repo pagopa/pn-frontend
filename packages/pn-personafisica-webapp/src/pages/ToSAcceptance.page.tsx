@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Link, Switch, Typography } from '@mui/material';
@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 
 const TermsOfService = () => {
   const dispatch = useAppDispatch();
@@ -63,7 +64,7 @@ const TermsOfService = () => {
   }, [tos]);
 
   return (
-    <Fragment>
+    <LoadingPageWrapper isInitialized>
       <Grid container justifyContent="center" sx={{backgroundColor: "#FAFAFA"}}>
         <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
           <TOSAgreement
@@ -88,7 +89,7 @@ const TermsOfService = () => {
           </TOSAgreement>
         </Grid>
       </Grid>
-    </Fragment>
+    </LoadingPageWrapper>
   );
 };
 
