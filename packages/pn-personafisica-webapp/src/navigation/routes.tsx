@@ -30,7 +30,7 @@ function Router() {
             <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
             <Route path={routes.DELEGHE} element={<Deleghe />} />
             <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
-            <Route path={routes.RECAPITI} element={<Contacts/>} />
+            <Route path={routes.RECAPITI} element={<Contacts />} />
             <Route path={routes.PROFILO} element={<Profile />} />
           </Route>
           {/* not found - non-logged users will see the common AccessDenied component */}

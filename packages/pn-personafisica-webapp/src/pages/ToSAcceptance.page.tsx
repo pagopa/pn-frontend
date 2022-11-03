@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Grid, Link } from '@mui/material';
@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 
 const TermsOfService = () => {
   const dispatch = useAppDispatch();
@@ -58,8 +59,8 @@ const TermsOfService = () => {
   }, [tos]);
 
   return (
-    <Fragment>
-      <Grid container justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
+    <LoadingPageWrapper isInitialized>
+      <Grid container justifyContent="center" sx={{backgroundColor: "#FAFAFA"}}>
         <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
           <TOSAgreement
             productName={t('tos.title', 'Piattaforma Notifiche')}
@@ -81,7 +82,7 @@ const TermsOfService = () => {
           </TOSAgreement>
         </Grid>
       </Grid>
-    </Fragment>
+    </LoadingPageWrapper>
   );
 };
 
