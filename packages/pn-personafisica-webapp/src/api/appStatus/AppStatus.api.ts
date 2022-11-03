@@ -73,8 +73,8 @@ function mockLegalFactDetails(legalFactId: string): LegalFactDocumentDetails {
    the API
    ------------------------------------------------------------------------ */
 
-// const useMockResponseData = false;
-const useMockResponseData = process.env.NODE_ENV === 'development';
+const useMockResponseData = false;
+// const useMockResponseData = process.env.NODE_ENV === 'development';
 
 export const AppStatusApi = {
   getCurrentStatus: async (): Promise<AppCurrentStatus> => {
@@ -118,6 +118,11 @@ export const AppStatusApi = {
     const validationResult = new BEDowntimeLogPageValidator().validate(apiResponse);
     if (validationResult != null) {
       throw new BadApiDataException('Wrong-formed data', validationResult);
+    }
+
+    // extra validation: downtime with fileAvailable but without legalFactId
+    if (apiResponse.result.some(downtime => downtime.fileAvailable && !downtime.legalFactId)) {
+      throw new BadApiDataException('Wrong data - a downtime marked as fileAvailable must indicate a legalFactId', {});
     }
 
     // finally the response
@@ -172,12 +177,18 @@ function beDowntimeToFeDowntime(downtime: BEDowntime): Downtime {
   if (downtime.legalFactId !== undefined) {
     result.legalFactId = downtime.legalFactId;
   }
-  // existence of legalFactId is taken as source for fileAvailable, takes preeminence over the fileAvailable attribute
-  // which is redundant
-  // if (downtime.fileAvailable !== undefined) {
-  //   result.fileAvailable = downtime.fileAvailable;
-  // }
-  result.fileAvailable = !!downtime.legalFactId;
+
+  // The attribute fileAvailable is *not* redundant, though it could seem so because it could be derived from the presence or not of legalFactId.
+  // In fact, the value for legalFactId is set *before* the file is actually available,
+  // since the BE process regarding the file involves two steps, 
+  // - first the storage is requested to AWS, which gives the name in the response
+  // - later AWS reports that the file is indeed available through a message to a queue in the BE 
+  //   linked to the filename indicated in the previous steps;
+  //   when such message is processed, the fileAvailable signal is set to true for the referenced file.
+  // -------------
+  // Carlos Lombardi, 2022.11.03, after a call with Giuseppe Porro
+  // -------------
+  result.fileAvailable = !!downtime.fileAvailable;
 
   return result;
 }

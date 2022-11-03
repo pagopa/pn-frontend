@@ -154,6 +154,21 @@ describe("AppStatus api tests", () => {
     await expect(AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
   });
 
+  it('get downtime history - incoherent downtime - fileAvailable but no legalFactId - API call fails', async () => {
+    const beDowntimeHistoryWithIncoherentRecord: BEDowntimeLogPage = {
+      result: [ 
+        beDowntimeHistoryThreeIncidents.result[0], 
+        {...beDowntimeHistoryThreeIncidents.result[1], fileAvailable: true, legalFactId: undefined},
+        beDowntimeHistoryThreeIncidents.result[2], 
+      ],
+      nextPage: "some-next-page",
+    }
+    mock
+      .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
+      .reply(200, beDowntimeHistoryWithIncoherentRecord);
+    await expect(AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
+  });
+
   it('get downtime history - downtime with functionality missing', async () => {
     const rottenIncidentRecord: any = {...beDowntimeHistoryThreeIncidents.result[1]};
     delete rottenIncidentRecord.functionality;
@@ -172,10 +187,8 @@ describe("AppStatus api tests", () => {
     await expect(AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
   });
 
-  it('get downtime history - preeminence (endDate over status, legalFactId over fileAvailable)', async () => {
+  it('get downtime history - preeminence of endDate over status', async () => {
     const incoherentDowntimeRecords = [...beDowntimeHistoryThreeIncidents.result];
-    // first downtime has legalFactId, so fileAvailable should be true
-    incoherentDowntimeRecords[0].fileAvailable = false;
     // second downtime has endDate, so status should be OK
     incoherentDowntimeRecords[1].status = "KO";
     // third downtime hasn't endDate, so status should be KO
@@ -189,7 +202,6 @@ describe("AppStatus api tests", () => {
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beIncoherentDowntimeHistory);
     const downtimeLogPage = await AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams);
-    expect(downtimeLogPage.downtimes[0].fileAvailable).toBe(true);
     expect(downtimeLogPage.downtimes[1].status).toBe(DowntimeStatus.OK);
     expect(downtimeLogPage.downtimes[2].status).toBe(DowntimeStatus.KO);
   });
