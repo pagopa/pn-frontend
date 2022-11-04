@@ -158,6 +158,7 @@
         "subject": "Oggetto della notifica",
         "abstract": "Descrizione",
         "group": "Gruppo",
+        "taxonomy-id": "Codice tassonometrico",
         "comunication-type": "Modalità di invio",
         "registered-letter-890": "Modello 890",
         "simple-registered-letter": "Raccomandata A/R",

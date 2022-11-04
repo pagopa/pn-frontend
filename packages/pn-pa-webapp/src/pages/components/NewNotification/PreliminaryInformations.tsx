@@ -30,6 +30,7 @@ type Props = {
   onConfirm: () => void;
 };
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
@@ -47,6 +48,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     subject: notification.subject || '',
     abstract: notification.abstract || '',
     group: notification.group || '',
+    taxonomyCode: notification.taxonomyCode || '',
     physicalCommunicationType: notification.physicalCommunicationType || '',
     paymentMode: notification.paymentMode || '',
   });
@@ -57,6 +59,10 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
     group: groups.length > 0 && !isAdmin ? yup.string().required() : yup.string(),
+    taxonomyCode: yup
+      .string()
+      .required(`${t('taxonomy-id')} ${tc('common:required')}`)
+      .test('taxonomyCodeTest', `${t('taxonomy-id')} ${tc('common:invalid')}`, (value) => /^([0-9]{6}[A-Z]{1})$/.test(value as string)),
   });
 
   const formik = useFormik({
@@ -140,7 +146,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           value={formik.values.group}
           onChange={handleChangeTouched}
           error={formik.touched.group && Boolean(formik.errors.group)}
-          helperText={formik.touched.group && formik.errors.group}>
+          helperText={formik.touched.group && formik.errors.group}
+        >
           {groups.length > 0 &&
             groups.map((group) => (
               <MenuItem key={group.id} value={group.id}>
@@ -148,6 +155,18 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               </MenuItem>
             ))}
         </CustomDropdown>
+        <TextField
+          id="taxonomyCode"
+          label={`${t('taxonomy-id')}*`}
+          fullWidth
+          name="taxonomyCode"
+          value={formik.values.taxonomyCode}
+          onChange={handleChangeTouched}
+          error={formik.touched.taxonomyCode && Boolean(formik.errors.taxonomyCode)}
+          helperText={formik.touched.taxonomyCode && formik.errors.taxonomyCode}
+          size="small"
+          margin="normal"
+        />
         <FormControl margin="normal" fullWidth>
           <FormLabel id="comunication-type-label">
             <Typography fontWeight={600} fontSize={16}>

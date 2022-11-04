@@ -26,6 +26,7 @@ const initialState = {
     payment: {},
     physicalCommunicationType: '' as PhysicalCommunicationType,
     group: '',
+    taxonomyCode: '',
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
   } as NewNotification,
