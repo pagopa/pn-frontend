@@ -160,7 +160,6 @@ export const createNewNotification = createAsyncThunk<NewNotificationResponse, N
   async (notification: NewNotification, { rejectWithValue }) => {
     try {
       const mappedNotification = newNotificationMapper(notification);
-      console.log(mappedNotification);
       return await NotificationsApi.createNewNotification(mappedNotification);
     } catch (e) {
       return rejectWithValue(e);

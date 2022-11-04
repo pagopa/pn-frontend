@@ -6,7 +6,6 @@ import { PhysicalCommunicationType } from '@pagopa-pn/pn-commons';
 import { newNotification } from '../../../../redux/newNotification/__test__/test-utils';
 import { render, testFormElements, testInput, testSelect } from '../../../../__test__/test-utils';
 import { PaymentModel } from '../../../../models/NewNotification';
-import * as hooks from '../../../../redux/hooks';
 import PreliminaryInformations from '../PreliminaryInformations';
 
 jest.mock('react-i18next', () => ({
@@ -39,12 +38,6 @@ describe('PreliminaryInformations Component', () => {
   const confirmHandlerMk = jest.fn();
 
   beforeEach(async () => {
-    // mock app selector
-    const useAppSelectorSpy = jest.spyOn(hooks, 'useAppSelector');
-    useAppSelectorSpy.mockReturnValue([
-      { id: '1', name: 'Group1', description: '', status: 'ACTIVE' },
-      { id: '2', name: 'Group2', description: '', status: 'ACTIVE' },
-    ]);
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     mockDispatchFn = jest.fn();
@@ -52,7 +45,17 @@ describe('PreliminaryInformations Component', () => {
     // render component
     await act(async () => {
       result = render(
-        <PreliminaryInformations notification={newNotification} onConfirm={confirmHandlerMk} />
+        <PreliminaryInformations notification={newNotification} onConfirm={confirmHandlerMk} />,
+        {
+          preloadedState: {
+            newNotificationState: {
+              groups: [
+                { id: '1', name: 'Group1', description: '', status: 'ACTIVE' },
+                { id: '2', name: 'Group2', description: '', status: 'ACTIVE' },
+              ],
+            },
+          },
+        }
       );
     });
   });
@@ -68,7 +71,7 @@ describe('PreliminaryInformations Component', () => {
     testFormElements(form!, 'paProtocolNumber', 'protocol-number*');
     testFormElements(form!, 'subject', 'subject*');
     testFormElements(form!, 'abstract', 'abstract');
-    testFormElements(form!, 'group', 'group*');
+    testFormElements(form!, 'group', 'group');
     testRadioElements(form!, 'comunicationTypeRadio', [
       'registered-letter-890',
       'simple-registered-letter',
@@ -77,7 +80,7 @@ describe('PreliminaryInformations Component', () => {
       'pagopa-notice',
       'pagopa-notice-f24-flatrate',
       'pagopa-notice-f24',
-      'nothing'
+      'nothing',
     ]);
     const button = form?.querySelector('button');
     expect(button!).toBeDisabled();
@@ -103,7 +106,7 @@ describe('PreliminaryInformations Component', () => {
     fireEvent.click(button!);
     await waitFor(() => {
       // infatti vengono eseguiti due dispatch, uno all'inizio per getUserGroups, l'altro nel submit per setPreliminaryInformations
-      // del dispatch per getUserGroups non so' come recuperare l'informazione relativa, 
+      // del dispatch per getUserGroups non so' come recuperare l'informazione relativa,
       // perché essendo un asyncThunk il valore con cui viene chiamato il dispatch è infatti una funzione, di cui non so' come ottenere dettagli
       expect(mockDispatchFn).toBeCalledTimes(2);
       expect(mockDispatchFn).toBeCalledWith({
