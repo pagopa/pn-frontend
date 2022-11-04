@@ -31,7 +31,7 @@ function Router() {
             <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
             <Route path={routes.DELEGHE} element={<Deleghe />} />
             <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
-            <Route path={routes.RECAPITI} element={<Contacts/>} />
+            <Route path={routes.RECAPITI} element={<Contacts />} />
             <Route path={routes.PROFILO} element={<Profile />} />
             <Route path={routes.APP_STATUS} element={<AppStatus />} />
           </Route>

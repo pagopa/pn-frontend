@@ -47,7 +47,7 @@ jest.mock('../../component/Notifications/NotificationPayment', () => () => <div>
 describe('NotificationDetail Page', () => {
   // eslint-disable-next-line functional/no-let
   let result: RenderResult;
-  const mockDispatchFn = jest.fn();
+  let mockDispatchFn: jest.Mock;
   const mockActionFn = jest.fn();
 
   const mockedUserInStore = { fiscal_number: 'mocked-user' };
@@ -68,13 +68,19 @@ describe('NotificationDetail Page', () => {
 
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn);
+    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     // mock action
     const actionSpy = jest.spyOn(actions, 'getReceivedNotification');
     actionSpy.mockImplementation(mockActionFn);
     // render component
     return render(<NotificationDetail />, { preloadedState: reduxStoreState });
   };
+
+  beforeEach(() => {
+    mockDispatchFn = jest.fn(() => ({
+      then: () => Promise.resolve(),
+    }));
+  });
 
   afterEach(() => {
     jest.resetAllMocks();

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Stack } from '@mui/material';
 import { CodeModal, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next';
@@ -21,6 +21,7 @@ import Delegators from '../component/Deleghe/Delegators';
 import { getSidemenuInformation } from '../redux/sidemenu/actions';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -34,6 +35,7 @@ const Deleghe = () => {
     name: acceptName,
     error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
+  const [pageReady, setPageReady] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -60,17 +62,22 @@ const Deleghe = () => {
     trackEventByType(TrackEventType.DELEGATION_DELEGATOR_ACCEPT);
   };
 
+  const retrieveData = async () => {
+    await dispatch(getDelegates());
+    await dispatch(getDelegators());
+    setPageReady(true);
+  };
+
   useEffect(() => {
-    void dispatch(getDelegates());
-    void dispatch(getDelegators());
+    void retrieveData();
     return () => {
       dispatch(resetState());
     };
   }, []);
 
   return (
-    <Box p={3}>
-      <>
+    <LoadingPageWrapper isInitialized={pageReady}>
+      <Box p={3}>
         <CodeModal
           title={t('deleghe.accept_title')}
           subtitle={t('deleghe.accept_description', { name: acceptName })}
@@ -117,8 +124,8 @@ const Deleghe = () => {
             <Delegators />
           </>
         )}
-      </>
-    </Box>
+      </Box>
+    </LoadingPageWrapper>
   );
 };
 
