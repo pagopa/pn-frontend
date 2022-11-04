@@ -14,6 +14,18 @@ type Props = {
   handleLinkClick: (item: SideMenuItem) => void;
 };
 
+
+function renderIcon(Icon: any): JSX.Element | null {
+  if (typeof Icon === "object") {
+    return <Icon />;
+  } else if (typeof Icon === "function") {
+    return Icon();
+  } else {
+    return null;
+  }
+}
+
+
 /**
  * SideMenu List Item: rappresenta un item nel menu di navigazione laterale. Se goOutside è true al click viene aperta un'altra tab del browser.
  * @param item SideMenuItem
@@ -50,7 +62,7 @@ const SideMenuListItem = ({
               <item.icon />
             </Badge>
           ) : (
-            <item.icon />
+            renderIcon(item.icon)
           )}
         </ListItemIcon>
       )}

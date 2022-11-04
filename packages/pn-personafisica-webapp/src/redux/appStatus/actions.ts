@@ -4,12 +4,12 @@ import { AppStatusApi } from "../../api/appStatus/AppStatus.api";
 import { AppCurrentStatus, GetDowntimeHistoryParams, DowntimeLogPage, LegalFactDocumentDetails } from "../../models/appStatus";
 
 export enum APP_STATUS_ACTIONS {
-    GET_CURRENT_STATUS = 'getCurrentStatus',
+    GET_CURRENT_STATUS = 'getCurrentAppStatus',
     GET_DOWNTIME_LOG_PAGE = 'getDowntimeLogPage',
     GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS = 'getDowntimeLegalFactDocumentDetails',
 }
 
-export const getCurrentStatus = createAsyncThunk<AppCurrentStatus>(
+export const getCurrentAppStatus = createAsyncThunk<AppCurrentStatus>(
     APP_STATUS_ACTIONS.GET_CURRENT_STATUS,
     performThunkAction(() => AppStatusApi.getCurrentStatus())
 );

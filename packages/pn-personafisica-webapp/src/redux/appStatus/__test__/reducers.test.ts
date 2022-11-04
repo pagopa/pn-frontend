@@ -2,7 +2,7 @@ import { AppStatusApi } from "../../../api/appStatus/AppStatus.api";
 import { AppCurrentStatus, DowntimeLogPage,  } from "../../../models/appStatus";
 import { mockAuthentication } from "../../auth/__test__/test-utils";
 import { store } from '../../store';
-import { getCurrentStatus, getDowntimeLogPage } from "../actions";
+import { getCurrentAppStatus, getDowntimeLogPage } from "../actions";
 import { currentStatusOk, simpleDowntimeLogPage } from "./test-utils";
 
 
@@ -18,10 +18,10 @@ describe('App Status redux state tests', () => {
     const apiSpy = jest.spyOn(AppStatusApi, 'getCurrentStatus');
     apiSpy.mockResolvedValue(currentStatusOk);
     const action = await store.dispatch(
-      getCurrentStatus()
+      getCurrentAppStatus()
     );
     const payload = action.payload as AppCurrentStatus;
-    expect(action.type).toBe('getCurrentStatus/fulfilled');
+    expect(action.type).toBe('getCurrentAppStatus/fulfilled');
     expect(payload).toEqual(currentStatusOk);
   });
 

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AppCurrentStatus, DowntimeLogPage, LegalFactDocumentDetails } from "../../models/appStatus";
-import { getCurrentStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from "./actions";
+import { getCurrentAppStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from "./actions";
 
 interface AppStatusData {
   currentStatus?: AppCurrentStatus;
@@ -18,7 +18,7 @@ const appStatusSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(getCurrentStatus.fulfilled, (state, action) => {
+    builder.addCase(getCurrentAppStatus.fulfilled, (state, action) => {
       state.currentStatus = action.payload;
     });
     builder.addCase(getDowntimeLogPage.fulfilled, (state, action) => {

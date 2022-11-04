@@ -13,9 +13,6 @@ export function booleanStringToBoolean(booleanString: string): boolean {
 
 /* eslint-disable-next-line arrow-body-style */
 const FormattedDateAndTime = ({ date, inTwoLines }: { date: string; inTwoLines?: boolean }) => {
-  console.log('in DateAndTimeInTwoLines per questo date');
-  console.log(date);
-
   return date ?
     (inTwoLines
       ? <Stack direction="column">

@@ -11,6 +11,7 @@ export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
     const theme = useTheme();
     const isMobile = useIsMobile();
   
+    // ATTENTION - a similar logic to choose the icon and its color is implemented in App.tsx
     const mainColor = status.appIsFullyOperative ? theme.palette.success.main : theme.palette.error.main;
     const statusText = t(`appStatus.statusDescription.${status.appIsFullyOperative ? "ok" : "not-ok"}`);
     const IconComponent = status.appIsFullyOperative ? CheckCircleIcon : ErrorIcon;

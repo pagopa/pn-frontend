@@ -6,7 +6,7 @@ import { AppStatusBar } from '../component/AppStatus/AppStatusBar';
 import { DesktopDowntimeLog } from '../component/AppStatus/DesktopDowntimeLog';
 import { MobileDowntimeLog } from '../component/AppStatus/MobileDowntimeLog';
 import { KnownFunctionality } from '../models/appStatus';
-import { getCurrentStatus, getDowntimeLogPage } from '../redux/appStatus/actions';
+import { getCurrentAppStatus, getDowntimeLogPage } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
@@ -20,7 +20,7 @@ const AppStatus = () => {
   const { t } = useTranslation(['appStatus']);
 
   const fetchCurrentStatus = useCallback(() => {
-    void dispatch(getCurrentStatus());
+    void dispatch(getCurrentAppStatus());
   }, []);
 
   const fetchDowntimeLog = useCallback(() => {

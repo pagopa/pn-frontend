@@ -19,11 +19,11 @@ const statusResponseExample: BEStatus = {
     "NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"
   ],
   openIncidents: [
-    {
-      functionality: "NOTIFICATION_WORKFLOW",
-      status: "KO",
-      startDate: minutesBeforeNow(1).toISOString(),
-    }
+    // {
+    //   functionality: "NOTIFICATION_WORKFLOW",
+    //   status: "KO",
+    //   startDate: minutesBeforeNow(1).toISOString(),
+    // }
   ],
 };
   
@@ -76,6 +76,9 @@ function mockLegalFactDetails(legalFactId: string): LegalFactDocumentDetails {
 const useMockResponseData = false;
 // const useMockResponseData = process.env.NODE_ENV === 'development';
 
+/* eslint-disable functional/no-let */
+let counter = 0;
+
 export const AppStatusApi = {
   getCurrentStatus: async (): Promise<AppCurrentStatus> => {
     /* eslint-disable functional/no-let */
@@ -100,7 +103,9 @@ export const AppStatusApi = {
     }
 
     // finally the response
-    return beDowntimeStatusToFeAppStatus(apiResponse);
+    // return beDowntimeStatusToFeAppStatus(apiResponse);
+    counter++;
+    return !useMockResponseData || counter > 1 ? beDowntimeStatusToFeAppStatus(apiResponse) : Promise.reject({ response: { status: 500 }});
   },
 
   getDowntimeLogPage: async (params: GetDowntimeHistoryParams): Promise<DowntimeLogPage> => {

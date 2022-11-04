@@ -1,9 +1,12 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Box, useTheme } from '@mui/material';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import HelpIcon from '@mui/icons-material/Help';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
@@ -20,7 +23,6 @@ import {
   useUnload,
 } from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
-import { Box } from '@mui/material';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
@@ -34,6 +36,7 @@ import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
 import { goToLoginPortal } from "./navigation/navigation.utility";
+import { getCurrentAppStatus } from './redux/appStatus/actions';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -48,11 +51,13 @@ const productsList: Array<ProductSwitchItem> = [
 const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
+  const theme = useTheme();
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { tos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
+  const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -113,6 +118,7 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
+      void dispatch(getCurrentAppStatus());
     }
   }, [sessionToken]);
 
@@ -170,7 +176,17 @@ const App = () => {
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     },
-    { label: t('menu.app-status'), icon: CheckCircleIcon, route: routes.APP_STATUS },
+    { 
+      label: t('menu.app-status'), 
+      // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar
+      icon: () => currentStatus 
+        ? (currentStatus.appIsFullyOperative
+          ? <CheckCircleIcon sx={{ color: theme.palette.success.main }} />
+          : <ErrorIcon sx={{ color: theme.palette.error.main }} />)
+        : <HelpIcon />
+      , 
+      route: routes.APP_STATUS 
+    },
   ];
 
   const changeLanguageHandler = async (langCode: string) => {
