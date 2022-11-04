@@ -131,7 +131,7 @@ describe('App', () => {
     it('Dispatches proper actions when session token is not empty', async () => {
       await act(async () => void render(<App />, initialState('mocked-session-token')));
 
-      expect(mockUseDispatchFn).toBeCalledTimes(2);
+      expect(mockUseDispatchFn).toBeCalledTimes(3);
       expect(mockSidemenuInformationActionFn).toBeCalledTimes(1);
       expect(mockDomicileInfoActionFn).toBeCalledTimes(1);
     });
