@@ -1,5 +1,5 @@
-import { Box, Stack, Typography } from '@mui/material';
-import { EmptyState, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Box, Stack, Typography, useTheme } from '@mui/material';
+import { EmptyState, formatDate, formatTimeHHMM, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppStatusBar } from '../component/AppStatus/AppStatusBar';
@@ -16,6 +16,7 @@ const AppStatus = () => {
   const dispatch = useAppDispatch();
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const downtimeLog = useAppSelector((state: RootState) => state.appStatus.downtimeLogPage);
+  const theme = useTheme();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['appStatus']);
 
@@ -43,6 +44,16 @@ const AppStatus = () => {
       />
 
       {currentStatus && <AppStatusBar status={currentStatus} />}
+
+      { currentStatus &&
+        <Stack direction="row" justifyContent="center">
+          <Typography variant="caption" sx={{ mt: 2, color: theme.palette.text.secondary }}>
+            { t('appStatus.lastCheckLegend', 
+              { lastCheckTimestamp: `${formatDate(currentStatus.lastCheckTimestamp)}, ore ${formatTimeHHMM(currentStatus.lastCheckTimestamp)}`})
+            }
+          </Typography>
+        </Stack>
+      }
 
       <Typography variant="h6" sx={{ mt: "36px", mb: 2 }}>{t('downtimeList.title')}</Typography>
 

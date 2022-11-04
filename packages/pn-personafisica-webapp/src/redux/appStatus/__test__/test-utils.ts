@@ -6,7 +6,8 @@ export const currentStatusOk: AppCurrentStatus = {
     rawFunctionality: KnownFunctionality.NotificationCreate,
     knownFunctionality: KnownFunctionality.NotificationCreate,
     isOperative: true,
-  }]
+  }],
+  lastCheckTimestamp: "2022-10-28T06:07:08Z",
 };
 
 export const simpleDowntimeLogPage: DowntimeLogPage = {

@@ -234,7 +234,12 @@ function beDowntimeStatusToFeAppStatus(beStatus: BEStatus): AppCurrentStatus {
 
   return {
     appIsFullyOperative: beStatus.openIncidents.length === 0,
-    statusByFunctionality
+    statusByFunctionality,
+    // The timestamp for the last check ("ultimo aggiornamento") is required in the app status page, but is not given by API.
+    // I decided to include it in the response given by the API layer of the FE.
+    // ----------------------
+    // Carlos Lombardi, 2022.11.4
+    lastCheckTimestamp: new Date().toISOString(),
   };
 }
 

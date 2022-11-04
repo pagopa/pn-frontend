@@ -58,6 +58,7 @@ export interface FunctionalityStatus {
 export interface AppCurrentStatus {
   appIsFullyOperative: boolean;
   statusByFunctionality: Array<FunctionalityStatus>;
+  lastCheckTimestamp: string;
 }
 
 export interface DowntimeLogPage {
