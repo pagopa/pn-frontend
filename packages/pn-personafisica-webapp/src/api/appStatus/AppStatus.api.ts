@@ -73,8 +73,8 @@ function mockLegalFactDetails(legalFactId: string): LegalFactDocumentDetails {
    the API
    ------------------------------------------------------------------------ */
 
-const useMockResponseData = false;
-// const useMockResponseData = process.env.NODE_ENV === 'development';
+// const useMockResponseData = false;
+const useMockResponseData = process.env.NODE_ENV === 'development';
 
 /* eslint-disable functional/no-let */
 let counter = 0;
@@ -105,7 +105,7 @@ export const AppStatusApi = {
     // finally the response
     // return beDowntimeStatusToFeAppStatus(apiResponse);
     counter++;
-    return !useMockResponseData || counter > 1 ? beDowntimeStatusToFeAppStatus(apiResponse) : Promise.reject({ response: { status: 500 }});
+    return !useMockResponseData || counter > 2 ? beDowntimeStatusToFeAppStatus(apiResponse) : Promise.reject({ response: { status: 500 }});
   },
 
   getDowntimeLogPage: async (params: GetDowntimeHistoryParams): Promise<DowntimeLogPage> => {
@@ -131,7 +131,8 @@ export const AppStatusApi = {
     }
 
     // finally the response
-    return beDowntimeLogPageToFeDowntimeLogPage(apiResponse);
+    counter++;
+    return !useMockResponseData || ![4,5,6,11,12,13].includes(counter) ? beDowntimeLogPageToFeDowntimeLogPage(apiResponse) : Promise.reject({ response: { status: 500 }});
   },
 
   /* eslint-disable-next-line arrow-body-style */
