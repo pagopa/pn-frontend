@@ -19,11 +19,11 @@ const statusResponseExample: BEStatus = {
     "NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"
   ],
   openIncidents: [
-    {
-      functionality: "NOTIFICATION_WORKFLOW",
-      status: "KO",
-      startDate: minutesBeforeNow(1).toISOString(),
-    }
+    // {
+    //   functionality: "NOTIFICATION_WORKFLOW",
+    //   status: "KO",
+    //   startDate: minutesBeforeNow(1).toISOString(),
+    // }
   ],
 };
   
@@ -73,8 +73,8 @@ function mockLegalFactDetails(legalFactId: string): LegalFactDocumentDetails {
    the API
    ------------------------------------------------------------------------ */
 
-const useMockResponseData = false;
-// const useMockResponseData = process.env.NODE_ENV === 'development';
+// const useMockResponseData = false;
+const useMockResponseData = process.env.NODE_ENV === 'development';
 
 /* eslint-disable functional/no-let */
 let counter = 0;

@@ -177,7 +177,7 @@ const App = () => {
     },
     { 
       label: t('menu.app-status'), 
-      // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar
+      // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
       icon: () => currentStatus 
         ? (currentStatus.appIsFullyOperative
           ? <CheckCircleIcon sx={{ color: theme.palette.success.main }} />

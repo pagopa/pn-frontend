@@ -18,6 +18,7 @@ import CustomMobileDialogToggle from './CustomMobileDialog/CustomMobileDialogTog
 import CustomMobileDialogContent from './CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogAction from './CustomMobileDialog/CustomMobileDialogAction';
 import TitleBox from './TitleBox';
+import { AppStatusBar } from './AppStatus/AppStatusBar';
 import NotificationDetailTable from './NotificationDetail/NotificationDetailTable';
 import NotificationDetailDocuments from './NotificationDetail/NotificationDetailDocuments';
 import HelpNotificationDetails from './NotificationDetail/HelpNotificationDetails';
@@ -61,6 +62,7 @@ export {
     NotificationDetailDocuments,
     HelpNotificationDetails,
     NotificationDetailTimeline,
+    AppStatusBar,
     Toast,
     CodeModal,
     InactivityHandler,

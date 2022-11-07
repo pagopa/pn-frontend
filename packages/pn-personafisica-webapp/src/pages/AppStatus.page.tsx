@@ -1,8 +1,7 @@
 import { Box, Stack, Typography, useTheme } from '@mui/material';
-import { ApiErrorWrapper, EmptyState, formatDate, formatTimeHHMM, TitleBox, useIsMobile, KnownFunctionality } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, EmptyState, formatDate, formatTimeHHMM, TitleBox, useIsMobile, KnownFunctionality, AppStatusBar } from '@pagopa-pn/pn-commons';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AppStatusBar } from '../component/AppStatus/AppStatusBar';
 import { DesktopDowntimeLog } from '../component/AppStatus/DesktopDowntimeLog';
 import { MobileDowntimeLog } from '../component/AppStatus/MobileDowntimeLog';
 import { useDownloadDocument } from '../component/AppStatus/useDownloadDocument';

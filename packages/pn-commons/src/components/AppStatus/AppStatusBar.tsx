@@ -2,18 +2,23 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import { Stack, Typography, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
-import { useTranslation } from "react-i18next";
-import { AppCurrentStatus } from "@pagopa-pn/pn-commons";
+import { useIsMobile } from '../../hooks';
+import { AppCurrentStatus } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
-    const { t } = useTranslation(['appStatus']);
     const theme = useTheme();
     const isMobile = useIsMobile();
-  
+
+    // labels
+    const statusText = getLocalizedOrDefaultLabel(
+        'appStatus',
+        `appStatus.statusDescription.${status.appIsFullyOperative ? "ok" : "not-ok"}`,
+        "Status dell'applicazione in questo momento: verde OK, rosso con problemi."
+      );
+    
     // ATTENTION - a similar logic to choose the icon and its color is implemented in App.tsx
     const mainColor = status.appIsFullyOperative ? theme.palette.success.main : theme.palette.error.main;
-    const statusText = t(`appStatus.statusDescription.${status.appIsFullyOperative ? "ok" : "not-ok"}`);
     const IconComponent = status.appIsFullyOperative ? CheckCircleIcon : ErrorIcon;
   
     return (

@@ -1,4 +1,4 @@
-type LocalizationNamespacesNames = 'common' | 'notifications';
+type LocalizationNamespacesNames = 'common' | 'notifications' | 'appStatus';
 
 type LocalizationNamespaces = {
   [key in LocalizationNamespacesNames]: string;
@@ -10,6 +10,7 @@ type LocalizationFunction = (namespace: string | Array<string>, path: string, da
 let localizationNamespaces: LocalizationNamespaces = {
   common: 'common',
   notifications: 'notifiche',
+  appStatus: 'appStatus',
 };
 
 /* eslint-disable-next-line functional/no-let */
@@ -36,11 +37,14 @@ export function getLocalizedOrDefaultLabel(
   const namespace = Array.isArray(namespaceName)
     ? namespaceName.map((nm) => localizationNamespaces[nm as LocalizationNamespacesNames])
     : localizationNamespaces[namespaceName as LocalizationNamespacesNames];
+  console.log({ namespaceName, path, namespace });
   if (translateFunction) {
     const localizedLabel = translateFunction(namespace, path, data);
+    console.log({ branch: "found translataFunction", localizedLabel });
     if (!localizedLabel || localizedLabel === path) {
       return defaultLabel;
     }
+    console.log({ branch: "not found translataFunction", localizedLabel });
     return localizedLabel;
   }
   return defaultLabel;
