@@ -45,11 +45,12 @@ describe('test login page', () => {
     );
   });
 
-  test('does not render the privacy disclaimer link', () => {
+  // portale login has only privacy policy and not terms and conditions page
+  test('does render the privacy disclaimer link', () => {
     render(<BrowserRouter><Login /></BrowserRouter>);
     const privacyDisclaimerLink = screen.queryByText(/Informativa Privacy/i);
 
-    expect(privacyDisclaimerLink).not.toBeInTheDocument();
+    expect(privacyDisclaimerLink).toBeInTheDocument();
   });
 
   test('does not render the link', () => {
