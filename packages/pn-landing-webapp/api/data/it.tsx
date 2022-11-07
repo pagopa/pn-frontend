@@ -183,7 +183,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
           </Typography>
           <Typography variant="body2">
             Nel frattempo, gli enti possono consultare il{" "}
-            <Link href="https://www.pagopa.it/static/7ae1cda16663a9fe201273e8150f0958/PN-ManualeOperativo.pdf">
+            <Link href="https://www.pagopa.it/static/e190eb758489b75d4d81112a1357b5b2/Manuale-Operativo-Piattaforma-Notifiche.pdf">
               manuale operativo
             </Link>
             {" "}(aggiornato al 28/06/2022),{" "}

@@ -61,7 +61,8 @@
     "action": "Ricarica la pagina"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
-  "not-logged": "Piattaforma Notifiche, effettua il login",
+  "not-logged": "Accedi all'Area Riservata",
+  "not-logged-subtitle": "Per usare Piattaforma Notifiche, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
@@ -85,6 +86,7 @@
     "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
     "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",
     "generic-token-exchange-problem": "Non è stato possibile completare l'accesso",
+    "error-in-initial-info-loading": "Non siamo riusciti a recuperare dati necessari per l'avvio dell'applicazione",
     "invalid-token-title": "Non puoi accedere per un problema tecnico - token non valido",
     "generic-title": "Errore generico",
     "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi",
