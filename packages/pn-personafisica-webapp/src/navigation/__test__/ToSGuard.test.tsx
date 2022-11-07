@@ -1,4 +1,5 @@
 import { act, screen } from "@testing-library/react";
+import * as redux from "react-redux";
 
 import { render } from "../../__test__/test-utils";
 import ToSGuard from "../ToSGuard";
@@ -33,6 +34,17 @@ const mockTosState = (fetchedTos: boolean, tos: boolean) => ({
   }});
 
 describe('Tests the ToSGuard component', () => {
+  const mockDispatchFn = jest.fn();
+
+  beforeEach(() => {
+    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
+    useDispatchSpy.mockReturnValue(mockDispatchFn);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders the loading page component if tos are not fetched', async () => {
     await act(async () => void render(<ToSGuard />, { preloadedState: mockTosState(false, false) } ));
 
@@ -42,6 +54,7 @@ describe('Tests the ToSGuard component', () => {
     expect(pageComponent).toBeTruthy();
     expect(tosComponent).toBeNull();
     expect(genericPage).toBeNull();
+    expect(mockDispatchFn).toBeCalledTimes(1);
   });
 
   it('renders the loading page component if tos are not accepted', async () => {
@@ -53,6 +66,7 @@ describe('Tests the ToSGuard component', () => {
     expect(pageComponent).toBeNull();
     expect(tosComponent).toBeTruthy();
     expect(genericPage).toBeNull();
+    expect(mockDispatchFn).toBeCalledTimes(1);
   });
 
   it('renders the loading page component if tos are not fetched', async () => {
@@ -64,5 +78,6 @@ describe('Tests the ToSGuard component', () => {
     expect(pageComponent).toBeNull();
     expect(tosComponent).toBeNull();
     expect(genericPage).toBeTruthy();
+    expect(mockDispatchFn).toBeCalledTimes(1);
   });
 });

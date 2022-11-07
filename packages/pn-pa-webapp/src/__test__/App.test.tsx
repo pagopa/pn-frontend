@@ -8,7 +8,6 @@ import * as redux from 'react-redux';
 import { render, axe } from './test-utils';
 import App from '../App';
 import { Party } from '../models/party';
-import * as authActions from '../redux/auth/actions';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -46,16 +45,12 @@ const reduxInitialState = {
 
 describe('App', () => {
   /* eslint-disable functional/no-let */
-  let mockToSApprovalActionFn: jest.Mock;
   let mockUseDispatchFn: jest.Mock;
 
   beforeEach(() => {
     mockUseDispatchFn = jest.fn(() => (action: any, state: any) => {
       console.log({ action, state });
     });
-    mockToSApprovalActionFn = jest.fn();
-    const getToSApprovalActionSpy = jest.spyOn(authActions, 'getToSApproval');
-    getToSApprovalActionSpy.mockImplementation(mockToSApprovalActionFn as any);
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockUseDispatchFn as any);
   });
