@@ -1,10 +1,8 @@
-import { MemoryRouter } from 'react-router-dom';
 import { act, screen } from '@testing-library/react';
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-import { render, renderWithoutRouter } from '../../__test__/test-utils';
+import { render } from '../../__test__/test-utils';
 import { AUTH_ACTIONS } from '../../redux/auth/actions';
 import Router from '../routes';
-import { PNRole } from '../../models/user';
 
 const mockSessionCheckFn = jest.fn(() => { });
 
@@ -15,14 +13,6 @@ jest.mock('react-i18next', () => ({
     t: (str: string) => str,
   }),
 }));
-
-jest.mock('@pagopa/mui-italia', () => {
-  const original = jest.requireActual('@pagopa/mui-italia');
-  return {
-    ...original,
-    TOSAgreement: () => <div data-testid="mock-tos-agreement">Terms of Service agreement component</div>,
-  };
-});
 
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
@@ -70,32 +60,5 @@ describe("router", () => {
   
     await act(async () => void render(<Router />, { preloadedState: mockReduxState }));
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
-  });
-
-  // expected behavior: to be redirected automatically to /dashboard
-  it("access to /tos for a user which have accepted the ToS", async () => {
-    const mockReduxState = { userState: { user: { 
-      sessionToken: 'good-token', 
-      organization: { id: 'good-organization', roles: [{ role: PNRole.ADMIN }] } 
-    }}};
-    await act(async () => void renderWithoutRouter(
-      <MemoryRouter initialEntries={["/tos"]}><Router /></MemoryRouter>, { preloadedState: mockReduxState }
-    ));
-    expect(screen.queryByTestId("mock-tos-agreement")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("mock-dashboard")).toBeInTheDocument();
-  });
-
-  // expected behavior: to keep in /tos
-  it("access to /tos for a user which have not accepted the ToS", async () => {
-    mockTosValue = false;
-    const mockReduxState = { userState: { user: { 
-      sessionToken: 'good-token', 
-      organization: { id: 'good-organization', roles: [{ role: PNRole.ADMIN }] } 
-    }}};
-    await act(async () => void renderWithoutRouter(
-      <MemoryRouter initialEntries={["/tos"]}><Router /></MemoryRouter>, { preloadedState: mockReduxState }
-    ));
-    expect(screen.queryByTestId("mock-tos-agreement")).toBeInTheDocument();
-    expect(screen.queryByTestId("mock-dashboard")).not.toBeInTheDocument();
   });
 });

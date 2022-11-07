@@ -1,6 +1,6 @@
+import { act, screen } from '@testing-library/react';
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
-import { act, screen } from '@testing-library/react';
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 
 /* eslint-disable import/order */
@@ -11,7 +11,7 @@ import { AUTH_ACTIONS } from '../redux/auth/actions';
 
 // mock imports
 jest.mock('react-i18next', () => ({
-  // this mock makes sure any components using the translate hook can use it without a warning being shown
+  // this mock makes sure any components using the translation hook can use it without a warning being shown
   useTranslation: () => ({
     t: (str: string) => str,
   }),
@@ -32,6 +32,7 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 
 // mocko SessionGuard perché produce problemi nel test
 jest.mock('../navigation/SessionGuard', () => () => <div>Session Guard</div>);
+jest.mock('../navigation/ToSGuard', () => () => <div>ToS Guard</div>);
 
 const Component = () => (
   <ThemeProvider theme={theme}>
@@ -86,8 +87,8 @@ describe('App', () => {
     mockFetchedTosStatus = true;
     mockTosStatus = true;
     const mockReduxStateWithApiError = {
-      ...reduxInitialState(), 
-      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_ORGANIZATION_PARTY) 
+      ...reduxInitialState(),
+      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_ORGANIZATION_PARTY)
     };
     await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
     const sidemenuComponent = screen.queryByText("sidemenu");
@@ -97,8 +98,8 @@ describe('App', () => {
   it('Sidemenu not included if error in API call to fetch TOS', async () => {
     mockLayout = true;
     const mockReduxStateWithApiError = {
-      ...reduxInitialState(), 
-      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_TOS_APPROVAL) 
+      ...reduxInitialState(),
+      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_TOS_APPROVAL)
     };
     await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
     const sidemenuComponent = screen.queryByText("sidemenu");
