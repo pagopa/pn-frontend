@@ -33,6 +33,7 @@ const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText }) => {
       direction={'row'}
       justifyContent={'center'}
       alignItems={'center'}
+      data-testid="api-error"
     >
       <ReportGmailerrorredIcon
         fontSize={'small'}

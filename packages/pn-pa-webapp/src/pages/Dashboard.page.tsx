@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -9,6 +9,7 @@ import {
   useIsMobile,
   formatToTimezoneString,
   getNextDay,
+  ApiErrorWrapper,
 } from '@pagopa-pn/pn-commons';
 import { Box, Button, Typography } from '@mui/material';
 
@@ -16,6 +17,7 @@ import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
+  DASHBOARD_ACTIONS,
   getSentNotifications,
   // setSorting, // Riabilitare con la issue PN-1124
 } from '../redux/dashboard/actions';
@@ -76,7 +78,8 @@ const Dashboard = () => {
   const handleRouteApiKeys = () => {
     navigate(routes.API_KEYS);
   };
-  useEffect(() => {
+
+  const fetchNotifications = useCallback( () => {
     const params = {
       ...filters,
       size: pagination.size,
@@ -88,6 +91,10 @@ const Dashboard = () => {
       endDate: formatToTimezoneString(getNextDay(new Date(params.endDate)))
     }));
   }, [filters, pagination.size, pagination.page, sort]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
 
   const handleEventTrackingCallbackPageSize = (pageSize: number) => {
     trackEventByType(TrackEventType.NOTIFICATION_TABLE_SIZE, {pageSize});
@@ -111,34 +118,36 @@ const Dashboard = () => {
           {t('new-notification-button')}
         </Button>
       </Box>
-      {isMobile ? (
-        <MobileNotifications
-          notifications={notifications}
-          // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
-          onManualSend={handleRouteManualSend}
-          onApiKeys={handleRouteApiKeys}
-        />
-      ) : (
-        <DesktopNotifications
-          notifications={notifications}
-          // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
-          onManualSend={handleRouteManualSend}
-          onApiKeys={handleRouteApiKeys}
-        />
-      )}
-      {notifications.length > 0 && (
-        <CustomPagination
-          paginationData={{
-            size: pagination.size,
-            page: pagination.page,
-            totalElements,
-          }}
-          onPageRequest={handleChangePage}
-          eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
-          pagesToShow={pagesToShow}
-          sx={{ padding: '0 10px' }}
-        />
-      )}
+      <ApiErrorWrapper apiId={DASHBOARD_ACTIONS.GET_SENT_NOTIFICATIONS} reloadAction={() => fetchNotifications()} mt={3}>
+        {isMobile ? (
+          <MobileNotifications
+            notifications={notifications}
+            // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
+            onManualSend={handleRouteManualSend}
+            onApiKeys={handleRouteApiKeys}
+          />
+        ) : (
+          <DesktopNotifications
+            notifications={notifications}
+            // onChangeSorting={handleChangeSorting} // Riabilitare con la issue PN-1124
+            onManualSend={handleRouteManualSend}
+            onApiKeys={handleRouteApiKeys}
+          />
+        )}
+        {notifications.length > 0 && (
+          <CustomPagination
+            paginationData={{
+              size: pagination.size,
+              page: pagination.page,
+              totalElements,
+            }}
+            onPageRequest={handleChangePage}
+            eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
+            pagesToShow={pagesToShow}
+            sx={{ padding: '0 10px' }}
+          />
+        )}
+      </ApiErrorWrapper>
     </Box>
   );
 };
