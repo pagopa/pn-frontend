@@ -16,7 +16,6 @@ import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import { Box } from '@mui/material';
 
 import { MIXPANEL_TOKEN } from "./utils/constants";
-import { getToSApproval } from "./redux/auth/actions";
 import Router from './navigation/routes';
 import { getOrganizationParty, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
@@ -159,10 +158,6 @@ const App = () => {
         })
       ),
   });
-
-  useEffect(() =>{
-    void dispatch(getToSApproval());
-  }, [sessionToken]);
 
   return (
     <>

@@ -1,5 +1,6 @@
 import { act, screen } from "@testing-library/react";
 
+import * as redux from "react-redux";
 import { render } from "../../__test__/test-utils";
 import ToSGuard from "../ToSGuard";
 
@@ -23,26 +24,28 @@ jest.mock('react-router-dom', () => {
   };
 });
 
-const mockNotFetchedTosState = {
+const mockTosState = (fetchedTos: boolean, tos: boolean) => ({
   userState: {
-    fetchedTos: false,
-  }};
-
-const mockNotAcceptedTosState = {
-  userState: {
-    fetchedTos: true,
-    tos: false,
-  }};
-
-const mockAcceptedTosState = {
-  userState: {
-    fetchedTos: true,
-    tos: true,
-  }};
+    user: {
+      sessionToken: "mockedToken"
+    },
+    fetchedTos,
+    tos
+  }});
 
 describe('Tests the ToSGuard component', () => {
+  beforeEach(() => {
+    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
+    const mockDispatchFn = jest.fn();
+    useDispatchSpy.mockReturnValue(mockDispatchFn);
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('renders the loading page component if tos are not fetched', async () => {
-    await act(async () => void render(<ToSGuard />, { preloadedState: mockNotFetchedTosState } ));
+    await act(async () => void render(<ToSGuard />, { preloadedState: mockTosState(false, false)} ));
 
     const pageComponent = screen.queryByText('loading page');
     const tosComponent = screen.queryByText('tos acceptance page');
@@ -52,8 +55,8 @@ describe('Tests the ToSGuard component', () => {
     expect(genericPage).toBeNull();
   });
 
-  it('renders the loading page component if tos are not accepted', async () => {
-    await act(async () => void render(<ToSGuard />, { preloadedState: mockNotAcceptedTosState } ));
+  it('renders the tos guard acceptance component if tos are not accepted', async () => {
+    await act(async () => void render(<ToSGuard />, { preloadedState: mockTosState(true, false) } ));
 
     const pageComponent = screen.queryByText('loading page');
     const tosComponent = screen.queryByText('tos acceptance page');
@@ -64,7 +67,7 @@ describe('Tests the ToSGuard component', () => {
   });
 
   it('renders the loading page component if tos are not fetched', async () => {
-    await act(async () => void render(<ToSGuard />, { preloadedState: mockAcceptedTosState } ));
+    await act(async () => void render(<ToSGuard />, { preloadedState: mockTosState(true, true) } ));
 
     const pageComponent = screen.queryByText('loading page');
     const tosComponent = screen.queryByText('tos acceptance page');

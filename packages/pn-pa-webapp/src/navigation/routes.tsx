@@ -18,9 +18,9 @@ function Router() {
   return (
     <Routes>
       <Route path="/" element={<SessionGuard />}>
-        <Route path="/" element={<ToSGuard />}>
           {/* protected routes */}
           <Route path="/"  element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
+            <Route path="/" element={<ToSGuard />}>
             <Route path={routes.DASHBOARD} element={<Dashboard />} />
             <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
             <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />

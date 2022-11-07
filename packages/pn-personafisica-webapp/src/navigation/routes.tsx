@@ -22,8 +22,8 @@ function Router() {
       <Routes>
         <Route path="/" element={<SessionGuard />}>
           {/* protected routes */}
-          <Route path="/" element={<ToSGuard />}>
-            <Route path="/" element={<RouteGuard />}>
+          <Route path="/" element={<RouteGuard />}>
+            <Route path="/" element={<ToSGuard />}>
               <Route path={routes.NOTIFICHE} element={<Notifiche />} />
               <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
               <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
