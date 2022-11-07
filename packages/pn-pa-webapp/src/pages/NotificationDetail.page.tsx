@@ -121,7 +121,7 @@ const NotificationDetail = () => {
         <>
           {recipients.map((recipient, i) => (
             <Box key={i} fontWeight={600}>
-              {recipient.taxId}
+              {`${recipient.taxId} - ${recipient.denomination}`}
             </Box>
           ))}
         </>
