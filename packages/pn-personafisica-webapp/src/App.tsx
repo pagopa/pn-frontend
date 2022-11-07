@@ -11,7 +11,6 @@ import {
   appStateActions,
   initLocalization,
   Layout,
-  LoadingOverlay,
   SideMenu,
   SideMenuItem,
   useMultiEvent,
@@ -236,7 +235,6 @@ const App = () => {
         hasTermsOfService={true}
       >
         <AppMessage sessionRedirect={async () => await dispatch(logout())} />
-        <LoadingOverlay />
         <Router />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>

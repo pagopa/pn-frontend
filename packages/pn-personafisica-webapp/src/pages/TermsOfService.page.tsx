@@ -353,7 +353,7 @@ const TermsOfServicePage = () => (
             Ai sensi degli articoli 1341 e 1342 del codice civile, proseguendo l’Utente dichiara espressamente di
             aver letto, compreso e accettato i seguenti articoli dei presenti termini e condizioni
             d’uso: <b>(8)</b> Costi e Spese; <b>(9)</b> Assistenza all’Utente e malfunzionamenti della
-            Piattaforma; <b>10)z</b> Responsabilità e obblighi dell’Utente; <b>(11)</b> Esclusioni e limitazione di
+            Piattaforma; <b>10)</b> Responsabilità e obblighi dell’Utente; <b>(11)</b> Esclusioni e limitazione di
             responsabilità della Società; <b>(13)</b> Modifiche ai ToS e <b>(14)</b> Legge applicabile e foro
             competente.
           </Typography>

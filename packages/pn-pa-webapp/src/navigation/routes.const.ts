@@ -2,7 +2,7 @@ import { PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY, TOS_LINK_RELATIVE_PATH as
 import { SELFCARE_BASE_URL } from '../utils/constants';
 
 export const DASHBOARD = '/dashboard';
-const NOTIFICA = '/notifica';
+const NOTIFICA = '/dettaglio';
 export const DETTAGLIO_NOTIFICA = `${DASHBOARD}/:id${NOTIFICA}`;
 export const NUOVA_NOTIFICA = `${DASHBOARD}/nuova-notifica`;
 export const API_KEYS = '/api-keys';

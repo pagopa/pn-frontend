@@ -192,7 +192,7 @@ describe('Filter Notifications Table Component', () => {
         payload: {
           startDate: formatToTimezoneString(tenYearsAgo),
           endDate: formatToTimezoneString(today),
-          iunMatch: undefined,
+          iunMatch: '',
         },
         type: 'dashboardSlice/setNotificationFilters',
       });
