@@ -1,9 +1,7 @@
+import { act, screen } from '@testing-library/react';
 import { ThemeProvider } from '@mui/material';
 import { theme } from '@pagopa/mui-italia';
-import { act, screen } from '@testing-library/react';
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
-import * as redux from 'react-redux';
-
 
 /* eslint-disable import/order */
 import { render, axe } from './test-utils';
