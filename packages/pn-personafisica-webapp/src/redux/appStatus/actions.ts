@@ -1,7 +1,6 @@
-import { performThunkAction } from "@pagopa-pn/pn-commons";
+import { performThunkAction, AppCurrentStatus, GetDowntimeHistoryParams, DowntimeLogPage, LegalFactDocumentDetails } from "@pagopa-pn/pn-commons";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AppStatusApi } from "../../api/appStatus/AppStatus.api";
-import { AppCurrentStatus, GetDowntimeHistoryParams, DowntimeLogPage, LegalFactDocumentDetails } from "../../models/appStatus";
 
 export enum APP_STATUS_ACTIONS {
     GET_CURRENT_STATUS = 'getCurrentAppStatus',

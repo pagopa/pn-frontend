@@ -1,10 +1,8 @@
 import { CardElement, Item, ItemsCard } from "@pagopa-pn/pn-commons";
-import { DowntimeLogPage } from "../../models/appStatus";
+import { DowntimeLogPage } from "@pagopa-pn/pn-commons";
 import { adaptFieldSpecToMobile, useFieldSpecs } from "./downtimeLog.utils";
-import { useDownloadDocument } from "./useDownloadDocument";
 
 export const MobileDowntimeLog = ({ downtimeLog }: { downtimeLog: DowntimeLogPage }) => {
-  useDownloadDocument();
   const { getDateFieldSpec, getFunctionalityFieldSpec, getLegalFactIdFieldSpec, getStatusFieldSpec, getRows } = useFieldSpecs();
 
   const cardHeader: [CardElement, CardElement | null] = [

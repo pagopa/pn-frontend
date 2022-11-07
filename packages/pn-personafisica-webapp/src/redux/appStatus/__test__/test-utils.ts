@@ -1,4 +1,4 @@
-import { AppCurrentStatus, DowntimeLogPage, DowntimeStatus, KnownFunctionality } from "../../../models/appStatus";
+import { AppCurrentStatus, DowntimeLogPage, DowntimeStatus, KnownFunctionality } from "@pagopa-pn/pn-commons";
 
 export const currentStatusOk: AppCurrentStatus = {
   appIsFullyOperative: true,

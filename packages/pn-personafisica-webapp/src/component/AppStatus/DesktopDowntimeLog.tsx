@@ -1,10 +1,8 @@
 import { Column, Item, ItemsTable } from '@pagopa-pn/pn-commons';
-import { DowntimeLogPage } from "../../models/appStatus";
+import { DowntimeLogPage } from "@pagopa-pn/pn-commons";
 import { DowntimeLogColumn, useFieldSpecs } from './downtimeLog.utils';
-import { useDownloadDocument } from './useDownloadDocument';
 
 export const DesktopDowntimeLog = ({ downtimeLog }: { downtimeLog: DowntimeLogPage }) => {
-  useDownloadDocument();
   const { getDateFieldSpec, getFunctionalityFieldSpec, getLegalFactIdFieldSpec, getStatusFieldSpec, getRows } = useFieldSpecs();
 
   const columns: Array<Column<DowntimeLogColumn>> = [

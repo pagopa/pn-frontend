@@ -1,4 +1,4 @@
-import { BEDowntimeLogPage, BEStatus, FunctionalityStatus, GetDowntimeHistoryParams, DowntimeStatus, KnownFunctionality } from "../../../models/appStatus";
+import { BEDowntimeLogPage, BEStatus, FunctionalityStatus, GetDowntimeHistoryParams, DowntimeStatus, KnownFunctionality } from "../../../models";
 
 /* ------------------------------------------------------------------------
    auxiliary functions and constants

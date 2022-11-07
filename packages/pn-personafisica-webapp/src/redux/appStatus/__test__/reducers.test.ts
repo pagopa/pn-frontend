@@ -1,5 +1,5 @@
+import { AppCurrentStatus, DowntimeLogPage,  } from "@pagopa-pn/pn-commons";
 import { AppStatusApi } from "../../../api/appStatus/AppStatus.api";
-import { AppCurrentStatus, DowntimeLogPage,  } from "../../../models/appStatus";
 import { mockAuthentication } from "../../auth/__test__/test-utils";
 import { store } from '../../store';
 import { getCurrentAppStatus, getDowntimeLogPage } from "../actions";

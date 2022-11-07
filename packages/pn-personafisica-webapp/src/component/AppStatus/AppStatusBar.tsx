@@ -4,7 +4,7 @@ import { Stack, Typography, useTheme } from '@mui/material';
 import { alpha } from '@mui/material/styles';
 import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { useTranslation } from "react-i18next";
-import { AppCurrentStatus } from "../../models/appStatus";
+import { AppCurrentStatus } from "@pagopa-pn/pn-commons";
 
 export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
     const { t } = useTranslation(['appStatus']);

@@ -1,11 +1,11 @@
 import { Box, Stack, Typography, useTheme } from '@mui/material';
-import { ApiErrorWrapper, EmptyState, formatDate, formatTimeHHMM, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, EmptyState, formatDate, formatTimeHHMM, TitleBox, useIsMobile, KnownFunctionality } from '@pagopa-pn/pn-commons';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppStatusBar } from '../component/AppStatus/AppStatusBar';
 import { DesktopDowntimeLog } from '../component/AppStatus/DesktopDowntimeLog';
 import { MobileDowntimeLog } from '../component/AppStatus/MobileDowntimeLog';
-import { KnownFunctionality } from '../models/appStatus';
+import { useDownloadDocument } from '../component/AppStatus/useDownloadDocument';
 import { APP_STATUS_ACTIONS, getCurrentAppStatus, getDowntimeLogPage } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -19,6 +19,7 @@ const AppStatus = () => {
   const theme = useTheme();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['appStatus']);
+  useDownloadDocument();
 
   const fetchCurrentStatus = useCallback(() => {
     void dispatch(getCurrentAppStatus());

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { AppCurrentStatus, DowntimeLogPage, LegalFactDocumentDetails } from "../../models/appStatus";
+import { AppCurrentStatus, DowntimeLogPage, LegalFactDocumentDetails } from "@pagopa-pn/pn-commons";
 import { getCurrentAppStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from "./actions";
 
 interface AppStatusData {

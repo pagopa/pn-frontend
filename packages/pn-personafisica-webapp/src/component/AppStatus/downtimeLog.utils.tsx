@@ -2,10 +2,10 @@ import { useCallback } from 'react';
 import { Button, Chip, Stack, Typography, useTheme } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { CardElement, Column, formatDate, formatTimeHHMM, Item } from '@pagopa-pn/pn-commons';
+import { DowntimeLogPage, DowntimeStatus } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../redux/hooks';
 import { getDowntimeLegalFactDocumentDetails } from '../../redux/appStatus/actions';
-import { DowntimeLogPage, DowntimeStatus } from '../../models/appStatus';
 
 export function booleanStringToBoolean(booleanString: string): boolean {
   return booleanString.toLowerCase() === "true";

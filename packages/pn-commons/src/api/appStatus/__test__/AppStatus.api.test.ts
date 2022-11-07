@@ -1,23 +1,23 @@
+import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { apiClient } from '../../axios';
-import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
+import { BEDowntimeLogPage, DowntimeLogPage, DowntimeStatus, KnownFunctionality, LegalFactDocumentDetails } from '../../../models';
 import { DOWNTIME_HISTORY, DOWNTIME_LEGAL_FACT_DETAILS, DOWNTIME_STATUS } from '../appStatus.routes';
 import { beAppStatusNoIncidents, beAppStatusOneIncident, beAppStatusOneFinishedDowntimeAsOpenIncident, beAppStatusOneIncidentWithError, beAppStatusTwoIncidentsNormalCase, beAppStatusTwoIncidentsOneUnknownFunctionality, beDowntimeHistoryNoIncidents, beDowntimeHistoryThreeIncidents, downStatusOnKnownFunctionality, downStatusOnUnknownFunctionality, downtimeHistoryEmptyQueryParams, incidentTimestamps, statusByFunctionalityOk } from './test-utils';
-import { AppStatusApi, BadApiDataException } from '../AppStatus.api';
-import { BEDowntimeLogPage, DowntimeLogPage, DowntimeStatus, KnownFunctionality, LegalFactDocumentDetails } from '../../../models/appStatus';
+import { BadApiDataException, createAppStatusApi } from '../AppStatus.api';
 
 
 /* ------------------------------------------------------------------------
    The actual test suite
    ------------------------------------------------------------------------ */
 describe("AppStatus api tests", () => {
-  mockAuthentication();
+  const fakeApiClient = axios.create();
 
   /* eslint-disable-next-line functional/no-let */
   let mock: MockAdapter;
+  let appStatusApi = createAppStatusApi(fakeApiClient);
 
   beforeEach(() => {
-    mock = new MockAdapter(apiClient);
+    mock = new MockAdapter(fakeApiClient);
   });
 
   afterEach(() => {
@@ -29,7 +29,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_STATUS())
       .reply(200, beAppStatusNoIncidents);
-    const res = await AppStatusApi.getCurrentStatus();
+    const res = await appStatusApi.getCurrentStatus();
     expect(res.appIsFullyOperative).toEqual(true);
     expect(new Set(res.statusByFunctionality)).toEqual(new Set(statusByFunctionalityOk()));
   });
@@ -42,7 +42,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_STATUS())
       .reply(200, beAppStatusOneIncident);
-    const res = await AppStatusApi.getCurrentStatus();
+    const res = await appStatusApi.getCurrentStatus();
     expect(res.appIsFullyOperative).toEqual(false);
     expect(new Set(res.statusByFunctionality)).toEqual(new Set(expectedStatusByFunctionality));
   });
@@ -60,7 +60,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_STATUS())
       .reply(200, beAppStatusTwoIncidentsNormalCase);
-    const res = await AppStatusApi.getCurrentStatus();
+    const res = await appStatusApi.getCurrentStatus();
     expect(res.appIsFullyOperative).toEqual(false);
     expect(new Set(res.statusByFunctionality)).toEqual(new Set(expectedStatusByFunctionality));
   });
@@ -74,7 +74,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_STATUS())
       .reply(200, beAppStatusTwoIncidentsOneUnknownFunctionality);
-    const res = await AppStatusApi.getCurrentStatus();
+    const res = await appStatusApi.getCurrentStatus();
     expect(res.appIsFullyOperative).toEqual(false);
     expect(new Set(res.statusByFunctionality)).toEqual(new Set(expectedStatusByFunctionality));
   });
@@ -84,7 +84,7 @@ describe("AppStatus api tests", () => {
       .onGet(DOWNTIME_STATUS())
       .reply(200, beAppStatusOneFinishedDowntimeAsOpenIncident);
     ;
-    await expect(AppStatusApi.getCurrentStatus()).rejects.toThrow(BadApiDataException);
+    await expect(appStatusApi.getCurrentStatus()).rejects.toThrow(BadApiDataException);
   });
 
   it('get status - one ill-formed open incident - API call fails', async () => {
@@ -92,14 +92,14 @@ describe("AppStatus api tests", () => {
       .onGet(DOWNTIME_STATUS())
       .reply(200, beAppStatusOneIncidentWithError);
     ;
-    await expect(AppStatusApi.getCurrentStatus()).rejects.toThrow(BadApiDataException);
+    await expect(appStatusApi.getCurrentStatus()).rejects.toThrow(BadApiDataException);
   });
 
   it('get downtime history - no downtimes', async () => {
     mock
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beDowntimeHistoryNoIncidents);
-    const res = await AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams);
+    const res = await appStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams);
     expect(res).toEqual({ downtimes: [] });
   });
 
@@ -135,7 +135,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beDowntimeHistoryThreeIncidents);
-    const res = await AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams);
+    const res = await appStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams);
     expect(res).toEqual(expectedOutput);
   });
 
@@ -151,7 +151,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beDowntimeHistoryWithDateFormatError);
-    await expect(AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
+    await expect(appStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
   });
 
   it('get downtime history - incoherent downtime - fileAvailable but no legalFactId - API call fails', async () => {
@@ -166,7 +166,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beDowntimeHistoryWithIncoherentRecord);
-    await expect(AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
+    await expect(appStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
   });
 
   it('get downtime history - downtime with functionality missing', async () => {
@@ -184,7 +184,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beDowntimeHistoryWithDateFormatError);
-    await expect(AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
+    await expect(appStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams)).rejects.toThrow(BadApiDataException);
   });
 
   it('get downtime history - preeminence of endDate over status', async () => {
@@ -201,7 +201,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_HISTORY(downtimeHistoryEmptyQueryParams))
       .reply(200, beIncoherentDowntimeHistory);
-    const downtimeLogPage = await AppStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams);
+    const downtimeLogPage = await appStatusApi.getDowntimeLogPage(downtimeHistoryEmptyQueryParams);
     expect(downtimeLogPage.downtimes[1].status).toBe(DowntimeStatus.OK);
     expect(downtimeLogPage.downtimes[2].status).toBe(DowntimeStatus.KO);
   });
@@ -223,7 +223,7 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_LEGAL_FACT_DETAILS('some-other-legal-fact-id'))
       .reply(200, otherLegalFactData);
-    const downtimeLegalFactDetails = await AppStatusApi.getLegalFactDetails('some-legal-fact-id');
+    const downtimeLegalFactDetails = await appStatusApi.getLegalFactDetails('some-legal-fact-id');
     expect(downtimeLegalFactDetails).toEqual(legalFactData);
   });
 
@@ -235,6 +235,6 @@ describe("AppStatus api tests", () => {
     mock
       .onGet(DOWNTIME_LEGAL_FACT_DETAILS('some-legal-fact-id'))
       .reply(200, legalFactData);
-    await expect(AppStatusApi.getLegalFactDetails("some-legal-fact-id")).rejects.toThrow(BadApiDataException);
+    await expect(appStatusApi.getLegalFactDetails("some-legal-fact-id")).rejects.toThrow(BadApiDataException);
   });
 });
