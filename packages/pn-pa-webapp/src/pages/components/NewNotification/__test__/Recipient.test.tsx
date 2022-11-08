@@ -218,12 +218,32 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
+  it('tests form validation with correct data', async () => {
+    const form = result.container.querySelector('form') as HTMLFormElement;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const addButton = result.queryByText('add-recipient');
+    fireEvent.click(addButton!);
+    await populateFormMultipleRecipients(form);
+    expect(submitButton).toBeEnabled();
+  }, 20000);
+
   it('tests form validation (identical taxId)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     const addButton = result.queryByText('add-recipient');
     fireEvent.click(addButton!);
     await populateFormMultipleRecipients(form);
+    await testInput(form, `recipients[1].taxId`, newNotification.recipients[0].taxId);
+    expect(submitButton).toBeDisabled();
+  }, 20000);
+
+  it('tests form validation (identical creditorTaxId and noticeCode)', async () => {
+    const form = result.container.querySelector('form') as HTMLFormElement;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const addButton = result.queryByText('add-recipient');
+    fireEvent.click(addButton!);
+    await populateFormMultipleRecipients(form);
+    await testInput(form, `recipients[1].noticeCode`, newNotification.recipients[0].noticeCode);
     expect(submitButton).toBeDisabled();
   }, 20000);
 

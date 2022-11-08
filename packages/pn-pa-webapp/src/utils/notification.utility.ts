@@ -10,7 +10,7 @@ import {
   PaymentModel
 } from '../models/NewNotification';
 
-const checkFisicalAddress = (recipient: NewNotificationRecipient) => {
+const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
   if (
     recipient.address &&
     recipient.houseNumber &&
@@ -63,7 +63,7 @@ const newNotificationRecipientsMapper = (
         },
       },
       digitalDomicile,
-      physicalAddress: checkFisicalAddress(recipient),
+      physicalAddress: checkPhysicalAddress(recipient),
     };
   });
 
