@@ -22,12 +22,12 @@ export const AppStatusBar = ({ status }: { status: AppCurrentStatus }) => {
     const IconComponent = status.appIsFullyOperative ? CheckCircleIcon : ErrorIcon;
   
     return (
-      <Stack component="div" direction={isMobile ? "column" : "row"} justifyContent='center' alignItems="center" sx={(theme) => ({
+      <Stack component="div" data-testid="app-status-bar" direction={isMobile ? "column" : "row"} justifyContent='center' alignItems="center" sx={(theme) => ({
         mt: isMobile ? '23px' : '42px', py: '21px', px: '35px', width: '100%',
         backgroundColor: alpha(mainColor, theme.palette.action.hoverOpacity),
         borderColor: mainColor, borderWidth: '1px', borderStyle: 'solid', borderRadius: "10px",
       })}>
-        <IconComponent sx={{ width: "20px", mr: isMobile ? 0 : "20px", mb: isMobile ? "12px" : 0, color: mainColor }} />
+        <IconComponent data-testid="app-status-bar-icon" sx={{ width: "20px", mr: isMobile ? 0 : "20px", mb: isMobile ? "12px" : 0, color: mainColor }} />
         <Typography variant='body2'>
           {statusText}
         </Typography>
