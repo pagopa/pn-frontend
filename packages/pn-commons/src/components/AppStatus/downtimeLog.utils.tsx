@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import { Button, Chip, Stack, Typography, useTheme } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import { useTranslation } from 'react-i18next';
 import { formatDate, formatTimeHHMM } from '../../services';
 import { CardElement, Column, Item } from '../../types';
 import { DowntimeLogPage, DowntimeStatus } from '../../models';
@@ -43,7 +42,6 @@ export type DowntimeLogColumn =
 
 
 export function useFieldSpecs({ getDowntimeLegalFactDocumentDetails }: { getDowntimeLegalFactDocumentDetails: (legalFactId: string) => any}) {
-  const { t } = useTranslation(['appStatus']);
   const theme = useTheme();
 
   const getDateFieldSpec = useCallback((fieldId: DowntimeLogColumn, inTwoLines: boolean): Omit<Column<DowntimeLogColumn>, "width"> => ({
@@ -69,8 +67,17 @@ export function useFieldSpecs({ getDowntimeLegalFactDocumentDetails }: { getDown
     sortable: false,
     getCellLabel(_: string, i: Item) {
       return i.knownFunctionality
-        ? t(`legends.knownFunctionality.${i.knownFunctionality}`)
-        : t('legends.unknownFunctionality', { functionality: i.rawFunctionality });
+        ? getLocalizedOrDefaultLabel(
+            'appStatus',
+            `legends.knownFunctionality.${i.knownFunctionality}`,
+            "Nome del servizio ben conosciuto"
+          )
+        : getLocalizedOrDefaultLabel(
+            'appStatus',
+            'legends.unknownFunctionality',
+            "Un servizio sconosciuto",
+            { functionality: i.rawFunctionality }
+          );
     },
   }), []);
 
@@ -89,11 +96,11 @@ export function useFieldSpecs({ getDowntimeLegalFactDocumentDetails }: { getDown
           startIcon={<DownloadIcon />}
           onClick={() => { void getDowntimeLegalFactDocumentDetails(i.legalFactId as string); }}
         >
-          {t("legends.legalFactDownload")}
+          { getLocalizedOrDefaultLabel('appStatus', "legends.legalFactDownload", "Scaricare") }
         </Button>;
       } else {
         return <Typography variant="body2" sx={{ color: theme.palette.text.secondary, }}>
-          {t(`legends.noFileAvailableByStatus.${i.status}`)}
+          { getLocalizedOrDefaultLabel('appStatus', `legends.noFileAvailableByStatus.${i.status}`, "Non si può ancora scaricare") }
         </Typography>;
       }
     },
@@ -109,8 +116,8 @@ export function useFieldSpecs({ getDowntimeLegalFactDocumentDetails }: { getDown
     sortable: false,
     getCellLabel(value: string) {
       return <Chip
-        label={t(`legends.status.${value}`)}
-        sx={{ backgroundColor: value === DowntimeStatus.OK ? theme.palette.error.light : theme.palette.success.light }}
+        label={getLocalizedOrDefaultLabel('appStatus', `legends.status.${value}`, "Status")}
+        sx={{ backgroundColor: value === DowntimeStatus.OK ? theme.palette.success.light : theme.palette.error.light }}
       />;
     },
   }), []);

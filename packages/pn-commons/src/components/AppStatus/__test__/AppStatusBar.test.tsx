@@ -42,7 +42,7 @@ const baseStatus: Omit<AppCurrentStatus, "appIsFullyOperative"> = {
 const okStatus: AppCurrentStatus = {...baseStatus, appIsFullyOperative: true};
 const notOkStatus: AppCurrentStatus = {...baseStatus, appIsFullyOperative: false};
 
-describe('AppStatusBar', () => {
+describe('AppStatusBar component', () => {
   /* eslint-disable-next-line functional/no-let */
   let checkIconElement: HTMLElement | null;
   /* eslint-disable-next-line functional/no-let */
@@ -61,12 +61,18 @@ describe('AppStatusBar', () => {
   it('desktop - app status OK', async () => {
     mockIsMobile = false;
     await act(async () => void render(<AppStatusBar status={ okStatus }/>));
+
+    // check the "status OK" message is present, and that the "status not OK" message is not
     const okMessageComponent = screen.queryByText('appStatus.statusDescription.ok');
     const errorMessageComponent = screen.queryByText('appStatus.statusDescription.not-ok');
     expect(okMessageComponent).toBeInTheDocument();
     expect(errorMessageComponent).not.toBeInTheDocument();
+
+    // check main element: flexbox with row direction, border color success
     const mainElement = screen.queryByTestId("app-status-bar");
     expect(mainElement).toHaveStyle({ display: "flex", "flex-direction": "row", "border-color": fakePalette.success.main });
+
+    // check icon: must be CheckCircleIcon
     const iconElement = screen.queryByTestId("app-status-bar-icon");
     expect(iconElement).toBeInTheDocument();
     expect(iconElement?.innerHTML).toEqual(checkIconElement?.innerHTML);
@@ -75,12 +81,18 @@ describe('AppStatusBar', () => {
   it('desktop - app status not OK', async () => {
     mockIsMobile = false;
     await act(async () => void render(<AppStatusBar status={ notOkStatus }/>));
+
+    // check the "status not OK" message is present, and that the "status OK" message is not
     const okMessageComponent = screen.queryByText('appStatus.statusDescription.ok');
     const errorMessageComponent = screen.queryByText('appStatus.statusDescription.not-ok');
     expect(okMessageComponent).not.toBeInTheDocument();
     expect(errorMessageComponent).toBeInTheDocument();
+
+    // check main element: flexbox with row direction, border color error
     const mainElement = screen.queryByTestId("app-status-bar");
     expect(mainElement).toHaveStyle({ display: "flex", "flex-direction": "row", "border-color": fakePalette.error.main });
+
+    // check icon: must be ErrorIcon
     const iconElement = screen.queryByTestId("app-status-bar-icon");
     expect(iconElement).toBeInTheDocument();
     expect(iconElement?.innerHTML).toEqual(errorIconElement?.innerHTML);
@@ -89,12 +101,18 @@ describe('AppStatusBar', () => {
   it('mobile - app status OK', async () => {
     mockIsMobile = true;
     await act(async () => void render(<AppStatusBar status={ okStatus }/>));
+
+    // check the "status OK" message is present, and that the "status not OK" message is not
     const okMessageComponent = screen.queryByText('appStatus.statusDescription.ok');
     const errorMessageComponent = screen.queryByText('appStatus.statusDescription.not-ok');
     expect(okMessageComponent).toBeInTheDocument();
     expect(errorMessageComponent).not.toBeInTheDocument();
+
+    // check main element: flexbox with column direction, border color error
     const mainElement = screen.queryByTestId("app-status-bar");
     expect(mainElement).toHaveStyle({ display: "flex", "flex-direction": "column", "border-color": fakePalette.success.main });
+
+    // check icon: must be CheckCircleIcon
     const iconElement = screen.queryByTestId("app-status-bar-icon");
     expect(iconElement).toBeInTheDocument();
     expect(iconElement?.innerHTML).toEqual(checkIconElement?.innerHTML);

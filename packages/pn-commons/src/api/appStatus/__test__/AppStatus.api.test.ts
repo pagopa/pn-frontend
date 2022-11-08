@@ -2,7 +2,13 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 import { BEDowntimeLogPage, DowntimeLogPage, DowntimeStatus, KnownFunctionality, LegalFactDocumentDetails } from '../../../models';
 import { DOWNTIME_HISTORY, DOWNTIME_LEGAL_FACT_DETAILS, DOWNTIME_STATUS } from '../appStatus.routes';
-import { beAppStatusNoIncidents, beAppStatusOneIncident, beAppStatusOneFinishedDowntimeAsOpenIncident, beAppStatusOneIncidentWithError, beAppStatusTwoIncidentsNormalCase, beAppStatusTwoIncidentsOneUnknownFunctionality, beDowntimeHistoryNoIncidents, beDowntimeHistoryThreeIncidents, downStatusOnKnownFunctionality, downStatusOnUnknownFunctionality, downtimeHistoryEmptyQueryParams, incidentTimestamps, statusByFunctionalityOk } from './test-utils';
+import { 
+  beAppStatusNoIncidents, beAppStatusOneIncident, beAppStatusOneFinishedDowntimeAsOpenIncident, 
+  beAppStatusOneIncidentWithError, beAppStatusTwoIncidentsNormalCase, beAppStatusTwoIncidentsOneUnknownFunctionality, 
+  beDowntimeHistoryNoIncidents, beDowntimeHistoryThreeIncidents, 
+  downStatusOnKnownFunctionality, downStatusOnUnknownFunctionality, downtimeHistoryEmptyQueryParams, 
+  incidentTimestamps, statusByFunctionalityOk 
+} from './test-utils';
 import { BadApiDataException, createAppStatusApi } from '../AppStatus.api';
 
 
