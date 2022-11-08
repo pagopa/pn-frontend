@@ -47,7 +47,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { tos } = useAppSelector((state: RootState) => state.userState);
+  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
@@ -105,17 +105,12 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getDomicileInfo());
-    }
-  }, [sessionToken]);
-
-  useEffect(() => {
-    if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
     }
   }, [sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
-    // implementazione esplorativa su come potrebbe gestirse l'errore dell'API
+    // Implementazione esplorativa su come potrebbe gestire l'errore dell'API
     // che restituisce i delegators per il sideMenu.
     //
     // attenzione - per far funzionare questo si deve cambiare dove dice
@@ -229,7 +224,7 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!!sessionToken && tos && !isPrivacyPage}
+        showSideMenu={!!sessionToken && tos && fetchedTos && !isPrivacyPage}
         productsList={productsList}
         loggedUser={jwtUser}
         enableUserDropdown

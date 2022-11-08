@@ -1,7 +1,7 @@
 import { Fragment, ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
-import { Box, Grid, Link, Typography } from '@mui/material';
+import { Grid, Link } from '@mui/material';
 import {
   PRIVACY_LINK_RELATIVE_PATH,
   TOS_LINK_RELATIVE_PATH,
@@ -64,21 +64,18 @@ const TermsOfService = () => {
         <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
           <TOSAgreement
             productName={t('tos.title', 'Piattaforma Notifiche')}
-            description={t('tos.body', 'Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.')}
+            description={<Trans
+              ns={'common'}
+              i18nKey={'tos.switch-label'}
+              components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
+            >
+              Accedendo, accetti i <TosLink>Termini e condizioni d’uso</TosLink> del servizio e
+              confermi di aver letto l’<PrivacyLink>Informativa Privacy</PrivacyLink>.
+            </Trans>}
             onConfirm={handleAccept}
             confirmBtnLabel={t('tos.button', 'Accedi')}
           >
-            <Box display="flex" alignItems="center" mt={8}>
-              <Typography color="text.secondary" variant="body1" textAlign="center">
-                <Trans
-                  ns={'common'}
-                  i18nKey={'tos.switch-label'}
-                  components={[<PrivacyLink key={'privacy-link'}/>, <TosLink key={'tos-link'}/>]}
-                >
-                  Accetto l’<PrivacyLink>Informativa Privacy</PrivacyLink> e i <TosLink>Termini e condizioni d’uso</TosLink> di Piattaforma Notifiche.
-                </Trans>
-              </Typography>
-            </Box>
+            <></>
           </TOSAgreement>
         </Grid>
       </Grid>

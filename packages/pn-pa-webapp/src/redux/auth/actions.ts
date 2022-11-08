@@ -1,5 +1,5 @@
-import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { performThunkAction } from '@pagopa-pn/pn-commons';
 import { AuthApi } from '../../api/auth/Auth.api';
 import { ConsentsApi } from '../../api/consents/Consents.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
@@ -8,8 +8,8 @@ import { Party } from '../../models/party';
 import { PartyRole, PNRole } from '../../models/user';
 import { User } from './types';
 
-export enum AUTH_ACTIONS  {
-  GET_TOS_APPROVAL = 'getToSApproval',
+export enum AUTH_ACTIONS {
+  GET_ORGANIZATION_PARTY = 'getOrganizationParty', GET_TOS_APPROVAL = 'getToSApproval',
 }
 
 /**
@@ -40,15 +40,11 @@ export const exchangeToken = createAsyncThunk<User, string>(
  *     Carlos Lombardi, 2022.07.27
  */
 export const getOrganizationParty = createAsyncThunk<Party, string>(
-  'getOrganizationParty',
-  async (params: string, { rejectWithValue }) => {
-    try {
-      const partyFromApi = await ExternalRegistriesAPI.getOrganizationParty(params);
-      return partyFromApi || { id: '', name: 'Ente sconosciuto' };
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  AUTH_ACTIONS.GET_ORGANIZATION_PARTY,
+  performThunkAction(async (organizationId: string) => {
+    const partyFromApi = await ExternalRegistriesAPI.getOrganizationParty(organizationId);
+    return partyFromApi || { id: '', name: 'Ente sconosciuto' };
+  })
 );
 
 /**

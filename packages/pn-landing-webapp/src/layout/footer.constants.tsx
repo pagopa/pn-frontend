@@ -57,9 +57,9 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
     title: "Risorse",
     links: [
       {
-        label: "Privacy Policy",
+        label: "Informativa Privacy",
         href: `/informativa-privacy/`,
-        ariaLabel: "Vai al link: Privacy Policy",
+        ariaLabel: "Vai al link: Informativa Privacy",
         linkType: "internal",
       },
       {
