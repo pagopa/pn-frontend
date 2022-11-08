@@ -1,3 +1,5 @@
+/* eslint-disable functional/no-let */
+
 import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -47,6 +49,19 @@ const singleRecipient = {
   showDigitalDomicile: false,
   showPhysicalAddress: false,
 };
+
+function getDuplicateValuesByKeys<T>(recipientsList: Array<T>, keys: Array<keyof T>): Array<string> {
+  const getIUV = (item: T) => {
+    let IUV = '';
+    for (let i = 0; i < keys.length; i++) {
+      IUV += item[keys[i]] ?? '';
+    }
+    return IUV;
+  };
+  return recipientsList
+    .map((recipient) => getIUV(recipient))
+    .filter((iuv, i, iuvList) => iuvList.indexOf(iuv) !== i);
+}
 
 type Props = {
   onConfirm: () => void;
@@ -162,13 +177,11 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
       )
       .test('identicalTaxIds', t('identical-fiscal-codes-error'), (values) => {
         if (values) {
-          const duplicatesTaxIds = values
-            .map((item) => item.taxId)
-            .filter((e, i, a) => a.indexOf(e) !== i);
+          const duplicatesTaxIds = getDuplicateValuesByKeys(values, ['taxId']);
           if (duplicatesTaxIds.length > 0) {
             const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
             values.forEach((value, i) => {
-              if (duplicatesTaxIds.includes(value.taxId)) {
+              if (value.taxId && duplicatesTaxIds.includes(value.taxId)) {
                 // eslint-disable-next-line functional/immutable-data
                 errors.push(
                   new yup.ValidationError(
@@ -185,6 +198,41 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
           }
         }
         return true;
+      })
+      .test('identicalIUV', t('identical-fiscal-codes-error'),
+        (values) => {
+          if (values) {
+            const duplicateIUVs = getDuplicateValuesByKeys(values, ['creditorTaxId', 'noticeCode']);
+            if (duplicateIUVs.length > 0) {
+              const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
+              values.forEach((value, i) => {
+                if (
+                  value.creditorTaxId
+                  && value.noticeCode
+                  && duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
+                ) {
+                  // eslint-disable-next-line functional/immutable-data
+                  errors.push(
+                    new yup.ValidationError(
+                      t('identical-notice-codes-error'),
+                      value,
+                      `recipients[${i}].noticeCode`
+                    ),
+                    new yup.ValidationError(
+                      ' ',
+                      value,
+                      `recipients[${i}].creditorTaxId`
+                    )
+                  );
+                }
+              });
+              return errors.length === 0 ? true : new yup.ValidationError(errors);
+            } else {
+              return true;
+            }
+          } else {
+            return true;
+          }
       }),
   });
 

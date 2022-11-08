@@ -21,7 +21,7 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     lastName: 'Rossi',
     recipientType: RecipientType.PF,
     creditorTaxId: '12345678910',
-    noticeCode: '123456789123456789',
+    noticeCode: '123456789123456788',
     type: DigitalDomicileType.PEC,
     digitalDomicile: 'mocked@mail.it',
     address: 'address',
@@ -150,7 +150,7 @@ export const newNotificationDTO: NewNotificationDTO = {
       },
       payment: {
         creditorTaxId: '12345678910',
-        noticeCode: '123456789123456789',
+        noticeCode: '123456789123456788',
         pagoPaForm: {
           title: 'mocked-name',
           digests: {
