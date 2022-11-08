@@ -77,7 +77,7 @@ const useMockResponseData = false;
 // const useMockResponseData = process.env.NODE_ENV === 'development';
 
 /* eslint-disable functional/no-let */
-let counter = 0;
+let counter = 1000;
 
 export function createAppStatusApi(apiClient: AxiosInstance) {
   return {

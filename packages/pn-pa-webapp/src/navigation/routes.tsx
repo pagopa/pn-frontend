@@ -1,18 +1,19 @@
-import { Routes, Route } from 'react-router-dom';
 import { NotFound } from '@pagopa-pn/pn-commons';
+import { Route, Routes } from 'react-router-dom';
 
 import Dashboard from '../pages/Dashboard.page';
-import NotificationDetail from '../pages/NotificationDetail.page';
 import NewNotification from '../pages/NewNotification.page';
+import NotificationDetail from '../pages/NotificationDetail.page';
 // import ApiKeys from '../pages/ApiKeys.page';
 import PrivacyPolicyPage from "../pages/PrivacyPolicy.page";
 import TermsOfServicePage from "../pages/TermsOfService.page";
 
 import { PNRole } from '../models/user';
+import AppStatus from '../pages/AppStatus.page';
 import ToSAcceptance from '../pages/ToSAcceptance.page';
+import RouteGuard from './RouteGuard';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
-import RouteGuard from './RouteGuard';
 
 function Router() {
   return (
@@ -24,6 +25,7 @@ function Router() {
           <Route path={routes.DASHBOARD} element={<Dashboard />} />
           <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
           <Route path={routes.NUOVA_NOTIFICA} element={<NewNotification />} />
+          <Route path={routes.APP_STATUS} element={<AppStatus />} />
           {/**
            * Refers to PN-1741
            * Commented out because beyond MVP scope

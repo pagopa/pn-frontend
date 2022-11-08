@@ -11,6 +11,7 @@ export const ROLES_SEGMENT = '/users';
 export const ID_PN_SEGMENT = 'prod-pn';
 export const GROUPS_SEGMENT = '/groups';
 export const TOS = '/tos';
+export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 
 /** ROLES navigation link to SelfCare "Referenti" section for Piattaforma Notifiche
