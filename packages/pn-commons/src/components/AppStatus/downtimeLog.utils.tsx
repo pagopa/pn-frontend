@@ -1,11 +1,11 @@
 import { useCallback } from 'react';
 import { Button, Chip, Stack, Typography, useTheme } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import { CardElement, Column, formatDate, formatTimeHHMM, Item } from '@pagopa-pn/pn-commons';
-import { DowntimeLogPage, DowntimeStatus } from '@pagopa-pn/pn-commons';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch } from '../../redux/hooks';
-import { getDowntimeLegalFactDocumentDetails } from '../../redux/appStatus/actions';
+import { formatDate, formatTimeHHMM } from '../../services';
+import { CardElement, Column, Item } from '../../types';
+import { DowntimeLogPage, DowntimeStatus } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 export function booleanStringToBoolean(booleanString: string): boolean {
   return booleanString.toLowerCase() === "true";
@@ -42,14 +42,17 @@ export type DowntimeLogColumn =
   | '';
 
 
-export function useFieldSpecs() {
+export function useFieldSpecs({ getDowntimeLegalFactDocumentDetails }: { getDowntimeLegalFactDocumentDetails: (legalFactId: string) => any}) {
   const { t } = useTranslation(['appStatus']);
-  const dispatch = useAppDispatch();
   const theme = useTheme();
 
   const getDateFieldSpec = useCallback((fieldId: DowntimeLogColumn, inTwoLines: boolean): Omit<Column<DowntimeLogColumn>, "width"> => ({
     id: fieldId,
-    label: t(`downtimeList.columnHeader.${fieldId}`),
+    label: getLocalizedOrDefaultLabel(
+      'appStatus',
+      `downtimeList.columnHeader.${fieldId}`,
+      `Data ${fieldId}`
+    ),
     sortable: false, 
     getCellLabel(value: string) {
       return <FormattedDateAndTime date={value} inTwoLines={inTwoLines} />;
@@ -58,7 +61,11 @@ export function useFieldSpecs() {
 
   const getFunctionalityFieldSpec = useCallback((): Omit<Column<DowntimeLogColumn>, "width"> => ({
     id: 'functionality',
-    label: t('downtimeList.columnHeader.functionality'),
+    label: getLocalizedOrDefaultLabel(
+      'appStatus',
+      'downtimeList.columnHeader.functionality',
+      "Servizio coinvolto"
+    ),
     sortable: false,
     getCellLabel(_: string, i: Item) {
       return i.knownFunctionality
@@ -69,14 +76,18 @@ export function useFieldSpecs() {
 
   const getLegalFactIdFieldSpec = useCallback((): Omit<Column<DowntimeLogColumn>, "width"> => ({
     id: 'legalFactId',
-    label: t('downtimeList.columnHeader.legalFactId'),
+    label: getLocalizedOrDefaultLabel(
+      'appStatus',
+      'downtimeList.columnHeader.legalFactId',
+      "Attestazione"
+    ),
     sortable: false,
     getCellLabel(_: string, i: Item) {
       if (booleanStringToBoolean(i.fileAvailable as string)) {
         return <Button
           sx={{ px: 0 }}
           startIcon={<DownloadIcon />}
-          onClick={() => { void dispatch(getDowntimeLegalFactDocumentDetails(i.legalFactId as string)); }}
+          onClick={() => { void getDowntimeLegalFactDocumentDetails(i.legalFactId as string); }}
         >
           {t("legends.legalFactDownload")}
         </Button>;
@@ -90,7 +101,11 @@ export function useFieldSpecs() {
 
   const getStatusFieldSpec = useCallback((): Omit<Column<DowntimeLogColumn>, "width"> => ({
     id: 'status',
-    label: t('downtimeList.columnHeader.status'),
+    label: getLocalizedOrDefaultLabel(
+      'appStatus',
+      'downtimeList.columnHeader.status',
+      "Stato"
+    ),
     sortable: false,
     getCellLabel(value: string) {
       return <Chip

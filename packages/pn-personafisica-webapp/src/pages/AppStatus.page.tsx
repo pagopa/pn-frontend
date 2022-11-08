@@ -1,11 +1,12 @@
-import { Box, Stack, Typography, useTheme } from '@mui/material';
-import { ApiErrorWrapper, EmptyState, formatDate, formatTimeHHMM, TitleBox, useIsMobile, KnownFunctionality, AppStatusBar } from '@pagopa-pn/pn-commons';
 import { useCallback, useEffect } from 'react';
+import { Box, Stack, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import { DesktopDowntimeLog } from '../component/AppStatus/DesktopDowntimeLog';
-import { MobileDowntimeLog } from '../component/AppStatus/MobileDowntimeLog';
+import { 
+  ApiErrorWrapper, EmptyState, formatDate, formatTimeHHMM, TitleBox, useIsMobile, KnownFunctionality, 
+  AppStatusBar, DesktopDowntimeLog, MobileDowntimeLog 
+} from '@pagopa-pn/pn-commons';
 import { useDownloadDocument } from '../component/AppStatus/useDownloadDocument';
-import { APP_STATUS_ACTIONS, getCurrentAppStatus, getDowntimeLogPage } from '../redux/appStatus/actions';
+import { APP_STATUS_ACTIONS, getCurrentAppStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 
@@ -22,14 +23,18 @@ const AppStatus = () => {
 
   const fetchCurrentStatus = useCallback(() => {
     void dispatch(getCurrentAppStatus());
-  }, []);
+  }, [dispatch, getCurrentAppStatus]);
 
   const fetchDowntimeLog = useCallback(() => {
     void dispatch(getDowntimeLogPage({ 
       startDate: "1900-01-01T00:00:00Z",
       functionality: [KnownFunctionality.NotificationCreate, KnownFunctionality.NotificationVisualization, KnownFunctionality.NotificationWorkflow],
     }));
-  }, []);
+  }, [dispatch, getDowntimeLogPage]);
+
+  const fetchDowntimeLegalFactDocumentDetails = useCallback(
+    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)), 
+  [dispatch, getDowntimeLegalFactDocumentDetails]);
 
   useEffect(() => {
     fetchCurrentStatus();
@@ -67,8 +72,14 @@ const AppStatus = () => {
         { downtimeLog && 
           (downtimeLog.downtimes.length > 0) 
             ? (isMobile 
-                ? <Box sx={{ mt: 2 }}><MobileDowntimeLog downtimeLog={downtimeLog} /></Box>
-                : <DesktopDowntimeLog downtimeLog={downtimeLog} />
+                ? <Box sx={{ mt: 2 }}>
+                    <MobileDowntimeLog downtimeLog={downtimeLog} 
+                      getDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails} 
+                    />
+                  </Box>
+                : <DesktopDowntimeLog downtimeLog={downtimeLog} 
+                    getDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails} 
+                  />
               )
             : <EmptyState disableSentimentDissatisfied enableSentimentSatisfied emptyMessage={t('downtimeList.emptyMessage')} />      
         }
