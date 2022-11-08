@@ -82,10 +82,11 @@ describe('PaymentMethods Component', () => {
     expect(result.container).toHaveTextContent(/back-to-attachments/i);
   });
 
-  it('adds first pagoPa document (confirm disabled)', async () => {
+  it('adds first and second pagoPa documents (confirm disabled)', async () => {
     const form = result.container.querySelector('form');
     const paymentBoxes = result.queryAllByTestId('paymentBox');
     uploadDocument(paymentBoxes[0].parentNode!);
+    uploadDocument(paymentBoxes[2].parentNode!);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // vedi flexDirection row-reverse
@@ -93,10 +94,11 @@ describe('PaymentMethods Component', () => {
     expect(buttons![0]).toBeDisabled();
   });
 
-  it('adds first and second pagoPa documents and clicks on confirm', async () => {
+  it('adds all payment documents and clicks on confirm', async () => {
     const form = result.container.querySelector('form');
     const paymentBoxes = result.queryAllByTestId('paymentBox');
     uploadDocument(paymentBoxes[0].parentNode!);
+    uploadDocument(paymentBoxes[1].parentNode!);
     uploadDocument(paymentBoxes[2].parentNode!);
     uploadDocument(paymentBoxes[3].parentNode!);
     const buttons = await waitFor(() => form?.querySelectorAll('button'));
@@ -134,13 +136,13 @@ describe('PaymentMethods Component', () => {
             idx: 0,
             name: 'pagopa-notice-f24',
             file: {
-              name: index === 0 ? '' : 'Mocked file',
+              name: 'Mocked file',
               sha256: {
-                hashBase64: index === 0 ? '' : 'mocked-hasBase64',
-                hashHex: index === 0 ? '' : 'mocked-hashHex'
+                hashBase64: 'mocked-hasBase64',
+                hashHex: 'mocked-hashHex'
               },
-              size: index === 0 ? 0 : 14,
-              uint8Array: index === 0 ? undefined : new Uint8Array()
+              size: 14,
+              uint8Array: new Uint8Array()
             },
             contentType: 'application/pdf',
             ref: {
