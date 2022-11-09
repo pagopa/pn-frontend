@@ -324,8 +324,6 @@ const TimelineAllowedStatus = [
   TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW,
   TimelineCategory.SEND_DIGITAL_DOMICILE,
   TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-  TimelineCategory.SEND_DIGITAL_FEEDBACK,
-  TimelineCategory.SEND_DIGITAL_PROGRESS,
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_PAPER_FEEDBACK,
