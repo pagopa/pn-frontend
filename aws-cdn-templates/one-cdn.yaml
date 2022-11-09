@@ -44,7 +44,7 @@ Parameters:
   Limit:
     Type: Number
     Description: The limit on requests per 5-minute period for a single originating IP address.
-    Default: 2000
+    Default: 1000
 
 Conditions:
 
