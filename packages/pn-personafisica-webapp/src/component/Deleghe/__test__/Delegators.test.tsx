@@ -47,7 +47,7 @@ describe('Delegators Component - assuming delegators API works properly', () => 
     expect(result.container).not.toHaveTextContent(/luca blu/i);
   });
 
-  it('is Delegator component accessible', async ()=>{
+  it.skip('is Delegator component accessible', async ()=>{
     const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
     mockUseAppSelector.mockReturnValueOnce(arrayOfDelegators);
     const result = render(<Delegators />);
