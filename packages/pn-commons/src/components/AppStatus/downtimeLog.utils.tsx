@@ -116,6 +116,7 @@ export function useFieldSpecs({ getDowntimeLegalFactDocumentDetails }: { getDown
     sortable: false,
     getCellLabel(value: string) {
       return <Chip
+        data-testid="downtime-status"
         label={getLocalizedOrDefaultLabel('appStatus', `legends.status.${value}`, "Status")}
         sx={{ backgroundColor: value === DowntimeStatus.OK ? theme.palette.success.light : theme.palette.error.light }}
       />;
