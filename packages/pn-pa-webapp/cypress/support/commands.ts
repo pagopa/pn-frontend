@@ -36,27 +36,12 @@
 //   }
 // }
 
-/**
- * Login programmatically
- */
-Cypress.Commands.add('login', () => {
-  /**
-   * TODO: implement login through api
-   */
-  cy.window().then((win) => {
-    const user = win.sessionStorage.getItem('user');
-
-    if (!user) {
-      win.sessionStorage.setItem('user', JSON.stringify(Cypress.env('user')));
-    }
-  });
-});
-
 /*
   * Login with token exchange
   */
 Cypress.Commands.add('loginWithTokenExchange', () => {
   cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
+  cy.wait(1500);
 });
 
 /**
