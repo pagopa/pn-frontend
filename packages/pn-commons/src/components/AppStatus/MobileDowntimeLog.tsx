@@ -22,7 +22,7 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
     {...adaptFieldSpecToMobile(getDateFieldSpec('startDate', false)), notWrappedInTypography: true},
     {...adaptFieldSpecToMobile(getDateFieldSpec('endDate', false)), notWrappedInTypography: true},
     adaptFieldSpecToMobile(getFunctionalityFieldSpec()),
-    adaptFieldSpecToMobile(getLegalFactIdFieldSpec()),
+    {...adaptFieldSpecToMobile(getLegalFactIdFieldSpec()), notWrappedInTypography: true},
   ], [getDateFieldSpec, getFunctionalityFieldSpec, getLegalFactIdFieldSpec]);
 
   /* eslint-disable-next-line sonarjs/no-identical-functions */

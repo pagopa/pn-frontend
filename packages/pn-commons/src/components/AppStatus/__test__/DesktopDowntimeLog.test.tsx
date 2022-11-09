@@ -86,10 +86,15 @@ describe('DesktopDowntimeLog component - with data', () => {
     expect(endDateIndex).toEqual(startDateIndex + 1);
 
     // legalFactId and status must be present
-    const startDateHeader = within(headerRow).queryByText("downtimeList.columnHeader.legalFactId");
+    const legalFactIdHeader = within(headerRow).queryByText("downtimeList.columnHeader.legalFactId");
     const statusHeader = within(headerRow).queryByText("downtimeList.columnHeader.status");
-    expect(startDateHeader).toBeInTheDocument();
+    expect(legalFactIdHeader).toBeInTheDocument();
     expect(statusHeader).toBeInTheDocument();
+  });
+
+  // expect 4, one for the header, one for each of the three downtimes included
+  it("row count", async () => {
+    expect(rowComponents).toHaveLength(4);
   });
 
   it("date values", async () => {
@@ -163,7 +168,7 @@ describe('DesktopDowntimeLog component - with data', () => {
     const secondDataRow = rowComponents[2];
     const secondRowColumns = within(secondDataRow).queryAllByRole("cell");
     const secondRowLegalFact = secondRowColumns[legalFactIndex];
-    const button2 = within(firstRowLegalFact).queryByRole("button");
+    const button2 = within(secondRowLegalFact).queryByRole("button");
     expect(button2).not.toBeInTheDocument();
     const description2 = within(secondRowLegalFact).queryByText(`legends.noFileAvailableByStatus.${DowntimeStatus.OK}`);
     expect(description2).toBeInTheDocument();
@@ -187,7 +192,7 @@ describe('DesktopDowntimeLog component - with data', () => {
     const firstRowStatus = firstRowColumns[statusIndex];
     const statusChip1 = within(firstRowStatus).queryByTestId("downtime-status");
     expect(statusChip1).toHaveStyle({ "background-color": fakePalette.error.light });
-    const description1 = within(firstRowStatus).queryByText(`legends.status.${DowntimeStatus.KO}`);
+    const description1 = statusChip1 && within(statusChip1).queryByText(`legends.status.${DowntimeStatus.KO}`);
     expect(description1).toBeInTheDocument();
 
     // third row - closed downtime
@@ -196,7 +201,7 @@ describe('DesktopDowntimeLog component - with data', () => {
     const thirdRowStatus = thirdRowColumns[statusIndex];
     const statusChip3 = within(thirdRowStatus).queryByTestId("downtime-status");
     expect(statusChip3).toHaveStyle({ "background-color": fakePalette.success.light });
-    const description3 = within(thirdRowStatus).queryByText(`legends.status.${DowntimeStatus.OK}`);
+    const description3 = statusChip3 && within(statusChip3).queryByText(`legends.status.${DowntimeStatus.OK}`);
     expect(description3).toBeInTheDocument();
   });
 

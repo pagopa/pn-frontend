@@ -87,7 +87,7 @@ const ItemsCard = ({ cardHeader, cardBody, cardData, cardActions, sx, headerGrid
                         {body.getLabel(data[body.id], data)}
                       </Typography>
                     )}
-                    {body.notWrappedInTypography && body.getLabel(data[body.id], data)}
+                    {body.notWrappedInTypography && <div data-testid="cardBodyValue">{body.getLabel(data[body.id], data)}</div>}
                   </Fragment>
                 )}
               </Box>
