@@ -33,7 +33,6 @@ import CopyToClipboard from './CopyToClipboard';
 import LoadingPage from './LoadingPage';
 import ApiError from './ApiError/ApiError';
 import ApiErrorWrapper from './ApiError/ApiErrorWrapper';
-import TermsOfServiceHandler from './TermsOfServiceHandler';
 
 export {
     LoadingOverlay,
@@ -70,6 +69,5 @@ export {
     FileUpload,
     Prompt,
     CopyToClipboard,
-    LoadingPage,
-    TermsOfServiceHandler
+    LoadingPage
 };

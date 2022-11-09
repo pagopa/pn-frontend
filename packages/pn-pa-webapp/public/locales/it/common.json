@@ -28,7 +28,7 @@
   "tos": {
     "title": "Piattaforma Notifiche",
     "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
-    "switchLabel": "Accetto l'<0>Informativa Privacy</0> e i <1>Termini e condizioni d’uso</1> di Piattaforma Notifiche.",
+    "switch-label": "Accedendo, accetti i <0>Termini e condizioni d’uso</0> del servizio e confermi di aver letto l’<1>Informativa Privacy</1>.",
     "button": "Accedi"
   },
   "table": {
@@ -61,7 +61,8 @@
     "action": "Ricarica la pagina"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
-  "not-logged": "Piattaforma Notifiche, effettua il login",
+  "not-logged": "Accedi all'Area Riservata",
+  "not-logged-subtitle": "Per usare Piattaforma Notifiche, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
@@ -85,6 +86,7 @@
     "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
     "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",
     "generic-token-exchange-problem": "Non è stato possibile completare l'accesso",
+    "error-in-initial-info-loading": "Non siamo riusciti a recuperare dati necessari per l'avvio dell'applicazione",
     "invalid-token-title": "Non puoi accedere per un problema tecnico - token non valido",
     "generic-title": "Errore generico",
     "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi",

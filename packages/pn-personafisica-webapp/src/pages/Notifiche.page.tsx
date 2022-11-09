@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import {
@@ -21,6 +21,7 @@ import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { Delegator } from '../redux/delegation/types';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
@@ -30,6 +31,7 @@ const Notifiche = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche']);
   const { mandateId } = useParams();
+  const [pageReady, setPageReady] = useState(false);
 
   const { notifications, filters, sort, pagination } = useAppSelector(
     (state: RootState) => state.dashboardState
@@ -73,14 +75,8 @@ const Notifiche = () => {
         ...params,
         endDate: formatToTimezoneString(getNextDay(new Date(params.endDate))),
       })
-    );
+    ).then(() => setPageReady(true));
   }, [filters, pagination.size, pagination.page]);
-  // PN-2433
-  /*
-  From dependencies of useCallback has been removed pagination.nextPagesKey.
-  This parameters can be updated when the notification list api is called and this can causes an update of the function and another api call.
-  Because this parameter is closely related to other dependencies and never change alone, it can be removed from dependency array.
-  */
 
   // Pagination handlers
   const handleChangePage = (paginationData: PaginationData) => {
@@ -106,53 +102,55 @@ const Notifiche = () => {
   }, [fetchNotifications, currentDelegator]);
 
   return (
-    <Box p={3}>
-      <DomicileBanner />
-      <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
-      <ApiErrorWrapper
-        apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
-        reloadAction={fetchNotifications}
-      >
-        {isMobile ? (
-          <MobileNotifications
-            notifications={notifications}
-            sort={sort}
-            onChangeSorting={handleChangeSorting}
-            currentDelegator={currentDelegator}
-          />
-        ) : (
-          <DesktopNotifications
-            notifications={notifications}
-            sort={sort}
-            onChangeSorting={handleChangeSorting}
-            currentDelegator={currentDelegator}
-          />
-        )}
-        {notifications.length > 0 && (
-          <CustomPagination
-            paginationData={{
-              size: pagination.size,
-              page: pagination.page,
-              totalElements,
-            }}
-            onPageRequest={handleChangePage}
-            pagesToShow={pagesToShow}
-            eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
-            sx={
-              isMobile
-                ? {
-                    padding: '0',
-                    '& .items-per-page-selector button': {
-                      paddingLeft: 0,
-                      height: '24px',
-                    },
-                  }
-                : { padding: '0 10px' }
-            }
-          />
-        )}
-      </ApiErrorWrapper>
-    </Box>
+    <LoadingPageWrapper isInitialized={pageReady}>
+      <Box p={3}>
+        <DomicileBanner />
+        <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
+        <ApiErrorWrapper
+          apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
+          reloadAction={fetchNotifications}
+        >
+          {isMobile ? (
+            <MobileNotifications
+              notifications={notifications}
+              sort={sort}
+              onChangeSorting={handleChangeSorting}
+              currentDelegator={currentDelegator}
+            />
+          ) : (
+            <DesktopNotifications
+              notifications={notifications}
+              sort={sort}
+              onChangeSorting={handleChangeSorting}
+              currentDelegator={currentDelegator}
+            />
+          )}
+          {notifications.length > 0 && (
+            <CustomPagination
+              paginationData={{
+                size: pagination.size,
+                page: pagination.page,
+                totalElements,
+              }}
+              onPageRequest={handleChangePage}
+              pagesToShow={pagesToShow}
+              eventTrackingCallbackPageSize={handleEventTrackingCallbackPageSize}
+              sx={
+                isMobile
+                  ? {
+                      padding: '0',
+                      '& .items-per-page-selector button': {
+                        paddingLeft: 0,
+                        height: '24px',
+                      },
+                    }
+                  : { padding: '0 10px' }
+              }
+            />
+          )}
+        </ApiErrorWrapper>
+      </Box>
+    </LoadingPageWrapper>
   );
 };
 

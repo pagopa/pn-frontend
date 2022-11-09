@@ -153,6 +153,7 @@
     "drag-doc": "Trascina qui il documento",
     "steps": {
       "preliminary-informations": {
+        "fetch-groups-error": "Non siamo riusciti a recuperare i dati che servono per poter creare una nuova notifica.",
         "title": "Informazioni preliminari",
         "protocol-number": "Numero di protocollo",
         "subject": "Oggetto della notifica",
@@ -164,7 +165,8 @@
         "payment-method": "Modello di pagamento",
         "pagopa-notice": "Avviso pagoPA",
         "pagopa-notice-f24-flatrate": "Avviso pagoPA e Modello F24 forfettario",
-        "pagopa-notice-f24": "Avviso pagoPA e Modello F24"
+        "pagopa-notice-f24": "Avviso pagoPA e Modello F24",
+        "nothing": "Nessuno"
       },
       "recipient": {
         "title": "Destinatario",
@@ -218,6 +220,7 @@
         "attach-pagopa-notice": "Allega Avviso pagoPA",
         "attach-f24-flatrate": "Allega Modello F24 forfettario",
         "attach-f24": "Allega Modello F24",
+        "nothing": "<0>Se questa notifica prevede un pagamento, torna a </0><1>Informazioni preliminari</1><2> e seleziona un modello. Poi, torna qui per caricarlo.</2>",
         "back-to-attachments": "Torna a Allegati"
       },
       "sync-feedback": {

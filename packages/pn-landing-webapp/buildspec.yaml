@@ -25,6 +25,11 @@ batch:
         variables:
           BUILD_ID: cert
           NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.cert.pn.pagopa.it/"          
+    - identifier: pn_landing_hotfix_build
+      env:
+        variables:
+          BUILD_ID: hotfix
+          NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.hotfix.pn.pagopa.it/"          
 phases:
   install:
     runtime-versions:
