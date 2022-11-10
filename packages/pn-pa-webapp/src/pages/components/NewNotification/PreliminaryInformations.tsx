@@ -12,7 +12,7 @@ import {
   Typography,
   MenuItem,
 } from '@mui/material';
-import { PhysicalCommunicationType, CustomDropdown, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType, CustomDropdown, ApiErrorWrapper, dataRegex } from '@pagopa-pn/pn-commons';
 
 import { NewNotification, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus, PNRole } from '../../../models/user';
@@ -30,7 +30,6 @@ type Props = {
   onConfirm: () => void;
 };
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
@@ -54,15 +53,15 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   });
 
   const validationSchema = yup.object({
-    paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('common:required')}`),
-    subject: yup.string().required(`${t('subject')} ${tc('common:required')}`),
+    paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('required')}`),
+    subject: yup.string().required(`${t('subject')} ${tc('required')}`),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
     group: groups.length > 0 && !isAdmin ? yup.string().required() : yup.string(),
     taxonomyCode: yup
       .string()
-      .required(`${t('taxonomy-id')} ${tc('common:required')}`)
-      .test('taxonomyCodeTest', `${t('taxonomy-id')} ${tc('common:invalid')}`, (value) => /^([0-9]{6}[A-Z]{1})$/.test(value as string)),
+      .required(`${t('taxonomy-id')} ${tc('required')}`)
+      .test('taxonomyCodeTest', `${t('taxonomy-id')} ${tc('invalid')}`, (value) => dataRegex.taxonomyCode.test(value as string)),
   });
 
   const formik = useFormik({
