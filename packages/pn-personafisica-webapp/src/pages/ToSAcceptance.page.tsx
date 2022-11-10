@@ -73,7 +73,7 @@ const TermsOfService = () => {
             confirmBtnLabel={t('tos.button', 'Accedi')}
             confirmBtnDisabled={!accepted}
           >
-            <Box display="flex" alignItems="center" mt={8}>
+            <Box display="flex" alignItems="center">
               <Switch
                 value={accepted}
                 onClick={() => setAccepted(!accepted)}
