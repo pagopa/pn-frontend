@@ -172,7 +172,7 @@ const NewNotification = () => {
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
                 recipientsData={notification.recipients}
-                notification={notification}
+                paymentMode={notification.paymentMode}
               />
             )}
             {activeStep === 2 && (

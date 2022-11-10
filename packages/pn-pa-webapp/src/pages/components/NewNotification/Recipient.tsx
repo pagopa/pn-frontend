@@ -1,8 +1,7 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
-import { ReactJSXElement } from '@emotion/react/types/jsx-namespace';
 import { Add, Delete } from '@mui/icons-material';
 import {
   FormControl,
@@ -20,7 +19,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
-import { NewNotification, NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
+import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
 import PhysicalAddress from './PhysicalAddress';
@@ -50,13 +49,13 @@ const singleRecipient = {
 };
 
 type Props = {
-  notification: NewNotification;
+  paymentMode: PaymentModel | undefined;
   onConfirm: () => void;
   onPreviousStep?: () => void;
   recipientsData?: Array<NewNotificationRecipient>;
 };
 
-const Recipient = ({ notification, onConfirm, onPreviousStep, recipientsData }: Props) => {
+const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.recipient',
@@ -154,7 +153,7 @@ const Recipient = ({ notification, onConfirm, onPreviousStep, recipientsData }: 
       }),
     };
 
-    if(notification.paymentMode !== PaymentModel.NOTHING) {
+    if(paymentMode !== PaymentModel.NOTHING) {
       return {
         ...validationObject,
         // .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
@@ -278,7 +277,7 @@ const Recipient = ({ notification, onConfirm, onPreviousStep, recipientsData }: 
     }
   };
 
-  const paymentReferenceData = (data: ReactJSXElement) => notification.paymentMode === PaymentModel.NOTHING ? '' : data;
+  const paymentReferenceData = (data: ReactNode) => paymentMode === PaymentModel.NOTHING ? '' : data;
 
   return (
     <Formik
