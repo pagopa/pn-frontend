@@ -41,7 +41,7 @@
   */
 Cypress.Commands.add('loginWithTokenExchange', () => {
   cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
-  cy.wait(1500);
+  cy.wait(3000);
 });
 
 /**
