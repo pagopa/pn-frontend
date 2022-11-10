@@ -236,6 +236,8 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
   };
 
   const deleteDocumentHandler = async (index: number) => {
+    await formik.setFieldTouched(`documents.${index}`, false);
+    
     const documents = formik
       .values
       .documents
