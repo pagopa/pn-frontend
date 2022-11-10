@@ -14,10 +14,13 @@ describe("Notifications Filter", () => {
     cy.visit('/dashboard');
     cy.get('#startDate').type(startDate);
     cy.get('#endDate').type(endDate);
+    cy.intercept({
+      method: 'GET',
+      url: /delivery/
+    }).as('filtering');
     cy.get('.MuiButton-outlined').click();
-    cy.wait(3000);
+    cy.wait('@filtering');
     cy.get(':nth-child(1) > .css-pgy0cg-MuiTableCell-root').click();
-    cy.wait(3000);
     cy.get('.css-6ezsbm-MuiStack-root > .MuiButton-root').click();
     cy.get('#startDate').should('have.value', startDate);
     cy.get('#endDate').should('have.value', endDate);

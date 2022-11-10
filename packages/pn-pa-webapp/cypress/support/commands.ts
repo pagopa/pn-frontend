@@ -40,8 +40,12 @@
   * Login with token exchange
   */
 Cypress.Commands.add('loginWithTokenExchange', () => {
+  cy.intercept({
+    method:'POST',
+    url: /token-exchange/
+  }).as('login');
   cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
-  cy.wait(3000);
+  cy.wait('@login');
 });
 
 /**
