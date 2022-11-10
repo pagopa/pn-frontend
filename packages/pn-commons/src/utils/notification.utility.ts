@@ -326,6 +326,8 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
   TimelineCategory.SEND_ANALOG_DOMICILE,
+  TimelineCategory.SEND_DIGITAL_FEEDBACK,
+  TimelineCategory.SEND_DIGITAL_PROGRESS,
   TimelineCategory.SEND_PAPER_FEEDBACK,
   TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
   // PN-2068
