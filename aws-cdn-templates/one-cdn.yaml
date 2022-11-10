@@ -402,22 +402,10 @@ Resources:
       Description: Web Application Firewall for AWS CloudFront
       Name: !Join ["-", [CloudFront-WAF, !Ref Name]]
       Rules: 
-        - Action: 
-            Block: {}
-          Name: "CloudFront_Rate_based_Rule"
-          Priority: 0
-          Statement: 
-            RateBasedStatement: 
-              Limit: !Ref Limit
-              AggregateKeyType: IP
-          VisibilityConfig: 
-            SampledRequestsEnabled: true
-            CloudWatchMetricsEnabled: true
-            MetricName: "CloudFront_Rate_based_Rule"
         - Name: AWSManagedRulesAmazonIpReputationList
           OverrideAction: 
             None: {}
-          Priority: 1
+          Priority: 0
           Statement: 
             ManagedRuleGroupStatement:
               VendorName: AWS
@@ -429,7 +417,7 @@ Resources:
         - Name: AWSManagedRulesAnonymousIpList
           OverrideAction: 
             None: {}
-          Priority: 2
+          Priority: 1
           Statement: 
             ManagedRuleGroupStatement:
               VendorName: AWS
@@ -438,6 +426,18 @@ Resources:
             CloudWatchMetricsEnabled: true
             MetricName: AWSManagedRulesAnonymousIpList
             SampledRequestsEnabled: true
+        - Action: 
+            Block: {}
+          Name: "CloudFront_Rate_based_Rule"
+          Priority: 2
+          Statement: 
+            RateBasedStatement: 
+              Limit: !Ref Limit
+              AggregateKeyType: IP
+          VisibilityConfig: 
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: "CloudFront_Rate_based_Rule"
       Scope: CLOUDFRONT
       VisibilityConfig: 
         CloudWatchMetricsEnabled: true
