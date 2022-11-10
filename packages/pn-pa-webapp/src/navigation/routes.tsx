@@ -9,12 +9,12 @@ import PrivacyPolicyPage from "../pages/PrivacyPolicy.page";
 import TermsOfServicePage from "../pages/TermsOfService.page";
 
 import { PNRole } from '../models/user';
+import AppStatus from '../pages/AppStatus.page';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
 import ToSGuard from "./ToSGuard";
 import OrganizationPartyGuard from './OrganizationPartyGuard';
-import AppStatus from '../pages/AppStatus.page';
 
 function Router() {
   return (

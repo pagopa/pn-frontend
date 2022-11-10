@@ -73,8 +73,8 @@ function mockLegalFactDetails(legalFactId: string): LegalFactDocumentDetails {
    the API
    ------------------------------------------------------------------------ */
 
-// const useMockResponseData = false;
-const useMockResponseData = process.env.NODE_ENV === 'development';
+const useMockResponseData = false;
+// const useMockResponseData = process.env.NODE_ENV === 'development';
 
 /* eslint-disable functional/no-let */
 let counter = 1000;
