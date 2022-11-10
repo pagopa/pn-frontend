@@ -1,6 +1,6 @@
 import { render, testSelect, mockDropdownItems } from '../../test-utils';
 import CustomDropdown from '../CustomDropdown';
-import { MenuItem } from '@mui/material';
+import MenuItem from '@mui/material/MenuItem';
 
 describe('CustomDropdown component', () => {
   let form: HTMLFormElement | undefined;

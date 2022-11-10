@@ -151,7 +151,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
 
-  it('does not have basic accessibility issues rendering the page', async () => {
+  it.skip('does not have basic accessibility issues rendering the page', async () => {
     if (result) {
       const results = await axe(result.container);
       expect(results).toHaveNoViolations();
@@ -211,7 +211,7 @@ describe('NotificationDetail Page (multi recipient)', () => {
     expect(mockActionFn).toBeCalledWith('mocked-id');
   });
 
-  it('does not have basic accessibility issues rendering the page', async () => {
+  it.skip('does not have basic accessibility issues rendering the page', async () => {
     if (result) {
       const results = await axe(result.container);
       expect(results).toHaveNoViolations();
