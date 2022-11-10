@@ -2,10 +2,11 @@
 
 ### Start
 
-On the root project
+In project root run
 
 `yarn install`
-If you get authentication error, please use this command:
+
+If you get an authentication error, please use this command:
 `yarn config set "strict-ssl" false -g`
 
 Starting applications
@@ -15,14 +16,14 @@ Starting applications
 - `yarn start:login` to start the login section for citizens in local (url: localhost:3000)
 - `yarn start:landing` to start landing site in local (url: localhost:3000)
 
-You can also run `yarn start` in their own package folder:
+You can also run `yarn start` in the relative package folder:
 
 ```
 cd packages/<package-folder>
 yarn start
 ```
 
-To run test on all packages
+To run test for all packages
 `yarn test`
 
 To build all the monorepo
@@ -30,43 +31,44 @@ To build all the monorepo
 
 Other scripts
 
-- `yarn refresh:monorepo` reinstalls all the dipendencies of the whole workspace
+- `yarn refresh:monorepo` reinstalls all the dependencies of the whole workspace
 - `yarn clean:win` or `yarn clean:nx` deletes node_modules folder in the workspace (use win in you use Windows OS or nx if you use linux-based OS)
 
 ### Lerna
 
-This projects uses [lerna](https://github.com/lerna/lerna) and [craco](https://github.com/gsoft-inc/craco)
-These tools allows to handle a monorepo with multiple webapps which share common components.
-Grazie a questi tool è possibile avere un monorepo con webapp separate che condividono alcune componenti.
+This project uses [lerna](https://github.com/lerna/lerna) and [craco](https://github.com/gsoft-inc/craco)
+These tools allow to handle a monorepo with multiple webapps which share common components.
 The content of monorepo is:
 
 - packages/pn-commons component-library for Piattaforma Notifiche
+- packages/pn-validator utility library to perform validation tasks on custom schemas
 - packages/pn-pa-webapp app for public administration
-- packages/pn-personafisica-webapp app for citizens- packages/pn-personafisica-login login section for citizen app
+- packages/pn-personafisica-webapp app for citizens
+- packages/pn-personafisica-login login section for citizen app
 - packages/pn-landing-webapp landing site for Piattaforma Notifiche
 
 https://medium.com/geekculture/setting-up-monorepo-with-create-react-app-cb2cfa763b96
 
 
 ### Sonar
-You can run a task analysis with sonar-scanner by this script command
+You can run a task analysis with sonar-scanner using this script
 - `yarn sonar`
-To run it locally, you need to add env variable SONAR_TOKEN which contains the token of the project
-The analysis will bel available [there](https://sonarcloud.io/project/overview?id=pagopa_pn-frontend)
+To run it locally, you need to add env variable SONAR_TOKEN which contains the token of the project.
+The analysis will bel available [here](https://sonarcloud.io/project/overview?id=pagopa_pn-frontend)
 
 
 ### Version
 
-Use the command `yarn run version` from branch `main` to release a new version of the project. This script uses [lerna version](https://github.com/lerna/lerna/blob/main/commands/version/README.md).
+Use `yarn run version` from branch `main` to tag a new version of the project and generate the relative changelog. This script uses [lerna version](https://github.com/lerna/lerna/blob/main/commands/version/README.md). To generate a consistent changelog, we use [conventional-commit](https://www.conventionalcommits.org/en/v1.0.0/)
 
-The tool it automatically detects the modified packages starting from the previous version and updates files of dipendencies and then executes git commit and tag commands.
+The tool automatically detects the modified packages starting from the previous version and then executes git commit and tag.
 
 Examples:
 - `yarn run version 1.0.1` to directly specify a version number
 - `yarn run version patch` to update the project according SemVer mode
 - `yarn run version` to make choices from prompt
 
-When you have chosen desired version, end the procedure with command `git push origin --tags` to push the new tag.
+When you have chosen desired version, you can end the procedure with `git push origin --tags` which will push the new tag.
 
 For more details and options, please visit [github](https://github.com/lerna/lerna/tree/main/commands/version)
 
