@@ -172,7 +172,7 @@
         "title": "Destinatario",
         "fiscal-code-error": "Il codice fiscale inserito non è corretto",
         "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale. Inseriscine uno diverso.",
-        "identical-notice-codes-error": "Hai già utilizzato questo Codice avviso per questo Ente Creditore. Inseriscine uno diverso.",
+        "identical-notice-codes-error": "C’è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
         "too-long-denomination-error-PF": "La lunghezza totale di nome e cognome non può superare gli 80 caratteri",
