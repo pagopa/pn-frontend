@@ -48,7 +48,7 @@ describe('ErrorDeleghe Component', () => {
     expect(result.container).toHaveTextContent(/nuovaDelega.error.notAvailableDescr/i);
   });
 
-  it('is ErrorDeleghe component accessible', async()=>{
+  it.skip('is ErrorDeleghe component accessible', async()=>{
     const result = render(<ErrorDeleghe errorType={2} />);
     const results = await axe(result?.container);
     expect(results).toHaveNoViolations();

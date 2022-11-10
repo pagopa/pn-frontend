@@ -1,0 +1,35 @@
+version: 0.2
+env:
+  secrets-manager:
+    SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      #install yarn
+      - echo installing yarn
+      - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+      - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+      - apt install --no-install-recommends yarn
+  pre_build:
+    commands:
+      - echo launching yarn install...
+      - yarn install
+  build:
+    commands:
+      - echo Running tests with coverage...
+      - yarn test:coverage
+      - |
+        BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
+        if [[ "$BRANCH_NAME" =~ ^(main|develop)$ ]]; then
+            SONAR_OPTS="-Dsonar.branch.name=$BRANCH_NAME"
+        else 
+            SONAR_OPTS="-Dsonar.pullrequest.key=$PR_NUM -Dsonar.pullrequest.branch=$BRANCH_NAME -Dsonar.pullrequest.base=$BRANCH_TARGET"
+        fi
+      - echo Running sonar task...
+      - yarn run sonar --SONAR_OPTS
+      # - sleep 5
+      # - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
+      # - cat result.json
+      # - if [ $(jq -r '.projectStatus.status' result.json) = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ;fi

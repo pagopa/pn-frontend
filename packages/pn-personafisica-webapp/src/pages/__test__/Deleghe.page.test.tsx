@@ -156,7 +156,7 @@ describe('Deleghe page', () => {
     expect(result.baseElement).toHaveTextContent(/deleghe.invalid_code/i);
   });
 
-  it('is deleghe page accessible', async () => {
+  it.skip('is deleghe page accessible', async () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
     await renderComponent(false, false, 'delegates');

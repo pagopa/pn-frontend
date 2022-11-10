@@ -63,17 +63,19 @@ type Props = {
   isCompleted: boolean;
 };
 
+const emptyFileData = {
+  uint8Array: undefined,
+  sha256: { hashBase64: '', hashHex: '' },
+  name: '',
+  size: 0,
+};
+
 const newPaymentDocument = (id: string, name: string): NewNotificationDocument => ({
   id,
   idx: 0,
   name,
   contentType: 'application/pdf',
-  file: {
-    uint8Array: undefined,
-    sha256: { hashBase64: '', hashHex: '' },
-    name: '',
-    size: 0,
-  },
+  file: emptyFileData,
   ref: {
     key: '',
     versionToken: '',
@@ -196,14 +198,24 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
     }),
   });
 
+  const getValidationSchemaParameters = () => {
+    // eslint-disable-next-line functional/no-let
+    let parameters = {};
+
+    if (notification.paymentMode !== PaymentModel.NOTHING) {
+      parameters = { pagoPaForm: paymentDocumentSchema.required() };
+
+      if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24) {
+        parameters = { ...parameters, f24standard: paymentDocumentSchema.required() };
+      } else if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE) {
+        parameters = { ...parameters, f24flatRate: paymentDocumentSchema.required() };
+      }
+    }
+    return parameters;
+  };
+
   const validationSchema = yup.lazy((obj) =>
-    yup.object(
-      _.mapValues(obj, () =>
-        yup.object({
-          pagoPaForm: paymentDocumentSchema.required(),
-        })
-      )
-    )
+    yup.object(_.mapValues(obj, () => yup.object(getValidationSchemaParameters())))
   );
 
   const formik = useFormik({
@@ -239,12 +251,19 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
     });
   };
 
-  const removeFileHandler = async (id: string) => {
-    await formik.setFieldValue(`${id}.ref`, {
-      key: '',
-      versionToken: '',
+  const removeFileHandler = async (
+    id: string,
+    taxId: string,
+    paymentType: 'pagoPaForm' | 'f24flatRate' | 'f24standard'
+  ) => {
+    await formik.setFieldValue(id, {
+      ...formik.values[taxId][paymentType],
+      file: emptyFileData,
+      ref: {
+        key: '',
+        versionToken: '',
+      },
     });
-    await formik.setFieldValue(`${id}.file`, '');
   };
 
   return (
@@ -270,24 +289,24 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
                 id={`${recipient.taxId}.pagoPaForm`}
                 title={`${t('attach-pagopa-notice')}*`}
                 onFileUploaded={fileUploadedHandler}
-                onRemoveFile={removeFileHandler}
+                onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPaForm')}
                 fileUploaded={formik.values[recipient.taxId].pagoPaForm}
               />
               {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
                 <PaymentBox
                   id={`${recipient.taxId}.f24flatRate`}
-                  title={t('attach-f24-flatrate')}
+                  title={`${t('attach-f24-flatrate')}*`}
                   onFileUploaded={fileUploadedHandler}
-                  onRemoveFile={removeFileHandler}
+                  onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24flatRate')}
                   fileUploaded={formik.values[recipient.taxId].f24flatRate}
                 />
               )}
               {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
                 <PaymentBox
                   id={`${recipient.taxId}.f24standard`}
-                  title={t('attach-f24')}
+                  title={`${t('attach-f24')}*`}
                   onFileUploaded={fileUploadedHandler}
-                  onRemoveFile={removeFileHandler}
+                  onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24standard')}
                   fileUploaded={formik.values[recipient.taxId].f24standard}
                 />
               )}
