@@ -103,7 +103,7 @@ const NotificationDetailTimelineStep = ({
   if (timelineStep.steps) {
     /* eslint-disable functional/immutable-data */
     legalFactsIds = timelineStep.steps.reduce((arr, s) => {
-      if (s.legalFactsIds) {
+      if (s.legalFactsIds && (collapsed || (!collapsed && s.hidden))) {
         return arr.concat(s.legalFactsIds.map((lf) => ({ file: lf, step: s })));
       }
       return arr;
@@ -148,7 +148,7 @@ const NotificationDetailTimelineStep = ({
           <Typography color="text.primary" variant="caption">
             {notificationStatusInfos.description}
           </Typography>
-          {collapsed && legalFactsIds && legalFactsIds.length > 0 &&
+          {legalFactsIds && legalFactsIds.length > 0 &&
             legalFactsIds.map((lf) => (
               <ButtonNaked
                 key={lf.file.key}

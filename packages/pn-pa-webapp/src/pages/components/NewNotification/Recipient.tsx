@@ -150,6 +150,10 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
             is: true,
             then: yup.string().required(tc('required-field')),
           }),
+          municipality: yup.string().when('showPhysicalAddress', {
+            is: true,
+            then: yup.string().required(tc('required-field')),
+          }),
           province: yup.string().when('showPhysicalAddress', {
             is: true,
             then: yup.string().required(tc('required-field')),
@@ -269,7 +273,7 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
       validateOnBlur={false}
       validateOnMount
     >
-      {({ values, setFieldValue, touched, handleBlur, errors, isValid /* setValues */ }) => (
+      {({ values, setFieldValue, touched, setFieldTouched, handleBlur, errors, isValid /* setValues */ }) => (
         <Form>
           <NewNotificationCard noPaper isContinueDisabled={!isValid} previousStepLabel={t('back-to-preliminary-informations')}
               previousStepOnClick={() => handlePreviousStep(values)}>
@@ -292,9 +296,13 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
                     <Delete
                       data-testid="DeleteRecipientIcon"
                       onClick={() => {
+                        if(errors && errors.recipients && errors.recipients[index]) {
+                          setFieldTouched(`recipients.${index}`, false, false);
+                        }
                         setFieldValue(
                           'recipients',
-                          values.recipients.filter((_, j) => index !== j)
+                          values.recipients.filter((_, j) => index !== j),
+                          true
                         );
                       }}
                     />
