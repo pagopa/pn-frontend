@@ -5,7 +5,7 @@ import {
   Typography
 } from "@mui/material";
 
-const PrivacyPolicyPage = () => (
+const TermsOfServicePage = () => (
     <>
       <Container
         maxWidth="xl"
@@ -361,4 +361,4 @@ const PrivacyPolicyPage = () => (
       </Container>
     </>);
 
-export default PrivacyPolicyPage;
+export default TermsOfServicePage;

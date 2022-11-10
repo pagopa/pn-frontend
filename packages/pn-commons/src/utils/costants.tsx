@@ -97,18 +97,18 @@ export const preLoginLinks = (
       title: getLocalizedOrDefaultLabel('common', 'footer.resources', 'Risorse'),
       links: [
         {
-          label: 'Privacy Policy',
+          label: 'Informativa Privacy',
           href: privacyPolicyHref ?? `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
           ariaLabel: `${getLocalizedOrDefaultLabel(
             'common',
             'footer.go-to',
             'Vai al link'
-          )}: Privacy Policy`,
+          )}: Informativa Privacy`,
           linkType: 'internal',
         },
         {
           ...getFooterLinkLabels('certifications', 'Certificazioni'),
-          href: 'https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf',
+          href: 'https://www.pagopa.it/static/307f84e95cb44e962922833037b8ef2d/Certificazione-ISO-27001.pdf',
           ariaLabel: 'Vai al link: Certificazioni',
           linkType: 'internal',
         },
@@ -228,13 +228,13 @@ export const postLoginLinks = (
   termsOfServiceHref?: string
 ): Array<FooterLinksType> => [
   {
-    label: 'Privacy policy',
+    label: 'Informativa Privacy',
     href: privacyPolicyHref ?? `${window.location.origin}${PRIVACY_LINK_RELATIVE_PATH}`,
     ariaLabel: `${getLocalizedOrDefaultLabel(
       'common',
       'footer.go-to',
       'Vai al link'
-    )}: Privacy Policy`,
+    )}: Informativa Privacy`,
     linkType: 'internal',
   },
   {

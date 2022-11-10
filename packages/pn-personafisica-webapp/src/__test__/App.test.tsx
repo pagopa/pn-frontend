@@ -4,6 +4,8 @@ import MockAdapter from 'axios-mock-adapter';
 import { act, screen } from '@testing-library/react';
 import { Suspense } from 'react';
 import * as redux from 'react-redux';
+
+/* eslint-disable import/order */
 import { axe, render } from './test-utils';
 import App from '../App';
 import i18n from '../i18n';
@@ -13,8 +15,7 @@ import * as sidemenuActions from '../redux/sidemenu/actions';
 // mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch; 
 // questo totale viene verificato in un test
 jest.mock('../navigation/SessionGuard', () => () => <div>Session Guard</div>);
-
-
+jest.mock('../navigation/ToSGuard', () => () => <div>ToS Guard</div>);
 
 /**
  * Componente che mette App all'interno di un Suspense, 

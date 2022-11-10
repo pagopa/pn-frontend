@@ -21,6 +21,7 @@ import {
   GET_USER_GROUPS,
 } from './notifications.routes';
 
+
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };

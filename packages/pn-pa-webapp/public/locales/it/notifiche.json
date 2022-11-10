@@ -153,6 +153,7 @@
     "drag-doc": "Trascina qui il documento",
     "steps": {
       "preliminary-informations": {
+        "fetch-groups-error": "Non siamo riusciti a recuperare i dati che servono per poter creare una nuova notifica.",
         "title": "Informazioni preliminari",
         "protocol-number": "Numero di protocollo",
         "subject": "Oggetto della notifica",
