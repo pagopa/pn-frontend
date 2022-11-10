@@ -25,6 +25,7 @@ const populateForm = async (form: HTMLFormElement) => {
   fireEvent.click(checkbox!);
   await testInput(form, `recipients[0].address`, newNotification.recipients[0].address);
   await testInput(form, `recipients[0].houseNumber`, newNotification.recipients[0].houseNumber);
+  await testInput(form, `recipients[0].municipality`, newNotification.recipients[0].municipality);
   await testInput(form, `recipients[0].zip`, newNotification.recipients[0].zip);
   await testInput(form, `recipients[0].province`, newNotification.recipients[0].province);
   await testInput(form, `recipients[0].foreignState`, newNotification.recipients[0].foreignState);
