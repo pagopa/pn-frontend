@@ -1,5 +1,3 @@
-/* eslint-disable functional/no-let */
-
 import { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
@@ -19,11 +17,13 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
+
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
 import { NewNotificationRecipient } from '../../../models/NewNotification';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
+import { getDuplicateValuesByKeys } from "../../../utils/notification.utility";
 import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
@@ -49,19 +49,6 @@ const singleRecipient = {
   showDigitalDomicile: false,
   showPhysicalAddress: false,
 };
-
-function getDuplicateValuesByKeys<T>(recipientsList: Array<T>, keys: Array<keyof T>): Array<string> {
-  const getIUV = (item: T) => {
-    let IUV = '';
-    for (let i = 0; i < keys.length; i++) {
-      IUV += item[keys[i]] ?? '';
-    }
-    return IUV;
-  };
-  return recipientsList
-    .map((recipient) => getIUV(recipient))
-    .filter((iuv, i, iuvList) => iuvList.indexOf(iuv) !== i);
-}
 
 type Props = {
   onConfirm: () => void;

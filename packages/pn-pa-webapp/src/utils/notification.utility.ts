@@ -1,3 +1,5 @@
+/* eslint-disable functional/no-let */
+
 import _ from 'lodash';
 import { NotificationDetailRecipient, NotificationDetailDocument, RecipientType } from '@pagopa-pn/pn-commons';
 
@@ -135,4 +137,19 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
   }
   /* eslint-enable functional/immutable-data */
   return newNotificationParsed;
+}
+
+export function getDuplicateValuesByKeys<T>(objectsList: Array<T>, keys: Array<keyof T>): Array<string> {
+  const getValue = (item: T) => {
+    let valueByKeys = '';
+    for (let i = 0; i < keys.length; i++) {
+      valueByKeys += item[keys[i]] ?? '';
+    }
+    return valueByKeys;
+  };
+
+  return objectsList
+    .map((recipient) => getValue(recipient))
+    .filter((value, i, valueList) => valueList.indexOf(value) !== i)
+    .filter((value, i, valueList) => valueList.indexOf(value) === i);
 }

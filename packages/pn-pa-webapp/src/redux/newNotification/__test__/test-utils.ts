@@ -229,9 +229,7 @@ export const newNotificationDTO: NewNotificationDTO = {
 };
 
 export const newNotificationWithEmptyAddress: NewNotification = {
-  paProtocolNumber: '',
-  subject: '',
-  cancelledIun: '',
+  ...newNotification,
   recipients: [{
     idx: 0,
     taxId: 'MRARSS90P08H501Q',
@@ -249,26 +247,10 @@ export const newNotificationWithEmptyAddress: NewNotification = {
     province: 'province',
     foreignState: 'foreignState',
   }],
-  documents: [newNotificationDocument],
-  payment: {
-    'MRARSS90P08H501Q': {
-      pagoPaForm: {...newNotificationPagoPa},
-    },
-    'SRAGLL00P48H501U': {
-      pagoPaForm: {...newNotificationPagoPa},
-      f24standard: {...newNotificationF24Standard},
-    },
-  },
-  physicalCommunicationType: '' as PhysicalCommunicationType,
-  paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
-  group: '',
-  notificationFeePolicy: '' as NotificationFeePolicy,
 };
 
 export const newNotificationDTOWithUndefinedAddress: NewNotificationDTO = {
-  paProtocolNumber: '',
-  subject: '',
-  cancelledIun: '',
+  ...newNotificationDTO,
   recipients: [
     {
       taxId: 'MRARSS90P08H501Q',
@@ -296,20 +278,4 @@ export const newNotificationDTOWithUndefinedAddress: NewNotificationDTO = {
       },
     }
   ],
-  documents: [
-    {
-      title: 'mocked-name',
-      digests: {
-        sha256: 'mocked-sha256',
-      },
-      contentType: 'text/plain',
-      ref: {
-        key: '',
-        versionToken: '',
-      },
-    }
-  ],
-  physicalCommunicationType: '' as PhysicalCommunicationType,
-  group: '',
-  notificationFeePolicy: '' as NotificationFeePolicy,
 };
