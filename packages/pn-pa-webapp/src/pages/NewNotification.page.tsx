@@ -172,6 +172,7 @@ const NewNotification = () => {
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
                 recipientsData={notification.recipients}
+                notification={notification}
               />
             )}
             {activeStep === 2 && (

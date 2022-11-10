@@ -58,7 +58,7 @@ describe('Recipient Component', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     // render component
     await act(async () => {
-      result = render(<Recipient onConfirm={() => {}} />);
+      result = render(<Recipient notification={newNotification} onConfirm={() => {}} />);
     });
   });
 
