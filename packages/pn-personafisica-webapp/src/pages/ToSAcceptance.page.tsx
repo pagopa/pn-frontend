@@ -61,7 +61,7 @@ const TermsOfService = () => {
 
   return (
     <LoadingPageWrapper isInitialized>
-      <Grid container justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
+      <Grid container height="100%" justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
         <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
           <TOSAgreement
             productName={t('tos.title', 'Piattaforma Notifiche')}
