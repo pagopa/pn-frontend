@@ -122,6 +122,7 @@ export const newNotification: NewNotification = {
   physicalCommunicationType: '' as PhysicalCommunicationType,
   paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
   group: '',
+  taxonomyCode: '010801N',
   notificationFeePolicy: '' as NotificationFeePolicy,
 };
 
@@ -216,5 +217,6 @@ export const newNotificationDTO: NewNotificationDTO = {
   ],
   physicalCommunicationType: '' as PhysicalCommunicationType,
   group: '',
+  taxonomyCode: '010801N',
   notificationFeePolicy: '' as NotificationFeePolicy,
 };

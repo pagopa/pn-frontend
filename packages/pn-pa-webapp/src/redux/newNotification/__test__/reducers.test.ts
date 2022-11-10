@@ -34,6 +34,7 @@ const initialState = {
     physicalCommunicationType: '',
     paymentMode: '',
     group: '',
+    taxonomyCode: '',
     notificationFeePolicy: '',
   },
   groups: [],
@@ -87,6 +88,7 @@ describe('New notification redux state tests', () => {
       abstract: '',
       physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
       group: '',
+      taxonomyCode: '010801N',
       paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
     };
     const action = store.dispatch(setPreliminaryInformations(preliminaryInformations));
