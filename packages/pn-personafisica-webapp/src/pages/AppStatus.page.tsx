@@ -1,14 +1,15 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Stack, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { 
   ApiErrorWrapper, EmptyState, TitleBox, useIsMobile, KnownFunctionality, 
-  AppStatusBar, DesktopDowntimeLog, MobileDowntimeLog, formatDateTime 
+  AppStatusBar, DesktopDowntimeLog, MobileDowntimeLog, formatDateTime, GetDowntimeHistoryParams, PaginationData, CustomPagination 
 } from '@pagopa-pn/pn-commons';
 import { useDownloadDocument } from '../component/AppStatus/useDownloadDocument';
 import { APP_STATUS_ACTIONS, getCurrentAppStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
+import { clearPagination, setPagination } from '../redux/appStatus/reducers';
 
 
 /* eslint-disable-next-line arrow-body-style */
@@ -16,6 +17,8 @@ const AppStatus = () => {
   const dispatch = useAppDispatch();
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const downtimeLog = useAppSelector((state: RootState) => state.appStatus.downtimeLogPage);
+  const paginationData = useAppSelector((state: RootState) => state.appStatus.pagination);
+  const [isInitialized, setIsInitialized] = useState(false);
   const theme = useTheme();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['appStatus']);
@@ -26,20 +29,46 @@ const AppStatus = () => {
   }, [dispatch, getCurrentAppStatus]);
 
   const fetchDowntimeLog = useCallback(() => {
-    void dispatch(getDowntimeLogPage({ 
+    console.log("redefining fetchDowntimeLog");
+    const fetchParams: GetDowntimeHistoryParams = { 
       startDate: "1900-01-01T00:00:00Z",
       functionality: [KnownFunctionality.NotificationCreate, KnownFunctionality.NotificationVisualization, KnownFunctionality.NotificationWorkflow],
-    }));
-  }, [dispatch, getDowntimeLogPage]);
+      size: String(paginationData.size),
+      page: paginationData.resultPages[paginationData.page],
+    };
+    void dispatch(getDowntimeLogPage(fetchParams));
+  }, [dispatch, getDowntimeLogPage, paginationData.page, paginationData.size]);
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback(
     (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)), 
   [dispatch, getDowntimeLegalFactDocumentDetails]);
 
   useEffect(() => {
-    fetchCurrentStatus();
-    fetchDowntimeLog();
-  }, [fetchCurrentStatus, fetchDowntimeLog]);
+    if (!isInitialized) {
+      console.log("clear pagination");
+      dispatch(clearPagination());
+      setIsInitialized(true);
+    }
+  }, [isInitialized]);
+
+  /*
+   * whenever fetchDowntimeLog changes (e.g. when pagination parameters change)
+   * I decide to perform the status API call along with that fo the downtime log
+   * to bring the user status information as updated as possible.
+   * -------------------------------
+   * Carlos Lombardi, 2022.11.11
+   */
+  useEffect(() => {
+    if (isInitialized) {
+      console.log("fetch info");
+      fetchCurrentStatus();
+      fetchDowntimeLog();
+    }
+  }, [fetchCurrentStatus, fetchDowntimeLog, isInitialized]);
+
+  const handleChangePage = (paginationData: PaginationData) => {
+    dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
+  };
 
   const lastCheckTimestampFormatted = useMemo(() => {
     if (currentStatus) {
@@ -50,7 +79,15 @@ const AppStatus = () => {
     }
   }, [currentStatus]);
 
-  return <Box p={3}>
+  // resultPages includes one element per page, *including the first page*
+  // check the comments in the reducer
+  const totalElements = paginationData.size * paginationData.resultPages.length;
+  // paginagion will show just a single page number, along with the arrows
+  // because the lookup size of the API is just one, there is no (easy) way to know 
+  // whether there is more than one page forward
+  const pagesToShow = [paginationData.page + 1];    
+
+return <Box p={3}>
     <Stack direction="column">
 
       {/* Titolo status */}
@@ -91,6 +128,17 @@ const AppStatus = () => {
                   />
               )
             : <EmptyState disableSentimentDissatisfied enableSentimentSatisfied emptyMessage={t('downtimeList.emptyMessage')} />      
+        }
+        { downtimeLog && downtimeLog.downtimes.length > 0 && 
+          <CustomPagination
+            paginationData={{
+              size: paginationData.size,
+              page: paginationData.page,
+              totalElements,
+            }}
+            onPageRequest={handleChangePage}
+            pagesToShow={pagesToShow}
+          />        
         }
       </ApiErrorWrapper>
     </Stack>

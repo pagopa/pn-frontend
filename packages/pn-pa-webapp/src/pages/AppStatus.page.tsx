@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Stack, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { 
@@ -18,6 +18,7 @@ const AppStatus = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const downtimeLog = useAppSelector((state: RootState) => state.appStatus.downtimeLogPage);
   const paginationData = useAppSelector((state: RootState) => state.appStatus.pagination);
+  const [isInitialized, setIsInitialized] = useState(false);
   const theme = useTheme();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['appStatus']);
@@ -41,6 +42,13 @@ const AppStatus = () => {
     (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)), 
   [dispatch, getDowntimeLegalFactDocumentDetails]);
 
+  useEffect(() => {
+    if (!isInitialized) {
+      dispatch(clearPagination());
+      setIsInitialized(true);
+    }
+  }, [isInitialized]);
+
   /*
    * whenever fetchDowntimeLog changes (e.g. when pagination parameters change)
    * I decide to perform the status API call along with that fo the downtime log
@@ -49,13 +57,11 @@ const AppStatus = () => {
    * Carlos Lombardi, 2022.11.11
    */
   useEffect(() => {
-    fetchCurrentStatus();
-    fetchDowntimeLog();
-  }, [fetchCurrentStatus, fetchDowntimeLog]);
-
-  useEffect(() => {
-    dispatch(clearPagination());
-  }, []);
+    if (isInitialized) {
+      fetchCurrentStatus();
+      fetchDowntimeLog();
+    }
+  }, [fetchCurrentStatus, fetchDowntimeLog, isInitialized]);
 
   const handleChangePage = (paginationData: PaginationData) => {
     dispatch(setPagination({ size: paginationData.size, page: paginationData.page }));
