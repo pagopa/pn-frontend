@@ -16,6 +16,7 @@ export const dataRegex = {
     /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i,
   pIva: /^\d{11}$/,
   isoDate: /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d{1,3})?)Z$/,
+  taxonomyCode: /^(\d{6}[A-Z]{1})$/,
 };
 
 /**

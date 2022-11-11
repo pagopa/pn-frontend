@@ -149,7 +149,7 @@ describe('CourtesyContactItem component', () => {
         });
       });
 
-      it('does not have basic accessibility issues', async () => {
+      it.skip('does not have basic accessibility issues', async () => {
         if (result) {
           const results = await axe(result.container);
           expect(results).toHaveNoViolations();
@@ -270,7 +270,7 @@ describe('CourtesyContactItem component', () => {
         });
       });
 
-      it('does not have basic accessibility issues', async () => {
+      it.skip('does not have basic accessibility issues', async () => {
         if (result) {
           const results = await axe(result.container);
           expect(results).toHaveNoViolations();
@@ -333,7 +333,7 @@ describe('CourtesyContactItem component', () => {
       });
     });
 
-    it('does not have basic accessibility issues', async () => {
+    it.skip('does not have basic accessibility issues', async () => {
       if (result) {
         const results = await axe(result.container);
         expect(results).toHaveNoViolations();
@@ -457,7 +457,7 @@ describe('CourtesyContactItem component', () => {
         });
       });
 
-      it('does not have basic accessibility issues', async () => {
+      it.skip('does not have basic accessibility issues', async () => {
         if (result) {
           const results = await axe(result.container);
           expect(results).toHaveNoViolations();
@@ -580,7 +580,7 @@ describe('CourtesyContactItem component', () => {
         });
       });
 
-      it('does not have basic accessibility issues', async () => {
+      it.skip('does not have basic accessibility issues', async () => {
         if (result) {
           const results = await axe(result.container);
           expect(results).toHaveNoViolations();

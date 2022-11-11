@@ -45,7 +45,6 @@ const AppStatus = () => {
 
   useEffect(() => {
     if (!isInitialized) {
-      console.log("clear pagination");
       dispatch(clearPagination());
       setIsInitialized(true);
     }
@@ -60,7 +59,6 @@ const AppStatus = () => {
    */
   useEffect(() => {
     if (isInitialized) {
-      console.log("fetch info");
       fetchCurrentStatus();
       fetchDowntimeLog();
     }
