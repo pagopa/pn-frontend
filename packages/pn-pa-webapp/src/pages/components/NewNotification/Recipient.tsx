@@ -23,7 +23,7 @@ import { useAppDispatch } from '../../../redux/hooks';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
-import { getDuplicateValuesByKeys } from "../../../utils/notification.utility";
+import { getDuplicateValuesByKeys } from '../../../utils/notification.utility';
 import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
@@ -63,16 +63,18 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
     keyPrefix: 'new-notification.steps.recipient',
   });
   const { t: tc } = useTranslation(['common']);
-
-  const initialValues = recipientsData && recipientsData.length > 0
-  ? {
-      recipients: recipientsData.map((recipient, index) => ({
-        ...recipient,
-        idx: index,
-        id: `recipient.${index}`,
-      })),
-    }
-  : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
+  // TODO all validation code shoduld be put in a different file in order to make this file more readable
+  // moreover cross-validation between form items is resulting in bad input performance
+  const initialValues =
+    recipientsData && recipientsData.length > 0
+      ? {
+          recipients: recipientsData.map((recipient, index) => ({
+            ...recipient,
+            idx: index,
+            id: `recipient.${index}`,
+          })),
+        }
+      : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
   const buildRecipientValidationObject = () => {
     const validationObject = {
@@ -87,15 +89,12 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
           test(value) {
             const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
             const isAcceptableLength =
-              (value || '').length + ((this.parent.lastName as string) || '').length <=
-              maxLength;
+              (value || '').length + ((this.parent.lastName as string) || '').length <= maxLength;
             if (isAcceptableLength) {
               return true;
             } else {
               // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
-              const messageKey = `too-long-denomination-error-${
-                this.parent.recipientType || 'PF'
-              }`;
+              const messageKey = `too-long-denomination-error-${this.parent.recipientType || 'PF'}`;
               return this.createError({ message: t(messageKey), path: this.path });
             }
           },
@@ -155,7 +154,7 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
       }),
     };
 
-    if(paymentMode !== PaymentModel.NOTHING) {
+    if (paymentMode !== PaymentModel.NOTHING) {
       return {
         ...validationObject,
         // .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
@@ -169,16 +168,14 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
           .required(tc('required-field')),
       };
     }
-    
+
     return validationObject;
   };
 
   const validationSchema = yup.object({
     recipients: yup
       .array()
-      .of(
-        yup.object(buildRecipientValidationObject())
-      )
+      .of(yup.object(buildRecipientValidationObject()))
       .test('identicalTaxIds', t('identical-fiscal-codes-error'), (values) => {
         if (values) {
           const duplicatesTaxIds = getDuplicateValuesByKeys(values, ['taxId']);
@@ -203,40 +200,37 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
         }
         return true;
       })
-      .test('identicalIUV', t('identical-fiscal-codes-error'),
-        (values) => {
-          if (values) {
-            const duplicateIUVs = getDuplicateValuesByKeys(values, ['creditorTaxId', 'noticeCode']);
-            if (duplicateIUVs.length > 0) {
-              const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
-              values.forEach((value, i) => {
-                if (
-                  value.creditorTaxId
-                  && value.noticeCode
-                  && duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
-                ) {
-                  // eslint-disable-next-line functional/immutable-data
-                  errors.push(
-                    new yup.ValidationError(
-                      t('identical-notice-codes-error'),
-                      value,
-                      `recipients[${i}].noticeCode`
-                    ),
-                    new yup.ValidationError(
-                      ' ',
-                      value,
-                      `recipients[${i}].creditorTaxId`
-                    )
-                  );
-                }
-              });
-              return errors.length === 0 ? true : new yup.ValidationError(errors);
-            } else {
-              return true;
-            }
+      // TODO the form needs some typing definition (any should not be allowed)
+      // here we have any because we add or remove creditorTaxId and noticeCode to the form based on the chosen paymentModel
+      .test('identicalIUV', t('identical-fiscal-codes-error'), (values: any) => {
+        if (values && paymentMode !== PaymentModel.NOTHING) {
+          const duplicateIUVs = getDuplicateValuesByKeys(values, ['creditorTaxId', 'noticeCode']);
+          if (duplicateIUVs.length > 0) {
+            const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
+            values.forEach((value: { creditorTaxId: string; noticeCode: string }, i: number) => {
+              if (
+                value.creditorTaxId &&
+                value.noticeCode &&
+                duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
+              ) {
+                // eslint-disable-next-line functional/immutable-data
+                errors.push(
+                  new yup.ValidationError(
+                    t('identical-notice-codes-error'),
+                    value,
+                    `recipients[${i}].noticeCode`
+                  ),
+                  new yup.ValidationError(' ', value, `recipients[${i}].creditorTaxId`)
+                );
+              }
+            });
+            return errors.length === 0 ? true : new yup.ValidationError(errors);
           } else {
             return true;
           }
+        } else {
+          return true;
+        }
       }),
   });
 
@@ -289,7 +283,10 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
     }
   };
 
-  const handleAddRecipient = (values: { recipients: Array<NewNotificationRecipient> }, setFieldValue: any) => {
+  const handleAddRecipient = (
+    values: { recipients: Array<NewNotificationRecipient> },
+    setFieldValue: any
+  ) => {
     const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx;
     setFieldValue('recipients', [
       ...values.recipients,
@@ -312,7 +309,8 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
     }
   };
 
-  const paymentReferenceData = (data: ReactNode) => paymentMode === PaymentModel.NOTHING ? '' : data;
+  const paymentReferenceData = (data: ReactNode) =>
+    paymentMode === PaymentModel.NOTHING ? '' : data;
 
   return (
     <Formik
@@ -323,10 +321,22 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
       validateOnBlur={false}
       validateOnMount
     >
-      {({ values, setFieldValue, touched, setFieldTouched, handleBlur, errors, isValid /* setValues */ }) => (
+      {({
+        values,
+        setFieldValue,
+        touched,
+        setFieldTouched,
+        handleBlur,
+        errors,
+        isValid /* setValues */,
+      }) => (
         <Form>
-          <NewNotificationCard noPaper isContinueDisabled={!isValid} previousStepLabel={t('back-to-preliminary-informations')}
-              previousStepOnClick={() => handlePreviousStep(values)}>
+          <NewNotificationCard
+            noPaper
+            isContinueDisabled={!isValid}
+            previousStepLabel={t('back-to-preliminary-informations')}
+            previousStepOnClick={() => handlePreviousStep(values)}
+          >
             {values.recipients.map((recipient, index) => (
               <Paper
                 key={recipient.id}
@@ -346,7 +356,7 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
                     <Delete
                       data-testid="DeleteRecipientIcon"
                       onClick={() => {
-                        if(errors && errors.recipients && errors.recipients[index]) {
+                        if (errors && errors.recipients && errors.recipients[index]) {
                           setFieldTouched(`recipients.${index}`, false, false);
                         }
                         setFieldValue(
