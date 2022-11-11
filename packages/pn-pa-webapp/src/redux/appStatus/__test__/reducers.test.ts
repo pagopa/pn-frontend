@@ -11,7 +11,7 @@ describe('App Status redux state tests', () => {
 
   it('Initial state', () => {
     const state = store.getState().appStatus;
-    expect(state).toEqual({});
+    expect(state).toEqual({pagination: { size: 10, page: 0, resultPages: ["0"] }});
   });
 
   it('Should be able to fetch the current status', async () => {

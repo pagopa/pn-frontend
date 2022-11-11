@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
-import { dataRegex } from "@pagopa-pn/pn-commons";
 import { Validator } from "@pagopa-pn/pn-validator";
+import { dataRegex } from "../utils";
 
 /* ------------------------------------------------------------------------
    Types for specific attributes
