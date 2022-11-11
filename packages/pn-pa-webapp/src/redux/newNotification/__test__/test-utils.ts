@@ -21,11 +21,11 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     lastName: 'Rossi',
     recipientType: RecipientType.PF,
     creditorTaxId: '12345678910',
-    noticeCode: '123456789123456789',
+    noticeCode: '123456789123456788',
     type: DigitalDomicileType.PEC,
     digitalDomicile: 'mocked@mail.it',
     address: 'address',
-    houseNumber: 'houseNumber',
+    houseNumber: '1',
     zip: 'zip',
     municipality: 'municipality',
     province: 'province',
@@ -41,12 +41,12 @@ const newNotificationRecipients: Array<NewNotificationRecipient> = [
     noticeCode: '123456789123456789',
     type: DigitalDomicileType.PEC,
     digitalDomicile: 'mocked@mail.it',
-    address: '',
-    houseNumber: '',
-    zip: '',
-    municipality: '',
-    province: '',
-    foreignState: '',
+    address: 'address',
+    houseNumber: '2',
+    zip: 'zip',
+    municipality: 'municipality',
+    province: 'province',
+    foreignState: 'foreignState',
   },
 ];
 
@@ -140,7 +140,7 @@ export const newNotificationDTO: NewNotificationDTO = {
         address: 'mocked@mail.it',
       },
       physicalAddress: {
-        address: 'address houseNumber',
+        address: 'address 1',
         addressDetails: undefined,
         at: undefined,
         zip: 'zip',
@@ -151,7 +151,7 @@ export const newNotificationDTO: NewNotificationDTO = {
       },
       payment: {
         creditorTaxId: '12345678910',
-        noticeCode: '123456789123456789',
+        noticeCode: '123456789123456788',
         pagoPaForm: {
           title: 'mocked-name',
           digests: {
@@ -173,7 +173,16 @@ export const newNotificationDTO: NewNotificationDTO = {
         type: DigitalDomicileType.PEC,
         address: 'mocked@mail.it',
       },
-      physicalAddress: undefined,
+      physicalAddress:  {
+         address: "address 2",
+         addressDetails: undefined,
+         at: undefined,
+         foreignState: "foreignState",
+         municipality: "municipality",
+         municipalityDetails: undefined,
+         province: "province",
+         zip: "zip",
+      },
       payment: {
         creditorTaxId: '12345678910',
         noticeCode: '123456789123456789',
@@ -219,4 +228,56 @@ export const newNotificationDTO: NewNotificationDTO = {
   group: '',
   taxonomyCode: '010801N',
   notificationFeePolicy: '' as NotificationFeePolicy,
+};
+
+export const newNotificationWithEmptyAddress: NewNotification = {
+  ...newNotification,
+  recipients: [{
+    idx: 0,
+    taxId: 'MRARSS90P08H501Q',
+    firstName: 'Mario',
+    lastName: 'Rossi',
+    recipientType: RecipientType.PF,
+    creditorTaxId: '12345678910',
+    noticeCode: '123456789123456788',
+    type: DigitalDomicileType.PEC,
+    digitalDomicile: 'mocked@mail.it',
+    address: '',
+    houseNumber: '',
+    zip: 'zip',
+    municipality: 'municipality',
+    province: 'province',
+    foreignState: 'foreignState',
+  }],
+};
+
+export const newNotificationDTOWithUndefinedAddress: NewNotificationDTO = {
+  ...newNotificationDTO,
+  recipients: [
+    {
+      taxId: 'MRARSS90P08H501Q',
+      denomination: 'Mario Rossi',
+      recipientType: RecipientType.PF,
+      digitalDomicile: {
+        type: DigitalDomicileType.PEC,
+        address: 'mocked@mail.it',
+      },
+      physicalAddress: undefined,
+      payment: {
+        creditorTaxId: '12345678910',
+        noticeCode: '123456789123456788',
+        pagoPaForm: {
+          title: 'mocked-name',
+          digests: {
+            sha256: 'mocked-pa-sha256',
+          },
+          contentType: 'text/plain',
+          ref: {
+            key: '',
+            versionToken: '',
+          },
+        },
+      },
+    }
+  ],
 };
