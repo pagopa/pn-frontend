@@ -295,7 +295,7 @@ Resources:
           AcmCertificateArn: !Ref WebCertificateArn
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
-        WebACLId: !GetAtt ApiWafWebAcl.Arn
+#        WebACLId: !GetAtt ApiWafWebAcl.Arn
 
   DefaultHeaderPolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy
@@ -394,55 +394,55 @@ Resources:
       Name: !Sub "${AWS::StackName}-RewriteDefaultIndexRequest"
 
   # AWS WAF Web ACLs for CloudFront
-  ApiWafWebAcl:
-    Type: AWS::WAFv2::WebACL
-    Properties: 
-      DefaultAction: 
-        Allow: {}
-      Description: Web Application Firewall for AWS CloudFront
-      Name: !Join ["-", [CloudFront-WAF, !Ref Name]]
-      Rules: 
-        - Name: AWSManagedRulesAmazonIpReputationList
-          OverrideAction: 
-            None: {}
-          Priority: 0
-          Statement: 
-            ManagedRuleGroupStatement:
-              VendorName: AWS
-              Name: AWSManagedRulesAmazonIpReputationList
-          VisibilityConfig: 
-            CloudWatchMetricsEnabled: true
-            MetricName: AWSManagedRulesAmazonIpReputationList
-            SampledRequestsEnabled: true
-        - Name: AWSManagedRulesAnonymousIpList
-          OverrideAction: 
-            None: {}
-          Priority: 1
-          Statement: 
-            ManagedRuleGroupStatement:
-              VendorName: AWS
-              Name: AWSManagedRulesAnonymousIpList
-          VisibilityConfig: 
-            CloudWatchMetricsEnabled: true
-            MetricName: AWSManagedRulesAnonymousIpList
-            SampledRequestsEnabled: true
-        - Action: 
-            Block: {}
-          Name: "CloudFront_Rate_based_Rule"
-          Priority: 2
-          Statement: 
-            RateBasedStatement: 
-              Limit: !Ref Limit
-              AggregateKeyType: IP
-          VisibilityConfig: 
-            SampledRequestsEnabled: true
-            CloudWatchMetricsEnabled: true
-            MetricName: "CloudFront_Rate_based_Rule"
-      Scope: CLOUDFRONT
-      VisibilityConfig: 
-        CloudWatchMetricsEnabled: true
-        MetricName: !Join ["-", [CloudFront-WAF, !Ref Name]]
-        SampledRequestsEnabled: true
+  #ApiWafWebAcl:
+  #  Type: AWS::WAFv2::WebACL
+  #  Properties: 
+  #    DefaultAction: 
+  #      Allow: {}
+  #    Description: Web Application Firewall for AWS CloudFront
+  #    Name: !Join ["-", [CloudFront-WAF, !Ref Name]]
+  #    Rules: 
+  #      - Name: AWSManagedRulesAmazonIpReputationList
+  #        OverrideAction: 
+  #          None: {}
+  #        Priority: 0
+  #        Statement: 
+  #          ManagedRuleGroupStatement:
+  #            VendorName: AWS
+  #            Name: AWSManagedRulesAmazonIpReputationList
+  #        VisibilityConfig: 
+  #          CloudWatchMetricsEnabled: true
+  #          MetricName: AWSManagedRulesAmazonIpReputationList
+  #          SampledRequestsEnabled: true
+  #      - Name: AWSManagedRulesAnonymousIpList
+  #        OverrideAction: 
+  #          None: {}
+  #        Priority: 1
+  #        Statement: 
+  #          ManagedRuleGroupStatement:
+  #            VendorName: AWS
+  #            Name: AWSManagedRulesAnonymousIpList
+  #        VisibilityConfig: 
+  #          CloudWatchMetricsEnabled: true
+  #          MetricName: AWSManagedRulesAnonymousIpList
+  #          SampledRequestsEnabled: true
+  #      - Action: 
+  #          Block: {}
+  #        Name: "CloudFront_Rate_based_Rule"
+  #        Priority: 2
+  #        Statement: 
+  #          RateBasedStatement: 
+  #            Limit: !Ref Limit
+  #            AggregateKeyType: IP
+  #        VisibilityConfig: 
+  #          SampledRequestsEnabled: true
+  #          CloudWatchMetricsEnabled: true
+  #          MetricName: "CloudFront_Rate_based_Rule"
+  #    Scope: CLOUDFRONT
+  #    VisibilityConfig: 
+  #      CloudWatchMetricsEnabled: true
+  #      MetricName: !Join ["-", [CloudFront-WAF, !Ref Name]]
+  #      SampledRequestsEnabled: true
 
 Outputs:
 
