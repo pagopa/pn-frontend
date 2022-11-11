@@ -1,9 +1,9 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { Box, Stack, Typography, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { 
-  ApiErrorWrapper, EmptyState, formatDate, formatTimeHHMM, TitleBox, useIsMobile, KnownFunctionality, 
-  AppStatusBar, DesktopDowntimeLog, MobileDowntimeLog 
+  ApiErrorWrapper, EmptyState, TitleBox, useIsMobile, KnownFunctionality, 
+  AppStatusBar, DesktopDowntimeLog, MobileDowntimeLog, formatDateTime 
 } from '@pagopa-pn/pn-commons';
 import { APP_STATUS_ACTIONS, getCurrentAppStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -41,6 +41,15 @@ const AppStatus = () => {
     fetchDowntimeLog();
   }, [fetchCurrentStatus, fetchDowntimeLog]);
 
+  const lastCheckTimestampFormatted = useMemo(() => {
+    if (currentStatus) {
+      const dateAndTime = formatDateTime(currentStatus.lastCheckTimestamp);
+      return `${dateAndTime.date}, ${dateAndTime.time}`;
+    } else {
+      return "";
+    }
+  }, [currentStatus]);
+
   return <Box p={3}>
     <Stack direction="column">
 
@@ -57,7 +66,7 @@ const AppStatus = () => {
           <Stack direction="row" justifyContent="center">
             <Typography variant="caption" sx={{ mt: 2, color: theme.palette.text.secondary }}>
               { t('appStatus.lastCheckLegend', 
-                { lastCheckTimestamp: `${formatDate(currentStatus.lastCheckTimestamp)}, ore ${formatTimeHHMM(currentStatus.lastCheckTimestamp)}`})
+                { lastCheckTimestamp: lastCheckTimestampFormatted })
               }
             </Typography>
           </Stack>

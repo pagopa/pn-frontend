@@ -1,3 +1,5 @@
+import { getLocalizedOrDefaultLabel } from "./localization.service";
+
 function isToday(date: Date): boolean {
   const today = new Date();
   return (
@@ -11,7 +13,12 @@ export function formatDate(dateString: string): string {
   const date = new Date(dateString);
   const month = `0${date.getMonth() + 1}`.slice(-2);
   const day = `0${date.getDate()}`.slice(-2);
-  return isToday(date) ? 'Oggi' : `${day}/${month}/${date.getFullYear()}`;
+  const todayLabel = getLocalizedOrDefaultLabel(
+    'common',
+    'date-time.today-uppercase-initial',
+    "Oggi"
+  );
+  return isToday(date) ? todayLabel : `${day}/${month}/${date.getFullYear()}`;
 }
 
 export function formatTimeHHMM(dateString: string): string {
@@ -19,6 +26,15 @@ export function formatTimeHHMM(dateString: string): string {
   const hour = `0${date.getHours()}`.slice(-2);
   const minute = `0${date.getMinutes()}`.slice(-2);
   return `${hour}:${minute}`;
+}
+
+export function formatDateTime(dateString: string): { date: string, time: string } {
+  const hourOfDayLabel = getLocalizedOrDefaultLabel(
+    'common',
+    'date-time.hour-of-day',
+    "ore"
+  );
+  return {date: formatDate(dateString), time: `${hourOfDayLabel} ${formatTimeHHMM(dateString)}`};
 }
 
 export function formatToSlicedISOString(date: Date): string {

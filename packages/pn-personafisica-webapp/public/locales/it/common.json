@@ -58,6 +58,10 @@
     "select-date": "Scegli data",
     "date-selected": "Scegli data, la data selezionata è {{date}}"
   },
+  "date-time": {
+    "today-uppercase-initial": "Oggi",
+    "hour-of-day": "ore"
+  },
   "error-boundary": {
     "title": "Qualcosa è andato storto",
     "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",

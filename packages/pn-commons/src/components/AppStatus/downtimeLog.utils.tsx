@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
 import { Button, Chip, Stack, Typography, useTheme } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
-import { formatDate, formatTimeHHMM } from '../../services';
 import { CardElement, Column, Item } from '../../types';
 import { DowntimeLogPage, DowntimeStatus } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { formatDateTime } from '../../services/date.service';
 
 export function booleanStringToBoolean(booleanString: string): boolean {
   return booleanString.toLowerCase() === "true";
@@ -12,15 +12,17 @@ export function booleanStringToBoolean(booleanString: string): boolean {
 
 /* eslint-disable-next-line arrow-body-style */
 const FormattedDateAndTime = ({ date, inTwoLines }: { date: string; inTwoLines?: boolean }) => {
-  return date ?
-    (inTwoLines
+  if (date) {
+    const dateAndTime = formatDateTime(date);
+    return inTwoLines
       ? <Stack direction="column">
-        <Typography variant="body2">{formatDate(date)},</Typography>
-        <Typography variant="body2">ore {formatTimeHHMM(date)}</Typography>
+        <Typography variant="body2">{dateAndTime.date},</Typography>
+        <Typography variant="body2">{dateAndTime.time}</Typography>
       </Stack>
-      : <Typography variant="body2">{formatDate(date)}, ore {formatTimeHHMM(date)}</Typography>
-    )
-    : <Typography variant="body2">-</Typography>;
+      : <Typography variant="body2">{dateAndTime.date}, {dateAndTime.time}</Typography>;
+  } else {
+    return <Typography variant="body2">-</Typography>;
+  }
 };
 
 export function adaptFieldSpecToMobile(desktopFieldSpec: Omit<Column<DowntimeLogColumn>, "width">): CardElement {

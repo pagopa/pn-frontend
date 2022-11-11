@@ -6,7 +6,7 @@
       "ok": "Tutti i servizi di Piattaforma Notifiche sono operativi.",
       "not-ok": "C'è un disservizio in corso. Per maggiori dettagli, consulta la tabella qui sotto."
     },
-    "lastCheckLegend": "Ultimo aggiornamento {{ lastCheckTimestamp }}"
+    "lastCheckLegend": "Ultimo aggiornamento - {{ lastCheckTimestamp }}"
   },
   "downtimeList": {
     "title": "Storico dei disservizi",
