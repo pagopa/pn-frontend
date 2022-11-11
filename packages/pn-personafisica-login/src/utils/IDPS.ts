@@ -75,13 +75,15 @@ if (ENV.SPID_TEST_ENV_ENABLED) {
     imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/11/Test-Logo.svg',
   });
 }
+
 if (ENV.SPID_VALIDATOR_ENV_ENABLED) {
   // eslint-disable-next-line functional/immutable-data
   IDPS.identityProviders.push({
     identifier: 'validator',
     entityId: 'xx_validator',
     name: 'validator',
-    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/1/11/Test-Logo.svg',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Validator-Test.png',
   });
 }
+
 export { IDPS };
