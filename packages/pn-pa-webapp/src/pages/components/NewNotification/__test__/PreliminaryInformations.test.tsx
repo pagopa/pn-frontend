@@ -72,6 +72,7 @@ describe('PreliminaryInformations Component', () => {
     testFormElements(form!, 'subject', 'subject*');
     testFormElements(form!, 'abstract', 'abstract');
     testFormElements(form!, 'group', 'group');
+    testFormElements(form!, 'taxonomyCode', 'taxonomy-id*');
     testRadioElements(form!, 'comunicationTypeRadio', [
       'registered-letter-890',
       'simple-registered-letter',
@@ -90,6 +91,7 @@ describe('PreliminaryInformations Component', () => {
     const form = result.container.querySelector('form');
     await testInput(form!, 'paProtocolNumber', 'mocked-NotificationId');
     await testInput(form!, 'subject', 'mocked-Subject');
+    await testInput(form!, 'taxonomyCode', '012345N');
     await testSelect(
       form!,
       'group',
@@ -114,6 +116,7 @@ describe('PreliminaryInformations Component', () => {
           paProtocolNumber: 'mocked-NotificationId',
           subject: 'mocked-Subject',
           abstract: '',
+          taxonomyCode: '012345N',
           group: '2',
           physicalCommunicationType: PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER,
           paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,

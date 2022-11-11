@@ -17,11 +17,13 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
+
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
+import { getDuplicateValuesByKeys } from "../../../utils/notification.utility";
 import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
@@ -179,13 +181,11 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
       )
       .test('identicalTaxIds', t('identical-fiscal-codes-error'), (values) => {
         if (values) {
-          const duplicatesTaxIds = values
-            .map((item) => item.taxId)
-            .filter((e, i, a) => a.indexOf(e) !== i);
+          const duplicatesTaxIds = getDuplicateValuesByKeys(values, ['taxId']);
           if (duplicatesTaxIds.length > 0) {
             const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
             values.forEach((value, i) => {
-              if (duplicatesTaxIds.includes(value.taxId)) {
+              if (value.taxId && duplicatesTaxIds.includes(value.taxId)) {
                 // eslint-disable-next-line functional/immutable-data
                 errors.push(
                   new yup.ValidationError(
@@ -202,6 +202,41 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
           }
         }
         return true;
+      })
+      .test('identicalIUV', t('identical-fiscal-codes-error'),
+        (values) => {
+          if (values) {
+            const duplicateIUVs = getDuplicateValuesByKeys(values, ['creditorTaxId', 'noticeCode']);
+            if (duplicateIUVs.length > 0) {
+              const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
+              values.forEach((value, i) => {
+                if (
+                  value.creditorTaxId
+                  && value.noticeCode
+                  && duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
+                ) {
+                  // eslint-disable-next-line functional/immutable-data
+                  errors.push(
+                    new yup.ValidationError(
+                      t('identical-notice-codes-error'),
+                      value,
+                      `recipients[${i}].noticeCode`
+                    ),
+                    new yup.ValidationError(
+                      ' ',
+                      value,
+                      `recipients[${i}].creditorTaxId`
+                    )
+                  );
+                }
+              });
+              return errors.length === 0 ? true : new yup.ValidationError(errors);
+            } else {
+              return true;
+            }
+          } else {
+            return true;
+          }
       }),
   });
 

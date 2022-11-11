@@ -25,6 +25,7 @@ interface BaseNewNotification {
   senderDenomination?: string;
   senderTaxId?: string;
   group?: string;
+  taxonomyCode: string;
 }
 
 // New Notification DTO

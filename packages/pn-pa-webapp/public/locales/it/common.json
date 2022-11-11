@@ -116,6 +116,7 @@
   "required-fields": "*Campi obbligatori",
   "required-field": "Campo obbligatorio",
   "required": "obbligatorio",
+  "invalid": "non valido",
   "upload-file": {
     "or": "oppure",
     "select-from-pc": "selezionalo dal tuo computer",

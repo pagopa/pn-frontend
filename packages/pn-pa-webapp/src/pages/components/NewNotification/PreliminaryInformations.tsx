@@ -12,7 +12,7 @@ import {
   Typography,
   MenuItem,
 } from '@mui/material';
-import { PhysicalCommunicationType, CustomDropdown, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
+import { PhysicalCommunicationType, CustomDropdown, ApiErrorWrapper, dataRegex } from '@pagopa-pn/pn-commons';
 
 import { NewNotification, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus, PNRole } from '../../../models/user';
@@ -47,16 +47,21 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     subject: notification.subject || '',
     abstract: notification.abstract || '',
     group: notification.group || '',
+    taxonomyCode: notification.taxonomyCode || '',
     physicalCommunicationType: notification.physicalCommunicationType || '',
     paymentMode: notification.paymentMode || '',
   });
 
   const validationSchema = yup.object({
-    paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('common:required')}`),
-    subject: yup.string().required(`${t('subject')} ${tc('common:required')}`),
+    paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('required')}`),
+    subject: yup.string().required(`${t('subject')} ${tc('required')}`),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
     group: groups.length > 0 && !isAdmin ? yup.string().required() : yup.string(),
+    taxonomyCode: yup
+      .string()
+      .required(`${t('taxonomy-id')} ${tc('required')}`)
+      .test('taxonomyCodeTest', `${t('taxonomy-id')} ${tc('invalid')}`, (value) => dataRegex.taxonomyCode.test(value as string)),
   });
 
   const formik = useFormik({
@@ -157,6 +162,18 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                 </MenuItem>
               ))}
           </CustomDropdown>
+          <TextField
+            id="taxonomyCode"
+            label={`${t('taxonomy-id')}*`}
+            fullWidth
+            name="taxonomyCode"
+            value={formik.values.taxonomyCode}
+            onChange={handleChangeTouched}
+            error={formik.touched.taxonomyCode && Boolean(formik.errors.taxonomyCode)}
+            helperText={formik.touched.taxonomyCode && formik.errors.taxonomyCode}
+            size="small"
+            margin="normal"
+          />
           <FormControl margin="normal" fullWidth>
             <FormLabel id="comunication-type-label">
               <Typography fontWeight={600} fontSize={16}>
