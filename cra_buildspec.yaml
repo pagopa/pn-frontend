@@ -8,7 +8,7 @@ phases:
       -  echo check if current env is dev and current branch is main
       - |
         BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///')
-        if [[ "$BRANCH_NAME" != main && "$BUILD_ID" != dev ]]; then
+        if [[ "$BRANCH_NAME" != "main" && "$BUILD_ID" != "dev" ]]; then
             echo test block
             aws codebuild stop-build --id $BUILD_ID
         else
