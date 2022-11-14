@@ -10,9 +10,10 @@ phases:
         BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///');
         echo current branch $BRANCH_NAME
         echo current env $BUILD_ID
-        if [[ $BRANCH_NAME != main && $BUILD_ID != dev ]];
-        then aws codebuild stop-build --id $BUILD_ID;
-        else continue;
+        if [[ "$BRANCH_NAME" != main && $BUILD_ID != dev ]]; then
+          aws codebuild stop-build --id $BUILD_ID
+        else 
+          continue
         fi
         echo check completed
       # install yarn
