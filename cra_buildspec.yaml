@@ -7,7 +7,7 @@ phases:
       # workaround to reduce allarms-noise due tu an eccessive amount of build in non-dev environment during development (eg. draft-PR or development branch)
       - |
         echo check if current env is dev and current branch is main
-        BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///');
+        BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
         echo current branch $BRANCH_NAME
         echo current env $BUILD_ID
         if [[ "$BRANCH_NAME" != main && $BUILD_ID != dev ]]; then
