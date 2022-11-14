@@ -19,12 +19,8 @@ describe('test login page', () => {
   });
 
   test('rendering test', () => {
-    render(<BrowserRouter><Login /></BrowserRouter>);
-    const LinkName = screen.getByText(/Scopri di più/i);
-    expect(LinkName).toHaveAttribute(
-      'href',
-      'https://www.spid.gov.it/cos-e-spid/come-attivare-spid/'
-    );
+    const result = render(<BrowserRouter><Login /></BrowserRouter>);
+    expect(result.container).toHaveTextContent(/Come vuoi accedere/i);
   });
 
   test('renders button Entra con Spid', () => {
@@ -49,11 +45,12 @@ describe('test login page', () => {
     );
   });
 
-  test('does not render the privacy disclaimer link', () => {
+  // portale login has only privacy policy and not terms and conditions page
+  test('does render the privacy disclaimer link', () => {
     render(<BrowserRouter><Login /></BrowserRouter>);
     const privacyDisclaimerLink = screen.queryByText(/Informativa Privacy/i);
 
-    expect(privacyDisclaimerLink).not.toBeInTheDocument();
+    expect(privacyDisclaimerLink).toBeInTheDocument();
   });
 
   test('does not render the link', () => {

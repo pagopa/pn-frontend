@@ -48,6 +48,7 @@ import * as routes from '../navigation/routes.const';
 import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { generateVCode } from '../utils/delegation.utility';
 import { trackEventByType } from "../utils/mixpanel";
 import { TrackEventType } from "../utils/events";
@@ -186,7 +187,7 @@ const NuovaDelega = () => {
   );
 
   return (
-    <Fragment>
+    <LoadingPageWrapper isInitialized>
       {!created && (
         <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumbs}
@@ -435,7 +436,7 @@ const NuovaDelega = () => {
           onClickLabel={t('nuovaDelega.backToDelegations')}
         />
       )}
-    </Fragment>
+    </LoadingPageWrapper>
   );
 };
 

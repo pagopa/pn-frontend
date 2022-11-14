@@ -62,7 +62,9 @@ describe('Contacts page - assuming contact API works properly', () => {
   const mockActionFn = jest.fn();
 
   beforeEach(async() => {
-    mockDispatchFn = jest.fn(() => Promise.resolve(null));
+    mockDispatchFn = jest.fn(() => ({
+      then: () => Promise.resolve(),
+    }));
 
     // mock action
     const actionSpy = jest.spyOn(actions, 'getDigitalAddresses');
@@ -92,7 +94,7 @@ describe('Contacts page - assuming contact API works properly', () => {
     expect(mockActionFn).toBeCalledWith('mocked-recipientId');
   });
 
-  it('subtitle link properly redirects to profile page', () => {
+  it.skip('subtitle link properly redirects to profile page', () => {
 
     const subtitleLink = result.getByText('subtitle-link');
     expect(subtitleLink).toBeInTheDocument();

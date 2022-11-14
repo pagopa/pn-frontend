@@ -26,7 +26,7 @@ Parameters:
   AlternateWebDomainReferenceToSite:
     Description: true if the website must be reachable using the AlternateWebDomain
     Type: String
-    Default: 'true'
+    Default: 'true' 
 
   AlternateHostedZoneId:
     Description: Hosted Zone Id in which you want to add alternate DNS
@@ -37,10 +37,14 @@ Parameters:
     Description: "ACM Web Certificate ARN"
     Type: String
 
-  
   WebApiUrl:
     Description: "The Url of web API: useful for content-security-policy"
     Type: String
+
+  Limit:
+    Type: Number
+    Description: The limit on requests per 5-minute period for a single originating IP address.
+    Default: 1000
 
 Conditions:
 
@@ -291,6 +295,7 @@ Resources:
           AcmCertificateArn: !Ref WebCertificateArn
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
+#        WebACLId: !GetAtt ApiWafWebAcl.Arn
 
   DefaultHeaderPolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy
@@ -387,6 +392,57 @@ Resources:
         Comment: 'Rewriting the request between a CloudFront Distribution and an origin'
         Runtime: cloudfront-js-1.0
       Name: !Sub "${AWS::StackName}-RewriteDefaultIndexRequest"
+
+  # AWS WAF Web ACLs for CloudFront
+  #ApiWafWebAcl:
+  #  Type: AWS::WAFv2::WebACL
+  #  Properties: 
+  #    DefaultAction: 
+  #      Allow: {}
+  #    Description: Web Application Firewall for AWS CloudFront
+  #    Name: !Join ["-", [CloudFront-WAF, !Ref Name]]
+  #    Rules: 
+  #      - Name: AWSManagedRulesAmazonIpReputationList
+  #        OverrideAction: 
+  #          None: {}
+  #        Priority: 0
+  #        Statement: 
+  #          ManagedRuleGroupStatement:
+  #            VendorName: AWS
+  #            Name: AWSManagedRulesAmazonIpReputationList
+  #        VisibilityConfig: 
+  #          CloudWatchMetricsEnabled: true
+  #          MetricName: AWSManagedRulesAmazonIpReputationList
+  #          SampledRequestsEnabled: true
+  #      - Name: AWSManagedRulesAnonymousIpList
+  #        OverrideAction: 
+  #          None: {}
+  #        Priority: 1
+  #        Statement: 
+  #          ManagedRuleGroupStatement:
+  #            VendorName: AWS
+  #            Name: AWSManagedRulesAnonymousIpList
+  #        VisibilityConfig: 
+  #          CloudWatchMetricsEnabled: true
+  #          MetricName: AWSManagedRulesAnonymousIpList
+  #          SampledRequestsEnabled: true
+  #      - Action: 
+  #          Block: {}
+  #        Name: "CloudFront_Rate_based_Rule"
+  #        Priority: 2
+  #        Statement: 
+  #          RateBasedStatement: 
+  #            Limit: !Ref Limit
+  #            AggregateKeyType: IP
+  #        VisibilityConfig: 
+  #          SampledRequestsEnabled: true
+  #          CloudWatchMetricsEnabled: true
+  #          MetricName: "CloudFront_Rate_based_Rule"
+  #    Scope: CLOUDFRONT
+  #    VisibilityConfig: 
+  #      CloudWatchMetricsEnabled: true
+  #      MetricName: !Join ["-", [CloudFront-WAF, !Ref Name]]
+  #      SampledRequestsEnabled: true
 
 Outputs:
 
