@@ -8,6 +8,7 @@ batch:
           BUILD_ID: dev
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
+          REACT_APP_SPID_VALIDATOR_ENV_ENABLED: false
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
           REACT_APP_URL_API_LOGIN: https://hub-login.spid.dev.pn.pagopa.it
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
@@ -20,6 +21,7 @@ batch:
           BUILD_ID: svil
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
+          REACT_APP_SPID_VALIDATOR_ENV_ENABLED: false
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
           REACT_APP_URL_API_LOGIN: https://hub-login.spid.svil.pn.pagopa.it
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
@@ -32,6 +34,7 @@ batch:
           BUILD_ID: coll
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
+          REACT_APP_SPID_VALIDATOR_ENV_ENABLED: false
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
           REACT_APP_URL_API_LOGIN: https://hub-login.spid.coll.pn.pagopa.it
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
@@ -44,6 +47,7 @@ batch:
           BUILD_ID: cert
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
+          REACT_APP_SPID_VALIDATOR_ENV_ENABLED: false
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
           REACT_APP_URL_API_LOGIN: https://hub-login.spid.cert.pn.pagopa.it
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
@@ -56,6 +60,7 @@ batch:
           BUILD_ID: hotfix
           REACT_APP_ENABLE_ASSISTANCE: true
           REACT_APP_SPID_TEST_ENV_ENABLED: true
+          REACT_APP_SPID_VALIDATOR_ENV_ENABLED: true
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
           REACT_APP_URL_API_LOGIN: https://hub-login.spid.notifichedigitali.it
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
