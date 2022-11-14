@@ -7,7 +7,9 @@ phases:
       # workaround to reduce allarms-noise due tu an eccessive amount of build in non-dev environment during development (eg. draft-PR or development branch)
       - echo check if current env is dev and current branch is main
       - |
-        
+        if current_branch <> main && current_build_id <> pn_dev
+        then aws codebuild stop-build --id $BUILD_ID
+        else continue
       # install yarn
       - echo installing yarn
       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
