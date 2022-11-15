@@ -15,6 +15,7 @@ const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
 const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
 const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
 const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
+const NotificationFromQrCode = React.lazy(() => import('../pages/NotificationFromQrCode.page'));
 
 function Router() {
   return (
@@ -25,6 +26,7 @@ function Router() {
           <Route path="/" element={<RouteGuard />}>
             <Route path="/" element={<ToSGuard />}>
               <Route path={routes.NOTIFICHE} element={<Notifiche />} />
+              <Route path={routes.DETTAGLIO_NOTIFICA_QRCODE} element={<NotificationFromQrCode />} />
               <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
               <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
               <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
