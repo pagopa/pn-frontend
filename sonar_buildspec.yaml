@@ -18,6 +18,7 @@ phases:
       - yarn install
   build:
     commands:
+       # - if it doesn't work use [ and not [[
       - echo Running tests with coverage...
       - yarn test:coverage
       - |
