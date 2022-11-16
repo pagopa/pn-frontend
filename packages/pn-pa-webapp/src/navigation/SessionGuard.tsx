@@ -6,26 +6,22 @@ import {
   useProcess,
   useSessionCheck,
 } from '@pagopa-pn/pn-commons';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { AUTH_ACTIONS, exchangeToken, logout } from '../redux/auth/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { DISABLE_INACTIVITY_HANDLER } from '../utils/constants';
-import { getHomePage } from '../utils/role.utility';
 import { goToSelfcareLogin } from './navigation.utility';
 
 enum INITIALIZATION_STEPS {
   USER_DETERMINATION = 'UserDetermination',
-  FETCH_TOS_STATUS = 'FetchTosStatus',
-  INITIAL_PAGE_DETERMINATION = 'InitialPageDetermination',
   SESSION_CHECK = 'SessionCheck',
 }
 
 const INITIALIZATION_SEQUENCE = [
   INITIALIZATION_STEPS.USER_DETERMINATION,
-  INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION,
   INITIALIZATION_STEPS.SESSION_CHECK,
 ];
 
@@ -51,14 +47,14 @@ const SessionGuardRender = () => {
   const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
 
   const goodbyeMessage = {
-    title: isUnauthorizedUser ? messageUnauthorizedUser.title : 
+    title: isUnauthorizedUser ? messageUnauthorizedUser.title :
       hasTosApiErrors ? t('error-when-fetching-tos-status.title') : t('leaving-app.title'),
-    message: isUnauthorizedUser ? messageUnauthorizedUser.message : 
+    message: isUnauthorizedUser ? messageUnauthorizedUser.message :
       hasTosApiErrors ? t('error-when-fetching-tos-status.message') : t('leaving-app.message'),
   };
 
   const renderIfInitialized = () =>
-    isUnauthorizedUser || isClosedSession || hasTosApiErrors ? (
+    isUnauthorizedUser || hasTosApiErrors || isClosedSession ? (
       <SessionModal
         open
         title={goodbyeMessage.title}
@@ -88,17 +84,10 @@ const SessionGuard = () => {
   );
   const { isClosedSession } = useAppSelector((state: RootState) => state.userState);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
   const { hasApiErrors } = useErrors();
 
   const { isFinished, performStep } = useProcess(INITIALIZATION_SEQUENCE);
-
-  // se un utente loggato fa reload, si deve evitare il navigate iniziale
-  // questo si determina appena cominciata l'inizializzazione, se c'è già un sessionToken
-  // questo vuol dire che è stato preso da session storage,
-  // cioè siamo in presenza di un reload di un utente loggato
-  const [isSessionReload, setIsSessionReload] = useState(false);
 
   const hasTosApiErrors = hasApiErrors(AUTH_ACTIONS.GET_TOS_APPROVAL);
 
@@ -115,34 +104,15 @@ const SessionGuard = () => {
       // se i dati del utente sono stati presi da session storage,
       // si deve saltare la user determination e settare l'indicativo di session reload
       // che verrà usato nella initial page determination
-      if (sessionToken) {
-        setIsSessionReload(true);
-      } else {
-        const selfCareToken = getTokenParam();
-        if (selfCareToken) {
-          await dispatch(exchangeToken(selfCareToken));
+      if (!sessionToken)  {
+        const spidToken = getTokenParam();
+        if (spidToken) {
+          await dispatch(exchangeToken(spidToken));
         }
       }
     };
     void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, doUserDetermination);
   }, [performStep, getTokenParam, sessionToken]);
-
-  /**
-   * Step 2 - determinazione pagina iniziale
-   */
-  useEffect(() => {
-    const doInitalPageDetermination = async () => {
-      // non si setta initial page se è un session reload
-      if (sessionToken && !isClosedSession && !hasTosApiErrors) {
-        // non si setta initial page se è un session reload di un utente che ha già accettato i TOS
-        const initialPage = isSessionReload ? undefined : getHomePage();
-        if (initialPage) {
-          navigate(initialPage, { replace: true });
-        }
-      }
-    };
-    void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
-  }, [performStep, sessionToken, isClosedSession, isSessionReload]);
 
   /**
    * Step 3 - lancio del sessionCheck
