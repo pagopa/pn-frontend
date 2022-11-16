@@ -12,6 +12,7 @@ import { AxiosResponse } from 'axios';
 import { Delegator } from '../../redux/delegation/types';
 import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
+import { NotificationId } from '../../models/Notifications';
 import { apiClient } from '../axios';
 import {
   NOTIFICATIONS_LIST,
@@ -83,15 +84,15 @@ export const NotificationsApi = {
       }
     }),
   
-  exchangeNotificationQrCodeMock: (qrCode: string): Promise<{ iun: string; mandateId?: string }> => qrCode === "bad-qrcode" 
+  exchangeNotificationQrCodeMock: (qrCode: string): Promise<NotificationId> => qrCode === "bad-qrcode" 
     ? Promise.reject({ response: { status: 404 }})
     : (qrCode === "delegated-qrcode" 
         ? Promise.resolve({ iun: 'QPMA-YRWN-WQXL-202211-V-1', mandateId: 'c7f9d779-b6e6-4934-a92a-e6fc85e4d7df' })
         : Promise.resolve({ iun: 'JLGK-XGYT-ERGK-202210-U-1' })
       ),
 
-  exchangeNotificationQrCode: (qrCode: string): Promise<{ iun: string; mandateId?: string }> => 
-    apiClient.post<{ iun: string; mandateId?: string }>(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: qrCode })
+  exchangeNotificationQrCode: (qrCode: string): Promise<NotificationId> => 
+    apiClient.post<NotificationId>(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: qrCode })
     .then((response) => response.data),
 
   /**

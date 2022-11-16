@@ -1,21 +1,25 @@
+import { AccessDenied, LoadingPage } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from "react-router-dom";
 import { NotificationsApi } from '../api/notifications/Notifications.api';
-import { DETTAGLIO_NOTIFICA, DETTAGLIO_NOTIFICA_DELEGATO } from '../navigation/routes.const';
+import { NotificationId } from '../models/Notifications';
+import { GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH, GET_DETTAGLIO_NOTIFICA_PATH, NOTIFICHE } from '../navigation/routes.const';
 
 
-function notificationDetailPath(notificationId: { iun: string; mandateId?: string }): string {
+function notificationDetailPath(notificationId: NotificationId): string {
   return notificationId.mandateId 
-    ? DETTAGLIO_NOTIFICA_DELEGATO.replace(":mandateId", notificationId.mandateId).replace(":id", notificationId.iun)
-    : DETTAGLIO_NOTIFICA.replace(":id", notificationId.iun);
+    ? GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(notificationId.iun, notificationId.mandateId)
+    : GET_DETTAGLIO_NOTIFICA_PATH(notificationId.iun);
 }
 
 /* eslint-disable-next-line arrow-body-style */
 const NotificationFromQrCode = () => {
   const { qrcode } = useParams();
   const navigate = useNavigate();
-  const [notificationFetched, setNotificationFetched] = useState(false);
-  const [notificationId, setNotificationId] = useState<{ iun: string; mandateId?: string } | undefined>();
+  const { t } = useTranslation(['notifiche']);
+  const [fetchError, setFetchError] = useState(false);
+  const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
 
   useEffect(() => {
     const fetchNotificationFromQrCode = async () => {
@@ -23,10 +27,9 @@ const NotificationFromQrCode = () => {
         try {
           const fetchedData = await NotificationsApi.exchangeNotificationQrCode(qrcode);
           setNotificationId(fetchedData);
-        } catch (err) {
-          console.log(err);
+        } catch {
+          setFetchError(true);
         }
-        setNotificationFetched(true);
       }
     };
     void fetchNotificationFromQrCode();
@@ -34,19 +37,20 @@ const NotificationFromQrCode = () => {
 
   useEffect(() => {
     if (notificationId) {
-      navigate(notificationDetailPath(notificationId), { replace: true });
+      navigate(notificationDetailPath(notificationId), { replace: true, state: { fromQrCode: true } });
     }
   }, [notificationId]);
 
-  return qrcode 
-    ? (notificationFetched
-        ? (notificationId 
-            ? <div>Notification from QR code {qrcode} - will show notification with IUN {notificationId} ...</div>
-            : <div>Problems when fetching IUN</div>
-          )
-        : <div>Waiting ...</div>
-      )
-    : <div>No QR code obtained</div>;
+  return notificationId 
+    ? <div />     // in questo caso si fa la redirect verso il dettaglio notifica
+    : (fetchError 
+      ? <AccessDenied
+          message={t('from-qrcode.not-found')}
+          isLogged={true}
+          goToHomePage={() => navigate(NOTIFICHE, {replace: true})}
+          goToLogin={() => {}}
+        />
+      : <LoadingPage />);
 };
 
 export default NotificationFromQrCode;

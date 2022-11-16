@@ -27,6 +27,9 @@
     "desc": "decrescente",
     "options": "Opzioni sort"
   },
+  "from-qrcode": {
+    "not-found": "Link alla notifica non trovato"
+  },
   "detail": {
     "table-aria-label": "Dettaglio notifica",
     "date": "Data di invio",
@@ -40,6 +43,7 @@
     "creditor-tax-id": "Codice Fiscale Ente",
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Dettaglio notifica",
+    "breadcrumb-from-qr-code": " (attraverso QR code)",
     "acts": "Documenti allegati",
     "timeline-title": "Stato della notifica",
     "legalfact": "Attestazione opponibile a terzi",

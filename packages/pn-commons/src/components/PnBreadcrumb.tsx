@@ -21,13 +21,14 @@ const BreadcrumbLink = (props: LinkProps & RefAttributes<HTMLAnchorElement>) => 
 type PnBreadcrumbProps = {
   goBackAction?: () => void;
   goBackLabel?: string;
+  showBackAction?: boolean;       // set to false if you don't want the "back" ("Indietro") link to be included
   linkProps?: LinkProps & RefAttributes<HTMLAnchorElement>
   linkRoute: string;
   linkLabel: ReactNode;
   currentLocationLabel: string;
 };
 
-const PnBreadcrumb = ({goBackAction, goBackLabel = 'Indietro', linkProps, linkRoute, linkLabel, currentLocationLabel}: PnBreadcrumbProps) => {
+const PnBreadcrumb = ({goBackAction, goBackLabel = 'Indietro', showBackAction = true, linkProps, linkRoute, linkLabel, currentLocationLabel}: PnBreadcrumbProps) => {
   const navigate = useNavigate();
   
   return (
@@ -37,9 +38,9 @@ const PnBreadcrumb = ({goBackAction, goBackLabel = 'Indietro', linkProps, linkRo
       justifyContent="start"
       spacing={3}
     >
-      <ButtonNaked color="primary" startIcon={<ArrowBackIcon />} onClick={goBackAction ? goBackAction : () => navigate(-1)}>
+      {showBackAction && <ButtonNaked color="primary" startIcon={<ArrowBackIcon />} onClick={goBackAction ? goBackAction : () => navigate(-1)}>
         {goBackLabel}
-      </ButtonNaked>
+      </ButtonNaked>}
       <Breadcrumbs aria-label="breadcrumb">
         <BreadcrumbLink to={linkRoute} {...linkProps}>{linkLabel}</BreadcrumbLink>
         <Typography

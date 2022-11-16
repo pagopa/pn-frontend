@@ -1,5 +1,5 @@
-import { Fragment, ReactNode, useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Fragment, ReactNode, useCallback, useEffect, useState, useMemo } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Grid, Box, Paper, Stack, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -43,9 +43,16 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+// state for the invocations to this component
+// (to include in navigation or Link to the route/s arriving to it)
+type LocationState = {
+  fromQrCode?: boolean;    // indicates whether the user arrived to the notification detail page from the QR code
+};
+
 const NotificationDetail = () => {
   const classes = useStyles();
   const { id, mandateId } = useParams();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
   const isMobile = useIsMobile();
@@ -186,8 +193,11 @@ const NotificationDetail = () => {
     }
   }, [legalFactDownloadUrl]);
 
-  const properBreadcrumb = (
+  const fromQrCode = useMemo(() => !!(location.state && (location.state as LocationState).fromQrCode), [location]);
+
+  const properBreadcrumb = useMemo(() => (
     <PnBreadcrumb
+      showBackAction={!fromQrCode}
       goBackLabel={t('button.indietro', { ns: 'common' })}
       linkRoute={routes.NOTIFICHE}
       linkLabel={
@@ -196,9 +206,14 @@ const NotificationDetail = () => {
           {t('detail.breadcrumb-root', { ns: 'notifiche' })}
         </Fragment>
       }
-      currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
+      currentLocationLabel={
+        `${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}${
+          fromQrCode ? `${t('detail.breadcrumb-from-qr-code', { ns: 'notifiche' })}` : ''
+        }`
+      }
     />
-  );
+  ), [fromQrCode]);
+
   const breadcrumb = (
     <Fragment>
       {properBreadcrumb}
