@@ -2,3 +2,23 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* ONTRUST STYLES */
+.otnotice .otnotice-content {
+  font-family: "Titillium Web",sans-serif;
+  color: #17324D;
+}
+
+.otnotice .otnotice-content .otnotice-menu {
+  position: absolute;
+}
+
+.otnotice .otnotice-content .otnotice-section:first-child h2 {
+  font-size: 2.375rem;
+  color: #17324D;
+}
+
+.otnotice .otnotice-content .otnotice-section:not(:first-child) h2 {
+  font-size: 1.75rem;
+  color: #17324D;
+}

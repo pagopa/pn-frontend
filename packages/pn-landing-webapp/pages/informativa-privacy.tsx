@@ -9,6 +9,7 @@ import Head from "next/head";
 declare const OneTrust: any;
 
 const PrivacyPage: NextPage = () => {
+
   useEffect(() => {
     OneTrust.NoticeApi.Initialized.then(function () {
       OneTrust.NoticeApi.LoadNotices(
@@ -33,7 +34,7 @@ const PrivacyPage: NextPage = () => {
 
       <div
         id="otnotice-b5c8e1dc-89df-4ec2-a02d-1c0f55fac052"
-        className="otnotice"
+        className={`otnotice`}
       ></div>
       {/*
       <main>
