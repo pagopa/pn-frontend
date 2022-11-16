@@ -5,12 +5,11 @@ phases:
       nodejs: 14
     commands:
       # workaround to reduce allarms-noise due tu an eccessive amount of build in non-dev environment during development (eg. draft-PR or development branch)
-      #  aws codebuild stop-build --id $CODEBUILD_BUILD_ID
       -  echo check if current env is dev and current branch is main
       - |
         BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///')
         if [ "$BRANCH_NAME" != "main" -a "$BUILD_ID" != "dev" ]; then
-           echo build stopped
+            aws codebuild stop-build --id $CODEBUILD_BUILD_ID
         else
             continue
         fi
