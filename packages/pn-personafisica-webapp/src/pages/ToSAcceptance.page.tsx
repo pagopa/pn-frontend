@@ -67,7 +67,7 @@ const TermsOfService = () => {
             productName={t('tos.title', 'Piattaforma Notifiche')}
             description={t(
               'tos.body',
-              'Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.'
+              'Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.'
             )}
             onConfirm={handleAccept}
             confirmBtnLabel={t('tos.button', 'Accedi')}
@@ -83,10 +83,10 @@ const TermsOfService = () => {
                 <Trans
                   ns={'common'}
                   i18nKey={'tos.switch-label'}
-                  components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
+                  components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
                 >
-                  Accetto l’<PrivacyLink>Informativa Privacy</PrivacyLink> e i{' '}
-                  <TosLink>Termini e condizioni d’uso</TosLink> di Piattaforma Notifiche.
+                  Accetto i <TosLink>Termini e condizioni d’uso del servizio</TosLink>
+                  e confermo di avere letto <PrivacyLink>l’Informativa Privacy</PrivacyLink>.
                 </Trans>
               </Typography>
             </Box>

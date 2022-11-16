@@ -29,8 +29,8 @@
   },
   "tos": {
     "title": "Piattaforma Notifiche",
-    "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
-    "switch-label": "Accetto l’<0>Informativa Privacy</0> e i <1>Termini e condizioni d’uso</1> di Piattaforma Notifiche.",
+    "body": "Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.",
+    "switch-label": "Accetto i <0>Termini e condizioni d’uso del servizio</0> e confermo di avere letto <1>l’Informativa Privacy</1>.",
     "button": "Accedi"
   },
   "table": {
