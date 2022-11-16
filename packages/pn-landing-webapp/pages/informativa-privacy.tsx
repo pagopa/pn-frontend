@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 
-import { Typography, Grid, Link, Container } from "@mui/material";
+// import { Typography, Grid, Link, Container } from "@mui/material";
 
 // const FAVICON_PATH = `${process.env.NEXT_PUBLIC_ASSETS_URL}/favicon.svg`;
 
