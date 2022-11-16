@@ -115,7 +115,7 @@ const SessionGuard = () => {
   }, [performStep, getTokenParam, sessionToken]);
 
   /**
-   * Step 3 - lancio del sessionCheck
+   * Step 2 - lancio del sessionCheck
    */
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
