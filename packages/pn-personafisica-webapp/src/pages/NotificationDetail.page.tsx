@@ -198,8 +198,7 @@ const NotificationDetail = () => {
   const properBreadcrumb = useMemo(() => (
     <PnBreadcrumb
       showBackAction={!fromQrCode}
-      goBackLabel={t('button.indietro', { ns: 'common' })}
-      linkRoute={routes.NOTIFICHE}
+      linkRoute={mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) :  routes.NOTIFICHE}
       linkLabel={
         <Fragment>
           <EmailIcon sx={{ mr: 0.5 }} />
@@ -208,6 +207,7 @@ const NotificationDetail = () => {
       }
       currentLocationLabel={
         `${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}${
+          /* eslint-disable-next-line sonarjs/no-nested-template-literals */
           fromQrCode ? `${t('detail.breadcrumb-from-qr-code', { ns: 'notifiche' })}` : ''
         }`
       }

@@ -3,6 +3,7 @@ import { Link, LinkProps, useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Stack, styled, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { ButtonNaked } from "@pagopa/mui-italia";
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   display: 'flex',
@@ -28,9 +29,11 @@ type PnBreadcrumbProps = {
   currentLocationLabel: string;
 };
 
-const PnBreadcrumb = ({goBackAction, goBackLabel = 'Indietro', showBackAction = true, linkProps, linkRoute, linkLabel, currentLocationLabel}: PnBreadcrumbProps) => {
+const PnBreadcrumb = ({goBackAction, goBackLabel, showBackAction = true, linkProps, linkRoute, linkLabel, currentLocationLabel}: PnBreadcrumbProps) => {
   const navigate = useNavigate();
   
+  const finalBackLabel = goBackLabel || getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro');
+
   return (
     <Stack
       direction={{ xs: 'column', sm: 'row' }}
@@ -39,7 +42,7 @@ const PnBreadcrumb = ({goBackAction, goBackLabel = 'Indietro', showBackAction = 
       spacing={3}
     >
       {showBackAction && <ButtonNaked color="primary" startIcon={<ArrowBackIcon />} onClick={goBackAction ? goBackAction : () => navigate(-1)}>
-        {goBackLabel}
+        {finalBackLabel}
       </ButtonNaked>}
       <Breadcrumbs aria-label="breadcrumb">
         <BreadcrumbLink to={linkRoute} {...linkProps}>{linkLabel}</BreadcrumbLink>
