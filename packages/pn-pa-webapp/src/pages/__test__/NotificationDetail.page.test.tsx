@@ -101,7 +101,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result.container).toHaveTextContent('mocked-abstract');
     expect(result.container).toHaveTextContent(/Table/i);
-    expect(result.container).toHaveTextContent(/130.00/i);
+    expect(result.container).toHaveTextContent(/1,30 €/i);
     expect(result.container).toHaveTextContent(
       `${notificationToFe.recipients[0].payment?.creditorTaxId} - ${notificationToFe.recipients[0].payment?.noticeCode}`
     );
@@ -198,7 +198,7 @@ describe('NotificationDetail Page (multi recipient)', () => {
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFeMultiRecipient.subject);
     expect(result.container).toHaveTextContent('mocked-abstract');
     expect(result.container).toHaveTextContent(/Table/i);
-    expect(result.container).toHaveTextContent(/200.00/i);
+    expect(result.container).toHaveTextContent(/2,00 €/i);
     for (const recipient of notificationToFeMultiRecipient.recipients) {
       expect(result.container).toHaveTextContent(
         `${recipient.taxId} - ${recipient.payment?.creditorTaxId} - ${recipient.payment?.noticeCode}`

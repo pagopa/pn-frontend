@@ -30,7 +30,7 @@ import {
   NotificationDetailRecipient,
   NotificationStatus,
   useErrors,
-  ApiError,
+  ApiError, formatEurocentToCurrency,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -149,8 +149,8 @@ const NotificationDetail = () => {
     },
     {
       label: t('detail.amount', { ns: 'notifiche' }),
-      rawValue: notification.amount?.toFixed(2),
-      value: <Box fontWeight={600}>{notification.amount?.toFixed(2)}</Box>,
+      rawValue: notification.amount ? formatEurocentToCurrency(notification.amount).toString() : undefined,
+      value: <Box fontWeight={600}>{notification.amount && formatEurocentToCurrency(notification.amount)}</Box>,
     },
     {
       label: t('detail.iun', { ns: 'notifiche' }),
