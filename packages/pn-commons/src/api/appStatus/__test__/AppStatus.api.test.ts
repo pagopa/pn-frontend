@@ -1,6 +1,6 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { BEDowntimeLogPage, DowntimeLogPage, DowntimeStatus, KnownFunctionality, LegalFactDocumentDetails } from '../../../models';
+import { DowntimeLogPageDTO, DowntimeLogPage, DowntimeStatus, KnownFunctionality, LegalFactDocumentDetails } from '../../../models';
 import { DOWNTIME_HISTORY, DOWNTIME_LEGAL_FACT_DETAILS, DOWNTIME_STATUS } from '../appStatus.routes';
 import { 
   beAppStatusNoIncidents, beAppStatusOneIncident, beAppStatusOneFinishedDowntimeAsOpenIncident, 
@@ -146,7 +146,7 @@ describe("AppStatus api tests", () => {
   });
 
   it('get downtime history - downtime with date in bad format - API call fails', async () => {
-    const beDowntimeHistoryWithDateFormatError: BEDowntimeLogPage = {
+    const beDowntimeHistoryWithDateFormatError: DowntimeLogPageDTO = {
       result: [ 
         beDowntimeHistoryThreeIncidents.result[0], 
         {...beDowntimeHistoryThreeIncidents.result[1], startDate: '2022-84-24T08:15:21Z'},
@@ -161,7 +161,7 @@ describe("AppStatus api tests", () => {
   });
 
   it('get downtime history - incoherent downtime - fileAvailable but no legalFactId - API call fails', async () => {
-    const beDowntimeHistoryWithIncoherentRecord: BEDowntimeLogPage = {
+    const beDowntimeHistoryWithIncoherentRecord: DowntimeLogPageDTO = {
       result: [ 
         beDowntimeHistoryThreeIncidents.result[0], 
         {...beDowntimeHistoryThreeIncidents.result[1], fileAvailable: true, legalFactId: undefined},

@@ -1,16 +1,16 @@
 import {
-  AppCurrentStatus, BEDowntime, BEStatus, 
+  AppCurrentStatus, DowntimeDTO, AppStatusDTO, 
   FunctionalityStatus, GetDowntimeHistoryParams, Downtime, DowntimeLogPage, DowntimeStatus, 
-  isKnownFunctionality, KnownFunctionality, BEDowntimeLogPage, LegalFactDocumentDetails,
-  BEDowntimeValidator, BEStatusValidator, BEDowntimeLogPageValidator
+  isKnownFunctionality, KnownFunctionality, DowntimeLogPageDTO, LegalFactDocumentDetails,
+  BEDowntimeValidator, AppStatusDTOValidator, DowntimeLogPageDTOValidator
 } from "./appStatus";
 
 export {
-  BEDowntimeLogPageValidator, BEStatusValidator, BEDowntimeValidator,
+  DowntimeLogPageDTOValidator, AppStatusDTOValidator, BEDowntimeValidator,
   DowntimeStatus, isKnownFunctionality, KnownFunctionality
 };  
 export type { 
-  BEDowntime, BEStatus, BEDowntimeLogPage, GetDowntimeHistoryParams, 
+  DowntimeDTO, AppStatusDTO, DowntimeLogPageDTO, GetDowntimeHistoryParams, 
   AppCurrentStatus, FunctionalityStatus, Downtime, DowntimeLogPage, LegalFactDocumentDetails 
 };
 

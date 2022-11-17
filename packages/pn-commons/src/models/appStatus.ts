@@ -90,7 +90,7 @@ export interface LegalFactDocumentDetails {
  * - startDate not a valid date
  * - endDate, if present, not a valid date
  */
- export interface BEDowntime {
+ export interface DowntimeDTO {
   functionality: string;
   status: string;
   startDate: string;
@@ -102,13 +102,13 @@ export interface LegalFactDocumentDetails {
 /**
  * Possible errors: just those of open incidents
  */
-export interface BEStatus {
+export interface AppStatusDTO {
   functionalities: Array<string>;
-  openIncidents: Array<BEDowntime>;
+  openIncidents: Array<DowntimeDTO>;
 }
 
-export interface BEDowntimeLogPage {
-  result: Array<BEDowntime>;
+export interface DowntimeLogPageDTO {
+  result: Array<DowntimeDTO>;
   nextPage?: string;
 }
 
@@ -141,7 +141,7 @@ function validateBoolean(value: boolean | undefined | null): string | null {
     validation - BE response validators
     ------------------------------------------------------------------------ */
 
-export class BEDowntimeValidator extends Validator<BEDowntime> {
+export class BEDowntimeValidator extends Validator<DowntimeDTO> {
   constructor() {
     super();
     this.ruleFor('functionality').customValidator(validateString).isUndefined(true);
@@ -154,7 +154,7 @@ export class BEDowntimeValidator extends Validator<BEDowntime> {
   }
 }
 
-export class BEStatusValidator extends Validator<BEStatus> {
+export class AppStatusDTOValidator extends Validator<AppStatusDTO> {
   constructor() {
     super();
     this.ruleFor("functionalities").isEmpty(true).forEachElement(rules => rules.customValidator(validateString));
@@ -162,7 +162,7 @@ export class BEStatusValidator extends Validator<BEStatus> {
   }
 }
 
-export class BEDowntimeLogPageValidator extends Validator<BEDowntimeLogPage> {
+export class DowntimeLogPageDTOValidator extends Validator<DowntimeLogPageDTO> {
   constructor() {
     super();
     this.ruleFor('result').forEachElement(rules => rules.setValidator(new BEDowntimeValidator())).isUndefined(true);

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Box, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { 
   ApiErrorWrapper, EmptyState, TitleBox, useIsMobile, KnownFunctionality, 
@@ -19,7 +19,6 @@ const AppStatus = () => {
   const downtimeLog = useAppSelector((state: RootState) => state.appStatus.downtimeLogPage);
   const paginationData = useAppSelector((state: RootState) => state.appStatus.pagination);
   const [isInitialized, setIsInitialized] = useState(false);
-  const theme = useTheme();
   const isMobile = useIsMobile();
   const { t } = useTranslation(['appStatus']);
   useDownloadDocument();
@@ -99,7 +98,7 @@ return <Box p={3}>
         {currentStatus && <AppStatusBar status={currentStatus} />}
         { currentStatus &&
           <Stack direction="row" justifyContent="center">
-            <Typography variant="caption" sx={{ mt: 2, color: theme.palette.text.secondary }}>
+            <Typography variant="caption" sx={{ mt: 2, color: 'text.secondary' }}>
               { t('appStatus.lastCheckLegend', 
                 { lastCheckTimestamp: lastCheckTimestampFormatted })
               }

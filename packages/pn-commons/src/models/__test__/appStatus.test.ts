@@ -1,8 +1,8 @@
-import { BEDowntimeLogPage, BEDowntimeLogPageValidator, BEDowntime, BEDowntimeValidator, BEStatus, BEStatusValidator } from "../appStatus";
+import { DowntimeLogPageDTO, DowntimeLogPageDTOValidator, DowntimeDTO, BEDowntimeValidator, AppStatusDTO, AppStatusDTOValidator } from "../appStatus";
 
 describe("App Status model test", () => {
   it("downtime validator - minimal valid downtime", () => {
-    const downtime: BEDowntime = {
+    const downtime: DowntimeDTO = {
       functionality: "NOTIFICATION_CREATE",
       status: "OK",
       startDate: "2022-10-21T06:07:08Z",
@@ -12,7 +12,7 @@ describe("App Status model test", () => {
   });
 
   it("downtime validator - valid downtime with full data", () => {
-    const downtime: BEDowntime = {
+    const downtime: DowntimeDTO = {
       functionality: "NOTIFICATION_CREATE",
       status: "KO",
       startDate: "2022-10-21T06:07:08Z",
@@ -25,7 +25,7 @@ describe("App Status model test", () => {
   });
 
   it("downtime validator - bad status", () => {
-    const downtime: BEDowntime = {
+    const downtime: DowntimeDTO = {
       functionality: "NOTIFICATION_CREATE",
       status: "INVALID_STATUS",
       startDate: "2022-10-21T06:07:08Z",
@@ -89,7 +89,7 @@ describe("App Status model test", () => {
   });
 
   it("downtime validator - ill-formed start date", () => {
-    const downtime: BEDowntime = {
+    const downtime: DowntimeDTO = {
       functionality: "NOTIFICATION_WORKFLOW",
       status: "KO",
       startDate: "not-a-date",
@@ -107,7 +107,7 @@ describe("App Status model test", () => {
   });
 
   it("downtime validator - ill-formed end date", () => {
-    const downtime: BEDowntime = {
+    const downtime: DowntimeDTO = {
       functionality: "NOTIFICATION_WORKFLOW",
       status: "KO",
       startDate: "2022-10-21T06:07:05Z",
@@ -122,15 +122,15 @@ describe("App Status model test", () => {
   });
 
   it("status validator - valid data with no open incidents", () => {
-    const status: BEStatus = {
+    const status: AppStatusDTO = {
       functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"],
       openIncidents: [],
     }
-    expect(new BEStatusValidator().validate(status)).toBeNull();
+    expect(new AppStatusDTOValidator().validate(status)).toBeNull();
   });
 
   it("status validator - valid data with two open incidents", () => {
-    const status: BEStatus = {
+    const status: AppStatusDTO = {
       functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"],
       openIncidents: [
         {
@@ -149,11 +149,11 @@ describe("App Status model test", () => {
         }
       ],
     }
-    expect(new BEStatusValidator().validate(status)).toBeNull();
+    expect(new AppStatusDTOValidator().validate(status)).toBeNull();
   });
 
   it("status validator - empty list of functionalities", () => {
-    const status: BEStatus = {
+    const status: AppStatusDTO = {
       functionalities: [],
       openIncidents: [
         {
@@ -172,14 +172,14 @@ describe("App Status model test", () => {
         }
       ],
     }
-    const validationResult = new BEStatusValidator().validate(status);
+    const validationResult = new AppStatusDTOValidator().validate(status);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.functionalities).not.toBeUndefined();
     expect(validationResult?.openIncidents).toBeUndefined();
   });
 
   it("status validator - bad-typed start date in one open incident", () => {
-    const status: BEStatus = {
+    const status: AppStatusDTO = {
       functionalities: ["NOTIFICATION_CREATE", "NOTIFICATION_VISUALIZATION", "NOTIFICATION_WORKFLOW"],
       openIncidents: [
         {
@@ -198,21 +198,21 @@ describe("App Status model test", () => {
         }
       ],
     }
-    const validationResult = new BEStatusValidator().validate(status);
+    const validationResult = new AppStatusDTOValidator().validate(status);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.functionalities).toBeUndefined();
     expect(validationResult?.openIncidents).not.toBeUndefined();
   });
 
   it("downtime page validator - valid page with no downtime events", () => {
-    const downtimeLogPage: BEDowntimeLogPage = {
+    const downtimeLogPage: DowntimeLogPageDTO = {
       result: [],
     };
-    expect(new BEDowntimeLogPageValidator().validate(downtimeLogPage)).toBeNull(); 
+    expect(new DowntimeLogPageDTOValidator().validate(downtimeLogPage)).toBeNull(); 
   });
 
   it("downtime page validator - valid page with three downtime events", () => {
-    const downtimeLogPage: BEDowntimeLogPage = {
+    const downtimeLogPage: DowntimeLogPageDTO = {
       result: [
         {
           functionality: "NOTIFICATION_CREATE",
@@ -237,7 +237,7 @@ describe("App Status model test", () => {
       ],
       nextPage: "some-next-page",
     };
-    expect(new BEDowntimeLogPageValidator().validate(downtimeLogPage)).toBeNull(); 
+    expect(new DowntimeLogPageDTOValidator().validate(downtimeLogPage)).toBeNull(); 
   });
 
   it("downtime page validator - invalid page - ill-formed downtime", () => {
@@ -266,7 +266,7 @@ describe("App Status model test", () => {
       ],
       nextPage: "some-next-page",
     };
-    const validationResult = new BEDowntimeLogPageValidator().validate(downtimeLogPage);
+    const validationResult = new DowntimeLogPageDTOValidator().validate(downtimeLogPage);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.result).not.toBeUndefined();
     expect(validationResult?.nextPage).toBeUndefined();
@@ -291,7 +291,7 @@ describe("App Status model test", () => {
       ],
       nextPage: {a: 4, b: 28},
     };
-    const validationResult = new BEDowntimeLogPageValidator().validate(downtimeLogPage);
+    const validationResult = new DowntimeLogPageDTOValidator().validate(downtimeLogPage);
     expect(validationResult).not.toBeNull();
     expect(validationResult?.result).toBeUndefined();
     expect(validationResult?.nextPage).not.toBeUndefined();

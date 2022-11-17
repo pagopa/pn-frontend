@@ -2,7 +2,7 @@ import { Email } from '@mui/icons-material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
-import { Box, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import {
   AppMessage,
   appStateActions,
@@ -48,7 +48,6 @@ const App = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
 
   const dispatch = useAppDispatch();
-  const theme = useTheme();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const { hasApiErrors } = useErrors();
 
@@ -74,8 +73,8 @@ const App = () => {
         // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
         icon: () => currentStatus 
           ? (currentStatus.appIsFullyOperative
-            ? <CheckCircleIcon sx={{ color: theme.palette.success.main }} />
-            : <ErrorIcon sx={{ color: theme.palette.error.main }} />)
+            ? <CheckCircleIcon sx={{ color: 'success.main' }} />
+            : <ErrorIcon sx={{ color: 'error.main' }} />)
           : <HelpIcon />
         , 
         route: routes.APP_STATUS 

@@ -1,5 +1,5 @@
 import { AxiosInstance } from 'axios';
-import { AppCurrentStatus, BEDowntimeLogPageValidator, BEDowntime, BEStatus, BEStatusValidator, FunctionalityStatus, GetDowntimeHistoryParams, Downtime, DowntimeLogPage, DowntimeStatus, isKnownFunctionality, KnownFunctionality, BEDowntimeLogPage, LegalFactDocumentDetails } from '../../models';
+import { AppCurrentStatus, DowntimeLogPageDTOValidator, AppStatusDTOValidator, FunctionalityStatus, GetDowntimeHistoryParams, Downtime, DowntimeLogPage, DowntimeStatus, isKnownFunctionality, KnownFunctionality, LegalFactDocumentDetails, AppStatusDTO, DowntimeLogPageDTO, DowntimeDTO } from '../../models';
 import { DOWNTIME_HISTORY, DOWNTIME_LEGAL_FACT_DETAILS, DOWNTIME_STATUS } from './appStatus.routes';
 
 export class BadApiDataException extends Error {
@@ -17,13 +17,13 @@ export function createAppStatusApi(apiClient: AxiosInstance) {
   return {
     getCurrentStatus: async (): Promise<AppCurrentStatus> => {
       /* eslint-disable functional/no-let */
-      let apiResponse: BEStatus;
+      let apiResponse: AppStatusDTO;
   
-      const realApiResponse = await apiClient.get<BEStatus>(DOWNTIME_STATUS());
+      const realApiResponse = await apiClient.get<AppStatusDTO>(DOWNTIME_STATUS());
       apiResponse = realApiResponse.data;
   
       // pn-validator validation
-      const validationResult = new BEStatusValidator().validate(apiResponse);
+      const validationResult = new AppStatusDTOValidator().validate(apiResponse);
       if (validationResult != null) {
         throw new BadApiDataException('Wrong-formed data', validationResult);
       }
@@ -34,18 +34,18 @@ export function createAppStatusApi(apiClient: AxiosInstance) {
       }
   
       // finally the response
-      return beDowntimeStatusToFeAppStatus(apiResponse);
+      return beAppStatusToFeAppStatus(apiResponse);
     },
   
     getDowntimeLogPage: async (params: GetDowntimeHistoryParams): Promise<DowntimeLogPage> => {
       /* eslint-disable functional/no-let */
-      let apiResponse: BEDowntimeLogPage;
+      let apiResponse: DowntimeLogPageDTO;
   
-      const realApiResponse = await apiClient.get<BEDowntimeLogPage>(DOWNTIME_HISTORY(params));
+      const realApiResponse = await apiClient.get<DowntimeLogPageDTO>(DOWNTIME_HISTORY(params));
       apiResponse = realApiResponse.data;
   
       // pn-validator validation
-      const validationResult = new BEDowntimeLogPageValidator().validate(apiResponse);
+      const validationResult = new DowntimeLogPageDTOValidator().validate(apiResponse);
       if (validationResult != null) {
         throw new BadApiDataException('Wrong-formed data', validationResult);
       }
@@ -79,7 +79,7 @@ export function createAppStatusApi(apiClient: AxiosInstance) {
    BE-FE transformations
    ------------------------------------------------------------------------ */
 
-function beDowntimeToFeDowntime(downtime: BEDowntime): Downtime {
+function beDowntimeToFeDowntime(downtime: DowntimeDTO): Downtime {
   /* eslint-disable functional/immutable-data */
   const result: Downtime = {
     rawFunctionality: downtime.functionality,
@@ -118,8 +118,8 @@ function beDowntimeToFeDowntime(downtime: BEDowntime): Downtime {
   return result;
 }
 
-function beDowntimeStatusToFunctionalityCurrentStatus(functionality: KnownFunctionality, beStatus: BEStatus): FunctionalityStatus {
-  const currentIncident = beStatus.openIncidents.find(downtime => downtime.functionality === functionality);
+function beDowntimeStatusToFunctionalityCurrentStatus(functionality: KnownFunctionality, appStatusDTO: AppStatusDTO): FunctionalityStatus {
+  const currentIncident = appStatusDTO.openIncidents.find(downtime => downtime.functionality === functionality);
   if (currentIncident) {
     return {
       rawFunctionality: functionality as string,
@@ -136,7 +136,7 @@ function beDowntimeStatusToFunctionalityCurrentStatus(functionality: KnownFuncti
   }
 }
 
-function unknownDowntimeToFunctionalityCurrentStatus(downtime: BEDowntime): FunctionalityStatus {
+function unknownDowntimeToFunctionalityCurrentStatus(downtime: DowntimeDTO): FunctionalityStatus {
   return {
     rawFunctionality: downtime.functionality,
     isOperative: false,
@@ -144,16 +144,16 @@ function unknownDowntimeToFunctionalityCurrentStatus(downtime: BEDowntime): Func
   };
 }
 
-function beDowntimeStatusToFeAppStatus(beStatus: BEStatus): AppCurrentStatus {
+function beAppStatusToFeAppStatus(appStatusDTO: AppStatusDTO): AppCurrentStatus {
   const statusByFunctionality = [
-    ...Object.values(KnownFunctionality).map(funct => beDowntimeStatusToFunctionalityCurrentStatus(funct, beStatus)),
-    ...beStatus.openIncidents
+    ...Object.values(KnownFunctionality).map(funct => beDowntimeStatusToFunctionalityCurrentStatus(funct, appStatusDTO)),
+    ...appStatusDTO.openIncidents
       .filter(downtime => !isKnownFunctionality(downtime.functionality))
       .map(downtime => unknownDowntimeToFunctionalityCurrentStatus(downtime))
   ];
 
   return {
-    appIsFullyOperative: beStatus.openIncidents.length === 0,
+    appIsFullyOperative: appStatusDTO.openIncidents.length === 0,
     statusByFunctionality,
     // The timestamp for the last check ("ultimo aggiornamento") is required in the app status page, but is not given by API.
     // I decided to include it in the response given by the API layer of the FE.
@@ -163,13 +163,13 @@ function beDowntimeStatusToFeAppStatus(beStatus: BEStatus): AppCurrentStatus {
   };
 }
 
-function beDowntimeLogPageToFeDowntimeLogPage(beDowntimeLogPage: BEDowntimeLogPage): DowntimeLogPage {
+function beDowntimeLogPageToFeDowntimeLogPage(downtimeLogPageDTO: DowntimeLogPageDTO): DowntimeLogPage {
   /* eslint-disable functional/immutable-data */
   const result: DowntimeLogPage = {
-    downtimes: beDowntimeLogPage.result.map(beDowntimeToFeDowntime),
+    downtimes: downtimeLogPageDTO.result.map(beDowntimeToFeDowntime),
   };
-  if (beDowntimeLogPage.nextPage) {
-    result.nextPage = beDowntimeLogPage.nextPage;
+  if (downtimeLogPageDTO.nextPage) {
+    result.nextPage = downtimeLogPageDTO.nextPage;
   }
   return result;
 }

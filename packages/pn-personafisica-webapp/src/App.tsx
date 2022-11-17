@@ -1,7 +1,7 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -50,7 +50,6 @@ const productsList: Array<ProductSwitchItem> = [
 const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
-  const theme = useTheme();
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
@@ -175,8 +174,8 @@ const App = () => {
       // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
       icon: () => currentStatus 
         ? (currentStatus.appIsFullyOperative
-          ? <CheckCircleIcon sx={{ color: theme.palette.success.main }} />
-          : <ErrorIcon sx={{ color: theme.palette.error.main }} />)
+          ? <CheckCircleIcon sx={{ color: "success.main" }} />
+          : <ErrorIcon sx={{ color: "error.main" }} />)
         : <HelpIcon />
       , 
       route: routes.APP_STATUS 

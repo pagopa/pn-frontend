@@ -1,4 +1,4 @@
-import { BEDowntimeLogPage, BEStatus, FunctionalityStatus, GetDowntimeHistoryParams, DowntimeStatus, KnownFunctionality } from "../../../models";
+import { DowntimeLogPageDTO, AppStatusDTO, FunctionalityStatus, GetDowntimeHistoryParams, DowntimeStatus, KnownFunctionality } from "../../../models";
 
 /* ------------------------------------------------------------------------
    auxiliary functions and constants
@@ -66,12 +66,12 @@ export const downtimeHistoryEmptyQueryParams: GetDowntimeHistoryParams = {
 /* ------------------------------------------------------------------------
    BE mock responses for tests
    ------------------------------------------------------------------------ */
-export const beAppStatusNoIncidents: BEStatus = {
+export const beAppStatusNoIncidents: AppStatusDTO = {
   functionalities: knownFunctionalities,
   openIncidents: [],
 };
 
-export const beAppStatusOneIncident: BEStatus = {
+export const beAppStatusOneIncident: AppStatusDTO = {
   functionalities: knownFunctionalities,
   openIncidents: [{
     functionality: "NOTIFICATION_WORKFLOW",
@@ -80,7 +80,7 @@ export const beAppStatusOneIncident: BEStatus = {
   }],
 };
 
-export const beAppStatusTwoIncidentsNormalCase: BEStatus = {
+export const beAppStatusTwoIncidentsNormalCase: AppStatusDTO = {
   functionalities: knownFunctionalities,
   openIncidents: [
     {
@@ -96,7 +96,7 @@ export const beAppStatusTwoIncidentsNormalCase: BEStatus = {
   ],
 };
 
-export const beAppStatusTwoIncidentsOneUnknownFunctionality: BEStatus = {
+export const beAppStatusTwoIncidentsOneUnknownFunctionality: AppStatusDTO = {
   functionalities: knownFunctionalities,
   openIncidents: [
     {
@@ -112,7 +112,7 @@ export const beAppStatusTwoIncidentsOneUnknownFunctionality: BEStatus = {
   ],
 };
 
-export const beAppStatusOneFinishedDowntimeAsOpenIncident: BEStatus = {
+export const beAppStatusOneFinishedDowntimeAsOpenIncident: AppStatusDTO = {
   functionalities: knownFunctionalities,
   openIncidents: [
     {
@@ -129,7 +129,7 @@ export const beAppStatusOneFinishedDowntimeAsOpenIncident: BEStatus = {
   ],
 };
 
-export const beAppStatusOneIncidentWithError: BEStatus = {
+export const beAppStatusOneIncidentWithError: AppStatusDTO = {
   functionalities: knownFunctionalities,
   openIncidents: [
     {
@@ -145,11 +145,11 @@ export const beAppStatusOneIncidentWithError: BEStatus = {
   ],
 };
 
-export const beDowntimeHistoryNoIncidents: BEDowntimeLogPage = {
+export const beDowntimeHistoryNoIncidents: DowntimeLogPageDTO = {
   result: []
 };
 
-export const beDowntimeHistoryThreeIncidents: BEDowntimeLogPage = {
+export const beDowntimeHistoryThreeIncidents: DowntimeLogPageDTO = {
   result: [
     {
       functionality: "NOTIFICATION_CREATE",
