@@ -17,6 +17,8 @@ type Props = {
   showSideMenu?: boolean;
   /** List of available products */
   productsList: Array<ProductEntity>;
+  /** Show Header Product */
+  showHeaderProduct?: boolean;
   /** Current product */
   productId?: string;
   /** List of available parties */
@@ -52,6 +54,7 @@ export default function Layout({
   sideMenu,
   showSideMenu = true,
   productsList,
+  showHeaderProduct,
   productId,
   partyList,
   loggedUser,
@@ -82,6 +85,7 @@ export default function Layout({
             <Header
               onExitAction={onExitAction}
               productsList={productsList}
+              showHeaderProduct={showHeaderProduct}
               productId={productId}
               partyList={partyList}
               loggedUser={loggedUser}
