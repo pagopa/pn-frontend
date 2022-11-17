@@ -7,7 +7,6 @@ const mockNavigateFn = jest.fn(() => {});
 
 /* eslint-disable functional/no-let */
 let mockLocationHash: string;  // #selfCareToken=mocked_token
-// const mockLocationPath: string = "/notifiche";  // "/" or "/dashboard"
 
 
 jest.mock('react-router-dom', () => {
