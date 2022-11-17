@@ -61,19 +61,19 @@ const TermsOfService = () => {
 
   return (
     <LoadingPageWrapper isInitialized>
-      <Grid container justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
+      <Grid container height="100%" justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
         <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
           <TOSAgreement
             productName={t('tos.title', 'Piattaforma Notifiche')}
             description={t(
               'tos.body',
-              'Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.'
+              'Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.'
             )}
             onConfirm={handleAccept}
             confirmBtnLabel={t('tos.button', 'Accedi')}
             confirmBtnDisabled={!accepted}
           >
-            <Box display="flex" alignItems="center" mt={8}>
+            <Box display="flex" alignItems="center">
               <Switch
                 value={accepted}
                 onClick={() => setAccepted(!accepted)}
@@ -83,10 +83,10 @@ const TermsOfService = () => {
                 <Trans
                   ns={'common'}
                   i18nKey={'tos.switch-label'}
-                  components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
+                  components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
                 >
-                  Accetto l’<PrivacyLink>Informativa Privacy</PrivacyLink> e i{' '}
-                  <TosLink>Termini e condizioni d’uso</TosLink> di Piattaforma Notifiche.
+                  Accetto i <TosLink>Termini e condizioni d’uso del servizio</TosLink>
+                  e confermo di avere letto <PrivacyLink>l’Informativa Privacy</PrivacyLink>.
                 </Trans>
               </Typography>
             </Box>

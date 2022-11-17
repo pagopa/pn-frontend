@@ -226,6 +226,7 @@ const App = () => {
         }
         showSideMenu={!!sessionToken && tos && fetchedTos && !isPrivacyPage}
         productsList={productsList}
+        showHeaderProduct={tos}
         loggedUser={jwtUser}
         enableUserDropdown
         userActions={userActions}
