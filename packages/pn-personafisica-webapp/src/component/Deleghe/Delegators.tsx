@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Chip, Stack, Typography } from '@mui/material';
-import { Column, ItemsTable, Item, Sort, ApiErrorWrapper, EmptyState } from '@pagopa-pn/pn-commons';
+import { Column, ItemsTable, Item, Sort, ApiErrorWrapper, EmptyState, KnownSentiment } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -102,7 +102,7 @@ const Delegators = () => {
               sort={sortDelegators}
               onChangeSorting={handleChangeSorting}
             />
-            : <EmptyState disableSentimentDissatisfied emptyMessage={t('deleghe.no_delegators')} />
+            : <EmptyState sentimentIcon={KnownSentiment.NONE} emptyMessage={t('deleghe.no_delegators')} />
           }
         </ApiErrorWrapper>
       </Box>

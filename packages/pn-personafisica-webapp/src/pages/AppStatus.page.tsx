@@ -3,7 +3,7 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { 
   ApiErrorWrapper, EmptyState, TitleBox, useIsMobile, KnownFunctionality, 
-  AppStatusBar, DesktopDowntimeLog, MobileDowntimeLog, formatDateTime, GetDowntimeHistoryParams, PaginationData, CustomPagination 
+  AppStatusBar, DesktopDowntimeLog, MobileDowntimeLog, formatDateTime, GetDowntimeHistoryParams, PaginationData, CustomPagination, KnownSentiment 
 } from '@pagopa-pn/pn-commons';
 import { useDownloadDocument } from '../component/AppStatus/useDownloadDocument';
 import { APP_STATUS_ACTIONS, getCurrentAppStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from '../redux/appStatus/actions';
@@ -124,7 +124,7 @@ return <Box p={3}>
                     getDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails} 
                   />
               )
-            : <EmptyState disableSentimentDissatisfied enableSentimentSatisfied emptyMessage={t('downtimeList.emptyMessage')} />      
+            : <EmptyState sentimentIcon={KnownSentiment.SATISFIED} emptyMessage={t('downtimeList.emptyMessage')} />      
         }
         { downtimeLog && downtimeLog.downtimes.length > 0 && 
           <CustomPagination
