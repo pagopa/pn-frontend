@@ -41,6 +41,7 @@ phases:
         BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///')
         if [ "$BRANCH_NAME" != "main" -a "$BUILD_ID" != "dev" ]; then
             aws codebuild stop-build-batch --id $CODEBUILD_BUILD_ID
+            echo test
         else
             continue
         fi
