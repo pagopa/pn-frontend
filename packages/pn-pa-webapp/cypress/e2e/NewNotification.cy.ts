@@ -24,10 +24,10 @@ const recipients = [
 ]
 
 describe("Notifications New Notification", () => {
-  const pdfTest1 = './cypress/fixtures/pdf_test_1.pdf';
-  const pdfTest2 = './cypress/fixtures/pdf_test_2.pdf';
-  const pdfTest3 = './cypress/fixtures/pdf_test_3.pdf';
-  const pdfTest4 = './cypress/fixtures/pdf_test_4.pdf';
+  const pdfTest1 = './cypress/fixtures/attachments/pdf_test_1.pdf';
+  const pdfTest2 = './cypress/fixtures/attachments/pdf_test_2.pdf';
+  const pdfTest3 = './cypress/fixtures/attachments/pdf_test_3.pdf';
+  const pdfTest4 = './cypress/fixtures/attachments/pdf_test_4.pdf';
 
   beforeEach(() => {
     Cypress.on('uncaught:exception', (err, runnable) => {
@@ -305,8 +305,12 @@ describe("Notifications New Notification", () => {
     // Fill step 4
     cy.get('input[type="file"]').eq(0).selectFile(pdfTest3, { force: true });
     cy.get('input[type="file"]').eq(0).selectFile(pdfTest4, { force: true });
-    cy.get('button[type="submit"]').should('not.be.disabled');
+    
+    cy.get('button[type="submit"]').should('not.be.disabled').click();
 
+    cy.wait('@saveNewNotification');
+
+    cy.contains('La notifica è stata correttamente creata');
   });
 
 });
