@@ -3,13 +3,12 @@ import { Box, Stack, Typography } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { 
   ApiErrorWrapper, EmptyState, TitleBox, useIsMobile, KnownFunctionality, 
-  AppStatusBar, DesktopDowntimeLog, MobileDowntimeLog, formatDateTime, PaginationData, GetDowntimeHistoryParams, CustomPagination, KnownSentiment 
+  AppStatusBar, DesktopDowntimeLog, MobileDowntimeLog, formatDateTime, PaginationData, GetDowntimeHistoryParams, CustomPagination, KnownSentiment, useDownloadDocument 
 } from '@pagopa-pn/pn-commons';
 import { APP_STATUS_ACTIONS, getCurrentAppStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
-import { clearPagination, setPagination } from '../redux/appStatus/reducers';
-import { useDownloadDocument } from './components/AppStatus/useDownloadDocument';
+import { clearLegalFactDocumentData, clearPagination, setPagination } from '../redux/appStatus/reducers';
 
 
 /* eslint-disable-next-line arrow-body-style */
@@ -18,10 +17,14 @@ const AppStatus = () => {
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const downtimeLog = useAppSelector((state: RootState) => state.appStatus.downtimeLogPage);
   const paginationData = useAppSelector((state: RootState) => state.appStatus.pagination);
+  const legalFactDocumentDetails = useAppSelector((state: RootState) => state.appStatus.legalFactDocumentData);
   const [isInitialized, setIsInitialized] = useState(false);
   const isMobile = useIsMobile();
   const { t } = useTranslation(['appStatus']);
-  useDownloadDocument();
+  useDownloadDocument({ 
+    url: legalFactDocumentDetails && legalFactDocumentDetails.url, 
+    clearDownloadAction: () => dispatch(clearLegalFactDocumentData())
+  });
 
   const fetchCurrentStatus = useCallback(() => {
     void dispatch(getCurrentAppStatus());
