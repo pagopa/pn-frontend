@@ -40,8 +40,8 @@ phases:
       - |
         BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///')
         if [ "$BRANCH_NAME" != "main" -a "$BUILD_ID" != "dev" ]; then
-            CODEBUILD_BATCH_BUILD_IDS = $(echo aws codebuild list-build-batches-for-project --project-name pn_landing_dev_build)
-            echo $CODEBUILD_BATCH_BUILD_IDS
+            CODEBUILD_BATCH_BUILD_IDS = aws codebuild list-build-batches-for-project --project-name pn_landing_dev_build
+            echo CODEBUILD_BATCH_BUILD_IDS
             aws codebuild stop-build-batch --id $CODEBUILD_BATCH_BUILD_IDENTIFIER
             echo test
         else
