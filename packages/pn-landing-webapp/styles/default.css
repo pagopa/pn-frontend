@@ -3,7 +3,7 @@ body {
   padding: 0;
 }
 
-/* ONTRUST STYLES */
+/* START: ONETRUST STYLES */
 .otnotice .otnotice-content {
   font-family: "Titillium Web",sans-serif;
   color: #17324D;
@@ -64,3 +64,4 @@ body {
   font-size: 1.75rem;
   color: #17324D;
 }
+/* END: ONETRUST STYLES */
