@@ -21,9 +21,11 @@ phases:
     commands:
       - echo Running tests with coverage...
       - yarn test:coverage
+      - BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
+      - export BRANCH_TARGET=$(echo $CODEBUILD_WEBHOOK_BASE_REF | sed 's/refs\/heads\///')
+      - export PR_NUM=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/pr\///')
       - |
-        BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
-        if [[ "$BRANCH_NAME" =~ ^(main|develop|pn_ga)$ ]]; then
+        if [ "$BRANCH_NAME" =~ ^(main|develop|pn_ga)$ ]; then
             SONAR_OPTS="-Dsonar.branch.name=$BRANCH_NAME"
         else 
             SONAR_OPTS="-Dsonar.pullrequest.key=$PR_NUM -Dsonar.pullrequest.branch=$BRANCH_NAME -Dsonar.pullrequest.base=$BRANCH_TARGET"
