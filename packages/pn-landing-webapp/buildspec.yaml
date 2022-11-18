@@ -35,7 +35,7 @@ phases:
     runtime-versions:
       nodejs: 14
     commands:
-      # This code correctly stops the build, but in git hub, the check linked fails
+      # This code correctly stops the build, but in git hub the linked check fails
       # workaround to reduce allarms-noise due tu an eccessive amount of build in non-dev environment during development (eg. draft-PR or development branch)
       # -  echo check if current env is dev and current branch is main
       # - |
