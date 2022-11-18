@@ -578,7 +578,7 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
                         />
                       )}
                     </Grid>
-                    {values.recipients.length - 1 === index && (
+                    {values.recipients.length < 5 && values.recipients.length - 1 === index && (
                       <Stack mt={4} display="flex" direction="row" justifyContent="space-between">
                         <ButtonNaked
                           startIcon={<Add />}
