@@ -132,7 +132,7 @@ const SessionGuard = () => {
   useEffect(() => {
     const doInitalPageDetermination = async () => {
       if (sessionToken && !isClosedSession && !hasTosApiErrors) {
-        // se non è presente una route diversa dalla route si viene reindirizzati alla dashboard delle notifiche
+        // se non è presente una route diversa dalla root si viene reindirizzati alla dashboard delle notifiche
         const rootPath = location.pathname === '/';
         if (rootPath) {
           navigate(routes.NOTIFICHE, { replace: true });
