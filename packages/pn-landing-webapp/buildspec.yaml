@@ -35,20 +35,18 @@ phases:
     runtime-versions:
       nodejs: 14
     commands:
+      # This code correctly stops the build, but in git hub, the check linked fails
       # workaround to reduce allarms-noise due tu an eccessive amount of build in non-dev environment during development (eg. draft-PR or development branch)
-      -  echo check if current env is dev and current branch is main
-      - |
-        BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///')
-        if [ "$BRANCH_NAME" != "main" -a "$BUILD_ID" != "dev" ]; then
-        echo get batch build ids
-            CODEBUILD_BATCH_BUILD_IDS = $(aws codebuild list-build-batches-for-project --project-name pn_landing_dev_build)
-            echo $CODEBUILD_BATCH_BUILD_IDS
-            aws codebuild stop-build-batch --id $CODEBUILD_BATCH_BUILD_IDENTIFIER
-            echo test
-        else
-            continue
-        fi
-      - echo check completed
+      # -  echo check if current env is dev and current branch is main
+      # - |
+      #   BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///')
+      #   if [ "$BRANCH_NAME" != "main" -a "$BUILD_ID" != "dev" ]; then
+      #   echo get batch build ids
+      #       aws codebuild stop-build --id $CODEBUILD_BUILD_ID
+      #   else
+      #       continue
+      #   fi
+      # - echo check completed
       #install yarn
       - echo installing yarn
       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
