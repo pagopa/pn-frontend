@@ -12,7 +12,7 @@ function downloadDocument(url: string) {
 
 type Props = {
   url?: string;
-  clearDownloadAction?: () => any;
+  clearDownloadAction?: () => void;
 }
 
 // There are no tests for this hook, since for such a test either the document
