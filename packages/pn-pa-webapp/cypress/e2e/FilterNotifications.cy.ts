@@ -18,7 +18,7 @@ describe("Notifications Filter", () => {
 
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list-10_page-1.json'
+      fixture: 'notifications/list-10_page-1'
     }).as('notifications');
 
     cy.logout();
@@ -34,7 +34,7 @@ describe("Notifications Filter", () => {
 
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list-10_filtered-dates_page-1.json'
+      fixture: 'notifications/list-10_filtered-dates_page-1'
     }).as('filteredNotifications');
 
     cy.get('.MuiButton-outlined').click();
@@ -58,7 +58,7 @@ describe("Notifications Filter", () => {
 
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list-10_filtered-recipientTaxId_page-1.json'
+      fixture: 'notifications/list-10_filtered-recipientTaxId_page-1'
     }).as('filteredNotifications');
 
     cy.contains(/^Filtra$/).click();
@@ -80,7 +80,7 @@ describe("Notifications Filter", () => {
     
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list_filtered-iun.json'
+      fixture: 'notifications/list_filtered-iun'
     }).as('filteredNotifications');
 
     cy.contains(/^Filtra$/).click();
@@ -103,7 +103,7 @@ describe("Notifications Filter", () => {
     
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list_filtered-status.json'
+      fixture: 'notifications/list_filtered-status'
     }).as('filteredNotifications');
 
     cy.contains(/^Filtra$/).click();

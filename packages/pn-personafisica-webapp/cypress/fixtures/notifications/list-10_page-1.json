@@ -1,0 +1,137 @@
+{
+  "resultsPage": [
+    {
+      "iun": "PUGM-YUPG-UEUH-202211-U-1",
+      "paProtocolNumber": "prot-12346018",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-18T15:59:21.751839Z",
+      "subject": "Test invio notifica",
+      "notificationStatus": "DELIVERED",
+      "recipients": ["CSRGGL44L13H501E"],
+      "requestAcceptedAt": "2022-11-18T15:59:41.408734Z",
+      "group": ""
+    },
+    {
+      "iun": "KANA-UWRA-AKJE-202211-P-1",
+      "paProtocolNumber": "prot-12555514",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-15T11:05:26.649601Z",
+      "subject": "Test multidestinatario (2632)",
+      "notificationStatus": "ACCEPTED",
+      "recipients": ["CSRGGL44L13H501E"],
+      "requestAcceptedAt": "2022-11-15T11:05:55.374648Z",
+      "group": ""
+    },
+    {
+      "iun": "UXAV-MKPH-ALMV-202211-H-1",
+      "paProtocolNumber": "prot-12345011",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-10T12:23:51.108239Z",
+      "subject": "Test multidestinatario 10 (2613)",
+      "notificationStatus": "VIEWED",
+      "recipients": [
+        "CSRGGL44L13H501E",
+        "GRBGPP87L04L741X",
+        "BRGLRZ80D58H501Q"
+      ],
+      "requestAcceptedAt": "2022-11-10T12:24:25.488997Z",
+      "group": ""
+    },
+    {
+      "iun": "DRDE-VQMH-RKHL-202211-G-1",
+      "paProtocolNumber": "prot-12345010",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-08T13:28:56.926099Z",
+      "subject": "Test multidestinatario 10 (2577)",
+      "notificationStatus": "DELIVERING",
+      "recipients": ["CSRGGL44L13H501E", "GRBGPP87L04L741X"],
+      "requestAcceptedAt": "2022-11-08T13:28:56.926099Z",
+      "group": ""
+    },
+    {
+      "iun": "NUKM-YLNM-EYUG-202211-W-1",
+      "paProtocolNumber": "prot-12345009",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-07T16:37:33.460515Z",
+      "subject": "Test multidestinatario 8 (2453)",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CSRGGL44L13H501E"],
+      "requestAcceptedAt": "2022-11-07T16:37:33.460515Z",
+      "group": ""
+    },
+    {
+      "iun": "GETN-UZPE-HUXM-202211-V-1",
+      "paProtocolNumber": "prot-12345007",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-07T10:52:06.508794Z",
+      "subject": "Test multidestinatario 7 (2453)",
+      "notificationStatus": "DELIVERING",
+      "recipients": [
+        "CSRGGL44L13H501E",
+        "GRBGPP87L04L741X",
+        "BRGLRZ80D58H501Q",
+        "CLMCST42R12D969Z",
+        "PLOMRC01P30L736Y",
+        "MNDLCU98T68C933T",
+        "MNZLSN99E05F205J"
+      ],
+      "requestAcceptedAt": "2022-11-07T10:52:06.508794Z",
+      "group": ""
+    },
+    {
+      "iun": "JXYG-HVDA-XWVJ-202211-W-1",
+      "paProtocolNumber": "prot-12345612",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-04T14:51:29.104233Z",
+      "subject": "Test multidestinatario 6 (2453)",
+      "notificationStatus": "DELIVERING",
+      "recipients": [
+        "CSRGGL44L13H501E",
+        "GRBGPP87L04L741X",
+        "BRGLRZ80D58H501Q",
+        "CLMCST42R12D969Z",
+        "PLOMRC01P30L736Y",
+        "MNDLCU98T68C933T",
+        "MNZLSN99E05F205J"
+      ],
+      "requestAcceptedAt": "2022-11-04T14:51:29.104233Z",
+      "group": ""
+    },
+    {
+      "iun": "TVWM-WPDM-UXPG-202211-Q-1",
+      "paProtocolNumber": "prot-12345611",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-04T14:27:41.053221Z",
+      "subject": "Test multidestinatario 5 (2453)",
+      "notificationStatus": "DELIVERING",
+      "recipients": [
+        "CSRGGL44L13H501E",
+        "GRBGPP87L04L741X",
+        "BRGLRZ80D58H501Q",
+        "CLMCST42R12D969Z",
+        "PLOMRC01P30L736Y",
+        "MNDLCU98T68C933T",
+        "MNZLSN99E05F205J"
+      ],
+      "requestAcceptedAt": "2022-11-04T14:27:41.053221Z",
+      "group": ""
+    },
+    {
+      "iun": "TPHY-NWUD-HAGE-202211-U-1",
+      "paProtocolNumber": "prot-12345600",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-03T16:35:09.696359Z",
+      "subject": "Test multidestinatario (2453)",
+      "notificationStatus": "VIEWED",
+      "recipients": [
+        "CSRGGL44L13H501E",
+        "GRBGPP87L04L741X",
+        "CLMCST42R12D969Z"
+      ],
+      "requestAcceptedAt": "2022-11-03T16:35:09.696359Z",
+      "group": ""
+    }
+  ],
+  "moreResult": false,
+  "nextPagesKey": []
+}

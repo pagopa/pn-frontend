@@ -41,9 +41,9 @@ const getDates = (endToday: boolean = false) => {
 
 describe('Notification Filters (no delegators)', () => {
   beforeEach(() => {
-    // Cypress.on('uncaught:exception', (err, runnable) => {
-    //   return false;
-    // });
+    Cypress.on('uncaught:exception', (err, runnable) => {
+      return false;
+    });
     cy.viewport(1920, 1080);
     cy.login();
     cy.visit(NOTIFICHE);
@@ -57,7 +57,7 @@ describe('Notification Filters (no delegators)', () => {
 
     // TODO: set the status during login to avoid keep doing this action
     // accept onetrust cookies
-    cy.get('#onetrust-accept-btn-handler').click();
+    // cy.get('#onetrust-accept-btn-handler').click();
   });
 
   it('filtered dates should not change after visiting delegations page', () => {
@@ -146,9 +146,9 @@ describe('Notification Filters (no delegators)', () => {
 
 describe('Notification Filters (delegators)', () => {
   beforeEach(() => {
-    // Cypress.on('uncaught:exception', (err, runnable) => {
-    //   return false;
-    // });
+    Cypress.on('uncaught:exception', (err, runnable) => {
+      return false;
+    });
     cy.viewport(1920, 1080);
     cy.login();
     cy.visit(NOTIFICHE);
@@ -160,7 +160,7 @@ describe('Notification Filters (delegators)', () => {
     );
     
     // accept onetrust cookies
-    cy.get('#onetrust-accept-btn-handler').click();
+    // cy.get('#onetrust-accept-btn-handler').click();
   });
 
   it('filters reset visiting notifications list as a delegate', () => {

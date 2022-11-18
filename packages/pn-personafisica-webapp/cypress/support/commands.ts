@@ -34,6 +34,11 @@ Cypress.Commands.add('logout', () => {
 });
 
 Cypress.Commands.add('loginWithUI', () => {
+  Cypress.on('uncaught:exception', (err, runnable) => {
+    return false;
+  });
+
+cy.viewport(1920, 1080);
   cy.visit('');
 
   cy.window().then(win => {
@@ -43,7 +48,9 @@ Cypress.Commands.add('loginWithUI', () => {
     const password = Cypress.env("password") as string;
 
     if(!user) { // no session... login needed
+      cy.get('.css-zitybv > .MuiButton-root').click();
       cy.get('#spidButton').click();
+      cy.get('#onetrust-accept-btn-handler').click();
 
       cy.get('[alt="test"]').click();
       cy.get('input#username').type(username);
@@ -51,7 +58,6 @@ Cypress.Commands.add('loginWithUI', () => {
       cy.get('input#password').type(password);
       cy.get('button[type="submit"]').first().click();
       cy.get('input[value="Conferma"]').click();
-      cy.get('#onetrust-accept-btn-handler').click();
     }
   }); 
 
