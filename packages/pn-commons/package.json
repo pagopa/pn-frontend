@@ -24,7 +24,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write",
-    "sonar": "tsc && node sonarqube-scanner.js -Dsonar.login={$SONAR_TOKEN}"
+    "sonar": "tsc && node sonarqube-scanner.js -Dsonar.login=${SONAR_TOKEN}"
   },
   "eslintConfig": {
     "extends": [
