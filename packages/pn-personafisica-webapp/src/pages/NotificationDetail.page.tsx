@@ -206,10 +206,7 @@ const NotificationDetail = () => {
         </Fragment>
       }
       currentLocationLabel={
-        `${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}${
-          /* eslint-disable-next-line sonarjs/no-nested-template-literals */
-          fromQrCode ? `${t('detail.breadcrumb-from-qr-code', { ns: 'notifiche' })}` : ''
-        }`
+        `${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`
       }
     />
   ), [fromQrCode]);
