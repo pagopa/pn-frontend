@@ -1,13 +1,13 @@
 import { act, screen } from '@testing-library/react';
 import { render } from '../../__test__/test-utils';
 import SessionGuard from '../SessionGuard';
-import * as routes from '../routes.const';
 
 
-const mockNavigateFn = jest.fn(() => { });
+const mockNavigateFn = jest.fn(() => {});
 
 /* eslint-disable functional/no-let */
 let mockLocationHash: string;  // #selfCareToken=mocked_token
+
 
 jest.mock('react-router-dom', () => {
   const original = jest.requireActual('react-router-dom');
@@ -95,19 +95,6 @@ describe('SessionGuard Component', () => {
 
     expect(mockNavigateFn).toBeCalledTimes(0);
     expect(mockSessionCheckFn).toBeCalledTimes(0);
-  });
-
-  // cosa si aspetta: entra nell'app, fa navigate verso notifiche, lancia il sessionCheck
-  it('utente riconosciuto - TOS accettate', async () => {
-    mockLocationHash = "#selfCareToken=good_token";
-
-    await act(async () => void render(<SessionGuard />));
-    const pageComponent = screen.queryByText("Generic Page");
-    expect(pageComponent).toBeTruthy();
-
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect((mockNavigateFn.mock.calls[0] as any)[0]).toBe(routes.DASHBOARD);
-    expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
   // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
