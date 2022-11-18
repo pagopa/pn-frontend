@@ -587,6 +587,7 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
                           }}
                           color="primary"
                           size="large"
+                          disabled={values.recipients.length >= 5}
                         >
                           {t('add-recipient')}
                         </ButtonNaked>
