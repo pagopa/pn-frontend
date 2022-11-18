@@ -41,7 +41,7 @@ const PnBreadcrumb = ({goBackAction, goBackLabel, showBackAction = true, linkPro
       justifyContent="start"
       spacing={3}
     >
-      {showBackAction && <ButtonNaked color="primary" startIcon={<ArrowBackIcon />} onClick={goBackAction ? goBackAction : () => navigate(-1)}>
+      {showBackAction && <ButtonNaked color="primary" data-testid="breadcrumb-indietro-button" startIcon={<ArrowBackIcon />} onClick={goBackAction ? goBackAction : () => navigate(-1)}>
         {finalBackLabel}
       </ButtonNaked>}
       <Breadcrumbs aria-label="breadcrumb">
