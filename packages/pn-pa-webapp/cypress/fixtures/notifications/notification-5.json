@@ -1,0 +1,361 @@
+{
+  "abstract": "Abstract della notifica",
+  "paProtocolNumber": "302191668522621848",
+  "subject": "invio notifica GA cucumber",
+  "recipients": [
+    {
+      "recipientType": "PF",
+      "taxId": "CLMCST42R12D969Z",
+      "internalId": "PF-a6c1350d-1d69-4209-8bf8-31de58c79d6e",
+      "denomination": "Mario Cucumber",
+      "payment": {
+        "noticeCode": "302191668522621854",
+        "creditorTaxId": "77777777777",
+        "pagoPaForm": {
+          "digests": {
+            "sha256": "jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE="
+          },
+          "contentType": "application/pdf",
+          "ref": {
+            "key": "PN_NOTIFICATION_ATTACHMENTS-0001-PMV3-TQQ0-6ECA-IC9D",
+            "versionToken": "v1"
+          }
+        }
+      }
+    },
+    {
+      "recipientType": "PF",
+      "taxId": "FRMTTR76M06B715E",
+      "internalId": "PF-4fc75df3-0913-407e-bdaa-e50329708b7d",
+      "denomination": "Mario Gherkin",
+      "payment": {
+        "noticeCode": "302191668522621857",
+        "creditorTaxId": "77777777777",
+        "pagoPaForm": {
+          "digests": {
+            "sha256": "jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE="
+          },
+          "contentType": "application/pdf",
+          "ref": {
+            "key": "PN_NOTIFICATION_ATTACHMENTS-0001-DNYS-SMM0-YQ82-ZTXA",
+            "versionToken": "v1"
+          }
+        }
+      }
+    }
+  ],
+  "documents": [
+    {
+      "digests": { "sha256": "jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=" },
+      "contentType": "application/pdf",
+      "ref": {
+        "key": "PN_NOTIFICATION_ATTACHMENTS-0001-VIGY-4BS1-J4LC-CQLC",
+        "versionToken": "v1"
+      },
+      "docIdx": "0"
+    }
+  ],
+  "notificationFeePolicy": "FLAT_RATE",
+  "physicalCommunicationType": "REGISTERED_LETTER_890",
+  "senderDenomination": "Comune di palermo",
+  "senderTaxId": "80016350821",
+  "senderPaId": "5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce",
+  "iun": "GXQA-NXVL-UZKT-202211-Q-1",
+  "sentAt": "2022-11-15T14:30:22.629697Z",
+  "documentsAvailable": true,
+  "notificationStatus": "UNREACHABLE",
+  "notificationStatusHistory": [
+    {
+      "status": "ACCEPTED",
+      "activeFrom": "2022-11-15T14:30:22.629697Z",
+      "relatedTimelineElements": [
+        "GXQA-NXVL-UZKT-202211-Q-1_request_accepted",
+        "GXQA-NXVL-UZKT-202211-Q-1_aar_gen_1",
+        "GXQA-NXVL-UZKT-202211-Q-1_aar_gen_0",
+        "GXQA-NXVL-UZKT-202211-Q-1_get_address_1_source_PLATFORM_attempt_0",
+        "GXQA-NXVL-UZKT-202211-Q-1_get_address_1_source_SPECIAL_attempt_0",
+        "GXQA-NXVL-UZKT-202211-Q-1_1_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+        "public_registry_response_GXQA-NXVL-UZKT-202211-Q-1_1_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+        "GXQA-NXVL-UZKT-202211-Q-1_get_address_1_source_GENERAL_attempt_0",
+        "GXQA-NXVL-UZKT-202211-Q-1_schedule_analog_workflow_1",
+        "GXQA-NXVL-UZKT-202211-Q-1_get_address_0_source_PLATFORM_attempt_0",
+        "GXQA-NXVL-UZKT-202211-Q-1_get_address_0_source_SPECIAL_attempt_0",
+        "GXQA-NXVL-UZKT-202211-Q-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+        "public_registry_response_GXQA-NXVL-UZKT-202211-Q-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+        "GXQA-NXVL-UZKT-202211-Q-1_get_address_0_source_GENERAL_attempt_0",
+        "GXQA-NXVL-UZKT-202211-Q-1_schedule_analog_workflow_0",
+        "GXQA-NXVL-UZKT-202211-Q-1_0_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+        "GXQA-NXVL-UZKT-202211-Q-1_1_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+        "public_registry_response_GXQA-NXVL-UZKT-202211-Q-1_0_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+        "public_registry_response_GXQA-NXVL-UZKT-202211-Q-1_1_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+        "GXQA-NXVL-UZKT-202211-Q-1_analog_failure_workflow_0",
+        "GXQA-NXVL-UZKT-202211-Q-1_analog_failure_workflow_1",
+        "GXQA-NXVL-UZKT-202211-Q-1_completely_unreachable_1"
+      ]
+    },
+    {
+      "status": "UNREACHABLE",
+      "activeFrom": "2022-11-15T14:32:18.948463Z",
+      "relatedTimelineElements": [
+        "GXQA-NXVL-UZKT-202211-Q-1_completely_unreachable_0",
+        "GXQA-NXVL-UZKT-202211-Q-1_schedule_refinement_workflow_1",
+        "GXQA-NXVL-UZKT-202211-Q-1_schedule_refinement_workflow_0"
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_request_accepted",
+      "timestamp": "2022-11-15T14:30:49.336456Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_LEGAL_FACTS-0002-NGW1-3J6A-TY5I-EZ6P",
+          "category": "SENDER_ACK"
+        }
+      ],
+      "category": "REQUEST_ACCEPTED"
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_aar_gen_1",
+      "timestamp": "2022-11-15T14:31:19.488334Z",
+      "legalFactsIds": [],
+      "category": "AAR_GENERATION",
+      "details": {
+        "recIndex": 1,
+        "errors": [],
+        "numberOfPages": 1,
+        "generatedAarUrl": "safestorage://PN_AAR-0002-2DYC-FO1D-J4SM-7M8A"
+      }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_aar_gen_0",
+      "timestamp": "2022-11-15T14:31:19.60731Z",
+      "legalFactsIds": [],
+      "category": "AAR_GENERATION",
+      "details": {
+        "recIndex": 0,
+        "errors": [],
+        "numberOfPages": 1,
+        "generatedAarUrl": "safestorage://PN_AAR-0002-RYWY-NLML-GJQL-6Q9R"
+      }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_get_address_1_source_PLATFORM_attempt_0",
+      "timestamp": "2022-11-15T14:31:47.930161Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 1,
+        "digitalAddressSource": "PLATFORM",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T14:31:47.930154Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_get_address_1_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-15T14:31:47.954523Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 1,
+        "digitalAddressSource": "SPECIAL",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T14:31:47.954517Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_1_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+      "timestamp": "2022-11-15T14:31:47.981702Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_CALL",
+      "details": {
+        "recIndex": 1,
+        "deliveryMode": "DIGITAL",
+        "contactPhase": "CHOOSE_DELIVERY",
+        "sentAttemptMade": 0,
+        "sendDate": "2022-11-15T14:31:47.981689Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "public_registry_response_GXQA-NXVL-UZKT-202211-Q-1_1_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+      "timestamp": "2022-11-15T14:31:48.096017Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_RESPONSE",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_get_address_1_source_GENERAL_attempt_0",
+      "timestamp": "2022-11-15T14:31:48.13665Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 1,
+        "digitalAddressSource": "GENERAL",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T14:31:48.136645Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_schedule_analog_workflow_1",
+      "timestamp": "2022-11-15T14:31:48.180483Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_ANALOG_WORKFLOW",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_get_address_0_source_PLATFORM_attempt_0",
+      "timestamp": "2022-11-15T14:31:50.023308Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddressSource": "PLATFORM",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T14:31:50.023303Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_get_address_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-15T14:31:50.067143Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddressSource": "SPECIAL",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T14:31:50.067139Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+      "timestamp": "2022-11-15T14:31:50.26176Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_CALL",
+      "details": {
+        "recIndex": 0,
+        "deliveryMode": "DIGITAL",
+        "contactPhase": "CHOOSE_DELIVERY",
+        "sentAttemptMade": 0,
+        "sendDate": "2022-11-15T14:31:50.261718Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "public_registry_response_GXQA-NXVL-UZKT-202211-Q-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+      "timestamp": "2022-11-15T14:31:50.438145Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_RESPONSE",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_get_address_0_source_GENERAL_attempt_0",
+      "timestamp": "2022-11-15T14:31:50.483966Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddressSource": "GENERAL",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T14:31:50.483961Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_schedule_analog_workflow_0",
+      "timestamp": "2022-11-15T14:31:50.514497Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_ANALOG_WORKFLOW",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_0_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+      "timestamp": "2022-11-15T14:32:18.439869Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_CALL",
+      "details": {
+        "recIndex": 0,
+        "deliveryMode": "ANALOG",
+        "contactPhase": "SEND_ATTEMPT",
+        "sentAttemptMade": 0,
+        "sendDate": "2022-11-15T14:32:18.439864Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_1_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+      "timestamp": "2022-11-15T14:32:18.440075Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_CALL",
+      "details": {
+        "recIndex": 1,
+        "deliveryMode": "ANALOG",
+        "contactPhase": "SEND_ATTEMPT",
+        "sentAttemptMade": 0,
+        "sendDate": "2022-11-15T14:32:18.440072Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "public_registry_response_GXQA-NXVL-UZKT-202211-Q-1_0_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+      "timestamp": "2022-11-15T14:32:18.683039Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_RESPONSE",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "public_registry_response_GXQA-NXVL-UZKT-202211-Q-1_1_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+      "timestamp": "2022-11-15T14:32:18.762755Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_RESPONSE",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_analog_failure_workflow_0",
+      "timestamp": "2022-11-15T14:32:18.793511Z",
+      "legalFactsIds": [],
+      "category": "ANALOG_FAILURE_WORKFLOW",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_analog_failure_workflow_1",
+      "timestamp": "2022-11-15T14:32:18.848352Z",
+      "legalFactsIds": [],
+      "category": "ANALOG_FAILURE_WORKFLOW",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_completely_unreachable_1",
+      "timestamp": "2022-11-15T14:32:18.944713Z",
+      "legalFactsIds": [],
+      "category": "COMPLETELY_UNREACHABLE",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_completely_unreachable_0",
+      "timestamp": "2022-11-15T14:32:18.948463Z",
+      "legalFactsIds": [],
+      "category": "COMPLETELY_UNREACHABLE",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_schedule_refinement_workflow_1",
+      "timestamp": "2022-11-15T14:32:19.056721Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_REFINEMENT",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "GXQA-NXVL-UZKT-202211-Q-1_schedule_refinement_workflow_0",
+      "timestamp": "2022-11-15T14:32:19.159363Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_REFINEMENT",
+      "details": { "recIndex": 0, "errors": [] }
+    }
+  ]
+}
