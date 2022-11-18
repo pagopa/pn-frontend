@@ -2,7 +2,7 @@ import { ReactNode, RefAttributes } from 'react';
 import { Link, LinkProps, useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Stack, styled, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { ButtonNaked } from "@pagopa/mui-italia";
+import { ButtonNaked } from '@pagopa/mui-italia';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   display: 'flex',
@@ -21,15 +21,22 @@ const BreadcrumbLink = (props: LinkProps & RefAttributes<HTMLAnchorElement>) => 
 type PnBreadcrumbProps = {
   goBackAction?: () => void;
   goBackLabel?: string;
-  linkProps?: LinkProps & RefAttributes<HTMLAnchorElement>
+  linkProps?: LinkProps & RefAttributes<HTMLAnchorElement>;
   linkRoute: string;
   linkLabel: ReactNode;
   currentLocationLabel: string;
 };
 
-const PnBreadcrumb = ({goBackAction, goBackLabel = 'Indietro', linkProps, linkRoute, linkLabel, currentLocationLabel}: PnBreadcrumbProps) => {
+const PnBreadcrumb = ({
+  goBackAction,
+  goBackLabel = 'Indietro',
+  linkProps,
+  linkRoute,
+  linkLabel,
+  currentLocationLabel,
+}: PnBreadcrumbProps) => {
   const navigate = useNavigate();
-  
+
   return (
     <Stack
       direction={{ xs: 'column', sm: 'row' }}
@@ -37,11 +44,17 @@ const PnBreadcrumb = ({goBackAction, goBackLabel = 'Indietro', linkProps, linkRo
       justifyContent="start"
       spacing={3}
     >
-      <ButtonNaked color="primary" startIcon={<ArrowBackIcon />} onClick={goBackAction ? goBackAction : () => navigate(-1)}>
+      <ButtonNaked
+        color="primary"
+        startIcon={<ArrowBackIcon />}
+        onClick={goBackAction ? goBackAction : () => navigate(-1)}
+      >
         {goBackLabel}
       </ButtonNaked>
       <Breadcrumbs aria-label="breadcrumb">
-        <BreadcrumbLink to={linkRoute} {...linkProps}>{linkLabel}</BreadcrumbLink>
+        <BreadcrumbLink to={linkRoute} {...linkProps}>
+          {linkLabel}
+        </BreadcrumbLink>
         <Typography
           color="text.primary"
           fontWeight={600}
