@@ -15,17 +15,18 @@ const StyledStack = styled(Stack)`
 `;
 
 const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText }) => {
-  const text = mainText || getLocalizedOrDefaultLabel(
-    'common',
-    `messages.generic-api-error-main-text`,
-    'Non siamo riusciti a recuperare questi dati.'
-  );
+  const text =
+    mainText ||
+    getLocalizedOrDefaultLabel(
+      'common',
+      `messages.generic-api-error-main-text`,
+      'Non siamo riusciti a recuperare questi dati.'
+    );
   const actionLaunchText = getLocalizedOrDefaultLabel(
     'common',
     `messages.generic-api-error-action-text`,
     'Ricarica'
   );
-
 
   return (
     <StyledStack
@@ -40,7 +41,12 @@ const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText }) => {
         sx={{ verticalAlign: 'middle', margin: '0 20px' }}
       />
       <Typography sx={{ marginRight: '8px' }}>{text}</Typography>
-      <Typography color="primary" fontWeight="bold" sx={{ cursor: 'pointer' }} onClick={onClick || (() => window.location.reload()) }>
+      <Typography
+        color="primary"
+        fontWeight="bold"
+        sx={{ cursor: 'pointer' }}
+        onClick={onClick || (() => window.location.reload())}
+      >
         {actionLaunchText}
       </Typography>
     </StyledStack>

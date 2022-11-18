@@ -16,14 +16,13 @@ import {
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 import { Box } from '@mui/material';
 
-import { MIXPANEL_TOKEN } from "./utils/constants";
 import Router from './navigation/routes';
 import { AUTH_ACTIONS, getOrganizationParty, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 
-import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION, MIXPANEL_TOKEN } from './utils/constants';
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
@@ -103,7 +102,7 @@ const App = () => {
     ],
     [role, loggedUserOrganizationParty]
   );
-  
+
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));

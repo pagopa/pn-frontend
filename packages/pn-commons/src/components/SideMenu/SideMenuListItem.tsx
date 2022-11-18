@@ -31,35 +31,35 @@ const SideMenuListItem = ({
   handleLinkClick,
   onSelect,
 }: Props) => (
-    <ListItemButton
-      selected={selected}
-      onClick={() => {
-        onSelect();
-        if (goOutside) {
-          window.open(item.route as string);
-        } else {
-          handleLinkClick(item);
-        }
-      }}
-      sx={style}
-    >
-      {item.icon && (
-        <ListItemIcon>
-          {item.dotBadge ? (
-            <Badge color="primary" variant="dot">
-              <item.icon />
-            </Badge>
-          ) : (
+  <ListItemButton
+    selected={selected}
+    onClick={() => {
+      onSelect();
+      if (goOutside) {
+        window.open(item.route as string);
+      } else {
+        handleLinkClick(item);
+      }
+    }}
+    sx={style}
+  >
+    {item.icon && (
+      <ListItemIcon>
+        {item.dotBadge ? (
+          <Badge color="primary" variant="dot">
             <item.icon />
-          )}
-        </ListItemIcon>
-      )}
-      <ListItemText primary={item.label} data-cy={`menu-item(${(item.label).toLowerCase()})`} />
-      {item.rightBadgeNotification && (
-        <NotificationBadge numberOfNotification={item.rightBadgeNotification} />
-      )}
-      {goOutside && <ExitToApp color="action" />}
-    </ListItemButton>
-  );
+          </Badge>
+        ) : (
+          <item.icon />
+        )}
+      </ListItemIcon>
+    )}
+    <ListItemText primary={item.label} data-cy={`menu-item(${item.label.toLowerCase()})`} />
+    {item.rightBadgeNotification && (
+      <NotificationBadge numberOfNotification={item.rightBadgeNotification} />
+    )}
+    {goOutside && <ExitToApp color="action" />}
+  </ListItemButton>
+);
 
 export default SideMenuListItem;
