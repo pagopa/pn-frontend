@@ -64,7 +64,7 @@ export function useProcess<T>(sequence: Array<T>) {
   }, []);
 
   const endCurrentStep = useCallback(() => {
-    setCurrentSituation(currentValue => ({...currentValue, isActive: false }));
+    setCurrentSituation(currentValue => ({ ...currentValue, isActive: false }));
   }, []);
 
   const performStep = useCallback(async (step: T, action: () => Promise<void> | void) => {
