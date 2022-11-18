@@ -19,6 +19,10 @@ import NotificationDetail from '../NotificationDetail.page';
 
 const mockUseParamsFn = jest.fn();
 
+/* eslint-disable functional/no-let */
+let mockReactRouterState: any;
+/* eslint-enable functional/no-let */
+
 // mock imports
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -27,20 +31,29 @@ jest.mock('react-i18next', () => ({
     }),
 }));
 
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useParams: () => mockUseParamsFn(),
-}));
+jest.mock('react-router-dom', () => {
+  const original = jest.requireActual('react-router-dom');
+  return {
+    ...original,
+    useParams: () => mockUseParamsFn(),
+    useLocation: () => ({ ...original.useLocation(), state: mockReactRouterState }),
+  };
+});
 
-jest.mock('@pagopa-pn/pn-commons', () => ({
-  ...jest.requireActual('@pagopa-pn/pn-commons'),
-  NotificationDetailTable: ({ rows }: { rows: Array<NotificationDetailTableRow> }) => (
-    <div>Table {rows[1].value}</div>
-  ),
-  // NotificationDetailDocuments: () => <div>Documents</div>,
-  NotificationDetailTimeline: () => <div>Timeline</div>,
-  ApiError: () => <div>Api Error</div>,
-}));
+jest.mock('@pagopa-pn/pn-commons', () => {
+  const original = jest.requireActual('@pagopa-pn/pn-commons');
+  const OriginalPnBreadcrumb = original.PnBreadcrumb;
+  return {
+    ...original,
+    NotificationDetailTable: ({ rows }: { rows: Array<NotificationDetailTableRow> }) => (
+      <div>Table {rows[1].value}</div>
+    ),
+    // NotificationDetailDocuments: () => <div>Documents</div>,
+    NotificationDetailTimeline: () => <div>Timeline</div>,
+    ApiError: () => <div>Api Error</div>,
+    PnBreadcrumb: OriginalPnBreadcrumb
+  }
+});
 
 jest.mock('../../component/Notifications/NotificationPayment', () => () => <div>Payment</div>);
 
@@ -80,6 +93,7 @@ describe('NotificationDetail Page', () => {
     mockDispatchFn = jest.fn(() => ({
       then: () => Promise.resolve(),
     }));
+    mockReactRouterState = {};
   });
 
   afterEach(() => {
@@ -91,7 +105,7 @@ describe('NotificationDetail Page', () => {
     mockActionFn.mockReset();
   });
 
-  test('renders NotificationDetail page with payment box', async () => {
+  test.only('renders NotificationDetail page with payment box', async () => {
     result = renderComponent(notificationToFe);
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
@@ -267,5 +281,19 @@ describe('NotificationDetail Page', () => {
     ));
     const apiErrorComponent = screen.queryByText("Api Error");
     expect(apiErrorComponent).toBeTruthy();
+  });
+
+  it.only("normal navigation - includes 'indietro' button", async () => {
+    result = renderComponent(notificationToFe);
+    const indietroButton = result.queryByTestId("breadcrumb-indietro-button");
+    expect(indietroButton).toBeInTheDocument();
+  });
+
+
+  it.only("navigation from QR code - does not include 'indietro' button", async () => {
+    mockReactRouterState = { fromQrCode: true };
+    result = renderComponent(notificationToFe);
+    const indietroButton = result.queryByTestId("breadcrumb-indietro-button");
+    expect(indietroButton).not.toBeInTheDocument();
   });
 });

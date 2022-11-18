@@ -24,6 +24,7 @@ import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
 } from '../notifications.routes';
@@ -115,6 +116,24 @@ describe('Notifications api tests', () => {
     expect(res).toStrictEqual({
       status: 'SUCCEEDED',
       amount: 10,
+    });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('exchangeNotificationQrCode', async () => {
+    const mock = new MockAdapter(apiClient);
+    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: "qr1" }).reply(200, {
+      iun: 'mock-notification-1',
+      mandateId: 'mock-mandate-1',
+    });
+    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: "qr2" }).reply(200, {
+      iun: 'mock-notification-2',
+    });
+    const res = await NotificationsApi.exchangeNotificationQrCode("qr1");
+    expect(res).toStrictEqual({
+      iun: 'mock-notification-1',
+      mandateId: 'mock-mandate-1',
     });
     mock.reset();
     mock.restore();
