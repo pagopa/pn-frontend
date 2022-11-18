@@ -21,7 +21,6 @@ import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { MIXPANEL_TOKEN } from "./utils/constants";
 import Router from './navigation/routes';
 import { AUTH_ACTIONS, getOrganizationParty, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
@@ -30,7 +29,7 @@ import { getMenuItems } from './utils/role.utility';
 
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION, MIXPANEL_TOKEN } from './utils/constants';
 import { TrackEventType } from './utils/events';
 import { trackEventByType } from './utils/mixpanel';
 import './utils/onetrust';
@@ -144,7 +143,7 @@ const App = () => {
     ],
     [role, loggedUserOrganizationParty]
   );
-  
+
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));

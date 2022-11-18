@@ -1,3 +1,3 @@
 import "./Auth.cy";
-import "./NewNotifications.cy";
+import "./NewNotification.cy";
 import "./FilterNotifications.cy";
