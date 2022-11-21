@@ -2,9 +2,9 @@ import { IsEqual } from "../rules/IsEqual";
 import { IsNull } from "../rules/IsNull";
 import { IsUndefined } from "../rules/IsUndefined";
 import { CustomValidator } from "../rules/CustomValidator";
+import { IsOneOf } from "../rules/IsOneOf";
 import { ValidationResult } from "../types/ValidationResult";
 import { Rule } from "../Rule";
-import { IsOneOf } from "../rules/IsOneOf";
 
 export abstract class CommonRuleValidator<TModel, TValue> {
 
