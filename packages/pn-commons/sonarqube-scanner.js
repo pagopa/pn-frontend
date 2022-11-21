@@ -2,6 +2,7 @@ const scanner = require('sonarqube-scanner');
 const options = {
   'sonar.organization': 'pagopa',
   'sonar.projectKey': 'pagopa_pn-fe-commons',
+  'SONAR_TOKEN': process.env.SONAR_TOKEN
 };
 
 // if (typeof process.env.PR_NUM !== 'undefined' ) {
