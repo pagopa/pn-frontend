@@ -171,7 +171,7 @@ describe('Attachments Component', () => {
   it('Adds ten documents placeholders and checks that is not possible to add more', async () => {
     const form = result.container.querySelector('form');
     let buttons = await waitFor(() => form?.querySelectorAll('button'));
-    for (let i=0; i<11; i++) {
+    for (let i=0; i<10; i++) {
       fireEvent.click(buttons![0]);
     }
     buttons = await waitFor(() => form?.querySelectorAll('button'));

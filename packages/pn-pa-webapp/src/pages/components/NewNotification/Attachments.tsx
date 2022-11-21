@@ -301,7 +301,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
             sx={{ marginTop: i > 0 ? '30px' : '10px' }}
           />
         ))}
-        {formik.values.documents.length <= 11 &&
+        {formik.values.documents.length < 11 &&
           <ButtonNaked
             onClick={addDocumentHandler}
             color="primary"
