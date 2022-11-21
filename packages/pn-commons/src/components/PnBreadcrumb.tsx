@@ -29,7 +29,15 @@ type PnBreadcrumbProps = {
   currentLocationLabel: string;
 };
 
-const PnBreadcrumb = ({goBackAction, goBackLabel, showBackAction = true, linkProps, linkRoute, linkLabel, currentLocationLabel}: PnBreadcrumbProps) => {
+const PnBreadcrumb = ({
+  goBackAction,
+  goBackLabel,
+  showBackAction = true, 
+  linkProps,
+  linkRoute,
+  linkLabel,
+  currentLocationLabel,
+}: PnBreadcrumbProps) => {
   const navigate = useNavigate();
   
   const finalBackLabel = goBackLabel || getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro');
@@ -41,11 +49,20 @@ const PnBreadcrumb = ({goBackAction, goBackLabel, showBackAction = true, linkPro
       justifyContent="start"
       spacing={3}
     >
-      {showBackAction && <ButtonNaked color="primary" data-testid="breadcrumb-indietro-button" startIcon={<ArrowBackIcon />} onClick={goBackAction ? goBackAction : () => navigate(-1)}>
-        {finalBackLabel}
-      </ButtonNaked>}
+      {showBackAction && 
+        <ButtonNaked 
+          color="primary" 
+          data-testid="breadcrumb-indietro-button" 
+          startIcon={<ArrowBackIcon />} 
+          onClick={goBackAction ? goBackAction : () => navigate(-1)}
+        >
+          {finalBackLabel}
+        </ButtonNaked>
+      }
       <Breadcrumbs aria-label="breadcrumb">
-        <BreadcrumbLink to={linkRoute} {...linkProps}>{linkLabel}</BreadcrumbLink>
+        <BreadcrumbLink to={linkRoute} {...linkProps}>
+          {linkLabel}
+        </BreadcrumbLink>
         <Typography
           color="text.primary"
           fontWeight={600}

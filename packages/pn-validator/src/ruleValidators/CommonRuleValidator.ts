@@ -2,6 +2,7 @@ import { IsEqual } from "../rules/IsEqual";
 import { IsNull } from "../rules/IsNull";
 import { IsUndefined } from "../rules/IsUndefined";
 import { CustomValidator } from "../rules/CustomValidator";
+import { IsOneOf } from "../rules/IsOneOf";
 import { ValidationResult } from "../types/ValidationResult";
 import { Rule } from "../Rule";
 
@@ -41,6 +42,17 @@ export abstract class CommonRuleValidator<TModel, TValue> {
      */
     public isEqual = (value: TValue, not?: boolean, customErrorMessage?: string) => {
         this.pushRule(new IsEqual<TModel, TValue>(value, not, customErrorMessage));
+        return this;
+    }
+
+    /**
+     * Check if value is in (not in) the set provided
+     * @param {TValue[]} value value to compare
+     * @param {boolean} [not] boolean to evaluate negative condition
+     * @param {string} [customErrorMessage] custom message to show when validation fails
+     */
+     public isOneOf = (possibleValues: TValue[], not?: boolean, customErrorMessage?: string) => {
+        this.pushRule(new IsOneOf<TModel, TValue>(possibleValues, not, customErrorMessage));
         return this;
     }
 

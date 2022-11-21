@@ -68,7 +68,7 @@ export default function Layout({
   isLogged,
   showHeader = true,
   showFooter = true,
-  hasTermsOfService
+  hasTermsOfService,
 }: Props) {
   return (
     <ErrorBoundary
@@ -114,8 +114,9 @@ export default function Layout({
               onLanguageChanged={onLanguageChanged}
               eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
               hasTermsOfService={hasTermsOfService}
-            />)}
-          </>
+            />
+          )}
+        </>
       </Stack>
     </ErrorBoundary>
   );

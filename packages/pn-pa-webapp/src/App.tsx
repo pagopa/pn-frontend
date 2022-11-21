@@ -1,6 +1,8 @@
-import { ErrorInfo, useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { Email } from '@mui/icons-material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import HelpIcon from '@mui/icons-material/Help';
+import { Box } from '@mui/material';
 import {
   AppMessage,
   appStateActions,
@@ -8,24 +10,28 @@ import {
   Layout,
   LoadingOverlay,
   SideMenu,
+  SideMenuItem,
   useErrors,
   useMultiEvent,
   useTracking,
-  useUnload,
+  useUnload
 } from '@pagopa-pn/pn-commons';
 import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
-import { Box } from '@mui/material';
+import { ErrorInfo, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 
-import { MIXPANEL_TOKEN } from "./utils/constants";
 import Router from './navigation/routes';
 import { AUTH_ACTIONS, getOrganizationParty, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { RootState } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 
-import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION } from './utils/constants';
-import { trackEventByType } from './utils/mixpanel';
+import * as routes from './navigation/routes.const';
+import { getCurrentAppStatus } from './redux/appStatus/actions';
+import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION, MIXPANEL_TOKEN } from './utils/constants';
 import { TrackEventType } from './utils/events';
+import { trackEventByType } from './utils/mixpanel';
 import './utils/onetrust';
 
 const App = () => {
@@ -38,6 +44,7 @@ const App = () => {
     (state: RootState) => state.userState.organizationParty
   );
   const { tos } = useAppSelector((state: RootState) => state.userState);
+  const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
 
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
@@ -47,17 +54,50 @@ const App = () => {
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
   const sessionToken = loggedUser.sessionToken;
+
   const menuItems = useMemo(() => {
+    const basicMenuItems: Array<SideMenuItem> = [
+      { label: t('menu.notifications'), icon: Email, route: routes.DASHBOARD },
+      /**
+       * Refers to PN-1741
+       * Commented out because beyond MVP scope
+       * 
+       * LINKED TO:
+       * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
+       * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
+       */
+      // { label: menu.api-key, icon: VpnKey, route: routes.API_KEYS },
+      { 
+        label: t('menu.app-status'), 
+        // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
+        icon: () => currentStatus 
+          ? (currentStatus.appIsFullyOperative
+            ? <CheckCircleIcon sx={{ color: 'success.main' }} />
+            : <ErrorIcon sx={{ color: 'error.main' }} />)
+          : <HelpIcon />
+        , 
+        route: routes.APP_STATUS 
+      },
+    ];
+
+    // As the basicMenuItems definition now accesses the MUI theme and the Redux store,
+    // it would be cumbersome to include it in a "raw" (i.e. not linked to React) function.
+    // I preferred to define the basicMenuItems in the App React component,
+    // and pass them to the getMenuItems function, which just decides whether to include the selfCareItems or not.
+    // In turn, as basicMenuItems is defined in the React component, the definition can also access
+    // the i18n mechanism, so that is no longer needed to localize the labels afterwards.
+    // -------------------------------
+    // Carlos Lombardi, 2022.11.08
+    // -------------------------------
+    const items = { ...getMenuItems(basicMenuItems, idOrganization, role?.role) };
     // localize menu items
-    const items = { ...getMenuItems(idOrganization, role?.role) };
-    /* eslint-disable-next-line functional/immutable-data */
-    items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));
     if (items.selfCareItems) {
       /* eslint-disable-next-line functional/immutable-data */
       items.selfCareItems = items.selfCareItems.map((item) => ({ ...item, label: t(item.label) }));
     }
     return items;
-  }, [role, idOrganization]);
+  }, [role, idOrganization, currentStatus]);
+
   const jwtUser = useMemo(
     () => ({
       id: loggedUser.fiscal_number,
@@ -103,7 +143,7 @@ const App = () => {
     ],
     [role, loggedUserOrganizationParty]
   );
-  
+
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
@@ -116,6 +156,12 @@ const App = () => {
       void dispatch(getOrganizationParty(idOrganization));
     }
   }, [idOrganization]);
+
+  useEffect(() => {
+    if (sessionToken) {
+      void dispatch(getCurrentAppStatus());
+    }
+  }, [sessionToken, getCurrentAppStatus]);
 
   const { pathname } = useLocation();
   const path = pathname.split('/');

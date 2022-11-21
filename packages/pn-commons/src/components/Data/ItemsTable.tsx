@@ -96,7 +96,7 @@ function ItemsTable<ColumnId extends string>({
           </TableHead>
           <TableBody sx={{ backgroundColor: 'background.paper' }}>
               {rows.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row.id} data-cy="table(notifications).row">
                   {columns.map((column) => (
                     <TableCell
                       key={column.id}

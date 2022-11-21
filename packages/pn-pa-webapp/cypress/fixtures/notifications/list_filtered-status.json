@@ -1,0 +1,110 @@
+{
+  "resultsPage": [
+    {
+      "iun": "TRAT-DUPN-ZVQL-202211-H-1",
+      "paProtocolNumber": "302151668539296325",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T19:08:16.792895Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T19:08:42.242139Z"
+    },
+    {
+      "iun": "JWAR-PTAK-UPDU-202211-D-1",
+      "paProtocolNumber": "302151668532110773",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T17:08:31.592744Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T17:09:00.743836Z"
+    },
+    {
+      "iun": "WAUZ-WUPL-URMU-202211-H-1",
+      "paProtocolNumber": "302151668528051175",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T16:00:51.519355Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T16:01:22.878218Z"
+    },
+    {
+      "iun": "RKDH-DJWV-GZMP-202211-A-1",
+      "paProtocolNumber": "302161668522848328",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T14:34:09.627541Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T14:34:35.978998Z"
+    },
+    {
+      "iun": "DMVX-UMEJ-JQLJ-202211-Y-1",
+      "paProtocolNumber": "302161668520304027",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T13:51:44.882376Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T13:52:10.685438Z"
+    },
+    {
+      "iun": "UDXN-JYXZ-XUQN-202211-Q-1",
+      "paProtocolNumber": "302161668518601420",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T13:23:22.317768Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T13:23:37.750194Z"
+    },
+    {
+      "iun": "KQKW-RZXR-QYQD-202211-A-1",
+      "paProtocolNumber": "302151668517716310",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T13:08:36.792794Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T13:09:03.752826Z"
+    },
+    {
+      "iun": "PWLG-HJWZ-LDWL-202211-Q-1",
+      "paProtocolNumber": "302151668510648395",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T11:10:48.802511Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T11:11:18.579036Z"
+    },
+    {
+      "iun": "JDWM-VYZN-MDQE-202211-T-1",
+      "paProtocolNumber": "302161668507837973",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T10:23:59.085648Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T10:24:28.958095Z"
+    },
+    {
+      "iun": "ATVD-WTWQ-MLXL-202211-H-1",
+      "paProtocolNumber": "302161668503561876",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-15T09:12:42.591019Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "VIEWED",
+      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T09:13:09.819881Z"
+    }
+  ],
+  "moreResult": false,
+  "nextPagesKey": [
+    "eyJlayI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiS1FLVy1SWlhSLVFZUUQtMjAyMjExLUEtMSMjUEYtYTZjMTM1MGQtMWQ2OS00MjA5LThiZjgtMzFkZTU4Yzc5ZDZlIiwic2VudEF0IjoiMjAyMi0xMS0xNVQxMzowODozNi43OTI3OTRaIiwic2VuZGVySWRfY3JlYXRpb25Nb250aCI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIn19",
+    "eyJlayI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiSEdYRS1BRU5ELVJQRFItMjAyMjExLVQtMSMjUEYtYTZjMTM1MGQtMWQ2OS00MjA5LThiZjgtMzFkZTU4Yzc5ZDZlIiwic2VudEF0IjoiMjAyMi0xMS0xNVQwNzowMzo1NC4xMjU0NTBaIiwic2VuZGVySWRfY3JlYXRpb25Nb250aCI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIn19",
+    "eyJlayI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiTUROUi1YTllXLUhVR1UtMjAyMjExLUotMSMjUEYtYTZjMTM1MGQtMWQ2OS00MjA5LThiZjgtMzFkZTU4Yzc5ZDZlIiwic2VudEF0IjoiMjAyMi0xMS0xNFQxMDo0MjozNS40OTY5OTBaIiwic2VuZGVySWRfY3JlYXRpb25Nb250aCI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIn19"
+  ]
+}

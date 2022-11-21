@@ -20,10 +20,11 @@
     "start": "tsc -w --sourceMap=true",
     "build": "tsc",
     "test": "react-scripts test --watchAll=false",
-    "test:coverage": "react-scripts test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
+    "test:coverage": "tsc && react-scripts test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "eject": "react-scripts eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
-    "format": "prettier \"./**/*.{ts,tsx}\" --write"
+    "format": "prettier \"./**/*.{ts,tsx}\" --write",
+    "sonar": "node sonarqube-scanner.js -Dsonar.login=${SONAR_TOKEN}"
   },
   "eslintConfig": {
     "extends": [
@@ -44,6 +45,7 @@
     ]
   },
   "devDependencies": {
+    "sonarqube-scanner": "^2.8.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",

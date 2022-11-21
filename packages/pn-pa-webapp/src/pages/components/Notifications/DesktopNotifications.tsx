@@ -13,6 +13,7 @@ import {
   StatusTooltip,
   EmptyState,
   Notification,
+  KnownSentiment,
 } from '@pagopa-pn/pn-commons';
 
 import { trackEventByType } from '../../../utils/mixpanel';
@@ -145,7 +146,7 @@ const DesktopNotifications = ({
   const EmptyStateProps = {
     emptyMessage: filtersApplied ? undefined : t('empty-state.message'),
     emptyActionLabel: filtersApplied ? undefined : t('menu.api-key', {ns: 'common'}),
-    disableSentimentDissatisfied: !filtersApplied,
+    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     emptyActionCallback: filtersApplied ? filterNotificationsRef.current.cleanFilters : onApiKeys,
     secondaryMessage: filtersApplied ? undefined : {
       emptyMessage: t('empty-state.secondary-message'),
