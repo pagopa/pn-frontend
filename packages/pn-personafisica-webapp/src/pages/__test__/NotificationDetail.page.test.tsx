@@ -1,6 +1,7 @@
 import * as redux from 'react-redux';
 import { RenderResult, screen } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
+import * as routes from '../../navigation/routes.const';
 
 import {
   apiOutcomeTestHelper,
@@ -11,6 +12,7 @@ import {
 import { axe, render } from '../../__test__/test-utils';
 import * as actions from '../../redux/notification/actions';
 import {
+  fixedMandateId,
   notificationToFe,
   notificationToFeTwoRecipients,
   overrideNotificationMock,
@@ -21,6 +23,7 @@ const mockUseParamsFn = jest.fn();
 
 /* eslint-disable functional/no-let */
 let mockReactRouterState: any;
+let mockUseSimpleBreadcrumb = false;
 /* eslint-enable functional/no-let */
 
 // mock imports
@@ -51,7 +54,7 @@ jest.mock('@pagopa-pn/pn-commons', () => {
     // NotificationDetailDocuments: () => <div>Documents</div>,
     NotificationDetailTimeline: () => <div>Timeline</div>,
     ApiError: () => <div>Api Error</div>,
-    PnBreadcrumb: OriginalPnBreadcrumb
+    PnBreadcrumb: (props: any) => mockUseSimpleBreadcrumb ? <div data-testid="mock-breadcrumb-link">{props.linkRoute}</div> : <OriginalPnBreadcrumb {...props} />,
   }
 });
 
@@ -65,9 +68,28 @@ describe('NotificationDetail Page', () => {
 
   const mockedUserInStore = { fiscal_number: 'mocked-user' };
 
-  const renderComponent = (notification: INotificationDetail) => {
+  /*
+   * The second parameter allows to simulate that the logged user is a delegate for the 
+   * notification being rendered.
+   * It must be passed in an additional parameter because it would be cumbersome (if not impossible)
+   * to know whether the logged user is a recipient or a delegate based solely
+   * in the notification object. 
+   * If the notification is build using the function notificationToFeTwoRecipients, 
+   * which includes a parameter that also indicates that the notification detail is requested 
+   * by a recipient or a delegate, then unfortunately the same information is told twice,
+   * to notificationToFeTwoRecipients and to renderComponent.
+   * But I found no easy solution, so I prefer to keep the test source code as it is.
+   * -----------------------------------------
+   * Carlos Lombardi, 2022.11.21
+   */
+  const renderComponent = (notification: INotificationDetail, mandateId?: string) => {
     // mock query params
-    mockUseParamsFn.mockReturnValue({ id: 'mocked-id' });
+    const mockedQueryParams: {id: string, mandateId?: string} = { id: 'mocked-id' };
+    if (mandateId) {
+      // eslint-disable-next-line functional/immutable-data
+      mockedQueryParams.mandateId= mandateId;
+    }
+    mockUseParamsFn.mockReturnValue(mockedQueryParams);
 
     // mock Redux store state
     const reduxStoreState = {
@@ -94,6 +116,7 @@ describe('NotificationDetail Page', () => {
       then: () => Promise.resolve(),
     }));
     mockReactRouterState = {};
+    mockUseSimpleBreadcrumb = false;
   });
 
   afterEach(() => {
@@ -105,7 +128,7 @@ describe('NotificationDetail Page', () => {
     mockActionFn.mockReset();
   });
 
-  test.only('renders NotificationDetail page with payment box', async () => {
+  test('renders NotificationDetail page with payment box', async () => {
     result = renderComponent(notificationToFe);
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
@@ -254,7 +277,7 @@ describe('NotificationDetail Page', () => {
 
   test('renders NotificationDetail page with current delegator as first recipient', async () => {
     result = renderComponent(
-      notificationToFeTwoRecipients('CGNNMO80A03H501U', 'TTTUUU29J84Z600X', true)
+      notificationToFeTwoRecipients('CGNNMO80A03H501U', 'TTTUUU29J84Z600X', true), fixedMandateId
     );
     expect(result.container).toHaveTextContent('mocked-abstract');
     expect(result.container).toHaveTextContent('Totito');
@@ -264,7 +287,7 @@ describe('NotificationDetail Page', () => {
 
   test('renders NotificationDetail page with current delegator as second recipient', async () => {
     result = renderComponent(
-      notificationToFeTwoRecipients('TTTUUU29J84Z600X', 'CGNNMO80A03H501U', true)
+      notificationToFeTwoRecipients('TTTUUU29J84Z600X', 'CGNNMO80A03H501U', true), fixedMandateId
     );
     expect(result.container).toHaveTextContent('mocked-abstract');
     expect(result.container).toHaveTextContent('Analogico Ok');
@@ -283,17 +306,39 @@ describe('NotificationDetail Page', () => {
     expect(apiErrorComponent).toBeTruthy();
   });
 
-  it.only("normal navigation - includes 'indietro' button", async () => {
+  it("normal navigation - includes 'indietro' button", async () => {
     result = renderComponent(notificationToFe);
     const indietroButton = result.queryByTestId("breadcrumb-indietro-button");
     expect(indietroButton).toBeInTheDocument();
   });
 
 
-  it.only("navigation from QR code - does not include 'indietro' button", async () => {
+  it("navigation from QR code - does not include 'indietro' button", async () => {
     mockReactRouterState = { fromQrCode: true };
     result = renderComponent(notificationToFe);
     const indietroButton = result.queryByTestId("breadcrumb-indietro-button");
     expect(indietroButton).not.toBeInTheDocument();
+  });
+
+  it("'notifiche' link for recipient", async () => {
+    mockUseSimpleBreadcrumb = true;
+    // Using a notification with two recipients just because it's easy to set whether
+    // the logged user is the recipient or a delegate. 
+    // This test could be performed using a mono-recipient notification with no implications in what it's tested.
+    result = renderComponent(
+      notificationToFeTwoRecipients('TTTUUU29J84Z600X', 'CGNNMO80A03H501U', false)
+    );
+    const breadcrumbLinkComponent = screen.queryByTestId("mock-breadcrumb-link");
+    expect(breadcrumbLinkComponent).toHaveTextContent(new RegExp(`^${routes.NOTIFICHE}$`));
+  });
+
+  it("'notifiche' link for mandate", async () => {
+    mockUseSimpleBreadcrumb = true;
+    // Notification with two recipients: cfr. the comment in the other test about 'notifiche' link
+    result = renderComponent(
+      notificationToFeTwoRecipients('TTTUUU29J84Z600X', 'CGNNMO80A03H501U', true), fixedMandateId
+    );
+    const breadcrumbLinkComponent = screen.queryByTestId("mock-breadcrumb-link");
+    expect(breadcrumbLinkComponent).toHaveTextContent(new RegExp(`^${routes.GET_NOTIFICHE_DELEGATO_PATH(fixedMandateId)}$`));
   });
 });
