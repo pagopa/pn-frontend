@@ -20,6 +20,7 @@
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
     "contacts": "I tuoi recapiti",
+    "app-status": "Stato della piattaforma",
     "aria-label": "piattaforma-notifiche navigazione principale",
     "aria-label-inner": "piattaforma-notifiche navigazione destinatario"
   },
@@ -56,6 +57,10 @@
     "switch-to-calendar": "modalità di scelta dell'anno attiva, passa alla modalità calendario",
     "select-date": "Scegli data",
     "date-selected": "Scegli data, la data selezionata è {{date}}"
+  },
+  "date-time": {
+    "today-uppercase-initial": "Oggi",
+    "hour-of-day": "ore"
   },
   "error-boundary": {
     "title": "Qualcosa è andato storto",
