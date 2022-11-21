@@ -1,8 +1,8 @@
 const scanner = require('sonarqube-scanner');
+
 const options = {
   'sonar.organization': 'pagopa',
-  'sonar.projectKey': 'pagopa_pn-fe-commons',
-  'SONAR_TOKEN': process.env.SONAR_TOKEN
+  'sonar.projectKey': 'pagopa_pn-fe-commons'
 };
 
 // if (typeof process.env.PR_NUM !== 'undefined' ) {
@@ -14,6 +14,7 @@ const options = {
 scanner(
   {
     serverUrl: 'https://sonarcloud.io',
+    token: process.env.SONAR_TOKEN,
     options,
   },
   () => process.exit()
