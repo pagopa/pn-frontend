@@ -11,6 +11,8 @@ const options = {
 //   options["sonar.pullrequest.key"] = process.env.PR_NUM;
 // }
 
+console.log(process.env.SONAR_TOKEN);
+
 scanner(
   {
     serverUrl: 'https://sonarcloud.io',
