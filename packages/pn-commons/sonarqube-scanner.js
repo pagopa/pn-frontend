@@ -1,5 +1,5 @@
 const scanner = require('sonarqube-scanner');
-
+console.log("Sono nello script sonarqube-scanner");
 const options = {
   'sonar.organization': 'pagopa',
   'sonar.projectKey': 'pagopa_pn-fe-commons',
