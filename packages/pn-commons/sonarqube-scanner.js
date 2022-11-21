@@ -5,15 +5,18 @@ const options = {
   'sonar.projectKey': 'pagopa_pn-fe-commons',
 };
 
+// if (typeof process.env.PR_NUM !== 'undefined' ) {
+//   options["sonar.pullrequest.base"] = process.env.BRANCH_TARGET;
+//   options["sonar.pullrequest.branch"] = process.env.BRANCH_NAME;
+//   options["sonar.pullrequest.key"] = process.env.PR_NUM;
+// }
+
 scanner(
   {
     serverUrl: 'https://sonarcloud.io',
     options,
   },
   () => {
-    console.log("Token " + process.env.SONAR_TOKEN);
-    console.log("options ", options);
-    console.log('Sonar has finished');
     process.exit();
   }
 );
