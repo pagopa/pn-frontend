@@ -301,14 +301,16 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
             sx={{ marginTop: i > 0 ? '30px' : '10px' }}
           />
         ))}
-        <ButtonNaked
-          onClick={addDocumentHandler}
-          color="primary"
-          startIcon={<AddIcon />}
-          sx={{ marginTop: '30px' }}
-        >
-          {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
-        </ButtonNaked>
+        {formik.values.documents.length <= 11 &&
+          <ButtonNaked
+            onClick={addDocumentHandler}
+            color="primary"
+            startIcon={<AddIcon/>}
+            sx={{marginTop: '30px'}}
+          >
+            {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
+          </ButtonNaked>
+        }
       </NewNotificationCard>
     </form>
   );
