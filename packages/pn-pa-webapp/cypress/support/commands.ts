@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -35,6 +36,9 @@
 //     }
 //   }
 // }
+
+import './NewNotification';
+
 
 /*
   * Login with token exchange
@@ -87,4 +91,35 @@ Cypress.Commands.add('loginWithUI', () => {
   cy.get(
     ':nth-child(7) > .MuiPaper-root > .MuiCardContent-root > .MuiGrid-container > .css-gzsrxl > .MuiCardActions-root > .MuiButton-root'
   ).click();
+});
+
+Cypress.Commands.add('fillRecipient', (recipient: RecipientFormData) => {
+  // Recipient 2
+  cy.get(`input[name="recipients\[${recipient.position}\]\.firstName"]`).clear().type(recipient.data.firstname);
+  cy.get(`input[name="recipients\[${recipient.position}\]\.lastName"]`).clear().type(recipient.data.lastname);
+
+  cy.log('writing valid taxtId');
+  cy.get(`input[name="recipients\[${recipient.position}\]\.taxId"]`).clear().type(recipient.data.taxId);
+  
+  if(recipient.data.creditorTaxId) {
+    cy.log('writing valid creditor taxtId');
+    cy.get(`input[name="recipients\[${recipient.position}\]\.creditorTaxId"]`).clear().type(recipient.data.creditorTaxId);
+  }
+
+  if(recipient.data.noticeCode) {
+    cy.log('writing valid notice code');
+    cy.get(`input[name="recipients\[${recipient.position}\]\.noticeCode"]`).clear().type(recipient.data.noticeCode);
+  }
+
+  //Address
+  cy.get('[data-testid="PhysicalAddressCheckbox"]').eq(recipient.position).click();
+  
+  cy.get('button[type="submit"]').should('be.disabled');
+  
+  cy.get(`input[name="recipients\[${recipient.position}\]\.address"]`).type(recipient.data.address);
+  cy.get(`input[name="recipients\[${recipient.position}\]\.houseNumber"]`).type(recipient.data.houseNumber);
+  cy.get(`input[name="recipients\[${recipient.position}\]\.municipality"]`).type(recipient.data.municipality);
+  cy.get(`input[name="recipients\[${recipient.position}\]\.province"]`).type(recipient.data.province);
+  cy.get(`input[name="recipients\[${recipient.position}\]\.zip"]`).type(recipient.data.zip);
+  cy.get(`input[name="recipients\[${recipient.position}\]\.foreignState"]`).type(recipient.data.foreignState);
 });

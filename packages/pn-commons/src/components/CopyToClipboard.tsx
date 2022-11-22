@@ -1,6 +1,6 @@
-import { Button, Link, SxProps, Theme } from "@mui/material";
+import { Button, Link, SxProps, Theme } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import { useIsMobile } from "../hooks";
+import { useIsMobile } from '../hooks';
 
 interface Props {
   /** callback used to retrieve the text to be copied */
@@ -20,18 +20,15 @@ const CopyToClipboard: React.FC<Props> = ({ getValue, text }) => {
     if ('clipboard' in navigator) {
       return await navigator.clipboard.writeText(value);
     } else {
-      return document.execCommand('copy', true, value);
+      // execCommand is deprecated: we do not support IE so we return a console.log message
+      // return document.execCommand('copy', true, value);
+      console.log('Operation not supported');
     }
   };
-  
+
   return (
-    <Button
-      component={Link}
-      color="primary"
-      sx={alertButtonStyle}
-      onClick={doCopyToClipboard}
-    >
-      <ContentCopyIcon fontSize="small" sx={{ m: '5px'}} />
+    <Button component={Link} color="primary" sx={alertButtonStyle} onClick={doCopyToClipboard}>
+      <ContentCopyIcon fontSize="small" sx={{ m: '5px' }} />
       {text}
     </Button>
   );

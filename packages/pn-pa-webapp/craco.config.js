@@ -3,6 +3,7 @@ const { getLoader, loaderByName } = require('@craco/craco');
 
 const packages = [];
 packages.push(path.join(__dirname, '../pn-commons'));
+packages.push(path.join(__dirname, '../pn-validator'));
 
 module.exports = {
   webpack: {

@@ -1,8 +1,12 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Box } from '@mui/material';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import HelpIcon from '@mui/icons-material/Help';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
@@ -18,7 +22,6 @@ import {
   useUnload,
 } from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
-import { Box } from '@mui/material';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
@@ -32,6 +35,7 @@ import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
 import { goToLoginPortal } from "./navigation/navigation.utility";
+import { getCurrentAppStatus } from './redux/appStatus/actions';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -51,6 +55,7 @@ const App = () => {
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
+  const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -106,6 +111,7 @@ const App = () => {
     if (sessionToken !== '') {
       void dispatch(getDomicileInfo());
       void dispatch(getSidemenuInformation());
+      void dispatch(getCurrentAppStatus());
     }
   }, [sessionToken]);
 
@@ -162,6 +168,17 @@ const App = () => {
       icon: AltRouteIcon,
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
+    },
+    { 
+      label: t('menu.app-status'), 
+      // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
+      icon: () => currentStatus 
+        ? (currentStatus.appIsFullyOperative
+          ? <CheckCircleIcon sx={{ color: "success.main" }} />
+          : <ErrorIcon sx={{ color: "error.main" }} />)
+        : <HelpIcon />
+      , 
+      route: routes.APP_STATUS 
     },
   ];
 
@@ -226,6 +243,7 @@ const App = () => {
         }
         showSideMenu={!!sessionToken && tos && fetchedTos && !isPrivacyPage}
         productsList={productsList}
+        showHeaderProduct={tos}
         loggedUser={jwtUser}
         enableUserDropdown
         userActions={userActions}
