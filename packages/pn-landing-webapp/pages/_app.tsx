@@ -13,7 +13,13 @@ function Main({ Component, pageProps }: AppProps) {
     <ThemeProvider theme={theme}>
       <LangProvider>
         <LandingLayout>
-          <Script src="/onetrust/privacy-notice-scripts/otnotice-1.0.min.js" type="text/javascript" charSet="UTF-8" id="otprivacy-notice-script" strategy="beforeInteractive"/>
+          <Script
+            src="/onetrust/privacy-notice-scripts/otnotice-1.0.min.js"
+            type="text/javascript"
+            charSet="UTF-8"
+            id="otprivacy-notice-script"
+            strategy="lazyOnload"
+          />
           <Component {...pageProps} />
         </LandingLayout>
       </LangProvider>
