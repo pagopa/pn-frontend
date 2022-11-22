@@ -3,6 +3,7 @@ const scanner = require('sonarqube-scanner');
 const options = {
   'sonar.organization': 'pagopa',
   'sonar.projectKey': 'pagopa_pn-fe-commons',
+  'sonar.javascript.lcov.reportPaths': './coverage/lcov.info'
 };
 
 if (typeof process.env.PR_NUM !== 'undefined') {
