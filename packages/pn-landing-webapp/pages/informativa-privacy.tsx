@@ -6,23 +6,17 @@ import { ONE_TRUST_PORTAL_CDN } from "@utils/constants";
 declare const OneTrust: {
   NoticeApi: {
     Initialized: {
-      then: (cbk: () => void) => void
-    }
-    LoadNotices: (noticesUrls: Array<string>, flag: boolean) => void
-  }
+      then: (cbk: () => void) => void;
+    };
+    LoadNotices: (noticesUrls: Array<string>, flag: boolean) => void;
+  };
 };
 
 const PrivacyPage: NextPage = () => {
-
   useEffect(() => {
     if (ONE_TRUST_PORTAL_CDN) {
       OneTrust.NoticeApi.Initialized.then(() => {
-        OneTrust.NoticeApi.LoadNotices(
-          [
-            ONE_TRUST_PORTAL_CDN as string,
-          ],
-          false
-        );
+        OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN as string], false);
       });
     }
   }, []);
