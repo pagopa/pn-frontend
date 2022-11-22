@@ -18,7 +18,7 @@ import {
 } from '../../../redux/notification/__test__/test-utils';
 import { newNotificationDTO } from '../../../redux/newNotification/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
-import { apiClient, externalClient } from '../../axios';
+import { apiClient, externalClient } from '../../clients';
 import { NotificationsApi } from '../Notifications.api';
 import {
   CREATE_NOTIFICATION,

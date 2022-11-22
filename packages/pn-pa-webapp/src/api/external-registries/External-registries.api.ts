@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { Party } from '../../models/party';
-import { apiClient } from '../axios';
+import { apiClient } from '../clients';
 
 import { GET_PARTY_FOR_ORGANIZATION } from './external-registries-routes';
 

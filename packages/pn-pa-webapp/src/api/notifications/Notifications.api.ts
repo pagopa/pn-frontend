@@ -10,7 +10,7 @@ import {
 
 import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
-import { apiClient, externalClient } from '../axios';
+import { apiClient, externalClient } from '../clients';
 import {
   CREATE_NOTIFICATION,
   NOTIFICATIONS_LIST,

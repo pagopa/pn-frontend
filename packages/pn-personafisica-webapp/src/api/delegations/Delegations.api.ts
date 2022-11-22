@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { apiClient } from '../axios';
+import { apiClient } from '../clients';
 import {
   AcceptDelegationResponse,
   CreateDelegationProps,
