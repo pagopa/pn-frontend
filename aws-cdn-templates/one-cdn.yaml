@@ -314,7 +314,7 @@ Resources:
                            https://selfcare.pagopa.it/assets/ \
                            https://privacyportalde-cdn.onetrust.com/ \
                            ${WebApiUrl}; \
-                           style-src 'self' 'unsafe-inline'; \
+                           style-src 'self' 'unsafe-inline' https://privacyportalde-cdn.onetrust.com/; \
                            worker-src 'none'; \
                            font-src 'self'; \
                            frame-ancestors 'self' ; \
