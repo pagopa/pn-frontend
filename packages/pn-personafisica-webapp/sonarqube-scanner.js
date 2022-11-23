@@ -2,7 +2,7 @@ const scanner = require('sonarqube-scanner');
 
 const options = {
   'sonar.organization': 'pagopa',
-  'sonar.projectKey': 'pagopa_pn-fe-commons',
+  'sonar.projectKey': 'pagopa_pn-personafisica-webapp',
 };
 
 if (typeof process.env.PR_NUM !== 'undefined') {
