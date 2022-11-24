@@ -142,6 +142,32 @@ describe('Notification Filters (no delegators)', () => {
     cy.get(startDateInput).should('have.value', startDate);
     cy.get(endDateInput).should('have.value', '');
   });
+
+  it('should filter notifications by IUN', () => {
+    const filteredIun = 'UXAV-MKPH-ALMV-202211-H-1';
+    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, { fixture: 'notifications/list-10_page-1' }).as('getNotifications');
+    
+    cy.get('#iunMatch').type(filteredIun);
+    
+    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '', iun: filteredIun })}*`, {
+      statusCode: 200,
+      fixture: 'notifications/list_filtered-iun'
+    }).as('filteredNotifications');
+    
+    cy.contains(/^Filtra$/).click();
+
+    cy.wait('@filteredNotifications').then((interception) => {
+      expect(interception.request.url).include(`iunMatch=${filteredIun}`);
+      expect(interception.response.statusCode).to.equal(200);
+    });
+
+
+    cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
+
+    cy.get('#iunMatch').should('have.value', filteredIun);
+
+    cy.get('[data-cy="table(notifications).row"]').should('have.length', 1);
+  });
 });
 
 describe('Notification Filters (delegators)', () => {

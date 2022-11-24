@@ -1,0 +1,21 @@
+{
+  "resultsPage": [
+    {
+      "iun": "UXAV-MKPH-ALMV-202211-H-1",
+      "paProtocolNumber": "prot-12345011",
+      "sender": "Comune di Palermo",
+      "sentAt": "2022-11-10T12:23:51.108239Z",
+      "subject": "Test multidestinatario 10 (2613)",
+      "notificationStatus": "VIEWED",
+      "recipients": [
+        "CSRGGL44L13H501E",
+        "GRBGPP87L04L741X",
+        "BRGLRZ80D58H501Q"
+      ],
+      "requestAcceptedAt": "2022-11-10T12:24:25.488997Z",
+      "group": ""
+    }
+  ],
+  "moreResult": false,
+  "nextPagesKey": []
+}
