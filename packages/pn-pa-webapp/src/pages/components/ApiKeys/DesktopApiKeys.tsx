@@ -1,8 +1,10 @@
-import { Fragment, useState, MouseEvent } from 'react';
+import { Fragment, useState, MouseEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { MoreVert } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+
 import {
   Column,
   Item,
@@ -10,10 +12,11 @@ import {
   StatusTooltip,
   EmptyState,
   CopyToClipboard,
-  // GroupsApiKey,
+  formatDate,
 } from '@pagopa-pn/pn-commons';
 import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory, modalApiKeyView } from '../../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../../utils/apikeys.utility';
+import * as routes from '../../../navigation/routes.const';
 
 type Props = {
   apiKeys: Array<ApiKey>;
@@ -26,7 +29,9 @@ const DesktopApiKeys = ({
 }: Props) => {
   const { t } = useTranslation(['apikeys']);
   const handleEventTrackingTooltip = () => undefined;
-
+  const navigate = useNavigate();
+  const [rows, setRows] = useState<Array<Item>>([]);
+  const [tableKey, setTableKey] = useState(0);
   type ApiKeyContextMenuProps = {
     row: Item;
   };
@@ -126,14 +131,13 @@ const DesktopApiKeys = ({
       },
     },
     {
-      id: 'lastModify',
-      label: t('table.last-modify'),
+      id: 'lastUpdate',
+      label: t('table.last-update'),
       width: '15%',
-      // eslint-disable-next-line sonarjs/no-identical-functions
       getCellLabel(value: string, row: Item) {
         return (
           <Typography sx={{ color: row.status === ApiKeyStatus.ROTATED ? '#aaa' : undefined }}>
-            {value}
+            {formatDate(value)}
           </Typography>
         );
       },
@@ -185,23 +189,27 @@ const DesktopApiKeys = ({
     },
   ];
 
-  const rows: Array<Item> = apiKeys.map((n: ApiKey, index) => ({
-    ...n,
-    id: index.toString(),
-  }));
+  useEffect(() => {
+    const rowsMap: Array<Item> = apiKeys.map((n: ApiKey, index) => ({
+      ...n,
+      id: index.toString(),
+    }));
+    setRows(rowsMap);
+    setTableKey(tableKey + 1);
+  }, [apiKeys]);
 
   return (
     <Fragment>
       {apiKeys && (
         <Fragment>
           {apiKeys.length > 0 ? (
-            <ItemsTable data-testid="tableApiKeys" columns={columns} rows={rows} />
+            <ItemsTable key={tableKey} data-testid="tableApiKeys" columns={columns} rows={rows} />
           ) : (
             <EmptyState
               data-testid="emptyState"
               emptyMessage={t('empty-message')}
               emptyActionLabel={t('empty-action-label')}
-              emptyActionCallback={() => alert('Nuova API Key routing da fare')}
+              emptyActionCallback={() => navigate(routes.NUOVA_API_KEY)}
             />
           )}
         </Fragment>

@@ -30,7 +30,7 @@ describe('DesktopApiKeys component', () => {
     const result = render(<DesktopApiKeys
       {...defaultProps}
     />);
-    expect(result.container).toHaveTextContent(/last-modify/i);
+    expect(result.container).toHaveTextContent(/last-update/i);
   });
 
   it('Check context menu', async () => {

@@ -18,9 +18,9 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   getApiKeys,
   setApiKeyStatus,
-  setApiKeyDeleted,
+  deleteApiKey,
 } from '../redux/apiKeys/actions';
-import { ApiKey, ApiKeyStatus, modalApiKeyView } from '../models/ApiKeys';
+import { ApiKey, ApiKeySetStatus, modalApiKeyView } from '../models/ApiKeys';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
 
@@ -74,26 +74,22 @@ const ApiKeys = () => {
 
   const apiKeyBlocked = (apiKeyId: string) => {
     handleCloseModal();
-    // Integrare logica di success / failure e eventuale callback relativa (aggiornamento tabella per esempio)
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeyStatus.BLOCKED }));
+    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(() => void dispatch(getApiKeys()));
   };
 
   const apiKeyEnabled = (apiKeyId: string) => {
     handleCloseModal();
-    // Integrare logica di success / failure e eventuale callback relativa (aggiornamento tabella per esempio)
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeyStatus.ENABLED }));
+    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(() => void dispatch(getApiKeys()));
   };
 
   const apiKeyRotated = (apiKeyId: string) => {
     handleCloseModal();
-    // Integrare logica di success / failure e eventuale callback relativa (aggiornamento tabella per esempio)
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeyStatus.ROTATED }));
+    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(() => void dispatch(getApiKeys()));
   };
 
   const apiKeyDeleted = (apiKeyId: string) => {
     handleCloseModal();
-    // Integrare logica di success / failure e eventuale callback relativa (aggiornamento tabella per esempio)
-    void dispatch(setApiKeyDeleted(apiKeyId));
+    void dispatch(deleteApiKey(apiKeyId)).then(() => void dispatch(getApiKeys()));
   };
 
   return (

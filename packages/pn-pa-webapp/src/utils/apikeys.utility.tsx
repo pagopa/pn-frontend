@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { formatDate } from '@pagopa-pn/pn-commons';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
@@ -33,10 +34,7 @@ const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
         const output = (p: string, h: ApiKeyStatusHistory) => (
           <Box sx={{textAlign: 'left'}} key={index}>
             <Box>
-              {t(`tooltip.${p}`)} {h.date} {t('tooltip.from')}
-            </Box>
-            <Box>
-              <b>{h.by}</b>
+              {t(`tooltip.${p}`)} {formatDate(h.date)}
             </Box>
           </Box>
         );

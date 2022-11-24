@@ -1,7 +1,10 @@
+import { ApiKeysApi } from '../../../api/apiKeys/ApiKeys.api';
 import { ApiKey } from '../../../models/ApiKeys';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
+import { getApiKeys } from '../actions';
 import { resetState } from  '../reducers';
+import { mockApiKeysForFE } from './test-utils';
 
 const initialState = {
   loading: false,
@@ -18,9 +21,13 @@ describe('api keys page redux state test', () => {
     });
   });
 
-  // TO-DO: Make test for fetching data when BE is ready
   it.skip('Should be able to fetch the api keys list', async () => {
-    
+    const apiSpy = jest.spyOn(ApiKeysApi, 'getApiKeys');
+    apiSpy.mockResolvedValue(mockApiKeysForFE);
+    const action = await store.dispatch(getApiKeys());
+    const payload = action.payload;
+    expect(action).toBe('getApiKeys/fulfilled');
+    expect(payload).toEqual(mockApiKeysForFE);
   });
 
   it('Should be able to reset state', () => {

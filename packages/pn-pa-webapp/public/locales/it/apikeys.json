@@ -31,10 +31,11 @@
   "empty-message": "Non è stata ancora generata nessuna API Key per questo ente.",
   "empty-action-label": "Genera API Key",
   "api-key-copied": "API Key copiata",
+  "go-to-api-keys": "Torna a API Key",
   "table": {
     "name": "Nome",
     "api-key": "API Key",
-    "last-modify": "Ultima modifica",
+    "last-update": "Ultima modifica",
     "groups": "Gruppi",
     "status": "Stato"
   },

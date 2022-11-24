@@ -1,6 +1,6 @@
-import { ApiKeyStatus } from "../../models/ApiKeys";
+import { ApiKeySetStatus } from "../../models/ApiKeys";
 
 export type ApiKeyStatusBE = {
   apiKey: string;
-  status: ApiKeyStatus;
+  status: ApiKeySetStatus;
 };
