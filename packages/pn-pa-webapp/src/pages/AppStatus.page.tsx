@@ -10,8 +10,6 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { clearLegalFactDocumentData, clearPagination, setPagination } from '../redux/appStatus/reducers';
 
-
-/* eslint-disable-next-line arrow-body-style */
 const AppStatus = () => {
   const dispatch = useAppDispatch();
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
