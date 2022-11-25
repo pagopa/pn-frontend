@@ -1,4 +1,5 @@
-import { Email } from '@mui/icons-material';
+import Email from '@mui/icons-material/Email';
+import VpnKey from '@mui/icons-material/VpnKey';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
@@ -68,7 +69,7 @@ const App = () => {
        * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
        * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
        */
-      // { label: menu.api-key, icon: VpnKey, route: routes.API_KEYS },
+      { label: t('menu.api-key'), icon: VpnKey, route: routes.API_KEYS },
       { 
         label: t('menu.app-status'), 
         // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)

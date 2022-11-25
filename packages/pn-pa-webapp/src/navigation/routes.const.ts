@@ -1,4 +1,7 @@
-import { PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY, TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE } from "@pagopa-pn/pn-commons";
+import {
+  PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
+  TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
+} from '@pagopa-pn/pn-commons';
 import { SELFCARE_BASE_URL } from '../utils/constants';
 
 export const DASHBOARD = '/dashboard';
@@ -21,7 +24,7 @@ export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 export const ROLES = (idOrganization: string) =>
   `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${ROLES_SEGMENT}#${ID_PN_SEGMENT}`;
 
-/** GROUPS navigation link to SelfCare "Groppi" section for Piattaforma Notifiche 
+/** GROUPS navigation link to SelfCare "Gruppi" section for Piattaforma Notifiche
  * @param idOrganization
  */
 export const GROUPS = (idOrganization: string) =>
