@@ -23,7 +23,7 @@ describe('Api keys api tests', () => {
     const mock = new MockAdapter(apiClient);
     mock.onPost(CREATE_APIKEY()).reply(200, {
       id: 'mocked-id',
-      'api-key': 'mocked-apikey',
+      apiKey: 'mocked-apikey',
     });
     const res = await ApiKeysApi.createNewApiKey(newApiKeyForBE);
     expect(res).toStrictEqual('mocked-apikey');
