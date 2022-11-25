@@ -204,6 +204,7 @@
       },
       "attachments": {
         "title": "Allegati",
+        "max-attachments": "E' possibile inserire fino a un massimo di 10 allegati oltre l'atto.",
         "attach-for-recipients": "Allegati per tutti i destinatari",
         "act-attachment": "Allega l'atto",
         "doc-attachment": "Allega un altro documento",
