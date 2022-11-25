@@ -12,14 +12,15 @@
     "enter": "Entra",
     "exit": "Esci",
     "close": "Chiudi",
-    "go-to-home": "Torna alla home page",
-    "go-to-login": "Procedi al login"
+    "go-to-home": "Vai alla home page",
+    "go-to-login": "Accedi"
   },
   "menu": {
     "notifiche": "Notifiche",
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
     "contacts": "I tuoi recapiti",
+    "app-status": "Stato della piattaforma",
     "aria-label": "piattaforma-notifiche navigazione principale",
     "aria-label-inner": "piattaforma-notifiche navigazione destinatario"
   },
@@ -29,8 +30,8 @@
   },
   "tos": {
     "title": "Piattaforma Notifiche",
-    "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
-    "switchLabel": "Accetto l'<0>Informativa Privacy</0> e i <1>Termini e condizioni d’uso</1> di Piattaforma Notifiche.",
+    "body": "Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.",
+    "switch-label": "Accetto i <0>Termini e condizioni d’uso del servizio</0> e confermo di avere letto <1>l’Informativa Privacy</1>.",
     "button": "Accedi"
   },
   "table": {
@@ -57,13 +58,18 @@
     "select-date": "Scegli data",
     "date-selected": "Scegli data, la data selezionata è {{date}}"
   },
+  "date-time": {
+    "today-uppercase-initial": "Oggi",
+    "hour-of-day": "ore"
+  },
   "error-boundary": {
     "title": "Qualcosa è andato storto",
     "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
     "action": "Ricarica la pagina"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
-  "not-logged": "Piattaforma Notifiche, effettua il login",
+  "not-logged": "Accedi a Piattaforma Notifiche",
+  "not-logged-subtitle": "Per vedere e gestire le tue notifiche, accedi con SPID o CIE.",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."

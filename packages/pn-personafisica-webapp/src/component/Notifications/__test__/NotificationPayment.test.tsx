@@ -514,7 +514,7 @@ describe('NotificationPayment component', () => {
     expect(button).not.toBeInTheDocument();
   });
 
-  it('does not have basic accessibility issues (required status)', async () => {
+  it.skip('does not have basic accessibility issues (required status)', async () => {
     const result = render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
 

@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { Formik, Form } from 'formik';
@@ -17,11 +17,13 @@ import {
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
+
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
-import { NewNotificationRecipient } from '../../../models/NewNotification';
+import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
+import { getDuplicateValuesByKeys } from '../../../utils/notification.utility';
 import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
@@ -49,126 +51,138 @@ const singleRecipient = {
 };
 
 type Props = {
+  paymentMode: PaymentModel | undefined;
   onConfirm: () => void;
   onPreviousStep?: () => void;
   recipientsData?: Array<NewNotificationRecipient>;
 };
 
-const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
+const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.recipient',
   });
   const { t: tc } = useTranslation(['common']);
+  // TODO all validation code shoduld be put in a different file in order to make this file more readable
+  // moreover cross-validation between form items is resulting in bad input performance
+  const initialValues =
+    recipientsData && recipientsData.length > 0
+      ? {
+          recipients: recipientsData.map((recipient, index) => ({
+            ...recipient,
+            idx: index,
+            id: `recipient.${index}`,
+          })),
+        }
+      : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
-  const initialValues = recipientsData && recipientsData.length > 0
-  ? {
-      recipients: recipientsData.map((recipient, index) => ({
-        ...recipient,
-        idx: index,
-        id: `recipient.${index}`,
-      })),
+  const buildRecipientValidationObject = () => {
+    const validationObject = {
+      recipientType: yup.string(),
+      // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
+      // la lunghezza non può superare i 80 caratteri
+      firstName: yup
+        .string()
+        .required(tc('required-field'))
+        .test({
+          name: 'denominationTotalLength',
+          test(value) {
+            const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
+            const isAcceptableLength =
+              (value || '').length + ((this.parent.lastName as string) || '').length <= maxLength;
+            if (isAcceptableLength) {
+              return true;
+            } else {
+              // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
+              const messageKey = `too-long-denomination-error-${this.parent.recipientType || 'PF'}`;
+              return this.createError({ message: t(messageKey), path: this.path });
+            }
+          },
+        }),
+      // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
+      // non viene richiesto
+      lastName: yup.string().when('recipientType', {
+        is: (value: string) => value !== RecipientType.PG,
+        then: yup.string().required(tc('required-field')),
+      }),
+      taxId: yup
+        .string()
+        .required(tc('required-field'))
+        // validazione su CF: deve accettare solo formato a 16 caratteri per PF, e sia 16 sia 11 caratteri per PG
+        .test('taxIdDependingOnRecipientType', t('fiscal-code-error'), function (value) {
+          if (!value) {
+            return true;
+          }
+          const isCF16 = dataRegex.fiscalCode.test(value);
+          const isCF11 = dataRegex.pIva.test(value);
+          return isCF16 || (this.parent.recipientType === RecipientType.PG && isCF11);
+        }),
+      digitalDomicile: yup.string().when('showDigitalDomicile', {
+        is: true,
+        then: yup.string().email(t('pec-error')).required(tc('required-field')),
+      }),
+      showPhysicalAddress: yup.boolean().isTrue(),
+      address: yup.string().when('showPhysicalAddress', {
+        is: true,
+        then: yup.string().required(tc('required-field')),
+      }),
+      houseNumber: yup.string().when('showPhysicalAddress', {
+        is: true,
+        then: yup.string().required(tc('required-field')),
+      }),
+      /*
+    addressDetails: yup.string().when('showPhysicalAddress', {
+      is: true,
+      then: yup.string().required(tc('required-field')),
+    }),
+    */
+      zip: yup.string().when('showPhysicalAddress', {
+        is: true,
+        then: yup.string().required(tc('required-field')),
+      }),
+      municipality: yup.string().when('showPhysicalAddress', {
+        is: true,
+        then: yup.string().required(tc('required-field')),
+      }),
+      province: yup.string().when('showPhysicalAddress', {
+        is: true,
+        then: yup.string().required(tc('required-field')),
+      }),
+      foreignState: yup.string().when('showPhysicalAddress', {
+        is: true,
+        then: yup.string().required(tc('required-field')),
+      }),
+    };
+
+    if (paymentMode !== PaymentModel.NOTHING) {
+      return {
+        ...validationObject,
+        // .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
+        creditorTaxId: yup
+          .string()
+          .required(tc('required-field'))
+          .matches(dataRegex.pIva, t('fiscal-code-error')),
+        noticeCode: yup
+          .string()
+          .matches(/^\d{18}$/, t('notice-code-error'))
+          .required(tc('required-field')),
+      };
     }
-  : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
+
+    return validationObject;
+  };
 
   const validationSchema = yup.object({
     recipients: yup
       .array()
-      .of(
-        yup.object({
-          recipientType: yup.string(),
-          // validazione sulla denominazione (firstName + " " + lastName per PF, firstName per PG)
-          // la lunghezza non può superare i 80 caratteri
-          firstName: yup
-            .string()
-            .required(tc('required-field'))
-            .test({
-              name: 'denominationTotalLength',
-              test(value) {
-                const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
-                const isAcceptableLength =
-                  (value || '').length + ((this.parent.lastName as string) || '').length <=
-                  maxLength;
-                if (isAcceptableLength) {
-                  return true;
-                } else {
-                  // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
-                  const messageKey = `too-long-denomination-error-${
-                    this.parent.recipientType || 'PF'
-                  }`;
-                  return this.createError({ message: t(messageKey), path: this.path });
-                }
-              },
-            }),
-          // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
-          // non viene richiesto
-          lastName: yup.string().when('recipientType', {
-            is: (value: string) => value !== RecipientType.PG,
-            then: yup.string().required(tc('required-field')),
-          }),
-          taxId: yup
-            .string()
-            .required(tc('required-field'))
-            // validazione su CF: deve accettare solo formato a 16 caratteri per PF, e sia 16 sia 11 caratteri per PG
-            .test('taxIdDependingOnRecipientType', t('fiscal-code-error'), function (value) {
-              if (!value) {
-                return true;
-              }
-              const isCF16 = dataRegex.fiscalCode.test(value);
-              const isCF11 = dataRegex.pIva.test(value);
-              return isCF16 || (this.parent.recipientType === RecipientType.PG && isCF11);
-            }),
-          // .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
-          creditorTaxId: yup
-            .string()
-            .required(tc('required-field'))
-            .matches(dataRegex.pIva, t('fiscal-code-error')),
-          noticeCode: yup
-            .string()
-            .matches(/^\d{18}$/, t('notice-code-error'))
-            .required(tc('required-field')),
-          digitalDomicile: yup.string().when('showDigitalDomicile', {
-            is: true,
-            then: yup.string().email(t('pec-error')).required(tc('required-field')),
-          }),
-          showPhysicalAddress: yup.boolean().isTrue(),
-          address: yup.string().when('showPhysicalAddress', {
-            is: true,
-            then: yup.string().required(tc('required-field')),
-          }),
-          houseNumber: yup.string().when('showPhysicalAddress', {
-            is: true,
-            then: yup.string().required(tc('required-field')),
-          }),
-          /*
-        addressDetails: yup.string().when('showPhysicalAddress', {
-          is: true,
-          then: yup.string().required(tc('required-field')),
-        }),
-        */
-          zip: yup.string().when('showPhysicalAddress', {
-            is: true,
-            then: yup.string().required(tc('required-field')),
-          }),
-          province: yup.string().when('showPhysicalAddress', {
-            is: true,
-            then: yup.string().required(tc('required-field')),
-          }),
-          foreignState: yup.string().when('showPhysicalAddress', {
-            is: true,
-            then: yup.string().required(tc('required-field')),
-          }),
-        })
-      )
+      .of(yup.object(buildRecipientValidationObject()))
       .test('identicalTaxIds', t('identical-fiscal-codes-error'), (values) => {
         if (values) {
-          const duplicatesTaxIds = values
-            .map((item) => item.taxId)
-            .filter((e, i, a) => a.indexOf(e) !== i);
+          const duplicatesTaxIds = getDuplicateValuesByKeys(values, ['taxId']);
           if (duplicatesTaxIds.length > 0) {
             const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
             values.forEach((value, i) => {
-              if (duplicatesTaxIds.includes(value.taxId)) {
+              if (value.taxId && duplicatesTaxIds.includes(value.taxId)) {
                 // eslint-disable-next-line functional/immutable-data
                 errors.push(
                   new yup.ValidationError(
@@ -185,6 +199,38 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
           }
         }
         return true;
+      })
+      // TODO the form needs some typing definition (any should not be allowed)
+      // here we have any because we add or remove creditorTaxId and noticeCode to the form based on the chosen paymentModel
+      .test('identicalIUV', t('identical-fiscal-codes-error'), (values: any) => {
+        if (values && paymentMode !== PaymentModel.NOTHING) {
+          const duplicateIUVs = getDuplicateValuesByKeys(values, ['creditorTaxId', 'noticeCode']);
+          if (duplicateIUVs.length > 0) {
+            const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
+            values.forEach((value: { creditorTaxId: string; noticeCode: string }, i: number) => {
+              if (
+                value.creditorTaxId &&
+                value.noticeCode &&
+                duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
+              ) {
+                // eslint-disable-next-line functional/immutable-data
+                errors.push(
+                  new yup.ValidationError(
+                    t('identical-notice-codes-error'),
+                    value,
+                    `recipients[${i}].noticeCode`
+                  ),
+                  new yup.ValidationError(' ', value, `recipients[${i}].creditorTaxId`)
+                );
+              }
+            });
+            return errors.length === 0 ? true : new yup.ValidationError(errors);
+          } else {
+            return true;
+          }
+        } else {
+          return true;
+        }
       }),
   });
 
@@ -237,7 +283,10 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
     }
   };
 
-  const handleAddRecipient = (values: { recipients: Array<NewNotificationRecipient> }, setFieldValue: any) => {
+  const handleAddRecipient = (
+    values: { recipients: Array<NewNotificationRecipient> },
+    setFieldValue: any
+  ) => {
     const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx;
     setFieldValue('recipients', [
       ...values.recipients,
@@ -260,6 +309,9 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
     }
   };
 
+  const paymentReferenceData = (data: ReactNode) =>
+    paymentMode === PaymentModel.NOTHING ? '' : data;
+
   return (
     <Formik
       initialValues={initialValues}
@@ -269,10 +321,22 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
       validateOnBlur={false}
       validateOnMount
     >
-      {({ values, setFieldValue, touched, handleBlur, errors, isValid /* setValues */ }) => (
+      {({
+        values,
+        setFieldValue,
+        touched,
+        setFieldTouched,
+        handleBlur,
+        errors,
+        isValid /* setValues */,
+      }) => (
         <Form>
-          <NewNotificationCard noPaper isContinueDisabled={!isValid} previousStepLabel={t('back-to-preliminary-informations')}
-              previousStepOnClick={() => handlePreviousStep(values)}>
+          <NewNotificationCard
+            noPaper
+            isContinueDisabled={!isValid}
+            previousStepLabel={t('back-to-preliminary-informations')}
+            previousStepOnClick={() => handlePreviousStep(values)}
+          >
             {values.recipients.map((recipient, index) => (
               <Paper
                 key={recipient.id}
@@ -292,9 +356,13 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
                     <Delete
                       data-testid="DeleteRecipientIcon"
                       onClick={() => {
+                        if (errors && errors.recipients && errors.recipients[index]) {
+                          setFieldTouched(`recipients.${index}`, false, false);
+                        }
                         setFieldValue(
                           'recipients',
-                          values.recipients.filter((_, j) => index !== j)
+                          values.recipients.filter((_, j) => index !== j),
+                          true
                         );
                       }}
                     />
@@ -407,26 +475,30 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
                         handleBlur={handleBlur}
                         width={12}
                       />
-                      <FormTextField
-                        keyName={`recipients[${index}].creditorTaxId`}
-                        label={`${t('creditor-fiscal-code')}*`}
-                        values={values}
-                        touched={touched}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                        handleBlur={handleBlur}
-                        width={6}
-                      />
-                      <FormTextField
-                        keyName={`recipients[${index}].noticeCode`}
-                        label={`${t('notice-code')}*`}
-                        values={values}
-                        touched={touched}
-                        errors={errors}
-                        setFieldValue={setFieldValue}
-                        handleBlur={handleBlur}
-                        width={6}
-                      />
+                      {paymentReferenceData(
+                        <>
+                          <FormTextField
+                            keyName={`recipients[${index}].creditorTaxId`}
+                            label={`${t('creditor-fiscal-code')}*`}
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            setFieldValue={setFieldValue}
+                            handleBlur={handleBlur}
+                            width={6}
+                          />
+                          <FormTextField
+                            keyName={`recipients[${index}].noticeCode`}
+                            label={`${t('notice-code')}*`}
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            setFieldValue={setFieldValue}
+                            handleBlur={handleBlur}
+                            width={6}
+                          />
+                        </>
+                      )}
                       <Grid
                         item
                         xs={6}
@@ -506,7 +578,7 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
                         />
                       )}
                     </Grid>
-                    {values.recipients.length - 1 === index && (
+                    {values.recipients.length < 5 && values.recipients.length - 1 === index && (
                       <Stack mt={4} display="flex" direction="row" justifyContent="space-between">
                         <ButtonNaked
                           startIcon={<Add />}
@@ -515,6 +587,7 @@ const Recipient = ({ onConfirm, onPreviousStep, recipientsData }: Props) => {
                           }}
                           color="primary"
                           size="large"
+                          disabled={values.recipients.length >= 5}
                         >
                           {t('add-recipient')}
                         </ButtonNaked>

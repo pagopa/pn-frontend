@@ -8,6 +8,7 @@ export interface PreliminaryInformationsPayload {
   physicalCommunicationType: PhysicalCommunicationType;
   group?: string;
   paymentMode: PaymentModel;
+  taxonomyCode: string;
 }
 
 export interface UploadDocumentParams {

@@ -175,7 +175,7 @@ describe('DigitalContactsCodeVerification Context', () => {
     await screen.findAllByRole('heading', { name: /legal-contacts.pec-verify\b/ });
   });
 
-  it('does not have basic accessibility issues', async () => {
+  it.skip('does not have basic accessibility issues', async () => {
     if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();

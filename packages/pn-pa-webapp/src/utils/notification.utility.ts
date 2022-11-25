@@ -1,3 +1,5 @@
+/* eslint-disable functional/no-let */
+
 import _ from 'lodash';
 import { NotificationDetailRecipient, NotificationDetailDocument, RecipientType } from '@pagopa-pn/pn-commons';
 
@@ -7,9 +9,10 @@ import {
   NewNotificationDTO,
   NewNotification,
   PaymentObject,
+  PaymentModel
 } from '../models/NewNotification';
 
-const checkFisicalAddress = (recipient: NewNotificationRecipient) => {
+const checkPhysicalAddress = (recipient: NewNotificationRecipient) => {
   if (
     recipient.address &&
     recipient.houseNumber &&
@@ -33,7 +36,8 @@ const checkFisicalAddress = (recipient: NewNotificationRecipient) => {
 };
 
 const newNotificationRecipientsMapper = (
-  recipients: Array<NewNotificationRecipient>
+  recipients: Array<NewNotificationRecipient>,
+  paymentMethod?: PaymentModel
 ): Array<NotificationDetailRecipient> =>
   recipients.map((recipient) => {
     const digitalDomicile = recipient.digitalDomicile
@@ -46,7 +50,7 @@ const newNotificationRecipientsMapper = (
       denomination: recipient.recipientType === RecipientType.PG ? recipient.firstName : `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
       taxId: recipient.taxId,
-      payment: {
+      payment: paymentMethod === PaymentModel.NOTHING ? undefined : {
         creditorTaxId: recipient.creditorTaxId,
         noticeCode: recipient.noticeCode,
         pagoPaForm: {
@@ -61,7 +65,7 @@ const newNotificationRecipientsMapper = (
         },
       },
       digitalDomicile,
-      physicalAddress: checkFisicalAddress(recipient),
+      physicalAddress: checkPhysicalAddress(recipient),
     };
   });
 
@@ -121,11 +125,11 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
     documents: [],
   };
   // format recipients
-  newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients);
+  newNotificationParsed.recipients = newNotificationRecipientsMapper(newNotification.recipients, newNotification.paymentMode);
   // format attachments
   newNotificationParsed.documents = newNotificationAttachmentsMapper(newNotification.documents);
   // format payments
-  if (newNotification.payment) {
+  if (newNotification.payment && Object.keys(newNotification.payment).length > 0) {
     newNotificationParsed.recipients = newNotificationPaymentDocumentsMapper(
       newNotificationParsed.recipients,
       newNotification.payment
@@ -133,4 +137,19 @@ export function newNotificationMapper(newNotification: NewNotification): NewNoti
   }
   /* eslint-enable functional/immutable-data */
   return newNotificationParsed;
+}
+
+export function getDuplicateValuesByKeys<T>(objectsList: Array<T>, keys: Array<keyof T>): Array<string> {
+  const getValue = (item: T) => {
+    let valueByKeys = '';
+    for (let i = 0; i < keys.length; i++) {
+      valueByKeys += item[keys[i]] ?? '';
+    }
+    return valueByKeys;
+  };
+
+  return objectsList
+    .map((recipient) => getValue(recipient))
+    .filter((value, i, valueList) => valueList.indexOf(value) !== i)
+    .filter((value, i, valueList) => valueList.indexOf(value) === i);
 }

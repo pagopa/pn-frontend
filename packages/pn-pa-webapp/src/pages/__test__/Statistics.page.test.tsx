@@ -1,3 +1,5 @@
+import React from "react";
+
 import Statistics from "../Statistics.page";
 import { render } from "../../__test__/test-utils";
 

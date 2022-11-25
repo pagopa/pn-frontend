@@ -6,6 +6,7 @@ import { NotificationStatus } from './NotificationStatus';
 import { SideMenuItem } from './SideMenuItem';
 import { Column, Item, Sort } from './ItemsTable';
 import { Notification, GetNotificationsResponse, GetNotificationsParams } from './Notifications';
+import { KnownSentiment } from './EmptyState';
 import {
   AnalogWorkflowDetails,
   NotHandledDetails,
@@ -40,19 +41,20 @@ import { EventsType } from './MixpanelEvents';
 import { AppResponse, ServerResponseError, ErrorMessage } from './AppResponse';
 
 export {
-    basicNoLoggedUserData,
-    NotificationStatus,
-    NotificationFeePolicy,
-    TimelineCategory,
-    DigitalDomicileType,
-    RecipientType,
-    AddressSource,
-    LegalFactType,
-    PhysicalCommunicationType,
-    PaymentInfoDetail,
-    PaymentStatus,
-    PaymentAttachmentSName,
-    MessageType
+  basicNoLoggedUserData,
+  NotificationStatus,
+  NotificationFeePolicy,
+  TimelineCategory,
+  DigitalDomicileType,
+  RecipientType,
+  AddressSource,
+  LegalFactType,
+  PhysicalCommunicationType,
+  PaymentInfoDetail,
+  PaymentStatus,
+  PaymentAttachmentSName,
+  MessageType,
+  KnownSentiment,
 };
 export type {
   AnalogWorkflowDetails,

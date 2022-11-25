@@ -29,6 +29,23 @@ const customRender = (
   });
 };
 
+const renderWithoutRouter = (
+  ui: ReactElement,
+  {
+    preloadedState,
+    renderOptions,
+  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
+) => {
+  const testStore = configureStore({
+    reducer: appReducers,
+    preloadedState,
+  });
+  return render(ui, {
+    wrapper: ({ children }) => <Provider store={testStore}>{children}</Provider>,
+    ...renderOptions,
+  });
+};
+
 const axe = configureAxe({
   rules: {
     region: { enabled: false },
@@ -92,4 +109,5 @@ expect.extend(toHaveNoViolations);
 
 export * from '@testing-library/react';
 export { customRender as render };
+export { renderWithoutRouter };
 export { axe };

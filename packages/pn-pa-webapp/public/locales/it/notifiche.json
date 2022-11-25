@@ -153,23 +153,27 @@
     "drag-doc": "Trascina qui il documento",
     "steps": {
       "preliminary-informations": {
+        "fetch-groups-error": "Non siamo riusciti a recuperare i dati che servono per poter creare una nuova notifica.",
         "title": "Informazioni preliminari",
         "protocol-number": "Numero di protocollo",
         "subject": "Oggetto della notifica",
         "abstract": "Descrizione",
         "group": "Gruppo",
+        "taxonomy-id": "Codice tassonometrico",
         "comunication-type": "Modalità di invio",
         "registered-letter-890": "Modello 890",
         "simple-registered-letter": "Raccomandata A/R",
         "payment-method": "Modello di pagamento",
         "pagopa-notice": "Avviso pagoPA",
         "pagopa-notice-f24-flatrate": "Avviso pagoPA e Modello F24 forfettario",
-        "pagopa-notice-f24": "Avviso pagoPA e Modello F24"
+        "pagopa-notice-f24": "Avviso pagoPA e Modello F24",
+        "nothing": "Nessuno"
       },
       "recipient": {
         "title": "Destinatario",
         "fiscal-code-error": "Il codice fiscale inserito non è corretto",
         "identical-fiscal-codes-error": "C'è già un destinatario con questo Codice Fiscale. Inseriscine uno diverso.",
+        "identical-notice-codes-error": "C’è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
         "too-long-denomination-error-PF": "La lunghezza totale di nome e cognome non può superare gli 80 caratteri",
@@ -218,6 +222,7 @@
         "attach-pagopa-notice": "Allega Avviso pagoPA",
         "attach-f24-flatrate": "Allega Modello F24 forfettario",
         "attach-f24": "Allega Modello F24",
+        "nothing": "<0>Se questa notifica prevede un pagamento, torna a </0><1>Informazioni preliminari</1><2> e seleziona un modello. Poi, torna qui per caricarlo.</2>",
         "back-to-attachments": "Torna a Allegati"
       },
       "sync-feedback": {

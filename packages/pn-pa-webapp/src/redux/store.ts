@@ -3,6 +3,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
 import { LOG_REDUX_ACTIONS } from '../utils/constants';
 import { trackingMiddleware } from '../utils/mixpanel';
+import appStatusSlice from './appStatus/reducers';
 import userSlice from './auth/reducers';
 import dashboardSlice from './dashboard/reducers';
 import newApiKeySlice from './NewApiKey/reducers';
@@ -16,6 +17,7 @@ const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined, trackingM
 export const appReducers = {
   appState: appStateReducer,
   userState: userSlice.reducer,
+  appStatus: appStatusSlice.reducer,
   dashboardState: dashboardSlice.reducer,
   notificationState: notificationSlice.reducer,
   newNotificationState: newNotificationSlice.reducer,

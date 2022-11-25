@@ -17,6 +17,7 @@
     "groups": "Gruppi",
     "api-key": "API Key",
     "statistics": "Statistiche",
+    "app-status": "Stato della piattaforma",
     "aria-label": "piattaforma-notifiche navigazione principale",
     "aria-label-inner": "piattaforma-notifiche navigazione mittente"
   },
@@ -29,7 +30,7 @@
   "tos": {
     "title": "Piattaforma Notifiche",
     "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
-    "switchLabel": "Accetto l'<0>Informativa Privacy</0> e i <1>Termini e condizioni d’uso</1> di Piattaforma Notifiche.",
+    "switch-label": "Accedendo, accetti i <0>Termini e condizioni d’uso</0> del servizio e confermi di aver letto l’<1>Informativa Privacy</1>.",
     "button": "Accedi"
   },
   "table": {
@@ -56,13 +57,18 @@
     "select-date": "Scegli data",
     "date-selected": "Scegli data, la data selezionata è {{date}}"
   },
+  "date-time": {
+    "today-uppercase-initial": "Oggi",
+    "hour-of-day": "ore"
+  },
   "error-boundary": {
     "title": "Qualcosa è andato storto",
     "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
     "action": "Ricarica la pagina"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
-  "not-logged": "Piattaforma Notifiche, effettua il login",
+  "not-logged": "Accedi all'Area Riservata",
+  "not-logged-subtitle": "Per usare Piattaforma Notifiche, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
@@ -86,6 +92,7 @@
     "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
     "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",
     "generic-token-exchange-problem": "Non è stato possibile completare l'accesso",
+    "error-in-initial-info-loading": "Non siamo riusciti a recuperare dati necessari per l'avvio dell'applicazione",
     "invalid-token-title": "Non puoi accedere per un problema tecnico - token non valido",
     "generic-title": "Errore generico",
     "generic-message": "Si è verificato un errore. Si prega di riprovare più tardi",
@@ -115,6 +122,7 @@
   "required-fields": "*Campi obbligatori",
   "required-field": "Campo obbligatorio",
   "required": "obbligatorio",
+  "invalid": "non valido",
   "upload-file": {
     "or": "oppure",
     "select-from-pc": "selezionalo dal tuo computer",

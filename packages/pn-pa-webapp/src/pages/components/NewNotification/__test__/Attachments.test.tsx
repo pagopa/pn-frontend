@@ -149,8 +149,10 @@ describe('Attachments Component', () => {
     let newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
     const deleteIcon = newAttachmentBoxes[1].querySelector('[data-testid="DeleteIcon"]');
     fireEvent.click(deleteIcon!);
-    newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
-    expect(newAttachmentBoxes).toHaveLength(1);
+    await waitFor(() => {
+      newAttachmentBoxes = result.queryAllByTestId('attachmentBox');
+      expect(newAttachmentBoxes).toHaveLength(1);
+    });
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
