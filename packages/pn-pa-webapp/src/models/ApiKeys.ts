@@ -44,7 +44,7 @@ export interface GetApiKeysResponse {
 
 export interface GetNewApiKeyResponse {
   id: string;
-  "api-key": string;
+  apiKey: string;
 }
 
 interface ApiKeyRow {

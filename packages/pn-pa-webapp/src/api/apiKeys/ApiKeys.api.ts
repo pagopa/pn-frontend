@@ -18,7 +18,7 @@ export const ApiKeysApi = {
   createNewApiKey: (newApiKey: NewApiKeyType): Promise<string> =>
     apiClient.post<GetNewApiKeyResponse>(CREATE_APIKEY(), newApiKey).then((response) => {
       const data = response.data;
-      return data['api-key'];
+      return data.apiKey;
     }),
   deleteApiKey: (apiKeyId: string): Promise<string> =>
     apiClient
@@ -26,8 +26,6 @@ export const ApiKeysApi = {
       .then((response) => setResponseError(response.status)),
   setApiKeyStatus: (apiKeyStatus: ApiKeyStatusBE): Promise<string> =>
     apiClient
-      .put<string>(STATUS_APIKEY(apiKeyStatus.apiKey), null, {
-        params: { status: apiKeyStatus.status },
-      })
+      .put<string>(STATUS_APIKEY(apiKeyStatus.apiKey), { status: apiKeyStatus.status })
       .then((response) => setResponseError(response.status)),
 };
