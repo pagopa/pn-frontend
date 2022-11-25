@@ -18,6 +18,10 @@ import CustomMobileDialogToggle from './CustomMobileDialog/CustomMobileDialogTog
 import CustomMobileDialogContent from './CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogAction from './CustomMobileDialog/CustomMobileDialogAction';
 import TitleBox from './TitleBox';
+import { AppStatusBar } from './AppStatus/AppStatusBar';
+import DesktopDowntimeLog from './AppStatus/DesktopDowntimeLog';
+import MobileDowntimeLog from './AppStatus/MobileDowntimeLog';
+import { useFieldSpecs, adaptFieldSpecToMobile, DowntimeLogColumn } from './AppStatus/downtimeLog.utils';
 import NotificationDetailTable from './NotificationDetail/NotificationDetailTable';
 import NotificationDetailDocuments from './NotificationDetail/NotificationDetailDocuments';
 import HelpNotificationDetails from './NotificationDetail/HelpNotificationDetails';
@@ -61,6 +65,11 @@ export {
     NotificationDetailDocuments,
     HelpNotificationDetails,
     NotificationDetailTimeline,
+    AppStatusBar,
+    DesktopDowntimeLog,
+    MobileDowntimeLog,
+    useFieldSpecs, 
+    adaptFieldSpecToMobile, 
     Toast,
     CodeModal,
     InactivityHandler,
@@ -70,4 +79,8 @@ export {
     Prompt,
     CopyToClipboard,
     LoadingPage
+};
+
+export type { 
+    DowntimeLogColumn, 
 };

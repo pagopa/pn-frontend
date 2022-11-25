@@ -30,6 +30,24 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
+jest.mock('../api/appStatus/AppStatus.api', () => {
+  const original = jest.requireActual('../api/consents/Consents.api');
+  return {
+    ...original,
+    AppStatusApi: {
+      getCurrentStatus: () => Promise.resolve({
+        appIsFullyOperative: true,
+        statusByFunctionality: [],  
+        lastCheckTimestamp: '2022-11-01T14:15:28Z',
+      }),
+      getDowntimeLogPage: () => Promise.resolve({
+        downtimes: [],
+        statusByFunctionality: [],     
+      }),
+    },
+  };
+});
+
 // mocko SessionGuard perché produce problemi nel test
 jest.mock('../navigation/SessionGuard', () => () => <div>Session Guard</div>);
 jest.mock('../navigation/ToSGuard', () => () => <div>ToS Guard</div>);
