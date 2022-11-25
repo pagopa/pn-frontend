@@ -31,6 +31,12 @@ export function getNextDay(date: Date): Date {
   return dateFns.addDays(date, 1);
 }
 
+export function minutesBeforeNow(n: number): Date {
+  const dateObject = new Date();
+  dateObject.setTime(dateObject.getTime() - (60000 * n));
+  return dateObject;
+}
+
 export function formatToTimezoneString(date: Date): string {
   return dateFns.formatByString(date, DATE_FORMAT_TIMEZONE);
 }

@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Button, Link, SxProps, Theme, Tooltip } from "@mui/material";
+import { Button, Link, SxProps, Theme, Tooltip } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import CheckIcon from '@mui/icons-material/Check';
-import { useIsMobile } from "../hooks";
-
+import { useIsMobile } from '../hooks';
 interface Props {
   /** callback used to retrieve the text to be copied */
   getValue: () => string;
@@ -14,7 +13,13 @@ interface Props {
   disabled?: boolean;
 }
 
-const CopyToClipboard: React.FC<Props> = ({ getValue, text, tooltipMode, tooltip = '', disabled = false }) => {
+const CopyToClipboard: React.FC<Props> = ({
+  getValue,
+  text,
+  tooltipMode,
+  tooltip = '',
+  disabled = false,
+}) => {
   const padding = tooltipMode ? 0 : undefined;
   const alertButtonStyle: SxProps<Theme> = useIsMobile()
     ? { textAlign: 'center', padding }
@@ -37,10 +42,12 @@ const CopyToClipboard: React.FC<Props> = ({ getValue, text, tooltipMode, tooltip
       }
       return await navigator.clipboard.writeText(value);
     } else {
-      return document.execCommand('copy', true, value);
+      // execCommand is deprecated: we do not support IE so we return a console.log message
+      // return document.execCommand('copy', true, value);
+      console.log('Operation not supported');
     }
   };
-  
+
   return (
     <Button
       component={Link}
@@ -50,12 +57,8 @@ const CopyToClipboard: React.FC<Props> = ({ getValue, text, tooltipMode, tooltip
       disabled={disabled}
       aria-label={tooltip}
     >
-      {copied && (        
-        <Tooltip
-          arrow={true}
-          title={tooltip}
-          placement='top'
-        >
+      {copied && (
+        <Tooltip arrow={true} title={tooltip} placement="top">
           <CheckIcon fontSize="small" sx={{ m: '5px' }} />
         </Tooltip>
       )}

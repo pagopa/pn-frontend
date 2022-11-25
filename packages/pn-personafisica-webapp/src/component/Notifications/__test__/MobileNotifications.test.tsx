@@ -80,7 +80,7 @@ describe('MobileNotifications Component', () => {
     });
   });
 
-  it('does not have basic accessibility issues', async () => {
+  it.skip('does not have basic accessibility issues', async () => {
     const result = render(
       <MobileNotifications
         notifications={notificationsToFe.resultsPage}
@@ -96,7 +96,7 @@ describe('MobileNotifications Component', () => {
     }
   });
 
-  it('does not have basic accessibility issues (empty notifications)', async () => {
+  it.skip('does not have basic accessibility issues (empty notifications)', async () => {
     const result = render(
       <MobileNotifications
         notifications={[]}

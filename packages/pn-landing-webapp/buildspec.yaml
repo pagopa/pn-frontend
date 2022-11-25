@@ -6,6 +6,7 @@ batch:
         variables:
           BUILD_ID: dev
           NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.dev.pn.pagopa.it/"
+          NEXT_PUBLIC_ONE_TRUST_PORTAL_CDN: "https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/b5c8e1dc-89df-4ec2-a02d-1c0f55fac052.json"
     - identifier: pn_landing_svil_build
       env:
         variables:
@@ -25,10 +26,15 @@ batch:
         variables:
           BUILD_ID: cert
           NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.cert.pn.pagopa.it/"          
+    - identifier: pn_landing_hotfix_build
+      env:
+        variables:
+          BUILD_ID: hotfix
+          NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.hotfix.pn.pagopa.it/"          
 phases:
   install:
     runtime-versions:
-      nodejs: 14
+      nodejs: 16
     commands:
       #install yarn
       - echo installing yarn

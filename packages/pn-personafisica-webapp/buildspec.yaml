@@ -12,7 +12,7 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
-          REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"
+          REACT_APP_ONETRUST_DOMAIN_ID: "29cc1c86-f2ef-494d-8242-9bec8009cd29-test"
     - identifier: pn_pf_svil_build
       buildspec: cra_buildspec.yaml
       env:
@@ -24,7 +24,7 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
-          REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c"
+          REACT_APP_ONETRUST_DOMAIN_ID: "29cc1c86-f2ef-494d-8242-9bec8009cd29-test"
     - identifier: pn_pf_coll_build
       buildspec: cra_buildspec.yaml
       env:
@@ -36,7 +36,7 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
-          REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"
+          REACT_APP_ONETRUST_DOMAIN_ID: "29cc1c86-f2ef-494d-8242-9bec8009cd29-test"
     - identifier: pn_pf_cert_build
       buildspec: cra_buildspec.yaml
       env:
@@ -48,7 +48,19 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
-          REACT_APP_ONETRUST_DOMAIN_ID: "fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c-test"          
+          REACT_APP_ONETRUST_DOMAIN_ID: "29cc1c86-f2ef-494d-8242-9bec8009cd29-test"
+    - identifier: pn_pf_hotfix_build
+      buildspec: cra_buildspec.yaml
+      env:
+        variables:
+          BUILD_ID: hotfix
+          #PN-2029 REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
+          REACT_APP_URL_FE_LOGIN: https://portale-login.hotfix.pn.pagopa.it/
+          REACT_APP_URL_API: https://webapi.hotfix.pn.pagopa.it/
+          REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
+          REACT_APP_DISABLE_INACTIVITY_HANDLER: false
+          REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
+          REACT_APP_ONETRUST_DOMAIN_ID: "29cc1c86-f2ef-494d-8242-9bec8009cd29-test"                    
     # - identifier: pn_pf_prod_build
     #     buildspec: cra_buildspec.yaml
     #     env:
@@ -60,4 +72,4 @@ batch:
     #        REACT_APP_URL_API: https://webapi.pn.pagopa.it/
     #        REACT_APP_DISABLE_INACTIVITY_HANDLER: false
     #        REACT_APP_MIXPANEL_TOKEN: "e860a58bfce634272eca1e0ce288f33a"
-    #        REACT_APP_ONETRUST_DOMAIN_ID: "tbd"
+    #        REACT_APP_ONETRUST_DOMAIN_ID: "29cc1c86-f2ef-494d-8242-9bec8009cd29"

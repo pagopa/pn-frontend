@@ -1,8 +1,5 @@
 import { FooterLinksType, PreLoginFooterLinksType } from "@pagopa/mui-italia";
 
-const isDev = process.env.NODE_ENV === "development";
-const pathEnding = isDev ? "" : "index.html";
-
 export const LANGUAGES = {
   it: { it: "Italiano", en: "Inglese" },
   en: { it: "Italian", en: "English" },
@@ -60,9 +57,9 @@ export const preLoginLinks = (): PreLoginFooterLinksType => ({
     title: "Risorse",
     links: [
       {
-        label: "Privacy Policy",
-        href: `/informativa-privacy/` + pathEnding,
-        ariaLabel: "Vai al link: Privacy Policy",
+        label: "Informativa Privacy",
+        href: `/informativa-privacy/`,
+        ariaLabel: "Vai al link: Informativa Privacy",
         linkType: "internal",
       },
       {

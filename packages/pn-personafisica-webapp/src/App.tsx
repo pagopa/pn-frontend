@@ -1,9 +1,11 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import HelpIcon from '@mui/icons-material/Help';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
@@ -18,7 +20,6 @@ import {
   errorFactoryManager,
   initLocalization,
   Layout,
-  LoadingOverlay,
   ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
@@ -38,8 +39,9 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
-import {goToLoginPortal} from "./navigation/navigation.utility";
 import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
+import { goToLoginPortal } from './navigation/navigation.utility';
+import { getCurrentAppStatus } from './redux/appStatus/actions';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -55,10 +57,11 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { tos } = useAppSelector((state: RootState) => state.userState);
+  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
+  const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -77,27 +80,24 @@ const App = () => {
 
   const isPrivacyPage = path[1] === 'privacy-tos';
 
-  const userActions = useMemo(
-    () => {
-      const profiloAction = {
-        id: 'profile',
-        label: t('menu.profilo'),
-        onClick: () => {
-          trackEventByType(TrackEventType.USER_VIEW_PROFILE);
-          navigate(routes.PROFILO);
-        },
-        icon: <SettingsIcon fontSize="small" color="inherit" />,
-      };
-      const logoutAction = {
-        id: 'logout',
-        label: t('header.logout'),
-        onClick: () => handleUserLogout(),
-        icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
-      };
-      return tos ? [ profiloAction, logoutAction ] : [ logoutAction ];
-    },
-    [tos]
-  );
+  const userActions = useMemo(() => {
+    const profiloAction = {
+      id: 'profile',
+      label: t('menu.profilo'),
+      onClick: () => {
+        trackEventByType(TrackEventType.USER_VIEW_PROFILE);
+        navigate(routes.PROFILO);
+      },
+      icon: <SettingsIcon fontSize="small" color="inherit" />,
+    };
+    const logoutAction = {
+      id: 'logout',
+      label: t('header.logout'),
+      onClick: () => handleUserLogout(),
+      icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
+    };
+    return tos ? [profiloAction, logoutAction] : [logoutAction];
+  }, [tos]);
 
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
@@ -115,17 +115,13 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getDomicileInfo());
-    }
-  }, [sessionToken]);
-
-  useEffect(() => {
-    if (sessionToken !== '') {
       void dispatch(getSidemenuInformation());
+      void dispatch(getCurrentAppStatus());
     }
   }, [sessionToken]);
 
   const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
-    // implementazione esplorativa su come potrebbe gestirse l'errore dell'API
+    // Implementazione esplorativa su come potrebbe gestire l'errore dell'API
     // che restituisce i delegators per il sideMenu.
     //
     // attenzione - per far funzionare questo si deve cambiare dove dice
@@ -177,6 +173,21 @@ const App = () => {
       icon: AltRouteIcon,
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
+    },
+    {
+      label: t('menu.app-status'),
+      // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
+      icon: () =>
+        currentStatus ? (
+          currentStatus.appIsFullyOperative ? (
+            <CheckCircleIcon sx={{ color: 'success.main' }} />
+          ) : (
+            <ErrorIcon sx={{ color: 'error.main' }} />
+          )
+        ) : (
+          <HelpIcon />
+        ),
+      route: routes.APP_STATUS,
     },
   ];
 
@@ -240,19 +251,20 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!!sessionToken && tos && !isPrivacyPage}
+        showSideMenu={!!sessionToken && tos && fetchedTos && !isPrivacyPage}
         productsList={productsList}
+        showHeaderProduct={tos}
         loggedUser={jwtUser}
         enableUserDropdown
         userActions={userActions}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
         isLogged={!!sessionToken}
+        hasTermsOfService={true}
       >
         {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
         <AppMessage />
         <AppResponseMessage />
-        <LoadingOverlay />
         <Router />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>

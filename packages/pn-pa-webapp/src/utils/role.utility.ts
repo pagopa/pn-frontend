@@ -1,14 +1,9 @@
-import { Email, People, ShowChart, SupervisedUserCircle, VpnKey } from '@mui/icons-material';
+import { People, ShowChart, SupervisedUserCircle } from '@mui/icons-material';
 import { SideMenuItem } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { PNRole } from '../models/user';
 import { IS_DEVELOP } from './constants';
-
-const BasicMenuItems: Array<SideMenuItem> = [
-  { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
-  { label: 'menu.api-key', icon: VpnKey, route: routes.API_KEYS },
-];
 
 const statisticsMenuItem = { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE };
 
@@ -21,24 +16,34 @@ function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
 
 /**
  * Get Menu Items based on user role
- * @param idOrganization 
- * @param role 
+ * @param idOrganization
+ * @param role
  * @returns Allowed list of menù items
  */
-export function getMenuItems(idOrganization: string, role?: PNRole): {
+export function getMenuItems(
+  basicMenuItems: Array<SideMenuItem>,
+  idOrganization: string,
+  role?: PNRole
+): {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
 } {
   if (IS_DEVELOP) {
-    return { menuItems: [...BasicMenuItems, statisticsMenuItem], selfCareItems: selfcareMenuItems(idOrganization) };
+    return {
+      menuItems: [...basicMenuItems, statisticsMenuItem],
+      selfCareItems: selfcareMenuItems(idOrganization),
+    };
   }
   switch (role) {
     case PNRole.ADMIN:
-      return { menuItems: [...BasicMenuItems, statisticsMenuItem], selfCareItems: selfcareMenuItems(idOrganization) };
+      return {
+        menuItems: [...basicMenuItems, statisticsMenuItem],
+        selfCareItems: selfcareMenuItems(idOrganization),
+      };
     case PNRole.OPERATOR:
-      return { menuItems: BasicMenuItems };
+      return { menuItems: basicMenuItems };
     default:
-      return { menuItems: BasicMenuItems };
+      return { menuItems: basicMenuItems };
   }
 }
 

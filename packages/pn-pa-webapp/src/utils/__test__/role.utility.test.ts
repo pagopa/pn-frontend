@@ -4,9 +4,15 @@ import { PNRole } from '../../models/user';
 import * as routes from '../../navigation/routes.const';
 import { getHomePage, getMenuItems } from '../role.utility';
 
-
 const mockedIdOrganization = 'mocked-id';
-const BasicMenuItems: Array<SideMenuItem> = [
+// The actual basicMenuItems includes an additional element, which would be cumbersome
+// to reproduce in the test since it accesses the Redux store and the MUI theme.
+// As the actual responsibility of getMenuItems is to decide whether to include the selfCareItems
+// or not, any list of basicMenuItems is fit to the test.
+// -------------------------------
+// Carlos Lombardi, 2022.11.08
+// -------------------------------
+const basicMenuItems: Array<SideMenuItem> = [
   { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
   { label: 'menu.api-key', icon: VpnKey, route: routes.API_KEYS },
 ];
@@ -17,13 +23,19 @@ const SelfCareItems: Array<SideMenuItem> = [
 ];
 
 test('return menu items for role REFERENTE_AMMINISTRATIVO', () => {
-  const items = getMenuItems(mockedIdOrganization, PNRole.ADMIN);
-  expect(items).toEqual({ menuItems: [...BasicMenuItems, { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE }], selfCareItems: SelfCareItems });
+  const items = getMenuItems(basicMenuItems, mockedIdOrganization, PNRole.ADMIN);
+  expect(items).toEqual({
+    menuItems: [
+      ...basicMenuItems,
+      { label: 'menu.statistics', icon: ShowChart, route: routes.STATISTICHE },
+    ],
+    selfCareItems: SelfCareItems,
+  });
 });
 
 test('return menu items for role REFERENTE_OPERATIVO', () => {
-  const items = getMenuItems(mockedIdOrganization, PNRole.OPERATOR);
-  expect(items).toEqual({ menuItems: BasicMenuItems });
+  const items = getMenuItems(basicMenuItems, mockedIdOrganization, PNRole.OPERATOR);
+  expect(items).toEqual({ menuItems: basicMenuItems });
 });
 
 test('return home page for role REFERENTE_AMMINISTRATIVO', () => {

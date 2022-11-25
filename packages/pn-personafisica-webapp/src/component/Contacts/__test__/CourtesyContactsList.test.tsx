@@ -100,7 +100,7 @@ describe('CourtesyContactsList Component', () => {
     expect(buttons[1].textContent).toMatch('button.rimuovi');
   });
 
-  it('does not have basic accessibility issues (empty store)', async () => {
+  it.skip('does not have basic accessibility issues (empty store)', async () => {
     mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce([]);
     await act(async () => {
       result = render(
@@ -118,7 +118,7 @@ describe('CourtesyContactsList Component', () => {
     }
   });
 
-  it('does not have basic accessibility issues (data in store)', async () => {
+  it.skip('does not have basic accessibility issues (data in store)', async () => {
     mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce(mockedStore);
     await act(async () => {
       result = render(
