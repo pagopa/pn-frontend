@@ -302,7 +302,7 @@ describe("Notifications New Notification", () => {
     cy.get('button[type="submit"]').should('not.be.disabled').click();
 
     // Fill step 3
-    cy.get('.MuiPaper-root > :nth-child(2) > .MuiButton-root').click();
+    cy.get('[data-testid="AddIcon"]').click();
     cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
     cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
     cy.get('input[name="documents\.0\.name"]').type('pdf di Test 1');
