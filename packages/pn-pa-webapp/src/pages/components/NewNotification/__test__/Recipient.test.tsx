@@ -95,6 +95,23 @@ describe('Recipient Component', () => {
     await waitFor(() => expect(result?.container).not.toHaveTextContent(/title 2/i));
   });
 
+  it('renders the 5 cards, then add recipient should be disabled', async () => {
+    expect(result.container).not.toHaveTextContent(/title 1/i);
+    expect(result.container).not.toHaveTextContent(/title 2/i);
+    const addButton1 = result.queryByText('add-recipient');
+    fireEvent.click(addButton1!);
+    const addButton2 = result.queryByText('add-recipient');
+    fireEvent.click(addButton2!);
+    const addButton3 = result.queryByText('add-recipient');
+    fireEvent.click(addButton3!);
+    const addButton4 = result.queryByText('add-recipient');
+    fireEvent.click(addButton4!);
+    expect(result.container).toHaveTextContent(/title 1/i);
+    expect(result.container).toHaveTextContent(/title 5/i);
+    const addButton5 = result.queryByText('add-recipient');
+    expect(addButton5).toBeNull();
+  });
+
   it('shows the digital domicile form and the physical address form', async () => {
     const digitalDomicileCheckbox = result.getByTestId('DigitalDomicileCheckbox');
     const physicalAddressCheckbox = result.getByTestId('PhysicalAddressCheckbox');

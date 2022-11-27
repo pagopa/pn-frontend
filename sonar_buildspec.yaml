@@ -2,7 +2,7 @@ version: 0.2
 env:
   shell: bash
   secrets-manager:
-    SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM
+    SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM:token
 phases:
   install:
     runtime-versions:
@@ -23,17 +23,9 @@ phases:
       - echo Running tests with coverage...
       - yarn test:coverage
       - BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
-      - export BRANCH_TARGET=$(echo $CODEBUILD_WEBHOOK_BASE_REF | sed 's/refs\/heads\///')
-      - export PR_NUM=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/pr\///')
-      - SONAR_OPTS="-Dsonar.branch.name=$BRANCH_NAME"
-      - |
-        if [[ "$BRANCH_NAME" =~ ^(main|develop|pn_ga)$ ]]; then
-            SONAR_OPTS="-Dsonar.branch.name=$BRANCH_NAME"
-        else 
-            SONAR_OPTS="-Dsonar.pullrequest.key=$PR_NUM -Dsonar.pullrequest.branch=$BRANCH_NAME -Dsonar.pullrequest.base=$BRANCH_TARGET"
-        fi
+      - if echo $CODEBUILD_SOURCE_VERSION | grep -q ^pr/ ; then PR_NUM=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/pr\///'); BRANCH_TARGET=$(echo $CODEBUILD_WEBHOOK_BASE_REF | sed 's/refs\/heads\///'); export PR_NUM BRANCH_TARGET; fi;
       - echo Running sonar task...
-      - yarn run sonar --SONAR_OPTS
+      - yarn run sonar
       # - sleep 5
       # - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
       # - cat result.json
