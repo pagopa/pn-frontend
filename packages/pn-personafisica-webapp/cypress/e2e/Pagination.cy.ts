@@ -1,25 +1,32 @@
-describe("Pagination", () => {
+import { NOTIFICHE } from '../../src/navigation/routes.const';
+import { NOTIFICATIONS_LIST } from '../../src/api/notifications/notifications.routes';
+import {
+  DELEGATIONS_BY_DELEGATOR,
+  DELEGATIONS_BY_DELEGATE,
+} from '../../src/api/delegations/delegations.routes';
+
+describe('Pagination', () => {
   beforeEach(() => {
-    Cypress.on('uncaught:exception', (err, runnable) => {
-      return false;
-    });
     cy.viewport(1920, 1080);
 
     // cy.intercept('GET', /delivery\/notifications\/sent/, {
-    cy.intercept('GET', /delivery\/notifications\/sent.*size=10/, {
-      statusCode: 200,
-      fixture: 'notifications/list-10/page-1'
-    }).as('notifications');
 
-    cy.logout();
-    cy.loginWithTokenExchange();
-    cy.visit('/dashboard');
+    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}**size=10`, {
+      fixture: 'notifications/list-10/page-1',
+    }).as('getNotifications');
+    cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}`).as('getDelegates');
+    cy.intercept(`${DELEGATIONS_BY_DELEGATE()}`, { fixture: 'delegations/no-mandates' }).as(
+      'getDelegators'
+    );
+
+    cy.login();
+    cy.visit(NOTIFICHE);
   });
 
   it('should change the number of results per page', () => {
-    cy.intercept('GET', /delivery\/notifications\/sent.*size=20/, {
+    cy.intercept('GET', `${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}**size=20`, {
       statusCode: 200,
-      fixture: 'notifications/list-20/page-1'
+      fixture: 'notifications/list-20/page-1',
     }).as('notifications_2');
 
     cy.get('[data-cy="table(notifications).row"]').should('have.length', 10);
@@ -33,18 +40,18 @@ describe("Pagination", () => {
     });
 
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
-    
+
     cy.get('[data-testid="itemsPerPageSelector"] > .MuiButton-root').should('have.text', '20');
-    
+
     cy.get('[data-cy="table(notifications).row"]').should('have.length', 20);
   });
 
   it('Should change current page', () => {
-    cy.intercept('GET', /delivery\/notifications\/sent.*nextPagesKey=11111111111111111111/, {
+    cy.intercept('GET', `${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}**nextPagesKey=11111111111111111111`, {
       statusCode: 200,
-      fixture: 'notifications/list-10/page-2'
+      fixture: 'notifications/list-10/page-2',
     }).as('notifications_2');
-    
+
     cy.get('.MuiPagination-ul > :nth-child(1) button').should('be.disabled');
     cy.get('.MuiPagination-ul > :nth-child(3) > .MuiButtonBase-root').click();
 

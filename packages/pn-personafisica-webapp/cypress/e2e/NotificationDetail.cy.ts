@@ -2,7 +2,11 @@ import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 import { NOTIFICHE } from '../../src/navigation/routes.const';
 import { NOTIFICATION_PAYMENT_INFO } from '../../src/api/notifications/notifications.routes';
-import { NOTIFICATION_DETAIL, NOTIFICATION_DETAIL_LEGALFACT, NOTIFICATIONS_LIST } from '../../src/api/notifications/notifications.routes';
+import {
+  NOTIFICATION_DETAIL,
+  // NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATIONS_LIST,
+} from '../../src/api/notifications/notifications.routes';
 import {
   DELEGATIONS_BY_DELEGATOR,
   DELEGATIONS_BY_DELEGATE,
@@ -10,52 +14,53 @@ import {
 
 const notifications = [
   {
-    iun: 'PUGM-YUPG-UEUH-202211-U-1',
+    iun: 'XQPQ-MAJP-HMTJ-202211-E-1',
     statusBefore: NotificationStatus.DELIVERED,
-    statusAfter: NotificationStatus.VIEWED
+    statusAfter: NotificationStatus.VIEWED,
+    legalFactId: 'safestorage%3A%2F%2FPN_LEGAL_FACTS-0002-XVU9-QOPG-DMBU-53R4',
   },
   {
-    iun: 'NUKM-YLNM-EYUG-202211-W-1',
+    iun: 'RLRP-KDKT-WQYK-202211-Y-1',
     status: NotificationStatus.EFFECTIVE_DATE,
-    legalFactId: 'safestorage%3A%2F%2FPN_LEGAL_FACTS-0002-B4ZJ-7MCN-2Y59-4B6C'
-  }
+  },
 ];
 
 describe('Notification Detail', () => {
   beforeEach(() => {
-    Cypress.on('uncaught:exception', (err, runnable) => {
-      return false;
-    });
     cy.viewport(1920, 1080);
-    cy.login();
-    cy.visit(NOTIFICHE);
 
-    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, { fixture: 'notifications/list-10_page-1' }).as('getNotifications');
-    cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}*`).as('getDelegates');
-    cy.intercept(`${DELEGATIONS_BY_DELEGATE()}*`, { fixture: 'no-mandates-by-delegate.json' }).as(
+    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, {
+      fixture: 'notifications/list-10/page-1',
+    }).as('getNotifications');
+
+    cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}`, { fixture: 'delegations/no-mandates' }).as(
+      'getDelegates'
+    );
+    cy.intercept(`${DELEGATIONS_BY_DELEGATE()}`, { fixture: 'delegations/no-mandates' }).as(
       'getDelegators'
     );
-    cy.intercept(`${NOTIFICATION_PAYMENT_INFO('*', '*')}*`).as('getPaymentInfo');
 
-    // TODO: set the status during login to avoid keep doing this action
-    // accept onetrust cookies
-    // cy.get('#onetrust-accept-btn-handler').click();
+    cy.intercept(`${NOTIFICATION_PAYMENT_INFO('', '')}/**`, { fixture: 'payments/required'}).as('getPaymentInfo');
+    // cy.intercept('/ext-registry/pagopa/v1/paymentinfo/**', { fixture: 'payments/required' }).as('getPaymentInfo');
+
+    cy.login();
+    cy.visit(NOTIFICHE);
   });
 
-  it.only('Downloads Legal fact', () => {
-    cy.intercept(`${NOTIFICATION_DETAIL(notifications[1].iun)}*`, {
+  it('Downloads Legal fact', () => {
+    cy.intercept(`${NOTIFICATION_DETAIL(notifications[0].iun)}*`, {
       statusCode: 200,
-      fixture: 'notifications/notification-5_effective_date' }
-    ).as('selectedNotification');
-    
-    cy.contains(notifications[1].iun).click();
+      fixture: 'notifications/viewed',
+    }).as('selectedNotification');
 
-    // cy.intercept('GET', `${NOTIFICATION_DETAIL_LEGALFACT(notifications[1].iun, notifications[1].legalFactId)}*`, {
-    cy.intercept('GET', `delivery-push/${notifications[1].iun}/legal-facts/DIGITAL_DELIVERY/${notifications[1].legalFactId}*`, {
+    cy.contains(notifications[0].iun).click();
+
+    // cy.intercept('GET', `${NOTIFICATION_DETAIL_LEGALFACT(notifications[0].iun, notifications[0].legalFactId)}`, {
+    cy.intercept('GET', `/delivery-push/${notifications[0].iun}/legal-facts/**`, {
       statusCode: 200,
-      fixture: 'legalFacts/WZ94.pdf'
+      fixture: 'legalFacts/WZ94.pdf',
     }).as('downloadLegalFact');
-    
+
     cy.wait('@selectedNotification');
 
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
@@ -63,15 +68,15 @@ describe('Notification Detail', () => {
     cy.contains(/^Attestazione opponibile a terzi\b/).click();
 
     cy.wait('@downloadLegalFact').then((interception) => {
-      expect(interception.request.url).include(notifications[1].legalFactId);
+      expect(interception.request.url).include(notifications[0].legalFactId);
       expect(interception.response.statusCode).to.equal(200);
     });
   });
 
-  it('change notification status from \'DELIVERED\' to \'VIEWED\'', () => {
+  it(`Changes notification status from '${notifications[0].statusBefore}' to '${notifications[0].statusAfter}'`, () => {
     cy.intercept('GET', `${NOTIFICATION_DETAIL(notifications[0].iun)}`, {
       statusCode: 200,
-      fixture: 'notifications/notification-1_viewed'
+      fixture: 'notifications/viewed',
     }).as('selectedNotification');
 
     cy.contains(`${notifications[0].iun}`).click();
@@ -88,21 +93,30 @@ describe('Notification Detail', () => {
 
     cy.contains('Perfezionata per visione');
 
-    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, { fixture: 'notifications/list-10_page-1_viewed' }).as('getNotifications');
+    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, {
+      fixture: 'notifications/list-10/page-1_viewed',
+    }).as('getNotifications');
 
     cy.get('[data-cy="menu-item(notifiche)"]').click();
 
-    cy.get('[data-cy="table(notifications).row"]').eq(0).find('.MuiChip-label').should('have.text', 'Perfezionata per visione');
+    cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
+
+    cy.get('[data-cy="table(notifications).row"]')
+      .eq(0)
+      .find('.MuiChip-label')
+      .should('have.text', 'Perfezionata per visione');
   });
 
-  it('should have status \'EFFECTIVE_DATE\'', () => {
+  it("should have status 'EFFECTIVE_DATE'", () => {
     cy.intercept('GET', `${NOTIFICATION_DETAIL(notifications[1].iun)}`, {
       statusCode: 200,
-      fixture: 'notifications/notification-5_effective_date'
+      fixture: 'notifications/effective_date',
     }).as('selectedNotification');
 
-    cy.get('[data-cy="table(notifications).row"]').eq(4).find('.MuiChip-label')
-    .should('have.text', 'Perfezionata per decorrenza termini');
+    cy.get('[data-cy="table(notifications).row"]')
+      .eq(2)
+      .find('.MuiChip-label')
+      .should('have.text', 'Perfezionata per decorrenza termini');
 
     cy.contains(`${notifications[1].iun}`).click();
 

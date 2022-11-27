@@ -1,7 +1,7 @@
 {
   "abstract": "",
   "paProtocolNumber": "prot-12346018",
-  "subject": "Test invio notifica",
+  "subject": "Test 0001",
   "recipients": [
     {
       "recipientType": "PF",
@@ -59,48 +59,55 @@
   ],
   "notificationFeePolicy": "FLAT_RATE",
   "physicalCommunicationType": "REGISTERED_LETTER_890",
-  "senderDenomination": "Comune di Palermo",
+  "senderDenomination": "Comune di Milano",
   "senderTaxId": "80016350821",
   "group": "",
   "taxonomyCode": "654321A",
   "senderPaId": "5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce",
-  "iun": "PUGM-YUPG-UEUH-202211-U-1",
-  "sentAt": "2022-11-18T15:59:21.751839Z",
+  "iun": "XQPQ-MAJP-HMTJ-202211-E-1",
+  "sentAt": "2022-11-22T15:08:30.951031Z",
   "documentsAvailable": true,
-  "notificationStatus": "DELIVERED",
+  "notificationStatus": "VIEWED",
   "notificationStatusHistory": [
     {
       "status": "ACCEPTED",
-      "activeFrom": "2022-11-18T15:59:21.751839Z",
+      "activeFrom": "2022-11-22T15:08:30.951031Z",
       "relatedTimelineElements": [
-        "PUGM-YUPG-UEUH-202211-U-1_request_accepted",
-        "PUGM-YUPG-UEUH-202211-U-1_aar_gen_0",
-        "PUGM-YUPG-UEUH-202211-U-1_get_address_0_source_PLATFORM_attempt_0",
-        "PUGM-YUPG-UEUH-202211-U-1_get_address_0_source_SPECIAL_attempt_0"
+        "XQPQ-MAJP-HMTJ-202211-E-1_request_accepted",
+        "XQPQ-MAJP-HMTJ-202211-E-1_aar_gen_0",
+        "XQPQ-MAJP-HMTJ-202211-E-1_get_address_0_source_PLATFORM_attempt_0",
+        "XQPQ-MAJP-HMTJ-202211-E-1_get_address_0_source_SPECIAL_attempt_0"
       ]
     },
     {
       "status": "DELIVERING",
-      "activeFrom": "2022-11-18T16:00:29.455208Z",
+      "activeFrom": "2022-11-22T15:09:38.455208Z",
       "relatedTimelineElements": [
-        "PUGM-YUPG-UEUH-202211-U-1_send_digital_domicile_0_source_SPECIAL_attempt_0",
-        "PUGM-YUPG-UEUH-202211-U-1_digital_delivering_progress_0_source_SPECIAL_attempt_0_progidx_1",
-        "PUGM-YUPG-UEUH-202211-U-1_send_digital_feedback_0_source_SPECIAL_attempt_0"
+        "XQPQ-MAJP-HMTJ-202211-E-1_send_digital_domicile_0_source_SPECIAL_attempt_0",
+        "XQPQ-MAJP-HMTJ-202211-E-1_digital_delivering_progress_0_source_SPECIAL_attempt_0_progidx_1",
+        "XQPQ-MAJP-HMTJ-202211-E-1_send_digital_feedback_0_source_SPECIAL_attempt_0"
       ]
     },
     {
       "status": "DELIVERED",
-      "activeFrom": "2022-11-18T16:00:51.833208Z",
+      "activeFrom": "2022-11-22T15:10:00.833208Z",
       "relatedTimelineElements": [
-        "PUGM-YUPG-UEUH-202211-U-1_digital_success_workflow_0",
-        "PUGM-YUPG-UEUH-202211-U-1_schedule_refinement_workflow_0"
+        "XQPQ-MAJP-HMTJ-202211-E-1_digital_success_workflow_0",
+        "XQPQ-MAJP-HMTJ-202211-E-1_schedule_refinement_workflow_0"
+      ]
+    },
+    {
+      "status": "VIEWED",
+      "activeFrom": "2022-11-25T10:48:26.116856Z",
+      "relatedTimelineElements": [
+        "XQPQ-MAJP-HMTJ-202211-E-1_notification_viewed_0"
       ]
     }
   ],
   "timeline": [
     {
-      "elementId": "PUGM-YUPG-UEUH-202211-U-1_request_accepted",
-      "timestamp": "2022-11-18T15:59:41.408734Z",
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_request_accepted",
+      "timestamp": "2022-11-22T15:08:50.408734Z",
       "legalFactsIds": [
         {
           "key": "safestorage://PN_LEGAL_FACTS-0002-ZYHH-EWH8-J96Y-GHJV",
@@ -110,8 +117,8 @@
       "category": "REQUEST_ACCEPTED"
     },
     {
-      "elementId": "PUGM-YUPG-UEUH-202211-U-1_aar_gen_0",
-      "timestamp": "2022-11-18T16:00:04.070945Z",
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_aar_gen_0",
+      "timestamp": "2022-11-22T15:09:13.070945Z",
       "legalFactsIds": [],
       "category": "AAR_GENERATION",
       "details": {
@@ -122,34 +129,34 @@
       }
     },
     {
-      "elementId": "PUGM-YUPG-UEUH-202211-U-1_get_address_0_source_PLATFORM_attempt_0",
-      "timestamp": "2022-11-18T16:00:29.404863Z",
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_get_address_0_source_PLATFORM_attempt_0",
+      "timestamp": "2022-11-22T15:09:38.404863Z",
       "legalFactsIds": [],
       "category": "GET_ADDRESS",
       "details": {
         "recIndex": 0,
         "digitalAddressSource": "PLATFORM",
         "isAvailable": false,
-        "attemptDate": "2022-11-18T16:00:29.404861Z",
+        "attemptDate": "2022-11-22T15:09:38.404861Z",
         "errors": []
       }
     },
     {
-      "elementId": "PUGM-YUPG-UEUH-202211-U-1_get_address_0_source_SPECIAL_attempt_0",
-      "timestamp": "2022-11-18T16:00:29.429229Z",
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_get_address_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-22T15:09:38.429229Z",
       "legalFactsIds": [],
       "category": "GET_ADDRESS",
       "details": {
         "recIndex": 0,
         "digitalAddressSource": "SPECIAL",
         "isAvailable": true,
-        "attemptDate": "2022-11-18T16:00:29.429228Z",
+        "attemptDate": "2022-11-22T15:09:38.429228Z",
         "errors": []
       }
     },
     {
-      "elementId": "PUGM-YUPG-UEUH-202211-U-1_send_digital_domicile_0_source_SPECIAL_attempt_0",
-      "timestamp": "2022-11-18T16:00:29.455208Z",
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_send_digital_domicile_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-22T15:09:38.455208Z",
       "legalFactsIds": [],
       "category": "SEND_DIGITAL_DOMICILE",
       "details": {
@@ -164,8 +171,8 @@
       }
     },
     {
-      "elementId": "PUGM-YUPG-UEUH-202211-U-1_digital_delivering_progress_0_source_SPECIAL_attempt_0_progidx_1",
-      "timestamp": "2022-11-18T16:00:40.096874Z",
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_digital_delivering_progress_0_source_SPECIAL_attempt_0_progidx_1",
+      "timestamp": "2022-11-22T15:09:50.096874Z",
       "legalFactsIds": [
         {
           "key": "safestorage://PN_NOTIFICATION_ATTACHMENTS-0001-UUV8-0RXJ-PV7S-BWBU",
@@ -182,15 +189,15 @@
         "digitalAddressSource": "SPECIAL",
         "errors": [],
         "retryNumber": 0,
-        "notificationDate": "2022-11-18T16:00:41.351501Z",
+        "notificationDate": "2022-11-22T15:09:51.351501Z",
         "sendingReceipts": [{}],
         "eventCode": "C001",
         "shouldRetry": false
       }
     },
     {
-      "elementId": "PUGM-YUPG-UEUH-202211-U-1_send_digital_feedback_0_source_SPECIAL_attempt_0",
-      "timestamp": "2022-11-18T16:00:50.100689Z",
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_send_digital_feedback_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-22T15:09:59.100689Z",
       "legalFactsIds": [
         {
           "key": "safestorage://PN_NOTIFICATION_ATTACHMENTS-0001-A0ZF-DC8X-6ZKS-ZT9W",
@@ -207,13 +214,13 @@
         "digitalAddressSource": "SPECIAL",
         "errors": [],
         "responseStatus": "OK",
-        "notificationDate": "2022-11-18T16:00:50.100689Z",
+        "notificationDate": "2022-11-22T15:09:59.100689Z",
         "sendingReceipts": [{}]
       }
     },
     {
-      "elementId": "PUGM-YUPG-UEUH-202211-U-1_digital_success_workflow_0",
-      "timestamp": "2022-11-18T16:00:51.833208Z",
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_digital_success_workflow_0",
+      "timestamp": "2022-11-22T15:10:00.833208Z",
       "legalFactsIds": [
         {
           "key": "safestorage://PN_LEGAL_FACTS-0002-QE3Z-PO1N-GYFP-NWQ1",
@@ -231,11 +238,23 @@
       }
     },
     {
-      "elementId": "PUGM-YUPG-UEUH-202211-U-1_schedule_refinement_workflow_0",
-      "timestamp": "2022-11-18T16:00:51.915149Z",
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_schedule_refinement_workflow_0",
+      "timestamp": "2022-11-22T15:10:00.915149Z",
       "legalFactsIds": [],
       "category": "SCHEDULE_REFINEMENT",
       "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_notification_viewed_0",
+      "timestamp": "2022-11-25T10:48:26.116856Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_LEGAL_FACTS-0002-XVU9-QOPG-DMBU-53R4",
+          "category": "RECIPIENT_ACCESS"
+        }
+      ],
+      "category": "NOTIFICATION_VIEWED",
+      "details": { "recIndex": 0, "notificationCost": 100, "errors": [] }
     }
   ]
 }

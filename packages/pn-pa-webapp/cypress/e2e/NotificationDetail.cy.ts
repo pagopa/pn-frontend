@@ -2,21 +2,9 @@ import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
 const notifications = [
   {
-    taxIds: [
-      'CLMCST42R12D969Z',
-      'FRMTTR76M06B715E'
-    ],
-    iun: 'UAXE-PUWR-LDZX-202211-N-1',
-    status: NotificationStatus.UNREACHABLE,
-    legalFactId: 'PN_LEGAL_FACTS-0002-F6JE-7WPR-9Y92-OG95'
-  },
-  {
-    taxIds: [
-      'CLMCST42R12D969Z',
-      'FRMTTR76M06B715E'
-    ],
-    iun: 'RNAG-YTXL-NGWN-202211-W-1',
-    status: NotificationStatus.EFFECTIVE_DATE
+    iun: 'RLRP-KDKT-WQYK-202211-Y-1',
+    status: NotificationStatus.EFFECTIVE_DATE,
+    legalFactId: 'PN_LEGAL_FACTS-0002-V547-0WE5-TKNE-OK0D'
   }
 ];
 
@@ -29,7 +17,7 @@ describe("Notification Detail", () => {
 
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list-10_page-1'
+      fixture: 'notifications/list-10/page-1'
     }).as('notifications');
 
     cy.logout();
@@ -40,11 +28,10 @@ describe("Notification Detail", () => {
   it('Downloads Legal fact', () => {
     cy.intercept('GET', `delivery/notifications/sent/${notifications[0].iun}`, {
       statusCode: 200,
-      fixture: 'notifications/notification-3'
+      fixture: 'notifications/effective_date'
     }).as('selectedNotification');
 
-    
-    cy.intercept('GET', `delivery-push/${notifications[0].iun}/legal-facts/SENDER_ACK/${notifications[0].legalFactId}`, {
+    cy.intercept('GET', `/delivery-push/${notifications[0].iun}/legal-facts/**`, {
       statusCode: 200,
       fixture: 'legalFacts/OG95.pdf'
     }).as('downloadLegalFact');
@@ -63,13 +50,13 @@ describe("Notification Detail", () => {
     });
   });
 
-  it('Show notification status as \'EFFECTIVE_DATE\'', () => {
-    cy.intercept('GET', `delivery/notifications/sent/${notifications[1].iun}`, {
+  it(`Show notification status as '${notifications[0].status}'`, () => {
+    cy.intercept('GET', `delivery/notifications/sent/${notifications[0].iun}`, {
       statusCode: 200,
-      fixture: 'notifications/notification-1'
+      fixture: 'notifications/effective_date'
     }).as('selectedNotification');
 
-    cy.contains(`${notifications[1].iun}`).click();
+    cy.contains(`${notifications[0].iun}`).click();
 
     cy.contains('Perfezionata per decorrenza termini');
   });
