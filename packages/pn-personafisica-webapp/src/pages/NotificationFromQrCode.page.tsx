@@ -1,7 +1,7 @@
 import { AccessDenied, LoadingPage } from '@pagopa-pn/pn-commons';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
 import { GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH, GET_DETTAGLIO_NOTIFICA_PATH, NOTIFICHE } from '../navigation/routes.const';
@@ -15,11 +15,16 @@ function notificationDetailPath(notificationId: NotificationId): string {
 
 /* eslint-disable-next-line arrow-body-style */
 const NotificationFromQrCode = () => {
-  const { qrcode } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche']);
   const [fetchError, setFetchError] = useState(false);
   const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
+
+  const qrcode = useMemo(() => {
+    const queryParams = new URLSearchParams(location.search);
+    return queryParams.get("aar");
+  }, [location]);
 
   useEffect(() => {
     const fetchNotificationFromQrCode = async () => {

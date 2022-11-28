@@ -7,7 +7,7 @@ export const PROFILO = '/profilo';
 const NOTIFICA = '/dettaglio';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
 export const DETTAGLIO_NOTIFICA_DELEGATO = `${NOTIFICHE_DELEGATO}/:id${NOTIFICA}`;
-export const DETTAGLIO_NOTIFICA_QRCODE = `${NOTIFICHE}/qrcode/:qrcode`;
+export const DETTAGLIO_NOTIFICA_QRCODE = '/notifica';
 export const NUOVA_DELEGA = `${DELEGHE}/nuova`;
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${NOTIFICA}`;
 export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: string) => `${NOTIFICHE}/${mandateId}/${id}${NOTIFICA}`;

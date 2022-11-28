@@ -14,7 +14,7 @@ jest.mock('react-router-dom', () => {
   return {
     ...original,
     useNavigate: () => mockNavigateFn,
-    useParams: () => ({ qrcode: mockQrCode }),
+    useLocation: () => ({ search: `?aar=${mockQrCode}` }),
   };
 });
 
