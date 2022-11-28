@@ -19,7 +19,6 @@ describe("Notifications New Notification", () => {
     cy.loginWithTokenExchange();
 
     // intercepts send notification request stubbing its successful response
-    // cy.intercept('POST', '/delivery/requests', {
     cy.intercept('POST', CREATE_NOTIFICATION(), {
       statusCode: 202,
       body: {
@@ -29,21 +28,7 @@ describe("Notifications New Notification", () => {
     }).as('saveNewNotification');
     
     cy.intercept('/delivery/attachments/preload').as('preloadAttachments');
-    // cy.intercept('/delivery/attachments/preload', {
-    //   statusCode: 200,
-    //   body: {
-    //     secret: 'xxxxxxxxx',
-    //     httpMethod: 'PUT',
-    //     url: 'https://safestorage-test-url',
-    //     key: "PN_NOTIFICATION_ATTACHMENTS-0001-3AT0-IUKO-CNRD-NPWV"
-    //   }
-    // }).as('preloadAttachments');
-
-    // cy.intercept('PUT', 'https://safestorage-test-url', {
-    //   statusCode: 200
-    // });
-
-    // cy.visit(NUOVA_NOTIFICA);
+    
     cy.visit('/dashboard/nuova-notifica');
   });
 
@@ -69,19 +54,6 @@ describe("Notifications New Notification", () => {
         noticeCode: '302001869076319100',
       }
     });
-    // cy.fixture('recipients/cesare').then((cesare) => {
-    //   // Fill step 2
-    //   cy.fillRecipient({
-    //     position: 0,
-    //     data: {
-    //       ...cesare,
-    //       creditorTaxId: '77777777777',
-    //       noticeCode: '302001869076319100',
-    //     }
-    //   });
-    // });
-    
-   
     
     cy.get('button[type="submit"]').should('not.be.disabled').click();
     
