@@ -21,6 +21,16 @@
       "requestAcceptedAt": "2022-11-16T07:03:47.009013Z"
     },
     {
+      "iun": "YMYP-YRKU-VGJR-202211-Z-1",
+      "paProtocolNumber": "302201668582148126",
+      "sender": "Comune di palermo",
+      "sentAt": "2022-11-16T07:02:33.65716Z",
+      "subject": "invio notifica GA cucumber",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-16T07:03:07.697137Z"
+    },
+    {
       "iun": "UAXE-PUWR-LDZX-202211-N-1",
       "paProtocolNumber": "302161668540964858",
       "sender": "Comune di palermo",
@@ -81,30 +91,20 @@
       "requestAcceptedAt": "2022-11-15T19:03:40.572316Z"
     },
     {
-      "iun": "TKLE-KPXT-HMJE-202211-T-1",
-      "paProtocolNumber": "302161668533752298",
+      "iun": "QYLZ-HDNG-UWMH-202211-U-1",
+      "paProtocolNumber": "302191668538951540",
       "sender": "Comune di palermo",
-      "sentAt": "2022-11-15T17:35:52.732168Z",
-      "subject": "invio notifica GA cucumber",
-      "notificationStatus": "UNREACHABLE",
-      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
-      "requestAcceptedAt": "2022-11-15T17:36:22.005067Z"
-    },
-    {
-      "iun": "HYUY-JTJG-HLTW-202211-A-1",
-      "paProtocolNumber": "302161668533634508",
-      "sender": "Comune di palermo",
-      "sentAt": "2022-11-15T17:33:55.009954Z",
+      "sentAt": "2022-11-15T19:02:35.513979Z",
       "subject": "invio notifica GA cucumber",
       "notificationStatus": "EFFECTIVE_DATE",
-      "recipients": ["CLMCST42R12D969Z", "FRMTTR76M06B715E"],
-      "requestAcceptedAt": "2022-11-15T17:34:18.726342Z"
+      "recipients": ["FRMTTR76M06B715E"],
+      "requestAcceptedAt": "2022-11-15T19:03:08.259072Z"
     }
   ],
   "moreResult": true,
   "nextPagesKey": [
-    "eyJlayI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiS1FLVy1SWlhSLVFZUUQtMjAyMjExLUEtMSMjUEYtYTZjMTM1MGQtMWQ2OS00MjA5LThiZjgtMzFkZTU4Yzc5ZDZlIiwic2VudEF0IjoiMjAyMi0xMS0xNVQxMzowODozNi43OTI3OTRaIiwic2VuZGVySWRfY3JlYXRpb25Nb250aCI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIn19",
-    "eyJlayI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiSEdYRS1BRU5ELVJQRFItMjAyMjExLVQtMSMjUEYtYTZjMTM1MGQtMWQ2OS00MjA5LThiZjgtMzFkZTU4Yzc5ZDZlIiwic2VudEF0IjoiMjAyMi0xMS0xNVQwNzowMzo1NC4xMjU0NTBaIiwic2VuZGVySWRfY3JlYXRpb25Nb250aCI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIn19",
-    "eyJlayI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIiwiaWsiOnsiaXVuX3JlY2lwaWVudElkIjoiTUROUi1YTllXLUhVR1UtMjAyMjExLUotMSMjUEYtYTZjMTM1MGQtMWQ2OS00MjA5LThiZjgtMzFkZTU4Yzc5ZDZlIiwic2VudEF0IjoiMjAyMi0xMS0xNFQxMDo0MjozNS40OTY5OTBaIiwic2VuZGVySWRfY3JlYXRpb25Nb250aCI6IjViOTk0ZDRhLTBmYTgtNDdhYy05YzdiLTM1NGYxZDQ0YTFjZSMjMjAyMjExIn19"
+    "1111111",
+    "2222222",
+    "3333333"
   ]
 }

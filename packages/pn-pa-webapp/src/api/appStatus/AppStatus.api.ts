@@ -1,5 +1,5 @@
 import { createAppStatusApi } from '@pagopa-pn/pn-commons';
-import { apiClient } from '../axios';
+import { apiClient } from '../apiClients';
 
 /* ------------------------------------------------------------------------
    the API
