@@ -34,7 +34,7 @@ describe('api keys page redux state test', () => {
     ]);
   });
 
-  it.skip('Should be able to create new API Key', async () => {
+  it('Should be able to create new API Key', async () => {
     const apiSpy = jest.spyOn(ApiKeysApi, 'createNewApiKey');
     apiSpy.mockResolvedValue('mocked-api-key');
     const action = await store.dispatch(saveNewApiKey(newApiKeyForBE));

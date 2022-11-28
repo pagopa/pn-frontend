@@ -21,12 +21,12 @@ describe('api keys page redux state test', () => {
     });
   });
 
-  it.skip('Should be able to fetch the api keys list', async () => {
+  it('Should be able to fetch the api keys list', async () => {
     const apiSpy = jest.spyOn(ApiKeysApi, 'getApiKeys');
     apiSpy.mockResolvedValue(mockApiKeysForFE);
     const action = await store.dispatch(getApiKeys());
     const payload = action.payload;
-    expect(action).toBe('getApiKeys/fulfilled');
+    expect(action.type).toBe('getApiKeys/fulfilled');
     expect(payload).toEqual(mockApiKeysForFE);
   });
 
