@@ -1,0 +1,11 @@
+{
+  "firstname": "Giuseppe Maria",
+  "lastname": "Garibaldi",
+  "taxId": "GRBGPP87L04L741X",
+  "address": "Via dei Mille",
+  "houseNumber": "1000",
+  "municipality": "Marsala",
+  "province": "TP",
+  "zip": "91025",
+  "foreignState": "Italia"
+}

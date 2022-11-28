@@ -5,14 +5,15 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Layout, useIsMobile } from '@pagopa-pn/pn-commons';
-import { SpidIcon } from '@pagopa/mui-italia/dist/icons';
+import { SpidIcon, CieIcon } from '@pagopa/mui-italia/dist/icons';
 import { styled } from '@mui/material/styles';
 import { useSearchParams } from "react-router-dom";
 
 import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
-import { storageOriginOps } from '../../utils/storage';
+import {storageOriginOps, storageSpidSelectedOps} from '../../utils/storage';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
+import { ENV } from "../../utils/env";
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -34,10 +35,8 @@ const Login = () => {
     storageOriginOps.write(origin);
   }
 
-  // PN-2195 hide CIE button
-  /* const goCIE = () => {
+  const goCIE = () => {
     storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
-    // () =>
     window.location.assign(
       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
     );
@@ -48,7 +47,7 @@ const Login = () => {
         SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
       },
     );
-  }; */
+  };
 
   if (showIDPS) {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
@@ -137,9 +136,9 @@ const Login = () => {
                 </LoginButton>
               </Box>
 
-              {/* PN-2195 hide CIE button
               <Box display="flex" justifyContent="center" alignItems="center">
                 <LoginButton
+                  id="cieButton"
                   sx={{
                     borderRadius: '4px',
                     width: '90%',
@@ -152,7 +151,7 @@ const Login = () => {
                 >
                   {t('loginPage.loginBox.cieLogin')}
                 </LoginButton>
-              </Box> */}
+              </Box>
             </Box>
           </Grid>
         </Grid>

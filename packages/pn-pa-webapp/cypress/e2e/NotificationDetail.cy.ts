@@ -1,15 +1,12 @@
-
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
 
-const notification = {
-  taxIds: [
-    'CLMCST42R12D969Z',
-    'FRMTTR76M06B715E'
-  ],
-  iun: 'UAXE-PUWR-LDZX-202211-N-1',
-  status: NotificationStatus.UNREACHABLE,
-  legalFactId: 'PN_LEGAL_FACTS-0002-F6JE-7WPR-9Y92-OG95'
-}
+const notifications = [
+  {
+    iun: 'RLRP-KDKT-WQYK-202211-Y-1',
+    status: NotificationStatus.EFFECTIVE_DATE,
+    legalFactId: 'PN_LEGAL_FACTS-0002-V547-0WE5-TKNE-OK0D'
+  }
+];
 
 describe("Notification Detail", () => {
   beforeEach(() => {
@@ -20,7 +17,7 @@ describe("Notification Detail", () => {
 
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list-10_page-1.json'
+      fixture: 'notifications/list-10/page-1'
     }).as('notifications');
 
     cy.logout();
@@ -29,18 +26,17 @@ describe("Notification Detail", () => {
   });
 
   it('Downloads Legal fact', () => {
-    cy.intercept('GET', `delivery/notifications/sent/${notification.iun}`, {
+    cy.intercept('GET', `delivery/notifications/sent/${notifications[0].iun}`, {
       statusCode: 200,
-      fixture: 'notifications/notification-3.json'
+      fixture: 'notifications/effective_date'
     }).as('selectedNotification');
 
-    
-    cy.intercept('GET', `delivery-push/${notification.iun}/legal-facts/SENDER_ACK/${notification.legalFactId}`, {
+    cy.intercept('GET', `/delivery-push/${notifications[0].iun}/legal-facts/**`, {
       statusCode: 200,
       fixture: 'legalFacts/OG95.pdf'
     }).as('downloadLegalFact');
 
-    cy.contains(notification.iun).click();
+    cy.contains(notifications[0].iun).click();
 
     cy.wait('@selectedNotification');
 
@@ -49,8 +45,19 @@ describe("Notification Detail", () => {
     cy.contains(/^Attestazione opponibile a terzi\b/).click();
 
     cy.wait('@downloadLegalFact').then((interception) => {
-      expect(interception.request.url).include(notification.legalFactId);
+      expect(interception.request.url).include(notifications[0].legalFactId);
       expect(interception.response.statusCode).to.equal(200);
     });
+  });
+
+  it(`Show notification status as '${notifications[0].status}'`, () => {
+    cy.intercept('GET', `delivery/notifications/sent/${notifications[0].iun}`, {
+      statusCode: 200,
+      fixture: 'notifications/effective_date'
+    }).as('selectedNotification');
+
+    cy.contains(`${notifications[0].iun}`).click();
+
+    cy.contains('Perfezionata per decorrenza termini');
   });
 });
