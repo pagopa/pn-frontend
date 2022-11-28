@@ -1,5 +1,5 @@
 import { Consent, ConsentActionType, ConsentType } from '../../models/consents';
-import { apiClient } from '../clients';
+import { apiClient } from '../apiClients';
 import { CONSENTS } from './consents.routes';
 
 export const ConsentsApi = {

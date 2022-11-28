@@ -4,7 +4,7 @@ import {
   DigitalAddresses,
   LegalChannelType,
 } from '../../models/contacts';
-import { apiClient } from '../clients';
+import { apiClient } from '../apiClients';
 import { CONTACTS_LIST, COURTESY_CONTACT, LEGAL_CONTACT } from './contacts.routes';
 
 export const ContactsApi = {

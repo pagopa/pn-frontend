@@ -8,7 +8,7 @@ import {
   formatToTimezoneString,
   getNextDay,
 } from '@pagopa-pn/pn-commons';
-import { apiClient } from '../../clients';
+import { apiClient } from '../../apiClients';
 import { NotificationsApi } from '../Notifications.api';
 import {
   notificationsFromBe,

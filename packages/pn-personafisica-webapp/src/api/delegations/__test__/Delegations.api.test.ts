@@ -7,7 +7,7 @@ import {
   arrayOfDelegators,
   mockCreateDelegation,
 } from '../../../redux/delegation/__test__/test.utils';
-import { apiClient } from '../../clients';
+import { apiClient } from '../../apiClients';
 import { DelegationsApi } from '../Delegations.api';
 import { ACCEPT_DELEGATION, CREATE_DELEGATION, DELEGATIONS_BY_DELEGATE, DELEGATIONS_BY_DELEGATOR, REJECT_DELEGATION, REOVKE_DELEGATION } from '../delegations.routes';
 
