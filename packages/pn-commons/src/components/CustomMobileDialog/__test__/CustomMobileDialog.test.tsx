@@ -1,4 +1,5 @@
-import { DialogActions, DialogContent } from '@mui/material';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import { fireEvent, waitFor, screen, RenderResult } from '@testing-library/react';
 
 import { render } from '../../../test-utils';

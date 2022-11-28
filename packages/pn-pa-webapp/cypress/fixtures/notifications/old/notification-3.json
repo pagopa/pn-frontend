@@ -1,0 +1,361 @@
+{
+  "abstract": "Abstract della notifica",
+  "paProtocolNumber": "302161668540964858",
+  "subject": "invio notifica GA cucumber",
+  "recipients": [
+    {
+      "recipientType": "PF",
+      "taxId": "CLMCST42R12D969Z",
+      "internalId": "PF-a6c1350d-1d69-4209-8bf8-31de58c79d6e",
+      "denomination": "Mario Cucumber",
+      "payment": {
+        "noticeCode": "302161668540964862",
+        "creditorTaxId": "77777777777",
+        "pagoPaForm": {
+          "digests": {
+            "sha256": "jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE="
+          },
+          "contentType": "application/pdf",
+          "ref": {
+            "key": "PN_NOTIFICATION_ATTACHMENTS-0001-XVDZ-TS9W-WKON-NKPX",
+            "versionToken": "v1"
+          }
+        }
+      }
+    },
+    {
+      "recipientType": "PF",
+      "taxId": "FRMTTR76M06B715E",
+      "internalId": "PF-4fc75df3-0913-407e-bdaa-e50329708b7d",
+      "denomination": "Mario Gherkin",
+      "payment": {
+        "noticeCode": "302161668540964864",
+        "creditorTaxId": "77777777777",
+        "pagoPaForm": {
+          "digests": {
+            "sha256": "jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE="
+          },
+          "contentType": "application/pdf",
+          "ref": {
+            "key": "PN_NOTIFICATION_ATTACHMENTS-0001-NYMX-56FF-H06K-UHNT",
+            "versionToken": "v1"
+          }
+        }
+      }
+    }
+  ],
+  "documents": [
+    {
+      "digests": { "sha256": "jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=" },
+      "contentType": "application/pdf",
+      "ref": {
+        "key": "PN_NOTIFICATION_ATTACHMENTS-0001-CTUB-2MGW-MFEV-YRXF",
+        "versionToken": "v1"
+      },
+      "docIdx": "0"
+    }
+  ],
+  "notificationFeePolicy": "FLAT_RATE",
+  "physicalCommunicationType": "REGISTERED_LETTER_890",
+  "senderDenomination": "Comune di palermo",
+  "senderTaxId": "80016350821",
+  "senderPaId": "5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce",
+  "iun": "UAXE-PUWR-LDZX-202211-N-1",
+  "sentAt": "2022-11-15T19:36:05.181217Z",
+  "documentsAvailable": true,
+  "notificationStatus": "UNREACHABLE",
+  "notificationStatusHistory": [
+    {
+      "status": "ACCEPTED",
+      "activeFrom": "2022-11-15T19:36:05.181217Z",
+      "relatedTimelineElements": [
+        "UAXE-PUWR-LDZX-202211-N-1_request_accepted",
+        "UAXE-PUWR-LDZX-202211-N-1_aar_gen_1",
+        "UAXE-PUWR-LDZX-202211-N-1_aar_gen_0",
+        "UAXE-PUWR-LDZX-202211-N-1_get_address_1_source_PLATFORM_attempt_0",
+        "UAXE-PUWR-LDZX-202211-N-1_get_address_0_source_PLATFORM_attempt_0",
+        "UAXE-PUWR-LDZX-202211-N-1_get_address_1_source_SPECIAL_attempt_0",
+        "UAXE-PUWR-LDZX-202211-N-1_get_address_0_source_SPECIAL_attempt_0",
+        "UAXE-PUWR-LDZX-202211-N-1_1_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+        "UAXE-PUWR-LDZX-202211-N-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+        "public_registry_response_UAXE-PUWR-LDZX-202211-N-1_1_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+        "UAXE-PUWR-LDZX-202211-N-1_get_address_1_source_GENERAL_attempt_0",
+        "public_registry_response_UAXE-PUWR-LDZX-202211-N-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+        "UAXE-PUWR-LDZX-202211-N-1_schedule_analog_workflow_1",
+        "UAXE-PUWR-LDZX-202211-N-1_get_address_0_source_GENERAL_attempt_0",
+        "UAXE-PUWR-LDZX-202211-N-1_schedule_analog_workflow_0",
+        "UAXE-PUWR-LDZX-202211-N-1_0_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+        "UAXE-PUWR-LDZX-202211-N-1_1_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+        "public_registry_response_UAXE-PUWR-LDZX-202211-N-1_0_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+        "UAXE-PUWR-LDZX-202211-N-1_analog_failure_workflow_0",
+        "UAXE-PUWR-LDZX-202211-N-1_completely_unreachable_0",
+        "public_registry_response_UAXE-PUWR-LDZX-202211-N-1_1_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+        "UAXE-PUWR-LDZX-202211-N-1_schedule_refinement_workflow_0",
+        "UAXE-PUWR-LDZX-202211-N-1_analog_failure_workflow_1"
+      ]
+    },
+    {
+      "status": "UNREACHABLE",
+      "activeFrom": "2022-11-15T19:38:02.050205Z",
+      "relatedTimelineElements": [
+        "UAXE-PUWR-LDZX-202211-N-1_completely_unreachable_1",
+        "UAXE-PUWR-LDZX-202211-N-1_schedule_refinement_workflow_1"
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_request_accepted",
+      "timestamp": "2022-11-15T19:36:29.725821Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_LEGAL_FACTS-0002-F6JE-7WPR-9Y92-OG95",
+          "category": "SENDER_ACK"
+        }
+      ],
+      "category": "REQUEST_ACCEPTED"
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_aar_gen_1",
+      "timestamp": "2022-11-15T19:37:01.835323Z",
+      "legalFactsIds": [],
+      "category": "AAR_GENERATION",
+      "details": {
+        "recIndex": 1,
+        "errors": [],
+        "numberOfPages": 1,
+        "generatedAarUrl": "safestorage://PN_AAR-0002-DZPF-9WHW-EA20-YIHQ"
+      }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_aar_gen_0",
+      "timestamp": "2022-11-15T19:37:01.935131Z",
+      "legalFactsIds": [],
+      "category": "AAR_GENERATION",
+      "details": {
+        "recIndex": 0,
+        "errors": [],
+        "numberOfPages": 1,
+        "generatedAarUrl": "safestorage://PN_AAR-0002-664Z-D59J-ZTCF-5ANQ"
+      }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_get_address_1_source_PLATFORM_attempt_0",
+      "timestamp": "2022-11-15T19:37:31.694118Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 1,
+        "digitalAddressSource": "PLATFORM",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T19:37:31.694117Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_get_address_0_source_PLATFORM_attempt_0",
+      "timestamp": "2022-11-15T19:37:31.701231Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddressSource": "PLATFORM",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T19:37:31.70123Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_get_address_1_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-15T19:37:31.721283Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 1,
+        "digitalAddressSource": "SPECIAL",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T19:37:31.721283Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_get_address_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-15T19:37:31.752766Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddressSource": "SPECIAL",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T19:37:31.752765Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_1_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+      "timestamp": "2022-11-15T19:37:31.753932Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_CALL",
+      "details": {
+        "recIndex": 1,
+        "deliveryMode": "DIGITAL",
+        "contactPhase": "CHOOSE_DELIVERY",
+        "sentAttemptMade": 0,
+        "sendDate": "2022-11-15T19:37:31.753906Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+      "timestamp": "2022-11-15T19:37:31.789539Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_CALL",
+      "details": {
+        "recIndex": 0,
+        "deliveryMode": "DIGITAL",
+        "contactPhase": "CHOOSE_DELIVERY",
+        "sentAttemptMade": 0,
+        "sendDate": "2022-11-15T19:37:31.789536Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "public_registry_response_UAXE-PUWR-LDZX-202211-N-1_1_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+      "timestamp": "2022-11-15T19:37:31.977319Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_RESPONSE",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_get_address_1_source_GENERAL_attempt_0",
+      "timestamp": "2022-11-15T19:37:32.010887Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 1,
+        "digitalAddressSource": "GENERAL",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T19:37:32.010886Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "public_registry_response_UAXE-PUWR-LDZX-202211-N-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+      "timestamp": "2022-11-15T19:37:32.030511Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_RESPONSE",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_schedule_analog_workflow_1",
+      "timestamp": "2022-11-15T19:37:32.038714Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_ANALOG_WORKFLOW",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_get_address_0_source_GENERAL_attempt_0",
+      "timestamp": "2022-11-15T19:37:32.067872Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddressSource": "GENERAL",
+        "isAvailable": false,
+        "attemptDate": "2022-11-15T19:37:32.067871Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_schedule_analog_workflow_0",
+      "timestamp": "2022-11-15T19:37:32.196323Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_ANALOG_WORKFLOW",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_0_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+      "timestamp": "2022-11-15T19:38:01.726296Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_CALL",
+      "details": {
+        "recIndex": 0,
+        "deliveryMode": "ANALOG",
+        "contactPhase": "SEND_ATTEMPT",
+        "sentAttemptMade": 0,
+        "sendDate": "2022-11-15T19:38:01.726293Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_1_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+      "timestamp": "2022-11-15T19:38:01.746537Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_CALL",
+      "details": {
+        "recIndex": 1,
+        "deliveryMode": "ANALOG",
+        "contactPhase": "SEND_ATTEMPT",
+        "sentAttemptMade": 0,
+        "sendDate": "2022-11-15T19:38:01.746535Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "public_registry_response_UAXE-PUWR-LDZX-202211-N-1_0_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+      "timestamp": "2022-11-15T19:38:01.859006Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_RESPONSE",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_analog_failure_workflow_0",
+      "timestamp": "2022-11-15T19:38:01.891067Z",
+      "legalFactsIds": [],
+      "category": "ANALOG_FAILURE_WORKFLOW",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_completely_unreachable_0",
+      "timestamp": "2022-11-15T19:38:01.92613Z",
+      "legalFactsIds": [],
+      "category": "COMPLETELY_UNREACHABLE",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "public_registry_response_UAXE-PUWR-LDZX-202211-N-1_1_ANALOG_SEND_ATTEMPT_0_public_registry_call",
+      "timestamp": "2022-11-15T19:38:01.926758Z",
+      "legalFactsIds": [],
+      "category": "PUBLIC_REGISTRY_RESPONSE",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_schedule_refinement_workflow_0",
+      "timestamp": "2022-11-15T19:38:01.960985Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_REFINEMENT",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_analog_failure_workflow_1",
+      "timestamp": "2022-11-15T19:38:01.964019Z",
+      "legalFactsIds": [],
+      "category": "ANALOG_FAILURE_WORKFLOW",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_completely_unreachable_1",
+      "timestamp": "2022-11-15T19:38:02.050205Z",
+      "legalFactsIds": [],
+      "category": "COMPLETELY_UNREACHABLE",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "UAXE-PUWR-LDZX-202211-N-1_schedule_refinement_workflow_1",
+      "timestamp": "2022-11-15T19:38:02.270467Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_REFINEMENT",
+      "details": { "recIndex": 1, "errors": [] }
+    }
+  ]
+}

@@ -6,6 +6,7 @@ type Props = {
   children: ReactNode;
   isContinueDisabled: boolean;
   title?: string;
+  subtitle?: string;
   noPaper?: boolean;
   submitLabel?: string;
   previousStepLabel?: string;
@@ -16,6 +17,7 @@ const NewNotificationCard = ({
   children,
   isContinueDisabled,
   title,
+  subtitle,
   noPaper = false,
   submitLabel,
   previousStepLabel,
@@ -28,6 +30,7 @@ const NewNotificationCard = ({
       {!noPaper && (
         <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
           {title && <Typography variant="h6">{title}</Typography>}
+          {subtitle && <Typography variant="body1">{subtitle}</Typography>}
           <Box sx={{ marginTop: '20px' }}>{children}</Box>
         </Paper>
       )}

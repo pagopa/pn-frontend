@@ -17,6 +17,7 @@ import {
     tenYearsAgo,
     DATE_FORMAT,
     getNextDay,
+    minutesBeforeNow,
     formatToTimezoneString
 } from './date.utility';
 import { IUN_regex, formatIun } from './iun.utility';
@@ -38,6 +39,7 @@ export {
     getDay,
     getTime,
     getNextDay,
+    minutesBeforeNow,
     formatToTimezoneString,
     getValidValue,
     formatFiscalCode,

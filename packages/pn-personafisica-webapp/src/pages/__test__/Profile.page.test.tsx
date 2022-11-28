@@ -72,7 +72,7 @@ describe('testing profile page', () => {
     expect(mockNavigateFn).toBeCalledWith(RECAPITI);
   });
 
-  it('is profile page accessible', async ()=>{
+  it.skip('is profile page accessible', async ()=>{
     const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
     mockUseAppSelector.mockReturnValueOnce({
       name: 'Mario',

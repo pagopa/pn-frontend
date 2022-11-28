@@ -1,16 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { NotificationDetail, LegalFactId } from '@pagopa-pn/pn-commons';
+import { NotificationDetail, LegalFactId, performThunkAction } from '@pagopa-pn/pn-commons';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
+export enum NOTIFICATION_ACTIONS {
+  GET_SENT_NOTIFICATION = 'getSentNotification',
+};
+
 export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
-  'getSentNotification',
-  async (params: string, { rejectWithValue }) => {
-    try {
-      return await NotificationsApi.getSentNotification(params);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION, 
+  performThunkAction((params: string) => NotificationsApi.getSentNotification(params))
 );
 
 export const getSentNotificationLegalfact = createAsyncThunk<{url: string}, {iun: string; legalFact: LegalFactId}>(

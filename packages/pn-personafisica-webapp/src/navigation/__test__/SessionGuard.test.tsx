@@ -1,13 +1,12 @@
 import { act, screen } from '@testing-library/react';
 import { render } from '../../__test__/test-utils';
 import SessionGuard from '../SessionGuard';
-import * as routes from '../routes.const';
 
-
-const mockNavigateFn = jest.fn(() => { });
+const mockNavigateFn = jest.fn(() => {});
 
 /* eslint-disable functional/no-let */
 let mockLocationHash: string;  // #token=mocked_token
+let mockLocationPath: string;  // "/" or "/notifiche"
 
 jest.mock('react-router-dom', () => {
   const original = jest.requireActual('react-router-dom');
@@ -15,7 +14,7 @@ jest.mock('react-router-dom', () => {
     ...original,
     Outlet: () => <div>Generic Page</div>,
     useNavigate: () => mockNavigateFn,
-    useLocation: () => ({ hash: mockLocationHash }),
+    useLocation: () => ({ hash: mockLocationHash, pathname: mockLocationPath }),
   };
 });
 
@@ -49,26 +48,6 @@ jest.mock('../../utils/constants', () => {
   };
 });
 
-/* eslint-disable functional/no-let */
-let mockTosValue: boolean;
-let mockMakeTosCallFail: boolean;
-
-jest.mock('../../api/consents/Consents.api', () => {
-  const original = jest.requireActual('../../api/consents/Consents.api');
-  return {
-    ...original,
-    ConsentsApi: {
-      getConsentByType: () => mockMakeTosCallFail
-        ? Promise.reject({ response: { status: 500 } })
-        : Promise.resolve({
-            recipientId: "mock-consent-id",
-            consentType: "TOS",
-            accepted: mockTosValue,
-          })
-    },
-  };
-});
-
 jest.mock('../../api/auth/Auth.api', () => {
   const original = jest.requireActual('../../api/auth/Auth.api');
   return {
@@ -84,8 +63,6 @@ jest.mock('../../api/auth/Auth.api', () => {
 
 describe('SessionGuard Component', () => {
   beforeEach(() => {
-    mockTosValue = true;
-    mockMakeTosCallFail = false;
     mockLocationHash = "";
   });
 
@@ -118,48 +95,28 @@ describe('SessionGuard Component', () => {
     expect(mockSessionCheckFn).toBeCalledTimes(0);
   });
 
-  // cosa si aspetta: entra nell'app, fa navigate verso notifiche, lancia il sessionCheck
-  it('utente riconosciuto - TOS già accettate', async () => {
+  it('utente riconosciuto - non è presente una route', async () => {
     mockLocationHash = "#token=good_token";
+    mockLocationPath = "/";
 
     await act(async () => void render(<SessionGuard />));
     const pageComponent = screen.queryByText("Generic Page");
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect((mockNavigateFn.mock.calls[0] as any)[0]).toBe(routes.NOTIFICHE);
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
-  // cosa si aspetta: entra nell'app, fa navigate verso TOS, lancia il sessionCheck
-  it('utente riconosciuto - TOS non ancora accettate', async () => {
+  it('utente riconosciuto - è presente una route', async () => {
     mockLocationHash = "#token=good_token";
-    mockTosValue = false;
+    mockLocationPath = "/notifiche";
 
     await act(async () => void render(<SessionGuard />));
     const pageComponent = screen.queryByText("Generic Page");
     expect(pageComponent).toBeTruthy();
-
-    expect(mockNavigateFn).toBeCalledTimes(1);
-    expect((mockNavigateFn.mock.calls[0] as any)[0]).toBe(routes.TOS);
-    expect(mockSessionCheckFn).toBeCalledTimes(1);
-  });
-
-  // cosa si aspetta: non entra nell'app, messaggio associato al diservizio della chiamata 
-  it('utente riconosciuto - fallisce la chiamata a TOS', async () => {
-    mockLocationHash = "#token=good_token";
-    mockMakeTosCallFail = true;
-
-    await act(async () => void render(<SessionGuard />));
-    const logoutComponent = screen.queryByText('Session Modal');
-    expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText("leaving-app.title");
-    expect(logoutTitleComponent).toBeNull();
-    const tosCallFailedComponent = screen.queryByText("error-when-fetching-tos-status.title");
-    expect(tosCallFailedComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(0);
-    expect(mockSessionCheckFn).toBeCalledTimes(0);
+    expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
   // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken

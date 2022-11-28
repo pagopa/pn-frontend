@@ -18,6 +18,10 @@ import CustomMobileDialogToggle from './CustomMobileDialog/CustomMobileDialogTog
 import CustomMobileDialogContent from './CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogAction from './CustomMobileDialog/CustomMobileDialogAction';
 import TitleBox from './TitleBox';
+import { AppStatusBar } from './AppStatus/AppStatusBar';
+import DesktopDowntimeLog from './AppStatus/DesktopDowntimeLog';
+import MobileDowntimeLog from './AppStatus/MobileDowntimeLog';
+import { useFieldSpecs, adaptFieldSpecToMobile, DowntimeLogColumn } from './AppStatus/downtimeLog.utils';
 import NotificationDetailTable from './NotificationDetail/NotificationDetailTable';
 import NotificationDetailDocuments from './NotificationDetail/NotificationDetailDocuments';
 import HelpNotificationDetails from './NotificationDetail/HelpNotificationDetails';
@@ -33,7 +37,6 @@ import CopyToClipboard from './CopyToClipboard';
 import LoadingPage from './LoadingPage';
 import ApiError from './ApiError/ApiError';
 import ApiErrorWrapper from './ApiError/ApiErrorWrapper';
-import TermsOfServiceHandler from './TermsOfServiceHandler';
 
 export {
     LoadingOverlay,
@@ -62,6 +65,11 @@ export {
     NotificationDetailDocuments,
     HelpNotificationDetails,
     NotificationDetailTimeline,
+    AppStatusBar,
+    DesktopDowntimeLog,
+    MobileDowntimeLog,
+    useFieldSpecs, 
+    adaptFieldSpecToMobile, 
     Toast,
     CodeModal,
     InactivityHandler,
@@ -70,6 +78,9 @@ export {
     FileUpload,
     Prompt,
     CopyToClipboard,
-    LoadingPage,
-    TermsOfServiceHandler
+    LoadingPage
+};
+
+export type { 
+    DowntimeLogColumn, 
 };

@@ -25,6 +25,7 @@ const populateForm = async (form: HTMLFormElement) => {
   fireEvent.click(checkbox!);
   await testInput(form, `recipients[0].address`, newNotification.recipients[0].address);
   await testInput(form, `recipients[0].houseNumber`, newNotification.recipients[0].houseNumber);
+  await testInput(form, `recipients[0].municipality`, newNotification.recipients[0].municipality);
   await testInput(form, `recipients[0].zip`, newNotification.recipients[0].zip);
   await testInput(form, `recipients[0].province`, newNotification.recipients[0].province);
   await testInput(form, `recipients[0].foreignState`, newNotification.recipients[0].foreignState);
@@ -49,6 +50,9 @@ const populateFormMultipleRecipients = async (form: HTMLFormElement) => {
   }
 };
 
+// TODO i'm skipping all very slow tests => they would be implemented using cypress as integration tests
+// when validation is "detached" from the component, validation schema should be tested separately as UT with jest 
+
 describe('Recipient Component', () => {
   // eslint-disable-next-line functional/no-let
   let result: RenderResult;
@@ -57,7 +61,7 @@ describe('Recipient Component', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     // render component
     await act(async () => {
-      result = render(<Recipient onConfirm={() => {}} />);
+      result = render(<Recipient paymentMode={newNotification.paymentMode} onConfirm={() => {}} />);
     });
   });
 
@@ -91,6 +95,23 @@ describe('Recipient Component', () => {
     await waitFor(() => expect(result?.container).not.toHaveTextContent(/title 2/i));
   });
 
+  it('renders the 5 cards, then add recipient should be disabled', async () => {
+    expect(result.container).not.toHaveTextContent(/title 1/i);
+    expect(result.container).not.toHaveTextContent(/title 2/i);
+    const addButton1 = result.queryByText('add-recipient');
+    fireEvent.click(addButton1!);
+    const addButton2 = result.queryByText('add-recipient');
+    fireEvent.click(addButton2!);
+    const addButton3 = result.queryByText('add-recipient');
+    fireEvent.click(addButton3!);
+    const addButton4 = result.queryByText('add-recipient');
+    fireEvent.click(addButton4!);
+    expect(result.container).toHaveTextContent(/title 1/i);
+    expect(result.container).toHaveTextContent(/title 5/i);
+    const addButton5 = result.queryByText('add-recipient');
+    expect(addButton5).toBeNull();
+  });
+
   it('shows the digital domicile form and the physical address form', async () => {
     const digitalDomicileCheckbox = result.getByTestId('DigitalDomicileCheckbox');
     const physicalAddressCheckbox = result.getByTestId('PhysicalAddressCheckbox');
@@ -120,7 +141,7 @@ describe('Recipient Component', () => {
     });
   });
 
-  it('tests form validation (firstname)', async () => {
+  it.skip('tests form validation (firstname)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeDisabled();
@@ -130,7 +151,7 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests form validation (lastname)', async () => {
+  it.skip('tests form validation (lastname)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeDisabled();
@@ -140,7 +161,7 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests form validation (tax id)', async () => {
+  it.skip('tests form validation (tax id)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeDisabled();
@@ -152,7 +173,7 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests form validation (creditor tax id)', async () => {
+  it.skip('tests form validation (creditor tax id)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeDisabled();
@@ -166,7 +187,7 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests form validation (notice code)', async () => {
+  it.skip('tests form validation (notice code)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeDisabled();
@@ -178,7 +199,7 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests form validation (address)', async () => {
+  it.skip('tests form validation (address)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeDisabled();
@@ -188,7 +209,7 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests form validation (house number)', async () => {
+  it.skip('tests form validation (house number)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeDisabled();
@@ -198,7 +219,7 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests form validation (zip)', async () => {
+  it.skip('tests form validation (zip)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeDisabled();
@@ -208,7 +229,7 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests form validation (province)', async () => {
+  it.skip('tests form validation (province)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeDisabled();
@@ -218,16 +239,36 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests form validation (identical taxId)', async () => {
+  it.skip('tests form validation with correct data', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     const addButton = result.queryByText('add-recipient');
     fireEvent.click(addButton!);
     await populateFormMultipleRecipients(form);
+    expect(submitButton).toBeEnabled();
+  }, 20000);
+
+  it.skip('tests form validation (identical taxId)', async () => {
+    const form = result.container.querySelector('form') as HTMLFormElement;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const addButton = result.queryByText('add-recipient');
+    fireEvent.click(addButton!);
+    await populateFormMultipleRecipients(form);
+    await testInput(form, `recipients[1].taxId`, newNotification.recipients[0].taxId);
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests form validation (foreign state)', async () => {
+  it.skip('tests form validation (identical creditorTaxId and noticeCode)', async () => {
+    const form = result.container.querySelector('form') as HTMLFormElement;
+    const submitButton = form.querySelector('button[type="submit"]');
+    const addButton = result.queryByText('add-recipient');
+    fireEvent.click(addButton!);
+    await populateFormMultipleRecipients(form);
+    await testInput(form, `recipients[1].noticeCode`, newNotification.recipients[0].noticeCode);
+    expect(submitButton).toBeDisabled();
+  }, 20000);
+
+  it.skip('tests form validation (foreign state)', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     const submitButton = form.querySelector('button[type="submit"]');
     expect(submitButton).toBeDisabled();
@@ -237,7 +278,7 @@ describe('Recipient Component', () => {
     expect(submitButton).toBeDisabled();
   }, 20000);
 
-  it('tests the form inputs and submit function', async () => {
+  it.skip('tests the form inputs and submit function', async () => {
     const form = result.container.querySelector('form') as HTMLFormElement;
     await populateForm(form);
     const submitButton = form.querySelector('button[type="submit"]');

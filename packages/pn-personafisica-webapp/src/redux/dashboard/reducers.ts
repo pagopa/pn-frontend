@@ -20,7 +20,7 @@ const dashboardSlice = createSlice({
     filters: {
       startDate: formatToTimezoneString(tenYearsAgo),
       endDate: formatToTimezoneString(today),
-      iunMatch: undefined,
+      iunMatch: '',
       mandateId: undefined,
     } as GetNotificationsParams,
     pagination: {
@@ -57,7 +57,7 @@ const dashboardSlice = createSlice({
     setMandateId: (state, action: PayloadAction<string | undefined>) => {
       state.notifications = [];
       state.filters = {
-        iunMatch: undefined,
+        iunMatch: '',
         mandateId: action.payload,
         startDate: formatToTimezoneString(tenYearsAgo),
         endDate: formatToTimezoneString(today),

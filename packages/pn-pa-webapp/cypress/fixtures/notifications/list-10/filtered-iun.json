@@ -1,0 +1,16 @@
+{
+  "resultsPage": [
+    {
+      "iun": "TQTY-DKPT-WXUM-202211-A-1",
+      "paProtocolNumber": "prot-0004",
+      "sender": "Comune di Milano",
+      "sentAt": "2022-11-15T09:03:50.703364Z",
+      "subject": "Test 0004",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["GRBGPP87L04L741X", "BRGLRZ80D58H501Q"],
+      "requestAcceptedAt": "2022-11-15T09:04:18.080468Z"
+    }
+  ],
+  "moreResult": false,
+  "nextPagesKey": []
+}

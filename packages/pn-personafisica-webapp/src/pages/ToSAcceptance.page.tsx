@@ -1,28 +1,56 @@
-import { Fragment, ReactNode, useEffect } from 'react';
-import { Trans } from 'react-i18next';
+import { ReactNode, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Grid } from '@mui/material';
-import { TermsOfServiceHandler, useIsMobile } from '@pagopa-pn/pn-commons';
+import { Box, Grid, Link, Switch, Typography } from '@mui/material';
+import { TOSAgreement } from '@pagopa/mui-italia';
+import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 
 const TermsOfService = () => {
-  const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation('common');
+  const [accepted, setAccepted] = useState(false);
   const tos = useAppSelector((state: RootState) => state.userState.tos);
 
+  const redirectPrivacyLink = () => navigate(`${PRIVACY_LINK_RELATIVE_PATH}`);
+  const redirectToSLink = () => navigate(`${TOS_LINK_RELATIVE_PATH}`);
+
+  const PrivacyLink = ({ children }: { children?: ReactNode }) => (
+    <Link
+      key="privacy-link"
+      sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
+      onClick={redirectPrivacyLink}
+    >
+      {children}
+    </Link>
+  );
+
+  const TosLink = ({ children }: { children?: ReactNode }) => (
+    <Link
+      key="tos-link"
+      data-testid="terms-and-conditions"
+      sx={{ cursor: 'pointer', textDecoration: 'none !important' }}
+      onClick={redirectToSLink}
+    >
+      {children}
+    </Link>
+  );
+
   const handleAccept = () => {
-    void dispatch(acceptToS()).unwrap()
-    .then(() => {
-      navigate(routes.NOTIFICHE);
-    })
-    .catch(_ => {
-      console.error(_);
-    });
+    void dispatch(acceptToS())
+      .unwrap()
+      .then(() => {
+        navigate(routes.NOTIFICHE);
+      })
+      .catch((_) => {
+        console.error(_);
+      });
   };
 
   useEffect(() => {
@@ -32,20 +60,40 @@ const TermsOfService = () => {
   }, [tos]);
 
   return (
-    <Fragment>
-      <Grid container justifyContent="center" my={isMobile ? 4 : 16}>
+    <LoadingPageWrapper isInitialized>
+      <Grid container height="100%" justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
         <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
-          <TermsOfServiceHandler
-            handleAcceptTos={handleAccept}
-            transComponent={(path: string, components: Array<ReactNode>, defaultLoaclization: ReactNode) => (
-              <Trans i18nKey={path} components={components}>
-                {defaultLoaclization}
-              </Trans>
+          <TOSAgreement
+            productName={t('tos.title', 'Piattaforma Notifiche')}
+            description={t(
+              'tos.body',
+              'Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.'
             )}
-          />
+            onConfirm={handleAccept}
+            confirmBtnLabel={t('tos.button', 'Accedi')}
+            confirmBtnDisabled={!accepted}
+          >
+            <Box display="flex" alignItems="center">
+              <Switch
+                value={accepted}
+                onClick={() => setAccepted(!accepted)}
+                data-testid="tosSwitch"
+              />
+              <Typography color="text.secondary" variant="body1">
+                <Trans
+                  ns={'common'}
+                  i18nKey={'tos.switch-label'}
+                  components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
+                >
+                  Accetto i <TosLink>Termini e condizioni d’uso del servizio</TosLink>
+                  e confermo di avere letto <PrivacyLink>l’Informativa Privacy</PrivacyLink>.
+                </Trans>
+              </Typography>
+            </Box>
+          </TOSAgreement>
         </Grid>
       </Grid>
-    </Fragment>
+    </LoadingPageWrapper>
   );
 };
 

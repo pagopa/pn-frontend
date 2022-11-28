@@ -23,7 +23,12 @@ type Props = {
   vertical?: boolean;
   accept: string;
   uploadFn?: (file: any, sha256?: { hashBase64: string; hashHex: string }) => Promise<void>;
-  onFileUploaded: (file: any, sha256?: { hashBase64: string; hashHex: string }, name?: string, size?: number) => void;
+  onFileUploaded: (
+    file: any,
+    sha256?: { hashBase64: string; hashHex: string },
+    name?: string,
+    size?: number
+  ) => void;
   onRemoveFile: () => void;
   isSending?: boolean;
   sx?: SxProps;
@@ -72,7 +77,14 @@ const reducer = (state: UploadState, action: { type: string; payload?: any }) =>
         sha256: '',
       };
     case 'FILE_PREVIOUSLY_UPLOADED':
-      return { ...state, ...action.payload, status: UploadStatus.UPLOADED, error: '', sha256: action.payload.file.sha256.hashHex, name: action.payload.name ? action.payload.name : '' };
+      return {
+        ...state,
+        ...action.payload,
+        status: UploadStatus.UPLOADED,
+        error: '',
+        sha256: action.payload.file.sha256.hashHex,
+        name: action.payload.name ? action.payload.name : '',
+      };
     case 'FILE_UPLOADED':
       return { ...state, status: UploadStatus.UPLOADED, error: '', sha256: action.payload };
     case 'REMOVE_FILE':
@@ -132,7 +144,8 @@ const FileUpload = ({
   });
   const uploadInputRef = useRef();
 
-  const attachmentExists = (fileUploaded != null && fileUploaded.file != null && fileUploaded.file.uint8Array != null);
+  const attachmentExists =
+    fileUploaded != null && fileUploaded.file != null && fileUploaded.file.uint8Array != null;
 
   const containerStyle = useMemo(() => {
     if (data.status === UploadStatus.IN_PROGRESS || data.status === UploadStatus.SENDING) {
@@ -286,7 +299,7 @@ const FileUpload = ({
           </Typography>
         </OrientedBox>
       )}
-      {(data.status === UploadStatus.UPLOADED) && (
+      {data.status === UploadStatus.UPLOADED && (
         <Fragment>
           <Box
             display="flex"

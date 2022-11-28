@@ -20,6 +20,8 @@ export const ENV = {
 
   SPID_TEST_ENV_ENABLED: env.get('REACT_APP_SPID_TEST_ENV_ENABLED').required().asBool(),
 
+  SPID_VALIDATOR_ENV_ENABLED: env.get('REACT_APP_SPID_VALIDATOR_ENV_ENABLED').required().asBool(),
+
   SPID_CIE_ENTITY_ID: env.get('REACT_APP_SPID_CIE_ENTITY_ID').required().asString(),
 
   ANALYTCS: {

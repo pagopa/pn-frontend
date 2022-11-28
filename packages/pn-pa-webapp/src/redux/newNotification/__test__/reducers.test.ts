@@ -19,6 +19,7 @@ import {
   setAttachments,
   resetState,
   setPaymentDocuments,
+  setIsCompleted
 } from '../reducers';
 import { newNotification } from './test-utils';
 
@@ -33,6 +34,7 @@ const initialState = {
     physicalCommunicationType: '',
     paymentMode: '',
     group: '',
+    taxonomyCode: '',
     notificationFeePolicy: '',
   },
   groups: [],
@@ -86,6 +88,7 @@ describe('New notification redux state tests', () => {
       abstract: '',
       physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
       group: '',
+      taxonomyCode: '010801N',
       paymentMode: PaymentModel.PAGO_PA_NOTICE_F24,
     };
     const action = store.dispatch(setPreliminaryInformations(preliminaryInformations));
@@ -179,6 +182,13 @@ describe('New notification redux state tests', () => {
         },
       },
     });
+  });
+
+  it('Should be able to set isCompleted status', () => {
+    const action = store.dispatch(setIsCompleted());
+    const payload = action.payload;
+    expect(action.type).toBe('newNotificationSlice/setIsCompleted');
+    expect(payload).toEqual(void 0);
   });
 
   it('Should be able to create new notification', async () => {

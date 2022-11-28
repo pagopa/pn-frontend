@@ -17,6 +17,8 @@ type Props = {
   showSideMenu?: boolean;
   /** List of available products */
   productsList: Array<ProductEntity>;
+  /** Show Header Product */
+  showHeaderProduct?: boolean;
   /** Current product */
   productId?: string;
   /** List of available parties */
@@ -52,6 +54,7 @@ export default function Layout({
   sideMenu,
   showSideMenu = true,
   productsList,
+  showHeaderProduct,
   productId,
   partyList,
   loggedUser,
@@ -65,19 +68,24 @@ export default function Layout({
   isLogged,
   showHeader = true,
   showFooter = true,
-  hasTermsOfService
+  hasTermsOfService,
 }: Props) {
   return (
-    <ErrorBoundary sx={{ height: 'calc(100vh - 5px)' }} eventTrackingCallback={eventTrackingCallbackAppCrash}>
+    <ErrorBoundary
+      sx={{ height: 'calc(100vh - 5px)' }}
+      eventTrackingCallback={eventTrackingCallbackAppCrash}
+    >
       {/* calc fixes the layout discrepancy given by the version box */}
       <Stack
         direction="column"
         sx={{ minHeight: 'calc(100vh - 5px)' }} // 100vh per sticky footer
       >
-          <>
-            {showHeader && <Header
+        <>
+          {showHeader && (
+            <Header
               onExitAction={onExitAction}
               productsList={productsList}
+              showHeaderProduct={showHeaderProduct}
               productId={productId}
               partyList={partyList}
               loggedUser={loggedUser}
@@ -86,26 +94,29 @@ export default function Layout({
               onAssistanceClick={onAssistanceClick}
               eventTrackingCallbackProductSwitch={eventTrackingCallbackProductSwitch}
               isLogged={isLogged}
-            />}
-              <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
-                {showSideMenu && (
-                  <Box sx={{ width: { lg: 300 }, flexShrink: '0' }} component="nav">
-                    {sideMenu}
-                  </Box>
-                )}
-                <Box sx={{ flexGrow: 1 }} component="main">
-                <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
-                  {children}
-                </ErrorBoundary>
+            />
+          )}
+          <Stack direction={{ xs: 'column', lg: 'row' }} sx={{ flexGrow: 1 }}>
+            {showSideMenu && (
+              <Box sx={{ width: { lg: 300 }, flexShrink: '0' }} component="nav">
+                {sideMenu}
               </Box>
-            </Stack>
-            {showFooter && <Footer
+            )}
+            <Box sx={{ flexGrow: 1, position: 'relative' }} component="main">
+              <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
+                {children}
+              </ErrorBoundary>
+            </Box>
+          </Stack>
+          {showFooter && (
+            <Footer
               loggedUser={loggedUser.id !== ''}
               onLanguageChanged={onLanguageChanged}
               eventTrackingCallbackChangeLanguage={eventTrackingCallbackFooterChangeLanguage}
               hasTermsOfService={hasTermsOfService}
-            />}
-          </>
+            />
+          )}
+        </>
       </Stack>
     </ErrorBoundary>
   );

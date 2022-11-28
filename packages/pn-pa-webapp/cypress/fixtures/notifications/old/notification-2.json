@@ -1,0 +1,393 @@
+{
+  "abstract": "Abstract della notifica",
+  "paProtocolNumber": "302201668582198808",
+  "subject": "invio notifica GA cucumber",
+  "recipients": [
+    {
+      "recipientType": "PF",
+      "taxId": "CLMCST42R12D969Z",
+      "internalId": "PF-a6c1350d-1d69-4209-8bf8-31de58c79d6e",
+      "denomination": "Mario Cucumber",
+      "digitalDomicile": {
+        "type": "PEC",
+        "address": "CLMCST42R12D969Z@pnpagopa.postecert.local"
+      },
+      "physicalAddress": {
+        "at": "Presso",
+        "address": "Via senza nome",
+        "zip": "40100",
+        "municipality": "Milano",
+        "municipalityDetails": "Milano",
+        "province": "MI",
+        "foreignState": "ITALIA"
+      }
+    },
+    {
+      "recipientType": "PF",
+      "taxId": "FRMTTR76M06B715E",
+      "internalId": "PF-4fc75df3-0913-407e-bdaa-e50329708b7d",
+      "denomination": "Mario Gherkin",
+      "digitalDomicile": {
+        "type": "PEC",
+        "address": "FRMTTR76M06B715E@pnpagopa.postecert.local"
+      },
+      "physicalAddress": {
+        "at": "Presso",
+        "address": "Via senza nome",
+        "zip": "40100",
+        "municipality": "Milano",
+        "municipalityDetails": "Milano",
+        "province": "MI",
+        "foreignState": "ITALIA"
+      }
+    }
+  ],
+  "documents": [
+    {
+      "digests": { "sha256": "jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=" },
+      "contentType": "application/pdf",
+      "ref": {
+        "key": "PN_NOTIFICATION_ATTACHMENTS-0001-JWDF-HVPT-MSFK-REJ7",
+        "versionToken": "v1"
+      },
+      "docIdx": "0"
+    }
+  ],
+  "notificationFeePolicy": "FLAT_RATE",
+  "physicalCommunicationType": "REGISTERED_LETTER_890",
+  "senderDenomination": "Comune di palermo",
+  "senderTaxId": "80016350821",
+  "senderPaId": "5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce",
+  "iun": "RLMX-RTJK-HVHW-202211-Z-1",
+  "sentAt": "2022-11-16T07:03:19.005985Z",
+  "documentsAvailable": true,
+  "notificationStatus": "EFFECTIVE_DATE",
+  "notificationStatusHistory": [
+    {
+      "status": "ACCEPTED",
+      "activeFrom": "2022-11-16T07:03:19.005985Z",
+      "relatedTimelineElements": [
+        "RLMX-RTJK-HVHW-202211-Z-1_request_accepted",
+        "RLMX-RTJK-HVHW-202211-Z-1_aar_gen_1",
+        "RLMX-RTJK-HVHW-202211-Z-1_aar_gen_0",
+        "RLMX-RTJK-HVHW-202211-Z-1_get_address_1_source_PLATFORM_attempt_0",
+        "RLMX-RTJK-HVHW-202211-Z-1_get_address_1_source_SPECIAL_attempt_0"
+      ]
+    },
+    {
+      "status": "DELIVERING",
+      "activeFrom": "2022-11-16T07:04:29.582099Z",
+      "relatedTimelineElements": [
+        "RLMX-RTJK-HVHW-202211-Z-1_send_digital_domicile_1_source_SPECIAL_attempt_0",
+        "RLMX-RTJK-HVHW-202211-Z-1_get_address_0_source_PLATFORM_attempt_0",
+        "RLMX-RTJK-HVHW-202211-Z-1_get_address_0_source_SPECIAL_attempt_0",
+        "RLMX-RTJK-HVHW-202211-Z-1_send_digital_domicile_0_source_SPECIAL_attempt_0",
+        "RLMX-RTJK-HVHW-202211-Z-1_digital_delivering_progress_1_source_SPECIAL_attempt_0_progidx_1",
+        "RLMX-RTJK-HVHW-202211-Z-1_digital_delivering_progress_0_source_SPECIAL_attempt_0_progidx_1",
+        "RLMX-RTJK-HVHW-202211-Z-1_send_digital_feedback_1_source_SPECIAL_attempt_0",
+        "RLMX-RTJK-HVHW-202211-Z-1_digital_success_workflow_1",
+        "RLMX-RTJK-HVHW-202211-Z-1_schedule_refinement_workflow_1",
+        "RLMX-RTJK-HVHW-202211-Z-1_send_digital_feedback_0_source_SPECIAL_attempt_0"
+      ]
+    },
+    {
+      "status": "DELIVERED",
+      "activeFrom": "2022-11-16T07:04:56.378833Z",
+      "relatedTimelineElements": [
+        "RLMX-RTJK-HVHW-202211-Z-1_digital_success_workflow_0",
+        "RLMX-RTJK-HVHW-202211-Z-1_schedule_refinement_workflow_0"
+      ]
+    },
+    {
+      "status": "EFFECTIVE_DATE",
+      "activeFrom": "2022-11-16T07:08:00.63404Z",
+      "relatedTimelineElements": [
+        "RLMX-RTJK-HVHW-202211-Z-1_refinement_0",
+        "RLMX-RTJK-HVHW-202211-Z-1_refinement_1"
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_request_accepted",
+      "timestamp": "2022-11-16T07:03:47.009013Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_LEGAL_FACTS-0002-0AIU-QOW2-0XNN-1U8H",
+          "category": "SENDER_ACK"
+        }
+      ],
+      "category": "REQUEST_ACCEPTED"
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_aar_gen_1",
+      "timestamp": "2022-11-16T07:04:00.088633Z",
+      "legalFactsIds": [],
+      "category": "AAR_GENERATION",
+      "details": {
+        "recIndex": 1,
+        "errors": [],
+        "numberOfPages": 1,
+        "generatedAarUrl": "safestorage://PN_AAR-0002-P63F-G6G5-ZKG0-2U2X"
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_aar_gen_0",
+      "timestamp": "2022-11-16T07:04:00.13462Z",
+      "legalFactsIds": [],
+      "category": "AAR_GENERATION",
+      "details": {
+        "recIndex": 0,
+        "errors": [],
+        "numberOfPages": 1,
+        "generatedAarUrl": "safestorage://PN_AAR-0002-5E3A-65I3-7IH0-A741"
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_get_address_1_source_PLATFORM_attempt_0",
+      "timestamp": "2022-11-16T07:04:29.455117Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 1,
+        "digitalAddressSource": "PLATFORM",
+        "isAvailable": false,
+        "attemptDate": "2022-11-16T07:04:29.455116Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_get_address_1_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-16T07:04:29.481388Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 1,
+        "digitalAddressSource": "SPECIAL",
+        "isAvailable": true,
+        "attemptDate": "2022-11-16T07:04:29.481387Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_send_digital_domicile_1_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-16T07:04:29.582099Z",
+      "legalFactsIds": [],
+      "category": "SEND_DIGITAL_DOMICILE",
+      "details": {
+        "recIndex": 1,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "FRMTTR76M06B715E@pnpagopa.postecert.local"
+        },
+        "digitalAddressSource": "SPECIAL",
+        "errors": [],
+        "retryNumber": 0
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_get_address_0_source_PLATFORM_attempt_0",
+      "timestamp": "2022-11-16T07:04:32.127087Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddressSource": "PLATFORM",
+        "isAvailable": false,
+        "attemptDate": "2022-11-16T07:04:32.127086Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_get_address_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-16T07:04:32.150006Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddressSource": "SPECIAL",
+        "isAvailable": true,
+        "attemptDate": "2022-11-16T07:04:32.150005Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_send_digital_domicile_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-16T07:04:32.175551Z",
+      "legalFactsIds": [],
+      "category": "SEND_DIGITAL_DOMICILE",
+      "details": {
+        "recIndex": 0,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "CLMCST42R12D969Z@pnpagopa.postecert.local"
+        },
+        "digitalAddressSource": "SPECIAL",
+        "errors": [],
+        "retryNumber": 0
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_digital_delivering_progress_1_source_SPECIAL_attempt_0_progidx_1",
+      "timestamp": "2022-11-16T07:04:40.103812Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_NOTIFICATION_ATTACHMENTS-0001-LBG8-I25H-NF2C-RN4G",
+          "category": "PEC_RECEIPT"
+        }
+      ],
+      "category": "SEND_DIGITAL_PROGRESS",
+      "details": {
+        "recIndex": 1,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "FRMTTR76M06B715E@pnpagopa.postecert.local"
+        },
+        "digitalAddressSource": "SPECIAL",
+        "errors": [],
+        "retryNumber": 0,
+        "notificationDate": "2022-11-16T07:04:41.328644Z",
+        "sendingReceipts": [{}],
+        "eventCode": "C001",
+        "shouldRetry": false
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_digital_delivering_progress_0_source_SPECIAL_attempt_0_progidx_1",
+      "timestamp": "2022-11-16T07:04:45.046544Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_NOTIFICATION_ATTACHMENTS-0001-7KI6-QXD9-C7Z7-G2XX",
+          "category": "PEC_RECEIPT"
+        }
+      ],
+      "category": "SEND_DIGITAL_PROGRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "CLMCST42R12D969Z@pnpagopa.postecert.local"
+        },
+        "digitalAddressSource": "SPECIAL",
+        "errors": [],
+        "retryNumber": 0,
+        "notificationDate": "2022-11-16T07:04:46.277011Z",
+        "sendingReceipts": [{}],
+        "eventCode": "C001",
+        "shouldRetry": false
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_send_digital_feedback_1_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-16T07:04:50.166343Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_NOTIFICATION_ATTACHMENTS-0001-CHLH-CQAA-JJ45-SCQ0",
+          "category": "PEC_RECEIPT"
+        }
+      ],
+      "category": "SEND_DIGITAL_FEEDBACK",
+      "details": {
+        "recIndex": 1,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "FRMTTR76M06B715E@pnpagopa.postecert.local"
+        },
+        "digitalAddressSource": "SPECIAL",
+        "errors": [],
+        "responseStatus": "OK",
+        "notificationDate": "2022-11-16T07:04:50.166343Z",
+        "sendingReceipts": [{}]
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_digital_success_workflow_1",
+      "timestamp": "2022-11-16T07:04:52.649113Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_LEGAL_FACTS-0002-BK1B-IDNF-L62F-CXO9",
+          "category": "DIGITAL_DELIVERY"
+        }
+      ],
+      "category": "DIGITAL_SUCCESS_WORKFLOW",
+      "details": {
+        "recIndex": 1,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "FRMTTR76M06B715E@pnpagopa.postecert.local"
+        },
+        "errors": []
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_schedule_refinement_workflow_1",
+      "timestamp": "2022-11-16T07:04:52.698177Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_REFINEMENT",
+      "details": { "recIndex": 1, "errors": [] }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_send_digital_feedback_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-16T07:04:55.000564Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_NOTIFICATION_ATTACHMENTS-0001-788O-NR6Y-YI94-2TVI",
+          "category": "PEC_RECEIPT"
+        }
+      ],
+      "category": "SEND_DIGITAL_FEEDBACK",
+      "details": {
+        "recIndex": 0,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "CLMCST42R12D969Z@pnpagopa.postecert.local"
+        },
+        "digitalAddressSource": "SPECIAL",
+        "errors": [],
+        "responseStatus": "OK",
+        "notificationDate": "2022-11-16T07:04:55.000564Z",
+        "sendingReceipts": [{}]
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_digital_success_workflow_0",
+      "timestamp": "2022-11-16T07:04:56.378833Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_LEGAL_FACTS-0002-LP81-QGAG-NZ0H-KTU8",
+          "category": "DIGITAL_DELIVERY"
+        }
+      ],
+      "category": "DIGITAL_SUCCESS_WORKFLOW",
+      "details": {
+        "recIndex": 0,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "CLMCST42R12D969Z@pnpagopa.postecert.local"
+        },
+        "errors": []
+      }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_schedule_refinement_workflow_0",
+      "timestamp": "2022-11-16T07:04:56.512122Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_REFINEMENT",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_refinement_0",
+      "timestamp": "2022-11-16T07:08:00.63404Z",
+      "legalFactsIds": [],
+      "category": "REFINEMENT",
+      "details": { "recIndex": 0, "notificationCost": 100, "errors": [] }
+    },
+    {
+      "elementId": "RLMX-RTJK-HVHW-202211-Z-1_refinement_1",
+      "timestamp": "2022-11-16T07:08:00.761407Z",
+      "legalFactsIds": [],
+      "category": "REFINEMENT",
+      "details": { "recIndex": 1, "notificationCost": 100, "errors": [] }
+    }
+  ]
+}

@@ -28,9 +28,8 @@ describe('test Terms of Service page', () => {
   it('checks the texts in the page', () => {
     const result = render(<ToSAcceptance />);
 
-    expect(result.container).toHaveTextContent(/Piattaforma Notifiche/i);
-    expect(result.container).toHaveTextContent(/Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso./i);
-    expect(result.container).toHaveTextContent(/tos.switchLabel/i);
-    expect(result.container).toHaveTextContent(/Accedi/i);
+    expect(result.container).toHaveTextContent(/tos.title/i);
+    expect(result.container).toHaveTextContent(/tos.switch-label/i);
+    expect(result.container).toHaveTextContent(/tos.button/i);
   });
 });

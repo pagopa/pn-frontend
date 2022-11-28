@@ -174,7 +174,7 @@ describe('Dashboard Page', () => {
     });
   });
 
-  it('does not have basic accessibility issues rendering the page', async () => {
+  it.skip('does not have basic accessibility issues rendering the page', async () => {
     await act(async () => {
       result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
     });

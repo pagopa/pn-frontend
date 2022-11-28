@@ -5,6 +5,7 @@ import { IAppMessage } from './AppMessage';
 import { NotificationStatus } from './NotificationStatus';
 import { SideMenuItem } from './SideMenuItem';
 import { Column, Item, Sort } from './ItemsTable';
+import { KnownSentiment } from './EmptyState';
 import {
     Notification,
     GetNotificationsResponse,
@@ -55,7 +56,8 @@ export {
     PaymentInfoDetail,
     PaymentStatus,
     PaymentAttachmentSName,
-    MessageType
+    MessageType,
+    KnownSentiment,
 };
 export type {
     AnalogWorkflowDetails,
