@@ -19,10 +19,10 @@ const MobileDowntimeLog = ({ downtimeLog, getDowntimeLegalFactDocumentDetails }:
   ], [getStatusFieldSpec]);
 
   const cardBody: Array<CardElement> = useMemo(() => [
-    {...adaptFieldSpecToMobile(getDateFieldSpec('startDate', false)), notWrappedInTypography: true},
-    {...adaptFieldSpecToMobile(getDateFieldSpec('endDate', false)), notWrappedInTypography: true},
+    { ...adaptFieldSpecToMobile(getDateFieldSpec('startDate', false)), notWrappedInTypography: true },
+    { ...adaptFieldSpecToMobile(getDateFieldSpec('endDate', false)), notWrappedInTypography: true },
     adaptFieldSpecToMobile(getFunctionalityFieldSpec()),
-    {...adaptFieldSpecToMobile(getLegalFactIdFieldSpec()), notWrappedInTypography: true},
+    { ...adaptFieldSpecToMobile(getLegalFactIdFieldSpec()), notWrappedInTypography: true },
   ], [getDateFieldSpec, getFunctionalityFieldSpec, getLegalFactIdFieldSpec]);
 
   /* eslint-disable-next-line sonarjs/no-identical-functions */
