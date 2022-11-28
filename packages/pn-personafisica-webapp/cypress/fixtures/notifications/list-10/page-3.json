@@ -1,0 +1,108 @@
+{
+  "resultsPage": [
+    {
+      "iun": "JDPN-EVMR-TMDQ-202211-V-1",
+      "paProtocolNumber": "prot-0046",
+      "sender": "Comune di Milano",
+      "sentAt": "2022-03-31T08:03:48.298885Z",
+      "subject": "Test 0046",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CSRGGL44L13H501E"],
+      "requestAcceptedAt": "2022-03-31T08:04:20.5015Z"
+    },
+    {
+      "iun": "HEUE-MRUE-TAQT-202211-V-1",
+      "paProtocolNumber": "prot-0048",
+      "sender": "Comune di Milano",
+      "sentAt": "2022-03-23T10:12:30.671771Z",
+      "subject": "Test 0048",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CSRGGL44L13H501E"],
+      "requestAcceptedAt": "2022-03-23T10:12:58.795748Z"
+    },
+    {
+      "iun": "AXHV-TNZK-VEMW-202211-H-1",
+      "paProtocolNumber": "prot-0053",
+      "sender": "Comune di milano",
+      "sentAt": "2022-03-09T14:10:51.589611Z",
+      "subject": "Test 0053",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CSRGGL44L13H501E"],
+      "requestAcceptedAt": "2022-03-09T14:10:22.777615Z"
+    },
+    {
+      "iun": "RDHW-UKHT-LAJG-202211-J-1",
+      "paProtocolNumber": "prot-0055",
+      "sender": "Comune di Milano",
+      "sentAt": "2022-03-04T16:51:45.598507Z",
+      "subject": "Test 0055",
+      "notificationStatus": "UNREACHABLE",
+      "recipients": ["CSRGGL44L13H501E"],
+      "requestAcceptedAt": "2022-03-04T16:52:12.714657Z"
+    },
+    {
+      "iun": "ZRVR-TMXL-GZUL-202211-K-1",
+      "paProtocolNumber": "prot-0058",
+      "sender": "Comune di Milano",
+      "sentAt": "2022-02-24T10:50:03.71401Z",
+      "subject": "Test 0058",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CSRGGL44L13H501E", "GRBGPP87L04L741X", "BRGLRZ80D58H501Q"],
+      "requestAcceptedAt": "2022-02-24T10:50:29.122199Z"
+    },
+    {
+      "iun": "VRLU-ADKV-WMXM-202211-Z-1",
+      "paProtocolNumber": "prot-0061",
+      "sender": "Comune di Milano",
+      "sentAt": "2022-02-16T11:28:49.618244Z",
+      "subject": "Test 0061",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CSRGGL44L13H501E", "GRBGPP87L04L741X"],
+      "requestAcceptedAt": "2022-02-16T11:29:07.012304Z"
+    },
+    {
+      "iun": "HQNA-NZQT-HDZE-202211-E-1",
+      "paProtocolNumber": "prot-0063",
+      "sender": "Comune di Milano",
+      "sentAt": "2022-02-10T10:17:37.051937Z",
+      "subject": "Test 0063",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CSRGGL44L13H501E", "GRBGPP87L04L741X"],
+      "requestAcceptedAt": "2022-02-10T10:17:57.375222Z"
+    },
+    {
+      "iun": "DUNE-JWTJ-MPTP-202211-K-1",
+      "paProtocolNumber": "prot-0069",
+      "sender": "Comune di Milano",
+      "sentAt": "2022-01-17T09:27:29.455682Z",
+      "subject": "Test 0069",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CSRGGL44L13H501E"],
+      "requestAcceptedAt": "2022-01-17T09:27:50.459629Z"
+    },
+    {
+      "iun": "AZLR-JNXR-HKYG-202211-R-1",
+      "paProtocolNumber": "prot-0071",
+      "sender": "Comune di Milano",
+      "sentAt": "2022-01-12T18:12:16.747077Z",
+      "subject": "Test 0071",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CSRGGL44L13H501E", "BRGLRZ80D58H501Q"],
+      "requestAcceptedAt": "2022-01-12T18:12:43.741417Z"
+    },
+    {
+      "iun": "XNPJ-VGUR-DGPL-202211-K-1",
+      "paProtocolNumber": "prot-0080",
+      "sender": "Comune di Milano",
+      "sentAt": "2021-12-13T16:14:49.300208Z",
+      "subject": "Test 0080",
+      "notificationStatus": "EFFECTIVE_DATE",
+      "recipients": ["CSRGGL44L13H501E"],
+      "requestAcceptedAt": "2021-12-13T16:15:13.776833Z"
+    }
+  ],
+  "moreResult": false,
+  "nextPagesKey": [
+    "11111111111111111111"
+  ]
+}
