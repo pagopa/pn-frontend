@@ -192,6 +192,8 @@ const timeline: Array<INotificationDetailTimeline> = [
   },
 ];
 
+export const fixedMandateId = 'ALFA-BETA-GAMMA';
+
 export const notificationFromBe: NotificationDetail = {
   iun: 'c_b963-220220221119',
   paProtocolNumber: '220220221119',
@@ -298,14 +300,13 @@ export const notificationToFeTwoRecipients = (
   delegatorFiscalNumber?: string,
   isDelegate?: boolean
 ) => {
-  const fixedMandateId = 'ALFA-BETA-GAMMA';
   return parseNotificationDetailForRecipient(
     notificationFromBeTwoRecipients,
     userFiscalNumber,
     delegatorFiscalNumber && isDelegate
       ? [
           {
-            mandateId: 'ALFA-BETA-GAMMA',
+            mandateId: fixedMandateId,
             delegator: {
               fiscalCode: delegatorFiscalNumber,
               firstName: 'Mario',
