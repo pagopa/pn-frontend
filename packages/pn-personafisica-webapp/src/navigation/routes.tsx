@@ -27,7 +27,7 @@ function Router() {
           <Route path="/" element={<RouteGuard />}>
             <Route path="/" element={<ToSGuard />}>
               <Route path={routes.NOTIFICHE} element={<Notifiche />} />
-              <Route path={routes.DETTAGLIO_NOTIFICA_QRCODE} element={<NotificationFromQrCode />} />
+              <Route path={routes.DETTAGLIO_NOTIFICA_QRCODE_PATH} element={<NotificationFromQrCode />} />
               <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
               <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
               <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />

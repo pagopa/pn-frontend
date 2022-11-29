@@ -1,5 +1,5 @@
 import { act, screen } from '@testing-library/react';
-import { GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH, GET_DETTAGLIO_NOTIFICA_PATH } from '../../navigation/routes.const';
+import { DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM, GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH, GET_DETTAGLIO_NOTIFICA_PATH } from '../../navigation/routes.const';
 import { render } from '../../__test__/test-utils';
 import NotificationFromQrCode from '../NotificationFromQrCode.page';
 
@@ -9,12 +9,14 @@ const mockNavigateFn = jest.fn(() => {});
 let mockQrCode: string;
 /* eslint-enable functional/no-let */
 
+const mockQrCodeQueryParam = DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM;
+
 jest.mock('react-router-dom', () => {
   const original = jest.requireActual('react-router-dom');
   return {
     ...original,
     useNavigate: () => mockNavigateFn,
-    useLocation: () => ({ search: `?aar=${mockQrCode}` }),
+    useLocation: () => ({ search: `?${mockQrCodeQueryParam}=${mockQrCode}` }),
   };
 });
 

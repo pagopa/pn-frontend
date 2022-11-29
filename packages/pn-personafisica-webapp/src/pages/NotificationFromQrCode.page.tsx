@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from "react-router-dom";
 import { NotificationsApi } from '../api/notifications/Notifications.api';
 import { NotificationId } from '../models/Notifications';
-import { GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH, GET_DETTAGLIO_NOTIFICA_PATH, NOTIFICHE } from '../navigation/routes.const';
+import { DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM, GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH, GET_DETTAGLIO_NOTIFICA_PATH, NOTIFICHE } from '../navigation/routes.const';
 
 
 function notificationDetailPath(notificationId: NotificationId): string {
@@ -23,7 +23,7 @@ const NotificationFromQrCode = () => {
 
   const qrcode = useMemo(() => {
     const queryParams = new URLSearchParams(location.search);
-    return queryParams.get("aar");
+    return queryParams.get(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
   }, [location]);
 
   useEffect(() => {
