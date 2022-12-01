@@ -195,7 +195,7 @@ const DesktopApiKeys = ({
       id: index.toString(),
     }));
     setRows(rowsMap);
-    setTableKey(tableKey + 1);
+    setTableKey(tableKey + 1); // This is needed to make ItemsTable to properly update itself.
   }, [apiKeys]);
 
   return (

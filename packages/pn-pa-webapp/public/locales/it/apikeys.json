@@ -7,6 +7,7 @@
     "text4": "accesso alle informazioni",
     "text5": " sul loro stato. Qui puoi generare e gestire le API Key da utilizzare per autenticare le richieste dell’ente."
   },
+  "error-fecth-api-keys": "Non è stato possibile recuperare la lista delle API Key",
   "api-key-succesfully-generated": "API Key generata con successo!",
   "copy-the-api-key": "Per consentire l'integrazione, copia il codice e inseriscilo nella piattaforma proprietaria dell'ente.",
   "generated-api-keys": "API Key generate",

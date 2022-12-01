@@ -55,3 +55,13 @@ interface ApiKeyRow {
   status: ApiKeyStatus;
   statusHistory: Array<ApiKeyStatusHistory>;
 }
+
+export interface NewApiKeyBE {
+  name: string;
+  groups: Array<string>;
+}
+
+export interface ApiKeyStatusBE {
+  apiKey: string;
+  status: string;
+}

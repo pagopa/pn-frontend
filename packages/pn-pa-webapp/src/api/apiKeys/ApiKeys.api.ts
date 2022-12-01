@@ -1,6 +1,4 @@
-import { ApiKey, GetApiKeysResponse, GetNewApiKeyResponse } from '../../models/ApiKeys';
-import { ApiKeyStatusBE } from '../../redux/apiKeys/types';
-import { NewApiKeyType } from '../../redux/NewApiKey/types';
+import { ApiKey, ApiKeyStatusBE, GetApiKeysResponse, GetNewApiKeyResponse, NewApiKeyBE } from '../../models/ApiKeys';
 import { apiClient } from '../axios';
 import { APIKEY_LIST, CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from './apiKeys.routes';
 
@@ -15,7 +13,7 @@ export const ApiKeysApi = {
       }
       return [];
     }),
-  createNewApiKey: (newApiKey: NewApiKeyType): Promise<string> =>
+  createNewApiKey: (newApiKey: NewApiKeyBE): Promise<string> =>
     apiClient.post<GetNewApiKeyResponse>(CREATE_APIKEY(), newApiKey).then((response) => {
       const data = response.data;
       return data.apiKey;

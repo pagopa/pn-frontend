@@ -1,6 +1,6 @@
-import { NewApiKeyType } from '../types';
+import { NewApiKey } from '../types';
 
-export const newApiKeyForBE: NewApiKeyType = {
+export const newApiKeyForBE: NewApiKey = {
   name: 'mock-name',
   groups: ['mock-group'],
 };

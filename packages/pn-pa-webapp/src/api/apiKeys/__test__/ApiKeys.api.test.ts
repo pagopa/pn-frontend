@@ -8,6 +8,19 @@ import { newApiKeyForBE } from '../../../redux/NewApiKey/__test__/test-utils';
 import { ApiKeySetStatus } from '../../../models/ApiKeys';
 
 describe('Api keys api tests', () => {
+
+  // eslint-disable-next-line functional/no-let
+  let mock: MockAdapter;
+
+  beforeEach(() => {
+    mock = new MockAdapter(apiClient);
+  });
+
+  afterEach(() => {
+    mock.reset();
+    mock.restore();
+  });
+
   mockAuthentication();
 
   it('getApiKeys', async () => {
@@ -15,40 +28,29 @@ describe('Api keys api tests', () => {
     mock.onGet(APIKEY_LIST()).reply(200, mockApiKeysFromBE);
     const res = await ApiKeysApi.getApiKeys();
     expect(res).toStrictEqual(mockApiKeysForFE);
-    mock.reset();
-    mock.restore();
   });
 
   it('createNewApiKey', async () => {
-    const mock = new MockAdapter(apiClient);
     mock.onPost(CREATE_APIKEY()).reply(200, {
       id: 'mocked-id',
       apiKey: 'mocked-apikey',
     });
     const res = await ApiKeysApi.createNewApiKey(newApiKeyForBE);
     expect(res).toStrictEqual('mocked-apikey');
-    mock.reset();
-    mock.restore();
   });
 
   it('deleteApiKey', async () => {
-    const mock = new MockAdapter(apiClient);
     mock.onDelete(DELETE_APIKEY('mocked-apikey')).reply(200, 'success');
     const res = await ApiKeysApi.deleteApiKey('mocked-apikey');
     expect(res).toStrictEqual('success');
-    mock.reset();
-    mock.restore();
   });
 
   it('setApiKeyStatus', async () => {
-    const mock = new MockAdapter(apiClient);
     mock.onPut(STATUS_APIKEY('mocked-apikey')).reply(200, 'success');
     const res = await ApiKeysApi.setApiKeyStatus({
       apiKey: 'mocked-apikey',
       status: ApiKeySetStatus.BLOCK,
     });
     expect(res).toStrictEqual('success');
-    mock.reset();
-    mock.restore();
   });
 });
