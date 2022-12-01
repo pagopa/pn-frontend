@@ -29,7 +29,7 @@ describe("Notifications New Notification", () => {
     cy.visit('/dashboard/nuova-notifica');
   });
 
-  it.only('Create new notification with no user groups and operator role', () => {
+  it.only('Create new notification with groups and operator role', () => {
 
     cy.window().then((win) => {
       let user: User = JSON.parse(win.sessionStorage.getItem('user'));
