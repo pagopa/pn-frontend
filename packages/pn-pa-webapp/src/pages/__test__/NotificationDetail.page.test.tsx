@@ -150,14 +150,8 @@ describe('NotificationDetail Page (one recipient)', () => {
     await waitFor(() => expect(modal).not.toBeInTheDocument());
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
-
-  it.skip('does not have basic accessibility issues rendering the page', async () => {
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
-  });
 });
+
 
 describe('NotificationDetail Page (multi recipient)', () => {
   let result: RenderResult;
@@ -209,12 +203,5 @@ describe('NotificationDetail Page (multi recipient)', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-id');
-  });
-
-  it.skip('does not have basic accessibility issues rendering the page', async () => {
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
   });
 });

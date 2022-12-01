@@ -7,7 +7,7 @@ import { sideMenuItems } from './test-utils';
 
 expect.extend(toHaveNoViolations);
 
-describe('SideMenu', () => {
+describe('SideMenu - accessibility tests', () => {
   it('sidemenu accesibility', async () => {
     const { container } = render(<SideMenu menuItems={sideMenuItems} />);
     const results = await axe(container);

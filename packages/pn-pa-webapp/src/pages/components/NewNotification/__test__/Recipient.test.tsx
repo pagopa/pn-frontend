@@ -106,10 +106,12 @@ describe('Recipient Component', () => {
     fireEvent.click(addButton3!);
     const addButton4 = result.queryByText('add-recipient');
     fireEvent.click(addButton4!);
-    expect(result.container).toHaveTextContent(/title 1/i);
-    expect(result.container).toHaveTextContent(/title 5/i);
-    const addButton5 = result.queryByText('add-recipient');
-    expect(addButton5).toBeNull();
+    await waitFor(() => {
+      expect(result.container).toHaveTextContent(/title 1/i);
+      expect(result.container).toHaveTextContent(/title 5/i);
+      const addButton5 = result.queryByText('add-recipient');
+      expect(addButton5).toBeNull();
+    });
   });
 
   it('shows the digital domicile form and the physical address form', async () => {

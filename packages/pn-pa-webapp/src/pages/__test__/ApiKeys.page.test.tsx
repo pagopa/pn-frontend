@@ -1,7 +1,5 @@
-
-
 import { RenderResult } from '@testing-library/react';
-import { render, axe } from '../../__test__/test-utils';
+import { render } from '../../__test__/test-utils';
 import ApiKeys from '../ApiKeys.page';
 
 describe('ApiKeys Page', () => {
@@ -15,13 +13,6 @@ describe('ApiKeys Page', () => {
 
   it('renders the page', () => {
     result?.getByRole('heading', { name: /api keys/i });
-  });
-
-  it.skip('does not have basic accessibility issues rendering the page', async () => {
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
   });
 
 });
