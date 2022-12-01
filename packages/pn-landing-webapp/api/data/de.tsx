@@ -1,0 +1,645 @@
+import { WalkthroughProps } from "@pagopa/mui-italia";
+import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
+import { HorizontalNavProps } from "@pagopa/mui-italia";
+import { SvgIcon } from "@mui/material";
+import { Typography } from "@mui/material";
+import Link from "next/link";
+
+import {
+  CheckmarkIcon,
+  CloudIcon,
+  DelegationIcon,
+  DeliverIcon,
+  DocCheckIcon,
+  EasyIcon,
+  EcologyIcon,
+  FireworksIcon,
+  HourglassIcon,
+  IOIcon,
+  MessageIcon,
+  NotificationIcon,
+  PECIcon,
+  PeopleIcon,
+  PiggyIcon,
+  SendIcon,
+  SyncIcon,
+  UploadIcon,
+  WalletIcon,
+} from "./icons";
+import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
+
+import { IAppData, IInfoblockData, IShowcaseData } from "model";
+
+const assistanceLink = {
+  label: "Hilfe",
+  ariaLabel: "Hilfe",
+  href: `mailto:${PAGOPA_HELP_EMAIL}`,
+};
+
+const onReadClick = () => {
+  window.open(PN_URL, "_blank");
+};
+
+// eslint-disable-next-line no-extra-boolean-cast
+const heroCta = !!PN_URL
+  ? {
+      label: "Lies deine Bescheide",
+      title: "Lies deine Bescheide",
+      onClick: onReadClick,
+    }
+  : undefined;
+
+/** Hero mocked data */
+const paHero: HeroProps = {
+  type: "image",
+  title: "Bescheide senden? Das ist leicht gesagt",
+  subtitle: `Und ab heute auch zu tun. Piattaforma Notifiche digitalisiert die Verwaltung rechtlicher Kommunikation und 
+    vereinfacht den Prozess für alle: für diejenigen, die sie versenden, und für diejenigen, die sie erhalten.`,
+  inverse: false,
+  image: `${IMAGES_PATH}/pa-hero-foreground.png`,
+  altText: "",
+  background: `${IMAGES_PATH}/hero-background.png`,
+};
+
+const pfHero: HeroProps = {
+  type: "image",
+  title: "Bescheide? Sind zum Greifen nah.",
+  subtitle: `Mit Piattaforma Notifiche kannst du rechtliche Mitteilungen einer Organisation sofort erhalten: Du kannst 
+  Einschreiben, die dir normalerweise in Papierform zugestellt werden, direkt online oder in der App einsehen, verwalten 
+  und bezahlen.`,
+  ctaPrimary: heroCta,
+  inverse: false,
+  image: `${IMAGES_PATH}/pf-hero-foreground.png`,
+  altText: "",
+  background: `${IMAGES_PATH}/hero-background.png`,
+};
+
+const coHero: HeroProps = {
+  type: "text",
+  title: "",
+};
+/* ************************************** */
+
+/** Infoblocks mocked data */
+
+const paInfoBlocks: Array<IInfoblockData> = [
+  {
+    name: "infoblock 1",
+    data: {
+      // overline: "Rappresenti un ente?",
+      title: "Eine einfachere Möglichkeit, Bescheide zu verwalten",
+      content: (
+        <>
+          <Typography variant="body2">
+            Piattaforma Notifiche digitalisiert und vereinfacht die Verwaltung von rechtlicher Kommunikation. 
+            Die übermittelnden Stellen müssen lediglich das zuzustellende Dokument hinterlegen: Die Plattform 
+            sorgt für den Versand, entweder digital oder analog.
+          </Typography>
+          <Typography variant="body2">
+            Mit Piattaforma Notifiche wird die Ungewissheit hinsichtlich der Erreichbarkeit von Empfängern 
+            verringert und der Verwaltungsaufwand und die Kosten werden reduziert.
+          </Typography>
+        </>
+      ),
+      inverse: false,
+      image: `${IMAGES_PATH}/pa-infoblock-1.png`,
+      altText: "",
+      imageShadow: true,
+    },
+  },
+  {
+    name: "infoblock 2",
+    data: {
+      title: "Lade das Dokument hoch. Und dann lehn dich zurück.",
+      content: (
+        <>
+          <Typography variant="body2">
+            Piattaforma Notifiche integriert sich in das Protokoll der Behörden und bietet sowohl APIs für 
+            den automatischen Versand von Bescheiden als auch die Möglichkeit, manuelle Sendungen zu tätigen. 
+            Nach dem Hochladen der Zahlungsunterlagen und -formulare generiert die Plattform die UIN (Unique 
+            Identification Number), einen eindeutigen Identifikationscode für den Bescheid.
+          </Typography>
+          <Typography variant="body2">
+            Sie sucht dann in ihren Archiven und öffentlichen Registern nach einer PEC, die sich auf den 
+            Adressaten zurückführen lässt, und sendet den Bescheid. Danach sendet sie eine Zahlungsaufforderung 
+            an die anderen digitalen Kontakte des Empfängers (IO-App, E-Mail und SMS).
+          </Typography>
+          <Typography variant="body2">
+            Wenn der Empfänger keine digitale Adresse angegeben hat und keinen Zugang zur Plattform hat, fährt 
+            die Plattform mit der Suche nach einer physischen Adresse und anschließend mit dem Versand per 
+            Einschreiben fort.
+          </Typography>
+        </>
+      ),
+      inverse: true,
+      image: `${IMAGES_PATH}/pa-infoblock-2.png`,
+      altText: "",
+      imageShadow: false,
+    },
+  },
+  {
+    name: "infoblock 3",
+    data: {
+      title: "Und der Empfänger?",
+      content: (
+        <>
+          <Typography variant="body2">
+            Der Empfänger greift über SPID oder CIE auf die Plattform zu, wo er das zugestellte Dokument 
+            einsehen und herunterladen kann. Dank der Integration mit pagoPA kann er gleichzeitig auch die 
+            fälligen Zahlungen leisten. Wenn er den Dienst in der IO-App aktiviert hat, kann er alles 
+            direkt in der App erledigen.
+          </Typography>
+          <Typography variant="body2">
+            Wie die Behörde hat auch der Empfänger Zugriff auf die Historie des Zustellungsstatus und die 
+            Bescheinigungen, die Dritten gegenüber geltend gemacht werden können.
+          </Typography>
+        </>
+      ),
+      inverse: false,
+      image: `${IMAGES_PATH}/pa-infoblock-3.png`,
+      altText: "",
+      imageShadow: false,
+    },
+  },
+  {
+    name: "infoblock 4",
+    data: {
+      title: "Demnächst für Behörden verfügbar",
+      content: (
+        <>
+          <Typography variant="body2">
+            Derzeit wird Piattaforma Notifiche mit einer kleinen Anzahl von Pilotbehörden getestet.
+          </Typography>
+          <Typography variant="body2">
+            Sobald sie betriebsbereit ist, kann auch deine Behörde einen Beitrittsantrag stellen und sie 
+            einsetzen, um den Benachrichtigungsprozess zu digitalisieren.
+          </Typography>
+          <Typography variant="body2">
+            In der Zwischenzeit können Behörden{" "}
+            <Link href="https://www.pagopa.it/static/e190eb758489b75d4d81112a1357b5b2/Manuale-Operativo-Piattaforma-Notifiche.pdf">
+              das Betriebshandbuch
+            </Link>
+            {" "}(aktualisiert am 28.06.2022),{" "}
+            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
+              die b2b-APIs für öffentliche Verwaltungen
+            </Link>
+            {" "}und{" "}
+            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
+              die b2b-APIs über den Stand der Benachrichtigungen konsultieren
+            </Link>
+            .
+          </Typography>
+        </>
+      ),
+      inverse: false,
+      image: `${IMAGES_PATH}/pa-infoblock-4.png`,
+      altText: "",
+      aspectRatio: "9/16",
+      imageShadow: false,
+    },
+  },
+];
+
+const pfInfoBlocks: Array<IInfoblockData> = [
+  {
+    name: "infoblock 1",
+    data: {
+      title: "Verpasse keine Bescheide mehr",
+      content: (
+        <>
+          <Typography variant="body2">
+            Bescheide sind Mitteilungen mit rechtlichem Wert, die offiziell von einer Verwaltung herausgegeben werden, 
+            wie z. B. Bußgeldbescheide, Steuerbescheide, Ergebnisse von Verwaltungsverfahren bei öffentlichen 
+            Verwaltungen oder Erstattungen, die du bisher immer per Einschreiben erhalten hast. Von nun an kannst du 
+            sie digital empfangen und einsehen, indem du über SPID oder CIE oder direkt über die IO-App auf Piattaforma 
+            Notifiche zugreifst.
+          </Typography>
+          <Typography variant="body2">
+            Außerdem kannst du dank der Integration mit pagoPA eventuell angefallene Gebühren bezahlen, den Verlauf der 
+            erhaltenen Bescheide einsehen und diese direkt online verwalten. Darüber hinaus benötigst du nur eine 
+            Vollmacht, um auch die Bescheide deiner Familienangehörigen zu verwalten.
+          </Typography>
+        </>
+      ),
+      inverse: false,
+      image: `${IMAGES_PATH}/pf-infoblock-1.png`,
+      imageShadow: false,
+    },
+  },
+  {
+    name: "infoblock 2",
+    data: {
+      title: "Du entscheidest, wie du Bescheide erhältst",
+      content: (
+        <>
+          <Typography variant="body2">
+            Bei der Versendung von rechtlicher Kommunikation gibt Piattaforma Notifiche immer den digitalen Adressen der 
+            Empfänger den Vorrang. Du kannst jederzeit mit SPID und CIE auf die Plattform zugreifen, um deine Präferenzen 
+            zwischen PEC, App IO, E-Mail oder SMS anzugeben oder zu aktualisieren. Wenn du keine Adresse angibst oder 
+            keinen Zugang zur Plattform hast, erhältst du die Bescheide weiterhin per Einschreiben in Papierform.
+          </Typography>
+        </>
+      ),
+      inverse: true,
+      image: `${IMAGES_PATH}/pf-infoblock-2.png`,
+      imageShadow: false,
+    },
+  },
+  {
+    name: "infoblock 3",
+    data: {
+      title: "Die Zukunft der rechtlichen Kommunikation",
+      content: (
+        <>
+          <Typography variant="body2">
+            Derzeit wird Piattaforma Notifiche mit einer kleinen Anzahl von Verwaltungen getestet.
+          </Typography>
+          <Typography variant="body2">
+            Nach und nach wird die Plattform von den öffentlichen Verwaltungen übernommen und für die Übermittlung von 
+            Bescheiden an alle Bürger genutzt.
+          </Typography>
+        </>
+      ),
+      inverse: false,
+      image: `${IMAGES_PATH}/pf-infoblock-3.png`,
+      aspectRatio: "9/16",
+      imageShadow: false,
+    },
+  },
+];
+
+const coInfoBlocks: Array<IInfoblockData> = [
+  {
+    name: "infoblock 1",
+    data: {
+      title: "",
+      inverse: false,
+      image: "",
+      imageShadow: false,
+    },
+  },
+  {
+    name: "infoblock 2",
+    data: {
+      title: "",
+      inverse: true,
+      image: "",
+      imageShadow: false,
+    },
+  },
+];
+/* ************************************** */
+
+/** Showcase mocked data */
+const paShowcases: Array<IShowcaseData> = [
+  {
+    name: "showcase 1",
+    data: {
+      title: "Eine Möglichkeit, in vielerlei Hinsicht zu sparen",
+      items: [
+        {
+          icon: <PeopleIcon />,
+          title: "Einzigartig",
+          subtitle:
+            "Bescheide werden über einen einzigen Kanal versandt, verwaltet und überwacht, der von mehreren Ansprechpartnern in derselben Organisation genutzt werden kann",
+        },
+        {
+          icon: <FireworksIcon />,
+          title: "Einfach",
+          subtitle:
+            "Bescheide können über API oder manuell hochgeladen werden: Sobald die Dokumente hinterlegt sind, kümmert sich die Plattform um den Versand und verfolgt die Statusänderungen",
+        },
+        {
+          icon: <EasyIcon />,
+          title: "Sofort",
+          subtitle:
+            "Wenn der Empfänger eine digitale Adresse hat, verkürzt sich die Sendezeit erheblich",
+        },
+        {
+          icon: <CheckmarkIcon />,
+          title: "Sicher",
+          subtitle:
+            "Der Zustellungsprozess ist standardisiert, und es besteht eine größere Sicherheit, dass die Zustellung an den Empfänger erfolgt",
+        },
+      ],
+    },
+  },
+];
+
+const pfShowcases: Array<IShowcaseData> = [
+  {
+    name: "showcase 1",
+    data: {
+      title: "Was digitale Bescheide dir bieten",
+      items: [
+        {
+          icon: <PiggyIcon />,
+          title: "Bequemlichkeit",
+          subtitle:
+            "Digitale Zustellung von Bescheiden führt zu niedrigeren Service- und Versandkosten",
+        },
+        {
+          icon: <HourglassIcon />,
+          title: "Zeit",
+          subtitle:
+            "Kein Warten oder Anstehen mehr bei der Abholung von Papiermitteilungen",
+        },
+        {
+          icon: <EcologyIcon />,
+          title: "Nachhaltigkeit",
+          subtitle:
+            "Du trägst zur Verringerung des Papierverbrauchs und der Transportemissionen bei",
+        },
+        {
+          icon: <CloudIcon />,
+          title: "Platz",
+          subtitle:
+            "Du musst keine gedruckten Dokumente mehr aufbewahren, da du diese digital herunterladen und archivieren kannst",
+        },
+      ],
+    },
+  },
+  {
+    name: "showcase 2",
+    data: {
+      title: "",
+      items: [
+        {
+          icon: <PECIcon />,
+          title: "Zertifizierte Mail (PEC)",
+          subtitle: (
+            <Typography variant="body2">
+              Wenn du eine PEC-Adresse hast, werden dir die Bescheide rechtmäßig zugestellt, und es gibt keine Einschreiben 
+              in Papierform mehr. Die dir zugesandte Empfangsbestätigung enthält den Link, über den du auf den Inhalt auf 
+              Piattaforma Notifiche zugreifen kannst.
+            </Typography>
+          ),
+        },
+        {
+          /**
+           * Waiting for IOIcon
+           */
+          // icon: <IOIcon />,
+          icon: <img src={`${IMAGES_PATH}/IOIcon.svg`} />,
+          title: "IO-App",
+          subtitle: (
+            <Typography variant="body2">
+              Wenn du den Dienst „Digitale Bescheide“ von Piattaforma Notifiche aktivierst, kannst du rechtliche Kommunikation{" "} 
+              <strong>direkt in der App</strong> erhalten und verwalten. Wenn du keine PEC hast und die Nachricht sofort liest, 
+              erhältst du kein Einschreiben in Papierform und der Bescheid wird rechtmäßig zugestellt.
+            </Typography>
+          ),
+        },
+        {
+          icon: <MessageIcon />,
+          title: "E-Mail oder SMS",
+          subtitle: (
+            <Typography variant="body2">
+              Außerdem kannst du wählen, ob du eine Zahlungsaufforderung an deine E-Mail-Adresse oder per SMS erhalten möchtest. 
+              Wenn du keine PEC hast und über den entsprechenden Link auf die Plattform zugreifst, erhältst du kein Einschreiben 
+              in Papierform und der Bescheid gilt als rechtmäßig zugestellt.
+            </Typography>
+          ),
+        },
+      ],
+    },
+  },
+];
+
+const coShowcases: Array<IShowcaseData> = [
+  {
+    name: "",
+    data: {
+      title: "",
+      items: [
+        {
+          icon: <PECIcon />,
+          title: "",
+          subtitle: `
+            `,
+        },
+        {
+          icon: <IOIcon />,
+          title: "",
+          subtitle: `
+          `,
+        },
+        {
+          icon: <MessageIcon />,
+          title: "",
+          subtitle: `
+          `,
+        },
+      ],
+    },
+  },
+];
+/* ************************************** */
+
+/** Walkthrough mocked data */
+const paWalkthrough: WalkthroughProps = {
+  title: "Wie funktioniert das?",
+  items: [
+    {
+      icon: <UploadIcon color="primary" />,
+      title: "Die Organisation erstellt die Benachrichtigungsanfrage",
+      subtitle:
+        "Mit Hilfe von API-Schlüsseln oder manuell erstellt die Organisation die Benachrichtigungsanfrage und lädt die Anlagen hoch.",
+    },
+    {
+      icon: <SyncIcon color="primary" />,
+      title: "Die Plattform übernimmt sie",
+      subtitle: `Piattaforma Notifiche prüft die Vollständigkeit und Richtigkeit der Informationen. Bei jeder Statusänderung wird 
+        immer ein Zertifikat erstellt, das gegenüber Dritten geltend gemacht werden kann.`,
+    },
+    {
+      icon: <SendIcon color="primary" />,
+      title: "Der Bescheid wird gesendet",
+      subtitle: `Die Plattform informiert den Empfänger über das Vorhandensein eines Bescheides über verschiedene mögliche Kanäle:
+        PEC, App IO, E-Mail, SMS. Alternativ kann sie auch eine physische Adresse finden und ein Einschreiben in Papierform versenden.`,
+    },
+    {
+      icon: <DeliverIcon color="primary" />,
+      title: "Der Empfänger erhält den Bescheid",
+      subtitle: `Der Empfänger greift auf die Plattform zu. Dort kann er die zugestellten Dokumente herunterladen und dank der 
+        Integration mit pagoPA gleichzeitig die fälligen Beträge bezahlen. Wenn er sie über IO erhält, kann er alles direkt in der 
+        App erledigen.`,
+    },
+  ],
+};
+
+const pfWalkthrough: WalkthroughProps = {
+  title: "Wie funktioniert das?",
+  items: [
+    {
+      icon: <NotificationIcon color="primary" />,
+      title: "Du erhältst den Bescheid",
+      subtitle: `
+        Bei jedem Bescheid prüft die Plattform, ob es eine dir zugeordnete oder von dir angegebene PEC für 
+        den Versand der Empfangsbestätigung gibt. Sie sendet dann eine Zahlungsaufforderung an deine anderen 
+        digitalen Kontakte (IO-App, E-Mail und SMS). Wenn du keine digitalen Kontaktdaten angegeben hast und 
+        keinen Zugang zur Plattform hast, erhältst du ein Einschreiben in Papierform.
+      `,
+    },
+    {
+      icon: <DocCheckIcon color="primary" />,
+      title: "Lies den Inhalt",
+      subtitle: `
+        Von der empfangenen Nachricht aus kannst du auf die Plattform zugreifen, um den Bescheid zu lesen und 
+        die entsprechenden Anhänge herunterzuladen. Wenn du den Dienst auf IO aktivierst, kannst du den Inhalt 
+        direkt in der App einsehen: Dies entspricht der Unterzeichnung des Rückscheins eines herkömmlichen 
+        Einschreibens.
+      `,
+    },
+    {
+      icon: <WalletIcon color="primary" />,
+      title: "Begleiche die Zahlung",
+      subtitle: `
+        Wenn ein Betrag zu zahlen ist, kannst du dank der Integration mit pagoPA gleichzeitig online von der 
+        Plattform oder direkt von IO aus fortfahren. Wenn du es vorziehst, einen Schalter aufzusuchen, musst 
+        du den mit dem Bescheid erhaltenen Zahlschein mitnehmen.
+      `,
+    },
+    {
+      icon: <DelegationIcon color="primary" />,
+      title: "Selber handeln oder andere handeln lassen",
+      subtitle: `
+        Wenn du möchtest, kannst du andere natürliche oder juristische Personen damit beauftragen, deine 
+        Bescheide online zu empfangen oder die beigefügten Dokumente in Papierform bei jeder Poststelle 
+        abzuholen.
+      `,
+      isSequential: false,
+    },
+  ],
+};
+
+const coWalkthrough: WalkthroughProps = {
+  title: "",
+  items: [
+    {
+      title: "",
+      subtitle: "",
+    },
+    {
+      title: "",
+      subtitle: "",
+    },
+  ],
+};
+/* ************************************** */
+
+/** HorizontalNav mocked data */
+const paHorizontalNav: HorizontalNavProps = {
+  // const paHorizontalNav = {
+  sections: [
+    {
+      icon: (
+        <SvgIcon component="image">
+          <img src="static/icons/HORIZONTAL-NAV-1.svg" />
+        </SvgIcon>
+      ),
+      title: "Repräsentierst du ein Unternehmen?",
+      subtitle:
+        "Verwalte die Bescheide deines Unternehmens zentral und in Zusammenarbeit mit deinen Kollegen.",
+      cta: {
+        label: "Entdecke die Vorteile für Unternehmen",
+        title: "CTA1",
+        href: "#",
+      },
+    },
+    {
+      icon: (
+        <SvgIcon component="image">
+          <img src="static/icons/HORIZONTAL-NAV-2.svg" />
+        </SvgIcon>
+      ),
+      title: "Bist du Bürger*in?",
+      subtitle:
+        "Aktiviere den Dienst in der IO-App: Wenn du dich innerhalb von 7 Tagen nach Erhalt der Nachricht in der App bei XYZ anmeldest, erhältst du keinen Papierkram und sparst Zeit und Geld.",
+      cta: {
+        label: "Entdecke die Vorteile für die Bürger",
+        title: "CTA1",
+        href: "#",
+      },
+    },
+  ],
+};
+
+// const pfHorizontalNav: HorizontalNavProps = {
+const pfHorizontalNav = {
+  sections: [
+    {
+      title: "",
+      subtitle: "",
+      cta: {
+        label: "",
+        title: "",
+        href: "",
+      },
+    },
+    {
+      title: "",
+      subtitle: "",
+      cta: {
+        label: "",
+        title: "",
+        href: "",
+      },
+    },
+  ],
+};
+
+// const pfHorizontalNav: HorizontalNavProps = {
+const coHorizontalNav = {
+  sections: [
+    {
+      title: "",
+      subtitle: "",
+      cta: {
+        label: "",
+        title: "",
+        href: "",
+      },
+    },
+    {
+      title: "",
+      subtitle: "",
+      cta: {
+        label: "",
+        title: "",
+        href: "",
+      },
+    },
+  ],
+};
+/* ************************************** */
+
+/** Application Data Mock */
+export const deAppData: IAppData = {
+  common: {
+    alert:
+      "Die Plattform ist nicht betriebsbereit. Nur einige der auf dieser Seite beschriebenen Funktionen werden derzeit getestet und stehen nur einer begrenzten Anzahl von Nutzern zur Verfügung, die Empfänger der von den Pilotbehörden verschickten Bescheide sein werden.",
+    assistance: assistanceLink,
+  },
+  pa: {
+    hero: paHero,
+    infoblocks: paInfoBlocks,
+    showcases: paShowcases,
+    walkthrough: paWalkthrough,
+    horizontalNav: paHorizontalNav,
+  },
+  pf: {
+    hero: pfHero,
+    infoblocks: pfInfoBlocks,
+    showcases: pfShowcases,
+    walkthrough: pfWalkthrough,
+    horizontalNav: pfHorizontalNav,
+  },
+  co: {
+    hero: coHero,
+    infoblocks: coInfoBlocks,
+    showcases: coShowcases,
+    walkthrough: coWalkthrough,
+    horizontalNav: coHorizontalNav,
+  },
+};

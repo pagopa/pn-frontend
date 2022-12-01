@@ -6,16 +6,22 @@ import { InfoblockProps } from "@pagopa/mui-italia";
 import { IAppData, UserType } from "model";
 import { HorizontalNavProps } from "@pagopa/mui-italia";
 import LangContext from "../provider/lang-context";
+import { deAppData } from "./data/de";
 import { enAppData } from "./data/en";
+import { frAppData } from "./data/fr";
 import { itAppData } from "./data/it";
+import { slAppData } from "./data/sl";
 
 export const getAppData = (): IAppData => {
   const lang = useContext(LangContext);
 
-  if (lang.selectedLanguage === "it") {
-    return itAppData;
-  } else {
-    return enAppData;
+  switch(lang.selectedLanguage){
+    case 'it': return itAppData;
+    case 'en': return enAppData;
+    case 'fr': return frAppData;
+    case 'de': return deAppData;
+    case 'sl': return slAppData;
+    default: return itAppData;
   }
 };
 

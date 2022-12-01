@@ -239,7 +239,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 2",
     data: {
-      title: "Scegli tu come ricevere le notifiche ",
+      title: "Scegli tu come ricevere le notifiche",
       content: (
         <>
           <Typography variant="body2">
@@ -498,32 +498,32 @@ const pfWalkthrough: WalkthroughProps = {
         l’invio dell’avviso di avvenuta ricezione. Poi, invia un avviso di cortesia ai tuoi altri recapiti 
         digitali (app IO, email e sms). Se non hai indicato alcun recapito digitale e non hai accesso alla 
         piattaforma, riceverai una raccomandata cartacea.
-        `,
+      `,
     },
     {
       icon: <DocCheckIcon color="primary" />,
       title: "Leggi il contenuto",
       subtitle: `
-      Dal messaggio ricevuto, puoi accedere alla piattafoma per leggere la notifica e scaricare i relativi 
-      allegati. Se attivi il servizio su IO, puoi visualizzare il contenuto direttamente in app: questo 
-      equivale a firmare la ricevuta di ritorno di una raccomandata tradizionale.
+        Dal messaggio ricevuto, puoi accedere alla piattafoma per leggere la notifica e scaricare i relativi 
+        allegati. Se attivi il servizio su IO, puoi visualizzare il contenuto direttamente in app: questo 
+        equivale a firmare la ricevuta di ritorno di una raccomandata tradizionale.
       `,
     },
     {
       icon: <WalletIcon color="primary" />,
       title: "Paga le spese",
       subtitle: `
-      Se c’è un importo da pagare, grazie all’integrazione con pagoPA, puoi procedere contestualmente online 
-      dalla piattaforma oppure direttamente da IO. Se preferisci recarti a uno sportello, dovrai avere con te 
-      il modulo di pagamento ricevuto con la notifica.
+        Se c’è un importo da pagare, grazie all’integrazione con pagoPA, puoi procedere contestualmente online 
+        dalla piattaforma oppure direttamente da IO. Se preferisci recarti a uno sportello, dovrai avere con te 
+        il modulo di pagamento ricevuto con la notifica.
       `,
     },
     {
       icon: <DelegationIcon color="primary" />,
       title: "Puoi delegare o essere delegato",
       subtitle: `
-      Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online o 
-      a ritirare i documenti allegati in versione cartacea presso qualsiasi Ufficio Postale.
+        Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online o 
+        a ritirare i documenti allegati in versione cartacea presso qualsiasi Ufficio Postale.
       `,
       isSequential: false,
     },

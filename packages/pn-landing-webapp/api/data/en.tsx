@@ -31,8 +31,8 @@ import { IAppData, IInfoblockData, IShowcaseData } from "model";
 
 
 const assistanceLink = {
-  label: "Assistenza",
-  ariaLabel: "assistenza",
+  label: "Support",
+  ariaLabel: "Support",
   href: `mailto:${PAGOPA_HELP_EMAIL}`,
 };
 
@@ -43,8 +43,8 @@ const onReadClick = () => {
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
-      label: "Leggi le tue notifiche",
-      title: "Leggi le tue notifiche",
+      label: "Read your notifications",
+      title: "Read your notifications",
       onClick: onReadClick,
     }
   : undefined;
@@ -52,9 +52,9 @@ const heroCta = !!PN_URL
 /** Hero mocked data */
 const paHero: HeroProps = {
   type: "image",
-  title: "Inviare notifiche? Facile a dirsi.",
-  subtitle: `E da oggi anche a farsi. Piattaforma Notifiche digitalizza la gestione delle comunicazioni a valore legale, 
-    semplificando il processo per tutti: chi le invia, e chi le riceve.`,
+  title: "Send notifications? Easily said.",
+  subtitle: `And, from today, easily done. Piattaforma Notifiche digitises the management of legal communications, 
+    simplifying the process for everyone: those who send them, and those who receive them.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
@@ -63,9 +63,10 @@ const paHero: HeroProps = {
 
 const pfHero: HeroProps = {
   type: "image",
-  title: "Le notifiche? Sono a portata di mano.",
-  subtitle: `Con Piattaforma Notifiche puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
-    potrai visualizzare, gestire e pagare direttamente online o in app le raccomandate che di solito ti vengono inviate in cartaceo.`,
+  title: "Notifications? At your fingertips.",
+  subtitle: `With Piattaforma Notifiche, you can instantly receive legal communications from an organisation: you 
+    can view, manage and pay for registered letters that are usually sent to you on paper directly online or through 
+    the app.`,
   ctaPrimary: heroCta,
   inverse: false,
   image: `${IMAGES_PATH}/pf-hero-foreground.png`,
@@ -86,19 +87,17 @@ const paInfoBlocks: Array<IInfoblockData> = [
     name: "infoblock 1",
     data: {
       // overline: "Rappresenti un ente?",
-      title: "Un modo più semplice di gestire le notifiche",
+      title: "An easier way to manage notifications",
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche digitalizza e semplifica la gestione delle
-            comunicazioni a valore legale. Gli enti mittenti non devono che
-            depositare l’atto da notificare: sarà la piattaforma a occuparsi
-            dell’invio, per via digitale o analogica.
+          Piattaforma Notifiche digitises and simplifies the management of legal communications. 
+          The sending organisations only have to deposit the deed to be delivered: the platform 
+          will take care of the sending, either by digital or analogue means.
           </Typography>
           <Typography variant="body2">
-            Con Piattaforma Notifiche, diminuisce l’incertezza della
-            reperibilità dei destinatari e si riducono i tempi e i costi di
-            gestione.
+            With Piattaforma Notifiche, the uncertainty of recipient availability is minimised, 
+            and management time and costs are reduced.
           </Typography>
         </>
       ),
@@ -111,27 +110,24 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 2",
     data: {
-      title: "Carica l’atto. Poi, dimenticatene",
+      title: "Upload the deed. Then forget about it",
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche si integra con il protocollo degli enti e
-            offre sia API per l’invio automatico delle notifiche, sia la
-            possibilità di fare invii manuali. Una volta effettuato il
-            caricamento degli atti e dei moduli di pagamento, la piattaforma
-            genera lo IUN, un codice univoco identificativo della notifica.
+            Piattaforma Notifiche integrates with the institutions' protocol and offers both APIs 
+            for sending notifications automatically and the possibility of making manual submissions. 
+            Once the deeds and payment forms have been uploaded, the platform generates the IUN, a 
+            unique code identifying the notification.
           </Typography>
           <Typography variant="body2">
-            Successivamente, cerca nei suoi archivi e nei registri pubblici una
-            PEC riconducibile al destinatario e invia la notifica. Poi, invia un
-            avviso di cortesia agli altri recapiti digitali (app IO, email e
-            SMS) del destinatario.
+            Subsequently, it searches its archives and public registers for a PEC traceable to the 
+            recipient and sends the notification. It then sends a courtesy notice to the recipient's 
+            other digital contacts (IO app, email and SMS).
           </Typography>
           <Typography variant="body2">
-            Se il destinatario non ha indicato alcun recapito digitale e non ha
-            accesso alla piattaforma, questa procede con la ricerca di un
-            indirizzo fisico, e quindi con l’invio tramite raccomandata
-            cartacea.
+            If the recipient has not indicated a digital address and does not have access to the 
+            platform, the platform proceeds with the search for a physical address, and then with 
+            sending by registered mail.
           </Typography>
         </>
       ),
@@ -144,20 +140,18 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 3",
     data: {
-      title: "E il destinatario?",
+      title: "What about the recipient?",
       content: (
         <>
           <Typography variant="body2">
-            Il destinatario accede alla piattaforma tramite SPID o CIE, dove può
-            visionare e scaricare l’atto notificato. Grazie all’integrazione con
-            pagoPA, può anche pagare contestualmente quanto dovuto. Se ha
-            attivato il servizio su app IO, potrà fare tutto direttamente in
-            app.
+            The recipient accesses the platform via SPID or CIE, where they can view and download 
+            the deed notified. Thanks to the integration with pagoPA, they can also pay what they 
+            owe at the same time. If they have activated the service on the IO app, they can do 
+            everything directly in the app.
           </Typography>
           <Typography variant="body2">
-            Come l’ente, anche il desinatario ha accesso alla cronologia degli
-            stati della notifica e alle attestazioni opponibili a terzi che ne
-            danno prova.
+            Like the organisation, the recipient also has access to the history of the status of 
+            the notification and the certificates enforceable against third parties that prove it.
           </Typography>
         </>
       ),
@@ -170,29 +164,28 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Presto disponibile per gli enti",
+      title: "Soon available to organisations",
       content: (
         <>
           <Typography variant="body2">
-            Attualmente, Piattaforma Notifiche è oggetto di collaudo con un
-            numero ristretto di enti pilota.
+            Currently, Piattaforma Notifiche is being tested with a small number of pilot organisations.
           </Typography>
           <Typography variant="body2">
-            Quando sarà operativa, anche il tuo ente potrà fare richiesta di
-            adesione e adottarla per digitalizzare il processo di notificazione.
+            When it is operational, your organisation will also be able to apply for membership and adopt 
+            it to digitise the notification process.
           </Typography>
           <Typography variant="body2">
-            Nel frattempo, gli enti possono consultare il{" "}
+            In the meantime, organisations can consult{" "}
             <Link href="https://www.pagopa.it/static/e190eb758489b75d4d81112a1357b5b2/Manuale-Operativo-Piattaforma-Notifiche.pdf">
-              manuale operativo
+              the operations manual
             </Link>{" "}
-            (aggiornato al 28/06/2022),{" "}
+              (updated 28/06/2022),{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
-              le API b2b per le pubbliche amministrazioni
+              the b2b API for public administrations
             </Link>{" "}
-            e{" "}
+            and{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-              le API b2b per l’avanzamento delle notifiche
+              the b2b API for the advancement of notifications
             </Link>
             .
           </Typography>
@@ -211,23 +204,20 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 1",
     data: {
-      title: "Non perderti più nessuna notifica",
+      title: "Never miss a notification again",
       content: (
         <>
           <Typography variant="body2">
-            Le notifiche sono comunicazioni a valore legale emesse in via
-            ufficiale da un’amministrazione, come multe, avvisi di accertamento
-            di tributi, esiti di pratiche amministrative avviate con le
-            Pubbliche Amministrazioni o rimborsi, che fino ad ora hai sempre
-            ricevuto tramite raccomandata. Da oggi puoi riceverle e consultarle
-            in digitale, accedendo a Piattaforma Notifiche tramite SPID o CIE o
-            direttamente sull’app IO.
+            Notifications are communications with legal value issued officially by an administration, such 
+            as fines, tax assessment notices, outcomes of administrative procedures initiated with public 
+            administrations or refunds, which until now, you have always received by registered mail. From 
+            now on, you can receive and consult them digitally by accessing Piattaforma Notifiche via SPID 
+            or CIE or directly on the IO app.
           </Typography>
           <Typography variant="body2">
-            Puoi anche pagare eventuali costi grazie all’integrazione con
-            pagoPA, visualizzare lo storico delle notifiche ricevute e gestirle
-            direttamente online. Inoltre, ti basta una delega per gestire anche
-            le raccomandate dei tuoi familiari.
+            You can also pay any fees thanks to the integration with pagoPA, view the history of received 
+            notifications and manage them directly online. In addition, you only need a proxy to handle 
+            your family members' registered mail as well.
           </Typography>
         </>
       ),
@@ -239,16 +229,15 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 2",
     data: {
-      title: "Scegli tu come ricevere le notifiche ",
+      title: "You choose how to receive notifications",
       content: (
         <>
           <Typography variant="body2">
-            Per inviare le comunicazioni a valore legale, Piattaforma Notifiche
-            dà sempre la priorità ai recapiti digitali del destinatario. In ogni
-            momento, puoi accedere alla piattaforma con SPID e CIE per indicare
-            o aggiornare le tue preferenze tra PEC, App IO, email o SMS. Se non
-            indichi alcun recapito o non hai accesso alla piattaforma,
-            continuerai a ricevere le notifiche tramite raccomandata cartacea.
+            To send legal communications, Piattaforma Notifiche always gives priority to the digital 
+            addresses of the recipient. At any time, you can access the platform with SPID and CIE to 
+            indicate or update your preferences between PEC, IO app, email or SMS. If you do not indicate 
+            any address or do not have access to the platform, you will continue to receive notifications 
+            by registered mail.
           </Typography>
         </>
       ),
@@ -260,17 +249,15 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 3",
     data: {
-      title: "Il futuro delle comunicazioni a valore legale",
+      title: "The future of legal communications",
       content: (
         <>
           <Typography variant="body2">
-            Attualmente, Piattaforma Notifiche è oggetto di collaudo con un
-            numero ristretto di amministrazioni.
+            Currently, Piattaforma Notifiche is being tested with a small number of administrations.
           </Typography>
           <Typography variant="body2">
-            Progressivamente, la piattaforma verrà adottata dalle Pubbliche
-            Amministrazioni e utilizzata per inviare notifiche a tutti i
-            cittadini.
+            Progressively, the platform will be adopted by public administrations and used to send 
+            notifications to all citizens.
           </Typography>
         </>
       ),
@@ -309,31 +296,31 @@ const paShowcases: Array<IShowcaseData> = [
   {
     name: "showcase 1",
     data: {
-      title: "Un solo modo per risparmiare in tanti modi",
+      title: "One way to save in many",
       items: [
         {
           icon: <PeopleIcon />,
-          title: "Unico",
+          title: "Unique ways",
           subtitle:
-            "Le notifiche sono inviate, gestite e monitorate tramite un solo canale, accessibile da più referenti dello stesso ente",
+            "Notifications are sent, managed and monitored through a single channel, accessible by several representatives of the same organisation",
         },
         {
           icon: <FireworksIcon />,
-          title: "Semplice",
+          title: "Simple",
           subtitle:
-            "Si possono caricare notifiche tramite API o manualmente: depositati i documenti, la piattaforma si occupa dell’invio e tiene traccia dei cambi di stato",
+            "Notifications can be uploaded via API or manually: once the documents have been deposited, the platform takes care of sending them and keeps track of status changes",
         },
         {
           icon: <EasyIcon />,
-          title: "Immediato",
+          title: "Immediate",
           subtitle:
-            "Se il destinatario ha un recapito digitale, i tempi di invio diminuiscono notevolmente",
+            "If the recipient has a digital address, mailing times are considerably reduced",
         },
         {
           icon: <CheckmarkIcon />,
-          title: "Certo",
+          title: "Certain",
           subtitle:
-            "Il processo di notificazione è normato  e c’è maggiore certezza di consegna al destinatario",
+            "The notification process is regulated and there is greater certainty of delivery to the recipient",
         },
       ],
     },
@@ -344,31 +331,31 @@ const pfShowcases: Array<IShowcaseData> = [
   {
     name: "showcase 1",
     data: {
-      title: "Cosa ti offrono le notifiche digitali",
+      title: "What digital notifications offer you",
       items: [
         {
           icon: <PiggyIcon />,
-          title: "Convenienza",
+          title: "Convenience",
           subtitle:
-            "Il recapito delle notifiche in digitale comporta minori costi di notificazione e spedizione",
+            "Digital delivery of notifications leads to lower service and delivery costs",
         },
         {
           icon: <HourglassIcon />,
-          title: "Tempo",
+          title: "Time",
           subtitle:
-            "Niente più attese o code per il ritiro delle comunicazioni cartacee",
+            "No more waiting or queuing to collect paper communications",
         },
         {
           icon: <EcologyIcon />,
-          title: "Sostenibilità",
+          title: "Sustainability",
           subtitle:
-            "Contribuisci a ridurre il consumo di carta e le emissioni per il trasporto",
+            "Help reduce paper consumption and transport emissions",
         },
         {
           icon: <CloudIcon />,
-          title: "Spazio",
+          title: "Space",
           subtitle:
-            "Non devi più conservare i documenti stampati, grazie alla possibilità di scaricare e archiviare gli atti in digitale",
+            "You no longer have to keep printed documents, thanks to the option to download and store deeds digitally",
         },
       ],
     },
@@ -383,10 +370,9 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "PEC",
           subtitle: (
             <Typography variant="body2">
-              Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente
-              consegnate, senza più raccomandate cartacee. L’avviso di avvenuta
-              ricezione che ti sarà inviato contiene il link per accedere al
-              contenuto su Piattaforma Notifiche.
+              If you have a PEC address, notifications will be legally delivered to you, with no more 
+              registered paper mail. The acknowledgement of receipt that will be sent to you contains 
+              the link to access the content on Piattaforma Notifiche.
             </Typography>
           ),
         },
@@ -396,27 +382,24 @@ const pfShowcases: Array<IShowcaseData> = [
            */
           // icon: <IOIcon />,
           icon: <img src={`${IMAGES_PATH}/IOIcon.svg`} />,
-          title: "App IO",
+          title: "IO app",
           subtitle: (
             <Typography variant="body2">
-              Se attivi il servizio “Notifiche digitali” di Piattaforma
-              Notifiche, puoi ricevere e gestire{" "}
-              <strong>direttamente in app</strong> le comunicazioni a valore
-              legale. Se non hai la PEC e leggi subito il messaggio, non
-              riceverai la raccomandata cartacea e la notifica ti risulterà
-              legalmente recapitata.
+              If you activate the "Digital Notifications" service of Piattaforma Notifiche, you can 
+              receive and manage legal communications <strong>directly in the app</strong>. If you 
+              do not have a PEC and read the message immediately, you will not receive the registered 
+              letter and the notification will be legally delivered.
             </Typography>
           ),
         },
         {
           icon: <MessageIcon />,
-          title: "Email o SMS",
+          title: "Email or SMS",
           subtitle: (
             <Typography variant="body2">
-              In più, puoi anche scegliere di ricevere un avviso di cortesia al
-              tuo indirizzo email o tramite SMS. Se non hai la PEC e accedi alla
-              piattaforma dall’apposito link, non riceverai la raccomandata
-              cartacea e la notifica ti risulterà legalmente recapitata.
+              In addition, you can also choose to receive a courtesy notification at your email address 
+              or by SMS. If you do not have a PEC and access the platform from the designated link, you 
+              will not receive the registered letter and the notification will be legally delivered.
             </Typography>
           ),
         },
@@ -457,73 +440,73 @@ const coShowcases: Array<IShowcaseData> = [
 
 /** Walkthrough mocked data */
 const paWalkthrough: WalkthroughProps = {
-  title: "Come funziona?",
+  title: "How does it work?",
   items: [
     {
       icon: <UploadIcon color="primary" />,
-      title: "L’ente crea la richiesta di notifica",
+      title: "The organisation creates the notification request",
       subtitle:
-        "Con l’uso di chiavi API o manualmente, l’ente crea la richiesta di notifica e carica gli allegati.",
+        "Using API keys or manually, the organisation creates the notification request and uploads the attachments.",
     },
     {
       icon: <SyncIcon color="primary" />,
-      title: "La piattaforma la prende in carico",
-      subtitle: `Piattaforma Notifiche verifica la completezza e correttezza delle informazioni. Ad ogni cambio di 
-        stato, viene sempre generata la relativa attestazione opponibile a terzi.`,
+      title: "The platform takes care of it",
+      subtitle: `Piattaforma Notifiche verifies the completeness and correctness of the information. Each time there is 
+        a status change, the corresponding certificate enforceable against third parties is always generated.`,
     },
     {
       icon: <SendIcon color="primary" />,
-      title: "La notifica viene inviata",
-      subtitle: `La piattaforma comunica al destinatario la presenza di una notifica tramite diversi possibili canali: 
-        PEC, App IO, email, SMS. In alternativa, ricerca un indirizzo fisico e invia una raccomandata cartacea.`,
+      title: "The notification is sent",
+      subtitle: `The platform notifies the recipient of the presence of a notification through several possible channels: 
+        PEC, IO app, email, or SMS. Alternatively, it finds a physical address and sends a registered letter.`,
     },
     {
       icon: <DeliverIcon color="primary" />,
-      title: "Il destinatario la riceve",
-      subtitle: `Il destinatario accede alla piattaforma. Lì, può scaricare gli i documenti notificati e pagare 
-        contestualmente quanto dovuto, grazie all’integrazione con pagoPA. Se la riceve tramite IO, può fare 
-        tutto direttamente in app.`,
+      title: "The recipient receives it",
+      subtitle: `The recipient accesses the platform. There, they can download the notified documents and simultaneously 
+        pay what is due, thanks to the integration with pagoPA. If they receive it via IO, they can do everything directly 
+        in the app.`,
     },
   ],
 };
 
 const pfWalkthrough: WalkthroughProps = {
-  title: "Come funziona?",
+  title: "How does it work?",
   items: [
     {
       icon: <NotificationIcon color="primary" />,
-      title: "Ricevi la notifica",
+      title: "Receive the notification",
       subtitle: `
-        Per ogni notifica, la piattaforma  verifica che ci sia una PEC a te associata o da te indicata per 
-        l’invio dell’avviso di avvenuta ricezione. Poi, invia un avviso di cortesia ai tuoi altri recapiti 
-        digitali (app IO, email e sms). Se non hai indicato alcun recapito digitale e non hai accesso alla 
-        piattaforma, riceverai una raccomandata cartacea.
+        For each notification, the platform checks whether there is a PEC associated with you or indicated by you for 
+        sending the acknowledgement of receipt. It then sends a courtesy notice to your other digital contacts (IO app, 
+          email and SMS). If you have not provided a digital address and do not have access to the platform, you will 
+          receive a registered letter in paper form.
         `,
     },
     {
       icon: <DocCheckIcon color="primary" />,
-      title: "Leggi il contenuto",
+      title: "Read the contents",
       subtitle: `
-      Dal messaggio ricevuto, puoi accedere alla piattafoma per leggere la notifica e scaricare i relativi 
-      allegati. Se attivi il servizio su IO, puoi visualizzare il contenuto direttamente in app: questo 
-      equivale a firmare la ricevuta di ritorno di una raccomandata tradizionale.
+        From the message you receive, you can access the platform to read the notification and download its attachments. 
+        If you activate the service on IO, you can view the content directly in the app: this is equivalent to signing 
+        the return receipt of a traditional registered letter.
       `,
     },
     {
       icon: <WalletIcon color="primary" />,
-      title: "Paga le spese",
+      title: "Paying expenses",
       subtitle: `
-      Se c’è un importo da pagare, grazie all’integrazione con pagoPA, puoi procedere contestualmente online 
-      dalla piattaforma oppure direttamente da IO. Se preferisci recarti a uno sportello, dovrai avere con te 
-      il modulo di pagamento ricevuto con la notifica.
+        If there is an amount to be paid, thanks to the integration with pagoPA, you can proceed simultaneously online 
+        from the platform or directly from IO. If you prefer to go to a counter, you will need to have the payment form 
+        with you.
       `,
     },
     {
       icon: <DelegationIcon color="primary" />,
-      title: "Puoi delegare o essere delegato",
+      title: "You can delegate or be delegated",
       subtitle: `
-      Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online o 
-      a ritirare i documenti allegati in versione cartacea presso qualsiasi Ufficio Postale.
+      If you wish, you can delegate other persons, natural or legal, to receive your notifications online or to collect 
+      the attached documents in paper form at any Post Office.
       `,
       isSequential: false,
     },
@@ -555,11 +538,11 @@ const paHorizontalNav: HorizontalNavProps = {
           <img src="static/icons/HORIZONTAL-NAV-1.svg" />
         </SvgIcon>
       ),
-      title: "Rappresenti un’impresa?",
+      title: "Do you represent a company?",
       subtitle:
-        "Gestisci le notifiche della tua impresa in un unico spazio, in collaborazione con i colleghi.",
+        "Manage your company's notifications in one place, in collaboration with colleagues.",
       cta: {
-        label: "Scopri i vantaggi per le imprese",
+        label: "Discover the benefits for businesses",
         title: "CTA1",
         href: "#",
       },
@@ -570,11 +553,11 @@ const paHorizontalNav: HorizontalNavProps = {
           <img src="static/icons/HORIZONTAL-NAV-2.svg" />
         </SvgIcon>
       ),
-      title: "Sei una cittadina o un cittadino?",
+      title: "Are you a citizen?",
       subtitle:
-        "Attiva il servizio sull’app IO: così se accederai a XYZ entro 7 giorni dalla ricezione del messaggio in app, non riceverai il cartaceo e rispamierai tempo e denaro.",
+        "Activate the service on the IO app: so if you access XYZ within 7 days of receiving the message in the app, you will not receive the paper copy, and you will save time and money.",
       cta: {
-        label: "Scopri i vantaggi per i cittadini",
+        label: "Discover the benefits for citizens",
         title: "CTA1",
         href: "#",
       },
@@ -635,7 +618,7 @@ const coHorizontalNav = {
 export const enAppData: IAppData = {
   common: {
     alert:
-      "La piattaforma non è operativa. Attualmente sono in fase di collaudo solo alcune delle funzionalità descritte in questa pagina, disponibili esclusivamente per un numero limitato di utenti che saranno destinatari delle notifiche inviate dagli enti pilota.",
+      "The platform is not operational. Only some of the functionalities described on this page are currently being tested and are only available to a limited number of users who will be recipients of the notifications sent by the pilot organisations.",
     assistance: assistanceLink,
   },
   pa: {

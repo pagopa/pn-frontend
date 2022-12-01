@@ -1,7 +1,7 @@
 import { createContext, FC, ReactNode, useState } from "react";
 import { useEffect } from "react";
 
-export type LangCode = "it" | "en";
+export type LangCode = 'de' | 'en' | 'fr' | 'it' | 'sl';
 
 const LS_LANG_PROP_NAME = "pagopaLanguage";
 const DEFAULT_LANG: LangCode = "it";
