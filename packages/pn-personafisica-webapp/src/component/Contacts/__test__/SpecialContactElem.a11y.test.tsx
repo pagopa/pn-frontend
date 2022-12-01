@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { act, RenderResult } from '@testing-library/react';
 
 import { axe, render } from '../../../__test__/test-utils';
@@ -12,12 +13,11 @@ jest.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-describe('SpecialContactElem Component', () => {
-  it('renders SpecialContactElem', async () => {
+describe('SpecialContactElem Component - accessibility tests', () => {
+  it('does not have basic accessibility issues', async () => {
     // eslint-disable-next-line functional/no-let
     let result: RenderResult | undefined;
 
-    // render component
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
@@ -33,20 +33,11 @@ describe('SpecialContactElem Component', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-
-    expect(result?.container).toHaveTextContent('Mocked Sender');
-    const specialContactForms = result?.queryAllByTestId('specialContactForm');
-    expect(specialContactForms).toHaveLength(2);
-    expect(specialContactForms![0]).toHaveTextContent('mocked@pec.it');
-    expect(result?.container).toHaveTextContent('-');
-    expect(specialContactForms![1]).toHaveTextContent('mocked@mail.it');
-    const firstFormButtons = specialContactForms![0].querySelectorAll('button');
-    expect(firstFormButtons).toHaveLength(2);
-    expect(firstFormButtons[0]).toHaveTextContent('button.modifica');
-    expect(firstFormButtons[1]).toHaveTextContent('button.rimuovi');
-    const secondFormButtons = specialContactForms![1].querySelectorAll('button');
-    expect(secondFormButtons).toHaveLength(2);
-    expect(secondFormButtons[0]).toHaveTextContent('button.modifica');
-    expect(secondFormButtons[1]).toHaveTextContent('button.rimuovi');
+    if (result) {
+      const res = await axe(result.container);
+      expect(res).toHaveNoViolations();
+    } else {
+      fail('render() returned undefined!');
+    }
   });
 });

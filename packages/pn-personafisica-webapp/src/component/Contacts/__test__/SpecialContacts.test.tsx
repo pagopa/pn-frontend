@@ -1,13 +1,14 @@
 import * as redux from 'react-redux';
 import { act, fireEvent, screen, RenderResult, within, waitFor } from '@testing-library/react';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/contact/actions';
 import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
 import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
+import { courtesyAddresses, legalAddresses, initialState } from './SpecialContacts.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -210,51 +211,11 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
         <DigitalContactsCodeVerificationProvider>
           <SpecialContacts
             recipientId="mocked-recipientId"
-            legalAddresses={[
-              {
-                addressType: '',
-                recipientId: 'mocked-recipientId',
-                senderId: 'default',
-                channelType: LegalChannelType.PEC,
-                value: 'mocked@mail.com',
-                code: '12345',
-              },
-            ]}
-            courtesyAddresses={[
-              {
-                addressType: '',
-                recipientId: 'mocked-recipientId',
-                senderId: 'default',
-                channelType: CourtesyChannelType.EMAIL,
-                value: 'mocked@mail.com',
-                code: '12345',
-              },
-              {
-                addressType: '',
-                recipientId: 'mocked-recipientId',
-                senderId: 'default',
-                channelType: CourtesyChannelType.SMS,
-                value: '12345678910',
-                code: '12345',
-              },
-            ]}
+            legalAddresses={legalAddresses}
+            courtesyAddresses={courtesyAddresses}
           />
         </DigitalContactsCodeVerificationProvider>,
-        {
-          preloadedState: {
-            contactsState: {
-              loading: false,
-              digitalAddresses: {
-                legal: [],
-                courtesy: [],
-              },
-              parties: [
-                { name: 'Comune di Milano', id: 'comune-milano' },
-                { name: 'Tribunale di Milano', id: 'tribunale-milano' },
-              ],
-            },
-          },
-        }
+        { preloadedState: initialState }
       );
     });
   });
@@ -435,15 +396,6 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       CourtesyChannelType.EMAIL
     );
   });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail('render() returned undefined!');
-    }
-  }, 10000);
 });
 
 

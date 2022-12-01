@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { axe, render } from '../../../__test__/test-utils';
 import DigitalContactsCard from '../DigitalContactsCard';
 
@@ -13,10 +14,9 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-describe('DigitalContactsCard Component', () => {
-  it('renders DigitalContactsCard', () => {
-    // render component
-    const result = render(
+describe('DigitalContactsCard Component - accessibility tests', () => {
+  it('does not have basic accessibility issues', async () => {
+    const { container } = render(
       <DigitalContactsCard
         sectionTitle={'mocked-sectionTitle'}
         title={title}
@@ -27,15 +27,7 @@ describe('DigitalContactsCard Component', () => {
         {body}
       </DigitalContactsCard>
     );
-    const titleEl = result.container.querySelector('h4');
-    expect(titleEl).toBeInTheDocument();
-    expect(titleEl).toHaveTextContent(title);
-    expect(result.container).toHaveTextContent(subTitle);
-    const bodyEl = result.queryByTestId('body');
-    expect(bodyEl).toBeInTheDocument();
-    expect(bodyEl).toHaveTextContent(/Body/i);
-    const buttonEl = result.container.querySelector('button');
-    expect(buttonEl).toBeInTheDocument();
-    expect(buttonEl).toHaveTextContent(/Click me/i);
+    const result = await axe(container);
+    expect(result).toHaveNoViolations();
   });
 });

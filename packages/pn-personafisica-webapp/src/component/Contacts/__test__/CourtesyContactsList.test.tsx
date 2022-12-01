@@ -1,10 +1,10 @@
-import { fail } from 'assert';
+import * as React from 'react';
+import { act, RenderResult, screen } from "@testing-library/react";
 import * as redux from 'react-redux';
-import { act, screen, RenderResult } from "@testing-library/react";
-import { render, axe } from "../../../__test__/test-utils";
-import CourtesyContactsList from "../CourtesyContactsList";
-import * as hooks from '../../../redux/hooks';
 import { CourtesyChannelType, DigitalAddress } from '../../../models/contacts';
+import * as hooks from '../../../redux/hooks';
+import { render } from "../../../__test__/test-utils";
+import CourtesyContactsList from "../CourtesyContactsList";
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 // import * as actions from '../../../redux/contact/actions';
 
@@ -98,41 +98,5 @@ describe('CourtesyContactsList Component', () => {
     expect(buttons[1]).toBeEnabled();
     expect(buttons[0].textContent).toMatch('button.modifica');
     expect(buttons[1].textContent).toMatch('button.rimuovi');
-  });
-
-  it.skip('does not have basic accessibility issues (empty store)', async () => {
-    mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce([]);
-    await act(async () => {
-      result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={[]} />
-        </DigitalContactsCodeVerificationProvider>
-      );
-    });
-
-    if(result){
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail("render() returned undefined!");
-    }
-  });
-
-  it.skip('does not have basic accessibility issues (data in store)', async () => {
-    mockUseAppSelector.mockReturnValueOnce(emptyMockedStore).mockReturnValueOnce(mockedStore);
-    await act(async () => {
-      result = render(
-        <DigitalContactsCodeVerificationProvider>
-          <CourtesyContactsList recipientId="mock-recipient" contacts={mockedStore} />
-        </DigitalContactsCodeVerificationProvider>
-      );
-    });
-
-    if(result){
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail("render() returned undefined!");
-    }
   });
 });
