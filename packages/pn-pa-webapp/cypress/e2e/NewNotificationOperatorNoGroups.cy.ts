@@ -1,4 +1,4 @@
-import cesare from './fixtures/recipients/cesare.json';
+import { cesare } from '../fixtures/recipients/recipients';
 import {CREATE_NOTIFICATION} from '../../src/api/notifications/notifications.routes';
 import { PNRole } from '../../src/models/user';
 import { User } from '../../src/redux/auth/types';
