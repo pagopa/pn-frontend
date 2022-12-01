@@ -1,10 +1,10 @@
 export interface ApiKey {
-  id?: string;
+  id: string;
   name: string;
-  apiKey: string;
+  value: string;
   lastUpdate: string;
-  groups: Array<string>;
-  status: string;
+  groups: Array<ApiKeyStatus>;
+  status: ApiKeyStatus;
   statusHistory: Array<ApiKeyStatusHistory>;
 }
 
@@ -14,7 +14,7 @@ export interface ApiKeyStatusHistory {
   date: string;
 }
 
-export type ApiKeyColumn = 'name' | 'apiKey' | 'lastUpdate' | 'groups' | 'status' | 'history';
+export type ApiKeyColumn = 'name' | 'value' | 'lastUpdate' | 'groups' | 'status' | 'history';
 
 export enum ApiKeySetStatus {
   BLOCK = 'BLOCK',
@@ -29,7 +29,7 @@ export enum ApiKeyStatus {
   ROTATED = 'ROTATED',
 }
 
-export enum modalApiKeyView {
+export enum ModalApiKeyView {
   NONE = 'NONE',
   VIEW = 'VIEW',
   BLOCK = 'BLOCK',
@@ -39,7 +39,7 @@ export enum modalApiKeyView {
 }
 
 export interface GetApiKeysResponse {
-  items: Array<ApiKeyRow>;
+  items: Array<ApiKey>;
 }
 
 export interface GetNewApiKeyResponse {
@@ -47,21 +47,12 @@ export interface GetNewApiKeyResponse {
   apiKey: string;
 }
 
-interface ApiKeyRow {
-  id: string;
-  name: string;
-  lastUpdate: string;
-  groups: Array<string>;
-  status: ApiKeyStatus;
-  statusHistory: Array<ApiKeyStatusHistory>;
-}
-
 export interface NewApiKeyBE {
   name: string;
-  groups: Array<string>;
+  groups: Array<ApiKeyStatus>;
 }
 
 export interface ApiKeyStatusBE {
   apiKey: string;
-  status: string;
+  status: ApiKeySetStatus;
 }

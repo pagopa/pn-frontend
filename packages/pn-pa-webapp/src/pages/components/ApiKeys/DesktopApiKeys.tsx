@@ -14,13 +14,13 @@ import {
   CopyToClipboard,
   formatDate,
 } from '@pagopa-pn/pn-commons';
-import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory, modalApiKeyView } from '../../../models/ApiKeys';
+import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory, ModalApiKeyView } from '../../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../../utils/apikeys.utility';
 import * as routes from '../../../navigation/routes.const';
 
 type Props = {
   apiKeys: Array<ApiKey>;
-  handleModalClick: (view: modalApiKeyView, apiKeyId: number) => void;
+  handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
 };
 
 const DesktopApiKeys = ({
@@ -79,11 +79,11 @@ const DesktopApiKeys = ({
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          {row.status !== ApiKeyStatus.ROTATED && <MenuItem data-testid="buttonView" onClick={() => handleModalClick(modalApiKeyView.VIEW, apiKeyId)}>{t('context-menu.view')}</MenuItem>}
-          {(row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED) && <MenuItem data-testid="buttonRotate" onClick={() => handleModalClick(modalApiKeyView.ROTATE, apiKeyId)}>{t('context-menu.rotate')}</MenuItem>}
-          {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && <MenuItem data-testid="buttonBlock" onClick={() => handleModalClick(modalApiKeyView.BLOCK, apiKeyId)}>{t('context-menu.block')}</MenuItem>}
-          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonDelete" onClick={() => handleModalClick(modalApiKeyView.DELETE, apiKeyId)}>{t('context-menu.delete')}</MenuItem>}
-          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonEnable" onClick={() => handleModalClick(modalApiKeyView.ENABLE, apiKeyId)}>{t('context-menu.enable')}</MenuItem>}
+          {row.status !== ApiKeyStatus.ROTATED && <MenuItem data-testid="buttonView" onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}>{t('context-menu.view')}</MenuItem>}
+          {(row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED) && <MenuItem data-testid="buttonRotate" onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}>{t('context-menu.rotate')}</MenuItem>}
+          {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && <MenuItem data-testid="buttonBlock" onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}>{t('context-menu.block')}</MenuItem>}
+          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonDelete" onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}>{t('context-menu.delete')}</MenuItem>}
+          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonEnable" onClick={() => handleModalClick(ModalApiKeyView.ENABLE, apiKeyId)}>{t('context-menu.enable')}</MenuItem>}
         </Menu>
       </Box>
     );
@@ -104,7 +104,7 @@ const DesktopApiKeys = ({
       },
     },
     {
-      id: 'apiKey',
+      id: 'value',
       label: t('table.api-key'),
       width: '30%',
       sortable: false,

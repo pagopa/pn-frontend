@@ -21,7 +21,7 @@ import {
   deleteApiKey,
   API_KEYS_ACTIONS,
 } from '../redux/apiKeys/actions';
-import { ApiKey, ApiKeySetStatus, modalApiKeyView } from '../models/ApiKeys';
+import { ApiKey, ApiKeySetStatus, ModalApiKeyView } from '../models/ApiKeys';
 import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
 
@@ -55,17 +55,17 @@ const ApiKeys = () => {
   }, []);
 
   type modalType = {
-    view: modalApiKeyView;
+    view: ModalApiKeyView;
     apiKey?: ApiKey;
   };
 
-  const [modal, setModal] = useState<modalType>({ view: modalApiKeyView.NONE });
+  const [modal, setModal] = useState<modalType>({ view: ModalApiKeyView.NONE });
 
   const handleCloseModal = () => {
-    setModal({ view: modalApiKeyView.NONE });
+    setModal({ view: ModalApiKeyView.NONE });
   };
 
-  const handleModalClick = (view: modalApiKeyView, apiKeyId: number) => {
+  const handleModalClick = (view: ModalApiKeyView, apiKeyId: number) => {
     setModal({ view, apiKey: apiKeys[apiKeyId] });
   };
 
@@ -135,21 +135,21 @@ const ApiKeys = () => {
         </Box>
         <DesktopApiKeys apiKeys={apiKeys} handleModalClick={handleModalClick} />
 
-        <Dialog open={modal.view !== modalApiKeyView.NONE} onClose={handleCloseModal}>
+        <Dialog open={modal.view !== ModalApiKeyView.NONE} onClose={handleCloseModal}>
           <Box
             sx={{
               padding: 3,
               minWidth: isMobile ? '0' : '600px',
             }}
           >
-            {modal.view === modalApiKeyView.VIEW && (
+            {modal.view === ModalApiKeyView.VIEW && (
               <ApiKeyModal
                 titleSx={{ marginBottom: isMobile ? 3 : undefined }}
                 title={`API Key ${modal.apiKey?.name}`}
                 subTitle={t('copy-api-key-info')}
                 content={
                   <TextField
-                    value={modal.apiKey?.apiKey}
+                    value={modal.apiKey?.value}
                     fullWidth={true}
                     InputProps={{
                       readOnly: true,
@@ -158,7 +158,7 @@ const ApiKeys = () => {
                           <CopyToClipboard
                             tooltipMode={true}
                             tooltip={t('api-key-copied')}
-                            getValue={() => modal.apiKey?.apiKey || ''}
+                            getValue={() => modal.apiKey?.value || ''}
                           />
                         </InputAdornment>
                       ),
@@ -169,7 +169,7 @@ const ApiKeys = () => {
                 closeModalHandler={handleCloseModal}
               />
             )}
-            {modal.view === modalApiKeyView.BLOCK && (
+            {modal.view === ModalApiKeyView.BLOCK && (
               <ApiKeyModal
                 titleSx={{ marginBottom: 2 }}
                 title={t('block-api-key')}
@@ -182,10 +182,10 @@ const ApiKeys = () => {
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
                 actionButtonLabel={t('block-button')}
-                actionHandler={() => apiKeyBlocked(modal.apiKey?.apiKey as string)}
+                actionHandler={() => apiKeyBlocked(modal.apiKey?.id as string)}
               />
             )}
-            {modal.view === modalApiKeyView.ENABLE && (
+            {modal.view === ModalApiKeyView.ENABLE && (
               <ApiKeyModal
                 titleSx={{ marginBottom: 2 }}
                 title={t('enable-api-key')}
@@ -193,10 +193,10 @@ const ApiKeys = () => {
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
                 actionButtonLabel={t('enable-button')}
-                actionHandler={() => apiKeyEnabled(modal.apiKey?.apiKey as string)}
+                actionHandler={() => apiKeyEnabled(modal.apiKey?.id as string)}
               />
             )}
-            {modal.view === modalApiKeyView.ROTATE && (
+            {modal.view === ModalApiKeyView.ROTATE && (
               <ApiKeyModal
                 titleSx={{ marginBottom: 2 }}
                 title={t('rotate-api-key')}
@@ -205,10 +205,10 @@ const ApiKeys = () => {
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
                 actionButtonLabel={t('rotate-button')}
-                actionHandler={() => apiKeyRotated(modal.apiKey?.apiKey as string)}
+                actionHandler={() => apiKeyRotated(modal.apiKey?.id as string)}
               />
             )}
-            {modal.view === modalApiKeyView.DELETE && (
+            {modal.view === ModalApiKeyView.DELETE && (
               <ApiKeyModal
                 titleSx={{ marginBottom: 2 }}
                 title={t('delete-api-key')}
@@ -216,7 +216,7 @@ const ApiKeys = () => {
                 closeButtonLabel={t('cancel-button')}
                 closeModalHandler={handleCloseModal}
                 actionButtonLabel={t('delete-button')}
-                actionHandler={() => apiKeyDeleted(modal.apiKey?.apiKey as string)}
+                actionHandler={() => apiKeyDeleted(modal.apiKey?.id as string)}
               />
             )}
           </Box>

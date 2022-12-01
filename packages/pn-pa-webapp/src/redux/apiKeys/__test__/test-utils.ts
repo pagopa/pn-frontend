@@ -4,6 +4,7 @@ export const mockApiKeysFromBE: GetApiKeysResponse = {
   items: [
     {
       id: '9e522ef5-a024-4dbd-8a59-3e090c637659',
+      value: '9e522ef5-a024-4dbd-8a59-3e090c637650',
       name: 'Rimborso e multe',
       lastUpdate: '21/09/2022',
       groups: ['Gruppo1', 'Gruppo2', 'Gruppo3', 'Gruppo4', 'Gruppo5'],
@@ -28,6 +29,7 @@ export const mockApiKeysFromBE: GetApiKeysResponse = {
     },
     {
       id: '9e522ef5-a024-4dbd-8a59-3e090c637651',
+      value: '9e522ef5-a024-4dbd-8a59-3e090c637652',
       name: 'Cartelle esattoriali',
       lastUpdate: '22/09/2022',
       groups: ['Gruppo1', 'Gruppo2', 'Gruppo3'],
@@ -52,6 +54,7 @@ export const mockApiKeysFromBE: GetApiKeysResponse = {
     },
     {
       id: '9e522ef5-a024-4dbd-8a59-3e090c637653',
+      value: '9e522ef5-a024-4dbd-8a59-3e090c637654',
       name: 'Rimborsi',
       lastUpdate: '22/09/2022',
       groups: ['Gruppo1', 'Gruppo2', 'Gruppo3'],
@@ -77,7 +80,4 @@ export const mockApiKeysFromBE: GetApiKeysResponse = {
   ],
 };
 
-export const mockApiKeysForFE = mockApiKeysFromBE.items.map((item) => ({
-  ...item,
-  apiKey: item.id,
-}));
+export const mockApiKeysForFE = mockApiKeysFromBE.items;

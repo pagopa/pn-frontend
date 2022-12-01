@@ -6,10 +6,9 @@ const setResponseError = (response: number) => (response === 200 ? 'success' : '
 
 export const ApiKeysApi = {
   getApiKeys: (): Promise<Array<ApiKey>> =>
-    apiClient.get<GetApiKeysResponse>(APIKEY_LIST()).then((response) => {
+    apiClient.get<GetApiKeysResponse>(APIKEY_LIST(), {params: {showVirtualKey: true}}).then((response) => {
       if (response.data && response.data.items) {
-        const data = response.data;
-        return data.items.map((item) => ({ ...item, apiKey: item.id }));
+        return response.data.items;
       }
       return [];
     }),
