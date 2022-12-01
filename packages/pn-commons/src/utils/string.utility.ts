@@ -27,3 +27,72 @@ export function formatFiscalCode(fiscalCode: string): string {
   return fiscalCode.toUpperCase();
 }
 
+/**
+ * Check if the attribute is potentially dangerous
+ * @param  {String}  name  The attribute name
+ * @param  {String}  value The attribute value
+ * @return {Boolean}       If true, the attribute is potentially dangerous
+ */
+ function isPossiblyDangerous (name: string, value: string): boolean {
+	let val = value.replace(/\s+/g, '').toLowerCase();
+	if (['src', 'href', 'xlink:href'].includes(name)) {
+		if (val.includes('javascript:') || val.includes('data:text/html')) return true;
+	}
+	if (name.startsWith('on')) return true;
+  return false;
+}
+
+/**
+ * Remove potentially dangerous attributes from an element
+ * @param  {Element} elem The element
+ */
+ function removeAttributes (elem: Element) {
+	// Loop through each attribute
+	// If it's dangerous, remove it
+	let atts = elem.attributes;
+	for (let {name, value} of atts) {
+		if (!isPossiblyDangerous(name, value)) continue;
+		elem.removeAttribute(name);
+	}
+}
+
+/**
+ * Remove <script> elements
+ * @param  {Document} html The HTML
+ */
+ function removeScripts (html: Document) {
+	let scripts = html.querySelectorAll('script');
+	for (let script of scripts) {
+		script.remove();
+	}
+}
+
+/**
+ * Remove dangerous stuff from the HTML document's nodes
+ * @param  {Document | Element} html The HTML document
+ */
+ function clean (html: Document | Element) {
+	let nodes = html.children;
+	for (let node of nodes) {
+		removeAttributes(node);
+		clean(node);
+	}
+}
+
+/**
+ * Remove dangerous code from a string.
+ * @param  {string} srt
+ * @returns string
+ */
+export function sanitizeString(srt: string): string {
+  // convert string to html without rendering it
+  const parser = new DOMParser();
+  const html = parser.parseFromString(srt, 'text/html');
+  // remove script
+  removeScripts(html);
+  // remove malicious attributes
+  clean(html);
+  // return sanitized string
+  return html.body.innerHTML;
+}
+
