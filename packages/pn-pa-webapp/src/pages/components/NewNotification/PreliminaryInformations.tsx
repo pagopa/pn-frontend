@@ -191,7 +191,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                 data-testid="comunicationTypeRadio"
               />
               <FormControlLabel
-                value={PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER}
+                value={PhysicalCommunicationType.AR_REGISTERED_LETTER}
                 control={<Radio />}
                 label={t('simple-registered-letter')}
                 data-testid="comunicationTypeRadio"
