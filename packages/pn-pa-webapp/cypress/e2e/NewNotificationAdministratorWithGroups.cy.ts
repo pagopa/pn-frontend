@@ -1,7 +1,6 @@
 import { cesare } from '../fixtures/recipients/recipients';
 import {CREATE_NOTIFICATION} from '../../src/api/notifications/notifications.routes';
 import { PNRole } from '../../src/models/user';
-import { User } from '../../src/redux/auth/types';
 describe("Notifications New Notification", () => {
   const pdfTest1 = './cypress/fixtures/attachments/pdf_test_1.pdf';
   const pdfTest2 = './cypress/fixtures/attachments/pdf_test_2.pdf';
@@ -13,7 +12,7 @@ describe("Notifications New Notification", () => {
     cy.viewport(1920, 1080);
 
     cy.logout();
-    cy.loginWithTokenExchange();    
+    cy.loginWithTokenExchange(PNRole.ADMIN);    
 
     // intercepts send notification request stubbing its successful response
     cy.intercept('POST', CREATE_NOTIFICATION(), {
@@ -31,12 +30,6 @@ describe("Notifications New Notification", () => {
 
   it.only('Create new notification with groups and administrator role', () => {
 
-    cy.window().then((win) => {
-      let user: User = JSON.parse(win.sessionStorage.getItem('user'));
-      user.organization.roles[0].role = PNRole.ADMIN;
-      win.sessionStorage.setItem('user', JSON.stringify(user));
-    });
-
     cy.intercept(/groups/, { fixture: 'groups/groups' });
     
     // Fill step 1
@@ -48,10 +41,14 @@ describe("Notifications New Notification", () => {
       communicationType: 'Model_890',
       paymentMethod: 'pagoPA'
     });
+
+    // The following validation need to be resolved with PN-2198
+    // cy.get('button[type="submit"]').should('be.disabled')
+
     cy.get('#group').click();
     cy.get('.MuiMenuItem-root').click();
 
-    cy.get('button[type="submit"]').should('not.be.disabled').click();
+    cy.get('button[type="submit"]').should('be.enabled').click();
 
     cy.fillRecipient({
       position: 0,
