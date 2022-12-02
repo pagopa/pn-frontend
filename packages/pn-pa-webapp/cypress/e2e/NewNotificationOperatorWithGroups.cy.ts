@@ -59,18 +59,18 @@ describe("Notifications New Notification", () => {
       }
     });
     
-    cy.get('button[type="submit"]').should('not.be.disabled').click();
+    cy.get('button[type="submit"]').should('be.enabled').click();
     
     // Fill step 3
     cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
     cy.get('input[name="documents\.0\.name"]').type('pdf di Test 1');
-    cy.get('button[type="submit"]').should('not.be.disabled').click();
+    cy.get('button[type="submit"]').should('be.enabled').click();
 
     cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
     // Fill step 4
     cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-    cy.get('button[type="submit"]').should('not.be.disabled').click();
+    cy.get('button[type="submit"]').should('be.enabled').click();
 
     cy.wait('@saveNewNotification');
 
