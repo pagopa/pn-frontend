@@ -274,7 +274,14 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef 
 
   useImperativeHandle(forwardedRef, () => ({
     confirm() {
-      handlePreviousStep();
+      dispatch(
+        setAttachments({
+          documents: formik.values.documents.map((v) => ({
+            ...v,
+            id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+          })),
+        })
+      );
     },
   }));
 
@@ -328,6 +335,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef 
   );
 };
 
+// This is a workaorund to prevent cognitive complexity warning
 export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
   <Attachments {...props} forwardedRef={ref} />
 ));

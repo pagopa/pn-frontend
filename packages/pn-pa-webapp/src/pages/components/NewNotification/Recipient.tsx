@@ -337,7 +337,7 @@ const Recipient = ({
 
   useImperativeHandle(forwardedRef, () => ({
     confirm() {
-      handlePreviousStep(formRef.current ? formRef.current.values : { recipients: [] });
+      dispatch(saveRecipients(formRef.current ? formRef.current.values : { recipients: [] }));
     },
   }));
 
@@ -610,4 +610,7 @@ const Recipient = ({
   );
 };
 
-export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => <Recipient {...props} forwardedRef={ref} />);
+// This is a workaorund to prevent cognitive complexity warning
+export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
+  <Recipient {...props} forwardedRef={ref} />
+));

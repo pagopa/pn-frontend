@@ -275,7 +275,7 @@ const PaymentMethods = ({
 
   useImperativeHandle(forwardedRef, () => ({
     confirm() {
-      handlePreviousStep();
+      dispatch(setPaymentDocuments({ paymentDocuments: formatPaymentDocuments() }));
     },
   }));
 
@@ -366,6 +366,7 @@ const PaymentMethods = ({
   );
 };
 
+// This is a workaorund to prevent cognitive complexity warning
 export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
   <PaymentMethods {...props} forwardedRef={ref} />
 ));

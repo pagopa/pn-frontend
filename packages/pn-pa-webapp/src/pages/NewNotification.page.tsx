@@ -96,6 +96,7 @@ const NewNotification = () => {
       // navigation event from stepper
       if (childRef.current) {
         childRef.current.confirm();
+        setActiveStep(selectedStep);
       }
     } else {
       setActiveStep(activeStep - 1);
