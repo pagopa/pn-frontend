@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react';
+import { ForwardedRef, forwardRef, Fragment, useImperativeHandle, useMemo } from 'react';
 import _ from 'lodash';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
@@ -61,6 +61,7 @@ type Props = {
   onConfirm: () => void;
   onPreviousStep?: (step?: number) => void;
   isCompleted: boolean;
+  forwardedRef: ForwardedRef<unknown>;
 };
 
 const emptyFileData = {
@@ -82,7 +83,13 @@ const newPaymentDocument = (id: string, name: string): NewNotificationDocument =
   },
 });
 
-const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }: Props) => {
+const PaymentMethods = ({
+  notification,
+  onConfirm,
+  isCompleted,
+  onPreviousStep,
+  forwardedRef,
+}: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.payment-methods',
@@ -266,6 +273,12 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
     });
   };
 
+  useImperativeHandle(forwardedRef, () => ({
+    confirm() {
+      handlePreviousStep();
+    },
+  }));
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <NewNotificationCard
@@ -353,4 +366,6 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
   );
 };
 
-export default PaymentMethods;
+export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
+  <PaymentMethods {...props} forwardedRef={ref} />
+));

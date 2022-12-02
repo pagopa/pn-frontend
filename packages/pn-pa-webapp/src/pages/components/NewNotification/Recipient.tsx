@@ -1,7 +1,7 @@
-import { ChangeEvent, ReactNode } from 'react';
+import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikProps, FormikErrors } from 'formik';
 import { Add, Delete } from '@mui/icons-material';
 import {
   FormControl,
@@ -23,10 +23,15 @@ import { useAppDispatch } from '../../../redux/hooks';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
-import { getDuplicateValuesByKeys } from '../../../utils/notification.utility';
 import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
+import {
+  denominationTotalLength,
+  identicalIUV,
+  identicalTaxIds,
+  taxIdDependingOnRecipientType,
+} from './Recipient.validations';
 
 const singleRecipient = {
   recipientType: RecipientType.PF,
@@ -50,19 +55,31 @@ const singleRecipient = {
   showPhysicalAddress: false,
 };
 
+type FormRecipients = {
+  recipients: Array<NewNotificationRecipient>;
+};
+
 type Props = {
   paymentMode: PaymentModel | undefined;
   onConfirm: () => void;
   onPreviousStep?: () => void;
   recipientsData?: Array<NewNotificationRecipient>;
+  forwardedRef: ForwardedRef<unknown>;
 };
 
-const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: Props) => {
+const Recipient = ({
+  paymentMode,
+  onConfirm,
+  onPreviousStep,
+  recipientsData,
+  forwardedRef,
+}: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.recipient',
   });
   const { t: tc } = useTranslation(['common']);
+  const formRef = useRef<FormikProps<FormRecipients>>();
   // TODO all validation code shoduld be put in a different file in order to make this file more readable
   // moreover cross-validation between form items is resulting in bad input performance
   const initialValues =
@@ -87,16 +104,15 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
         .test({
           name: 'denominationTotalLength',
           test(value) {
-            const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
-            const isAcceptableLength =
-              (value || '').length + ((this.parent.lastName as string) || '').length <= maxLength;
-            if (isAcceptableLength) {
+            const messageKey = denominationTotalLength(
+              value,
+              this.parent.recipientType,
+              this.parent.lastName
+            );
+            if (!messageKey) {
               return true;
-            } else {
-              // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
-              const messageKey = `too-long-denomination-error-${this.parent.recipientType || 'PF'}`;
-              return this.createError({ message: t(messageKey), path: this.path });
             }
+            return this.createError({ message: t(messageKey), path: this.path });
           },
         }),
       // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
@@ -110,12 +126,7 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
         .required(tc('required-field'))
         // validazione su CF: deve accettare solo formato a 16 caratteri per PF, e sia 16 sia 11 caratteri per PG
         .test('taxIdDependingOnRecipientType', t('fiscal-code-error'), function (value) {
-          if (!value) {
-            return true;
-          }
-          const isCF16 = dataRegex.fiscalCode.test(value);
-          const isCF11 = dataRegex.pIva.test(value);
-          return isCF16 || (this.parent.recipientType === RecipientType.PG && isCF11);
+          return taxIdDependingOnRecipientType(value, this.parent.recipientType);
         }),
       digitalDomicile: yup.string().when('showDigitalDomicile', {
         is: true,
@@ -157,7 +168,6 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
     if (paymentMode !== PaymentModel.NOTHING) {
       return {
         ...validationObject,
-        // .matches(dataRegex.fiscalCode, t('fiscal-code-error')),
         creditorTaxId: yup
           .string()
           .required(tc('required-field'))
@@ -177,60 +187,27 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
       .array()
       .of(yup.object(buildRecipientValidationObject()))
       .test('identicalTaxIds', t('identical-fiscal-codes-error'), (values) => {
-        if (values) {
-          const duplicatesTaxIds = getDuplicateValuesByKeys(values, ['taxId']);
-          if (duplicatesTaxIds.length > 0) {
-            const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
-            values.forEach((value, i) => {
-              if (value.taxId && duplicatesTaxIds.includes(value.taxId)) {
-                // eslint-disable-next-line functional/immutable-data
-                errors.push(
-                  new yup.ValidationError(
-                    t('identical-fiscal-codes-error'),
-                    value,
-                    `recipients[${i}].taxId`
-                  )
-                );
-              }
-            });
-            return errors.length === 0 ? true : new yup.ValidationError(errors);
-          } else {
-            return true;
-          }
-        }
-        return true;
-      })
-      // TODO the form needs some typing definition (any should not be allowed)
-      // here we have any because we add or remove creditorTaxId and noticeCode to the form based on the chosen paymentModel
-      .test('identicalIUV', t('identical-fiscal-codes-error'), (values: any) => {
-        if (values && paymentMode !== PaymentModel.NOTHING) {
-          const duplicateIUVs = getDuplicateValuesByKeys(values, ['creditorTaxId', 'noticeCode']);
-          if (duplicateIUVs.length > 0) {
-            const errors: string | yup.ValidationError | Array<yup.ValidationError> = [];
-            values.forEach((value: { creditorTaxId: string; noticeCode: string }, i: number) => {
-              if (
-                value.creditorTaxId &&
-                value.noticeCode &&
-                duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
-              ) {
-                // eslint-disable-next-line functional/immutable-data
-                errors.push(
-                  new yup.ValidationError(
-                    t('identical-notice-codes-error'),
-                    value,
-                    `recipients[${i}].noticeCode`
-                  ),
-                  new yup.ValidationError(' ', value, `recipients[${i}].creditorTaxId`)
-                );
-              }
-            });
-            return errors.length === 0 ? true : new yup.ValidationError(errors);
-          } else {
-            return true;
-          }
-        } else {
+        const errors = identicalTaxIds(values as Array<NewNotificationRecipient> | undefined);
+        if (errors.length === 0) {
           return true;
         }
+        return new yup.ValidationError(
+          errors.map((e) => new yup.ValidationError(t(e.messageKey), e.value, e.id))
+        );
+      })
+      .test('identicalIUV', t('identical-fiscal-codes-error'), (values) => {
+        const errors = identicalIUV(
+          values as Array<NewNotificationRecipient> | undefined,
+          paymentMode
+        );
+        if (errors.length === 0) {
+          return true;
+        }
+        return new yup.ValidationError(
+          errors.map(
+            (e) => new yup.ValidationError(e.messageKey ? t(e.messageKey) : '', e.value, e.id)
+          )
+        );
       }),
   });
 
@@ -283,10 +260,7 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
     }
   };
 
-  const handleAddRecipient = (
-    values: { recipients: Array<NewNotificationRecipient> },
-    setFieldValue: any
-  ) => {
+  const handleAddRecipient = (values: FormRecipients, setFieldValue: any) => {
     const lastRecipientIdx = values.recipients[values.recipients.length - 1].idx;
     setFieldValue('recipients', [
       ...values.recipients,
@@ -297,20 +271,75 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
     });
   };
 
-  const handleSubmit = (values: { recipients: Array<NewNotificationRecipient> }) => {
+  const handleSubmit = (values: FormRecipients) => {
     dispatch(saveRecipients(values));
     onConfirm();
   };
 
-  const handlePreviousStep = (values: { recipients: Array<NewNotificationRecipient> }) => {
+  const handlePreviousStep = (values: FormRecipients) => {
     dispatch(saveRecipients(values));
     if (onPreviousStep) {
       onPreviousStep();
     }
   };
 
-  const paymentReferenceData = (data: ReactNode) =>
-    paymentMode === PaymentModel.NOTHING ? '' : data;
+  const deleteRecipientHandler = (
+    errors: FormikErrors<FormRecipients>,
+    index: number,
+    values: FormRecipients,
+    setFieldTouched: (
+      field: string,
+      isTouched?: boolean | undefined,
+      shouldValidate?: boolean | undefined
+    ) => void,
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
+  ) => {
+    if (errors && errors.recipients && errors.recipients[index]) {
+      setFieldTouched(`recipients.${index}`, false, false);
+    }
+    setFieldValue(
+      'recipients',
+      values.recipients.filter((_, j) => index !== j),
+      true
+    );
+  };
+
+  const changeRecipientTypeHandler = (
+    event: any,
+    index: number,
+    values: FormRecipients,
+    setFieldValue: (field: string, value: any, shouldValidate?: boolean | undefined) => void
+  ) => {
+    const valuesToUpdate: {
+      recipientType: RecipientType;
+      firstName: string;
+      lastName?: string;
+    } = {
+      recipientType: event.currentTarget.value as RecipientType,
+      firstName: '',
+    };
+    if (event.currentTarget.value === RecipientType.PG) {
+      /* eslint-disable-next-line functional/immutable-data */
+      valuesToUpdate.lastName = '';
+    }
+    // I take profit that any level in the value structure can be used in setFieldValue ...
+    setFieldValue(`recipients[${index}]`, {
+      ...values.recipients[index],
+      ...valuesToUpdate,
+    });
+    // In fact, I would have liked to specify the change through a function, i.e.
+    //   setFieldValue(`recipients[${index}]`, (currentValue: any) => ({...currentValue, ...valuesToUpdate}));
+    // but unfortunately Formik' setFieldValue is not capable of handling such kind of updates.
+    trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
+      type: event.currentTarget.value,
+    });
+  };
+
+  useImperativeHandle(forwardedRef, () => ({
+    confirm() {
+      handlePreviousStep(formRef.current ? formRef.current.values : { recipients: [] });
+    },
+  }));
 
   return (
     <Formik
@@ -320,6 +349,8 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
       onSubmit={(values) => handleSubmit(values)}
       validateOnBlur={false}
       validateOnMount
+      // eslint-disable-next-line functional/immutable-data
+      innerRef={(form) => (formRef.current = form || undefined)}
     >
       {({
         values,
@@ -355,16 +386,15 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
                   {values.recipients.length > 1 && (
                     <Delete
                       data-testid="DeleteRecipientIcon"
-                      onClick={() => {
-                        if (errors && errors.recipients && errors.recipients[index]) {
-                          setFieldTouched(`recipients.${index}`, false, false);
-                        }
-                        setFieldValue(
-                          'recipients',
-                          values.recipients.filter((_, j) => index !== j),
-                          true
-                        );
-                      }}
+                      onClick={() =>
+                        deleteRecipientHandler(
+                          errors,
+                          index,
+                          values,
+                          setFieldTouched,
+                          setFieldValue
+                        )
+                      }
                     />
                   )}
                 </Stack>
@@ -377,33 +407,9 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
                         defaultValue={RecipientType.PF}
                         name={`recipients[${index}].recipientType`}
                         value={values.recipients[index].recipientType}
-                        onChange={(event) => {
-                          const valuesToUpdate: {
-                            recipientType: RecipientType;
-                            firstName: string;
-                            lastName?: string;
-                          } = {
-                            recipientType: event.currentTarget.value as RecipientType,
-                            firstName: '',
-                          };
-                          if (event.currentTarget.value === RecipientType.PG) {
-                            /* eslint-disable-next-line functional/immutable-data */
-                            valuesToUpdate.lastName = '';
-                          }
-
-                          // I take profit that any level in the value structure can be used in setFieldValue ...
-                          setFieldValue(`recipients[${index}]`, {
-                            ...values.recipients[index],
-                            ...valuesToUpdate,
-                          });
-                          // In fact, I would have liked to specify the change through a function, i.e.
-                          //   setFieldValue(`recipients[${index}]`, (currentValue: any) => ({...currentValue, ...valuesToUpdate}));
-                          // but unfortunately Formik' setFieldValue is not capable of handling such kind of updates.
-
-                          trackEventByType(TrackEventType.NOTIFICATION_SEND_RECIPIENT_TYPE, {
-                            type: event.currentTarget.value,
-                          });
-                        }}
+                        onChange={(event) =>
+                          changeRecipientTypeHandler(event, index, values, setFieldValue)
+                        }
                       >
                         <Grid container spacing={2}>
                           <Grid item xs={4}>
@@ -475,7 +481,7 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
                         handleBlur={handleBlur}
                         width={12}
                       />
-                      {paymentReferenceData(
+                      {paymentMode !== PaymentModel.NOTHING && (
                         <>
                           <FormTextField
                             keyName={`recipients[${index}].creditorTaxId`}
@@ -604,4 +610,4 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
   );
 };
 
-export default Recipient;
+export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => <Recipient {...props} forwardedRef={ref} />);

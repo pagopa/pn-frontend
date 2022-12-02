@@ -1,4 +1,11 @@
-import { ChangeEvent, Fragment, useMemo } from 'react';
+import {
+  ChangeEvent,
+  forwardRef,
+  Fragment,
+  useMemo,
+  ForwardedRef,
+  useImperativeHandle,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { FormikErrors, useFormik } from 'formik';
 import * as yup from 'yup';
@@ -102,6 +109,7 @@ type Props = {
   onConfirm: () => void;
   onPreviousStep?: () => void;
   attachmentsData?: Array<NewNotificationDocument>;
+  forwardedRef: ForwardedRef<unknown>;
 };
 
 const emptyFileData = {
@@ -123,7 +131,7 @@ const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument
   },
 });
 
-const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
+const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef }: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.attachments',
@@ -209,22 +217,19 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
       size,
       uint8Array: file,
       sha256,
-      name
+      name,
     });
   };
 
   const removeFileHandler = async (id: string, index: number) => {
-    await formik.setFieldValue(
-      id,
-      {
-        ...formik.values.documents[index],
-        file: emptyFileData,
-        ref: {
-          key: '',
-          versionToken: '',
-        }
-      }
-    );
+    await formik.setFieldValue(id, {
+      ...formik.values.documents[index],
+      file: emptyFileData,
+      ref: {
+        key: '',
+        versionToken: '',
+      },
+    });
   };
 
   const addDocumentHandler = async () => {
@@ -239,19 +244,17 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
 
   const deleteDocumentHandler = async (index: number) => {
     await formik.setFieldTouched(`documents.${index}`, false, false);
-    
-    const documents = formik
-      .values
-      .documents
+
+    const documents = formik.values.documents
       .filter((_d, i) => i !== index)
       .map((document, i) => ({
         ...document,
         idx: i,
-        id: document.id.indexOf('.file') !== -1 ? `documents.${i}.file` : `documents.${i}`
+        id: document.id.indexOf('.file') !== -1 ? `documents.${i}.file` : `documents.${i}`,
       }));
 
     await formik.setValues({
-      documents
+      documents,
     });
   };
 
@@ -268,6 +271,12 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
       onPreviousStep();
     }
   };
+
+  useImperativeHandle(forwardedRef, () => ({
+    confirm() {
+      handlePreviousStep();
+    },
+  }));
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -304,19 +313,21 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
             sx={{ marginTop: i > 0 ? '30px' : '10px' }}
           />
         ))}
-        {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS &&
+        {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS && (
           <ButtonNaked
             onClick={addDocumentHandler}
             color="primary"
-            startIcon={<AddIcon/>}
-            sx={{marginTop: '30px'}}
+            startIcon={<AddIcon />}
+            sx={{ marginTop: '30px' }}
           >
             {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
           </ButtonNaked>
-        }
+        )}
       </NewNotificationCard>
     </form>
   );
 };
 
-export default Attachments;
+export default forwardRef((props: Omit<Props, 'forwardedRef'>, ref) => (
+  <Attachments {...props} forwardedRef={ref} />
+));
