@@ -3,7 +3,7 @@ export interface ApiKey {
   name: string;
   value: string;
   lastUpdate: string;
-  groups: Array<ApiKeyStatus>;
+  groups: Array<string>;
   status: ApiKeyStatus;
   statusHistory: Array<ApiKeyStatusHistory>;
 }
@@ -49,7 +49,7 @@ export interface GetNewApiKeyResponse {
 
 export interface NewApiKeyBE {
   name: string;
-  groups: Array<ApiKeyStatus>;
+  groups: Array<string>;
 }
 
 export interface ApiKeyStatusBE {
