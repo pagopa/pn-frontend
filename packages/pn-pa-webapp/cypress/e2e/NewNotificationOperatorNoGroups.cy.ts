@@ -42,6 +42,8 @@ describe("Notifications New Notification", () => {
       paymentMethod: 'pagoPA'
     });
 
+    cy.get('#group').should('be.disabled');
+
     cy.get('button[type="submit"]').should('be.enabled').click();
 
     cy.fillRecipient({
