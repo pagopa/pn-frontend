@@ -66,6 +66,7 @@
     ]
   },
   "devDependencies": {
+    "sonarqube-scanner": "^2.8.1",
     "@cypress/webpack-preprocessor": "^5.12.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",

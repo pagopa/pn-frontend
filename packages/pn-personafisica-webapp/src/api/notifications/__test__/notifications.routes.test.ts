@@ -5,6 +5,7 @@ import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
 } from '../notifications.routes';
@@ -48,5 +49,10 @@ describe('Notifications routes', () => {
   it('should compile NOTIFICATION_PAYMENT_INFO', () => {
     const route = NOTIFICATION_PAYMENT_INFO('mocked-taxId', 'mocked-noticeCode');
     expect(route).toEqual('/ext-registry/pagopa/v1/paymentinfo/mocked-taxId/mocked-noticeCode');
+  });
+
+  it('should compile NOTIFICATION_ID_FROM_QRCODE', () => {
+    const route = NOTIFICATION_ID_FROM_QRCODE();
+    expect(route).toEqual('/delivery/notifications/received/check-aar-qr-code');
   });
 });

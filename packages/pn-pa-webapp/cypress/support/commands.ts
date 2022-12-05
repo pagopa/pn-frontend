@@ -1,4 +1,5 @@
 /// <reference types="cypress" />
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -36,17 +37,38 @@
 //   }
 // }
 
+import { PNRole } from '../../src/models/user';
+import { User } from '../../src/redux/auth/types';
+import './NewNotification';
+
+/*
+  * Set user role
+  */
+Cypress.Commands.add('setRole', (role: PNRole) => {
+  cy.window().then((win) => {
+    let user: User = JSON.parse(win.sessionStorage.getItem('user'));
+    user.organization.roles[0].role = role;
+    win.sessionStorage.setItem('user', JSON.stringify(user));
+  });
+});
+
 /*
   * Login with token exchange
   */
-Cypress.Commands.add('loginWithTokenExchange', () => {
+Cypress.Commands.add('loginWithTokenExchange', (role?: PNRole) => {
   cy.intercept({
     method:'POST',
     url: /token-exchange/
   }).as('login');
   cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
   cy.wait('@login');
+  if (role) {
+    cy.log(`Setting user role to ${role}`);
+    cy.setRole(role);
+  }
 });
+
+
 
 /**
  * Logout programmatically
@@ -88,3 +110,4 @@ Cypress.Commands.add('loginWithUI', () => {
     ':nth-child(7) > .MuiPaper-root > .MuiCardContent-root > .MuiGrid-container > .css-gzsrxl > .MuiCardActions-root > .MuiButton-root'
   ).click();
 });
+

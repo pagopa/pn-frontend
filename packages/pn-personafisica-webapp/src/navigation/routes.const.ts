@@ -7,10 +7,13 @@ export const PROFILO = '/profilo';
 const NOTIFICA = '/dettaglio';
 export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
 export const DETTAGLIO_NOTIFICA_DELEGATO = `${NOTIFICHE_DELEGATO}/:id${NOTIFICA}`;
+export const DETTAGLIO_NOTIFICA_QRCODE_PATH = '/notifica';
+export const DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM = 'aar';
 export const NUOVA_DELEGA = `${DELEGHE}/nuova`;
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${NOTIFICA}`;
 export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: string) => `${NOTIFICHE}/${mandateId}/${id}${NOTIFICA}`;
 export const RECAPITI = '/recapiti';
 export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/${mandateId}`;
+export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 

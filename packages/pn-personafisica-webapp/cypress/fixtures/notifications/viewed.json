@@ -1,0 +1,260 @@
+{
+  "abstract": "",
+  "paProtocolNumber": "prot-12346018",
+  "subject": "Test 0001",
+  "recipients": [
+    {
+      "recipientType": "PF",
+      "taxId": "CSRGGL44L13H501E",
+      "internalId": "PF-a01b62d4-e3f8-48f3-a4d8-cf628a34b745",
+      "denomination": "Gaio Giulio Cesare",
+      "digitalDomicile": { "type": "PEC", "address": "gcesare@test.pagopa.it" },
+      "physicalAddress": {
+        "at": "",
+        "address": "Via Appia 1",
+        "addressDetails": "",
+        "zip": "00186",
+        "municipality": "Roma",
+        "municipalityDetails": "",
+        "province": "RM",
+        "foreignState": "Italia"
+      },
+      "payment": {
+        "noticeCode": "302001869076320201",
+        "creditorTaxId": "77777777777",
+        "pagoPaForm": {
+          "digests": {
+            "sha256": "XZXeu4boxpq6To7rj+Hsmge3QrGybiUWHdBGMx1Kx9s="
+          },
+          "contentType": "application/pdf",
+          "ref": {
+            "key": "PN_NOTIFICATION_ATTACHMENTS-0001-J0ZW-28UW-4KWG-1EBT",
+            "versionToken": "Ea5a9tyAZCR413qspfi1vEkHF3E927Rz"
+          }
+        },
+        "f24standard": {
+          "digests": {
+            "sha256": "6HJVJUxum8/8mkBDXFiMT4CWywY6DH4WVS8+09V0FUg="
+          },
+          "contentType": "application/pdf",
+          "ref": {
+            "key": "PN_NOTIFICATION_ATTACHMENTS-0001-PS8Y-HUF2-LL1X-3Y1Q",
+            "versionToken": "u_ZhTEkiHoJUL3157SC6IPjTkexyocIA"
+          }
+        }
+      }
+    }
+  ],
+  "documents": [
+    {
+      "digests": { "sha256": "jezIVxlG1M1woCSUngM6KipUN3/p8cG5RMIPnuEanlE=" },
+      "contentType": "application/pdf",
+      "ref": {
+        "key": "PN_NOTIFICATION_ATTACHMENTS-0001-PVLS-B9XI-008Z-2VBU",
+        "versionToken": "4CxExyPjxEEa_ESNBRPq4nvRGCBMi7QE"
+      },
+      "title": "Multa per eccesso di velocità",
+      "docIdx": "0"
+    }
+  ],
+  "notificationFeePolicy": "FLAT_RATE",
+  "physicalCommunicationType": "REGISTERED_LETTER_890",
+  "senderDenomination": "Comune di Milano",
+  "senderTaxId": "80016350821",
+  "group": "",
+  "taxonomyCode": "654321A",
+  "senderPaId": "5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce",
+  "iun": "XQPQ-MAJP-HMTJ-202211-E-1",
+  "sentAt": "2022-11-22T15:08:30.951031Z",
+  "documentsAvailable": true,
+  "notificationStatus": "VIEWED",
+  "notificationStatusHistory": [
+    {
+      "status": "ACCEPTED",
+      "activeFrom": "2022-11-22T15:08:30.951031Z",
+      "relatedTimelineElements": [
+        "XQPQ-MAJP-HMTJ-202211-E-1_request_accepted",
+        "XQPQ-MAJP-HMTJ-202211-E-1_aar_gen_0",
+        "XQPQ-MAJP-HMTJ-202211-E-1_get_address_0_source_PLATFORM_attempt_0",
+        "XQPQ-MAJP-HMTJ-202211-E-1_get_address_0_source_SPECIAL_attempt_0"
+      ]
+    },
+    {
+      "status": "DELIVERING",
+      "activeFrom": "2022-11-22T15:09:38.455208Z",
+      "relatedTimelineElements": [
+        "XQPQ-MAJP-HMTJ-202211-E-1_send_digital_domicile_0_source_SPECIAL_attempt_0",
+        "XQPQ-MAJP-HMTJ-202211-E-1_digital_delivering_progress_0_source_SPECIAL_attempt_0_progidx_1",
+        "XQPQ-MAJP-HMTJ-202211-E-1_send_digital_feedback_0_source_SPECIAL_attempt_0"
+      ]
+    },
+    {
+      "status": "DELIVERED",
+      "activeFrom": "2022-11-22T15:10:00.833208Z",
+      "relatedTimelineElements": [
+        "XQPQ-MAJP-HMTJ-202211-E-1_digital_success_workflow_0",
+        "XQPQ-MAJP-HMTJ-202211-E-1_schedule_refinement_workflow_0"
+      ]
+    },
+    {
+      "status": "VIEWED",
+      "activeFrom": "2022-11-25T10:48:26.116856Z",
+      "relatedTimelineElements": [
+        "XQPQ-MAJP-HMTJ-202211-E-1_notification_viewed_0"
+      ]
+    }
+  ],
+  "timeline": [
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_request_accepted",
+      "timestamp": "2022-11-22T15:08:50.408734Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_LEGAL_FACTS-0002-ZYHH-EWH8-J96Y-GHJV",
+          "category": "SENDER_ACK"
+        }
+      ],
+      "category": "REQUEST_ACCEPTED"
+    },
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_aar_gen_0",
+      "timestamp": "2022-11-22T15:09:13.070945Z",
+      "legalFactsIds": [],
+      "category": "AAR_GENERATION",
+      "details": {
+        "recIndex": 0,
+        "errors": [],
+        "numberOfPages": 1,
+        "generatedAarUrl": "safestorage://PN_AAR-0002-QWJZ-DBVV-P2T4-TMZR"
+      }
+    },
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_get_address_0_source_PLATFORM_attempt_0",
+      "timestamp": "2022-11-22T15:09:38.404863Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddressSource": "PLATFORM",
+        "isAvailable": false,
+        "attemptDate": "2022-11-22T15:09:38.404861Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_get_address_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-22T15:09:38.429229Z",
+      "legalFactsIds": [],
+      "category": "GET_ADDRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddressSource": "SPECIAL",
+        "isAvailable": true,
+        "attemptDate": "2022-11-22T15:09:38.429228Z",
+        "errors": []
+      }
+    },
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_send_digital_domicile_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-22T15:09:38.455208Z",
+      "legalFactsIds": [],
+      "category": "SEND_DIGITAL_DOMICILE",
+      "details": {
+        "recIndex": 0,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "gcesare@test.pagopa.it"
+        },
+        "digitalAddressSource": "SPECIAL",
+        "errors": [],
+        "retryNumber": 0
+      }
+    },
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_digital_delivering_progress_0_source_SPECIAL_attempt_0_progidx_1",
+      "timestamp": "2022-11-22T15:09:50.096874Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_NOTIFICATION_ATTACHMENTS-0001-UUV8-0RXJ-PV7S-BWBU",
+          "category": "PEC_RECEIPT"
+        }
+      ],
+      "category": "SEND_DIGITAL_PROGRESS",
+      "details": {
+        "recIndex": 0,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "gcesare@test.pagopa.it"
+        },
+        "digitalAddressSource": "SPECIAL",
+        "errors": [],
+        "retryNumber": 0,
+        "notificationDate": "2022-11-22T15:09:51.351501Z",
+        "sendingReceipts": [{}],
+        "eventCode": "C001",
+        "shouldRetry": false
+      }
+    },
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_send_digital_feedback_0_source_SPECIAL_attempt_0",
+      "timestamp": "2022-11-22T15:09:59.100689Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_NOTIFICATION_ATTACHMENTS-0001-A0ZF-DC8X-6ZKS-ZT9W",
+          "category": "PEC_RECEIPT"
+        }
+      ],
+      "category": "SEND_DIGITAL_FEEDBACK",
+      "details": {
+        "recIndex": 0,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "gcesare@test.pagopa.it"
+        },
+        "digitalAddressSource": "SPECIAL",
+        "errors": [],
+        "responseStatus": "OK",
+        "notificationDate": "2022-11-22T15:09:59.100689Z",
+        "sendingReceipts": [{}]
+      }
+    },
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_digital_success_workflow_0",
+      "timestamp": "2022-11-22T15:10:00.833208Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_LEGAL_FACTS-0002-QE3Z-PO1N-GYFP-NWQ1",
+          "category": "DIGITAL_DELIVERY"
+        }
+      ],
+      "category": "DIGITAL_SUCCESS_WORKFLOW",
+      "details": {
+        "recIndex": 0,
+        "digitalAddress": {
+          "type": "PEC",
+          "address": "gcesare@test.pagopa.it"
+        },
+        "errors": []
+      }
+    },
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_schedule_refinement_workflow_0",
+      "timestamp": "2022-11-22T15:10:00.915149Z",
+      "legalFactsIds": [],
+      "category": "SCHEDULE_REFINEMENT",
+      "details": { "recIndex": 0, "errors": [] }
+    },
+    {
+      "elementId": "XQPQ-MAJP-HMTJ-202211-E-1_notification_viewed_0",
+      "timestamp": "2022-11-25T10:48:26.116856Z",
+      "legalFactsIds": [
+        {
+          "key": "safestorage://PN_LEGAL_FACTS-0002-XVU9-QOPG-DMBU-53R4",
+          "category": "RECIPIENT_ACCESS"
+        }
+      ],
+      "category": "NOTIFICATION_VIEWED",
+      "details": { "recIndex": 0, "notificationCost": 100, "errors": [] }
+    }
+  ]
+}

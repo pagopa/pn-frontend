@@ -15,6 +15,8 @@ const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
 const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
 const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
 const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
+const NotificationFromQrCode = React.lazy(() => import('../pages/NotificationFromQrCode.page'));
+const AppStatus = React.lazy(() => import('../pages/AppStatus.page'));
 
 function Router() {
   return (
@@ -25,6 +27,7 @@ function Router() {
           <Route path="/" element={<RouteGuard />}>
             <Route path="/" element={<ToSGuard />}>
               <Route path={routes.NOTIFICHE} element={<Notifiche />} />
+              <Route path={routes.DETTAGLIO_NOTIFICA_QRCODE_PATH} element={<NotificationFromQrCode />} />
               <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
               <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
               <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
@@ -32,6 +35,7 @@ function Router() {
               <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
               <Route path={routes.RECAPITI} element={<Contacts />} />
               <Route path={routes.PROFILO} element={<Profile />} />
+              <Route path={routes.APP_STATUS} element={<AppStatus />} />
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
             <Route path="*" element={<RouteGuard />}>

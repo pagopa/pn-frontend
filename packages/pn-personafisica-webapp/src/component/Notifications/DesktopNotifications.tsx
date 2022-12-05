@@ -11,6 +11,7 @@ import {
   Item,
   ItemsTable,
   EmptyState,
+  KnownSentiment,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../../navigation/routes.const';
@@ -137,7 +138,7 @@ const DesktopNotifications = ({
     emptyMessage: filtersApplied
       ? undefined
       : 'Non hai ricevuto nessuna notifica. Vai alla sezione',
-    disableSentimentDissatisfied: !filtersApplied,
+    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     secondaryMessage: filtersApplied
       ? undefined
       : {

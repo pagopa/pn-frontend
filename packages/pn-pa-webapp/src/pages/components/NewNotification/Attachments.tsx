@@ -36,6 +36,8 @@ type AttachmentBoxProps = {
   fileUploaded?: NewNotificationDocument;
 };
 
+const MAX_NUMBER_OF_ATTACHMENTS = 10;
+
 const AttachmentBox = ({
   id,
   title,
@@ -272,6 +274,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
       <NewNotificationCard
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}
+        subtitle={t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS })}
         previousStepLabel={t('back-to-recipient')}
         previousStepOnClick={() => handlePreviousStep()}
       >
@@ -301,14 +304,16 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
             sx={{ marginTop: i > 0 ? '30px' : '10px' }}
           />
         ))}
-        <ButtonNaked
-          onClick={addDocumentHandler}
-          color="primary"
-          startIcon={<AddIcon />}
-          sx={{ marginTop: '30px' }}
-        >
-          {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
-        </ButtonNaked>
+        {formik.values.documents.length <= MAX_NUMBER_OF_ATTACHMENTS &&
+          <ButtonNaked
+            onClick={addDocumentHandler}
+            color="primary"
+            startIcon={<AddIcon/>}
+            sx={{marginTop: '30px'}}
+          >
+            {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
+          </ButtonNaked>
+        }
       </NewNotificationCard>
     </form>
   );

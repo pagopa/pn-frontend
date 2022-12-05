@@ -60,14 +60,14 @@ const TermsOfService = () => {
 
   return (
     <Fragment>
-      <Grid container justifyContent="center" sx={{backgroundColor: "#FAFAFA"}}>
+      <Grid container height="100%" justifyContent="center" sx={{backgroundColor: "#FAFAFA"}}>
         <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
           <TOSAgreement
             productName={t('tos.title', 'Piattaforma Notifiche')}
             description={<Trans
               ns={'common'}
               i18nKey={'tos.switch-label'}
-              components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
+              components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
             >
               Accedendo, accetti i <TosLink>Termini e condizioni d’uso</TosLink> del servizio e
               confermi di aver letto l’<PrivacyLink>Informativa Privacy</PrivacyLink>.
