@@ -21,6 +21,7 @@ import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
+import { ApiKeyStatus } from '../models/ApiKeys';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
 const useStyles = makeStyles(() => ({
@@ -51,7 +52,7 @@ const NewApiKey = () => {
 
   const initialValues = () => ({
     name: '',
-    groups: [] as Array<string>,
+    groups: [] as Array<ApiKeyStatus>,
   });
 
   const validationSchema = yup.object({
@@ -71,11 +72,6 @@ const NewApiKey = () => {
     validationSchema,
     onSubmit: (values) => {
       if (formik.isValid) {
-        /*
-          Integrare logica di success / failure ed eventuale callback relativa.
-          Il setState setApiKeySent(true) mostra la schermata di avvenuto successo.
-        */
-
         void dispatch(saveNewApiKey({ ...values }));
         setApiKeySent(true);
       }
@@ -158,7 +154,7 @@ const NewApiKey = () => {
                           renderOption={(props, option) => (
                             <MenuItem {...props}>
                               <ListItemIcon>
-                                <Checkbox checked={formik.values.groups.indexOf(option) > -1} />
+                                <Checkbox checked={formik.values.groups.indexOf(option as ApiKeyStatus) > -1} />
                               </ListItemIcon>
                               <ListItemText primary={option} />
                             </MenuItem>

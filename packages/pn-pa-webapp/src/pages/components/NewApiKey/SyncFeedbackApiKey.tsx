@@ -55,7 +55,7 @@ const SyncFeedbackApiKey = ({ newApiKeyId = '' }) => {
           sx={{ marginTop: '30px' }}
           onClick={() => navigate(routes.API_KEYS)}
         >
-          Torna a API Key
+          { t('go-to-api-keys') }
         </Button>
       </Box>
     </Box>

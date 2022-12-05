@@ -1,32 +1,16 @@
-/* eslint-disable sonarjs/no-identical-functions */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { performThunkAction } from '@pagopa-pn/pn-commons';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { ApiKeysApi } from '../../api/apiKeys/ApiKeys.api';
+import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { NewApiKeyBE } from '../../models/ApiKeys';
+import { UserGroup, GroupStatus } from '../../models/user';
 
-
-/*
-  Funzioni mock in attesa del BE
-  Rimuovere tutti i commenti eslint quando pronto.
-*/
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { NotificationsApi } from "../../api/notifications/Notifications.api";
-import { UserGroup, GroupStatus } from "../../models/user";
-import { NewApiKeyType } from "./types";
-
-export const saveNewApiKey = createAsyncThunk<string, NewApiKeyType>('saveNewApiKey', async (param: NewApiKeyType, { rejectWithValue }) => {
-  try {
-    console.log(param);
-    return '0000002340000011234000000077781546453728';
-  } catch(e) {
-    return rejectWithValue(e);
-  }
-});
+export const saveNewApiKey = createAsyncThunk<string, NewApiKeyBE>(
+  'saveNewApiKey',
+  performThunkAction((param: NewApiKeyBE) => ApiKeysApi.createNewApiKey(param))
+);
 
 export const getApiKeyUserGroups = createAsyncThunk<Array<UserGroup>, GroupStatus | undefined>(
   'getApiKeyUserGroups',
-  async (status: GroupStatus | undefined, { rejectWithValue }) => {
-    try {
-      return await NotificationsApi.getUserGroups(status);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction((status: GroupStatus | undefined) => NotificationsApi.getUserGroups(status))
 );

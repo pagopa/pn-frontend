@@ -1,8 +1,10 @@
-import { Fragment, useState, MouseEvent } from 'react';
+import { Fragment, useState, MouseEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { MoreVert } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
+
 import {
   Column,
   Item,
@@ -10,14 +12,15 @@ import {
   StatusTooltip,
   EmptyState,
   CopyToClipboard,
-  // GroupsApiKey,
+  formatDate,
 } from '@pagopa-pn/pn-commons';
-import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory, modalApiKeyView } from '../../../models/ApiKeys';
+import { ApiKey, ApiKeyColumn, ApiKeyStatus, ApiKeyStatusHistory, ModalApiKeyView } from '../../../models/ApiKeys';
 import { getApiKeyStatusInfos } from '../../../utils/apikeys.utility';
+import * as routes from '../../../navigation/routes.const';
 
 type Props = {
   apiKeys: Array<ApiKey>;
-  handleModalClick: (view: modalApiKeyView, apiKeyId: number) => void;
+  handleModalClick: (view: ModalApiKeyView, apiKeyId: number) => void;
 };
 
 const DesktopApiKeys = ({
@@ -26,7 +29,9 @@ const DesktopApiKeys = ({
 }: Props) => {
   const { t } = useTranslation(['apikeys']);
   const handleEventTrackingTooltip = () => undefined;
-
+  const navigate = useNavigate();
+  const [rows, setRows] = useState<Array<Item>>([]);
+  const [tableKey, setTableKey] = useState(0);
   type ApiKeyContextMenuProps = {
     row: Item;
   };
@@ -74,11 +79,11 @@ const DesktopApiKeys = ({
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
-          {row.status !== ApiKeyStatus.ROTATED && <MenuItem data-testid="buttonView" onClick={() => handleModalClick(modalApiKeyView.VIEW, apiKeyId)}>{t('context-menu.view')}</MenuItem>}
-          {(row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED) && <MenuItem data-testid="buttonRotate" onClick={() => handleModalClick(modalApiKeyView.ROTATE, apiKeyId)}>{t('context-menu.rotate')}</MenuItem>}
-          {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && <MenuItem data-testid="buttonBlock" onClick={() => handleModalClick(modalApiKeyView.BLOCK, apiKeyId)}>{t('context-menu.block')}</MenuItem>}
-          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonDelete" onClick={() => handleModalClick(modalApiKeyView.DELETE, apiKeyId)}>{t('context-menu.delete')}</MenuItem>}
-          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonEnable" onClick={() => handleModalClick(modalApiKeyView.ENABLE, apiKeyId)}>{t('context-menu.enable')}</MenuItem>}
+          {row.status !== ApiKeyStatus.ROTATED && <MenuItem data-testid="buttonView" onClick={() => handleModalClick(ModalApiKeyView.VIEW, apiKeyId)}>{t('context-menu.view')}</MenuItem>}
+          {(row.status !== ApiKeyStatus.ROTATED && row.status !== ApiKeyStatus.BLOCKED) && <MenuItem data-testid="buttonRotate" onClick={() => handleModalClick(ModalApiKeyView.ROTATE, apiKeyId)}>{t('context-menu.rotate')}</MenuItem>}
+          {(row.status === ApiKeyStatus.ENABLED || row.status === ApiKeyStatus.ROTATED) && <MenuItem data-testid="buttonBlock" onClick={() => handleModalClick(ModalApiKeyView.BLOCK, apiKeyId)}>{t('context-menu.block')}</MenuItem>}
+          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonDelete" onClick={() => handleModalClick(ModalApiKeyView.DELETE, apiKeyId)}>{t('context-menu.delete')}</MenuItem>}
+          {row.status === ApiKeyStatus.BLOCKED && <MenuItem data-testid="buttonEnable" onClick={() => handleModalClick(ModalApiKeyView.ENABLE, apiKeyId)}>{t('context-menu.enable')}</MenuItem>}
         </Menu>
       </Box>
     );
@@ -99,7 +104,7 @@ const DesktopApiKeys = ({
       },
     },
     {
-      id: 'apiKey',
+      id: 'value',
       label: t('table.api-key'),
       width: '30%',
       sortable: false,
@@ -126,14 +131,13 @@ const DesktopApiKeys = ({
       },
     },
     {
-      id: 'lastModify',
-      label: t('table.last-modify'),
+      id: 'lastUpdate',
+      label: t('table.last-update'),
       width: '15%',
-      // eslint-disable-next-line sonarjs/no-identical-functions
       getCellLabel(value: string, row: Item) {
         return (
           <Typography sx={{ color: row.status === ApiKeyStatus.ROTATED ? '#aaa' : undefined }}>
-            {value}
+            {formatDate(value)}
           </Typography>
         );
       },
@@ -185,23 +189,27 @@ const DesktopApiKeys = ({
     },
   ];
 
-  const rows: Array<Item> = apiKeys.map((n: ApiKey, index) => ({
-    ...n,
-    id: index.toString(),
-  }));
+  useEffect(() => {
+    const rowsMap: Array<Item> = apiKeys.map((n: ApiKey, index) => ({
+      ...n,
+      id: index.toString(),
+    }));
+    setRows(rowsMap);
+    setTableKey(tableKey + 1); // This is needed to make ItemsTable to properly update itself.
+  }, [apiKeys]);
 
   return (
     <Fragment>
       {apiKeys && (
         <Fragment>
           {apiKeys.length > 0 ? (
-            <ItemsTable data-testid="tableApiKeys" columns={columns} rows={rows} />
+            <ItemsTable key={tableKey} data-testid="tableApiKeys" columns={columns} rows={rows} />
           ) : (
             <EmptyState
               data-testid="emptyState"
               emptyMessage={t('empty-message')}
               emptyActionLabel={t('empty-action-label')}
-              emptyActionCallback={() => alert('Nuova API Key routing da fare')}
+              emptyActionCallback={() => navigate(routes.NUOVA_API_KEY)}
             />
           )}
         </Fragment>

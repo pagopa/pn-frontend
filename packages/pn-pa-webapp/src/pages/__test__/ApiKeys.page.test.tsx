@@ -1,17 +1,10 @@
-/*
-  Scrivere TEST opportuni non appena si avrà il quadro completo su FE/BE
-  Issue di riferimento: PN-1845
-
-  Ci sono un paio di test dove si è provveduti a skipparli per evitare il fallimento dei test di tutta la webapp
-*/
-import React from 'react';
-
 import { act, fireEvent, RenderResult, waitFor } from '@testing-library/react';
+import React from 'react';
 import * as redux from 'react-redux';
-import * as actions from '../../redux/apiKeys/actions';
 import { ApiKey } from '../../models/ApiKeys';
 import { mockApiKeysForFE } from '../../redux/apiKeys/__test__/test-utils';
 import { axe, render } from '../../__test__/test-utils';
+import * as actions from '../../redux/apiKeys/actions';
 import ApiKeys from '../ApiKeys.page';
 
 const mockNavigateFn = jest.fn();
@@ -37,13 +30,13 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
-const mockDispatchFn = jest.fn();
-const mockActionFn = jest.fn();
-
 describe('ApiKeys Page', () => {
   // eslint-disable-next-line functional/no-let
   let result: RenderResult | undefined;
 
+  const mockDispatchFn = jest.fn();
+  const mockActionFn = jest.fn();
+  
   const initialState = (param: Array<ApiKey>) => ({
     preloadedState: {
       apiKeysState: {
@@ -54,12 +47,12 @@ describe('ApiKeys Page', () => {
   });
 
   beforeEach(async () => {
-    // mock action
-    const actionSpy = jest.spyOn(actions, 'getApiKeys');
-    actionSpy.mockImplementation(mockActionFn);
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockDispatchFn);
+    // mock action
+    const actionSpy = jest.spyOn(actions, 'getApiKeys');
+    actionSpy.mockImplementation(mockActionFn);
   });
 
   afterEach(() => {
@@ -99,9 +92,6 @@ describe('ApiKeys Page', () => {
     await act(async () => {
       result = render(<ApiKeys />, initialState(mockApiKeysForFE));
     });
-  });
-
-  it.skip('does not have basic accessibility issues rendering the page', async () => {
     if (result) {
       const results = await axe(result.container);
       expect(results).toHaveNoViolations();
