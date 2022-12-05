@@ -28,7 +28,7 @@ describe("Notifications New Notification", () => {
     cy.visit('/dashboard/nuova-notifica');
   });
 
-  it.only('Create new notification with no user groups and operator role', () => {
+  it('Create new notification with no user groups and operator role', () => {
 
     cy.intercept(/groups/, { fixture: 'groups/no-groups' });
     
