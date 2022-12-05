@@ -38,8 +38,8 @@ declare namespace Cypress {
      login(): void;
      logout(): void;
      loginWithUI(): void;
-     loginWithTokenExchange(role?: PNRole): void;
      setRole(role: PNRole): void;
+     loginWithTokenExchange(role?: PNRole): void;
      fillRecipient(recipient: RecipientFormData): void;
   }
 }

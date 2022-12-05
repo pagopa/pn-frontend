@@ -12,12 +12,14 @@ import { AxiosResponse } from 'axios';
 import { Delegator } from '../../redux/delegation/types';
 import { parseNotificationDetailForRecipient } from '../../utils/notification.utility';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
+import { NotificationId } from '../../models/Notifications';
 import { apiClient } from '../apiClients';
 import {
   NOTIFICATIONS_LIST,
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
 } from './notifications.routes';
@@ -81,6 +83,10 @@ export const NotificationsApi = {
         return {} as NotificationDetailForRecipient;
       }
     }),
+  
+  exchangeNotificationQrCode: (qrCode: string): Promise<NotificationId> => 
+    apiClient.post<NotificationId>(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: qrCode })
+    .then((response) => response.data),
 
   /**
    * Gets current user notification document

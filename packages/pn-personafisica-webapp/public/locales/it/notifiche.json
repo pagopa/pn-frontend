@@ -27,6 +27,9 @@
     "desc": "decrescente",
     "options": "Opzioni sort"
   },
+  "from-qrcode": {
+    "not-found": "Link alla notifica non trovato"
+  },
   "detail": {
     "table-aria-label": "Dettaglio notifica",
     "date": "Data di invio",
