@@ -92,9 +92,6 @@ describe('ApiKeys Page', () => {
     await act(async () => {
       result = render(<ApiKeys />, initialState(mockApiKeysForFE));
     });
-  });
-
-  it('does not have basic accessibility issues rendering the page', async () => {
     if (result) {
       const results = await axe(result.container);
       expect(results).toHaveNoViolations();

@@ -1,14 +1,6 @@
 import { useState, useEffect, Fragment, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  Button,
-  Link,
-  Dialog,
-  TextField,
-  InputAdornment,
-} from '@mui/material';
+import { Box, Typography, Button, Link, Dialog, TextField, InputAdornment } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { useIsMobile, CopyToClipboard, TitleBox, ApiErrorWrapper } from '@pagopa-pn/pn-commons';
 import { useTranslation, Trans } from 'react-i18next';
@@ -79,17 +71,23 @@ const ApiKeys = () => {
 
   const apiKeyBlocked = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(() => void dispatch(getApiKeys()));
+    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.BLOCK })).then(
+      () => void dispatch(getApiKeys())
+    );
   };
 
   const apiKeyEnabled = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(() => void dispatch(getApiKeys()));
+    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ENABLE })).then(
+      () => void dispatch(getApiKeys())
+    );
   };
 
   const apiKeyRotated = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(() => void dispatch(getApiKeys()));
+    void dispatch(setApiKeyStatus({ apiKey: apiKeyId, status: ApiKeySetStatus.ROTATE })).then(
+      () => void dispatch(getApiKeys())
+    );
   };
 
   const apiKeyDeleted = (apiKeyId: string) => {
@@ -98,41 +96,41 @@ const ApiKeys = () => {
   };
 
   return (
-    <ApiErrorWrapper
-      apiId={API_KEYS_ACTIONS.GET_API_KEYS}
-      reloadAction={() => fetchApiKeys()}
-      mainText={t('error-fecth-api-keys')}
-      mt={3}
-    >
-      <Box p={3}>
-        <TitleBox
-          variantTitle="h4"
-          title={t('title')}
-          sx={{ pt: '20px' }}
-          subTitle={<SubTitle />}
-          variantSubTitle="body1"
-        ></TitleBox>
-        <Box
-          sx={{
-            display: isMobile ? 'block' : 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: isMobile ? 3 : 10,
-          }}
+    <Box p={3}>
+      <TitleBox
+        variantTitle="h4"
+        title={t('title')}
+        sx={{ pt: '20px' }}
+        subTitle={<SubTitle />}
+        variantSubTitle="body1"
+      ></TitleBox>
+      <Box
+        sx={{
+          display: isMobile ? 'block' : 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginTop: isMobile ? 3 : 10,
+        }}
+      >
+        <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
+          {t('generated-api-keys')}
+        </Typography>
+        <Button
+          data-testid="generateApiKey"
+          variant="outlined"
+          sx={{ marginBottom: isMobile ? 3 : undefined }}
+          onClick={handleNewApiKeyClick}
         >
-          <Typography variant="h5" sx={{ marginBottom: isMobile ? 3 : undefined }}>
-            {t('generated-api-keys')}
-          </Typography>
-          <Button
-            data-testid="generateApiKey"
-            variant="outlined"
-            sx={{ marginBottom: isMobile ? 3 : undefined }}
-            onClick={handleNewApiKeyClick}
-          >
-            <Add />
-            {t('new-api-key-button')}
-          </Button>
-        </Box>
+          <Add />
+          {t('new-api-key-button')}
+        </Button>
+      </Box>
+      <ApiErrorWrapper
+        apiId={API_KEYS_ACTIONS.GET_API_KEYS}
+        reloadAction={() => fetchApiKeys()}
+        mainText={t('error-fecth-api-keys')}
+        mt={3}
+      >
         <DesktopApiKeys apiKeys={apiKeys} handleModalClick={handleModalClick} />
 
         <Dialog open={modal.view !== ModalApiKeyView.NONE} onClose={handleCloseModal}>
@@ -221,8 +219,8 @@ const ApiKeys = () => {
             )}
           </Box>
         </Dialog>
-      </Box>
-    </ApiErrorWrapper>
+      </ApiErrorWrapper>
+    </Box>
   );
 };
 
