@@ -13,6 +13,7 @@ import {
   uploadNotificationAttachment,
   uploadNotificationPaymentDocument,
   getUserGroups,
+  createNewNotification,
 } from './actions';
 import { PreliminaryInformationsPayload } from './types';
 
@@ -101,6 +102,9 @@ const newNotificationSlice = createSlice({
     builder.addCase(uploadNotificationPaymentDocument.fulfilled, (state, action) => {
       state.notification.payment = action.payload;
       state.isCompleted = true;
+    });
+    builder.addCase(createNewNotification.rejected, (state) => {
+      state.isCompleted = false;
     });
   },
 });
