@@ -139,6 +139,10 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
               hashHex: formikPagoPaForm.file.sha256.hashHex,
             },
           },
+          ref: {
+            key: formikPagoPaForm.ref.key,
+            versionToken: formikPagoPaForm.ref.versionToken,
+          },
         },
       };
       if (formikF24flatRate) {
@@ -153,6 +157,10 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
               hashHex: formikF24flatRate.file.sha256.hashHex,
             },
           },
+          ref: {
+            key: formikF24flatRate.ref.key,
+            versionToken: formikF24flatRate.ref.versionToken,
+          },
         };
       }
       if (formikF24standard) {
@@ -166,6 +174,10 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
               hashBase64: formikF24standard.file.sha256.hashBase64,
               hashHex: formikF24standard.file.sha256.hashHex,
             },
+          },
+          ref: {
+            key: formikF24standard.ref.key,
+            versionToken: formikF24standard.ref.versionToken,
           },
         };
       }
@@ -218,6 +230,19 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
     yup.object(_.mapValues(obj, () => yup.object(getValidationSchemaParameters())))
   );
 
+  const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
+    // set ref
+    for (const [taxId, payment] of Object.entries(paymentPayload)) {
+      await formik.setFieldValue(`${taxId}.pagoPaForm.ref`, payment.pagoPaForm.ref, false);
+      if (payment.f24standard) {
+        await formik.setFieldValue(`${taxId}.f24standard.ref`, payment.f24standard.ref, false);
+      }
+      if (payment.f24flatRate) {
+        await formik.setFieldValue(`${taxId}.f24flatRate.ref`, payment.f24flatRate.ref, false);
+      }
+    }
+  };
+
   const formik = useFormik({
     initialValues,
     validationSchema: notification.paymentMode !== PaymentModel.NOTHING ? validationSchema : null,
@@ -228,7 +253,11 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
         return;
       }
       if (notification.paymentMode !== PaymentModel.NOTHING) {
-        await dispatch(uploadNotificationPaymentDocument(values));
+        const paymentData = await dispatch(uploadNotificationPaymentDocument(values));
+        const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
+        if (paymentPayload) {
+          await updateRefAfterUpload(paymentPayload);
+        }
       } else {
         dispatch(setIsCompleted());
       }
