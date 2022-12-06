@@ -21,6 +21,7 @@ describe('App state slice tests', () => {
         errors: [],
         success: []
       },
+      responseEvent: null,
       isInitialized: false,
     });
   });

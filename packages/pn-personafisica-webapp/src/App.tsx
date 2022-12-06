@@ -1,7 +1,6 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -10,18 +9,24 @@ import HelpIcon from '@mui/icons-material/Help';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { Box } from '@mui/material';
+
+import { ProductSwitchItem } from '@pagopa/mui-italia';
+
 import {
   AppMessage,
+  AppResponseMessage,
   appStateActions,
+  errorFactoryManager,
   initLocalization,
   Layout,
+  ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
   useMultiEvent,
   useTracking,
   useUnload,
 } from '@pagopa-pn/pn-commons';
-import { ProductSwitchItem } from '@pagopa/mui-italia';
 
 import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
@@ -34,6 +39,7 @@ import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/action
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
+import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
 import { goToLoginPortal } from './navigation/navigation.utility';
 import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -104,6 +110,8 @@ const App = () => {
   useEffect(() => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
+    // eslint-disable-next-line functional/immutable-data
+    errorFactoryManager.factory = new PFAppErrorFactory((path, ns) => t(path, { ns }));
   }, []);
 
   useEffect(() => {
@@ -228,6 +236,7 @@ const App = () => {
 
   return (
     <>
+      <ResponseEventDispatcher />
       <Layout
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
@@ -255,7 +264,9 @@ const App = () => {
         isLogged={!!sessionToken}
         hasTermsOfService={true}
       >
-        <AppMessage sessionRedirect={async () => await dispatch(logout())} />
+        {/* <AppMessage sessionRedirect={async () => await dispatch(logout())} /> */}
+        <AppMessage />
+        <AppResponseMessage />
         <Router />
       </Layout>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>

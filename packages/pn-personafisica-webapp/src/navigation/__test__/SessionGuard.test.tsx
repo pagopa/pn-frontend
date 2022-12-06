@@ -1,12 +1,25 @@
+import React from 'react';
+
 import { act, screen } from '@testing-library/react';
+
+import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+
 import { render } from '../../__test__/test-utils';
 import SessionGuard from '../SessionGuard';
+
+const SessionGuardWithErrorPublisher = () => (
+  <>
+    <ResponseEventDispatcher />
+    <AppResponseMessage />
+    <SessionGuard />
+  </>
+);
 
 const mockNavigateFn = jest.fn(() => {});
 
 /* eslint-disable functional/no-let */
-let mockLocationHash: string;  // #token=mocked_token
-let mockLocationPath: string;  // "/" or "/notifiche"
+let mockLocationHash: string; // #token=mocked_token
+let mockLocationPath: string; // "/" or "/notifiche"
 
 jest.mock('react-router-dom', () => {
   const original = jest.requireActual('react-router-dom');
@@ -26,17 +39,19 @@ jest.mock('react-i18next', () => ({
   Trans: () => 'mocked verify description',
 }));
 
-const mockSessionCheckFn = jest.fn(() => { });
+const mockSessionCheckFn = jest.fn(() => {});
 
 jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
     useSessionCheck: () => mockSessionCheckFn,
-    SessionModal: ({ title }: { title: string }) => <>
-      <div>Session Modal</div>
-      <div>{title}</div>
-    </>,
+    SessionModal: ({ title }: { title: string }) => (
+      <>
+        <div>Session Modal</div>
+        <div>{title}</div>
+      </>
+    ),
   };
 });
 
@@ -53,17 +68,17 @@ jest.mock('../../api/auth/Auth.api', () => {
   return {
     ...original,
     AuthApi: {
-      exchangeToken: (spidToken: string) => spidToken.startsWith("good")
-        ? Promise.resolve({ sessionToken: "good-session-token" })
-        : Promise.reject({ response: { status: 403 } })
-    }
+      exchangeToken: (spidToken: string) =>
+        spidToken.startsWith('good')
+          ? Promise.resolve({ sessionToken: 'good-session-token' })
+          : Promise.reject({ response: { status: 403 } }),
+    },
   };
 });
 
-
 describe('SessionGuard Component', () => {
   beforeEach(() => {
-    mockLocationHash = "";
+    mockLocationHash = '';
   });
 
   afterEach(() => {
@@ -77,8 +92,11 @@ describe('SessionGuard Component', () => {
       userState: { user: { sessionToken: 'mocked-token' } },
     };
 
-    await act(async () => void render(<SessionGuard />, { preloadedState: mockReduxState }));
-    const pageComponent = screen.queryByText("Generic Page");
+    await act(
+      async () =>
+        void render(<SessionGuardWithErrorPublisher />, { preloadedState: mockReduxState })
+    );
+    const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(0);
@@ -87,8 +105,8 @@ describe('SessionGuard Component', () => {
 
   // cosa si aspetta: entra nell'app, non fa nessun navigate, non lancia il sessionCheck
   it('senza spid token - ingresso anonimo', async () => {
-    await act(async () => void render(<SessionGuard />));
-    const pageComponent = screen.queryByText("Generic Page");
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
+    const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(0);
@@ -96,11 +114,11 @@ describe('SessionGuard Component', () => {
   });
 
   it('utente riconosciuto - non è presente una route', async () => {
-    mockLocationHash = "#token=good_token";
-    mockLocationPath = "/";
+    mockLocationHash = '#token=good_token';
+    mockLocationPath = '/';
 
-    await act(async () => void render(<SessionGuard />));
-    const pageComponent = screen.queryByText("Generic Page");
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
+    const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
@@ -108,25 +126,24 @@ describe('SessionGuard Component', () => {
   });
 
   it('utente riconosciuto - è presente una route', async () => {
-    mockLocationHash = "#token=good_token";
-    mockLocationPath = "/notifiche";
+    mockLocationHash = '#token=good_token';
+    mockLocationPath = '/notifiche';
 
-    await act(async () => void render(<SessionGuard />));
-    const pageComponent = screen.queryByText("Generic Page");
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
+    const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
 
-    expect(mockNavigateFn).toBeCalledTimes(0);
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
   // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
   it('errore nello SPID token', async () => {
-    mockLocationHash = "#token=bad_token";
+    mockLocationHash = '#token=bad_token';
 
-    await act(async () => void render(<SessionGuard />));
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const logoutComponent = screen.queryByText('Session Modal');
     expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText("leaving-app.title");
+    const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeNull();
 
     expect(mockNavigateFn).toBeCalledTimes(0);
@@ -139,10 +156,13 @@ describe('SessionGuard Component', () => {
       userState: { user: { sessionToken: 'mocked-token' }, isClosedSession: true },
     };
 
-    await act(async () => void render(<SessionGuard />, { preloadedState: mockReduxState }));
+    await act(
+      async () =>
+        void render(<SessionGuardWithErrorPublisher />, { preloadedState: mockReduxState })
+    );
     const logoutComponent = screen.queryByText('Session Modal');
     expect(logoutComponent).toBeTruthy();
-    const logoutTitleComponent = screen.queryByText("leaving-app.title");
+    const logoutTitleComponent = screen.queryByText('leaving-app.title');
     expect(logoutTitleComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(0);

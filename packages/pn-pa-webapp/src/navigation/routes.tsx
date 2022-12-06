@@ -3,17 +3,19 @@ import { NotFound } from '@pagopa-pn/pn-commons';
 
 import Dashboard from '../pages/Dashboard.page';
 import NewNotification from '../pages/NewNotification.page';
+import ApiKeys from '../pages/ApiKeys.page';
+import NewApiKey from '../pages/NewApiKey.page';
+import Statistics from '../pages/Statistics.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
-// import ApiKeys from '../pages/ApiKeys.page';
-import PrivacyPolicyPage from "../pages/PrivacyPolicy.page";
-import TermsOfServicePage from "../pages/TermsOfService.page";
+import PrivacyPolicyPage from '../pages/PrivacyPolicy.page';
+import TermsOfServicePage from '../pages/TermsOfService.page';
 
 import { PNRole } from '../models/user';
 import AppStatus from '../pages/AppStatus.page';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
-import ToSGuard from "./ToSGuard";
+import ToSGuard from './ToSGuard';
 import OrganizationPartyGuard from './OrganizationPartyGuard';
 
 function Router() {
@@ -21,8 +23,8 @@ function Router() {
     <Routes>
       <Route path="/" element={<SessionGuard />}>
         <Route path="/" element={<OrganizationPartyGuard />}>
-        {/* protected routes */}
-          <Route path="/"  element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
+          {/* protected routes */}
+          <Route path="/" element={<RouteGuard roles={[PNRole.ADMIN, PNRole.OPERATOR]} />}>
             <Route path="/" element={<ToSGuard />}>
               <Route path={routes.DASHBOARD} element={<Dashboard />} />
               <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
@@ -38,6 +40,9 @@ function Router() {
                *
                * <Route path={routes.API_KEYS} element={<ApiKeys />} />
                * */}
+              <Route path={routes.API_KEYS} element={<ApiKeys />} />
+              <Route path={routes.NUOVA_API_KEY} element={<NewApiKey />} />
+              <Route path={routes.STATISTICHE} element={<Statistics />} />
               <Route path="/" element={<Navigate to={routes.DASHBOARD} />} />
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}

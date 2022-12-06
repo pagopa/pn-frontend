@@ -1,5 +1,6 @@
 import * as redux from 'react-redux';
 import { act, fireEvent, screen, RenderResult, within, waitFor } from '@testing-library/react';
+import { apiOutcomeTestHelper, AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/contact/actions';
@@ -7,7 +8,6 @@ import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts'
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
 import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
-import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 import { courtesyAddresses, legalAddresses, initialState } from './SpecialContacts.test-utils';
 
 jest.mock('react-i18next', () => ({
@@ -412,22 +412,26 @@ describe('Contacts Page - different contact API behaviors', () => {
   it('API error', async () => {
     const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
     apiSpy.mockRejectedValue({ response: { status: 500 } });
-    await act(async () => void render(        
+    await act(async () => void render(<>
+      <ResponseEventDispatcher />
+      <AppResponseMessage />
       <DigitalContactsCodeVerificationProvider>
         <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
       </DigitalContactsCodeVerificationProvider>
-    ));
+    </>));
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 
   it('API OK', async () => {
     const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
     apiSpy.mockResolvedValue([]);
-    await act(async () => void render(        
+    await act(async () => void render(<>
+      <ResponseEventDispatcher />
+      <AppResponseMessage />
       <DigitalContactsCodeVerificationProvider>
         <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
       </DigitalContactsCodeVerificationProvider>
-    ));
+    </>));
     apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
