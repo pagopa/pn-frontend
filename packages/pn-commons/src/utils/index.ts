@@ -1,4 +1,4 @@
-import { dataRegex, formatFiscalCode } from './string.utility';
+import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
 import { calculatePages } from './pagination.utility';
 import {
     getNotificationStatusInfos,
@@ -63,4 +63,5 @@ export {
     apiOutcomeTestHelper,
     simpleMockForApiErrorWrapper,
     performThunkAction,
+    sanitizeString
 };
