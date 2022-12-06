@@ -1,4 +1,8 @@
-import { HeroProps } from "@pagopa/mui-italia";
+import {
+  FooterLinksType,
+  HeroProps,
+  PreLoginFooterLinksType
+} from "@pagopa/mui-italia";
 import { HorizontalNavProps } from "@pagopa/mui-italia";
 import { WalkthroughProps } from "@pagopa/mui-italia";
 import { ShowcaseProps } from "@pagopa/mui-italia";
@@ -37,8 +41,12 @@ export interface IShowcaseData {
 export interface IAppData {
   common: {
     alert: string;
-    assistance: ILinkData
-  }
+    assistance: ILinkData;
+    pagoPALink: ILinkData;
+    companyLegalInfo: JSX.Element;
+    preLoginLinks: PreLoginFooterLinksType;
+    postLoginLinks: Array<FooterLinksType>;
+  };
   pa: ILandingComponents;
   pf: ILandingComponents;
   co: ILandingComponents;

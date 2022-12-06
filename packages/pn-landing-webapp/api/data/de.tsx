@@ -1,9 +1,14 @@
-import { WalkthroughProps } from "@pagopa/mui-italia";
+import {
+  FooterLinksType,
+  HorizontalNavProps,
+  PreLoginFooterLinksType,
+  WalkthroughProps
+} from "@pagopa/mui-italia";
 import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
-import { HorizontalNavProps } from "@pagopa/mui-italia";
-import { SvgIcon } from "@mui/material";
-import { Typography } from "@mui/material";
+import { SvgIcon, Typography } from "@mui/material";
 import Link from "next/link";
+
+import { PAGOPA_HOME } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -28,13 +33,7 @@ import {
 } from "./icons";
 import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
 
-import { IAppData, IInfoblockData, IShowcaseData } from "model";
-
-const assistanceLink = {
-  label: "Hilfe",
-  ariaLabel: "Hilfe",
-  href: `mailto:${PAGOPA_HELP_EMAIL}`,
-};
+import { IAppData, IInfoblockData, ILinkData, IShowcaseData } from "model";
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
@@ -614,12 +613,181 @@ const coHorizontalNav = {
 };
 /* ************************************** */
 
+/**
+ * Footer data
+ */
+ const pagoPALink: ILinkData = {
+  label: "PagoPA S.p.A.",
+  href: PAGOPA_HOME ?? "",
+  ariaLabel: "Link: Gehe auf die Website von PagoPA S.p.A."
+};
+
+const assistanceLink = {
+  label: "Hilfe",
+  ariaLabel: "Hilfe",
+  href: `mailto:${PAGOPA_HELP_EMAIL}`,
+};
+
+const companyLegalInfo = (
+  <>
+    <strong>PagoPA S.p.A.</strong> — Aktiengesellschaft mit einem einzigen Gesellschafter -
+    voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, 
+    Piazza Colonna 370
+    <br />
+    PLZ 00187 - Eintragungsnummer im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009
+  </>
+);
+
+const preLoginLinks: PreLoginFooterLinksType = {
+  // First column
+  aboutUs: {
+    title: undefined,
+    links: [
+      {
+        label: "Über uns",
+        href: `${pagoPALink.href}societa/chi-siamo`,
+        ariaLabel: "Zum Link: Über uns",
+        linkType: "external",
+      },
+      {
+        label: "PNRR",
+        href: `${pagoPALink.href}opportunita/pnrr/progetti`,
+        ariaLabel: "Zum Link: PNRR",
+        linkType: "external",
+      },
+      {
+        label: "Media",
+        href: `${pagoPALink.href}media`,
+        ariaLabel: "Zum Link: Media",
+        linkType: "external",
+      },
+      {
+        label: "Karriere",
+        href: `${pagoPALink.href}lavora-con-noi`,
+        ariaLabel: "Zum Link: Karriere",
+        linkType: "external",
+      },
+    ],
+  },
+  // Third column
+  resources: {
+    title: "Quellen",
+    links: [
+      {
+        label: "Informativa Privacy",
+        href: `/informativa-privacy/`,
+        ariaLabel: "Zum Link: Informativa Privacy",
+        linkType: "internal",
+      },
+      {
+        label: "Zertifizierungen",
+        href: "https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf",
+        ariaLabel: "Zum Link: Zertifizierungen",
+        linkType: "internal",
+      },
+      {
+        label: "Informationssicherheit",
+        href: "https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf",
+        ariaLabel: "Zum Link: Informationssicherheit",
+        linkType: "internal",
+      },
+      {
+        label: "Recht auf Schutz personenbezogener Daten",
+        href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
+        ariaLabel: "Zum Link: Recht auf Schutz personenbezogener Daten",
+        linkType: "internal",
+      },
+      // {
+      //   label: "Cookie-Einstellungen",
+      //   href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
+      //   ariaLabel: "Zum Link: Cookie-Einstellungen",
+      //   linkType: "internal",
+      // },
+      {
+        label: "Transparente Gesellschaft",
+        href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.html",
+        ariaLabel: "Zum Link: Transparente Gesellschaft",
+        linkType: "internal",
+      },
+      {
+        label: "Responsible Disclosure Policy",
+        href: "https://www.pagopa.it/it/responsible-disclosure-policy/",
+        ariaLabel: "Zum Link: Responsible Disclosure Policy",
+        linkType: "internal",
+      },
+      {
+        label: "Modell 321",
+        href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls",
+        ariaLabel: "Zum Link: Modell 321",
+        linkType: "internal",
+      },
+    ],
+  },
+  // Fourth column
+  followUs: {
+    title: "Folge uns auf",
+    socialLinks: [
+      {
+        icon: "linkedin",
+        title: "LinkedIn",
+        href: "https://it.linkedin.com/company/pagopa",
+        ariaLabel: "Link: Gehe auf die Website LinkedIn von PagoPA S.p.A.",
+      },
+      {
+        title: "Twitter",
+        icon: "twitter",
+        href: "https://twitter.com/pagopa",
+        ariaLabel: "Link: Gehe auf die Website Twitter von PagoPA S.p.A.",
+      },
+      {
+        icon: "instagram",
+        title: "Instagram",
+        href: "https://www.instagram.com/pagopaspa/?hl=en",
+        ariaLabel: "Link: Gehe auf die Website Instagram von PagoPA S.p.A.",
+      },
+      {
+        icon: "medium",
+        title: "Medium",
+        href: "https://medium.com/pagopa-spa",
+        ariaLabel: "Link: Gehe auf die Website Medium von PagoPA S.p.A.",
+      },
+    ],
+    links: [
+      {
+        label: "Zugänglichkeit",
+        href: "https://form.agid.gov.it/view/eca3487c-f3cb-40be-a590-212eafc70058/",
+        ariaLabel: "Zum Link: Zugänglichkeit",
+        linkType: "internal",
+      },
+    ],
+  },
+};
+
+const postLoginLinks: Array<FooterLinksType> = [
+  {
+    label: "Privacy policy",
+    href: "privacy-policy",
+    ariaLabel: "Vai al link: Privacy policy",
+    linkType: "internal",
+  },
+  {
+    label: "Accessibilità",
+    href: "accessibilita",
+    ariaLabel: "Vai al link: Accessibilità",
+    linkType: "internal",
+  },
+];
+
 /** Application Data Mock */
 export const deAppData: IAppData = {
   common: {
     alert:
       "Die Plattform ist nicht betriebsbereit. Nur einige der auf dieser Seite beschriebenen Funktionen werden derzeit getestet und stehen nur einer begrenzten Anzahl von Nutzern zur Verfügung, die Empfänger der von den Pilotbehörden verschickten Bescheide sein werden.",
     assistance: assistanceLink,
+    pagoPALink,
+    companyLegalInfo,
+    preLoginLinks,
+    postLoginLinks
   },
   pa: {
     hero: paHero,
