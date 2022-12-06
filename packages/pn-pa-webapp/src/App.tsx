@@ -62,7 +62,7 @@ const App = () => {
 
   const menuItems = useMemo(() => {
     const basicMenuItems: Array<SideMenuItem> = [
-      { label: t('menu.notifications'), icon: Email, route: routes.DASHBOARD },
+      { label: 'menu.notifications', icon: Email, route: routes.DASHBOARD },
       /**
        * Refers to PN-1741
        * Commented out because beyond MVP scope
@@ -71,9 +71,9 @@ const App = () => {
        * - "<Route path={routes.API_KEYS}.../>" in packages/pn-pa-webapp/src/navigation/routes.tsx
        * - BasicMenuItems in packages/pn-pa-webapp/src/utils/__TEST__/role.utilitytest.ts
        */
-      { label: t('menu.api-key'), icon: VpnKey, route: routes.API_KEYS },
+      { label: 'menu.api-key', icon: VpnKey, route: routes.API_KEYS },
       { 
-        label: t('menu.app-status'), 
+        label: 'menu.app-status', 
         // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
         icon: () => currentStatus 
           ? (currentStatus.appIsFullyOperative
@@ -96,6 +96,8 @@ const App = () => {
     // -------------------------------
     const items = { ...getMenuItems(basicMenuItems, idOrganization, role?.role) };
     // localize menu items
+    /* eslint-disable-next-line functional/immutable-data */
+    items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));
     if (items.selfCareItems) {
       /* eslint-disable-next-line functional/immutable-data */
       items.selfCareItems = items.selfCareItems.map((item) => ({ ...item, label: t(item.label) }));
