@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import { mockApiKeysForFE, mockApiKeysFromBE } from '../../../redux/apiKeys/__test__/test-utils';
 import { mockAuthentication } from '../../../redux/auth/__test__/test-utils';
-import { apiClient } from '../../axios';
+import { apiClient } from '../../apiClients';
 import { APIKEY_LIST, CREATE_APIKEY, DELETE_APIKEY, STATUS_APIKEY } from '../apiKeys.routes';
 import { ApiKeysApi } from '../ApiKeys.api';
 import { newApiKeyForBE } from '../../../redux/NewApiKey/__test__/test-utils';
