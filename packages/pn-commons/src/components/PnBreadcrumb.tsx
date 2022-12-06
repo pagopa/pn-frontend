@@ -2,7 +2,8 @@ import { ReactNode, RefAttributes } from 'react';
 import { Link, LinkProps, useNavigate } from 'react-router-dom';
 import { Breadcrumbs, Stack, styled, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { ButtonNaked } from '@pagopa/mui-italia';
+import { ButtonNaked } from "@pagopa/mui-italia";
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
 const StyledLink = styled(Link)(({ theme }) => ({
   display: 'flex',
@@ -21,7 +22,8 @@ const BreadcrumbLink = (props: LinkProps & RefAttributes<HTMLAnchorElement>) => 
 type PnBreadcrumbProps = {
   goBackAction?: () => void;
   goBackLabel?: string;
-  linkProps?: LinkProps & RefAttributes<HTMLAnchorElement>;
+  showBackAction?: boolean;       // set to false if you don't want the "back" ("Indietro") link to be included
+  linkProps?: LinkProps & RefAttributes<HTMLAnchorElement>
   linkRoute: string;
   linkLabel: ReactNode;
   currentLocationLabel: string;
@@ -29,13 +31,16 @@ type PnBreadcrumbProps = {
 
 const PnBreadcrumb = ({
   goBackAction,
-  goBackLabel = 'Indietro',
+  goBackLabel,
+  showBackAction = true, 
   linkProps,
   linkRoute,
   linkLabel,
   currentLocationLabel,
 }: PnBreadcrumbProps) => {
   const navigate = useNavigate();
+  
+  const finalBackLabel = goBackLabel || getLocalizedOrDefaultLabel('common', 'button.indietro', 'Indietro');
 
   return (
     <Stack
@@ -44,13 +49,16 @@ const PnBreadcrumb = ({
       justifyContent="start"
       spacing={3}
     >
-      <ButtonNaked
-        color="primary"
-        startIcon={<ArrowBackIcon />}
-        onClick={goBackAction ? goBackAction : () => navigate(-1)}
-      >
-        {goBackLabel}
-      </ButtonNaked>
+      {showBackAction && 
+        <ButtonNaked 
+          color="primary" 
+          data-testid="breadcrumb-indietro-button" 
+          startIcon={<ArrowBackIcon />} 
+          onClick={goBackAction ? goBackAction : () => navigate(-1)}
+        >
+          {finalBackLabel}
+        </ButtonNaked>
+      }
       <Breadcrumbs aria-label="breadcrumb">
         <BreadcrumbLink to={linkRoute} {...linkProps}>
           {linkLabel}

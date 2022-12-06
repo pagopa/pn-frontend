@@ -162,7 +162,6 @@ const NuovaDelega = () => {
   const breadcrumbs = (
     <Fragment>
       <PnBreadcrumb
-        goBackLabel={t('button.indietro', { ns: 'common' })}
         linkRoute={routes.DELEGHE}
         linkLabel={
           <Fragment>

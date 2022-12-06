@@ -31,7 +31,6 @@ const AppStatus = () => {
   }, [dispatch, getCurrentAppStatus]);
 
   const fetchDowntimeLog = useCallback(() => {
-    console.log("redefining fetchDowntimeLog");
     const fetchParams: GetDowntimeHistoryParams = { 
       startDate: "1900-01-01T00:00:00Z",
       functionality: [KnownFunctionality.NotificationCreate, KnownFunctionality.NotificationVisualization, KnownFunctionality.NotificationWorkflow],

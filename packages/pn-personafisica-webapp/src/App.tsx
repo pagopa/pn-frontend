@@ -33,7 +33,7 @@ import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
-import { RootState } from './redux/store';
+import { RootState, store } from './redux/store';
 import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { trackEventByType } from './utils/mixpanel';
@@ -41,6 +41,7 @@ import { TrackEventType } from './utils/events';
 import './utils/onetrust';
 import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
 import { goToLoginPortal } from './navigation/navigation.utility';
+import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 
 // TODO: get products list from be (?)
@@ -54,6 +55,7 @@ const productsList: Array<ProductSwitchItem> = [
 ];
 
 const App = () => {
+  setUpInterceptor(store);
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);

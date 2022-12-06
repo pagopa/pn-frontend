@@ -1,7 +1,7 @@
 import { today } from '@pagopa-pn/pn-commons';
 import { NOTIFICHE } from '../../src/navigation/routes.const';
 import { NOTIFICATION_PAYMENT_INFO } from '../../src/api/notifications/notifications.routes';
-import { NOTIFICATIONS_LIST } from '../../src/api/notifications/notifications.routes';
+import { NOTIFICATION_DETAIL, NOTIFICATIONS_LIST } from '../../src/api/notifications/notifications.routes';
 import {
   DELEGATIONS_BY_DELEGATOR,
   DELEGATIONS_BY_DELEGATE,
@@ -28,7 +28,7 @@ const getDates = (endToday: boolean = false) => {
     month: '2-digit',
     day: '2-digit',
     year: 'numeric',
-  }
+  };
 
   const startDateStr = new Intl.DateTimeFormat('it-IT', dateFormat).format(startDate);
   const endDateStr = new Intl.DateTimeFormat('it-IT', dateFormat).format(endDate);
@@ -41,23 +41,18 @@ const getDates = (endToday: boolean = false) => {
 
 describe('Notification Filters (no delegators)', () => {
   beforeEach(() => {
-    // Cypress.on('uncaught:exception', (err, runnable) => {
-    //   return false;
-    // });
     cy.viewport(1920, 1080);
-    cy.login();
-    cy.visit(NOTIFICHE);
 
-    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`).as('getNotifications');
-    cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}*`).as('getDelegates');
-    cy.intercept(`${DELEGATIONS_BY_DELEGATE()}*`, { fixture: 'no-mandates-by-delegate.json' }).as(
+    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, { fixture: 'notifications/list-10/page-1' }).as('getNotifications');
+    cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}`).as('getDelegates');
+    cy.intercept(`${DELEGATIONS_BY_DELEGATE()}`, { fixture: 'delegations/no-mandates' }).as(
       'getDelegators'
     );
-    cy.intercept(`${NOTIFICATION_PAYMENT_INFO('*', '*')}*`).as('getPaymentInfo');
 
-    // TODO: set the status during login to avoid keep doing this action
-    // accept onetrust cookies
-    cy.get('#onetrust-accept-btn-handler').click();
+    cy.intercept(`${NOTIFICATION_PAYMENT_INFO('', '')}/**`, { fixture: 'payments/required'}).as('getPaymentInfo');
+
+    cy.login();
+    cy.visit(NOTIFICHE);
   });
 
   it('filtered dates should not change after visiting delegations page', () => {
@@ -69,9 +64,13 @@ describe('Notification Filters (no delegators)', () => {
 
     cy.wait(['@getNotifications']);
 
+    cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
+
     cy.get(delegationMenuItem).click();
 
     cy.wait(['@getDelegates', '@getDelegators']);
+
+    cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
     cy.get(notificationMenuItem).click();
 
@@ -80,6 +79,7 @@ describe('Notification Filters (no delegators)', () => {
   });
 
   it('filtered dates should not change after visiting a notification detail', () => {
+    const iun = 'XQPQ-MAJP-HMTJ-202211-E-1';
     const { startDate, endDate } = getDates();
 
     cy.get(startDateInput, { timeout: 10000 }).type(startDate);
@@ -87,6 +87,11 @@ describe('Notification Filters (no delegators)', () => {
     cy.contains(filterButton).click();
 
     cy.wait(['@getNotifications', '@getNotifications']);
+    
+    cy.intercept(`${NOTIFICATION_DETAIL(iun)}`, {
+      statusCode: 200,
+      fixture: 'notifications/viewed',
+    }).as('selectedNotification');
 
     cy.get(notificationListItem).click();
 
@@ -97,6 +102,7 @@ describe('Notification Filters (no delegators)', () => {
   });
 
   it('filtered dates should not change after visiting a notification detail and delegation list', () => {
+    const iun = 'XQPQ-MAJP-HMTJ-202211-E-1';
     const { startDate, endDate } = getDates();
 
     cy.get(startDateInput, { timeout: 10000 }).type(startDate);
@@ -104,9 +110,15 @@ describe('Notification Filters (no delegators)', () => {
     cy.contains(filterButton).click();
 
     cy.wait(['@getNotifications', '@getNotifications']);
+    
+    cy.intercept(`${NOTIFICATION_DETAIL(iun)}`, {
+      statusCode: 200,
+      fixture: 'notifications/viewed',
+    }).as('selectedNotification');
 
     cy.get(notificationListItem).click();
 
+    cy.wait('@selectedNotification');
     cy.wait('@getPaymentInfo');
 
     cy.get(notificationMenuItem).click();
@@ -142,25 +154,47 @@ describe('Notification Filters (no delegators)', () => {
     cy.get(startDateInput).should('have.value', startDate);
     cy.get(endDateInput).should('have.value', '');
   });
+
+  it('should filter notifications by IUN', () => {
+    const filteredIun = 'MUKX-VEDN-ZTLW-202211-L-1';
+    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, {
+      fixture: 'notifications/list-10/page-1',
+    }).as('getNotifications');
+
+    cy.get('#iunMatch').type(filteredIun);
+
+    cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '', iun: filteredIun })}*`, {
+      statusCode: 200,
+      fixture: 'notifications/list-10/filtered-iun',
+    }).as('filteredNotifications');
+
+    cy.contains(/^Filtra$/).click();
+
+    cy.wait('@filteredNotifications').then((interception) => {
+      expect(interception.request.url).include(`iunMatch=${filteredIun}`);
+      expect(interception.response.statusCode).to.equal(200);
+    });
+
+    cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
+
+    cy.get('#iunMatch').should('have.value', filteredIun);
+
+    cy.get('[data-cy="table(notifications).row"]').should('have.length', 1);
+  });
 });
 
 describe('Notification Filters (delegators)', () => {
   beforeEach(() => {
-    // Cypress.on('uncaught:exception', (err, runnable) => {
-    //   return false;
-    // });
     cy.viewport(1920, 1080);
-    cy.login();
-    cy.visit(NOTIFICHE);
 
     cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`).as('getNotifications');
     cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}*`).as('getDelegates');
-    cy.intercept(`${DELEGATIONS_BY_DELEGATE()}*`, { fixture: 'mandates-by-delegate.json' }).as(
+    cy.intercept(`${DELEGATIONS_BY_DELEGATE()}*`, { fixture: 'delegations/mandates-by-delegate' }).as(
       'getDelegators'
     );
-    
-    // accept onetrust cookies
-    cy.get('#onetrust-accept-btn-handler').click();
+
+    cy.login();
+    cy.visit(NOTIFICHE);
   });
 
   it('filters reset visiting notifications list as a delegate', () => {
@@ -176,7 +210,7 @@ describe('Notification Filters (delegators)', () => {
     cy.get(endDateInput).should('have.value', endDate);
 
     cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, {
-      fixture: 'delegations-by-delegate.json',
+      fixture: 'notifications/delegator/list-10/page-1',
     }).as('getNotificationsByDelegate');
     cy.get(collapsibleNotificationMenu).click();
     cy.get(notificationsByDelegateMenuItem).click();

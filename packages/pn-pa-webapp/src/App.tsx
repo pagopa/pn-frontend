@@ -27,7 +27,7 @@ import { useLocation } from 'react-router-dom';
 import Router from './navigation/routes';
 import { AUTH_ACTIONS, getOrganizationParty, logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { RootState } from './redux/store';
+import { RootState, store } from './redux/store';
 import { getMenuItems } from './utils/role.utility';
 
 import * as routes from './navigation/routes.const';
@@ -36,11 +36,13 @@ import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION, MIXPANEL_TOKEN } from '.
 import { TrackEventType } from './utils/events';
 import { trackEventByType } from './utils/mixpanel';
 import './utils/onetrust';
+import { setUpInterceptor } from "./api/interceptors";
 
 const App = () => {
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
   });
+  setUpInterceptor(store);
 
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const loggedUserOrganizationParty = useAppSelector(

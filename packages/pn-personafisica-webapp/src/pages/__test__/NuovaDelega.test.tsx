@@ -114,7 +114,7 @@ describe('NuovaDelega page', () => {
   it('navigates to Deleghe page before creation', () => {
     useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />, initialState(false));
-    const backButton = result.getByText('button.indietro');
+    const backButton = result.getByTestId('breadcrumb-indietro-button');
 
     fireEvent.click(backButton);
     expect(mockNavigateFn).toBeCalled();

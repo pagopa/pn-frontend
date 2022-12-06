@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.2](https://github.com/pagopa/pn-frontend/compare/v1.5.1...v1.5.2) (2022-11-29)
+
+
+### Bug Fixes
+
+* updated node version to 16 for landing codebuilder ([e5065e0](https://github.com/pagopa/pn-frontend/commit/e5065e009692fe8038174d541308dddf875238c7))
+
+
+
+
+
 ## [1.5.1](https://github.com/pagopa/pn-frontend/compare/v1.5.0...v1.5.1) (2022-11-14)
 
 **Note:** Version bump only for package @pagopa-pn/pn-landing-webapp

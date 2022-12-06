@@ -37,20 +37,38 @@
 //   }
 // }
 
+import { PNRole } from '../../src/models/user';
+import { User } from '../../src/redux/auth/types';
 import './NewNotification';
 
+/*
+  * Set user role
+  */
+Cypress.Commands.add('setRole', (role: PNRole) => {
+  cy.window().then((win) => {
+    let user: User = JSON.parse(win.sessionStorage.getItem('user'));
+    user.organization.roles[0].role = role;
+    win.sessionStorage.setItem('user', JSON.stringify(user));
+  });
+});
 
 /*
   * Login with token exchange
   */
-Cypress.Commands.add('loginWithTokenExchange', () => {
+Cypress.Commands.add('loginWithTokenExchange', (role?: PNRole) => {
   cy.intercept({
     method:'POST',
     url: /token-exchange/
   }).as('login');
   cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
   cy.wait('@login');
+  if (role) {
+    cy.log(`Setting user role to ${role}`);
+    cy.setRole(role);
+  }
 });
+
+
 
 /**
  * Logout programmatically
@@ -93,33 +111,3 @@ Cypress.Commands.add('loginWithUI', () => {
   ).click();
 });
 
-Cypress.Commands.add('fillRecipient', (recipient: RecipientFormData) => {
-  // Recipient 2
-  cy.get(`input[name="recipients\[${recipient.position}\]\.firstName"]`).clear().type(recipient.data.firstname);
-  cy.get(`input[name="recipients\[${recipient.position}\]\.lastName"]`).clear().type(recipient.data.lastname);
-
-  cy.log('writing valid taxtId');
-  cy.get(`input[name="recipients\[${recipient.position}\]\.taxId"]`).clear().type(recipient.data.taxId);
-  
-  if(recipient.data.creditorTaxId) {
-    cy.log('writing valid creditor taxtId');
-    cy.get(`input[name="recipients\[${recipient.position}\]\.creditorTaxId"]`).clear().type(recipient.data.creditorTaxId);
-  }
-
-  if(recipient.data.noticeCode) {
-    cy.log('writing valid notice code');
-    cy.get(`input[name="recipients\[${recipient.position}\]\.noticeCode"]`).clear().type(recipient.data.noticeCode);
-  }
-
-  //Address
-  cy.get('[data-testid="PhysicalAddressCheckbox"]').eq(recipient.position).click();
-  
-  cy.get('button[type="submit"]').should('be.disabled');
-  
-  cy.get(`input[name="recipients\[${recipient.position}\]\.address"]`).type(recipient.data.address);
-  cy.get(`input[name="recipients\[${recipient.position}\]\.houseNumber"]`).type(recipient.data.houseNumber);
-  cy.get(`input[name="recipients\[${recipient.position}\]\.municipality"]`).type(recipient.data.municipality);
-  cy.get(`input[name="recipients\[${recipient.position}\]\.province"]`).type(recipient.data.province);
-  cy.get(`input[name="recipients\[${recipient.position}\]\.zip"]`).type(recipient.data.zip);
-  cy.get(`input[name="recipients\[${recipient.position}\]\.foreignState"]`).type(recipient.data.foreignState);
-});

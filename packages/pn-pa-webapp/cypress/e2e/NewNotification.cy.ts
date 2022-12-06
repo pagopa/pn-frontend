@@ -1,27 +1,7 @@
-const recipients = [
-  {
-    firstname: 'Gaio Giulio',
-    lastname: 'Cesare',
-    taxId: 'CSRGGL44L13H501E',
-    address: 'Via Appia',
-    houseNumber: '1',
-    municipality: 'Roma',
-    province: 'RM',
-    zip: '00186',
-    foreignState: 'Italia'
-  },
-  {
-    firstname: 'Giuseppe Maria',
-    lastname: 'Garibaldi',
-    taxId: 'GRBGPP87L04L741X',
-    address: 'Via dei Mille',
-    houseNumber: '1000',
-    municipality: 'Marsala',
-    province: 'TP',
-    zip: '91025',
-    foreignState: 'Italia'
-  }
-]
+import cesare from '../fixtures/recipients/cesare.json';
+import garibaldi from '../fixtures/recipients/garibaldi.json';
+// import {NUOVA_NOTIFICA} from '../../src/navigation/routes.const';
+import {CREATE_NOTIFICATION} from '../../src/api/notifications/notifications.routes';
 
 describe("Notifications New Notification", () => {
   const pdfTest1 = './cypress/fixtures/attachments/pdf_test_1.pdf';
@@ -39,7 +19,7 @@ describe("Notifications New Notification", () => {
     cy.loginWithTokenExchange();
 
     // intercepts send notification request stubbing its successful response
-    cy.intercept('POST', '/delivery/requests', {
+    cy.intercept('POST', CREATE_NOTIFICATION(), {
       statusCode: 202,
       body: {
         notificationRequestId: 'S0FOQS1VV1JBLUFLSkUtMjAyMjExLVAtMQ==',
@@ -48,7 +28,7 @@ describe("Notifications New Notification", () => {
     }).as('saveNewNotification');
     
     cy.intercept('/delivery/attachments/preload').as('preloadAttachments');
-
+    
     cy.visit('/dashboard/nuova-notifica');
   });
 
@@ -65,12 +45,11 @@ describe("Notifications New Notification", () => {
     });
 
     cy.get('button[type="submit"]').should('not.be.disabled').click();
-    
-    // Fill step 2
+
     cy.fillRecipient({
       position: 0,
       data: {
-        ...recipients[0],
+        ...cesare,
         creditorTaxId: '77777777777',
         noticeCode: '302001869076319100',
       }
@@ -109,7 +88,7 @@ describe("Notifications New Notification", () => {
     // Fill step 2
     cy.fillRecipient({
       position: 0,
-      data: recipients[0]
+      data: cesare
     });
     
     cy.get('button[type="submit"]').should('not.be.disabled').click();
@@ -149,7 +128,7 @@ describe("Notifications New Notification", () => {
     cy.fillRecipient({
       position: 0,
       data: {
-        ...recipients[0],
+        ...cesare,
         creditorTaxId: '77777777777',
         noticeCode: '302001869076319100'
       }
@@ -161,7 +140,7 @@ describe("Notifications New Notification", () => {
     cy.fillRecipient({
       position: 1,
       data: {
-        ...recipients[1],
+        ...garibaldi,
         creditorTaxId: '77777777777',
         noticeCode: '302001869076319101'
       }
@@ -205,7 +184,7 @@ describe("Notifications New Notification", () => {
     // Recipient 1
     cy.fillRecipient({
       position: 0,
-      data: recipients[0]
+      data: cesare
     });
     
     cy.contains(/^Aggiungi un destinatario$/).click();
@@ -213,7 +192,7 @@ describe("Notifications New Notification", () => {
     // Recipient 2
     cy.fillRecipient({
       position: 1,
-      data: recipients[1]
+      data: garibaldi
     });
 
     cy.get('button[type="submit"]').should('not.be.disabled').click();
@@ -295,7 +274,7 @@ describe("Notifications New Notification", () => {
     cy.get('button[type="submit"]').should('not.be.disabled').click();
 
     // Fill step 3
-    cy.get('.MuiPaper-root > :nth-child(2) > .MuiButton-root').click();
+    cy.get('[data-testid="AddIcon"]').click();
     cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
     cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
     cy.get('input[name="documents\.0\.name"]').type('pdf di Test 1');
