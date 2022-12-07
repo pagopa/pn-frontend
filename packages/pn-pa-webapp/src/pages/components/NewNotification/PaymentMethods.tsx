@@ -14,8 +14,7 @@ import {
 } from '../../../models/NewNotification';
 import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationPaymentDocument } from '../../../redux/newNotification/actions';
-import { setIsCompleted } from '../../../redux/newNotification/reducers';
-import { setPaymentDocuments } from '../../../redux/newNotification/reducers';
+import { setIsCompleted, setPaymentDocuments } from '../../../redux/newNotification/reducers';
 import NewNotificationCard from './NewNotificationCard';
 
 type PaymentBoxProps = {
