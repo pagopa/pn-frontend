@@ -44,7 +44,7 @@ const PaymentBox = ({ id, title, onFileUploaded, onRemoveFile, fileUploaded }: P
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
         onFileUploaded={(file, sha256, name, size) =>
-          onFileUploaded(`${id}.file`, file as Uint8Array, sha256, name, size)
+          onFileUploaded(id, file as Uint8Array, sha256, name, size)
         }
         onRemoveFile={() => onRemoveFile(id)}
         sx={{ marginTop: '10px' }}
@@ -265,18 +265,22 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
   });
 
   const fileUploadedHandler = async (
+    taxId: string,
+    paymentType: 'pagoPaForm' | 'f24flatRate' | 'f24standard',
     id: string,
     file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string },
     name?: string,
     size?: number
   ) => {
-    await formik.setFieldTouched(id, true, false);
+    await formik.setFieldTouched(`${id}.file`, true, false);
     await formik.setFieldValue(id, {
-      size,
-      uint8Array: file,
-      sha256,
-      name,
+      ...formik.values[taxId][paymentType],
+      file: { size, uint8Array: file, sha256, name },
+      ref: {
+        key: '',
+        versionToken: '',
+      },
     });
   };
 
@@ -317,7 +321,8 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
               <PaymentBox
                 id={`${recipient.taxId}.pagoPaForm`}
                 title={`${t('attach-pagopa-notice')}*`}
-                onFileUploaded={fileUploadedHandler}
+                onFileUploaded={(id, file, sha256, name, size) =>
+                  fileUploadedHandler(recipient.taxId, 'pagoPaForm', id, file, sha256, name, size)}
                 onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPaForm')}
                 fileUploaded={formik.values[recipient.taxId].pagoPaForm}
               />
@@ -325,7 +330,8 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
                 <PaymentBox
                   id={`${recipient.taxId}.f24flatRate`}
                   title={`${t('attach-f24-flatrate')}*`}
-                  onFileUploaded={fileUploadedHandler}
+                  onFileUploaded={(id, file, sha256, name, size) =>
+                    fileUploadedHandler(recipient.taxId, 'f24flatRate', id, file, sha256, name, size)}
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24flatRate')}
                   fileUploaded={formik.values[recipient.taxId].f24flatRate}
                 />
@@ -334,7 +340,8 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
                 <PaymentBox
                   id={`${recipient.taxId}.f24standard`}
                   title={`${t('attach-f24')}*`}
-                  onFileUploaded={fileUploadedHandler}
+                  onFileUploaded={(id, file, sha256, name, size) =>
+                    fileUploadedHandler(recipient.taxId, 'f24standard', id, file, sha256, name, size)}
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24standard')}
                   fileUploaded={formik.values[recipient.taxId].f24standard}
                 />
