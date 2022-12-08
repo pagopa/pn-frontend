@@ -3,7 +3,7 @@ import React from 'react';
 
 import * as redux from 'react-redux';
 import { act, fireEvent, RenderResult, screen } from '@testing-library/react';
-import { axe, render } from '../../__test__/test-utils';
+import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/contact/actions';
 import Contacts from '../Contacts.page';
 import { PROFILO } from '../../navigation/routes.const';
@@ -105,12 +105,6 @@ describe('Contacts page - assuming contact API works properly', () => {
     fireEvent.click(subtitleLink);
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(PROFILO);
-  });
-
-  it('is contact page accessible', async () => {
-    const { container } = result;
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
   });
 });
 

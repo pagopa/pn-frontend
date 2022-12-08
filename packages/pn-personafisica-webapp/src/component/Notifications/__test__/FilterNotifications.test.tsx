@@ -2,7 +2,7 @@ import { fireEvent, waitFor, screen, within, RenderResult, act } from '@testing-
 import * as redux from 'react-redux';
 import { formatToTimezoneString, getNextDay, tenYearsAgo, today } from '@pagopa-pn/pn-commons';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
 function formatDate(date: Date): string {
@@ -197,14 +197,5 @@ describe('Filter Notifications Table Component', () => {
         type: 'dashboardSlice/setNotificationFilters',
       });
     });
-  });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail('render() returned undefined!');
-    }
   });
 });
