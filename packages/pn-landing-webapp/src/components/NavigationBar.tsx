@@ -1,6 +1,7 @@
-import { Box, Chip, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+
+import { Box, Chip, Stack, Tab, Tabs, Typography } from "@mui/material";
 
 const NavigationBar = () => {
   const { pathname } = useRouter();

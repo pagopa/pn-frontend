@@ -1,14 +1,18 @@
+import Link from "next/link";
+
+import { SvgIcon, Typography } from "@mui/material";
+
 import {
   FooterLinksType,
+  HeroProps,
   HorizontalNavProps,
   PreLoginFooterLinksType,
   WalkthroughProps
 } from "@pagopa/mui-italia";
-import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
-import { SvgIcon, Typography } from "@mui/material";
-import Link from "next/link";
 
-import { PAGOPA_HOME } from "@utils/constants";
+import { IAppData, IInfoblockData, ILinkData, IShowcaseData } from "model";
+
+import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -31,9 +35,6 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
-
-import { IAppData, IInfoblockData, ILinkData, IShowcaseData } from "model";
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");

@@ -1,14 +1,18 @@
+import Link from "next/link";
+
+import { SvgIcon, Typography } from "@mui/material";
+
 import {
   FooterLinksType,
+  HeroProps,
   HorizontalNavProps,
   PreLoginFooterLinksType,
   WalkthroughProps
 } from "@pagopa/mui-italia";
-import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
-import { SvgIcon, Typography } from "@mui/material";
-import Link from "next/link";
 
-import { PAGOPA_HOME } from "@utils/constants";
+import { IAppData, IInfoblockData, ILinkData, IShowcaseData } from "model";
+
+import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -31,9 +35,6 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
-
-import { IAppData, IInfoblockData, ILinkData, IShowcaseData } from "model";
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
@@ -113,14 +114,14 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche integrates with the institutions' protocol and offers both APIs 
+            Piattaforma Notifiche integrates with the institutions’ protocol and offers both APIs 
             for sending notifications automatically and the possibility of making manual submissions. 
             Once the deeds and payment forms have been uploaded, the platform generates the IUN, a 
             unique code identifying the notification.
           </Typography>
           <Typography variant="body2">
             Subsequently, it searches its archives and public registers for a PEC traceable to the 
-            recipient and sends the notification. It then sends a courtesy notice to the recipient's 
+            recipient and sends the notification. It then sends a courtesy notice to the recipient’s 
             other digital contacts (IO app, email and SMS).
           </Typography>
           <Typography variant="body2">
@@ -216,7 +217,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
           <Typography variant="body2">
             You can also pay any fees thanks to the integration with pagoPA, view the history of received 
             notifications and manage them directly online. In addition, you only need a proxy to handle 
-            your family members' registered mail as well.
+            your family members’ registered mail as well.
           </Typography>
         </>
       ),
@@ -384,7 +385,7 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "IO app",
           subtitle: (
             <Typography variant="body2">
-              If you activate the "Digital Notifications" service of Piattaforma Notifiche, you can 
+              If you activate the &quot;Digital Notifications&quot; service of Piattaforma Notifiche, you can 
               receive and manage legal communications <strong>directly in the app</strong>. If you 
               do not have a PEC and read the message immediately, you will not receive the registered 
               letter and the notification will be legally delivered.

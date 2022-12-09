@@ -1,12 +1,12 @@
 import {
   FooterLinksType,
   HeroProps,
-  PreLoginFooterLinksType
+  HorizontalNavProps,
+  InfoblockProps,
+  PreLoginFooterLinksType,
+  ShowcaseProps,
+  WalkthroughProps
 } from "@pagopa/mui-italia";
-import { HorizontalNavProps } from "@pagopa/mui-italia";
-import { WalkthroughProps } from "@pagopa/mui-italia";
-import { ShowcaseProps } from "@pagopa/mui-italia";
-import { InfoblockProps } from "@pagopa/mui-italia";
 
 export enum UserType {
   PA = "pa",

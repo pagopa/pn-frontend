@@ -1,17 +1,19 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+
 import {
   Infoblock,
   Showcase,
   Walkthrough,
   Hero,
 } from "@pagopa/mui-italia";
+
 import {
   getHeroData,
   getInfoblockData,
   getShowcaseData,
   getWalkthroughData,
-} from "../../api";
+} from "api";
 import { UserType } from "model";
 
 const USER_TYPE = UserType.PF;

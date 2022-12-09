@@ -1,11 +1,16 @@
 import { useContext } from "react";
-import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
-import { ShowcaseProps } from "@pagopa/mui-italia/dist/components/Showcase";
-import { WalkthroughProps } from "@pagopa/mui-italia/dist/components/Walkthrough";
-import { InfoblockProps } from "@pagopa/mui-italia";
+
+import {
+  HeroProps,
+  HorizontalNavProps,
+  InfoblockProps,
+  ShowcaseProps,
+  WalkthroughProps,
+} from "@pagopa/mui-italia";
+
 import { IAppData, UserType } from "model";
-import { HorizontalNavProps } from "@pagopa/mui-italia";
-import LangContext from "../provider/lang-context";
+import LangContext from "provider/lang-context";
+
 import { deAppData } from "./data/de";
 import { enAppData } from "./data/en";
 import { frAppData } from "./data/fr";
@@ -15,13 +20,19 @@ import { slAppData } from "./data/sl";
 export const getAppData = (): IAppData => {
   const lang = useContext(LangContext);
 
-  switch(lang.selectedLanguage){
-    case 'it': return itAppData;
-    case 'en': return enAppData;
-    case 'fr': return frAppData;
-    case 'de': return deAppData;
-    case 'sl': return slAppData;
-    default: return itAppData;
+  switch (lang.selectedLanguage) {
+    case "it":
+      return itAppData;
+    case "en":
+      return enAppData;
+    case "fr":
+      return frAppData;
+    case "de":
+      return deAppData;
+    case "sl":
+      return slAppData;
+    default:
+      return itAppData;
   }
 };
 

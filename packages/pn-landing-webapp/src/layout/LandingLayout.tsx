@@ -1,11 +1,14 @@
-import { Alert, Box, Stack } from "@mui/material";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-import { Footer, ButtonNaked } from "@pagopa/mui-italia";
 import { ReactNode, useContext } from "react";
 
-import LangContext from "../../provider/lang-context";
+import { Alert, Box, Stack } from "@mui/material";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+
+import { Footer, ButtonNaked } from "@pagopa/mui-italia";
+
+import LangContext from "provider/lang-context";
+import { getAppData } from "api";
+
 import NavigationBar from "../components/NavigationBar";
-import { getAppData } from "../../api";
 import { LANGUAGES } from "./constants";
 
 interface Props {
