@@ -1,5 +1,7 @@
 import * as redux from 'react-redux';
+
 import { fireEvent, waitFor } from '@testing-library/react';
+
 import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 
 import { render } from '../../__test__/test-utils';
@@ -112,7 +114,7 @@ describe('NuovaDelega page', () => {
   it('navigates to Deleghe page before creation', () => {
     useIsMobileSpy.mockReturnValue(false);
     const result = render(<NuovaDelega />, initialState(false));
-    const backButton = result.getByText('button.indietro');
+    const backButton = result.getByTestId('breadcrumb-indietro-button');
 
     fireEvent.click(backButton);
     expect(mockNavigateFn).toBeCalled();

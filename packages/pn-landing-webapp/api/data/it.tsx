@@ -463,7 +463,7 @@ const paWalkthrough: WalkthroughProps = {
       icon: <UploadIcon color="primary" />,
       title: "L’ente crea la richiesta di notifica",
       subtitle:
-        "Con l’uso di chiavi API o manualmente, l’ente crea la richiesta di notifica e carica gli allegati.",
+        "Con l’uso di API Key o manualmente, l’ente crea la richiesta di notifica e carica gli allegati.",
     },
     {
       icon: <SyncIcon color="primary" />,

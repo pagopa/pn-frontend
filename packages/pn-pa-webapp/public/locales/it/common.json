@@ -15,8 +15,9 @@
     "notifications": "Notifiche",
     "roles": "Ruoli",
     "groups": "Gruppi",
+    "api-key": "API Key",
+    "statistics": "Statistiche",
     "app-status": "Stato della piattaforma",
-    "api-key": "Chiavi API",
     "aria-label": "piattaforma-notifiche navigazione principale",
     "aria-label-inner": "piattaforma-notifiche navigazione mittente"
   },

@@ -1,5 +1,6 @@
-import { createContext, FC, ReactNode, useContext, useEffect, useState } from 'react';
+import { createContext, FC, ReactNode, useCallback, useContext, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+
 import _ from 'lodash';
 import {
   Box,
@@ -11,7 +12,8 @@ import {
   DialogTitle,
   Typography
 } from '@mui/material';
-import { appStateActions, CodeModal } from '@pagopa-pn/pn-commons';
+
+import { appStateActions, CodeModal, AppResponsePublisher,  AppResponse, ErrorMessage } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
@@ -55,6 +57,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     ? digitalAddresses.legal.concat(digitalAddresses.courtesy)
     : [];
   const [isConfirmationModalVisible, setIsConfirmationModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<ErrorMessage>();
 
   const initialProps = {
     labelRoot: '',
@@ -73,6 +76,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   const handleClose = (status: 'validated' | 'cancelled' = 'cancelled') => {
     setCodeNotValid(false);
     setOpen(false);
+    
     setProps(initialProps);
     if (props.callbackOnValidation) {
       props.callbackOnValidation(status);
@@ -142,10 +146,11 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           setOpen(true);
         }
       })
-      .catch((error) => {
-        if(error.response.status === 422) {
-          setCodeNotValid(true);
-        }
+      .catch(() => {
+      // .catch((error) => {
+        // if(error.response.status === 422) {
+        //   setCodeNotValid(true);
+        // }
       });
   };
 
@@ -185,6 +190,32 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       setIsConfirmationModalVisible(true);
     }
   }, [props]);
+  
+  const handleAddressUpdateError = useCallback((responseError: AppResponse) => {
+    if(!open) {
+      // notify the publisher we are not handling the error
+      return true;
+    } 
+    if(Array.isArray(responseError.errors)){
+      const error = responseError.errors[0];
+      setErrorMessage({
+        title: error.message.title,
+        content: error.message.content
+      });
+      setCodeNotValid(true);
+    }
+    return false;
+  }, [open]);
+  
+  useEffect(() => {
+    AppResponsePublisher.error.subscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
+    AppResponsePublisher.error.subscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+    
+    return () => {
+      AppResponsePublisher.error.unsubscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
+      AppResponsePublisher.error.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+    };
+  }, [handleAddressUpdateError]);
 
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
@@ -200,7 +231,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           }
           open={open}
           initialValues={new Array(5).fill('')}
-          handleClose={() => setOpen(false)}
+          handleClose={() => handleClose()}
           codeSectionTitle={t(`${props.labelRoot}.insert-code`, { ns: 'recapiti' })}
           codeSectionAdditional={
             <Box>
@@ -223,8 +254,10 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           cancelCallback={() => handleClose('cancelled')}
           confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
           hasError={codeNotValid}
-          errorTitle={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
-          errorMessage={t(`${props.labelRoot}.wrong-code-message`, { ns: 'recapiti' })}
+          // errorTitle={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
+          // errorMessage={t(`${props.labelRoot}.wrong-code-message`, { ns: 'recapiti' })}
+          errorTitle={errorMessage?.title}
+          errorMessage={errorMessage?.content}
         />
       )}
       <Dialog

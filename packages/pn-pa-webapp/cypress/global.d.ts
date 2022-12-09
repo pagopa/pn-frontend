@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { PNRole } from "../src/models/user";
+
 export type PaymentMethodType = 'pagoPA' | 'pagoPA_F24_FlatRate' | 'pagoPA_F24_Standard' | 'none';
 
 export interface PreliminaryInfoFormData {
@@ -36,7 +38,8 @@ declare namespace Cypress {
      login(): void;
      logout(): void;
      loginWithUI(): void;
-     loginWithTokenExchange(): void;
+     setRole(role: PNRole): void;
+     loginWithTokenExchange(role?: PNRole): void;
      fillRecipient(recipient: RecipientFormData): void;
   }
 }

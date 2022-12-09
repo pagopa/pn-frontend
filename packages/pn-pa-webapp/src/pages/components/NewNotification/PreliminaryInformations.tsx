@@ -15,7 +15,7 @@ import {
 import { PhysicalCommunicationType, CustomDropdown, ApiErrorWrapper, dataRegex } from '@pagopa-pn/pn-commons';
 
 import { NewNotification, PaymentModel } from '../../../models/NewNotification';
-import { GroupStatus, PNRole } from '../../../models/user';
+import { GroupStatus } from '../../../models/user';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import { setPreliminaryInformations } from '../../../redux/newNotification/reducers';
 import { getUserGroups, NEW_NOTIFICATION_ACTIONS } from '../../../redux/newNotification/actions';
@@ -33,9 +33,6 @@ type Props = {
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
-
-  const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const isAdmin = loggedUser.organization?.roles[0].role === PNRole.ADMIN;
 
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
@@ -57,7 +54,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     subject: yup.string().required(`${t('subject')} ${tc('required')}`),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
-    group: groups.length > 0 && !isAdmin ? yup.string().required() : yup.string(),
+    group: groups.length > 0 ? yup.string().required() : yup.string(),
     taxonomyCode: yup
       .string()
       .required(`${t('taxonomy-id')} ${tc('required')}`)
@@ -146,7 +143,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
           />
           <CustomDropdown
             id="group"
-            label={`${t('group')}${groups.length > 0 && !isAdmin ? '*' : ''}`}
+            label={`${t('group')}${groups.length > 0 ? '*' : ''}`}
             fullWidth
             name="group"
             size="small"
@@ -194,7 +191,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                 data-testid="comunicationTypeRadio"
               />
               <FormControlLabel
-                value={PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER}
+                value={PhysicalCommunicationType.AR_REGISTERED_LETTER}
                 control={<Radio />}
                 label={t('simple-registered-letter')}
                 data-testid="comunicationTypeRadio"

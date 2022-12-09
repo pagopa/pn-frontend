@@ -19,7 +19,7 @@ type Props = {
   menuItems: Array<SideMenuItem>;
   selfCareItems?: Array<SideMenuItem>;
   handleLinkClick: (item: SideMenuItem, flag?: boolean) => void;
-  selectedItem: { index: number; label: string; route: string };
+  selectedItem: { index: number; label: string; route: string; parent?: string };
 };
 
 const useStyles = makeStyles(() => ({
@@ -54,6 +54,12 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
 
   useEffect(() => {
     setSelectedIndex(selectedItem);
+    // open parent menù
+    setOpenId(selectedItem.parent || '');
+    setOpen(selectedItem.parent !== undefined);
+    /* eslint-disable functional/immutable-data */
+    prevOpenId.current = selectedItem.parent || '';
+    /* eslint-enalbe functional/immutable-data */
   }, [selectedItem]);
 
   return (

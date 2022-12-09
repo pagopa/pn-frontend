@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.2](https://github.com/pagopa/pn-frontend/compare/v1.5.1...v1.5.2) (2022-11-29)
+
+
+### Bug Fixes
+
+* add SPID_VALIDATOR_ENV_ENABLED in env.ts ([5791a4c](https://github.com/pagopa/pn-frontend/commit/5791a4c194af02b9b478f4af59645fa742ac14f9))
+* add validator env variable for test ([0863d63](https://github.com/pagopa/pn-frontend/commit/0863d63604c14a718c0d83495f0794293fe25a9d))
+* added sonar script in pn-commons ([2712e6a](https://github.com/pagopa/pn-frontend/commit/2712e6a521123968449ddb16433fb1404cc973c8))
+* change validator icon ([981e389](https://github.com/pagopa/pn-frontend/commit/981e3896505fd5ee1babfcdb4edf7bd42cd55d36))
+* **pn-2672:** format payment amount from eurocents to euros ([9ec5e8d](https://github.com/pagopa/pn-frontend/commit/9ec5e8d6ad97e610985da0c6b0321fe548a003b0))
+* updated node version to 16 for landing codebuilder ([e5065e0](https://github.com/pagopa/pn-frontend/commit/e5065e009692fe8038174d541308dddf875238c7))
+* updated sonar pipeline to check packages and not monorepo ([9ec3081](https://github.com/pagopa/pn-frontend/commit/9ec30812e2d8e65865b8fa845c4ef7e22ded0bc4))
+
+
+### Features
+
+* **pn-785:** added sonar scripts to all packages ([#480](https://github.com/pagopa/pn-frontend/issues/480)) ([56e7456](https://github.com/pagopa/pn-frontend/commit/56e7456929317759916bf88cd03d4a29cc8d513a))
+
+
+
+
+
 ## [1.5.1](https://github.com/pagopa/pn-frontend/compare/v1.5.0...v1.5.1) (2022-11-14)
 
 

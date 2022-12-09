@@ -1,3 +1,4 @@
+import React from 'react';
 import * as redux from 'react-redux';
 import { render } from '../../__test__/test-utils';
 import ToSAcceptance from '../ToSAcceptance.page';

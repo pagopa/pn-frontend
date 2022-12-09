@@ -6,26 +6,32 @@ type Props = {
   isLogged: boolean;
   goToLogin: () => void;
   goToHomePage: () => void;
+  message?: string;
+  subtitle?: string;
 };
 
-const AccessDenied = ({ isLogged, goToLogin, goToHomePage }: Props) => {
-  const message = isLogged ? 'access-denied' : 'not-logged';
-  const subTitle = isLogged ? '' : 'not-logged-subtitle';
+const AccessDenied = ({ isLogged, goToLogin, goToHomePage, message, subtitle }: Props) => {
+  const finalMessage = message || getLocalizedOrDefaultLabel(
+    'common',
+    isLogged ? 'access-denied' : 'not-logged',
+    'Non hai le autorizzazioni necessarie per accedere a questa pagina'
+  );
+  const finalSubTitle = subtitle || (
+    isLogged 
+      ? '' 
+      : getLocalizedOrDefaultLabel('common', 'not-logged-subtitle', '')
+  );
 
   return (
     <Stack direction="column" alignItems="center" my={4} sx={{ minHeight: '50vh' }}>
       <Box mt={4}>
         <Typography align="center" color="text.primary" variant="h4">
-          {getLocalizedOrDefaultLabel(
-            'common',
-            message,
-            'Non hai le autorizzazioni necessarie per accedere a questa pagina'
-          )}
+          {finalMessage}
         </Typography>
       </Box>
       <Box my={2}>
         <Typography align="center" color="text.primary" variant="body1">
-          {getLocalizedOrDefaultLabel('common', subTitle, '')}
+          {finalSubTitle}
         </Typography>
       </Box>
 

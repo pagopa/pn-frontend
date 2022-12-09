@@ -67,7 +67,7 @@ const TermsOfService = () => {
             description={<Trans
               ns={'common'}
               i18nKey={'tos.switch-label'}
-              components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
+              components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
             >
               Accedendo, accetti i <TosLink>Termini e condizioni d’uso</TosLink> del servizio e
               confermi di aver letto l’<PrivacyLink>Informativa Privacy</PrivacyLink>.

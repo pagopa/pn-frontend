@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-personafisica-webapp",
   "description": "Piattaforma Notifiche per il cittadino",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -9,7 +9,7 @@
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.8.6",
     "@mui/x-date-pickers": "^5.0.0-alpha.5",
-    "@pagopa-pn/pn-commons": "^1.5.1",
+    "@pagopa-pn/pn-commons": "^1.5.2",
     "@pagopa/mui-italia": "^0.8.1",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
@@ -66,7 +66,6 @@
     ]
   },
   "devDependencies": {
-    "sonarqube-scanner": "^2.8.1",
     "@cypress/webpack-preprocessor": "^5.12.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
@@ -92,6 +91,7 @@
     "prettier": "^2.4.1",
     "react-scripts": "^5.0.1",
     "regex-replace": "^2.3.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "sonarqube-scanner": "^2.8.1"
   }
 }
