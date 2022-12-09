@@ -1,4 +1,3 @@
-/* eslint-disable functional/no-let */
 import React from 'react';
 import { act, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';

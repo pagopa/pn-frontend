@@ -4,7 +4,7 @@ import * as redux from 'react-redux';
 import * as isMobileHook from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 
 import { act, fireEvent, RenderResult, waitFor } from '@testing-library/react';
-import { axe, render } from '../../__test__/test-utils';
+import { render } from '../../__test__/test-utils';
 import Deleghe from '../Deleghe.page';
 
 const useIsMobileSpy = jest.spyOn(isMobileHook, 'useIsMobile');
@@ -164,14 +164,5 @@ describe('Deleghe page', () => {
     expect(result.baseElement).toHaveTextContent('Accept mandate error');
 
     useStateSpy.mockRestore();
-  });
-
-  it.skip('is deleghe page accessible', async () => {
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-    useIsMobileSpy.mockReturnValue(false);
-    await renderComponent(false, false, 'delegates');
-    const { container } = render(<Deleghe />);
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
   });
 });

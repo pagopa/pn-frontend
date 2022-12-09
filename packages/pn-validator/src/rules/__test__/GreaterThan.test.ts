@@ -15,6 +15,8 @@ describe('Test greater than rule', () => {
     expect(result).toBe(null);
   });
 
+  // questo test non fallisce, sembra che si stia verificando 
+  // che venga lanciata un'eccezione con un certo messaggio ...
   it('value not a number', () => {
     const rule = new GreaterThan<any, String>(5);
     try {
@@ -22,6 +24,29 @@ describe('Test greater than rule', () => {
     } catch (e) {
       expect(e.message).toBe('A value with wrong type was passed to the greaterThan rule');
     }
+  });
+
+  // ... ma questo test dovrebbe fallire (perché non viene lanciata un'eccezione)
+  // ma invece non fallisce
+  it.only('value not a number - see this', () => {
+    const rule = new GreaterThan<any, Number>(5);
+    try {
+      rule.valueValidator(8);
+    } catch (e) {
+      expect(e.message).toBe('A value with wrong type was passed to the greaterThan rule');
+    }
+  });
+
+  // questa è la versione corretta del primo test ...
+  it.only('value not a number - and now this', () => {
+    const rule = new GreaterThan<any, String>(5);
+    expect(() => rule.valueValidator('hello')).toThrow('A value with wrong type was passed to the greaterThan rule');
+  });
+
+  // ... il cui si vede perché questo infatti fallisce
+  it.only('value not a number - and this', () => {
+    const rule = new GreaterThan<any, Number>(5);
+    expect(() => rule.valueValidator(8)).toThrow('A value with wrong type was passed to the greaterThan rule');
   });
 
   it('value greater than (number - not equal)', () => {
