@@ -87,16 +87,13 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
         .test({
           name: 'denominationTotalLength',
           test(value) {
-            const maxLength = this.parent.recipientType === RecipientType.PG ? 80 : 79;
-            const isAcceptableLength =
-              (value || '').length + ((this.parent.lastName as string) || '').length <= maxLength;
-            if (isAcceptableLength) {
+            const denomination = (value || '') + ((this.parent.lastName as string) || '');
+            if (dataRegex.denomination.test(denomination)) {
               return true;
-            } else {
-              // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
-              const messageKey = `too-long-denomination-error-${this.parent.recipientType || 'PF'}`;
-              return this.createError({ message: t(messageKey), path: this.path });
             }
+            // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
+            const messageKey = `too-long-denomination-error-${this.parent.recipientType || 'PF'}`;
+            return this.createError({ message: t(messageKey), path: this.path });
           },
         }),
       // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
@@ -164,7 +161,7 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
           .matches(dataRegex.pIva, t('fiscal-code-error')),
         noticeCode: yup
           .string()
-          .matches(/^\d{18}$/, t('notice-code-error'))
+          .matches(dataRegex.noticeCode, t('notice-code-error'))
           .required(tc('required-field')),
       };
     }

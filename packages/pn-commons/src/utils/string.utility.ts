@@ -16,6 +16,8 @@ export const dataRegex = {
     /^([A-Z]{6}[0-9LMNPQRSTUV]{2}[ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1})$/i,
   pIva: /^\d{11}$/,
   taxonomyCode: /^(\d{6}[A-Z]{1})$/,
+  denomination: /^([\x20-\xFF]{1,80})$/,
+  noticeCode: /^\d{18}$/
 };
 
 /**
