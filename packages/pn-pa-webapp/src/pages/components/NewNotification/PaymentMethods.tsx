@@ -272,7 +272,6 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
     name?: string,
     size?: number
   ) => {
-    await formik.setFieldTouched(`${id}.file`, true, false);
     await formik.setFieldValue(id, {
       ...formik.values[taxId][paymentType],
       file: { size, uint8Array: file, sha256, name },
@@ -280,7 +279,8 @@ const PaymentMethods = ({ notification, onConfirm, isCompleted, onPreviousStep }
         key: '',
         versionToken: '',
       },
-    });
+    }, false);
+    await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
   const removeFileHandler = async (

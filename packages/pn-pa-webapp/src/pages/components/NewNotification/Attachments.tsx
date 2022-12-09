@@ -201,7 +201,6 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
     name?: string,
     size?: number
   ) => {
-    await formik.setFieldTouched(`${id}.file`, true, false);
     await formik.setFieldValue(id, {
       ...formik.values.documents[index],
       file: {
@@ -214,7 +213,8 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData }: Props) => {
         key: '',
         versionToken: '',
       },
-    });
+    }, false);
+    await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
   const removeFileHandler = async (id: string, index: number) => {
