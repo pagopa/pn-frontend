@@ -1,5 +1,6 @@
 import { dataRegex, formatFiscalCode } from './string.utility';
 import { calculatePages } from './pagination.utility';
+
 import {
     getNotificationStatusInfos,
     getNotificationAllowedStatus,
@@ -17,6 +18,7 @@ import {
     tenYearsAgo,
     DATE_FORMAT,
     getNextDay,
+    minutesBeforeNow,
     formatToTimezoneString
 } from './date.utility';
 import { IUN_regex, formatIun } from './iun.utility';
@@ -27,6 +29,8 @@ import { compileRoute } from './routes.utility';
 import { URL_DIGITAL_NOTIFICATIONS, PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from './costants';
 import { mockApiErrorWrapper, simpleMockForApiErrorWrapper, apiOutcomeTestHelper } from './test.utility';
 import { performThunkAction } from './redux.utility';
+import { ResponseEventDispatcher, AppResponsePublisher } from './AppResponse';
+import { AppError, AppErrorFactory, errorFactoryManager, UnknownAppError } from './AppError';
 
 export {
     getNotificationAllowedStatus,
@@ -38,6 +42,7 @@ export {
     getDay,
     getTime,
     getNextDay,
+    minutesBeforeNow,
     formatToTimezoneString,
     getValidValue,
     formatFiscalCode,
@@ -63,4 +68,10 @@ export {
     apiOutcomeTestHelper,
     simpleMockForApiErrorWrapper,
     performThunkAction,
+    AppResponsePublisher,
+    ResponseEventDispatcher,
+    AppError,
+    AppErrorFactory,
+    errorFactoryManager,
+    UnknownAppError
 };

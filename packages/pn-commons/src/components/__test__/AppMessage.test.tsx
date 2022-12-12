@@ -15,21 +15,27 @@ const errors: Array<IAppMessage> = [
     toNotify: true,
     alreadyShown: false,
   }
-]
+];
+
+const reduxInitialState = {
+  appState: {
+    messages: {
+      errors,
+      success: []
+    }
+  },
+};
 
 describe('AppMessage Component', () => {
 
   it('renders toast and dispacthes event on close', async () => {
-    // mock useSelector
-    const useSelectorSpy = jest.spyOn(redux, 'useSelector');
-    useSelectorSpy.mockReturnValueOnce(errors);
-    useSelectorSpy.mockReturnValueOnce([]);
     // mock dispatch
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     const mockDispatchFn = jest.fn();
     useDispatchSpy.mockReturnValue(mockDispatchFn);
     // render component
-    render(<AppMessage />);
+    // render(<AppMessage />);
+    render(<AppMessage/>, { preloadedState: reduxInitialState });
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockDispatchFn).toBeCalledWith({

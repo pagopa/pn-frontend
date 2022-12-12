@@ -13,6 +13,7 @@ import {
   uploadNotificationAttachment,
   uploadNotificationPaymentDocument,
   getUserGroups,
+  createNewNotification,
 } from './actions';
 import { PreliminaryInformationsPayload } from './types';
 
@@ -26,6 +27,7 @@ const initialState = {
     payment: {},
     physicalCommunicationType: '' as PhysicalCommunicationType,
     group: '',
+    taxonomyCode: '',
     paymentMode: '' as PaymentModel,
     notificationFeePolicy: '' as NotificationFeePolicy,
   } as NewNotification,
@@ -57,6 +59,11 @@ const newNotificationSlice = createSlice({
         // in questa fase la notificationFeePolicy viene assegnata di default a FLAT_RATE
         // Carlotta Dimatteo 10/08/2022
         notificationFeePolicy: NotificationFeePolicy.FLAT_RATE,
+        // reset payment data if payment mode has changed
+        payment:
+          state.notification.paymentMode !== action.payload.paymentMode
+            ? {}
+            : state.notification.payment,
       };
     },
     saveRecipients: (
@@ -80,6 +87,9 @@ const newNotificationSlice = createSlice({
         payment: action.payload.paymentDocuments,
       };
     },
+    setIsCompleted: (state) => {
+      state.isCompleted = true;
+    },
     resetState: () => initialState,
   },
   extraReducers: (builder) => {
@@ -93,6 +103,9 @@ const newNotificationSlice = createSlice({
       state.notification.payment = action.payload;
       state.isCompleted = true;
     });
+    builder.addCase(createNewNotification.rejected, (state) => {
+      state.isCompleted = false;
+    });
   },
 });
 
@@ -104,6 +117,7 @@ export const {
   setAttachments,
   setPaymentDocuments,
   resetState,
+  setIsCompleted,
 } = newNotificationSlice.actions;
 
 export default newNotificationSlice;

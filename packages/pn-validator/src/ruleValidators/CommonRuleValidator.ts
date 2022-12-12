@@ -7,6 +7,7 @@ import { CustomValidator } from '../rules/CustomValidator';
 import { ValidationResult } from '../types/ValidationResult';
 import { Rule } from '../Rule';
 import { Matches } from '../rules/Matches';
+import { IsOneOf } from '../rules/IsOneOf';
 
 export abstract class CommonRuleValidator<TModel, TValue> {
   protected pushRule: (rule: Rule<TModel, TValue>) => void;
@@ -56,6 +57,17 @@ export abstract class CommonRuleValidator<TModel, TValue> {
   };
 
   /**
+   * Check if value is in (not in) the set provided
+   * @param {TValue[]} value value to compare
+   * @param {boolean} [not] boolean to evaluate negative condition
+   * @param {string} [customErrorMessage] custom message to show when validation fails
+   */
+  public isOneOf = (possibleValues: TValue[], not?: boolean, customErrorMessage?: string) => {
+    this.pushRule(new IsOneOf<TModel, TValue>(possibleValues, not, customErrorMessage));
+    return this;
+  };
+
+  /**
    * Run custom validator
    * @param {boolean} validator custom validator
    */
@@ -69,23 +81,24 @@ export abstract class CommonRuleValidator<TModel, TValue> {
   /**
    * Negate next rule
    */
-  public readonly not = (): NotRuleValidator<TModel, TValue> => ({
-    isNull: (customErrorMessage?: string) => {
-      return this.addIsNullRule(true, customErrorMessage);
-    },
-    isUndefined: (customErrorMessage?: string) => {
-      return this.addIsUndefinedRule(true, customErrorMessage);
-    },
-    isEqual: (value: TValue, customErrorMessage?: string) => {
-      return this.addIsEqualRule(value, true, customErrorMessage);
-    },
-    isEmpty: (customErrorMessage?: string) => {
-      this.pushRule(new IsEmpty<TModel, TValue>(true, customErrorMessage));
-      return this;
-    },
-    matches: (pattern: RegExp, customErrorMessage?: string) => {
-      this.pushRule(new Matches<TModel, TValue>(pattern, true, customErrorMessage));
-      return this;
-    },
-  }) as unknown as NotRuleValidator<TModel, TValue>;
+  public readonly not = (): NotRuleValidator<TModel, TValue> =>
+    ({
+      isNull: (customErrorMessage?: string) => {
+        return this.addIsNullRule(true, customErrorMessage);
+      },
+      isUndefined: (customErrorMessage?: string) => {
+        return this.addIsUndefinedRule(true, customErrorMessage);
+      },
+      isEqual: (value: TValue, customErrorMessage?: string) => {
+        return this.addIsEqualRule(value, true, customErrorMessage);
+      },
+      isEmpty: (customErrorMessage?: string) => {
+        this.pushRule(new IsEmpty<TModel, TValue>(true, customErrorMessage));
+        return this;
+      },
+      matches: (pattern: RegExp, customErrorMessage?: string) => {
+        this.pushRule(new Matches<TModel, TValue>(pattern, true, customErrorMessage));
+        return this;
+      },
+    } as unknown as NotRuleValidator<TModel, TValue>);
 }

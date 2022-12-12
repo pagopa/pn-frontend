@@ -1,21 +1,19 @@
 import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
 import { Layout, useIsMobile } from '@pagopa-pn/pn-commons';
-import { SpidIcon } from '@pagopa/mui-italia/dist/icons';
+import { SpidIcon, CieIcon } from '@pagopa/mui-italia/dist/icons';
 import { styled } from '@mui/material/styles';
 import { useSearchParams } from "react-router-dom";
 
-import { IDPS} from '../../utils/IDPS';
 import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
-import { storageOriginOps } from '../../utils/storage';
+import {storageOriginOps, storageSpidSelectedOps} from '../../utils/storage';
 import { trackEventByType } from "../../utils/mixpanel";
 import { TrackEventType } from "../../utils/events";
+import { ENV } from "../../utils/env";
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -37,10 +35,8 @@ const Login = () => {
     storageOriginOps.write(origin);
   }
 
-  // PN-2195 hide CIE button
-  /* const goCIE = () => {
+  const goCIE = () => {
     storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
-    // () =>
     window.location.assign(
       `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
     );
@@ -51,7 +47,7 @@ const Login = () => {
         SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
       },
     );
-  }; */
+  };
 
   if (showIDPS) {
     return <SpidSelect onBack={() => setShowIDPS(false)} />;
@@ -118,24 +114,11 @@ const Login = () => {
                 boxShadow:
                   '0px 8px 10px -5px rgba(0, 43, 85, 0.1), 0px 16px 24px 2px rgba(0, 43, 85, 0.05), 0px 6px 30px 5px rgba(0, 43, 85, 0.1)',
                 borderRadius: '16px',
-                p: 1,
+                px: 1,
+                py: 3,
                 backgroundColor: 'white',
               }}
             >
-              <Typography
-                py={4}
-                px={0}
-                color="textPrimary"
-                variant="h6"
-                sx={{
-                  fontWeight: 'bold',
-                  textAlign: 'center',
-                }}
-                component="div"
-              >
-                {t('loginPage.loginBox.title')}
-              </Typography>
-
               <Box display="flex" justifyContent="center" alignItems="center">
                 <LoginButton
                   id="spidButton"
@@ -153,9 +136,9 @@ const Login = () => {
                 </LoginButton>
               </Box>
 
-              {/* PN-2195 hide CIE button
               <Box display="flex" justifyContent="center" alignItems="center">
                 <LoginButton
+                  id="cieButton"
                   sx={{
                     borderRadius: '4px',
                     width: '90%',
@@ -168,29 +151,7 @@ const Login = () => {
                 >
                   {t('loginPage.loginBox.cieLogin')}
                 </LoginButton>
-              </Box> */}
-
-              <Box mt={4}>
-                <Divider variant="middle" />
               </Box>
-
-              <Typography
-                py={3}
-                px={0}
-                color="textPrimary"
-                variant="body1"
-                sx={{
-                  textAlign: 'center',
-                }}
-                component="div"
-              >
-                <Trans i18nKey="loginPage.hintText">
-                  Non hai SPID?
-                  <Link href={IDPS.richiediSpid} color="#0062C3 !important">
-                    Scopri di più
-                  </Link>
-                </Trans>
-              </Typography>
             </Box>
           </Grid>
         </Grid>

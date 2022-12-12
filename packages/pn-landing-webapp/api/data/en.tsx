@@ -3,8 +3,8 @@ import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
 import { HorizontalNavProps } from "@pagopa/mui-italia";
 import { SvgIcon } from "@mui/material";
 import { Typography } from "@mui/material";
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
-import { IAppData, IInfoblockData, IShowcaseData } from "model";
+import Link from "next/link";
+
 import {
   CheckmarkIcon,
   CloudIcon,
@@ -26,7 +26,9 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
-import Link from "next/link";
+import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
+import { IAppData, IInfoblockData, IShowcaseData } from "model";
+
 
 const assistanceLink = {
   label: "Assistenza",
@@ -49,6 +51,7 @@ const heroCta = !!PN_URL
 
 /** Hero mocked data */
 const paHero: HeroProps = {
+  type: "image",
   title: "Inviare notifiche? Facile a dirsi.",
   subtitle: `E da oggi anche a farsi. Piattaforma Notifiche digitalizza la gestione delle comunicazioni a valore legale, 
     semplificando il processo per tutti: chi le invia, e chi le riceve.`,
@@ -59,6 +62,7 @@ const paHero: HeroProps = {
 };
 
 const pfHero: HeroProps = {
+  type: "image",
   title: "Le notifiche? Sono a portata di mano.",
   subtitle: `Con Piattaforma Notifiche puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
     potrai visualizzare, gestire e pagare direttamente online o in app le raccomandate che di solito ti vengono inviate in cartaceo.`,
@@ -70,6 +74,7 @@ const pfHero: HeroProps = {
 };
 
 const coHero: HeroProps = {
+  type: "text",
   title: "",
 };
 /* ************************************** */
@@ -111,7 +116,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
         <>
           <Typography variant="body2">
             Piattaforma Notifiche si integra con il protocollo degli enti e
-            offre sia API per l'invio automatico delle notifiche, sia la
+            offre sia API per l’invio automatico delle notifiche, sia la
             possibilità di fare invii manuali. Una volta effettuato il
             caricamento degli atti e dei moduli di pagamento, la piattaforma
             genera lo IUN, un codice univoco identificativo della notifica.
@@ -178,7 +183,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
           </Typography>
           <Typography variant="body2">
             Nel frattempo, gli enti possono consultare il{" "}
-            <Link href="https://www.pagopa.it/static/7ae1cda16663a9fe201273e8150f0958/PN-ManualeOperativo.pdf">
+            <Link href="https://www.pagopa.it/static/e190eb758489b75d4d81112a1357b5b2/Manuale-Operativo-Piattaforma-Notifiche.pdf">
               manuale operativo
             </Link>{" "}
             (aggiornato al 28/06/2022),{" "}
@@ -187,7 +192,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             </Link>{" "}
             e{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-              le API b2b per l'avanzamento delle notifiche
+              le API b2b per l’avanzamento delle notifiche
             </Link>
             .
           </Typography>
@@ -211,7 +216,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
         <>
           <Typography variant="body2">
             Le notifiche sono comunicazioni a valore legale emesse in via
-            ufficiale da un'amministrazione, come multe, avvisi di accertamento
+            ufficiale da un’amministrazione, come multe, avvisi di accertamento
             di tributi, esiti di pratiche amministrative avviate con le
             Pubbliche Amministrazioni o rimborsi, che fino ad ora hai sempre
             ricevuto tramite raccomandata. Da oggi puoi riceverle e consultarle
@@ -458,7 +463,7 @@ const paWalkthrough: WalkthroughProps = {
       icon: <UploadIcon color="primary" />,
       title: "L’ente crea la richiesta di notifica",
       subtitle:
-        "Con l’uso di chiavi API o manualmente, l’ente crea la richiesta di notifica e carica gli allegati.",
+        "Con l’uso di API Key o manualmente, l’ente crea la richiesta di notifica e carica gli allegati.",
     },
     {
       icon: <SyncIcon color="primary" />,

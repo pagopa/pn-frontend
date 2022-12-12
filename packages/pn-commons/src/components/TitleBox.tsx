@@ -42,7 +42,7 @@ export default function TitleBox({
         <Typography variant={variantTitle}>{title}</Typography>
       </Grid>}
       {subTitle && <Grid item xs={12} mb={mbSubTitle}>
-        <Typography variant={variantSubTitle} sx={{ fontSize: '18px' }}>
+        <Typography variant={variantSubTitle} sx={{ fontSize: '18px' }} component={typeof subTitle !== "string" ? "div" : "p"}>
           {subTitle}
         </Typography>
       </Grid>}

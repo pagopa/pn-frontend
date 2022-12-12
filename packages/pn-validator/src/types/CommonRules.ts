@@ -33,6 +33,7 @@ export interface CommonRules<TModel, TValue> {
   readonly isNull: () => RuleValidators<TModel, TValue>;
   readonly isUndefined: () => RuleValidators<TModel, TValue>;
   readonly isEqual: (value: TValue) => RuleValidators<TModel, TValue>;
+  readonly isOneOf: (possibleValues: TValue[], not?: boolean) => RuleValidators<TModel, TValue>;
   readonly customValidator: (
     validator: (value: TValue, model: TModel) => ValidationResult<TValue>
   ) => RuleValidators<TModel, TValue>;

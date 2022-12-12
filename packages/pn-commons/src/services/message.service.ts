@@ -93,7 +93,7 @@ export const createAppError = (error: IAppErrorProps, options: { show: boolean }
   return e;
 };
 
-export const createAppMessage = (title: string, message: string, status?: number): IAppMessage => {
+export const createAppMessage = (title: string, message: string, status?: number, action?: string): IAppMessage => {
   const e: IAppMessage = {
     id: _.uniqueId(),
     title,
@@ -102,6 +102,7 @@ export const createAppMessage = (title: string, message: string, status?: number
     toNotify: true,
     status,
     alreadyShown: false,
+    action
   };
   return e;
 };

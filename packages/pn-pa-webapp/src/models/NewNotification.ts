@@ -11,6 +11,7 @@ export enum PaymentModel {
   PAGO_PA_NOTICE = 'PAGO_PA_NOTICE',
   PAGO_PA_NOTICE_F24_FLATRATE = 'PAGO_PA_NOTICE_F24_FLATRATE',
   PAGO_PA_NOTICE_F24 = 'PAGO_PA_NOTICE_F24',
+  NOTHING = 'NOTHING'
 }
 
 interface BaseNewNotification {
@@ -24,6 +25,7 @@ interface BaseNewNotification {
   senderDenomination?: string;
   senderTaxId?: string;
   group?: string;
+  taxonomyCode: string;
 }
 
 // New Notification DTO
@@ -34,6 +36,7 @@ export interface NewNotificationDTO extends BaseNewNotification {
 
 // New Notification
 export interface NewNotificationRecipient {
+  id: string;
   idx: number;
   recipientType: RecipientType;
   taxId: string;

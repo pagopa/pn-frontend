@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 // PN-2028
 // import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -59,6 +59,7 @@ const NewNotification = () => {
     t('new-notification.steps.attachments.title', { ns: 'notifiche' }),
     t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }),
   ];
+  const childRef = useRef<{confirm: () => void}>();
 
   const eventStep = [
     TrackEventType.NOTIFICATION_SEND_PRELIMINARY_INFO,
@@ -92,7 +93,11 @@ const NewNotification = () => {
 
   const goToPreviousStep = (selectedStep?: number) => {
     if (selectedStep !== undefined && selectedStep >= 0 && selectedStep < activeStep) {
-      setActiveStep(selectedStep);
+      // navigation event from stepper
+      if (childRef.current) {
+        childRef.current.confirm();
+        setActiveStep(selectedStep);
+      }
     } else {
       setActiveStep(activeStep - 1);
     }
@@ -165,13 +170,15 @@ const NewNotification = () => {
               ))}
             </Stepper>
             {activeStep === 0 && (
-              <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />
+              <PreliminaryInformations notification={notification} onConfirm={goToNextStep}/>
             )}
             {activeStep === 1 && (
               <Recipient
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
                 recipientsData={notification.recipients}
+                paymentMode={notification.paymentMode}
+                ref={childRef}
               />
             )}
             {activeStep === 2 && (
@@ -179,6 +186,7 @@ const NewNotification = () => {
                 onConfirm={goToNextStep}
                 onPreviousStep={goToPreviousStep}
                 attachmentsData={notification.documents}
+                ref={childRef}
               />
             )}
             {activeStep === 3 && (
@@ -187,6 +195,7 @@ const NewNotification = () => {
                 notification={notification}
                 isCompleted={isCompleted}
                 onPreviousStep={goToPreviousStep}
+                ref={childRef}
               />
             )}
           </Grid>

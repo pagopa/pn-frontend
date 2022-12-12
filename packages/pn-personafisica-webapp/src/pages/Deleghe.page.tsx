@@ -1,6 +1,13 @@
-import { useEffect } from 'react';
+import React from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Stack } from '@mui/material';
-import { CodeModal, TitleBox, useIsMobile } from '@pagopa-pn/pn-commons';
+import {
+  AppResponse,
+  AppResponsePublisher,
+  CodeModal,
+  TitleBox,
+  useIsMobile,
+} from '@pagopa-pn/pn-commons';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -21,6 +28,7 @@ import Delegators from '../component/Deleghe/Delegators';
 import { getSidemenuInformation } from '../redux/sidemenu/actions';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 
 const Deleghe = () => {
   const isMobile = useIsMobile();
@@ -34,6 +42,9 @@ const Deleghe = () => {
     name: acceptName,
     error: acceptError,
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
+  const [pageReady, setPageReady] = useState(false);
+
+  const [errorText, setErrorText] = React.useState('');
 
   const dispatch = useAppDispatch();
 
@@ -60,17 +71,34 @@ const Deleghe = () => {
     trackEventByType(TrackEventType.DELEGATION_DELEGATOR_ACCEPT);
   };
 
+  const retrieveData = async () => {
+    await dispatch(getDelegates());
+    await dispatch(getDelegators());
+    setPageReady(true);
+  };
+
   useEffect(() => {
-    void dispatch(getDelegates());
-    void dispatch(getDelegators());
+    void retrieveData();
     return () => {
       dispatch(resetState());
     };
   }, []);
 
+  const handleAcceptDelegationError = (errorResponse: AppResponse) => {
+    const error = errorResponse.errors ? errorResponse.errors[0] : null;
+    setErrorText(error?.message.content || '');
+  };
+
+  React.useEffect(() => {
+    AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptDelegationError);
+
+    return () =>
+      AppResponsePublisher.error.unsubscribe('acceptDelegation', handleAcceptDelegationError);
+  }, []);
+
   return (
-    <Box p={3}>
-      <>
+    <LoadingPageWrapper isInitialized={pageReady}>
+      <Box p={3}>
         <CodeModal
           title={t('deleghe.accept_title')}
           subtitle={t('deleghe.accept_description', { name: acceptName })}
@@ -83,7 +111,8 @@ const Deleghe = () => {
           confirmLabel={t('deleghe.accept')}
           codeSectionTitle={t('deleghe.verification_code')}
           hasError={acceptError}
-          errorMessage={t('deleghe.invalid_code')}
+          // errorMessage={t('deleghe.invalid_code')}
+          errorMessage={errorText}
         />
         <ConfirmationModal
           open={open}
@@ -117,8 +146,8 @@ const Deleghe = () => {
             <Delegators />
           </>
         )}
-      </>
-    </Box>
+      </Box>
+    </LoadingPageWrapper>
   );
 };
 

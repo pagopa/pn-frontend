@@ -149,8 +149,10 @@ describe('Attachments Component', () => {
     let newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
     const deleteIcon = newAttachmentBoxes[1].querySelector('[data-testid="DeleteIcon"]');
     fireEvent.click(deleteIcon!);
-    newAttachmentBoxes = await waitFor(() => result.queryAllByTestId('attachmentBox'));
-    expect(newAttachmentBoxes).toHaveLength(1);
+    await waitFor(() => {
+      newAttachmentBoxes = result.queryAllByTestId('attachmentBox');
+      expect(newAttachmentBoxes).toHaveLength(1);
+    });
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
@@ -164,5 +166,16 @@ describe('Attachments Component', () => {
         sha256: 'mocked-hasBase64',
       },
     ]);
+  });
+
+  it('Adds ten documents placeholders and checks that is not possible to add more', async () => {
+    const form = result.container.querySelector('form');
+    let buttons = await waitFor(() => form?.querySelectorAll('button'));
+    for (let i=0; i<10; i++) {
+      fireEvent.click(buttons![0]);
+    }
+    buttons = await waitFor(() => form?.querySelectorAll('button'));
+    expect(buttons![0]).not.toHaveTextContent(/add-another-doc/i);
+    expect(buttons![0]).toHaveTextContent(/button.continue/i);
   });
 });

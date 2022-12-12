@@ -1,0 +1,82 @@
+{
+  "title": "API Key",
+  "subtitle": {
+    "text1": "Piattaforma Notifiche offre API di ",
+    "text2": "invio notifiche",
+    "text3": " e ",
+    "text4": "accesso alle informazioni",
+    "text5": " sul loro stato. Qui puoi generare e gestire le API Key da utilizzare per autenticare le richieste dell’ente."
+  },
+  "error-fecth-api-keys": "Non è stato possibile recuperare la lista delle API Key",
+  "api-key-succesfully-generated": "API Key generata con successo!",
+  "copy-the-api-key": "Per consentire l'integrazione, copia il codice e inseriscilo nella piattaforma proprietaria dell'ente.",
+  "generated-api-keys": "API Key generate",
+  "new-api-key-button": "Genera API Key",
+  "close-button": "Chiudi",
+  "cancel-button": "Annulla",
+  "enable-button": "Attiva",
+  "block-button": "Blocca",
+  "rotate-button": "Ruota",
+  "delete-button": "Elimina",
+  "block-api-key": "Blocca API Key",
+  "enable-api-key": "Attiva API Key",
+  "rotate-api-key": "Ruota API Key",
+  "delete-api-key": "Elimina API Key",
+  "block-warning1": "Se blocchi <strong>{{apiKeyName}}</strong>, qualsiasi richiesta effettuata attraverso questa API Key avrà esito negativo.",
+  "block-warning2": "Puoi attivarla di nuovo in qualsiasi momento.",
+  "rotate-warning1": "Ruotando <strong>{{apiKeyName}}</strong>, disattivi la API Key esistente e ne generi una nuova, con gli stessi attributi.",
+  "rotate-warning2": "Dopo che hai inserito la nuova API Key nella piattaforma dell’ente, blocca ed elimina la versione ruotata.",
+  "enable-warning": "Se attivi l'API Key <strong>{{apiKeyName}}</strong>, questa potrà essere nuovamente utilizzata. Puoi bloccarla di nuovo in qualsiasi momento.",
+  "delete-warning": "Se elimini definitivamente l'API Key <strong>{{apiKeyName}}</strong>, questa non potrà essere nuovamente attivata e utilizzata.",
+  "copy-api-key-info": "Copia il codice e inseriscilo nella piattaforma dell'ente",
+  "empty-message": "Non è stata ancora generata nessuna API Key per questo ente.",
+  "empty-action-label": "Genera API Key",
+  "api-key-copied": "API Key copiata",
+  "go-to-api-keys": "Torna a API Key",
+  "table": {
+    "name": "Nome",
+    "api-key": "API Key",
+    "last-update": "Ultima modifica",
+    "groups": "Gruppi",
+    "status": "Stato"
+  },
+  "context-menu": {
+    "enable": "Attiva",
+    "block": "Blocca",
+    "rotate": "Ruota",
+    "delete": "Elimina",
+    "view": "Visualizza"
+  },
+  "status": {
+    "enabled": "Attiva",
+    "blocked": "Bloccata",
+    "rotated": "Ruotata",
+    "enabled-tooltip": "L'API Key è attiva",
+    "blocked-tooltip": "L'API Key è bloccata",
+    "rotated-tooltip": "L'API Key è ruotata",
+    "enabled-description": "L'API Key è attiva",
+    "blocked-description": "L'API Key è bloccata",
+    "rotated-description": "L'API Key è ruotata"
+  },
+  "tooltip": {
+    "created-in": "Creata il",
+    "blocked-in": "Bloccata il",
+    "enabled-in": "Attivata il",
+    "rotated-in": "Ruotata il",
+    "from": "da"
+  },
+  "new-api-key": {
+    "page-title": "Genera una API Key",
+    "cancel-prompt": "Annullare l'operazione?",
+    "page-description": "Piattaforma Notifiche ha generato il codice della API Key. Ora, inserisci un nome identificativo e assegnala a uno o più gruppi.",
+    "form-label-name": "Dai un nome alla tua API Key",
+    "form-placeholder-name": "Inserisci un nome",
+    "form-error-name": "Definire un nome per l'API Key",
+    "form-label-groups": "Scegli i gruppi a cui assegnare l’API Key",
+    "form-placeholder-groups": "Cerca un gruppo",
+    "form-error-groups": "Selezionare almeno un gruppo",
+    "continue-button": "Continua",
+    "required-fields": "Campi obbligatori",
+    "no-groups": "Nessun gruppo disponibile"
+  }
+}

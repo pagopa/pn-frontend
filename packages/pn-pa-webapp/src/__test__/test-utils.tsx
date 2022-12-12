@@ -29,6 +29,23 @@ const customRender = (
   });
 };
 
+const renderWithoutRouter = (
+  ui: ReactElement,
+  {
+    preloadedState,
+    renderOptions,
+  }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
+) => {
+  const testStore = configureStore({
+    reducer: appReducers,
+    preloadedState,
+  });
+  return render(ui, {
+    wrapper: ({ children }) => <Provider store={testStore}>{children}</Provider>,
+    ...renderOptions,
+  });
+};
+
 const axe = configureAxe({
   rules: {
     region: { enabled: false },
@@ -36,13 +53,21 @@ const axe = configureAxe({
 });
 
 // utility functions
-export function testFormElements(form: HTMLFormElement, elementName: string, label: string) {
-  const formElement = form.querySelector(`input[name="${elementName}"]`);
+  /**
+   * @form form element
+   * @elementName element name
+   * @label element's label
+   * @findById set true if a form component doesn't have "name" prop like Autocomplete component
+   */ 
+export function testFormElements(form: HTMLFormElement, elementName: string, label: string, findById?: boolean) {
+
+  const formElement = form.querySelector(`input[${findById ? 'id' : 'name'}="${elementName}"]`);
   expect(formElement).toBeInTheDocument();
   const formElementLabel = form.querySelector(`label[for="${elementName}"]`);
   expect(formElementLabel).toBeInTheDocument();
   expect(formElementLabel).toHaveTextContent(label);
 }
+
 
 export async function testInput(
   form: HTMLFormElement,
@@ -84,4 +109,5 @@ expect.extend(toHaveNoViolations);
 
 export * from '@testing-library/react';
 export { customRender as render };
+export { renderWithoutRouter };
 export { axe };

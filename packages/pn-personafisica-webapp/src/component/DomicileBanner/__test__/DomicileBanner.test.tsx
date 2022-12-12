@@ -42,7 +42,7 @@ describe('DomicileBanner component', () => {
     expect(dialog).toBeNull();
   });
 
-  it('is Domicile Banner component accessible', async()=>{
+  it.skip('is Domicile Banner component accessible', async()=>{
     const result = render(<DomicileBanner />);
     const results = await axe(result?.container);
     expect(results).toHaveNoViolations();

@@ -3,6 +3,52 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.2](https://github.com/pagopa/pn-frontend/compare/v1.5.1...v1.5.2) (2022-11-29)
+
+
+### Bug Fixes
+
+* add SPID_VALIDATOR_ENV_ENABLED in env.ts ([5791a4c](https://github.com/pagopa/pn-frontend/commit/5791a4c194af02b9b478f4af59645fa742ac14f9))
+* add validator env variable for test ([0863d63](https://github.com/pagopa/pn-frontend/commit/0863d63604c14a718c0d83495f0794293fe25a9d))
+* change validator icon ([981e389](https://github.com/pagopa/pn-frontend/commit/981e3896505fd5ee1babfcdb4edf7bd42cd55d36))
+
+
+### Features
+
+* **pn-785:** added sonar scripts to all packages ([#480](https://github.com/pagopa/pn-frontend/issues/480)) ([56e7456](https://github.com/pagopa/pn-frontend/commit/56e7456929317759916bf88cd03d4a29cc8d513a))
+
+
+
+
+
+## [1.5.1](https://github.com/pagopa/pn-frontend/compare/v1.5.0...v1.5.1) (2022-11-14)
+
+**Note:** Version bump only for package @pagopa-pn/pn-personafisica-login
+
+
+
+
+
+# [1.5.0](https://github.com/pagopa/pn-frontend/compare/v1.4.1...v1.5.0) (2022-11-07)
+
+
+### Bug Fixes
+
+* **pn-2392:** differenziate tos acceptance page using mui-italia components ([ec8a3ab](https://github.com/pagopa/pn-frontend/commit/ec8a3ab643f31b79667f28161ef6b1610454dcfe))
+* **pn-2455:** modified copy text in login page. ([df02421](https://github.com/pagopa/pn-frontend/commit/df024216644a38911369163f239dae2f3ce202e3))
+
+
+### Features
+
+* **1285:** added onetrust scripts for production ([05cc91a](https://github.com/pagopa/pn-frontend/commit/05cc91aeab923457f593d56f0934e6a129648e0a))
+* **Pn 2501:** changed copy for Tos and privacy policy acceptance ([#452](https://github.com/pagopa/pn-frontend/issues/452)) ([5fc0608](https://github.com/pagopa/pn-frontend/commit/5fc06084de074e00246d18c14ff373f2e8ec9350))
+* **pn-2398:** added build list item for hotfix environment ([46e36f1](https://github.com/pagopa/pn-frontend/commit/46e36f135da279e6709d82cec701674f2e8e73de))
+* **pn-2410:** Translated README.md(s) and other documents in english ([a59de44](https://github.com/pagopa/pn-frontend/commit/a59de44d62b82cd60c8eaa75f2a4536aa8a6a0ae))
+
+
+
+
+
 ## [1.4.2](https://github.com/pagopa/pn-frontend/compare/v1.4.1...v1.4.2) (2022-10-25)
 
 **Note:** Version bump only for package @pagopa-pn/pn-personafisica-login

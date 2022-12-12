@@ -3,6 +3,63 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.2](https://github.com/pagopa/pn-frontend/compare/v1.5.1...v1.5.2) (2022-11-29)
+
+
+### Bug Fixes
+
+* added sonar script in pn-commons ([2712e6a](https://github.com/pagopa/pn-frontend/commit/2712e6a521123968449ddb16433fb1404cc973c8))
+
+
+### Features
+
+* **pn-785:** added sonar scripts to all packages ([#480](https://github.com/pagopa/pn-frontend/issues/480)) ([56e7456](https://github.com/pagopa/pn-frontend/commit/56e7456929317759916bf88cd03d4a29cc8d513a))
+
+
+
+
+
+## [1.5.1](https://github.com/pagopa/pn-frontend/compare/v1.5.0...v1.5.1) (2022-11-14)
+
+
+### Bug Fixes
+
+* **pn-2498:** legal fact not visible when timeline step is expanded ([5392aa2](https://github.com/pagopa/pn-frontend/commit/5392aa2a19076757e2151ab6de1e92ba069b3e33))
+
+
+### Features
+
+* **pn-2488:** taxonomy code field in new notification page ([765c342](https://github.com/pagopa/pn-frontend/commit/765c34249955cfffd72c3e87b375f42cc6e1b2a8))
+
+
+
+
+
+# [1.5.0](https://github.com/pagopa/pn-frontend/compare/v1.4.1...v1.5.0) (2022-11-07)
+
+
+### Bug Fixes
+
+* fixed broken pagopa links ([7e06e34](https://github.com/pagopa/pn-frontend/commit/7e06e347408d825845a6d9b9d9751eaaed8de58e))
+* fixed navigation back and forward Area Riservata ([bbd6206](https://github.com/pagopa/pn-frontend/commit/bbd6206f6988cec6a2c91f8c3471abb006253dc5))
+* **pn-2204:** remove index.html ending from landing app links ([#440](https://github.com/pagopa/pn-frontend/issues/440)) ([faa5c23](https://github.com/pagopa/pn-frontend/commit/faa5c234bd542f79d4404f9880b411baf135a25d))
+* **pn-2392:** differenziate tos acceptance page using mui-italia components ([ec8a3ab](https://github.com/pagopa/pn-frontend/commit/ec8a3ab643f31b79667f28161ef6b1610454dcfe))
+
+
+### Features
+
+* **2391:** refactoring footer links ([9fc71f5](https://github.com/pagopa/pn-frontend/commit/9fc71f5336848f8cd08ce22b373b2d25874f8300))
+* **Pn 2501:** changed copy for Tos and privacy policy acceptance ([#452](https://github.com/pagopa/pn-frontend/issues/452)) ([5fc0608](https://github.com/pagopa/pn-frontend/commit/5fc06084de074e00246d18c14ff373f2e8ec9350))
+* **pn-2138:** replaced loading spinner with skeleton to improve UX ([#438](https://github.com/pagopa/pn-frontend/issues/438)) ([a6f5766](https://github.com/pagopa/pn-frontend/commit/a6f576614865ba9015aedfb0307b1b5b2557999c))
+* **pn-2261:** Handling failure in API calls to retrieve information, for pa-webapp ([339453a](https://github.com/pagopa/pn-frontend/commit/339453a13afb0666f2439344e42454670680a5cd))
+* **pn-2298:** add tos guard ([c4b5a68](https://github.com/pagopa/pn-frontend/commit/c4b5a685bf5b366630e12e8038d74ecab5b619cc))
+* **PN-2455:** added subtitle to login courtesy page ([c00759a](https://github.com/pagopa/pn-frontend/commit/c00759afb0218ab6b07c186edd25719ff815ae18))
+* **pn-2460:** Edited regex for phone number ([8d8023e](https://github.com/pagopa/pn-frontend/commit/8d8023ef0d4e93ff89f1fb2eea61330c7e5af8dc))
+
+
+
+
+
 ## [1.4.2](https://github.com/pagopa/pn-frontend/compare/v1.4.1...v1.4.2) (2022-10-25)
 
 

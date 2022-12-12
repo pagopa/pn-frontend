@@ -10,7 +10,7 @@ import {
 
 import { NewNotificationDTO, NewNotificationResponse } from '../../models/NewNotification';
 import { GroupStatus, UserGroup } from '../../models/user';
-import { apiClient, externalClient } from '../axios';
+import { apiClient, externalClient } from '../apiClients';
 import {
   CREATE_NOTIFICATION,
   NOTIFICATIONS_LIST,
@@ -20,6 +20,7 @@ import {
   NOTIFICATION_PRELOAD_DOCUMENT,
   GET_USER_GROUPS,
 } from './notifications.routes';
+
 
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {

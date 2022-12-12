@@ -16,6 +16,7 @@ import {
   StatusTooltip,
   CardAction,
   MobileNotificationsSort,
+  KnownSentiment,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 
@@ -166,7 +167,7 @@ const MobileNotifications = ({ notifications, sort, onChangeSorting, currentDele
     emptyMessage: filtersApplied
       ? undefined
       : 'Non hai ricevuto nessuna notifica. Vai alla sezione',
-    disableSentimentDissatisfied: !filtersApplied,
+    sentimentIcon: filtersApplied ? KnownSentiment.DISSATISFIED : KnownSentiment.NONE,
     secondaryMessage: filtersApplied
       ? undefined
       : {

@@ -35,12 +35,9 @@ import {
   PnBreadcrumb,
   CustomDropdown,
 } from '@pagopa-pn/pn-commons';
-import { dataRegex } from '@pagopa-pn/pn-commons/src/utils/string.utility';
+import { dataRegex } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import {
-  createDelegation,
-  getAllEntities,
-} from '../redux/newDelegation/actions';
+import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
 import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
@@ -48,9 +45,10 @@ import * as routes from '../navigation/routes.const';
 import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
+import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { generateVCode } from '../utils/delegation.utility';
-import { trackEventByType } from "../utils/mixpanel";
-import { TrackEventType } from "../utils/events";
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -95,11 +93,10 @@ const NuovaDelega = () => {
     navigate(routes.DELEGHE);
   };
 
-  const isToday = (date: Date | null): boolean => (
+  const isToday = (date: Date | null): boolean =>
     date?.getDate() === today.getDate() &&
     date?.getMonth() === today.getMonth() &&
-    date?.getFullYear() === today.getFullYear()
-  );
+    date?.getFullYear() === today.getFullYear();
 
   // Get tomorrow date
   const today = new Date();
@@ -135,11 +132,14 @@ const NuovaDelega = () => {
     expirationDate: yup
       .mixed()
       .required(t('nuovaDelega.validation.expirationDate.required'))
-      .test('validDate', t('nuovaDelega.validation.expirationDate.wrong'), value => value?.getTime() >= tomorrow.getTime())
+      .test(
+        'validDate',
+        t('nuovaDelega.validation.expirationDate.wrong'),
+        (value) => value?.getTime() >= tomorrow.getTime()
+      ),
   });
 
   const xsValue = isMobile ? 12 : 4;
-
 
   useEffect(() => {
     dispatch(resetNewDelegation());
@@ -154,7 +154,7 @@ const NuovaDelega = () => {
   }, [loadAllEntities]);
 
   const handleGetAllEntities = () => {
-    if(!loadAllEntities) {
+    if (!loadAllEntities) {
       setLoadAllEntities(true);
     }
   };
@@ -162,7 +162,6 @@ const NuovaDelega = () => {
   const breadcrumbs = (
     <Fragment>
       <PnBreadcrumb
-        goBackLabel={t('button.indietro', { ns: 'common' })}
         linkRoute={routes.DELEGHE}
         linkLabel={
           <Fragment>
@@ -186,7 +185,7 @@ const NuovaDelega = () => {
   );
 
   return (
-    <Fragment>
+    <LoadingPageWrapper isInitialized>
       {!created && (
         <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumbs}
@@ -300,7 +299,7 @@ const NuovaDelega = () => {
                               'selectTuttiEntiOrSelezionati',
                               event.currentTarget.value
                             );
-                            if(event.currentTarget.value === 'entiSelezionati') {
+                            if (event.currentTarget.value === 'entiSelezionati') {
                               handleGetAllEntities();
                             }
                           }}
@@ -435,7 +434,7 @@ const NuovaDelega = () => {
           onClickLabel={t('nuovaDelega.backToDelegations')}
         />
       )}
-    </Fragment>
+    </LoadingPageWrapper>
   );
 };
 

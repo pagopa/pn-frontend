@@ -1,15 +1,15 @@
 {
   "name": "@pagopa-pn/pn-personafisica-login",
   "description": "Pagina di login di Piattaforma Notifiche per il cittadino",
-  "version": "1.4.2",
+  "version": "1.5.2",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.6",
-    "@pagopa-pn/pn-commons": "^1.4.2",
-    "@pagopa/mui-italia": "^0.6.38",
+    "@pagopa-pn/pn-commons": "^1.5.2",
+    "@pagopa/mui-italia": "^0.8.1",
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
@@ -34,7 +34,8 @@
     "eject": "craco eject",
     "lint-autofix": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx ",
-    "prettify": "prettier --write \"./**/*.{ts,tsx}\""
+    "prettify": "prettier --write \"./**/*.{ts,tsx}\"",
+    "sonar": "node sonarqube-scanner.js"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +56,7 @@
     ]
   },
   "devDependencies": {
+    "sonarqube-scanner": "^2.8.1",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
@@ -74,7 +76,8 @@
     "eslint-plugin-sonarjs": "^0.10.0",
     "jest-sonar-reporter": "^2.0.0",
     "prettier": "^2.4.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "sonarqube-scanner": "^2.8.1"
   },
   "jest": {
     "coveragePathIgnorePatterns": [

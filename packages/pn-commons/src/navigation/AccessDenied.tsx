@@ -6,20 +6,32 @@ type Props = {
   isLogged: boolean;
   goToLogin: () => void;
   goToHomePage: () => void;
+  message?: string;
+  subtitle?: string;
 };
 
-const AccessDenied = ({ isLogged, goToLogin, goToHomePage }: Props) => {
-  const message = isLogged ? 'access-denied' : 'not-logged';
+const AccessDenied = ({ isLogged, goToLogin, goToHomePage, message, subtitle }: Props) => {
+  const finalMessage = message || getLocalizedOrDefaultLabel(
+    'common',
+    isLogged ? 'access-denied' : 'not-logged',
+    'Non hai le autorizzazioni necessarie per accedere a questa pagina'
+  );
+  const finalSubTitle = subtitle || (
+    isLogged 
+      ? '' 
+      : getLocalizedOrDefaultLabel('common', 'not-logged-subtitle', '')
+  );
 
   return (
     <Stack direction="column" alignItems="center" my={4} sx={{ minHeight: '50vh' }}>
-      <Box my={4}>
-        <Typography align="center" color="textPrimary" variant="h4">
-          {getLocalizedOrDefaultLabel(
-            'common',
-            message,
-            'Non hai le autorizzazioni necessarie per accedere a questa pagina'
-          )}
+      <Box mt={4}>
+        <Typography align="center" color="text.primary" variant="h4">
+          {finalMessage}
+        </Typography>
+      </Box>
+      <Box my={2}>
+        <Typography align="center" color="text.primary" variant="body1">
+          {finalSubTitle}
         </Typography>
       </Box>
 
@@ -32,8 +44,8 @@ const AccessDenied = ({ isLogged, goToLogin, goToHomePage }: Props) => {
           }}
         >
           {isLogged
-            ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Torna alla home page ...')
-            : getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Procedi al login ...')}
+            ? getLocalizedOrDefaultLabel('common', 'button.go-to-home', 'Vai alla home page')
+            : getLocalizedOrDefaultLabel('common', 'button.go-to-login', 'Accedi')}
         </Button>
       </Box>
     </Stack>
