@@ -3,11 +3,9 @@ import CustomDropdown from '../CustomDropdown';
 import MenuItem from '@mui/material/MenuItem';
 
 describe('CustomDropdown component', () => {
-  let form: HTMLFormElement | undefined;
-
   it('renders with items list, test select', async () => {
     const result = render(
-      <CustomDropdown name="mock-dropdown-name" id="mock-dropdown-name" label="mock-dropdown-label">
+      <CustomDropdown name="mock-dropdown-name" id="mock-dropdown-name" label="mock-dropdown-label" value="">
         {mockDropdownItems.map((mockItem) => (
           <MenuItem key={mockItem.key} value={mockItem.value}>
             {mockItem.label}
@@ -24,6 +22,7 @@ describe('CustomDropdown component', () => {
         name="mock-dropdown-name"
         id="mock-dropdown-name"
         label="mock-dropdown-label"
+        value=""
       />
     );
     const input = await result.findByPlaceholderText(/Non ci sono elementi/i);

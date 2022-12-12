@@ -51,7 +51,7 @@ https://medium.com/geekculture/setting-up-monorepo-with-create-react-app-cb2cfa7
 
 
 ### Sonar
-You can run a task analysis with sonar-scanner using this script
+You can run a task analysis with sonar-scanner using this script in each package
 - `yarn sonar`
 To run it locally, you need to add env variable SONAR_TOKEN which contains the token of the project.
 The analysis will bel available [here](https://sonarcloud.io/project/overview?id=pagopa_pn-frontend)

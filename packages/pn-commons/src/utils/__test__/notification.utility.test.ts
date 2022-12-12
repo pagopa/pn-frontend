@@ -268,7 +268,7 @@ describe('timeline utility functions', () => {
   it('return timeline status infos - SEND_ANALOG_DOMICILE (A/R)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_DOMICILE;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).serviceLevel =
-      PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER;
+      PhysicalCommunicationType.AR_REGISTERED_LETTER;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
       at: '',
       addressDetails: '',

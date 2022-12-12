@@ -1,4 +1,7 @@
-import { PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY, TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE } from "@pagopa-pn/pn-commons";
+import {
+  PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
+  TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
+} from '@pagopa-pn/pn-commons';
 
 export const NOTIFICHE = '/notifiche';
 export const NOTIFICHE_DELEGATO = `${NOTIFICHE}/:mandateId`;
@@ -11,9 +14,9 @@ export const DETTAGLIO_NOTIFICA_QRCODE_PATH = '/notifica';
 export const DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM = 'aar';
 export const NUOVA_DELEGA = `${DELEGHE}/nuova`;
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${NOTIFICA}`;
-export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: string) => `${NOTIFICHE}/${mandateId}/${id}${NOTIFICA}`;
+export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: string) =>
+  `${NOTIFICHE}/${mandateId}/${id}${NOTIFICA}`;
 export const RECAPITI = '/recapiti';
 export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/${mandateId}`;
 export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
-
