@@ -8,7 +8,7 @@ class Prova {
 class ProvaValidator extends Validator<Prova> {
   constructor() {
     super();
-    this.ruleFor('property').isEmpty();
+    this.ruleFor('property').isString().isEmpty();
   }
 }
 

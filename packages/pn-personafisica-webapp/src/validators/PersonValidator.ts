@@ -8,9 +8,9 @@ import { Person } from '../redux/delegation/types';
 export class PersonValidator extends Validator<Person> {
     constructor() {
       super();
-      this.ruleFor('firstName').isEqual('Mario');
-      this.ruleFor('lastName').isEmpty();
-      this.ruleFor('displayName').length(3, 4);
+      this.ruleFor('firstName').isString().isEqual('Mario');
+      this.ruleFor('lastName').isString().isEmpty();
+      this.ruleFor('displayName').isString().length(3, 4);
     }
   }
   

@@ -6,15 +6,15 @@ import { ArrayRuleValidator } from './../ruleValidators/ArrayRuleValidator';
 import { CommonRuleValidator } from '../ruleValidators/CommonRuleValidator';
 
 export type TypeRules<TModel, TValue> = [TValue] extends [String | undefined | null]
-  ? StringRuleValidator<TModel, TValue>
+  ? { isString: () => StringRuleValidator<TModel, TValue> }
   : [TValue] extends [Number | undefined | null]
-  ? NumberRuleValidator<TModel, TValue>
+  ? { isNumber: () => NumberRuleValidator<TModel, TValue> }
   : [TValue] extends [Date | undefined | null]
-  ? DateRuleValidator<TModel, TValue>
+  ? { isDate: () => DateRuleValidator<TModel, TValue> }
   : [TValue] extends [Boolean | undefined | null]
-  ? CommonRuleValidator<TModel, TValue>
+  ? { isBoolean: () => CommonRuleValidator<TModel, TValue> }
   : [TValue] extends [Array<infer _TEachValue> | undefined | null]
-  ? ArrayRuleValidator<TModel, TValue>
+  ? { isArray: () => ArrayRuleValidator<TModel, TValue> }
   : TValue extends object
-  ? ObjectRuleValidator<TModel, TValue>
+  ? { isObject: () => ObjectRuleValidator<TModel, TValue> }
   : {};
