@@ -1,4 +1,5 @@
 import { DateRules } from '../types/DateRules';
+import { NotRuleValidator } from '../types/CommonRules';
 import { LessThan } from '../rules/LessThan';
 import { GreaterThan } from '../rules/GreaterThan';
 import { Rule } from '../Rule';
@@ -41,4 +42,12 @@ export class DateRuleValidator<TModel, TValue>
     this.pushRule(new GreaterThan(value, equalTo, customErrorMessage));
     return this;
   };
+
+  /**
+   * Negate next rule
+   */
+  public readonly not = (): NotRuleValidator<TModel, TValue> =>
+    ({
+      ...this._not(),
+    } as unknown as NotRuleValidator<TModel, TValue>);
 }

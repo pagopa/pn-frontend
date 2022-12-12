@@ -1,5 +1,5 @@
 import { NumberRuleValidator } from '../ruleValidators/NumberRuleValidator';
-import { CommonRules } from './CommonRules';
+import { CommonRules, NotRuleValidator } from './CommonRules';
 
 export interface NumberRules<TModel, TValue> extends CommonRules<TModel, TValue> {
   readonly lessThan: (value: number, equalTo?: boolean) => NumberRuleValidator<TModel, TValue>;
@@ -10,4 +10,5 @@ export interface NumberRules<TModel, TValue> extends CommonRules<TModel, TValue>
     inclusiveLowerBound?: boolean,
     inclusiveUpperBound?: boolean
   ) => NumberRuleValidator<TModel, TValue>;
+  readonly not: () => NotRuleValidator<TModel, TValue>;
 }

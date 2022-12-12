@@ -5,6 +5,7 @@ import { IsString } from './rules/IsString';
 import { IsNumber } from './rules/IsNumber';
 import { ValidationResult } from './types/ValidationResult';
 import { TypeRules } from './types/TypeRules';
+import { BooleanRuleValidator } from './ruleValidators/BooleanRuleValidator';
 import { StringRuleValidator } from './ruleValidators/StringRuleValidator';
 import { NumberRuleValidator } from './ruleValidators/NumberRuleValidator';
 import { DateRuleValidator } from './ruleValidators/DateRuleValidator';
@@ -12,6 +13,7 @@ import { ObjectRuleValidator } from './ruleValidators/ObjectRuleValidator';
 import { ArrayRuleValidator } from './ruleValidators/ArrayRuleValidator';
 import { hasError } from './HasError';
 import { Rule } from './Rule';
+import { IsBoolean } from './rules/IsBoolean';
 
 export class ValidatorBuilder<TModel, TValue> {
   private rules: Array<{ isAsync: boolean; rule: Rule<TModel, TValue> }> = [];
@@ -55,6 +57,11 @@ export class ValidatorBuilder<TModel, TValue> {
     return new DateRuleValidator<TModel, TValue>(this.pushRule);
   }
 
+  private isBoolean = () => {
+    this.pushRule(new IsBoolean());
+    return new BooleanRuleValidator<TModel, TValue>(this.pushRule);
+  }
+
   private isObject = () => {
     this.pushRule(new IsObject());
     return new ObjectRuleValidator<TModel, TValue>(this.pushRule);
@@ -69,6 +76,7 @@ export class ValidatorBuilder<TModel, TValue> {
     isString: this.isString,
     isNumber: this.isNumber,
     isDate: this.isDate,
+    isBoolean: this.isBoolean,
     isObject: this.isObject,
     isArray: this.isArray
   }) as unknown as TypeRules<TModel, TValue>;

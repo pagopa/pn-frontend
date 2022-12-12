@@ -1,9 +1,9 @@
+import { BooleanRuleValidator } from './../ruleValidators/BooleanRuleValidator';
 import { NumberRuleValidator } from './../ruleValidators/NumberRuleValidator';
 import { StringRuleValidator } from './../ruleValidators/StringRuleValidator';
 import { DateRuleValidator } from './../ruleValidators/DateRuleValidator';
 import { ObjectRuleValidator } from '../ruleValidators/ObjectRuleValidator';
 import { ArrayRuleValidator } from './../ruleValidators/ArrayRuleValidator';
-import { CommonRuleValidator } from '../ruleValidators/CommonRuleValidator';
 
 export type TypeRules<TModel, TValue> = [TValue] extends [String | undefined | null]
   ? { isString: () => StringRuleValidator<TModel, TValue> }
@@ -12,7 +12,7 @@ export type TypeRules<TModel, TValue> = [TValue] extends [String | undefined | n
   : [TValue] extends [Date | undefined | null]
   ? { isDate: () => DateRuleValidator<TModel, TValue> }
   : [TValue] extends [Boolean | undefined | null]
-  ? { isBoolean: () => CommonRuleValidator<TModel, TValue> }
+  ? { isBoolean: () => BooleanRuleValidator<TModel, TValue> }
   : [TValue] extends [Array<infer _TEachValue> | undefined | null]
   ? { isArray: () => ArrayRuleValidator<TModel, TValue> }
   : TValue extends object

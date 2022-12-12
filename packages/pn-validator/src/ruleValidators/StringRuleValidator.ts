@@ -1,4 +1,4 @@
-import { StringRules } from '../types/StringRules';
+import { NotStringRuleValidator, StringRules } from '../types/StringRules';
 import { IsEmpty } from '../rules/IsEmpty';
 import { Length } from '../rules/Length';
 import { Matches } from '../rules/Matches';
@@ -13,13 +13,29 @@ export class StringRuleValidator<TModel, TValue>
     super(pushRule);
   }
 
+  private addIsEmptyRule = (
+    not: boolean,
+    customErrorMessage?: string
+  ): StringRuleValidator<TModel, TValue> => {
+    this.pushRule(new IsEmpty<TModel, TValue>(not, customErrorMessage));
+    return this;
+  };
+
+  private addMatchesRule = (
+    pattern: RegExp,
+    not: boolean,
+    customErrorMessage?: string
+  ): StringRuleValidator<TModel, TValue> => {
+    this.pushRule(new Matches<TModel, TValue>(pattern, not, customErrorMessage));
+    return this;
+  };
+
   /**
    * Check if value is empty
    * @param {string} [customErrorMessage] custom message to show when validation fails
    */
   public readonly isEmpty = (customErrorMessage?: string): StringRuleValidator<TModel, TValue> => {
-    this.pushRule(new IsEmpty<TModel, TValue>(false, customErrorMessage));
-    return this;
+    return this.addIsEmptyRule(false, customErrorMessage);
   };
 
   /**
@@ -46,7 +62,20 @@ export class StringRuleValidator<TModel, TValue>
     pattern: RegExp,
     customErrorMessage?: string
   ): StringRuleValidator<TModel, TValue> => {
-    this.pushRule(new Matches<TModel, TValue>(pattern, false, customErrorMessage));
-    return this;
+    return this.addMatchesRule(pattern, false, customErrorMessage);
   };
+
+  /**
+   * Negate next rule
+   */
+  public readonly not = (): NotStringRuleValidator<TModel, TValue> =>
+    ({
+      ...this._not(),
+      isEmpty: (customErrorMessage?: string) => {
+        return this.addIsEmptyRule(true, customErrorMessage);
+      },
+      matches: (pattern: RegExp, customErrorMessage?: string) => {
+        return this.addMatchesRule(pattern, true, customErrorMessage);
+      },
+    } as unknown as NotStringRuleValidator<TModel, TValue>);
 }

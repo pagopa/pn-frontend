@@ -1,3 +1,4 @@
+import { NotRuleValidator } from '../types/CommonRules';
 import { NumberRules } from '../types/NumberRules';
 import { LessThan } from '../rules/LessThan';
 import { GreaterThan } from '../rules/GreaterThan';
@@ -69,4 +70,12 @@ export class NumberRuleValidator<TModel, TValue>
     );
     return this;
   };
+
+  /**
+   * Negate next rule
+   */
+  public readonly not = (): NotRuleValidator<TModel, TValue> =>
+    ({
+      ...this._not(),
+    } as unknown as NotRuleValidator<TModel, TValue>);
 }

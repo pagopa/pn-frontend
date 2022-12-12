@@ -15,6 +15,8 @@ import { IsNumber } from './IsNumber';
 import { IsDate } from './IsDate';
 import { IsObject } from './IsObject';
 import { IsArray } from './IsArray';
+import { BooleanRuleValidator } from '../ruleValidators/BooleanRuleValidator';
+import { IsBoolean } from './IsBoolean';
 
 export class ForEachElement<TModel, TValue> extends Rule<TModel, TValue> {
   private rules: Array<{ isAsync: boolean; rule: Rule<TModel, TElemValue<TValue>> }> = [];
@@ -43,6 +45,11 @@ export class ForEachElement<TModel, TValue> extends Rule<TModel, TValue> {
     return new DateRuleValidator<TModel, TElemValue<TValue>>(this.pushRule);
   };
 
+  private isBoolean = () => {
+    this.pushRule(new IsBoolean());
+    return new BooleanRuleValidator<TModel, TElemValue<TValue>>(this.pushRule);
+  }
+
   private isObject = () => {
     this.pushRule(new IsObject());
     return new ObjectRuleValidator<TModel, TElemValue<TValue>>(this.pushRule);
@@ -58,6 +65,7 @@ export class ForEachElement<TModel, TValue> extends Rule<TModel, TValue> {
       isString: this.isString,
       isNumber: this.isNumber,
       isDate: this.isDate,
+      isBoolean: this.isBoolean,
       isObject: this.isObject,
       isArray: this.isArray,
     } as unknown as TypeRules<TModel, TElemValue<TValue>>);
