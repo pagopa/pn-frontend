@@ -118,7 +118,7 @@ describe('PreliminaryInformations Component', () => {
           abstract: '',
           taxonomyCode: '012345N',
           group: '2',
-          physicalCommunicationType: PhysicalCommunicationType.SIMPLE_REGISTERED_LETTER,
+          physicalCommunicationType: PhysicalCommunicationType.AR_REGISTERED_LETTER,
           paymentMode: PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE,
         },
         type: 'newNotificationSlice/setPreliminaryInformations',
