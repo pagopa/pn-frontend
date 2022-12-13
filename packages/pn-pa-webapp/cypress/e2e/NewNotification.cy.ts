@@ -27,7 +27,7 @@ describe('New Notification', () => {
     cy.intercept('/delivery/attachments/preload').as('preloadAttachments');
   });
 
-  describe('Test single / multiple recipients and with / without payment documents', () => {
+  describe('Single/multi recipients', () => {
     beforeEach(() => {
       cy.logout();
       cy.loginWithTokenExchange();
@@ -35,7 +35,7 @@ describe('New Notification', () => {
       cy.visit('/dashboard/nuova-notifica');
     });
 
-    it('Create a single recipient notification with a payment document', () => {
+    it('Creates a single recipient notification with a payment document', () => {
       // Fill step 1
       cy.fillPreliminaryInfo({
         paProtocolNumber: 'prot-123456789',
@@ -46,7 +46,7 @@ describe('New Notification', () => {
         paymentMethod: 'pagoPA',
       });
 
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       cy.fillRecipient({
         position: 0,
@@ -57,25 +57,25 @@ describe('New Notification', () => {
         },
       });
 
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
       // Fill step 4
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       cy.wait('@saveNewNotification');
 
       cy.contains('La notifica è stata correttamente creata');
     });
 
-    it('Create a single recipient notification without any payment document', () => {
+    it('Creates a single recipient notification without any payment document', () => {
       // Fill step 1
       cy.fillPreliminaryInfo({
         paProtocolNumber: 'prot-123456789',
@@ -85,7 +85,7 @@ describe('New Notification', () => {
         communicationType: 'Model_890',
       });
 
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 2
       cy.fillRecipient({
@@ -93,12 +93,12 @@ describe('New Notification', () => {
         data: cesare,
       });
 
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
@@ -110,7 +110,7 @@ describe('New Notification', () => {
       cy.contains('La notifica è stata correttamente creata');
     });
 
-    it('Create a multi recipient notification with payment documents', () => {
+    it('Creates a multi recipients notification with payment documents', () => {
       // Fill step 1
       cy.fillPreliminaryInfo({
         paProtocolNumber: 'prot-123456789',
@@ -121,7 +121,7 @@ describe('New Notification', () => {
         paymentMethod: 'pagoPA',
       });
 
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 2
 
@@ -147,12 +147,12 @@ describe('New Notification', () => {
         },
       });
 
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
@@ -160,14 +160,14 @@ describe('New Notification', () => {
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
       cy.get('button[type="submit"]').should('be.disabled');
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest3, { force: true });
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       cy.wait('@saveNewNotification');
 
       cy.contains('La notifica è stata correttamente creata');
     });
 
-    it('Create a multi recipient notification without payment documents', () => {
+    it('Creates a multi recipients notification without payment documents', () => {
       // Fill step 1
       cy.fillPreliminaryInfo({
         paProtocolNumber: 'prot-123456789',
@@ -177,7 +177,7 @@ describe('New Notification', () => {
         communicationType: 'Model_890',
       });
 
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 2
 
@@ -195,14 +195,14 @@ describe('New Notification', () => {
         data: garibaldi,
       });
 
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       cy.get('button[type="submit"]').should('be.disabled');
 
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
@@ -214,14 +214,14 @@ describe('New Notification', () => {
       cy.contains('La notifica è stata correttamente creata');
     });
 
-    it('Create new notification', () => {
+    it('Creates a notification and verify recipient form inputs validity', () => {
       // Fill step 1
       cy.get('#paProtocolNumber').type('Test new notification - Cypress');
       cy.get('#subject').type('Nuova Notifica');
       cy.get('#taxonomyCode').type('012345X');
       cy.get('[data-testid="comunicationTypeRadio"]').eq(0).click();
       cy.get('[data-testid="paymentMethodRadio"]').eq(1).click();
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 2
       cy.get('input[name="recipients[0].firstName"]').type('Nome');
@@ -270,7 +270,7 @@ describe('New Notification', () => {
       cy.get('input[name="recipients[0].province"]').type('MI');
       cy.get('input[name="recipients[0].zip"]').type('20100');
       cy.get('input[name="recipients[0].foreignState"]').type('Italia');
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 3
       cy.get('[data-testid="AddIcon"]').click();
@@ -278,13 +278,13 @@ describe('New Notification', () => {
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
       cy.get('input[name="documents.1.name"]').type('pdf di Test 2');
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 4
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest3, { force: true });
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest4, { force: true });
 
-      cy.get('button[type="submit"]').should('not.be.disabled').click();
+      cy.get('button[type="submit"]').should('be.enabled').click();
 
       cy.wait('@saveNewNotification');
 
@@ -292,14 +292,14 @@ describe('New Notification', () => {
     });
   });
 
-  describe('Test administrator role with groups / no-groups', () => {
+  describe('Administrator role', () => {
     beforeEach(() => {
       cy.logout();
       cy.loginWithTokenExchange(PNRole.ADMIN);
       cy.visit('/dashboard/nuova-notifica');
     });
 
-    it('Create new notification with no user groups and administrator role', () => {
+    it('Creates a new notification when no user group is available', () => {
       cy.intercept(/groups/, { fixture: 'groups/no-groups' });
 
       // Fill step 1
@@ -343,7 +343,7 @@ describe('New Notification', () => {
       cy.contains('La notifica è stata correttamente creata');
     });
 
-    it('Create new notification with groups and administrator role', () => {
+    it('Creates a new notification when a user group is available', () => {
       cy.intercept(/groups/, { fixture: 'groups/groups' });
 
       // Fill step 1
@@ -392,14 +392,14 @@ describe('New Notification', () => {
     });
   });
 
-  describe('Test operator role with groups / no-groups', () => {
+  describe('Operator role', () => {
     beforeEach(() => {
       cy.logout();
       cy.loginWithTokenExchange(PNRole.OPERATOR);
       cy.visit('/dashboard/nuova-notifica');
     });
 
-    it('Create new notification with no user groups and operator role', () => {
+    it('Creates a new notification when no user group is available', () => {
       cy.intercept(/groups/, { fixture: 'groups/no-groups' });
 
       // Fill step 1
@@ -443,7 +443,7 @@ describe('New Notification', () => {
       cy.contains('La notifica è stata correttamente creata');
     });
 
-    it('Create new notification with groups and operator role', () => {
+    it('Creates a new notification when a user group is available', () => {
       cy.intercept(/groups/, { fixture: 'groups/groups' });
 
       // Fill step 1
