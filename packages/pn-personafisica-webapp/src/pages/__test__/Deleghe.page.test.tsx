@@ -151,16 +151,25 @@ describe('Deleghe page', () => {
     expect(mockDispatchFn).toBeCalledTimes(6);
   });
 
-  // TODO control this test
-  it.skip('checks the accept modal error state', async () => {
+  it('checks the accept modal error state', async () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     useIsMobileSpy.mockReturnValue(false);
     const setState = jest.fn();
-    const setStateFn: any = () => ['Accept mandate error', setState];
+    // We affect the initial value of a state only if is ''. 
+    // The aim is to set the value for the errorText state in Deleghe **only**.
+    // If we changed useState without this restriction, then the test would fail because
+    // also the state in the CodeModal component (in pn-commons) would be affected.
+    //
+    // This trick makes the test work for the moment.
+    // Of course, whenever Deleghe would involve in the future some state whose initial value is '', 
+    // then this test would be at risk.
+    // -----------------------------------------
+    // Carlos Lombardi, 2022.12.13
+    // -----------------------------------------
+    const setStateFn: any = (initialValue) => [initialValue === '' ? 'Accept mandate error' : initialValue, setState];
     const useStateSpy = jest.spyOn(React, 'useState');
     useStateSpy.mockImplementation(setStateFn);
-    useSelectorSpy(false, true, 'delegators', true);
-    const result = render(<Deleghe />);
+    await renderComponent(false, true, 'delegators', true);
     expect(result.baseElement).toHaveTextContent('Accept mandate error');
 
     useStateSpy.mockRestore();
