@@ -99,7 +99,7 @@ return <Box p={3}>
       <ApiErrorWrapper apiId={APP_STATUS_ACTIONS.GET_CURRENT_STATUS} reloadAction={() => fetchCurrentStatus()} mt={3}>
         {currentStatus && <AppStatusBar status={currentStatus} />}
         { currentStatus &&
-          <Stack direction="row" justifyContent="center">
+          <Stack direction="row" justifyContent="center" data-testid="appStatus-lastCheck">
             <Typography variant="caption" sx={{ mt: 2, color: 'text.secondary' }}>
               { t('appStatus.lastCheckLegend', 
                 { lastCheckTimestamp: lastCheckTimestampFormatted })

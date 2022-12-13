@@ -43,22 +43,20 @@ describe('SideMenuList', () => {
 
   // TODO questo test periodicamente fallisce ma solo in locale! non riesco a capire perchè
   // ---> ipotesi?
-  it.skip('Open and close sub menu', async () => {
+  it('Open and close sub menu', async () => {
     const ul = screen.getByRole('navigation');
     const buttons = await within(ul).findAllByRole('button');
-    await waitFor(() => {
-      fireEvent.click(buttons[1]);
-    });
+    fireEvent.click(buttons[1]);
     let collapsedMenu = await within(ul).findByTestId(`collapse-${sideMenuItems[1].label}`);
     await testMenuItem(
       collapsedMenu,
       sideMenuItems[1].children!.length,
       sideMenuItems[1].children!
     );
+    fireEvent.click(buttons[2]);
     await waitFor(() => {
-      fireEvent.click(buttons[2]);
+      expect(collapsedMenu).not.toBeInTheDocument();
     });
-    expect(collapsedMenu).not.toBeInTheDocument();
     collapsedMenu = await within(ul).findByTestId(`collapse-${sideMenuItems[2].label}`);
     await testMenuItem(
       collapsedMenu,

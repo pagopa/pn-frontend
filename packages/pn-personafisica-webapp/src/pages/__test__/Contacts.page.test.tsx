@@ -98,7 +98,7 @@ describe('Contacts page - assuming contact API works properly', () => {
     expect(mockActionFn).toBeCalledWith('mocked-recipientId');
   });
 
-  it.skip('subtitle link properly redirects to profile page', () => {
+  it('subtitle link properly redirects to profile page', () => {
     const subtitleLink = result.getByText('subtitle-link');
     expect(subtitleLink).toBeInTheDocument();
 

@@ -41,7 +41,7 @@ const ApiErrorWrapper: React.FC<ApiErrorWrapperProps> = ({
 }) => (
   <ApiErrorWrapperGeneral
     apiId={apiId}
-    errorComponent={<ApiError onClick={reloadAction} mt={mt} mainText={mainText} />}
+    errorComponent={<ApiError onClick={reloadAction} mt={mt} mainText={mainText} apiId={apiId} />}
   >
     {children}
   </ApiErrorWrapperGeneral>

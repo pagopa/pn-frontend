@@ -2,7 +2,7 @@ import * as redux from 'react-redux';
 import { NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
 import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 
-import { render, axe } from '../../__test__/test-utils';
+import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/notification/actions';
 import {
   notificationToFe,
@@ -128,6 +128,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
 
+  // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
   test.skip('clicks on the cancel button and on close modal', async () => {
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);
@@ -138,6 +139,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     await waitFor(() => expect(modal).not.toBeInTheDocument());
   });
 
+  // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
   test.skip('clicks on the cancel button and on confirm button', async () => {
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);
