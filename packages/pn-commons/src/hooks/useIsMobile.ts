@@ -1,21 +1,7 @@
-import { useEffect, useState } from 'react';
+import { Theme } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 /**
- * Checks if we are on a mobile device 
+ * Checks if we are on a mobile device
  */
-export function useIsMobile() {
-  const [width, setWidth] = useState<number>(window.innerWidth);
-
-  const handleWindowSizeChange = () => {
-    setWidth(window.innerWidth);
-  };
-
-  useEffect(() => {
-    window.addEventListener('resize', handleWindowSizeChange);
-    return () => {
-      window.removeEventListener('resize', handleWindowSizeChange);
-    };
-  }, []);
-
-  return width <= 1200;
-}
+export const useIsMobile = () => useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'));
