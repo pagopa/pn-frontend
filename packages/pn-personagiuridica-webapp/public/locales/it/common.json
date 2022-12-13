@@ -1,0 +1,11 @@
+{
+  "menu": {
+    "profilo": "I tuoi dati",
+    "aria-label": "piattaforma-notifiche navigazione principale",
+    "aria-label-inner": "piattaforma-notifiche navigazione persona giuridica"
+  },
+  "header": {
+    "logout": "Esci",
+    "pago-pa-link": "Sito di PagoPA S.p.A."
+  }
+}

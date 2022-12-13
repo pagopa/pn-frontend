@@ -8,6 +8,7 @@ import { LoadingPage } from '@pagopa-pn/pn-commons';
 
 import { store } from './redux/store';
 import './index.css';
+import './i18n.ts';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
