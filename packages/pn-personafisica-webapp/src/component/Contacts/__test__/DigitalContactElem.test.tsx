@@ -7,15 +7,18 @@ import * as actions from '../../../redux/contact/actions';
 import { LegalChannelType } from '../../../models/contacts';
 import DigitalContactElem from '../DigitalContactElem';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
-import * as trackingFunctions from "../../../utils/mixpanel";
-import {TrackEventType} from "../../../utils/events";
+import * as trackingFunctions from '../../../utils/mixpanel';
+import { TrackEventType } from '../../../utils/events';
+import React from 'react';
+import userEvent from '@testing-library/user-event';
+import * as hooks from '@pagopa-pn/pn-commons/src/hooks/useIsMobile';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-      t: (str: string) => str,
-    }),
-  Trans: (props: {i18nKey: string}) => props.i18nKey,
+    t: (str: string) => str,
+  }),
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 const fields = [
@@ -53,6 +56,9 @@ describe('DigitalContactElem Component', () => {
   let result: RenderResult | undefined;
 
   beforeEach(() => {
+    const useIsMobileSpy = jest.spyOn(hooks, 'useIsMobile');
+    useIsMobileSpy.mockImplementation(() => true);
+
     createTrackEventSpy.mockImplementation(mockTrackEventFn);
     // mock action
     const deleteActionSpy = jest.spyOn(actions, 'deleteLegalAddress');
@@ -96,7 +102,7 @@ describe('DigitalContactElem Component', () => {
 
   it('renders DigitalContactElem (edit mode)', async () => {
     const buttons = result?.container.querySelectorAll('button');
-    fireEvent.click(buttons![0]);
+    userEvent.click(buttons![0]);
     await waitFor(() => {
       const input = result?.queryByTestId('field');
       expect(input).toBeInTheDocument();
@@ -108,7 +114,7 @@ describe('DigitalContactElem Component', () => {
 
   it('shows remove modal', async () => {
     const buttons = result?.container.querySelectorAll('button');
-    fireEvent.click(buttons![1]);
+    userEvent.click(buttons![1]);
     const dialog = await waitFor(() => screen.queryByRole('dialog'));
     expect(dialog).toBeInTheDocument();
     expect(dialog).toHaveTextContent('mocked-title');
@@ -121,11 +127,11 @@ describe('DigitalContactElem Component', () => {
 
   it('closes remove modal (clicks on cancel)', async () => {
     const buttons = result?.container.querySelectorAll('button');
-    fireEvent.click(buttons![1]);
+    userEvent.click(buttons![1]);
     const dialog = await waitFor(() => screen.queryByRole('dialog'));
     expect(dialog).toBeInTheDocument();
     const dialogButtons = dialog?.querySelectorAll('button');
-    fireEvent.click(dialogButtons![0]);
+    userEvent.click(dialogButtons![0]);
     await waitFor(() => {
       expect(dialog).not.toBeInTheDocument();
     });
@@ -133,14 +139,16 @@ describe('DigitalContactElem Component', () => {
 
   it('closes remove modal (clicks on confirm)', async () => {
     const buttons = result?.container.querySelectorAll('button');
-    fireEvent.click(buttons![1]);
+    userEvent.click(buttons![1]);
     const dialog = await waitFor(() => screen.queryByRole('dialog'));
     expect(dialog).toBeInTheDocument();
     const dialogButtons = dialog?.querySelectorAll('button');
-    fireEvent.click(dialogButtons![1]);
+    userEvent.click(dialogButtons![1]);
     await waitFor(() => {
       expect(mockTrackEventFn).toBeCalledTimes(1);
-      expect(mockTrackEventFn).toBeCalledWith(TrackEventType.CONTACT_LEGAL_CONTACT, {action: "delete"});
+      expect(mockTrackEventFn).toBeCalledWith(TrackEventType.CONTACT_LEGAL_CONTACT, {
+        action: 'delete',
+      });
       expect(dialog).not.toBeInTheDocument();
       expect(deleteMockActionFn).toBeCalledTimes(1);
       expect(deleteMockActionFn).toBeCalledWith({
@@ -151,12 +159,12 @@ describe('DigitalContactElem Component', () => {
     });
   });
 
-  it.skip('does not have basic accessibility issues', async () => {
+  it('does not have basic accessibility issues', async () => {
     if (result) {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 });
