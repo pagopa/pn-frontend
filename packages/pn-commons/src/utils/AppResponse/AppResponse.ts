@@ -11,7 +11,7 @@ export const createAppResponseError = (action: string, response: ServerResponse)
 
       const retVal = { action, status, traceId, timestamp };
       
-      if(Array.isArray(data.errors)) {
+      if(Array.isArray(data.errors) && data.errors.length > 0) {
         const errors = serverErrors?.map((error) => factory.create(error).getResponseError());
         return { ...retVal, errors };
       }

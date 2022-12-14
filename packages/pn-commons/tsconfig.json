@@ -3,6 +3,8 @@
     "target": "esnext",
     "module": "esnext",
     "lib": [
+      "DOM",
+      "DOM.Iterable",
       "es6",
       "dom",
       "es2019"
