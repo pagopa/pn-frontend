@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.3](https://github.com/pagopa/pn-frontend/compare/v1.5.2...v1.5.3) (2022-12-14)
+
+
+### Bug Fixes
+
+* **pn-2838:** updated tsconfig to manage dom manipulation ([#502](https://github.com/pagopa/pn-frontend/issues/502)) ([ff54c3d](https://github.com/pagopa/pn-frontend/commit/ff54c3d0a01bb6360106e50629324c97f63bd9e5))
+
+
+
+
+
 ## [1.5.2](https://github.com/pagopa/pn-frontend/compare/v1.5.1...v1.5.2) (2022-11-29)
 
 

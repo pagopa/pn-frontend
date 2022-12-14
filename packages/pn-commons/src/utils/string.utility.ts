@@ -17,6 +17,8 @@ export const dataRegex = {
   pIva: /^\d{11}$/,
   isoDate: /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d{1,3})?)Z$/,
   taxonomyCode: /^(\d{6}[A-Z]{1})$/,
+  denomination: /^([\x20-\xFF]{1,80})$/,
+  noticeCode: /^\d{18}$/
 };
 
 /**
