@@ -129,6 +129,7 @@ describe('NotificationDetail Page (one recipient)', () => {
   });
 
   // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
+  // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
   test.skip('clicks on the cancel button and on close modal', async () => {
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);
@@ -140,6 +141,7 @@ describe('NotificationDetail Page (one recipient)', () => {
   });
 
   // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
+  // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
   test.skip('clicks on the cancel button and on confirm button', async () => {
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);

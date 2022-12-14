@@ -52,6 +52,11 @@ const populateFormMultipleRecipients = async (form: HTMLFormElement) => {
 
 // TODO i'm skipping all very slow tests => they would be implemented using cypress as integration tests
 // when validation is "detached" from the component, validation schema should be tested separately as UT with jest 
+// ----------------------------------
+// In the context of PN-2712, we decided to keep these tests skipped until the new, cypress-based tests are operative.
+// Cfr PN-2962, open to implement the cypress-based tests. 
+// Carlotta Dimatteo and Carlos Lombardi, 2022.12.14
+// ----------------------------------
 
 describe('Recipient Component', () => {
   // eslint-disable-next-line functional/no-let
