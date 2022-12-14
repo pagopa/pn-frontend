@@ -25,11 +25,11 @@ describe('Attachments Component', () => {
   (file as any).name = 'Mocked file';
 
   function uploadDocument(elem: ParentNode, index: number) {
+    const nameInput = elem.querySelector(`[id="documents.${index}.name"]`);
+    fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
     const fileInput = elem.querySelector('[data-testid="fileInput"]');
     const input = fileInput?.querySelector('input');
     fireEvent.change(input!, { target: { files: [file] } });
-    const nameInput = elem.querySelector(`[id="documents.${index}.name"]`);
-    fireEvent.change(nameInput!, { target: { value: `Doc${index}` } });
   }
 
   async function testConfirm(button: HTMLButtonElement, documents: Array<UploadDocumentParams>) {

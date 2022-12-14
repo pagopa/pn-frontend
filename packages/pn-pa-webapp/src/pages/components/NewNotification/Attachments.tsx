@@ -80,9 +80,7 @@ const AttachmentBox = ({
         key={`${new Date()}`}
         uploadText={t('new-notification.drag-doc')}
         accept="application/pdf"
-        onFileUploaded={(file, sha256, name, size) =>
-          onFileUploaded(`${id}.file`, file, sha256, name, size)
-        }
+        onFileUploaded={(file, sha256, name, size) => onFileUploaded(id, file, sha256, name, size)}
         onRemoveFile={() => onRemoveFile(id)}
         sx={{ marginTop: '10px' }}
         fileFormat="uint8Array"
@@ -206,19 +204,27 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef 
   };
 
   const fileUploadedHandler = async (
+    index: number,
     id: string,
     file?: Uint8Array,
     sha256?: { hashBase64: string; hashHex: string },
     name?: string,
     size?: number
   ) => {
-    await formik.setFieldTouched(id, true, false);
     await formik.setFieldValue(id, {
-      size,
-      uint8Array: file,
-      sha256,
-      name,
-    });
+      ...formik.values.documents[index],
+      file: {
+        size,
+        uint8Array: file,
+        sha256,
+        name,
+      },
+      ref: {
+        key: '',
+        versionToken: '',
+      },
+    }, false);
+    await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
   const removeFileHandler = async (id: string, index: number) => {
@@ -315,7 +321,9 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef 
                 : undefined
             }
             onFieldTouched={handleChangeTouched}
-            onFileUploaded={fileUploadedHandler}
+            onFileUploaded={(id, file, sha256, name, size) =>
+              fileUploadedHandler(i, id, file, sha256, name, size)
+            }
             onRemoveFile={(id) => removeFileHandler(id, i)}
             sx={{ marginTop: i > 0 ? '30px' : '10px' }}
           />
