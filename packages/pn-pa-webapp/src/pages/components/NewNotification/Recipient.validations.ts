@@ -8,9 +8,8 @@ export function denominationTotalLength(
   recipientType: RecipientType,
   lastName: string
 ): string {
-  const maxLength = recipientType === RecipientType.PG ? 80 : 79;
-  const isAcceptableLength = (value || '').length + (lastName || '').length <= maxLength;
-  if (isAcceptableLength) {
+  const denomination = (value || '') + (lastName ? ' ' + lastName : '');
+  if (dataRegex.denomination.test(denomination)) {
     return '';
   }
   // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
