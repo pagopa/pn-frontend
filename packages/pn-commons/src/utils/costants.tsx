@@ -1,8 +1,8 @@
-import { FooterLinksType, PreLoginFooterLinksType } from '@pagopa/mui-italia';
+import { FooterLinksType, Languages, PreLoginFooterLinksType } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
-export const LANGUAGES = {
+export const LANGUAGES: Languages = {
   it: { it: 'Italiano', en: 'Inglese' },
   en: { it: 'Italian', en: 'English' },
 };
