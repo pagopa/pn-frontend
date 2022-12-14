@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
 import Prova from '../pages/Prova.page';
@@ -14,7 +14,9 @@ function Router() {
         <Route path="/" element={<SessionGuard />}>
           {/* protected routes */}
           <Route path="/" element={<RouteGuard />}>
-            <Route path={routes.PROVA} element={<Prova />} />
+            <Route path={routes.NOTIFICHE} element={<Prova />} />
+            <Route path={routes.DELEGHE} element={<Prova />} />
+            <Route path="/" element={<Navigate to={routes.NOTIFICHE} />} />
           </Route>
         </Route>
         <Route path="*" element={<NotFound />} />

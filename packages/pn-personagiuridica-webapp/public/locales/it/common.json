@@ -2,7 +2,11 @@
   "menu": {
     "profilo": "I tuoi dati",
     "aria-label": "piattaforma-notifiche navigazione principale",
-    "aria-label-inner": "piattaforma-notifiche navigazione persona giuridica"
+    "aria-label-inner": "piattaforma-notifiche navigazione persona giuridica",
+    "notifications": "Notifiche",
+    "delegations": "Deleghe",
+    "roles": "Ruoli",
+    "groups": "Gruppi"
   },
   "header": {
     "logout": "Esci",

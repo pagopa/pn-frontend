@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Box } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import AltRouteIcon from '@mui/icons-material/AltRoute';
 import {
   AppMessage,
   AppResponseMessage,
@@ -17,12 +18,15 @@ import {
   useUnload,
 } from '@pagopa-pn/pn-commons';
 import { ProductSwitchItem } from '@pagopa/mui-italia';
+import { Email } from '@mui/icons-material';
 
 import { useAppDispatch } from './redux/hooks';
 import Router from './navigation/routes';
 import { TrackEventType } from './utils/events';
 import { trackEventByType } from './utils/mixpanel';
 import { MIXPANEL_TOKEN, VERSION } from './utils/constants';
+import * as routes from './navigation/routes.const';
+import { getMenuItems } from './utils/role.utility';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -50,7 +54,27 @@ function App() {
   };
 
   // TODO: define side menu items
-  const menuItems: Array<SideMenuItem> = [];
+  const menuItems = useMemo(() => {
+    const basicMenuItems: Array<SideMenuItem> = [
+      { label: 'menu.notifications', icon: Email, route: routes.NOTIFICHE },
+      // TODO: gestire badge
+      {
+        label: t('menu.delegations'),
+        icon: AltRouteIcon,
+        route: routes.DELEGHE,
+        rightBadgeNotification: undefined,
+      },
+    ];
+    const items = { ...getMenuItems(basicMenuItems, 'id-organizazzione') };
+    // localize menu items
+    /* eslint-disable-next-line functional/immutable-data */
+    items.menuItems = items.menuItems.map((item) => ({ ...item, label: t(item.label) }));
+    if (items.selfCareItems) {
+      /* eslint-disable-next-line functional/immutable-data */
+      items.selfCareItems = items.selfCareItems.map((item) => ({ ...item, label: t(item.label) }));
+    }
+    return items;
+  }, []);
 
   // TODO: manage tos
   const userActions = useMemo(() => {
@@ -133,12 +157,15 @@ function App() {
         enableUserDropdown
         productsList={productsList}
         sideMenu={
-          <SideMenu
-            menuItems={menuItems}
-            eventTrackingCallback={(target) =>
-              trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
-            }
-          />
+          menuItems && (
+            <SideMenu
+              menuItems={menuItems.menuItems}
+              selfCareItems={menuItems.selfCareItems}
+              eventTrackingCallback={(target) =>
+                trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
+              }
+            />
+          )
         }
         userActions={userActions}
         onLanguageChanged={changeLanguageHandler}
