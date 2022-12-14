@@ -33,6 +33,7 @@ const AppStatus = () => {
   const fetchDowntimeLog = useCallback(() => {
     const fetchParams: GetDowntimeHistoryParams = { 
       startDate: "1900-01-01T00:00:00Z",
+      endDate: new Date().toISOString(),
       functionality: [KnownFunctionality.NotificationCreate, KnownFunctionality.NotificationVisualization, KnownFunctionality.NotificationWorkflow],
       size: String(paginationData.size),
       page: paginationData.resultPages[paginationData.page],
