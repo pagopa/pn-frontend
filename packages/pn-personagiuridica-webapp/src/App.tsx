@@ -59,7 +59,7 @@ function App() {
       { label: 'menu.notifications', icon: Email, route: routes.NOTIFICHE },
       // TODO: gestire badge
       {
-        label: t('menu.delegations'),
+        label: 'menu.delegations',
         icon: AltRouteIcon,
         route: routes.DELEGHE,
         rightBadgeNotification: undefined,
