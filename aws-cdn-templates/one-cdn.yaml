@@ -41,10 +41,10 @@ Parameters:
     Description: "The Url of web API: useful for content-security-policy"
     Type: String
 
-  Limit:
-    Type: Number
-    Description: The limit on requests per 5-minute period for a single originating IP address.
-    Default: 1000
+#  Limit:
+#    Type: Number
+#    Description: The limit on requests per 5-minute period for a single originating IP address.
+#    Default: 1000
 
   RequestsAlarmLimit:
     Type: Number
@@ -422,10 +422,11 @@ Resources:
         - !Ref AlarmSNSTopicArn
       DatapointsToAlarm: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
-      EvaluationPeriods: 5
+      EvaluationPeriods: 1
       Threshold: !Ref RequestsAlarmLimit
       TreatMissingData: notBreaching
       Namespace: "AWS/CloudFront"
+      Period: 300
       MetricName: "Requests"
       Dimensions:
         - Name: DistributionId
@@ -445,7 +446,8 @@ Resources:
         - !Ref AlarmSNSTopicArn
       DatapointsToAlarm: 1
       ComparisonOperator: GreaterThanOrEqualToThreshold
-      EvaluationPeriods: 5
+      EvaluationPeriods: 1
+      Period: 300
       Threshold: !Ref ErrorRateAlarmLimit
       TreatMissingData: notBreaching
       Namespace: "AWS/CloudFront"
