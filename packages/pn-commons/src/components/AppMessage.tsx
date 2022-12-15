@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { appStateActions, appStateSelectors } from '../redux';
 import { IAppMessage, MessageType } from '../types';
 import SnackBar from './SnackBar/SnackBar';
-//import Toast from './Toast/Toast';
 
 type EnqueuedMessage = {
   type: 'error' | 'success';
@@ -64,20 +63,9 @@ const AppMessage = () => {
 
   return (
     <>
-      {/* currentMessage &&
-      <Toast
-      key={currentMessage.message.id}
-      title={currentMessage.message.title || ""}
-      message={currentMessage.message.message}
-      open
-      type={currentMessage.type === MessageType.ERROR ? MessageType.ERROR : MessageType.SUCCESS}
-      onClose={() => onCloseToast(currentMessage)}
-      closingDelay={5000}
-    /> */}
       {currentMessage && (
         <SnackBar
           key={currentMessage.message.id}
-          title={currentMessage.message.title || ''}
           message={currentMessage.message.message}
           open
           type={currentMessage.type === MessageType.ERROR ? MessageType.ERROR : MessageType.SUCCESS}
