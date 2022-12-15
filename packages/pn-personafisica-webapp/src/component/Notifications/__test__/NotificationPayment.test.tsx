@@ -1,26 +1,32 @@
 /* eslint-disable functional/no-let */
-import { apiOutcomeTestHelper, AppResponseMessage, NotificationDetailPayment, ResponseEventDispatcher } from "@pagopa-pn/pn-commons";
+import {
+  apiOutcomeTestHelper,
+  AppResponseMessage,
+  NotificationDetailPayment,
+  ResponseEventDispatcher,
+} from '@pagopa-pn/pn-commons';
 import { act, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { PaymentStatus, PaymentInfoDetail } from "@pagopa-pn/pn-commons";
-import { axe, render, screen } from "../../../__test__/test-utils";
+import { PaymentStatus, PaymentInfoDetail } from '@pagopa-pn/pn-commons';
+import { axe, render, screen } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/notification/actions';
 import * as hooks from '../../../redux/hooks';
-import NotificationPayment from "../NotificationPayment";
-import { NotificationsApi } from "../../../api/notifications/Notifications.api";
+import NotificationPayment from '../NotificationPayment';
+import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import React from 'react';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
-      t: (str: string) => str,
-    }),
-    Trans: () => "mocked-text",
+    t: (str: string) => str,
+  }),
+  Trans: () => 'mocked-text',
 }));
 
 /**
  * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
  */
- jest.mock('@pagopa-pn/pn-commons', () => {
+jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
@@ -31,78 +37,91 @@ jest.mock('react-i18next', () => ({
 const mockedNotificationDetailPayment = {
   notificationFeePolicy: 'FLAT_RATE',
   noticeCode: 'mocked-noticeCode',
-  creditorTaxId: "mocked-creditorTaxId",
+  creditorTaxId: 'mocked-creditorTaxId',
   pagoPaForm: {
     digests: {
-      sha256: "mocked-pagopa-sha256"
+      sha256: 'mocked-pagopa-sha256',
     },
-    contentType: "application/pdf",
+    contentType: 'application/pdf',
     ref: {
-      key: "mocked-pagopa-key",
-      versionToken: "mockedVersionToken"
-    }
+      key: 'mocked-pagopa-key',
+      versionToken: 'mockedVersionToken',
+    },
   },
   f24flatRate: {
     digests: {
-      sha256: "mocked-f24-sha256"
+      sha256: 'mocked-f24-sha256',
     },
-    contentType: "application/pdf",
+    contentType: 'application/pdf',
     ref: {
-      key: "mocked-f24-key",
-      versionToken: "mockedVersionToken"
-    }
-  }
+      key: 'mocked-f24-key',
+      versionToken: 'mockedVersionToken',
+    },
+  },
 } as NotificationDetailPayment;
 
 const mocked_payments_detail = {
   required: {
     amount: 47350,
-    status: PaymentStatus.REQUIRED
+    status: PaymentStatus.REQUIRED,
   },
   inprogress: {
     amount: 47350,
-    status: PaymentStatus.INPROGRESS
+    status: PaymentStatus.INPROGRESS,
   },
   succeeded: {
-    status: PaymentStatus.SUCCEEDED
+    status: PaymentStatus.SUCCEEDED,
   },
-  failed: [{// 0
-        status: PaymentStatus.FAILED,
-        detail: PaymentInfoDetail.DOMAIN_UNKNOWN,
-        detail_v2: "PPT_STAZIONE_INT_PA_ERRORE_RESPONSE",
-        errorCode: "CODICE_ERRORE"
-      }, {// 1
-        status: PaymentStatus.FAILED,
-        detail: PaymentInfoDetail.PAYMENT_UNAVAILABLE,
-        detail_v2: "PPT_INTERMEDIARIO_PSP_SCONOSCIUTO",
-        errorCode: "CODICE_ERRORE"
-      }, {// 2
-        status: PaymentStatus.FAILED,
-        detail: PaymentInfoDetail.PAYMENT_UNKNOWN,
-        detail_v2: "PAA_PAGAMENTO_SCONOSCIUTO",
-        errorCode: "CODICE_ERRORE"
-      }, {// 3
-        status: PaymentStatus.FAILED,
-        detail: PaymentInfoDetail.GENERIC_ERROR
-      }, {// 4
-        status: PaymentStatus.FAILED,
-        detail: PaymentInfoDetail.PAYMENT_CANCELED
-      }, {// 5
-        status: PaymentStatus.FAILED,
-        detail: PaymentInfoDetail.PAYMENT_EXPIRED
-      }]
+  failed: [
+    {
+      // 0
+      status: PaymentStatus.FAILED,
+      detail: PaymentInfoDetail.DOMAIN_UNKNOWN,
+      detail_v2: 'PPT_STAZIONE_INT_PA_ERRORE_RESPONSE',
+      errorCode: 'CODICE_ERRORE',
+    },
+    {
+      // 1
+      status: PaymentStatus.FAILED,
+      detail: PaymentInfoDetail.PAYMENT_UNAVAILABLE,
+      detail_v2: 'PPT_INTERMEDIARIO_PSP_SCONOSCIUTO',
+      errorCode: 'CODICE_ERRORE',
+    },
+    {
+      // 2
+      status: PaymentStatus.FAILED,
+      detail: PaymentInfoDetail.PAYMENT_UNKNOWN,
+      detail_v2: 'PAA_PAGAMENTO_SCONOSCIUTO',
+      errorCode: 'CODICE_ERRORE',
+    },
+    {
+      // 3
+      status: PaymentStatus.FAILED,
+      detail: PaymentInfoDetail.GENERIC_ERROR,
+    },
+    {
+      // 4
+      status: PaymentStatus.FAILED,
+      detail: PaymentInfoDetail.PAYMENT_CANCELED,
+    },
+    {
+      // 5
+      status: PaymentStatus.FAILED,
+      detail: PaymentInfoDetail.PAYMENT_EXPIRED,
+    },
+  ],
 };
 
 describe('NotificationPayment component', () => {
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
   const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-  
+
   beforeEach(() => {
     mockActionFn = jest.fn();
     const actionSpy = jest.spyOn(actions, 'getNotificationPaymentInfo');
     actionSpy.mockImplementation(mockActionFn as any);
-    
+
     // mock dispatch
     mockDispatchFn = jest.fn(() => ({
       unwrap: () => Promise.resolve(),
@@ -118,42 +137,64 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly while loading payment info', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending'});
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     const disclaimer = screen.queryByText('detail.payment.disclaimer');
     expect(disclaimer).not.toBeInTheDocument();
 
-    const loadingButton = screen.getByRole('button', { name: 'detail.payment.submit'});
+    const loadingButton = screen.getByRole('button', { name: 'detail.payment.submit' });
     expect(loadingButton.querySelector('svg')).toBeInTheDocument();
     expect(loadingButton).toBeInTheDocument();
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
   });
 
   it('renders properly if getPaymentInfo returns a "required" status', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
-    
+
     const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
@@ -168,30 +209,43 @@ describe('NotificationPayment component', () => {
     expect(loadingButton).toBeInTheDocument();
     expect(loadingButton.querySelector('svg')).not.toBeInTheDocument();
 
-    const divider = screen.getByRole("separator");
+    const divider = screen.getByRole('separator');
     expect(divider).toBeInTheDocument();
 
-    const pagopaAttachmentButton = screen.getByRole("button", { name: 'detail.payment.download-pagopa-notification' });
+    const pagopaAttachmentButton = screen.getByRole('button', {
+      name: 'detail.payment.download-pagopa-notification',
+    });
     expect(pagopaAttachmentButton).toBeInTheDocument();
 
-    const f24AttachmentButton = screen.getByRole("button", { name: 'detail.payment.download-f24' });
+    const f24AttachmentButton = screen.getByRole('button', { name: 'detail.payment.download-f24' });
     expect(f24AttachmentButton).toBeInTheDocument();
   });
 
   it('renders properly if getPaymentInfo returns a "in progress" status', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.inprogress);
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
-    
+
     const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
@@ -213,25 +267,36 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly if getPaymentInfo returns a "succeeded" status', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.succeeded);
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
-    
+
     const title = screen.getByRole('heading', { name: 'detail.payment.summary-succeeded' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent("");
+    expect(amount).toHaveTextContent('');
 
     const disclaimer = screen.queryByText('detail.payment.disclaimer');
     expect(disclaimer).not.toBeInTheDocument();
@@ -248,10 +313,18 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly if getPaymentInfo returns a "failed" status and "domain_unknown" detail', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[0]);
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
@@ -260,16 +333,19 @@ describe('NotificationPayment component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
-    
+
     const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent("");
+    expect(amount).toHaveTextContent('');
 
     const disclaimer = screen.queryByText('detail.payment.disclaimer');
     expect(disclaimer).not.toBeInTheDocument();
@@ -287,18 +363,26 @@ describe('NotificationPayment component', () => {
     const errorCode = screen.getByText('PPT_STAZIONE_INT_PA_ERRORE_RESPONSE');
     expect(errorCode).toBeInTheDocument();
 
-    const copyLink = screen.getByRole("button", { name: /detail.payment.copy-to-clipboard/ });
+    const copyLink = screen.getByRole('button', { name: /detail.payment.copy-to-clipboard/ });
     expect(copyLink).toBeInTheDocument();
 
-    const button = screen.getByRole("button", { name: /detail.payment.contact-support/ });
+    const button = screen.getByRole('button', { name: /detail.payment.contact-support/ });
     expect(button).toBeInTheDocument();
   });
 
   it('renders properly if getPaymentInfo returns a "failed" status and "payment_unavailable" detail', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[1]);
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
@@ -307,16 +391,19 @@ describe('NotificationPayment component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
-    
+
     const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent("");
+    expect(amount).toHaveTextContent('');
 
     const disclaimer = screen.queryByText('detail.payment.disclaimer');
     expect(disclaimer).not.toBeInTheDocument();
@@ -334,18 +421,26 @@ describe('NotificationPayment component', () => {
     const errorCode = screen.getByText('PPT_INTERMEDIARIO_PSP_SCONOSCIUTO');
     expect(errorCode).toBeInTheDocument();
 
-    const copyLink = screen.getByRole("button", { name: /detail.payment.copy-to-clipboard/ });
+    const copyLink = screen.getByRole('button', { name: /detail.payment.copy-to-clipboard/ });
     expect(copyLink).toBeInTheDocument();
 
-    const button = screen.getByRole("button", { name: /detail.payment.contact-support/ });
+    const button = screen.getByRole('button', { name: /detail.payment.contact-support/ });
     expect(button).toBeInTheDocument();
   });
 
   it('renders properly if getPaymentInfo returns a "failed" status and "payment_unknown" detail', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[2]);
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
@@ -354,16 +449,19 @@ describe('NotificationPayment component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
-    
+
     const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent("");
+    expect(amount).toHaveTextContent('');
 
     const disclaimer = screen.queryByText('detail.payment.disclaimer');
     expect(disclaimer).not.toBeInTheDocument();
@@ -381,18 +479,26 @@ describe('NotificationPayment component', () => {
     const errorCode = screen.getByText('PAA_PAGAMENTO_SCONOSCIUTO');
     expect(errorCode).toBeInTheDocument();
 
-    const copyLink = screen.getByRole("button", { name: /detail.payment.copy-to-clipboard/ });
+    const copyLink = screen.getByRole('button', { name: /detail.payment.copy-to-clipboard/ });
     expect(copyLink).toBeInTheDocument();
 
-    const button = screen.getByRole("button", { name: /detail.payment.contact-support/ });
+    const button = screen.getByRole('button', { name: /detail.payment.contact-support/ });
     expect(button).toBeInTheDocument();
   });
 
   it('renders properly if getPaymentInfo returns a "failed" status and "generic_error" detail', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[3]);
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
@@ -401,16 +507,19 @@ describe('NotificationPayment component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
-    
+
     const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent("");
+    expect(amount).toHaveTextContent('');
 
     const disclaimer = screen.queryByText('detail.payment.disclaimer');
     expect(disclaimer).not.toBeInTheDocument();
@@ -425,18 +534,26 @@ describe('NotificationPayment component', () => {
     expect(alertMessage).toBeInTheDocument();
     expect(alertMessage).toHaveTextContent('detail.payment.error-generic');
 
-    const copyLink = screen.getByRole("button", { name: /detail.payment.contact-support/ });
+    const copyLink = screen.getByRole('button', { name: /detail.payment.contact-support/ });
     expect(copyLink).toBeInTheDocument();
 
-    const button = screen.getByRole("button", { name: /detail.payment.reload-page/ });
+    const button = screen.getByRole('button', { name: /detail.payment.reload-page/ });
     expect(button).toBeInTheDocument();
   });
 
   it('renders properly if getPaymentInfo returns a "failed" status and "payment_canceled" detail', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[4]);
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
@@ -445,16 +562,19 @@ describe('NotificationPayment component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
-    
+
     const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent("");
+    expect(amount).toHaveTextContent('');
 
     const disclaimer = screen.queryByText('detail.payment.disclaimer');
     expect(disclaimer).not.toBeInTheDocument();
@@ -469,15 +589,23 @@ describe('NotificationPayment component', () => {
     expect(alertMessage).toBeInTheDocument();
     expect(alertMessage).toHaveTextContent('detail.payment.error-canceled');
 
-    const button = screen.queryByRole("button");
+    const button = screen.queryByRole('button');
     expect(button).not.toBeInTheDocument();
   });
 
   it('renders properly if getPaymentInfo returns a "failed" status and "payment_expired" detail', async () => {
-    render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[5]);
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     const disclaimer_loading = screen.queryByText('detail.payment.disclaimer');
@@ -486,16 +614,19 @@ describe('NotificationPayment component', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
-    
+
     const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
     expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent("");
+    expect(amount).toHaveTextContent('');
 
     const disclaimer = screen.queryByText('detail.payment.disclaimer');
     expect(disclaimer).not.toBeInTheDocument();
@@ -510,21 +641,32 @@ describe('NotificationPayment component', () => {
     expect(alertMessage).toBeInTheDocument();
     expect(alertMessage).toHaveTextContent('detail.payment.error-expired');
 
-    const button = screen.queryByRole("button");
+    const button = screen.queryByRole('button');
     expect(button).not.toBeInTheDocument();
   });
 
   it.skip('does not have basic accessibility issues (required status)', async () => {
-    const result = render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
+    const result = render(
+      <NotificationPayment
+        iun="mocked-iun"
+        notificationPayment={mockedNotificationDetailPayment}
+        onDocumentDownload={mockActionFn}
+        senderDenomination="mocked-senderDenomination"
+        subject="mocked-subject"
+      />
+    );
     mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
 
-    const amountLoader = screen.getByTestId("loading-skeleton");
+    const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
+      expect(mockActionFn).toBeCalledWith({
+        noticeCode: 'mocked-noticeCode',
+        taxId: 'mocked-creditorTaxId',
+      });
       expect(amountLoader).not.toBeInTheDocument();
     });
 
@@ -536,7 +678,7 @@ describe('NotificationPayment component', () => {
       const res = await axe(result.container);
       expect(res).toHaveNoViolations();
     } else {
-      fail("render() returned undefined!");
+      fail('render() returned undefined!');
     }
   });
 });
@@ -557,24 +699,44 @@ describe('NotificationPayment - different payment fetch API behaviors', () => {
   it('API error', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
     apiSpy.mockRejectedValue({ response: { status: 500 } });
-    await act(async () => void render(<>
-      <ResponseEventDispatcher />
-      <AppResponseMessage />
-      <NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={() => {}}/>
-    </>));
+    await act(
+      async () =>
+        void render(
+          <>
+            <ResponseEventDispatcher />
+            <AppResponseMessage />
+            <NotificationPayment
+              iun="mocked-iun"
+              notificationPayment={mockedNotificationDetailPayment}
+              onDocumentDownload={() => {}}
+              senderDenomination="mocked-senderDenomination"
+              subject="mocked-subject"
+            />
+          </>
+        )
+    );
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 
   it('API OK', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentInfo');
-    apiSpy.mockResolvedValue({ status: PaymentStatus.SUCCEEDED, url: "https://react.org" });
-    await act(async () => void render(<>
-      <ResponseEventDispatcher />
-      <AppResponseMessage />
-      <NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={() => {}}/>
-    </>));
+    apiSpy.mockResolvedValue({ status: PaymentStatus.SUCCEEDED, url: 'https://react.org' });
+    await act(
+      async () =>
+        void render(
+          <>
+            <ResponseEventDispatcher />
+            <AppResponseMessage />
+            <NotificationPayment
+              iun="mocked-iun"
+              notificationPayment={mockedNotificationDetailPayment}
+              onDocumentDownload={() => {}}
+              senderDenomination="mocked-senderDenomination"
+              subject="mocked-subject"
+            />
+          </>
+        )
+    );
     apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
-
-

@@ -27,6 +27,7 @@ import {
   NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
+  NOTIFICATION_PAYMENT_URL,
 } from '../notifications.routes';
 
 describe('Notifications api tests', () => {
@@ -121,16 +122,51 @@ describe('Notifications api tests', () => {
     mock.restore();
   });
 
+  it('getNotificationPaymentUrl', async () => {
+    const taxId = 'mocked-taxId';
+    const noticeCode = 'mocked-noticeCode';
+    const mock = new MockAdapter(apiClient);
+    mock
+      .onPost(NOTIFICATION_PAYMENT_URL(), {
+        paymentNotice: {
+          noticeNumber: noticeCode,
+          fiscalCode: taxId,
+          amount: 0,
+          companyName: 'Mocked Company',
+          description: 'Mocked title',
+        },
+        returnUrl: 'mocked-return-url',
+      })
+      .reply(200, {
+        checkoutUrl: 'mocked-url',
+      });
+    const res = await NotificationsApi.getNotificationPaymentUrl(
+      {
+        noticeNumber: noticeCode,
+        fiscalCode: taxId,
+        amount: 0,
+        companyName: 'Mocked Company',
+        description: 'Mocked title',
+      },
+      'mocked-return-url'
+    );
+    expect(res).toStrictEqual({
+      checkoutUrl: 'mocked-url',
+    });
+    mock.reset();
+    mock.restore();
+  });
+
   it('exchangeNotificationQrCode', async () => {
     const mock = new MockAdapter(apiClient);
-    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: "qr1" }).reply(200, {
+    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: 'qr1' }).reply(200, {
       iun: 'mock-notification-1',
       mandateId: 'mock-mandate-1',
     });
-    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: "qr2" }).reply(200, {
+    mock.onPost(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: 'qr2' }).reply(200, {
       iun: 'mock-notification-2',
     });
-    const res = await NotificationsApi.exchangeNotificationQrCode("qr1");
+    const res = await NotificationsApi.exchangeNotificationQrCode('qr1');
     expect(res).toStrictEqual({
       iun: 'mock-notification-1',
       mandateId: 'mock-mandate-1',
