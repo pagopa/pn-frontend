@@ -24,6 +24,8 @@ phases:
       # - yarn test:coverage
       - |
         if [ $SUB_PRJ_NAME == "packages/pn-pa-webapp" -o $SUB_PRJ_NAME == "packages/pn-personafisica-webapp" ] ; then
+          echo Installing wait-on module...
+          yarn add wait-on
           echo Starting application...
           yarn start & wait-on http://localhost:3000
         fi
