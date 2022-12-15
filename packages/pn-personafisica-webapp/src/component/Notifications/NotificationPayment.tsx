@@ -51,6 +51,8 @@ interface Props {
   notificationPayment: NotificationDetailPayment;
   onDocumentDownload: (url: string) => void;
   mandateId?: string;
+  senderDenomination?: string;
+  subject: string;
 }
 
 interface PrimaryAction {
@@ -83,6 +85,8 @@ const NotificationPayment: React.FC<Props> = ({
   notificationPayment,
   onDocumentDownload,
   mandateId,
+  senderDenomination,
+  subject,
 }) => {
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
@@ -157,13 +161,29 @@ const NotificationPayment: React.FC<Props> = ({
       window.open(paymentUrl);
     }
     */
-    if (notificationPayment.noticeCode) {
-      void dispatch(
+    if (
+      notificationPayment.noticeCode &&
+      notificationPayment.creditorTaxId &&
+      paymentInfo.amount &&
+      senderDenomination
+    ) {
+      dispatch(
         getNotificationPaymentUrl({
-          paymentNotice: notificationPayment.noticeCode,
+          paymentNotice: {
+            noticeNumber: notificationPayment.noticeCode,
+            fiscalCode: notificationPayment.creditorTaxId,
+            amount: paymentInfo.amount,
+            companyName: senderDenomination,
+            description: subject,
+          },
           returnUrl: window.location.href,
         })
-      );
+      )
+        .unwrap()
+        .then((res: { checkoutUrl: string }) => {
+          window.open(res.checkoutUrl);
+        })
+        .catch(() => undefined);
     }
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION);
   };

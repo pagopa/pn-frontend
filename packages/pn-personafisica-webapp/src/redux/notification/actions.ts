@@ -4,6 +4,7 @@ import {
   PaymentInfo,
   performThunkAction,
 } from '@pagopa-pn/pn-commons';
+import { PaymentNotice } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
@@ -84,10 +85,10 @@ export const getNotificationPaymentInfo = createAsyncThunk<
 
 export const getNotificationPaymentUrl = createAsyncThunk<
   { checkoutUrl: string },
-  { paymentNotice: string; returnUrl: string }
+  { paymentNotice: PaymentNotice; returnUrl: string }
 >(
   NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_URL,
-  performThunkAction((params: { paymentNotice: string; returnUrl: string }) => 
+  performThunkAction((params: { paymentNotice: PaymentNotice; returnUrl: string }) => 
     NotificationsApi.getNotificationPaymentUrl(params.paymentNotice, params.returnUrl)
   )
 );

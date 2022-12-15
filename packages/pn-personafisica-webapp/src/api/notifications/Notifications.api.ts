@@ -6,6 +6,7 @@ import {
   NotificationDetail,
   PaymentAttachmentNameType,
   PaymentInfo,
+  PaymentNotice
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
 
@@ -156,7 +157,7 @@ export const NotificationsApi = {
    * @param  {string} taxId
    * @returns Promise
    */
-  getNotificationPaymentUrl: (paymentNotice: string, returnUrl: string): Promise<{ checkoutUrl: string }> =>
+  getNotificationPaymentUrl: (paymentNotice: PaymentNotice, returnUrl: string): Promise<{ checkoutUrl: string }> =>
     apiClient
       .post<{ checkoutUrl: string }>(NOTIFICATION_PAYMENT_URL(), {
         paymentNotice,
