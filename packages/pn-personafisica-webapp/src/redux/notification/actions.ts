@@ -13,6 +13,7 @@ import { GetReceivedNotificationParams } from './types';
 export enum NOTIFICATION_ACTIONS  {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
   GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
+  GET_NOTIFICATION_PAYMENT_URL = 'getNotificationPaymentUrl',
 }
 
 
@@ -78,5 +79,15 @@ export const getNotificationPaymentInfo = createAsyncThunk<
   NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO,
   performThunkAction((params: { noticeCode: string; taxId: string }) => 
     NotificationsApi.getNotificationPaymentInfo(params.noticeCode, params.taxId)
+  )
+);
+
+export const getNotificationPaymentUrl = createAsyncThunk<
+  { checkoutUrl: string },
+  { paymentNotice: string; returnUrl: string }
+>(
+  NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_URL,
+  performThunkAction((params: { paymentNotice: string; returnUrl: string }) => 
+    NotificationsApi.getNotificationPaymentUrl(params.paymentNotice, params.returnUrl)
   )
 );
