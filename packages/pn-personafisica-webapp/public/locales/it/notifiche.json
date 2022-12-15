@@ -31,6 +31,7 @@
     "not-found": "Link alla notifica non trovato"
   },
   "detail": {
+    "document-not-available": "Il documento sarà scaricabile tra pochi minuti, aggiorna la pagina o attendi",
     "table-aria-label": "Dettaglio notifica",
     "date": "Data di invio",
     "payment-terms": "Da pagare entro il",

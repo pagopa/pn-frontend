@@ -30,7 +30,7 @@ import {
   NotificationDetailRecipient,
   NotificationStatus,
   useErrors,
-  ApiError, formatEurocentToCurrency,
+  ApiError, formatEurocentToCurrency, TimedMessage,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -56,6 +56,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+const refreshPage = () => {
+  window.location.reload();
+};
+
 const NotificationDetail = () => {
   const classes = useStyles();
   const { id } = useParams();
@@ -70,6 +74,9 @@ const NotificationDetail = () => {
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
   );
+  const legalFactDownloadRetryAfter = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
+  );
   const { recipients } = notification;
   const recipientsWithNoticeCode = recipients.filter((recipient) => recipient.payment?.noticeCode);
   const recipientsWithAltNoticeCode = recipients.filter(
@@ -78,6 +85,8 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
+
+  const [timeoutMessage, setTimeoutMessage] = useState(0);
 
   const getRecipientsNoticeCodeField = (
     filteredRecipients: Array<NotificationDetailRecipient>,
@@ -269,6 +278,12 @@ const NotificationDetail = () => {
     }
   }, [legalFactDownloadUrl]);
 
+  useEffect(() => {
+    if (legalFactDownloadRetryAfter && legalFactDownloadRetryAfter > 0) {
+      setTimeoutMessage(legalFactDownloadRetryAfter * 1000);
+    }
+  }, [legalFactDownloadRetryAfter]);
+
   const properBreadcrumb = <PnBreadcrumb
     linkRoute={routes.DASHBOARD}
     linkLabel={
@@ -381,6 +396,12 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
+                <TimedMessage
+                  variant='body2'
+                  timeout={timeoutMessage}
+                  message={t('detail.document-not-available', { ns: 'notifiche' })}
+                  callback={() => refreshPage()}
+                />
                 <NotificationDetailTable rows={detailTableRows} />
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                   <NotificationDetailDocuments

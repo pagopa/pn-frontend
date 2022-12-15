@@ -29,6 +29,7 @@ const initialState = {
   },
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
+  legalFactDownloadRetryAfter: 0,
 };
 
 describe('Notification detail redux state tests', () => {

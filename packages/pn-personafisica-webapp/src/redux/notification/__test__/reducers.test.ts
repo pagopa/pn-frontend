@@ -38,6 +38,7 @@ const initialState = {
   },
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
+  legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
   paymentInfo: {},

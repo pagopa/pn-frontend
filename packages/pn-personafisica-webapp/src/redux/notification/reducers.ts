@@ -48,6 +48,7 @@ const initialState = {
   } as NotificationDetailForRecipient,
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
+  legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
   paymentInfo: {} as PaymentInfo,
@@ -72,6 +73,9 @@ const notificationSlice = createSlice({
     builder.addCase(getReceivedNotificationLegalfact.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.legalFactDownloadUrl = action.payload.url;
+      }
+      if (action.payload.retryAfter) {
+        state.legalFactDownloadRetryAfter = action.payload.retryAfter;
       }
     });
     builder.addCase(getPaymentAttachment.fulfilled, (state, action) => {

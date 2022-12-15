@@ -33,6 +33,7 @@ const initialState = {
   } as NotificationDetail,
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
+  legalFactDownloadRetryAfter: 0,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -54,6 +55,9 @@ const notificationSlice = createSlice({
     builder.addCase(getSentNotificationLegalfact.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.legalFactDownloadUrl = action.payload.url;
+      }
+      if (action.payload.retryAfter) {
+        state.legalFactDownloadRetryAfter = action.payload.retryAfter;
       }
     });
   },

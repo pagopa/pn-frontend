@@ -17,6 +17,7 @@ import {
   NotificationStatus,
   useErrors,
   ApiError,
+  TimedMessage,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -49,6 +50,10 @@ type LocationState = {
   fromQrCode?: boolean;    // indicates whether the user arrived to the notification detail page from the QR code
 };
 
+const refreshPage = () => {
+  window.location.reload();
+};
+
 const NotificationDetail = () => {
   const classes = useStyles();
   const { id, mandateId } = useParams();
@@ -69,12 +74,15 @@ const NotificationDetail = () => {
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
-
+  const [timeoutMessage, setTimeoutMessage] = useState(0);
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
+  );
+  const legalFactDownloadRetryAfter = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -193,6 +201,12 @@ const NotificationDetail = () => {
     }
   }, [legalFactDownloadUrl]);
 
+  useEffect(() => {
+    if (legalFactDownloadRetryAfter && legalFactDownloadRetryAfter > 0) {
+      setTimeoutMessage(legalFactDownloadRetryAfter * 1000);
+    }
+  }, [legalFactDownloadRetryAfter]);
+
   const fromQrCode = useMemo(() => !!(location.state && (location.state as LocationState).fromQrCode), [location]);
 
   const properBreadcrumb = useMemo(() => (
@@ -245,6 +259,12 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
+                <TimedMessage
+                  variant='body2'
+                  timeout={timeoutMessage}
+                  message={t('detail.document-not-available', { ns: 'notifiche' })}
+                  callback={() => refreshPage()}
+                />
                 <NotificationDetailTable rows={detailTableRows} />
                 {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
                   <NotificationPayment

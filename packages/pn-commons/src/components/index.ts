@@ -38,6 +38,7 @@ import CopyToClipboard from './CopyToClipboard';
 import LoadingPage from './LoadingPage';
 import ApiError from './ApiError/ApiError';
 import ApiErrorWrapper from './ApiError/ApiErrorWrapper';
+import TimedMessage from './TimedMessage/TimedMessage';
 
 export {
     LoadingOverlay,
@@ -80,7 +81,8 @@ export {
     FileUpload,
     Prompt,
     CopyToClipboard,
-    LoadingPage
+    LoadingPage,
+    TimedMessage
 };
 
 export type { 

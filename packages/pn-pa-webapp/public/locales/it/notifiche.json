@@ -39,6 +39,7 @@
     "secondary-action": "invio manuale"
   },
   "detail": {
+    "document-not-available": "Il documento sarà scaricabile tra pochi minuti, aggiorna la pagina o attendi",
     "table-aria-label": "Dettaglio notifica",
     "sender": "Mittente",
     "recipient": "Destinatario",
