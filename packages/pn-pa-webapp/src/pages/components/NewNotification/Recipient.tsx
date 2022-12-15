@@ -174,7 +174,7 @@ const Recipient = ({
           .matches(dataRegex.pIva, t('fiscal-code-error')),
         noticeCode: yup
           .string()
-          .matches(/^\d{18}$/, t('notice-code-error'))
+          .matches(dataRegex.noticeCode, t('notice-code-error'))
           .required(tc('required-field')),
       };
     }
