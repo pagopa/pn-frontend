@@ -41,6 +41,7 @@ Parameters:
     Description: "The Url of web API: useful for content-security-policy"
     Type: String
 
+#  Do not remove, we are waiting for DPIA approval about WAF on us-east-1 region
 #  Limit:
 #    Type: Number
 #    Description: The limit on requests per 5-minute period for a single originating IP address.
@@ -48,7 +49,7 @@ Parameters:
 
   RequestsAlarmLimit:
     Type: Number
-    Default: 1000
+    Default: 50000
     Description: The limit of requests on 5 minutes period to raise an alarm
 
   ErrorRateAlarmLimit:
