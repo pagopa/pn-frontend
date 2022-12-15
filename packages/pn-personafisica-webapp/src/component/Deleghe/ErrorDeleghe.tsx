@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { /* Toast */ SnackBar, MessageType } from '@pagopa-pn/pn-commons';
+import { SnackBar, MessageType } from '@pagopa-pn/pn-commons';
 
 class ErrorDelega {
   title: string;
@@ -27,16 +27,7 @@ const ErrorDeleghe: React.FC<ErrorDelegheProps> = ({ errorType }) => {
   ];
 
   return (
-    /*  <Toast
-      title={errorType !== undefined ? errors[errorType].title : ''}
-      message={errorType !== undefined ? errors[errorType].description : ''}
-      open={errorType !== undefined}
-      variant="standard"
-      type={MessageType.ERROR}
-      aria-label="errore"
-    /> */
     <SnackBar
-      title={errorType !== undefined ? errors[errorType].title : ''}
       message={errorType !== undefined ? errors[errorType].description : ''}
       open={errorType !== undefined}
       variant="standard"

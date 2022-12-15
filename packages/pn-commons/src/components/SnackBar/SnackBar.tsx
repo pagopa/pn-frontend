@@ -7,8 +7,6 @@ import { MessageType } from '../../types/MessageType';
 type Props = {
   /** whether the sneakbar should be open or not */
   open: boolean;
-  /** title to be shown */
-  title: string;
   /** message type (error, success, info, warning) */
   type: MessageType;
   /** message to be shown */
@@ -20,19 +18,11 @@ type Props = {
   variant?: 'outlined' | 'standard' | 'filled';
 };
 
-const SnackBar = ({
-  //title,
-  message,
-  open,
-  type,
-  closingDelay,
-  onClose,
-  variant = 'outlined',
-}: Props) => {
+const SnackBar = ({ message, open, type, closingDelay, onClose, variant = 'outlined' }: Props) => {
   const [openStatus, setOpenStatus] = useState(open);
   const isMobile = useIsMobile();
 
-  const closeToast = () => {
+  const closeSnackBar = () => {
     setOpenStatus(false);
     if (onClose) {
       onClose();
@@ -42,7 +32,7 @@ const SnackBar = ({
   useEffect(() => {
     if (closingDelay && openStatus) {
       const timer = setTimeout(() => {
-        closeToast();
+        closeSnackBar();
       }, closingDelay);
       return () => clearTimeout(timer);
     }
@@ -58,7 +48,7 @@ const SnackBar = ({
 
   const action = (
     <>
-      <IconButton size="small" aria-label="close" color="inherit" onClick={closeToast}>
+      <IconButton size="small" aria-label="close" color="inherit" onClick={closeSnackBar}>
         <CloseIcon fontSize="small" />
       </IconButton>
     </>
@@ -66,29 +56,29 @@ const SnackBar = ({
 
   return (
     <>
-      openStatus && (
-      <div>
-        <Snackbar open={open} onClose={closeToast} action={action}>
-          <Alert
-            //onClose={function noRefCheck() {}}
-            severity={getColor.get(type)}
-            sx={{
-              position: 'fixed',
-              bottom: '64px',
-              right: isMobile ? '5%' : '64px',
-              zIndex: 100,
-              width: isMobile ? 'calc(100vw - 10%)' : '376px',
-              '& .MuiAlert-message': {
-                width: '100%',
-              },
-            }}
-            variant={variant}
-          >
-            {message}
-          </Alert>
-        </Snackbar>
-      </div>
-      )
+      {openStatus && (
+        <div data-testid="snackBarContainer">
+          <Snackbar open={open} action={action}>
+            <Alert
+              onClose={closeSnackBar}
+              severity={getColor.get(type)}
+              sx={{
+                position: 'fixed',
+                bottom: '64px',
+                right: isMobile ? '5%' : '64px',
+                zIndex: 100,
+                width: isMobile ? 'calc(100vw - 10%)' : '376px',
+                '& .MuiAlert-message': {
+                  width: '100%',
+                },
+              }}
+              variant={variant}
+            >
+              {message}
+            </Alert>
+          </Snackbar>
+        </div>
+      )}
     </>
   );
 };
