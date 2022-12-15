@@ -24,7 +24,7 @@ phases:
       # - yarn test:coverage
       - echo $SUB_PRJ_NAME
       - |
-        if [ $SUB_PRJ_NAME == "pn-pa-webapp" -o $SUB_PRJ_NAME == "pn-personafisica-webapp" ] ; then
+        if [ $SUB_PRJ_NAME == "packages/pn-pa-webapp" -o $SUB_PRJ_NAME == "packages/pn-personafisica-webapp" ] ; then
           echo Starting application...
         fi
       # yarn start & wait-on http://localhost:3000
