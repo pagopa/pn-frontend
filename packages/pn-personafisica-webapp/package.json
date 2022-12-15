@@ -37,6 +37,7 @@
   },
   "scripts": {
     "start": "craco start",
+    "start-waiton": "craco start & wait-on http://localhost:3000",
     "build": "craco build",
     "test": "craco test --watchAll=false",
     "test:coverage": "craco test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
