@@ -1,7 +1,7 @@
 import { Fragment, ReactNode, useCallback, useEffect, useState, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Grid, Box, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Box, Paper, Stack, Typography, Alert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
@@ -259,12 +259,6 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                <TimedMessage
-                  variant='body2'
-                  timeout={timeoutMessage}
-                  message={t('detail.document-not-available', { ns: 'notifiche' })}
-                  callback={() => refreshPage()}
-                />
                 <NotificationDetailTable rows={detailTableRows} />
                 {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
                   <NotificationPayment
@@ -301,6 +295,16 @@ const NotificationDetail = () => {
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box component="section" sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
+                <TimedMessage
+                  timeout={timeoutMessage}
+                  message={<Alert
+                    severity={'warning'}
+                    sx={{mb: 3}}
+                  >
+                    {t('detail.document-not-available', { ns: 'notifiche' })}
+                  </Alert>}
+                  callback={() => refreshPage()}
+                />
                 <NotificationDetailTimeline
                   recipients={notification.recipients}
                   statusHistory={notification.notificationStatusHistory}

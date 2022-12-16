@@ -1,4 +1,4 @@
-import { Box, Typography, TypographyTypeMap } from '@mui/material';
+import { Box } from '@mui/material';
 import { ReactNode, useEffect, useState } from 'react';
 
 interface TimedMessageProps {
@@ -6,13 +6,11 @@ interface TimedMessageProps {
   message?: ReactNode | string;
   /** Set timeout in milliseconds */
   timeout: number;
-  /** Variant typography style */
-  variant?: TypographyTypeMap["props"]["variant"];
   /** Callback function when timeout reachs end */
   callback?: () => void;
 }
 
-const TimedMessage = ({ message = '', timeout = 0, variant, callback }: TimedMessageProps) => {
+const TimedMessage = ({ message = '', timeout = 0, callback }: TimedMessageProps) => {
 
   const [showMessage, setShowMessage] = useState(false);
 
@@ -31,10 +29,8 @@ const TimedMessage = ({ message = '', timeout = 0, variant, callback }: TimedMes
   return (
     <>
       {showMessage && (
-        <Box>
-          <Typography variant={variant} data-testid="timed-message">
-            { message }
-          </Typography>
+        <Box data-testid="timed-message">
+          { message }
         </Box>
       )}
     </>

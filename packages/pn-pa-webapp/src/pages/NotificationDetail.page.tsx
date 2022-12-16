@@ -13,6 +13,7 @@ import {
   Grid,
   Paper,
   Stack,
+  Alert,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
@@ -396,12 +397,6 @@ const NotificationDetail = () => {
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
-                <TimedMessage
-                  variant='body2'
-                  timeout={timeoutMessage}
-                  message={t('detail.document-not-available', { ns: 'notifiche' })}
-                  callback={() => refreshPage()}
-                />
                 <NotificationDetailTable rows={detailTableRows} />
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
@@ -417,6 +412,16 @@ const NotificationDetail = () => {
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
+                <TimedMessage
+                  timeout={timeoutMessage}
+                  message={<Alert
+                    severity={'warning'}
+                    sx={{mb: 3}}
+                  >
+                    {t('detail.document-not-available', { ns: 'notifiche' })}
+                  </Alert>}
+                  callback={() => refreshPage()}
+                />
                 <NotificationDetailTimeline
                   recipients={recipients}
                   statusHistory={notification.notificationStatusHistory}
