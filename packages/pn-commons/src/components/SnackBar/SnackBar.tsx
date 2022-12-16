@@ -29,6 +29,7 @@ const SnackBar = ({ message, open, type, closingDelay, onClose, variant = 'outli
     }
   };
 
+  //create timer for closing snackbar after *closingDelay* milliseconds
   useEffect(() => {
     if (closingDelay && openStatus) {
       const timer = setTimeout(() => {
