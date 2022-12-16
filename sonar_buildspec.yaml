@@ -17,7 +17,7 @@ phases:
     commands:
       - echo launching yarn install in $SUB_PRJ_NAME...
       - cd $SUB_PRJ_NAME
-      - yarn install
+      - yarn install --frozen-lockfile
   build:
     commands:
       - echo Running tests with coverage...

@@ -1,7 +1,7 @@
 {
   "appStatus": {
     "title": "Stato della piattaforma",
-    "subtitle": "Verifica il funzionamento di Piattaforma Notifiche, visualizza lo storico dei disservizi e scarica le relative attestazioni opponibili a terzi. Ogni attestazione certifica un disservizio: potrebbe esserti utile nel caso in cui questo abbia coinvolto una notifica destinata a te.",
+    "subtitle": "Verifica il funzionamento di Piattaforma Notifiche, visualizza lo storico dei disservizi e scarica le relative attestazioni opponibili a terzi.",
     "statusDescription": {
       "ok": "Tutti i servizi di Piattaforma Notifiche sono operativi.",
       "not-ok": "C'è un disservizio in corso. Per maggiori dettagli, consulta la tabella qui sotto."
