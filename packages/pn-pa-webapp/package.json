@@ -48,6 +48,8 @@
     "eject": "craco eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write",
+    "cy-open": "cypress open",
+    "cy-run": "cypress run",
     "sonar": "node sonarqube-scanner.js"
   },
   "browserslist": {
