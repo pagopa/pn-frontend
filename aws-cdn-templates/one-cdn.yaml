@@ -41,10 +41,25 @@ Parameters:
     Description: "The Url of web API: useful for content-security-policy"
     Type: String
 
-  Limit:
+#  Do not remove, we are waiting for DPIA approval about WAF on us-east-1 region
+#  Limit:
+#    Type: Number
+#    Description: The limit on requests per 5-minute period for a single originating IP address.
+#    Default: 1000
+
+  RequestsAlarmLimit:
     Type: Number
-    Description: The limit on requests per 5-minute period for a single originating IP address.
-    Default: 1000
+    Default: 50000
+    Description: The limit of requests on 5 minutes period to raise an alarm
+
+  ErrorRateAlarmLimit:
+    Type: Number
+    Default: 10
+    Description: The limit of error rate percentage on 5 minutes period to raise an alarm
+
+  AlarmSNSTopicArn:
+    Type: String
+    Description: ARN of the topic to send the alarm to
 
 Conditions:
 
@@ -394,6 +409,55 @@ Resources:
         Runtime: cloudfront-js-1.0
       Name: !Sub "${AWS::StackName}-RewriteDefaultIndexRequest"
 
+  # Alarms
+  TooManyRequestsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${WebDomain}-DistributionRequestsAlarm"
+      AlarmDescription: "CloudWatch alarm for when distributions requests rate is too high."
+      AlarmActions: 
+        - !Ref AlarmSNSTopicArn
+      InsufficientDataActions:
+        - !Ref AlarmSNSTopicArn
+      OKActions:
+        - !Ref AlarmSNSTopicArn
+      DatapointsToAlarm: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      Threshold: !Ref RequestsAlarmLimit
+      TreatMissingData: notBreaching
+      Namespace: "AWS/CloudFront"
+      Period: 300
+      MetricName: "Requests"
+      Dimensions:
+        - Name: DistributionId
+          Value: !Ref WebsiteCDN
+      Statistic: "Sum"
+
+  TooManyErrorsAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${WebDomain}-DistributionErrorsAlarm"
+      AlarmDescription: "CloudWatch alarm for when distributions error rate is too high."
+      AlarmActions: 
+        - !Ref AlarmSNSTopicArn
+      InsufficientDataActions:
+        - !Ref AlarmSNSTopicArn
+      OKActions:
+        - !Ref AlarmSNSTopicArn
+      DatapointsToAlarm: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      Period: 300
+      Threshold: !Ref ErrorRateAlarmLimit
+      TreatMissingData: notBreaching
+      Namespace: "AWS/CloudFront"
+      MetricName: "TotalErrorRate"
+      Dimensions:
+        - Name: DistributionId
+          Value: !Ref WebsiteCDN
+      Statistic: "Average"
+
   # AWS WAF Web ACLs for CloudFront
   #ApiWafWebAcl:
   #  Type: AWS::WAFv2::WebACL
@@ -461,3 +525,11 @@ Outputs:
     Condition: CreateAlternateDNSname
     Value: !Sub 'http://${AlternateWebDomain}'
     Description: Alternate site access URL
+  
+  TooManyErrorsAlarmArn:
+    Value: !GetAtt TooManyErrorsAlarm.Arn
+    Description: ARN of distribution too many errors alarm
+
+  TooManyRequestsAlarmArn:
+    Value: !GetAtt TooManyRequestsAlarm.Arn
+    Description: ARN of distribution too many requests alarm
