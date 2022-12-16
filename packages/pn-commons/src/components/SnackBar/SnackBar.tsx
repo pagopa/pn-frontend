@@ -37,6 +37,7 @@ const SnackBar = ({ message, open, type, closingDelay, onClose, variant = 'outli
       }, closingDelay);
       return () => clearTimeout(timer);
     }
+    // since it returns in a conditional branch, it must return in all cases
     return;
   }, []);
 
