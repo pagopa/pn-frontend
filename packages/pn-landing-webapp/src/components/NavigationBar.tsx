@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 import { Box, Chip, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { INavigationBarProps } from "model";
 
-const NavigationBar = () => {
+const NavigationBar = ({ title, chip, pf, pa}: INavigationBarProps) => {
   const { pathname } = useRouter();
   const [index, setIndex] = useState(0);
 
-  const cittadiniPath = "/cittadini/";
-  const paPath = "/pubbliche-amministrazioni/";
+  const pfPath = "/cittadini";
+  const paPath = "/pubbliche-amministrazioni";
 
   function a11yProps(index: number) {
     return {
@@ -18,10 +19,10 @@ const NavigationBar = () => {
   }
 
   useEffect(() => {
-    if (pathname === "/cittadini") {
+    if (pathname === pfPath) {
       setIndex(0);
     }
-    if (pathname === "/pubbliche-amministrazioni") {
+    if (pathname === paPath) {
       setIndex(1);
     }
   }, [pathname]);
@@ -31,9 +32,9 @@ const NavigationBar = () => {
       <Stack direction={{ xs: "column", sm: "row" }}>
         <Stack direction="row" alignItems="center" mx={3} my={2}>
           <Typography variant="h5" mr={2}>
-            Piattaforma Notifiche
+            {title}
           </Typography>
-          <Chip label="Beta" size="small" color="primary" />
+          <Chip label={chip} size="small" color="primary" />
         </Stack>
         <Tabs value={index} component="nav">
           <Tab
@@ -42,13 +43,13 @@ const NavigationBar = () => {
             onClick={(
               event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
             ) => {
-              if (pathname === cittadiniPath) {
+              if (pathname === `${pfPath}/`) {
                 event.preventDefault();
               }
             }}
-            key="Cittadini"
-            label="Cittadini"
-            href={cittadiniPath}
+            key={pf}
+            label={pf}
+            href={pfPath}
             {...a11yProps(0)}
           />
           <Tab
@@ -57,12 +58,12 @@ const NavigationBar = () => {
             onClick={(
               event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
             ) => {
-              if (pathname === paPath) {
+              if (pathname === `${paPath}/`) {
                 event.preventDefault();
               }
             }}
-            key="Enti"
-            label="Enti"
+            key={pa}
+            label={pa}
             href={paPath}
             {...a11yProps(1)}
           />

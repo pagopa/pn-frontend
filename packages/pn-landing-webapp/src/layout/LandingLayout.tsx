@@ -69,7 +69,7 @@ const LandingLayout = ({ children }: Props) => {
             </ButtonNaked>
           </Stack>
         </Stack>
-        <NavigationBar />
+        <NavigationBar {...appData.common.navigation} />
         <Alert severity="info">{appData.common.alert}</Alert>
         <Box sx={{ flexGrow: 1 }} component="main">
           {children}

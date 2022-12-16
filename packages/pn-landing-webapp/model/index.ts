@@ -38,8 +38,16 @@ export interface IShowcaseData {
   data: ShowcaseProps;
 }
 
+export interface INavigationBarProps {
+  title: string;
+  chip: string;
+  pf: string;
+  pa: string;
+}
+
 export interface IAppData {
   common: {
+    navigation: INavigationBarProps;
     alert: string;
     assistance: ILinkData;
     pagoPALink: ILinkData;

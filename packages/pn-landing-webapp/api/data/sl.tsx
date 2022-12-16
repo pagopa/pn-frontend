@@ -10,7 +10,7 @@ import {
   WalkthroughProps
 } from "@pagopa/mui-italia";
 
-import { IAppData, IInfoblockData, ILinkData, IShowcaseData } from "model";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
 
 import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
@@ -38,6 +38,13 @@ import {
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
+};
+
+const navigation: INavigationBarProps = {
+  title: "Piattaforma Notifiche",
+  chip: "Beta",
+  pf: "Cittadini",
+  pa: "Enti"
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -781,6 +788,7 @@ const postLoginLinks: Array<FooterLinksType> = [
 /** Application Data Mock */
 export const slAppData: IAppData = {
   common: {
+    navigation,
     alert:
       "Platforma ne deluje. Trenutno poteka preizkus samo nekaterih funkcij, opisanih na tej strani, do katerih lahko dostopa izključno omejeno število uporabnikov, ki bodo prejemniki obvestil, ki jih pošiljajo ustanove, vključene v pilotni projekt.",
     assistance: assistanceLink,

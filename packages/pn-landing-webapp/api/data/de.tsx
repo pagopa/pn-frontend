@@ -10,7 +10,7 @@ import {
   WalkthroughProps
 } from "@pagopa/mui-italia";
 
-import { IAppData, IInfoblockData, ILinkData, IShowcaseData } from "model";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
 
 import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
@@ -38,6 +38,13 @@ import {
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
+};
+
+const navigation: INavigationBarProps = {
+  title: "Piattaforma Notifiche",
+  chip: "Beta",
+  pf: "Cittadini",
+  pa: "Enti"
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -782,6 +789,7 @@ const postLoginLinks: Array<FooterLinksType> = [
 /** Application Data Mock */
 export const deAppData: IAppData = {
   common: {
+    navigation,
     alert:
       "Die Plattform ist nicht betriebsbereit. Nur einige der auf dieser Seite beschriebenen Funktionen werden derzeit getestet und stehen nur einer begrenzten Anzahl von Nutzern zur Verfügung, die Empfänger der von den Pilotbehörden verschickten Bescheide sein werden.",
     assistance: assistanceLink,

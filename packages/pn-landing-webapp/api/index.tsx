@@ -73,6 +73,11 @@ export const getWalkthroughData = (
   userType: UserType = UserType.PA
 ): WalkthroughProps => getAppData()[userType].walkthrough;
 
+/**
+ * Even though the HorizontalNav component is not currently used we keep all
+ * its functionalities available so it can be quickly added to any page of
+ * the landing site
+ */
 export const getHorizontalNavData = (
   userType: UserType = UserType.PA
 ): HorizontalNavProps => getAppData()[userType].horizontalNav;

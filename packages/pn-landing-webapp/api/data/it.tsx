@@ -10,7 +10,7 @@ import {
   WalkthroughProps
 } from "@pagopa/mui-italia";
 
-import { IAppData, IInfoblockData, ILinkData, IShowcaseData } from "model";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
 
 import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
@@ -38,6 +38,13 @@ import {
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
+};
+
+const navigation: INavigationBarProps = {
+  title: "Piattaforma Notifiche",
+  chip: "Beta",
+  pf: "Cittadini",
+  pa: "Enti"
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -801,6 +808,7 @@ const postLoginLinks: Array<FooterLinksType> = [
 /** Application Data Mock */
 export const itAppData: IAppData = {
   common: {
+    navigation,
     alert:
       "La piattaforma non è operativa. Attualmente sono in fase di collaudo solo alcune delle funzionalità descritte in questa pagina, disponibili esclusivamente per un numero limitato di utenti che saranno destinatari delle notifiche inviate dagli enti pilota.",
     assistance: assistanceLink,
