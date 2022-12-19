@@ -1,6 +1,6 @@
 import { getLocalizedOrDefaultLabel } from "./localization.service";
 
-function isToday(date: Date): boolean {
+export function isToday(date: Date): boolean {
   const today = new Date();
   return (
     date.getDate() === today.getDate() &&
