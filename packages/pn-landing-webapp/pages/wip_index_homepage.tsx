@@ -1,7 +1,7 @@
+import { useEffect } from "react";
 import { NextPage } from "next";
 import Head from "next/head";
 import Router from "next/router";
-import { useEffect } from "react";
 
 // Questa è una homepage di servizio, nel senso che andando su "/" si viene ridirezionati sulla pagina dei cittadini
 // e in nextjs con SSG non ho trovato altri modi. Per ora su cloudfront viene servito come rootObject direttamente /cittadini/index.html

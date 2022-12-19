@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Footer as MuiFooter } from '@pagopa/mui-italia';
+import { Footer as MuiFooter, LangCode } from '@pagopa/mui-italia';
 
 import {
   LANGUAGES,
@@ -21,9 +21,9 @@ type Props = {
 };
 
 const Footer = ({ onLanguageChanged = () => {}, loggedUser = false, eventTrackingCallbackChangeLanguage, hasTermsOfService }: Props) => {
-  const [currentLangCode, setCurrentLangCode] = useState<'it' | 'en'>('it');
+  const [currentLangCode, setCurrentLangCode] = useState<LangCode>('it');
 
-  const changeLanguageHandler = (langCode: 'it' | 'en') => {
+  const changeLanguageHandler = (langCode: LangCode) => {
     if (eventTrackingCallbackChangeLanguage) {
       eventTrackingCallbackChangeLanguage();
     }
