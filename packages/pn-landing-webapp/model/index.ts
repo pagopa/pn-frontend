@@ -1,8 +1,12 @@
-import { HeroProps } from "@pagopa/mui-italia";
-import { HorizontalNavProps } from "@pagopa/mui-italia";
-import { WalkthroughProps } from "@pagopa/mui-italia";
-import { ShowcaseProps } from "@pagopa/mui-italia";
-import { InfoblockProps } from "@pagopa/mui-italia";
+import {
+  FooterLinksType,
+  HeroProps,
+  HorizontalNavProps,
+  InfoblockProps,
+  PreLoginFooterLinksType,
+  ShowcaseProps,
+  WalkthroughProps
+} from "@pagopa/mui-italia";
 
 export enum UserType {
   PA = "pa",
@@ -34,11 +38,23 @@ export interface IShowcaseData {
   data: ShowcaseProps;
 }
 
+export interface INavigationBarProps {
+  title: string;
+  chip: string;
+  pf: string;
+  pa: string;
+}
+
 export interface IAppData {
   common: {
+    navigation: INavigationBarProps;
     alert: string;
-    assistance: ILinkData
-  }
+    assistance: ILinkData;
+    pagoPALink: ILinkData;
+    companyLegalInfo: JSX.Element;
+    preLoginLinks: PreLoginFooterLinksType;
+    postLoginLinks: Array<FooterLinksType>;
+  };
   pa: ILandingComponents;
   pf: ILandingComponents;
   co: ILandingComponents;

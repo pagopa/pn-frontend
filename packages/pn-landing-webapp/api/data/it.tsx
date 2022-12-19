@@ -1,9 +1,18 @@
-import { WalkthroughProps } from "@pagopa/mui-italia";
-import { HeroProps } from "@pagopa/mui-italia/dist/components/Hero";
-import { HorizontalNavProps } from "@pagopa/mui-italia";
-import { SvgIcon } from "@mui/material";
-import { Typography } from "@mui/material";
 import Link from "next/link";
+
+import { SvgIcon, Typography } from "@mui/material";
+
+import {
+  FooterLinksType,
+  HeroProps,
+  HorizontalNavProps,
+  PreLoginFooterLinksType,
+  WalkthroughProps
+} from "@pagopa/mui-italia";
+
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+
+import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -26,18 +35,16 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
-
-import { IAppData, IInfoblockData, IShowcaseData } from "model";
-
-const assistanceLink = {
-  label: "Assistenza",
-  ariaLabel: "assistenza",
-  href: `mailto:${PAGOPA_HELP_EMAIL}`,
-};
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
+};
+
+const navigation: INavigationBarProps = {
+  title: "Piattaforma Notifiche",
+  chip: "Beta",
+  pf: "Cittadini",
+  pa: "Enti"
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -239,7 +246,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 2",
     data: {
-      title: "Scegli tu come ricevere le notifiche ",
+      title: "Scegli tu come ricevere le notifiche",
       content: (
         <>
           <Typography variant="body2">
@@ -498,32 +505,32 @@ const pfWalkthrough: WalkthroughProps = {
         l’invio dell’avviso di avvenuta ricezione. Poi, invia un avviso di cortesia ai tuoi altri recapiti 
         digitali (app IO, email e sms). Se non hai indicato alcun recapito digitale e non hai accesso alla 
         piattaforma, riceverai una raccomandata cartacea.
-        `,
+      `,
     },
     {
       icon: <DocCheckIcon color="primary" />,
       title: "Leggi il contenuto",
       subtitle: `
-      Dal messaggio ricevuto, puoi accedere alla piattafoma per leggere la notifica e scaricare i relativi 
-      allegati. Se attivi il servizio su IO, puoi visualizzare il contenuto direttamente in app: questo 
-      equivale a firmare la ricevuta di ritorno di una raccomandata tradizionale.
+        Dal messaggio ricevuto, puoi accedere alla piattafoma per leggere la notifica e scaricare i relativi 
+        allegati. Se attivi il servizio su IO, puoi visualizzare il contenuto direttamente in app: questo 
+        equivale a firmare la ricevuta di ritorno di una raccomandata tradizionale.
       `,
     },
     {
       icon: <WalletIcon color="primary" />,
       title: "Paga le spese",
       subtitle: `
-      Se c’è un importo da pagare, grazie all’integrazione con pagoPA, puoi procedere contestualmente online 
-      dalla piattaforma oppure direttamente da IO. Se preferisci recarti a uno sportello, dovrai avere con te 
-      il modulo di pagamento ricevuto con la notifica.
+        Se c’è un importo da pagare, grazie all’integrazione con pagoPA, puoi procedere contestualmente online 
+        dalla piattaforma oppure direttamente da IO. Se preferisci recarti a uno sportello, dovrai avere con te 
+        il modulo di pagamento ricevuto con la notifica.
       `,
     },
     {
       icon: <DelegationIcon color="primary" />,
       title: "Puoi delegare o essere delegato",
       subtitle: `
-      Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online o 
-      a ritirare i documenti allegati in versione cartacea presso qualsiasi Ufficio Postale.
+        Se lo desideri, puoi delegare altre persone, fisiche o giuridiche, a ricevere le tue notifiche online o 
+        a ritirare i documenti allegati in versione cartacea presso qualsiasi Ufficio Postale.
       `,
       isSequential: false,
     },
@@ -631,12 +638,184 @@ const coHorizontalNav = {
 };
 /* ************************************** */
 
+/**
+ * Footer data
+ */
+const pagoPALink: ILinkData = {
+  label: "PagoPA S.p.A.",
+  href: PAGOPA_HOME ?? "",
+  ariaLabel: "Link: vai al sito di PagoPA S.p.A."
+};
+
+const assistanceLink = {
+  label: "Assistenza",
+  ariaLabel: "assistenza",
+  href: `mailto:${PAGOPA_HELP_EMAIL}`,
+};
+
+const companyLegalInfo = (
+  <>
+    <strong>PagoPA S.p.A.</strong> — società per azioni con socio unico -
+    capitale sociale di euro 1,000,000 interamente versato - sede legale in
+    Roma, Piazza Colonna 370,
+    <br />
+    CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA
+    15376371009
+  </>
+);
+
+const preLoginLinks: PreLoginFooterLinksType = {
+  // First column
+  aboutUs: {
+    title: undefined,
+    links: [
+      {
+        label: "Chi siamo",
+        href: `${pagoPALink.href}societa/chi-siamo`,
+        ariaLabel: "Vai al link: Chi siamo",
+        linkType: "external",
+      },
+      {
+        label: "PNRR",
+        href: `${pagoPALink.href}opportunita/pnrr/progetti`,
+        ariaLabel: "Vai al link: PNRR",
+        linkType: "external",
+      },
+      {
+        label: "Media",
+        href: `${pagoPALink.href}media`,
+        ariaLabel: "Vai al link: Media",
+        linkType: "external",
+      },
+      {
+        label: "Lavora con noi",
+        href: `${pagoPALink.href}lavora-con-noi`,
+        ariaLabel: "Vai al link: Lavora con noi",
+        linkType: "external",
+      },
+    ],
+  },
+  // Third column
+  resources: {
+    title: "Risorse",
+    links: [
+      {
+        label: "Informativa Privacy",
+        href: `/informativa-privacy/`,
+        ariaLabel: "Vai al link: Informativa Privacy",
+        linkType: "internal",
+      },
+      {
+        label: "Certificazioni",
+        href: "https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf",
+        ariaLabel: "Vai al link: Certificazioni",
+        linkType: "internal",
+      },
+      {
+        label: "Sicurezza delle informazioni",
+        href: "https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf",
+        ariaLabel: "Vai al link: Sicurezza delle informazioni",
+        linkType: "internal",
+      },
+      {
+        label: "Diritto alla protezione dei dati personali",
+        href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
+        ariaLabel: "Vai al link: Diritto alla protezione dei dati personali",
+        linkType: "internal",
+      },
+      // {
+      //   label: "Preferenze Cookie",
+      //   href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
+      //   ariaLabel: "Vai al link: Preferenze Cookie",
+      //   linkType: "internal",
+      // },
+      {
+        label: "Società trasparente",
+        href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.html",
+        ariaLabel: "Vai al link: Società trasparente",
+        linkType: "internal",
+      },
+      {
+        label: "Responsible Disclosure Policy",
+        href: "https://www.pagopa.it/it/responsible-disclosure-policy/",
+        ariaLabel: "Vai al link: Responsible Disclosure Policy",
+        linkType: "internal",
+      },
+      {
+        label: "Modello 321",
+        href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls",
+        ariaLabel: "Vai al link: Modello 321",
+        linkType: "internal",
+      },
+    ],
+  },
+  // Fourth column
+  followUs: {
+    title: "Seguici su",
+    socialLinks: [
+      {
+        icon: "linkedin",
+        title: "LinkedIn",
+        href: "https://it.linkedin.com/company/pagopa",
+        ariaLabel: "Link: vai al sito LinkedIn di PagoPA S.p.A.",
+      },
+      {
+        title: "Twitter",
+        icon: "twitter",
+        href: "https://twitter.com/pagopa",
+        ariaLabel: "Link: vai al sito Twitter di PagoPA S.p.A.",
+      },
+      {
+        icon: "instagram",
+        title: "Instagram",
+        href: "https://www.instagram.com/pagopaspa/?hl=en",
+        ariaLabel: "Link: vai al sito Instagram di PagoPA S.p.A.",
+      },
+      {
+        icon: "medium",
+        title: "Medium",
+        href: "https://medium.com/pagopa-spa",
+        ariaLabel: "Link: vai al sito Medium di PagoPA S.p.A.",
+      },
+    ],
+    links: [
+      {
+        label: "Accessibilità",
+        href: "https://form.agid.gov.it/view/eca3487c-f3cb-40be-a590-212eafc70058/",
+        ariaLabel: "Vai al link: Accessibilità",
+        linkType: "internal",
+      },
+    ],
+  },
+};
+
+const postLoginLinks: Array<FooterLinksType> = [
+  {
+    label: "Privacy policy",
+    href: "privacy-policy",
+    ariaLabel: "Vai al link: Privacy policy",
+    linkType: "internal",
+  },
+  {
+    label: "Accessibilità",
+    href: "accessibilita",
+    ariaLabel: "Vai al link: Accessibilità",
+    linkType: "internal",
+  },
+];
+
+
 /** Application Data Mock */
 export const itAppData: IAppData = {
   common: {
+    navigation,
     alert:
       "La piattaforma non è operativa. Attualmente sono in fase di collaudo solo alcune delle funzionalità descritte in questa pagina, disponibili esclusivamente per un numero limitato di utenti che saranno destinatari delle notifiche inviate dagli enti pilota.",
     assistance: assistanceLink,
+    pagoPALink,
+    companyLegalInfo,
+    preLoginLinks,
+    postLoginLinks
   },
   pa: {
     hero: paHero,
