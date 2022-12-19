@@ -50,8 +50,8 @@ const navigation: INavigationBarProps = {
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
-      label: "Read your notifications",
-      title: "Read your notifications",
+      label: "Lies deine Bescheide",
+      title: "Lies deine Bescheide",
       onClick: onReadClick,
     }
   : undefined;
@@ -59,9 +59,9 @@ const heroCta = !!PN_URL
 /** Hero mocked data */
 const paHero: HeroProps = {
   type: "image",
-  title: "Send notifications? Easily said.",
-  subtitle: `And, from today, easily done. Piattaforma Notifiche digitises the management of legal communications, 
-    simplifying the process for everyone: those who send them, and those who receive them.`,
+  title: "Bescheide senden? Das ist leicht gesagt",
+  subtitle: `Und ab heute auch zu tun. Piattaforma Notifiche digitalisiert die Verwaltung rechtlicher Kommunikation und 
+    vereinfacht den Prozess für alle: für diejenigen, die sie versenden, und für diejenigen, die sie erhalten.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
@@ -70,10 +70,10 @@ const paHero: HeroProps = {
 
 const pfHero: HeroProps = {
   type: "image",
-  title: "Notifications? At your fingertips.",
-  subtitle: `With Piattaforma Notifiche, you can instantly receive legal communications from an organisation: you 
-    can view, manage and pay for registered letters that are usually sent to you on paper directly online or through 
-    the app.`,
+  title: "Bescheide? Sind zum Greifen nah.",
+  subtitle: `Mit Piattaforma Notifiche kannst du rechtliche Mitteilungen einer Organisation sofort erhalten: Du kannst 
+  Einschreiben, die dir normalerweise in Papierform zugestellt werden, direkt online oder in der App einsehen, verwalten 
+  und bezahlen.`,
   ctaPrimary: heroCta,
   inverse: false,
   image: `${IMAGES_PATH}/pf-hero-foreground.png`,
@@ -94,17 +94,17 @@ const paInfoBlocks: Array<IInfoblockData> = [
     name: "infoblock 1",
     data: {
       // overline: "Rappresenti un ente?",
-      title: "An easier way to manage notifications",
+      title: "Eine einfachere Möglichkeit, Bescheide zu verwalten",
       content: (
         <>
           <Typography variant="body2">
-          Piattaforma Notifiche digitises and simplifies the management of legal communications. 
-          The sending organisations only have to deposit the deed to be delivered: the platform 
-          will take care of the sending, either by digital or analogue means.
+            Piattaforma Notifiche digitalisiert und vereinfacht die Verwaltung von rechtlicher Kommunikation. 
+            Die übermittelnden Stellen müssen lediglich das zuzustellende Dokument hinterlegen: Die Plattform 
+            sorgt für den Versand, entweder digital oder analog.
           </Typography>
           <Typography variant="body2">
-            With Piattaforma Notifiche, the uncertainty of recipient availability is minimised, 
-            and management time and costs are reduced.
+            Mit Piattaforma Notifiche wird die Ungewissheit hinsichtlich der Erreichbarkeit von Empfängern 
+            verringert und der Verwaltungsaufwand und die Kosten werden reduziert.
           </Typography>
         </>
       ),
@@ -117,24 +117,24 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 2",
     data: {
-      title: "Upload the deed. Then forget about it",
+      title: "Lade das Dokument hoch. Und dann lehn dich zurück.",
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche integrates with the institutions’ protocol and offers both APIs 
-            for sending notifications automatically and the possibility of making manual submissions. 
-            Once the deeds and payment forms have been uploaded, the platform generates the IUN, a 
-            unique code identifying the notification.
+            Piattaforma Notifiche integriert sich in das Protokoll der Behörden und bietet sowohl APIs für 
+            den automatischen Versand von Bescheiden als auch die Möglichkeit, manuelle Sendungen zu tätigen. 
+            Nach dem Hochladen der Zahlungsunterlagen und -formulare generiert die Plattform die UIN (Unique 
+            Identification Number), einen eindeutigen Identifikationscode für den Bescheid.
           </Typography>
           <Typography variant="body2">
-            Subsequently, it searches its archives and public registers for a PEC traceable to the 
-            recipient and sends the notification. It then sends a courtesy notice to the recipient’s 
-            other digital contacts (IO app, email and SMS).
+            Sie sucht dann in ihren Archiven und öffentlichen Registern nach einer PEC, die sich auf den 
+            Adressaten zurückführen lässt, und sendet den Bescheid. Danach sendet sie eine Zahlungsaufforderung 
+            an die anderen digitalen Kontakte des Empfängers (IO-App, E-Mail und SMS).
           </Typography>
           <Typography variant="body2">
-            If the recipient has not indicated a digital address and does not have access to the 
-            platform, the platform proceeds with the search for a physical address, and then with 
-            sending by registered mail.
+            Wenn der Empfänger keine digitale Adresse angegeben hat und keinen Zugang zur Plattform hat, fährt 
+            die Plattform mit der Suche nach einer physischen Adresse und anschließend mit dem Versand per 
+            Einschreiben fort.
           </Typography>
         </>
       ),
@@ -147,18 +147,18 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 3",
     data: {
-      title: "What about the recipient?",
+      title: "Und der Empfänger?",
       content: (
         <>
           <Typography variant="body2">
-            The recipient accesses the platform via SPID or CIE, where they can view and download 
-            the deed notified. Thanks to the integration with pagoPA, they can also pay what they 
-            owe at the same time. If they have activated the service on the IO app, they can do 
-            everything directly in the app.
+            Der Empfänger greift über SPID oder CIE auf die Plattform zu, wo er das zugestellte Dokument 
+            einsehen und herunterladen kann. Dank der Integration mit pagoPA kann er gleichzeitig auch die 
+            fälligen Zahlungen leisten. Wenn er den Dienst in der IO-App aktiviert hat, kann er alles 
+            direkt in der App erledigen.
           </Typography>
           <Typography variant="body2">
-            Like the organisation, the recipient also has access to the history of the status of 
-            the notification and the certificates enforceable against third parties that prove it.
+            Wie die Behörde hat auch der Empfänger Zugriff auf die Historie des Zustellungsstatus und die 
+            Bescheinigungen, die Dritten gegenüber geltend gemacht werden können.
           </Typography>
         </>
       ),
@@ -171,28 +171,28 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Soon available to organisations",
+      title: "Demnächst für Behörden verfügbar",
       content: (
         <>
           <Typography variant="body2">
-            Currently, Piattaforma Notifiche is being tested with a small number of pilot organisations.
+            Derzeit wird Piattaforma Notifiche mit einer kleinen Anzahl von Pilotbehörden getestet.
           </Typography>
           <Typography variant="body2">
-            When it is operational, your organisation will also be able to apply for membership and adopt 
-            it to digitise the notification process.
+            Sobald sie betriebsbereit ist, kann auch deine Behörde einen Beitrittsantrag stellen und sie 
+            einsetzen, um den Benachrichtigungsprozess zu digitalisieren.
           </Typography>
           <Typography variant="body2">
-            In the meantime, organisations can consult{" "}
+            In der Zwischenzeit können Behörden{" "}
             <Link href="https://www.pagopa.it/static/e190eb758489b75d4d81112a1357b5b2/Manuale-Operativo-Piattaforma-Notifiche.pdf">
-              the operations manual
-            </Link>{" "}
-              (updated 28/06/2022),{" "}
+              das Betriebshandbuch
+            </Link>
+            {" "}(aktualisiert am 28.06.2022),{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
-              the b2b API for public administrations
-            </Link>{" "}
-            and{" "}
+              die b2b-APIs für öffentliche Verwaltungen
+            </Link>
+            {" "}und{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-              the b2b API for the advancement of notifications
+              die b2b-APIs über den Stand der Benachrichtigungen konsultieren
             </Link>
             .
           </Typography>
@@ -211,20 +211,20 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 1",
     data: {
-      title: "Never miss a notification again",
+      title: "Verpasse keine Bescheide mehr",
       content: (
         <>
           <Typography variant="body2">
-            Notifications are communications with legal value issued officially by an administration, such 
-            as fines, tax assessment notices, outcomes of administrative procedures initiated with public 
-            administrations or refunds, which until now, you have always received by registered mail. From 
-            now on, you can receive and consult them digitally by accessing Piattaforma Notifiche via SPID 
-            or CIE or directly on the IO app.
+            Bescheide sind Mitteilungen mit rechtlichem Wert, die offiziell von einer Verwaltung herausgegeben werden, 
+            wie z. B. Bußgeldbescheide, Steuerbescheide, Ergebnisse von Verwaltungsverfahren bei öffentlichen 
+            Verwaltungen oder Erstattungen, die du bisher immer per Einschreiben erhalten hast. Von nun an kannst du 
+            sie digital empfangen und einsehen, indem du über SPID oder CIE oder direkt über die IO-App auf Piattaforma 
+            Notifiche zugreifst.
           </Typography>
           <Typography variant="body2">
-            You can also pay any fees thanks to the integration with pagoPA, view the history of received 
-            notifications and manage them directly online. In addition, you only need a proxy to handle 
-            your family members’ registered mail as well.
+            Außerdem kannst du dank der Integration mit pagoPA eventuell angefallene Gebühren bezahlen, den Verlauf der 
+            erhaltenen Bescheide einsehen und diese direkt online verwalten. Darüber hinaus benötigst du nur eine 
+            Vollmacht, um auch die Bescheide deiner Familienangehörigen zu verwalten.
           </Typography>
         </>
       ),
@@ -236,15 +236,14 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 2",
     data: {
-      title: "You choose how to receive notifications",
+      title: "Du entscheidest, wie du Bescheide erhältst",
       content: (
         <>
           <Typography variant="body2">
-            To send legal communications, Piattaforma Notifiche always gives priority to the digital 
-            addresses of the recipient. At any time, you can access the platform with SPID and CIE to 
-            indicate or update your preferences between PEC, IO app, email or SMS. If you do not indicate 
-            any address or do not have access to the platform, you will continue to receive notifications 
-            by registered mail.
+            Bei der Versendung von rechtlicher Kommunikation gibt Piattaforma Notifiche immer den digitalen Adressen der 
+            Empfänger den Vorrang. Du kannst jederzeit mit SPID und CIE auf die Plattform zugreifen, um deine Präferenzen 
+            zwischen PEC, App IO, E-Mail oder SMS anzugeben oder zu aktualisieren. Wenn du keine Adresse angibst oder 
+            keinen Zugang zur Plattform hast, erhältst du die Bescheide weiterhin per Einschreiben in Papierform.
           </Typography>
         </>
       ),
@@ -256,15 +255,15 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 3",
     data: {
-      title: "The future of legal communications",
+      title: "Die Zukunft der rechtlichen Kommunikation",
       content: (
         <>
           <Typography variant="body2">
-            Currently, Piattaforma Notifiche is being tested with a small number of administrations.
+            Derzeit wird Piattaforma Notifiche mit einer kleinen Anzahl von Verwaltungen getestet.
           </Typography>
           <Typography variant="body2">
-            Progressively, the platform will be adopted by public administrations and used to send 
-            notifications to all citizens.
+            Nach und nach wird die Plattform von den öffentlichen Verwaltungen übernommen und für die Übermittlung von 
+            Bescheiden an alle Bürger genutzt.
           </Typography>
         </>
       ),
@@ -303,31 +302,31 @@ const paShowcases: Array<IShowcaseData> = [
   {
     name: "showcase 1",
     data: {
-      title: "One way to save in many",
+      title: "Eine Möglichkeit, in vielerlei Hinsicht zu sparen",
       items: [
         {
           icon: <PeopleIcon />,
-          title: "Unique ways",
+          title: "Einzigartig",
           subtitle:
-            "Notifications are sent, managed and monitored through a single channel, accessible by several representatives of the same organisation",
+            "Bescheide werden über einen einzigen Kanal versandt, verwaltet und überwacht, der von mehreren Ansprechpartnern in derselben Organisation genutzt werden kann",
         },
         {
           icon: <FireworksIcon />,
-          title: "Simple",
+          title: "Einfach",
           subtitle:
-            "Notifications can be uploaded via API or manually: once the documents have been deposited, the platform takes care of sending them and keeps track of status changes",
+            "Bescheide können über API oder manuell hochgeladen werden: Sobald die Dokumente hinterlegt sind, kümmert sich die Plattform um den Versand und verfolgt die Statusänderungen",
         },
         {
           icon: <EasyIcon />,
-          title: "Immediate",
+          title: "Sofort",
           subtitle:
-            "If the recipient has a digital address, mailing times are considerably reduced",
+            "Wenn der Empfänger eine digitale Adresse hat, verkürzt sich die Sendezeit erheblich",
         },
         {
           icon: <CheckmarkIcon />,
-          title: "Certain",
+          title: "Sicher",
           subtitle:
-            "The notification process is regulated and there is greater certainty of delivery to the recipient",
+            "Der Zustellungsprozess ist standardisiert, und es besteht eine größere Sicherheit, dass die Zustellung an den Empfänger erfolgt",
         },
       ],
     },
@@ -338,31 +337,31 @@ const pfShowcases: Array<IShowcaseData> = [
   {
     name: "showcase 1",
     data: {
-      title: "What digital notifications offer you",
+      title: "Was digitale Bescheide dir bieten",
       items: [
         {
           icon: <PiggyIcon />,
-          title: "Convenience",
+          title: "Bequemlichkeit",
           subtitle:
-            "Digital delivery of notifications leads to lower service and delivery costs",
+            "Digitale Zustellung von Bescheiden führt zu niedrigeren Service- und Versandkosten",
         },
         {
           icon: <HourglassIcon />,
-          title: "Time",
+          title: "Zeit",
           subtitle:
-            "No more waiting or queuing to collect paper communications",
+            "Kein Warten oder Anstehen mehr bei der Abholung von Papiermitteilungen",
         },
         {
           icon: <EcologyIcon />,
-          title: "Sustainability",
+          title: "Nachhaltigkeit",
           subtitle:
-            "Help reduce paper consumption and transport emissions",
+            "Du trägst zur Verringerung des Papierverbrauchs und der Transportemissionen bei",
         },
         {
           icon: <CloudIcon />,
-          title: "Space",
+          title: "Platz",
           subtitle:
-            "You no longer have to keep printed documents, thanks to the option to download and store deeds digitally",
+            "Du musst keine gedruckten Dokumente mehr aufbewahren, da du diese digital herunterladen und archivieren kannst",
         },
       ],
     },
@@ -374,12 +373,12 @@ const pfShowcases: Array<IShowcaseData> = [
       items: [
         {
           icon: <PECIcon />,
-          title: "PEC",
+          title: "Zertifizierte Mail (PEC)",
           subtitle: (
             <Typography variant="body2">
-              If you have a PEC address, notifications will be legally delivered to you, with no more 
-              registered paper mail. The acknowledgement of receipt that will be sent to you contains 
-              the link to access the content on Piattaforma Notifiche.
+              Wenn du eine PEC-Adresse hast, werden dir die Bescheide rechtmäßig zugestellt, und es gibt keine Einschreiben 
+              in Papierform mehr. Die dir zugesandte Empfangsbestätigung enthält den Link, über den du auf den Inhalt auf 
+              Piattaforma Notifiche zugreifen kannst.
             </Typography>
           ),
         },
@@ -389,24 +388,23 @@ const pfShowcases: Array<IShowcaseData> = [
            */
           // icon: <IOIcon />,
           icon: <img src={`${IMAGES_PATH}/IOIcon.svg`} />,
-          title: "IO app",
+          title: "IO-App",
           subtitle: (
             <Typography variant="body2">
-              If you activate the &quot;Digital Notifications&quot; service of Piattaforma Notifiche, you can 
-              receive and manage legal communications <strong>directly in the app</strong>. If you 
-              do not have a PEC and read the message immediately, you will not receive the registered 
-              letter and the notification will be legally delivered.
+              Wenn du den Dienst „Digitale Bescheide“ von Piattaforma Notifiche aktivierst, kannst du rechtliche Kommunikation{" "} 
+              <strong>direkt in der App</strong> erhalten und verwalten. Wenn du keine PEC hast und die Nachricht sofort liest, 
+              erhältst du kein Einschreiben in Papierform und der Bescheid wird rechtmäßig zugestellt.
             </Typography>
           ),
         },
         {
           icon: <MessageIcon />,
-          title: "Email or SMS",
+          title: "E-Mail oder SMS",
           subtitle: (
             <Typography variant="body2">
-              In addition, you can also choose to receive a courtesy notification at your email address 
-              or by SMS. If you do not have a PEC and access the platform from the designated link, you 
-              will not receive the registered letter and the notification will be legally delivered.
+              Außerdem kannst du wählen, ob du eine Zahlungsaufforderung an deine E-Mail-Adresse oder per SMS erhalten möchtest. 
+              Wenn du keine PEC hast und über den entsprechenden Link auf die Plattform zugreifst, erhältst du kein Einschreiben 
+              in Papierform und der Bescheid gilt als rechtmäßig zugestellt.
             </Typography>
           ),
         },
@@ -447,73 +445,75 @@ const coShowcases: Array<IShowcaseData> = [
 
 /** Walkthrough mocked data */
 const paWalkthrough: WalkthroughProps = {
-  title: "How does it work?",
+  title: "Wie funktioniert das?",
   items: [
     {
       icon: <UploadIcon color="primary" />,
-      title: "The organisation creates the notification request",
+      title: "Die Organisation erstellt die Benachrichtigungsanfrage",
       subtitle:
-        "Using API keys or manually, the organisation creates the notification request and uploads the attachments.",
+        "Mit Hilfe von API-Schlüsseln oder manuell erstellt die Organisation die Benachrichtigungsanfrage und lädt die Anlagen hoch.",
     },
     {
       icon: <SyncIcon color="primary" />,
-      title: "The platform takes care of it",
-      subtitle: `Piattaforma Notifiche verifies the completeness and correctness of the information. Each time there is 
-        a status change, the corresponding certificate enforceable against third parties is always generated.`,
+      title: "Die Plattform übernimmt sie",
+      subtitle: `Piattaforma Notifiche prüft die Vollständigkeit und Richtigkeit der Informationen. Bei jeder Statusänderung wird 
+        immer ein Zertifikat erstellt, das gegenüber Dritten geltend gemacht werden kann.`,
     },
     {
       icon: <SendIcon color="primary" />,
-      title: "The notification is sent",
-      subtitle: `The platform notifies the recipient of the presence of a notification through several possible channels: 
-        PEC, IO app, email, or SMS. Alternatively, it finds a physical address and sends a registered letter.`,
+      title: "Der Bescheid wird gesendet",
+      subtitle: `Die Plattform informiert den Empfänger über das Vorhandensein eines Bescheides über verschiedene mögliche Kanäle:
+        PEC, App IO, E-Mail, SMS. Alternativ kann sie auch eine physische Adresse finden und ein Einschreiben in Papierform versenden.`,
     },
     {
       icon: <DeliverIcon color="primary" />,
-      title: "The recipient receives it",
-      subtitle: `The recipient accesses the platform. There, they can download the notified documents and simultaneously 
-        pay what is due, thanks to the integration with pagoPA. If they receive it via IO, they can do everything directly 
-        in the app.`,
+      title: "Der Empfänger erhält den Bescheid",
+      subtitle: `Der Empfänger greift auf die Plattform zu. Dort kann er die zugestellten Dokumente herunterladen und dank der 
+        Integration mit pagoPA gleichzeitig die fälligen Beträge bezahlen. Wenn er sie über IO erhält, kann er alles direkt in der 
+        App erledigen.`,
     },
   ],
 };
 
 const pfWalkthrough: WalkthroughProps = {
-  title: "How does it work?",
+  title: "Wie funktioniert das?",
   items: [
     {
       icon: <NotificationIcon color="primary" />,
-      title: "Receive the notification",
+      title: "Du erhältst den Bescheid",
       subtitle: `
-        For each notification, the platform checks whether there is a PEC associated with you or indicated by you for 
-        sending the acknowledgement of receipt. It then sends a courtesy notice to your other digital contacts (IO app, 
-          email and SMS). If you have not provided a digital address and do not have access to the platform, you will 
-          receive a registered letter in paper form.
-        `,
+        Bei jedem Bescheid prüft die Plattform, ob es eine dir zugeordnete oder von dir angegebene PEC für 
+        den Versand der Empfangsbestätigung gibt. Sie sendet dann eine Zahlungsaufforderung an deine anderen 
+        digitalen Kontakte (IO-App, E-Mail und SMS). Wenn du keine digitalen Kontaktdaten angegeben hast und 
+        keinen Zugang zur Plattform hast, erhältst du ein Einschreiben in Papierform.
+      `,
     },
     {
       icon: <DocCheckIcon color="primary" />,
-      title: "Read the contents",
+      title: "Lies den Inhalt",
       subtitle: `
-        From the message you receive, you can access the platform to read the notification and download its attachments. 
-        If you activate the service on IO, you can view the content directly in the app: this is equivalent to signing 
-        the return receipt of a traditional registered letter.
+        Von der empfangenen Nachricht aus kannst du auf die Plattform zugreifen, um den Bescheid zu lesen und 
+        die entsprechenden Anhänge herunterzuladen. Wenn du den Dienst auf IO aktivierst, kannst du den Inhalt 
+        direkt in der App einsehen: Dies entspricht der Unterzeichnung des Rückscheins eines herkömmlichen 
+        Einschreibens.
       `,
     },
     {
       icon: <WalletIcon color="primary" />,
-      title: "Paying expenses",
+      title: "Begleiche die Zahlung",
       subtitle: `
-        If there is an amount to be paid, thanks to the integration with pagoPA, you can proceed simultaneously online 
-        from the platform or directly from IO. If you prefer to go to a counter, you will need to have the payment form 
-        with you.
+        Wenn ein Betrag zu zahlen ist, kannst du dank der Integration mit pagoPA gleichzeitig online von der 
+        Plattform oder direkt von IO aus fortfahren. Wenn du es vorziehst, einen Schalter aufzusuchen, musst 
+        du den mit dem Bescheid erhaltenen Zahlschein mitnehmen.
       `,
     },
     {
       icon: <DelegationIcon color="primary" />,
-      title: "You can delegate or be delegated",
+      title: "Selber handeln oder andere handeln lassen",
       subtitle: `
-      If you wish, you can delegate other persons, natural or legal, to receive your notifications online or to collect 
-      the attached documents in paper form at any Post Office.
+        Wenn du möchtest, kannst du andere natürliche oder juristische Personen damit beauftragen, deine 
+        Bescheide online zu empfangen oder die beigefügten Dokumente in Papierform bei jeder Poststelle 
+        abzuholen.
       `,
       isSequential: false,
     },
@@ -545,11 +545,11 @@ const paHorizontalNav: HorizontalNavProps = {
           <img src="static/icons/HORIZONTAL-NAV-1.svg" />
         </SvgIcon>
       ),
-      title: "Do you represent a company?",
+      title: "Repräsentierst du ein Unternehmen?",
       subtitle:
-        "Manage your company's notifications in one place, in collaboration with colleagues.",
+        "Verwalte die Bescheide deines Unternehmens zentral und in Zusammenarbeit mit deinen Kollegen.",
       cta: {
-        label: "Discover the benefits for businesses",
+        label: "Entdecke die Vorteile für Unternehmen",
         title: "CTA1",
         href: "#",
       },
@@ -560,11 +560,11 @@ const paHorizontalNav: HorizontalNavProps = {
           <img src="static/icons/HORIZONTAL-NAV-2.svg" />
         </SvgIcon>
       ),
-      title: "Are you a citizen?",
+      title: "Bist du Bürger*in?",
       subtitle:
-        "Activate the service on the IO app: so if you access XYZ within 7 days of receiving the message in the app, you will not receive the paper copy, and you will save time and money.",
+        "Aktiviere den Dienst in der IO-App: Wenn du dich innerhalb von 7 Tagen nach Erhalt der Nachricht in der App bei XYZ anmeldest, erhältst du keinen Papierkram und sparst Zeit und Geld.",
       cta: {
-        label: "Discover the benefits for citizens",
+        label: "Entdecke die Vorteile für die Bürger",
         title: "CTA1",
         href: "#",
       },
@@ -624,25 +624,25 @@ const coHorizontalNav = {
 /**
  * Footer data
  */
-const pagoPALink: ILinkData = {
+ const pagoPALink: ILinkData = {
   label: "PagoPA S.p.A.",
   href: PAGOPA_HOME ?? "",
-  ariaLabel: "Link: go to the website of PagoPA S.p.A."
+  ariaLabel: "Link: Gehe auf die Website von PagoPA S.p.A."
 };
 
 const assistanceLink = {
-  label: "Support",
-  ariaLabel: "Support",
+  label: "Hilfe",
+  ariaLabel: "Hilfe",
   href: `mailto:${PAGOPA_HELP_EMAIL}`,
 };
 
 const companyLegalInfo = (
   <>
-    <strong>PagoPA S.p.A.</strong> — joint stock company with sole shareholder -
-    share capital of 1,000,000 euros fully paid up - registered office in Rome, 
+    <strong>PagoPA S.p.A.</strong> — Aktiengesellschaft mit einem einzigen Gesellschafter -
+    voll eingezahltes Grundkapital von 1.000.000 Euro - eingetragener Sitz in Rom, 
     Piazza Colonna 370
     <br />
-    CAP 00187 - Reg. no. in the Rome Business Register, Tax code and VAT number 15376371009
+    PLZ 00187 - Eintragungsnummer im Handelsregister von Rom, Steuernummer und USt-IdNr. 15376371009
   </>
 );
 
@@ -652,119 +652,119 @@ const preLoginLinks: PreLoginFooterLinksType = {
     title: undefined,
     links: [
       {
-        label: "About us",
+        label: "Über uns",
         href: `${pagoPALink.href}societa/chi-siamo`,
-        ariaLabel: "Go to link: About us",
+        ariaLabel: "Zum Link: Über uns",
         linkType: "external",
       },
       {
         label: "PNRR",
         href: `${pagoPALink.href}opportunita/pnrr/progetti`,
-        ariaLabel: "Go to link: PNRR",
+        ariaLabel: "Zum Link: PNRR",
         linkType: "external",
       },
       {
         label: "Media",
         href: `${pagoPALink.href}media`,
-        ariaLabel: "Go to link: Media",
+        ariaLabel: "Zum Link: Media",
         linkType: "external",
       },
       {
-        label: "Work with us",
+        label: "Karriere",
         href: `${pagoPALink.href}lavora-con-noi`,
-        ariaLabel: "Go to link: Work with us",
+        ariaLabel: "Zum Link: Karriere",
         linkType: "external",
       },
     ],
   },
   // Third column
   resources: {
-    title: "Resources",
+    title: "Quellen",
     links: [
       {
         label: "Informativa Privacy",
         href: `/informativa-privacy/`,
-        ariaLabel: "Go to link: Informativa Privacy",
+        ariaLabel: "Zum Link: Informativa Privacy",
         linkType: "internal",
       },
       {
-        label: "Certifications",
+        label: "Zertifizierungen",
         href: "https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf",
-        ariaLabel: "Go to link: Certifications",
+        ariaLabel: "Zum Link: Zertifizierungen",
         linkType: "internal",
       },
       {
-        label: "Information security",
+        label: "Informationssicherheit",
         href: "https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf",
-        ariaLabel: "Go to link: Information security",
+        ariaLabel: "Zum Link: Informationssicherheit",
         linkType: "internal",
       },
       {
-        label: "Right to protection of personal data",
+        label: "Recht auf Schutz personenbezogener Daten",
         href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
-        ariaLabel: "Go to link: Right to protection of personal data",
+        ariaLabel: "Zum Link: Recht auf Schutz personenbezogener Daten",
         linkType: "internal",
       },
       // {
-      //   label: "Cookie Preferences",
+      //   label: "Cookie-Einstellungen",
       //   href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
-      //   ariaLabel: "Go to link: Cookie Preferences",
+      //   ariaLabel: "Zum Link: Cookie-Einstellungen",
       //   linkType: "internal",
       // },
       {
-        label: "Transparent company",
+        label: "Transparente Gesellschaft",
         href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.html",
-        ariaLabel: "Go to link: Transparent company",
+        ariaLabel: "Zum Link: Transparente Gesellschaft",
         linkType: "internal",
       },
       {
         label: "Responsible Disclosure Policy",
         href: "https://www.pagopa.it/it/responsible-disclosure-policy/",
-        ariaLabel: "Go to link: Responsible Disclosure Policy",
+        ariaLabel: "Zum Link: Responsible Disclosure Policy",
         linkType: "internal",
       },
       {
-        label: "Model 321",
+        label: "Modell 321",
         href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls",
-        ariaLabel: "Go to link: Model 321",
+        ariaLabel: "Zum Link: Modell 321",
         linkType: "internal",
       },
     ],
   },
   // Fourth column
   followUs: {
-    title: "Follow us on",
+    title: "Folge uns auf",
     socialLinks: [
       {
         icon: "linkedin",
         title: "LinkedIn",
         href: "https://it.linkedin.com/company/pagopa",
-        ariaLabel: "Link: go to the website LinkedIn of PagoPA S.p.A.",
+        ariaLabel: "Link: Gehe auf die Website LinkedIn von PagoPA S.p.A.",
       },
       {
         title: "Twitter",
         icon: "twitter",
         href: "https://twitter.com/pagopa",
-        ariaLabel: "Link: go to the website Twitter of PagoPA S.p.A.",
+        ariaLabel: "Link: Gehe auf die Website Twitter von PagoPA S.p.A.",
       },
       {
         icon: "instagram",
         title: "Instagram",
         href: "https://www.instagram.com/pagopaspa/?hl=en",
-        ariaLabel: "Link: go to the website Instagram of PagoPA S.p.A.",
+        ariaLabel: "Link: Gehe auf die Website Instagram von PagoPA S.p.A.",
       },
       {
         icon: "medium",
         title: "Medium",
         href: "https://medium.com/pagopa-spa",
-        ariaLabel: "Link: go to the website Medium of PagoPA S.p.A.",
+        ariaLabel: "Link: Gehe auf die Website Medium von PagoPA S.p.A.",
       },
     ],
     links: [
       {
-        label: "Accessibility",
+        label: "Zugänglichkeit",
         href: "https://form.agid.gov.it/view/eca3487c-f3cb-40be-a590-212eafc70058/",
-        ariaLabel: "Go to link: Accessibility",
+        ariaLabel: "Zum Link: Zugänglichkeit",
         linkType: "internal",
       },
     ],
@@ -787,11 +787,11 @@ const postLoginLinks: Array<FooterLinksType> = [
 ];
 
 /** Application Data Mock */
-export const enAppData: IAppData = {
+export const deAppData: IAppData = {
   common: {
     navigation,
     alert:
-      "The platform is not operational. Only some of the functionalities described on this page are currently being tested and are only available to a limited number of users who will be recipients of the notifications sent by the pilot organisations.",
+      "Die Plattform ist nicht betriebsbereit. Nur einige der auf dieser Seite beschriebenen Funktionen werden derzeit getestet und stehen nur einer begrenzten Anzahl von Nutzern zur Verfügung, die Empfänger der von den Pilotbehörden verschickten Bescheide sein werden.",
     assistance: assistanceLink,
     pagoPALink,
     companyLegalInfo,

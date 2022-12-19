@@ -50,8 +50,8 @@ const navigation: INavigationBarProps = {
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
-      label: "Read your notifications",
-      title: "Read your notifications",
+      label: "Preberi svoja obvestila",
+      title: "Preberi svoja obvestila",
       onClick: onReadClick,
     }
   : undefined;
@@ -59,9 +59,9 @@ const heroCta = !!PN_URL
 /** Hero mocked data */
 const paHero: HeroProps = {
   type: "image",
-  title: "Send notifications? Easily said.",
-  subtitle: `And, from today, easily done. Piattaforma Notifiche digitises the management of legal communications, 
-    simplifying the process for everyone: those who send them, and those who receive them.`,
+  title: "Pošiljanje obvestil? Lažje rečeno kot storjeno.",
+  subtitle: `Od danes pa tudi storjeno. Piattaforma Notifiche digitalizira upravljanje komunikacij s pravno vrednostjo in 
+    poenostavlja postopek za vse: pošiljatelje in prejemnike.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
@@ -70,10 +70,10 @@ const paHero: HeroProps = {
 
 const pfHero: HeroProps = {
   type: "image",
-  title: "Notifications? At your fingertips.",
-  subtitle: `With Piattaforma Notifiche, you can instantly receive legal communications from an organisation: you 
-    can view, manage and pay for registered letters that are usually sent to you on paper directly online or through 
-    the app.`,
+  title: "Kaj pa obvestila? Imaš jih na dosegu roke.",
+  subtitle: `S platformo Piattaforma Notifiche lahko takoj prejmeš sporočila s pravno vrednostjo, ki jih pošlje določena 
+    ustanova: lahko si ogledaš, upravljaš in plačaš neposredno na spletu ali v aplikaciji. In to velja za vsa priporočena 
+    pisma, ki jih običajno prejmeš v papirni obliki.`,
   ctaPrimary: heroCta,
   inverse: false,
   image: `${IMAGES_PATH}/pf-hero-foreground.png`,
@@ -94,17 +94,17 @@ const paInfoBlocks: Array<IInfoblockData> = [
     name: "infoblock 1",
     data: {
       // overline: "Rappresenti un ente?",
-      title: "An easier way to manage notifications",
+      title: "Enostavnejši način za upravljanje obvestil",
       content: (
         <>
           <Typography variant="body2">
-          Piattaforma Notifiche digitises and simplifies the management of legal communications. 
-          The sending organisations only have to deposit the deed to be delivered: the platform 
-          will take care of the sending, either by digital or analogue means.
+            Piattaforma Notifiche digitalizira in poenostavlja upravljanje komunikacij s pravno vrednostjo. 
+            Vse, kar morajo storiti ustanove pošiljateljice, je vložiti dokument za vročitev: platforma pa 
+            bo poskrbela za pošiljanje, v digitalni ali analogni obliki.
           </Typography>
           <Typography variant="body2">
-            With Piattaforma Notifiche, the uncertainty of recipient availability is minimised, 
-            and management time and costs are reduced.
+            S platformo Piattaforma Notifiche za obveščanje se zmanjša negotovost glede dosegljivosti 
+            prejemnikov, zmanjšajo pa se tudi čas in stroški upravljanja.
           </Typography>
         </>
       ),
@@ -117,24 +117,22 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 2",
     data: {
-      title: "Upload the deed. Then forget about it",
+      title: "Naloži dokument. Nato pa lahko nanj pozabiš",
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche integrates with the institutions’ protocol and offers both APIs 
-            for sending notifications automatically and the possibility of making manual submissions. 
-            Once the deeds and payment forms have been uploaded, the platform generates the IUN, a 
-            unique code identifying the notification.
+            Piattaforma Notifiche se integrira s protokolom ustanov in ponuja API za samodejno pošiljanje 
+            obvestil, kot tudi možnost ročnega pošiljanja. Ko so dokumenti in plačilni obrazci naloženi, 
+            platforma ustvari IUN, edinstveno identifikacijsko kodo obvestila.
           </Typography>
           <Typography variant="body2">
-            Subsequently, it searches its archives and public registers for a PEC traceable to the 
-            recipient and sends the notification. It then sends a courtesy notice to the recipient’s 
-            other digital contacts (IO app, email and SMS).
+            Nato v svojih arhivih in javnih registrih poišče naslov certificirane elektronske pošte (PEC), 
+            ki je povezan s prejemnikom, in pošlje obvestilo. Nato pošlje še vljudnostno obvestilo na druge 
+            podatke za stik s prejemnikom v digitalni obliki (aplikacija IO, e-pošta in SMS).
           </Typography>
           <Typography variant="body2">
-            If the recipient has not indicated a digital address and does not have access to the 
-            platform, the platform proceeds with the search for a physical address, and then with 
-            sending by registered mail.
+            Če prejemnik ni navedel nobenega podatka za stik v digitalni obliki in nima dostopa do platforme, 
+            slednja poišče njegov fizični naslov, na kateri pošlje priporočeno pismo v papirni obliki.
           </Typography>
         </>
       ),
@@ -147,18 +145,18 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 3",
     data: {
-      title: "What about the recipient?",
+      title: "Kaj pa prejemnik?",
       content: (
         <>
           <Typography variant="body2">
-            The recipient accesses the platform via SPID or CIE, where they can view and download 
-            the deed notified. Thanks to the integration with pagoPA, they can also pay what they 
-            owe at the same time. If they have activated the service on the IO app, they can do 
-            everything directly in the app.
+            Prejemnik dostopa do platforme z uporabo digitalnih identitet SPID ali CIE, na njej pa si lahko 
+            ogleda in prenese vročeni dokument. Zahvaljujoč integraciji s platformo pagoPA lahko istočasno 
+            tudi plača dolgovani znesek. Če je storitev aktiviral v aplikaciji IO, lahko vse to stori 
+            neposredno v aplikaciji.
           </Typography>
           <Typography variant="body2">
-            Like the organisation, the recipient also has access to the history of the status of 
-            the notification and the certificates enforceable against third parties that prove it.
+            Tako kot ustanova pošiljateljica ima tudi prejemnik dostop do kronološkega pregleda stanja 
+            obvestila in do potrdil, izvršljivih zoper tretje osebe, ki to dokazujejo.
           </Typography>
         </>
       ),
@@ -171,28 +169,28 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Soon available to organisations",
+      title: "Kmalu na voljo za ustanove",
       content: (
         <>
           <Typography variant="body2">
-            Currently, Piattaforma Notifiche is being tested with a small number of pilot organisations.
+            Trenutno je Piattaforma Notifiche v fazi preizkusa, v katerem sodeluje le nekaj pilotnih ustanov.
           </Typography>
           <Typography variant="body2">
-            When it is operational, your organisation will also be able to apply for membership and adopt 
-            it to digitise the notification process.
+            Ko bo postala operativna, bo lahko tudi vaša ustanova zaprosila za članstvo in uvedla platformo 
+            za digitalizacijo postopka obveščanja.
           </Typography>
           <Typography variant="body2">
-            In the meantime, organisations can consult{" "}
+            V tem času pa si lahko ustanove preberejo{" "}
             <Link href="https://www.pagopa.it/static/e190eb758489b75d4d81112a1357b5b2/Manuale-Operativo-Piattaforma-Notifiche.pdf">
-              the operations manual
-            </Link>{" "}
-              (updated 28/06/2022),{" "}
+              operativni priročnik
+            </Link>
+            {" "}(posodobljen dne 28. 6. 2022),{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
-              the b2b API for public administrations
-            </Link>{" "}
-            and{" "}
+              API-je b2b za javno upravo
+            </Link>
+            {" "}in{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-              the b2b API for the advancement of notifications
+              API-je b2b za potek postopka obveščanja
             </Link>
             .
           </Typography>
@@ -211,20 +209,21 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 1",
     data: {
-      title: "Never miss a notification again",
+      title: "Nikoli več ne spreglej nobenega obvestila",
       content: (
         <>
           <Typography variant="body2">
-            Notifications are communications with legal value issued officially by an administration, such 
-            as fines, tax assessment notices, outcomes of administrative procedures initiated with public 
-            administrations or refunds, which until now, you have always received by registered mail. From 
-            now on, you can receive and consult them digitally by accessing Piattaforma Notifiche via SPID 
-            or CIE or directly on the IO app.
+            Obvestila so sporočila s pravno vrednostjo, ki jih uradno izda upravni organ, kot so globe, 
+            obvestila o odmeri davka, rezultati upravnih postopkov, sproženih pri javnih upravah ali 
+            povračila, ki si jih do sedaj vedno prejel s priporočeno pošto. Od danes jih lahko prejmeš 
+            in si jih ogledaš v digitalni obliki, in sicer z dostopom do platforme Piattaforma Notifiche 
+            z uporabo digitalnih identitet SPID ali CIE ali neposredno v aplikaciji IO.
           </Typography>
           <Typography variant="body2">
-            You can also pay any fees thanks to the integration with pagoPA, view the history of received 
-            notifications and manage them directly online. In addition, you only need a proxy to handle 
-            your family members’ registered mail as well.
+            Prav tako lahko plačaš morebitne stroške zahvaljujoč integraciji s platformo pagoPA, si 
+            ogledaš zgodovino prejetih obvestil in jih upravljaš neposredno na spletu. Poleg tega je vse, 
+            kar potrebuješ za upravljanje priporočenih sporočil za svoje družinske člane, le njihovo 
+            pooblastilo.
           </Typography>
         </>
       ),
@@ -236,15 +235,15 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 2",
     data: {
-      title: "You choose how to receive notifications",
+      title: "Izbira načina prejemanja obvestil je tvoja",
       content: (
         <>
           <Typography variant="body2">
-            To send legal communications, Piattaforma Notifiche always gives priority to the digital 
-            addresses of the recipient. At any time, you can access the platform with SPID and CIE to 
-            indicate or update your preferences between PEC, IO app, email or SMS. If you do not indicate 
-            any address or do not have access to the platform, you will continue to receive notifications 
-            by registered mail.
+            Za pošiljanje sporočil s pravno vrednostjo Piattaforma Notifiche da vedno prednost digitalnim 
+            podatkom za stik prejemnika. Z uporabo digitalnih identitet SPID ali CIE lahko kadarkoli 
+            dostopaš do platforme ter posodobiš svoje nastavitve z izbiro med PEC, aplikacijo IO, e-pošto 
+            ali SMS. Če ne navedeš nobenih podatkov za stik ali nimaš dostopa do platforme, boš obvestila 
+            še naprej prejemal s priporočeno pošto v papirni obliki.
           </Typography>
         </>
       ),
@@ -256,15 +255,14 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 3",
     data: {
-      title: "The future of legal communications",
+      title: "Prihodnost sporočil s pravno vrednostjo",
       content: (
         <>
           <Typography variant="body2">
-            Currently, Piattaforma Notifiche is being tested with a small number of administrations.
+            Trenutno je Piattaforma Notifiche v fazi preizkusa, v katerem sodelujejo le nekatere upravne ustanove.
           </Typography>
           <Typography variant="body2">
-            Progressively, the platform will be adopted by public administrations and used to send 
-            notifications to all citizens.
+            Postopoma bodo javne uprave sprejele platformo in jo uporabljale za pošiljanje obvestil vsem državljanom.
           </Typography>
         </>
       ),
@@ -303,31 +301,31 @@ const paShowcases: Array<IShowcaseData> = [
   {
     name: "showcase 1",
     data: {
-      title: "One way to save in many",
+      title: "En sam način, ki ti omogoči, da privarčuješ na mnogo načinov",
       items: [
         {
           icon: <PeopleIcon />,
-          title: "Unique ways",
+          title: "Edinstveno",
           subtitle:
-            "Notifications are sent, managed and monitored through a single channel, accessible by several representatives of the same organisation",
+            "Obvestila se pošiljajo, upravljajo in spremljajo prek enega samega kanala, do katerega lahko dostopa več oseb iz iste ustanove",
         },
         {
           icon: <FireworksIcon />,
-          title: "Simple",
+          title: "Enostavno",
           subtitle:
-            "Notifications can be uploaded via API or manually: once the documents have been deposited, the platform takes care of sending them and keeps track of status changes",
+            "Obvestila lahko naložiš prek API-ja ali ročno: ko so dokumenti vloženi, platforma poskrbi za pošiljanje in spremlja spremembe stanja",
         },
         {
           icon: <EasyIcon />,
-          title: "Immediate",
+          title: "Neposredno",
           subtitle:
-            "If the recipient has a digital address, mailing times are considerably reduced",
+            "Če ima prejemnik digitalni naslov, se čas dostave bistveno skrajša",
         },
         {
           icon: <CheckmarkIcon />,
-          title: "Certain",
+          title: "Zanesljivo",
           subtitle:
-            "The notification process is regulated and there is greater certainty of delivery to the recipient",
+            "Postopek obveščanja je urejen, kar zagotavlja večjo zanesljivost dostave prejemniku",
         },
       ],
     },
@@ -338,31 +336,31 @@ const pfShowcases: Array<IShowcaseData> = [
   {
     name: "showcase 1",
     data: {
-      title: "What digital notifications offer you",
+      title: "Kaj ti nudijo digitalna obvestila",
       items: [
         {
           icon: <PiggyIcon />,
-          title: "Convenience",
+          title: "Udobje",
           subtitle:
-            "Digital delivery of notifications leads to lower service and delivery costs",
+            "Dostava obvestil v digitalni obliki omogoča nižje stroške obveščanja in pošiljanja",
         },
         {
           icon: <HourglassIcon />,
-          title: "Time",
+          title: "Čas",
           subtitle:
-            "No more waiting or queuing to collect paper communications",
+            "Nič več čakanja v vrsti za prevzem pisem v papirni obliki",
         },
         {
           icon: <EcologyIcon />,
-          title: "Sustainability",
+          title: "Trajnost",
           subtitle:
-            "Help reduce paper consumption and transport emissions",
+            "Pomagaj zmanjšati porabo papirja in emisije, ki jih povzroča promet",
         },
         {
           icon: <CloudIcon />,
-          title: "Space",
+          title: "Prostor",
           subtitle:
-            "You no longer have to keep printed documents, thanks to the option to download and store deeds digitally",
+            "Z možnostjo digitalnega prenosa in arhiviranja dokumentov v digitalni obliki ti ni treba več hraniti natisnjenih dokumentov",
         },
       ],
     },
@@ -377,9 +375,9 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "PEC",
           subtitle: (
             <Typography variant="body2">
-              If you have a PEC address, notifications will be legally delivered to you, with no more 
-              registered paper mail. The acknowledgement of receipt that will be sent to you contains 
-              the link to access the content on Piattaforma Notifiche.
+              Če imaš naslov PEC, bodo obvestila dostavljena zakonito, brez dodatnih priporočenih 
+              pisem v papirni obliki. Obvestilo o prejemu, ki bo poslano, vsebuje povezavo za dostop 
+              do vsebine na platformi Piattaforma Notifiche.
             </Typography>
           ),
         },
@@ -389,24 +387,24 @@ const pfShowcases: Array<IShowcaseData> = [
            */
           // icon: <IOIcon />,
           icon: <img src={`${IMAGES_PATH}/IOIcon.svg`} />,
-          title: "IO app",
+          title: "Aplikacija IO",
           subtitle: (
             <Typography variant="body2">
-              If you activate the &quot;Digital Notifications&quot; service of Piattaforma Notifiche, you can 
-              receive and manage legal communications <strong>directly in the app</strong>. If you 
-              do not have a PEC and read the message immediately, you will not receive the registered 
-              letter and the notification will be legally delivered.
+              Če aktiviraš storitev »Digitalna obvestila« na platformi Piattaforma Notifiche, lahko 
+              prejmeš in upravljaš sporočila s pravno vrednostjo <strong>neposredno v aplikaciji.</strong>{" "}
+              Če nimaš naslova PEC in takoj prebereš sporočilo, ne boš prejel priporočenega pisma v 
+              papirni obliki, obvestilo pa bo zakonito vročeno.
             </Typography>
           ),
         },
         {
           icon: <MessageIcon />,
-          title: "Email or SMS",
+          title: "E-pošta ali SMS",
           subtitle: (
             <Typography variant="body2">
-              In addition, you can also choose to receive a courtesy notification at your email address 
-              or by SMS. If you do not have a PEC and access the platform from the designated link, you 
-              will not receive the registered letter and the notification will be legally delivered.
+              Poleg tega se lahko odločiš tudi za prejemanje vljudnostnega obvestila na svoj e-naslov 
+              ali prek sporočila SMS. Če nimaš naslova PEC in dostopaš do platforme prek ustrezne povezave, 
+              ne boš prejel priporočenega pisma v papirni obliki, obvestilo pa bo zakonito vročeno.
             </Typography>
           ),
         },
@@ -447,73 +445,74 @@ const coShowcases: Array<IShowcaseData> = [
 
 /** Walkthrough mocked data */
 const paWalkthrough: WalkthroughProps = {
-  title: "How does it work?",
+  title: "Kako deluje?",
   items: [
     {
       icon: <UploadIcon color="primary" />,
-      title: "The organisation creates the notification request",
+      title: "Ustanova ustvari zahtevo za obvestilo",
       subtitle:
-        "Using API keys or manually, the organisation creates the notification request and uploads the attachments.",
+        "Z uporabo ključev API ali ročno ustanova ustvari zahtevo za obvestilo in naloži priloge.",
     },
     {
       icon: <SyncIcon color="primary" />,
-      title: "The platform takes care of it",
-      subtitle: `Piattaforma Notifiche verifies the completeness and correctness of the information. Each time there is 
-        a status change, the corresponding certificate enforceable against third parties is always generated.`,
+      title: "Platforma to prevzame",
+      subtitle: `Piattaforma Notifiche preveri popolnost in pravilnost informacij. Ob vsaki spremembi stanja obvestila 
+        se vedno ustvari tudi ustrezno potrdilo, izvršljivo zoper tretje osebe.`,
     },
     {
       icon: <SendIcon color="primary" />,
-      title: "The notification is sent",
-      subtitle: `The platform notifies the recipient of the presence of a notification through several possible channels: 
-        PEC, IO app, email, or SMS. Alternatively, it finds a physical address and sends a registered letter.`,
+      title: "Obvestilo je nato poslano",
+      subtitle: `Platforma sporoči prejemniku prisotnost obvestila prek različnih možnih kanalov: PEC, aplikacija IO, 
+        e-pošta, SMS. Druga možnost je, da poišče fizični naslov in pošlje priporočeno pismo v papirni obliki.`,
     },
     {
       icon: <DeliverIcon color="primary" />,
-      title: "The recipient receives it",
-      subtitle: `The recipient accesses the platform. There, they can download the notified documents and simultaneously 
-        pay what is due, thanks to the integration with pagoPA. If they receive it via IO, they can do everything directly 
-        in the app.`,
+      title: "Prejemnik ga prejme",
+      subtitle: `Prejemnik dostopi do platforme. Tam lahko prenese vročene dokumente in hkrati plača dolgovani znesek, 
+        zahvaljujoč integraciji s platformo pagoPA. Če ga prejme prek aplikacije IO, lahko vse to stori neposredno v 
+        aplikaciji.`,
     },
   ],
 };
 
 const pfWalkthrough: WalkthroughProps = {
-  title: "How does it work?",
+  title: "Kako deluje?",
   items: [
     {
       icon: <NotificationIcon color="primary" />,
-      title: "Receive the notification",
+      title: "Prejmi obvestilo",
       subtitle: `
-        For each notification, the platform checks whether there is a PEC associated with you or indicated by you for 
-        sending the acknowledgement of receipt. It then sends a courtesy notice to your other digital contacts (IO app, 
-          email and SMS). If you have not provided a digital address and do not have access to the platform, you will 
-          receive a registered letter in paper form.
-        `,
+        Za vsako obvestilo platforma preveri, ali obstaja naslov PEC, ki je povezan s teboj oziroma si ga 
+        ti navedel za pošiljanje obvestila o opravljenem prejemu. Nato pošlje še vljudnostno obvestilo na 
+        tvoje druge podatke za stik v digitalni obliki (aplikacija IO, e-pošta in SMS). Če ne navedeš 
+        nobenih digitalnih podatkov za stik in nimaš dostopa do platforme, boš prejel priporočeno pismo v 
+        papirni obliki.
+      `,
     },
     {
       icon: <DocCheckIcon color="primary" />,
-      title: "Read the contents",
+      title: "Preberi vsebino",
       subtitle: `
-        From the message you receive, you can access the platform to read the notification and download its attachments. 
-        If you activate the service on IO, you can view the content directly in the app: this is equivalent to signing 
-        the return receipt of a traditional registered letter.
+        Iz prejetega sporočila lahko dostopaš do platforme in prebereš obvestilo ter preneseš njegove priloge. 
+        Če aktiviraš storitev v aplikaciji IO, si lahko ogledaš vsebino neposredno v aplikaciji: to je 
+        enakovredno podpisu povratnice običajnega priporočenega pisma.
       `,
     },
     {
       icon: <WalletIcon color="primary" />,
-      title: "Paying expenses",
+      title: "Plačaj stroške",
       subtitle: `
-        If there is an amount to be paid, thanks to the integration with pagoPA, you can proceed simultaneously online 
-        from the platform or directly from IO. If you prefer to go to a counter, you will need to have the payment form 
-        with you.
+        Če moraš plačati določen znesek, lahko zahvaljujoč integraciji s platformo pagoPA to storiš neposredno 
+        na spletu s platforme ali neposredno v aplikaciji IO. Če pa se raje odpraviš k okencu, moraš imeti pri 
+        sebi prejeti plačilni obrazec, ki ga prejmeš skupaj z obvestilom.
       `,
     },
     {
       icon: <DelegationIcon color="primary" />,
-      title: "You can delegate or be delegated",
+      title: "Lahko pooblastiš ali postaneš pooblaščenec",
       subtitle: `
-      If you wish, you can delegate other persons, natural or legal, to receive your notifications online or to collect 
-      the attached documents in paper form at any Post Office.
+        Če želiš, lahko druge osebe, fizične ali pravne, pooblastiš za prejemanje tvojih obvestil preko spleta 
+        ali za prevzem priloženih dokumentov v papirni obliki na kateremkoli poštnem uradu.
       `,
       isSequential: false,
     },
@@ -545,11 +544,11 @@ const paHorizontalNav: HorizontalNavProps = {
           <img src="static/icons/HORIZONTAL-NAV-1.svg" />
         </SvgIcon>
       ),
-      title: "Do you represent a company?",
+      title: "Zastopaš podjetje?",
       subtitle:
-        "Manage your company's notifications in one place, in collaboration with colleagues.",
+        "Upravljaj obvestila svojega podjetja na enem mestu, skupaj s sodelavci.",
       cta: {
-        label: "Discover the benefits for businesses",
+        label: "Odkrij prednosti za podjetja",
         title: "CTA1",
         href: "#",
       },
@@ -560,11 +559,11 @@ const paHorizontalNav: HorizontalNavProps = {
           <img src="static/icons/HORIZONTAL-NAV-2.svg" />
         </SvgIcon>
       ),
-      title: "Are you a citizen?",
+      title: "Si državljan ali državljanka?",
       subtitle:
-        "Activate the service on the IO app: so if you access XYZ within 7 days of receiving the message in the app, you will not receive the paper copy, and you will save time and money.",
+        "Aktiviraj storitev v aplikaciji IO: če se prijaviš v XYZ v roku 7 dni od prejema sporočila v aplikaciji, ne boš prejel obvestila v papirni obliki ter tako prihranil čas in denar.",
       cta: {
-        label: "Discover the benefits for citizens",
+        label: "Odkrij prednosti za državljane",
         title: "CTA1",
         href: "#",
       },
@@ -624,25 +623,25 @@ const coHorizontalNav = {
 /**
  * Footer data
  */
-const pagoPALink: ILinkData = {
+ const pagoPALink: ILinkData = {
   label: "PagoPA S.p.A.",
   href: PAGOPA_HOME ?? "",
-  ariaLabel: "Link: go to the website of PagoPA S.p.A."
+  ariaLabel: "Povezava: pojdi na spletno mesto družbe PagoPA S.p.A."
 };
 
 const assistanceLink = {
-  label: "Support",
-  ariaLabel: "Support",
+  label: "Podpora strankam",
+  ariaLabel: "Podpora strankam",
   href: `mailto:${PAGOPA_HELP_EMAIL}`,
 };
 
 const companyLegalInfo = (
   <>
-    <strong>PagoPA S.p.A.</strong> — joint stock company with sole shareholder -
-    share capital of 1,000,000 euros fully paid up - registered office in Rome, 
+    <strong>PagoPA S.p.A.</strong> — delniška družba z enim družbenikom -
+    v celoti vplačan osnovni kapital 1.000.000 EUR - sedež v Rimu, 
     Piazza Colonna 370
     <br />
-    CAP 00187 - Reg. no. in the Rome Business Register, Tax code and VAT number 15376371009
+    Poštna številka 00187 - št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009
   </>
 );
 
@@ -652,119 +651,119 @@ const preLoginLinks: PreLoginFooterLinksType = {
     title: undefined,
     links: [
       {
-        label: "About us",
+        label: "Kdo smo",
         href: `${pagoPALink.href}societa/chi-siamo`,
-        ariaLabel: "Go to link: About us",
+        ariaLabel: "Pojdi na povezavo: Kdo smo",
         linkType: "external",
       },
       {
         label: "PNRR",
         href: `${pagoPALink.href}opportunita/pnrr/progetti`,
-        ariaLabel: "Go to link: PNRR",
+        ariaLabel: "Pojdi na povezavo: PNRR",
         linkType: "external",
       },
       {
         label: "Media",
         href: `${pagoPALink.href}media`,
-        ariaLabel: "Go to link: Media",
+        ariaLabel: "Pojdi na povezavo: Media",
         linkType: "external",
       },
       {
-        label: "Work with us",
+        label: "Sodeluj z nami",
         href: `${pagoPALink.href}lavora-con-noi`,
-        ariaLabel: "Go to link: Work with us",
+        ariaLabel: "Pojdi na povezavo: Sodeluj z nami",
         linkType: "external",
       },
     ],
   },
   // Third column
   resources: {
-    title: "Resources",
+    title: "Viri",
     links: [
       {
         label: "Informativa Privacy",
         href: `/informativa-privacy/`,
-        ariaLabel: "Go to link: Informativa Privacy",
+        ariaLabel: "Pojdi na povezavo: Informativa Privacy",
         linkType: "internal",
       },
       {
-        label: "Certifications",
+        label: "Certifikati",
         href: "https://www.pagopa.it/static/10ffe3b3d90ecad83d1bbebea0512188/Certificato-SGSI-PagoPA-2020.pdf",
-        ariaLabel: "Go to link: Certifications",
+        ariaLabel: "Pojdi na povezavo: Certifikati",
         linkType: "internal",
       },
       {
-        label: "Information security",
+        label: "Varnost podatkov",
         href: "https://www.pagopa.it/static/781646994f1f8ddad2d95af3aaedac3d/Sicurezza-delle-informazioni_PagoPA-S.p.A..pdf",
-        ariaLabel: "Go to link: Information security",
+        ariaLabel: "Pojdi na povezavo: Varnost podatkov",
         linkType: "internal",
       },
       {
-        label: "Right to protection of personal data",
+        label: "Pravica do varstva osebnih podatkov",
         href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
-        ariaLabel: "Go to link: Right to protection of personal data",
+        ariaLabel: "Pojdi na povezavo: Pravica do varstva osebnih podatkov",
         linkType: "internal",
       },
       // {
-      //   label: "Cookie Preferences",
+      //   label: "Nastavitve piškotkov",
       //   href: "https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8",
-      //   ariaLabel: "Go to link: Cookie Preferences",
+      //   ariaLabel: "Pojdi na povezavo: Nastavitve piškotkov",
       //   linkType: "internal",
       // },
       {
-        label: "Transparent company",
+        label: "Pregledna družba",
         href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.html",
-        ariaLabel: "Go to link: Transparent company",
+        ariaLabel: "Pojdi na povezavo: Pregledna družba",
         linkType: "internal",
       },
       {
-        label: "Responsible Disclosure Policy",
+        label: "Politika odgovornega razkritja",
         href: "https://www.pagopa.it/it/responsible-disclosure-policy/",
-        ariaLabel: "Go to link: Responsible Disclosure Policy",
+        ariaLabel: "Pojdi na povezavo: Politika odgovornega razkritja",
         linkType: "internal",
       },
       {
         label: "Model 321",
         href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls",
-        ariaLabel: "Go to link: Model 321",
+        ariaLabel: "Pojdi na povezavo: Model 321",
         linkType: "internal",
       },
     ],
   },
   // Fourth column
   followUs: {
-    title: "Follow us on",
+    title: "Sledi nam na",
     socialLinks: [
       {
         icon: "linkedin",
         title: "LinkedIn",
         href: "https://it.linkedin.com/company/pagopa",
-        ariaLabel: "Link: go to the website LinkedIn of PagoPA S.p.A.",
+        ariaLabel: "Povezava: pojdi na spletno mesto LinkedIn družbe PagoPA S.p.A.",
       },
       {
         title: "Twitter",
         icon: "twitter",
         href: "https://twitter.com/pagopa",
-        ariaLabel: "Link: go to the website Twitter of PagoPA S.p.A.",
+        ariaLabel: "Povezava: pojdi na spletno mesto Twitter družbe PagoPA S.p.A.",
       },
       {
         icon: "instagram",
         title: "Instagram",
         href: "https://www.instagram.com/pagopaspa/?hl=en",
-        ariaLabel: "Link: go to the website Instagram of PagoPA S.p.A.",
+        ariaLabel: "Povezava: pojdi na spletno mesto Instagram družbe PagoPA S.p.A.",
       },
       {
         icon: "medium",
         title: "Medium",
         href: "https://medium.com/pagopa-spa",
-        ariaLabel: "Link: go to the website Medium of PagoPA S.p.A.",
+        ariaLabel: "Povezava: pojdi na spletno mesto Medium družbe PagoPA S.p.A.",
       },
     ],
     links: [
       {
-        label: "Accessibility",
+        label: "Dostopnost",
         href: "https://form.agid.gov.it/view/eca3487c-f3cb-40be-a590-212eafc70058/",
-        ariaLabel: "Go to link: Accessibility",
+        ariaLabel: "Pojdi na povezavo: Dostopnost",
         linkType: "internal",
       },
     ],
@@ -787,11 +786,11 @@ const postLoginLinks: Array<FooterLinksType> = [
 ];
 
 /** Application Data Mock */
-export const enAppData: IAppData = {
+export const slAppData: IAppData = {
   common: {
     navigation,
     alert:
-      "The platform is not operational. Only some of the functionalities described on this page are currently being tested and are only available to a limited number of users who will be recipients of the notifications sent by the pilot organisations.",
+      "Platforma ne deluje. Trenutno poteka preizkus samo nekaterih funkcij, opisanih na tej strani, do katerih lahko dostopa izključno omejeno število uporabnikov, ki bodo prejemniki obvestil, ki jih pošiljajo ustanove, vključene v pilotni projekt.",
     assistance: assistanceLink,
     pagoPALink,
     companyLegalInfo,

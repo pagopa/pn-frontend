@@ -2410,6 +2410,11 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@fontsource/dm-mono@^4.5.10":
+  version "4.5.10"
+  resolved "https://registry.yarnpkg.com/@fontsource/dm-mono/-/dm-mono-4.5.10.tgz#2d033549b4fe75ab8e26c5e74081f1ba5aa65519"
+  integrity sha512-cVd0L+tz1PrrNyClnpeJvRtVdvtB69L9PJ4sBm3t2ZCcbzKCa3MmW9duljKeRxTfQh3YTZpevnD14uWumRJYzA==
+
 "@fontsource/titillium-web@^4.5.9":
   version "4.5.9"
   resolved "https://registry.yarnpkg.com/@fontsource/titillium-web/-/titillium-web-4.5.9.tgz#9de41e7b27fd6913055c2e9f616e5a2c5180f121"
@@ -4166,11 +4171,12 @@
   dependencies:
     "@octokit/openapi-types" "^13.9.0"
 
-"@pagopa/mui-italia@^0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.8.1.tgz#57f70344218cc34644d874f7fe13dbc60dbee502"
-  integrity sha512-T2TH7vXDPxp38Jpywp8+MFB/HF7hc2UdoYXWWG+M7MuFxOM8daTuIeFyDUb7/n/PwfnJHl9tnGbRm8jQHPRiLA==
+"@pagopa/mui-italia@^0.8.10":
+  version "0.8.10"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.8.10.tgz#3e60c49e6d172a91196c23df66f8ddd653554ec0"
+  integrity sha512-B93lSUucbE2JkNG1voF5BK5ARKmiii9fVo0kLcsiJ4jQt0C9O2GC0251pbj2zcIL2K1ijV08Qim1GHIdVHMEsA==
   dependencies:
+    "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"
     clsx "^1.2.1"
     fp-ts "^2.12.3"
