@@ -1,17 +1,8 @@
 import { Box } from '@mui/material';
-import { formatDate } from '@pagopa-pn/pn-commons';
+import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
-
-function isToday(date: Date): boolean {
-  const today = new Date();
-  return (
-    date.getDate() === today.getDate() &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
-  );
-}
 
 function LocalizeStatus(
   status: string,
@@ -48,7 +39,7 @@ const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
           </Box>
         );
 
-        const suffixToday = isToday(new Date()) ? '' : '-in';
+        const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
 
         switch (h.status) {
           case ApiKeyStatus.ENABLED:
