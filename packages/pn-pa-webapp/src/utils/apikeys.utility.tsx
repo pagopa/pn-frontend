@@ -4,6 +4,15 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
 
+function isToday(date: Date): boolean {
+  const today = new Date();
+  return (
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
+  );
+}
+
 function LocalizeStatus(
   status: string,
   history: Array<ApiKeyStatusHistory>
@@ -38,22 +47,25 @@ const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
             </Box>
           </Box>
         );
+
+        const suffixToday = isToday(new Date()) ? '' : '-in';
+
         switch (h.status) {
           case ApiKeyStatus.ENABLED:
             return (
-              output('enabled-in', h)
+              output(`enabled${suffixToday}`, h)
             );
           case ApiKeyStatus.CREATED:
             return (
-              output('created-in', h)
+              output(`created${suffixToday}`, h)
             );
           case ApiKeyStatus.BLOCKED:
             return (
-              output('blocked-in', h)
+              output(`blocked${suffixToday}`, h)
             );
           case ApiKeyStatus.ROTATED:
             return (
-              output('rotated-in', h)
+              output(`rotated${suffixToday}`, h)
             );
           default:
             return <></>;
