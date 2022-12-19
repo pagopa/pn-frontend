@@ -47,7 +47,7 @@ const NavigationBar = ({ title, chip, pf, pa}: INavigationBarProps) => {
                 event.preventDefault();
               }
             }}
-            key={pf}
+            key="persona-fisica"
             label={pf}
             href={pfPath}
             {...a11yProps(0)}
@@ -62,7 +62,7 @@ const NavigationBar = ({ title, chip, pf, pa}: INavigationBarProps) => {
                 event.preventDefault();
               }
             }}
-            key={pa}
+            key="pubblica-amminstrazione"
             label={pa}
             href={paPath}
             {...a11yProps(1)}
