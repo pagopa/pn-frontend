@@ -10,12 +10,15 @@ import {
   PaymentAttachmentSName,
   PaymentInfo,
   RecipientType,
+  PaymentStatus,
+  PaymentInfoDetail,
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 
 import {
   getNotificationPaymentInfo,
+  getNotificationPaymentUrl,
   getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
@@ -88,6 +91,13 @@ const notificationSlice = createSlice({
       if (action.payload) {
         state.paymentInfo = action.payload;
       }
+    });
+    builder.addCase(getNotificationPaymentUrl.rejected, (state) => {
+      state.paymentInfo = {
+        ...state.paymentInfo,
+        status: PaymentStatus.FAILED,
+        detail: PaymentInfoDetail.GENERIC_ERROR,
+      };
     });
   },
 });

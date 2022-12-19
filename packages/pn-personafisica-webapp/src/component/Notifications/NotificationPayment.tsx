@@ -150,17 +150,6 @@ const NotificationPayment: React.FC<Props> = ({
   };
 
   const onPayClick = () => {
-    /*
-    const paymentUrl = paymentInfo.url;
-    if (paymentUrl && notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
-      window.open(
-        `${paymentUrl}/${notificationPayment.creditorTaxId}${notificationPayment.noticeCode}`
-      );
-    } else if (paymentUrl) {
-      // do we need to inform the user that NoticeCode and/or creditorTaxId are unavailable and redirect to base checkout url?
-      window.open(paymentUrl);
-    }
-    */
     if (
       notificationPayment.noticeCode &&
       notificationPayment.creditorTaxId &&
@@ -181,7 +170,7 @@ const NotificationPayment: React.FC<Props> = ({
       )
         .unwrap()
         .then((res: { checkoutUrl: string }) => {
-          window.open(res.checkoutUrl);
+          window.location.assign(res.checkoutUrl);
         })
         .catch(() => undefined);
     }
