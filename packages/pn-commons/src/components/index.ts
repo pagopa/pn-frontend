@@ -22,12 +22,15 @@ import TitleBox from './TitleBox';
 import { AppStatusBar } from './AppStatus/AppStatusBar';
 import DesktopDowntimeLog from './AppStatus/DesktopDowntimeLog';
 import MobileDowntimeLog from './AppStatus/MobileDowntimeLog';
-import { useFieldSpecs, adaptFieldSpecToMobile, DowntimeLogColumn } from './AppStatus/downtimeLog.utils';
+import {
+  useFieldSpecs,
+  adaptFieldSpecToMobile,
+  DowntimeLogColumn,
+} from './AppStatus/downtimeLog.utils';
 import NotificationDetailTable from './NotificationDetail/NotificationDetailTable';
 import NotificationDetailDocuments from './NotificationDetail/NotificationDetailDocuments';
 import HelpNotificationDetails from './NotificationDetail/HelpNotificationDetails';
 import NotificationDetailTimeline from './NotificationDetail/NotificationDetailTimeline';
-import Toast from './Toast/Toast';
 import CodeModal from './CodeModal/CodeModal';
 import InactivityHandler from './InactivityHandler';
 import CustomDatePicker from './CustomDatePicker';
@@ -38,53 +41,52 @@ import CopyToClipboard from './CopyToClipboard';
 import LoadingPage from './LoadingPage';
 import ApiError from './ApiError/ApiError';
 import ApiErrorWrapper from './ApiError/ApiErrorWrapper';
+import SnackBar from './SnackBar/SnackBar';
 import TimedMessage from './TimedMessage/TimedMessage';
 
 export {
-    LoadingOverlay,
-    Header,
-    Layout,
-    Footer,
-    CustomPagination,
-    CustomTooltip,
-    AppMessage,
-    AppResponseMessage,
-    SideMenu,
-    ItemsTable,
-    EmptyState,
-    ApiError,
-    ApiErrorWrapper,
-    CustomDropdown,
-    StatusTooltip,
-    MobileNotificationsSort,
-    SessionModal,
-    ItemsCard,
-    CustomMobileDialog,
-    CustomMobileDialogToggle,
-    CustomMobileDialogContent,
-    CustomMobileDialogAction,
-    TitleBox,
-    NotificationDetailTable,
-    NotificationDetailDocuments,
-    HelpNotificationDetails,
-    NotificationDetailTimeline,
-    AppStatusBar,
-    DesktopDowntimeLog,
-    MobileDowntimeLog,
-    useFieldSpecs, 
-    adaptFieldSpecToMobile, 
-    Toast,
-    CodeModal,
-    InactivityHandler,
-    CustomDatePicker,
-    PnBreadcrumb,
-    FileUpload,
-    Prompt,
-    CopyToClipboard,
-    LoadingPage,
-    TimedMessage
+  LoadingOverlay,
+  Header,
+  Layout,
+  Footer,
+  CustomPagination,
+  CustomTooltip,
+  AppMessage,
+  AppResponseMessage,
+  SideMenu,
+  ItemsTable,
+  EmptyState,
+  ApiError,
+  ApiErrorWrapper,
+  CustomDropdown,
+  StatusTooltip,
+  MobileNotificationsSort,
+  SessionModal,
+  ItemsCard,
+  CustomMobileDialog,
+  CustomMobileDialogToggle,
+  CustomMobileDialogContent,
+  CustomMobileDialogAction,
+  TitleBox,
+  NotificationDetailTable,
+  NotificationDetailDocuments,
+  HelpNotificationDetails,
+  NotificationDetailTimeline,
+  AppStatusBar,
+  DesktopDowntimeLog,
+  MobileDowntimeLog,
+  useFieldSpecs,
+  adaptFieldSpecToMobile,
+  SnackBar,
+  CodeModal,
+  InactivityHandler,
+  CustomDatePicker,
+  PnBreadcrumb,
+  FileUpload,
+  Prompt,
+  CopyToClipboard,
+  LoadingPage,
+  TimedMessage
 };
 
-export type { 
-    DowntimeLogColumn, 
-};
+export type { DowntimeLogColumn };
