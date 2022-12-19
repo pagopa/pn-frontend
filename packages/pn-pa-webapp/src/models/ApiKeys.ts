@@ -14,7 +14,7 @@ export interface ApiKeyStatusHistory {
   date: string;
 }
 
-export type ApiKeyColumn = 'name' | 'value' | 'lastUpdate' | 'groups' | 'status' | 'history';
+export type ApiKeyColumn = 'name' | 'value' | 'lastUpdate' | 'groups' | 'status' | 'history' | 'contextMenu';
 
 export enum ApiKeySetStatus {
   BLOCK = 'BLOCK',
