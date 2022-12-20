@@ -110,7 +110,6 @@ export const appStateSlice = createSlice({
         state.loading.result = false;
         const actionBeingRejected = action.type.slice(0, action.type.indexOf("/"));
         state.messages.errors = doRemoveErrorsByAction(actionBeingRejected, state.messages.errors);
-        
         const response = createAppResponseError(actionBeingRejected, action.payload.response);
         state.responseEvent = { outcome: 'error', name: actionBeingRejected, response };
       });

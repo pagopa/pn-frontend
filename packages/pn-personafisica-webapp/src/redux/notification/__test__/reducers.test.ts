@@ -4,6 +4,7 @@ import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
   getNotificationPaymentInfo,
+  getNotificationPaymentUrl,
   getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
@@ -151,5 +152,25 @@ describe('Notification detail redux state tests', () => {
 
     const state = store.getState().notificationState;
     expect(state.paymentInfo).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
+  });
+
+  it('Should be able to fetch payment url', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentUrl');
+    apiSpy.mockResolvedValue({ checkoutUrl: "mocked-url" });
+    const action = await store.dispatch(
+      getNotificationPaymentUrl({
+        paymentNotice: {
+          noticeNumber: 'mocked-noticeCode',
+          fiscalCode: 'mocked-taxId',
+          amount: 0,
+          companyName: 'Mocked Company',
+          description: 'Mocked title',
+        },
+        returnUrl: 'mocked-return-url',
+      })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getNotificationPaymentUrl/fulfilled');
+    expect(payload).toEqual({ checkoutUrl: "mocked-url" });
   });
 });
