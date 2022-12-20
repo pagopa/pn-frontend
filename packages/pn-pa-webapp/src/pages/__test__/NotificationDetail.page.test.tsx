@@ -119,7 +119,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     fireEvent.click(documentButton);
     expect(mockDispatchFn).toBeCalledTimes(2);
     fireEvent.click(legalFactButton);
-    expect(mockDispatchFn).toBeCalledTimes(3);
+    expect(mockDispatchFn).toBeCalledTimes(4);
   });
 
   test('clicks on the back button', () => {
