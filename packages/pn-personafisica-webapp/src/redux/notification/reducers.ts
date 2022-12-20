@@ -60,6 +60,10 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
+    resetLegalFactState: (state) => {
+      state.legalFactDownloadUrl = '';
+      state.legalFactDownloadRetryAfter = 0;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
@@ -96,6 +100,6 @@ const notificationSlice = createSlice({
   },
 });
 
-export const { resetState } = notificationSlice.actions;
+export const { resetState, resetLegalFactState } = notificationSlice.actions;
 
 export default notificationSlice;

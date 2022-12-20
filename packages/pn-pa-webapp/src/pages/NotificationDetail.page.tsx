@@ -31,7 +31,9 @@ import {
   NotificationDetailRecipient,
   NotificationStatus,
   useErrors,
-  ApiError, formatEurocentToCurrency, TimedMessage,
+  ApiError,
+  formatEurocentToCurrency,
+  TimedMessage,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -47,7 +49,7 @@ import {
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
 import { setCancelledIun } from '../redux/newNotification/reducers';
-import { resetState } from '../redux/notification/reducers';
+import { resetLegalFactState, resetState } from '../redux/notification/reducers';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -90,8 +92,7 @@ const NotificationDetail = () => {
     if (filteredRecipients.length > 1) {
       return filteredRecipients.map((recipient, index) => (
         <Box key={index} fontWeight={600}>
-          {recipient.taxId} -{' '}
-          {recipient?.payment?.creditorTaxId} -{' '}
+          {recipient.taxId} - {recipient?.payment?.creditorTaxId} -{' '}
           {alt ? recipient.payment?.noticeCodeAlternative : recipient.payment?.noticeCode}
         </Box>
       ));
@@ -153,8 +154,14 @@ const NotificationDetail = () => {
     },
     {
       label: t('detail.amount', { ns: 'notifiche' }),
-      rawValue: notification.amount ? formatEurocentToCurrency(notification.amount).toString() : undefined,
-      value: <Box fontWeight={600}>{notification.amount && formatEurocentToCurrency(notification.amount)}</Box>,
+      rawValue: notification.amount
+        ? formatEurocentToCurrency(notification.amount).toString()
+        : undefined,
+      value: (
+        <Box fontWeight={600}>
+          {notification.amount && formatEurocentToCurrency(notification.amount)}
+        </Box>
+      ),
     },
     {
       label: t('detail.iun', { ns: 'notifiche' }),
@@ -201,6 +208,7 @@ const NotificationDetail = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    dispatch(resetLegalFactState());
     void dispatch(
       getSentNotificationLegalfact({
         iun: notification.iun,
@@ -234,11 +242,11 @@ const NotificationDetail = () => {
 
   const getDownloadFilesMessage = useCallback((): string => {
     if (isCancelled) {
-      return "Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.";
+      return 'Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.';
     } else if (hasDocumentsAvailable) {
-      return "I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.";
+      return 'I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.';
     } else {
-      return "Poiché sono trascorsi 120 giorni dalla data di perfezionamento, i documenti non sono più disponibili.";
+      return 'Poiché sono trascorsi 120 giorni dalla data di perfezionamento, i documenti non sono più disponibili.';
     }
   }, [isCancelled, hasDocumentsAvailable]);
 
@@ -274,22 +282,24 @@ const NotificationDetail = () => {
   }, [legalFactDownloadUrl]);
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
-  
-  const properBreadcrumb = <PnBreadcrumb
-    linkRoute={routes.DASHBOARD}
-    linkLabel={
-      <Fragment>
-        <EmailIcon sx={{ mr: 0.5 }} />
-        {t('detail.breadcrumb-root', { ns: 'notifiche' })}
-      </Fragment>
-    }
-    currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
-    goBackLabel={t('button.indietro', { ns: 'common' })}
-  />;
+
+  const properBreadcrumb = (
+    <PnBreadcrumb
+      linkRoute={routes.DASHBOARD}
+      linkLabel={
+        <Fragment>
+          <EmailIcon sx={{ mr: 0.5 }} />
+          {t('detail.breadcrumb-root', { ns: 'notifiche' })}
+        </Fragment>
+      }
+      currentLocationLabel={t('detail.breadcrumb-leaf', { ns: 'notifiche' })}
+      goBackLabel={t('button.indietro', { ns: 'common' })}
+    />
+  );
 
   const breadcrumb = (
     <Fragment>
-      { properBreadcrumb }
+      {properBreadcrumb}
       <TitleBox
         variantTitle="h4"
         title={notification.subject}
@@ -374,16 +384,20 @@ const NotificationDetail = () => {
 
   return (
     <>
-      {hasNotificationSentApiError && 
+      {hasNotificationSentApiError && (
         <Box className={classes.root} sx={{ p: 3 }}>
           {properBreadcrumb}
           <ApiError onClick={() => fetchSentNotification()} mt={3} />
         </Box>
-      }
-      {!hasNotificationSentApiError && 
+      )}
+      {!hasNotificationSentApiError && (
         <Box className={classes.root} sx={{ p: { xs: 3, lg: 0 } }}>
           {isMobile && breadcrumb}
-          <Grid container direction={isMobile ? 'column-reverse' : 'row'} spacing={isMobile ? 3 : 0}>
+          <Grid
+            container
+            direction={isMobile ? 'column-reverse' : 'row'}
+            spacing={isMobile ? 3 : 0}
+          >
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
@@ -404,12 +418,11 @@ const NotificationDetail = () => {
               <Box sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
                 <TimedMessage
                   timeout={timeoutMessage}
-                  message={<Alert
-                    severity={'warning'}
-                    sx={{mb: 3}}
-                  >
-                    {t('detail.document-not-available', { ns: 'notifiche' })}
-                  </Alert>}
+                  message={
+                    <Alert severity={'warning'} sx={{ mb: 3 }}>
+                      {t('detail.document-not-available', { ns: 'notifiche' })}
+                    </Alert>
+                  }
                 />
                 <NotificationDetailTimeline
                   recipients={recipients}
@@ -427,7 +440,7 @@ const NotificationDetail = () => {
             </Grid>
           </Grid>
         </Box>
-      }
+      )}
       <ModalAlert />
     </>
   );

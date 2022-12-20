@@ -29,7 +29,7 @@ import {
   getReceivedNotificationLegalfact,
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
-import { resetState } from '../redux/notification/reducers';
+import { resetLegalFactState, resetState } from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
@@ -132,6 +132,7 @@ const NotificationDetail = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    dispatch(resetLegalFactState());
     void dispatch(
       getReceivedNotificationLegalfact({ iun: notification.iun, legalFact, mandateId })
     );
