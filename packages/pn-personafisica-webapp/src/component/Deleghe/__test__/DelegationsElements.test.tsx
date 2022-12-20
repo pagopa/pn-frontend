@@ -1,5 +1,5 @@
 import { fireEvent } from '@testing-library/react';
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import { AcceptButton, Menu, OrganizationsList } from '../DelegationsElements';
 
 jest.mock('react-i18next', () => ({
@@ -63,11 +63,5 @@ describe('DelegationElements', () => {
     const result = render(<AcceptButton id={'1'} name={'test'} />);
 
     expect(result.container).toHaveTextContent(/deleghe.accept/i);
-  });
-
-  it('is Menu component accessible', async ()=>{
-    const result = render(<Menu />);
-    const results = await axe(result?.container);
-    expect(results).toHaveNoViolations();
   });
 });

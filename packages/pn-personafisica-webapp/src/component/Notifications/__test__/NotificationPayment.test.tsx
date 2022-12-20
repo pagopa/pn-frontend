@@ -1,13 +1,13 @@
 /* eslint-disable functional/no-let */
-import { apiOutcomeTestHelper, AppResponseMessage, NotificationDetailPayment, ResponseEventDispatcher } from "@pagopa-pn/pn-commons";
+import { apiOutcomeTestHelper, AppResponseMessage, ResponseEventDispatcher } from "@pagopa-pn/pn-commons";
 import { act, waitFor } from '@testing-library/react';
-import * as redux from 'react-redux';
 import { PaymentStatus, PaymentInfoDetail } from "@pagopa-pn/pn-commons";
-import { axe, render, screen } from "../../../__test__/test-utils";
+import { render, screen } from "../../../__test__/test-utils";
 import * as actions from '../../../redux/notification/actions';
 import * as hooks from '../../../redux/hooks';
 import NotificationPayment from "../NotificationPayment";
 import { NotificationsApi } from "../../../api/notifications/Notifications.api";
+import { doMockUseDispatch, mockedNotificationDetailPayment } from "./NotificationPayment.test-utils";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -27,32 +27,6 @@ jest.mock('react-i18next', () => ({
     ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
   };
 });
-
-const mockedNotificationDetailPayment = {
-  notificationFeePolicy: 'FLAT_RATE',
-  noticeCode: 'mocked-noticeCode',
-  creditorTaxId: "mocked-creditorTaxId",
-  pagoPaForm: {
-    digests: {
-      sha256: "mocked-pagopa-sha256"
-    },
-    contentType: "application/pdf",
-    ref: {
-      key: "mocked-pagopa-key",
-      versionToken: "mockedVersionToken"
-    }
-  },
-  f24flatRate: {
-    digests: {
-      sha256: "mocked-f24-sha256"
-    },
-    contentType: "application/pdf",
-    ref: {
-      key: "mocked-f24-key",
-      versionToken: "mockedVersionToken"
-    }
-  }
-} as NotificationDetailPayment;
 
 const mocked_payments_detail = {
   required: {
@@ -104,12 +78,7 @@ describe('NotificationPayment component', () => {
     actionSpy.mockImplementation(mockActionFn as any);
     
     // mock dispatch
-    mockDispatchFn = jest.fn(() => ({
-      unwrap: () => Promise.resolve(),
-    }));
-
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+    mockDispatchFn = doMockUseDispatch();
   });
 
   afterEach(() => {
@@ -512,32 +481,6 @@ describe('NotificationPayment component', () => {
 
     const button = screen.queryByRole("button");
     expect(button).not.toBeInTheDocument();
-  });
-
-  it.skip('does not have basic accessibility issues (required status)', async () => {
-    const result = render(<NotificationPayment iun="mocked-iun" notificationPayment={mockedNotificationDetailPayment} onDocumentDownload={mockActionFn}/>);
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
-
-    const amountLoader = screen.getByTestId("loading-skeleton");
-    expect(amountLoader).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({noticeCode: "mocked-noticeCode", taxId: "mocked-creditorTaxId"});
-      expect(amountLoader).not.toBeInTheDocument();
-    });
-
-    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
-    expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent(/473,50\b/);
-
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail("render() returned undefined!");
-    }
   });
 });
 

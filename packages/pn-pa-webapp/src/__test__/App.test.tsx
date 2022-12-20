@@ -4,7 +4,7 @@ import { theme } from '@pagopa/mui-italia';
 import { apiOutcomeTestHelper } from '@pagopa-pn/pn-commons';
 
 /* eslint-disable import/order */
-import { render, axe } from './test-utils';
+import { render } from './test-utils';
 import App from '../App';
 import { Party } from '../models/party';
 import { AUTH_ACTIONS } from '../redux/auth/actions';
@@ -92,12 +92,6 @@ describe('App', () => {
     render(<Component/>, { preloadedState: reduxInitialState() });
     const welcomeElement = screen.getByText(/header.notification-platform/i);
     expect(welcomeElement).toBeInTheDocument();
-  });
-
-  it.skip('Test if automatic accessibility tests passes', async () => {
-    const { container } = render(<Component/>);
-    const result = await axe(container);
-    expect(result).toHaveNoViolations();
   });
 
   it('Sidemenu not included if error in API call to fetch organization', async () => {
