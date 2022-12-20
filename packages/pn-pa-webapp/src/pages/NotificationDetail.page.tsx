@@ -57,10 +57,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const refreshPage = () => {
-  window.location.reload();
-};
-
 const NotificationDetail = () => {
   const classes = useStyles();
   const { id } = useParams();
@@ -86,8 +82,6 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
-
-  const [timeoutMessage, setTimeoutMessage] = useState(0);
 
   const getRecipientsNoticeCodeField = (
     filteredRecipients: Array<NotificationDetailRecipient>,
@@ -279,12 +273,8 @@ const NotificationDetail = () => {
     }
   }, [legalFactDownloadUrl]);
 
-  useEffect(() => {
-    if (legalFactDownloadRetryAfter && legalFactDownloadRetryAfter > 0) {
-      setTimeoutMessage(legalFactDownloadRetryAfter * 1000);
-    }
-  }, [legalFactDownloadRetryAfter]);
-
+  const timeoutMessage = legalFactDownloadRetryAfter * 1000;
+  
   const properBreadcrumb = <PnBreadcrumb
     linkRoute={routes.DASHBOARD}
     linkLabel={
@@ -420,7 +410,6 @@ const NotificationDetail = () => {
                   >
                     {t('detail.document-not-available', { ns: 'notifiche' })}
                   </Alert>}
-                  callback={() => refreshPage()}
                 />
                 <NotificationDetailTimeline
                   recipients={recipients}

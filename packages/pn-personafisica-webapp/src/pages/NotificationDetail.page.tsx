@@ -50,10 +50,6 @@ type LocationState = {
   fromQrCode?: boolean;    // indicates whether the user arrived to the notification detail page from the QR code
 };
 
-const refreshPage = () => {
-  window.location.reload();
-};
-
 const NotificationDetail = () => {
   const classes = useStyles();
   const { id, mandateId } = useParams();
@@ -74,7 +70,6 @@ const NotificationDetail = () => {
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
-  const [timeoutMessage, setTimeoutMessage] = useState(0);
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -201,11 +196,7 @@ const NotificationDetail = () => {
     }
   }, [legalFactDownloadUrl]);
 
-  useEffect(() => {
-    if (legalFactDownloadRetryAfter && legalFactDownloadRetryAfter > 0) {
-      setTimeoutMessage(legalFactDownloadRetryAfter * 1000);
-    }
-  }, [legalFactDownloadRetryAfter]);
+  const timeoutMessage = legalFactDownloadRetryAfter * 1000;
 
   const fromQrCode = useMemo(() => !!(location.state && (location.state as LocationState).fromQrCode), [location]);
 
@@ -303,7 +294,6 @@ const NotificationDetail = () => {
                   >
                     {t('detail.document-not-available', { ns: 'notifiche' })}
                   </Alert>}
-                  callback={() => refreshPage()}
                 />
                 <NotificationDetailTimeline
                   recipients={notification.recipients}
