@@ -3,6 +3,7 @@ env:
   shell: bash
   secrets-manager:
     SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM:token
+    CYPRESS_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-session-LRjFc6:session
 phases:
   install:
     runtime-versions:
@@ -21,15 +22,18 @@ phases:
   build:
     commands:
       - echo Running tests with coverage...
-      # - yarn test:coverage
       - |
         if [ $SUB_PRJ_NAME == "packages/pn-pa-webapp" -o $SUB_PRJ_NAME == "packages/pn-personafisica-webapp" ] ; then
           echo Installing wait-on module...
           yarn add wait-on
           echo Starting application...
           yarn start-waiton
-          yarn cy-ci
+          echo Running cypress in headless mode...
+          echo $CYPRESS_ENV
+          yarn cy-run --config "$CYPRESS_ENV"
         fi
+      # yarn cy-run
+      # - yarn test:coverage
       # - BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
       # - if echo $CODEBUILD_SOURCE_VERSION | grep -q ^pr/ ; then PR_NUM=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/pr\///'); BRANCH_TARGET=$(echo $CODEBUILD_WEBHOOK_BASE_REF | sed 's/refs\/heads\///'); export PR_NUM BRANCH_TARGET; fi;
       # - echo Running sonar task...
