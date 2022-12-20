@@ -19,7 +19,9 @@
   "scripts": {
     "start": "tsc -w --sourceMap=true",
     "build": "tsc",
-    "test": "react-scripts test --watchAll=false",
+    "test": "react-scripts test --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\"",
+    "test:a11y": "react-scripts test --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.(tsx|ts)$\"",
+    "test:all": "react-script test --watchAll=false",
     "test:coverage": "tsc && react-scripts test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
     "eject": "react-scripts eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",

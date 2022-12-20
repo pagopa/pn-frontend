@@ -11,7 +11,7 @@ export const getSentNotification = createAsyncThunk<NotificationDetail, string>(
   performThunkAction((params: string) => NotificationsApi.getSentNotification(params))
 );
 
-export const getSentNotificationLegalfact = createAsyncThunk<{url: string}, {iun: string; legalFact: LegalFactId}>(
+export const getSentNotificationLegalfact = createAsyncThunk<{url: string; retryAfter?: number}, {iun: string; legalFact: LegalFactId}>(
   'getSentNotificationLegalfact',
   async (params: {iun: string; legalFact: LegalFactId}, { rejectWithValue }) => {
     try {

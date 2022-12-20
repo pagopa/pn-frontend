@@ -10,12 +10,15 @@ import {
   PaymentAttachmentSName,
   PaymentInfo,
   RecipientType,
+  PaymentStatus,
+  PaymentInfoDetail,
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 
 import {
   getNotificationPaymentInfo,
+  getNotificationPaymentUrl,
   getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
@@ -48,6 +51,7 @@ const initialState = {
   } as NotificationDetailForRecipient,
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
+  legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
   paymentInfo: {} as PaymentInfo,
@@ -59,6 +63,10 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
+    resetLegalFactState: (state) => {
+      state.legalFactDownloadUrl = '';
+      state.legalFactDownloadRetryAfter = 0;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
@@ -72,6 +80,9 @@ const notificationSlice = createSlice({
     builder.addCase(getReceivedNotificationLegalfact.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.legalFactDownloadUrl = action.payload.url;
+      }
+      if (action.payload.retryAfter) {
+        state.legalFactDownloadRetryAfter = action.payload.retryAfter;
       }
     });
     builder.addCase(getPaymentAttachment.fulfilled, (state, action) => {
@@ -89,9 +100,16 @@ const notificationSlice = createSlice({
         state.paymentInfo = action.payload;
       }
     });
+    builder.addCase(getNotificationPaymentUrl.rejected, (state) => {
+      state.paymentInfo = {
+        ...state.paymentInfo,
+        status: PaymentStatus.FAILED,
+        detail: PaymentInfoDetail.GENERIC_ERROR,
+      };
+    });
   },
 });
 
-export const { resetState } = notificationSlice.actions;
+export const { resetState, resetLegalFactState } = notificationSlice.actions;
 
 export default notificationSlice;
