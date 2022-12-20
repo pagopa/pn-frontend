@@ -33,7 +33,7 @@ export const getReceivedNotification = createAsyncThunk<
 );
 
 export const getReceivedNotificationLegalfact = createAsyncThunk<
-  { url: string },
+  { url: string; retryAfter?: number },
   { iun: string; legalFact: LegalFactId; mandateId?: string }
 >(
   'getReceivedNotificationLegalfact',
