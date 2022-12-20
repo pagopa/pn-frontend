@@ -1,13 +1,7 @@
 import * as React from 'react';
-import {
-  fireEvent,
-  RenderResult
-} from '@testing-library/react';
-import * as redux from 'react-redux';
 import { axe, render } from "../../../__test__/test-utils";
 
 import { CourtesyChannelType, IOAllowedValues } from "../../../models/contacts";
-import * as actions from '../../../redux/contact/actions';
 import IOContact from "../IOContact";
 
 jest.mock('react-i18next', () => ({

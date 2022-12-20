@@ -1,6 +1,6 @@
 import { act, RenderResult } from '@testing-library/react';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
 
