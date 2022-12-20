@@ -14,6 +14,7 @@ phases:
       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
       - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
       - apt install --no-install-recommends yarn
+      - apt-get install xvfb libgtk2.0-0 libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2
   pre_build:
     commands:
       - echo launching yarn install in $SUB_PRJ_NAME...
@@ -28,7 +29,6 @@ phases:
           echo Starting application...
           yarn start-waiton
           echo Running cypress in headless mode...
-          echo $CYPRESS_ENV
           yarn cy-run --headless --config '$CYPRESS_ENV'
         fi
       # yarn cy-run
