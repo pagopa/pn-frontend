@@ -105,7 +105,7 @@ const NuovaDelega = () => {
   tomorrow.setHours(0, 0, 0, 0);
 
   const initialValues = {
-    selectPersonaFisicaOrPersonaGiuridica: 'pf',
+    selectPersonaFisicaOrPersonaGiuridica: '',
     codiceFiscale: '',
     nome: '',
     cognome: '',
@@ -268,7 +268,6 @@ const NuovaDelega = () => {
                             control={<Radio />}
                             name={'selectPersonaFisicaOrPersonaGiuridica'}
                             label={t('nuovaDelega.form.legalPerson')}
-                            disabled
                           />
                         </RadioGroup>
                       </FormControl>
