@@ -28,7 +28,7 @@ phases:
           echo Starting application...
           yarn start-waiton
           echo Running cypress in headless mode...
-          cypress run --headless
+          yarn cy-run --browser chromium --headless
         fi
       # yarn cy-run
       # - yarn test:coverage
