@@ -97,7 +97,7 @@ describe('App', () => {
   /**
    * Tests che usano Component e inizializzazione "semplice" di i18n.
    */
-  describe("tests che non analizzano dettagli (test solo di accessibilità e renderizzazione)", () => {
+  describe("tests che non analizzano dettagli (test solo di renderizzazione)", () => {
     beforeEach(() => {
       void i18n.init();
     });
@@ -106,14 +106,7 @@ describe('App', () => {
       render(<Component />);
       const loading = screen.getByText(/loading.../i);
       expect(loading).toBeInTheDocument();
-    });
-  
-    it.skip('Test if automatic accessibility tests passes', async () => {
-      const { container } = render(<Component />);
-      const result = await axe(container);
-      expect(result).toHaveNoViolations();
-    });
-    
+    });    
   });
 
 

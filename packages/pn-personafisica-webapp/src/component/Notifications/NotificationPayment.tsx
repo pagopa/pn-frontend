@@ -397,13 +397,13 @@ const NotificationPayment: React.FC<Props> = ({
       <Paper sx={{ p: 3, mb: '1rem' }} className="paperContainer">
         <Grid container direction="row" justifyContent="space-between">
           <Grid item xs={8} lg={8}>
-            <Typography variant="h6" display="inline" fontWeight={600} fontSize={24}>
+            <Typography variant="h5" display="inline" fontWeight={600} fontSize={24}>
               {data.title}
             </Typography>
           </Grid>
           <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
             <Typography
-              variant="h6"
+              variant="h5"
               aria-label={t('detail.payment.amount', { ns: 'notifiche' })}
               display="inline"
               fontWeight={600}

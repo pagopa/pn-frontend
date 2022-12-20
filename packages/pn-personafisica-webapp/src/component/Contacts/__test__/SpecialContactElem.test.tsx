@@ -1,6 +1,6 @@
 import { act, RenderResult } from '@testing-library/react';
 
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
 
@@ -13,10 +13,10 @@ jest.mock('react-i18next', () => ({
 }));
 
 describe('SpecialContactElem Component', () => {
-  // eslint-disable-next-line functional/no-let
-  let result: RenderResult | undefined;
+  it('renders SpecialContactElem', async () => {
+    // eslint-disable-next-line functional/no-let
+    let result: RenderResult | undefined;
 
-  beforeEach(async () => {
     // render component
     await act(async () => {
       result = render(
@@ -33,13 +33,7 @@ describe('SpecialContactElem Component', () => {
         </DigitalContactsCodeVerificationProvider>
       );
     });
-  });
 
-  afterEach(() => {
-    result = undefined;
-  });
-
-  it('renders SpecialContactElem', () => {
     expect(result?.container).toHaveTextContent('Mocked Sender');
     const specialContactForms = result?.queryAllByTestId('specialContactForm');
     expect(specialContactForms).toHaveLength(2);
@@ -54,14 +48,5 @@ describe('SpecialContactElem Component', () => {
     expect(secondFormButtons).toHaveLength(2);
     expect(secondFormButtons[0]).toHaveTextContent('button.modifica');
     expect(secondFormButtons[1]).toHaveTextContent('button.rimuovi');
-  });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail('render() returned undefined!');
-    }
   });
 });

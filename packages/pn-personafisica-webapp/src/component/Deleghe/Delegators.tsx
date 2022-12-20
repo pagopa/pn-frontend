@@ -90,7 +90,7 @@ const Delegators = () => {
     <>
       <Box mb={8}>
         <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <Typography variant="h6">{t('deleghe.delegatorsTitle')}</Typography>
+          <Typography variant="h5">{t('deleghe.delegatorsTitle')}</Typography>
         </Stack>
         <ApiErrorWrapper apiId={DELEGATION_ACTIONS.GET_DELEGATORS} reloadAction={() => dispatch(getDelegators())} 
           mainText={t('deleghe.delegatorsApiErrorMessage')}
