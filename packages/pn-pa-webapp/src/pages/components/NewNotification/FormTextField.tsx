@@ -11,6 +11,7 @@ type Props = {
   setFieldValue: any;
   handleBlur?: any;
   width?: number;
+  bornEmpty?: boolean;
 };
 
 const FormTextField = ({
@@ -22,6 +23,7 @@ const FormTextField = ({
   errors,
   handleBlur,
   width = 12,
+  bornEmpty = true,
 }: Props) => (
   <Grid item xs={width}>
     <TextField
@@ -34,8 +36,8 @@ const FormTextField = ({
       onBlur={handleBlur}
       label={label}
       name={keyName}
-      error={Boolean(getIn(touched, keyName)) && Boolean(getIn(errors, keyName))}
-      helperText={getIn(touched, keyName) && getIn(errors, keyName)}
+      error={(!bornEmpty || Boolean(getIn(touched, keyName))) && Boolean(getIn(errors, keyName))}
+      helperText={(!bornEmpty || getIn(touched, keyName)) && getIn(errors, keyName)}
       fullWidth
     />
   </Grid>
