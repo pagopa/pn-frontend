@@ -1,7 +1,7 @@
 import { DatePickerTypes } from "../types";
 import { getLocalizedOrDefaultLabel } from "./localization.service";
 
-export function isToday(date: Date | DatePickerTypes): boolean {
+export function isToday(date: DatePickerTypes): boolean {
   const today = new Date();
   return (
     date?.getDate() === today.getDate() &&
