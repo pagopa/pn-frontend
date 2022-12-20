@@ -6,6 +6,7 @@ import {
   NotificationDetail,
   PaymentAttachmentNameType,
   PaymentInfo,
+  PaymentNotice
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
 
@@ -22,6 +23,7 @@ import {
   NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
+  NOTIFICATION_PAYMENT_URL,
 } from './notifications.routes';
 
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
@@ -147,5 +149,19 @@ export const NotificationsApi = {
   getNotificationPaymentInfo: (noticeCode: string, taxId: string): Promise<PaymentInfo> =>
     apiClient
       .get<PaymentInfo>(NOTIFICATION_PAYMENT_INFO(taxId, noticeCode))
+      .then((response) => response.data),
+
+  /**
+   * Gets current user's notification payment url
+   * @param  {string} noticeCode
+   * @param  {string} taxId
+   * @returns Promise
+   */
+  getNotificationPaymentUrl: (paymentNotice: PaymentNotice, returnUrl: string): Promise<{ checkoutUrl: string }> =>
+    apiClient
+      .post<{ checkoutUrl: string }>(NOTIFICATION_PAYMENT_URL(), {
+        paymentNotice,
+        returnUrl
+      })
       .then((response) => response.data),
 };

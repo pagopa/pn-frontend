@@ -1,6 +1,14 @@
+import React from 'react';
+
 import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { formatToTimezoneString, getNextDay, tenYearsAgo, today, Notification } from '@pagopa-pn/pn-commons';
+import {
+  formatToTimezoneString,
+  getNextDay,
+  tenYearsAgo,
+  today,
+  Notification,
+} from '@pagopa-pn/pn-commons';
 
 import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/dashboard/actions';
@@ -128,7 +136,7 @@ describe('Dashboard Page', () => {
     fireEvent.click(itemsPerPageSelectorBtn!);
     const itemsPerPageDropdown = await waitFor(() => screen.queryByRole('presentation'));
     expect(itemsPerPageDropdown).toBeInTheDocument();
-    const itemsPerPageItem = within(itemsPerPageDropdown!).queryByText('100');
+    const itemsPerPageItem = within(itemsPerPageDropdown!).queryByText('50');
     // reset mock dispatch function
     mockDispatchFn.mockReset();
     mockDispatchFn.mockClear();
@@ -136,7 +144,7 @@ describe('Dashboard Page', () => {
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockDispatchFn).toBeCalledWith({
-        payload: { size: 100, page: 0 },
+        payload: { size: 50, page: 0 },
         type: 'dashboardSlice/setPagination',
       });
     });
