@@ -10,7 +10,7 @@
     "@mui/material": "^5.8.6",
     "@mui/x-date-pickers": "^5.0.0-alpha.5",
     "@pagopa-pn/pn-commons": "^1.5.3",
-    "@pagopa/mui-italia": "^0.8.1",
+    "@pagopa/mui-italia": "^0.8.10",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.11.21",

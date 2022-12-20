@@ -10,8 +10,6 @@ describe('Delegation', () => {
   beforeEach(() => {
     cy.viewport(1920, 1080);
 
-    // cy.intercept('GET', /delivery\/notifications\/sent/, {
-
     cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}**size=10`, {
       fixture: 'notifications/list-10/page-1',
     }).as('getNotifications');
@@ -42,7 +40,6 @@ describe('Delegation', () => {
         fixture: 'notifications/delegator/detail',
       }).as('notificationAsDelegate');
       
-      cy.get('[data-testid="ExpandMoreIcon"]').click();
       cy.get('[data-cy="collapsible-list"] > :nth-child(2)').click();
 
       cy.wait('@notificationsAsDelegate').then((interception) => {
