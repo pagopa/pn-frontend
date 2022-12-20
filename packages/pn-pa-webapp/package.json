@@ -65,7 +65,6 @@
     ]
   },
   "devDependencies": {
-    "sonarqube-scanner": "^2.8.1",
     "@cypress/webpack-preprocessor": "^5.15.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
@@ -94,6 +93,8 @@
     "prettier": "^2.4.1",
     "react-scripts": "^5.0.1",
     "regex-replace": "^2.3.1",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "sonarqube-scanner": "^2.8.1",
+    "wait-on": "^7.0.1"
   }
 }
