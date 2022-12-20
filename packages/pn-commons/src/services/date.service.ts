@@ -1,11 +1,12 @@
+import { DatePickerTypes } from "../types";
 import { getLocalizedOrDefaultLabel } from "./localization.service";
 
-export function isToday(date: Date): boolean {
+export function isToday(date: Date | DatePickerTypes): boolean {
   const today = new Date();
   return (
-    date.getDate() === today.getDate() &&
-    date.getMonth() === today.getMonth() &&
-    date.getFullYear() === today.getFullYear()
+    date?.getDate() === today.getDate() &&
+    date?.getMonth() === today.getMonth() &&
+    date?.getFullYear() === today.getFullYear()
   );
 }
 
@@ -28,13 +29,13 @@ export function formatTimeHHMM(dateString: string): string {
   return `${hour}:${minute}`;
 }
 
-export function formatDateTime(dateString: string): { date: string, time: string } {
+export function formatDateTime(dateString: string): { date: string; time: string } {
   const hourOfDayLabel = getLocalizedOrDefaultLabel(
     'common',
     'date-time.hour-of-day',
     "ore"
   );
-  return {date: formatDate(dateString), time: `${hourOfDayLabel} ${formatTimeHHMM(dateString)}`};
+  return { date: formatDate(dateString), time: `${hourOfDayLabel} ${formatTimeHHMM(dateString)}` };
 }
 
 export function formatToSlicedISOString(date: Date): string {
