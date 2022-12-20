@@ -9,12 +9,14 @@ phases:
     runtime-versions:
       nodejs: 16
     commands:
+      - apt-get update
+      - apt-get -y upgrade
       #install yarn
       - echo installing yarn
       - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
       - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
       - apt install --no-install-recommends yarn
-      - yum -y install Xvfb
+      - apt-get install xvfb -y
   pre_build:
     commands:
       - echo launching yarn install in $SUB_PRJ_NAME...
