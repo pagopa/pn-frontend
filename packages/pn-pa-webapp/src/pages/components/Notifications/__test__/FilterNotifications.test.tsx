@@ -8,7 +8,6 @@ import {
   testFormElements,
   testInput,
   testSelect,
-  axe,
 } from '../../../../__test__/test-utils';
 import FilterNotifications from '../FilterNotifications';
 
@@ -285,11 +284,4 @@ describe('Filter Notifications Table Component', () => {
       });
     });
   });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
-  }, 15000);
 });

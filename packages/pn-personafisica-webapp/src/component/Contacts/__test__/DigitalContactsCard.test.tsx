@@ -38,20 +38,4 @@ describe('DigitalContactsCard Component', () => {
     expect(buttonEl).toBeInTheDocument();
     expect(buttonEl).toHaveTextContent(/Click me/i);
   });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    const { container } = render(
-      <DigitalContactsCard
-        sectionTitle={'mocked-sectionTitle'}
-        title={title}
-        subtitle={subTitle}
-        actions={actions}
-        avatar="avatar"
-      >
-        {body}
-      </DigitalContactsCard>
-    );
-    const result = await axe(container);
-    expect(result).toHaveNoViolations();
-  });
 });

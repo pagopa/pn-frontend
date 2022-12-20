@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { render, axe } from "../../../__test__/test-utils";
 import CourtesyContacts from "../CourtesyContacts";
 
@@ -27,11 +28,5 @@ describe('CourtesyContacts Component', () => {
     const courtesyContactsListComponents = result.getAllByText('CourtesyContactsList');
     expect(courtesyContactsListComponents[0]).toBeInTheDocument();
     expect(courtesyContactsListComponents).toHaveLength(1);
-  });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    const { container } = render(<CourtesyContacts recipientId="mock-recipient" contacts={[]}/>);
-    const result = await axe(container);
-    expect(result).toHaveNoViolations();
   });
 });

@@ -1,19 +1,19 @@
-/* eslint-disable functional/no-let */
+import React from 'react';
 import {
   apiOutcomeTestHelper,
   AppResponseMessage,
   NotificationDetailPayment,
   ResponseEventDispatcher,
+  PaymentStatus, PaymentInfoDetail
 } from '@pagopa-pn/pn-commons';
 import { act, waitFor } from '@testing-library/react';
-import * as redux from 'react-redux';
-import { PaymentStatus, PaymentInfoDetail } from '@pagopa-pn/pn-commons';
-import { axe, render, screen } from '../../../__test__/test-utils';
+
+import { render, screen } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/notification/actions';
 import * as hooks from '../../../redux/hooks';
-import NotificationPayment from '../NotificationPayment';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
-import React from 'react';
+import NotificationPayment from '../NotificationPayment';
+import { doMockUseDispatch } from './NotificationPayment.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -113,8 +113,10 @@ const mocked_payments_detail = {
 };
 
 describe('NotificationPayment component', () => {
+  /* eslint-disable functional/no-let */
   let mockDispatchFn: jest.Mock;
   let mockActionFn: jest.Mock;
+  /* eslint-enable functional/no-let */
   const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
 
   beforeEach(() => {
@@ -123,12 +125,7 @@ describe('NotificationPayment component', () => {
     actionSpy.mockImplementation(mockActionFn as any);
 
     // mock dispatch
-    mockDispatchFn = jest.fn(() => ({
-      unwrap: () => Promise.resolve(),
-    }));
-
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
+    mockDispatchFn = doMockUseDispatch();
   });
 
   afterEach(() => {
@@ -644,43 +641,6 @@ describe('NotificationPayment component', () => {
     const button = screen.queryByRole('button');
     expect(button).not.toBeInTheDocument();
   });
-
-  it.skip('does not have basic accessibility issues (required status)', async () => {
-    const result = render(
-      <NotificationPayment
-        iun="mocked-iun"
-        notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
-        senderDenomination="mocked-senderDenomination"
-        subject="mocked-subject"
-      />
-    );
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
-
-    const amountLoader = screen.getByTestId('loading-skeleton');
-    expect(amountLoader).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
-      expect(mockActionFn).toBeCalledWith({
-        noticeCode: 'mocked-noticeCode',
-        taxId: 'mocked-creditorTaxId',
-      });
-      expect(amountLoader).not.toBeInTheDocument();
-    });
-
-    const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
-    expect(amount).toBeInTheDocument();
-    expect(amount).toHaveTextContent(/473,50\b/);
-
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail('render() returned undefined!');
-    }
-  });
 });
 
 describe('NotificationPayment - different payment fetch API behaviors', () => {
@@ -740,3 +700,4 @@ describe('NotificationPayment - different payment fetch API behaviors', () => {
     apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
+
