@@ -18,7 +18,16 @@ phases:
       - apt install --no-install-recommends yarn
       # cypress dependencies
       - apt-get install libatk1.0-0 -y
-      # - apt-get install libatk-bridge2.0-0 -y
+      - apt-get install libatk-bridge2.0-0 -y
+      - apt-get install libcups2 -y
+      - apt-get install libgtk-3-0 -y
+      - apt-get install libxcomposite-dev -y
+      - apt-get install libxdamage-dev -y
+      - apt-get install libxrandr2 -y
+      - apt-get install libgbm-dev -y
+      - apt-get install libxkbcommon-x11-0 -y
+      - apt-get install libasound2 -y
+      - apt-get install libatspi2.0-dev -y
   pre_build:
     commands:
       - echo launching yarn install in $SUB_PRJ_NAME...
