@@ -10,7 +10,7 @@ import {
   Notification,
 } from '@pagopa-pn/pn-commons';
 
-import { render, axe } from '../../__test__/test-utils';
+import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/dashboard/actions';
 import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
 import Dashboard from '../Dashboard.page';
@@ -182,13 +182,4 @@ describe('Dashboard Page', () => {
     });
   });
 
-  it.skip('does not have basic accessibility issues rendering the page', async () => {
-    await act(async () => {
-      result = render(<Dashboard />, initialState(notificationsToFe.resultsPage));
-    });
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
-  }, 15000);
 });

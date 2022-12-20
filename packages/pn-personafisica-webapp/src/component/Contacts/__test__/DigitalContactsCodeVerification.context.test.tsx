@@ -1,15 +1,12 @@
-import { ReactNode } from 'react';
-import * as redux from 'react-redux';
+import * as React from 'react';
 import { fireEvent, RenderResult, screen, waitFor } from '@testing-library/react';
+import * as redux from 'react-redux';
 
-import { CourtesyChannelType, LegalChannelType } from '../../../models/contacts';
-import { axe, render } from '../../../__test__/test-utils';
+import { LegalChannelType } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import * as hooks from '../../../redux/hooks';
-import {
-  DigitalContactsCodeVerificationProvider,
-  useDigitalContactsCodeVerificationContext,
-} from '../DigitalContactsCodeVerification.context';
+import { axe, render } from '../../../__test__/test-utils';
+import { Component, mockedStore, Wrapper } from './DigitalContactsCodeVerification.context.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -18,36 +15,6 @@ jest.mock('react-i18next', () => ({
   }),
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
-
-const mockedStore = {
-  legal: [],
-  courtesy: [{
-    addressType: 'courtesy',
-    recipientId: 'mocked-recipientId',
-    senderId: 'mocked-senderId',
-    channelType: CourtesyChannelType.EMAIL,
-    value: "mocked-value",
-    code: ''
-  }]
-};
-
-const Wrapper = ({ children }: { children: ReactNode }) => (
-  <DigitalContactsCodeVerificationProvider>{children}</DigitalContactsCodeVerificationProvider>
-);
-
-const Component = () => {
-  const { initValidation } = useDigitalContactsCodeVerificationContext();
-
-  const handleButtonClick = () => {
-    initValidation(LegalChannelType.PEC, 'mocked-value', 'mocked-recipientId', 'mocked-senderId');
-  };
-
-  return (
-    <div>
-      <button onClick={handleButtonClick}>Click me</button>
-    </div>
-  );
-};
 
 const showDialog = async (
   result: RenderResult,
@@ -173,14 +140,5 @@ describe('DigitalContactsCodeVerification Context', () => {
 
     fireEvent.click(confirmButton);
     await screen.findAllByRole('heading', { name: /legal-contacts.pec-verify\b/ });
-  });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail("render() returned undefined!");
-    }
   });
 });

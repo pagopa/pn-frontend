@@ -1,4 +1,3 @@
-import React from 'react';
 import { useEffect, useState } from 'react';
 import { Box, Stack } from '@mui/material';
 import {
@@ -44,7 +43,7 @@ const Deleghe = () => {
   } = useAppSelector((state: RootState) => state.delegationsState.acceptModalState);
   const [pageReady, setPageReady] = useState(false);
 
-  const [errorText, setErrorText] = React.useState('');
+  const [errorText, setErrorText] = useState('');
 
   const dispatch = useAppDispatch();
 
@@ -89,7 +88,7 @@ const Deleghe = () => {
     setErrorText(error?.message.content || '');
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     AppResponsePublisher.error.subscribe('acceptDelegation', handleAcceptDelegationError);
 
     return () =>

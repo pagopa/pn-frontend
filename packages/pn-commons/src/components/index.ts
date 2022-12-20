@@ -42,6 +42,7 @@ import LoadingPage from './LoadingPage';
 import ApiError from './ApiError/ApiError';
 import ApiErrorWrapper from './ApiError/ApiErrorWrapper';
 import SnackBar from './SnackBar/SnackBar';
+import TimedMessage from './TimedMessage/TimedMessage';
 
 export {
   LoadingOverlay,
@@ -85,6 +86,7 @@ export {
   Prompt,
   CopyToClipboard,
   LoadingPage,
+  TimedMessage
 };
 
 export type { DowntimeLogColumn };

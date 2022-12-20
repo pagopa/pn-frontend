@@ -149,12 +149,6 @@ describe('CourtesyContactItem component', () => {
         });
       });
 
-      it.skip('does not have basic accessibility issues', async () => {
-        if (result) {
-          const results = await axe(result.container);
-          expect(results).toHaveNoViolations();
-        }
-      });
     });
 
     describe('change an existing phone number', () => {
@@ -270,12 +264,6 @@ describe('CourtesyContactItem component', () => {
         });
       });
 
-      it.skip('does not have basic accessibility issues', async () => {
-        if (result) {
-          const results = await axe(result.container);
-          expect(results).toHaveNoViolations();
-        }
-      });
     });
 
     describe('delete an existing phone number', () => {
@@ -333,12 +321,6 @@ describe('CourtesyContactItem component', () => {
       });
     });
 
-    it.skip('does not have basic accessibility issues', async () => {
-      if (result) {
-        const results = await axe(result.container);
-        expect(results).toHaveNoViolations();
-      }
-    });
   });
 
   describe('testing component having type "email"', () => {
@@ -456,13 +438,6 @@ describe('CourtesyContactItem component', () => {
           expect(dialog).not.toBeInTheDocument();
         });
       });
-
-      it.skip('does not have basic accessibility issues', async () => {
-        if (result) {
-          const results = await axe(result.container);
-          expect(results).toHaveNoViolations();
-        }
-      });
     });
 
     describe('change an existing email', () => {
@@ -578,13 +553,6 @@ describe('CourtesyContactItem component', () => {
         await waitFor(() => {
           expect(dialog).not.toBeInTheDocument();
         });
-      });
-
-      it.skip('does not have basic accessibility issues', async () => {
-        if (result) {
-          const results = await axe(result.container);
-          expect(results).toHaveNoViolations();
-        }
       });
     });
 

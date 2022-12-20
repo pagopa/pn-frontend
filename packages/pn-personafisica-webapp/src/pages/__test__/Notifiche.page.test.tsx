@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { act, fireEvent, RenderResult, screen, waitFor, within } from '@testing-library/react';
-import * as redux from 'react-redux';
 import {
   formatToTimezoneString,
   getNextDay,
@@ -12,12 +11,10 @@ import {
   AppResponseMessage,
 } from '@pagopa-pn/pn-commons';
 
-import { axe, render } from '../../__test__/test-utils';
-import * as actions from '../../redux/dashboard/actions';
-import * as hooks from '../../redux/hooks';
-import { notificationsToFe } from '../../redux/dashboard/__test__/test-utils';
-import Notifiche from '../Notifiche.page';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
+import { render } from '../../__test__/test-utils';
+import Notifiche from '../Notifiche.page';
+import { doPrepareTestScenario } from './Notifiche.page.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -41,48 +38,13 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 describe('Notifiche Page - with notifications', () => {
   let result: RenderResult | undefined;
   let mockDispatchFn: jest.Mock;
-
-  const mockActionFn = jest.fn();
+  let mockActionFn: jest.Mock;
 
   beforeEach(async () => {
-    mockDispatchFn = jest.fn(() => ({
-      then: () => Promise.resolve(),
-    }));
-    // mock app selector
-    const spy = jest.spyOn(hooks, 'useAppSelector');
-    spy
-      .mockReturnValueOnce({
-        notifications: notificationsToFe.resultsPage,
-        filters: {
-          startDate: formatToTimezoneString(tenYearsAgo),
-          endDate: formatToTimezoneString(today),
-          recipientId: '',
-          status: '',
-          subjectRegExp: '',
-        },
-        sort: {
-          orderBy: '',
-          order: 'asc',
-        },
-        pagination: {
-          nextPagesKey: ['mocked-page-key-1', 'mocked-page-key-2', 'mocked-page-key-3'],
-          size: 10,
-          page: 0,
-          moreResult: true,
-        },
-      })
-      .mockReturnValueOnce({ delegators: [] })
-      .mockReturnValueOnce({ legalDomicile: [] });
-    // mock action
-    const actionSpy = jest.spyOn(actions, 'getReceivedNotifications');
-    actionSpy.mockImplementation(mockActionFn);
-    // mock dispatch
-    const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
-    useDispatchSpy.mockReturnValue(mockDispatchFn as any);
-    // render component
-    await act(async () => {
-      result = render(<Notifiche />);
-    });
+    const scenario = await doPrepareTestScenario();
+    result = scenario.result;
+    mockDispatchFn = scenario.mockDispatchFn;
+    mockActionFn = scenario.mockActionFn;
   });
 
   afterEach(() => {
@@ -151,15 +113,6 @@ describe('Notifiche Page - with notifications', () => {
       });
     });
   });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail('render() returned undefined!');
-    }
-  }, 15000);
 });
 
 describe('Notifiche Page - query for notification API outcome', () => {
