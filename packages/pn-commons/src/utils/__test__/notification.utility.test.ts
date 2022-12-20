@@ -284,8 +284,8 @@ describe('timeline utility functions', () => {
     );
   });
 
-  it('return timeline status infos - SEND_PAPER_FEEDBACK', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_PAPER_FEEDBACK;
+  it('return timeline status infos - SEND_ANALOG_FEEDBACK', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
     testTimelineStatusInfosFn(
       'Aggiornamento stato raccomandata',
       'Si allega un aggiornamento dello stato della raccomandata.'
@@ -321,8 +321,8 @@ describe('timeline utility functions', () => {
     expect(label).toBe('Attestazione opponibile a terzi');
   });
 
-  it('return legalFact label - SEND_PAPER_FEEDBACK', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_PAPER_FEEDBACK;
+  it('return legalFact label - SEND_ANALOG_FEEDBACK', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
     expect(label).toBe('Ricevuta');
   });

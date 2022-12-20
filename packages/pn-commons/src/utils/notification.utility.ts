@@ -12,7 +12,7 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
 } from '../types';
-import { LegalFactType, SendDigitalDetails } from '../types/NotificationDetail';
+import { LegalFactType, SendDigitalDetails, SendPaperDetails } from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
@@ -217,8 +217,29 @@ export function getLegalFactLabel(
   );
   const receiptLabel = getLocalizedOrDefaultLabel('notifications', `detail.receipt`, 'Ricevuta');
   // TODO: localize in pn_ga branch
-  if (timelineStep.category === TimelineCategory.SEND_PAPER_FEEDBACK) {
+  if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
+    if ((timelineStep.details as SendPaperDetails).status === 'OK') {
+      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.legalfact.paper-receipt-delivered',
+        'di consegna raccomandata'
+      )}`;
+    } else if ((timelineStep.details as SendPaperDetails).status === 'KO') {
+      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.legalfact.paper-receipt-not-delivered',
+        'di mancata consegna raccomandata'
+      )}`;
+    }
     return receiptLabel;
+  } else if (
+    timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS
+  ) {
+    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.paper-receipt-accepted',
+      'di accettazione raccomandata'
+    )}`;
   } else if (
     timelineStep.category === TimelineCategory.SEND_DIGITAL_PROGRESS &&
     legalFactType === LegalFactType.PEC_RECEIPT
@@ -328,12 +349,13 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_DIGITAL_FEEDBACK,
   TimelineCategory.SEND_DIGITAL_PROGRESS,
-  TimelineCategory.SEND_PAPER_FEEDBACK,
   TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
   // PN-2068
   TimelineCategory.SEND_COURTESY_MESSAGE,
   // PN-1647
   TimelineCategory.NOT_HANDLED,
+  TimelineCategory.SEND_ANALOG_PROGRESS,
+  TimelineCategory.SEND_ANALOG_FEEDBACK,
 ];
 
 /**
