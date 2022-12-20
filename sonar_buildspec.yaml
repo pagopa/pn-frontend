@@ -30,7 +30,7 @@ phases:
           yarn start-waiton
           echo Running cypress in headless mode...
           echo $CYPRESS_ENV
-          yarn cy-run --config "$CYPRESS_ENV"
+          yarn cy-run --config '$CYPRESS_ENV'
         fi
       # yarn cy-run
       # - yarn test:coverage
