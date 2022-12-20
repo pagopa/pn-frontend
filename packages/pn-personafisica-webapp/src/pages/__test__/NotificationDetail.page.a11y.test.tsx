@@ -53,13 +53,13 @@ describe('NotificationDetail Page - accessibility tests', () => {
     expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFe.subject);
     expect(result.container).toHaveTextContent(/Payment/i);
     expect(await axe(result.container as Element)).toHaveNoViolations(); // Accesibility test
-  });
+  }, 15000);
 
   test('renders NotificationDetail page without payment box', async () => {
     const result = await renderComponent(overrideNotificationMock({recipients: [{payment: { noticeCode: '' }}]}));
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
     expect(result.container).not.toHaveTextContent(/Payment/i);
     expect(await axe(result.container as Element)).toHaveNoViolations(); // Accesibility test
-  });
+  }, 15000);
 
 });

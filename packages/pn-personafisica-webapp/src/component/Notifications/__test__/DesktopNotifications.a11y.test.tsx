@@ -31,7 +31,7 @@ describe('DesktopNotifications Component - accessibility tests', () => {
     } else {
       fail('render() returned undefined!');
     }
-  });
+  }, 15000);
 
   it('does not have basic accessibility issues (empty notifications)', async () => {
     // eslint-disable-next-line functional/no-let
@@ -51,5 +51,5 @@ describe('DesktopNotifications Component - accessibility tests', () => {
     } else {
       fail('render() returned undefined!');
     }
-  });
+  }, 15000);
 });

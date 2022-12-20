@@ -29,7 +29,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
       const results = await axe(result.container);
       expect(results).toHaveNoViolations();
     }
-  });
+  }, 15000);
 
 
   it('multi recipient - does not have basic accessibility issues rendering the page', async () => {
@@ -47,7 +47,7 @@ describe('NotificationDetail Page - accessibility tests', () => {
       const results = await axe(result.container);
       expect(results).toHaveNoViolations();
     }
-  });
+  }, 15000);
 });
 
 

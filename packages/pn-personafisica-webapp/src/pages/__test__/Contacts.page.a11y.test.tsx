@@ -50,5 +50,5 @@ describe('Contacts page - accessibility tests', () => {
     } else {
       fail("render() returned undefined!");
     }
-  });
+  }, 15000);
 });
