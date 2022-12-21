@@ -12,7 +12,7 @@ import {
 
 import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
 
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
+import { IMAGES_PATH, MANUALE_URL, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -50,10 +50,10 @@ const navigation: INavigationBarProps = {
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
-      label: "Lis tes notifications",
-      title: "Lis tes notifications",
-      onClick: onReadClick,
-    }
+    label: "Lis tes notifications",
+    title: "Lis tes notifications",
+    onClick: onReadClick,
+  }
   : undefined;
 
 /** Hero mocked data */
@@ -96,13 +96,13 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-          Piattaforma Notifiche numérise et simplifie la gestion des communications à valeur juridique. 
-          Les organismes émetteurs doivent seulement déposer l’acte à notifier : ce sera la plateforme 
-          qui s’occupera de l’envoi, par voie numérique ou analogique.
+            Piattaforma Notifiche numérise et simplifie la gestion des communications à valeur juridique.
+            Les organismes émetteurs doivent seulement déposer l’acte à notifier : ce sera la plateforme
+            qui s’occupera de l’envoi, par voie numérique ou analogique.
           </Typography>
           <Typography variant="body2">
-          Avec Piattaforma Notifiche, l’incertitude de la disponibilité des destinataires diminue et les 
-          temps et les coûts de gestion sont réduits.
+            Avec Piattaforma Notifiche, l’incertitude de la disponibilité des destinataires diminue et les
+            temps et les coûts de gestion sont réduits.
           </Typography>
         </>
       ),
@@ -119,22 +119,22 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-          Piattaforma Notifiche s’intègre au protocole des organismes et offre 
-          à la fois des API pour l’envoi automatique des notifications et la 
-          possibilité de faire des envois manuels. Une fois le chargement des 
-          actes et des formulaires de paiement effectué, la plateforme génère 
-          l’IUN, un code unique d’identification de la notification.
+            Piattaforma Notifiche s’intègre au protocole des organismes et offre
+            à la fois des API pour l’envoi automatique des notifications et la
+            possibilité de faire des envois manuels. Une fois le chargement des
+            actes et des formulaires de paiement effectué, la plateforme génère
+            l’IUN, un code unique d’identification de la notification.
           </Typography>
           <Typography variant="body2">
-          Ensuite, elle recherche dans ses archives et dans les registres publics 
-          une adresse PEC attribuée au destinataire et envoie la notification. 
-          Ensuite, elle envoie un avis de courtoisie aux autres coordonnées 
-          numériques (application IO, e-mail et SMS) du destinataire.
+            Ensuite, elle recherche dans ses archives et dans les registres publics
+            une adresse PEC attribuée au destinataire et envoie la notification.
+            Ensuite, elle envoie un avis de courtoisie aux autres coordonnées
+            numériques (application IO, e-mail et SMS) du destinataire.
           </Typography>
           <Typography variant="body2">
-          Si le destinataire n’a indiqué aucune coordonnée numérique et n’a pas 
-          accès à la plateforme, celle-ci procède à la recherche d’une adresse 
-          physique, puis à l’envoi par courrier recommandé papier.
+            Si le destinataire n’a indiqué aucune coordonnée numérique et n’a pas
+            accès à la plateforme, celle-ci procède à la recherche d’une adresse
+            physique, puis à l’envoi par courrier recommandé papier.
           </Typography>
         </>
       ),
@@ -151,15 +151,15 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Le destinataire accède à la plateforme via SPID ou CIE, où il peut 
-            visualiser et télécharger l’acte notifié. Grâce à l’intégration avec 
-            pagoPA, il peut également payer ce qui est dû en même temps. S’il a 
-            activé le service sur l’application IO, il peut tout faire directement 
+            Le destinataire accède à la plateforme via SPID ou CIE, où il peut
+            visualiser et télécharger l’acte notifié. Grâce à l’intégration avec
+            pagoPA, il peut également payer ce qui est dû en même temps. S’il a
+            activé le service sur l’application IO, il peut tout faire directement
             dans l’application.
           </Typography>
           <Typography variant="body2">
-            Comme l’organisme, le destinataire a également accès à l’historique 
-            des états de la notification et aux attestations opposables aux tiers 
+            Comme l’organisme, le destinataire a également accès à l’historique
+            des états de la notification et aux attestations opposables aux tiers
             qui en sont la preuve.
           </Typography>
         </>
@@ -177,16 +177,16 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Actuellement, Piattaforma Notifiche est testée avec un nombre limité 
+            Actuellement, Piattaforma Notifiche est testée avec un nombre limité
             d’organismes pilotes.
           </Typography>
           <Typography variant="body2">
-            Lorsqu’elle sera opérationnelle, ton organisme pourra également faire 
+            Lorsqu’elle sera opérationnelle, ton organisme pourra également faire
             une demande d’adhésion et l’adopter pour numériser le processus de notification.
           </Typography>
           <Typography variant="body2">
-             Pendant ce temps, les organismes peuvent consulter le{" "}
-            <Link href="https://www.pagopa.it/static/e190eb758489b75d4d81112a1357b5b2/Manuale-Operativo-Piattaforma-Notifiche.pdf">
+            Pendant ce temps, les organismes peuvent consulter le{" "}
+            <Link href={MANUALE_URL}>
               manuel d’utilisation
             </Link>
             {" "}(mis à jour le 28/06/2022),{" "}
@@ -218,17 +218,17 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Les notifications sont des communications à valeur juridique émises officiellement 
-            par une administration, telles que des amendes, des avis d’imposition, des résultats 
-            de procédures administratives engagées avec les Administrations publiques ou des 
-            remboursements, que tu as jusqu’à présent toujours reçus par courrier recommandé. 
-            À partir d’aujourd’hui, tu peux les recevoir et les consulter en numérique, en 
+            Les notifications sont des communications à valeur juridique émises officiellement
+            par une administration, telles que des amendes, des avis d’imposition, des résultats
+            de procédures administratives engagées avec les Administrations publiques ou des
+            remboursements, que tu as jusqu’à présent toujours reçus par courrier recommandé.
+            À partir d’aujourd’hui, tu peux les recevoir et les consulter en numérique, en
             accédant à Piattaforma Notifiche via SPID ou CIE ou directement sur l’application IO.
           </Typography>
           <Typography variant="body2">
-            Tu peux également payer les éventuels coûts grâce à l’intégration avec pagoPA, 
-            consulter l’historique des notifications reçues et les gérer directement en ligne. 
-            De plus, il te suffit d’une délégation pour gérer les courriers recommandés de tes 
+            Tu peux également payer les éventuels coûts grâce à l’intégration avec pagoPA,
+            consulter l’historique des notifications reçues et les gérer directement en ligne.
+            De plus, il te suffit d’une délégation pour gérer les courriers recommandés de tes
             proches.
           </Typography>
         </>
@@ -245,11 +245,11 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Pour envoyer les communications à valeur juridique, Piattaforma Notifiche donne 
-            toujours la priorité aux coordonnées numériques du destinataire. Tu peux à tout 
-            moment te connecter à la plateforme avec SPID et CIE pour indiquer ou mettre à 
-            jour tes préférences entre l’adresse PEC, l’application IO, l’e-mail ou le SMS. 
-            Si tu n’indiques aucune coordonnée ou si tu n’as pas accès à la plateforme, tu 
+            Pour envoyer les communications à valeur juridique, Piattaforma Notifiche donne
+            toujours la priorité aux coordonnées numériques du destinataire. Tu peux à tout
+            moment te connecter à la plateforme avec SPID et CIE pour indiquer ou mettre à
+            jour tes préférences entre l’adresse PEC, l’application IO, l’e-mail ou le SMS.
+            Si tu n’indiques aucune coordonnée ou si tu n’as pas accès à la plateforme, tu
             continueras à recevoir les notifications par courrier recommandé papier.
           </Typography>
         </>
@@ -269,7 +269,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
             Actuellement, Piattaforma Notifiche est testée avec un nombre limité d’administrations.
           </Typography>
           <Typography variant="body2">
-            Progressivement, la plateforme sera adoptée par les Administrations publiques et utilisée 
+            Progressivement, la plateforme sera adoptée par les Administrations publiques et utilisée
             pour envoyer des notifications à tous les citoyens.
           </Typography>
         </>
@@ -383,8 +383,8 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "PEC",
           subtitle: (
             <Typography variant="body2">
-              Si tu as une adresse PEC, les notifications te seront légalement remises, sans plus de 
-              courriers recommandés papier. L’avis de réception qui te sera envoyé contient le lien 
+              Si tu as une adresse PEC, les notifications te seront légalement remises, sans plus de
+              courriers recommandés papier. L’avis de réception qui te sera envoyé contient le lien
               pour accéder au contenu sur Piattaforma Notifiche.
             </Typography>
           ),
@@ -398,9 +398,9 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "Application IO",
           subtitle: (
             <Typography variant="body2">
-              Si tu actives le service « Notifications numériques » de Piattaforma Notifiche, tu peux 
-              recevoir et gérer{" "}<strong>directement dans l’application</strong> les communications 
-              à valeur juridique. Si tu n’as pas de PEC et que tu lis immédiatement le message, tu ne 
+              Si tu actives le service « Notifications numériques » de Piattaforma Notifiche, tu peux
+              recevoir et gérer{" "}<strong>directement dans l’application</strong> les communications
+              à valeur juridique. Si tu n’as pas de PEC et que tu lis immédiatement le message, tu ne
               recevras pas le courrier recommandé papier et la notification te sera légalement remise.
             </Typography>
           ),
@@ -410,9 +410,9 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "E-mail ou SMS",
           subtitle: (
             <Typography variant="body2">
-              En outre, tu peux également choisir de recevoir une notification de courtoisie à ton 
-              adresse électronique ou par SMS. Si tu n’as pas de PEC et que tu accèdes à la plateforme 
-              à partir du lien approprié, tu ne recevras pas le courrier recommandé papier et la 
+              En outre, tu peux également choisir de recevoir une notification de courtoisie à ton
+              adresse électronique ou par SMS. Si tu n’as pas de PEC et que tu accèdes à la plateforme
+              à partir du lien approprié, tu ne recevras pas le courrier recommandé papier et la
               notification te sera légalement remise.
             </Typography>
           ),
@@ -639,7 +639,7 @@ const coHorizontalNav = {
 /**
  * Footer data
  */
- const pagoPALink: ILinkData = {
+const pagoPALink: ILinkData = {
   label: "PagoPA S.p.A.",
   href: PAGOPA_HOME ?? "",
   ariaLabel: "Lien : va sur le site de PagoPA S.p.A."
@@ -654,7 +654,7 @@ const assistanceLink = {
 const companyLegalInfo = (
   <>
     <strong>PagoPA S.p.A.</strong> — société anonyme à associé unique -
-    capital social de 1 000 000 d’euros entièrement libéré - siège social à Rome, 
+    capital social de 1 000 000 d’euros entièrement libéré - siège social à Rome,
     Piazza Colonna 370
     <br />
     Code postal 00187 - N° d’inscription au Registre du Commerce de Rome, code fiscal et n° de TVA 15376371009
