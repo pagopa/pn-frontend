@@ -12,7 +12,7 @@ import {
 
 import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
 
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
+import { IMAGES_PATH, MANUALE_URL, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -183,7 +183,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
           </Typography>
           <Typography variant="body2">
             In der Zwischenzeit können Behörden{" "}
-            <Link href="https://www.pagopa.it/static/e190eb758489b75d4d81112a1357b5b2/Manuale-Operativo-Piattaforma-Notifiche.pdf">
+            <Link href={MANUALE_URL}>
               das Betriebshandbuch
             </Link>
             {" "}(aktualisiert am 28.06.2022),{" "}
