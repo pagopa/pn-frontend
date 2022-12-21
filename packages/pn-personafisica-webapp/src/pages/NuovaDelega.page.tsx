@@ -101,10 +101,11 @@ const NuovaDelega = () => {
   tomorrow.setHours(0, 0, 0, 0);
 
   const initialValues = {
-    selectPersonaFisicaOrPersonaGiuridica: '',
+    selectPersonaFisicaOrPersonaGiuridica: 'pf',
     codiceFiscale: '',
     nome: '',
     cognome: '',
+    ragioneSociale: '',
     selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
     expirationDate: tomorrow,
     enteSelect: {
@@ -122,8 +123,18 @@ const NuovaDelega = () => {
       .string()
       .required(t('nuovaDelega.validation.fiscalCode.required'))
       .matches(dataRegex.fiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
-    nome: yup.string().required(t('nuovaDelega.validation.name.required')),
-    cognome: yup.string().required(t('nuovaDelega.validation.surname.required')),
+    nome: yup
+      .string()
+      .required(t('nuovaDelega.validation.name.required'))
+      .when('selectPersonaFisicaOrPersonaGiuridica', {
+        is: (val: string) => val === 'pf',
+        then: yup.string().required(t('nuovaDelega.validation.name.required')),
+        otherwise: yup.string().required(t('nuovaDelega.validation.businessName.required')),
+      }),
+    cognome: yup.string().when('selectPersonaFisicaOrPersonaGiuridica', {
+      is: 'pf',
+      then: yup.string().required(t('nuovaDelega.validation.surname.required')),
+    }),
     enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
     expirationDate: yup
       .mixed()
@@ -135,7 +146,8 @@ const NuovaDelega = () => {
       ),
   });
 
-  const xsValue = isMobile ? 12 : 4;
+  const getError = (fieldTouched: boolean | undefined, fieldError: string | undefined) =>
+    fieldTouched && fieldError;
 
   useEffect(() => {
     dispatch(resetNewDelegation());
@@ -203,32 +215,42 @@ const NuovaDelega = () => {
                   {({ values, setFieldValue, touched, errors, setFieldTouched }) => (
                     <Form>
                       <FormControl sx={{ width: '100%' }}>
-                        <RadioGroup
-                          aria-labelledby="radio-buttons-group-pf-pg"
-                          defaultValue="pf"
-                          name="selectPersonaFisicaOrPersonaGiuridica"
-                          value={values.selectPersonaFisicaOrPersonaGiuridica.toString()}
-                          onChange={(event) => {
-                            setFieldValue(
-                              'selectPersonaFisicaOrPersonaGiuridica',
-                              event.currentTarget.value
-                            );
-                          }}
-                        >
-                          <Grid
-                            container
-                            sx={{ width: '100%', justifyContent: 'space-between' }}
-                            className={classes.direction}
-                          >
-                            <Grid item xs={isMobile ? 12 : 3}>
+                        <Stack direction={isMobile ? 'column' : 'row'}>
+                          <Stack justifyContent="center">
+                            <RadioGroup
+                              aria-labelledby="radio-buttons-group-pf-pg"
+                              defaultValue="pf"
+                              name="selectPersonaFisicaOrPersonaGiuridica"
+                              value={values.selectPersonaFisicaOrPersonaGiuridica.toString()}
+                              onChange={(event) => {
+                                setFieldValue(
+                                  'selectPersonaFisicaOrPersonaGiuridica',
+                                  event.currentTarget.value
+                                );
+                              }}
+                            >
                               <FormControlLabel
                                 value="pf"
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.naturalPerson')}
                               />
-                            </Grid>
-                            <Grid item xs={xsValue} className={classes.margin}>
+                              <FormControlLabel
+                                value="pg"
+                                control={<Radio />}
+                                name={'selectPersonaFisicaOrPersonaGiuridica'}
+                                label={t('nuovaDelega.form.legalPerson')}
+                              />
+                            </RadioGroup>
+                          </Stack>
+                          <Stack
+                            justifyContent="space-between"
+                            alignItems="center"
+                            direction={isMobile ? 'column' : 'row'}
+                            spacing={1}
+                            flex="1 0 100px"
+                          >
+                            {values.selectPersonaFisicaOrPersonaGiuridica === 'pf' && (
                               <TextField
                                 sx={{ margin: 'auto' }}
                                 id="nome"
@@ -238,14 +260,15 @@ const NuovaDelega = () => {
                                 }}
                                 label={t('nuovaDelega.form.firstName')}
                                 name="nome"
-                                error={touched.nome && Boolean(errors.nome)}
-                                helperText={touched.nome && errors.nome}
+                                error={Boolean(getError(touched.nome, errors.nome))}
+                                helperText={getError(touched.nome, errors.nome)}
                                 fullWidth
                               />
-                            </Grid>
-                            <Grid item xs={xsValue} className={classes.margin}>
+                            )}
+
+                            {values.selectPersonaFisicaOrPersonaGiuridica === 'pf' && (
                               <TextField
-                                sx={{ margin: 'auto', mt: isMobile ? 1 : 0 }}
+                                sx={{ margin: 'auto' }}
                                 id="cognome"
                                 value={values.cognome.toString()}
                                 onChange={(event) => {
@@ -253,19 +276,28 @@ const NuovaDelega = () => {
                                 }}
                                 label={t('nuovaDelega.form.lastName')}
                                 name="cognome"
-                                error={touched.cognome && Boolean(errors.cognome)}
-                                helperText={touched.cognome && errors.cognome}
+                                error={Boolean(getError(touched.cognome, errors.cognome))}
+                                helperText={getError(touched.cognome, errors.cognome)}
                                 fullWidth
                               />
-                            </Grid>
-                          </Grid>
-                          <FormControlLabel
-                            value="pg"
-                            control={<Radio />}
-                            name={'selectPersonaFisicaOrPersonaGiuridica'}
-                            label={t('nuovaDelega.form.legalPerson')}
-                          />
-                        </RadioGroup>
+                            )}
+                            {values.selectPersonaFisicaOrPersonaGiuridica === 'pg' && (
+                              <TextField
+                                sx={{ margin: 'auto' }}
+                                id="nome"
+                                value={values.nome.toString()}
+                                onChange={(event) => {
+                                  setFieldValue('nome', event.currentTarget.value);
+                                }}
+                                label={t('nuovaDelega.form.businessName')}
+                                name="nome"
+                                error={Boolean(getError(touched.nome, errors.nome))}
+                                helperText={getError(touched.nome, errors.nome)}
+                                fullWidth
+                              />
+                            )}
+                          </Stack>
+                        </Stack>
                       </FormControl>
                       <TextField
                         sx={{ marginTop: '2rem' }}
@@ -284,63 +316,61 @@ const NuovaDelega = () => {
                         {t('nuovaDelega.form.viewFrom')}
                       </Typography>
                       <FormControl sx={{ width: '100%' }}>
-                        <RadioGroup
-                          aria-labelledby="radio-buttons-group-pf-pg"
-                          defaultValue="tuttiGliEnti"
-                          name="selectTuttiEntiOrSelezionati"
-                          value={values.selectTuttiEntiOrSelezionati.toString()}
-                          onChange={(event) => {
-                            setFieldValue(
-                              'selectTuttiEntiOrSelezionati',
-                              event.currentTarget.value
-                            );
-                            if (event.currentTarget.value === 'entiSelezionati') {
-                              handleGetAllEntities();
-                            }
-                          }}
-                        >
-                          <FormControlLabel
-                            value="tuttiGliEnti"
-                            control={<Radio />}
-                            name={'selectTuttiEntiOrSelezionati'}
-                            label={t('nuovaDelega.form.allEntities')}
-                          />
-                          <Grid container className={classes.direction}>
-                            <Grid item xs={isMobile ? 12 : 6}>
-                              <FormControlLabel
-                                value="entiSelezionati"
-                                control={<Radio />}
-                                data-testid="radioSelectedEntities"
-                                name={'selectTuttiEntiOrSelezionati'}
-                                label={t('nuovaDelega.form.onlySelected')}
-                              />
-                            </Grid>
-                            <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
-                              {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
-                                <FormControl fullWidth>
-                                  <CustomDropdown
-                                    id="ente-select"
-                                    label={t('nuovaDelega.form.selectEntities')}
-                                    fullWidth
-                                    value={values.enteSelect.uniqueIdentifier}
-                                    onChange={(event: SelectChangeEvent<string>) => {
-                                      setFieldValue('enteSelect', {
-                                        name: event.target.name,
-                                        uniqueIdentifier: event.target.value,
-                                      });
-                                    }}
-                                  >
-                                    {entities.map((entity) => (
-                                      <MenuItem value={entity.id} key={entity.id}>
-                                        <DropDownPartyMenuItem name={entity.name} />
-                                      </MenuItem>
-                                    ))}
-                                  </CustomDropdown>
-                                </FormControl>
-                              )}
-                            </Grid>
-                          </Grid>
-                        </RadioGroup>
+                        <Stack>
+                          <RadioGroup
+                            aria-labelledby="radio-buttons-group-pf-pg"
+                            defaultValue="tuttiGliEnti"
+                            name="selectTuttiEntiOrSelezionati"
+                            value={values.selectTuttiEntiOrSelezionati.toString()}
+                            onChange={(event) => {
+                              setFieldValue(
+                                'selectTuttiEntiOrSelezionati',
+                                event.currentTarget.value
+                              );
+                              if (event.currentTarget.value === 'entiSelezionati') {
+                                handleGetAllEntities();
+                              }
+                            }}
+                          >
+                            <FormControlLabel
+                              value="tuttiGliEnti"
+                              control={<Radio />}
+                              name={'selectTuttiEntiOrSelezionati'}
+                              label={t('nuovaDelega.form.allEntities')}
+                            />
+
+                            <FormControlLabel
+                              value="entiSelezionati"
+                              control={<Radio />}
+                              data-testid="radioSelectedEntities"
+                              name={'selectTuttiEntiOrSelezionati'}
+                              label={t('nuovaDelega.form.onlySelected')}
+                            />
+
+                            {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
+                              <FormControl fullWidth>
+                                <CustomDropdown
+                                  id="ente-select"
+                                  label={t('nuovaDelega.form.selectEntities')}
+                                  fullWidth
+                                  value={values.enteSelect.uniqueIdentifier}
+                                  onChange={(event: SelectChangeEvent<string>) => {
+                                    setFieldValue('enteSelect', {
+                                      name: event.target.name,
+                                      uniqueIdentifier: event.target.value,
+                                    });
+                                  }}
+                                >
+                                  {entities.map((entity) => (
+                                    <MenuItem value={entity.id} key={entity.id}>
+                                      <DropDownPartyMenuItem name={entity.name} />
+                                    </MenuItem>
+                                  ))}
+                                </CustomDropdown>
+                              </FormControl>
+                            )}
+                          </RadioGroup>
+                        </Stack>
                       </FormControl>
                       <br />
                       <Box sx={{ marginTop: '1rem', width: '100%' }}>
@@ -395,7 +425,28 @@ const NuovaDelega = () => {
                         <VerificationCodeComponent code={values.verificationCode} />
                       </Stack>
                       <Divider sx={{ marginTop: '1rem' }} />
-                      <Grid container sx={{ marginTop: '1rem' }}>
+                      <Stack
+                        sx={{ mt: '1rem' }}
+                        alignItems="flex-start"
+                        justifyContent={'flex-start'}
+                      >
+                        <Stack>
+                          <Button
+                            sx={{ marginTop: '1rem', margin: 'auto' }}
+                            type={'submit'}
+                            variant={'contained'}
+                            data-testid="createButton"
+                          >
+                            {t('nuovaDelega.form.submit')}
+                          </Button>
+                        </Stack>
+                        <Stack>
+                          <Stack direction="row" alignItems="center" justifyContent="end">
+                            <ErrorDeleghe />
+                          </Stack>
+                        </Stack>
+                      </Stack>
+                      {/* <Grid container sx={{ marginTop: '1rem' }}>
                         <Grid item xs={12} sx={{ margin: 'auto' }}>
                           <Button
                             sx={{ marginTop: '1rem', margin: 'auto' }}
@@ -411,7 +462,7 @@ const NuovaDelega = () => {
                             <ErrorDeleghe />
                           </Stack>
                         </Grid>
-                      </Grid>
+                      </Grid> */}
                     </Form>
                   )}
                 </Formik>
