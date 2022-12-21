@@ -8,3 +8,5 @@ export const PAGOPA_HOME = process.env.NEXT_PUBLIC_PAGOPA_HOME;
 export const PAGOPA_HELP_EMAIL = process.env.NEXT_PUBLIC_PAGOPA_HELP_EMAIL;
 
 export const PN_URL = process.env.NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL;
+
+export const MANUALE_URL = "https://docs.pagopa.it/pn-manuale-operativo/";

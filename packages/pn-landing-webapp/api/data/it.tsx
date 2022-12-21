@@ -26,7 +26,7 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
+import { IMAGES_PATH, MANUALE_URL, PAGOPA_HELP_EMAIL, PN_URL } from "@utils/constants";
 
 import { IAppData, IInfoblockData, IShowcaseData } from "model";
 
@@ -183,7 +183,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
           </Typography>
           <Typography variant="body2">
             Nel frattempo, gli enti possono consultare il{" "}
-            <Link href="https://www.pagopa.it/static/e190eb758489b75d4d81112a1357b5b2/Manuale-Operativo-Piattaforma-Notifiche.pdf">
+            <Link href={MANUALE_URL}>
               manuale operativo
             </Link>
             {" "}(aggiornato al 28/06/2022),{" "}
