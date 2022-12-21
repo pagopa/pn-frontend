@@ -40,7 +40,6 @@ phases:
           echo Starting application...
           yarn start-waiton
           echo Running cypress in headless mode...
-          echo $CYPRESS_PF_ENV
           yarn cy-run --env username=$CYPRESS_USER password=$CYPRESS_PASS tokenExchange=$CYPRESS_TOKEN
         fi
       

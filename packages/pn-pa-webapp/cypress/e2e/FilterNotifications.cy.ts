@@ -37,7 +37,8 @@ describe("Filter Notifications", () => {
     cy.visit('/dashboard');
   });
 
-  it(`Filters by dates from ${startDate.formatted} to ${endDate.formatted}, enter a notification detail, then go back e verify filters are still set`, () => {
+  it.only(`Filters by dates from ${startDate.formatted} to ${endDate.formatted}, enter a notification detail, then go back e verify filters are still set`, () => {
+    console.log("CYPRESS USER: ", Cypress.env("username"));
     cy.get('#startDate').type(startDate.formatted);
     cy.get('#endDate').type(endDate.formatted);
 
