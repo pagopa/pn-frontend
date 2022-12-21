@@ -18,7 +18,8 @@ phases:
       - echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
       - apt install --no-install-recommends yarn
       # cypress dependencies
-      - apt-get install -y libatk1.0-0 libatk-bridge2.0-0 libcups2 libgtk-3-0 libxcomposite-dev libxdamage-dev libxrandr2 libgbm-dev libxkbcommon-x11-0 libasound2 libatspi2.0-dev
+      # - apt-get install -y libatk1.0-0 libatk-bridge2.0-0 libcups2 libgtk-3-0 libxcomposite-dev libxdamage-dev libxrandr2 libgbm-dev libxkbcommon-x11-0 libasound2 libatspi2.0-dev
+      - apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
       # - apt-get install libatk1.0-0 -y
       # - apt-get install libatk-bridge2.0-0 -y
       # - apt-get install libcups2 -y
@@ -50,11 +51,11 @@ phases:
           yarn start-waiton
           echo Running cypress in headless mode...
           echo $CYPRESS_PF_ENV
-          yarn cy-run --config '$CYPRESS_PF_ENV'
+          yarn cy-run
         fi
       
       # ldd /root/.cache/Cypress/10.8.0/Cypress/Cypress | grep 'not found'
-      # yarn cy-run --config '$CYPRESS_ENV'
+      # yarn cy-run --config '$CYPRESS_PF_ENV'
 
       # - sleep 5
       # - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
