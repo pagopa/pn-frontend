@@ -7,9 +7,8 @@ import { TypeRules } from './types/TypeRules';
 export class Validator<TModel> {
   private validatorBuilders: ValidatorBuilders<TModel> = {};
 
-  public readonly validate = (model: TModel, strict: boolean = false): ValidationError<TModel> | null => {
+  public readonly validate = (model: TModel): ValidationError<TModel> | null => {
     let errors: ValidationError<TModel> | null = null;
-    // if strict = true, first check that input model doesn't have keys not defined in TModel
     
     // loop over all validators
     for (const propertyName of Object.keys(this.validatorBuilders)) {
@@ -20,6 +19,7 @@ export class Validator<TModel> {
         // check errors
         if (hasError(result)) {
           if (!errors) {
+
             errors = {};
           }
           errors[propertyName as keyof TModel] = result;
