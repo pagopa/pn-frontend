@@ -3,9 +3,8 @@ env:
   shell: bash
   secrets-manager:
     SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM:token
-    CYPRESS_USER: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:user
-    CYPRESS_PASS: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pass
-    CYPRESS_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:token
+    CYPRESS_PF_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf
+    CYPRESS_PA_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa
 phases:
   install:
     runtime-versions:
@@ -35,12 +34,15 @@ phases:
       # - yarn run sonar
       # if [ $SUB_PRJ_NAME == "packages/pn-pa-webapp" -o $SUB_PRJ_NAME == "packages/pn-personafisica-webapp" ] ; then
       - |
-        if [ $SUB_PRJ_NAME == "packages/pn-pa-webapp" ] ; then
+        if [ $SUB_PRJ_NAME == "packages/pn-personafisica-webapp" ] ; then
           echo Installing wait-on module...
           echo Starting application...
           yarn start-waiton
+          echo Creating cypress env file
+          echo '$CYPRESS_PF_ENV' >cypress.env.json
+          cat cypress.env.json
           echo Running cypress in headless mode...
-          yarn cy-run --env username=$CYPRESS_USER password=$CYPRESS_PASS tokenExchange=$CYPRESS_TOKEN
+          yarn cy-run
         fi
       
       # ldd /root/.cache/Cypress/10.8.0/Cypress/Cypress | grep 'not found'
