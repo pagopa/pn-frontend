@@ -57,7 +57,7 @@ describe('Notification Filters (no delegators)', () => {
   it('filtered dates should not change after visiting delegations page', () => {
     const { startDate, endDate } = getDates();
 
-    cy.get(startDateInput, { timeout: 10000 }).type(startDate);
+    cy.get(startDateInput, { timeout: 10000 }).type(startDate, {force: true});
     cy.get(endDateInput).type(endDate);
     cy.contains(filterButton).click();
 
@@ -81,7 +81,7 @@ describe('Notification Filters (no delegators)', () => {
     const iun = 'XQPQ-MAJP-HMTJ-202211-E-1';
     const { startDate, endDate } = getDates();
 
-    cy.get(startDateInput, { timeout: 10000 }).type(startDate);
+    cy.get(startDateInput, { timeout: 10000 }).type(startDate, {force: true});
     cy.get(endDateInput).type(endDate);
     cy.contains(filterButton).click();
 
@@ -104,7 +104,7 @@ describe('Notification Filters (no delegators)', () => {
     const iun = 'XQPQ-MAJP-HMTJ-202211-E-1';
     const { startDate, endDate } = getDates();
 
-    cy.get(startDateInput, { timeout: 10000 }).type(startDate);
+    cy.get(startDateInput, { timeout: 10000 }).type(startDate, {force: true});
     cy.get(endDateInput).type(endDate);
     cy.contains(filterButton).click();
 
@@ -138,7 +138,7 @@ describe('Notification Filters (no delegators)', () => {
   it('end date should reset when "today" has been selected', () => {
     const { startDate, endDate } = getDates(true);
 
-    cy.get(startDateInput, { timeout: 10000 }).type(startDate);
+    cy.get(startDateInput, { timeout: 10000 }).type(startDate, {force: true});
     cy.get(endDateInput).type(endDate);
     cy.contains(filterButton)
       .click()
@@ -160,7 +160,7 @@ describe('Notification Filters (no delegators)', () => {
       fixture: 'notifications/list-10/page-1',
     }).as('getNotifications');
 
-    cy.get('#iunMatch').type(filteredIun);
+    cy.get('#iunMatch').type(filteredIun, {force: true});
 
     cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '', iun: filteredIun })}*`, {
       statusCode: 200,
@@ -199,7 +199,7 @@ describe('Notification Filters (delegators)', () => {
   it('filters reset visiting notifications list as a delegate', () => {
     const { startDate, endDate } = getDates();
 
-    cy.get(startDateInput, { timeout: 10000 }).type(startDate);
+    cy.get(startDateInput, { timeout: 10000 }).type(startDate, {force: true});
     cy.get(endDateInput).type(endDate);
     cy.contains(filterButton).click();
 
