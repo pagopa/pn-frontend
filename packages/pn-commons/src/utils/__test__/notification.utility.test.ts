@@ -11,6 +11,7 @@ import {
   TimelineCategory,
   NotificationStatus
 } from '../../types';
+import { ResponseStatus } from '../../types/NotificationDetail';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -284,11 +285,31 @@ describe('timeline utility functions', () => {
     );
   });
 
-  it('return timeline status infos - SEND_ANALOG_FEEDBACK', () => {
+  it('return timeline status infos - SEND_ANALOG_FEEDBACK (failure)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).status = ResponseStatus.KO;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
+      address: 'Indirizzo fisico',
+      zip: 'zip',
+      municipality: 'municipality'
+    };
     testTimelineStatusInfosFn(
-      'Aggiornamento stato raccomandata',
-      'Si allega un aggiornamento dello stato della raccomandata.'
+      'Invio per via cartacea non riuscito',
+      "Il tentativo di invio della notifica per via cartacea a Nome Cognome non è riuscito."
+    );
+  });
+
+  it('return timeline status infos - SEND_ANALOG_FEEDBACK (success)', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).status = ResponseStatus.OK;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
+      address: 'Indirizzo fisico',
+      zip: 'zip',
+      municipality: 'municipality'
+    };
+    testTimelineStatusInfosFn(
+      'Invio per via cartacea riuscito',
+      "Il tentativo di invio della notifica per via cartacea a Nome Cognome è riuscito."
     );
   });
 
@@ -321,10 +342,18 @@ describe('timeline utility functions', () => {
     expect(label).toBe('Attestazione opponibile a terzi');
   });
 
-  it('return legalFact label - SEND_ANALOG_FEEDBACK', () => {
+  it('return legalFact label - SEND_ANALOG_FEEDBACK (success)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).status = ResponseStatus.OK;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
-    expect(label).toBe('Ricevuta');
+    expect(label).toBe('Ricevuta di consegna raccomandata');
+  });
+
+  it('return legalFact label - SEND_ANALOG_FEEDBACK (failure)', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).status = ResponseStatus.KO;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
+    expect(label).toBe('Ricevuta di mancata consegna raccomandata');
   });
 
   it('return legalFact label - SENDER_ACK', () => {
@@ -355,6 +384,12 @@ describe('timeline utility functions', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_VIEWED;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.RECIPIENT_ACCESS);
     expect(label).toBe('Attestazione opponibile a terzi: avvenuto accesso');
+  });
+
+  it('return legalFact label - SEND_ANALOG_PROGRESS', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
+    expect(label).toBe('Ricevuta di accettazione raccomandata');
   });
 
   it('return legalFact label - SEND_DIGITAL_PROGRESS (success)', () => {

@@ -49,7 +49,7 @@ export interface INotificationDetailTimeline {
   hidden?: boolean;
 }
 
-enum ResponseStatus {
+export enum ResponseStatus {
   OK = 'OK',
   PROGRESS = 'PROGRESS',
   PROGRESS_WITH_RETRY = 'PROGRESS_WITH_RETRY',
