@@ -57,8 +57,8 @@ describe('Notification Filters (no delegators)', () => {
   it('filtered dates should not change after visiting delegations page', () => {
     const { startDate, endDate } = getDates();
 
-    cy.get(startDateInput).type(startDate);
-    cy.get(endDateInput).type(endDate);
+    cy.get(startDateInput).type(startDate, {force: true});
+    cy.get(endDateInput).type(endDate, {force: true});
     cy.contains(filterButton).click();
 
     cy.wait(['@getNotifications']);
@@ -81,8 +81,8 @@ describe('Notification Filters (no delegators)', () => {
     const iun = 'XQPQ-MAJP-HMTJ-202211-E-1';
     const { startDate, endDate } = getDates();
 
-    cy.get(startDateInput).type(startDate);
-    cy.get(endDateInput).type(endDate);
+    cy.get(startDateInput).type(startDate, {force: true});
+    cy.get(endDateInput).type(endDate, {force: true});
     cy.contains(filterButton).click();
 
     cy.wait(['@getNotifications', '@getNotifications']);
@@ -104,8 +104,8 @@ describe('Notification Filters (no delegators)', () => {
     const iun = 'XQPQ-MAJP-HMTJ-202211-E-1';
     const { startDate, endDate } = getDates();
 
-    cy.get(startDateInput).type(startDate);
-    cy.get(endDateInput).type(endDate);
+    cy.get(startDateInput).type(startDate, {force: true});
+    cy.get(endDateInput).type(endDate, {force: true});
     cy.contains(filterButton).click();
 
     cy.wait(['@getNotifications', '@getNotifications']);
@@ -138,8 +138,8 @@ describe('Notification Filters (no delegators)', () => {
   it('end date should reset when "today" has been selected', () => {
     const { startDate, endDate } = getDates(true);
 
-    cy.get(startDateInput).type(startDate);
-    cy.get(endDateInput).type(endDate);
+    cy.get(startDateInput).type(startDate, {force: true});
+    cy.get(endDateInput).type(endDate, {force: true});
     cy.contains(filterButton)
       .click()
       .then(() => {});
@@ -160,14 +160,14 @@ describe('Notification Filters (no delegators)', () => {
       fixture: 'notifications/list-10/page-1',
     }).as('getNotifications');
 
-    cy.get('#iunMatch').type(filteredIun);
+    cy.get('#iunMatch').type(filteredIun, {force: true});
 
     cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '', iun: filteredIun })}*`, {
       statusCode: 200,
       fixture: 'notifications/list-10/filtered-iun',
     }).as('filteredNotifications');
 
-    cy.contains(/^Filtra$/).click();
+    cy.contains(/^Filtra$/).click({force: true});
 
     cy.wait('@filteredNotifications').then((interception) => {
       expect(interception.request.url).include(`iunMatch=${filteredIun}`);
@@ -199,8 +199,8 @@ describe('Notification Filters (delegators)', () => {
   it('filters reset visiting notifications list as a delegate', () => {
     const { startDate, endDate } = getDates();
 
-    cy.get(startDateInput).type(startDate);
-    cy.get(endDateInput).type(endDate);
+    cy.get(startDateInput).type(startDate, {force: true});
+    cy.get(endDateInput).type(endDate, {force: true});
     cy.contains(filterButton).click();
 
     cy.wait(['@getNotifications', '@getNotifications']);
