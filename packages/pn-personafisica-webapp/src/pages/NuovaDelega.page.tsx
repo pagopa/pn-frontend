@@ -34,8 +34,9 @@ import {
   useIsMobile,
   PnBreadcrumb,
   CustomDropdown,
+  isToday,
+  dataRegex,
 } from '@pagopa-pn/pn-commons';
-import { dataRegex } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
 import { resetNewDelegation } from '../redux/newDelegation/reducers';
@@ -92,11 +93,6 @@ const NuovaDelega = () => {
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
   };
-
-  const isToday = (date: Date | null): boolean =>
-    date?.getDate() === today.getDate() &&
-    date?.getMonth() === today.getMonth() &&
-    date?.getFullYear() === today.getFullYear();
 
   // Get tomorrow date
   const today = new Date();

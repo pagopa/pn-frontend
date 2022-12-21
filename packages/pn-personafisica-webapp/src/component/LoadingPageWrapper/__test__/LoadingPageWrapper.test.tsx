@@ -1,4 +1,4 @@
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import LoadingPageWrapper from '../LoadingPageWrapper';
 
 
@@ -35,11 +35,5 @@ describe('LoadingPageWrapper component', () => {
     });
     const innerComponent = result.getByTestId('inner-component')
     expect(innerComponent).toBeInTheDocument();
-  });
-
-  it.skip('is component accessible', async()=>{
-    const result = render(<LoadingPageWrapper>test</LoadingPageWrapper>);
-    const results = await axe(result?.container);
-    expect(results).toHaveNoViolations();
   });
 });
