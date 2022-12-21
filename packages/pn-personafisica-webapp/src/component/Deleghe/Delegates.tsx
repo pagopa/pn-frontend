@@ -121,7 +121,7 @@ const Delegates = () => {
       />
       <Box mb={8}>
         <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-          <Typography variant="h6">{t('deleghe.delegatesTitle')}</Typography>
+          <Typography variant="h5">{t('deleghe.delegatesTitle')}</Typography>
           <Box>
             <Button variant="outlined" onClick={(_e, source='default') => handleAddDelegationClick(source)}>
               <AddIcon fontSize={'small'} sx={{ marginRight: 1 }} />

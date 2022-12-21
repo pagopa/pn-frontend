@@ -5,7 +5,9 @@
     "lib": [
       "es6",
       "dom",
-      "es2019"
+      "es2019",
+      "DOM",
+      "DOM.Iterable",
     ],
     "jsx": "react-jsx",
     "noEmit": true,
@@ -33,9 +35,12 @@
   "exclude": [
     "__mocks__",
     "dist",
+    "lib",
     "node_modules",
     "**/__tests__/*",
     "**/__test__/*",
+    "src/test-utils.tsx",
+    "src/setupTests.ts",
     "Dangerfile.ts"
   ]
 }

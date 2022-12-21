@@ -1,4 +1,4 @@
-import { dataRegex, formatFiscalCode } from './string.utility';
+import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
 import { calculatePages } from './pagination.utility';
 
 import {
@@ -60,7 +60,7 @@ export {
     getNotificationTimelineStatusInfos,
     basicUserDataMatcherContents,
     basicInitialUserData,
-    adaptedTokenExchangeError, 
+    adaptedTokenExchangeError,
     URL_DIGITAL_NOTIFICATIONS,
     PRIVACY_LINK_RELATIVE_PATH,
     TOS_LINK_RELATIVE_PATH,
@@ -73,5 +73,6 @@ export {
     AppError,
     AppErrorFactory,
     errorFactoryManager,
-    UnknownAppError
+    UnknownAppError,
+    sanitizeString
 };

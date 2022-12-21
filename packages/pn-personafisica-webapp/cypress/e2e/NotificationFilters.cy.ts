@@ -13,7 +13,6 @@ const filterButton = 'Filtra';
 const notificationMenuItem = '[data-cy="menu-item(notifiche)"]';
 const delegationMenuItem = '[data-cy="menu-item(deleghe)"]';
 const notificationListItem = '[data-cy="table(notifications)"] > :nth-child(2) > :first';
-const collapsibleNotificationMenu = '[data-cy="collapsible-menu"]';
 const notificationsByDelegateMenuItem = '[data-cy="collapsible-list"] > :nth-child(2)';
 
 const getDates = (endToday: boolean = false) => {
@@ -212,7 +211,7 @@ describe('Notification Filters (delegators)', () => {
     cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, {
       fixture: 'notifications/delegator/list-10/page-1',
     }).as('getNotificationsByDelegate');
-    cy.get(collapsibleNotificationMenu).click();
+    
     cy.get(notificationsByDelegateMenuItem).click();
 
     cy.wait('@getNotificationsByDelegate');

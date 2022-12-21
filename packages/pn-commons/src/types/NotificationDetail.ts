@@ -193,6 +193,14 @@ export interface PaymentInfo {
   url: string;
 }
 
+export interface PaymentNotice {
+  noticeNumber: string;
+  fiscalCode: string;
+  amount: number;
+  companyName: string;
+  description: string;
+}
+
 export enum PaymentAttachmentSName {
   PAGOPA = "PAGOPA",
   F24 = "F24"

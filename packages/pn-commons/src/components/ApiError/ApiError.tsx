@@ -6,6 +6,7 @@ type ApiErrorProps = {
   onClick?: () => void;
   mt?: number;
   mainText?: string;
+  apiId?: string;
 };
 
 const StyledStack = styled(Stack)`
@@ -14,7 +15,7 @@ const StyledStack = styled(Stack)`
   padding: 16px;
 `;
 
-const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText }) => {
+const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText, apiId }) => {
   const text =
     mainText ||
     getLocalizedOrDefaultLabel(
@@ -34,7 +35,7 @@ const ApiError: React.FC<ApiErrorProps> = ({ onClick, mt = 0, mainText }) => {
       direction={'row'}
       justifyContent={'center'}
       alignItems={'center'}
-      data-testid="api-error"
+      data-testid={`api-error${apiId ? `-${apiId}` : ''}`}
     >
       <ReportGmailerrorredIcon
         fontSize={'small'}

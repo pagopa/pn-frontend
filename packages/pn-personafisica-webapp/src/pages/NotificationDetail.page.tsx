@@ -1,7 +1,7 @@
 import { Fragment, ReactNode, useCallback, useEffect, useState, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Grid, Box, Paper, Stack, Typography } from '@mui/material';
+import { Grid, Box, Paper, Stack, Typography, Alert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import EmailIcon from '@mui/icons-material/Email';
 import {
@@ -17,6 +17,7 @@ import {
   NotificationStatus,
   useErrors,
   ApiError,
+  TimedMessage,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -28,7 +29,7 @@ import {
   getReceivedNotificationLegalfact,
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
-import { resetState } from '../redux/notification/reducers';
+import { resetLegalFactState, resetState } from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
@@ -69,12 +70,14 @@ const NotificationDetail = () => {
 
   const noticeCode = currentRecipient?.payment?.noticeCode;
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
-
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
+  );
+  const legalFactDownloadRetryAfter = useAppSelector(
+    (state: RootState) => state.notificationState.legalFactDownloadRetryAfter
   );
   const unfilteredDetailTableRows: Array<{
     label: string;
@@ -129,6 +132,7 @@ const NotificationDetail = () => {
   };
 
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
+    dispatch(resetLegalFactState());
     void dispatch(
       getReceivedNotificationLegalfact({ iun: notification.iun, legalFact, mandateId })
     );
@@ -193,6 +197,8 @@ const NotificationDetail = () => {
     }
   }, [legalFactDownloadUrl]);
 
+  const timeoutMessage = legalFactDownloadRetryAfter * 1000;
+
   const fromQrCode = useMemo(() => !!(location.state && (location.state as LocationState).fromQrCode), [location]);
 
   const properBreadcrumb = useMemo(() => (
@@ -249,6 +255,8 @@ const NotificationDetail = () => {
                 {!isCancelled && currentRecipient?.payment && creditorTaxId && noticeCode && (
                   <NotificationPayment
                     iun={notification.iun}
+                    senderDenomination={notification.senderDenomination}
+                    subject={notification.subject}
                     notificationPayment={currentRecipient.payment}
                     onDocumentDownload={dowloadDocument}
                     mandateId={mandateId}
@@ -281,6 +289,15 @@ const NotificationDetail = () => {
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box component="section" sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
+                <TimedMessage
+                  timeout={timeoutMessage}
+                  message={<Alert
+                    severity={'warning'}
+                    sx={{mb: 3}}
+                  >
+                    {t('detail.document-not-available', { ns: 'notifiche' })}
+                  </Alert>}
+                />
                 <NotificationDetailTimeline
                   recipients={notification.recipients}
                   statusHistory={notification.notificationStatusHistory}

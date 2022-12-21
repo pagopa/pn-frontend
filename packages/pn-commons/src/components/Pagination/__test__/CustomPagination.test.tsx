@@ -1,20 +1,20 @@
-import { fireEvent, RenderResult, waitFor, screen } from "@testing-library/react";
+import React from 'react';
+import { fireEvent, RenderResult, waitFor, screen } from '@testing-library/react';
 
-import { render } from "../../../test-utils";
-import CustomPagination from "../CustomPagination";
-import { PaginationData } from "../types";
+import { render } from '../../../test-utils';
+import CustomPagination from '../CustomPagination';
+import { PaginationData } from '../types';
 
 let paginationData: PaginationData = {
   page: 0,
   size: 50,
-  totalElements: 500
+  totalElements: 500,
 };
 
 const handlePageChange = jest.fn();
 const mockEventTrackingPageSize = jest.fn();
 
 describe('CustomPagination Component', () => {
-
   let result: RenderResult | undefined;
 
   beforeEach(() => {
@@ -34,7 +34,7 @@ describe('CustomPagination Component', () => {
     paginationData = {
       page: 0,
       size: 50,
-      totalElements: 500
+      totalElements: 500,
     };
   });
 
@@ -56,18 +56,18 @@ describe('CustomPagination Component', () => {
     const itemsPerPageListContainer = await screen.findByRole('presentation');
     expect(itemsPerPageListContainer).toBeInTheDocument();
     const itemsPerPageList = await screen.findAllByRole('menuitem');
-    expect(itemsPerPageList).toHaveLength(6);
+    expect(itemsPerPageList).toHaveLength(3);
     await waitFor(() => {
-      fireEvent.click(itemsPerPageList[4]!);
+      fireEvent.click(itemsPerPageList[1]!);
     });
-    expect(button).toHaveTextContent(/200/i);
+    expect(button).toHaveTextContent(/20/i);
     expect(handlePageChange).toBeCalledTimes(1);
     expect(mockEventTrackingPageSize).toBeCalledTimes(1);
     expect(handlePageChange).toBeCalledWith({
       page: 0,
-      size: 200,
-      totalElements: 500
-    })
+      size: 20,
+      totalElements: 500,
+    });
   });
 
   it('changes page', async () => {
@@ -89,7 +89,7 @@ describe('CustomPagination Component', () => {
     expect(handlePageChange).toBeCalledWith({
       page: 4,
       size: 50,
-      totalElements: 500
+      totalElements: 500,
     });
   });
 });

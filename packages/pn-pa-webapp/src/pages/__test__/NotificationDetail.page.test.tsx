@@ -2,7 +2,7 @@ import * as redux from 'react-redux';
 import { NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
 import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 
-import { render, axe } from '../../__test__/test-utils';
+import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/notification/actions';
 import {
   notificationToFe,
@@ -119,7 +119,7 @@ describe('NotificationDetail Page (one recipient)', () => {
     fireEvent.click(documentButton);
     expect(mockDispatchFn).toBeCalledTimes(2);
     fireEvent.click(legalFactButton);
-    expect(mockDispatchFn).toBeCalledTimes(3);
+    expect(mockDispatchFn).toBeCalledTimes(4);
   });
 
   test('clicks on the back button', () => {
@@ -128,6 +128,8 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
 
+  // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
+  // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
   test.skip('clicks on the cancel button and on close modal', async () => {
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);
@@ -138,6 +140,8 @@ describe('NotificationDetail Page (one recipient)', () => {
     await waitFor(() => expect(modal).not.toBeInTheDocument());
   });
 
+  // pn-1714 - cancel notification ("Annulla notifica") button temporarily non operative
+  // (in the context of pn-2712, I decide to keep this test as skipped - Carlos Lombardi, 2022.12.14)
   test.skip('clicks on the cancel button and on confirm button', async () => {
     const cancelNotificationBtn = result.getByTestId('cancelNotificationBtn');
     fireEvent.click(cancelNotificationBtn);
@@ -150,14 +154,8 @@ describe('NotificationDetail Page (one recipient)', () => {
     await waitFor(() => expect(modal).not.toBeInTheDocument());
     expect(mockNavigateFn).toBeCalledTimes(1);
   });
-
-  it.skip('does not have basic accessibility issues rendering the page', async () => {
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
-  });
 });
+
 
 describe('NotificationDetail Page (multi recipient)', () => {
   let result: RenderResult;
@@ -209,12 +207,5 @@ describe('NotificationDetail Page (multi recipient)', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-id');
-  });
-
-  it.skip('does not have basic accessibility issues rendering the page', async () => {
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
   });
 });

@@ -2,7 +2,6 @@ import { fireEvent, screen } from "@testing-library/react";
 import { render } from "../../__test__/test-utils";
 import Profile from "../Profile.page";
 import * as hooks from '../../redux/hooks';
-import { axe } from "../../__test__/test-utils";
 import { RECAPITI } from '../../navigation/routes.const';
 
 jest.mock('react-i18next', () => ({
@@ -70,17 +69,5 @@ describe('testing profile page', () => {
     fireEvent.click(button);
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(RECAPITI);
-  });
-
-  it.skip('is profile page accessible', async ()=>{
-    const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
-    mockUseAppSelector.mockReturnValueOnce({
-      name: 'Mario',
-      family_name: 'Rossi',
-      fiscal_number: 'RSSMRA45P02H501W'
-    });
-    const { container } = render(<Profile/>);
-    const results = await axe(container);
-    expect(results).toHaveNoViolations();
   });
 });

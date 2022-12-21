@@ -3,6 +3,8 @@
     "target": "esnext",
     "module": "esnext",
     "lib": [
+      "DOM",
+      "DOM.Iterable",
       "es6",
       "dom",
       "es2019"
@@ -33,9 +35,12 @@
   "exclude": [
     "__mocks__",
     "dist",
+    "lib",
     "node_modules",
     "**/__tests__/*",
     "**/__test__/*",
+    "src/test-utils.tsx",
+    "src/setupTests.ts",
     "Dangerfile.ts"
   ]
 }
