@@ -4,7 +4,7 @@ env:
   secrets-manager:
     SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM:token
     CYPRESS_PF_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf
-    CYPRESS_PA_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa
+    # CYPRESS_PA_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa
 phases:
   install:
     runtime-versions:
