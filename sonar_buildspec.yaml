@@ -29,7 +29,6 @@ phases:
       - apt install --no-install-recommends yarn
       # install cypress dependencies
       - apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-      - apt-get install -y awk
       # set hosts file
       - echo 127.0.0.1 portale.dev.pn.pagopa.it >> /etc/hosts
       - cat /etc/hosts
@@ -40,7 +39,7 @@ phases:
       - yarn install --frozen-lockfile
   build:
     commands:
-      - PRJ_NAME = awk -F "/" '{print $NF}' $SUB_PRJ_NAME
+      - PRJ_NAME=${SUB_PRJ_NAME##*/}
       - echo CURRENT PROJECT IS $PRJ_NAME
       - echo Running tests with coverage...
       # - yarn test:coverage
