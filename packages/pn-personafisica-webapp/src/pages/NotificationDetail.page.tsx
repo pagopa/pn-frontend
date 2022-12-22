@@ -1,5 +1,5 @@
 import { Fragment, ReactNode, useCallback, useEffect, useState, useMemo } from 'react';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Grid, Box, Paper, Stack, Typography, Alert } from '@mui/material';
 import { makeStyles } from '@mui/styles';
@@ -47,7 +47,7 @@ const useStyles = makeStyles(() => ({
 // state for the invocations to this component
 // (to include in navigation or Link to the route/s arriving to it)
 type LocationState = {
-  fromQrCode?: boolean;    // indicates whether the user arrived to the notification detail page from the QR code
+  fromQrCode?: boolean; // indicates whether the user arrived to the notification detail page from the QR code
 };
 
 const NotificationDetail = () => {
@@ -59,6 +59,7 @@ const NotificationDetail = () => {
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
+  const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
   const delegatorsFromStore = useAppSelector(
@@ -199,23 +200,28 @@ const NotificationDetail = () => {
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
 
-  const fromQrCode = useMemo(() => !!(location.state && (location.state as LocationState).fromQrCode), [location]);
+  const fromQrCode = useMemo(
+    () => !!(location.state && (location.state as LocationState).fromQrCode),
+    [location]
+  );
 
-  const properBreadcrumb = useMemo(() => (
-    <PnBreadcrumb
-      showBackAction={!fromQrCode}
-      linkRoute={mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) :  routes.NOTIFICHE}
-      linkLabel={
-        <Fragment>
-          <EmailIcon sx={{ mr: 0.5 }} />
-          {t('detail.breadcrumb-root', { ns: 'notifiche' })}
-        </Fragment>
-      }
-      currentLocationLabel={
-        `${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`
-      }
-    />
-  ), [fromQrCode]);
+  const properBreadcrumb = useMemo(
+    () => (
+      <PnBreadcrumb
+        showBackAction={!fromQrCode}
+        linkRoute={mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE}
+        linkLabel={
+          <Fragment>
+            <EmailIcon sx={{ mr: 0.5 }} />
+            {t('detail.breadcrumb-root', { ns: 'notifiche' })}
+          </Fragment>
+        }
+        currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
+        goBackAction={() => navigate(routes.NOTIFICHE)}
+      />
+    ),
+    [fromQrCode]
+  );
 
   const breadcrumb = (
     <Fragment>
@@ -291,12 +297,11 @@ const NotificationDetail = () => {
               <Box component="section" sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
                 <TimedMessage
                   timeout={timeoutMessage}
-                  message={<Alert
-                    severity={'warning'}
-                    sx={{mb: 3}}
-                  >
-                    {t('detail.document-not-available', { ns: 'notifiche' })}
-                  </Alert>}
+                  message={
+                    <Alert severity={'warning'} sx={{ mb: 3 }}>
+                      {t('detail.document-not-available', { ns: 'notifiche' })}
+                    </Alert>
+                  }
                 />
                 <NotificationDetailTimeline
                   recipients={notification.recipients}
