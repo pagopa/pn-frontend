@@ -31,9 +31,6 @@ phases:
       - yarn install --frozen-lockfile
   build:
     commands:
-      # extract project name
-      - PRJ_NAME=${SUB_PRJ_NAME##*/}
-      - echo CURRENT PROJECT IS $PRJ_NAME
       - echo Running tests with coverage...
       # - yarn test:coverage
       - BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
@@ -42,18 +39,25 @@ phases:
       # - yarn run sonar
       - |
         if [ -d "cypress/" ] ; then
-          echo Creating .env file...
+          PRJ_NAME=${SUB_PRJ_NAME##*/}
+
           DEV_ENV="ENV_${PRJ_NAME//-/_}"
+          CYPRESS_ENV="CYPRESS_${PRJ_NAME//-/_}"
+          
+          echo Creating .env.development.local file...
           echo -e "${!DEV_ENV}" > .env.development.local
+          
+          echo Creating cypress.env.json file...
+          echo -e "${!CYPRESS_ENV}" > cypress.env.json
+
           echo Starting application...
           yarn start-waiton
-          CYPRESS_ENV="CYPRESS_${PRJ_NAME//-/_}"
-          echo -e "${!CYPRESS_ENV}" > cypress.env.json
+
           echo Running Cypress in headless mode...
           yarn cy-run --config video=false
         fi
       
-      # yarn cy-run --config video=false --headless
+      # to show missing cypress dependencies
       # ldd /root/.cache/Cypress/10.8.0/Cypress/Cypress | grep 'not found'
 
       # - sleep 5
