@@ -54,12 +54,15 @@ phases:
         if [ -d "cypress/" ] ; then
           echo Creating .env file...
           DEV_ENV="ENV_${PRJ_NAME//-/_}"
-          echo variable name is $DEV_ENV
+          echo DEV_ENV variable name has value "$DEV_ENV"
+          echo -e "${!DEV_ENV}" > .env.development.local
+          cat .env.development.local
           echo Starting application...
           yarn start-waiton
           echo Creating Cypress env file...
-          CYPRESS_ENV="CYPRESS_${PRJ_NAME}"
-          echo ${!CYPRESS_ENV} > cypress.env.json
+          CYPRESS_ENV="CYPRESS_${PRJ_NAME//-/_}"
+          echo CYPRESS_ENV variable name has value "$CYPRESS_ENV"
+          echo -e "${!CYPRESS_ENV}" > cypress.env.json
           echo Running Cypress in headless mode...
           yarn cy-run
         fi
