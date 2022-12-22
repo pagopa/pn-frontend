@@ -13,9 +13,10 @@ env:
   shell: bash
   secrets-manager:
     SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM:token
-    CYPRESS_PF_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf
-    CYPRESS_PA_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa
-    CYPRESS_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:cypress/pn-personafisica-webapp
+    CYPRESS_pn-personafisica-webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf
+    CYPRESS_pn-pa-webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa
+    ENV_pn-personafisica-webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf-env
+    ENV_pn-pa-webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa-env
 phases:
   install:
     runtime-versions:
@@ -43,7 +44,6 @@ phases:
       # extract project name
       - PRJ_NAME=${SUB_PRJ_NAME##*/}
       - echo CURRENT PROJECT IS $PRJ_NAME
-      -
       - echo Running tests with coverage...
       # - yarn test:coverage
       - BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
@@ -52,13 +52,13 @@ phases:
       # - yarn run sonar
       - |
         if [ -d "cypress/" ] ; then
-          echo Installing wait-on module...
+          DEV_ENV=$ENV_${PRJ_NAME}
+          echo $DEV_ENV >.env.development.local
           echo Starting application...
           yarn start-waiton
           echo Creating Cypress env file...
+          CYPRESS_ENV=$CYPRESS_${PRJ_NAME}
           echo $CYPRESS_ENV >cypress.env.json
-          cat cypress.env.json
-          echo 
           echo Running Cypress in headless mode...
           yarn cy-run
         fi
