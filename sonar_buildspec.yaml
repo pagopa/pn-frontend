@@ -46,8 +46,9 @@ phases:
       - echo Running sonar task...
       # - yarn run sonar
       # if [ $SUB_PRJ_NAME == "packages/pn-pa-webapp" -o $SUB_PRJ_NAME == "packages/pn-personafisica-webapp" ] ; then
+      # if [ $SUB_PRJ_NAME == "packages/pn-personafisica-webapp" ] ; then
       - |
-        if [ $SUB_PRJ_NAME == "packages/pn-personafisica-webapp" ] ; then
+        if [ -d "cypress/" ] ; then
           echo Installing wait-on module...
           echo Starting application...
           yarn start-waiton
