@@ -14,6 +14,7 @@ const InactivityHandler = ({ inactivityTimer, children, onTimerExpired }: Props)
   const resetTimer = () => setInitTimeout(!initTimeout);
 
   const initListeners = () => {
+    console.log('InactivityTimer - dentro initListener');
     window.addEventListener('mousemove', resetTimer);
     window.addEventListener('scroll', resetTimer);
     window.addEventListener('keydown', resetTimer);
