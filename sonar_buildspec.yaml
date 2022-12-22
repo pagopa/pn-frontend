@@ -52,13 +52,13 @@ phases:
       # - yarn run sonar
       - |
         if [ -d "cypress/" ] ; then
-          DEV_ENV=ENV_${PRJ_NAME}
-          echo ${DEV_ENV} > .env.development.local
+          DEV_ENV=ENV_$PRJ_NAME
+          echo ${!DEV_ENV} > .env.development.local
           echo Starting application...
           yarn start-waiton
           echo Creating Cypress env file...
-          CYPRESS_ENV=CYPRESS_${PRJ_NAME}
-          echo ${CYPRESS_ENV} > cypress.env.json
+          CYPRESS_ENV=CYPRESS_$PRJ_NAME
+          echo ${!CYPRESS_ENV} > cypress.env.json
           echo Running Cypress in headless mode...
           yarn cy-run
         fi
