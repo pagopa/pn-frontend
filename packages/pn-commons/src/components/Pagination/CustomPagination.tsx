@@ -35,17 +35,33 @@ const getA11yPaginationLabels = (
       ariaStr = getLocalizedOrDefaultLabel('common', 'paginator.last', 'ultimo elemento');
       break;
     case 'page':
-      ariaStr = `${getLocalizedOrDefaultLabel('common', 'paginator.page', 'pagina')} ${page.toString()}`;
+      ariaStr = `${getLocalizedOrDefaultLabel(
+        'common',
+        'paginator.page',
+        'pagina'
+      )} ${page.toString()}`;
       break;
     case 'next':
-      ariaStr = getLocalizedOrDefaultLabel('common', 'paginator.next', 'Vai alla pagina successiva');
+      ariaStr = getLocalizedOrDefaultLabel(
+        'common',
+        'paginator.next',
+        'Vai alla pagina successiva'
+      );
       break;
     case 'previous':
-      ariaStr = getLocalizedOrDefaultLabel('common', 'paginator.previous', 'Vai alla pagina precedente');
+      ariaStr = getLocalizedOrDefaultLabel(
+        'common',
+        'paginator.previous',
+        'Vai alla pagina precedente'
+      );
       break;
   }
   if (selected) {
-    ariaStr += `, ${getLocalizedOrDefaultLabel('common', 'paginator.selected', 'elemento selezionato')}`;
+    ariaStr += `, ${getLocalizedOrDefaultLabel(
+      'common',
+      'paginator.selected',
+      'elemento selezionato'
+    )}`;
   }
   return ariaStr;
 };
@@ -54,7 +70,7 @@ const getA11yPaginationLabels = (
 export default function CustomPagination({
   paginationData,
   onPageRequest,
-  elementsPerPage = [10, 20, 50, 100, 200, 500],
+  elementsPerPage = [10, 20, 50],
   pagesToShow,
   sx,
   eventTrackingCallbackPageSize,
@@ -77,7 +93,7 @@ export default function CustomPagination({
       // reset current page
       paginationData.page = 0;
       onPageRequest(paginationData);
-      if(eventTrackingCallbackPageSize) eventTrackingCallbackPageSize(selectedSize);
+      if (eventTrackingCallbackPageSize) eventTrackingCallbackPageSize(selectedSize);
     }
     handleClose();
   };
@@ -100,7 +116,11 @@ export default function CustomPagination({
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           endIcon={<ArrowDropDown />}
-          aria-label={getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page', 'Righe per pagina')}
+          aria-label={getLocalizedOrDefaultLabel(
+            'common',
+            'paginator.rows-per-page',
+            'Righe per pagina'
+          )}
         >
           {size}
         </Button>
@@ -110,7 +130,11 @@ export default function CustomPagination({
           open={open}
           onClose={handleClose}
           MenuListProps={{
-            'aria-labelledby': getLocalizedOrDefaultLabel('common', 'paginator.rows-per-page', 'Righe per pagina'),
+            'aria-labelledby': getLocalizedOrDefaultLabel(
+              'common',
+              'paginator.rows-per-page',
+              'Righe per pagina'
+            ),
           }}
         >
           {elementsPerPage.map((ep) => (
@@ -132,7 +156,11 @@ export default function CustomPagination({
         {paginationData.totalElements > size && (
           <Pagination
             sx={{ display: 'flex' }}
-            aria-label={getLocalizedOrDefaultLabel('common', 'paginator.aria-label', 'Menu Paginazione')}
+            aria-label={getLocalizedOrDefaultLabel(
+              'common',
+              'paginator.aria-label',
+              'Menu Paginazione'
+            )}
             color="primary"
             variant="text"
             shape="circular"
