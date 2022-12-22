@@ -105,7 +105,6 @@ const NuovaDelega = () => {
     codiceFiscale: '',
     nome: '',
     cognome: '',
-    ragioneSociale: '',
     selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
     expirationDate: tomorrow,
     enteSelect: {
