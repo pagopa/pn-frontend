@@ -1,15 +1,5 @@
 version: 0.2
 env:
-  variables:
-    REACT_APP_URL_FE_LOGIN: https://portale-login.dev.pn.pagopa.it/
-    REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
-    REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
-    REACT_APP_DISABLE_INACTIVITY_HANDLER: true
-    REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
-    REACT_APP_ONETRUST_DOMAIN_ID: "29cc1c86-f2ef-494d-8242-9bec8009cd29-test"
-    HOST: 'portale.dev.pn.pagopa.it'
-    HTTPS: true
-    PORT: 443
   shell: bash
   secrets-manager:
     SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM:token
@@ -60,7 +50,7 @@ phases:
           CYPRESS_ENV="CYPRESS_${PRJ_NAME//-/_}"
           echo -e "${!CYPRESS_ENV}" > cypress.env.json
           echo Running Cypress in headless mode...
-          yarn cy-run
+          yarn cy-run --config video=false
         fi
       
       # yarn cy-run --config video=false --headless
