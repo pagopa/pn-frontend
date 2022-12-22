@@ -15,6 +15,7 @@ env:
     SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM:token
     CYPRESS_PF_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf
     CYPRESS_PA_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa
+    CYPRESS_ENV: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:cypress/pn-personafisica-webapp
 phases:
   install:
     runtime-versions:
@@ -39,31 +40,31 @@ phases:
       - yarn install --frozen-lockfile
   build:
     commands:
+      # extract project name
       - PRJ_NAME=${SUB_PRJ_NAME##*/}
       - echo CURRENT PROJECT IS $PRJ_NAME
+      -
       - echo Running tests with coverage...
       # - yarn test:coverage
       - BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
       - if echo $CODEBUILD_SOURCE_VERSION | grep -q ^pr/ ; then PR_NUM=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/pr\///'); BRANCH_TARGET=$(echo $CODEBUILD_WEBHOOK_BASE_REF | sed 's/refs\/heads\///'); export PR_NUM BRANCH_TARGET; fi;
       - echo Running sonar task...
       # - yarn run sonar
-      # if [ $SUB_PRJ_NAME == "packages/pn-pa-webapp" -o $SUB_PRJ_NAME == "packages/pn-personafisica-webapp" ] ; then
-      # if [ $SUB_PRJ_NAME == "packages/pn-personafisica-webapp" ] ; then
       - |
         if [ -d "cypress/" ] ; then
           echo Installing wait-on module...
           echo Starting application...
           yarn start-waiton
           echo Creating Cypress env file...
-          echo $CYPRESS_PF_ENV >cypress.env.json
+          echo $CYPRESS_ENV >cypress.env.json
           cat cypress.env.json
           echo 
           echo Running Cypress in headless mode...
-          yarn cy-run --config video=false --headless
+          yarn cy-run
         fi
       
+      # yarn cy-run --config video=false --headless
       # ldd /root/.cache/Cypress/10.8.0/Cypress/Cypress | grep 'not found'
-      # yarn cy-run --config '$CYPRESS_PF_ENV'
 
       # - sleep 5
       # - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
