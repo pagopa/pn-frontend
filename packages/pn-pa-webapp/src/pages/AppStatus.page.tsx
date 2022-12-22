@@ -99,7 +99,7 @@ const AppStatus = () => {
   const lastCheckTimestampFormatted = useMemo(() => {
     if (currentStatus) {
       const dateAndTime = formatDateTime(currentStatus.lastCheckTimestamp);
-      return `${dateAndTime.date}, ${dateAndTime.time}`;
+      return dateAndTime;
     } else {
       return '';
     }

@@ -4,14 +4,13 @@ import {
   AppResponseMessage,
   DowntimeStatus,
   formatDate,
-  formatTimeHHMM,
   KnownFunctionality,
   ResponseEventDispatcher,
 } from '@pagopa-pn/pn-commons';
 import { render } from '../../__test__/test-utils';
 import AppStatus from '../AppStatus.page';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
-
+import { formatTime } from '../../../../pn-commons/src/utils';
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
   useTranslation: () => ({
@@ -60,33 +59,36 @@ jest.mock('../../api/appStatus/AppStatus.api', () => {
               statusByFunctionality: [],
               lastCheckTimestamp: mockLastCheckTimestamp,
             }),
-      getDowntimeLogPage: () => mockDowntimeLogApiFail
-        ? Promise.reject({ response: { status: 500 } })
-        : Promise.resolve({
-            downtimes: mockIncludeDowntimes
-              ? [
-                  {
-                    rawFunctionality: mockNotificationCreate,
-                    knownFunctionality: mockNotificationCreate,
-                    status: mockDowntimeStatusOK,
-                    startDate: '2022-10-24T08:15:21Z',
-                    endDate: '2022-10-24T08:15:29Z',
-                    legalFactId: 'some-legal-fact-id',
-                    fileAvailable: true,
-                  },
-                ]
-              : [],
-            statusByFunctionality: [],
-          }),
+      getDowntimeLogPage: () =>
+        mockDowntimeLogApiFail
+          ? Promise.reject({ response: { status: 500 } })
+          : Promise.resolve({
+              downtimes: mockIncludeDowntimes
+                ? [
+                    {
+                      rawFunctionality: mockNotificationCreate,
+                      knownFunctionality: mockNotificationCreate,
+                      status: mockDowntimeStatusOK,
+                      startDate: '2022-10-24T08:15:21Z',
+                      endDate: '2022-10-24T08:15:29Z',
+                      legalFactId: 'some-legal-fact-id',
+                      fileAvailable: true,
+                    },
+                  ]
+                : [],
+              statusByFunctionality: [],
+            }),
     },
   };
 });
 
-const AppStatusWithErrorHandling = () => <>
-  <ResponseEventDispatcher />
-  <AppResponseMessage />
-  <AppStatus />
-</>;
+const AppStatusWithErrorHandling = () => (
+  <>
+    <ResponseEventDispatcher />
+    <AppResponseMessage />
+    <AppStatus />
+  </>
+);
 
 describe('AppStatus page', () => {
   beforeEach(() => {
@@ -145,8 +147,12 @@ describe('AppStatus page', () => {
     const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
     const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
     const emptyStateComponent = screen.queryByTestId('mock-empty-state');
-    const statusApiErrorComponent = screen.queryByTestId(`api-error-${APP_STATUS_ACTIONS.GET_CURRENT_STATUS}`);
-    const downtimeApiErrorComponent = screen.queryByTestId(`api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE}`);
+    const statusApiErrorComponent = screen.queryByTestId(
+      `api-error-${APP_STATUS_ACTIONS.GET_CURRENT_STATUS}`
+    );
+    const downtimeApiErrorComponent = screen.queryByTestId(
+      `api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE}`
+    );
     expect(appStatusBarComponent).not.toBeInTheDocument();
     expect(desktopDonwtimeLogComponent).toBeInTheDocument();
     expect(mobileDonwtimeLogComponent).not.toBeInTheDocument();
@@ -164,8 +170,12 @@ describe('AppStatus page', () => {
     const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
     const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
     const emptyStateComponent = screen.queryByTestId('mock-empty-state');
-    const statusApiErrorComponent = screen.queryByTestId(`api-error-${APP_STATUS_ACTIONS.GET_CURRENT_STATUS}`);
-    const downtimeApiErrorComponent = screen.queryByTestId(`api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE}`);
+    const statusApiErrorComponent = screen.queryByTestId(
+      `api-error-${APP_STATUS_ACTIONS.GET_CURRENT_STATUS}`
+    );
+    const downtimeApiErrorComponent = screen.queryByTestId(
+      `api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE}`
+    );
     expect(appStatusBarComponent).toBeInTheDocument();
     expect(desktopDonwtimeLogComponent).not.toBeInTheDocument();
     expect(mobileDonwtimeLogComponent).not.toBeInTheDocument();
@@ -180,7 +190,7 @@ describe('AppStatus page', () => {
     await act(async () => void render(<AppStatusWithErrorHandling />));
     const lastCheckLegend = screen.queryByText(new RegExp('appStatus.lastCheckLegend'));
     const lastCheckDate = screen.queryByText(new RegExp(formatDate(mockLastCheckTimestamp)));
-    const lastCheckTime = screen.queryByText(new RegExp(formatTimeHHMM(mockLastCheckTimestamp)));
+    const lastCheckTime = screen.queryByText(new RegExp(formatTime(mockLastCheckTimestamp)));
     expect(lastCheckLegend).toBeInTheDocument();
     expect(lastCheckDate).toBeInTheDocument();
     expect(lastCheckTime).toBeInTheDocument();

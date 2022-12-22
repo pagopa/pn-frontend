@@ -1,11 +1,17 @@
-import { getMonthString, getDay, getTime, getNextDay, formatToTimezoneString } from '../date.utility';
+import {
+  formatMonthString,
+  formatDay,
+  formatTime,
+  getNextDay,
+  formatToTimezoneString,
+} from '../date.utility';
 
 const dateString = '2022-02-22T14:20:20.566Z';
 const date = new Date(dateString);
 
 describe('Date utility', () => {
   it('return month string, uppercase and truncated to the first three letters', () => {
-    const month = getMonthString(dateString);
+    const month = formatMonthString(dateString);
     const expectedMonth = date
       .toLocaleString('default', { month: 'long' })
       .toUpperCase()
@@ -14,13 +20,13 @@ describe('Date utility', () => {
   });
 
   it('return day', () => {
-    const day = getDay(dateString);
+    const day = formatDay(dateString);
     const expectedDay = `0${date.getDate()}`.slice(-2);
     expect(day).toBe(expectedDay);
   });
 
   it('return time', () => {
-    const time = getTime(dateString);
+    const time = formatTime(dateString);
     const expectedTime = `${date.getHours()}:${date.getMinutes()}`;
     expect(time).toBe(expectedTime);
   });
