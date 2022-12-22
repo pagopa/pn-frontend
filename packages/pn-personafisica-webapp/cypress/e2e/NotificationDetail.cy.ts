@@ -53,7 +53,7 @@ describe('Notification Detail', () => {
       fixture: 'notifications/viewed',
     }).as('selectedNotification');
 
-    cy.contains(notifications[0].iun).click({force: true});
+    cy.contains(notifications[0].iun).click();
 
     // cy.intercept('GET', `${NOTIFICATION_DETAIL_LEGALFACT(notifications[0].iun, notifications[0].legalFactId)}`, {
     cy.intercept('GET', `/delivery-push/${notifications[0].iun}/legal-facts/**`, {
@@ -65,7 +65,7 @@ describe('Notification Detail', () => {
 
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
-    cy.contains(/^Attestazione opponibile a terzi\b/).click({force: true});
+    cy.contains(/^Attestazione opponibile a terzi\b/).click();
 
     cy.wait('@downloadLegalFact').then((interception) => {
       expect(interception.request.url).include(notifications[0].legalFactId);
@@ -79,7 +79,7 @@ describe('Notification Detail', () => {
       fixture: 'notifications/viewed',
     }).as('selectedNotification');
 
-    cy.contains(`${notifications[0].iun}`).click({force: true});
+    cy.contains(`${notifications[0].iun}`).click();
 
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
@@ -97,7 +97,7 @@ describe('Notification Detail', () => {
       fixture: 'notifications/list-10/page-1_viewed',
     }).as('getNotifications');
 
-    cy.get('[data-cy="menu-item(notifiche)"]').click({force: true});
+    cy.get('[data-cy="menu-item(notifiche)"]').click();
 
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
@@ -118,7 +118,7 @@ describe('Notification Detail', () => {
       .find('.MuiChip-label')
       .should('have.text', 'Perfezionata per decorrenza termini');
 
-    cy.contains(`${notifications[1].iun}`).click({force: true});
+    cy.contains(`${notifications[1].iun}`).click();
 
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 

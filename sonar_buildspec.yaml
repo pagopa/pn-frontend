@@ -42,7 +42,7 @@ phases:
           echo $CYPRESS_PF_ENV >cypress.env.json
           cat cypress.env.json
           echo Running Cypress in headless mode...
-          yarn cy-run
+          yarn cy-run --config video=false
         fi
       
       # ldd /root/.cache/Cypress/10.8.0/Cypress/Cypress | grep 'not found'
