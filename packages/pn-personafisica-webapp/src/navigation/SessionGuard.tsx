@@ -105,8 +105,22 @@ const SessionGuard = () => {
 
   const getTokenParam = useCallback(() => {
     const params = new URLSearchParams(location.hash);
+    console.log('SessionGuard - in getTokenParam');
+    console.log({...location, token: params.get('#token')});
     return params.get('#token');
   }, [location]);
+
+  // const getTokenParam = useCallback(() => {
+  //   const keyToToken = "#token=";
+  //   const startOfLastToken = location.hash.lastIndexOf(keyToToken)+keyToToken.length;
+  //   const endOfLastToken = location.hash.indexOf("#", startOfLastToken);
+  //   console.log('SessionGuard - in getTokenParam');
+  //   console.log({
+  //     hash: location.hash, startOfLastToken, endOfLastToken, 
+  //     result: location.hash.slice(startOfLastToken, endOfLastToken === -1 ? undefined : endOfLastToken)
+  //   });
+  //   return location.hash.slice(startOfLastToken, endOfLastToken === -1 ? undefined : endOfLastToken);
+  // }, [location]);
 
   /**
    * Step 1 - determinazione dell'utente - token exchange
@@ -132,10 +146,14 @@ const SessionGuard = () => {
   useEffect(() => {
     const doInitalPageDetermination = async () => {
       if (sessionToken && !isClosedSession && !hasTosApiErrors) {
+        console.log("in SessionGuard");
+        console.log(location);
         // se non è presente una route diversa dalla root si viene reindirizzati alla dashboard delle notifiche
         const rootPath = location.pathname === '/';
         if (rootPath) {
           navigate(routes.NOTIFICHE, { replace: true });
+        } else {
+          navigate({ pathname: location.pathname, search: location.search, hash: ""}, { replace: true });
         }
       }
     };
