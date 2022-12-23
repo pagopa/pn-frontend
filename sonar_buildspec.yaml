@@ -38,11 +38,8 @@ phases:
       - echo Running sonar task...
       # - yarn run sonar
       # if [ -d "cypress/" ] ; then
-      # echo Starting application...
       # yarn start-waiton
 
-      # echo Running Cypress in headless mode...
-      # yarn cy-run --config video=false
       - |
         if [ $SUB_PRJ_NAME == 'packages/pn-personafisica-webapp' ] ; then
           PRJ_NAME=${SUB_PRJ_NAME##*/}
@@ -56,7 +53,13 @@ phases:
           echo Creating cypress.env.json file...
           echo -e "${!CYPRESS_ENV}" > cypress.env.json
 
-          node run-cy-tests.js
+          echo Starting application...
+          nohup yarn start & echo $! > pidfile
+          
+          echo Running Cypress in headless mode...
+          yarn cy-run --config video=false
+
+          kill $(cat pidfile)
         fi
       
       # to show missing cypress dependencies
