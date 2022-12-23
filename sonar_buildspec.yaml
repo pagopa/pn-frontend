@@ -22,8 +22,8 @@ phases:
       # install cypress dependencies
       - apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
       # set hosts file
-      - echo 127.0.0.1 portale.dev.pn.pagopa.it >> /etc/hosts
-      - cat /etc/hosts
+      # - echo 127.0.0.1 portale.dev.pn.pagopa.it >> /etc/hosts
+      # - cat /etc/hosts
   pre_build:
     commands:
       - echo launching yarn install in $SUB_PRJ_NAME...
@@ -41,26 +41,31 @@ phases:
       # yarn start-waiton
 
       - |
-        if [ $SUB_PRJ_NAME == 'packages/pn-personafisica-webapp' ] ; then
-          PRJ_NAME=${SUB_PRJ_NAME##*/}
-
-          DEV_ENV="ENV_${PRJ_NAME//-/_}"
-          CYPRESS_ENV="CYPRESS_${PRJ_NAME//-/_}"
-          
-          echo Renaming file .env.cypress to .env.development.local...
-          mv .env.cypress .env.development.local
-          
-          echo Creating cypress.env.json file...
-          echo -e "${!CYPRESS_ENV}" > cypress.env.json
-
-          echo Starting application...
-          nohup yarn start & echo $! > pidfile
-          
-          echo Running Cypress in headless mode...
-          yarn cy-run --config video=false
-
-          kill $(cat pidfile)
+        if [ -d "cypress/" ] ; then
+          echo fetching .env variables
+          source .env.cypress
+          echo "127.0.0.1 $HOST" >> /etc/hosts
+          cat /etc/hosts
         fi
+
+      # PRJ_NAME=${SUB_PRJ_NAME##*/}
+
+      # DEV_ENV="ENV_${PRJ_NAME//-/_}"
+      # CYPRESS_ENV="CYPRESS_${PRJ_NAME//-/_}"
+      
+      # echo Renaming file .env.cypress to .env.development.local...
+      # mv .env.cypress .env.development.local
+      
+      # echo Creating cypress.env.json file...
+      # echo -e "${!CYPRESS_ENV}" > cypress.env.json
+
+      # echo Starting application...
+      # nohup yarn start-waiton & echo $! > pidfile
+      
+      # echo Running Cypress in headless mode...
+      # yarn cy-run --config video=false
+
+      # kill $(cat pidfile)
       
       # to show missing cypress dependencies
       # ldd /root/.cache/Cypress/10.8.0/Cypress/Cypress | grep 'not found'
