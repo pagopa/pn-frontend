@@ -45,6 +45,9 @@ describe('Notification Detail', () => {
 
     cy.login();
     cy.visit(NOTIFICHE);
+
+    cy.wait('@getNotifications');
+    cy.get('[data-testid="content"]').should('not.exist');
   });
 
   it('Downloads Legal fact', () => {
@@ -62,7 +65,6 @@ describe('Notification Detail', () => {
     }).as('downloadLegalFact');
 
     cy.wait('@selectedNotification');
-
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
     cy.contains(/^Attestazione opponibile a terzi\b/).click();
@@ -71,6 +73,7 @@ describe('Notification Detail', () => {
       expect(interception.request.url).include(notifications[0].legalFactId);
       expect(interception.response.statusCode).to.equal(200);
     });
+    cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
   });
 
   it(`Changes notification status from '${notifications[0].statusBefore}' to '${notifications[0].statusAfter}'`, () => {
@@ -81,14 +84,10 @@ describe('Notification Detail', () => {
 
     cy.contains(`${notifications[0].iun}`).click();
 
-    cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
-
     cy.wait('@selectedNotification').then((interception) => {
       expect(interception.response.statusCode).to.equal(200);
     });
-
     cy.wait('@getPaymentInfo');
-
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
     cy.contains('Perfezionata per visione');
@@ -99,7 +98,8 @@ describe('Notification Detail', () => {
 
     cy.get('[data-cy="menu-item(notifiche)"]').click();
 
-    cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
+    cy.wait('@getNotifications');
+    cy.get('[data-testid="content"]').should('not.exist');
 
     cy.get('[data-cy="table(notifications).row"]')
       .eq(0)
@@ -120,14 +120,10 @@ describe('Notification Detail', () => {
 
     cy.contains(`${notifications[1].iun}`).click();
 
-    cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
-
     cy.wait('@selectedNotification').then((interception) => {
       expect(interception.response.statusCode).to.equal(200);
     });
-
     cy.wait('@getPaymentInfo');
-
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
     cy.contains('Perfezionata per decorrenza termini');
