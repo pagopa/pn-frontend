@@ -1,7 +1,7 @@
 {
   "name": "@pagopa-pn/pn-pa-webapp",
   "description": "Backoffice di Piattaforma Notifiche per la Pubblica Amministrazione",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",
@@ -11,8 +11,8 @@
     "@mui/material": "^5.8.6",
     "@mui/styles": "^5.4.1",
     "@mui/x-date-pickers": "^5.0.0-alpha.5",
-    "@pagopa-pn/pn-commons": "^1.5.3",
     "@pagopa/mui-italia": "^0.8.10",
+    "@pagopa-pn/pn-commons": "^1.5.4",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.11.21",

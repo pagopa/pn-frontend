@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.5.4](https://github.com/pagopa/pn-frontend/compare/v1.5.3...v1.5.4) (2022-12-23)
+
+
+### Bug Fixes
+
+* **PN-3034:** updated handbook link ([9d47cff](https://github.com/pagopa/pn-frontend/commit/9d47cffa451aaf3da73edf86e7a2242abdeda2c5))
+
+
+
+
+
 ## [1.5.3](https://github.com/pagopa/pn-frontend/compare/v1.5.2...v1.5.3) (2022-12-14)
 
 **Note:** Version bump only for package @pagopa-pn/pn-landing-webapp
