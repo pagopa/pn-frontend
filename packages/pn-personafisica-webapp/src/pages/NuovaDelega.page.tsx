@@ -235,6 +235,10 @@ const NuovaDelega = () => {
                                 label={t('nuovaDelega.form.naturalPerson')}
                               />
                               <FormControlLabel
+                                onClick={() => {
+                                  setFieldValue('nome', '');
+                                  setFieldValue('cognome', '');
+                                }}
                                 value="pg"
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
