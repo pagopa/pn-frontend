@@ -159,7 +159,7 @@ const NuovaDelega = () => {
     funField('nome', initialValues.nome, false);
     funField('cognome', initialValues.cognome, false);
     funTouched('nome', false, false);
-    funTouched('cognome', false, false);
+    funTouched('cognome', false, true);
     return (): void => {};
   };
 
