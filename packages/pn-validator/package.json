@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "sonarqube-scanner": "^2.8.1",
-    "@babel/core": "^7.0.0-0",
+    "@babel/core": "^7.20.7",
     "@babel/preset-env": "^7.18.10",
     "@babel/preset-typescript": "^7.18.6",
     "@types/jest": "^28.0.0",
