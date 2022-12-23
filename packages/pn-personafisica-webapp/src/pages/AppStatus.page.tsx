@@ -99,11 +99,9 @@ const AppStatus = () => {
 
   const lastCheckTimestampFormatted = useMemo(() => {
     if (currentStatus) {
-      const dateAndTime = formatDateTime(currentStatus.lastCheckTimestamp);
-      return dateAndTime;
-    } else {
-      return '';
+      return formatDateTime(currentStatus.lastCheckTimestamp);
     }
+    return '';
   }, [currentStatus]);
 
   // resultPages includes one element per page, *including the first page*
