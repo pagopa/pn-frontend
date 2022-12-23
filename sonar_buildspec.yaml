@@ -3,10 +3,8 @@ env:
   shell: bash
   secrets-manager:
     SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM:token
-    CYPRESS_pn_personafisica_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf
-    CYPRESS_pn_pa_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa
-    # ENV_pn_personafisica_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf-env
-    # ENV_pn_pa_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa-env
+    # CYPRESS_pn_personafisica_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf
+    # CYPRESS_pn_pa_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa
 phases:
   install:
     runtime-versions:
@@ -21,9 +19,6 @@ phases:
       - apt install --no-install-recommends yarn
       # install cypress dependencies
       - apt-get install -y libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb
-      # set hosts file
-      # - echo 127.0.0.1 portale.dev.pn.pagopa.it >> /etc/hosts
-      # - cat /etc/hosts
   pre_build:
     commands:
       - echo launching yarn install in $SUB_PRJ_NAME...
@@ -31,26 +26,20 @@ phases:
       - yarn install --frozen-lockfile
   build:
     commands:
-      - echo Running tests with coverage...
+      # - echo Running tests with coverage...
       # - yarn test:coverage
       - BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
       - if echo $CODEBUILD_SOURCE_VERSION | grep -q ^pr/ ; then PR_NUM=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/pr\///'); BRANCH_TARGET=$(echo $CODEBUILD_WEBHOOK_BASE_REF | sed 's/refs\/heads\///'); export PR_NUM BRANCH_TARGET; fi;
-      - echo Running sonar task...
+      # - echo Running sonar task...
       # - yarn run sonar
-      # if [ -d "cypress/" ] ; then
-      # yarn start-waiton
 
       - |
         if [ -d "cypress/" ] ; then
-          echo fetching .env variables
+          echo Fetching .env variables...
           source .env.cypress
-          echo "127.0.0.1 $HOST" >> /etc/hosts
-          cat /etc/hosts
-          
-          PRJ_NAME=${SUB_PRJ_NAME##*/}
 
-          DEV_ENV="ENV_${PRJ_NAME//-/_}"
-          CYPRESS_ENV="CYPRESS_${PRJ_NAME//-/_}"
+          echo Setting up hosts file...
+          echo "127.0.0.1 $HOST" >> /etc/hosts
           
           echo Renaming file .env.cypress to .env.development.local...
           mv .env.cypress .env.development.local
@@ -64,9 +53,6 @@ phases:
           echo Running Cypress in headless mode...
           yarn cy-run --config video=false
         fi
-
-
-      # kill $(cat pidfile)
       
       # to show missing cypress dependencies
       # ldd /root/.cache/Cypress/10.8.0/Cypress/Cypress | grep 'not found'
