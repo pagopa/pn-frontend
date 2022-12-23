@@ -41,7 +41,7 @@
   },
   "scripts": {
     "start": "craco start",
-    "start-waiton": "craco start & wait-on ${HTTPS ? 'https://' : 'http://'}${HOST}:${PORT}",
+    "start-waiton": "craco start & wait-on",
     "build": "craco build",
     "test": "craco test --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:a11y": "craco test --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.(tsx|ts)$\"",
