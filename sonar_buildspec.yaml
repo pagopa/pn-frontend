@@ -37,8 +37,14 @@ phases:
       - if echo $CODEBUILD_SOURCE_VERSION | grep -q ^pr/ ; then PR_NUM=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/pr\///'); BRANCH_TARGET=$(echo $CODEBUILD_WEBHOOK_BASE_REF | sed 's/refs\/heads\///'); export PR_NUM BRANCH_TARGET; fi;
       - echo Running sonar task...
       # - yarn run sonar
+      # if [ -d "cypress/" ] ; then
+      # echo Starting application...
+      # yarn start-waiton
+
+      # echo Running Cypress in headless mode...
+      # yarn cy-run --config video=false
       - |
-        if [ -d "cypress/" ] ; then
+        if [ $SUB_PRJ_NAME == 'packages/pn-personafisica-webapp' ] ; then
           PRJ_NAME=${SUB_PRJ_NAME##*/}
 
           DEV_ENV="ENV_${PRJ_NAME//-/_}"
@@ -50,11 +56,7 @@ phases:
           echo Creating cypress.env.json file...
           echo -e "${!CYPRESS_ENV}" > cypress.env.json
 
-          echo Starting application...
-          yarn start-waiton
-
-          echo Running Cypress in headless mode...
-          yarn cy-run --config video=false
+          node run-cy-tests.js
         fi
       
       # to show missing cypress dependencies
