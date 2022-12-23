@@ -11,11 +11,7 @@ describe('Test between rule', () => {
 
   it('value not a number', () => {
     const rule = new Between<any, String>(1, 5);
-    try {
-      rule.valueValidator('prova');
-    } catch (e) {
-      expect(e.message).toBe('A non-number value was passed to the betwen rule');
-    }
+    expect(() => rule.valueValidator('prova')).toThrow('A non-number value was passed to the betwen rule');
   });
 
   it('value in the range (no inclusive)', () => {
