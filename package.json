@@ -2,7 +2,7 @@
   "name": "piattaforma-notifiche-monorepo",
   "private": true,
   "devDependencies": {
-    "@craco/craco": "^6.4.5",
+    "@craco/craco": "7.0.0",
     "lerna": "^5.5.2",
     "sonarqube-scanner": "^2.8.1"
   },
