@@ -99,8 +99,7 @@ const Recipient = ({ paymentMode, onConfirm, onPreviousStep, recipientsData }: P
           name: 'denominationTotalLength',
           test(value) {
             const denomination = (value || '') + ((this.parent.lastName as string) || '');
-            // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
-            const messageKey = `too-long-denomination-error-${this.parent.recipientType || 'PF'}`;
+            const messageKey = `too-long-denomination-error`;
             if (denomination.length > 80) {
               if (this.parent.recipientType === 'PG') {
                 return this.createError({ message: t(messageKey), path: this.path });
