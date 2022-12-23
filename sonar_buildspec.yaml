@@ -5,8 +5,8 @@ env:
     SONAR_TOKEN: arn:aws:secretsmanager:eu-central-1:911845998067:secret:SonarCloud-7370vM:token
     CYPRESS_pn_personafisica_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf
     CYPRESS_pn_pa_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa
-    ENV_pn_personafisica_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf-env
-    ENV_pn_pa_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa-env
+    # ENV_pn_personafisica_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pf-env
+    # ENV_pn_pa_webapp: arn:aws:secretsmanager:eu-central-1:911845998067:secret:cypress-McfeXF:pa-env
 phases:
   install:
     runtime-versions:
@@ -44,8 +44,8 @@ phases:
           DEV_ENV="ENV_${PRJ_NAME//-/_}"
           CYPRESS_ENV="CYPRESS_${PRJ_NAME//-/_}"
           
-          echo Creating .env.development.local file...
-          echo -e "${!DEV_ENV}" > .env.development.local
+          echo Renaming file .env.cypress to .env.development.local...
+          mv .env.cypress .env.development.local
           
           echo Creating cypress.env.json file...
           echo -e "${!CYPRESS_ENV}" > cypress.env.json
