@@ -44,27 +44,27 @@ phases:
         if [ -d "cypress/" ] ; then
           echo fetching .env variables
           source .env.cypress
-          echo HOST is: $HOST
           echo "127.0.0.1 $HOST" >> /etc/hosts
           cat /etc/hosts
+          
+          PRJ_NAME=${SUB_PRJ_NAME##*/}
+
+          DEV_ENV="ENV_${PRJ_NAME//-/_}"
+          CYPRESS_ENV="CYPRESS_${PRJ_NAME//-/_}"
+          
+          echo Renaming file .env.cypress to .env.development.local...
+          mv .env.cypress .env.development.local
+          
+          echo Creating cypress.env.json file...
+          echo -e "${!CYPRESS_ENV}" > cypress.env.json
+
+          echo Starting application...
+          yarn start-waiton
+          
+          echo Running Cypress in headless mode...
+          yarn cy-run --config video=false
         fi
 
-      # PRJ_NAME=${SUB_PRJ_NAME##*/}
-
-      # DEV_ENV="ENV_${PRJ_NAME//-/_}"
-      # CYPRESS_ENV="CYPRESS_${PRJ_NAME//-/_}"
-      
-      # echo Renaming file .env.cypress to .env.development.local...
-      # mv .env.cypress .env.development.local
-      
-      # echo Creating cypress.env.json file...
-      # echo -e "${!CYPRESS_ENV}" > cypress.env.json
-
-      # echo Starting application...
-      # nohup yarn start-waiton & echo $! > pidfile
-      
-      # echo Running Cypress in headless mode...
-      # yarn cy-run --config video=false
 
       # kill $(cat pidfile)
       
