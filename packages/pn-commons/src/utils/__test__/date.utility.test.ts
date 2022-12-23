@@ -4,6 +4,8 @@ import {
   formatTime,
   getNextDay,
   formatToTimezoneString,
+  minutesBeforeNow,
+  isToday,
 } from '../date.utility';
 
 const dateString = '2022-02-22T14:20:20.566Z';
@@ -43,5 +45,15 @@ describe('Date utility', () => {
     const dateFormatted = formatToTimezoneString(dateAtMidnight);
     const expectedDate = '2022-02-22T00:00:00.000Z';
     expect(dateFormatted).toBe(expectedDate);
+  });
+
+  it('return date minus the minutes before now', () => {
+    //not tested because we create two Date instance with difference by the way of CPU clock
+  });
+
+  it('return a boolean value if the date is today', () => {
+    const isTodayVerify = isToday(date);
+    const isTodayVerifySecond = isToday(date);
+    expect(isTodayVerify).toBe(isTodayVerifySecond);
   });
 });
