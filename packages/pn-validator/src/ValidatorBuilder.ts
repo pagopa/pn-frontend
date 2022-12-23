@@ -44,40 +44,41 @@ export class ValidatorBuilder<TModel, TValue> {
 
   private isString = () => {
     this.pushRule(new IsString());
-    return new StringRuleValidator<TModel, TValue>(this.pushRule)
+    return new StringRuleValidator<TModel, TValue>(this.pushRule);
   };
 
   private isNumber = () => {
     this.pushRule(new IsNumber());
     return new NumberRuleValidator<TModel, TValue>(this.pushRule);
-  }
+  };
 
   private isDate = () => {
     this.pushRule(new IsDate());
     return new DateRuleValidator<TModel, TValue>(this.pushRule);
-  }
+  };
 
   private isBoolean = () => {
     this.pushRule(new IsBoolean());
     return new BooleanRuleValidator<TModel, TValue>(this.pushRule);
-  }
+  };
 
   private isObject = () => {
     this.pushRule(new IsObject());
     return new ObjectRuleValidator<TModel, TValue>(this.pushRule);
-  }
+  };
 
   private isArray = () => {
     this.pushRule(new IsArray());
     return new ArrayRuleValidator<TModel, TValue>(this.pushRule);
-  }
+  };
 
-  public getTypeRules = (): TypeRules<TModel, TValue> => ({
-    isString: this.isString,
-    isNumber: this.isNumber,
-    isDate: this.isDate,
-    isBoolean: this.isBoolean,
-    isObject: this.isObject,
-    isArray: this.isArray
-  }) as unknown as TypeRules<TModel, TValue>;
+  public getTypeRules = (): TypeRules<TModel, TValue> =>
+    ({
+      isString: this.isString,
+      isNumber: this.isNumber,
+      isDate: this.isDate,
+      isBoolean: this.isBoolean,
+      isObject: this.isObject,
+      isArray: this.isArray,
+    } as unknown as TypeRules<TModel, TValue>);
 }

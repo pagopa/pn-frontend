@@ -4,8 +4,14 @@ const checkCommonRules = (rules) => {
   expect(rules.isNull).toBeDefined();
   expect(rules.isUndefined).toBeDefined();
   expect(rules.isEqual).toBeDefined();
+  expect(rules.isOneOf).toBeDefined();
   expect(rules.customValidator).toBeDefined();
-}
+  expect(rules.not).toBeDefined();
+  expect(rules.not().isNull).toBeDefined();
+  expect(rules.not().isUndefined).toBeDefined();
+  expect(rules.not().isEqual).toBeDefined();
+  expect(rules.not().isOneOf).toBeDefined();
+};
 
 describe('Test ValidatorBuilder', () => {
   it('check if methods exist', () => {
@@ -22,6 +28,8 @@ describe('Test ValidatorBuilder', () => {
     expect(rules.isString().length).toBeDefined();
     expect(rules.isString().matches).toBeDefined();
     checkCommonRules(rules.isString());
+    expect(rules.isString().not().isEmpty).toBeDefined();
+    expect(rules.isString().not().matches).toBeDefined();
   });
 
   it('check if getTypeRules returns correct rules (number)', () => {
@@ -32,6 +40,13 @@ describe('Test ValidatorBuilder', () => {
     expect(rules.isNumber().greaterThan).toBeDefined();
     expect(rules.isNumber().between).toBeDefined();
     checkCommonRules(rules.isNumber());
+  });
+
+  it('check if getTypeRules returns correct rules (boolean)', () => {
+    const dummyValidatorBuilder = new ValidatorBuilder<any, Boolean>();
+    const rules = dummyValidatorBuilder.getTypeRules();
+    expect(rules.isBoolean).toBeDefined();
+    checkCommonRules(rules.isBoolean());
   });
 
   it('check if getTypeRules returns correct rules (date)', () => {
@@ -50,6 +65,7 @@ describe('Test ValidatorBuilder', () => {
     expect(rules.isObject().isEmpty).toBeDefined();
     expect(rules.isObject().setValidator).toBeDefined();
     checkCommonRules(rules.isObject());
+    expect(rules.isObject().not().isEmpty).toBeDefined();
   });
 
   it('check if getTypeRules returns correct rules (array)', () => {
@@ -59,6 +75,7 @@ describe('Test ValidatorBuilder', () => {
     expect(rules.isArray().isEmpty).toBeDefined();
     expect(rules.isArray().forEachElement).toBeDefined();
     checkCommonRules(rules.isArray());
+    expect(rules.isArray().not().isEmpty).toBeDefined();
   });
 
   it('check if validate works (value valid)', () => {
@@ -66,7 +83,7 @@ describe('Test ValidatorBuilder', () => {
     const rules = dummyValidatorBuilder.getTypeRules();
     rules.isString().isEqual('prova');
     const results = dummyValidatorBuilder.validate('prova', {});
-    expect(results).toBeNull()
+    expect(results).toBeNull();
   });
 
   it('check if validate works (value invalid)', () => {

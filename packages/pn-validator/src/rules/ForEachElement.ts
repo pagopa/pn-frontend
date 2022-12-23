@@ -48,7 +48,7 @@ export class ForEachElement<TModel, TValue> extends Rule<TModel, TValue> {
   private isBoolean = () => {
     this.pushRule(new IsBoolean());
     return new BooleanRuleValidator<TModel, TElemValue<TValue>>(this.pushRule);
-  }
+  };
 
   private isObject = () => {
     this.pushRule(new IsObject());
@@ -94,7 +94,7 @@ export class ForEachElement<TModel, TValue> extends Rule<TModel, TValue> {
           results[index] = resultToAdd;
           index++;
         }
-        if (results.filter(r => r === null).length > results.length) {
+        if (results.filter((r) => r === null).length < results.length) {
           break;
         }
       }
