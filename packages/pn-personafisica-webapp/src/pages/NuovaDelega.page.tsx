@@ -1,6 +1,6 @@
 import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, MouseEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
@@ -152,6 +152,17 @@ const NuovaDelega = () => {
     dispatch(resetNewDelegation());
   }, []);
 
+  const deleteInput = (
+    funField: (field: string, setValue: any, validation: boolean | undefined) => void,
+    funTouched: (field: string, setValue: boolean, validation: boolean) => void
+  ): MouseEventHandler<HTMLLabelElement> => {
+    funField('nome', initialValues.nome, false);
+    funField('cognome', initialValues.cognome, false);
+    funTouched('nome', false, false);
+    funTouched('cognome', false, false);
+    return (): void => {};
+  };
+
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
   useEffect(() => {
@@ -235,10 +246,7 @@ const NuovaDelega = () => {
                                 label={t('nuovaDelega.form.naturalPerson')}
                               />
                               <FormControlLabel
-                                onClick={() => {
-                                  setFieldValue('nome', '');
-                                  setFieldValue('cognome', '');
-                                }}
+                                onClick={() => deleteInput(setFieldValue, setFieldTouched)}
                                 value="pg"
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
