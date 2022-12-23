@@ -44,6 +44,7 @@ phases:
         if [ -d "cypress/" ] ; then
           echo fetching .env variables
           source .env.cypress
+          echo HOST is: $HOST
           echo "127.0.0.1 $HOST" >> /etc/hosts
           cat /etc/hosts
         fi
