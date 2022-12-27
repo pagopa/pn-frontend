@@ -26,7 +26,7 @@ export class Between<TModel, TValue> extends Rule<TModel, TValue> {
     if (!isDefined(value)) {
       return null;
     }
-    if (!isNumber<unknown, Number>(value)) {
+    if (!isNumber(value)) {
       throw new TypeError('A non-number value was passed to the betwen rule');
     }
     const numberValue = value instanceof Number ? value.valueOf() : value;
