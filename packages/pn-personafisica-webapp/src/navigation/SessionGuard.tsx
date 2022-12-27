@@ -105,8 +105,6 @@ const SessionGuard = () => {
 
   const getTokenParam = useCallback(() => {
     const params = new URLSearchParams(location.hash);
-    console.log('SessionGuard - in getTokenParam');
-    console.log({...location, token: params.get('#token')});
     return params.get('#token');
   }, [location]);
 
@@ -148,8 +146,6 @@ const SessionGuard = () => {
   useEffect(() => {
     const doInitalPageDetermination = async () => {
       if (sessionToken && !isClosedSession && !hasTosApiErrors) {
-        console.log("in SessionGuard");
-        console.log(location);
         const rootPath = location.pathname === '/';
         if (rootPath) {
           navigate(routes.NOTIFICHE, { replace: true });
@@ -167,7 +163,6 @@ const SessionGuard = () => {
           // Carlos Lombardi, 2022.12.27
           // ----------------------
           const newHash = hashAsObject.toString().replace(/%23/g, "#");
-          console.log({location, newHash});
           navigate({ pathname: location.pathname, search: location.search, hash: newHash}, { replace: true });
         }
       }

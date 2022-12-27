@@ -5,6 +5,7 @@ import { act, screen } from '@testing-library/react';
 import { AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../__test__/test-utils';
+import * as routes from '../routes.const';
 import SessionGuard from '../SessionGuard';
 
 const SessionGuardWithErrorPublisher = () => (
@@ -19,7 +20,8 @@ const mockNavigateFn = jest.fn(() => {});
 
 /* eslint-disable functional/no-let */
 let mockLocationHash: string; // #token=mocked_token
-let mockLocationPath: string; // "/" or "/notifiche"
+let mockLocationPath: string; // e.g. "/" or routes.NOTIFICHE
+let mockLocationSearch: string;
 
 jest.mock('react-router-dom', () => {
   const original = jest.requireActual('react-router-dom');
@@ -27,7 +29,7 @@ jest.mock('react-router-dom', () => {
     ...original,
     Outlet: () => <div>Generic Page</div>,
     useNavigate: () => mockNavigateFn,
-    useLocation: () => ({ hash: mockLocationHash, pathname: mockLocationPath }),
+    useLocation: () => ({ hash: mockLocationHash, search: mockLocationSearch, pathname: mockLocationPath }),
   };
 });
 
@@ -79,6 +81,7 @@ jest.mock('../../api/auth/Auth.api', () => {
 describe('SessionGuard Component', () => {
   beforeEach(() => {
     mockLocationHash = '';
+    mockLocationSearch = '';
   });
 
   afterEach(() => {
@@ -86,8 +89,10 @@ describe('SessionGuard Component', () => {
     jest.restoreAllMocks();
   });
 
-  // cosa si aspetta: entra nell'app, non fa nessun navigate, lancia il sessionCheck
-  it('reload - session token presente', async () => {
+  // expected behavior: enters the app, does a navigate, launches sessionCheck
+  it('reload - session token already present', async () => {
+    mockLocationPath = routes.DETTAGLIO_NOTIFICA_QRCODE_PATH;
+    mockLocationSearch = `?${routes.DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=toto`;
     const mockReduxState = {
       userState: { user: { sessionToken: 'mocked-token' } },
     };
@@ -99,12 +104,33 @@ describe('SessionGuard Component', () => {
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
 
-    expect(mockNavigateFn).toBeCalledTimes(0);
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DETTAGLIO_NOTIFICA_QRCODE_PATH, search: mockLocationSearch, hash: ""}, { replace: true });
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
-  // cosa si aspetta: entra nell'app, non fa nessun navigate, non lancia il sessionCheck
-  it('senza spid token - ingresso anonimo', async () => {
+  it('reload - session token already present - with hash', async () => {
+    mockLocationPath = routes.DELEGHE;
+    mockLocationHash = '#greet=hola';
+    const mockReduxState = {
+      userState: { user: { sessionToken: 'mocked-token' } },
+    };
+
+    await act(
+      async () =>
+        void render(<SessionGuardWithErrorPublisher />, { preloadedState: mockReduxState })
+    );
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
+
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DELEGHE, search: "", hash: mockLocationHash}, { replace: true });
+    expect(mockSessionCheckFn).toBeCalledTimes(1);
+  });
+
+  // expected behavior: enters the app, does no navigate, doesn't launch sessionCheck
+  it('no spid token - anonymous access', async () => {
+    mockLocationPath = routes.TERMS_OF_SERVICE;
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
@@ -113,7 +139,7 @@ describe('SessionGuard Component', () => {
     expect(mockSessionCheckFn).toBeCalledTimes(0);
   });
 
-  it('utente riconosciuto - non è presente una route', async () => {
+  it('sound login - no path indicated', async () => {
     mockLocationHash = '#token=good_token';
     mockLocationPath = '/';
 
@@ -122,23 +148,41 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith(routes.NOTIFICHE, { replace: true });
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
-  it('utente riconosciuto - è presente una route', async () => {
+  it('sound login - path indicated', async () => {
     mockLocationHash = '#token=good_token';
-    mockLocationPath = '/notifiche';
+    mockLocationPath = routes.DELEGHE;
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const pageComponent = screen.queryByText('Generic Page');
     expect(pageComponent).toBeTruthy();
 
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DELEGHE, search: "", hash: ""}, { replace: true });
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
-  // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
-  it('errore nello SPID token', async () => {
+  it('sound login - path indicated - with additional hash value', async () => {
+    mockLocationHash = '#token=good_token&#greet=hola';
+    mockLocationPath = routes.DELEGHE;
+
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
+    const pageComponent = screen.queryByText('Generic Page');
+    expect(pageComponent).toBeTruthy();
+
+    expect(mockNavigateFn).toBeCalledTimes(1);
+    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DELEGHE, search: "", hash: "#greet=hola"}, { replace: true });
+    expect(mockSessionCheckFn).toBeCalledTimes(1);
+  });
+
+  // expected behavior: does not enter the app, does no navigate, message about exchangeToken error
+  // (i.e. different than the logout message)
+  it('bad SPID token', async () => {
     mockLocationHash = '#token=bad_token';
+    mockLocationPath = '/';
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const logoutComponent = screen.queryByText('Session Modal');
@@ -150,8 +194,9 @@ describe('SessionGuard Component', () => {
     expect(mockSessionCheckFn).toBeCalledTimes(0);
   });
 
-  // cosa si aspetta: non entra nell'app, messaggio di logout
+  // expected behavior: does not enter the app, does no navigate, message about logout
   it('logout', async () => {
+    mockLocationPath = routes.NOTIFICHE;
     const mockReduxState = {
       userState: { user: { sessionToken: 'mocked-token' }, isClosedSession: true },
     };
