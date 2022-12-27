@@ -28,7 +28,7 @@ const INITIALIZATION_SEQUENCE = [
   INITIALIZATION_STEPS.SESSION_CHECK,
 ];
 
-const inactivityTimer = 20 * 1000;  //  5 * 60 * 1000;
+const inactivityTimer = 5 * 60 * 1000;
 
 // Perché ci sono due componenti.
 // Il codice in SessionGuard implementa i steps necessari per determinare se c'è sessione, se è utente abilitato, se è sessione anonima, ecc..
