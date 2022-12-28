@@ -2,6 +2,7 @@ import { SELFCARE_BASE_URL } from "../utils/constants";
 
 export const NOTIFICHE = '/notifiche';
 export const DELEGHE = '/deleghe';
+export const APP_STATUS = '/app-status';
 export const USERS_SEGMENT = '/users';
 export const GROUPS_SEGMENT = '/groups';
 export const ID_PN_SEGMENT = 'prod-pn';
