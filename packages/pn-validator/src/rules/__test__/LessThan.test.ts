@@ -17,11 +17,7 @@ describe('Test less than rule', () => {
 
   it('value not a number', () => {
     const rule = new LessThan<any, String>(5);
-    try {
-      rule.valueValidator('prova');
-    } catch (e) {
-      expect(e.message).toBe('A value with wrong type was passed to the lessThan rule');
-    }
+    expect(() => rule.valueValidator('prova')).toThrow('A value with wrong type was passed to the lessThan rule');
   });
 
   it('value less than (number - not equal)', () => {

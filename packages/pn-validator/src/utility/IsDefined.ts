@@ -1,3 +1,3 @@
-export const isDefined = <TValue>(value: TValue): boolean => {
+export const isDefined = (value: unknown): boolean => {
   return value !== null && value !== undefined;
 };
