@@ -1,7 +1,7 @@
 import { ChangeEvent, ForwardedRef, forwardRef, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { Formik, Form, FormikProps, FormikErrors, getIn } from 'formik';
+import { Formik, Form, FormikProps, FormikErrors } from 'formik';
 import { Add, Delete } from '@mui/icons-material';
 import {
   FormControl,
@@ -452,7 +452,7 @@ const Recipient = ({
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
                               label={t('legal-person')}
-                              // disabled
+                              disabled
                             />
                           </Grid>
                           {values.recipients[index].recipientType === RecipientType.PG && (
@@ -480,7 +480,6 @@ const Recipient = ({
                         setFieldValue={setFieldValue}
                         handleBlur={handleBlur}
                         width={12}
-                        bornEmpty={!recipientsData || recipientsData.length < index || String(getIn(values, `recipients[${index}].taxId`)).length === 0}
                       />
                       {paymentMode !== PaymentModel.NOTHING && (
                         <>
