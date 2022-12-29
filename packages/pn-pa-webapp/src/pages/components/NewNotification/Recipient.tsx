@@ -27,7 +27,6 @@ import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
 import {
-  denominationTotalLength,
   identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
@@ -93,6 +92,17 @@ const Recipient = ({
         }
       : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
+  const checkForbiddenCharacters = (
+    value: string,
+    path: string,
+    createError: (params?: yup.CreateErrorOptions | undefined) => yup.ValidationError
+  ) => {
+    if (dataRegex.denomination.test(value)) {
+      return true;
+    }
+    return createError({ message: t(`forbidden-characters-denomination-error`), path });
+  };
+
   const buildRecipientValidationObject = () => {
     const validationObject = {
       recipientType: yup.string(),
@@ -104,22 +114,30 @@ const Recipient = ({
         .test({
           name: 'denominationTotalLength',
           test(value) {
-            const messageKey = denominationTotalLength(
-              value,
-              this.parent.recipientType,
-              this.parent.lastName
-            );
-            if (!messageKey) {
-              return true;
+            const denomination = (value || '') + ((this.parent.lastName as string) || '');
+            const messageKey = `too-long-denomination-error`;
+            if (denomination.length > 80) {
+              if (this.parent.recipientType === 'PG') {
+                return this.createError({ message: t(messageKey), path: this.path });
+              }
+              return new yup.ValidationError([
+                this.createError({ message: t(messageKey), path: this.path }),
+                this.createError({ message: ' ', path: `recipients[${this.parent.idx}].lastName` }),
+              ]);
             }
-            return this.createError({ message: t(messageKey), path: this.path });
+            return checkForbiddenCharacters(value || '', this.path, this.createError);
           },
         }),
       // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
       // non viene richiesto
       lastName: yup.string().when('recipientType', {
         is: (value: string) => value !== RecipientType.PG,
-        then: yup.string().required(tc('required-field')),
+        then: yup.string().required(tc('required-field')).test({
+          name: 'denominationTotalLength',
+          test(value) {
+            return checkForbiddenCharacters(value || '', this.path, this.createError);
+          },
+        }),
       }),
       taxId: yup
         .string()
