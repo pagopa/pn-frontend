@@ -20,6 +20,7 @@ import CustomMobileDialogContent from './CustomMobileDialog/CustomMobileDialogCo
 import CustomMobileDialogAction from './CustomMobileDialog/CustomMobileDialogAction';
 import TitleBox from './TitleBox';
 import { AppStatusBar } from './AppStatus/AppStatusBar';
+import { AppStatusRender } from './AppStatus/AppStatusRender';
 import DesktopDowntimeLog from './AppStatus/DesktopDowntimeLog';
 import MobileDowntimeLog from './AppStatus/MobileDowntimeLog';
 import {
@@ -72,6 +73,7 @@ export {
   NotificationDetailDocuments,
   HelpNotificationDetails,
   NotificationDetailTimeline,
+  AppStatusRender,
   AppStatusBar,
   DesktopDowntimeLog,
   MobileDowntimeLog,

@@ -17,6 +17,14 @@ export const AppStatusApi = {
     ? Promise.resolve({
         downtimes: [
           {
+            rawFunctionality: KnownFunctionality.NotificationWorkflow,
+            knownFunctionality: KnownFunctionality.NotificationWorkflow,
+            status: DowntimeStatus.OK,
+            startDate: '2022-10-28T10:11:09Z',
+            endDate: '2022-10-28T10:18:14Z',
+            fileAvailable: false,    
+          },
+          {
             rawFunctionality: KnownFunctionality.NotificationCreate,
             knownFunctionality: KnownFunctionality.NotificationCreate,
             status: DowntimeStatus.OK,
@@ -24,14 +32,6 @@ export const AppStatusApi = {
             endDate: '2022-10-23T15:51:12Z',
             legalFactId: "some-legal-fact-id",
             fileAvailable: true,    
-          },
-          {
-            rawFunctionality: KnownFunctionality.NotificationWorkflow,
-            knownFunctionality: KnownFunctionality.NotificationWorkflow,
-            status: DowntimeStatus.OK,
-            startDate: '2022-10-28T10:11:09Z',
-            endDate: '2022-10-28T10:18:14Z',
-            fileAvailable: false,    
           },
         ],
       }) 
