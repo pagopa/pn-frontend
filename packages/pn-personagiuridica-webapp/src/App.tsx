@@ -14,6 +14,7 @@ import {
   appStateActions,
   initLocalization,
   Layout,
+  ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
   useMultiEvent,
@@ -51,9 +52,6 @@ function App() {
   const source = path[path.length - 1];
 
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-
-  console.log('in App.tsx');
-  console.log({ currentStatus });
 
   // TODO: remove mocked data
   const jwtUser = {
@@ -174,6 +172,7 @@ function App() {
 
   return (
     <>
+      <ResponseEventDispatcher />
       <Layout
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}

@@ -86,6 +86,9 @@ const AppStatus = () => {
   // whether there is more than one page forward
   const pagesToShow = [paginationData.page + 1];    
 
+console.log('rendering AppStatus.page');
+console.log({ currentStatus, lastCheckTimestampFormatted });
+
 return <Box p={3}>
     <Stack direction="column">
 
