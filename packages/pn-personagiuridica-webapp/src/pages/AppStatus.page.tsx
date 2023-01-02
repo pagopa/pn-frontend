@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AppStatusRender, GetDowntimeHistoryParams, PaginationData } from '@pagopa-pn/pn-commons';
 import { getCurrentAppStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from '../redux/appStatus/actions';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -9,6 +10,7 @@ import { APP_STATUS_ACTIONS } from '../redux/appStatus/actions';
 const AppStatus = () => {
   const dispatch = useAppDispatch();
   const appStatus = useAppSelector((state: RootState) => state.appStatus);
+  useTranslation(['appStatus']);
 
   const fetchCurrentStatus = useCallback(() => {
     void dispatch(getCurrentAppStatus());

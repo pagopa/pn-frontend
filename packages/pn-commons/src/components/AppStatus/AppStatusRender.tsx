@@ -1,11 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import { 
-  ApiErrorWrapper, EmptyState, TitleBox, useIsMobile, KnownFunctionality, 
-  AppStatusBar, DesktopDowntimeLog, MobileDowntimeLog, formatDateTime, CustomPagination, KnownSentiment, useDownloadDocument, 
-  GetDowntimeHistoryParams, PaginationData, AppStatusData 
-} from '@pagopa-pn/pn-commons';
+import { PaginationData } from '../Pagination/types';
+import { formatDateTime } from '../../services';
+import TitleBox from '../TitleBox';
+import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
+import { AppStatusBar } from './AppStatusBar';
+import MobileDowntimeLog from './MobileDowntimeLog';
+import DesktopDowntimeLog from './DesktopDowntimeLog';
+import EmptyState from '../EmptyState';
+import { AppStatusData, KnownSentiment } from '../../types';
+import CustomPagination from '../Pagination/CustomPagination';
+import { GetDowntimeHistoryParams, KnownFunctionality } from '../../models';
+import { useDownloadDocument, useIsMobile } from '../../hooks';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 type Props = {
   appStatus: AppStatusData;
@@ -26,7 +33,6 @@ export const AppStatusRender = (props: Props) => {
   const { currentStatus, downtimeLogPage, pagination: paginationData, legalFactDocumentData } = appStatus;
   const [isInitialized, setIsInitialized] = useState(false);
   const isMobile = useIsMobile();
-  const { t } = useTranslation(['appStatus']);
   useDownloadDocument({ 
     url: legalFactDocumentData && legalFactDocumentData.url, 
     clearDownloadAction: clearLegalFactDocument,
@@ -87,13 +93,40 @@ export const AppStatusRender = (props: Props) => {
   //     even when paginationData.page is recognized as a number - Carlos Lombardi, 2022.12.29
   const pagesToShow = [(paginationData.page as number) + 1];    
 
+  const title = getLocalizedOrDefaultLabel(
+    'appStatus',
+    'appStatus.title',
+    "Stato della piattaforma"
+  );
+  const subtitle = getLocalizedOrDefaultLabel(
+    'appStatus',
+    'appStatus.subtitle',
+    "Verifica lo stato della piattaforma ..."
+  );
+  const lastCheckLegend = getLocalizedOrDefaultLabel(
+    'appStatus',
+    'appStatus.lastCheckLegend',
+    "Timestamp ultima verifica ...",
+    { lastCheckTimestamp: lastCheckTimestampFormatted }
+  );
+  const downtimeListTitle = getLocalizedOrDefaultLabel(
+    'appStatus',
+    'downtimeList.title',
+    "Elenco dei disservizi"
+  );
+  const downtimeListEmptyMessage = getLocalizedOrDefaultLabel(
+    'appStatus',
+    'downtimeList.emptyMessage',
+    "Nessun disservizio!"
+  );
+
   return <Box p={3}>
     <Stack direction="column">
 
       {/* Titolo status */}
       <TitleBox
-        title={t('appStatus.title')} variantTitle='h4'
-        subTitle={t('appStatus.subtitle')} variantSubTitle='body1'
+        title={title} variantTitle='h4'
+        subTitle={subtitle} variantSubTitle='body1'
       />
 
       {/* Dati relativi al status */}
@@ -102,16 +135,14 @@ export const AppStatusRender = (props: Props) => {
         { currentStatus &&
           <Stack direction="row" justifyContent="center" data-testid="appStatus-lastCheck">
             <Typography variant="caption" sx={{ mt: 2, color: 'text.secondary' }}>
-              { t('appStatus.lastCheckLegend', 
-                { lastCheckTimestamp: lastCheckTimestampFormatted })
-              }
+              { lastCheckLegend }
             </Typography>
           </Stack>
         }
       </ApiErrorWrapper>
 
       {/* Titolo elenco di downtime */}
-      <Typography variant="h6" sx={{ mt: "36px", mb: 2 }}>{t('downtimeList.title')}</Typography>
+      <Typography variant="h6" sx={{ mt: "36px", mb: 2 }}>{downtimeListTitle}</Typography>
 
       {/* Dati relativi al elenco di downtime */}
       <ApiErrorWrapper apiId={actionIds.GET_DOWNTIME_LOG_PAGE} reloadAction={() => fetchDowntimeLog()} mt={2}>
@@ -127,7 +158,7 @@ export const AppStatusRender = (props: Props) => {
                     getDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails} 
                   />
               )
-            : <EmptyState sentimentIcon={KnownSentiment.SATISFIED} emptyMessage={t('downtimeList.emptyMessage')} />      
+            : <EmptyState sentimentIcon={KnownSentiment.SATISFIED} emptyMessage={downtimeListEmptyMessage} />      
         }
         { downtimeLogPage && downtimeLogPage.downtimes.length > 0 && 
           <CustomPagination
