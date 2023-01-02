@@ -4,7 +4,8 @@ import {
   AppResponseMessage,
   NotificationDetailPayment,
   ResponseEventDispatcher,
-  PaymentStatus, PaymentInfoDetail
+  PaymentStatus,
+  PaymentInfoDetail,
 } from '@pagopa-pn/pn-commons';
 import { act, waitFor } from '@testing-library/react';
 
@@ -138,7 +139,6 @@ describe('NotificationPayment component', () => {
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
       />
@@ -172,7 +172,6 @@ describe('NotificationPayment component', () => {
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
       />
@@ -184,7 +183,7 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledWith({
         noticeCode: 'mocked-noticeCode',
         taxId: 'mocked-creditorTaxId',
@@ -223,7 +222,6 @@ describe('NotificationPayment component', () => {
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
       />
@@ -235,7 +233,7 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledWith({
         noticeCode: 'mocked-noticeCode',
         taxId: 'mocked-creditorTaxId',
@@ -268,7 +266,6 @@ describe('NotificationPayment component', () => {
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
       />
@@ -280,7 +277,7 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledWith({
         noticeCode: 'mocked-noticeCode',
         taxId: 'mocked-creditorTaxId',
@@ -314,7 +311,6 @@ describe('NotificationPayment component', () => {
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
       />
@@ -329,7 +325,7 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledWith({
         noticeCode: 'mocked-noticeCode',
         taxId: 'mocked-creditorTaxId',
@@ -372,7 +368,6 @@ describe('NotificationPayment component', () => {
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
       />
@@ -387,7 +382,7 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledWith({
         noticeCode: 'mocked-noticeCode',
         taxId: 'mocked-creditorTaxId',
@@ -430,7 +425,6 @@ describe('NotificationPayment component', () => {
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
       />
@@ -445,7 +439,7 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledWith({
         noticeCode: 'mocked-noticeCode',
         taxId: 'mocked-creditorTaxId',
@@ -488,7 +482,6 @@ describe('NotificationPayment component', () => {
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
       />
@@ -503,7 +496,7 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledWith({
         noticeCode: 'mocked-noticeCode',
         taxId: 'mocked-creditorTaxId',
@@ -543,7 +536,6 @@ describe('NotificationPayment component', () => {
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
       />
@@ -558,7 +550,7 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledWith({
         noticeCode: 'mocked-noticeCode',
         taxId: 'mocked-creditorTaxId',
@@ -595,7 +587,6 @@ describe('NotificationPayment component', () => {
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
-        onDocumentDownload={mockActionFn}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
       />
@@ -610,7 +601,7 @@ describe('NotificationPayment component', () => {
 
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
-      expect(mockActionFn).toBeCalledTimes(3);
+      expect(mockActionFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledWith({
         noticeCode: 'mocked-noticeCode',
         taxId: 'mocked-creditorTaxId',
@@ -668,7 +659,6 @@ describe('NotificationPayment - different payment fetch API behaviors', () => {
             <NotificationPayment
               iun="mocked-iun"
               notificationPayment={mockedNotificationDetailPayment}
-              onDocumentDownload={() => {}}
               senderDenomination="mocked-senderDenomination"
               subject="mocked-subject"
             />
@@ -690,7 +680,6 @@ describe('NotificationPayment - different payment fetch API behaviors', () => {
             <NotificationPayment
               iun="mocked-iun"
               notificationPayment={mockedNotificationDetailPayment}
-              onDocumentDownload={() => {}}
               senderDenomination="mocked-senderDenomination"
               subject="mocked-subject"
             />
@@ -700,4 +689,3 @@ describe('NotificationPayment - different payment fetch API behaviors', () => {
     apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
-
