@@ -6,6 +6,7 @@ import { render } from '../../../test-utils';
 import { AppStatusData, KnownSentiment } from '../../../types';
 import { AppStatusRender } from '../AppStatusRender';
 import { apiOutcomeTestHelper } from '../../../utils';
+import { formatDate, formatTimeHHMM } from '../../../services';
 
 /* eslint-disable-next-line functional/no-let */
 let mockIsMobile: boolean;
@@ -15,6 +16,14 @@ jest.mock('../../../hooks', () => {
   return {
     ...original,
     useIsMobile: () => mockIsMobile,
+  };
+});
+
+jest.mock('../../../services/localization.service', () => {
+  const original = jest.requireActual('../../../services/localization.service');
+  return {
+    ...original,
+    getLocalizedOrDefaultLabel: (_1: string, key: string, _2: string, data: any) => <span>{key} - {JSON.stringify(data)}</span>
   };
 });
 
@@ -175,6 +184,25 @@ describe('AppStatusRender component', () => {
     expect(emptyStateComponent).not.toBeInTheDocument();
     expect(errorStatusComponent).toBeInTheDocument();
     expect(errorDowntimeComponent).toBeInTheDocument();
+  });
+
+  it('Last check message, must include date and time of last check timestamp', async () => {
+    mockIsMobile = false;
+    await act(async () => void render(
+      <AppStatusRender 
+        actionIds={mockActionIds} appStatus={mockAppStatus} clearLegalFactDocument={() => {}} 
+        clearPagination={() => {}} fetchCurrentStatus={() => {}} fetchDowntimeLegalFactDocumentDetails={() => { return undefined; }}
+        fetchDowntimeLogPage={() => {}} setPagination={() => {}}
+      />,
+    ));
+    const lastCheckLegend = screen.queryByText(new RegExp('appStatus.lastCheckLegend'));
+    const lastCheckDate = screen.queryByText(new RegExp(formatDate("2022-12-28T15:43:19.190Z")));
+    const lastCheckTime = screen.queryByText(new RegExp(formatTimeHHMM("2022-12-28T15:43:19.190Z")));
+    expect(lastCheckLegend).toBeInTheDocument();
+    expect(lastCheckDate).toBeInTheDocument();
+    expect(lastCheckTime).toBeInTheDocument();
+    expect(lastCheckLegend).toBe(lastCheckDate);
+    expect(lastCheckLegend).toBe(lastCheckTime);
   });
 });
 

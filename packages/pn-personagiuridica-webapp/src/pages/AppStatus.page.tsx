@@ -10,6 +10,9 @@ import { APP_STATUS_ACTIONS } from '../redux/appStatus/actions';
 const AppStatus = () => {
   const dispatch = useAppDispatch();
   const appStatus = useAppSelector((state: RootState) => state.appStatus);
+  // The useTranslation *must* be activated, even when it is not directly used in this component' code, 
+  // to avoid problems in the components defined in pn-commons,
+  // when these components need to access to localized messages.
   useTranslation(['appStatus']);
 
   const fetchCurrentStatus = useCallback(() => {

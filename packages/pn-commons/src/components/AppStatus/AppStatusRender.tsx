@@ -106,7 +106,7 @@ export const AppStatusRender = (props: Props) => {
   const lastCheckLegend = getLocalizedOrDefaultLabel(
     'appStatus',
     'appStatus.lastCheckLegend',
-    "Timestamp ultima verifica ...",
+    "Timestamp ultima verifica",
     { lastCheckTimestamp: lastCheckTimestampFormatted }
   );
   const downtimeListTitle = getLocalizedOrDefaultLabel(
