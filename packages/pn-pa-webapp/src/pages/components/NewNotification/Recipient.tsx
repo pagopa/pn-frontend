@@ -470,7 +470,6 @@ const Recipient = ({
                               control={<Radio />}
                               name={`recipients[${index}].recipientType`}
                               label={t('legal-person')}
-                              // disabled
                             />
                           </Grid>
                           {values.recipients[index].recipientType === RecipientType.PG && (
