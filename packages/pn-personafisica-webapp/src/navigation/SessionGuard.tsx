@@ -109,7 +109,8 @@ const SessionGuard = () => {
   }, [location]);
 
   /**
-   * Step 1 - determinazione dell'utente - token exchange
+   * Step 1 - user determination - token exchange.
+   * The token is obtained from the #token element in the hash of the URL.
    */
   useEffect(() => {
     const doUserDetermination = async () => {
@@ -127,20 +128,49 @@ const SessionGuard = () => {
   }, [performStep]);
 
   /**
-   * Step 2 - determinazione pagina iniziale
+   * Step 2 - initial page determination
+   * - If the access request specifies anything different from the root path, 
+   *   then the path and the search are preserved, while the hash is discarded.
+   * 
+   *   Why is not convenient to preserve the hash:
+   *   in case of timeout-caused logout the full path is set as origin for portale-login, and then reused as the path 
+   *   when portale-login re-launches this app. 
+   *   If we don't clean the token, then the "old" token will appear in the URL after the re-login, in fact that URL 
+   *   would include two #token, "old" and "new". 
+   *   Cfr. PN-2913.
+   *   Besides this, I guess is nicer to show a "cleaner" value in the browser address bar, not including a token
+   *   which has been already used (in the previous step of this guard).
+   *   
+   * - Otherwise, the user is redirected to the notification dashboard.
    */
   useEffect(() => {
     const doInitalPageDetermination = async () => {
       if (sessionToken && !isClosedSession && !hasTosApiErrors) {
-        // se non è presente una route diversa dalla root si viene reindirizzati alla dashboard delle notifiche
         const rootPath = location.pathname === '/';
         if (rootPath) {
           navigate(routes.NOTIFICHE, { replace: true });
+        } else {
+          const hashAsObject = new URLSearchParams(location.hash);
+          hashAsObject.delete("#token");
+          // ----------------------
+          // Unfortunately, URLSearchParams does not preserve the # chars in the hash attribute names,
+          // hence I had to un-escape them.
+          // I don't know why replaceAll is not accepted by TS,
+          // maybe a problem wrt which version of JS/TS we should consider;
+          // for both this aspect and the implemented solution cfr. 
+          // https://stackoverflow.com/questions/62825358/javascript-replaceall-is-not-a-function-type-error
+          // ----------------------
+          // Carlos Lombardi, 2022.12.27
+          // ----------------------
+          const newHash = hashAsObject.toString().replace(/%23/g, "#");
+          navigate({ pathname: location.pathname, search: location.search, hash: newHash}, { replace: true });
         }
       }
     };
     void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
   }, [performStep]);
+
+
 
   /**
    * Step 3 - lancio del sessionCheck
