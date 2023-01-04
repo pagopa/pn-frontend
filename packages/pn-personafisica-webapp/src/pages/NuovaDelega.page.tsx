@@ -44,7 +44,6 @@ import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
 import DropDownPartyMenuItem from '../component/Party/DropDownParty';
-import ErrorDeleghe from '../component/Deleghe/ErrorDeleghe';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { generateVCode } from '../utils/delegation.utility';
@@ -406,11 +405,6 @@ const NuovaDelega = () => {
                           >
                             {t('nuovaDelega.form.submit')}
                           </Button>
-                        </Grid>
-                        <Grid item xs={8} sx={{ margin: 'auto' }}>
-                          <Stack direction="row" alignItems="center" justifyContent="end">
-                            <ErrorDeleghe />
-                          </Stack>
                         </Grid>
                       </Grid>
                     </Form>
