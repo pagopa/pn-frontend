@@ -2,17 +2,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { PaginationData } from '../Pagination/types';
 import { formatDateTime } from '../../services';
+import CustomPagination from '../Pagination/CustomPagination';
+import { GetDowntimeHistoryParams, KnownFunctionality } from '../../models';
+import { AppStatusData, KnownSentiment } from '../../types';
+import { useDownloadDocument, useIsMobile } from '../../hooks';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import TitleBox from '../TitleBox';
+import EmptyState from '../EmptyState';
 import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 import { AppStatusBar } from './AppStatusBar';
 import MobileDowntimeLog from './MobileDowntimeLog';
 import DesktopDowntimeLog from './DesktopDowntimeLog';
-import EmptyState from '../EmptyState';
-import { AppStatusData, KnownSentiment } from '../../types';
-import CustomPagination from '../Pagination/CustomPagination';
-import { GetDowntimeHistoryParams, KnownFunctionality } from '../../models';
-import { useDownloadDocument, useIsMobile } from '../../hooks';
-import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 
 type Props = {
   appStatus: AppStatusData;
@@ -89,9 +89,7 @@ export const AppStatusRender = (props: Props) => {
   // paginagion will show just a single page number, along with the arrows
   // because the lookup size of the API is just one, there is no (easy) way to know 
   // whether there is more than one page forward
-  // NB: don't know why, but I needed to add the "as number" cast in order to avoid a compilation error,
-  //     even when paginationData.page is recognized as a number - Carlos Lombardi, 2022.12.29
-  const pagesToShow = [(paginationData.page as number) + 1];    
+  const pagesToShow = [paginationData.page + 1];    
 
   const title = getLocalizedOrDefaultLabel(
     'appStatus',
