@@ -8,12 +8,12 @@ function downloadDocument(url: string) {
   link.rel = 'noreferrer';
   link.click();
   /* eslint-enable functional/immutable-data */
-};
+}
 
 type Props = {
   url?: string;
   clearDownloadAction?: () => void;
-}
+};
 
 // There are no tests for this hook, since for such a test either the document
 // or the downloadDocument action.
