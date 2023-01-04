@@ -120,6 +120,14 @@ describe('NotificationPayment component', () => {
   /* eslint-enable functional/no-let */
   const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
 
+  function prepareMockForPaymentInfo(paymentInfo: any) {
+    // The component makes three queries into the Redux store, the first one to get the payment info, 
+    // the latter two to get the eventual urls to launch the download.
+    // Only the first query should produce a value.
+    mockUseAppSelector.mockReturnValueOnce(paymentInfo);
+    mockUseAppSelector.mockReturnValue(undefined);
+  }
+
   beforeEach(() => {
     mockActionFn = jest.fn();
     const actionSpy = jest.spyOn(actions, 'getNotificationPaymentInfo');
@@ -176,7 +184,7 @@ describe('NotificationPayment component', () => {
         subject="mocked-subject"
       />
     );
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.required);
+    prepareMockForPaymentInfo(mocked_payments_detail.required);
 
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
@@ -226,7 +234,7 @@ describe('NotificationPayment component', () => {
         subject="mocked-subject"
       />
     );
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.inprogress);
+    prepareMockForPaymentInfo(mocked_payments_detail.inprogress);
 
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
@@ -270,7 +278,7 @@ describe('NotificationPayment component', () => {
         subject="mocked-subject"
       />
     );
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.succeeded);
+    prepareMockForPaymentInfo(mocked_payments_detail.succeeded);
 
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
@@ -315,7 +323,7 @@ describe('NotificationPayment component', () => {
         subject="mocked-subject"
       />
     );
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[0]);
+    prepareMockForPaymentInfo(mocked_payments_detail.failed[0]);
 
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
@@ -372,7 +380,7 @@ describe('NotificationPayment component', () => {
         subject="mocked-subject"
       />
     );
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[1]);
+    prepareMockForPaymentInfo(mocked_payments_detail.failed[1]);
 
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
@@ -429,7 +437,7 @@ describe('NotificationPayment component', () => {
         subject="mocked-subject"
       />
     );
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[2]);
+    prepareMockForPaymentInfo(mocked_payments_detail.failed[2]);
 
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
@@ -486,7 +494,7 @@ describe('NotificationPayment component', () => {
         subject="mocked-subject"
       />
     );
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[3]);
+    prepareMockForPaymentInfo(mocked_payments_detail.failed[3]);
 
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
@@ -540,7 +548,7 @@ describe('NotificationPayment component', () => {
         subject="mocked-subject"
       />
     );
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[4]);
+    prepareMockForPaymentInfo(mocked_payments_detail.failed[4]);
 
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
@@ -591,7 +599,7 @@ describe('NotificationPayment component', () => {
         subject="mocked-subject"
       />
     );
-    mockUseAppSelector.mockReturnValue(mocked_payments_detail.failed[5]);
+    prepareMockForPaymentInfo(mocked_payments_detail.failed[5]);
 
     const amountLoader = screen.getByTestId('loading-skeleton');
     expect(amountLoader).toBeInTheDocument();
