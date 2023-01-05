@@ -5,12 +5,16 @@ import { Box } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import HelpIcon from '@mui/icons-material/Help';
 import {
   AppMessage,
   AppResponseMessage,
   appStateActions,
   initLocalization,
   Layout,
+  ResponseEventDispatcher,
   SideMenu,
   SideMenuItem,
   useMultiEvent,
@@ -20,13 +24,15 @@ import {
 import { ProductSwitchItem } from '@pagopa/mui-italia';
 import { Email } from '@mui/icons-material';
 
-import { useAppDispatch } from './redux/hooks';
+import { useAppDispatch, useAppSelector } from './redux/hooks';
 import Router from './navigation/routes';
 import { TrackEventType } from './utils/events';
 import { trackEventByType } from './utils/mixpanel';
 import { MIXPANEL_TOKEN, VERSION } from './utils/constants';
 import * as routes from './navigation/routes.const';
 import { getMenuItems } from './utils/role.utility';
+import { RootState } from './redux/store';
+import { getCurrentAppStatus } from './redux/appStatus/actions';
 
 // TODO: get products list from be (?)
 const productsList: Array<ProductSwitchItem> = [
@@ -44,6 +50,8 @@ function App() {
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
+
+  const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
 
   // TODO: remove mocked data
   const jwtUser = {
@@ -64,6 +72,17 @@ function App() {
         route: routes.DELEGHE,
         rightBadgeNotification: undefined,
       },
+      { 
+        label: 'menu.app-status', 
+        // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
+        icon: () => currentStatus 
+          ? (currentStatus.appIsFullyOperative
+            ? <CheckCircleIcon sx={{ color: 'success.main' }} />
+            : <ErrorIcon sx={{ color: 'error.main' }} />)
+          : <HelpIcon />
+        , 
+        route: routes.APP_STATUS 
+      },
     ];
     const items = { ...getMenuItems(basicMenuItems, 'id-organizazzione') };
     // localize menu items
@@ -74,7 +93,7 @@ function App() {
       items.selfCareItems = items.selfCareItems.map((item) => ({ ...item, label: t(item.label) }));
     }
     return items;
-  }, []);
+  }, [currentStatus]);
 
   // TODO: manage tos
   const userActions = useMemo(() => {
@@ -95,6 +114,12 @@ function App() {
     };
     return [profiloAction, logoutAction];
   }, []);
+
+  useEffect(() => /* { */
+    // if (sessionToken) {
+      void dispatch(getCurrentAppStatus())
+    // }
+  /* } */ , [ /* sessionToken, */ getCurrentAppStatus]);
 
   const handleUserLogout = () => {
     // TODO: manage logout
@@ -147,6 +172,7 @@ function App() {
 
   return (
     <>
+      <ResponseEventDispatcher />
       <Layout
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
