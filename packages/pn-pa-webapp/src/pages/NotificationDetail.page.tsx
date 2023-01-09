@@ -34,6 +34,7 @@ import {
   ApiError,
   formatEurocentToCurrency,
   TimedMessage,
+  useDownloadDocument,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -220,16 +221,6 @@ const NotificationDetail = () => {
     );
   };
 
-  const dowloadDocument = (url: string) => {
-    /* eslint-disable functional/immutable-data */
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_blank';
-    link.rel = 'noreferrer';
-    link.click();
-    /* eslint-enable functional/immutable-data */
-  };
-
   const handleCancelNotification = () => {
     dispatch(setCancelledIun(notification.iun));
     navigate(routes.NUOVA_NOTIFICA);
@@ -269,17 +260,8 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, [fetchSentNotification]);
 
-  useEffect(() => {
-    if (documentDownloadUrl) {
-      dowloadDocument(documentDownloadUrl);
-    }
-  }, [documentDownloadUrl]);
-
-  useEffect(() => {
-    if (legalFactDownloadUrl) {
-      dowloadDocument(legalFactDownloadUrl);
-    }
-  }, [legalFactDownloadUrl]);
+  useDownloadDocument({ url: legalFactDownloadUrl });
+  useDownloadDocument({ url: documentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
 

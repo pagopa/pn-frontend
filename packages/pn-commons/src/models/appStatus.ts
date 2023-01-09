@@ -144,29 +144,29 @@ function validateBoolean(value: boolean | undefined | null): string | null {
 export class BEDowntimeValidator extends Validator<DowntimeDTO> {
   constructor() {
     super();
-    this.ruleFor('functionality').customValidator(validateString).isUndefined(true);
+    this.ruleFor('functionality').isString().customValidator(validateString).not().isUndefined();
     // this.ruleFor('functionality').isUndefined(true);
-    this.ruleFor('status').isOneOf(Object.values(DowntimeStatus) as Array<string>).isUndefined(true);
-    this.ruleFor('startDate').customValidator(validateIsoDate(true));
-    this.ruleFor('endDate').customValidator(validateIsoDate(false));
-    this.ruleFor('legalFactId').customValidator(validateString);
-    this.ruleFor('fileAvailable').customValidator(validateBoolean);
+    this.ruleFor('status').isString().isOneOf(Object.values(DowntimeStatus) as Array<string>).not().isUndefined();
+    this.ruleFor('startDate').isString().customValidator(validateIsoDate(true));
+    this.ruleFor('endDate').isString().customValidator(validateIsoDate(false));
+    this.ruleFor('legalFactId').isString().customValidator(validateString);
+    this.ruleFor('fileAvailable').isBoolean().customValidator(validateBoolean);
   }
 }
 
 export class AppStatusDTOValidator extends Validator<AppStatusDTO> {
   constructor() {
     super();
-    this.ruleFor("functionalities").isEmpty(true).forEachElement(rules => rules.customValidator(validateString));
-    this.ruleFor("openIncidents").forEachElement(rules => rules.setValidator(new BEDowntimeValidator()));
+    this.ruleFor("functionalities").isArray().not().isEmpty().forEachElement(rules => rules.isString().customValidator(validateString));
+    this.ruleFor("openIncidents").isArray().forEachElement(rules => rules.isObject().setValidator(new BEDowntimeValidator()));
   }
 }
 
 export class DowntimeLogPageDTOValidator extends Validator<DowntimeLogPageDTO> {
   constructor() {
     super();
-    this.ruleFor('result').forEachElement(rules => rules.setValidator(new BEDowntimeValidator())).isUndefined(true);
-    this.ruleFor('nextPage').customValidator(validateString);
+    this.ruleFor('result').isArray().forEachElement(rules => rules.isObject().setValidator(new BEDowntimeValidator())).not().isUndefined();
+    this.ruleFor('nextPage').isString().customValidator(validateString);
   }
 }
 

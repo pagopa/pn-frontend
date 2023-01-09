@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-landing-webapp",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -16,8 +16,8 @@
     "@mui/lab": "5.0.0-alpha.100",
     "@mui/material": "^5.8.6",
     "@mui/system": "5.10.8",
-    "@pagopa-pn/pn-commons": "^1.5.3",
     "@pagopa/mui-italia": "^0.8.10",
+    "@pagopa-pn/pn-commons": "^1.5.4",
     "next": "12.1.6",
     "next-i18next": "^11.0.0",
     "next-language-detector": "^1.0.2",

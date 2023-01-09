@@ -4,11 +4,13 @@ import logger from 'redux-logger';
 
 import { LOG_REDUX_ACTIONS } from '../utils/constants';
 import { trackingMiddleware } from '../utils/mixpanel';
+import appStatusSlice from './appStatus/reducers';
 
 const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined, trackingMiddleware];
 
 export const appReducers = {
-  appState: appStateReducer
+  appState: appStateReducer,
+  appStatus: appStatusSlice.reducer,
 };
 
 export const createStore = () =>
