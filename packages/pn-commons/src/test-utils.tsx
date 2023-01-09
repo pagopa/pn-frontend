@@ -42,7 +42,7 @@ const customRender = (
   }: { preloadedState?: any; renderOptions?: Omit<RenderOptions, 'wrapper'> } = {}
 ) => {
   const testStore = configureStore({
-    reducer: appStateSlice.reducer,
+    reducer: {appState: appStateSlice.reducer},
     preloadedState,
   });
   return render(ui, {

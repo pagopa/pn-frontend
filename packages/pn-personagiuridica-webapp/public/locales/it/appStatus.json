@@ -1,0 +1,39 @@
+{
+  "appStatus": {
+    "title": "Stato della piattaforma",
+    "subtitle": "Verifica il funzionamento di Piattaforma Notifiche, visualizza lo storico dei disservizi e scarica le relative attestazioni opponibili a terzi.",
+    "statusDescription": {
+      "ok": "Tutti i servizi di Piattaforma Notifiche sono operativi.",
+      "not-ok": "C'è un disservizio in corso. Per maggiori dettagli, consulta la tabella qui sotto."
+    },
+    "lastCheckLegend": "Ultimo aggiornamento - {{ lastCheckTimestamp }}"
+  },
+  "downtimeList": {
+    "title": "Storico dei disservizi",
+    "columnHeader": {
+      "startDate": "Data di inizio",
+      "endDate": "Data di fine",
+      "functionality": "Servizio coinvolto",
+      "legalFactId": "Attestazioni opponibili a terzi",
+      "status": "Stato"
+    },
+    "emptyMessage": "Non sono stati registrati disservizi"
+  },
+  "legends": {
+    "knownFunctionality": {
+      "NOTIFICATION_CREATE": "Invio delle notifiche",
+      "NOTIFICATION_VISUALIZATION": "Visualizzazione notifiche e download allegati",
+      "NOTIFICATION_WORKFLOW": "Cambio di stato delle notifiche"
+    },
+    "unknownFunctionality": "Servizio sconosciuto ({{functionality}})",
+    "status": {
+      "OK": "Risolto",
+      "KO": "In corso"
+    },
+    "noFileAvailableByStatus": {
+      "OK": "L'attestazione sarà disponibile a breve",
+      "KO": "L'attestazione sarà disponibile al termine del disservizio"
+    },
+    "legalFactDownload": "Scarica l'attestazione"
+  }
+}

@@ -1,13 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppCurrentStatus, DowntimeLogPage, LegalFactDocumentDetails } from "@pagopa-pn/pn-commons";
+import { AppStatusData } from "@pagopa-pn/pn-commons";
 import { getCurrentAppStatus, getDowntimeLegalFactDocumentDetails, getDowntimeLogPage } from "./actions";
-
-interface AppStatusData {
-  currentStatus?: AppCurrentStatus;
-  downtimeLogPage?: DowntimeLogPage;
-  legalFactDocumentData?: LegalFactDocumentDetails;
-  pagination: { size: number; page: number; resultPages: Array<string> };
-};
 
 /* eslint-disable functional/immutable-data */
 const appStatusSlice = createSlice({
