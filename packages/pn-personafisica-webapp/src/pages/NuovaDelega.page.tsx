@@ -36,6 +36,7 @@ import {
   CustomDropdown,
   isToday,
   dataRegex,
+  RecipientType,
 } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
@@ -101,7 +102,7 @@ const NuovaDelega = () => {
   tomorrow.setHours(0, 0, 0, 0);
 
   const initialValues = {
-    selectPersonaFisicaOrPersonaGiuridica: 'pf',
+    selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
     codiceFiscale: '',
     nome: '',
     cognome: '',
@@ -121,17 +122,26 @@ const NuovaDelega = () => {
     codiceFiscale: yup
       .string()
       .required(t('nuovaDelega.validation.fiscalCode.required'))
-      .matches(dataRegex.fiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
+      .test(
+        'taxIdDependingOnRecipientType',
+        t('nuovaDelega.validation.fiscalCode.wrong'),
+        function (value) {
+          return taxIdDependingOnRecipientType(
+            value,
+            this.parent.selectPersonaFisicaOrPersonaGiuridica
+          );
+        }
+      ),
     nome: yup
       .string()
       .required(t('nuovaDelega.validation.name.required'))
       .when('selectPersonaFisicaOrPersonaGiuridica', {
-        is: (val: string) => val === 'pf',
+        is: (val: string) => val === RecipientType.PF,
         then: yup.string().required(t('nuovaDelega.validation.name.required')),
         otherwise: yup.string().required(t('nuovaDelega.validation.businessName.required')),
       }),
     cognome: yup.string().when('selectPersonaFisicaOrPersonaGiuridica', {
-      is: 'pf',
+      is: RecipientType.PF,
       then: yup.string().required(t('nuovaDelega.validation.surname.required')),
     }),
     enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
@@ -162,6 +172,18 @@ const NuovaDelega = () => {
     funTouched('cognome', false, true);
     return (): void => {};
   };
+
+  function taxIdDependingOnRecipientType(
+    value: string | undefined,
+    recipientType: RecipientType
+  ): boolean {
+    if (!value) {
+      return true;
+    }
+    const isCF16 = dataRegex.fiscalCode.test(value);
+    const isCF11 = dataRegex.pIva.test(value);
+    return isCF16 || (recipientType === RecipientType.PG && isCF11);
+  }
 
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
@@ -229,7 +251,7 @@ const NuovaDelega = () => {
                           <Stack justifyContent="center">
                             <RadioGroup
                               aria-labelledby="radio-buttons-group-pf-pg"
-                              defaultValue="pf"
+                              defaultValue={RecipientType.PF}
                               name="selectPersonaFisicaOrPersonaGiuridica"
                               value={values.selectPersonaFisicaOrPersonaGiuridica.toString()}
                               onChange={(event) => {
@@ -240,14 +262,14 @@ const NuovaDelega = () => {
                               }}
                             >
                               <FormControlLabel
-                                value="pf"
+                                value={RecipientType.PF}
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.naturalPerson')}
                               />
                               <FormControlLabel
                                 onClick={() => deleteInput(setFieldValue, setFieldTouched)}
-                                value="pg"
+                                value={RecipientType.PG}
                                 control={<Radio />}
                                 name={'selectPersonaFisicaOrPersonaGiuridica'}
                                 label={t('nuovaDelega.form.legalPerson')}
@@ -261,7 +283,7 @@ const NuovaDelega = () => {
                             spacing={1}
                             flex="1 0 100px"
                           >
-                            {values.selectPersonaFisicaOrPersonaGiuridica === 'pf' && (
+                            {values.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF && (
                               <TextField
                                 sx={{ margin: 'auto' }}
                                 id="nome"
@@ -277,7 +299,7 @@ const NuovaDelega = () => {
                               />
                             )}
 
-                            {values.selectPersonaFisicaOrPersonaGiuridica === 'pf' && (
+                            {values.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PF && (
                               <TextField
                                 sx={{ margin: 'auto' }}
                                 id="cognome"
@@ -292,7 +314,7 @@ const NuovaDelega = () => {
                                 fullWidth
                               />
                             )}
-                            {values.selectPersonaFisicaOrPersonaGiuridica === 'pg' && (
+                            {values.selectPersonaFisicaOrPersonaGiuridica === RecipientType.PG && (
                               <TextField
                                 sx={{ margin: 'auto' }}
                                 id="nome"
