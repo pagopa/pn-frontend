@@ -5,6 +5,7 @@ import {
   GetNotificationsResponse,
   LegalFactId,
   NotificationDetail,
+  NotificationDetailOtherDocument,
   parseNotificationDetail,
 } from '@pagopa-pn/pn-commons';
 
@@ -19,6 +20,7 @@ import {
   NOTIFICATION_DETAIL_LEGALFACT,
   NOTIFICATION_PRELOAD_DOCUMENT,
   GET_USER_GROUPS,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
 } from './notifications.routes';
 
 
@@ -77,6 +79,11 @@ export const NotificationsApi = {
   getSentNotificationDocument: (iun: string, documentIndex: string): Promise<{ url: string }> =>
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
+      .then((response) => getDownloadUrl(response)),
+
+  getSentNotificationOtherDocument: (iun: string, otherDocument: NotificationDetailOtherDocument): Promise<{ url: string }> =>
+    apiClient
+      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {params: {documentId: otherDocument.documentId}})
       .then((response) => getDownloadUrl(response)),
 
   /**

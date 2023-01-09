@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
@@ -12,7 +13,7 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
 } from '../types';
-import { LegalFactType, SendDigitalDetails } from '../types/NotificationDetail';
+import { AarDetails, LegalFactType, NotificationDetailOtherDocument, SendDigitalDetails } from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
@@ -369,7 +370,9 @@ function populateMacroStep(
  * @param  {NotificationDetail} parsedNotification
  */
 function populateMacroSteps(parsedNotification: NotificationDetail) {
+  // eslint-disable-next-line functional/no-let
   let isEffectiveDateStatus = false;
+  // eslint-disable-next-line functional/no-let
   let acceptedStatusItems: Array<string> = [];
   for (const status of parsedNotification.notificationStatusHistory) {
     // if status accepted has items, move them to the next state, but preserve legalfacts
@@ -408,11 +411,23 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
  * @param  {NotificationDetail} notificationDetail
  * @returns NotificationDetail
  */
+const populateOtherDocuments = (timeline: Array<INotificationDetailTimeline>): Array<NotificationDetailOtherDocument> => {
+  const timelineFiltered = timeline.filter(t => t.category === TimelineCategory.AAR_GENERATION);
+  if (timelineFiltered.length>0) {
+    return timelineFiltered.map(t => ({
+      documentId: (t.details as AarDetails).generatedAarUrl as string,
+      documentType: LegalFactType.AAR,
+    }));
+  }
+  return [];
+};
+
 export function parseNotificationDetail(
   notificationDetail: NotificationDetail
 ): NotificationDetail {
   const parsedNotification = {
     ...notificationDetail,
+    otherDocuments: populateOtherDocuments(notificationDetail.timeline),
     sentAt: formatDate(notificationDetail.sentAt),
   };
   /* eslint-disable functional/immutable-data */

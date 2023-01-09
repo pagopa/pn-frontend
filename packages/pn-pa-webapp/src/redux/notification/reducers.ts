@@ -7,12 +7,14 @@ import {
   INotificationDetailTimeline,
   NotificationStatusHistory,
   PhysicalCommunicationType,
-  NotificationFeePolicy
+  NotificationFeePolicy,
+  NotificationDetailOtherDocument,
 } from '@pagopa-pn/pn-commons';
 import {
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
+  getSentNotificationOtherDocument,
 } from './actions';
 
 const initialState = {
@@ -22,6 +24,7 @@ const initialState = {
     subject: '',
     recipients: [] as Array<NotificationDetailRecipient>,
     documents: [] as Array<NotificationDetailDocument>,
+    otherDocuments: [] as Array<NotificationDetailOtherDocument>,
     notificationFeePolicy: '' as NotificationFeePolicy,
     physicalCommunicationType: '' as PhysicalCommunicationType,
     senderPaId: '',
@@ -32,6 +35,7 @@ const initialState = {
     timeline: [] as Array<INotificationDetailTimeline>
   } as NotificationDetail,
   documentDownloadUrl: '',
+  otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
 };
 
@@ -49,6 +53,11 @@ const notificationSlice = createSlice({
     builder.addCase(getSentNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.documentDownloadUrl = action.payload.url;
+      }
+    });
+    builder.addCase(getSentNotificationOtherDocument.fulfilled, (state, action) => {
+      if (action.payload.url) {
+        state.otherDocumentDownloadUrl = action.payload.url;
       }
     });
     builder.addCase(getSentNotificationLegalfact.fulfilled, (state, action) => {

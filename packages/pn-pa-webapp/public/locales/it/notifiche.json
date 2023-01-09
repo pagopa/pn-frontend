@@ -60,6 +60,7 @@
       "message": "Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la precedente."
     },
     "acts": "Documenti allegati",
+    "other-acts": "Altri documenti",
     "timeline-title": "Stato della notifica",
     "legalfact": "Attestazione opponibile a terzi",
     "receipt": "Ricevuta",

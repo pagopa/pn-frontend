@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { NotificationDetail, LegalFactId, performThunkAction } from '@pagopa-pn/pn-commons';
+import { NotificationDetail, LegalFactId, performThunkAction, NotificationDetailOtherDocument } from '@pagopa-pn/pn-commons';
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 
 export enum NOTIFICATION_ACTIONS {
@@ -27,6 +27,17 @@ export const getSentNotificationDocument = createAsyncThunk<{url: string}, {iun:
   async (params: {iun: string; documentIndex: string}, { rejectWithValue }) => {
     try {
       return await NotificationsApi.getSentNotificationDocument(params.iun, params.documentIndex);
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
+);
+
+export const getSentNotificationOtherDocument = createAsyncThunk<{url: string}, {iun: string; otherDocument: NotificationDetailOtherDocument}>(
+  'getSentNotificationOtherDocument',
+  async (params: {iun: string; otherDocument: NotificationDetailOtherDocument}, { rejectWithValue }) => {
+    try {
+      return await NotificationsApi.getSentNotificationOtherDocument(params.iun, params.otherDocument);
     } catch (e) {
       return rejectWithValue(e);
     }
