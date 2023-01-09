@@ -8,7 +8,8 @@ import { render } from '../../__test__/test-utils';
 import NuovaDelega from '../NuovaDelega.page';
 import * as actions from '../../redux/newDelegation/actions';
 import * as trackingFunctions from '../../utils/mixpanel';
-import {TrackEventType} from "../../utils/events";
+import { TrackEventType } from '../../utils/events';
+import { RecipientType } from '@pagopa-pn/pn-commons';
 
 jest.mock('../../component/Deleghe/VerificationCodeComponent', () => ({
   __esModule: true,
@@ -55,14 +56,13 @@ async function testInput(form: HTMLFormElement, elementName: string, value: stri
 }
 
 describe('NuovaDelega page', () => {
-
   const initialState = (created: boolean) => ({
     preloadedState: {
       newDelegationState: {
         created,
-        entities: []
-      }      
-    }
+        entities: [],
+      },
+    },
   });
 
   beforeEach(() => {
@@ -153,7 +153,7 @@ describe('NuovaDelega page', () => {
       expect(mockDispatchFn).toBeCalledTimes(2);
       expect(mockCreateActionFn).toBeCalledTimes(1);
       expect(mockCreateActionFn).toBeCalledWith({
-        selectPersonaFisicaOrPersonaGiuridica: 'pf',
+        selectPersonaFisicaOrPersonaGiuridica: RecipientType.PF,
         codiceFiscale: 'RSSMRA01A01A111A',
         nome: 'Mario',
         cognome: 'Rossi',
