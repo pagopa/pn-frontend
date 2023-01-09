@@ -52,6 +52,11 @@ const populateFormMultipleRecipients = async (form: HTMLFormElement) => {
 
 // TODO i'm skipping all very slow tests => they would be implemented using cypress as integration tests
 // when validation is "detached" from the component, validation schema should be tested separately as UT with jest 
+// ----------------------------------
+// In the context of PN-2712, we decided to keep these tests skipped until the new, cypress-based tests are operative.
+// Cfr PN-2962, open to implement the cypress-based tests. 
+// Carlotta Dimatteo and Carlos Lombardi, 2022.12.14
+// ----------------------------------
 
 describe('Recipient Component', () => {
   // eslint-disable-next-line functional/no-let
@@ -106,10 +111,12 @@ describe('Recipient Component', () => {
     fireEvent.click(addButton3!);
     const addButton4 = result.queryByText('add-recipient');
     fireEvent.click(addButton4!);
-    expect(result.container).toHaveTextContent(/title 1/i);
-    expect(result.container).toHaveTextContent(/title 5/i);
-    const addButton5 = result.queryByText('add-recipient');
-    expect(addButton5).toBeNull();
+    await waitFor(() => {
+      expect(result.container).toHaveTextContent(/title 1/i);
+      expect(result.container).toHaveTextContent(/title 5/i);
+      const addButton5 = result.queryByText('add-recipient');
+      expect(addButton5).toBeNull();
+    });
   });
 
   it('shows the digital domicile form and the physical address form', async () => {

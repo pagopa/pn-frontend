@@ -44,7 +44,7 @@ describe("OrganizationPartyGuard component", () => {
     };
     await act(async () => void render(<OrganizationPartyGuard />, { preloadedState: mockReduxState }));
     const contentsComponent = screen.queryByTestId("normal-contents"); 
-    const apiErrorComponent = screen.queryByTestId("api-error"); 
+    const apiErrorComponent = screen.queryByTestId(`api-error-${AUTH_ACTIONS.GET_ORGANIZATION_PARTY}`); 
     expect(contentsComponent).not.toBeInTheDocument();
     expect(apiErrorComponent).toBeInTheDocument();
   });

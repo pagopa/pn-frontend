@@ -1,6 +1,7 @@
 // types
 import { PaginationData } from '../components/Pagination/types';
 import { DatePickerTypes } from '../components/CustomDatePicker';
+import { AppStatusData } from './AppStatus';
 import { IAppMessage } from './AppMessage';
 import { NotificationStatus } from './NotificationStatus';
 import { SideMenuItem } from './SideMenuItem';
@@ -28,6 +29,7 @@ import {
   NotificationDetailOtherDocument,
   PhysicalCommunicationType,
   PaymentInfoDetail,
+  PaymentNotice,
   PaymentStatus,
   PaymentAttachmentSName,
   PaymentAttachmentNameType,
@@ -59,6 +61,7 @@ export {
 };
 export type {
   AnalogWorkflowDetails,
+  AppStatusData,
   BasicUser,
   CardAction,
   CardElement,
@@ -84,6 +87,7 @@ export type {
   PaginationData,
   PaymentAttachmentNameType,
   PaymentInfo,
+  PaymentNotice,
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,

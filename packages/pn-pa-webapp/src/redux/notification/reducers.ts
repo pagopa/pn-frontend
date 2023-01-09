@@ -37,6 +37,7 @@ const initialState = {
   documentDownloadUrl: '',
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
+  legalFactDownloadRetryAfter: 0,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -45,6 +46,10 @@ const notificationSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
+    resetLegalFactState: (state) => {
+      state.legalFactDownloadUrl = '';
+      state.legalFactDownloadRetryAfter = 0;
+    } 
   },
   extraReducers: (builder) => {
     builder.addCase(getSentNotification.fulfilled, (state, action) => {
@@ -64,10 +69,13 @@ const notificationSlice = createSlice({
       if (action.payload.url) {
         state.legalFactDownloadUrl = action.payload.url;
       }
+      if (action.payload.retryAfter) {
+        state.legalFactDownloadRetryAfter = action.payload.retryAfter;
+      }
     });
   },
 });
 
-export const {resetState} = notificationSlice.actions;
+export const {resetState, resetLegalFactState} = notificationSlice.actions;
 
 export default notificationSlice;

@@ -4,7 +4,7 @@ import {
   RenderResult
 } from '@testing-library/react';
 import * as redux from 'react-redux';
-import { axe, render } from "../../../__test__/test-utils";
+import { render } from "../../../__test__/test-utils";
 
 import { CourtesyChannelType, IOAllowedValues } from "../../../models/contacts";
 import * as actions from '../../../redux/contact/actions';
@@ -94,15 +94,9 @@ describe('IOContact component', () => {
   });
 
   describe('test component when IO is unavailable', () => {
-    beforeEach(() => {
-      result = render(<IOContact recipientId="mocked-recipientId" contact={undefined} />);
-    });
-
-    afterEach(() => {
-      result = undefined;
-    });
-
     it('renders as expected', () => {
+      result = render(<IOContact recipientId="mocked-recipientId" contact={undefined} />);
+
       const cardAvatar = result?.container.querySelector('svg>title');
       expect(cardAvatar).toBeInTheDocument();
       expect(cardAvatar).toHaveTextContent('Sms');
@@ -123,19 +117,9 @@ describe('IOContact component', () => {
       const link = result?.container.querySelector('a');
       expect(link).not.toBeInTheDocument();
     });
-
-    it.skip('does not have basic accessibility issues', async () => {
-      if (result) {
-        const res = await axe(result.container);
-        expect(res).toHaveNoViolations();
-      } else {
-        fail("render() returned undefined!");
-      }
-    });
   });
 
-  describe('test component when IO is available and disabled', () => {
-    
+  describe('test component when IO is available and disabled', () => {    
     beforeEach(() => {
       result = render(<IOContact recipientId="mocked-recipientId" contact={disabledAddress} />);
     });
@@ -163,8 +147,7 @@ describe('IOContact component', () => {
       // expect(link).toHaveTextContent('io-contact.disclaimer-link');
     });
 
-    it('should enable IO', async () => {
-      
+    it('should enable IO', async () => {      
       const ioCheckbox = result?.getByRole('checkbox', { name: 'io-contact.switch-label'});
       expect(ioCheckbox).toBeInTheDocument();
       expect(ioCheckbox).not.toBeChecked();
@@ -177,15 +160,6 @@ describe('IOContact component', () => {
 
       expect(ioCheckbox).toBeInTheDocument();
       expect(ioCheckbox).toBeChecked();
-    });
-    
-    it.skip('does not have basic accessibility issues', async () => {
-      if (result) {
-        const res = await axe(result.container);
-        expect(res).toHaveNoViolations();
-      } else {
-        fail("render() returned undefined!");
-      }
     });
   });
 
@@ -218,8 +192,7 @@ describe('IOContact component', () => {
       // expect(link).toHaveTextContent('io-contact.disclaimer-link');
     });
 
-    it('should disable IO', async () => {
-      
+    it('should disable IO', async () => {      
       const ioCheckbox = result?.getByRole('checkbox', { name: 'io-contact.switch-label'});
       expect(ioCheckbox).toBeInTheDocument();
       expect(ioCheckbox).toBeChecked();
@@ -231,15 +204,6 @@ describe('IOContact component', () => {
       expect(mockDisableActionFn).toBeCalledWith('mocked-recipientId');
 
       expect(ioCheckbox).not.toBeChecked();
-    });
-    
-    it.skip('does not have basic accessibility issues', async () => {
-      if (result) {
-        const res = await axe(result.container);
-        expect(res).toHaveNoViolations();
-      } else {
-        fail("render() returned undefined!");
-      }
     });
   });
 });

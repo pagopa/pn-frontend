@@ -11,11 +11,7 @@ describe('Test length rule', () => {
 
   it('value not a string', () => {
     const rule = new Length<any, Number>();
-    try {
-      rule.valueValidator(1);
-    } catch (e) {
-      expect(e.message).toBe('A non-string value was passed to the length rule');
-    }
+    expect(() => rule.valueValidator(1)).toThrow('A non-string value was passed to the length rule');
   });
 
   it('valid value (without limits)', () => {

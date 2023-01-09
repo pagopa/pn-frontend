@@ -1,7 +1,7 @@
 import { fireEvent, waitFor } from '@testing-library/react';
 
 import { notificationsToFe } from '../../../redux/dashboard/__test__/test-utils';
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import * as routes from '../../../navigation/routes.const';
 import MobileNotifications from '../MobileNotifications';
 
@@ -78,38 +78,5 @@ describe('MobileNotifications Component', () => {
         routes.GET_DETTAGLIO_NOTIFICA_PATH(notificationsToFe.resultsPage[0].iun)
       );
     });
-  });
-
-  it.skip('does not have basic accessibility issues', async () => {
-    const result = render(
-      <MobileNotifications
-        notifications={notificationsToFe.resultsPage}
-        sort={{ orderBy: '', order: 'asc' }}
-      />
-    );
-
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail("render() returned undefined!");
-    }
-  });
-
-  it.skip('does not have basic accessibility issues (empty notifications)', async () => {
-    const result = render(
-      <MobileNotifications
-        notifications={[]}
-        sort={{ orderBy: 'sentAt', order: 'asc' }}
-        onChangeSorting={() => {}}
-      />
-    );
-
-    if (result) {
-      const res = await axe(result.container);
-      expect(res).toHaveNoViolations();
-    } else {
-      fail("render() returned undefined!");
-    }
   });
 });

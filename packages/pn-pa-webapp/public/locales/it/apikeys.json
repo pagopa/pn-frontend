@@ -59,9 +59,13 @@
     "rotated-description": "L'API Key è ruotata"
   },
   "tooltip": {
+    "created": "Creata",
     "created-in": "Creata il",
+    "blocked": "Bloccata",
     "blocked-in": "Bloccata il",
+    "enabled": "Attivata",
     "enabled-in": "Attivata il",
+    "rotated": "Ruotata",
     "rotated-in": "Ruotata il",
     "from": "da"
   },

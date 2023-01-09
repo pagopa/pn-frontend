@@ -4,7 +4,9 @@
     "lib": [
       "es6",
       "dom",
-      "es2019"
+      "es2019",
+      "DOM",
+      "DOM.Iterable",
     ],
     "allowJs": true,
     "skipLibCheck": true,

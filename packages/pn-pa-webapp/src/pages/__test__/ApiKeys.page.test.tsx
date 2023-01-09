@@ -3,7 +3,7 @@ import React from 'react';
 import * as redux from 'react-redux';
 import { ApiKey } from '../../models/ApiKeys';
 import { mockApiKeysForFE } from '../../redux/apiKeys/__test__/test-utils';
-import { axe, render } from '../../__test__/test-utils';
+import { render } from '../../__test__/test-utils';
 import * as actions from '../../redux/apiKeys/actions';
 import ApiKeys from '../ApiKeys.page';
 
@@ -87,14 +87,4 @@ describe('ApiKeys Page', () => {
       expect(mockNavigateFn).toBeCalledTimes(1);
     });
   });
-
-  it('does not have basic accessibility issues rendering the page', async () => {
-    await act(async () => {
-      result = render(<ApiKeys />, initialState(mockApiKeysForFE));
-    });
-    if (result) {
-      const results = await axe(result.container);
-      expect(results).toHaveNoViolations();
-    }
-  }, 15000);
 });

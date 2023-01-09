@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import { formatDate } from '@pagopa-pn/pn-commons';
+import { formatDate, isToday } from '@pagopa-pn/pn-commons';
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ApiKeyStatus, ApiKeyStatusHistory } from '../models/ApiKeys';
@@ -38,22 +38,25 @@ const TooltipApiKey = (history: Array<ApiKeyStatusHistory>) => {
             </Box>
           </Box>
         );
+
+        const suffixToday = isToday(new Date(h.date)) ? '' : '-in';
+
         switch (h.status) {
           case ApiKeyStatus.ENABLED:
             return (
-              output('enabled-in', h)
+              output(`enabled${suffixToday}`, h)
             );
           case ApiKeyStatus.CREATED:
             return (
-              output('created-in', h)
+              output(`created${suffixToday}`, h)
             );
           case ApiKeyStatus.BLOCKED:
             return (
-              output('blocked-in', h)
+              output(`blocked${suffixToday}`, h)
             );
           case ApiKeyStatus.ROTATED:
             return (
-              output('rotated-in', h)
+              output(`rotated${suffixToday}`, h)
             );
           default:
             return <></>;

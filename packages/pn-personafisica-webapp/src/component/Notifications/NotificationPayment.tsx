@@ -26,13 +26,21 @@ import {
   PaymentStatus,
   useIsMobile,
   appStateActions,
+  useDownloadDocument,
 } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { getNotificationPaymentInfo, getPaymentAttachment, NOTIFICATION_ACTIONS } from '../../redux/notification/actions';
+import {
+  getNotificationPaymentInfo,
+  getNotificationPaymentUrl,
+  getPaymentAttachment,
+  NOTIFICATION_ACTIONS,
+} from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import { PAGOPA_HELP_EMAIL,
+import {
+  PAGOPA_HELP_EMAIL,
   // PN-2029
   // PAYMENT_DISCLAIMER_URL
 } from '../../utils/constants';
@@ -42,8 +50,9 @@ import { trackEventByType } from '../../utils/mixpanel';
 interface Props {
   iun: string;
   notificationPayment: NotificationDetailPayment;
-  onDocumentDownload: (url: string) => void;
   mandateId?: string;
+  senderDenomination?: string;
+  subject: string;
 }
 
 interface PrimaryAction {
@@ -74,8 +83,9 @@ interface PaymentData {
 const NotificationPayment: React.FC<Props> = ({
   iun,
   notificationPayment,
-  onDocumentDownload,
   mandateId,
+  senderDenomination,
+  subject,
 }) => {
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
@@ -97,17 +107,8 @@ const NotificationPayment: React.FC<Props> = ({
     fetchPaymentInfo();
   }, []);
 
-  useEffect(() => {
-    if (pagopaAttachmentUrl) {
-      onDocumentDownload(pagopaAttachmentUrl);
-    }
-  }, [pagopaAttachmentUrl]);
-
-  useEffect(() => {
-    if (f24AttachmentUrl) {
-      onDocumentDownload(f24AttachmentUrl);
-    }
-  }, [f24AttachmentUrl]);
+  useDownloadDocument({ url: pagopaAttachmentUrl });
+  useDownloadDocument({ url: f24AttachmentUrl });
 
   const fetchPaymentInfo = () => {
     if (notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
@@ -119,7 +120,7 @@ const NotificationPayment: React.FC<Props> = ({
       )
         // PN-1942 - gestione generica di disservizio API
         // si toglie la gestione ad-hoc che veniva fatta in questo componente, perciò il catch che era
-        // presente non c'è più. 
+        // presente non c'è più.
         // Di conseguenza, questo unwrap infatti non è necessario per il funzionamento dell'app.
         // Però lascio sia unwrap sia un catch vuoto, perché se l'unwrap viene tolto, falliscono tutti i test di NotificationPayment,
         // e se c'è unwrap allora si deve fare un catch.
@@ -132,19 +133,36 @@ const NotificationPayment: React.FC<Props> = ({
         .catch(() => {});
     } else {
       setLoading(() => false);
-      dispatch(appStateActions.removeErrorsByAction(NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO));
+      dispatch(
+        appStateActions.removeErrorsByAction(NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO)
+      );
     }
   };
 
   const onPayClick = () => {
-    const paymentUrl = paymentInfo.url;
-    if (paymentUrl && notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
-      window.open(
-        `${paymentUrl}/${notificationPayment.creditorTaxId}${notificationPayment.noticeCode}`
-      );
-    } else if (paymentUrl) {
-      // do we need to inform the user that NoticeCode and/or creditorTaxId are unavailable and redirect to base checkout url?
-      window.open(paymentUrl);
+    if (
+      notificationPayment.noticeCode &&
+      notificationPayment.creditorTaxId &&
+      paymentInfo.amount &&
+      senderDenomination
+    ) {
+      dispatch(
+        getNotificationPaymentUrl({
+          paymentNotice: {
+            noticeNumber: notificationPayment.noticeCode,
+            fiscalCode: notificationPayment.creditorTaxId,
+            amount: paymentInfo.amount,
+            companyName: senderDenomination,
+            description: subject,
+          },
+          returnUrl: window.location.href,
+        })
+      )
+        .unwrap()
+        .then((res: { checkoutUrl: string }) => {
+          window.location.assign(res.checkoutUrl);
+        })
+        .catch(() => undefined);
     }
     trackEventByType(TrackEventType.NOTIFICATION_DETAIL_PAYMENT_INTERACTION);
   };
@@ -236,13 +254,11 @@ const NotificationPayment: React.FC<Props> = ({
     <>
       {t('detail.payment.disclaimer', { ns: 'notifiche' })}
       &nbsp;
-      {
-        /* PN-2029
+      {/* PN-2029
         <Link href="#" onClick={onDisclaimerClick}>
           {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
         </Link>
-        */
-      }
+        */}
     </>
   );
 
@@ -390,20 +406,21 @@ const NotificationPayment: React.FC<Props> = ({
   const attachments = getAttachmentsData();
 
   return (
-    <ApiErrorWrapper 
-      apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO} reloadAction={fetchPaymentInfo} 
+    <ApiErrorWrapper
+      apiId={NOTIFICATION_ACTIONS.GET_NOTIFICATION_PAYMENT_INFO}
+      reloadAction={fetchPaymentInfo}
       mainText={t('detail.payment.message-error-fetch-payment', { ns: 'notifiche' })}
     >
       <Paper sx={{ p: 3, mb: '1rem' }} className="paperContainer">
         <Grid container direction="row" justifyContent="space-between">
           <Grid item xs={8} lg={8}>
-            <Typography variant="h6" display="inline" fontWeight={600} fontSize={24}>
+            <Typography variant="h5" display="inline" fontWeight={600} fontSize={24}>
               {data.title}
             </Typography>
           </Grid>
           <Grid item xs={4} lg={4} sx={{ textAlign: 'right' }}>
             <Typography
-              variant="h6"
+              variant="h5"
               aria-label={t('detail.payment.amount', { ns: 'notifiche' })}
               display="inline"
               fontWeight={600}

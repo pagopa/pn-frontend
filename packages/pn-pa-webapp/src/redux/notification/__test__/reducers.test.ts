@@ -8,7 +8,7 @@ import {
   getSentNotificationDocument,
   getSentNotificationLegalfact,
 } from '../actions';
-import { resetState } from '../reducers';
+import { resetLegalFactState, resetState } from '../reducers';
 import { notificationToFe } from './test-utils';
 
 const initialState = {
@@ -29,6 +29,7 @@ const initialState = {
   },
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
+  legalFactDownloadRetryAfter: 0,
 };
 
 describe('Notification detail redux state tests', () => {
@@ -80,5 +81,15 @@ describe('Notification detail redux state tests', () => {
     expect(payload).toEqual(undefined);
     const state = store.getState().notificationState;
     expect(state).toEqual(initialState);
+  });
+
+  it('Should be able to reset legalfact state', () => {
+    const action = store.dispatch(resetLegalFactState());
+    const payload = action.payload;
+    expect(action.type).toBe('notificationSlice/resetLegalFactState');
+    expect(payload).toEqual(undefined);
+    const state = store.getState().notificationState;
+    expect(state.legalFactDownloadRetryAfter).toEqual(0); 
+    expect(state.legalFactDownloadUrl).toEqual(''); 
   });
 });

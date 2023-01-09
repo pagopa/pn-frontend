@@ -106,7 +106,7 @@ const DesktopApiKeys = ({
     {
       id: 'value',
       label: t('table.api-key'),
-      width: '30%',
+      width: '25%',
       sortable: false,
       getCellLabel(value: string, row: Item) {
         return (
@@ -173,7 +173,7 @@ const DesktopApiKeys = ({
               display: 'flex',
               alignItems: 'center',
               width: '100%',
-              justifyContent: 'space-between',
+              justifyContent: 'center',
             }}
           >
             <StatusTooltip
@@ -181,12 +181,23 @@ const DesktopApiKeys = ({
               tooltip={tooltip}
               color={color}
               eventTrackingCallback={handleEventTrackingTooltip}
-            ></StatusTooltip>
-            <ApiKeyContextMenu row={row} />
+            />
           </Box>
         );
       },
     },
+    {
+      id: 'contextMenu',
+      label: '',
+      width: '5%',
+      align: 'left',
+      sortable: false,
+      getCellLabel(_value: string, row: Item) {
+        return (
+          <ApiKeyContextMenu row={row} />
+        );
+      }
+    }
   ];
 
   useEffect(() => {

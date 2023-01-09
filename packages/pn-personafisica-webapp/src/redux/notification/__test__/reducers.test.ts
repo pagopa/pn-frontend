@@ -4,12 +4,13 @@ import { mockAuthentication } from '../../auth/__test__/test-utils';
 import { store } from '../../store';
 import {
   getNotificationPaymentInfo,
+  getNotificationPaymentUrl,
   getPaymentAttachment,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
 } from '../actions';
-import { resetState } from '../reducers';
+import { resetLegalFactState, resetState } from '../reducers';
 import { notificationToFe } from './test-utils';
 
 const initialState = {
@@ -38,6 +39,7 @@ const initialState = {
   },
   documentDownloadUrl: '',
   legalFactDownloadUrl: '',
+  legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
   paymentInfo: {},
@@ -100,6 +102,16 @@ describe('Notification detail redux state tests', () => {
     expect(state).toEqual(initialState);
   });
 
+  it('Should be able to reset legalfact state', () => {
+    const action = store.dispatch(resetLegalFactState());
+    const payload = action.payload;
+    expect(action.type).toBe('notificationSlice/resetLegalFactState');
+    expect(payload).toEqual(undefined);
+    const state = store.getState().notificationState;
+    expect(state.legalFactDownloadRetryAfter).toEqual(0); 
+    expect(state.legalFactDownloadUrl).toEqual(''); 
+  });
+
   it('Should be able to fetch the pagopa document', async () => {
     const apiSpy = jest.spyOn(NotificationsApi, 'getPaymentAttachment');
     apiSpy.mockResolvedValue({ url: 'http://pagopa-mocked-url.com' });
@@ -140,5 +152,25 @@ describe('Notification detail redux state tests', () => {
 
     const state = store.getState().notificationState;
     expect(state.paymentInfo).toEqual({ status: PaymentStatus.REQUIRED, amount: 1200, url: "mocked-url" });
+  });
+
+  it('Should be able to fetch payment url', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getNotificationPaymentUrl');
+    apiSpy.mockResolvedValue({ checkoutUrl: "mocked-url" });
+    const action = await store.dispatch(
+      getNotificationPaymentUrl({
+        paymentNotice: {
+          noticeNumber: 'mocked-noticeCode',
+          fiscalCode: 'mocked-taxId',
+          amount: 0,
+          companyName: 'Mocked Company',
+          description: 'Mocked title',
+        },
+        returnUrl: 'mocked-return-url',
+      })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getNotificationPaymentUrl/fulfilled');
+    expect(payload).toEqual({ checkoutUrl: "mocked-url" });
   });
 });
