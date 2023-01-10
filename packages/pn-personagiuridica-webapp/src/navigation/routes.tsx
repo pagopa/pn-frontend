@@ -4,6 +4,7 @@ import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
 import Prova from '../pages/Prova.page';
 import AppStatus from '../pages/AppStatus.page';
+import Contacts from '../pages/Contacts.page';
 import * as routes from './routes.const';
 import RouteGuard from './RouteGuard';
 import SessionGuard from './SessionGuard';
@@ -17,7 +18,8 @@ function Router() {
           <Route path="/" element={<RouteGuard />}>
             <Route path={routes.NOTIFICHE} element={<Prova />} />
             <Route path={routes.DELEGHE} element={<Prova />} />
-            <Route path={routes.APP_STATUS} element={<AppStatus  />} />
+            <Route path={routes.APP_STATUS} element={<AppStatus />} />
+            <Route path={routes.RECAPITI} element={<Contacts />} />
             <Route path="/" element={<Navigate to={routes.NOTIFICHE} />} />
           </Route>
         </Route>

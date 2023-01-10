@@ -8,6 +8,8 @@ import AltRouteIcon from '@mui/icons-material/AltRoute';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
+import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
+
 import {
   AppMessage,
   AppResponseMessage,
@@ -67,21 +69,32 @@ function App() {
       { label: 'menu.notifications', icon: Email, route: routes.NOTIFICHE },
       // TODO: gestire badge
       {
+        label: 'menu.contacts',
+        icon: MarkunreadMailboxIcon,
+        route: routes.RECAPITI,
+        rightBadgeNotification: undefined,
+      },
+      {
         label: 'menu.delegations',
         icon: AltRouteIcon,
         route: routes.DELEGHE,
         rightBadgeNotification: undefined,
       },
-      { 
-        label: 'menu.app-status', 
+
+      {
+        label: 'menu.app-status',
         // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
-        icon: () => currentStatus 
-          ? (currentStatus.appIsFullyOperative
-            ? <CheckCircleIcon sx={{ color: 'success.main' }} />
-            : <ErrorIcon sx={{ color: 'error.main' }} />)
-          : <HelpIcon />
-        , 
-        route: routes.APP_STATUS 
+        icon: () =>
+          currentStatus ? (
+            currentStatus.appIsFullyOperative ? (
+              <CheckCircleIcon sx={{ color: 'success.main' }} />
+            ) : (
+              <ErrorIcon sx={{ color: 'error.main' }} />
+            )
+          ) : (
+            <HelpIcon />
+          ),
+        route: routes.APP_STATUS,
       },
     ];
     const items = { ...getMenuItems(basicMenuItems, 'id-organizazzione') };
@@ -115,11 +128,14 @@ function App() {
     return [profiloAction, logoutAction];
   }, []);
 
-  useEffect(() => /* { */
-    // if (sessionToken) {
-      void dispatch(getCurrentAppStatus())
+  useEffect(
+    () =>
+      /* { */
+      // if (sessionToken) {
+      void dispatch(getCurrentAppStatus()),
     // }
-  /* } */ , [ /* sessionToken, */ getCurrentAppStatus]);
+    /* } */ [/* sessionToken, */ getCurrentAppStatus]
+  );
 
   const handleUserLogout = () => {
     // TODO: manage logout

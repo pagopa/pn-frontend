@@ -1,4 +1,4 @@
-import { SELFCARE_BASE_URL } from "../utils/constants";
+import { SELFCARE_BASE_URL } from '../utils/constants';
 
 export const NOTIFICHE = '/notifiche';
 export const DELEGHE = '/deleghe';
@@ -18,3 +18,5 @@ export const USERS = (idOrganization: string) =>
  */
 export const GROUPS = (idOrganization: string) =>
   `${SELFCARE_BASE_URL}${NOTIFICHE}/${idOrganization}${GROUPS_SEGMENT}#${ID_PN_SEGMENT}`;
+export const RECAPITI = '/recapiti';
+export const PROFILO = '/profilo';
