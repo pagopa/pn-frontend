@@ -18,6 +18,7 @@ import {
   useErrors,
   ApiError,
   TimedMessage,
+  useDownloadDocument,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -139,16 +140,6 @@ const NotificationDetail = () => {
     );
   };
 
-  const dowloadDocument = (url: string) => {
-    /* eslint-disable functional/immutable-data */
-    const link = document.createElement('a');
-    link.href = url;
-    link.target = '_blank';
-    link.rel = 'noreferrer';
-    link.click();
-    /* eslint-enable functional/immutable-data */
-  };
-
   const isCancelled =
     notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
 
@@ -186,17 +177,8 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, []);
 
-  useEffect(() => {
-    if (documentDownloadUrl) {
-      dowloadDocument(documentDownloadUrl);
-    }
-  }, [documentDownloadUrl]);
-
-  useEffect(() => {
-    if (legalFactDownloadUrl) {
-      dowloadDocument(legalFactDownloadUrl);
-    }
-  }, [legalFactDownloadUrl]);
+  useDownloadDocument({ url: documentDownloadUrl });
+  useDownloadDocument({ url: legalFactDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
 
@@ -264,7 +246,6 @@ const NotificationDetail = () => {
                     senderDenomination={notification.senderDenomination}
                     subject={notification.subject}
                     notificationPayment={currentRecipient.payment}
-                    onDocumentDownload={dowloadDocument}
                     mandateId={mandateId}
                   />
                 )}

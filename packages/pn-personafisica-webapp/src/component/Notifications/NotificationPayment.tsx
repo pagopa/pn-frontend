@@ -26,6 +26,7 @@ import {
   PaymentStatus,
   useIsMobile,
   appStateActions,
+  useDownloadDocument,
 } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -49,7 +50,6 @@ import { trackEventByType } from '../../utils/mixpanel';
 interface Props {
   iun: string;
   notificationPayment: NotificationDetailPayment;
-  onDocumentDownload: (url: string) => void;
   mandateId?: string;
   senderDenomination?: string;
   subject: string;
@@ -83,7 +83,6 @@ interface PaymentData {
 const NotificationPayment: React.FC<Props> = ({
   iun,
   notificationPayment,
-  onDocumentDownload,
   mandateId,
   senderDenomination,
   subject,
@@ -108,17 +107,8 @@ const NotificationPayment: React.FC<Props> = ({
     fetchPaymentInfo();
   }, []);
 
-  useEffect(() => {
-    if (pagopaAttachmentUrl) {
-      onDocumentDownload(pagopaAttachmentUrl);
-    }
-  }, [pagopaAttachmentUrl]);
-
-  useEffect(() => {
-    if (f24AttachmentUrl) {
-      onDocumentDownload(f24AttachmentUrl);
-    }
-  }, [f24AttachmentUrl]);
+  useDownloadDocument({ url: pagopaAttachmentUrl });
+  useDownloadDocument({ url: f24AttachmentUrl });
 
   const fetchPaymentInfo = () => {
     if (notificationPayment.noticeCode && notificationPayment.creditorTaxId) {
