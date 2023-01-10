@@ -6,7 +6,7 @@ import { render } from '../../../test-utils';
 import { AppStatusData, KnownSentiment } from '../../../types';
 import { AppStatusRender } from '../AppStatusRender';
 import { apiOutcomeTestHelper } from '../../../utils';
-import { formatDate, formatTime } from '@pagopa-pn/pn-commons';
+import { formatDate, formatTime } from '../../../utils/date.utility';
 
 /* eslint-disable-next-line functional/no-let */
 let mockIsMobile: boolean;
