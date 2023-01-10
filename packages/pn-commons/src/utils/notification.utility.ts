@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/cognitive-complexity */
 /* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
@@ -370,9 +369,7 @@ function populateMacroStep(
  * @param  {NotificationDetail} parsedNotification
  */
 function populateMacroSteps(parsedNotification: NotificationDetail) {
-  // eslint-disable-next-line functional/no-let
   let isEffectiveDateStatus = false;
-  // eslint-disable-next-line functional/no-let
   let acceptedStatusItems: Array<string> = [];
   for (const status of parsedNotification.notificationStatusHistory) {
     // if status accepted has items, move them to the next state, but preserve legalfacts

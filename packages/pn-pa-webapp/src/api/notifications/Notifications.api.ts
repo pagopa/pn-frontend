@@ -81,6 +81,12 @@ export const NotificationsApi = {
       .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
       .then((response) => getDownloadUrl(response)),
 
+  /**
+   * 
+   * @param  {string} iun
+   * @param  {NotificationDetailOtherDocument} otherDocument 
+   * @returns Promise
+   */
   getSentNotificationOtherDocument: (iun: string, otherDocument: NotificationDetailOtherDocument): Promise<{ url: string }> =>
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {params: {documentId: otherDocument.documentId}})

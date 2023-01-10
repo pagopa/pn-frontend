@@ -7,6 +7,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import {
   LegalFactId,
   NotificationDetailDocuments,
+  NotificationDetailOtherDocuments,
   // HelpNotificationDetails,
   NotificationDetailTableRow,
   NotificationDetailTable,
@@ -19,6 +20,7 @@ import {
   ApiError,
   TimedMessage,
   useDownloadDocument,
+  NotificationDetailOtherDocument,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -28,6 +30,7 @@ import {
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
+  getReceivedNotificationOtherDocument,
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
 import { resetLegalFactState, resetState } from '../redux/notification/reducers';
@@ -74,6 +77,9 @@ const NotificationDetail = () => {
   const creditorTaxId = currentRecipient?.payment?.creditorTaxId;
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
+  );
+  const otherDocumentDownloadUrl = useAppSelector(
+    (state: RootState) => state.notificationState.otherDocumentDownloadUrl
   );
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
@@ -133,6 +139,12 @@ const NotificationDetail = () => {
     }
   };
 
+  const otherDocumentDowloadHandler = (otherDocument: NotificationDetailOtherDocument) => {
+    if (otherDocument) {
+      void dispatch(getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+    }
+  };
+
   const legalFactDownloadHandler = (legalFact: LegalFactId) => {
     dispatch(resetLegalFactState());
     void dispatch(
@@ -140,8 +152,7 @@ const NotificationDetail = () => {
     );
   };
 
-  const isCancelled =
-    notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
+  const isCancelled = (notification.notificationStatus === NotificationStatus.CANCELLED);
 
   const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
 
@@ -179,6 +190,7 @@ const NotificationDetail = () => {
 
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: legalFactDownloadUrl });
+  useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
 
@@ -255,6 +267,16 @@ const NotificationDetail = () => {
                     title={t('detail.acts', { ns: 'notifiche' })}
                     documents={isCancelled ? [] : notification.documents}
                     clickHandler={documentDowloadHandler}
+                    documentsAvailable={hasDocumentsAvailable}
+                    downloadFilesMessage={getDownloadFilesMessage()}
+                    downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
+                  />
+                </Paper>
+                <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                  <NotificationDetailOtherDocuments
+                    title={t('detail.other-acts', { ns: 'notifiche' })}
+                    otherDocuments={notification.otherDocuments ?? []}
+                    clickHandler={otherDocumentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}

@@ -184,16 +184,16 @@ describe('NotificationDetail Page', () => {
     result = await renderComponent(notificationToFe);
     const downloadDocumentBtn = result.getByRole('button', { name: 'Mocked document' });
     expect(downloadDocumentBtn).toBeInTheDocument();
-    const documentsText = result.getByText('detail.acts_files.downloadable_acts');
-    expect(documentsText).toBeInTheDocument();
+    const documentsText = result.getAllByText('detail.acts_files.downloadable_acts');
+    expect(documentsText.length).toBeGreaterThan(0);
   });
 
   test('renders NotificationDetail if documents are not available', async () => {
     result = await renderComponent(overrideNotificationMock({documentsAvailable: false}));
     const documentTitle = result.queryByText('Mocked document');
     expect(documentTitle).toBeInTheDocument();
-    const documentsText = result.getByText('detail.acts_files.not_downloadable_acts');
-    expect(documentsText).toBeInTheDocument();
+    const documentsText = result.getAllByText('detail.acts_files.not_downloadable_acts');
+    expect(documentsText.length).toBeGreaterThan(0);
   });
 
   test('renders NotificationDetail if status is cancelled', async () => {
@@ -203,8 +203,8 @@ describe('NotificationDetail Page', () => {
     const documentTitle = result.queryByText('Mocked document');
     expect(documentTitle).not.toBeInTheDocument();
     expect(result.container).not.toHaveTextContent(/Payment/i);
-    const documentsText = result.getByText('detail.acts_files.notification_cancelled');
-    expect(documentsText).toBeInTheDocument();
+    const documentsText = result.getAllByText('detail.acts_files.notification_cancelled');
+    expect(documentsText.length).toBeGreaterThan(0);
   });
 
   test('renders NotificationDetail page with the first recipient logged', async () => {
