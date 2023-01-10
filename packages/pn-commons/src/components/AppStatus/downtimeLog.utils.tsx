@@ -4,7 +4,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import { CardElement, Column, Item } from '../../types';
 import { DowntimeLogPage, DowntimeStatus } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
-import { formatDateTime, formatDate, formatTime } from '../../utils/date.utility';
+import { formatDateTime, formatDate, formatTimeWithLegend } from '../../utils/date.utility';
 export function booleanStringToBoolean(booleanString: string): boolean {
   return booleanString.toLowerCase() === 'true';
 }
@@ -12,14 +12,13 @@ export function booleanStringToBoolean(booleanString: string): boolean {
 /* eslint-disable-next-line arrow-body-style */
 const FormattedDateAndTime = ({ date, inTwoLines }: { date: string; inTwoLines?: boolean }) => {
   if (date) {
-    const dateAndTime = formatDateTime(date);
     return inTwoLines ? (
       <Stack direction="column">
         <Typography variant="body2">{formatDate(date)},</Typography>
-        <Typography variant="body2">{formatTime(date)}</Typography>
+        <Typography variant="body2">{formatTimeWithLegend(date)}</Typography>
       </Stack>
     ) : (
-      <Typography variant="body2">{dateAndTime}</Typography>
+      <Typography variant="body2">{formatDateTime(date)}</Typography>
     );
   } else {
     return <Typography variant="body2">-</Typography>;

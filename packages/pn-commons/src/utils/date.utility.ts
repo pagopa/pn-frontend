@@ -16,6 +16,16 @@ export function formatMonthString(dateString: string): string {
   return date.toLocaleString('default', { month: 'long' }).toUpperCase().substring(0, 3);
 }
 
+export function formatTimeWithLegend(dateString: string): string {
+  const date = new Date(dateString);
+  const hourOfDayLabel = getLocalizedOrDefaultLabel('common', 'date-time.hour-of-day', 'ore');
+
+  return `${hourOfDayLabel} ${date.getHours().toString().padStart(2, '0')}:${date
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}`;
+}
+
 export function formatDay(dateString: string): string {
   const date = new Date(dateString);
   return `0${date.getDate()}`.slice(-2);
