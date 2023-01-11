@@ -34,5 +34,9 @@
     "packages": [
       "packages/**"
     ]
+  },
+  "dependencies": {
+    "@types/node": "*",
+    "typescript": "^4.5.5"
   }
 }

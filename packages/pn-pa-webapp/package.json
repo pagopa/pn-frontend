@@ -10,6 +10,7 @@
     "@mui/lab": "^5.0.0-alpha.80",
     "@mui/material": "^5.8.6",
     "@mui/styles": "^5.4.1",
+    "@mui/system": "^5.4.1",
     "@mui/x-date-pickers": "^5.0.0-alpha.5",
     "@pagopa-pn/pn-commons": "^1.5.4",
     "@pagopa/mui-italia": "^0.8.1",
@@ -62,6 +63,8 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.0.1",
+    "@babel/preset-env": "^7.0.0",
     "@cypress/webpack-preprocessor": "^5.15.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
@@ -72,6 +75,7 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "axios-mock-adapter": "^1.20.0",
+    "babel-loader": "^8.0.2",
     "cypress": "^10.10.0",
     "danger": "^10.5.3",
     "danger-plugin-digitalcitizenship": "^1.0.0",
@@ -91,6 +95,7 @@
     "react-scripts": "^5.0.1",
     "regex-replace": "^2.3.1",
     "rimraf": "^3.0.2",
-    "sonarqube-scanner": "^2.8.1"
+    "sonarqube-scanner": "^2.8.1",
+    "webpack": "^5"
   }
 }
