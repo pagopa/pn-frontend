@@ -39,7 +39,7 @@ export const ContactsApi = {
           recipientId: 'PF-b32e4920-6ff3-4872-8018-d60a4e5827f9',
           senderId: 'default',
           channelType: CourtesyChannelType.SMS,
-          value: '+3912345678912',
+          value: '+393466541500',
           code: '',
         },
       ],
@@ -77,11 +77,15 @@ export const ContactsApi = {
     senderId: string,
     channelType: LegalChannelType,
     body: { value: string; verificationCode?: string }
-  ): Promise<void | DigitalAddress> => {
-    console.log({ recipientId, senderId, body, channelType });
-    return Promise.resolve();
-  },
-
+  ): Promise<void | DigitalAddress> =>
+    Promise.resolve({
+      addressType: 'legal',
+      recipientId,
+      senderId,
+      channelType,
+      value: body.value,
+      code: 'verified',
+    }),
   /*
   /**
    * Create or update a courtesy address
@@ -109,16 +113,21 @@ export const ContactsApi = {
         code: 'verified',
       };
     }), */
+
   createOrUpdateCourtesyAddress: (
     recipientId: string,
     senderId: string,
     channelType: CourtesyChannelType,
     body: { value: string; verificationCode?: string }
-  ): Promise<void | DigitalAddress> => {
-    console.log({ recipientId, senderId, body, channelType });
-    return Promise.resolve();
-  },
-
+  ): Promise<void | DigitalAddress> =>
+    Promise.resolve({
+      addressType: 'courtesy',
+      recipientId,
+      senderId,
+      channelType,
+      value: body.value,
+      code: 'verified',
+    }),
   /* /*
    * Remove current user digital address
    * @param  {string} recipientId
@@ -129,7 +138,7 @@ export const ContactsApi = {
      */
   deleteLegalAddress: (senderId: string, channelType: LegalChannelType): Promise<string> => {
     console.log({ senderId, channelType });
-    return Promise.resolve('');
+    return Promise.resolve(senderId);
   },
 
   /*
@@ -150,6 +159,6 @@ export const ContactsApi = {
     channelType: CourtesyChannelType
   ): Promise<string> => {
     console.log({ courtesySenderId, channelType });
-    return Promise.resolve('');
+    return Promise.resolve(courtesySenderId);
   },
 };
