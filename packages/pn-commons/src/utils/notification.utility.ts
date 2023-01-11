@@ -12,7 +12,12 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
 } from '../types';
-import { AarDetails, LegalFactType, NotificationDetailOtherDocument, SendDigitalDetails } from '../types/NotificationDetail';
+import {
+  AarDetails,
+  LegalFactType,
+  NotificationDetailDocument,
+  SendDigitalDetails,
+} from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
@@ -408,12 +413,22 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
  * @param  {NotificationDetail} notificationDetail
  * @returns NotificationDetail
  */
-const populateOtherDocuments = (timeline: Array<INotificationDetailTimeline>): Array<NotificationDetailOtherDocument> => {
-  const timelineFiltered = timeline.filter(t => t.category === TimelineCategory.AAR_GENERATION);
-  if (timelineFiltered.length>0) {
-    return timelineFiltered.map(t => ({
+const populateOtherDocuments = (
+  timeline: Array<INotificationDetailTimeline>
+): Array<NotificationDetailDocument> => {
+  const timelineFiltered = timeline.filter((t) => t.category === TimelineCategory.AAR_GENERATION);
+  if (timelineFiltered.length > 0) {
+    return timelineFiltered.map((t) => ({
       documentId: (t.details as AarDetails).generatedAarUrl as string,
       documentType: LegalFactType.AAR,
+      digests: {
+        sha256: '',
+      },
+      ref: {
+        key: '',
+        versionToken: '',
+      },
+      contentType: '',
     }));
   }
   return [];

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
@@ -22,7 +23,6 @@ import {
   // NotificationStatus,
   LegalFactId,
   NotificationDetailDocuments,
-  NotificationDetailOtherDocuments,
   NotificationDetailTable,
   NotificationDetailTableRow,
   NotificationDetailTimeline,
@@ -208,15 +208,15 @@ const NotificationDetail = () => {
       value: row.value,
     }));
 
-  const documentDowloadHandler = (documentIndex: string | undefined) => {
-    if (documentIndex) {
-      void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
-    }
-  };
-
-  const otherDocumentDowloadHandler = (otherDocument: NotificationDetailOtherDocument) => {
-    if (otherDocument) {
+    const documentDowloadHandler = (document: string | NotificationDetailOtherDocument | undefined) => {
+    if (_.isObject(document)) {
+      const otherDocument = document as NotificationDetailOtherDocument;
       void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+    } else {
+      const documentIndex = document as string;
+      void dispatch(
+        getSentNotificationDocument({ iun: notification.iun, documentIndex })
+      );
     }
   };
 
@@ -407,10 +407,10 @@ const NotificationDetail = () => {
                   />
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
-                  <NotificationDetailOtherDocuments
+                  <NotificationDetailDocuments
                     title={t('detail.other-acts', { ns: 'notifiche' })}
-                    otherDocuments={notification.otherDocuments ?? []}
-                    clickHandler={otherDocumentDowloadHandler}
+                    documents={notification.otherDocuments ?? []}
+                    clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}
                     downloadFilesLink="Quando si perfeziona una notifica?"

@@ -93,7 +93,7 @@ export const getNotificationPaymentUrl = createAsyncThunk<
 
 export const getReceivedNotificationOtherDocument = createAsyncThunk<{url: string}, {iun: string; otherDocument: NotificationDetailOtherDocument}>(
   'getReceivedNotificationOtherDocument',
-  async (params: {iun: string; otherDocument: NotificationDetailOtherDocument}, { rejectWithValue }) => {
+  async (params: {iun: string; otherDocument: { documentId: string; documentType: string }}, { rejectWithValue }) => {
     try {
       return await NotificationsApi.getReceivedNotificationOtherDocument(params.iun, params.otherDocument);
     } catch (e) {

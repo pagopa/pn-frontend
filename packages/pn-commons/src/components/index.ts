@@ -27,7 +27,6 @@ import {
 } from './AppStatus/downtimeLog.utils';
 import NotificationDetailTable from './NotificationDetail/NotificationDetailTable';
 import NotificationDetailDocuments from './NotificationDetail/NotificationDetailDocuments';
-import NotificationDetailOtherDocuments from './NotificationDetail/NotificationDetailOtherDocuments';
 import HelpNotificationDetails from './NotificationDetail/HelpNotificationDetails';
 import NotificationDetailTimeline from './NotificationDetail/NotificationDetailTimeline';
 import CodeModal from './CodeModal/CodeModal';
@@ -69,7 +68,6 @@ export {
   TitleBox,
   NotificationDetailTable,
   NotificationDetailDocuments,
-  NotificationDetailOtherDocuments,
   HelpNotificationDetails,
   NotificationDetailTimeline,
   AppStatusRender,

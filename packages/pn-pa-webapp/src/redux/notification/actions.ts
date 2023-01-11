@@ -35,7 +35,7 @@ export const getSentNotificationDocument = createAsyncThunk<{url: string}, {iun:
 
 export const getSentNotificationOtherDocument = createAsyncThunk<{url: string}, {iun: string; otherDocument: NotificationDetailOtherDocument}>(
   'getSentNotificationOtherDocument',
-  async (params: {iun: string; otherDocument: NotificationDetailOtherDocument}, { rejectWithValue }) => {
+  async (params: {iun: string; otherDocument: { documentId: string; documentType: string }}, { rejectWithValue }) => {
     try {
       return await NotificationsApi.getSentNotificationOtherDocument(params.iun, params.otherDocument);
     } catch (e) {

@@ -12,7 +12,6 @@ import {
   RecipientType,
   PaymentStatus,
   PaymentInfoDetail,
-  NotificationDetailOtherDocument,
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
@@ -36,7 +35,7 @@ const initialState = {
     senderDenomination: '',
     paymentExpirationDate: '',
     documents: [] as Array<NotificationDetailDocument>,
-    otherDocuments: [] as Array<NotificationDetailOtherDocument>,
+    otherDocuments: [] as Array<NotificationDetailDocument>,
     notificationFeePolicy: '' as NotificationFeePolicy,
     physicalCommunicationType: '' as PhysicalCommunicationType,
     senderPaId: '',

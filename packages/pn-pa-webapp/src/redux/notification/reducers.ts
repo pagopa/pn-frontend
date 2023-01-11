@@ -8,7 +8,6 @@ import {
   NotificationStatusHistory,
   PhysicalCommunicationType,
   NotificationFeePolicy,
-  NotificationDetailOtherDocument,
 } from '@pagopa-pn/pn-commons';
 import {
   getSentNotification,
@@ -24,7 +23,7 @@ const initialState = {
     subject: '',
     recipients: [] as Array<NotificationDetailRecipient>,
     documents: [] as Array<NotificationDetailDocument>,
-    otherDocuments: [] as Array<NotificationDetailOtherDocument>,
+    otherDocuments: [] as Array<NotificationDetailDocument>,
     notificationFeePolicy: '' as NotificationFeePolicy,
     physicalCommunicationType: '' as PhysicalCommunicationType,
     senderPaId: '',

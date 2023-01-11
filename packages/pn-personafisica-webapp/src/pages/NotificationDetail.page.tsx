@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { Fragment, ReactNode, useCallback, useEffect, useState, useMemo } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +8,6 @@ import EmailIcon from '@mui/icons-material/Email';
 import {
   LegalFactId,
   NotificationDetailDocuments,
-  NotificationDetailOtherDocuments,
   // HelpNotificationDetails,
   NotificationDetailTableRow,
   NotificationDetailTable,
@@ -131,17 +131,15 @@ const NotificationDetail = () => {
       value: row.value,
     }));
 
-  const documentDowloadHandler = (documentIndex: string | undefined) => {
-    if (documentIndex) {
+  const documentDowloadHandler = (document: string | NotificationDetailOtherDocument | undefined) => {
+    if (_.isObject(document)) {
+      const otherDocument = document as NotificationDetailOtherDocument;
+      void dispatch(getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+    } else {
+      const documentIndex = document as string;
       void dispatch(
         getReceivedNotificationDocument({ iun: notification.iun, documentIndex, mandateId })
       );
-    }
-  };
-
-  const otherDocumentDowloadHandler = (otherDocument: NotificationDetailOtherDocument) => {
-    if (otherDocument) {
-      void dispatch(getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument }));
     }
   };
 
@@ -273,10 +271,10 @@ const NotificationDetail = () => {
                   />
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
-                  <NotificationDetailOtherDocuments
+                  <NotificationDetailDocuments
                     title={t('detail.other-acts', { ns: 'notifiche' })}
-                    otherDocuments={notification.otherDocuments ?? []}
-                    clickHandler={otherDocumentDowloadHandler}
+                    documents={notification.otherDocuments ?? []}
+                    clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}

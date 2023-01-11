@@ -8,7 +8,7 @@ export interface NotificationDetail {
   abstract?: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
-  otherDocuments?: Array<NotificationDetailOtherDocument>;
+  otherDocuments?: Array<NotificationDetailDocument>;
   notificationFeePolicy: NotificationFeePolicy;
   cancelledIun?: string;
   physicalCommunicationType: PhysicalCommunicationType;
@@ -159,6 +159,8 @@ export interface NotificationDetailDocument {
   title?: string;
   requiresAck?: boolean;
   docIdx?: string;
+  documentId?: string;
+  documentType?: string;
 }
 
 export enum NotificationFeePolicy {
