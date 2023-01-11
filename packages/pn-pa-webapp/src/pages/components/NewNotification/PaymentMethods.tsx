@@ -2,7 +2,6 @@ import { ForwardedRef, forwardRef, Fragment, useImperativeHandle, useMemo } from
 import _ from 'lodash';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 import { Link, Paper, Typography } from '@mui/material';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 
@@ -198,44 +197,6 @@ const PaymentMethods = ({
     }
   };
 
-  const paymentDocumentSchema = yup.object({
-    name: yup.string().required(),
-    file: yup.object({
-      size: yup.number().required(),
-      name: yup.string().required(),
-      uint8Array: yup
-        .mixed()
-        .test((input) => input instanceof Uint8Array)
-        .required(),
-      sha256: yup
-        .object({
-          hashBase64: yup.string().required(),
-          hashHex: yup.string().required(),
-        })
-        .required(),
-    }),
-  });
-
-  const getValidationSchemaParameters = () => {
-    // eslint-disable-next-line functional/no-let
-    let parameters = {};
-
-    if (notification.paymentMode !== PaymentModel.NOTHING) {
-      parameters = { pagoPaForm: paymentDocumentSchema.required() };
-
-      if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24) {
-        parameters = { ...parameters, f24standard: paymentDocumentSchema.required() };
-      } else if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE) {
-        parameters = { ...parameters, f24flatRate: paymentDocumentSchema.required() };
-      }
-    }
-    return parameters;
-  };
-
-  const validationSchema = yup.lazy((obj) =>
-    yup.object(_.mapValues(obj, () => yup.object(getValidationSchemaParameters())))
-  );
-
   const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
     // set ref
     for (const [taxId, payment] of Object.entries(paymentPayload)) {
@@ -249,13 +210,36 @@ const PaymentMethods = ({
     }
   };
 
+  const formIsEmpty = (values: any) => {
+    // eslint-disable-next-line functional/no-let
+    let isEmpty = true;
+    notification.recipients.forEach(recipient => {
+      const currentDocument = values[recipient.taxId];
+      if (currentDocument.pagoPaForm && currentDocument.pagoPaForm.file.name !== '') {
+        isEmpty = false;
+      }
+      if (currentDocument.f24flatRate && currentDocument.f24flatRate.file.name !== '') {
+        isEmpty = false;
+      }
+      if (currentDocument.f24standard && currentDocument.f24standard.file.name !== '') {
+        isEmpty = false;
+      }
+    });
+    return isEmpty;
+  };
+
   const formik = useFormik({
     initialValues,
-    validationSchema: notification.paymentMode !== PaymentModel.NOTHING ? validationSchema : null,
     validateOnMount: true,
     onSubmit: async (values) => {
-      if (isCompleted) {
-        onConfirm();
+      const emptyForm = formIsEmpty(values);
+      if (isCompleted || emptyForm) {
+        if (emptyForm) {
+          dispatch(setIsCompleted());
+          return;
+        } else {
+          onConfirm();
+        }
         return;
       }
       if (notification.paymentMode !== PaymentModel.NOTHING) {
@@ -332,7 +316,7 @@ const PaymentMethods = ({
               </Typography>
               <PaymentBox
                 id={`${recipient.taxId}.pagoPaForm`}
-                title={`${t('attach-pagopa-notice')}*`}
+                title={`${t('attach-pagopa-notice')}`}
                 onFileUploaded={(id, file, sha256, name, size) =>
                   fileUploadedHandler(recipient.taxId, 'pagoPaForm', id, file, sha256, name, size)}
                 onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPaForm')}
@@ -341,7 +325,7 @@ const PaymentMethods = ({
               {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
                 <PaymentBox
                   id={`${recipient.taxId}.f24flatRate`}
-                  title={`${t('attach-f24-flatrate')}*`}
+                  title={`${t('attach-f24-flatrate')}`}
                   onFileUploaded={(id, file, sha256, name, size) =>
                     fileUploadedHandler(recipient.taxId, 'f24flatRate', id, file, sha256, name, size)}
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24flatRate')}
@@ -351,7 +335,7 @@ const PaymentMethods = ({
               {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
                 <PaymentBox
                   id={`${recipient.taxId}.f24standard`}
-                  title={`${t('attach-f24')}*`}
+                  title={`${t('attach-f24')}`}
                   onFileUploaded={(id, file, sha256, name, size) =>
                     fileUploadedHandler(recipient.taxId, 'f24standard', id, file, sha256, name, size)}
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24standard')}
