@@ -13,7 +13,7 @@ export function denominationTotalLength(
     return '';
   }
   // il messaggio di "denominazione troppo lunga" è diverso a seconda che sia PF o PG
-  return `too-long-denomination-error-${recipientType || 'PF'}`;
+  return `too-long-denomination-error-${recipientType || RecipientType.PF}`;
 }
 
 export function taxIdDependingOnRecipientType(
@@ -65,16 +65,18 @@ export function identicalIUV(
           duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
         ) {
           // eslint-disable-next-line functional/immutable-data
-          errors.push({
-            messageKey: 'identical-notice-codes-error',
-            value,
-            id: `recipients[${i}].noticeCode`
-          },
-          {
-            messageKey: '',
-            value,
-            id: `recipients[${i}].creditorTaxId`
-          });
+          errors.push(
+            {
+              messageKey: 'identical-notice-codes-error',
+              value,
+              id: `recipients[${i}].noticeCode`,
+            },
+            {
+              messageKey: '',
+              value,
+              id: `recipients[${i}].creditorTaxId`,
+            }
+          );
         }
       });
     }

@@ -117,7 +117,7 @@ const Recipient = ({
             const denomination = (value || '') + ((this.parent.lastName as string) || '');
             const messageKey = `too-long-denomination-error`;
             if (denomination.length > 80) {
-              if (this.parent.recipientType === 'PG') {
+              if (this.parent.recipientType === RecipientType.PG) {
                 return this.createError({ message: t(messageKey), path: this.path });
               }
               return new yup.ValidationError([
@@ -132,12 +132,15 @@ const Recipient = ({
       // non viene richiesto
       lastName: yup.string().when('recipientType', {
         is: (value: string) => value !== RecipientType.PG,
-        then: yup.string().required(tc('required-field')).test({
-          name: 'denominationTotalLength',
-          test(value) {
-            return checkForbiddenCharacters(value || '', this.path, this.createError);
-          },
-        }),
+        then: yup
+          .string()
+          .required(tc('required-field'))
+          .test({
+            name: 'denominationTotalLength',
+            test(value) {
+              return checkForbiddenCharacters(value || '', this.path, this.createError);
+            },
+          }),
       }),
       taxId: yup
         .string()
