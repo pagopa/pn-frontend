@@ -9,5 +9,5 @@ export const PAGOPA_HELP_EMAIL = process.env.NEXT_PUBLIC_PAGOPA_HELP_EMAIL;
 
 export const PN_URL = process.env.NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL;
 
-export const ONE_TRUST_PORTAL_CDN = process.env.NEXT_PUBLIC_ONE_TRUST_PORTAL_CDN;
 export const MANUALE_URL = "https://docs.pagopa.it/pn-manuale-operativo/";
+export const ONE_TRUST_PORTAL_CDN = process.env.NEXT_PUBLIC_ONE_TRUST_PORTAL_CDN;
