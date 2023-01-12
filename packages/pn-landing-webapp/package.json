@@ -10,12 +10,12 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@emotion/react": "^11.9.3",
-    "@emotion/styled": "^11.9.3",
-    "@mui/icons-material": "^5.10.9",
-    "@mui/lab": "5.0.0-alpha.100",
-    "@mui/material": "^5.8.6",
-    "@mui/system": "^5.10.8",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/lab": "5.0.0-alpha.115",
+    "@mui/material": "^5.11.4",
+    "@mui/system": "^5.11.4",
     "@pagopa-pn/pn-commons": "^1.5.4",
     "@pagopa/mui-italia": "^0.8.1",
     "next": "12.1.6",

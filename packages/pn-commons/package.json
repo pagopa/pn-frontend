@@ -5,8 +5,8 @@
   "main": "./src/index.ts",
   "dependencies": {
     "@date-io/date-fns": "^2.15.0",
-    "@mui/icons-material": "^5.8.4",
-    "@mui/material": "^5.8.6",
+    "@mui/icons-material": "^5.11.0",
+    "@mui/material": "^5.11.4",
     "@octokit/core": "^4.1.0",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/node": "^16.11.21",
