@@ -1,6 +1,6 @@
 import currentLocale from 'date-fns/locale/it';
 import { useNavigate } from 'react-router-dom';
-import { Fragment, MouseEventHandler, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import * as yup from 'yup';
@@ -164,12 +164,11 @@ const NuovaDelega = () => {
   const deleteInput = (
     funField: (field: string, setValue: any, validation: boolean | undefined) => void,
     funTouched: (field: string, setValue: boolean, validation: boolean) => void
-  ): MouseEventHandler<HTMLLabelElement> => {
+  ) => {
     funField('nome', initialValues.nome, false);
     funField('cognome', initialValues.cognome, false);
     funTouched('nome', false, false);
     funTouched('cognome', false, true);
-    return (): void => {};
   };
 
   function taxIdDependingOnRecipientType(
