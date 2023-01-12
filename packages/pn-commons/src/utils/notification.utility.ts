@@ -421,6 +421,11 @@ const populateOtherDocuments = (
     return timelineFiltered.map((t) => ({
       documentId: (t.details as AarDetails).generatedAarUrl as string,
       documentType: LegalFactType.AAR,
+      title: getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.other-document',
+        'Avviso di avvenuta ricezione'
+      ),
       digests: {
         sha256: '',
       },

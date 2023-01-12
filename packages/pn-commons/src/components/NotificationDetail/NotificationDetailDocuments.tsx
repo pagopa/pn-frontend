@@ -73,7 +73,7 @@ const NotificationDetailDocuments = ({
       {documents && documents.map((d) => {
         const document = {
           key: d.digests ? d.digests.sha256 : d.documentId,
-          name: d.title || d.ref.key || d.documentId?.substring(d.documentId.lastIndexOf('/') + 1),
+          name: d.title || d.ref.key,
           downloadHandler: d.documentId ? { documentId: d.documentId, documentType: d.documentType } as NotificationDetailOtherDocument : d.docIdx
         };
         return <Box key={document.key}>
