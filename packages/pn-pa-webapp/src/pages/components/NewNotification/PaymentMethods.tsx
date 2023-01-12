@@ -244,23 +244,16 @@ const PaymentMethods = ({
     validateOnMount: true,
     onSubmit: async (values) => {
       const emptyForm = formIsEmpty(values);
-      if (isCompleted || emptyForm) {
-        if (emptyForm) {
-          dispatch(setIsCompleted());
-          return;
-        } else {
-          onConfirm();
-        }
-        return;
-      }
-      if (notification.paymentMode !== PaymentModel.NOTHING) {
+      if (isCompleted) {
+        onConfirm();
+      } else if (emptyForm || notification.paymentMode === PaymentModel.NOTHING) {
+        dispatch(setIsCompleted());
+      } else {
         const paymentData = await dispatch(uploadNotificationPaymentDocument(values));
         const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
         if (paymentPayload) {
           await updateRefAfterUpload(paymentPayload);
         }
-      } else {
-        dispatch(setIsCompleted());
       }
     },
   });
