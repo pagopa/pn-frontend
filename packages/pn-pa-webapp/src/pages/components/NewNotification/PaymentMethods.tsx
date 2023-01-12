@@ -131,9 +131,17 @@ const PaymentMethods = ({
       const formikPagoPaForm = formik.values[r.taxId].pagoPaForm;
       const formikF24flatRate = formik.values[r.taxId].f24flatRate;
       const formikF24standard = formik.values[r.taxId].f24standard;
+      // I avoid including empty file object into the result
+      // hence I check for any file object that it actually points to a file 
+      // (this is the condition XXX.file.uint8Array)
+      // and then I don't add the payment info for a recipient if it doesn't include any actual file pointer
+      // (this is the Object.keys(paymentsForThisRecipient).length > 0 condition below)
+      // ---------------------------------------------
+      // Carlos Lombardi, 2023.01.10
+      const paymentsForThisRecipient: any = {};
       /* eslint-disable functional/immutable-data */
-      obj[r.taxId] = {
-        pagoPaForm: {
+      if (formikPagoPaForm.file.uint8Array) {
+        paymentsForThisRecipient.pagoPaForm = {
           ...newPaymentDocument(`${r.taxId}-pagoPaDoc`, t('pagopa-notice')),
           file: {
             uint8Array: formikPagoPaForm.file.uint8Array,
@@ -148,10 +156,10 @@ const PaymentMethods = ({
             key: formikPagoPaForm.ref.key,
             versionToken: formikPagoPaForm.ref.versionToken,
           },
-        },
+        };
       };
-      if (formikF24flatRate) {
-        obj[r.taxId].f24flatRate = {
+      if (formikF24flatRate && formikF24flatRate.file.uint8Array) {
+        paymentsForThisRecipient.f24flatRate = {
           ...newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate')),
           file: {
             uint8Array: formikF24flatRate.file.uint8Array,
@@ -168,8 +176,8 @@ const PaymentMethods = ({
           },
         };
       }
-      if (formikF24standard) {
-        obj[r.taxId].f24standard = {
+      if (formikF24standard && formikF24standard.file.uint8Array) {
+        paymentsForThisRecipient.f24standard = {
           ...newPaymentDocument(`${r.taxId}-f24standardDoc`, t('pagopa-notice-f24')),
           file: {
             uint8Array: formikF24standard.file.uint8Array,
@@ -185,6 +193,9 @@ const PaymentMethods = ({
             versionToken: formikF24standard.ref.versionToken,
           },
         };
+      }
+      if (Object.keys(paymentsForThisRecipient).length > 0) {
+        obj[r.taxId] = paymentsForThisRecipient;
       }
       /* eslint-enable functional/immutable-data */
       return obj;

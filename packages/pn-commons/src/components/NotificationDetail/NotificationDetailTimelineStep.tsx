@@ -14,12 +14,13 @@ import {
 } from '@pagopa/mui-italia';
 
 import {
-  getDay,
-  getMonthString,
-  getTime,
+  formatDay,
+  formatMonthString,
+  formatTime,
   getLegalFactLabel,
   getNotificationStatusInfos,
-  getNotificationTimelineStatusInfos } from '../../utils';
+  getNotificationTimelineStatusInfos,
+} from '../../utils';
 import {
   LegalFactId,
   INotificationDetailTimeline,
@@ -91,7 +92,7 @@ const NotificationDetailTimelineStep = ({
   showHistoryButton = false,
   historyButtonLabel,
   historyButtonClickHandler,
-  eventTrackingCallbackShowMore
+  eventTrackingCallbackShowMore,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -117,16 +118,16 @@ const NotificationDetailTimelineStep = ({
     undefined,
     <Fragment>
       <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-        {getMonthString(timelineStep.activeFrom)}
+        {formatMonthString(timelineStep.activeFrom)}
       </Typography>
       <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
-        {getDay(timelineStep.activeFrom)}
+        {formatDay(timelineStep.activeFrom)}
       </Typography>
     </Fragment>,
     position === 'first' ? 'outlined' : undefined,
     <Fragment>
       <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-        {getTime(timelineStep.activeFrom)}
+        {formatTime(timelineStep.activeFrom)}
       </Typography>
       <Chip
         data-testid="itemStatus"
@@ -148,7 +149,8 @@ const NotificationDetailTimelineStep = ({
           <Typography color="text.primary" variant="caption">
             {notificationStatusInfos.description}
           </Typography>
-          {legalFactsIds && legalFactsIds.length > 0 &&
+          {legalFactsIds &&
+            legalFactsIds.length > 0 &&
             legalFactsIds.map((lf) => (
               <ButtonNaked
                 key={lf.file.key}
@@ -196,16 +198,16 @@ const NotificationDetailTimelineStep = ({
       s.elementId,
       <Fragment>
         <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-          {getMonthString(s.timestamp)}
+          {formatMonthString(s.timestamp)}
         </Typography>
         <Typography fontWeight={600} fontSize={18} data-testid="dateItem">
-          {getDay(s.timestamp)}
+          {formatDay(s.timestamp)}
         </Typography>
       </Fragment>,
       undefined,
       <Fragment>
         <Typography color="text.secondary" fontSize={14} data-testid="dateItem">
-          {getTime(s.timestamp)}
+          {formatTime(s.timestamp)}
         </Typography>
         <Typography
           color="text.primary"
@@ -219,19 +221,21 @@ const NotificationDetailTimelineStep = ({
         <Box sx={{ overflowWrap: 'anywhere' }}>
           <Typography color="text.primary" fontSize={14}>
             {timelineStatusInfos.description}&nbsp;
-            {s.legalFactsIds && s.legalFactsIds.length > 0 && (
-              s.legalFactsIds.map(lf => <Typography
-                fontSize={14}
-                display="inline"
-                variant="button"
-                color="primary"
-                sx={{ cursor: 'pointer' }}
-                onClick={() => s.legalFactsIds && clickHandler(lf)}
-                key={lf.key}
-              >
-                {getLegalFactLabel(s, lf.category)}
-              </Typography>
-            ))}
+            {s.legalFactsIds &&
+              s.legalFactsIds.length > 0 &&
+              s.legalFactsIds.map((lf) => (
+                <Typography
+                  fontSize={14}
+                  display="inline"
+                  variant="button"
+                  color="primary"
+                  sx={{ cursor: 'pointer' }}
+                  onClick={() => s.legalFactsIds && clickHandler(lf)}
+                  key={lf.key}
+                >
+                  {getLegalFactLabel(s, lf.category)}
+                </Typography>
+              ))}
           </Typography>
         </Box>
         {recipients.length > 1 && (
