@@ -60,8 +60,6 @@
     "@types/jest": "^27.4.0",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
-    "danger": "^10.5.3",
-    "danger-plugin-digitalcitizenship": "^1.0.0",
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-functional": "^3.7.2",
