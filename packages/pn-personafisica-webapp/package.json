@@ -95,7 +95,7 @@
     "react-scripts": "^5.0.1",
     "regex-replace": "^2.3.1",
     "rimraf": "^3.0.2",
-    "sonarqube-scanner": "^2.8.1",
+    "sonarqube-scanner": "^3.0.0",
     "webpack": "^5"
   }
 }
