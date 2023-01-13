@@ -4,9 +4,9 @@ import {
   DigitalAddresses,
   LegalChannelType,
 } from '../../models/contacts';
-/* import { deleteCourtesyAddress } from '../../redux/contact/actions';
-import {  COURTESY_CONTACT, LEGAL_CONTACT } from './contacts.routes';
- */
+import { apiClient } from '../apiClients';
+import { CONTACTS_LIST, COURTESY_CONTACT, LEGAL_CONTACT } from './contacts.routes';
+
 export const ContactsApi = {
   /**
    * Gets current user digital addresses
@@ -14,19 +14,18 @@ export const ContactsApi = {
    * @returns Promise
    */
 
-  /* getDigitalAddresses: (): Promise<DigitalAddresses> => 
-    apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => ({
-        legal: response.data.legal ? response.data.legal : [],
-        courtesy: response.data.courtesy ? response.data.courtesy : [],
-      })
-    ), */
-
   getDigitalAddresses: (): Promise<DigitalAddresses> =>
+    apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => ({
+      legal: response.data.legal ? response.data.legal : [],
+      courtesy: response.data.courtesy ? response.data.courtesy : [],
+    })),
+
+  /*  getDigitalAddresses: (): Promise<DigitalAddresses> =>
     Promise.resolve({
       legal: [
         {
           addressType: 'LEGAL',
-          recipientId: 'PF-b32e4920-6ff3-4872-8018-d60a4e5827f9',
+          recipientId: 'PG-b32e4920-6ff3-4872-8018-d60a4e5827f9',
           senderId: 'default',
           channelType: LegalChannelType.PEC,
           value: 'test@prova.org',
@@ -36,20 +35,20 @@ export const ContactsApi = {
       courtesy: [
         {
           addressType: 'COURTESY',
-          recipientId: 'PF-b32e4920-6ff3-4872-8018-d60a4e5827f9',
+          recipientId: 'PG-b32e4920-6ff3-4872-8018-d60a4e5827f9',
           senderId: 'default',
           channelType: CourtesyChannelType.SMS,
           value: '+393466541500',
           code: '',
         },
       ],
-    }),
+    }), */
 
-  /*  /**
+  /**
    * Create or update a digital address with legal value
    * @param  {string} recipientId
    * @returns Promise
-   
+   */
   createOrUpdateLegalAddress: (
     recipientId: string,
     senderId: string,
@@ -70,9 +69,9 @@ export const ContactsApi = {
         value: body.value,
         code: 'verified',
       };
-    }), */
+    }),
 
-  createOrUpdateLegalAddress: (
+  /*  createOrUpdateLegalAddress: (
     recipientId: string,
     senderId: string,
     channelType: LegalChannelType,
@@ -85,14 +84,14 @@ export const ContactsApi = {
       channelType,
       value: body.value,
       code: 'verified',
-    }),
-  /*
+    }), */
+
   /**
    * Create or update a courtesy address
    * @param  {string} recipientId
    * @returns Promise
-   
-   createOrUpdateCourtesyAddress: (
+   */
+  createOrUpdateCourtesyAddress: (
     recipientId: string,
     senderId: string,
     channelType: CourtesyChannelType,
@@ -112,9 +111,9 @@ export const ContactsApi = {
         value: body.value,
         code: 'verified',
       };
-    }), */
+    }),
 
-  createOrUpdateCourtesyAddress: (
+  /*  createOrUpdateCourtesyAddress: (
     recipientId: string,
     senderId: string,
     channelType: CourtesyChannelType,
@@ -127,25 +126,25 @@ export const ContactsApi = {
       channelType,
       value: body.value,
       code: 'verified',
-    }),
-  /* /*
+    }), */
+  /*
    * Remove current user digital address
    * @param  {string} recipientId
    * @returns Promise
-   
+   */
   deleteLegalAddress: (senderId: string, channelType: LegalChannelType): Promise<string> =>
     apiClient.delete<string>(LEGAL_CONTACT(senderId, channelType)).then(() => senderId),
-     */
-  deleteLegalAddress: (senderId: string, channelType: LegalChannelType): Promise<string> => {
+
+  /*  deleteLegalAddress: (senderId: string, channelType: LegalChannelType): Promise<string> => {
     console.log({ senderId, channelType });
     return Promise.resolve(senderId);
-  },
+  }, */
 
   /*
    * Remove current user digital address
    * @param  {string} recipientId
    * @returns Promise
-   
+   */
   deleteCourtesyAddress: (
     courtesySenderId: string,
     channelType: CourtesyChannelType
@@ -153,12 +152,12 @@ export const ContactsApi = {
     apiClient
       .delete<string>(COURTESY_CONTACT(courtesySenderId, channelType))
       .then(() => courtesySenderId),
-*/
-  deleteCourtesyAddress: (
+
+  /*  deleteCourtesyAddress: (
     courtesySenderId: string,
     channelType: CourtesyChannelType
   ): Promise<string> => {
     console.log({ courtesySenderId, channelType });
     return Promise.resolve(courtesySenderId);
-  },
+  }, */
 };
