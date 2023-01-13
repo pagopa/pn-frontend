@@ -8,6 +8,8 @@
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.8.6",
     "@mui/x-date-pickers": "^5.0.0-alpha.5",
+    "@mui/system": "^5.4.1",
+    "@mui/lab": "5.0.0-alpha.100",
     "@pagopa/mui-italia": "^0.8.1",
     "@reduxjs/toolkit": "^1.7.1",
     "axios": "^0.23.0",
