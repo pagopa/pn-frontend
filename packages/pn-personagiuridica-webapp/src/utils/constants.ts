@@ -8,3 +8,4 @@ export const SELFCARE_BASE_URL = process.env.REACT_APP_URL_SELFCARE_BASE;
 export const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN || 'DUMMY';
 
 export const VERSION = process.env.REACT_APP_VERSION ?? '';
+export const PAGOPA_HELP_EMAIL = process.env.REACT_APP_PAGOPA_HELP_EMAIL;
