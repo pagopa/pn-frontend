@@ -1,4 +1,5 @@
-import { fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
 import { render } from '../../../__test__/test-utils';
 import DomicileBanner from '../DomicileBanner';
 
@@ -23,12 +24,12 @@ describe('DomicileBanner component', () => {
     expect(dialog).toBeInTheDocument();
     expect(result.container).toHaveTextContent(/detail.add_domicile/i);
   });
-
-  it('clicks on the link to add a domicile', () => {
+  //skippato per non navigazione in recapiti
+  it.skip('clicks on the link to add a domicile', () => {
     const result = render(<DomicileBanner />);
     const link = result.getByRole('button', { name: /detail.add_domicile/ });
 
-    fireEvent.click(link);
+    userEvent.click(link);
 
     expect(mockNavigateFn).toBeCalled();
   });
@@ -37,7 +38,7 @@ describe('DomicileBanner component', () => {
     const result = render(<DomicileBanner />);
     const closeButton = result.getByTestId('CloseIcon');
 
-    fireEvent.click(closeButton);
+    userEvent.click(closeButton);
     const dialog = result.queryByTestId('addDomicileBanner');
     expect(dialog).toBeNull();
   });

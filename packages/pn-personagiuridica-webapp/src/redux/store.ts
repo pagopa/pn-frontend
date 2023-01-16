@@ -6,7 +6,9 @@ import { LOG_REDUX_ACTIONS } from '../utils/constants';
 import { trackingMiddleware } from '../utils/mixpanel';
 import appStatusSlice from './appStatus/reducers';
 import userSlice from './auth/reducers';
+import contactsSlice from './contact/reducers';
 import dashboardSlice from './dashboard/reducers';
+import delegationsSlice from './delegation/reducers';
 import notificationSlice from './notification/reducers';
 import generalInfoSlice from './sidemenu/reducers';
 
@@ -19,6 +21,8 @@ export const appReducers = {
   notificationState: notificationSlice.reducer,
   generalInfoState: generalInfoSlice.reducer,
   dashboardState: dashboardSlice.reducer,
+  delegationsState: delegationsSlice.reducer,
+  contactsState: contactsSlice.reducer,
 };
 
 export const createStore = () =>
