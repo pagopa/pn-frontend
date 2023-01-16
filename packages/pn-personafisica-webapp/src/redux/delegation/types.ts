@@ -1,3 +1,5 @@
+import { RecipientType } from '@pagopa-pn/pn-commons';
+
 import { User } from '../auth/types';
 
 export type UserAndDelegations = User & DelegationsList;
@@ -46,7 +48,7 @@ export interface Person {
 }
 
 export interface NewDelegationFormProps {
-  selectPersonaFisicaOrPersonaGiuridica: string;
+  selectPersonaFisicaOrPersonaGiuridica: RecipientType;
   codiceFiscale: string;
   nome: string;
   cognome: string;
