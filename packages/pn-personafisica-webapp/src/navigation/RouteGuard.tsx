@@ -17,7 +17,8 @@ const RouteGuard = () => {
         goToHomePage={() => navigate(routes.NOTIFICHE, {replace: true})}
         goToLogin={() => goToLoginPortal(window.location.href)}
       />
-    );}
+    );
+  }
 
   return <Outlet />;
 };

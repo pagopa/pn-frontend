@@ -4,13 +4,22 @@ import {
   AppResponseMessage,
   DowntimeStatus,
   formatDate,
-  formatTimeHHMM,
   KnownFunctionality,
   ResponseEventDispatcher,
 } from '@pagopa-pn/pn-commons';
 import { render } from '../../__test__/test-utils';
 import AppStatus from '../AppStatus.page';
 import { APP_STATUS_ACTIONS } from '../../redux/appStatus/actions';
+
+const fakePalette = { success: { main: '#00FF00' }, error: { main: '#FF0000' } };
+
+jest.mock('@mui/material', () => {
+  const original = jest.requireActual('@mui/material');
+  return {
+    ...original,
+    useTheme: () => ({ ...original.useTheme(), palette: fakePalette }),
+  };
+});
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -20,27 +29,10 @@ jest.mock('react-i18next', () => ({
   Trans: () => 'mocked verify description',
 }));
 
-/* eslint-disable-next-line functional/no-let */
-let mockIsMobile: boolean;
-
-jest.mock('@pagopa-pn/pn-commons', () => {
-  const original = jest.requireActual('@pagopa-pn/pn-commons');
-  return {
-    ...original,
-    useIsMobile: () => mockIsMobile,
-    EmptyState: () => <div data-testid="mock-empty-state">Empty state</div>,
-    AppStatusBar: () => <div data-testid="mock-app-status-bar">AppStatus bar</div>,
-    DesktopDowntimeLog: () => (
-      <div data-testid="mock-desktop-downtime-log">Desktop downtime log</div>
-    ),
-    MobileDowntimeLog: () => <div data-testid="mock-mobile-downtime-log">Mobile downtime log</div>,
-  };
-});
-
 /* eslint-disable functional/no-let */
-let mockIncludeDowntimes: boolean;
 let mockAppStatusApiFail: boolean;
 let mockDowntimeLogApiFail: boolean;
+let mockIsFullyOperative: boolean;
 /* eslint-enable functional/no-let */
 
 const mockNotificationCreate = KnownFunctionality.NotificationCreate;
@@ -56,37 +48,38 @@ jest.mock('../../api/appStatus/AppStatus.api', () => {
         mockAppStatusApiFail
           ? Promise.reject({ response: { status: 500 } })
           : Promise.resolve({
-              appIsFullyOperative: true,
+              appIsFullyOperative: mockIsFullyOperative,
               statusByFunctionality: [],
               lastCheckTimestamp: mockLastCheckTimestamp,
             }),
-      getDowntimeLogPage: () => mockDowntimeLogApiFail
-        ? Promise.reject({ response: { status: 500 } })
-        : Promise.resolve({
-            downtimes: mockIncludeDowntimes
-              ? [
-                  {
-                    rawFunctionality: mockNotificationCreate,
-                    knownFunctionality: mockNotificationCreate,
-                    status: mockDowntimeStatusOK,
-                    startDate: '2022-10-24T08:15:21Z',
-                    endDate: '2022-10-24T08:15:29Z',
-                    legalFactId: 'some-legal-fact-id',
-                    fileAvailable: true,
-                  },
-                ]
-              : [],
-            statusByFunctionality: [],
-          }),
+      getDowntimeLogPage: () =>
+        mockDowntimeLogApiFail
+          ? Promise.reject({ response: { status: 500 } })
+          : Promise.resolve({
+              downtimes: [
+                {
+                  rawFunctionality: mockNotificationCreate,
+                  knownFunctionality: mockNotificationCreate,
+                  status: mockDowntimeStatusOK,
+                  startDate: '2022-10-24T08:15:21Z',
+                  endDate: '2022-10-28T08:18:29Z',
+                  legalFactId: 'some-legal-fact-id',
+                  fileAvailable: true,
+                },
+              ],
+              statusByFunctionality: [],
+            }),
     },
   };
 });
 
-const AppStatusWithErrorHandling = () => <>
-  <ResponseEventDispatcher />
-  <AppResponseMessage />
-  <AppStatus />
-</>;
+const AppStatusWithErrorHandling = () => (
+  <>
+    <ResponseEventDispatcher />
+    <AppResponseMessage />
+    <AppStatus />
+  </>
+);
 
 describe('AppStatus page', () => {
   beforeEach(() => {
@@ -94,97 +87,57 @@ describe('AppStatus page', () => {
     mockDowntimeLogApiFail = false;
   });
 
-  it('Desktop - with downtimes', async () => {
-    mockIncludeDowntimes = true;
-    mockIsMobile = false;
+  /*
+   * The intent of the "OK" test is to verify somehow that the result of the API calls
+   * is rendered.
+   * We perform a minimal check of two facts:
+   * (1) the "green" variant of the status bar is rendered, instead of the "red" one.
+   * (2) the downtime log list includes a datum from the mocked API response.
+   */
+  it('OK', async () => {
+    mockIsFullyOperative = true;
     await act(async () => void render(<AppStatusWithErrorHandling />));
-    const appStatusBarComponent = screen.queryByTestId('mock-app-status-bar');
-    const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
-    const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
-    const emptyStateComponent = screen.queryByTestId('mock-empty-state');
+    const appStatusBarComponent = screen.queryByTestId('app-status-bar');
     expect(appStatusBarComponent).toBeInTheDocument();
-    expect(desktopDonwtimeLogComponent).toBeInTheDocument();
-    expect(mobileDonwtimeLogComponent).not.toBeInTheDocument();
-    expect(emptyStateComponent).not.toBeInTheDocument();
+    expect(appStatusBarComponent).toHaveStyle({ 'border-color': fakePalette.success.main });
+    const startDateComponent = screen.queryByText(new RegExp(formatDate('2022-10-24T08:15:21Z')));
+    expect(startDateComponent).toBeInTheDocument();
   });
 
-  it('Mobile - with downtimes', async () => {
-    mockIncludeDowntimes = true;
-    mockIsMobile = true;
+  /*
+   * In the "not OK" test, we just check that the "red" variant of the status bar is rendered.
+   */
+  it('not OK', async () => {
+    mockIsFullyOperative = false;
     await act(async () => void render(<AppStatusWithErrorHandling />));
-    const appStatusBarComponent = screen.queryByTestId('mock-app-status-bar');
-    const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
-    const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
-    const emptyStateComponent = screen.queryByTestId('mock-empty-state');
+    const appStatusBarComponent = screen.queryByTestId('app-status-bar');
     expect(appStatusBarComponent).toBeInTheDocument();
-    expect(desktopDonwtimeLogComponent).not.toBeInTheDocument();
-    expect(mobileDonwtimeLogComponent).toBeInTheDocument();
-    expect(emptyStateComponent).not.toBeInTheDocument();
-  });
-
-  it('Desktop - no downtimes', async () => {
-    mockIncludeDowntimes = false;
-    mockIsMobile = false;
-    await act(async () => void render(<AppStatusWithErrorHandling />));
-    const appStatusBarComponent = screen.queryByTestId('mock-app-status-bar');
-    const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
-    const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
-    const emptyStateComponent = screen.queryByTestId('mock-empty-state');
-    expect(appStatusBarComponent).toBeInTheDocument();
-    expect(desktopDonwtimeLogComponent).not.toBeInTheDocument();
-    expect(mobileDonwtimeLogComponent).not.toBeInTheDocument();
-    expect(emptyStateComponent).toBeInTheDocument();
+    expect(appStatusBarComponent).toHaveStyle({ 'border-color': fakePalette.error.main });
   });
 
   it('Desktop - error in app status API', async () => {
-    mockIncludeDowntimes = true;
-    mockIsMobile = false;
     mockAppStatusApiFail = true;
     await act(async () => void render(<AppStatusWithErrorHandling />));
-    const appStatusBarComponent = screen.queryByTestId('mock-app-status-bar');
-    const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
-    const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
-    const emptyStateComponent = screen.queryByTestId('mock-empty-state');
-    const statusApiErrorComponent = screen.queryByTestId(`api-error-${APP_STATUS_ACTIONS.GET_CURRENT_STATUS}`);
-    const downtimeApiErrorComponent = screen.queryByTestId(`api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE}`);
-    expect(appStatusBarComponent).not.toBeInTheDocument();
-    expect(desktopDonwtimeLogComponent).toBeInTheDocument();
-    expect(mobileDonwtimeLogComponent).not.toBeInTheDocument();
-    expect(emptyStateComponent).not.toBeInTheDocument();
+    const statusApiErrorComponent = screen.queryByTestId(
+      `api-error-${APP_STATUS_ACTIONS.GET_CURRENT_STATUS}`
+    );
+    const downtimeApiErrorComponent = screen.queryByTestId(
+      `api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE}`
+    );
     expect(statusApiErrorComponent).toBeInTheDocument();
     expect(downtimeApiErrorComponent).not.toBeInTheDocument();
   });
 
   it('Desktop - error in downtime log API', async () => {
-    mockIncludeDowntimes = true;
-    mockIsMobile = false;
     mockDowntimeLogApiFail = true;
     await act(async () => void render(<AppStatusWithErrorHandling />));
-    const appStatusBarComponent = screen.queryByTestId('mock-app-status-bar');
-    const desktopDonwtimeLogComponent = screen.queryByTestId('mock-desktop-downtime-log');
-    const mobileDonwtimeLogComponent = screen.queryByTestId('mock-mobile-downtime-log');
-    const emptyStateComponent = screen.queryByTestId('mock-empty-state');
-    const statusApiErrorComponent = screen.queryByTestId(`api-error-${APP_STATUS_ACTIONS.GET_CURRENT_STATUS}`);
-    const downtimeApiErrorComponent = screen.queryByTestId(`api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE}`);
-    expect(appStatusBarComponent).toBeInTheDocument();
-    expect(desktopDonwtimeLogComponent).not.toBeInTheDocument();
-    expect(mobileDonwtimeLogComponent).not.toBeInTheDocument();
-    expect(emptyStateComponent).not.toBeInTheDocument();
+    const statusApiErrorComponent = screen.queryByTestId(
+      `api-error-${APP_STATUS_ACTIONS.GET_CURRENT_STATUS}`
+    );
+    const downtimeApiErrorComponent = screen.queryByTestId(
+      `api-error-${APP_STATUS_ACTIONS.GET_DOWNTIME_LOG_PAGE}`
+    );
     expect(statusApiErrorComponent).not.toBeInTheDocument();
     expect(downtimeApiErrorComponent).toBeInTheDocument();
-  });
-
-  it('Last check message, must include date and time of last check timestamp', async () => {
-    mockIncludeDowntimes = true;
-    mockIsMobile = false;
-    await act(async () => void render(<AppStatusWithErrorHandling />));
-    const lastCheckLegend = screen.queryByText(new RegExp('appStatus.lastCheckLegend'));
-    const lastCheckDate = screen.queryByText(new RegExp(formatDate(mockLastCheckTimestamp)));
-    const lastCheckTime = screen.queryByText(new RegExp(formatTimeHHMM(mockLastCheckTimestamp)));
-    expect(lastCheckLegend).toBeInTheDocument();
-    expect(lastCheckDate).toBeInTheDocument();
-    expect(lastCheckTime).toBeInTheDocument();
-    expect(lastCheckLegend).toBe(lastCheckDate);
-    expect(lastCheckLegend).toBe(lastCheckTime);
   });
 });

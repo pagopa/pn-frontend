@@ -14,7 +14,7 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
   }
 
   private compareDate = <TArg>(value: TArg, valueToCompare: TArg): boolean => {
-    if (isDate<unknown, Date>(value) && isDate<unknown, Date>(valueToCompare)) {
+    if (isDate(value) && isDate(valueToCompare)) {
       return value.getTime() === valueToCompare.getTime();
     }
     return false;
@@ -24,7 +24,7 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
     value: TArg,
     valueToCompare: TArg
   ): boolean => {
-    if (isObject<unknown, object>(value) && isObject<unknown, object>(valueToCompare)) {
+    if (isObject(value) && isObject(valueToCompare)) {
       if (Object.keys(value).length === Object.keys(valueToCompare).length) {
         return Object.keys(value).every((key) => {
           return (
@@ -40,8 +40,8 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
 
   private compareArray = <TArg>(value: TArg, valueToCompare: TArg): boolean => {
     if (
-      isArray<unknown, Array<unknown>>(value) &&
-      isArray<unknown, Array<unknown>>(valueToCompare)
+      isArray(value) &&
+      isArray(valueToCompare)
     ) {
       if (value.length === valueToCompare.length) {
         return value.every((elem, index) => {
@@ -55,14 +55,14 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
 
   private compare = <TArg>(value: TArg, valueToCompare: TArg): boolean => {
     if (typeof value === typeof valueToCompare) {
-      if (isObject<unknown, object>(value)) {
+      if (isObject(value)) {
         return this.compareObject(value, valueToCompare);
       }
-      if (isArray<unknown, Array<unknown>>(value)) {
+      if (isArray(value)) {
         return this.compareArray(value, valueToCompare);
       }
       if (
-        (isDate<unknown, Date>(value) && this.compareDate(value, valueToCompare)) ||
+        (isDate(value) && this.compareDate(value, valueToCompare)) ||
         value === valueToCompare
       ) {
         return true;
@@ -72,10 +72,10 @@ export class IsEqual<TModel, TValue> extends Rule<TModel, TValue> {
   };
 
   private printValue = () => {
-    if (isObject<unknown, object>(this.valueToCompare) || isArray<unknown, Array<unknown>>(this.valueToCompare)) {
+    if (isObject(this.valueToCompare) || isArray(this.valueToCompare)) {
       return JSON.stringify(this.valueToCompare);
     }
-    if (isDate<unknown, Date>(this.valueToCompare)) {
+    if (isDate(this.valueToCompare)) {
       return this.valueToCompare.toISOString();
     }
     return this.valueToCompare;

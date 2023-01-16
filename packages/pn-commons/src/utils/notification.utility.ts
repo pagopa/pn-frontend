@@ -1,7 +1,7 @@
 /* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
-import { formatDate } from '../services';
+import { formatDate } from '../utils';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import {
   INotificationDetailTimeline,
