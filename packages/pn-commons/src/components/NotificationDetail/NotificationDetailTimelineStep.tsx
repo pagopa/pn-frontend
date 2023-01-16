@@ -99,7 +99,10 @@ const NotificationDetailTimelineStep = ({
   let legalFactsIds: Array<{ file: LegalFactId; step: INotificationDetailTimeline }> = [];
   let visibleSteps: Array<INotificationDetailTimeline> = [];
   /* eslint-enable functional/no-let */
-  const notificationStatusInfos = getNotificationStatusInfos(timelineStep.status);
+  const notificationStatusInfos = getNotificationStatusInfos(
+    timelineStep.status,
+    timelineStep.recipient
+  );
 
   if (timelineStep.steps) {
     /* eslint-disable functional/immutable-data */

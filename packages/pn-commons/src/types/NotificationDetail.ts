@@ -26,26 +26,29 @@ export interface NotificationDetail {
   amount?: number;
 }
 
+export type NotificationDetailTimelineDetails =
+  | BaseDetails
+  | ViewedDetails
+  | AnalogWorkflowDetails
+  | DigitalWorkflowDetails
+  | AddressInfoDetails
+  | PublicRegistryCallDetails
+  | PublicRegistryResponseDetails
+  | RequestRefusedDetails
+  | ScheduleDigitalWorkflowDetails
+  | SendCourtesyMessageDetails
+  | SendDigitalDetails
+  | SendPaperDetails
+  // PN-1647
+  | NotHandledDetails;
+
 export interface INotificationDetailTimeline {
   elementId: string;
   timestamp: string;
   legalFactsIds?: Array<LegalFactId>;
   category: TimelineCategory;
-  details:
-    | BaseDetails
-    | AnalogWorkflowDetails
-    | DigitalWorkflowDetails
-    | AddressInfoDetails
-    | PublicRegistryCallDetails
-    | PublicRegistryResponseDetails
-    | RequestRefusedDetails
-    | ScheduleDigitalWorkflowDetails
-    | SendCourtesyMessageDetails
-    | SendDigitalDetails
-    | SendPaperDetails
-    // PN-1647
-    | NotHandledDetails;
-    // only fe
+  details: NotificationDetailTimelineDetails;
+  // only fe
   hidden?: boolean;
 }
 
@@ -60,6 +63,19 @@ export interface SendPaperDetails extends BaseDetails {
 
 interface BaseDetails {
   recIndex?: number;
+}
+
+interface DelegateInfo {
+  internalId: string;
+  taxId: string;
+  operatorUuid: string;
+  mandateId: string;
+  denomination: string;
+  delegateType: RecipientType;
+}
+
+export interface ViewedDetails extends BaseDetails {
+  delegateInfo?: DelegateInfo;
 }
 
 export interface AnalogWorkflowDetails extends BaseDetails {
@@ -167,21 +183,21 @@ export interface NotificationDetailPayment {
 }
 
 export enum PaymentStatus {
-  REQUIRED = "REQUIRED",
-  SUCCEEDED = "SUCCEEDED",
-  INPROGRESS = "IN_PROGRESS",
-  FAILED = "FAILURE"
+  REQUIRED = 'REQUIRED',
+  SUCCEEDED = 'SUCCEEDED',
+  INPROGRESS = 'IN_PROGRESS',
+  FAILED = 'FAILURE',
 }
 
 export enum PaymentInfoDetail {
-  PAYMENT_UNAVAILABLE = "PAYMENT_UNAVAILABLE",    // Technical Error
-  PAYMENT_UNKNOWN = "PAYMENT_UNKNOWN",            // Payment data error
-  DOMAIN_UNKNOWN = "DOMAIN_UNKNOWN",              // Creditor institution error
-  PAYMENT_ONGOING = "PAYMENT_ONGOING",            // Payment on going
-  PAYMENT_EXPIRED = "PAYMENT_EXPIRED",            // Payment expired
-  PAYMENT_CANCELED = "PAYMENT_CANCELED",          // Payment canceled
-  PAYMENT_DUPLICATED = "PAYMENT_DUPLICATED",      // Payment duplicated
-  GENERIC_ERROR = "GENERIC_ERROR"                 // Generic error
+  PAYMENT_UNAVAILABLE = 'PAYMENT_UNAVAILABLE', // Technical Error
+  PAYMENT_UNKNOWN = 'PAYMENT_UNKNOWN', // Payment data error
+  DOMAIN_UNKNOWN = 'DOMAIN_UNKNOWN', // Creditor institution error
+  PAYMENT_ONGOING = 'PAYMENT_ONGOING', // Payment on going
+  PAYMENT_EXPIRED = 'PAYMENT_EXPIRED', // Payment expired
+  PAYMENT_CANCELED = 'PAYMENT_CANCELED', // Payment canceled
+  PAYMENT_DUPLICATED = 'PAYMENT_DUPLICATED', // Payment duplicated
+  GENERIC_ERROR = 'GENERIC_ERROR', // Generic error
 }
 
 export interface PaymentInfo {
@@ -202,8 +218,8 @@ export interface PaymentNotice {
 }
 
 export enum PaymentAttachmentSName {
-  PAGOPA = "PAGOPA",
-  F24 = "F24"
+  PAGOPA = 'PAGOPA',
+  F24 = 'F24',
 }
 
 export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
@@ -214,6 +230,7 @@ export interface NotificationStatusHistory {
   relatedTimelineElements: Array<string>;
   // only fe
   steps?: Array<INotificationDetailTimeline>;
+  recipient?: string;
 }
 
 export enum TimelineCategory {
@@ -242,7 +259,7 @@ export enum TimelineCategory {
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
   REQUEST_REFUSED = 'REQUEST_REFUSED',
   // PN-1647
-  NOT_HANDLED = 'NOT_HANDLED'
+  NOT_HANDLED = 'NOT_HANDLED',
 }
 
 interface DigitalAddress {
@@ -264,7 +281,7 @@ interface PhysicalAddress {
 export enum DigitalDomicileType {
   PEC = 'PEC',
   EMAIL = 'EMAIL',
-  APPIO = 'APPIO' // PN-2068
+  APPIO = 'APPIO', // PN-2068
 }
 
 export enum RecipientType {
@@ -307,6 +324,14 @@ export interface NotificationDetailTableRow {
   value: ReactNode;
 }
 
-export type DigitalDetails = DigitalWorkflowDetails | PublicRegistryResponseDetails | ScheduleDigitalWorkflowDetails | SendCourtesyMessageDetails | SendDigitalDetails;
+export type DigitalDetails =
+  | DigitalWorkflowDetails
+  | PublicRegistryResponseDetails
+  | ScheduleDigitalWorkflowDetails
+  | SendCourtesyMessageDetails
+  | SendDigitalDetails;
 
-export type AnalogDetails = SendPaperDetails | AnalogWorkflowDetails | PublicRegistryResponseDetails;
+export type AnalogDetails =
+  | SendPaperDetails
+  | AnalogWorkflowDetails
+  | PublicRegistryResponseDetails;
