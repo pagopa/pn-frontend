@@ -1,8 +1,15 @@
+import React from 'react';
+
 import { fireEvent, waitFor, screen } from '@testing-library/react';
 
 import { render } from '../../../test-utils';
 import * as hooks from '../../../hooks/useIsMobile';
-import { getDay, getMonthString, getTime, getNotificationStatusInfos } from '../../../utils';
+import {
+  formatDay,
+  formatMonthString,
+  formatTime,
+  getNotificationStatusInfos,
+} from '../../../utils';
 import { parsedNotification } from '../../../utils/__test__/test-utils';
 import NotificationDetailTimeline from '../NotificationDetailTimeline';
 
@@ -17,13 +24,15 @@ const testTimelineRendering = async (container: HTMLElement) => {
       const dateItems = item.querySelectorAll('[data-testid="dateItem"]');
       expect(dateItems).toHaveLength(3);
       expect(dateItems[0]).toHaveTextContent(
-        getMonthString(parsedNotification.notificationStatusHistory[timelineIndex / 2].activeFrom)
+        formatMonthString(
+          parsedNotification.notificationStatusHistory[timelineIndex / 2].activeFrom
+        )
       );
       expect(dateItems[1]).toHaveTextContent(
-        getDay(parsedNotification.notificationStatusHistory[timelineIndex / 2].activeFrom)
+        formatDay(parsedNotification.notificationStatusHistory[timelineIndex / 2].activeFrom)
       );
       expect(dateItems[2]).toHaveTextContent(
-        getTime(parsedNotification.notificationStatusHistory[timelineIndex / 2].activeFrom)
+        formatTime(parsedNotification.notificationStatusHistory[timelineIndex / 2].activeFrom)
       );
       const itemStatus = item.querySelector('[data-testid="itemStatus"]');
       expect(itemStatus).toBeInTheDocument();
@@ -114,10 +123,10 @@ describe('NotificationDetailTimeline Component', () => {
       const dateItems = timelineExpandedItem!.querySelectorAll('[data-testid="dateItem"]');
       expect(dateItems).toHaveLength(3);
       expect(dateItems[0]).toHaveTextContent(
-        getMonthString(parsedNotification.timeline[0].timestamp)
+        formatMonthString(parsedNotification.timeline[0].timestamp)
       );
-      expect(dateItems[1]).toHaveTextContent(getDay(parsedNotification.timeline[0].timestamp));
-      expect(dateItems[2]).toHaveTextContent(getTime(parsedNotification.timeline[0].timestamp));
+      expect(dateItems[1]).toHaveTextContent(formatDay(parsedNotification.timeline[0].timestamp));
+      expect(dateItems[2]).toHaveTextContent(formatTime(parsedNotification.timeline[0].timestamp));
       expect(timelineExpandedItem).toHaveTextContent(parsedNotification.recipients[0].denomination);
     });
   });
