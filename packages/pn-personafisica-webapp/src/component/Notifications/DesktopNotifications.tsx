@@ -115,7 +115,14 @@ const DesktopNotifications = ({
         const { label, tooltip, color } = getNotificationStatusInfos(
           row.notificationStatus as NotificationStatus
         );
-        return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
+        return (
+          <StatusTooltip
+            label={label}
+            tooltip={tooltip}
+            color={color}
+            eventTrackingCallback={handleEventTrackingTooltip}
+          ></StatusTooltip>
+        );
       },
     },
   ];
@@ -142,7 +149,8 @@ const DesktopNotifications = ({
     secondaryMessage: filtersApplied
       ? undefined
       : {
-          emptyMessage: 'e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.',
+          emptyMessage:
+            'e inserisci uno più recapiti di cortesia: così, se riceverai una notifica, te lo comunicheremo.',
         },
   };
 
@@ -151,7 +159,9 @@ const DesktopNotifications = ({
   // Navigation handlers
   const handleRowClick = (row: Item) => {
     if (currentDelegator) {
-      navigate(routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId));
+      navigate(
+        routes.GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH(row.iun as string, currentDelegator.mandateId)
+      );
     } else {
       navigate(routes.GET_DETTAGLIO_NOTIFICA_PATH(row.iun as string));
     }
