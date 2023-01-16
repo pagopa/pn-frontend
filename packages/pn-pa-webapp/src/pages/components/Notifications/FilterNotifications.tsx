@@ -81,7 +81,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
     recipientId: yup
       .string()
       .matches(
-        new RegExp(dataRegex.fiscalCode.source + '|' + dataRegex.pIva.source),
+        dataRegex.pIvaAndFiscalCode,
         t('filters.errors.fiscal-code', { ns: 'notifiche' })
       ),
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
