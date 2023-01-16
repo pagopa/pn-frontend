@@ -64,8 +64,6 @@
     "@types/react-router": "^5.1.16",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
-    "danger": "^10.5.3",
-    "danger-plugin-digitalcitizenship": "^1.0.0",
     "eslint": "7.11.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-functional": "^3.7.2",
@@ -75,7 +73,8 @@
     "eslint-plugin-sonarjs": "^0.10.0",
     "jest-sonar-reporter": "^2.0.0",
     "prettier": "^2.4.1",
-    "react-scripts": "^5.0.1"
+    "react-scripts": "^5.0.1",
+    "sonarqube-scanner": "^3.0.0"
   },
   "jest": {
     "coveragePathIgnorePatterns": [
