@@ -131,7 +131,9 @@ const NotificationDetail = () => {
       value: row.value,
     }));
 
-  const documentDowloadHandler = (document: string | NotificationDetailOtherDocument | undefined) => {
+  const documentDowloadHandler = (
+    document: string | NotificationDetailOtherDocument | undefined
+  ) => {
     if (_.isObject(document)) {
       const otherDocument = document as NotificationDetailOtherDocument;
       void dispatch(getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument }));
@@ -150,7 +152,7 @@ const NotificationDetail = () => {
     );
   };
 
-  const isCancelled = (notification.notificationStatus === NotificationStatus.CANCELLED);
+  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
   const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
 

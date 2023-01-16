@@ -423,7 +423,7 @@ const populateOtherDocuments = (
       documentType: LegalFactType.AAR,
       title: getLocalizedOrDefaultLabel(
         'notifications',
-        'detail.timeline.other-document',
+        'detail.timeline.aar-document',
         'Avviso di avvenuta ricezione'
       ),
       digests: {

@@ -208,15 +208,15 @@ const NotificationDetail = () => {
       value: row.value,
     }));
 
-    const documentDowloadHandler = (document: string | NotificationDetailOtherDocument | undefined) => {
+  const documentDowloadHandler = (
+    document: string | NotificationDetailOtherDocument | undefined
+  ) => {
     if (_.isObject(document)) {
       const otherDocument = document as NotificationDetailOtherDocument;
       void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
     } else {
       const documentIndex = document as string;
-      void dispatch(
-        getSentNotificationDocument({ iun: notification.iun, documentIndex })
-      );
+      void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
     }
   };
 
@@ -238,7 +238,7 @@ const NotificationDetail = () => {
     navigate(routes.NUOVA_NOTIFICA);
   };
 
-  const isCancelled = (notification.notificationStatus === NotificationStatus.CANCELLED);
+  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
   const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
 
