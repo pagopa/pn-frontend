@@ -249,6 +249,10 @@ const PaymentMethods = ({
       if (isCompleted) {
         onConfirm();
       } else if (emptyForm || notification.paymentMode === PaymentModel.NOTHING) {
+        // Maybe now the form is empty, but in the previous time the user went back 
+        // from the payments step the form wasn't empty.
+        // Just in case, we clean the payment info from the Redux store
+        dispatch(setPaymentDocuments({ paymentDocuments: {} }));
         dispatch(setIsCompleted());
       } else {
         const paymentData = await dispatch(uploadNotificationPaymentDocument(formatPaymentDocuments()));
