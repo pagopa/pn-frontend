@@ -211,7 +211,9 @@ const PaymentMethods = ({
   const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
     // set ref
     for (const [taxId, payment] of Object.entries(paymentPayload)) {
-      await formik.setFieldValue(`${taxId}.pagoPaForm.ref`, payment.pagoPaForm.ref, false);
+      if (payment.pagoPaForm) {
+        await formik.setFieldValue(`${taxId}.pagoPaForm.ref`, payment.pagoPaForm.ref, false);
+      }
       if (payment.f24standard) {
         await formik.setFieldValue(`${taxId}.f24standard.ref`, payment.f24standard.ref, false);
       }
@@ -249,7 +251,7 @@ const PaymentMethods = ({
       } else if (emptyForm || notification.paymentMode === PaymentModel.NOTHING) {
         dispatch(setIsCompleted());
       } else {
-        const paymentData = await dispatch(uploadNotificationPaymentDocument(values));
+        const paymentData = await dispatch(uploadNotificationPaymentDocument(formatPaymentDocuments()));
         const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
         if (paymentPayload) {
           await updateRefAfterUpload(paymentPayload);
