@@ -8,7 +8,7 @@ describe('NewNotificationBadge component', () => {
 
     const result = render(<>{getNewNotificationBadge(notificationStatus)}</>);
 
-    const badge = result.getByRole('new-notification-badge');
+    const badge = result.getByRole('status');
     expect(badge).toBeInTheDocument();
   });
 
@@ -17,7 +17,7 @@ describe('NewNotificationBadge component', () => {
 
     const result = render(<>{getNewNotificationBadge(notificationStatus)}</>);
 
-    const badge = result.queryByRole('new-notification-badge');
+    const badge = result.queryByRole('status');
     expect(badge).not.toBeInTheDocument();
   });
 });
