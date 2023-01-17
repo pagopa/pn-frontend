@@ -10,18 +10,27 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Typography
+  Typography,
 } from '@mui/material';
 
-import { appStateActions, CodeModal, AppResponsePublisher,  AppResponse, ErrorMessage } from '@pagopa-pn/pn-commons';
+import {
+  appStateActions,
+  CodeModal,
+  AppResponsePublisher,
+  AppResponse,
+  ErrorMessage,
+} from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { RootState } from '../../redux/store';
-import { createOrUpdateCourtesyAddress, createOrUpdateLegalAddress, } from '../../redux/contact/actions';
-import { trackEventByType } from "../../utils/mixpanel";
-import { EventActions, TrackEventType } from "../../utils/events";
-import { getContactEventType } from "../../utils/contacts.utility";
+import {
+  createOrUpdateCourtesyAddress,
+  createOrUpdateLegalAddress,
+} from '../../redux/contact/actions';
+import { trackEventByType } from '../../utils/mixpanel';
+import { EventActions, TrackEventType } from '../../utils/events';
+import { getContactEventType } from '../../utils/contacts.utility';
 import { SaveDigitalAddressParams } from '../../redux/contact/types';
 
 type ModalProps = {
@@ -71,15 +80,14 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   const [open, setOpen] = useState(false);
   const [codeNotValid, setCodeNotValid] = useState(false);
   const dispatch = useAppDispatch();
-  const [props, setProps] = useState(initialProps);
+  const [modalProps, setModalProps] = useState(initialProps);
 
   const handleClose = (status: 'validated' | 'cancelled' = 'cancelled') => {
     setCodeNotValid(false);
     setOpen(false);
-    
-    setProps(initialProps);
-    if (props.callbackOnValidation) {
-      props.callbackOnValidation(status);
+    setModalProps(initialProps);
+    if (modalProps.callbackOnValidation) {
+      modalProps.callbackOnValidation(status);
     }
   };
 
@@ -95,8 +103,9 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   const contactAlreadyExists = (): boolean =>
     !!addresses.find(
       (elem) =>
-        elem.value === props.value &&
-        (elem.senderId !== props.senderId || elem.channelType !== props.digitalDomicileType)
+        elem.value === modalProps.value &&
+        (elem.senderId !== modalProps.senderId ||
+          elem.channelType !== modalProps.digitalDomicileType)
     );
 
   const handleCodeVerification = (verificationCode?: string, noCallback: boolean = false) => {
@@ -104,21 +113,21 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     let actionToBeDispatched;
     let eventTypeByChannel;
     /* eslint-enable functional/no-let */
-    if (props.digitalDomicileType === LegalChannelType.PEC) {
+    if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
       actionToBeDispatched = createOrUpdateLegalAddress;
       eventTypeByChannel = TrackEventType.CONTACT_LEGAL_CONTACT;
     } else {
       actionToBeDispatched = createOrUpdateCourtesyAddress;
-      eventTypeByChannel = getContactEventType(props.digitalDomicileType);
+      eventTypeByChannel = getContactEventType(modalProps.digitalDomicileType);
     }
     if (!actionToBeDispatched) {
       return;
     }
     const digitalAddressParams: SaveDigitalAddressParams = {
-      recipientId: props.recipientId,
-      senderId: props.senderId,
-      channelType: props.digitalDomicileType,
-      value: props.value,
+      recipientId: modalProps.recipientId,
+      senderId: modalProps.senderId,
+      channelType: modalProps.digitalDomicileType,
+      value: modalProps.value,
       code: verificationCode,
     };
 
@@ -135,7 +144,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           dispatch(
             appStateActions.addSuccess({
               title: '',
-              message: t(`${props.labelRoot}.${props.labelType}-added-successfully`, {
+              message: t(`${modalProps.labelRoot}.${modalProps.labelType}-added-successfully`, {
                 ns: 'recapiti',
               }),
             })
@@ -147,7 +156,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         }
       })
       .catch(() => {
-      // .catch((error) => {
+        // .catch((error) => {
         // if(error.response.status === 422) {
         //   setCodeNotValid(true);
         // }
@@ -172,7 +181,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       labelRoot = 'courtesy-contacts';
       labelType = digitalDomicileType === CourtesyChannelType.SMS ? 'phone' : 'email';
     }
-    setProps({
+    setModalProps({
       labelRoot,
       labelType,
       recipientId,
@@ -184,59 +193,72 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   };
 
   useEffect(() => {
-    if (!_.isEqual(props, initialProps) && !contactAlreadyExists()) {
+    if (!_.isEqual(modalProps, initialProps) && !contactAlreadyExists()) {
       handleCodeVerification();
     } else if (contactAlreadyExists()) {
       setIsConfirmationModalVisible(true);
     }
-  }, [props]);
-  
-  const handleAddressUpdateError = useCallback((responseError: AppResponse) => {
-    if(!open) {
-      // notify the publisher we are not handling the error
-      return true;
-    } 
-    if(Array.isArray(responseError.errors)){
-      const error = responseError.errors[0];
-      setErrorMessage({
-        title: error.message.title,
-        content: error.message.content
-      });
-      setCodeNotValid(true);
-    }
-    return false;
-  }, [open]);
-  
+  }, [modalProps]);
+
+  const handleAddressUpdateError = useCallback(
+    (responseError: AppResponse) => {
+      if (!open) {
+        // notify the publisher we are not handling the error
+        return true;
+      }
+      if (Array.isArray(responseError.errors)) {
+        const error = responseError.errors[0];
+        setErrorMessage({
+          title: error.message.title,
+          content: error.message.content,
+        });
+        setCodeNotValid(true);
+      }
+      return false;
+    },
+    [open]
+  );
+
   useEffect(() => {
-    AppResponsePublisher.error.subscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
-    AppResponsePublisher.error.subscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
-    
+    AppResponsePublisher.error.subscribe('createOrUpdateLegalAddress', handleAddressUpdateError);
+    AppResponsePublisher.error.subscribe('createOrUpdateCourtesyAddress', handleAddressUpdateError);
+
     return () => {
-      AppResponsePublisher.error.unsubscribe("createOrUpdateLegalAddress", handleAddressUpdateError);
-      AppResponsePublisher.error.unsubscribe("createOrUpdateCourtesyAddress", handleAddressUpdateError);
+      AppResponsePublisher.error.unsubscribe(
+        'createOrUpdateLegalAddress',
+        handleAddressUpdateError
+      );
+      AppResponsePublisher.error.unsubscribe(
+        'createOrUpdateCourtesyAddress',
+        handleAddressUpdateError
+      );
     };
   }, [handleAddressUpdateError]);
 
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
       {children}
-      {!_.isEqual(props, initialProps) && (
+      {!_.isEqual(modalProps, initialProps) && (
         <CodeModal
           title={
-            t(`${props.labelRoot}.${props.labelType}-verify`, { ns: 'recapiti' }) +
-            ` ${props.value}`
+            t(`${modalProps.labelRoot}.${modalProps.labelType}-verify`, { ns: 'recapiti' }) +
+            ` ${modalProps.value}`
           }
           subtitle={
-            <Trans i18nKey={`${props.labelRoot}.${props.labelType}-verify-descr`} ns="recapiti" />
+            <Trans
+              i18nKey={`${modalProps.labelRoot}.${modalProps.labelType}-verify-descr`}
+              ns="recapiti"
+            />
           }
           open={open}
           initialValues={new Array(5).fill('')}
           handleClose={() => handleClose()}
-          codeSectionTitle={t(`${props.labelRoot}.insert-code`, { ns: 'recapiti' })}
+          codeSectionTitle={t(`${modalProps.labelRoot}.insert-code`, { ns: 'recapiti' })}
           codeSectionAdditional={
             <Box>
               <Typography variant="body2" display="inline">
-                {t(`${props.labelRoot}.${props.labelType}-new-code`, { ns: 'recapiti' })}&nbsp;
+                {t(`${modalProps.labelRoot}.${modalProps.labelType}-new-code`, { ns: 'recapiti' })}
+                &nbsp;
               </Typography>
               <Typography
                 variant="body2"
@@ -245,7 +267,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
                 onClick={() => handleCodeVerification(undefined, true)}
                 sx={{ cursor: 'pointer' }}
               >
-                {t(`${props.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
+                {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
               </Typography>
             </Box>
           }
@@ -254,8 +276,8 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           cancelCallback={() => handleClose('cancelled')}
           confirmCallback={(values: Array<string>) => handleCodeVerification(values.join(''))}
           hasError={codeNotValid}
-          // errorTitle={t(`${props.labelRoot}.wrong-code`, { ns: 'recapiti' })}
-          // errorMessage={t(`${props.labelRoot}.wrong-code-message`, { ns: 'recapiti' })}
+          // errorTitle={t(`${modalProps.labelRoot}.wrong-code`, { ns: 'recapiti' })}
+          // errorMessage={t(`${modalProps.labelRoot}.wrong-code-message`, { ns: 'recapiti' })}
           errorTitle={errorMessage?.title}
           errorMessage={errorMessage?.content}
         />
@@ -267,11 +289,11 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
         aria-describedby="dialog-description"
       >
         <DialogTitle id="dialog-title">
-          {t(`common.duplicate-contact-title`, { value: props.value, ns: 'recapiti' })}
+          {t(`common.duplicate-contact-title`, { value: modalProps.value, ns: 'recapiti' })}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="dialog-description">
-            {t(`common.duplicate-contact-descr`, { value: props.value, ns: 'recapiti' })}
+            {t(`common.duplicate-contact-descr`, { value: modalProps.value, ns: 'recapiti' })}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
