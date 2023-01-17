@@ -1,3 +1,4 @@
+import React from 'react';
 import { Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
@@ -8,6 +9,8 @@ import * as routes from './routes.const';
 import RouteGuard from './RouteGuard';
 import SessionGuard from './SessionGuard';
 
+const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.page'));
+
 function Router() {
   return (
     <Suspense fallback={<LoadingPage />}>
@@ -16,8 +19,9 @@ function Router() {
           {/* protected routes */}
           <Route path="/" element={<RouteGuard />}>
             <Route path={routes.NOTIFICHE} element={<Prova />} />
+            <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
             <Route path={routes.DELEGHE} element={<Prova />} />
-            <Route path={routes.APP_STATUS} element={<AppStatus  />} />
+            <Route path={routes.APP_STATUS} element={<AppStatus />} />
             <Route path="/" element={<Navigate to={routes.NOTIFICHE} />} />
           </Route>
         </Route>

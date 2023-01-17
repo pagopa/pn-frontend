@@ -20,7 +20,9 @@ const messageIndex = Math.floor(Math.random() * 4) + 1;
 const DomicileBanner = () => {
   const { t } = useTranslation(['notifiche']);
   const { pathname } = useLocation();
-  //const navigate = useNavigate();
+
+  // const navigate = useNavigate();
+
   const dispatch = useAppDispatch();
   const open = useAppSelector((state: RootState) => state.generalInfoState.domicileBannerOpened);
   const legalDomicile = useAppSelector((state: RootState) => state.generalInfoState.legalDomicile);

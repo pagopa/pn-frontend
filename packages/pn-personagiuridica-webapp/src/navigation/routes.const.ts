@@ -19,6 +19,7 @@ export const USERS = (idOrganization: string) =>
  */
 export const GROUPS = (idOrganization: string) =>
   `${SELFCARE_BASE_URL}${NOTIFICHE}/${idOrganization}${GROUPS_SEGMENT}#${ID_PN_SEGMENT}`;
+export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
 
 export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/${mandateId}`;
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${NOTIFICA}`;
