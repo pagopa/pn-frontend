@@ -1,0 +1,117 @@
+{
+  "deleghe": {
+    "title": "Deleghe",
+    "close": "Chiudi",
+    "description": "Qui puoi gestire i tuoi delegati e le deleghe a tuo carico. I primi sono le persone fisiche o giuridiche che hai autorizzato alla visualizzazione e gestione delle tue notifiche, le seconde sono coloro che hanno autorizzato te.",
+    "delegatesTitle": "I tuoi delegati",
+    "delegatorsTitle": "Deleghe a tuo carico",
+    "delegatorsApiErrorMessage": "Non siamo riusciti a recuperare i dati in merito alle deleghe a tuo carico.",
+    "delegationStart": "Inizio delega",
+    "delegationEnd": "Fine delega",
+    "empty_state": "Non hai delegato nessuna persona alla visualizzazione delle tue notifiche.",
+    "accept_title": "Inserisci il codice di verifica",
+    "accept_description": "Per accettare la delega, inserisci il codice che {{name}} ha condiviso con te.",
+    "add": "Aggiungi una delega",
+    "invalid_code": "Codice di verifica non valido",
+    "revoke": "Revoca",
+    "reject": "Rifiuta",
+    "accept": "Accetta",
+    "show": "Mostra codice",
+    "revocation_question": "Vuoi davvero revocare la delega?",
+    "rejection_question": "Vuoi davvero rifiutare la delega?",
+    "confirm_revocation": "Revoca la delega",
+    "confirm_rejection": "Rifiuta la delega",
+    "error_title": "Spiacenti, qualcosa è andato storto",
+    "error_subtitle": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
+    "error_button": "Ricarica la pagina",
+    "no_delegates": "Non hai delegato nessuno alla visualizzazione delle tue notifiche.",
+    "no_delegators": "Non hai deleghe a tuo carico.",
+    "show_code_title": "Codice di verifica per la delega a {{name}}",
+    "show_code_subtitle": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
+    "verification_code": "Codice di verifica",
+    "table": {
+      "name": "Nome",
+      "email": "Email",
+      "delegationStart": "Inizio delega",
+      "delegationEnd": "Fine delega",
+      "permissions": "Permessi",
+      "status": "Stato",
+      "showCode": "Mostra codice",
+      "revoke": "Revoca",
+      "reject": "Rifiuta",
+      "accept": "Accetta",
+      "notificationsFrom": "Notifiche da:",
+      "allNotifications": "Tutte le notifiche",
+      "active": "Attiva",
+      "pending": "In attesa di conferma"
+    }
+  },
+  "nuovaDelega": {
+    "breadcrumb": "Nuova delega",
+    "backToDelegations": "Torna alle deleghe",
+    "createdTitle": "La tua richiesta di delega è stata creata con successo",
+    "createdDescription": "Condividi il codice di verifica con la persona delegata: dovrà inserirlo al primo accesso a Piattaforma Notifiche e accettare la tua richiesta.",
+    "title": "Le tue deleghe",
+    "subtitle": "Inserisci i dati del soggetto giuridico a cui vuoi delegare la gestione delle tue notifiche",
+    "form": {
+      "personType": "Soggetto giuridico*:",
+      "naturalPerson": "Persona fisica",
+      "legalPerson": "Persona giuridica",
+      "firstName": "Nome*",
+      "lastName": "Cognome*",
+      "fiscalCode": "Codice Fiscale*",
+      "email": "Email*",
+      "viewFrom": "Potrà visualizzare le notifiche da parte di*:",
+      "allEntities": "Tutti gli enti",
+      "onlySelected": "Solo gli enti selezionati",
+      "selectEntities": "Seleziona enti",
+      "endDate": "Termine delega",
+      "verificationCode": "Codice di verifica",
+      "verificationCodeDescr": "Condividi questo codice con la persona delegata: dovrà inserirlo all’accettazione della delega.",
+      "submit": "Invia la richiesta",
+      "mandatoryField": "Campi obbligatori*"
+    },
+    "validation": {
+      "fiscalCode": {
+        "required": "Il Codice Fiscale è obbligatorio",
+        "wrong": "Il Codice Fiscale inserito non è corretto"
+      },
+      "email": {
+        "wrong": "Email non formattata correttamente",
+        "required": "Email obbligatoria"
+      },
+      "name": {
+        "required": "Il nome è obbligatorio"
+      },
+      "surname": {
+        "required": "Il cognome è obbligatorio"
+      },
+      "expirationDate": {
+        "required": "La data di termine delega è obbligatoria",
+        "wrong": "Data errata"
+      }
+    }
+  },
+  "errors": {
+    "not_found": {
+      "title": "Errore",
+      "message": "Delega non trovata"
+    },
+    "already_exists": {
+      "title": "Delega già presente",
+      "message": "La persona che hai indicato ha già una delega per questo ente."
+    },
+    "not_acceptable": {
+      "title": "Delega non valida",
+      "message": "La delega inserita non è valida"
+    },
+    "delegate_himself": {
+      "title": "Errore inserimento delega",
+      "message": "Non è possibile delegare se stessi"
+    },
+    "invalid_verification_code": {
+      "title": "Codice non valido",
+      "message": "Codice di verifica non valido"
+    }
+  }
+}

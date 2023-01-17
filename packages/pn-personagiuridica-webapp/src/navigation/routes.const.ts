@@ -1,20 +1,22 @@
-import { SELFCARE_BASE_URL } from "../utils/constants";
+import {
+  PRIVACY_LINK_RELATIVE_PATH as PRIVACY_POLICY,
+  TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
+} from '@pagopa-pn/pn-commons';
 
 export const NOTIFICHE = '/notifiche';
+export const NOTIFICHE_DELEGATO = `${NOTIFICHE}/:mandateId`;
 export const DELEGHE = '/deleghe';
+export const PROFILO = '/profilo';
+const NOTIFICA = '/dettaglio';
+export const DETTAGLIO_NOTIFICA = `${NOTIFICHE}/:id${NOTIFICA}`;
+export const DETTAGLIO_NOTIFICA_DELEGATO = `${NOTIFICHE_DELEGATO}/:id${NOTIFICA}`;
+export const DETTAGLIO_NOTIFICA_QRCODE_PATH = '/notifica';
+export const DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM = 'aar';
+export const NUOVA_DELEGA = `${DELEGHE}/nuova`;
+export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${NOTIFICHE}/${id}${NOTIFICA}`;
+export const GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH = (id: string, mandateId: string) =>
+  `${NOTIFICHE}/${mandateId}/${id}${NOTIFICA}`;
+export const RECAPITI = '/recapiti';
+export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/${mandateId}`;
 export const APP_STATUS = '/app-status';
-export const USERS_SEGMENT = '/users';
-export const GROUPS_SEGMENT = '/groups';
-export const ID_PN_SEGMENT = 'prod-pn';
-
-/** ROLES navigation link to SelfCare "Referenti" section for Piattaforma Notifiche
- * @param idOrganization
- */
-export const USERS = (idOrganization: string) =>
-  `${SELFCARE_BASE_URL}${NOTIFICHE}/${idOrganization}${USERS_SEGMENT}#${ID_PN_SEGMENT}`;
-
-/** GROUPS navigation link to SelfCare "Gruppi" section for Piattaforma Notifiche
- * @param idOrganization
- */
-export const GROUPS = (idOrganization: string) =>
-  `${SELFCARE_BASE_URL}${NOTIFICHE}/${idOrganization}${GROUPS_SEGMENT}#${ID_PN_SEGMENT}`;
+export { PRIVACY_POLICY, TERMS_OF_SERVICE };
