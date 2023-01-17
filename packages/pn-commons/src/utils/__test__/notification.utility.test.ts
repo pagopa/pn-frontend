@@ -9,7 +9,7 @@ import {
   SendDigitalDetails,
   SendPaperDetails,
   TimelineCategory,
-  NotificationStatus
+  NotificationStatus,
 } from '../../types';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
@@ -27,9 +27,10 @@ function testNotificationStatusInfosFn(
   status: NotificationStatus,
   labelToTest: string,
   colorToTest: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary',
-  tooltipToTest: string
+  tooltipToTest: string,
+  recipient?: string
 ) {
-  const { label, color, tooltip } = getNotificationStatusInfos(status);
+  const { label, color, tooltip } = getNotificationStatusInfos(status, recipient);
   expect(label).toBe(labelToTest);
   expect(color).toBe(colorToTest);
   expect(tooltip).toBe(tooltipToTest);
@@ -108,28 +109,51 @@ describe('notification utility functions', () => {
     );
   });
 
+  it('return notification status infos - VIEWED (with recipient infos)', () => {
+    testNotificationStatusInfosFn(
+      NotificationStatus.VIEWED,
+      'Perfezionata per visione',
+      'info',
+      'Il delegato Mario Rossi ha letto la notifica',
+      'Mario Rossi'
+    );
+  });
+
   it('return notification status infos - VIEWED_AFTER_DEADLINE', () => {
     testNotificationStatusInfosFn(
-        NotificationStatus.VIEWED_AFTER_DEADLINE,
-        'Visualizzata',
-        'success',
-        'Il destinatario ha visualizzato la notifica'
+      NotificationStatus.VIEWED_AFTER_DEADLINE,
+      'Visualizzata',
+      'success',
+      'Il destinatario ha visualizzato la notifica'
+    );
+  });
+
+  it('return notification status infos - VIEWED_AFTER_DEADLINE (with recipient infos)', () => {
+    testNotificationStatusInfosFn(
+      NotificationStatus.VIEWED_AFTER_DEADLINE,
+      'Visualizzata',
+      'success',
+      'Il delegato Mario Rossi ha visualizzato la notifica',
+      'Mario Rossi'
     );
   });
 
   it('return notification status infos - CANCELLED', () => {
     testNotificationStatusInfosFn(
-        NotificationStatus.CANCELLED,
-        'Annullata',
-        'warning',
-        "L'ente ha annullato l'invio della notifica"
+      NotificationStatus.CANCELLED,
+      'Annullata',
+      'warning',
+      "L'ente ha annullato l'invio della notifica"
     );
   });
 
   it('return notifications filters count (no filters)', () => {
     const date = new Date();
     const count = filtersApplied(
-      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)) },
+      {
+        startDate: formatToTimezoneString(date),
+        endDate: formatToTimezoneString(getNextDay(date)),
+      },
       { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)) }
     );
     expect(count).toEqual(0);
@@ -138,8 +162,18 @@ describe('notification utility functions', () => {
   it('return notifications filters count (with filters)', () => {
     const date = new Date();
     const count = filtersApplied(
-      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)), iunMatch: 'mocked-iun', recipientId: 'mocked-recipient' },
-      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)), iunMatch: undefined, recipientId: undefined },
+      {
+        startDate: formatToTimezoneString(date),
+        endDate: formatToTimezoneString(getNextDay(date)),
+        iunMatch: 'mocked-iun',
+        recipientId: 'mocked-recipient',
+      },
+      {
+        startDate: formatToTimezoneString(date),
+        endDate: formatToTimezoneString(getNextDay(date)),
+        iunMatch: undefined,
+        recipientId: undefined,
+      }
     );
     expect(count).toEqual(2);
   });
@@ -211,7 +245,7 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio per via digitale non riuscito',
-      "Il tentativo di invio della notifica per via digitale a Nome Cognome non è riuscito."
+      'Il tentativo di invio della notifica per via digitale a Nome Cognome non è riuscito.'
     );
   });
 
@@ -225,7 +259,7 @@ describe('timeline utility functions', () => {
     };
     testTimelineStatusInfosFn(
       'Invio per via digitale riuscito',
-      "Il tentativo di invio della notifica per via digitale a Nome Cognome è riuscito."
+      'Il tentativo di invio della notifica per via digitale a Nome Cognome è riuscito.'
     );
   });
 
@@ -335,25 +369,37 @@ describe('timeline utility functions', () => {
 
   it('return legalFact label - DIGITAL_DELIVERY', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_SUCCESS_WORKFLOW;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.DIGITAL_DELIVERY);
+    const label = getLegalFactLabel(
+      parsedNotificationCopy.timeline[0],
+      LegalFactType.DIGITAL_DELIVERY
+    );
     expect(label).toBe('Attestazione opponibile a terzi: notifica digitale');
   });
 
   it('return legalFact label - DIGITAL_DELIVERY', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.DIGITAL_DELIVERY);
+    const label = getLegalFactLabel(
+      parsedNotificationCopy.timeline[0],
+      LegalFactType.DIGITAL_DELIVERY
+    );
     expect(label).toBe('Attestazione opponibile a terzi: mancato recapito digitale');
   });
 
   it('return legalFact label - ANALOG_DELIVERY', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.ANALOG_SUCCESS_WORKFLOW;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.ANALOG_DELIVERY);
+    const label = getLegalFactLabel(
+      parsedNotificationCopy.timeline[0],
+      LegalFactType.ANALOG_DELIVERY
+    );
     expect(label).toBe('Attestazione opponibile a terzi: conformità');
   });
 
   it('return legalFact label - RECIPIENT_ACCESS', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_VIEWED;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.RECIPIENT_ACCESS);
+    const label = getLegalFactLabel(
+      parsedNotificationCopy.timeline[0],
+      LegalFactType.RECIPIENT_ACCESS
+    );
     expect(label).toBe('Attestazione opponibile a terzi: avvenuto accesso');
   });
 
@@ -397,10 +443,11 @@ describe('timeline utility functions', () => {
   it('return timeline status infos - NOT_HANDLED', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.NOT_HANDLED;
     (parsedNotificationCopy.timeline[0].details as NotHandledDetails).reasonCode = '001';
-    (parsedNotificationCopy.timeline[0].details as NotHandledDetails).reason = 'Paper message not handled';
+    (parsedNotificationCopy.timeline[0].details as NotHandledDetails).reason =
+      'Paper message not handled';
     testTimelineStatusInfosFn(
       'Annullata',
-      "La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante il collaudo della piattaforma."
+      'La notifica è stata inviata per via cartacea, dopo un tentativo di invio per via digitale durante il collaudo della piattaforma.'
     );
   });
 });
