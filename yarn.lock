@@ -3483,7 +3483,7 @@
   resolved "https://registry.yarnpkg.com/@mui/core-downloads-tracker/-/core-downloads-tracker-5.11.4.tgz#def5937e21443b197fd1998fd66721bd9c49a1bb"
   integrity sha512-jWVwGM3vG4O0sXcW0VcIl+njCWbGCBF5vvjRpuKJajrz51AD7D6+fP1SkInZXVk5pRHf6Bnk/Yj9Of9gXxb/hA==
 
-"@mui/icons-material@^5.10.3", "@mui/icons-material@^5.8.4":
+"@mui/icons-material@^5.8.4":
   version "5.11.0"
   resolved "https://registry.yarnpkg.com/@mui/icons-material/-/icons-material-5.11.0.tgz#9ea6949278b2266d2683866069cd43009eaf6464"
   integrity sha512-I2LaOKqO8a0xcLGtIozC9xoXjZAto5G5gh0FYUMAlbsIHNHIjn4Xrw9rvjY20vZonyiGrZNMAlAXYkY6JvhF6A==
@@ -3593,7 +3593,7 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/x-date-pickers@^5.0.0-alpha.5", "@mui/x-date-pickers@^5.0.13":
+"@mui/x-date-pickers@^5.0.13":
   version "5.0.13"
   resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-5.0.13.tgz#0188f17483984ffe3f615444bff225256f7b4a0c"
   integrity sha512-nUc35Zvah/l4bEWcPNRtSvWBL+7uAlokd6G6PzQfLe2TQo4GNlK1JVRfoVpBY5FsdM09uWLrpvfWLbka87k7GA==
@@ -3993,16 +3993,6 @@
   integrity sha512-65/TPpOJP1i3K4lBJMnWqPUJ6zuOtzhtagDvydAWbEXpbFYA0oMKKyLb95NFZZP0lSh/4b6K+DQlzvYQJQQePg==
   dependencies:
     "@octokit/openapi-types" "^14.0.0"
-
-"@pagopa/mui-italia@^0.8.1":
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.8.1.tgz#57f70344218cc34644d874f7fe13dbc60dbee502"
-  integrity sha512-T2TH7vXDPxp38Jpywp8+MFB/HF7hc2UdoYXWWG+M7MuFxOM8daTuIeFyDUb7/n/PwfnJHl9tnGbRm8jQHPRiLA==
-  dependencies:
-    "@fontsource/titillium-web" "^4.5.9"
-    clsx "^1.2.1"
-    fp-ts "^2.12.3"
-    io-ts "^2.2.18"
 
 "@pagopa/mui-italia@^0.8.10":
   version "0.8.11"
