@@ -161,6 +161,7 @@ export interface NotificationDetailDocument {
   docIdx?: string;
   documentId?: string;
   documentType?: string;
+  recIndex?: number;
 }
 
 export enum NotificationFeePolicy {

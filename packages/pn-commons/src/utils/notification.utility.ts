@@ -415,10 +415,11 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
  */
 const populateOtherDocuments = (
   timeline: Array<INotificationDetailTimeline>
-): Array<NotificationDetailDocument> => {
+): Array<NotificationDetailDocument> => {  
   const timelineFiltered = timeline.filter((t) => t.category === TimelineCategory.AAR_GENERATION);
   if (timelineFiltered.length > 0) {
     return timelineFiltered.map((t) => ({
+      recIndex: t.details.recIndex,
       documentId: (t.details as AarDetails).generatedAarUrl as string,
       documentType: LegalFactType.AAR,
       title: getLocalizedOrDefaultLabel(

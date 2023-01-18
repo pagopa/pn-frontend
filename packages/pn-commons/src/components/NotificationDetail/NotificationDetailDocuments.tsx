@@ -30,8 +30,33 @@ const NotificationDetailDocuments = ({
   documentsAvailable = true,
   downloadFilesMessage,
   // TODO: remove comment when link ready downloadFilesLink
-}: Props) => (
-  <Fragment>
+}: Props) => {
+
+  const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) => documents.map((d) => {
+    const document = {
+      key: d.digests ? d.digests.sha256 : d.documentId,
+      name: d.title || d.ref.key,
+      downloadHandler: d.documentId ? { documentId: d.documentId, documentType: d.documentType } as NotificationDetailOtherDocument : d.docIdx
+    };
+    return <Box key={document.key}>
+      {!documentsAvailable ? (
+      <Typography sx={{ display: 'flex', alignItems: 'center' }}><AttachFileIcon sx={{ mr: 1 }} fontSize='inherit' color="inherit" />{d.title || d.ref.key}</Typography>) : (
+      <ButtonNaked
+        data-testid="documentButton"
+        color={'primary'}
+        startIcon={<AttachFileIcon />}
+        onClick={() => clickHandler(document.downloadHandler)}
+      >
+        {document.name}
+        <Typography sx={{ fontWeight: 600, ml: 1 }}>
+          {''} {/* TODO: integrate specific dimension of file */}
+        </Typography>
+      </ButtonNaked>
+      )}
+    </Box>;
+  });
+  
+  return <Fragment>
     <Grid
       key={'files-section'}
       container
@@ -70,31 +95,9 @@ const NotificationDetailDocuments = ({
       </Stack>
     </Grid>
     <Grid key={'download-files-section'} item>
-      {documents && documents.map((d) => {
-        const document = {
-          key: d.digests ? d.digests.sha256 : d.documentId,
-          name: d.title || d.ref.key,
-          downloadHandler: d.documentId ? { documentId: d.documentId, documentType: d.documentType } as NotificationDetailOtherDocument : d.docIdx
-        };
-        return <Box key={document.key}>
-          {!documentsAvailable ? (
-          <Typography sx={{ display: 'flex', alignItems: 'center' }}><AttachFileIcon sx={{ mr: 1 }} fontSize='inherit' color="inherit" />{d.title || d.ref.key}</Typography>) : (
-          <ButtonNaked
-            data-testid="documentButton"
-            color={'primary'}
-            startIcon={<AttachFileIcon />}
-            onClick={() => clickHandler(document.downloadHandler)}
-          >
-            {document.name}
-            <Typography sx={{ fontWeight: 600, ml: 1 }}>
-              {''} {/* TODO: integrate specific dimension of file */}
-            </Typography>
-          </ButtonNaked>
-          )}
-        </Box>;
-      })}
+      {documents && mapOtherDocuments(documents)}
     </Grid>
-  </Fragment>
-);
+  </Fragment>;
+};
 
 export default NotificationDetailDocuments;
