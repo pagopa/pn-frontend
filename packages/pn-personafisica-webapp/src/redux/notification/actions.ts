@@ -91,11 +91,18 @@ export const getNotificationPaymentUrl = createAsyncThunk<
   )
 );
 
-export const getReceivedNotificationOtherDocument = createAsyncThunk<{url: string}, {iun: string; otherDocument: NotificationDetailOtherDocument}>(
+export const getReceivedNotificationOtherDocument = createAsyncThunk<{url: string}, {iun: string; otherDocument: NotificationDetailOtherDocument; mandateId?: string}>(
   'getReceivedNotificationOtherDocument',
-  async (params: {iun: string; otherDocument: { documentId: string; documentType: string }}, { rejectWithValue }) => {
+  async (params: {
+    iun: string;
+    mandateId?: string;
+    otherDocument: {
+      documentId: string;
+      documentType: string;
+    };
+  }, { rejectWithValue }) => {
     try {
-      return await NotificationsApi.getReceivedNotificationOtherDocument(params.iun, params.otherDocument);
+      return await NotificationsApi.getReceivedNotificationOtherDocument(params.iun, params.otherDocument, params.mandateId);
     } catch (e) {
       return rejectWithValue(e);
     }
