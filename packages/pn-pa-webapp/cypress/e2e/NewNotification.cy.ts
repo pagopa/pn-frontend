@@ -68,7 +68,7 @@ describe('New Notification', () => {
 
       // Fill step 4
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 
@@ -91,6 +91,46 @@ describe('New Notification', () => {
       cy.fillRecipient({
         position: 0,
         data: cesare,
+      });
+
+      cy.get('button[type="submit"]').should('be.enabled').click();
+
+      // Fill step 3
+      cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
+      cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
+      cy.get('button[type="submit"]').should('be.enabled').click();
+
+      cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
+
+      // Fill step 4
+      cy.contains(/^Invia$/).click();
+
+      cy.wait('@saveNewNotification');
+
+      cy.contains('La notifica è stata correttamente creata');
+    });
+
+    it('Creates a single recipient notification with payment document selected but without uploading it', () => {
+      // Fill step 1
+      cy.fillPreliminaryInfo({
+        paProtocolNumber: 'prot-123456789',
+        subject: 'Cypress Test - Create new notification',
+        abstract: 'Testing single recipient without payment document',
+        taxonomyCode: '012345X',
+        communicationType: 'Model_890',
+        paymentMethod: 'pagoPA',
+      });
+
+      cy.get('button[type="submit"]').should('be.enabled').click();
+
+      // Fill step 2
+      cy.fillRecipient({
+        position: 0,
+        data: {
+          ...cesare,
+          creditorTaxId: '77777777777',
+          noticeCode: '302001869076319100',
+        },
       });
 
       cy.get('button[type="submit"]').should('be.enabled').click();
@@ -158,9 +198,8 @@ describe('New Notification', () => {
 
       // Fill step 4
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').should('be.disabled');
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest3, { force: true });
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 
@@ -284,7 +323,7 @@ describe('New Notification', () => {
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest3, { force: true });
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest4, { force: true });
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 
@@ -336,7 +375,7 @@ describe('New Notification', () => {
 
       // Fill step 4
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 
@@ -384,7 +423,7 @@ describe('New Notification', () => {
 
       // Fill step 4
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 
@@ -436,7 +475,7 @@ describe('New Notification', () => {
 
       // Fill step 4
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 
@@ -484,7 +523,7 @@ describe('New Notification', () => {
 
       // Fill step 4
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 

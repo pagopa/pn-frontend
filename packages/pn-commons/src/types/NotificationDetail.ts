@@ -8,6 +8,7 @@ export interface NotificationDetail {
   abstract?: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
+  otherDocuments?: Array<NotificationDetailDocument>;
   notificationFeePolicy: NotificationFeePolicy;
   cancelledIun?: string;
   physicalCommunicationType: PhysicalCommunicationType;
@@ -33,6 +34,7 @@ export interface INotificationDetailTimeline {
   category: TimelineCategory;
   details:
     | BaseDetails
+    | AarDetails
     | AnalogWorkflowDetails
     | DigitalWorkflowDetails
     | AddressInfoDetails
@@ -60,6 +62,13 @@ export interface SendPaperDetails extends BaseDetails {
 
 interface BaseDetails {
   recIndex?: number;
+}
+
+export interface AarDetails {
+  recIndex?: number;
+  errors?: Array<string>;
+  generatedAarUrl?: string;
+  numberOfPages?: number;
 }
 
 export interface AnalogWorkflowDetails extends BaseDetails {
@@ -150,6 +159,9 @@ export interface NotificationDetailDocument {
   title?: string;
   requiresAck?: boolean;
   docIdx?: string;
+  documentId?: string;
+  documentType?: string;
+  recIndex?: number;
 }
 
 export enum NotificationFeePolicy {
@@ -161,7 +173,7 @@ export interface NotificationDetailPayment {
   noticeCode?: string;
   noticeCodeAlternative?: string;
   creditorTaxId: string;
-  pagoPaForm: NotificationDetailDocument;
+  pagoPaForm?: NotificationDetailDocument;
   f24flatRate?: NotificationDetailDocument;
   f24standard?: NotificationDetailDocument;
 }
@@ -242,7 +254,8 @@ export enum TimelineCategory {
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
   REQUEST_REFUSED = 'REQUEST_REFUSED',
   // PN-1647
-  NOT_HANDLED = 'NOT_HANDLED'
+  NOT_HANDLED = 'NOT_HANDLED',
+  AAR_GENERATION = 'AAR_GENERATION'
 }
 
 interface DigitalAddress {
@@ -284,6 +297,7 @@ export enum AddressSource {
 }
 
 export enum LegalFactType {
+  AAR = 'AAR',
   SENDER_ACK = 'SENDER_ACK',
   DIGITAL_DELIVERY = 'DIGITAL_DELIVERY',
   ANALOG_DELIVERY = 'ANALOG_DELIVERY',
@@ -294,6 +308,11 @@ export enum LegalFactType {
 export interface LegalFactId {
   key: string;
   category: LegalFactType;
+}
+
+export interface NotificationDetailOtherDocument {
+  documentId: string;
+  documentType: string;
 }
 
 export enum PhysicalCommunicationType {
