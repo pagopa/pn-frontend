@@ -4,6 +4,7 @@ import {
   GetNotificationsResponse,
   LegalFactId,
   NotificationDetail,
+  NotificationDetailOtherDocument,
   PaymentAttachmentNameType,
   PaymentInfo,
   PaymentNotice
@@ -20,6 +21,7 @@ import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
@@ -106,6 +108,17 @@ export const NotificationsApi = {
       .get<{ url: string }>(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex, mandateId))
       .then((response) => getDownloadUrl(response)),
 
+  /**
+   * 
+   * @param  {string} iun
+   * @param  {NotificationDetailOtherDocument} otherDocument 
+   * @returns Promise
+   */
+  getReceivedNotificationOtherDocument: (iun: string, otherDocument: NotificationDetailOtherDocument): Promise<{ url: string }> =>
+    apiClient
+      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {params: {documentId: otherDocument.documentId}})
+      .then((response) => getDownloadUrl(response)),
+  
   /**
    * Gets current user notification legalfact
    * @param  {string} iun
