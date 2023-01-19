@@ -18,7 +18,7 @@ import DesktopApiKeys from './components/ApiKeys/DesktopApiKeys';
 import ApiKeyModal from './components/ApiKeys/ApiKeyModal';
 
 const SubTitle = () => {
-  const { t } = useTranslation(['apiKeys']);
+  const { t } = useTranslation(['apikeys']);
   return (
     <Fragment>
       {t('subtitle.text1')}

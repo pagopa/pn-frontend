@@ -113,10 +113,10 @@ describe('NotificationDetail Page (one recipient)', () => {
   });
 
   test('executes the document and legal fact download handler', async () => {
-    const documentButton = result.getByTestId('documentButton');
+    const documentButton = result.getAllByTestId('documentButton');
     const legalFactButton = result.getByTestId('legalFactButton');
     expect(mockDispatchFn).toBeCalledTimes(1);
-    fireEvent.click(documentButton);
+    fireEvent.click(documentButton[0]);
     expect(mockDispatchFn).toBeCalledTimes(2);
     fireEvent.click(legalFactButton);
     expect(mockDispatchFn).toBeCalledTimes(4);

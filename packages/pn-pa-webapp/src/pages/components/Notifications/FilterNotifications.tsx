@@ -67,6 +67,8 @@ function isFilterapplied(filtersCount: number): boolean {
   return filtersCount > 0;
 }
 
+const getValidStatus = (status: string) => (status === 'All' ? '' : status);
+
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
   const dispatch = useAppDispatch();
@@ -78,7 +80,10 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const validationSchema = yup.object({
     recipientId: yup
       .string()
-      .matches(dataRegex.fiscalCode, t('filters.errors.fiscal-code', { ns: 'notifiche' })),
+      .matches(
+        dataRegex.pIvaAndFiscalCode,
+        t('filters.errors.fiscal-code', { ns: 'notifiche' })
+      ),
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
     startDate: yup.date().min(tenYearsAgo),
     endDate: yup.date().min(tenYearsAgo),
@@ -97,7 +102,7 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         endDate: formatToTimezoneString(values.endDate),
         recipientId: getValidValue(values.recipientId),
         iunMatch: getValidValue(values.iunMatch),
-        status: values.status === 'All' ? '' : values.status,
+        status: getValidStatus(values.status),
       };
       if (_.isEqual(prevFilters, currentFilters)) {
         return;

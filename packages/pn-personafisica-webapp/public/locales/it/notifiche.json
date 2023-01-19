@@ -45,6 +45,7 @@
     "breadcrumb-root": "Notifiche",
     "breadcrumb-leaf": "Dettaglio notifica",
     "acts": "Documenti allegati",
+    "other-acts": "Altri documenti",
     "timeline-title": "Stato della notifica",
     "legalfact": "Attestazione opponibile a terzi",
     "receipt": "Ricevuta",
@@ -122,6 +123,7 @@
       "send-digital-progress-error-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} non è stato preso in carico.",
       "send-digital-progress-success": "Invio via PEC preso in carico",
       "send-digital-progress-success-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} è stato preso in carico.",
+      "aar-document": "Avviso di avvenuta ricezione",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
         "digital-delivery-success": "notifica digitale",
