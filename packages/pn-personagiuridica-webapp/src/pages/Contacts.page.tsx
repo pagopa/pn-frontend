@@ -24,16 +24,23 @@ const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
-  const digitalAddresses = useAppSelector((state: RootState) => state.contactsState.digitalAddresses);
+  const digitalAddresses = useAppSelector(
+    (state: RootState) => state.contactsState.digitalAddresses
+  );
   const [pageReady, setPageReady] = useState(false);
 
-  const contactIO = useMemo(() => isDigitalAddressLoaded ? digitalAddresses.courtesy.find(
-    (address) => address.channelType === CourtesyChannelType.IOMSG
-  ) : null, [isDigitalAddressLoaded]);
+  const contactIO = useMemo(
+    () =>
+      isDigitalAddressLoaded
+        ? digitalAddresses.courtesy.find(
+            (address) => address.channelType === CourtesyChannelType.IOMSG
+          )
+        : null,
+    [isDigitalAddressLoaded]
+  );
 
   const fetchAddresses = useCallback(() => {
-    void dispatch(getDigitalAddresses(recipientId))
-    .then(() => {
+    void dispatch(getDigitalAddresses(recipientId)).then(() => {
       setIsDigitalAddressLoaded(true);
       setPageReady(true);
     });
@@ -68,7 +75,11 @@ const Contacts = () => {
             subTitle={subtitle}
             variantSubTitle={'body1'}
           />
-          <ApiErrorWrapper apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES} reloadAction={fetchAddresses} mt={2}>
+          <ApiErrorWrapper
+            apiId={CONTACT_ACTIONS.GET_DIGITAL_ADDRESSES}
+            reloadAction={fetchAddresses}
+            mt={2}
+          >
             <Stack direction="column" spacing={8} mt={8}>
               <Stack spacing={3}>
                 <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>

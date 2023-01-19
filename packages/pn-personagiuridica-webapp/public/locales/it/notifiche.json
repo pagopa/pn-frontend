@@ -1,5 +1,6 @@
 {
-  "title": "Le tue notifiche",
+  "title": "Notifiche di {{recipient}}",
+  "subtitle": "Qui puoi visualizzare tutte le notifiche destinate a {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
   "table": {
     "data": "Data",
     "mittente": "Mittente",

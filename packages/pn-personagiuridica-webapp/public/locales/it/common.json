@@ -16,11 +16,14 @@
     "go-to-login": "Accedi"
   },
   "menu": {
-    "notifiche": "Notifiche",
+    "notifiche": "Le tue notifiche",
+    "notifiche-come-delegato": "Le notifiche a te delegate",
     "deleghe": "Deleghe",
     "profilo": "I tuoi dati",
     "contacts": "I tuoi recapiti",
     "app-status": "Stato della piattaforma",
+    "users": "Utenti",
+    "groups": "Gruppi",
     "aria-label": "piattaforma-notifiche navigazione principale",
     "aria-label-inner": "piattaforma-notifiche navigazione destinatario"
   },

@@ -1,5 +1,5 @@
 import { ErrorInfo, useEffect, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
@@ -7,11 +7,10 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
 import AltRouteIcon from '@mui/icons-material/AltRoute';
-import SettingsIcon from '@mui/icons-material/Settings';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { People, SupervisedUserCircle } from '@mui/icons-material';
 import { Box } from '@mui/material';
 
-import { ProductSwitchItem } from '@pagopa/mui-italia';
+import { PartyEntity, ProductSwitchItem } from '@pagopa/mui-italia';
 
 import {
   AppMessage,
@@ -34,7 +33,6 @@ import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
 import { RootState, store } from './redux/store';
-import { Delegation } from './redux/delegation/types';
 import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
@@ -60,11 +58,8 @@ const App = () => {
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
-  const { pendingDelegators, delegators } = useAppSelector(
-    (state: RootState) => state.generalInfoState
-  );
+  const { pendingDelegators } = useAppSelector((state: RootState) => state.generalInfoState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
-  const navigate = useNavigate();
   const { pathname } = useLocation();
   const path = pathname.split('/');
   const source = path[path.length - 1];
@@ -81,25 +76,6 @@ const App = () => {
   );
 
   const isPrivacyPage = path[1] === 'privacy-tos';
-
-  const userActions = useMemo(() => {
-    const profiloAction = {
-      id: 'profile',
-      label: t('menu.profilo'),
-      onClick: () => {
-        trackEventByType(TrackEventType.USER_VIEW_PROFILE);
-        navigate(routes.PROFILO);
-      },
-      icon: <SettingsIcon fontSize="small" color="inherit" />,
-    };
-    const logoutAction = {
-      id: 'logout',
-      label: t('header.logout'),
-      onClick: () => handleUserLogout(),
-      icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
-    };
-    return tos ? [profiloAction, logoutAction] : [logoutAction];
-  }, [tos]);
 
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
@@ -122,43 +98,16 @@ const App = () => {
     }
   }, [sessionToken]);
 
-  const mapDelegatorSideMenuItem = (): Array<SideMenuItem> | undefined => {
-    // Implementazione esplorativa su come potrebbe gestire l'errore dell'API
-    // che restituisce i delegators per il sideMenu.
-    //
-    // attenzione - per far funzionare questo si deve cambiare dove dice
-    //     sideMenuDelegators.length > 0,  deve cambiarsi per ... > 1
-    // si deve anche abilitare la gestione errori nell'action di getSidemenuInformation
-    //
-    // if (hasApiErrors(SIDEMENU_ACTIONS.GET_SIDEMENU_INFORMATION)) {
-    //   return [{
-    //     label: "Qualcuno/a ha delegato su di te?",
-    //     route: "",
-    //     action: () => dispatch(getSidemenuInformation()),
-    //   }];
-    // } else
-    if (delegators.length > 0) {
-      const myNotifications = {
-        label: t('title', { ns: 'notifiche' }),
-        route: routes.NOTIFICHE,
-      };
-      const mappedDelegators = delegators.map((delegator: Delegation) => ({
-        label:
-          'delegator' in delegator && delegator.delegator
-            ? `${delegator.delegator.displayName}`
-            : 'No Name Found',
-        route:
-          'delegator' in delegator && delegator.delegator
-            ? routes.GET_NOTIFICHE_DELEGATO_PATH(delegator.mandateId)
-            : '*',
-      }));
-      return [myNotifications, ...mappedDelegators];
-    } else {
-      return undefined;
-    }
-  };
-
-  const sideMenuDelegators = mapDelegatorSideMenuItem();
+  const notificationMenuItems: Array<SideMenuItem> = [
+    {
+      label: t('menu.notifiche'),
+      route: routes.NOTIFICHE,
+    },
+    {
+      label: t('menu.notifiche-come-delegato'),
+      route: routes.NOTIFICHE_DELEGATO,
+    },
+  ];
 
   // TODO spostare questo in un file di utility
   const menuItems: Array<SideMenuItem> = [
@@ -166,16 +115,16 @@ const App = () => {
       label: t('menu.notifiche'),
       icon: MailOutlineIcon,
       route: routes.NOTIFICHE,
-      children: sideMenuDelegators,
-      notSelectable: sideMenuDelegators && sideMenuDelegators.length > 0,
+      children: notificationMenuItems,
+      notSelectable: notificationMenuItems && notificationMenuItems.length > 0,
     },
-    { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {
       label: t('menu.deleghe'),
       icon: AltRouteIcon,
       route: routes.DELEGHE,
       rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     },
+    { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {
       label: t('menu.app-status'),
       // ATTENTION - a similar logic to choose the icon and its color is implemented in AppStatusBar (in pn-commons)
@@ -192,6 +141,24 @@ const App = () => {
       route: routes.APP_STATUS,
     },
   ];
+
+  const selfcareMenuItems: Array<SideMenuItem> = [
+    { label: t('menu.users'), icon: People, route: routes.USERS },
+    { label: t('menu.groups'), icon: SupervisedUserCircle, route: routes.GROUPS },
+  ];
+
+  const partyList: Array<PartyEntity> = useMemo(
+    () => [
+      {
+        id: '0',
+        name: 'CAF di prova',
+        // productRole: role?.role,
+        productRole: 'Amministratore',
+        logoUrl: undefined,
+      },
+    ],
+    []
+  );
 
   const changeLanguageHandler = async (langCode: string) => {
     await i18n.changeLanguage(langCode);
@@ -240,6 +207,7 @@ const App = () => {
       <Layout
         showHeader={!isPrivacyPage}
         showFooter={!isPrivacyPage}
+        onExitAction={handleUserLogout}
         eventTrackingCallbackAppCrash={handleEventTrackingCallbackAppCrash}
         eventTrackingCallbackFooterChangeLanguage={handleEventTrackingCallbackFooterChangeLanguage}
         eventTrackingCallbackProductSwitch={(target) =>
@@ -248,6 +216,7 @@ const App = () => {
         sideMenu={
           <SideMenu
             menuItems={menuItems}
+            selfCareItems={selfcareMenuItems}
             eventTrackingCallback={(target) =>
               trackEventByType(TrackEventType.USER_NAV_ITEM, { target })
             }
@@ -257,10 +226,9 @@ const App = () => {
         productsList={productsList}
         showHeaderProduct={tos}
         loggedUser={jwtUser}
-        enableUserDropdown
-        userActions={userActions}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
+        partyList={partyList}
         isLogged={!!sessionToken}
         hasTermsOfService={true}
       >

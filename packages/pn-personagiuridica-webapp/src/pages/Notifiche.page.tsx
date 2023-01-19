@@ -45,7 +45,9 @@ const Notifiche = () => {
     ? t('delegatorTitle', {
         name: currentDelegator.delegator ? currentDelegator.delegator.displayName : '',
       })
-    : t('title');
+    : t('title', { recipient: 'CAF di prova' });
+
+  const pageSubTitle = t('subtitle', { recipient: 'CAF di prova' });
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8
@@ -105,7 +107,13 @@ const Notifiche = () => {
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
         <DomicileBanner />
-        <TitleBox variantTitle="h4" title={pageTitle} mbTitle={isMobile ? 3 : undefined} />
+        <TitleBox
+          variantTitle="h4"
+          title={pageTitle}
+          subTitle={pageSubTitle}
+          variantSubTitle={'body1'}
+          mbTitle={isMobile ? 3 : undefined}
+        />
         <ApiErrorWrapper
           apiId={DASHBOARD_ACTIONS.GET_RECEIVED_NOTIFICATIONS}
           reloadAction={fetchNotifications}
