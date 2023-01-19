@@ -173,7 +173,7 @@ export interface NotificationDetailPayment {
   noticeCode?: string;
   noticeCodeAlternative?: string;
   creditorTaxId: string;
-  pagoPaForm: NotificationDetailDocument;
+  pagoPaForm?: NotificationDetailDocument;
   f24flatRate?: NotificationDetailDocument;
   f24standard?: NotificationDetailDocument;
 }

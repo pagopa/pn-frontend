@@ -78,7 +78,6 @@ describe('PaymentMethods Component', () => {
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // vedi flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
-    expect(buttons![0]).toBeDisabled();
     expect(result.container).toHaveTextContent(/back-to-attachments/i);
   });
 
@@ -91,7 +90,6 @@ describe('PaymentMethods Component', () => {
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // vedi flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
-    expect(buttons![0]).toBeDisabled();
   });
 
   it('adds all payment documents and clicks on confirm', async () => {
