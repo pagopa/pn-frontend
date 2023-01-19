@@ -2,7 +2,6 @@ import { ForwardedRef, forwardRef, Fragment, useImperativeHandle, useMemo } from
 import _ from 'lodash';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 import { Link, Paper, Typography } from '@mui/material';
 import { FileUpload } from '@pagopa-pn/pn-commons';
 
@@ -209,48 +208,12 @@ const PaymentMethods = ({
     }
   };
 
-  const paymentDocumentSchema = yup.object({
-    name: yup.string().required(),
-    file: yup.object({
-      size: yup.number().required(),
-      name: yup.string().required(),
-      uint8Array: yup
-        .mixed()
-        .test((input) => input instanceof Uint8Array)
-        .required(),
-      sha256: yup
-        .object({
-          hashBase64: yup.string().required(),
-          hashHex: yup.string().required(),
-        })
-        .required(),
-    }),
-  });
-
-  const getValidationSchemaParameters = () => {
-    // eslint-disable-next-line functional/no-let
-    let parameters = {};
-
-    if (notification.paymentMode !== PaymentModel.NOTHING) {
-      parameters = { pagoPaForm: paymentDocumentSchema.required() };
-
-      if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24) {
-        parameters = { ...parameters, f24standard: paymentDocumentSchema.required() };
-      } else if (notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE) {
-        parameters = { ...parameters, f24flatRate: paymentDocumentSchema.required() };
-      }
-    }
-    return parameters;
-  };
-
-  const validationSchema = yup.lazy((obj) =>
-    yup.object(_.mapValues(obj, () => yup.object(getValidationSchemaParameters())))
-  );
-
   const updateRefAfterUpload = async (paymentPayload: { [key: string]: PaymentObject }) => {
     // set ref
     for (const [taxId, payment] of Object.entries(paymentPayload)) {
-      await formik.setFieldValue(`${taxId}.pagoPaForm.ref`, payment.pagoPaForm.ref, false);
+      if (payment.pagoPaForm) {
+        await formik.setFieldValue(`${taxId}.pagoPaForm.ref`, payment.pagoPaForm.ref, false);
+      }
       if (payment.f24standard) {
         await formik.setFieldValue(`${taxId}.f24standard.ref`, payment.f24standard.ref, false);
       }
@@ -260,23 +223,56 @@ const PaymentMethods = ({
     }
   };
 
+  const formIsEmpty = (values: any) => {
+    // eslint-disable-next-line functional/no-let
+    let isEmpty = true;
+    notification.recipients.forEach(recipient => {
+      const currentDocument = values[recipient.taxId];
+      if (currentDocument.pagoPaForm && currentDocument.pagoPaForm.file.name !== '') {
+        isEmpty = false;
+      }
+      if (currentDocument.f24flatRate && currentDocument.f24flatRate.file.name !== '') {
+        isEmpty = false;
+      }
+      if (currentDocument.f24standard && currentDocument.f24standard.file.name !== '') {
+        isEmpty = false;
+      }
+    });
+    return isEmpty;
+  };
+
   const formik = useFormik({
     initialValues,
-    validationSchema: notification.paymentMode !== PaymentModel.NOTHING ? validationSchema : null,
     validateOnMount: true,
     onSubmit: async (values) => {
+      const emptyForm = formIsEmpty(values);
       if (isCompleted) {
         onConfirm();
-        return;
-      }
-      if (notification.paymentMode !== PaymentModel.NOTHING) {
-        const paymentData = await dispatch(uploadNotificationPaymentDocument(values));
+      } else if (emptyForm || notification.paymentMode === PaymentModel.NOTHING) {
+        // Maybe now the form is empty, but in the previous time the user went back 
+        // from the payments step the form wasn't empty.
+        // Just in case, we clean the payment info from the Redux store
+        dispatch(setPaymentDocuments({ paymentDocuments: {} }));
+        dispatch(setIsCompleted());
+      } else {
+        // Beware! - 
+        // Recall that the taxId is the key for the payment document info in the Redux storage.
+        // If the user changes the taxId of a recipient and/or deletes a recipient 
+        // after having attached payment documents,
+        // the information related to the "old" taxIds is kept in the Redux store 
+        // until the user returns to the payment document step.
+        // Fortunately, the formatPaymentDocuments function "sanitizes" the payment document info,
+        // since it includes the information related to current taxIds only.
+        // If the call to formatPaymentDocuments were omitted, then we would probably risk sending
+        // garbage to the API call.
+        // Please take this note into consideration in case of refactoring of this part.
+        // --------------------------------------
+        // Carlos Lombardi, 2023.01.19
+        const paymentData = await dispatch(uploadNotificationPaymentDocument(formatPaymentDocuments()));
         const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
         if (paymentPayload) {
           await updateRefAfterUpload(paymentPayload);
         }
-      } else {
-        dispatch(setIsCompleted());
       }
     },
   });
@@ -343,7 +339,7 @@ const PaymentMethods = ({
               </Typography>
               <PaymentBox
                 id={`${recipient.taxId}.pagoPaForm`}
-                title={`${t('attach-pagopa-notice')}*`}
+                title={`${t('attach-pagopa-notice')}`}
                 onFileUploaded={(id, file, sha256, name, size) =>
                   fileUploadedHandler(recipient.taxId, 'pagoPaForm', id, file, sha256, name, size)}
                 onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPaForm')}
@@ -352,7 +348,7 @@ const PaymentMethods = ({
               {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE && (
                 <PaymentBox
                   id={`${recipient.taxId}.f24flatRate`}
-                  title={`${t('attach-f24-flatrate')}*`}
+                  title={`${t('attach-f24-flatrate')}`}
                   onFileUploaded={(id, file, sha256, name, size) =>
                     fileUploadedHandler(recipient.taxId, 'f24flatRate', id, file, sha256, name, size)}
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24flatRate')}
@@ -362,7 +358,7 @@ const PaymentMethods = ({
               {notification.paymentMode === PaymentModel.PAGO_PA_NOTICE_F24 && (
                 <PaymentBox
                   id={`${recipient.taxId}.f24standard`}
-                  title={`${t('attach-f24')}*`}
+                  title={`${t('attach-f24')}`}
                   onFileUploaded={(id, file, sha256, name, size) =>
                     fileUploadedHandler(recipient.taxId, 'f24standard', id, file, sha256, name, size)}
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24standard')}

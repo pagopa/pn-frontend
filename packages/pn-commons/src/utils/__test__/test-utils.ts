@@ -83,6 +83,7 @@ export const notificationFromBe: NotificationDetail = {
   recipients,
   documentsAvailable: true,
   documents: [],
+  otherDocuments: [],
   notificationStatus: NotificationStatus.ACCEPTED,
   notificationStatusHistory: statusHistory,
   timeline,
@@ -100,6 +101,7 @@ export const parsedNotification: NotificationDetail = {
   recipients,
   documentsAvailable: true,
   documents: [],
+  otherDocuments: [],
   notificationStatus: NotificationStatus.ACCEPTED,
   notificationStatusHistory: [
     { ...statusHistory[0], steps: [{...timeline[0], hidden: false}] },
