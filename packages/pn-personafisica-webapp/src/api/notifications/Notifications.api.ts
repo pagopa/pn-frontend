@@ -42,7 +42,7 @@ export const NotificationsApi = {
    * @param  {string} endDate
    * @returns Promise
    */
-  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> => 
+  getReceivedNotifications: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
     apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
       if (response.data && response.data.resultsPage) {
         const notifications = response.data.resultsPage.map((d) => ({
@@ -87,10 +87,11 @@ export const NotificationsApi = {
         return {} as NotificationDetailForRecipient;
       }
     }),
-  
-  exchangeNotificationQrCode: (qrCode: string): Promise<NotificationId> => 
-    apiClient.post<NotificationId>(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: qrCode })
-    .then((response) => response.data),
+
+  exchangeNotificationQrCode: (qrCode: string): Promise<NotificationId> =>
+    apiClient
+      .post<NotificationId>(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: qrCode })
+      .then((response) => response.data),
 
   /**
    * Gets current user notification document
@@ -109,16 +110,22 @@ export const NotificationsApi = {
       .then((response) => getDownloadUrl(response)),
 
   /**
-   * 
+   *
    * @param  {string} iun
-   * @param  {NotificationDetailOtherDocument} otherDocument 
+   * @param  {NotificationDetailOtherDocument} otherDocument
    * @returns Promise
    */
-  getReceivedNotificationOtherDocument: (iun: string, otherDocument: NotificationDetailOtherDocument): Promise<{ url: string }> =>
+  getReceivedNotificationOtherDocument: (
+    iun: string,
+    otherDocument: NotificationDetailOtherDocument,
+    mandateId?: string,
+  ): Promise<{ url: string }> =>
     apiClient
-      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {params: {documentId: otherDocument.documentId}})
+      .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
+        params: { documentId: otherDocument.documentId, mandateId },
+      })
       .then((response) => getDownloadUrl(response)),
-  
+
   /**
    * Gets current user notification legalfact
    * @param  {string} iun
@@ -170,11 +177,14 @@ export const NotificationsApi = {
    * @param  {string} taxId
    * @returns Promise
    */
-  getNotificationPaymentUrl: (paymentNotice: PaymentNotice, returnUrl: string): Promise<{ checkoutUrl: string }> =>
+  getNotificationPaymentUrl: (
+    paymentNotice: PaymentNotice,
+    returnUrl: string
+  ): Promise<{ checkoutUrl: string }> =>
     apiClient
       .post<{ checkoutUrl: string }>(NOTIFICATION_PAYMENT_URL(), {
         paymentNotice,
-        returnUrl
+        returnUrl,
       })
       .then((response) => response.data),
 };

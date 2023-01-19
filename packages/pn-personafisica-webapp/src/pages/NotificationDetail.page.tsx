@@ -136,7 +136,7 @@ const NotificationDetail = () => {
   ) => {
     if (_.isObject(document)) {
       const otherDocument = document as NotificationDetailOtherDocument;
-      void dispatch(getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+      void dispatch(getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument, mandateId }));
     } else {
       const documentIndex = document as string;
       void dispatch(
