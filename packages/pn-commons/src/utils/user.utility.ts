@@ -35,7 +35,7 @@ export function basicInitialUserData<T extends BasicUser>(
     let userInfoFromSessionStorage = null;
     try {
       userInfoFromSessionStorage = JSON.parse(rawDataFromStorage);
-      yupMatcher.validateSync(userInfoFromSessionStorage);
+      yupMatcher.validateSync(userInfoFromSessionStorage, { stripUnknown: false });
     } catch (e) {
       // discard the malformed JSON in session storage
       sessionStorage.clear();
