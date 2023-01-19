@@ -49,5 +49,12 @@ export function parseNotificationDetailForRecipient(
   // do the changes common to the pa and pf
   const commonNotificationDetailForFe = parseNotificationDetail(notificationClone);
 
-  return { ...commonNotificationDetailForFe, currentRecipient, currentRecipientIndex };
+  return {
+    ...commonNotificationDetailForFe,
+    otherDocuments: commonNotificationDetailForFe.otherDocuments?.filter(
+      (d) => d.recIndex === currentRecipientIndex
+    ),
+    currentRecipient,
+    currentRecipientIndex,
+  };
 }

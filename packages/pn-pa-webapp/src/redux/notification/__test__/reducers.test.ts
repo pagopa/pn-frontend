@@ -18,6 +18,7 @@ const initialState = {
     subject: '',
     recipients: [],
     documents: [],
+    otherDocuments: [],
     notificationFeePolicy: '',
     physicalCommunicationType: '',
     senderPaId: '',
@@ -28,6 +29,7 @@ const initialState = {
     timeline: []
   },
   documentDownloadUrl: '',
+  otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
 };
