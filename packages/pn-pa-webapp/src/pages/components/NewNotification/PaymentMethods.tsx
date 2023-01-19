@@ -255,6 +255,19 @@ const PaymentMethods = ({
         dispatch(setPaymentDocuments({ paymentDocuments: {} }));
         dispatch(setIsCompleted());
       } else {
+        // Beware! - 
+        // Recall that the taxId is the key for the payment document info in the Redux storage.
+        // If the user changes the taxId of a recipient and/or deletes a recipient 
+        // after having attached payment documents,
+        // the information related to the "old" taxIds is kept in the Redux store 
+        // until the user returns to the payment document step.
+        // Fortunately, the formatPaymentDocuments function "sanitizes" the payment document info,
+        // since it includes the information related to current taxIds only.
+        // If the call to formatPaymentDocuments were omitted, then we would probably risk sending
+        // garbage to the API call.
+        // Please take this note into consideration in case of refactoring of this part.
+        // --------------------------------------
+        // Carlos Lombardi, 2023.01.19
         const paymentData = await dispatch(uploadNotificationPaymentDocument(formatPaymentDocuments()));
         const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
         if (paymentPayload) {
