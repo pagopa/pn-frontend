@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { ONE_TRUST_PORTAL_CDN } from "../utils/constants";
+import { ONE_TRUST_PORTAL_CDN_PP } from "../utils/constants";
 
 declare const OneTrust: {
   NoticeApi: {
@@ -12,9 +12,9 @@ declare const OneTrust: {
 
 const PrivacyPolicyPage = () => {
   useEffect(() => {
-    if (ONE_TRUST_PORTAL_CDN) {
+    if (ONE_TRUST_PORTAL_CDN_PP) {
       OneTrust.NoticeApi.Initialized.then(function () {
-        OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN], false);
+        OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN_PP], false);
       });
     }
   }, []);
