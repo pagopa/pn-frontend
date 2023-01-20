@@ -4,7 +4,10 @@ import {
   PaymentInfo,
   performThunkAction,
 } from '@pagopa-pn/pn-commons';
-import { NotificationDetailOtherDocument, PaymentNotice } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
+import {
+  NotificationDetailOtherDocument,
+  PaymentNotice,
+} from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
@@ -91,20 +94,24 @@ export const getNotificationPaymentUrl = createAsyncThunk<
   )
 );
 
-export const getReceivedNotificationOtherDocument = createAsyncThunk<{url: string}, {iun: string; otherDocument: NotificationDetailOtherDocument; mandateId?: string}>(
+export const getReceivedNotificationOtherDocument = createAsyncThunk<
+  { url: string },
+  { iun: string; otherDocument: NotificationDetailOtherDocument; mandateId?: string }
+>(
   'getReceivedNotificationOtherDocument',
-  async (params: {
-    iun: string;
-    mandateId?: string;
-    otherDocument: {
-      documentId: string;
-      documentType: string;
-    };
-  }, { rejectWithValue }) => {
-    try {
-      return await NotificationsApi.getReceivedNotificationOtherDocument(params.iun, params.otherDocument, params.mandateId);
-    } catch (e) {
-      return rejectWithValue(e);
-    }
-  }
+  performThunkAction(
+    (params: {
+      iun: string;
+      mandateId?: string;
+      otherDocument: {
+        documentId: string;
+        documentType: string;
+      };
+    }) =>
+      NotificationsApi.getReceivedNotificationOtherDocument(
+        params.iun,
+        params.otherDocument,
+        params.mandateId
+      )
+  )
 );
