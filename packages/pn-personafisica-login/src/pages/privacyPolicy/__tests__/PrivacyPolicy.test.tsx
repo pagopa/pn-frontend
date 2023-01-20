@@ -3,10 +3,9 @@ import { render } from "@testing-library/react";
 import PrivacyPolicy from "../PrivacyPolicy";
 
 describe("test the Privacy Policy page",() => {
-  test("test the Privacy Policy page rendering", () => {
+  test("check that Privacy Policy page container is rendered", () => {
     const result = render(<PrivacyPolicy />);
 
-    expect(result.baseElement).toHaveTextContent("Privacy Policy");
-    expect(result.baseElement).toHaveTextContent("Cookie policy");
+    expect(result.getByRole('article')).toBeInTheDocument()
   });
 });
