@@ -2,15 +2,15 @@ import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { ThemeProvider, CssBaseline } from '@mui/material';
-import { theme } from '@pagopa/mui-italia';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { theme } from "@pagopa/mui-italia";
 import { LoadingPage } from '@pagopa-pn/pn-commons';
 
-import { store } from './redux/store';
 import './index.css';
+import reportWebVitals from './reportWebVitals';
+import { store } from './redux/store';
 import './i18n.ts';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>

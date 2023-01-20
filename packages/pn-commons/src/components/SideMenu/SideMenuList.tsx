@@ -87,6 +87,7 @@ const SideMenuList = ({ menuItems, selfCareItems, handleLinkClick, selectedItem 
               <ListItemButton
                 selected={
                   selectedIndex &&
+                  !item.notSelectable &&
                   index === selectedIndex.index &&
                   selectedIndex.label === item.label
                 }
