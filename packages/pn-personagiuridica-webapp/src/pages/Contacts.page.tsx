@@ -1,9 +1,14 @@
 import { useEffect, useMemo, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Link, Stack, Typography } from '@mui/material';
+import {
+  Box,
+  // Link,
+  Stack,
+  Typography,
+} from '@mui/material';
 import { ApiErrorWrapper, TitleBox } from '@pagopa-pn/pn-commons';
 
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { CONTACT_ACTIONS, getDigitalAddresses } from '../redux/contact/actions';
 import { resetState } from '../redux/contact/reducers';
@@ -15,12 +20,12 @@ import IOContact from '../component/Contacts/IOContact';
 import CourtesyContacts from '../component/Contacts/CourtesyContacts';
 import SpecialContacts from '../component/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
-import { PROFILO } from '../navigation/routes.const';
+// import { PROFILO } from '../navigation/routes.const';
 import { CourtesyChannelType } from '../models/contacts';
 
 const Contacts = () => {
   const [isDigitalAddressLoaded, setIsDigitalAddressLoaded] = useState(false);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
@@ -51,16 +56,17 @@ const Contacts = () => {
     return () => void dispatch(resetState());
   }, []);
 
-  const handleRedirectToProfilePage = () => {
-    navigate(PROFILO);
-  };
+  // const handleRedirectToProfilePage = () => {
+  //   navigate(PROFILO);
+  // };
 
   const subtitle = (
     <>
       {t('subtitle-1', { ns: 'recapiti' })}
-      <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage}>
+      {/* <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage}>
         {t('subtitle-link', { ns: 'recapiti' })}
-      </Link>
+      </Link> */}
+      {t('subtitle-link', { ns: 'recapiti' })}
       {t('subtitle-2', { ns: 'recapiti' })}
     </>
   );
