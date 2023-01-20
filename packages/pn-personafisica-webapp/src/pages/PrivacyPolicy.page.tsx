@@ -12,9 +12,11 @@ declare const OneTrust: {
 
 const PrivacyPolicyPage = () => {
   useEffect(() => {
+    if (ONE_TRUST_PORTAL_CDN) {
       OneTrust.NoticeApi.Initialized.then(function () {
         OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN], false);
       });
+    }
   }, []);
 
   return (
