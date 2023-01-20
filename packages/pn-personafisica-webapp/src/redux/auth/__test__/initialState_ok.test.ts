@@ -1,4 +1,4 @@
-import { userResponse } from "./test-users";
+import { userResponse } from './test-users';
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 
@@ -15,4 +15,3 @@ describe('Initial auth redux state tests - session storage with correct JSON', (
     expect(state.user.uid).toEqual(userResponse.uid);
   });
 });
-
