@@ -5,10 +5,9 @@ import { ConsentsApi } from '../../api/consents/Consents.api';
 import { Consent, ConsentActionType, ConsentType } from '../../models/consents';
 import { User } from './types';
 
-export enum AUTH_ACTIONS  {
+export enum AUTH_ACTIONS {
   GET_TOS_APPROVAL = 'getToSApproval',
 }
-
 
 /**
  * Exchange token action between selfcare and pn.
@@ -18,9 +17,7 @@ export const exchangeToken = createAsyncThunk<User, string>(
   'exchangeToken',
   async (spidToken: string, { rejectWithValue }) => {
     try {
-      const user = await AuthApi.exchangeToken(spidToken);
-      sessionStorage.setItem('user', JSON.stringify(user));
-      return user;
+      return await AuthApi.exchangeToken(spidToken);
     } catch (e) {
       return rejectWithValue(e);
     }

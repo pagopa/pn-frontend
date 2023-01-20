@@ -5,5 +5,5 @@ export function goToLoginPortal(origin: string) {
   const encodedPathname = encodeURIComponent(origin);
 
   /* eslint-disable functional/immutable-data */
-  window.location.replace(baseUrl + 'logout' + `?origin=${encodedPathname}`);
+  window.location.replace(`${baseUrl}logout?origin=${encodedPathname}`);
 }

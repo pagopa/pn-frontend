@@ -1,19 +1,28 @@
-import { basicInitialUserData, basicNoLoggedUserData, basicUserDataMatcherContents, dataRegex, adaptedTokenExchangeError } from '@pagopa-pn/pn-commons';
+import {
+  basicInitialUserData,
+  basicNoLoggedUserData,
+  basicUserDataMatcherContents,
+  dataRegex,
+  adaptedTokenExchangeError,
+} from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 import * as yup from 'yup';
 import { acceptToS, exchangeToken, getToSApproval, logout } from './actions';
 import { User } from './types';
 
-const userDataMatcher = yup.object({
-  ...basicUserDataMatcherContents,
-  from_aa: yup.boolean(),
-  level: yup.string().matches(dataRegex.lettersAndNumbers),
-  iat: yup.number(),
-  exp: yup.number(),
-  aud: yup.string().matches(dataRegex.simpleServer),
-  iss: yup.string().url(),
-  jti: yup.string().matches(dataRegex.lettersAndNumbers),
-});
+const userDataMatcher = yup
+  .object({
+    ...basicUserDataMatcherContents,
+    from_aa: yup.boolean(),
+    level: yup.string().matches(dataRegex.lettersAndNumbers),
+    iat: yup.number(),
+    exp: yup.number(),
+    aud: yup.string().matches(dataRegex.simpleServer),
+    iss: yup.string().url(),
+    jti: yup.string().matches(dataRegex.lettersAndNumbers),
+    mobile_phone: yup.string().matches(dataRegex.phoneNumber),
+  })
+  .noUnknown(true);
 
 const noLoggedUserData = {
   ...basicNoLoggedUserData,
@@ -29,16 +38,12 @@ const noLoggedUserData = {
 
 const emptyUnauthorizedMessage = { title: '', message: '' };
 
-function initialUserData(): User {
-  return basicInitialUserData(userDataMatcher, noLoggedUserData);
-}
-
 /* eslint-disable functional/immutable-data */
 const userSlice = createSlice({
   name: 'userSlice',
   initialState: {
     loading: false,
-    user: initialUserData(),
+    user: basicInitialUserData(userDataMatcher, noLoggedUserData),
     tos: false,
     fetchedTos: false,
     isUnauthorizedUser: false,
@@ -48,13 +53,24 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
-      state.user = action.payload;
+      const user = action.payload;
+      // validate user from api before setting it in the sessionStorage
+      try {
+        userDataMatcher.validateSync(user, { stripUnknown: false });
+        sessionStorage.setItem('user', JSON.stringify(user));
+        state.user = action.payload;
+      } catch {
+        state.isUnauthorizedUser = true;
+        state.messageUnauthorizedUser = emptyUnauthorizedMessage;
+      }
       state.isClosedSession = false;
     });
     builder.addCase(exchangeToken.rejected, (state, action) => {
       const adaptedError = adaptedTokenExchangeError(action.payload);
       state.isUnauthorizedUser = adaptedError.isUnauthorizedUser;
-      state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser ? adaptedError.response.customMessage : emptyUnauthorizedMessage;
+      state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser
+        ? adaptedError.response.customMessage
+        : emptyUnauthorizedMessage;
       state.isClosedSession = false;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
