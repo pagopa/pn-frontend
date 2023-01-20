@@ -32,7 +32,10 @@ import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
 import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
 import { RootState, store } from './redux/store';
-import { getDomicileInfo, getSidemenuInformation } from './redux/sidemenu/actions';
+import {
+  getDomicileInfo,
+  // getSidemenuInformation
+} from './redux/sidemenu/actions';
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
@@ -91,7 +94,7 @@ const App = () => {
   useEffect(() => {
     if (sessionToken !== '') {
       void dispatch(getDomicileInfo());
-      void dispatch(getSidemenuInformation());
+      // void dispatch(getSidemenuInformation());
       void dispatch(getCurrentAppStatus());
     }
   }, [sessionToken]);

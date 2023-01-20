@@ -25,7 +25,7 @@
     "users": "Utenti",
     "groups": "Gruppi",
     "aria-label": "piattaforma-notifiche navigazione principale",
-    "aria-label-inner": "piattaforma-notifiche navigazione destinatario"
+    "aria-label-inner": "piattaforma-notifiche navigazione persona giuridica"
   },
   "header": {
     "logout": "Esci",
