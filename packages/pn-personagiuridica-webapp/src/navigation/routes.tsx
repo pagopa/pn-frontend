@@ -13,9 +13,7 @@ const Contacts = React.lazy(() => import('../pages/Contacts.page'));
 const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.page'));
 const NotificationFromQrCode = React.lazy(() => import('../pages/NotificationFromQrCode.page'));
 const Notifiche = React.lazy(() => import('../pages/Notifiche.page'));
-const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
 const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
-const Profile = React.lazy(() => import('../pages/Profile.page'));
 const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
 const UnderConstruction = React.lazy(() => import('../pages/UnderConstruction.page'));
 
@@ -32,13 +30,8 @@ function Router() {
                 path={routes.DETTAGLIO_NOTIFICA_QRCODE_PATH}
                 element={<NotificationFromQrCode />}
               />
-              <Route path={routes.NOTIFICHE_DELEGATO} element={<UnderConstruction />} />
               <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-              <Route path={routes.DETTAGLIO_NOTIFICA_DELEGATO} element={<NotificationDetail />} />
-              <Route path={routes.DELEGHE} element={<UnderConstruction />} />
-              <Route path={routes.NUOVA_DELEGA} element={<NuovaDelega />} />
               <Route path={routes.RECAPITI} element={<Contacts />} />
-              <Route path={routes.PROFILO} element={<Profile />} />
               <Route path={routes.APP_STATUS} element={<AppStatus />} />
               <Route path={routes.USERS} element={<UnderConstruction />} />
               <Route path={routes.GROUPS} element={<UnderConstruction />} />

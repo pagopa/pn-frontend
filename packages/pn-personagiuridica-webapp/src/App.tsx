@@ -6,7 +6,6 @@ import MarkunreadMailboxIcon from '@mui/icons-material/MarkunreadMailbox';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 import HelpIcon from '@mui/icons-material/Help';
-import AltRouteIcon from '@mui/icons-material/AltRoute';
 import { People, SupervisedUserCircle } from '@mui/icons-material';
 import { Box } from '@mui/material';
 
@@ -58,7 +57,6 @@ const App = () => {
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
   const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
-  const { pendingDelegators } = useAppSelector((state: RootState) => state.generalInfoState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -103,10 +101,6 @@ const App = () => {
       label: t('menu.notifiche'),
       route: routes.NOTIFICHE,
     },
-    {
-      label: t('menu.notifiche-come-delegato'),
-      route: routes.NOTIFICHE_DELEGATO,
-    },
   ];
 
   // TODO spostare questo in un file di utility
@@ -117,12 +111,6 @@ const App = () => {
       route: routes.NOTIFICHE,
       children: notificationMenuItems,
       notSelectable: notificationMenuItems && notificationMenuItems.length > 0,
-    },
-    {
-      label: t('menu.deleghe'),
-      icon: AltRouteIcon,
-      route: routes.DELEGHE,
-      rightBadgeNotification: pendingDelegators ? pendingDelegators : undefined,
     },
     { label: t('menu.contacts'), icon: MarkunreadMailboxIcon, route: routes.RECAPITI },
     {
