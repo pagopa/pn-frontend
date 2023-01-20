@@ -12,7 +12,8 @@ batch:
           REACT_APP_URL_API: https://webapi.dev.pn.pagopa.it/
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
-          REACT_APP_ONETRUST_DOMAIN_ID: "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test"     
+          REACT_APP_ONETRUST_DOMAIN_ID: "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test"
+          REACT_APP_ONE_TRUST_PORTAL_CDN: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/4824a110-316e-42fd-b492-8e2b0513db70.json
     - identifier: pn_pa_svil_build
       buildspec: cra_buildspec.yaml
       env:
@@ -24,7 +25,8 @@ batch:
           REACT_APP_URL_API: https://webapi.svil.pn.pagopa.it/
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
-          REACT_APP_ONETRUST_DOMAIN_ID: "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test"    
+          REACT_APP_ONETRUST_DOMAIN_ID: "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test"
+          REACT_APP_ONE_TRUST_PORTAL_CDN: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/4824a110-316e-42fd-b492-8e2b0513db70.json
     - identifier: pn_pa_coll_build
       buildspec: cra_buildspec.yaml
       env:
@@ -37,6 +39,7 @@ batch:
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
           REACT_APP_ONETRUST_DOMAIN_ID: "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test"
+          REACT_APP_ONE_TRUST_PORTAL_CDN: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/4824a110-316e-42fd-b492-8e2b0513db70.json
     - identifier: pn_pa_cert_build
       buildspec: cra_buildspec.yaml
       env:
@@ -49,6 +52,7 @@ batch:
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
           REACT_APP_ONETRUST_DOMAIN_ID: "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test"
+          REACT_APP_ONE_TRUST_PORTAL_CDN: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/4824a110-316e-42fd-b492-8e2b0513db70.json
     - identifier: pn_pa_hotfix_build
       buildspec: cra_buildspec.yaml
       env:
@@ -60,7 +64,8 @@ batch:
           REACT_APP_URL_API: https://webapi.hotfix.pn.pagopa.it/
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: "aef0b0d89c3355510e9cdfdb18e7d0b5"
-          REACT_APP_ONETRUST_DOMAIN_ID: "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test"                    
+          REACT_APP_ONETRUST_DOMAIN_ID: "62ebb6a0-1a65-48a4-8ca0-837de03b1199-test"
+          REACT_APP_ONE_TRUST_PORTAL_CDN: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/4824a110-316e-42fd-b492-8e2b0513db70.json
     # - identifier: pn_pa_prod_build
     #   buildspec: cra_buildspec.yaml
     #   env:
