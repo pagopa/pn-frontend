@@ -23,6 +23,7 @@ import {
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
+  getReceivedNotificationOtherDocument,
 } from './actions';
 
 const initialState = {
@@ -34,6 +35,7 @@ const initialState = {
     senderDenomination: '',
     paymentExpirationDate: '',
     documents: [] as Array<NotificationDetailDocument>,
+    otherDocuments: [] as Array<NotificationDetailDocument>,
     notificationFeePolicy: '' as NotificationFeePolicy,
     physicalCommunicationType: '' as PhysicalCommunicationType,
     senderPaId: '',
@@ -50,6 +52,7 @@ const initialState = {
     currentRecipientIndex: 0,
   } as NotificationDetailForRecipient,
   documentDownloadUrl: '',
+  otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
@@ -75,6 +78,11 @@ const notificationSlice = createSlice({
     builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {
         state.documentDownloadUrl = action.payload.url;
+      }
+    });
+    builder.addCase(getReceivedNotificationOtherDocument.fulfilled, (state, action) => {
+      if (action.payload.url) {
+        state.otherDocumentDownloadUrl = action.payload.url;
       }
     });
     builder.addCase(getReceivedNotificationLegalfact.fulfilled, (state, action) => {

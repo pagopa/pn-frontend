@@ -1,6 +1,12 @@
 import * as yup from 'yup';
 import { createSlice } from '@reduxjs/toolkit';
-import { adaptedTokenExchangeError, basicInitialUserData, basicNoLoggedUserData, basicUserDataMatcherContents, dataRegex } from '@pagopa-pn/pn-commons';
+import {
+  adaptedTokenExchangeError,
+  basicInitialUserData,
+  basicNoLoggedUserData,
+  basicUserDataMatcherContents,
+  dataRegex,
+} from '@pagopa-pn/pn-commons';
 import { Party } from '../../models/party';
 
 import { PartyRole, PNRole } from '../../models/user';
@@ -17,14 +23,16 @@ const organizationMatcher = yup.object({
   roles: yup.array().of(roleMatcher),
   fiscal_code: yup.string().matches(dataRegex.pIva),
   groups: yup.array().of(yup.string()),
-
+  name: yup.string(),
 });
 
-const userDataMatcher = yup.object({
-  ...basicUserDataMatcherContents,
-  organization: organizationMatcher,
-  desiredExp: yup.number(),
-});
+const userDataMatcher = yup
+  .object({
+    ...basicUserDataMatcherContents,
+    organization: organizationMatcher,
+    desired_exp: yup.number(),
+  })
+  .noUnknown(true);
 
 const noLoggedUserData = {
   ...basicNoLoggedUserData,
@@ -43,16 +51,12 @@ const noLoggedUserData = {
 
 const emptyUnauthorizedMessage = { title: '', message: '' };
 
-function initialUserData(): User {
-  return basicInitialUserData(userDataMatcher, noLoggedUserData);
-}
-
 /* eslint-disable functional/immutable-data */
 const userSlice = createSlice({
   name: 'userSlice',
   initialState: {
     loading: false,
-    user: initialUserData(),
+    user: basicInitialUserData(userDataMatcher, noLoggedUserData),
     tos: false,
     fetchedTos: false,
     organizationParty: {
@@ -66,13 +70,24 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(exchangeToken.fulfilled, (state, action) => {
-      state.user = action.payload;
+      const user = action.payload;
+      // validate user from api before setting it in the sessionStorage
+      try {
+        userDataMatcher.validateSync(user, { stripUnknown: false });
+        sessionStorage.setItem('user', JSON.stringify(user));
+        state.user = action.payload;
+      } catch {
+        state.isUnauthorizedUser = true;
+        state.messageUnauthorizedUser = emptyUnauthorizedMessage;
+      }
       state.isClosedSession = false;
     });
     builder.addCase(exchangeToken.rejected, (state, action) => {
       const adaptedError = adaptedTokenExchangeError(action.payload);
       state.isUnauthorizedUser = adaptedError.isUnauthorizedUser;
-      state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser ? adaptedError.response.customMessage : emptyUnauthorizedMessage;
+      state.messageUnauthorizedUser = adaptedError.isUnauthorizedUser
+        ? adaptedError.response.customMessage
+        : emptyUnauthorizedMessage;
       state.isClosedSession = false;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
