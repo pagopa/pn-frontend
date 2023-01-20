@@ -1,0 +1,14 @@
+{
+  "title": "I tuoi dati",
+  "subtitle": "Questi dati vengono ricavati dal tuo SPID o CIE e non sono modificabili.",
+  "profile": {
+    "name": "Nome",
+    "family_name": "Cognome",
+    "fiscal_number": "Codice fiscale"
+  },
+  "alert-redirect-to-contacts": {
+    "title": "Vuoi gestire i tuoi recapiti?",
+    "message": "Inserisci, visualizza o modifica i recapiti a cui vuoi ricevere le notifiche e comunicazioni di Piattaforma Notifiche.",
+    "action-text": "Vai ai tuoi recapiti"
+  }
+}
