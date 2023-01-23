@@ -49,7 +49,7 @@ const newNotificationRecipientsMapper = (
     return {
       denomination: recipient.recipientType === RecipientType.PG ? recipient.firstName : `${recipient.firstName} ${recipient.lastName}`,
       recipientType: recipient.recipientType,
-      taxId: recipient.taxId,
+      taxId: recipient.taxId.toUpperCase(),
       payment: paymentMethod === PaymentModel.NOTHING ? undefined : {
         creditorTaxId: recipient.creditorTaxId,
         noticeCode: recipient.noticeCode,
