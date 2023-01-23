@@ -61,6 +61,7 @@
       "message": "Per completare l’annullamento, devi inviare una nuova notifica che sostituisca la precedente."
     },
     "acts": "Documenti allegati",
+    "other-acts": "Altri documenti",
     "timeline-title": "Stato della notifica",
     "legalfact": "Attestazione opponibile a terzi",
     "receipt": "Ricevuta",
@@ -102,6 +103,7 @@
       "send-analog-error-description": "Il tentativo di invio della notifica per via cartacea a {{name}} non è riuscito.",
       "send-analog-success": "Invio per via cartacea riuscito",
       "send-analog-success-description": "Il tentativo di invio della notifica per via cartacea a {{name}} è riuscito.",
+      "aar-document": "Avviso di avvenuta ricezione",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
         "digital-delivery-success": "notifica digitale",

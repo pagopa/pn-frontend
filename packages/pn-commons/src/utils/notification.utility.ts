@@ -12,7 +12,13 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
 } from '../types';
-import { LegalFactType, SendDigitalDetails, SendPaperDetails } from '../types/NotificationDetail';
+import {
+  AarDetails,
+  LegalFactType,
+  NotificationDetailDocument,
+  SendDigitalDetails,
+  SendPaperDetails,
+} from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
@@ -232,9 +238,7 @@ export function getLegalFactLabel(
       )}`;
     }
     return receiptLabel;
-  } else if (
-    timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS
-  ) {
+  } else if (timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
     return `${receiptLabel} ${getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.paper-receipt-accepted',
@@ -430,11 +434,39 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
  * @param  {NotificationDetail} notificationDetail
  * @returns NotificationDetail
  */
+const populateOtherDocuments = (
+  timeline: Array<INotificationDetailTimeline>
+): Array<NotificationDetailDocument> => {
+  const timelineFiltered = timeline.filter((t) => t.category === TimelineCategory.AAR_GENERATION);
+  if (timelineFiltered.length > 0) {
+    return timelineFiltered.map((t) => ({
+      recIndex: t.details.recIndex,
+      documentId: (t.details as AarDetails).generatedAarUrl as string,
+      documentType: LegalFactType.AAR,
+      title: getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.aar-document',
+        'Avviso di avvenuta ricezione'
+      ),
+      digests: {
+        sha256: '',
+      },
+      ref: {
+        key: '',
+        versionToken: '',
+      },
+      contentType: '',
+    }));
+  }
+  return [];
+};
+
 export function parseNotificationDetail(
   notificationDetail: NotificationDetail
 ): NotificationDetail {
   const parsedNotification = {
     ...notificationDetail,
+    otherDocuments: populateOtherDocuments(notificationDetail.timeline),
     sentAt: formatDate(notificationDetail.sentAt),
   };
   /* eslint-disable functional/immutable-data */

@@ -48,7 +48,7 @@ const LandingLayout = ({ children }: Props) => {
               href={appData.common.pagoPALink.href}
               color="text"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               disableRipple
               disableTouchRipple
             >
@@ -60,7 +60,7 @@ const LandingLayout = ({ children }: Props) => {
               href={appData.common.assistance.href}
               color="text"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               disableRipple
               disableTouchRipple
               startIcon={<HelpOutlineOutlinedIcon fontSize="inherit" />}
