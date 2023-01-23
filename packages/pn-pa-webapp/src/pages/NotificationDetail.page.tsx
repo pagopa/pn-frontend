@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, Fragment, ReactNode, useState, useCallback } from 'react';
@@ -35,6 +36,7 @@ import {
   formatEurocentToCurrency,
   TimedMessage,
   useDownloadDocument,
+  NotificationDetailOtherDocument,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -47,6 +49,7 @@ import {
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
+  getSentNotificationOtherDocument,
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
 import { setCancelledIun } from '../redux/newNotification/reducers';
@@ -70,6 +73,9 @@ const NotificationDetail = () => {
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
+  );
+  const otherDocumentDownloadUrl = useAppSelector(
+    (state: RootState) => state.notificationState.otherDocumentDownloadUrl
   );
   const legalFactDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.legalFactDownloadUrl
@@ -202,8 +208,14 @@ const NotificationDetail = () => {
       value: row.value,
     }));
 
-  const documentDowloadHandler = (documentIndex: string | undefined) => {
-    if (documentIndex) {
+  const documentDowloadHandler = (
+    document: string | NotificationDetailOtherDocument | undefined
+  ) => {
+    if (_.isObject(document)) {
+      const otherDocument = document as NotificationDetailOtherDocument;
+      void dispatch(getSentNotificationOtherDocument({ iun: notification.iun, otherDocument }));
+    } else {
+      const documentIndex = document as string;
       void dispatch(getSentNotificationDocument({ iun: notification.iun, documentIndex }));
     }
   };
@@ -226,8 +238,7 @@ const NotificationDetail = () => {
     navigate(routes.NUOVA_NOTIFICA);
   };
 
-  const isCancelled =
-    notification.notificationStatus === NotificationStatus.CANCELLED ? true : false;
+  const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
   const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
 
@@ -262,6 +273,7 @@ const NotificationDetail = () => {
 
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: documentDownloadUrl });
+  useDownloadDocument({ url: otherDocumentDownloadUrl });
 
   const timeoutMessage = legalFactDownloadRetryAfter * 1000;
 
@@ -388,6 +400,16 @@ const NotificationDetail = () => {
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
                     documents={notification.documents ?? []}
+                    clickHandler={documentDowloadHandler}
+                    documentsAvailable={hasDocumentsAvailable}
+                    downloadFilesMessage={getDownloadFilesMessage()}
+                    downloadFilesLink="Quando si perfeziona una notifica?"
+                  />
+                </Paper>
+                <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                  <NotificationDetailDocuments
+                    title={t('detail.other-acts', { ns: 'notifiche' })}
+                    documents={notification.otherDocuments ?? []}
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}

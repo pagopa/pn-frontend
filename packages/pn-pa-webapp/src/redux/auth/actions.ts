@@ -9,7 +9,8 @@ import { PartyRole, PNRole } from '../../models/user';
 import { User } from './types';
 
 export enum AUTH_ACTIONS {
-  GET_ORGANIZATION_PARTY = 'getOrganizationParty', GET_TOS_APPROVAL = 'getToSApproval',
+  GET_ORGANIZATION_PARTY = 'getOrganizationParty',
+  GET_TOS_APPROVAL = 'getToSApproval',
 }
 
 /**
@@ -21,9 +22,7 @@ export const exchangeToken = createAsyncThunk<User, string>(
   async (selfCareToken: string, { rejectWithValue }) => {
     // use selfcare token to get autenticated user
     try {
-      const user = await AuthApi.exchangeToken(selfCareToken);
-      sessionStorage.setItem('user', JSON.stringify(user));
-      return user;
+      return await AuthApi.exchangeToken(selfCareToken);
     } catch (e) {
       return rejectWithValue(e);
     }
@@ -32,9 +31,9 @@ export const exchangeToken = createAsyncThunk<User, string>(
 
 /**
  * Obtain the organization party for the given organization id.
- * NB: in fact, when the corresponding reducer is to be called, the value of the organization id 
+ * NB: in fact, when the corresponding reducer is to be called, the value of the organization id
  *     is already in the state of this slice. But given the way the reducer/action pair is defined,
- *     I could not find to have the state accesible to the code of the thunk. 
+ *     I could not find to have the state accesible to the code of the thunk.
  *     Hence the organizationId is expected as a parameter, whose value will be taken from this very slice.
  *     ------------------------------
  *     Carlos Lombardi, 2022.07.27
