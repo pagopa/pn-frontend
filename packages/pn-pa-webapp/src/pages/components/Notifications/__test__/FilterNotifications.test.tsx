@@ -102,7 +102,7 @@ describe('Filter Notifications Table Component', () => {
 
   it('renders filter notifications table', () => {
     expect(form).toBeInTheDocument();
-    testFormElements(form!, 'recipientId', 'filters.fiscal-code');
+    testFormElements(form!, 'recipientId', 'filters.fiscal-code-tax-code');
     testFormElements(form!, 'startDate', 'filters.data_da');
     testFormElements(form!, 'endDate', 'filters.data_a');
     testFormElements(form!, 'status', 'filters.status');
