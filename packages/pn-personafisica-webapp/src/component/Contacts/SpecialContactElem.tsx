@@ -8,8 +8,8 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { phoneRegExp } from '../../utils/contacts.utility';
-import { trackEventByType } from "../../utils/mixpanel";
-import { EventActions, TrackEventType } from "../../utils/events";
+import { trackEventByType } from '../../utils/mixpanel';
+import { EventActions, TrackEventType } from '../../utils/events';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
@@ -32,9 +32,9 @@ type Field = {
 };
 
 const addressTypeToLabel = {
-  'mail': 'email',
-  'pec': 'pec',
-  'phone': 'phone'
+  mail: 'email',
+  pec: 'pec',
+  phone: 'phone',
 };
 
 const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
@@ -116,6 +116,12 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     });
   }, [address]);
 
+  const resetModifyValue = () => {
+    void formik.setFieldValue(formik.values[`${address.senderId}_phone`], address.phone, true);
+    void formik.setFieldValue(formik.values[`${address.senderId}_mail`], address.mail, true);
+    void formik.setFieldValue(formik.values[`${address.senderId}_pec`], address.pec, true);
+  };
+
   const jsxField = (f: Field) => (
     <Fragment>
       {address[f.addressId] ? (
@@ -146,7 +152,9 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
               },
             ]}
             saveDisabled={!!formik.errors[f.id]}
-            removeModalTitle={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-title`, { ns: 'recapiti' })}
+            removeModalTitle={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-title`, {
+              ns: 'recapiti',
+            })}
             removeModalBody={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-message`, {
               value: formik.values[f.id],
               ns: 'recapiti',
@@ -154,9 +162,12 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
             value={formik.values[f.id]}
             onConfirmClick={updateContact}
             forceMobileView
+            resetModifyValue={resetModifyValue}
           />
         </form>
-      ) : '-'}
+      ) : (
+        '-'
+      )}
     </Fragment>
   );
 

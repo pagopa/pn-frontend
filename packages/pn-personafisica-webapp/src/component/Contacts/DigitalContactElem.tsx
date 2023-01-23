@@ -1,14 +1,14 @@
 import { Fragment, memo, ReactChild, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Grid,
-    Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Typography,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -17,9 +17,9 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
-import { trackEventByType } from "../../utils/mixpanel";
-import { EventActions, TrackEventType } from "../../utils/events";
-import { getContactEventType } from "../../utils/contacts.utility";
+import { trackEventByType } from '../../utils/mixpanel';
+import { EventActions, TrackEventType } from '../../utils/events';
+import { getContactEventType } from '../../utils/contacts.utility';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
@@ -39,6 +39,7 @@ type Props = {
   onConfirmClick: (status: 'validated' | 'cancelled') => void;
   forceMobileView?: boolean;
   blockDelete?: boolean;
+  resetModifyValue: () => void;
 };
 
 const DigitalContactElem = memo(
@@ -54,6 +55,7 @@ const DigitalContactElem = memo(
     onConfirmClick,
     forceMobileView = false,
     blockDelete,
+    resetModifyValue,
   }: Props) => {
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
@@ -82,6 +84,11 @@ const DigitalContactElem = memo(
       setShowModal(true);
     };
 
+    const onCancel = () => {
+      resetModifyValue();
+      toggleEdit();
+    };
+
     const confirmHandler = () => {
       handleModalClose();
       if (contactType === LegalChannelType.PEC) {
@@ -97,7 +104,7 @@ const DigitalContactElem = memo(
           channelType: contactType as CourtesyChannelType,
         })
       );
-       trackEventByType(eventTypeByChannel, { action: EventActions.DELETE });
+      trackEventByType(eventTypeByChannel, { action: EventActions.DELETE });
     };
 
     const editHandler = () => {
@@ -161,9 +168,13 @@ const DigitalContactElem = memo(
                 {t('button.salva')}
               </ButtonNaked>
             )}
-            {isMobile && (
+            {isMobile && !editMode ? (
               <ButtonNaked color="primary" onClick={removeHandler}>
-                {t('button.rimuovi')}
+                {t('button.elimina')}
+              </ButtonNaked>
+            ) : (
+              <ButtonNaked color="primary" onClick={onCancel}>
+                {t('button.annulla')}
               </ButtonNaked>
             )}
           </Grid>

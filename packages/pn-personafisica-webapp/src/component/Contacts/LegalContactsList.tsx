@@ -60,6 +60,10 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     }
   };
 
+  const resetModifyValue = () => {
+    void formik.setFieldValue('pec', formik.values.pec, true);
+  };
+
   return (
     <DigitalContactsCard
       sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
@@ -116,6 +120,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             onConfirmClick={handleEditConfirm}
             blockDelete={legalAddresses.length > 1}
             forceMobileView
+            resetModifyValue={resetModifyValue}
           />
         </form>
       </Box>
@@ -123,7 +128,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         <Typography component="span" variant="body1">
           {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
         </Typography>
-          {/** 
+        {/** 
            * Waiting for FAQs
         <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
           {t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}
