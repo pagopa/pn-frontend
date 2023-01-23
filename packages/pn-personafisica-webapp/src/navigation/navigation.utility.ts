@@ -1,9 +1,6 @@
-import { URL_FE_LOGIN } from '../utils/constants';
+import { URL_FE_LOGOUT } from '../utils/constants';
 
-export function goToLoginPortal(origin: string) {
-  const baseUrl = URL_FE_LOGIN ?? '';
-  const encodedPathname = encodeURIComponent(origin);
-
+export function goToLoginPortal(type: 'PG' | 'PF') {
   /* eslint-disable functional/immutable-data */
-  window.location.replace(`${baseUrl}logout?origin=${encodedPathname}`);
+  window.location.replace(`${URL_FE_LOGOUT}?type=${type}`);
 }

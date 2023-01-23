@@ -231,7 +231,7 @@ const App = () => {
   const handleUserLogout = () => {
     void dispatch(logout());
 
-    goToLoginPortal(window.location.origin);
+    goToLoginPortal('PF');
   };
 
   return (
