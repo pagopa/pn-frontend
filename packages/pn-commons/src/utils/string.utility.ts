@@ -7,7 +7,20 @@
  * Carlos Lombardi, 2022.08.05
  */
 export const dataRegex = {
-  phoneNumber: /^3\d{2}[. ]??\d{6,7}$/g,
+  phoneNumber: /^3\d{8,9}$/g, 
+  // was /^3\d{2}[. ]??\d{6,7}$/g before, but BE (for courtesy addresses) do not accept the space 
+  // between the former three digits and the rest,
+  // so that the simple thing to do is not to accept it in the FE neither
+  // ------------------------------------
+  // Carlos Lombardi, 2023.01.23
+
+  phoneNumberWithItalyPrefix: /^\+393\d{8,9}$/g,
+  // in the modiifcation of a SMS courtesy address, the phone number is edited
+  // prefixed with the Italy intl. prefix +39
+  // (since it comes from BE as such, and to keep it untouched for the modification is the simplest thing to do)
+  // ------------------------------------
+  // Carlos Lombardi, 2023.01.23
+
   name: /^[A-Za-zÀ-ÿ\-'" 0-9\.]+$/,
   lettersAndNumbers: /^[A-Za-z0-9]+$/,
   simpleServer: /^[A-Za-z0-9.\-/]+$/, // the server part of an URL, no protocol, no query params
