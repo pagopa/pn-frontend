@@ -61,7 +61,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
   };
 
   const resetModifyValue = () => {
-    void formik.setFieldValue('pec', formik.values.pec, true);
+    void formik.setFieldValue('pec', defaultAddress?.value, true);
   };
 
   return (
