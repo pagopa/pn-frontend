@@ -91,14 +91,18 @@
       "send-analog-domicile-890-description": "È in corso l'invio della notifica a {{name}} all'indirizzo {{address}} tramite raccomandata 890.",
       "send-analog-domicile-ar": "Invio via raccomandata A/R",
       "send-analog-domicile-ar-description": "È in corso l'invio della notifica a {{name}} all'indirizzo {{address}} tramite raccomandata A/R.",
-      "send-paper-feedback": "Aggiornamento stato raccomandata",
-      "send-paper-feedback-description": "Si allega un aggiornamento dello stato della raccomandata.",
       "digital-failure-workflow": "Invio per via digitale fallito",
       "digital-failure-workflow-description": "L'invio per via digitale della notifica a {{name}} è fallito.",
       "send-digital-progress-error": "Invio via PEC non preso in carico",
       "send-digital-progress-error-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} non è stato preso in carico.",
       "send-digital-progress-success": "Invio via PEC preso in carico",
       "send-digital-progress-success-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} è stato preso in carico.",
+      "send-analog-progress": "Invio via raccomandata preso in carico",
+      "send-analog-progress-description": "L'invio della notifica a {{name}} all'indirizzo {{address}} è stato preso in carico.",
+      "send-analog-error": "Invio per via cartacea non riuscito",
+      "send-analog-error-description": "Il tentativo di invio della notifica per via cartacea a {{name}} non è riuscito.",
+      "send-analog-success": "Invio per via cartacea riuscito",
+      "send-analog-success-description": "Il tentativo di invio della notifica per via cartacea a {{name}} è riuscito.",
       "aar-document": "Avviso di avvenuta ricezione",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
@@ -107,9 +111,12 @@
         "analog-delivery": "conformità",
         "recipient-access": "avvenuto accesso",
         "pec-receipt-accepted": "di accettazione PEC",
+        "paper-receipt-accepted": "di accettazione raccomandata",
         "pec-receipt-not-accepted": "di mancata accettazione PEC",
         "pec-receipt-delivered": "di consegna PEC",
-        "pec-receipt-not-delivered": "di mancata consegna PEC"
+        "pec-receipt-not-delivered": "di mancata consegna PEC",
+        "paper-receipt-delivered": "di consegna raccomandata",
+        "paper-receipt-not-delivered": "di mancata consegna raccomandata"
       }
     }
   },
