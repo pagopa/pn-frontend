@@ -448,12 +448,20 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
     }
     // check if there are information about the user that chahnged the status and populate recipient object
     if (status.status === NotificationStatus.VIEWED) {
-      const viewedStep = status.steps.find(
+      const viewedSteps = status.steps.filter(
         (s) => s.category === TimelineCategory.NOTIFICATION_VIEWED
       );
-      if (viewedStep && viewedStep.details && (viewedStep.details as ViewedDetails).delegateInfo) {
-        const { denomination, taxId } = (viewedStep.details as ViewedDetails).delegateInfo!;
-        status.recipient = `${denomination} (${taxId})`;
+      if (viewedSteps.length) {
+        // get last step, that is the first chronologically
+        const mostOldViewedStep = viewedSteps[viewedSteps.length - 1];
+        if (
+          mostOldViewedStep.details &&
+          (mostOldViewedStep.details as ViewedDetails).delegateInfo
+        ) {
+          const { denomination, taxId } = (mostOldViewedStep.details as ViewedDetails)
+            .delegateInfo!;
+          status.recipient = `${denomination} (${taxId})`;
+        }
       }
     }
     // change status if current is VIEWED and before there is a status EFFECTIVE_DATE
