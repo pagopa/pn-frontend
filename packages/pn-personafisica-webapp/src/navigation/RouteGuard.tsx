@@ -1,5 +1,5 @@
 import { AccessDenied } from '@pagopa-pn/pn-commons';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
@@ -8,6 +8,7 @@ import * as routes from './routes.const';
 
 const RouteGuard = () => {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
   const { sessionToken } = useAppSelector((state: RootState) => state.userState.user);
 
   if (!sessionToken) {
@@ -15,7 +16,7 @@ const RouteGuard = () => {
       <AccessDenied
         isLogged={false}
         goToHomePage={() => navigate(routes.NOTIFICHE, { replace: true })}
-        goToLogin={() => goToLoginPortal('PF')}
+        goToLogin={() => goToLoginPortal('PF', params.get('aar'))}
       />
     );
   }
