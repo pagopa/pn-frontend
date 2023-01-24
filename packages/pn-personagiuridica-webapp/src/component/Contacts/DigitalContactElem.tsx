@@ -39,6 +39,56 @@ type Props = {
   onConfirmClick: (status: 'validated' | 'cancelled') => void;
   forceMobileView?: boolean;
   blockDelete?: boolean;
+  resetModifyValue: () => void;
+};
+
+type DialogProps = {
+  showModal: boolean;
+  handleModalClose: () => void;
+  removeModalTitle: string;
+  removeModalBody: string;
+  blockDelete?: boolean;
+  confirmHandler: () => void;
+};
+
+const DeleteDialog: React.FC<DialogProps> = ({
+  showModal,
+  handleModalClose,
+  removeModalTitle,
+  removeModalBody,
+  blockDelete,
+  confirmHandler,
+}) => {
+  const { t } = useTranslation(['common']);
+
+  const deleteModalActions = blockDelete ? (
+    <Button onClick={handleModalClose} variant="outlined">
+      {t('button.close')}
+    </Button>
+  ) : (
+    <>
+      <Button onClick={handleModalClose} variant="outlined">
+        {t('button.annulla')}
+      </Button>
+      <Button onClick={confirmHandler} variant="contained">
+        {t('button.conferma')}
+      </Button>
+    </>
+  );
+  return (
+    <Dialog
+      open={showModal}
+      onClose={handleModalClose}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+    >
+      <DialogTitle id="dialog-title">{removeModalTitle}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
+      </DialogContent>
+      <DialogActions>{deleteModalActions}</DialogActions>
+    </Dialog>
+  );
 };
 
 const DigitalContactElem = memo(
@@ -54,6 +104,7 @@ const DigitalContactElem = memo(
     onConfirmClick,
     forceMobileView = false,
     blockDelete,
+    resetModifyValue,
   }: Props) => {
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
@@ -83,6 +134,7 @@ const DigitalContactElem = memo(
     };
 
     const onCancel = () => {
+      resetModifyValue();
       toggleEdit();
     };
 
@@ -116,21 +168,6 @@ const DigitalContactElem = memo(
         }
       );
     };
-
-    const deleteModalActions = blockDelete ? (
-      <Button onClick={handleModalClose} variant="outlined">
-        {t('button.close')}
-      </Button>
-    ) : (
-      <>
-        <Button onClick={handleModalClose} variant="outlined">
-          {t('button.annulla')}
-        </Button>
-        <Button onClick={confirmHandler} variant="contained">
-          {t('button.conferma')}
-        </Button>
-      </>
-    );
 
     return (
       <Fragment>
@@ -176,18 +213,14 @@ const DigitalContactElem = memo(
             )}
           </Grid>
         </Grid>
-        <Dialog
-          open={showModal}
-          onClose={handleModalClose}
-          aria-labelledby="dialog-title"
-          aria-describedby="dialog-description"
-        >
-          <DialogTitle id="dialog-title">{removeModalTitle}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
-          </DialogContent>
-          <DialogActions>{deleteModalActions}</DialogActions>
-        </Dialog>
+        <DeleteDialog
+          showModal={showModal}
+          handleModalClose={handleModalClose}
+          removeModalTitle={removeModalTitle}
+          removeModalBody={removeModalBody}
+          blockDelete={blockDelete}
+          confirmHandler={confirmHandler}
+        />
       </Fragment>
     );
   }
