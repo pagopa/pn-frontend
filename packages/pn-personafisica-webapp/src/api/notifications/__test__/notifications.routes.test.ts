@@ -5,6 +5,7 @@ import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
@@ -34,6 +35,14 @@ describe('Notifications routes', () => {
     expect(route).toEqual('/delivery/notifications/received/mocked-iun/attachments/documents/0');
   });
 
+  it('should compile NOTIFICATION_DETAIL_OTHER_DOCUMENTS', () => {
+    const route = NOTIFICATION_DETAIL_OTHER_DOCUMENTS('mocked-iun', {
+      documentId: 'mocked-id',
+      documentType: 'mocked-type',
+    });
+    expect(route).toEqual('/delivery-push/mocked-iun/document/mocked-type');
+  });
+
   it('should compile NOTIFICATION_DETAIL_LEGALFACT', () => {
     const route = NOTIFICATION_DETAIL_LEGALFACT('mocked-iun', {
       key: 'mocked-key',
@@ -44,7 +53,9 @@ describe('Notifications routes', () => {
 
   it('should compile NOTIFICATION_PAYMENT_ATTACHMENT', () => {
     const route = NOTIFICATION_PAYMENT_ATTACHMENT('mocked-iun', 'mocked-attachmentName');
-    expect(route).toEqual('/delivery/notifications/received/mocked-iun/attachments/payment/mocked-attachmentName');
+    expect(route).toEqual(
+      '/delivery/notifications/received/mocked-iun/attachments/payment/mocked-attachmentName'
+    );
   });
 
   it('should compile NOTIFICATION_PAYMENT_INFO', () => {
