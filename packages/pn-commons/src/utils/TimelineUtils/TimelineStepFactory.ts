@@ -1,3 +1,5 @@
+import { SendAnalogFeedbackStep } from './SendAnalogFeedbackStep';
+import { SendAnalogProgressStep } from './SendAnalogProgressStep';
 import { INotificationDetailTimeline, TimelineCategory } from '../../types';
 import { ScheduleDigitalWorkflowStep } from './ScheduleDigitalWorkflowStep';
 import { TimelineStep } from './TimelineStep';
@@ -10,7 +12,6 @@ import { SendDigitalFeedbackStep } from './SendDigitalFeedbackStep';
 import { SendDigitalProgressStep } from './SendDigitalProgressStep';
 import { SendSimpleRegisteredLetterStep } from './SendSimpleRegisteredLetterStep';
 import { SendAnalogDomicileStep } from './SendAnalogDomicileStep';
-import { SendPaperFeedbackStep } from './SendPaperFeedbackStep';
 import { DigitalFailureWorkflowStep } from './DigitalFailureWorkflowStep';
 import { NotHandledStep } from './NotHandledStep';
 
@@ -35,12 +36,14 @@ export class TimelineStepFactory {
          return new SendSimpleRegisteredLetterStep();
       case TimelineCategory.SEND_ANALOG_DOMICILE:
          return new SendAnalogDomicileStep();
-      case TimelineCategory.SEND_PAPER_FEEDBACK:
-        return new SendPaperFeedbackStep();
       case TimelineCategory.DIGITAL_FAILURE_WORKFLOW:
         return new DigitalFailureWorkflowStep();
       case TimelineCategory.NOT_HANDLED:
         return new NotHandledStep();
+      case TimelineCategory.SEND_ANALOG_PROGRESS:
+        return new SendAnalogProgressStep();
+      case TimelineCategory.SEND_ANALOG_FEEDBACK:
+        return new SendAnalogFeedbackStep();
       default:
         return new DefaultStep();
     }
