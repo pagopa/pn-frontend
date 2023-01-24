@@ -1,4 +1,6 @@
 /* eslint-disable functional/no-let */
+import React from 'react';
+
 import { act, fireEvent, RenderResult, screen, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { render, axe } from '../../../__test__/test-utils';
@@ -148,7 +150,6 @@ describe('CourtesyContactItem component', () => {
           expect(dialog).not.toBeInTheDocument();
         });
       });
-
     });
 
     describe('change an existing phone number', () => {
@@ -169,7 +170,7 @@ describe('CourtesyContactItem component', () => {
       test('type in an invalid number while in "edit mode"', async () => {
         //verify initial conditions
         screen.getByText(INPUT_VALID_PHONE);
-        screen.getByRole('button', { name: 'button.rimuovi' });
+        screen.getByRole('button', { name: 'button.elimina' });
         const editButton = screen.getByRole('button', { name: 'button.modifica' });
 
         fireEvent.click(editButton);
@@ -264,6 +265,21 @@ describe('CourtesyContactItem component', () => {
         });
       });
 
+      test('override an existing email using the same value', async () => {
+        const editButton = screen.getByRole('button', { name: 'button.modifica' });
+        fireEvent.click(editButton);
+        const input = await waitFor(() => screen.getByRole('textbox'));
+        const cancel = screen.getByRole('button', { name: 'button.annulla' });
+        fireEvent.change(input, { target: { value: '' } });
+        await waitFor(() => expect(input).toHaveValue(''));
+        fireEvent.change(input, { target: { value: 'ciao' } });
+        await waitFor(() => expect(input).toHaveValue('ciao'));
+        fireEvent.click(cancel);
+        await waitFor(() => {
+          const number = screen.getByText(INPUT_VALID_PHONE);
+          expect(number).toBeInTheDocument();
+        });
+      });
     });
 
     describe('delete an existing phone number', () => {
@@ -289,7 +305,7 @@ describe('CourtesyContactItem component', () => {
         const phoneText = screen.getByText(SUBMITTED_VALID_PHONE);
         expect(phoneText).toBeInTheDocument();
 
-        const deleteButton = screen.getByRole('button', { name: 'button.rimuovi' });
+        const deleteButton = screen.getByRole('button', { name: 'button.elimina' });
 
         fireEvent.click(deleteButton);
 
@@ -320,7 +336,6 @@ describe('CourtesyContactItem component', () => {
         });
       });
     });
-
   });
 
   describe('testing component having type "email"', () => {
@@ -440,7 +455,7 @@ describe('CourtesyContactItem component', () => {
       });
     });
 
-    describe('change an existing email', () => {
+    describe('modify an existing email', () => {
       beforeEach(async () => {
         await act(async () => {
           result = render(
@@ -458,7 +473,7 @@ describe('CourtesyContactItem component', () => {
       test('type in an invalid email while in "edit mode"', async () => {
         //verify initial conditions
         screen.getByText(VALID_EMAIL);
-        screen.getByRole('button', { name: 'button.rimuovi' });
+        screen.getByRole('button', { name: 'button.elimina' });
         const editButton = screen.getByRole('button', { name: 'button.modifica' });
 
         fireEvent.click(editButton);
@@ -579,7 +594,7 @@ describe('CourtesyContactItem component', () => {
         const textValue = screen.getByText(VALID_EMAIL);
         expect(textValue).toBeInTheDocument();
 
-        const deleteButton = screen.getByRole('button', { name: 'button.rimuovi' });
+        const deleteButton = screen.getByRole('button', { name: 'button.elimina' });
 
         fireEvent.click(deleteButton);
 
