@@ -54,6 +54,13 @@ export interface INotificationDetailTimeline {
   hidden?: boolean;
 }
 
+export enum ResponseStatus {
+  OK = 'OK',
+  PROGRESS = 'PROGRESS',
+  PROGRESS_WITH_RETRY = 'PROGRESS_WITH_RETRY',
+  KO = 'KO',
+}
+
 export interface SendPaperDetails extends BaseDetails {
   physicalAddress: PhysicalAddress;
   serviceLevel: PhysicalCommunicationType;
@@ -61,6 +68,14 @@ export interface SendPaperDetails extends BaseDetails {
   investigation: boolean;
   newAddress?: PhysicalAddress;
   errors?: Array<string>;
+  productType?: string;
+  analogCost?: number;
+  status?: ResponseStatus;
+  sendingReceipts?: Array<{
+    id: string;
+    system: string;
+  }>;
+  requestTimelineId: string;
 }
 
 interface BaseDetails {
@@ -266,12 +281,15 @@ export enum TimelineCategory {
   SEND_SIMPLE_REGISTERED_LETTER = 'SEND_SIMPLE_REGISTERED_LETTER',
   NOTIFICATION_VIEWED = 'NOTIFICATION_VIEWED',
   SEND_ANALOG_DOMICILE = 'SEND_ANALOG_DOMICILE',
-  SEND_PAPER_FEEDBACK = 'SEND_PAPER_FEEDBACK',
   PAYMENT = 'PAYMENT',
   COMPLETELY_UNREACHABLE = 'COMPLETELY_UNREACHABLE',
   REQUEST_REFUSED = 'REQUEST_REFUSED',
   // PN-1647
   NOT_HANDLED = 'NOT_HANDLED',
+  PREPARE_SIMPLE_REGISTERED_LETTER = 'PREPARE_SIMPLE_REGISTERED_LETTER',
+  PREPARE_ANALOG_DOMICILE = 'PREPARE_ANALOG_DOMICILE',
+  SEND_ANALOG_PROGRESS = 'SEND_ANALOG_PROGRESS',
+  SEND_ANALOG_FEEDBACK = 'SEND_ANALOG_FEEDBACK',
   AAR_GENERATION = 'AAR_GENERATION',
 }
 
