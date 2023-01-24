@@ -57,7 +57,7 @@ describe('InsertLegalContact component', () => {
     expect(button).toBeDisabled();
   });
 
-  it('checks invalid pec', async () => {
+  it('checks invalid pec - 1', async () => {
     const cardBody = result?.queryByTestId('DigitalContactsCardBody');
     const pecInput = cardBody?.querySelector('input[id="pec"]');
     fireEvent.change(pecInput!, { target: { value: 'mail-errata' } });
@@ -69,11 +69,23 @@ describe('InsertLegalContact component', () => {
     expect(button).toBeDisabled();
   });
 
+  it('checks invalid pec - 2', async () => {
+    const cardBody = result?.queryByTestId('DigitalContactsCardBody');
+    const pecInput = cardBody?.querySelector('input[id="pec"]');
+    fireEvent.change(pecInput!, { target: { value: 'mail!1@valida.mail' } });
+    await waitFor(() => expect(pecInput!).toHaveValue('mail!1@valida.mail'));
+    const errorMessage = cardBody?.querySelector('#pec-helper-text');
+    expect(errorMessage).toBeInTheDocument();
+    expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
+    const button = result?.getByRole('button', { name: 'button.conferma' });
+    expect(button).toBeDisabled();
+  });
+
   it('checks valid pec', async () => {
     const cardBody = result?.queryByTestId('DigitalContactsCardBody');
     const pecInput = cardBody?.querySelector('input[id="pec"]');
-    fireEvent.change(pecInput!, { target: { value: 'mail@valida.mail' } });
-    await waitFor(() => expect(pecInput!).toHaveValue('mail@valida.mail'));
+    fireEvent.change(pecInput!, { target: { value: 'mail@valida.com' } });
+    await waitFor(() => expect(pecInput!).toHaveValue('mail@valida.com'));
     const errorMessage = cardBody?.querySelector('#pec-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
     const button = result?.getByRole('button', { name: 'button.conferma' });
@@ -83,8 +95,8 @@ describe('InsertLegalContact component', () => {
   it('adds pec', async () => {
     const cardBody = result?.queryByTestId('DigitalContactsCardBody');
     const pecInput = cardBody?.querySelector('input[id="pec"]');
-    fireEvent.change(pecInput!, { target: { value: 'mail@valida.mail' } });
-    await waitFor(() => expect(pecInput!).toHaveValue('mail@valida.mail'));
+    fireEvent.change(pecInput!, { target: { value: 'mail@valida.com' } });
+    await waitFor(() => expect(pecInput!).toHaveValue('mail@valida.com'));
     const button = result?.getByRole('button', { name: 'button.conferma' });
     fireEvent.click(button!);
     await waitFor(() => {
@@ -94,7 +106,7 @@ describe('InsertLegalContact component', () => {
         recipientId: 'mocked-recipientId',
         senderId: 'default',
         channelType: LegalChannelType.PEC,
-        value: 'mail@valida.mail',
+        value: 'mail@valida.com',
         code: undefined,
       });
     });
@@ -127,7 +139,7 @@ describe('InsertLegalContact component', () => {
         recipientId: 'mocked-recipientId',
         senderId: 'default',
         channelType: LegalChannelType.PEC,
-        value: 'mail@valida.mail',
+        value: 'mail@valida.com',
         code: '01234',
       });
     });

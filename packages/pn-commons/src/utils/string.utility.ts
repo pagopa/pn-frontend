@@ -7,7 +7,20 @@
  * Carlos Lombardi, 2022.08.05
  */
 export const dataRegex = {
-  phoneNumber: /^3\d{2}[. ]??\d{6,7}$/g,
+  phoneNumber: /^3\d{8,9}$/g, 
+  // was /^3\d{2}[. ]??\d{6,7}$/g before, but BE (for courtesy addresses) do not accept the space 
+  // between the former three digits and the rest,
+  // so that the simple thing to do is not to accept it in the FE neither
+  // ------------------------------------
+  // Carlos Lombardi, 2023.01.23
+
+  phoneNumberWithItalyPrefix: /^\+393\d{8,9}$/g,
+  // in the modiifcation of a SMS courtesy address, the phone number is edited
+  // prefixed with the Italy intl. prefix +39
+  // (since it comes from BE as such, and to keep it untouched for the modification is the simplest thing to do)
+  // ------------------------------------
+  // Carlos Lombardi, 2023.01.23
+
   name: /^[A-Za-zÀ-ÿ\-'" 0-9\.]+$/,
   lettersAndNumbers: /^[A-Za-z0-9]+$/,
   simpleServer: /^[A-Za-z0-9.\-/]+$/, // the server part of an URL, no protocol, no query params
@@ -19,7 +32,28 @@ export const dataRegex = {
   isoDate: /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d{1,3})?)Z$/,
   taxonomyCode: /^(\d{6}[A-Z]{1})$/,
   denomination: /^([\x20-\xFF]{1,80})$/,
-  noticeCode: /^\d{18}$/
+  noticeCode: /^\d{18}$/,
+
+  email: /^[a-zA-Z0-9]+(?:[.\-_][a-zA-Z0-9]+){0,10}@[a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+){0,10}(?:\.[a-zA-Z0-9]{2,3})$/,
+  // We adopt a regex to validate email addresses, which is stricter than the one adopted by the BE 
+  // the difference being that other special characters besides dash and underscore are allowed BE-side.
+  // We will raise the issue to the test team.
+  // The regex specifies a list of chunks separated by dot, dash or underscore before the at symbol, 
+  // and another, analogous list, but allowing as separators only dot or dash, after the at symbol.
+  // The chunks allow Latin, unaccented letters and digits only. 
+  // The number of chunks is limited (11 before the at, 12 after it) to be coherent with the BE, which establishes this limitation 
+  // in order to avoid the risk of backtrack explosion.
+  // Of course, the at symbol is mandatory, as well as a final dot after it, so that the last separator must be a dot (and not a dash).
+  // The last chunk must have length 2 or 3. Beware that e.g. addresses for the ".info" domain are so excluded,
+  // this detail will be also raised to the test team.
+  //
+  // There is one case in which we choose not to adopt this email regex pattern, but instead rely on
+  // a more liberal specification.
+  // Namely, this is the case for the email address that comes as part of the logged user data 
+  // in the response to token exchange.
+  // Cfr. the comment in src/utils/user.utility.ts 
+  // ------------------------------------
+  // Carlos Lombardi, 2023.01.24
 };
 
 /**
