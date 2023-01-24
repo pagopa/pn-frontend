@@ -562,7 +562,7 @@ const Recipient = ({
                         />
                       )}
                     </Grid>
-                    <Grid container spacing={2}>
+                    <Grid container>
                       <Grid
                         xs={12}
                         item
