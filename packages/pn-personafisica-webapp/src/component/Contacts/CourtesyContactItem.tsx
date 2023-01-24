@@ -65,6 +65,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     formik.handleChange(event);
+
     await formik.setFieldTouched(event.target.id, true, false);
   };
 
