@@ -1,101 +1,113 @@
-import { storageOpsBuilder } from "../storage.utility";
+import { storageOpsBuilder } from '../storage.utility';
 
 describe('test storageOpsBuilder', () => {
-    test('test storageOpsBuilder read string function when empty', () => {
-        const builder = storageOpsBuilder('testKey', 'string', true)
+  test('test storageOpsBuilder read string function when empty', () => {
+    const builder = storageOpsBuilder('testKey', 'string', true);
 
-        const readTestKey = builder.read()
+    const readTestKey = builder.read();
 
-        expect(readTestKey).toBeUndefined()
-    })
+    expect(readTestKey).toBeUndefined();
+  });
 
-    test('test storageOpsBuilder string write function', () => {
-        const builder = storageOpsBuilder('testKey', 'string', true)
+  test('test storageOpsBuilder string write function', () => {
+    const builder = storageOpsBuilder('testKey', 'string', true);
 
-        builder.write('testValue')
-        const readTestKey = builder.read()
+    builder.write('testValue');
+    const readTestKey = builder.read();
 
+    expect(readTestKey).toEqual('testValue');
+  });
 
-        expect(readTestKey).toEqual('testValue')
-    })
+  test('test storageOpsBuilder string delete function', () => {
+    const builder = storageOpsBuilder('testKey', 'string', true);
 
-    test('test storageOpsBuilder string delete function', () => {
-        const builder = storageOpsBuilder('testKey', 'string', true)
+    builder.delete();
+    const readTestKey = builder.read();
 
-        builder.delete()
-        const readTestKey = builder.read()
+    expect(readTestKey).toBeUndefined();
+  });
 
-        expect(readTestKey).toBeUndefined()
-    })
+  test('test storageOpsBuilder read number function when empty', () => {
+    const builder = storageOpsBuilder('testKey', 'number', true);
 
-    test('test storageOpsBuilder read number function when empty', () => {
-        const builder = storageOpsBuilder('testKey', 'number', true)
+    const readTestKey = builder.read();
 
-        const readTestKey = builder.read()
+    expect(readTestKey).toBeUndefined();
+  });
 
-        expect(readTestKey).toBeUndefined()
-    })
+  test('test storageOpsBuilder number write function', () => {
+    const builder = storageOpsBuilder('testKey', 'number', true);
 
-    test('test storageOpsBuilder number write function', () => {
-        const builder = storageOpsBuilder('testKey', 'number', true)
+    builder.write(6);
+    const readTestKey = builder.read();
 
-        builder.write(6)
-        const readTestKey = builder.read()
+    expect(readTestKey).toEqual(6);
+  });
 
-        expect(readTestKey).toEqual(6)
-    })
+  test('test storageOpsBuilder number delete function', () => {
+    const builder = storageOpsBuilder('testKey', 'number', true);
 
-    test('test storageOpsBuilder number delete function', () => {
-        const builder = storageOpsBuilder('testKey', 'number', true)
+    builder.delete();
+    const readTestKey = builder.read();
 
-        builder.delete()
-        const readTestKey = builder.read()
+    expect(readTestKey).toBeUndefined();
+  });
 
-        expect(readTestKey).toBeUndefined()
-    })
+  test('test storageOpsBuilder read object function when empty', () => {
+    const builder = storageOpsBuilder('testKey', 'object', true);
 
-    test('test storageOpsBuilder read object function when empty', () => {
-        const builder = storageOpsBuilder('testKey', 'object', true)
+    const readTestKey = builder.read();
 
-        const readTestKey = builder.read()
+    expect(readTestKey).toBeUndefined();
+  });
 
-        expect(readTestKey).toBeUndefined()
-    })
+  test('test storageOpsBuilder object write function', () => {
+    const builder = storageOpsBuilder('testKey', 'object', true);
 
-    test('test storageOpsBuilder object write function', () => {
-        const builder = storageOpsBuilder('testKey', 'object', true)
+    builder.write('testValue');
+    const readTestKey = builder.read();
 
-        builder.write('testValue')
-        const readTestKey = builder.read()
+    expect(readTestKey).toEqual('testValue');
+  });
 
+  test('test storageOpsBuilder object delete function', () => {
+    const builder = storageOpsBuilder('testKey', 'object', true);
 
-        expect(readTestKey).toEqual('testValue')
-    })
+    builder.delete();
+    const readTestKey = builder.read();
 
-    test('test storageOpsBuilder object delete function', () => {
-        const builder = storageOpsBuilder('testKey', 'object', true)
+    expect(readTestKey).toBeUndefined();
+  });
 
-        builder.delete()
-        const readTestKey = builder.read()
+  test('test storageOpsBuilder session', () => {
+    const builder = storageOpsBuilder('testKey', 'string', false);
 
-        expect(readTestKey).toBeUndefined()
-    })
+    const initialTestKey = builder.read();
 
-    test('test storageOpsBuilder session', () => {
-        const builder = storageOpsBuilder('testKey', 'string', false)
+    expect(initialTestKey).toBeUndefined();
 
-        const initialTestKey = builder.read()
+    builder.write('testValue');
+    const updatedTestKey = builder.read();
 
-        expect(initialTestKey).toBeUndefined()
+    expect(updatedTestKey).toEqual('testValue');
 
-        builder.write('testValue')
-        const updatedTestKey = builder.read()
+    builder.delete();
+    const readTestKey = builder.read();
 
-        expect(updatedTestKey).toEqual('testValue')
+    expect(readTestKey).toBeUndefined();
+  });
 
-        builder.delete()
-        const readTestKey = builder.read()
+  test('test storageOpsBuilder session - xss attacks', () => {
+    const builder = storageOpsBuilder('testKey', 'string', false);
+    const initialTestKey = builder.read();
+    expect(initialTestKey).toBeUndefined();
 
-        expect(readTestKey).toBeUndefined()
-    })
-})
+    builder.write('<script>malicious code</script>testValue');
+    const updatedTestKey = builder.read();
+    expect(updatedTestKey).toEqual('testValue');
+
+    builder.delete();
+    const readTestKey = builder.read();
+    expect(readTestKey).toBeUndefined();
+  });
+});

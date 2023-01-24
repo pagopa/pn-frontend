@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles';
 import { useSearchParams } from 'react-router-dom';
 
 import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
-import { storageTypeOps, storageSpidSelectedOps } from '../../utils/storage';
+import { storageTypeOps, storageSpidSelectedOps, storageAarOps } from '../../utils/storage';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
 import { ENV } from '../../utils/env';
@@ -30,9 +30,14 @@ const Login = () => {
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
   const type = params.get('type');
+  const aar = params.get('aar');
 
   if (type !== null && type !== '' && (type === 'PG' || type === 'PF')) {
     storageTypeOps.write(type);
+  }
+
+  if (aar !== null && aar !== '') {
+    storageAarOps.write(aar);
   }
 
   const goCIE = () => {
