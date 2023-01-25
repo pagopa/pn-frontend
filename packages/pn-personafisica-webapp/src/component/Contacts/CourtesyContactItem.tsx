@@ -79,10 +79,6 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     void formik.setFieldValue(type, value, true);
   }, [value]);
 
-  /* const resetModifyValue = () => {
-    void formik.setFieldValue(type, value, true);
-  }; */
-
   if (value) {
     return (
       <form style={{ width: '100%' }}>

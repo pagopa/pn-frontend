@@ -148,7 +148,6 @@ describe('CourtesyContactItem component', () => {
           expect(dialog).not.toBeInTheDocument();
         });
       });
-
     });
 
     describe('change an existing phone number', () => {
@@ -169,7 +168,7 @@ describe('CourtesyContactItem component', () => {
       test('type in an invalid number while in "edit mode"', async () => {
         //verify initial conditions
         screen.getByText(INPUT_VALID_PHONE);
-        screen.getByRole('button', { name: 'button.rimuovi' });
+        screen.getByRole('button', { name: 'button.elimina' });
         const editButton = screen.getByRole('button', { name: 'button.modifica' });
 
         fireEvent.click(editButton);
@@ -263,7 +262,6 @@ describe('CourtesyContactItem component', () => {
           expect(dialog).not.toBeInTheDocument();
         });
       });
-
     });
 
     describe('delete an existing phone number', () => {
@@ -289,7 +287,7 @@ describe('CourtesyContactItem component', () => {
         const phoneText = screen.getByText(SUBMITTED_VALID_PHONE);
         expect(phoneText).toBeInTheDocument();
 
-        const deleteButton = screen.getByRole('button', { name: 'button.rimuovi' });
+        const deleteButton = screen.getByRole('button', { name: 'button.elimina' });
 
         fireEvent.click(deleteButton);
 
@@ -320,7 +318,6 @@ describe('CourtesyContactItem component', () => {
         });
       });
     });
-
   });
 
   describe('testing component having type "email"', () => {
@@ -458,7 +455,7 @@ describe('CourtesyContactItem component', () => {
       test('type in an invalid email while in "edit mode"', async () => {
         //verify initial conditions
         screen.getByText(VALID_EMAIL);
-        screen.getByRole('button', { name: 'button.rimuovi' });
+        screen.getByRole('button', { name: 'button.elimina' });
         const editButton = screen.getByRole('button', { name: 'button.modifica' });
 
         fireEvent.click(editButton);
@@ -579,7 +576,7 @@ describe('CourtesyContactItem component', () => {
         const textValue = screen.getByText(VALID_EMAIL);
         expect(textValue).toBeInTheDocument();
 
-        const deleteButton = screen.getByRole('button', { name: 'button.rimuovi' });
+        const deleteButton = screen.getByRole('button', { name: 'button.elimina' });
 
         fireEvent.click(deleteButton);
 

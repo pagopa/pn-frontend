@@ -116,12 +116,6 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     });
   }, [address]);
 
-  /* const resetModifyValue = () => {
-    void formik.setFieldValue(`${address.senderId}_phone`, address.phone, true);
-    void formik.setFieldValue(`${address.senderId}_mail`, address.mail, true);
-    void formik.setFieldValue(`${address.senderId}_pec`, address.pec, true);
-  };
- */
   const jsxField = (f: Field) => (
     <Fragment>
       {address[f.addressId] ? (

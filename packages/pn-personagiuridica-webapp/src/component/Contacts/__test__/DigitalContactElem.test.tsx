@@ -97,7 +97,7 @@ describe('DigitalContactElem Component', () => {
     const buttons = result?.container.querySelectorAll('button');
     expect(buttons).toHaveLength(2);
     expect(buttons![0]).toHaveTextContent('button.modifica');
-    expect(buttons![1]).toHaveTextContent('button.rimuovi');
+    expect(buttons![1]).toHaveTextContent('button.elimina');
   });
 
   it('renders DigitalContactElem (edit mode)', async () => {

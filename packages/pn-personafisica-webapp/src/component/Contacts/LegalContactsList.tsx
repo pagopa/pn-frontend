@@ -60,10 +60,6 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     }
   };
 
-  /* const resetModifyValue = () => {
-    void formik.setFieldValue('pec', defaultAddress?.value, true);
-  }; */
-
   return (
     <DigitalContactsCard
       sectionTitle={t('legal-contacts.title', { ns: 'recapiti' })}
