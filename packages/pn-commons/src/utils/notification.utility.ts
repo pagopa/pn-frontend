@@ -17,6 +17,7 @@ import {
   LegalFactType,
   NotificationDetailDocument,
   SendDigitalDetails,
+  ViewedDetails,
   SendPaperDetails,
 } from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
@@ -26,7 +27,8 @@ function localizeStatus(
   status: string,
   defaultLabel: string,
   defaultTooltip: string,
-  defaultDescription: string
+  defaultDescription: string,
+  data?: { [key: string]: any }
 ): {
   label: string;
   tooltip: string;
@@ -37,12 +39,14 @@ function localizeStatus(
     tooltip: getLocalizedOrDefaultLabel(
       'notifications',
       `status.${status}-tooltip`,
-      defaultTooltip
+      defaultTooltip,
+      data
     ),
     description: getLocalizedOrDefaultLabel(
       'notifications',
       `status.${status}-description`,
-      defaultDescription
+      defaultDescription,
+      data
     ),
   };
 }
@@ -52,12 +56,17 @@ function localizeStatus(
  * @param  {NotificationStatus} status
  * @returns object
  */
-export function getNotificationStatusInfos(status: NotificationStatus): {
+export function getNotificationStatusInfos(
+  status: NotificationStatus,
+  recipient?: string
+): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
   tooltip: string;
   description: string;
 } {
+  /* eslint-disable-next-line functional/no-let */
+  let subject = getLocalizedOrDefaultLabel('notifications', `status.recipient`, 'destinatario');
   switch (status) {
     case NotificationStatus.DELIVERED:
       return {
@@ -120,23 +129,41 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
         ),
       };
     case NotificationStatus.VIEWED:
+      if (recipient) {
+        subject = getLocalizedOrDefaultLabel(
+          'notifications',
+          `status.delegate`,
+          `delegato ${recipient}`,
+          { name: recipient }
+        );
+      }
       return {
         color: 'info',
         ...localizeStatus(
           'viewed',
           'Perfezionata per visione',
-          'Il destinatario ha letto la notifica',
-          'Il destinatario ha letto la notifica entro il termine stabilito'
+          `Il ${subject} ha letto la notifica`,
+          `Il ${subject} ha letto la notifica entro il termine stabilito`,
+          { subject }
         ),
       };
     case NotificationStatus.VIEWED_AFTER_DEADLINE:
+      if (recipient) {
+        subject = getLocalizedOrDefaultLabel(
+          'notifications',
+          `status.delegate`,
+          `delegato ${recipient}`,
+          { name: recipient }
+        );
+      }
       return {
         color: 'success',
         ...localizeStatus(
           'viewed-after-deadline',
           'Visualizzata',
-          'Il destinatario ha visualizzato la notifica',
-          'Il destinatario ha visualizzato la notifica'
+          `Il ${subject} ha visualizzato la notifica`,
+          `Il ${subject} ha visualizzato la notifica`,
+          { subject }
         ),
       };
     case NotificationStatus.CANCELLED:
@@ -418,6 +445,24 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
     });
     if (status.status !== NotificationStatus.ACCEPTED && acceptedStatusItems.length) {
       acceptedStatusItems = [];
+    }
+    // check if there are information about the user that chahnged the status and populate recipient object
+    if (status.status === NotificationStatus.VIEWED) {
+      const viewedSteps = status.steps.filter(
+        (s) => s.category === TimelineCategory.NOTIFICATION_VIEWED
+      );
+      if (viewedSteps.length) {
+        // get last step, that is the first chronologically
+        const mostOldViewedStep = viewedSteps[viewedSteps.length - 1];
+        if (
+          mostOldViewedStep.details &&
+          (mostOldViewedStep.details as ViewedDetails).delegateInfo
+        ) {
+          const { denomination, taxId } = (mostOldViewedStep.details as ViewedDetails)
+            .delegateInfo!;
+          status.recipient = `${denomination} (${taxId})`;
+        }
+      }
     }
     // change status if current is VIEWED and before there is a status EFFECTIVE_DATE
     if (status.status === NotificationStatus.EFFECTIVE_DATE) {
