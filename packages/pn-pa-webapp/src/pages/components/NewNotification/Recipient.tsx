@@ -148,7 +148,7 @@ const Recipient = ({
         }),
       digitalDomicile: yup.string().when('showDigitalDomicile', {
         is: true,
-        then: yup.string().email(t('pec-error')).required(tc('required-field')),
+        then: yup.string().matches(dataRegex.email, t('pec-error')).required(tc('required-field')),
       }),
       showPhysicalAddress: yup.boolean().isTrue(),
       address: yup.string().when('showPhysicalAddress', {
