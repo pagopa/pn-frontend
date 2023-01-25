@@ -3,7 +3,7 @@
   "subtitle": "Qui trovi tutte le notifiche inviate dall'ente. Puoi filtrarle per Codice Fiscale, Codice IUN, data di invio e stato.",
   "new-notification-button": "Invia una nuova notifica",
   "filters": {
-    "fiscal-code": "Codice Fiscale",
+    "fiscal-code-tax-code": "Codice Fiscale o Partita Iva",
     "iun": "Codice IUN",
     "data_da": "Da",
     "data_da-aria-label": "Data inizio ricerca",
