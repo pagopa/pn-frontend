@@ -273,7 +273,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       avatar={null}
     >
       <Typography sx={{ marginTop: '20px' }}>{t('required-fields')}</Typography>
-      <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
+      <form style={{ margin: '20px 0' }} onSubmit={e => e.preventDefault()}>
         <Grid container direction="row" spacing={2} alignItems="flex">
           <Grid item lg xs={12}>
             <CustomDropdown

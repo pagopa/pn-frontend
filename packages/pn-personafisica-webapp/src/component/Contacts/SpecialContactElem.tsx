@@ -119,7 +119,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const jsxField = (f: Field) => (
     <Fragment>
       {address[f.addressId] ? (
-        <form data-testid="specialContactForm">
+        <form data-testid="specialContactForm" onSubmit={ e => e.preventDefault() }>
           <DigitalContactElem
             recipientId={recipientId}
             senderId={address.senderId}
