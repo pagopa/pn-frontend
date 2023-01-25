@@ -8,18 +8,18 @@ const filters = {
   startDate: '2022-10-01',
   endDate: '2022-11-16',
   endFilteredDate: '2022-11-17',
-  status: NotificationStatus.VIEWED
-}
+  status: NotificationStatus.VIEWED,
+};
 
-describe("Filter Notifications", () => {
+describe('Filter Notifications', () => {
   const startDate = {
     iso: filters.startDate,
-    formatted: formatDate(filters.startDate)
+    formatted: formatDate(filters.startDate),
   };
   const endDate = {
     iso: filters.endDate,
     isoNextDay: filters.endFilteredDate,
-    formatted: formatDate(filters.endDate)
+    formatted: formatDate(filters.endDate),
   };
   beforeEach(() => {
     Cypress.on('uncaught:exception', (err, runnable) => {
@@ -29,7 +29,7 @@ describe("Filter Notifications", () => {
 
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list-10/page-1'
+      fixture: 'notifications/list-10/page-1',
     }).as('notifications');
 
     cy.logout();
@@ -43,7 +43,12 @@ describe("Filter Notifications", () => {
 
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list-10/filtered-dates'
+      fixture: 'notifications/list-10/filtered-dates',
+    }).as('filteredNotifications');
+
+    cy.intercept('GET', `/delivery\/notifications\/sent/${filters.iun}`, {
+      statusCode: 200,
+      fixture: 'notifications/effective_date',
     }).as('filteredNotifications');
 
     cy.get('.MuiButton-outlined').click();
@@ -53,11 +58,11 @@ describe("Filter Notifications", () => {
       expect(interception.request.url).include(`endDate=${endDate.isoNextDay}`);
       expect(interception.response.statusCode).to.equal(200);
     });
-    
+
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
     cy.get(':nth-child(1) > .css-pgy0cg-MuiTableCell-root').should('be.visible').click();
-    cy.get('.css-6ezsbm-MuiStack-root > .MuiButton-root').click();
+    cy.get('[data-testid="breadcrumb-indietro-button"]').click();
     cy.get('#startDate').should('have.value', startDate.formatted);
     cy.get('#endDate').should('have.value', endDate.formatted);
 
@@ -69,7 +74,7 @@ describe("Filter Notifications", () => {
 
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list-10/filtered-recipient'
+      fixture: 'notifications/list-10/filtered-recipient',
     }).as('filteredNotifications');
 
     cy.contains(/^Filtra$/).click();
@@ -88,10 +93,10 @@ describe("Filter Notifications", () => {
 
   it(`Filter notifications by IUN '${filters.iun}'`, () => {
     cy.get('#iunMatch').type(filters.iun);
-    
+
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list-10/filtered-iun'
+      fixture: 'notifications/list-10/filtered-iun',
     }).as('filteredNotifications');
 
     cy.contains(/^Filtra$/).click();
@@ -111,10 +116,10 @@ describe("Filter Notifications", () => {
   it(`Filter notifications by status '${filters.status}'`, () => {
     cy.get('#status').click();
     cy.get(`[data-value="${filters.status}"]`).click();
-    
+
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
-      fixture: 'notifications/list-10/filtered-status'
+      fixture: 'notifications/list-10/filtered-status',
     }).as('filteredNotifications');
 
     cy.contains(/^Filtra$/).click();

@@ -1,3 +1,4 @@
+import { URL_FE_LOGIN } from '../../utils/constants';
 import { goToLoginPortal } from '../navigation.utility';
 
 const replaceFn = jest.fn();
@@ -24,8 +25,9 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal', () => {
+    const baseUrl = URL_FE_LOGIN ?? '';
     goToLoginPortal('fake-origin');
     expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith('logout?origin=fake-origin');
+    expect(replaceFn).toBeCalledWith(`${baseUrl}logout?origin=fake-origin`);
   });
 });
