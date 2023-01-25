@@ -6,7 +6,7 @@ const webpackOptions = require('./cypress/webpack.config');
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'https://portale.dev.pn.pagopa.it',
+    baseUrl: 'https://portale-pg.dev.pn.pagopa.it',
     // defaultCommandTimeout: 30000,
     // requestTimeout: 30000,
     setupNodeEvents(on, config) {
@@ -14,13 +14,14 @@ export default defineConfig({
       let excludeSpecPattern = [];
       const initialExcludePattern = config.excludeSpecPattern;
 
-      if (typeof initialExcludePattern === "string") {
+      if (typeof initialExcludePattern === 'string') {
         excludeSpecPattern.push(initialExcludePattern);
       } else {
         excludeSpecPattern = [initialExcludePattern];
       }
 
-      if(config.isTextTerminal){ // cypress launched using run
+      if (config.isTextTerminal) {
+        // cypress launched using run
         excludeSpecPattern.push('cypress/e2e/All.cy.ts');
       }
 
@@ -31,14 +32,14 @@ export default defineConfig({
 
       const options = {
         webpackOptions,
-        watchOptions: {}
+        watchOptions: {},
       };
 
       on('file:preprocessor', webpackPreprocessor(options));
 
       return {
         ...config,
-        excludeSpecPattern
+        excludeSpecPattern,
       };
     },
   },
