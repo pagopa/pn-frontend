@@ -53,6 +53,16 @@ Parameters:
     Default: ''
     Description: ARN of portale-pg distribution too many requests alarm
 
+  StatusTooManyErrorsAlarmArn:
+    Type: String
+    Default: ''
+    Description: ARN of portale-pg distribution too many errors alarm
+
+  StatusTooManyRequestsAlarmArn:
+    Type: String
+    Default: ''
+    Description: ARN of portale-pg distribution too many requests alarm
+
 Resources:
   # Dashboard
   FrontendMicroserviceCloudWatchDashboard:
@@ -73,3 +83,5 @@ Resources:
             - !Ref LandingTooManyRequestsAlarmArn
             - !Ref PGTooManyErrorsAlarmArn
             - !Ref PGTooManyRequestsAlarmArn
+            - !Ref StatusTooManyErrorsAlarmArn
+            - !Ref StatusTooManyRequestsAlarmArn
