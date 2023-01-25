@@ -27,26 +27,29 @@ export interface NotificationDetail {
   amount?: number;
 }
 
+export type NotificationDetailTimelineDetails =
+  | BaseDetails
+  | AarDetails
+  | ViewedDetails
+  | AnalogWorkflowDetails
+  | DigitalWorkflowDetails
+  | AddressInfoDetails
+  | PublicRegistryCallDetails
+  | PublicRegistryResponseDetails
+  | RequestRefusedDetails
+  | ScheduleDigitalWorkflowDetails
+  | SendCourtesyMessageDetails
+  | SendDigitalDetails
+  | SendPaperDetails
+  // PN-1647
+  | NotHandledDetails;
+
 export interface INotificationDetailTimeline {
   elementId: string;
   timestamp: string;
   legalFactsIds?: Array<LegalFactId>;
   category: TimelineCategory;
-  details:
-    | BaseDetails
-    | AarDetails
-    | AnalogWorkflowDetails
-    | DigitalWorkflowDetails
-    | AddressInfoDetails
-    | PublicRegistryCallDetails
-    | PublicRegistryResponseDetails
-    | RequestRefusedDetails
-    | ScheduleDigitalWorkflowDetails
-    | SendCourtesyMessageDetails
-    | SendDigitalDetails
-    | SendPaperDetails
-    // PN-1647
-    | NotHandledDetails;
+  details: NotificationDetailTimelineDetails;
   // only fe
   hidden?: boolean;
 }
@@ -77,6 +80,19 @@ export interface SendPaperDetails extends BaseDetails {
 
 interface BaseDetails {
   recIndex?: number;
+}
+
+interface DelegateInfo {
+  internalId: string;
+  taxId: string;
+  operatorUuid: string;
+  mandateId: string;
+  denomination: string;
+  delegateType: RecipientType;
+}
+
+export interface ViewedDetails extends BaseDetails {
+  delegateInfo?: DelegateInfo;
 }
 
 export interface AarDetails {
@@ -241,6 +257,7 @@ export interface NotificationStatusHistory {
   relatedTimelineElements: Array<string>;
   // only fe
   steps?: Array<INotificationDetailTimeline>;
+  recipient?: string;
 }
 
 export enum TimelineCategory {
