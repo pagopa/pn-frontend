@@ -1,4 +1,4 @@
-import { User } from "../types";
+import { User } from '../types';
 
 export const userResponse: User = {
   sessionToken: 'mocked-session-token',
@@ -9,7 +9,7 @@ export const userResponse: User = {
   mobile_phone: '333333334',
   from_aa: false,
   uid: 'a6c1350d-1d69-4209-8bf8-31de58c79d6f',
-  aud: 'portale.dev.pn.pagopa.it',
+  aud: 'portale-pg.dev.pn.pagopa.it',
   level: 'L2',
   iat: 1646394256,
   exp: 1646397856,
