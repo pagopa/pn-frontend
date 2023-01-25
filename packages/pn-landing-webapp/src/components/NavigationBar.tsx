@@ -6,7 +6,7 @@ import { INavigationBarProps } from "model";
 
 const NavigationBar = ({ title, chip, pf, pa}: INavigationBarProps) => {
   const { pathname } = useRouter();
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState<number | undefined>();
 
   const pfPath = "/cittadini";
   const paPath = "/pubbliche-amministrazioni";

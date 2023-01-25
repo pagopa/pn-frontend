@@ -10,10 +10,6 @@ import {
   WalkthroughProps
 } from "@pagopa/mui-italia";
 
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
-
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL, MANUALE_URL } from "@utils/constants";
-
 import {
   CheckmarkIcon,
   CloudIcon,
@@ -35,6 +31,17 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+
+import {
+  IMAGES_PATH,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PN_URL,
+  MANUALE_URL,
+  PARTNER_AND_INTERMEDIARIES_PATH
+} from "@utils/constants";
+
 
 const assistanceLink = {
   label: "Assistenza",
@@ -183,7 +190,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Presto disponibile per gli enti",
+      title: " ",
       content: (
         <>
           <Typography variant="body2">
@@ -203,11 +210,15 @@ const paInfoBlocks: Array<IInfoblockData> = [
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
               le API b2b per le pubbliche amministrazioni
             </Link>
-            {" "}e{" "}
+            ,{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
               le API b2b per l’avanzamento delle notifiche
             </Link>
-            .
+            {" "}e{" "}
+            <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
+              la lista dei Partner e Intermediari tecnologici
+            </Link>
+            {" "}che stanno implementando le attività di integrazione alla piattaforma e di cui è possibile avvalersi per un supporto nella gestione degli aspetti tecnici .
           </Typography>
         </>
       ),
@@ -216,6 +227,11 @@ const paInfoBlocks: Array<IInfoblockData> = [
       altText: "",
       aspectRatio: "9/16",
       imageShadow: false,
+      ctaPrimary: {
+        label: "Avvia l’integrazione",
+        title: "Avvia l’integrazione",
+        onClick: () => window.location.assign("/pubbliche-amministrazioni/partner-e-intermediari")
+      }
     },
   },
 ];
@@ -809,8 +825,6 @@ const postLoginLinks: Array<FooterLinksType> = [
 export const itAppData: IAppData = {
   common: {
     navigation,
-    alert:
-      "La piattaforma non è operativa. Attualmente sono in fase di collaudo solo alcune delle funzionalità descritte in questa pagina, disponibili esclusivamente per un numero limitato di utenti che saranno destinatari delle notifiche inviate dagli enti pilota.",
     assistance: assistanceLink,
     pagoPALink,
     companyLegalInfo,

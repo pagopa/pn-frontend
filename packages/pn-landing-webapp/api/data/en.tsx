@@ -10,10 +10,6 @@ import {
   WalkthroughProps
 } from "@pagopa/mui-italia";
 
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
-
-import { IMAGES_PATH, MANUALE_URL, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
-
 import {
   CheckmarkIcon,
   CloudIcon,
@@ -35,6 +31,17 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+
+import {
+  IMAGES_PATH,
+  MANUALE_URL,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PARTNER_AND_INTERMEDIARIES_PATH,
+  PN_URL
+} from "@utils/constants";
+
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
@@ -171,7 +178,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Soon available to organisations",
+      title: " ",
       content: (
         <>
           <Typography variant="body2">
@@ -189,12 +196,16 @@ const paInfoBlocks: Array<IInfoblockData> = [
               (updated 28/06/2022),{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
               the b2b API for public administrations
-            </Link>{" "}
-            and{" "}
+            </Link>
+            ,{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
               the b2b API for the advancement of notifications
             </Link>
-            .
+            {" "}and{" "}
+            <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
+              the list of technology Partners and Intermediaries
+            </Link>
+            {" "}who are implementing the activities of integration to the platform and which can be used for support in the management of the technical aspects.
           </Typography>
         </>
       ),
@@ -203,6 +214,11 @@ const paInfoBlocks: Array<IInfoblockData> = [
       altText: "",
       aspectRatio: "9/16",
       imageShadow: false,
+      ctaPrimary: {
+        label: "Starten Sie die Integration",
+        title: "Starten Sie die Integration",
+        onClick: () => window.location.assign("/pubbliche-amministrazioni/partner-e-intermediari")
+      }
     },
   },
 ];
@@ -790,8 +806,6 @@ const postLoginLinks: Array<FooterLinksType> = [
 export const enAppData: IAppData = {
   common: {
     navigation,
-    alert:
-      "The platform is not operational. Only some of the functionalities described on this page are currently being tested and are only available to a limited number of users who will be recipients of the notifications sent by the pilot organisations.",
     assistance: assistanceLink,
     pagoPALink,
     companyLegalInfo,

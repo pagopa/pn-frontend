@@ -10,10 +10,6 @@ import {
   WalkthroughProps
 } from "@pagopa/mui-italia";
 
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
-
-import { IMAGES_PATH, MANUALE_URL, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
-
 import {
   CheckmarkIcon,
   CloudIcon,
@@ -35,6 +31,17 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+
+import {
+  IMAGES_PATH,
+  MANUALE_URL,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PARTNER_AND_INTERMEDIARIES_PATH,
+  PN_URL
+} from "@utils/constants";
+
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
@@ -173,7 +180,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Bientôt disponible pour les organismes",
+      title: " ",
       content: (
         <>
           <Typography variant="body2">
@@ -193,11 +200,15 @@ const paInfoBlocks: Array<IInfoblockData> = [
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
               les API b2b pour les administrations publiques
             </Link>
-            {" "}et{" "}
+            ,{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
               les API b2b pour l’avancement des notifications.
             </Link>
-            .
+            {" "}et{" "}
+            <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
+              la liste des Partenaires et Intermédiaires technologiques
+            </Link>
+            qui mettent en œuvre les activités d’intégration à la plate-forme et qui peut servir de support dans la gestion des aspects techniques.
           </Typography>
         </>
       ),
@@ -206,6 +217,11 @@ const paInfoBlocks: Array<IInfoblockData> = [
       altText: "",
       aspectRatio: "9/16",
       imageShadow: false,
+      ctaPrimary: {
+        label: "Démarrer l'intégration",
+        title: "Démarrer l'intégration",
+        onClick: () => window.location.assign("/pubbliche-amministrazioni/partner-e-intermediari")
+      }
     },
   },
 ];

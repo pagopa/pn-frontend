@@ -10,10 +10,6 @@ import {
   WalkthroughProps
 } from "@pagopa/mui-italia";
 
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
-
-import { IMAGES_PATH, MANUALE_URL, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
-
 import {
   CheckmarkIcon,
   CloudIcon,
@@ -35,6 +31,17 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+
+import {
+  IMAGES_PATH,
+  MANUALE_URL,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PARTNER_AND_INTERMEDIARIES_PATH,
+  PN_URL
+} from "@utils/constants";
+
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
@@ -169,7 +176,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Kmalu na voljo za ustanove",
+      title: " ",
       content: (
         <>
           <Typography variant="body2">
@@ -192,7 +199,9 @@ const paInfoBlocks: Array<IInfoblockData> = [
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
               API-je b2b za potek postopka obveščanja
             </Link>
-            .
+            {" "}in{" "}
+            <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>seznam tehnoloških partnerjev in posrednikov</Link>
+            , ki izvajajo dejavnosti integracije platforme in ki jih je mogoče uporabiti za podporo pri upravljanju tehničnih vidikov.
           </Typography>
         </>
       ),
@@ -201,6 +210,11 @@ const paInfoBlocks: Array<IInfoblockData> = [
       altText: "",
       aspectRatio: "9/16",
       imageShadow: false,
+      ctaPrimary: {
+        label: "Zaženite integracijo",
+        title: "Zaženite integracijo",
+        onClick: () => window.location.assign("/pubbliche-amministrazioni/partner-e-intermediari")
+      }
     },
   },
 ];
