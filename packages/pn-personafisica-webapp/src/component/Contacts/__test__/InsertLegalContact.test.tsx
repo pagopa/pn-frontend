@@ -72,8 +72,8 @@ describe('InsertLegalContact component', () => {
   it('checks invalid pec - 2', async () => {
     const cardBody = result?.queryByTestId('DigitalContactsCardBody');
     const pecInput = cardBody?.querySelector('input[id="pec"]');
-    fireEvent.change(pecInput!, { target: { value: 'mail!1@valida.mail' } });
-    await waitFor(() => expect(pecInput!).toHaveValue('mail!1@valida.mail'));
+    fireEvent.change(pecInput!, { target: { value: 'mail!1@invalida.it' } });
+    await waitFor(() => expect(pecInput!).toHaveValue('mail!1@invalida.it'));
     const errorMessage = cardBody?.querySelector('#pec-helper-text');
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
