@@ -1,3 +1,4 @@
+import { AppRouteType } from '@pagopa-pn/pn-commons';
 import { URL_FE_LOGOUT } from '../../utils/constants';
 import { goToLoginPortal } from '../navigation.utility';
 
@@ -25,19 +26,19 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal', () => {
-    goToLoginPortal('PG');
+    goToLoginPortal(AppRouteType.PG);
     expect(replaceFn).toBeCalledTimes(1);
     expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG`);
   });
 
   it('goToLoginPortal - aar', () => {
-    goToLoginPortal('PG', 'fake-aar-token');
+    goToLoginPortal(AppRouteType.PG, 'fake-aar-token');
     expect(replaceFn).toBeCalledTimes(1);
     expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG&aar=fake-aar-token`);
   });
 
   it('goToLoginPortal - aar', () => {
-    goToLoginPortal('PG', '<script>malicious code</script>malicious-aar-token');
+    goToLoginPortal(AppRouteType.PG, '<script>malicious code</script>malicious-aar-token');
     expect(replaceFn).toBeCalledTimes(1);
     expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG&aar=malicious-aar-token`);
   });

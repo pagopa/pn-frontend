@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Layout, useIsMobile } from '@pagopa-pn/pn-commons';
+import { AppRouteParams, AppRouteType, Layout, useIsMobile } from '@pagopa-pn/pn-commons';
 import { SpidIcon, CieIcon } from '@pagopa/mui-italia/dist/icons';
 import { styled } from '@mui/material/styles';
 import { useSearchParams } from 'react-router-dom';
@@ -29,10 +29,10 @@ const Login = () => {
   const { t, i18n } = useTranslation(['login', 'notifiche']);
   const isMobile = useIsMobile();
   const [params] = useSearchParams();
-  const type = params.get('type');
-  const aar = params.get('aar');
+  const type = params.get(AppRouteParams.TYPE);
+  const aar = params.get(AppRouteParams.AAR);
 
-  if (type !== null && type !== '' && (type === 'PG' || type === 'PF')) {
+  if (type !== null && type !== '' && (type === AppRouteType.PF || type === AppRouteType.PG)) {
     storageTypeOps.write(type);
   }
 

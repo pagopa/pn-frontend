@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
+import { AppRouteType } from '@pagopa-pn/pn-commons';
 
 import SuccessPage from '../Success';
 import '../../../locales/i18n';
@@ -26,7 +27,7 @@ describe('test login page', () => {
   });
 
   test('test redirect - PF', () => {
-    storageTypeOps.write('PF');
+    storageTypeOps.write(AppRouteType.PF);
     render(
       <BrowserRouter>
         <SuccessPage />
@@ -38,7 +39,7 @@ describe('test login page', () => {
   });
 
   test('test redirect - PG', () => {
-    storageTypeOps.write('PG');
+    storageTypeOps.write(AppRouteType.PG);
     render(
       <BrowserRouter>
         <SuccessPage />
@@ -50,7 +51,7 @@ describe('test login page', () => {
   });
 
   test('test redirect - xss attack', () => {
-    storageTypeOps.write('<script>malicious code</script>not-safe-url' as 'PF');
+    storageTypeOps.write('<script>malicious code</script>not-safe-url' as AppRouteType.PF);
     render(
       <BrowserRouter>
         <SuccessPage />
@@ -61,7 +62,7 @@ describe('test login page', () => {
   });
 
   test('test redirect - aar', () => {
-    storageTypeOps.write('PF');
+    storageTypeOps.write(AppRouteType.PF);
     storageAarOps.write('aar-token');
     render(
       <BrowserRouter>
@@ -74,7 +75,7 @@ describe('test login page', () => {
   });
 
   test('test redirect - aar with xss attack', () => {
-    storageTypeOps.write('PF');
+    storageTypeOps.write(AppRouteType.PF);
     storageAarOps.write('<script>malicious code</script>aar-malicious-token');
     render(
       <BrowserRouter>

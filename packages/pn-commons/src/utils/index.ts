@@ -33,7 +33,7 @@ import {
   adaptedTokenExchangeError,
 } from './user.utility';
 import { storageOpsBuilder } from './storage.utility';
-import { compileRoute } from './routes.utility';
+import { compileRoute, AppRouteType, AppRouteParams } from './routes.utility';
 import {
   URL_DIGITAL_NOTIFICATIONS,
   PRIVACY_LINK_RELATIVE_PATH,
@@ -73,6 +73,8 @@ export {
   dataRegex,
   storageOpsBuilder,
   compileRoute,
+  AppRouteType,
+  AppRouteParams,
   today,
   tenYearsAgo,
   DATE_FORMAT,

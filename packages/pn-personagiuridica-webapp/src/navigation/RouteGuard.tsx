@@ -1,4 +1,4 @@
-import { AccessDenied } from '@pagopa-pn/pn-commons';
+import { AccessDenied, AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useAppSelector } from '../redux/hooks';
@@ -16,7 +16,7 @@ const RouteGuard = () => {
       <AccessDenied
         isLogged={false}
         goToHomePage={() => navigate(routes.NOTIFICHE, { replace: true })}
-        goToLogin={() => goToLoginPortal('PG', params.get('aar'))}
+        goToLogin={() => goToLoginPortal(AppRouteType.PG, params.get(AppRouteParams.AAR))}
       />
     );
   }
