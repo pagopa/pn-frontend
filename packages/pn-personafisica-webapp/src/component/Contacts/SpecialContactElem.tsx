@@ -89,9 +89,9 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
       .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
   });
 
-  const updateContact = (status: 'validated' | 'cancelled') => {
+  const updateContact = async (status: 'validated' | 'cancelled', id: string) => {
     if (status === 'cancelled') {
-      formik.resetForm({ values: initialValues });
+      await formik.setFieldValue(id, initialValues[id]);
     }
     trackEventByType(TrackEventType.CONTACT_SPECIAL_CONTACTS, { action: EventActions.ADD });
   };
@@ -116,12 +116,12 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     });
   }, [address]);
 
-  const resetModifyValue = () => {
+  /* const resetModifyValue = () => {
     void formik.setFieldValue(`${address.senderId}_phone`, address.phone, true);
     void formik.setFieldValue(`${address.senderId}_mail`, address.mail, true);
     void formik.setFieldValue(`${address.senderId}_pec`, address.pec, true);
   };
-
+ */
   const jsxField = (f: Field) => (
     <Fragment>
       {address[f.addressId] ? (
@@ -160,9 +160,9 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
               ns: 'recapiti',
             })}
             value={formik.values[f.id]}
-            onConfirmClick={updateContact}
+            onConfirmClick={(status) => updateContact(status, f.id)}
             forceMobileView
-            resetModifyValue={resetModifyValue}
+            resetModifyValue={() => updateContact('cancelled', f.id)}
           />
         </form>
       ) : (

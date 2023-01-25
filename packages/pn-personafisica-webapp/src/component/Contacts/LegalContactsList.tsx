@@ -60,9 +60,9 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     }
   };
 
-  const resetModifyValue = () => {
+  /* const resetModifyValue = () => {
     void formik.setFieldValue('pec', defaultAddress?.value, true);
-  };
+  }; */
 
   return (
     <DigitalContactsCard
@@ -120,7 +120,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             onConfirmClick={handleEditConfirm}
             blockDelete={legalAddresses.length > 1}
             forceMobileView
-            resetModifyValue={resetModifyValue}
+            resetModifyValue={() => handleEditConfirm('cancelled')}
           />
         </form>
       </Box>

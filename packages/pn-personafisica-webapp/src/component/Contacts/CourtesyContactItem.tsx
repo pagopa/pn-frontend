@@ -79,9 +79,9 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     void formik.setFieldValue(type, value, true);
   }, [value]);
 
-  const resetModifyValue = () => {
+  /* const resetModifyValue = () => {
     void formik.setFieldValue(type, value, true);
-  };
+  }; */
 
   if (value) {
     return (
@@ -134,7 +134,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           onConfirmClick={handleEditConfirm}
           blockDelete={blockDelete}
           forceMobileView
-          resetModifyValue={resetModifyValue}
+          resetModifyValue={() => handleEditConfirm('cancelled')}
         />
       </form>
     );
