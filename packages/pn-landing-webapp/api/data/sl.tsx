@@ -176,7 +176,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: " ",
+      title: "Zaženite integracijo",
       content: (
         <>
           <Typography variant="body2">
@@ -209,12 +209,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: false,
-      ctaPrimary: {
-        label: "Zaženite integracijo",
-        title: "Zaženite integracijo",
-        onClick: () => window.location.assign("/pubbliche-amministrazioni/partner-e-intermediari")
-      }
+      imageShadow: false
     },
   },
 ];

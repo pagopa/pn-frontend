@@ -190,7 +190,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: " ",
+      title: "Avvia l’integrazione",
       content: (
         <>
           <Typography variant="body2">
@@ -226,12 +226,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: false,
-      ctaPrimary: {
-        label: "Avvia l’integrazione",
-        title: "Avvia l’integrazione",
-        onClick: () => window.location.assign("/pubbliche-amministrazioni/partner-e-intermediari")
-      }
+      imageShadow: false
     },
   },
 ];
