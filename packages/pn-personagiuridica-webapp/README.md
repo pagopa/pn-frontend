@@ -4,12 +4,12 @@ Edit your hosts file depending on your OS [windows] (https://en.wikiversity.org/
 
 with this entry:
 
-`127.0.0.1 portale.dev.pn.pagopa.it`
+`127.0.0.1 portale-pg.dev.pn.pagopa.it`
 
 add a new .env file in this root with name `.env.development.local`. Then edit it with these commands:
 
 ```
-HOST='portale.dev.pn.pagopa.it'
+HOST='portale-pg.dev.pn.pagopa.it'
 HTTPS=true
 PORT=443
 ```
@@ -17,10 +17,10 @@ PORT=443
 Now you can run `yarn start` to make redirect from reference URL to app in localhost.
 
 ### Translations
+
 The Platform for Citizen have int'l translation support. The only language present is italian. The tool used for translations is [react-i18next](https://react.i18next.com/).
 
 Is strongly recommended to wrap texts (even if no "official" translations are available not saved to translation files) by using hook [`useTranslation`](https://react.i18next.com/latest/usetranslation-hook).
-
 
 ## Env variables (development)
 
