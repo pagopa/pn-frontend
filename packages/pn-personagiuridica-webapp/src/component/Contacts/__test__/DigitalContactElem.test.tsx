@@ -48,6 +48,7 @@ const fields = [
 
 const deleteMockActionFn = jest.fn();
 const mockDispatchFn = jest.fn();
+const mockResetModifyValue = jest.fn();
 // mock tracking
 const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
 const mockTrackEventFn = jest.fn();
@@ -78,6 +79,7 @@ describe('DigitalContactElem Component', () => {
           value="mocked-value"
           contactType={LegalChannelType.PEC}
           onConfirmClick={() => {}}
+          resetModifyValue={mockResetModifyValue}
         />
       </DigitalContactsCodeVerificationProvider>
     );
@@ -109,7 +111,10 @@ describe('DigitalContactElem Component', () => {
       const newButtons = result?.container.querySelectorAll('button');
       expect(newButtons).toHaveLength(2);
       expect(newButtons![0]).toHaveTextContent('button.salva');
+      expect(newButtons![1]).toHaveTextContent('button.annulla');
+      userEvent.click(newButtons![1]);
     });
+    expect(mockResetModifyValue).toBeCalledTimes(1);
   });
 
   it('shows remove modal', async () => {

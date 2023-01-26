@@ -10,9 +10,7 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
@@ -37,7 +35,6 @@ type Props = {
   removeModalBody: string;
   value: string;
   onConfirmClick: (status: 'validated' | 'cancelled') => void;
-  forceMobileView?: boolean;
   blockDelete?: boolean;
   resetModifyValue: () => void;
 };
@@ -102,14 +99,12 @@ const DigitalContactElem = memo(
     contactType,
     value,
     onConfirmClick,
-    forceMobileView = false,
     blockDelete,
     resetModifyValue,
   }: Props) => {
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const isMobile = useIsMobile() || forceMobileView;
     const dispatch = useAppDispatch();
     const { initValidation } = useDigitalContactsCodeVerificationContext();
 
@@ -171,22 +166,9 @@ const DigitalContactElem = memo(
 
     return (
       <Fragment>
-        <Grid container spacing={isMobile ? 2 : 4} direction="row" alignItems="center">
-          {!isMobile && (
-            <Grid item lg="auto">
-              <CloseIcon
-                sx={{
-                  cursor: 'pointer',
-                  position: 'relative',
-                  top: '4px',
-                  color: 'action.active',
-                }}
-                onClick={removeHandler}
-              />
-            </Grid>
-          )}
+        <Grid container spacing="4" direction="row" alignItems="center">
           {mappedChildren}
-          <Grid item lg={forceMobileView ? 12 : 2} xs={12} textAlign={isMobile ? 'left' : 'right'}>
+          <Grid item lg={12} xs={12} textAlign={'left'}>
             {!editMode ? (
               <ButtonNaked color="primary" onClick={toggleEdit} sx={{ marginRight: '10px' }}>
                 {t('button.modifica')}
@@ -202,7 +184,7 @@ const DigitalContactElem = memo(
                 {t('button.salva')}
               </ButtonNaked>
             )}
-            {isMobile && !editMode ? (
+            {!editMode ? (
               <ButtonNaked color="primary" onClick={removeHandler}>
                 {t('button.elimina')}
               </ButtonNaked>
