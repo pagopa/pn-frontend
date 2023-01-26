@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { SvgIcon, Typography } from "@mui/material";
+import { List, ListItem, SvgIcon, Typography } from "@mui/material";
 
 import {
   FooterLinksType,
@@ -57,10 +57,10 @@ const navigation: INavigationBarProps = {
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
-      label: "Read your notifications",
-      title: "Read your notifications",
-      onClick: onReadClick,
-    }
+    label: "Read your notifications",
+    title: "Read your notifications",
+    onClick: onReadClick,
+  }
   : undefined;
 
 /** Hero mocked data */
@@ -105,12 +105,12 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-          Piattaforma Notifiche digitises and simplifies the management of legal communications. 
-          The sending organisations only have to deposit the deed to be delivered: the platform 
-          will take care of the sending, either by digital or analogue means.
+            Piattaforma Notifiche digitises and simplifies the management of legal communications.
+            The sending organisations only have to deposit the deed to be delivered: the platform
+            will take care of the sending, either by digital or analogue means.
           </Typography>
           <Typography variant="body2">
-            With Piattaforma Notifiche, the uncertainty of recipient availability is minimised, 
+            With Piattaforma Notifiche, the uncertainty of recipient availability is minimised,
             and management time and costs are reduced.
           </Typography>
         </>
@@ -128,19 +128,19 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche integrates with the institutions’ protocol and offers both APIs 
-            for sending notifications automatically and the possibility of making manual submissions. 
-            Once the deeds and payment forms have been uploaded, the platform generates the IUN, a 
+            Piattaforma Notifiche integrates with the institutions’ protocol and offers both APIs
+            for sending notifications automatically and the possibility of making manual submissions.
+            Once the deeds and payment forms have been uploaded, the platform generates the IUN, a
             unique code identifying the notification.
           </Typography>
           <Typography variant="body2">
-            Subsequently, it searches its archives and public registers for a PEC traceable to the 
-            recipient and sends the notification. It then sends a courtesy notice to the recipient’s 
+            Subsequently, it searches its archives and public registers for a PEC traceable to the
+            recipient and sends the notification. It then sends a courtesy notice to the recipient’s
             other digital contacts (IO app, email and SMS).
           </Typography>
           <Typography variant="body2">
-            If the recipient has not indicated a digital address and does not have access to the 
-            platform, the platform proceeds with the search for a physical address, and then with 
+            If the recipient has not indicated a digital address and does not have access to the
+            platform, the platform proceeds with the search for a physical address, and then with
             sending by registered mail.
           </Typography>
         </>
@@ -158,13 +158,13 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            The recipient accesses the platform via SPID or CIE, where they can view and download 
-            the deed notified. Thanks to the integration with pagoPA, they can also pay what they 
-            owe at the same time. If they have activated the service on the IO app, they can do 
+            The recipient accesses the platform via SPID or CIE, where they can view and download
+            the deed notified. Thanks to the integration with pagoPA, they can also pay what they
+            owe at the same time. If they have activated the service on the IO app, they can do
             everything directly in the app.
           </Typography>
           <Typography variant="body2">
-            Like the organisation, the recipient also has access to the history of the status of 
+            Like the organisation, the recipient also has access to the history of the status of
             the notification and the certificates enforceable against third parties that prove it.
           </Typography>
         </>
@@ -182,31 +182,44 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Currently, Piattaforma Notifiche is being tested with a small number of pilot organisations.
+            Currently, organizations can start the technical activities necessary for integration into Piattaforma Notifiche.
           </Typography>
+
           <Typography variant="body2">
-            When it is operational, your organisation will also be able to apply for membership and adopt 
-            it to digitise the notification process.
+            In the meantime, organisations can consult:{" "}
           </Typography>
-          <Typography variant="body2">
-            In the meantime, organisations can consult{" "}
-            <Link href={MANUALE_URL}>
-              the operations manual
-            </Link>{" "}
-              (updated 28/06/2022),{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
-              the b2b API for public administrations
-            </Link>
-            ,{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-              the b2b API for the advancement of notifications
-            </Link>
-            {" "}and{" "}
-            <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
-              the list of technology Partners and Intermediaries
-            </Link>
-            {" "}who are implementing the activities of integration to the platform and which can be used for support in the management of the technical aspects.
-          </Typography>
+          <List sx={{ listStyleType: 'disc', pl: 4 }}>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={MANUALE_URL}>
+                  the operations manual
+                </Link>
+                {" "}(updated 20/11/2022),
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
+                  the b2b API for public administrations
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
+                  the b2b API for the advancement of notifications
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
+                  the list of technology Partners and Intermediaries
+                </Link>
+                {" "}who are implementing the activities of integration to the platform and which can be used for support in the management of the technical aspects
+              </Typography>
+            </ListItem>
+          </List>
         </>
       ),
       inverse: false,
@@ -226,15 +239,15 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Notifications are communications with legal value issued officially by an administration, such 
-            as fines, tax assessment notices, outcomes of administrative procedures initiated with public 
-            administrations or refunds, which until now, you have always received by registered mail. From 
-            now on, you can receive and consult them digitally by accessing Piattaforma Notifiche via SPID 
+            Notifications are communications with legal value issued officially by an administration, such
+            as fines, tax assessment notices, outcomes of administrative procedures initiated with public
+            administrations or refunds, which until now, you have always received by registered mail. From
+            now on, you can receive and consult them digitally by accessing Piattaforma Notifiche via SPID
             or CIE or directly on the IO app.
           </Typography>
           <Typography variant="body2">
-            You can also pay any fees thanks to the integration with pagoPA, view the history of received 
-            notifications and manage them directly online. In addition, you only need a proxy to handle 
+            You can also pay any fees thanks to the integration with pagoPA, view the history of received
+            notifications and manage them directly online. In addition, you only need a proxy to handle
             your family members’ registered mail as well.
           </Typography>
         </>
@@ -251,10 +264,10 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            To send legal communications, Piattaforma Notifiche always gives priority to the digital 
-            addresses of the recipient. At any time, you can access the platform with SPID and CIE to 
-            indicate or update your preferences between PEC, IO app, email or SMS. If you do not indicate 
-            any address or do not have access to the platform, you will continue to receive notifications 
+            To send legal communications, Piattaforma Notifiche always gives priority to the digital
+            addresses of the recipient. At any time, you can access the platform with SPID and CIE to
+            indicate or update your preferences between PEC, IO app, email or SMS. If you do not indicate
+            any address or do not have access to the platform, you will continue to receive notifications
             by registered mail.
           </Typography>
         </>
@@ -274,7 +287,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
             Currently, Piattaforma Notifiche is being tested with a small number of administrations.
           </Typography>
           <Typography variant="body2">
-            Progressively, the platform will be adopted by public administrations and used to send 
+            Progressively, the platform will be adopted by public administrations and used to send
             notifications to all citizens.
           </Typography>
         </>
@@ -388,8 +401,8 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "PEC",
           subtitle: (
             <Typography variant="body2">
-              If you have a PEC address, notifications will be legally delivered to you, with no more 
-              registered paper mail. The acknowledgement of receipt that will be sent to you contains 
+              If you have a PEC address, notifications will be legally delivered to you, with no more
+              registered paper mail. The acknowledgement of receipt that will be sent to you contains
               the link to access the content on Piattaforma Notifiche.
             </Typography>
           ),
@@ -403,9 +416,9 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "IO app",
           subtitle: (
             <Typography variant="body2">
-              If you activate the &quot;Digital Notifications&quot; service of Piattaforma Notifiche, you can 
-              receive and manage legal communications <strong>directly in the app</strong>. If you 
-              do not have a PEC and read the message immediately, you will not receive the registered 
+              If you activate the &quot;Digital Notifications&quot; service of Piattaforma Notifiche, you can
+              receive and manage legal communications <strong>directly in the app</strong>. If you
+              do not have a PEC and read the message immediately, you will not receive the registered
               letter and the notification will be legally delivered.
             </Typography>
           ),
@@ -415,8 +428,8 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "Email or SMS",
           subtitle: (
             <Typography variant="body2">
-              In addition, you can also choose to receive a courtesy notification at your email address 
-              or by SMS. If you do not have a PEC and access the platform from the designated link, you 
+              In addition, you can also choose to receive a courtesy notification at your email address
+              or by SMS. If you do not have a PEC and access the platform from the designated link, you
               will not receive the registered letter and the notification will be legally delivered.
             </Typography>
           ),
@@ -650,7 +663,7 @@ const assistanceLink = {
 const companyLegalInfo = (
   <>
     <strong>PagoPA S.p.A.</strong> — joint stock company with sole shareholder -
-    share capital of 1,000,000 euros fully paid up - registered office in Rome, 
+    share capital of 1,000,000 euros fully paid up - registered office in Rome,
     Piazza Colonna 370
     <br />
     CAP 00187 - Reg. no. in the Rome Business Register, Tax code and VAT number 15376371009
