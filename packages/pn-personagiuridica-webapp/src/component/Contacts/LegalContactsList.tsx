@@ -1,9 +1,10 @@
 import { ChangeEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Grid, Box, Typography, TextField, Alert } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
-import { Grid, Box, Typography, TextField, Alert } from '@mui/material';
+import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
@@ -36,7 +37,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     pec: yup
       .string()
       .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-      .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
+      .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
   });
   const initialValues = {
     pec: defaultAddress?.value || '',
