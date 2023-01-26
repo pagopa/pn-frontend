@@ -175,7 +175,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             app.
           </Typography>
           <Typography variant="body2">
-            Come l’ente, anche il desinatario ha accesso alla cronologia degli
+            Come l’ente, anche il destinatario ha accesso alla cronologia degli
             stati della notifica e alle attestazioni opponibili a terzi che ne
             danno prova.
           </Typography>

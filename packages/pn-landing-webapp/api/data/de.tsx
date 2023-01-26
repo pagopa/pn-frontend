@@ -196,14 +196,14 @@ const paInfoBlocks: Array<IInfoblockData> = [
             {" "}(aktualisiert am 28.06.2022),{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
               die b2b-APIs für öffentliche Verwaltungen
-            </Link>
+            </Link> 
             {" "}und{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
               die b2b-APIs über den Stand der Benachrichtigungen konsultieren
             </Link>
             {" "}und{" "}
             <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>die Liste der Technologiepartner und Vermittler</Link>
-            , die die Integrationsaktivitäten umsetzen, einsehen zur Plattform und die zur Unterstützung bei der Verwaltung der technischen Aspekte verwendet werden können.
+            , die Integrationsaktivitäten umsetzen, einsehen zur Plattform und die zur Unterstützung bei der Verwaltung der technischen Aspekte verwendet werden können.
           </Typography>
         </>
       ),
