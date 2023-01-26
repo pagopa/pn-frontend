@@ -1,25 +1,23 @@
 import { Fragment, memo, ReactChild, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Grid,
-    Typography,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Typography,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
 import { useAppDispatch } from '../../redux/hooks';
-import { trackEventByType } from "../../utils/mixpanel";
-import { EventActions, TrackEventType } from "../../utils/events";
-import { getContactEventType } from "../../utils/contacts.utility";
+import { trackEventByType } from '../../utils/mixpanel';
+import { EventActions, TrackEventType } from '../../utils/events';
+import { getContactEventType } from '../../utils/contacts.utility';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
@@ -37,8 +35,57 @@ type Props = {
   removeModalBody: string;
   value: string;
   onConfirmClick: (status: 'validated' | 'cancelled') => void;
-  forceMobileView?: boolean;
   blockDelete?: boolean;
+  resetModifyValue: () => void;
+};
+
+type DialogProps = {
+  showModal: boolean;
+  handleModalClose: () => void;
+  removeModalTitle: string;
+  removeModalBody: string;
+  blockDelete?: boolean;
+  confirmHandler: () => void;
+};
+
+const DeleteDialog: React.FC<DialogProps> = ({
+  showModal,
+  handleModalClose,
+  removeModalTitle,
+  removeModalBody,
+  blockDelete,
+  confirmHandler,
+}) => {
+  const { t } = useTranslation(['common']);
+
+  const deleteModalActions = blockDelete ? (
+    <Button onClick={handleModalClose} variant="outlined">
+      {t('button.close')}
+    </Button>
+  ) : (
+    <>
+      <Button onClick={handleModalClose} variant="outlined">
+        {t('button.annulla')}
+      </Button>
+      <Button onClick={confirmHandler} variant="contained">
+        {t('button.conferma')}
+      </Button>
+    </>
+  );
+  return (
+    <Dialog
+      open={showModal}
+      onClose={handleModalClose}
+      aria-labelledby="dialog-title"
+      aria-describedby="dialog-description"
+    >
+      <DialogTitle id="dialog-title">{removeModalTitle}</DialogTitle>
+      <DialogContent>
+        <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
+      </DialogContent>
+      <DialogActions>{deleteModalActions}</DialogActions>
+    </Dialog>
+  );
 };
 
 const DigitalContactElem = memo(
@@ -52,13 +99,12 @@ const DigitalContactElem = memo(
     contactType,
     value,
     onConfirmClick,
-    forceMobileView = false,
     blockDelete,
+    resetModifyValue,
   }: Props) => {
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const isMobile = useIsMobile() || forceMobileView;
     const dispatch = useAppDispatch();
     const { initValidation } = useDigitalContactsCodeVerificationContext();
 
@@ -82,6 +128,11 @@ const DigitalContactElem = memo(
       setShowModal(true);
     };
 
+    const onCancel = () => {
+      resetModifyValue();
+      toggleEdit();
+    };
+
     const confirmHandler = () => {
       handleModalClose();
       if (contactType === LegalChannelType.PEC) {
@@ -97,7 +148,7 @@ const DigitalContactElem = memo(
           channelType: contactType as CourtesyChannelType,
         })
       );
-       trackEventByType(eventTypeByChannel, { action: EventActions.DELETE });
+      trackEventByType(eventTypeByChannel, { action: EventActions.DELETE });
     };
 
     const editHandler = () => {
@@ -113,39 +164,11 @@ const DigitalContactElem = memo(
       );
     };
 
-    const deleteModalActions = blockDelete ? (
-      <Button onClick={handleModalClose} variant="outlined">
-        {t('button.close')}
-      </Button>
-    ) : (
-      <>
-        <Button onClick={handleModalClose} variant="outlined">
-          {t('button.annulla')}
-        </Button>
-        <Button onClick={confirmHandler} variant="contained">
-          {t('button.conferma')}
-        </Button>
-      </>
-    );
-
     return (
       <Fragment>
-        <Grid container spacing={isMobile ? 2 : 4} direction="row" alignItems="center">
-          {!isMobile && (
-            <Grid item lg="auto">
-              <CloseIcon
-                sx={{
-                  cursor: 'pointer',
-                  position: 'relative',
-                  top: '4px',
-                  color: 'action.active',
-                }}
-                onClick={removeHandler}
-              />
-            </Grid>
-          )}
+        <Grid container spacing="4" direction="row" alignItems="center">
           {mappedChildren}
-          <Grid item lg={forceMobileView ? 12 : 2} xs={12} textAlign={isMobile ? 'left' : 'right'}>
+          <Grid item lg={12} xs={12} textAlign={'left'}>
             {!editMode ? (
               <ButtonNaked color="primary" onClick={toggleEdit} sx={{ marginRight: '10px' }}>
                 {t('button.modifica')}
@@ -161,25 +184,25 @@ const DigitalContactElem = memo(
                 {t('button.salva')}
               </ButtonNaked>
             )}
-            {isMobile && (
+            {!editMode ? (
               <ButtonNaked color="primary" onClick={removeHandler}>
-                {t('button.rimuovi')}
+                {t('button.elimina')}
+              </ButtonNaked>
+            ) : (
+              <ButtonNaked color="primary" onClick={onCancel}>
+                {t('button.annulla')}
               </ButtonNaked>
             )}
           </Grid>
         </Grid>
-        <Dialog
-          open={showModal}
-          onClose={handleModalClose}
-          aria-labelledby="dialog-title"
-          aria-describedby="dialog-description"
-        >
-          <DialogTitle id="dialog-title">{removeModalTitle}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="dialog-description">{removeModalBody}</DialogContentText>
-          </DialogContent>
-          <DialogActions>{deleteModalActions}</DialogActions>
-        </Dialog>
+        <DeleteDialog
+          showModal={showModal}
+          handleModalClose={handleModalClose}
+          removeModalTitle={removeModalTitle}
+          removeModalBody={removeModalBody}
+          blockDelete={blockDelete}
+          confirmHandler={confirmHandler}
+        />
       </Fragment>
     );
   }
