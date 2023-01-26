@@ -83,7 +83,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     []
   );
 
-  const validationSchema: any = yup.object({
+  const validationSchema = yup.object({
     [`${address.senderId}_pec`]: yup
       .string()
       .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
