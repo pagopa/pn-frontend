@@ -3,6 +3,7 @@ import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../models
 import { TrackEventType } from './events';
 
 export const phoneRegExp = dataRegex.phoneNumber;
+export const phoneRegExpWithItalyPrefix = dataRegex.phoneNumberWithItalyPrefix;
 export const internationalPhonePrefix = '+39';
 
 export function countContactsByType(contacts: Array<DigitalAddress>, type: CourtesyChannelType) {

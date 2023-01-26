@@ -7,7 +7,7 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { phoneRegExp } from '../../utils/contacts.utility';
+import { phoneRegExpWithItalyPrefix } from '../../utils/contacts.utility';
 import { trackEventByType } from '../../utils/mixpanel';
 import { EventActions, TrackEventType } from '../../utils/events';
 import DigitalContactElem from './DigitalContactElem';
@@ -82,7 +82,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     [`${address.senderId}_phone`]: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(phoneRegExp, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+      .matches(phoneRegExpWithItalyPrefix, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
     [`${address.senderId}_mail`]: yup
       .string()
       .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
@@ -91,7 +91,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
 
   const updateContact = async (status: 'validated' | 'cancelled', id: string) => {
     if (status === 'cancelled') {
-      await formik.setFieldValue(id, initialValues[id]);
+      await formik.setFieldValue(id, initialValues[id], true);
     }
     trackEventByType(TrackEventType.CONTACT_SPECIAL_CONTACTS, { action: EventActions.ADD });
   };
@@ -137,9 +137,8 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
                     size="small"
                     value={formik.values[f.id]}
                     onChange={handleChangeTouched}
-                    error={formik.touched[f.id] && Boolean(formik.errors[f.id])}
-                    helperText={formik.touched[f.id] && formik.errors[f.id]}
-                  />
+                    error={(formik.touched[f.id] || formik.values[f.id].length > 0) && Boolean(formik.errors[f.id])}
+                    helperText={(formik.touched[f.id] || formik.values[f.id].length > 0) && formik.errors[f.id]}                  />
                 ),
                 isEditable: true,
                 size: 'variable',
