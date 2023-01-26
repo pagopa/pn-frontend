@@ -72,7 +72,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
       avatar={<IllusEmailValidation />}
     >
       <Box sx={{ marginTop: '20px' }}>
-        <form>
+        <form onSubmit={formik.handleSubmit}>
           <Typography mb={1} sx={{ fontWeight: 'bold' }}>
             {t('legal-contacts.pec-added', { ns: 'recapiti' })}
           </Typography>

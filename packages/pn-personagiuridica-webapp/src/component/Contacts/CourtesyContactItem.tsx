@@ -81,7 +81,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
 
   if (value) {
     return (
-      <form style={{ width: '100%' }}>
+      <form style={{ width: '100%' }} onSubmit={ formik.handleSubmit }>
         <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
           {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
         </Typography>
