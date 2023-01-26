@@ -8,6 +8,7 @@ import { Grid, Box, Typography, TextField, Alert } from '@mui/material';
 import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
 import DigitalContactElem from './DigitalContactElem';
+import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
   recipientId: string;
@@ -16,6 +17,7 @@ type Props = {
 
 const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
+  const { initValidation } = useDigitalContactsCodeVerificationContext();
 
   const title = useMemo(
     () => (
@@ -46,7 +48,9 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     initialValues,
     validationSchema,
     /** onSubmit validate */
-    onSubmit: () => {},
+    onSubmit: () => {
+      initValidation(LegalChannelType.PEC, formik.values.pec, recipientId, 'default');
+    },
   });
 
   const handleChangeTouched = async (e: ChangeEvent) => {
