@@ -355,8 +355,9 @@ describe('CourtesyContactItem component', () => {
 
   describe('testing component having type "email"', () => {
     const VALID_EMAIL = 'prova@pagopa.it';
-    const VALID_EMAIL_2 = 'testpagopa@gmail.it';
-    const INVALID_EMAIL = 'testpagopa.it';
+    const VALID_EMAIL_2 = 'test-pagopa@gmail.inner.it';
+    const INVALID_EMAIL_1 = 'testpagopa.it';
+    const INVALID_EMAIL_2 = 'a1.a2.a3.a4.a5.a6.a7.a8.a9.a0.b1.b2@pagopa.it';
     const VALID_CODE = 'verified';
 
     beforeEach(() => {
@@ -386,14 +387,29 @@ describe('CourtesyContactItem component', () => {
         });
       });
 
-      test('type in an invalid email', async () => {
+      test('type in an invalid email - 1', async () => {
         const inputs = await result!.findAllByRole('textbox');
         expect(inputs![0]).toBeInTheDocument();
         expect(inputs).toHaveLength(1);
         const input = result?.getByPlaceholderText('courtesy-contacts.link-email-placeholder');
         expect(inputs![0]).toEqual(input);
-        fireEvent.change(input!, { target: { value: INVALID_EMAIL } });
-        await waitFor(() => expect(input!).toHaveValue(INVALID_EMAIL));
+        fireEvent.change(input!, { target: { value: INVALID_EMAIL_1 } });
+        await waitFor(() => expect(input!).toHaveValue(INVALID_EMAIL_1));
+        const textMessage = result!.queryByText('courtesy-contacts.valid-email');
+        expect(textMessage).toBeInTheDocument();
+        const button = screen.getByRole('button');
+        expect(button).toHaveTextContent('courtesy-contacts.email-add');
+        expect(button).toBeDisabled();
+      });
+
+      test('type in an invalid email - 2', async () => {
+        const inputs = await result!.findAllByRole('textbox');
+        expect(inputs![0]).toBeInTheDocument();
+        expect(inputs).toHaveLength(1);
+        const input = result?.getByPlaceholderText('courtesy-contacts.link-email-placeholder');
+        expect(inputs![0]).toEqual(input);
+        fireEvent.change(input!, { target: { value: INVALID_EMAIL_2 } });
+        await waitFor(() => expect(input!).toHaveValue(INVALID_EMAIL_2));
         const textMessage = result!.queryByText('courtesy-contacts.valid-email');
         expect(textMessage).toBeInTheDocument();
         const button = screen.getByRole('button');
@@ -498,8 +514,8 @@ describe('CourtesyContactItem component', () => {
         expect(input).toHaveValue(VALID_EMAIL);
         expect(saveButton).toBeEnabled();
 
-        fireEvent.change(input, { target: { value: INVALID_EMAIL } });
-        await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL));
+        fireEvent.change(input, { target: { value: INVALID_EMAIL_1 } });
+        await waitFor(() => expect(input).toHaveValue(INVALID_EMAIL_1));
         expect(saveButton).toBeDisabled();
       });
 

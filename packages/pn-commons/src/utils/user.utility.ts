@@ -13,7 +13,19 @@ export const basicUserDataMatcherContents = {
   name: yup.string().matches(dataRegex.name),
   uid: yup.string().uuid(),
   sessionToken: yup.string().matches(dataRegex.token),
+
   email: yup.string().email(),
+  /* *Note*:
+   * For the user email that arrives to PN from other apps, we use the more liberal
+   * validation provided by yup.
+   * This is different than what we do for the emails that are managed inside PN,
+   * e.g. for the emails in the Contacts page for persona fisica, and the email
+   * which can be indicated in the manual notification creation in pa-webapp.
+   * For these emails instead we use a more strict validation, equal to that 
+   * performed by the BE.
+   * --------------------------------------
+   * Carlos Lombardi, 2023.01.24
+   */
 };
 
 /**

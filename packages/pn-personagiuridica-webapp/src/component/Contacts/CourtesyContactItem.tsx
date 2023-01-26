@@ -4,9 +4,10 @@ import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType } from '../../models/contacts';
-import { internationalPhonePrefix, phoneRegExp, phoneRegExpWithItalyPrefix } from '../../utils/contacts.utility';
+import { internationalPhonePrefix } from '../../utils/contacts.utility';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactElem from './DigitalContactElem';
 
@@ -25,7 +26,7 @@ interface Props {
 const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
-  const [phoneRegex, setPhoneRegex] = useState(phoneRegExp);
+  const [phoneRegex, setPhoneRegex] = useState(dataRegex.phoneNumber);
 
   const digitalDomicileType = useMemo(
     () => (type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS),
@@ -35,8 +36,8 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
   const emailValidationSchema = useMemo(() => yup.object().shape({
     email: yup
       .string()
-      .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
-      .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
+      .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
+      .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
   }), []);
 
   // note that phoneValidationSchema depends on the phoneRegex which is different
@@ -46,7 +47,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     phone: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(phoneRegex, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+      .matches(dataRegex.phoneNumber, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
   }), [phoneRegex]);
 
   const formik = useFormik({
@@ -89,7 +90,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     // to avoid a subtle bug
     const changeValue = async () => {
       await formik.setFieldValue(type, value, true);
-      setPhoneRegex(value ? phoneRegExpWithItalyPrefix : phoneRegExp);
+      setPhoneRegex(value ? dataRegex.phoneNumberWithItalyPrefix : dataRegex.phoneNumber);
     };
     void changeValue();
   }, [value]);
@@ -97,7 +98,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
   // if the phoneRegex changes from its initial value of phoneRegExp to phoneRegExpWithItalyPrefix
   // then we re-run the Formik validation on the field' value
   useEffect(() => {
-    if (phoneRegex === phoneRegExpWithItalyPrefix) {
+    if (phoneRegex === dataRegex.phoneNumberWithItalyPrefix) {
       void formik.validateField(type);
     }
   }, [phoneRegex]);
