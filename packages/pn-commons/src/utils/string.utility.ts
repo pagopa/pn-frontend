@@ -34,7 +34,7 @@ export const dataRegex = {
   denomination: /^([\x20-\xFF]{1,80})$/,
   noticeCode: /^\d{18}$/,
 
-  email: /^[a-zA-Z0-9]+(?:[.\-_][a-zA-Z0-9]+){0,10}@[a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+){0,10}(?:\.[a-zA-Z0-9]{2,3})$/,
+  email: /^[a-zA-Z0-9]+(?:[.\-_][a-zA-Z0-9]+){0,10}@[a-zA-Z0-9]+(?:[.-][a-zA-Z0-9]+){0,10}(?:\.[a-zA-Z0-9]{2,10})$/,
   // We adopt a regex to validate email addresses, which is stricter than the one adopted by the BE 
   // the difference being that other special characters besides dash and underscore are allowed BE-side.
   // We will raise the issue to the test team.
@@ -44,8 +44,7 @@ export const dataRegex = {
   // The number of chunks is limited (11 before the at, 12 after it) to be coherent with the BE, which establishes this limitation 
   // in order to avoid the risk of backtrack explosion.
   // Of course, the at symbol is mandatory, as well as a final dot after it, so that the last separator must be a dot (and not a dash).
-  // The last chunk must have length 2 or 3. Beware that e.g. addresses for the ".info" domain are so excluded,
-  // this detail will be also raised to the test team.
+  // The last chunk must have length 2 to 10.
   //
   // There is one case in which we choose not to adopt this email regex pattern, but instead rely on
   // a more liberal specification.

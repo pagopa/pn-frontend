@@ -120,8 +120,8 @@ describe('LegalContactsList Component', () => {
     const buttons = form?.querySelectorAll('button');
     fireEvent.click(buttons![0]);
     const input = await waitFor(() => form?.querySelector('input'));
-    fireEvent.change(input!, { target: { value: 'mail@invalida.info' } });
-    await waitFor(() => expect(input!).toHaveValue('mail@invalida.info'));
+    fireEvent.change(input!, { target: { value: 'mail@invalida.informazionelunga' } });
+    await waitFor(() => expect(input!).toHaveValue('mail@invalida.informazionelunga'));
     const errorMessage = form?.querySelector('#pec-helper-text');
     expect(errorMessage).toBeInTheDocument();
     expect(errorMessage).toHaveTextContent('legal-contacts.valid-pec');
@@ -134,8 +134,8 @@ describe('LegalContactsList Component', () => {
     const buttons = form?.querySelectorAll('button');
     fireEvent.click(buttons![0]);
     const input = await waitFor(() => form?.querySelector('input'));
-    fireEvent.change(input!, { target: { value: 'mail@valida.com' } });
-    await waitFor(() => expect(input!).toHaveValue('mail@valida.com'));
+    fireEvent.change(input!, { target: { value: 'mail@valida.local' } });
+    await waitFor(() => expect(input!).toHaveValue('mail@valida.local'));
     const errorMessage = form?.querySelector('#pec-helper-text');
     expect(errorMessage).not.toBeInTheDocument();
     const newButtons = form?.querySelectorAll('button');
