@@ -47,7 +47,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     phone: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(dataRegex.phoneNumber, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+      .matches(phoneRegex, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
   }), [phoneRegex]);
 
   const formik = useFormik({
