@@ -65,6 +65,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     formik.handleChange(event);
+
     await formik.setFieldTouched(event.target.id, true, false);
   };
 
@@ -80,23 +81,27 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
 
   if (value) {
     return (
-      <form style={{ width: '100%'}} onSubmit={ formik.handleSubmit }>
-        <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
+      <form style={{ width: '100%' }} onSubmit={ formik.handleSubmit }>
+        <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
+          {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
+        </Typography>
         <DigitalContactElem
           recipientId={recipientId}
           senderId="default"
           contactType={digitalDomicileType}
           removeModalTitle={
             blockDelete
-                ? t(`courtesy-contacts.block-remove-${type}-title`, { ns: 'recapiti' })
-                : t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })}
+              ? t(`courtesy-contacts.block-remove-${type}-title`, { ns: 'recapiti' })
+              : t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })
+          }
           removeModalBody={
             blockDelete
-                ? t(`courtesy-contacts.block-remove-${type}-message`, { ns: 'recapiti' })
-                : t(`courtesy-contacts.remove-${type}-message`, {
-            value: formik.values[type],
-            ns: 'recapiti',
-          })}
+              ? t(`courtesy-contacts.block-remove-${type}-message`, { ns: 'recapiti' })
+              : t(`courtesy-contacts.remove-${type}-message`, {
+                  value: formik.values[type],
+                  ns: 'recapiti',
+                })
+          }
           value={formik.values[type]}
           fields={[
             {
@@ -124,15 +129,17 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           saveDisabled={!formik.isValid}
           onConfirmClick={handleEditConfirm}
           blockDelete={blockDelete}
-          forceMobileView
+          resetModifyValue={() => handleEditConfirm('cancelled')}
         />
       </form>
     );
   }
 
   return (
-    <form onSubmit={formik.handleSubmit} style={{ width: '100%'}}>
-      <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
+    <form onSubmit={formik.handleSubmit} style={{ width: '100%' }}>
+      <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
+        {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
+      </Typography>
       <Grid container spacing={2} direction="row">
         <Grid item lg={8} sm={8} xs={12}>
           <TextField
@@ -149,11 +156,15 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
             })}
             fullWidth
             type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
-            InputProps={ type === CourtesyFieldType.PHONE ? {
-              startAdornment: (
-                <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-              ),
-            } : {}}
+            InputProps={
+              type === CourtesyFieldType.PHONE
+                ? {
+                    startAdornment: (
+                      <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                    ),
+                  }
+                : {}
+            }
           />
         </Grid>
         <Grid item lg={4} sm={4} xs={12} alignItems="right">

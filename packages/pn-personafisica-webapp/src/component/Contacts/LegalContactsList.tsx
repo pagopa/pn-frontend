@@ -119,7 +119,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             value={formik.values.pec}
             onConfirmClick={handleEditConfirm}
             blockDelete={legalAddresses.length > 1}
-            forceMobileView
+            resetModifyValue={() => handleEditConfirm('cancelled')}
           />
         </form>
       </Box>
@@ -127,7 +127,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
         <Typography component="span" variant="body1">
           {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
         </Typography>
-          {/** 
+        {/** 
            * Waiting for FAQs
         <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant="body1">
           {t('legal-contacts.disclaimer-link', { ns: 'recapiti' })}

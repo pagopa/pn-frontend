@@ -8,8 +8,8 @@ import { useIsMobile } from '@pagopa-pn/pn-commons';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { phoneRegExp } from '../../utils/contacts.utility';
-import { trackEventByType } from "../../utils/mixpanel";
-import { EventActions, TrackEventType } from "../../utils/events";
+import { trackEventByType } from '../../utils/mixpanel';
+import { EventActions, TrackEventType } from '../../utils/events';
 import DigitalContactElem from './DigitalContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
@@ -33,9 +33,9 @@ type Field = {
 };
 
 const addressTypeToLabel = {
-  'mail': 'email',
-  'pec': 'pec',
-  'phone': 'phone'
+  mail: 'email',
+  pec: 'pec',
+  phone: 'phone',
 };
 
 const getDigitalDomicileType = (addressId: string): LegalChannelType | CourtesyChannelType =>
@@ -98,9 +98,9 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
       .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
   });
 
-  const updateContact = (status: 'validated' | 'cancelled') => {
+  const updateContact = async (status: 'validated' | 'cancelled', id: string) => {
     if (status === 'cancelled') {
-      formik.resetForm({ values: initialValues });
+      await formik.setFieldValue(id, initialValues[id]);
     }
     trackEventByType(TrackEventType.CONTACT_SPECIAL_CONTACTS, { action: EventActions.ADD });
   };
@@ -162,17 +162,21 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
               },
             ]}
             saveDisabled={!!formik.errors[f.id]}
-            removeModalTitle={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-title`, { ns: 'recapiti' })}
+            removeModalTitle={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-title`, {
+              ns: 'recapiti',
+            })}
             removeModalBody={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-message`, {
               value: formik.values[f.id],
               ns: 'recapiti',
             })}
             value={formik.values[f.id]}
-            onConfirmClick={updateContact}
-            forceMobileView
+            onConfirmClick={(status) => updateContact(status, f.id)}
+            resetModifyValue={() => updateContact('cancelled', f.id)}
           />
         </form>
-      ) : '-'}
+      ) : (
+        '-'
+      )}
     </Fragment>
   );
 
