@@ -115,7 +115,6 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             value={formik.values.pec}
             onConfirmClick={handleEditConfirm}
             blockDelete={legalAddresses.length > 1}
-            forceMobileView
             resetModifyValue={() => handleEditConfirm('cancelled')}
           />
         </form>

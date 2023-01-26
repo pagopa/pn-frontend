@@ -155,7 +155,6 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
             })}
             value={formik.values[f.id]}
             onConfirmClick={(status) => updateContact(status, f.id)}
-            forceMobileView
             resetModifyValue={() => updateContact('cancelled', f.id)}
           />
         </form>

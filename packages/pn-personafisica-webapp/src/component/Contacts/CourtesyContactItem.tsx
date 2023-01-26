@@ -129,7 +129,6 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           saveDisabled={!formik.isValid}
           onConfirmClick={handleEditConfirm}
           blockDelete={blockDelete}
-          forceMobileView
           resetModifyValue={() => handleEditConfirm('cancelled')}
         />
       </form>
