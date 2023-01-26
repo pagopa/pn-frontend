@@ -43,10 +43,10 @@ describe('SpecialContactElem Component', () => {
     const firstFormButtons = specialContactForms![0].querySelectorAll('button');
     expect(firstFormButtons).toHaveLength(2);
     expect(firstFormButtons[0]).toHaveTextContent('button.modifica');
-    expect(firstFormButtons[1]).toHaveTextContent('button.rimuovi');
+    expect(firstFormButtons[1]).toHaveTextContent('button.elimina');
     const secondFormButtons = specialContactForms![1].querySelectorAll('button');
     expect(secondFormButtons).toHaveLength(2);
     expect(secondFormButtons[0]).toHaveTextContent('button.modifica');
-    expect(secondFormButtons[1]).toHaveTextContent('button.rimuovi');
+    expect(secondFormButtons[1]).toHaveTextContent('button.elimina');
   });
 });
