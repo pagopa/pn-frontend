@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { SvgIcon, Typography } from "@mui/material";
+import { List, ListItem, SvgIcon, Typography } from "@mui/material";
 
 import {
   FooterLinksType,
@@ -9,10 +9,6 @@ import {
   PreLoginFooterLinksType,
   WalkthroughProps
 } from "@pagopa/mui-italia";
-
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
-
-import { IMAGES_PATH, MANUALE_URL, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -35,6 +31,17 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+
+import {
+  IMAGES_PATH,
+  MANUALE_URL,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PARTNER_AND_INTERMEDIARIES_PATH,
+  PN_URL
+} from "@utils/constants";
+
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
@@ -173,39 +180,51 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Bientôt disponible pour les organismes",
+      title: "Démarrer l'intégration",
       content: (
         <>
           <Typography variant="body2">
-            Actuellement, Piattaforma Notifiche est testée avec un nombre limité
-            d’organismes pilotes.
+            Actuellement, les organisations peuvent démarrer les activités techniques nécessaires à l'intégration dans Piattaforma Notifiche.
           </Typography>
           <Typography variant="body2">
-            Lorsqu’elle sera opérationnelle, ton organisme pourra également faire
-            une demande d’adhésion et l’adopter pour numériser le processus de notification.
+            Pendant ce temps, les organismes peuvent consulter le
           </Typography>
-          <Typography variant="body2">
-            Pendant ce temps, les organismes peuvent consulter le{" "}
-            <Link href={MANUALE_URL}>
-              manuel d’utilisation
-            </Link>
-            {" "}(mis à jour le 28/06/2022),{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
-              les API b2b pour les administrations publiques
-            </Link>
-            {" "}et{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-              les API b2b pour l’avancement des notifications.
-            </Link>
-            .
-          </Typography>
+          <List sx={{ listStyleType: 'disc', pl: 4 }}>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={MANUALE_URL}>
+                  manuel d’utilisation
+                </Link>
+                {" "}(mis à jour le 28/06/2022),{" "}
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2"></Typography>
+              <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
+                les API b2b pour les administrations publiques
+              </Link>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2"></Typography>
+              <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
+                les API b2b pour l’avancement des notifications.
+              </Link>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2"></Typography>
+              <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
+                la liste des Partenaires et Intermédiaires technologiques
+              </Link>
+              qui mettent en œuvre les activités d’intégration à la plate-forme et qui peut servir de support dans la gestion des aspects techniques.
+            </ListItem>
+          </List>
         </>
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: false,
+      imageShadow: false
     },
   },
 ];

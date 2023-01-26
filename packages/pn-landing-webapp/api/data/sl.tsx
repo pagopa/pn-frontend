@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { SvgIcon, Typography } from "@mui/material";
+import { List, ListItem, SvgIcon, Typography } from "@mui/material";
 
 import {
   FooterLinksType,
@@ -9,10 +9,6 @@ import {
   PreLoginFooterLinksType,
   WalkthroughProps
 } from "@pagopa/mui-italia";
-
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
-
-import { IMAGES_PATH, MANUALE_URL, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -35,6 +31,16 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+
+import {
+  IMAGES_PATH,
+  MANUALE_URL,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PARTNER_AND_INTERMEDIARIES_PATH,
+  PN_URL
+} from "@utils/constants";
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
@@ -50,10 +56,10 @@ const navigation: INavigationBarProps = {
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
-      label: "Preberi svoja obvestila",
-      title: "Preberi svoja obvestila",
-      onClick: onReadClick,
-    }
+    label: "Preberi svoja obvestila",
+    title: "Preberi svoja obvestila",
+    onClick: onReadClick,
+  }
   : undefined;
 
 /** Hero mocked data */
@@ -98,12 +104,12 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche digitalizira in poenostavlja upravljanje komunikacij s pravno vrednostjo. 
-            Vse, kar morajo storiti ustanove pošiljateljice, je vložiti dokument za vročitev: platforma pa 
+            Piattaforma Notifiche digitalizira in poenostavlja upravljanje komunikacij s pravno vrednostjo.
+            Vse, kar morajo storiti ustanove pošiljateljice, je vložiti dokument za vročitev: platforma pa
             bo poskrbela za pošiljanje, v digitalni ali analogni obliki.
           </Typography>
           <Typography variant="body2">
-            S platformo Piattaforma Notifiche za obveščanje se zmanjša negotovost glede dosegljivosti 
+            S platformo Piattaforma Notifiche za obveščanje se zmanjša negotovost glede dosegljivosti
             prejemnikov, zmanjšajo pa se tudi čas in stroški upravljanja.
           </Typography>
         </>
@@ -121,17 +127,17 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche se integrira s protokolom ustanov in ponuja API za samodejno pošiljanje 
-            obvestil, kot tudi možnost ročnega pošiljanja. Ko so dokumenti in plačilni obrazci naloženi, 
+            Piattaforma Notifiche se integrira s protokolom ustanov in ponuja API za samodejno pošiljanje
+            obvestil, kot tudi možnost ročnega pošiljanja. Ko so dokumenti in plačilni obrazci naloženi,
             platforma ustvari IUN, edinstveno identifikacijsko kodo obvestila.
           </Typography>
           <Typography variant="body2">
-            Nato v svojih arhivih in javnih registrih poišče naslov certificirane elektronske pošte (PEC), 
-            ki je povezan s prejemnikom, in pošlje obvestilo. Nato pošlje še vljudnostno obvestilo na druge 
+            Nato v svojih arhivih in javnih registrih poišče naslov certificirane elektronske pošte (PEC),
+            ki je povezan s prejemnikom, in pošlje obvestilo. Nato pošlje še vljudnostno obvestilo na druge
             podatke za stik s prejemnikom v digitalni obliki (aplikacija IO, e-pošta in SMS).
           </Typography>
           <Typography variant="body2">
-            Če prejemnik ni navedel nobenega podatka za stik v digitalni obliki in nima dostopa do platforme, 
+            Če prejemnik ni navedel nobenega podatka za stik v digitalni obliki in nima dostopa do platforme,
             slednja poišče njegov fizični naslov, na kateri pošlje priporočeno pismo v papirni obliki.
           </Typography>
         </>
@@ -149,13 +155,13 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Prejemnik dostopa do platforme z uporabo digitalnih identitet SPID ali CIE, na njej pa si lahko 
-            ogleda in prenese vročeni dokument. Zahvaljujoč integraciji s platformo pagoPA lahko istočasno 
-            tudi plača dolgovani znesek. Če je storitev aktiviral v aplikaciji IO, lahko vse to stori 
+            Prejemnik dostopa do platforme z uporabo digitalnih identitet SPID ali CIE, na njej pa si lahko
+            ogleda in prenese vročeni dokument. Zahvaljujoč integraciji s platformo pagoPA lahko istočasno
+            tudi plača dolgovani znesek. Če je storitev aktiviral v aplikaciji IO, lahko vse to stori
             neposredno v aplikaciji.
           </Typography>
           <Typography variant="body2">
-            Tako kot ustanova pošiljateljica ima tudi prejemnik dostop do kronološkega pregleda stanja 
+            Tako kot ustanova pošiljateljica ima tudi prejemnik dostop do kronološkega pregleda stanja
             obvestila in do potrdil, izvršljivih zoper tretje osebe, ki to dokazujejo.
           </Typography>
         </>
@@ -169,38 +175,52 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Kmalu na voljo za ustanove",
+      title: "Zaženite integracijo",
       content: (
         <>
           <Typography variant="body2">
-            Trenutno je Piattaforma Notifiche v fazi preizkusa, v katerem sodeluje le nekaj pilotnih ustanov.
+            Trenutno lahko institucije začnejo tehnične dejavnosti, potrebne za integracijo v Piattaforma Notifiche.
           </Typography>
+
           <Typography variant="body2">
-            Ko bo postala operativna, bo lahko tudi vaša ustanova zaprosila za članstvo in uvedla platformo 
-            za digitalizacijo postopka obveščanja.
+            V tem času pa si lahko ustanove preberejo
           </Typography>
-          <Typography variant="body2">
-            V tem času pa si lahko ustanove preberejo{" "}
-            <Link href={MANUALE_URL}>
-              operativni priročnik
-            </Link>
-            {" "}(posodobljen dne 28. 6. 2022),{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
-              API-je b2b za javno upravo
-            </Link>
-            {" "}in{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-              API-je b2b za potek postopka obveščanja
-            </Link>
-            .
-          </Typography>
+          <List sx={{ listStyleType: 'disc', pl: 4 }}>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={MANUALE_URL}>
+                  operativni priročnik
+                </Link>
+                {" "}(posodobljen dne 20. 11. 2022),{" "}
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
+                  API-je b2b za javno upravo
+                </Link></Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
+                  API-je b2b za potek postopka obveščanja
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>seznam tehnoloških partnerjev in posrednikov</Link>
+                , ki izvajajo dejavnosti integracije platforme in ki jih je mogoče uporabiti za podporo pri upravljanju tehničnih vidikov.
+              </Typography>
+            </ListItem>
+          </List>
         </>
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: false,
+      imageShadow: false
     },
   },
 ];
@@ -213,16 +233,16 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Obvestila so sporočila s pravno vrednostjo, ki jih uradno izda upravni organ, kot so globe, 
-            obvestila o odmeri davka, rezultati upravnih postopkov, sproženih pri javnih upravah ali 
-            povračila, ki si jih do sedaj vedno prejel s priporočeno pošto. Od danes jih lahko prejmeš 
-            in si jih ogledaš v digitalni obliki, in sicer z dostopom do platforme Piattaforma Notifiche 
+            Obvestila so sporočila s pravno vrednostjo, ki jih uradno izda upravni organ, kot so globe,
+            obvestila o odmeri davka, rezultati upravnih postopkov, sproženih pri javnih upravah ali
+            povračila, ki si jih do sedaj vedno prejel s priporočeno pošto. Od danes jih lahko prejmeš
+            in si jih ogledaš v digitalni obliki, in sicer z dostopom do platforme Piattaforma Notifiche
             z uporabo digitalnih identitet SPID ali CIE ali neposredno v aplikaciji IO.
           </Typography>
           <Typography variant="body2">
-            Prav tako lahko plačaš morebitne stroške zahvaljujoč integraciji s platformo pagoPA, si 
-            ogledaš zgodovino prejetih obvestil in jih upravljaš neposredno na spletu. Poleg tega je vse, 
-            kar potrebuješ za upravljanje priporočenih sporočil za svoje družinske člane, le njihovo 
+            Prav tako lahko plačaš morebitne stroške zahvaljujoč integraciji s platformo pagoPA, si
+            ogledaš zgodovino prejetih obvestil in jih upravljaš neposredno na spletu. Poleg tega je vse,
+            kar potrebuješ za upravljanje priporočenih sporočil za svoje družinske člane, le njihovo
             pooblastilo.
           </Typography>
         </>
@@ -239,10 +259,10 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Za pošiljanje sporočil s pravno vrednostjo Piattaforma Notifiche da vedno prednost digitalnim 
-            podatkom za stik prejemnika. Z uporabo digitalnih identitet SPID ali CIE lahko kadarkoli 
-            dostopaš do platforme ter posodobiš svoje nastavitve z izbiro med PEC, aplikacijo IO, e-pošto 
-            ali SMS. Če ne navedeš nobenih podatkov za stik ali nimaš dostopa do platforme, boš obvestila 
+            Za pošiljanje sporočil s pravno vrednostjo Piattaforma Notifiche da vedno prednost digitalnim
+            podatkom za stik prejemnika. Z uporabo digitalnih identitet SPID ali CIE lahko kadarkoli
+            dostopaš do platforme ter posodobiš svoje nastavitve z izbiro med PEC, aplikacijo IO, e-pošto
+            ali SMS. Če ne navedeš nobenih podatkov za stik ali nimaš dostopa do platforme, boš obvestila
             še naprej prejemal s priporočeno pošto v papirni obliki.
           </Typography>
         </>
@@ -375,8 +395,8 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "PEC",
           subtitle: (
             <Typography variant="body2">
-              Če imaš naslov PEC, bodo obvestila dostavljena zakonito, brez dodatnih priporočenih 
-              pisem v papirni obliki. Obvestilo o prejemu, ki bo poslano, vsebuje povezavo za dostop 
+              Če imaš naslov PEC, bodo obvestila dostavljena zakonito, brez dodatnih priporočenih
+              pisem v papirni obliki. Obvestilo o prejemu, ki bo poslano, vsebuje povezavo za dostop
               do vsebine na platformi Piattaforma Notifiche.
             </Typography>
           ),
@@ -390,9 +410,9 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "Aplikacija IO",
           subtitle: (
             <Typography variant="body2">
-              Če aktiviraš storitev »Digitalna obvestila« na platformi Piattaforma Notifiche, lahko 
+              Če aktiviraš storitev »Digitalna obvestila« na platformi Piattaforma Notifiche, lahko
               prejmeš in upravljaš sporočila s pravno vrednostjo <strong>neposredno v aplikaciji.</strong>{" "}
-              Če nimaš naslova PEC in takoj prebereš sporočilo, ne boš prejel priporočenega pisma v 
+              Če nimaš naslova PEC in takoj prebereš sporočilo, ne boš prejel priporočenega pisma v
               papirni obliki, obvestilo pa bo zakonito vročeno.
             </Typography>
           ),
@@ -402,8 +422,8 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "E-pošta ali SMS",
           subtitle: (
             <Typography variant="body2">
-              Poleg tega se lahko odločiš tudi za prejemanje vljudnostnega obvestila na svoj e-naslov 
-              ali prek sporočila SMS. Če nimaš naslova PEC in dostopaš do platforme prek ustrezne povezave, 
+              Poleg tega se lahko odločiš tudi za prejemanje vljudnostnega obvestila na svoj e-naslov
+              ali prek sporočila SMS. Če nimaš naslova PEC in dostopaš do platforme prek ustrezne povezave,
               ne boš prejel priporočenega pisma v papirni obliki, obvestilo pa bo zakonito vročeno.
             </Typography>
           ),
@@ -423,19 +443,19 @@ const coShowcases: Array<IShowcaseData> = [
           icon: <PECIcon />,
           title: "",
           subtitle: `
-            `,
+                      `,
         },
         {
           icon: <IOIcon />,
           title: "",
           subtitle: `
-          `,
+                      `,
         },
         {
           icon: <MessageIcon />,
           title: "",
           subtitle: `
-          `,
+                      `,
         },
       ],
     },
@@ -456,21 +476,21 @@ const paWalkthrough: WalkthroughProps = {
     {
       icon: <SyncIcon color="primary" />,
       title: "Platforma to prevzame",
-      subtitle: `Piattaforma Notifiche preveri popolnost in pravilnost informacij. Ob vsaki spremembi stanja obvestila 
-        se vedno ustvari tudi ustrezno potrdilo, izvršljivo zoper tretje osebe.`,
+      subtitle: `Piattaforma Notifiche preveri popolnost in pravilnost informacij. Ob vsaki spremembi stanja obvestila
+                      se vedno ustvari tudi ustrezno potrdilo, izvršljivo zoper tretje osebe.`,
     },
     {
       icon: <SendIcon color="primary" />,
       title: "Obvestilo je nato poslano",
-      subtitle: `Platforma sporoči prejemniku prisotnost obvestila prek različnih možnih kanalov: PEC, aplikacija IO, 
-        e-pošta, SMS. Druga možnost je, da poišče fizični naslov in pošlje priporočeno pismo v papirni obliki.`,
+      subtitle: `Platforma sporoči prejemniku prisotnost obvestila prek različnih možnih kanalov: PEC, aplikacija IO,
+                      e-pošta, SMS. Druga možnost je, da poišče fizični naslov in pošlje priporočeno pismo v papirni obliki.`,
     },
     {
       icon: <DeliverIcon color="primary" />,
       title: "Prejemnik ga prejme",
-      subtitle: `Prejemnik dostopi do platforme. Tam lahko prenese vročene dokumente in hkrati plača dolgovani znesek, 
-        zahvaljujoč integraciji s platformo pagoPA. Če ga prejme prek aplikacije IO, lahko vse to stori neposredno v 
-        aplikaciji.`,
+      subtitle: `Prejemnik dostopi do platforme. Tam lahko prenese vročene dokumente in hkrati plača dolgovani znesek,
+                      zahvaljujoč integraciji s platformo pagoPA. Če ga prejme prek aplikacije IO, lahko vse to stori neposredno v
+                      aplikaciji.`,
     },
   ],
 };
@@ -482,38 +502,38 @@ const pfWalkthrough: WalkthroughProps = {
       icon: <NotificationIcon color="primary" />,
       title: "Prejmi obvestilo",
       subtitle: `
-        Za vsako obvestilo platforma preveri, ali obstaja naslov PEC, ki je povezan s teboj oziroma si ga 
-        ti navedel za pošiljanje obvestila o opravljenem prejemu. Nato pošlje še vljudnostno obvestilo na 
-        tvoje druge podatke za stik v digitalni obliki (aplikacija IO, e-pošta in SMS). Če ne navedeš 
-        nobenih digitalnih podatkov za stik in nimaš dostopa do platforme, boš prejel priporočeno pismo v 
-        papirni obliki.
-      `,
+                      Za vsako obvestilo platforma preveri, ali obstaja naslov PEC, ki je povezan s teboj oziroma si ga
+                      ti navedel za pošiljanje obvestila o opravljenem prejemu. Nato pošlje še vljudnostno obvestilo na
+                      tvoje druge podatke za stik v digitalni obliki (aplikacija IO, e-pošta in SMS). Če ne navedeš
+                      nobenih digitalnih podatkov za stik in nimaš dostopa do platforme, boš prejel priporočeno pismo v
+                      papirni obliki.
+                      `,
     },
     {
       icon: <DocCheckIcon color="primary" />,
       title: "Preberi vsebino",
       subtitle: `
-        Iz prejetega sporočila lahko dostopaš do platforme in prebereš obvestilo ter preneseš njegove priloge. 
-        Če aktiviraš storitev v aplikaciji IO, si lahko ogledaš vsebino neposredno v aplikaciji: to je 
-        enakovredno podpisu povratnice običajnega priporočenega pisma.
-      `,
+                      Iz prejetega sporočila lahko dostopaš do platforme in prebereš obvestilo ter preneseš njegove priloge.
+                      Če aktiviraš storitev v aplikaciji IO, si lahko ogledaš vsebino neposredno v aplikaciji: to je
+                      enakovredno podpisu povratnice običajnega priporočenega pisma.
+                      `,
     },
     {
       icon: <WalletIcon color="primary" />,
       title: "Plačaj stroške",
       subtitle: `
-        Če moraš plačati določen znesek, lahko zahvaljujoč integraciji s platformo pagoPA to storiš neposredno 
-        na spletu s platforme ali neposredno v aplikaciji IO. Če pa se raje odpraviš k okencu, moraš imeti pri 
-        sebi prejeti plačilni obrazec, ki ga prejmeš skupaj z obvestilom.
-      `,
+                      Če moraš plačati določen znesek, lahko zahvaljujoč integraciji s platformo pagoPA to storiš neposredno
+                      na spletu s platforme ali neposredno v aplikaciji IO. Če pa se raje odpraviš k okencu, moraš imeti pri
+                      sebi prejeti plačilni obrazec, ki ga prejmeš skupaj z obvestilom.
+                      `,
     },
     {
       icon: <DelegationIcon color="primary" />,
       title: "Lahko pooblastiš ali postaneš pooblaščenec",
       subtitle: `
-        Če želiš, lahko druge osebe, fizične ali pravne, pooblastiš za prejemanje tvojih obvestil preko spleta 
-        ali za prevzem priloženih dokumentov v papirni obliki na kateremkoli poštnem uradu.
-      `,
+                      Če želiš, lahko druge osebe, fizične ali pravne, pooblastiš za prejemanje tvojih obvestil preko spleta
+                      ali za prevzem priloženih dokumentov v papirni obliki na kateremkoli poštnem uradu.
+                      `,
       isSequential: false,
     },
   ],
@@ -623,7 +643,7 @@ const coHorizontalNav = {
 /**
  * Footer data
  */
- const pagoPALink: ILinkData = {
+const pagoPALink: ILinkData = {
   label: "PagoPA S.p.A.",
   href: PAGOPA_HOME ?? "",
   ariaLabel: "Povezava: pojdi na spletno mesto družbe PagoPA S.p.A."
@@ -638,7 +658,7 @@ const assistanceLink = {
 const companyLegalInfo = (
   <>
     <strong>PagoPA S.p.A.</strong> — delniška družba z enim družbenikom -
-    v celoti vplačan osnovni kapital 1.000.000 EUR - sedež v Rimu, 
+    v celoti vplačan osnovni kapital 1.000.000 EUR - sedež v Rimu,
     Piazza Colonna 370
     <br />
     Poštna številka 00187 - št. vpisa v Poslovni register v Rimu, davčna številka in identifikacijska številka za DDV 15376371009

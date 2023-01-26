@@ -12,7 +12,7 @@ jest.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (str: string) => str,
   }),
-  Trans: (props: {i18nKey: string}) => props.i18nKey,
+  Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
 const legalAddresses: Array<DigitalAddress> = [
@@ -70,7 +70,7 @@ describe('LegalContactsList Component', () => {
     const buttons = form?.querySelectorAll('button');
     expect(buttons!).toHaveLength(2);
     expect(buttons![0]).toHaveTextContent('button.modifica');
-    expect(buttons![1]).toHaveTextContent('button.rimuovi');
+    expect(buttons![1]).toHaveTextContent('button.elimina');
   });
 
   // it('expands disclosure', async () => {
@@ -178,9 +178,11 @@ describe('LegalContactsList Component', () => {
     mockActionFn.mockReset();
     mockDispatchFn.mockReset();
     mockDispatchFn.mockClear();
-    mockDispatchFn.mockImplementation(jest.fn(() => ({
-      unwrap: () => Promise.resolve({code: 'verified'}),
-    })));
+    mockDispatchFn.mockImplementation(
+      jest.fn(() => ({
+        unwrap: () => Promise.resolve({ code: 'verified' }),
+      }))
+    );
     fireEvent.click(dialogButtons![1]);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
@@ -215,7 +217,7 @@ describe('LegalContactsList Component', () => {
       expect(deleteMockActionFn).toBeCalledWith({
         recipientId: 'mocked-recipientId',
         senderId: 'default',
-        channelType: LegalChannelType.PEC
+        channelType: LegalChannelType.PEC,
       });
     });
   });
