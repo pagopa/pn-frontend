@@ -85,10 +85,23 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
   // we detect the insertion vs. modification behavior based on the presence or absence
   // of the value prop, so that we change the regex to be applied to the phone number field
   useEffect(() => {
-    void formik.setFieldValue(type, value, true);
-    setPhoneRegex(value ? phoneRegExpWithItalyPrefix : phoneRegExp);
+    // the change of the phone regex must actually await that the field value is set
+    // to avoid a subtle bug
+    const changeValue = async () => {
+      await formik.setFieldValue(type, value, true);
+      setPhoneRegex(value ? phoneRegExpWithItalyPrefix : phoneRegExp);
+    };
+    void changeValue();
   }, [value]);
 
+  // if the phoneRegex changes from its initial value of phoneRegExp to phoneRegExpWithItalyPrefix
+  // then we re-run the Formik validation on the field' value
+  useEffect(() => {
+    if (phoneRegex === phoneRegExpWithItalyPrefix) {
+      void formik.validateField(type);
+    }
+  }, [phoneRegex]);
+  
   /*
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
@@ -133,8 +146,8 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
                   size="small"
                   value={formik.values[type]}
                   onChange={handleChangeTouched}
-                  error={formik.touched[type] && Boolean(formik.errors[type])}
-                  helperText={formik.touched[type] && formik.errors[type]}
+                  error={(formik.touched[type] || formik.values[type].length > 0) && Boolean(formik.errors[type])}
+                  helperText={(formik.touched[type] || formik.values[type].length > 0) && formik.errors[type]}
                 />
               ),
               isEditable: true,
