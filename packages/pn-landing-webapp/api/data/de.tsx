@@ -10,10 +10,6 @@ import {
   WalkthroughProps
 } from "@pagopa/mui-italia";
 
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
-
-import { IMAGES_PATH, MANUALE_URL, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL } from "@utils/constants";
-
 import {
   CheckmarkIcon,
   CloudIcon,
@@ -35,6 +31,17 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+
+import {
+  IMAGES_PATH,
+  MANUALE_URL,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PARTNER_AND_INTERMEDIARIES_PATH,
+  PN_URL
+} from "@utils/constants";
+
 
 const onReadClick = () => {
   window.open(PN_URL, "_blank");
@@ -171,7 +178,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Demnächst für Behörden verfügbar",
+      title: "Starten Sie die Integration",
       content: (
         <>
           <Typography variant="body2">
@@ -189,12 +196,14 @@ const paInfoBlocks: Array<IInfoblockData> = [
             {" "}(aktualisiert am 28.06.2022),{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
               die b2b-APIs für öffentliche Verwaltungen
-            </Link>
+            </Link> 
             {" "}und{" "}
             <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
               die b2b-APIs über den Stand der Benachrichtigungen konsultieren
             </Link>
-            .
+            {" "}und{" "}
+            <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>die Liste der Technologiepartner und Vermittler</Link>
+            , die Integrationsaktivitäten umsetzen, einsehen zur Plattform und die zur Unterstützung bei der Verwaltung der technischen Aspekte verwendet werden können.
           </Typography>
         </>
       ),
@@ -202,7 +211,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: false,
+      imageShadow: false
     },
   },
 ];
@@ -790,8 +799,6 @@ const postLoginLinks: Array<FooterLinksType> = [
 export const deAppData: IAppData = {
   common: {
     navigation,
-    alert:
-      "Die Plattform ist nicht betriebsbereit. Nur einige der auf dieser Seite beschriebenen Funktionen werden derzeit getestet und stehen nur einer begrenzten Anzahl von Nutzern zur Verfügung, die Empfänger der von den Pilotbehörden verschickten Bescheide sein werden.",
     assistance: assistanceLink,
     pagoPALink,
     companyLegalInfo,
