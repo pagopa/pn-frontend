@@ -39,6 +39,9 @@ describe('CourtesyContactItem component', () => {
     const INPUT_VALID_PHONE_2 = '3337654321';
     const SUBMITTED_VALID_PHONE = '+393331234567';
     const INPUT_INVALID_PHONE = '33312345';
+    const INPUT_VALID_PHONE_UPDATE = '+393331234567';
+    const INPUT_VALID_PHONE_2_UPDATE = '+393337654321';
+    const INPUT_INVALID_PHONE_UPDATE = '+3933312345';
     const VALID_CODE = 'verified';
 
     beforeEach(() => {
@@ -160,7 +163,7 @@ describe('CourtesyContactItem component', () => {
               <CourtesyContactItem
                 recipientId="mocked-recipient"
                 type={CourtesyFieldType.PHONE}
-                value={INPUT_VALID_PHONE}
+                value={INPUT_VALID_PHONE_UPDATE}
               />
             </DigitalContactsCodeVerificationProvider>
           );
@@ -169,7 +172,7 @@ describe('CourtesyContactItem component', () => {
 
       test('type in an invalid number while in "edit mode"', async () => {
         //verify initial conditions
-        screen.getByText(INPUT_VALID_PHONE);
+        screen.getByText(INPUT_VALID_PHONE_UPDATE);
         screen.getByRole('button', { name: 'button.elimina' });
         const editButton = screen.getByRole('button', { name: 'button.modifica' });
 
@@ -177,11 +180,11 @@ describe('CourtesyContactItem component', () => {
 
         const input = screen.getByRole('textbox');
         const saveButton = screen.getByRole('button', { name: 'button.salva' });
-        expect(input).toHaveValue(INPUT_VALID_PHONE);
+        expect(input).toHaveValue(INPUT_VALID_PHONE_UPDATE);
         expect(saveButton).toBeEnabled();
 
-        fireEvent.change(input, { target: { value: INPUT_INVALID_PHONE } });
-        await waitFor(() => expect(input).toHaveValue(INPUT_INVALID_PHONE));
+        fireEvent.change(input, { target: { value: INPUT_INVALID_PHONE_UPDATE } });
+        await waitFor(() => expect(input).toHaveValue(INPUT_INVALID_PHONE_UPDATE));
         expect(saveButton).toBeDisabled();
       });
 
@@ -196,7 +199,7 @@ describe('CourtesyContactItem component', () => {
         await waitFor(() => expect(input).toHaveValue('ciao'));
         fireEvent.click(cancel);
         await waitFor(() => {
-          const number = screen.getByText(INPUT_VALID_PHONE);
+          const number = screen.getByText(INPUT_VALID_PHONE_UPDATE);
           expect(number).toBeInTheDocument();
         });
         fireEvent.click(editButton);
@@ -204,8 +207,8 @@ describe('CourtesyContactItem component', () => {
 
         fireEvent.change(input, { target: { value: '' } });
         await waitFor(() => expect(input).toHaveValue(''));
-        fireEvent.change(input, { target: { value: INPUT_VALID_PHONE } });
-        await waitFor(() => expect(input).toHaveValue(INPUT_VALID_PHONE));
+        fireEvent.change(input, { target: { value: INPUT_VALID_PHONE_UPDATE } });
+        await waitFor(() => expect(input).toHaveValue(INPUT_VALID_PHONE_UPDATE));
         // clear mocks
         mockActionFn.mockClear();
         mockActionFn.mockReset();
@@ -217,15 +220,15 @@ describe('CourtesyContactItem component', () => {
           }))
         );
         fireEvent.click(saveButton);
-        await waitFor(() => screen.getByText(INPUT_VALID_PHONE));
+        await waitFor(() => screen.getByText(INPUT_VALID_PHONE_UPDATE));
       });
 
       test('override an existing phone number with a new one', async () => {
         const editButton = screen.getByRole('button', { name: 'button.modifica' });
         fireEvent.click(editButton);
         const input = result?.getByRole('textbox');
-        fireEvent.change(input!, { target: { value: INPUT_VALID_PHONE_2 } });
-        await waitFor(() => expect(input!).toHaveValue(INPUT_VALID_PHONE_2));
+        fireEvent.change(input!, { target: { value: INPUT_VALID_PHONE_2_UPDATE } });
+        await waitFor(() => expect(input!).toHaveValue(INPUT_VALID_PHONE_2_UPDATE));
         const saveButton = screen.getByRole('button', { name: 'button.salva' });
         fireEvent.click(saveButton);
         await waitFor(() => {
@@ -235,7 +238,7 @@ describe('CourtesyContactItem component', () => {
             recipientId: 'mocked-recipient',
             senderId: 'default',
             channelType: CourtesyChannelType.SMS,
-            value: INPUT_VALID_PHONE_2,
+            value: INPUT_VALID_PHONE_2_UPDATE,
             code: undefined,
           });
         });
@@ -268,7 +271,7 @@ describe('CourtesyContactItem component', () => {
             recipientId: 'mocked-recipient',
             senderId: 'default',
             channelType: CourtesyChannelType.SMS,
-            value: INPUT_VALID_PHONE_2,
+            value: INPUT_VALID_PHONE_2_UPDATE,
             code: '01234',
           });
         });
