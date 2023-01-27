@@ -1,12 +1,13 @@
 import { Button, Grid, TextField, InputAdornment, Typography } from '@mui/material';
 
-import { ChangeEvent, useEffect, useMemo } from 'react';
+import { ChangeEvent, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType } from '../../models/contacts';
-import { internationalPhonePrefix, phoneRegExp } from '../../utils/contacts.utility';
+import { internationalPhonePrefix } from '../../utils/contacts.utility';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactElem from './DigitalContactElem';
 
@@ -25,6 +26,7 @@ interface Props {
 const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
+  const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
 
   const digitalDomicileType = useMemo(
     () => (type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS),
@@ -34,15 +36,15 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
   const emailValidationSchema = yup.object().shape({
     email: yup
       .string()
-      .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
-      .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
+      .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
+      .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
   });
 
   const phoneValidationSchema = yup.object().shape({
     phone: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(phoneRegExp, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+      .matches(dataRegex.phoneNumber, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
   });
 
   const formik = useFormik({
@@ -81,7 +83,13 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
 
   if (value) {
     return (
-      <form style={{ width: '100%' }}>
+      <form
+        style={{ width: '100%' }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          digitalElemRef.current.editContact();
+        }}
+      >
         <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
           {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
         </Typography>
@@ -103,6 +111,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
                 })
           }
           value={formik.values[type]}
+          ref={digitalElemRef}
           fields={[
             {
               id: `value-${type}`,

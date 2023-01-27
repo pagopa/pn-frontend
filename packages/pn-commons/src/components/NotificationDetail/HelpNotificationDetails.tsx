@@ -50,7 +50,7 @@ const HelpNotificationDetails: React.FC<HelpNotificationDetailsProps> = ({
   useEffect(() => {
     const fetchValidatedContactChannels = async () => {
       const validatedPhoneNumber = (await yup.string().matches(dataRegex.phoneNumber).isValid(phoneNumber)) ? phoneNumber : null;
-      const validatedMail = (await yup.string().email().isValid(mail)) ? mail : null;
+      const validatedMail = (await yup.string().matches(dataRegex.email).isValid(mail)) ? mail : null;
       const validatedWebsite = (await yup.string().url().isValid(website)) ? website : null;
       setValidatedContactChannels({ 
         phoneNumber: validatedPhoneNumber,

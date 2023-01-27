@@ -1,9 +1,10 @@
-import { ChangeEvent, useMemo } from 'react';
+import { ChangeEvent, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Grid, Box, Typography, TextField, Alert } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
-import { Grid, Box, Typography, TextField, Alert } from '@mui/material';
+import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { DigitalAddress, LegalChannelType } from '../../models/contacts';
 import DigitalContactsCard from './DigitalContactsCard';
@@ -16,6 +17,7 @@ type Props = {
 
 const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
+  const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
 
   const title = useMemo(
     () => (
@@ -36,7 +38,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
     pec: yup
       .string()
       .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-      .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
+      .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
   });
   const initialValues = {
     pec: defaultAddress?.value || '',
@@ -68,7 +70,10 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
       avatar={<IllusEmailValidation />}
     >
       <Box sx={{ marginTop: '20px' }}>
-        <form>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          digitalElemRef.current.editContact();
+        }}>
           <Typography mb={1} sx={{ fontWeight: 'bold' }}>
             {t('legal-contacts.pec-added', { ns: 'recapiti' })}
           </Typography>
@@ -116,6 +121,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             onConfirmClick={handleEditConfirm}
             blockDelete={legalAddresses.length > 1}
             resetModifyValue={() => handleEditConfirm('cancelled')}
+            ref={digitalElemRef}
           />
         </form>
       </Box>
