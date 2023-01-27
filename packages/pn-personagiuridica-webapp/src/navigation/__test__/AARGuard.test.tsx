@@ -5,9 +5,9 @@ import {
   DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM,
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
-} from '../../navigation/routes.const';
+} from '../routes.const';
 import { render } from '../../__test__/test-utils';
-import NotificationFromQrCodeGuard from '../NotificationFromQrCodeGuard';
+import AARGuard from '../AARGuard';
 
 const mockNavigateFn = jest.fn(() => {});
 
@@ -67,7 +67,7 @@ describe('Notification from QR code', () => {
 
   it('QR code requested by a delegate', async () => {
     mockQrCode = 'qr-code-2';
-    await act(async () => void render(<NotificationFromQrCodeGuard />));
+    await act(async () => void render(<AARGuard />));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(
       GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH('mock-iun-2', 'mock-mandateId-2'),
@@ -79,7 +79,7 @@ describe('Notification from QR code', () => {
 
   it('QR code requested by a recipient', async () => {
     mockQrCode = 'qr-code-1';
-    await act(async () => void render(<NotificationFromQrCodeGuard />));
+    await act(async () => void render(<AARGuard />));
     expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockNavigateFn).toBeCalledWith(GET_DETTAGLIO_NOTIFICA_PATH('mock-iun-1'), {
       replace: true,
@@ -91,7 +91,7 @@ describe('Notification from QR code', () => {
 
   it('invalid QR code', async () => {
     mockQrCode = 'bad-qr-code';
-    await act(async () => void render(<NotificationFromQrCodeGuard />));
+    await act(async () => void render(<AARGuard />));
     expect(mockNavigateFn).toBeCalledTimes(0);
     const accessDeniedComponent = screen.queryByTestId('mock-access-denied');
     expect(accessDeniedComponent).toBeInTheDocument();
@@ -99,7 +99,7 @@ describe('Notification from QR code', () => {
 
   it('no QR code', async () => {
     mockQrCode = '';
-    await act(async () => void render(<NotificationFromQrCodeGuard />));
+    await act(async () => void render(<AARGuard />));
     expect(mockNavigateFn).toBeCalledTimes(0);
     const outletComponent = screen.queryByText('Mocked Outlet');
     expect(outletComponent).toBeInTheDocument();

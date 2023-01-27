@@ -6,7 +6,7 @@ import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
 import ToSGuard from './ToSGuard';
-import NotificationFromQrCodeGuard from './NotificationFromQrCodeGuard';
+import AARGuard from './AARGuard';
 
 const Profile = React.lazy(() => import('../pages/Profile.page'));
 const Notifiche = React.lazy(() => import('../pages/Notifiche.page'));
@@ -26,7 +26,7 @@ function Router() {
           {/* protected routes */}
           <Route path="/" element={<RouteGuard />}>
             <Route path="/" element={<ToSGuard />}>
-              <Route path="/" element={<NotificationFromQrCodeGuard />}>
+              <Route path="/" element={<AARGuard />}>
                 <Route path={routes.NOTIFICHE} element={<Notifiche />} />
                 <Route path={routes.NOTIFICHE_DELEGATO} element={<Notifiche />} />
                 <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />

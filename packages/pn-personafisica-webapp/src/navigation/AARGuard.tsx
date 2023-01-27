@@ -9,7 +9,7 @@ import {
   GET_DETTAGLIO_NOTIFICA_DELEGATO_PATH,
   GET_DETTAGLIO_NOTIFICA_PATH,
   NOTIFICHE,
-} from '../navigation/routes.const';
+} from './routes.const';
 
 function notificationDetailPath(notificationId: NotificationId): string {
   return notificationId.mandateId
@@ -18,23 +18,23 @@ function notificationDetailPath(notificationId: NotificationId): string {
 }
 
 /* eslint-disable-next-line arrow-body-style */
-const NotificationFromQrCodeGuard = () => {
+const AARGuard = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation(['notifiche']);
   const [fetchError, setFetchError] = useState(false);
   const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
 
-  const qrcode = useMemo(() => {
+  const aar = useMemo(() => {
     const queryParams = new URLSearchParams(location.search);
     return queryParams.get(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
   }, [location]);
 
   useEffect(() => {
     const fetchNotificationFromQrCode = async () => {
-      if (qrcode) {
+      if (aar) {
         try {
-          const fetchedData = await NotificationsApi.exchangeNotificationQrCode(qrcode);
+          const fetchedData = await NotificationsApi.exchangeNotificationQrCode(aar);
           setNotificationId(fetchedData);
         } catch {
           setFetchError(true);
@@ -42,7 +42,7 @@ const NotificationFromQrCodeGuard = () => {
       }
     };
     void fetchNotificationFromQrCode();
-  }, [qrcode]);
+  }, [aar]);
 
   useEffect(() => {
     if (notificationId) {
@@ -53,7 +53,7 @@ const NotificationFromQrCodeGuard = () => {
     }
   }, [notificationId]);
 
-  if (!qrcode) {
+  if (!aar) {
     return <Outlet />;
   }
 
@@ -71,4 +71,4 @@ const NotificationFromQrCodeGuard = () => {
   return <LoadingPage />;
 };
 
-export default NotificationFromQrCodeGuard;
+export default AARGuard;
