@@ -48,7 +48,7 @@ export interface INavigationBarProps {
 export interface IAppData {
   common: {
     navigation: INavigationBarProps;
-    alert: string;
+    alert?: string;
     assistance: ILinkData;
     pagoPALink: ILinkData;
     companyLegalInfo: JSX.Element;

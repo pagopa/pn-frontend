@@ -1,12 +1,13 @@
 import { Button, Grid, TextField, InputAdornment, Typography } from '@mui/material';
 
-import { ChangeEvent, useEffect, useMemo } from 'react';
+import { ChangeEvent, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType } from '../../models/contacts';
-import { internationalPhonePrefix, phoneRegExp } from '../../utils/contacts.utility';
+import { internationalPhonePrefix } from '../../utils/contacts.utility';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 import DigitalContactElem from './DigitalContactElem';
 
@@ -25,6 +26,7 @@ interface Props {
 const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
+  const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
 
   const digitalDomicileType = useMemo(
     () => (type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS),
@@ -34,15 +36,15 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
   const emailValidationSchema = yup.object().shape({
     email: yup
       .string()
-      .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
-      .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
+      .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
+      .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
   });
 
   const phoneValidationSchema = yup.object().shape({
     phone: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(phoneRegExp, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+      .matches(dataRegex.phoneNumber, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
   });
 
   const formik = useFormik({
@@ -65,6 +67,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     formik.handleChange(event);
+
     await formik.setFieldTouched(event.target.id, true, false);
   };
 
@@ -80,24 +83,35 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
 
   if (value) {
     return (
-      <form style={{ width: '100%'}}>
-        <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
+      <form
+        style={{ width: '100%' }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          digitalElemRef.current.editContact();
+        }}
+      >
+        <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
+          {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
+        </Typography>
         <DigitalContactElem
           recipientId={recipientId}
           senderId="default"
           contactType={digitalDomicileType}
           removeModalTitle={
             blockDelete
-                ? t(`courtesy-contacts.block-remove-${type}-title`, { ns: 'recapiti' })
-                : t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })}
+              ? t(`courtesy-contacts.block-remove-${type}-title`, { ns: 'recapiti' })
+              : t(`courtesy-contacts.remove-${type}-title`, { ns: 'recapiti' })
+          }
           removeModalBody={
             blockDelete
-                ? t(`courtesy-contacts.block-remove-${type}-message`, { ns: 'recapiti' })
-                : t(`courtesy-contacts.remove-${type}-message`, {
-            value: formik.values[type],
-            ns: 'recapiti',
-          })}
+              ? t(`courtesy-contacts.block-remove-${type}-message`, { ns: 'recapiti' })
+              : t(`courtesy-contacts.remove-${type}-message`, {
+                  value: formik.values[type],
+                  ns: 'recapiti',
+                })
+          }
           value={formik.values[type]}
+          ref={digitalElemRef}
           fields={[
             {
               id: `value-${type}`,
@@ -124,15 +138,17 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           saveDisabled={!formik.isValid}
           onConfirmClick={handleEditConfirm}
           blockDelete={blockDelete}
-          forceMobileView
+          resetModifyValue={() => handleEditConfirm('cancelled')}
         />
       </form>
     );
   }
 
   return (
-    <form onSubmit={formik.handleSubmit} style={{ width: '100%'}}>
-      <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>{t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}</Typography>
+    <form onSubmit={formik.handleSubmit} style={{ width: '100%' }}>
+      <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
+        {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
+      </Typography>
       <Grid container spacing={2} direction="row">
         <Grid item lg={8} sm={8} xs={12}>
           <TextField
@@ -149,11 +165,15 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
             })}
             fullWidth
             type={type === CourtesyFieldType.EMAIL ? 'mail' : 'tel'}
-            InputProps={ type === CourtesyFieldType.PHONE ? {
-              startAdornment: (
-                <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-              ),
-            } : {}}
+            InputProps={
+              type === CourtesyFieldType.PHONE
+                ? {
+                    startAdornment: (
+                      <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                    ),
+                  }
+                : {}
+            }
           />
         </Grid>
         <Grid item lg={4} sm={4} xs={12} alignItems="right">

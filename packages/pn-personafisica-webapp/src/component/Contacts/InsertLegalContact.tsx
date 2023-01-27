@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Alert, Button, Grid, TextField, Typography } from '@mui/material';
 import { IllusEmailValidation } from '@pagopa/mui-italia';
+import { dataRegex } from '@pagopa-pn/pn-commons';
 
 import { LegalChannelType } from '../../models/contacts';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
@@ -24,7 +25,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
       then: yup
         .string()
         .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-        .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
+        .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     }),
   });
 

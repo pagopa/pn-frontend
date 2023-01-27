@@ -18,13 +18,13 @@ import {
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { ApiErrorWrapper, useIsMobile, CustomDropdown } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, useIsMobile, CustomDropdown, dataRegex } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
 
 import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
-import { internationalPhonePrefix, phoneRegExp } from '../../utils/contacts.utility';
+import { internationalPhonePrefix } from '../../utils/contacts.utility';
 import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
 import SpecialContactElem from './SpecialContactElem';
@@ -115,21 +115,21 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       then: yup
         .string()
         .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-        .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
+        .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     }),
     s_mail: yup.string().when('addressType', {
       is: CourtesyChannelType.EMAIL,
       then: yup
         .string()
         .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
-        .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
+        .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
     }),
     s_phone: yup.string().when('addressType', {
       is: CourtesyChannelType.SMS,
       then: yup
         .string()
         .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-        .matches(phoneRegExp, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+        .matches(dataRegex.phoneNumber, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
     }),
   });
 

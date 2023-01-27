@@ -271,14 +271,19 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
     testFormElements(form!, 's_phone', 'special-contacts.phone');
   });
 
-  it('checks invalid pec', async () => {
+  it('checks invalid pec - 1', async () => {
     const form = result.container.querySelector('form');
     await testInvalidField(form!, 's_pec', 'mail-errata', 'legal-contacts.valid-pec');
   });
 
+  it('checks invalid pec - 2', async () => {
+    const form = result.container.querySelector('form');
+    await testInvalidField(form!, 's_pec', 'non.va.bene@a1.a2.a3.a4.a5.a6.a7.a8.a9.a0.b1.b2.b3.b4', 'legal-contacts.valid-pec');
+  });
+
   it('checks valid pec', async () => {
     const form = result.container.querySelector('form');
-    await testValidFiled(form!, 's_pec', 'mail@valida.mail');
+    await testValidFiled(form!, 's_pec', 'mail-carino@valida.com');
   });
 
   it('checks invalid mail', async () => {
@@ -293,7 +298,7 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       ],
       2
     );
-    await testInvalidField(form!, 's_mail', 'mail-errata', 'courtesy-contacts.valid-email');
+    await testInvalidField(form!, 's_mail', 'due__trattini_bassi_no@pagopa.it', 'courtesy-contacts.valid-email');
   });
 
   it('checks valid mail', async () => {
@@ -308,7 +313,7 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       ],
       2
     );
-    await testValidFiled(form!, 's_mail', 'mail@valida.mail');
+    await testValidFiled(form!, 's_mail', 'mail@valida.ar');
   });
 
   it('checks invalid phone', async () => {
@@ -346,7 +351,7 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
     await testContactAddition(
       form!,
       's_pec',
-      'mail@valida.mail',
+      'mail@valida.ar',
       mockDispatchFn,
       mockActionFn,
       LegalChannelType.PEC
@@ -390,7 +395,7 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
     await testContactAddition(
       form!,
       's_mail',
-      'mail@valida.mail',
+      'mail-trattino.punto_underscore.fine@val-ida.it',
       mockDispatchFn,
       mockActionFn,
       CourtesyChannelType.EMAIL
