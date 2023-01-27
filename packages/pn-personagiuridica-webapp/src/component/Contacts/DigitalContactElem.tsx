@@ -1,4 +1,4 @@
-import { Fragment, memo, ReactChild, useState } from 'react';
+import { forwardRef, Fragment, memo, ReactChild, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -88,20 +88,23 @@ const DeleteDialog: React.FC<DialogProps> = ({
   );
 };
 
-const DigitalContactElem = memo(
-  ({
-    fields,
-    saveDisabled = false,
-    removeModalTitle,
-    removeModalBody,
-    recipientId,
-    senderId,
-    contactType,
-    value,
-    onConfirmClick,
-    blockDelete,
-    resetModifyValue,
-  }: Props) => {
+const DigitalContactElem = forwardRef(
+  (
+    {
+      fields,
+      saveDisabled = false,
+      removeModalTitle,
+      removeModalBody,
+      recipientId,
+      senderId,
+      contactType,
+      value,
+      onConfirmClick,
+      blockDelete,
+      resetModifyValue,
+    }: Props,
+    ref
+  ) => {
     const { t } = useTranslation(['common']);
     const [editMode, setEditMode] = useState(false);
     const [showModal, setShowModal] = useState(false);
@@ -164,6 +167,10 @@ const DigitalContactElem = memo(
       );
     };
 
+    useImperativeHandle(ref, () => ({
+      editContact: editHandler,
+    }));
+
     return (
       <Fragment>
         <Grid container spacing="4" direction="row" alignItems="center">
@@ -208,4 +215,4 @@ const DigitalContactElem = memo(
   }
 );
 
-export default DigitalContactElem;
+export default memo(DigitalContactElem);
