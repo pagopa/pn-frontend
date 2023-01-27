@@ -3,13 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { TableCell, TableRow, TextField, Typography } from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { dataRegex, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { phoneRegExp } from '../../utils/contacts.utility';
-import { trackEventByType } from '../../utils/mixpanel';
-import { EventActions, TrackEventType } from '../../utils/events';
+import { trackEventByType } from "../../utils/mixpanel";
+import { EventActions, TrackEventType } from "../../utils/events";
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
@@ -86,15 +85,15 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     [`${address.senderId}_pec`]: yup
       .string()
       .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-      .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
+      .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     [`${address.senderId}_phone`]: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(phoneRegExp, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+      .matches(dataRegex.phoneNumber, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
     [`${address.senderId}_mail`]: yup
       .string()
       .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
-      .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
+      .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
   });
 
   const updateContact = async (status: 'validated' | 'cancelled', id: string) => {
