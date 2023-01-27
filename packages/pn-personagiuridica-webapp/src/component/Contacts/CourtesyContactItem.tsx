@@ -1,6 +1,6 @@
 import { Button, Grid, TextField, InputAdornment, Typography } from '@mui/material';
 
-import { ChangeEvent, useEffect, useMemo, useRef } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -26,6 +26,7 @@ interface Props {
 const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
+  const [phoneRegex, setPhoneRegex] = useState(dataRegex.phoneNumber);
   const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
 
   const digitalDomicileType = useMemo(
@@ -33,19 +34,22 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     []
   );
 
-  const emailValidationSchema = yup.object().shape({
+  const emailValidationSchema = useMemo(() => yup.object().shape({
     email: yup
       .string()
       .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
       .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
-  });
+  }), []);
 
-  const phoneValidationSchema = yup.object().shape({
+  // note that phoneValidationSchema depends on the phoneRegex which is different
+  // for the insertion and modification cases, check the comment 
+  // about the useEffect which calls setPhoneRegex below
+  const phoneValidationSchema = useMemo(() => yup.object().shape({
     phone: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(dataRegex.phoneNumber, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
-  });
+      .matches(phoneRegex, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+  }), [phoneRegex]);
 
   const formik = useFormik({
     initialValues: {
@@ -77,10 +81,34 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     }
   };
 
+  // the regex for the phone number should
+  // - not include Italy intl. prefix +39 when the SMS courtesy address is *inserted*
+  // - include Italy intl. prefix +39 when the SMS courtesy address is *modified*
+  // we detect the insertion vs. modification behavior based on the presence or absence
+  // of the value prop, so that we change the regex to be applied to the phone number field
   useEffect(() => {
-    void formik.setFieldValue(type, value, true);
+    // the change of the phone regex must actually await that the field value is set
+    // to avoid a subtle bug
+    const changeValue = async () => {
+      await formik.setFieldValue(type, value, true);
+      setPhoneRegex(value ? dataRegex.phoneNumberWithItalyPrefix : dataRegex.phoneNumber);
+    };
+    void changeValue();
   }, [value]);
 
+  // if the phoneRegex changes from its initial value of phoneRegExp to phoneRegExpWithItalyPrefix
+  // then we re-run the Formik validation on the field' value
+  useEffect(() => {
+    if (phoneRegex === dataRegex.phoneNumberWithItalyPrefix) {
+      void formik.validateField(type);
+    }
+  }, [phoneRegex]);
+
+  /*
+   * if *some* value (phone number, email address) has been attached to the contact type,
+   * then we show the value giving the user the possibility of changing it
+   * (the DigitalContactElem component includes the "update" button)
+   */  
   if (value) {
     return (
       <form
@@ -127,8 +155,8 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
                   size="small"
                   value={formik.values[type]}
                   onChange={handleChangeTouched}
-                  error={formik.touched[type] && Boolean(formik.errors[type])}
-                  helperText={formik.touched[type] && formik.errors[type]}
+                  error={(formik.touched[type] || formik.values[type].length > 0) && Boolean(formik.errors[type])}
+                  helperText={(formik.touched[type] || formik.values[type].length > 0) && formik.errors[type]}
                 />
               ),
               isEditable: true,
@@ -144,6 +172,11 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     );
   }
 
+  /*
+   * if *no* value (phone number, email address) has been attached to the contact type,
+   * then we show the input field allowing the user to enter it along with the button 
+   * to perform the addition.
+   */  
   return (
     <form onSubmit={formik.handleSubmit} style={{ width: '100%' }}>
       <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
