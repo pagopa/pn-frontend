@@ -153,7 +153,14 @@ const SessionGuard = () => {
       if (sessionToken && !isClosedSession && !hasTosApiErrors) {
         const rootPath = location.pathname === '/';
         if (rootPath) {
-          navigate(routes.NOTIFICHE, { replace: true });
+          // ----------------------
+          // I'm not sure about this manual redirect because react-router-dom itself does redirect if properly configured
+          // For the moment and for aar link, I had to pass search: location.search in the navigate function
+          // Without it, the aar parameter was lost during redirect
+          // ----------------------
+          // Andrea Cimini, 2023.01.27
+          // ----------------------
+          navigate({ pathname: routes.NOTIFICHE, search: location.search }, { replace: true });
         } else {
           const hashAsObject = new URLSearchParams(location.hash);
           hashAsObject.delete('#token');

@@ -7,7 +7,7 @@ import {
   NotificationDetailOtherDocument,
   PaymentAttachmentNameType,
   PaymentInfo,
-  PaymentNotice
+  PaymentNotice,
 } from '@pagopa-pn/pn-commons';
 import { AxiosResponse } from 'axios';
 
@@ -88,6 +88,11 @@ export const NotificationsApi = {
       }
     }),
 
+  /**
+   * Get notification iun and mandate id from aar link
+   * @param {string} qrCode
+   * @returns Promise
+   */
   exchangeNotificationQrCode: (qrCode: string): Promise<NotificationId> =>
     apiClient
       .post<NotificationId>(NOTIFICATION_ID_FROM_QRCODE(), { aarQrCodeValue: qrCode })
@@ -118,7 +123,7 @@ export const NotificationsApi = {
   getReceivedNotificationOtherDocument: (
     iun: string,
     otherDocument: NotificationDetailOtherDocument,
-    mandateId?: string,
+    mandateId?: string
   ): Promise<{ url: string }> =>
     apiClient
       .get<{ url: string }>(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
