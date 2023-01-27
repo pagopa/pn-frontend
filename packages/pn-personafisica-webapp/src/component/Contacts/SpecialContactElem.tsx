@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, Fragment, memo, useEffect, useMemo } from 'react';
+import { ChangeEvent, Fragment, memo, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -11,7 +11,6 @@ import { phoneRegExp } from '../../utils/contacts.utility';
 import { trackEventByType } from '../../utils/mixpanel';
 import { EventActions, TrackEventType } from '../../utils/events';
 import DigitalContactElem from './DigitalContactElem';
-import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
 
 type Props = {
   address: {
@@ -38,17 +37,17 @@ const addressTypeToLabel = {
   phone: 'phone',
 };
 
-const getDigitalDomicileType = (addressId: string): LegalChannelType | CourtesyChannelType =>
-  addressId === 'pec'
-    ? LegalChannelType.PEC
-    : (addressId === 'email'
-    ? CourtesyChannelType.EMAIL
-    : CourtesyChannelType.SMS);
-
 const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
-  const { initValidation } = useDigitalContactsCodeVerificationContext();
+  const digitalElemRef = useRef<{ 
+    [key: string]: { editContact: () => void};
+  }>(
+    { 
+      [`${address.senderId}_pec`]: { editContact: () => {}},
+      [`${address.senderId}_phone`]: { editContact: () => {}},
+      [`${address.senderId}_mail`]: { editContact: () => {}},
+    });
 
   const initialValues = {
     [`${address.senderId}_pec`]: address.pec || '',
@@ -125,17 +124,15 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     });
   }, [address]);
 
-  const submitFormHandler = async (e: FormEvent, addressId: string) => {
-    e.preventDefault();
-    const contactValue = formik.values[`${address.senderId}_${addressId}`];
-    const digitalDomicileType = getDigitalDomicileType(addressId);
-    initValidation(digitalDomicileType, contactValue, recipientId, address.senderId);
-  };
-
   const jsxField = (f: Field) => (
     <Fragment>
       {address[f.addressId] ? (
-        <form data-testid="specialContactForm" onSubmit={ e => submitFormHandler(e, f.addressId) }>
+        <form data-testid="specialContactForm" onSubmit={
+          (e) => {
+            e.preventDefault();
+            digitalElemRef.current[f.id].editContact();
+          }
+        }>
           <DigitalContactElem
             recipientId={recipientId}
             senderId={address.senderId}
@@ -172,6 +169,8 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
             value={formik.values[f.id]}
             onConfirmClick={(status) => updateContact(status, f.id)}
             resetModifyValue={() => updateContact('cancelled', f.id)}
+            // eslint-disable-next-line functional/immutable-data
+            ref={(node: { editContact: () => void}) => (digitalElemRef.current[f.id] = node)}
           />
         </form>
       ) : (
