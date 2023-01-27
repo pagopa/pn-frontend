@@ -289,7 +289,8 @@ Resources:
                 - EventType: viewer-request
                   FunctionARN: !GetAtt RewriteFunction.FunctionMetadata.FunctionARN
               - !Ref "AWS::NoValue"   
-        DefaultRootObject: !If [ IsLanding, 'cittadini/index.html', 'index.html'] 
+        DefaultRootObject: !If [ IsLanding, 'pubbliche-amministrazioni/index.html', 'index.html'] 
+        # DefaultRootObject: !If [ IsLanding, 'cittadini/index.html', 'index.html'] 
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200

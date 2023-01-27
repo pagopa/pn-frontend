@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { SvgIcon, Typography } from "@mui/material";
+import { List, ListItem, SvgIcon, Typography } from "@mui/material";
 
 import {
   FooterLinksType,
@@ -9,10 +9,6 @@ import {
   PreLoginFooterLinksType,
   WalkthroughProps
 } from "@pagopa/mui-italia";
-
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
-
-import { IMAGES_PATH, PAGOPA_HELP_EMAIL, PAGOPA_HOME, PN_URL, MANUALE_URL } from "@utils/constants";
 
 import {
   CheckmarkIcon,
@@ -35,6 +31,17 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
+import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+
+import {
+  IMAGES_PATH,
+  PAGOPA_HELP_EMAIL,
+  PAGOPA_HOME,
+  PN_URL,
+  MANUALE_URL,
+  PARTNER_AND_INTERMEDIARIES_PATH
+} from "@utils/constants";
+
 
 const assistanceLink = {
   label: "Assistenza",
@@ -56,10 +63,10 @@ const navigation: INavigationBarProps = {
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
-      label: "Leggi le tue notifiche",
-      title: "Leggi le tue notifiche",
-      onClick: onReadClick,
-    }
+    label: "Leggi le tue notifiche",
+    title: "Leggi le tue notifiche",
+    onClick: onReadClick,
+  }
   : undefined;
 
 /** Hero mocked data */
@@ -168,7 +175,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             app.
           </Typography>
           <Typography variant="body2">
-            Come l’ente, anche il desinatario ha accesso alla cronologia degli
+            Come l’ente, anche il destinatario ha accesso alla cronologia degli
             stati della notifica e alle attestazioni opponibili a terzi che ne
             danno prova.
           </Typography>
@@ -183,39 +190,55 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Presto disponibile per gli enti",
+      title: "Avvia l’integrazione",
       content: (
         <>
           <Typography variant="body2">
-            Attualmente, Piattaforma Notifiche è oggetto di collaudo con un
-            numero ristretto di enti pilota.
+            Attualmente gli enti possono avviare le attività tecniche necessarie per l’integrazione a Piattaforma Notifiche.
           </Typography>
+
           <Typography variant="body2">
-            Quando sarà operativa, anche il tuo ente potrà fare richiesta di
-            adesione e adottarla per digitalizzare il processo di notificazione.
+            A tal fine sono disponibili: 
           </Typography>
-          <Typography variant="body2">
-            Nel frattempo, gli enti possono consultare il{" "}
-            <Link href={MANUALE_URL}>
-              manuale operativo
-            </Link>
-            {" "}(aggiornato al 28/06/2022),{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
-              le API b2b per le pubbliche amministrazioni
-            </Link>
-            {" "}e{" "}
-            <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-              le API b2b per l’avanzamento delle notifiche
-            </Link>
-            .
-          </Typography>
+          <List sx={{ listStyleType: 'disc', pl: 4 }}>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={MANUALE_URL}>
+                  manuale operativo
+                </Link>
+                {" "}(aggiornato al 20/11/2022),
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
+                  le API b2b per le pubbliche amministrazioni
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
+                  le API b2b per l’avanzamento delle notifiche
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
+                  la lista dei Partner e Intermediari tecnologici
+                </Link>
+                {" "}che stanno implementando le attività di integrazione alla piattaforma e di cui è possibile avvalersi per un supporto nella gestione degli aspetti tecnici
+              </Typography>
+            </ListItem>
+          </List>
         </>
       ),
       inverse: false,
       image: `${IMAGES_PATH}/pa-infoblock-4.png`,
       altText: "",
       aspectRatio: "9/16",
-      imageShadow: false,
+      imageShadow: false
     },
   },
 ];
@@ -809,8 +832,6 @@ const postLoginLinks: Array<FooterLinksType> = [
 export const itAppData: IAppData = {
   common: {
     navigation,
-    alert:
-      "La piattaforma non è operativa. Attualmente sono in fase di collaudo solo alcune delle funzionalità descritte in questa pagina, disponibili esclusivamente per un numero limitato di utenti che saranno destinatari delle notifiche inviate dagli enti pilota.",
     assistance: assistanceLink,
     pagoPALink,
     companyLegalInfo,
