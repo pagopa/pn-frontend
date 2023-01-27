@@ -1,6 +1,6 @@
 import { Button, Grid, TextField, InputAdornment, Typography } from '@mui/material';
 
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -27,6 +27,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
   const { t } = useTranslation(['common', 'recapiti']);
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const [phoneRegex, setPhoneRegex] = useState(dataRegex.phoneNumber);
+  const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
 
   const digitalDomicileType = useMemo(
     () => (type === CourtesyFieldType.EMAIL ? CourtesyChannelType.EMAIL : CourtesyChannelType.SMS),
@@ -110,7 +111,13 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
    */
   if (value) {
     return (
-      <form style={{ width: '100%' }}>
+      <form
+        style={{ width: '100%' }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          digitalElemRef.current.editContact();
+        }}
+      >
         <Typography variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
           {t(`courtesy-contacts.${type}-added`, { ns: 'recapiti' })}
         </Typography>
@@ -132,6 +139,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
                 })
           }
           value={formik.values[type]}
+          ref={digitalElemRef}
           fields={[
             {
               id: `value-${type}`,

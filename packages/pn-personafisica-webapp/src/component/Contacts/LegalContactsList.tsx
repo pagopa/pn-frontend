@@ -1,4 +1,4 @@
-import { ChangeEvent, useMemo } from 'react';
+import { ChangeEvent, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Grid, Box, Typography, TextField, Alert } from '@mui/material';
 import { useFormik } from 'formik';
@@ -17,6 +17,7 @@ type Props = {
 
 const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
+  const digitalElemRef = useRef<{ editContact: () => void }>({ editContact: () => {} });
 
   const title = useMemo(
     () => (
@@ -69,7 +70,10 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
       avatar={<IllusEmailValidation />}
     >
       <Box sx={{ marginTop: '20px' }}>
-        <form>
+        <form onSubmit={(e) => {
+          e.preventDefault();
+          digitalElemRef.current.editContact();
+        }}>
           <Typography mb={1} sx={{ fontWeight: 'bold' }}>
             {t('legal-contacts.pec-added', { ns: 'recapiti' })}
           </Typography>
@@ -117,6 +121,7 @@ const LegalContactsList = ({ recipientId, legalAddresses }: Props) => {
             onConfirmClick={handleEditConfirm}
             blockDelete={legalAddresses.length > 1}
             resetModifyValue={() => handleEditConfirm('cancelled')}
+            ref={digitalElemRef}
           />
         </form>
       </Box>

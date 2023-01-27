@@ -1,4 +1,4 @@
-import { ChangeEvent, Fragment, memo, useEffect, useMemo } from 'react';
+import { ChangeEvent, Fragment, memo, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -39,6 +39,14 @@ const addressTypeToLabel = {
 const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
+  const digitalElemRef = useRef<{ 
+    [key: string]: { editContact: () => void};
+  }>(
+    { 
+      [`${address.senderId}_pec`]: { editContact: () => {}},
+      [`${address.senderId}_phone`]: { editContact: () => {}},
+      [`${address.senderId}_mail`]: { editContact: () => {}},
+    });
 
   const initialValues = {
     [`${address.senderId}_pec`]: address.pec || '',
@@ -118,7 +126,12 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const jsxField = (f: Field) => (
     <Fragment>
       {address[f.addressId] ? (
-        <form data-testid="specialContactForm">
+        <form data-testid="specialContactForm" onSubmit={
+          (e) => {
+            e.preventDefault();
+            digitalElemRef.current[f.id].editContact();
+          }
+        }>
           <DigitalContactElem
             recipientId={recipientId}
             senderId={address.senderId}
@@ -155,6 +168,8 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
             value={formik.values[f.id]}
             onConfirmClick={(status) => updateContact(status, f.id)}
             resetModifyValue={() => updateContact('cancelled', f.id)}
+            // eslint-disable-next-line functional/immutable-data
+            ref={(node: { editContact: () => void}) => (digitalElemRef.current[f.id] = node)}
           />
         </form>
       ) : (

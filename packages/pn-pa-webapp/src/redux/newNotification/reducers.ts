@@ -70,7 +70,10 @@ const newNotificationSlice = createSlice({
       state,
       action: PayloadAction<{ recipients: Array<NewNotificationRecipient> }>
     ) => {
-      state.notification.recipients = action.payload.recipients;
+      state.notification.recipients = action.payload.recipients.map((r) => ({
+        ...r,
+        taxId: r.taxId.toUpperCase(),
+      }));
     },
     setAttachments: (
       state,
