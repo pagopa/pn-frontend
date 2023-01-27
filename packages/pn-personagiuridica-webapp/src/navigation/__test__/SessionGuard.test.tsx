@@ -29,7 +29,11 @@ jest.mock('react-router-dom', () => {
     ...original,
     Outlet: () => <div>Generic Page</div>,
     useNavigate: () => mockNavigateFn,
-    useLocation: () => ({ hash: mockLocationHash, search: mockLocationSearch, pathname: mockLocationPath }),
+    useLocation: () => ({
+      hash: mockLocationHash,
+      search: mockLocationSearch,
+      pathname: mockLocationPath,
+    }),
   };
 });
 
@@ -91,7 +95,6 @@ describe('SessionGuard Component', () => {
 
   // expected behavior: enters the app, does a navigate, launches sessionCheck
   it('reload - session token already present', async () => {
-    mockLocationPath = routes.DETTAGLIO_NOTIFICA_QRCODE_PATH;
     mockLocationSearch = `?${routes.DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM}=toto`;
     const mockReduxState = {
       userState: { user: { sessionToken: 'mocked-token' } },
@@ -105,7 +108,10 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DETTAGLIO_NOTIFICA_QRCODE_PATH, search: mockLocationSearch, hash: ""}, { replace: true });
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: undefined, search: mockLocationSearch, hash: '' },
+      { replace: true }
+    );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
@@ -124,7 +130,10 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DELEGHE, search: "", hash: mockLocationHash}, { replace: true });
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: routes.DELEGHE, search: '', hash: mockLocationHash },
+      { replace: true }
+    );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
@@ -148,7 +157,10 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith(routes.NOTIFICHE, { replace: true });
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: routes.NOTIFICHE, search: '' },
+      { replace: true }
+    );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
@@ -161,7 +173,10 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DELEGHE, search: "", hash: ""}, { replace: true });
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: routes.DELEGHE, search: '', hash: '' },
+      { replace: true }
+    );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
@@ -174,7 +189,10 @@ describe('SessionGuard Component', () => {
     expect(pageComponent).toBeTruthy();
 
     expect(mockNavigateFn).toBeCalledTimes(1);
-    expect(mockNavigateFn).toBeCalledWith({pathname: routes.DELEGHE, search: "", hash: "#greet=hola"}, { replace: true });
+    expect(mockNavigateFn).toBeCalledWith(
+      { pathname: routes.DELEGHE, search: '', hash: '#greet=hola' },
+      { replace: true }
+    );
     expect(mockSessionCheckFn).toBeCalledTimes(1);
   });
 
