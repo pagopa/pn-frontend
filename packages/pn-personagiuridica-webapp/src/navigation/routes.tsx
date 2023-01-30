@@ -6,12 +6,12 @@ import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
 import ToSGuard from './ToSGuard';
+import AARGuard from './AARGuard';
 
 const AppStatus = React.lazy(() => import('../pages/AppStatus.page'));
 const Contacts = React.lazy(() => import('../pages/Contacts.page'));
 // const Deleghe = React.lazy(() => import('../pages/Deleghe.page'));
 const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.page'));
-const NotificationFromQrCode = React.lazy(() => import('../pages/NotificationFromQrCode.page'));
 const Notifiche = React.lazy(() => import('../pages/Notifiche.page'));
 const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
 const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
@@ -25,16 +25,14 @@ function Router() {
           {/* protected routes */}
           <Route path="/" element={<RouteGuard />}>
             <Route path="/" element={<ToSGuard />}>
-              <Route path={routes.NOTIFICHE} element={<Notifiche />} />
-              <Route
-                path={routes.DETTAGLIO_NOTIFICA_QRCODE_PATH}
-                element={<NotificationFromQrCode />}
-              />
-              <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
-              <Route path={routes.RECAPITI} element={<Contacts />} />
-              <Route path={routes.APP_STATUS} element={<AppStatus />} />
-              <Route path={routes.USERS} element={<UnderConstruction />} />
-              <Route path={routes.GROUPS} element={<UnderConstruction />} />
+              <Route path="/" element={<AARGuard />}>
+                <Route path={routes.NOTIFICHE} element={<Notifiche />} />
+                <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
+                <Route path={routes.RECAPITI} element={<Contacts />} />
+                <Route path={routes.APP_STATUS} element={<AppStatus />} />
+                <Route path={routes.USERS} element={<UnderConstruction />} />
+                <Route path={routes.GROUPS} element={<UnderConstruction />} />
+              </Route>
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
             <Route path="*" element={<RouteGuard />}>

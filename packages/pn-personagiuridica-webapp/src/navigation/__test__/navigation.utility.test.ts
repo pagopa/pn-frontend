@@ -26,20 +26,20 @@ describe('Tests navigation utility methods', () => {
   });
 
   it('goToLoginPortal', () => {
-    goToLoginPortal(AppRouteType.PF);
+    goToLoginPortal(AppRouteType.PG);
     expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PF`);
+    expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG`);
   });
 
   it('goToLoginPortal - aar', () => {
-    goToLoginPortal(AppRouteType.PF, 'fake-aar-token');
+    goToLoginPortal(AppRouteType.PG, 'fake-aar-token');
     expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PF&aar=fake-aar-token`);
+    expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG&aar=fake-aar-token`);
   });
 
   it('goToLoginPortal - aar', () => {
-    goToLoginPortal(AppRouteType.PF, '<script>malicious code</script>malicious-aar-token');
+    goToLoginPortal(AppRouteType.PG, '<script>malicious code</script>malicious-aar-token');
     expect(replaceFn).toBeCalledTimes(1);
-    expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PF&aar=malicious-aar-token`);
+    expect(replaceFn).toBeCalledWith(`${URL_FE_LOGOUT}?type=PG&aar=malicious-aar-token`);
   });
 });
