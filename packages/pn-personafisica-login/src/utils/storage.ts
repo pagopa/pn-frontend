@@ -1,7 +1,11 @@
-import { storageOpsBuilder } from '@pagopa-pn/pn-commons';
+import { storageOpsBuilder, AppRouteType, AppRouteParams } from '@pagopa-pn/pn-commons';
 
 export const storageOnSuccessOps = storageOpsBuilder<string>('LOGIN:onSuccess', 'string', false);
-/** An object containing a complete set of operation on the storage regarding the origin where the login portal should redirect the user * */
-export const storageOriginOps = storageOpsBuilder<string>('origin', 'string', false);
+export const storageTypeOps = storageOpsBuilder<AppRouteType.PF | AppRouteType.PG>(
+  AppRouteParams.TYPE,
+  'string',
+  false
+);
+export const storageAarOps = storageOpsBuilder<string>(AppRouteParams.AAR, 'string', false);
 
 export const storageSpidSelectedOps = storageOpsBuilder<string>('SPID_SELECTED', 'object', false);

@@ -11,12 +11,6 @@ void i18next
     fallbackLng: 'it',
     debug: process.env.NODE_ENV === 'development',
     ns: ['common'],
-
-    // variant inspired in https://stackoverflow.com/questions/58269428/i18next-react-trans-component-escaping-characters-correctly
-    // is the version present in pf-login
-    // interpolation: { escapeValue: false },  
-    
-    // variant copied from pa-webapp
     interpolation: {
       escape: (srt: string): string => sanitizeString(srt)
     }

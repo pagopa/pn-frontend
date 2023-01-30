@@ -1,13 +1,12 @@
-import { ChangeEvent, Fragment, memo, useEffect, useMemo } from 'react';
+import { ChangeEvent, Fragment, memo, useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { TableCell, TableRow, TextField, Typography } from '@mui/material';
-import { useIsMobile } from '@pagopa-pn/pn-commons';
+import { dataRegex, useIsMobile } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
-import { phoneRegExp } from '../../utils/contacts.utility';
 import { trackEventByType } from "../../utils/mixpanel";
 import { EventActions, TrackEventType } from "../../utils/events";
 import DigitalContactElem from './DigitalContactElem';
@@ -32,14 +31,22 @@ type Field = {
 };
 
 const addressTypeToLabel = {
-  'mail': 'email',
-  'pec': 'pec',
-  'phone': 'phone'
+  mail: 'email',
+  pec: 'pec',
+  phone: 'phone',
 };
 
 const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
+  const digitalElemRef = useRef<{ 
+    [key: string]: { editContact: () => void};
+  }>(
+    { 
+      [`${address.senderId}_pec`]: { editContact: () => {}},
+      [`${address.senderId}_phone`]: { editContact: () => {}},
+      [`${address.senderId}_mail`]: { editContact: () => {}},
+    });
 
   const initialValues = {
     [`${address.senderId}_pec`]: address.pec || '',
@@ -78,20 +85,20 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     [`${address.senderId}_pec`]: yup
       .string()
       .required(t('legal-contacts.valid-pec', { ns: 'recapiti' }))
-      .email(t('legal-contacts.valid-pec', { ns: 'recapiti' })),
+      .matches(dataRegex.email, t('legal-contacts.valid-pec', { ns: 'recapiti' })),
     [`${address.senderId}_phone`]: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(phoneRegExp, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+      .matches(dataRegex.phoneNumberWithItalyPrefix, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
     [`${address.senderId}_mail`]: yup
       .string()
       .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
-      .email(t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
+      .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
   });
 
-  const updateContact = (status: 'validated' | 'cancelled') => {
+  const updateContact = async (status: 'validated' | 'cancelled', id: string) => {
     if (status === 'cancelled') {
-      formik.resetForm({ values: initialValues });
+      await formik.setFieldValue(id, initialValues[id], true);
     }
     trackEventByType(TrackEventType.CONTACT_SPECIAL_CONTACTS, { action: EventActions.ADD });
   };
@@ -119,7 +126,12 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const jsxField = (f: Field) => (
     <Fragment>
       {address[f.addressId] ? (
-        <form data-testid="specialContactForm">
+        <form data-testid="specialContactForm" onSubmit={
+          (e) => {
+            e.preventDefault();
+            digitalElemRef.current[f.id].editContact();
+          }
+        }>
           <DigitalContactElem
             recipientId={recipientId}
             senderId={address.senderId}
@@ -137,8 +149,8 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
                     size="small"
                     value={formik.values[f.id]}
                     onChange={handleChangeTouched}
-                    error={formik.touched[f.id] && Boolean(formik.errors[f.id])}
-                    helperText={formik.touched[f.id] && formik.errors[f.id]}
+                    error={(formik.touched[f.id] || formik.values[f.id].length > 0) && Boolean(formik.errors[f.id])}
+                    helperText={(formik.touched[f.id] || formik.values[f.id].length > 0) && formik.errors[f.id]}
                   />
                 ),
                 isEditable: true,
@@ -146,17 +158,23 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
               },
             ]}
             saveDisabled={!!formik.errors[f.id]}
-            removeModalTitle={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-title`, { ns: 'recapiti' })}
+            removeModalTitle={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-title`, {
+              ns: 'recapiti',
+            })}
             removeModalBody={t(`${f.labelRoot}.remove-${addressTypeToLabel[f.addressId]}-message`, {
               value: formik.values[f.id],
               ns: 'recapiti',
             })}
             value={formik.values[f.id]}
-            onConfirmClick={updateContact}
-            forceMobileView
+            onConfirmClick={(status) => updateContact(status, f.id)}
+            resetModifyValue={() => updateContact('cancelled', f.id)}
+            // eslint-disable-next-line functional/immutable-data
+            ref={(node: { editContact: () => void}) => (digitalElemRef.current[f.id] = node)}
           />
         </form>
-      ) : '-'}
+      ) : (
+        '-'
+      )}
     </Fragment>
   );
 

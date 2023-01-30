@@ -1,15 +1,15 @@
 import { ReactNode, useContext } from "react";
 
-import { Alert, Box, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 import { Footer, ButtonNaked } from "@pagopa/mui-italia";
 
+import NavigationBar from "../components/NavigationBar";
+import { LANGUAGES } from "./constants";
 import LangContext from "provider/lang-context";
 import { getAppData } from "api";
 
-import NavigationBar from "../components/NavigationBar";
-import { LANGUAGES } from "./constants";
 
 interface Props {
   children?: ReactNode;
@@ -48,7 +48,7 @@ const LandingLayout = ({ children }: Props) => {
               href={appData.common.pagoPALink.href}
               color="text"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               disableRipple
               disableTouchRipple
             >
@@ -60,7 +60,7 @@ const LandingLayout = ({ children }: Props) => {
               href={appData.common.assistance.href}
               color="text"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               disableRipple
               disableTouchRipple
               startIcon={<HelpOutlineOutlinedIcon fontSize="inherit" />}
@@ -70,7 +70,6 @@ const LandingLayout = ({ children }: Props) => {
           </Stack>
         </Stack>
         <NavigationBar {...appData.common.navigation} />
-        <Alert severity="info">{appData.common.alert}</Alert>
         <Box sx={{ flexGrow: 1 }} component="main">
           {children}
         </Box>

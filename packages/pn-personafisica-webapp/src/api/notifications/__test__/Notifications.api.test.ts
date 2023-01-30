@@ -24,6 +24,7 @@ import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_ID_FROM_QRCODE,
   NOTIFICATION_PAYMENT_ATTACHMENT,
   NOTIFICATION_PAYMENT_INFO,
@@ -70,6 +71,22 @@ describe('Notifications api tests', () => {
       .onGet(NOTIFICATION_DETAIL_DOCUMENTS(iun, documentIndex))
       .reply(200, { url: 'http://mocked-url.com' });
     const res = await NotificationsApi.getReceivedNotificationDocument(iun, documentIndex);
+    expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
+    mock.reset();
+    mock.restore();
+  });
+
+  it('getReceivedNotificationOtherDocument', async () => {
+    const iun = 'mocked-iun';
+    const otherDocument = {
+      documentId: 'mocked-id',
+      documentType: 'mocked-type',
+    };
+    const mock = new MockAdapter(apiClient);
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument))
+      .reply(200, { url: 'http://mocked-url.com' });
+    const res = await NotificationsApi.getReceivedNotificationOtherDocument(iun, otherDocument);
     expect(res).toStrictEqual({ url: 'http://mocked-url.com' });
     mock.reset();
     mock.restore();

@@ -148,7 +148,7 @@ const Recipient = ({
         }),
       digitalDomicile: yup.string().when('showDigitalDomicile', {
         is: true,
-        then: yup.string().email(t('pec-error')).required(tc('required-field')),
+        then: yup.string().matches(dataRegex.email, t('pec-error')).required(tc('required-field')),
       }),
       showPhysicalAddress: yup.boolean().isTrue(),
       address: yup.string().when('showPhysicalAddress', {
@@ -562,7 +562,7 @@ const Recipient = ({
                         />
                       )}
                     </Grid>
-                    <Grid container spacing={2}>
+                    <Grid container>
                       <Grid
                         xs={12}
                         item
@@ -590,6 +590,8 @@ const Recipient = ({
                           <Typography>{t('add-physical-domicile')}*</Typography>
                         </Stack>
                       </Grid>
+                    </Grid>
+                    <Grid container spacing={2} mt={1}>
                       {values.recipients[index].showPhysicalAddress && (
                         <PhysicalAddress
                           values={values}

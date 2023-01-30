@@ -12,7 +12,14 @@ import {
   NotificationStatus,
   NotificationStatusHistory,
 } from '../types';
-import { LegalFactType, SendDigitalDetails } from '../types/NotificationDetail';
+import {
+  AarDetails,
+  LegalFactType,
+  NotificationDetailDocument,
+  SendDigitalDetails,
+  ViewedDetails,
+  SendPaperDetails,
+} from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
@@ -20,7 +27,8 @@ function localizeStatus(
   status: string,
   defaultLabel: string,
   defaultTooltip: string,
-  defaultDescription: string
+  defaultDescription: string,
+  data?: { [key: string]: any }
 ): {
   label: string;
   tooltip: string;
@@ -31,12 +39,14 @@ function localizeStatus(
     tooltip: getLocalizedOrDefaultLabel(
       'notifications',
       `status.${status}-tooltip`,
-      defaultTooltip
+      defaultTooltip,
+      data
     ),
     description: getLocalizedOrDefaultLabel(
       'notifications',
       `status.${status}-description`,
-      defaultDescription
+      defaultDescription,
+      data
     ),
   };
 }
@@ -46,12 +56,17 @@ function localizeStatus(
  * @param  {NotificationStatus} status
  * @returns object
  */
-export function getNotificationStatusInfos(status: NotificationStatus): {
+export function getNotificationStatusInfos(
+  status: NotificationStatus,
+  recipient?: string
+): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
   tooltip: string;
   description: string;
 } {
+  /* eslint-disable-next-line functional/no-let */
+  let subject = getLocalizedOrDefaultLabel('notifications', `status.recipient`, 'destinatario');
   switch (status) {
     case NotificationStatus.DELIVERED:
       return {
@@ -114,23 +129,41 @@ export function getNotificationStatusInfos(status: NotificationStatus): {
         ),
       };
     case NotificationStatus.VIEWED:
+      if (recipient) {
+        subject = getLocalizedOrDefaultLabel(
+          'notifications',
+          `status.delegate`,
+          `delegato ${recipient}`,
+          { name: recipient }
+        );
+      }
       return {
         color: 'info',
         ...localizeStatus(
           'viewed',
           'Perfezionata per visione',
-          'Il destinatario ha letto la notifica',
-          'Il destinatario ha letto la notifica entro il termine stabilito'
+          `Il ${subject} ha letto la notifica`,
+          `Il ${subject} ha letto la notifica entro il termine stabilito`,
+          { subject }
         ),
       };
     case NotificationStatus.VIEWED_AFTER_DEADLINE:
+      if (recipient) {
+        subject = getLocalizedOrDefaultLabel(
+          'notifications',
+          `status.delegate`,
+          `delegato ${recipient}`,
+          { name: recipient }
+        );
+      }
       return {
         color: 'success',
         ...localizeStatus(
           'viewed-after-deadline',
           'Visualizzata',
-          'Il destinatario ha visualizzato la notifica',
-          'Il destinatario ha visualizzato la notifica'
+          `Il ${subject} ha visualizzato la notifica`,
+          `Il ${subject} ha visualizzato la notifica`,
+          { subject }
         ),
       };
     case NotificationStatus.CANCELLED:
@@ -217,8 +250,27 @@ export function getLegalFactLabel(
   );
   const receiptLabel = getLocalizedOrDefaultLabel('notifications', `detail.receipt`, 'Ricevuta');
   // TODO: localize in pn_ga branch
-  if (timelineStep.category === TimelineCategory.SEND_PAPER_FEEDBACK) {
+  if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
+    if ((timelineStep.details as SendPaperDetails).status === 'OK') {
+      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.legalfact.paper-receipt-delivered',
+        'di consegna raccomandata'
+      )}`;
+    } else if ((timelineStep.details as SendPaperDetails).status === 'KO') {
+      return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.legalfact.paper-receipt-not-delivered',
+        'di mancata consegna raccomandata'
+      )}`;
+    }
     return receiptLabel;
+  } else if (timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
+    return `${receiptLabel} ${getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.timeline.legalfact.paper-receipt-accepted',
+      'di accettazione raccomandata'
+    )}`;
   } else if (
     timelineStep.category === TimelineCategory.SEND_DIGITAL_PROGRESS &&
     legalFactType === LegalFactType.PEC_RECEIPT
@@ -328,12 +380,13 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_DIGITAL_FEEDBACK,
   TimelineCategory.SEND_DIGITAL_PROGRESS,
-  TimelineCategory.SEND_PAPER_FEEDBACK,
   TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
   // PN-2068
   TimelineCategory.SEND_COURTESY_MESSAGE,
   // PN-1647
   TimelineCategory.NOT_HANDLED,
+  TimelineCategory.SEND_ANALOG_PROGRESS,
+  TimelineCategory.SEND_ANALOG_FEEDBACK,
 ];
 
 /**
@@ -393,6 +446,24 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
     if (status.status !== NotificationStatus.ACCEPTED && acceptedStatusItems.length) {
       acceptedStatusItems = [];
     }
+    // check if there are information about the user that chahnged the status and populate recipient object
+    if (status.status === NotificationStatus.VIEWED) {
+      const viewedSteps = status.steps.filter(
+        (s) => s.category === TimelineCategory.NOTIFICATION_VIEWED
+      );
+      if (viewedSteps.length) {
+        // get last step, that is the first chronologically
+        const mostOldViewedStep = viewedSteps[viewedSteps.length - 1];
+        if (
+          mostOldViewedStep.details &&
+          (mostOldViewedStep.details as ViewedDetails).delegateInfo
+        ) {
+          const { denomination, taxId } = (mostOldViewedStep.details as ViewedDetails)
+            .delegateInfo!;
+          status.recipient = `${denomination} (${taxId})`;
+        }
+      }
+    }
     // change status if current is VIEWED and before there is a status EFFECTIVE_DATE
     if (status.status === NotificationStatus.EFFECTIVE_DATE) {
       isEffectiveDateStatus = true;
@@ -408,11 +479,39 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
  * @param  {NotificationDetail} notificationDetail
  * @returns NotificationDetail
  */
+const populateOtherDocuments = (
+  timeline: Array<INotificationDetailTimeline>
+): Array<NotificationDetailDocument> => {
+  const timelineFiltered = timeline.filter((t) => t.category === TimelineCategory.AAR_GENERATION);
+  if (timelineFiltered.length > 0) {
+    return timelineFiltered.map((t) => ({
+      recIndex: t.details.recIndex,
+      documentId: (t.details as AarDetails).generatedAarUrl as string,
+      documentType: LegalFactType.AAR,
+      title: getLocalizedOrDefaultLabel(
+        'notifications',
+        'detail.timeline.aar-document',
+        'Avviso di avvenuta ricezione'
+      ),
+      digests: {
+        sha256: '',
+      },
+      ref: {
+        key: '',
+        versionToken: '',
+      },
+      contentType: '',
+    }));
+  }
+  return [];
+};
+
 export function parseNotificationDetail(
   notificationDetail: NotificationDetail
 ): NotificationDetail {
   const parsedNotification = {
     ...notificationDetail,
+    otherDocuments: populateOtherDocuments(notificationDetail.timeline),
     sentAt: formatDate(notificationDetail.sentAt),
   };
   /* eslint-disable functional/immutable-data */
