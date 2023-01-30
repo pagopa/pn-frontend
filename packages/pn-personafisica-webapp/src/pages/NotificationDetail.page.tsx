@@ -21,6 +21,9 @@ import {
   TimedMessage,
   useDownloadDocument,
   NotificationDetailOtherDocument,
+  NotificationRelatedDowntimes,
+  GetDowntimeHistoryParams,
+  KnownFunctionality,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -33,6 +36,7 @@ import {
   getReceivedNotificationOtherDocument,
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
+import { getDowntimeLogPage, } from '../redux/appStatus/actions';
 import { resetLegalFactState, resetState } from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
@@ -70,6 +74,7 @@ const NotificationDetail = () => {
     (state: RootState) => state.generalInfoState.delegators
   );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const appStatus = useAppSelector((state: RootState) => state.appStatus);
 
   const currentRecipient = notification && notification.currentRecipient;
 
@@ -188,6 +193,24 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, []);
 
+  /* load relevant information about donwtimes */
+  useEffect(() => {
+    const fetchParams: GetDowntimeHistoryParams = {
+      startDate: '2022-12-06T00:00:00Z',
+      endDate: '2022-12-08T00:00:00Z',
+      functionality: [
+        KnownFunctionality.NotificationCreate,
+        KnownFunctionality.NotificationVisualization,
+        KnownFunctionality.NotificationWorkflow,
+      ],
+      // size and page parameters are not needed if we are interested in all downtimes 
+      // within the given time range
+      // size: '100',
+      // page: '0',
+    };
+    void dispatch(getDowntimeLogPage(fetchParams));
+  }, []);
+
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: otherDocumentDownloadUrl });
@@ -281,6 +304,9 @@ const NotificationDetail = () => {
                     downloadFilesMessage={getDownloadFilesMessage()}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                   />
+                </Paper>
+                <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+                  <NotificationRelatedDowntimes appStatus={appStatus}/>
                 </Paper>
                 {/* TODO decommentare con pn-841
             <Paper sx={{ p: 3 }} className="paperContainer">
