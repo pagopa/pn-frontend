@@ -1,47 +1,42 @@
+import { useDocumentationUnauthorized } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
-import { Grid, Link, Box } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-
+import { ONE_TRUST_PORTAL_CDN_PP } from '../utils/constants';
 import * as routes from '../navigation/routes.const';
-import { useToSLayout } from '@pagopa-pn/pn-commons';
-declare const OneTrust: any;
+declare const OneTrust: {
+  NoticeApi: {
+    Initialized: {
+      then: (cbk: () => void) => {
+        finally: (cbk: () => void) => void;
+      };
+    };
+    LoadNotices: (noticesUrls: Array<string>, flag: boolean) => void;
+  };
+};
 
-const PrivacyPolicy = () => {
-  const { t } = useTranslation();
+const PrivacyPolicyPage = () => {
   const [contentLoaded, setContentLoaded] = useState(false);
 
   useEffect(() => {
-    useToSLayout(contentLoaded, routes);
-    OneTrust.NoticeApi.Initialized.then(function () {
-      OneTrust.NoticeApi.LoadNotices(
-        [
-          'https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/5b7fed3e-ea34-4620-b01d-b17fa7c88441.json',
-        ],
-        false
-      );
-    }).finally(() => {
-      setContentLoaded(true);
-    });
+    if (ONE_TRUST_PORTAL_CDN_PP) {
+      OneTrust.NoticeApi.Initialized.then(function () {
+        OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN_PP], false);
+      }).finally(() => {
+        setContentLoaded(true);
+      });
+    }
   }, []);
+
+  useDocumentationUnauthorized(contentLoaded, routes.PRIVACY_POLICY);
 
   return (
     <>
-      <Grid sx={{ px: 3, py: 3 }}>
-        <div id="otnotice-5b7fed3e-ea34-4620-b01d-b17fa7c88441" className="otnotice"></div>
-      </Grid>
-
-      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)' }}>
-        <Grid
-          sx={{ display: 'grid', gridColumn: 'span 2', mt: 5, justifyContent: 'center' }}
-        ></Grid>
-        <Grid sx={{ display: 'grid', gridColumn: 'span 10', mt: 5, justifyContent: 'center' }}>
-          <Link underline="hover" href={routes.APP_STATUS}>
-            {t('tos.backHome')}
-          </Link>
-        </Grid>
-      </Box>
+      <div
+        role="article"
+        id="otnotice-365c84c5-9329-4ec5-89f5-e53572eda132"
+        className="otnotice"
+      ></div>
     </>
   );
 };
 
-export default PrivacyPolicy;
+export default PrivacyPolicyPage;

@@ -6,7 +6,7 @@ import { useProcess } from './useProcess';
 import { useErrors } from './useErrors';
 import { useTracking } from './useTracking';
 import { useDownloadDocument } from './useDownloadDocument';
-import { useToSLayout } from './useToSLayout';
+import { useDocumentationUnauthorized } from './useDocumentationUnauthorized';
 
 export {
   useIsMobile,
@@ -17,5 +17,5 @@ export {
   useTracking,
   useDownloadDocument,
   useProcess,
-  useToSLayout,
+  useDocumentationUnauthorized,
 };
