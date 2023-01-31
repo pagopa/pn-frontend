@@ -7,6 +7,7 @@ import {
   NOTIFICATION_DETAIL,
   NOTIFICATION_DETAIL_DOCUMENTS,
   NOTIFICATION_DETAIL_LEGALFACT,
+  NOTIFICATION_DETAIL_OTHER_DOCUMENTS,
   NOTIFICATION_PRELOAD_DOCUMENT,
 } from '../notifications.routes';
 
@@ -32,6 +33,11 @@ describe('Notifications routes', () => {
   it('should compile NOTIFICATION_DETAIL_DOCUMENTS', () => {
     const route = NOTIFICATION_DETAIL_DOCUMENTS('mocked-iun', '0');
     expect(route).toEqual('/delivery/notifications/sent/mocked-iun/attachments/documents/0');
+  });
+
+  it('should compile NOTIFICATION_DETAIL_OTHER_DOCUMENTS', () => {
+    const route = NOTIFICATION_DETAIL_OTHER_DOCUMENTS('mocked-iun', { documentId: 'mocked-doc-id', documentType: 'mocked-doc-type'});
+    expect(route).toEqual('/delivery-push/mocked-iun/document/mocked-doc-type');
   });
 
   it('should compile NOTIFICATION_DETAIL_LEGALFACT', () => {
