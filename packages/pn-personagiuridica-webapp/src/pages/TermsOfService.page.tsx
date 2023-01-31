@@ -22,7 +22,7 @@ const TermsOfServicePage = () => {
 
   return (
     <>
-      <div role="article" id="otnotice-083fb982-149c-4241-be09-12ae67d88b66" className="otnotice"></div>
+      <div role="article" id="otnotice-112fd95d-6e88-461b-b8fc-534ee4277e96" className="otnotice"></div>
     </>
   );
 };

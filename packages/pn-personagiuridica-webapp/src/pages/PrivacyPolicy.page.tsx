@@ -21,7 +21,7 @@ const PrivacyPolicyPage = () => {
 
   return (
     <>
-      <div id="otnotice-4824a110-316e-42fd-b492-8e2b0513db70" className="otnotice"></div>
+      <div id="otnotice-9d7b7236-956b-4669-8943-5284fba6a815" className="otnotice"></div>
     </>
   );
 };
