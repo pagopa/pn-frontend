@@ -83,17 +83,19 @@ describe('Notifications api tests', () => {
     mock.restore();
   });
 
-  it('getSentNotificationOtherDocument', async() => {
+  it('getSentNotificationOtherDocument', async () => {
     const iun = 'mocked-iun';
     const otherDocument: NotificationDetailOtherDocument = {
       documentId: 'mocked-id',
       documentType: 'mocked-type',
     };
     const mock = new MockAdapter(apiClient);
-    mock.onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
-      documentId: otherDocument.documentId,
-      documentType: otherDocument.documentType,
-    }).reply(200, undefined);
+    mock
+      .onGet(NOTIFICATION_DETAIL_OTHER_DOCUMENTS(iun, otherDocument), {
+        documentId: otherDocument.documentId,
+        documentType: otherDocument.documentType,
+      })
+      .reply(200, undefined);
     const res = await NotificationsApi.getSentNotificationOtherDocument(iun, otherDocument);
     expect(res).toStrictEqual({ url: '' });
     mock.reset();
