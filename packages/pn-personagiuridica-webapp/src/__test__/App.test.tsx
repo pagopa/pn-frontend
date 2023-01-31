@@ -10,6 +10,7 @@ import { axe, render } from './test-utils';
 import App from '../App';
 import i18n from '../i18n';
 import * as sidemenuActions from '../redux/sidemenu/actions';
+import { PartyRole, PNRole } from '../redux/auth/types';
 
 // mocko SessionGuard perché fa dispatch che fanno variare il totale di chiamate al dispatch;
 // questo totale viene verificato in un test
@@ -36,6 +37,15 @@ const initialState = (token: string) => ({
         family_name: 'mocked-family-name',
         email: 'mocked-user@mocked-domain.com',
         sessionToken: token,
+        organizzation: {
+          name: 'mocked-organizzation',
+          roles: [
+            {
+              partyRole: PartyRole.MANAGER,
+              role: PNRole.ADMIN,
+            },
+          ],
+        },
       },
       tos: true,
     },

@@ -78,6 +78,8 @@ const App = () => {
   );
 
   const isPrivacyPage = path[1] === 'privacy-tos';
+  const organization = loggedUser.organization;
+  const role = loggedUser.organization?.roles[0];
 
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
@@ -143,13 +145,18 @@ const App = () => {
     () => [
       {
         id: '0',
-        name: 'CAF di prova',
+        name: organization?.name,
         // productRole: role?.role,
-        productRole: 'Amministratore',
+        productRole: t(`roles.${role?.role}`),
         logoUrl: undefined,
+        // non posso settare un'icona di MUI perché @pagopa/mui-italia accetta solo string o undefined come logoUrl
+        // ma fortunatamente, se si passa undefined, fa vedere proprio il logo che ci serve
+        // ------------------
+        // Carlos Lombardi, 2022.07.28
+        // logoUrl: <AccountBalanceIcon />
       },
     ],
-    []
+    [role, organization]
   );
 
   const changeLanguageHandler = async (langCode: string) => {

@@ -1,12 +1,31 @@
-import { BasicUser } from "@pagopa-pn/pn-commons";
+import { BasicUser } from '@pagopa-pn/pn-commons';
+
+export enum PNRole {
+  ADMIN = 'pg-admin', // ref amministrativo
+  OPERATOR = 'pg-operator', // ref tecnico
+}
+
+export enum PartyRole {
+  DELEGATE = 'DELEGATE', // not managed by PN
+  MANAGER = 'MANAGER',
+  OPERATOR = 'OPERATOR',
+  SUB_DELEGATE = 'SUB_DELEGATE', // not managed by PN
+}
+
+export interface Role {
+  role: PNRole;
+  partyRole: PartyRole;
+}
+
+export interface Organization {
+  id: string;
+  name: string;
+  roles: Array<Role>;
+  fiscal_code: string; // organization fiscal code
+  groups?: Array<string>;
+}
 
 export interface User extends BasicUser {
-  // On 2023.01.19, I tried with several users in DEV and none of them 
-  // includes mobile_phone in the response from token exchange.
-  // We leave the issue about the need to include this field to further investigation.
-  // -----------------------------
-  // Carlos Lombardi, 2023.01.19
-  mobile_phone: string;
   from_aa: boolean;
   aud: string;
   level: string;
@@ -14,4 +33,6 @@ export interface User extends BasicUser {
   exp: number;
   iss: string;
   jti: string;
+  organization: Organization;
+  desired_exp: number;
 }
