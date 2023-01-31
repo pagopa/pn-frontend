@@ -20,12 +20,14 @@ type DisambiguationAccountProps = {
   type: AppRouteType;
   selected?: boolean;
   onClickBox: (type: AppRouteType) => void;
+  testId: string;
 };
 
 const DisambiguationAccount: React.FC<DisambiguationAccountProps> = ({
   type,
   selected = false,
   onClickBox,
+  testId,
 }: DisambiguationAccountProps) => {
   const { t } = useTranslation();
 
@@ -39,7 +41,7 @@ const DisambiguationAccount: React.FC<DisambiguationAccountProps> = ({
   const avatarTextColor = selected ? 'primary.main' : 'text.primary';
 
   return (
-    <Grid container item justifyContent="center" mb={2}>
+    <Grid container item justifyContent="center" mb={2} data-testid={testId}>
       <Grid item xs={10} sm={6} md={4} lg={4} xl={3}>
         <Box
           sx={{
@@ -180,17 +182,20 @@ const SuccessPage = () => {
               type={AppRouteType.PF}
               onClickBox={clickHandler}
               selected={typeSelected === AppRouteType.PF}
+              testId="pf-box"
             />
             <DisambiguationAccount
               type={AppRouteType.PG}
               onClickBox={clickHandler}
               selected={typeSelected === AppRouteType.PG}
+              testId="pg-box"
             />
             <Button
               variant="contained"
               sx={{ marginTop: isMobile ? 4 : 7 }}
               disabled={typeSelected === null}
               onClick={goToApp}
+              data-testid="confirm-button"
             >
               {t('disambiguationPage.button')}
             </Button>
