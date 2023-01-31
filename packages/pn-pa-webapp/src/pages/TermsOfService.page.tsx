@@ -7,9 +7,7 @@ import * as routes from '../navigation/routes.const';
 declare const OneTrust: {
   NoticeApi: {
     Initialized: {
-      then: (cbk: () => void) => {
-        finally: (cbk: () => void) => void;
-      };
+      then: (cbk: () => void) => void;
     };
     LoadNotices: (noticesUrls: Array<string>, flag: boolean) => void;
   };
@@ -22,9 +20,8 @@ const TermsOfServicePage = () => {
     if (ONE_TRUST_PORTAL_CDN_TOS) {
       OneTrust.NoticeApi.Initialized.then(function () {
         OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN_TOS], false);
-      }).finally(() => {
-        setContentLoaded(true);
       });
+      setContentLoaded(true);
     }
   }, []);
   useDocumentationUnauthorized(contentLoaded, routes.TERMS_OF_SERVICE);
