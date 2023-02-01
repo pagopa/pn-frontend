@@ -89,6 +89,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
         <Alert
           sx={{ mt: 4 }}
           severity={status !== IOContactStatus.UNAVAILABLE ? 'info' : 'warning'}
+          data-testid="AppIO alert"
         >
           <Typography component="span" variant="body1">
             {IOContactStatus.UNAVAILABLE
