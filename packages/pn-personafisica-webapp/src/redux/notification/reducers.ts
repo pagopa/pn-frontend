@@ -12,11 +12,13 @@ import {
   RecipientType,
   PaymentStatus,
   PaymentInfoDetail,
+  Downtime,
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 
 import {
+  getDowntimeEvents,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getPaymentAttachment,
@@ -58,6 +60,7 @@ const initialState = {
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
   paymentInfo: {} as PaymentInfo,
+  downtimeEvents: [] as Array<Downtime>,
 };
 
 /* eslint-disable functional/immutable-data */
@@ -114,6 +117,9 @@ const notificationSlice = createSlice({
         status: PaymentStatus.FAILED,
         detail: PaymentInfoDetail.GENERIC_ERROR,
       };
+    });
+    builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
+      state.downtimeEvents = action.payload.downtimes;
     });
   },
 });

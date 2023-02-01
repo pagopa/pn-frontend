@@ -1,18 +1,19 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect } from 'react';
 import { Grid, Stack, Typography } from '@mui/material';
-import { AppStatusData } from '../../types';
+import { NotificationStatusHistory } from '../../types';
+import { Downtime } from '../../models';
 
 type Props = {
-  appStatus: AppStatusData;
+  downtimeEvents: Array<Downtime>;
+  fetchDowntimeEvents: () => void;
+  notificationStatusHistory: Array<NotificationStatusHistory>;
 };
 
 const NotificationRelatedDowntimes = (props: Props) => {
   const title = "DISSERVIZI";
 
-  if (props.appStatus.downtimeLogPage) {
-    console.log(props.appStatus.downtimeLogPage);
-  }
-
+  useEffect(() => props.fetchDowntimeEvents(), []);
+  
   return <Fragment>
     <Grid
       key={'downtimes-section'}
@@ -33,10 +34,10 @@ const NotificationRelatedDowntimes = (props: Props) => {
         </Typography>
       </Grid>
     </Grid>
-    { props.appStatus && props.appStatus.downtimeLogPage && 
+    { props.downtimeEvents && 
       <Grid key={'detail-documents-message'} item>
         <Stack direction="row">
-          <div>Trovati {props.appStatus.downtimeLogPage?.downtimes.length} disservizi</div>
+          <div>Trovati {props.downtimeEvents.length} disservizi</div>
           {/* {downloadFilesMessage && (
             <Typography variant="body2" sx={{ mb: 3 }}>
               {downloadFilesMessage}

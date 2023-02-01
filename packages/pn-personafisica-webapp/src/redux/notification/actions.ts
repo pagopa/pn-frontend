@@ -1,4 +1,7 @@
 import {
+  DowntimeLogPage,
+  GetNotificationDowntimeEventsParams,
+  KnownFunctionality,
   LegalFactId,
   PaymentAttachmentNameType,
   PaymentInfo,
@@ -9,6 +12,7 @@ import {
   PaymentNotice,
 } from '@pagopa-pn/pn-commons/src/types/NotificationDetail';
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import { AppStatusApi } from '../../api/appStatus/AppStatus.api';
 
 import { NotificationsApi } from '../../api/notifications/Notifications.api';
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
@@ -18,6 +22,7 @@ export enum NOTIFICATION_ACTIONS {
   GET_RECEIVED_NOTIFICATION = 'getReceivedNotification',
   GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
   GET_NOTIFICATION_PAYMENT_URL = 'getNotificationPaymentUrl',
+  GET_DOWNTIME_EVENTS = 'getDowntimeEvents',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -115,3 +120,21 @@ export const getReceivedNotificationOtherDocument = createAsyncThunk<
       )
   )
 );
+
+export const getDowntimeEvents = createAsyncThunk<DowntimeLogPage, GetNotificationDowntimeEventsParams>(
+  NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS,
+  performThunkAction((params: GetNotificationDowntimeEventsParams) => {
+    const completeParams = {...params,
+      functionality: [
+        KnownFunctionality.NotificationCreate,
+        KnownFunctionality.NotificationVisualization,
+        KnownFunctionality.NotificationWorkflow,
+      ],
+      // size and page parameters are not needed since we are interested in all downtimes 
+      // within the given time range
+    };
+    return AppStatusApi.getDowntimeLogPage(completeParams);
+  })
+);
+
+
