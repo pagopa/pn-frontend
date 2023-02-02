@@ -115,7 +115,7 @@ const CodeModal = memo(
           <Divider sx={{ margin: '20px 0' }} />
           {hasError && (
             <Alert data-testid="errorAlert" severity="error" sx={{ textAlign: textPosition }}>
-              <AlertTitle>{errorTitle}</AlertTitle>
+              <AlertTitle data-testid="CodeModal error title">{errorTitle}</AlertTitle>
               {errorMessage}
             </Alert>
           )}
