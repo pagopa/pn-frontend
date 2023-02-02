@@ -1,28 +1,126 @@
-import { Fragment, useEffect } from 'react';
-import { Grid, Stack, Typography } from '@mui/material';
-import { NotificationStatusHistory } from '../../types';
+import { useEffect, useState } from 'react';
+import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import { ButtonNaked } from '@pagopa/mui-italia';
+import { NotificationStatus, NotificationStatusHistory } from '../../types';
 import { Downtime } from '../../models';
+import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { formatDate, isToday } from '../../utils';
 
 type Props = {
-  downtimeEvents: Array<Downtime>;
-  fetchDowntimeEvents: () => void;
+  // the notification history, needed to compute the time range for the downtime events query
   notificationStatusHistory: Array<NotificationStatusHistory>;
+
+  // action to obtain and set the downtime events to be shown ...
+  fetchDowntimeEvents: (fromDate: string, toDate: string | undefined) => void;
+
+  // ... so that such events are passed throught this prop
+  downtimeEvents: Array<Downtime>;
 };
 
-const NotificationRelatedDowntimes = (props: Props) => {
-  const title = "DISSERVIZI";
 
-  useEffect(() => props.fetchDowntimeEvents(), []);
-  
-  return <Fragment>
+/*
+ * Some auxiliary functions
+ */
+
+function completeFormatDate(dateAsString: string) {
+  const datePrefix = getLocalizedOrDefaultLabel(
+    'notifications',
+    'detail.downtimes.datePrefix',
+    'il ',
+  );
+  return `${isToday(new Date(dateAsString)) ? '' : datePrefix} ${formatDate(dateAsString)}`;
+}
+
+function mainTextForDowntime(downtime: Downtime) {
+  return downtime.endDate 
+    ? getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.downtimes.textWithEndDate',
+      `Disservizio dal ${downtime.startDate} al ${downtime.endDate}`,
+      { startDate: completeFormatDate(downtime.startDate), endDate: completeFormatDate(downtime.endDate) }
+    ) : getLocalizedOrDefaultLabel(
+      'notifications',
+      'detail.downtimes.textWithoutEndDate',
+      `Disservizio iniziato il ${downtime.startDate}`,
+      { startDate: completeFormatDate(downtime.startDate) }
+    );
+}
+
+
+/*
+ * The component!
+ * ****************************************************************** */
+const NotificationRelatedDowntimes = (props: Props) => {
+  const theme = useTheme();
+
+  const title = getLocalizedOrDefaultLabel(
+    'notifications',
+    'detail.downtimes.title',
+    'DISSERVIZI'
+  );
+
+  const [shouldFetchEvents, setShouldFetchEvents] = useState<boolean>(false); 
+
+  /*
+   * Decide whether the events are to be obtained, in such case it determines the time range
+   * and launches the fetch. The following rules apply, they are meant to be considered in order.
+   * 
+   * - if the notification was cancelled, i.e. there is a CANCELLED event in its status history,
+   *   then the downtime information should not appear.
+   * - if there is no ACCEPTED event in the status history, then the downtime information should not appear.
+   * - if the earlier between the EFFECTIVE_DATE or VIEWED events  
+   *   is before the ACCEPTED event, then the downtime information should not appear.
+   * - if no EFFECTIVE_DATE or VIEWED events are present, then 
+   *   the downtime events between the ACCEPTED event and the current date/time must be shown.
+   * - otherwise, i.e. if the earlier between the EFFECTIVE_DATE or VIEWED events is after
+   *   the ACCEPTED event, then the downtime events between the ACCEPTED event
+   *   and the earlier between the EFFECTIVE_DATE or VIEWED events must be shown.
+   */
+  useEffect(() => {
+    const acceptedRecord = props.notificationStatusHistory.find(record => 
+      record.status === NotificationStatus.ACCEPTED
+    );
+    const effectiveDateRecord = props.notificationStatusHistory.find(record => 
+      record.status === NotificationStatus.EFFECTIVE_DATE
+    );
+    const viewedRecord = props.notificationStatusHistory.find(record => 
+      record.status === NotificationStatus.VIEWED
+    );
+    const cancelledRecord = props.notificationStatusHistory.find(record => 
+      record.status === NotificationStatus.CANCELLED
+    );
+
+    // the earlier between VIEWED and EFFECTIVE_DATE
+    const completedRecord =
+      effectiveDateRecord && viewedRecord 
+        ? (effectiveDateRecord.activeFrom < viewedRecord.activeFrom ? effectiveDateRecord : viewedRecord)
+        : (effectiveDateRecord || viewedRecord); 
+
+    console.log('about to fetch downtime events');
+    console.log({ acceptedRecord, effectiveDateRecord, viewedRecord, completedRecord, cancelledRecord });
+
+    const invalidStatusHistory = cancelledRecord || !acceptedRecord  
+      || (acceptedRecord && completedRecord && acceptedRecord.activeFrom > completedRecord.activeFrom);
+    if (invalidStatusHistory || !acceptedRecord) {
+      setShouldFetchEvents(false);
+    } else {
+      setShouldFetchEvents(true);
+      props.fetchDowntimeEvents(acceptedRecord.activeFrom, completedRecord?.activeFrom || new Date().toISOString());
+    }
+    
+  }, [props.notificationStatusHistory]);
+
+  return shouldFetchEvents && props.downtimeEvents.length > 0 ? <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
     <Grid
       key={'downtimes-section'}
       container
       direction="row"
       justifyContent="space-between"
       alignItems="center"
+      data-testid="notification-related-downtimes-main"
     >
-      <Grid key={'downtimes-section-title'} item sx={{ mb: 3 }}>
+      <Grid key={'downtimes-section-title'} item sx={{ mb: 1 }}>
         <Typography
           color="text.primary"
           variant="overline"
@@ -34,22 +132,72 @@ const NotificationRelatedDowntimes = (props: Props) => {
         </Typography>
       </Grid>
     </Grid>
-    { props.downtimeEvents && 
-      <Grid key={'detail-documents-message'} item>
-        <Stack direction="row">
-          <div>Trovati {props.downtimeEvents.length} disservizi</div>
-          {/* {downloadFilesMessage && (
-            <Typography variant="body2" sx={{ mb: 3 }}>
-              {downloadFilesMessage}
-            </Typography>
-          )} */}
-        </Stack>
-      </Grid>
-    }
-    {/* <Grid key={'download-files-section'} item>
-      {documents && mapOtherDocuments(documents)}
-    </Grid> */}
-  </Fragment>;
+    <Grid key={'detail-documents-message'} item>
+      <Stack direction="column">
+
+        {/* Render each downtime event */}
+        {props.downtimeEvents.map((event, ix) => <Stack key={ix} direction="column" alignItems="flex-start" data-testid="notification-related-downtime-detail" sx={{ 
+          mt: 3, borderBottomColor: 'divider', borderBottomStyle: 'solid', borderBottomWidth: '3px',
+        }}>
+
+          {/* Description including time range */}
+          <Typography variant="body2">
+            {mainTextForDowntime(event)}
+          </Typography>
+
+          {/* Target functionalities */}
+          <ul>
+            <li style={{ marginTop: "-12px" }}>
+              <Typography variant="body2">{
+                event.knownFunctionality 
+                  ? getLocalizedOrDefaultLabel(
+                      'appStatus',
+                      `legends.knownFunctionality.${event.knownFunctionality}`,
+                      event.knownFunctionality
+                    )
+                  : getLocalizedOrDefaultLabel(
+                      'appStatus',
+                      'legends.unknownFunctionality',
+                      'Un servizio sconosciuto',
+                      { functionality: event.rawFunctionality })
+              }</Typography>
+            </li>
+          </ul>
+
+          {/* Link to download related file, or message about non-availability of such file */}
+          <Box sx={{ mb: 3, ml: 2 }}>
+            {event.fileAvailable ?
+              <ButtonNaked
+                sx={{ px: 0 }}
+                color='primary'
+                startIcon={<AttachFileIcon />}
+                onClick={() => {
+                  // void getDowntimeLegalFactDocumentDetails(i.legalFactId as string);
+                  console.log(`should download ${event.legalFactId}`);
+                }}
+              >
+                {getLocalizedOrDefaultLabel(
+                  'notifications',
+                  'detail.downtimes.legalFactDownload',
+                  'Scaricare'
+                )}
+              </ButtonNaked>
+            :
+              <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+                {getLocalizedOrDefaultLabel(
+                  'appStatus',
+                  `legends.noFileAvailableByStatus.${event.status}`,
+                  'Non si può ancora scaricare'
+                )}
+              </Typography>
+            }
+          </Box>
+
+        </Stack>)}
+      </Stack>
+    </Grid>
+  </Paper>
+  : <></>;
 };
 
 export default NotificationRelatedDowntimes;

@@ -77,6 +77,13 @@ const notificationSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
+      if (action.payload.iun === "KQKX-WMDW-GDMU-202301-L-1") {
+        // const acceptedStatusRecord = state.notification.notificationStatusHistory.find(record => record.status === NotificationStatus.ACCEPTED);
+        // if (acceptedStatusRecord) {
+        //   acceptedStatusRecord.activeFrom = "2023-01-26T15:59:23.333432372Z";
+        // }
+        // state.notification.notificationStatusHistory = state.notification.notificationStatusHistory.filter(record => record.status !== NotificationStatus.EFFECTIVE_DATE);
+      }
     });
     builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {

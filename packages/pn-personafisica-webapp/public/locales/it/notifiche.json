@@ -140,6 +140,13 @@
         "pec-receipt-not-delivered": "di mancata consegna PEC"
       }
     },
+    "downtimes": {
+      "title": "DISSERVIZI",
+      "textWithEndDate": "Disservizio iniziato {{startDate}} e concluso {{endDate}} sulle seguenti funzionalità:",
+      "textWithoutEndDate": "Disservizio iniziato {{startDate}} e non ancora concluso sulle seguenti funzionalità:",
+      "datePrefix": "il ",
+      "legalFactDownload": "Attestazione di malfunzionamento"
+    },
     "help": {
       "goto": "Vai al sito",
       "assistance": "Per problemi tecnici o domande relative a Piattaforma Notifiche, premi su “Assisistenza” in alto a destra."

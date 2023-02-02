@@ -62,7 +62,7 @@ const NotificationDetail = () => {
   const { id, mandateId } = useParams();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['common', 'notifiche']);
+  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
@@ -193,10 +193,10 @@ const NotificationDetail = () => {
   }, []);
 
   /* function which loads relevant information about donwtimes */
-  const fetchDowntimeEvents = useCallback(() => {
+  const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
     const fetchParams: GetNotificationDowntimeEventsParams = {
-      startDate: '2022-12-06T00:00:00Z',
-      endDate: '2022-12-08T00:00:00Z',
+      startDate: fromDate,
+      endDate: toDate,
     };
     void dispatch(getDowntimeEvents(fetchParams));
   }, []);
@@ -294,14 +294,12 @@ const NotificationDetail = () => {
                     downloadFilesMessage={getDownloadFilesMessage()}
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                   />
-                </Paper>
-                <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
-                  <NotificationRelatedDowntimes 
-                    downtimeEvents={downtimeEvents} 
-                    fetchDowntimeEvents={fetchDowntimeEvents}
-                    notificationStatusHistory={notification.notificationStatusHistory}
-                  />
-                </Paper>
+                </Paper>                
+                <NotificationRelatedDowntimes 
+                  downtimeEvents={downtimeEvents} 
+                  fetchDowntimeEvents={fetchDowntimeEvents}
+                  notificationStatusHistory={notification.notificationStatusHistory}
+                />
                 {/* TODO decommentare con pn-841
             <Paper sx={{ p: 3 }} className="paperContainer">
               <HelpNotificationDetails 
