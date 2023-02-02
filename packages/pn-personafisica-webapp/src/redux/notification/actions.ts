@@ -2,6 +2,7 @@ import {
   DowntimeLogPage,
   GetNotificationDowntimeEventsParams,
   KnownFunctionality,
+  LegalFactDocumentDetails,
   LegalFactId,
   PaymentAttachmentNameType,
   PaymentInfo,
@@ -23,6 +24,7 @@ export enum NOTIFICATION_ACTIONS {
   GET_NOTIFICATION_PAYMENT_INFO = 'getNotificationPaymentInfo',
   GET_NOTIFICATION_PAYMENT_URL = 'getNotificationPaymentUrl',
   GET_DOWNTIME_EVENTS = 'getDowntimeEvents',
+  GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS = 'getNotificationDowntimeLegalFactDocumentDetails',
 }
 
 export const getReceivedNotification = createAsyncThunk<
@@ -137,4 +139,9 @@ export const getDowntimeEvents = createAsyncThunk<DowntimeLogPage, GetNotificati
   })
 );
 
+// copy of the action having same name in the appStatus slice!!
+export const getDowntimeLegalFactDocumentDetails = createAsyncThunk<LegalFactDocumentDetails, string>(
+  NOTIFICATION_ACTIONS.GET_DOWNTIME_LEGAL_FACT_DOCUMENT_DETAILS,
+  performThunkAction((legalFactId: string) => AppStatusApi.getLegalFactDetails(legalFactId))
+);
 

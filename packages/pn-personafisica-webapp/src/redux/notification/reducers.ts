@@ -19,6 +19,7 @@ import { NotificationDetailForRecipient } from '../../models/NotificationDetail'
 
 import {
   getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getPaymentAttachment,
@@ -59,6 +60,8 @@ const initialState = {
   legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
+  downtimeLegalFactUrl: '',  // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
+                             // analogous for other URLs 
   paymentInfo: {} as PaymentInfo,
   downtimeEvents: [] as Array<Downtime>,
 };
@@ -72,18 +75,21 @@ const notificationSlice = createSlice({
     resetLegalFactState: (state) => {
       state.legalFactDownloadUrl = '';
       state.legalFactDownloadRetryAfter = 0;
-    }
+    },
+    clearDowntimeLegalFactData: (state) => {
+      state.downtimeLegalFactUrl = '';
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
-      if (action.payload.iun === "KQKX-WMDW-GDMU-202301-L-1") {
-        // const acceptedStatusRecord = state.notification.notificationStatusHistory.find(record => record.status === NotificationStatus.ACCEPTED);
-        // if (acceptedStatusRecord) {
-        //   acceptedStatusRecord.activeFrom = "2023-01-26T15:59:23.333432372Z";
-        // }
-        // state.notification.notificationStatusHistory = state.notification.notificationStatusHistory.filter(record => record.status !== NotificationStatus.EFFECTIVE_DATE);
-      }
+      // if (action.payload.iun === "KQKX-WMDW-GDMU-202301-L-1") {
+      //   const acceptedStatusRecord = state.notification.notificationStatusHistory.find(record => record.status === NotificationStatus.ACCEPTED);
+      //   if (acceptedStatusRecord) {
+      //     acceptedStatusRecord.activeFrom = "2023-01-26T15:59:23.333432372Z";
+      //   }
+      //   state.notification.notificationStatusHistory = state.notification.notificationStatusHistory.filter(record => record.status !== NotificationStatus.EFFECTIVE_DATE);
+      // }
     });
     builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {
@@ -126,11 +132,29 @@ const notificationSlice = createSlice({
       };
     });
     builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
-      state.downtimeEvents = action.payload.downtimes;
+      const copiedDowntimes = [...action.payload.downtimes];
+      copiedDowntimes.forEach(downtime => {
+        if (downtime.startDate === "2022-12-07T09:33:15.995Z") {
+          downtime.fileAvailable = false;
+        } else if (downtime.startDate === "2022-12-06T14:38:53Z") {
+          delete downtime.endDate;
+          downtime.fileAvailable = false;
+        }
+      });
+      state.downtimeEvents = copiedDowntimes;
+      // state.downtimeEvents = action.payload.downtimes;
+    });
+    builder.addCase(getDowntimeLegalFactDocumentDetails.fulfilled, (state, action) => {
+      // by the moment we preserve only the URL. 
+      // if the need of showing the file size arises in the future,
+      // we'll probably need to change this in order to keep the whole response from the API call
+      // -----------------------
+      // Carlos Lombardi, 2023.02.02
+      state.downtimeLegalFactUrl = action.payload.url;
     });
   },
 });
 
-export const { resetState, resetLegalFactState } = notificationSlice.actions;
+export const { resetState, resetLegalFactState, clearDowntimeLegalFactData } = notificationSlice.actions;
 
 export default notificationSlice;

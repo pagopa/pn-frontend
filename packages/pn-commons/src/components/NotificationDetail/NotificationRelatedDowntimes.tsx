@@ -6,6 +6,7 @@ import { NotificationStatus, NotificationStatusHistory } from '../../types';
 import { Downtime } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { formatDate, isToday } from '../../utils';
+import { useDownloadDocument } from '../../hooks';
 
 type Props = {
   // the notification history, needed to compute the time range for the downtime events query
@@ -16,6 +17,15 @@ type Props = {
 
   // ... so that such events are passed throught this prop
   downtimeEvents: Array<Downtime>;
+
+  // action to obtain and set the legal fact document url ...
+  fetchDowntimeLegalFactDocumentDetails: (legalFactId: string) => void;
+
+  // ... so that it is passed throught this prop ...
+  downtimeLegalFactUrl: string;
+
+  // ... and afterwards can be cleaned using this prop
+  clearDowntimeLegalFactData: () => void;
 };
 
 
@@ -62,6 +72,11 @@ const NotificationRelatedDowntimes = (props: Props) => {
 
   const [shouldFetchEvents, setShouldFetchEvents] = useState<boolean>(false); 
 
+  useDownloadDocument({
+    url: props.downtimeLegalFactUrl,
+    clearDownloadAction: props.clearDowntimeLegalFactData,
+  });
+
   /*
    * Decide whether the events are to be obtained, in such case it determines the time range
    * and launches the fetch. The following rules apply, they are meant to be considered in order.
@@ -96,9 +111,6 @@ const NotificationRelatedDowntimes = (props: Props) => {
       effectiveDateRecord && viewedRecord 
         ? (effectiveDateRecord.activeFrom < viewedRecord.activeFrom ? effectiveDateRecord : viewedRecord)
         : (effectiveDateRecord || viewedRecord); 
-
-    console.log('about to fetch downtime events');
-    console.log({ acceptedRecord, effectiveDateRecord, viewedRecord, completedRecord, cancelledRecord });
 
     const invalidStatusHistory = cancelledRecord || !acceptedRecord  
       || (acceptedRecord && completedRecord && acceptedRecord.activeFrom > completedRecord.activeFrom);
@@ -172,8 +184,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
                 color='primary'
                 startIcon={<AttachFileIcon />}
                 onClick={() => {
-                  // void getDowntimeLegalFactDocumentDetails(i.legalFactId as string);
-                  console.log(`should download ${event.legalFactId}`);
+                  void props.fetchDowntimeLegalFactDocumentDetails(event.legalFactId as string);
                 }}
               >
                 {getLocalizedOrDefaultLabel(
@@ -183,7 +194,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
                 )}
               </ButtonNaked>
             :
-              <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
+              <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontSize: "0.875rem" }}>
                 {getLocalizedOrDefaultLabel(
                   'appStatus',
                   `legends.noFileAvailableByStatus.${event.status}`,

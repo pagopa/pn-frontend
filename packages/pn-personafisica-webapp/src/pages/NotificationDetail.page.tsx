@@ -34,9 +34,10 @@ import {
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
   getReceivedNotificationOtherDocument,
+  getDowntimeLegalFactDocumentDetails,
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
-import { resetLegalFactState, resetState } from '../redux/notification/reducers';
+import { resetLegalFactState, resetState, clearDowntimeLegalFactData } from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
@@ -74,6 +75,9 @@ const NotificationDetail = () => {
   );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
   const downtimeEvents = useAppSelector((state: RootState) => state.notificationState.downtimeEvents);
+  const downtimeLegalFactUrl = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeLegalFactUrl
+  );
 
   const currentRecipient = notification && notification.currentRecipient;
 
@@ -201,6 +205,11 @@ const NotificationDetail = () => {
     void dispatch(getDowntimeEvents(fetchParams));
   }, []);
 
+  const fetchDowntimeLegalFactDocumentDetails = useCallback(
+    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
+    [dispatch, getDowntimeLegalFactDocumentDetails]
+  );
+
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: otherDocumentDownloadUrl });
@@ -299,6 +308,9 @@ const NotificationDetail = () => {
                   downtimeEvents={downtimeEvents} 
                   fetchDowntimeEvents={fetchDowntimeEvents}
                   notificationStatusHistory={notification.notificationStatusHistory}
+                  downtimeLegalFactUrl={downtimeLegalFactUrl}
+                  fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData()) }
                 />
                 {/* TODO decommentare con pn-841
             <Paper sx={{ p: 3 }} className="paperContainer">
