@@ -23,7 +23,7 @@ const PrivacyPolicyPage = () => {
     }
   }, []);
 
-  useDocumentationUnauthorized(contentLoaded, routes.PRIVACY_POLICY);
+  useDocumentationUnauthorized(contentLoaded, routes.PRIVACY_POLICY, '.otnotice-content a');
   return (
     <>
       <div

@@ -24,7 +24,7 @@ const TermsOfServicePage = () => {
       setContentLoaded(true);
     }
   }, []);
-  useDocumentationUnauthorized(contentLoaded, routes.TERMS_OF_SERVICE);
+  useDocumentationUnauthorized(contentLoaded, routes.TERMS_OF_SERVICE, '.otnotice-content a');
 
   return (
     <>

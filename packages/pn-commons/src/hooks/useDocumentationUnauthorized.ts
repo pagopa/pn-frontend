@@ -1,9 +1,13 @@
 import { useLayoutEffect } from 'react';
 
-export const useDocumentationUnauthorized = (contentLoaded: boolean, route: any) => {
+export const useDocumentationUnauthorized = (
+  contentLoaded: boolean,
+  route: any,
+  selectorString: string
+) => {
   useLayoutEffect(() => {
     setTimeout(() => {
-      const links = document.querySelectorAll('.otnotice-content a');
+      const links = document.querySelectorAll(selectorString);
       links.forEach((l) => {
         const href = l.getAttribute('href');
         if (href?.startsWith('#')) {
