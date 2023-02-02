@@ -47,6 +47,7 @@ function completeFormatDate(dateAsString: string) {
 }
 
 function mainTextForDowntime(downtime: Downtime) {
+  // beware! - tests rely on the default texts
   return downtime.endDate 
     ? getLocalizedOrDefaultLabel(
       'notifications',
@@ -196,6 +197,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
               </ul>
 
               {/* Link to download related file, or message about non-availability of such file */}
+              {/* beware! - tests rely on the default texts */}
               <Box sx={{ mb: 3, ml: 2 }}>
                 {event.fileAvailable ?
                   <ButtonNaked
@@ -217,7 +219,7 @@ const NotificationRelatedDowntimes = (props: Props) => {
                     {getLocalizedOrDefaultLabel(
                       'appStatus',
                       `legends.noFileAvailableByStatus.${event.status}`,
-                      'Non si può ancora scaricare'
+                      'File non disponibile'
                     )}
                   </Typography>
                 }
