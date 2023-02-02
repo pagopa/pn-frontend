@@ -90,6 +90,13 @@ const notificationSlice = createSlice({
       //   }
       //   state.notification.notificationStatusHistory = state.notification.notificationStatusHistory.filter(record => record.status !== NotificationStatus.EFFECTIVE_DATE);
       // }
+      if (action.payload.iun === "NJNY-KUAH-WELW-202212-L-1") {
+        state.notification.notificationStatusHistory.unshift({ activeFrom: "2023-01-19T15:02:57.156693Z", status: NotificationStatus.UNREACHABLE, relatedTimelineElements: [] });
+        // const viewedStatusRecord = state.notification.notificationStatusHistory.find(record => record.status === NotificationStatus.VIEWED);
+        // if (viewedStatusRecord) {
+        //   viewedStatusRecord.status = NotificationStatus.UNREACHABLE;
+        // }
+      }
     });
     builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {

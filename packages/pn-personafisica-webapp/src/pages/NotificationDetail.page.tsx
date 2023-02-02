@@ -311,6 +311,7 @@ const NotificationDetail = () => {
                   downtimeLegalFactUrl={downtimeLegalFactUrl}
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
                   clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData()) }
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
                 />
                 {/* TODO decommentare con pn-841
             <Paper sx={{ p: 3 }} className="paperContainer">

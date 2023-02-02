@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Box, Grid, Paper, Stack, Typography, useTheme } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -7,6 +7,7 @@ import { Downtime } from '../../models';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
 import { formatDate, isToday } from '../../utils';
 import { useDownloadDocument } from '../../hooks';
+import ApiErrorWrapper from '../ApiError/ApiErrorWrapper';
 
 type Props = {
   // the notification history, needed to compute the time range for the downtime events query
@@ -26,6 +27,9 @@ type Props = {
 
   // ... and afterwards can be cleaned using this prop
   clearDowntimeLegalFactData: () => void;
+
+  // api id for ApiErrorWrapper
+  apiId: string;
 };
 
 
@@ -84,15 +88,15 @@ const NotificationRelatedDowntimes = (props: Props) => {
    * - if the notification was cancelled, i.e. there is a CANCELLED event in its status history,
    *   then the downtime information should not appear.
    * - if there is no ACCEPTED event in the status history, then the downtime information should not appear.
-   * - if the earlier between the EFFECTIVE_DATE or VIEWED events  
+   * - if the earlier between the EFFECTIVE_DATE, VIEWED or UNREACHABLE events  
    *   is before the ACCEPTED event, then the downtime information should not appear.
    * - if no EFFECTIVE_DATE or VIEWED events are present, then 
    *   the downtime events between the ACCEPTED event and the current date/time must be shown.
-   * - otherwise, i.e. if the earlier between the EFFECTIVE_DATE or VIEWED events is after
+   * - otherwise, i.e. if the earlier between the EFFECTIVE_DATE, VIEWED or UNREACHABLE events is after
    *   the ACCEPTED event, then the downtime events between the ACCEPTED event
-   *   and the earlier between the EFFECTIVE_DATE or VIEWED events must be shown.
+   *   and the earlier between the EFFECTIVE_DATE, VIEWED or UNREACHABLE events must be shown.
    */
-  useEffect(() => {
+  const doFetchEvents = useCallback(() => {
     const acceptedRecord = props.notificationStatusHistory.find(record => 
       record.status === NotificationStatus.ACCEPTED
     );
@@ -102,15 +106,22 @@ const NotificationRelatedDowntimes = (props: Props) => {
     const viewedRecord = props.notificationStatusHistory.find(record => 
       record.status === NotificationStatus.VIEWED
     );
+    const unreachableRecord = props.notificationStatusHistory.find(record => 
+      record.status === NotificationStatus.UNREACHABLE
+    );
     const cancelledRecord = props.notificationStatusHistory.find(record => 
       record.status === NotificationStatus.CANCELLED
     );
 
-    // the earlier between VIEWED and EFFECTIVE_DATE
-    const completedRecord =
+    // the earlier between VIEWED, EFFECTIVE_DATE and UNREACHABLE
+    const viewedOrEffectiveDateRecord =
       effectiveDateRecord && viewedRecord 
         ? (effectiveDateRecord.activeFrom < viewedRecord.activeFrom ? effectiveDateRecord : viewedRecord)
         : (effectiveDateRecord || viewedRecord); 
+    const completedRecord = 
+      viewedOrEffectiveDateRecord && unreachableRecord 
+        ? (viewedOrEffectiveDateRecord.activeFrom < unreachableRecord.activeFrom ? viewedOrEffectiveDateRecord : unreachableRecord)
+        : (viewedOrEffectiveDateRecord || unreachableRecord); 
 
     const invalidStatusHistory = cancelledRecord || !acceptedRecord  
       || (acceptedRecord && completedRecord && acceptedRecord.activeFrom > completedRecord.activeFrom);
@@ -120,95 +131,101 @@ const NotificationRelatedDowntimes = (props: Props) => {
       setShouldFetchEvents(true);
       props.fetchDowntimeEvents(acceptedRecord.activeFrom, completedRecord?.activeFrom || new Date().toISOString());
     }
-    
   }, [props.notificationStatusHistory]);
 
-  return shouldFetchEvents && props.downtimeEvents.length > 0 ? <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
-    <Grid
-      key={'downtimes-section'}
-      container
-      direction="row"
-      justifyContent="space-between"
-      alignItems="center"
-      data-testid="notification-related-downtimes-main"
-    >
-      <Grid key={'downtimes-section-title'} item sx={{ mb: 1 }}>
-        <Typography
-          color="text.primary"
-          variant="overline"
-          fontWeight={700}
-          textTransform="uppercase"
-          fontSize={14}
+  useEffect(() => doFetchEvents(), [doFetchEvents]);
+
+  return <ApiErrorWrapper apiId={props.apiId} reloadAction={doFetchEvents}>
+    {
+      shouldFetchEvents && props.downtimeEvents.length > 0 ? <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
+        <Grid
+          key={'downtimes-section'}
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          data-testid="notification-related-downtimes-main"
         >
-          {title}
-        </Typography>
-      </Grid>
-    </Grid>
-    <Grid key={'detail-documents-message'} item>
-      <Stack direction="column">
+          <Grid key={'downtimes-section-title'} item sx={{ mb: 1 }}>
+            <Typography
+              color="text.primary"
+              variant="overline"
+              fontWeight={700}
+              textTransform="uppercase"
+              fontSize={14}
+            >
+              {title}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid key={'detail-documents-message'} item>
+          <Stack direction="column">
 
-        {/* Render each downtime event */}
-        {props.downtimeEvents.map((event, ix) => <Stack key={ix} direction="column" alignItems="flex-start" data-testid="notification-related-downtime-detail" sx={{ 
-          mt: 3, borderBottomColor: 'divider', borderBottomStyle: 'solid', borderBottomWidth: '3px',
-        }}>
+            {/* Render each downtime event */}
+            {props.downtimeEvents.map((event, ix) => <Stack key={ix} direction="column" alignItems="flex-start" data-testid="notification-related-downtime-detail" sx={{ 
+              mt: 3, borderBottomColor: 'divider', borderBottomStyle: 'solid', borderBottomWidth: '3px',
+            }}>
 
-          {/* Description including time range */}
-          <Typography variant="body2">
-            {mainTextForDowntime(event)}
-          </Typography>
-
-          {/* Target functionalities */}
-          <ul>
-            <li style={{ marginTop: "-12px" }}>
-              <Typography variant="body2">{
-                event.knownFunctionality 
-                  ? getLocalizedOrDefaultLabel(
-                      'appStatus',
-                      `legends.knownFunctionality.${event.knownFunctionality}`,
-                      event.knownFunctionality
-                    )
-                  : getLocalizedOrDefaultLabel(
-                      'appStatus',
-                      'legends.unknownFunctionality',
-                      'Un servizio sconosciuto',
-                      { functionality: event.rawFunctionality })
-              }</Typography>
-            </li>
-          </ul>
-
-          {/* Link to download related file, or message about non-availability of such file */}
-          <Box sx={{ mb: 3, ml: 2 }}>
-            {event.fileAvailable ?
-              <ButtonNaked
-                sx={{ px: 0 }}
-                color='primary'
-                startIcon={<AttachFileIcon />}
-                onClick={() => {
-                  void props.fetchDowntimeLegalFactDocumentDetails(event.legalFactId as string);
-                }}
-              >
-                {getLocalizedOrDefaultLabel(
-                  'notifications',
-                  'detail.downtimes.legalFactDownload',
-                  'Scaricare'
-                )}
-              </ButtonNaked>
-            :
-              <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontSize: "0.875rem" }}>
-                {getLocalizedOrDefaultLabel(
-                  'appStatus',
-                  `legends.noFileAvailableByStatus.${event.status}`,
-                  'Non si può ancora scaricare'
-                )}
+              {/* Description including time range */}
+              <Typography variant="body2">
+                {mainTextForDowntime(event)}
               </Typography>
-            }
-          </Box>
 
-        </Stack>)}
-      </Stack>
-    </Grid>
-  </Paper>
-  : <></>;
+              {/* Target functionalities */}
+              <ul>
+                <li style={{ marginTop: "-12px" }}>
+                  <Typography variant="body2">{
+                    event.knownFunctionality 
+                      ? getLocalizedOrDefaultLabel(
+                          'appStatus',
+                          `legends.knownFunctionality.${event.knownFunctionality}`,
+                          event.knownFunctionality
+                        )
+                      : getLocalizedOrDefaultLabel(
+                          'appStatus',
+                          'legends.unknownFunctionality',
+                          'Un servizio sconosciuto',
+                          { functionality: event.rawFunctionality }
+                        )
+                  }</Typography>
+                </li>
+              </ul>
+
+              {/* Link to download related file, or message about non-availability of such file */}
+              <Box sx={{ mb: 3, ml: 2 }}>
+                {event.fileAvailable ?
+                  <ButtonNaked
+                    sx={{ px: 0 }}
+                    color='primary'
+                    startIcon={<AttachFileIcon />}
+                    onClick={() => {
+                      void props.fetchDowntimeLegalFactDocumentDetails(event.legalFactId as string);
+                    }}
+                  >
+                    {getLocalizedOrDefaultLabel(
+                      'notifications',
+                      'detail.downtimes.legalFactDownload',
+                      'Scaricare'
+                    )}
+                  </ButtonNaked>
+                :
+                  <Typography variant="body2" sx={{ color: theme.palette.text.secondary, fontSize: "0.875rem" }}>
+                    {getLocalizedOrDefaultLabel(
+                      'appStatus',
+                      `legends.noFileAvailableByStatus.${event.status}`,
+                      'Non si può ancora scaricare'
+                    )}
+                  </Typography>
+                }
+              </Box>
+
+            </Stack>)}
+          </Stack>
+        </Grid>
+      </Paper>
+      : <></>
+    }
+  </ApiErrorWrapper>;
 };
 
 export default NotificationRelatedDowntimes;
