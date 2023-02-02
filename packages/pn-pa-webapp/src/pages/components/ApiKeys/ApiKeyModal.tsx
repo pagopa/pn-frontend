@@ -31,11 +31,11 @@ const ApiKeyModal = ({
     </Typography>
     {content}
     <Grid container justifyContent="flex-end" sx={{ marginTop: 3 }}>
-      <Button variant="outlined" onClick={closeModalHandler} sx={{ mr: actionButtonLabel ? 2 : 0 }}>
+      <Button data-testid="close-modal-button" variant="outlined" onClick={closeModalHandler} sx={{ mr: actionButtonLabel ? 2 : 0 }}>
         {closeButtonLabel}
       </Button>
       {actionButtonLabel && (
-        <Button variant="contained" onClick={actionHandler}>
+        <Button data-testid="action-modal-button" variant="contained" onClick={actionHandler}>
           {actionButtonLabel}
         </Button>
       )}
