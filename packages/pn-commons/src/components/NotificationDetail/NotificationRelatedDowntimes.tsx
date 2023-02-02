@@ -135,7 +135,11 @@ const NotificationRelatedDowntimes = (props: Props) => {
 
   useEffect(() => doFetchEvents(), [doFetchEvents]);
 
-  return <ApiErrorWrapper apiId={props.apiId} reloadAction={doFetchEvents}>
+  return <ApiErrorWrapper apiId={props.apiId} reloadAction={doFetchEvents} mainText={getLocalizedOrDefaultLabel(
+    'notifications',
+    'detail.downtimes.apiErrorMessage',
+    'Errore API'
+  )}>
     {
       shouldFetchEvents && props.downtimeEvents.length > 0 ? <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
         <Grid
