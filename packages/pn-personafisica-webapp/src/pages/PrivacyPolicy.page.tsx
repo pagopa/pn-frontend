@@ -18,8 +18,8 @@ const PrivacyPolicyPage = () => {
     if (ONE_TRUST_PORTAL_CDN_PP) {
       OneTrust.NoticeApi.Initialized.then(function () {
         OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN_PP], false);
+        setContentLoaded(true);
       });
-      setContentLoaded(true);
     }
   }, []);
 

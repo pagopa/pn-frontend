@@ -20,8 +20,8 @@ const TermsOfServicePage = () => {
     if (ONE_TRUST_PORTAL_CDN_TOS) {
       OneTrust.NoticeApi.Initialized.then(function () {
         OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN_TOS], false);
+        setContentLoaded(true);
       });
-      setContentLoaded(true);
     }
   }, []);
   useDocumentationUnauthorized(contentLoaded, routes.TERMS_OF_SERVICE, '.otnotice-content a');
