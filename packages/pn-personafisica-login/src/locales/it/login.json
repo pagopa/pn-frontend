@@ -18,5 +18,12 @@
   "loginError": {
     "title": "Spiacenti, qualcosa è andato storto.",
     "message": "A causa di un errore del sistema non è possibile completare la procedura.<1 />Ti chiediamo di riprovare più tardi."
+  },
+  "disambiguationPage": {
+    "title": "Con che profilo vuoi accedere?",
+    "subTitle": "Ti reindirizzeremo in base alla tua scelta.",
+    "pf": "Privato cittadino",
+    "pg": "Persona giuridica",
+    "button": "Accedi"
   }
 }
