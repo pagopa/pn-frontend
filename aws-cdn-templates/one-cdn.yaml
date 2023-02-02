@@ -8,11 +8,11 @@ Parameters:
   WebDomain:
     Description: "Domain for webapp"
     Type: String
-  
+
   WebDomainReferenceToSite:
     Description: true if the website must be reachable using the WebDomain
     Type: String
-    Default: 'true'
+    Default: "true"
 
   HostedZoneId:
     Description: "Hosted Zone Id in which you want to add record"
@@ -21,17 +21,17 @@ Parameters:
   AlternateWebDomain:
     Description: "Alternate Domain name for the webapp"
     Type: String
-    Default: ''
+    Default: ""
 
   AlternateWebDomainReferenceToSite:
     Description: true if the website must be reachable using the AlternateWebDomain
     Type: String
-    Default: 'true' 
+    Default: "true"
 
   AlternateHostedZoneId:
     Description: Hosted Zone Id in which you want to add alternate DNS
     Type: String
-    Default: ''
+    Default: ""
 
   WebCertificateArn:
     Description: "ACM Web Certificate ARN"
@@ -41,11 +41,11 @@ Parameters:
     Description: "The Url of web API: useful for content-security-policy"
     Type: String
 
-#  Do not remove, we are waiting for DPIA approval about WAF on us-east-1 region
-#  Limit:
-#    Type: Number
-#    Description: The limit on requests per 5-minute period for a single originating IP address.
-#    Default: 1000
+  #  Do not remove, we are waiting for DPIA approval about WAF on us-east-1 region
+  #  Limit:
+  #    Type: Number
+  #    Description: The limit on requests per 5-minute period for a single originating IP address.
+  #    Default: 1000
 
   RequestsAlarmLimit:
     Type: Number
@@ -62,40 +62,42 @@ Parameters:
     Description: ARN of the topic to send the alarm to
 
 Conditions:
-
   # Is landing site if name startsWith 'web-landing-cdn-'
   IsLanding:
     Fn::And:
-      - !Not [ !Equals [ !Ref Name, "" ]]
-      - !Equals [ !Select [ 0, !Split [ web-landing-cdn-, !Ref Name ]], "" ]
-  
+      - !Not [!Equals [!Ref Name, ""]]
+      - !Equals [!Select [0, !Split [web-landing-cdn-, !Ref Name]], ""]
+
   # If domain is used in certificate, add this domain to CloudFront
   CreateDNSname: !Equals
-        - !Ref WebDomainReferenceToSite
-        - 'true'
-  
+    - !Ref WebDomainReferenceToSite
+    - "true"
+
   # If alternate domain is provided and is used in certificate, add this domain to CloudFront
-  CreateAlternateDNSname: 
+  CreateAlternateDNSname:
     Fn::And:
-      - Fn::Not: 
-        - Fn::Equals:
-          - !Ref AlternateWebDomain
-          - ""
+      - Fn::Not:
+          - Fn::Equals:
+              - !Ref AlternateWebDomain
+              - ""
       - !Equals
         - !Ref AlternateWebDomainReferenceToSite
-        - 'true'
-  
+        - "true"
+
   # Condition combination to handle CDN alias array without NoValue
-  BothDNSNames: !And [ !Condition CreateDNSname, !Condition CreateAlternateDNSname ]
-  OnlyPrimaryDNSName: !And [ !Condition CreateDNSname, !Not [ !Condition CreateAlternateDNSname ] ]
-  OnlyAlternateDNSName: !And [ !Not [ !Condition CreateDNSname ], !Condition CreateAlternateDNSname ]
-  
-  CreatePrimaryAliasRecord: !Not 
+  BothDNSNames:
+    !And [!Condition CreateDNSname, !Condition CreateAlternateDNSname]
+  OnlyPrimaryDNSName:
+    !And [!Condition CreateDNSname, !Not [!Condition CreateAlternateDNSname]]
+  OnlyAlternateDNSName:
+    !And [!Not [!Condition CreateDNSname], !Condition CreateAlternateDNSname]
+
+  CreatePrimaryAliasRecord: !Not
     - !Equals
       - !Ref HostedZoneId
       - ""
-  
-  CreateAlternateAliasRecord: !Not 
+
+  CreateAlternateAliasRecord: !Not
     - !Equals
       - !Ref AlternateHostedZoneId
       - ""
@@ -106,7 +108,7 @@ Resources:
     Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
     Properties:
       CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub 'CloudFront OAI for ${Name} WebApp'
+        Comment: !Sub "CloudFront OAI for ${Name} WebApp"
   # - WebApp S3 Bucket
   S3BucketForWebsiteContent:
     Type: AWS::S3::Bucket
@@ -121,27 +123,27 @@ Resources:
   S3BucketForWebsiteContentPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref 'S3BucketForWebsiteContent'
+      Bucket: !Ref "S3BucketForWebsiteContent"
       PolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
-        - Action:
-          - s3:GetObject
-          Effect: Allow
-          Resource: !Sub '${S3BucketForWebsiteContent.Arn}/*'
-          Principal:
-            CanonicalUser:
-              Fn::GetAtt:
-              - CloudFrontOriginAccessIdentity
-              - S3CanonicalUserId
-  
+          - Action:
+              - s3:GetObject
+            Effect: Allow
+            Resource: !Sub "${S3BucketForWebsiteContent.Arn}/*"
+            Principal:
+              CanonicalUser:
+                Fn::GetAtt:
+                  - CloudFrontOriginAccessIdentity
+                  - S3CanonicalUserId
+
   # - WebApp default one minute caching policy
   WebsiteCDNCachingPolicy:
     Type: AWS::CloudFront::CachePolicy
     Properties:
       CachePolicyConfig:
-        Name: !Sub '${Name}-WebsiteCDNCachingPolicy'
-        Comment: 'Keep cache for one minute.' 
+        Name: !Sub "${Name}-WebsiteCDNCachingPolicy"
+        Comment: "Keep cache for one minute."
         DefaultTTL: 30
         MaxTTL: 60
         MinTTL: 10
@@ -154,14 +156,14 @@ Resources:
             HeaderBehavior: none
           QueryStringsConfig:
             QueryStringBehavior: all
-  
+
   # - WebApp default one hour caching policy
   WebsiteCDNCachingPolicyOneHour:
     Type: AWS::CloudFront::CachePolicy
     Properties:
       CachePolicyConfig:
-        Name: !Sub '${Name}-WebsiteCDNCachingPolicyOneHour'
-        Comment: 'Keep cache for one hour.'
+        Name: !Sub "${Name}-WebsiteCDNCachingPolicyOneHour"
+        Comment: "Keep cache for one hour."
         DefaultTTL: 3600 ## 1 hour
         MaxTTL: 3600
         MinTTL: 1
@@ -173,16 +175,16 @@ Resources:
           HeadersConfig:
             HeaderBehavior: none
           QueryStringsConfig:
-            QueryStringBehavior: all                         
+            QueryStringBehavior: all
 
   # - WebApp default five minutes caching policy
   WebsiteCDNCachingPolicyFiveMinutes:
     Type: AWS::CloudFront::CachePolicy
     Properties:
       CachePolicyConfig:
-        Name: !Sub '${Name}-WebsiteCDNCachingPolicyFiveMinutes'
-        Comment: 'Keep cache for five minutes.'
-        DefaultTTL: 300 
+        Name: !Sub "${Name}-WebsiteCDNCachingPolicyFiveMinutes"
+        Comment: "Keep cache for five minutes."
+        DefaultTTL: 300
         MaxTTL: 300
         MinTTL: 1
         ParametersInCacheKeyAndForwardedToOrigin:
@@ -193,28 +195,26 @@ Resources:
           HeadersConfig:
             HeaderBehavior: none
           QueryStringsConfig:
-            QueryStringBehavior: none  
+            QueryStringBehavior: none
 
-  
   # - WebApp CDN
   WebsiteCDN:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
         Comment: CDN for S3-backed website
-        Aliases:
-          !If
-            - BothDNSNames
+        Aliases: !If
+          - BothDNSNames
+          - - !Ref WebDomain
+            - !Ref AlternateWebDomain
+          - !If
+            - OnlyPrimaryDNSName
             - - !Ref WebDomain
-              - !Ref AlternateWebDomain
             - !If
-                - OnlyPrimaryDNSName
-                - - !Ref WebDomain
-                - !If
-                    - OnlyAlternateDNSName
-                    - - !Ref AlternateWebDomain
-                    - !Ref AWS::NoValue
-        Enabled: 'true'
+              - OnlyAlternateDNSName
+              - - !Ref AlternateWebDomain
+              - !Ref AWS::NoValue
+        Enabled: "true"
         CacheBehaviors:
           - AllowedMethods:
               - GET
@@ -222,55 +222,55 @@ Resources:
             CachedMethods:
               - GET
               - HEAD
-            TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+            TargetOriginId: !Sub "S3-${S3BucketForWebsiteContent}"
             ViewerProtocolPolicy: redirect-to-https
             CachePolicyId: !Ref WebsiteCDNCachingPolicyFiveMinutes
             ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
-            PathPattern: index.html
+            PathPattern: /index.html
           - AllowedMethods:
               - GET
               - HEAD
             CachedMethods:
               - GET
               - HEAD
-            TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+            TargetOriginId: !Sub "S3-${S3BucketForWebsiteContent}"
             ViewerProtocolPolicy: redirect-to-https
             CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d ## CachingOptimizedForUncompressedObjects - Default TTL: 86,400 seconds (24 hours) - https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policies-list
             ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
-            PathPattern: static/*
+            PathPattern: /static*
           - AllowedMethods:
               - GET
               - HEAD
             CachedMethods:
               - GET
               - HEAD
-            TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+            TargetOriginId: !Sub "S3-${S3BucketForWebsiteContent}"
             ViewerProtocolPolicy: redirect-to-https
             CachePolicyId: b2884449-e4de-46a7-ac36-70bc7f1ddd6d ## CachingOptimizedForUncompressedObjects - Default TTL: 86,400 seconds (24 hours) - https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html#managed-cache-policies-list
             ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
-            PathPattern: oneTrust/*
+            PathPattern: /onetrust*
           - AllowedMethods:
               - GET
               - HEAD
             CachedMethods:
               - GET
               - HEAD
-            TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+            TargetOriginId: !Sub "S3-${S3BucketForWebsiteContent}"
             ViewerProtocolPolicy: redirect-to-https
             CachePolicyId: !Ref WebsiteCDNCachingPolicyOneHour
             ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
-            PathPattern: locales/*
+            PathPattern: /locales*
           - AllowedMethods:
               - GET
               - HEAD
             CachedMethods:
               - GET
               - HEAD
-            TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+            TargetOriginId: !Sub "S3-${S3BucketForWebsiteContent}"
             ViewerProtocolPolicy: redirect-to-https
             CachePolicyId: !Ref WebsiteCDNCachingPolicyOneHour
             ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
-            PathPattern: icons/*
+            PathPattern: /icons*
         DefaultCacheBehavior:
           AllowedMethods:
             - GET
@@ -278,78 +278,82 @@ Resources:
           CachedMethods:
             - GET
             - HEAD
-          TargetOriginId: !Sub 'S3-${S3BucketForWebsiteContent}'
+          TargetOriginId: !Sub "S3-${S3BucketForWebsiteContent}"
           ViewerProtocolPolicy: redirect-to-https
           CachePolicyId: !Ref WebsiteCDNCachingPolicy
           ResponseHeadersPolicyId: !Ref DefaultHeaderPolicy
           FunctionAssociations:
             Fn::If:
               - IsLanding
-              - 
-                - EventType: viewer-request
+              - - EventType: viewer-request
                   FunctionARN: !GetAtt RewriteFunction.FunctionMetadata.FunctionARN
-              - !Ref "AWS::NoValue"   
-        DefaultRootObject: !If [ IsLanding, 'pubbliche-amministrazioni/index.html', 'index.html'] 
-        # DefaultRootObject: !If [ IsLanding, 'cittadini/index.html', 'index.html'] 
+              - !Ref "AWS::NoValue"
+        DefaultRootObject:
+          !If [IsLanding, "pubbliche-amministrazioni/index.html", "index.html"]
+        # DefaultRootObject: !If [ IsLanding, 'cittadini/index.html', 'index.html']
         CustomErrorResponses:
           - ErrorCode: 404
             ResponseCode: 200
-            ResponsePagePath: !If [ IsLanding, '/404/index.html', '/index.html' ]
+            ResponsePagePath: !If [IsLanding, "/404/index.html", "/index.html"]
           - ErrorCode: 403
             ResponseCode: 200
-            ResponsePagePath: !If [ IsLanding, '/404/index.html', '/index.html' ]
+            ResponsePagePath: !If [IsLanding, "/404/index.html", "/index.html"]
         Origins:
-        - DomainName: !Sub '${S3BucketForWebsiteContent.RegionalDomainName}'
-          Id: !Sub 'S3-${S3BucketForWebsiteContent}'
-          S3OriginConfig:
-            OriginAccessIdentity:
-              Fn::Join:
-              - ''
-              - - origin-access-identity/cloudfront/
-                - Ref: CloudFrontOriginAccessIdentity
+          - DomainName: !Sub "${S3BucketForWebsiteContent.RegionalDomainName}"
+            Id: !Sub "S3-${S3BucketForWebsiteContent}"
+            S3OriginConfig:
+              OriginAccessIdentity:
+                Fn::Join:
+                  - ""
+                  - - origin-access-identity/cloudfront/
+                    - Ref: CloudFrontOriginAccessIdentity
         ViewerCertificate:
           AcmCertificateArn: !Ref WebCertificateArn
           MinimumProtocolVersion: TLSv1.2_2021
           SslSupportMethod: sni-only
-#        WebACLId: !GetAtt ApiWafWebAcl.Arn
+  #        WebACLId: !GetAtt ApiWafWebAcl.Arn
 
   DefaultHeaderPolicy:
     Type: AWS::CloudFront::ResponseHeadersPolicy
-    Properties: 
-      ResponseHeadersPolicyConfig: 
-        Name: !Sub '${Name}-headerPolicy'
-        SecurityHeadersConfig: 
+    Properties:
+      ResponseHeadersPolicyConfig:
+        Name: !Sub "${Name}-headerPolicy"
+        SecurityHeadersConfig:
           # add_header Content-Security-Policy
-          ContentSecurityPolicy: 
-            ContentSecurityPolicy: 
+          ContentSecurityPolicy:
+            ContentSecurityPolicy:
               Fn::Join:
                 - " "
                 - - "default-src 'self';"
-                  - !If [ IsLanding, "object-src 'self' https://www.notifichedigitali.pagopa.it/ https://notifichedigitali.pagopa.it ;", "object-src 'none';" ] 
+                  - !If [
+                      IsLanding,
+                      "object-src 'self' https://www.notifichedigitali.pagopa.it/ https://notifichedigitali.pagopa.it ;",
+                      "object-src 'none';",
+                    ]
                   - !Sub " connect-src 'self' https://api-eu.mixpanel.com/track/  \
-                           https://selfcare.pagopa.it/assets/ \
-                           https://privacyportalde-cdn.onetrust.com/ \
-                           ${WebApiUrl}; \
-                           style-src 'self' 'unsafe-inline' https://privacyportalde-cdn.onetrust.com/; \
-                           worker-src 'none'; \
-                           font-src 'self'; \
-                           frame-ancestors 'self' ; \
-                           img-src 'self' https://assets.cdn.io.italia.it/ data:"
+                    https://selfcare.pagopa.it/assets/ \
+                    https://privacyportalde-cdn.onetrust.com/ \
+                    ${WebApiUrl}; \
+                    style-src 'self' 'unsafe-inline' https://privacyportalde-cdn.onetrust.com/; \
+                    worker-src 'none'; \
+                    font-src 'self'; \
+                    frame-ancestors 'self' ; \
+                    img-src 'self' https://assets.cdn.io.italia.it/ data:"
             Override: true
           # add_header X-Content-Type-Options "nosniff";
-          ContentTypeOptions: 
+          ContentTypeOptions:
             #ContentTypeOptions: "nosniff"
             Override: true
           # add_header X-Frame-Options "SAMEORIGIN";
-          FrameOptions: 
+          FrameOptions:
             FrameOption: "SAMEORIGIN"
             Override: true
           # add_header Referrer-Policy "no-referrer";
-          ReferrerPolicy: 
+          ReferrerPolicy:
             ReferrerPolicy: "no-referrer"
             Override: true
           # add_header Strict-Transport-Security "max-age=31536000";
-          StrictTransportSecurity: 
+          StrictTransportSecurity:
             AccessControlMaxAgeSec: 31536000
             IncludeSubdomains: false
             Preload: false
@@ -380,7 +384,7 @@ Resources:
         EvaluateTargetHealth: false
         HostedZoneId: Z2FDTNDATAQYW2
 
-  ## 
+  ##
   ## Rewrite rule based on example provided by aws at https://github.com/aws-samples/amazon-cloudfront-functions/blob/main/url-rewrite-single-page-apps/index.js
   RewriteFunction:
     Type: AWS::CloudFront::Function
@@ -406,7 +410,7 @@ Resources:
             return request;
         }
       FunctionConfig:
-        Comment: 'Rewriting the request between a CloudFront Distribution and an origin'
+        Comment: "Rewriting the request between a CloudFront Distribution and an origin"
         Runtime: cloudfront-js-1.0
       Name: !Sub "${AWS::StackName}-RewriteDefaultIndexRequest"
 
@@ -416,7 +420,7 @@ Resources:
     Properties:
       AlarmName: !Sub "${WebDomain}-DistributionRequestsAlarm"
       AlarmDescription: "CloudWatch alarm for when distributions requests rate is too high."
-      AlarmActions: 
+      AlarmActions:
         - !Ref AlarmSNSTopicArn
       InsufficientDataActions:
         - !Ref AlarmSNSTopicArn
@@ -440,7 +444,7 @@ Resources:
     Properties:
       AlarmName: !Sub "${WebDomain}-DistributionErrorsAlarm"
       AlarmDescription: "CloudWatch alarm for when distributions error rate is too high."
-      AlarmActions: 
+      AlarmActions:
         - !Ref AlarmSNSTopicArn
       InsufficientDataActions:
         - !Ref AlarmSNSTopicArn
@@ -462,71 +466,70 @@ Resources:
   # AWS WAF Web ACLs for CloudFront
   #ApiWafWebAcl:
   #  Type: AWS::WAFv2::WebACL
-  #  Properties: 
-  #    DefaultAction: 
+  #  Properties:
+  #    DefaultAction:
   #      Allow: {}
   #    Description: Web Application Firewall for AWS CloudFront
   #    Name: !Join ["-", [CloudFront-WAF, !Ref Name]]
-  #    Rules: 
+  #    Rules:
   #      - Name: AWSManagedRulesAmazonIpReputationList
-  #        OverrideAction: 
+  #        OverrideAction:
   #          None: {}
   #        Priority: 0
-  #        Statement: 
+  #        Statement:
   #          ManagedRuleGroupStatement:
   #            VendorName: AWS
   #            Name: AWSManagedRulesAmazonIpReputationList
-  #        VisibilityConfig: 
+  #        VisibilityConfig:
   #          CloudWatchMetricsEnabled: true
   #          MetricName: AWSManagedRulesAmazonIpReputationList
   #          SampledRequestsEnabled: true
   #      - Name: AWSManagedRulesAnonymousIpList
-  #        OverrideAction: 
+  #        OverrideAction:
   #          None: {}
   #        Priority: 1
-  #        Statement: 
+  #        Statement:
   #          ManagedRuleGroupStatement:
   #            VendorName: AWS
   #            Name: AWSManagedRulesAnonymousIpList
-  #        VisibilityConfig: 
+  #        VisibilityConfig:
   #          CloudWatchMetricsEnabled: true
   #          MetricName: AWSManagedRulesAnonymousIpList
   #          SampledRequestsEnabled: true
-  #      - Action: 
+  #      - Action:
   #          Block: {}
   #        Name: "CloudFront_Rate_based_Rule"
   #        Priority: 2
-  #        Statement: 
-  #          RateBasedStatement: 
+  #        Statement:
+  #          RateBasedStatement:
   #            Limit: !Ref Limit
   #            AggregateKeyType: IP
-  #        VisibilityConfig: 
+  #        VisibilityConfig:
   #          SampledRequestsEnabled: true
   #          CloudWatchMetricsEnabled: true
   #          MetricName: "CloudFront_Rate_based_Rule"
   #    Scope: CLOUDFRONT
-  #    VisibilityConfig: 
+  #    VisibilityConfig:
   #      CloudWatchMetricsEnabled: true
   #      MetricName: !Join ["-", [CloudFront-WAF, !Ref Name]]
   #      SampledRequestsEnabled: true
 
 Outputs:
-
   # - WebApp Outputs
   WebAppBucketName:
-    Value: !Ref 'S3BucketForWebsiteContent'
+    Value: !Ref "S3BucketForWebsiteContent"
     Description: Name of S3 bucket to hold website content
   WebAppCdnUrl:
-    Value:  !Join ['', ['https://', !GetAtt WebsiteCDN.DomainName]] 
+    Value: !Join ["", ["https://", !GetAtt WebsiteCDN.DomainName]]
     Description: Site access URL
   WebDomainUrl:
-    Value:  !Sub 'https://${WebDomain}'
+    Value: !Sub "https://${WebDomain}"
     Description: Site access URL
   AlternateWebDomainUrl:
     Condition: CreateAlternateDNSname
-    Value: !Sub 'http://${AlternateWebDomain}'
+    Value: !Sub "http://${AlternateWebDomain}"
     Description: Alternate site access URL
-  
+
   TooManyErrorsAlarmArn:
     Value: !GetAtt TooManyErrorsAlarm.Arn
     Description: ARN of distribution too many errors alarm
