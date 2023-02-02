@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDocumentationUnauthorized } from '@pagopa-pn/pn-commons';
+import { useRewriteLinks } from '@pagopa-pn/pn-commons';
 
 import { ONE_TRUST_PORTAL_CDN_TOS } from '../utils/constants';
 import * as routes from '../navigation/routes.const';
@@ -24,7 +24,7 @@ const TermsOfServicePage = () => {
       });
     }
   }, []);
-  useDocumentationUnauthorized(contentLoaded, routes.TERMS_OF_SERVICE, '.otnotice-content a');
+  useRewriteLinks(contentLoaded, routes.TERMS_OF_SERVICE, '.otnotice-content a');
 
   return (
     <>

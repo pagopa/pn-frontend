@@ -1,10 +1,6 @@
 import { useLayoutEffect } from 'react';
 
-export const useDocumentationUnauthorized = (
-  contentLoaded: boolean,
-  route: any,
-  selectorString: string
-) => {
+export const useRewriteLinks = (contentLoaded: boolean, route: any, selectorString: string) => {
   useLayoutEffect(() => {
     setTimeout(() => {
       const links = document.querySelectorAll(selectorString);

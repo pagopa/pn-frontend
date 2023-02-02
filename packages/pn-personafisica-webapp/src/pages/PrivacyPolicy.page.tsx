@@ -1,4 +1,4 @@
-import { useDocumentationUnauthorized } from '@pagopa-pn/pn-commons';
+import { useRewriteLinks } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { ONE_TRUST_PORTAL_CDN_PP } from '../utils/constants';
 import * as routes from '../navigation/routes.const';
@@ -23,7 +23,7 @@ const PrivacyPolicyPage = () => {
     }
   }, []);
 
-  useDocumentationUnauthorized(contentLoaded, routes.PRIVACY_POLICY, '.otnotice-content a');
+  useRewriteLinks(contentLoaded, routes.PRIVACY_POLICY, '.otnotice-content a');
   return (
     <>
       <div
