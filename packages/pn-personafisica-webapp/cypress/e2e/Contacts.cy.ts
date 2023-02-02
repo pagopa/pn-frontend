@@ -91,7 +91,7 @@ describe('Contacts', () => {
       fixture: 'contacts/invalid-code-response',
     }).as('sendInvalidCode');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid);
+    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid, { delay: 100 });
     cy.get('[data-testid="code confirm button"]').click();
 
     // verify the request is properly formatted
@@ -111,7 +111,7 @@ describe('Contacts', () => {
       fixture: '',
     }).as('addPec');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid);
+    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
     cy.get('[data-testid="code confirm button"]').click();
 
     cy.wait('@addPec');
@@ -243,7 +243,7 @@ describe('Contacts', () => {
       fixture: 'contacts/invalid-code-response',
     }).as('sendInvalidCode');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid);
+    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid, { delay: 100 });
     cy.get('[data-testid="code confirm button"]').click();
 
     // verify the request is properly formatted
@@ -260,7 +260,7 @@ describe('Contacts', () => {
       fixture: '',
     }).as('addEmail');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid);
+    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
     cy.get('[data-testid="code confirm button"]').click();
 
     cy.wait('@addEmail');
@@ -330,7 +330,7 @@ describe('Contacts', () => {
       fixture: 'contacts/invalid-code-response',
     }).as('sendInvalidCode');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid);
+    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid, { delay: 100 });
     cy.get('[data-testid="code confirm button"]').click();
 
     // verify the request is properly formatted
@@ -347,7 +347,7 @@ describe('Contacts', () => {
       fixture: '',
     }).as('addPhone');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid);
+    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
     cy.get('[data-testid="code confirm button"]').click();
 
     cy.wait('@addPhone');
@@ -421,7 +421,7 @@ describe('Contacts', () => {
       }
     ).as('sendInvalidCode');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid);
+    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid, { delay: 100 });
     cy.get('[data-testid="code confirm button"]').click();
 
     // verify the request is properly formatted
@@ -442,7 +442,7 @@ describe('Contacts', () => {
       }
     ).as('addPec');
 
-    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid);
+    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
     cy.get('[data-testid="code confirm button"]').click();
 
     cy.wait('@addPec');
