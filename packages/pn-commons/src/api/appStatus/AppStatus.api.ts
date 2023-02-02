@@ -8,8 +8,6 @@ export class BadApiDataException extends Error {
   }
 }
 
-// eslint-disable-next-line functional/no-let
-let callCount = 0;
 
 /* ------------------------------------------------------------------------
    the API
@@ -58,35 +56,6 @@ export function createAppStatusApi(apiClient: AxiosInstance) {
       }
   
       // finally the response
-      if (apiResponse.result[0].startDate === "2022-12-09T08:21:56Z") {
-        callCount++;
-        if (callCount % 3 === 1) {
-          return Promise.reject({ response: { status: 500 } });
-        }
-      }
-      return beDowntimeLogPageToFeDowntimeLogPage(apiResponse);
-    },
-
-
-    getDowntimeLogPageReal: async (params: GetDowntimeHistoryParams): Promise<DowntimeLogPage> => {
-      /* eslint-disable functional/no-let */
-      let apiResponse: DowntimeLogPageDTO;
-  
-      const realApiResponse = await apiClient.get<DowntimeLogPageDTO>(DOWNTIME_HISTORY(params));
-      apiResponse = realApiResponse.data;
-  
-      // pn-validator validation
-      const validationResult = new DowntimeLogPageDTOValidator().validate(apiResponse);
-      if (validationResult != null) {
-        throw new BadApiDataException('Wrong-formed data', validationResult);
-      }
-  
-      // extra validation: downtime with fileAvailable but without legalFactId
-      if (apiResponse.result.some(downtime => downtime.fileAvailable && !downtime.legalFactId)) {
-        throw new BadApiDataException('Wrong data - a downtime marked as fileAvailable must indicate a legalFactId', {});
-      }
-  
-      // finally the response
       return beDowntimeLogPageToFeDowntimeLogPage(apiResponse);
     },
   
@@ -101,7 +70,7 @@ export function createAppStatusApi(apiClient: AxiosInstance) {
 
       return realApiResponse.data;
     },
-  }
+  };
 };
 
 

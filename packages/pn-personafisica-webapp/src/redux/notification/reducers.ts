@@ -83,20 +83,6 @@ const notificationSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
       state.notification = action.payload;
-      // if (action.payload.iun === "KQKX-WMDW-GDMU-202301-L-1") {
-      //   const acceptedStatusRecord = state.notification.notificationStatusHistory.find(record => record.status === NotificationStatus.ACCEPTED);
-      //   if (acceptedStatusRecord) {
-      //     acceptedStatusRecord.activeFrom = "2023-01-26T15:59:23.333432372Z";
-      //   }
-      //   state.notification.notificationStatusHistory = state.notification.notificationStatusHistory.filter(record => record.status !== NotificationStatus.EFFECTIVE_DATE);
-      // }
-      if (action.payload.iun === "NJNY-KUAH-WELW-202212-L-1") {
-        state.notification.notificationStatusHistory.unshift({ activeFrom: "2023-01-19T15:02:57.156693Z", status: NotificationStatus.UNREACHABLE, relatedTimelineElements: [] });
-        // const viewedStatusRecord = state.notification.notificationStatusHistory.find(record => record.status === NotificationStatus.VIEWED);
-        // if (viewedStatusRecord) {
-        //   viewedStatusRecord.status = NotificationStatus.UNREACHABLE;
-        // }
-      }
     });
     builder.addCase(getReceivedNotificationDocument.fulfilled, (state, action) => {
       if (action.payload.url) {
@@ -139,17 +125,7 @@ const notificationSlice = createSlice({
       };
     });
     builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
-      const copiedDowntimes = [...action.payload.downtimes];
-      copiedDowntimes.forEach(downtime => {
-        if (downtime.startDate === "2022-12-07T09:33:15.995Z") {
-          downtime.fileAvailable = false;
-        } else if (downtime.startDate === "2022-12-06T14:38:53Z") {
-          delete downtime.endDate;
-          downtime.fileAvailable = false;
-        }
-      });
-      state.downtimeEvents = copiedDowntimes;
-      // state.downtimeEvents = action.payload.downtimes;
+      state.downtimeEvents = action.payload.downtimes;
     });
     builder.addCase(getDowntimeLegalFactDocumentDetails.fulfilled, (state, action) => {
       // by the moment we preserve only the URL. 
