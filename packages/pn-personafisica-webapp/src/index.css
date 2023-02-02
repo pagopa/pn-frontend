@@ -65,4 +65,8 @@ body {
   font-size: 1.75rem;
   color: #17324D;
 }
+
+.otnotice-content .otnotice-sections::after {
+  font-size: 6rem!important;
+}
 /* END: ONETRUST STYLES */
