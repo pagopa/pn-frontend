@@ -15,6 +15,17 @@ jest.mock('@mui/material', () => {
   };
 });
 
+/* eslint-disable-next-line functional/no-let */
+let mockMakeApiFail: boolean;
+
+jest.mock('../../../hooks', () => {
+  const original = jest.requireActual('../../../hooks');
+  return {
+    ...original,
+    useErrors: () => ({ hasApiErrors: () => mockMakeApiFail }),
+  };
+});
+
 const mockDowntimes: Array<Downtime> = [
   {
     rawFunctionality: KnownFunctionality.NotificationWorkflow,
@@ -72,6 +83,7 @@ describe('NotificationRelatedDowntimes component', () => {
   let fetchDowntimeEventsMock: jest.Mock<any, any>;
 
   beforeEach(async () => {
+    mockMakeApiFail = false;
     fetchDowntimeEventsMock = jest.fn();
   });
 
@@ -83,7 +95,7 @@ describe('NotificationRelatedDowntimes component', () => {
             downtimeEvents={downtimes}
             fetchDowntimeEvents={fetchDowntimeEventsMock} 
             notificationStatusHistory={history}
-            apiId="mock-api-id"
+            apiId='mock-api-id'
             clearDowntimeLegalFactData={() => {}}
             downtimeLegalFactUrl="mock-url"
             fetchDowntimeLegalFactDocumentDetails={() => {}}
@@ -117,6 +129,9 @@ describe('NotificationRelatedDowntimes component', () => {
     expect(detailComponents[1]).toHaveTextContent(mockDowntimes[1].startDate);
     expect(detailComponents[1]).toHaveTextContent(mockDowntimes[1].endDate as string);
     expect(detailComponents[1]).toHaveTextContent(mockDowntimes[1].knownFunctionality as string);
+
+    const apiErrorComponent = screen.queryByTestId('api-error-mock-api-id');
+    expect(apiErrorComponent).not.toBeInTheDocument();
   });
 
   it('normal history - one complete downtime, one not finished, one finished but yet without link', async () => {
@@ -226,5 +241,15 @@ describe('NotificationRelatedDowntimes component', () => {
     expect(fetchDowntimeEventsMock).toHaveBeenCalledWith(mockHistory[4].activeFrom, mockHistory[2].activeFrom);
     const mainComponent = screen.queryByTestId('notification-related-downtimes-main');
     expect(mainComponent).toBeInTheDocument();
+  });
+
+  it('api error', async () => {
+    mockMakeApiFail = true;
+    await renderComponent(mockDowntimes, mockHistory);
+
+    const mainComponent = screen.queryByTestId('notification-related-downtimes-main');
+    expect(mainComponent).not.toBeInTheDocument();
+    const apiErrorComponent = screen.queryByTestId('api-error-mock-api-id');
+    expect(apiErrorComponent).toBeInTheDocument();
   });
 });
