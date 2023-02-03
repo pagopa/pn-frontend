@@ -96,7 +96,9 @@ const SessionGuardRender = () => {
 const SessionGuard = () => {
   const location = useLocation();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
-  const { sessionToken, exp: expDate } = useAppSelector((state: RootState) => state.userState.user);
+  const { sessionToken, desired_exp: expDate } = useAppSelector(
+    (state: RootState) => state.userState.user
+  );
   const { isClosedSession } = useAppSelector((state: RootState) => state.userState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -110,7 +112,7 @@ const SessionGuard = () => {
 
   const getTokenParam = useCallback(() => {
     const params = new URLSearchParams(location.hash);
-    return params.get('#token');
+    return params.get('#selfCareToken');
   }, [location]);
 
   /**
@@ -163,7 +165,7 @@ const SessionGuard = () => {
           navigate({ pathname: routes.NOTIFICHE, search: location.search }, { replace: true });
         } else {
           const hashAsObject = new URLSearchParams(location.hash);
-          hashAsObject.delete('#token');
+          hashAsObject.delete('#selfCareToken');
           // ----------------------
           // Unfortunately, URLSearchParams does not preserve the # chars in the hash attribute names,
           // hence I had to un-escape them.

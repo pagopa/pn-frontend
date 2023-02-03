@@ -1,23 +1,20 @@
 import { store } from '../../store';
-import { User } from '../types';
+import { PartyRole, PNRole, User } from '../types';
 import { userResponse } from './test-users';
 import { mockLogin, mockLogout } from './test-utils';
 
 import { ConsentsApi } from '../../../api/consents/Consents.api';
 import { ConsentType } from '../../../models/consents';
-import {
-  acceptToS,
-  getToSApproval,
-} from '../actions';
+import { acceptToS, getToSApproval } from '../actions';
 
 /**
  * The tests about how the initial state is set based on the values in sessionStorage
- * must lie in separate files, because 
+ * must lie in separate files, because
  * - in order to set the session storage before the Redux store is initialized, the store must be
  *   imported using a require (rather than import) statement coming *after* the mock session storage values
  *   are set. E.g.
- * - and furthermore, if we include multiple require statements for the same file in the same test file, 
- *   the value obtained in the first require is preserved in all the test files, hence to test with 
+ * - and furthermore, if we include multiple require statements for the same file in the same test file,
+ *   the value obtained in the first require is preserved in all the test files, hence to test with
  *   different initial store values (deriving from different settings of the session storage)
  *   we need to put on different test files.
  * -----------------------
@@ -26,7 +23,7 @@ import {
 describe('Auth redux state tests', () => {
   const getConsentsApiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');
   const setConsentsApiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
-  
+
   afterAll(() => {
     getConsentsApiSpy.mockRestore();
     setConsentsApiSpy.mockRestore();
@@ -37,21 +34,31 @@ describe('Auth redux state tests', () => {
     expect(state).toEqual({
       loading: false,
       user: {
-            sessionToken: '',
-            name: '',
-            family_name: '',
-            fiscal_number: '',
-            email: '',
-            mobile_phone: '',
-            from_aa: false,
-            uid: '',
-            level: '',
-            iat: 0,
-            exp: 0,
-            iss: '',
-            jti: '',
-            aud: '',
-          },
+        sessionToken: '',
+        name: '',
+        family_name: '',
+        fiscal_number: '',
+        email: '',
+        from_aa: false,
+        uid: '',
+        level: '',
+        iat: 0,
+        exp: 0,
+        iss: '',
+        jti: '',
+        aud: '',
+        desired_exp: 0,
+        organization: {
+          fiscal_code: '',
+          id: '',
+          roles: [
+            {
+              partyRole: PartyRole.MANAGER,
+              role: PNRole.ADMIN,
+            },
+          ],
+        },
+      },
       tos: false,
       fetchedTos: false,
       isClosedSession: false,
@@ -79,7 +86,6 @@ describe('Auth redux state tests', () => {
       family_name: '',
       fiscal_number: '',
       email: '',
-      mobile_phone: '',
       from_aa: false,
       uid: '',
       level: '',
@@ -88,6 +94,17 @@ describe('Auth redux state tests', () => {
       iss: '',
       jti: '',
       aud: '',
+      desired_exp: 0,
+      organization: {
+        fiscal_code: '',
+        id: '',
+        roles: [
+          {
+            partyRole: PartyRole.MANAGER,
+            role: PNRole.ADMIN,
+          },
+        ],
+      },
     });
   });
 

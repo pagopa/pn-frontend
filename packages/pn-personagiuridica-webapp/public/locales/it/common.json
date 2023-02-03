@@ -152,5 +152,9 @@
       "title": "Errore",
       "message": "Errore non previsto"
     }
+  },
+  "roles": {
+    "pg-operator": "Referente operativo",
+    "pg-admin": "Referente amministrativo"
   }
 }
