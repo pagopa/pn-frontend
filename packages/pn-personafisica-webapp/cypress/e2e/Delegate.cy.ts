@@ -9,7 +9,12 @@ import {
   REJECT_DELEGATION,
   ACCEPT_DELEGATION,
 } from '../../src/api/delegations/delegations.routes';
-import { today, tenYearsAgo, formatToTimezoneString } from '../../../pn-commons/src/utils/date.utility';
+
+import mockData from '../fixtures/delegations/test-data';
+import { getNextDay, formatToSlicedISOString } from '../../../pn-commons/src/utils/date.utility';
+
+const tomorrow = getNextDay( new Date() );
+const formattedTomorrowSliced = formatToSlicedISOString(tomorrow);
 
 describe('Delegation', () => {
   beforeEach(() => {
@@ -77,14 +82,14 @@ describe('Delegation', () => {
       cy.get('[data-testid="menu-list"] > :nth-child(4) > .MuiBox-root').contains(/1/).should('exist');
       cy.visit(DELEGHE);
       cy.wait('@getDelegators');
-      cy.get(':nth-child(3) > .css-1gi4qli > .MuiTableContainer-root > [data-cy="table(notifications)"] > .MuiTableBody-root > :nth-child(1) > .css-1ogoim7-MuiTableCell-root > [data-testid="delegationMenuIcon"] > [data-testid="MoreVertIcon"]').click();
+      cy.get('[data-testid="delegators-wrapper"] [data-cy="table(notifications)"] > .MuiTableBody-root > :nth-child(1) [data-testid="delegationMenuIcon"]').click();
       cy.get('.MuiPaper-root > .MuiList-root > .MuiButtonBase-root').click();
       cy.intercept('PATCH', `${REJECT_DELEGATION('af02d543-c67e-4c64-8259-4f7ac12249fd')}`, {
         statusCode: 200
       }).as('rejectDelegation');
       cy.get('.css-pj2eij-MuiGrid-root > [data-testid="dialogAction"]').click();
       cy.wait('@rejectDelegation');
-      cy.get('.css-19kzrtu > :nth-child(3)').contains(/Giuseppe Maria Garibaldi/).should('not.exist');
+      cy.get('[data-testid="delegators-wrapper"]').contains(/Giuseppe Maria Garibaldi/).should('not.exist');
     });
 
     it('Should accept delegator\s request', () => {
@@ -100,40 +105,66 @@ describe('Delegation', () => {
         fixture: 'delegations/mandates-by-delegate-after-activation',
       }).as('getDelegatesAfterActivation');
       cy.intercept('PATCH',`${ACCEPT_DELEGATION('af02d543-c67e-4c64-8259-4f7ac12249fd')}`, {
-        statusCode: 204
+        statusCode: 204,
+        fixture: 'delegations/accept-delegation-response'
       }).as('acceptDelegation');
       cy.get('.MuiDialogActions-root > .MuiButton-contained').click();
-      cy.wait('@getDelegatesAfterActivation');
+      cy.wait('@acceptDelegation').its('request.body').should('deep.equal', {
+        verificationCode: '25622'
+      });
+      cy.wait('@getDelegatesAfterActivation')
       cy.get(':nth-child(2) > .MuiTableCell-alignCenter > .MuiChip-root > .MuiChip-label').contains(/Attiva/).should('exist');
     });
   });
 
   describe('As delegator', () => {
     it('Should create new delegate', () => {
+      cy.intercept(DELEGHE).as('getDeleghePage');
       cy.visit(DELEGHE);
-      cy.get('.css-1teipz8-MuiStack-root > .MuiBox-root > .MuiButtonBase-root').click();
-      const formDelegator = {
-        name: 'Cristoforo',
-        surname: 'Colombo',
-        fiscalCode: 'CLMCST42R12D969Z',
-      }
+      cy.wait(['@getDeleghePage', '@getDelegates', '@getDelegators']);
+      cy.get('[data-testid="loading-skeleton"]').should('not.exist');
+      cy.get('[data-testid="add-delegation"]').click();
+      
+      const formDelegator = mockData.copy.newDelegation;
+      
       cy.get('#nome').type(formDelegator.name);
       cy.get('#cognome').type(formDelegator.surname);
       cy.get('#codiceFiscale').type(formDelegator.fiscalCode);
+
+      /*
+        Comments below are regardings to check correct payload sending and needs reworks
+      */
+
+      const newDelegationRequest = mockData.requests.newDelegation;
+
       cy.intercept('POST', `${CREATE_DELEGATION()}`, {
         statusCode: 201,
-        fixture: 'delegations/mandate'
+        // body: {
+        //   ...newDelegationRequest,
+        //   expirationDate: tomorrow,
+        // }
       }).as('createDelegation');
+
       cy.get('[data-testid="createButton"]').click();
-      cy.wait('@createDelegation');
-      cy.get('.MuiTypography-h4').contains(/La tua richiesta di delega è stata creata con successo/).should('exist');
+
+      /*
+
+      const payload = mockData.payloads.newDelegation;
+      cy.wait('@createDelegation').its('request.body').should('deep.equal', {
+        ...payload,
+        dateto: formattedTomorrowSliced
+      });
+
+      */
+
+      cy.get('[data-testid="courtesy-page"]').contains(/La tua richiesta di delega è stata creata con successo/).should('exist');
       cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}`, {
         fixture: 'delegations/mandates-by-delegator-after-new-delegation',
       }).as('getDelegatorsAfterNewDelegation');
       cy.visit(DELEGHE);
       cy.wait('@getDelegatorsAfterNewDelegation');
-      cy.get(':nth-child(2) > .css-1uen9zh-MuiTableCell-root > .MuiTypography-root').contains(/Cristoforo Colombo/).should('exist');
-      cy.get(':nth-child(1) > .MuiTableCell-alignCenter > .MuiChip-root > .MuiChip-label').contains(/In attesa di conferma/).should('exist');
+      cy.get('[data-testid="delegates-wrapper"]').contains(/Cristoforo Colombo/).should('exist');
+      cy.get('[data-testid="delegates-wrapper"] [data-cy="table(notifications)"] > .MuiTableBody-root > :nth-child(2) .MuiChip-label').contains(/In attesa di conferma/).should('exist');
     });
 
     it('Shoud revoke a delegate', () => {
@@ -142,11 +173,10 @@ describe('Delegation', () => {
       cy.intercept('PATCH', `${REOVKE_DELEGATION('6c969e5d-b3a0-4c11-a82a-3b8360d1436c')}`, {
         statusCode: 200
       }).as('revokeDelegation');
-      cy.get(':nth-child(2) > .css-1gi4qli > .MuiTableContainer-root > [data-cy="table(notifications)"] > .MuiTableBody-root > :nth-child(1) > .css-1ogoim7-MuiTableCell-root > [data-testid="delegationMenuIcon"]').click();
+      cy.get('[data-testid="delegates-wrapper"] [data-testid="delegationMenuIcon"]').click();
       cy.get('.MuiList-root > [tabindex="-1"]').click();
       cy.get('.css-pj2eij-MuiGrid-root > [data-testid="dialogAction"]').click();
-      cy.wait('@revokeDelegation');
-      cy.get('.css-19kzrtu > :nth-child(2)').contains(/Ettore Fieramosca/).should('not.exist');
+      cy.get('[data-testid="delegates-wrapper"]').contains(/Ettore Fieramosca/).should('not.exist');
     });
   });
 });

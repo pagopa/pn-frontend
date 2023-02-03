@@ -11,6 +11,7 @@ type Props = {
 
 const CourtesyPage = ({ icon, title, subtitle, onClick, onClickLabel }: Props) => (
     <Box
+        data-testid="courtesy-page"
         sx={{
             maxWidth: '480px',
             minHeight: '400px',
