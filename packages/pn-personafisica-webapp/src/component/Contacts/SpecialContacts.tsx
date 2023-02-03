@@ -261,173 +261,176 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     }
   }, [addressTypes]);
 
-  return <ApiErrorWrapper 
-    apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES} 
-    reloadAction={fetchAllActivatedParties} 
-    mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
-  >
-    <DigitalContactsCard
-      sectionTitle=""
-      title=""
-      subtitle={t('special-contacts.subtitle', { ns: 'recapiti' })}
-      avatar={null}
+  return (
+    <ApiErrorWrapper
+      apiId={CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES}
+      reloadAction={fetchAllActivatedParties}
+      mainText={t('special-contacts.fetch-party-error', { ns: 'recapiti' })}
     >
-      <Typography sx={{ marginTop: '20px' }}>{t('required-fields')}</Typography>
-      <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
-        <Grid container direction="row" spacing={2} alignItems="flex">
-          <Grid item lg xs={12}>
-            <CustomDropdown
-              id="sender"
-              label={`${t('special-contacts.sender', { ns: 'recapiti' })}*`}
-              name="sender"
-              value={formik.values.sender}
-              onChange={senderChangeHandler}
-              fullWidth
-              size="small"
-            >
-              {parties.map((party) => (
-                <MenuItem key={party.id} value={party.id}>
-                  <DropDownPartyMenuItem name={party.name} />
-                </MenuItem>
-              ))}
-            </CustomDropdown>
-          </Grid>
-          <Grid item lg xs={12}>
-            <CustomDropdown
-              id="addressType"
-              label={`${t('special-contacts.address-type', { ns: 'recapiti' })}*`}
-              name="addressType"
-              value={formik.values.addressType}
-              onChange={addressTypeChangeHandler}
-              fullWidth
-              size="small"
-            >
-              {addressTypes
-                .filter((a) => a.show)
-                .map((a) => (
-                  <MenuItem key={a.id} value={a.id}>
-                    {a.value}
+      <DigitalContactsCard
+        sectionTitle=""
+        title=""
+        subtitle={t('special-contacts.subtitle', { ns: 'recapiti' })}
+        avatar={null}
+      >
+        <Typography sx={{ marginTop: '20px' }}>{t('required-fields')}</Typography>
+        <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
+          <Grid container direction="row" spacing={2} alignItems="flex">
+            <Grid item lg xs={12}>
+              <CustomDropdown
+                id="sender"
+                label={`${t('special-contacts.sender', { ns: 'recapiti' })}*`}
+                name="sender"
+                value={formik.values.sender}
+                onChange={senderChangeHandler}
+                fullWidth
+                size="small"
+              >
+                {parties.map((party) => (
+                  <MenuItem key={party.id} value={party.id}>
+                    <DropDownPartyMenuItem name={party.name} />
                   </MenuItem>
                 ))}
-            </CustomDropdown>
-          </Grid>
-          <Grid item lg xs={12}>
-            {formik.values.addressType === LegalChannelType.PEC && (
-              <TextField
-                id="s_pec"
-                label={`${t('special-contacts.pec', { ns: 'recapiti' })}*`}
-                name="s_pec"
-                value={formik.values.s_pec}
-                onChange={handleChangeTouched}
+              </CustomDropdown>
+            </Grid>
+            <Grid item lg xs={12}>
+              <CustomDropdown
+                id="addressType"
+                label={`${t('special-contacts.address-type', { ns: 'recapiti' })}*`}
+                name="addressType"
+                value={formik.values.addressType}
+                onChange={addressTypeChangeHandler}
                 fullWidth
-                variant="outlined"
-                type="mail"
                 size="small"
-                error={formik.touched.s_pec && Boolean(formik.errors.s_pec)}
-                helperText={formik.touched.s_pec && formik.errors.s_pec}
-              />
-            )}
-            {formik.values.addressType === CourtesyChannelType.SMS && (
-              <TextField
-                id="s_phone"
-                label={`${t('special-contacts.phone', { ns: 'recapiti' })}*`}
-                name="s_phone"
-                value={formik.values.s_phone}
-                onChange={handleChangeTouched}
-                fullWidth
-                variant="outlined"
-                type="tel"
-                size="small"
-                error={formik.touched.s_phone && Boolean(formik.errors.s_phone)}
-                helperText={formik.touched.s_phone && formik.errors.s_phone}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
-                  ),
-                }}
-              />
-            )}
-            {formik.values.addressType === CourtesyChannelType.EMAIL && (
-              <TextField
-                id="s_mail"
-                label={`${t('special-contacts.mail', { ns: 'recapiti' })}*`}
-                name="s_mail"
-                value={formik.values.s_mail}
-                onChange={handleChangeTouched}
-                fullWidth
-                variant="outlined"
-                type="mail"
-                size="small"
-                error={formik.touched.s_mail && Boolean(formik.errors.s_mail)}
-                helperText={formik.touched.s_mail && formik.errors.s_mail}
-              />
-            )}
-          </Grid>
-          <Grid item lg="auto" xs={12} textAlign="right">
-            <ButtonNaked
-              sx={{ marginLeft: 'auto', height: '40px' }}
-              type="submit"
-              disabled={!formik.isValid}
-              color="primary"
-            >
-              {t('button.associa')}
-            </ButtonNaked>
-          </Grid>
-        </Grid>
-      </form>
-      {alreadyExistsMessage && (
-        <Alert severity="warning" sx={{ marginBottom: '20px' }}>
-          {alreadyExistsMessage}
-        </Alert>
-      )}
-      {addresses.length > 0 && (
-        <Fragment>
-          <Typography fontWeight={600} sx={{ marginTop: '80px' }}>
-            {t('special-contacts.associated', { ns: 'recapiti' })}
-          </Typography>
-          {!isMobile && (
-            <Table aria-label={t('special-contacts.associated', { ns: 'recapiti' })}>
-              <TableHead>
-                <TableRow>
-                  {listHeaders.map((h) => (
-                    <TableCell width="25%" key={h.id} sx={{ borderBottomColor: 'divider' }}>
-                      {h.label}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {addresses.map((a) => (
-                  <SpecialContactElem
-                    key={a.senderId}
-                    address={a}
-                    senders={parties}
-                    recipientId={recipientId}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          )}
-          {isMobile &&
-            addresses.map((a) => (
-              <Card
-                key={a.senderId}
-                sx={{
-                  border: '1px solid',
-                  borderRadius: '8px',
-                  borderColor: 'divider',
-                  marginTop: '20px',
-                }}
               >
-                <CardContent>
-                  <SpecialContactElem address={a} senders={parties} recipientId={recipientId} />
-                </CardContent>
-              </Card>
-            ))}
-        </Fragment>
-      )}
-    </DigitalContactsCard>
-  </ApiErrorWrapper>;
+                {addressTypes
+                  .filter((a) => a.show)
+                  .map((a) => (
+                    <MenuItem key={a.id} value={a.id}>
+                      {a.value}
+                    </MenuItem>
+                  ))}
+              </CustomDropdown>
+            </Grid>
+            <Grid item lg xs={12}>
+              {formik.values.addressType === LegalChannelType.PEC && (
+                <TextField
+                  id="s_pec"
+                  label={`${t('special-contacts.pec', { ns: 'recapiti' })}*`}
+                  name="s_pec"
+                  value={formik.values.s_pec}
+                  onChange={handleChangeTouched}
+                  fullWidth
+                  variant="outlined"
+                  type="mail"
+                  size="small"
+                  error={formik.touched.s_pec && Boolean(formik.errors.s_pec)}
+                  helperText={formik.touched.s_pec && formik.errors.s_pec}
+                />
+              )}
+              {formik.values.addressType === CourtesyChannelType.SMS && (
+                <TextField
+                  id="s_phone"
+                  label={`${t('special-contacts.phone', { ns: 'recapiti' })}*`}
+                  name="s_phone"
+                  value={formik.values.s_phone}
+                  onChange={handleChangeTouched}
+                  fullWidth
+                  variant="outlined"
+                  type="tel"
+                  size="small"
+                  error={formik.touched.s_phone && Boolean(formik.errors.s_phone)}
+                  helperText={formik.touched.s_phone && formik.errors.s_phone}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">{internationalPhonePrefix}</InputAdornment>
+                    ),
+                  }}
+                />
+              )}
+              {formik.values.addressType === CourtesyChannelType.EMAIL && (
+                <TextField
+                  id="s_mail"
+                  label={`${t('special-contacts.mail', { ns: 'recapiti' })}*`}
+                  name="s_mail"
+                  value={formik.values.s_mail}
+                  onChange={handleChangeTouched}
+                  fullWidth
+                  variant="outlined"
+                  type="mail"
+                  size="small"
+                  error={formik.touched.s_mail && Boolean(formik.errors.s_mail)}
+                  helperText={formik.touched.s_mail && formik.errors.s_mail}
+                />
+              )}
+            </Grid>
+            <Grid item lg="auto" xs={12} textAlign="right">
+              <ButtonNaked
+                sx={{ marginLeft: 'auto', height: '40px' }}
+                type="submit"
+                disabled={!formik.isValid}
+                color="primary"
+                data-testid="Special contact add button"
+              >
+                {t('button.associa')}
+              </ButtonNaked>
+            </Grid>
+          </Grid>
+        </form>
+        {alreadyExistsMessage && (
+          <Alert severity="warning" sx={{ marginBottom: '20px' }}>
+            {alreadyExistsMessage}
+          </Alert>
+        )}
+        {addresses.length > 0 && (
+          <Fragment>
+            <Typography fontWeight={600} sx={{ marginTop: '80px' }}>
+              {t('special-contacts.associated', { ns: 'recapiti' })}
+            </Typography>
+            {!isMobile && (
+              <Table aria-label={t('special-contacts.associated', { ns: 'recapiti' })}>
+                <TableHead>
+                  <TableRow>
+                    {listHeaders.map((h) => (
+                      <TableCell width="25%" key={h.id} sx={{ borderBottomColor: 'divider' }}>
+                        {h.label}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {addresses.map((a) => (
+                    <SpecialContactElem
+                      key={a.senderId}
+                      address={a}
+                      senders={parties}
+                      recipientId={recipientId}
+                    />
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+            {isMobile &&
+              addresses.map((a) => (
+                <Card
+                  key={a.senderId}
+                  sx={{
+                    border: '1px solid',
+                    borderRadius: '8px',
+                    borderColor: 'divider',
+                    marginTop: '20px',
+                  }}
+                >
+                  <CardContent>
+                    <SpecialContactElem address={a} senders={parties} recipientId={recipientId} />
+                  </CardContent>
+                </Card>
+              ))}
+          </Fragment>
+        )}
+      </DigitalContactsCard>
+    </ApiErrorWrapper>
+  );
 };
 
 export default SpecialContacts;
