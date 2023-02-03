@@ -2,6 +2,7 @@ import { useRewriteLinks } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { ONE_TRUST_PORTAL_CDN_PP } from '../utils/constants';
 import * as routes from '../navigation/routes.const';
+
 declare const OneTrust: {
   NoticeApi: {
     Initialized: {
