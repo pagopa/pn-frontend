@@ -70,7 +70,7 @@ export function createAppStatusApi(apiClient: AxiosInstance) {
 
       return realApiResponse.data;
     },
-  }
+  };
 };
 
 

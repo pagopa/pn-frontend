@@ -37,6 +37,8 @@ import {
   TimedMessage,
   useDownloadDocument,
   NotificationDetailOtherDocument,
+  NotificationRelatedDowntimes,
+  GetNotificationDowntimeEventsParams,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -46,14 +48,16 @@ import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import {
+  getDowntimeEvents,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
   getSentNotificationOtherDocument,
+  getDowntimeLegalFactDocumentDetails,
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
 import { setCancelledIun } from '../redux/newNotification/reducers';
-import { resetLegalFactState, resetState } from '../redux/notification/reducers';
+import { resetLegalFactState, resetState, clearDowntimeLegalFactData } from '../redux/notification/reducers';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -71,6 +75,10 @@ const NotificationDetail = () => {
   const { hasApiErrors } = useErrors();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const downtimeEvents = useAppSelector((state: RootState) => state.notificationState.downtimeEvents);
+  const downtimeLegalFactUrl = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeLegalFactUrl
+  );  
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -88,7 +96,13 @@ const NotificationDetail = () => {
   const recipientsWithAltNoticeCode = recipients.filter(
     (recipient) => recipient.payment?.noticeCodeAlternative
   );
-  const { t } = useTranslation(['common', 'notifiche']);
+  /*
+   * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
+   * in pn-commons (hence cannot access the i18n files) used in this page
+   * ---------------------------------
+   * Carlos Lombardi, 2023.02.03
+   */
+  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
 
@@ -271,6 +285,20 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, [fetchSentNotification]);
 
+  /* function which loads relevant information about donwtimes */
+  const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
+    const fetchParams: GetNotificationDowntimeEventsParams = {
+      startDate: fromDate,
+      endDate: toDate,
+    };
+    void dispatch(getDowntimeEvents(fetchParams));
+  }, []);
+
+  const fetchDowntimeLegalFactDocumentDetails = useCallback(
+    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
+    []
+  );
+
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: otherDocumentDownloadUrl });
@@ -416,7 +444,15 @@ const NotificationDetail = () => {
                     downloadFilesLink="Quando si perfeziona una notifica?"
                   />
                 </Paper>
-              </Stack>
+                <NotificationRelatedDowntimes 
+                  downtimeEvents={downtimeEvents} 
+                  fetchDowntimeEvents={fetchDowntimeEvents}
+                  notificationStatusHistory={notification.notificationStatusHistory}
+                  downtimeLegalFactUrl={downtimeLegalFactUrl}
+                  fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData()) }
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
+                />              </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
