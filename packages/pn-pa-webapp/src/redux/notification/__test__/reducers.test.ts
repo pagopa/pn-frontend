@@ -32,6 +32,8 @@ const initialState = {
   otherDocumentDownloadUrl: '',
   legalFactDownloadUrl: '',
   legalFactDownloadRetryAfter: 0,
+  downtimeLegalFactUrl: '',
+  downtimeEvents: [],
 };
 
 describe('Notification detail redux state tests', () => {

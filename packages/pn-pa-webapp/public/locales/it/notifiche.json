@@ -120,6 +120,14 @@
       }
     }
   },
+  "downtimes": {
+    "title": "DISSERVIZI",
+    "textWithEndDate": "Disservizio iniziato {{startDate}} e concluso {{endDate}} sulle seguenti funzionalità:",
+    "textWithoutEndDate": "Disservizio iniziato {{startDate}} e non ancora concluso sulle seguenti funzionalità:",
+    "datePrefix": "il ",
+    "legalFactDownload": "Attestazione di malfunzionamento",
+    "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica."
+  },
   "status": {
     "recipient": "destinatario",
     "delegate": "delegato {{name}}",

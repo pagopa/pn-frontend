@@ -12,11 +12,14 @@ import {
   RecipientType,
   PaymentStatus,
   PaymentInfoDetail,
+  Downtime,
 } from '@pagopa-pn/pn-commons';
 
 import { NotificationDetailForRecipient } from '../../models/NotificationDetail';
 
 import {
+  getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,  
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getPaymentAttachment,
@@ -57,7 +60,10 @@ const initialState = {
   legalFactDownloadRetryAfter: 0,
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
+  downtimeLegalFactUrl: '',  // the non-filled value for URLs must be a falsy value in order to ensure expected behavior of useDownloadDocument
+                             // analogous for other URLs   
   paymentInfo: {} as PaymentInfo,
+  downtimeEvents: [] as Array<Downtime>,  
 };
 
 /* eslint-disable functional/immutable-data */
@@ -69,7 +75,10 @@ const notificationSlice = createSlice({
     resetLegalFactState: (state) => {
       state.legalFactDownloadUrl = '';
       state.legalFactDownloadRetryAfter = 0;
-    }
+    },
+    clearDowntimeLegalFactData: (state) => {
+      state.downtimeLegalFactUrl = '';
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getReceivedNotification.fulfilled, (state, action) => {
@@ -115,9 +124,20 @@ const notificationSlice = createSlice({
         detail: PaymentInfoDetail.GENERIC_ERROR,
       };
     });
+    builder.addCase(getDowntimeEvents.fulfilled, (state, action) => {
+      state.downtimeEvents = action.payload.downtimes;
+    });
+    builder.addCase(getDowntimeLegalFactDocumentDetails.fulfilled, (state, action) => {
+      // by the moment we preserve only the URL. 
+      // if the need of showing the file size arises in the future,
+      // we'll probably need to change this in order to keep the whole response from the API call
+      // -----------------------
+      // Carlos Lombardi, 2023.02.02
+      state.downtimeLegalFactUrl = action.payload.url;
+    });
   },
 });
 
-export const { resetState, resetLegalFactState } = notificationSlice.actions;
+export const { resetState, resetLegalFactState, clearDowntimeLegalFactData } = notificationSlice.actions;
 
 export default notificationSlice;
