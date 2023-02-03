@@ -149,7 +149,7 @@ describe('SessionGuard Component', () => {
   });
 
   it('sound login - no path indicated', async () => {
-    mockLocationHash = '#token=good_token';
+    mockLocationHash = '#selfCareToken=good_token';
     mockLocationPath = '/';
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -165,7 +165,7 @@ describe('SessionGuard Component', () => {
   });
 
   it('sound login - path indicated', async () => {
-    mockLocationHash = '#token=good_token';
+    mockLocationHash = '#selfCareToken=good_token';
     mockLocationPath = routes.DELEGHE;
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -181,7 +181,7 @@ describe('SessionGuard Component', () => {
   });
 
   it('sound login - path indicated - with additional hash value', async () => {
-    mockLocationHash = '#token=good_token&#greet=hola';
+    mockLocationHash = '#selfCareToken=good_token&#greet=hola';
     mockLocationPath = routes.DELEGHE;
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -199,7 +199,7 @@ describe('SessionGuard Component', () => {
   // expected behavior: does not enter the app, does no navigate, message about exchangeToken error
   // (i.e. different than the logout message)
   it('bad SPID token', async () => {
-    mockLocationHash = '#token=bad_token';
+    mockLocationHash = '#selfCareToken=bad_token';
     mockLocationPath = '/';
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
