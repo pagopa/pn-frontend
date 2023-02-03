@@ -7,6 +7,7 @@ import {
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
+  getSentNotificationOtherDocument,
 } from '../actions';
 import { resetLegalFactState, resetState } from '../reducers';
 import { notificationToFe } from './test-utils';
@@ -75,6 +76,23 @@ describe('Notification detail redux state tests', () => {
     );
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationLegalfact/fulfilled');
+    expect(payload).toEqual({ url: 'http://mocked-url.com' });
+  });
+
+  it('Should be able to fetch the notification AAR document', async () => {
+    const apiSpy = jest.spyOn(NotificationsApi, 'getSentNotificationOtherDocument');
+    apiSpy.mockResolvedValue({ url: 'http://mocked-url.com' });
+    const action = await store.dispatch(
+      getSentNotificationOtherDocument({
+        iun: 'mocked-iun',
+        otherDocument: {
+          documentId: 'mocked-document-id',
+          documentType: 'mocked-document-type',
+        }
+      })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getSentNotificationOtherDocument/fulfilled');
     expect(payload).toEqual({ url: 'http://mocked-url.com' });
   });
 
