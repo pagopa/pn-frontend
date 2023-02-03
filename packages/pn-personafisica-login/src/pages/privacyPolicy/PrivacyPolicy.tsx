@@ -1,5 +1,7 @@
-import { useEffect } from 'react';
-import { ONE_TRUST_PORTAL_CDN } from '../../utils/constants';
+import { useEffect, useState } from 'react';
+import { useRewriteLinks } from '@pagopa-pn/pn-commons';
+
+import { ONE_TRUST_PORTAL_CDN, ROUTE_PRIVACY_POLICY } from '../../utils/constants';
 
 declare const OneTrust: {
   NoticeApi: {
@@ -11,13 +13,18 @@ declare const OneTrust: {
 };
 
 const PrivacyPolicy = () => {
+  const [contentLoaded, setContentLoaded] = useState(false);
+
   useEffect(() => {
     if (ONE_TRUST_PORTAL_CDN) {
       OneTrust.NoticeApi.Initialized.then(function () {
         OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN], false);
+        setContentLoaded(true);
       });
     }
   }, []);
+
+  useRewriteLinks(contentLoaded, ROUTE_PRIVACY_POLICY, '.otnotice-content a');
 
   return (
     <>
