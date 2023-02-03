@@ -19,7 +19,7 @@ const editHref = (link: HTMLElement, route: String) => {
   }
 };
 
-describe('test useDocumentUnauthorized hook', () => {
+describe('test useRewriteLinks hook', () => {
   test('hook set new href', async () => {
     const result = render(<Component></Component>);
     const link = await result.findByRole('link');
