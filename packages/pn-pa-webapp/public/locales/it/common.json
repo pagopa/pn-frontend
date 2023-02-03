@@ -135,8 +135,6 @@
   },
   "roles": {
     "operator": "Referente operativo",
-    "admin": "Referente amministrativo",
-    "pg-operator": "Referente operativo",
-    "pg-admin": "Referente amministrativo"
+    "admin": "Referente amministrativo"
   }
 }

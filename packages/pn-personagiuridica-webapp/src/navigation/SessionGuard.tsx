@@ -96,7 +96,9 @@ const SessionGuardRender = () => {
 const SessionGuard = () => {
   const location = useLocation();
   const isInitialized = useAppSelector((state: RootState) => state.appState.isInitialized);
-  const { sessionToken, exp: expDate } = useAppSelector((state: RootState) => state.userState.user);
+  const { sessionToken, desired_exp: expDate } = useAppSelector(
+    (state: RootState) => state.userState.user
+  );
   const { isClosedSession } = useAppSelector((state: RootState) => state.userState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

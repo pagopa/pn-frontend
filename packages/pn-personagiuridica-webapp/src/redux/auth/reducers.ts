@@ -32,7 +32,7 @@ const userDataMatcher = yup
     exp: yup.number(),
     aud: yup.string().matches(dataRegex.simpleServer),
     iss: yup.string().url(),
-    jti: yup.string().matches(dataRegex.lettersAndNumbers),
+    jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
     organization: organizationMatcher,
     desired_exp: yup.number(),
   })
@@ -83,7 +83,8 @@ const userSlice = createSlice({
         userDataMatcher.validateSync(user, { stripUnknown: false });
         sessionStorage.setItem('user', JSON.stringify(user));
         state.user = action.payload;
-      } catch {
+      } catch (e) {
+        console.log(e);
         state.isUnauthorizedUser = true;
         state.messageUnauthorizedUser = emptyUnauthorizedMessage;
       }
