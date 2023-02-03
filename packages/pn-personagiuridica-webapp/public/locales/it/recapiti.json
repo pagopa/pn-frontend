@@ -37,7 +37,7 @@
     "title": "",
     "subtitle": "App IO",
     "description": "Quando c’è una notifica per te, ti inviamo un messaggio su IO.  Puoi leggerla e pagare eventuali spese direttamente in app. Qui ricevi anche eventuali comunicazioni importanti.",
-    "disclaimer-message": "Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
+    "disclaimer-message": "Se non hai la PEC, leggi la notifica entro 5 giorni dalla ricezione del messaggio: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
     "disclaimer-link": "Scopri di più",
     "switch-label": "Avvisami con un messaggio su IO",
     "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Notifiche digitali\" di Piattaforma Notifiche sia attivo"
@@ -74,7 +74,7 @@
     "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi email che hai indicato alla voce “Altri recapiti”.",
     "block-remove-phone-title": "Non puoi eliminare il numero di telefono",
     "block-remove-phone-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”.",
-    "disclaimer-message": "Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
+    "disclaimer-message": "Se non hai la PEC, leggi la notifica entro 5 giorni dalla ricezione del messaggio: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
     "disclaimer-link": "Scopri di più"
   },
   "special-contacts": {
