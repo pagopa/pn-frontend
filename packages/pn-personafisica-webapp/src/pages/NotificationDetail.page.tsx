@@ -63,7 +63,15 @@ const NotificationDetail = () => {
   const { id, mandateId } = useParams();
   const location = useLocation();
   const dispatch = useAppDispatch();
+
+  /*
+   * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
+   * in pn-commons (hence cannot access the i18n files) used in this page
+   * ---------------------------------
+   * Carlos Lombardi, 2023.02.03
+   */
   const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
+
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
@@ -207,7 +215,7 @@ const NotificationDetail = () => {
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback(
     (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
-    [dispatch, getDowntimeLegalFactDocumentDetails]
+    []
   );
 
   useDownloadDocument({ url: documentDownloadUrl });

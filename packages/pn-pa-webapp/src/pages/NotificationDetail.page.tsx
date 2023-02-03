@@ -96,6 +96,12 @@ const NotificationDetail = () => {
   const recipientsWithAltNoticeCode = recipients.filter(
     (recipient) => recipient.payment?.noticeCodeAlternative
   );
+  /*
+   * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
+   * in pn-commons (hence cannot access the i18n files) used in this page
+   * ---------------------------------
+   * Carlos Lombardi, 2023.02.03
+   */
   const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
@@ -290,7 +296,7 @@ const NotificationDetail = () => {
 
   const fetchDowntimeLegalFactDocumentDetails = useCallback(
     (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
-    [dispatch, getDowntimeLegalFactDocumentDetails]
+    []
   );
 
   useDownloadDocument({ url: legalFactDownloadUrl });
