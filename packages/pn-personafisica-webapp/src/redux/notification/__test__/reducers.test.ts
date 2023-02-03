@@ -52,6 +52,8 @@ const initialState = {
   pagopaAttachmentUrl: '',
   f24AttachmentUrl: '',
   paymentInfo: {},
+  downtimeLegalFactUrl: '',
+  downtimeEvents: [],
 };
 
 describe('Notification detail redux state tests', () => {

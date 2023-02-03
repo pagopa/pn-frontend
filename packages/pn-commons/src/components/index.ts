@@ -28,6 +28,7 @@ import {
 import NotificationDetailTable from './NotificationDetail/NotificationDetailTable';
 import NotificationDetailDocuments from './NotificationDetail/NotificationDetailDocuments';
 import HelpNotificationDetails from './NotificationDetail/HelpNotificationDetails';
+import NotificationRelatedDowntimes from './NotificationDetail/NotificationRelatedDowntimes';
 import NotificationDetailTimeline from './NotificationDetail/NotificationDetailTimeline';
 import CodeModal from './CodeModal/CodeModal';
 import InactivityHandler from './InactivityHandler';
@@ -68,6 +69,7 @@ export {
   TitleBox,
   NotificationDetailTable,
   NotificationDetailDocuments,
+  NotificationRelatedDowntimes,
   HelpNotificationDetails,
   NotificationDetailTimeline,
   AppStatusRender,
