@@ -17,7 +17,7 @@
           "fiscalCode": null,
           "person": true
       },
-      "status": "pending",
+      "status": "active",
       "visibilityIds": [],
       "verificationCode": null,
       "datefrom": "2022-10-04",

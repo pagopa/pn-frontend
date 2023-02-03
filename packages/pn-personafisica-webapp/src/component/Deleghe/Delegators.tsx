@@ -88,7 +88,7 @@ const Delegators = () => {
 
   return (
     <>
-      <Box mb={8}>
+      <Box mb={8} data-testid="delegators-wrapper">
         <Stack mb={2} direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
           <Typography variant="h5">{t('deleghe.delegatorsTitle')}</Typography>
         </Stack>
