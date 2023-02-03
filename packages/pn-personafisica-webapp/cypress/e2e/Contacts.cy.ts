@@ -387,15 +387,15 @@ describe('Contacts', () => {
     cy.get('[data-value="PEC"]').click();
 
     // enter an invalid pec and verify the error message
-    cy.get('#s_pec').type(mockData.data.additional.invalid);
+    cy.get('#s_pec').type(mockData.data.additional.invalidPec);
     cy.get('#s_pec-helper-text')
       .should('be.visible')
-      .should('have.text', mockData.copy.additional.inputInvalidMessage);
+      .should('have.text', mockData.copy.additional.invalidPecMessage);
 
     cy.get('[data-testid="Special contact add button"]').should('be.disabled');
 
     // enter a valid pec and confirm
-    cy.get('#s_pec').clear().type(mockData.data.additional.valid);
+    cy.get('#s_pec').clear().type(mockData.data.additional.validPec);
 
     cy.intercept(
       'POST',
@@ -426,7 +426,7 @@ describe('Contacts', () => {
 
     // verify the request is properly formatted
     cy.wait('@sendInvalidCode').its('request.body').should('deep.equal', {
-      value: mockData.data.additional.valid,
+      value: mockData.data.additional.validPec,
       verificationCode: mockData.data.codes.invalid,
     });
 
@@ -445,8 +445,94 @@ describe('Contacts', () => {
     cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
     cy.get('[data-testid="code confirm button"]').click();
 
+    // verify the successful toast and the new address are shown
     cy.wait('@addPec');
-    cy.contains(mockData.copy.additional.successMessage);
-    cy.contains(mockData.data.additional.valid);
+    cy.contains(mockData.copy.additional.successPecMessage);
+    cy.contains(mockData.data.additional.validPec);
+
+    // adding a phone number to special contacts
+    cy.get('#addressType').click();
+    cy.get('[data-value="SMS"]').click();
+
+    // enter an invalid phone number and verify the error message
+    cy.get('#s_phone').type(mockData.data.additional.invalidPhone, { delay: 100 });
+    cy.get('#s_phone-helper-text')
+      .should('be.visible')
+      .should('have.text', mockData.copy.additional.invalidPhoneMessage);
+
+    cy.get('[data-testid="Special contact add button"]').should('be.disabled');
+
+    // // enter a valid phone number and confirm
+    cy.get('#s_phone').clear().type(mockData.data.additional.validPhone);
+
+    cy.intercept(
+      'POST',
+      `${COURTESY_CONTACT(mockData.data.additional.sender, CourtesyChannelType.SMS)}`,
+      {
+        statusCode: 200,
+        fixture: '',
+      }
+    ).as('addPhone');
+
+    /**
+     * <WORKAROUND>
+     * change sender in order to avoid a bug just spotted in the following process:
+     * 1) select the sender, the contact type, type in the contact and confirm
+     * 2) try to add another contact changing the type and value
+     *
+     * the "invalid input" error message goes away when the input is correct, but
+     * the submit button is not enabled without changing the sender
+     *  */
+    cy.get('#sender').click();
+    cy.get(`[data-value="${mockData.data.additional.sender2}"]`).click();
+    cy.get('#sender').click();
+    cy.get(`[data-value="${mockData.data.additional.sender}"]`).click();
+    /**
+     * </WORKAROUND>
+     */
+
+    cy.get('[data-testid="Special contact add button"]').should('be.enabled').click();
+
+    cy.get('[data-testid="code confirm button"]').should('be.disabled');
+    cy.get('[data-testid="code cancel button"]').should('be.enabled');
+
+    // insert an invalid code
+    cy.intercept(
+      'POST',
+      `${COURTESY_CONTACT(mockData.data.additional.sender, CourtesyChannelType.SMS)}`,
+      {
+        statusCode: 422,
+        fixture: 'contacts/invalid-code-response',
+      }
+    ).as('sendInvalidCode');
+
+    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.invalid, { delay: 100 });
+
+    cy.get('[data-testid="code confirm button"]').click();
+
+    // verify the request is properly formatted
+    cy.wait('@sendInvalidCode').its('request.body').should('deep.equal', {
+      value: mockData.data.additional.validPhoneWithIntPrefix,
+      verificationCode: mockData.data.codes.invalid,
+    });
+
+    cy.get('[data-testid="errorAlert"]').should('be.visible');
+
+    // insert a valid code
+    cy.intercept(
+      'POST',
+      `${COURTESY_CONTACT(mockData.data.additional.sender, CourtesyChannelType.SMS)}`,
+      {
+        statusCode: 204,
+        fixture: '',
+      }
+    ).as('addPhone');
+
+    cy.get('[data-testid="code input (0)"]').type(mockData.data.codes.valid, { delay: 100 });
+    cy.get('[data-testid="code confirm button"]').click();
+
+    cy.wait('@addPhone');
+    cy.contains(mockData.copy.additional.successPhoneMessage);
+    cy.contains(mockData.data.additional.validPhoneWithIntPrefix);
   });
 });

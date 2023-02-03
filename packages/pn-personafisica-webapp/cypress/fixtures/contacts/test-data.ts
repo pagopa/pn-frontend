@@ -25,7 +25,7 @@ export default {
       subtitle:
         'Quando c’è una notifica per te, ti inviamo un’email o un SMS. Accedi a Piattaforma Notifiche per leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.',
       disclaimer:
-        'Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.',
+        'Se non hai la PEC, leggi la notifica entro 5 giorni dalla ricezione del messaggio: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.',
     },
     mail: {
       inputPlaceholder: 'Il tuo indirizzo email',
@@ -51,9 +51,11 @@ export default {
       addrTypePlaceholder: 'Indirizzo PEC',
       pecPlaceholder: 'Indirizzo PEC*',
       mailPlaceholder: 'Indirizzo mail*',
-      inputInvalidMessage: 'Indirizzo PEC non valido',
+      invalidPecMessage: 'Indirizzo PEC non valido',
+      invalidPhoneMessage: 'Numero di cellulare non valido',
       confirmButton: 'Conferma',
-      successMessage: 'PEC associata correttamente',
+      successPecMessage: 'PEC associata correttamente',
+      successPhoneMessage: 'Numero di cellulare aggiunto correttamente',
     },
     modal: {
       title: 'Abbiamo inviato un codice a {{value}}',
@@ -85,8 +87,12 @@ export default {
     },
     additional: {
       sender: '026e8c72-7944-4dcd-8668-f596447fec6d',
-      invalid: 'pec.cypress.pagopa.it',
-      valid: 'pec@cypress.pagopa.it',
+      sender2: '4db741cf-17e1-4751-9b7b-7675ccca472b',
+      invalidPec: 'pec.cypress.pagopa.it',
+      validPec: 'pec@cypress.pagopa.it',
+      invalidPhone: '1234567890',
+      validPhone: '3331234567',
+      validPhoneWithIntPrefix: '+393331234567',
     },
     codes: {
       invalid: '12345',
