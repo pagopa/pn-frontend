@@ -17,6 +17,7 @@ const NuovaDelega = React.lazy(() => import('../pages/NuovaDelega.page'));
 const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
 const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
 const AppStatus = React.lazy(() => import('../pages/AppStatus.page'));
+const ParticipatingEntitiesPage = React.lazy(() => import('../pages/ParticipatingEntities.page'));
 
 function Router() {
   return (
@@ -46,6 +47,7 @@ function Router() {
         </Route>
         <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
         <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
+        <Route path={routes.PARTICIPATING_ENTITIES} element={<ParticipatingEntitiesPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

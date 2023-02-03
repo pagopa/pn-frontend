@@ -21,5 +21,7 @@ export const URL_FILE_TERMS_OF_SERVICE = process.env.REACT_APP_URL_FILE_TERMS_OF
 export const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN || 'DUMMY';
 
 export const OT_DOMAIN_ID = process.env.REACT_APP_ONETRUST_DOMAIN_ID || '';
+export const ONE_TRUST_PORTAL_CDN_PP = process.env.REACT_APP_ONE_TRUST_PORTAL_CDN_PP || '';
+export const ONE_TRUST_PORTAL_CDN_TOS = process.env.REACT_APP_ONE_TRUST_PORTAL_CDN_TOS || '';
 
 export const VERSION = process.env.REACT_APP_VERSION ?? '';
