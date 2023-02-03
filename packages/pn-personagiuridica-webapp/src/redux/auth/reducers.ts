@@ -8,7 +8,20 @@ import {
 import { createSlice } from '@reduxjs/toolkit';
 import * as yup from 'yup';
 import { acceptToS, exchangeToken, getToSApproval, logout } from './actions';
-import { User } from './types';
+import { PartyRole, PNRole, User } from './types';
+
+const roleMatcher = yup.object({
+  role: yup.string().oneOf(Object.values(PNRole)),
+  partyRole: yup.string().oneOf(Object.values(PartyRole)),
+});
+
+const organizationMatcher = yup.object({
+  id: yup.string(),
+  roles: yup.array().of(roleMatcher),
+  fiscal_code: yup.string().matches(dataRegex.pIva),
+  groups: yup.array().of(yup.string()),
+  name: yup.string(),
+});
 
 const userDataMatcher = yup
   .object({
@@ -19,14 +32,14 @@ const userDataMatcher = yup
     exp: yup.number(),
     aud: yup.string().matches(dataRegex.simpleServer),
     iss: yup.string().url(),
-    jti: yup.string().matches(dataRegex.lettersAndNumbers),
-    mobile_phone: yup.string().matches(dataRegex.phoneNumber),
+    jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
+    organization: organizationMatcher,
+    desired_exp: yup.number(),
   })
   .noUnknown(true);
 
 const noLoggedUserData = {
   ...basicNoLoggedUserData,
-  mobile_phone: '',
   from_aa: false,
   level: '',
   iat: 0,
@@ -34,6 +47,17 @@ const noLoggedUserData = {
   iss: '',
   jti: '',
   aud: '',
+  organization: {
+    id: '',
+    roles: [
+      {
+        role: PNRole.ADMIN,
+        partyRole: PartyRole.MANAGER,
+      },
+    ],
+    fiscal_code: '',
+  },
+  desired_exp: 0,
 } as User;
 
 const emptyUnauthorizedMessage = { title: '', message: '' };

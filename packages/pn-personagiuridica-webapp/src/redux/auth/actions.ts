@@ -3,7 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AuthApi } from '../../api/auth/Auth.api';
 import { ConsentsApi } from '../../api/consents/Consents.api';
 import { Consent, ConsentActionType, ConsentType } from '../../models/consents';
-import { User } from './types';
+import { PartyRole, PNRole, User } from './types';
 
 export enum AUTH_ACTIONS {
   GET_TOS_APPROVAL = 'getToSApproval',
@@ -36,7 +36,6 @@ export const logout = createAsyncThunk<User>('logout', async () => {
     family_name: '',
     fiscal_number: '',
     email: '',
-    mobile_phone: '',
     from_aa: false,
     uid: '',
     level: '',
@@ -45,6 +44,17 @@ export const logout = createAsyncThunk<User>('logout', async () => {
     iss: '',
     jti: '',
     aud: '',
+    organization: {
+      id: '',
+      roles: [
+        {
+          partyRole: PartyRole.MANAGER,
+          role: PNRole.ADMIN,
+        },
+      ],
+      fiscal_code: '',
+    },
+    desired_exp: 0,
   } as User;
 });
 

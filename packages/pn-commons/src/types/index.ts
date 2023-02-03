@@ -8,6 +8,7 @@ import { SideMenuItem } from './SideMenuItem';
 import { Column, Item, Sort } from './ItemsTable';
 import { Notification, GetNotificationsResponse, GetNotificationsParams } from './Notifications';
 import { KnownSentiment } from './EmptyState';
+import {GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import {
   AnalogWorkflowDetails,
   NotHandledDetails,
@@ -84,6 +85,7 @@ export type {
   NotificationDetailPayment,
   NotificationDetailTableRow,
   NotificationStatusHistory,
+  GetNotificationDowntimeEventsParams,
   PaginationData,
   PaymentAttachmentNameType,
   PaymentInfo,

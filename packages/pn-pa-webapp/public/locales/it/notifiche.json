@@ -118,6 +118,14 @@
         "paper-receipt-delivered": "di consegna raccomandata",
         "paper-receipt-not-delivered": "di mancata consegna raccomandata"
       }
+    },
+    "downtimes": {
+      "title": "DISSERVIZI",
+      "textWithEndDate": "Disservizio iniziato {{startDate}} e concluso {{endDate}} sulle seguenti funzionalità:",
+      "textWithoutEndDate": "Disservizio iniziato {{startDate}} e non ancora concluso sulle seguenti funzionalità:",
+      "datePrefix": "il ",
+      "legalFactDownload": "Attestazione di malfunzionamento",
+      "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica."
     }
   },
   "status": {
