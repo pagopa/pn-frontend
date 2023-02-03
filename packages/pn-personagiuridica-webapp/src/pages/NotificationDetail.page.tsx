@@ -21,19 +21,23 @@ import {
   TimedMessage,
   useDownloadDocument,
   NotificationDetailOtherDocument,
+  NotificationRelatedDowntimes,
+  GetNotificationDowntimeEventsParams,  
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import {
+  getDowntimeEvents,
   getReceivedNotification,
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
   getReceivedNotificationOtherDocument,
+  getDowntimeLegalFactDocumentDetails,  
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
-import { resetLegalFactState, resetState } from '../redux/notification/reducers';
+import { resetLegalFactState, resetState, clearDowntimeLegalFactData } from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
@@ -59,7 +63,15 @@ const NotificationDetail = () => {
   const { id, mandateId } = useParams();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const { t } = useTranslation(['common', 'notifiche']);
+
+  /*
+   * appStatus is included since it is used inside NotificationRelatedDowntimes, a component
+   * in pn-commons (hence cannot access the i18n files) used in this page
+   * ---------------------------------
+   * Carlos Lombardi, 2023.02.03
+   */
+  const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
+
   const isMobile = useIsMobile();
   const { hasApiErrors } = useErrors();
   const [pageReady, setPageReady] = useState(false);
@@ -70,6 +82,10 @@ const NotificationDetail = () => {
     (state: RootState) => state.generalInfoState.delegators
   );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
+  const downtimeEvents = useAppSelector((state: RootState) => state.notificationState.downtimeEvents);
+  const downtimeLegalFactUrl = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeLegalFactUrl
+  );  
 
   const currentRecipient = notification && notification.currentRecipient;
 
@@ -188,6 +204,20 @@ const NotificationDetail = () => {
     return () => void dispatch(resetState());
   }, []);
 
+  /* function which loads relevant information about donwtimes */
+  const fetchDowntimeEvents = useCallback((fromDate: string, toDate: string | undefined) => {
+    const fetchParams: GetNotificationDowntimeEventsParams = {
+      startDate: fromDate,
+      endDate: toDate,
+    };
+    void dispatch(getDowntimeEvents(fetchParams));
+  }, []);
+
+  const fetchDowntimeLegalFactDocumentDetails = useCallback(
+    (legalFactId: string) => void dispatch(getDowntimeLegalFactDocumentDetails(legalFactId)),
+    []
+  );
+
   useDownloadDocument({ url: documentDownloadUrl });
   useDownloadDocument({ url: legalFactDownloadUrl });
   useDownloadDocument({ url: otherDocumentDownloadUrl });
@@ -282,6 +312,15 @@ const NotificationDetail = () => {
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                   />
                 </Paper>
+                <NotificationRelatedDowntimes 
+                  downtimeEvents={downtimeEvents} 
+                  fetchDowntimeEvents={fetchDowntimeEvents}
+                  notificationStatusHistory={notification.notificationStatusHistory}
+                  downtimeLegalFactUrl={downtimeLegalFactUrl}
+                  fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
+                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData()) }
+                  apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
+                />                
                 {/* TODO decommentare con pn-841
             <Paper sx={{ p: 3 }} className="paperContainer">
               <HelpNotificationDetails 
