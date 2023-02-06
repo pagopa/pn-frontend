@@ -12,7 +12,12 @@ import {
   Typography,
   MenuItem,
 } from '@mui/material';
-import { PhysicalCommunicationType, CustomDropdown, ApiErrorWrapper, dataRegex } from '@pagopa-pn/pn-commons';
+import {
+  PhysicalCommunicationType,
+  CustomDropdown,
+  ApiErrorWrapper,
+  dataRegex,
+} from '@pagopa-pn/pn-commons';
 
 import { NewNotification, PaymentModel } from '../../../models/NewNotification';
 import { GroupStatus } from '../../../models/user';
@@ -23,6 +28,7 @@ import { PreliminaryInformationsPayload } from '../../../redux/newNotification/t
 import { RootState } from '../../../redux/store';
 import { trackEventByType } from '../../../utils/mixpanel';
 import { TrackEventType } from '../../../utils/events';
+import { IS_PAYMENT_ENABLED } from '../../../utils/constants';
 import NewNotificationCard from './NewNotificationCard';
 
 type Props = {
@@ -58,7 +64,9 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     taxonomyCode: yup
       .string()
       .required(`${t('taxonomy-id')} ${tc('required')}`)
-      .test('taxonomyCodeTest', `${t('taxonomy-id')} ${tc('invalid')}`, (value) => dataRegex.taxonomyCode.test(value as string)),
+      .test('taxonomyCodeTest', `${t('taxonomy-id')} ${tc('invalid')}`, (value) =>
+        dataRegex.taxonomyCode.test(value as string)
+      ),
   });
 
   const formik = useFormik({
@@ -98,7 +106,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   }, [fetchGroups]);
 
   return (
-
     <ApiErrorWrapper
       apiId={NEW_NOTIFICATION_ACTIONS.GET_USER_GROUPS}
       reloadAction={() => fetchGroups()}
@@ -151,7 +158,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             value={formik.values.group}
             onChange={handleChangeTouched}
             error={formik.touched.group && Boolean(formik.errors.group)}
-            helperText={formik.touched.group && formik.errors.group}>
+            helperText={formik.touched.group && formik.errors.group}
+          >
             {groups.length > 0 &&
               groups.map((group) => (
                 <MenuItem key={group.id} value={group.id}>
@@ -210,24 +218,28 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               value={formik.values.paymentMode}
               onChange={handleChangePaymentMode}
             >
-              <FormControlLabel
-                value={PaymentModel.PAGO_PA_NOTICE}
-                control={<Radio />}
-                label={t('pagopa-notice')}
-                data-testid="paymentMethodRadio"
-              />
-              <FormControlLabel
-                value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
-                control={<Radio />}
-                label={t('pagopa-notice-f24-flatrate')}
-                data-testid="paymentMethodRadio"
-              />
-              <FormControlLabel
-                value={PaymentModel.PAGO_PA_NOTICE_F24}
-                control={<Radio />}
-                label={t('pagopa-notice-f24')}
-                data-testid="paymentMethodRadio"
-              />
+              {IS_PAYMENT_ENABLED && (
+                <>
+                  <FormControlLabel
+                    value={PaymentModel.PAGO_PA_NOTICE}
+                    control={<Radio />}
+                    label={t('pagopa-notice')}
+                    data-testid="paymentMethodRadio"
+                  />
+                  <FormControlLabel
+                    value={PaymentModel.PAGO_PA_NOTICE_F24_FLATRATE}
+                    control={<Radio />}
+                    label={t('pagopa-notice-f24-flatrate')}
+                    data-testid="paymentMethodRadio"
+                  />
+                  <FormControlLabel
+                    value={PaymentModel.PAGO_PA_NOTICE_F24}
+                    control={<Radio />}
+                    label={t('pagopa-notice-f24')}
+                    data-testid="paymentMethodRadio"
+                  />
+                </>
+              )}
               <FormControlLabel
                 value={PaymentModel.NOTHING}
                 control={<Radio />}
