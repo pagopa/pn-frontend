@@ -9,11 +9,11 @@
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "5.0.0-alpha.100",
     "@mui/material": "^5.8.6",
-    "@pagopa/mui-italia": "^0.8.10",
     "@mui/styles": "^5.11.2",
     "@mui/system": "^5.4.1",
     "@mui/x-date-pickers": "^5.0.13",
     "@pagopa-pn/pn-commons": "^1.5.4",
+    "@pagopa/mui-italia": "^0.8.10",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/lodash": "^4.14.172",
     "@types/node": "^16.11.21",
@@ -40,6 +40,7 @@
   },
   "scripts": {
     "start": "craco start",
+    "start-waiton": "craco start & wait-on",
     "build": "craco build",
     "test": "craco test --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:a11y": "craco test --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.(tsx|ts)$\"",
@@ -48,6 +49,8 @@
     "eject": "craco eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write",
+    "cy-open": "cypress open",
+    "cy-run": "cypress run",
     "sonar": "node sonarqube-scanner.js"
   },
   "browserslist": {
@@ -93,6 +96,7 @@
     "react-scripts": "^5.0.1",
     "rimraf": "^3.0.2",
     "sonarqube-scanner": "^3.0.0",
+    "wait-on": "^7.0.1",
     "webpack": "^5"
   }
 }
