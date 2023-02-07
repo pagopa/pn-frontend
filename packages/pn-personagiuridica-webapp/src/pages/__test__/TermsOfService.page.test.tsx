@@ -1,13 +1,13 @@
 import React from 'react';
 import { render } from "../../__test__/test-utils";
 
-import { ONE_TRUST_PORTAL_CDN_TOS } from '../../utils/constants';
 import TermsOfServicePage from '../TermsOfService.page';
+import { ONE_TRUST_BASEPATH } from '@pagopa-pn/pn-commons/src/utils/onetrust.utility';
 
 jest.mock('../../utils/constants', () => {
   return {
     ...jest.requireActual('../../utils/constants'),
-    ONE_TRUST_PORTAL_CDN_TOS: 'mocked-url',
+    ONE_TRUST_TOS: 'mocked-id',
   };
 });
 
@@ -33,7 +33,7 @@ describe('TermsOfService page component', () => {
   test('render component', () => {
     const result = render(<TermsOfServicePage />);
     expect(loadNoticesFn).toBeCalledTimes(1);
-    expect(loadNoticesFn).toBeCalledWith([ONE_TRUST_PORTAL_CDN_TOS], false);
+    expect(loadNoticesFn).toBeCalledWith([`${ONE_TRUST_BASEPATH}/mocked-id.json`], false);
     expect(result.getByRole('article')).toBeInTheDocument();
   });
 });

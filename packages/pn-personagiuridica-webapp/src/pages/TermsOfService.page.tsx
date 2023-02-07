@@ -1,8 +1,11 @@
-import { useRewriteLinks } from '@pagopa-pn/pn-commons';
+import { compileOneTrustPath, useRewriteLinks } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import * as routes from '../navigation/routes.const';
 
-import { ONE_TRUST_PORTAL_CDN_TOS } from '../utils/constants';
+import {
+  ONE_TRUST_DRAFT_MODE,
+  ONE_TRUST_TOS,
+} from '../utils/constants';
 
 declare const OneTrust: {
   NoticeApi: {
@@ -17,9 +20,17 @@ const TermsOfServicePage = () => {
   const [contentLoaded, setContentLoaded] = useState(false);
 
   useEffect(() => {
-    if (ONE_TRUST_PORTAL_CDN_TOS) {
+    if (ONE_TRUST_TOS) {
       OneTrust.NoticeApi.Initialized.then(function () {
-        OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN_TOS], false);
+        OneTrust.NoticeApi.LoadNotices(
+          [
+            compileOneTrustPath(
+              ONE_TRUST_TOS,
+              ONE_TRUST_DRAFT_MODE
+            ),
+          ],
+          false
+        );
         setContentLoaded(true);
       });
     }

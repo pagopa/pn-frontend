@@ -10,6 +10,7 @@ import {
   getNotificationTimelineStatusInfos,
 } from './notification.utility';
 import { getValidValue } from './genericFunctions.utility';
+import { compileOneTrustPath } from './onetrust.utility';
 import {
   formatMonthString,
   formatDay,
@@ -97,4 +98,5 @@ export {
   errorFactoryManager,
   UnknownAppError,
   sanitizeString,
+  compileOneTrustPath,
 };
