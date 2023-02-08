@@ -26,29 +26,6 @@ phases:
     commands:
       - BRANCH_NAME=$(echo $CODEBUILD_WEBHOOK_HEAD_REF | sed 's/refs\/heads\///'); export BRANCH_NAME=${BRANCH_NAME:=$GIT_DEFAULT_BRANCH}
       - if echo $CODEBUILD_SOURCE_VERSION | grep -q ^pr/ ; then PR_NUM=$(echo $CODEBUILD_SOURCE_VERSION | sed 's/pr\///'); BRANCH_TARGET=$(echo $CODEBUILD_WEBHOOK_BASE_REF | sed 's/refs\/heads\///'); export PR_NUM BRANCH_TARGET; fi;
-      # verify the "cypress" folder is present and, if so, run the cypress tests
-      # if [ -d "cypress/" -a  $SUB_PRJ_NAME != "packages/pn-personagiuridica-webapp" ] ; then
-
-      # - |
-      #   if [ -d "cypress/" ] ; then
-      #     echo Fetching .env variables...
-      #     source .env.cypress
-
-      #     echo Setting up hosts file...
-      #     echo "127.0.0.1 $HOST" >> /etc/hosts
-
-      #     echo Renaming file .env.cypress to .env.development.local...
-      #     mv .env.cypress .env.development.local
-
-      #     echo Creating cypress.env.json file...
-      #     echo -e "${!CYPRESS_ENV}" > cypress.env.json
-
-      #     echo Starting application...
-      #     yarn start-waiton $WEBAPP_URL
-
-      #     echo Running Cypress in headless mode...
-      #     yarn cy-run --config video=false
-      #   fi
       ## Running the development server
       - echo Setting up and running the web application...
       # Fetching .env variables
