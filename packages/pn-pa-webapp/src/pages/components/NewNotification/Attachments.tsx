@@ -19,6 +19,7 @@ import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
 import { setAttachments } from '../../../redux/newNotification/reducers';
 import { NewNotificationDocument } from '../../../models/NewNotification';
+import { IS_PAYMENT_ENABLED } from '../../../utils/constants';
 import NewNotificationCard from './NewNotificationCard';
 
 type AttachmentBoxProps = {
@@ -108,6 +109,7 @@ type Props = {
   onPreviousStep?: () => void;
   attachmentsData?: Array<NewNotificationDocument>;
   forwardedRef: ForwardedRef<unknown>;
+  isCompleted: boolean;
 };
 
 const emptyFileData = {
@@ -129,7 +131,13 @@ const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument
   },
 });
 
-const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef }: Props) => {
+const Attachments = ({
+  onConfirm,
+  onPreviousStep,
+  attachmentsData,
+  forwardedRef,
+  isCompleted,
+}: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.attachments',
@@ -177,7 +185,11 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef 
     validationSchema,
     validateOnMount: true,
     onSubmit: (values) => {
-      if (formik.isValid) {
+      if (!IS_PAYMENT_ENABLED) {
+        if (isCompleted) {
+          onConfirm();
+        }
+      } else if (formik.isValid) {
         // store attachments
         dispatch(
           setAttachments({
@@ -211,19 +223,23 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef 
     name?: string,
     size?: number
   ) => {
-    await formik.setFieldValue(id, {
-      ...formik.values.documents[index],
-      file: {
-        size,
-        uint8Array: file,
-        sha256,
-        name,
+    await formik.setFieldValue(
+      id,
+      {
+        ...formik.values.documents[index],
+        file: {
+          size,
+          uint8Array: file,
+          sha256,
+          name,
+        },
+        ref: {
+          key: '',
+          versionToken: '',
+        },
       },
-      ref: {
-        key: '',
-        versionToken: '',
-      },
-    }, false);
+      false
+    );
     await formik.setFieldTouched(`${id}.file`, true, true);
   };
 

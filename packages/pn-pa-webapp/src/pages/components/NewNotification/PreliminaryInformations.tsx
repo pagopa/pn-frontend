@@ -52,7 +52,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     group: notification.group || '',
     taxonomyCode: notification.taxonomyCode || '',
     physicalCommunicationType: notification.physicalCommunicationType || '',
-    paymentMode: notification.paymentMode || '',
+    paymentMode: notification.paymentMode || (IS_PAYMENT_ENABLED ? '' : PaymentModel.NOTHING),
   });
 
   const validationSchema = yup.object({
@@ -206,20 +206,20 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
               />
             </RadioGroup>
           </FormControl>
-          <FormControl margin="normal" fullWidth>
-            <FormLabel id="payment-method-label">
-              <Typography fontWeight={600} fontSize={16}>
-                {`${t('payment-method')}*`}
-              </Typography>
-            </FormLabel>
-            <RadioGroup
-              aria-labelledby="payment-method-label"
-              name="paymentMode"
-              value={formik.values.paymentMode}
-              onChange={handleChangePaymentMode}
-            >
-              {IS_PAYMENT_ENABLED && (
-                <>
+          {IS_PAYMENT_ENABLED && (
+            <>
+              <FormControl margin="normal" fullWidth>
+                <FormLabel id="payment-method-label">
+                  <Typography fontWeight={600} fontSize={16}>
+                    {`${t('payment-method')}*`}
+                  </Typography>
+                </FormLabel>
+                <RadioGroup
+                  aria-labelledby="payment-method-label"
+                  name="paymentMode"
+                  value={formik.values.paymentMode}
+                  onChange={handleChangePaymentMode}
+                >
                   <FormControlLabel
                     value={PaymentModel.PAGO_PA_NOTICE}
                     control={<Radio />}
@@ -238,16 +238,16 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
                     label={t('pagopa-notice-f24')}
                     data-testid="paymentMethodRadio"
                   />
-                </>
-              )}
-              <FormControlLabel
-                value={PaymentModel.NOTHING}
-                control={<Radio />}
-                label={t('nothing')}
-                data-testid="paymentMethodRadio"
-              />
-            </RadioGroup>
-          </FormControl>
+                  <FormControlLabel
+                    value={PaymentModel.NOTHING}
+                    control={<Radio />}
+                    label={t('nothing')}
+                    data-testid="paymentMethodRadio"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </>
+          )}
         </NewNotificationCard>
       </form>
     </ApiErrorWrapper>
