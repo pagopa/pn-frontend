@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/cognitive-complexity */
+/* eslint-disable complexity */
 /* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
@@ -417,11 +419,60 @@ function populateMacroStep(
   }
 }
 
+/** 
+ * Move the steps up to DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER (the latter one) 
+ * from DELIVERED to the end of DELIVERING. Cfr. PN-3623.
+ * I do this outside the main loop because the state DELIVERING comes before DELIVERED, 
+ * so that performing this movement in the previous loop would be awkward.
+ * I *strongly* believe that the processing of a notification' timeline should be re-designed.
+ * -----------------------------
+ * Carlos Lombardi, 2023.02.08
+ * -----------------------------
+ */
+function shiftDeliveredTimelineElementsToDelivering(parsedNotification: NotificationDetail) {
+  const deliveringStatus = parsedNotification.notificationStatusHistory.find(
+    status => status.status === NotificationStatus.DELIVERING
+  );
+  const deliveredStatus = parsedNotification.notificationStatusHistory.find(
+    status => status.status === NotificationStatus.DELIVERED
+  );
+  if (deliveringStatus && deliveredStatus) {
+    // find inside deliveredStatus.relatedTimelineElements, the (first) index corresponding 
+    // to an timeline element belonging to the given category
+    const findElementIndexByTimelineCategory = (category: TimelineCategory) => 
+      deliveredStatus.relatedTimelineElements.findIndex(elementId => {
+        const step = parsedNotification.timeline.find((t) => t.elementId === elementId);
+        return step && step.category === category;
+      }
+    );
+    const digitalFailureWorkflowIndex = findElementIndexByTimelineCategory(TimelineCategory.DIGITAL_FAILURE_WORKFLOW);
+    const sendSimpleRegisteredLetterIndex = findElementIndexByTimelineCategory(TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER);
+    const lastIndexToShift = Math.max(digitalFailureWorkflowIndex, sendSimpleRegisteredLetterIndex);
+    if (lastIndexToShift > -1) {
+      deliveringStatus.relatedTimelineElements.push(...deliveredStatus.relatedTimelineElements.slice(0,lastIndexToShift+1));
+      deliveredStatus.relatedTimelineElements = deliveredStatus.relatedTimelineElements.slice(lastIndexToShift+1);
+
+      // Also change the "activeFrom" timestamp of the DELIVERED status 
+      // to avoid it to be earlier than the last timeline element added to DELIVERING, i.e. the previous step.
+      const lastDeliveringTimelineElementAfterShift = parsedNotification.timeline.find(
+        (t) => t.elementId === deliveringStatus.relatedTimelineElements[deliveringStatus.relatedTimelineElements.length - 1]
+      );
+      if (lastDeliveringTimelineElementAfterShift && lastDeliveringTimelineElementAfterShift.timestamp > deliveredStatus.activeFrom) {
+        deliveredStatus.activeFrom = lastDeliveringTimelineElementAfterShift.timestamp;
+      }
+    }
+  }
+}
+
+
 /**
  * Populate timeline macro steps
  * @param  {NotificationDetail} parsedNotification
  */
 function populateMacroSteps(parsedNotification: NotificationDetail) {
+  // before starting ...
+  shiftDeliveredTimelineElementsToDelivering(parsedNotification);
+
   let isEffectiveDateStatus = false;
   let acceptedStatusItems: Array<string> = [];
   for (const status of parsedNotification.notificationStatusHistory) {
@@ -436,7 +487,7 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
     for (const timelineElement of status.relatedTimelineElements) {
       populateMacroStep(parsedNotification, timelineElement, status, acceptedStatusItems);
     }
-    // order step by time
+    // order step by time, latest first
     status.steps.sort((a, b) => {
       if (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime() >= 0) {
         return 1;
