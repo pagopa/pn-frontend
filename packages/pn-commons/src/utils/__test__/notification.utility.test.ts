@@ -321,29 +321,31 @@ describe('timeline utility functions', () => {
 
   it('return timeline status infos - SEND_ANALOG_FEEDBACK (failure)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).status = ResponseStatus.KO;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
+      ResponseStatus.KO;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
       address: 'Indirizzo fisico',
       zip: 'zip',
-      municipality: 'municipality'
+      municipality: 'municipality',
     };
     testTimelineStatusInfosFn(
       'Invio per via cartacea non riuscito',
-      "Il tentativo di invio della notifica per via cartacea a Nome Cognome non è riuscito."
+      'Il tentativo di invio della notifica per via cartacea a Nome Cognome non è riuscito.'
     );
   });
 
   it('return timeline status infos - SEND_ANALOG_FEEDBACK (success)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).status = ResponseStatus.OK;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
+      ResponseStatus.OK;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
       address: 'Indirizzo fisico',
       zip: 'zip',
-      municipality: 'municipality'
+      municipality: 'municipality',
     };
     testTimelineStatusInfosFn(
       'Invio per via cartacea riuscito',
-      "Il tentativo di invio della notifica per via cartacea a Nome Cognome è riuscito."
+      'Il tentativo di invio della notifica per via cartacea a Nome Cognome è riuscito.'
     );
   });
 
@@ -378,14 +380,16 @@ describe('timeline utility functions', () => {
 
   it('return legalFact label - SEND_ANALOG_FEEDBACK (success)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).status = ResponseStatus.OK;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
+      ResponseStatus.OK;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
     expect(label).toBe('Ricevuta di consegna raccomandata');
   });
 
   it('return legalFact label - SEND_ANALOG_FEEDBACK (failure)', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).status = ResponseStatus.KO;
+    (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
+      ResponseStatus.KO;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
     expect(label).toBe('Ricevuta di mancata consegna raccomandata');
   });
