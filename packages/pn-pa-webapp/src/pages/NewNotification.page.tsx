@@ -2,7 +2,7 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 // PN-2028
 // import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
+import { Alert, Box, Grid, Step, StepLabel, Stepper, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import { TitleBox, Prompt, useIsMobile, PnBreadcrumb } from '@pagopa-pn/pn-commons';
 
@@ -132,7 +132,7 @@ const NewNotification = () => {
       if (activeStep === 2 && isCompleted) {
         void dispatch(createNewNotification(notification))
           .unwrap()
-          .then(() => setActiveStep((previousStep) => previousStep + 1));
+          .then(() => setActiveStep((previousStep) => previousStep + 2));
       }
     }
   };
@@ -183,6 +183,14 @@ const NewNotification = () => {
             <Typography sx={{ marginTop: '10px' }} variant="body2">
               {t('required-fields')}
             </Typography>
+            {!IS_PAYMENT_ENABLED && (
+              <Alert sx={{ mt: 4 }} severity={'warning'}>
+                <Typography component="span" variant="body1">
+                  {t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}{' '}
+                </Typography>
+              </Alert>
+            )}
+
             {IS_PAYMENT_ENABLED ? (
               <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
                 {steps.map((label, index) => (

@@ -189,6 +189,22 @@ const Attachments = ({
         if (isCompleted) {
           onConfirm();
         }
+        // store attachments
+        dispatch(
+          setAttachments({
+            documents: values.documents.map((v) => ({
+              ...v,
+              id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+            })),
+          })
+        );
+        // upload attachments
+        dispatch(uploadNotificationAttachment(values.documents))
+          .unwrap()
+          .then(() => {
+            onConfirm();
+          })
+          .catch(() => undefined);
       } else if (formik.isValid) {
         // store attachments
         dispatch(
@@ -313,6 +329,7 @@ const Attachments = ({
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}
         subtitle={t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS })}
+        submitLabel={IS_PAYMENT_ENABLED ? tc('button.continue') : tc('button.send')}
         previousStepLabel={t('back-to-recipient')}
         previousStepOnClick={() => handlePreviousStep()}
       >
