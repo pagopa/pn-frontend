@@ -7,10 +7,13 @@ export class SendDigitalFeedbackStep extends TimelineStep {
       return {
         ...this.localizeTimelineStatus(
           'send-digital-error',
-          'Invio per via digitale non riuscito',
-          `Il tentativo di invio della notifica per via digitale a ${payload.recipient?.denomination} non è riuscito.`,
+          'Invio via PEC non riuscito',
+          `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
+            (payload.step.details as SendDigitalDetails).digitalAddress?.address
+          } non è riuscito perché la casella è satura, non valida o inattiva.`,
           {
             name: payload.recipient?.denomination,
+            address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
           }
         ),
         recipient: payload.recipientLabel,

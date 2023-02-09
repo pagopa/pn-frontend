@@ -31,7 +31,7 @@ function testNotificationStatusInfosFn(
   tooltipToTest: string,
   recipient?: string
 ) {
-  const { label, color, tooltip } = getNotificationStatusInfos(status, recipient);
+  const { label, color, tooltip } = getNotificationStatusInfos(status, { recipient });
   expect(label).toBe(labelToTest);
   expect(color).toBe(colorToTest);
   expect(tooltip).toBe(tooltipToTest);

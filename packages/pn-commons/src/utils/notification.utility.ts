@@ -53,6 +53,11 @@ function localizeStatus(
   };
 }
 
+function hasTimelineElementForCategory(category: TimelineCategory, statusHistory: Array<NotificationStatusHistory>): boolean {
+  return statusHistory.some(status => status.steps?.some(step => step.category === category));
+}
+
+
 /**
  * Returns the mapping between current notification status and its color, label and descriptive message.
  * @param  {NotificationStatus} status
@@ -60,7 +65,7 @@ function localizeStatus(
  */
 export function getNotificationStatusInfos(
   status: NotificationStatus,
-  recipient?: string
+  options?: { recipient?: string; completeStatusHistory?: Array<NotificationStatusHistory> }
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
@@ -71,13 +76,21 @@ export function getNotificationStatusInfos(
   let subject = getLocalizedOrDefaultLabel('notifications', `status.recipient`, 'destinatario');
   switch (status) {
     case NotificationStatus.DELIVERED:
+      const deliveredThroughRegisteredLetter = options?.completeStatusHistory && 
+        hasTimelineElementForCategory(TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER, options.completeStatusHistory);
+      const deliveryModeDescription = getLocalizedOrDefaultLabel(
+        'notifications', 
+        `status.deliveryMode.${deliveredThroughRegisteredLetter ? 'analog' : 'digital'}`, 
+        deliveredThroughRegisteredLetter ? 'analogico' : 'digitale'
+      );
       return {
         color: 'default',
         ...localizeStatus(
           'delivered',
           'Consegnata',
           'La notifica è stata consegnata',
-          'La notifica è stata consegnata'
+          `La notifica è stata consegnata in via ${deliveredThroughRegisteredLetter ? 'analogica' : 'digitale'}`,
+          { deliveryMode: deliveryModeDescription }
         ),
       };
     case NotificationStatus.DELIVERING:
@@ -131,12 +144,12 @@ export function getNotificationStatusInfos(
         ),
       };
     case NotificationStatus.VIEWED:
-      if (recipient) {
+      if (options?.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
           `status.delegate`,
-          `delegato ${recipient}`,
-          { name: recipient }
+          `delegato ${options?.recipient}`,
+          { name: options?.recipient }
         );
       }
       return {
@@ -150,12 +163,12 @@ export function getNotificationStatusInfos(
         ),
       };
     case NotificationStatus.VIEWED_AFTER_DEADLINE:
-      if (recipient) {
+      if (options?.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
           `status.delegate`,
-          `delegato ${recipient}`,
-          { name: recipient }
+          `delegato ${options?.recipient}`,
+          { name: options?.recipient }
         );
       }
       return {

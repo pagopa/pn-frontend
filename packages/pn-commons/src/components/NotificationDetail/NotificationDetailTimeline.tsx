@@ -85,6 +85,7 @@ const NotificationDetailTimeline = ({
       showMoreButtonLabel={showMoreButtonLabel}
       showLessButtonLabel={showLessButtonLabel}
       eventTrackingCallbackShowMore={eventTrackingCallbackShowMore}
+      completeStatusHistory={statusHistory}
     />
   ));
 
@@ -117,7 +118,8 @@ const NotificationDetailTimeline = ({
             historyButtonLabel={historyButtonLabel}
             showHistoryButton
             historyButtonClickHandler={toggleHistoryDrawer}
-          />
+            completeStatusHistory={statusHistory}
+            />
         ) : (
           timelineComponent
         )}
