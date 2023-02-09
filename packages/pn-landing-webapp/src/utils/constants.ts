@@ -10,7 +10,7 @@ export const PN_URL = process.env.NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL;
 
 export const MANUALE_URL = "https://docs.pagopa.it/pn-manuale-operativo/";
 
-export const ONE_TRUST_DRAFT_MODE = process.env.NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE || '';
+export const ONE_TRUST_DRAFT_MODE = !!process.env.NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE;
 export const ONE_TRUST_PP = process.env.NEXT_PUBLIC_ONE_TRUST_PP || '';
 
 export const PARTNER_AND_INTERMEDIARIES_PATH = "/pubbliche-amministrazioni/partner-e-intermediari";

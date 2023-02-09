@@ -16,7 +16,7 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: 'ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test'
-          REACT_APP_ONE_TRUST_DRAFT_MODE: "draft"
+          REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: "133242e7-ad9a-45e5-a417-b7a50c746899"
     - identifier: pn_login_svil_build
       buildspec: cra_buildspec.yaml
@@ -33,7 +33,7 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: 'ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test'
-          REACT_APP_ONE_TRUST_DRAFT_MODE: "draft"
+          REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: "133242e7-ad9a-45e5-a417-b7a50c746899"
     - identifier: pn_login_coll_build
       buildspec: cra_buildspec.yaml
@@ -50,7 +50,7 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: 'ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test'
-          REACT_APP_ONE_TRUST_DRAFT_MODE: "draft"
+          REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: "133242e7-ad9a-45e5-a417-b7a50c746899"
     - identifier: pn_login_cert_build
       buildspec: cra_buildspec.yaml
@@ -67,7 +67,7 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: 'ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test'
-          REACT_APP_ONE_TRUST_DRAFT_MODE: "draft"
+          REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: "133242e7-ad9a-45e5-a417-b7a50c746899"
     - identifier: pn_login_hotfix_build
       buildspec: cra_buildspec.yaml
@@ -84,7 +84,7 @@ batch:
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: 'ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test'
-          REACT_APP_ONE_TRUST_DRAFT_MODE: "draft"
+          REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: "133242e7-ad9a-45e5-a417-b7a50c746899"
     # - identifier: pn_login_prod_build
     #   buildspec: cra_buildspec.yaml

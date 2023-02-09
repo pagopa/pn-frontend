@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from "../../__test__/test-utils";
 
-import { ONE_TRUST_BASEPATH } from '@pagopa-pn/pn-commons/src/utils/onetrust.utility';
+import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 import TermsOfServicePage from '../TermsOfService.page';
 
 jest.mock('../../utils/constants', () => {
@@ -33,7 +33,7 @@ describe('TermsOfService page component', () => {
   test('render component', () => {
     const result = render(<TermsOfServicePage />);
     expect(loadNoticesFn).toBeCalledTimes(1);
-    expect(loadNoticesFn).toBeCalledWith([`${ONE_TRUST_BASEPATH}/mocked-id.json`], false);
+    expect(loadNoticesFn).toBeCalledWith([compileOneTrustPath('mocked-id')], false);
     expect(result.getByRole('article')).toBeInTheDocument();
   });
 });

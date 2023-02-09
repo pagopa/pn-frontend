@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import PrivacyPolicyPage from '../PrivacyPolicy.page';
-import { ONE_TRUST_BASEPATH } from '@pagopa-pn/pn-commons/src/utils/onetrust.utility';
+import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 
 jest.mock('../../utils/constants', () => {
   return {
@@ -31,7 +31,7 @@ describe('test the Privacy Policy page', () => {
   test('check that Privacy Policy page container is rendered', () => {
     const result = render(<PrivacyPolicyPage />);
     expect(loadNoticesFn).toBeCalledTimes(1);
-    expect(loadNoticesFn).toBeCalledWith([`${ONE_TRUST_BASEPATH}/mocked-id.json`], false);
+    expect(loadNoticesFn).toBeCalledWith([compileOneTrustPath('mocked-id')], false);
     expect(result.getByRole('article')).toBeInTheDocument();
   });
 });

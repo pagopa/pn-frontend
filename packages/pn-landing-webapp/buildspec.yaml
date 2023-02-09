@@ -6,21 +6,21 @@ batch:
         variables:
           BUILD_ID: dev
           NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.dev.pn.pagopa.it/"
-          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: ''
+          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: false
           NEXT_PUBLIC_ONE_TRUST_PP: 'b5c8e1dc-89df-4ec2-a02d-1c0f55fac052'
     - identifier: pn_landing_svil_build
       env:
         variables:
           BUILD_ID: svil
           NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.svil.pn.pagopa.it/"
-          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: ''
+          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: false
           NEXT_PUBLIC_ONE_TRUST_PP: 'b5c8e1dc-89df-4ec2-a02d-1c0f55fac052'
     - identifier: pn_landing_coll_build
       env:
         variables:
           BUILD_ID: coll
           NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.coll.pn.pagopa.it/"
-          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: ''
+          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: false
           NEXT_PUBLIC_ONE_TRUST_PP: 'b5c8e1dc-89df-4ec2-a02d-1c0f55fac052'
     - identifier: pn_landing_preview_build
       env:
@@ -32,14 +32,14 @@ batch:
         variables:
           BUILD_ID: cert
           NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.cert.pn.pagopa.it/"
-          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: ''
+          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: false
           NEXT_PUBLIC_ONE_TRUST_PP: 'b5c8e1dc-89df-4ec2-a02d-1c0f55fac052'
     - identifier: pn_landing_hotfix_build
       env:
         variables:
           BUILD_ID: hotfix
           NEXT_PUBLIC_PIATTAFORMA_NOTIFICHE_URL: "https://portale-login.hotfix.pn.pagopa.it/"
-          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: ''
+          NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE: false
           NEXT_PUBLIC_ONE_TRUST_PP: 'b5c8e1dc-89df-4ec2-a02d-1c0f55fac052'
 phases:
   install:
