@@ -13,6 +13,7 @@ export const AuthApi = {
             fiscal_number: response.data.fiscal_number,
             organization: response.data.organization,
             sessionToken: response.data.sessionToken,
-            uid: response.data.uid
+            uid: response.data.uid,
+            hasGroups: response.data.hasGroups || true // This data is mocked. Waiting for PN-3867 to be done
         }))
 };

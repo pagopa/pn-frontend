@@ -29,6 +29,7 @@ const organizationMatcher = yup.object({
 const userDataMatcher = yup
   .object({
     ...basicUserDataMatcherContents,
+    hasGroups: yup.boolean(),
     organization: organizationMatcher,
     desired_exp: yup.number(),
   })

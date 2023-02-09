@@ -33,6 +33,7 @@ type Props = {
 const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
   const dispatch = useAppDispatch();
   const groups = useAppSelector((state: RootState) => state.newNotificationState.groups);
+  const user = useAppSelector((state: RootState) => state.userState.user);
 
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.preliminary-informations',
@@ -54,7 +55,7 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
     subject: yup.string().required(`${t('subject')} ${tc('required')}`),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
-    group: groups.length > 0 ? yup.string().required() : yup.string(),
+    group: (groups.length > 0 && user.hasGroups) ? yup.string().required() : yup.string(),
     taxonomyCode: yup
       .string()
       .required(`${t('taxonomy-id')} ${tc('required')}`)
@@ -141,9 +142,10 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             size="small"
             margin="normal"
           />
+          <p>Has groups: {JSON.stringify(user.hasGroups)}</p>
           <CustomDropdown
             id="group"
-            label={`${t('group')}${groups.length > 0 ? '*' : ''}`}
+            label={`${t('group')}${(groups.length > 0 && user.hasGroups) ? '*' : ''}`}
             fullWidth
             name="group"
             size="small"
