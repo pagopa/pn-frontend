@@ -15,7 +15,6 @@ export interface TimelineStepInfo {
 }
 
 export abstract class TimelineStep {
-
   localizeTimelineStatus(
     category: string,
     defaultLabel: string,
