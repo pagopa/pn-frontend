@@ -491,6 +491,8 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
       stepsToShift.sort(fromLatestToEarliest);
       deliveringStatus.steps.unshift(...stepsToShift);
       status.steps = status.steps.slice(lastDeliveredIndexToShift+1);
+
+      status.activeFrom = deliveringStatus.steps[0].timestamp;
     }
 
     // order step by time, latest first
