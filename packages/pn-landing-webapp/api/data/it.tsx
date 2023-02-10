@@ -231,13 +231,13 @@ const paInfoBlocks: Array<IInfoblockData> = [
                 {" "}che stanno implementando le attività di integrazione alla piattaforma e di cui è possibile avvalersi per un supporto nella gestione degli aspetti tecnici
               </Typography>
             </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
+            {/* <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
                 <Link href={"/static/documents/Modulo Ordinativo Commessa per Anticipazione.xlsx"}>
                   la lista dei Partner e Intermediari tecnologici
                 </Link>
               </Typography>
-            </ListItem>
+            </ListItem> */}
           </List>
         </>
       ),

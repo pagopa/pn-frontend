@@ -13,4 +13,4 @@ export const MANUALE_URL = "https://docs.pagopa.it/pn-manuale-operativo/";
 export const ONE_TRUST_DRAFT_MODE = !!process.env.NEXT_PUBLIC_ONE_TRUST_DRAFT_MODE;
 export const ONE_TRUST_PP = process.env.NEXT_PUBLIC_ONE_TRUST_PP || '';
 
-export const PARTNER_AND_INTERMEDIARIES_PATH = "/pubbliche-amministrazioni/partner-e-intermediari";
+export const PARTNER_AND_INTERMEDIARIES_PATH = "https://docs.pagopa.it/lista-partner-tecnologici-pn_pagopa-s.p.a./";
