@@ -142,7 +142,6 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             size="small"
             margin="normal"
           />
-          <p>Has groups: {JSON.stringify(user.hasGroups)}</p>
           <CustomDropdown
             id="group"
             label={`${t('group')}${(groups.length > 0 && user.hasGroups) ? '*' : ''}`}

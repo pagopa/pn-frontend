@@ -14,6 +14,6 @@ export const AuthApi = {
             organization: response.data.organization,
             sessionToken: response.data.sessionToken,
             uid: response.data.uid,
-            hasGroups: response.data.hasGroups || true // This data is mocked. Waiting for PN-3867 to be done
+            hasGroups: response.data.hasGroups,
         }))
 };
