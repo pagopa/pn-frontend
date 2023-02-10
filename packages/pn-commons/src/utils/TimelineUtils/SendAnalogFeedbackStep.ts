@@ -1,9 +1,10 @@
-import { SendPaperDetails } from './../../types';
+import { ResponseStatus } from '../../types/NotificationDetail';
+import { SendPaperDetails } from '../../types';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendAnalogFeedbackStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
-    if ((payload.step.details as SendPaperDetails).status === 'KO') {
+    if ((payload.step.details as SendPaperDetails).responseStatus === ResponseStatus.KO) {
       return {
         ...this.localizeTimelineStatus(
           'send-analog-error',
