@@ -3,12 +3,8 @@ import { useEffect } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Script from "next/script";
-import { compileOneTrustPath } from "@pagopa-pn/pn-commons";
 
-import {
-  ONE_TRUST_PP,
-  ONE_TRUST_DRAFT_MODE,
-} from "@utils/constants";
+import { ONE_TRUST_CDN } from "@utils/constants";
 
 declare const OneTrust: {
   NoticeApi: {
@@ -21,17 +17,9 @@ declare const OneTrust: {
 
 const PrivacyPage: NextPage = () => {
   useEffect(() => {
-    if (ONE_TRUST_PP) {
+    if (ONE_TRUST_CDN) {
       OneTrust.NoticeApi.Initialized.then(() => {
-        OneTrust.NoticeApi.LoadNotices(
-          [
-            compileOneTrustPath(
-              ONE_TRUST_PP,
-              ONE_TRUST_DRAFT_MODE
-            ),
-          ],
-          false
-        );
+        OneTrust.NoticeApi.LoadNotices([ONE_TRUST_CDN], false);
       });
     }
   }, []);
