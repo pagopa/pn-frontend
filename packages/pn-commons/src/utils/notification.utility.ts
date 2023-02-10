@@ -53,10 +53,6 @@ function localizeStatus(
   };
 }
 
-function hasTimelineElementForCategory(category: TimelineCategory, statusHistory: Array<NotificationStatusHistory>): boolean {
-  return statusHistory.some(status => status.steps?.some(step => step.category === category));
-}
-
 
 /**
  * Returns the mapping between current notification status and its color, label and descriptive message.
@@ -64,24 +60,26 @@ function hasTimelineElementForCategory(category: TimelineCategory, statusHistory
  * @returns object
  */
 export function getNotificationStatusInfos(
-  status: NotificationStatus,
-  options?: { recipient?: string; completeStatusHistory?: Array<NotificationStatusHistory> }
+  status: NotificationStatus | NotificationStatusHistory,
+  // options?: { recipient?: string; completeStatusHistory?: Array<NotificationStatusHistory> }
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
   tooltip: string;
   description: string;
 } {
+  const statusComesAsAnObject = !!((status as NotificationStatusHistory).status);
+  const statusObject: NotificationStatusHistory | undefined = statusComesAsAnObject ? status as NotificationStatusHistory : undefined;
+  const actualStatus: NotificationStatus = statusComesAsAnObject ? (status as NotificationStatusHistory).status : (status as NotificationStatus);
   /* eslint-disable-next-line functional/no-let */
   let subject = getLocalizedOrDefaultLabel('notifications', `status.recipient`, 'destinatario');
-  switch (status) {
+  switch (actualStatus) {
     case NotificationStatus.DELIVERED:
-      const deliveredThroughRegisteredLetter = options?.completeStatusHistory && 
-        hasTimelineElementForCategory(TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER, options.completeStatusHistory);
+      const deliveryMode = (statusObject && statusObject.deliveryMode) || 'analog';
       const deliveryModeDescription = getLocalizedOrDefaultLabel(
         'notifications', 
-        `status.deliveryMode.${deliveredThroughRegisteredLetter ? 'analog' : 'digital'}`, 
-        deliveredThroughRegisteredLetter ? 'analogico' : 'digitale'
+        `status.deliveryMode.${deliveryMode}`, 
+        deliveryMode === 'analog' ? 'analogico' : 'digitale'
       );
       return {
         color: 'default',
@@ -89,7 +87,7 @@ export function getNotificationStatusInfos(
           'delivered',
           'Consegnata',
           'La notifica è stata consegnata',
-          `La notifica è stata consegnata in via ${deliveredThroughRegisteredLetter ? 'analogica' : 'digitale'}`,
+          `La notifica è stata consegnata in via ${deliveryMode === 'analog' ? 'analogica' : 'digitale'}`,
           { deliveryMode: deliveryModeDescription }
         ),
       };
@@ -144,12 +142,12 @@ export function getNotificationStatusInfos(
         ),
       };
     case NotificationStatus.VIEWED:
-      if (options?.recipient) {
+      if (statusObject && statusObject.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
           `status.delegate`,
-          `delegato ${options?.recipient}`,
-          { name: options?.recipient }
+          `delegato ${statusObject.recipient}`,
+          { name: statusObject.recipient }
         );
       }
       return {
@@ -163,12 +161,12 @@ export function getNotificationStatusInfos(
         ),
       };
     case NotificationStatus.VIEWED_AFTER_DEADLINE:
-      if (options?.recipient) {
+      if (statusObject && statusObject.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
           `status.delegate`,
-          `delegato ${options?.recipient}`,
-          { name: options?.recipient }
+          `delegato ${statusObject.recipient}`,
+          { name: statusObject.recipient }
         );
       }
       return {
@@ -410,13 +408,14 @@ const TimelineAllowedStatus = [
  * @param  {string} timelineElement
  * @param  {NotificationStatusHistory} status
  * @param  {Array<string>} acceptedStatusItems
- */
+ * @returns the found step, which is sometimes useful in populatedMacroSteps (i.e. the function calling this one)
+ */ 
 function populateMacroStep(
   parsedNotification: NotificationDetail,
   timelineElement: string,
   status: NotificationStatusHistory,
   acceptedStatusItems: Array<string>
-) {
+): INotificationDetailTimeline | undefined {
   const step = parsedNotification.timeline.find((t) => t.elementId === timelineElement);
   if (step) {
     // hide accepted status micro steps
@@ -430,65 +429,34 @@ function populateMacroStep(
       status.steps!.push(step);
     }
   }
+  return step;
 }
 
-/** 
- * Move the steps up to DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER (the latter one) 
- * from DELIVERED to the end of DELIVERING. Cfr. PN-3623.
- * I do this outside the main loop because the state DELIVERING comes before DELIVERED, 
- * so that performing this movement in the previous loop would be awkward.
- * I *strongly* believe that the processing of a notification' timeline should be re-designed.
- * -----------------------------
- * Carlos Lombardi, 2023.02.08
- * -----------------------------
- */
-function shiftDeliveredTimelineElementsToDelivering(parsedNotification: NotificationDetail) {
-  const deliveringStatus = parsedNotification.notificationStatusHistory.find(
-    status => status.status === NotificationStatus.DELIVERING
-  );
-  const deliveredStatus = parsedNotification.notificationStatusHistory.find(
-    status => status.status === NotificationStatus.DELIVERED
-  );
-  if (deliveringStatus && deliveredStatus) {
-    // find inside deliveredStatus.relatedTimelineElements, the (first) index corresponding 
-    // to an timeline element belonging to the given category
-    const findElementIndexByTimelineCategory = (category: TimelineCategory) => 
-      deliveredStatus.relatedTimelineElements.findIndex(elementId => {
-        const step = parsedNotification.timeline.find((t) => t.elementId === elementId);
-        return step && step.category === category;
-      }
-    );
-    const digitalFailureWorkflowIndex = findElementIndexByTimelineCategory(TimelineCategory.DIGITAL_FAILURE_WORKFLOW);
-    const sendSimpleRegisteredLetterIndex = findElementIndexByTimelineCategory(TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER);
-    const lastIndexToShift = Math.max(digitalFailureWorkflowIndex, sendSimpleRegisteredLetterIndex);
-    if (lastIndexToShift > -1) {
-      deliveringStatus.relatedTimelineElements.push(...deliveredStatus.relatedTimelineElements.slice(0,lastIndexToShift+1));
-      deliveredStatus.relatedTimelineElements = deliveredStatus.relatedTimelineElements.slice(lastIndexToShift+1);
 
-      // Also change the "activeFrom" timestamp of the DELIVERED status 
-      // to avoid it to be earlier than the last timeline element added to DELIVERING, i.e. the previous step.
-      const lastDeliveringTimelineElementAfterShift = parsedNotification.timeline.find(
-        (t) => t.elementId === deliveringStatus.relatedTimelineElements[deliveringStatus.relatedTimelineElements.length - 1]
-      );
-      if (lastDeliveringTimelineElementAfterShift && lastDeliveringTimelineElementAfterShift.timestamp > deliveredStatus.activeFrom) {
-        deliveredStatus.activeFrom = lastDeliveringTimelineElementAfterShift.timestamp;
-      }
-    }
+function fromLatestToEarliest(a: INotificationDetailTimeline, b: INotificationDetailTimeline) {
+  if (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime() >= 0) {
+    return 1;
   }
+  return -1;
 }
 
-
-/**
- * Populate timeline macro steps
- * @param  {NotificationDetail} parsedNotification
- */
 function populateMacroSteps(parsedNotification: NotificationDetail) {
-  // before starting ...
-  shiftDeliveredTimelineElementsToDelivering(parsedNotification);
-
+  /* eslint-disable functional/no-let */
   let isEffectiveDateStatus = false;
   let acceptedStatusItems: Array<string> = [];
+  let hasSentSimpleRegisteredLetter = false;
+  let deliveringStatus: NotificationStatusHistory | undefined;
+
+  /* eslint-enable functional/no-let */
+
   for (const status of parsedNotification.notificationStatusHistory) {
+    /* eslint-disable-next-line functional/no-let */
+    let lastDeliveredIndexToShift = -1;
+
+    // keep pointer to delivering status for eventual later use
+    if (status.status === NotificationStatus.DELIVERING) {
+      deliveringStatus = status;
+    }
     // if status accepted has items, move them to the next state, but preserve legalfacts
     if (status.status === NotificationStatus.ACCEPTED && status.relatedTimelineElements.length) {
       acceptedStatusItems = status.relatedTimelineElements;
@@ -496,19 +464,43 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
       status.relatedTimelineElements.unshift(...acceptedStatusItems);
     }
     status.steps = [];
+
     // find timeline steps that are linked with current status
-    for (const timelineElement of status.relatedTimelineElements) {
-      populateMacroStep(parsedNotification, timelineElement, status, acceptedStatusItems);
-    }
-    // order step by time, latest first
-    status.steps.sort((a, b) => {
-      if (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime() >= 0) {
-        return 1;
-      }
-      return -1;
+    status.relatedTimelineElements.forEach((timelineElement, ix) => {
+      const step = populateMacroStep(parsedNotification, timelineElement, status, acceptedStatusItems);
+      if (step) {
+        // must remember if a simple registered letter was sent
+        if (step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER) {
+          hasSentSimpleRegisteredLetter = true;
+        } 
+        // record the last timeline event from DELIVERED that must be shifted to DELIVERING
+        // the rule: up to the last DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER element
+        if (status.status === NotificationStatus.DELIVERED &&
+          (step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW 
+          || step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER)
+        ) {
+          lastDeliveredIndexToShift = ix;
+        }
+      } 
     });
+    
+    // shift steps from DELIVERED to DELIVERING
+    // this is the reason why the pointer to the DELIVERING status is kept, recall that 
+    if (status.status === NotificationStatus.DELIVERED && lastDeliveredIndexToShift > -1 && deliveringStatus && deliveringStatus.steps) {
+      const stepsToShift = status.steps.slice(0, lastDeliveredIndexToShift+1);
+      stepsToShift.sort(fromLatestToEarliest);
+      deliveringStatus.steps.unshift(...stepsToShift);
+      status.steps = status.steps.slice(lastDeliveredIndexToShift+1);
+    }
+
+    // order step by time, latest first
+    status.steps.sort(fromLatestToEarliest);
     if (status.status !== NotificationStatus.ACCEPTED && acceptedStatusItems.length) {
       acceptedStatusItems = [];
+    }
+    // sets the delivery mode for DELIVERED status
+    if (status.status === NotificationStatus.DELIVERED) {
+      status.deliveryMode = hasSentSimpleRegisteredLetter ? "analog" : "digital";
     }
     // check if there are information about the user that chahnged the status and populate recipient object
     if (status.status === NotificationStatus.VIEWED) {

@@ -258,6 +258,8 @@ export interface NotificationStatusHistory {
   // only fe
   steps?: Array<INotificationDetailTimeline>;
   recipient?: string;
+  // this is useful for the DELIVERED status only
+  deliveryMode?: 'analog' | 'digital';
 }
 
 export enum TimelineCategory {

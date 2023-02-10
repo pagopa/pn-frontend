@@ -105,9 +105,9 @@ export const parsedNotification: NotificationDetail = {
   notificationStatus: NotificationStatus.ACCEPTED,
   notificationStatusHistory: [
     { ...statusHistory[0], steps: [{...timeline[0], hidden: false}] },
-    { ...statusHistory[1], steps: [{...timeline[1], hidden: false}]},
+    { ...statusHistory[1], steps: [{...timeline[1], hidden: false}], deliveryMode: 'digital'},
   ],
   timeline: timeline.map(t => ({...t, hidden: false})),
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
+  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };

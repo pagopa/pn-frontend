@@ -31,7 +31,7 @@ function testNotificationStatusInfosFn(
   tooltipToTest: string,
   recipient?: string
 ) {
-  const { label, color, tooltip } = getNotificationStatusInfos(status, { recipient });
+  const { label, color, tooltip } = getNotificationStatusInfos({status, recipient, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] });
   expect(label).toBe(labelToTest);
   expect(color).toBe(colorToTest);
   expect(tooltip).toBe(tooltipToTest);
@@ -245,8 +245,8 @@ describe('timeline utility functions', () => {
       address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
-      'Invio per via digitale non riuscito',
-      'Il tentativo di invio della notifica per via digitale a Nome Cognome non è riuscito.'
+      'Invio via PEC non riuscito',
+      "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail non è riuscito perché la casella è satura, non valida o inattiva."
     );
   });
 
@@ -259,8 +259,8 @@ describe('timeline utility functions', () => {
       address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
-      'Invio per via digitale riuscito',
-      'Il tentativo di invio della notifica per via digitale a Nome Cognome è riuscito.'
+      'Invio via PEC riuscito',
+      "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail è riuscito."
     );
   });
 

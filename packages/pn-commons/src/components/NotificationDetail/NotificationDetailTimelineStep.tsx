@@ -39,7 +39,6 @@ type Props = {
   historyButtonLabel?: string;
   historyButtonClickHandler?: () => void;
   eventTrackingCallbackShowMore?: () => void;
-  completeStatusHistory: Array<NotificationStatusHistory>;
 };
 
 /**
@@ -95,7 +94,6 @@ const NotificationDetailTimelineStep = ({
   historyButtonLabel,
   historyButtonClickHandler,
   eventTrackingCallbackShowMore,
-  completeStatusHistory,
 }: Props) => {
   const [collapsed, setCollapsed] = useState(true);
   /* eslint-disable functional/no-let */
@@ -103,10 +101,7 @@ const NotificationDetailTimelineStep = ({
   let visibleSteps: Array<INotificationDetailTimeline> = [];
   /* eslint-enable functional/no-let */
 
-  const notificationStatusInfos = getNotificationStatusInfos(
-    timelineStep.status,
-    { recipient: timelineStep.recipient, completeStatusHistory }
-  );
+  const notificationStatusInfos = getNotificationStatusInfos(timelineStep);
 
   if (timelineStep.steps) {
     /* eslint-disable functional/immutable-data */
