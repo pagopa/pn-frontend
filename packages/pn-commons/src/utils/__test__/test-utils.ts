@@ -91,6 +91,28 @@ export const notificationFromBe: NotificationDetail = {
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
 };
 
+export function flexibleNotificationFromBE(
+  status: NotificationStatus, statusHistory: NotificationStatusHistory[], timeline: INotificationDetailTimeline[]
+): NotificationDetail {
+  return {
+    iun: '',
+    paProtocolNumber: '',
+    senderPaId: '',
+    subject: '',
+    sentAt: '2022-02-21T10:19:33.440Z',
+    cancelledByIun: '',
+    recipients,
+    documentsAvailable: true,
+    documents: [],
+    otherDocuments: [],
+    notificationStatus: status,
+    notificationStatusHistory: statusHistory,
+    timeline,
+    physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
+    notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
+  }
+}
+
 export const parsedNotification: NotificationDetail = {
   iun: '',
   paProtocolNumber: '',
@@ -105,7 +127,7 @@ export const parsedNotification: NotificationDetail = {
   notificationStatus: NotificationStatus.ACCEPTED,
   notificationStatusHistory: [
     { ...statusHistory[0], steps: [{...timeline[0], hidden: false}] },
-    { ...statusHistory[1], steps: [{...timeline[1], hidden: false}], deliveryMode: 'digital'},
+    { ...statusHistory[1], steps: [{...timeline[1], hidden: false}] },
   ],
   timeline: timeline.map(t => ({...t, hidden: false})),
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,

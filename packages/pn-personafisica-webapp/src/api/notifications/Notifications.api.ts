@@ -93,7 +93,7 @@ function mockedNotificationDetail() {
     "iun": "KQKX-WMDW-GDMU-202301-L-1",
     "sentAt": "2023-01-26T13:54:47.18027307Z",
     "documentsAvailable": true,
-    "notificationStatus": NotificationStatus.VIEWED,
+    "notificationStatus": NotificationStatus.DELIVERING,
     "notificationStatusHistory": [
       {
         "status": NotificationStatus.ACCEPTED,
@@ -112,26 +112,30 @@ function mockedNotificationDetail() {
         "relatedTimelineElements": [
           "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_0_source_PLATFORM_attempt_0",
           "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_0_source_PLATFORM_attempt_0_progidx_1",
-          "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_0"
+          "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_0",
+          "KQKX-WMDW-GDMU-202301-L-1_schedule_digital_workflow_0_source_PLATFORM_retry_0",
+          // "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_0_source_PLATFORM_attempt_1",
+          // "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_0_source_PLATFORM_attempt_1_progidx_1",
+          // "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_1",
         ]
       },
-      {
-        "status": NotificationStatus.DELIVERED,
-        "activeFrom": "2023-01-26T13:57:16.42843144Z",
-        "relatedTimelineElements": [
-          "KQKX-WMDW-GDMU-202301-L-1_digital_failure_workflow_0",
-          "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_0",
-          "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_0",
-          "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_0",
-          "KQKX-WMDW-GDMU-202301-L-1_notification_paid",
-          "KQKX-WMDW-GDMU-202301-L-1_send_courtesy_message_0_index_2"
-        ]
-      },
-      {
-        "status": NotificationStatus.EFFECTIVE_DATE,
-        "activeFrom": "2023-01-26T14:01:23.333432372Z",
-        "relatedTimelineElements": ["KQKX-WMDW-GDMU-202301-L-1_refinement_0"]
-      },
+      // {
+      //   "status": NotificationStatus.DELIVERED,
+      //   "activeFrom": "2023-01-26T13:57:16.42843144Z",
+      //   "relatedTimelineElements": [
+      //     // "KQKX-WMDW-GDMU-202301-L-1_digital_failure_workflow_0",
+      //     // "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_0",
+      //     // "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_0",
+      //     // "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_0",
+      //     // "KQKX-WMDW-GDMU-202301-L-1_notification_paid",
+      //     // "KQKX-WMDW-GDMU-202301-L-1_send_courtesy_message_0_index_2"
+      //   ]
+      // },
+      // {
+      //   "status": NotificationStatus.EFFECTIVE_DATE,
+      //   "activeFrom": "2023-01-26T14:01:23.333432372Z",
+      //   "relatedTimelineElements": ["KQKX-WMDW-GDMU-202301-L-1_refinement_0"]
+      // },
       // {
       //   "status": NotificationStatus.VIEWED,
       //   "activeFrom": "2023-01-27T12:14:23.357127847Z",
@@ -267,90 +271,163 @@ function mockedNotificationDetail() {
         }
       },
       {
-        "elementId": "KQKX-WMDW-GDMU-202301-L-1_digital_failure_workflow_0",
-        "timestamp": "2023-01-26T13:57:16.42843144Z",
-        "legalFactsIds": [
-          {
-            "key": "safestorage://PN_LEGAL_FACTS-0002-0HBC-V58A-FT7W-WG8Y",
-            "category": LegalFactType.DIGITAL_DELIVERY
-          }
-        ],
-        "category": TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_schedule_digital_workflow_0_source_PLATFORM_retry_0",
+        "timestamp": "2023-01-26T13:57:34.001161877Z",
+        "legalFactsIds": [],
+        "category": TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW,
+        "details": {
+            "recIndex": 0,
+            "digitalAddressSource": "PLATFORM",
+            "sentAttemptMade": 0,
+            "lastAttemptDate": "2023-02-08T17:08:10.95299597Z"
+        }
+      },
+      {
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_0_source_PLATFORM_attempt_1",
+        "timestamp": "2023-01-26T13:57:40.651901435Z",
+        "legalFactsIds": [],
+        "category": TimelineCategory.SEND_DIGITAL_DOMICILE,
         "details": {
           "recIndex": 0,
           "digitalAddress": {
             "type": "PEC",
-            "address": "manudido99@gmail.com"
-          }
+            "address": "manudido86@gmail.com"
+          },
+          "digitalAddressSource": "PLATFORM",
+          "retryNumber": 1
         }
       },
       {
-        "elementId": "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_0",
-        "timestamp": "2023-01-26T13:57:16.525827086Z",
-        "legalFactsIds": [],
-        "category": TimelineCategory.SCHEDULE_REFINEMENT,
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_0_source_PLATFORM_attempt_1_progidx_1",
+        "timestamp": "2023-01-26T13:57:42.000870007Z",
+        "legalFactsIds": [
+          {
+            "key": "safestorage://PN_EXTERNAL_LEGAL_FACTS-0003-T9NR-EZKL-5V5A-WUAM",
+            "category": LegalFactType.PEC_RECEIPT,
+          }
+        ],
+        "category": TimelineCategory.SEND_DIGITAL_PROGRESS,
         "details": {
-          "recIndex": 0
+          "recIndex": 0,
+          "digitalAddress": {
+            "type": "PEC",
+            "address": "manudido86@gmail.com"
+          },
+          "digitalAddressSource": "PLATFORM",
+          "retryNumber": 1,
+          "notificationDate": "2023-01-26T13:57:41.224667703Z",
+          "sendingReceipts": [{}],
+          "eventCode": "C001",
+          "shouldRetry": false
         }
       },
       {
-          "elementId": "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_0",
-          "timestamp": "2023-01-26T13:57:18.525827086Z",
-          "legalFactsIds": [],
-          "category": TimelineCategory.PREPARE_SIMPLE_REGISTERED_LETTER,
-          "details": {
-              "recIndex": 0,
-              "physicalAddress": {
-                  "at": "",
-                  "address": "via prova 45",
-                  "addressDetails": "",
-                  "zip": "20121",
-                  "municipality": "milano",
-                  "province": "milano"
-              },
-              "analogCost": 1
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_1",
+        "timestamp": "2023-01-26T13:57:44.001161877Z",
+        "legalFactsIds": [
+          {
+            "key": "safestorage://PN_EXTERNAL_LEGAL_FACTS-0003-VXMT-20MV-CBBU-X5MR",
+            "category": LegalFactType.PEC_RECEIPT
           }
-      },
-      {
-          "elementId": "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_0",
-          "timestamp": "2023-01-26T13:58:20.525827086Z",
-          "legalFactsIds": [],
-          "category": TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
-          "details": {
-              "recIndex": 0,
-              "physicalAddress": {
-                  "address": "via prova 45",
-                  "zip": "20121",
-                  "municipality": "milano",
-                  "province": "milano"
-              },
-              "productType": "RN_RS",
-              "analogCost": 1100
-          }
-      },
-      {
-        "elementId": "KQKX-WMDW-GDMU-202301-L-1_notification_paid",
-        "timestamp": "2023-01-26T13:58:22.525827086Z",
-        "legalFactsIds": [],
-        "category": TimelineCategory.PAYMENT,
+        ],
+        "category": TimelineCategory.SEND_DIGITAL_FEEDBACK,
         "details": {
-            "recIndex": 0,
+          "recIndex": 0,
+          "digitalAddress": {
+            "type": "PEC",
+            "address": "manudido86@gmail.com"
+          },
+          "digitalAddressSource": "PLATFORM",
+          "responseStatus": "KO",
+          "notificationDate": "2023-01-26T13:57:43.001161877Z",
+          "sendingReceipts": [{}]
         }
-    },
-    {
-      "elementId": "KQKX-WMDW-GDMU-202301-L-1_send_courtesy_message_0_index_2",
-      "timestamp": "2023-01-26T13:59:24.525827086Z",
-      "legalFactsIds": [],
-      "category": TimelineCategory.SEND_COURTESY_MESSAGE,
-      "details": {
-        "recIndex": 0,
-        "digitalAddress": {
-          "type": "EMAIL",
-          "address": "manudido86@gmail.com"
-        },
-        "sendDate": "2023-01-26T13:59:24.525827086Z"
-      }
-    },
+      },
+      // {
+      //   "elementId": "KQKX-WMDW-GDMU-202301-L-1_digital_success_workflow_0",
+      //   "timestamp": "2023-01-26T13:58:12.42843144Z",
+      //   "legalFactsIds": [
+      //     {
+      //       "key": "safestorage://PN_LEGAL_FACTS-0002-0HBC-V58A-FT7W-WG8Y",
+      //       "category": LegalFactType.DIGITAL_DELIVERY
+      //     }
+      //   ],
+      //   "category": TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
+      //   "details": {
+      //     "recIndex": 0,
+      //     "digitalAddress": {
+      //       "type": "PEC",
+      //       "address": "manudido86@gmail.com"
+      //     }
+      //   }
+      // },
+      // {
+      //   "elementId": "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_0",
+      //   "timestamp": "2023-01-26T13:58:16.525827086Z",
+      //   "legalFactsIds": [],
+      //   "category": TimelineCategory.SCHEDULE_REFINEMENT,
+      //   "details": {
+      //     "recIndex": 0
+      //   }
+      // },
+      // {
+      //     "elementId": "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_0",
+      //     "timestamp": "2023-01-26T13:58:18.525827086Z",
+      //     "legalFactsIds": [],
+      //     "category": TimelineCategory.PREPARE_SIMPLE_REGISTERED_LETTER,
+      //     "details": {
+      //         "recIndex": 0,
+      //         "physicalAddress": {
+      //             "at": "",
+      //             "address": "via prova 45",
+      //             "addressDetails": "",
+      //             "zip": "20121",
+      //             "municipality": "milano",
+      //             "province": "milano"
+      //         },
+      //         "analogCost": 1
+      //     }
+      // },
+      // {
+      //     "elementId": "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_0",
+      //     "timestamp": "2023-01-26T13:59:20.525827086Z",
+      //     "legalFactsIds": [],
+      //     "category": TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
+      //     "details": {
+      //         "recIndex": 0,
+      //         "physicalAddress": {
+      //             "address": "via prova 45",
+      //             "zip": "20121",
+      //             "municipality": "milano",
+      //             "province": "milano"
+      //         },
+      //         "productType": "RN_RS",
+      //         "analogCost": 1100
+      //     }
+      // },
+    //   {
+    //     "elementId": "KQKX-WMDW-GDMU-202301-L-1_notification_paid",
+    //     "timestamp": "2023-01-26T13:59:22.525827086Z",
+    //     "legalFactsIds": [],
+    //     "category": TimelineCategory.PAYMENT,
+    //     "details": {
+    //         "recIndex": 0,
+    //     }
+    // },
+    // {
+    //   "elementId": "KQKX-WMDW-GDMU-202301-L-1_send_courtesy_message_0_index_2",
+    //   "timestamp": "2023-01-26T14:00:24.525827086Z",
+    //   "legalFactsIds": [],
+    //   "category": TimelineCategory.SEND_COURTESY_MESSAGE,
+    //   "details": {
+    //     "recIndex": 0,
+    //     "digitalAddress": {
+    //       "type": "EMAIL",
+    //       "address": "manudido86@gmail.com"
+    //     },
+    //     "sendDate": "2023-01-26T13:59:24.525827086Z"
+    //   }
+    // },
   {
         "elementId": "KQKX-WMDW-GDMU-202301-L-1_refinement_0",
         "timestamp": "2023-01-26T14:01:23.333432372Z",
@@ -361,20 +438,20 @@ function mockedNotificationDetail() {
           "notificationCost": 100
         }
       },
-      // {
-      //   "elementId": "KQKX-WMDW-GDMU-202301-L-1_notification_viewed_0",
-      //   "timestamp": "2023-01-27T12:14:23.357127847Z",
-      //   "legalFactsIds": [
-      //     {
-      //       "key": "safestorage://PN_LEGAL_FACTS-0002-7LNB-G0E1-2OGO-EEA6",
-      //       "category": LegalFactType.RECIPIENT_ACCESS
-      //     }
-      //   ],
-      //   "category": TimelineCategory.NOTIFICATION_VIEWED,
-      //   "details": {
-      //     "recIndex": 0
-      //   }
-      // }
+      {
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_notification_viewed_0",
+        "timestamp": "2023-01-27T12:14:23.357127847Z",
+        "legalFactsIds": [
+          {
+            "key": "safestorage://PN_LEGAL_FACTS-0002-7LNB-G0E1-2OGO-EEA6",
+            "category": LegalFactType.RECIPIENT_ACCESS
+          }
+        ],
+        "category": TimelineCategory.NOTIFICATION_VIEWED,
+        "details": {
+          "recIndex": 0
+        }
+      }
     ]
   };
 };

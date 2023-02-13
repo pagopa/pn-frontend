@@ -21,6 +21,7 @@ import {
   SendDigitalDetails,
   ViewedDetails,
   SendPaperDetails,
+  NotificationDeliveryMode,
 } from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -75,22 +76,29 @@ export function getNotificationStatusInfos(
   let subject = getLocalizedOrDefaultLabel('notifications', `status.recipient`, 'destinatario');
   switch (actualStatus) {
     case NotificationStatus.DELIVERED:
-      const deliveryMode = (statusObject && statusObject.deliveryMode) || 'analog';
-      const deliveryModeDescription = getLocalizedOrDefaultLabel(
-        'notifications', 
-        `status.deliveryMode.${deliveryMode}`, 
-        deliveryMode === 'analog' ? 'analogico' : 'digitale'
+      const statusInfos = localizeStatus(
+        'delivered',
+        'Consegnata',
+        `La notifica è stata consegnata`,
+        'La notifica è stata consegnata.',
       );
-      return {
-        color: 'default',
-        ...localizeStatus(
-          'delivered',
-          'Consegnata',
-          'La notifica è stata consegnata',
-          `La notifica è stata consegnata in via ${deliveryMode === 'analog' ? 'analogica' : 'digitale'}`,
+      // if the deliveryMode is defined, then change the description for a more specific one.
+      const deliveryMode = statusObject && statusObject.deliveryMode;
+      if (deliveryMode) {
+        const deliveryModeDescription = getLocalizedOrDefaultLabel(
+          'notifications', 
+          `status.deliveryMode.${deliveryMode}`, 
+          `${deliveryMode}`
+        );
+        statusInfos.description =  getLocalizedOrDefaultLabel(
+          'notifications',
+          'status.delivered-description-with-delivery-mode',
+          `La notifica è stata consegnata per via ${deliveryMode === NotificationDeliveryMode.ANALOG ? 'analogica' : 'digitale'}.`,
           { deliveryMode: deliveryModeDescription }
-        ),
-      };
+        );
+      }
+      // set the color at the end to avoid a type error since the color is defined as an union among some well-known strings
+      return { color: 'default', ...statusInfos };
     case NotificationStatus.DELIVERING:
       return {
         color: 'default',
@@ -444,7 +452,7 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
   /* eslint-disable functional/no-let */
   let isEffectiveDateStatus = false;
   let acceptedStatusItems: Array<string> = [];
-  let hasSentSimpleRegisteredLetter = false;
+  let deliveryMode: NotificationDeliveryMode | undefined;
   let deliveringStatus: NotificationStatusHistory | undefined;
 
   /* eslint-enable functional/no-let */
@@ -469,9 +477,12 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
     status.relatedTimelineElements.forEach((timelineElement, ix) => {
       const step = populateMacroStep(parsedNotification, timelineElement, status, acceptedStatusItems);
       if (step) {
-        // must remember if a simple registered letter was sent
-        if (step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER) {
-          hasSentSimpleRegisteredLetter = true;
+        // delivery mode: according to the first arrived 
+        // between DIGITAL_SUCCESS_WORKFLOW and SEND_SIMPLE_REGISTERED_LETTER
+        if (step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW && !deliveryMode) {
+          deliveryMode = NotificationDeliveryMode.DIGITAL;
+        } else if (step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER && !deliveryMode) {
+          deliveryMode = NotificationDeliveryMode.ANALOG;
         } 
         // record the last timeline event from DELIVERED that must be shifted to DELIVERING
         // the rule: up to the last DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER element
@@ -501,8 +512,8 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
       acceptedStatusItems = [];
     }
     // sets the delivery mode for DELIVERED status
-    if (status.status === NotificationStatus.DELIVERED) {
-      status.deliveryMode = hasSentSimpleRegisteredLetter ? "analog" : "digital";
+    if (status.status === NotificationStatus.DELIVERED && deliveryMode) {
+      status.deliveryMode = deliveryMode;
     }
     // check if there are information about the user that chahnged the status and populate recipient object
     if (status.status === NotificationStatus.VIEWED) {

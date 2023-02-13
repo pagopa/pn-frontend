@@ -11,7 +11,7 @@ import {
   TimelineCategory,
   NotificationStatus,
 } from '../../types';
-import { ResponseStatus } from '../../types/NotificationDetail';
+import { NotificationDeliveryMode, NotificationStatusHistory, ResponseStatus } from '../../types/NotificationDetail';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -37,6 +37,20 @@ function testNotificationStatusInfosFn(
   expect(tooltip).toBe(tooltipToTest);
 }
 
+function testNotificationStatusInfosFnIncludingDescription(
+  status: NotificationStatusHistory,
+  labelToTest: string,
+  colorToTest: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary',
+  tooltipToTest: string,
+  descriptionToTest: string,
+) {
+  const { label, color, tooltip, description } = getNotificationStatusInfos(status);
+  expect(label).toBe(labelToTest);
+  expect(color).toBe(colorToTest);
+  expect(tooltip).toBe(tooltipToTest);
+  expect(description).toBe(descriptionToTest);
+}
+
 function testTimelineStatusInfosFn(labelToTest: string, descriptionToTest: string) {
   const { label, description } = getNotificationTimelineStatusInfos(
     parsedNotificationCopy.timeline[0],
@@ -47,12 +61,33 @@ function testTimelineStatusInfosFn(labelToTest: string, descriptionToTest: strin
 }
 
 describe('notification utility functions', () => {
-  it('return notification status infos - DELIVERED', () => {
-    testNotificationStatusInfosFn(
-      NotificationStatus.DELIVERED,
+  it('return notification status infos - DELIVERED - analog shipment', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.ANALOG },
       'Consegnata',
       'default',
-      'La notifica è stata consegnata'
+      'La notifica è stata consegnata',
+      'La notifica è stata consegnata per via analogica.'
+    );
+  });
+
+  it('return notification status infos - DELIVERED - digital shipment', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.DIGITAL },
+      'Consegnata',
+      'default',
+      'La notifica è stata consegnata',
+      'La notifica è stata consegnata per via digitale.'
+    );
+  });
+
+  it('return notification status infos - DELIVERED - unspecified shipment mode', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      'Consegnata',
+      'default',
+      'La notifica è stata consegnata',
+      'La notifica è stata consegnata.'
     );
   });
 

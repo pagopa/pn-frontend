@@ -3,7 +3,9 @@ import { apiClient } from '../apiClients';
 import { CONSENTS } from './consents.routes';
 
 export const ConsentsApi = {
-  getConsentByType: (consentType: ConsentType): Promise<Consent> =>
+  getConsentByType: (consentType: ConsentType): Promise<Consent> => Promise.resolve({recipientId: consentType ? 'toto' : 'titi', consentType: ConsentType.TOS, accepted: true}),
+
+  getConsentByTypeReal: (consentType: ConsentType): Promise<Consent> =>
     apiClient
       .get<Consent>(CONSENTS(consentType))
       .then((response) => response.data),
