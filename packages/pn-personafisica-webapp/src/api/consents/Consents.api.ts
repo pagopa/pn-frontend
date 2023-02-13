@@ -3,10 +3,21 @@ import { apiClient } from '../apiClients';
 import { CONSENTS } from './consents.routes';
 
 export const ConsentsApi = {
+  /*
   getConsentByType: (consentType: ConsentType): Promise<Consent> =>
     apiClient
       .get<Consent>(CONSENTS(consentType))
       .then((response) => response.data),
+      */
+
+  getConsentByType: (consentType: ConsentType): Promise<Consent> => {
+    console.log(consentType);
+    return Promise.resolve({
+      recipientId: 'ciao',
+      consentType: ConsentType.TOS,
+      accepted: true,
+    });
+  },
 
   setConsentByType: (
     consentType: ConsentType,
