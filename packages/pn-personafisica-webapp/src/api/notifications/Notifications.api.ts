@@ -114,35 +114,35 @@ function mockedNotificationDetail() {
           "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_0_source_PLATFORM_attempt_0_progidx_1",
           "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_0",
           "KQKX-WMDW-GDMU-202301-L-1_schedule_digital_workflow_0_source_PLATFORM_retry_0",
-          // "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_0_source_PLATFORM_attempt_1",
-          // "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_0_source_PLATFORM_attempt_1_progidx_1",
-          // "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_1",
+          "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_0_source_PLATFORM_attempt_1",
+          "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_0_source_PLATFORM_attempt_1_progidx_1",
+          "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_1",
         ]
       },
-      // {
-      //   "status": NotificationStatus.DELIVERED,
-      //   "activeFrom": "2023-01-26T13:57:16.42843144Z",
-      //   "relatedTimelineElements": [
-      //     // "KQKX-WMDW-GDMU-202301-L-1_digital_failure_workflow_0",
-      //     // "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_0",
-      //     // "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_0",
-      //     // "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_0",
-      //     // "KQKX-WMDW-GDMU-202301-L-1_notification_paid",
-      //     // "KQKX-WMDW-GDMU-202301-L-1_send_courtesy_message_0_index_2"
-      //   ]
-      // },
-      // {
-      //   "status": NotificationStatus.EFFECTIVE_DATE,
-      //   "activeFrom": "2023-01-26T14:01:23.333432372Z",
-      //   "relatedTimelineElements": ["KQKX-WMDW-GDMU-202301-L-1_refinement_0"]
-      // },
-      // {
-      //   "status": NotificationStatus.VIEWED,
-      //   "activeFrom": "2023-01-27T12:14:23.357127847Z",
-      //   "relatedTimelineElements": [
-      //     "KQKX-WMDW-GDMU-202301-L-1_notification_viewed_0"
-      //   ]
-      // }
+      {
+        "status": NotificationStatus.DELIVERED,
+        "activeFrom": "2023-01-26T13:57:16.42843144Z",
+        "relatedTimelineElements": [
+          "KQKX-WMDW-GDMU-202301-L-1_digital_success_workflow_0",
+          "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_0",
+          // "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_0",
+          // "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_0",
+          // "KQKX-WMDW-GDMU-202301-L-1_notification_paid",
+          // "KQKX-WMDW-GDMU-202301-L-1_send_courtesy_message_0_index_2"
+        ]
+      },
+      {
+        "status": NotificationStatus.EFFECTIVE_DATE,
+        "activeFrom": "2023-01-26T14:01:23.333432372Z",
+        "relatedTimelineElements": ["KQKX-WMDW-GDMU-202301-L-1_refinement_0"]
+      },
+      {
+        "status": NotificationStatus.VIEWED,
+        "activeFrom": "2023-01-27T12:14:23.357127847Z",
+        "relatedTimelineElements": [
+          "KQKX-WMDW-GDMU-202301-L-1_notification_viewed_0"
+        ]
+      }
     ],
     "timeline": [
       {
@@ -338,38 +338,38 @@ function mockedNotificationDetail() {
             "address": "manudido86@gmail.com"
           },
           "digitalAddressSource": "PLATFORM",
-          "responseStatus": "KO",
+          "responseStatus": "OK",
           "notificationDate": "2023-01-26T13:57:43.001161877Z",
           "sendingReceipts": [{}]
         }
       },
-      // {
-      //   "elementId": "KQKX-WMDW-GDMU-202301-L-1_digital_success_workflow_0",
-      //   "timestamp": "2023-01-26T13:58:12.42843144Z",
-      //   "legalFactsIds": [
-      //     {
-      //       "key": "safestorage://PN_LEGAL_FACTS-0002-0HBC-V58A-FT7W-WG8Y",
-      //       "category": LegalFactType.DIGITAL_DELIVERY
-      //     }
-      //   ],
-      //   "category": TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
-      //   "details": {
-      //     "recIndex": 0,
-      //     "digitalAddress": {
-      //       "type": "PEC",
-      //       "address": "manudido86@gmail.com"
-      //     }
-      //   }
-      // },
-      // {
-      //   "elementId": "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_0",
-      //   "timestamp": "2023-01-26T13:58:16.525827086Z",
-      //   "legalFactsIds": [],
-      //   "category": TimelineCategory.SCHEDULE_REFINEMENT,
-      //   "details": {
-      //     "recIndex": 0
-      //   }
-      // },
+      {
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_digital_success_workflow_0",
+        "timestamp": "2023-01-26T13:58:12.42843144Z",
+        "legalFactsIds": [
+          {
+            "key": "safestorage://PN_LEGAL_FACTS-0002-0HBC-V58A-FT7W-WG8Y",
+            "category": LegalFactType.DIGITAL_DELIVERY
+          }
+        ],
+        "category": TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+        "details": {
+          "recIndex": 0,
+          "digitalAddress": {
+            "type": "PEC",
+            "address": "manudido86@gmail.com"
+          }
+        }
+      },
+      {
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_0",
+        "timestamp": "2023-01-26T13:58:16.525827086Z",
+        "legalFactsIds": [],
+        "category": TimelineCategory.SCHEDULE_REFINEMENT,
+        "details": {
+          "recIndex": 0
+        }
+      },
       // {
       //     "elementId": "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_0",
       //     "timestamp": "2023-01-26T13:58:18.525827086Z",

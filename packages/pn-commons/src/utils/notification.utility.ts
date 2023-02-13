@@ -454,13 +454,15 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
   let acceptedStatusItems: Array<string> = [];
   let deliveryMode: NotificationDeliveryMode | undefined;
   let deliveringStatus: NotificationStatusHistory | undefined;
+  /* eslint-enable functional/no-let */
 
+  /* eslint-disable functional/no-let */
+  let lastDeliveredIndexToShift = -1;
+  let lastDeliveredIndexToShiftIsFixed = false;
+  let preventShiftFromDeliveredToDelivering = false;
   /* eslint-enable functional/no-let */
 
   for (const status of parsedNotification.notificationStatusHistory) {
-    /* eslint-disable-next-line functional/no-let */
-    let lastDeliveredIndexToShift = -1;
-
     // keep pointer to delivering status for eventual later use
     if (status.status === NotificationStatus.DELIVERING) {
       deliveringStatus = status;
@@ -484,20 +486,45 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
         } else if (step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER && !deliveryMode) {
           deliveryMode = NotificationDeliveryMode.ANALOG;
         } 
+
+        // // if a DIGITAL_SUCCESS_WORKFLOW event is found in the DELIVERING status
+        // // (since as of 2023.02.13 the jump from DELIVERING to DELIVERED could not be related to the *first* digital shipment resolution)
+        // // then no shift is performed from DELIVERED to DELIVERING
+        // // ... I prefer to still shift events up to the first DIGITAL_SUCCESS_WORKFLOW found in DELIVERED status ...
+        // // keep the code just in case
+        // if (status.status === NotificationStatus.DELIVERING && step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
+        //   preventShiftFromDeliveredToDelivering = true;
+        // }
+
         // record the last timeline event from DELIVERED that must be shifted to DELIVERING
-        // the rule: up to the last DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER element
-        if (status.status === NotificationStatus.DELIVERED &&
-          (step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW 
-          || step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER)
-        ) {
-          lastDeliveredIndexToShift = ix;
+        // the rules: 
+        // - up to the last DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER element,
+        // - or the first DIGITAL_SUCCESS_WORKFLOW afterwards a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER 
+        //   (in this case, excluding it)
+        // if a DIGITAL_SUCCESS_WORKFLOW is found before a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER
+        // then no shift has to be done
+        if (status.status === NotificationStatus.DELIVERED && !preventShiftFromDeliveredToDelivering) {
+          if ((step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW 
+              || step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER) && !lastDeliveredIndexToShiftIsFixed)
+          {
+            lastDeliveredIndexToShift = ix;
+          } else if (step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
+            if (lastDeliveredIndexToShift > -1) {
+              lastDeliveredIndexToShift = ix - 1;
+              lastDeliveredIndexToShiftIsFixed = true;
+            } else {
+              preventShiftFromDeliveredToDelivering = true;
+            }
+          } 
         }
       } 
     });
     
     // shift steps from DELIVERED to DELIVERING
     // this is the reason why the pointer to the DELIVERING status is kept, recall that 
-    if (status.status === NotificationStatus.DELIVERED && lastDeliveredIndexToShift > -1 && deliveringStatus && deliveringStatus.steps) {
+    if (status.status === NotificationStatus.DELIVERED && deliveringStatus && deliveringStatus.steps
+        && !preventShiftFromDeliveredToDelivering && lastDeliveredIndexToShift > -1 
+    ) {
       const stepsToShift = status.steps.slice(0, lastDeliveredIndexToShift+1);
       stepsToShift.sort(fromLatestToEarliest);
       deliveringStatus.steps.unshift(...stepsToShift);
