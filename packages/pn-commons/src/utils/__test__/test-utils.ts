@@ -74,7 +74,7 @@ const recipients: Array<NotificationDetailRecipient> = [
 ];
 
 export const notificationFromBe: NotificationDetail = {
-  iun: '',
+  iun: 'KQKX-WMDW-GDMU-202301-L-1',
   paProtocolNumber: '',
   senderPaId: '',
   subject: '',
@@ -114,7 +114,7 @@ export function flexibleNotificationFromBE(
 }
 
 export const parsedNotification: NotificationDetail = {
-  iun: '',
+  iun: 'KQKX-WMDW-GDMU-202301-L-1',
   paProtocolNumber: '',
   senderPaId: '',
   subject: '',
