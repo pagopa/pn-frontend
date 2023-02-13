@@ -1,28 +1,27 @@
 import { Fragment, ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
-import { Grid, Link } from '@mui/material';
-import {
-  PRIVACY_LINK_RELATIVE_PATH,
-  TOS_LINK_RELATIVE_PATH,
-} from '@pagopa-pn/pn-commons';
+import { Box, Grid, Link } from '@mui/material';
+import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from '@pagopa-pn/pn-commons';
 
-import { TOSAgreement } from "@pagopa/mui-italia";
+import { TOSAgreement } from '@pagopa/mui-italia';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 
-const TermsOfService = () => {
+type TermsOfServiceProps = {
+  isFirstAccept: boolean;
+};
+
+const TermsOfService = ({ isFirstAccept }: TermsOfServiceProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
   const tos = useAppSelector((state: RootState) => state.userState.tos);
 
-  const redirectPrivacyLink = () =>
-    navigate(`${PRIVACY_LINK_RELATIVE_PATH}`);
-  const redirectToSLink = () =>
-    navigate(`${TOS_LINK_RELATIVE_PATH}`);
+  const redirectPrivacyLink = () => navigate(`${PRIVACY_LINK_RELATIVE_PATH}`);
+  const redirectToSLink = () => navigate(`${TOS_LINK_RELATIVE_PATH}`);
 
   const PrivacyLink = ({ children }: { children?: ReactNode }) => (
     <Link
@@ -46,8 +45,9 @@ const TermsOfService = () => {
   );
 
   const handleAccept = () => {
-    void dispatch(acceptToS()).unwrap()
-      .catch(_ => {
+    void dispatch(acceptToS())
+      .unwrap()
+      .catch((_) => {
         console.error(_);
       });
   };
@@ -60,22 +60,27 @@ const TermsOfService = () => {
 
   return (
     <Fragment>
-      <Grid container height="100%" justifyContent="center" sx={{backgroundColor: "#FAFAFA"}}>
+      <Grid container height="100%" justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
         <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
           <TOSAgreement
             productName={t('tos.title', 'Piattaforma Notifiche')}
-            description={<Trans
-              ns={'common'}
-              i18nKey={'tos.switch-label'}
-              components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
-            >
-              Accedendo, accetti i <TosLink>Termini e condizioni d’uso</TosLink> del servizio e
-              confermi di aver letto l’<PrivacyLink>Informativa Privacy</PrivacyLink>.
-            </Trans>}
+            description={t(
+              isFirstAccept ? 'tos.body' : 'tos.redo-body',
+              'Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.'
+            )}
             onConfirm={handleAccept}
             confirmBtnLabel={t('tos.button', 'Accedi')}
           >
-            <></>
+            <Box display="flex" alignItems="center">
+              <Trans
+                ns={'common'}
+                i18nKey={'tos.switch-label'}
+                components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
+              >
+                Accedendo, accetti i <TosLink>Termini e condizioni d’uso</TosLink> del servizio e
+                confermi di aver letto l’<PrivacyLink>Informativa Privacy</PrivacyLink>.
+              </Trans>
+            </Box>
           </TOSAgreement>
         </Grid>
       </Grid>

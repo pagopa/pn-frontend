@@ -69,6 +69,8 @@ const userSlice = createSlice({
     loading: false,
     user: basicInitialUserData(userDataMatcher, noLoggedUserData),
     tos: false,
+    isFirstAccept: true,
+    consentVersion: '',
     fetchedTos: false,
     isUnauthorizedUser: false,
     messageUnauthorizedUser: emptyUnauthorizedMessage,
@@ -104,10 +106,12 @@ const userSlice = createSlice({
     });
     builder.addCase(getToSApproval.fulfilled, (state, action) => {
       state.tos = action.payload.accepted;
+      state.isFirstAccept = action.payload.isFirstAccept;
       state.fetchedTos = true;
     });
     builder.addCase(getToSApproval.rejected, (state) => {
       state.tos = false;
+      state.isFirstAccept = true;
       state.fetchedTos = true;
     });
     builder.addCase(acceptToS.fulfilled, (state) => {

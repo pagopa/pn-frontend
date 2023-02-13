@@ -26,10 +26,20 @@ describe('test Terms of Service page', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
   });
 
-  it('checks the texts in the page', () => {
-    const result = render(<ToSAcceptance />);
+  it('checks the texts in the page - First ToS acceptance', () => {
+    const result = render(<ToSAcceptance isFirstAccept={true} />);
 
     expect(result.container).toHaveTextContent(/tos.title/i);
+    expect(result.container).toHaveTextContent(/tos.body/i);
+    expect(result.container).toHaveTextContent(/tos.switch-label/i);
+    expect(result.container).toHaveTextContent(/tos.button/i);
+  });
+
+  it('checks the texts in the page - ToS has changed', () => {
+    const result = render(<ToSAcceptance isFirstAccept={false} />);
+
+    expect(result.container).toHaveTextContent(/tos.title/i);
+    expect(result.container).toHaveTextContent(/tos.redo-body/i);
     expect(result.container).toHaveTextContent(/tos.switch-label/i);
     expect(result.container).toHaveTextContent(/tos.button/i);
   });

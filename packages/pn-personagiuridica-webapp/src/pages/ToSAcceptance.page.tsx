@@ -11,7 +11,11 @@ import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 
-const TermsOfService = () => {
+type TermsOfServiceProps = {
+  isFirstAccept: boolean;
+};
+
+const TermsOfService = ({ isFirstAccept }: TermsOfServiceProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
@@ -66,7 +70,7 @@ const TermsOfService = () => {
           <TOSAgreement
             productName={t('tos.title', 'Piattaforma Notifiche')}
             description={t(
-              'tos.body',
+              isFirstAccept ? 'tos.body' : 'tos.redo-body',
               'Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.'
             )}
             onConfirm={handleAccept}
@@ -85,8 +89,8 @@ const TermsOfService = () => {
                   i18nKey={'tos.switch-label'}
                   components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
                 >
-                  Accetto i <TosLink>Termini e condizioni d’uso del servizio</TosLink>
-                  e confermo di avere letto <PrivacyLink>l’Informativa Privacy</PrivacyLink>.
+                  Accetto i <TosLink>Termini e condizioni d’uso del servizio</TosLink>e confermo di
+                  avere letto <PrivacyLink>l’Informativa Privacy</PrivacyLink>.
                 </Trans>
               </Typography>
             </Box>
