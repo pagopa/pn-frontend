@@ -13,8 +13,9 @@ batch:
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: '337d1f8a-9339-4dea-83df-77b6cd229521'
-          REACT_APP_ONE_TRUST_PORTAL_CDN_PP: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/9d7b7236-956b-4669-8943-5284fba6a815.json
-          REACT_APP_ONE_TRUST_PORTAL_CDN_TOS: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/112fd95d-6e88-461b-b8fc-534ee4277e96.json
+          REACT_APP_ONE_TRUST_DRAFT_MODE: true
+          REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
+          REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
     - identifier: pn_pg_svil_build
       buildspec: cra_buildspec.yaml
       env:
@@ -27,8 +28,9 @@ batch:
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: '337d1f8a-9339-4dea-83df-77b6cd229521'
-          REACT_APP_ONE_TRUST_PORTAL_CDN_PP: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/9d7b7236-956b-4669-8943-5284fba6a815.json
-          REACT_APP_ONE_TRUST_PORTAL_CDN_TOS: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/112fd95d-6e88-461b-b8fc-534ee4277e96.json
+          REACT_APP_ONE_TRUST_DRAFT_MODE: true
+          REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
+          REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
     - identifier: pn_pg_coll_build
       buildspec: cra_buildspec.yaml
       env:
@@ -41,8 +43,9 @@ batch:
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: '337d1f8a-9339-4dea-83df-77b6cd229521'
-          REACT_APP_ONE_TRUST_PORTAL_CDN_PP: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/9d7b7236-956b-4669-8943-5284fba6a815.json
-          REACT_APP_ONE_TRUST_PORTAL_CDN_TOS: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/112fd95d-6e88-461b-b8fc-534ee4277e96.json
+          REACT_APP_ONE_TRUST_DRAFT_MODE: true
+          REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
+          REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
     - identifier: pn_pg_cert_build
       buildspec: cra_buildspec.yaml
       env:
@@ -55,8 +58,9 @@ batch:
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: '337d1f8a-9339-4dea-83df-77b6cd229521'
-          REACT_APP_ONE_TRUST_PORTAL_CDN_PP: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/9d7b7236-956b-4669-8943-5284fba6a815.json
-          REACT_APP_ONE_TRUST_PORTAL_CDN_TOS: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/112fd95d-6e88-461b-b8fc-534ee4277e96.json
+          REACT_APP_ONE_TRUST_DRAFT_MODE: true
+          REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
+          REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
     - identifier: pn_pg_hotfix_build
       buildspec: cra_buildspec.yaml
       env:
@@ -69,8 +73,9 @@ batch:
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: '337d1f8a-9339-4dea-83df-77b6cd229521'
-          REACT_APP_ONE_TRUST_PORTAL_CDN_PP: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/9d7b7236-956b-4669-8943-5284fba6a815.json
-          REACT_APP_ONE_TRUST_PORTAL_CDN_TOS: https://privacyportalde-cdn.onetrust.com/77f17844-04c3-4969-a11d-462ee77acbe1/privacy-notices/draft/112fd95d-6e88-461b-b8fc-534ee4277e96.json
+          REACT_APP_ONE_TRUST_DRAFT_MODE: true
+          REACT_APP_ONE_TRUST_PP: '9d7b7236-956b-4669-8943-5284fba6a815'
+          REACT_APP_ONE_TRUST_TOS: '112fd95d-6e88-461b-b8fc-534ee4277e96'
     # - identifier: pn_pg_prod_build
     #     buildspec: cra_buildspec.yaml
     #     env:

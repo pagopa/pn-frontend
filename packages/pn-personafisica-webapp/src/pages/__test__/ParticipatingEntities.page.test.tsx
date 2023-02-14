@@ -1,16 +1,16 @@
-import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
+import React from 'react';
 import { render } from '@testing-library/react';
+import ParticipatingEntities from '../ParticipatingEntities.page';
+import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 
-import PrivacyPolicy from '../PrivacyPolicy';
-
-jest.mock('../../../utils/constants', () => {
+jest.mock('../../utils/constants', () => {
   return {
-    ...jest.requireActual('../../../utils/constants'),
-    ONE_TRUST_PP: 'mocked-id',
+    ...jest.requireActual('../../utils/constants'),
+    ONE_TRUST_PARTICIPATING_ENTITIES: 'mocked-id',
   };
 });
 
-describe('test the Privacy Policy page', () => {
+describe('test the Participating Entities page', () => {
   const loadNoticesFn = jest.fn();
 
   beforeAll(() => {
@@ -29,7 +29,7 @@ describe('test the Privacy Policy page', () => {
   });
 
   test('check that Privacy Policy page container is rendered', () => {
-    const result = render(<PrivacyPolicy />);
+    const result = render(<ParticipatingEntities />);
     expect(loadNoticesFn).toBeCalledTimes(1);
     expect(loadNoticesFn).toBeCalledWith([compileOneTrustPath('mocked-id')], false);
     expect(result.getByRole('article')).toBeInTheDocument();
