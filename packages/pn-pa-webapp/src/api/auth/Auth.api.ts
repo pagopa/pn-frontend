@@ -14,6 +14,5 @@ export const AuthApi = {
             organization: response.data.organization,
             sessionToken: response.data.sessionToken,
             uid: response.data.uid,
-            hasGroups: response.data.hasGroups,
         }))
 };

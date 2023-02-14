@@ -24,12 +24,12 @@ const organizationMatcher = yup.object({
   fiscal_code: yup.string().matches(dataRegex.pIva),
   groups: yup.array().of(yup.string()),
   name: yup.string(),
+  hasGroups: yup.boolean(),
 });
 
 const userDataMatcher = yup
   .object({
     ...basicUserDataMatcherContents,
-    hasGroups: yup.boolean(),
     organization: organizationMatcher,
     desired_exp: yup.number(),
   })

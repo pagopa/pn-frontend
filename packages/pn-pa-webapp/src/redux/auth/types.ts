@@ -4,7 +4,6 @@ import { Role } from '../../models/user';
 export interface User extends BasicUser {
   organization: Organization;
   desired_exp: number;
-  hasGroups?: boolean;
 }
 
 export interface Organization {
@@ -12,4 +11,5 @@ export interface Organization {
   roles: Array<Role>;
   fiscal_code: string; // organization fiscal code
   groups?: Array<string>;
+  hasGroups?: boolean;
 }
