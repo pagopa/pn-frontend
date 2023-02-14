@@ -70,7 +70,7 @@ export interface SendPaperDetails extends BaseDetails {
   errors?: Array<string>;
   productType?: string;
   analogCost?: number;
-  status?: ResponseStatus;
+  responseStatus?: ResponseStatus;
   sendingReceipts?: Array<{
     id: string;
     system: string;

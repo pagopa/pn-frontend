@@ -9,7 +9,9 @@ export const ROUTE_PRIVACY_POLICY = BASE_ROUTE + '/informativa-privacy';
 export const ROUTE_LOGOUT = ENV.URL_FE.LOGOUT;
 export const PAGOPA_HELP_EMAIL = process.env.REACT_APP_PAGOPA_HELP_EMAIL;
 export const OT_DOMAIN_ID = ENV.COOKIE.OT_DOMAIN_ID;
-export const ONE_TRUST_PORTAL_CDN = process.env.REACT_APP_ONE_TRUST_PORTAL_CDN || '';
+
+export const ONE_TRUST_DRAFT_MODE = !!process.env.REACT_APP_ONE_TRUST_DRAFT_MODE;
+export const ONE_TRUST_PP = process.env.REACT_APP_ONE_TRUST_PP || '';
 export const PF_URL = process.env.REACT_APP_PF_URL;
 export const PG_URL = process.env.REACT_APP_PG_URL;
 

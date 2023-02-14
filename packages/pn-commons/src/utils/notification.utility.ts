@@ -21,7 +21,11 @@ import {
   SendDigitalDetails,
   ViewedDetails,
   SendPaperDetails,
+<<<<<<< HEAD
   NotificationDeliveryMode,
+=======
+  ResponseStatus,
+>>>>>>> develop
 } from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -272,13 +276,13 @@ export function getLegalFactLabel(
   const receiptLabel = getLocalizedOrDefaultLabel('notifications', `detail.receipt`, 'Ricevuta');
   // TODO: localize in pn_ga branch
   if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
-    if ((timelineStep.details as SendPaperDetails).status === 'OK') {
+    if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.OK) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
         'notifications',
         'detail.timeline.legalfact.paper-receipt-delivered',
         'di consegna raccomandata'
       )}`;
-    } else if ((timelineStep.details as SendPaperDetails).status === 'KO') {
+    } else if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.KO) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
         'notifications',
         'detail.timeline.legalfact.paper-receipt-not-delivered',

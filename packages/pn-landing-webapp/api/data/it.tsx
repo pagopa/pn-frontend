@@ -198,7 +198,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
           </Typography>
 
           <Typography variant="body2">
-            A tal fine sono disponibili: 
+            A tal fine sono disponibili:
           </Typography>
           <List sx={{ listStyleType: 'disc', pl: 4 }}>
             <ListItem sx={{ display: 'list-item' }}>
@@ -231,6 +231,13 @@ const paInfoBlocks: Array<IInfoblockData> = [
                 {" "}che stanno implementando le attività di integrazione alla piattaforma e di cui è possibile avvalersi per un supporto nella gestione degli aspetti tecnici
               </Typography>
             </ListItem>
+            {/* <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={"/static/documents/Modulo Ordinativo Commessa per Anticipazione.xlsx"}>
+                  la lista dei Partner e Intermediari tecnologici
+                </Link>
+              </Typography>
+            </ListItem> */}
           </List>
         </>
       ),
@@ -765,9 +772,9 @@ const preLoginLinks: PreLoginFooterLinksType = {
         linkType: "internal",
       },
       {
-        label: "Modello 321",
+        label: "Modello 231",
         href: "https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls",
-        ariaLabel: "Vai al link: Modello 321",
+        ariaLabel: "Vai al link: Modello 231",
         linkType: "internal",
       },
     ],
