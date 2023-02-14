@@ -73,6 +73,17 @@ const recipients: Array<NotificationDetailRecipient> = [
   },
 ];
 
+const additionalRecipient = {
+  recipientType: RecipientType.PF,
+  taxId: 'mocked-taxId2',
+  denomination: 'Nome2 Cognome2',
+  digitalDomicile: { type: DigitalDomicileType.PEC, address: 'toto86@gmail.com', },
+  physicalAddress: { 
+    address: 'mocked address 2', addressDetails: '', zip: '', municipality: '', province: '',
+    at: '', foreignState: '',
+  }
+};
+
 export const notificationFromBe: NotificationDetail = {
   iun: 'KQKX-WMDW-GDMU-202301-L-1',
   paProtocolNumber: '',
@@ -92,8 +103,12 @@ export const notificationFromBe: NotificationDetail = {
 };
 
 export function flexibleNotificationFromBE(
-  status: NotificationStatus, statusHistory: NotificationStatusHistory[], timeline: INotificationDetailTimeline[]
+  status: NotificationStatus, statusHistory: NotificationStatusHistory[], timeline: INotificationDetailTimeline[],
+  recipientCount = 1
 ): NotificationDetail {
+  if (![1,2].includes(recipientCount)) {
+    throw new Error("only 1 or 2 recipients supported");
+  }
   return {
     iun: '',
     paProtocolNumber: '',
@@ -101,7 +116,7 @@ export function flexibleNotificationFromBE(
     subject: '',
     sentAt: '2022-02-21T10:19:33.440Z',
     cancelledByIun: '',
-    recipients,
+    recipients: recipientCount === 2 ? [...recipients, additionalRecipient] : recipients,
     documentsAvailable: true,
     documents: [],
     otherDocuments: [],

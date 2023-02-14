@@ -180,7 +180,7 @@ const digitalSendOkSecondAttemptBeTimeline = () => [
     "category": TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
     "timestamp": "2023-01-26T14:16:12.42843144Z",
     "legalFactsIds": [
-      { "key": "digital-failure-0", "category": LegalFactType.DIGITAL_DELIVERY }
+      { "key": "digital-success-0", "category": LegalFactType.DIGITAL_DELIVERY }
     ],
     "details": {
       "recIndex": 0, "digitalAddress": { "type": "PEC", "address": "manudido86@gmail.com" }
@@ -275,7 +275,7 @@ const justFailedAttemptsStatusHistory = () => [
   },
 ];
 
-describe('parseNotificationDetail scenarios', () => {
+describe('parseNotificationDetail scenarios - single recipient', () => {
   it('send simple registered letter scenario - should shift timeline events from DELIVERED to DELIVERING', () => {
     const notificationBe = flexibleNotificationFromBE(
       NotificationStatus.DELIVERED, sendRegisteredLetterBeStatusHistory(), sendRegisteredLetterBeTimeline()
