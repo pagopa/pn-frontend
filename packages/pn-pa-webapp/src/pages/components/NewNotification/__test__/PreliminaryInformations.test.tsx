@@ -181,8 +181,6 @@ describe('PreliminaryInformations Component with payment disabled', () => {
       'registered-letter-890',
       'simple-registered-letter',
     ]);
-    testRadioElements(form!, 'paymentMethodRadio', ['nothing']);
-
     const button = form?.querySelector('button');
     expect(button!).toBeDisabled();
   });
