@@ -51,7 +51,6 @@ batch:
           REACT_APP_ONE_TRUST_PP: '4824a110-316e-42fd-b492-8e2b0513db70'
           REACT_APP_ONE_TRUST_TOS: '083fb982-149c-4241-be09-12ae67d88b66'
           REACT_APP_IS_PAYMENT_ENABLED: false
-
     - identifier: pn_pa_cert_build
       buildspec: cra_buildspec.yaml
       env:
@@ -68,7 +67,6 @@ batch:
           REACT_APP_ONE_TRUST_PP: '4824a110-316e-42fd-b492-8e2b0513db70'
           REACT_APP_ONE_TRUST_TOS: '083fb982-149c-4241-be09-12ae67d88b66'
           REACT_APP_IS_PAYMENT_ENABLED: false
-
     - identifier: pn_pa_hotfix_build
       buildspec: cra_buildspec.yaml
       env:
@@ -85,7 +83,6 @@ batch:
           REACT_APP_ONE_TRUST_PP: '4824a110-316e-42fd-b492-8e2b0513db70'
           REACT_APP_ONE_TRUST_TOS: '083fb982-149c-4241-be09-12ae67d88b66'
           REACT_APP_IS_PAYMENT_ENABLED: false
-
     # - identifier: pn_pa_prod_build
     #   buildspec: cra_buildspec.yaml
     #   env:
