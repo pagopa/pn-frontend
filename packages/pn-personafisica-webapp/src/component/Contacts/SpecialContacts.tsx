@@ -154,10 +154,11 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         values.s_pec || values.s_mail || internationalPhonePrefix + values.s_phone,
         recipientId,
         values.sender,
-        (status: 'validated' | 'cancelled') => {
+        async (status: 'validated' | 'cancelled') => {
           if (status === 'validated') {
             // reset form
             formik.resetForm();
+            await formik.validateForm();
           }
         }
       );
