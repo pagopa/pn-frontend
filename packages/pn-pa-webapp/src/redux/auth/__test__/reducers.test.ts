@@ -105,7 +105,6 @@ describe('Auth redux state tests', () => {
       consentType: ConsentType.TOS,
       accepted: false,
       isFirstAccept: true,
-      consentVersion: 'mocked-version',
     };
     const apiSpy = jest.spyOn(ConsentsApi, 'getConsentByType');
     apiSpy.mockRejectedValue(tosMock);
@@ -120,7 +119,7 @@ describe('Auth redux state tests', () => {
     const tosAcceptanceMock = 'success';
     const apiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
     apiSpy.mockResolvedValue(tosAcceptanceMock);
-    const action = await store.dispatch(acceptToS());
+    const action = await store.dispatch(acceptToS('mock-version-1'));
     const payload = action.payload as string;
     expect(action.type).toBe('acceptToS/fulfilled');
     expect(payload).toEqual(tosAcceptanceMock);
@@ -130,7 +129,7 @@ describe('Auth redux state tests', () => {
     const tosAcceptanceMock = 'error';
     const apiSpy = jest.spyOn(ConsentsApi, 'setConsentByType');
     apiSpy.mockRejectedValue(tosAcceptanceMock);
-    const action = await store.dispatch(acceptToS());
+    const action = await store.dispatch(acceptToS('mock-version-1'));
     const payload = action.payload as string;
     expect(action.type).toBe('acceptToS/rejected');
     expect(payload).toEqual(tosAcceptanceMock);

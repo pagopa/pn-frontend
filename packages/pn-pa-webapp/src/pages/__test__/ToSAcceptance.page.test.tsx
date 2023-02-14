@@ -27,7 +27,7 @@ describe('test Terms of Service page', () => {
   });
 
   it('checks the texts in the page - First ToS acceptance', () => {
-    const result = render(<ToSAcceptance isFirstAccept={true} />);
+    const result = render(<ToSAcceptance isFirstAccept={true} consentVersion={'mocked-version-1'} />);
 
     expect(result.container).toHaveTextContent(/tos.title/i);
     expect(result.container).toHaveTextContent(/tos.body/i);
@@ -36,7 +36,7 @@ describe('test Terms of Service page', () => {
   });
 
   it('checks the texts in the page - ToS has changed', () => {
-    const result = render(<ToSAcceptance isFirstAccept={false} />);
+    const result = render(<ToSAcceptance isFirstAccept={false} consentVersion={'mocked-version-1'} />);
 
     expect(result.container).toHaveTextContent(/tos.title/i);
     expect(result.container).toHaveTextContent(/tos.redo-body/i);

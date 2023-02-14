@@ -9,7 +9,7 @@ import { getToSApproval } from "../redux/auth/actions";
 
 const ToSGuard = () => {
   const dispatch = useAppDispatch();
-  const { tos, fetchedTos, isFirstAccept } = useAppSelector((state: RootState) => state.userState);
+  const { tos, fetchedTos, isFirstAccept, consentVersion } = useAppSelector((state: RootState) => state.userState);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
 
   const sessionToken = loggedUser.sessionToken;
@@ -25,7 +25,7 @@ const ToSGuard = () => {
   }
 
   if (!tos) {
-    return <ToSAcceptancePage isFirstAccept={isFirstAccept} />;
+    return <ToSAcceptancePage isFirstAccept={isFirstAccept} consentVersion={consentVersion} />;
   }
 
   return <Outlet />;

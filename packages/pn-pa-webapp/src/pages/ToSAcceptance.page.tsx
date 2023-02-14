@@ -12,9 +12,10 @@ import { RootState } from '../redux/store';
 
 type TermsOfServiceProps = {
   isFirstAccept: boolean;
+  consentVersion: string;
 };
 
-const TermsOfService = ({ isFirstAccept }: TermsOfServiceProps) => {
+const TermsOfService = ({ isFirstAccept, consentVersion }: TermsOfServiceProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
@@ -45,7 +46,7 @@ const TermsOfService = ({ isFirstAccept }: TermsOfServiceProps) => {
   );
 
   const handleAccept = () => {
-    void dispatch(acceptToS())
+    void dispatch(acceptToS(consentVersion))
       .unwrap()
       .catch((_) => {
         console.error(_);
