@@ -22,7 +22,7 @@ import {
   useDownloadDocument,
   NotificationDetailOtherDocument,
   NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams,  
+  GetNotificationDowntimeEventsParams,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -34,10 +34,14 @@ import {
   getReceivedNotificationDocument,
   getReceivedNotificationLegalfact,
   getReceivedNotificationOtherDocument,
-  getDowntimeLegalFactDocumentDetails,  
+  getDowntimeLegalFactDocumentDetails,
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
-import { resetLegalFactState, resetState, clearDowntimeLegalFactData } from '../redux/notification/reducers';
+import {
+  resetLegalFactState,
+  resetState,
+  clearDowntimeLegalFactData,
+} from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
@@ -82,10 +86,12 @@ const NotificationDetail = () => {
     (state: RootState) => state.generalInfoState.delegators
   );
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const downtimeEvents = useAppSelector((state: RootState) => state.notificationState.downtimeEvents);
+  const downtimeEvents = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeEvents
+  );
   const downtimeLegalFactUrl = useAppSelector(
     (state: RootState) => state.notificationState.downtimeLegalFactUrl
-  );  
+  );
 
   const currentRecipient = notification && notification.currentRecipient;
 
@@ -152,7 +158,9 @@ const NotificationDetail = () => {
   ) => {
     if (_.isObject(document)) {
       const otherDocument = document as NotificationDetailOtherDocument;
-      void dispatch(getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument, mandateId }));
+      void dispatch(
+        getReceivedNotificationOtherDocument({ iun: notification.iun, otherDocument, mandateId })
+      );
     } else {
       const documentIndex = document as string;
       void dispatch(
@@ -229,11 +237,12 @@ const NotificationDetail = () => {
     [location]
   );
 
-  const properBreadcrumb = useMemo(
-    () => (
+  const properBreadcrumb = useMemo(() => {
+    const backRoute = mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE;
+    return (
       <PnBreadcrumb
         showBackAction={!fromQrCode}
-        linkRoute={mandateId ? routes.GET_NOTIFICHE_DELEGATO_PATH(mandateId) : routes.NOTIFICHE}
+        linkRoute={backRoute}
         linkLabel={
           <Fragment>
             <EmailIcon sx={{ mr: 0.5 }} />
@@ -241,11 +250,10 @@ const NotificationDetail = () => {
           </Fragment>
         }
         currentLocationLabel={`${t('detail.breadcrumb-leaf', { ns: 'notifiche' })}`}
-        goBackAction={() => navigate(routes.NOTIFICHE)}
+        goBackAction={() => navigate(backRoute)}
       />
-    ),
-    [fromQrCode]
-  );
+    );
+  }, [fromQrCode]);
 
   const breadcrumb = (
     <Fragment>
@@ -312,15 +320,15 @@ const NotificationDetail = () => {
                     downloadFilesLink={t('detail.acts_files.effected_faq', { ns: 'notifiche' })}
                   />
                 </Paper>
-                <NotificationRelatedDowntimes 
-                  downtimeEvents={downtimeEvents} 
+                <NotificationRelatedDowntimes
+                  downtimeEvents={downtimeEvents}
                   fetchDowntimeEvents={fetchDowntimeEvents}
                   notificationStatusHistory={notification.notificationStatusHistory}
                   downtimeLegalFactUrl={downtimeLegalFactUrl}
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData()) }
+                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData())}
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
-                />                
+                />
                 {/* TODO decommentare con pn-841
             <Paper sx={{ p: 3 }} className="paperContainer">
               <HelpNotificationDetails 
