@@ -21,11 +21,8 @@ import {
   SendDigitalDetails,
   ViewedDetails,
   SendPaperDetails,
-<<<<<<< HEAD
   NotificationDeliveryMode,
-=======
   ResponseStatus,
->>>>>>> develop
 } from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
