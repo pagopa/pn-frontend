@@ -13,8 +13,10 @@ export const DISABLE_INACTIVITY_HANDLER = process.env.REACT_APP_DISABLE_INACTIVI
 
 export const OT_DOMAIN_ID =
   process.env.REACT_APP_ONETRUST_DOMAIN_ID || 'fd5aef6f-a6d3-422b-87b7-aa5e2cb6510c';
-export const ONE_TRUST_PORTAL_CDN_PP = process.env.REACT_APP_ONE_TRUST_PORTAL_CDN_PP || '';
-export const ONE_TRUST_PORTAL_CDN_TOS = process.env.REACT_APP_ONE_TRUST_PORTAL_CDN_TOS || '';
+
+export const ONE_TRUST_DRAFT_MODE = !!process.env.REACT_APP_ONE_TRUST_DRAFT_MODE;
+export const ONE_TRUST_PP = process.env.REACT_APP_ONE_TRUST_PP || '';
+export const ONE_TRUST_TOS = process.env.REACT_APP_ONE_TRUST_TOS || '';
 export const IS_PAYMENT_ENABLED =
   process.env.REACT_APP_IS_PAYMENT_ENABLED === 'true' ? true : false;
 

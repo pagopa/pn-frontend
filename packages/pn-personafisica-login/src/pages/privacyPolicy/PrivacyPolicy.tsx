@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useRewriteLinks } from '@pagopa-pn/pn-commons';
+import { useRewriteLinks, compileOneTrustPath } from '@pagopa-pn/pn-commons';
 
-import { ONE_TRUST_PORTAL_CDN, ROUTE_PRIVACY_POLICY } from '../../utils/constants';
+import {
+  ONE_TRUST_DRAFT_MODE,
+  ONE_TRUST_PP,
+  ROUTE_PRIVACY_POLICY,
+} from '../../utils/constants';
 
 declare const OneTrust: {
   NoticeApi: {
@@ -16,9 +20,17 @@ const PrivacyPolicy = () => {
   const [contentLoaded, setContentLoaded] = useState(false);
 
   useEffect(() => {
-    if (ONE_TRUST_PORTAL_CDN) {
+    if (ONE_TRUST_PP) {
       OneTrust.NoticeApi.Initialized.then(function () {
-        OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN], false);
+        OneTrust.NoticeApi.LoadNotices(
+          [
+            compileOneTrustPath(
+              ONE_TRUST_PP,
+              ONE_TRUST_DRAFT_MODE
+            ),
+          ],
+          false
+        );
         setContentLoaded(true);
       });
     }

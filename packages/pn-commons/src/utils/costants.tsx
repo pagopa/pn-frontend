@@ -143,10 +143,10 @@ export const preLoginLinks = (
           linkType: 'internal',
         },
         {
-          ...getFooterLinkLabels('321-model', 'Modello 321'),
+          ...getFooterLinkLabels('321-model', 'Modello 231'),
           href: 'https://pagopa.portaleamministrazionetrasparente.it/pagina746_altri-contenuti.htmls',
           linkType: 'internal',
-          ariaLabel: 'Vai al link: Modello 321',
+          ariaLabel: 'Vai al link: Modello 231',
         },
       ],
     },
