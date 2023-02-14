@@ -59,27 +59,22 @@ const NewNotification = () => {
     t('new-notification.steps.preliminary-informations.title', { ns: 'notifiche' }),
     t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
     t('new-notification.steps.attachments.title', { ns: 'notifiche' }),
-    t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }),
   ];
-  const stepsWithoutPayment = [
-    t('new-notification.steps.preliminary-informations.title', { ns: 'notifiche' }),
-    t('new-notification.steps.recipient.title', { ns: 'notifiche' }),
-    t('new-notification.steps.attachments.title', { ns: 'notifiche' }),
-  ];
+
   const childRef = useRef<{ confirm: () => void }>();
 
   const eventStep = [
     TrackEventType.NOTIFICATION_SEND_PRELIMINARY_INFO,
     TrackEventType.NOTIFICATION_SEND_RECIPIENT_INFO,
     TrackEventType.NOTIFICATION_SEND_ATTACHMENTS,
-    TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES,
   ];
 
-  const eventStepWithoutPayment = [
-    TrackEventType.NOTIFICATION_SEND_PRELIMINARY_INFO,
-    TrackEventType.NOTIFICATION_SEND_RECIPIENT_INFO,
-    TrackEventType.NOTIFICATION_SEND_ATTACHMENTS,
-  ];
+  if (IS_PAYMENT_ENABLED) {
+    // eslint-disable-next-line functional/immutable-data
+    eventStep.push(TrackEventType.NOTIFICATION_SEND_PAYMENT_MODES);
+    // eslint-disable-next-line functional/immutable-data
+    steps.push(t('new-notification.steps.payment-methods.title', { ns: 'notifiche' }));
+  }
 
   const stepType = ['preliminary info', 'recipient', 'attachments', 'payment modes'];
 
@@ -100,11 +95,8 @@ const NewNotification = () => {
   };
 
   const goToNextStep = () => {
-    if (IS_PAYMENT_ENABLED) {
-      trackEventByType(eventStep[activeStep]);
-    } else {
-      trackEventByType(eventStepWithoutPayment[activeStep]);
-    }
+    trackEventByType(eventStep[activeStep]);
+
     setActiveStep((previousStep) => previousStep + 1);
   };
 
@@ -121,19 +113,10 @@ const NewNotification = () => {
   };
 
   const createNotification = () => {
-    // if it is last step, save notification
-    if (IS_PAYMENT_ENABLED) {
-      if (activeStep === 3 && isCompleted) {
-        void dispatch(createNewNotification(notification))
-          .unwrap()
-          .then(() => setActiveStep((previousStep) => previousStep + 1));
-      }
-    } else {
-      if (activeStep === 2 && isCompleted) {
-        void dispatch(createNewNotification(notification))
-          .unwrap()
-          .then(() => setActiveStep((previousStep) => previousStep + 2));
-      }
+    if (activeStep === steps.length - 1 && isCompleted) {
+      void dispatch(createNewNotification(notification))
+        .unwrap()
+        .then(() => setActiveStep((previousStep) => previousStep + 1));
     }
   };
 
@@ -191,31 +174,17 @@ const NewNotification = () => {
               </Alert>
             )}
 
-            {IS_PAYMENT_ENABLED ? (
-              <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
-                {steps.map((label, index) => (
-                  <Step
-                    key={label}
-                    onClick={() => (index < activeStep ? goToPreviousStep(index) : undefined)}
-                    sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
-                  >
-                    <StepLabel>{label}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-            ) : (
-              <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
-                {stepsWithoutPayment.map((label, index) => (
-                  <Step
-                    key={label}
-                    onClick={() => (index < activeStep ? goToPreviousStep(index) : undefined)}
-                    sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
-                  >
-                    <StepLabel>{label + ''}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-            )}
+            <Stepper activeStep={activeStep} alternativeLabel sx={{ marginTop: '60px' }}>
+              {steps.map((label, index) => (
+                <Step
+                  key={label}
+                  onClick={() => (index < activeStep ? goToPreviousStep(index) : undefined)}
+                  sx={{ cursor: index < activeStep ? 'pointer' : 'auto' }}
+                >
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
 
             {activeStep === 0 && (
               <PreliminaryInformations notification={notification} onConfirm={goToNextStep} />

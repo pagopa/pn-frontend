@@ -185,43 +185,26 @@ const Attachments = ({
     validationSchema,
     validateOnMount: true,
     onSubmit: (values) => {
-      if (!IS_PAYMENT_ENABLED) {
-        if (isCompleted) {
+      if (formik.isValid) {
+        if (!IS_PAYMENT_ENABLED && isCompleted) {
           onConfirm();
+        } else {
+          dispatch(
+            setAttachments({
+              documents: values.documents.map((v) => ({
+                ...v,
+                id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+              })),
+            })
+          );
+          // upload attachments
+          dispatch(uploadNotificationAttachment(values.documents))
+            .unwrap()
+            .then(() => {
+              onConfirm();
+            })
+            .catch(() => undefined);
         }
-        // store attachments
-        dispatch(
-          setAttachments({
-            documents: values.documents.map((v) => ({
-              ...v,
-              id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-            })),
-          })
-        );
-        // upload attachments
-        dispatch(uploadNotificationAttachment(values.documents))
-          .unwrap()
-          .then(() => {
-            onConfirm();
-          })
-          .catch(() => undefined);
-      } else if (formik.isValid) {
-        // store attachments
-        dispatch(
-          setAttachments({
-            documents: values.documents.map((v) => ({
-              ...v,
-              id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-            })),
-          })
-        );
-        // upload attachments
-        dispatch(uploadNotificationAttachment(values.documents))
-          .unwrap()
-          .then(() => {
-            onConfirm();
-          })
-          .catch(() => undefined);
       }
     },
   });
