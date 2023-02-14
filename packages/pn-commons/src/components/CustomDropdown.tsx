@@ -1,9 +1,7 @@
-import { ChangeEvent, ReactNode, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { TextField, SxProps, MenuItem } from '@mui/material';
 
 type Props = {
-  /** children wrapper */
-  children?: ReactNode;
   /** id */
   id: string;
   /** value */
@@ -38,7 +36,7 @@ type Props = {
   emptyItemLabel?: string;
 };
 
-const CustomDropdown = ({
+const CustomDropdown: React.FC<Props> = ({
   children,
   id,
   value,
@@ -56,7 +54,7 @@ const CustomDropdown = ({
   emptyItemKey = '',
   emptyItemValue = '',
   emptyItemLabel = '------',
-}: Props) => {
+}) => {
   const [innerValue, setInnerValue] = useState(value);
 
   const changeHandler = (event: ChangeEvent) => {
@@ -64,8 +62,14 @@ const CustomDropdown = ({
     if (onChange) {
       onChange(event);
     }
-  }
-  
+  };
+
+  useEffect(() => {
+    if (value !== innerValue) {
+      setInnerValue(value);
+    }
+  }, [value]);
+
   return (
     <>
       {children ? (

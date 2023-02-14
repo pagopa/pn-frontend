@@ -1,6 +1,10 @@
+import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 import { useEffect } from 'react';
 
-import { ONE_TRUST_PORTAL_CDN_PARTICIPATING_ENTITIES } from '../utils/constants';
+import {
+  ONE_TRUST_PARTICIPATING_ENTITIES,
+  ONE_TRUST_DRAFT_MODE,
+} from '../utils/constants';
 
 declare const OneTrust: {
   NoticeApi: {
@@ -13,9 +17,17 @@ declare const OneTrust: {
 
 const ParticipatingEntitiesPage = () => {
   useEffect(() => {
-    if (ONE_TRUST_PORTAL_CDN_PARTICIPATING_ENTITIES) {
+    if (ONE_TRUST_PARTICIPATING_ENTITIES) {
       OneTrust.NoticeApi.Initialized.then(function () {
-        OneTrust.NoticeApi.LoadNotices([ONE_TRUST_PORTAL_CDN_PARTICIPATING_ENTITIES], false);
+        OneTrust.NoticeApi.LoadNotices(
+          [
+            compileOneTrustPath(
+              ONE_TRUST_PARTICIPATING_ENTITIES,
+              ONE_TRUST_DRAFT_MODE
+            ),
+          ],
+          false
+        );
       });
     }
   }, []);
