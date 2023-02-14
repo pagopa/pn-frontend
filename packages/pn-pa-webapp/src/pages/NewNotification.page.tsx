@@ -184,7 +184,7 @@ const NewNotification = () => {
               {t('required-fields')}
             </Typography>
             {!IS_PAYMENT_ENABLED && (
-              <Alert sx={{ mt: 4 }} severity={'warning'}>
+              <Alert data-testid="alert" sx={{ mt: 4 }} severity={'warning'}>
                 <Typography component="span" variant="body1">
                   {t('new-notification.warning-payment-disabled', { ns: 'notifiche' })}{' '}
                 </Typography>
