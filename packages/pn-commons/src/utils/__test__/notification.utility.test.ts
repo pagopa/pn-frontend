@@ -11,7 +11,7 @@ import {
   TimelineCategory,
   NotificationStatus,
 } from '../../types';
-import { ResponseStatus } from '../../types/NotificationDetail';
+import { NotificationDeliveryMode, NotificationStatusHistory, ResponseStatus } from '../../types/NotificationDetail';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -31,10 +31,24 @@ function testNotificationStatusInfosFn(
   tooltipToTest: string,
   recipient?: string
 ) {
-  const { label, color, tooltip } = getNotificationStatusInfos(status, recipient);
+  const { label, color, tooltip } = getNotificationStatusInfos({status, recipient, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] });
   expect(label).toBe(labelToTest);
   expect(color).toBe(colorToTest);
   expect(tooltip).toBe(tooltipToTest);
+}
+
+function testNotificationStatusInfosFnIncludingDescription(
+  status: NotificationStatusHistory,
+  labelToTest: string,
+  colorToTest: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary',
+  tooltipToTest: string,
+  descriptionToTest: string,
+) {
+  const { label, color, tooltip, description } = getNotificationStatusInfos(status);
+  expect(label).toBe(labelToTest);
+  expect(color).toBe(colorToTest);
+  expect(tooltip).toBe(tooltipToTest);
+  expect(description).toBe(descriptionToTest);
 }
 
 function testTimelineStatusInfosFn(labelToTest: string, descriptionToTest: string) {
@@ -47,12 +61,33 @@ function testTimelineStatusInfosFn(labelToTest: string, descriptionToTest: strin
 }
 
 describe('notification utility functions', () => {
-  it('return notification status infos - DELIVERED', () => {
-    testNotificationStatusInfosFn(
-      NotificationStatus.DELIVERED,
+  it('return notification status infos - DELIVERED - analog shipment', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.ANALOG },
       'Consegnata',
       'default',
-      'La notifica è stata consegnata'
+      'La notifica è stata consegnata',
+      'La notifica è stata consegnata per via analogica.'
+    );
+  });
+
+  it('return notification status infos - DELIVERED - digital shipment', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.DIGITAL },
+      'Consegnata',
+      'default',
+      'La notifica è stata consegnata',
+      'La notifica è stata consegnata per via digitale.'
+    );
+  });
+
+  it('return notification status infos - DELIVERED - unspecified shipment mode', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      'Consegnata',
+      'default',
+      'La notifica è stata consegnata',
+      'La notifica è stata consegnata.'
     );
   });
 
@@ -245,8 +280,8 @@ describe('timeline utility functions', () => {
       address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
-      'Invio per via digitale non riuscito',
-      'Il tentativo di invio della notifica per via digitale a Nome Cognome non è riuscito.'
+      'Invio via PEC non riuscito',
+      "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail non è riuscito perché la casella è satura, non valida o inattiva."
     );
   });
 
@@ -259,8 +294,8 @@ describe('timeline utility functions', () => {
       address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
-      'Invio per via digitale riuscito',
-      'Il tentativo di invio della notifica per via digitale a Nome Cognome è riuscito.'
+      'Invio via PEC riuscito',
+      "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail è riuscito."
     );
   });
 

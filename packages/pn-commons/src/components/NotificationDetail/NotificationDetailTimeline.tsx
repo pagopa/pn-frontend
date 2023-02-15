@@ -117,7 +117,7 @@ const NotificationDetailTimeline = ({
             historyButtonLabel={historyButtonLabel}
             showHistoryButton
             historyButtonClickHandler={toggleHistoryDrawer}
-          />
+            />
         ) : (
           timelineComponent
         )}

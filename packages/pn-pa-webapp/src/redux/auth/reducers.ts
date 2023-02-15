@@ -24,6 +24,7 @@ const organizationMatcher = yup.object({
   fiscal_code: yup.string().matches(dataRegex.pIva),
   groups: yup.array().of(yup.string()),
   name: yup.string(),
+  hasGroups: yup.boolean(),
 });
 
 const userDataMatcher = yup
@@ -58,6 +59,8 @@ const userSlice = createSlice({
     loading: false,
     user: basicInitialUserData(userDataMatcher, noLoggedUserData),
     tos: false,
+    isFirstAccept: true,
+    consentVersion: '',
     fetchedTos: false,
     organizationParty: {
       id: '',
@@ -76,9 +79,10 @@ const userSlice = createSlice({
         userDataMatcher.validateSync(user, { stripUnknown: false });
         sessionStorage.setItem('user', JSON.stringify(user));
         state.user = action.payload;
-      } catch {
+      } catch (e) {
         state.isUnauthorizedUser = true;
         state.messageUnauthorizedUser = emptyUnauthorizedMessage;
+        console.debug(e);
       }
       state.isClosedSession = false;
     });
@@ -99,10 +103,13 @@ const userSlice = createSlice({
     });
     builder.addCase(getToSApproval.fulfilled, (state, action) => {
       state.tos = action.payload.accepted;
+      state.isFirstAccept = action.payload.isFirstAccept;
+      state.consentVersion = action.payload.consentVersion;
       state.fetchedTos = true;
     });
     builder.addCase(getToSApproval.rejected, (state) => {
       state.tos = false;
+      state.isFirstAccept = true;
       state.fetchedTos = true;
     });
     builder.addCase(acceptToS.fulfilled, (state) => {
