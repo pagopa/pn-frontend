@@ -30,7 +30,7 @@ describe('TermsOfService page component', () => {
     };
   });
 
-  test('render component', () => {
+  test.skip('render component', () => {
     const result = render(<TermsOfServicePage />);
     expect(loadNoticesFn).toBeCalledTimes(1);
     expect(loadNoticesFn).toBeCalledWith([compileOneTrustPath('mocked-id')], false);

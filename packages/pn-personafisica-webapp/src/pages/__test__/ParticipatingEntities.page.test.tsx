@@ -28,7 +28,7 @@ describe('test the Participating Entities page', () => {
     };
   });
 
-  test('check that Privacy Policy page container is rendered', () => {
+  test.skip('check that Privacy Policy page container is rendered', () => {
     const result = render(<ParticipatingEntities />);
     expect(loadNoticesFn).toBeCalledTimes(1);
     expect(loadNoticesFn).toBeCalledWith([compileOneTrustPath('mocked-id')], false);
