@@ -85,9 +85,10 @@ const userSlice = createSlice({
         userDataMatcher.validateSync(user, { stripUnknown: false });
         sessionStorage.setItem('user', JSON.stringify(user));
         state.user = action.payload;
-      } catch {
+      } catch (e) {
         state.isUnauthorizedUser = true;
         state.messageUnauthorizedUser = emptyUnauthorizedMessage;
+        console.debug(e);
       }
       state.isClosedSession = false;
     });

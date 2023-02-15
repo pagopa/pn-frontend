@@ -24,6 +24,7 @@ const organizationMatcher = yup.object({
   fiscal_code: yup.string().matches(dataRegex.pIva),
   groups: yup.array().of(yup.string()),
   name: yup.string(),
+  hasGroups: yup.boolean(),
 });
 
 const userDataMatcher = yup
@@ -78,9 +79,10 @@ const userSlice = createSlice({
         userDataMatcher.validateSync(user, { stripUnknown: false });
         sessionStorage.setItem('user', JSON.stringify(user));
         state.user = action.payload;
-      } catch {
+      } catch (e) {
         state.isUnauthorizedUser = true;
         state.messageUnauthorizedUser = emptyUnauthorizedMessage;
+        console.debug(e);
       }
       state.isClosedSession = false;
     });
