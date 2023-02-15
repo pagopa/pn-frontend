@@ -11,7 +11,7 @@ import ToSAcceptancePage from "../pages/ToSAcceptance.page";
 
 const ToSGuard = () => {
   const dispatch = useAppDispatch();
-  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
+  const { tos, fetchedTos, isFirstAccept, consentVersion } = useAppSelector((state: RootState) => state.userState);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
 
   const sessionToken = loggedUser.sessionToken;
@@ -27,7 +27,7 @@ const ToSGuard = () => {
   }
 
   if (!tos) {
-    return <ToSAcceptancePage />;
+    return <ToSAcceptancePage isFirstAccept={isFirstAccept} consentVersion={consentVersion} />;
   }
 
   return <Outlet />;
