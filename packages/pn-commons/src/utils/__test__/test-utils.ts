@@ -73,8 +73,19 @@ const recipients: Array<NotificationDetailRecipient> = [
   },
 ];
 
+const additionalRecipient = {
+  recipientType: RecipientType.PF,
+  taxId: 'mocked-taxId2',
+  denomination: 'Nome2 Cognome2',
+  digitalDomicile: { type: DigitalDomicileType.PEC, address: 'toto86@gmail.com', },
+  physicalAddress: { 
+    address: 'mocked address 2', addressDetails: '', zip: '', municipality: '', province: '',
+    at: '', foreignState: '',
+  }
+};
+
 export const notificationFromBe: NotificationDetail = {
-  iun: '',
+  iun: 'KQKX-WMDW-GDMU-202301-L-1',
   paProtocolNumber: '',
   senderPaId: '',
   subject: '',
@@ -91,8 +102,34 @@ export const notificationFromBe: NotificationDetail = {
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
 };
 
+export function flexibleNotificationFromBE(
+  status: NotificationStatus, statusHistory: NotificationStatusHistory[], timeline: INotificationDetailTimeline[],
+  recipientCount = 1
+): NotificationDetail {
+  if (![1,2].includes(recipientCount)) {
+    throw new Error("only 1 or 2 recipients supported");
+  }
+  return {
+    iun: '',
+    paProtocolNumber: '',
+    senderPaId: '',
+    subject: '',
+    sentAt: '2022-02-21T10:19:33.440Z',
+    cancelledByIun: '',
+    recipients: recipientCount === 2 ? [...recipients, additionalRecipient] : recipients,
+    documentsAvailable: true,
+    documents: [],
+    otherDocuments: [],
+    notificationStatus: status,
+    notificationStatusHistory: statusHistory,
+    timeline,
+    physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
+    notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
+  }
+}
+
 export const parsedNotification: NotificationDetail = {
-  iun: '',
+  iun: 'KQKX-WMDW-GDMU-202301-L-1',
   paProtocolNumber: '',
   senderPaId: '',
   subject: '',
@@ -105,9 +142,9 @@ export const parsedNotification: NotificationDetail = {
   notificationStatus: NotificationStatus.ACCEPTED,
   notificationStatusHistory: [
     { ...statusHistory[0], steps: [{...timeline[0], hidden: false}] },
-    { ...statusHistory[1], steps: [{...timeline[1], hidden: false}]},
+    { ...statusHistory[1], steps: [{...timeline[1], hidden: false}] },
   ],
   timeline: timeline.map(t => ({...t, hidden: false})),
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
+  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };
