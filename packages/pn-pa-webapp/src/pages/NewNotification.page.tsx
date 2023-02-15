@@ -135,7 +135,7 @@ const NewNotification = () => {
 
   useEffect(() => () => void dispatch(resetState()), []);
 
-  if (activeStep === 4) {
+  if (activeStep === steps.length) {
     return <SyncFeedback />;
   }
 
