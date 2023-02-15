@@ -13,6 +13,6 @@ export const AuthApi = {
             fiscal_number: response.data.fiscal_number,
             organization: response.data.organization,
             sessionToken: response.data.sessionToken,
-            uid: response.data.uid
+            uid: response.data.uid,
         }))
 };
