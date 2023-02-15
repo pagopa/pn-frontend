@@ -238,10 +238,6 @@ export const getNotificationAllowedStatus = () => [
     label: getLocalizedOrDefaultLabel('notifications', 'status.viewed', 'Perfezionata per visione'),
   },
   {
-    value: NotificationStatus.PAID,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.paid', 'Pagata'),
-  },
-  {
     value: NotificationStatus.CANCELLED,
     label: getLocalizedOrDefaultLabel('notifications', 'status.canceled', 'Annullata'),
   },
