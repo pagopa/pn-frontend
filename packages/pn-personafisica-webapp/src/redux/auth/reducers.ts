@@ -19,7 +19,7 @@ const userDataMatcher = yup
     exp: yup.number(),
     aud: yup.string().matches(dataRegex.simpleServer),
     iss: yup.string().url(),
-    jti: yup.string().matches(dataRegex.lettersAndNumbers),
+    jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
     mobile_phone: yup.string().matches(dataRegex.phoneNumber),
   })
   .noUnknown(true);
@@ -59,9 +59,10 @@ const userSlice = createSlice({
         userDataMatcher.validateSync(user, { stripUnknown: false });
         sessionStorage.setItem('user', JSON.stringify(user));
         state.user = action.payload;
-      } catch {
+      } catch (e) {
         state.isUnauthorizedUser = true;
         state.messageUnauthorizedUser = emptyUnauthorizedMessage;
+        console.debug(e);
       }
       state.isClosedSession = false;
     });
