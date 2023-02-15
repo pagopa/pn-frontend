@@ -24,6 +24,7 @@
   "tos": {
     "title": "Notification Platform",
     "body": "Before accessing, accept the Terms and conditions of use of the service and read the Privacy Policy.",
+    "redo-body": "The Privacy policy and the Terms and conditions are changed. Before accessing, read and accept the new version.",
     "switchLabel": "I accept the <0>Terms and conditions of use</0> and confirm that I have read <1>the Privacy Policy</1>.",
     "button": "Log in"
   }

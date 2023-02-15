@@ -80,13 +80,12 @@ export const getToSApproval = createAsyncThunk<Consent>(
   performThunkAction(() => ConsentsApi.getConsentByType(ConsentType.TOS))
 );
 
-export const acceptToS = createAsyncThunk<string>('acceptToS', async (_, { rejectWithValue }) => {
-  const body = {
-    action: ConsentActionType.ACCEPT,
-  };
-  try {
-    return await ConsentsApi.setConsentByType(ConsentType.TOS, body);
-  } catch (e) {
-    return rejectWithValue(e);
-  }
-});
+export const acceptToS = createAsyncThunk<string, string>(
+  'acceptToS',
+  performThunkAction((consentVersion: string) => {
+    const body = {
+      action: ConsentActionType.ACCEPT,
+    };
+    return ConsentsApi.setConsentByType(ConsentType.TOS, consentVersion, body);
+  })
+);

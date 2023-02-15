@@ -34,6 +34,7 @@
   "tos": {
     "title": "Piattaforma Notifiche",
     "body": "Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.",
+    "redo-body": "L’Informativa Privacy e i Termini e condizioni d’uso sono cambiati. Per accedere, leggi e accetta la nuova versione.",
     "switch-label": "Accetto i <0>Termini e condizioni d’uso del servizio</0> e confermo di avere letto <1>l’Informativa Privacy</1>.",
     "button": "Accedi"
   },

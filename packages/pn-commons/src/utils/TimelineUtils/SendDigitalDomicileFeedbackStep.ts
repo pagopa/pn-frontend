@@ -1,7 +1,10 @@
 import { SendDigitalDetails } from '../../types';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
-export class SendDigitalDomicileFeedbackStep extends TimelineStep {
+// BEWARE - this class should be erased. See comment in /src/types/NotificationDetail.ts
+// --------------------------------------
+// Carlos Lombardi, 2023.02.10
+  export class SendDigitalDomicileFeedbackStep extends TimelineStep {
   getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null {
     if ((payload.step.details as SendDigitalDetails).responseStatus === 'KO') {
       return {
