@@ -1,7 +1,7 @@
 import { Fragment, ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
-import { Box, Grid, Link } from '@mui/material';
+import { Box, Grid, Link, Typography } from '@mui/material';
 import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from '@pagopa-pn/pn-commons';
 
 import { TOSAgreement } from '@pagopa/mui-italia';
@@ -73,14 +73,16 @@ const TermsOfService = ({ isFirstAccept, consentVersion }: TermsOfServiceProps) 
             confirmBtnLabel={t('tos.button', 'Accedi')}
           >
             <Box display="flex" alignItems="center">
-              <Trans
-                ns={'common'}
-                i18nKey={'tos.switch-label'}
-                components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
-              >
-                Accedendo, accetti i <TosLink>Termini e condizioni d’uso</TosLink> del servizio e
-                confermi di aver letto l’<PrivacyLink>Informativa Privacy</PrivacyLink>.
-              </Trans>
+              <Typography color="text.secondary" variant="body1">
+                <Trans
+                  ns={'common'}
+                  i18nKey={'tos.switch-label'}
+                  components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
+                >
+                  Accedendo, accetti i <TosLink>Termini e condizioni d’uso</TosLink> del servizio e
+                  confermi di aver letto l’<PrivacyLink>Informativa Privacy</PrivacyLink>.
+                </Trans>
+              </Typography>
             </Box>
           </TOSAgreement>
         </Grid>
