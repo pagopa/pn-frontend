@@ -1,3 +1,4 @@
+import React from 'react';
 import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 
 import { render } from '../../__test__/test-utils';
@@ -31,38 +32,47 @@ jest.mock(
       )
 );
 
-jest.mock(
-  '../components/NewNotification/Recipient',
-  () =>
-    ({ onConfirm }: { onConfirm: () => void }) =>
-      (
-        <div data-testid="stepContent">
-          Recipient <button onClick={onConfirm}>Click Me!</button>
-        </div>
-      )
-);
+jest.mock('../components/NewNotification/Recipient', () => {
+  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
+  return forwardRef(({ onConfirm }: { onConfirm: () => void }, ref: any) => {
+    useImperativeHandle(ref, () => ({
+      confirm: () => {},
+    }));
+    return (
+      <div data-testid="stepContent">
+        Recipient <button onClick={onConfirm}>Click Me!</button>
+      </div>
+    );
+  });
+});
 
-jest.mock(
-  '../components/NewNotification/Attachments',
-  () =>
-    ({ onConfirm }: { onConfirm: () => void }) =>
-      (
-        <div data-testid="stepContent">
-          Attachments <button onClick={onConfirm}>Click Me!</button>
-        </div>
-      )
-);
+jest.mock('../components/NewNotification/Attachments', () => {
+  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
+  return forwardRef(({ onConfirm }: { onConfirm: () => void }, ref: any) => {
+    useImperativeHandle(ref, () => ({
+      confirm: () => {},
+    }));
+    return (
+      <div data-testid="stepContent">
+        Attachments <button onClick={onConfirm}>Click Me!</button>
+      </div>
+    );
+  });
+});
 
-jest.mock(
-  '../components/NewNotification/PaymentMethods',
-  () =>
-    ({ onConfirm }: { onConfirm: () => void }) =>
-      (
-        <div data-testid="stepContent">
-          PaymentMethods <button onClick={onConfirm}>Click Me!</button>
-        </div>
-      )
-);
+jest.mock('../components/NewNotification/PaymentMethods', () => {
+  const { forwardRef, useImperativeHandle } = jest.requireActual('react');
+  return forwardRef(({ onConfirm }: { onConfirm: () => void }, ref: any) => {
+    useImperativeHandle(ref, () => ({
+      confirm: () => {},
+    }));
+    return (
+      <div data-testid="stepContent">
+        PaymentMethods <button onClick={onConfirm}>Click Me!</button>
+      </div>
+    );
+  });
+});
 
 jest.mock('../components/NewNotification/SyncFeedback', () => () => (
   <div data-testid="stepContent">SyncFeedback</div>
