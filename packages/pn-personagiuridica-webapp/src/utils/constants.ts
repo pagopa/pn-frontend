@@ -22,7 +22,7 @@ export const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN || 'DUMMY';
 
 export const OT_DOMAIN_ID = process.env.REACT_APP_ONETRUST_DOMAIN_ID || '';
 
-export const ONE_TRUST_DRAFT_MODE = !!process.env.REACT_APP_ONE_TRUST_DRAFT_MODE;
+export const ONE_TRUST_DRAFT_MODE = process.env.REACT_APP_ONE_TRUST_DRAFT_MODE === 'true';
 export const ONE_TRUST_PP = process.env.REACT_APP_ONE_TRUST_PP || '';
 export const ONE_TRUST_TOS = process.env.REACT_APP_ONE_TRUST_TOS || '';
 
