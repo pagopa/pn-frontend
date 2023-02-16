@@ -18,7 +18,13 @@ import {
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { ApiErrorWrapper, useIsMobile, CustomDropdown, dataRegex } from '@pagopa-pn/pn-commons';
+import {
+  ApiErrorWrapper,
+  useIsMobile,
+  CustomDropdown,
+  dataRegex,
+  SpecialContactsProvider
+} from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -382,52 +388,54 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
             {alreadyExistsMessage}
           </Alert>
         )}
-        {addresses.length > 0 && (
-          <Fragment>
-            <Typography fontWeight={600} sx={{ marginTop: '80px' }}>
-              {t('special-contacts.associated', { ns: 'recapiti' })}
-            </Typography>
-            {!isMobile && (
-              <Table aria-label={t('special-contacts.associated', { ns: 'recapiti' })}>
-                <TableHead>
-                  <TableRow>
-                    {listHeaders.map((h) => (
-                      <TableCell width="25%" key={h.id} sx={{ borderBottomColor: 'divider' }}>
-                        {h.label}
-                      </TableCell>
+        <SpecialContactsProvider>
+          {addresses.length > 0 && (
+            <Fragment>
+              <Typography fontWeight={600} sx={{ marginTop: '80px' }}>
+                {t('special-contacts.associated', { ns: 'recapiti' })}
+              </Typography>
+              {!isMobile && (
+                <Table aria-label={t('special-contacts.associated', { ns: 'recapiti' })}>
+                  <TableHead>
+                    <TableRow>
+                      {listHeaders.map((h) => (
+                        <TableCell width="25%" key={h.id} sx={{ borderBottomColor: 'divider' }}>
+                          {h.label}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {addresses.map((a) => (
+                      <SpecialContactElem
+                        key={a.senderId}
+                        address={a}
+                        senders={parties}
+                        recipientId={recipientId}
+                      />
                     ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {addresses.map((a) => (
-                    <SpecialContactElem
-                      key={a.senderId}
-                      address={a}
-                      senders={parties}
-                      recipientId={recipientId}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-            {isMobile &&
-              addresses.map((a) => (
-                <Card
-                  key={a.senderId}
-                  sx={{
-                    border: '1px solid',
-                    borderRadius: '8px',
-                    borderColor: 'divider',
-                    marginTop: '20px',
-                  }}
-                >
-                  <CardContent>
-                    <SpecialContactElem address={a} senders={parties} recipientId={recipientId} />
-                  </CardContent>
-                </Card>
-              ))}
-          </Fragment>
-        )}
+                  </TableBody>
+                </Table>
+              )}
+              {isMobile &&
+                addresses.map((a) => (
+                  <Card
+                    key={a.senderId}
+                    sx={{
+                      border: '1px solid',
+                      borderRadius: '8px',
+                      borderColor: 'divider',
+                      marginTop: '20px',
+                    }}
+                  >
+                    <CardContent>
+                      <SpecialContactElem address={a} senders={parties} recipientId={recipientId} />
+                    </CardContent>
+                  </Card>
+                ))}
+            </Fragment>
+          )}
+        </SpecialContactsProvider>
       </DigitalContactsCard>
     </ApiErrorWrapper>
   );
