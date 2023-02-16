@@ -6,6 +6,7 @@ import { axe, render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContacts from '../SpecialContacts';
 import { courtesyAddresses, legalAddresses, initialState } from './SpecialContacts.test-utils';
+import {SpecialContactsProvider} from "../SpecialContacts.context";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -31,11 +32,13 @@ describe('SpecialContacts Component - accessibility tests', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContacts
-            recipientId="mocked-recipientId"
-            legalAddresses={legalAddresses}
-            courtesyAddresses={courtesyAddresses}
-          />
+          <SpecialContactsProvider>
+            <SpecialContacts
+              recipientId="mocked-recipientId"
+              legalAddresses={legalAddresses}
+              courtesyAddresses={courtesyAddresses}
+            />
+          </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>,
         {
           preloadedState: initialState,
