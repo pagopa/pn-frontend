@@ -125,7 +125,9 @@ const DigitalContactElem = forwardRef(
 
     const toggleEdit = () => {
       setEditMode(!editMode);
-      if (setContextEditMode) { setContextEditMode(!editMode);};
+      if (setContextEditMode) {
+        setContextEditMode(!editMode);
+      }
     };
 
     const handleModalClose = () => {

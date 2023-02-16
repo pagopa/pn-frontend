@@ -18,7 +18,7 @@ import {
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { ApiErrorWrapper, useIsMobile, CustomDropdown, dataRegex } from '@pagopa-pn/pn-commons';
+import { ApiErrorWrapper, useIsMobile, CustomDropdown, dataRegex, SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
@@ -29,7 +29,6 @@ import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
 import SpecialContactElem from './SpecialContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
-import { SpecialContactsProvider } from "./SpecialContacts.context";
 
 type Props = {
   recipientId: string;

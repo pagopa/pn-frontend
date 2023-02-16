@@ -3,14 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { TableCell, TableRow, TextField, Typography } from '@mui/material';
-import { dataRegex, useIsMobile } from '@pagopa-pn/pn-commons';
+import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { trackEventByType } from "../../utils/mixpanel";
 import { EventActions, TrackEventType } from "../../utils/events";
 import DigitalContactElem from './DigitalContactElem';
-import { useSpecialContactsContext } from "./SpecialContacts.context";
 
 type Props = {
   address: {

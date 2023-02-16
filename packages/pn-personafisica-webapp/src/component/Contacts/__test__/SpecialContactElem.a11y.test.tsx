@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { act, RenderResult } from '@testing-library/react';
+import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 
 import { axe, render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
@@ -21,15 +22,17 @@ describe('SpecialContactElem Component - accessibility tests', () => {
     await act(async () => {
       result = render(
         <DigitalContactsCodeVerificationProvider>
-          <SpecialContactElem
-            address={{
-              senderId: 'mocked-senderId',
-              mail: 'mocked@mail.it',
-              pec: 'mocked@pec.it',
-            }}
-            senders={[{ id: 'mocked-senderId', name: 'Mocked Sender' }]}
-            recipientId="mocked-recipientId"
-          />
+          <SpecialContactsProvider>
+            <SpecialContactElem
+              address={{
+                senderId: 'mocked-senderId',
+                mail: 'mocked@mail.it',
+                pec: 'mocked@pec.it',
+              }}
+              senders={[{ id: 'mocked-senderId', name: 'Mocked Sender' }]}
+              recipientId="mocked-recipientId"
+            />
+          </SpecialContactsProvider>
         </DigitalContactsCodeVerificationProvider>
       );
     });

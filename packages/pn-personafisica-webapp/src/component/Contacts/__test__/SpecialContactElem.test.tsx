@@ -1,9 +1,9 @@
 import { act, fireEvent, RenderResult, waitFor } from '@testing-library/react';
+import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 
 import { render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
-import { SpecialContactsProvider } from "../SpecialContacts.context";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
