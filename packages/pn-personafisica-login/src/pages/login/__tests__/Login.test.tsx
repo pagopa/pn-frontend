@@ -1,12 +1,27 @@
-import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { AppRouteParams, AppRouteType } from '@pagopa-pn/pn-commons';
 
+import { storageAarOps, storageTypeOps } from '../../../utils/storage';
 import Login from '../Login';
 import { ENV } from '../../../utils/env';
 import '../../../locales/i18n';
 import React from 'react';
 
 const oldWindowLocation = global.window.location;
+
+// simulate url params
+function mockCreateMockedSearchParams() {
+  const mockedSearchParams = new URLSearchParams();
+  mockedSearchParams.set(AppRouteParams.TYPE, AppRouteType.PF);
+  mockedSearchParams.set(AppRouteParams.AAR, 'fake-aar-token');
+  return mockedSearchParams;
+}
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useSearchParams: () => [mockCreateMockedSearchParams(), null],
+}));
 
 describe('test login page', () => {
   beforeAll(() => {
@@ -77,5 +92,15 @@ describe('test login page', () => {
     );
     const privacyDisclaimerLink = screen.queryByTestId('terms-and-conditions');
     expect(privacyDisclaimerLink).not.toBeInTheDocument();
+  });
+
+  test('check aar and type stored correctly', () => {
+    render(
+      <BrowserRouter>
+        <Login />
+      </BrowserRouter>
+    );
+    expect(storageTypeOps.read()).toBe(AppRouteType.PF);
+    expect(storageAarOps.read()).toBe('fake-aar-token');
   });
 });
