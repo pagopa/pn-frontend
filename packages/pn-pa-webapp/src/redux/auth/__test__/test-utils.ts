@@ -28,8 +28,8 @@ export const userResponse: User = {
   name: 'Mario',
   family_name: 'Rossi',
   fiscal_number: 'RSSMRA80A01H501U',
-  email: 'mocked-email',
-  uid: 'mocked-uid',
+  email: 'mocked-email@mail.com',
+  uid: '00000000-0000-0000-0000-000000000000',
   organization: {
     id: 'mocked-id',
     roles: [
@@ -38,7 +38,7 @@ export const userResponse: User = {
         role: PNRole.ADMIN,
       },
     ],
-    fiscal_code: 'mocked-organization-fiscal-code',
+    fiscal_code: '12345678910',
   },
-  desired_exp: 0
+  desired_exp: 0,
 };
