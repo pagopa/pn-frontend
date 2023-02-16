@@ -10,6 +10,7 @@ import { Party } from '../../models/party';
 import { trackEventByType } from "../../utils/mixpanel";
 import { EventActions, TrackEventType } from "../../utils/events";
 import DigitalContactElem from './DigitalContactElem';
+import { useSpecialContactsContext } from "./SpecialContacts.context";
 
 type Props = {
   address: {
@@ -39,6 +40,7 @@ const addressTypeToLabel = {
 const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
+  const { contextEditMode, setContextEditMode } = useSpecialContactsContext();
   const digitalElemRef = useRef<{ 
     [key: string]: { editContact: () => void};
   }>(
@@ -170,6 +172,8 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
             resetModifyValue={() => updateContact('cancelled', f.id)}
             // eslint-disable-next-line functional/immutable-data
             ref={(node: { editContact: () => void}) => (digitalElemRef.current[f.id] = node)}
+            editDisabled={contextEditMode}
+            setContextEditMode={setContextEditMode}
           />
         </form>
       ) : (
