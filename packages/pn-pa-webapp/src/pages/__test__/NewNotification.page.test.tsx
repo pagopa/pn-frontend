@@ -32,6 +32,12 @@ jest.mock(
       )
 );
 
+// Before the update, tests completed with success but in console there were a lot of warnings due to the forwardRef feature.
+// Because we mock the component and trhe real component export its ref,
+// also the mocked component must have the forwardRef and the useImperativeHandle features.
+// Furthermore the useImperativeHandle in the mocked component must export the same elements that the real component does
+// ----------------------
+// Andrea Cimini, 2023.02.17
 jest.mock('../components/NewNotification/Recipient', () => {
   const { forwardRef, useImperativeHandle } = jest.requireActual('react');
   return forwardRef(({ onConfirm }: { onConfirm: () => void }, ref: any) => {

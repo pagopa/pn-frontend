@@ -23,6 +23,11 @@ export const mockAuthentication = () => {
   });
 };
 
+// For security reasons, we had a strict validation to user object.
+// This doesn't invalidate the tests, but generates some annoying logs during their execution if the mocked user doesn't respect the validation rules.
+// To avoid this, I updated the mocked user so as to comply with the validation rules.
+// ----------------------
+// Andrea Cimini, 2023.02.17
 export const userResponse: User = {
   sessionToken: 'mocked-session-token',
   name: 'Mario',
