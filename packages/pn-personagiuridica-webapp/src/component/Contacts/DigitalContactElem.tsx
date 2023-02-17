@@ -1,4 +1,13 @@
-import { forwardRef, Fragment, memo, ReactChild, useImperativeHandle, useState } from 'react';
+import {
+  Dispatch,
+  forwardRef,
+  Fragment,
+  memo,
+  ReactChild,
+  SetStateAction,
+  useImperativeHandle,
+  useState
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Button,
@@ -37,6 +46,8 @@ type Props = {
   onConfirmClick: (status: 'validated' | 'cancelled') => void;
   blockDelete?: boolean;
   resetModifyValue: () => void;
+  editDisabled?: boolean;
+  setContextEditMode?: Dispatch<SetStateAction<boolean>>;
 };
 
 type DialogProps = {
@@ -102,6 +113,8 @@ const DigitalContactElem = forwardRef(
       onConfirmClick,
       blockDelete,
       resetModifyValue,
+      editDisabled,
+      setContextEditMode
     }: Props,
     ref
   ) => {
@@ -121,6 +134,9 @@ const DigitalContactElem = forwardRef(
 
     const toggleEdit = () => {
       setEditMode(!editMode);
+      if (setContextEditMode) {
+        setContextEditMode(!editMode);
+      }
     };
 
     const handleModalClose = () => {
@@ -177,7 +193,12 @@ const DigitalContactElem = forwardRef(
           {mappedChildren}
           <Grid item lg={12} xs={12} textAlign={'left'}>
             {!editMode ? (
-              <ButtonNaked color="primary" onClick={toggleEdit} sx={{ marginRight: '10px' }}>
+              <ButtonNaked
+                color="primary"
+                onClick={toggleEdit}
+                sx={{ marginRight: '10px' }}
+                disabled={editDisabled}
+              >
                 {t('button.modifica')}
               </ButtonNaked>
             ) : (

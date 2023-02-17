@@ -7,6 +7,7 @@ jest.mock('../../utils/constants', () => {
   return {
     ...jest.requireActual('../../utils/constants'),
     ONE_TRUST_PARTICIPATING_ENTITIES: 'mocked-id',
+    ONE_TRUST_DRAFT_MODE: false,
   };
 });
 
@@ -28,7 +29,7 @@ describe('test the Participating Entities page', () => {
     };
   });
 
-  test.skip('check that Privacy Policy page container is rendered', () => {
+  test('check that Privacy Policy page container is rendered', () => {
     const result = render(<ParticipatingEntities />);
     expect(loadNoticesFn).toBeCalledTimes(1);
     expect(loadNoticesFn).toBeCalledWith([compileOneTrustPath('mocked-id')], false);
