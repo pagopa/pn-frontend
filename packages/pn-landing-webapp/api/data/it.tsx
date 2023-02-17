@@ -88,6 +88,15 @@ const paHero: HeroProps = {
       document.location = loc + '#start-integration';
       return false;
     }
+  },
+  ctaSecondary: {
+    label: "Accedi",
+    title: "Accedi",
+    /* Carlotta Dimatteo - aggiunta della CTA richiesta dal team di comunicazione il 17/02/2023 */
+    onClick: function onClick() {
+      window.open('https://selfcare.pagopa.it/auth/login?onSuccess=%2Fonboarding%2Fprod-pn', '_blank');
+      return false;
+    }
   }
 };
 
@@ -221,11 +230,12 @@ const paInfoBlocks: Array<IInfoblockData> = [
           </Typography>
           <Typography variant="overline">Sottoscrivere l’accordo di adesione</Typography>
           <Typography variant="body2">
-            Per ricevere l’accordo di adesione, è necessario accedere all’Area Riservata per gli enti. Una volta sottoscritto l’accordo in digitale,
-            l’ente dovrà caricarlo e inviarlo a PagoPA S.p.A. sempre dall’
+            Per ricevere l’accordo di adesione, è necessario accedere all’
             <Link href={"https://selfcare.pagopa.it/auth/login?onSuccess=dashboard"}>
               <a target="_blank" rel="noopener noreferrer">Area Riservata.</a>
             </Link>
+            {" "}per gli enti. Una volta sottoscritto l’accordo in digitale,
+            l’ente dovrà caricarlo e inviarlo a PagoPA S.p.A. sempre dall’Area Riservata.
             Inoltre, a integrazione dell’accordo, dovranno essere inviati i seguenti moduli debitamente compilati:
           </Typography>
           <List sx={{ listStyleType: 'disc', pl: 4 }}>
@@ -255,7 +265,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             </ListItem>
             <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
-                <Link href={"https://app.gitbook.com/o/KXYtsf32WSKm6ga638R3/c/10DUrOzaWhbkn0GVZKjb"}>
+                <Link href={"https://app.gitbook.com/o/KXYtsf32WSKm6ga638R3/s/xJKQCleWk4paV973ustG/"}>
                   <a target="_blank" rel="noopener noreferrer">
                     SLA di servizio
                   </a>
