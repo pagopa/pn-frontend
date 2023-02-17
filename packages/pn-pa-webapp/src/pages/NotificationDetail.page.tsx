@@ -57,7 +57,11 @@ import {
   NOTIFICATION_ACTIONS,
 } from '../redux/notification/actions';
 import { setCancelledIun } from '../redux/newNotification/reducers';
-import { resetLegalFactState, resetState, clearDowntimeLegalFactData } from '../redux/notification/reducers';
+import {
+  resetLegalFactState,
+  resetState,
+  clearDowntimeLegalFactData,
+} from '../redux/notification/reducers';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -75,10 +79,12 @@ const NotificationDetail = () => {
   const { hasApiErrors } = useErrors();
   const isMobile = useIsMobile();
   const notification = useAppSelector((state: RootState) => state.notificationState.notification);
-  const downtimeEvents = useAppSelector((state: RootState) => state.notificationState.downtimeEvents);
+  const downtimeEvents = useAppSelector(
+    (state: RootState) => state.notificationState.downtimeEvents
+  );
   const downtimeLegalFactUrl = useAppSelector(
     (state: RootState) => state.notificationState.downtimeLegalFactUrl
-  );  
+  );
   const documentDownloadUrl = useAppSelector(
     (state: RootState) => state.notificationState.documentDownloadUrl
   );
@@ -444,15 +450,16 @@ const NotificationDetail = () => {
                     downloadFilesLink="Quando si perfeziona una notifica?"
                   />
                 </Paper>
-                <NotificationRelatedDowntimes 
-                  downtimeEvents={downtimeEvents} 
+                <NotificationRelatedDowntimes
+                  downtimeEvents={downtimeEvents}
                   fetchDowntimeEvents={fetchDowntimeEvents}
                   notificationStatusHistory={notification.notificationStatusHistory}
                   downtimeLegalFactUrl={downtimeLegalFactUrl}
                   fetchDowntimeLegalFactDocumentDetails={fetchDowntimeLegalFactDocumentDetails}
-                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData()) }
+                  clearDowntimeLegalFactData={() => dispatch(clearDowntimeLegalFactData())}
                   apiId={NOTIFICATION_ACTIONS.GET_DOWNTIME_EVENTS}
-                />              </Stack>
+                />
+              </Stack>
             </Grid>
             <Grid item lg={5} xs={12}>
               <Box sx={{ backgroundColor: 'white', height: '100%', p: 3 }}>
