@@ -19,7 +19,7 @@ const userDataMatcher = yup
     exp: yup.number(),
     aud: yup.string().matches(dataRegex.simpleServer),
     iss: yup.string().url(),
-    jti: yup.string().matches(dataRegex.lettersAndNumbers),
+    jti: yup.string().matches(dataRegex.lettersNumbersAndDashs),
     mobile_phone: yup.string().matches(dataRegex.phoneNumber),
   })
   .noUnknown(true);
@@ -46,6 +46,8 @@ const userSlice = createSlice({
     user: basicInitialUserData(userDataMatcher, noLoggedUserData),
     tos: false,
     fetchedTos: false,
+    isFirstAccept: true,
+    consentVersion: '',
     isUnauthorizedUser: false,
     messageUnauthorizedUser: emptyUnauthorizedMessage,
     isClosedSession: false,
@@ -59,9 +61,10 @@ const userSlice = createSlice({
         userDataMatcher.validateSync(user, { stripUnknown: false });
         sessionStorage.setItem('user', JSON.stringify(user));
         state.user = action.payload;
-      } catch {
+      } catch (e) {
         state.isUnauthorizedUser = true;
         state.messageUnauthorizedUser = emptyUnauthorizedMessage;
+        console.debug(e);
       }
       state.isClosedSession = false;
     });
@@ -80,10 +83,13 @@ const userSlice = createSlice({
     });
     builder.addCase(getToSApproval.fulfilled, (state, action) => {
       state.tos = action.payload.accepted;
+      state.isFirstAccept = action.payload.isFirstAccept;
+      state.consentVersion = action.payload.consentVersion;
       state.fetchedTos = true;
     });
     builder.addCase(getToSApproval.rejected, (state) => {
       state.tos = false;
+      state.isFirstAccept = true;
       state.fetchedTos = true;
     });
     builder.addCase(acceptToS.fulfilled, (state) => {

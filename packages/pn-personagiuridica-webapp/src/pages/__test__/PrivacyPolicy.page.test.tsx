@@ -7,6 +7,7 @@ jest.mock('../../utils/constants', () => {
   return {
     ...jest.requireActual('../../utils/constants'),
     ONE_TRUST_PP: 'mocked-id',
+    ONE_TRUST_DRAFT_MODE: false,
   };
 });
 

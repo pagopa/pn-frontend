@@ -1,9 +1,9 @@
-import { SendAnalogFeedbackStep } from './SendAnalogFeedbackStep';
-import { SendAnalogProgressStep } from './SendAnalogProgressStep';
 import { INotificationDetailTimeline, TimelineCategory } from '../../types';
 import { ScheduleDigitalWorkflowStep } from './ScheduleDigitalWorkflowStep';
 import { TimelineStep } from './TimelineStep';
 import { DefaultStep } from './DefaultStep';
+import { SendAnalogProgressStep } from './SendAnalogProgressStep';
+import { SendAnalogFeedbackStep } from './SendAnalogFeedbackStep';
 import { ScheduleAnalogWorkflowStep } from './ScheduleAnalogWorkflow';
 import { SendCourtesyMessageStep } from './SendCourtesyMessageStep';
 import { SendDigitalDomicileStep } from './SendDigitalDomicileStep';
@@ -26,6 +26,11 @@ export class TimelineStepFactory {
         return new SendCourtesyMessageStep();
       case TimelineCategory.SEND_DIGITAL_DOMICILE:
         return new SendDigitalDomicileStep();
+
+      // BEWARE - this case should be removed. See comment in /src/types/NotificationDetail.ts
+      // --------------------------------------
+      // Carlos Lombardi, 2023.02.10
+
       case TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK:
         return new SendDigitalDomicileFeedbackStep();
       case TimelineCategory.SEND_DIGITAL_FEEDBACK:

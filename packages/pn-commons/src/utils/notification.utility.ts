@@ -1,3 +1,5 @@
+/* eslint-disable sonarjs/cognitive-complexity */
+/* eslint-disable complexity */
 /* eslint-disable functional/immutable-data */
 import _ from 'lodash';
 
@@ -19,6 +21,7 @@ import {
   SendDigitalDetails,
   ViewedDetails,
   SendPaperDetails,
+  NotificationDeliveryMode,
   ResponseStatus,
 } from '../types/NotificationDetail';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
@@ -52,33 +55,51 @@ function localizeStatus(
   };
 }
 
+
 /**
  * Returns the mapping between current notification status and its color, label and descriptive message.
  * @param  {NotificationStatus} status
  * @returns object
  */
 export function getNotificationStatusInfos(
-  status: NotificationStatus,
-  recipient?: string
+  status: NotificationStatus | NotificationStatusHistory,
+  // options?: { recipient?: string; completeStatusHistory?: Array<NotificationStatusHistory> }
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
   tooltip: string;
   description: string;
 } {
+  const statusComesAsAnObject = !!((status as NotificationStatusHistory).status);
+  const statusObject: NotificationStatusHistory | undefined = statusComesAsAnObject ? status as NotificationStatusHistory : undefined;
+  const actualStatus: NotificationStatus = statusComesAsAnObject ? (status as NotificationStatusHistory).status : (status as NotificationStatus);
   /* eslint-disable-next-line functional/no-let */
   let subject = getLocalizedOrDefaultLabel('notifications', `status.recipient`, 'destinatario');
-  switch (status) {
+  switch (actualStatus) {
     case NotificationStatus.DELIVERED:
-      return {
-        color: 'default',
-        ...localizeStatus(
-          'delivered',
-          'Consegnata',
-          'La notifica è stata consegnata',
-          'La notifica è stata consegnata'
-        ),
-      };
+      const statusInfos = localizeStatus(
+        'delivered',
+        'Consegnata',
+        `La notifica è stata consegnata`,
+        'La notifica è stata consegnata.',
+      );
+      // if the deliveryMode is defined, then change the description for a more specific one.
+      const deliveryMode = statusObject && statusObject.deliveryMode;
+      if (deliveryMode) {
+        const deliveryModeDescription = getLocalizedOrDefaultLabel(
+          'notifications', 
+          `status.deliveryMode.${deliveryMode}`, 
+          `${deliveryMode}`
+        );
+        statusInfos.description =  getLocalizedOrDefaultLabel(
+          'notifications',
+          'status.delivered-description-with-delivery-mode',
+          `La notifica è stata consegnata per via ${deliveryMode === NotificationDeliveryMode.ANALOG ? 'analogica' : 'digitale'}.`,
+          { deliveryMode: deliveryModeDescription }
+        );
+      }
+      // set the color at the end to avoid a type error since the color is defined as an union among some well-known strings
+      return { color: 'default', ...statusInfos };
     case NotificationStatus.DELIVERING:
       return {
         color: 'default',
@@ -130,12 +151,12 @@ export function getNotificationStatusInfos(
         ),
       };
     case NotificationStatus.VIEWED:
-      if (recipient) {
+      if (statusObject && statusObject.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
           `status.delegate`,
-          `delegato ${recipient}`,
-          { name: recipient }
+          `delegato ${statusObject.recipient}`,
+          { name: statusObject.recipient }
         );
       }
       return {
@@ -149,12 +170,12 @@ export function getNotificationStatusInfos(
         ),
       };
     case NotificationStatus.VIEWED_AFTER_DEADLINE:
-      if (recipient) {
+      if (statusObject && statusObject.recipient) {
         subject = getLocalizedOrDefaultLabel(
           'notifications',
           `status.delegate`,
-          `delegato ${recipient}`,
-          { name: recipient }
+          `delegato ${statusObject.recipient}`,
+          { name: statusObject.recipient }
         );
       }
       return {
@@ -215,10 +236,6 @@ export const getNotificationAllowedStatus = () => [
   {
     value: NotificationStatus.VIEWED,
     label: getLocalizedOrDefaultLabel('notifications', 'status.viewed', 'Perfezionata per visione'),
-  },
-  {
-    value: NotificationStatus.PAID,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.paid', 'Pagata'),
   },
   {
     value: NotificationStatus.CANCELLED,
@@ -396,13 +413,14 @@ const TimelineAllowedStatus = [
  * @param  {string} timelineElement
  * @param  {NotificationStatusHistory} status
  * @param  {Array<string>} acceptedStatusItems
- */
+ * @returns the found step, which is sometimes useful in populatedMacroSteps (i.e. the function calling this one)
+ */ 
 function populateMacroStep(
   parsedNotification: NotificationDetail,
   timelineElement: string,
   status: NotificationStatusHistory,
   acceptedStatusItems: Array<string>
-) {
+): INotificationDetailTimeline | undefined {
   const step = parsedNotification.timeline.find((t) => t.elementId === timelineElement);
   if (step) {
     // hide accepted status micro steps
@@ -416,16 +434,36 @@ function populateMacroStep(
       status.steps!.push(step);
     }
   }
+  return step;
 }
 
-/**
- * Populate timeline macro steps
- * @param  {NotificationDetail} parsedNotification
- */
+
+function fromLatestToEarliest(a: INotificationDetailTimeline, b: INotificationDetailTimeline) {
+  if (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime() >= 0) {
+    return 1;
+  }
+  return -1;
+}
+
 function populateMacroSteps(parsedNotification: NotificationDetail) {
+  /* eslint-disable functional/no-let */
   let isEffectiveDateStatus = false;
   let acceptedStatusItems: Array<string> = [];
+  let deliveryMode: NotificationDeliveryMode | undefined;
+  let deliveringStatus: NotificationStatusHistory | undefined;
+  /* eslint-enable functional/no-let */
+
+  /* eslint-disable functional/no-let */
+  let lastDeliveredIndexToShift = -1;
+  let lastDeliveredIndexToShiftIsFixed = false;
+  let preventShiftFromDeliveredToDelivering = false;
+  /* eslint-enable functional/no-let */
+
   for (const status of parsedNotification.notificationStatusHistory) {
+    // keep pointer to delivering status for eventual later use
+    if (status.status === NotificationStatus.DELIVERING) {
+      deliveringStatus = status;
+    }
     // if status accepted has items, move them to the next state, but preserve legalfacts
     if (status.status === NotificationStatus.ACCEPTED && status.relatedTimelineElements.length) {
       acceptedStatusItems = status.relatedTimelineElements;
@@ -433,19 +471,73 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
       status.relatedTimelineElements.unshift(...acceptedStatusItems);
     }
     status.steps = [];
+
     // find timeline steps that are linked with current status
-    for (const timelineElement of status.relatedTimelineElements) {
-      populateMacroStep(parsedNotification, timelineElement, status, acceptedStatusItems);
-    }
-    // order step by time
-    status.steps.sort((a, b) => {
-      if (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime() >= 0) {
-        return 1;
-      }
-      return -1;
+    status.relatedTimelineElements.forEach((timelineElement, ix) => {
+      const step = populateMacroStep(parsedNotification, timelineElement, status, acceptedStatusItems);
+      if (step) {
+        // delivery mode: according to the first arrived 
+        // between DIGITAL_SUCCESS_WORKFLOW and SEND_SIMPLE_REGISTERED_LETTER
+        if (step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW && !deliveryMode) {
+          deliveryMode = NotificationDeliveryMode.DIGITAL;
+        } else if (step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER && !deliveryMode) {
+          deliveryMode = NotificationDeliveryMode.ANALOG;
+        } 
+
+        // // if a DIGITAL_SUCCESS_WORKFLOW event is found in the DELIVERING status
+        // // (since as of 2023.02.13 the jump from DELIVERING to DELIVERED could not be related to the *first* digital shipment resolution)
+        // // then no shift is performed from DELIVERED to DELIVERING
+        // // ... I prefer to still shift events up to the first DIGITAL_SUCCESS_WORKFLOW found in DELIVERED status ...
+        // // keep the code just in case
+        // if (status.status === NotificationStatus.DELIVERING && step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
+        //   preventShiftFromDeliveredToDelivering = true;
+        // }
+
+        // record the last timeline event from DELIVERED that must be shifted to DELIVERING
+        // the rules: 
+        // - up to the last DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER element,
+        // - or the first DIGITAL_SUCCESS_WORKFLOW afterwards a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER 
+        //   (in this case, excluding it)
+        // if a DIGITAL_SUCCESS_WORKFLOW is found before a DIGITAL_FAILURE_WORKFLOW or SEND_SIMPLE_REGISTERED_LETTER
+        // then no shift has to be done
+        if (status.status === NotificationStatus.DELIVERED && !preventShiftFromDeliveredToDelivering) {
+          if ((step.category === TimelineCategory.DIGITAL_FAILURE_WORKFLOW 
+              || step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER) && !lastDeliveredIndexToShiftIsFixed)
+          {
+            lastDeliveredIndexToShift = ix;
+          } else if (step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
+            if (lastDeliveredIndexToShift > -1) {
+              lastDeliveredIndexToShift = ix - 1;
+              lastDeliveredIndexToShiftIsFixed = true;
+            } else {
+              preventShiftFromDeliveredToDelivering = true;
+            }
+          } 
+        }
+      } 
     });
+    
+    // shift steps from DELIVERED to DELIVERING
+    // this is the reason why the pointer to the DELIVERING status is kept, recall that 
+    if (status.status === NotificationStatus.DELIVERED && deliveringStatus && deliveringStatus.steps
+        && !preventShiftFromDeliveredToDelivering && lastDeliveredIndexToShift > -1 
+    ) {
+      const stepsToShift = status.steps.slice(0, lastDeliveredIndexToShift+1);
+      stepsToShift.sort(fromLatestToEarliest);
+      deliveringStatus.steps.unshift(...stepsToShift);
+      status.steps = status.steps.slice(lastDeliveredIndexToShift+1);
+
+      status.activeFrom = deliveringStatus.steps[0].timestamp;
+    }
+
+    // order step by time, latest first
+    status.steps.sort(fromLatestToEarliest);
     if (status.status !== NotificationStatus.ACCEPTED && acceptedStatusItems.length) {
       acceptedStatusItems = [];
+    }
+    // sets the delivery mode for DELIVERED status
+    if (status.status === NotificationStatus.DELIVERED && deliveryMode) {
+      status.deliveryMode = deliveryMode;
     }
     // check if there are information about the user that chahnged the status and populate recipient object
     if (status.status === NotificationStatus.VIEWED) {

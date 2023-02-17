@@ -35,6 +35,7 @@ const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   return { url: '' };
 };
 
+
 export const NotificationsApi = {
   /**
    * Gets current user notifications
