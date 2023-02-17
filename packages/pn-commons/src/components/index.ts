@@ -41,6 +41,7 @@ import LoadingPage from './LoadingPage';
 import ApiError from './ApiError/ApiError';
 import ApiErrorWrapper from './ApiError/ApiErrorWrapper';
 import SnackBar from './SnackBar/SnackBar';
+import { SpecialContactsProvider, useSpecialContactsContext } from "./SpecialContacts.context";
 import TimedMessage from './TimedMessage/TimedMessage';
 
 export {
@@ -84,6 +85,8 @@ export {
   Prompt,
   CopyToClipboard,
   LoadingPage,
+  SpecialContactsProvider,
+  useSpecialContactsContext,
   TimedMessage
 };
 

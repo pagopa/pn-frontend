@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { TableCell, TableRow, TextField, Typography } from '@mui/material';
-import { dataRegex, useIsMobile } from '@pagopa-pn/pn-commons';
+import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { Party } from '../../models/party';
@@ -39,6 +39,7 @@ const addressTypeToLabel = {
 const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
+  const { contextEditMode, setContextEditMode } = useSpecialContactsContext();
   const digitalElemRef = useRef<{ 
     [key: string]: { editContact: () => void};
   }>(
@@ -170,6 +171,8 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
             resetModifyValue={() => updateContact('cancelled', f.id)}
             // eslint-disable-next-line functional/immutable-data
             ref={(node: { editContact: () => void}) => (digitalElemRef.current[f.id] = node)}
+            editDisabled={contextEditMode}
+            setContextEditMode={setContextEditMode}
           />
         </form>
       ) : (
