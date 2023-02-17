@@ -176,6 +176,7 @@
     },
     "back-to-notifications": "Torna alle notifiche",
     "drag-doc": "Trascina qui il documento",
+    "warning-payment-disabled": "Al momento le notifiche che prevedono un pagamento si possono inviare solo tramite API Key.",
     "steps": {
       "preliminary-informations": {
         "fetch-groups-error": "Non siamo riusciti a recuperare i dati che servono per poter creare una nuova notifica.",
