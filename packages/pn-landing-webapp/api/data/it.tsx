@@ -217,10 +217,8 @@ const paInfoBlocks: Array<IInfoblockData> = [
           <Typography variant="body2">
             La procedura per avviare le attività tecniche e amministrative necessarie per l’adesione e l’integrazione degli enti a Piattaforma Notifiche, prevede le seguenti fasi:
           </Typography>
-          <div>
-            <Typography variant="h6" color="primary.main" display={"inline"}>01.</Typography>
-            <Typography variant="h6" display={"inline"}> Scegliere come integrarsi</Typography>
-          </div>
+
+          <Typography variant="h6">01. Scegli come integrarti</Typography>
 
           <Typography variant="body2">
             Ogni ente può decidere se integrarsi alla piattaforma direttamente oppure tramite un fornitore.
@@ -233,12 +231,13 @@ const paInfoBlocks: Array<IInfoblockData> = [
             I soggetti che intendono integrarsi alla Piattaforma Notifiche in qualità di Partner o Intermediari Tecnologici possono manifestare il proprio interesse ad avviare
             la procedura ed essere inseriti nella lista inviando una mail all’indirizzo account@pagopa.it.
           </Typography>
-          <Typography variant="h6">02. Sottoscrivere l’accordo di adesione</Typography>
+          <Typography variant="h6">02. Sottoscrivi l’accordo di adesione</Typography>
           <Typography variant="body2">
             Per ricevere l'accordo di adesione, l'ente dovrà accedere all'
-            <Link href={selfCareUrl}>
+            <Link href={"https://selfcare.pagopa.it/auth/login?onSuccess=%2Fonboarding%2Fprod-pn"}>
               <a target="_blank" rel="noopener noreferrer">Area Riservata</a>
-            </Link>{" "} seguire i passaggi descritti nel <Link href="https://docs.pagopa.it/area-riservata-enti-piattaforma-notifiche/">
+            </Link>{" "}seguire i passaggi descritti nel{" "}
+            <Link href="https://docs.pagopa.it/area-riservata-enti-piattaforma-notifiche/">
               <a target="_blank" rel="noopener noreferrer">manuale operativo.</a>
             </Link><br></br>
             Una volta sottoscritto l’accordo in digitale,
@@ -280,7 +279,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
               </Typography>
             </ListItem>
           </List>
-          <Typography variant="h6">03. Avviare l’integrazione tecnologica</Typography>
+          <Typography variant="h6">03. Avvia l’integrazione tecnologica</Typography>
           <Typography variant="body2">
             Di seguito sono consultabili i materiali necessari per integrare i sistemi dell’ente alla piattaforma:
           </Typography>
