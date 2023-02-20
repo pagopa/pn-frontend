@@ -1,3 +1,4 @@
+import React from 'react';
 import * as redux from 'react-redux';
 import { NotificationDetailTableRow } from '@pagopa-pn/pn-commons';
 import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
@@ -156,7 +157,6 @@ describe('NotificationDetail Page (one recipient)', () => {
   });
 });
 
-
 describe('NotificationDetail Page (multi recipient)', () => {
   let result: RenderResult;
   const mockDispatchFn = jest.fn();
@@ -193,7 +193,9 @@ describe('NotificationDetail Page (multi recipient)', () => {
 
   test('renders NotificationDetail page', () => {
     expect(result.getByRole('link')).toHaveTextContent(/detail.breadcrumb-root/i);
-    expect(result.container.querySelector('h4')).toHaveTextContent(notificationToFeMultiRecipient.subject);
+    expect(result.container.querySelector('h4')).toHaveTextContent(
+      notificationToFeMultiRecipient.subject
+    );
     expect(result.container).toHaveTextContent('mocked-abstract');
     expect(result.container).toHaveTextContent(/Table/i);
     expect(result.container).toHaveTextContent(/2,00 €/i);

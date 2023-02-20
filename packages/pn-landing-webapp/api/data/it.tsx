@@ -60,6 +60,8 @@ const navigation: INavigationBarProps = {
   pa: "Enti"
 };
 
+const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";
+
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
@@ -86,6 +88,15 @@ const paHero: HeroProps = {
     onClick: function onClick() {
       var loc = document.location.toString().split('#')[0];
       document.location = loc + '#start-integration';
+      return false;
+    }
+  },
+  ctaSecondary: {
+    label: "Accedi",
+    title: "Accedi",
+    /* Carlotta Dimatteo - aggiunta della CTA richiesta dal team di comunicazione il 17/02/2023 */
+    onClick: function onClick() {
+      window.open(selfCareUrl, '_blank');
       return false;
     }
   }
@@ -207,7 +218,8 @@ const paInfoBlocks: Array<IInfoblockData> = [
             La procedura per avviare le attività tecniche e amministrative necessarie per l’adesione e l’integrazione degli enti a Piattaforma Notifiche, prevede le seguenti fasi:
           </Typography>
 
-          <Typography variant="overline">Scegliere come integrarsi</Typography>
+          <Typography variant="h6">01. Scegli come integrarti</Typography>
+
           <Typography variant="body2">
             Ogni ente può decidere se integrarsi alla piattaforma direttamente oppure tramite un fornitore.
             Nel secondo caso, è disponibile <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
@@ -219,13 +231,17 @@ const paInfoBlocks: Array<IInfoblockData> = [
             I soggetti che intendono integrarsi alla Piattaforma Notifiche in qualità di Partner o Intermediari Tecnologici possono manifestare il proprio interesse ad avviare
             la procedura ed essere inseriti nella lista inviando una mail all’indirizzo account@pagopa.it.
           </Typography>
-          <Typography variant="overline">Sottoscrivere l’accordo di adesione</Typography>
+          <Typography variant="h6">02. Sottoscrivi l’accordo di adesione</Typography>
           <Typography variant="body2">
-            Per ricevere l’accordo di adesione, è necessario accedere all’Area Riservata per gli enti. Una volta sottoscritto l’accordo in digitale,
-            l’ente dovrà caricarlo e inviarlo a PagoPA S.p.A. sempre dall’
-            <Link href={"https://selfcare.pagopa.it/auth/login?onSuccess=dashboard"}>
-              <a target="_blank" rel="noopener noreferrer">Area Riservata.</a>
-            </Link>
+            Per ricevere l'accordo di adesione, l'ente dovrà accedere all'
+            <Link href={"https://selfcare.pagopa.it/auth/login?onSuccess=%2Fonboarding%2Fprod-pn"}>
+              <a target="_blank" rel="noopener noreferrer">Area Riservata</a>
+            </Link>{" "}seguire i passaggi descritti nel{" "}
+            <Link href="https://docs.pagopa.it/area-riservata-enti-piattaforma-notifiche/">
+              <a target="_blank" rel="noopener noreferrer">manuale operativo.</a>
+            </Link><br></br>
+            Una volta sottoscritto l’accordo in digitale,
+            l’ente dovrà caricarlo e inviarlo a PagoPA S.p.A. sempre dall’Area Riservata.
             Inoltre, a integrazione dell’accordo, dovranno essere inviati i seguenti moduli debitamente compilati:
           </Typography>
           <List sx={{ listStyleType: 'disc', pl: 4 }}>
@@ -255,7 +271,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             </ListItem>
             <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
-                <Link href={"https://app.gitbook.com/o/KXYtsf32WSKm6ga638R3/c/10DUrOzaWhbkn0GVZKjb"}>
+                <Link href={"https://app.gitbook.com/o/KXYtsf32WSKm6ga638R3/s/xJKQCleWk4paV973ustG/"}>
                   <a target="_blank" rel="noopener noreferrer">
                     SLA di servizio
                   </a>
@@ -263,7 +279,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
               </Typography>
             </ListItem>
           </List>
-          <Typography variant="overline">Avviare l’integrazione tecnologica</Typography>
+          <Typography variant="h6">03. Avvia l’integrazione tecnologica</Typography>
           <Typography variant="body2">
             Di seguito sono consultabili i materiali necessari per integrare i sistemi dell’ente alla piattaforma:
           </Typography>
@@ -298,7 +314,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
               </Typography>
             </ListItem>
           </List>
-          <Typography>Per ulteriori informazioni e chiarimenti, è possibile consultare{" "}
+          <Typography variant="body2">Per ulteriori informazioni e chiarimenti, è possibile consultare{" "}
             <Link href={"https://app.gitbook.com/o/KXYtsf32WSKm6ga638R3/s/iWZ1gWl9GF8n6vjCvjY2/"}>
               <a target="_blank" rel="noopener noreferrer">
                 qui
