@@ -27,7 +27,7 @@
     "test": "react-scripts test --watchAll=false --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:a11y": "react-scripts test --watchAll=false --testPathPattern=\"\\.a11y\\.test\\.(tsx|ts)$\"",
     "test:all": "react-script test --watchAll=false",
-    "test:coverage": "tsc && react-scripts test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter",
+    "test:coverage": "tsc && react-scripts test --watchAll=false --ci --coverage --testResultsProcessor=jest-sonar-reporter --testPathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$\" --coveragePathIgnorePatterns=\"\\.a11y\\.test\\.(tsx|ts)$|.src.types|.src.assets\"",
     "eject": "react-scripts eject",
     "lint": "eslint . -c .eslintrc.js --ext .ts,.tsx --fix",
     "format": "prettier \"./**/*.{ts,tsx}\" --write",
