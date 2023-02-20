@@ -307,6 +307,9 @@ Resources:
                   - ""
                   - - origin-access-identity/cloudfront/
                     - Ref: CloudFrontOriginAccessIdentity
+        Logging:
+          Bucket: !Ref S3BucketForWebsiteContent
+          Prefix: 'access_logs/'
         ViewerCertificate:
           AcmCertificateArn: !Ref WebCertificateArn
           MinimumProtocolVersion: TLSv1.2_2021
