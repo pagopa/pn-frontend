@@ -16,7 +16,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '4824a110-316e-42fd-b492-8e2b0513db70'
           REACT_APP_ONE_TRUST_TOS: '083fb982-149c-4241-be09-12ae67d88b66'
-          REACT_APP_IS_PAYMENT_ENABLED: true
+          REACT_APP_IS_PAYMENT_ENABLED: false
 
     - identifier: pn_pa_svil_build
       buildspec: cra_buildspec.yaml
@@ -33,7 +33,7 @@ batch:
           REACT_APP_ONE_TRUST_DRAFT_MODE: true
           REACT_APP_ONE_TRUST_PP: '4824a110-316e-42fd-b492-8e2b0513db70'
           REACT_APP_ONE_TRUST_TOS: '083fb982-149c-4241-be09-12ae67d88b66'
-          REACT_APP_IS_PAYMENT_ENABLED: true
+          REACT_APP_IS_PAYMENT_ENABLED: false
 
     - identifier: pn_pa_coll_build
       buildspec: cra_buildspec.yaml
