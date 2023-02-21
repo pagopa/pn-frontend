@@ -12,7 +12,7 @@ export class UnavailableForLegalReasonsError extends AppError {
       title: getLocalizedOrDefaultLabel(
         'common',
         'errors.unavailable_legal_reasons.title',
-        'Paittaforma non operativa'
+        'Piattaforma non operativa'
       ),
       content: getLocalizedOrDefaultLabel(
         'common',

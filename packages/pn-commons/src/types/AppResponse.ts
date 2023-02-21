@@ -59,7 +59,7 @@ export enum ServerResponseErrorCode {
   INTERNAL_SERVER_ERROR = 'SERVER_ERROR',
 
   UNHANDLED_ERROR = 'UNHANDLED_ERROR',
-  GENRIC_ERROR = 'GENRIC_ERROR',
+  GENERIC_ERROR = 'GENERIC_ERROR',
 }
 
 interface ServerResponseData {
