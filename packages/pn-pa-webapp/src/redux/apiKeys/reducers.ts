@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ApiKey } from '../../models/ApiKeys';
-import { getApiKeys } from './actions';
+import { deleteApiKey, getApiKeys } from './actions';
 
 const initialState = {
   loading: false,
@@ -17,6 +17,9 @@ const apiKeysSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getApiKeys.fulfilled, (state, action) => {
       state.apiKeys = action.payload;
+    });
+    builder.addCase(deleteApiKey.fulfilled, (state, action) => {
+      state.apiKeys = state.apiKeys.filter((apikey) => apikey.id !== action.payload);
     });
   }
 });
