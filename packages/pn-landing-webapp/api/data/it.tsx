@@ -236,7 +236,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             Per ricevere l'accordo di adesione, l'ente dovrà accedere all'
             <Link href={"https://selfcare.pagopa.it/auth/login?onSuccess=%2Fonboarding%2Fprod-pn"}>
               <a target="_blank" rel="noopener noreferrer">Area Riservata</a>
-            </Link>{" "}seguire i passaggi descritti nel{" "}
+            </Link>{" "}e seguire i passaggi descritti nel{" "}
             <Link href="https://docs.pagopa.it/area-riservata-enti-piattaforma-notifiche/">
               <a target="_blank" rel="noopener noreferrer">manuale operativo.</a>
             </Link><br></br>
