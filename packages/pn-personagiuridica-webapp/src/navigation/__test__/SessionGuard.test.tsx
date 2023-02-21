@@ -74,10 +74,14 @@ jest.mock('../../api/auth/Auth.api', () => {
   return {
     ...original,
     AuthApi: {
-      exchangeToken: (spidToken: string) =>
-        spidToken.startsWith('good')
-          ? Promise.resolve({ sessionToken: 'good-session-token' })
-          : Promise.reject({ response: { status: 403 } }),
+      exchangeToken: (spidToken: string) => {
+        if (spidToken.startsWith('403')) {
+          return Promise.reject({ response: { status: 403 } });
+        } else if (spidToken.startsWith('451')) {
+          return Promise.reject({ response: { status: 451 } });
+        }
+        return Promise.resolve({ sessionToken: 'good-session-token' });
+      },
     },
   };
 });
@@ -149,7 +153,7 @@ describe('SessionGuard Component', () => {
   });
 
   it('sound login - no path indicated', async () => {
-    mockLocationHash = '#selfCareToken=good_token';
+    mockLocationHash = '#selfCareToken=200_token';
     mockLocationPath = '/';
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -165,7 +169,7 @@ describe('SessionGuard Component', () => {
   });
 
   it('sound login - path indicated', async () => {
-    mockLocationHash = '#selfCareToken=good_token';
+    mockLocationHash = '#selfCareToken=200_token';
     mockLocationPath = routes.DELEGHE;
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -181,7 +185,7 @@ describe('SessionGuard Component', () => {
   });
 
   it('sound login - path indicated - with additional hash value', async () => {
-    mockLocationHash = '#selfCareToken=good_token&#greet=hola';
+    mockLocationHash = '#selfCareToken=200_token&#greet=hola';
     mockLocationPath = routes.DELEGHE;
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
@@ -198,14 +202,30 @@ describe('SessionGuard Component', () => {
 
   // expected behavior: does not enter the app, does no navigate, message about exchangeToken error
   // (i.e. different than the logout message)
-  it('bad SPID token', async () => {
-    mockLocationHash = '#selfCareToken=bad_token';
+  it('bad SPID token (403)', async () => {
+    mockLocationHash = '#selfCareToken=403_token';
     mockLocationPath = '/';
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const logoutComponent = screen.queryByText('Session Modal');
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText('leaving-app.title');
+    expect(logoutTitleComponent).toBeNull();
+
+    expect(mockNavigateFn).toBeCalledTimes(0);
+    expect(mockSessionCheckFn).toBeCalledTimes(0);
+  });
+
+  // expected behavior: does not enter the app, does no navigate, message about exchangeToken error
+  // (i.e. different than the logout message)
+  it('bad SPID token (451)', async () => {
+    mockLocationHash = '#selfCareToken=451_token';
+    mockLocationPath = '/';
+
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
+    const logoutComponent = screen.queryByText('Session Modal');
+    expect(logoutComponent).toBeTruthy();
+    const logoutTitleComponent = screen.queryByText('messages.451-message');
     expect(logoutTitleComponent).toBeNull();
 
     expect(mockNavigateFn).toBeCalledTimes(0);

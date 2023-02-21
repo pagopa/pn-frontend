@@ -93,6 +93,8 @@
     "403-message": "Entra e accedi con SPID o CIE.",
     "401-title": "Utente non autorizzato",
     "401-message": "L'utente corrente non ha le autorizzazioni",
+    "451-title": "Piattaforma non operativa",
+    "451-message": "La Piattaforma non è operativa.",
     "500-title": "Il servizio non è disponibile",
     "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
     "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",
@@ -132,6 +134,10 @@
     "unauthorized": {
       "title": "Utente non autorizzato",
       "message": "L'utente corrente non ha le autorizzazioni."
+    },
+    "unavailable_legal_reasons": {
+      "title": "Paittaforma non operativa",
+      "message": "La Piattaforma non è operativa."
     },
     "forbidden": {
       "title": "La sessione è scaduta",
