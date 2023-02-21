@@ -16,9 +16,10 @@ import {
   Divider,
   Grid,
   MenuItem,
-  SelectChangeEvent,
+  // SelectChangeEvent,
   Stack,
   Paper,
+  Autocomplete,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import { IllusCompleted } from '@pagopa/mui-italia';
@@ -33,7 +34,7 @@ import {
   TitleBox,
   useIsMobile,
   PnBreadcrumb,
-  CustomDropdown,
+  // CustomDropdown,
   isToday,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
@@ -43,12 +44,14 @@ import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
-import DropDownPartyMenuItem from '../component/Party/DropDownParty';
+// import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { generateVCode } from '../utils/delegation.utility';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
+import { EnteSelect } from '../models/Deleghe';
+import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -88,6 +91,7 @@ const NuovaDelega = () => {
     void dispatch(createDelegation(values));
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
+  const [inputValue, setInputValue] = useState('');
 
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
@@ -123,7 +127,7 @@ const NuovaDelega = () => {
       .matches(dataRegex.fiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
     nome: yup.string().required(t('nuovaDelega.validation.name.required')),
     cognome: yup.string().required(t('nuovaDelega.validation.surname.required')),
-    enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
+    // enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }),
     expirationDate: yup
       .mixed()
       .required(t('nuovaDelega.validation.expirationDate.required'))
@@ -153,6 +157,19 @@ const NuovaDelega = () => {
       setLoadAllEntities(true);
     }
   };
+  // done for complexity
+  const renderOption = (props: any, option: any) => (
+    <MenuItem {...props} value={option.id} key={option.id}>
+      <DropDownPartyMenuItem name={option.name} />
+    </MenuItem>
+  );
+
+  const handleChangeInput = (newInputValue: string) => {
+    console.log('newInputValue :>> ', newInputValue);
+    setInputValue(newInputValue);
+  };
+
+  const getOptionLabel = (option: EnteSelect) => option.name || '';
 
   const breadcrumbs = (
     <Fragment>
@@ -318,7 +335,7 @@ const NuovaDelega = () => {
                             <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
                               {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                                 <FormControl fullWidth>
-                                  <CustomDropdown
+                                  {/* <CustomDropdown
                                     id="ente-select"
                                     label={t('nuovaDelega.form.selectEntities')}
                                     fullWidth
@@ -335,7 +352,30 @@ const NuovaDelega = () => {
                                         <DropDownPartyMenuItem name={entity.name} />
                                       </MenuItem>
                                     ))}
-                                  </CustomDropdown>
+                                  </CustomDropdown> */}
+                                  <Autocomplete
+                                    id="ente-select"
+                                    options={entities}
+                                    fullWidth
+                                    autoComplete
+                                    autoSelect
+                                    getOptionLabel={getOptionLabel}
+                                    isOptionEqualToValue={(option, value) => option.id === value}
+                                    onChange={(_event: any, newValue: EnteSelect) => {
+                                      setFieldValue('enteSelect', {
+                                        name: newValue.name,
+                                        uniqueIdentifier: newValue.id,
+                                      });
+                                    }}
+                                    inputValue={inputValue}
+                                    onInputChange={(_event, newInputValue) =>
+                                      handleChangeInput(newInputValue)
+                                    }
+                                    renderOption={renderOption}
+                                    renderInput={(params) => (
+                                      <TextField {...params} label="Seleziona enti" />
+                                    )}
+                                  />
                                 </FormControl>
                               )}
                             </Grid>
