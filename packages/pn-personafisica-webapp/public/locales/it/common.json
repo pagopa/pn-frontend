@@ -12,6 +12,8 @@
     "enter": "Entra",
     "exit": "Esci",
     "close": "Chiudi",
+    "enable": "Attiva",
+    "disable": "Disattiva",
     "go-to-home": "Vai alla home page",
     "go-to-login": "Accedi"
   },
