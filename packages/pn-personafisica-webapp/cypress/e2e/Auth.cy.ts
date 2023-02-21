@@ -1,4 +1,11 @@
 describe('Auth', () => {
+  beforeEach(() => {
+    cy.intercept(/TOS/, {
+      statusCode: 200,
+      fixture: 'tos/tos-accepted'
+    });
+  });
+
   it('Should login properly through UI', () => {
     cy.logout();
     cy.loginWithUI();
