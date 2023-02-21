@@ -74,7 +74,9 @@ const AttachmentBox = ({
       >
         <Typography fontWeight={600}>{title}</Typography>
         {canBeDeleted && (
-          <DeleteIcon color="action" onClick={onDelete} sx={{ cursor: 'pointer' }} />
+          <ButtonNaked onClick={onDelete} data-testid="deletebutton">
+            <DeleteIcon color="action" sx={{ cursor: 'pointer' }} />
+          </ButtonNaked>
         )}
       </Box>
       <FileUpload
@@ -350,6 +352,7 @@ const Attachments = ({
             color="primary"
             startIcon={<AddIcon />}
             sx={{ marginTop: '30px' }}
+            data-testid="add-another-doc"
           >
             {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
           </ButtonNaked>
