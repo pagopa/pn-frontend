@@ -87,13 +87,13 @@ describe('Attachments Component with payment enabled', () => {
     expect(deleteIcon).not.toBeInTheDocument();
     const fileInput = attachmentBoxes[0].parentNode?.querySelector('[data-testid="fileInput"]');
     expect(fileInput).toBeInTheDocument();
-    const buttons = form?.querySelectorAll('button');
-    expect(buttons).toHaveLength(3);
+    const buttonSubmit = result.getByTestId('step-submit');
+    const buttonPrevious = result.getByTestId('previous-step');
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
-    expect(buttons![1]).toBeDisabled();
-    expect(result.container).toHaveTextContent(/back-to-recipient/i);
+    expect(buttonSubmit).toBeDisabled();
+    expect(buttonPrevious).toHaveTextContent(/back-to-recipient/i);
   });
 
   it('adds document and click on confirm', async () => {
@@ -183,13 +183,13 @@ describe('Attachments Component with payment enabled', () => {
 
   it('Adds ten documents placeholders and checks that is not possible to add more', async () => {
     const form = result.container.querySelector('form');
-    let buttons = await waitFor(() => form?.querySelectorAll('button'));
+    const buttonAddAnotherDoc = result.getByTestId('add-another-doc');
     for (let i = 0; i < 10; i++) {
-      fireEvent.click(buttons![0]);
+      fireEvent.click(buttonAddAnotherDoc);
     }
-    buttons = await waitFor(() => form?.querySelectorAll('button'));
-    expect(buttons![0]).not.toHaveTextContent(/add-another-doc/i);
-    expect(buttons![0]).toHaveTextContent(/button.continue/i);
+    expect(buttonAddAnotherDoc).not.toBeInTheDocument();
+    const buttonNextStep = result.getByTestId('step-submit');
+    expect(buttonNextStep).toHaveTextContent(/button.continue/i);
   });
 });
 
@@ -257,27 +257,27 @@ describe('Attachments Component without payment enabled', () => {
     expect(deleteIcon).not.toBeInTheDocument();
     const fileInput = attachmentBoxes[0].parentNode?.querySelector('[data-testid="fileInput"]');
     expect(fileInput).toBeInTheDocument();
-    const buttons = form?.querySelectorAll('button');
-    expect(buttons).toHaveLength(3);
+    const buttonSubmit = result.getByTestId('step-submit');
+    const buttonPrevious = result.getByTestId('previous-step');
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
     waitFor(() => {
-      expect(buttons![1]).toBeDisabled();
+      expect(buttonSubmit).toBeDisabled();
     });
-    expect(result.container).toHaveTextContent(/back-to-recipient/i);
+    expect(buttonPrevious).toHaveTextContent(/back-to-recipient/i);
   });
 
   it('adds document and click on confirm', async () => {
     const form = result.container.querySelector('form');
     const attachmentBoxes = result.queryAllByTestId('attachmentBox');
     uploadDocument(attachmentBoxes[0].parentNode!, 0);
-    const buttons = await waitFor(() => form?.querySelectorAll('button'));
+    const button = await waitFor(() => result.getByTestId('step-submit'));
     // Avendo cambiato posizione nella lista dei bottoni (in modo da avere sempre il bottone "continua" a dx, qui vado a prendere il primo bottone)
     // flexDirection row-reverse
     // PN-1843 Carlotta Dimatteo 12/08/2022
-    expect(buttons![1]).toBeEnabled();
-    void testConfirm(buttons![1], [
+    expect(button).toBeEnabled();
+    void testConfirm(button as HTMLButtonElement, [
       {
         id: 'documents.0',
         key: 'Doc0',
@@ -355,12 +355,12 @@ describe('Attachments Component without payment enabled', () => {
 
   it('Adds ten documents placeholders and checks that is not possible to add more', async () => {
     const form = result.container.querySelector('form');
-    let buttons = await waitFor(() => form?.querySelectorAll('button'));
+    const buttonAddAnotherDoc = result.getByTestId('add-another-doc');
     for (let i = 0; i < 10; i++) {
-      fireEvent.click(buttons![0]);
+      fireEvent.click(buttonAddAnotherDoc);
     }
-    buttons = await waitFor(() => form?.querySelectorAll('button'));
-    expect(buttons![0]).not.toHaveTextContent(/add-another-doc/i);
-    expect(buttons![0]).toHaveTextContent(/button.send/i);
+    expect(buttonAddAnotherDoc).not.toBeInTheDocument();
+    const buttonNextStep = result.getByTestId('step-submit');
+    expect(buttonNextStep).toHaveTextContent(/button.send/i);
   });
 });
