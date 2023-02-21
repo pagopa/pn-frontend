@@ -32,13 +32,13 @@ const NotificationDetailDocuments = ({
   // TODO: remove comment when link ready downloadFilesLink
 }: Props) => {
 
-  const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) => documents.map((d) => {
+  const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) => documents.map((d, index) => {
     const document = {
       key: d.digests ? d.digests.sha256 : d.documentId,
       name: d.title || d.ref.key,
       downloadHandler: d.documentId ? { documentId: d.documentId, documentType: d.documentType } as NotificationDetailOtherDocument : d.docIdx
     };
-    return <Box key={document.key}>
+    return <Box key={index}>
       {!documentsAvailable ? (
       <Typography sx={{ display: 'flex', alignItems: 'center' }}><AttachFileIcon sx={{ mr: 1 }} fontSize='inherit' color="inherit" />{d.title || d.ref.key}</Typography>) : (
       <ButtonNaked
