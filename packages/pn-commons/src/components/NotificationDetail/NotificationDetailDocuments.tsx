@@ -34,7 +34,7 @@ const NotificationDetailDocuments = ({
 
   const mapOtherDocuments = (documents: Array<NotificationDetailDocument>) => documents.map((d) => {
     const document = {
-      key: (d.digests && d.digests.sha256 !== '') ? d.digests.sha256 : d.documentId,
+      key: (d.digests && d.digests.sha256) ? d.digests.sha256 : d.documentId,
       name: d.title || d.ref.key,
       downloadHandler: d.documentId ? { documentId: d.documentId, documentType: d.documentType } as NotificationDetailOtherDocument : d.docIdx
     };
