@@ -42,11 +42,11 @@ const NewNotificationCard = ({
         alignItems="center"
         sx={{ marginTop: '40px', marginBottom: '20px' }}
       >
-        <Button variant="contained" type="submit" disabled={isContinueDisabled}>
+        <Button variant="contained" type="submit" disabled={isContinueDisabled} data-testid="step-submit">
           {submitLabel ? submitLabel : t('button.continue')}
         </Button>
         {previousStepLabel && (
-          <Button variant="outlined" type="button" onClick={previousStepOnClick}>
+          <Button variant="outlined" type="button" onClick={previousStepOnClick} data-testid="previous-step">
             {previousStepLabel}
           </Button>
         )}
