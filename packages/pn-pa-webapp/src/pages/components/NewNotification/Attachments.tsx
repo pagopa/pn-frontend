@@ -74,7 +74,9 @@ const AttachmentBox = ({
       >
         <Typography fontWeight={600}>{title}</Typography>
         {canBeDeleted && (
-          <DeleteIcon color="action" onClick={onDelete} sx={{ cursor: 'pointer' }} />
+          <ButtonNaked onClick={onDelete}>
+            <DeleteIcon color="action" sx={{ cursor: 'pointer' }} />
+          </ButtonNaked>
         )}
       </Box>
       <FileUpload

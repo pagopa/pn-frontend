@@ -13,7 +13,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import CloseIcon from '@mui/icons-material/Close';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { calcUnit8Array, calcSha256String, calcBase64String } from '../utils/file.utility';
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 import CustomTooltip from './CustomTooltip';
@@ -220,6 +220,7 @@ const FileUpload = ({
   const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    // eslint-disable-next-line functional/immutable-data
     e.dataTransfer.dropEffect = 'copy';
   };
 
@@ -259,20 +260,21 @@ const FileUpload = ({
             {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
             &nbsp;
           </Typography>
-          <Typography
-            display="inline"
-            variant="body2"
-            color="primary"
-            sx={{ cursor: 'pointer' }}
-            onClick={chooseFileHandler}
-            data-testid="loadFromPc"
-          >
-            {getLocalizedOrDefaultLabel(
-              'common',
-              'upload-file.select-from-pc',
-              'selezionalo dal tuo computer'
-            )}
-          </Typography>
+          <ButtonNaked onClick={chooseFileHandler}>
+            <Typography
+              display="inline"
+              variant="body2"
+              color="primary"
+              sx={{ cursor: 'pointer' }}
+              data-testid="loadFromPc"
+            >
+              {getLocalizedOrDefaultLabel(
+                'common',
+                'upload-file.select-from-pc',
+                'selezionalo dal tuo computer'
+              )}
+            </Typography>
+          </ButtonNaked>
           <Input
             type="file"
             sx={{ display: 'none' }}
