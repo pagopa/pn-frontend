@@ -319,6 +319,7 @@ Resources:
           Fn::If:
             - HasLogsBucket
             - Bucket: !Sub ${S3LogsBucket}.s3.eu-central-1.amazonaws.com
+              IncludeCookies: false
             - !Ref AWS::NoValue
         ViewerCertificate:
           AcmCertificateArn: !Ref WebCertificateArn
