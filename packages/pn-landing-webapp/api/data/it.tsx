@@ -236,9 +236,9 @@ const paInfoBlocks: Array<IInfoblockData> = [
             Per ricevere l'accordo di adesione, l'ente dovrà accedere all'
             <Link href={"https://selfcare.pagopa.it/auth/login?onSuccess=%2Fonboarding%2Fprod-pn"}>
               <a target="_blank" rel="noopener noreferrer">Area Riservata</a>
-            </Link>{" "}e seguire i passaggi descritti nel{" "}
+            </Link>{" "}e seguire i passaggi descritti in{" "}
             <Link href="https://docs.pagopa.it/area-riservata-enti-piattaforma-notifiche/">
-              <a target="_blank" rel="noopener noreferrer">manuale operativo.</a>
+              <a target="_blank" rel="noopener noreferrer">questa guida.</a>
             </Link><br></br>
             Una volta sottoscritto l’accordo in digitale,
             l’ente dovrà caricarlo e inviarlo a PagoPA S.p.A. sempre dall’Area Riservata.

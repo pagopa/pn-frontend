@@ -61,6 +61,11 @@ Parameters:
     Type: String
     Description: ARN of the topic to send the alarm to
 
+  S3LogsBucket:
+    Type: String
+    Default: '-'
+    Description: Access Log bucket name
+
 Conditions:
   # Is landing site if name startsWith 'web-landing-cdn-'
   IsLanding:
@@ -72,6 +77,9 @@ Conditions:
   CreateDNSname: !Equals
     - !Ref WebDomainReferenceToSite
     - "true"
+
+  # If domain is used in certificate, add this domain to CloudFront
+  HasLogsBucket: !Not [!Equals [!Ref S3LogsBucket, "-" ]]
 
   # If alternate domain is provided and is used in certificate, add this domain to CloudFront
   CreateAlternateDNSname:
@@ -307,6 +315,12 @@ Resources:
                   - ""
                   - - origin-access-identity/cloudfront/
                     - Ref: CloudFrontOriginAccessIdentity
+        Logging:
+          Fn::If:
+            - HasLogsBucket
+            - Bucket: !Sub ${S3LogsBucket}.s3.eu-central-1.amazonaws.com
+              IncludeCookies: false
+            - !Ref AWS::NoValue
         ViewerCertificate:
           AcmCertificateArn: !Ref WebCertificateArn
           MinimumProtocolVersion: TLSv1.2_2021
