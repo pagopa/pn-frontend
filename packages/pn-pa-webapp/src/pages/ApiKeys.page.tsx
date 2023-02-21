@@ -92,7 +92,7 @@ const ApiKeys = () => {
 
   const apiKeyDeleted = (apiKeyId: string) => {
     handleCloseModal();
-    void dispatch(deleteApiKey(apiKeyId));
+    void dispatch(deleteApiKey(apiKeyId)).then(() => void dispatch(getApiKeys()));
   };
 
   return (

@@ -42,7 +42,7 @@ describe('Api keys api tests', () => {
   it('deleteApiKey', async () => {
     mock.onDelete(DELETE_APIKEY('mocked-apikey')).reply(200, 'success');
     const res = await ApiKeysApi.deleteApiKey('mocked-apikey');
-    expect(res).toStrictEqual('mocked-apikey');
+    expect(res).toStrictEqual('success');
   });
 
   it('setApiKeyStatus', async () => {

@@ -45,11 +45,8 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
    * @returns true if the api key history contains status ROTATED, otherwise false
    */
   const isApiKeyRotated = (apiKeyIdx: number): boolean => {
-    const currentApiKey = apiKeys[apiKeyIdx];
-    if (currentApiKey && currentApiKey.statusHistory) {
-      return !!currentApiKey.statusHistory.find((status) => status.status === ApiKeyStatus.ROTATED);
-    }
-    return false;
+    const currentApiKey = (rows[apiKeyIdx] as any) as ApiKey;
+    return !!currentApiKey.statusHistory.find((status) => status.status === ApiKeyStatus.ROTATED);
   };
 
   const ApiKeyContextMenu = ({ row }: ApiKeyContextMenuProps) => {

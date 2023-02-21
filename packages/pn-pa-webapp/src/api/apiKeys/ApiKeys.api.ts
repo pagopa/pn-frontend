@@ -20,12 +20,7 @@ export const ApiKeysApi = {
   deleteApiKey: (apiKeyId: string): Promise<string> =>
     apiClient
       .delete<string>(DELETE_APIKEY(apiKeyId))
-      .then((response) => {
-        if (response.status === 200) {
-          return apiKeyId;
-        }
-        return setResponseError(response.status);
-      }),
+      .then((response) => setResponseError(response.status)),
   setApiKeyStatus: (apiKeyStatus: ApiKeyStatusBE): Promise<string> =>
     apiClient
       .put<string>(STATUS_APIKEY(apiKeyStatus.apiKey), { status: apiKeyStatus.status })
