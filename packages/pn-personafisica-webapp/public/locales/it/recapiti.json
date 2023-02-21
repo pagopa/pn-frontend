@@ -41,9 +41,19 @@
     "disclaimer-message": "Se non hai la PEC, leggi la notifica entro 5 giorni dalla ricezione del messaggio: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
     "disclaimer-link": "Scopri di più",
     "switch-label": "Avvisami con un messaggio su IO",
-    "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Notifiche digitali\" di Piattaforma Notifiche sia attivo",
+    "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Avvisi di cortesia\" di Piattaforma Notifiche sia attivo",
     "enabled": "Attivo",
-    "disabled": "Non attivo"
+    "disabled": "Non attivo",
+    "enable-modal": {
+      "title": "Vuoi attivare il servizio \"Notifiche digitali\" su IO?",
+      "confirm-label": "Ho capito",
+      "content": "Se non hai la PEC e accedi alla notifica entro 120 ore (5 giorni) dalla ricezione del messaggio, non riceverai l'avviso di avvenuta ricezione tramite raccomandata."
+    },
+    "disable-modal": {
+      "title": "Vuoi disattivare il servizio \"Notifiche digitali\" su IO?",
+      "confirm-label": "Ho capito",
+      "content": "Quando ti arriva una notifica, non riceverai più un messaggio in app."
+    }
   },
   "courtesy-contacts": {
     "title": "",

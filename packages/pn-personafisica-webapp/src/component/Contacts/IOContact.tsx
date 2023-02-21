@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 
 import { ButtonNaked, IllusSms } from '@pagopa/mui-italia';
+import { DisclaimerModal } from '@pagopa-pn/pn-commons';
 
 import { DigitalAddress, IOAllowedValues } from '../../models/contacts';
 import { useAppDispatch } from '../../redux/hooks';
@@ -25,6 +26,7 @@ enum IOContactStatus {
 }
 
 const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
   const [status, setStatus] = useState<IOContactStatus>(IOContactStatus.PENDING);
@@ -44,30 +46,14 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
   const enableIO = () =>
     dispatch(enableIOAddress(recipientId)).then(() => {
       setStatus(() => IOContactStatus.ENABLED);
+      setIsConfirmModalOpen(false);
     });
 
   const disableIO = () =>
     dispatch(disableIOAddress(recipientId)).then(() => {
       setStatus(() => IOContactStatus.DISABLED);
+      setIsConfirmModalOpen(false);
     });
-
-  // const toggleIO = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   event.preventDefault();
-  //   switch (status) {
-  //     case IOContactStatus.ENABLED:
-  //       void dispatch(disableIOAddress(recipientId)).then(() => {
-  //         setStatus(() => IOContactStatus.DISABLED);
-  //       });
-  //       break;
-  //     case IOContactStatus.DISABLED:
-  //       void dispatch(enableIOAddress(recipientId)).then(() => {
-  //         setStatus(() => IOContactStatus.ENABLED);
-  //       });
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // };
 
   useEffect(() => {
     parseContact();
@@ -82,40 +68,22 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
           ? {
               Icon: <CloseIcon fontSize="small" color="disabled" />,
               text: t('io-contact.disabled', { ns: 'recapiti' }),
-              btn: {
-                text: t('button.enable'),
-                callback: enableIO,
-              },
+              btn: t('button.enable'),
             }
           : {
               Icon: <CheckIcon fontSize="small" color="success" />,
               text: t('io-contact.enabled', { ns: 'recapiti' }),
-              btn: {
-                text: t('button.disable'),
-                callback: disableIO,
-              },
+              btn: t('button.disable'),
             };
       return (
         <Stack direction="row" mt={3}>
           {content.Icon}
           <Typography ml={1}>{content.text}</Typography>
           <Box flexGrow={1} textAlign="right">
-            <ButtonNaked color="primary" onClick={content.btn.callback}>
-              {content.btn.text}
+            <ButtonNaked color="primary" onClick={() => setIsConfirmModalOpen(true)}>
+              {content.btn}
             </ButtonNaked>
           </Box>
-
-          {/* <FormControlLabel
-            control={
-              <Switch
-                aria-label=""
-                color="primary"
-                checked={status === IOContactStatus.ENABLED}
-                onChange={toggleIO}
-              />
-            }
-            label={t('io-contact.switch-label', { ns: 'recapiti' })}
-          /> */}
         </Stack>
       );
     }
@@ -158,6 +126,26 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
     >
       {getContent()}
       {getDisclaimer()}
+      {status === IOContactStatus.DISABLED && (
+        <DisclaimerModal
+          open={isConfirmModalOpen}
+          onConfirm={enableIO}
+          title={t('io-contact.enable-modal.title', { ns: 'recapiti' })}
+          confirmLabel={t('io-contact.enable-modal.confirm-label', { ns: 'recapiti' })}
+          content={t('io-contact.enable-modal.content', { ns: 'recapiti' })}
+          onCancel={() => setIsConfirmModalOpen(false)}
+        />
+      )}
+      {status === IOContactStatus.ENABLED && (
+        <DisclaimerModal
+          open={isConfirmModalOpen}
+          onConfirm={disableIO}
+          title={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
+          confirmLabel={t('io-contact.disable-modal.confirm-label', { ns: 'recapiti' })}
+          content={t('io-contact.disable-modal.content', { ns: 'recapiti' })}
+          onCancel={() => setIsConfirmModalOpen(false)}
+        />
+      )}
     </DigitalContactsCard>
   );
 };
