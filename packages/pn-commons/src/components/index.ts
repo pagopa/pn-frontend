@@ -12,6 +12,7 @@ import StatusTooltip from './Notifications/StatusTooltip';
 import MobileNotificationsSort from './Notifications/MobileNotificationsSort';
 import ItemsTable from './Data/ItemsTable';
 import EmptyState from './EmptyState';
+import DisclaimerModal from "./DisclaimerModal";
 import CustomDropdown from './CustomDropdown';
 import ItemsCard from './Data/ItemsCard';
 import CustomMobileDialog from './CustomMobileDialog/CustomMobileDialog';
@@ -63,6 +64,7 @@ export {
   MobileNotificationsSort,
   SessionModal,
   ItemsCard,
+  DisclaimerModal,
   CustomMobileDialog,
   CustomMobileDialogToggle,
   CustomMobileDialogContent,
