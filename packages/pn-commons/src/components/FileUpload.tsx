@@ -260,13 +260,12 @@ const FileUpload = ({
             {uploadText}&nbsp;{getLocalizedOrDefaultLabel('common', 'upload-file.or', 'oppure')}
             &nbsp;
           </Typography>
-          <ButtonNaked onClick={chooseFileHandler}>
+          <ButtonNaked onClick={chooseFileHandler} data-testid="loadFromPc">
             <Typography
               display="inline"
               variant="body2"
               color="primary"
               sx={{ cursor: 'pointer' }}
-              data-testid="loadFromPc"
             >
               {getLocalizedOrDefaultLabel(
                 'common',
