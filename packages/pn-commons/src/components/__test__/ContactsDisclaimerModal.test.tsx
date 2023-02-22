@@ -17,7 +17,7 @@ describe('DisclaimerModal tests', () => {
 
     expect(result.baseElement).toHaveTextContent('test content');
     expect(result.baseElement).toHaveTextContent('Ho capito')
-  })
+  });
 
   it('checks that callback functions are called correctly when clicking on buttons', async () => {
     const result = render(
@@ -42,5 +42,5 @@ describe('DisclaimerModal tests', () => {
     expect(confirmButton).toBeEnabled();
     await userEvent.click(confirmButton);
     expect(mockConfirm).toBeCalledTimes(1);
-  })
-})
+  });
+});
