@@ -1,12 +1,13 @@
 /* eslint-disable functional/no-let */
 import React from 'react';
-import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
+import { fireEvent, RenderResult } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { render, screen } from '../../../__test__/test-utils';
 
 import { CourtesyChannelType, IOAllowedValues } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import IOContact from '../IOContact';
+import userEvent from "@testing-library/user-event";
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -60,9 +61,7 @@ describe('IOContact component', () => {
 
   afterEach(() => {
     result = undefined;
-    // jest.restoreAllMocks();
-    // jest.clearAllMocks();
-    jest.resetAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('test component when contacts have not yet been fetched', () => {
@@ -150,27 +149,19 @@ describe('IOContact component', () => {
     });
 
     it('should enable IO', async () => {
-      const enableBtn = result?.getByRole('button', { name: 'button.enable' });
+      const enableBtn = result.getByRole('button', { name: 'button.enable' });
+      await userEvent.click(enableBtn);
+      const disclaimerCheckbox = result.getByRole('checkbox', { name: 'io-contact.enable-modal.checkbox' });
+      fireEvent.click(disclaimerCheckbox);
 
-      fireEvent.click(enableBtn!);
-
-      waitFor(() => {
-        const disclaimerCheckbox = result?.getByRole('checkbox', { name: 'button.capito' });
-        fireEvent.click(disclaimerCheckbox!);
-        const disclaimerConfirmButton = result?.getByRole('button', {
-          name: 'io-contact.enable-modal.confirm',
-        });
-        fireEvent.click(disclaimerConfirmButton!);
+      const disclaimerConfirmButton = result.getByRole('button', {
+        name: 'io-contact.enable-modal.confirm',
       });
-
-      waitFor(() => {
-        expect(mockDispatchFn).toBeCalledTimes(1);
-        expect(mockEnableActionFn).toBeCalledTimes(1);
-        expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
-
-        const disableBtn = result?.getByRole('button', { name: 'button.disable' });
-        expect(disableBtn).toBeInTheDocument();
-      });
+      fireEvent.click(disclaimerConfirmButton);
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockEnableActionFn).toBeCalledTimes(1);
+      expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
+      // we don't check for enable button to be visible because redux actions are mocked
     });
   });
 
@@ -205,27 +196,20 @@ describe('IOContact component', () => {
     });
 
     it('should disable IO', async () => {
-      const disableBtn = result?.getByRole('button', { name: 'button.disable' });
-
+      const disableBtn = result.getByRole('button', { name: 'button.disable' });
       fireEvent.click(disableBtn!);
 
-      waitFor(() => {
-        const disclaimerCheckbox = result?.getByRole('checkbox', { name: 'button.capito' });
-        fireEvent.click(disclaimerCheckbox!);
-        const disclaimerConfirmButton = result?.getByRole('button', {
-          name: 'io-contact.enable-modal.confirm',
-        });
-        fireEvent.click(disclaimerConfirmButton!);
+      const disclaimerCheckbox = await screen.getByRole('checkbox', { name: 'io-contact.disable-modal.checkbox' });
+      fireEvent.click(disclaimerCheckbox);
+      const disclaimerConfirmButton = screen.getByRole('button', {
+        name: 'io-contact.disable-modal.confirm',
       });
+      fireEvent.click(disclaimerConfirmButton);
 
-      waitFor(() => {
-        expect(mockDispatchFn).toBeCalledTimes(1);
-        expect(mockEnableActionFn).toBeCalledTimes(1);
-        expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
-
-        const enableBtn = result?.getByRole('button', { name: 'button.enable' });
-        expect(enableBtn).toBeInTheDocument();
-      });
+      expect(mockDispatchFn).toBeCalledTimes(1);
+      expect(mockDisableActionFn).toBeCalledTimes(1);
+      expect(mockDisableActionFn).toBeCalledWith('mocked-recipientId');
+      // we don't check for enable button to be visible because redux actions are mocked
     });
   });
 });
