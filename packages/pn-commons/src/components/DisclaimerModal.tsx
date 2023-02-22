@@ -13,53 +13,58 @@ import { getLocalizedOrDefaultLabel } from "../services/localization.service";
 import { useIsMobile } from "../hooks";
 
 type Props = {
-  open: boolean;
   onConfirm: () => void;
   onCancel: () => void;
   confirmLabel: string;
   title?: string;
   content?: string;
+  checkboxLabel?: string;
 };
 
-const DisclaimerModal = ({ open, onConfirm, onCancel, confirmLabel, title, content }: Props) => {
+const DisclaimerModal = ({ onConfirm, onCancel, confirmLabel, title, content, checkboxLabel }: Props) => {
   const isMobile = useIsMobile();
   const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
   const [checked, setChecked] = useState(false);
+  const disabledConfirm = !checked && !!checkboxLabel;
 
   const handleChange = () => {
     setChecked(!checked);
   };
   
   return (
-    <Dialog open={open}>
+    <Dialog open>
       {title &&
-        <DialogTitle>
+        <DialogTitle p={4} pb={0}>
           {title}
         </DialogTitle>
       }
-      <DialogContent>
+      <DialogContent sx={{ p: 4 }}>
         {content &&
           <Box>
             {content}
           </Box>
         }
-        <Box>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={checked}
-                onChange={handleChange}
-              />
-            }
-            label={getLocalizedOrDefaultLabel('common', 'capito', 'Ho capito')}
-          />
-        </Box>
+        {checkboxLabel &&
+          <Box>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={checked}
+                  onChange={handleChange}
+                />
+              }
+              label={checkboxLabel}
+            />
+          </Box>
+        }
       </DialogContent>
       <DialogActions
         disableSpacing={isMobile}
         sx={{
           textAlign: textPosition,
           flexDirection: isMobile ? 'column' : 'row',
+          p: 4,
+          pt: 0
         }}
       >
         <Button
@@ -67,13 +72,14 @@ const DisclaimerModal = ({ open, onConfirm, onCancel, confirmLabel, title, conte
           onClick={onCancel}
           fullWidth={isMobile}
           data-testid="disclaimer-confirm-button"
+          sx={{ mb: isMobile ? 2 : 0 }}
         >
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}
         </Button>
         <Button
-          variant="outlined"
+          variant="contained"
           onClick={onConfirm}
-          disabled={!checked}
+          disabled={disabledConfirm}
           fullWidth={isMobile}
           data-testid="disclaimer-confirm-button"
         >
