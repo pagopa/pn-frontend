@@ -38,6 +38,7 @@ function localizeStatus(
   tooltip: string;
   description: string;
 } {
+  const isMultiRecipient = data && data.isMultiRecipient;
   return {
     label: getLocalizedOrDefaultLabel('notifications', `status.${status}`, defaultLabel),
     tooltip: getLocalizedOrDefaultLabel(
@@ -48,7 +49,7 @@ function localizeStatus(
     ),
     description: getLocalizedOrDefaultLabel(
       'notifications',
-      `status.${status}-description`,
+      `status.${status}-description${isMultiRecipient ? '-multirecipient' : ''}`,
       defaultDescription,
       data
     ),
@@ -63,7 +64,7 @@ function localizeStatus(
  */
 export function getNotificationStatusInfos(
   status: NotificationStatus | NotificationStatusHistory,
-  // options?: { recipient?: string; completeStatusHistory?: Array<NotificationStatusHistory> }
+  options?: { recipients: Array<NotificationDetailRecipient> }
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
@@ -73,6 +74,8 @@ export function getNotificationStatusInfos(
   const statusComesAsAnObject = !!((status as NotificationStatusHistory).status);
   const statusObject: NotificationStatusHistory | undefined = statusComesAsAnObject ? status as NotificationStatusHistory : undefined;
   const actualStatus: NotificationStatus = statusComesAsAnObject ? (status as NotificationStatusHistory).status : (status as NotificationStatus);
+  const isMultiRecipient = options && options.recipients.length > 1;
+
   /* eslint-disable-next-line functional/no-let */
   let subject = getLocalizedOrDefaultLabel('notifications', `status.recipient`, 'destinatario');
   switch (actualStatus) {
@@ -82,10 +85,11 @@ export function getNotificationStatusInfos(
         'Consegnata',
         `La notifica è stata consegnata`,
         'La notifica è stata consegnata.',
+        { isMultiRecipient }
       );
       // if the deliveryMode is defined, then change the description for a more specific one.
       const deliveryMode = statusObject && statusObject.deliveryMode;
-      if (deliveryMode) {
+      if (deliveryMode && !isMultiRecipient) {
         const deliveryModeDescription = getLocalizedOrDefaultLabel(
           'notifications', 
           `status.deliveryMode.${deliveryMode}`, 
