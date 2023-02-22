@@ -5,7 +5,7 @@ import * as redux from 'react-redux';
 import { LegalChannelType } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import * as hooks from '../../../redux/hooks';
-import { axe, render } from '../../../__test__/test-utils';
+import { render } from '../../../__test__/test-utils';
 import { Component, mockedStore, Wrapper } from './DigitalContactsCodeVerification.context.test-utils';
 
 jest.mock('react-i18next', () => ({
@@ -34,6 +34,11 @@ const showDialog = async (
       code: undefined,
     });
   });
+  const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito'})
+  fireEvent.click(disclaimerCheckbox)
+  const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma'})
+  fireEvent.click(disclaimerConfirmButton)
+
   return waitFor(() => screen.queryByTestId('codeDialog'));
 };
 

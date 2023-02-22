@@ -5,7 +5,8 @@
   "subtitle-link": "li trovi qui",
   "general-contacts-title": "Recapiti generali",
   "special-contacts-title": "Altri recapiti",
-  "alert-dialog-body": "Se non hai la PEC e accedi alla notifica su Piattaforma Notifiche entro 120 ore (5 giorni) dalla ricezione dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+  "alert-dialog-EMAIL": "Se non hai la PEC e accedi alla notifica su Piattaforma Notifiche entro 120 ore (5 giorni) dalla ricezione dell'email, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+  "alert-dialog-SMS": "Se non hai la PEC e accedi alla notifica su Piattaforma Notifiche entro 120 ore (5 giorni) dalla ricezione dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
   "legal-contacts": {
     "title": "",
     "subtitle": "PEC",

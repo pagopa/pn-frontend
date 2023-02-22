@@ -32,7 +32,10 @@ const DisclaimerModal = ({ onConfirm, onCancel, confirmLabel, title, content, ch
   };
   
   return (
-    <Dialog open>
+    <Dialog
+      open={true}
+      data-testid="disclaimerDialog"
+    >
       {title &&
         <DialogTitle p={4} pb={0}>
           {title}
