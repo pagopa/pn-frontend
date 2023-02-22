@@ -152,8 +152,13 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           );
           handleClose('validated');
         } else {
-          // open code verification dialog
-          setDisclaimerOpen(true);
+          if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
+            // open verification code dialog
+            setOpen(true);
+          } else {
+            // open disclaimer dialog
+            setDisclaimerOpen(true);
+          }
         }
       });
   };
@@ -242,7 +247,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           onCancel={() => setDisclaimerOpen(false)}
           confirmLabel={t('button.conferma')}
           checkboxLabel={t('button.capito')}
-          content={t('alert-dialog-body', {ns: 'recapiti'})}
+          content={t(`alert-dialog-${modalProps.digitalDomicileType}`, { ns: 'recapiti' })}
         />
       }
       {!_.isEqual(modalProps, initialProps) && (
