@@ -70,6 +70,11 @@ describe('Notification Filters (no delegators)', () => {
       'getPaymentInfo'
     );
 
+    cy.intercept(/TOS/, {
+      statusCode: 200,
+      fixture: 'tos/tos-accepted'
+    });
+
     cy.login();
     cy.visit(NOTIFICHE);
 

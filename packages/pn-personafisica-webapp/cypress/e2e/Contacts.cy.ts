@@ -22,6 +22,11 @@ describe('Contacts', () => {
       fixture: 'commons/activated-parties',
     }).as('getParties');
 
+    cy.intercept(/TOS/, {
+      statusCode: 200,
+      fixture: 'tos/tos-accepted'
+    });
+
     cy.login();
     cy.visit(RECAPITI);
   });
