@@ -92,7 +92,6 @@ const NuovaDelega = () => {
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
   const [inputValue, setInputValue] = useState('');
-
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
   };
@@ -110,10 +109,7 @@ const NuovaDelega = () => {
     cognome: '',
     selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
     expirationDate: tomorrow,
-    enteSelect: {
-      name: '',
-      uniqueIdentifier: '',
-    },
+    enteSelect: [],
     verificationCode: generateVCode(),
   };
 
@@ -127,7 +123,7 @@ const NuovaDelega = () => {
       .matches(dataRegex.fiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
     nome: yup.string().required(t('nuovaDelega.validation.name.required')),
     cognome: yup.string().required(t('nuovaDelega.validation.surname.required')),
-    // enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }),
+    enteSelect: yup.array().required(),
     expirationDate: yup
       .mixed()
       .required(t('nuovaDelega.validation.expirationDate.required'))
@@ -159,13 +155,12 @@ const NuovaDelega = () => {
   };
   // done for complexity
   const renderOption = (props: any, option: any) => (
-    <MenuItem {...props} value={option.id} key={option.id}>
+    <MenuItem {...props} value={option.uniqueIdentifier} key={option.uniqueIdentifier}>
       <DropDownPartyMenuItem name={option.name} />
     </MenuItem>
   );
 
   const handleChangeInput = (newInputValue: string) => {
-    console.log('newInputValue :>> ', newInputValue);
     setInputValue(newInputValue);
   };
 
@@ -355,17 +350,16 @@ const NuovaDelega = () => {
                                   </CustomDropdown> */}
                                   <Autocomplete
                                     id="ente-select"
+                                    multiple
                                     options={entities}
                                     fullWidth
                                     autoComplete
-                                    autoSelect
                                     getOptionLabel={getOptionLabel}
-                                    isOptionEqualToValue={(option, value) => option.id === value}
-                                    onChange={(_event: any, newValue: EnteSelect) => {
-                                      setFieldValue('enteSelect', {
-                                        name: newValue.name,
-                                        uniqueIdentifier: newValue.id,
-                                      });
+                                    isOptionEqualToValue={(option, value) =>
+                                      option.name === value.name
+                                    }
+                                    onChange={(_event: any, newValue: Array<EnteSelect>) => {
+                                      setFieldValue('enteSelect', newValue);
                                     }}
                                     inputValue={inputValue}
                                     onInputChange={(_event, newInputValue) =>
