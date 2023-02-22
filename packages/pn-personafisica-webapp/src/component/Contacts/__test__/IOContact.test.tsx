@@ -60,7 +60,9 @@ describe('IOContact component', () => {
 
   afterEach(() => {
     result = undefined;
-    jest.restoreAllMocks();
+    // jest.restoreAllMocks();
+    // jest.clearAllMocks();
+    jest.resetAllMocks();
   });
 
   describe('test component when contacts have not yet been fetched', () => {
@@ -153,12 +155,12 @@ describe('IOContact component', () => {
       fireEvent.click(enableBtn!);
 
       waitFor(() => {
-        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
-        fireEvent.click(disclaimerCheckbox);
-        const disclaimerConfirmButton = screen.getByRole('button', {
+        const disclaimerCheckbox = result?.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox!);
+        const disclaimerConfirmButton = result?.getByRole('button', {
           name: 'io-contact.enable-modal.confirm',
         });
-        fireEvent.click(disclaimerConfirmButton);
+        fireEvent.click(disclaimerConfirmButton!);
       });
 
       waitFor(() => {
@@ -166,7 +168,7 @@ describe('IOContact component', () => {
         expect(mockEnableActionFn).toBeCalledTimes(1);
         expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
 
-        const disableBtn = screen.getByRole('button', { name: 'button.disable' });
+        const disableBtn = result?.getByRole('button', { name: 'button.disable' });
         expect(disableBtn).toBeInTheDocument();
       });
     });
@@ -208,12 +210,12 @@ describe('IOContact component', () => {
       fireEvent.click(disableBtn!);
 
       waitFor(() => {
-        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
-        fireEvent.click(disclaimerCheckbox);
-        const disclaimerConfirmButton = screen.getByRole('button', {
+        const disclaimerCheckbox = result?.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox!);
+        const disclaimerConfirmButton = result?.getByRole('button', {
           name: 'io-contact.enable-modal.confirm',
         });
-        fireEvent.click(disclaimerConfirmButton);
+        fireEvent.click(disclaimerConfirmButton!);
       });
 
       waitFor(() => {
@@ -221,7 +223,7 @@ describe('IOContact component', () => {
         expect(mockEnableActionFn).toBeCalledTimes(1);
         expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
 
-        const enableBtn = screen.getByRole('button', { name: 'button.enable' });
+        const enableBtn = result?.getByRole('button', { name: 'button.enable' });
         expect(enableBtn).toBeInTheDocument();
       });
     });

@@ -45,19 +45,17 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
 
   const enableIO = () =>
     dispatch(enableIOAddress(recipientId)).then(() => {
-      setStatus(() => IOContactStatus.ENABLED);
       setIsConfirmModalOpen(false);
     });
 
   const disableIO = () =>
     dispatch(disableIOAddress(recipientId)).then(() => {
-      setStatus(() => IOContactStatus.DISABLED);
       setIsConfirmModalOpen(false);
     });
 
   useEffect(() => {
     parseContact();
-  }, [contact]);
+  }, [contact?.value]);
 
   const getContent = () => {
     if (status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {
