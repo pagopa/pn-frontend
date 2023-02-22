@@ -6,9 +6,10 @@ import {
   ReactChild,
   SetStateAction,
   useImperativeHandle,
-  useState
+  useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
+import { AsyncThunk } from '@reduxjs/toolkit';
 import {
   Button,
   Dialog,
@@ -23,6 +24,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { deleteCourtesyAddress, deleteLegalAddress } from '../../redux/contact/actions';
+import { DeleteDigitalAddressParams } from '../../redux/contact/types';
 import { useAppDispatch } from '../../redux/hooks';
 import { trackEventByType } from '../../utils/mixpanel';
 import { EventActions, TrackEventType } from '../../utils/events';
@@ -46,6 +48,7 @@ type Props = {
   onConfirmClick: (status: 'validated' | 'cancelled') => void;
   blockDelete?: boolean;
   resetModifyValue: () => void;
+  onDeleteCbk?: () => void;
   editDisabled?: boolean;
   setContextEditMode?: Dispatch<SetStateAction<boolean>>;
 };
@@ -114,7 +117,8 @@ const DigitalContactElem = forwardRef(
       blockDelete,
       resetModifyValue,
       editDisabled,
-      setContextEditMode
+      setContextEditMode,
+      onDeleteCbk,
     }: Props,
     ref
   ) => {
@@ -154,20 +158,24 @@ const DigitalContactElem = forwardRef(
 
     const confirmHandler = () => {
       handleModalClose();
+      /* eslint-disable-next-line functional/no-let */
+      let actionToDispatch: AsyncThunk<string, DeleteDigitalAddressParams, any>;
       if (contactType === LegalChannelType.PEC) {
-        void dispatch(deleteLegalAddress({ recipientId, senderId, channelType: contactType }));
         trackEventByType(TrackEventType.CONTACT_LEGAL_CONTACT, { action: EventActions.DELETE });
-        return;
+        actionToDispatch = deleteLegalAddress;
+      } else {
+        const eventTypeByChannel = getContactEventType(contactType);
+        trackEventByType(eventTypeByChannel, { action: EventActions.DELETE });
+        actionToDispatch = deleteCourtesyAddress;
       }
-      const eventTypeByChannel = getContactEventType(contactType);
-      void dispatch(
-        deleteCourtesyAddress({
-          recipientId,
-          senderId,
-          channelType: contactType as CourtesyChannelType,
+      void dispatch(actionToDispatch({ recipientId, senderId, channelType: contactType }))
+        .unwrap()
+        .then(() => {
+          if (onDeleteCbk) {
+            onDeleteCbk();
+          }
         })
-      );
-      trackEventByType(eventTypeByChannel, { action: EventActions.DELETE });
+        .catch();
     };
 
     const editHandler = () => {
@@ -197,7 +205,8 @@ const DigitalContactElem = forwardRef(
                 color="primary"
                 onClick={toggleEdit}
                 sx={{ marginRight: '10px' }}
-                disabled={editDisabled}>
+                disabled={editDisabled}
+              >
                 {t('button.modifica')}
               </ButtonNaked>
             ) : (
