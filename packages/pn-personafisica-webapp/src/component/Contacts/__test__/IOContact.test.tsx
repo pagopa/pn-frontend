@@ -1,5 +1,6 @@
 /* eslint-disable functional/no-let */
-import { fireEvent, RenderResult } from '@testing-library/react';
+import React from 'react';
+import { fireEvent, RenderResult, waitFor } from '@testing-library/react';
 import * as redux from 'react-redux';
 import { render, screen } from '../../../__test__/test-utils';
 
@@ -151,18 +152,23 @@ describe('IOContact component', () => {
 
       fireEvent.click(enableBtn!);
 
-      // TODO:
-      // wait for modal confirmation to appear
-      // get the checkbox and click it
-      // submit the modal
-      // verify the status has changed
+      waitFor(() => {
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', {
+          name: 'io-contact.enable-modal.confirm',
+        });
+        fireEvent.click(disclaimerConfirmButton);
+      });
 
-      // expect(mockDispatchFn).toBeCalledTimes(1);
-      // expect(mockEnableActionFn).toBeCalledTimes(1);
-      // expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
+      waitFor(() => {
+        expect(mockDispatchFn).toBeCalledTimes(1);
+        expect(mockEnableActionFn).toBeCalledTimes(1);
+        expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
 
-      // expect(ioCheckbox).toBeInTheDocument();
-      // expect(ioCheckbox).toBeChecked();
+        const disableBtn = screen.getByRole('button', { name: 'button.disable' });
+        expect(disableBtn).toBeInTheDocument();
+      });
     });
   });
 
@@ -201,17 +207,23 @@ describe('IOContact component', () => {
 
       fireEvent.click(disableBtn!);
 
-      // TODO:
-      // wait for modal confirmation to appear
-      // get the checkbox and click it
-      // submit the modal
-      // verify the status has changed
+      waitFor(() => {
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', {
+          name: 'io-contact.enable-modal.confirm',
+        });
+        fireEvent.click(disclaimerConfirmButton);
+      });
 
-      // expect(mockDispatchFn).toBeCalledTimes(1);
-      // expect(mockDisableActionFn).toBeCalledTimes(1);
-      // expect(mockDisableActionFn).toBeCalledWith('mocked-recipientId');
+      waitFor(() => {
+        expect(mockDispatchFn).toBeCalledTimes(1);
+        expect(mockEnableActionFn).toBeCalledTimes(1);
+        expect(mockEnableActionFn).toBeCalledWith('mocked-recipientId');
 
-      // expect(ioCheckbox).not.toBeChecked();
+        const enableBtn = screen.getByRole('button', { name: 'button.enable' });
+        expect(enableBtn).toBeInTheDocument();
+      });
     });
   });
 });
