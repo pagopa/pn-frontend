@@ -11,7 +11,7 @@ describe('Test UserAttributesInvalidVerificationCodeAppError', () => {
       translateFn
     );
     const messege = appError.getMessage();
-    expect(messege.title).toBe('errors.invalid_verification_code.title deleghe');
-    expect(messege.content).toBe('errors.invalid_verification_code.message deleghe');
+    expect(messege.title).toBe('errors.invalid_verification_code.title recapiti');
+    expect(messege.content).toBe('errors.invalid_verification_code.message recapiti');
   });
 });
