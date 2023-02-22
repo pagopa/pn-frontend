@@ -6,11 +6,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControlLabel
-} from "@mui/material";
-import { useMemo, useState } from "react";
-import { getLocalizedOrDefaultLabel } from "../services/localization.service";
-import { useIsMobile } from "../hooks";
+  FormControlLabel,
+} from '@mui/material';
+import { useMemo, useState } from 'react';
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
+import { useIsMobile } from '../hooks';
 
 type Props = {
   onConfirm: () => void;
@@ -21,7 +21,14 @@ type Props = {
   checkboxLabel?: string;
 };
 
-const DisclaimerModal = ({ onConfirm, onCancel, confirmLabel, title, content, checkboxLabel }: Props) => {
+const DisclaimerModal = ({
+  onConfirm,
+  onCancel,
+  confirmLabel,
+  title,
+  content,
+  checkboxLabel,
+}: Props) => {
   const isMobile = useIsMobile();
   const textPosition = useMemo(() => (isMobile ? 'center' : 'left'), [isMobile]);
   const [checked, setChecked] = useState(false);
@@ -30,36 +37,20 @@ const DisclaimerModal = ({ onConfirm, onCancel, confirmLabel, title, content, ch
   const handleChange = () => {
     setChecked(!checked);
   };
-  
+
   return (
-    <Dialog
-      open={true}
-      data-testid="disclaimerDialog"
-    >
-      {title &&
-        <DialogTitle p={4} pb={0}>
-          {title}
-        </DialogTitle>
-      }
+    <Dialog open={true} data-testid="disclaimerDialog">
+      {title && <DialogTitle sx={{ p: 4, pb: 2 }}>{title}</DialogTitle>}
       <DialogContent sx={{ p: 4 }}>
-        {content &&
-          <Box>
-            {content}
-          </Box>
-        }
-        {checkboxLabel &&
+        {content && <Box>{content}</Box>}
+        {checkboxLabel && (
           <Box>
             <FormControlLabel
-              control={
-                <Checkbox
-                  checked={checked}
-                  onChange={handleChange}
-                />
-              }
+              control={<Checkbox checked={checked} onChange={handleChange} />}
               label={checkboxLabel}
             />
           </Box>
-        }
+        )}
       </DialogContent>
       <DialogActions
         disableSpacing={isMobile}
@@ -67,7 +58,7 @@ const DisclaimerModal = ({ onConfirm, onCancel, confirmLabel, title, content, ch
           textAlign: textPosition,
           flexDirection: isMobile ? 'column' : 'row',
           p: 4,
-          pt: 0
+          pt: 0,
         }}
       >
         <Button

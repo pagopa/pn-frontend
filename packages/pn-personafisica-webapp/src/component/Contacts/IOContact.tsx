@@ -130,8 +130,9 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
         <DisclaimerModal
           onConfirm={enableIO}
           title={t('io-contact.enable-modal.title', { ns: 'recapiti' })}
-          confirmLabel={t('io-contact.enable-modal.confirm', { ns: 'recapiti' })}
           content={t('io-contact.enable-modal.content', { ns: 'recapiti' })}
+          checkboxLabel={t('io-contact.enable-modal.checkbox', { ns: 'recapiti' })}
+          confirmLabel={t('io-contact.enable-modal.confirm', { ns: 'recapiti' })}
           onCancel={() => setIsConfirmModalOpen(false)}
         />
       )}
@@ -139,8 +140,9 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
         <DisclaimerModal
           onConfirm={disableIO}
           title={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
-          confirmLabel={t('io-contact.disable-modal.confirm', { ns: 'recapiti' })}
           content={t('io-contact.disable-modal.content', { ns: 'recapiti' })}
+          checkboxLabel={t('io-contact.disable-modal.checkbox', { ns: 'recapiti' })}
+          confirmLabel={t('io-contact.disable-modal.confirm', { ns: 'recapiti' })}
           onCancel={() => setIsConfirmModalOpen(false)}
         />
       )}
