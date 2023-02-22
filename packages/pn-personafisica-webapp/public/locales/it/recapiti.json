@@ -46,12 +46,14 @@
     "disabled": "Non attivo",
     "enable-modal": {
       "title": "Vuoi attivare il servizio \"Notifiche digitali\" su IO?",
-      "confirm-label": "Ho capito",
+      "checkbox": "Ho capito",
+      "confirm": "Attiva servizio",
       "content": "Se non hai la PEC e accedi alla notifica entro 120 ore (5 giorni) dalla ricezione del messaggio, non riceverai l'avviso di avvenuta ricezione tramite raccomandata."
     },
     "disable-modal": {
       "title": "Vuoi disattivare il servizio \"Notifiche digitali\" su IO?",
-      "confirm-label": "Ho capito",
+      "checkbox": "",
+      "confirm": "Disattiva servizio",
       "content": "Quando ti arriva una notifica, non riceverai più un messaggio in app."
     }
   },

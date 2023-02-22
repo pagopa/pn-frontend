@@ -131,7 +131,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
           open={isConfirmModalOpen}
           onConfirm={enableIO}
           title={t('io-contact.enable-modal.title', { ns: 'recapiti' })}
-          confirmLabel={t('io-contact.enable-modal.confirm-label', { ns: 'recapiti' })}
+          confirmLabel={t('io-contact.enable-modal.confirm', { ns: 'recapiti' })}
           content={t('io-contact.enable-modal.content', { ns: 'recapiti' })}
           onCancel={() => setIsConfirmModalOpen(false)}
         />
@@ -141,7 +141,7 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
           open={isConfirmModalOpen}
           onConfirm={disableIO}
           title={t('io-contact.disable-modal.title', { ns: 'recapiti' })}
-          confirmLabel={t('io-contact.disable-modal.confirm-label', { ns: 'recapiti' })}
+          confirmLabel={t('io-contact.disable-modal.confirm', { ns: 'recapiti' })}
           content={t('io-contact.disable-modal.content', { ns: 'recapiti' })}
           onCancel={() => setIsConfirmModalOpen(false)}
         />
