@@ -38,5 +38,12 @@ export abstract class TimelineStep {
     };
   }
 
+  nameAndTaxId(payload: TimelineStepPayload) {
+    return {
+      name: payload.recipient?.denomination,
+      taxId: payload.recipient ? `(${payload.recipient.taxId})` : '',
+    };
+  }
+
   abstract getTimelineStepInfo(payload: TimelineStepPayload): TimelineStepInfo | null;
 }
