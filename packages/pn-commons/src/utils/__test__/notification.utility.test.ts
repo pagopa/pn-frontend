@@ -216,14 +216,6 @@ describe('notification utility functions', () => {
 });
 
 describe('timeline utility functions', () => {
-  it('return timeline status infos - SCHEDULE_ANALOG_WORKFLOW', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_ANALOG_WORKFLOW;
-    testTimelineStatusInfosFn(
-      'Invio per via cartacea in preparazione',
-      "L'invio della notifica per via cartacea a Nome Cognome è in preparazione."
-    );
-  });
-
   it('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
     testTimelineStatusInfosFn(
@@ -255,19 +247,6 @@ describe('timeline utility functions', () => {
     testTimelineStatusInfosFn(
       'Invio via PEC',
       "È in corso l'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail"
-    );
-  });
-
-  it('return timeline status infos - SEND_DIGITAL_DOMICILE_FEEDBACK', () => {
-    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
-      type: DigitalDomicileType.PEC,
-      address: 'nome@cognome.mail',
-    };
-    testTimelineStatusInfosFn(
-      'Invio via PEC riuscito',
-      "L' invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail è riuscito."
     );
   });
 
