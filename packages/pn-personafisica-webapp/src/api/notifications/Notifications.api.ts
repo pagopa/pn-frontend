@@ -36,7 +36,7 @@ import {
 } from './notifications.routes';
 
 
-function mockedNotificationDetail() { 
+function mockedNotificationDetail(): any { 
   return {
     "abstract": "Dritto devi andare!",
     "paProtocolNumber": "3473",
@@ -45,7 +45,7 @@ function mockedNotificationDetail() {
       {
         "recipientType": RecipientType.PF,
         "taxId": "LVLDAA85T50G702B",
-        "internalId": "PF-b32e4920-6ff3-4872-8018-d60a4e5827f9",
+        // "internalId": "PF-b32e4920-6ff3-4872-8018-d60a4e5827f9",
         "denomination": "Ada Lovelace",
         "digitalDomicile": {
           "type": DigitalDomicileType.PEC,
@@ -64,22 +64,22 @@ function mockedNotificationDetail() {
       },
       {
         "recipientType": RecipientType.PF,
-        "taxId": "CLMCST42R12D969Z",
+        // "taxId": "CLMCST42R12D969Z",
         "internalId": "PF-a6c1350d-1d69-4209-8bf8-31de58c79d6e",
-        "denomination": "Mario Gherkin",
-        "digitalDomicile": {
-          "type": DigitalDomicileType.PEC,
-          "address": "testpagopa2@pnpagopa.postecert.local"
-        },
-        "physicalAddress": {
-          "at": "Presso",
-          "address": "Via senza nome",
-          "zip": "40100",
-          "municipality": "Milano",
-          "municipalityDetails": "Milano",
-          "province": "MI",
-          "foreignState": "ITALIA"
-        },
+        // "denomination": "Mario Gherkin",
+        // "digitalDomicile": {
+        //   "type": DigitalDomicileType.PEC,
+        //   "address": "testpagopa2@pnpagopa.postecert.local"
+        // },
+        // "physicalAddress": {
+        //   "at": "Presso",
+        //   "address": "Via senza nome",
+        //   "zip": "40100",
+        //   "municipality": "Milano",
+        //   "municipalityDetails": "Milano",
+        //   "province": "MI",
+        //   "foreignState": "ITALIA"
+        // },
       },
     ],
     "documents": [
@@ -153,7 +153,7 @@ function mockedNotificationDetail() {
         "status": NotificationStatus.VIEWED,
         "activeFrom": "2023-01-27T12:14:23.357127847Z",
         "relatedTimelineElements": [
-          "KQKX-WMDW-GDMU-202301-L-1_notification_viewed_0"
+          // "KQKX-WMDW-GDMU-202301-L-1_notification_viewed_0"
         ]
       }
     ],
@@ -575,7 +575,17 @@ function mockedNotificationDetail() {
           }
         ],
         "category": TimelineCategory.NOTIFICATION_VIEWED,
-        "details": { "recIndex": 0 }
+        "details": { 
+          "recIndex": 0,
+          "delegateInfo": {
+            "internalId": "mocked-delegate-internal-id",
+            "taxId": "GLLGLL64B15G702I",
+            "operatorUuid": "mocked-delegate-uuid",
+            "mandateId": "7c69e30a-23cd-4ef2-9b95-98c5a9f4e636",
+            "denomination": "galileo galilei",
+            "delegateType": RecipientType.PF,
+          }
+        }
       },
       {
         "elementId": "KQKX-WMDW-GDMU-202301-L-1_notification_viewed_1",

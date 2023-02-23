@@ -31,7 +31,7 @@ import {
 } from './notifications.routes';
 
 
-function mockedNotificationDetail() { 
+function mockedNotificationDetail(): any { 
   return {
     "abstract": "Dritto devi andare!",
     "paProtocolNumber": "3473",
@@ -154,11 +154,11 @@ function mockedNotificationDetail() {
           // "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_1",
         ]
       },
-      {
-        "status": NotificationStatus.EFFECTIVE_DATE,
-        "activeFrom": "2023-01-26T14:31:23.333432372Z",
-        "relatedTimelineElements": ["KQKX-WMDW-GDMU-202301-L-1_refinement_0"]
-      },
+      // {
+      //   "status": NotificationStatus.EFFECTIVE_DATE,
+      //   "activeFrom": "2023-01-26T14:31:23.333432372Z",
+      //   "relatedTimelineElements": ["KQKX-WMDW-GDMU-202301-L-1_refinement_0"]
+      // },
       {
         "status": NotificationStatus.VIEWED,
         "activeFrom": "2023-01-27T12:14:23.357127847Z",
@@ -585,7 +585,17 @@ function mockedNotificationDetail() {
           }
         ],
         "category": TimelineCategory.NOTIFICATION_VIEWED,
-        "details": { "recIndex": 0 }
+        "details": { 
+          "recIndex": 0,
+          "delegateInfo": {
+            "internalId": "mocked-delegate-internal-id",
+            "taxId": "GLLGLL64B15G702I",
+            "operatorUuid": "mocked-delegate-uuid",
+            "mandateId": "7c69e30a-23cd-4ef2-9b95-98c5a9f4e636",
+            "denomination": "galileo galilei",
+            "delegateType": RecipientType.PF,
+          }
+        }
       },
       {
         "elementId": "KQKX-WMDW-GDMU-202301-L-1_notification_viewed_1",

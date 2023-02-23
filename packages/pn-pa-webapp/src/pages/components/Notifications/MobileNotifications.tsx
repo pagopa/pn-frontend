@@ -70,7 +70,8 @@ const MobileNotifications = ({
       label: t('table.status'),
       getLabel(_, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
-          row.notificationStatus as NotificationStatus
+          row.notificationStatus as NotificationStatus, 
+          { recipients: row.recipients as Array<string> }
         );
         return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },
