@@ -57,25 +57,25 @@ function mockedNotificationDetail(): any {
           "foreignState": "Italia"
         }
       },
-      {
-        "recipientType": RecipientType.PF,
-        "taxId": "CLMCST42R12D969Z",
-        "internalId": "PF-a6c1350d-1d69-4209-8bf8-31de58c79d6e",
-        "denomination": "Mario Gherkin",
-        "digitalDomicile": {
-          "type": DigitalDomicileType.PEC,
-          "address": "testpagopa2@pnpagopa.postecert.local"
-        },
-        "physicalAddress": {
-          "at": "Presso",
-          "address": "Via senza nome",
-          "zip": "40100",
-          "municipality": "Milano",
-          "municipalityDetails": "Milano",
-          "province": "MI",
-          "foreignState": "ITALIA"
-        },
-      },
+      // {
+      //   "recipientType": RecipientType.PF,
+      //   "taxId": "CLMCST42R12D969Z",
+      //   "internalId": "PF-a6c1350d-1d69-4209-8bf8-31de58c79d6e",
+      //   "denomination": "Mario Gherkin",
+      //   "digitalDomicile": {
+      //     "type": DigitalDomicileType.PEC,
+      //     "address": "testpagopa2@pnpagopa.postecert.local"
+      //   },
+      //   "physicalAddress": {
+      //     "at": "Presso",
+      //     "address": "Via senza nome",
+      //     "zip": "40100",
+      //     "municipality": "Milano",
+      //     "municipalityDetails": "Milano",
+      //     "province": "MI",
+      //     "foreignState": "ITALIA"
+      //   },
+      // },
     ],
     "documents": [
       {
@@ -124,18 +124,18 @@ function mockedNotificationDetail(): any {
           "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_0",
           "KQKX-WMDW-GDMU-202301-L-1_schedule_digital_workflow_0_source_PLATFORM_retry_0",
           // recipient 1 - first attempt
-          "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_1_source_PLATFORM_attempt_0",
-          "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_1_source_PLATFORM_attempt_0_progidx_1",
-          "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_1_source_PLATFORM_attempt_0",
-          "KQKX-WMDW-GDMU-202301-L-1_schedule_digital_workflow_1_source_PLATFORM_retry_0",
+          // "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_1_source_PLATFORM_attempt_0",
+          // "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_1_source_PLATFORM_attempt_0_progidx_1",
+          // "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_1_source_PLATFORM_attempt_0",
+          // "KQKX-WMDW-GDMU-202301-L-1_schedule_digital_workflow_1_source_PLATFORM_retry_0",
           // recipient 0 - second attempt
           "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_0_source_PLATFORM_attempt_1",
           "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_0_source_PLATFORM_attempt_1_progidx_1",
           "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_1",
           // recipient 1 - second attempt
-          "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_1_source_PLATFORM_attempt_1",
-          "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_1_source_PLATFORM_attempt_1_progidx_1",
-          "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_1_source_PLATFORM_attempt_1",
+          // "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_1_source_PLATFORM_attempt_1",
+          // "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_1_source_PLATFORM_attempt_1_progidx_1",
+          // "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_1_source_PLATFORM_attempt_1",
         ]
       },
       {
@@ -148,17 +148,17 @@ function mockedNotificationDetail(): any {
           // "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_0",
           // "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_0",
           // digital success - recipient 1
-          "KQKX-WMDW-GDMU-202301-L-1_digital_success_workflow_1",
-          "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_1",
+          // "KQKX-WMDW-GDMU-202301-L-1_digital_success_workflow_1",
+          // "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_1",
           // "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_1",
           // "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_1",
         ]
       },
-      // {
-      //   "status": NotificationStatus.EFFECTIVE_DATE,
-      //   "activeFrom": "2023-01-26T14:31:23.333432372Z",
-      //   "relatedTimelineElements": ["KQKX-WMDW-GDMU-202301-L-1_refinement_0"]
-      // },
+      {
+        "status": NotificationStatus.EFFECTIVE_DATE,
+        "activeFrom": "2023-01-26T14:31:23.333432372Z",
+        "relatedTimelineElements": ["KQKX-WMDW-GDMU-202301-L-1_refinement_0"]
+      },
       {
         "status": NotificationStatus.VIEWED,
         "activeFrom": "2023-01-27T12:14:23.357127847Z",

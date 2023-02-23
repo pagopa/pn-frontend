@@ -421,6 +421,7 @@ export function getNotificationTimelineStatusInfos(
     step,
     recipient,
     recipientLabel,
+    isMultiRecipient: recipients.length > 1
   });
 }
 

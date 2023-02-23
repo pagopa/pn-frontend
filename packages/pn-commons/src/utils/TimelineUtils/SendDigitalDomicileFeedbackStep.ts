@@ -10,6 +10,7 @@ import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineS
       return {
         ...this.localizeTimelineStatus(
           'send-digital-domicile-error',
+          false, 
           'Invio via PEC fallito',
           `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
             (payload.step.details as SendDigitalDetails).digitalAddress?.address
@@ -25,6 +26,7 @@ import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineS
     return {
       ...this.localizeTimelineStatus(
         'send-digital-domicile-success',
+        false, 
         'Invio via PEC riuscito',
         `L' invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
           (payload.step.details as SendDigitalDetails).digitalAddress?.address

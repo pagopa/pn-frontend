@@ -10,6 +10,7 @@ export class SendDigitalDomicileStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'send-digital-domicile',
+        false, 
         'Invio via PEC',
         `È in corso l'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
           (payload.step.details as SendDigitalDetails).digitalAddress?.address

@@ -5,6 +5,7 @@ export interface TimelineStepPayload {
   step: INotificationDetailTimeline;
   recipient?: NotificationDetailRecipient;
   recipientLabel?: string;
+  isMultiRecipient: boolean;
 }
 
 export interface TimelineStepInfo {
@@ -17,6 +18,7 @@ export interface TimelineStepInfo {
 export abstract class TimelineStep {
   localizeTimelineStatus(
     category: string,
+    isMultiRecipient: boolean,
     defaultLabel: string,
     defaultDescription: string,
     data?: { [key: string]: string | undefined }
@@ -29,7 +31,7 @@ export abstract class TimelineStep {
       ),
       description: getLocalizedOrDefaultLabel(
         'notifications',
-        `detail.timeline.${category}-description`,
+        `detail.timeline.${category}-description${isMultiRecipient ? '-multirecipient' : ''}`,
         defaultDescription,
         data
       ),

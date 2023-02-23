@@ -10,6 +10,7 @@ export class SendAnalogDomicileStep extends TimelineStep {
       return {
         ...this.localizeTimelineStatus(
           'send-analog-domicile-890',
+          false, 
           'Invio via raccomandata 890',
           `È in corso l'invio della notifica a ${payload.recipient?.denomination} all'indirizzo ${
             (payload.step.details as AnalogWorkflowDetails).physicalAddress?.address
@@ -25,6 +26,7 @@ export class SendAnalogDomicileStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'send-analog-domicile-ar',
+        false, 
         'Invio via raccomandata A/R',
         `È in corso l'invio della notifica a ${payload.recipient?.denomination} all'indirizzo ${
           (payload.step.details as AnalogWorkflowDetails).physicalAddress?.address

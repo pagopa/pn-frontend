@@ -6,6 +6,7 @@ export class SendAnalogProgressStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'send-analog-progress',
+        false, 
         'Invio via raccomandata preso in carico',
         `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo ${
           (payload.step.details as SendPaperDetails).physicalAddress.address

@@ -5,6 +5,7 @@ export class ScheduleAnalogWorkflowStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'schedule-analog-workflow',
+        false, 
         'Invio per via cartacea in preparazione',
         `L'invio della notifica per via cartacea a ${payload.recipient?.denomination} è in preparazione.`,
         {
