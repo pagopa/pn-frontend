@@ -432,7 +432,6 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_DIGITAL_FEEDBACK,
   TimelineCategory.SEND_DIGITAL_PROGRESS,
-  TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
   // PN-2068
   TimelineCategory.SEND_COURTESY_MESSAGE,
   // PN-1647

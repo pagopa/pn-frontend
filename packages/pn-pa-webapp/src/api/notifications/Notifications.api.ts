@@ -121,7 +121,7 @@ function mockedNotificationDetail(): any {
           // recipient 0 - first attempt
           "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_0_source_PLATFORM_attempt_0",
           "KQKX-WMDW-GDMU-202301-L-1_digital_delivering_progress_0_source_PLATFORM_attempt_0_progidx_1",
-          "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_0",
+          // "KQKX-WMDW-GDMU-202301-L-1_send_digital_feedback_0_source_PLATFORM_attempt_0",
           "KQKX-WMDW-GDMU-202301-L-1_schedule_digital_workflow_0_source_PLATFORM_retry_0",
           // recipient 1 - first attempt
           "KQKX-WMDW-GDMU-202301-L-1_send_digital_domicile_1_source_PLATFORM_attempt_0",
@@ -142,16 +142,16 @@ function mockedNotificationDetail(): any {
         "status": NotificationStatus.DELIVERED,
         "activeFrom": "2023-01-26T14:16:12.42843144Z",
         "relatedTimelineElements": [
-          // digital success - recipient 0
-          "KQKX-WMDW-GDMU-202301-L-1_digital_success_workflow_0",
+          // digital outcome - recipient 0
+          "KQKX-WMDW-GDMU-202301-L-1_digital_failure_workflow_0",
           "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_0",
-          // "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_0",
-          // "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_0",
-          // digital success - recipient 1
-          "KQKX-WMDW-GDMU-202301-L-1_digital_success_workflow_1",
+          "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_0",
+          "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_0",
+          // digital outcome - recipient 1
+          "KQKX-WMDW-GDMU-202301-L-1_digital_failure_workflow_1",
           "KQKX-WMDW-GDMU-202301-L-1_schedule_refinement_workflow_1",
-          // "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_1",
-          // "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_1",
+          "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_1",
+          "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_1",
         ]
       },
       {
@@ -259,7 +259,7 @@ function mockedNotificationDetail(): any {
           "retryNumber": 0,
           "notificationDate": "2023-01-26T13:56:06.224667703Z",
           "sendingReceipts": [{}],
-          "eventCode": "C001",
+          "eventCode": "C008",
           "shouldRetry": false
         }
       },
@@ -404,7 +404,7 @@ function mockedNotificationDetail(): any {
             "address": "manudido86@gmail.com"
           },
           "digitalAddressSource": "PLATFORM",
-          "responseStatus": "OK",
+          "responseStatus": "KO",
           "notificationDate": "2023-01-26T13:57:43.001161877Z",
           "sendingReceipts": [{}]
         }
@@ -457,19 +457,19 @@ function mockedNotificationDetail(): any {
           "recIndex": 1,
           "digitalAddress": { "type": "PEC", "address": "toto93@gmail.com" },
           "digitalAddressSource": "PLATFORM",
-          "responseStatus": "OK",
+          "responseStatus": "KO",
           "notificationDate": "2023-01-26T13:57:43.001161877Z",
           "sendingReceipts": [{}]
         }
       },
-      // digital success - recipient 0
+      // digital outcome - recipient 0
       {
-        "elementId": "KQKX-WMDW-GDMU-202301-L-1_digital_success_workflow_0",
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_digital_failure_workflow_0",
         "timestamp": "2023-01-26T14:16:12.42843144Z",
         "legalFactsIds": [
           { "key": "safestorage://PN_LEGAL_FACTS-0002-0HBC-V58A-FT7W-WG8Y", "category": LegalFactType.DIGITAL_DELIVERY }
         ],
-        "category": TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+        "category": TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
         "details": {
           "recIndex": 0,
           "digitalAddress": { "type": "PEC", "address": "manudido86@gmail.com" }
@@ -511,14 +511,14 @@ function mockedNotificationDetail(): any {
           "analogCost": 1100
         }
       },
-      // digital success - recipient 1
+      // digital outcome - recipient 1
       {
-        "elementId": "KQKX-WMDW-GDMU-202301-L-1_digital_success_workflow_1",
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_digital_failure_workflow_1",
         "timestamp": "2023-01-26T14:26:12.42843144Z",
         "legalFactsIds": [
           { "key": "safestorage://PN_LEGAL_FACTS-0002-7DSD-PMF0-5SMU-95AI", "category": LegalFactType.DIGITAL_DELIVERY }
         ],
-        "category": TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+        "category": TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
         "details": {
           "recIndex": 1,
           "digitalAddress": { "type": "PEC", "address": "toto93@gmail.com" }
@@ -531,35 +531,35 @@ function mockedNotificationDetail(): any {
         "category": TimelineCategory.SCHEDULE_REFINEMENT,
         "details": { "recIndex": 1 }
       },
-      // {
-      //   "elementId": "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_1",
-      //   "timestamp": "2023-01-26T14:27:18.525827086Z",
-      //   "legalFactsIds": [],
-      //   "category": TimelineCategory.PREPARE_SIMPLE_REGISTERED_LETTER,
-      //   "details": {
-      //     "recIndex": 1,
-      //     "physicalAddress": {
-      //       "at": "", "address": "Via Roma 153", "addressDetails": "", "zip": "98036", 
-      //       "municipality": "Graniti", "province": "Messina"
-      //     },
-      //     "analogCost": 1
-      //   }
-      // },
-      // {
-      //   "elementId": "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_1",
-      //   "timestamp": "2023-01-26T14:29:20.525827086Z",
-      //   "legalFactsIds": [],
-      //   "category": TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
-      //   "details": {
-      //     "recIndex": 1,
-      //     "physicalAddress": {
-      //       "at": "", "address": "Via Roma 153", "addressDetails": "", "zip": "98036", 
-      //       "municipality": "Graniti", "province": "Messina"
-      //     },
-      //     "productType": "RN_RS",
-      //     "analogCost": 1100
-      //   }
-      // },
+      {
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_prepare_simple_registered_letter_1",
+        "timestamp": "2023-01-26T14:27:18.525827086Z",
+        "legalFactsIds": [],
+        "category": TimelineCategory.PREPARE_SIMPLE_REGISTERED_LETTER,
+        "details": {
+          "recIndex": 1,
+          "physicalAddress": {
+            "at": "", "address": "Via Roma 153", "addressDetails": "", "zip": "98036", 
+            "municipality": "Graniti", "province": "Messina"
+          },
+          "analogCost": 1
+        }
+      },
+      {
+        "elementId": "KQKX-WMDW-GDMU-202301-L-1_send_simple_registered_letter_1",
+        "timestamp": "2023-01-26T14:29:20.525827086Z",
+        "legalFactsIds": [],
+        "category": TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
+        "details": {
+          "recIndex": 1,
+          "physicalAddress": {
+            "at": "", "address": "Via Valerio Massimo Crisafulli Terzo 153", "addressDetails": "", "zip": "65020", 
+            "municipality": "San Valentino in Abruzzo Citeriore", "province": "Pescara"
+          },
+          "productType": "RN_RS",
+          "analogCost": 1100
+        }
+      },
       // subsequent events
       {
         "elementId": "KQKX-WMDW-GDMU-202301-L-1_refinement_0",
