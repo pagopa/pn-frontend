@@ -50,7 +50,11 @@ function localizeStatus(
   console.log({ status, isMultiRecipient });
 
   return {
-    label: getLocalizedOrDefaultLabel('notifications', `status.${status}`, defaultLabel),
+    label: getLocalizedOrDefaultLabel(
+      'notifications', 
+      `status.${status}${isMultiRecipient ? '-multirecipient' : ''}`, 
+      defaultLabel
+    ),
     tooltip: getLocalizedOrDefaultLabel(
       'notifications',
       `status.${status}-tooltip${isMultiRecipient ? '-multirecipient' : ''}`,
@@ -111,8 +115,9 @@ export function getNotificationStatusInfos(
         'La notifica è stata consegnata.',
         { isMultiRecipient }
       );
-      // if the deliveryMode is defined, then change the description for a more specific one.
+      // if the deliveryMode is defined, then change the description for a more specific one ...
       const deliveryMode = statusObject && statusObject.deliveryMode;
+      // ... only for single-recipient notifications!
       if (deliveryMode && !isMultiRecipient) {
         const deliveryModeDescription = getLocalizedOrDefaultLabel(
           'notifications', 
@@ -145,7 +150,8 @@ export function getNotificationStatusInfos(
           'unreachable',
           'Destinatario irreperibile',
           'Il destinatario non è reperibile',
-          'Il destinatario non è reperibile'
+          'Il destinatario non è reperibile',
+          { isMultiRecipient }
         ),
       };
     case NotificationStatus.PAID:

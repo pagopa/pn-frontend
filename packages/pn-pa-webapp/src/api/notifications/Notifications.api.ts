@@ -635,6 +635,31 @@ export const NotificationsApi = {
           ...d,
           sentAt: formatDate(d.sentAt),
         }));
+        notifications.forEach(noti => {
+          if (noti.iun === "NGQJ-YEXR-MYVA-202211-Y-1") {
+            // eslint-disable-next-line functional/immutable-data
+            noti.recipients = [noti.recipients[0]];
+          }
+        });
+        return {
+          ...response.data,
+          resultsPage: notifications,
+        };
+      }
+      return {
+        resultsPage: [],
+        moreResult: false,
+        nextPagesKey: [],
+      };
+    }),
+
+  getSentNotificationsReal: (params: GetNotificationsParams): Promise<GetNotificationsResponse> =>
+    apiClient.get<GetNotificationsResponse>(NOTIFICATIONS_LIST(params)).then((response) => {
+      if (response.data && response.data.resultsPage) {
+        const notifications = response.data.resultsPage.map((d) => ({
+          ...d,
+          sentAt: formatDate(d.sentAt),
+        }));
         return {
           ...response.data,
           resultsPage: notifications,
@@ -658,7 +683,12 @@ export const NotificationsApi = {
     } else {
       return apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
         if (response.data && response.data.iun) {
-          return parseNotificationDetail(response.data);
+          const parsedNotification = parseNotificationDetail(response.data);
+          if (parsedNotification.iun === "NGQJ-YEXR-MYVA-202211-Y-1") {
+            // eslint-disable-next-line functional/immutable-data
+            parsedNotification.recipients = [parsedNotification.recipients[0]];
+          }
+          return parsedNotification;
         }
         return {} as NotificationDetail;
       });
