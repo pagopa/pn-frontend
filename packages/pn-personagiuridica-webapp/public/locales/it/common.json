@@ -4,6 +4,7 @@
     "annulla filtro": "Rimuovi filtri",
     "indietro": "Indietro",
     "associa": "Associa",
+    "capito": "Ho capito",
     "conferma": "Conferma",
     "annulla": "Annulla",
     "modifica": "Modifica",
@@ -12,6 +13,8 @@
     "enter": "Entra",
     "exit": "Esci",
     "close": "Chiudi",
+    "enable": "Attiva",
+    "disable": "Disattiva",
     "go-to-home": "Vai alla home page",
     "go-to-login": "Accedi"
   },

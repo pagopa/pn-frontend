@@ -5,6 +5,8 @@
   "subtitle-link": "li trovi qui",
   "general-contacts-title": "Recapiti generali",
   "special-contacts-title": "Altri recapiti",
+  "alert-dialog-EMAIL": "Se non hai la PEC e accedi alla notifica su Piattaforma Notifiche entro 120 ore (5 giorni) dalla ricezione dell'email, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+  "alert-dialog-SMS": "Se non hai la PEC e accedi alla notifica su Piattaforma Notifiche entro 120 ore (5 giorni) dalla ricezione dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
   "legal-contacts": {
     "title": "",
     "subtitle": "PEC",
@@ -31,7 +33,21 @@
     "disclaimer-message": "Questo è l’indirizzo principale che verrà utilizzato per inviarti gli avvisi di avvenuta ricezione in via digitale. Inserendolo, non riceverai più raccomandate cartacee.",
     "disclaimer-link": "Scopri di più",
     "block-remove-pec-title": "Non puoi eliminare la PEC",
-    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”."
+    "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Notifiche digitali\" di Piattaforma Notifiche sia attivo",
+    "enabled": "Attivo",
+    "disabled": "Non attivo",
+    "enable-modal": {
+      "title": "Vuoi attivare il servizio \"Notifiche digitali\" su IO?",
+      "checkbox": "Ho capito",
+      "confirm": "Attiva servizio",
+      "content": "Se non hai la PEC e accedi alla notifica entro 120 ore (5 giorni) dalla ricezione del messaggio, non riceverai l'avviso di avvenuta ricezione tramite raccomandata."
+    },
+    "disable-modal": {
+      "title": "Vuoi disattivare il servizio \"Notifiche digitali\" su IO?",
+      "checkbox": "",
+      "confirm": "Disattiva servizio",
+      "content": "Quando ti arriva una notifica, non riceverai più un messaggio in app."
+    }
   },
   "io-contact": {
     "title": "",
