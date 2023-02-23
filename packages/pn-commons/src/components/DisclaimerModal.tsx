@@ -46,7 +46,13 @@ const DisclaimerModal = ({
         {checkboxLabel && (
           <Box>
             <FormControlLabel
-              control={<Checkbox checked={checked} onChange={handleChange} />}
+              control={
+                <Checkbox
+                  checked={checked}
+                  onChange={handleChange}
+                  data-testid="disclaimer-checkbox"
+                />
+              }
               label={checkboxLabel}
             />
           </Box>
@@ -65,7 +71,7 @@ const DisclaimerModal = ({
           variant="outlined"
           onClick={onCancel}
           fullWidth={isMobile}
-          data-testid="disclaimer-confirm-button"
+          data-testid="disclaimer-cancel-button"
           sx={{ mb: isMobile ? 2 : 0 }}
         >
           {getLocalizedOrDefaultLabel('common', 'button.annulla', 'Annulla')}

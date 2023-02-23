@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Alert, Box, Stack, Typography } from '@mui/material';
@@ -29,19 +29,20 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
-  const [status, setStatus] = useState<IOContactStatus>(IOContactStatus.PENDING);
 
   const parseContact = () => {
     if (contact === null) {
-      setStatus(() => IOContactStatus.PENDING);
+      return IOContactStatus.PENDING;
     } else if (contact === undefined) {
-      setStatus(() => IOContactStatus.UNAVAILABLE);
+      return IOContactStatus.UNAVAILABLE;
     } else if (contact.value === IOAllowedValues.DISABLED) {
-      setStatus(() => IOContactStatus.DISABLED);
+      return IOContactStatus.DISABLED;
     } else {
-      setStatus(() => IOContactStatus.ENABLED);
+      return IOContactStatus.ENABLED;
     }
   };
+
+  const status = parseContact();
 
   const enableIO = () =>
     dispatch(enableIOAddress(recipientId)).then(() => {
@@ -52,10 +53,6 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
     dispatch(disableIOAddress(recipientId)).then(() => {
       setIsConfirmModalOpen(false);
     });
-
-  useEffect(() => {
-    parseContact();
-  }, [contact?.value]);
 
   const getContent = () => {
     if (status === IOContactStatus.UNAVAILABLE || status === IOContactStatus.PENDING) {
@@ -76,9 +73,15 @@ const IOContact: React.FC<Props> = ({ recipientId, contact }) => {
       return (
         <Stack direction="row" mt={3}>
           {content.Icon}
-          <Typography ml={1}>{content.text}</Typography>
+          <Typography data-testid="IO status" ml={1}>
+            {content.text}
+          </Typography>
           <Box flexGrow={1} textAlign="right">
-            <ButtonNaked color="primary" onClick={() => setIsConfirmModalOpen(true)}>
+            <ButtonNaked
+              color="primary"
+              data-testid="IO button"
+              onClick={() => setIsConfirmModalOpen(true)}
+            >
               {content.btn}
             </ButtonNaked>
           </Box>
