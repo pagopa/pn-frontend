@@ -19,6 +19,9 @@ Cypress.Commands.add('login', () => {
       win.sessionStorage.setItem('user', JSON.stringify(Cypress.env('user')));
     }
   });
+  cy.visit('');
+
+  cy.get('#onetrust-accept-btn-handler').click();
 });
 
 /**

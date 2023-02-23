@@ -242,7 +242,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             </Link><br></br>
             Una volta sottoscritto l’accordo in digitale,
             l’ente dovrà caricarlo e inviarlo a PagoPA S.p.A. sempre dall’Area Riservata.
-            Inoltre, a integrazione dell’accordo, dovranno essere inviati i seguenti moduli debitamente compilati:
+            Inoltre, a integrazione dell’accordo, dovranno essere inviati i seguenti moduli debitamente compilati ove richiesto:
           </Typography>
           <List sx={{ listStyleType: 'disc', pl: 4 }}>
             <ListItem sx={{ display: 'list-item' }}>
