@@ -248,6 +248,11 @@ describe('CourtesyContactItem component', () => {
             code: undefined,
           });
         });
+        // Confirms the disclaimer dialog
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
+        fireEvent.click(disclaimerConfirmButton);
         const dialog = await waitFor(() => {
           const dialogEl = screen.queryByTestId('codeDialog');
           expect(dialogEl).toBeInTheDocument();
@@ -453,6 +458,12 @@ describe('CourtesyContactItem component', () => {
             code: undefined,
           });
         });
+        // Confirms the disclaimer dialog
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
+        fireEvent.click(disclaimerConfirmButton);
+
         const dialog = await waitFor(() => {
           const dialogEl = screen.queryByTestId('codeDialog');
           expect(dialogEl).toBeInTheDocument();
@@ -580,6 +591,12 @@ describe('CourtesyContactItem component', () => {
             code: undefined,
           });
         });
+        // Confirms the disclaimer dialog
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
+        fireEvent.click(disclaimerConfirmButton);
+
         const dialog = await waitFor(() => {
           const dialogEl = screen.queryByTestId('codeDialog');
           expect(dialogEl).toBeInTheDocument();
