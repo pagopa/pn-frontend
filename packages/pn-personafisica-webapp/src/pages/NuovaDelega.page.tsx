@@ -44,14 +44,13 @@ import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
-// import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { generateVCode } from '../utils/delegation.utility';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
-import { EnteSelect } from '../models/Deleghe';
 import DropDownPartyMenuItem from '../component/Party/DropDownParty';
+import { Party } from '../models/party';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -102,7 +101,7 @@ const NuovaDelega = () => {
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
 
-  const initialValues = {
+  const initialValues: NewDelegationFormProps = {
     selectPersonaFisicaOrPersonaGiuridica: 'pf',
     codiceFiscale: '',
     nome: '',
@@ -154,8 +153,8 @@ const NuovaDelega = () => {
     }
   };
   // done for complexity
-  const renderOption = (props: any, option: any) => (
-    <MenuItem {...props} value={option.uniqueIdentifier} key={option.uniqueIdentifier}>
+  const renderOption = (props: any, option: Party) => (
+    <MenuItem {...props} value={option.id} key={option.id}>
       <DropDownPartyMenuItem name={option.name} />
     </MenuItem>
   );
@@ -164,7 +163,7 @@ const NuovaDelega = () => {
     setInputValue(newInputValue);
   };
 
-  const getOptionLabel = (option: EnteSelect) => option.name || '';
+  const getOptionLabel = (option: Party) => option.name || '';
 
   const breadcrumbs = (
     <Fragment>
@@ -358,7 +357,7 @@ const NuovaDelega = () => {
                                     isOptionEqualToValue={(option, value) =>
                                       option.name === value.name
                                     }
-                                    onChange={(_event: any, newValue: Array<EnteSelect>) => {
+                                    onChange={(_event: any, newValue: Array<Party>) => {
                                       setFieldValue('enteSelect', newValue);
                                     }}
                                     inputValue={inputValue}

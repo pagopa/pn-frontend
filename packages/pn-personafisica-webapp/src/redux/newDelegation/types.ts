@@ -1,5 +1,7 @@
+import { Party } from '../../models/party';
+
 export interface newDelegation {
   created: boolean;
   error: boolean;
-  entities: Array<any>;
+  entities: Array<Party>;
 }

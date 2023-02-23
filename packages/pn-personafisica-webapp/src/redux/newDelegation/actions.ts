@@ -4,6 +4,7 @@ import { formatToSlicedISOString } from '@pagopa-pn/pn-commons';
 import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { CreateDelegationResponse, NewDelegationFormProps } from '../delegation/types';
+import { DelegationParty } from '../../models/Deleghe';
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
   'createDelegation',
@@ -15,7 +16,14 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
         fiscalCode: data.codiceFiscale,
         person: data.selectPersonaFisicaOrPersonaGiuridica === 'pf',
       },
-      visibilityIds: data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti' ? [] : data.enteSelect,
+      visibilityIds:
+        data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti'
+          ? []
+          : data.enteSelect.map(function (ente) {
+              return {
+                uniqueIdentifier: ente.id,
+              } as DelegationParty;
+            }),
       verificationCode: data.verificationCode,
       dateto: formatToSlicedISOString(data.expirationDate),
     };
