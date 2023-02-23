@@ -197,8 +197,7 @@ const DigitalContactElem = forwardRef(
                 color="primary"
                 onClick={toggleEdit}
                 sx={{ marginRight: '10px' }}
-                disabled={editDisabled}
-              >
+                disabled={editDisabled}>
                 {t('button.modifica')}
               </ButtonNaked>
             ) : (

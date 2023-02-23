@@ -18,7 +18,7 @@ import {
   CodeModal,
   AppResponsePublisher,
   AppResponse,
-  ErrorMessage,
+  ErrorMessage, DisclaimerModal,
 } from '@pagopa-pn/pn-commons';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -78,6 +78,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   } as ModalProps;
 
   const [open, setOpen] = useState(false);
+  const [disclaimerOpen, setDisclaimerOpen] = useState(false);
   const [codeNotValid, setCodeNotValid] = useState(false);
   const dispatch = useAppDispatch();
   const [modalProps, setModalProps] = useState(initialProps);
@@ -132,7 +133,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     };
 
     trackEventByType(eventTypeByChannel, { action: EventActions.ADD });
-    dispatch(actionToBeDispatched(digitalAddressParams))
+    void dispatch(actionToBeDispatched(digitalAddressParams))
       .unwrap()
       .then((res) => {
         if (noCallback) {
@@ -151,15 +152,14 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           );
           handleClose('validated');
         } else {
-          // open code verification dialog
-          setOpen(true);
+          if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
+            // open verification code dialog
+            setOpen(true);
+          } else {
+            // open disclaimer dialog
+            setDisclaimerOpen(true);
+          }
         }
-      })
-      .catch(() => {
-        // .catch((error) => {
-        // if(error.response.status === 422) {
-        //   setCodeNotValid(true);
-        // }
       });
   };
 
@@ -238,6 +238,18 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
       {children}
+      {disclaimerOpen &&
+        <DisclaimerModal
+          onConfirm={() => {
+            setDisclaimerOpen(false);
+            setOpen(true);
+          }}
+          onCancel={() => setDisclaimerOpen(false)}
+          confirmLabel={t('button.conferma')}
+          checkboxLabel={t('button.capito')}
+          content={t(`alert-dialog-${modalProps.digitalDomicileType}`, { ns: 'recapiti' })}
+        />
+      }
       {!_.isEqual(modalProps, initialProps) && (
         <CodeModal
           title={

@@ -34,22 +34,30 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     []
   );
 
-  const emailValidationSchema = useMemo(() => yup.object().shape({
-    email: yup
-      .string()
-      .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
-      .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
-  }), []);
+  const emailValidationSchema = useMemo(
+    () =>
+      yup.object().shape({
+        email: yup
+          .string()
+          .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
+          .matches(dataRegex.email, t('courtesy-contacts.valid-email', { ns: 'recapiti' })),
+      }),
+    []
+  );
 
   // note that phoneValidationSchema depends on the phoneRegex which is different
-  // for the insertion and modification cases, check the comment 
+  // for the insertion and modification cases, check the comment
   // about the useEffect which calls setPhoneRegex below
-  const phoneValidationSchema = useMemo(() => yup.object().shape({
-    phone: yup
-      .string()
-      .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(phoneRegex, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
-  }), [phoneRegex]);
+  const phoneValidationSchema = useMemo(
+    () =>
+      yup.object().shape({
+        phone: yup
+          .string()
+          .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
+          .matches(phoneRegex, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+      }),
+    [phoneRegex]
+  );
 
   const formik = useFormik({
     initialValues: {
@@ -108,7 +116,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
    * if *some* value (phone number, email address) has been attached to the contact type,
    * then we show the value giving the user the possibility of changing it
    * (the DigitalContactElem component includes the "update" button)
-   */  
+   */
   if (value) {
     return (
       <form
@@ -155,8 +163,13 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
                   size="small"
                   value={formik.values[type]}
                   onChange={handleChangeTouched}
-                  error={(formik.touched[type] || formik.values[type].length > 0) && Boolean(formik.errors[type])}
-                  helperText={(formik.touched[type] || formik.values[type].length > 0) && formik.errors[type]}
+                  error={
+                    (formik.touched[type] || formik.values[type].length > 0) &&
+                    Boolean(formik.errors[type])
+                  }
+                  helperText={
+                    (formik.touched[type] || formik.values[type].length > 0) && formik.errors[type]
+                  }
                 />
               ),
               isEditable: true,
@@ -174,9 +187,9 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
 
   /*
    * if *no* value (phone number, email address) has been attached to the contact type,
-   * then we show the input field allowing the user to enter it along with the button 
+   * then we show the input field allowing the user to enter it along with the button
    * to perform the addition.
-   */  
+   */
   return (
     <form onSubmit={formik.handleSubmit} style={{ width: '100%' }}>
       <Typography id={`${type}-label`} variant="body2" mb={1} sx={{ fontWeight: 'bold' }}>
@@ -210,7 +223,13 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           />
         </Grid>
         <Grid item lg={4} sm={4} xs={12} alignItems="right">
-          <Button variant="outlined" disabled={!formik.isValid} fullWidth type="submit">
+          <Button
+            variant="outlined"
+            disabled={!formik.isValid}
+            fullWidth
+            type="submit"
+            data-testid={`add ${type}`}
+          >
             {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
           </Button>
         </Grid>
