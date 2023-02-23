@@ -16,7 +16,6 @@ import {
   Divider,
   Grid,
   MenuItem,
-  // SelectChangeEvent,
   Stack,
   Paper,
   Autocomplete,
@@ -34,7 +33,6 @@ import {
   TitleBox,
   useIsMobile,
   PnBreadcrumb,
-  // CustomDropdown,
   isToday,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
@@ -47,10 +45,10 @@ import * as routes from '../navigation/routes.const';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { generateVCode } from '../utils/delegation.utility';
-import { trackEventByType } from '../utils/mixpanel';
-import { TrackEventType } from '../utils/events';
 import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import { Party } from '../models/party';
+import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -329,24 +327,6 @@ const NuovaDelega = () => {
                             <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
                               {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                                 <FormControl fullWidth>
-                                  {/* <CustomDropdown
-                                    id="ente-select"
-                                    label={t('nuovaDelega.form.selectEntities')}
-                                    fullWidth
-                                    value={values.enteSelect.uniqueIdentifier}
-                                    onChange={(event: SelectChangeEvent<string>) => {
-                                      setFieldValue('enteSelect', {
-                                        name: event.target.name,
-                                        uniqueIdentifier: event.target.value,
-                                      });
-                                    }}
-                                  >
-                                    {entities.map((entity) => (
-                                      <MenuItem value={entity.id} key={entity.id}>
-                                        <DropDownPartyMenuItem name={entity.name} />
-                                      </MenuItem>
-                                    ))}
-                                  </CustomDropdown> */}
                                   <Autocomplete
                                     id="ente-select"
                                     multiple
