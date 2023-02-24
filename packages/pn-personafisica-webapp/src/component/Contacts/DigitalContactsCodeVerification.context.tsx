@@ -31,13 +31,13 @@ import {
 import { trackEventByType } from '../../utils/mixpanel';
 import { EventActions, TrackEventType } from '../../utils/events';
 import { getContactEventType } from '../../utils/contacts.utility';
-import { SaveDigitalAddressParams, SenderParty } from '../../redux/contact/types';
+import { SaveDigitalAddressParams } from '../../redux/contact/types';
 
 type ModalProps = {
   labelRoot: string;
   labelType: string;
   recipientId: string;
-  senderId: Array<SenderParty>;
+  senderId: string;
   digitalDomicileType: LegalChannelType | CourtesyChannelType;
   value: string;
   callbackOnValidation?: (status: 'validated' | 'cancelled') => void;
@@ -48,7 +48,7 @@ interface IDigitalContactsCodeVerificationContext {
     digitalDomicileType: LegalChannelType | CourtesyChannelType,
     value: string,
     recipientId: string,
-    senderId: Array<SenderParty>,
+    senderId: string,
     callbackOnValidation?: (status: 'validated' | 'cancelled') => void
   ) => void;
 }
@@ -72,7 +72,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     labelRoot: '',
     labelType: '',
     recipientId: '',
-    senderId: [],
+    senderId: '',
     digitalDomicileType: LegalChannelType.PEC,
     value: '',
   } as ModalProps;
@@ -104,7 +104,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     !!addresses.find(
       (elem) =>
         elem.value === modalProps.value &&
-        (!modalProps.senderId.includes({ uniqueIdentifier: elem.senderId }) ||
+        (elem.senderId !== modalProps.senderId ||
           elem.channelType !== modalProps.digitalDomicileType)
     );
 
@@ -167,7 +167,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     digitalDomicileType: LegalChannelType | CourtesyChannelType,
     value: string,
     recipientId: string,
-    senderId: Array<SenderParty>,
+    senderId: string,
     callbackOnValidation?: (status: 'validated' | 'cancelled') => void
   ) => {
     /* eslint-disable functional/no-let */

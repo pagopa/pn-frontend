@@ -151,6 +151,16 @@ const NuovaDelega = () => {
     }
   };
   // done for complexity
+
+  const handleFilterAutocomplete = (options: Array<Party>, state: { inputValue: string }) => {
+    if (state.inputValue.length >= 4) {
+      return options.filter((item: Party) =>
+        String(item.name).toLowerCase().includes(state.inputValue.toLowerCase())
+      );
+    }
+    return options;
+  };
+
   const renderOption = (props: any, option: Party) => (
     <MenuItem {...props} value={option.id} key={option.id}>
       <DropDownPartyMenuItem name={option.name} />
@@ -344,6 +354,7 @@ const NuovaDelega = () => {
                                     onInputChange={(_event, newInputValue) =>
                                       handleChangeInput(newInputValue)
                                     }
+                                    filterOptions={handleFilterAutocomplete}
                                     renderOption={renderOption}
                                     renderInput={(params) => (
                                       <TextField {...params} label="Seleziona enti" />

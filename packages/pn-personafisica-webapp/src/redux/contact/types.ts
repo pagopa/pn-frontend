@@ -8,7 +8,7 @@ export interface DeleteDigitalAddressParams {
 
 export interface SaveDigitalAddressParams {
   recipientId: string;
-  senderId: Array<SenderParty>;
+  senderId: string;
   channelType: LegalChannelType | CourtesyChannelType;
   value: string;
   code?: string;

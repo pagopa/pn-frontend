@@ -91,9 +91,7 @@ export const enableIOAddress = createAsyncThunk<DigitalAddress | void, string>(
     try {
       return await ContactsApi.createOrUpdateCourtesyAddress(
         recipientId,
-        //perchè default?
-        // 'default',
-        [],
+        'default',
         CourtesyChannelType.IOMSG,
         { value: 'APPIO', verificationCode: '00000' }
       );

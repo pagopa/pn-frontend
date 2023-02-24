@@ -1,7 +1,6 @@
 import { compileRoute } from '@pagopa-pn/pn-commons';
 
 import { LegalChannelType, CourtesyChannelType } from '../../models/contacts';
-import { SenderParty } from '../../redux/contact/types';
 
 // Prefixes
 const API_CONTACTS_PREFIX = 'address-book';
@@ -28,11 +27,7 @@ export function CONTACTS_LIST() {
     path: API_CONTACTS_BASE_PATH,
   });
 }
-//metto che può essere stringa per eliminare il singolo id
-export function LEGAL_CONTACT(
-  senderId: Array<SenderParty> | string,
-  channelType: LegalChannelType
-) {
+export function LEGAL_CONTACT(senderId: string, channelType: LegalChannelType) {
   return compileRoute({
     prefix: API_CONTACTS_PREFIX,
     path: API_CONTACTS_LEGAL_PATH,
@@ -43,10 +38,7 @@ export function LEGAL_CONTACT(
   });
 }
 
-export function COURTESY_CONTACT(
-  senderId: Array<SenderParty> | string,
-  channelType: CourtesyChannelType
-) {
+export function COURTESY_CONTACT(senderId: string, channelType: CourtesyChannelType) {
   return compileRoute({
     prefix: API_CONTACTS_PREFIX,
     path: API_CONTACTS_COURTESY_PATH,
