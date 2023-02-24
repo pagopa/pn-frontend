@@ -63,6 +63,12 @@ const IDPS: { identityProviders: Array<IdentityProvider>; richiediSpid: string }
       imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-lepidaid.png',
     },
     {
+      identifier: 'TeamSystem',
+      entityId: 'teamsystemid',
+      name: 'TeamSystem',
+      imageUrl: 'https://assets.cdn.io.italia.it/spid/idps/spid-idp-teamsystemid.png',
+    },
+    {
       identifier: 'Etna',
       entityId: 'ehtid',
       name: 'EtnaID',
