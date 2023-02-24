@@ -11,4 +11,4 @@ export type DelegatesColumn = DelegheColumn;
 
 export type DelegatorsColumn = DelegheColumn;
 
-export type DelegationParty = { uniqueIdentifier: string };
+export type DelegationParty = { name: string | null; uniqueIdentifier: string };

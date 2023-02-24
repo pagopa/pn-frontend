@@ -22,6 +22,7 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
           : data.enteSelect.map(function (ente) {
               return {
                 uniqueIdentifier: ente.id,
+                name: ente.name,
               } as DelegationParty;
             }),
       verificationCode: data.verificationCode,

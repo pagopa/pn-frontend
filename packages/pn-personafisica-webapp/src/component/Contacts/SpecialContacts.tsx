@@ -2,6 +2,7 @@ import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
+  Autocomplete,
   Card,
   CardContent,
   Grid,
@@ -23,11 +24,12 @@ import {
   useIsMobile,
   CustomDropdown,
   dataRegex,
-  SpecialContactsProvider
+  SpecialContactsProvider,
 } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { Party } from '../../models/party';
 
 import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
 import { internationalPhonePrefix } from '../../utils/contacts.utility';
@@ -35,6 +37,7 @@ import DropDownPartyMenuItem from '../Party/DropDownParty';
 import DigitalContactsCard from './DigitalContactsCard';
 import SpecialContactElem from './SpecialContactElem';
 import { useDigitalContactsCodeVerificationContext } from './DigitalContactsCodeVerification.context';
+import { SenderParty } from '../../redux/contact/types';
 
 type Props = {
   recipientId: string;
@@ -43,10 +46,24 @@ type Props = {
 };
 
 type Address = {
-  senderId: string;
+  senderId: Array<SenderParty> | string;
   phone?: string;
   mail?: string;
   pec?: string;
+};
+
+type SpecialContacts = {
+  sender: Array<Party>;
+  addressType: LegalChannelType | CourtesyChannelType | undefined;
+  s_pec: string;
+  s_mail: string;
+  s_phone: string;
+};
+
+type AddressType = {
+  id: LegalChannelType | CourtesyChannelType;
+  value: string;
+  show: boolean;
 };
 
 const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Props) => {
@@ -57,9 +74,10 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const isMobile = useIsMobile();
+  const [inputValue, setInputValue] = useState('');
 
   const addressTypes = useMemo(
-    () => [
+    (): Array<AddressType> => [
       {
         id: LegalChannelType.PEC,
         value: t('special-contacts.pec', { ns: 'recapiti' }),
@@ -114,7 +132,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   useEffect(() => fetchAllActivatedParties(), [fetchAllActivatedParties]);
 
   const validationSchema = yup.object({
-    sender: yup.string().required(),
+    sender: yup.array().required(),
     addressType: yup.string().required(),
     s_pec: yup.string().when('addressType', {
       is: LegalChannelType.PEC,
@@ -140,9 +158,9 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   });
 
   const initialValues = useMemo(
-    () => ({
-      sender: '',
-      addressType: addressTypes.find((a) => a.show)?.id as LegalChannelType | CourtesyChannelType,
+    (): SpecialContacts => ({
+      sender: [],
+      addressType: addressTypes.find((a: AddressType) => a.show)?.id,
       s_pec: '',
       s_mail: '',
       s_phone: '',
@@ -154,29 +172,45 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     initialValues,
     validateOnMount: true,
     validationSchema,
-    onSubmit: (values) => {
-      initValidation(
-        values.addressType,
-        values.s_pec || values.s_mail || internationalPhonePrefix + values.s_phone,
-        recipientId,
-        values.sender,
-        async (status: 'validated' | 'cancelled') => {
-          if (status === 'validated') {
-            // reset form
-            formik.resetForm();
-            await formik.validateForm();
+    onSubmit: (values: SpecialContacts) => {
+      //da controllare se usare l'undefined è corretto
+      if (values.addressType) {
+        initValidation(
+          values.addressType,
+          values.s_pec || values.s_mail || internationalPhonePrefix + values.s_phone,
+          recipientId,
+          values.sender.map(function (senders) {
+            return { uniqueIdentifier: senders.id } as SenderParty;
+          }),
+          async (status: 'validated' | 'cancelled') => {
+            if (status === 'validated') {
+              // reset form
+              formik.resetForm();
+              await formik.validateForm();
+            }
           }
-        }
-      );
+        );
+      }
     },
   });
+  const renderOption = (props: any, option: Party) => (
+    <MenuItem {...props} value={option.id} key={option.id}>
+      <DropDownPartyMenuItem name={option.name} />
+    </MenuItem>
+  );
+
+  const getOptionLabel = (option: Party) => option.name || '';
+
+  const handleChangeInput = (newInputValue: string) => {
+    setInputValue(newInputValue);
+  };
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const senderChangeHandler = (e: ChangeEvent) => {
+  const senderChangeHandler = (e: any) => {
     formik.handleChange(e);
     if (formik.values.addressType === LegalChannelType.PEC) {
       const alreadyExists =
@@ -200,7 +234,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   };
 
   const addressTypeChangeHandler = async (e: ChangeEvent) => {
-    if ((e.target as any).value === LegalChannelType.PEC) {
+    /*  if ((e.target as any).value === LegalChannelType.PEC) {
       await formik.setFieldValue('s_mail', '');
       await formik.setFieldValue('s_phone', '');
       const alreadyExists =
@@ -224,7 +258,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.phone-already-exists', { ns: 'recapiti' }) : ''
       );
-    }
+    } */
     formik.handleChange(e);
   };
 
@@ -284,7 +318,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
           <Grid container direction="row" spacing={2} alignItems="flex">
             <Grid item lg xs={12}>
-              <CustomDropdown
+              {/*  <CustomDropdown
                 id="sender"
                 label={`${t('special-contacts.sender', { ns: 'recapiti' })}*`}
                 name="sender"
@@ -298,7 +332,22 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                     <DropDownPartyMenuItem name={party.name} />
                   </MenuItem>
                 ))}
-              </CustomDropdown>
+              </CustomDropdown> */}
+              <Autocomplete
+                id="sender"
+                multiple
+                size="small"
+                options={parties}
+                fullWidth
+                autoComplete
+                getOptionLabel={getOptionLabel}
+                isOptionEqualToValue={(option, value) => option.name === value.name}
+                onChange={senderChangeHandler}
+                inputValue={inputValue}
+                onInputChange={(_event, newInputValue) => handleChangeInput(newInputValue)}
+                renderOption={renderOption}
+                renderInput={(params) => <TextField {...params} label="Seleziona enti" />}
+              />
             </Grid>
             <Grid item lg xs={12}>
               <CustomDropdown
