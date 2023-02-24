@@ -34,6 +34,11 @@ describe('Delegation', () => {
 
     cy.intercept(`${NOTIFICATION_PAYMENT_INFO('', '')}/**`, { fixture: 'payments/required'}).as('getPaymentInfo');
     
+    cy.intercept(/TOS/, {
+      statusCode: 200,
+      fixture: 'tos/tos-accepted'
+    });
+
     cy.login();
     cy.visit(NOTIFICHE);
   });
