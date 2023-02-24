@@ -271,7 +271,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             </ListItem>
             <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
-                <Link href={"https://app.gitbook.com/o/KXYtsf32WSKm6ga638R3/s/xJKQCleWk4paV973ustG/"}>
+                <Link href={"https://docs.pagopa.it/sla-di-servizio/"}>
                   <a target="_blank" rel="noopener noreferrer">
                     SLA di servizio
                   </a>
@@ -297,7 +297,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
 
-                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa.yaml">
                   <a target="_blank" rel="noopener noreferrer">
                     API b2b per le pubbliche amministrazioni
                   </a>
@@ -306,7 +306,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             </ListItem>
             <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
-                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook.yaml">
                   <a target="_blank" rel="noopener noreferrer">
                     API b2b per l’avanzamento delle notifiche
                   </a>
@@ -315,7 +315,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             </ListItem>
           </List>
           <Typography variant="body2">Per ulteriori informazioni e chiarimenti, è possibile consultare{" "}
-            <Link href={"https://app.gitbook.com/o/KXYtsf32WSKm6ga638R3/s/iWZ1gWl9GF8n6vjCvjY2/"}>
+            <Link href={"https://docs.pagopa.it/faq-enti/"}>
               <a target="_blank" rel="noopener noreferrer">
                 qui
               </a>
