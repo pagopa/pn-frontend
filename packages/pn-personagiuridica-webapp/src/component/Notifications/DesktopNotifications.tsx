@@ -113,7 +113,7 @@ const DesktopNotifications = ({
       sortable: false, // TODO: will be re-enabled in PN-1124
       getCellLabel(_: string, row: Item) {
         const { label, tooltip, color } = getNotificationStatusInfos(
-          row.notificationStatus as NotificationStatus
+          row.notificationStatus as NotificationStatus, {recipients: row.recipients as Array<string>}
         );
         return <StatusTooltip label={label} tooltip={tooltip} color={color} eventTrackingCallback={handleEventTrackingTooltip}></StatusTooltip>;
       },

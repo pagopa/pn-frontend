@@ -47,8 +47,6 @@ function localizeStatus(
 } {
   const isMultiRecipient = data && data.isMultiRecipient;
 
-  console.log({ status, isMultiRecipient });
-
   return {
     label: getLocalizedOrDefaultLabel(
       'notifications', 
