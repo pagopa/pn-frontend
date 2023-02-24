@@ -614,6 +614,432 @@ function mockedNotificationDetail(): any {
 };
 
 
+function mockedAnalogNotificationDetail(): any {
+  return {
+    "abstract": "",
+    "paProtocolNumber": "2023080217355",
+    "subject": "prova priva preva",
+    "recipients": [
+        {
+            "recipientType": "PF",
+            "taxId": "PLOMRC01P30L736Y",
+            "internalId": "PF-20250cb4-2f26-4609-9ca3-051bd621e0b7",
+            "denomination": "marco polo",
+            "physicalAddress": {
+                "at": "",
+                "address": "via prova 1",
+                "addressDetails": "",
+                "zip": "20121",
+                "municipality": "milano",
+                "municipalityDetails": "",
+                "province": "milano",
+                "foreignState": "italia"
+            },
+            "payment": {
+                "noticeCode": "302047770003556788",
+                "creditorTaxId": "77777777777"
+            }
+        },
+        // {
+        //   "recipientType": RecipientType.PF,
+        //   "taxId": "CLMCST42R12D969Z",
+        //   "internalId": "PF-a6c1350d-1d69-4209-8bf8-31de58c79d6e",
+        //   "denomination": "Mario Gherkin",
+        //   "digitalDomicile": {
+        //     "type": DigitalDomicileType.PEC,
+        //     "address": "testpagopa2@pnpagopa.postecert.local"
+        //   },
+        //   "physicalAddress": {
+        //     "at": "Presso",
+        //     "address": "Via senza nome",
+        //     "zip": "40100",
+        //     "municipality": "Milano",
+        //     "municipalityDetails": "Milano",
+        //     "province": "MI",
+        //     "foreignState": "ITALIA"
+        //   },
+        // },
+      ],
+    "documents": [
+        {
+            "digests": {
+                "sha256": "EbHGyDE77eEdLgw88zM37xMcnEcUx/QenPLDncJUfyk="
+            },
+            "contentType": "application/pdf",
+            "ref": {
+                "key": "PN_NOTIFICATION_ATTACHMENTS-0001-4J35-OBZE-5AUL-JCDP",
+                "versionToken": "5MRCSKyBgEHbjcLqlmtxpZl4F.p7egrr"
+            },
+            "title": "atto",
+            "docIdx": "0"
+        }
+    ],
+    "notificationFeePolicy": "FLAT_RATE",
+    "physicalCommunicationType": "AR_REGISTERED_LETTER",
+    "senderDenomination": "Comune di Palermo",
+    "senderTaxId": "80016350821",
+    "group": "",
+    "taxonomyCode": "123456A",
+    "senderPaId": "5b994d4a-0fa8-47ac-9c7b-354f1d44a1ce",
+    "iun": "WRVL-PVGN-UZTK-202302-A-1",
+    "sentAt": "2023-02-08T16:36:05.904429787Z",
+    "documentsAvailable": true,
+    "notificationStatus": "VIEWED",
+    "notificationStatusHistory": [
+      {
+        "status": "ACCEPTED",
+        "activeFrom": "2023-02-08T16:36:05.904429787Z",
+        "relatedTimelineElements": [
+          "WRVL-PVGN-UZTK-202302-A-1_request_accepted",
+          "aar_creation_request_iun_WRVL-PVGN-UZTK-202302-A-1_recIndex_0",
+          "WRVL-PVGN-UZTK-202302-A-1_aar_gen_0",
+          "WRVL-PVGN-UZTK-202302-A-1_send_courtesy_message_0_type_EMAIL",
+          "WRVL-PVGN-UZTK-202302-A-1_get_address_0_source_PLATFORM_attempt_0",
+          "WRVL-PVGN-UZTK-202302-A-1_get_address_0_source_SPECIAL_attempt_0",
+          "WRVL-PVGN-UZTK-202302-A-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+          "public_registry_response_WRVL-PVGN-UZTK-202302-A-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+          "WRVL-PVGN-UZTK-202302-A-1_get_address_0_source_GENERAL_attempt_0",
+          "WRVL-PVGN-UZTK-202302-A-1_schedule_analog_workflow_0_retry_0",
+          "WRVL-PVGN-UZTK-202302-A-1_prepare_analog_domicile_0_attempt_0"
+        ]
+      },
+      {
+        "status": "DELIVERING",
+        "activeFrom": "2023-02-08T16:40:33.217455701Z",
+        "relatedTimelineElements": [
+          "WRVL-PVGN-UZTK-202302-A-1_send_analog_domicile_0_attempt_0",
+          "WRVL-PVGN-UZTK-202302-A-1_send_analog_progress_0_update_0",
+          "WRVL-PVGN-UZTK-202302-A-1_send_analog_feedback_0_attempt_0"
+        ]
+      },
+      {
+        "status": "DELIVERED",
+        "activeFrom": "2023-02-08T16:40:57.5513874Z",
+        "relatedTimelineElements": [
+          "WRVL-PVGN-UZTK-202302-A-1_analog_success_workflow_0",
+          "WRVL-PVGN-UZTK-202302-A-1_schedule_refinement_workflow_0"
+        ]
+      },
+      {
+        "status": "EFFECTIVE_DATE",
+        "activeFrom": "2023-02-08T16:45:01.254143387Z",
+        "relatedTimelineElements": [
+          "WRVL-PVGN-UZTK-202302-A-1_refinement_0"
+        ]
+      },
+      {
+        "status": "VIEWED",
+        "activeFrom": "2023-02-09T14:44:39.966797944Z",
+        "relatedTimelineElements": [
+          "WRVL-PVGN-UZTK-202302-A-1_notification_viewed_0",
+          "notification_viewed_creation_request_iun_WRVL-PVGN-UZTK-202302-A-1_recIndex_0",
+          "NOTIFICATION_VIEWED.IUN_WRVL-PVGN-UZTK-202302-A-1.RECINDEX_0",
+          "NOTIFICATION_VIEWED_CREATION_REQUEST.IUN_WRVL-PVGN-UZTK-202302-A-1.RECINDEX_0"
+        ]
+      }
+    ],
+    "timeline": [
+      {
+        "elementId": "senderack_legalfact_creation_request_iun_WRVL-PVGN-UZTK-202302-A-1",
+        "timestamp": "2023-02-08T16:36:36.62863026Z",
+        "legalFactsIds": [],
+        "category": "SENDER_ACK_CREATION_REQUEST",
+        "details": {}
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_request_accepted",
+        "timestamp": "2023-02-08T16:37:01.876406427Z",
+        "legalFactsIds": [
+          {
+            "key": "safestorage://PN_LEGAL_FACTS-0002-5WNA-FU6Z-VVZV-1D5E",
+            "category": "SENDER_ACK"
+          }
+        ],
+        "category": "REQUEST_ACCEPTED"
+      },
+      {
+        "elementId": "aar_creation_request_iun_WRVL-PVGN-UZTK-202302-A-1_recIndex_0",
+        "timestamp": "2023-02-08T16:37:30.242868569Z",
+        "legalFactsIds": [],
+        "category": "AAR_CREATION_REQUEST",
+        "details": {
+          "recIndex": 0,
+          "aarKey": "safestorage://PN_AAR-0002-GVTP-ZMH1-49O7-LDRJ",
+          "numberOfPages": 1
+        }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_aar_gen_0",
+        "timestamp": "2023-02-08T16:37:59.886730617Z",
+        "legalFactsIds": [],
+        "category": "AAR_GENERATION",
+        "details": {
+          "recIndex": 0,
+          "numberOfPages": 1,
+          "generatedAarUrl": "safestorage://PN_AAR-0002-GVTP-ZMH1-49O7-LDRJ"
+        }
+      },
+      {
+          "elementId": "WRVL-PVGN-UZTK-202302-A-1_send_courtesy_message_0_type_EMAIL",
+          "timestamp": "2023-02-08T16:38:00.037670604Z",
+          "legalFactsIds": [],
+          "category": "SEND_COURTESY_MESSAGE",
+          "details": {
+            "recIndex": 0,
+            "digitalAddress": {
+              "type": "EMAIL",
+              "address": "test@test.it"
+            },
+            "sendDate": "2023-02-08T16:38:00.036508467Z"
+          }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_get_address_0_source_PLATFORM_attempt_0",
+        "timestamp": "2023-02-08T16:38:29.978501364Z",
+        "legalFactsIds": [],
+        "category": "GET_ADDRESS",
+        "details": {
+          "recIndex": 0,
+          "digitalAddressSource": "PLATFORM",
+          "isAvailable": false,
+          "attemptDate": "2023-02-08T16:38:29.978495649Z"
+        }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_get_address_0_source_SPECIAL_attempt_0",
+        "timestamp": "2023-02-08T16:38:30.011315723Z",
+        "legalFactsIds": [],
+        "category": "GET_ADDRESS",
+        "details": {
+          "recIndex": 0,
+          "digitalAddressSource": "SPECIAL",
+          "isAvailable": false,
+          "attemptDate": "2023-02-08T16:38:30.011310333Z"
+        }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+        "timestamp": "2023-02-08T16:38:30.260846704Z",
+        "legalFactsIds": [],
+        "category": "PUBLIC_REGISTRY_CALL",
+        "details": {
+          "recIndex": 0,
+          "deliveryMode": "DIGITAL",
+          "contactPhase": "CHOOSE_DELIVERY",
+          "sentAttemptMade": 0,
+          "sendDate": "2023-02-08T16:38:30.260841154Z"
+        }
+      },
+      {
+        "elementId": "public_registry_response_WRVL-PVGN-UZTK-202302-A-1_0_DIGITAL_CHOOSE_DELIVERY_0_public_registry_call",
+        "timestamp": "2023-02-08T16:38:32.855255118Z",
+        "legalFactsIds": [],
+        "category": "PUBLIC_REGISTRY_RESPONSE",
+        "details": {
+          "recIndex": 0
+        }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_get_address_0_source_GENERAL_attempt_0",
+        "timestamp": "2023-02-08T16:38:32.913957893Z",
+        "legalFactsIds": [],
+        "category": "GET_ADDRESS",
+        "details": {
+          "recIndex": 0,
+          "digitalAddressSource": "GENERAL",
+          "isAvailable": false,
+          "attemptDate": "2023-02-08T16:38:32.913952529Z"
+        }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_schedule_analog_workflow_0_retry_0",
+        "timestamp": "2023-02-08T16:38:32.9830969Z",
+        "legalFactsIds": [],
+        "category": "SCHEDULE_ANALOG_WORKFLOW",
+        "details": {
+          "recIndex": 0
+        }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_prepare_analog_domicile_0_attempt_0",
+        "timestamp": "2023-02-08T16:40:30.370627919Z",
+        "legalFactsIds": [],
+        "category": "PREPARE_ANALOG_DOMICILE",
+        "details": {
+          "recIndex": 0,
+          "physicalAddress": {
+            "at": "",
+            "address": "via prova 1",
+            "addressDetails": "",
+            "zip": "20121",
+            "municipality": "milano",
+            "province": "milano"
+          },
+          "sentAttemptMade": 0
+        }
+      },
+      {
+          "elementId": "WRVL-PVGN-UZTK-202302-A-1_send_analog_domicile_0_attempt_0",
+          "timestamp": "2023-02-08T16:40:33.217455701Z",
+          "legalFactsIds": [],
+          "category": "SEND_ANALOG_DOMICILE",
+          "details": {
+              "recIndex": 0,
+              "physicalAddress": {
+                  "address": "via prova 1",
+                  "zip": "20121",
+                  "municipality": "milano",
+                  "province": "milano"
+              },
+              "sentAttemptMade": 0,
+              "serviceLevel": "AR_REGISTERED_LETTER",
+              "ServiceLevelAR": "AR_REGISTERED_LETTER",
+              "serviceLevel890": "REGISTERED_LETTER_890",
+              "productType": "RN_AR",
+              "analogCost": 1100
+          }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_send_analog_progress_0_update_0",
+        "timestamp": "2023-02-08T16:40:34.217455701Z",
+        "legalFactsIds": [
+          {
+            "key": "safestorage://PN_EXTERNAL_LEGAL_FACTS-0003-13YK-ZH8U-OUP9-SOJM",
+            "category": "ANALOG_DELIVERY"
+          }
+        ],
+        "category": "SEND_ANALOG_PROGRESS",
+        "details": {
+            "recIndex": 0,
+            "physicalAddress": {
+                "address": "via prova 1",
+                "zip": "20121",
+                "municipality": "milano",
+                "province": "milano"
+            },
+            "sentAttemptMade": 0,
+            "productType": "RN_AR",
+            "analogCost": 1100
+        }
+    },
+    {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_send_analog_feedback_0_attempt_0",
+        "timestamp": "2023-02-08T16:40:57.50164825Z",
+        "legalFactsIds": [
+          {
+            "key": "safestorage://PN_EXTERNAL_LEGAL_FACTS-0003-13YK-ZH8U-OUP9-SOJM",
+            "category": "ANALOG_DELIVERY"
+          }
+        ],
+        "category": "SEND_ANALOG_FEEDBACK",
+        "details": {
+          "recIndex": 0,
+          "physicalAddress": {
+            "at": "",
+            "address": "via prova 1",
+            "addressDetails": "",
+            "zip": "20121",
+            "municipality": "milano",
+            "province": "milano"
+          },
+          "sentAttemptMade": 0,
+          "responseStatus": "OK"
+        }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_analog_success_workflow_0",
+        "timestamp": "2023-02-08T16:40:57.5513874Z",
+        "legalFactsIds": [
+          {
+            "key": "safestorage://PN_EXTERNAL_LEGAL_FACTS-0003-13YK-ZH8U-OUP9-SOJM",
+            "category": "ANALOG_DELIVERY"
+          }
+        ],
+        "category": "ANALOG_SUCCESS_WORKFLOW",
+        "details": {
+          "recIndex": 0,
+          "physicalAddress": {
+            "at": "",
+            "address": "via prova 1",
+            "addressDetails": "",
+            "zip": "20121",
+            "municipality": "milano",
+            "province": "milano"
+          }
+        }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_schedule_refinement_workflow_0",
+        "timestamp": "2023-02-08T16:40:57.661845703Z",
+        "legalFactsIds": [],
+        "category": "SCHEDULE_REFINEMENT",
+        "details": {
+          "recIndex": 0
+        }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_refinement_0",
+        "timestamp": "2023-02-08T16:45:01.254143387Z",
+        "legalFactsIds": [],
+        "category": "REFINEMENT",
+        "details": {
+          "recIndex": 0,
+          "notificationCost": 100
+        }
+      },
+      {
+        "elementId": "WRVL-PVGN-UZTK-202302-A-1_notification_viewed_0",
+        "timestamp": "2023-02-09T14:44:39.966797944Z",
+        "legalFactsIds": [
+          {
+            "key": "safestorage://PN_LEGAL_FACTS-0002-ASTL-VVSZ-FYV2-EL3A",
+            "category": "RECIPIENT_ACCESS"
+          }
+        ],
+        "category": "NOTIFICATION_VIEWED",
+        "details": {
+          "recIndex": 0
+        }
+      },
+      {
+        "elementId": "notification_viewed_creation_request_iun_WRVL-PVGN-UZTK-202302-A-1_recIndex_0",
+        "timestamp": "2023-02-09T14:44:50.813741977Z",
+        "legalFactsIds": [],
+        "category": "NOTIFICATION_VIEWED_CREATION_REQUEST",
+        "details": {
+          "recIndex": 0,
+          "eventTimestamp": "2023-02-09T14:44:39.966797944Z"
+        }
+      },
+      {
+        "elementId": "NOTIFICATION_VIEWED.IUN_WRVL-PVGN-UZTK-202302-A-1.RECINDEX_0",
+        "timestamp": "2023-02-23T16:41:57.511051467Z",
+        "legalFactsIds": [
+          {
+            "key": "safestorage://PN_LEGAL_FACTS-0002-8ZCR-9GMT-2SIU-XPS4",
+            "category": "RECIPIENT_ACCESS"
+          }
+        ],
+        "category": "NOTIFICATION_VIEWED",
+        "details": {
+          "recIndex": 0,
+          "notificationCost": 100
+        }
+      },
+      {
+        "elementId": "NOTIFICATION_VIEWED_CREATION_REQUEST.IUN_WRVL-PVGN-UZTK-202302-A-1.RECINDEX_0",
+        "timestamp": "2023-02-23T16:42:08.474766059Z",
+        "legalFactsIds": [],
+        "category": "NOTIFICATION_VIEWED_CREATION_REQUEST",
+        "details": {
+          "recIndex": 0,
+          "eventTimestamp": "2023-02-23T16:41:57.511051467Z"
+        }
+      }
+    ]
+  };
+}
+
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };
@@ -680,6 +1106,8 @@ export const NotificationsApi = {
   getSentNotification: (iun: string): Promise<NotificationDetail> => {
     if (iun === "KQKX-WMDW-GDMU-202301-L-1") {
       return Promise.resolve(parseNotificationDetail(mockedNotificationDetail()));
+    } else if (iun === "WRVL-PVGN-UZTK-202302-A-1") {
+      return Promise.resolve(parseNotificationDetail(mockedAnalogNotificationDetail()));
     } else {
       return apiClient.get<NotificationDetail>(NOTIFICATION_DETAIL(iun)).then((response) => {
         if (response.data && response.data.iun) {

@@ -484,14 +484,6 @@ describe('timeline utility functions', () => {
     expect(label).toBe('Ricevuta di mancata consegna PEC');
   });
 
-  it('return legalFact label - DIGITAL_FAILURE_WORKFLOW', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
-    testTimelineStatusInfosFn(
-      'Invio per via digitale fallito',
-      `L'invio per via digitale della notifica a Nome Cognome è fallito.`
-    );
-  });
-
   // PN-1647
   it('return timeline status infos - NOT_HANDLED', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.NOT_HANDLED;

@@ -303,6 +303,15 @@ export function getLegalFactLabel(
   );
   const receiptLabel = getLocalizedOrDefaultLabel('notifications', `detail.receipt`, 'Ricevuta');
   // TODO: localize in pn_ga branch
+
+  // To the moment the examples of legal facts associated to this
+  // kind of events have ANALOG_DELIVERY as legalFactType, but I'm not sure this is OK,
+  // I already asked to BE colleagues.
+  // Moreover, I found no documentation which indicates
+  // the legalFactType to expect for such events.
+  // Hence I keep the condition on the category only.
+  // -------------------------
+  // Carlos Lombardi, 2022.24.02
   if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
     if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.OK) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
@@ -318,6 +327,12 @@ export function getLegalFactLabel(
       )}`;
     }
     return receiptLabel;
+  // To the moment I could access to no example of a legal fact associated to this
+  // kind of events, neither to a documentation which indicates
+  // the legalFactType to expect for such events.
+  // Hence I keep the condition on the category only.
+  // -------------------------
+  // Carlos Lombardi, 2022.24.02
   } else if (timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
     return `${receiptLabel} ${getLocalizedOrDefaultLabel(
       'notifications',
@@ -339,7 +354,8 @@ export function getLegalFactLabel(
       )}`;
     } else if (
       (timelineStep.details as SendDigitalDetails).eventCode === 'C008' ||
-      (timelineStep.details as SendDigitalDetails).eventCode === 'C010'
+      (timelineStep.details as SendDigitalDetails).eventCode === 'C010' ||
+      (timelineStep.details as SendDigitalDetails).eventCode === 'DP10'
     ) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
         'notifications',
@@ -364,6 +380,8 @@ export function getLegalFactLabel(
         'di mancata consegna PEC'
       )}`;
     }
+  // this is (at least in the examples I've seen)
+  // related to the category REQUEST_ACCEPTED
   } else if (legalFactType === LegalFactType.SENDER_ACK) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
@@ -388,18 +406,28 @@ export function getLegalFactLabel(
       'detail.timeline.legalfact.digital-delivery-failure',
       'mancato recapito digitale'
     )}`;
-  } else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
-    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
-      'notifications',
-      'detail.timeline.legalfact.analog-delivery',
-      'conformità'
-    )}`;
+  // this is (at least in the examples I've seen)
+  // related to the category NOTIFICATION_VIEWED
   } else if (legalFactType === LegalFactType.RECIPIENT_ACCESS) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.recipient-access',
       'avvenuto accesso'
     )}`;
+
+    // this case is not needed, since the only legal fact arriving currently
+    // regards the event type SEND_ANALOG_FEEDBACK
+    // which is handled separately.
+    // I prefer to keep it commented out, since the situation is not completely clear.
+    // -------------------------
+    // Carlos Lombardi, 2022.24.02
+    // -------------------------
+  // } else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
+  //   return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+  //     'notifications',
+  //     'detail.timeline.legalfact.analog-delivery',
+  //     'conformità'
+  //   )}`;
   }
   return legalFactLabel;
 }
