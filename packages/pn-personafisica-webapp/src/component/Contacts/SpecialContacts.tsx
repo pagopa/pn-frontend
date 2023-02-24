@@ -322,21 +322,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
           <Grid container direction="row" spacing={2} alignItems="flex">
             <Grid item lg xs={12}>
-              {/*  <CustomDropdown
-                id="sender"
-                label={`${t('special-contacts.sender', { ns: 'recapiti' })}*`}
-                name="sender"
-                value={formik.values.sender}
-                onChange={senderChangeHandler}
-                fullWidth
-                size="small"
-              >
-                {parties.map((party) => (
-                  <MenuItem key={party.id} value={party.id}>
-                    <DropDownPartyMenuItem name={party.name} />
-                  </MenuItem>
-                ))}
-              </CustomDropdown> */}
               <Autocomplete
                 id="sender"
                 size="small"
