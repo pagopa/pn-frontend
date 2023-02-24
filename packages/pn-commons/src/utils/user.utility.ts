@@ -97,12 +97,12 @@ export function adaptedTokenExchangeError(originalError: any) {
           title: getLocalizedOrDefaultLabel(
             'common',
             `messages.451-title`,
-            'Piattaforma non operativa'
+            'Piattaforma non accessibile'
           ),
           message: getLocalizedOrDefaultLabel(
             'common',
             `messages.451-message`,
-            'La Piattaforma non è operativa.'
+            'Non è possibile accedere alla piattaforma'
           ),
         },
       },

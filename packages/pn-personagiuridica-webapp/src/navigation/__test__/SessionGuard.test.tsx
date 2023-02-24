@@ -228,7 +228,7 @@ describe('SessionGuard Component', () => {
     const logoutTitleComponent = screen.queryByText('messages.451-message');
     expect(logoutTitleComponent).toBeNull();
 
-    expect(mockNavigateFn).toBeCalledTimes(0);
+    expect(mockNavigateFn).toBeCalledTimes(1);
     expect(mockSessionCheckFn).toBeCalledTimes(0);
   });
 

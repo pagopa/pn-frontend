@@ -67,6 +67,11 @@
     "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
     "action": "Ricarica la pagina"
   },
+  "not-accessible": {
+    "title": "Non è possibile accedere alla piattaforma",
+    "description": "Riprova tra qualche ora. Se hai bisogno di assistenza",
+    "action": "scrivici"
+  },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
   "not-logged": "Accedi all'Area Riservata",
   "not-logged-subtitle": "Per usare Piattaforma Notifiche, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
@@ -89,8 +94,8 @@
     "403-message": "Entra e accedi con SPID o CIE.",
     "401-title": "Utente non autorizzato",
     "401-message": "L'utente corrente non ha le autorizzazioni",
-    "451-title": "Piattaforma non operativa",
-    "451-message": "La Piattaforma non è operativa.",
+    "451-title": "Piattaforma non accessibile",
+    "451-message": "Non è possibile accedere alla piattaforma",
     "500-title": "Il servizio non è disponibile",
     "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
     "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",

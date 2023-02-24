@@ -1,36 +1,46 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from '@mui/material';
+import { IllusError } from '@pagopa/mui-italia';
 
-import { getLocalizedOrDefaultLabel } from "../services/localization.service";
+import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
-const AppNotAccessible = () => {
-    return (
-        <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
-          <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
-            {/*<IllusError />*/}
-            <Typography variant="h4" color="text.primary" sx={{ margin: '20px 0 10px 0' }}>
-              {getLocalizedOrDefaultLabel(
-                'common',
-                'error-boundary.title',
-                'Qualcosa è andato storto'
-              )}
-            </Typography>
-            <Typography variant="body1" color="text.primary">
-              {getLocalizedOrDefaultLabel(
-                'common',
-                'error-boundary.description',
-                'Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.'
-              )}
-            </Typography>
-            <Button variant="contained" sx={{ marginTop: '30px' }}>
-              {getLocalizedOrDefaultLabel(
-                'common',
-                'error-boundary.action',
-                'Ricarica la pagina'
-              )}
-            </Button>
-          </Box>
-        </Box>
-      );
-}
+type Props = {
+  onAssistanceClick: () => void;
+};
+
+const AppNotAccessible: React.FC<Props> = ({ onAssistanceClick }) => {
+  return (
+    <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
+      <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
+        <IllusError />
+        <Typography variant="h4" color="text.primary" sx={{ margin: '20px 0 10px 0' }}>
+          {getLocalizedOrDefaultLabel(
+            'common',
+            'not-accessible.title',
+            'Non è possibile accedere alla piattaforma'
+          )}
+        </Typography>
+        <Typography variant="body1" color="text.primary" display="inline">
+          {getLocalizedOrDefaultLabel(
+            'common',
+            'not-accessible.description',
+            'Riprova tra qualche ora. Se hai bisogno di assistenza'
+          )}
+        </Typography>
+        &nbsp;
+        <Typography
+          variant="body1"
+          color="primary"
+          display="inline"
+          fontWeight="700"
+          sx={{ cursor: 'pointer', textDecoration: 'underline' }}
+          onClick={onAssistanceClick}
+          data-testid="assistance-button"
+        >
+          {`${getLocalizedOrDefaultLabel('common', 'not-accessible.action', 'scrivici')}.`}
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
 
 export default AppNotAccessible;
