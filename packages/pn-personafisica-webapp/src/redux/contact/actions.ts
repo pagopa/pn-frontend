@@ -12,7 +12,7 @@ import {
 import { Party } from '../../models/party';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
-export enum CONTACT_ACTIONS  {
+export enum CONTACT_ACTIONS {
   GET_DIGITAL_ADDRESSES = 'getDigitalAddresses',
   GET_ALL_ACTIVATED_PARTIES = 'getAllActivatedParties',
 }
@@ -91,7 +91,9 @@ export const enableIOAddress = createAsyncThunk<DigitalAddress | void, string>(
     try {
       return await ContactsApi.createOrUpdateCourtesyAddress(
         recipientId,
-        'default',
+        //perchè default?
+        // 'default',
+        [],
         CourtesyChannelType.IOMSG,
         { value: 'APPIO', verificationCode: '00000' }
       );
@@ -112,8 +114,7 @@ export const disableIOAddress = createAsyncThunk<string, string>(
   }
 );
 
-
-export const getAllActivatedParties = createAsyncThunk<Array<Party>,void>(
-  CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES, 
+export const getAllActivatedParties = createAsyncThunk<Array<Party>, void>(
+  CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES,
   performThunkAction(() => ExternalRegistriesAPI.getAllActivatedParties())
 );

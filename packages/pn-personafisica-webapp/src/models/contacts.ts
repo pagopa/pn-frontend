@@ -1,3 +1,5 @@
+import { SenderParty } from '../redux/contact/types';
+
 export enum LegalChannelType {
   PEC = 'PEC',
 }
@@ -16,7 +18,7 @@ export enum IOAllowedValues {
 export interface DigitalAddress {
   addressType: string;
   recipientId: string;
-  senderId: string;
+  senderId: Array<SenderParty> | string;
   channelType: LegalChannelType | CourtesyChannelType;
   value: string;
   code: string;

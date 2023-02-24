@@ -4,6 +4,7 @@ import {
   DigitalAddresses,
   LegalChannelType,
 } from '../../models/contacts';
+import { SenderParty } from '../../redux/contact/types';
 import { apiClient } from '../apiClients';
 import { CONTACTS_LIST, COURTESY_CONTACT, LEGAL_CONTACT } from './contacts.routes';
 
@@ -13,12 +14,11 @@ export const ContactsApi = {
    * @param  {string} recipientId
    * @returns Promise
    */
-  getDigitalAddresses: (): Promise<DigitalAddresses> => 
+  getDigitalAddresses: (): Promise<DigitalAddresses> =>
     apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => ({
-        legal: response.data.legal ? response.data.legal : [],
-        courtesy: response.data.courtesy ? response.data.courtesy : [],
-      })
-    ),
+      legal: response.data.legal ? response.data.legal : [],
+      courtesy: response.data.courtesy ? response.data.courtesy : [],
+    })),
 
   /**
    * Create or update a digital address with legal value
@@ -27,7 +27,7 @@ export const ContactsApi = {
    */
   createOrUpdateLegalAddress: (
     recipientId: string,
-    senderId: string,
+    senderId: Array<SenderParty>,
     channelType: LegalChannelType,
     body: { value: string; verificationCode?: string }
   ): Promise<void | DigitalAddress> =>
@@ -53,7 +53,7 @@ export const ContactsApi = {
    */
   createOrUpdateCourtesyAddress: (
     recipientId: string,
-    senderId: string,
+    senderId: Array<SenderParty>,
     channelType: CourtesyChannelType,
     body: { value: string; verificationCode?: string }
   ): Promise<void | DigitalAddress> =>
