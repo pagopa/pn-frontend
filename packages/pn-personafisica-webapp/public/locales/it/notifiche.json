@@ -121,21 +121,25 @@
       "send-digital-progress-success-description": "L'invio della notifica a {{name}} all'indirizzo PEC {{address}} è stato preso in carico.",
       "send-analog-progress": "Aggiornamento sull'invio cartaceo",
       "send-analog-progress-description": "C'è un aggiornamento sull'invio cartaceo.",
-      "send-analog-error": "Invio per via cartacea non riuscito",
-      "send-analog-error-description": "Il tentativo di invio della notifica per via cartacea a {{name}} non è riuscito.",
-      "send-analog-success": "Invio per via cartacea riuscito",
-      "send-analog-success-description": "Il tentativo di invio della notifica per via cartacea a {{name}} è riuscito.",
+      "send-analog-error": "Invio per via cartacea non andato a buon fine",
+      "send-analog-error-description": "Il tentativo di invio della notifica per via cartacea non è andato a buon fine.",
+      "send-analog-error-description-multirecipient": "Il tentativo di invio della notifica per via cartacea a {{name}} {{taxId}} non è andato a buon fine.",
+      "send-analog-success": "Invio per via cartacea andato a buon fine",
+      "send-analog-success-description": "Il tentativo di invio della notifica per via cartacea è andato a buon fine.",
+      "send-analog-success-description-multirecipient": "Il tentativo di invio della notifica per via cartacea a {{name}} {{taxId}} è andato a buon fine.",
       "aar-document": "Avviso di avvenuta ricezione",
       "legalfact": {
         "sender-ack": "notifica presa in carico",
         "digital-delivery-success": "notifica digitale",
         "digital-delivery-failure": "mancato recapito digitale",
-        "analog-delivery": "conformità",
         "recipient-access": "avvenuto accesso",
         "pec-receipt-accepted": "di accettazione PEC",
         "pec-receipt-not-accepted": "di mancata accettazione PEC",
         "pec-receipt-delivered": "di consegna PEC",
-        "pec-receipt-not-delivered": "di mancata consegna PEC"
+        "pec-receipt-not-delivered": "di mancata consegna PEC",
+        "paper-receipt-accepted": "di accettazione raccomandata",
+        "paper-receipt-delivered": "di consegna raccomandata",
+        "paper-receipt-not-delivered": "di mancata consegna raccomandata"
       }
     },
     "downtimes": {

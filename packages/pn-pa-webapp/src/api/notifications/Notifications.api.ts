@@ -640,25 +640,25 @@ function mockedAnalogNotificationDetail(): any {
                 "creditorTaxId": "77777777777"
             }
         },
-        // {
-        //   "recipientType": RecipientType.PF,
-        //   "taxId": "CLMCST42R12D969Z",
-        //   "internalId": "PF-a6c1350d-1d69-4209-8bf8-31de58c79d6e",
-        //   "denomination": "Mario Gherkin",
-        //   "digitalDomicile": {
-        //     "type": DigitalDomicileType.PEC,
-        //     "address": "testpagopa2@pnpagopa.postecert.local"
-        //   },
-        //   "physicalAddress": {
-        //     "at": "Presso",
-        //     "address": "Via senza nome",
-        //     "zip": "40100",
-        //     "municipality": "Milano",
-        //     "municipalityDetails": "Milano",
-        //     "province": "MI",
-        //     "foreignState": "ITALIA"
-        //   },
-        // },
+        {
+          "recipientType": RecipientType.PF,
+          "taxId": "CLMCST42R12D969Z",
+          "internalId": "PF-a6c1350d-1d69-4209-8bf8-31de58c79d6e",
+          "denomination": "Mario Gherkin",
+          "digitalDomicile": {
+            "type": DigitalDomicileType.PEC,
+            "address": "testpagopa2@pnpagopa.postecert.local"
+          },
+          "physicalAddress": {
+            "at": "Presso",
+            "address": "Via senza nome",
+            "zip": "40100",
+            "municipality": "Milano",
+            "municipalityDetails": "Milano",
+            "province": "MI",
+            "foreignState": "ITALIA"
+          },
+        },
       ],
     "documents": [
         {

@@ -8,12 +8,10 @@ export class SendAnalogFeedbackStep extends TimelineStep {
       return {
         ...this.localizeTimelineStatus(
           'send-analog-error',
-          false, 
+          payload.isMultiRecipient, 
           'Invio per via cartacea non riuscito',
           `Il tentativo di invio della notifica per via cartacea a ${payload.recipient?.denomination} non è riuscito.`,
-          {
-            name: payload.recipient?.denomination,
-          }
+          this.nameAndTaxId(payload),
         ),
         recipient: payload.recipientLabel,
       };
@@ -21,12 +19,10 @@ export class SendAnalogFeedbackStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'send-analog-success',
-        false, 
+        payload.isMultiRecipient, 
         'Invio per via cartacea riuscito',
         `Il tentativo di invio della notifica per via cartacea a ${payload.recipient?.denomination} è riuscito.`,
-        {
-          name: payload.recipient?.denomination,
-        }
+        this.nameAndTaxId(payload),
       ),
       recipient: payload.recipientLabel,
     };
