@@ -31,6 +31,10 @@ describe('New Notification', () => {
     beforeEach(() => {
       cy.logout();
       cy.loginWithTokenExchange();
+      cy.intercept(/TOS/, {
+        statusCode: 200,
+        fixture: 'tos/tos-accepted'
+      });
       cy.intercept(/groups/, { fixture: 'groups/no-groups' });
       cy.visit('/dashboard/nuova-notifica');
     });

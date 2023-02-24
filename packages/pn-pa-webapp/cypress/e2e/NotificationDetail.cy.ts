@@ -20,6 +20,11 @@ describe("Notification Detail", () => {
       fixture: 'notifications/list-10/page-1'
     }).as('notifications');
 
+    cy.intercept(/TOS/, {
+      statusCode: 200,
+      fixture: 'tos/tos-accepted'
+    });
+
     cy.logout();
     cy.loginWithTokenExchange();
     cy.visit('/dashboard');

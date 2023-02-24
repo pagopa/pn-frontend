@@ -79,8 +79,11 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     formik.handleChange(event);
+    await handleTouched(event.target.id, true);
+  };
 
-    await formik.setFieldTouched(event.target.id, true, false);
+  const handleTouched = async (id: string, touched: boolean) => {
+    await formik.setFieldTouched(id, touched, false);
   };
 
   const handleEditConfirm = async (status: 'validated' | 'cancelled') => {
@@ -180,6 +183,7 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           onConfirmClick={handleEditConfirm}
           blockDelete={blockDelete}
           resetModifyValue={() => handleEditConfirm('cancelled')}
+          onDeleteCbk={() => void handleTouched(type, false)}
         />
       </form>
     );
