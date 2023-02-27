@@ -152,36 +152,6 @@ export const notificationFromBe: NotificationDetail = {
       },
     },
     {
-      elementId: 'c_b429-202203021814_send_pec_result_rec0_SPECIAL_n1',
-      timestamp: '2022-03-02T17:57:03.284Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-      details: {
-        digitalAddress: {
-          type: DigitalDomicileType.PEC,
-          address: 'nome.cognome@works.demo.it',
-        },
-        digitalAddressSource: AddressSource.GENERAL,
-        retryNumber: 1,
-        downstreamId: {
-          systemId: '',
-          messageId: '',
-        },
-        errors: ['OK'],
-      },
-    },
-    {
-      elementId: 'c_b429-202203021814_send_courtesy_rec0',
-      timestamp: '2022-03-02T17:57:06.819Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-      details: {},
-      legalFactsIds: [
-        {
-          key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
-          category: LegalFactType.DIGITAL_DELIVERY,
-        },
-      ],
-    },
-    {
       elementId: 'c_b429-202203021814_recipient_timeout_rec0',
       timestamp: '2022-03-02T17:59:10.029Z',
       category: TimelineCategory.REFINEMENT,
@@ -366,36 +336,6 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
           messageId: '',
         },
       },
-    },
-    {
-      elementId: 'c_b429-202203021814_send_pec_result_rec0_SPECIAL_n1',
-      timestamp: '2022-03-02T17:57:03.284Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-      details: {
-        digitalAddress: {
-          type: DigitalDomicileType.PEC,
-          address: 'nome.cognome@works.demo.it',
-        },
-        digitalAddressSource: AddressSource.GENERAL,
-        retryNumber: 1,
-        downstreamId: {
-          systemId: '',
-          messageId: '',
-        },
-        errors: ['OK'],
-      },
-    },
-    {
-      elementId: 'c_b429-202203021814_send_courtesy_rec0',
-      timestamp: '2022-03-02T17:57:06.819Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-      details: {},
-      legalFactsIds: [
-        {
-          key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
-          category: LegalFactType.DIGITAL_DELIVERY,
-        },
-      ],
     },
     {
       elementId: 'c_b429-202203021814_recipient_timeout_rec0',

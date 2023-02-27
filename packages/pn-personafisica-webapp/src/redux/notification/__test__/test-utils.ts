@@ -149,7 +149,7 @@ const timeline: Array<INotificationDetailTimeline> = [
   {
     elementId: 'c_b429-202203021814_send_pec_result_rec0_SPECIAL_n1',
     timestamp: '2022-03-02T17:57:03.284Z',
-    category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
+    category: TimelineCategory.NOTIFICATION_VIEWED,
     legalFactsIds: [
       {
         key: 'sender_ack-toto1',
@@ -173,7 +173,7 @@ const timeline: Array<INotificationDetailTimeline> = [
   {
     elementId: 'c_b429-202203021814_send_courtesy_rec0',
     timestamp: '2022-03-02T17:57:06.819Z',
-    category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
+    category: TimelineCategory.NOTIFICATION_VIEWED,
     details: {
       recIndex: 0,
     },
@@ -238,7 +238,7 @@ const notificationFromBeTwoRecipients: NotificationDetail = {
   timeline: [...notificationFromBe.timeline, {
     elementId: 'c_b429-202203021814_send_courtesy_rec1',
     timestamp: '2022-03-02T17:57:06.819Z',
-    category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
+    category: TimelineCategory.NOTIFICATION_VIEWED,
     details: {
       recIndex: 1,
     },
