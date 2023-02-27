@@ -73,7 +73,7 @@ const recipients: Array<NotificationDetailRecipient> = [
   },
 ];
 
-const additionalRecipient = {
+const additionalRecipient: NotificationDetailRecipient = {
   recipientType: RecipientType.PF,
   taxId: 'mocked-taxId2',
   denomination: 'Nome2 Cognome2',
@@ -145,6 +145,42 @@ export const parsedNotification: NotificationDetail = {
     { ...statusHistory[1], steps: [{...timeline[1], hidden: false}] },
   ],
   timeline: timeline.map(t => ({...t, hidden: false})),
+  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
+  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+};
+
+const timelineTwoRecipients = [timeline[0], {
+  elementId: 'mocked-id-3',
+  timestamp: '2022-03-21T08:56:50.177Z',
+  category: TimelineCategory.SEND_DIGITAL_DOMICILE,
+  details: {
+    recIndex: 1,
+    digitalAddress: {
+      address: 'toto86@gmail.com',
+      type: DigitalDomicileType.PEC
+    }
+  } as SendDigitalDetails,
+}, timeline[1]];
+
+export const parsedNotificationTwoRecipients: NotificationDetail = {
+  iun: 'KQKX-WMDW-GDMU-202301-L-1',
+  paProtocolNumber: '',
+  senderPaId: '',
+  subject: '',
+  sentAt: '21/02/2022',
+  cancelledByIun: '',
+  recipients: [...recipients, additionalRecipient],
+  documentsAvailable: true,
+  documents: [],
+  otherDocuments: [],
+  notificationStatus: NotificationStatus.ACCEPTED,
+  notificationStatusHistory: [
+    { ...statusHistory[0], steps: [
+      {...timelineTwoRecipients[0], hidden: false}, {...timelineTwoRecipients[1], hidden: false}
+    ] },
+    { ...statusHistory[1], steps: [{...timelineTwoRecipients[2], hidden: false}] },
+  ],
+  timeline: timelineTwoRecipients.map(t => ({...t, hidden: false})),
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };

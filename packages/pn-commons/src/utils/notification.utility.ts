@@ -441,12 +441,10 @@ export function getNotificationTimelineStatusInfos(
   recipients: Array<NotificationDetailRecipient>
 ): TimelineStepInfo | null {
   const recipient = !_.isNil(step.details.recIndex) ? recipients[step.details.recIndex] : undefined;
-  const recipientLabel = `${recipient?.taxId} - ${recipient?.denomination}`;
 
   return TimelineStepFactory.createTimelineStep(step).getTimelineStepInfo({
     step,
     recipient,
-    recipientLabel,
     isMultiRecipient: recipients.length > 1
   });
 }

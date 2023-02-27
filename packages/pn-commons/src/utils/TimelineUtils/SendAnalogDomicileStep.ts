@@ -34,7 +34,6 @@ export class SendAnalogDomicileStep extends TimelineStep {
             ...this.completePhysicalAddress(payload),
           }
         ),
-        recipient: payload.recipientLabel,
       };
     }
     return {
@@ -50,7 +49,6 @@ export class SendAnalogDomicileStep extends TimelineStep {
           ...this.completePhysicalAddress(payload),
         }
       ),
-      recipient: payload.recipientLabel,
     };
   }
 }

@@ -16,7 +16,6 @@ export class SendSimpleRegisteredLetterStep extends TimelineStep {
           ...this.completePhysicalAddress(payload),
         }
       ),
-      recipient: payload.recipientLabel,
     };
   }
 }

@@ -145,7 +145,7 @@ interface ScheduleDigitalWorkflowDetails extends BaseDetails, DigitalAddress {
 }
 
 export interface SendCourtesyMessageDetails extends BaseDetails {
-  digitalAddress: DigitalAddress;
+  digitalAddress: DigitalAddressForCourtesyMessage;
   sendDate: string;
 }
 
@@ -303,6 +303,11 @@ interface DigitalAddress {
   address: string;
 }
 
+interface DigitalAddressForCourtesyMessage {
+  type: DigitalDomicileTypeForCourtesyMessage;
+  address: string;
+}
+
 interface PhysicalAddress {
   at?: string;
   address: string;
@@ -319,6 +324,12 @@ export enum DigitalDomicileType {
   EMAIL = 'EMAIL',
   APPIO = 'APPIO', // PN-2068
 }
+
+export enum DigitalDomicileTypeForCourtesyMessageOnly {
+  SMS = 'SMS',
+}
+
+export type DigitalDomicileTypeForCourtesyMessage = DigitalDomicileType | DigitalDomicileTypeForCourtesyMessageOnly;
 
 export enum RecipientType {
   PF = 'PF',
