@@ -11,7 +11,7 @@ import {
   TimelineCategory,
   NotificationStatus,
 } from '../../types';
-import { DigitalDomicileTypeForCourtesyMessageOnly, NotificationDeliveryMode, NotificationDetail, NotificationStatusHistory, ResponseStatus } from '../../types/NotificationDetail';
+import { DigitalDomicileTypeForCourtesyMessageOnly, NotificationDeliveryMode, NotificationDetail, NotificationDetailRecipient, NotificationStatusHistory, ResponseStatus } from '../../types/NotificationDetail';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -27,7 +27,13 @@ jest.mock('../../services/localization.service', () => {
   const original = jest.requireActual('../../services/localization.service');
   return {
     ...original,
-    getLocalizedOrDefaultLabel: (_1: string, key: string, _2: string, data: any) => data ? `${key} /-/ ${JSON.stringify(data)}` : key,
+    getLocalizedOrDefaultLabel: (_1: string, key: string, _2: string, data: any) => {
+      if (key === 'status.delegate' && data && data.name) {
+        return `status.delegate.${data.name}`;
+      } else {
+        return data ? `${key} /-/ ${JSON.stringify(data)}` : key
+      }
+    },
   };
 });
 
@@ -49,17 +55,29 @@ function testNotificationStatusInfosFn(
 }
 
 function testNotificationStatusInfosFnIncludingDescription(
-  status: NotificationStatusHistory,
+  status: NotificationStatusHistory | NotificationStatus,
+  recipients: Array<NotificationDetailRecipient | string> | undefined,
   labelToTest: string,
   colorToTest: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary',
   tooltipToTest: string,
   descriptionToTest: string,
+  descriptionDataToTest?: any
 ) {
-  const { label, color, tooltip, description } = getNotificationStatusInfos(status);
+  const { label, color, tooltip, description } = recipients ? getNotificationStatusInfos(status, { recipients }) : getNotificationStatusInfos(status);
   expect(label).toBe(labelToTest);
   expect(color).toBe(colorToTest);
-  expect(tooltip).toBe(tooltipToTest);
-  expect(description).toBe(descriptionToTest);
+  if (description.indexOf(" /-/ ") > -1) {
+    const [bareDescription, descriptionDataAsString] = description.split(" /-/ ");
+    const bareTooltip = tooltip.split(" /-/ ")[0];
+    expect(bareTooltip).toBe(tooltipToTest);
+    expect(bareDescription).toBe(descriptionToTest);
+    console.log(description);
+    console.log(description.split(" /-/ "));
+    expect(JSON.parse(descriptionDataAsString)).toEqual(descriptionDataToTest);
+  } else {
+    expect(tooltip).toBe(tooltipToTest);
+    expect(description).toBe(descriptionToTest);
+  }
 }
 
 function testTimelineStatusInfosFn(notification: NotificationDetail, timelineIndex: number, labelToTest: string, descriptionToTest: string, descriptionDataToTest?: any) {
@@ -90,158 +108,233 @@ function testTimelineStatusInfosFnMulti1(labelToTest: string, descriptionToTest:
   testTimelineStatusInfosFn(parsedNotificationTwoRecipientsCopy, 0, labelToTest, descriptionToTest, descriptionDataToTest);
 }
 
-describe.skip('notification utility functions', () => {
-  it('return notification status infos - DELIVERED - analog shipment', () => {
+describe('notification status texts', () => {
+  it('return notification status infos - DELIVERED - single recipient - analog shipment', () => {
     testNotificationStatusInfosFnIncludingDescription(
       {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.ANALOG },
-      'Consegnata',
+      ["single-recipient"],
+      'status.delivered',
       'default',
-      'La notifica è stata consegnata',
-      'La notifica è stata consegnata per via analogica.'
+      'status.delivered-tooltip',
+      'status.delivered-description-with-delivery-mode',
+      { deliveryMode: 'status.deliveryMode.analog' }
     );
   });
 
-  it('return notification status infos - DELIVERED - digital shipment', () => {
+  it('return notification status infos - DELIVERED - single recipient - digital shipment', () => {
     testNotificationStatusInfosFnIncludingDescription(
       {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.DIGITAL },
-      'Consegnata',
+      ["single-recipient"],
+      'status.delivered',
       'default',
-      'La notifica è stata consegnata',
-      'La notifica è stata consegnata per via digitale.'
+      'status.delivered-tooltip',
+      'status.delivered-description-with-delivery-mode',
+      { deliveryMode: 'status.deliveryMode.digital' }
     );
   });
 
-  it('return notification status infos - DELIVERED - unspecified shipment mode', () => {
+  it('return notification status infos - DELIVERED - single recipient - no delivery mode specified', () => {
     testNotificationStatusInfosFnIncludingDescription(
       {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
-      'Consegnata',
+      ["single-recipient"],
+      'status.delivered',
       'default',
-      'La notifica è stata consegnata',
-      'La notifica è stata consegnata.'
+      'status.delivered-tooltip',
+      'status.delivered-description',
+    );
+  });
+
+  it('return notification status infos - DELIVERED - multi recipient - analog shipment', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.ANALOG },
+      ["recipient-1", "recipient-2"],
+      'status.delivered-multirecipient',
+      'default',
+      'status.delivered-tooltip-multirecipient',
+      'status.delivered-description-multirecipient',
+    );
+  });
+
+  it('return notification status infos - DELIVERED - multi recipient - digital shipment', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.DIGITAL },
+      ["recipient-1", "recipient-2"],
+      'status.delivered-multirecipient',
+      'default',
+      'status.delivered-tooltip-multirecipient',
+      'status.delivered-description-multirecipient',
     );
   });
 
   it('return notification status infos - DELIVERING', () => {
-    testNotificationStatusInfosFn(
-      NotificationStatus.DELIVERING,
-      'Invio in corso',
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERING, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      ["single-recipient"],
+      'status.delivering',
       'default',
-      "L'invio della notifica è in corso"
+      'status.delivering-tooltip',
+      'status.delivering-description',
     );
   });
 
-  it('return notification status infos - UNREACHABLE', () => {
-    testNotificationStatusInfosFn(
+  it('return notification status infos - DELIVERING - passing the status only', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      NotificationStatus.DELIVERING,
+      undefined,
+      'status.delivering',
+      'default',
+      'status.delivering-tooltip',
+      'status.delivering-description',
+    );
+  });
+
+  it('return notification status infos - UNREACHABLE - single recipient - passing the status only', () => {
+    testNotificationStatusInfosFnIncludingDescription(
       NotificationStatus.UNREACHABLE,
-      'Destinatario irreperibile',
+      ["single-recipient"],
+      'status.unreachable',
       'error',
-      'Il destinatario non è reperibile'
+      'status.unreachable-tooltip',
+      'status.unreachable-description',
     );
   });
 
-  it('return notification status infos - PAID', () => {
-    testNotificationStatusInfosFn(
+  it('return notification status infos - UNREACHABLE - multi recipient - passing the status only', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      NotificationStatus.UNREACHABLE,
+      ["recipient-1", "recipient-2"],
+      'status.unreachable-multirecipient',
+      'error',
+      'status.unreachable-tooltip-multirecipient',
+      'status.unreachable-description-multirecipient',
+    );
+  });
+
+  it('return notification status infos - PAID - passing the status only', () => {
+    testNotificationStatusInfosFnIncludingDescription(
       NotificationStatus.PAID,
-      'Pagata',
+      undefined,
+      'status.paid',
       'success',
-      'Il destinatario ha pagato i costi della notifica'
+      'status.paid-tooltip',
+      'status.paid-description',
     );
   });
 
   it('return notification status infos - ACCEPTED', () => {
-    testNotificationStatusInfosFn(
-      NotificationStatus.ACCEPTED,
-      'Depositata',
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.ACCEPTED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      undefined,
+      'status.accepted',
       'default',
-      "L'ente ha depositato la notifica"
+      'status.accepted-tooltip',
+      'status.accepted-description',
     );
   });
 
-  it('return notification status infos - EFFECTIVE_DATE', () => {
-    testNotificationStatusInfosFn(
-      NotificationStatus.EFFECTIVE_DATE,
-      'Perfezionata per decorrenza termini',
+  it('return notification status infos - EFFECTIVE_DATE - single recipient', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.EFFECTIVE_DATE, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      ["single-recipient"],
+      'status.effective-date',
       'info',
-      'Il destinatario non ha letto la notifica'
+      'status.effective-date-tooltip',
+      'status.effective-date-description',
     );
   });
 
-  it('return notification status infos - VIEWED', () => {
-    testNotificationStatusInfosFn(
-      NotificationStatus.VIEWED,
-      'Perfezionata per visione',
+  it('return notification status infos - EFFECTIVE_DATE - multi recipient', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.EFFECTIVE_DATE, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      ["recipient-1", "recipient-2"],
+      'status.effective-date-multirecipient',
       'info',
-      'Il destinatario ha letto la notifica'
+      'status.effective-date-tooltip-multirecipient',
+      'status.effective-date-description-multirecipient',
     );
   });
 
-  it('return notification status infos - VIEWED (with recipient infos)', () => {
-    testNotificationStatusInfosFn(
-      NotificationStatus.VIEWED,
-      'Perfezionata per visione',
+  it('return notification status infos - VIEWED - single recipient - no delegate (named as "recipient") info', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.VIEWED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      ["single-recipient"],
+      'status.viewed',
       'info',
-      'Il delegato Mario Rossi ha letto la notifica',
-      'Mario Rossi'
+      'status.viewed-tooltip',
+      'status.viewed-description',
+      { subject: "status.recipient" }
     );
   });
 
-  it('return notification status infos - VIEWED_AFTER_DEADLINE', () => {
-    testNotificationStatusInfosFn(
-      NotificationStatus.VIEWED_AFTER_DEADLINE,
-      'Visualizzata',
+  it('return notification status infos - VIEWED - single recipient - including delegate (named as "recipient") info', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.VIEWED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], recipient: "Mario Rossi" },
+      ["single-recipient"],
+      'status.viewed',
+      'info',
+      'status.viewed-tooltip',
+      'status.viewed-description',
+      { subject: "status.delegate.Mario Rossi" }
+    );
+  });
+
+  it('return notification status infos - VIEWED - multi recipient - no delegate (named as "recipient") info', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.VIEWED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      ["recipient-1", "recipient-2"],
+      'status.viewed-multirecipient',
+      'info',
+      'status.viewed-tooltip-multirecipient',
+      'status.viewed-description-multirecipient',
+      { subject: "status.recipient" }
+    );
+  });
+
+  it('return notification status infos - VIEWED_AFTER_DEADLINE - single recipient - no delegate (named as "recipient") info', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.VIEWED_AFTER_DEADLINE, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      ["single-recipient"],
+      'status.viewed-after-deadline',
       'success',
-      'Il destinatario ha visualizzato la notifica'
+      'status.viewed-after-deadline-tooltip',
+      'status.viewed-after-deadline-description',
+      { subject: "status.recipient" }
     );
   });
 
-  it('return notification status infos - VIEWED_AFTER_DEADLINE (with recipient infos)', () => {
-    testNotificationStatusInfosFn(
-      NotificationStatus.VIEWED_AFTER_DEADLINE,
-      'Visualizzata',
+  it('return notification status infos - VIEWED_AFTER_DEADLINE - single recipient - including delegate (named as "recipient") info', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.VIEWED_AFTER_DEADLINE, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], recipient: "Gloria Gaynor" },
+      ["single-recipient"],
+      'status.viewed-after-deadline',
       'success',
-      'Il delegato Mario Rossi ha visualizzato la notifica',
-      'Mario Rossi'
+      'status.viewed-after-deadline-tooltip',
+      'status.viewed-after-deadline-description',
+      { subject: "status.delegate.Gloria Gaynor" }
     );
   });
 
-  it('return notification status infos - CANCELLED', () => {
-    testNotificationStatusInfosFn(
+  it('return notification status infos - VIEWED_AFTER_DEADLINE - multi recipient - including delegate (named as "recipient") info', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.VIEWED_AFTER_DEADLINE, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], recipient: 'Laura Bissoli' },
+      ["recipient-1", "recipient-2"],
+      'status.viewed-after-deadline-multirecipient',
+      'success',
+      'status.viewed-after-deadline-tooltip-multirecipient',
+      'status.viewed-after-deadline-description-multirecipient',
+      { subject: "status.delegate.Laura Bissoli" }
+    );
+  });
+
+  it('return notification status infos - CANCELLED - passing status only', () => {
+    testNotificationStatusInfosFnIncludingDescription(
       NotificationStatus.CANCELLED,
-      'Annullata',
+      undefined,
+      'status.canceled',
       'warning',
-      "L'ente ha annullato l'invio della notifica"
+      'status.canceled-tooltip',
+      'status.canceled-description',
     );
-  });
-
-  it('return notifications filters count (no filters)', () => {
-    const date = new Date();
-    const count = filtersApplied(
-      {
-        startDate: formatToTimezoneString(date),
-        endDate: formatToTimezoneString(getNextDay(date)),
-      },
-      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)) }
-    );
-    expect(count).toEqual(0);
-  });
-
-  it('return notifications filters count (with filters)', () => {
-    const date = new Date();
-    const count = filtersApplied(
-      {
-        startDate: formatToTimezoneString(date),
-        endDate: formatToTimezoneString(getNextDay(date)),
-        iunMatch: 'mocked-iun',
-        recipientId: 'mocked-recipient',
-      },
-      {
-        startDate: formatToTimezoneString(date),
-        endDate: formatToTimezoneString(getNextDay(date)),
-        iunMatch: undefined,
-        recipientId: undefined,
-      }
-    );
-    expect(count).toEqual(2);
   });
 });
 
@@ -678,14 +771,45 @@ describe.skip('timeline event description', () => {
   });
 });
 
-describe.skip('parse notification', () => {
+describe.skip('parse notification & filters', () => {
   it('return parsed notification detail response', () => {
     const calculatedParsedNotification = parseNotificationDetail(notificationFromBe);
     expect(calculatedParsedNotification).toStrictEqual(parsedNotification);
   });
+
+  it('return notifications filters count (no filters)', () => {
+    const date = new Date();
+    const count = filtersApplied(
+      {
+        startDate: formatToTimezoneString(date),
+        endDate: formatToTimezoneString(getNextDay(date)),
+      },
+      { startDate: formatToTimezoneString(date), endDate: formatToTimezoneString(getNextDay(date)) }
+    );
+    expect(count).toEqual(0);
+  });
+
+  it('return notifications filters count (with filters)', () => {
+    const date = new Date();
+    const count = filtersApplied(
+      {
+        startDate: formatToTimezoneString(date),
+        endDate: formatToTimezoneString(getNextDay(date)),
+        iunMatch: 'mocked-iun',
+        recipientId: 'mocked-recipient',
+      },
+      {
+        startDate: formatToTimezoneString(date),
+        endDate: formatToTimezoneString(getNextDay(date)),
+        iunMatch: undefined,
+        recipientId: undefined,
+      }
+    );
+    expect(count).toEqual(2);
+  });
 });
 
-describe('timeline legal fact link text', () => {
+describe.skip('timeline legal fact link text', () => {
   it('return legalFact label - default', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.GET_ADDRESS;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);

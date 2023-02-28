@@ -46,6 +46,11 @@ function localizeStatus(
   description: string;
 } {
   const isMultiRecipient = data && data.isMultiRecipient;
+  // eslint-disable-next-line functional/no-let
+  let filteredData: any = _.omit(data, ["isMultiRecipient"]);
+  if (Object.keys(filteredData).length === 0) {
+    filteredData = undefined;
+  }
 
   return {
     label: getLocalizedOrDefaultLabel(
@@ -57,13 +62,13 @@ function localizeStatus(
       'notifications',
       `status.${status}-tooltip${isMultiRecipient ? '-multirecipient' : ''}`,
       defaultTooltip,
-      data
+      filteredData
     ),
     description: getLocalizedOrDefaultLabel(
       'notifications',
       `status.${status}-description${isMultiRecipient ? '-multirecipient' : ''}`,
       defaultDescription,
-      data
+      filteredData
     ),
   };
 }
