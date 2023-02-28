@@ -99,7 +99,9 @@ const SessionGuard = () => {
   const { sessionToken, desired_exp: expDate } = useAppSelector(
     (state: RootState) => state.userState.user
   );
-  const { isClosedSession } = useAppSelector((state: RootState) => state.userState);
+  const { isClosedSession, isForbiddenUser } = useAppSelector(
+    (state: RootState) => state.userState
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const sessionCheck = useSessionCheck(200, () => dispatch(logout()));
@@ -152,7 +154,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     const doInitalPageDetermination = async () => {
-      if (sessionToken && !isClosedSession && !hasTosApiErrors) {
+      if (sessionToken && !isClosedSession && !hasTosApiErrors && !isForbiddenUser) {
         const rootPath = location.pathname === '/';
         if (rootPath) {
           // ----------------------
@@ -182,6 +184,14 @@ const SessionGuard = () => {
             { replace: true }
           );
         }
+      } else if (isForbiddenUser) {
+        // ----------------------
+        // I'm not sure about this management of the redirects
+        // Momentarily I have added the isForbiddenUser variable that is true if login returns 451 error code
+        // ----------------------
+        // Andrea Cimini, 2023.02.24
+        // ----------------------
+        navigate({ pathname: routes.NOT_ACCESSIBLE }, { replace: true });
       }
     };
     void performStep(INITIALIZATION_STEPS.INITIAL_PAGE_DETERMINATION, doInitalPageDetermination);
@@ -192,7 +202,7 @@ const SessionGuard = () => {
    */
   useEffect(() => {
     void performStep(INITIALIZATION_STEPS.SESSION_CHECK, () => {
-      if (sessionToken && !isClosedSession && !hasTosApiErrors) {
+      if (sessionToken && !isClosedSession && !hasTosApiErrors && !isForbiddenUser) {
         sessionCheck(expDate);
       }
     });
