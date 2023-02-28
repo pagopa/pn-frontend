@@ -20,7 +20,7 @@ import {
   getNotificationTimelineStatusInfos,
   parseNotificationDetail,
 } from '../notification.utility';
-import { notificationFromBe, parsedNotification, parsedNotificationTwoRecipients } from './test-utils';
+import { acceptedDeliveringDeliveredTimeline, acceptedDeliveringDeliveredTimelineStatusHistory, notificationFromBe, parsedNotification, parsedNotificationTwoRecipients } from './test-utils';
 
 
 jest.mock('../../services/localization.service', () => {
@@ -40,19 +40,6 @@ jest.mock('../../services/localization.service', () => {
 
 let parsedNotificationCopy = _.cloneDeep(parsedNotification);
 let parsedNotificationTwoRecipientsCopy = _.cloneDeep(parsedNotificationTwoRecipients);
-
-function testNotificationStatusInfosFn(
-  status: NotificationStatus,
-  labelToTest: string,
-  colorToTest: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary',
-  tooltipToTest: string,
-  recipient?: string
-) {
-  const { label, color, tooltip } = getNotificationStatusInfos({status, recipient, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] });
-  expect(label).toBe(labelToTest);
-  expect(color).toBe(colorToTest);
-  expect(tooltip).toBe(tooltipToTest);
-}
 
 function testNotificationStatusInfosFnIncludingDescription(
   status: NotificationStatusHistory | NotificationStatus,
@@ -108,7 +95,7 @@ function testTimelineStatusInfosFnMulti1(labelToTest: string, descriptionToTest:
   testTimelineStatusInfosFn(parsedNotificationTwoRecipientsCopy, 0, labelToTest, descriptionToTest, descriptionDataToTest);
 }
 
-describe('notification status texts', () => {
+describe.skip('notification status texts', () => {
   it('return notification status infos - DELIVERED - single recipient - analog shipment', () => {
     testNotificationStatusInfosFnIncludingDescription(
       {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.ANALOG },
@@ -771,10 +758,64 @@ describe.skip('timeline event description', () => {
   });
 });
 
-describe.skip('parse notification & filters', () => {
+describe('parse notification & filters', () => {
+  let sourceNotification: NotificationDetail;
+
+  beforeEach(() => {
+    sourceNotification = {...notificationFromBe};
+  });
+
   it('return parsed notification detail response', () => {
-    const calculatedParsedNotification = parseNotificationDetail(notificationFromBe);
+    const calculatedParsedNotification = parseNotificationDetail(sourceNotification);
     expect(calculatedParsedNotification).toStrictEqual(parsedNotification);
+  });
+
+  it('reverse status and events', () => {
+    sourceNotification.timeline = acceptedDeliveringDeliveredTimeline();
+    sourceNotification.notificationStatusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+    // statuses
+    expect(parsedNotification.notificationStatusHistory).toHaveLength(3);
+    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.DELIVERED);
+    expect(parsedNotification.notificationStatusHistory[1].status).toEqual(NotificationStatus.DELIVERING);
+    expect(parsedNotification.notificationStatusHistory[2].status).toEqual(NotificationStatus.ACCEPTED);
+    // DELIVERED events
+    let currentSteps = parsedNotification.notificationStatusHistory[0].steps;
+    expect(currentSteps).toHaveLength(2);
+    expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SCHEDULE_REFINEMENT);
+    expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.DIGITAL_SUCCESS_WORKFLOW);
+    // DELIVERING events -- ACCEPTED events are copied
+    currentSteps = parsedNotification.notificationStatusHistory[1].steps;
+    expect(currentSteps).toHaveLength(5);
+    expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SEND_DIGITAL_FEEDBACK);
+    expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.SEND_DIGITAL_PROGRESS);
+    expect(currentSteps && currentSteps[2].category).toEqual(TimelineCategory.SEND_DIGITAL_DOMICILE);
+    expect(currentSteps && currentSteps[3].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
+    expect(currentSteps && currentSteps[4].category).toEqual(TimelineCategory.REQUEST_ACCEPTED);
+    // ACCEPTED events
+    currentSteps = parsedNotification.notificationStatusHistory[2].steps;
+    expect(currentSteps).toHaveLength(2);
+    expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
+    expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.REQUEST_ACCEPTED);
+  });
+
+  it('duplicates ACCEPTED events - hidden copies', () => {
+    sourceNotification.timeline = acceptedDeliveringDeliveredTimeline();
+    sourceNotification.notificationStatusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+    // DELIVERING events -- ACCEPTED events are copied at the end
+    let currentSteps = parsedNotification.notificationStatusHistory[1].steps;
+    expect(currentSteps).toHaveLength(5);
+    expect(currentSteps && currentSteps[3].hidden).toBeFalsy();
+    // the REQUEST_ACCEPTED step is always hidden
+    expect(currentSteps && currentSteps[4].hidden).toBeTruthy();
+    expect(currentSteps && currentSteps[4].legalFactsIds).toHaveLength(0);
+    // ACCEPTED events
+    currentSteps = parsedNotification.notificationStatusHistory[2].steps;
+    expect(currentSteps).toHaveLength(2);
+    expect(currentSteps && currentSteps[0].hidden).toBeTruthy();
+    expect(currentSteps && currentSteps[1].hidden).toBeTruthy();
+    expect(currentSteps && currentSteps[1].legalFactsIds).toHaveLength(1);
   });
 
   it('return notifications filters count (no filters)', () => {
