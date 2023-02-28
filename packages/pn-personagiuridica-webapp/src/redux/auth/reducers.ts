@@ -18,7 +18,7 @@ const roleMatcher = yup.object({
 const organizationMatcher = yup.object({
   id: yup.string(),
   roles: yup.array().of(roleMatcher),
-  fiscal_code: yup.string().matches(dataRegex.pIva),
+  fiscal_code: yup.string().matches(dataRegex.pIvaAndFiscalCode),
   groups: yup.array().of(yup.string()),
   name: yup.string(),
 });

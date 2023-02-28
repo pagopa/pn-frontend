@@ -7,12 +7,13 @@ export class SendDigitalFeedbackStep extends TimelineStep {
       return {
         ...this.localizeTimelineStatus(
           'send-digital-error',
+          payload.isMultiRecipient, 
           'Invio via PEC non riuscito',
           `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
             (payload.step.details as SendDigitalDetails).digitalAddress?.address
           } non è riuscito perché la casella è satura, non valida o inattiva.`,
           {
-            name: payload.recipient?.denomination,
+            ...this.nameAndTaxId(payload),
             address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
           }
         ),
@@ -22,12 +23,13 @@ export class SendDigitalFeedbackStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'send-digital-success',
+        payload.isMultiRecipient, 
         'Invio via PEC riuscito',
         `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo PEC ${
           (payload.step.details as SendDigitalDetails).digitalAddress?.address
         } è riuscito.`,
         {
-          name: payload.recipient?.denomination,
+          ...this.nameAndTaxId(payload),
           address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
         }
     ),
