@@ -1,4 +1,3 @@
-import { SendPaperDetails } from '../../types';
 import { TimelineStep, TimelineStepInfo, TimelineStepPayload } from './TimelineStep';
 
 export class SendAnalogProgressStep extends TimelineStep {
@@ -6,14 +5,9 @@ export class SendAnalogProgressStep extends TimelineStep {
     return {
       ...this.localizeTimelineStatus(
         'send-analog-progress',
-        'Invio via raccomandata preso in carico',
-        `L'invio della notifica a ${payload.recipient?.denomination} all'indirizzo ${
-          (payload.step.details as SendPaperDetails).physicalAddress.address
-        } è stato preso in carico.`,
-        {
-          name: payload.recipient?.denomination,
-          address: (payload.step.details as SendPaperDetails).physicalAddress.address,
-        }
+        payload.isMultiRecipient, 
+        `Aggiornamento sull'invio cartaceo`,
+        `C'è un aggiornamento sull'invio cartaceo.`,
       ),
       recipient: payload.recipientLabel,
     };
