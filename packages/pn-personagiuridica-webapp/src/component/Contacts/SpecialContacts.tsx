@@ -1,12 +1,4 @@
-import {
-  ChangeEvent,
-  Fragment,
-  SyntheticEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -224,7 +216,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const senderChangeHandler = async (e: SyntheticEvent<Element, Event>, newValue: Party | null) => {
+  const senderChangeHandler = async (e: any, newValue: any) => {
     await formik.setFieldValue('sender', newValue);
     formik.handleChange(e);
     if (formik.values.addressType === LegalChannelType.PEC) {
