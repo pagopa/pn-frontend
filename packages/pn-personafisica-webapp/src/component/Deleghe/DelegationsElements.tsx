@@ -106,17 +106,14 @@ export const OrganizationsList = (props: {
               listStyle: 'square',
             }}
           >
-            {props.organizations.map((organization) => {
-              console.log('organization :>> ', organization);
-              return (
-                <ListItem
-                  key={organization}
-                  sx={{ display: 'revert', paddingLeft: 0, marginLeft: 3, fontWeight: '500' }}
-                >
-                  <Typography variant={props.textVariant || 'inherit'}>{organization}</Typography>
-                </ListItem>
-              );
-            })}
+            {props.organizations.map((organization) => (
+              <ListItem
+                key={organization}
+                sx={{ display: 'revert', paddingLeft: 0, marginLeft: 3, fontWeight: '500' }}
+              >
+                <Typography variant={props.textVariant || 'inherit'}>{organization}</Typography>
+              </ListItem>
+            ))}
           </List>
         </Box>
       )}

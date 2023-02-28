@@ -10,7 +10,6 @@ import { Delegation, Person } from '../redux/delegation/types';
 
 export default function delegationToItem(delegations: Array<Delegation>): Array<Item> {
   // TODO to be tested
-  console.log('delegations :>> ', delegations);
   return delegations.map((delegation: Delegation) => ({
     id: delegation.mandateId,
     name: getFirstName(delegation),

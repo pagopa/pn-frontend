@@ -73,7 +73,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const isMobile = useIsMobile();
-  const [inputValue, setInputValue] = useState('');
+  const [senderInputValue, setSenderInputValue] = useState('');
 
   const addressTypes = useMemo(
     (): Array<AddressType> => [
@@ -171,7 +171,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     initialValues,
     validateOnMount: true,
     validationSchema,
-    onSubmit: (values: SpecialContacts) => {
+    onSubmit: (values) => {
       if (values.addressType) {
         initValidation(
           values.addressType,
@@ -190,10 +190,10 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     },
   });
 
-  const handleFilterAutocomplete = (options: Array<Party>, state: { inputValue: string }) => {
-    if (state.inputValue.length >= 4) {
+  const handleFilterAutocomplete = (options: Array<Party>) => {
+    if (senderInputValue.length >= 4) {
       return options.filter((item: Party) =>
-        String(item.name).toLowerCase().includes(state.inputValue.toLowerCase())
+        String(item.name).toLowerCase().includes(senderInputValue.toLowerCase())
       );
     }
     return options;
@@ -208,7 +208,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const getOptionLabel = (option: Party) => option.name || '';
 
   const handleChangeInput = (newInputValue: string) => {
-    setInputValue(newInputValue);
+    setSenderInputValue(newInputValue);
   };
 
   const handleChangeTouched = async (e: ChangeEvent) => {
@@ -331,11 +331,17 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 getOptionLabel={getOptionLabel}
                 isOptionEqualToValue={(option, value) => option.name === value.name}
                 onChange={senderChangeHandler}
-                inputValue={inputValue}
+                inputValue={senderInputValue}
                 onInputChange={(_event, newInputValue) => handleChangeInput(newInputValue)}
                 filterOptions={handleFilterAutocomplete}
                 renderOption={renderOption}
-                renderInput={(params) => <TextField {...params} name="sender" label={ t('special-contacts.sender')} />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="sender"
+                    label={t('special-contacts.sender', { ns: 'recapiti' })}
+                  />
+                )}
               />
             </Grid>
             <Grid item lg xs={12}>
