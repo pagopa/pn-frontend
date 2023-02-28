@@ -11,7 +11,7 @@ import {
   TimelineCategory,
   NotificationStatus,
 } from '../../types';
-import { ResponseStatus } from '../../types/NotificationDetail';
+import { NotificationDeliveryMode, NotificationStatusHistory, ResponseStatus } from '../../types/NotificationDetail';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -31,10 +31,24 @@ function testNotificationStatusInfosFn(
   tooltipToTest: string,
   recipient?: string
 ) {
-  const { label, color, tooltip } = getNotificationStatusInfos(status, recipient);
+  const { label, color, tooltip } = getNotificationStatusInfos({status, recipient, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] });
   expect(label).toBe(labelToTest);
   expect(color).toBe(colorToTest);
   expect(tooltip).toBe(tooltipToTest);
+}
+
+function testNotificationStatusInfosFnIncludingDescription(
+  status: NotificationStatusHistory,
+  labelToTest: string,
+  colorToTest: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary',
+  tooltipToTest: string,
+  descriptionToTest: string,
+) {
+  const { label, color, tooltip, description } = getNotificationStatusInfos(status);
+  expect(label).toBe(labelToTest);
+  expect(color).toBe(colorToTest);
+  expect(tooltip).toBe(tooltipToTest);
+  expect(description).toBe(descriptionToTest);
 }
 
 function testTimelineStatusInfosFn(labelToTest: string, descriptionToTest: string) {
@@ -47,12 +61,33 @@ function testTimelineStatusInfosFn(labelToTest: string, descriptionToTest: strin
 }
 
 describe('notification utility functions', () => {
-  it('return notification status infos - DELIVERED', () => {
-    testNotificationStatusInfosFn(
-      NotificationStatus.DELIVERED,
+  it('return notification status infos - DELIVERED - analog shipment', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.ANALOG },
       'Consegnata',
       'default',
-      'La notifica è stata consegnata'
+      'La notifica è stata consegnata',
+      'La notifica è stata consegnata per via analogica.'
+    );
+  });
+
+  it('return notification status infos - DELIVERED - digital shipment', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.DIGITAL },
+      'Consegnata',
+      'default',
+      'La notifica è stata consegnata',
+      'La notifica è stata consegnata per via digitale.'
+    );
+  });
+
+  it('return notification status infos - DELIVERED - unspecified shipment mode', () => {
+    testNotificationStatusInfosFnIncludingDescription(
+      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      'Consegnata',
+      'default',
+      'La notifica è stata consegnata',
+      'La notifica è stata consegnata.'
     );
   });
 
@@ -181,14 +216,6 @@ describe('notification utility functions', () => {
 });
 
 describe('timeline utility functions', () => {
-  it('return timeline status infos - SCHEDULE_ANALOG_WORKFLOW', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_ANALOG_WORKFLOW;
-    testTimelineStatusInfosFn(
-      'Invio per via cartacea in preparazione',
-      "L'invio della notifica per via cartacea a Nome Cognome è in preparazione."
-    );
-  });
-
   it('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
     testTimelineStatusInfosFn(
@@ -223,19 +250,6 @@ describe('timeline utility functions', () => {
     );
   });
 
-  it('return timeline status infos - SEND_DIGITAL_DOMICILE_FEEDBACK', () => {
-    parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
-      type: DigitalDomicileType.PEC,
-      address: 'nome@cognome.mail',
-    };
-    testTimelineStatusInfosFn(
-      'Invio via PEC riuscito',
-      "L' invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail è riuscito."
-    );
-  });
-
   it('return timeline status infos - SEND_DIGITAL_FEEDBACK (failure)', () => {
     parsedNotificationCopy.recipients[0].digitalDomicile!.type = DigitalDomicileType.PEC;
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
@@ -245,8 +259,8 @@ describe('timeline utility functions', () => {
       address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
-      'Invio per via digitale non riuscito',
-      'Il tentativo di invio della notifica per via digitale a Nome Cognome non è riuscito.'
+      'Invio via PEC non riuscito',
+      "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail non è riuscito perché la casella è satura, non valida o inattiva."
     );
   });
 
@@ -259,8 +273,8 @@ describe('timeline utility functions', () => {
       address: 'nome@cognome.mail',
     };
     testTimelineStatusInfosFn(
-      'Invio per via digitale riuscito',
-      'Il tentativo di invio della notifica per via digitale a Nome Cognome è riuscito.'
+      'Invio via PEC riuscito',
+      "L'invio della notifica a Nome Cognome all'indirizzo PEC nome@cognome.mail è riuscito."
     );
   });
 
@@ -418,15 +432,6 @@ describe('timeline utility functions', () => {
     expect(label).toBe('Attestazione opponibile a terzi: mancato recapito digitale');
   });
 
-  it('return legalFact label - ANALOG_DELIVERY', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.ANALOG_SUCCESS_WORKFLOW;
-    const label = getLegalFactLabel(
-      parsedNotificationCopy.timeline[0],
-      LegalFactType.ANALOG_DELIVERY
-    );
-    expect(label).toBe('Attestazione opponibile a terzi: conformità');
-  });
-
   it('return legalFact label - RECIPIENT_ACCESS', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_VIEWED;
     const label = getLegalFactLabel(
@@ -468,14 +473,6 @@ describe('timeline utility functions', () => {
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
     expect(label).toBe('Ricevuta di mancata consegna PEC');
-  });
-
-  it('return legalFact label - DIGITAL_FAILURE_WORKFLOW', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
-    testTimelineStatusInfosFn(
-      'Invio per via digitale fallito',
-      `L'invio per via digitale della notifica a Nome Cognome è fallito.`
-    );
   });
 
   // PN-1647

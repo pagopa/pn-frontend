@@ -9,7 +9,7 @@
     "continue": "Continua",
     "send": "Invia",
     "go-to-home": "Torna alla home page",
-    "go-to-login": "Procedi al login"
+    "go-to-login": "Accedi"
   },
   "menu": {
     "notifications": "Notifiche",
@@ -30,6 +30,7 @@
   "tos": {
     "title": "Piattaforma Notifiche",
     "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
+    "redo-body": "L’Informativa Privacy e i Termini e condizioni d’uso sono cambiati. Per accedere, leggi e accetta la nuova versione.",
     "switch-label": "Accedendo, accetti i <0>Termini e condizioni d’uso</0> del servizio e confermi di aver letto l’<1>Informativa Privacy</1>.",
     "button": "Accedi"
   },

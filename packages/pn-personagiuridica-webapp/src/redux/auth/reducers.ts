@@ -18,7 +18,7 @@ const roleMatcher = yup.object({
 const organizationMatcher = yup.object({
   id: yup.string(),
   roles: yup.array().of(roleMatcher),
-  fiscal_code: yup.string().matches(dataRegex.pIva),
+  fiscal_code: yup.string().matches(dataRegex.pIvaAndFiscalCode),
   groups: yup.array().of(yup.string()),
   name: yup.string(),
 });
@@ -69,6 +69,8 @@ const userSlice = createSlice({
     loading: false,
     user: basicInitialUserData(userDataMatcher, noLoggedUserData),
     tos: false,
+    isFirstAccept: true,
+    consentVersion: '',
     fetchedTos: false,
     isUnauthorizedUser: false,
     messageUnauthorizedUser: emptyUnauthorizedMessage,
@@ -83,9 +85,10 @@ const userSlice = createSlice({
         userDataMatcher.validateSync(user, { stripUnknown: false });
         sessionStorage.setItem('user', JSON.stringify(user));
         state.user = action.payload;
-      } catch {
+      } catch (e) {
         state.isUnauthorizedUser = true;
         state.messageUnauthorizedUser = emptyUnauthorizedMessage;
+        console.debug(e);
       }
       state.isClosedSession = false;
     });
@@ -104,10 +107,13 @@ const userSlice = createSlice({
     });
     builder.addCase(getToSApproval.fulfilled, (state, action) => {
       state.tos = action.payload.accepted;
+      state.isFirstAccept = action.payload.isFirstAccept;
+      state.consentVersion = action.payload.consentVersion;
       state.fetchedTos = true;
     });
     builder.addCase(getToSApproval.rejected, (state) => {
       state.tos = false;
+      state.isFirstAccept = true;
       state.fetchedTos = true;
     });
     builder.addCase(acceptToS.fulfilled, (state) => {

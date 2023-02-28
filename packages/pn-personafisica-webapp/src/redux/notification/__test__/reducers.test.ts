@@ -5,10 +5,14 @@ import {
   PaymentStatus,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
+import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
 import { store } from '../../store';
 import {
+  getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getNotificationPaymentInfo,
   getNotificationPaymentUrl,
   getPaymentAttachment,
@@ -201,5 +205,35 @@ describe('Notification detail redux state tests', () => {
     const payload = action.payload;
     expect(action.type).toBe('getNotificationPaymentUrl/fulfilled');
     expect(payload).toEqual({ checkoutUrl: 'mocked-url' });
+  });
+
+  it('Should be able to fetch the downtimes events', async () => {
+    const apiSpy = jest.spyOn(AppStatusApi, 'getDowntimeLogPage');
+    apiSpy.mockResolvedValue(simpleDowntimeLogPage);
+    const action = await store.dispatch(
+      getDowntimeEvents({
+        startDate: '2022-10-23T15:50:04Z',
+      })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getDowntimeEvents/fulfilled');
+    expect(payload).toEqual(simpleDowntimeLogPage);
+  });
+
+  it('Should be able to fetch the downtimes legal fact details', async () => {
+    const apiSpy = jest.spyOn(AppStatusApi, 'getLegalFactDetails');
+    apiSpy.mockResolvedValue({
+      filename: 'mocked-filename',
+      contentLength: 0,
+      url: 'mocked-url',
+    });
+    const action = await store.dispatch(getDowntimeLegalFactDocumentDetails('mocked-iun'));
+    const payload = action.payload;
+    expect(action.type).toBe('getNotificationDowntimeLegalFactDocumentDetails/fulfilled');
+    expect(payload).toEqual({
+      filename: 'mocked-filename',
+      contentLength: 0,
+      url: 'mocked-url',
+    });
   });
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from "../../__test__/test-utils";
+import { render } from '../../__test__/test-utils';
 
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 import TermsOfServicePage from '../TermsOfService.page';
@@ -8,11 +8,11 @@ jest.mock('../../utils/constants', () => {
   return {
     ...jest.requireActual('../../utils/constants'),
     ONE_TRUST_TOS: 'mocked-id',
+    ONE_TRUST_DRAFT_MODE: false,
   };
 });
 
 describe('TermsOfService page component', () => {
-
   const loadNoticesFn = jest.fn();
 
   beforeAll(() => {

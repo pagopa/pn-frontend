@@ -81,6 +81,7 @@ const timelineStepCmp = (
  * @param showMoreButtonLabel label of show more button
  * @param showLessButtonLabel label of show less button
  * @param eventTrackingCallbackShowMore event tracking callback
+ * @param completeStatusHistory the whole history, sometimes some information from a different status must be retrieved
  */
 const NotificationDetailTimelineStep = ({
   timelineStep,
@@ -99,10 +100,8 @@ const NotificationDetailTimelineStep = ({
   let legalFactsIds: Array<{ file: LegalFactId; step: INotificationDetailTimeline }> = [];
   let visibleSteps: Array<INotificationDetailTimeline> = [];
   /* eslint-enable functional/no-let */
-  const notificationStatusInfos = getNotificationStatusInfos(
-    timelineStep.status,
-    timelineStep.recipient
-  );
+
+  const notificationStatusInfos = getNotificationStatusInfos(timelineStep, { recipients });
 
   if (timelineStep.steps) {
     /* eslint-disable functional/immutable-data */
@@ -241,13 +240,6 @@ const NotificationDetailTimelineStep = ({
               ))}
           </Typography>
         </Box>
-        {recipients.length > 1 && (
-          <Box>
-            <Typography fontSize={14} color="text.secondary">
-              {timelineStatusInfos.recipient}
-            </Typography>
-          </Box>
-        )}
       </Fragment>,
       'middle',
       'small'

@@ -8,6 +8,8 @@ import {
   NewNotificationDocument,
   PaymentObject,
 } from '../../models/NewNotification';
+import { IS_PAYMENT_ENABLED } from '../../utils/constants';
+
 import { UserGroup } from '../../models/user';
 import {
   uploadNotificationAttachment,
@@ -101,6 +103,7 @@ const newNotificationSlice = createSlice({
     });
     builder.addCase(uploadNotificationAttachment.fulfilled, (state, action) => {
       state.notification.documents = action.payload;
+      state.isCompleted = IS_PAYMENT_ENABLED ? false : true;
     });
     builder.addCase(uploadNotificationPaymentDocument.fulfilled, (state, action) => {
       state.notification.payment = action.payload;

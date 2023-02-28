@@ -251,6 +251,10 @@ export enum PaymentAttachmentSName {
 
 export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
 
+export enum NotificationDeliveryMode {
+  ANALOG = 'analog',
+  DIGITAL = 'digital'
+}
 export interface NotificationStatusHistory {
   status: NotificationStatus;
   activeFrom: string;
@@ -258,6 +262,8 @@ export interface NotificationStatusHistory {
   // only fe
   steps?: Array<INotificationDetailTimeline>;
   recipient?: string;
+  // this is useful for the DELIVERED status only
+  deliveryMode?: NotificationDeliveryMode;
 }
 
 export enum TimelineCategory {
@@ -269,7 +275,6 @@ export enum TimelineCategory {
   SCHEDULE_ANALOG_WORKFLOW = 'SCHEDULE_ANALOG_WORKFLOW',
   SCHEDULE_DIGITAL_WORKFLOW = 'SCHEDULE_DIGITAL_WORKFLOW',
   SEND_DIGITAL_DOMICILE = 'SEND_DIGITAL_DOMICILE',
-  SEND_DIGITAL_DOMICILE_FEEDBACK = 'SEND_DIGITAL_DOMICILE_FEEDBACK',
   SEND_DIGITAL_PROGRESS = 'SEND_DIGITAL_PROGRESS',
   SEND_DIGITAL_FEEDBACK = 'SEND_DIGITAL_FEEDBACK',
   REFINEMENT = 'REFINEMENT',

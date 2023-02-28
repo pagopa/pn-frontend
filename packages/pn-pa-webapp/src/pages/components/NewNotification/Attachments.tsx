@@ -19,6 +19,7 @@ import { useAppDispatch } from '../../../redux/hooks';
 import { uploadNotificationAttachment } from '../../../redux/newNotification/actions';
 import { setAttachments } from '../../../redux/newNotification/reducers';
 import { NewNotificationDocument } from '../../../models/NewNotification';
+import { IS_PAYMENT_ENABLED } from '../../../utils/constants';
 import NewNotificationCard from './NewNotificationCard';
 
 type AttachmentBoxProps = {
@@ -73,7 +74,9 @@ const AttachmentBox = ({
       >
         <Typography fontWeight={600}>{title}</Typography>
         {canBeDeleted && (
-          <DeleteIcon color="action" onClick={onDelete} sx={{ cursor: 'pointer' }} />
+          <ButtonNaked onClick={onDelete} data-testid="deletebutton">
+            <DeleteIcon color="action" sx={{ cursor: 'pointer' }} />
+          </ButtonNaked>
         )}
       </Box>
       <FileUpload
@@ -108,6 +111,7 @@ type Props = {
   onPreviousStep?: () => void;
   attachmentsData?: Array<NewNotificationDocument>;
   forwardedRef: ForwardedRef<unknown>;
+  isCompleted: boolean;
 };
 
 const emptyFileData = {
@@ -129,7 +133,13 @@ const newAttachmentDocument = (id: string, idx: number): NewNotificationDocument
   },
 });
 
-const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef }: Props) => {
+const Attachments = ({
+  onConfirm,
+  onPreviousStep,
+  attachmentsData,
+  forwardedRef,
+  isCompleted,
+}: Props) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['notifiche'], {
     keyPrefix: 'new-notification.steps.attachments',
@@ -178,22 +188,25 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef 
     validateOnMount: true,
     onSubmit: (values) => {
       if (formik.isValid) {
-        // store attachments
-        dispatch(
-          setAttachments({
-            documents: values.documents.map((v) => ({
-              ...v,
-              id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
-            })),
-          })
-        );
-        // upload attachments
-        dispatch(uploadNotificationAttachment(values.documents))
-          .unwrap()
-          .then(() => {
-            onConfirm();
-          })
-          .catch(() => undefined);
+        if (!IS_PAYMENT_ENABLED && isCompleted) {
+          onConfirm();
+        } else {
+          dispatch(
+            setAttachments({
+              documents: values.documents.map((v) => ({
+                ...v,
+                id: v.id.indexOf('.file') !== -1 ? v.id.slice(0, -5) : v.id,
+              })),
+            })
+          );
+          // upload attachments
+          dispatch(uploadNotificationAttachment(values.documents))
+            .unwrap()
+            .then(() => {
+              onConfirm();
+            })
+            .catch(() => undefined);
+        }
       }
     },
   });
@@ -211,19 +224,23 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef 
     name?: string,
     size?: number
   ) => {
-    await formik.setFieldValue(id, {
-      ...formik.values.documents[index],
-      file: {
-        size,
-        uint8Array: file,
-        sha256,
-        name,
+    await formik.setFieldValue(
+      id,
+      {
+        ...formik.values.documents[index],
+        file: {
+          size,
+          uint8Array: file,
+          sha256,
+          name,
+        },
+        ref: {
+          key: '',
+          versionToken: '',
+        },
       },
-      ref: {
-        key: '',
-        versionToken: '',
-      },
-    }, false);
+      false
+    );
     await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
@@ -297,6 +314,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef 
         isContinueDisabled={!formik.isValid}
         title={t('attach-for-recipients')}
         subtitle={t('max-attachments', { maxNumber: MAX_NUMBER_OF_ATTACHMENTS })}
+        submitLabel={IS_PAYMENT_ENABLED ? tc('button.continue') : tc('button.send')}
         previousStepLabel={t('back-to-recipient')}
         previousStepOnClick={() => handlePreviousStep()}
       >
@@ -334,6 +352,7 @@ const Attachments = ({ onConfirm, onPreviousStep, attachmentsData, forwardedRef 
             color="primary"
             startIcon={<AddIcon />}
             sx={{ marginTop: '30px' }}
+            data-testid="add-another-doc"
           >
             {formik.values.documents.length === 1 ? t('add-doc') : t('add-another-doc')}
           </ButtonNaked>

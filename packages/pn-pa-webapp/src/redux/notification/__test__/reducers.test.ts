@@ -2,8 +2,12 @@ import { LegalFactType, NotificationDetail } from '@pagopa-pn/pn-commons';
 
 import { store } from '../../store';
 import { NotificationsApi } from '../../../api/notifications/Notifications.api';
+import { AppStatusApi } from '../../../api/appStatus/AppStatus.api';
 import { mockAuthentication } from '../../auth/__test__/test-utils';
+import { simpleDowntimeLogPage } from '../../appStatus/__test__/test-utils';
 import {
+  getDowntimeEvents,
+  getDowntimeLegalFactDocumentDetails,
   getSentNotification,
   getSentNotificationDocument,
   getSentNotificationLegalfact,
@@ -27,7 +31,7 @@ const initialState = {
     sentAt: '',
     notificationStatus: '',
     notificationStatusHistory: [],
-    timeline: []
+    timeline: [],
   },
   documentDownloadUrl: '',
   otherDocumentDownloadUrl: '',
@@ -88,12 +92,42 @@ describe('Notification detail redux state tests', () => {
         otherDocument: {
           documentId: 'mocked-document-id',
           documentType: 'mocked-document-type',
-        }
+        },
       })
     );
     const payload = action.payload;
     expect(action.type).toBe('getSentNotificationOtherDocument/fulfilled');
     expect(payload).toEqual({ url: 'http://mocked-url.com' });
+  });
+
+  it('Should be able to fetch the downtimes events', async () => {
+    const apiSpy = jest.spyOn(AppStatusApi, 'getDowntimeLogPage');
+    apiSpy.mockResolvedValue(simpleDowntimeLogPage);
+    const action = await store.dispatch(
+      getDowntimeEvents({
+        startDate: '2022-10-23T15:50:04Z',
+      })
+    );
+    const payload = action.payload;
+    expect(action.type).toBe('getDowntimeEvents/fulfilled');
+    expect(payload).toEqual(simpleDowntimeLogPage);
+  });
+
+  it('Should be able to fetch the downtimes legal fact details', async () => {
+    const apiSpy = jest.spyOn(AppStatusApi, 'getLegalFactDetails');
+    apiSpy.mockResolvedValue({
+      filename: 'mocked-filename',
+      contentLength: 0,
+      url: 'mocked-url',
+    });
+    const action = await store.dispatch(getDowntimeLegalFactDocumentDetails('mocked-iun'));
+    const payload = action.payload;
+    expect(action.type).toBe('getNotificationDowntimeLegalFactDocumentDetails/fulfilled');
+    expect(payload).toEqual({
+      filename: 'mocked-filename',
+      contentLength: 0,
+      url: 'mocked-url',
+    });
   });
 
   it('Should be able to reset state', () => {
@@ -111,7 +145,7 @@ describe('Notification detail redux state tests', () => {
     expect(action.type).toBe('notificationSlice/resetLegalFactState');
     expect(payload).toEqual(undefined);
     const state = store.getState().notificationState;
-    expect(state.legalFactDownloadRetryAfter).toEqual(0); 
-    expect(state.legalFactDownloadUrl).toEqual(''); 
+    expect(state.legalFactDownloadRetryAfter).toEqual(0);
+    expect(state.legalFactDownloadUrl).toEqual('');
   });
 });

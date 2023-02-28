@@ -60,6 +60,8 @@ const navigation: INavigationBarProps = {
   pa: "Enti"
 };
 
+const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";
+
 // eslint-disable-next-line no-extra-boolean-cast
 const heroCta = !!PN_URL
   ? {
@@ -79,6 +81,25 @@ const paHero: HeroProps = {
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
   altText: "",
   background: `${IMAGES_PATH}/hero-background.png`,
+  ctaPrimary: {
+    label: "Scopri come aderire",
+    title: "Scopri come aderire",
+    /* Carlotta Dimatteo - workaround per gestire un anchor interno alla pagina richiesto dal team di comunicazione il 16/02/2023 */
+    onClick: function onClick() {
+      var loc = document.location.toString().split('#')[0];
+      document.location = loc + '#start-integration';
+      return false;
+    }
+  },
+  ctaSecondary: {
+    label: "Accedi",
+    title: "Accedi",
+    /* Carlotta Dimatteo - aggiunta della CTA richiesta dal team di comunicazione il 17/02/2023 */
+    onClick: function onClick() {
+      window.open(selfCareUrl, '_blank');
+      return false;
+    }
+  }
 };
 
 const pfHero: HeroProps = {
@@ -167,7 +188,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       title: "E il destinatario?",
       content: (
         <>
-          <Typography variant="body2">
+          <Typography variant="body2" >
             Il destinatario accede alla piattaforma tramite SPID o CIE, dove può
             visionare e scaricare l’atto notificato. Grazie all’integrazione con
             pagoPA, può anche pagare contestualmente quanto dovuto. Se ha
@@ -190,55 +211,115 @@ const paInfoBlocks: Array<IInfoblockData> = [
   {
     name: "infoblock 4",
     data: {
-      title: "Avvia l’integrazione",
+      title: "Scopri come aderire",
       content: (
         <>
           <Typography variant="body2">
-            Attualmente gli enti possono avviare le attività tecniche necessarie per l’integrazione a Piattaforma Notifiche.
+            La procedura per avviare le attività tecniche e amministrative necessarie per l’adesione e l’integrazione degli enti a Piattaforma Notifiche, prevede le seguenti fasi:
           </Typography>
 
+          <Typography variant="h6">01. Scegli come integrarti</Typography>
+
           <Typography variant="body2">
-            A tal fine sono disponibili:
+            Ogni ente può decidere se integrarsi alla piattaforma direttamente oppure tramite un fornitore.
+            Nel secondo caso, è disponibile <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
+              <a target="_blank" rel="noopener noreferrer">la lista dei Partner e Intermediari tecnologici</a>
+            </Link> che stanno implementando le attività di integrazione alla piattaforma
+            e di cui è possibile avvalersi per un supporto nella gestione degli aspetti tecnici.
+          </Typography>
+          <Typography variant="caption">
+            I soggetti che intendono integrarsi alla Piattaforma Notifiche in qualità di Partner o Intermediari Tecnologici possono manifestare il proprio interesse ad avviare
+            la procedura ed essere inseriti nella lista inviando una mail all’indirizzo account@pagopa.it.
+          </Typography>
+          <Typography variant="h6">02. Sottoscrivi l’accordo di adesione</Typography>
+          <Typography variant="body2">
+            Per ricevere l'accordo di adesione, l'ente dovrà accedere all'
+            <Link href={"https://selfcare.pagopa.it/auth/login?onSuccess=%2Fonboarding%2Fprod-pn"}>
+              <a target="_blank" rel="noopener noreferrer">Area Riservata</a>
+            </Link>{" "}e seguire i passaggi descritti in{" "}
+            <Link href="https://docs.pagopa.it/area-riservata-enti-piattaforma-notifiche/">
+              <a target="_blank" rel="noopener noreferrer">questa guida.</a>
+            </Link><br></br>
+            Una volta sottoscritto l’accordo in digitale,
+            l’ente dovrà caricarlo e inviarlo a PagoPA S.p.A. sempre dall’Area Riservata.
+            Inoltre, a integrazione dell’accordo, dovranno essere inviati i seguenti moduli debitamente compilati ove richiesto:
           </Typography>
           <List sx={{ listStyleType: 'disc', pl: 4 }}>
             <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
-                <Link href={MANUALE_URL}>
-                  manuale operativo
+                <Link href={"https://docs.pagopa.it/allegato-1bis-al-contratto-di-adesione/"}>
+                  <a target="_blank" rel="noopener noreferrer">Allegato 1-Bis</a>
                 </Link>
-                {" "}(aggiornato al 20/11/2022),
+                {" "}al Contratto di Adesione
               </Typography>
             </ListItem>
             <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
-                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-v1.yaml">
-                  le API b2b per le pubbliche amministrazioni
+                <Link href={"/static/documents/Modulo preventivo di fornitura.xlsx"}>
+                  Modulo di Profilazione
                 </Link>
+                {" "}necessario per l’avvio in esercizio
               </Typography>
             </ListItem>
             <ListItem sx={{ display: 'list-item' }}>
-              <Typography variant="body2">
-                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-v1.yaml">
-                  le API b2b per l’avanzamento delle notifiche
-                </Link>
-              </Typography>
-            </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
-              <Typography variant="body2">
-                <Link href={PARTNER_AND_INTERMEDIARIES_PATH}>
-                  la lista dei Partner e Intermediari tecnologici
-                </Link>
-                {" "}che stanno implementando le attività di integrazione alla piattaforma e di cui è possibile avvalersi per un supporto nella gestione degli aspetti tecnici
-              </Typography>
-            </ListItem>
-            {/* <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
                 <Link href={"/static/documents/Modulo Ordinativo Commessa per Anticipazione.xlsx"}>
-                  la lista dei Partner e Intermediari tecnologici
+                  Modulo Commessa
+                </Link>
+                {" "}necessario per la fatturazione
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={"https://docs.pagopa.it/sla-di-servizio/"}>
+                  <a target="_blank" rel="noopener noreferrer">
+                    SLA di servizio
+                  </a>
                 </Link>
               </Typography>
-            </ListItem> */}
+            </ListItem>
           </List>
+          <Typography variant="h6">03. Avvia l’integrazione tecnologica</Typography>
+          <Typography variant="body2">
+            Di seguito sono consultabili i materiali necessari per integrare i sistemi dell’ente alla piattaforma:
+          </Typography>
+
+          <List sx={{ listStyleType: 'disc', pl: 4 }}>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href={MANUALE_URL}>
+                  <a target="_blank" rel="noopener noreferrer">
+                    manuale operativo
+                  </a>
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa.yaml">
+                  <a target="_blank" rel="noopener noreferrer">
+                    API b2b per le pubbliche amministrazioni
+                  </a>
+                </Link>
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ display: 'list-item' }}>
+              <Typography variant="body2">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook.yaml">
+                  <a target="_blank" rel="noopener noreferrer">
+                    API b2b per l’avanzamento delle notifiche
+                  </a>
+                </Link>
+              </Typography>
+            </ListItem>
+          </List>
+          <Typography variant="body2">Per ulteriori informazioni e chiarimenti, è possibile consultare{" "}
+            <Link href={"https://docs.pagopa.it/faq-enti/"}>
+              <a target="_blank" rel="noopener noreferrer">
+                qui
+              </a>
+            </Link> le principali FAQ. </Typography>
         </>
       ),
       inverse: false,
