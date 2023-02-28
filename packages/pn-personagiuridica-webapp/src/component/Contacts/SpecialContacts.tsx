@@ -216,7 +216,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const senderChangeHandler = async (e: any, newValue: any) => {
+  const senderChangeHandler = async (e: any, newValue: Party | null) => {
     await formik.setFieldValue('sender', newValue);
     formik.handleChange(e);
     if (formik.values.addressType === LegalChannelType.PEC) {
