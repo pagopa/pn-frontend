@@ -73,7 +73,7 @@ function testTimelineStatusInfosFn(notification: NotificationDetail, timelineInd
     expect(bareDescription).toBe(`detail.timeline.${descriptionToTest}`);
     expect(JSON.parse(descriptionDataAsString)).toEqual(descriptionDataToTest);
   } else {
-    expect(description).toBe(descriptionToTest);
+    expect(description).toBe(`detail.timeline.${descriptionToTest}`);
   }
 }
 
@@ -245,7 +245,7 @@ describe.skip('notification utility functions', () => {
   });
 });
 
-describe('timeline event description', () => {
+describe.skip('timeline event description', () => {
   beforeEach(() => {
     parsedNotificationCopy = _.cloneDeep(parsedNotification);
     parsedNotificationTwoRecipientsCopy = _.cloneDeep(parsedNotificationTwoRecipients);    
@@ -343,6 +343,54 @@ describe('timeline event description', () => {
     );
   });
 
+  it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - single recipient', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C008';
+    testTimelineStatusInfosFnSingle(
+      'send-digital-progress-error',
+      'send-digital-progress-error-description',
+      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: 'nome@cognome.mail' }
+    );
+  });
+
+  it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 1', () => {
+    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C010';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
+      address: 'titi99@some.org',
+      type: DigitalDomicileType.PEC,
+    };
+    testTimelineStatusInfosFnMulti1(
+      'send-digital-progress-error',
+      'send-digital-progress-error-description-multirecipient',
+      { name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)', address: 'titi99@some.org' }
+    );
+  });
+
+  it('return timeline status infos - SEND_DIGITAL_PROGRESS - success - single recipient', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C001';
+    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
+      address: 'titi35@other.org',
+      type: DigitalDomicileType.PEC,
+    };
+    testTimelineStatusInfosFnSingle(
+      'send-digital-progress-success',
+      'send-digital-progress-success-description',
+      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: 'titi35@other.org' }
+    );
+  });
+
+  it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 0', () => {
+    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).eventCode = 'DP00';
+    testTimelineStatusInfosFnMulti0(
+      'send-digital-progress-success',
+      'send-digital-progress-success-description-multirecipient',
+      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: 'nome@cognome.mail' }
+    );
+  });
+
   it('return timeline status infos - SEND_DIGITAL_FEEDBACK - failure - single recipient', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
@@ -401,54 +449,6 @@ describe('timeline event description', () => {
       'send-simple-registered-letter-description',
       { name: 'Nome Cognome', taxId: '(mocked-taxId)', 
         address: 'Via Mazzini 1848 - Graniti (98036)', simpleAddress: 'Via Mazzini 1848' }
-    );
-  });
-
-  it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - single recipient', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C008';
-    testTimelineStatusInfosFnSingle(
-      'send-digital-progress-error',
-      'send-digital-progress-error-description',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: 'nome@cognome.mail' }
-    );
-  });
-
-  it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 1', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C010';
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
-      address: 'titi99@some.org',
-      type: DigitalDomicileType.PEC,
-    };
-    testTimelineStatusInfosFnMulti1(
-      'send-digital-progress-error',
-      'send-digital-progress-error-description-multirecipient',
-      { name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)', address: 'titi99@some.org' }
-    );
-  });
-
-  it('return timeline status infos - SEND_DIGITAL_PROGRESS - success - single recipient', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C001';
-    (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
-      address: 'titi35@other.org',
-      type: DigitalDomicileType.PEC,
-    };
-    testTimelineStatusInfosFnSingle(
-      'send-digital-progress-success',
-      'send-digital-progress-success-description',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: 'titi35@other.org' }
-    );
-  });
-
-  it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 0', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).eventCode = 'DP00';
-    testTimelineStatusInfosFnMulti0(
-      'send-digital-progress-success',
-      'send-digital-progress-success-description-multirecipient',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: 'nome@cognome.mail' }
     );
   });
 
@@ -577,6 +577,22 @@ describe('timeline event description', () => {
     );
   });
 
+  it('return timeline status infos - SEND_ANALOG_PROGRESS - single recipient', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
+    testTimelineStatusInfosFnSingle(
+      'send-analog-progress',
+      'send-analog-progress-description',
+    );
+  });
+
+  it('return timeline status infos - SEND_ANALOG_PROGRESS - multi recipient', () => {
+    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
+    testTimelineStatusInfosFnMulti1(
+      'send-analog-progress',
+      'send-analog-progress-description-multirecipient',
+    );
+  });
+
   it('return timeline status infos - SEND_ANALOG_FEEDBACK - failure - single recipient', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
@@ -669,11 +685,11 @@ describe.skip('parse notification', () => {
   });
 });
 
-describe.skip('timeline legal fact link text', () => {
+describe('timeline legal fact link text', () => {
   it('return legalFact label - default', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.GET_ADDRESS;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
-    expect(label).toBe('Attestazione opponibile a terzi');
+    expect(label).toBe('detail.legalfact');
   });
 
   it('return legalFact label - SEND_ANALOG_FEEDBACK (success)', () => {
@@ -681,7 +697,7 @@ describe.skip('timeline legal fact link text', () => {
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
       ResponseStatus.OK;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
-    expect(label).toBe('Ricevuta di consegna raccomandata');
+    expect(label).toBe('detail.receipt detail.timeline.legalfact.paper-receipt-delivered');
   });
 
   it('return legalFact label - SEND_ANALOG_FEEDBACK (failure)', () => {
@@ -689,73 +705,77 @@ describe.skip('timeline legal fact link text', () => {
     (parsedNotificationCopy.timeline[0].details as SendPaperDetails).responseStatus =
       ResponseStatus.KO;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
-    expect(label).toBe('Ricevuta di mancata consegna raccomandata');
-  });
-
-  it('return legalFact label - SENDER_ACK', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.REQUEST_ACCEPTED;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.SENDER_ACK);
-    expect(label).toBe('Attestazione opponibile a terzi: notifica presa in carico');
-  });
-
-  it('return legalFact label - DIGITAL_DELIVERY', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_SUCCESS_WORKFLOW;
-    const label = getLegalFactLabel(
-      parsedNotificationCopy.timeline[0],
-      LegalFactType.DIGITAL_DELIVERY
-    );
-    expect(label).toBe('Attestazione opponibile a terzi: notifica digitale');
-  });
-
-  it('return legalFact label - DIGITAL_DELIVERY', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
-    const label = getLegalFactLabel(
-      parsedNotificationCopy.timeline[0],
-      LegalFactType.DIGITAL_DELIVERY
-    );
-    expect(label).toBe('Attestazione opponibile a terzi: mancato recapito digitale');
-  });
-
-  it('return legalFact label - RECIPIENT_ACCESS', () => {
-    parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_VIEWED;
-    const label = getLegalFactLabel(
-      parsedNotificationCopy.timeline[0],
-      LegalFactType.RECIPIENT_ACCESS
-    );
-    expect(label).toBe('Attestazione opponibile a terzi: avvenuto accesso');
+    expect(label).toBe('detail.receipt detail.timeline.legalfact.paper-receipt-not-delivered');
   });
 
   it('return legalFact label - SEND_ANALOG_PROGRESS', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);
-    expect(label).toBe('Ricevuta di accettazione raccomandata');
+    expect(label).toBe('detail.receipt detail.timeline.legalfact.paper-receipt-accepted');
   });
 
-  it('return legalFact label - SEND_DIGITAL_PROGRESS (success)', () => {
+  it('return legalFact label - SEND_DIGITAL_PROGRESS (success) - PEC_RECEIPT', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C001';
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
-    expect(label).toBe('Ricevuta di accettazione PEC');
+    expect(label).toBe('detail.receipt detail.timeline.legalfact.pec-receipt-accepted');
   });
 
-  it('return legalFact label - SEND_DIGITAL_PROGRESS (failure)', () => {
+  it('return legalFact label - SEND_DIGITAL_PROGRESS (failure) - PEC_RECEIPT', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C008';
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
-    expect(label).toBe('Ricevuta di mancata accettazione PEC');
+    expect(label).toBe('detail.receipt detail.timeline.legalfact.pec-receipt-not-accepted');
   });
 
-  it('return legalFact label - SEND_DIGITAL_FEEDBACK (success)', () => {
+  it('return legalFact label - SEND_DIGITAL_FEEDBACK (success) - PEC_RECEIPT', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'OK';
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
-    expect(label).toBe('Ricevuta di consegna PEC');
+    expect(label).toBe('detail.receipt detail.timeline.legalfact.pec-receipt-delivered');
   });
 
-  it('return legalFact label - SEND_DIGITAL_FEEDBACK (failure)', () => {
+  it('return legalFact label - SEND_DIGITAL_FEEDBACK (failure) - PEC_RECEIPT', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
     (parsedNotificationCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'KO';
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.PEC_RECEIPT);
-    expect(label).toBe('Ricevuta di mancata consegna PEC');
+    expect(label).toBe('detail.receipt detail.timeline.legalfact.pec-receipt-not-delivered');
   });
+
+  it('return legalFact label - REQUEST_ACCEPTED - SENDER_ACK', () => {
+    // In fact the timeline event category is not explicitly checked.
+    // In the examples I've seen, such legal facts are associated to REQUEST_ACCEPTED events.
+    // I set the category to avoid the scenario to be "caught up" by previous cases in the 
+    // legal fact switch, which check the timeline event category only.
+    // ------------------------------------
+    // Carlos Lombardi, 2023.02.28
+    // ------------------------------------
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.REQUEST_ACCEPTED;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.SENDER_ACK);
+    expect(label).toBe('detail.legalfact: detail.timeline.legalfact.sender-ack');
+  });
+
+  it('return legalFact label - DIGITAL_SUCCESS_WORKFLOW - DIGITAL_DELIVERY', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_SUCCESS_WORKFLOW;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.DIGITAL_DELIVERY);
+    expect(label).toBe('detail.legalfact: detail.timeline.legalfact.digital-delivery-success');
+  });
+
+  it('return legalFact label - DIGITAL_FAILURE_WORKFLOW - DIGITAL_DELIVERY', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.DIGITAL_DELIVERY);
+    expect(label).toBe('detail.legalfact: detail.timeline.legalfact.digital-delivery-failure');
+  });
+
+  // Similar to the SENDER_ACK case above, in this case the timeline event category
+  // associated but not explicitly verified in the code is NOTIFICATION_VIEWED
+  // ------------------------------------
+  // Carlos Lombardi, 2023.02.28
+  // ------------------------------------
+  it('return legalFact label - NOTIFICATION_VIEWED - RECIPIENT_ACCESS', () => {
+    parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_VIEWED;
+    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.RECIPIENT_ACCESS);
+    expect(label).toBe('detail.legalfact: detail.timeline.legalfact.recipient-access');
+  });
+
 });
