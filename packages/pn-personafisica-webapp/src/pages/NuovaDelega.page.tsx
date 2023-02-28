@@ -88,7 +88,7 @@ const NuovaDelega = () => {
     void dispatch(createDelegation(values));
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
-  const [inputValue, setInputValue] = useState('');
+  const [senderInputValue, setSenderInputValue] = useState('');
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
   };
@@ -99,7 +99,7 @@ const NuovaDelega = () => {
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
 
-  const initialValues: NewDelegationFormProps = {
+  const initialValues = {
     selectPersonaFisicaOrPersonaGiuridica: 'pf',
     codiceFiscale: '',
     nome: '',
@@ -152,10 +152,10 @@ const NuovaDelega = () => {
   };
   // done for complexity
 
-  const handleFilterAutocomplete = (options: Array<Party>, state: { inputValue: string }) => {
-    if (state.inputValue.length >= 4) {
+  const handleFilterAutocomplete = (options: Array<Party>) => {
+    if (senderInputValue.length >= 4) {
       return options.filter((item: Party) =>
-        String(item.name).toLowerCase().includes(state.inputValue.toLowerCase())
+        String(item.name).toLowerCase().includes(senderInputValue.toLowerCase())
       );
     }
     return options;
@@ -168,7 +168,7 @@ const NuovaDelega = () => {
   );
 
   const handleChangeInput = (newInputValue: string) => {
-    setInputValue(newInputValue);
+    setSenderInputValue(newInputValue);
   };
 
   const getOptionLabel = (option: Party) => option.name || '';
@@ -350,14 +350,17 @@ const NuovaDelega = () => {
                                     onChange={(_event: any, newValue: Array<Party>) => {
                                       setFieldValue('enteSelect', newValue);
                                     }}
-                                    inputValue={inputValue}
+                                    inputValue={senderInputValue}
                                     onInputChange={(_event, newInputValue) =>
                                       handleChangeInput(newInputValue)
                                     }
                                     filterOptions={handleFilterAutocomplete}
                                     renderOption={renderOption}
                                     renderInput={(params) => (
-                                      <TextField {...params} label="Seleziona enti" />
+                                      <TextField
+                                        {...params}
+                                        label={t('nuovaDelega.form.selectEntities')}
+                                      />
                                     )}
                                   />
                                 </FormControl>

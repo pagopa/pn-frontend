@@ -1,4 +1,12 @@
-import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
+import {
+  ChangeEvent,
+  Fragment,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
@@ -216,21 +224,21 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const senderChangeHandler = async (e: any, newValue: any) => {
+  const senderChangeHandler = async (e: SyntheticEvent<Element, Event>, newValue: Party | null) => {
     await formik.setFieldValue('sender', newValue);
     formik.handleChange(e);
     if (formik.values.addressType === LegalChannelType.PEC) {
-      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue.id && a.pec) > -1;
+      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.pec) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.pec-already-exists', { ns: 'recapiti' }) : ''
       );
     } else if (formik.values.addressType === CourtesyChannelType.EMAIL) {
-      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue.id && a.mail) > -1;
+      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.mail) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.email-already-exists', { ns: 'recapiti' }) : ''
       );
     } else {
-      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue.id && a.phone) > -1;
+      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.phone) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.phone-already-exists', { ns: 'recapiti' }) : ''
       );
