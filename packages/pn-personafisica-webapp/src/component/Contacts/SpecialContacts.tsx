@@ -200,7 +200,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   };
 
   const renderOption = (props: any, option: Party) => (
-    <MenuItem {...props} value={option.id} key={option.id}>
+    <MenuItem {...props} value={option.id} key={option.id} role="option">
       <DropDownPartyMenuItem name={option.name} />
     </MenuItem>
   );
@@ -335,7 +335,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 onInputChange={(_event, newInputValue) => handleChangeInput(newInputValue)}
                 filterOptions={handleFilterAutocomplete}
                 renderOption={renderOption}
-                renderInput={(params) => <TextField {...params} label="Seleziona enti" />}
+                renderInput={(params) => <TextField {...params} name="sender" label={ t('special-contacts.sender')} />}
               />
             </Grid>
             <Grid item lg xs={12}>

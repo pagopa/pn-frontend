@@ -9,6 +9,7 @@ import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeV
 import SpecialContacts from '../SpecialContacts';
 import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
 import { courtesyAddresses, legalAddresses, initialState } from './SpecialContacts.test-utils';
+import React from 'react';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -65,13 +66,34 @@ async function testSelect(
   });
 }
 
+async function testAutocomplete(
+  form: HTMLFormElement,
+  elementName: string,
+  options: Array<{ label: string; value: string }>,
+  optToSelect: number
+) {
+  const selectInput = form.querySelector(`input[name="${elementName}"]`);
+  fireEvent.mouseDown(selectInput as Element);
+  const selectOptionsContainer = await screen.findByRole('presentation');
+  expect(selectOptionsContainer).toBeInTheDocument();
+  const selectOptionsListItems = await within(selectOptionsContainer).findAllByRole('option');
+  expect(selectOptionsListItems).toHaveLength(options.length);
+  selectOptionsListItems.forEach((opt, index) => {
+    expect(opt).toHaveTextContent(options[index].label);
+  });
+  await waitFor(() => {
+    fireEvent.click(selectOptionsListItems[optToSelect]);
+    expect(selectInput).toHaveValue(options[optToSelect].label);
+  });
+}
+
 async function testInvalidField(
   form: HTMLFormElement,
   elementName: string,
   value: string,
   errorMessageString: string
 ) {
-  await testSelect(
+  await testAutocomplete(
     form,
     'sender',
     [
@@ -86,12 +108,12 @@ async function testInvalidField(
   const errorMessage = form.querySelector(`#${elementName}-helper-text`);
   expect(errorMessage).toBeInTheDocument();
   expect(errorMessage).toHaveTextContent(errorMessageString);
-  const button = form.querySelector('button');
+  const button = form.querySelector('button[data-testid="Special contact add button"]');
   expect(button).toBeDisabled();
 }
 
 async function testValidFiled(form: HTMLFormElement, elementName: string, value: string) {
-  await testSelect(
+  await testAutocomplete(
     form,
     'sender',
     [
@@ -105,7 +127,7 @@ async function testValidFiled(form: HTMLFormElement, elementName: string, value:
   await waitFor(() => expect(input!).toHaveValue(value));
   const errorMessage = form.querySelector(`#${elementName}-helper-text`);
   expect(errorMessage).not.toBeInTheDocument();
-  const button = form.querySelector('button');
+  const button = form.querySelector('button[data-testid="Special contact add button"]');
   expect(button).toBeEnabled();
 }
 
@@ -124,7 +146,7 @@ async function testContactAddition(
     const actionSpy = jest.spyOn(actions, 'createOrUpdateCourtesyAddress');
     actionSpy.mockImplementation(mockActionFn as any);
   }
-  await testSelect(
+  await testAutocomplete(
     form,
     'sender',
     [
@@ -136,7 +158,7 @@ async function testContactAddition(
   const input = form.querySelector(`input[name="${elementName}"]`);
   fireEvent.change(input!, { target: { value } });
   await waitFor(() => expect(input!).toHaveValue(value));
-  const button = form.querySelector('button');
+  const button = form.querySelector('button[data-testid="Special contact add button"]');
   fireEvent.click(button!);
   mockDispatchFn.mockClear();
   await waitFor(() => {
@@ -236,14 +258,14 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
     testFormElements(form!, 'sender', 'special-contacts.sender');
     testFormElements(form!, 'addressType', 'special-contacts.address-type');
     testFormElements(form!, 's_pec', 'special-contacts.pec');
-    const button = form?.querySelector('button');
+    const button = form?.querySelector('[data-testid="Special contact add button"]');
     expect(button).toHaveTextContent('button.associa');
     expect(button).toBeDisabled();
   });
 
   it('changes sender', async () => {
     const form = result.container.querySelector('form');
-    await testSelect(
+    await testAutocomplete(
       form!,
       'sender',
       [
