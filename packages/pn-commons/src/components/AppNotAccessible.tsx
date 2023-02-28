@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import { IllusError } from '@pagopa/mui-italia';
+import { IllusInProgress } from '@pagopa/mui-italia';
 
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
@@ -11,7 +11,7 @@ const AppNotAccessible: React.FC<Props> = ({ onAssistanceClick }) => {
   return (
     <Box sx={{ minHeight: '350px', height: '100%', display: 'flex' }}>
       <Box sx={{ margin: 'auto', textAlign: 'center', width: '80vw' }}>
-        <IllusError />
+        <IllusInProgress />
         <Typography variant="h4" color="text.primary" sx={{ margin: '20px 0 10px 0' }}>
           {getLocalizedOrDefaultLabel(
             'common',
