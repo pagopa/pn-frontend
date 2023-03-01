@@ -55,7 +55,7 @@ interface IDigitalContactsCodeVerificationContext {
 
 const DigitalContactsCodeVerificationContext = createContext<
   IDigitalContactsCodeVerificationContext | undefined
->(undefined);
+  >(undefined);
 
 const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) => {
   const { t } = useTranslation(['common', 'recapiti']);
@@ -152,7 +152,11 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           );
           handleClose('validated');
         } else {
-          if (modalProps.digitalDomicileType === LegalChannelType.PEC) {
+          // if senderId !== 'default' they are a special contact => don't show disclaimer
+          // if modalProps.digitalDomicileType === LegalChannelType.PEC it's a legal contact => don't show disclaimer
+          // if modalProps.digitalDomicileType !== LegalChannelType.PEC and senderId === 'default' it's a
+          // courtesy contact => show disclaimer
+          if (modalProps.digitalDomicileType === LegalChannelType.PEC || modalProps.senderId !== 'default') {
             // open verification code dialog
             setOpen(true);
           } else {
