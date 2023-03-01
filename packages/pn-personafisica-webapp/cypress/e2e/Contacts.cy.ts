@@ -523,16 +523,7 @@ describe('Contacts', () => {
     ).as('addPhone');
 
     cy.get('[data-testid="Special contact add button"]').should('be.enabled').click();
-    // confirmation modal
-    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.phone.modal.content);
-    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.phone.modal.checkboxText);
-    cy.get('[data-testid="disclaimer-confirm-button"]').should('be.disabled');
-    cy.get('[data-testid="disclaimer-checkbox"]').should('not.be.checked').click();
-    cy.get('[data-testid="disclaimer-confirm-button"]')
-      .should('be.enabled')
-      .should('have.text', mockData.copy.phone.modal.confirmButton)
-      .click();
-
+    
     cy.get('[data-testid="code confirm button"]').should('be.disabled');
     cy.get('[data-testid="code cancel button"]').should('be.enabled');
 
