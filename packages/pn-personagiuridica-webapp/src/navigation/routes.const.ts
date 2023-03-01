@@ -22,3 +22,4 @@ export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 export const USERS = '/users';
 export const GROUPS = '/groups';
+export const NOT_ACCESSIBLE = '/non-accessibile';
