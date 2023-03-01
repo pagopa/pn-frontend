@@ -19,6 +19,7 @@ export interface ServerResponseError {
    * other requests having many fields that need to be validated)
    */
   element?: string;
+  detail?: string;
 }
 
 export interface AppResponse {
@@ -32,6 +33,7 @@ export interface AppResponse {
 export interface AppResponseError {
   code: string;
   element?: string;
+  detail?: string;
   message: {
     title: string;
     content: string;

@@ -1,21 +1,20 @@
-import {
-  ServerResponseError,
-  ErrorMessage,
-  AppResponseError } from '../../types/AppResponse';
+import { ServerResponseError, ErrorMessage, AppResponseError } from '../../types/AppResponse';
 
 abstract class AppError {
   protected code: string;
   protected element: string;
+  protected detail: string;
 
   constructor(error: ServerResponseError) {
     this.code = error.code;
-    this.element = error.element || "";
+    this.element = error.element || '';
+    this.detail = error.detail || '';
   }
 
   getErrorDetail(): ServerResponseError {
     return {
       code: this.code,
-      element: this.element
+      element: this.element,
     };
   }
 
@@ -25,8 +24,8 @@ abstract class AppError {
       element: this.element,
       message: {
         title: this.getMessage().title,
-        content: this.getMessage().content
-      }
+        content: this.getMessage().content,
+      },
     };
   }
 
