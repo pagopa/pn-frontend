@@ -74,6 +74,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const isMobile = useIsMobile();
   const [senderInputValue, setSenderInputValue] = useState('');
+  const [loadAllEntities, setLoadAllEntities] = useState(false);
 
   const addressTypes = useMemo(
     (): Array<AddressType> => [
@@ -125,10 +126,19 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   );
 
   const fetchAllActivatedParties = useCallback(() => {
-    void dispatch(getAllActivatedParties());
-  }, []);
+    if (!loadAllEntities) {
+      void dispatch(getAllActivatedParties({}));
+      setLoadAllEntities(true);
+    }
+  }, [loadAllEntities]);
 
-  useEffect(() => fetchAllActivatedParties(), [fetchAllActivatedParties]);
+  useEffect(() => {
+    if (senderInputValue.length >= 4) {
+      void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
+    } else if (senderInputValue.length === 0 && loadAllEntities) {
+      void dispatch(getAllActivatedParties({ blockLoading: true }));
+    }
+  }, [senderInputValue]);
 
   const validationSchema = yup.object({
     sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
@@ -190,14 +200,14 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     },
   });
 
-  const handleFilterAutocomplete = (options: Array<Party>) => {
+  /* const handleFilterAutocomplete = (options: Array<Party>) => {
     if (senderInputValue.length >= 4) {
       return options.filter((item: Party) =>
         String(item.name).toLowerCase().includes(senderInputValue.toLowerCase())
       );
     }
     return options;
-  };
+  }; */
 
   const renderOption = (props: any, option: Party) => (
     <MenuItem {...props} value={option.id} key={option.id} role="option">
@@ -333,7 +343,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 onChange={senderChangeHandler}
                 inputValue={senderInputValue}
                 onInputChange={(_event, newInputValue) => handleChangeInput(newInputValue)}
-                filterOptions={handleFilterAutocomplete}
+                filterOptions={(e) => e}
                 renderOption={renderOption}
                 renderInput={(params) => (
                   <TextField
