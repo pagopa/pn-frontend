@@ -200,15 +200,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     },
   });
 
-  /* const handleFilterAutocomplete = (options: Array<Party>) => {
-    if (senderInputValue.length >= 4) {
-      return options.filter((item: Party) =>
-        String(item.name).toLowerCase().includes(senderInputValue.toLowerCase())
-      );
-    }
-    return options;
-  }; */
-
   const renderOption = (props: any, option: Party) => (
     <MenuItem {...props} value={option.id} key={option.id} role="option">
       <DropDownPartyMenuItem name={option.name} />

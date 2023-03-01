@@ -26,3 +26,8 @@ export interface DigitalAddresses {
   legal: Array<DigitalAddress>;
   courtesy: Array<DigitalAddress>;
 }
+
+export interface filterEntitiesBE {
+  paNameFilter?: string;
+  blockLoading?: boolean;
+}

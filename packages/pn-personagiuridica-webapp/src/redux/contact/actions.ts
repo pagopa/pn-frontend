@@ -7,12 +7,13 @@ import {
   CourtesyChannelType,
   DigitalAddress,
   DigitalAddresses,
+  filterEntitiesBE,
   LegalChannelType,
 } from '../../models/contacts';
 import { Party } from '../../models/party';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
-export enum CONTACT_ACTIONS  {
+export enum CONTACT_ACTIONS {
   GET_DIGITAL_ADDRESSES = 'getDigitalAddresses',
   GET_ALL_ACTIVATED_PARTIES = 'getAllActivatedParties',
 }
@@ -112,8 +113,13 @@ export const disableIOAddress = createAsyncThunk<string, string>(
   }
 );
 
-
-export const getAllActivatedParties = createAsyncThunk<Array<Party>,void>(
-  CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES, 
-  performThunkAction(() => ExternalRegistriesAPI.getAllActivatedParties())
+export const getAllActivatedParties = createAsyncThunk<Array<Party>, filterEntitiesBE | null>(
+  CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES,
+  async (payload, { rejectWithValue }) => {
+    try {
+      return await ExternalRegistriesAPI.getAllActivatedParties(payload ? payload : {});
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  }
 );
