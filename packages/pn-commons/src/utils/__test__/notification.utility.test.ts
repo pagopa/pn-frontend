@@ -11,7 +11,7 @@ import {
   TimelineCategory,
   NotificationStatus,
 } from '../../types';
-import { DigitalDomicileTypeForCourtesyMessageOnly, INotificationDetailTimeline, NotificationDeliveryMode, NotificationDetail, NotificationDetailRecipient, NotificationStatusHistory, ResponseStatus } from '../../types/NotificationDetail';
+import { DigitalDomicileTypeForCourtesyMessageOnly, DigitalWorkflowDetails, INotificationDetailTimeline, NotificationDeliveryMode, NotificationDetail, NotificationDetailRecipient, NotificationStatusHistory, RecipientType, ResponseStatus } from '../../types/NotificationDetail';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -20,7 +20,7 @@ import {
   getNotificationTimelineStatusInfos,
   parseNotificationDetail,
 } from '../notification.utility';
-import { acceptedDeliveringDeliveredTimeline, acceptedDeliveringDeliveredTimelineStatusHistory, notificationFromBe, parsedNotification, parsedNotificationTwoRecipients } from './test-utils';
+import { acceptedDeliveringDeliveredTimeline, acceptedDeliveringDeliveredTimelineStatusHistory, additionalRecipient, notificationFromBe, parsedNotification, parsedNotificationTwoRecipients } from './test-utils';
 
 
 jest.mock('../../services/localization.service', () => {
@@ -110,7 +110,7 @@ function testTimelineStatusInfosFnMulti1(labelToTest: string, descriptionToTest:
   testTimelineStatusInfosFn(parsedNotificationTwoRecipientsCopy, 0, labelToTest, descriptionToTest, descriptionDataToTest);
 }
 
-describe.skip('notification status texts', () => {
+describe('notification status texts', () => {
   it('return notification status infos - DELIVERED - single recipient - analog shipment', () => {
     testNotificationStatusInfosFnIncludingDescription(
       {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.ANALOG },
@@ -340,7 +340,7 @@ describe.skip('notification status texts', () => {
   });
 });
 
-describe.skip('timeline event description', () => {
+describe('timeline event description', () => {
   beforeEach(() => {
     parsedNotificationCopy = _.cloneDeep(parsedNotification);
     parsedNotificationTwoRecipientsCopy = _.cloneDeep(parsedNotificationTwoRecipients);    
@@ -871,7 +871,7 @@ describe('parse notification & filters', () => {
     const timeline = acceptedDeliveringDeliveredTimeline();
     const indexToUpdate = timeline.findIndex(elem => elem.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW);
     timeline[indexToUpdate].category = TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER;
-    timeline[indexToUpdate].elementId = 'send_simple_registered_letter';
+    timeline[indexToUpdate].elementId = 'send-simple-registered-letter-0';
     timeline[indexToUpdate].details = {
       recIndex: 0,
       productType: 'RN_RS',
@@ -880,8 +880,8 @@ describe('parse notification & filters', () => {
     sourceNotification.timeline = timeline;
     // also from status history
     const history = acceptedDeliveringDeliveredTimelineStatusHistory();
-    // DELIVERED is the first status, the currently DIGITAL_SUCCESS_WORKFLOW its first element.
-    history[0].relatedTimelineElements[0] = 'send_simple_registered_letter';
+    // DELIVERED is the last status, the currently DIGITAL_SUCCESS_WORKFLOW its first element.
+    history[2].relatedTimelineElements[0] = 'send-simple-registered-letter-0';
     sourceNotification.notificationStatusHistory = history;
 
     // now the test
@@ -906,6 +906,253 @@ describe('parse notification & filters', () => {
     const parsedNotification = parseNotificationDetail(sourceNotification);
     // the first status is DELIVERED
     expect(parsedNotification.notificationStatusHistory[0].deliveryMode).toBeFalsy();
+  });
+
+  it('shift steps from DELIVERED to DELIVERING', () => {
+    const timeline = acceptedDeliveringDeliveredTimeline();
+
+    // change the category of the DIGITAL_SUCCESS_WORKFLOW timeline event to DIGITAL_FAILURE_WORKFLOW
+    const indexToUpdate = timeline.findIndex(elem => elem.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW);
+    timeline[indexToUpdate].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
+    timeline[indexToUpdate].elementId = 'digital-failure-workflow';
+    timeline[indexToUpdate].details = { recIndex: 0 };
+
+    // add PREPARE_SIMPLE_REGISTERED_LETTER / SEND_SIMPLE_REGISTERED_LETTER / SEND_COURTESY_MESSAGE
+    const prepareEvent: INotificationDetailTimeline = {
+      elementId: 'prepare-simple-registered-letter-0',
+      timestamp: '2023-01-26T14:17:20.525827086Z',
+      category: TimelineCategory.PREPARE_SIMPLE_REGISTERED_LETTER,
+      details: {
+        recIndex: 0, productType: 'RN_RS',
+        physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' }
+      },
+    };
+    const sendEvent: INotificationDetailTimeline = {
+      elementId: 'send-simple-registered-letter-0',
+      timestamp: '2023-01-26T14:17:23.525827086Z',
+      category: TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
+      details: {
+        recIndex: 0, productType: 'RN_RS',
+        physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' }
+      },
+    };
+    const courtesyEvent: INotificationDetailTimeline = {
+      elementId: 'send_courtesy_message_1',
+      timestamp: '2023-01-26T14:17:26.525827086Z',
+      category: TimelineCategory.SEND_COURTESY_MESSAGE,
+      details: {
+        recIndex: 0, sendDate: "some-date",
+        digitalAddress: { type: DigitalDomicileType.EMAIL, address: 'still.other@mail.it'},
+      },
+    };
+    timeline.push(prepareEvent, sendEvent, courtesyEvent);
+
+    // set the modified timeline
+    sourceNotification.timeline = timeline;
+
+    // change the status history accordingly
+    const history = acceptedDeliveringDeliveredTimelineStatusHistory();
+    // DELIVERED is the last status, the currently DIGITAL_SUCCESS_WORKFLOW its first element.
+    history[2].relatedTimelineElements[0] = 'digital-failure-workflow';
+    history[2].relatedTimelineElements.push(prepareEvent.elementId, sendEvent.elementId, courtesyEvent.elementId);
+    sourceNotification.notificationStatusHistory = history;
+
+    // now the test
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+
+    // the first status is DELIVERED
+    let currentSteps = parsedNotification.notificationStatusHistory[0].steps;
+    expect(currentSteps).toHaveLength(1);
+    expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
+    expect(currentSteps && (currentSteps[0].details as DigitalWorkflowDetails).digitalAddress?.address).toEqual('still.other@mail.it');
+
+    // the second status is DELIVERING
+    currentSteps = parsedNotification.notificationStatusHistory[1].steps;
+    // 4 shifted from DELIVERED + 3 originally in DELIVERING + 2 copied from AACCEPTED
+    expect(currentSteps).toHaveLength(9);
+    expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER);
+    expect(currentSteps && currentSteps[0].hidden).toBeFalsy();
+    expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.PREPARE_SIMPLE_REGISTERED_LETTER);
+    expect(currentSteps && currentSteps[1].hidden).toBeTruthy();
+    expect(currentSteps && currentSteps[2].category).toEqual(TimelineCategory.SCHEDULE_REFINEMENT);
+    expect(currentSteps && currentSteps[2].hidden).toBeTruthy();
+    expect(currentSteps && currentSteps[3].category).toEqual(TimelineCategory.DIGITAL_FAILURE_WORKFLOW);
+    expect(currentSteps && currentSteps[3].hidden).toBeTruthy();
+    expect(currentSteps && currentSteps[4].category).toEqual(TimelineCategory.SEND_DIGITAL_FEEDBACK);
+    expect(currentSteps && currentSteps[4].hidden).toBeFalsy();
+  });
+
+  it('recipient in VIEWED status - no delegate', () => {
+    // add a VIEWED status with one NOTIFICATION_VIEWED element - no delegate
+    const notificationViewedElement: INotificationDetailTimeline = {
+      elementId: 'notification-viewed-0',
+      timestamp: '2023-01-26T14:17:26.525827086Z',
+      category: TimelineCategory.NOTIFICATION_VIEWED,
+      details: { recIndex: 0 },
+    };
+    const viewedStatus: NotificationStatusHistory = {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2023-01-26T14:17:26.525827086Z',
+      relatedTimelineElements: [notificationViewedElement.elementId],
+    };
+    const timeline = acceptedDeliveringDeliveredTimeline();
+    timeline.push(notificationViewedElement);
+    sourceNotification.timeline = timeline;
+    const statusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    statusHistory.push(viewedStatus);
+    sourceNotification.notificationStatusHistory = statusHistory;
+
+    // parse
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+
+    // ----------- checks
+    expect(parsedNotification.notificationStatusHistory).toHaveLength(4);
+    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.VIEWED);
+    expect(parsedNotification.notificationStatusHistory[0].recipient).toBeFalsy();
+  });
+
+  it('recipient in VIEWED status - with delegate', () => {
+    // add a VIEWED status with two NOTIFICATION_VIEWED element - both with delegate info
+    const notificationViewedElement1: INotificationDetailTimeline = {
+      elementId: 'notification-viewed-0',
+      timestamp: '2023-01-26T14:17:26.525827086Z',
+      category: TimelineCategory.NOTIFICATION_VIEWED,
+      details: { 
+        recIndex: 0, 
+        delegateInfo: { 
+          internalId: "mocked-delegate-internal-id",
+          taxId: "GLLGLL64B15G702I",
+          operatorUuid: "mocked-delegate-uuid",
+          mandateId: "7c69e30a-23cd-4ef2-9b95-98c5a9f4e636",
+          denomination: "galileo galilei",
+          delegateType: RecipientType.PF,
+        } 
+      },
+    };
+    const notificationViewedElement2: INotificationDetailTimeline = {
+      elementId: 'notification-viewed-1',
+      timestamp: '2023-01-26T14:17:36.525827086Z',
+      category: TimelineCategory.NOTIFICATION_VIEWED,
+      details: { 
+        recIndex: 0, 
+        delegateInfo: { 
+          internalId: "mocked-delegate-internal-id-2",
+          taxId: "LVLDAA85T50G702B",
+          operatorUuid: "mocked-delegate-uuid-2",
+          mandateId: "8669e30a-23cd-4ef2-9b95-98c5a9f4e636",
+          denomination: "ada lovelace",
+          delegateType: RecipientType.PF,
+        } 
+      },
+    };
+    const viewedStatus: NotificationStatusHistory = {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2023-01-26T14:17:26.525827086Z',
+      relatedTimelineElements: [notificationViewedElement1.elementId, notificationViewedElement2.elementId],
+
+    };
+    const timeline = acceptedDeliveringDeliveredTimeline();
+    timeline.push(notificationViewedElement1, notificationViewedElement2);
+    sourceNotification.timeline = timeline;
+    const statusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    statusHistory.push(viewedStatus);
+    sourceNotification.notificationStatusHistory = statusHistory;
+
+    // parse
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+
+    // ----------- checks
+    expect(parsedNotification.notificationStatusHistory).toHaveLength(4);
+    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.VIEWED);
+    expect(parsedNotification.notificationStatusHistory[0].steps).toHaveLength(2);
+    expect(parsedNotification.notificationStatusHistory[0].recipient).toEqual('galileo galilei (GLLGLL64B15G702I)');
+  });
+
+  // The situation for a multirecipient notification
+  // when the notification detail is accessed by either a sender or 
+  // a recipient who has already viewed the notification is similar to this,
+  // since the decision about including or not the VIEWED_AFTER_DEADLINE status
+  // regards *only* the presence of a NOTIFICATION_VIEWED timeline element.
+  // Consequently, all these scenarios are covered by the following test.
+  it('changed VIEWED unto VIEWED_AFTER_DEADLINE', () => {
+    // add an EFFECTIVE_DATE status, and afterwards a VIEWED status with one NOTIFICATION_VIEWED element - no delegate
+    const refinementElement: INotificationDetailTimeline = {
+      elementId: 'refinement-0',
+      timestamp: '2023-01-26T14:18:26.525827086Z',
+      category: TimelineCategory.REFINEMENT,
+      details: { recIndex: 0 },
+    };
+    const notificationViewedElement: INotificationDetailTimeline = {
+      elementId: 'notification-viewed-0',
+      timestamp: '2023-01-26T14:20:26.525827086Z',
+      category: TimelineCategory.NOTIFICATION_VIEWED,
+      details: { recIndex: 0 },
+    };
+    const effectiveDateStatus: NotificationStatusHistory = {
+      status: NotificationStatus.EFFECTIVE_DATE,
+      activeFrom: '2023-01-26T14:18:26.525827086Z',
+      relatedTimelineElements: [refinementElement.elementId],
+    };
+    const viewedStatus: NotificationStatusHistory = {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2023-01-26T14:20:26.525827086Z',
+      relatedTimelineElements: [notificationViewedElement.elementId],
+    };
+    const timeline = acceptedDeliveringDeliveredTimeline();
+    timeline.push(refinementElement, notificationViewedElement);
+    sourceNotification.timeline = timeline;
+    const statusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    statusHistory.push(effectiveDateStatus, viewedStatus);
+    sourceNotification.notificationStatusHistory = statusHistory;
+
+    // parse
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+
+    // ----------- checks
+    expect(parsedNotification.notificationStatusHistory).toHaveLength(5);
+    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.VIEWED_AFTER_DEADLINE);
+    expect(parsedNotification.notificationStatusHistory[1].status).toEqual(NotificationStatus.EFFECTIVE_DATE);
+  });
+
+  it('VIEWED status erased - multi-recipient notification, detail requested by a recipient who has not yet viewed the notification', () => {
+    // add a recipient to the notification
+    sourceNotification.recipients.push(additionalRecipient);
+
+    // Add an EFFECTIVE_DATE status, and afterwards a VIEWED status with no NOTIFICATION_VIEWED element.
+    // How could be possible to have an empth VIEWED status: here the scenario.
+    // There is no NOTIFICATION_VIEWED element corresponding to the recipient
+    // who has requested the detail, 
+    // then the API call filters all the NOTIFICATION_VIEWED elements
+    // since they regard recipients other than the currently logged one.
+    const refinementElement: INotificationDetailTimeline = {
+      elementId: 'refinement-0',
+      timestamp: '2023-01-26T14:18:26.525827086Z',
+      category: TimelineCategory.REFINEMENT,
+      details: { recIndex: 0 },
+    };
+    const effectiveDateStatus: NotificationStatusHistory = {
+      status: NotificationStatus.EFFECTIVE_DATE,
+      activeFrom: '2023-01-26T14:18:26.525827086Z',
+      relatedTimelineElements: [refinementElement.elementId],
+    };
+    const viewedStatus: NotificationStatusHistory = {
+      status: NotificationStatus.VIEWED,
+      activeFrom: '2023-01-26T14:20:26.525827086Z',
+      relatedTimelineElements: [],
+    };
+    const timeline = acceptedDeliveringDeliveredTimeline();
+    timeline.push(refinementElement);
+    sourceNotification.timeline = timeline;
+    const statusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    statusHistory.push(effectiveDateStatus, viewedStatus);
+    sourceNotification.notificationStatusHistory = statusHistory;
+
+    // parse
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+
+    // ----------- checks
+    expect(parsedNotification.notificationStatusHistory).toHaveLength(4);
+    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.EFFECTIVE_DATE);
   });
 
   it('return notifications filters count (no filters)', () => {
@@ -940,7 +1187,7 @@ describe('parse notification & filters', () => {
   });
 });
 
-describe.skip('timeline legal fact link text', () => {
+describe('timeline legal fact link text', () => {
   it('return legalFact label - default', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.GET_ADDRESS;
     const label = getLegalFactLabel(parsedNotificationCopy.timeline[0]);

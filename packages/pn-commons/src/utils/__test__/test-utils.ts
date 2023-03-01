@@ -74,7 +74,7 @@ const recipients: Array<NotificationDetailRecipient> = [
   },
 ];
 
-const additionalRecipient: NotificationDetailRecipient = {
+export const additionalRecipient: NotificationDetailRecipient = {
   recipientType: RecipientType.PF,
   taxId: 'mocked-taxId2',
   denomination: 'Nome2 Cognome2',
