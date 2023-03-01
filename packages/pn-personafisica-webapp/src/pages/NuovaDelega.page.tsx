@@ -150,8 +150,8 @@ const NuovaDelega = () => {
       setLoadAllEntities(true);
     }
   };
-  // done for complexity
 
+  // done for complexity
   const handleFilterAutocomplete = (options: Array<Party>) => {
     if (senderInputValue.length >= 4) {
       return options.filter((item: Party) =>

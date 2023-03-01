@@ -5,3 +5,7 @@ export interface newDelegation {
   error: boolean;
   entities: Array<Party>;
 }
+
+export interface filterEntitiesBE {
+  paNameFilter?: string;
+}
