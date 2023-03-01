@@ -8,7 +8,7 @@
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.6",
-    "@pagopa/mui-italia": "^0.8.10",
+    "@pagopa/mui-italia": "^0.9.0",
     "@mui/x-date-pickers": "^5.0.13",
     "@pagopa-pn/pn-commons": "^1.5.4",
     "@reduxjs/toolkit": "^1.7.1",
