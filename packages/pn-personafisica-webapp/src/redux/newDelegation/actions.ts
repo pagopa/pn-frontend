@@ -38,11 +38,13 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
   }
 );
 
-export const getAllEntities = createAsyncThunk<Array<Party>, filterEntitiesBE>(
+export const getAllEntities = createAsyncThunk<Array<Party>, filterEntitiesBE | null>(
   'getAllEntities',
-  async (_, { rejectWithValue }, payload?: filterEntitiesBE) => {
+  async (payload, { rejectWithValue }) => {
     try {
-      return await ExternalRegistriesAPI.getAllActivatedParties(payload);
+      return await ExternalRegistriesAPI.getAllActivatedParties(
+        payload ? payload : {}
+      );
     } catch (e) {
       return rejectWithValue(e);
     }

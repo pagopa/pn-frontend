@@ -137,11 +137,23 @@ const NuovaDelega = () => {
     dispatch(resetNewDelegation());
   }, []);
 
+  useEffect(() => {
+    if (senderInputValue.length >= 4) {
+      void dispatch(
+        getAllEntities({ paNameFilter: senderInputValue, blockLoading: true })
+      );
+    } else if (senderInputValue.length === 0 && loadAllEntities) {
+      void dispatch(
+        getAllEntities({ blockLoading: true })
+      );
+    }
+  }, [senderInputValue]);
+  
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
   useEffect(() => {
     if (loadAllEntities) {
-      void dispatch(getAllEntities());
+      void dispatch(getAllEntities({}));
     }
   }, [loadAllEntities]);
 
@@ -149,16 +161,6 @@ const NuovaDelega = () => {
     if (!loadAllEntities) {
       setLoadAllEntities(true);
     }
-  };
-
-  // done for complexity
-  const handleFilterAutocomplete = (options: Array<Party>) => {
-    if (senderInputValue.length >= 4) {
-      return options.filter((item: Party) =>
-        String(item.name).toLowerCase().includes(senderInputValue.toLowerCase())
-      );
-    }
-    return options;
   };
 
   const renderOption = (props: any, option: Party) => (
@@ -354,7 +356,7 @@ const NuovaDelega = () => {
                                     onInputChange={(_event, newInputValue) =>
                                       handleChangeInput(newInputValue)
                                     }
-                                    filterOptions={handleFilterAutocomplete}
+                                    filterOptions={(e) => e}
                                     renderOption={renderOption}
                                     renderInput={(params) => (
                                       <TextField
