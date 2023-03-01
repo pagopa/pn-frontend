@@ -208,7 +208,7 @@ export function acceptedDeliveringDeliveredTimeline(): Array<INotificationDetail
     },
     {
       elementId: 'send_digital_domicile_0_PLATFORM',
-      timestamp: '2023-01-26T13:55:52.651901435Z',
+      timestamp: '2023-01-26T13:55:58.651901435Z',
       category: TimelineCategory.SEND_DIGITAL_DOMICILE,
       details: {
         recIndex: 0,

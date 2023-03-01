@@ -11,7 +11,7 @@ import {
   TimelineCategory,
   NotificationStatus,
 } from '../../types';
-import { DigitalDomicileTypeForCourtesyMessageOnly, NotificationDeliveryMode, NotificationDetail, NotificationDetailRecipient, NotificationStatusHistory, ResponseStatus } from '../../types/NotificationDetail';
+import { DigitalDomicileTypeForCourtesyMessageOnly, INotificationDetailTimeline, NotificationDeliveryMode, NotificationDetail, NotificationDetailRecipient, NotificationStatusHistory, ResponseStatus } from '../../types/NotificationDetail';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -28,9 +28,24 @@ jest.mock('../../services/localization.service', () => {
   return {
     ...original,
     getLocalizedOrDefaultLabel: (_1: string, key: string, _2: string, data: any) => {
+      // Ad-hoc handling of a particular case: in order to generate the description for the
+      // VIEWED / VIEWED_AFTER_DEADLINE statuses, if the notification has been viewed by a delegate,
+      // a previous i18n call allows to obtain the text that refers to the delegate,
+      // and then the obtained value is passed as a data item (say "recipient") to the "main" i18n call.
+      // But in turn, the first i18n call has also data passed, namely the name of the delegate.
+      // Hence in this mock we would arrive to something like
+      // 'mainKey /-/ { recipient: status.delegate /-/ {name: Some Name} }'
+      // which is difficult to parse. 
+      // Then for the first i18n call in this case, whose key is status.delgate,
+      // we give instead 'status.delegate.Some Name' as the output, so that the final i18n expression
+      // is 'mainKey /-/ { recipient: status.delegate.Some Name }'
+      // which can be handled through the general procedure and is easy to expect about.
       if (key === 'status.delegate' && data && data.name) {
         return `status.delegate.${data.name}`;
       } else {
+        // just separate key and data with a unique pattern
+        // so that they can be split for the expectations.
+        // The data is re-converted into JSON in order to ease the specification of the expected result.
         return data ? `${key} /-/ ${JSON.stringify(data)}` : key
       }
     },
@@ -770,10 +785,25 @@ describe('parse notification & filters', () => {
     expect(calculatedParsedNotification).toStrictEqual(parsedNotification);
   });
 
-  it('reverse status and events', () => {
-    sourceNotification.timeline = acceptedDeliveringDeliveredTimeline();
-    sourceNotification.notificationStatusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+  it('reverse status and events - some hidden status', () => {
+    // inject an initial, hidden event for the DELIVERING status
+    const injectedFirstDeliveringEvent: INotificationDetailTimeline = {
+      elementId: 'public-registry-call',
+      timestamp: '2023-01-26T13:55:57.651901435Z',
+      category: TimelineCategory.PUBLIC_REGISTRY_CALL,
+      details: {},
+    };
+    const timeline = acceptedDeliveringDeliveredTimeline();
+    timeline.splice(2, 0, injectedFirstDeliveringEvent);
+    sourceNotification.timeline = timeline;
+    const statusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    statusHistory[1].relatedTimelineElements.unshift('public-registry-call');
+    sourceNotification.notificationStatusHistory = statusHistory;
+
+    // parse
     const parsedNotification = parseNotificationDetail(sourceNotification);
+
+    // ----------- checks
     // statuses
     expect(parsedNotification.notificationStatusHistory).toHaveLength(3);
     expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.DELIVERED);
@@ -783,16 +813,25 @@ describe('parse notification & filters', () => {
     let currentSteps = parsedNotification.notificationStatusHistory[0].steps;
     expect(currentSteps).toHaveLength(2);
     expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SCHEDULE_REFINEMENT);
+    expect(currentSteps && currentSteps[0].hidden).toBeTruthy();
     expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.DIGITAL_SUCCESS_WORKFLOW);
+    expect(currentSteps && currentSteps[1].hidden).toBeTruthy();
     // DELIVERING events -- ACCEPTED events are copied
+    // hidden status of copied events is checked in a separate test
     currentSteps = parsedNotification.notificationStatusHistory[1].steps;
-    expect(currentSteps).toHaveLength(5);
+    expect(currentSteps).toHaveLength(6);
     expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SEND_DIGITAL_FEEDBACK);
+    expect(currentSteps && currentSteps[0].hidden).toBeFalsy();
     expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.SEND_DIGITAL_PROGRESS);
+    expect(currentSteps && currentSteps[1].hidden).toBeFalsy();
     expect(currentSteps && currentSteps[2].category).toEqual(TimelineCategory.SEND_DIGITAL_DOMICILE);
-    expect(currentSteps && currentSteps[3].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
-    expect(currentSteps && currentSteps[4].category).toEqual(TimelineCategory.REQUEST_ACCEPTED);
+    expect(currentSteps && currentSteps[2].hidden).toBeFalsy();
+    expect(currentSteps && currentSteps[3].category).toEqual(TimelineCategory.PUBLIC_REGISTRY_CALL);
+    expect(currentSteps && currentSteps[3].hidden).toBeTruthy();
+    expect(currentSteps && currentSteps[4].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
+    expect(currentSteps && currentSteps[5].category).toEqual(TimelineCategory.REQUEST_ACCEPTED);
     // ACCEPTED events
+    // hidden status is checked in a separate test
     currentSteps = parsedNotification.notificationStatusHistory[2].steps;
     expect(currentSteps).toHaveLength(2);
     expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
@@ -816,6 +855,57 @@ describe('parse notification & filters', () => {
     expect(currentSteps && currentSteps[0].hidden).toBeTruthy();
     expect(currentSteps && currentSteps[1].hidden).toBeTruthy();
     expect(currentSteps && currentSteps[1].legalFactsIds).toHaveLength(1);
+  });
+
+  it('deliveryMode DIGITAL', () => {
+    sourceNotification.timeline = acceptedDeliveringDeliveredTimeline();
+    sourceNotification.notificationStatusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    // the "base" mocked notification corresponds to the DIGITAL workflow
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+    // the first status is DELIVERED
+    expect(parsedNotification.notificationStatusHistory[0].deliveryMode).toEqual(NotificationDeliveryMode.DIGITAL);
+  });
+
+  it('deliveryMode ANALOG', () => {
+    // change the category of the DIGITAL_SUCCESS_WORKFLOW timeline event to SEND_SIMPLE_REGISTERED_LETTER
+    const timeline = acceptedDeliveringDeliveredTimeline();
+    const indexToUpdate = timeline.findIndex(elem => elem.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW);
+    timeline[indexToUpdate].category = TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER;
+    timeline[indexToUpdate].elementId = 'send_simple_registered_letter';
+    timeline[indexToUpdate].details = {
+      recIndex: 0,
+      productType: 'RN_RS',
+      physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' }
+    };
+    sourceNotification.timeline = timeline;
+    // also from status history
+    const history = acceptedDeliveringDeliveredTimelineStatusHistory();
+    // DELIVERED is the first status, the currently DIGITAL_SUCCESS_WORKFLOW its first element.
+    history[0].relatedTimelineElements[0] = 'send_simple_registered_letter';
+    sourceNotification.notificationStatusHistory = history;
+
+    // now the test
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+    // the first status is DELIVERED
+    expect(parsedNotification.notificationStatusHistory[0].deliveryMode).toEqual(NotificationDeliveryMode.ANALOG);
+  });
+
+  it('deliveryMode not assigned', () => {
+    // remove the DIGITAL_SUCCESS_WORKFLOW timeline event
+    const timeline = acceptedDeliveringDeliveredTimeline();
+    const indexToRemove = timeline.findIndex(elem => elem.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW);
+    timeline.splice(indexToRemove, 1);
+    sourceNotification.timeline = timeline;
+    // also from status history
+    const history = acceptedDeliveringDeliveredTimelineStatusHistory();
+    // DELIVERED is the first status, DIGITAL_SUCCESS_WORKFLOW its first element.
+    history[0].relatedTimelineElements.splice(0, 0);
+    sourceNotification.notificationStatusHistory = history;
+
+    // now the test
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+    // the first status is DELIVERED
+    expect(parsedNotification.notificationStatusHistory[0].deliveryMode).toBeFalsy();
   });
 
   it('return notifications filters count (no filters)', () => {
