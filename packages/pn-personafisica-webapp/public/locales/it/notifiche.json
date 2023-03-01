@@ -63,7 +63,7 @@
     "payment": {
       "summary-pending": "Da pagare",
       "summary-succeeded": "Pagato",
-      "amount": "importo",
+      "amount": "Importo",
       "disclaimer": "Questo importo verrà aggiornato al momento del pagamento. Quindi potrebbe essere diverso.",
       "disclaimer-link": "Come mai?",
       "submit": "Paga",
@@ -84,7 +84,9 @@
       "error-payment-unknown": "Spiacenti, i dati dell'avviso non sono corretti. Codice di errore per l’assistenza:",
       "error-generic": "Spiacenti, si è verificato un errore imprevisto. Ricarica la pagina o contattaci per ricevere assistenza.",
       "error-canceled": "Spiacenti, l’Ente Creditore ha revocato questo avviso. Contatta l’Ente per maggiori informazioni.",
-      "error-expired": "Spiacenti, l’avviso è scaduto e non è più possibile pagarlo. Contatta l’Ente per maggiori informazioni."
+      "error-expired": "Spiacenti, l’avviso è scaduto e non è più possibile pagarlo. Contatta l’Ente per maggiori informazioni.",
+      "object": "Oggetto del pagamento",
+      "type": "Tipologia di pagamento"
     },
     "acts_files": {
       "downloadable_acts": "I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.",

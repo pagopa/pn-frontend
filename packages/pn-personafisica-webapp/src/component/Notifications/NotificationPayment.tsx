@@ -2,6 +2,7 @@ import { LoadingButton } from '@mui/lab';
 import {
   Alert,
   AlertColor,
+  Box,
   Button,
   Divider,
   Grid,
@@ -10,23 +11,27 @@ import {
   Skeleton,
   Stack,
   SxProps,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
   Theme,
   Typography,
 } from '@mui/material';
-import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import {
   ApiErrorWrapper,
+  appStateActions,
   CopyToClipboard,
   formatEurocentToCurrency,
   NotificationDetailPayment,
   PaymentAttachmentSName,
   PaymentInfoDetail,
   PaymentStatus,
-  useIsMobile,
-  appStateActions,
   useDownloadDocument,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -39,11 +44,7 @@ import {
   NOTIFICATION_ACTIONS,
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import {
-  PAGOPA_HELP_EMAIL,
-  // PN-2029
-  // PAYMENT_DISCLAIMER_URL
-} from '../../utils/constants';
+import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
 
@@ -503,6 +504,34 @@ const NotificationPayment: React.FC<Props> = ({
                 </Stack>
               </>
             )}
+            {!loading && paymentInfo.status === PaymentStatus.SUCCEEDED &&
+              <TableContainer component={Paper} className="paperContainer" sx={{ backgroundColor: "background.default", p: 3 }}>
+                <Table aria-label={t('notifications', 'detail.table-aria-label')}>
+                  <TableBody>
+                    <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
+                      <TableCell padding="none" sx={{ py: 1 }}>{t('detail.payment.object', { ns: 'notifiche' })}</TableCell>
+                      <TableCell padding="none" sx={{ py: 1 }}>Avviso.Oggetto</TableCell>
+                    </TableRow>
+                    <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
+                      <TableCell padding="none" sx={{ py: 1 }}>{t('detail.payment.amount', { ns: 'notifiche' })}</TableCell>
+                      <TableCell padding="none" sx={{ py: 1 }}>130,00 €</TableCell>
+                    </TableRow>
+                    <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
+                      <TableCell padding="none" sx={{ py: 1 }}>{t('detail.payment.type', { ns: 'notifiche' })}</TableCell>
+                      <TableCell padding="none" sx={{ py: 1 }}>[Avviso pagoPA]</TableCell>
+                    </TableRow>
+                    <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
+                      <TableCell padding="none" sx={{ py: 1 }}>{t('detail.notice-code', { ns: 'notifiche' })}</TableCell>
+                      <TableCell padding="none" sx={{ py: 1 }}>0000 0000 0000 0000 00</TableCell>
+                    </TableRow>
+                    <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
+                      <TableCell padding="none" sx={{ py: 1 }}>{t('detail.creditor-tax-id', { ns: 'notifiche' })}</TableCell>
+                      <TableCell padding="none" sx={{ py: 1 }}>00000000000</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            }
           </Stack>
         </Grid>
       </Paper>
