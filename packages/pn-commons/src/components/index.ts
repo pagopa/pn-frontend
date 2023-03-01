@@ -44,6 +44,7 @@ import ApiErrorWrapper from './ApiError/ApiErrorWrapper';
 import SnackBar from './SnackBar/SnackBar';
 import { SpecialContactsProvider, useSpecialContactsContext } from "./SpecialContacts.context";
 import TimedMessage from './TimedMessage/TimedMessage';
+import AppNotAccessible from './AppNotAccessible';
 
 export {
   LoadingOverlay,
@@ -89,7 +90,8 @@ export {
   LoadingPage,
   SpecialContactsProvider,
   useSpecialContactsContext,
-  TimedMessage
+  TimedMessage,
+  AppNotAccessible
 };
 
 export type { DowntimeLogColumn };
