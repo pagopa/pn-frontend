@@ -153,13 +153,6 @@ async function testContactAddition(
     });
   });
 
-  if (channelType !== LegalChannelType.PEC) {
-    const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
-    fireEvent.click(disclaimerCheckbox);
-    const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
-    fireEvent.click(disclaimerConfirmButton);
-  }
-
   const dialog = await waitFor(() => {
     const dialogEl = screen.queryByTestId('codeDialog');
     expect(dialogEl).toBeInTheDocument();
