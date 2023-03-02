@@ -6,8 +6,3 @@ export interface newDelegation {
   entities: Array<Party>;
   blockLoading: boolean;
 }
-
-export interface filterEntitiesBE {
-  paNameFilter?: string;
-  blockLoading?: boolean;
-}

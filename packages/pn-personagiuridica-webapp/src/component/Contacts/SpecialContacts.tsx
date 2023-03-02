@@ -74,7 +74,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const isMobile = useIsMobile();
   const [senderInputValue, setSenderInputValue] = useState('');
-  const [loadAllEntities, setLoadAllEntities] = useState(false);
 
   const addressTypes = useMemo(
     (): Array<AddressType> => [
@@ -126,16 +125,13 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   );
 
   const fetchAllActivatedParties = useCallback(() => {
-    if (!loadAllEntities) {
-      void dispatch(getAllActivatedParties({}));
-      setLoadAllEntities(true);
-    }
-  }, [loadAllEntities]);
+    void dispatch(getAllActivatedParties({}));
+  }, []);
 
   useEffect(() => {
     if (senderInputValue.length >= 4) {
       void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
-    } else if (senderInputValue.length === 0 && loadAllEntities) {
+    } else if (senderInputValue.length === 0) {
       void dispatch(getAllActivatedParties({ blockLoading: true }));
     }
   }, [senderInputValue]);
