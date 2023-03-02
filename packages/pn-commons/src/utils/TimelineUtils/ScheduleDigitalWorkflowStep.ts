@@ -10,7 +10,6 @@ export class ScheduleDigitalWorkflowStep extends TimelineStep {
         `L'invio della notifica per via digitale a ${payload.recipient?.denomination} è in preparazione.`,
         this.nameAndTaxId(payload)
       ),
-      recipient: payload.recipientLabel,
     };
   }
 }

@@ -24,7 +24,7 @@ describe('Contacts', () => {
 
     cy.intercept(/TOS/, {
       statusCode: 200,
-      fixture: 'tos/tos-accepted'
+      fixture: 'tos/tos-accepted',
     });
 
     cy.login();
@@ -154,13 +154,26 @@ describe('Contacts', () => {
     cy.get('[data-testid="body"]').should('not.exist');
     cy.get('[data-testid="content"]').should('not.exist');
 
-    // enable io
+    // intercept enable request and simulate a successful response
     cy.intercept('POST', `${COURTESY_CONTACT('default', CourtesyChannelType.IOMSG)}`, {
       statusCode: 200,
       fixture: '',
     }).as('enableIO');
 
-    cy.get('.PrivateSwitchBase-input').should('not.be.checked').click();
+    // verify io is disabled and enable it
+    cy.get('[data-testid="CloseIcon"]');
+    cy.get('[data-testid="IO status"]').should('have.text', mockData.copy.io.disabled);
+    cy.get('[data-testid="IO button"]').should('have.text', mockData.copy.io.enable).click();
+    // Confirmation Modal
+    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.io.modal.enable.title);
+    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.io.modal.enable.content);
+    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.io.modal.enable.checkboxText);
+    cy.get('[data-testid="disclaimer-confirm-button"]').should('be.disabled');
+    cy.get('[data-testid="disclaimer-checkbox"]').should('not.be.checked').click();
+    cy.get('[data-testid="disclaimer-confirm-button"]')
+      .should('be.enabled')
+      .should('have.text', mockData.copy.io.modal.enable.confirmButton)
+      .click();
 
     // verify the request is properly formatted
     cy.wait('@enableIO').its('request.body').should('deep.equal', {
@@ -168,18 +181,27 @@ describe('Contacts', () => {
       verificationCode: mockData.data.io.code,
     });
 
-    cy.get('.PrivateSwitchBase-input').should('be.checked');
-
+    // intercept disable request and simulate a successful response
     cy.intercept('DELETE', `${COURTESY_CONTACT('default', CourtesyChannelType.IOMSG)}`, {
       statusCode: 204,
       fixture: '',
     }).as('disableIO');
 
-    cy.get('.PrivateSwitchBase-input').click();
+    // verify io is enabled and disable it
+    cy.get('[data-testid="CheckIcon"]');
+    cy.get('[data-testid="IO status"]').should('have.text', mockData.copy.io.enabled);
+    cy.get('[data-testid="IO button"]').should('have.text', mockData.copy.io.disable).click();
+    // Confirmation Modal
+    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.io.modal.disable.title);
+    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.io.modal.disable.content);
+    cy.get('[data-testid="disclaimer-confirm-button"]').should('be.enabled').click();
 
     cy.wait('@disableIO');
 
-    cy.get('.PrivateSwitchBase-input').should('not.be.checked');
+    // verify io is disabled
+    cy.get('[data-testid="CloseIcon"]');
+    cy.get('[data-testid="IO status"]').should('have.text', mockData.copy.io.disabled);
+    cy.get('[data-testid="IO button"]').should('have.text', mockData.copy.io.enable);
   });
 
   it('Should add a valid email', () => {
@@ -229,6 +251,15 @@ describe('Contacts', () => {
       fixture: '',
     }).as('addEmail');
     cy.get('[data-testid="add email"]').click();
+    // confirmation modal
+    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.mail.modal.content);
+    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.mail.modal.checkboxText);
+    cy.get('[data-testid="disclaimer-confirm-button"]').should('be.disabled');
+    cy.get('[data-testid="disclaimer-checkbox"]').should('not.be.checked').click();
+    cy.get('[data-testid="disclaimer-confirm-button"]')
+      .should('be.enabled')
+      .should('have.text', mockData.copy.mail.modal.confirmButton)
+      .click();
 
     cy.wait('@addEmail');
 
@@ -311,6 +342,15 @@ describe('Contacts', () => {
       fixture: '',
     }).as('addPhone');
     cy.get('[data-testid="add phone"]').click();
+    // confirmation modal
+    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.phone.modal.content);
+    cy.get('[data-testid="disclaimerDialog"]').contains(mockData.copy.phone.modal.checkboxText);
+    cy.get('[data-testid="disclaimer-confirm-button"]').should('be.disabled');
+    cy.get('[data-testid="disclaimer-checkbox"]').should('not.be.checked').click();
+    cy.get('[data-testid="disclaimer-confirm-button"]')
+      .should('be.enabled')
+      .should('have.text', mockData.copy.phone.modal.confirmButton)
+      .click();
 
     cy.wait('@addPhone');
 
@@ -456,6 +496,9 @@ describe('Contacts', () => {
     cy.contains(mockData.data.additional.validPec);
 
     // adding a phone number to special contacts
+    cy.get('#sender').click();
+    cy.get(`[data-value="${mockData.data.additional.sender}"]`).click();
+
     cy.get('#addressType').click();
     cy.get('[data-value="SMS"]').click();
 
@@ -479,25 +522,8 @@ describe('Contacts', () => {
       }
     ).as('addPhone');
 
-    /**
-     * <WORKAROUND>
-     * change sender in order to avoid a bug just spotted in the following process:
-     * 1) select the sender, the contact type, type in the contact and confirm
-     * 2) try to add another contact changing the type and value
-     *
-     * the "invalid input" error message goes away when the input is correct, but
-     * the submit button is not enabled without changing the sender
-     *  */
-    cy.get('#sender').click();
-    cy.get(`[data-value="${mockData.data.additional.sender2}"]`).click();
-    cy.get('#sender').click();
-    cy.get(`[data-value="${mockData.data.additional.sender}"]`).click();
-    /**
-     * </WORKAROUND>
-     */
-
     cy.get('[data-testid="Special contact add button"]').should('be.enabled').click();
-
+    
     cy.get('[data-testid="code confirm button"]').should('be.disabled');
     cy.get('[data-testid="code cancel button"]').should('be.enabled');
 

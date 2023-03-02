@@ -32,16 +32,16 @@ export const DelegationsApi = {
   getDelegates: (): Promise<Array<Delegate>> =>
     apiClient
       .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATOR())
-      .then((response: AxiosResponse<Array<Delegation>>) => 
-          response.data.map((delegation) => ({
-            mandateId: delegation.mandateId,
-            status: delegation.status,
-            visibilityIds: delegation.visibilityIds,
-            verificationCode: delegation.verificationCode,
-            datefrom: delegation.datefrom,
-            dateto: delegation.dateto,
-            delegate: 'delegate' in delegation ? delegation.delegate : null,
-          }))
+      .then((response: AxiosResponse<Array<Delegation>>) =>
+        response.data.map((delegation) => ({
+          mandateId: delegation.mandateId,
+          status: delegation.status,
+          visibilityIds: delegation.visibilityIds,
+          verificationCode: delegation.verificationCode,
+          datefrom: delegation.datefrom,
+          dateto: delegation.dateto,
+          delegate: 'delegate' in delegation ? delegation.delegate : null,
+        }))
       ),
 
   /**
@@ -51,7 +51,7 @@ export const DelegationsApi = {
   getDelegators: (): Promise<Array<Delegator>> =>
     apiClient
       .get<Array<Delegation>>(DELEGATIONS_BY_DELEGATE())
-      .then((response: AxiosResponse<Array<Delegation>>) => 
+      .then((response: AxiosResponse<Array<Delegation>>) =>
         response.data.map((delegation) => ({
           mandateId: delegation.mandateId,
           status: delegation.status,
@@ -62,7 +62,7 @@ export const DelegationsApi = {
           delegator: 'delegator' in delegation ? delegation.delegator : null,
         }))
       ),
-  
+
   /**
    * Removes a delegation that the user created
    * @param id
