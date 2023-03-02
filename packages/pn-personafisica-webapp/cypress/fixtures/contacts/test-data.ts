@@ -16,7 +16,7 @@ export default {
     io: {
       title: 'App IO',
       subtitle:
-        'Quando c’è una notifica per te, ti inviamo un messaggio su IO. Puoi leggerla e pagare eventuali spese direttamente in app. Qui ricevi anche eventuali comunicazioni importanti.',
+        'Attiva il servizio “Notifiche digitali”: quando c’è una notifica per te, ti inviamo un messaggio in app, dove puoi leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.',
       disclaimer:
         'Scarica l’app IO, accedi e assicurati che il servizio "Notifiche digitali" di Piattaforma Notifiche sia attivo',
       enabled: 'Attivo',
@@ -27,7 +27,7 @@ export default {
         enable: {
           title: 'Vuoi attivare il servizio "Notifiche digitali" su IO?',
           content:
-            "Se non hai una PEC e accedi alla notifica su Piattaforma Notifiche entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+            "Se non hai una PEC e accedi alla notifica entro 5 giorni (120 ore) dall’invio del messaggio, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
           checkboxText: 'Ho capito',
           confirmButton: 'Attiva servizio',
         },
@@ -53,7 +53,7 @@ export default {
       modalHelpValue: 'l’indirizzo e-mail',
       modal: {
         content:
-          "Se non hai la PEC e accedi alla notifica su Piattaforma Notifiche entro 120 ore (5 giorni) dalla ricezione dell'email, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+          "Se non hai una PEC e accedi alla notifica su Piattaforma Notifiche entro 5 giorni (120 ore) dall’invio dell'e-mail, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
         checkboxText: 'Ho capito',
         confirmButton: 'Conferma',
       },
@@ -67,7 +67,7 @@ export default {
       modalHelpValue: 'il numero di cellulare',
       modal: {
         content:
-          "Se non hai la PEC e accedi alla notifica su Piattaforma Notifiche entro 120 ore (5 giorni) dalla ricezione dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+          "Se non hai una PEC e accedi alla notifica su Piattaforma Notifiche entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
         checkboxText: 'Ho capito',
         confirmButton: 'Conferma',
       },
