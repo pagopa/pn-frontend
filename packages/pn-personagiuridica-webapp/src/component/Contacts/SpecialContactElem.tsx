@@ -40,7 +40,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
   const { contextEditMode, setContextEditMode } = useSpecialContactsContext();
-  const digitalElemRef = useRef<{
+  const digitalElemRef = useRef<{ 
     [key: string]: { editContact: () => void};
   }>(
     { 
@@ -151,7 +151,8 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
                     value={formik.values[f.id]}
                     onChange={handleChangeTouched}
                     error={(formik.touched[f.id] || formik.values[f.id].length > 0) && Boolean(formik.errors[f.id])}
-                    helperText={(formik.touched[f.id] || formik.values[f.id].length > 0) && formik.errors[f.id]}                  />
+                    helperText={(formik.touched[f.id] || formik.values[f.id].length > 0) && formik.errors[f.id]}
+                  />
                 ),
                 isEditable: true,
                 size: 'variable',

@@ -71,14 +71,20 @@ const InsertLegalContact = ({ recipientId }: Props) => {
             />
           </Grid>
           <Grid item lg={4} sm={4} xs={12} alignItems="right">
-            <Button variant="outlined" disabled={!formik.isValid} fullWidth type="submit">
+            <Button
+              variant="outlined"
+              disabled={!formik.isValid}
+              fullWidth
+              type="submit"
+              data-testid="add contact"
+            >
               {t('button.conferma')}
               {/* {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })} */}
             </Button>
           </Grid>
         </Grid>
         <Alert sx={{ mt: 4 }} severity="info">
-          <Typography component="span" variant="body1">
+          <Typography component="span" variant="body1" data-testid="legal contact disclaimer">
             {t('legal-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
           </Typography>
           {/** 
