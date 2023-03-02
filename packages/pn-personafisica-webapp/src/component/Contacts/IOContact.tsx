@@ -15,7 +15,7 @@ import DigitalContactsCard from './DigitalContactsCard';
 
 interface Props {
   recipientId: string;
-  contact?: DigitalAddress | null | undefined;
+  contact: DigitalAddress | null | undefined;
 }
 
 enum IOContactStatus {
