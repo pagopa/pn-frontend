@@ -20,7 +20,6 @@ export class SendDigitalDomicileStep extends TimelineStep {
           address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
         }
       ),
-      recipient: payload.recipientLabel,
     };
   }
 }

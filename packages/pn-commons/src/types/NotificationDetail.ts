@@ -253,7 +253,7 @@ export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
 
 export enum NotificationDeliveryMode {
   ANALOG = 'analog',
-  DIGITAL = 'digital'
+  DIGITAL = 'digital',
 }
 export interface NotificationStatusHistory {
   status: NotificationStatus;
@@ -318,6 +318,7 @@ export enum DigitalDomicileType {
   PEC = 'PEC',
   EMAIL = 'EMAIL',
   APPIO = 'APPIO', // PN-2068
+  SMS = 'SMS', // possible type for courtesy message
 }
 
 export enum RecipientType {
