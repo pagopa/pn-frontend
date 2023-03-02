@@ -41,6 +41,7 @@ export type NotificationDetailTimelineDetails =
   | SendCourtesyMessageDetails
   | SendDigitalDetails
   | SendPaperDetails
+  | PaidDetails
   // PN-1647
   | NotHandledDetails;
 
@@ -161,6 +162,16 @@ export interface SendDigitalDetails extends BaseDetails {
   notificationDate?: string;
   errors?: Array<string>;
   eventCode?: string;
+}
+
+export interface PaidDetails extends BaseDetails {
+  paymentSourceChannel: string;
+  recipientType: RecipientType;
+  amount?: number;
+  creditorTaxId?: string;
+  idF24?: string;
+  noticeCode?: string;
+  paymentObject?: string;
 }
 
 // PN-1647

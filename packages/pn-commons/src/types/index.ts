@@ -8,7 +8,7 @@ import { SideMenuItem } from './SideMenuItem';
 import { Column, Item, Sort } from './ItemsTable';
 import { Notification, GetNotificationsResponse, GetNotificationsParams } from './Notifications';
 import { KnownSentiment } from './EmptyState';
-import {GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
+import { GetNotificationDowntimeEventsParams } from './GetNotificationDowntimeEventsParams';
 import {
   AnalogWorkflowDetails,
   NotHandledDetails,
@@ -37,6 +37,7 @@ import {
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
+  PaidDetails
 } from './NotificationDetail';
 import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
@@ -87,6 +88,7 @@ export type {
   NotificationStatusHistory,
   GetNotificationDowntimeEventsParams,
   PaginationData,
+  PaidDetails,
   PaymentAttachmentNameType,
   PaymentInfo,
   PaymentNotice,

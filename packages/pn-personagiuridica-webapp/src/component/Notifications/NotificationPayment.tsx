@@ -10,11 +10,6 @@ import {
   Skeleton,
   Stack,
   SxProps,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
   Theme,
   Typography,
 } from '@mui/material';
@@ -32,6 +27,9 @@ import {
   useIsMobile,
   appStateActions,
   useDownloadDocument,
+  NotificationPaidDetail,
+  INotificationDetailTimeline,
+  PaidDetails,
 } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -103,8 +101,9 @@ const NotificationPayment: React.FC<Props> = ({
   const f24AttachmentUrl = useAppSelector(
     (state: RootState) => state.notificationState.f24AttachmentUrl
   );
+  const timeline = useAppSelector((state: RootState) => state.notificationState.notification.timeline);
 
-  const alertButtonStyle: SxProps<Theme> = useIsMobile()
+  const alertButtonStyle: SxProps<Theme> = isMobile
     ? { textAlign: 'center' }
     : { textAlign: 'center', minWidth: 'max-content' };
 
@@ -409,6 +408,13 @@ const NotificationPayment: React.FC<Props> = ({
 
   const data = composePaymentData();
   const attachments = getAttachmentsData();
+  const paidEvents =
+    timeline
+      .filter(
+        (timelineEvent: INotificationDetailTimeline) =>
+          timelineEvent.elementId.startsWith('NOTIFICATION_PAID')
+      )
+      .map((paidEvent) => paidEvent.details as PaidDetails);
 
   return (
     <ApiErrorWrapper
@@ -509,32 +515,7 @@ const NotificationPayment: React.FC<Props> = ({
               </>
             )}
             {!loading && paymentInfo.status === PaymentStatus.SUCCEEDED &&
-              <TableContainer component={Paper} className="paperContainer" sx={{ backgroundColor: "background.default", p: 3 }}>
-                <Table aria-label={t('notifications', 'detail.table-aria-label')}>
-                  <TableBody>
-                    <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
-                      <TableCell padding="none" sx={{ py: 1 }}>{t('detail.payment.object', { ns: 'notifiche' })}</TableCell>
-                      <TableCell padding="none" sx={{ py: 1 }}>Avviso.Oggetto</TableCell>
-                    </TableRow>
-                    <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
-                      <TableCell padding="none" sx={{ py: 1 }}>{t('detail.payment.amount', { ns: 'notifiche' })}</TableCell>
-                      <TableCell padding="none" sx={{ py: 1 }}>130,00 €</TableCell>
-                    </TableRow>
-                    <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
-                      <TableCell padding="none" sx={{ py: 1 }}>{t('detail.payment.type', { ns: 'notifiche' })}</TableCell>
-                      <TableCell padding="none" sx={{ py: 1 }}>[Avviso pagoPA]</TableCell>
-                    </TableRow>
-                    <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
-                      <TableCell padding="none" sx={{ py: 1 }}>{t('detail.notice-code', { ns: 'notifiche' })}</TableCell>
-                      <TableCell padding="none" sx={{ py: 1 }}>0000 0000 0000 0000 00</TableCell>
-                    </TableRow>
-                    <TableRow sx={{ '& td': { border: 'none' }, verticalAlign: 'top' }}>
-                      <TableCell padding="none" sx={{ py: 1 }}>{t('detail.creditor-tax-id', { ns: 'notifiche' })}</TableCell>
-                      <TableCell padding="none" sx={{ py: 1 }}>00000000000</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <NotificationPaidDetail paidDetailsList={paidEvents} />
             }
           </Stack>
         </Grid>
