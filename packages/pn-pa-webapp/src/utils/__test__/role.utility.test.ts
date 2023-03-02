@@ -18,7 +18,7 @@ const basicMenuItems: Array<SideMenuItem> = [
 ];
 
 const SelfCareItems: Array<SideMenuItem> = [
-  { label: 'menu.users', icon: People, route: routes.ROLES(mockedIdOrganization) },
+  { label: 'menu.users', icon: People, route: routes.USERS(mockedIdOrganization) },
   { label: 'menu.groups', icon: SupervisedUserCircle, route: routes.GROUPS(mockedIdOrganization) },
 ];
 

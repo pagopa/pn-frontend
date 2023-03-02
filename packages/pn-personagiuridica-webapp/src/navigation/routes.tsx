@@ -18,7 +18,6 @@ const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.
 const Notifiche = React.lazy(() => import('../pages/Notifiche.page'));
 const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
 const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
-const UnderConstruction = React.lazy(() => import('../pages/UnderConstruction.page'));
 
 const handleAssistanceClick = () => {
   trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
@@ -39,8 +38,6 @@ function Router() {
                 <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
                 <Route path={routes.RECAPITI} element={<Contacts />} />
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
-                <Route path={routes.USERS} element={<UnderConstruction />} />
-                <Route path={routes.GROUPS} element={<UnderConstruction />} />
               </Route>
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
