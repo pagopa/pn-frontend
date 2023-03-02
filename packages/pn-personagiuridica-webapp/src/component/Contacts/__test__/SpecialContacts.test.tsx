@@ -174,6 +174,7 @@ async function testContactAddition(
       code: undefined,
     });
   });
+
   const dialog = await waitFor(() => {
     const dialogEl = screen.queryByTestId('codeDialog');
     expect(dialogEl).toBeInTheDocument();

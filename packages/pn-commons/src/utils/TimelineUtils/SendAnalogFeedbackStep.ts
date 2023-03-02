@@ -13,7 +13,6 @@ export class SendAnalogFeedbackStep extends TimelineStep {
           `Il tentativo di invio della notifica per via cartacea a ${payload.recipient?.denomination} non è riuscito.`,
           this.nameAndTaxId(payload),
         ),
-        recipient: payload.recipientLabel,
       };
     }
     return {
@@ -24,7 +23,6 @@ export class SendAnalogFeedbackStep extends TimelineStep {
         `Il tentativo di invio della notifica per via cartacea a ${payload.recipient?.denomination} è riuscito.`,
         this.nameAndTaxId(payload),
       ),
-      recipient: payload.recipientLabel,
     };
   }
 }

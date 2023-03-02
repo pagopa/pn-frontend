@@ -13,7 +13,7 @@
   },
   "menu": {
     "notifications": "Notifiche",
-    "roles": "Ruoli",
+    "users": "Utenti",
     "groups": "Gruppi",
     "api-key": "API Key",
     "statistics": "Statistiche",

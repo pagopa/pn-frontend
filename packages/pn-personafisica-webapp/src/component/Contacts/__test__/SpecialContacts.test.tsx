@@ -1,6 +1,10 @@
 import * as redux from 'react-redux';
 import { act, fireEvent, screen, RenderResult, within, waitFor } from '@testing-library/react';
-import { apiOutcomeTestHelper, AppResponseMessage, ResponseEventDispatcher } from '@pagopa-pn/pn-commons';
+import {
+  apiOutcomeTestHelper,
+  AppResponseMessage,
+  ResponseEventDispatcher,
+} from '@pagopa-pn/pn-commons';
 
 import { render } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/contact/actions';
@@ -19,18 +23,16 @@ jest.mock('react-i18next', () => ({
   Trans: (props: { i18nKey: string }) => props.i18nKey,
 }));
 
-
 /**
  * Vedi commenti nella definizione di simpleMockForApiErrorWrapper
  */
- jest.mock('@pagopa-pn/pn-commons', () => {
+jest.mock('@pagopa-pn/pn-commons', () => {
   const original = jest.requireActual('@pagopa-pn/pn-commons');
   return {
     ...original,
     ApiErrorWrapper: original.simpleMockForApiErrorWrapper,
   };
 });
-
 
 jest.mock('../SpecialContactElem', () => () => <div>SpecialContactElem</div>);
 
@@ -172,6 +174,7 @@ async function testContactAddition(
       code: undefined,
     });
   });
+
   const dialog = await waitFor(() => {
     const dialogEl = screen.queryByTestId('codeDialog');
     expect(dialogEl).toBeInTheDocument();
@@ -245,11 +248,11 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
   afterEach(() => {
     jest.resetAllMocks();
     jest.clearAllMocks();
-    // restore sembra di essere appunto necessario per restituire il comportamento originale 
+    // restore sembra di essere appunto necessario per restituire il comportamento originale
     // alle funzoni/oggetti moccati
     // ------------------
     // Carlos Lombardi, 2022.09.01
-    jest.restoreAllMocks();  
+    jest.restoreAllMocks();
   });
 
   it('renders SpecialContacts', () => {
@@ -300,7 +303,12 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
 
   it('checks invalid pec - 2', async () => {
     const form = result.container.querySelector('form');
-    await testInvalidField(form!, 's_pec', 'non.va.bene@a1.a2.a3.a4.a5.a6.a7.a8.a9.a0.b1.b2.b3.b4', 'legal-contacts.valid-pec');
+    await testInvalidField(
+      form!,
+      's_pec',
+      'non.va.bene@a1.a2.a3.a4.a5.a6.a7.a8.a9.a0.b1.b2.b3.b4',
+      'legal-contacts.valid-pec'
+    );
   });
 
   it('checks valid pec', async () => {
@@ -320,7 +328,12 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
       ],
       2
     );
-    await testInvalidField(form!, 's_mail', 'due__trattini_bassi_no@pagopa.it', 'courtesy-contacts.valid-email');
+    await testInvalidField(
+      form!,
+      's_mail',
+      'due__trattini_bassi_no@pagopa.it',
+      'courtesy-contacts.valid-email'
+    );
   });
 
   it('checks valid mail', async () => {
@@ -425,7 +438,6 @@ describe('SpecialContacts Component - assuming parties API works properly', () =
   });
 });
 
-
 describe('Contacts Page - different contact API behaviors', () => {
   beforeEach(() => {
     apiOutcomeTestHelper.setStandardMock();
@@ -439,27 +451,36 @@ describe('Contacts Page - different contact API behaviors', () => {
   it('API error', async () => {
     const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
     apiSpy.mockRejectedValue({ response: { status: 500 } });
-    await act(async () => void render(<>
-      <ResponseEventDispatcher />
-      <AppResponseMessage />
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
-      </DigitalContactsCodeVerificationProvider>
-    </>));
+    await act(
+      async () =>
+        void render(
+          <>
+            <ResponseEventDispatcher />
+            <AppResponseMessage />
+            <DigitalContactsCodeVerificationProvider>
+              <SpecialContacts recipientId="toto" legalAddresses={[]} courtesyAddresses={[]} />
+            </DigitalContactsCodeVerificationProvider>
+          </>
+        )
+    );
     apiOutcomeTestHelper.expectApiErrorComponent(screen);
   });
 
   it('API OK', async () => {
     const apiSpy = jest.spyOn(ExternalRegistriesAPI, 'getAllActivatedParties');
     apiSpy.mockResolvedValue([]);
-    await act(async () => void render(<>
-      <ResponseEventDispatcher />
-      <AppResponseMessage />
-      <DigitalContactsCodeVerificationProvider>
-        <SpecialContacts recipientId='toto' legalAddresses={[]} courtesyAddresses={[]} />
-      </DigitalContactsCodeVerificationProvider>
-    </>));
+    await act(
+      async () =>
+        void render(
+          <>
+            <ResponseEventDispatcher />
+            <AppResponseMessage />
+            <DigitalContactsCodeVerificationProvider>
+              <SpecialContacts recipientId="toto" legalAddresses={[]} courtesyAddresses={[]} />
+            </DigitalContactsCodeVerificationProvider>
+          </>
+        )
+    );
     apiOutcomeTestHelper.expectApiOKComponent(screen);
   });
 });
-
