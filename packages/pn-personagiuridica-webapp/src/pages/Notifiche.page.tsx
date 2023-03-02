@@ -40,14 +40,16 @@ const Notifiche = () => {
   const currentDelegator = delegators.find(
     (delegation: Delegator) => delegation.mandateId === mandateId
   );
+  const organization =  useAppSelector((state: RootState) => state.userState.user.organization);
+
   const isMobile = useIsMobile();
   const pageTitle = currentDelegator
     ? t('delegatorTitle', {
         name: currentDelegator.delegator ? currentDelegator.delegator.displayName : '',
       })
-    : t('title', { recipient: 'CAF di prova' });
+    : t('title', { recipient: organization.name });
 
-  const pageSubTitle = t('subtitle', { recipient: 'CAF di prova' });
+  const pageSubTitle = t('subtitle', { recipient: organization.name });
   // back end return at most the next three pages
   // we have flag moreResult to check if there are more pages
   // the minum number of pages, to have ellipsis in the paginator, is 8

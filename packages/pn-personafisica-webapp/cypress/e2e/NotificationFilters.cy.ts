@@ -72,7 +72,7 @@ describe('Notification Filters (no delegators)', () => {
 
     cy.intercept(/TOS/, {
       statusCode: 200,
-      fixture: 'tos/tos-accepted'
+      fixture: 'tos/tos-accepted',
     });
 
     cy.login();
@@ -126,12 +126,12 @@ describe('Notification Filters (no delegators)', () => {
 
     cy.wait('@selectedNotification');
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
-    
+
     cy.get(notificationMenuItem).click();
-    
+
     cy.wait('@getNotifications');
     cy.get('[data-testid="content"]').should('not.exist');
-    
+
     cy.get(startDateInput).should('have.value', startDate);
     cy.get(endDateInput).should('have.value', endDate);
   });

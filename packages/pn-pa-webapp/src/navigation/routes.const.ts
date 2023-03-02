@@ -31,3 +31,4 @@ export const GROUPS = (idOrganization: string) =>
   `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${GROUPS_SEGMENT}#${ID_PN_SEGMENT}`;
 
 export const GET_DETTAGLIO_NOTIFICA_PATH = (id: string) => `${DASHBOARD}/${id}${NOTIFICA}`;
+export const NOT_ACCESSIBLE = '/non-accessibile';

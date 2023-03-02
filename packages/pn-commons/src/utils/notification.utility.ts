@@ -27,6 +27,13 @@ import {
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
 
+/*
+ * Besides the values used in the generation of the final messages, 
+ * data can include an isMultiRecipient attribute, which refers to the notification.
+ * If set to true, the "-tooltip-multirecipient" and "-description-multirecipient"
+ * (instead of just "-tooltip" and "-description")
+ * entries will be looked for in the i18n catalog.
+ */
 function localizeStatus(
   status: string,
   defaultLabel: string,
@@ -38,17 +45,23 @@ function localizeStatus(
   tooltip: string;
   description: string;
 } {
+  const isMultiRecipient = data && data.isMultiRecipient;
+
   return {
-    label: getLocalizedOrDefaultLabel('notifications', `status.${status}`, defaultLabel),
+    label: getLocalizedOrDefaultLabel(
+      'notifications', 
+      `status.${status}${isMultiRecipient ? '-multirecipient' : ''}`, 
+      defaultLabel
+    ),
     tooltip: getLocalizedOrDefaultLabel(
       'notifications',
-      `status.${status}-tooltip`,
+      `status.${status}-tooltip${isMultiRecipient ? '-multirecipient' : ''}`,
       defaultTooltip,
       data
     ),
     description: getLocalizedOrDefaultLabel(
       'notifications',
-      `status.${status}-description`,
+      `status.${status}-description${isMultiRecipient ? '-multirecipient' : ''}`,
       defaultDescription,
       data
     ),
@@ -63,7 +76,7 @@ function localizeStatus(
  */
 export function getNotificationStatusInfos(
   status: NotificationStatus | NotificationStatusHistory,
-  // options?: { recipient?: string; completeStatusHistory?: Array<NotificationStatusHistory> }
+  options?: { recipients: Array<NotificationDetailRecipient | string> }
 ): {
   color: 'warning' | 'error' | 'success' | 'info' | 'default' | 'primary' | 'secondary' | undefined;
   label: string;
@@ -73,8 +86,24 @@ export function getNotificationStatusInfos(
   const statusComesAsAnObject = !!((status as NotificationStatusHistory).status);
   const statusObject: NotificationStatusHistory | undefined = statusComesAsAnObject ? status as NotificationStatusHistory : undefined;
   const actualStatus: NotificationStatus = statusComesAsAnObject ? (status as NotificationStatusHistory).status : (status as NotificationStatus);
+  const isMultiRecipient = options && options.recipients.length > 1;
+
+  // the subject is either the recipient or (for the VIEWED and VIEWED_AFTER_DEADLINE)
+  // the delegate who have seen the notification for first.
+  // Hence the "let" is OK, in the particular cases inside the following switch statement
+  // it will be reassigned if needed (i.e. if the value should reference a delegate instead).
+
   /* eslint-disable-next-line functional/no-let */
   let subject = getLocalizedOrDefaultLabel('notifications', `status.recipient`, 'destinatario');
+
+  // beware!!
+  // the isMultiRecipient attribute should be added to data (when calling localizeStatus)
+  // **only** if the tooltip and copy for a state should differ for multi-recipient notification.
+  // If copy and tooltip are the same for the mono and multi-recipient cases, 
+  // then this attribute should **not** be sent, so that the default/mono literals will be taken.
+  // ---------------------------------------------------
+  // Carlos Lombardi, 2023.02.23
+
   switch (actualStatus) {
     case NotificationStatus.DELIVERED:
       const statusInfos = localizeStatus(
@@ -82,10 +111,12 @@ export function getNotificationStatusInfos(
         'Consegnata',
         `La notifica è stata consegnata`,
         'La notifica è stata consegnata.',
+        { isMultiRecipient }
       );
-      // if the deliveryMode is defined, then change the description for a more specific one.
+      // if the deliveryMode is defined, then change the description for a more specific one ...
       const deliveryMode = statusObject && statusObject.deliveryMode;
-      if (deliveryMode) {
+      // ... only for single-recipient notifications!
+      if (deliveryMode && !isMultiRecipient) {
         const deliveryModeDescription = getLocalizedOrDefaultLabel(
           'notifications', 
           `status.deliveryMode.${deliveryMode}`, 
@@ -117,7 +148,8 @@ export function getNotificationStatusInfos(
           'unreachable',
           'Destinatario irreperibile',
           'Il destinatario non è reperibile',
-          'Il destinatario non è reperibile'
+          'Il destinatario non è reperibile',
+          { isMultiRecipient }
         ),
       };
     case NotificationStatus.PAID:
@@ -147,7 +179,8 @@ export function getNotificationStatusInfos(
           'effective-date',
           'Perfezionata per decorrenza termini',
           'Il destinatario non ha letto la notifica',
-          'Il destinatario non ha letto la notifica entro il termine stabilito'
+          'Il destinatario non ha letto la notifica entro il termine stabilito',
+          { isMultiRecipient }
         ),
       };
     case NotificationStatus.VIEWED:
@@ -166,7 +199,7 @@ export function getNotificationStatusInfos(
           'Perfezionata per visione',
           `Il ${subject} ha letto la notifica`,
           `Il ${subject} ha letto la notifica entro il termine stabilito`,
-          { subject }
+          { subject, isMultiRecipient }
         ),
       };
     case NotificationStatus.VIEWED_AFTER_DEADLINE:
@@ -185,7 +218,7 @@ export function getNotificationStatusInfos(
           'Visualizzata',
           `Il ${subject} ha visualizzato la notifica`,
           `Il ${subject} ha visualizzato la notifica`,
-          { subject }
+          { subject, isMultiRecipient }
         ),
       };
     case NotificationStatus.CANCELLED:
@@ -268,6 +301,15 @@ export function getLegalFactLabel(
   );
   const receiptLabel = getLocalizedOrDefaultLabel('notifications', `detail.receipt`, 'Ricevuta');
   // TODO: localize in pn_ga branch
+
+  // To the moment the examples of legal facts associated to this
+  // kind of events have ANALOG_DELIVERY as legalFactType, but I'm not sure this is OK,
+  // I already asked to BE colleagues.
+  // Moreover, I found no documentation which indicates
+  // the legalFactType to expect for such events.
+  // Hence I keep the condition on the category only.
+  // -------------------------
+  // Carlos Lombardi, 2022.24.02
   if (timelineStep.category === TimelineCategory.SEND_ANALOG_FEEDBACK) {
     if ((timelineStep.details as SendPaperDetails).responseStatus === ResponseStatus.OK) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
@@ -283,6 +325,12 @@ export function getLegalFactLabel(
       )}`;
     }
     return receiptLabel;
+  // To the moment I could access to no example of a legal fact associated to this
+  // kind of events, neither to a documentation which indicates
+  // the legalFactType to expect for such events.
+  // Hence I keep the condition on the category only.
+  // -------------------------
+  // Carlos Lombardi, 2022.24.02
   } else if (timelineStep.category === TimelineCategory.SEND_ANALOG_PROGRESS) {
     return `${receiptLabel} ${getLocalizedOrDefaultLabel(
       'notifications',
@@ -304,7 +352,8 @@ export function getLegalFactLabel(
       )}`;
     } else if (
       (timelineStep.details as SendDigitalDetails).eventCode === 'C008' ||
-      (timelineStep.details as SendDigitalDetails).eventCode === 'C010'
+      (timelineStep.details as SendDigitalDetails).eventCode === 'C010' ||
+      (timelineStep.details as SendDigitalDetails).eventCode === 'DP10'
     ) {
       return `${receiptLabel} ${getLocalizedOrDefaultLabel(
         'notifications',
@@ -329,6 +378,8 @@ export function getLegalFactLabel(
         'di mancata consegna PEC'
       )}`;
     }
+  // this is (at least in the examples I've seen)
+  // related to the category REQUEST_ACCEPTED
   } else if (legalFactType === LegalFactType.SENDER_ACK) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
@@ -353,18 +404,28 @@ export function getLegalFactLabel(
       'detail.timeline.legalfact.digital-delivery-failure',
       'mancato recapito digitale'
     )}`;
-  } else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
-    return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
-      'notifications',
-      'detail.timeline.legalfact.analog-delivery',
-      'conformità'
-    )}`;
+  // this is (at least in the examples I've seen)
+  // related to the category NOTIFICATION_VIEWED
   } else if (legalFactType === LegalFactType.RECIPIENT_ACCESS) {
     return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
       'notifications',
       'detail.timeline.legalfact.recipient-access',
       'avvenuto accesso'
     )}`;
+
+    // this case is not needed, since the only legal fact arriving currently
+    // regards the event type SEND_ANALOG_FEEDBACK
+    // which is handled separately.
+    // I prefer to keep it commented out, since the situation is not completely clear.
+    // -------------------------
+    // Carlos Lombardi, 2022.24.02
+    // -------------------------
+  // } else if (legalFactType === LegalFactType.ANALOG_DELIVERY) {
+  //   return `${legalFactLabel}: ${getLocalizedOrDefaultLabel(
+  //     'notifications',
+  //     'detail.timeline.legalfact.analog-delivery',
+  //     'conformità'
+  //   )}`;
   }
   return legalFactLabel;
 }
@@ -386,19 +447,17 @@ export function getNotificationTimelineStatusInfos(
     step,
     recipient,
     recipientLabel,
+    isMultiRecipient: recipients.length > 1
   });
 }
 
 const TimelineAllowedStatus = [
-  TimelineCategory.SCHEDULE_ANALOG_WORKFLOW,
   TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW,
   TimelineCategory.SEND_DIGITAL_DOMICILE,
-  TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
   TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
   TimelineCategory.SEND_ANALOG_DOMICILE,
   TimelineCategory.SEND_DIGITAL_FEEDBACK,
   TimelineCategory.SEND_DIGITAL_PROGRESS,
-  TimelineCategory.DIGITAL_FAILURE_WORKFLOW,
   // PN-2068
   TimelineCategory.SEND_COURTESY_MESSAGE,
   // PN-1647
@@ -458,6 +517,8 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
   let lastDeliveredIndexToShiftIsFixed = false;
   let preventShiftFromDeliveredToDelivering = false;
   /* eslint-enable functional/no-let */
+
+  const statusesToRemove: Array<NotificationStatus> = [];
 
   for (const status of parsedNotification.notificationStatusHistory) {
     // keep pointer to delivering status for eventual later use
@@ -555,6 +616,28 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
             .delegateInfo!;
           status.recipient = `${denomination} (${taxId})`;
         }
+      } else {
+        // (a quite subtle detail)
+        // if the logged user has no NOTIFICATION_VIEWED events related to the VIEWED state,
+        // this means that:
+        // 1. this is a multirecipient notification, and
+        // 2. this particular recipient has not yet viewed the notification, i.e. other recipients
+        //    have viewed the notification but not the currently logged one.
+        // In this situation, the specification indicates that
+        // - if at least one recipient has seen the notification before the earliest view deadline 
+        //   (i.e. the notification never passed through the EFFECTIVE_DATE state)
+        //   then the VIEWED state is shown without legal fact 
+        //   (since there is no legal fact concerning the logged user)
+        // - otherwise, i.e. if the notification passed through the EFFECTIVE_DATE state 
+        //   before having reached the VIEWED state, 
+        //   then the VIEWED_AFTER_DEADLINE should *not* be rendered for the current user,
+        // I implement this in a rather tricky way, indicating that if the VIEWED status 
+        // is transformed into VIEWED_AFTER_DEADLINE, then it must be removed after the 
+        // status cycle.
+        // -----------------------------------------
+        // Carlos Lombardi, 2023.02.23  
+        // -----------------------------------------
+        statusesToRemove.push(NotificationStatus.VIEWED_AFTER_DEADLINE);
       }
     }
     // change status if current is VIEWED and before there is a status EFFECTIVE_DATE
@@ -565,6 +648,14 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
       status.status = NotificationStatus.VIEWED_AFTER_DEADLINE;
     }
   }
+
+  // now we are after the loop over the statuses
+  // maybe some statuses are to be removed
+  // at the moment, the only case is the VIEWED_AFTER_DEADLINE for recipients who 
+  // haven't yet viewed the notification (cfr. the huge comment right above)
+  parsedNotification.notificationStatusHistory = parsedNotification.notificationStatusHistory.filter(
+    status => !statusesToRemove.includes(status.status)
+  );
 }
 
 /**

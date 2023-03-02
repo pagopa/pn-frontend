@@ -4,6 +4,7 @@
     "annulla filtro": "Rimuovi filtri",
     "indietro": "Indietro",
     "associa": "Associa",
+    "capito": "Ho capito",
     "conferma": "Conferma",
     "annulla": "Annulla",
     "modifica": "Modifica",
@@ -12,6 +13,8 @@
     "enter": "Entra",
     "exit": "Esci",
     "close": "Chiudi",
+    "enable": "Attiva",
+    "disable": "Disattiva",
     "go-to-home": "Vai alla home page",
     "go-to-login": "Accedi"
   },
@@ -68,6 +71,11 @@
     "description": "Non siamo riusciti a caricare la pagina. Ricaricala, oppure prova più tardi.",
     "action": "Ricarica la pagina"
   },
+  "not-accessible": {
+    "title": "Non è possibile accedere alla piattaforma",
+    "description": "Riprova tra qualche ora. Se hai bisogno di assistenza",
+    "action": "scrivici"
+  },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
   "not-logged": "Accedi a Piattaforma Notifiche",
   "not-logged-subtitle": "Per vedere e gestire le tue notifiche, accedi con SPID o CIE.",
@@ -90,6 +98,8 @@
     "403-message": "Entra e accedi con SPID o CIE.",
     "401-title": "Utente non autorizzato",
     "401-message": "L'utente corrente non ha le autorizzazioni",
+    "451-title": "Piattaforma non accessibile",
+    "451-message": "Non è possibile accedere alla piattaforma",
     "500-title": "Il servizio non è disponibile",
     "500-message": "Per un problema temporaneo del servizio, la tua richiesta non è stata inviata. Riprova più tardi.",
     "lacking-grants-for-app-title": "Non sei autorizzato ad accedere",
@@ -129,6 +139,10 @@
     "unauthorized": {
       "title": "Utente non autorizzato",
       "message": "L'utente corrente non ha le autorizzazioni."
+    },
+    "unavailable_legal_reasons": {
+      "title": "Piattaforma non accessibile",
+      "message": "Non è possibile accedere alla piattaforma"
     },
     "forbidden": {
       "title": "La sessione è scaduta",
