@@ -145,7 +145,7 @@ interface ScheduleDigitalWorkflowDetails extends BaseDetails, DigitalAddress {
 }
 
 export interface SendCourtesyMessageDetails extends BaseDetails {
-  digitalAddress: DigitalAddressForCourtesyMessage;
+  digitalAddress: DigitalAddress;
   sendDate: string;
 }
 
@@ -253,7 +253,7 @@ export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
 
 export enum NotificationDeliveryMode {
   ANALOG = 'analog',
-  DIGITAL = 'digital'
+  DIGITAL = 'digital',
 }
 export interface NotificationStatusHistory {
   status: NotificationStatus;
@@ -303,11 +303,6 @@ interface DigitalAddress {
   address: string;
 }
 
-interface DigitalAddressForCourtesyMessage {
-  type: DigitalDomicileType;
-  address: string;
-}
-
 interface PhysicalAddress {
   at?: string;
   address: string;
@@ -323,7 +318,7 @@ export enum DigitalDomicileType {
   PEC = 'PEC',
   EMAIL = 'EMAIL',
   APPIO = 'APPIO', // PN-2068
-  SMS = 'SMS',     // possible type for courtesy message
+  SMS = 'SMS', // possible type for courtesy message
 }
 
 export enum RecipientType {
