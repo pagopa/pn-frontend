@@ -20,7 +20,7 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
       visibilityIds:
         data.selectTuttiEntiOrSelezionati === 'tuttiGliEnti'
           ? []
-          : data.enteSelect.map(function (ente) {
+          : data.enti.map(function (ente) {
               return {
                 uniqueIdentifier: ente.id,
                 name: ente.name,

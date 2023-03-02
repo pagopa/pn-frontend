@@ -51,7 +51,7 @@ export interface NewDelegationFormProps {
   cognome: string;
   selectTuttiEntiOrSelezionati: string;
   expirationDate: Date;
-  enteSelect: Array<Party>;
+  enti: Array<Party>;
   verificationCode: string;
 }
 export interface AcceptDelegationResponse {

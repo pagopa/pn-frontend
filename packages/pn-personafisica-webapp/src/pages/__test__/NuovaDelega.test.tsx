@@ -8,7 +8,7 @@ import { render } from '../../__test__/test-utils';
 import NuovaDelega from '../NuovaDelega.page';
 import * as actions from '../../redux/newDelegation/actions';
 import * as trackingFunctions from '../../utils/mixpanel';
-import {TrackEventType} from "../../utils/events";
+import { TrackEventType } from '../../utils/events';
 
 jest.mock('../../component/Deleghe/VerificationCodeComponent', () => ({
   __esModule: true,
@@ -55,14 +55,13 @@ async function testInput(form: HTMLFormElement, elementName: string, value: stri
 }
 
 describe('NuovaDelega page', () => {
-
   const initialState = (created: boolean) => ({
     preloadedState: {
       newDelegationState: {
         created,
-        entities: []
-      }      
-    }
+        entities: [],
+      },
+    },
   });
 
   beforeEach(() => {
@@ -159,7 +158,7 @@ describe('NuovaDelega page', () => {
         cognome: 'Rossi',
         selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
         expirationDate: new Date('01/01/2122'),
-        enteSelect: [],
+        enti: [],
         verificationCode: 'verification code',
       });
     });

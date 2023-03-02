@@ -106,7 +106,7 @@ const NuovaDelega = () => {
     cognome: '',
     selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
     expirationDate: tomorrow,
-    enteSelect: [],
+    enti: [],
     verificationCode: generateVCode(),
   };
 
@@ -120,7 +120,7 @@ const NuovaDelega = () => {
       .matches(dataRegex.fiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
     nome: yup.string().required(t('nuovaDelega.validation.name.required')),
     cognome: yup.string().required(t('nuovaDelega.validation.surname.required')),
-    enteSelect: yup.array().required(),
+    enti: yup.array().required(),
     expirationDate: yup
       .mixed()
       .required(t('nuovaDelega.validation.expirationDate.required'))
@@ -139,16 +139,12 @@ const NuovaDelega = () => {
 
   useEffect(() => {
     if (senderInputValue.length >= 4) {
-      void dispatch(
-        getAllEntities({ paNameFilter: senderInputValue, blockLoading: true })
-      );
+      void dispatch(getAllEntities({ paNameFilter: senderInputValue, blockLoading: true }));
     } else if (senderInputValue.length === 0 && loadAllEntities) {
-      void dispatch(
-        getAllEntities({ blockLoading: true })
-      );
+      void dispatch(getAllEntities({ blockLoading: true }));
     }
   }, [senderInputValue]);
-  
+
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
   useEffect(() => {
@@ -350,7 +346,7 @@ const NuovaDelega = () => {
                                       option.name === value.name
                                     }
                                     onChange={(_event: any, newValue: Array<Party>) => {
-                                      setFieldValue('enteSelect', newValue);
+                                      setFieldValue('enti', newValue);
                                     }}
                                     inputValue={senderInputValue}
                                     onInputChange={(_event, newInputValue) =>

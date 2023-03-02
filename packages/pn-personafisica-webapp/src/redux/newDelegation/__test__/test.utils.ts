@@ -12,7 +12,7 @@ export const createDelegationPayload = {
   cognome: 'cognome',
   selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
   expirationDate: new Date(),
-  enteSelect: [{ name: '', id: '' }],
+  enti: [{ name: '', id: '' }],
   verificationCode: '00000',
 };
 
@@ -24,7 +24,7 @@ export const createDelegationSelectedPayload = {
   cognome: 'cognome',
   selectTuttiEntiOrSelezionati: 'entiSelezionati',
   expirationDate: new Date(),
-  enteSelect: [{ name: 'test', id: 'test' }],
+  enti: [{ name: 'test', id: 'test' }],
   verificationCode: '00000',
 };
 
@@ -49,19 +49,20 @@ export const createDelegationResponse = {
 export const createDelegationGenericErrorResponse = {
   response: {
     data: {
-      status: 401
-    }
-  }
+      status: 401,
+    },
+  },
 };
 
 export const createDelegationDuplicatedErrorResponse = {
   response: {
     data: {
-      detail: "Non è possibile creare due deleghe per lo stesso delegato",
+      detail: 'Non è possibile creare due deleghe per lo stesso delegato',
       errors: [],
       status: 400,
-      title: "Delega già presente",
-      traceId: "Self=1-62cfe68e-42c58950706157804fcb5f44;Root=1-62cfe68e-6635717822bd2bb604a51bb2;Parent=618f0c8aa046eb8a;Sampled=1"
-    }
-  }
+      title: 'Delega già presente',
+      traceId:
+        'Self=1-62cfe68e-42c58950706157804fcb5f44;Root=1-62cfe68e-6635717822bd2bb604a51bb2;Parent=618f0c8aa046eb8a;Sampled=1',
+    },
+  },
 };
