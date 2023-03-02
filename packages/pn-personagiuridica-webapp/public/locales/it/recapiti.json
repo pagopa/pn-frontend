@@ -93,7 +93,8 @@
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",
-    "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?"
+    "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?",
+    "enti-not-found": "Nessun ente trovato"
   },
   "errors": {
     "invalid_verification_code": {

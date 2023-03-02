@@ -342,6 +342,7 @@ const NuovaDelega = () => {
                                     fullWidth
                                     autoComplete
                                     getOptionLabel={getOptionLabel}
+                                    noOptionsText={(t('common.enti-not.found'), { ns: 'recapiti' })}
                                     isOptionEqualToValue={(option, value) =>
                                       option.name === value.name
                                     }

@@ -326,6 +326,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 fullWidth
                 autoComplete
                 getOptionLabel={getOptionLabel}
+                noOptionsText={(t('common.enti-not.found'), { ns: 'recapiti' })}
                 isOptionEqualToValue={(option, value) => option.name === value.name}
                 onChange={senderChangeHandler}
                 inputValue={senderInputValue}
