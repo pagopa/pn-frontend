@@ -164,7 +164,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
   const initialValues = useMemo(
     () => ({
-      sender: { id: '', name: '' },
+      sender: { id: '', name: '' } as Party,
       addressType: addressTypes.find((a: AddressType) => a.show)?.id,
       s_pec: '',
       s_mail: '',
