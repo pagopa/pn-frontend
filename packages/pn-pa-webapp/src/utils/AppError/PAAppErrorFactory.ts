@@ -9,7 +9,7 @@ import { GenericInvalidParameterAppError } from './GenericInvalidParameterAppErr
 import { ServerResponseErrorCode } from './types';
 
 export class PAAppErrorFactory extends AppErrorFactory {
-  private translateFunction: (path: string, ns: string) => string = (path: string) => path;
+  private translateFunction: (path: string, ns: string) => string;
 
   constructor(translateFunction: (path: string, ns: string) => string) {
     super();

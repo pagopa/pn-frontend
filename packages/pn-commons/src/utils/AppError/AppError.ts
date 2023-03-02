@@ -15,6 +15,7 @@ abstract class AppError {
     return {
       code: this.code,
       element: this.element,
+      detail: this.detail,
     };
   }
 
@@ -22,6 +23,7 @@ abstract class AppError {
     return {
       code: this.code,
       element: this.element,
+      detail: this.detail,
       message: {
         title: this.getMessage().title,
         content: this.getMessage().content,
