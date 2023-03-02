@@ -227,7 +227,13 @@ const CourtesyContactItem = ({ recipientId, type, value, blockDelete }: Props) =
           />
         </Grid>
         <Grid item lg={4} sm={4} xs={12} alignItems="right">
-          <Button variant="outlined" disabled={!formik.isValid} fullWidth type="submit">
+          <Button
+            variant="outlined"
+            disabled={!formik.isValid}
+            fullWidth
+            type="submit"
+            data-testid={`add ${type}`}
+          >
             {t(`courtesy-contacts.${type}-add`, { ns: 'recapiti' })}
           </Button>
         </Grid>

@@ -5,8 +5,12 @@ import * as redux from 'react-redux';
 import { LegalChannelType } from '../../../models/contacts';
 import * as actions from '../../../redux/contact/actions';
 import * as hooks from '../../../redux/hooks';
-import { axe, render } from '../../../__test__/test-utils';
-import { Component, mockedStore, Wrapper } from './DigitalContactsCodeVerification.context.test-utils';
+import { render } from '../../../__test__/test-utils';
+import {
+  Component,
+  mockedStore,
+  Wrapper,
+} from './DigitalContactsCodeVerification.context.test-utils';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -34,6 +38,7 @@ const showDialog = async (
       code: undefined,
     });
   });
+
   return waitFor(() => screen.queryByTestId('codeDialog'));
 };
 
@@ -108,9 +113,11 @@ describe('DigitalContactsCodeVerification Context', () => {
     mockActionFn.mockReset();
     mockDispatchFn.mockReset();
     mockDispatchFn.mockClear();
-    mockDispatchFn.mockImplementation(jest.fn(() => ({
-      unwrap: () => Promise.resolve({ code: 'verified' }),
-    })));
+    mockDispatchFn.mockImplementation(
+      jest.fn(() => ({
+        unwrap: () => Promise.resolve({ code: 'verified' }),
+      }))
+    );
     fireEvent.click(buttons![1]);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
@@ -132,7 +139,6 @@ describe('DigitalContactsCodeVerification Context', () => {
     const button = screen.getByRole('button', { name: 'Click me' });
     expect(button).toBeInTheDocument();
     mockUseAppSelector.mockReturnValue(mockedStore);
-
 
     fireEvent.click(button);
     screen.getByRole('heading', { name: 'common.duplicate-contact-title' });

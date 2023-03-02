@@ -377,6 +377,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 type="submit"
                 disabled={!formik.isValid}
                 color="primary"
+                data-testid="Special contact add button"
               >
                 {t('button.associa')}
               </ButtonNaked>
