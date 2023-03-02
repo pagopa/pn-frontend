@@ -9,7 +9,7 @@ import {
   DigitalAddresses,
   LegalChannelType,
 } from '../../models/contacts';
-import { FilterEntitiesBE, Party } from '../../models/party';
+import { FilterPartiesParams, Party } from '../../models/party';
 import { DeleteDigitalAddressParams, SaveDigitalAddressParams } from './types';
 
 export enum CONTACT_ACTIONS {
@@ -112,7 +112,7 @@ export const disableIOAddress = createAsyncThunk<string, string>(
   }
 );
 
-export const getAllActivatedParties = createAsyncThunk<Array<Party>, FilterEntitiesBE | null>(
+export const getAllActivatedParties = createAsyncThunk<Array<Party>, FilterPartiesParams | null>(
   CONTACT_ACTIONS.GET_ALL_ACTIVATED_PARTIES,
   async (payload, { rejectWithValue }) => {
     try {

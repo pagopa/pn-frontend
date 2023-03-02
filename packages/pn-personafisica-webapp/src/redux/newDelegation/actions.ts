@@ -5,7 +5,7 @@ import { DelegationsApi } from '../../api/delegations/Delegations.api';
 import { ExternalRegistriesAPI } from '../../api/external-registries/External-registries.api';
 import { CreateDelegationResponse, NewDelegationFormProps } from '../delegation/types';
 import { DelegationParty } from '../../models/Deleghe';
-import { FilterEntitiesBE, Party } from '../../models/party';
+import { FilterPartiesParams, Party } from '../../models/party';
 
 export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDelegationFormProps>(
   'createDelegation',
@@ -37,13 +37,11 @@ export const createDelegation = createAsyncThunk<CreateDelegationResponse, NewDe
   }
 );
 
-export const getAllEntities = createAsyncThunk<Array<Party>, FilterEntitiesBE | null>(
+export const getAllEntities = createAsyncThunk<Array<Party>, FilterPartiesParams | null>(
   'getAllEntities',
   async (payload, { rejectWithValue }) => {
     try {
-      return await ExternalRegistriesAPI.getAllActivatedParties(
-        payload ? payload : {}
-      );
+      return await ExternalRegistriesAPI.getAllActivatedParties(payload ? payload : {});
     } catch (e) {
       return rejectWithValue(e);
     }

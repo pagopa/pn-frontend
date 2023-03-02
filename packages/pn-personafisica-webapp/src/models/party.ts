@@ -3,7 +3,7 @@ export interface Party {
   name: string;
 }
 
-export interface FilterEntitiesBE {
+export interface FilterPartiesParams {
   paNameFilter?: string;
   blockLoading?: boolean;
 }
