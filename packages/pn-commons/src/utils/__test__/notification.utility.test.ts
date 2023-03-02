@@ -10,8 +10,15 @@ import {
   SendPaperDetails,
   TimelineCategory,
   NotificationStatus,
+  NotificationStatusHistory,
+  NotificationDetailRecipient,
+  NotificationDetail,
+  NotificationDeliveryMode,
+  ResponseStatus,
+  INotificationDetailTimeline,
+  DigitalWorkflowDetails,
+  RecipientType,
 } from '../../types';
-import { DigitalDomicileTypeForCourtesyMessageOnly, DigitalWorkflowDetails, INotificationDetailTimeline, NotificationDeliveryMode, NotificationDetail, NotificationDetailRecipient, NotificationStatusHistory, RecipientType, ResponseStatus } from '../../types/NotificationDetail';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -389,7 +396,7 @@ describe('timeline event description', () => {
   it('return timeline status infos - SEND_COURTESY_MESSAGE - multi recipient 0 - sms', () => {
     parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_COURTESY_MESSAGE;
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendCourtesyMessageDetails).digitalAddress = {
-      type: DigitalDomicileTypeForCourtesyMessageOnly.SMS,
+      type: DigitalDomicileType.SMS,
       address: '+393334445566',
     };
     testTimelineStatusInfosFnMulti0(

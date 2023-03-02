@@ -304,7 +304,7 @@ interface DigitalAddress {
 }
 
 interface DigitalAddressForCourtesyMessage {
-  type: DigitalDomicileTypeForCourtesyMessage;
+  type: DigitalDomicileType;
   address: string;
 }
 
@@ -323,13 +323,8 @@ export enum DigitalDomicileType {
   PEC = 'PEC',
   EMAIL = 'EMAIL',
   APPIO = 'APPIO', // PN-2068
+  SMS = 'SMS',     // possible type for courtesy message
 }
-
-export enum DigitalDomicileTypeForCourtesyMessageOnly {
-  SMS = 'SMS',
-}
-
-export type DigitalDomicileTypeForCourtesyMessage = DigitalDomicileType | DigitalDomicileTypeForCourtesyMessageOnly;
 
 export enum RecipientType {
   PF = 'PF',
