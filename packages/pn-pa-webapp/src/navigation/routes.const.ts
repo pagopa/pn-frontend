@@ -12,17 +12,17 @@ export const API_KEYS = '/api-keys';
 export const NUOVA_API_KEY = `${API_KEYS}/nuova-api-key`;
 export const STATISTICHE = '/statistiche';
 
-export const ROLES_SEGMENT = '/users';
+export const USERS_SEGMENT = '/users';
 export const ID_PN_SEGMENT = 'prod-pn';
 export const GROUPS_SEGMENT = '/groups';
 export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 
-/** ROLES navigation link to SelfCare "Referenti" section for Piattaforma Notifiche
+/** USERS navigation link to SelfCare "Referenti" section for Piattaforma Notifiche
  * @param idOrganization
  */
-export const ROLES = (idOrganization: string) =>
-  `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${ROLES_SEGMENT}#${ID_PN_SEGMENT}`;
+export const USERS = (idOrganization: string) =>
+  `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${USERS_SEGMENT}#${ID_PN_SEGMENT}`;
 
 /** GROUPS navigation link to SelfCare "Gruppi" section for Piattaforma Notifiche
  * @param idOrganization
