@@ -27,6 +27,8 @@ import {
   useIsMobile,
   appStateActions,
   useDownloadDocument,
+  NotificationPaidDetail,
+  PaymentHistory,
 } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -50,9 +52,10 @@ import { trackEventByType } from '../../utils/mixpanel';
 interface Props {
   iun: string;
   notificationPayment: NotificationDetailPayment;
+  subject: string;
   mandateId?: string;
   senderDenomination?: string;
-  subject: string;
+  paymentHistory?: Array<PaymentHistory>;
 }
 
 interface PrimaryAction {
@@ -84,6 +87,7 @@ const NotificationPayment: React.FC<Props> = ({
   iun,
   notificationPayment,
   mandateId,
+  paymentHistory,
   senderDenomination,
   subject,
 }) => {
@@ -99,7 +103,7 @@ const NotificationPayment: React.FC<Props> = ({
     (state: RootState) => state.notificationState.f24AttachmentUrl
   );
 
-  const alertButtonStyle: SxProps<Theme> = useIsMobile()
+  const alertButtonStyle: SxProps<Theme> = isMobile
     ? { textAlign: 'center' }
     : { textAlign: 'center', minWidth: 'max-content' };
 
@@ -503,6 +507,12 @@ const NotificationPayment: React.FC<Props> = ({
                 </Stack>
               </>
             )}
+            {!loading
+              && paymentInfo.status === PaymentStatus.SUCCEEDED
+              && paymentHistory
+              && paymentHistory.length > 0
+              && <NotificationPaidDetail paymentDetailsList={paymentHistory} />
+            }
           </Stack>
         </Grid>
       </Paper>
