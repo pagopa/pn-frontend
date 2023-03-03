@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { render, prettyDOM } from '../../../test-utils';
+import { render, fireEvent } from '../../../test-utils';
 import { PaymentHistory, RecipientType } from '../../../types';
 import { formatEurocentToCurrency, formatFiscalCode } from '../../../utils';
 import NotificationPaidDetail from '../NotificationPaidDetail';
@@ -75,6 +75,8 @@ describe('NotificationDetailPaid Component', () => {
     const result = render(<NotificationPaidDetail paymentDetailsList={[paymentHistory[0]]} />);
     const table = result.getByTestId('paymentTable');
     expect(table).toBeInTheDocument();
+    const recipient = result.queryByTestId('recipient');
+    expect(recipient).not.toBeInTheDocument();
     testTableData(paymentHistory[0], table, false);
   });
 
@@ -84,20 +86,50 @@ describe('NotificationDetailPaid Component', () => {
     );
     const table = result.getByTestId('paymentTable');
     expect(table).toBeInTheDocument();
-    const sender = result.getByTestId('sender');
-    expect(sender).toBeInTheDocument();
-    expect(sender).toHaveTextContent(
+    const recipient = result.getByTestId('recipient');
+    expect(recipient).toBeInTheDocument();
+    expect(recipient).toHaveTextContent(
       `${paymentHistory[0].recipientDenomination} - ${paymentHistory[0].recipientTaxId}`
     );
     testTableData(paymentHistory[0], table, true);
   });
 
-  it.skip('renders NotificationPaidDetail - multi recipient and sender', () => {
-    const result = render(<NotificationPaidDetail paymentDetailsList={paymentHistory} isSender />);
+  it('renders NotificationPaidDetail - multi recipient and no sender', () => {
+    const result = render(<NotificationPaidDetail paymentDetailsList={paymentHistory} />);
     const tables = result.getAllByTestId('paymentTable');
     expect(tables).toHaveLength(paymentHistory.length);
     tables.forEach((table, index) => {
-      testTableData(paymentHistory[index], table, true);
+      testTableData(paymentHistory[index], table, false);
     });
+  });
+
+  it('renders NotificationPaidDetail - multi recipient and sender', () => {
+    const result = render(<NotificationPaidDetail paymentDetailsList={paymentHistory} isSender />);
+    const accordions = result.getAllByTestId('paymentAccordion');
+    expect(accordions).toHaveLength(paymentHistory.length);
+    accordions.forEach((accordion, index) => {
+      const recipient = accordion.querySelector(`[data-testid="recipient"]`);
+      expect(recipient).toBeInTheDocument();
+      expect(recipient).toHaveTextContent(
+        `${paymentHistory[index].recipientDenomination} - ${paymentHistory[index].recipientTaxId}`
+      );
+      const table = accordion.querySelector(`[data-testid="paymentTable"]`);
+      expect(table).toBeInTheDocument();
+      testTableData(paymentHistory[index], table as HTMLElement, true);
+      const button = accordion.querySelector(`[role="button"]`);
+      // accordion collapsed
+      expect(button).toHaveAttribute('aria-expanded', 'false');
+    });
+    // click on first accordion
+    const buttonFirst = accordions[0].querySelector(`[role="button"]`);
+    fireEvent.click(buttonFirst!);
+    // accordion expanded
+    expect(buttonFirst).toHaveAttribute('aria-expanded', 'true');
+    // click on last accordion
+    const buttonlast = accordions[accordions.length - 1].querySelector(`[role="button"]`);
+    fireEvent.click(buttonlast!);
+    // accordion expanded and others collapsed
+    expect(buttonlast).toHaveAttribute('aria-expanded', 'true');
+    expect(buttonFirst).toHaveAttribute('aria-expanded', 'false');
   });
 });

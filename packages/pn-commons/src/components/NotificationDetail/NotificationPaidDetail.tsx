@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Accordion,
   AccordionSummary,
@@ -126,69 +126,68 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
 const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPaidDetailProps) => {
   const [expanded, setExpanded] = useState<string | false>(false);
 
-  const handleChange =
-    (panel: string) => (_: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-    };
+  const handleChange = (panel: string) => (_: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   return (
     <>
-      {paymentDetailsList
-        && paymentDetailsList.length === 1
-        && (
-          <Box mt={2}>
-            {isSender && (
-              <Typography fontSize='16px' fontWeight={600} data-testid="sender" mb={2}>
-                {paymentDetailsList[0].recipientDenomination} - {paymentDetailsList[0].recipientTaxId}
-              </Typography>
-            )}
-            <PaymentTable paymentDetails={paymentDetailsList[0]} showRecipientType={isSender}/>
-          </Box>
-        )}
-      {paymentDetailsList
-        && paymentDetailsList.length > 1
-        && paymentDetailsList.map((paymentEventDetails: PaymentHistory, index: number) => (
+      {paymentDetailsList && paymentDetailsList.length === 1 && (
+        <Box mt={2}>
+          {isSender && (
+            <Typography fontSize="16px" fontWeight={600} data-testid="recipient" mb={2}>
+              {paymentDetailsList[0].recipientDenomination} - {paymentDetailsList[0].recipientTaxId}
+            </Typography>
+          )}
+          <PaymentTable paymentDetails={paymentDetailsList[0]} showRecipientType={isSender} />
+        </Box>
+      )}
+      {paymentDetailsList &&
+        paymentDetailsList.length > 1 &&
+        paymentDetailsList.map((paymentEventDetails: PaymentHistory, index: number) =>
           isSender ? (
-            <>
-              <Accordion
-                key={index}
-                expanded={expanded === `panel-${index}`}
-                onChange={handleChange(`panel-${index}`)}
-                disableGutters
+            <Accordion
+              key={index}
+              expanded={expanded === `panel-${index}`}
+              onChange={handleChange(`panel-${index}`)}
+              disableGutters
+              data-testid="paymentAccordion"
+            >
+              <AccordionSummary
+                expandIcon={
+                  expanded === `panel-${index}` ? (
+                    <UnfoldLessIcon color="primary" />
+                  ) : (
+                    <UnfoldMoreIcon color="primary" />
+                  )
+                }
               >
-                <AccordionSummary
-                  expandIcon={
-                  expanded === `panel-${index}`
-                    ? <UnfoldLessIcon color='primary' />
-                    : <UnfoldMoreIcon color='primary' />
-                  }
+                <Box
+                  width="100%"
+                  display="flex"
+                  flexDirection="row"
+                  justifyContent="space-between"
+                  alignItems="center"
                 >
-                  <Box
-                    width='100%'
-                    display='flex'
-                    flexDirection='row'
-                    justifyContent='space-between'
-                    alignItems='center'
-                  >
-                    <Typography fontSize='16px' fontWeight='600'>
-                      {paymentEventDetails.recipientDenomination} - {paymentEventDetails.recipientTaxId}
-                    </Typography>
-                    <Typography fontSize='14px' fontWeight='600' color='primary'>
-                      {getLocalizedOrDefaultLabel(
-                        'notifiche',
-                        'payment.show-more',
-                        'Mostra dettagli'
-                      )}
-                    </Typography>
-                  </Box>
-                </AccordionSummary>
-                <PaymentTable paymentDetails={paymentEventDetails} showRecipientType />
-              </Accordion>
-            </>
+                  <Typography fontSize="16px" fontWeight="600" data-testid="recipient">
+                    {paymentEventDetails.recipientDenomination} -{' '}
+                    {paymentEventDetails.recipientTaxId}
+                  </Typography>
+                  <Typography fontSize="14px" fontWeight="600" color="primary">
+                    {getLocalizedOrDefaultLabel(
+                      'notifiche',
+                      'payment.show-more',
+                      'Mostra dettagli'
+                    )}
+                  </Typography>
+                </Box>
+              </AccordionSummary>
+              <PaymentTable paymentDetails={paymentEventDetails} showRecipientType />
+            </Accordion>
           ) : (
-            <PaymentTable key={index} paymentDetails={paymentEventDetails}/>
+            <PaymentTable key={index} paymentDetails={paymentEventDetails} />
           )
-        ))}
+        )}
     </>
   );
 };
