@@ -9,7 +9,7 @@ const statisticsMenuItem = { label: 'menu.statistics', icon: ShowChart, route: r
 
 function selfcareMenuItems(idOrganization: string): Array<SideMenuItem> {
   return [
-    { label: 'menu.users', icon: People, route: routes.ROLES(idOrganization) },
+    { label: 'menu.users', icon: People, route: routes.USERS(idOrganization) },
     { label: 'menu.groups', icon: SupervisedUserCircle, route: routes.GROUPS(idOrganization) },
   ];
 }

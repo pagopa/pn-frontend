@@ -28,8 +28,14 @@ import {
   getNotificationTimelineStatusInfos,
   parseNotificationDetail,
 } from '../notification.utility';
-import { acceptedDeliveringDeliveredTimeline, acceptedDeliveringDeliveredTimelineStatusHistory, additionalRecipient, notificationFromBe, parsedNotification, parsedNotificationTwoRecipients } from './test-utils';
-
+import {
+  acceptedDeliveringDeliveredTimeline,
+  acceptedDeliveringDeliveredTimelineStatusHistory,
+  additionalRecipient,
+  notificationFromBe,
+  parsedNotification,
+  parsedNotificationTwoRecipients,
+} from './test-utils';
 
 jest.mock('../../services/localization.service', () => {
   const original = jest.requireActual('../../services/localization.service');
@@ -43,7 +49,7 @@ jest.mock('../../services/localization.service', () => {
       // But in turn, the first i18n call has also data passed, namely the name of the delegate.
       // Hence in this mock we would arrive to something like
       // 'mainKey /-/ { recipient: status.delegate /-/ {name: Some Name} }'
-      // which is difficult to parse. 
+      // which is difficult to parse.
       // Then for the first i18n call in this case, whose key is status.delgate,
       // we give instead 'status.delegate.Some Name' as the output, so that the final i18n expression
       // is 'mainKey /-/ { recipient: status.delegate.Some Name }'
@@ -54,12 +60,11 @@ jest.mock('../../services/localization.service', () => {
         // just separate key and data with a unique pattern
         // so that they can be split for the expectations.
         // The data is re-converted into JSON in order to ease the specification of the expected result.
-        return data ? `${key} /-/ ${JSON.stringify(data)}` : key
+        return data ? `${key} /-/ ${JSON.stringify(data)}` : key;
       }
     },
   };
 });
-
 
 let parsedNotificationCopy = _.cloneDeep(parsedNotification);
 let parsedNotificationTwoRecipientsCopy = _.cloneDeep(parsedNotificationTwoRecipients);
@@ -73,12 +78,14 @@ function testNotificationStatusInfosFnIncludingDescription(
   descriptionToTest: string,
   descriptionDataToTest?: any
 ) {
-  const { label, color, tooltip, description } = recipients ? getNotificationStatusInfos(status, { recipients }) : getNotificationStatusInfos(status);
+  const { label, color, tooltip, description } = recipients
+    ? getNotificationStatusInfos(status, { recipients })
+    : getNotificationStatusInfos(status);
   expect(label).toBe(labelToTest);
   expect(color).toBe(colorToTest);
-  if (description.indexOf(" /-/ ") > -1) {
-    const [bareDescription, descriptionDataAsString] = description.split(" /-/ ");
-    const bareTooltip = tooltip.split(" /-/ ")[0];
+  if (description.indexOf(' /-/ ') > -1) {
+    const [bareDescription, descriptionDataAsString] = description.split(' /-/ ');
+    const bareTooltip = tooltip.split(' /-/ ')[0];
     expect(bareTooltip).toBe(tooltipToTest);
     expect(bareDescription).toBe(descriptionToTest);
     expect(JSON.parse(descriptionDataAsString)).toEqual(descriptionDataToTest);
@@ -88,14 +95,20 @@ function testNotificationStatusInfosFnIncludingDescription(
   }
 }
 
-function testTimelineStatusInfosFn(notification: NotificationDetail, timelineIndex: number, labelToTest: string, descriptionToTest: string, descriptionDataToTest?: any) {
+function testTimelineStatusInfosFn(
+  notification: NotificationDetail,
+  timelineIndex: number,
+  labelToTest: string,
+  descriptionToTest: string,
+  descriptionDataToTest?: any
+) {
   const { label, description } = getNotificationTimelineStatusInfos(
     notification.timeline[timelineIndex],
     notification.recipients
   ) as { label: string; description: string };
   expect(label).toBe(`detail.timeline.${labelToTest}`);
-  if (description.indexOf(" /-/ ") > -1) {
-    const [bareDescription, descriptionDataAsString] = description.split(" /-/ ");
+  if (description.indexOf(' /-/ ') > -1) {
+    const [bareDescription, descriptionDataAsString] = description.split(' /-/ ');
     expect(bareDescription).toBe(`detail.timeline.${descriptionToTest}`);
     expect(JSON.parse(descriptionDataAsString)).toEqual(descriptionDataToTest);
   } else {
@@ -103,24 +116,59 @@ function testTimelineStatusInfosFn(notification: NotificationDetail, timelineInd
   }
 }
 
-function testTimelineStatusInfosFnSingle(labelToTest: string, descriptionToTest: string, descriptionDataToTest?: any) {
-  testTimelineStatusInfosFn(parsedNotificationCopy, 0, labelToTest, descriptionToTest, descriptionDataToTest);
+function testTimelineStatusInfosFnSingle(
+  labelToTest: string,
+  descriptionToTest: string,
+  descriptionDataToTest?: any
+) {
+  testTimelineStatusInfosFn(
+    parsedNotificationCopy,
+    0,
+    labelToTest,
+    descriptionToTest,
+    descriptionDataToTest
+  );
 }
 
-function testTimelineStatusInfosFnMulti0(labelToTest: string, descriptionToTest: string, descriptionDataToTest?: any) {
-  testTimelineStatusInfosFn(parsedNotificationTwoRecipientsCopy, 0, labelToTest, descriptionToTest, descriptionDataToTest);
+function testTimelineStatusInfosFnMulti0(
+  labelToTest: string,
+  descriptionToTest: string,
+  descriptionDataToTest?: any
+) {
+  testTimelineStatusInfosFn(
+    parsedNotificationTwoRecipientsCopy,
+    0,
+    labelToTest,
+    descriptionToTest,
+    descriptionDataToTest
+  );
 }
 
-function testTimelineStatusInfosFnMulti1(labelToTest: string, descriptionToTest: string, descriptionDataToTest?: any) {
+function testTimelineStatusInfosFnMulti1(
+  labelToTest: string,
+  descriptionToTest: string,
+  descriptionDataToTest?: any
+) {
   parsedNotificationTwoRecipientsCopy.timeline[0].details.recIndex = 1;
-  testTimelineStatusInfosFn(parsedNotificationTwoRecipientsCopy, 0, labelToTest, descriptionToTest, descriptionDataToTest);
+  testTimelineStatusInfosFn(
+    parsedNotificationTwoRecipientsCopy,
+    0,
+    labelToTest,
+    descriptionToTest,
+    descriptionDataToTest
+  );
 }
 
 describe('notification status texts', () => {
   it('return notification status infos - DELIVERED - single recipient - analog shipment', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.ANALOG },
-      ["single-recipient"],
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.ANALOG,
+      },
+      ['single-recipient'],
       'status.delivered',
       'default',
       'status.delivered-tooltip',
@@ -131,8 +179,13 @@ describe('notification status texts', () => {
 
   it('return notification status infos - DELIVERED - single recipient - digital shipment', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.DIGITAL },
-      ["single-recipient"],
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.DIGITAL,
+      },
+      ['single-recipient'],
       'status.delivered',
       'default',
       'status.delivered-tooltip',
@@ -143,45 +196,63 @@ describe('notification status texts', () => {
 
   it('return notification status infos - DELIVERED - single recipient - no delivery mode specified', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
-      ["single-recipient"],
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      ['single-recipient'],
       'status.delivered',
       'default',
       'status.delivered-tooltip',
-      'status.delivered-description',
+      'status.delivered-description'
     );
   });
 
   it('return notification status infos - DELIVERED - multi recipient - analog shipment', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.ANALOG },
-      ["recipient-1", "recipient-2"],
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.ANALOG,
+      },
+      ['recipient-1', 'recipient-2'],
       'status.delivered-multirecipient',
       'default',
       'status.delivered-tooltip-multirecipient',
-      'status.delivered-description-multirecipient',
+      'status.delivered-description-multirecipient'
     );
   });
 
   it('return notification status infos - DELIVERED - multi recipient - digital shipment', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.DELIVERED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], deliveryMode: NotificationDeliveryMode.DIGITAL },
-      ["recipient-1", "recipient-2"],
+      {
+        status: NotificationStatus.DELIVERED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        deliveryMode: NotificationDeliveryMode.DIGITAL,
+      },
+      ['recipient-1', 'recipient-2'],
       'status.delivered-multirecipient',
       'default',
       'status.delivered-tooltip-multirecipient',
-      'status.delivered-description-multirecipient',
+      'status.delivered-description-multirecipient'
     );
   });
 
   it('return notification status infos - DELIVERING', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.DELIVERING, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
-      ["single-recipient"],
+      {
+        status: NotificationStatus.DELIVERING,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      ['single-recipient'],
       'status.delivering',
       'default',
       'status.delivering-tooltip',
-      'status.delivering-description',
+      'status.delivering-description'
     );
   });
 
@@ -192,29 +263,29 @@ describe('notification status texts', () => {
       'status.delivering',
       'default',
       'status.delivering-tooltip',
-      'status.delivering-description',
+      'status.delivering-description'
     );
   });
 
   it('return notification status infos - UNREACHABLE - single recipient - passing the status only', () => {
     testNotificationStatusInfosFnIncludingDescription(
       NotificationStatus.UNREACHABLE,
-      ["single-recipient"],
+      ['single-recipient'],
       'status.unreachable',
       'error',
       'status.unreachable-tooltip',
-      'status.unreachable-description',
+      'status.unreachable-description'
     );
   });
 
   it('return notification status infos - UNREACHABLE - multi recipient - passing the status only', () => {
     testNotificationStatusInfosFnIncludingDescription(
       NotificationStatus.UNREACHABLE,
-      ["recipient-1", "recipient-2"],
+      ['recipient-1', 'recipient-2'],
       'status.unreachable-multirecipient',
       'error',
       'status.unreachable-tooltip-multirecipient',
-      'status.unreachable-description-multirecipient',
+      'status.unreachable-description-multirecipient'
     );
   });
 
@@ -225,112 +296,151 @@ describe('notification status texts', () => {
       'status.paid',
       'success',
       'status.paid-tooltip',
-      'status.paid-description',
+      'status.paid-description'
     );
   });
 
   it('return notification status infos - ACCEPTED', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.ACCEPTED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
+      {
+        status: NotificationStatus.ACCEPTED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
       undefined,
       'status.accepted',
       'default',
       'status.accepted-tooltip',
-      'status.accepted-description',
+      'status.accepted-description'
     );
   });
 
   it('return notification status infos - EFFECTIVE_DATE - single recipient', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.EFFECTIVE_DATE, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
-      ["single-recipient"],
+      {
+        status: NotificationStatus.EFFECTIVE_DATE,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      ['single-recipient'],
       'status.effective-date',
       'info',
       'status.effective-date-tooltip',
-      'status.effective-date-description',
+      'status.effective-date-description'
     );
   });
 
   it('return notification status infos - EFFECTIVE_DATE - multi recipient', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.EFFECTIVE_DATE, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
-      ["recipient-1", "recipient-2"],
+      {
+        status: NotificationStatus.EFFECTIVE_DATE,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      ['recipient-1', 'recipient-2'],
       'status.effective-date-multirecipient',
       'info',
       'status.effective-date-tooltip-multirecipient',
-      'status.effective-date-description-multirecipient',
+      'status.effective-date-description-multirecipient'
     );
   });
 
   it('return notification status infos - VIEWED - single recipient - no delegate (named as "recipient") info', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.VIEWED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
-      ["single-recipient"],
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      ['single-recipient'],
       'status.viewed',
       'info',
       'status.viewed-tooltip',
       'status.viewed-description',
-      { subject: "status.recipient" }
+      { subject: 'status.recipient' }
     );
   });
 
   it('return notification status infos - VIEWED - single recipient - including delegate (named as "recipient") info', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.VIEWED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], recipient: "Mario Rossi" },
-      ["single-recipient"],
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        recipient: 'Mario Rossi',
+      },
+      ['single-recipient'],
       'status.viewed',
       'info',
       'status.viewed-tooltip',
       'status.viewed-description',
-      { subject: "status.delegate.Mario Rossi" }
+      { subject: 'status.delegate.Mario Rossi' }
     );
   });
 
   it('return notification status infos - VIEWED - multi recipient - no delegate (named as "recipient") info', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.VIEWED, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
-      ["recipient-1", "recipient-2"],
+      {
+        status: NotificationStatus.VIEWED,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      ['recipient-1', 'recipient-2'],
       'status.viewed-multirecipient',
       'info',
       'status.viewed-tooltip-multirecipient',
       'status.viewed-description-multirecipient',
-      { subject: "status.recipient" }
+      { subject: 'status.recipient' }
     );
   });
 
   it('return notification status infos - VIEWED_AFTER_DEADLINE - single recipient - no delegate (named as "recipient") info', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.VIEWED_AFTER_DEADLINE, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [] },
-      ["single-recipient"],
+      {
+        status: NotificationStatus.VIEWED_AFTER_DEADLINE,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+      },
+      ['single-recipient'],
       'status.viewed-after-deadline',
       'success',
       'status.viewed-after-deadline-tooltip',
       'status.viewed-after-deadline-description',
-      { subject: "status.recipient" }
+      { subject: 'status.recipient' }
     );
   });
 
   it('return notification status infos - VIEWED_AFTER_DEADLINE - single recipient - including delegate (named as "recipient") info', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.VIEWED_AFTER_DEADLINE, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], recipient: "Gloria Gaynor" },
-      ["single-recipient"],
+      {
+        status: NotificationStatus.VIEWED_AFTER_DEADLINE,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        recipient: 'Gloria Gaynor',
+      },
+      ['single-recipient'],
       'status.viewed-after-deadline',
       'success',
       'status.viewed-after-deadline-tooltip',
       'status.viewed-after-deadline-description',
-      { subject: "status.delegate.Gloria Gaynor" }
+      { subject: 'status.delegate.Gloria Gaynor' }
     );
   });
 
   it('return notification status infos - VIEWED_AFTER_DEADLINE - multi recipient - including delegate (named as "recipient") info', () => {
     testNotificationStatusInfosFnIncludingDescription(
-      {status: NotificationStatus.VIEWED_AFTER_DEADLINE, activeFrom: '2023-01-26T13:57:16.42843144Z', relatedTimelineElements: [], recipient: 'Laura Bissoli' },
-      ["recipient-1", "recipient-2"],
+      {
+        status: NotificationStatus.VIEWED_AFTER_DEADLINE,
+        activeFrom: '2023-01-26T13:57:16.42843144Z',
+        relatedTimelineElements: [],
+        recipient: 'Laura Bissoli',
+      },
+      ['recipient-1', 'recipient-2'],
       'status.viewed-after-deadline-multirecipient',
       'success',
       'status.viewed-after-deadline-tooltip-multirecipient',
       'status.viewed-after-deadline-description-multirecipient',
-      { subject: "status.delegate.Laura Bissoli" }
+      { subject: 'status.delegate.Laura Bissoli' }
     );
   });
 
@@ -341,7 +451,7 @@ describe('notification status texts', () => {
       'status.canceled',
       'warning',
       'status.canceled-tooltip',
-      'status.canceled-description',
+      'status.canceled-description'
     );
   });
 });
@@ -349,7 +459,7 @@ describe('notification status texts', () => {
 describe('timeline event description', () => {
   beforeEach(() => {
     parsedNotificationCopy = _.cloneDeep(parsedNotification);
-    parsedNotificationTwoRecipientsCopy = _.cloneDeep(parsedNotificationTwoRecipients);    
+    parsedNotificationTwoRecipientsCopy = _.cloneDeep(parsedNotificationTwoRecipients);
   });
 
   it('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW - single recipient', () => {
@@ -362,7 +472,8 @@ describe('timeline event description', () => {
   });
 
   it('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW - multirecipient - recipient 0', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
     testTimelineStatusInfosFnMulti0(
       'schedule-digital-workflow',
       'schedule-digital-workflow-description-multirecipient',
@@ -371,7 +482,8 @@ describe('timeline event description', () => {
   });
 
   it('return timeline status infos - SCHEDULE_DIGITAL_WORKFLOW - multirecipient - recipient 1', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SCHEDULE_DIGITAL_WORKFLOW;
     testTimelineStatusInfosFnMulti1(
       'schedule-digital-workflow',
       'schedule-digital-workflow-description-multirecipient',
@@ -385,36 +497,42 @@ describe('timeline event description', () => {
       type: DigitalDomicileType.EMAIL,
       address: 'nome@cognome.mail',
     };
-    testTimelineStatusInfosFnSingle(
-      'send-courtesy-message',
-      'send-courtesy-message-description',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', type: "email" }
-    );
+    testTimelineStatusInfosFnSingle('send-courtesy-message', 'send-courtesy-message-description', {
+      name: 'Nome Cognome',
+      taxId: '(mocked-taxId)',
+      type: 'email',
+    });
   });
 
   it('return timeline status infos - SEND_COURTESY_MESSAGE - multi recipient 0 - sms', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_COURTESY_MESSAGE;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendCourtesyMessageDetails).digitalAddress = {
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_COURTESY_MESSAGE;
+    (
+      parsedNotificationTwoRecipientsCopy.timeline[0].details as SendCourtesyMessageDetails
+    ).digitalAddress = {
       type: DigitalDomicileType.SMS,
       address: '+393334445566',
     };
     testTimelineStatusInfosFnMulti0(
       'send-courtesy-message',
       'send-courtesy-message-description-multirecipient',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', type: "sms" }
+      { name: 'Nome Cognome', taxId: '(mocked-taxId)', type: 'sms' }
     );
   });
 
   it('return timeline status infos - SEND_COURTESY_MESSAGE - multi recipient 1 - app IO', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_COURTESY_MESSAGE;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendCourtesyMessageDetails).digitalAddress = {
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_COURTESY_MESSAGE;
+    (
+      parsedNotificationTwoRecipientsCopy.timeline[0].details as SendCourtesyMessageDetails
+    ).digitalAddress = {
       type: DigitalDomicileType.APPIO,
       address: '+393334445566',
     };
     testTimelineStatusInfosFnMulti1(
       'send-courtesy-message',
       'send-courtesy-message-description-multirecipient',
-      { name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)', type: "app IO" }
+      { name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)', type: 'app IO' }
     );
   });
 
@@ -424,23 +542,25 @@ describe('timeline event description', () => {
       type: DigitalDomicileType.PEC,
       address: 'toto86@cognome.mail',
     };
-    testTimelineStatusInfosFnSingle(
-      'send-digital-domicile',
-      'send-digital-domicile-description',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: "toto86@cognome.mail" }
-    );
+    testTimelineStatusInfosFnSingle('send-digital-domicile', 'send-digital-domicile-description', {
+      name: 'Nome Cognome',
+      taxId: '(mocked-taxId)',
+      address: 'toto86@cognome.mail',
+    });
   });
 
   it('return timeline status infos - SEND_DIGITAL_DOMICILE - multi recipient 1', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_DOMICILE;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
-      type: DigitalDomicileType.PEC,
-      address: 'toto86@cognome.mail',
-    };
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_DIGITAL_DOMICILE;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress =
+      {
+        type: DigitalDomicileType.PEC,
+        address: 'toto86@cognome.mail',
+      };
     testTimelineStatusInfosFnMulti1(
       'send-digital-domicile',
       'send-digital-domicile-description-multirecipient',
-      { name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)', address: "toto86@cognome.mail" }
+      { name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)', address: 'toto86@cognome.mail' }
     );
   });
 
@@ -455,12 +575,15 @@ describe('timeline event description', () => {
   });
 
   it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 1', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).eventCode = 'C010';
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
-      address: 'titi99@some.org',
-      type: DigitalDomicileType.PEC,
-    };
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).eventCode =
+      'C010';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress =
+      {
+        address: 'titi99@some.org',
+        type: DigitalDomicileType.PEC,
+      };
     testTimelineStatusInfosFnMulti1(
       'send-digital-progress-error',
       'send-digital-progress-error-description-multirecipient',
@@ -483,8 +606,10 @@ describe('timeline event description', () => {
   });
 
   it('return timeline status infos - SEND_DIGITAL_PROGRESS - failure - multi recipient 0', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_PROGRESS;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).eventCode = 'DP00';
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_DIGITAL_PROGRESS;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).eventCode =
+      'DP00';
     testTimelineStatusInfosFnMulti0(
       'send-digital-progress-success',
       'send-digital-progress-success-description-multirecipient',
@@ -499,38 +624,44 @@ describe('timeline event description', () => {
       type: DigitalDomicileType.PEC,
       address: 'nome.altronome@cognome.mail',
     };
-    testTimelineStatusInfosFnSingle(
-      'send-digital-error',
-      'send-digital-error-description',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: "nome.altronome@cognome.mail" }
-    );
+    testTimelineStatusInfosFnSingle('send-digital-error', 'send-digital-error-description', {
+      name: 'Nome Cognome',
+      taxId: '(mocked-taxId)',
+      address: 'nome.altronome@cognome.mail',
+    });
   });
 
   it('return timeline status infos - SEND_DIGITAL_FEEDBACK - success - multirecipient 0', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'OK';
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
-      type: DigitalDomicileType.PEC,
-      address: 'nome0@cognome.mail',
-    };
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_DIGITAL_FEEDBACK;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).responseStatus =
+      'OK';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress =
+      {
+        type: DigitalDomicileType.PEC,
+        address: 'nome0@cognome.mail',
+      };
     testTimelineStatusInfosFnMulti0(
       'send-digital-success',
       'send-digital-success-description-multirecipient',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: "nome0@cognome.mail" }
+      { name: 'Nome Cognome', taxId: '(mocked-taxId)', address: 'nome0@cognome.mail' }
     );
   });
 
   it('return timeline status infos - SEND_DIGITAL_FEEDBACK - success - multirecipient 1', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_DIGITAL_FEEDBACK;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).responseStatus = 'OK';
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress = {
-      type: DigitalDomicileType.PEC,
-      address: 'nome0@cognome.mail',
-    };
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_DIGITAL_FEEDBACK;
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).responseStatus =
+      'OK';
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendDigitalDetails).digitalAddress =
+      {
+        type: DigitalDomicileType.PEC,
+        address: 'nome0@cognome.mail',
+      };
     testTimelineStatusInfosFnMulti1(
       'send-digital-success',
       'send-digital-success-description-multirecipient',
-      { name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)', address: "nome0@cognome.mail" }
+      { name: 'Nome2 Cognome2', taxId: '(mocked-taxId2)', address: 'nome0@cognome.mail' }
     );
   });
 
@@ -548,14 +679,21 @@ describe('timeline event description', () => {
     testTimelineStatusInfosFnSingle(
       'send-simple-registered-letter',
       'send-simple-registered-letter-description',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', 
-        address: 'Via Mazzini 1848 - Graniti (98036)', simpleAddress: 'Via Mazzini 1848' }
+      {
+        name: 'Nome Cognome',
+        taxId: '(mocked-taxId)',
+        address: 'Via Mazzini 1848 - Graniti (98036)',
+        simpleAddress: 'Via Mazzini 1848',
+      }
     );
   });
 
   it('return timeline status infos - SEND_SIMPLE_REGISTERED_LETTER - multi recipient 0 - just bare address', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as AnalogWorkflowDetails).physicalAddress = {
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER;
+    (
+      parsedNotificationTwoRecipientsCopy.timeline[0].details as AnalogWorkflowDetails
+    ).physicalAddress = {
       at: '',
       addressDetails: '',
       address: 'Via Roma 135',
@@ -567,14 +705,21 @@ describe('timeline event description', () => {
     testTimelineStatusInfosFnMulti0(
       'send-simple-registered-letter',
       'send-simple-registered-letter-description-multirecipient',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', 
-        address: 'Via Roma 135', simpleAddress: 'Via Roma 135' }
+      {
+        name: 'Nome Cognome',
+        taxId: '(mocked-taxId)',
+        address: 'Via Roma 135',
+        simpleAddress: 'Via Roma 135',
+      }
     );
   });
 
   it('return timeline status infos - SEND_SIMPLE_REGISTERED_LETTER - multi recipient 1 - no address at all', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as AnalogWorkflowDetails).physicalAddress = {
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER;
+    (
+      parsedNotificationTwoRecipientsCopy.timeline[0].details as AnalogWorkflowDetails
+    ).physicalAddress = {
       at: '',
       addressDetails: '',
       address: '',
@@ -606,31 +751,41 @@ describe('timeline event description', () => {
     testTimelineStatusInfosFnSingle(
       'send-analog-domicile-890',
       'send-analog-domicile-890-description',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', 
-        address: 'Via Manganelli 1', simpleAddress: 'Via Manganelli 1' }
+      {
+        name: 'Nome Cognome',
+        taxId: '(mocked-taxId)',
+        address: 'Via Manganelli 1',
+        simpleAddress: 'Via Manganelli 1',
+      }
     );
   });
 
   it('return timeline status infos - SEND_ANALOG_DOMICILE - 890 - multi recipient 1 - full address', () => {
     parsedNotificationTwoRecipientsCopy.recipients[0].denomination = 'Lorenza Catrufizzio';
     parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_DOMICILE;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_ANALOG_DOMICILE;
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).serviceLevel =
       PhysicalCommunicationType.REGISTERED_LETTER_890;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
-      at: 'Gaetano Papino',
-      addressDetails: '',
-      address: 'Via Manganelli 1',
-      zip: '98030',
-      municipality: 'Francavilla di Sicilia',
-      province: '',
-      foreignState: '',
-    };
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).physicalAddress =
+      {
+        at: 'Gaetano Papino',
+        addressDetails: '',
+        address: 'Via Manganelli 1',
+        zip: '98030',
+        municipality: 'Francavilla di Sicilia',
+        province: '',
+        foreignState: '',
+      };
     testTimelineStatusInfosFnMulti1(
       'send-analog-domicile-890',
       'send-analog-domicile-890-description-multirecipient',
-      { name: `Catena Dall'Olio`, taxId: '(mocked-taxId2)', 
-        address: 'Via Manganelli 1 - Francavilla di Sicilia (98030)', simpleAddress: 'Via Manganelli 1' }
+      {
+        name: `Catena Dall'Olio`,
+        taxId: '(mocked-taxId2)',
+        address: 'Via Manganelli 1 - Francavilla di Sicilia (98030)',
+        simpleAddress: 'Via Manganelli 1',
+      }
     );
   });
 
@@ -650,47 +805,55 @@ describe('timeline event description', () => {
     testTimelineStatusInfosFnSingle(
       'send-analog-domicile-ar',
       'send-analog-domicile-ar-description',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', 
-        address: 'Via Umberto 45 - Motta Camastra (98035)', simpleAddress: 'Via Umberto 45' }
+      {
+        name: 'Nome Cognome',
+        taxId: '(mocked-taxId)',
+        address: 'Via Umberto 45 - Motta Camastra (98035)',
+        simpleAddress: 'Via Umberto 45',
+      }
     );
   });
 
   it('return timeline status infos - SEND_ANALOG_DOMICILE - A/R - multi recipient 0 - bare address', () => {
     parsedNotificationTwoRecipientsCopy.recipients[0].denomination = 'Lorenza Catrufizzio';
     parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_DOMICILE;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_ANALOG_DOMICILE;
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).serviceLevel =
       PhysicalCommunicationType.AR_REGISTERED_LETTER;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
-      at: 'Gaetano Papino',
-      addressDetails: '',
-      address: 'Via Manganelli 1',
-      zip: '',
-      municipality: '',
-      province: '',
-      foreignState: '',
-    };
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).physicalAddress =
+      {
+        at: 'Gaetano Papino',
+        addressDetails: '',
+        address: 'Via Manganelli 1',
+        zip: '',
+        municipality: '',
+        province: '',
+        foreignState: '',
+      };
     testTimelineStatusInfosFnMulti0(
       'send-analog-domicile-ar',
       'send-analog-domicile-ar-description-multirecipient',
-      { name: 'Lorenza Catrufizzio', taxId: '(mocked-taxId)', 
-        address: 'Via Manganelli 1', simpleAddress: 'Via Manganelli 1' }
+      {
+        name: 'Lorenza Catrufizzio',
+        taxId: '(mocked-taxId)',
+        address: 'Via Manganelli 1',
+        simpleAddress: 'Via Manganelli 1',
+      }
     );
   });
 
   it('return timeline status infos - SEND_ANALOG_PROGRESS - single recipient', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
-    testTimelineStatusInfosFnSingle(
-      'send-analog-progress',
-      'send-analog-progress-description',
-    );
+    testTimelineStatusInfosFnSingle('send-analog-progress', 'send-analog-progress-description');
   });
 
   it('return timeline status infos - SEND_ANALOG_PROGRESS - multi recipient', () => {
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_PROGRESS;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_ANALOG_PROGRESS;
     testTimelineStatusInfosFnMulti1(
       'send-analog-progress',
-      'send-analog-progress-description-multirecipient',
+      'send-analog-progress-description-multirecipient'
     );
   });
 
@@ -703,28 +866,29 @@ describe('timeline event description', () => {
       zip: 'zip',
       municipality: 'municipality',
     };
-    testTimelineStatusInfosFnSingle(
-      'send-analog-error',
-      'send-analog-error-description',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', }
-    );
+    testTimelineStatusInfosFnSingle('send-analog-error', 'send-analog-error-description', {
+      name: 'Nome Cognome',
+      taxId: '(mocked-taxId)',
+    });
   });
 
   it('return timeline status infos - SEND_ANALOG_FEEDBACK - failure - multi recipient 0', () => {
     parsedNotificationTwoRecipientsCopy.recipients[0].denomination = 'Lorenza Catrufizzio';
     parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_ANALOG_FEEDBACK;
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).responseStatus =
       ResponseStatus.KO;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
-      address: 'Indirizzo fisico',
-      zip: 'zip',
-      municipality: 'municipality',
-    };
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).physicalAddress =
+      {
+        address: 'Indirizzo fisico',
+        zip: 'zip',
+        municipality: 'municipality',
+      };
     testTimelineStatusInfosFnMulti0(
       'send-analog-error',
       'send-analog-error-description-multirecipient',
-      { name: 'Lorenza Catrufizzio', taxId: '(mocked-taxId)', }
+      { name: 'Lorenza Catrufizzio', taxId: '(mocked-taxId)' }
     );
   });
 
@@ -737,28 +901,29 @@ describe('timeline event description', () => {
       zip: 'zip',
       municipality: 'municipality',
     };
-    testTimelineStatusInfosFnSingle(
-      'send-analog-success',
-      'send-analog-success-description',
-      { name: 'Nome Cognome', taxId: '(mocked-taxId)', }
-    );
+    testTimelineStatusInfosFnSingle('send-analog-success', 'send-analog-success-description', {
+      name: 'Nome Cognome',
+      taxId: '(mocked-taxId)',
+    });
   });
 
   it('return timeline status infos - SEND_ANALOG_FEEDBACK - success - multi recipient 1', () => {
     parsedNotificationTwoRecipientsCopy.recipients[0].denomination = 'Lorenza Catrufizzio';
     parsedNotificationTwoRecipientsCopy.recipients[1].denomination = `Catena Dall'Olio`;
-    parsedNotificationTwoRecipientsCopy.timeline[0].category = TimelineCategory.SEND_ANALOG_FEEDBACK;
+    parsedNotificationTwoRecipientsCopy.timeline[0].category =
+      TimelineCategory.SEND_ANALOG_FEEDBACK;
     (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).responseStatus =
       ResponseStatus.OK;
-    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).physicalAddress = {
-      address: 'Indirizzo fisico',
-      zip: 'zip',
-      municipality: 'municipality',
-    };
+    (parsedNotificationTwoRecipientsCopy.timeline[0].details as SendPaperDetails).physicalAddress =
+      {
+        address: 'Indirizzo fisico',
+        zip: 'zip',
+        municipality: 'municipality',
+      };
     testTimelineStatusInfosFnMulti1(
       'send-analog-success',
       'send-analog-success-description-multirecipient',
-      { name: `Catena Dall'Olio`, taxId: '(mocked-taxId2)', }
+      { name: `Catena Dall'Olio`, taxId: '(mocked-taxId2)' }
     );
   });
 
@@ -783,7 +948,7 @@ describe('parse notification & filters', () => {
   let sourceNotification: NotificationDetail;
 
   beforeEach(() => {
-    sourceNotification = {...notificationFromBe};
+    sourceNotification = { ...notificationFromBe };
   });
 
   it('return parsed notification detail response', () => {
@@ -812,41 +977,60 @@ describe('parse notification & filters', () => {
     // ----------- checks
     // statuses
     expect(parsedNotification.notificationStatusHistory).toHaveLength(3);
-    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.DELIVERED);
-    expect(parsedNotification.notificationStatusHistory[1].status).toEqual(NotificationStatus.DELIVERING);
-    expect(parsedNotification.notificationStatusHistory[2].status).toEqual(NotificationStatus.ACCEPTED);
+    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(
+      NotificationStatus.DELIVERED
+    );
+    expect(parsedNotification.notificationStatusHistory[1].status).toEqual(
+      NotificationStatus.DELIVERING
+    );
+    expect(parsedNotification.notificationStatusHistory[2].status).toEqual(
+      NotificationStatus.ACCEPTED
+    );
     // DELIVERED events
     let currentSteps = parsedNotification.notificationStatusHistory[0].steps;
     expect(currentSteps).toHaveLength(2);
     expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SCHEDULE_REFINEMENT);
     expect(currentSteps && currentSteps[0].hidden).toBeTruthy();
-    expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.DIGITAL_SUCCESS_WORKFLOW);
+    expect(currentSteps && currentSteps[1].category).toEqual(
+      TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+    );
     expect(currentSteps && currentSteps[1].hidden).toBeTruthy();
     // DELIVERING events -- ACCEPTED events are copied
     // hidden status of copied events is checked in a separate test
     currentSteps = parsedNotification.notificationStatusHistory[1].steps;
     expect(currentSteps).toHaveLength(6);
-    expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SEND_DIGITAL_FEEDBACK);
+    expect(currentSteps && currentSteps[0].category).toEqual(
+      TimelineCategory.SEND_DIGITAL_FEEDBACK
+    );
     expect(currentSteps && currentSteps[0].hidden).toBeFalsy();
-    expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.SEND_DIGITAL_PROGRESS);
+    expect(currentSteps && currentSteps[1].category).toEqual(
+      TimelineCategory.SEND_DIGITAL_PROGRESS
+    );
     expect(currentSteps && currentSteps[1].hidden).toBeFalsy();
-    expect(currentSteps && currentSteps[2].category).toEqual(TimelineCategory.SEND_DIGITAL_DOMICILE);
+    expect(currentSteps && currentSteps[2].category).toEqual(
+      TimelineCategory.SEND_DIGITAL_DOMICILE
+    );
     expect(currentSteps && currentSteps[2].hidden).toBeFalsy();
     expect(currentSteps && currentSteps[3].category).toEqual(TimelineCategory.PUBLIC_REGISTRY_CALL);
     expect(currentSteps && currentSteps[3].hidden).toBeTruthy();
-    expect(currentSteps && currentSteps[4].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
+    expect(currentSteps && currentSteps[4].category).toEqual(
+      TimelineCategory.SEND_COURTESY_MESSAGE
+    );
     expect(currentSteps && currentSteps[5].category).toEqual(TimelineCategory.REQUEST_ACCEPTED);
     // ACCEPTED events
     // hidden status is checked in a separate test
     currentSteps = parsedNotification.notificationStatusHistory[2].steps;
     expect(currentSteps).toHaveLength(2);
-    expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
+    expect(currentSteps && currentSteps[0].category).toEqual(
+      TimelineCategory.SEND_COURTESY_MESSAGE
+    );
     expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.REQUEST_ACCEPTED);
   });
 
   it('duplicates ACCEPTED events - hidden copies', () => {
     sourceNotification.timeline = acceptedDeliveringDeliveredTimeline();
-    sourceNotification.notificationStatusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    sourceNotification.notificationStatusHistory =
+      acceptedDeliveringDeliveredTimelineStatusHistory();
     const parsedNotification = parseNotificationDetail(sourceNotification);
     // DELIVERING events -- ACCEPTED events are copied at the end
     let currentSteps = parsedNotification.notificationStatusHistory[1].steps;
@@ -928,23 +1112,28 @@ describe('parse notification & filters', () => {
 
   it('deliveryMode DIGITAL', () => {
     sourceNotification.timeline = acceptedDeliveringDeliveredTimeline();
-    sourceNotification.notificationStatusHistory = acceptedDeliveringDeliveredTimelineStatusHistory();
+    sourceNotification.notificationStatusHistory =
+      acceptedDeliveringDeliveredTimelineStatusHistory();
     // the "base" mocked notification corresponds to the DIGITAL workflow
     const parsedNotification = parseNotificationDetail(sourceNotification);
     // the first status is DELIVERED
-    expect(parsedNotification.notificationStatusHistory[0].deliveryMode).toEqual(NotificationDeliveryMode.DIGITAL);
+    expect(parsedNotification.notificationStatusHistory[0].deliveryMode).toEqual(
+      NotificationDeliveryMode.DIGITAL
+    );
   });
 
   it('deliveryMode ANALOG', () => {
     // change the category of the DIGITAL_SUCCESS_WORKFLOW timeline event to SEND_SIMPLE_REGISTERED_LETTER
     const timeline = acceptedDeliveringDeliveredTimeline();
-    const indexToUpdate = timeline.findIndex(elem => elem.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW);
+    const indexToUpdate = timeline.findIndex(
+      (elem) => elem.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+    );
     timeline[indexToUpdate].category = TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER;
     timeline[indexToUpdate].elementId = 'send-simple-registered-letter-0';
     timeline[indexToUpdate].details = {
       recIndex: 0,
       productType: 'RN_RS',
-      physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' }
+      physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' },
     };
     sourceNotification.timeline = timeline;
     // also from status history
@@ -956,13 +1145,17 @@ describe('parse notification & filters', () => {
     // now the test
     const parsedNotification = parseNotificationDetail(sourceNotification);
     // the first status is DELIVERED
-    expect(parsedNotification.notificationStatusHistory[0].deliveryMode).toEqual(NotificationDeliveryMode.ANALOG);
+    expect(parsedNotification.notificationStatusHistory[0].deliveryMode).toEqual(
+      NotificationDeliveryMode.ANALOG
+    );
   });
 
   it('deliveryMode not assigned', () => {
     // remove the DIGITAL_SUCCESS_WORKFLOW timeline event
     const timeline = acceptedDeliveringDeliveredTimeline();
-    const indexToRemove = timeline.findIndex(elem => elem.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW);
+    const indexToRemove = timeline.findIndex(
+      (elem) => elem.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+    );
     timeline.splice(indexToRemove, 1);
     sourceNotification.timeline = timeline;
     // also from status history
@@ -981,7 +1174,9 @@ describe('parse notification & filters', () => {
     const timeline = acceptedDeliveringDeliveredTimeline();
 
     // change the category of the DIGITAL_SUCCESS_WORKFLOW timeline event to DIGITAL_FAILURE_WORKFLOW
-    const indexToUpdate = timeline.findIndex(elem => elem.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW);
+    const indexToUpdate = timeline.findIndex(
+      (elem) => elem.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW
+    );
     timeline[indexToUpdate].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
     timeline[indexToUpdate].elementId = 'digital-failure-workflow';
     timeline[indexToUpdate].details = { recIndex: 0 };
@@ -992,8 +1187,9 @@ describe('parse notification & filters', () => {
       timestamp: '2023-01-26T14:17:20.525827086Z',
       category: TimelineCategory.PREPARE_SIMPLE_REGISTERED_LETTER,
       details: {
-        recIndex: 0, productType: 'RN_RS',
-        physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' }
+        recIndex: 0,
+        productType: 'RN_RS',
+        physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' },
       },
     };
     const sendEvent: INotificationDetailTimeline = {
@@ -1001,8 +1197,9 @@ describe('parse notification & filters', () => {
       timestamp: '2023-01-26T14:17:23.525827086Z',
       category: TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER,
       details: {
-        recIndex: 0, productType: 'RN_RS',
-        physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' }
+        recIndex: 0,
+        productType: 'RN_RS',
+        physicalAddress: { address: 'Via Rosas 1829', zip: '98036', municipality: 'Graniti' },
       },
     };
     const courtesyEvent: INotificationDetailTimeline = {
@@ -1010,8 +1207,9 @@ describe('parse notification & filters', () => {
       timestamp: '2023-01-26T14:17:26.525827086Z',
       category: TimelineCategory.SEND_COURTESY_MESSAGE,
       details: {
-        recIndex: 0, sendDate: "some-date",
-        digitalAddress: { type: DigitalDomicileType.EMAIL, address: 'still.other@mail.it'},
+        recIndex: 0,
+        sendDate: 'some-date',
+        digitalAddress: { type: DigitalDomicileType.EMAIL, address: 'still.other@mail.it' },
       },
     };
     timeline.push(prepareEvent, sendEvent, courtesyEvent);
@@ -1023,7 +1221,11 @@ describe('parse notification & filters', () => {
     const history = acceptedDeliveringDeliveredTimelineStatusHistory();
     // DELIVERED is the last status, the currently DIGITAL_SUCCESS_WORKFLOW its first element.
     history[2].relatedTimelineElements[0] = 'digital-failure-workflow';
-    history[2].relatedTimelineElements.push(prepareEvent.elementId, sendEvent.elementId, courtesyEvent.elementId);
+    history[2].relatedTimelineElements.push(
+      prepareEvent.elementId,
+      sendEvent.elementId,
+      courtesyEvent.elementId
+    );
     sourceNotification.notificationStatusHistory = history;
 
     // now the test
@@ -1032,22 +1234,34 @@ describe('parse notification & filters', () => {
     // the first status is DELIVERED
     let currentSteps = parsedNotification.notificationStatusHistory[0].steps;
     expect(currentSteps).toHaveLength(1);
-    expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
-    expect(currentSteps && (currentSteps[0].details as DigitalWorkflowDetails).digitalAddress?.address).toEqual('still.other@mail.it');
+    expect(currentSteps && currentSteps[0].category).toEqual(
+      TimelineCategory.SEND_COURTESY_MESSAGE
+    );
+    expect(
+      currentSteps && (currentSteps[0].details as DigitalWorkflowDetails).digitalAddress?.address
+    ).toEqual('still.other@mail.it');
 
     // the second status is DELIVERING
     currentSteps = parsedNotification.notificationStatusHistory[1].steps;
     // 4 shifted from DELIVERED + 3 originally in DELIVERING + 2 copied from AACCEPTED
     expect(currentSteps).toHaveLength(9);
-    expect(currentSteps && currentSteps[0].category).toEqual(TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER);
+    expect(currentSteps && currentSteps[0].category).toEqual(
+      TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER
+    );
     expect(currentSteps && currentSteps[0].hidden).toBeFalsy();
-    expect(currentSteps && currentSteps[1].category).toEqual(TimelineCategory.PREPARE_SIMPLE_REGISTERED_LETTER);
+    expect(currentSteps && currentSteps[1].category).toEqual(
+      TimelineCategory.PREPARE_SIMPLE_REGISTERED_LETTER
+    );
     expect(currentSteps && currentSteps[1].hidden).toBeTruthy();
     expect(currentSteps && currentSteps[2].category).toEqual(TimelineCategory.SCHEDULE_REFINEMENT);
     expect(currentSteps && currentSteps[2].hidden).toBeTruthy();
-    expect(currentSteps && currentSteps[3].category).toEqual(TimelineCategory.DIGITAL_FAILURE_WORKFLOW);
+    expect(currentSteps && currentSteps[3].category).toEqual(
+      TimelineCategory.DIGITAL_FAILURE_WORKFLOW
+    );
     expect(currentSteps && currentSteps[3].hidden).toBeTruthy();
-    expect(currentSteps && currentSteps[4].category).toEqual(TimelineCategory.SEND_DIGITAL_FEEDBACK);
+    expect(currentSteps && currentSteps[4].category).toEqual(
+      TimelineCategory.SEND_DIGITAL_FEEDBACK
+    );
     expect(currentSteps && currentSteps[4].hidden).toBeFalsy();
   });
 
@@ -1076,7 +1290,9 @@ describe('parse notification & filters', () => {
 
     // ----------- checks
     expect(parsedNotification.notificationStatusHistory).toHaveLength(4);
-    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.VIEWED);
+    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(
+      NotificationStatus.VIEWED
+    );
     expect(parsedNotification.notificationStatusHistory[0].recipient).toBeFalsy();
   });
 
@@ -1086,39 +1302,41 @@ describe('parse notification & filters', () => {
       elementId: 'notification-viewed-0',
       timestamp: '2023-01-26T14:17:26.525827086Z',
       category: TimelineCategory.NOTIFICATION_VIEWED,
-      details: { 
-        recIndex: 0, 
-        delegateInfo: { 
-          internalId: "mocked-delegate-internal-id",
-          taxId: "GLLGLL64B15G702I",
-          operatorUuid: "mocked-delegate-uuid",
-          mandateId: "7c69e30a-23cd-4ef2-9b95-98c5a9f4e636",
-          denomination: "galileo galilei",
+      details: {
+        recIndex: 0,
+        delegateInfo: {
+          internalId: 'mocked-delegate-internal-id',
+          taxId: 'GLLGLL64B15G702I',
+          operatorUuid: 'mocked-delegate-uuid',
+          mandateId: '7c69e30a-23cd-4ef2-9b95-98c5a9f4e636',
+          denomination: 'galileo galilei',
           delegateType: RecipientType.PF,
-        } 
+        },
       },
     };
     const notificationViewedElement2: INotificationDetailTimeline = {
       elementId: 'notification-viewed-1',
       timestamp: '2023-01-26T14:17:36.525827086Z',
       category: TimelineCategory.NOTIFICATION_VIEWED,
-      details: { 
-        recIndex: 0, 
-        delegateInfo: { 
-          internalId: "mocked-delegate-internal-id-2",
-          taxId: "LVLDAA85T50G702B",
-          operatorUuid: "mocked-delegate-uuid-2",
-          mandateId: "8669e30a-23cd-4ef2-9b95-98c5a9f4e636",
-          denomination: "ada lovelace",
+      details: {
+        recIndex: 0,
+        delegateInfo: {
+          internalId: 'mocked-delegate-internal-id-2',
+          taxId: 'LVLDAA85T50G702B',
+          operatorUuid: 'mocked-delegate-uuid-2',
+          mandateId: '8669e30a-23cd-4ef2-9b95-98c5a9f4e636',
+          denomination: 'ada lovelace',
           delegateType: RecipientType.PF,
-        } 
+        },
       },
     };
     const viewedStatus: NotificationStatusHistory = {
       status: NotificationStatus.VIEWED,
       activeFrom: '2023-01-26T14:17:26.525827086Z',
-      relatedTimelineElements: [notificationViewedElement1.elementId, notificationViewedElement2.elementId],
-
+      relatedTimelineElements: [
+        notificationViewedElement1.elementId,
+        notificationViewedElement2.elementId,
+      ],
     };
     const timeline = acceptedDeliveringDeliveredTimeline();
     timeline.push(notificationViewedElement1, notificationViewedElement2);
@@ -1132,13 +1350,17 @@ describe('parse notification & filters', () => {
 
     // ----------- checks
     expect(parsedNotification.notificationStatusHistory).toHaveLength(4);
-    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.VIEWED);
+    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(
+      NotificationStatus.VIEWED
+    );
     expect(parsedNotification.notificationStatusHistory[0].steps).toHaveLength(2);
-    expect(parsedNotification.notificationStatusHistory[0].recipient).toEqual('galileo galilei (GLLGLL64B15G702I)');
+    expect(parsedNotification.notificationStatusHistory[0].recipient).toEqual(
+      'galileo galilei (GLLGLL64B15G702I)'
+    );
   });
 
   // The situation for a multirecipient notification
-  // when the notification detail is accessed by either a sender or 
+  // when the notification detail is accessed by either a sender or
   // a recipient who has already viewed the notification is similar to this,
   // since the decision about including or not the VIEWED_AFTER_DEADLINE status
   // regards *only* the presence of a NOTIFICATION_VIEWED timeline element.
@@ -1179,8 +1401,12 @@ describe('parse notification & filters', () => {
 
     // ----------- checks
     expect(parsedNotification.notificationStatusHistory).toHaveLength(5);
-    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.VIEWED_AFTER_DEADLINE);
-    expect(parsedNotification.notificationStatusHistory[1].status).toEqual(NotificationStatus.EFFECTIVE_DATE);
+    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(
+      NotificationStatus.VIEWED_AFTER_DEADLINE
+    );
+    expect(parsedNotification.notificationStatusHistory[1].status).toEqual(
+      NotificationStatus.EFFECTIVE_DATE
+    );
   });
 
   it('VIEWED status erased - multi-recipient notification, detail requested by a recipient who has not yet viewed the notification', () => {
@@ -1190,7 +1416,7 @@ describe('parse notification & filters', () => {
     // Add an EFFECTIVE_DATE status, and afterwards a VIEWED status with no NOTIFICATION_VIEWED element.
     // How could be possible to have an empth VIEWED status: here the scenario.
     // There is no NOTIFICATION_VIEWED element corresponding to the recipient
-    // who has requested the detail, 
+    // who has requested the detail,
     // then the API call filters all the NOTIFICATION_VIEWED elements
     // since they regard recipients other than the currently logged one.
     const refinementElement: INotificationDetailTimeline = {
@@ -1221,7 +1447,9 @@ describe('parse notification & filters', () => {
 
     // ----------- checks
     expect(parsedNotification.notificationStatusHistory).toHaveLength(4);
-    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(NotificationStatus.EFFECTIVE_DATE);
+    expect(parsedNotification.notificationStatusHistory[0].status).toEqual(
+      NotificationStatus.EFFECTIVE_DATE
+    );
   });
 
   it('return notifications filters count (no filters)', () => {
@@ -1316,7 +1544,7 @@ describe('timeline legal fact link text', () => {
   it('return legalFact label - REQUEST_ACCEPTED - SENDER_ACK', () => {
     // In fact the timeline event category is not explicitly checked.
     // In the examples I've seen, such legal facts are associated to REQUEST_ACCEPTED events.
-    // I set the category to avoid the scenario to be "caught up" by previous cases in the 
+    // I set the category to avoid the scenario to be "caught up" by previous cases in the
     // legal fact switch, which check the timeline event category only.
     // ------------------------------------
     // Carlos Lombardi, 2023.02.28
@@ -1328,13 +1556,19 @@ describe('timeline legal fact link text', () => {
 
   it('return legalFact label - DIGITAL_SUCCESS_WORKFLOW - DIGITAL_DELIVERY', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_SUCCESS_WORKFLOW;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.DIGITAL_DELIVERY);
+    const label = getLegalFactLabel(
+      parsedNotificationCopy.timeline[0],
+      LegalFactType.DIGITAL_DELIVERY
+    );
     expect(label).toBe('detail.legalfact: detail.timeline.legalfact.digital-delivery-success');
   });
 
   it('return legalFact label - DIGITAL_FAILURE_WORKFLOW - DIGITAL_DELIVERY', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.DIGITAL_FAILURE_WORKFLOW;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.DIGITAL_DELIVERY);
+    const label = getLegalFactLabel(
+      parsedNotificationCopy.timeline[0],
+      LegalFactType.DIGITAL_DELIVERY
+    );
     expect(label).toBe('detail.legalfact: detail.timeline.legalfact.digital-delivery-failure');
   });
 
@@ -1345,8 +1579,10 @@ describe('timeline legal fact link text', () => {
   // ------------------------------------
   it('return legalFact label - NOTIFICATION_VIEWED - RECIPIENT_ACCESS', () => {
     parsedNotificationCopy.timeline[0].category = TimelineCategory.NOTIFICATION_VIEWED;
-    const label = getLegalFactLabel(parsedNotificationCopy.timeline[0], LegalFactType.RECIPIENT_ACCESS);
+    const label = getLegalFactLabel(
+      parsedNotificationCopy.timeline[0],
+      LegalFactType.RECIPIENT_ACCESS
+    );
     expect(label).toBe('detail.legalfact: detail.timeline.legalfact.recipient-access');
   });
-
 });

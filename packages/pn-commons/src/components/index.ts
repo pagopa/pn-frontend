@@ -3,6 +3,7 @@ import Footer from './Footer/Footer';
 import Header from './Header/Header';
 import { LoadingOverlay } from './Loading/LoadingOverlay';
 import CustomPagination from './Pagination/CustomPagination';
+import CustomTableRow from "./CustomTableRow";
 import CustomTooltip from './CustomTooltip';
 import AppMessage from './AppMessage';
 import AppResponseMessage from './AppResponseMessage';
@@ -31,6 +32,7 @@ import NotificationDetailDocuments from './NotificationDetail/NotificationDetail
 import HelpNotificationDetails from './NotificationDetail/HelpNotificationDetails';
 import NotificationRelatedDowntimes from './NotificationDetail/NotificationRelatedDowntimes';
 import NotificationDetailTimeline from './NotificationDetail/NotificationDetailTimeline';
+import NotificationPaidDetail from "./NotificationDetail/NotificationPaidDetail";
 import CodeModal from './CodeModal/CodeModal';
 import InactivityHandler from './InactivityHandler';
 import CustomDatePicker from './CustomDatePicker';
@@ -52,6 +54,7 @@ export {
   Layout,
   Footer,
   CustomPagination,
+  CustomTableRow,
   CustomTooltip,
   AppMessage,
   AppResponseMessage,
@@ -76,6 +79,7 @@ export {
   NotificationRelatedDowntimes,
   HelpNotificationDetails,
   NotificationDetailTimeline,
+  NotificationPaidDetail,
   AppStatusRender,
   useFieldSpecs,
   adaptFieldSpecToMobile,

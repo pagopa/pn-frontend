@@ -8,7 +8,6 @@ export interface NotificationDetail {
   abstract?: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
-  otherDocuments?: Array<NotificationDetailDocument>;
   notificationFeePolicy: NotificationFeePolicy;
   cancelledIun?: string;
   physicalCommunicationType: PhysicalCommunicationType;
@@ -25,7 +24,15 @@ export interface NotificationDetail {
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
   amount?: number;
+  // only fe
+  otherDocuments?: Array<NotificationDetailDocument>;
+  paymentHistory?: Array<PaymentHistory>;
 }
+
+export type PaymentHistory = PaidDetails & {
+  recipientDenomination: string;
+  recipientTaxId: string;
+};
 
 export type NotificationDetailTimelineDetails =
   | BaseDetails
@@ -41,6 +48,7 @@ export type NotificationDetailTimelineDetails =
   | SendCourtesyMessageDetails
   | SendDigitalDetails
   | SendPaperDetails
+  | PaidDetails
   // PN-1647
   | NotHandledDetails;
 
@@ -162,6 +170,16 @@ export interface SendDigitalDetails extends BaseDetails {
   notificationDate?: string;
   errors?: Array<string>;
   eventCode?: string;
+}
+
+export interface PaidDetails extends BaseDetails {
+  paymentSourceChannel: string;
+  recipientType: RecipientType;
+  amount?: number;
+  creditorTaxId?: string;
+  idF24?: string;
+  noticeCode?: string;
+  paymentObject?: string;
 }
 
 // PN-1647

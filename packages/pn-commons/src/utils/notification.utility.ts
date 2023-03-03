@@ -23,6 +23,8 @@ import {
   ResponseStatus,
   SendCourtesyMessageDetails,
   DigitalDomicileType,
+  PaidDetails,
+  PaymentHistory,
 } from '../types';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
@@ -584,11 +586,11 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
           deliveryMode = NotificationDeliveryMode.ANALOG;
         }
 
-        // // if a DIGITAL_SUCCESS_WORKFLOW event is found in the DELIVERING status
-        // // (since as of 2023.02.13 the jump from DELIVERING to DELIVERED could not be related to the *first* digital shipment resolution)
-        // // then no shift is performed from DELIVERED to DELIVERING
-        // // ... I prefer to still shift events up to the first DIGITAL_SUCCESS_WORKFLOW found in DELIVERED status ...
-        // // keep the code just in case
+        // if a DIGITAL_SUCCESS_WORKFLOW event is found in the DELIVERING status
+        // (since as of 2023.02.13 the jump from DELIVERING to DELIVERED could not be related to the *first* digital shipment resolution)
+        // then no shift is performed from DELIVERED to DELIVERING
+        // ... I prefer to still shift events up to the first DIGITAL_SUCCESS_WORKFLOW found in DELIVERED status ...
+        // keep the code just in case
         // if (status.status === NotificationStatus.DELIVERING && step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
         //   preventShiftFromDeliveredToDelivering = true;
         // }
@@ -708,9 +710,9 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
 }
 
 /**
- * Parse notification detail repsonse before sent it to fe.
- * @param  {NotificationDetail} notificationDetail
- * @returns NotificationDetail
+ * Populate other documents array before send notification to fe.
+ * @param  {Array<INotificationDetailTimeline>} timeline
+ * @returns Array<NotificationDetailDocument>
  */
 const populateOtherDocuments = (
   timeline: Array<INotificationDetailTimeline>
@@ -739,12 +741,48 @@ const populateOtherDocuments = (
   return [];
 };
 
+/**
+ * Populate payment history array before send notification to fe.
+ * @param  {Array<INotificationDetailTimeline>} timeline
+ * @param  {Array<NotificationDetailRecipient>} recipients
+ * @returns Array<NotificationDetailDocument>
+ */
+const populatePaymentHistory = (
+  timeline: Array<INotificationDetailTimeline>,
+  recipients: Array<NotificationDetailRecipient>
+): Array<PaymentHistory> => {
+  const paymentHistory: Array<PaymentHistory> = [];
+  // get all timeline steps that have category payment
+  const paymentTimelineStep = timeline.filter((t) => t.category === TimelineCategory.PAYMENT);
+  // populate payment history array with the informations from timeline and related recipients
+  if (paymentTimelineStep.length > 0) {
+    for (const payment of paymentTimelineStep) {
+      const recIndex = payment.details.recIndex;
+      if (recIndex !== null && recIndex !== undefined) {
+        const recipient = recipients[recIndex];
+        /* eslint-disable-next-line functional/immutable-data */
+        paymentHistory.push({
+          ...(payment.details as PaidDetails),
+          recipientDenomination: recipient.denomination,
+          recipientTaxId: recipient.taxId,
+        });
+      }
+    }
+  }
+
+  return paymentHistory;
+};
+
 export function parseNotificationDetail(
   notificationDetail: NotificationDetail
 ): NotificationDetail {
   const parsedNotification = {
     ...notificationDetail,
     otherDocuments: populateOtherDocuments(notificationDetail.timeline),
+    paymentHistory: populatePaymentHistory(
+      notificationDetail.timeline,
+      notificationDetail.recipients
+    ),
     sentAt: formatDate(notificationDetail.sentAt),
   };
   /* eslint-disable functional/immutable-data */
@@ -763,15 +801,6 @@ export function parseNotificationDetail(
     }
     return -1;
   });
-  // Non dovrebbe essere necessario perchè l'oggetto timeline non viene usato nel layer di presentazione.
-  /*
-  parsedNotification.timeline.sort((a, b) => {
-    if (new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime() >= 0) {
-      return 1;
-    }
-    return -1;
-  });
-  */
   /* eslint-enable functional/immutable-data */
   /* eslint-enable functional/no-let */
   return parsedNotification;

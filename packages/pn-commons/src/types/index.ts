@@ -39,9 +39,11 @@ import {
   SendCourtesyMessageDetails,
   SendDigitalDetails,
   SendPaperDetails,
+  PaidDetails,
   DigitalWorkflowDetails,
   ViewedDetails,
   AarDetails,
+  PaymentHistory,
 } from './NotificationDetail';
 import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
@@ -94,6 +96,7 @@ export type {
   NotificationStatusHistory,
   GetNotificationDowntimeEventsParams,
   PaginationData,
+  PaidDetails,
   PaymentAttachmentNameType,
   PaymentInfo,
   PaymentNotice,
@@ -108,4 +111,5 @@ export type {
   AppResponse,
   ServerResponseError,
   ErrorMessage,
+  PaymentHistory,
 };
