@@ -17,6 +17,9 @@
       "fiscal-code": "Inserisci il codice per intero"
     }
   },
+  "payment": {
+    "title": "Pagamenti"
+  },
   "table": {
     "date": "Data",
     "recipient": "Destinatario",
