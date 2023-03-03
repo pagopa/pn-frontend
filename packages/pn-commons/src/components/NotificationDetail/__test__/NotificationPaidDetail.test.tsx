@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { render } from '../../../test-utils';
+import { render, prettyDOM } from '../../../test-utils';
 import { PaymentHistory, RecipientType } from '../../../types';
+import { formatEurocentToCurrency, formatFiscalCode } from '../../../utils';
 import NotificationPaidDetail from '../NotificationPaidDetail';
 
 describe('NotificationDetailPaid Component', () => {
@@ -11,7 +12,7 @@ describe('NotificationDetailPaid Component', () => {
       recipientTaxId: 'RSSMRA80A01H501U',
       paymentSourceChannel: 'EXTERNAL_REGISTRY',
       recipientType: RecipientType.PF,
-      amount: 100,
+      amount: 10000.45,
       creditorTaxId: '77777777777',
       noticeCode: '302181677769720267',
     },
@@ -20,7 +21,7 @@ describe('NotificationDetailPaid Component', () => {
       recipientTaxId: 'BNCSRA00E44H501J',
       paymentSourceChannel: 'EXTERNAL_REGISTRY',
       recipientType: RecipientType.PF,
-      amount: 30,
+      amount: 30.67,
       creditorTaxId: '77777777777',
       noticeCode: '302181677459720267',
       idF24: 'aw345s',
@@ -29,21 +30,41 @@ describe('NotificationDetailPaid Component', () => {
 
   function testTableData(payment: PaymentHistory, table: HTMLElement, isSender: boolean) {
     const tableRows = [
-      'recipientType',
-      'paymentObject',
-      'amount',
-      'paymentType',
-      'noticeCode',
-      'creditorTaxId',
+      { id: 'recipientType', label: 'Tipo di destinatario', value: 'Persona fisica' },
+      { id: 'paymentObject', label: 'Oggetto del pagamento', value: payment.paymentObject || '-' },
+      {
+        id: 'amount',
+        label: 'Importo',
+        value: payment.amount ? formatEurocentToCurrency(payment.amount) : '-',
+      },
+      {
+        id: 'paymentType',
+        label: 'Tipologia di pagamento',
+        value: payment.idF24 ? 'F24' : 'Avviso pagoPA',
+      },
+      {
+        id: 'noticeCode',
+        label: 'Codice Avviso',
+        value: payment.noticeCode ? payment.noticeCode.match(/.{1,4}/g)?.join(' ') : '-',
+      },
+      {
+        id: 'creditorTaxId',
+        label: 'Codice Fiscale Ente',
+        value: payment.creditorTaxId ? formatFiscalCode(payment.creditorTaxId) : '-',
+      },
     ];
-    for (const key of tableRows) {
-      const row = table.querySelector(`[data-testid="${key}"]`);
-      if (payment[key] || key === 'paymentType') {
-        if (key === 'recipientType' && !isSender) {
+    for (const tableRow of tableRows) {
+      const row = table.querySelector(`[data-testid="${tableRow.id}"]`);
+      if (payment[tableRow.id] || tableRow.id === 'paymentType') {
+        if (tableRow.id === 'recipientType' && !isSender) {
           expect(row).not.toBeInTheDocument();
           continue;
         }
         expect(row).toBeInTheDocument();
+        const label = row!.querySelector(`[data-testid="label"]`);
+        const value = row!.querySelector(`[data-testid="value"]`);
+        expect(label).toHaveTextContent(tableRow.label);
+        expect(value!.textContent).toBe(tableRow.value);
         continue;
       }
       expect(row).not.toBeInTheDocument();

@@ -56,7 +56,7 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
                 : getLocalizedOrDefaultLabel(
                     'notifiche',
                     'detail.payment.legal-person',
-                    'persona-giuridica'
+                    'Persona giuridica'
                   )
             }
           />
