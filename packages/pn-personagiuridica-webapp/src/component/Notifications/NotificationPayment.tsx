@@ -28,8 +28,7 @@ import {
   appStateActions,
   useDownloadDocument,
   NotificationPaidDetail,
-  INotificationDetailTimeline,
-  PaidDetails,
+  PaymentHistory,
 } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -53,9 +52,10 @@ import { trackEventByType } from '../../utils/mixpanel';
 interface Props {
   iun: string;
   notificationPayment: NotificationDetailPayment;
+  subject: string;
   mandateId?: string;
   senderDenomination?: string;
-  subject: string;
+  paymentHistory?: Array<PaymentHistory>;
 }
 
 interface PrimaryAction {
@@ -87,6 +87,7 @@ const NotificationPayment: React.FC<Props> = ({
   iun,
   notificationPayment,
   mandateId,
+  paymentHistory,
   senderDenomination,
   subject,
 }) => {
@@ -101,7 +102,6 @@ const NotificationPayment: React.FC<Props> = ({
   const f24AttachmentUrl = useAppSelector(
     (state: RootState) => state.notificationState.f24AttachmentUrl
   );
-  const timeline = useAppSelector((state: RootState) => state.notificationState.notification.timeline);
 
   const alertButtonStyle: SxProps<Theme> = isMobile
     ? { textAlign: 'center' }
@@ -408,13 +408,6 @@ const NotificationPayment: React.FC<Props> = ({
 
   const data = composePaymentData();
   const attachments = getAttachmentsData();
-  const paidEvents =
-    timeline
-      .filter(
-        (timelineEvent: INotificationDetailTimeline) =>
-          timelineEvent.elementId.startsWith('NOTIFICATION_PAID')
-      )
-      .map((paidEvent) => paidEvent.details as PaidDetails);
 
   return (
     <ApiErrorWrapper
@@ -514,8 +507,11 @@ const NotificationPayment: React.FC<Props> = ({
                 </Stack>
               </>
             )}
-            {!loading && paymentInfo.status === PaymentStatus.SUCCEEDED &&
-              <NotificationPaidDetail paidDetailsList={paidEvents} />
+            {!loading
+              && paymentInfo.status === PaymentStatus.SUCCEEDED
+              && paymentHistory
+              && paymentHistory.length > 0
+              && <NotificationPaidDetail paymentDetailsList={paymentHistory} />
             }
           </Stack>
         </Grid>

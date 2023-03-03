@@ -38,7 +38,7 @@ import {
   useDownloadDocument,
   NotificationDetailOtherDocument,
   NotificationRelatedDowntimes,
-  GetNotificationDowntimeEventsParams,
+  GetNotificationDowntimeEventsParams, NotificationPaidDetail,
 } from '@pagopa-pn/pn-commons';
 import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { trackEventByType } from '../utils/mixpanel';
@@ -111,6 +111,7 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
+  const showPayments = notification.paymentHistory && notification.paymentHistory.length > 0;
 
   const getRecipientsNoticeCodeField = (
     filteredRecipients: Array<NotificationDetailRecipient>,
@@ -430,6 +431,12 @@ const NotificationDetail = () => {
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 <NotificationDetailTable rows={detailTableRows} />
+                {showPayments && (
+                  <Paper sx={{p: 3, mb: 3}} className="paperContainer">
+                    <Typography>{t("payment.title", { ns: 'notifiche' })}</Typography>
+                    <NotificationPaidDetail paymentDetailsList={notification.paymentHistory} isSender />
+                  </Paper>
+                )}
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}

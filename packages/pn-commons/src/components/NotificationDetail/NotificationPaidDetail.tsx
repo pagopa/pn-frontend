@@ -66,15 +66,6 @@ const PaymentTable = ({ paymentDetails, showRecipientType }: PaymentTableProps) 
             value={formatEurocentToCurrency(paymentDetails.amount)}
           />
         }
-        {paymentDetails.amount &&
-          <CustomTableRow
-            label={getLocalizedOrDefaultLabel(
-              'notifiche',
-              'detail.payment.amount',
-              'Importo')}
-            value={formatEurocentToCurrency(paymentDetails.amount)}
-          />
-        }
         <CustomTableRow
           label={getLocalizedOrDefaultLabel(
             'notifiche',
@@ -132,7 +123,6 @@ const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPa
         isSender ? (
             <Accordion key={index}>
               <AccordionSummary
-
               >
                 <Typography>
                   {paymentEventDetails}
