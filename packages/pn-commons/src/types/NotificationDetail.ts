@@ -147,6 +147,7 @@ interface ScheduleDigitalWorkflowDetails extends BaseDetails, DigitalAddress {
 export interface SendCourtesyMessageDetails extends BaseDetails {
   digitalAddress: DigitalAddress;
   sendDate: string;
+  ioSendMessageResult?: AppIoCourtesyMessageEventType;
 }
 
 export interface SendDigitalDetails extends BaseDetails {
@@ -329,6 +330,16 @@ export enum RecipientType {
 enum DeliveryMode {
   DIGITAL = 'DIGITAL',
   ANALOG = 'ANALOG ',
+}
+
+// PN-4484 - only the messages of the SENT_COURTESY kind are meaningful to the user
+export enum AppIoCourtesyMessageEventType {
+  // message effettively sent
+  SENT_COURTESY = 'SENT_COURTESY',    
+  // sent a kind of internal message (which don't actually arrive to the user) about "OPTIN" 
+  SENT_OPTIN = 'SENT_OPTIN',
+  // another event related to "OPTIN" internal messages
+  NOT_SENT_OPTIN_ALREADY_SENT = 'NOT_SENT_OPTIN_ALREADY_SENT',
 }
 
 export enum AddressSource {

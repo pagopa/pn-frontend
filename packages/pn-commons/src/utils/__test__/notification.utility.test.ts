@@ -19,6 +19,7 @@ import {
   DigitalWorkflowDetails,
   RecipientType,
 } from '../../types';
+import { AppIoCourtesyMessageEventType } from '../../types/NotificationDetail';
 import { formatToTimezoneString, getNextDay } from '../date.utility';
 import {
   filtersApplied,
@@ -80,8 +81,6 @@ function testNotificationStatusInfosFnIncludingDescription(
     const bareTooltip = tooltip.split(" /-/ ")[0];
     expect(bareTooltip).toBe(tooltipToTest);
     expect(bareDescription).toBe(descriptionToTest);
-    console.log(description);
-    console.log(description.split(" /-/ "));
     expect(JSON.parse(descriptionDataAsString)).toEqual(descriptionDataToTest);
   } else {
     expect(tooltip).toBe(tooltipToTest);
@@ -862,6 +861,69 @@ describe('parse notification & filters', () => {
     expect(currentSteps && currentSteps[0].hidden).toBeTruthy();
     expect(currentSteps && currentSteps[1].hidden).toBeTruthy();
     expect(currentSteps && currentSteps[1].legalFactsIds).toHaveLength(1);
+  });
+
+  it('OPTIN-related AppIO courtesy-message-send events should be hidden', () => {
+    const timeline = acceptedDeliveringDeliveredTimeline();
+
+    // add several SEND_COURTESY_MESSAGE
+    const courtesyIOOptinEvent: INotificationDetailTimeline = {
+      elementId: 'send_courtesy_message_appio_optin',
+      timestamp: '2023-01-26T13:55:53.597019182Z',
+      category: TimelineCategory.SEND_COURTESY_MESSAGE,
+      details: {
+        recIndex: 0, sendDate: "some-date-optin",
+        digitalAddress: { type: DigitalDomicileType.APPIO, address: 'some-user-appio'},
+        ioSendMessageResult: AppIoCourtesyMessageEventType.SENT_OPTIN,
+      },
+    };
+    const courtesyIOActualSendEvent: INotificationDetailTimeline = {
+      elementId: 'send_courtesy_message_appio_actual_send',
+      timestamp: '2023-01-26T13:55:54.597019182Z',
+      category: TimelineCategory.SEND_COURTESY_MESSAGE,
+      details: {
+        recIndex: 0, sendDate: "some-date-actual_appio_send",
+        digitalAddress: { type: DigitalDomicileType.APPIO, address: 'some-user-appio'},
+        ioSendMessageResult: AppIoCourtesyMessageEventType.SENT_COURTESY,
+      },
+    };
+    timeline.splice(2, 0, courtesyIOOptinEvent, courtesyIOActualSendEvent);
+
+    // set the modified timeline
+    sourceNotification.timeline = timeline;
+
+    // change the status history accordingly
+    const history = acceptedDeliveringDeliveredTimelineStatusHistory();
+    // ACCEPTED is the first status, the additional SEND_COURTESY_MESSAGE events are to be added at the end.
+    history[0].relatedTimelineElements.push(courtesyIOOptinEvent.elementId, courtesyIOActualSendEvent.elementId);
+    sourceNotification.notificationStatusHistory = history;
+
+    // now the test
+    const parsedNotification = parseNotificationDetail(sourceNotification);
+
+    // in fact I must verify in the DELIVERING copied events, since *all* the ACCEPTED events are hidden
+
+    // DELIVERING is the intermediate (i.e. second) status
+    let currentSteps = parsedNotification.notificationStatusHistory[1].steps;
+    expect(currentSteps).toHaveLength(7);
+    // fourth-to-last, i.e. fourth (of seven) step is the SENT_COURTESY - not hidden
+    // the three latter steps are the "original" DELIVERY steps
+    expect(currentSteps && currentSteps[3].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
+    expect(currentSteps && (currentSteps[3].details as SendCourtesyMessageDetails).digitalAddress?.type).toEqual(DigitalDomicileType.APPIO);
+    expect(currentSteps && (currentSteps[3].details as SendCourtesyMessageDetails).ioSendMessageResult).toEqual(AppIoCourtesyMessageEventType.SENT_COURTESY);
+    expect(currentSteps && currentSteps[3].hidden).toBeFalsy();
+    // third-to-last, i.e. fifth, step is the SENT_OPTIN - hidden
+    expect(currentSteps && currentSteps[4].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
+    expect(currentSteps && (currentSteps[4].details as SendCourtesyMessageDetails).digitalAddress?.type).toEqual(DigitalDomicileType.APPIO);
+    expect(currentSteps && (currentSteps[4].details as SendCourtesyMessageDetails).ioSendMessageResult).toEqual(AppIoCourtesyMessageEventType.SENT_OPTIN);
+    expect(currentSteps && currentSteps[4].hidden).toBeTruthy();
+    // second-to-last, i.e. sixth step is a courtesy message sent through email - not hidden
+    expect(currentSteps && currentSteps[5].category).toEqual(TimelineCategory.SEND_COURTESY_MESSAGE);
+    expect(currentSteps && (currentSteps[5].details as SendCourtesyMessageDetails).digitalAddress?.type).toEqual(DigitalDomicileType.EMAIL);
+    expect(currentSteps && currentSteps[5].hidden).toBeFalsy();
+    // last, i.e. seventh step is REQUEST_ACEPTED - always hidden
+    expect(currentSteps && currentSteps[6].category).toEqual(TimelineCategory.REQUEST_ACCEPTED);
+    expect(currentSteps && currentSteps[6].hidden).toBeTruthy();
   });
 
   it('deliveryMode DIGITAL', () => {

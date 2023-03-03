@@ -21,9 +21,12 @@ import {
   SendPaperDetails,
   NotificationDeliveryMode,
   ResponseStatus,
+  SendCourtesyMessageDetails,
+  DigitalDomicileType,
 } from '../types';
 import { TimelineStepInfo } from './TimelineUtils/TimelineStep';
 import { TimelineStepFactory } from './TimelineUtils/TimelineStepFactory';
+import { AppIoCourtesyMessageEventType } from '../types/NotificationDetail';
 
 /*
  * Besides the values used in the generation of the final messages,
@@ -472,6 +475,26 @@ const TimelineAllowedStatus = [
   TimelineCategory.SEND_ANALOG_FEEDBACK,
 ];
 
+/*
+ * PN-4484 - courtesy message through app IO only seen
+ * if details.ioSendMessageResult = SENT_COURTESY 
+ * (cfr. definition of AppIoCourtesyMessageEventType)
+ * so any other kind of message is deemed as internal.
+ * 
+ * To preserve backward compatibility, if the attribute has no value,
+ * the message is not considered internal (and thus shown).
+ */
+function isInternalAppIoEvent(step: INotificationDetailTimeline): boolean {
+  if (step.category === TimelineCategory.SEND_COURTESY_MESSAGE) {
+    const details = step.details as SendCourtesyMessageDetails;
+    return details.digitalAddress.type === DigitalDomicileType.APPIO 
+      && !!details.ioSendMessageResult
+      && details.ioSendMessageResult !== AppIoCourtesyMessageEventType.SENT_COURTESY;
+  } else {
+    return false;
+  }
+}
+
 /**
  * Populate timeline macro steps
  * @param  {NotificationDetail} parsedNotification
@@ -491,10 +514,13 @@ function populateMacroStep(
     // hide accepted status micro steps
     if (status.status === NotificationStatus.ACCEPTED) {
       status.steps!.push({ ...step, hidden: true });
-      // remove legal facts for those microsteps that are releated to accepted status
+    // PN-4484 - hide the internal events related to the courtesy messages sent through app IO
+    } else if (isInternalAppIoEvent(step)) {
+      status.steps!.push({ ...step, hidden: true });
+    // remove legal facts for those microsteps that are releated to accepted status
     } else if (acceptedStatusItems.length && acceptedStatusItems.indexOf(step.elementId) > -1) {
       status.steps!.push({ ...step, legalFactsIds: [] });
-      // default case
+    // default case
     } else {
       status.steps!.push(step);
     }
