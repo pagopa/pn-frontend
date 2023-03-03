@@ -9,9 +9,13 @@ import {
   PhysicalCommunicationType,
   NotificationDetail,
   SendDigitalDetails,
-  NotificationStatus
+  NotificationStatus,
 } from '../../types';
-import { AddressSource, LegalFactType, NotificationDetailTimelineDetails } from '../../types/NotificationDetail';
+import {
+  AddressSource,
+  LegalFactType,
+  NotificationDetailTimelineDetails,
+} from '../../types/NotificationDetail';
 
 const timeline: Array<INotificationDetailTimeline> = [
   {
@@ -22,8 +26,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 0,
       digitalAddress: {
         address: 'nome@cognome.mail',
-        type: DigitalDomicileType.PEC
-      }
+        type: DigitalDomicileType.PEC,
+      },
     } as SendDigitalDetails,
   },
   {
@@ -34,8 +38,8 @@ const timeline: Array<INotificationDetailTimeline> = [
       recIndex: 0,
       digitalAddress: {
         address: 'nome@cognome.mail',
-        type: DigitalDomicileType.PEC
-      }
+        type: DigitalDomicileType.PEC,
+      },
     } as SendDigitalDetails,
   },
 ];
@@ -70,7 +74,7 @@ const recipients: Array<NotificationDetailRecipient> = [
       municipality: '',
       province: '',
       foreignState: '',
-    }
+    },
   },
 ];
 
@@ -78,11 +82,16 @@ export const additionalRecipient: NotificationDetailRecipient = {
   recipientType: RecipientType.PF,
   taxId: 'mocked-taxId2',
   denomination: 'Nome2 Cognome2',
-  digitalDomicile: { type: DigitalDomicileType.PEC, address: 'toto86@gmail.com', },
-  physicalAddress: { 
-    address: 'mocked address 2', addressDetails: '', zip: '', municipality: '', province: '',
-    at: '', foreignState: '',
-  }
+  digitalDomicile: { type: DigitalDomicileType.PEC, address: 'toto86@gmail.com' },
+  physicalAddress: {
+    address: 'mocked address 2',
+    addressDetails: '',
+    zip: '',
+    municipality: '',
+    province: '',
+    at: '',
+    foreignState: '',
+  },
 };
 
 export const notificationFromBe: NotificationDetail = {
@@ -100,15 +109,17 @@ export const notificationFromBe: NotificationDetail = {
   notificationStatusHistory: statusHistory,
   timeline,
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
+  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };
 
 export function flexibleNotificationFromBE(
-  status: NotificationStatus, statusHistory: NotificationStatusHistory[], timeline: INotificationDetailTimeline[],
+  status: NotificationStatus,
+  statusHistory: NotificationStatusHistory[],
+  timeline: INotificationDetailTimeline[],
   recipientCount = 1
 ): NotificationDetail {
-  if (![1,2].includes(recipientCount)) {
-    throw new Error("only 1 or 2 recipients supported");
+  if (![1, 2].includes(recipientCount)) {
+    throw new Error('only 1 or 2 recipients supported');
   }
   return {
     iun: '',
@@ -125,8 +136,8 @@ export function flexibleNotificationFromBE(
     notificationStatusHistory: statusHistory,
     timeline,
     physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-    notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE
-  }
+    notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+  };
 }
 
 export const parsedNotification: NotificationDetail = {
@@ -140,28 +151,33 @@ export const parsedNotification: NotificationDetail = {
   documentsAvailable: true,
   documents: [],
   otherDocuments: [],
+  paymentHistory: [],
   notificationStatus: NotificationStatus.ACCEPTED,
   notificationStatusHistory: [
-    { ...statusHistory[0], steps: [{...timeline[0], hidden: false}] },
-    { ...statusHistory[1], steps: [{...timeline[1], hidden: false}] },
+    { ...statusHistory[0], steps: [{ ...timeline[0], hidden: false }] },
+    { ...statusHistory[1], steps: [{ ...timeline[1], hidden: false }] },
   ],
-  timeline: timeline.map(t => ({...t, hidden: false})),
+  timeline: timeline.map((t) => ({ ...t, hidden: false })),
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };
 
-const timelineTwoRecipients = [timeline[0], {
-  elementId: 'mocked-id-3',
-  timestamp: '2022-03-21T08:56:50.177Z',
-  category: TimelineCategory.SEND_DIGITAL_DOMICILE,
-  details: {
-    recIndex: 1,
-    digitalAddress: {
-      address: 'toto86@gmail.com',
-      type: DigitalDomicileType.PEC
-    }
-  } as SendDigitalDetails,
-}, timeline[1]];
+const timelineTwoRecipients = [
+  timeline[0],
+  {
+    elementId: 'mocked-id-3',
+    timestamp: '2022-03-21T08:56:50.177Z',
+    category: TimelineCategory.SEND_DIGITAL_DOMICILE,
+    details: {
+      recIndex: 1,
+      digitalAddress: {
+        address: 'toto86@gmail.com',
+        type: DigitalDomicileType.PEC,
+      },
+    } as SendDigitalDetails,
+  },
+  timeline[1],
+];
 
 export const parsedNotificationTwoRecipients: NotificationDetail = {
   iun: 'KQKX-WMDW-GDMU-202301-L-1',
@@ -176,16 +192,19 @@ export const parsedNotificationTwoRecipients: NotificationDetail = {
   otherDocuments: [],
   notificationStatus: NotificationStatus.ACCEPTED,
   notificationStatusHistory: [
-    { ...statusHistory[0], steps: [
-      {...timelineTwoRecipients[0], hidden: false}, {...timelineTwoRecipients[1], hidden: false}
-    ] },
-    { ...statusHistory[1], steps: [{...timelineTwoRecipients[2], hidden: false}] },
+    {
+      ...statusHistory[0],
+      steps: [
+        { ...timelineTwoRecipients[0], hidden: false },
+        { ...timelineTwoRecipients[1], hidden: false },
+      ],
+    },
+    { ...statusHistory[1], steps: [{ ...timelineTwoRecipients[2], hidden: false }] },
   ],
-  timeline: timelineTwoRecipients.map(t => ({...t, hidden: false})),
+  timeline: timelineTwoRecipients.map((t) => ({ ...t, hidden: false })),
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };
-
 
 export function acceptedDeliveringDeliveredTimeline(): Array<INotificationDetailTimeline> {
   return [
@@ -194,7 +213,7 @@ export function acceptedDeliveringDeliveredTimeline(): Array<INotificationDetail
       timestamp: '2023-01-26T13:55:15.975574085Z',
       category: TimelineCategory.REQUEST_ACCEPTED,
       details: {},
-      legalFactsIds: [{ category: LegalFactType.SENDER_ACK, key: "mocked-legal-fact-1"}]
+      legalFactsIds: [{ category: LegalFactType.SENDER_ACK, key: 'mocked-legal-fact-1' }],
     },
     {
       elementId: 'send_courtesy_message_0',
@@ -202,8 +221,8 @@ export function acceptedDeliveringDeliveredTimeline(): Array<INotificationDetail
       category: TimelineCategory.SEND_COURTESY_MESSAGE,
       details: {
         recIndex: 0,
-        digitalAddress: { type: DigitalDomicileType.EMAIL, address: 'other@mail.it'},
-        sendDate: "some-date",
+        digitalAddress: { type: DigitalDomicileType.EMAIL, address: 'other@mail.it' },
+        sendDate: 'some-date',
       } as NotificationDetailTimelineDetails,
     },
     {
@@ -213,7 +232,7 @@ export function acceptedDeliveringDeliveredTimeline(): Array<INotificationDetail
       details: {
         recIndex: 0,
         digitalAddressSource: AddressSource.PLATFORM,
-        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it'},
+        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it' },
       } as NotificationDetailTimelineDetails,
     },
     {
@@ -222,9 +241,9 @@ export function acceptedDeliveringDeliveredTimeline(): Array<INotificationDetail
       category: TimelineCategory.SEND_DIGITAL_PROGRESS,
       details: {
         recIndex: 0,
-        eventCode: "C001",
+        eventCode: 'C001',
         digitalAddressSource: AddressSource.PLATFORM,
-        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it'},
+        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it' },
       } as NotificationDetailTimelineDetails,
     },
     {
@@ -233,9 +252,9 @@ export function acceptedDeliveringDeliveredTimeline(): Array<INotificationDetail
       category: TimelineCategory.SEND_DIGITAL_FEEDBACK,
       details: {
         recIndex: 0,
-        responseStatus: "OK",
+        responseStatus: 'OK',
         digitalAddressSource: AddressSource.PLATFORM,
-        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it'},
+        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it' },
       } as NotificationDetailTimelineDetails,
     },
     {
@@ -244,17 +263,17 @@ export function acceptedDeliveringDeliveredTimeline(): Array<INotificationDetail
       category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
       details: {
         recIndex: 0,
-        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it'},
+        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it' },
       } as NotificationDetailTimelineDetails,
     },
     {
       elementId: 'schedule_refinement_0',
       timestamp: '2023-01-26T14:17:16.525827086Z',
       category: TimelineCategory.SCHEDULE_REFINEMENT,
-      details: { recIndex: 0, } as NotificationDetailTimelineDetails,
+      details: { recIndex: 0 } as NotificationDetailTimelineDetails,
     },
   ];
-};
+}
 
 export function acceptedDeliveringDeliveredTimelineStatusHistory(): Array<NotificationStatusHistory> {
   return [
@@ -267,14 +286,15 @@ export function acceptedDeliveringDeliveredTimelineStatusHistory(): Array<Notifi
       status: NotificationStatus.DELIVERING,
       activeFrom: '2023-01-26T13:55:52.651901435Z',
       relatedTimelineElements: [
-        'send_digital_domicile_0_PLATFORM', 'digital_progress_0_PLATFORM', 'digital_feedback_0_PLATFORM'
+        'send_digital_domicile_0_PLATFORM',
+        'digital_progress_0_PLATFORM',
+        'digital_feedback_0_PLATFORM',
       ],
     },
     {
       status: NotificationStatus.DELIVERED,
       activeFrom: '2023-01-26T14:16:12.42843144Z',
-      relatedTimelineElements: [ 'digital_success_workflow_0', 'schedule_refinement_0' ],
-    }
+      relatedTimelineElements: ['digital_success_workflow_0', 'schedule_refinement_0'],
+    },
   ];
 }
-

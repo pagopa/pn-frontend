@@ -34,6 +34,7 @@
   "detail": {
     "document-not-available": "Il documento sarà scaricabile tra pochi minuti. Puoi riprovare ricaricando la pagina o cliccando sul link del documento richiesto",
     "table-aria-label": "Dettaglio notifica",
+    "payment-table-aria-label": "Dettaglio pagamenti",
     "date": "Data di invio",
     "payment-terms": "Da pagare entro il",
     "sender": "Mittente",
@@ -112,7 +113,7 @@
       "send-digital-success-description": "L'invio della notifica all'indirizzo PEC {{address}} è riuscito.",
       "send-digital-success-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}} è riuscito.",
       "send-simple-registered-letter": "Invio via raccomandata semplice",
-      "send-simple-registered-letter-description": "È in corso l'invio della notifica all'indirizzo {{address}} tramite raccomandata semplice.",      
+      "send-simple-registered-letter-description": "È in corso l'invio della notifica all'indirizzo {{address}} tramite raccomandata semplice.",
       "send-simple-registered-letter-description-multirecipient": "È in corso l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata semplice.",
       "send-analog-domicile-890": "Invio via raccomandata 890",
       "send-analog-domicile-890-description": "È iniziato l'invio della notifica all'indirizzo {{address}} tramite raccomandata 890.",
@@ -157,7 +158,7 @@
       "datePrefix": "il ",
       "legalFactDownload": "Attestazione di malfunzionamento",
       "apiErrorMessage": "Non siamo riusciti a caricare gli eventuali disservizi che hanno interessato questa notifica."
-    },    
+    },
     "help": {
       "goto": "Vai al sito",
       "assistance": "Per problemi tecnici o domande relative a Piattaforma Notifiche, premi su “Assisistenza” in alto a destra."
