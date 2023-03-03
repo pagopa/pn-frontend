@@ -20,10 +20,10 @@ import {
   ApiErrorWrapper,
   appStateActions,
   CopyToClipboard,
-  formatEurocentToCurrency, INotificationDetailTimeline,
+  formatEurocentToCurrency,
   NotificationDetailPayment,
-  NotificationPaidDetail, PaidDetails,
-  PaymentAttachmentSName,
+  NotificationPaidDetail,
+  PaymentAttachmentSName, PaymentHistory,
   PaymentInfoDetail,
   PaymentStatus,
   useDownloadDocument,
@@ -47,9 +47,10 @@ import { trackEventByType } from '../../utils/mixpanel';
 interface Props {
   iun: string;
   notificationPayment: NotificationDetailPayment;
-  mandateId?: string;
-  senderDenomination?: string;
   subject: string;
+  mandateId?: string;
+  paymentHistory?: Array<PaymentHistory>;
+  senderDenomination?: string;
 }
 
 interface PrimaryAction {
@@ -81,6 +82,7 @@ const NotificationPayment: React.FC<Props> = ({
   iun,
   notificationPayment,
   mandateId,
+  paymentHistory,
   senderDenomination,
   subject,
 }) => {
@@ -95,7 +97,6 @@ const NotificationPayment: React.FC<Props> = ({
   const f24AttachmentUrl = useAppSelector(
     (state: RootState) => state.notificationState.f24AttachmentUrl
   );
-  const timeline = useAppSelector((state: RootState) => state.notificationState.notification.timeline);
 
   const alertButtonStyle: SxProps<Theme> = isMobile
     ? { textAlign: 'center' }
@@ -402,13 +403,6 @@ const NotificationPayment: React.FC<Props> = ({
 
   const data = composePaymentData();
   const attachments = getAttachmentsData();
-  const paidEvents =
-    timeline
-      .filter(
-        (timelineEvent: INotificationDetailTimeline) =>
-          timelineEvent.elementId.startsWith('NOTIFICATION_PAID')
-      )
-      .map((paidEvent) => paidEvent.details as PaidDetails);
 
   return (
     <ApiErrorWrapper
@@ -508,8 +502,11 @@ const NotificationPayment: React.FC<Props> = ({
                 </Stack>
               </>
             )}
-            {!loading && paymentInfo.status === PaymentStatus.SUCCEEDED &&
-              <NotificationPaidDetail paidDetailsList={paidEvents} />
+            {!loading
+              && paymentInfo.status === PaymentStatus.SUCCEEDED
+              && paymentHistory
+              && paymentHistory.length > 0
+              && <NotificationPaidDetail paymentDetailsList={paymentHistory} />
             }
           </Stack>
         </Grid>

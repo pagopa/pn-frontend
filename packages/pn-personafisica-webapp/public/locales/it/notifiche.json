@@ -86,7 +86,10 @@
       "error-canceled": "Spiacenti, l’Ente Creditore ha revocato questo avviso. Contatta l’Ente per maggiori informazioni.",
       "error-expired": "Spiacenti, l’avviso è scaduto e non è più possibile pagarlo. Contatta l’Ente per maggiori informazioni.",
       "object": "Oggetto del pagamento",
-      "type": "Tipologia di pagamento"
+      "type": "Tipologia di pagamento",
+      "recipient-type": "Tipo di destinatario",
+      "natural-person": "Persona fisica",
+      "legal-person": "Persona giuridica"
     },
     "acts_files": {
       "downloadable_acts": "I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.",
