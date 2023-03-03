@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { NotFound } from '@pagopa-pn/pn-commons';
+import { AppNotAccessible, NotFound } from '@pagopa-pn/pn-commons';
 
 import Dashboard from '../pages/Dashboard.page';
 import NewNotification from '../pages/NewNotification.page';
@@ -9,7 +9,9 @@ import Statistics from '../pages/Statistics.page';
 import NotificationDetail from '../pages/NotificationDetail.page';
 import PrivacyPolicyPage from '../pages/PrivacyPolicy.page';
 import TermsOfServicePage from '../pages/TermsOfService.page';
-
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
+import { PAGOPA_HELP_EMAIL } from '../utils/constants';
 import { PNRole } from '../models/user';
 import AppStatus from '../pages/AppStatus.page';
 import * as routes from './routes.const';
@@ -17,6 +19,12 @@ import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
 import ToSGuard from './ToSGuard';
 import OrganizationPartyGuard from './OrganizationPartyGuard';
+
+const handleAssistanceClick = () => {
+  trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
+  /* eslint-disable-next-line functional/immutable-data */
+  window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+};
 
 function Router() {
   return (
@@ -54,6 +62,10 @@ function Router() {
       </Route>
       <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
       <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
+      <Route
+        path={routes.NOT_ACCESSIBLE}
+        element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
+      />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

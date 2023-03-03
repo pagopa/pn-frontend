@@ -40,7 +40,7 @@ import {
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
-import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
+import { PGAppErrorFactory } from './utils/AppError/PGAppErrorFactory';
 import { goToLoginPortal } from './navigation/navigation.utility';
 import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -91,7 +91,7 @@ const App = () => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
     // eslint-disable-next-line functional/immutable-data
-    errorFactoryManager.factory = new PFAppErrorFactory((path, ns) => t(path, { ns }));
+    errorFactoryManager.factory = new PGAppErrorFactory((path, ns) => t(path, { ns }));
   }, []);
 
   useEffect(() => {

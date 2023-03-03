@@ -85,7 +85,7 @@
       "send-digital-success-description": "L'invio della notifica all'indirizzo PEC {{address}} è riuscito.",
       "send-digital-success-description-multirecipient": "L'invio della notifica a {{name}} {{taxId}} all'indirizzo PEC {{address}} è riuscito.",
       "send-simple-registered-letter": "Invio via raccomandata semplice",
-      "send-simple-registered-letter-description": "È in corso l'invio della notifica all'indirizzo {{address}} tramite raccomandata semplice.",      
+      "send-simple-registered-letter-description": "È in corso l'invio della notifica all'indirizzo {{address}} tramite raccomandata semplice.",
       "send-simple-registered-letter-description-multirecipient": "È in corso l'invio della notifica a {{name}} {{taxId}} all'indirizzo {{address}} tramite raccomandata semplice.",
       "send-analog-domicile-890": "Invio via raccomandata 890",
       "send-analog-domicile-890-description": "È iniziato l'invio della notifica all'indirizzo {{address}} tramite raccomandata 890.",
@@ -275,6 +275,16 @@
         "title": "La notifica è stata correttamente creata",
         "message": "Trovi gli aggiornamenti sul suo stato nella sezione \"Notifiche\"",
         "go-to-notifications": "Vai alle Notifiche"
+      }
+    },
+    "errors": {
+      "fiscal_code": {
+        "title": "Codice fiscale non valido",
+        "message": "Il codice fiscale per uno o più destinatari non è valido"
+      },
+      "invalid_parameter": {
+        "title": "Dati non validi",
+        "message": "Uno o più dei dati inseriti non sono validi"
       }
     }
   }

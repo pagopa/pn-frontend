@@ -18,7 +18,6 @@ export class SendDigitalProgressStep extends TimelineStep {
             address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
           }
         ),
-        recipient: payload.recipientLabel,
       };
     } else if (eventCode === 'C001' || eventCode === 'DP00') {
       return {
@@ -34,7 +33,6 @@ export class SendDigitalProgressStep extends TimelineStep {
             address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
           }
         ),
-        recipient: payload.recipientLabel,
       };
     }
     return null;

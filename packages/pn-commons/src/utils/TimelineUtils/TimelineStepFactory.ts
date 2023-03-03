@@ -29,12 +29,12 @@ export class TimelineStepFactory {
          return new SendSimpleRegisteredLetterStep();
       case TimelineCategory.SEND_ANALOG_DOMICILE:
          return new SendAnalogDomicileStep();
-      case TimelineCategory.NOT_HANDLED:
-        return new NotHandledStep();
-      case TimelineCategory.SEND_ANALOG_PROGRESS:
-        return new SendAnalogProgressStep();
       case TimelineCategory.SEND_ANALOG_FEEDBACK:
         return new SendAnalogFeedbackStep();
+      case TimelineCategory.SEND_ANALOG_PROGRESS:
+        return new SendAnalogProgressStep();
+      case TimelineCategory.NOT_HANDLED:
+        return new NotHandledStep();
       default:
         return new DefaultStep();
     }

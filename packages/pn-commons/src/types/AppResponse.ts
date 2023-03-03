@@ -19,6 +19,7 @@ export interface ServerResponseError {
    * other requests having many fields that need to be validated)
    */
   element?: string;
+  detail?: string;
 }
 
 export interface AppResponse {
@@ -32,6 +33,7 @@ export interface AppResponse {
 export interface AppResponseError {
   code: string;
   element?: string;
+  detail?: string;
   message: {
     title: string;
     content: string;
@@ -48,17 +50,18 @@ export enum ServerResponseErrorCode {
    * Used by AppErrorFactory as default when the received error code
    * has no correspondent subtype to be mapped to
    */
-  UNKNOWN_ERROR = "UNKNOWN_ERROR",
-  
+  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
+
   // GENERIC ERROR
-  BAD_REQUEST_ERROR = "BAD_REQUEST_ERROR",
+  BAD_REQUEST_ERROR = 'BAD_REQUEST_ERROR',
   UNAUTHORIZED_ERROR = 'UNAUTHORIZED_ERROR',
   FORBIDDEN_ERROR = 'FORBIDDEN_ERROR',
+  UNAVAILABLE_FOR_LEGAL_REASONS_ERROR = 'UNAVAILABLE_FOR_LEGAL_REASONS_ERROR',
   NOT_FOUND_ERROR = 'NOT_FOUND_ERROR',
   INTERNAL_SERVER_ERROR = 'SERVER_ERROR',
 
   UNHANDLED_ERROR = 'UNHANDLED_ERROR',
-  GENRIC_ERROR = 'GENRIC_ERROR'
+  GENERIC_ERROR = 'GENERIC_ERROR',
 }
 
 interface ServerResponseData {

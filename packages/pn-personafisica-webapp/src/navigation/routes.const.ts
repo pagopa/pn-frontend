@@ -21,3 +21,4 @@ export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/
 export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 export const PARTICIPATING_ENTITIES = '/informativa-aderenti';
+export const NOT_ACCESSIBLE = '/non-accessibile';
