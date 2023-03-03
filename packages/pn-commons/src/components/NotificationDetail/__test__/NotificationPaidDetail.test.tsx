@@ -26,11 +26,24 @@ describe('NotificationDetailPaid Component', () => {
       noticeCode: '302181677459720267',
       idF24: 'aw345s',
     },
+    {
+      recipientDenomination: 'Ufficio Tal dei Tali',
+      recipientTaxId: '12345678910',
+      paymentSourceChannel: 'EXTERNAL_REGISTRY',
+      recipientType: RecipientType.PG,
+      amount: 65.12,
+      creditorTaxId: '77777777777',
+      noticeCode: '302181677459720267',
+    },
   ];
 
   function testTableData(payment: PaymentHistory, table: HTMLElement, isSender: boolean) {
     const tableRows = [
-      { id: 'recipientType', label: 'Tipo di destinatario', value: 'Persona fisica' },
+      {
+        id: 'recipientType',
+        label: 'Tipo di destinatario',
+        value: payment.recipientType === RecipientType.PF ? 'Persona fisica' : 'Persona giuridica',
+      },
       { id: 'paymentObject', label: 'Oggetto del pagamento', value: payment.paymentObject || '-' },
       {
         id: 'amount',
@@ -75,7 +88,7 @@ describe('NotificationDetailPaid Component', () => {
     const result = render(<NotificationPaidDetail paymentDetailsList={[paymentHistory[0]]} />);
     const table = result.getByTestId('paymentTable');
     expect(table).toBeInTheDocument();
-    const recipient = result.queryByTestId('recipient');
+    const recipient = result.queryByTestId('paymentRecipient');
     expect(recipient).not.toBeInTheDocument();
     testTableData(paymentHistory[0], table, false);
   });
@@ -86,7 +99,7 @@ describe('NotificationDetailPaid Component', () => {
     );
     const table = result.getByTestId('paymentTable');
     expect(table).toBeInTheDocument();
-    const recipient = result.getByTestId('recipient');
+    const recipient = result.getByTestId('paymentRecipient');
     expect(recipient).toBeInTheDocument();
     expect(recipient).toHaveTextContent(
       `${paymentHistory[0].recipientDenomination} - ${paymentHistory[0].recipientTaxId}`

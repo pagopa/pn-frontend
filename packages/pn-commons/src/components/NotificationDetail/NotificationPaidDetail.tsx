@@ -135,7 +135,7 @@ const NotificationPaidDetail = ({ paymentDetailsList, isSender }: NotificationPa
       {paymentDetailsList && paymentDetailsList.length === 1 && (
         <Box mt={2}>
           {isSender && (
-            <Typography fontSize="16px" fontWeight={600} data-testid="recipient" mb={2}>
+            <Typography fontSize="16px" fontWeight={600} data-testid="paymentRecipient" mb={2}>
               {paymentDetailsList[0].recipientDenomination} - {paymentDetailsList[0].recipientTaxId}
             </Typography>
           )}
