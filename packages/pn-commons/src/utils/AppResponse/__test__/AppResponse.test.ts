@@ -24,7 +24,8 @@ describe('Creation of AppResponse objects', () => {
       timestamp: '2022-10-05',
       errors: [{
         code: ServerResponseErrorCode.BAD_REQUEST_ERROR,
-        element: "",
+        element: '',
+        detail: '',
         message: {
           title: expect.stringMatching(/.*/),
           content: expect.stringMatching(/.*/),
@@ -52,7 +53,8 @@ describe('Creation of AppResponse objects', () => {
       timestamp: '2022-10-05',
       errors: [{
         code: ServerResponseErrorCode.UNAUTHORIZED_ERROR,
-        element: "",
+        element: '',
+        detail: '',
         message: {
           title: expect.stringMatching(/.*/),
           content: expect.stringMatching(/.*/),
@@ -81,7 +83,8 @@ describe('Creation of AppResponse objects', () => {
       timestamp: '2022-10-05',
       errors: [{
         code: ServerResponseErrorCode.NOT_FOUND_ERROR,
-        element: "",
+        element: '',
+        detail: '',
         message: {
           title: expect.stringMatching(/.*/),
           content: expect.stringMatching(/.*/),

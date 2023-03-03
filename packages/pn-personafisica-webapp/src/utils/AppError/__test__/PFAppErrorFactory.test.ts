@@ -38,35 +38,35 @@ describe('Test PFAppErrorFactory', () => {
     expect(errorClass).toBeInstanceOf(MandateAlreadyExistsAppError);
   });
 
-  it('Should return MandateNotFoundAppError', () => {
+  it('Should return MandateNotAcceptableAppError', () => {
     const errorClass = errorFactory.getCustomErrorForTest({
       code: ServerResponseErrorCode.PN_MANDATE_NOTACCEPTABLE,
     });
     expect(errorClass).toBeInstanceOf(MandateNotAcceptableAppError);
   });
 
-  it('Should return MandateNotFoundAppError', () => {
+  it('Should return MandateDelegateHimselfAppError', () => {
     const errorClass = errorFactory.getCustomErrorForTest({
       code: ServerResponseErrorCode.PN_MANDATE_DELEGATEHIMSELF,
     });
     expect(errorClass).toBeInstanceOf(MandateDelegateHimselfAppError);
   });
 
-  it('Should return MandateNotFoundAppError', () => {
+  it('Should return MandateInvalidVerificationCodeAppError', () => {
     const errorClass = errorFactory.getCustomErrorForTest({
       code: ServerResponseErrorCode.PN_MANDATE_INVALIDVERIFICATIONCODE,
     });
     expect(errorClass).toBeInstanceOf(MandateInvalidVerificationCodeAppError);
   });
 
-  it('Should return MandateNotFoundAppError', () => {
+  it('Should return UserAttributesInvalidVerificationCodeAppError', () => {
     const errorClass = errorFactory.getCustomErrorForTest({
       code: ServerResponseErrorCode.PN_USERATTRIBUTES_INVALIDVERIFICATIONCODE,
     });
     expect(errorClass).toBeInstanceOf(UserAttributesInvalidVerificationCodeAppError);
   });
 
-  it('Should return MandateNotFoundAppError', () => {
+  it('Should return GenericInvalidParameterPatternAppError', () => {
     const errorClass = errorFactory.getCustomErrorForTest({
       code: ServerResponseErrorCode.PN_GENERIC_INVALIDPARAMETER_PATTERN,
     });

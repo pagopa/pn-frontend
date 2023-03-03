@@ -2,6 +2,7 @@ import { ChangeEvent, Fragment, useCallback, useEffect, useMemo, useState } from
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
+  Autocomplete,
   Card,
   CardContent,
   Grid,
@@ -23,11 +24,12 @@ import {
   useIsMobile,
   CustomDropdown,
   dataRegex,
-  SpecialContactsProvider
+  SpecialContactsProvider,
 } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { RootState } from '../../redux/store';
+import { Party } from '../../models/party';
 
 import { CourtesyChannelType, DigitalAddress, LegalChannelType } from '../../models/contacts';
 import { internationalPhonePrefix } from '../../utils/contacts.utility';
@@ -49,6 +51,20 @@ type Address = {
   pec?: string;
 };
 
+type SpecialContacts = {
+  sender: Party;
+  addressType: LegalChannelType | CourtesyChannelType | undefined;
+  s_pec: string;
+  s_mail: string;
+  s_phone: string;
+};
+
+type AddressType = {
+  id: LegalChannelType | CourtesyChannelType;
+  value: string;
+  show: boolean;
+};
+
 const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
@@ -57,9 +73,10 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
   const isMobile = useIsMobile();
+  const [senderInputValue, setSenderInputValue] = useState('');
 
   const addressTypes = useMemo(
-    () => [
+    (): Array<AddressType> => [
       {
         id: LegalChannelType.PEC,
         value: t('special-contacts.pec', { ns: 'recapiti' }),
@@ -108,13 +125,19 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   );
 
   const fetchAllActivatedParties = useCallback(() => {
-    void dispatch(getAllActivatedParties());
+    void dispatch(getAllActivatedParties({}));
   }, []);
 
-  useEffect(() => fetchAllActivatedParties(), [fetchAllActivatedParties]);
+  useEffect(() => {
+    if (senderInputValue.length >= 4) {
+      void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
+    } else if (senderInputValue.length === 0) {
+      void dispatch(getAllActivatedParties({ blockLoading: true }));
+    }
+  }, [senderInputValue]);
 
   const validationSchema = yup.object({
-    sender: yup.string().required(),
+    sender: yup.object({ id: yup.string(), name: yup.string() }).required(),
     addressType: yup.string().required(),
     s_pec: yup.string().when('addressType', {
       is: LegalChannelType.PEC,
@@ -141,8 +164,8 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
   const initialValues = useMemo(
     () => ({
-      sender: '',
-      addressType: addressTypes.find((a) => a.show)?.id as LegalChannelType | CourtesyChannelType,
+      sender: { id: '', name: '' } as Party,
+      addressType: addressTypes.find((a: AddressType) => a.show)?.id,
       s_pec: '',
       s_mail: '',
       s_phone: '',
@@ -155,44 +178,56 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     validateOnMount: true,
     validationSchema,
     onSubmit: (values) => {
-      initValidation(
-        values.addressType,
-        values.s_pec || values.s_mail || internationalPhonePrefix + values.s_phone,
-        recipientId,
-        values.sender,
-        async (status: 'validated' | 'cancelled') => {
-          if (status === 'validated') {
-            // reset form
-            formik.resetForm();
-            await formik.validateForm();
+      if (values.addressType) {
+        initValidation(
+          values.addressType,
+          values.s_pec || values.s_mail || internationalPhonePrefix + values.s_phone,
+          recipientId,
+          values.sender.id,
+          async (status: 'validated' | 'cancelled') => {
+            if (status === 'validated') {
+              // reset form
+              formik.resetForm();
+              await formik.validateForm();
+            }
           }
-        }
-      );
+        );
+      }
     },
   });
+
+  const renderOption = (props: any, option: Party) => (
+    <MenuItem {...props} value={option.id} key={option.id} role="option">
+      <DropDownPartyMenuItem name={option.name} />
+    </MenuItem>
+  );
+
+  const getOptionLabel = (option: Party) => option.name || '';
+
+  const handleChangeInput = (newInputValue: string) => {
+    setSenderInputValue(newInputValue);
+  };
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
   };
 
-  const senderChangeHandler = (e: ChangeEvent) => {
+  const senderChangeHandler = async (e: any, newValue: Party | null) => {
+    await formik.setFieldValue('sender', newValue);
     formik.handleChange(e);
     if (formik.values.addressType === LegalChannelType.PEC) {
-      const alreadyExists =
-        addresses.findIndex((a) => a.senderId === (e.target as any).value && a.pec) > -1;
+      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.pec) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.pec-already-exists', { ns: 'recapiti' }) : ''
       );
     } else if (formik.values.addressType === CourtesyChannelType.EMAIL) {
-      const alreadyExists =
-        addresses.findIndex((a) => a.senderId === (e.target as any).value && a.mail) > -1;
+      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.mail) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.email-already-exists', { ns: 'recapiti' }) : ''
       );
     } else {
-      const alreadyExists =
-        addresses.findIndex((a) => a.senderId === (e.target as any).value && a.phone) > -1;
+      const alreadyExists = addresses.findIndex((a) => a.senderId === newValue?.id && a.phone) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.phone-already-exists', { ns: 'recapiti' }) : ''
       );
@@ -204,7 +239,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       await formik.setFieldValue('s_mail', '');
       await formik.setFieldValue('s_phone', '');
       const alreadyExists =
-        addresses.findIndex((a) => a.senderId === formik.values.sender && a.pec) > -1;
+        addresses.findIndex((a) => a.senderId === formik.values.sender.id && a.pec) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.pec-already-exists', { ns: 'recapiti' }) : ''
       );
@@ -212,7 +247,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       await formik.setFieldValue('s_pec', '');
       await formik.setFieldValue('s_phone', '');
       const alreadyExists =
-        addresses.findIndex((a) => a.senderId === formik.values.sender && a.mail) > -1;
+        addresses.findIndex((a) => a.senderId === formik.values.sender.id && a.mail) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.email-already-exists', { ns: 'recapiti' }) : ''
       );
@@ -220,7 +255,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       await formik.setFieldValue('s_pec', '');
       await formik.setFieldValue('s_mail', '');
       const alreadyExists =
-        addresses.findIndex((a) => a.senderId === formik.values.sender && a.phone) > -1;
+        addresses.findIndex((a) => a.senderId === formik.values.sender.id && a.phone) > -1;
       setAlreadyExistsMessage(
         alreadyExists ? t('special-contacts.phone-already-exists', { ns: 'recapiti' }) : ''
       );
@@ -284,21 +319,28 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
         <form style={{ margin: '20px 0' }} onSubmit={formik.handleSubmit}>
           <Grid container direction="row" spacing={2} alignItems="flex">
             <Grid item lg xs={12}>
-              <CustomDropdown
+              <Autocomplete
                 id="sender"
-                label={`${t('special-contacts.sender', { ns: 'recapiti' })}*`}
-                name="sender"
-                value={formik.values.sender}
-                onChange={senderChangeHandler}
-                fullWidth
                 size="small"
-              >
-                {parties.map((party) => (
-                  <MenuItem key={party.id} value={party.id}>
-                    <DropDownPartyMenuItem name={party.name} />
-                  </MenuItem>
-                ))}
-              </CustomDropdown>
+                options={parties}
+                fullWidth
+                autoComplete
+                noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
+                getOptionLabel={getOptionLabel}
+                isOptionEqualToValue={(option, value) => option.name === value.name}
+                onChange={senderChangeHandler}
+                inputValue={senderInputValue}
+                onInputChange={(_event, newInputValue) => handleChangeInput(newInputValue)}
+                filterOptions={(e) => e}
+                renderOption={renderOption}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    name="sender"
+                    label={t('special-contacts.sender', { ns: 'recapiti' })}
+                  />
+                )}
+              />
             </Grid>
             <Grid item lg xs={12}>
               <CustomDropdown
