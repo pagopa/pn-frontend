@@ -43,6 +43,7 @@ import {
   DigitalWorkflowDetails,
   ViewedDetails,
   AarDetails,
+  PaymentHistory,
 } from './NotificationDetail';
 import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
@@ -110,4 +111,5 @@ export type {
   AppResponse,
   ServerResponseError,
   ErrorMessage,
+  PaymentHistory,
 };

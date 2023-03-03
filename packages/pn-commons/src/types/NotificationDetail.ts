@@ -8,7 +8,6 @@ export interface NotificationDetail {
   abstract?: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
-  otherDocuments?: Array<NotificationDetailDocument>;
   notificationFeePolicy: NotificationFeePolicy;
   cancelledIun?: string;
   physicalCommunicationType: PhysicalCommunicationType;
@@ -25,7 +24,15 @@ export interface NotificationDetail {
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
   amount?: number;
+  // only fe
+  otherDocuments?: Array<NotificationDetailDocument>;
+  paymentHistory?: Array<PaymentHistory>;
 }
+
+export type PaymentHistory = PaidDetails & {
+  recipientDenomination: string;
+  recipientTaxId: string;
+};
 
 export type NotificationDetailTimelineDetails =
   | BaseDetails
