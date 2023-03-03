@@ -111,7 +111,6 @@ const NotificationDetail = () => {
   const { t } = useTranslation(['common', 'notifiche', 'appStatus']);
 
   const hasNotificationSentApiError = hasApiErrors(NOTIFICATION_ACTIONS.GET_SENT_NOTIFICATION);
-  const showPayments = notification.paymentHistory && notification.paymentHistory.length > 0;
 
   const getRecipientsNoticeCodeField = (
     filteredRecipients: Array<NotificationDetailRecipient>,
@@ -261,7 +260,7 @@ const NotificationDetail = () => {
 
   const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
-  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable ? false : true;
+  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable;
 
   const getDownloadFilesMessage = useCallback((): string => {
     if (isCancelled) {
@@ -411,6 +410,9 @@ const NotificationDetail = () => {
     </Dialog>
   );
 
+  const direction = isMobile ? 'column-reverse' : 'row';
+  const spacing = isMobile ? 3 : 0;
+
   return (
     <>
       {hasNotificationSentApiError && (
@@ -424,23 +426,33 @@ const NotificationDetail = () => {
           {isMobile && breadcrumb}
           <Grid
             container
-            direction={isMobile ? 'column-reverse' : 'row'}
-            spacing={isMobile ? 3 : 0}
+            direction={direction}
+            spacing={spacing}
           >
             <Grid item lg={7} xs={12} sx={{ p: { xs: 0, lg: 3 } }}>
               {!isMobile && breadcrumb}
               <Stack spacing={3}>
                 <NotificationDetailTable rows={detailTableRows} />
-                {showPayments && (
+                {notification.paymentHistory && notification.paymentHistory.length > 0 && (
                   <Paper sx={{p: 3, mb: 3}} className="paperContainer">
-                    <Typography>{t("payment.title", { ns: 'notifiche' })}</Typography>
+                    <Typography variant="h5">{t("payment.title", { ns: 'notifiche' })}</Typography>
+                    {notification.paymentHistory.length === 1 && (
+                      <Typography>
+                        {t("payment.subtitle-single", { ns: 'notifiche' })}
+                      </Typography>
+                    )}
+                    {notification.paymentHistory.length > 1 && (
+                      <Typography>
+                        {t("payment.subtitle-multiple", { ns: 'notifiche' })}
+                      </Typography>
+                    )}
                     <NotificationPaidDetail paymentDetailsList={notification.paymentHistory} isSender />
                   </Paper>
                 )}
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
-                    documents={notification.documents ?? []}
+                    documents={notification.documents}
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}
@@ -450,7 +462,7 @@ const NotificationDetail = () => {
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.other-acts', { ns: 'notifiche' })}
-                    documents={notification.otherDocuments ?? []}
+                    documents={notification.otherDocuments}
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}

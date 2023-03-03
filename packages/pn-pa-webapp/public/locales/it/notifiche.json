@@ -18,7 +18,10 @@
     }
   },
   "payment": {
-    "title": "Pagamenti"
+    "title": "Pagamenti",
+    "subtitle-single": "I costi di notifica sono stati pagati dal destinatario",
+    "subtitle-multiple": "I costi di notifica sono stati pagati dai seguenti destinatari:",
+    "show-more": "Mostra dettagli"
   },
   "table": {
     "date": "Data",

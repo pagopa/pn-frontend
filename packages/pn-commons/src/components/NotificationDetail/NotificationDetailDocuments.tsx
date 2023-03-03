@@ -6,7 +6,7 @@ import { ButtonNaked } from '@pagopa/mui-italia';
 import { NotificationDetailDocument, NotificationDetailOtherDocument } from '../../types';
 type Props = {
   title: string;
-  documents: Array<NotificationDetailDocument>;
+  documents: Array<NotificationDetailDocument> | undefined;
   clickHandler: (document: string | NotificationDetailOtherDocument | undefined) => void;
   documentsAvailable?: boolean;
   downloadFilesMessage?: string;
@@ -25,7 +25,7 @@ type Props = {
 
 const NotificationDetailDocuments = ({
   title,
-  documents,
+  documents = [],
   clickHandler,
   documentsAvailable = true,
   downloadFilesMessage,

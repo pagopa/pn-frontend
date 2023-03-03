@@ -12,7 +12,7 @@ const CustomTableRow = ({ label, value, dataTestId }: Props) => (
       {label}
     </TableCell>
     <TableCell padding="none" sx={{ py: 1 }} data-testid="value">
-      {value ?? '-'}
+      <b>{value ?? '-'}</b>
     </TableCell>
   </TableRow>
 );
