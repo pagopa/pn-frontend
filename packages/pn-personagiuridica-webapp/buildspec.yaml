@@ -24,7 +24,7 @@ batch:
           BUILD_ID: svil
           # PN-2029 REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
           REACT_APP_URL_FE_LOGIN: https://portale-login.svil.pn.pagopa.it/
-          REACT_APP_URL_SELFCARE_BASE: https://pnpg.svil.selfcare.pagopa.it
+          REACT_APP_URL_SELFCARE_BASE: https://pnpg.dev.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.svil.pn.pagopa.it/
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: true
@@ -40,7 +40,7 @@ batch:
           BUILD_ID: coll
           #PN-2029 REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
           REACT_APP_URL_FE_LOGIN: https://portale-login.coll.pn.pagopa.it/
-          REACT_APP_URL_SELFCARE_BASE: https://pnpg.coll.selfcare.pagopa.it
+          REACT_APP_URL_SELFCARE_BASE: https://pnpg.dev.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.coll.pn.pagopa.it/
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
@@ -56,7 +56,7 @@ batch:
           BUILD_ID: cert
           #PN-2029 REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
           REACT_APP_URL_FE_LOGIN: https://portale-login.cert.pn.pagopa.it/
-          REACT_APP_URL_SELFCARE_BASE: https://pnpg.cert.selfcare.pagopa.it
+          REACT_APP_URL_SELFCARE_BASE: https://pnpg.dev.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.cert.pn.pagopa.it/
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
@@ -72,7 +72,7 @@ batch:
           BUILD_ID: hotfix
           #PN-2029 REACT_APP_PAYMENT_DISCLAIMER_URL: https://www.pagopa.it
           REACT_APP_URL_FE_LOGIN: https://portale-login.hotfix.pn.pagopa.it/
-          REACT_APP_URL_SELFCARE_BASE: https://pnpg.hotfix.selfcare.pagopa.it
+          REACT_APP_URL_SELFCARE_BASE: https://pnpg.dev.selfcare.pagopa.it
           REACT_APP_URL_API: https://webapi.hotfix.pn.pagopa.it/
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_DISABLE_INACTIVITY_HANDLER: false
