@@ -13,12 +13,11 @@ export const ContactsApi = {
    * @param  {string} recipientId
    * @returns Promise
    */
-  getDigitalAddresses: (): Promise<DigitalAddresses> => 
+  getDigitalAddresses: (): Promise<DigitalAddresses> =>
     apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => ({
-        legal: response.data.legal ? response.data.legal : [],
-        courtesy: response.data.courtesy ? response.data.courtesy : [],
-      })
-    ),
+      legal: response.data.legal ? response.data.legal : [],
+      courtesy: response.data.courtesy ? response.data.courtesy : [],
+    })),
 
   /**
    * Create or update a digital address with legal value

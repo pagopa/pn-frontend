@@ -40,7 +40,7 @@ import {
 import { trackEventByType } from './utils/mixpanel';
 import { TrackEventType } from './utils/events';
 import './utils/onetrust';
-import { PFAppErrorFactory } from './utils/AppError/PFAppErrorFactory';
+import { PGAppErrorFactory } from './utils/AppError/PGAppErrorFactory';
 import { goToLoginPortal } from './navigation/navigation.utility';
 import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
@@ -91,7 +91,7 @@ const App = () => {
     // init localization
     initLocalization((namespace, path, data) => t(path, { ns: namespace, ...data }));
     // eslint-disable-next-line functional/immutable-data
-    errorFactoryManager.factory = new PFAppErrorFactory((path, ns) => t(path, { ns }));
+    errorFactoryManager.factory = new PGAppErrorFactory((path, ns) => t(path, { ns }));
   }, []);
 
   useEffect(() => {
@@ -137,8 +137,8 @@ const App = () => {
   ];
 
   const selfcareMenuItems: Array<SideMenuItem> = [
-    { label: t('menu.users'), icon: People, route: routes.USERS },
-    { label: t('menu.groups'), icon: SupervisedUserCircle, route: routes.GROUPS },
+    { label: t('menu.users'), icon: People, route: routes.USERS(organization?.id) },
+    { label: t('menu.groups'), icon: SupervisedUserCircle, route: routes.GROUPS(organization?.id) },
   ];
 
   const partyList: Array<PartyEntity> = useMemo(

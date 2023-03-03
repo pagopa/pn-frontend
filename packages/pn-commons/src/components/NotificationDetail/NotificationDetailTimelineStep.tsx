@@ -101,7 +101,7 @@ const NotificationDetailTimelineStep = ({
   let visibleSteps: Array<INotificationDetailTimeline> = [];
   /* eslint-enable functional/no-let */
 
-  const notificationStatusInfos = getNotificationStatusInfos(timelineStep);
+  const notificationStatusInfos = getNotificationStatusInfos(timelineStep, { recipients });
 
   if (timelineStep.steps) {
     /* eslint-disable functional/immutable-data */
@@ -240,13 +240,6 @@ const NotificationDetailTimelineStep = ({
               ))}
           </Typography>
         </Box>
-        {recipients.length > 1 && (
-          <Box>
-            <Typography fontSize={14} color="text.secondary">
-              {timelineStatusInfos.recipient}
-            </Typography>
-          </Box>
-        )}
       </Fragment>,
       'middle',
       'small'

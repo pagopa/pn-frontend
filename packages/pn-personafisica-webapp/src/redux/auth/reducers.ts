@@ -51,6 +51,7 @@ const userSlice = createSlice({
     isUnauthorizedUser: false,
     messageUnauthorizedUser: emptyUnauthorizedMessage,
     isClosedSession: false,
+    isForbiddenUser: false,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -67,6 +68,7 @@ const userSlice = createSlice({
         console.debug(e);
       }
       state.isClosedSession = false;
+      state.isForbiddenUser = false;
     });
     builder.addCase(exchangeToken.rejected, (state, action) => {
       const adaptedError = adaptedTokenExchangeError(action.payload);
@@ -75,6 +77,7 @@ const userSlice = createSlice({
         ? adaptedError.response.customMessage
         : emptyUnauthorizedMessage;
       state.isClosedSession = false;
+      state.isForbiddenUser = adaptedError.response?.status === 451;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
       state.user = action.payload;

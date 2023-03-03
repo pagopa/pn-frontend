@@ -16,9 +16,9 @@ import {
   Divider,
   Grid,
   MenuItem,
-  SelectChangeEvent,
   Stack,
   Paper,
+  Autocomplete,
 } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import { IllusCompleted } from '@pagopa/mui-italia';
@@ -33,7 +33,6 @@ import {
   TitleBox,
   useIsMobile,
   PnBreadcrumb,
-  CustomDropdown,
   isToday,
   dataRegex,
 } from '@pagopa-pn/pn-commons';
@@ -43,12 +42,13 @@ import { resetNewDelegation } from '../redux/newDelegation/reducers';
 import { NewDelegationFormProps } from '../redux/delegation/types';
 import { RootState } from '../redux/store';
 import * as routes from '../navigation/routes.const';
-import DropDownPartyMenuItem from '../component/Party/DropDownParty';
 import VerificationCodeComponent from '../component/Deleghe/VerificationCodeComponent';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { generateVCode } from '../utils/delegation.utility';
-import { trackEventByType } from '../utils/mixpanel';
+import DropDownPartyMenuItem from '../component/Party/DropDownParty';
+import { Party } from '../models/party';
 import { TrackEventType } from '../utils/events';
+import { trackEventByType } from '../utils/mixpanel';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -88,7 +88,7 @@ const NuovaDelega = () => {
     void dispatch(createDelegation(values));
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
   };
-
+  const [senderInputValue, setSenderInputValue] = useState('');
   const handleDelegationsClick = () => {
     navigate(routes.DELEGHE);
   };
@@ -106,10 +106,7 @@ const NuovaDelega = () => {
     cognome: '',
     selectTuttiEntiOrSelezionati: 'tuttiGliEnti',
     expirationDate: tomorrow,
-    enteSelect: {
-      name: '',
-      uniqueIdentifier: '',
-    },
+    enti: [],
     verificationCode: generateVCode(),
   };
 
@@ -123,7 +120,7 @@ const NuovaDelega = () => {
       .matches(dataRegex.fiscalCode, t('nuovaDelega.validation.fiscalCode.wrong')),
     nome: yup.string().required(t('nuovaDelega.validation.name.required')),
     cognome: yup.string().required(t('nuovaDelega.validation.surname.required')),
-    enteSelect: yup.object({ name: yup.string(), uniqueIdentifier: yup.string() }).required(),
+    enti: yup.array().required(),
     expirationDate: yup
       .mixed()
       .required(t('nuovaDelega.validation.expirationDate.required'))
@@ -140,11 +137,19 @@ const NuovaDelega = () => {
     dispatch(resetNewDelegation());
   }, []);
 
+  useEffect(() => {
+    if (senderInputValue.length >= 4) {
+      void dispatch(getAllEntities({ paNameFilter: senderInputValue, blockLoading: true }));
+    } else if (senderInputValue.length === 0 && loadAllEntities) {
+      void dispatch(getAllEntities({ blockLoading: true }));
+    }
+  }, [senderInputValue]);
+
   const [loadAllEntities, setLoadAllEntities] = useState(false);
 
   useEffect(() => {
     if (loadAllEntities) {
-      void dispatch(getAllEntities());
+      void dispatch(getAllEntities({}));
     }
   }, [loadAllEntities]);
 
@@ -153,6 +158,18 @@ const NuovaDelega = () => {
       setLoadAllEntities(true);
     }
   };
+
+  const renderOption = (props: any, option: Party) => (
+    <MenuItem {...props} value={option.id} key={option.id}>
+      <DropDownPartyMenuItem name={option.name} />
+    </MenuItem>
+  );
+
+  const handleChangeInput = (newInputValue: string) => {
+    setSenderInputValue(newInputValue);
+  };
+
+  const getOptionLabel = (option: Party) => option.name || '';
 
   const breadcrumbs = (
     <Fragment>
@@ -318,24 +335,33 @@ const NuovaDelega = () => {
                             <Grid item xs={isMobile ? 12 : 6} className={classes.margin}>
                               {values.selectTuttiEntiOrSelezionati === 'entiSelezionati' && (
                                 <FormControl fullWidth>
-                                  <CustomDropdown
+                                  <Autocomplete
                                     id="ente-select"
-                                    label={t('nuovaDelega.form.selectEntities')}
+                                    multiple
+                                    options={entities}
                                     fullWidth
-                                    value={values.enteSelect.uniqueIdentifier}
-                                    onChange={(event: SelectChangeEvent<string>) => {
-                                      setFieldValue('enteSelect', {
-                                        name: event.target.name,
-                                        uniqueIdentifier: event.target.value,
-                                      });
+                                    autoComplete
+                                    getOptionLabel={getOptionLabel}
+                                    noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
+                                    isOptionEqualToValue={(option, value) =>
+                                      option.name === value.name
+                                    }
+                                    onChange={(_event: any, newValue: Array<Party>) => {
+                                      setFieldValue('enti', newValue);
                                     }}
-                                  >
-                                    {entities.map((entity) => (
-                                      <MenuItem value={entity.id} key={entity.id}>
-                                        <DropDownPartyMenuItem name={entity.name} />
-                                      </MenuItem>
-                                    ))}
-                                  </CustomDropdown>
+                                    inputValue={senderInputValue}
+                                    onInputChange={(_event, newInputValue) =>
+                                      handleChangeInput(newInputValue)
+                                    }
+                                    filterOptions={(e) => e}
+                                    renderOption={renderOption}
+                                    renderInput={(params) => (
+                                      <TextField
+                                        {...params}
+                                        label={t('nuovaDelega.form.selectEntities')}
+                                      />
+                                    )}
+                                  />
                                 </FormControl>
                               )}
                             </Grid>

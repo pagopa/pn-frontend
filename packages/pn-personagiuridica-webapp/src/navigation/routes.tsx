@@ -1,7 +1,10 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
+import { AppNotAccessible, LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
+import { PAGOPA_HELP_EMAIL } from '../utils/constants';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -15,7 +18,12 @@ const NotificationDetail = React.lazy(() => import('../pages/NotificationDetail.
 const Notifiche = React.lazy(() => import('../pages/Notifiche.page'));
 const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page'));
 const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
-const UnderConstruction = React.lazy(() => import('../pages/UnderConstruction.page'));
+
+const handleAssistanceClick = () => {
+  trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
+  /* eslint-disable-next-line functional/immutable-data */
+  window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+};
 
 function Router() {
   return (
@@ -30,8 +38,6 @@ function Router() {
                 <Route path={routes.DETTAGLIO_NOTIFICA} element={<NotificationDetail />} />
                 <Route path={routes.RECAPITI} element={<Contacts />} />
                 <Route path={routes.APP_STATUS} element={<AppStatus />} />
-                <Route path={routes.USERS} element={<UnderConstruction />} />
-                <Route path={routes.GROUPS} element={<UnderConstruction />} />
               </Route>
             </Route>
             {/* not found - non-logged users will see the common AccessDenied component */}
@@ -42,6 +48,10 @@ function Router() {
         </Route>
         <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
         <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
+        <Route
+          path={routes.NOT_ACCESSIBLE}
+          element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

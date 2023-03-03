@@ -1,7 +1,10 @@
 import React, { Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
+import { AppNotAccessible, LoadingPage, NotFound } from '@pagopa-pn/pn-commons';
 
+import { trackEventByType } from '../utils/mixpanel';
+import { TrackEventType } from '../utils/events';
+import { PAGOPA_HELP_EMAIL } from '../utils/constants';
 import * as routes from './routes.const';
 import SessionGuard from './SessionGuard';
 import RouteGuard from './RouteGuard';
@@ -18,6 +21,12 @@ const PrivacyPolicyPage = React.lazy(() => import('../pages/PrivacyPolicy.page')
 const TermsOfServicePage = React.lazy(() => import('../pages/TermsOfService.page'));
 const AppStatus = React.lazy(() => import('../pages/AppStatus.page'));
 const ParticipatingEntitiesPage = React.lazy(() => import('../pages/ParticipatingEntities.page'));
+
+const handleAssistanceClick = () => {
+  trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
+  /* eslint-disable-next-line functional/immutable-data */
+  window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+};
 
 function Router() {
   return (
@@ -48,6 +57,10 @@ function Router() {
         <Route path={routes.PRIVACY_POLICY} element={<PrivacyPolicyPage />} />
         <Route path={routes.TERMS_OF_SERVICE} element={<TermsOfServicePage />} />
         <Route path={routes.PARTICIPATING_ENTITIES} element={<ParticipatingEntitiesPage />} />
+        <Route
+          path={routes.NOT_ACCESSIBLE}
+          element={<AppNotAccessible onAssistanceClick={handleAssistanceClick} />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

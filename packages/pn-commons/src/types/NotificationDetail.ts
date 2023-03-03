@@ -253,7 +253,7 @@ export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
 
 export enum NotificationDeliveryMode {
   ANALOG = 'analog',
-  DIGITAL = 'digital'
+  DIGITAL = 'digital',
 }
 export interface NotificationStatusHistory {
   status: NotificationStatus;
@@ -275,17 +275,6 @@ export enum TimelineCategory {
   SCHEDULE_ANALOG_WORKFLOW = 'SCHEDULE_ANALOG_WORKFLOW',
   SCHEDULE_DIGITAL_WORKFLOW = 'SCHEDULE_DIGITAL_WORKFLOW',
   SEND_DIGITAL_DOMICILE = 'SEND_DIGITAL_DOMICILE',
-
-  // From what verified by Andrea Cimini and Simone Rondinella, the element SEND_DIGITAL_DOMICILE_FEEDBACK
-  // does not exist anymore.
-  // This value should be therefore erased, as well as the entry in TimelineStepFactory,
-  // the class SendDigitalDomicileFeedbackStep, and the corresponding literals in the i18n files.
-  // We postpone this cleanup until a complete revision of the timeline.
-  // --------------------------------------
-  // Carlos Lombardi, 2023.02.10
-
-  SEND_DIGITAL_DOMICILE_FEEDBACK = 'SEND_DIGITAL_DOMICILE_FEEDBACK',
-
   SEND_DIGITAL_PROGRESS = 'SEND_DIGITAL_PROGRESS',
   SEND_DIGITAL_FEEDBACK = 'SEND_DIGITAL_FEEDBACK',
   REFINEMENT = 'REFINEMENT',
@@ -329,6 +318,7 @@ export enum DigitalDomicileType {
   PEC = 'PEC',
   EMAIL = 'EMAIL',
   APPIO = 'APPIO', // PN-2068
+  SMS = 'SMS', // possible type for courtesy message
 }
 
 export enum RecipientType {

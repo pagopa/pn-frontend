@@ -1,14 +1,19 @@
-import { AppError, AppErrorFactory, ServerResponseError, UnknownAppError } from "@pagopa-pn/pn-commons";
+import {
+  AppError,
+  AppErrorFactory,
+  ServerResponseError,
+  UnknownAppError,
+} from '@pagopa-pn/pn-commons';
 
-import { ServerResponseErrorCode } from "./types";
-import { MandateAlreadyExistsAppError } from "./MandateAlreadyExistsAppError";
-import { MandateDelegateHimselfAppError } from "./MandateDelegateHimselfAppError";
-import { MandateInvalidVerificationCodeAppError } from "./MandateInvalidVerificationCodeAppError";
-import { MandateNotAcceptableAppError } from "./MandateNotAcceptableAppError";
-import { MandateNotFoundAppError } from "./MandateNotFoundAppError";
-import { UserAttributesInvalidVerificationCodeAppError } from "./UserAttributesInvalidVerificationCodeAppError";
+import { ServerResponseErrorCode } from './types';
+import { MandateAlreadyExistsAppError } from './MandateAlreadyExistsAppError';
+import { MandateDelegateHimselfAppError } from './MandateDelegateHimselfAppError';
+import { MandateInvalidVerificationCodeAppError } from './MandateInvalidVerificationCodeAppError';
+import { MandateNotAcceptableAppError } from './MandateNotAcceptableAppError';
+import { MandateNotFoundAppError } from './MandateNotFoundAppError';
+import { UserAttributesInvalidVerificationCodeAppError } from './UserAttributesInvalidVerificationCodeAppError';
 
-export class PFAppErrorFactory extends AppErrorFactory {
+export class PGAppErrorFactory extends AppErrorFactory {
   private translateFunction: (path: string, ns: string) => string = (path: string) => path;
 
   constructor(translateFunction: (path: string, ns: string) => string) {
@@ -16,7 +21,9 @@ export class PFAppErrorFactory extends AppErrorFactory {
     this.translateFunction = translateFunction;
   }
 
-  protected getCustomError: (error: ServerResponseError) => AppError = (error: ServerResponseError) => {
+  protected getCustomError: (error: ServerResponseError) => AppError = (
+    error: ServerResponseError
+  ) => {
     switch (error.code) {
       case ServerResponseErrorCode.PN_MANDATE_NOTFOUND:
         return new MandateNotFoundAppError(error, this.translateFunction);

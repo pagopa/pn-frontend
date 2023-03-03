@@ -1,10 +1,12 @@
 {
   "title": "I tuoi recapiti",
-  "subtitle-1": "Qui puoi indicare e modificare i recapiti a cui vuoi ricevere le tue notifiche per via digitale. Se stai cercando i tuoi dati personali, ",
+  "subtitle-1": "Qui puoi indicare e modificare i recapiti digitali a cui riceverai gli avvisi di avvenuta ricezione e di cortesia delle tue notifiche. Se stai cercando i tuoi dati personali, ",
   "subtitle-2": ".",
   "subtitle-link": "li trovi qui",
   "general-contacts-title": "Recapiti generali",
   "special-contacts-title": "Altri recapiti",
+  "alert-dialog-EMAIL": "Se non hai una PEC e accedi alla notifica su Piattaforma Notifiche entro 5 giorni (120 ore) dall’invio dell'e-mail, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+  "alert-dialog-SMS": "Se non hai una PEC e accedi alla notifica su Piattaforma Notifiche entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
   "legal-contacts": {
     "title": "",
     "subtitle": "PEC",
@@ -31,13 +33,27 @@
     "disclaimer-message": "Questo è l’indirizzo principale che verrà utilizzato per inviarti gli avvisi di avvenuta ricezione in via digitale. Inserendolo, non riceverai più raccomandate cartacee.",
     "disclaimer-link": "Scopri di più",
     "block-remove-pec-title": "Non puoi eliminare la PEC",
-    "block-remove-pec-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi PEC che hai indicato alla voce “Altri recapiti”."
+    "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Notifiche digitali\" di Piattaforma Notifiche sia attivo",
+    "enabled": "Attivo",
+    "disabled": "Non attivo",
+    "enable-modal": {
+      "title": "Vuoi attivare il servizio \"Notifiche digitali\" su IO?",
+      "checkbox": "Ho capito",
+      "confirm": "Attiva servizio",
+      "content": "Se non hai una PEC e accedi alla notifica entro 5 giorni (120 ore) dall’invio del messaggio, non riceverai l'avviso di avvenuta ricezione tramite raccomandata."
+    },
+    "disable-modal": {
+      "title": "Vuoi disattivare il servizio \"Notifiche digitali\" su IO?",
+      "checkbox": "",
+      "confirm": "Disattiva servizio",
+      "content": "Quando ti arriva una notifica, non riceverai più un messaggio in app."
+    }
   },
   "io-contact": {
     "title": "",
     "subtitle": "App IO",
-    "description": "Quando c’è una notifica per te, ti inviamo un messaggio su IO.  Puoi leggerla e pagare eventuali spese direttamente in app. Qui ricevi anche eventuali comunicazioni importanti.",
-    "disclaimer-message": "Se non hai la PEC, leggi la notifica entro 5 giorni dalla ricezione del messaggio: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
+    "description": "Attiva il servizio “Notifiche digitali”: quando c’è una notifica per te, ti inviamo un messaggio in app, dove puoi leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.",
+    "disclaimer-message": "Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
     "disclaimer-link": "Scopri di più",
     "switch-label": "Avvisami con un messaggio su IO",
     "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Notifiche digitali\" di Piattaforma Notifiche sia attivo"
@@ -74,7 +90,7 @@
     "block-remove-email-message": "Per poterlo fare, devi prima eliminare tutti gli indirizzi email che hai indicato alla voce “Altri recapiti”.",
     "block-remove-phone-title": "Non puoi eliminare il numero di telefono",
     "block-remove-phone-message": "Per poterlo fare, devi prima eliminare tutti i numeri di telefono che hai indicato alla voce “Altri recapiti”.",
-    "disclaimer-message": "Se non hai la PEC, leggi la notifica entro 5 giorni dalla ricezione del messaggio: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
+    "disclaimer-message": "Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
     "disclaimer-link": "Scopri di più"
   },
   "special-contacts": {
@@ -93,7 +109,8 @@
   },
   "common": {
     "duplicate-contact-title": "Recapito già presente",
-    "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?"
+    "duplicate-contact-descr": "Il contatto {{value}} è già presente, vuoi procedere ugualmente?",
+    "enti-not-found": "Nessun ente trovato"
   },
   "errors": {
     "invalid_verification_code": {

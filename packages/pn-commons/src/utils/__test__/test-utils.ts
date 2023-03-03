@@ -11,6 +11,7 @@ import {
   SendDigitalDetails,
   NotificationStatus
 } from '../../types';
+import { AddressSource, LegalFactType, NotificationDetailTimelineDetails } from '../../types/NotificationDetail';
 
 const timeline: Array<INotificationDetailTimeline> = [
   {
@@ -73,7 +74,7 @@ const recipients: Array<NotificationDetailRecipient> = [
   },
 ];
 
-const additionalRecipient = {
+export const additionalRecipient: NotificationDetailRecipient = {
   recipientType: RecipientType.PF,
   taxId: 'mocked-taxId2',
   denomination: 'Nome2 Cognome2',
@@ -148,3 +149,132 @@ export const parsedNotification: NotificationDetail = {
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
   notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
 };
+
+const timelineTwoRecipients = [timeline[0], {
+  elementId: 'mocked-id-3',
+  timestamp: '2022-03-21T08:56:50.177Z',
+  category: TimelineCategory.SEND_DIGITAL_DOMICILE,
+  details: {
+    recIndex: 1,
+    digitalAddress: {
+      address: 'toto86@gmail.com',
+      type: DigitalDomicileType.PEC
+    }
+  } as SendDigitalDetails,
+}, timeline[1]];
+
+export const parsedNotificationTwoRecipients: NotificationDetail = {
+  iun: 'KQKX-WMDW-GDMU-202301-L-1',
+  paProtocolNumber: '',
+  senderPaId: '',
+  subject: '',
+  sentAt: '21/02/2022',
+  cancelledByIun: '',
+  recipients: [...recipients, additionalRecipient],
+  documentsAvailable: true,
+  documents: [],
+  otherDocuments: [],
+  notificationStatus: NotificationStatus.ACCEPTED,
+  notificationStatusHistory: [
+    { ...statusHistory[0], steps: [
+      {...timelineTwoRecipients[0], hidden: false}, {...timelineTwoRecipients[1], hidden: false}
+    ] },
+    { ...statusHistory[1], steps: [{...timelineTwoRecipients[2], hidden: false}] },
+  ],
+  timeline: timelineTwoRecipients.map(t => ({...t, hidden: false})),
+  physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
+  notificationFeePolicy: NotificationFeePolicy.DELIVERY_MODE,
+};
+
+
+export function acceptedDeliveringDeliveredTimeline(): Array<INotificationDetailTimeline> {
+  return [
+    {
+      elementId: 'request_accepted',
+      timestamp: '2023-01-26T13:55:15.975574085Z',
+      category: TimelineCategory.REQUEST_ACCEPTED,
+      details: {},
+      legalFactsIds: [{ category: LegalFactType.SENDER_ACK, key: "mocked-legal-fact-1"}]
+    },
+    {
+      elementId: 'send_courtesy_message_0',
+      timestamp: '2023-01-26T13:55:52.597019182Z',
+      category: TimelineCategory.SEND_COURTESY_MESSAGE,
+      details: {
+        recIndex: 0,
+        digitalAddress: { type: DigitalDomicileType.EMAIL, address: 'other@mail.it'},
+        sendDate: "some-date",
+      } as NotificationDetailTimelineDetails,
+    },
+    {
+      elementId: 'send_digital_domicile_0_PLATFORM',
+      timestamp: '2023-01-26T13:55:58.651901435Z',
+      category: TimelineCategory.SEND_DIGITAL_DOMICILE,
+      details: {
+        recIndex: 0,
+        digitalAddressSource: AddressSource.PLATFORM,
+        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it'},
+      } as NotificationDetailTimelineDetails,
+    },
+    {
+      elementId: 'digital_progress_0_PLATFORM',
+      timestamp: '2023-01-26T13:56:05.000870007Z',
+      category: TimelineCategory.SEND_DIGITAL_PROGRESS,
+      details: {
+        recIndex: 0,
+        eventCode: "C001",
+        digitalAddressSource: AddressSource.PLATFORM,
+        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it'},
+      } as NotificationDetailTimelineDetails,
+    },
+    {
+      elementId: 'digital_feedback_0_PLATFORM',
+      timestamp: '2023-01-26T13:56:15.001161877Z',
+      category: TimelineCategory.SEND_DIGITAL_FEEDBACK,
+      details: {
+        recIndex: 0,
+        responseStatus: "OK",
+        digitalAddressSource: AddressSource.PLATFORM,
+        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it'},
+      } as NotificationDetailTimelineDetails,
+    },
+    {
+      elementId: 'digital_success_workflow_0',
+      timestamp: '2023-01-26T14:16:12.42843144Z',
+      category: TimelineCategory.DIGITAL_SUCCESS_WORKFLOW,
+      details: {
+        recIndex: 0,
+        digitalAddress: { type: DigitalDomicileType.PEC, address: 'some@mail.it'},
+      } as NotificationDetailTimelineDetails,
+    },
+    {
+      elementId: 'schedule_refinement_0',
+      timestamp: '2023-01-26T14:17:16.525827086Z',
+      category: TimelineCategory.SCHEDULE_REFINEMENT,
+      details: { recIndex: 0, } as NotificationDetailTimelineDetails,
+    },
+  ];
+};
+
+export function acceptedDeliveringDeliveredTimelineStatusHistory(): Array<NotificationStatusHistory> {
+  return [
+    {
+      status: NotificationStatus.ACCEPTED,
+      activeFrom: '2023-01-26T13:55:15.975574085Z',
+      relatedTimelineElements: ['request_accepted', 'send_courtesy_message_0'],
+    },
+    {
+      status: NotificationStatus.DELIVERING,
+      activeFrom: '2023-01-26T13:55:52.651901435Z',
+      relatedTimelineElements: [
+        'send_digital_domicile_0_PLATFORM', 'digital_progress_0_PLATFORM', 'digital_feedback_0_PLATFORM'
+      ],
+    },
+    {
+      status: NotificationStatus.DELIVERED,
+      activeFrom: '2023-01-26T14:16:12.42843144Z',
+      relatedTimelineElements: [ 'digital_success_workflow_0', 'schedule_refinement_0' ],
+    }
+  ];
+}
+

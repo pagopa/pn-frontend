@@ -15,7 +15,7 @@ import { UserAttributesInvalidVerificationCodeAppError } from './UserAttributesI
 import { GenericInvalidParameterPatternAppError } from './GenericInvalidParameterPatternAppError';
 
 export class PFAppErrorFactory extends AppErrorFactory {
-  private translateFunction: (path: string, ns: string) => string = (path: string) => path;
+  private translateFunction: (path: string, ns: string) => string;
 
   constructor(translateFunction: (path: string, ns: string) => string) {
     super();
