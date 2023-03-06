@@ -75,7 +75,7 @@ const Contacts = () => {
             <Stack direction="column" spacing={8} mt={8}>
               <Stack spacing={3}>
                 <Stack direction={{ xs: 'column', lg: 'row' }} spacing={3}>
-                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
+                  <Box sx={{ width: '100%' }}>
                     {digitalAddresses.legal.length === 0 ? (
                       <InsertLegalContact recipientId={recipientId} />
                     ) : (
