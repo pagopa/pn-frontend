@@ -4006,10 +4006,10 @@
   dependencies:
     "@octokit/openapi-types" "^14.0.0"
 
-"@pagopa/mui-italia@^0.8.10":
-  version "0.8.11"
-  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.8.11.tgz#5dfa29ceaafd9659b7a545a3d505ea91bce73199"
-  integrity sha512-CeDnCXnRcqlW+h5WkNl2EtyIQJmsuGEXopO8q+ZD5kVFgBxTU+SQC19YGjX2OPZC5NVVv25GxoWE68D39oeqsw==
+"@pagopa/mui-italia@^0.9.0":
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.9.0.tgz#65ca5780a84f0f304bcb748c413b45186232cadb"
+  integrity sha512-nSryI9H5UjwA3jOo4z2uIX+GCCnsckqdprgHAtAjlXKmaZPkNUxXcKrvSKkMvwSYNVF9/pfqX6yZixj/b0ZqQg==
   dependencies:
     "@fontsource/dm-mono" "^4.5.10"
     "@fontsource/titillium-web" "^4.5.9"

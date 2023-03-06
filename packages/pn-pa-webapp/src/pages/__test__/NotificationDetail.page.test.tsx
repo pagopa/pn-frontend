@@ -111,6 +111,11 @@ describe('NotificationDetail Page (one recipient)', () => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-id');
+    // check payment history box
+    const paymentTable = result.getByTestId('paymentTable');
+    const paymentRecipient = result.getByTestId('paymentRecipient');
+    expect(paymentTable).toBeInTheDocument();
+    expect(paymentRecipient).toBeInTheDocument();
   });
 
   test('executes the document and legal fact download handler', async () => {

@@ -15,8 +15,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import { useAppDispatch } from '../../redux/hooks';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
-import { trackEventByType } from "../../utils/mixpanel";
-import { TrackEventType } from "../../utils/events";
+import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utils/events';
 
 export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -91,7 +91,9 @@ export const OrganizationsList = (props: {
   return (
     <>
       {props.organizations.length === 0 ? (
-        <Typography variant={props.textVariant || 'inherit'}>{t('deleghe.table.allNotifications')}</Typography>
+        <Typography variant={props.textVariant || 'inherit'}>
+          {t('deleghe.table.allNotifications')}
+        </Typography>
       ) : (
         <Box>
           <Typography variant={props.textVariant || 'inherit'}>

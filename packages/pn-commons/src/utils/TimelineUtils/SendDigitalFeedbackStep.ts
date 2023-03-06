@@ -17,7 +17,6 @@ export class SendDigitalFeedbackStep extends TimelineStep {
             address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
           }
         ),
-        recipient: payload.recipientLabel,
       };
     }
     return {
@@ -32,8 +31,7 @@ export class SendDigitalFeedbackStep extends TimelineStep {
           ...this.nameAndTaxId(payload),
           address: (payload.step.details as SendDigitalDetails).digitalAddress?.address,
         }
-    ),
-      recipient: payload.recipientLabel,
+      ),
     };
   }
 }

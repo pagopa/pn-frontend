@@ -4,7 +4,6 @@ import { AnalogWorkflowDetails, INotificationDetailTimeline, NotificationDetailR
 export interface TimelineStepPayload {
   step: INotificationDetailTimeline;
   recipient?: NotificationDetailRecipient;
-  recipientLabel?: string;
   isMultiRecipient: boolean;
 }
 
@@ -12,7 +11,6 @@ export interface TimelineStepInfo {
   label: string;
   description: string;
   linkText?: string;
-  recipient?: string;
 }
 
 export abstract class TimelineStep {

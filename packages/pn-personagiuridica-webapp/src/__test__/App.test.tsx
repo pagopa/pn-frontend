@@ -38,6 +38,7 @@ const initialState = (token: string) => ({
         email: 'mocked-user@mocked-domain.com',
         sessionToken: token,
         organizzation: {
+          id: 'mocked-id',
           name: 'mocked-organizzation',
           roles: [
             {

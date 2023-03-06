@@ -297,7 +297,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
 
-                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa.yaml">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery/develop/docs/openapi/api-external-b2b-pa-bundle.yaml">
                   <a target="_blank" rel="noopener noreferrer">
                     API b2b per le pubbliche amministrazioni
                   </a>
@@ -306,7 +306,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             </ListItem>
             <ListItem sx={{ display: 'list-item' }}>
               <Typography variant="body2">
-                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook.yaml">
+                <Link href="https://petstore.swagger.io/?url=https://raw.githubusercontent.com/pagopa/pn-delivery-push/develop/docs/openapi/api-external-b2b-webhook-bundle.yaml">
                   <a target="_blank" rel="noopener noreferrer">
                     API b2b per l’avanzamento delle notifiche
                   </a>

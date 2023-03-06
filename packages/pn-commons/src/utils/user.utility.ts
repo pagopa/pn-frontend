@@ -21,7 +21,7 @@ export const basicUserDataMatcherContents = {
    * This is different than what we do for the emails that are managed inside PN,
    * e.g. for the emails in the Contacts page for persona fisica, and the email
    * which can be indicated in the manual notification creation in pa-webapp.
-   * For these emails instead we use a more strict validation, equal to that 
+   * For these emails instead we use a more strict validation, equal to that
    * performed by the BE.
    * --------------------------------------
    * Carlos Lombardi, 2023.01.24
@@ -63,51 +63,76 @@ export function basicInitialUserData<T extends BasicUser>(
 export function adaptedTokenExchangeError(originalError: any) {
   // status 403 - l'utente non ha i grants che servono per entrare nell'app
   // ------------------------
-  return originalError.response?.status === 403
-    ? {
-        ...originalError,
-        isUnauthorizedUser: true,
-        response: {
-          ...originalError.response,
-          customMessage: {
-            title: getLocalizedOrDefaultLabel(
-              'common',
-              `messages.lacking-grants-for-app-title`,
-              'Non sei autorizzato ad accedere ...'
-            ),
-            message: getLocalizedOrDefaultLabel(
-              'common',
-              `leaving-app.title`,
-              'Stai uscendo da Piattaforma Notifiche ...'
-            ),
-          },
+  if (originalError.response?.status === 403) {
+    return {
+      ...originalError,
+      isUnauthorizedUser: true,
+      response: {
+        ...originalError.response,
+        customMessage: {
+          title: getLocalizedOrDefaultLabel(
+            'common',
+            `messages.lacking-grants-for-app-title`,
+            'Non sei autorizzato ad accedere ...'
+          ),
+          message: getLocalizedOrDefaultLabel(
+            'common',
+            `leaving-app.title`,
+            'Stai uscendo da Piattaforma Notifiche ...'
+          ),
         },
-      }
-    : // se il token non è valido, sia pa che pf forniscono una response
-      // con status 400 e data.error 'Token is not valid'
-      // ho pensato ad approfittarne per rendere un messaggio specifico
-      // ma nella review è stato chiesto di gestire in modo particolare
-      // solo lo status 403.
-      // ---------------------------------------------
-      // Carlos Lombardi, 2022.08.31
-      // ------------------------
-      {
-        ...originalError,
-        isUnauthorizedUser: true,
-        response: {
-          ...originalError.response,
-          customMessage: {
-            title: getLocalizedOrDefaultLabel(
-              'common',
-              `messages.generic-token-exchange-problem`,
-              "Non è stato possibile completare l'accesso ..."
-            ),
-            message: getLocalizedOrDefaultLabel(
-              'common',
-              `leaving-app.title`,
-              'Stai uscendo da Piattaforma Notifiche ...'
-            ),
-          },
+      },
+    };
+    // status 451 - access forbidden for legal reasons
+    // ---------------------------------------------
+    // Andrea Cimini, 2023.02.21
+    // ------------------------
+  } else if (originalError.response?.status === 451) {
+    return {
+      ...originalError,
+      isUnauthorizedUser: true,
+      response: {
+        ...originalError.response,
+        customMessage: {
+          title: getLocalizedOrDefaultLabel(
+            'common',
+            `messages.451-title`,
+            'Piattaforma non accessibile'
+          ),
+          message: getLocalizedOrDefaultLabel(
+            'common',
+            `messages.451-message`,
+            'Non è possibile accedere alla piattaforma'
+          ),
         },
-      };
+      },
+    };
+  }
+  // se il token non è valido, sia pa che pf forniscono una response
+  // con status 400 e data.error 'Token is not valid'
+  // ho pensato ad approfittarne per rendere un messaggio specifico
+  // ma nella review è stato chiesto di gestire in modo particolare
+  // solo lo status 403.
+  // ---------------------------------------------
+  // Carlos Lombardi, 2022.08.31
+  // ------------------------
+  return {
+    ...originalError,
+    isUnauthorizedUser: true,
+    response: {
+      ...originalError.response,
+      customMessage: {
+        title: getLocalizedOrDefaultLabel(
+          'common',
+          `messages.generic-token-exchange-problem`,
+          "Non è stato possibile completare l'accesso ..."
+        ),
+        message: getLocalizedOrDefaultLabel(
+          'common',
+          `leaving-app.title`,
+          'Stai uscendo da Piattaforma Notifiche ...'
+        ),
+      },
+    },
+  };
 }

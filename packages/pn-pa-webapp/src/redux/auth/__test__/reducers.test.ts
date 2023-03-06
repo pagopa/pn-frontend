@@ -1,6 +1,6 @@
 import { ConsentsApi } from '../../../api/consents/Consents.api';
 import { ExternalRegistriesAPI } from '../../../api/external-registries/External-registries.api';
-import { Consent, ConsentActionType, ConsentType } from '../../../models/consents';
+import { Consent, ConsentType } from '../../../models/consents';
 import { Party } from '../../../models/party';
 import { PartyRole, PNRole } from '../../../models/user';
 import { store } from '../../store';
@@ -46,6 +46,7 @@ describe('Auth redux state tests', () => {
       fetchedTos: false,
       messageUnauthorizedUser: { title: '', message: '' },
       isClosedSession: false,
+      isForbiddenUser: false,
     });
   });
 

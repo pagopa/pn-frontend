@@ -9,7 +9,6 @@ export class SendAnalogProgressStep extends TimelineStep {
         `Aggiornamento sull'invio cartaceo`,
         `C'è un aggiornamento sull'invio cartaceo.`,
       ),
-      recipient: payload.recipientLabel,
     };
   }
 }

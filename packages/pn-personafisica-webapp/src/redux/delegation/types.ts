@@ -1,3 +1,5 @@
+import { DelegationParty } from '../../models/Deleghe';
+import { Party } from '../../models/party';
 import { User } from '../auth/types';
 
 export type UserAndDelegations = User & DelegationsList;
@@ -11,10 +13,7 @@ export interface DelegationsList {
 export interface IDelegation {
   mandateId: string;
   status: 'active' | 'pending';
-  visibilityIds: Array<{
-    name: string;
-    uniqueIdentifier: string;
-  }>;
+  visibilityIds: Array<DelegationParty>;
   verificationCode: string;
   datefrom: string;
   dateto: string;
@@ -52,7 +51,7 @@ export interface NewDelegationFormProps {
   cognome: string;
   selectTuttiEntiOrSelezionati: string;
   expirationDate: Date;
-  enteSelect: { name: string; uniqueIdentifier: string };
+  enti: Array<Party>;
   verificationCode: string;
 }
 export interface AcceptDelegationResponse {
@@ -61,10 +60,7 @@ export interface AcceptDelegationResponse {
 
 export interface CreateDelegationProps {
   delegate: Person;
-  visibilityIds: Array<{
-    name: string;
-    uniqueIdentifier: string;
-  }>;
+  visibilityIds: Array<DelegationParty>;
   verificationCode: string;
   dateto: string;
 }
@@ -77,8 +73,5 @@ export interface CreateDelegationResponse {
   mandateId: string;
   status: string;
   verificationCode: string;
-  visibilityIds: Array<{
-    name: string;
-    uniqueIdentifier: string;
-  }>;
+  visibilityIds: Array<DelegationParty>;
 }
