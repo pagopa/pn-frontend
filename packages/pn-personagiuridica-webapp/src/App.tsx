@@ -144,8 +144,8 @@ const App = () => {
   ];
 
   const selfcareMenuItems: Array<SideMenuItem> = [
-    { label: t('menu.users'), icon: People, route: routes.USERS },
-    { label: t('menu.groups'), icon: SupervisedUserCircle, route: routes.GROUPS },
+    { label: t('menu.users'), icon: People, route: routes.USERS(organization?.id) },
+    { label: t('menu.groups'), icon: SupervisedUserCircle, route: routes.GROUPS(organization?.id) },
   ];
 
   const partyList: Array<PartyEntity> = useMemo(

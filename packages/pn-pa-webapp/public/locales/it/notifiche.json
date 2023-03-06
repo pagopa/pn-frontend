@@ -17,6 +17,12 @@
       "fiscal-code": "Inserisci il codice per intero"
     }
   },
+  "payment": {
+    "title": "Pagamenti",
+    "subtitle-single": "I costi di notifica sono stati pagati dal destinatario",
+    "subtitle-multiple": "I costi di notifica sono stati pagati dai seguenti destinatari:",
+    "show-more": "Mostra dettagli"
+  },
   "table": {
     "date": "Data",
     "recipient": "Destinatario",
@@ -41,6 +47,7 @@
   "detail": {
     "document-not-available": "Il documento sarà scaricabile tra pochi minuti. Puoi riprovare ricaricando la pagina o cliccando sul link del documento richiesto",
     "table-aria-label": "Dettaglio notifica",
+    "payment-table-aria-label": "Dettaglio pagamenti",
     "sender": "Mittente",
     "recipient": "Destinatario",
     "recipients": "Destinatari",
