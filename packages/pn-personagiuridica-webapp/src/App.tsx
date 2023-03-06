@@ -31,7 +31,7 @@ import * as routes from './navigation/routes.const';
 import Router from './navigation/routes';
 import { logout } from './redux/auth/actions';
 import { useAppDispatch, useAppSelector } from './redux/hooks';
-import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION } from './utils/constants';
+import { MIXPANEL_TOKEN, PAGOPA_HELP_EMAIL, VERSION, SELFCARE_BASE_URL } from './utils/constants';
 import { RootState, store } from './redux/store';
 import {
   getDomicileInfo,
@@ -45,15 +45,6 @@ import { goToLoginPortal } from './navigation/navigation.utility';
 import { setUpInterceptor } from './api/interceptors';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
 
-// TODO: get products list from be (?)
-const productsList: Array<ProductSwitchItem> = [
-  {
-    id: '0',
-    title: `Piattaforma Notifiche`,
-    productUrl: '',
-    linkType: 'internal',
-  },
-];
 
 const App = () => {
   setUpInterceptor(store);
@@ -80,6 +71,22 @@ const App = () => {
   const isPrivacyPage = path[1] === 'privacy-tos';
   const organization = loggedUser.organization;
   const role = loggedUser.organization?.roles[0];
+
+  // TODO: get products list from be (?)
+  const productsList: Array<ProductSwitchItem> = useMemo(() => [
+    {
+      id: '1',
+      title: t('header.product.organization-dashboard'),
+      productUrl: `${SELFCARE_BASE_URL}/dashboard/${organization.id}`,
+      linkType: 'external',
+    },
+    {
+      id: '0',
+      title: t('header.product.notification-platform'),
+      productUrl: '',
+      linkType: 'internal',
+    },
+  ], [t, organization.id]);
 
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
@@ -223,6 +230,7 @@ const App = () => {
         }
         showSideMenu={!!sessionToken && tos && fetchedTos && !isPrivacyPage}
         productsList={productsList}
+        productId={'0'}
         showHeaderProduct={tos}
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}

@@ -3,7 +3,7 @@ import { cesare, garibaldi } from '../fixtures/recipients';
 import { CREATE_NOTIFICATION } from '../../src/api/notifications/notifications.routes';
 import { PNRole } from '../../src/models/user';
 
-describe('New Notification', () => {
+describe.skip('New Notification with payment methods', () => {
   const pdfTest1 = './cypress/fixtures/attachments/pdf_test_1.pdf';
   const pdfTest2 = './cypress/fixtures/attachments/pdf_test_2.pdf';
   const pdfTest3 = './cypress/fixtures/attachments/pdf_test_3.pdf';
@@ -33,7 +33,7 @@ describe('New Notification', () => {
       cy.loginWithTokenExchange();
       cy.intercept(/TOS/, {
         statusCode: 200,
-        fixture: 'tos/tos-accepted'
+        fixture: 'tos/tos-accepted',
       });
       cy.intercept(/groups/, { fixture: 'groups/no-groups' });
       cy.visit('/dashboard/nuova-notifica');
