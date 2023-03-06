@@ -64,10 +64,14 @@ jest.mock('../../api/auth/Auth.api', () => {
   return {
     ...original,
     AuthApi: {
-      exchangeToken: (selfCareToken: string) =>
-        selfCareToken.startsWith('good')
-          ? Promise.resolve({ sessionToken: 'good-session-token' })
-          : Promise.reject({ response: { status: 403 } }),
+      exchangeToken: (selfCareToken: string) => {
+        if (selfCareToken.startsWith('403')) {
+          return Promise.reject({ response: { status: 403 } });
+        } else if (selfCareToken.startsWith('451')) {
+          return Promise.reject({ response: { status: 451 } });
+        }
+        return Promise.resolve({ sessionToken: 'good-session-token' });
+      },
     },
   };
 });
@@ -109,7 +113,7 @@ describe('SessionGuard Component', () => {
 
   // cosa si aspetta: entra nell'app, fa navigate verso notifiche, lancia il sessionCheck
   it('utente riconosciuto - TOS accettate', async () => {
-    mockLocationHash = '#selfCareToken=good_token';
+    mockLocationHash = '#selfCareToken=200_token';
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const pageComponent = screen.queryByText('Generic Page');
@@ -119,13 +123,26 @@ describe('SessionGuard Component', () => {
   });
 
   // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
-  it('errore nel selfCare token', async () => {
-    mockLocationHash = '#selfCareToken=bad_token';
+  it('errore nel selfCare token (403)', async () => {
+    mockLocationHash = '#selfCareToken=403_token';
 
     await act(async () => void render(<SessionGuardWithErrorPublisher />));
     const logoutComponent = screen.queryByText('Session Modal');
     expect(logoutComponent).toBeTruthy();
     const logoutTitleComponent = screen.queryByText('leaving-app.title');
+    expect(logoutTitleComponent).toBeNull();
+
+    expect(mockSessionCheckFn).toBeCalledTimes(0);
+  });
+
+  // cosa si aspetta: non entra nell'app, messaggio associato all'errore di exchangeToken
+  it('errore nel selfCare token (451)', async () => {
+    mockLocationHash = '#selfCareToken=451_token';
+
+    await act(async () => void render(<SessionGuardWithErrorPublisher />));
+    const logoutComponent = screen.queryByText('Session Modal');
+    expect(logoutComponent).toBeTruthy();
+    const logoutTitleComponent = screen.queryByText('messages.451-message');
     expect(logoutTitleComponent).toBeNull();
 
     expect(mockSessionCheckFn).toBeCalledTimes(0);

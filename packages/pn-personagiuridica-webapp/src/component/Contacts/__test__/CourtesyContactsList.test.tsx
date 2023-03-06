@@ -40,8 +40,6 @@ const mockedStore: Array<DigitalAddress> = [
 ];
 
 describe('CourtesyContactsList Component', () => {
-  // eslint-disable-next-line functional/no-let
-  let result: RenderResult | undefined;
   const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
   const mockDispatchFn = jest.fn(() => ({
     unwrap: () => Promise.resolve(),

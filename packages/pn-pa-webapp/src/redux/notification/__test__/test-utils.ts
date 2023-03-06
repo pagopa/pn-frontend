@@ -50,8 +50,8 @@ export const notificationFromBe: NotificationDetail = {
           contentType: 'mocked-contentType',
           ref: {
             key: 'Avviso PagoPa',
-            versionToken: 'mocked-versionToken'
-          }
+            versionToken: 'mocked-versionToken',
+          },
         },
         f24standard: {
           digests: {
@@ -60,8 +60,8 @@ export const notificationFromBe: NotificationDetail = {
           contentType: 'mocked-contentType',
           ref: {
             key: 'F24 Standard',
-            versionToken: 'mocked-versionToken'
-          }
+            versionToken: 'mocked-versionToken',
+          },
         },
       },
     },
@@ -152,44 +152,24 @@ export const notificationFromBe: NotificationDetail = {
       },
     },
     {
-      elementId: 'c_b429-202203021814_send_pec_result_rec0_SPECIAL_n1',
-      timestamp: '2022-03-02T17:57:03.284Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-      details: {
-        digitalAddress: {
-          type: DigitalDomicileType.PEC,
-          address: 'nome.cognome@works.demo.it',
-        },
-        digitalAddressSource: AddressSource.GENERAL,
-        retryNumber: 1,
-        downstreamId: {
-          systemId: '',
-          messageId: '',
-        },
-        errors: ['OK'],
-      },
-    },
-    {
-      elementId: 'c_b429-202203021814_send_courtesy_rec0',
-      timestamp: '2022-03-02T17:57:06.819Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-      details: {},
-      legalFactsIds: [
-        {
-          key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
-          category: LegalFactType.DIGITAL_DELIVERY,
-        },
-      ],
-    },
-    {
       elementId: 'c_b429-202203021814_recipient_timeout_rec0',
       timestamp: '2022-03-02T17:59:10.029Z',
       category: TimelineCategory.REFINEMENT,
       details: {},
     },
+    {
+      elementId: 'c_b4239-202203021814_recipient_timeout_rec0',
+      timestamp: '2022-03-02T17:59:10.029Z',
+      category: TimelineCategory.PAYMENT,
+      details: {
+        paymentSourceChannel: 'EXTERNAL_REGISTRY',
+        recipientType: RecipientType.PF,
+        recIndex: 0,
+      },
+    },
   ],
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  amount: 130
+  amount: 130,
 };
 
 export const notificationToFe = parseNotificationDetail(notificationFromBe);
@@ -233,8 +213,8 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
           contentType: 'mocked-contentType',
           ref: {
             key: 'Avviso PagoPa',
-            versionToken: 'mocked-versionToken'
-          }
+            versionToken: 'mocked-versionToken',
+          },
         },
         f24standard: {
           digests: {
@@ -243,9 +223,9 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
           contentType: 'mocked-contentType',
           ref: {
             key: 'F24 standard',
-            versionToken: 'mocked-versionToken'
-          }
-        }
+            versionToken: 'mocked-versionToken',
+          },
+        },
       },
     },
     {
@@ -275,10 +255,10 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
           contentType: 'mocked-contentType',
           ref: {
             key: 'Avviso PagoPa',
-            versionToken: 'mocked-versionToken'
-          }
-        }
-      }
+            versionToken: 'mocked-versionToken',
+          },
+        },
+      },
     },
   ],
   documents: [
@@ -308,8 +288,7 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
       elementId: 'c_b429-202203021814_start',
       timestamp: '2022-03-02T17:56:46.668Z',
       category: TimelineCategory.REQUEST_ACCEPTED,
-      details: {
-      },
+      details: {},
       legalFactsIds: [
         {
           key: 'sender_ack~0f4Z32eLEiX8NSYR4WYzyvQvnQHh1t7Z',
@@ -330,7 +309,7 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
           municipality: '',
           province: '',
           foreignState: '',
-        }
+        },
       },
     },
     {
@@ -368,36 +347,6 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
       },
     },
     {
-      elementId: 'c_b429-202203021814_send_pec_result_rec0_SPECIAL_n1',
-      timestamp: '2022-03-02T17:57:03.284Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-      details: {
-        digitalAddress: {
-          type: DigitalDomicileType.PEC,
-          address: 'nome.cognome@works.demo.it',
-        },
-        digitalAddressSource: AddressSource.GENERAL,
-        retryNumber: 1,
-        downstreamId: {
-          systemId: '',
-          messageId: '',
-        },
-        errors: ['OK'],
-      },
-    },
-    {
-      elementId: 'c_b429-202203021814_send_courtesy_rec0',
-      timestamp: '2022-03-02T17:57:06.819Z',
-      category: TimelineCategory.SEND_DIGITAL_DOMICILE_FEEDBACK,
-      details: {},
-      legalFactsIds: [
-        {
-          key: 'digital_delivery_info_ed84b8c9-444e-410d-80d7-cfad6aa12070~QDr7GVmbdGkJJFEgxi0OlxPs.l2F2Wq.',
-          category: LegalFactType.DIGITAL_DELIVERY,
-        },
-      ],
-    },
-    {
       elementId: 'c_b429-202203021814_recipient_timeout_rec0',
       timestamp: '2022-03-02T17:59:10.029Z',
       category: TimelineCategory.REFINEMENT,
@@ -407,7 +356,7 @@ export const notificationFromBeMultiRecipient: NotificationDetail = {
     },
   ],
   physicalCommunicationType: PhysicalCommunicationType.REGISTERED_LETTER_890,
-  amount: 200
+  amount: 200,
 };
 
 export const notificationToFeMultiRecipient = parseNotificationDetail(

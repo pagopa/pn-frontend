@@ -3,6 +3,7 @@ import {
   TOS_LINK_RELATIVE_PATH as TERMS_OF_SERVICE,
   AppRouteParams,
 } from '@pagopa-pn/pn-commons';
+import { SELFCARE_BASE_URL } from '../utils/constants';
 
 export const NOTIFICHE = '/notifiche';
 export const NOTIFICHE_DELEGATO = `${NOTIFICHE}-delegato`;
@@ -20,5 +21,20 @@ export const RECAPITI = '/recapiti';
 export const GET_NOTIFICHE_DELEGATO_PATH = (mandateId: string) => `${NOTIFICHE}/${mandateId}`;
 export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
-export const USERS = '/users';
-export const GROUPS = '/groups';
+export const NOT_ACCESSIBLE = '/non-accessibile';
+
+const DASHBOARD = '/dashboard';
+const USERS_SEGMENT = '/users';
+const GROUPS_SEGMENT = '/groups';
+
+/** USERS navigation link to SelfCare "Referenti" section for Piattaforma Notifiche
+ * @param idOrganization
+ */
+export const USERS = (idOrganization: string) =>
+  `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${USERS_SEGMENT}`;
+
+/** GROUPS navigation link to SelfCare "Gruppi" section for Piattaforma Notifiche
+ * @param idOrganization
+ */
+export const GROUPS = (idOrganization: string) =>
+  `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${GROUPS_SEGMENT}`;

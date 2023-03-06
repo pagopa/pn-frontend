@@ -16,16 +16,33 @@ export default {
     io: {
       title: 'App IO',
       subtitle:
-        'Quando c’è una notifica per te, ti inviamo un messaggio su IO. Puoi leggerla e pagare eventuali spese direttamente in app. Qui ricevi anche eventuali comunicazioni importanti.',
+        'Attiva il servizio “Notifiche digitali”: quando c’è una notifica per te, ti inviamo un messaggio in app, dove puoi leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.',
       disclaimer:
         'Scarica l’app IO, accedi e assicurati che il servizio "Notifiche digitali" di Piattaforma Notifiche sia attivo',
+      enabled: 'Attivo',
+      disabled: 'Non attivo',
+      enable: 'Attiva',
+      disable: 'Disattiva',
+      modal: {
+        enable: {
+          title: 'Vuoi attivare il servizio "Notifiche digitali" su IO?',
+          content:
+            "Se non hai una PEC e accedi alla notifica entro 5 giorni (120 ore) dall’invio del messaggio, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+          checkboxText: 'Ho capito',
+          confirmButton: 'Attiva servizio',
+        },
+        disable: {
+          title: 'Vuoi disattivare il servizio "Notifiche digitali" su IO?',
+          content: 'Quando ti arriva una notifica, non riceverai più un messaggio in app.',
+        },
+      },
     },
     courtesy: {
       title: 'Email o SMS',
       subtitle:
         'Quando c’è una notifica per te, ti inviamo un’email o un SMS. Accedi a Piattaforma Notifiche per leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.',
       disclaimer:
-        'Se non hai la PEC, leggi la notifica entro 5 giorni dalla ricezione del messaggio: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.',
+        'Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.',
     },
     mail: {
       inputPlaceholder: 'Il tuo indirizzo email',
@@ -34,6 +51,12 @@ export default {
       successMessage: 'Indirizzo email aggiunto correttamente',
       modalDescriptionValue: 'l’indirizzo e-mail',
       modalHelpValue: 'l’indirizzo e-mail',
+      modal: {
+        content:
+          "Se non hai una PEC e accedi alla notifica su Piattaforma Notifiche entro 5 giorni (120 ore) dall’invio dell'e-mail, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+        checkboxText: 'Ho capito',
+        confirmButton: 'Conferma',
+      },
     },
     phone: {
       inputPlaceholder: 'Il tuo cellulare',
@@ -42,6 +65,12 @@ export default {
       successMessage: 'Numero di cellulare aggiunto correttamente',
       modalDescriptionValue: 'il numero di cellulare',
       modalHelpValue: 'il numero di cellulare',
+      modal: {
+        content:
+          "Se non hai una PEC e accedi alla notifica su Piattaforma Notifiche entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+        checkboxText: 'Ho capito',
+        confirmButton: 'Conferma',
+      },
     },
     additional: {
       title: 'Altri recapiti',
@@ -87,7 +116,6 @@ export default {
     },
     additional: {
       sender: '026e8c72-7944-4dcd-8668-f596447fec6d',
-      sender2: '4db741cf-17e1-4751-9b7b-7675ccca472b',
       invalidPec: 'pec.cypress.pagopa.it',
       validPec: 'pec@cypress.pagopa.it',
       invalidPhone: '1234567890',

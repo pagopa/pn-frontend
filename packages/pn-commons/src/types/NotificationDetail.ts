@@ -8,7 +8,6 @@ export interface NotificationDetail {
   abstract?: string;
   recipients: Array<NotificationDetailRecipient>;
   documents: Array<NotificationDetailDocument>;
-  otherDocuments?: Array<NotificationDetailDocument>;
   notificationFeePolicy: NotificationFeePolicy;
   cancelledIun?: string;
   physicalCommunicationType: PhysicalCommunicationType;
@@ -25,7 +24,15 @@ export interface NotificationDetail {
   notificationStatusHistory: Array<NotificationStatusHistory>;
   timeline: Array<INotificationDetailTimeline>;
   amount?: number;
+  // only fe
+  otherDocuments?: Array<NotificationDetailDocument>;
+  paymentHistory?: Array<PaymentHistory>;
 }
+
+export type PaymentHistory = PaidDetails & {
+  recipientDenomination: string;
+  recipientTaxId: string;
+};
 
 export type NotificationDetailTimelineDetails =
   | BaseDetails
@@ -41,6 +48,7 @@ export type NotificationDetailTimelineDetails =
   | SendCourtesyMessageDetails
   | SendDigitalDetails
   | SendPaperDetails
+  | PaidDetails
   // PN-1647
   | NotHandledDetails;
 
@@ -147,6 +155,7 @@ interface ScheduleDigitalWorkflowDetails extends BaseDetails, DigitalAddress {
 export interface SendCourtesyMessageDetails extends BaseDetails {
   digitalAddress: DigitalAddress;
   sendDate: string;
+  ioSendMessageResult?: AppIoCourtesyMessageEventType;
 }
 
 export interface SendDigitalDetails extends BaseDetails {
@@ -161,6 +170,16 @@ export interface SendDigitalDetails extends BaseDetails {
   notificationDate?: string;
   errors?: Array<string>;
   eventCode?: string;
+}
+
+export interface PaidDetails extends BaseDetails {
+  paymentSourceChannel: string;
+  recipientType: RecipientType;
+  amount?: number;
+  creditorTaxId?: string;
+  idF24?: string;
+  noticeCode?: string;
+  paymentObject?: string;
 }
 
 // PN-1647
@@ -253,7 +272,7 @@ export type PaymentAttachmentNameType = number | PaymentAttachmentSName;
 
 export enum NotificationDeliveryMode {
   ANALOG = 'analog',
-  DIGITAL = 'digital'
+  DIGITAL = 'digital',
 }
 export interface NotificationStatusHistory {
   status: NotificationStatus;
@@ -275,17 +294,6 @@ export enum TimelineCategory {
   SCHEDULE_ANALOG_WORKFLOW = 'SCHEDULE_ANALOG_WORKFLOW',
   SCHEDULE_DIGITAL_WORKFLOW = 'SCHEDULE_DIGITAL_WORKFLOW',
   SEND_DIGITAL_DOMICILE = 'SEND_DIGITAL_DOMICILE',
-
-  // From what verified by Andrea Cimini and Simone Rondinella, the element SEND_DIGITAL_DOMICILE_FEEDBACK
-  // does not exist anymore.
-  // This value should be therefore erased, as well as the entry in TimelineStepFactory,
-  // the class SendDigitalDomicileFeedbackStep, and the corresponding literals in the i18n files.
-  // We postpone this cleanup until a complete revision of the timeline.
-  // --------------------------------------
-  // Carlos Lombardi, 2023.02.10
-
-  SEND_DIGITAL_DOMICILE_FEEDBACK = 'SEND_DIGITAL_DOMICILE_FEEDBACK',
-
   SEND_DIGITAL_PROGRESS = 'SEND_DIGITAL_PROGRESS',
   SEND_DIGITAL_FEEDBACK = 'SEND_DIGITAL_FEEDBACK',
   REFINEMENT = 'REFINEMENT',
@@ -329,6 +337,7 @@ export enum DigitalDomicileType {
   PEC = 'PEC',
   EMAIL = 'EMAIL',
   APPIO = 'APPIO', // PN-2068
+  SMS = 'SMS', // possible type for courtesy message
 }
 
 export enum RecipientType {
@@ -339,6 +348,16 @@ export enum RecipientType {
 enum DeliveryMode {
   DIGITAL = 'DIGITAL',
   ANALOG = 'ANALOG ',
+}
+
+// PN-4484 - only the messages of the SENT_COURTESY kind are meaningful to the user
+export enum AppIoCourtesyMessageEventType {
+  // message effettively sent
+  SENT_COURTESY = 'SENT_COURTESY',    
+  // sent a kind of internal message (which don't actually arrive to the user) about "OPTIN" 
+  SENT_OPTIN = 'SENT_OPTIN',
+  // another event related to "OPTIN" internal messages
+  NOT_SENT_OPTIN_ALREADY_SENT = 'NOT_SENT_OPTIN_ALREADY_SENT',
 }
 
 export enum AddressSource {

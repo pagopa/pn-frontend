@@ -28,6 +28,7 @@ import {
   NOTIFICATION_PAYMENT_URL,
 } from './notifications.routes';
 
+
 const getDownloadUrl = (response: AxiosResponse): { url: string } => {
   if (response.data) {
     return response.data as { url: string };

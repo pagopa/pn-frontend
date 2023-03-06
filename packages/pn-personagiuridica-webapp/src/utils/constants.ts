@@ -4,6 +4,7 @@ export const MOCK_USER = IS_DEVELOP;
 export const LOG_REDUX_ACTIONS = IS_DEVELOP;
 
 export const API_BASE_URL = process.env.REACT_APP_URL_API;
+export const SELFCARE_BASE_URL = process.env.REACT_APP_URL_SELFCARE_BASE;
 
 export const URL_FE_LOGIN = process.env.REACT_APP_URL_FE_LOGIN;
 export const URL_FE_LOGOUT = `${URL_FE_LOGIN}logout`;

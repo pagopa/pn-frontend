@@ -47,7 +47,6 @@ const fields = [
 ];
 
 const deleteMockActionFn = jest.fn();
-const mockDispatchFn = jest.fn();
 const mockResetModifyValue = jest.fn();
 // mock tracking
 const createTrackEventSpy = jest.spyOn(trackingFunctions, 'trackEventByType');
@@ -65,6 +64,9 @@ describe('DigitalContactElem Component', () => {
     const deleteActionSpy = jest.spyOn(actions, 'deleteLegalAddress');
     deleteActionSpy.mockImplementation(deleteMockActionFn as any);
     // mock dispatch
+    const mockDispatchFn = jest.fn(() => ({
+      unwrap: () => Promise.resolve(),
+    }));
     const useDispatchSpy = jest.spyOn(redux, 'useDispatch');
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
     // render component
