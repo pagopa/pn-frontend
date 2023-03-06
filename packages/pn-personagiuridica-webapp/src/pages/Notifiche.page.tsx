@@ -20,7 +20,6 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import DesktopNotifications from '../component/Notifications/DesktopNotifications';
 import MobileNotifications from '../component/Notifications/MobileNotifications';
-import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { Delegator } from '../redux/delegation/types';
 import { trackEventByType } from '../utils/mixpanel';
@@ -108,7 +107,6 @@ const Notifiche = () => {
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
       <Box p={3}>
-        <DomicileBanner />
         <TitleBox
           variantTitle="h4"
           title={pageTitle}
