@@ -31,6 +31,10 @@
     "aria-label-inner": "piattaforma-notifiche navigazione persona giuridica"
   },
   "header": {
+    "product": {
+      "organization-dashboard": "La tua impresa",
+      "notification-platform": "Notifiche digitali"
+    },
     "logout": "Esci",
     "pago-pa-link": "Sito di PagoPA S.p.A."
   },
