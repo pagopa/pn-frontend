@@ -16,8 +16,6 @@
     "link-aar": "Cos’è un avviso di avvenuta ricezione?",
     "link-pec": "Associa PEC",
     "link-pec-placeholder": "Il tuo indirizzo PEC",
-    "link-io": "Associa l’account dell'app IO*",
-    "io-disclaimer": "*Se vuoi utilizzare l’account dell’app IO, verifica di averlo prima abilitato nella sezione \"Impostazioni\".",
     "valid-pec": "Indirizzo PEC non valido",
     "pec-verify": "Abbiamo inviato un codice a",
     "pec-verify-descr": "Inseriscilo qui sotto per confermare l’indirizzo PEC. Il codice è valido per <strong>10 minuti</strong>.",
@@ -48,15 +46,6 @@
       "confirm": "Disattiva servizio",
       "content": "Quando ti arriva una notifica, non riceverai più un messaggio in app."
     }
-  },
-  "io-contact": {
-    "title": "",
-    "subtitle": "App IO",
-    "description": "Attiva il servizio “Notifiche digitali”: quando c’è una notifica per te, ti inviamo un messaggio in app, dove puoi leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.",
-    "disclaimer-message": "Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.",
-    "disclaimer-link": "Scopri di più",
-    "switch-label": "Avvisami con un messaggio su IO",
-    "disclaimer-message-unavailable": "Scarica l’app IO, accedi e assicurati che il servizio \"Notifiche digitali\" di Piattaforma Notifiche sia attivo"
   },
   "courtesy-contacts": {
     "title": "",
