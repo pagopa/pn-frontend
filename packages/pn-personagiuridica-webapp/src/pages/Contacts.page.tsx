@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
@@ -16,15 +16,12 @@ import { RootState } from '../redux/store';
 import { DigitalContactsCodeVerificationProvider } from '../component/Contacts/DigitalContactsCodeVerification.context';
 import InsertLegalContact from '../component/Contacts/InsertLegalContact';
 import LegalContactsList from '../component/Contacts/LegalContactsList';
-import IOContact from '../component/Contacts/IOContact';
 import CourtesyContacts from '../component/Contacts/CourtesyContacts';
 import SpecialContacts from '../component/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 // import { PROFILO } from '../navigation/routes.const';
-import { CourtesyChannelType } from '../models/contacts';
 
 const Contacts = () => {
-  const [isDigitalAddressLoaded, setIsDigitalAddressLoaded] = useState(false);
   // const navigate = useNavigate();
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
@@ -34,19 +31,8 @@ const Contacts = () => {
   );
   const [pageReady, setPageReady] = useState(false);
 
-  const contactIO = useMemo(
-    () =>
-      isDigitalAddressLoaded
-        ? digitalAddresses.courtesy.find(
-            (address) => address.channelType === CourtesyChannelType.IOMSG
-          )
-        : null,
-    [isDigitalAddressLoaded]
-  );
-
   const fetchAddresses = useCallback(() => {
     void dispatch(getDigitalAddresses(recipientId)).then(() => {
-      setIsDigitalAddressLoaded(true);
       setPageReady(true);
     });
   }, []);
@@ -98,9 +84,6 @@ const Contacts = () => {
                         legalAddresses={digitalAddresses.legal}
                       />
                     )}
-                  </Box>
-                  <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
-                    <IOContact recipientId={recipientId} contact={contactIO} />
                   </Box>
                 </Stack>
                 <CourtesyContacts recipientId={recipientId} contacts={digitalAddresses.courtesy} />
