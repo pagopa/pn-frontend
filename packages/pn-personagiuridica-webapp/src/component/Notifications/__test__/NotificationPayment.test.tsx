@@ -6,6 +6,7 @@ import {
   ResponseEventDispatcher,
   PaymentStatus,
   PaymentInfoDetail,
+  RecipientType,
 } from '@pagopa-pn/pn-commons';
 import { act, waitFor } from '@testing-library/react';
 
@@ -121,7 +122,7 @@ describe('NotificationPayment component', () => {
   const mockUseAppSelector = jest.spyOn(hooks, 'useAppSelector');
 
   function prepareMockForPaymentInfo(paymentInfo: any) {
-    // The component makes three queries into the Redux store, the first one to get the payment info, 
+    // The component makes three queries into the Redux store, the first one to get the payment info,
     // the latter two to get the eventual urls to launch the download.
     // Only the first query should produce a value.
     mockUseAppSelector.mockReturnValueOnce(paymentInfo);
@@ -276,6 +277,14 @@ describe('NotificationPayment component', () => {
         notificationPayment={mockedNotificationDetailPayment}
         senderDenomination="mocked-senderDenomination"
         subject="mocked-subject"
+        paymentHistory={[
+          {
+            recipientDenomination: 'Mario Rossi',
+            recipientTaxId: 'RSSMRA80A01H501U',
+            paymentSourceChannel: 'EXTERNAL_REGISTRY',
+            recipientType: RecipientType.PF,
+          },
+        ]}
       />
     );
     prepareMockForPaymentInfo(mocked_payments_detail.succeeded);
@@ -312,6 +321,9 @@ describe('NotificationPayment component', () => {
     const alertMessage = screen.getByRole('alert').querySelector('p');
     expect(alertMessage).toBeInTheDocument();
     expect(alertMessage).toHaveTextContent('detail.payment.message-completed');
+    // check payment history box
+    const paymentTable = screen.getByTestId('paymentTable');
+    expect(paymentTable).toBeInTheDocument();
   });
 
   it('renders properly if getPaymentInfo returns a "failed" status and "domain_unknown" detail', async () => {

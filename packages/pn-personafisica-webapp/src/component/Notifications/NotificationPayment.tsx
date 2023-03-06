@@ -2,6 +2,7 @@ import { LoadingButton } from '@mui/lab';
 import {
   Alert,
   AlertColor,
+  Box,
   Button,
   Divider,
   Grid,
@@ -13,20 +14,20 @@ import {
   Theme,
   Typography,
 } from '@mui/material';
-import { Box } from '@mui/system';
 import DownloadIcon from '@mui/icons-material/Download';
 import SendIcon from '@mui/icons-material/Send';
 import {
   ApiErrorWrapper,
+  appStateActions,
   CopyToClipboard,
   formatEurocentToCurrency,
   NotificationDetailPayment,
-  PaymentAttachmentSName,
+  NotificationPaidDetail,
+  PaymentAttachmentSName, PaymentHistory,
   PaymentInfoDetail,
   PaymentStatus,
-  useIsMobile,
-  appStateActions,
   useDownloadDocument,
+  useIsMobile,
 } from '@pagopa-pn/pn-commons';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -39,20 +40,17 @@ import {
   NOTIFICATION_ACTIONS,
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import {
-  PAGOPA_HELP_EMAIL,
-  // PN-2029
-  // PAYMENT_DISCLAIMER_URL
-} from '../../utils/constants';
+import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
 
 interface Props {
   iun: string;
   notificationPayment: NotificationDetailPayment;
-  mandateId?: string;
-  senderDenomination?: string;
   subject: string;
+  mandateId?: string;
+  paymentHistory?: Array<PaymentHistory>;
+  senderDenomination?: string;
 }
 
 interface PrimaryAction {
@@ -84,6 +82,7 @@ const NotificationPayment: React.FC<Props> = ({
   iun,
   notificationPayment,
   mandateId,
+  paymentHistory,
   senderDenomination,
   subject,
 }) => {
@@ -99,7 +98,7 @@ const NotificationPayment: React.FC<Props> = ({
     (state: RootState) => state.notificationState.f24AttachmentUrl
   );
 
-  const alertButtonStyle: SxProps<Theme> = useIsMobile()
+  const alertButtonStyle: SxProps<Theme> = isMobile
     ? { textAlign: 'center' }
     : { textAlign: 'center', minWidth: 'max-content' };
 
@@ -503,6 +502,12 @@ const NotificationPayment: React.FC<Props> = ({
                 </Stack>
               </>
             )}
+            {!loading
+              && paymentInfo.status === PaymentStatus.SUCCEEDED
+              && paymentHistory
+              && paymentHistory.length > 0
+              && <NotificationPaidDetail paymentDetailsList={paymentHistory} />
+            }
           </Stack>
         </Grid>
       </Paper>
