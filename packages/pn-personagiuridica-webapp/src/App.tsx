@@ -77,7 +77,7 @@ const App = () => {
     {
       id: '1',
       title: t('header.product.organization-dashboard'),
-      productUrl: `${SELFCARE_BASE_URL}/dashboard/${organization.id}`,
+      productUrl: `${SELFCARE_BASE_URL}/dashboard/${organization?.id}`,
       linkType: 'external',
     },
     {
@@ -86,7 +86,7 @@ const App = () => {
       productUrl: '',
       linkType: 'internal',
     },
-  ], [t, organization.id]);
+  ], [t, organization?.id]);
 
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
