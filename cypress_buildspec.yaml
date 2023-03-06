@@ -35,6 +35,7 @@ phases:
       ## Running Cypress
       - echo Setting up and running the test environment
       # Creating cypress.env.json file
-      - echo -e "$CYPRESS_ENV" > cypress.env.json
+      - echo $CYPRESS_ENV
+      - echo -e "${!CYPRESS_ENV}" > cypress.env.json
       # Running Cypress in headless mode
       - yarn cy-run --config video=false
