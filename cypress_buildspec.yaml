@@ -37,7 +37,7 @@ phases:
       ## Running Cypress
       - echo Setting up and running the test environment
       # Creating cypress.env.json file
-      - echo -e "$LOCAL_SECRET_VAR" > cypress.env.json
+      - echo $LOCAL_SECRET_VAR > cypress.env.json
       - cat cypress.env.json
       # - aws secretsmanager get-secret-value --secret-id $CYPRESS_ENV --query SecretString --output text > cypress.env.json
       # Running Cypress in headless mode
