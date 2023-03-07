@@ -35,9 +35,8 @@ phases:
       ## Running Cypress
       - echo Setting up and running the test environment
       # Creating cypress.env.json file
-      # - echo -e $CYPRESS_ENV > cypress.env.json
-
-      - aws secretsmanager get-secret-value --secret-id $CYPRESS_ENV --query SecretString --output text > cypress.env.json
+      - echo -e $CYPRESS_ENV > cypress.env.json
       - cat cypress.env.json
+      # - aws secretsmanager get-secret-value --secret-id $CYPRESS_ENV --query SecretString --output text > cypress.env.json
       # Running Cypress in headless mode
       # - yarn cy-run --config video=false
