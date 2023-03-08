@@ -8,6 +8,8 @@ export default defineConfig({
   e2e: {
     baseUrl: 'https://portale.dev.pn.pagopa.it',
     // defaultCommandTimeout: 10000,
+    video: false,
+    screenshotOnRunFailure: false,
     setupNodeEvents(on, config) {
       // setting up excludeSpecPattern
       let excludeSpecPattern = [];

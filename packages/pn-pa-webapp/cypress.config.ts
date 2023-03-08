@@ -7,7 +7,9 @@ const webpackOptions = require('./cypress/webpack.config');
 export default defineConfig({
   e2e: {
     baseUrl: 'https://portale-pa.dev.pn.pagopa.it',
-    defaultCommandTimeout: 30000,
+    // defaultCommandTimeout: 10000,
+    video: false,
+    screenshotOnRunFailure: false,
     setupNodeEvents(on, config) {
       // setting up excludeSpecPattern
       let excludeSpecPattern = [];
