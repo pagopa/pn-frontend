@@ -7,15 +7,6 @@ describe('Auth', () => {
   });
 
   it('Should login properly using APIs', () => {
-    cy.task(
-      'log',
-      '###################################################################################'
-    );
-    cy.task('log', Cypress.env('username'));
-    cy.task(
-      'log',
-      '###################################################################################'
-    );
     cy.logout();
     cy.loginWithTokenExchange();
     cy.window().then((win) => {

@@ -35,12 +35,17 @@ export default defineConfig({
 
       on('file:preprocessor', webpackPreprocessor(options));
 
+      // Decomment if you want log something to console
+      // in test use cy.task('log', something-to-log)
+      // Andrea Cimini, 2023.03.08
+      /*
       on('task', {
         log(message) {
           console.log(message);
           return null;
         },
       });
+      */
 
       return {
         ...config,
