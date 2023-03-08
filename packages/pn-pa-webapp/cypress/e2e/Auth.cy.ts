@@ -7,6 +7,7 @@ describe('Auth', () => {
   });
 
   it('Should login properly using APIs', () => {
+    let user;
     cy.task(
       'log',
       '###################################################################################'
@@ -14,15 +15,15 @@ describe('Auth', () => {
     cy.logout();
     cy.loginWithTokenExchange();
     cy.task('log', cy.window);
-    cy.window().then((win) => {
-      const user = win.sessionStorage.getItem('user');
-      cy.task('log', 'evaluating expect');
-      expect(user).not.to.be.null;
-    });
-    cy.task(
-      'log',
-      '###################################################################################'
-    );
+    cy.window()
+      .then((win) => {
+        user = win.sessionStorage.getItem('user');
+        // expect(user).not.to.be.null;
+      })
+      .then(() => {
+        cy.task('log', 'evaluating expect');
+        expect(user).not.to.be.null;
+      });
   });
 
   it('Should logout properly using APIs', () => {
