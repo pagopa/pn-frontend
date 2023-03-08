@@ -204,7 +204,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
       width: '15%',
       getCellLabel(value: Array<string>) {
         return (
-          <CustomTagGroup visibleItems={2}>
+          <CustomTagGroup visibleItems={3}>
             {value.map((v, i) => (
               <Box key={i} sx={{ my: 1 }}>
                 <Tag value={v} />
