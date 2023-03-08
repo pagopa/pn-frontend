@@ -21,7 +21,7 @@ import * as routes from '../navigation/routes.const';
 import { RootState } from '../redux/store';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getApiKeyUserGroups, saveNewApiKey } from '../redux/NewApiKey/actions';
-import { ApiKeyStatus } from '../models/ApiKeys';
+import { UserGroup } from '../models/user';
 import SyncFeedbackApiKey from './components/NewApiKey/SyncFeedbackApiKey';
 
 const useStyles = makeStyles(() => ({
@@ -34,11 +34,7 @@ const useStyles = makeStyles(() => ({
 
 const SubTitle = () => {
   const { t } = useTranslation(['apikeys'], { keyPrefix: 'new-api-key' });
-  return (
-    <Fragment>
-      {t('page-description')}
-    </Fragment>
-  );
+  return <Fragment>{t('page-description')}</Fragment>;
 };
 
 const NewApiKey = () => {
@@ -47,17 +43,24 @@ const NewApiKey = () => {
   const isMobile = useIsMobile();
   const groups = useAppSelector((state: RootState) => state.newApiKeyState.groups);
   const { t } = useTranslation(['apikeys'], { keyPrefix: 'new-api-key' });
-  const { t: tc} = useTranslation(['common']);
+  const { t: tc } = useTranslation(['common']);
   const [apiKeySent, setApiKeySent] = useState<boolean>(false);
 
   const initialValues = () => ({
     name: '',
-    groups: [] as Array<ApiKeyStatus>,
+    groups: [] as Array<UserGroup>,
   });
 
   const validationSchema = yup.object({
     name: yup.string().required(t('form-error-name')),
-    groups: yup.array(),
+    groups: yup.array().of(
+      yup.object({
+        id: yup.string(),
+        name: yup.string(),
+        description: yup.string(),
+        status: yup.string(),
+      })
+    ),
   });
 
   useEffect(() => {
@@ -65,14 +68,18 @@ const NewApiKey = () => {
       void dispatch(getApiKeyUserGroups());
     }
   }, []);
-  
+
   const formik = useFormik({
     initialValues: initialValues(),
     validateOnMount: true,
     validationSchema,
     onSubmit: (values) => {
+      const newApiKeyValues = {
+        name: values.name,
+        groups: values.groups.map((e) => e.id),
+      };
       if (formik.isValid) {
-        void dispatch(saveNewApiKey({ ...values }));
+        void dispatch(saveNewApiKey({ ...newApiKeyValues }));
         setApiKeySent(true);
       }
     },
@@ -85,7 +92,7 @@ const NewApiKey = () => {
 
   const classes = useStyles();
 
-  const handleGroupClick = async (_event: any, value: Array<string>) => {
+  const handleGroupClick = async (_event: any, value: Array<UserGroup>) => {
     await formik.setFieldValue('groups', value);
     await formik.setFieldTouched('groups', true, false);
   };
@@ -146,17 +153,18 @@ const NewApiKey = () => {
                           multiple
                           noOptionsText={t('no-groups')}
                           value={formik.values.groups}
-                          options={groups.map((g) => g.name)}
+                          options={groups}
                           id="groups"
-                          getOptionLabel={(option) => option}
-                          isOptionEqualToValue={(option: any, value: any) => option === value}
+                          getOptionLabel={(option) => option.name}
                           onChange={handleGroupClick}
                           renderOption={(props, option) => (
                             <MenuItem {...props}>
                               <ListItemIcon>
-                                <Checkbox checked={formik.values.groups.indexOf(option as ApiKeyStatus) > -1} />
+                                <Checkbox
+                                  checked={formik.values.groups.indexOf(option as UserGroup) > -1}
+                                />
                               </ListItemIcon>
-                              <ListItemText primary={option} />
+                              <ListItemText primary={option.name} />
                             </MenuItem>
                           )}
                           renderInput={(params) => (
@@ -167,7 +175,7 @@ const NewApiKey = () => {
                     </Paper>
                     <Box mt={3}>
                       <Button variant="contained" type="submit" disabled={!formik.isValid}>
-                      {t('continue-button')}
+                        {t('continue-button')}
                       </Button>
                     </Box>
                   </Box>
@@ -178,7 +186,7 @@ const NewApiKey = () => {
         </Prompt>
       )}
 
-      {(apiKeySent && newApiKey !== '') && <SyncFeedbackApiKey newApiKeyId={newApiKey} />}
+      {apiKeySent && newApiKey !== '' && <SyncFeedbackApiKey newApiKeyId={newApiKey} />}
     </>
   );
 };

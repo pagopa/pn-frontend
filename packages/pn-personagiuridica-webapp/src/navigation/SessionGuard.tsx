@@ -126,11 +126,17 @@ const SessionGuard = () => {
       // se i dati del utente sono stati presi da session storage,
       // si deve saltare la user determination e settare l'indicativo di session reload
       // che verrà usato nella initial page determination
-      if (!sessionToken) {
-        const spidToken = getTokenParam();
-        if (spidToken) {
-          await dispatch(exchangeToken(spidToken));
-        }
+      // ----------------------
+      // When user leaves the application without logging out (clicking on a external link) and after returns with another user,
+      // the sessionStorage contains the information of the previous user and this cause a serious bug.
+      // So if a token is present in the url, I clear the sessionStorage and I'll do the new tokenExchange.
+      // Again, I strongly recommend to rethink the guard structure and functionality
+      // ----------------------
+      // Andrea Cimini, 2023.03.07
+      // ----------------------
+      const spidToken = getTokenParam();
+      if (spidToken) {
+        await dispatch(exchangeToken(spidToken));
       }
     };
     void performStep(INITIALIZATION_STEPS.USER_DETERMINATION, doUserDetermination);
