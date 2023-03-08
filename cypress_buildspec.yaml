@@ -19,24 +19,24 @@ phases:
     commands:
       - echo launching yarn install in $SUB_PRJ_NAME...
       - cd $SUB_PRJ_NAME
-      # - yarn install --frozen-lockfile
+      - yarn install --frozen-lockfile
   build:
     commands:
       ## Running the development server
       - echo Setting up and running the web application...
       # Fetching .env variables
-      # - source .env.cypress
+      - source .env.cypress
       # Setting up hosts file
-      # - echo "127.0.0.1 $HOST" >> /etc/hosts
+      - echo "127.0.0.1 $HOST" >> /etc/hosts
       # Renaming file .env.cypress to .env.development.local
-      # - mv .env.cypress .env.development.local
+      - mv .env.cypress .env.development.local
       # starting the webapp and waiting for its availability
-      # - yarn start-waiton $WEBAPP_URL
+      - yarn start-waiton $WEBAPP_URL
       ## Running Cypress
       - echo Setting up and running the test environment
       # Creating cypress.env.json file
-      - echo -e ${!CYPRESS_ENV} > cypress.env.json
+      - echo -e $CYPRESS_ENV > cypress.env.json
       # - aws secretsmanager get-secret-value --secret-id $CYPRESS_ENV --query SecretString --output text > cypress.env.json
       - cat cypress.env.json
       # Running Cypress in headless mode
-      # - yarn cy-run --config video=false
+      - yarn cy-run --config video=false --spec "cypress/e2e/Auth.cy.ts"
