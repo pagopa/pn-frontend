@@ -56,12 +56,13 @@ const InsertLegalContact = ({ recipientId }: Props) => {
         avatar={<IllusEmailValidation />}
       >
         <Grid container spacing={2} direction="row" mt={4}>
-          <Grid item lg={8} sm={8} xs={12}>
+          <Grid item lg={4} sm={4} xs={12}>
             <TextField
               id="pec"
               placeholder={t('legal-contacts.link-pec-placeholder', { ns: 'recapiti' })}
               fullWidth
               name="pec"
+              inputProps={{ sx: { height: '30px' } }}
               value={formik.values.pec}
               onChange={handleChangeTouched}
               error={formik.touched.pec && Boolean(formik.errors.pec)}
@@ -70,7 +71,7 @@ const InsertLegalContact = ({ recipientId }: Props) => {
               size="small"
             />
           </Grid>
-          <Grid item lg={4} sm={4} xs={12} alignItems="right">
+          <Grid item lg={2} sm={2} xs={12} alignItems="right">
             <Button
               variant="outlined"
               disabled={!formik.isValid}

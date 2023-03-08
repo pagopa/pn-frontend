@@ -132,7 +132,15 @@ const DigitalContactElem = forwardRef(
       <Grid key={f.id} item lg={f.size === 'auto' ? true : 'auto'} xs={12}>
         {!f.isEditable && f.component}
         {f.isEditable && editMode && f.component}
-        {f.isEditable && !editMode && <Typography>{(f.component as any).props.value}</Typography>}
+        {f.isEditable && !editMode && (
+          <Typography
+            sx={{
+              wordBreak: 'break-word',
+            }}
+          >
+            {(f.component as any).props.value}
+          </Typography>
+        )}
       </Grid>
     ));
 

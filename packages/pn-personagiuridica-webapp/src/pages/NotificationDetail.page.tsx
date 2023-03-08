@@ -43,7 +43,6 @@ import {
   clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
-import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
@@ -299,7 +298,6 @@ const NotificationDetail = () => {
                     mandateId={mandateId}
                   />
                 )}
-                <DomicileBanner />
                 <Paper sx={{ p: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}

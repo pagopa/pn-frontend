@@ -42,7 +42,6 @@ jest.mock('@pagopa-pn/pn-commons', () => {
 
 jest.mock('../../component/Contacts/InsertLegalContact', () => () => <div>InsertLegalContact</div>);
 jest.mock('../../component/Contacts/CourtesyContacts', () => () => <div>CourtesyContacts</div>);
-jest.mock('../../component/Contacts/IOContact', () => () => <div>IOContact</div>);
 
 const initialState = {
   preloadedState: {
@@ -92,7 +91,6 @@ describe('Contacts page - assuming contact API works properly', () => {
     expect(result.container).toHaveTextContent(/subtitle/i);
     expect(result.container).toHaveTextContent(/InsertLegalContact/i);
     expect(result.container).toHaveTextContent(/CourtesyContacts/i);
-    expect(result.container).toHaveTextContent(/IOContact/i);
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith('mocked-recipientId');
