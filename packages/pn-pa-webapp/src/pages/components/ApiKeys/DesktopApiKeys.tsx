@@ -1,7 +1,6 @@
 import { Fragment, useState, MouseEvent, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, IconButton, Menu, MenuItem, Typography } from '@mui/material';
-import { Tag, TagGroup } from '@pagopa/mui-italia';
 import { MoreVert } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +12,9 @@ import {
   EmptyState,
   CopyToClipboard,
   formatDate,
+  CustomTagGroup,
 } from '@pagopa-pn/pn-commons';
+import { Tag } from '@pagopa/mui-italia';
 import {
   ApiKey,
   ApiKeyColumn,
@@ -45,7 +46,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
    * @returns true if the api key history contains status ROTATED, otherwise false
    */
   const isApiKeyRotated = (apiKeyIdx: number): boolean => {
-    const currentApiKey = (rows[apiKeyIdx] as any) as ApiKey;
+    const currentApiKey = rows[apiKeyIdx] as any as ApiKey;
     return !!currentApiKey.statusHistory.find((status) => status.status === ApiKeyStatus.ROTATED);
   };
 
@@ -203,11 +204,13 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
       width: '15%',
       getCellLabel(value: Array<string>) {
         return (
-          <TagGroup visibleItems={3}>
-            {value.map((v) => (
-              <Tag key={v} value={v} />
+          <CustomTagGroup visibleItems={2}>
+            {value.map((v, i) => (
+              <Box key={i} sx={{ my: 1 }}>
+                <Tag value={v} />
+              </Box>
             ))}
-          </TagGroup>
+          </CustomTagGroup>
         );
       },
     },
