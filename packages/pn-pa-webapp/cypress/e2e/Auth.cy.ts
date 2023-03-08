@@ -12,13 +12,14 @@ describe('Auth', () => {
       '###################################################################################'
     );
     cy.task('log', Cypress.env('tokenExchange'));
-    cy.task(
-      'log',
-      '###################################################################################'
-    );
     cy.logout();
     cy.loginWithTokenExchange();
     cy.window().then((win) => {
+      cy.task('log', win.sessionStorage);
+      cy.task(
+        'log',
+        '###################################################################################'
+      );
       const user = win.sessionStorage.getItem('user');
       expect(user).not.to.be.null;
     });
