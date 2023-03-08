@@ -264,12 +264,12 @@ const NotificationDetail = () => {
 
   const getDownloadFilesMessage = useCallback((): string => {
     if (isCancelled) {
-      return 'Poiché questa notifica è stata annullata, i documenti allegati non sono disponibili.';
-    } else if (hasDocumentsAvailable) {
-      return 'I documenti allegati sono disponibili online per 120 giorni dal perfezionamento della notifica.';
-    } else {
-      return 'Poiché sono trascorsi 120 giorni dalla data di perfezionamento, i documenti non sono più disponibili.';
+      return t('detail.download-message-cancelled', { ns: 'notifiche' });
     }
+    if (hasDocumentsAvailable) {
+      return t('detail.download-message-available', { ns: 'notifiche' });
+    }
+    return t('detail.download-message-expired', { ns: 'notifiche' });
   }, [isCancelled, hasDocumentsAvailable]);
 
   // PN-1714
@@ -456,7 +456,7 @@ const NotificationDetail = () => {
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}
-                    downloadFilesLink="Quando si perfeziona una notifica?"
+                    downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
@@ -466,7 +466,7 @@ const NotificationDetail = () => {
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}
-                    downloadFilesLink="Quando si perfeziona una notifica?"
+                    downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                 </Paper>
                 <NotificationRelatedDowntimes
