@@ -15,14 +15,14 @@ describe('Auth', () => {
     cy.logout();
     cy.loginWithTokenExchange();
     cy.window().then((win) => {
-      cy.task('log', win.sessionStorage);
-      cy.task(
-        'log',
-        '###################################################################################'
-      );
       const user = win.sessionStorage.getItem('user');
+      cy.task('log', 'evaluating expect');
       expect(user).not.to.be.null;
     });
+    cy.task(
+      'log',
+      '###################################################################################'
+    );
   });
 
   it('Should logout properly using APIs', () => {
