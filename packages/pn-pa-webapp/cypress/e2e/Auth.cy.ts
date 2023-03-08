@@ -16,7 +16,6 @@ describe('Auth', () => {
     cy.loginWithTokenExchange();
     cy.task('log', '----------------------------------------------');
     cy.task('log', 'after login');
-    cy.task('log', cy.window);
     cy.window().then((win) => {
       const user = win.sessionStorage.getItem('user');
       cy.task('log', 'evaluating expect');
