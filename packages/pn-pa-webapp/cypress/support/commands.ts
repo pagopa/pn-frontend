@@ -62,10 +62,7 @@ Cypress.Commands.add('loginWithTokenExchange', (role?: PNRole) => {
   }).as('login');
   cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
   cy.get('#onetrust-accept-btn-handler').click();
-  cy.wait('@login').then((interception) => {
-    cy.task('log', interception.response.body);
-  });
-  cy.task('log', 'user retrieved');
+  cy.wait('@login');
   if (role) {
     cy.log(`Setting user role to ${role}`);
     cy.setRole(role);
