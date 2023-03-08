@@ -8,7 +8,7 @@ const options = {
 };
 
 if (typeof process.env.PR_NUM !== 'undefined') {
-  options['sonar.pullrequest.target'] = process.env.BRANCH_TARGET;
+  options['sonar.pullrequest.base'] = process.env.BRANCH_TARGET;
   options['sonar.pullrequest.branch'] = process.env.BRANCH_NAME;
   options['sonar.pullrequest.key'] = process.env.PR_NUM;
 } else {
