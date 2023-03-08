@@ -456,7 +456,7 @@ const NotificationDetail = () => {
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}
-                    downloadFilesLink="Quando si perfeziona una notifica?"
+                    downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                 </Paper>
                 <Paper sx={{ p: 3, mb: 3 }} className="paperContainer">
@@ -466,7 +466,7 @@ const NotificationDetail = () => {
                     clickHandler={documentDowloadHandler}
                     documentsAvailable={hasDocumentsAvailable}
                     downloadFilesMessage={getDownloadFilesMessage()}
-                    downloadFilesLink="Quando si perfeziona una notifica?"
+                    downloadFilesLink={t('detail.download-files-link', { ns: 'notifiche' })}
                   />
                 </Paper>
                 <NotificationRelatedDowntimes
