@@ -275,6 +275,16 @@ const NotificationPayment: React.FC<Props> = ({
     </Link>
   );
 
+  const SupportButton = ({ children }: { children?: ReactNode }) => (
+    <Link
+      key="support-button"
+      sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+      onClick={contactSupportClick}
+    >
+      {children}
+    </Link>
+  );
+
   /** returns message data to be passed into the alert */
   const getMessageData = (): PaymentMessageData | undefined => {
     if (!(notificationPayment.noticeCode && notificationPayment.creditorTaxId)) {
@@ -298,14 +308,15 @@ const NotificationPayment: React.FC<Props> = ({
               <Trans
                 ns={'notifiche'}
                 i18nKey={'detail.payment.message-in-progress'}
-                components={[<ReloadPaymentInfoButton key={'reload-payment-button'}>Ricarica</ReloadPaymentInfoButton>]}
+                components={[
+                  <ReloadPaymentInfoButton key={'reload-payment-button'} />,
+                  <SupportButton key={'support-button'} />,
+                ]}
               >
-                Il pagamento è già in corso, puoi controllarne lo stato ricaricando la pagina o
-                cliccando <ReloadPaymentInfoButton>Ricarica</ReloadPaymentInfoButton>. Se è passato
-                troppo tempo senza aggiornamenti, segnalacelo!
+                Il pagamento è in corso: <ReloadPaymentInfoButton>ricarica la pagina</ReloadPaymentInfoButton> tra qualche
+                ora per verificarne lo stato. Se risulta ancora in corso, <SupportButton>contatta l’assistenza</SupportButton>.
               </Trans>
             ),
-            action: MessageActionType.CONTACT_SUPPORT,
           };
         case PaymentStatus.FAILED:
           return getFailedMessageData();
