@@ -30,8 +30,8 @@ import {
   NotificationPaidDetail,
   PaymentHistory,
 } from '@pagopa-pn/pn-commons';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { ReactNode, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import {
@@ -232,9 +232,11 @@ const NotificationPayment: React.FC<Props> = ({
   /** composes Payment Data to be rendered */
   const composePaymentData = (): PaymentData => {
     const title =
-      paymentInfo?.status !== PaymentStatus.SUCCEEDED
-        ? t('detail.payment.summary-pending', { ns: 'notifiche' })
-        : t('detail.payment.summary-succeeded', { ns: 'notifiche' });
+      paymentInfo?.status === PaymentStatus.SUCCEEDED
+        ? t('detail.payment.summary-succeeded', { ns: 'notifiche' })
+        : paymentInfo?.status === PaymentStatus.INPROGRESS
+        ? t('detail.payment.summary-in-progress', { ns: 'notifiche' })
+        : t('detail.payment.summary-pending', { ns: 'notifiche' });
 
     const amount = paymentInfo?.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
 
@@ -266,6 +268,17 @@ const NotificationPayment: React.FC<Props> = ({
     </>
   );
 
+  const ReloadPaymentInfoButton = ({ children }: { children?: ReactNode }) => (
+    <Link
+      key='reload-payment-button'
+      sx={{ textDecoration: 'none', fontWeight: 'bold', cursor: 'pointer' }}
+      color="primary"
+      onClick={fetchPaymentInfo}
+    >
+      {children}
+    </Link>
+  );
+  
   /** returns message data to be passed into the alert */
   const getMessageData = (): PaymentMessageData | undefined => {
     if (!(notificationPayment.noticeCode && notificationPayment.creditorTaxId)) {
@@ -285,7 +298,17 @@ const NotificationPayment: React.FC<Props> = ({
         case PaymentStatus.INPROGRESS:
           return {
             type: 'info',
-            body: t('detail.payment.message-in-progress', { ns: 'notifiche' }),
+            body: (
+              <Trans
+                ns={'notifiche'}
+                i18nKey={'detail.payment.message-in-progress'}
+                components={[<ReloadPaymentInfoButton key={'reload-payment-button'}>Ricarica</ReloadPaymentInfoButton>]}
+              >
+                Il pagamento è già in corso, puoi controllarne lo stato ricaricando la pagina o
+                cliccando <ReloadPaymentInfoButton>Ricarica</ReloadPaymentInfoButton>. Se è passato troppo
+                tempo senza aggiornamenti, segnalacelo!
+              </Trans>
+            ),
             action: MessageActionType.CONTACT_SUPPORT,
           };
         case PaymentStatus.FAILED:
@@ -507,12 +530,12 @@ const NotificationPayment: React.FC<Props> = ({
                 </Stack>
               </>
             )}
-            {!loading
-              && paymentInfo.status === PaymentStatus.SUCCEEDED
-              && paymentHistory
-              && paymentHistory.length > 0
-              && <NotificationPaidDetail paymentDetailsList={paymentHistory} />
-            }
+            {!loading &&
+              paymentInfo.status === PaymentStatus.SUCCEEDED &&
+              paymentHistory &&
+              paymentHistory.length > 0 && (
+                <NotificationPaidDetail paymentDetailsList={paymentHistory} />
+              )}
           </Stack>
         </Grid>
       </Paper>

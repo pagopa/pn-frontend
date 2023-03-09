@@ -64,6 +64,7 @@
     "payment": {
       "summary-pending": "Da pagare",
       "summary-succeeded": "Pagato",
+      "summary-in-progress": "Pagamento in corso",
       "amount": "Importo",
       "disclaimer": "Questo importo verrà aggiornato al momento del pagamento. Quindi potrebbe essere diverso.",
       "disclaimer-link": "Come mai?",
@@ -73,7 +74,7 @@
       "download-f24": "Scarica il modello F24",
       "message-error-fetch-payment": "Non siamo riusciti a recuperare i dati di pagamento per questa notifica.",
       "message-completed": "Il pagamento è stato effettuato con successo.",
-      "message-in-progress": "Il pagamento è già in corso, riprova tra qualche minuto. Se è passato troppo tempo, segnalacelo!",
+      "message-in-progress": "Il pagamento è già in corso, puoi controllarne lo stato ricaricando la pagina o cliccando <0>Ricarica</0>. Se è passato troppo tempo senza aggiornamenti, segnalacelo!",
       "message-failed": "Il pagamento non è andato a buon fine. Premi \"Paga\" per riprovare.",
       "message-network-error": "Si è verificato un errore nel recupero delle informazioni di pagamento. Ricarica la pagina.",
       "message-missing-parameter": "Codice notifica e/o codice fiscale ente non presenti!",
