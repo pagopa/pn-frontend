@@ -21,12 +21,8 @@ describe('Filter Notifications', () => {
     isoNextDay: filters.endFilteredDate,
     formatted: formatDate(filters.endDate),
   };
-  beforeEach(() => {
-    Cypress.on('uncaught:exception', (err, runnable) => {
-      return false;
-    });
-    cy.viewport(1920, 1080);
 
+  before(() => {
     cy.intercept('GET', /delivery\/notifications\/sent/, {
       statusCode: 200,
       fixture: 'notifications/list-10/page-1',
@@ -34,12 +30,19 @@ describe('Filter Notifications', () => {
 
     cy.intercept(/TOS/, {
       statusCode: 200,
-      fixture: 'tos/tos-accepted'
+      fixture: 'tos/tos-accepted',
     });
 
-    cy.logout();
     cy.loginWithTokenExchange();
     cy.visit('/dashboard');
+  });
+
+  beforeEach(() => {
+    cy.viewport(1920, 1080);
+  });
+
+  after(() => {
+    cy.logout();
   });
 
   it(`Filters by dates from ${startDate.formatted} to ${endDate.formatted}, enter a notification detail, then go back e verify filters are still set`, () => {
@@ -54,7 +57,7 @@ describe('Filter Notifications', () => {
     cy.intercept('GET', `/delivery\/notifications\/sent/${filters.iun}`, {
       statusCode: 200,
       fixture: 'notifications/effective_date',
-    }).as('filteredNotifications');
+    });
 
     cy.get('.MuiButton-outlined').click();
 
