@@ -59,6 +59,14 @@ describe('DelegationElements', () => {
     expect(result.container).toHaveTextContent(/Bollate/i);
   });
 
+  it('renders the OrganizationList with multiple organizations and maxHeight parameter set to 120px', () => {
+    const result = render(<OrganizationsList organizations={['Bollate', 'Milano', 'Abbiategrasso', 'Malpensa']} maxHeight="120px" />);
+    const organizationsList = result.getByTestId('organizations-list');
+    expect(result.container).toHaveTextContent(/deleghe.table.notificationsFrom/i);
+    expect(result.container).toHaveTextContent(/BollateMilanoAbbiategrassoMalpensa/i);
+    expect(organizationsList).toHaveStyle('overflow-y: auto; max-height: 120px');
+  });
+
   it('renders the AcceptButton', () => {
     const result = render(<AcceptButton id={'1'} name={'test'} />);
 

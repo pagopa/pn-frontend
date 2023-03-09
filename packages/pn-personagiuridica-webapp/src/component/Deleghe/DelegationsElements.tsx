@@ -9,6 +9,7 @@ import {
   List,
   ListItem,
   Typography,
+  useTheme,
 } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -86,8 +87,16 @@ export const Menu = (props: any) => {
 export const OrganizationsList = (props: {
   organizations: Array<string>;
   textVariant?: Variant;
+  maxHeight?: string;
 }) => {
   const { t } = useTranslation(['deleghe']);
+  const theme = useTheme();
+  const maxHeightStyle = props.maxHeight
+    ? {
+        maxHeight: props.maxHeight,
+        overflowY: 'auto',
+      }
+    : {};
   return (
     <>
       {props.organizations.length === 0 ? (
@@ -97,17 +106,24 @@ export const OrganizationsList = (props: {
           <Typography variant={props.textVariant || 'inherit'}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>
-          <List
+          <List data-testid="organizations-list"
             sx={{
               padding: 0,
               display: 'revert',
               listStyle: 'square',
+              ...maxHeightStyle,
             }}
           >
             {props.organizations.map((organization) => (
               <ListItem
                 key={organization}
-                sx={{ display: 'revert', paddingLeft: 0, marginLeft: 3, fontWeight: '500' }}
+                sx={{
+                  display: 'revert',
+                  paddingLeft: 0,
+                  marginLeft: 3,
+                  fontWeight: '500',
+                  width: `calc(100% - ${theme.spacing(3)})`,
+                }}
               >
                 <Typography variant={props.textVariant || 'inherit'}>{organization}</Typography>
               </ListItem>
