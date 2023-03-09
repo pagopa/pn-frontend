@@ -260,7 +260,7 @@ const NotificationDetail = () => {
 
   const isCancelled = notification.notificationStatus === NotificationStatus.CANCELLED;
 
-  const hasDocumentsAvailable = isCancelled || !notification.documentsAvailable;
+  const hasDocumentsAvailable = !(isCancelled || !notification.documentsAvailable);
 
   const getDownloadFilesMessage = useCallback((): string => {
     if (isCancelled) {
