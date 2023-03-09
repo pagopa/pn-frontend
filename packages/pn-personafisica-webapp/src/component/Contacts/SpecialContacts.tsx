@@ -337,7 +337,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   <TextField
                     {...params}
                     name="sender"
-                    label={t('special-contacts.sender', { ns: 'recapiti' })}
+                    label={`${t('special-contacts.sender', { ns: 'recapiti' })}*`}
                   />
                 )}
               />
