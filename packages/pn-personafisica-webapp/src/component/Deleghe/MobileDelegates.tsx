@@ -66,13 +66,6 @@ const MobileDelegates = () => {
       },
     },
     {
-      id: 'email',
-      label: t('deleghe.table.email'),
-      getLabel(value: string) {
-        return value;
-      },
-    },
-    {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
       getLabel(value: string) {
