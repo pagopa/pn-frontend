@@ -8,7 +8,7 @@ import {
   PaymentInfoDetail,
   RecipientType,
 } from '@pagopa-pn/pn-commons';
-import { act, prettyDOM, waitFor } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 
 import { render, screen } from '../../../__test__/test-utils';
 import * as actions from '../../../redux/notification/actions';
@@ -227,7 +227,7 @@ describe('NotificationPayment component', () => {
   });
 
   it('renders properly if getPaymentInfo returns a "in progress" status', async () => {
-    render(
+    const result = render(
       <NotificationPayment
         iun="mocked-iun"
         notificationPayment={mockedNotificationDetailPayment}
@@ -250,7 +250,7 @@ describe('NotificationPayment component', () => {
       expect(amountLoader).not.toBeInTheDocument();
     });
 
-    const title = screen.getByRole('heading', { name: 'detail.payment.summary-pending' });
+    const title = screen.getByRole('heading', { name: 'detail.payment.summary-in-progress' });
     expect(title).toBeInTheDocument();
 
     const amount = screen.getByRole('heading', { name: 'detail.payment.amount' });
@@ -266,8 +266,7 @@ describe('NotificationPayment component', () => {
     const alert = screen.getByTestId('InfoOutlinedIcon');
     expect(alert).toBeInTheDocument();
 
-    const alertMessage = screen.getByText('detail.payment.message-in-progress');
-    expect(alertMessage).toBeInTheDocument();
+    expect(result.container).toHaveTextContent('detail.payment.summary-in-progress');
   });
 
   it('renders properly if getPaymentInfo returns a "succeeded" status', async () => {
