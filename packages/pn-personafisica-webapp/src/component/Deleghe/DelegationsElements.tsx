@@ -97,7 +97,7 @@ export const OrganizationsList = (props: {
         </Typography>
       ) : (
         <Box>
-          <Typography variant={props.textVariant || 'inherit'}>
+          <Typography variant={props.textVariant || 'inherit'} mb={2}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>
           <CustomTagGroup visibleItems={props.visibleItems}>
