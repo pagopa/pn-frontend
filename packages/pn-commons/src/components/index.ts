@@ -47,6 +47,7 @@ import SnackBar from './SnackBar/SnackBar';
 import { SpecialContactsProvider, useSpecialContactsContext } from "./SpecialContacts.context";
 import TimedMessage from './TimedMessage/TimedMessage';
 import AppNotAccessible from './AppNotAccessible';
+import CustomTagGroup from './CustomTagGroup/CustomTagGroup';
 
 export {
   LoadingOverlay,
@@ -95,7 +96,8 @@ export {
   SpecialContactsProvider,
   useSpecialContactsContext,
   TimedMessage,
-  AppNotAccessible
+  AppNotAccessible,
+  CustomTagGroup
 };
 
 export type { DowntimeLogColumn };
