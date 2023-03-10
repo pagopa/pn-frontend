@@ -6,12 +6,12 @@ import {
   Menu as MUIMenu,
   MenuItem,
   Box,
-  List,
-  ListItem,
   Typography,
 } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { CustomTagGroup } from '@pagopa-pn/pn-commons';
+import { Tag } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../redux/hooks';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
@@ -86,6 +86,7 @@ export const Menu = (props: any) => {
 export const OrganizationsList = (props: {
   organizations: Array<string>;
   textVariant?: Variant;
+  visibleItems?: number;
 }) => {
   const { t } = useTranslation(['deleghe']);
   return (
@@ -96,25 +97,16 @@ export const OrganizationsList = (props: {
         </Typography>
       ) : (
         <Box>
-          <Typography variant={props.textVariant || 'inherit'}>
+          <Typography variant={props.textVariant || 'inherit'} mb={2}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>
-          <List
-            sx={{
-              padding: 0,
-              display: 'revert',
-              listStyle: 'square',
-            }}
-          >
+          <CustomTagGroup visibleItems={props.visibleItems}>
             {props.organizations.map((organization) => (
-              <ListItem
-                key={organization}
-                sx={{ display: 'revert', paddingLeft: 0, marginLeft: 3, fontWeight: '500' }}
-              >
-                <Typography variant={props.textVariant || 'inherit'}>{organization}</Typography>
-              </ListItem>
+              <Box sx={{mb:1, mr: 1, display: 'inline-block'}} key={organization}>
+                <Tag value={organization}/>
+              </Box>
             ))}
-          </List>
+          </CustomTagGroup>
         </Box>
       )}
     </>

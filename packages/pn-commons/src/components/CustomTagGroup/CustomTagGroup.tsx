@@ -1,4 +1,5 @@
-import { Box, Chip } from '@mui/material';
+import { Tag } from '@pagopa/mui-italia';
+import { Box } from '@mui/material';
 import React from 'react';
 import CustomTooltip from '../CustomTooltip';
 interface CustomTagGroupProps {
@@ -24,7 +25,9 @@ const CustomTagGroup = ({ visibleItems, onOpen, children }: CustomTagGroupProps)
             onOpen={onOpen}
             tooltipContent={<>{arrayChildren.slice(visibleItems).map((c) => c)}</>}
           >
-            <Chip label={`+${arrayChildren.length - (visibleItems as number)}`} />
+            <Box sx={{ cursor: 'pointer', display: 'inline-block' }} data-testid="custom-tooltip-indicator" role="button">
+              <Tag value={`+${arrayChildren.length - (visibleItems as number)}`} />
+            </Box>
           </CustomTooltip>
         </Box>
       )}
