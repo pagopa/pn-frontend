@@ -6,18 +6,17 @@ import {
   Menu as MUIMenu,
   MenuItem,
   Box,
-  List,
-  ListItem,
   Typography,
-  useTheme,
 } from '@mui/material';
 import { Variant } from '@mui/material/styles/createTypography';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { CustomTagGroup } from '@pagopa-pn/pn-commons';
+import { Tag } from '@pagopa/mui-italia';
 
 import { useAppDispatch } from '../../redux/hooks';
 import { openAcceptModal, openRevocationModal } from '../../redux/delegation/reducers';
-import { trackEventByType } from "../../utils/mixpanel";
-import { TrackEventType } from "../../utils/events";
+import { trackEventByType } from '../../utils/mixpanel';
+import { TrackEventType } from '../../utils/events';
 
 export const Menu = (props: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -87,48 +86,27 @@ export const Menu = (props: any) => {
 export const OrganizationsList = (props: {
   organizations: Array<string>;
   textVariant?: Variant;
-  maxHeight?: string;
+  visibleItems?: number;
 }) => {
   const { t } = useTranslation(['deleghe']);
-  const theme = useTheme();
-  const maxHeightStyle = props.maxHeight
-    ? {
-        maxHeight: props.maxHeight,
-        overflowY: 'auto',
-      }
-    : {};
   return (
     <>
       {props.organizations.length === 0 ? (
-        <Typography variant={props.textVariant || 'inherit'}>{t('deleghe.table.allNotifications')}</Typography>
+        <Typography variant={props.textVariant || 'inherit'}>
+          {t('deleghe.table.allNotifications')}
+        </Typography>
       ) : (
         <Box>
           <Typography variant={props.textVariant || 'inherit'}>
             {t('deleghe.table.notificationsFrom')}
           </Typography>
-          <List data-testid="organizations-list"
-            sx={{
-              padding: 0,
-              display: 'revert',
-              listStyle: 'square',
-              ...maxHeightStyle,
-            }}
-          >
+          <CustomTagGroup visibleItems={props.visibleItems}>
             {props.organizations.map((organization) => (
-              <ListItem
-                key={organization}
-                sx={{
-                  display: 'revert',
-                  paddingLeft: 0,
-                  marginLeft: 3,
-                  fontWeight: '500',
-                  width: `calc(100% - ${theme.spacing(3)})`,
-                }}
-              >
-                <Typography variant={props.textVariant || 'inherit'}>{organization}</Typography>
-              </ListItem>
+              <Box sx={{mb:1, mr: 1, display: 'inline-block'}} key={organization}>
+                <Tag value={organization}/>
+              </Box>
             ))}
-          </List>
+          </CustomTagGroup>
         </Box>
       )}
     </>

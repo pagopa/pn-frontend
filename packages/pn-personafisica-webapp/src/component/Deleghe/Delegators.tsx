@@ -55,7 +55,7 @@ const Delegators = () => {
       label: t('deleghe.table.permissions'),
       width: '18%',
       getCellLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} maxHeight={'120px'} />;
+        return <OrganizationsList organizations={value} visibleItems={3} />;
       },
     },
     {
