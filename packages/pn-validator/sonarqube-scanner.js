@@ -7,12 +7,14 @@ const options = {
   'sonar.javascript.lcov.reportPaths': './coverage/lcov.info',
 };
 
+
 if (typeof process.env.PR_NUM !== 'undefined') {
   options['sonar.pullrequest.base'] = process.env.BRANCH_TARGET;
   options['sonar.pullrequest.branch'] = process.env.BRANCH_NAME;
   options['sonar.pullrequest.key'] = process.env.PR_NUM;
 } else {
   options['sonar.branch.name'] = process.env.BRANCH_NAME;
+  options['sonar.branch.target'] = process.env.BRANCH_TARGET;
 }
 
 scanner(

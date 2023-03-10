@@ -11,6 +11,7 @@ if (typeof process.env.PR_NUM !== 'undefined') {
   options['sonar.pullrequest.key'] = process.env.PR_NUM;
 } else {
   options['sonar.branch.name'] = process.env.BRANCH_NAME;
+  options['sonar.branch.target'] = process.env.BRANCH_TARGET;
 }
 
 scanner(
