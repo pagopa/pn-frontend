@@ -29,7 +29,7 @@ batch:
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
           REACT_APP_URL_API_LOGIN: https://hub-login.spid.svil.pn.pagopa.it
           REACT_APP_PF_URL: https://portale.svil.pn.pagopa.it
-          REACT_APP_PG_URL: https://pnpg.dev.selfcare.pagopa.it
+          REACT_APP_PG_URL: https://pnpg.dev.selfcare.pagopa.it/auth/login/success
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: 'ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test'
@@ -46,7 +46,7 @@ batch:
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
           REACT_APP_URL_API_LOGIN: https://hub-login.spid.coll.pn.pagopa.it
           REACT_APP_PF_URL: https://portale.coll.pn.pagopa.it
-          REACT_APP_PG_URL: https://pnpg.dev.selfcare.pagopa.it
+          REACT_APP_PG_URL: https://pnpg.dev.selfcare.pagopa.it/auth/login/success
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: 'ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test'
@@ -63,7 +63,7 @@ batch:
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
           REACT_APP_URL_API_LOGIN: https://hub-login.spid.cert.pn.pagopa.it
           REACT_APP_PF_URL: https://portale.cert.pn.pagopa.it
-          REACT_APP_PG_URL: https://pnpg.dev.selfcare.pagopa.it
+          REACT_APP_PG_URL: https://pnpg.dev.selfcare.pagopa.it/auth/login/success
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: 'ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test'
@@ -80,7 +80,7 @@ batch:
           REACT_APP_SPID_CIE_ENTITY_ID: xx_servizicie_test
           REACT_APP_URL_API_LOGIN: https://hub-login.spid.notifichedigitali.it
           REACT_APP_PF_URL: https://portale.hotfix.pn.pagopa.it
-          REACT_APP_PG_URL: https://pnpg.dev.selfcare.pagopa.it
+          REACT_APP_PG_URL: https://pnpg.dev.selfcare.pagopa.it/auth/login/success
           REACT_APP_PAGOPA_HELP_EMAIL: notifichedigitali@assistenza.pagopa.it
           REACT_APP_MIXPANEL_TOKEN: 'aef0b0d89c3355510e9cdfdb18e7d0b5'
           REACT_APP_ONETRUST_DOMAIN_ID: 'ff3d2b72-7a44-43c2-b3bb-49e22f78edb9-test'
