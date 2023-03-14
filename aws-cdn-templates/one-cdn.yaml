@@ -544,6 +544,11 @@ Outputs:
     Value: !Sub "http://${AlternateWebDomain}"
     Description: Alternate site access URL
 
+  # Distribution ID
+  DistributionId:
+    Description: Cloudfront distribution ID
+    Value: !Ref WebsiteCDN
+    
   TooManyErrorsAlarmArn:
     Value: !GetAtt TooManyErrorsAlarm.Arn
     Description: ARN of distribution too many errors alarm
