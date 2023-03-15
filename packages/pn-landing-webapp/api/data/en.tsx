@@ -48,10 +48,10 @@ const onReadClick = () => {
 };
 
 const navigation: INavigationBarProps = {
-  title: "Piattaforma Notifiche",
+  title: "Notifications Platform",
   chip: "Beta",
-  pf: "Cittadini",
-  pa: "Enti"
+  pf: "The general public",
+  pa: "Entities",
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -706,9 +706,9 @@ const preLoginLinks: PreLoginFooterLinksType = {
     title: "Resources",
     links: [
       {
-        label: "Informativa Privacy",
+        label: "Privacy Policy",
         href: `/informativa-privacy/`,
-        ariaLabel: "Go to link: Informativa Privacy",
+        ariaLabel: "Go to link: Privacy Policy",
         linkType: "internal",
       },
       {

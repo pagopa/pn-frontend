@@ -4114,6 +4114,17 @@
   dependencies:
     "@octokit/openapi-types" "^14.0.0"
 
+"@pagopa/mui-italia@0.8.12":
+  version "0.8.12"
+  resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.8.12.tgz#e53e7ce965fe44d509b63c34ec45deeb7dbb8cf3"
+  integrity sha512-Qz0fMf5T3GHp/5g0VLyMR3kUtYnXpjtM3H9Hy5Co776Bi9BSiNLEPgP1svupIyW+RX8xpQD5fohyAmCNhP4qRw==
+  dependencies:
+    "@fontsource/dm-mono" "^4.5.10"
+    "@fontsource/titillium-web" "^4.5.9"
+    clsx "^1.2.1"
+    fp-ts "^2.12.3"
+    io-ts "^2.2.18"
+
 "@pagopa/mui-italia@^0.9.0":
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/@pagopa/mui-italia/-/mui-italia-0.9.0.tgz#65ca5780a84f0f304bcb748c413b45186232cadb"
@@ -12190,9 +12201,9 @@ npmlog@^6.0.0, npmlog@^6.0.2:
     set-blocking "^2.0.0"
 
 nth-check@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.npmjs.org/nth-check/-/nth-check-2.0.1.tgz"
-  integrity sha512-it1vE95zF6dTT9lBsYbxvqh0Soy4SPowchj0UBGj/V6cTPnXXtQOPUbhZ6CmGzAD/rW22LQK6E96pcdJXk4A4w==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/nth-check/-/nth-check-2.1.1.tgz#c9eab428effce36cd6b92c924bdb000ef1f1ed1d"
+  integrity sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==
   dependencies:
     boolbase "^1.0.0"
 
