@@ -45,22 +45,17 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
     </Link>
   );
 
-  const handleAccept = () => {
-    void dispatch(acceptToS(tosConsent.consentVersion))
-      .unwrap()
-      .then(() => {
-        void dispatch(acceptPrivacy(privacyConsent.consentVersion))
-          .unwrap()
-          .then(() => {
-            navigate(routes.NOTIFICHE);
-          })
-          .catch((_) => {
-            console.error(_);
-          });
-      })
-      .catch((_) => {
-        console.error(_);
-      });
+  const handleAccept = async () => {
+    try {
+      if (!tosConsent.accepted) {
+        await dispatch(acceptToS(tosConsent.consentVersion)).unwrap();
+      }
+      if (!privacyConsent.accepted) {
+        await dispatch(acceptPrivacy(privacyConsent.consentVersion)).unwrap();
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
