@@ -218,8 +218,8 @@ describe('Filter Notifications Table Component', () => {
     const todayM = new Date();
     const oneYearAgo = new Date(new Date().setMonth(todayM.getMonth() - 12));
     const oneMonthAgo = new Date(new Date().setMonth(todayM.getMonth() - 1));
-    todayM.setHours(0, 0, 0, 0);
     oneYearAgo.setHours(0, 0, 0, 0);
+    oneMonthAgo.setHours(0, 0, 0, 0);
 
     await setFormValues(form!, oneYearAgo, oneMonthAgo, 'ABCD-EFGH-ILMN-123456-A-1');
     const submitButton = form!.querySelector(`button[type="submit"]`);
