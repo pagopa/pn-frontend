@@ -74,7 +74,10 @@ describe('Notification Filters (no delegators)', () => {
       statusCode: 200,
       fixture: 'tos/tos-accepted',
     });
-
+    cy.intercept(/DATAPRIVACY/, {
+      statusCode: 200,
+      fixture: 'tos/privacy-accepted'
+    });
     cy.login();
     cy.visit(NOTIFICHE);
 

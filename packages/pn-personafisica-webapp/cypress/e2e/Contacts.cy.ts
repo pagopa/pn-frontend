@@ -26,7 +26,10 @@ describe('Contacts', () => {
       statusCode: 200,
       fixture: 'tos/tos-accepted',
     });
-
+    cy.intercept(/DATAPRIVACY/, {
+      statusCode: 200,
+      fixture: 'tos/privacy-accepted'
+    });
     cy.login();
     cy.visit(RECAPITI);
   });
@@ -423,7 +426,7 @@ describe('Contacts', () => {
     cy.get('[data-testid="Special contact add button"]').should('be.disabled');
 
     cy.get('#sender').click();
-    cy.get(`[data-value="${mockData.data.additional.sender}"]`).click();
+    cy.get('#sender-option-4 > .MuiGrid-container').click();
     cy.get('#addressType').click();
     cy.get('[data-value="EMAIL"]').click();
     cy.contains(mockData.copy.additional.mailPlaceholder);
@@ -497,7 +500,7 @@ describe('Contacts', () => {
 
     // adding a phone number to special contacts
     cy.get('#sender').click();
-    cy.get(`[data-value="${mockData.data.additional.sender}"]`).click();
+    cy.get('#sender-option-4 > .MuiGrid-container').click();
 
     cy.get('#addressType').click();
     cy.get('[data-value="SMS"]').click();
