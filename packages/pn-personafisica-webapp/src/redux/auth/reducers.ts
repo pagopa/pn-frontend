@@ -7,7 +7,7 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 import * as yup from 'yup';
-import { acceptToS, exchangeToken, getToSApproval, logout } from './actions';
+import { acceptPrivacy, acceptToS, exchangeToken, getPrivacyApproval, getToSApproval, logout } from './actions';
 import { User } from './types';
 
 const userDataMatcher = yup
@@ -44,14 +44,22 @@ const userSlice = createSlice({
   initialState: {
     loading: false,
     user: basicInitialUserData(userDataMatcher, noLoggedUserData),
-    tos: false,
     fetchedTos: false,
-    isFirstAccept: true,
-    consentVersion: '',
+    fetchedPrivacy: false,
     isUnauthorizedUser: false,
     messageUnauthorizedUser: emptyUnauthorizedMessage,
     isClosedSession: false,
     isForbiddenUser: false,
+    tosConsent: {
+      accepted: false,
+      isFirstAccept: false,
+      consentVersion: '',
+    },
+    privacyConsent: {
+      accepted: false,
+      isFirstAccept: false,
+      consentVersion: '',
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -85,21 +93,34 @@ const userSlice = createSlice({
       state.isClosedSession = true;
     });
     builder.addCase(getToSApproval.fulfilled, (state, action) => {
-      state.tos = action.payload.accepted;
-      state.isFirstAccept = action.payload.isFirstAccept;
-      state.consentVersion = action.payload.consentVersion;
+      state.tosConsent = action.payload;
       state.fetchedTos = true;
     });
     builder.addCase(getToSApproval.rejected, (state) => {
-      state.tos = false;
-      state.isFirstAccept = true;
+      state.tosConsent.accepted = false;
+      state.tosConsent.isFirstAccept = true;
       state.fetchedTos = true;
     });
+    builder.addCase(getPrivacyApproval.fulfilled, (state, action) => {
+      state.privacyConsent = action.payload;
+      state.fetchedPrivacy = true;
+    });
+    builder.addCase(getPrivacyApproval.rejected, (state) => {
+      state.privacyConsent.accepted = false;
+      state.privacyConsent.isFirstAccept = true;
+      state.fetchedPrivacy = true;
+    });
     builder.addCase(acceptToS.fulfilled, (state) => {
-      state.tos = true;
+      state.tosConsent.accepted = true;
     });
     builder.addCase(acceptToS.rejected, (state) => {
-      state.tos = false;
+      state.tosConsent.accepted = false;
+    });
+    builder.addCase(acceptPrivacy.fulfilled, (state) => {
+      state.privacyConsent.accepted = true;
+    });
+    builder.addCase(acceptPrivacy.rejected, (state) => {
+      state.privacyConsent.accepted = false;
     });
   },
 });

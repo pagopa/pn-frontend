@@ -5,23 +5,22 @@ import { Box, Grid, Link, Switch, Typography } from '@mui/material';
 import { TOSAgreement } from '@pagopa/mui-italia';
 import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from '@pagopa-pn/pn-commons';
 
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { acceptToS } from '../redux/auth/actions';
+import { ConsentUser } from '@pagopa-pn/pn-commons';
+import { useAppDispatch } from '../redux/hooks';
+import { acceptPrivacy, acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
-import { RootState } from '../redux/store';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
 
 type TermsOfServiceProps = {
-  isFirstAccept: boolean;
-  consentVersion: string;
+  tosConsent: ConsentUser;
+  privacyConsent: ConsentUser;
 };
 
-const TermsOfService = ({ isFirstAccept, consentVersion }: TermsOfServiceProps) => {
+const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { t } = useTranslation('common');
   const [accepted, setAccepted] = useState(false);
-  const tos = useAppSelector((state: RootState) => state.userState.tos);
 
   const redirectPrivacyLink = () => navigate(`${PRIVACY_LINK_RELATIVE_PATH}`);
   const redirectToSLink = () => navigate(`${TOS_LINK_RELATIVE_PATH}`);
@@ -47,22 +46,24 @@ const TermsOfService = ({ isFirstAccept, consentVersion }: TermsOfServiceProps) 
     </Link>
   );
 
-  const handleAccept = () => {
-    void dispatch(acceptToS(consentVersion))
-      .unwrap()
-      .then(() => {
-        navigate(routes.NOTIFICHE);
-      })
-      .catch((_) => {
-        console.error(_);
-      });
+  const handleAccept = async () => {
+    try {
+      if (!tosConsent.accepted) {
+        await dispatch(acceptToS(tosConsent.consentVersion)).unwrap();
+      }
+      if (!privacyConsent.accepted) {
+        await dispatch(acceptPrivacy(privacyConsent.consentVersion)).unwrap();
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
-    if (tos) {
+    if (tosConsent.accepted && privacyConsent.accepted) {
       navigate(routes.NOTIFICHE);
     }
-  }, [tos]);
+  }, [tosConsent, privacyConsent]);
 
   return (
     <LoadingPageWrapper isInitialized>
@@ -71,7 +72,9 @@ const TermsOfService = ({ isFirstAccept, consentVersion }: TermsOfServiceProps) 
           <TOSAgreement
             productName={t('tos.title', 'Piattaforma Notifiche')}
             description={t(
-              isFirstAccept ? 'tos.body' : 'tos.redo-body',
+              tosConsent.isFirstAccept && privacyConsent.isFirstAccept
+                ? 'tos.body'
+                : 'tos.redo-body',
               'Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.'
             )}
             onConfirm={handleAccept}

@@ -50,8 +50,8 @@ const onReadClick = () => {
 const navigation: INavigationBarProps = {
   title: "Piattaforma Notifiche",
   chip: "Beta",
-  pf: "Cittadini",
-  pa: "Enti"
+  pf: "Bürger",
+  pa: "Einrichtungen",
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -706,9 +706,9 @@ const preLoginLinks: PreLoginFooterLinksType = {
     title: "Quellen",
     links: [
       {
-        label: "Informativa Privacy",
+        label: "Datenschutzerklärung",
         href: `/informativa-privacy/`,
-        ariaLabel: "Zum Link: Informativa Privacy",
+        ariaLabel: "Zum Link: Datenschutzerklärung",
         linkType: "internal",
       },
       {
