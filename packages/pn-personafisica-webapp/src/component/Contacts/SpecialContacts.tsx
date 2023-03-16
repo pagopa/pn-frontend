@@ -72,6 +72,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
+  const [fullPartiesList, setFullPartiesList] = useState<Array<Party>>([]);
   const isMobile = useIsMobile();
   const [senderInputValue, setSenderInputValue] = useState('');
 
@@ -127,6 +128,13 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const fetchAllActivatedParties = useCallback(() => {
     void dispatch(getAllActivatedParties({}));
   }, []);
+
+  useEffect(() => {
+    if (fullPartiesList.length === 0) {
+      void dispatch(getAllActivatedParties({}));
+      setFullPartiesList(parties);
+    }
+  }, [parties]);
 
   useEffect(() => {
     if (senderInputValue.length >= 4) {
@@ -453,7 +461,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                       <SpecialContactElem
                         key={a.senderId}
                         address={a}
-                        senders={parties}
+                        senders={fullPartiesList}
                         recipientId={recipientId}
                       />
                     ))}
