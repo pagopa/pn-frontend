@@ -461,7 +461,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                       <SpecialContactElem
                         key={a.senderId}
                         address={a}
-                        senders={parties}
+                        senders={fullPartiesList}
                         recipientId={recipientId}
                       />
                     ))}
