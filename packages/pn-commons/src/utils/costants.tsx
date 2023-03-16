@@ -108,7 +108,7 @@ export const preLoginLinks = (
         },
         {
           ...getFooterLinkLabels('certifications', 'Certificazioni'),
-          href: 'https://www.pagopa.it/static/307f84e95cb44e962922833037b8ef2d/Certificazione-ISO-27001.pdf',
+          href: 'https://www.pagopa.it/static/e1979a4c34b4756ec4e8ff9fe115b92a/Certificazine_ISO27001.pdf',
           ariaLabel: 'Vai al link: Certificazioni',
           linkType: 'internal',
         },
