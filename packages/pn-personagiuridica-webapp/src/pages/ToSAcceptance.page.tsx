@@ -88,10 +88,10 @@ const TermsOfService = ({ isFirstAccept, consentVersion }: TermsOfServiceProps) 
                 <Trans
                   ns={'common'}
                   i18nKey={'tos.switch-label'}
-                  components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
+                  components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
                 >
-                  Accetto i <TosLink>Termini e condizioni d’uso del servizio</TosLink>e confermo di
-                  avere letto <PrivacyLink>l’Informativa Privacy</PrivacyLink>.
+                  Accetto l’<PrivacyLink>Informativa Privacy</PrivacyLink> e i
+                  <TosLink>Termini e condizioni d’uso </TosLink> di Piattaforma Notifiche.
                 </Trans>
               </Typography>
             </Box>
