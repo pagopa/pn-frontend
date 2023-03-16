@@ -47,7 +47,7 @@ import {
 } from './NotificationDetail';
 import { CardElement, CardSort, CardAction } from './ItemsCard';
 import { MessageType } from './MessageType';
-import { BasicUser, basicNoLoggedUserData } from './User';
+import { BasicUser, basicNoLoggedUserData, ConsentUser } from './User';
 import { EventsType } from './MixpanelEvents';
 import { AppResponse, ServerResponseError, ErrorMessage } from './AppResponse';
 
@@ -73,6 +73,7 @@ export type {
   AnalogWorkflowDetails,
   AppStatusData,
   BasicUser,
+  ConsentUser,
   CardAction,
   CardElement,
   CardSort,

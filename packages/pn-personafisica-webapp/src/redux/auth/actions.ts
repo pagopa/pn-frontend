@@ -7,6 +7,7 @@ import { User } from './types';
 
 export enum AUTH_ACTIONS {
   GET_TOS_APPROVAL = 'getToSApproval',
+  GET_PRIVACY_APPROVAL = 'getPrivacyApproval',
 }
 
 /**
@@ -56,6 +57,11 @@ export const getToSApproval = createAsyncThunk<Consent>(
   performThunkAction(() => ConsentsApi.getConsentByType(ConsentType.TOS))
 );
 
+export const getPrivacyApproval = createAsyncThunk<Consent>(
+  AUTH_ACTIONS.GET_PRIVACY_APPROVAL,
+  performThunkAction(() => ConsentsApi.getConsentByType(ConsentType.DATAPRIVACY))
+);
+
 export const acceptToS = createAsyncThunk<string, string>(
   'acceptToS',
   performThunkAction((consentVersion: string) => {
@@ -63,5 +69,15 @@ export const acceptToS = createAsyncThunk<string, string>(
       action: ConsentActionType.ACCEPT,
     };
     return ConsentsApi.setConsentByType(ConsentType.TOS, consentVersion, body);
+  })
+);
+
+export const acceptPrivacy = createAsyncThunk<string, string>(
+  'acceptPrivacy',
+  performThunkAction((consentVersion: string) => {
+    const body = {
+      action: ConsentActionType.ACCEPT,
+    };
+    return ConsentsApi.setConsentByType(ConsentType.DATAPRIVACY, consentVersion, body);
   })
 );
