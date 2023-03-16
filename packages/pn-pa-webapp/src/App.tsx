@@ -50,7 +50,7 @@ const App = () => {
   const loggedUserOrganizationParty = useAppSelector(
     (state: RootState) => state.userState.organizationParty
   );
-  const { tos } = useAppSelector((state: RootState) => state.userState);
+  const { tosConsent, privacyConsent } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
 
   const dispatch = useAppDispatch();
@@ -248,7 +248,13 @@ const App = () => {
             />
           )
         }
-        showSideMenu={!!sessionToken && tos && !hasFetchOrganizationPartyError && !isPrivacyPage}
+        showSideMenu={
+          !!sessionToken &&
+          tosConsent && tosConsent.accepted &&
+          privacyConsent && privacyConsent.accepted &&
+          !hasFetchOrganizationPartyError &&
+          !isPrivacyPage
+        }
         productsList={productsList}
         productId={'0'}
         partyList={partyList}

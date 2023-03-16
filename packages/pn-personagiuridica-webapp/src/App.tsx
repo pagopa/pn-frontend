@@ -51,7 +51,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
+  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector((state: RootState) => state.userState);
   const currentStatus = useAppSelector((state: RootState) => state.appStatus.currentStatus);
   const { pathname } = useLocation();
   const path = pathname.split('/');
@@ -228,10 +228,21 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!!sessionToken && tos && fetchedTos && !isPrivacyPage}
+        showSideMenu={
+          !!sessionToken &&
+          tosConsent &&
+          tosConsent.accepted &&
+          fetchedTos &&
+          privacyConsent &&
+          privacyConsent.accepted &&
+          fetchedPrivacy &&
+          !isPrivacyPage
+        }
         productsList={productsList}
         productId={'0'}
-        showHeaderProduct={tos}
+        showHeaderProduct={
+          tosConsent && tosConsent.accepted && privacyConsent && privacyConsent.accepted
+        }
         loggedUser={jwtUser}
         onLanguageChanged={changeLanguageHandler}
         onAssistanceClick={handleAssistanceClick}
