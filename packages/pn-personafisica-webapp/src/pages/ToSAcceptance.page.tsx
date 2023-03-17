@@ -68,7 +68,16 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
   return (
     <LoadingPageWrapper isInitialized>
       <Grid container height="100%" justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
-        <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
+        <Grid
+          item
+          xs={10}
+          sm={8}
+          md={6}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexDirection="column"
+        >
           <TOSAgreement
             productName={t('tos.title', 'Piattaforma Notifiche')}
             description={t(
