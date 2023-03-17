@@ -18,6 +18,7 @@ import {
   formatToTimezoneString,
   getValidValue,
   GetNotificationsParams,
+  dateIsDefined,
 } from '@pagopa-pn/pn-commons';
 
 import { useAppSelector } from '../../redux/hooks';
@@ -72,33 +73,6 @@ const initialValues = (
 };
 
 
-// the formik validations (which control the enable status of the "filtra" button)
-// must coincide with the input field validations (which control the color of the frame around each field)
-const dateFieldsValidation = {
-  // startDate cannot be earlier than 10 years ago
-  startDate: yup.date().min(tenYearsAgo).test({
-    name: 'notInFuture-start',
-    test(value) {
-      return !value || value.getTime() <= today.getTime();
-    }
-  }),
-  // endDate cannot be earlier than 10 years ago
-  endDate: yup.date().min(tenYearsAgo).test({
-    name: 'notInFuture-end',
-    test(value) {
-      return !value || value.getTime() <= today.getTime();
-    }
-  // endDate cannot be earlier than start date
-  }).test({
-    name: 'notBeforeStart-end',
-    test(value) {
-      const startDate = this.parent.startDate as Date;
-      return !startDate || !value || value.getTime() >= startDate.getTime();
-    }
-  }),
-};
-
-
 const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props, ref) => {
   const dispatch = useDispatch();
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
@@ -117,7 +91,12 @@ const FilterNotifications = forwardRef(({ showFilters, currentDelegator }: Props
 
   const validationSchema = yup.object({
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
-    ...dateFieldsValidation,
+    // the formik validations for dates (which control the enable status of the "filtra" button)
+    // must coincide with the input field validations (which control the color of the frame around each field)
+    startDate: yup.date().min(tenYearsAgo).max(today),
+    endDate: yup.date()
+      .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
+      .max(today)
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);

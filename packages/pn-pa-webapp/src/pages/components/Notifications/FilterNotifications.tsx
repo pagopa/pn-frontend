@@ -18,6 +18,7 @@ import {
   formatToTimezoneString,
   GetNotificationsParams,
   dataRegex,
+  dateIsDefined,
 } from '@pagopa-pn/pn-commons';
 
 import { setNotificationFilters } from '../../../redux/dashboard/reducers';
@@ -69,32 +70,6 @@ function isFilterapplied(filtersCount: number): boolean {
 
 const getValidStatus = (status: string) => (status === 'All' ? '' : status);
 
-// the formik validations (which control the enable status of the "filtra" button)
-// must coincide with the input field validations (which control the color of the frame around each field)
-const dateFieldsValidation = {
-  // startDate cannot be earlier than 10 years ago
-  startDate: yup.date().min(tenYearsAgo).test({
-    name: 'notInFuture-start',
-    test(value) {
-      return !value || value.getTime() <= today.getTime();
-    }
-  }),
-  // endDate cannot be earlier than 10 years ago
-  endDate: yup.date().min(tenYearsAgo).test({
-    name: 'notInFuture-end',
-    test(value) {
-      return !value || value.getTime() <= today.getTime();
-    }
-  // endDate cannot be earlier than start date
-  }).test({
-    name: 'notBeforeStart-end',
-    test(value) {
-      const startDate = this.parent.startDate as Date;
-      return !startDate || !value || value.getTime() >= startDate.getTime();
-    }
-  }),
-};
-
 
 const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
   const filters = useAppSelector((state: RootState) => state.dashboardState.filters);
@@ -112,7 +87,12 @@ const FilterNotifications = forwardRef(({ showFilters }: Props, ref) => {
         t('filters.errors.fiscal-code', { ns: 'notifiche' })
       ),
     iunMatch: yup.string().matches(IUN_regex, t('filters.errors.iun', { ns: 'notifiche' })),
-    ...dateFieldsValidation,
+    // the formik validations for dates (which control the enable status of the "filtra" button)
+    // must coincide with the input field validations (which control the color of the frame around each field)
+    startDate: yup.date().min(tenYearsAgo).max(today),
+    endDate: yup.date()
+      .min(dateIsDefined(startDate) ? startDate : tenYearsAgo)
+      .max(today)
   });
 
   const [prevFilters, setPrevFilters] = useState(filters || emptyValues);
