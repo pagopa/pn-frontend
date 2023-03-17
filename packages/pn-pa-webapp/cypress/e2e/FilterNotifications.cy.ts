@@ -32,7 +32,10 @@ describe('Filter Notifications', () => {
       statusCode: 200,
       fixture: 'tos/tos-accepted',
     });
-
+    cy.intercept(/DATAPRIVACY/, {
+      statusCode: 200,
+      fixture: 'tos/privacy-accepted',
+    });
     cy.loginWithTokenExchange();
     cy.visit('/dashboard');
   });

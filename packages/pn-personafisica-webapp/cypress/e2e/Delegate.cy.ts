@@ -38,7 +38,10 @@ describe('Delegation', () => {
       statusCode: 200,
       fixture: 'tos/tos-accepted'
     });
-
+    cy.intercept(/DATAPRIVACY/, {
+      statusCode: 200,
+      fixture: 'tos/privacy-accepted'
+    });
     cy.login();
     cy.visit(NOTIFICHE);
   });
@@ -106,13 +109,13 @@ describe('Delegation', () => {
       verificationCode.split('').forEach((code, i) =>
         cy.get(`:nth-child(${i + 1}) > .MuiInputBase-root > #outlined-basic`).type(code)
       );
-      cy.intercept(`${DELEGATIONS_BY_DELEGATE()}`, {
-        fixture: 'delegations/mandates-by-delegate-after-activation',
-      }).as('getDelegatesAfterActivation');
       cy.intercept('PATCH',`${ACCEPT_DELEGATION('af02d543-c67e-4c64-8259-4f7ac12249fd')}`, {
         statusCode: 204,
         fixture: 'delegations/accept-delegation-response'
       }).as('acceptDelegation');
+      cy.intercept(`${DELEGATIONS_BY_DELEGATE()}`, {
+        fixture: 'delegations/mandates-by-delegate-after-activation',
+      }).as('getDelegatesAfterActivation');
       cy.get('.MuiDialogActions-root > .MuiButton-contained').click();
       cy.wait('@acceptDelegation').its('request.body').should('deep.equal', {
         verificationCode: '25622'
