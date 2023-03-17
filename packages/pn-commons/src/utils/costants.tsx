@@ -2,6 +2,8 @@ import { FooterLinksType, Languages, PreLoginFooterLinksType } from '@pagopa/mui
 
 import { getLocalizedOrDefaultLabel } from '../services/localization.service';
 
+declare const OneTrust: any;
+
 export const LANGUAGES: Languages = {
   it: { it: 'Italiano', en: 'Inglese' },
   en: { it: 'Italian', en: 'English' },
@@ -127,7 +129,7 @@ export const preLoginLinks = (
         {
           ...getFooterLinkLabels('cookie', 'Preferenze Cookie'),
           ariaLabel: 'Vai al link: Preferenze Cookie',
-          href: 'https://privacyportal-de.onetrust.com/webform/77f17844-04c3-4969-a11d-462ee77acbe1/9ab6533d-be4a-482e-929a-0d8d2ab29df8',
+          onClick: () => OneTrust.ToggleInfoDisplay(),
           linkType: 'internal',
         },
         {
