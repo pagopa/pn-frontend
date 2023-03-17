@@ -1,16 +1,12 @@
-import { ReactNode } from 'react';
 import { appStateSelectors, LoadingOverlay, LoadingPage } from '@pagopa-pn/pn-commons';
 import { useAppSelector } from '../../redux/hooks';
 
-const LoadingPageWrapper = ({
-  children,
+const LoadingPageWrapper: React.FC<{ isInitialized?: boolean }> = ({
   isInitialized = false,
-}: {
-  children: ReactNode;
-  isInitialized?: boolean;
+  children,
 }) => {
   const loading = useAppSelector(appStateSelectors.selectLoading);
-  
+
   return (
     <>
       {!isInitialized && (

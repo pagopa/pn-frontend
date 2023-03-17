@@ -7,7 +7,14 @@ import {
 } from '@pagopa-pn/pn-commons';
 import { createSlice } from '@reduxjs/toolkit';
 import * as yup from 'yup';
-import { acceptPrivacy, acceptToS, exchangeToken, getPrivacyApproval, getToSApproval, logout } from './actions';
+import {
+  acceptPrivacy,
+  acceptToS,
+  exchangeToken,
+  getPrivacyApproval,
+  getToSApproval,
+  logout,
+} from './actions';
 import { User } from './types';
 
 const userDataMatcher = yup

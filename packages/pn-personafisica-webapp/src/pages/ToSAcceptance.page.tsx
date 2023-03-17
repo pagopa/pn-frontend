@@ -3,9 +3,12 @@ import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Link, Switch, Typography } from '@mui/material';
 import { TOSAgreement } from '@pagopa/mui-italia';
-import { PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from '@pagopa-pn/pn-commons';
+import {
+  PRIVACY_LINK_RELATIVE_PATH,
+  TOS_LINK_RELATIVE_PATH,
+  ConsentUser,
+} from '@pagopa-pn/pn-commons';
 
-import { ConsentUser } from '@pagopa-pn/pn-commons';
 import { useAppDispatch } from '../redux/hooks';
 import { acceptPrivacy, acceptToS } from '../redux/auth/actions';
 import * as routes from '../navigation/routes.const';
@@ -67,8 +70,13 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
 
   return (
     <LoadingPageWrapper isInitialized>
-      <Grid container height="100%" justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
-        <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
+      <Grid
+        container
+        sx={{ backgroundColor: '#FAFAFA', height: '100%' }}
+        justifyContent="center"
+        alignContent="center"
+      >
+        <Grid item xs={10} sm={8} md={6}>
           <TOSAgreement
             productName={t('tos.title', 'Piattaforma Notifiche')}
             description={t(
@@ -91,10 +99,10 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
                 <Trans
                   ns={'common'}
                   i18nKey={'tos.switch-label'}
-                  components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
+                  components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
                 >
-                  Accetto i <TosLink>Termini e condizioni d’uso del servizio</TosLink>e confermo di
-                  avere letto <PrivacyLink>l’Informativa Privacy</PrivacyLink>.
+                  Accetto l’<PrivacyLink>Informativa Privacy</PrivacyLink> e i
+                  <TosLink>Termini e condizioni d’uso </TosLink> di Piattaforma Notifiche.
                 </Trans>
               </Typography>
             </Box>
