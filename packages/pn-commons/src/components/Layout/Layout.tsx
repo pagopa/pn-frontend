@@ -102,7 +102,10 @@ export default function Layout({
                 {sideMenu}
               </Box>
             )}
-            <Box sx={{ height: '100%', flex: '1 1 0', position: 'relative' }} component="main">
+            <Box
+              sx={{ flexGrow: 1, flexBasis: { xs: 1, lg: 'auto' }, position: 'relative' }}
+              component="main"
+            >
               <ErrorBoundary eventTrackingCallback={eventTrackingCallbackAppCrash}>
                 {children}
               </ErrorBoundary>
