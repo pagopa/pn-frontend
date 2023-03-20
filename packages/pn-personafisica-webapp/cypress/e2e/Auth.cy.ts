@@ -4,6 +4,10 @@ describe('Auth', () => {
       statusCode: 200,
       fixture: 'tos/tos-accepted'
     });
+    cy.intercept(/DATAPRIVACY/, {
+      statusCode: 200,
+      fixture: 'tos/privacy-accepted'
+    });
   });
 
   it('Should login properly through UI', () => {

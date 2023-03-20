@@ -10,6 +10,7 @@ import {
   formatDate,
   formatToSlicedISOString,
   formatDateTime,
+  dateIsDefined,
 } from '../date.utility';
 
 const dateString = '2022-02-22T14:20:20.566Z';
@@ -44,6 +45,7 @@ describe('Date utility', () => {
     const localizedHour = String(new Date(date).getHours()).padStart(2, '0');
     expect(timeFormatted).toEqual(`16/02/2022, ${label} ${localizedHour}:03`);
   });
+
   it('return month string, uppercase and truncated to the first three letters', () => {
     const month = formatMonthString(dateString);
     const expectedMonth = date
@@ -70,6 +72,19 @@ describe('Date utility', () => {
     const label = getLocalizedOrDefaultLabel('common', 'date-time.hour-of-day', 'ore');
     const expectedTime = `${label} ${date.getHours()}:${date.getMinutes()}`;
     expect(time).toBe(expectedTime);
+  });
+
+  it('date is defined - sound date', () => {
+    expect(dateIsDefined(date)).toBeTruthy();
+  });
+
+  it('date is defined - wrong date', () => {
+    const wrongDate = new Date('2022-99-99T14:20:20.566Z');
+    expect(dateIsDefined(wrongDate)).toBeFalsy();
+  });
+
+  it('date is defined - no date', () => {
+    expect(dateIsDefined(null)).toBeFalsy();
   });
 
   it('return next day', () => {

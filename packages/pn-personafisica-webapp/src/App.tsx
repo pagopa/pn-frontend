@@ -60,7 +60,7 @@ const App = () => {
   const dispatch = useAppDispatch();
   const { t, i18n } = useTranslation(['common', 'notifiche']);
   const loggedUser = useAppSelector((state: RootState) => state.userState.user);
-  const { tos, fetchedTos } = useAppSelector((state: RootState) => state.userState);
+  const { tosConsent, fetchedTos, privacyConsent, fetchedPrivacy } = useAppSelector((state: RootState) => state.userState);
   const { pendingDelegators, delegators } = useAppSelector(
     (state: RootState) => state.generalInfoState
   );
@@ -99,8 +99,10 @@ const App = () => {
       onClick: () => handleUserLogout(),
       icon: <LogoutRoundedIcon fontSize="small" color="inherit" />,
     };
-    return tos ? [profiloAction, logoutAction] : [logoutAction];
-  }, [tos]);
+    return tosConsent && tosConsent.accepted && privacyConsent && privacyConsent.accepted
+      ? [profiloAction, logoutAction]
+      : [logoutAction];
+  }, [tosConsent, privacyConsent]);
 
   useUnload(() => {
     trackEventByType(TrackEventType.APP_UNLOAD);
@@ -254,9 +256,20 @@ const App = () => {
             }
           />
         }
-        showSideMenu={!!sessionToken && tos && fetchedTos && !isPrivacyPage}
+        showSideMenu={
+          !!sessionToken &&
+          tosConsent &&
+          tosConsent.accepted &&
+          fetchedTos &&
+          privacyConsent &&
+          privacyConsent.accepted &&
+          fetchedPrivacy &&
+          !isPrivacyPage
+        }
         productsList={productsList}
-        showHeaderProduct={tos}
+        showHeaderProduct={
+          tosConsent && tosConsent.accepted && privacyConsent && privacyConsent.accepted
+        }
         loggedUser={jwtUser}
         enableUserDropdown
         userActions={userActions}
