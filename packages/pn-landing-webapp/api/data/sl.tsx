@@ -66,7 +66,7 @@ const heroCta = !!PN_URL
 const paHero: HeroProps = {
   type: "image",
   title: "Pošiljanje obvestil? Lažje rečeno kot storjeno.",
-  subtitle: `Od danes pa tudi storjeno. Piattaforma Notifiche digitalizira upravljanje komunikacij s pravno vrednostjo in 
+  subtitle: `Od danes pa tudi storjeno. SEND digitalizira upravljanje komunikacij s pravno vrednostjo in 
     poenostavlja postopek za vse: pošiljatelje in prejemnike.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
@@ -77,7 +77,7 @@ const paHero: HeroProps = {
 const pfHero: HeroProps = {
   type: "image",
   title: "Kaj pa obvestila? Imaš jih na dosegu roke.",
-  subtitle: `S platformo Piattaforma Notifiche lahko takoj prejmeš sporočila s pravno vrednostjo, ki jih pošlje določena 
+  subtitle: `S platformo SEND lahko takoj prejmeš sporočila s pravno vrednostjo, ki jih pošlje določena 
     ustanova: lahko si ogledaš, upravljaš in plačaš neposredno na spletu ali v aplikaciji. In to velja za vsa priporočena 
     pisma, ki jih običajno prejmeš v papirni obliki.`,
   ctaPrimary: heroCta,
@@ -104,12 +104,12 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche digitalizira in poenostavlja upravljanje komunikacij s pravno vrednostjo.
+            SEND digitalizira in poenostavlja upravljanje komunikacij s pravno vrednostjo.
             Vse, kar morajo storiti ustanove pošiljateljice, je vložiti dokument za vročitev: platforma pa
             bo poskrbela za pošiljanje, v digitalni ali analogni obliki.
           </Typography>
           <Typography variant="body2">
-            S platformo Piattaforma Notifiche za obveščanje se zmanjša negotovost glede dosegljivosti
+            S platformo SEND za obveščanje se zmanjša negotovost glede dosegljivosti
             prejemnikov, zmanjšajo pa se tudi čas in stroški upravljanja.
           </Typography>
         </>
@@ -127,7 +127,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche se integrira s protokolom ustanov in ponuja API za samodejno pošiljanje
+            SEND se integrira s protokolom ustanov in ponuja API za samodejno pošiljanje
             obvestil, kot tudi možnost ročnega pošiljanja. Ko so dokumenti in plačilni obrazci naloženi,
             platforma ustvari IUN, edinstveno identifikacijsko kodo obvestila.
           </Typography>
@@ -179,7 +179,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Trenutno lahko institucije začnejo tehnične dejavnosti, potrebne za integracijo v Piattaforma Notifiche.
+            Trenutno lahko institucije začnejo tehnične dejavnosti, potrebne za integracijo v SEND.
           </Typography>
 
           <Typography variant="body2">
@@ -236,7 +236,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
             Obvestila so sporočila s pravno vrednostjo, ki jih uradno izda upravni organ, kot so globe,
             obvestila o odmeri davka, rezultati upravnih postopkov, sproženih pri javnih upravah ali
             povračila, ki si jih do sedaj vedno prejel s priporočeno pošto. Od danes jih lahko prejmeš
-            in si jih ogledaš v digitalni obliki, in sicer z dostopom do platforme Piattaforma Notifiche
+            in si jih ogledaš v digitalni obliki, in sicer z dostopom do platforme SEND
             z uporabo digitalnih identitet SPID ali CIE ali neposredno v aplikaciji IO.
           </Typography>
           <Typography variant="body2">
@@ -259,7 +259,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Za pošiljanje sporočil s pravno vrednostjo Piattaforma Notifiche da vedno prednost digitalnim
+            Za pošiljanje sporočil s pravno vrednostjo SEND da vedno prednost digitalnim
             podatkom za stik prejemnika. Z uporabo digitalnih identitet SPID ali CIE lahko kadarkoli
             dostopaš do platforme ter posodobiš svoje nastavitve z izbiro med PEC, aplikacijo IO, e-pošto
             ali SMS. Če ne navedeš nobenih podatkov za stik ali nimaš dostopa do platforme, boš obvestila
@@ -279,7 +279,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Trenutno je Piattaforma Notifiche v fazi preizkusa, v katerem sodelujejo le nekatere upravne ustanove.
+            Trenutno je SEND v fazi preizkusa, v katerem sodelujejo le nekatere upravne ustanove.
           </Typography>
           <Typography variant="body2">
             Postopoma bodo javne uprave sprejele platformo in jo uporabljale za pošiljanje obvestil vsem državljanom.
@@ -397,7 +397,7 @@ const pfShowcases: Array<IShowcaseData> = [
             <Typography variant="body2">
               Če imaš naslov PEC, bodo obvestila dostavljena zakonito, brez dodatnih priporočenih
               pisem v papirni obliki. Obvestilo o prejemu, ki bo poslano, vsebuje povezavo za dostop
-              do vsebine na platformi Piattaforma Notifiche.
+              do vsebine na platformi SEND.
             </Typography>
           ),
         },
@@ -410,7 +410,7 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "Aplikacija IO",
           subtitle: (
             <Typography variant="body2">
-              Če aktiviraš storitev »Digitalna obvestila« na platformi Piattaforma Notifiche, lahko
+              Če aktiviraš storitev »Digitalna obvestila« na platformi SEND, lahko
               prejmeš in upravljaš sporočila s pravno vrednostjo <strong>neposredno v aplikaciji.</strong>{" "}
               Če nimaš naslova PEC in takoj prebereš sporočilo, ne boš prejel priporočenega pisma v
               papirni obliki, obvestilo pa bo zakonito vročeno.
@@ -476,7 +476,7 @@ const paWalkthrough: WalkthroughProps = {
     {
       icon: <SyncIcon color="primary" />,
       title: "Platforma to prevzame",
-      subtitle: `Piattaforma Notifiche preveri popolnost in pravilnost informacij. Ob vsaki spremembi stanja obvestila
+      subtitle: `SEND preveri popolnost in pravilnost informacij. Ob vsaki spremembi stanja obvestila
                       se vedno ustvari tudi ustrezno potrdilo, izvršljivo zoper tretje osebe.`,
     },
     {

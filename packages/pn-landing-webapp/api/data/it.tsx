@@ -54,7 +54,7 @@ const onReadClick = () => {
 };
 
 const navigation: INavigationBarProps = {
-  title: "Piattaforma Notifiche",
+  title: "SEND - Servizio Notifiche Digitali",
   chip: "Beta",
   pf: "Cittadini",
   pa: "Enti"
@@ -75,7 +75,7 @@ const heroCta = !!PN_URL
 const paHero: HeroProps = {
   type: "image",
   title: "Inviare notifiche? Facile a dirsi.",
-  subtitle: `E da oggi anche a farsi. Piattaforma Notifiche digitalizza la gestione delle comunicazioni a valore legale, 
+  subtitle: `E da oggi anche a farsi. SEND digitalizza la gestione delle comunicazioni a valore legale, 
     semplificando il processo per tutti: chi le invia, e chi le riceve.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
@@ -105,7 +105,7 @@ const paHero: HeroProps = {
 const pfHero: HeroProps = {
   type: "image",
   title: "Le notifiche? Sono a portata di mano.",
-  subtitle: `Con Piattaforma Notifiche puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
+  subtitle: `Con SEND puoi ricevere istantaneamente le comunicazioni a valore legale da parte di un ente: 
     potrai visualizzare, gestire e pagare direttamente online o in app le raccomandate che di solito ti vengono inviate in cartaceo.`,
   ctaPrimary: heroCta,
   inverse: false,
@@ -131,13 +131,13 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche digitalizza e semplifica la gestione delle
+            SEND digitalizza e semplifica la gestione delle
             comunicazioni a valore legale. Gli enti mittenti non devono che
             depositare l’atto da notificare: sarà la piattaforma a occuparsi
             dell’invio, per via digitale o analogica.
           </Typography>
           <Typography variant="body2">
-            Con Piattaforma Notifiche, diminuisce l’incertezza della
+            Con SEND, diminuisce l’incertezza della
             reperibilità dei destinatari e si riducono i tempi e i costi di
             gestione.
           </Typography>
@@ -156,7 +156,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche si integra con il protocollo degli enti e
+            SEND si integra con il protocollo degli enti e
             offre sia API per l’invio automatico delle notifiche, sia la
             possibilità di fare invii manuali. Una volta effettuato il
             caricamento degli atti e dei moduli di pagamento, la piattaforma
@@ -215,7 +215,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            La procedura per avviare le attività tecniche e amministrative necessarie per l’adesione e l’integrazione degli enti a Piattaforma Notifiche, prevede le seguenti fasi:
+            La procedura per avviare le attività tecniche e amministrative necessarie per l’adesione e l’integrazione degli enti a SEND, prevede le seguenti fasi:
           </Typography>
 
           <Typography variant="h6">01. Scegli come integrarti</Typography>
@@ -228,7 +228,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
             e di cui è possibile avvalersi per un supporto nella gestione degli aspetti tecnici.
           </Typography>
           <Typography variant="caption">
-            I soggetti che intendono integrarsi alla Piattaforma Notifiche in qualità di Partner o Intermediari Tecnologici possono manifestare il proprio interesse ad avviare
+            I soggetti che intendono integrarsi alla SEND in qualità di Partner o Intermediari Tecnologici possono manifestare il proprio interesse ad avviare
             la procedura ed essere inseriti nella lista inviando una mail all’indirizzo account@pagopa.it.
           </Typography>
           <Typography variant="h6">02. Sottoscrivi l’accordo di adesione</Typography>
@@ -344,7 +344,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
             di tributi, esiti di pratiche amministrative avviate con le
             Pubbliche Amministrazioni o rimborsi, che fino ad ora hai sempre
             ricevuto tramite raccomandata. Da oggi puoi riceverle e consultarle
-            in digitale, accedendo a Piattaforma Notifiche tramite SPID o CIE o
+            in digitale, accedendo a SEND tramite SPID o CIE o
             direttamente sull’app IO.
           </Typography>
           <Typography variant="body2">
@@ -367,7 +367,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Per inviare le comunicazioni a valore legale, Piattaforma Notifiche
+            Per inviare le comunicazioni a valore legale, SEND
             dà sempre la priorità ai recapiti digitali del destinatario. In ogni
             momento, puoi accedere alla piattaforma con SPID e CIE per indicare
             o aggiornare le tue preferenze tra PEC, App IO, email o SMS. Se non
@@ -388,7 +388,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Attualmente, Piattaforma Notifiche è oggetto di collaudo con un
+            Attualmente, SEND è oggetto di collaudo con un
             numero ristretto di amministrazioni.
           </Typography>
           <Typography variant="body2">
@@ -510,7 +510,7 @@ const pfShowcases: Array<IShowcaseData> = [
               Se hai un indirizzo PEC, le notifiche ti risulteranno legalmente
               consegnate, senza più raccomandate cartacee. L’avviso di avvenuta
               ricezione che ti sarà inviato contiene il link per accedere al
-              contenuto su Piattaforma Notifiche.
+              contenuto su SEND.
             </Typography>
           ),
         },
@@ -592,7 +592,7 @@ const paWalkthrough: WalkthroughProps = {
     {
       icon: <SyncIcon color="primary" />,
       title: "La piattaforma la prende in carico",
-      subtitle: `Piattaforma Notifiche verifica la completezza e correttezza delle informazioni. Ad ogni cambio di 
+      subtitle: `SEND verifica la completezza e correttezza delle informazioni. Ad ogni cambio di 
         stato, viene sempre generata la relativa attestazione opponibile a terzi.`,
     },
     {

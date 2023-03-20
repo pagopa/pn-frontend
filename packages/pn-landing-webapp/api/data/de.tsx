@@ -48,7 +48,7 @@ const onReadClick = () => {
 };
 
 const navigation: INavigationBarProps = {
-  title: "Piattaforma Notifiche",
+  title: "SEND - Servizio Notifiche Digitali",
   chip: "Beta",
   pf: "Bürger",
   pa: "Einrichtungen",
@@ -67,7 +67,7 @@ const heroCta = !!PN_URL
 const paHero: HeroProps = {
   type: "image",
   title: "Bescheide senden? Das ist leicht gesagt",
-  subtitle: `Und ab heute auch zu tun. Piattaforma Notifiche digitalisiert die Verwaltung rechtlicher Kommunikation und 
+  subtitle: `Und ab heute auch zu tun. SEND digitalisiert die Verwaltung rechtlicher Kommunikation und 
     vereinfacht den Prozess für alle: für diejenigen, die sie versenden, und für diejenigen, die sie erhalten.`,
   inverse: false,
   image: `${IMAGES_PATH}/pa-hero-foreground.png`,
@@ -78,7 +78,7 @@ const paHero: HeroProps = {
 const pfHero: HeroProps = {
   type: "image",
   title: "Bescheide? Sind zum Greifen nah.",
-  subtitle: `Mit Piattaforma Notifiche kannst du rechtliche Mitteilungen einer Organisation sofort erhalten: Du kannst 
+  subtitle: `Mit SEND kannst du rechtliche Mitteilungen einer Organisation sofort erhalten: Du kannst 
   Einschreiben, die dir normalerweise in Papierform zugestellt werden, direkt online oder in der App einsehen, verwalten 
   und bezahlen.`,
   ctaPrimary: heroCta,
@@ -105,12 +105,12 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche digitalisiert und vereinfacht die Verwaltung von rechtlicher Kommunikation.
+            SEND digitalisiert und vereinfacht die Verwaltung von rechtlicher Kommunikation.
             Die übermittelnden Stellen müssen lediglich das zuzustellende Dokument hinterlegen: Die Plattform
             sorgt für den Versand, entweder digital oder analog.
           </Typography>
           <Typography variant="body2">
-            Mit Piattaforma Notifiche wird die Ungewissheit hinsichtlich der Erreichbarkeit von Empfängern
+            Mit SEND wird die Ungewissheit hinsichtlich der Erreichbarkeit von Empfängern
             verringert und der Verwaltungsaufwand und die Kosten werden reduziert.
           </Typography>
         </>
@@ -128,7 +128,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Piattaforma Notifiche integriert sich in das Protokoll der Behörden und bietet sowohl APIs für
+            SEND integriert sich in das Protokoll der Behörden und bietet sowohl APIs für
             den automatischen Versand von Bescheiden als auch die Möglichkeit, manuelle Sendungen zu tätigen.
             Nach dem Hochladen der Zahlungsunterlagen und -formulare generiert die Plattform die UIN (Unique
             Identification Number), einen eindeutigen Identifikationscode für den Bescheid.
@@ -182,7 +182,7 @@ const paInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Derzeit können Institutionen die technische Arbeit initiieren, die für die Integration mit Piattaforma Notifiche erforderlich ist.
+            Derzeit können Institutionen die technische Arbeit initiieren, die für die Integration mit SEND erforderlich ist.
           </Typography>
           <Typography variant="body2">
             In der Zwischenzeit können Behörden:{" "}
@@ -264,7 +264,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Bei der Versendung von rechtlicher Kommunikation gibt Piattaforma Notifiche immer den digitalen Adressen der
+            Bei der Versendung von rechtlicher Kommunikation gibt SEND immer den digitalen Adressen der
             Empfänger den Vorrang. Du kannst jederzeit mit SPID und CIE auf die Plattform zugreifen, um deine Präferenzen
             zwischen PEC, App IO, E-Mail oder SMS anzugeben oder zu aktualisieren. Wenn du keine Adresse angibst oder
             keinen Zugang zur Plattform hast, erhältst du die Bescheide weiterhin per Einschreiben in Papierform.
@@ -283,7 +283,7 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       content: (
         <>
           <Typography variant="body2">
-            Derzeit wird Piattaforma Notifiche mit einer kleinen Anzahl von Verwaltungen getestet.
+            Derzeit wird SEND mit einer kleinen Anzahl von Verwaltungen getestet.
           </Typography>
           <Typography variant="body2">
             Nach und nach wird die Plattform von den öffentlichen Verwaltungen übernommen und für die Übermittlung von
@@ -402,7 +402,7 @@ const pfShowcases: Array<IShowcaseData> = [
             <Typography variant="body2">
               Wenn du eine PEC-Adresse hast, werden dir die Bescheide rechtmäßig zugestellt, und es gibt keine Einschreiben
               in Papierform mehr. Die dir zugesandte Empfangsbestätigung enthält den Link, über den du auf den Inhalt auf
-              Piattaforma Notifiche zugreifen kannst.
+              SEND zugreifen kannst.
             </Typography>
           ),
         },
@@ -415,7 +415,7 @@ const pfShowcases: Array<IShowcaseData> = [
           title: "IO-App",
           subtitle: (
             <Typography variant="body2">
-              Wenn du den Dienst „Digitale Bescheide“ von Piattaforma Notifiche aktivierst, kannst du rechtliche Kommunikation{" "}
+              Wenn du den Dienst „Digitale Bescheide“ von SEND aktivierst, kannst du rechtliche Kommunikation{" "}
               <strong>direkt in der App</strong> erhalten und verwalten. Wenn du keine PEC hast und die Nachricht sofort liest,
               erhältst du kein Einschreiben in Papierform und der Bescheid wird rechtmäßig zugestellt.
             </Typography>
@@ -480,7 +480,7 @@ const paWalkthrough: WalkthroughProps = {
     {
       icon: <SyncIcon color="primary" />,
       title: "Die Plattform übernimmt sie",
-      subtitle: `Piattaforma Notifiche prüft die Vollständigkeit und Richtigkeit der Informationen. Bei jeder Statusänderung wird 
+      subtitle: `SEND prüft die Vollständigkeit und Richtigkeit der Informationen. Bei jeder Statusänderung wird 
         immer ein Zertifikat erstellt, das gegenüber Dritten geltend gemacht werden kann.`,
     },
     {

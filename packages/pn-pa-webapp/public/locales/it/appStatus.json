@@ -1,9 +1,9 @@
 {
   "appStatus": {
     "title": "Stato della piattaforma",
-    "subtitle": "Verifica il funzionamento di Piattaforma Notifiche, visualizza lo storico dei disservizi e scarica le relative attestazioni opponibili a terzi.",
+    "subtitle": "Verifica il funzionamento di SEND, visualizza lo storico dei disservizi e scarica le relative attestazioni opponibili a terzi.",
     "statusDescription": {
-      "ok": "Tutti i servizi di Piattaforma Notifiche sono operativi.",
+      "ok": "Tutti i servizi di SEND sono operativi.",
       "not-ok": "C'è un disservizio in corso. Per maggiori dettagli, consulta la tabella qui sotto."
     },
     "lastCheckLegend": "Ultimo aggiornamento - {{ lastCheckTimestamp }}"

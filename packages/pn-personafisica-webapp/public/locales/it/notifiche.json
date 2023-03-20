@@ -164,7 +164,7 @@
     },
     "help": {
       "goto": "Vai al sito",
-      "assistance": "Per problemi tecnici o domande relative a Piattaforma Notifiche, premi su “Assisistenza” in alto a destra."
+      "assistance": "Per problemi tecnici o domande relative a SEND, premi su “Assisistenza” in alto a destra."
     }
   },
   "delegatorTitle": "Le notifiche di {{name}}",

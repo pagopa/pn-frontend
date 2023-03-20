@@ -97,7 +97,7 @@ describe('App', () => {
     mockLayout = false;
   });
 
-  it('Piattaforma notifiche', () => {
+  it('SEND', () => {
     render(<Component/>, { preloadedState: reduxInitialState(false, false, false, false) });
     const welcomeElement = screen.getByText(/header.notification-platform/i);
     expect(welcomeElement).toBeInTheDocument();
