@@ -76,10 +76,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
       <Grid item xs={10} sm={8} md={6}>
         <TOSAgreement
           productName={t('tos.title', 'Piattaforma Notifiche')}
-          description={t(
-            tosConsent.isFirstAccept && privacyConsent.isFirstAccept ? 'tos.body' : 'tos.redo-body',
-            'Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.'
-          )}
+          description={<></>}
           onConfirm={handleAccept}
           confirmBtnLabel={t('tos.button', 'Accedi')}
         >
