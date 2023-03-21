@@ -96,7 +96,7 @@ describe('Notifications Table Component', () => {
     const tableBody = table.querySelector('tbody');
     const firstRow = tableBody!.querySelector('tr');
     const tableColumns = firstRow!.querySelectorAll('td');
-    fireEvent.click(tableColumns[2]);
+    fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
     expect(handleColumnClick).toBeCalledTimes(1);
     expect(handleColumnClick).toBeCalledWith(rows[0], columns[2]);
   });
