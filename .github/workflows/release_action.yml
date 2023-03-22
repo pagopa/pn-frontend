@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Create release branch
-        run: ./scripts/create_release_branch.sh -b $BASE_BRANCH -v $VERSION
+        run: ./.github/scripts/create_release_branch.sh -b $BASE_BRANCH -v $VERSION
         shell: bash
         env:
           BASE_BRANCH: develop
