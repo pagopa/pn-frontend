@@ -1,9 +1,5 @@
 name: Release branch action
 on:
-  push:
-    # Sequence of patterns matched against refs/heads
-    branches:
-      - feat/pn-4761
   schedule:
     # Runs "At 16:00 on Friday every two weeks"
     # - cron: '16 * * 5 [ $(expr $(date +%W) % 2) -eq 1 ]'
