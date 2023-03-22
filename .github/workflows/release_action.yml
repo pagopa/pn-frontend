@@ -20,7 +20,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Create release branch
         run: sudo ./.github/scripts/create_release_branch.sh -b $BASE_BRANCH -v $VERSION
-        shell: bash
+        # shell: bash
         env:
           BASE_BRANCH: develop
           VERSION: patch
