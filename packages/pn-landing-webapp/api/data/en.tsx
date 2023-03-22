@@ -48,7 +48,7 @@ const onReadClick = () => {
 };
 
 const navigation: INavigationBarProps = {
-  title: "Notifications Platform",
+  title: "Piattaforma Notifiche",
   chip: "Beta",
   pf: "The general public",
   pa: "Entities",
