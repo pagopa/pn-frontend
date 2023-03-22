@@ -18,8 +18,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: feat/pn-4761
       - name: Create release branch
         run: ./scripts/create_release_branch.sh -b $BASE_BRANCH -v $VERSION
         shell: bash
