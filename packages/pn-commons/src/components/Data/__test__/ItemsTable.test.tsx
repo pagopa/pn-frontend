@@ -22,6 +22,7 @@ const columns: Array<Column> = [
     width: '50%',
     getCellLabel: (value: string) => value,
     onClick: handleColumnClick,
+    disableAccessibility: true
   },
 ];
 
@@ -99,5 +100,21 @@ describe('Notifications Table Component', () => {
     fireEvent.click(tableColumns[2].querySelectorAll('button')[0]);
     expect(handleColumnClick).toBeCalledTimes(1);
     expect(handleColumnClick).toBeCalledWith(rows[0], columns[2]);
+  });
+
+  it('disable accessibility navigation on a column', () => {
+    render(
+      <ItemsTable
+        columns={columns}
+        rows={rows}
+        sort={sort}
+      />
+    );
+    const table = screen.getByRole('table');
+    const tableBody = table.querySelector('tbody');
+    const firstRow = tableBody!.querySelector('tr');
+    const tableColumns = firstRow!.querySelectorAll('td');
+    const button = tableColumns[2].querySelectorAll('button')[0]
+    expect(button).toHaveAttribute('tabIndex', '-1');
   });
 });

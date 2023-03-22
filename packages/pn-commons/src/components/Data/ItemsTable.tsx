@@ -115,6 +115,7 @@ function ItemsTable<ColumnId extends string>({
                   >
                     {column.onClick && (
                       <ButtonNaked
+                        tabIndex={column.disableAccessibility ? -1 : 0}
                         sx={buttonNakedInheritStyle}
                         onClick={() => column.onClick && column.onClick(row, column)}
                       >

@@ -15,6 +15,7 @@ export interface Column<ColumnId> {
   sortable?: boolean;
   getCellLabel(value: string | number | Array<string | ReactNode>, row?: Item): ReactNode;
   onClick?(row: Item, column: Column<ColumnId>): void;
+  disableAccessibility?: boolean;
 }
 
 export interface Item {
