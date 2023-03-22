@@ -6,8 +6,8 @@ const filters = {
   iun: 'TQTY-DKPT-WXUM-202211-A-1',
   // startDate: '01/09/2022',
   // endDate: '02/09/2022',
-  startDate: '2022-10-01',
-  endDate: '2022-11-16',
+  startDate: '2023-10-01',
+  endDate: '2023-11-16',
   endFilteredDate: '2022-11-17',
   status: NotificationStatus.VIEWED,
 };
