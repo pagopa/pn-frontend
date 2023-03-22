@@ -1,4 +1,5 @@
-import { formatDate, NotificationStatus } from '@pagopa-pn/pn-commons';
+import { formatDate } from '../../../pn-commons/src/utils/date.utility';
+import { NotificationStatus } from '../../../pn-commons/src/types/NotificationStatus';
 
 const filters = {
   taxId: 'GRBGPP87L04L741X',
