@@ -37,10 +37,8 @@ export default defineConfig({
       };
 
       on('before:browser:launch', (browser, launchOptions) => {
-        if (browser.name === 'chrome') {
           launchOptions.args.push('--disable-gpu')
           return launchOptions
-        }
       })
 
       on('file:preprocessor', webpackPreprocessor(options));
