@@ -114,14 +114,15 @@ const Recipient = ({
         .test({
           name: 'denominationTotalLength',
           test(value) {
-            const denomination = (value || '') + ((this.parent.lastName as string) || '');
-            const messageKey = `too-long-denomination-error`;
+            const lastName: string | null | undefined = this.parent.lastName as string;
+            const denomination = (value || '') + (lastName ? ' ' + lastName : '');
+            const messageKey = 'too-long-field-error';
             if (denomination.length > 80) {
               if (this.parent.recipientType === 'PG') {
-                return this.createError({ message: t(messageKey), path: this.path });
+                return this.createError({ message: tc(messageKey, { maxLength: 80 }), path: this.path });
               }
               return new yup.ValidationError([
-                this.createError({ message: t(messageKey), path: this.path }),
+                this.createError({ message: tc(messageKey, { maxLength: 80 }), path: this.path }),
                 this.createError({ message: ' ', path: `recipients[${this.parent.idx}].lastName` }),
               ]);
             }

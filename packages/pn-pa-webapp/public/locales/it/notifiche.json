@@ -232,7 +232,6 @@
         "identical-notice-codes-error": "C’è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
-        "too-long-denomination-error": "Inserisci max 80 caratteri",
         "forbidden-characters-denomination-error": "Hai inserito caratteri non validi",
         "legal-entity": "Soggetto giuridico",
         "physical-person": "Persona fisica",
