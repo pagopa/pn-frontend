@@ -4,7 +4,7 @@ on:
     # Runs "At 16:00 on Friday every two weeks"
     # - cron: '16 * * 5 [ $(expr $(date +%W) % 2) -eq 1 ]'
     # Runs "Every 1 minutes (for testing)"
-    - cron: */1 * * * *
+    - cron: "*/1 * * * *"
 # This allows a subsequently queued workflow run to interrupt previous runs
 concurrency:
   group: ${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}
