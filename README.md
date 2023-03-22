@@ -1,4 +1,4 @@
-﻿## SEND - Servizio Notifiche Digitale
+﻿## SEND - Servizio Notifiche Digitali
 
 ### Start
 
