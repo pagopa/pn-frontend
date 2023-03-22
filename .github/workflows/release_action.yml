@@ -18,8 +18,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Create release branch
-        run: |
-          .\script\create_release_branch.sh -b $BASE_BRANCH -v $VERSION
+        run: ".\script\create_release_branch.sh" -b $BASE_BRANCH -v $VERSION
         env:
           BASE_BRANCH: develop
           VERSION: patch
