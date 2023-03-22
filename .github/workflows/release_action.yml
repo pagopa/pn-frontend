@@ -18,7 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        fetch-depth: 0
+        with:
+          fetch-depth: 0
       - name: Create release branch
         run: sudo bash ./.github/scripts/create_release_branch.sh -b $BASE_BRANCH -v $VERSION
         # shell: bash
