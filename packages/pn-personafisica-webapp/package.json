@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-personafisica-webapp",
-  "description": "Piattaforma Notifiche per il cittadino",
+  "description": "SEND - Servizio Notifiche Digitali per il cittadino",
   "version": "1.5.4",
   "private": true,
   "dependencies": {

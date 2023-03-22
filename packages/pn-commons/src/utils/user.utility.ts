@@ -78,7 +78,7 @@ export function adaptedTokenExchangeError(originalError: any) {
           message: getLocalizedOrDefaultLabel(
             'common',
             `leaving-app.title`,
-            'Stai uscendo da Piattaforma Notifiche ...'
+            'Stai uscendo da SEND ...'
           ),
         },
       },
@@ -130,7 +130,7 @@ export function adaptedTokenExchangeError(originalError: any) {
         message: getLocalizedOrDefaultLabel(
           'common',
           `leaving-app.title`,
-          'Stai uscendo da Piattaforma Notifiche ...'
+          'Stai uscendo da SEND ...'
         ),
       },
     },

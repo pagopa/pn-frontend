@@ -58,6 +58,7 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
+      disableAccessibility: true,
     },
     {
       id: 'sentAt',
@@ -70,6 +71,7 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
+      disableAccessibility: true,
     },
     {
       id: 'sender',
@@ -82,6 +84,7 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
+      disableAccessibility: true,
     },
     {
       id: 'subject',
@@ -93,6 +96,7 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
+      disableAccessibility: true,
     },
     {
       id: 'iun',
