@@ -140,6 +140,7 @@ const FilterNotificationsFormBody = ({
             />
           )}
           disableFuture={true}
+          minDate={tenYearsAgo}
           maxDate={endDate ? endDate : undefined}
         />
       </LocalizationProvider>
@@ -180,8 +181,8 @@ const FilterNotificationsFormBody = ({
             />
           )}
           disableFuture={true}
-          minDate={startDate ? startDate : undefined}
-        />
+          minDate={startDate ? startDate : tenYearsAgo}
+          />
       </LocalizationProvider>
       <TextField
         id="status"

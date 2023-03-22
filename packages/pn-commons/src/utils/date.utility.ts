@@ -11,6 +11,8 @@ export const tenYearsAgo = new Date(new Date().setMonth(today.getMonth() - 120))
 today.setHours(0, 0, 0, 0);
 tenYearsAgo.setHours(0, 0, 0, 0);
 
+export function dateIsDefined(date: Date | null | undefined) { return date && !isNaN(date.getTime()); }
+
 export function formatMonthString(dateString: string): string {
   const date = new Date(dateString);
   return date.toLocaleString('default', { month: 'long' }).toUpperCase().substring(0, 3);

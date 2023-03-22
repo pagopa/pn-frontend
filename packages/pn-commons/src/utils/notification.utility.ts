@@ -576,12 +576,12 @@ function populateMacroSteps(parsedNotification: NotificationDetail) {
       );
       if (step) {
         // delivery mode: according to the first arrived
-        // between DIGITAL_SUCCESS_WORKFLOW and SEND_SIMPLE_REGISTERED_LETTER
-        if (step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW && !deliveryMode) {
+        // between DIGITAL_SUCCESS_WORKFLOW, SEND_SIMPLE_REGISTERED_LETTER and ANALOG_SUCCESS_WORKFLOW
+        if (!deliveryMode && step.category === TimelineCategory.DIGITAL_SUCCESS_WORKFLOW) {
           deliveryMode = NotificationDeliveryMode.DIGITAL;
         } else if (
-          step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER &&
-          !deliveryMode
+          !deliveryMode && 
+          (step.category === TimelineCategory.SEND_SIMPLE_REGISTERED_LETTER  || step.category === TimelineCategory.ANALOG_SUCCESS_WORKFLOW)          
         ) {
           deliveryMode = NotificationDeliveryMode.ANALOG;
         }

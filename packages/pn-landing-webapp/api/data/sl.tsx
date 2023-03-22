@@ -47,10 +47,10 @@ const onReadClick = () => {
 };
 
 const navigation: INavigationBarProps = {
-  title: "Piattaforma Notifiche",
+  title: "Platforma za obvestila",
   chip: "Beta",
-  pf: "Cittadini",
-  pa: "Enti"
+  pf: "Državljani",
+  pa: "Odvetnik",
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -701,9 +701,9 @@ const preLoginLinks: PreLoginFooterLinksType = {
     title: "Viri",
     links: [
       {
-        label: "Informativa Privacy",
+        label: "Izjava o varstvu osebnih podatkov",
         href: `/informativa-privacy/`,
-        ariaLabel: "Pojdi na povezavo: Informativa Privacy",
+        ariaLabel: "Pojdi na povezavo: Izjava o varstvu osebnih podatkov",
         linkType: "internal",
       },
       {

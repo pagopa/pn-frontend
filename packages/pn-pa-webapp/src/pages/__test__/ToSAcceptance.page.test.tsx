@@ -1,3 +1,4 @@
+import { ConsentUser } from '@pagopa-pn/pn-commons';
 import React from 'react';
 import * as redux from 'react-redux';
 import { render } from '../../__test__/test-utils';
@@ -26,8 +27,32 @@ describe('test Terms of Service page', () => {
     useDispatchSpy.mockReturnValue(mockDispatchFn as any);
   });
 
+  const tosFirstAcceptance: ConsentUser = {
+    accepted: false,
+    isFirstAccept: true,
+    consentVersion: "mocked-version-1"
+  }
+
+  const privacyFirstAcceptance: ConsentUser = {
+    accepted: false,
+    isFirstAccept: true,
+    consentVersion: "mocked-version-1"
+  }
+
+  const tosNonFirstAcceptance: ConsentUser = {
+    accepted: false,
+    isFirstAccept: false,
+    consentVersion: "mocked-version-2"
+  }
+
+  const privacyNonFirstAcceptance: ConsentUser = {
+    accepted: false,
+    isFirstAccept: false,
+    consentVersion: "mocked-version-2"
+  }
+
   it('checks the texts in the page - First ToS acceptance', () => {
-    const result = render(<ToSAcceptance isFirstAccept={true} consentVersion={'mocked-version-1'} />);
+    const result = render(<ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />);
 
     expect(result.container).toHaveTextContent(/tos.title/i);
     expect(result.container).toHaveTextContent(/tos.body/i);
@@ -36,7 +61,7 @@ describe('test Terms of Service page', () => {
   });
 
   it('checks the texts in the page - ToS has changed', () => {
-    const result = render(<ToSAcceptance isFirstAccept={false} consentVersion={'mocked-version-1'} />);
+    const result = render(<ToSAcceptance tosConsent={tosNonFirstAcceptance} privacyConsent={privacyNonFirstAcceptance} />);
 
     expect(result.container).toHaveTextContent(/tos.title/i);
     expect(result.container).toHaveTextContent(/tos.redo-body/i);

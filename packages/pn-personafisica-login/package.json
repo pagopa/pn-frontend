@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-personafisica-login",
-  "description": "Pagina di login di Piattaforma Notifiche per il cittadino",
+  "description": "Pagina di login di SEND per il cittadino",
   "version": "1.5.4",
   "private": true,
   "dependencies": {
@@ -75,13 +75,5 @@
     "prettier": "^2.4.1",
     "react-scripts": "^5.0.1",
     "sonarqube-scanner": "^3.0.0"
-  },
-  "jest": {
-    "coveragePathIgnorePatterns": [
-      "src/index.tsx",
-      "src/reportWebVitals.ts",
-      "src/utils/constants.ts",
-      "src/utils/IDPS.ts"
-    ]
   }
 }

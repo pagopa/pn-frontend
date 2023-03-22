@@ -19,8 +19,8 @@
   },
   "payment": {
     "title": "Pagamenti",
-    "subtitle-single": "I costi di notifica sono stati pagati dal destinatario",
-    "subtitle-multiple": "I costi di notifica sono stati pagati dai seguenti destinatari:",
+    "subtitle-single": "Il destinatario ha effettuato un pagamento. Ecco i dettagli:",
+    "subtitle-multiple": "Questi destinatari hanno effettuato un pagamento:",
     "show-more": "Mostra dettagli"
   },
   "table": {
@@ -156,7 +156,7 @@
     "delivered-tooltip": "L'invio della notifica è terminato",
     "delivered-tooltip-multirecipient": "L'invio della notifica è terminato",
     "delivered-description": "L'invio della notifica è terminato.",
-    "delivered-description-with-delivery-mode": "La notifica è stata consegnata in quanto almeno un recapito {{deliveryMode}} è valido.",
+    "delivered-description-with-delivery-mode": "L'invio della notifica è terminato in quanto almeno un recapito {{deliveryMode}} è valido.",
     "delivered-description-multirecipient": "L'invio della notifica è terminato in quanto un recapito di almeno un destinatario è valido.",
     "delivering": "Invio in corso",
     "delivering-tooltip": "L'invio della notifica è in corso",
@@ -171,8 +171,8 @@
     "paid-tooltip": "Il destinatario ha pagato i costi della notifica",
     "paid-description": "Il destinatario ha pagato i costi della notifica",
     "accepted": "Depositata",
-    "accepted-tooltip": "L'ente ha depositato la notifica in piattaforma.",
-    "accepted-description": "L'ente ha depositato la notifica",
+    "accepted-tooltip": "L'ente ha depositato la notifica",
+    "accepted-description": "L'ente ha depositato la notifica in piattaforma.",
     "effective-date": "Perfezionata per decorrenza termini",
     "effective-date-multirecipient": "Perfezionata per decorrenza termini",
     "effective-date-tooltip": "Il destinatario non ha letto la notifica",

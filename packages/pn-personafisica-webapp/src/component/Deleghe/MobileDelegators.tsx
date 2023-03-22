@@ -56,13 +56,6 @@ const MobileDelegators = () => {
       },
     },
     {
-      id: 'email',
-      label: t('deleghe.table.email'),
-      getLabel(value: string) {
-        return value;
-      },
-    },
-    {
       id: 'startDate',
       label: t('deleghe.table.delegationStart'),
       getLabel(value: string) {
@@ -80,7 +73,7 @@ const MobileDelegators = () => {
       id: 'visibilityIds',
       label: t('deleghe.table.permissions'),
       getLabel(value: Array<string>) {
-        return <OrganizationsList organizations={value} textVariant="body2" />;
+        return <OrganizationsList organizations={value} textVariant="body2" visibleItems={3} />;
       },
       notWrappedInTypography: true,
     },

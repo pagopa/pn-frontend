@@ -63,6 +63,7 @@
     "payment": {
       "summary-pending": "Da pagare",
       "summary-succeeded": "Pagato",
+      "summary-in-progress": "Pagamento in corso",
       "amount": "Importo",
       "disclaimer": "Questo importo verrà aggiornato al momento del pagamento. Quindi potrebbe essere diverso.",
       "disclaimer-link": "Come mai?",
@@ -72,7 +73,7 @@
       "download-f24": "Scarica il modello F24",
       "message-error-fetch-payment": "Non siamo riusciti a recuperare i dati di pagamento per questa notifica.",
       "message-completed": "Il pagamento è stato effettuato con successo.",
-      "message-in-progress": "Il pagamento è già in corso, riprova tra qualche minuto. Se è passato troppo tempo, segnalacelo!",
+      "message-in-progress": "Il pagamento è in corso: <0>ricarica la pagina</0> tra qualche ora per verificarne lo stato. Se risulta ancora in corso, <1>contatta l’assistenza</1>.",
       "message-failed": "Il pagamento non è andato a buon fine. Premi \"Paga\" per riprovare.",
       "message-network-error": "Si è verificato un errore nel recupero delle informazioni di pagamento. Ricarica la pagina.",
       "message-missing-parameter": "Codice notifica e/o codice fiscale ente non presenti!",
@@ -159,7 +160,7 @@
     },
     "help": {
       "goto": "Vai al sito",
-      "assistance": "Per problemi tecnici o domande relative a Piattaforma Notifiche, premi su “Assisistenza” in alto a destra."
+      "assistance": "Per problemi tecnici o domande relative a SEND, premi su “Assisistenza” in alto a destra."
     }
   },
   "delegatorTitle": "Le notifiche di {{name}}",
@@ -191,8 +192,8 @@
     "paid-tooltip": "Il destinatario ha pagato i costi della notifica",
     "paid-description": "Il destinatario ha pagato i costi della notifica",
     "accepted": "Depositata",
-    "accepted-tooltip": "L'ente ha depositato la notifica in piattaforma.",
-    "accepted-description": "L'ente ha depositato la notifica",
+    "accepted-tooltip": "L'ente ha depositato la notifica",
+    "accepted-description": "L'ente ha depositato la notifica in piattaforma.",
     "effective-date": "Perfezionata per decorrenza termini",
     "effective-date-multirecipient": "Perfezionata per decorrenza termini",
     "effective-date-tooltip": "Il destinatario non ha letto la notifica",

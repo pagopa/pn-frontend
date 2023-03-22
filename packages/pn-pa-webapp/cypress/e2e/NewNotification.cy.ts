@@ -35,6 +35,10 @@ describe.skip('New Notification with payment methods', () => {
         statusCode: 200,
         fixture: 'tos/tos-accepted',
       });
+      cy.intercept(/DATAPRIVACY/, {
+        statusCode: 200,
+        fixture: 'tos/privacy-accepted',
+      });
       cy.intercept(/groups/, { fixture: 'groups/no-groups' });
       cy.visit('/dashboard/nuova-notifica');
     });

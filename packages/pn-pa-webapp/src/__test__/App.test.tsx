@@ -8,6 +8,7 @@ import { render } from './test-utils';
 import App from '../App';
 import { Party } from '../models/party';
 import { AUTH_ACTIONS } from '../redux/auth/actions';
+import React from 'react';
 
 // mock imports
 jest.mock('react-i18next', () => ({
@@ -58,12 +59,12 @@ const Component = () => (
   </ThemeProvider>
 );
 
-
-/* eslint-disable functional/no-let */
-let mockFetchedTosStatus = false;
-let mockTosStatus = false;
-
-const reduxInitialState = () => ({
+const reduxInitialState = (
+  fetchedTos: boolean,
+  fetchedPrivacy: boolean,
+  acceptedTos: boolean,
+  acceptedPrivacy: boolean
+) => ({
   userState: {
     user: {
       fiscal_number: 'mocked-fiscal-number',
@@ -76,30 +77,36 @@ const reduxInitialState = () => ({
       id: '',
       name: '',
     } as Party,
-    fetchedTos: mockFetchedTosStatus,
-    tos: mockTosStatus,
+    fetchedTos,
+    fetchedPrivacy,
+    tosConsent: {
+      accepted: acceptedTos,
+      isFirstAccept: false,
+      currentVersion: 'mocked-version-1'
+    },
+    privacyConsent: {
+      accepted: acceptedPrivacy,
+      isFirstAccept: false,
+      currentVersion: 'mocked-version-1'
+    }
   },
 });
 
 describe('App', () => {
   beforeEach(() => {
     mockLayout = false;
-    mockFetchedTosStatus = false;
-    mockTosStatus = false;
   });
 
-  it('Piattaforma notifiche', () => {
-    render(<Component/>, { preloadedState: reduxInitialState() });
+  it('SEND', () => {
+    render(<Component/>, { preloadedState: reduxInitialState(false, false, false, false) });
     const welcomeElement = screen.getByText(/header.notification-platform/i);
     expect(welcomeElement).toBeInTheDocument();
   });
 
   it('Sidemenu not included if error in API call to fetch organization', async () => {
     mockLayout = true;
-    mockFetchedTosStatus = true;
-    mockTosStatus = true;
     const mockReduxStateWithApiError = {
-      ...reduxInitialState(),
+      ...reduxInitialState(true, true, false, false),
       appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_ORGANIZATION_PARTY)
     };
     await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
@@ -110,7 +117,7 @@ describe('App', () => {
   it('Sidemenu not included if error in API call to fetch TOS', async () => {
     mockLayout = true;
     const mockReduxStateWithApiError = {
-      ...reduxInitialState(),
+      ...reduxInitialState(true, true, false, false),
       appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_TOS_APPROVAL)
     };
     await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
@@ -118,20 +125,27 @@ describe('App', () => {
     expect(sidemenuComponent).toBeNull();
   });
 
-  it('Sidemenu not included if user has not accepted the TOS', async () => {
+  it('Sidemenu not included if error in API call to fetch PRIVACY', async () => {
     mockLayout = true;
-    mockFetchedTosStatus = true;
-    mockTosStatus = false;
-    await act(async () => void render(<Component />, { preloadedState: reduxInitialState() }));
+    const mockReduxStateWithApiError = {
+      ...reduxInitialState(true, true, false, false),
+      appState: apiOutcomeTestHelper.appStateWithMessageForAction(AUTH_ACTIONS.GET_PRIVACY_APPROVAL)
+    };
+    await act(async () => void render(<Component />, { preloadedState: mockReduxStateWithApiError }));
     const sidemenuComponent = screen.queryByText("sidemenu");
     expect(sidemenuComponent).toBeNull();
   });
 
-  it('Sidemenu included if user has accepted the TOS', async () => {
+  it('Sidemenu not included if user has not accepted the TOS and PRIVACY', async () => {
     mockLayout = true;
-    mockFetchedTosStatus = true;
-    mockTosStatus = true;
-    await act(async () => void render(<Component />, { preloadedState: reduxInitialState() }));
+    await act(async () => void render(<Component />, { preloadedState: reduxInitialState(true, true, false, false) }));
+    const sidemenuComponent = screen.queryByText("sidemenu");
+    expect(sidemenuComponent).toBeNull();
+  });
+
+  it('Sidemenu included if user has accepted the TOS and PRIVACY', async () => {
+    mockLayout = true;
+    await act(async () => void render(<Component />, { preloadedState: reduxInitialState(true, true, true, true) }));
     const sidemenuComponent = screen.queryByText("sidemenu");
     expect(sidemenuComponent).toBeTruthy();
   });
