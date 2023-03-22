@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   release_branch:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - name: Create release branch
