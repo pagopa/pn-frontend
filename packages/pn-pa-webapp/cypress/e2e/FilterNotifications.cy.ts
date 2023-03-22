@@ -23,7 +23,7 @@ describe('Filter Notifications', () => {
   };
 
   before(() => {
-    cy.intercept('GET', /delivery\/notifications\/sent/, {
+    cy.intercept('GET', '/delivery/notifications/sent/', {
       statusCode: 200,
       fixture: 'notifications/list-10/page-1',
     }).as('notifications');
@@ -52,7 +52,7 @@ describe('Filter Notifications', () => {
     cy.get('#startDate').type(startDate.formatted);
     cy.get('#endDate').type(endDate.formatted);
 
-    cy.intercept('GET', /delivery\/notifications\/sent/, {
+    cy.intercept('GET', '/delivery\/notifications\/sent/', {
       statusCode: 200,
       fixture: 'notifications/list-10/filtered-dates',
     }).as('filteredNotifications');

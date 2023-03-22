@@ -27,11 +27,11 @@ phases:
       # Fetching .env variables
       - source .env.cypress
       # Setting up hosts file
-      - echo "127.0.0.1 $HOST" >> /etc/hosts
+      # - echo "127.0.0.1 $HOST" >> /etc/hosts
       # Renaming file .env.cypress to .env.development.local
-      - mv .env.cypress .env.development.local
+      # - mv .env.cypress .env.development.local
       # starting the webapp and waiting for its availability
-      - yarn start-waiton $WEBAPP_URL
+      # - yarn start-waiton $WEBAPP_URL
       ## Running Cypress
       - echo Setting up and running the test environment
       # Creating cypress.env.json file

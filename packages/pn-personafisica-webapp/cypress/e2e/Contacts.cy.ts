@@ -11,9 +11,7 @@ import { CourtesyChannelType, LegalChannelType } from '../../src/models/contacts
 import mockData from '../fixtures/contacts/test-data';
 
 describe('Contacts', () => {
-  beforeEach(() => {
-    cy.viewport(1920, 1080);
-
+  before(() => {
     cy.intercept(`${DELEGATIONS_BY_DELEGATE()}`, { fixture: 'delegations/no-mandates' }).as(
       'getActiveMandates'
     );
@@ -33,6 +31,10 @@ describe('Contacts', () => {
     cy.login();
     cy.visit(RECAPITI);
   });
+
+  beforeEach(() => {
+    cy.viewport(1920, 1080);
+  })
 
   it('Should add a valid PEC', () => {
     // mock contacts (empty list)
