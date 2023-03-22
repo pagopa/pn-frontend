@@ -3,7 +3,7 @@ export default {
     pec: {
       title: 'PEC',
       subtitle:
-        'Quando c’è una notifica per te, ti inviamo qui l’avviso di avvenuta di ricezione. Accedi a Piattaforma Notifiche per leggerla e pagare eventuali spese.',
+        'Quando c’è una notifica per te, ti inviamo qui l’avviso di avvenuta di ricezione. Accedi a SEND per leggerla e pagare eventuali spese.',
       inputPlaceholder: 'Il tuo indirizzo PEC',
       inputInvalidMessage: 'Indirizzo PEC non valido',
       confirmButton: 'Conferma',
@@ -18,7 +18,7 @@ export default {
       subtitle:
         'Attiva il servizio “Notifiche digitali”: quando c’è una notifica per te, ti inviamo un messaggio in app, dove puoi leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.',
       disclaimer:
-        'Scarica l’app IO, accedi e assicurati che il servizio "Notifiche digitali" di Piattaforma Notifiche sia attivo',
+        'Scarica l’app IO, accedi e assicurati che il servizio "Notifiche digitali" di SEND sia attivo',
       enabled: 'Attivo',
       disabled: 'Non attivo',
       enable: 'Attiva',
@@ -40,7 +40,7 @@ export default {
     courtesy: {
       title: 'Email o SMS',
       subtitle:
-        'Quando c’è una notifica per te, ti inviamo un’email o un SMS. Accedi a Piattaforma Notifiche per leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.',
+        'Quando c’è una notifica per te, ti inviamo un’email o un SMS. Accedi a SEND per leggerla e pagare eventuali spese. Qui ricevi anche eventuali comunicazioni importanti.',
       disclaimer:
         'Se non hai la PEC, leggi subito la notifica: non riceverai la raccomandata cartacea e risparmierai tempo e denaro.',
     },
@@ -53,7 +53,7 @@ export default {
       modalHelpValue: 'l’indirizzo e-mail',
       modal: {
         content:
-          "Se non hai una PEC e accedi alla notifica su Piattaforma Notifiche entro 5 giorni (120 ore) dall’invio dell'e-mail, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+          "Se non hai una PEC e accedi alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'e-mail, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
         checkboxText: 'Ho capito',
         confirmButton: 'Conferma',
       },
@@ -67,7 +67,7 @@ export default {
       modalHelpValue: 'il numero di cellulare',
       modal: {
         content:
-          "Se non hai una PEC e accedi alla notifica su Piattaforma Notifiche entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
+          "Se non hai una PEC e accedi alla notifica su SEND entro 5 giorni (120 ore) dall’invio dell'SMS, non riceverai l'avviso di avvenuta ricezione tramite raccomandata.",
         checkboxText: 'Ho capito',
         confirmButton: 'Conferma',
       },

@@ -27,10 +27,10 @@ const PrivacyPage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Piattaforma Notifiche</title>
+        <title>SEND</title>
         <meta
           name="description"
-          content="Informativa Privacy Piattaforma notifiche"
+          content="Informativa Privacy Servizio notifiche digitali"
         />
         <link rel="icon" href="/static/favicon.svg" />
       </Head>

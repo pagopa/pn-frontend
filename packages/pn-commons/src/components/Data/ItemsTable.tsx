@@ -1,3 +1,4 @@
+import { ButtonNaked } from '@pagopa/mui-italia';
 import {
   Table,
   TableBody,
@@ -13,6 +14,7 @@ import { visuallyHidden } from '@mui/utils';
 
 import { Column, Item, Sort, Notification } from '../../types';
 import { getLocalizedOrDefaultLabel } from '../../services/localization.service';
+import { buttonNakedInheritStyle } from '../../utils';
 
 type Props<ColumnId> = {
   /** Table columns */
@@ -37,7 +39,7 @@ function ItemsTable<ColumnId extends string>({
       onChangeSorting({ order: isAsc ? 'desc' : 'asc', orderBy: property });
     }
   };
-  
+
   // Table style
   const Root = styled('div')(
     () => `
@@ -60,7 +62,11 @@ function ItemsTable<ColumnId extends string>({
   return (
     <Root>
       <TableContainer sx={{ marginBottom: '10px' }}>
-        <Table stickyHeader aria-label={getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')} data-cy="table(notifications)">
+        <Table
+          stickyHeader
+          aria-label={getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')}
+          data-cy="table(notifications)"
+        >
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -95,20 +101,33 @@ function ItemsTable<ColumnId extends string>({
             </TableRow>
           </TableHead>
           <TableBody sx={{ backgroundColor: 'background.paper' }}>
-              {rows.map((row) => (
-                <TableRow key={row.id} data-cy="table(notifications).row">
-                  {columns.map((column) => (
-                    <TableCell
-                      key={column.id}
-                      sx={{ width: column.width, borderBottom: 'none', cursor: column.onClick ? 'pointer': 'auto' }}
-                      align={column.align}
-                      onClick={() => column.onClick && column.onClick(row, column)}
-                    >
-                      {column.getCellLabel(row[column.id as keyof Notification], row)}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
+            {rows.map((row) => (
+              <TableRow key={row.id} data-cy="table(notifications).row">
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    sx={{
+                      width: column.width,
+                      borderBottom: 'none',
+                      cursor: column.onClick ? 'pointer' : 'auto',
+                    }}
+                    align={column.align}
+                  >
+                    {column.onClick && (
+                      <ButtonNaked
+                        tabIndex={column.disableAccessibility ? -1 : 0}
+                        sx={buttonNakedInheritStyle}
+                        onClick={() => column.onClick && column.onClick(row, column)}
+                      >
+                        {column.getCellLabel(row[column.id as keyof Notification], row)}
+                      </ButtonNaked>
+                    )}
+                    {!column.onClick &&
+                      column.getCellLabel(row[column.id as keyof Notification], row)}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>

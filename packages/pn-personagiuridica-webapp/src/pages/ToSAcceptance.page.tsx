@@ -78,7 +78,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
       >
         <Grid item xs={10} sm={8} md={6}>
           <TOSAgreement
-            productName={t('tos.title', 'Piattaforma Notifiche')}
+            productName={t('tos.title', 'SEND - Servizio Notifiche Digitali')}
             description={t(
               tosConsent.isFirstAccept && privacyConsent.isFirstAccept
                 ? 'tos.body'
@@ -102,7 +102,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
                   components={[<PrivacyLink key={'privacy-link'} />, <TosLink key={'tos-link'} />]}
                 >
                   Accetto l’<PrivacyLink>Informativa Privacy</PrivacyLink> e i
-                  <TosLink>Termini e condizioni d’uso </TosLink> di Piattaforma Notifiche.
+                  <TosLink>Termini e condizioni d’uso </TosLink> di SEND.
                 </Trans>
               </Typography>
             </Box>
