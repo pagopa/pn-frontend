@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Create release branch
         run: |
-          ./script/create_release_branch.sh \
+          "./script/create_release_branch.sh" \
             -b $BASE_BRANCH \
             -v $VERSION
         env:
