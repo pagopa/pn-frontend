@@ -58,7 +58,7 @@ Cypress.Commands.add('setRole', (role: PNRole) => {
 Cypress.Commands.add('loginWithTokenExchange', (role?: PNRole) => {
   cy.intercept({
     method: 'POST',
-    url: /token-exchange/,
+    url: 'token-exchange',
   }).as('login');
   cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
   cy.get('#onetrust-accept-btn-handler').click();
@@ -76,13 +76,11 @@ Cypress.Commands.add('logout', () => {
   /**
    * TODO: implement logout through api
    */
-  cy.window().then((win) => {
-    const user = win.sessionStorage.getItem('user');
+  const user = window.sessionStorage.getItem('user');
 
-    if (user) {
-      win.sessionStorage.removeItem('user');
-    }
-  });
+  if (user) {
+    window.sessionStorage.removeItem('user');
+  }
 });
 
 Cypress.Commands.add('loginWithUI', () => {

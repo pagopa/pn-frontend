@@ -1,16 +1,38 @@
-import { formatDate } from '../../../pn-commons/src/utils/date.utility';
+import {
+  formatDate,
+  formatToTimezoneString,
+  getNextDay,
+  tenYearsAgo,
+  today
+} from '../../../pn-commons/src/utils/date.utility';
 import { NotificationStatus } from '../../../pn-commons/src/types/NotificationStatus';
+import { NOTIFICATIONS_LIST } from "../../src/api/notifications/notifications.routes";
 
 const filters = {
   taxId: 'GRBGPP87L04L741X',
   iun: 'TQTY-DKPT-WXUM-202211-A-1',
   // startDate: '01/09/2022',
   // endDate: '02/09/2022',
-  startDate: '2023-10-01',
-  endDate: '2023-11-16',
+  startDate: '2022-10-01',
+  endDate: '2022-11-16',
   endFilteredDate: '2022-11-17',
   status: NotificationStatus.VIEWED,
 };
+
+const getParams = (params: {
+  iun?: string,
+  recipientId?: string,
+  startDate?: string,
+  endDate?: string,
+  status?: string
+}) => ({
+  iunMatch: params.iun,
+  recipientId: params.recipientId,
+  startDate: formatToTimezoneString(params.startDate ? new Date(params.startDate) : tenYearsAgo),
+  endDate: formatToTimezoneString(getNextDay(params.endDate ? new Date(params.endDate) : today)),
+  status: params.status,
+  size: 10
+});
 
 describe('Filter Notifications', () => {
   const startDate = {
@@ -24,11 +46,6 @@ describe('Filter Notifications', () => {
   };
 
   before(() => {
-    cy.intercept('GET', '/delivery/notifications/sent/', {
-      statusCode: 200,
-      fixture: 'notifications/list-10/page-1',
-    }).as('notifications');
-
     cy.intercept(/TOS/, {
       statusCode: 200,
       fixture: 'tos/tos-accepted',
@@ -38,10 +55,13 @@ describe('Filter Notifications', () => {
       fixture: 'tos/privacy-accepted',
     });
     cy.loginWithTokenExchange();
-    cy.visit('/dashboard');
   });
 
   beforeEach(() => {
+    cy.intercept('GET', NOTIFICATIONS_LIST(getParams({})), {
+      statusCode: 200,
+      fixture: 'notifications/list-10/page-1',
+    }).as('notifications');
     cy.viewport(1920, 1080);
   });
 
@@ -50,21 +70,28 @@ describe('Filter Notifications', () => {
   });
 
   it(`Filters by dates from ${startDate.formatted} to ${endDate.formatted}, enter a notification detail, then go back e verify filters are still set`, () => {
+    // wait for the notification list call response
+
     cy.get('#startDate').type(startDate.formatted);
     cy.get('#endDate').type(endDate.formatted);
 
-    cy.intercept('GET', '/delivery\/notifications\/sent/', {
-      statusCode: 200,
-      fixture: 'notifications/list-10/filtered-dates',
-    }).as('filteredNotifications');
+    // intercept filtered notifications with startDate and endDate inserted by the user
+    // we use a generated string instead of a regex to avoid ambiguity
+    cy.intercept(
+      'GET',
+      NOTIFICATIONS_LIST(getParams({ startDate: startDate.iso, endDate: endDate.iso })),
+      {
+        statusCode: 200,
+        fixture: 'notifications/list-10/filtered-dates',
+      }
+    ).as('filteredNotifications');
 
-    cy.intercept('GET', `/delivery\/notifications\/sent/${filters.iun}`, {
+    cy.intercept('GET', `/delivery/notifications/sent/${filters.iun}`, {
       statusCode: 200,
       fixture: 'notifications/effective_date',
-    });
-
-    cy.get('.MuiButton-outlined').click();
-
+    }).as('notificationDetail');
+    // show and await for filtered notifications
+    cy.get('[data-testid="filterButton"]').click();
     cy.wait('@filteredNotifications').then((interception) => {
       expect(interception.request.url).include(`startDate=${startDate.iso}`);
       expect(interception.request.url).include(`endDate=${endDate.isoNextDay}`);
@@ -74,7 +101,9 @@ describe('Filter Notifications', () => {
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
     cy.get(':nth-child(1) > .css-pgy0cg-MuiTableCell-root').should('be.visible').click();
+    cy.wait('@notificationDetail');
     cy.get('[data-testid="breadcrumb-indietro-button"]').click();
+    cy.wait('@filteredNotifications');
     cy.get('#startDate').should('have.value', startDate.formatted);
     cy.get('#endDate').should('have.value', endDate.formatted);
 
@@ -82,16 +111,18 @@ describe('Filter Notifications', () => {
   });
 
   it(`Filter notifications by recipient tax id '${filters.taxId}'`, () => {
-    cy.get('#recipientId').type(filters.taxId);
+    cy.get('[data-testid="cancelButton"]').click();
+    cy.wait('@notifications');
 
-    cy.intercept('GET', /delivery\/notifications\/sent/, {
+    cy.get('#recipientId').type(filters.taxId);
+    cy.intercept('GET', NOTIFICATIONS_LIST(getParams({ recipientId: filters.taxId })), {
       statusCode: 200,
       fixture: 'notifications/list-10/filtered-recipient',
-    }).as('filteredNotifications');
+    }).as('filteredByTaxId');
 
-    cy.contains(/^Filtra$/).click();
+    cy.get('[data-testid="filterButton"]').click();
 
-    cy.wait('@filteredNotifications').then((interception) => {
+    cy.wait('@filteredByTaxId').then((interception) => {
       expect(interception.request.url).include(`recipientId=${filters.taxId}`);
       expect(interception.response.statusCode).to.equal(200);
     });
@@ -104,16 +135,19 @@ describe('Filter Notifications', () => {
   });
 
   it(`Filter notifications by IUN '${filters.iun}'`, () => {
+    cy.get('[data-testid="cancelButton"]').click();
+    cy.wait('@notifications');
+
     cy.get('#iunMatch').type(filters.iun);
 
-    cy.intercept('GET', /delivery\/notifications\/sent/, {
+    cy.intercept('GET', NOTIFICATIONS_LIST(getParams({ iun: filters.iun })), {
       statusCode: 200,
       fixture: 'notifications/list-10/filtered-iun',
-    }).as('filteredNotifications');
+    }).as('filteredByIun');
 
-    cy.contains(/^Filtra$/).click();
+    cy.get('[data-testid="filterButton"]').click();
 
-    cy.wait('@filteredNotifications').then((interception) => {
+    cy.wait('@filteredByIun').then((interception) => {
       expect(interception.request.url).include(`iunMatch=${filters.iun}`);
       expect(interception.response.statusCode).to.equal(200);
     });
@@ -126,17 +160,20 @@ describe('Filter Notifications', () => {
   });
 
   it(`Filter notifications by status '${filters.status}'`, () => {
+    cy.get('[data-testid="cancelButton"]').click();
+    cy.wait('@notifications');
+
     cy.get('#status').click();
     cy.get(`[data-value="${filters.status}"]`).click();
 
-    cy.intercept('GET', /delivery\/notifications\/sent/, {
+    cy.intercept('GET', NOTIFICATIONS_LIST(getParams({ status: filters.status })), {
       statusCode: 200,
       fixture: 'notifications/list-10/filtered-status',
-    }).as('filteredNotifications');
+    }).as('filteredByStatus');
 
-    cy.contains(/^Filtra$/).click();
+    cy.get('[data-testid="filterButton"]').click();
 
-    cy.wait('@filteredNotifications').then((interception) => {
+    cy.wait('@filteredByStatus').then((interception) => {
       expect(interception.request.url).include(`status=${filters.status}`);
       expect(interception.response.statusCode).to.equal(200);
     });
