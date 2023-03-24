@@ -27,6 +27,7 @@ import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
 import {
+  denominationLenghtAndCharacters,
   identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
@@ -92,17 +93,6 @@ const Recipient = ({
         }
       : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
-  const checkForbiddenCharacters = (
-    value: string,
-    path: string,
-    createError: (params?: yup.CreateErrorOptions | undefined) => yup.ValidationError
-  ) => {
-    if (dataRegex.denomination.test(value)) {
-      return true;
-    }
-    return createError({ message: t(`forbidden-characters-denomination-error`), path });
-  };
-
   const buildRecipientValidationObject = () => {
     const validationObject = {
       recipientType: yup.string(),
@@ -112,33 +102,41 @@ const Recipient = ({
         .string()
         .required(tc('required-field'))
         .test({
-          name: 'denominationTotalLength',
+          name: 'denominationLenghtAndCharacters',
           test(value) {
-            const lastName: string | null | undefined = this.parent.lastName as string;
-            const denomination = (value || '') + (lastName ? ' ' + lastName : '');
-            const messageKey = 'too-long-field-error';
-            if (denomination.length > 80) {
-              if (this.parent.recipientType === 'PG') {
-                return this.createError({ message: tc(messageKey, { maxLength: 80 }), path: this.path });
-              }
-              return new yup.ValidationError([
-                this.createError({ message: tc(messageKey, { maxLength: 80 }), path: this.path }),
-                this.createError({ message: ' ', path: `recipients[${this.parent.idx}].lastName` }),
-              ]);
+            const error = denominationLenghtAndCharacters(value, this.parent.lastName);
+            if (error) {
+              return this.createError({
+                message:
+                  error.messageKey === 'too-long-field-error'
+                    ? tc(error.messageKey, error.data)
+                    : t(error.messageKey, error.data),
+                path: this.path,
+              });
             }
-            return checkForbiddenCharacters(value || '', this.path, this.createError);
+            return true;
           },
         }),
       // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
       // non viene richiesto
       lastName: yup.string().when('recipientType', {
         is: (value: string) => value !== RecipientType.PG,
-        then: yup.string().required(tc('required-field')).test({
-          name: 'denominationTotalLength',
-          test(value) {
-            return checkForbiddenCharacters(value || '', this.path, this.createError);
-          },
-        }),
+        then: yup
+          .string()
+          .required(tc('required-field'))
+          .test({
+            name: 'denominationLenghtAndCharacters',
+            test(value) {
+              const error = denominationLenghtAndCharacters(this.parent.firstName, value as string);
+              if (error) {
+                return this.createError({
+                  message: ' ',
+                  path: this.path,
+                });
+              }
+              return true;
+            },
+          }),
       }),
       taxId: yup
         .string()

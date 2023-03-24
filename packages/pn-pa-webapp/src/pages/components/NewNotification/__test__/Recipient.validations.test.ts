@@ -2,7 +2,7 @@ import { RecipientType } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationRecipient, PaymentModel } from '../../../../models/NewNotification';
 import {
-  denominationTotalLength,
+  denominationLenghtAndCharacters,
   identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
@@ -19,40 +19,19 @@ function makeRandomString(length) {
 }
 
 describe('test custom validation for recipients', () => {
-  it('denominationTotalLength (PF no errors)', () => {
-    const result = denominationTotalLength(
-      makeRandomString(5),
-      RecipientType.PF,
-      makeRandomString(5)
-    );
-    expect(result).toBe('');
+  it('denominationLenghtAndCharacters (no errors)', () => {
+    const result = denominationLenghtAndCharacters(makeRandomString(5), makeRandomString(5));
+    expect(result).toBe(undefined);
   });
 
-  it('denominationTotalLength (PF errors)', () => {
-    const result = denominationTotalLength(
-      makeRandomString(56),
-      RecipientType.PF,
-      makeRandomString(24)
-    );
-    expect(result).toBe('too-long-denomination-error-PF');
+  it('denominationTotalLength (errors - too long)', () => {
+    const result = denominationLenghtAndCharacters(makeRandomString(56), makeRandomString(24));
+    expect(result).toStrictEqual({ messageKey: 'too-long-field-error', data: { maxLength: 80 } });
   });
 
-  it('denominationTotalLength (PG no errors)', () => {
-    const result = denominationTotalLength(
-      makeRandomString(5),
-      RecipientType.PG,
-      makeRandomString(5)
-    );
-    expect(result).toBe('');
-  });
-
-  it('denominationTotalLength (PG errors)', () => {
-    const result = denominationTotalLength(
-      makeRandomString(56),
-      RecipientType.PG,
-      makeRandomString(25)
-    );
-    expect(result).toBe('too-long-denomination-error-PG');
+  it('denominationTotalLength (errors - forbidden characters)', () => {
+    const result = denominationLenghtAndCharacters(makeRandomString(56), 'D’Arco');
+    expect(result).toStrictEqual({ messageKey: 'forbidden-characters-denomination-error' });
   });
 
   it('taxIdDependingOnRecipientType (PF no errors)', () => {
@@ -105,19 +84,25 @@ describe('test custom validation for recipients', () => {
   });
 
   it('identicalIUV (no errors)', () => {
-    const result = identicalIUV([
-      { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-      { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
-    ] as Array<NewNotificationRecipient>, PaymentModel.PAGO_PA_NOTICE);
+    const result = identicalIUV(
+      [
+        { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
+        { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
+      ] as Array<NewNotificationRecipient>,
+      PaymentModel.PAGO_PA_NOTICE
+    );
     expect(result).toHaveLength(0);
   });
 
   it('identicalIUV (errors)', () => {
-    const result = identicalIUV([
-      { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-      { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
-      { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
-    ] as Array<NewNotificationRecipient>, PaymentModel.PAGO_PA_NOTICE);
+    const result = identicalIUV(
+      [
+        { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
+        { creditorTaxId: 'creditorTaxId2', noticeCode: 'noticeCode2' },
+        { creditorTaxId: 'creditorTaxId1', noticeCode: 'noticeCode1' },
+      ] as Array<NewNotificationRecipient>,
+      PaymentModel.PAGO_PA_NOTICE
+    );
     expect(result).toHaveLength(4);
     expect(result).toStrictEqual([
       {

@@ -3,6 +3,20 @@ import { dataRegex, RecipientType } from '@pagopa-pn/pn-commons';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import { getDuplicateValuesByKeys } from '../../../utils/notification.utility';
 
+export function denominationLenghtAndCharacters(
+  firstName: string | undefined,
+  lastName: string
+): { messageKey: string; data?: { [key: string]: number | string } } | undefined {
+  const denomination = (firstName || '') + (lastName ? ' ' + lastName : '');
+  if (dataRegex.denomination.test(denomination)) {
+    return undefined;
+  }
+  if (denomination.length > 80) {
+    return { messageKey: 'too-long-field-error', data: { maxLength: 80 } };
+  }
+  return { messageKey: `forbidden-characters-denomination-error` };
+}
+
 export function taxIdDependingOnRecipientType(
   value: string | undefined,
   recipientType: RecipientType
@@ -52,16 +66,18 @@ export function identicalIUV(
           duplicateIUVs.includes(value.creditorTaxId + value.noticeCode)
         ) {
           // eslint-disable-next-line functional/immutable-data
-          errors.push({
-            messageKey: 'identical-notice-codes-error',
-            value,
-            id: `recipients[${i}].noticeCode`
-          },
-          {
-            messageKey: '',
-            value,
-            id: `recipients[${i}].creditorTaxId`
-          });
+          errors.push(
+            {
+              messageKey: 'identical-notice-codes-error',
+              value,
+              id: `recipients[${i}].noticeCode`,
+            },
+            {
+              messageKey: '',
+              value,
+              id: `recipients[${i}].creditorTaxId`,
+            }
+          );
         }
       });
     }
