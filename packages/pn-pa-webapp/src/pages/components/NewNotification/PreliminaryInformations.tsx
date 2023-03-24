@@ -58,7 +58,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
 
   const validationSchema = yup.object({
     paProtocolNumber: yup.string().required(`${t('protocol-number')} ${tc('required')}`),
-    subject: yup.string().required(`${t('subject')} ${tc('required')}`),
+    subject: yup.string().required(`${t('subject')} ${tc('required')}`).max(134, tc('too-long-field-error', { maxLength: 134 })),
+    abstract: yup.string().max(1024, tc('too-long-field-error', { maxLength: 1024 })),
     physicalCommunicationType: yup.string().required(),
     paymentMode: yup.string().required(),
     group: (hasGroups) ? yup.string().required() : yup.string(),
@@ -146,6 +147,8 @@ const PreliminaryInformations = ({ notification, onConfirm }: Props) => {
             name="abstract"
             value={formik.values.abstract}
             onChange={handleChangeTouched}
+            error={formik.touched.abstract && Boolean(formik.errors.abstract)}
+            helperText={formik.touched.abstract && formik.errors.abstract}
             size="small"
             margin="normal"
           />
