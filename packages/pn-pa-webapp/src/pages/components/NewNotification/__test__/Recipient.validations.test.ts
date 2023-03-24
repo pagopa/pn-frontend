@@ -2,7 +2,7 @@ import { RecipientType } from '@pagopa-pn/pn-commons';
 
 import { NewNotificationRecipient, PaymentModel } from '../../../../models/NewNotification';
 import {
-  denominationLenghtAndCharacters,
+  denominationLengthAndCharacters,
   identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
@@ -19,18 +19,18 @@ function makeRandomString(length) {
 }
 
 describe('test custom validation for recipients', () => {
-  it('denominationLenghtAndCharacters (no errors)', () => {
-    const result = denominationLenghtAndCharacters(makeRandomString(5), makeRandomString(5));
+  it('denominationLengthAndCharacters (no errors)', () => {
+    const result = denominationLengthAndCharacters(makeRandomString(5), makeRandomString(5));
     expect(result).toBe(undefined);
   });
 
   it('denominationTotalLength (errors - too long)', () => {
-    const result = denominationLenghtAndCharacters(makeRandomString(56), makeRandomString(24));
+    const result = denominationLengthAndCharacters(makeRandomString(56), makeRandomString(24));
     expect(result).toStrictEqual({ messageKey: 'too-long-field-error', data: { maxLength: 80 } });
   });
 
   it('denominationTotalLength (errors - forbidden characters)', () => {
-    const result = denominationLenghtAndCharacters(makeRandomString(56), 'D’Arco');
+    const result = denominationLengthAndCharacters(makeRandomString(56), 'D’Arco');
     expect(result).toStrictEqual({ messageKey: 'forbidden-characters-denomination-error' });
   });
 

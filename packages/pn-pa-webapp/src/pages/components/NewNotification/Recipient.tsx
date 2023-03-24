@@ -27,7 +27,7 @@ import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
 import {
-  denominationLenghtAndCharacters,
+  denominationLengthAndCharacters,
   identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
@@ -102,9 +102,9 @@ const Recipient = ({
         .string()
         .required(tc('required-field'))
         .test({
-          name: 'denominationLenghtAndCharacters',
+          name: 'denominationLengthAndCharacters',
           test(value) {
-            const error = denominationLenghtAndCharacters(value, this.parent.lastName);
+            const error = denominationLengthAndCharacters(value, this.parent.lastName);
             if (error) {
               return this.createError({
                 message:
@@ -125,9 +125,9 @@ const Recipient = ({
           .string()
           .required(tc('required-field'))
           .test({
-            name: 'denominationLenghtAndCharacters',
+            name: 'denominationLengthAndCharacters',
             test(value) {
-              const error = denominationLenghtAndCharacters(this.parent.firstName, value as string);
+              const error = denominationLengthAndCharacters(this.parent.firstName, value as string);
               if (error) {
                 return this.createError({
                   message: ' ',

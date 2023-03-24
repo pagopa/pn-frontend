@@ -3,7 +3,7 @@ import { dataRegex, RecipientType } from '@pagopa-pn/pn-commons';
 import { NewNotificationRecipient, PaymentModel } from '../../../models/NewNotification';
 import { getDuplicateValuesByKeys } from '../../../utils/notification.utility';
 
-export function denominationLenghtAndCharacters(
+export function denominationLengthAndCharacters(
   firstName: string | undefined,
   lastName: string
 ): { messageKey: string; data?: { [key: string]: number | string } } | undefined {
