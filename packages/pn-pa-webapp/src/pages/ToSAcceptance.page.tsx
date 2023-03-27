@@ -76,25 +76,23 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
       <Grid item xs={10} sm={8} md={6}>
         <TOSAgreement
           productName={t('tos.title', 'SEND - Servizio Notifiche Digitali')}
-          description={t(
-            tosConsent.isFirstAccept && privacyConsent.isFirstAccept ? 'tos.body' : 'tos.redo-body'
-          )}
+          description={
+            <Box display="flex" alignItems="center">
+              <Typography color="text.secondary" variant="body1">
+                <Trans
+                  ns={'common'}
+                  i18nKey={'tos.switch-label'}
+                  components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
+                >
+                  Accedendo, accetti i <TosLink>Termini e condizioni d’uso</TosLink> del servizio e
+                  confermi di aver letto l’<PrivacyLink>Informativa Privacy</PrivacyLink>.
+                </Trans>
+              </Typography>
+            </Box>
+          }
           onConfirm={handleAccept}
           confirmBtnLabel={t('tos.button', 'Accedi')}
-        >
-          <Box display="flex" alignItems="center">
-            <Typography color="text.secondary" variant="body1">
-              <Trans
-                ns={'common'}
-                i18nKey={'tos.switch-label'}
-                components={[<TosLink key={'tos-link'} />, <PrivacyLink key={'privacy-link'} />]}
-              >
-                Accedendo, accetti i <TosLink>Termini e condizioni d’uso</TosLink> del servizio e
-                confermi di aver letto l’<PrivacyLink>Informativa Privacy</PrivacyLink>.
-              </Trans>
-            </Typography>
-          </Box>
-        </TOSAgreement>
+        />
       </Grid>
     </Grid>
   );
