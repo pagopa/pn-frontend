@@ -16,9 +16,13 @@ import { loadPaConfiguration } from './services/configuration.service';
 
 async function doTheRender() {
   try {
+    // load config from JSON file
     await loadPaConfiguration();
+
+    // init actions (previously static code) which make use of config
     initOneTrust();
     initStore();
+
     ReactDOM.render(
       <React.StrictMode>
         <Provider store={store}>
@@ -52,5 +56,6 @@ async function doTheRender() {
   
 }
 
+// actual launching of the React app
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 doTheRender();

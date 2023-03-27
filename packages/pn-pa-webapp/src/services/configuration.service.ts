@@ -1,4 +1,4 @@
-import { getConfiguration, loadConfiguration } from '@pagopa-pn/pn-commons';
+import { getConfiguration as generalGetConfiguration, loadConfiguration } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
 interface PaConfigurationFromFile {
@@ -19,8 +19,8 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
   }
 }
 
-export function getPaConfiguration(): PaConfiguration {
-  const configurationFromFile = getConfiguration<PaConfigurationFromFile>();
+export function getConfiguration(): PaConfiguration {
+  const configurationFromFile = generalGetConfiguration<PaConfigurationFromFile>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
   return {
     ...configurationFromFile,
@@ -33,5 +33,5 @@ export function getPaConfiguration(): PaConfiguration {
 
 export async function loadPaConfiguration(): Promise<void> {
   await loadConfiguration(new PaConfigurationValidator());
-  console.log(getPaConfiguration());
+  console.log(getConfiguration());
 }
