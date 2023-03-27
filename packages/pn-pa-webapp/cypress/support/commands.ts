@@ -76,11 +76,13 @@ Cypress.Commands.add('logout', () => {
   /**
    * TODO: implement logout through api
    */
-  const user = window.sessionStorage.getItem('user');
+  cy.window().then((win) => {
+    const user = win.sessionStorage.getItem('user');
 
-  if (user) {
-    window.sessionStorage.removeItem('user');
-  }
+    if (user) {
+      win.sessionStorage.removeItem('user');
+    }
+  });
 });
 
 Cypress.Commands.add('loginWithUI', () => {
