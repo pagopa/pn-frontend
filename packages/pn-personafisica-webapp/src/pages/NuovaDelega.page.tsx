@@ -77,6 +77,12 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+
+function validName(wholeString: string) {
+  const nameRegex = /([\x20-\xFF]*)/g;
+  return [...wholeString.matchAll(nameRegex)].map(match => match[0]).join('');
+}
+
 const NuovaDelega = () => {
   const classes = useStyles();
   const { t } = useTranslation(['deleghe', 'common']);
@@ -166,7 +172,7 @@ const NuovaDelega = () => {
   );
 
   const handleChangeInput = (newInputValue: string) => {
-    setSenderInputValue(newInputValue);
+    setSenderInputValue(validName(newInputValue).slice(0,80));
   };
 
   const getOptionLabel = (option: Party) => option.name || '';
@@ -216,7 +222,10 @@ const NuovaDelega = () => {
                   }}
                   validateOnBlur={false}
                 >
-                  {({ values, setFieldValue, touched, errors, setFieldTouched }) => (
+                  {
+                  
+                  // eslint-disable-next-line sonarjs/cognitive-complexity
+                  ({ values, setFieldValue, touched, errors, setFieldTouched }) => (
                     <Form>
                       <FormControl sx={{ width: '100%' }}>
                         <RadioGroup
@@ -358,7 +367,7 @@ const NuovaDelega = () => {
                                     renderInput={(params) => (
                                       <TextField
                                         {...params}
-                                        label={t('nuovaDelega.form.selectEntities')}
+                                        label={`${t('nuovaDelega.form.selectEntities')}${senderInputValue.length === 80 ? ' (ricerca max 80 caratteri)' : ''}`}
                                       />
                                     )}
                                   />
