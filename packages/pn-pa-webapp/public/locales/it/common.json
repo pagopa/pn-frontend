@@ -128,6 +128,7 @@
   "required-fields": "*Campi obbligatori",
   "required-field": "Campo obbligatorio",
   "required": "obbligatorio",
+  "too-long-field-error": "Inserisci max {{maxLength}} caratteri",
   "invalid": "non valido",
   "upload-file": {
     "or": "oppure",
