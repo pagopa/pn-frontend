@@ -1,43 +1,41 @@
-import { Validator } from "@pagopa-pn/pn-validator"
+import { Validator } from "@pagopa-pn/pn-validator";
 import { fetchConfiguration } from "./fetch.configuration.service";
-
-// eslint-disable-next-line functional/no-let
-let storedConfiguration: any = null;
-
-// eslint-disable-next-line functional/no-let
-let configurationLoadingExecuted = false;
 
 export class ConfigurationError extends Error { }
 
-// for test purposes only!!
-export function clearConfig() {
-  storedConfiguration = null;
-  configurationLoadingExecuted = false;
-}
+export class Configuration {
+  private static storedConfiguration: any = null;
+  private static configurationLoadingExecuted = false;
 
-export function validateConfiguration<T>(readConfiguration: T, validator: Validator<T>): T {
-  const validationResult = validator.validate(readConfiguration);
-  if (validationResult == null) {
-    return readConfiguration;
-  } else {
-    throw new ConfigurationError(JSON.stringify(validationResult));
+  static clear() {
+    this.storedConfiguration = null;
+    this.configurationLoadingExecuted = false;
   }
-}
 
-export async function loadConfiguration<T>(validator: Validator<T>): Promise<void> {
-  if (configurationLoadingExecuted) {
-    throw new ConfigurationError('config should be loaded just once');
+  static get<T>(): T {
+    if (!this.configurationLoadingExecuted) {
+      throw new ConfigurationError('loadConfiguration must be called before any call to getConfiguration');
+    } else if (this.storedConfiguration == null) {
+      throw new ConfigurationError('error detected when loading configuration');
+    }
+    return this.storedConfiguration;
   }
-  configurationLoadingExecuted = true;
-  const readValue: T = (await fetchConfiguration()) as T;
-  storedConfiguration = validateConfiguration(readValue, validator);
-}
 
-export function getConfiguration<T>(): T {
-  if (!configurationLoadingExecuted) {
-    throw new ConfigurationError('loadConfiguration must be called before any call to getConfiguration');
-  } else if (storedConfiguration == null) {
-    throw new ConfigurationError('error detected when loading configuration');
+  static async load<T>(validator: Validator<T>): Promise<void> {
+    if (this.configurationLoadingExecuted) {
+      throw new ConfigurationError('Configuration should be loaded just once');
+    }
+    this.configurationLoadingExecuted = true;
+    const readValue: T = (await fetchConfiguration()) as T;
+    this.storedConfiguration = this.validate(readValue, validator);
   }
-  return storedConfiguration;
+
+  private static validate<T>(readConfiguration: T, validator: Validator<T>): T {
+    const validationResult = validator.validate(readConfiguration);
+    if (validationResult == null) {
+      return readConfiguration;
+    } else {
+      throw new ConfigurationError(JSON.stringify(validationResult));
+    }
+  }
 }

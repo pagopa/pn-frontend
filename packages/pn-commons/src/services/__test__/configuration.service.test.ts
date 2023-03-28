@@ -1,5 +1,5 @@
 import { Validator } from '@pagopa-pn/pn-validator';
-import { clearConfig, getConfiguration, loadConfiguration } from '../configuration.service';
+import { Configuration } from '../configuration.service';
 
 let mockFetchConfigurationResult: any;
 
@@ -13,7 +13,7 @@ jest.mock('../fetch.configuration.service', () => {
       if (mockFetchConfigurationResult) {
         return Promise.resolve(mockFetchConfigurationResult);
       } else {
-        throw new Error('fetch.error');  
+        throw new Error('fetch.error');
       }
     },
   };
@@ -31,42 +31,42 @@ class TestConfigurationValidator extends Validator<TestConfiguration> {
 }
 
 function getTestConfiguration(): TestConfiguration {
-  return getConfiguration<TestConfiguration>();
+  return Configuration.get<TestConfiguration>();
 }
 
 describe('configuration service', () => {
-  beforeEach(() => clearConfig());
-  
+  beforeEach(() => Configuration.clear());
+
   it('fetchConfiguration lauches error', async () => {
     mockFetchConfigurationResult = undefined;
-    await expect(loadConfiguration(new TestConfigurationValidator())).rejects.toThrow('fetch.error');
+    await expect(Configuration.load(new TestConfigurationValidator())).rejects.toThrow('fetch.error');
   });
 
   it('wrong config contents - does not match the validator rules', async () => {
-    mockFetchConfigurationResult = {b: 42};
-    await expect(loadConfiguration(new TestConfigurationValidator())).rejects.toThrow(
-      JSON.stringify({ a: `Value mustn't be undefined`})
+    mockFetchConfigurationResult = { b: 42 };
+    await expect(Configuration.load(new TestConfigurationValidator())).rejects.toThrow(
+      JSON.stringify({ a: `Value mustn't be undefined` })
     );
   });
 
   it('loadConfiguration called more than once', async () => {
-    mockFetchConfigurationResult = {a: 42};
-    await expect(loadConfiguration(new TestConfigurationValidator())).resolves;
-    await expect(loadConfiguration(new TestConfigurationValidator())).rejects.toThrow(
-      'config should be loaded just once'
+    mockFetchConfigurationResult = { a: 42 };
+    await expect(Configuration.load(new TestConfigurationValidator())).resolves;
+    await expect(Configuration.load(new TestConfigurationValidator())).rejects.toThrow(
+      'Configuration should be loaded just once'
     );
   });
 
   it('getConfiguration called without having called loadConfiguration before', async () => {
-    mockFetchConfigurationResult = {a: 42};
+    mockFetchConfigurationResult = { a: 42 };
     expect(() => getTestConfiguration()).toThrow(
       'loadConfiguration must be called before any call to getConfiguration'
     );
   });
 
   it('happy path', async () => {
-    mockFetchConfigurationResult = {a: 42};
-    await loadConfiguration(new TestConfigurationValidator());
+    mockFetchConfigurationResult = { a: 42 };
+    await Configuration.load(new TestConfigurationValidator());
     const config = getTestConfiguration();
     expect(config.a).toBe(42);
   });
