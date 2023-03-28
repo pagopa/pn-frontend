@@ -68,7 +68,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
             onClick={handleClick}
             size="small"
             data-testid="contextMenuButton"
-            aria-label="context menu"
+            aria-label={t('context-menu.title')}
             aria-controls={open ? 'context-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
@@ -180,6 +180,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
               disabled={isApiKeyRotated(Number(row.id))}
               tooltipMode={true}
               tooltip={t('api-key-copied')}
+              tooltipBefore={t('api-key-copy')}
               getValue={() => value || ''}
             />
           </Box>
@@ -192,7 +193,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
       width: '15%',
       getCellLabel(value: string, row: Item) {
         return (
-          <Typography sx={{ color: setRowColorByStatus(Number(row.id)) }}>
+          <Typography aria-current="date" sx={{ color: setRowColorByStatus(Number(row.id)) }}>
             {formatDate(value)}
           </Typography>
         );
@@ -270,7 +271,13 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
       {apiKeys && (
         <Fragment>
           {apiKeys.length > 0 ? (
-            <ItemsTable key={tableKey} data-testid="tableApiKeys" columns={columns} rows={rows} />
+            <ItemsTable
+              key={tableKey}
+              data-testid="tableApiKeys"
+              columns={columns}
+              rows={rows}
+              title={t('table.title')}
+            />
           ) : (
             <EmptyState
               data-testid="emptyState"

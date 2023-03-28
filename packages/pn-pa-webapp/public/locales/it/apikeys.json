@@ -32,8 +32,10 @@
   "empty-message": "Non è stata ancora generata nessuna API Key per questo ente.",
   "empty-action-label": "Genera API Key",
   "api-key-copied": "API Key copiata",
+  "api-key-copy": "Copia API Key",
   "go-to-api-keys": "Torna a API Key",
   "table": {
+    "title": "Tabella delle API Key",
     "name": "Nome",
     "api-key": "API Key",
     "last-update": "Ultima modifica",
@@ -41,6 +43,7 @@
     "status": "Stato"
   },
   "context-menu": {
+    "title": "Opzioni su API Key",
     "enable": "Attiva",
     "block": "Blocca",
     "rotate": "Ruota",

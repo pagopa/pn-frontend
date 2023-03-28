@@ -24,6 +24,7 @@
     "show-more": "Mostra dettagli"
   },
   "table": {
+    "title": "Tabella delle notifiche",
     "date": "Data",
     "recipient": "Destinatario",
     "subject": "Oggetto",
