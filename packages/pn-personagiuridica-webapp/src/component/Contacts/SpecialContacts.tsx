@@ -25,6 +25,8 @@ import {
   CustomDropdown,
   dataRegex,
   SpecialContactsProvider,
+  searchStringLimitReachedText,
+  useSearchStringChangeInput,  
 } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -68,6 +70,7 @@ type AddressType = {
 const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
+  const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [addresses, setAddresses] = useState([] as Array<Address>);
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const { initValidation } = useDigitalContactsCodeVerificationContext();
@@ -204,10 +207,11 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
   const getOptionLabel = (option: Party) => option.name || '';
 
-  const handleChangeInput = (newInputValue: string) => {
-    setSenderInputValue(newInputValue);
-  };
-
+  // handling of search string for sender
+  const entitySearchLabel = (searchString: string): string => 
+    `${t('special-contacts.sender', { ns: 'recapiti' })}${searchStringLimitReachedText(searchString)}`
+  ;
+  const handleChangeInput = (newInputValue: string) => handleSearchStringChangeInput(newInputValue, setSenderInputValue);
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
     await formik.setFieldTouched(e.target.id, true, false);
@@ -337,7 +341,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   <TextField
                     {...params}
                     name="sender"
-                    label={`${t('special-contacts.sender', { ns: 'recapiti' })}*`}
+                    label={entitySearchLabel(senderInputValue)}
                   />
                 )}
               />

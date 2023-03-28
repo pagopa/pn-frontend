@@ -224,7 +224,6 @@ const NuovaDelega = () => {
                 >
                   {
                   
-                  // eslint-disable-next-line sonarjs/cognitive-complexity
                   ({ values, setFieldValue, touched, errors, setFieldTouched }) => (
                     <Form>
                       <FormControl sx={{ width: '100%' }}>
