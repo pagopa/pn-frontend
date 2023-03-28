@@ -25,6 +25,8 @@ import {
   CustomDropdown,
   dataRegex,
   SpecialContactsProvider,
+  cleanDenominationSearchString,
+  appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -204,8 +206,24 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
   const getOptionLabel = (option: Party) => option.name || '';
 
+  // the 80-char limit and invalid char cleaning are also implemented in the entity search
+  // in NuovaDelega.page.tsx.
+  const entitySearchLabel = (searchString: string): string => {
+    const limitText = searchString.length === 80 
+      ? ` (${t('validation.search-pattern-length-limit', { ns: 'common', maxLength: 80 })})` 
+      : '*';
+    return `${t('special-contacts.sender', { ns: 'recapiti' })}${limitText}`;
+  };
+
   const handleChangeInput = (newInputValue: string) => {
-    setSenderInputValue(newInputValue);
+    const cleanedValue = cleanDenominationSearchString(newInputValue); 
+    setSenderInputValue(cleanedValue.slice(0,80));
+    if (cleanedValue.length < newInputValue.length) {
+      dispatch(appStateActions.addError({
+        title: t('validation.invalid-characters-not-inserted', { ns: 'common' }),
+        message: t('validation.invalid-characters-not-inserted', { ns: 'common' })
+      }));
+    }
   };
 
   const handleChangeTouched = async (e: ChangeEvent) => {
@@ -337,7 +355,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   <TextField
                     {...params}
                     name="sender"
-                    label={`${t('special-contacts.sender', { ns: 'recapiti' })}*`}
+                    label={entitySearchLabel(senderInputValue)}
                   />
                 )}
               />

@@ -35,6 +35,8 @@ import {
   PnBreadcrumb,
   isToday,
   dataRegex,
+  cleanDenominationSearchString,
+  appStateActions,
 } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
@@ -77,11 +79,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-
-function validName(wholeString: string) {
-  const nameRegex = /([\x20-\xFF]*)/g;
-  return [...wholeString.matchAll(nameRegex)].map(match => match[0]).join('');
-}
 
 const NuovaDelega = () => {
   const classes = useStyles();
@@ -171,8 +168,24 @@ const NuovaDelega = () => {
     </MenuItem>
   );
 
+  // the 80-char limit and invalid char cleaning are also implemented in the entity search
+  // in SpecialContacts.tsx.
+  const entitySearchLabel = (searchString: string): string => {
+    const limitText = searchString.length === 80 
+      ? ` (${t('validation.search-pattern-length-limit', { ns: 'common', maxLength: 80 })})` 
+      : '';
+    return `${t('nuovaDelega.form.selectEntities')}${limitText}`;
+  };
+
   const handleChangeInput = (newInputValue: string) => {
-    setSenderInputValue(validName(newInputValue).slice(0,80));
+    const cleanedValue = cleanDenominationSearchString(newInputValue); 
+    setSenderInputValue(cleanedValue.slice(0,80));
+    if (cleanedValue.length < newInputValue.length) {
+      dispatch(appStateActions.addError({
+        title: t('validation.invalid-characters-not-inserted', { ns: 'common' }),
+        message: t('validation.invalid-characters-not-inserted', { ns: 'common' })
+      }));
+    }
   };
 
   const getOptionLabel = (option: Party) => option.name || '';
@@ -367,7 +380,7 @@ const NuovaDelega = () => {
                                     renderInput={(params) => (
                                       <TextField
                                         {...params}
-                                        label={`${t('nuovaDelega.form.selectEntities')}${senderInputValue.length === 80 ? ' (ricerca max 80 caratteri)' : ''}`}
+                                        label={entitySearchLabel(senderInputValue)}
                                       />
                                     )}
                                   />

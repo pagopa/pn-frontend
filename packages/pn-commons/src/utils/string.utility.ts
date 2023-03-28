@@ -35,6 +35,7 @@ export const dataRegex = {
   isoDate: /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d{1,3})?)Z$/,
   taxonomyCode: /^(\d{6}[A-Z]{1})$/,
   denomination: /^([\x20-\xFF]{1,80})$/,
+  denominationSearch: /([\x20-\xFF]*)/g, 
   noticeCode: /^\d{18}$/,
 
   email:
@@ -66,6 +67,14 @@ export const dataRegex = {
  */
 export function formatFiscalCode(fiscalCode: string): string {
   return fiscalCode.toUpperCase();
+}
+
+/*
+ * Returns the result of "cleaning" (i.e. purging non-desired chars)
+ * from a string used to denomination search, in particular in Autocomplete fields.
+ */
+export function cleanDenominationSearchString(wholeSearchString: string): string {
+  return [...wholeSearchString.matchAll(dataRegex.denominationSearch)].map(match => match[0]).join('');
 }
 
 /**
