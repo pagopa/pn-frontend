@@ -169,6 +169,7 @@ async function testContactAddition(
     expect(mockActionFn).toBeCalledWith({
       recipientId: 'mocked-recipientId',
       senderId: 'comune-milano',
+      senderName: 'Comune di Milano',
       channelType,
       value: elementName === 's_phone' ? '+39' + value : value,
       code: undefined,
@@ -203,6 +204,7 @@ async function testContactAddition(
     expect(mockActionFn).toBeCalledWith({
       recipientId: 'mocked-recipientId',
       senderId: 'comune-milano',
+      senderName: 'Comune di Milano',
       channelType,
       value: elementName === 's_phone' ? '+39' + value : value,
       code: '01234',

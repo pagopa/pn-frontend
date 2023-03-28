@@ -6,19 +6,18 @@ import { TableCell, TableRow, TextField, Typography } from '@mui/material';
 import { dataRegex, useIsMobile, useSpecialContactsContext } from '@pagopa-pn/pn-commons';
 
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
-import { Party } from '../../models/party';
-import { trackEventByType } from "../../utils/mixpanel";
-import { EventActions, TrackEventType } from "../../utils/events";
+import { trackEventByType } from '../../utils/mixpanel';
+import { EventActions, TrackEventType } from '../../utils/events';
 import DigitalContactElem from './DigitalContactElem';
 
 type Props = {
   address: {
     senderId: string;
+    senderName: string;
     phone?: string;
     mail?: string;
     pec?: string;
   };
-  senders: Array<Party>;
   recipientId: string;
 };
 
@@ -36,18 +35,17 @@ const addressTypeToLabel = {
   phone: 'phone',
 };
 
-const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
+const SpecialContactElem = memo(({ address, recipientId }: Props) => {
   const { t } = useTranslation(['recapiti']);
   const isMobile = useIsMobile();
   const { contextEditMode, setContextEditMode } = useSpecialContactsContext();
-  const digitalElemRef = useRef<{ 
-    [key: string]: { editContact: () => void};
-  }>(
-    { 
-      [`${address.senderId}_pec`]: { editContact: () => {}},
-      [`${address.senderId}_phone`]: { editContact: () => {}},
-      [`${address.senderId}_mail`]: { editContact: () => {}},
-    });
+  const digitalElemRef = useRef<{
+    [key: string]: { editContact: () => void };
+  }>({
+    [`${address.senderId}_pec`]: { editContact: () => {} },
+    [`${address.senderId}_phone`]: { editContact: () => {} },
+    [`${address.senderId}_mail`]: { editContact: () => {} },
+  });
 
   const initialValues = {
     [`${address.senderId}_pec`]: address.pec || '',
@@ -90,7 +88,10 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
     [`${address.senderId}_phone`]: yup
       .string()
       .required(t('courtesy-contacts.valid-phone', { ns: 'recapiti' }))
-      .matches(dataRegex.phoneNumberWithItalyPrefix, t('courtesy-contacts.valid-phone', { ns: 'recapiti' })),
+      .matches(
+        dataRegex.phoneNumberWithItalyPrefix,
+        t('courtesy-contacts.valid-phone', { ns: 'recapiti' })
+      ),
     [`${address.senderId}_mail`]: yup
       .string()
       .required(t('courtesy-contacts.valid-email', { ns: 'recapiti' }))
@@ -127,15 +128,17 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   const jsxField = (f: Field) => (
     <Fragment>
       {address[f.addressId] ? (
-        <form data-testid="specialContactForm" onSubmit={
-          (e) => {
+        <form
+          data-testid="specialContactForm"
+          onSubmit={(e) => {
             e.preventDefault();
             digitalElemRef.current[f.id].editContact();
-          }
-        }>
+          }}
+        >
           <DigitalContactElem
             recipientId={recipientId}
             senderId={address.senderId}
+            senderName={address.senderName}
             contactType={f.contactType}
             fields={[
               {
@@ -150,8 +153,14 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
                     size="small"
                     value={formik.values[f.id]}
                     onChange={handleChangeTouched}
-                    error={(formik.touched[f.id] || formik.values[f.id].length > 0) && Boolean(formik.errors[f.id])}
-                    helperText={(formik.touched[f.id] || formik.values[f.id].length > 0) && formik.errors[f.id]}
+                    error={
+                      (formik.touched[f.id] || formik.values[f.id].length > 0) &&
+                      Boolean(formik.errors[f.id])
+                    }
+                    helperText={
+                      (formik.touched[f.id] || formik.values[f.id].length > 0) &&
+                      formik.errors[f.id]
+                    }
                   />
                 ),
                 isEditable: true,
@@ -170,7 +179,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
             onConfirmClick={(status) => updateContact(status, f.id)}
             resetModifyValue={() => updateContact('cancelled', f.id)}
             // eslint-disable-next-line functional/immutable-data
-            ref={(node: { editContact: () => void}) => (digitalElemRef.current[f.id] = node)}
+            ref={(node: { editContact: () => void }) => (digitalElemRef.current[f.id] = node)}
             editDisabled={contextEditMode}
             setContextEditMode={setContextEditMode}
           />
@@ -186,7 +195,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
       <Fragment>
         <Typography fontWeight={600}>{t('special-contacts.sender', { ns: 'recapiti' })}</Typography>
         <Typography fontWeight={700} fontSize={16}>
-          {senders.find((s) => s.id === address.senderId)?.name}
+          {address.senderName}
         </Typography>
         {fields.map((f) => (
           <Fragment key={f.id}>
@@ -203,9 +212,7 @@ const SpecialContactElem = memo(({ address, senders, recipientId }: Props) => {
   return (
     <TableRow>
       <TableCell width="25%" sx={{ borderBottomColor: 'divider' }}>
-        <Typography fontWeight={700}>
-          {senders.find((s) => s.id === address.senderId)?.name}
-        </Typography>
+        <Typography fontWeight={700}>{address.senderName}</Typography>
       </TableCell>
       {fields.map((f) => (
         <TableCell width="25%" key={f.id} sx={{ borderBottomColor: 'divider' }}>
