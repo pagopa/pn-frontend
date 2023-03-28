@@ -135,7 +135,7 @@ function ItemsTable<ColumnId extends string>({
                           sx={buttonNakedInheritStyle}
                           onClick={() => column.onClick && column.onClick(row, column)}
                         >
-                          {cellValue} bcd
+                          {cellValue}
                         </ButtonNaked>
                       )}
                       {cellValue && !column.onClick && (
