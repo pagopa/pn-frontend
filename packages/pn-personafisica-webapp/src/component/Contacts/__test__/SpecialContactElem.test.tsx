@@ -1,3 +1,4 @@
+import React from 'react';
 import { act, fireEvent, RenderResult, waitFor } from '@testing-library/react';
 import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 
@@ -26,10 +27,10 @@ describe('SpecialContactElem Component', () => {
             <SpecialContactElem
               address={{
                 senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
                 mail: 'mocked@mail.it',
                 pec: 'mocked@pec.it',
               }}
-              senders={[{ id: 'mocked-senderId', name: 'Mocked Sender' }]}
               recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
@@ -65,10 +66,10 @@ describe('SpecialContactElem Component', () => {
             <SpecialContactElem
               address={{
                 senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
                 mail: 'mocked@mail.it',
                 pec: 'mocked@pec.it',
               }}
-              senders={[{ id: 'mocked-senderId', name: 'Mocked Sender' }]}
               recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
@@ -106,10 +107,10 @@ describe('SpecialContactElem Component', () => {
             <SpecialContactElem
               address={{
                 senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
                 mail: 'mocked@mail.it',
                 pec: 'mocked@pec.it',
               }}
-              senders={[{ id: 'mocked-senderId', name: 'Mocked Sender' }]}
               recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>

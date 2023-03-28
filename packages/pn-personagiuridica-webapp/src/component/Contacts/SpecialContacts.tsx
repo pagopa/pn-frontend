@@ -46,6 +46,7 @@ type Props = {
 
 type Address = {
   senderId: string;
+  senderName: string;
   phone?: string;
   mail?: string;
   pec?: string;
@@ -72,7 +73,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const { initValidation } = useDigitalContactsCodeVerificationContext();
   const parties = useAppSelector((state: RootState) => state.contactsState.parties);
-  const [fullPartiesList, setFullPartiesList] = useState<Array<Party>>([]);
   const isMobile = useIsMobile();
   const [senderInputValue, setSenderInputValue] = useState('');
 
@@ -130,13 +130,6 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
   }, []);
 
   useEffect(() => {
-    if (fullPartiesList.length === 0) {
-      void dispatch(getAllActivatedParties({}));
-      setFullPartiesList(parties);
-    }
-  }, [parties]);
-
-  useEffect(() => {
     if (senderInputValue.length >= 4) {
       void dispatch(getAllActivatedParties({ paNameFilter: senderInputValue, blockLoading: true }));
     } else if (senderInputValue.length === 0) {
@@ -192,6 +185,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
           values.s_pec || values.s_mail || internationalPhonePrefix + values.s_phone,
           recipientId,
           values.sender.id,
+          values.sender.name,
           async (status: 'validated' | 'cancelled') => {
             if (status === 'validated') {
               // reset form
@@ -276,6 +270,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       .filter((a) => a.senderId !== 'default')
       .map((a) => ({
         senderId: a.senderId,
+        senderName: a.senderName || a.senderId,
         channelType: a.channelType,
         pec: a.value,
       }));
@@ -283,6 +278,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     /* eslint-disable functional/immutable-data */
     const getAddress = (address: DigitalAddress) => ({
       senderId: address.senderId,
+      senderName: address.senderName || address.senderId,
       phone: address.channelType === CourtesyChannelType.SMS ? address.value : undefined,
       mail: address.channelType === CourtesyChannelType.EMAIL ? address.value : undefined,
     });
@@ -335,7 +331,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 autoComplete
                 noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
                 getOptionLabel={getOptionLabel}
-                isOptionEqualToValue={(option, value) => option.name === value.name}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={senderChangeHandler}
                 inputValue={senderInputValue}
                 onInputChange={(_event, newInputValue) => handleChangeInput(newInputValue)}
@@ -458,12 +454,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   </TableHead>
                   <TableBody>
                     {addresses.map((a) => (
-                      <SpecialContactElem
-                        key={a.senderId}
-                        address={a}
-                        senders={fullPartiesList}
-                        recipientId={recipientId}
-                      />
+                      <SpecialContactElem key={a.senderId} address={a} recipientId={recipientId} />
                     ))}
                   </TableBody>
                 </Table>
@@ -480,7 +471,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                     }}
                   >
                     <CardContent>
-                      <SpecialContactElem address={a} senders={parties} recipientId={recipientId} />
+                      <SpecialContactElem address={a} recipientId={recipientId} />
                     </CardContent>
                   </Card>
                 ))}
