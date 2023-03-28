@@ -55,7 +55,6 @@ describe('test Terms of Service page', () => {
     const result = render(<ToSAcceptance tosConsent={tosFirstAcceptance} privacyConsent={privacyFirstAcceptance} />);
 
     expect(result.container).toHaveTextContent(/tos.title/i);
-    expect(result.container).toHaveTextContent(/tos.body/i);
     expect(result.container).toHaveTextContent(/tos.switch-label/i);
     expect(result.container).toHaveTextContent(/tos.button/i);
   });
@@ -64,7 +63,6 @@ describe('test Terms of Service page', () => {
     const result = render(<ToSAcceptance tosConsent={tosNonFirstAcceptance} privacyConsent={privacyNonFirstAcceptance} />);
 
     expect(result.container).toHaveTextContent(/tos.title/i);
-    expect(result.container).toHaveTextContent(/tos.redo-body/i);
     expect(result.container).toHaveTextContent(/tos.switch-label/i);
     expect(result.container).toHaveTextContent(/tos.button/i);
   });

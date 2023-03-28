@@ -16,8 +16,8 @@ const HomePage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Piattaforma Notifiche</title>
-        <meta name="description" content="Piattaforma Notifiche" />
+        <title>SEND</title>
+        <meta name="description" content="Servizio notifiche digitali" />
         <link rel="icon" href="/static/favicon.svg" />
       </Head>
 

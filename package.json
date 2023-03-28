@@ -1,5 +1,5 @@
 {
-  "name": "piattaforma-notifiche-monorepo",
+  "name": "send-monorepo",
   "private": true,
   "devDependencies": {
     "@babel/core": "^7.0.0-0",

@@ -1,7 +1,7 @@
 {
   "title": "API Key",
   "subtitle": {
-    "text1": "Piattaforma Notifiche offre API di ",
+    "text1": "SEND offre API di ",
     "text2": "invio notifiche",
     "text3": " e ",
     "text4": "accesso alle informazioni",
@@ -75,7 +75,7 @@
   "new-api-key": {
     "page-title": "Genera una API Key",
     "cancel-prompt": "Annullare l'operazione?",
-    "page-description": "Piattaforma Notifiche ha generato il codice della API Key. Ora, inserisci un nome identificativo e assegnala a uno o più gruppi.",
+    "page-description": "SEND ha generato il codice della API Key. Ora, inserisci un nome identificativo e assegnala a uno o più gruppi.",
     "form-label-name": "Dai un nome alla tua API Key",
     "form-placeholder-name": "Inserisci un nome",
     "form-error-name": "Definire un nome per l'API Key",
