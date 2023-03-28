@@ -106,7 +106,7 @@ const HelpNotificationDetails: React.FC<HelpNotificationDetailsProps> = ({
       {getLocalizedOrDefaultLabel(
         'notifications',
         'detail.help.assistance',
-        'Per problemi tecnici o domande relative a Piattaforma Notifiche, premi su “Assisistenza” in alto a destra.'
+        'Per problemi tecnici o domande relative a SEND, premi su “Assisistenza” in alto a destra.'
       )}
     </Typography>
   </>

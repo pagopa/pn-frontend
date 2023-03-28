@@ -1,6 +1,6 @@
 {
   "name": "@pagopa-pn/pn-personagiuridica-webapp",
-  "description": "Piattaforma Notifiche per la persona giuridica",
+  "description": "SEND per la persona giuridica",
   "version": "1.5.4",
   "private": true,
   "dependencies": {

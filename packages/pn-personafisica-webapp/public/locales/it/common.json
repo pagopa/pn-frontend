@@ -32,10 +32,10 @@
     "pago-pa-link": "Sito di PagoPA S.p.A."
   },
   "tos": {
-    "title": "Piattaforma Notifiche",
-    "body": "Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.",
+    "title": "SEND - Servizio Notifiche Digitali",
+    "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
     "redo-body": "L’Informativa Privacy e i Termini e condizioni d’uso sono cambiati. Per accedere, leggi e accetta la nuova versione.",
-    "switch-label": "Accetto i <0>Termini e condizioni d’uso del servizio</0> e confermo di avere letto <1>l’Informativa Privacy</1>.",
+    "switch-label": "Accetto l’<0>Informativa Privacy</0> e i <1>Termini e condizioni d’uso</1> di SEND",
     "button": "Accedi"
   },
   "table": {
@@ -77,18 +77,18 @@
     "action": "scrivici"
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
-  "not-logged": "Accedi a Piattaforma Notifiche",
+  "not-logged": "Accedi a SEND",
   "not-logged-subtitle": "Per vedere e gestire le tue notifiche, accedi con SPID o CIE.",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
   },
   "leaving-app": {
-    "title": "Stai uscendo da Piattaforma Notifiche",
+    "title": "Stai uscendo da SEND",
     "message": "Verrai reindirizzato"
   },
   "error-when-fetching-tos-status": {
-    "title": "Problemi nell'accesso in Piattaforma Notifiche",
+    "title": "Problemi nell'accesso in SEND",
     "message": "Riprova più tardi"
   },
   "messages": {

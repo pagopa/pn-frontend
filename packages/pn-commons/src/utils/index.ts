@@ -19,6 +19,7 @@ import {
   isToday,
   tenYearsAgo,
   DATE_FORMAT,
+  dateIsDefined,
   getNextDay,
   minutesBeforeNow,
   formatToTimezoneString,
@@ -48,6 +49,7 @@ import {
 import { performThunkAction } from './redux.utility';
 import { ResponseEventDispatcher, AppResponsePublisher } from './AppResponse';
 import { AppError, AppErrorFactory, errorFactoryManager, UnknownAppError } from './AppError';
+import { buttonNakedInheritStyle } from './styles.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -62,6 +64,7 @@ export {
   formatDay,
   formatTime,
   getNextDay,
+  dateIsDefined,
   minutesBeforeNow,
   formatToTimezoneString,
   getValidValue,
@@ -99,4 +102,5 @@ export {
   UnknownAppError,
   sanitizeString,
   compileOneTrustPath,
+  buttonNakedInheritStyle,
 };

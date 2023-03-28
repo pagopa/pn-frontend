@@ -1,8 +1,12 @@
-import { Fragment, ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { Box, Grid, Link, Typography } from '@mui/material';
-import { ConsentUser, PRIVACY_LINK_RELATIVE_PATH, TOS_LINK_RELATIVE_PATH } from '@pagopa-pn/pn-commons';
+import {
+  ConsentUser,
+  PRIVACY_LINK_RELATIVE_PATH,
+  TOS_LINK_RELATIVE_PATH,
+} from '@pagopa-pn/pn-commons';
 
 import { TOSAgreement } from '@pagopa/mui-italia';
 import { useAppDispatch } from '../redux/hooks';
@@ -63,20 +67,16 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
   }, [tosConsent, privacyConsent]);
 
   return (
-    <Fragment>
-      <Grid container height="100%" justifyContent="center" sx={{ backgroundColor: '#FAFAFA' }}>
-        <Grid item xs={10} sm={8} md={4} display="flex" alignItems="center" flexDirection="column">
-          <TOSAgreement
-            productName={t('tos.title', 'Piattaforma Notifiche')}
-            description={t(
-              tosConsent.isFirstAccept && privacyConsent.isFirstAccept
-                ? 'tos.body'
-                : 'tos.redo-body',
-              'Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.'
-            )}
-            onConfirm={handleAccept}
-            confirmBtnLabel={t('tos.button', 'Accedi')}
-          >
+    <Grid
+      container
+      sx={{ backgroundColor: '#FAFAFA', height: '100%' }}
+      justifyContent="center"
+      alignContent="center"
+    >
+      <Grid item xs={10} sm={8} md={6}>
+        <TOSAgreement
+          productName={t('tos.title', 'SEND - Servizio Notifiche Digitali')}
+          description={
             <Box display="flex" alignItems="center">
               <Typography color="text.secondary" variant="body1">
                 <Trans
@@ -89,10 +89,12 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
                 </Trans>
               </Typography>
             </Box>
-          </TOSAgreement>
-        </Grid>
+          }
+          onConfirm={handleAccept}
+          confirmBtnLabel={t('tos.button', 'Accedi')}
+        />
       </Grid>
-    </Fragment>
+    </Grid>
   );
 };
 

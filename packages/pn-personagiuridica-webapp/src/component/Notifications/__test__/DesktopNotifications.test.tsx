@@ -57,7 +57,7 @@ describe('DesktopNotifications Component', () => {
       />
     );
     const notificationsTableCell = result?.container.querySelector(
-      'table tr:first-child td:nth-child(2)'
+      'table tr:first-child td:nth-child(2) button'
     );
     fireEvent.click(notificationsTableCell!);
     await waitFor(() => {

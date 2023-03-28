@@ -49,7 +49,7 @@ import { getCurrentAppStatus } from './redux/appStatus/actions';
 const productsList: Array<ProductSwitchItem> = [
   {
     id: '0',
-    title: `Piattaforma Notifiche`,
+    title: `SEND - Servizio Notifiche Digitali`,
     productUrl: '',
     linkType: 'internal',
   },
