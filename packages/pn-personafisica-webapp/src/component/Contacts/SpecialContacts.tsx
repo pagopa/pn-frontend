@@ -25,8 +25,8 @@ import {
   CustomDropdown,
   dataRegex,
   SpecialContactsProvider,
-  cleanDenominationSearchString,
-  appStateActions,
+  searchStringLimitReachedText,
+  useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -70,6 +70,7 @@ type AddressType = {
 const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
+  const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [addresses, setAddresses] = useState([] as Array<Address>);
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const { initValidation } = useDigitalContactsCodeVerificationContext();
@@ -206,25 +207,11 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
   const getOptionLabel = (option: Party) => option.name || '';
 
-  // the 80-char limit and invalid char cleaning are also implemented in the entity search
-  // in NuovaDelega.page.tsx.
-  const entitySearchLabel = (searchString: string): string => {
-    const limitText = searchString.length === 80 
-      ? ` (${t('validation.search-pattern-length-limit', { ns: 'common', maxLength: 80 })})` 
-      : '*';
-    return `${t('special-contacts.sender', { ns: 'recapiti' })}${limitText}`;
-  };
-
-  const handleChangeInput = (newInputValue: string) => {
-    const cleanedValue = cleanDenominationSearchString(newInputValue); 
-    setSenderInputValue(cleanedValue.slice(0,80));
-    if (cleanedValue.length < newInputValue.length) {
-      dispatch(appStateActions.addError({
-        title: t('validation.invalid-characters-not-inserted', { ns: 'common' }),
-        message: t('validation.invalid-characters-not-inserted', { ns: 'common' })
-      }));
-    }
-  };
+  // handling of search string for sender
+  const entitySearchLabel = (searchString: string): string => 
+    `${t('special-contacts.sender', { ns: 'recapiti' })}${searchStringLimitReachedText(searchString)}`
+  ;
+  const handleChangeInput = (newInputValue: string) => handleSearchStringChangeInput(newInputValue, setSenderInputValue);
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);

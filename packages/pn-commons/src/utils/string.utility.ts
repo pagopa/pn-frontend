@@ -69,14 +69,6 @@ export function formatFiscalCode(fiscalCode: string): string {
   return fiscalCode.toUpperCase();
 }
 
-/*
- * Returns the result of "cleaning" (i.e. purging non-desired chars)
- * from a string used to denomination search, in particular in Autocomplete fields.
- */
-export function cleanDenominationSearchString(wholeSearchString: string): string {
-  return [...wholeSearchString.matchAll(dataRegex.denominationSearch)].map(match => match[0]).join('');
-}
-
 /**
  * Check if the attribute is potentially dangerous
  * @param  {String}  name  The attribute name

@@ -35,8 +35,8 @@ import {
   PnBreadcrumb,
   isToday,
   dataRegex,
-  cleanDenominationSearchString,
-  appStateActions,
+  searchStringLimitReachedText,
+  useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
@@ -87,6 +87,7 @@ const NuovaDelega = () => {
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
+  const handleSearchStringChangeInput = useSearchStringChangeInput();
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
@@ -168,25 +169,11 @@ const NuovaDelega = () => {
     </MenuItem>
   );
 
-  // the 80-char limit and invalid char cleaning are also implemented in the entity search
-  // in SpecialContacts.tsx.
-  const entitySearchLabel = (searchString: string): string => {
-    const limitText = searchString.length === 80 
-      ? ` (${t('validation.search-pattern-length-limit', { ns: 'common', maxLength: 80 })})` 
-      : '';
-    return `${t('nuovaDelega.form.selectEntities')}${limitText}`;
-  };
-
-  const handleChangeInput = (newInputValue: string) => {
-    const cleanedValue = cleanDenominationSearchString(newInputValue); 
-    setSenderInputValue(cleanedValue.slice(0,80));
-    if (cleanedValue.length < newInputValue.length) {
-      dispatch(appStateActions.addError({
-        title: t('validation.invalid-characters-not-inserted', { ns: 'common' }),
-        message: t('validation.invalid-characters-not-inserted', { ns: 'common' })
-      }));
-    }
-  };
+  // handling of search string for sender
+  const entitySearchLabel = (searchString: string): string => 
+    `${t('nuovaDelega.form.selectEntities')}${searchStringLimitReachedText(searchString)}`
+  ;
+  const handleChangeInput = (newInputValue: string) => handleSearchStringChangeInput(newInputValue, setSenderInputValue);
 
   const getOptionLabel = (option: Party) => option.name || '';
 
