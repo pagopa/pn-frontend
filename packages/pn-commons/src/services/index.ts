@@ -1,5 +1,5 @@
 import { initLocalization } from './localization.service';
 import { trackEvent, interceptDispatch } from './tracking.service';
-import { loadConfiguration, getConfiguration } from './configuration.service';
+import { Configuration } from './configuration.service';
 
-export { initLocalization, trackEvent, interceptDispatch, loadConfiguration, getConfiguration };
+export { initLocalization, trackEvent, interceptDispatch, Configuration };
