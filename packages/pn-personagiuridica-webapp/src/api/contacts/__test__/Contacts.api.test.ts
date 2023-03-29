@@ -51,6 +51,7 @@ describe('Contacts api tests', () => {
       channelType: LegalChannelType.PEC,
       recipientId: 'mocked-recipientId',
       senderId: 'mocked-senderId',
+      senderName: undefined,
     });
     mock.reset();
     mock.restore();
@@ -101,6 +102,7 @@ describe('Contacts api tests', () => {
       channelType: CourtesyChannelType.EMAIL,
       recipientId: 'mocked-recipientId',
       senderId: 'mocked-senderId',
+      senderName: undefined,
     });
     mock.reset();
     mock.restore();
