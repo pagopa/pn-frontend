@@ -31,7 +31,8 @@ export const createOrUpdateLegalAddress = createAsyncThunk<
       params.recipientId,
       params.senderId,
       params.channelType as LegalChannelType,
-      { value: params.value, verificationCode: params.code }
+      { value: params.value, verificationCode: params.code },
+      params.senderName
     );
   } catch (e: any) {
     return rejectWithValue(e);
@@ -63,7 +64,8 @@ export const createOrUpdateCourtesyAddress = createAsyncThunk<
         params.recipientId,
         params.senderId,
         params.channelType as CourtesyChannelType,
-        { value: params.value, verificationCode: params.code }
+        { value: params.value, verificationCode: params.code },
+        params.senderName
       );
     } catch (e: any) {
       return rejectWithValue(e);
