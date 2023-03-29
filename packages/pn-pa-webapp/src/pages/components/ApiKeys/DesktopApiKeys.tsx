@@ -276,7 +276,7 @@ const DesktopApiKeys = ({ apiKeys, handleModalClick }: Props) => {
               data-testid="tableApiKeys"
               columns={columns}
               rows={rows}
-              title={t('table.title')}
+              ariaTitle={t('table.title')}
             />
           ) : (
             <EmptyState

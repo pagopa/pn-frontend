@@ -172,7 +172,7 @@ const DesktopNotifications = ({
               sort={sort}
               rows={rows}
               onChangeSorting={onChangeSorting}
-              title={t('table.title')}
+              ariaTitle={t('table.title')}
             />
           ) : (
             <EmptyState {...EmptyStateProps} />

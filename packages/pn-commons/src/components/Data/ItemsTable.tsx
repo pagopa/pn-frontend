@@ -26,7 +26,7 @@ type Props<ColumnId> = {
   /** The function to be invoked if the user change sorting */
   onChangeSorting?: (s: Sort<ColumnId>) => void;
   /** Table title used in aria-label */
-  title?: string;
+  ariaTitle?: string;
 };
 
 function ItemsTable<ColumnId extends string>({
@@ -34,7 +34,7 @@ function ItemsTable<ColumnId extends string>({
   rows,
   sort,
   onChangeSorting,
-  title,
+  ariaTitle,
 }: Props<ColumnId>) {
   const createSortHandler = (property: ColumnId) => () => {
     if (sort && onChangeSorting) {
@@ -68,8 +68,8 @@ function ItemsTable<ColumnId extends string>({
         <Table
           stickyHeader
           aria-label={
-            title
-              ? title
+            ariaTitle
+              ? ariaTitle
               : getLocalizedOrDefaultLabel('common', 'table.aria-label', 'Tabella di item')
           }
           data-cy="table(notifications)"
