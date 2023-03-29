@@ -256,7 +256,8 @@
         "foreign-state": "Stato",
         "at": "Presso",
         "address-details": "Note aggiuntive (scala, piano)",
-        "add-recipient": "Aggiungi un destinatario"
+        "add-recipient": "Aggiungi un destinatario",
+        "remove-recipient": "Rimuovi destinatario"
       },
       "attachments": {
         "title": "Allegati",
@@ -268,7 +269,9 @@
         "doc-name": "Nome del documento",
         "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
         "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
-        "back-to-recipient": "Torna a Destinatario"
+        "back-to-recipient": "Torna a Destinatario",
+        "remove-attachment": "Elimina allegato",
+        "remove-document": "Rimuovi documento"
       },
       "payment-methods": {
         "title": "Modelli di pagamento",
