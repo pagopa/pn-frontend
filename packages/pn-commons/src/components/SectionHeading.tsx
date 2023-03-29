@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
 function SectionHeading(props: SectionHeadingProps): JSX.Element {
   const classes = useStyles();
   return (
-    <Typography component="h3" variant="subtitle1" className={classes.root}>
+    <Typography component="h3" variant="h6" className={classes.root}>
       {props.children}
     </Typography>
   );
