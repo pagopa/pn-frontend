@@ -1,7 +1,7 @@
 import { Fragment, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Paper, Typography } from '@mui/material';
-import { CustomH3 } from '@pagopa-pn/pn-commons';
+import { SectionHeading } from '@pagopa-pn/pn-commons';
 
 type Props = {
   children: ReactNode;
@@ -30,7 +30,7 @@ const NewNotificationCard = ({
     <Fragment>
       {!noPaper && (
         <Paper sx={{ padding: '24px', marginTop: '40px' }} className="paperContainer">
-          {title && <CustomH3>{title}</CustomH3>}
+          {title && <SectionHeading>{title}</SectionHeading>}
           {subtitle && <Typography variant="body1">{subtitle}</Typography>}
           <Box sx={{ marginTop: '20px' }}>{children}</Box>
         </Paper>

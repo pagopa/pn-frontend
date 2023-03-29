@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { Link, Paper, Typography } from '@mui/material';
-import { CustomH3, FileUpload } from '@pagopa-pn/pn-commons';
+import { SectionHeading, FileUpload } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
@@ -340,9 +340,9 @@ const PaymentMethods = ({
               sx={{ padding: '24px', marginTop: '40px' }}
               className="paperContainer"
             >
-              <CustomH3>
+              <SectionHeading>
                 {t('payment-models')} {recipient.firstName} {recipient.lastName}
-              </CustomH3>
+              </SectionHeading>
               <PaymentBox
                 id={`${recipient.taxId}.pagoPaForm`}
                 title={`${t('attach-pagopa-notice')}`}

@@ -16,7 +16,7 @@ import {
   Paper,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { DigitalDomicileType, RecipientType, dataRegex, CustomH3 } from '@pagopa-pn/pn-commons';
+import { DigitalDomicileType, RecipientType, dataRegex, SectionHeading } from '@pagopa-pn/pn-commons';
 
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -397,9 +397,9 @@ const Recipient = ({
                   alignItems="center"
                   justifyContent="space-between"
                 >
-                  <CustomH3>
+                  <SectionHeading>
                     {t('title')} {values.recipients.length > 1 ? index + 1 : null}
-                  </CustomH3>
+                  </SectionHeading>
                   {values.recipients.length > 1 && (
                     <Delete
                       data-testid="DeleteRecipientIcon"
