@@ -1,9 +1,10 @@
 import { ReactNode } from 'react';
 import { Typography, Box } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { KnownSentiment } from '../types';
 import { iconForKnownSentiment } from '../types/EmptyState';
-
+import { buttonNakedInheritStyle } from '../utils';
 type Props = {
   /** Callback to be called when performing an empty action */
   emptyActionCallback?: (e: any, source?: string) => void;
@@ -12,7 +13,7 @@ type Props = {
   /** Empty action label */
   emptyActionLabel?: string;
   /** Indication for which emoticon to show */
-  sentimentIcon?: KnownSentiment | SvgIconComponent; 
+  sentimentIcon?: KnownSentiment | SvgIconComponent;
   /** Secondary Message */
   secondaryMessage?: Message;
 };
@@ -33,7 +34,8 @@ function EmptyState({
     emptyActionLabel: '',
   },
 }: Props) {
-  const FinalIcon = typeof sentimentIcon === "string" ? iconForKnownSentiment(sentimentIcon) : sentimentIcon;
+  const FinalIcon =
+    typeof sentimentIcon === 'string' ? iconForKnownSentiment(sentimentIcon) : sentimentIcon;
 
   return (
     <Box
@@ -47,29 +49,25 @@ function EmptyState({
       }}
     >
       {FinalIcon && (
-        <FinalIcon sx={{ verticalAlign: 'middle', mr: '20px', mb: '2px', fontSize: "1.25rem" }} />
+        <FinalIcon sx={{ verticalAlign: 'middle', mr: '20px', mb: '2px', fontSize: '1.25rem' }} />
       )}
       <Typography variant="body2" sx={{ display: 'inline' }}>
         {emptyMessage}
       </Typography>
-      { emptyActionCallback && 
+      {emptyActionCallback && (
         <>
           &nbsp;
-          <Typography
-            color="primary"
-            variant="body2"
-            fontWeight={'bold'}
+          <ButtonNaked
             data-testid="callToActionFirst"
-            sx={{
-              cursor: 'pointer',
-              display: 'inline',
-            }}
             onClick={emptyActionCallback}
+            sx={{ buttonNakedInheritStyle }}
           >
-            {emptyActionLabel}
-          </Typography>
-        </> 
-      }
+            <Typography color="primary" variant="body2" fontWeight={'bold'}>
+              {emptyActionLabel}
+            </Typography>
+          </ButtonNaked>
+        </>
+      )}
       &nbsp;
       <Typography variant="body2" sx={{ display: 'inline' }}>
         {secondaryMessage.emptyMessage}
