@@ -9,12 +9,14 @@ interface PaConfigurationFromFile {
   API_BASE_URL: string;
   ONE_TRUST_DRAFT_MODE?: boolean;
   ONE_TRUST_PP?: string;
+  ONE_TRUST_TOS?: string;
 }
 
 interface PaConfiguration extends PaConfigurationFromFile {
   OT_DOMAIN_ID: string;
   ONE_TRUST_DRAFT_MODE: boolean;
   ONE_TRUST_PP: string;
+  ONE_TRUST_TOS: string;
   IS_DEVELOP: boolean;
   MOCK_USER: boolean;
   LOG_REDUX_ACTIONS: boolean;
@@ -29,6 +31,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.token);
+    this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.token);
   }
 
   makeRequired(rule: StringRuleValidator<PaConfigurationFromFile, string>): void {
@@ -44,6 +47,7 @@ export function getConfiguration(): PaConfiguration {
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
     ONE_TRUST_DRAFT_MODE: !!configurationFromFile.ONE_TRUST_DRAFT_MODE,
     ONE_TRUST_PP: configurationFromFile.ONE_TRUST_PP || '',
+    ONE_TRUST_TOS: configurationFromFile.ONE_TRUST_TOS || '',
     IS_DEVELOP,
     MOCK_USER: IS_DEVELOP,
     LOG_REDUX_ACTIONS: IS_DEVELOP,

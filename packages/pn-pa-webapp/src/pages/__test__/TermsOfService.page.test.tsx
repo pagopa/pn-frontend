@@ -7,14 +7,9 @@ import TermsOfServicePage from '../TermsOfService.page';
 jest.mock('../../services/configuration.service', () => {
   return {
     ...jest.requireActual('../../services/configuration.service'),
-    getConfiguration: () => ({ONE_TRUST_DRAFT_MODE: false}),
-  };
-});
-
-jest.mock('../../utils/constants', () => {
-  return {
-    ...jest.requireActual('../../utils/constants'),
-    ONE_TRUST_TOS: 'mocked-id',
+    getConfiguration: () => (
+      { ONE_TRUST_DRAFT_MODE: false, ONE_TRUST_TOS: 'mocked-id' }
+    ),
   };
 });
 
