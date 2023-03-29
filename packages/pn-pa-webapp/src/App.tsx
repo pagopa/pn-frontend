@@ -33,12 +33,13 @@ import { getMenuItems } from './utils/role.utility';
 
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { PAGOPA_HELP_EMAIL, SELFCARE_BASE_URL, VERSION, MIXPANEL_TOKEN } from './utils/constants';
+import { PAGOPA_HELP_EMAIL, VERSION, MIXPANEL_TOKEN } from './utils/constants';
 import { TrackEventType } from './utils/events';
 import { trackEventByType } from './utils/mixpanel';
 import './utils/onetrust';
 import { PAAppErrorFactory } from './utils/AppError/PAAppErrorFactory';
 import { setUpInterceptor } from './api/interceptors';
+import { getConfiguration } from './services/configuration.service';
 
 const App = () => {
   useUnload(() => {
@@ -61,6 +62,8 @@ const App = () => {
   const role = loggedUser.organization?.roles[0];
   const idOrganization = loggedUser.organization?.id;
   const sessionToken = loggedUser.sessionToken;
+
+  const configuration = useMemo(() => getConfiguration(), []);
 
   const menuItems = useMemo(() => {
     const basicMenuItems: Array<SideMenuItem> = [
@@ -126,7 +129,7 @@ const App = () => {
       {
         id: '1',
         title: t('header.reserved-area'),
-        productUrl: `${SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
+        productUrl: `${configuration.SELFCARE_BASE_URL as string}/dashboard/${idOrganization}`,
         linkType: 'external',
       },
       {
