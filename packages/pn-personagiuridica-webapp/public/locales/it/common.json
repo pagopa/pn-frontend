@@ -140,7 +140,7 @@
   "required-fields": "*Campi obbligatori",
   "validation": {
     "search-pattern-length-limit": "ricerca max {{maxLength}} caratteri",
-    "invalid-characters-not-inserted": "caratteri invalidi non inseriti"
+    "invalid-characters-not-inserted": "I caratteri non validi non sono stati inseriti."
   },
   "errors": {
     "bad_request": {
