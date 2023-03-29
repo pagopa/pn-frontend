@@ -82,8 +82,7 @@ const TermsOfService = ({ tosConsent, privacyConsent }: TermsOfServiceProps) => 
             description={t(
               tosConsent.isFirstAccept && privacyConsent.isFirstAccept
                 ? 'tos.body'
-                : 'tos.redo-body',
-              'Prima di accedere, accetta i Termini e condizioni d’uso del servizio e leggi l’Informativa Privacy.'
+                : 'tos.redo-body'
             )}
             onConfirm={handleAccept}
             confirmBtnLabel={t('tos.button', 'Accedi')}

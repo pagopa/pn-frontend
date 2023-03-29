@@ -4,6 +4,7 @@ import { SpecialContactsProvider } from '@pagopa-pn/pn-commons';
 import { render } from '../../../__test__/test-utils';
 import { DigitalContactsCodeVerificationProvider } from '../DigitalContactsCodeVerification.context';
 import SpecialContactElem from '../SpecialContactElem';
+import React from 'react';
 
 jest.mock('react-i18next', () => ({
   // this mock makes sure any components using the translate hook can use it without a warning being shown
@@ -26,10 +27,10 @@ describe('SpecialContactElem Component', () => {
             <SpecialContactElem
               address={{
                 senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
                 mail: 'mocked@mail.it',
                 pec: 'mocked@pec.it',
               }}
-              senders={[{ id: 'mocked-senderId', name: 'Mocked Sender' }]}
               recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
@@ -65,10 +66,10 @@ describe('SpecialContactElem Component', () => {
             <SpecialContactElem
               address={{
                 senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
                 mail: 'mocked@mail.it',
                 pec: 'mocked@pec.it',
               }}
-              senders={[{ id: 'mocked-senderId', name: 'Mocked Sender' }]}
               recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
@@ -106,10 +107,10 @@ describe('SpecialContactElem Component', () => {
             <SpecialContactElem
               address={{
                 senderId: 'mocked-senderId',
+                senderName: 'Mocked Sender',
                 mail: 'mocked@mail.it',
                 pec: 'mocked@pec.it',
               }}
-              senders={[{ id: 'mocked-senderId', name: 'Mocked Sender' }]}
               recipientId="mocked-recipientId"
             />
           </SpecialContactsProvider>
