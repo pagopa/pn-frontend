@@ -1,26 +1,26 @@
 import { Configuration } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 
-interface PaConfigurationFromFile {
+interface LoginConfigurationFromFile {
   OT_DOMAIN_ID?: string;
 }
 
-interface PaConfiguration extends PaConfigurationFromFile {
+interface LoginConfiguration extends LoginConfigurationFromFile {
   OT_DOMAIN_ID: string;
   IS_DEVELOP: boolean;
   MOCK_USER: boolean;
   LOG_REDUX_ACTIONS: boolean;
 }
 
-class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
+class LoginConfigurationValidator extends Validator<LoginConfigurationFromFile> {
   constructor() {
     super();
     this.ruleFor('OT_DOMAIN_ID').isString();
   }
 }
 
-export function getConfiguration(): PaConfiguration {
-  const configurationFromFile = Configuration.get<PaConfigurationFromFile>();
+export function getConfiguration(): LoginConfiguration {
+  const configurationFromFile = Configuration.get<LoginConfigurationFromFile>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
   return {
     ...configurationFromFile,
@@ -31,7 +31,7 @@ export function getConfiguration(): PaConfiguration {
   };
 }
 
-export async function loadPaConfiguration(): Promise<void> {
-  await Configuration.load(new PaConfigurationValidator());
+export async function loadLoginConfiguration(): Promise<void> {
+  await Configuration.load(new LoginConfigurationValidator());
   console.log(getConfiguration());
 }

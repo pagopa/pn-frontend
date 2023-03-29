@@ -53,9 +53,7 @@ async function doTheRender() {
       document.getElementById('root')
     );  
   }
-  
 }
 
 // actual launching of the React app
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-doTheRender();
+void doTheRender();
