@@ -1,6 +1,6 @@
 name: Release branch action
-on: push
-# on: workflow_dispatch
+# on: push
+on: workflow_dispatch
 # This allows a subsequently queued workflow run to interrupt previous runs
 concurrency:
   group: ${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}
@@ -12,13 +12,13 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      # - name: Create release branch
-      # run: sudo bash ./.github/scripts/create_release_branch.sh -b $BASE_BRANCH -v $VERSION
-      # shell: bash
-      # env:
-      #  BASE_BRANCH: develop
-      #  VERSION: patch
-      - name: Echo env variables
-        run: echo "$GITHUB_CONTEXT"
+      - name: Create release branch
+        run: sudo bash ./.github/scripts/create_release_branch.sh -b $BASE_BRANCH -v $VERSION
+        shell: bash
         env:
-          GITHUB_CONTEXT: ${{ toJSON(github) }}
+          BASE_BRANCH: develop
+          VERSION: patch
+      # - name: Echo env variables
+      #   run: echo "$GITHUB_CONTEXT"
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJSON(github) }}
