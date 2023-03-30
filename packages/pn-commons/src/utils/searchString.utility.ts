@@ -25,7 +25,13 @@ export function searchStringLimitReachedText(searchString: string, maxLength = 8
     : '';
 }
 
-export function useSearchStringChangeInput(maxLength = 80) {
+/**
+ * This hook returns a function that can be used to handle changes to a search string input field. 
+ * 
+ * @param {number} [maxLength=80] - The maximum length for the cleaned search string.
+ * @returns {(newInputValue: string, setNewValue: (s: string) => void) => void} A function that takes the new input value and a setter function for the input field value.
+ */
+export function useSearchStringChangeInput(maxLength: number = 80): (newInputValue: string, setNewValue: (s: string) => void) => void {
   const dispatch = useDispatch();
 
   return useCallback((newInputValue: string, setNewValue: (s: string) => void) => {
