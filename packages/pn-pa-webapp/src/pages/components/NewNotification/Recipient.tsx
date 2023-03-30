@@ -16,7 +16,12 @@ import {
   Paper,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { DigitalDomicileType, RecipientType, dataRegex, SectionHeading } from '@pagopa-pn/pn-commons';
+import {
+  DigitalDomicileType,
+  RecipientType,
+  dataRegex,
+  SectionHeading,
+} from '@pagopa-pn/pn-commons';
 
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -401,7 +406,7 @@ const Recipient = ({
                     {t('title')} {values.recipients.length > 1 ? index + 1 : null}
                   </SectionHeading>
                   {values.recipients.length > 1 && (
-                    <Delete
+                    <ButtonNaked
                       data-testid="DeleteRecipientIcon"
                       aria-label={t('new-notification.steps.remove-recipient')}
                       onClick={() =>
@@ -413,7 +418,9 @@ const Recipient = ({
                           setFieldValue
                         )
                       }
-                    />
+                    >
+                      <Delete />
+                    </ButtonNaked>
                   )}
                 </Stack>
                 <Box sx={{ marginTop: '20px' }}>
