@@ -12,7 +12,7 @@ import { initStore, store } from './redux/store';
 import './i18n.ts';
 import App from './App';
 import { initOneTrust } from "./utils/onetrust";
-import {loadPgConfiguration} from "./services/configuration.service";
+import { loadPgConfiguration } from "./services/configuration.service";
 
 async function doTheRender() {
   try {

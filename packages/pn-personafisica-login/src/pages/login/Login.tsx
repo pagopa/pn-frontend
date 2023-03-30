@@ -9,11 +9,10 @@ import { SpidIcon, CieIcon } from '@pagopa/mui-italia/dist/icons';
 import { styled } from '@mui/material/styles';
 import { useSearchParams } from 'react-router-dom';
 
-import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
 import { storageTypeOps, storageSpidSelectedOps, storageAarOps } from '../../utils/storage';
 import { trackEventByType } from '../../utils/mixpanel';
 import { TrackEventType } from '../../utils/events';
-import { ENV } from '../../utils/env';
+import { getConfiguration } from "../../services/configuration.service";
 import SpidSelect from './SpidSelect';
 
 const LoginButton = styled(Button)(() => ({
@@ -31,6 +30,7 @@ const Login = () => {
   const [params] = useSearchParams();
   const type = params.get(AppRouteParams.TYPE);
   const aar = params.get(AppRouteParams.AAR);
+  const { URL_API_LOGIN, SPID_CIE_ENTITY_ID, PAGOPA_HELP_EMAIL } = getConfiguration();
 
   if (type !== null && type !== '' && (type === AppRouteType.PF || type === AppRouteType.PG)) {
     storageTypeOps.write(type);
@@ -41,13 +41,13 @@ const Login = () => {
   }
 
   const goCIE = () => {
-    storageSpidSelectedOps.write(ENV.SPID_CIE_ENTITY_ID);
+    storageSpidSelectedOps.write(SPID_CIE_ENTITY_ID);
     window.location.assign(
-      `${ENV.URL_API.LOGIN}/login?entityID=${ENV.SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
+      `${URL_API_LOGIN}/login?entityID=${SPID_CIE_ENTITY_ID}&authLevel=SpidL2`
     );
     trackEventByType(TrackEventType.LOGIN_IDP_SELECTED, {
       SPID_IDP_NAME: 'CIE',
-      SPID_IDP_ID: ENV.SPID_CIE_ENTITY_ID,
+      SPID_IDP_ID: SPID_CIE_ENTITY_ID,
     });
   };
 
