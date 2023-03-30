@@ -5,6 +5,6 @@ export PORTALE_PF_LOGIN_CERTIFICATE_ARN="arn:aws:acm:us-east-1:558518206506:cert
 export LANDING_CERTIFICATE_ARN="arn:aws:acm:us-east-1:558518206506:certificate/caa3c978-fd08-4144-a10b-93df32e8d2ac"
 export PORTALE_PG_CERTIFICATE_ARN="arn:aws:acm:us-east-1:558518206506:certificate/3c7d089a-a052-4492-8089-1dd58c5f41c7"
 #export LANDING_CERTIFICATE_ARN="arn:aws:acm:us-east-1:558518206506:certificate/4f9ad613-4c0f-40f8-979a-3b5f22e04ad8"
-export REACT_APP_URL_API="https://webapi.dev.pn.pagopa.it/ https://s3.eu-south-1.amazonaws.com/pagopasafestoragesandbox-nonlegal-input-eu-south-1/"
+export REACT_APP_URL_API="https://webapi.dev.pn.pagopa.it/ https://pn-ss-storage-dev-pnssbucket-9znf9ge7935e.s3.eu-south-1.amazonaws.com/"
 
 #export LANDING_SITE_ALTERNATE_DNS="landing-page.custom-url.pn.pagopa.it"
