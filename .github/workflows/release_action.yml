@@ -20,3 +20,5 @@ jobs:
       #  VERSION: patch
       - name: Echo env variables
         run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJSON(github) }}
