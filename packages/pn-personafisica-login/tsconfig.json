@@ -1,13 +1,12 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
+    "target": "ES6",
+    "module": "ES2020",
     "lib": [
+      "es2019",
+      "ES2020",
       "DOM",
-      "DOM.Iterable",
-      "es6",
-      "dom",
-      "es2019"
+      "DOM.Iterable"
     ],
     "jsx": "react-jsx",
     "noEmit": true,
