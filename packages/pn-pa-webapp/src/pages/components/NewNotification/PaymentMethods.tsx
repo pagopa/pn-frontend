@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { Link, Paper, Typography } from '@mui/material';
-import { FileUpload } from '@pagopa-pn/pn-commons';
+import { SectionHeading, FileUpload } from '@pagopa-pn/pn-commons';
 
 import {
   NewNotification,
@@ -132,7 +132,7 @@ const PaymentMethods = ({
       const formikF24flatRate = formik.values[r.taxId].f24flatRate;
       const formikF24standard = formik.values[r.taxId].f24standard;
       // I avoid including empty file object into the result
-      // hence I check for any file object that it actually points to a file 
+      // hence I check for any file object that it actually points to a file
       // (this is the condition XXX.file.uint8Array)
       // and then I don't add the payment info for a recipient if it doesn't include any actual file pointer
       // (this is the Object.keys(paymentsForThisRecipient).length > 0 condition below)
@@ -157,7 +157,7 @@ const PaymentMethods = ({
             versionToken: formikPagoPaForm.ref.versionToken,
           },
         };
-      };
+      }
       if (formikF24flatRate && formikF24flatRate.file.uint8Array) {
         paymentsForThisRecipient.f24flatRate = {
           ...newPaymentDocument(`${r.taxId}-f24flatRateDoc`, t('pagopa-notice-f24-flatrate')),
@@ -226,7 +226,7 @@ const PaymentMethods = ({
   const formIsEmpty = (values: any) => {
     // eslint-disable-next-line functional/no-let
     let isEmpty = true;
-    notification.recipients.forEach(recipient => {
+    notification.recipients.forEach((recipient) => {
       const currentDocument = values[recipient.taxId];
       if (currentDocument.pagoPaForm && currentDocument.pagoPaForm.file.name !== '') {
         isEmpty = false;
@@ -249,17 +249,17 @@ const PaymentMethods = ({
       if (isCompleted) {
         onConfirm();
       } else if (emptyForm || notification.paymentMode === PaymentModel.NOTHING) {
-        // Maybe now the form is empty, but in the previous time the user went back 
+        // Maybe now the form is empty, but in the previous time the user went back
         // from the payments step the form wasn't empty.
         // Just in case, we clean the payment info from the Redux store
         dispatch(setPaymentDocuments({ paymentDocuments: {} }));
         dispatch(setIsCompleted());
       } else {
-        // Beware! - 
+        // Beware! -
         // Recall that the taxId is the key for the payment document info in the Redux storage.
-        // If the user changes the taxId of a recipient and/or deletes a recipient 
+        // If the user changes the taxId of a recipient and/or deletes a recipient
         // after having attached payment documents,
-        // the information related to the "old" taxIds is kept in the Redux store 
+        // the information related to the "old" taxIds is kept in the Redux store
         // until the user returns to the payment document step.
         // Fortunately, the formatPaymentDocuments function "sanitizes" the payment document info,
         // since it includes the information related to current taxIds only.
@@ -268,7 +268,9 @@ const PaymentMethods = ({
         // Please take this note into consideration in case of refactoring of this part.
         // --------------------------------------
         // Carlos Lombardi, 2023.01.19
-        const paymentData = await dispatch(uploadNotificationPaymentDocument(formatPaymentDocuments()));
+        const paymentData = await dispatch(
+          uploadNotificationPaymentDocument(formatPaymentDocuments())
+        );
         const paymentPayload = paymentData.payload as { [key: string]: PaymentObject };
         if (paymentPayload) {
           await updateRefAfterUpload(paymentPayload);
@@ -286,14 +288,18 @@ const PaymentMethods = ({
     name?: string,
     size?: number
   ) => {
-    await formik.setFieldValue(id, {
-      ...formik.values[taxId][paymentType],
-      file: { size, uint8Array: file, sha256, name },
-      ref: {
-        key: '',
-        versionToken: '',
+    await formik.setFieldValue(
+      id,
+      {
+        ...formik.values[taxId][paymentType],
+        file: { size, uint8Array: file, sha256, name },
+        ref: {
+          key: '',
+          versionToken: '',
+        },
       },
-    }, false);
+      false
+    );
     await formik.setFieldTouched(`${id}.file`, true, true);
   };
 
@@ -334,14 +340,15 @@ const PaymentMethods = ({
               sx={{ padding: '24px', marginTop: '40px' }}
               className="paperContainer"
             >
-              <Typography variant="h6">
+              <SectionHeading>
                 {t('payment-models')} {recipient.firstName} {recipient.lastName}
-              </Typography>
+              </SectionHeading>
               <PaymentBox
                 id={`${recipient.taxId}.pagoPaForm`}
                 title={`${t('attach-pagopa-notice')}`}
                 onFileUploaded={(id, file, sha256, name, size) =>
-                  fileUploadedHandler(recipient.taxId, 'pagoPaForm', id, file, sha256, name, size)}
+                  fileUploadedHandler(recipient.taxId, 'pagoPaForm', id, file, sha256, name, size)
+                }
                 onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'pagoPaForm')}
                 fileUploaded={formik.values[recipient.taxId].pagoPaForm}
               />
@@ -350,7 +357,16 @@ const PaymentMethods = ({
                   id={`${recipient.taxId}.f24flatRate`}
                   title={`${t('attach-f24-flatrate')}`}
                   onFileUploaded={(id, file, sha256, name, size) =>
-                    fileUploadedHandler(recipient.taxId, 'f24flatRate', id, file, sha256, name, size)}
+                    fileUploadedHandler(
+                      recipient.taxId,
+                      'f24flatRate',
+                      id,
+                      file,
+                      sha256,
+                      name,
+                      size
+                    )
+                  }
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24flatRate')}
                   fileUploaded={formik.values[recipient.taxId].f24flatRate}
                 />
@@ -360,7 +376,16 @@ const PaymentMethods = ({
                   id={`${recipient.taxId}.f24standard`}
                   title={`${t('attach-f24')}`}
                   onFileUploaded={(id, file, sha256, name, size) =>
-                    fileUploadedHandler(recipient.taxId, 'f24standard', id, file, sha256, name, size)}
+                    fileUploadedHandler(
+                      recipient.taxId,
+                      'f24standard',
+                      id,
+                      file,
+                      sha256,
+                      name,
+                      size
+                    )
+                  }
                   onRemoveFile={(id) => removeFileHandler(id, recipient.taxId, 'f24standard')}
                   fileUploaded={formik.values[recipient.taxId].f24standard}
                 />
