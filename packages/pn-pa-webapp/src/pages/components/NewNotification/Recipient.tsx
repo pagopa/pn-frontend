@@ -16,7 +16,12 @@ import {
   Paper,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
+import {
+  DigitalDomicileType,
+  RecipientType,
+  dataRegex,
+  SectionHeading,
+} from '@pagopa-pn/pn-commons';
 
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -397,12 +402,13 @@ const Recipient = ({
                   alignItems="center"
                   justifyContent="space-between"
                 >
-                  <Typography variant="h6">
+                  <SectionHeading>
                     {t('title')} {values.recipients.length > 1 ? index + 1 : null}
-                  </Typography>
+                  </SectionHeading>
                   {values.recipients.length > 1 && (
-                    <Delete
+                    <ButtonNaked
                       data-testid="DeleteRecipientIcon"
+                      aria-label={t('new-notification.steps.remove-recipient')}
                       onClick={() =>
                         deleteRecipientHandler(
                           errors,
@@ -412,7 +418,9 @@ const Recipient = ({
                           setFieldValue
                         )
                       }
-                    />
+                    >
+                      <Delete />
+                    </ButtonNaked>
                   )}
                 </Stack>
                 <Box sx={{ marginTop: '20px' }}>
@@ -525,28 +533,31 @@ const Recipient = ({
                         item
                         xs={6}
                         data-testid="DigitalDomicileCheckbox"
-                        onClick={() =>
+                        onClick={(e) => {
                           setFieldValue(
                             `recipients[${index}].showDigitalDomicile`,
                             !values.recipients[index].showDigitalDomicile
-                          )
-                        }
+                          );
+                          e.preventDefault(); // avoids issue with non clickable checkbox label in FormControlLabel
+                        }}
                       >
-                        <Stack display="flex" direction="row" alignItems="center">
-                          <Checkbox
-                            checked={values.recipients[index].showDigitalDomicile}
-                            name={`recipients[${index}].showDigitalDomicile`}
-                            onChange={(digitalCheckEvent) =>
-                              handleAddressTypeChange(
-                                digitalCheckEvent,
-                                values.recipients[index],
-                                `recipients[${index}]`,
-                                setFieldValue
-                              )
-                            }
-                          />
-                          <Typography>{t('add-digital-domicile')}</Typography>
-                        </Stack>
+                        <FormControlLabel
+                          checked={values.recipients[index].showDigitalDomicile}
+                          control={
+                            <Checkbox
+                              onChange={(digitalCheckEvent) =>
+                                handleAddressTypeChange(
+                                  digitalCheckEvent as ChangeEvent,
+                                  values.recipients[index],
+                                  `recipients[${index}]`,
+                                  setFieldValue
+                                )
+                              }
+                            />
+                          }
+                          name={`recipients[${index}].showDigitalDomicile`}
+                          label={t('add-digital-domicile')}
+                        />
                       </Grid>
                       {values.recipients[index].showDigitalDomicile && (
                         <FormTextField
@@ -566,28 +577,31 @@ const Recipient = ({
                         xs={12}
                         item
                         data-testid="PhysicalAddressCheckbox"
-                        onClick={() =>
+                        onClick={(e) => {
                           setFieldValue(
                             `recipients[${index}].showPhysicalAddress`,
                             !values.recipients[index].showPhysicalAddress
-                          )
-                        }
+                          );
+                          e.preventDefault(); // avoids issue with non clickable checkbox label in FormControlLabel
+                        }}
                       >
-                        <Stack display="flex" direction="row" alignItems="center">
-                          <Checkbox
-                            checked={values.recipients[index].showPhysicalAddress}
-                            name={`recipients[${index}].showPhysicalAddress`}
-                            onChange={(physicalCheckEvent) =>
-                              handleAddressTypeChange(
-                                physicalCheckEvent,
-                                values.recipients[index],
-                                `recipients[${index}]`,
-                                setFieldValue
-                              )
-                            }
-                          />
-                          <Typography>{t('add-physical-domicile')}*</Typography>
-                        </Stack>
+                        <FormControlLabel
+                          checked={values.recipients[index].showPhysicalAddress}
+                          control={
+                            <Checkbox
+                              onChange={(physicalCheckEvent) =>
+                                handleAddressTypeChange(
+                                  physicalCheckEvent as ChangeEvent,
+                                  values.recipients[index],
+                                  `recipients[${index}]`,
+                                  setFieldValue
+                                )
+                              }
+                            />
+                          }
+                          name={`recipients[${index}].showPhysicalAddress`}
+                          label={`${t('add-physical-domicile')}*`}
+                        />
                       </Grid>
                     </Grid>
                     <Grid container spacing={2} mt={1}>
