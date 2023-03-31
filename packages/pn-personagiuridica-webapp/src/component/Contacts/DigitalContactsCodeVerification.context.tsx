@@ -21,7 +21,7 @@ import {
   ErrorMessage,
   DisclaimerModal,
 } from '@pagopa-pn/pn-commons';
-
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { RootState } from '../../redux/store';
@@ -285,15 +285,14 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
                 {t(`${modalProps.labelRoot}.${modalProps.labelType}-new-code`, { ns: 'recapiti' })}
                 &nbsp;
               </Typography>
-              <Typography
-                variant="body2"
-                display="inline"
-                color="primary"
+              <ButtonNaked
                 onClick={() => handleCodeVerification(undefined, true)}
-                sx={{ cursor: 'pointer' }}
+                sx={{verticalAlign: 'unset'}}
               >
-                {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
-              </Typography>
+                <Typography color="primary">
+                  {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
+                </Typography>
+              </ButtonNaked>
             </Box>
           }
           cancelLabel={t('button.annulla')}

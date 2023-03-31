@@ -96,8 +96,8 @@ describe('DigitalContactsCodeVerification Context', () => {
       expect(input).toHaveValue('');
     });
     const buttons = dialog?.querySelectorAll('button');
-    expect(buttons![0]).toHaveTextContent('button.annulla');
-    expect(buttons![1]).toHaveTextContent('button.conferma');
+    expect(buttons![1]).toHaveTextContent('button.annulla');
+    expect(buttons![2]).toHaveTextContent('button.conferma');
   });
 
   it('clicks on confirm button', async () => {
@@ -118,7 +118,7 @@ describe('DigitalContactsCodeVerification Context', () => {
         unwrap: () => Promise.resolve({ code: 'verified' }),
       }))
     );
-    fireEvent.click(buttons![1]);
+    fireEvent.click(buttons![2]);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);
