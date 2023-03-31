@@ -20,7 +20,6 @@ import {
   AppResponse,
   ErrorMessage,
   DisclaimerModal,
-  buttonNakedInheritStyle,
 } from '@pagopa-pn/pn-commons';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -288,7 +287,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
               </Typography>
               <ButtonNaked
                 onClick={() => handleCodeVerification(undefined, true)}
-                sx={buttonNakedInheritStyle}
+                sx={{verticalAlign: 'unset'}}
               >
                 <Typography color="primary">
                   {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
