@@ -112,6 +112,7 @@ const Dashboard = () => {
         <Button
           variant="contained"
           onClick={handleRouteManualSend}
+          aria-label={t('new-notification-button')}
           data-testid="newNotificationBtn"
           sx={{ marginBottom: isMobile ? 3 : undefined }}
         >
