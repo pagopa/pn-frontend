@@ -1,4 +1,4 @@
-import { Component, ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Typography, Box } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
 import { ButtonNaked } from '@pagopa/mui-italia';
@@ -68,7 +68,7 @@ function EmptyState({
           </ButtonNaked>
         </>
       )}
-      {secondaryMessage.emptyMessage && Component && (
+      {secondaryMessage.emptyMessage && (
         <>
           &nbsp;
           <Typography variant="body2" sx={{ display: 'inline' }}>
@@ -76,7 +76,7 @@ function EmptyState({
           </Typography>
         </>
       )}
-      {secondaryMessage.emptyActionLabel && Component && (
+      {secondaryMessage.emptyActionLabel && (
         <>
           &nbsp;
           <Typography
