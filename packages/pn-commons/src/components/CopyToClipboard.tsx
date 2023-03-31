@@ -10,6 +10,7 @@ interface Props {
   text?: string;
   tooltipMode?: boolean;
   tooltip?: string;
+  tooltipBefore?: string;
   disabled?: boolean;
 }
 
@@ -18,6 +19,7 @@ const CopyToClipboard: React.FC<Props> = ({
   text,
   tooltipMode,
   tooltip = '',
+  tooltipBefore = '',
   disabled = false,
 }) => {
   const padding = tooltipMode ? 0 : undefined;
@@ -55,7 +57,7 @@ const CopyToClipboard: React.FC<Props> = ({
       sx={alertButtonStyle}
       onClick={doCopyToClipboard}
       disabled={disabled}
-      aria-label={tooltip}
+      aria-label={copied ? tooltip : tooltipBefore}
     >
       {copied && (
         <Tooltip arrow={true} title={tooltip} placement="top">
