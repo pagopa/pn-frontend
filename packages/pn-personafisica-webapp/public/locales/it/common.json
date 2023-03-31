@@ -131,6 +131,10 @@
     "legal-part-2": "CAP 00187 - n. di iscrizione a Registro Imprese di Roma, CF e P.IVA 15376371009"
   },
   "required-fields": "*Campi obbligatori",
+  "validation": {
+    "search-pattern-length-limit": "ricerca max {{maxLength}} caratteri",
+    "invalid-characters-not-inserted": "I caratteri non validi non sono stati inseriti."
+  },
   "errors": {
     "bad_request": {
       "title": "Errore nell'invio dei dati",

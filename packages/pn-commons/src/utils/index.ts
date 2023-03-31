@@ -1,4 +1,5 @@
 import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
+import { searchStringCleanDenomination, searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
 import { calculatePages } from './pagination.utility';
 
 import {
@@ -69,6 +70,9 @@ export {
   formatToTimezoneString,
   getValidValue,
   formatFiscalCode,
+  searchStringCleanDenomination,
+  searchStringLimitReachedText,
+  useSearchStringChangeInput,
   formatDateTime,
   IUN_regex,
   formatIun,
