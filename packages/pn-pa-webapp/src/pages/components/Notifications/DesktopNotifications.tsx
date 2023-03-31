@@ -61,7 +61,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'recipients',
@@ -78,7 +77,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'subject',
@@ -90,7 +88,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'iun',
@@ -119,7 +116,6 @@ const DesktopNotifications = ({
       onClick(row: Item) {
         handleRowClick(row);
       },
-      disableAccessibility: true,
     },
     {
       id: 'notificationStatus',
@@ -176,6 +172,7 @@ const DesktopNotifications = ({
               sort={sort}
               rows={rows}
               onChangeSorting={onChangeSorting}
+              ariaTitle={t('table.title')}
             />
           ) : (
             <EmptyState {...EmptyStateProps} />

@@ -35,6 +35,8 @@ import {
   PnBreadcrumb,
   isToday,
   dataRegex,
+  searchStringLimitReachedText,
+  useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { createDelegation, getAllEntities } from '../redux/newDelegation/actions';
@@ -77,6 +79,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
+
 const NuovaDelega = () => {
   const classes = useStyles();
   const { t } = useTranslation(['deleghe', 'common']);
@@ -84,6 +87,7 @@ const NuovaDelega = () => {
   const isMobile = useIsMobile();
   const dispatch = useAppDispatch();
   const { entities, created } = useAppSelector((state: RootState) => state.newDelegationState);
+  const handleSearchStringChangeInput = useSearchStringChangeInput();
   const handleSubmit = (values: NewDelegationFormProps) => {
     void dispatch(createDelegation(values));
     trackEventByType(TrackEventType.DELEGATION_DELEGATE_ADD_ACTION);
@@ -165,9 +169,11 @@ const NuovaDelega = () => {
     </MenuItem>
   );
 
-  const handleChangeInput = (newInputValue: string) => {
-    setSenderInputValue(newInputValue);
-  };
+  // handling of search string for sender
+  const entitySearchLabel = (searchString: string): string => 
+    `${t('nuovaDelega.form.selectEntities')}${searchStringLimitReachedText(searchString)}`
+  ;
+  const handleChangeInput = (newInputValue: string) => handleSearchStringChangeInput(newInputValue, setSenderInputValue);
 
   const getOptionLabel = (option: Party) => option.name || '';
 
@@ -216,7 +222,9 @@ const NuovaDelega = () => {
                   }}
                   validateOnBlur={false}
                 >
-                  {({ values, setFieldValue, touched, errors, setFieldTouched }) => (
+                  {
+                  
+                  ({ values, setFieldValue, touched, errors, setFieldTouched }) => (
                     <Form>
                       <FormControl sx={{ width: '100%' }}>
                         <RadioGroup
@@ -358,7 +366,7 @@ const NuovaDelega = () => {
                                     renderInput={(params) => (
                                       <TextField
                                         {...params}
-                                        label={t('nuovaDelega.form.selectEntities')}
+                                        label={entitySearchLabel(senderInputValue)}
                                       />
                                     )}
                                   />
