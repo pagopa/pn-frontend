@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
+import { Component, ReactNode } from 'react';
 import { Typography, Box } from '@mui/material';
 import { SvgIconComponent } from '@mui/icons-material';
 import { ButtonNaked } from '@pagopa/mui-italia';
 import { KnownSentiment } from '../types';
 import { iconForKnownSentiment } from '../types/EmptyState';
-import { buttonNakedInheritStyle } from '../utils';
+
 type Props = {
   /** Callback to be called when performing an empty action */
   emptyActionCallback?: (e: any, source?: string) => void;
@@ -60,7 +60,7 @@ function EmptyState({
           <ButtonNaked
             data-testid="callToActionFirst"
             onClick={emptyActionCallback}
-            sx={{ buttonNakedInheritStyle }}
+            sx={{ verticalAlign: 'unset' }}
           >
             <Typography color="primary" variant="body2" fontWeight={'bold'}>
               {emptyActionLabel}
@@ -68,24 +68,32 @@ function EmptyState({
           </ButtonNaked>
         </>
       )}
-      &nbsp;
-      <Typography variant="body2" sx={{ display: 'inline' }}>
-        {secondaryMessage.emptyMessage}
-      </Typography>
-      &nbsp;
-      <Typography
-        color="primary"
-        variant="body2"
-        fontWeight={'bold'}
-        data-testid="callToActionSecond"
-        sx={{
-          cursor: 'pointer',
-          display: 'inline',
-        }}
-        onClick={secondaryMessage.emptyActionCallback}
-      >
-        {secondaryMessage.emptyActionLabel}
-      </Typography>
+      {secondaryMessage.emptyMessage && Component && (
+        <>
+          &nbsp;
+          <Typography variant="body2" sx={{ display: 'inline' }}>
+            {secondaryMessage.emptyMessage}
+          </Typography>
+        </>
+      )}
+      {secondaryMessage.emptyActionLabel && Component && (
+        <>
+          &nbsp;
+          <Typography
+            color="primary"
+            variant="body2"
+            fontWeight={'bold'}
+            data-testid="callToActionSecond"
+            sx={{
+              cursor: 'pointer',
+              display: 'inline',
+            }}
+            onClick={secondaryMessage.emptyActionCallback}
+          >
+            {secondaryMessage.emptyActionLabel}
+          </Typography>
+        </>
+      )}
     </Box>
   );
 }
