@@ -60,8 +60,15 @@ Props) => {
               <Box
                 sx={{
                   textOverflow: 'ellipsis',
-                  maxWidth: '200px',
+                  maxWidth: {
+                    xs: '15rem',
+                    sm: '20rem',
+                    md: '30rem',
+                    lg: '24rem',
+                    xl: '34rem'
+                  },
                   overflow: 'hidden',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {document.name}
