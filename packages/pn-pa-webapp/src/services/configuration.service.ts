@@ -2,6 +2,8 @@ import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 import { StringRuleValidator } from '@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator';
 
+import packageJsonData from '../../package.json';
+
 interface PaConfigurationFromFile {
   OT_DOMAIN_ID?: string;
   SELFCARE_URL_FE_LOGIN: string;
@@ -10,6 +12,9 @@ interface PaConfigurationFromFile {
   ONE_TRUST_DRAFT_MODE?: boolean;
   ONE_TRUST_PP?: string;
   ONE_TRUST_TOS?: string;
+  PAGOPA_HELP_EMAIL: string;
+  DISABLE_INACTIVITY_HANDLER?: boolean;
+  IS_PAYMENT_ENABLED?: boolean;
 }
 
 interface PaConfiguration extends PaConfigurationFromFile {
@@ -20,6 +25,9 @@ interface PaConfiguration extends PaConfigurationFromFile {
   IS_DEVELOP: boolean;
   MOCK_USER: boolean;
   LOG_REDUX_ACTIONS: boolean;
+  APP_VERSION: string;
+  DISABLE_INACTIVITY_HANDLER: boolean;
+  IS_PAYMENT_ENABLED: boolean;
 }
 
 class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
@@ -32,6 +40,9 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
     this.ruleFor('ONE_TRUST_PP').isString().matches(dataRegex.token);
     this.ruleFor('ONE_TRUST_TOS').isString().matches(dataRegex.token);
+    this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
+    this.ruleFor('DISABLE_INACTIVITY_HANDLER').isBoolean();
+    this.ruleFor('IS_PAYMENT_ENABLED').isBoolean();
   }
 
   makeRequired(rule: StringRuleValidator<PaConfigurationFromFile, string>): void {
@@ -51,6 +62,9 @@ export function getConfiguration(): PaConfiguration {
     IS_DEVELOP,
     MOCK_USER: IS_DEVELOP,
     LOG_REDUX_ACTIONS: IS_DEVELOP,
+    APP_VERSION: packageJsonData.version,
+    DISABLE_INACTIVITY_HANDLER: configurationFromFile.DISABLE_INACTIVITY_HANDLER ?? true,
+    IS_PAYMENT_ENABLED: !!configurationFromFile.IS_PAYMENT_ENABLED,
   };
 }
 

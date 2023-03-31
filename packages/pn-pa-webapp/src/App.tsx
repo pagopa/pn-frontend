@@ -33,13 +33,14 @@ import { getMenuItems } from './utils/role.utility';
 
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { PAGOPA_HELP_EMAIL, VERSION, MIXPANEL_TOKEN } from './utils/constants';
+import { MIXPANEL_TOKEN } from './utils/constants';
 import { TrackEventType } from './utils/events';
 import { trackEventByType } from './utils/mixpanel';
 import './utils/onetrust';
 import { PAAppErrorFactory } from './utils/AppError/PAAppErrorFactory';
 import { setUpInterceptor } from './api/interceptors';
 import { getConfiguration } from './services/configuration.service';
+
 
 const App = () => {
   useUnload(() => {
@@ -210,7 +211,7 @@ const App = () => {
   const handleAssistanceClick = () => {
     trackEventByType(TrackEventType.CUSTOMER_CARE_MAILTO, { source: 'postlogin' });
     /* eslint-disable-next-line functional/immutable-data */
-    window.location.href = `mailto:${PAGOPA_HELP_EMAIL}`;
+    window.location.href = `mailto:${configuration.PAGOPA_HELP_EMAIL}`;
   };
 
   const changeLanguageHandler = async (langCode: string) => {
@@ -222,7 +223,7 @@ const App = () => {
       dispatch(
         appStateActions.addSuccess({
           title: 'Current version',
-          message: `v${VERSION}`,
+          message: `v${configuration.APP_VERSION}`,
         })
       ),
   });

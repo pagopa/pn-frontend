@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 // PN-2028
 // import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -10,10 +10,9 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { RootState } from '../redux/store';
 import { createNewNotification } from '../redux/newNotification/actions';
 import { setSenderInfos, resetState } from '../redux/newNotification/reducers';
+import { getConfiguration } from '../services/configuration.service';
 import * as routes from '../navigation/routes.const';
 import { TrackEventType } from '../utils/events';
-import { IS_PAYMENT_ENABLED } from '../utils/constants';
-
 import { trackEventByType } from '../utils/mixpanel';
 import PreliminaryInformations from './components/NewNotification/PreliminaryInformations';
 import Recipient from './components/NewNotification/Recipient';
@@ -53,6 +52,7 @@ const NewNotification = () => {
   const isCompleted = useAppSelector((state: RootState) => state.newNotificationState.isCompleted);
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
   const organizationParty = useAppSelector((state: RootState) => state.userState.organizationParty);
+  const { IS_PAYMENT_ENABLED } = useMemo(() => getConfiguration(), []);
   const dispatch = useAppDispatch();
   const { t } = useTranslation(['common', 'notifiche']);
   const steps = [
