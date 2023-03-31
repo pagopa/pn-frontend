@@ -4,6 +4,7 @@ import { mockAuthentication } from "../../auth/__test__/test-utils";
 import { store } from '../../store';
 import { getCurrentAppStatus, getDowntimeLogPage } from "../actions";
 import { currentStatusOk, simpleDowntimeLogPage } from "./test-utils";
+import {clearPagination, setPagination} from "@pagopa-pn/pn-personafisica-webapp/src/redux/appStatus/reducers";
 
 
 describe('App Status redux state tests', () => {
@@ -36,4 +37,26 @@ describe('App Status redux state tests', () => {
     expect(payload).toEqual(simpleDowntimeLogPage);
   });
 
+  it('Should set the pagination', async () => {
+    const paginationData = { page: 5, size: 123 }
+    const action = store.dispatch(
+      setPagination(paginationData)
+    );
+    const payload = action.payload;
+    expect(payload).toEqual(paginationData);
+    const appState = store.getState().appStatus;
+    expect(appState.pagination).toEqual({ ...paginationData, resultPages: ["0"]});
+  });
+
+  it('Should reset the pagination', async () => {
+    const paginationData = { page: 5, size: 123 }
+    store.dispatch(setPagination(paginationData));
+    const appState = store.getState().appStatus;
+    expect(appState.pagination).toEqual({ ...paginationData, resultPages: ["0"]});
+
+    store.dispatch(clearPagination());
+    const clearedAppState = store.getState().appStatus;
+
+    expect(clearedAppState.pagination).toEqual({ size: 10, page: 0, resultPages: ["0"] });
+  });
 });

@@ -8,6 +8,18 @@ import { dataRegex } from "./string.utility";
  * Returns the result of "cleaning" (i.e. purging non-desired chars)
  * from a string used to denomination search, in particular in Autocomplete fields.
  */
+// export function searchStringCleanDenomination(wholeSearchString: string): string {
+//   let result = '';
+//   let match;
+//   while ((match = dataRegex.denominationSearch.exec(wholeSearchString)) !== null) {
+//     result += match[0];
+//   }
+//   return result;
+// }
+/**
+ * NB I changed searchStringCleanDenomination implementation because matchAll is part of the ECMAScript 2020 
+ * and at this date (30/03/2023) our compiler target does not include 
+ */
 export function searchStringCleanDenomination(wholeSearchString: string): string {
   return [...wholeSearchString.matchAll(dataRegex.denominationSearch)].map(match => match[0]).join('');
 }
