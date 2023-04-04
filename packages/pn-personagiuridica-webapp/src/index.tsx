@@ -13,6 +13,7 @@ import './i18n.ts';
 import App from './App';
 import { initOneTrust } from "./utils/onetrust";
 import { loadPgConfiguration } from "./services/configuration.service";
+import { initAxiosClients } from "./api/apiClients";
 
 async function doTheRender() {
   try {
@@ -22,6 +23,7 @@ async function doTheRender() {
     // init actions (previously static code) which make use of config
     initOneTrust();
     initStore();
+    initAxiosClients();
 
     ReactDOM.render(
       <React.StrictMode>

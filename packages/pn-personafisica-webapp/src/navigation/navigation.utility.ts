@@ -1,8 +1,8 @@
 import { AppRouteType, sanitizeString, AppRouteParams } from '@pagopa-pn/pn-commons';
-
-import { URL_FE_LOGOUT } from '../utils/constants';
+import { getConfiguration } from "../services/configuration.service";
 
 export function goToLoginPortal(type: AppRouteType.PF | AppRouteType.PG, aarToken?: string | null) {
+  const { URL_FE_LOGOUT } = getConfiguration();
   /* eslint-disable functional/no-let */
   /* eslint-disable functional/immutable-data */
   let urlToRiderect = `${URL_FE_LOGOUT}?${AppRouteParams.TYPE}=${type}`;

@@ -1,10 +1,6 @@
 import { compileOneTrustPath } from '@pagopa-pn/pn-commons';
 import { useEffect } from 'react';
-
-import {
-  ONE_TRUST_PARTICIPATING_ENTITIES,
-  ONE_TRUST_DRAFT_MODE,
-} from '../utils/constants';
+import { getConfiguration } from "../services/configuration.service";
 
 declare const OneTrust: {
   NoticeApi: {
@@ -16,6 +12,8 @@ declare const OneTrust: {
 };
 
 const ParticipatingEntitiesPage = () => {
+  const { ONE_TRUST_DRAFT_MODE, ONE_TRUST_PARTICIPATING_ENTITIES} = getConfiguration();
+
   useEffect(() => {
     if (ONE_TRUST_PARTICIPATING_ENTITIES) {
       OneTrust.NoticeApi.Initialized.then(function () {

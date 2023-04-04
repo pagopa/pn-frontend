@@ -1,37 +1,31 @@
-import {Configuration, dataRegex} from '@pagopa-pn/pn-commons';
+import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
 import {StringRuleValidator} from "@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator";
 
 interface LoginConfigurationFromFile {
   ENABLE_ASSISTANCE: boolean;
   MIXPANEL_TOKEN: string;
-  ONE_TRUST_DRAFT_MODE: boolean;
+  ONE_TRUST_DRAFT_MODE?: boolean;
   ONE_TRUST_PP: string;
-  OT_DOMAIN_ID: string;
+  OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
   PF_URL: string;
   PG_URL: string;
-  SPID_TEST_ENV_ENABLED: boolean;
-  SPID_VALIDATOR_ENV_ENABLED: boolean;
+  SPID_TEST_ENV_ENABLED?: boolean;
+  SPID_VALIDATOR_ENV_ENABLED?: boolean;
   SPID_CIE_ENTITY_ID: string;
   URL_API_LOGIN: string;
 }
 
 interface LoginConfiguration extends LoginConfigurationFromFile {
-  ENABLE_ASSISTANCE: boolean;
   IS_DEVELOP: boolean;
-  MIXPANEL_TOKEN: string;
   MOCK_USER: boolean;
   ONE_TRUST_DRAFT_MODE: boolean;
-  ONE_TRUST_PP: string;
   OT_DOMAIN_ID: string;
   PAGOPA_HELP_EMAIL: string;
   PF_URL: string;
   PG_URL: string;
-  SPID_TEST_ENV_ENABLED: boolean;
-  SPID_VALIDATOR_ENV_ENABLED: boolean;
   SPID_CIE_ENTITY_ID: string;
-  URL_API_LOGIN: string;
 }
 
 class LoginConfigurationValidator extends Validator<LoginConfigurationFromFile> {

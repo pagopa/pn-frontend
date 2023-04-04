@@ -41,13 +41,9 @@ import {
   NOTIFICATION_ACTIONS,
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import {
-  PAGOPA_HELP_EMAIL,
-  // PN-2029
-  // PAYMENT_DISCLAIMER_URL
-} from '../../utils/constants';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
+import { getConfiguration } from "../../services/configuration.service";
 
 interface Props {
   iun: string;
@@ -91,6 +87,7 @@ const NotificationPayment: React.FC<Props> = ({
   senderDenomination,
   subject,
 }) => {
+  const { PAGOPA_HELP_EMAIL } = getConfiguration();
   const { t } = useTranslation(['notifiche']);
   const isMobile = useIsMobile();
   const [loading, setLoading] = useState(true);
