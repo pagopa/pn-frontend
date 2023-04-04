@@ -2,7 +2,7 @@
   "OT_DOMAIN_ID": "62ebb6a0-1a65-48a4-8ca0-837de03b1199",
   "SELFCARE_URL_FE_LOGIN": "https://uat.selfcare.pagopa.it/auth/login",
   "SELFCARE_BASE_URL": "https://uat.selfcare.pagopa.it",
-  "API_BASE_URL": "https://webapi.dev.pn.pagopa.it/",
+  "API_BASE_URL": "https://webapi.svil.pn.pagopa.it/",
   "ONE_TRUST_DRAFT_MODE": true,
   "ONE_TRUST_PP": "4824a110-316e-42fd-b492-8e2b0513db70",
   "ONE_TRUST_TOS": "083fb982-149c-4241-be09-12ae67d88b66",
