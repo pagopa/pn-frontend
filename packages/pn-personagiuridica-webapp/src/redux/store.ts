@@ -1,8 +1,9 @@
 import { appStateReducer } from '@pagopa-pn/pn-commons';
 import { configureStore } from '@reduxjs/toolkit';
 import logger from 'redux-logger';
-import { LOG_REDUX_ACTIONS } from '../utils/constants';
+
 import { trackingMiddleware } from "../utils/mixpanel";
+import { getConfiguration } from "../services/configuration.service";
 import userSlice from './auth/reducers';
 import appStatusSlice from './appStatus/reducers';
 import dashboardSlice from './dashboard/reducers';
@@ -11,8 +12,6 @@ import delegationsSlice from './delegation/reducers';
 import newDelegationSlice from './newDelegation/reducers';
 import contactsSlice from './contact/reducers';
 import generalInfoSlice from './sidemenu/reducers';
-
-const additionalMiddlewares = [LOG_REDUX_ACTIONS ? logger : undefined, trackingMiddleware];
 
 export const appReducers = {
   appState: appStateReducer,
@@ -26,8 +25,10 @@ export const appReducers = {
   generalInfoState: generalInfoSlice.reducer
 };
 
-export const createStore = () =>
-  configureStore({
+const createStore = (logReduxActions?: boolean) =>{
+  const mustLogActions = logReduxActions ?? getConfiguration().LOG_REDUX_ACTIONS;
+  const additionalMiddlewares = [mustLogActions ? logger : undefined, trackingMiddleware];
+  return configureStore({
     reducer: appReducers,
     middleware: (getDefaultMiddleware) =>
       additionalMiddlewares.reduce(
@@ -35,13 +36,14 @@ export const createStore = () =>
         getDefaultMiddleware({ serializableCheck: false })
       ),
   });
+};
 
 // eslint-disable-next-line functional/no-let
 export let store: ReturnType<typeof createStore>;
 
-export function initStore(): void {
+export function initStore(logReduxActions?: boolean): void {
   // eslint-disable-next-line prefer-const
-  store = createStore();
+  store = createStore(logReduxActions);
 }
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

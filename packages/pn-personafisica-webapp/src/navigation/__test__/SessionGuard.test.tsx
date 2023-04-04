@@ -61,14 +61,6 @@ jest.mock('@pagopa-pn/pn-commons', () => {
   };
 });
 
-jest.mock('../../utils/constants', () => {
-  const original = jest.requireActual('../../utils/constants');
-  return {
-    ...original,
-    DISABLE_INACTIVITY_HANDLER: true,
-  };
-});
-
 jest.mock('../../api/auth/Auth.api', () => {
   const original = jest.requireActual('../../api/auth/Auth.api');
   return {

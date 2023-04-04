@@ -1,7 +1,7 @@
 import { getConfiguration } from "../services/configuration.service";
 
 export function initOneTrust() {
-  const {IS_DEVELOP, OT_DOMAIN_ID} = getConfiguration();
+  const { IS_DEVELOP, OT_DOMAIN_ID } = getConfiguration();
   console.log({IS_DEVELOP, OT_DOMAIN_ID});
   const domainScript = IS_DEVELOP ? "-test" : "";
   const scriptEl = document.createElement('script');
