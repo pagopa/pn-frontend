@@ -30,6 +30,11 @@ export class Configuration {
     this.storedConfiguration = this.validate(readValue, validator);
   }
 
+  static setForTest<T>(fakeConfiguration: T): void {
+    this.configurationLoadingExecuted = true;
+    this.storedConfiguration = fakeConfiguration;
+  }
+
   private static validate<T>(readConfiguration: T, validator: Validator<T>): T {
     const validationResult = validator.validate(readConfiguration);
     if (validationResult == null) {
