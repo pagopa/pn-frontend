@@ -10,8 +10,7 @@ window.getComputedStyle = (elt) => getComputedStyle(elt);
 
 beforeAll(async () => {
   const pnCommonsApi = await import('@pagopa-pn/pn-commons');
-  const storeApi = await import('./redux/store');
-  const apiClientsApi = await import('./api/apiClients');
+
   pnCommonsApi.Configuration.setForTest<any>({
     API_BASE_URL: "mock-api-base-url",
     DISABLE_INACTIVITY_HANDLER: true,
@@ -31,6 +30,14 @@ beforeAll(async () => {
     IS_PAYMENT_ENABLED: false,
     URL_FE_LOGIN: "https://portale-login.dev.pn.pagopa.it/"
   });
+
+  // this avoids the store initialization for a test in which we must set
+  // the sessionStorage before performing the initialization
+  if (expect.getState().testPath.endsWith('initialState_ok.test.ts')) {
+    return
+  }
+  const storeApi = await import('./redux/store');
+  const apiClientsApi = await import('./api/apiClients');
   storeApi.initStore(false);
   apiClientsApi.initAxiosClients();
 });
