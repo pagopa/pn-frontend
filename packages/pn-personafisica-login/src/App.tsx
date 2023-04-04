@@ -15,6 +15,7 @@ const App = () => {
   return (
     <>
       <Router />
+      <div>AAAA</div>
       <Box onClick={clickVersion} sx={{ height: '5px', background: 'white' }}></Box>
     </>
   );
