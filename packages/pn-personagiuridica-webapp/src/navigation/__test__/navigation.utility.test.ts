@@ -1,5 +1,5 @@
 import { AppRouteType } from '@pagopa-pn/pn-commons';
-import { URL_FE_LOGOUT } from '../../utils/constants';
+
 import { goToLoginPortal } from '../navigation.utility';
 
 const replaceFn = jest.fn();
