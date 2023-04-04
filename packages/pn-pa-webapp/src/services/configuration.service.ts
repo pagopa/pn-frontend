@@ -12,6 +12,7 @@ interface PaConfigurationFromFile {
   PAGOPA_HELP_EMAIL: string;
   DISABLE_INACTIVITY_HANDLER?: boolean;
   IS_PAYMENT_ENABLED?: boolean;
+  MIXPANEL_TOKEN?: string;
 }
 
 export interface PaConfiguration extends PaConfigurationFromFile {
@@ -25,6 +26,7 @@ export interface PaConfiguration extends PaConfigurationFromFile {
   APP_VERSION: string;
   DISABLE_INACTIVITY_HANDLER: boolean;
   IS_PAYMENT_ENABLED: boolean;
+  MIXPANEL_TOKEN: string;
 }
 
 class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
@@ -40,6 +42,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
     this.ruleFor('DISABLE_INACTIVITY_HANDLER').isBoolean();
     this.ruleFor('IS_PAYMENT_ENABLED').isBoolean();
+    this.ruleFor('MIXPANEL_TOKEN').isString();
   }
 
   makeRequired(rule: any): void {
@@ -63,6 +66,7 @@ export function getConfiguration(): PaConfiguration {
     APP_VERSION,
     DISABLE_INACTIVITY_HANDLER: configurationFromFile.DISABLE_INACTIVITY_HANDLER ?? true,
     IS_PAYMENT_ENABLED: !!configurationFromFile.IS_PAYMENT_ENABLED,
+    MIXPANEL_TOKEN: configurationFromFile.MIXPANEL_TOKEN || 'DUMMY',
   };
 }
 

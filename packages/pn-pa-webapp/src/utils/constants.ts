@@ -1,7 +1,7 @@
-export const IS_DEVELOP = process.env.NODE_ENV === 'development';
+// export const IS_DEVELOP = process.env.NODE_ENV === 'development';
 
-export const MOCK_USER = IS_DEVELOP;
-export const LOG_REDUX_ACTIONS = IS_DEVELOP;
+// export const MOCK_USER = IS_DEVELOP;
+// export const LOG_REDUX_ACTIONS = IS_DEVELOP;
 
 // export const API_BASE_URL = process.env.REACT_APP_URL_API;
 
@@ -17,5 +17,7 @@ export const LOG_REDUX_ACTIONS = IS_DEVELOP;
 // export const ONE_TRUST_PP = process.env.REACT_APP_ONE_TRUST_PP || '';
 // export const ONE_TRUST_TOS = process.env.REACT_APP_ONE_TRUST_TOS || '';
 // export const IS_PAYMENT_ENABLED = process.env.REACT_APP_IS_PAYMENT_ENABLED === 'true';
-export const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN || 'DUMMY';
+// export const MIXPANEL_TOKEN = process.env.REACT_APP_MIXPANEL_TOKEN || 'DUMMY';
 // export const VERSION = process.env.REACT_APP_VERSION ?? '';
+
+export const FAKE_CONFIG_VAR = 'fake-stuff';

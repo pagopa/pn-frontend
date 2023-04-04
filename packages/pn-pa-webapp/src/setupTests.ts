@@ -24,6 +24,7 @@ beforeAll(async () => {
     SELFCARE_URL_FE_LOGIN: 'mock-selfcare-login',
     SELFCARE_BASE_URL: 'mock-selfcare.base',
     IS_PAYMENT_ENABLED: false,
+    MIXPANEL_TOKEN: 'DUMMY',
   });
   storeApi.initStore(false);
   apiClientsApi.initAxiosClients();

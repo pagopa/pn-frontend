@@ -33,7 +33,6 @@ import { getMenuItems } from './utils/role.utility';
 
 import * as routes from './navigation/routes.const';
 import { getCurrentAppStatus } from './redux/appStatus/actions';
-import { MIXPANEL_TOKEN } from './utils/constants';
 import { TrackEventType } from './utils/events';
 import { trackEventByType } from './utils/mixpanel';
 import './utils/onetrust';
@@ -168,7 +167,7 @@ const App = () => {
     errorFactoryManager.factory = new PAAppErrorFactory((path, ns) => t(path, { ns }));
   }, []);
 
-  useTracking(MIXPANEL_TOKEN, process.env.NODE_ENV);
+  useTracking(configuration.MIXPANEL_TOKEN, process.env.NODE_ENV);
 
   useEffect(() => {
     if (idOrganization) {
