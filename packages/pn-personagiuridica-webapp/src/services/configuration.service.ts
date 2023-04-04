@@ -14,6 +14,7 @@ interface PgConfigurationFromFile {
   OT_DOMAIN_ID?: string;
   PAGOPA_HELP_EMAIL: string;
   PAYMENT_DISCLAIMER_URL?: string;
+  SELFCARE_BASE_URL: string;
   URL_FE_LOGIN: string;
   URL_CHECKOUT: string;
 }
@@ -40,6 +41,7 @@ class PgConfigurationValidator extends Validator<PgConfigurationFromFile> {
     this.makeRequired(this.ruleFor('API_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
     this.makeRequired(this.ruleFor('URL_FE_LOGIN').isString().matches((dataRegex.htmlPageUrl)));
     this.makeRequired(this.ruleFor('PAGOPA_HELP_EMAIL').isString().matches(dataRegex.email));
+    this.makeRequired(this.ruleFor('SELFCARE_BASE_URL').isString().matches(dataRegex.htmlPageUrl));
     this.ruleFor('ENABLE_ASSISTANCE').isBoolean();
     this.ruleFor('MIXPANEL_TOKEN').isString();
     this.ruleFor('ONE_TRUST_DRAFT_MODE').isBoolean();
