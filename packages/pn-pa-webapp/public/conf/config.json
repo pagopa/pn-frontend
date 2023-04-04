@@ -7,5 +7,6 @@
   "ONE_TRUST_PP": "4824a110-316e-42fd-b492-8e2b0513db70",
   "ONE_TRUST_TOS": "083fb982-149c-4241-be09-12ae67d88b66",
   "PAGOPA_HELP_EMAIL": "notifichedigitali@assistenza.pagopa.it",
-  "DISABLE_INACTIVITY_HANDLER": true
+  "DISABLE_INACTIVITY_HANDLER": true,
+  "IS_PAYMENT_ENABLED": false
 }

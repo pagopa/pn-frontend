@@ -25,8 +25,9 @@ export const appReducers = {
   statisticsState: statisticsSlice.reducer,
 };
 
-export const createStore = () =>{
-  const additionalMiddlewares = [getConfiguration().LOG_REDUX_ACTIONS ? logger : undefined, trackingMiddleware];
+const createStore = (logReduxActions?: boolean) =>{
+  const mustLogActions = logReduxActions ?? getConfiguration().LOG_REDUX_ACTIONS;
+  const additionalMiddlewares = [mustLogActions ? logger : undefined, trackingMiddleware];
   return configureStore({
     reducer: appReducers,
     middleware: (getDefaultMiddleware) =>
@@ -40,9 +41,9 @@ export const createStore = () =>{
 // eslint-disable-next-line functional/no-let
 export let store: ReturnType<typeof createStore>;
 
-export function initStore(): void {
+export function initStore(logReduxActions?: boolean): void {
   // eslint-disable-next-line prefer-const
-  store = createStore();
+  store = createStore(logReduxActions);
 }
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

@@ -1,8 +1,5 @@
 import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
-import { StringRuleValidator } from '@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator';
-
-import packageJsonData from '../../package.json';
 
 interface PaConfigurationFromFile {
   OT_DOMAIN_ID?: string;
@@ -17,7 +14,7 @@ interface PaConfigurationFromFile {
   IS_PAYMENT_ENABLED?: boolean;
 }
 
-interface PaConfiguration extends PaConfigurationFromFile {
+export interface PaConfiguration extends PaConfigurationFromFile {
   OT_DOMAIN_ID: string;
   ONE_TRUST_DRAFT_MODE: boolean;
   ONE_TRUST_PP: string;
@@ -45,7 +42,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
     this.ruleFor('IS_PAYMENT_ENABLED').isBoolean();
   }
 
-  makeRequired(rule: StringRuleValidator<PaConfigurationFromFile, string>): void {
+  makeRequired(rule: any): void {
     rule.not().isEmpty().not().isUndefined().not().isNull();
   }
 }
@@ -53,6 +50,7 @@ class PaConfigurationValidator extends Validator<PaConfigurationFromFile> {
 export function getConfiguration(): PaConfiguration {
   const configurationFromFile = Configuration.get<PaConfigurationFromFile>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
+  const APP_VERSION = process.env.REACT_APP_VERSION ?? '';
   return {
     ...configurationFromFile,
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
@@ -62,7 +60,7 @@ export function getConfiguration(): PaConfiguration {
     IS_DEVELOP,
     MOCK_USER: IS_DEVELOP,
     LOG_REDUX_ACTIONS: IS_DEVELOP,
-    APP_VERSION: packageJsonData.version,
+    APP_VERSION,
     DISABLE_INACTIVITY_HANDLER: configurationFromFile.DISABLE_INACTIVITY_HANDLER ?? true,
     IS_PAYMENT_ENABLED: !!configurationFromFile.IS_PAYMENT_ENABLED,
   };
@@ -70,5 +68,4 @@ export function getConfiguration(): PaConfiguration {
 
 export async function loadPaConfiguration(): Promise<void> {
   await Configuration.load(new PaConfigurationValidator());
-  console.log(getConfiguration());
 }
