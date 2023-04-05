@@ -1,6 +1,6 @@
 import { AppRouteType } from '@pagopa-pn/pn-commons';
 import { goToLoginPortal } from '../navigation.utility';
-import {getConfiguration} from "../../services/configuration.service";
+import { getConfiguration } from "../../services/configuration.service";
 
 const replaceFn = jest.fn();
 

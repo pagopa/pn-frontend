@@ -1,6 +1,6 @@
 import { Configuration, dataRegex } from '@pagopa-pn/pn-commons';
 import { Validator } from '@pagopa-pn/pn-validator';
-import {StringRuleValidator} from "@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator";
+import { StringRuleValidator } from "@pagopa-pn/pn-validator/src/ruleValidators/StringRuleValidator";
 
 interface LoginConfigurationFromFile {
   ENABLE_ASSISTANCE: boolean;
@@ -18,6 +18,7 @@ interface LoginConfigurationFromFile {
 }
 
 interface LoginConfiguration extends LoginConfigurationFromFile {
+  BASE_URL: string;
   IS_DEVELOP: boolean;
   MOCK_USER: boolean;
   ONE_TRUST_DRAFT_MODE: boolean;
@@ -25,7 +26,15 @@ interface LoginConfiguration extends LoginConfigurationFromFile {
   PAGOPA_HELP_EMAIL: string;
   PF_URL: string;
   PG_URL: string;
+  ROUTE_LOGIN: string;
+  ROUTE_LOGIN_ERROR: string;
+  ROUTE_LOGOUT: string;
+  ROUTE_PRIVACY_POLICY: string;
+  ROUTE_SUCCESS: string;
   SPID_CIE_ENTITY_ID: string;
+  SPID_TEST_ENV_ENABLED: boolean;
+  SPID_VALIDATOR_ENV_ENABLED: boolean;
+  VERSION: string;
 }
 
 class LoginConfigurationValidator extends Validator<LoginConfigurationFromFile> {
@@ -53,6 +62,9 @@ class LoginConfigurationValidator extends Validator<LoginConfigurationFromFile> 
 export function getConfiguration(): LoginConfiguration {
   const configurationFromFile = Configuration.get<LoginConfigurationFromFile>();
   const IS_DEVELOP = process.env.NODE_ENV === 'development';
+  const VERSION = process.env.REACT_APP_VERSION ?? '';
+  const BASE_URL = process.env.PUBLIC_URL;
+
   return {
     ...configurationFromFile,
     OT_DOMAIN_ID: configurationFromFile.OT_DOMAIN_ID || '',
@@ -61,6 +73,13 @@ export function getConfiguration(): LoginConfiguration {
     MOCK_USER: IS_DEVELOP,
     SPID_TEST_ENV_ENABLED: configurationFromFile.SPID_TEST_ENV_ENABLED || false,
     SPID_VALIDATOR_ENV_ENABLED: configurationFromFile.SPID_TEST_ENV_ENABLED || false,
+    VERSION,
+    BASE_URL,
+    ROUTE_LOGOUT: BASE_URL + '/logout',
+    ROUTE_LOGIN: BASE_URL + '/login',
+    ROUTE_LOGIN_ERROR: BASE_URL + '/login/error',
+    ROUTE_SUCCESS: BASE_URL + '/login/success',
+    ROUTE_PRIVACY_POLICY: BASE_URL + '/informativa-privacy',
   };
 }
 

@@ -14,7 +14,7 @@ import {
 import { storageAarOps, storageTypeOps } from '../../utils/storage';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
-import {getConfiguration} from "../../services/configuration.service";
+import { getConfiguration } from "../../services/configuration.service";
 
 type DisambiguationAccountProps = {
   type: AppRouteType;
