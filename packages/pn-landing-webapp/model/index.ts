@@ -26,6 +26,8 @@ export interface ILandingComponents {
   showcases: Array<IShowcaseData>;
   walkthrough: WalkthroughProps;
   horizontalNav: HorizontalNavProps;
+  headingTitles: Array<IHeadingTitlesData>;
+  tabs: Array<ITabsData>;
 }
 
 export interface IInfoblockData {
@@ -58,4 +60,23 @@ export interface IAppData {
   pa: ILandingComponents;
   pf: ILandingComponents;
   co: ILandingComponents;
+}
+
+export interface IHeadingTitlesData {
+  name: string;
+  data: IHeadingTitleProps;
+}
+
+export interface IHeadingTitleProps {
+  title?: string;
+  subtitle?: string | JSX.Element;
+}
+
+export interface ITabsData {
+  name: string;
+  data: ITabsProps;
+}
+
+export interface ITabsProps {
+  tabs: Array<string>;
 }
