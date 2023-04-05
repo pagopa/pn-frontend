@@ -197,7 +197,7 @@ async function testContactAddition(
       unwrap: () => Promise.resolve({ code: 'verified' }),
     }))
   );
-  fireEvent.click(dialogButtons![1]);
+  fireEvent.click(dialogButtons![2]);
   await waitFor(() => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
