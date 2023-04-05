@@ -155,6 +155,8 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
             })
           );
           handleClose('validated');
+        } else {
+          setOpen(true);
         }
       });
   };
@@ -209,7 +211,6 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     ) {
       // open verification code dialog
       handleCodeVerification();
-      setOpen(true);
     } else {
       // open disclaimer dialog
       setDisclaimerOpen(true);
