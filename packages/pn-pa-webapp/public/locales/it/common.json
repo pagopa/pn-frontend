@@ -29,8 +29,6 @@
   },
   "tos": {
     "title": "SEND - Servizio Notifiche Digitali",
-    "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
-    "redo-body": "L’Informativa Privacy e i Termini e condizioni d’uso sono cambiati. Per accedere, leggi e accetta la nuova versione.",
     "switch-label": "Accedendo, accetti i <0>Termini e condizioni d’uso</0> del servizio e confermi di aver letto l’<1>Informativa Privacy</1>.",
     "button": "Accedi"
   },

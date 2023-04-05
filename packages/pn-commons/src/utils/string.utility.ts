@@ -36,6 +36,7 @@ export const dataRegex = {
   isoDate: /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d{1,3})?)Z$/,
   taxonomyCode: /^(\d{6}[A-Z]{1})$/,
   denomination: /^([\x20-\xFF]{1,80})$/,
+  denominationSearch: /([\x20-\xFF]*)/g, 
   noticeCode: /^\d{18}$/,
 
   email:

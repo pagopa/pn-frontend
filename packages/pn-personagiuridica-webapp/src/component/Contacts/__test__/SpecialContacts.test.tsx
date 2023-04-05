@@ -169,6 +169,7 @@ async function testContactAddition(
     expect(mockActionFn).toBeCalledWith({
       recipientId: 'mocked-recipientId',
       senderId: 'comune-milano',
+      senderName: 'Comune di Milano',
       channelType,
       value: elementName === 's_phone' ? '+39' + value : value,
       code: undefined,
@@ -196,13 +197,14 @@ async function testContactAddition(
       unwrap: () => Promise.resolve({ code: 'verified' }),
     }))
   );
-  fireEvent.click(dialogButtons![1]);
+  fireEvent.click(dialogButtons![2]);
   await waitFor(() => {
     expect(mockDispatchFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledTimes(1);
     expect(mockActionFn).toBeCalledWith({
       recipientId: 'mocked-recipientId',
       senderId: 'comune-milano',
+      senderName: 'Comune di Milano',
       channelType,
       value: elementName === 's_phone' ? '+39' + value : value,
       code: '01234',

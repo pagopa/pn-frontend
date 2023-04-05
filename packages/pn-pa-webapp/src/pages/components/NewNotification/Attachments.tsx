@@ -74,7 +74,11 @@ const AttachmentBox = ({
       >
         <Typography fontWeight={600}>{title}</Typography>
         {canBeDeleted && (
-          <ButtonNaked onClick={onDelete} data-testid="deletebutton">
+          <ButtonNaked
+            onClick={onDelete}
+            data-testid="deletebutton"
+            aria-label={t('new-notification.steps.remove-document')}
+          >
             <DeleteIcon color="action" sx={{ cursor: 'pointer' }} />
           </ButtonNaked>
         )}

@@ -9,5 +9,7 @@ export const buttonNakedInheritStyle: CSSProperties = {
   background: 'inherit',
   margin: 0,
   padding: 0,
-  fontWeight: 'inherit'
+  fontWeight: 'inherit',
+  display: 'inherit',
+  textAlign: 'inherit'
 };

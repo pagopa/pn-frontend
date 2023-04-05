@@ -40,6 +40,7 @@ type Props = {
   }>;
   recipientId: string;
   senderId: string;
+  senderName?: string;
   contactType: CourtesyChannelType | LegalChannelType;
   saveDisabled?: boolean;
   removeModalTitle: string;
@@ -111,6 +112,7 @@ const DigitalContactElem = forwardRef(
       removeModalBody,
       recipientId,
       senderId,
+      senderName,
       contactType,
       value,
       onConfirmClick,
@@ -192,6 +194,7 @@ const DigitalContactElem = forwardRef(
         value,
         recipientId,
         senderId,
+        senderName,
         (status: 'validated' | 'cancelled') => {
           onConfirmClick(status);
           toggleEdit();
@@ -229,7 +232,7 @@ const DigitalContactElem = forwardRef(
               </ButtonNaked>
             )}
             {!editMode ? (
-              <ButtonNaked color="primary" onClick={removeHandler}>
+              <ButtonNaked color="primary" onClick={removeHandler} disabled={editDisabled}>
                 {t('button.elimina')}
               </ButtonNaked>
             ) : (

@@ -25,6 +25,8 @@ import {
   CustomDropdown,
   dataRegex,
   SpecialContactsProvider,
+  searchStringLimitReachedText,
+  useSearchStringChangeInput,
 } from '@pagopa-pn/pn-commons';
 import { CONTACT_ACTIONS, getAllActivatedParties } from '../../redux/contact/actions';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -46,6 +48,7 @@ type Props = {
 
 type Address = {
   senderId: string;
+  senderName: string;
   phone?: string;
   mail?: string;
   pec?: string;
@@ -68,6 +71,7 @@ type AddressType = {
 const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Props) => {
   const { t } = useTranslation(['common', 'recapiti']);
   const dispatch = useAppDispatch();
+  const handleSearchStringChangeInput = useSearchStringChangeInput();
   const [addresses, setAddresses] = useState([] as Array<Address>);
   const [alreadyExistsMessage, setAlreadyExistsMessage] = useState('');
   const { initValidation } = useDigitalContactsCodeVerificationContext();
@@ -184,6 +188,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
           values.s_pec || values.s_mail || internationalPhonePrefix + values.s_phone,
           recipientId,
           values.sender.id,
+          values.sender.name,
           async (status: 'validated' | 'cancelled') => {
             if (status === 'validated') {
               // reset form
@@ -204,9 +209,11 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
 
   const getOptionLabel = (option: Party) => option.name || '';
 
-  const handleChangeInput = (newInputValue: string) => {
-    setSenderInputValue(newInputValue);
-  };
+  // handling of search string for sender
+  const entitySearchLabel = (searchString: string): string => 
+    `${t('special-contacts.sender', { ns: 'recapiti' })}${searchStringLimitReachedText(searchString)}`
+  ;
+  const handleChangeInput = (newInputValue: string) => handleSearchStringChangeInput(newInputValue, setSenderInputValue);
 
   const handleChangeTouched = async (e: ChangeEvent) => {
     formik.handleChange(e);
@@ -268,6 +275,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
       .filter((a) => a.senderId !== 'default')
       .map((a) => ({
         senderId: a.senderId,
+        senderName: a.senderName || a.senderId,
         channelType: a.channelType,
         pec: a.value,
       }));
@@ -275,6 +283,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
     /* eslint-disable functional/immutable-data */
     const getAddress = (address: DigitalAddress) => ({
       senderId: address.senderId,
+      senderName: address.senderName || address.senderId,
       phone: address.channelType === CourtesyChannelType.SMS ? address.value : undefined,
       mail: address.channelType === CourtesyChannelType.EMAIL ? address.value : undefined,
     });
@@ -327,7 +336,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                 autoComplete
                 getOptionLabel={getOptionLabel}
                 noOptionsText={t('common.enti-not-found', { ns: 'recapiti' })}
-                isOptionEqualToValue={(option, value) => option.name === value.name}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
                 onChange={senderChangeHandler}
                 inputValue={senderInputValue}
                 onInputChange={(_event, newInputValue) => handleChangeInput(newInputValue)}
@@ -337,7 +346,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   <TextField
                     {...params}
                     name="sender"
-                    label={`${t('special-contacts.sender', { ns: 'recapiti' })}*`}
+                    label={entitySearchLabel(senderInputValue)}
                   />
                 )}
               />
@@ -450,12 +459,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                   </TableHead>
                   <TableBody>
                     {addresses.map((a) => (
-                      <SpecialContactElem
-                        key={a.senderId}
-                        address={a}
-                        senders={parties}
-                        recipientId={recipientId}
-                      />
+                      <SpecialContactElem key={a.senderId} address={a} recipientId={recipientId} />
                     ))}
                   </TableBody>
                 </Table>
@@ -472,7 +476,7 @@ const SpecialContacts = ({ recipientId, legalAddresses, courtesyAddresses }: Pro
                     }}
                   >
                     <CardContent>
-                      <SpecialContactElem address={a} senders={parties} recipientId={recipientId} />
+                      <SpecialContactElem address={a} recipientId={recipientId} />
                     </CardContent>
                   </Card>
                 ))}

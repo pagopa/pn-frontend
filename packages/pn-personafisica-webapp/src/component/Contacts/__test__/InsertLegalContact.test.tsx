@@ -1,4 +1,5 @@
 /* eslint-disable functional/no-let */
+import React from 'react';
 import * as redux from 'react-redux';
 import { act, fireEvent, RenderResult, waitFor, screen } from '@testing-library/react';
 
@@ -131,7 +132,7 @@ describe('InsertLegalContact component', () => {
         unwrap: () => Promise.resolve({ code: 'verified' }),
       }))
     );
-    fireEvent.click(dialogButtons![1]);
+    fireEvent.click(dialogButtons![2]);
     await waitFor(() => {
       expect(mockDispatchFn).toBeCalledTimes(1);
       expect(mockActionFn).toBeCalledTimes(1);

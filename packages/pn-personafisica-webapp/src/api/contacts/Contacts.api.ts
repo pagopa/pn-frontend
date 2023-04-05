@@ -28,7 +28,8 @@ export const ContactsApi = {
     recipientId: string,
     senderId: string,
     channelType: LegalChannelType,
-    body: { value: string; verificationCode?: string }
+    body: { value: string; verificationCode?: string },
+    senderName?: string
   ): Promise<void | DigitalAddress> =>
     apiClient.post<void>(LEGAL_CONTACT(senderId, channelType), body).then((response) => {
       if (response.status !== 204) {
@@ -40,6 +41,7 @@ export const ContactsApi = {
         addressType: 'legal',
         recipientId,
         senderId,
+        senderName,
         channelType,
         value: body.value,
         code: 'verified',
@@ -54,7 +56,8 @@ export const ContactsApi = {
     recipientId: string,
     senderId: string,
     channelType: CourtesyChannelType,
-    body: { value: string; verificationCode?: string }
+    body: { value: string; verificationCode?: string },
+    senderName?: string
   ): Promise<void | DigitalAddress> =>
     apiClient.post<void>(COURTESY_CONTACT(senderId, channelType), body).then((response) => {
       if (response.status !== 204) {
@@ -66,6 +69,7 @@ export const ContactsApi = {
         addressType: 'courtesy',
         recipientId,
         senderId,
+        senderName,
         channelType,
         value: body.value,
         code: 'verified',
