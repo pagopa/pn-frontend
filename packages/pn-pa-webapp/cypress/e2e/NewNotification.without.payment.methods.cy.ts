@@ -168,10 +168,12 @@ describe('New Notification without payment methods', () => {
     });
   });
 
-  describe('Administrator role', () => {
-    beforeEach(() => {
-      cy.logout();
+  describe.only('Administrator role', () => {
+    before(() => {
       cy.loginWithTokenExchange(PNRole.ADMIN);
+    });
+
+    beforeEach(() => {
       cy.visit('/dashboard/nuova-notifica');
     });
 
@@ -257,9 +259,11 @@ describe('New Notification without payment methods', () => {
   });
 
   describe('Operator role', () => {
-    beforeEach(() => {
-      cy.logout();
+    before(() => {
       cy.loginWithTokenExchange(PNRole.OPERATOR);
+    });
+
+    beforeEach(() => {
       cy.visit('/dashboard/nuova-notifica');
     });
 
