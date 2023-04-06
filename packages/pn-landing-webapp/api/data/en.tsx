@@ -52,6 +52,7 @@ const navigation: INavigationBarProps = {
   chip: "Beta",
   pf: "The general public",
   pa: "Entities",
+  faq: 'FAQ',
 };
 
 // eslint-disable-next-line no-extra-boolean-cast

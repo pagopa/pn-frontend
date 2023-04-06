@@ -57,7 +57,8 @@ const navigation: INavigationBarProps = {
   title: "Piattaforma Notifiche",
   chip: "Beta",
   pf: "Cittadini",
-  pa: "Enti"
+  pa: "Enti",
+  faq: 'FAQ',
 };
 
 const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";

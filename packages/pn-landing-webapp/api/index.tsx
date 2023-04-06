@@ -8,7 +8,7 @@ import {
   WalkthroughProps,
 } from "@pagopa/mui-italia";
 
-import { IAppData, UserType } from "model";
+import { IAppData, IFaqData, UserType } from "model";
 import LangContext from "provider/lang-context";
 
 import { deAppData } from "./data/de";
@@ -16,6 +16,7 @@ import { enAppData } from "./data/en";
 import { frAppData } from "./data/fr";
 import { itAppData } from "./data/it";
 import { slAppData } from "./data/sl";
+import { itFaqData } from "./data/faq-it";
 
 export const getAppData = (): IAppData => {
   const lang = useContext(LangContext);
@@ -81,5 +82,12 @@ export const getWalkthroughData = (
 export const getHorizontalNavData = (
   userType: UserType = UserType.PA
 ): HorizontalNavProps => getAppData()[userType].horizontalNav;
+
+// I preferred to keep FAQ data outside the language-dependent info
+// while we have the FAQ definition for Italian only.
+// To add into the IAddData structures for each language when the remaining definitions arrive.
+// --------------------------------------------------
+// Carlos Lombardi, 2023.04.06
+export const getFaqData = (): IFaqData => itFaqData;
 
 // export const getFooterData = (userType: UserType = UserType.PA): FooterProps => getAppData()[userType].footer;
