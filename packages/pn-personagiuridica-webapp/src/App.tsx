@@ -73,9 +73,9 @@ const App = () => {
 
   const isPrivacyPage = path[1] === 'privacy-tos';
   const organization = loggedUser.organization;
-  const role = loggedUser.organization?.roles[0];
+  const role = loggedUser.organization?.roles ? loggedUser.organization?.roles[0] : null;
 
-  const userHasAdminPermissions = useHasPermissions([role.role], [PNRole.ADMIN]);
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
   // TODO: get products list from be (?)
   const productsList: Array<ProductSwitchItem> = useMemo(

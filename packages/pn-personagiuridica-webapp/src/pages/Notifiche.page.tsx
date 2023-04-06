@@ -43,9 +43,9 @@ const Notifiche = () => {
     (delegation: Delegator) => delegation.mandateId === mandateId
   );
   const organization = useAppSelector((state: RootState) => state.userState.user.organization);
-  const role = organization?.roles[0];
+  const role = organization?.roles ? organization?.roles[0] : null;
 
-  const userHasAdminPermissions = useHasPermissions([role.role], [PNRole.ADMIN]);
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
 
   const isMobile = useIsMobile();
   const pageTitle = currentDelegator

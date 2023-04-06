@@ -84,9 +84,9 @@ const NotificationDetail = () => {
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
-  const role = currentUser.organization?.roles[0];
+  const role = currentUser.organization?.roles ? currentUser.organization?.roles[0] : null;
 
-  const userHasAdminPermissions = useHasPermissions([role.role], [PNRole.ADMIN]);
+  const userHasAdminPermissions = useHasPermissions(role ? [role.role] : [], [PNRole.ADMIN]);
   const delegatorsFromStore = useAppSelector(
     (state: RootState) => state.generalInfoState.delegators
   );
