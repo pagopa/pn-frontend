@@ -1,21 +1,30 @@
 import { Infoblock } from "@pagopa/mui-italia";
 import { NextPage } from "next";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   HeadingTitle,
   Tabs,
-  getAppData,
   getHeadingTitleData,
   getInfoblockData,
   getTabsData,
 } from "api";
 import { UserType } from "model";
+import { Box, Slide } from "@mui/material";
 
 const Perfezionamento: NextPage = () => {
-  const [currentTab, setCurrentTab] = useState(0);
-
+  const [currentTab, setCurrentTab] = useState({ index: 0, visible: true });
+  const transitionDuration = 500;
+  const containerRef = useRef(null);
+  const tabsData = getTabsData(UserType.PF, "tabs notification viewed 1");
   const handleTabChange = (tab: number) => {
-    setCurrentTab(tab);
+    if (tab === currentTab.index) {
+      return;
+    }
+    setCurrentTab({ index: currentTab.index, visible: false });
+    setTimeout(
+      () => setCurrentTab({ index: tab, visible: true }),
+      transitionDuration
+    );
   };
 
   return (
@@ -26,19 +35,23 @@ const Perfezionamento: NextPage = () => {
           "heading title notification viewed 1"
         )}
       />
-      <Tabs
-        {...getTabsData(UserType.PF, "tabs notification viewed 1")}
-        onTabChange={handleTabChange}
-      />
-      {getAppData()[UserType.PF].tabs.map((v) => (
-        <Infoblock
-          key={v.name}
-          {...getInfoblockData(
-            UserType.PF,
-            `infoblock notification viewed ${currentTab + 1}`
-          )}
-        />
-      ))}
+      <Tabs {...tabsData} onTabChange={handleTabChange} />
+      <Box ref={containerRef}>
+        <Slide
+          direction="right"
+          in={currentTab.visible}
+          timeout={transitionDuration}
+        >
+          <Box>
+            <Infoblock
+              {...getInfoblockData(
+                UserType.PF,
+                `infoblock notification viewed ${currentTab.index + 1}`
+              )}
+            />
+          </Box>
+        </Slide>
+      </Box>
     </>
   );
 };
