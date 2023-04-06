@@ -23,6 +23,7 @@ import {
   NotificationDetailOtherDocument,
   NotificationRelatedDowntimes,
   GetNotificationDowntimeEventsParams,
+  useHasPermissions,
 } from '@pagopa-pn/pn-commons';
 
 import * as routes from '../navigation/routes.const';
@@ -42,8 +43,10 @@ import {
   resetState,
   clearDowntimeLegalFactData,
 } from '../redux/notification/reducers';
+import { PNRole } from '../redux/auth/types';
 import NotificationPayment from '../component/Notifications/NotificationPayment';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import DomicileBanner from '../component/DomicileBanner/DomicileBanner';
 import { trackEventByType } from '../utils/mixpanel';
 import { TrackEventType } from '../utils/events';
 
@@ -81,6 +84,9 @@ const NotificationDetail = () => {
   const navigate = useNavigate();
 
   const currentUser = useAppSelector((state: RootState) => state.userState.user);
+  const role = currentUser.organization?.roles[0];
+
+  const userHasAdminPermissions = useHasPermissions([role.role], [PNRole.ADMIN]);
   const delegatorsFromStore = useAppSelector(
     (state: RootState) => state.generalInfoState.delegators
   );
@@ -298,6 +304,7 @@ const NotificationDetail = () => {
                     mandateId={mandateId}
                   />
                 )}
+                {userHasAdminPermissions && <DomicileBanner />}
                 <Paper sx={{ p: 3 }} className="paperContainer">
                   <NotificationDetailDocuments
                     title={t('detail.acts', { ns: 'notifiche' })}
