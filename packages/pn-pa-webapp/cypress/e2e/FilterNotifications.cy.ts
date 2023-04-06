@@ -1,12 +1,7 @@
-import {
-  formatDate,
-  formatToTimezoneString,
-  getNextDay,
-  tenYearsAgo,
-  today
-} from '../../../pn-commons/src/utils/date.utility';
+import { formatDate } from '../../../pn-commons/src/utils/date.utility';
 import { NotificationStatus } from '../../../pn-commons/src/types/NotificationStatus';
 import { NOTIFICATIONS_LIST } from "../../src/api/notifications/notifications.routes";
+import { getParams } from "../support/utils";
 
 const filters = {
   taxId: 'GRBGPP87L04L741X',
@@ -19,20 +14,7 @@ const filters = {
   status: NotificationStatus.VIEWED,
 };
 
-const getParams = (params: {
-  iun?: string,
-  recipientId?: string,
-  startDate?: string,
-  endDate?: string,
-  status?: string
-}) => ({
-  iunMatch: params.iun,
-  recipientId: params.recipientId,
-  startDate: formatToTimezoneString(params.startDate ? new Date(params.startDate) : tenYearsAgo),
-  endDate: formatToTimezoneString(getNextDay(params.endDate ? new Date(params.endDate) : today)),
-  status: params.status,
-  size: 10
-});
+
 
 describe('Filter Notifications', () => {
   const startDate = {

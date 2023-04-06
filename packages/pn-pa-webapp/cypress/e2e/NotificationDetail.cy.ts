@@ -1,4 +1,6 @@
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
+import { NOTIFICATIONS_LIST } from "../../src/api/notifications/notifications.routes";
+import { getParams } from "../support/utils";
 
 const notifications = [
   {
@@ -9,13 +11,16 @@ const notifications = [
 ];
 
 describe("Notification Detail", () => {
+  before(() => {
+    cy.loginWithTokenExchange();
+  })
   beforeEach(() => {
     Cypress.on('uncaught:exception', (err, runnable) => {
       return false;
     });
     cy.viewport(1920, 1080);
 
-    cy.intercept('GET', /delivery\/notifications\/sent/, {
+    cy.intercept('GET', NOTIFICATIONS_LIST(getParams({})), {
       statusCode: 200,
       fixture: 'notifications/list-10/page-1'
     }).as('notifications');
@@ -28,8 +33,6 @@ describe("Notification Detail", () => {
       statusCode: 200,
       fixture: 'tos/privacy-accepted',
     });
-    cy.logout();
-    cy.loginWithTokenExchange();
     cy.visit('/dashboard');
   });
 

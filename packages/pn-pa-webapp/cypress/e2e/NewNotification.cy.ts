@@ -8,12 +8,25 @@ describe.skip('New Notification with payment methods', () => {
   const pdfTest2 = './cypress/fixtures/attachments/pdf_test_2.pdf';
   const pdfTest3 = './cypress/fixtures/attachments/pdf_test_3.pdf';
   const pdfTest4 = './cypress/fixtures/attachments/pdf_test_4.pdf';
+  let tokenExchangeResponse;
+
+  before(() => {
+    cy.intercept(/TOS/, {
+      statusCode: 200,
+      fixture: 'tos/tos-accepted',
+    });
+    cy.intercept(/DATAPRIVACY/, {
+      statusCode: 200,
+      fixture: 'tos/privacy-accepted',
+    });
+    tokenExchangeResponse = cy.getExchangedToken();
+    cy.log('token', tokenExchangeResponse)
+  });
 
   beforeEach(() => {
     Cypress.on('uncaught:exception', (err, runnable) => {
       return false;
     });
-    cy.viewport(1920, 1080);
 
     // intercepts send notification request stubbing its successful response
     cy.intercept('POST', CREATE_NOTIFICATION(), {
@@ -25,25 +38,16 @@ describe.skip('New Notification with payment methods', () => {
     }).as('saveNewNotification');
 
     cy.intercept('/delivery/attachments/preload').as('preloadAttachments');
+    cy.visit('/dashboard/nuova-notifica');
   });
 
   describe('Single/multi recipients', () => {
     beforeEach(() => {
-      cy.logout();
-      cy.loginWithTokenExchange();
-      cy.intercept(/TOS/, {
-        statusCode: 200,
-        fixture: 'tos/tos-accepted',
-      });
-      cy.intercept(/DATAPRIVACY/, {
-        statusCode: 200,
-        fixture: 'tos/privacy-accepted',
-      });
       cy.intercept(/groups/, { fixture: 'groups/no-groups' });
-      cy.visit('/dashboard/nuova-notifica');
     });
 
-    it('Creates a single recipient notification with a payment document', () => {
+    // skipped because payments are currently disabled
+    it.skip('Creates a single recipient notification with a payment document', () => {
       // Fill step 1
       cy.fillPreliminaryInfo({
         paProtocolNumber: 'prot-123456789',
@@ -104,21 +108,17 @@ describe.skip('New Notification with payment methods', () => {
       cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 3
+
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('be.enabled').click();
-
-      cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
-
-      // Fill step 4
       cy.contains(/^Invia$/).click();
 
+      cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
       cy.wait('@saveNewNotification');
-
       cy.contains('La notifica è stata correttamente creata');
     });
 
-    it('Creates a single recipient notification with payment document selected but without uploading it', () => {
+    it.skip('Creates a single recipient notification with payment document selected but without uploading it', () => {
       // Fill step 1
       cy.fillPreliminaryInfo({
         paProtocolNumber: 'prot-123456789',
@@ -158,7 +158,7 @@ describe.skip('New Notification with payment methods', () => {
       cy.contains('La notifica è stata correttamente creata');
     });
 
-    it('Creates a multi recipients notification with payment documents', () => {
+    it.skip('Creates a multi recipients notification with payment documents', () => {
       // Fill step 1
       cy.fillPreliminaryInfo({
         paProtocolNumber: 'prot-123456789',
@@ -249,15 +249,10 @@ describe.skip('New Notification with payment methods', () => {
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.contains(/^Invia$/).should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
-
-      // Fill step 4
-      cy.contains(/^Invia$/).click();
-
       cy.wait('@saveNewNotification');
-
       cy.contains('La notifica è stata correttamente creata');
     });
 
@@ -267,7 +262,8 @@ describe.skip('New Notification with payment methods', () => {
       cy.get('#subject').type('Nuova Notifica');
       cy.get('#taxonomyCode').type('012345X');
       cy.get('[data-testid="comunicationTypeRadio"]').eq(0).click();
-      cy.get('[data-testid="paymentMethodRadio"]').eq(1).click();
+      // payment method is currently disabled
+      // cy.get('[data-testid="paymentMethodRadio"]').eq(1).click();
       cy.get('button[type="submit"]').should('be.enabled').click();
 
       // Fill step 2
@@ -285,30 +281,32 @@ describe.skip('New Notification with payment methods', () => {
 
       cy.log('validation text error for taxId disappears');
       cy.get('.css-1robk8y-MuiFormHelperText-root').should('not.exist');
+      // payment method is currently disabled
+      // cy.log('writing invalid creditor taxtId');
+      // cy.get('input[name="recipients[0].creditorTaxId"]').type('1231232131').blur();
+      //
+      // cy.log('validation text error for creditor taxId appears');
+      // cy.get('.css-1robk8y-MuiFormHelperText-root').should('be.visible');
+      //
+      // cy.log('writing valid creditor taxtId');
+      // cy.get('input[name="recipients[0].creditorTaxId"]').clear().type('12312321315');
 
-      cy.log('writing invalid creditor taxtId');
-      cy.get('input[name="recipients[0].creditorTaxId"]').type('1231232131').blur();
+      // cy.log('validation text error for creditor taxId disappears');
+      // cy.get('.css-1robk8y-MuiFormHelperText-root').should('not.exist');
+      // tests for creditor taxId end here
 
-      cy.log('validation text error for creditor taxId appears');
-      cy.get('.css-1robk8y-MuiFormHelperText-root').should('be.visible');
-
-      cy.log('writing valid creditor taxtId');
-      cy.get('input[name="recipients[0].creditorTaxId"]').clear().type('12312321315');
-
-      cy.log('validation text error for creditor taxId disappears');
-      cy.get('.css-1robk8y-MuiFormHelperText-root').should('not.exist');
-
-      cy.log('writing invalid notice code');
-      cy.get('input[name="recipients[0].noticeCode"]').type('12312312312312125').blur();
-
-      cy.log('validation text error for notice code');
-      cy.get('.css-1robk8y-MuiFormHelperText-root').should('be.visible');
-
-      cy.log('writing valid notice code');
-      cy.get('input[name="recipients[0].noticeCode"]').clear().type('123123123123123125');
-
-      cy.log('validation text error for notice code disappears');
-      cy.get('.css-1robk8y-MuiFormHelperText-root').should('not.exist');
+      // cy.log('writing invalid notice code');
+      // cy.get('input[name="recipients[0].noticeCode"]').type('12312312312312125').blur();
+      //
+      // cy.log('validation text error for notice code');
+      // cy.get('.css-1robk8y-MuiFormHelperText-root').should('be.visible');
+      //
+      // cy.log('writing valid notice code');
+      // cy.get('input[name="recipients[0].noticeCode"]').clear().type('123123123123123125');
+      //
+      // cy.log('validation text error for notice code disappears');
+      // cy.get('.css-1robk8y-MuiFormHelperText-root').should('not.exist');
+      // tests for notice code end here
 
       cy.get('[data-testid="PhysicalAddressCheckbox"]').click();
       cy.get('input[name="recipients[0].address"]').type('Indirizzo');
@@ -327,24 +325,19 @@ describe.skip('New Notification with payment methods', () => {
       cy.get('input[name="documents.1.name"]').type('pdf di Test 2');
       cy.get('button[type="submit"]').should('be.enabled').click();
 
+      // payment is currently disabled
       // Fill step 4
-      cy.get('input[type="file"]').eq(0).selectFile(pdfTest3, { force: true });
-      cy.get('input[type="file"]').eq(0).selectFile(pdfTest4, { force: true });
-
-      cy.get('button[type="submit"]').click();
+      // cy.get('input[type="file"]').eq(0).selectFile(pdfTest3, { force: true });
+      // cy.get('input[type="file"]').eq(0).selectFile(pdfTest4, { force: true });
+      //
+      // cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
-
       cy.contains('La notifica è stata correttamente creata');
     });
   });
 
   describe('Administrator role', () => {
-    beforeEach(() => {
-      cy.logout();
-      cy.loginWithTokenExchange(PNRole.ADMIN);
-      cy.visit('/dashboard/nuova-notifica');
-    });
 
     it('Creates a new notification when no user group is available', () => {
       cy.intercept(/groups/, { fixture: 'groups/no-groups' });
@@ -382,8 +375,8 @@ describe.skip('New Notification with payment methods', () => {
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
       // Fill step 4
-      cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').click();
+      // cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
+      // cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 
@@ -430,8 +423,8 @@ describe.skip('New Notification with payment methods', () => {
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
       // Fill step 4
-      cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').click();
+      // cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
+      // cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 
@@ -482,8 +475,8 @@ describe.skip('New Notification with payment methods', () => {
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
       // Fill step 4
-      cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').click();
+      // cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
+      // cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 
@@ -530,8 +523,8 @@ describe.skip('New Notification with payment methods', () => {
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
       // Fill step 4
-      cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
-      cy.get('button[type="submit"]').click();
+      // cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
+      // cy.get('button[type="submit"]').click();
 
       cy.wait('@saveNewNotification');
 

@@ -26,9 +26,11 @@ describe('New Notification without payment methods', () => {
   });
 
   describe('Single/multi recipients', () => {
-    beforeEach(() => {
-      cy.logout();
+    before(() => {
       cy.loginWithTokenExchange();
+    });
+
+    beforeEach(() => {
       cy.intercept(/TOS/, {
         statusCode: 200,
         fixture: 'tos/tos-accepted',
