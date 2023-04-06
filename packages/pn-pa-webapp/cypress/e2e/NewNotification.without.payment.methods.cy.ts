@@ -168,7 +168,7 @@ describe('New Notification without payment methods', () => {
     });
   });
 
-  describe.only('Administrator role', () => {
+  describe('Administrator role', () => {
     before(() => {
       cy.loginWithTokenExchange(PNRole.ADMIN);
     });
