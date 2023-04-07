@@ -52,7 +52,9 @@ function FaqDataItemBlock(props: { item: IFaqDataItem } & ActiveItemProps) {
         <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.title}</Typography>        
       </AccordionSummary>
       <AccordionDetails>
-        <FaqDescriptionBlock description={item.description} />
+        <Box sx={{ mr: 4, textAlign: 'justify' }}>
+          <FaqDescriptionBlock description={item.description} />
+        </Box>
       </AccordionDetails>
     </Accordion>
   </Box>;
@@ -101,8 +103,6 @@ const FaqPage: NextPage = () => {
         { faqData.sections.map(( section, ix ) => 
           <FaqDataSectionBlock section={section} key={ix} setActiveItem={setActiveItem} activeItem={currentItem} />
         ) }
-        {/* <FaqBlock title="SEND" />
-        <FaqBlock title="Recapiti" /> */}
       </Stack>
     </main>
   </>;

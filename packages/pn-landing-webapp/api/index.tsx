@@ -84,7 +84,7 @@ export const getHorizontalNavData = (
 ): HorizontalNavProps => getAppData()[userType].horizontalNav;
 
 // I preferred to keep FAQ data outside the language-dependent info
-// while we have the FAQ definition for Italian only.
+// while we have the FAQ definition for one language (i.e. Italian) only.
 // To add into the IAddData structures for each language when the remaining definitions arrive.
 // --------------------------------------------------
 // Carlos Lombardi, 2023.04.06
