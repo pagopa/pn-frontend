@@ -18,9 +18,10 @@ import {
   CodeModal,
   AppResponsePublisher,
   AppResponse,
-  ErrorMessage, DisclaimerModal,
+  ErrorMessage,
+  DisclaimerModal,
 } from '@pagopa-pn/pn-commons';
-
+import { ButtonNaked } from '@pagopa/mui-italia';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { CourtesyChannelType, LegalChannelType } from '../../models/contacts';
 import { RootState } from '../../redux/store';
@@ -38,6 +39,7 @@ type ModalProps = {
   labelType: string;
   recipientId: string;
   senderId: string;
+  senderName?: string;
   digitalDomicileType: LegalChannelType | CourtesyChannelType;
   value: string;
   callbackOnValidation?: (status: 'validated' | 'cancelled') => void;
@@ -49,13 +51,14 @@ interface IDigitalContactsCodeVerificationContext {
     value: string,
     recipientId: string,
     senderId: string,
+    senderName?: string,
     callbackOnValidation?: (status: 'validated' | 'cancelled') => void
   ) => void;
 }
 
 const DigitalContactsCodeVerificationContext = createContext<
   IDigitalContactsCodeVerificationContext | undefined
-  >(undefined);
+>(undefined);
 
 const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) => {
   const { t } = useTranslation(['common', 'recapiti']);
@@ -94,7 +97,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
 
   const handleConfirm = () => {
     setIsConfirmationModalVisible(false);
-    handleCodeVerification();
+    handleDisclaimerVisibilityFirst();
   };
 
   const handleDiscard = () => {
@@ -127,6 +130,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     const digitalAddressParams: SaveDigitalAddressParams = {
       recipientId: modalProps.recipientId,
       senderId: modalProps.senderId,
+      senderName: modalProps.senderName,
       channelType: modalProps.digitalDomicileType,
       value: modalProps.value,
       code: verificationCode,
@@ -152,17 +156,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           );
           handleClose('validated');
         } else {
-          // if senderId !== 'default' they are a special contact => don't show disclaimer
-          // if modalProps.digitalDomicileType === LegalChannelType.PEC it's a legal contact => don't show disclaimer
-          // if modalProps.digitalDomicileType !== LegalChannelType.PEC and senderId === 'default' it's a
-          // courtesy contact => show disclaimer
-          if (modalProps.digitalDomicileType === LegalChannelType.PEC || modalProps.senderId !== 'default') {
-            // open verification code dialog
-            setOpen(true);
-          } else {
-            // open disclaimer dialog
-            setDisclaimerOpen(true);
-          }
+          setOpen(true);
         }
       });
   };
@@ -172,6 +166,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
     value: string,
     recipientId: string,
     senderId: string,
+    senderName?: string,
     callbackOnValidation?: (status: 'validated' | 'cancelled') => void
   ) => {
     /* eslint-disable functional/no-let */
@@ -190,6 +185,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
       labelType,
       recipientId,
       senderId,
+      senderName,
       digitalDomicileType,
       value,
       callbackOnValidation,
@@ -198,11 +194,28 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
 
   useEffect(() => {
     if (!_.isEqual(modalProps, initialProps) && !contactAlreadyExists()) {
-      handleCodeVerification();
+      handleDisclaimerVisibilityFirst();
     } else if (contactAlreadyExists()) {
       setIsConfirmationModalVisible(true);
     }
   }, [modalProps]);
+
+  const handleDisclaimerVisibilityFirst = () => {
+    // if senderId !== 'default' they are a special contact => don't show disclaimer
+    // if modalProps.digitalDomicileType === LegalChannelType.PEC it's a legal contact => don't show disclaimer
+    // if modalProps.digitalDomicileType !== LegalChannelType.PEC and senderId === 'default' it's a
+    // courtesy contact => show disclaimer
+    if (
+      modalProps.digitalDomicileType === LegalChannelType.PEC ||
+      modalProps.senderId !== 'default'
+    ) {
+      // open verification code dialog
+      handleCodeVerification();
+    } else {
+      // open disclaimer dialog
+      setDisclaimerOpen(true);
+    }
+  };
 
   const handleAddressUpdateError = useCallback(
     (responseError: AppResponse) => {
@@ -242,10 +255,11 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
   return (
     <DigitalContactsCodeVerificationContext.Provider value={{ initValidation }}>
       {children}
-      {disclaimerOpen &&
+      {disclaimerOpen && (
         <DisclaimerModal
           onConfirm={() => {
             setDisclaimerOpen(false);
+            handleCodeVerification();
             setOpen(true);
           }}
           onCancel={() => setDisclaimerOpen(false)}
@@ -253,7 +267,7 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
           checkboxLabel={t('button.capito')}
           content={t(`alert-dialog-${modalProps.digitalDomicileType}`, { ns: 'recapiti' })}
         />
-      }
+      )}
       {!_.isEqual(modalProps, initialProps) && (
         <CodeModal
           title={
@@ -276,15 +290,14 @@ const DigitalContactsCodeVerificationProvider: FC<ReactNode> = ({ children }) =>
                 {t(`${modalProps.labelRoot}.${modalProps.labelType}-new-code`, { ns: 'recapiti' })}
                 &nbsp;
               </Typography>
-              <Typography
-                variant="body2"
-                display="inline"
-                color="primary"
+              <ButtonNaked
                 onClick={() => handleCodeVerification(undefined, true)}
-                sx={{ cursor: 'pointer' }}
+                sx={{verticalAlign: 'unset'}}
               >
-                {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
-              </Typography>
+                <Typography color="primary">
+                  {t(`${modalProps.labelRoot}.new-code-link`, { ns: 'recapiti' })}.
+                </Typography>
+              </ButtonNaked>
             </Box>
           }
           cancelLabel={t('button.annulla')}

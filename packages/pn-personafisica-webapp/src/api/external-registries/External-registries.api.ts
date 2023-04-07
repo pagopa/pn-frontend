@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { apiClient } from '../apiClients';
 import { FilterPartiesParams, Party } from '../../models/party';
 
-import { GET_ALL_ACTIVATED_PARTIES } from '../external-registries/external-registries-routes';
+import { GET_ALL_ACTIVATED_PARTIES } from './external-registries-routes';
 
 export const ExternalRegistriesAPI = {
   getAllActivatedParties: (payload?: FilterPartiesParams): Promise<Array<Party>> =>

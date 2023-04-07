@@ -16,7 +16,12 @@ import {
   Paper,
 } from '@mui/material';
 import { ButtonNaked } from '@pagopa/mui-italia';
-import { DigitalDomicileType, RecipientType, dataRegex } from '@pagopa-pn/pn-commons';
+import {
+  DigitalDomicileType,
+  RecipientType,
+  dataRegex,
+  SectionHeading,
+} from '@pagopa-pn/pn-commons';
 
 import { saveRecipients } from '../../../redux/newNotification/reducers';
 import { useAppDispatch } from '../../../redux/hooks';
@@ -27,6 +32,7 @@ import PhysicalAddress from './PhysicalAddress';
 import FormTextField from './FormTextField';
 import NewNotificationCard from './NewNotificationCard';
 import {
+  denominationLengthAndCharacters,
   identicalIUV,
   identicalTaxIds,
   taxIdDependingOnRecipientType,
@@ -92,17 +98,6 @@ const Recipient = ({
         }
       : { recipients: [{ ...singleRecipient, idx: 0, id: 'recipient.0' }] };
 
-  const checkForbiddenCharacters = (
-    value: string,
-    path: string,
-    createError: (params?: yup.CreateErrorOptions | undefined) => yup.ValidationError
-  ) => {
-    if (dataRegex.denomination.test(value)) {
-      return true;
-    }
-    return createError({ message: t(`forbidden-characters-denomination-error`), path });
-  };
-
   const buildRecipientValidationObject = () => {
     const validationObject = {
       recipientType: yup.string(),
@@ -112,32 +107,41 @@ const Recipient = ({
         .string()
         .required(tc('required-field'))
         .test({
-          name: 'denominationTotalLength',
+          name: 'denominationLengthAndCharacters',
           test(value) {
-            const denomination = (value || '') + ((this.parent.lastName as string) || '');
-            const messageKey = `too-long-denomination-error`;
-            if (denomination.length > 80) {
-              if (this.parent.recipientType === 'PG') {
-                return this.createError({ message: t(messageKey), path: this.path });
-              }
-              return new yup.ValidationError([
-                this.createError({ message: t(messageKey), path: this.path }),
-                this.createError({ message: ' ', path: `recipients[${this.parent.idx}].lastName` }),
-              ]);
+            const error = denominationLengthAndCharacters(value, this.parent.lastName);
+            if (error) {
+              return this.createError({
+                message:
+                  error.messageKey === 'too-long-field-error'
+                    ? tc(error.messageKey, error.data)
+                    : t(error.messageKey, error.data),
+                path: this.path,
+              });
             }
-            return checkForbiddenCharacters(value || '', this.path, this.createError);
+            return true;
           },
         }),
       // la validazione di lastName è condizionale perché per persone giuridiche questo attributo
       // non viene richiesto
       lastName: yup.string().when('recipientType', {
         is: (value: string) => value !== RecipientType.PG,
-        then: yup.string().required(tc('required-field')).test({
-          name: 'denominationTotalLength',
-          test(value) {
-            return checkForbiddenCharacters(value || '', this.path, this.createError);
-          },
-        }),
+        then: yup
+          .string()
+          .required(tc('required-field'))
+          .test({
+            name: 'denominationLengthAndCharacters',
+            test(value) {
+              const error = denominationLengthAndCharacters(this.parent.firstName, value as string);
+              if (error) {
+                return this.createError({
+                  message: ' ',
+                  path: this.path,
+                });
+              }
+              return true;
+            },
+          }),
       }),
       taxId: yup
         .string()
@@ -398,12 +402,13 @@ const Recipient = ({
                   alignItems="center"
                   justifyContent="space-between"
                 >
-                  <Typography variant="h6">
+                  <SectionHeading>
                     {t('title')} {values.recipients.length > 1 ? index + 1 : null}
-                  </Typography>
+                  </SectionHeading>
                   {values.recipients.length > 1 && (
-                    <Delete
+                    <ButtonNaked
                       data-testid="DeleteRecipientIcon"
+                      aria-label={t('new-notification.steps.remove-recipient')}
                       onClick={() =>
                         deleteRecipientHandler(
                           errors,
@@ -413,7 +418,9 @@ const Recipient = ({
                           setFieldValue
                         )
                       }
-                    />
+                    >
+                      <Delete />
+                    </ButtonNaked>
                   )}
                 </Stack>
                 <Box sx={{ marginTop: '20px' }}>
@@ -526,28 +533,31 @@ const Recipient = ({
                         item
                         xs={6}
                         data-testid="DigitalDomicileCheckbox"
-                        onClick={() =>
+                        onClick={(e) => {
                           setFieldValue(
                             `recipients[${index}].showDigitalDomicile`,
                             !values.recipients[index].showDigitalDomicile
-                          )
-                        }
+                          );
+                          e.preventDefault(); // avoids issue with non clickable checkbox label in FormControlLabel
+                        }}
                       >
-                        <Stack display="flex" direction="row" alignItems="center">
-                          <Checkbox
-                            checked={values.recipients[index].showDigitalDomicile}
-                            name={`recipients[${index}].showDigitalDomicile`}
-                            onChange={(digitalCheckEvent) =>
-                              handleAddressTypeChange(
-                                digitalCheckEvent,
-                                values.recipients[index],
-                                `recipients[${index}]`,
-                                setFieldValue
-                              )
-                            }
-                          />
-                          <Typography>{t('add-digital-domicile')}</Typography>
-                        </Stack>
+                        <FormControlLabel
+                          checked={values.recipients[index].showDigitalDomicile}
+                          control={
+                            <Checkbox
+                              onChange={(digitalCheckEvent) =>
+                                handleAddressTypeChange(
+                                  digitalCheckEvent as ChangeEvent,
+                                  values.recipients[index],
+                                  `recipients[${index}]`,
+                                  setFieldValue
+                                )
+                              }
+                            />
+                          }
+                          name={`recipients[${index}].showDigitalDomicile`}
+                          label={t('add-digital-domicile')}
+                        />
                       </Grid>
                       {values.recipients[index].showDigitalDomicile && (
                         <FormTextField
@@ -567,28 +577,31 @@ const Recipient = ({
                         xs={12}
                         item
                         data-testid="PhysicalAddressCheckbox"
-                        onClick={() =>
+                        onClick={(e) => {
                           setFieldValue(
                             `recipients[${index}].showPhysicalAddress`,
                             !values.recipients[index].showPhysicalAddress
-                          )
-                        }
+                          );
+                          e.preventDefault(); // avoids issue with non clickable checkbox label in FormControlLabel
+                        }}
                       >
-                        <Stack display="flex" direction="row" alignItems="center">
-                          <Checkbox
-                            checked={values.recipients[index].showPhysicalAddress}
-                            name={`recipients[${index}].showPhysicalAddress`}
-                            onChange={(physicalCheckEvent) =>
-                              handleAddressTypeChange(
-                                physicalCheckEvent,
-                                values.recipients[index],
-                                `recipients[${index}]`,
-                                setFieldValue
-                              )
-                            }
-                          />
-                          <Typography>{t('add-physical-domicile')}*</Typography>
-                        </Stack>
+                        <FormControlLabel
+                          checked={values.recipients[index].showPhysicalAddress}
+                          control={
+                            <Checkbox
+                              onChange={(physicalCheckEvent) =>
+                                handleAddressTypeChange(
+                                  physicalCheckEvent as ChangeEvent,
+                                  values.recipients[index],
+                                  `recipients[${index}]`,
+                                  setFieldValue
+                                )
+                              }
+                            />
+                          }
+                          name={`recipients[${index}].showPhysicalAddress`}
+                          label={`${t('add-physical-domicile')}*`}
+                        />
                       </Grid>
                     </Grid>
                     <Grid container spacing={2} mt={1}>

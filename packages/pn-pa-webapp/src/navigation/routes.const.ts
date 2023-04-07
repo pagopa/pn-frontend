@@ -18,13 +18,13 @@ export const GROUPS_SEGMENT = '/groups';
 export const APP_STATUS = '/app-status';
 export { PRIVACY_POLICY, TERMS_OF_SERVICE };
 
-/** USERS navigation link to SelfCare "Referenti" section for Piattaforma Notifiche
+/** USERS navigation link to SelfCare "Referenti" section for SEND
  * @param idOrganization
  */
 export const USERS = (idOrganization: string) =>
   `${SELFCARE_BASE_URL}${DASHBOARD}/${idOrganization}${USERS_SEGMENT}#${ID_PN_SEGMENT}`;
 
-/** GROUPS navigation link to SelfCare "Gruppi" section for Piattaforma Notifiche
+/** GROUPS navigation link to SelfCare "Gruppi" section for SEND
  * @param idOrganization
  */
 export const GROUPS = (idOrganization: string) =>

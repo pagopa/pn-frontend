@@ -261,12 +261,7 @@ const FileUpload = ({
             &nbsp;
           </Typography>
           <ButtonNaked onClick={chooseFileHandler} data-testid="loadFromPc">
-            <Typography
-              display="inline"
-              variant="body2"
-              color="primary"
-              sx={{ cursor: 'pointer' }}
-            >
+            <Typography display="inline" variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
               {getLocalizedOrDefaultLabel(
                 'common',
                 'upload-file.select-from-pc',
@@ -315,7 +310,14 @@ const FileUpload = ({
                 {(data.file.size / 1024).toFixed(2)}&nbsp;KB
               </Typography>
             </Box>
-            <IconButton onClick={removeFileHandler}>
+            <IconButton
+              onClick={removeFileHandler}
+              aria-label={getLocalizedOrDefaultLabel(
+                'notifiche',
+                'new-notification.steps.attachments.remove-attachment',
+                'Rimuovi allegato'
+              )}
+            >
               <CloseIcon />
             </IconButton>
           </Box>

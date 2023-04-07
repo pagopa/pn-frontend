@@ -20,6 +20,7 @@ import CustomMobileDialog from './CustomMobileDialog/CustomMobileDialog';
 import CustomMobileDialogToggle from './CustomMobileDialog/CustomMobileDialogToggle';
 import CustomMobileDialogContent from './CustomMobileDialog/CustomMobileDialogContent';
 import CustomMobileDialogAction from './CustomMobileDialog/CustomMobileDialogAction';
+import SectionHeading from './SectionHeading';
 import TitleBox from './TitleBox';
 import { AppStatusRender } from './AppStatus/AppStatusRender';
 import {
@@ -74,6 +75,7 @@ export {
   CustomMobileDialogToggle,
   CustomMobileDialogContent,
   CustomMobileDialogAction,
+  SectionHeading,
   TitleBox,
   NotificationDetailTable,
   NotificationDetailDocuments,

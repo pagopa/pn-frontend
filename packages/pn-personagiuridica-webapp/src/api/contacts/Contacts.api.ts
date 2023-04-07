@@ -13,12 +13,11 @@ export const ContactsApi = {
    * @param  {string} recipientId
    * @returns Promise
    */
-  getDigitalAddresses: (): Promise<DigitalAddresses> => 
+  getDigitalAddresses: (): Promise<DigitalAddresses> =>
     apiClient.get<DigitalAddresses>(CONTACTS_LIST()).then((response) => ({
-        legal: response.data.legal ? response.data.legal : [],
-        courtesy: response.data.courtesy ? response.data.courtesy : [],
-      })
-    ),
+      legal: response.data.legal ? response.data.legal : [],
+      courtesy: response.data.courtesy ? response.data.courtesy : [],
+    })),
 
   /**
    * Create or update a digital address with legal value
@@ -29,7 +28,8 @@ export const ContactsApi = {
     recipientId: string,
     senderId: string,
     channelType: LegalChannelType,
-    body: { value: string; verificationCode?: string }
+    body: { value: string; verificationCode?: string },
+    senderName?: string
   ): Promise<void | DigitalAddress> =>
     apiClient.post<void>(LEGAL_CONTACT(senderId, channelType), body).then((response) => {
       if (response.status !== 204) {
@@ -41,6 +41,7 @@ export const ContactsApi = {
         addressType: 'legal',
         recipientId,
         senderId,
+        senderName,
         channelType,
         value: body.value,
         code: 'verified',
@@ -55,7 +56,8 @@ export const ContactsApi = {
     recipientId: string,
     senderId: string,
     channelType: CourtesyChannelType,
-    body: { value: string; verificationCode?: string }
+    body: { value: string; verificationCode?: string },
+    senderName?: string
   ): Promise<void | DigitalAddress> =>
     apiClient.post<void>(COURTESY_CONTACT(senderId, channelType), body).then((response) => {
       if (response.status !== 204) {
@@ -67,6 +69,7 @@ export const ContactsApi = {
         addressType: 'courtesy',
         recipientId,
         senderId,
+        senderName,
         channelType,
         value: body.value,
         code: 'verified',

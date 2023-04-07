@@ -24,6 +24,7 @@
     "show-more": "Mostra dettagli"
   },
   "table": {
+    "title": "Tabella delle notifiche",
     "date": "Data",
     "recipient": "Destinatario",
     "subject": "Oggetto",
@@ -232,7 +233,6 @@
         "identical-notice-codes-error": "C’è già un destinatario con questo Codice Avviso. Inseriscine uno diverso.",
         "notice-code-error": "Inserisci un codice di 18 caratteri numerici",
         "pec-error": "Indirizzo PEC non valido",
-        "too-long-denomination-error": "Inserisci max 80 caratteri",
         "forbidden-characters-denomination-error": "Hai inserito caratteri non validi",
         "legal-entity": "Soggetto giuridico",
         "physical-person": "Persona fisica",
@@ -256,7 +256,8 @@
         "foreign-state": "Stato",
         "at": "Presso",
         "address-details": "Note aggiuntive (scala, piano)",
-        "add-recipient": "Aggiungi un destinatario"
+        "add-recipient": "Aggiungi un destinatario",
+        "remove-recipient": "Rimuovi destinatario"
       },
       "attachments": {
         "title": "Allegati",
@@ -268,7 +269,9 @@
         "doc-name": "Nome del documento",
         "add-doc": "Aggiungi un documento (per esempio, la lettera d’accompagnamento)",
         "add-another-doc": "Aggiungi un altro documento (per esempio, la lettera d’accompagnamento)",
-        "back-to-recipient": "Torna a Destinatario"
+        "back-to-recipient": "Torna a Destinatario",
+        "remove-attachment": "Elimina allegato",
+        "remove-document": "Rimuovi documento"
       },
       "payment-methods": {
         "title": "Modelli di pagamento",

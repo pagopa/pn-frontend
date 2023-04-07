@@ -25,12 +25,10 @@
     "logout": "Esci",
     "pago-pa-link": "Sito di PagoPA S.p.A.",
     "reserved-area": "Area Riservata",
-    "notification-platform": "Piattaforma Notifiche"
+    "notification-platform": "SEND - Servizio Notifiche Digitali"
   },
   "tos": {
-    "title": "Piattaforma Notifiche",
-    "body": "Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.",
-    "redo-body": "L’Informativa Privacy e i Termini e condizioni d’uso sono cambiati. Per accedere, leggi e accetta la nuova versione.",
+    "title": "SEND - Servizio Notifiche Digitali",
     "switch-label": "Accedendo, accetti i <0>Termini e condizioni d’uso</0> del servizio e confermi di aver letto l’<1>Informativa Privacy</1>.",
     "button": "Accedi"
   },
@@ -74,17 +72,17 @@
   },
   "access-denied": "Non hai le autorizzazioni necessarie per accedere a questa pagina",
   "not-logged": "Accedi all'Area Riservata",
-  "not-logged-subtitle": "Per usare Piattaforma Notifiche, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
+  "not-logged-subtitle": "Per usare SEND, accedi all'Area Riservata con SPID o CIE. Poi, premi \"Gestisci\" nella card corrispondente.",
   "not-found": {
     "title": "404: La pagina che stai cercando non esiste",
     "descpription": "Sei qui per errore, prova ad usare la navigazione."
   },
   "leaving-app": {
-    "title": "Stai uscendo da Piattaforma Notifiche",
+    "title": "Stai uscendo da SEND",
     "message": "Verrai reindirizzato"
   },
   "error-when-fetching-tos-status": {
-    "title": "Problemi nell'accesso in Piattaforma Notifiche",
+    "title": "Problemi nell'accesso in SEND",
     "message": "Riprova più tardi"
   },
   "messages": {
@@ -130,6 +128,7 @@
   "required-fields": "*Campi obbligatori",
   "required-field": "Campo obbligatorio",
   "required": "obbligatorio",
+  "too-long-field-error": "Inserisci max {{maxLength}} caratteri",
   "invalid": "non valido",
   "upload-file": {
     "or": "oppure",

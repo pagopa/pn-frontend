@@ -1,4 +1,5 @@
 import { dataRegex, formatFiscalCode, sanitizeString } from './string.utility';
+import { searchStringCleanDenomination, searchStringLimitReachedText, useSearchStringChangeInput } from './searchString.utility';
 import { calculatePages } from './pagination.utility';
 
 import {
@@ -49,6 +50,7 @@ import {
 import { performThunkAction } from './redux.utility';
 import { ResponseEventDispatcher, AppResponsePublisher } from './AppResponse';
 import { AppError, AppErrorFactory, errorFactoryManager, UnknownAppError } from './AppError';
+import { buttonNakedInheritStyle } from './styles.utility';
 
 export {
   getNotificationAllowedStatus,
@@ -68,6 +70,9 @@ export {
   formatToTimezoneString,
   getValidValue,
   formatFiscalCode,
+  searchStringCleanDenomination,
+  searchStringLimitReachedText,
+  useSearchStringChangeInput,
   formatDateTime,
   IUN_regex,
   formatIun,
@@ -101,4 +106,5 @@ export {
   UnknownAppError,
   sanitizeString,
   compileOneTrustPath,
+  buttonNakedInheritStyle,
 };

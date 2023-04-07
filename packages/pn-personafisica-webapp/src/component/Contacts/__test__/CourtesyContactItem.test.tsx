@@ -104,7 +104,13 @@ describe('CourtesyContactItem component', () => {
         fireEvent.change(input!, { target: { value: INPUT_VALID_PHONE } });
         await waitFor(() => expect(input!).toHaveValue(INPUT_VALID_PHONE));
         const button = result!.getByRole('button');
-        fireEvent.click(button!);
+        await waitFor(() => fireEvent.click(button!));
+        // Confirms the disclaimer dialog
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
+        fireEvent.click(disclaimerConfirmButton);
+
         await waitFor(() => {
           expect(mockDispatchFn).toBeCalledTimes(1);
           expect(mockActionFn).toBeCalledTimes(1);
@@ -116,11 +122,6 @@ describe('CourtesyContactItem component', () => {
             code: undefined,
           });
         });
-
-        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
-        fireEvent.click(disclaimerCheckbox);
-        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
-        fireEvent.click(disclaimerConfirmButton);
 
         const dialog = await waitFor(() => {
           const dialogEl = screen.queryByTestId('codeDialog');
@@ -143,7 +144,7 @@ describe('CourtesyContactItem component', () => {
             unwrap: () => Promise.resolve({ code: VALID_CODE }),
           }))
         );
-        fireEvent.click(dialogButtons![1]);
+        fireEvent.click(dialogButtons![2]);
         await waitFor(() => {
           expect(mockDispatchFn).toBeCalledTimes(1);
           expect(mockActionFn).toBeCalledTimes(1);
@@ -226,6 +227,11 @@ describe('CourtesyContactItem component', () => {
           }))
         );
         fireEvent.click(saveButton);
+        // Confirms the disclaimer dialog
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
+        fireEvent.click(disclaimerConfirmButton);
         await waitFor(() => screen.getByText(INPUT_VALID_PHONE_UPDATE));
       });
 
@@ -237,6 +243,11 @@ describe('CourtesyContactItem component', () => {
         await waitFor(() => expect(input!).toHaveValue(INPUT_VALID_PHONE_2_UPDATE));
         const saveButton = screen.getByRole('button', { name: 'button.salva' });
         fireEvent.click(saveButton);
+        // Confirms the disclaimer dialog
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
+        fireEvent.click(disclaimerConfirmButton);
         await waitFor(() => {
           expect(mockDispatchFn).toBeCalledTimes(1);
           expect(mockActionFn).toBeCalledTimes(1);
@@ -248,11 +259,6 @@ describe('CourtesyContactItem component', () => {
             code: undefined,
           });
         });
-        // Confirms the disclaimer dialog
-        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
-        fireEvent.click(disclaimerCheckbox);
-        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
-        fireEvent.click(disclaimerConfirmButton);
         const dialog = await waitFor(() => {
           const dialogEl = screen.queryByTestId('codeDialog');
           expect(dialogEl).toBeInTheDocument();
@@ -274,7 +280,7 @@ describe('CourtesyContactItem component', () => {
             unwrap: () => Promise.resolve({ code: VALID_CODE }),
           }))
         );
-        fireEvent.click(dialogButtons![1]);
+        fireEvent.click(dialogButtons![2]);
         await waitFor(() => {
           expect(mockDispatchFn).toBeCalledTimes(1);
           expect(mockActionFn).toBeCalledTimes(1);
@@ -446,7 +452,13 @@ describe('CourtesyContactItem component', () => {
         fireEvent.change(input!, { target: { value: VALID_EMAIL } });
         await waitFor(() => expect(input!).toHaveValue(VALID_EMAIL));
         const button = result!.getByRole('button');
-        fireEvent.click(button!);
+        await waitFor(() => fireEvent.click(button!));
+        // Confirms the disclaimer dialog
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
+        fireEvent.click(disclaimerConfirmButton);
+
         await waitFor(() => {
           expect(mockDispatchFn).toBeCalledTimes(1);
           expect(mockActionFn).toBeCalledTimes(1);
@@ -458,11 +470,6 @@ describe('CourtesyContactItem component', () => {
             code: undefined,
           });
         });
-        // Confirms the disclaimer dialog
-        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
-        fireEvent.click(disclaimerCheckbox);
-        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
-        fireEvent.click(disclaimerConfirmButton);
 
         const dialog = await waitFor(() => {
           const dialogEl = screen.queryByTestId('codeDialog');
@@ -485,7 +492,7 @@ describe('CourtesyContactItem component', () => {
             unwrap: () => Promise.resolve({ code: VALID_CODE }),
           }))
         );
-        fireEvent.click(dialogButtons![1]);
+        fireEvent.click(dialogButtons![2]);
         await waitFor(() => {
           expect(mockDispatchFn).toBeCalledTimes(1);
           expect(mockActionFn).toBeCalledTimes(1);
@@ -566,7 +573,13 @@ describe('CourtesyContactItem component', () => {
             unwrap: () => Promise.resolve({ code: VALID_CODE }),
           }))
         );
-        fireEvent.click(saveButton);
+        await waitFor(() => fireEvent.click(saveButton));
+        // Confirms the disclaimer dialog
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
+        fireEvent.click(disclaimerConfirmButton);
+        
         await waitFor(() => screen.getByText(VALID_EMAIL));
       });
 
@@ -580,6 +593,12 @@ describe('CourtesyContactItem component', () => {
         await waitFor(() => expect(input!).toHaveValue(VALID_EMAIL_2));
         const saveButton = screen.getByRole('button', { name: 'button.salva' });
         fireEvent.click(saveButton!);
+        // Confirms the disclaimer dialog
+        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
+        fireEvent.click(disclaimerCheckbox);
+        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
+        fireEvent.click(disclaimerConfirmButton);
+        
         await waitFor(() => {
           expect(mockDispatchFn).toBeCalledTimes(1);
           expect(mockActionFn).toBeCalledTimes(1);
@@ -591,11 +610,6 @@ describe('CourtesyContactItem component', () => {
             code: undefined,
           });
         });
-        // Confirms the disclaimer dialog
-        const disclaimerCheckbox = screen.getByRole('checkbox', { name: 'button.capito' });
-        fireEvent.click(disclaimerCheckbox);
-        const disclaimerConfirmButton = screen.getByRole('button', { name: 'button.conferma' });
-        fireEvent.click(disclaimerConfirmButton);
 
         const dialog = await waitFor(() => {
           const dialogEl = screen.queryByTestId('codeDialog');
@@ -618,7 +632,7 @@ describe('CourtesyContactItem component', () => {
             unwrap: () => Promise.resolve({ code: VALID_CODE }),
           }))
         );
-        fireEvent.click(dialogButtons![1]);
+        fireEvent.click(dialogButtons![2]);
         await waitFor(() => {
           expect(mockDispatchFn).toBeCalledTimes(1);
           expect(mockActionFn).toBeCalledTimes(1);
