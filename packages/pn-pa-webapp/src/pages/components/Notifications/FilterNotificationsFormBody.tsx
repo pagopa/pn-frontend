@@ -182,7 +182,7 @@ const FilterNotificationsFormBody = ({
           )}
           disableFuture={true}
           minDate={startDate ? startDate : tenYearsAgo}
-          />
+        />
       </LocalizationProvider>
       <TextField
         id="status"
@@ -193,7 +193,14 @@ const FilterNotificationsFormBody = ({
         value={formikInstance.values.status}
         size="small"
         fullWidth={isMobile}
-        sx={{ marginBottom: isMobile ? '20px' : '0' }}
+        sx={{
+          marginBottom: isMobile ? '20px' : '0',
+          '& .MuiInputBase-root': {
+            pr: 4,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis'
+          },
+        }}
       >
         {localizedNotificationStatus.map((status) => (
           <MenuItem key={status.value} value={status.value}>
