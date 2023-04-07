@@ -273,15 +273,11 @@ const NotificationPayment: React.FC<Props> = ({
     ) {
       title = t('detail.payment.summary-succeeded', { ns: 'notifiche' });
     } else if (paymentInfo.status === PaymentStatus.INPROGRESS) {
-      t('detail.payment.summary-in-progress', { ns: 'notifiche' });
+      title = t('detail.payment.summary-in-progress', { ns: 'notifiche' });
     }
-
     const amount = paymentInfo.amount ? formatEurocentToCurrency(paymentInfo.amount) : '';
-
     const disclaimer = amount ? getDisclaimer() : undefined;
-
     const message = getMessageData();
-
     const action = getActionData(amount);
 
     return {
