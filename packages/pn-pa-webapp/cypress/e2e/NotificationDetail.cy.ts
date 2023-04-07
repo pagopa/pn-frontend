@@ -1,5 +1,5 @@
 import { NotificationStatus } from '@pagopa-pn/pn-commons';
-import { NOTIFICATIONS_LIST } from "../../src/api/notifications/notifications.routes";
+import { NOTIFICATION_DETAIL, NOTIFICATIONS_LIST } from "../../src/api/notifications/notifications.routes";
 import { getParams } from "../support/utils";
 
 const notifications = [
@@ -37,7 +37,7 @@ describe("Notification Detail", () => {
   });
 
   it('Downloads Legal fact', () => {
-    cy.intercept('GET', `delivery/notifications/sent/${notifications[0].iun}`, {
+    cy.intercept('GET', NOTIFICATION_DETAIL(notifications[0].iun), {
       statusCode: 200,
       fixture: 'notifications/effective_date'
     }).as('selectedNotification');
@@ -62,7 +62,7 @@ describe("Notification Detail", () => {
   });
 
   it(`Show notification status as '${notifications[0].status}'`, () => {
-    cy.intercept('GET', `delivery/notifications/sent/${notifications[0].iun}`, {
+    cy.intercept('GET', NOTIFICATION_DETAIL(notifications[0].iun), {
       statusCode: 200,
       fixture: 'notifications/effective_date'
     }).as('selectedNotification');
