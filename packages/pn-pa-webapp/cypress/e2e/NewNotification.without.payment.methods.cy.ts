@@ -1,5 +1,4 @@
 import { cesare, garibaldi } from '../fixtures/recipients';
-import { NUOVA_NOTIFICA } from '../../src/navigation/routes.const';
 import { CREATE_NOTIFICATION } from '../../src/api/notifications/notifications.routes';
 import { PNRole } from '../../src/models/user';
 
@@ -40,7 +39,7 @@ describe('New Notification without payment methods', () => {
         fixture: 'tos/privacy-accepted',
       });
       cy.intercept(/groups/, { fixture: 'groups/no-groups' });
-      cy.visit(NUOVA_NOTIFICA);
+      cy.visit('/dashboard/nuova-notifica');
     });
 
     it('Creates a single recipient notification', () => {
@@ -174,7 +173,7 @@ describe('New Notification without payment methods', () => {
     });
 
     beforeEach(() => {
-      cy.visit(NUOVA_NOTIFICA);
+      cy.visit('/dashboard/nuova-notifica');
     });
 
     it('Creates a new notification when no user group is available', () => {
@@ -264,7 +263,7 @@ describe('New Notification without payment methods', () => {
     });
 
     beforeEach(() => {
-      cy.visit(NUOVA_NOTIFICA);
+      cy.visit('/dashboard/nuova-notifica');
     });
 
     it('Creates a new notification when no user group is available', () => {
