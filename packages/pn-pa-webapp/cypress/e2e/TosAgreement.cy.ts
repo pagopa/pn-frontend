@@ -20,7 +20,7 @@ describe('TOS agreement', () => {
       fixture: 'tos/privacy-first-acceptance'
     });
     cy.visit('');
-    cy.contains('Per accedere, leggi e accetta l’Informativa Privacy e i Termini e condizioni d’uso.');
+    cy.contains('Accedendo, accetti i Termini e condizioni d’uso del servizio e confermi di aver letto l’Informativa Privacy.');
     cy.contains('Accedi').should('be.enabled').click();
   });
 
@@ -34,7 +34,7 @@ describe('TOS agreement', () => {
       fixture: 'tos/privacy-no-first-acceptance'
     });
     cy.visit('');
-    cy.contains('L’Informativa Privacy e i Termini e condizioni d’uso sono cambiati. Per accedere, leggi e accetta la nuova versione.');
+    cy.contains('Accedendo, accetti i Termini e condizioni d’uso del servizio e confermi di aver letto l’Informativa Privacy.');
     cy.contains('Accedi').should('be.enabled').click();
   });
 
@@ -48,7 +48,7 @@ describe('TOS agreement', () => {
       fixture: 'tos/privacy-no-first-acceptance'
     });
     cy.visit('');
-    cy.contains('L’Informativa Privacy e i Termini e condizioni d’uso sono cambiati. Per accedere, leggi e accetta la nuova versione.');
+    cy.contains('Accedendo, accetti i Termini e condizioni d’uso del servizio e confermi di aver letto l’Informativa Privacy.');
     cy.contains('Accedi').should('be.enabled').click();
   });
 
@@ -62,7 +62,7 @@ describe('TOS agreement', () => {
       fixture: 'tos/privacy-accepted'
     });
     cy.visit('');
-    cy.contains('L’Informativa Privacy e i Termini e condizioni d’uso sono cambiati. Per accedere, leggi e accetta la nuova versione.');
+    cy.contains('Accedendo, accetti i Termini e condizioni d’uso del servizio e confermi di aver letto l’Informativa Privacy.');
     cy.contains('Accedi').should('be.enabled').click();
   });
 });
