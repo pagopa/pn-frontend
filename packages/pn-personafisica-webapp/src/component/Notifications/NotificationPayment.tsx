@@ -30,7 +30,7 @@ import {
   useDownloadDocument,
   useIsMobile,
 } from '@pagopa-pn/pn-commons';
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
@@ -41,7 +41,7 @@ import {
   NOTIFICATION_ACTIONS,
 } from '../../redux/notification/actions';
 import { RootState } from '../../redux/store';
-import { PAGOPA_HELP_EMAIL } from '../../utils/constants';
+import { FAQ_DIFFERENT_AMOUNTS_SUFFIX, LANDING_SITE_URL, PAGOPA_HELP_EMAIL } from '../../utils/constants';
 import { TrackEventType } from '../../utils/events';
 import { trackEventByType } from '../../utils/mixpanel';
 
@@ -192,12 +192,6 @@ const NotificationPayment: React.FC<Props> = ({
     );
   };
 
-  /*
-    PN-2029
-    const onDisclaimerClick = () => {
-      window.open(PAYMENT_DISCLAIMER_URL);
-    };
-  */
   const getAttachmentsData = () => {
     // eslint-disable-next-line functional/no-let
     const attachments = new Array<{ name: PaymentAttachmentSName; title: string }>();
@@ -251,18 +245,21 @@ const NotificationPayment: React.FC<Props> = ({
     };
   };
 
+  const completeFaqDifferentAmountsUrl = useMemo(
+    () => `${LANDING_SITE_URL}/${FAQ_DIFFERENT_AMOUNTS_SUFFIX}`,
+    []
+  );
+
   /** returns disclaimer JSX */
-  const getDisclaimer = (): JSX.Element => (
+  const getDisclaimer = useCallback((): JSX.Element => (
     <>
       {t('detail.payment.disclaimer', { ns: 'notifiche' })}
       &nbsp;
-      {/* PN-2029
-        <Link href="#" onClick={onDisclaimerClick}>
-          {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
-        </Link>
-        */}
+      <Link href={completeFaqDifferentAmountsUrl} target="_blank">
+        {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
+      </Link>
     </>
-  );
+  ), [completeFaqDifferentAmountsUrl]);
 
   const ReloadPaymentInfoButton = ({ children }: { children?: ReactNode }) => (
     <Link
