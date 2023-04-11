@@ -246,18 +246,23 @@ const NotificationPayment: React.FC<Props> = ({
   };
 
   const completeFaqDifferentAmountsUrl = useMemo(
-    () => `${LANDING_SITE_URL}/${FAQ_DIFFERENT_AMOUNTS_SUFFIX}`,
+    () => LANDING_SITE_URL && FAQ_DIFFERENT_AMOUNTS_SUFFIX
+      ? `${LANDING_SITE_URL}/${FAQ_DIFFERENT_AMOUNTS_SUFFIX}`
+      : undefined,
     []
   );
 
   /** returns disclaimer JSX */
-  const getDisclaimer = useCallback((): JSX.Element => (
+  const getDisclaimer = useCallback((): JSX.Element | undefined => (
     <>
       {t('detail.payment.disclaimer', { ns: 'notifiche' })}
       &nbsp;
-      <Link href={completeFaqDifferentAmountsUrl} target="_blank">
-        {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
-      </Link>
+      {
+        completeFaqDifferentAmountsUrl &&
+        <Link href={completeFaqDifferentAmountsUrl} target="_blank">
+          {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
+        </Link>
+      }
     </>
   ), [completeFaqDifferentAmountsUrl]);
 
