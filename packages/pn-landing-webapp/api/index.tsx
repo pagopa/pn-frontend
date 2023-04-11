@@ -8,7 +8,7 @@ import {
   WalkthroughProps,
 } from "@pagopa/mui-italia";
 
-import { IAppData, ITabsProps, UserType } from "model";
+import { IAppData, ITabsProps, UserType, IHeadingTitleProps } from "model";
 import LangContext from "provider/lang-context";
 
 import {
@@ -27,7 +27,6 @@ import {
   useTheme,
 } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { IHeadingTitleProps } from "../model/index";
 
 import { deAppData } from "./data/de";
 import { enAppData } from "./data/en";
@@ -102,24 +101,23 @@ export const getHorizontalNavData = (
 
 // export const getFooterData = (userType: UserType = UserType.PA): FooterProps => getAppData()[userType].footer;
 
-export const getHeadingTitleData = (
-  userType: UserType = UserType.PA,
-  name: string = ""
-): IHeadingTitleProps => {
-  const headingTitle = getAppData()[userType].headingTitles.filter(
-    (item) => item.name === name
+export const getCommonHeadingTitleData = (name: string): IHeadingTitleProps => {
+  const headingTitleData = getAppData().common.headingTitles.filter(
+    (f) => f.name === name
   )[0];
-  return headingTitle.data;
+  return headingTitleData.data;
 };
 
-export const getTabsData = (
-  userType: UserType = UserType.PA,
-  name: string = ""
-): ITabsProps => {
-  const tab = getAppData()[userType].tabs.filter(
-    (item) => item.name === name
+export const getCommonTabsData = (name: string): ITabsProps => {
+  const tabsData = getAppData().common.tabs.filter((f) => f.name === name)[0];
+  return tabsData.data;
+};
+
+export const getCommonInfoblockData = (name: string): InfoblockProps => {
+  const infoblockData = getAppData().common.infoblocks.filter(
+    (f) => f.name === name
   )[0];
-  return tab.data;
+  return infoblockData.data;
 };
 
 export const HeadingTitle = ({

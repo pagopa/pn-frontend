@@ -4,18 +4,18 @@ import { useRef, useState } from "react";
 import {
   HeadingTitle,
   Tabs,
-  getHeadingTitleData,
-  getInfoblockData,
-  getTabsData,
+  getCommonHeadingTitleData,
+  getCommonInfoblockData,
+  getCommonTabsData,
 } from "api";
-import { UserType } from "model";
 import { Box, Slide } from "@mui/material";
 
 const Perfezionamento: NextPage = () => {
   const [currentTab, setCurrentTab] = useState({ index: 0, visible: true });
   const transitionDuration = 500;
   const containerRef = useRef(null);
-  const tabsData = getTabsData(UserType.PF, "tabs notification viewed 1");
+  const tabsData = getCommonTabsData("tabs notification viewed 1");
+  const headingTitleData = getCommonHeadingTitleData("heading title notification viewed 1");
   const handleTabChange = (tab: number) => {
     if (tab === currentTab.index) {
       return;
@@ -29,12 +29,7 @@ const Perfezionamento: NextPage = () => {
 
   return (
     <>
-      <HeadingTitle
-        {...getHeadingTitleData(
-          UserType.PF,
-          "heading title notification viewed 1"
-        )}
-      />
+      <HeadingTitle {...headingTitleData} />
       <Tabs {...tabsData} onTabChange={handleTabChange} />
       <Box ref={containerRef}>
         <Slide
@@ -44,8 +39,7 @@ const Perfezionamento: NextPage = () => {
         >
           <Box>
             <Infoblock
-              {...getInfoblockData(
-                UserType.PF,
+              {...getCommonInfoblockData(
                 `infoblock notification viewed ${currentTab.index + 1}`
               )}
             />

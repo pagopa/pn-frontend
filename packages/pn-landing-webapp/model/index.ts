@@ -26,8 +26,6 @@ export interface ILandingComponents {
   showcases: Array<IShowcaseData>;
   walkthrough: WalkthroughProps;
   horizontalNav: HorizontalNavProps;
-  headingTitles: Array<IHeadingTitlesData>;
-  tabs: Array<ITabsData>;
 }
 
 export interface IInfoblockData {
@@ -56,6 +54,9 @@ export interface IAppData {
     companyLegalInfo: JSX.Element;
     preLoginLinks: PreLoginFooterLinksType;
     postLoginLinks: Array<FooterLinksType>;
+    headingTitles: Array<IHeadingTitlesData>;
+    tabs: Array<ITabsData>;
+    infoblocks: Array<IInfoblockData>;
   };
   pa: ILandingComponents;
   pf: ILandingComponents;

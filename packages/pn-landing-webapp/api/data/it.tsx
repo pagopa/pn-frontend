@@ -434,141 +434,6 @@ const pfInfoBlocks: Array<IInfoblockData> = [
       imageShadow: false,
     },
   },
-  {
-    name: "infoblock notification viewed 1",
-    data: {
-      title: "",
-      inverse: false,
-      image: `${IMAGES_PATH}/pf-notification-viewed-1.png`,
-      imageShadow: false,
-      content: (
-        <>
-          <Typography variant="overline">LA NOTIFICA SI PERFEZIONA</Typography>
-          <Typography variant="h4" color="primary">
-            7 giorni
-          </Typography>
-          <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
-            <Typography sx={{ mb: 3 }}>
-              dopo la data in cui ricevi la PEC. Se la ricevi dalle 21:00 in
-              poi, conta a partire dal giorno dopo.
-            </Typography>
-            <Alert color="info" variant="outlined" icon={<IconInfo />}>
-              <AlertTitle>La PEC è satura, non valida o inattiva?</AlertTitle>
-              <Typography variant="body2">
-                In questo caso, la notifica si perfeziona 15 giorni dopo la data
-                di deposito dell’avviso di mancato recapito. Lo trovi su SEND,
-                nel dettaglio della notifica.
-              </Typography>
-            </Alert>
-          </Box>
-        </>
-      ),
-    },
-  },
-  {
-    name: "infoblock notification viewed 2",
-    data: {
-      title: "",
-      inverse: false,
-      image: `${IMAGES_PATH}/pf-notification-viewed-2.png`,
-      imageShadow: false,
-      content: (
-        <>
-          <Typography variant="overline">LA NOTIFICA SI PERFEZIONA</Typography>
-          <Typography variant="h4" color="primary">
-            10 giorni
-          </Typography>
-          <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
-            <Typography variant="body2" sx={{ mb: 3 }}>
-              dopo la data in cui ti è stata consegnata.
-            </Typography>
-            <Alert color="info" variant="outlined" icon={<IconInfo />}>
-              <AlertTitle>Hai ricevuto un avviso di giacenza?</AlertTitle>
-              <Typography variant="body2">
-                Se ritiri l’avviso di avventa ricezione entro 10 giorni in
-                Ufficio Postale, conta a partire dalla data di ritiro. Se non lo
-                ritiri entro 10 giorni o non lo ritiri affatto, conta 20 giorni
-                a partire dalla data di consegna dell’avviso di giacenza.
-              </Typography>
-            </Alert>
-          </Box>
-        </>
-      ),
-    },
-  },
-  {
-    name: "infoblock notification viewed 3",
-    data: {
-      title: "",
-      inverse: false,
-      image: `${IMAGES_PATH}/pf-notification-viewed-3.png`,
-      imageShadow: false,
-      content: (
-        <>
-          <Typography variant="overline">LA NOTIFICA SI PERFEZIONA</Typography>
-          <Typography variant="h4" color="primary">
-            il giorno in cui apri il messaggio
-          </Typography>
-          <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
-            <Typography variant="body2" sx={{ mb: 3 }}>
-              che hai ricevuto su IO dal servizio “Notifiche digitali” di SEND,
-              a meno che non si sia già perfezionata prima tramite{" "}
-              <Link>PEC</Link> o <Link>raccomandata</Link>. Per aprire il
-              messaggio, selezionalo dalla lista e premi “Continua”.
-            </Typography>
-          </Box>
-        </>
-      ),
-    },
-  },
-  {
-    name: "infoblock notification viewed 4",
-    data: {
-      title: "",
-      inverse: false,
-      image: `${IMAGES_PATH}/pf-notification-viewed-4.png`,
-      imageShadow: false,
-      content: (
-        <>
-          <Typography variant="overline">LA NOTIFICA SI PERFEZIONA</Typography>
-          <Typography variant="h4" color="primary">
-            il giorno in cui la visualizzi
-          </Typography>
-          <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
-            <Typography variant="body2">
-              dopo avere effettuato l’accesso con SPID o CIE e avere premuto
-              sulla notifica, a meno che non si sia già perfezionata prima
-              tramite <Link>PEC</Link> o <Link>raccomandata</Link>.
-            </Typography>
-          </Box>
-        </>
-      ),
-    },
-  },
-  {
-    name: "infoblock notification viewed 5",
-    data: {
-      title: "",
-      inverse: false,
-      image: `${IMAGES_PATH}/pf-notification-viewed-5.png`,
-      imageShadow: false,
-      content: (
-        <>
-          <Typography variant="overline">LA NOTIFICA SI PERFEZIONA</Typography>
-          <Typography variant="h4" color="primary">
-            il giorno in cui la visualizzi
-          </Typography>
-          <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
-            <Typography variant="body2">
-              su SEND, dopo avere effettuato l’accesso con SPID o CIE e avere
-              premuto sulla notifica, a meno che non si sia già perfezionata
-              prima tramite <Link>PEC</Link> o <Link>raccomandata</Link>.
-            </Typography>
-          </Box>
-        </>
-      ),
-    },
-  },
 ];
 
 const coInfoBlocks: Array<IInfoblockData> = [
@@ -1080,7 +945,7 @@ const postLoginLinks: Array<FooterLinksType> = [
   },
 ];
 
-const pfHeadingTitles: Array<IHeadingTitlesData> = [
+const headingTitles: Array<IHeadingTitlesData> = [
   {
     name: "heading title notification viewed 1",
     data: {
@@ -1095,11 +960,7 @@ const pfHeadingTitles: Array<IHeadingTitlesData> = [
   },
 ];
 
-const paHeadingTitles: Array<IHeadingTitlesData> = pfHeadingTitles;
-
-const coHeadingTitles: Array<IHeadingTitlesData> = pfHeadingTitles;
-
-const pfTabs: Array<ITabsData> = [
+const tabs: Array<ITabsData> = [
   {
     name: "tabs notification viewed 1",
     data: {
@@ -1108,9 +969,143 @@ const pfTabs: Array<ITabsData> = [
   },
 ];
 
-const paTabs: Array<ITabsData> = pfTabs;
-
-const coTabs: Array<ITabsData> = pfTabs;
+const infoblocks: Array<IInfoblockData> = [
+  {
+    name: "infoblock notification viewed 1",
+    data: {
+      title: "",
+      inverse: false,
+      image: `${IMAGES_PATH}/pf-notification-viewed-1.png`,
+      imageShadow: false,
+      content: (
+        <>
+          <Typography variant="overline">LA NOTIFICA SI PERFEZIONA</Typography>
+          <Typography variant="h4" color="primary">
+            7 giorni
+          </Typography>
+          <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
+            <Typography sx={{ mb: 3 }}>
+              dopo la data in cui ricevi la PEC. Se la ricevi dalle 21:00 in
+              poi, conta a partire dal giorno dopo.
+            </Typography>
+            <Alert color="info" variant="outlined" icon={<IconInfo />}>
+              <AlertTitle>La PEC è satura, non valida o inattiva?</AlertTitle>
+              <Typography variant="body2">
+                In questo caso, la notifica si perfeziona 15 giorni dopo la data
+                di deposito dell’avviso di mancato recapito. Lo trovi su SEND,
+                nel dettaglio della notifica.
+              </Typography>
+            </Alert>
+          </Box>
+        </>
+      ),
+    },
+  },
+  {
+    name: "infoblock notification viewed 2",
+    data: {
+      title: "",
+      inverse: false,
+      image: `${IMAGES_PATH}/pf-notification-viewed-2.png`,
+      imageShadow: false,
+      content: (
+        <>
+          <Typography variant="overline">LA NOTIFICA SI PERFEZIONA</Typography>
+          <Typography variant="h4" color="primary">
+            10 giorni
+          </Typography>
+          <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
+            <Typography variant="body2" sx={{ mb: 3 }}>
+              dopo la data in cui ti è stata consegnata.
+            </Typography>
+            <Alert color="info" variant="outlined" icon={<IconInfo />}>
+              <AlertTitle>Hai ricevuto un avviso di giacenza?</AlertTitle>
+              <Typography variant="body2">
+                Se ritiri l’avviso di avventa ricezione entro 10 giorni in
+                Ufficio Postale, conta a partire dalla data di ritiro. Se non lo
+                ritiri entro 10 giorni o non lo ritiri affatto, conta 20 giorni
+                a partire dalla data di consegna dell’avviso di giacenza.
+              </Typography>
+            </Alert>
+          </Box>
+        </>
+      ),
+    },
+  },
+  {
+    name: "infoblock notification viewed 3",
+    data: {
+      title: "",
+      inverse: false,
+      image: `${IMAGES_PATH}/pf-notification-viewed-3.png`,
+      imageShadow: false,
+      content: (
+        <>
+          <Typography variant="overline">LA NOTIFICA SI PERFEZIONA</Typography>
+          <Typography variant="h4" color="primary">
+            il giorno in cui apri il messaggio
+          </Typography>
+          <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
+            <Typography variant="body2" sx={{ mb: 3 }}>
+              che hai ricevuto su IO dal servizio “Notifiche digitali” di SEND,
+              a meno che non si sia già perfezionata prima tramite{" "}
+              <Link>PEC</Link> o <Link>raccomandata</Link>. Per aprire il
+              messaggio, selezionalo dalla lista e premi “Continua”.
+            </Typography>
+          </Box>
+        </>
+      ),
+    },
+  },
+  {
+    name: "infoblock notification viewed 4",
+    data: {
+      title: "",
+      inverse: false,
+      image: `${IMAGES_PATH}/pf-notification-viewed-4.png`,
+      imageShadow: false,
+      content: (
+        <>
+          <Typography variant="overline">LA NOTIFICA SI PERFEZIONA</Typography>
+          <Typography variant="h4" color="primary">
+            il giorno in cui la visualizzi
+          </Typography>
+          <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
+            <Typography variant="body2">
+              dopo avere effettuato l’accesso con SPID o CIE e avere premuto
+              sulla notifica, a meno che non si sia già perfezionata prima
+              tramite <Link>PEC</Link> o <Link>raccomandata</Link>.
+            </Typography>
+          </Box>
+        </>
+      ),
+    },
+  },
+  {
+    name: "infoblock notification viewed 5",
+    data: {
+      title: "",
+      inverse: false,
+      image: `${IMAGES_PATH}/pf-notification-viewed-5.png`,
+      imageShadow: false,
+      content: (
+        <>
+          <Typography variant="overline">LA NOTIFICA SI PERFEZIONA</Typography>
+          <Typography variant="h4" color="primary">
+            il giorno in cui la visualizzi
+          </Typography>
+          <Box sx={{ pr: { lg: "20%", xs: 0 } }}>
+            <Typography variant="body2">
+              su SEND, dopo avere effettuato l’accesso con SPID o CIE e avere
+              premuto sulla notifica, a meno che non si sia già perfezionata
+              prima tramite <Link>PEC</Link> o <Link>raccomandata</Link>.
+            </Typography>
+          </Box>
+        </>
+      ),
+    },
+  },
+];
 
 /** Application Data Mock */
 export const itAppData: IAppData = {
@@ -1120,7 +1115,10 @@ export const itAppData: IAppData = {
     pagoPALink,
     companyLegalInfo,
     preLoginLinks,
-    postLoginLinks
+    postLoginLinks,
+    headingTitles,
+    tabs,
+    infoblocks
   },
   pa: {
     hero: paHero,
@@ -1128,8 +1126,6 @@ export const itAppData: IAppData = {
     showcases: paShowcases,
     walkthrough: paWalkthrough,
     horizontalNav: paHorizontalNav,
-    headingTitles: paHeadingTitles,
-    tabs: paTabs,
   },
   pf: {
     hero: pfHero,
@@ -1137,8 +1133,6 @@ export const itAppData: IAppData = {
     showcases: pfShowcases,
     walkthrough: pfWalkthrough,
     horizontalNav: pfHorizontalNav,
-    headingTitles: pfHeadingTitles,
-    tabs: pfTabs,
   },
   co: {
     hero: coHero,
@@ -1146,7 +1140,5 @@ export const itAppData: IAppData = {
     showcases: coShowcases,
     walkthrough: coWalkthrough,
     horizontalNav: coHorizontalNav,
-    headingTitles: coHeadingTitles,
-    tabs: coTabs,
   },
 };
