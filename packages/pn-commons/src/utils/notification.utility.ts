@@ -209,7 +209,7 @@ export function getNotificationStatusInfos(
         color: 'info',
         ...localizeStatus(
           'viewed',
-          'Perfezionata per visione',
+          'Avvenuto accesso',
           `Il ${subject} ha letto la notifica`,
           `Il ${subject} ha letto la notifica entro il termine stabilito`,
           { subject, isMultiRecipient }
@@ -281,7 +281,7 @@ export const getNotificationAllowedStatus = () => [
   },
   {
     value: NotificationStatus.VIEWED,
-    label: getLocalizedOrDefaultLabel('notifications', 'status.viewed', 'Perfezionata per visione'),
+    label: getLocalizedOrDefaultLabel('notifications', 'status.viewed', 'Avvenuto accesso'),
   },
   {
     value: NotificationStatus.CANCELLED,
