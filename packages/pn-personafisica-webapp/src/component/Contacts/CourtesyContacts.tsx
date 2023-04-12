@@ -26,16 +26,16 @@ const CourtesyContacts: React.FC<Props> = ({ recipientId, contacts }) => {
     >
       <Box sx={{ width: { xs: '100%', lg: '50%' } }}>
         <CourtesyContactsList recipientId={recipientId} contacts={contacts} />
-        <Alert sx={{ mt: 4 }} severity="info" data-testid="contacts disclaimer">
-          <Typography component="span" variant="body1">
-            {t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
-          </Typography>
-          {/** 
+      </Box>
+      <Alert sx={{ mt: 4 }} severity="info" data-testid="contacts disclaimer">
+        <Typography component="span" variant="body1">
+          {t('courtesy-contacts.disclaimer-message', { ns: 'recapiti' })}{' '}
+        </Typography>
+        {/** 
            * Waiting for FAQs
           <Link href={URL_DIGITAL_NOTIFICATIONS} target="_blank" variant='body1'>{t('courtesy-contacts.disclaimer-link', { ns: 'recapiti' })}</Link>
            * */}
-        </Alert>
-      </Box>
+      </Alert>
     </DigitalContactsCard>
   );
 };

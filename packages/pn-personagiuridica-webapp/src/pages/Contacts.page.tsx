@@ -27,6 +27,7 @@ const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
+  const organization =  useAppSelector((state: RootState) => state.userState.user.organization);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
   );
