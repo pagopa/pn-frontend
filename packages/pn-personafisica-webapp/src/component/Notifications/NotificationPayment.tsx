@@ -540,7 +540,7 @@ const NotificationPayment: React.FC<Props> = ({
               </>
             )}
             {!loading &&
-              paymentInfo.status === PaymentStatus.SUCCEEDED &&
+              paymentInfo?.status === PaymentStatus.SUCCEEDED &&
               paymentHistory &&
               paymentHistory.length > 0 && (
                 <NotificationPaidDetail paymentDetailsList={paymentHistory} />
