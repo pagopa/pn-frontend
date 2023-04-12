@@ -251,7 +251,7 @@ const NotificationPayment: React.FC<Props> = ({
 
   const completeFaqDifferentAmountsUrl = useMemo(
     () => LANDING_SITE_URL && FAQ_DIFFERENT_AMOUNTS_SUFFIX
-      ? `${LANDING_SITE_URL}/${FAQ_DIFFERENT_AMOUNTS_SUFFIX}`
+      ? `${LANDING_SITE_URL}${FAQ_DIFFERENT_AMOUNTS_SUFFIX}`
       : undefined,
     []
   );

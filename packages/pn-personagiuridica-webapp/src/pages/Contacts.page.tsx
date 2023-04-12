@@ -1,8 +1,8 @@
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
-  // Link,
+  Link,
   Stack,
   Typography,
 } from '@mui/material';
@@ -19,6 +19,7 @@ import LegalContactsList from '../component/Contacts/LegalContactsList';
 import CourtesyContacts from '../component/Contacts/CourtesyContacts';
 import SpecialContacts from '../component/Contacts/SpecialContacts';
 import LoadingPageWrapper from '../component/LoadingPageWrapper/LoadingPageWrapper';
+import { FAQ_WHAT_IS_AAR, FAQ_WHAT_IS_COURTESY_MESSAGE, LANDING_SITE_URL } from '../utils/constants';
 // import { PROFILO } from '../navigation/routes.const';
 
 const Contacts = () => {
@@ -46,14 +47,30 @@ const Contacts = () => {
   //   navigate(PROFILO);
   // };
 
+  const faqWhatIsAarCompleteLink = useMemo(
+    () => `${LANDING_SITE_URL}${FAQ_WHAT_IS_AAR}`, []
+  );
+
+  const faqWhatIsCourtesyMessageCompleteLink = useMemo(
+    () => `${LANDING_SITE_URL}${FAQ_WHAT_IS_COURTESY_MESSAGE}`, []
+  );
+
   const subtitle = (
     <>
-      {t('subtitle-1', { ns: 'recapiti' })}
-      {/* <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage}>
-        {t('subtitle-link', { ns: 'recapiti' })}
+      {t('subtitle-text-1', { ns: 'recapiti' })}
+      <Link href={faqWhatIsAarCompleteLink} target="_blank">
+        {t('subtitle-link-1', { ns: 'recapiti' })}
+      </Link>
+      {t('subtitle-text-2', { ns: 'recapiti' })}
+      <Link href={faqWhatIsCourtesyMessageCompleteLink} target="_blank">
+        {t('subtitle-link-2', { ns: 'recapiti' })}
+      </Link>
+      {t('subtitle-text-3', { ns: 'recapiti' })}
+      {/* <Link onClick={handleRedirectToProfilePage}>
+        {t('subtitle-link-3', { ns: 'recapiti' })}
       </Link> */}
-      {t('subtitle-link', { ns: 'recapiti' })}
-      {t('subtitle-2', { ns: 'recapiti' })}
+      {t('subtitle-link-3', { ns: 'recapiti' })}
+      {t('subtitle-text-4', { ns: 'recapiti' })}
     </>
   );
 
