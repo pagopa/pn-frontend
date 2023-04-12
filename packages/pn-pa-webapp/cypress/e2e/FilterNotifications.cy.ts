@@ -1,6 +1,6 @@
 import { formatDate } from '../../../pn-commons/src/utils/date.utility';
 import { NotificationStatus } from '../../../pn-commons/src/types/NotificationStatus';
-import { NOTIFICATIONS_LIST } from "../../src/api/notifications/notifications.routes";
+import {NOTIFICATION_DETAIL, NOTIFICATIONS_LIST} from "../../src/api/notifications/notifications.routes";
 import { getParams } from "../support/utils";
 
 const filters = {
@@ -52,8 +52,6 @@ describe('Filter Notifications', () => {
   });
 
   it(`Filters by dates from ${startDate.formatted} to ${endDate.formatted}, enter a notification detail, then go back e verify filters are still set`, () => {
-    // wait for the notification list call response
-
     cy.get('#startDate').type(startDate.formatted);
     cy.get('#endDate').type(endDate.formatted);
 
@@ -68,7 +66,7 @@ describe('Filter Notifications', () => {
       }
     ).as('filteredNotifications');
 
-    cy.intercept('GET', `/delivery/notifications/sent/${filters.iun}`, {
+    cy.intercept('GET', NOTIFICATION_DETAIL(filters.iun), {
       statusCode: 200,
       fixture: 'notifications/effective_date',
     }).as('notificationDetail');
@@ -82,7 +80,7 @@ describe('Filter Notifications', () => {
 
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
-    cy.get(':nth-child(1) > .css-pgy0cg-MuiTableCell-root').should('be.visible').click();
+    cy.get('[data-cy="table(notifications).row"] > :nth-child(1)').first().should('be.visible').click();
     cy.wait('@notificationDetail');
     cy.get('[data-testid="breadcrumb-indietro-button"]').click();
     cy.wait('@filteredNotifications');
@@ -162,7 +160,7 @@ describe('Filter Notifications', () => {
 
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
-    cy.get('[NAME="status"]').should('have.value', filters.status);
+    cy.get('[name="status"]').should('have.value', filters.status);
 
     cy.get('[data-cy="table(notifications).row"]').should('have.length', 10);
   });

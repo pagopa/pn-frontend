@@ -40,6 +40,7 @@ describe("Notification Detail", () => {
       fixture: 'notifications/effective_date'
     }).as('selectedNotification');
 
+    // doesn't seem to be a compile route for this one
     cy.intercept('GET', `/delivery-push/${notifications[0].iun}/legal-facts/**`, {
       statusCode: 200,
       fixture: 'legalFacts/OG95.pdf'

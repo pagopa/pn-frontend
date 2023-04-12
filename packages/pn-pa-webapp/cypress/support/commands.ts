@@ -99,27 +99,6 @@ Cypress.Commands.add('logout', () => {
   });
 });
 
-Cypress.Commands.add('loginWithUI', () => {
-  cy.visit('');
-  cy.get('.css-131dr2y-MuiStack-root > :nth-child(2) > .MuiButton-root').click();
-  cy.get('#onetrust-accept-btn-handler').click();
-  cy.get('#spidButton').click();
-  cy.get('[alt="test"]').click();
-
-  cy.origin('selc-u-spid-testenv.westeurope.azurecontainer.io', () => {
-    cy.get('#username').type('baldassarremazza');
-    cy.get('#password').type('test');
-    cy.get('button[type="submit"]').eq(0).click();
-    cy.get('button[type="submit"]').eq(0).click();
-  });
-
-  cy.get('[data-testid="PartyItemContainer: Comune di Milano"]').click();
-  cy.get('.css-ld1zcw > .MuiButton-root').click();
-  cy.get(
-    ':nth-child(7) > .MuiPaper-root > .MuiCardContent-root > .MuiGrid-container > .css-gzsrxl > .MuiCardActions-root > .MuiButton-root'
-  ).click();
-});
-
 Cypress.Commands.add('stubConsents', () => {
   cy.intercept(GET_CONSENTS(ConsentType.TOS), {
     statusCode: 200,

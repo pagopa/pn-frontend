@@ -1,7 +1,7 @@
 import { cesare, garibaldi } from '../fixtures/recipients';
 // import {NUOVA_NOTIFICA} from '../../src/navigation/routes.const';
-import { CREATE_NOTIFICATION } from '../../src/api/notifications/notifications.routes';
-import { PNRole } from '../../src/models/user';
+import {CREATE_NOTIFICATION, GET_USER_GROUPS} from '../../src/api/notifications/notifications.routes';
+import {GroupStatus, PNRole} from '../../src/models/user';
 
 describe.skip('New Notification with payment methods', () => {
   const pdfTest1 = './cypress/fixtures/attachments/pdf_test_1.pdf';
@@ -37,7 +37,7 @@ describe.skip('New Notification with payment methods', () => {
 
   describe('Single/multi recipients', () => {
     beforeEach(() => {
-      cy.intercept(/groups/, { fixture: 'groups/no-groups' });
+      cy.intercept(GET_USER_GROUPS(GroupStatus.ACTIVE), { fixture: 'groups/no-groups' });
     });
 
     // skipped because payments are currently disabled
@@ -334,7 +334,7 @@ describe.skip('New Notification with payment methods', () => {
   describe('Administrator role', () => {
 
     it('Creates a new notification when no user group is available', () => {
-      cy.intercept(/groups/, { fixture: 'groups/no-groups' });
+      cy.intercept(GET_USER_GROUPS(GroupStatus.ACTIVE), { fixture: 'groups/no-groups' });
 
       // Fill step 1
       cy.fillPreliminaryInfo({
@@ -378,7 +378,7 @@ describe.skip('New Notification with payment methods', () => {
     });
 
     it('Creates a new notification when a user group is available', () => {
-      cy.intercept(/groups/, { fixture: 'groups/groups' });
+      cy.intercept(GET_USER_GROUPS(GroupStatus.ACTIVE), { fixture: 'groups/groups' });
 
       // Fill step 1
       cy.fillPreliminaryInfo({
@@ -434,7 +434,7 @@ describe.skip('New Notification with payment methods', () => {
     });
 
     it('Creates a new notification when no user group is available', () => {
-      cy.intercept(/groups/, { fixture: 'groups/no-groups' });
+      cy.intercept(GET_USER_GROUPS(GroupStatus.ACTIVE), { fixture: 'groups/no-groups' });
 
       // Fill step 1
       cy.fillPreliminaryInfo({
@@ -478,7 +478,7 @@ describe.skip('New Notification with payment methods', () => {
     });
 
     it('Creates a new notification when a user group is available', () => {
-      cy.intercept(/groups/, { fixture: 'groups/groups' });
+      cy.intercept(GET_USER_GROUPS(GroupStatus.ACTIVE), { fixture: 'groups/groups' });
 
       // Fill step 1
       cy.fillPreliminaryInfo({

@@ -19,7 +19,6 @@ declare global {
     interface Chainable {
       login(): void;
       logout(): void;
-      loginWithUI(): void;
       setRole(role: PNRole): void;
       loginWithTokenExchange(role?: PNRole): void;
       fillRecipient(recipient: RecipientFormData): void;
