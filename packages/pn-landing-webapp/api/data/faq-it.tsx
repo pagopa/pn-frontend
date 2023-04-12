@@ -165,7 +165,7 @@ export const itFaqData: IFaqData = {
         ]
       },
     ] },
-    { title: 'Documenti della notifica', items: [
+    { title: 'Documenti e comunicazioni', items: [
       { id: 'documenti-aar', title: `Cos'è un avviso di avvenuta ricezione?`, 
         description: 
         <Box>
@@ -307,7 +307,7 @@ export const itFaqData: IFaqData = {
         ]
       },
       { id: 'ricezione-essere-delegato', 
-        title: `Voglio essere delegato/a da una persona a ricevere le mie notifiche. Posso farlo?`, 
+        title: `Voglio essere delegato/a da una persona a ricevere le sue notifiche. Posso farlo?`, 
         description: 
           `Sì: per farlo, chiedi alla persona di accedere a SEND con SPID o CIE e di andare
           alla sezione "Deleghe". Dille di premere "Aggiungi una delega", inserire i dati e
