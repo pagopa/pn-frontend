@@ -47,14 +47,7 @@ describe('Notification Detail', () => {
     cy.intercept(`${NOTIFICATION_PAYMENT_INFO('', '')}/**`, { fixture: 'payments/required'}).as('getPaymentInfo');
     // cy.intercept('/ext-registry/pagopa/v1/paymentinfo/**', { fixture: 'payments/required' }).as('getPaymentInfo');
 
-    cy.intercept(/TOS/, {
-      statusCode: 200,
-      fixture: 'tos/tos-accepted'
-    });
-    cy.intercept(/DATAPRIVACY/, {
-      statusCode: 200,
-      fixture: 'tos/privacy-accepted'
-    });
+    cy.stubConsents();
 
     cy.visit(NOTIFICHE);
 

@@ -1,6 +1,10 @@
 // @ts-check
 ///<reference path="../global.d.ts" />
 
+
+import { GET_CONSENTS } from "../../src/api/consents/consents.routes";
+import { ConsentType } from "../../src/models/consents";
+
 /**
  * Login programmatically
  */
@@ -13,6 +17,7 @@ Cypress.Commands.add('login', () => {
       'OptanonAlertBoxClosed=2023-03-17T15:26:49.072Z; ' +
       'OptanonConsent=isGpcEnabled=0&datestamp=Thu+Apr+06+2023+11%3A18%3A13+GMT%2B0200+(Central+European+Summer+Time)&version=202302.1.0&isIABGlobal=false&hosts=&landingPath=NotLandingPage&groups=C0001%3A1%2CC0002%3A1&geolocation=%3B&AwaitingReconsent=false';
   });
+
   Cypress.on('uncaught:exception', (err, runnable) => {
     return false;
   });
@@ -45,6 +50,11 @@ Cypress.Commands.add('logout', () => {
 });
 
 Cypress.Commands.add('loginWithUI', () => {
+  Cypress.on("window:before:load", window => {
+    window.document.cookie =
+      'OptanonAlertBoxClosed=2023-03-17T15:26:49.072Z; ' +
+      'OptanonConsent=isGpcEnabled=0&datestamp=Thu+Apr+06+2023+11%3A18%3A13+GMT%2B0200+(Central+European+Summer+Time)&version=202302.1.0&isIABGlobal=false&hosts=&landingPath=NotLandingPage&groups=C0001%3A1%2CC0002%3A1&geolocation=%3B&AwaitingReconsent=false';
+  });
   Cypress.on('uncaught:exception', (err, runnable) => {
     return false;
   });
@@ -62,7 +72,6 @@ Cypress.Commands.add('loginWithUI', () => {
       // no session... login needed
       cy.get('.css-zitybv > .MuiButton-root').click();
       cy.get('#spidButton').click();
-      cy.get('#onetrust-accept-btn-handler').click();
 
       cy.get('[alt="test"]').click();
       cy.get('input#username').type(username);
@@ -75,3 +84,14 @@ Cypress.Commands.add('loginWithUI', () => {
 
   cy.contains('Notifiche');
 });
+
+Cypress.Commands.add('stubConsents', () => {
+  cy.intercept(GET_CONSENTS(ConsentType.TOS), {
+    statusCode: 200,
+    fixture: 'tos/tos-accepted',
+  });
+  cy.intercept(GET_CONSENTS(ConsentType.DATAPRIVACY), {
+    statusCode: 200,
+    fixture: 'tos/privacy-accepted',
+  });
+})

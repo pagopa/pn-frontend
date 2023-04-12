@@ -74,14 +74,7 @@ describe('Notification Filters (no delegators)', () => {
       'getPaymentInfo'
     );
 
-    cy.intercept(/TOS/, {
-      statusCode: 200,
-      fixture: 'tos/tos-accepted',
-    });
-    cy.intercept(/DATAPRIVACY/, {
-      statusCode: 200,
-      fixture: 'tos/privacy-accepted'
-    });
+    cy.stubConsents();
     cy.visit(NOTIFICHE);
 
     cy.wait('@getNotifications');
@@ -250,14 +243,8 @@ describe('Notification Filters (delegators)', () => {
 
   beforeEach(() => {
     cy.viewport(1920, 1080);
-    cy.intercept(/TOS/, {
-      statusCode: 200,
-      fixture: 'tos/tos-accepted',
-    });
-    cy.intercept(/DATAPRIVACY/, {
-      statusCode: 200,
-      fixture: 'tos/privacy-accepted'
-    });
+    cy.stubConsents();
+
     cy.intercept(`${NOTIFICATIONS_LIST({ startDate: '', endDate: '' })}*`, {
       fixture: 'notifications/list-10/page-1',
     }).as('getNotifications');
