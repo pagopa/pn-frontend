@@ -51,30 +51,40 @@ const Contacts = () => {
   };
 
   const faqWhatIsAarCompleteLink = useMemo(
-    () => `${LANDING_SITE_URL}${FAQ_WHAT_IS_AAR}`, []
+    () => LANDING_SITE_URL && FAQ_WHAT_IS_AAR 
+      ? `${LANDING_SITE_URL}${FAQ_WHAT_IS_AAR}` 
+      : undefined
+    , []
   );
 
   const faqWhatIsCourtesyMessageCompleteLink = useMemo(
-    () => `${LANDING_SITE_URL}${FAQ_WHAT_IS_COURTESY_MESSAGE}`, []
+    () => LANDING_SITE_URL && FAQ_WHAT_IS_COURTESY_MESSAGE ? 
+      `${LANDING_SITE_URL}${FAQ_WHAT_IS_COURTESY_MESSAGE}`
+      : undefined
+    , []
   );
 
-  const subtitle = (faqWhatIsAarCompleteLink && faqWhatIsCourtesyMessageCompleteLink &&
-    <>
-      {t('subtitle-text-1', { ns: 'recapiti' })}
-      <Link href={faqWhatIsAarCompleteLink} target="_blank">
-        {t('subtitle-link-1', { ns: 'recapiti' })}
-      </Link>
-      {t('subtitle-text-2', { ns: 'recapiti' })}
-      <Link href={faqWhatIsCourtesyMessageCompleteLink} target="_blank">
-        {t('subtitle-link-2', { ns: 'recapiti' })}
-      </Link>
-      {t('subtitle-text-3', { ns: 'recapiti' })}
-      <Link onClick={handleRedirectToProfilePage}>
-        {t('subtitle-link-3', { ns: 'recapiti' })}
-      </Link>
-      {t('subtitle-text-4', { ns: 'recapiti' })}
-    </>
-  );
+  const subtitle = <>
+    {t('subtitle-text-1', { ns: 'recapiti' })}
+    { faqWhatIsAarCompleteLink 
+      ? <Link href={faqWhatIsAarCompleteLink} target="_blank">
+          {t('subtitle-link-1', { ns: 'recapiti' })}
+        </Link>
+      : t('subtitle-link-1', { ns: 'recapiti' })
+    }
+    {t('subtitle-text-2', { ns: 'recapiti' })}
+    { faqWhatIsCourtesyMessageCompleteLink
+      ? <Link href={faqWhatIsCourtesyMessageCompleteLink} target="_blank">
+          {t('subtitle-link-2', { ns: 'recapiti' })}
+        </Link>
+      : t('subtitle-link-2', { ns: 'recapiti' }) 
+    }
+    {t('subtitle-text-3', { ns: 'recapiti' })}
+    <Link onClick={handleRedirectToProfilePage}>
+      {t('subtitle-link-3', { ns: 'recapiti' })}
+    </Link>
+    {t('subtitle-text-4', { ns: 'recapiti' })}
+  </>;
 
   return (
     <LoadingPageWrapper isInitialized={pageReady}>
