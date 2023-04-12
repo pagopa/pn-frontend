@@ -51,16 +51,16 @@ export const Menu = (props: any) => {
   const getMenuItemElements = () => {
     if (props.menuType === 'delegates') {
       return [
-        <MenuItem key="showCode" onClick={handleOpenVerificationCodeModal}>
+        <MenuItem key="showCode" onClick={handleOpenVerificationCodeModal} data-testid="menuItem-showCode">
           {t('deleghe.show')}
         </MenuItem>,
-        <MenuItem key="revoke" onClick={handleOpenModalClick}>
+        <MenuItem key="revoke" onClick={handleOpenModalClick} data-testid="menuItem-revokeDelegate">
           {t('deleghe.revoke')}
         </MenuItem>,
       ];
     } else {
       return [
-        <MenuItem key="reject" onClick={handleOpenModalClick}>
+        <MenuItem key="reject" onClick={handleOpenModalClick} data-testid="menuItem-revokeDelegator">
           {t('deleghe.reject')}
         </MenuItem>,
       ];

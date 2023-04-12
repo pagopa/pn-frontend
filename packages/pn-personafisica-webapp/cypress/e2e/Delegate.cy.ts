@@ -142,23 +142,9 @@ describe('Delegation', () => {
 
       cy.intercept('POST', `${CREATE_DELEGATION()}`, {
         statusCode: 201,
-        // body: {
-        //   ...newDelegationRequest,
-        //   expirationDate: tomorrow,
-        // }
       }).as('createDelegation');
 
       cy.get('[data-testid="createButton"]').click();
-
-      /*
-
-      const payload = mockData.payloads.newDelegation;
-      cy.wait('@createDelegation').its('request.body').should('deep.equal', {
-        ...payload,
-        dateto: formattedTomorrowSliced
-      });
-
-      */
 
       cy.get('[data-testid="courtesy-page"]').contains(/La tua richiesta di delega è stata creata con successo/).should('exist');
       cy.intercept(`${DELEGATIONS_BY_DELEGATOR()}`, {
@@ -171,13 +157,15 @@ describe('Delegation', () => {
     });
 
     it('Shoud revoke a delegate', () => {
-      cy.wait('@getDelegators');
+      cy.wait(['@getDelegators', '@getDelegates']);
       cy.intercept('PATCH', `${REOVKE_DELEGATION('6c969e5d-b3a0-4c11-a82a-3b8360d1436c')}`, {
         statusCode: 200
       }).as('revokeDelegation');
+
       cy.get('[data-testid="delegates-wrapper"] [data-testid="delegationMenuIcon"]').click();
-      cy.get('.MuiList-root > [tabindex="-1"]').click();
-      cy.get('.css-pj2eij-MuiGrid-root > [data-testid="dialogAction"]').click();
+      cy.get('[data-testid="menuItem-revokeDelegate"]').click();
+      cy.get('[data-testid="dialogAction-confirm"]').click();
+
       cy.get('[data-testid="delegates-wrapper"]').contains(/Ettore Fieramosca/).should('not.exist');
     });
   });
