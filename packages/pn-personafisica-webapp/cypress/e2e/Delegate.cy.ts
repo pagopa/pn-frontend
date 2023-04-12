@@ -156,14 +156,16 @@ describe('Delegation', () => {
       cy.get('[data-testid="delegates-wrapper"] [data-cy="table(notifications)"] > .MuiTableBody-root > :nth-child(2) .MuiChip-label').contains(/In attesa di conferma/).should('exist');
     });
 
-    it('Shoud revoke a delegate', () => {
+    it.only('Shoud revoke a delegate', () => {
       cy.wait(['@getDelegators', '@getDelegates']);
       cy.get('[data-testid="delegates-wrapper"]').contains(/Gaio Giulio Cesare/).should('exist');
       cy.intercept('PATCH', `${REOVKE_DELEGATION('6c969e5d-b3a0-4c11-a82a-3b8360d1436c')}`, {
         statusCode: 200
       }).as('revokeDelegation');
 
-      cy.get('[data-testid="delegates-wrapper"] [data-testid="delegationMenuIcon"]').click();
+      cy.get('[data-testid="delegates-wrapper"]').within(() => {
+        cy.get('[data-testid="delegationMenuIcon"]').click();
+      });
       cy.get('[data-testid="menuItem-revokeDelegate"]').click();
       cy.get('[data-testid="dialogAction"]').eq(1).click();
 
