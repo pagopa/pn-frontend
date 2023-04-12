@@ -17,7 +17,6 @@ function notificationDetailPath(notificationId: NotificationId): string {
     : GET_DETTAGLIO_NOTIFICA_PATH(notificationId.iun);
 }
 
-/* eslint-disable-next-line arrow-body-style */
 const AARGuard = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -25,10 +24,22 @@ const AARGuard = () => {
   const [fetchError, setFetchError] = useState(false);
   const [notificationId, setNotificationId] = useState<NotificationId | undefined>();
 
+  // momentarily added for pn-5157
+  const storedAar = localStorage.getItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
+
   const aar = useMemo(() => {
     const queryParams = new URLSearchParams(location.search);
-    return queryParams.get(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
-  }, [location]);
+    // momentarily updated for pn-5157
+    const queryAar = queryParams.get(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM);
+    if (queryAar) {
+      return queryAar;
+    }
+    // get from localstorage
+    if (storedAar) {
+      return storedAar;
+    }
+    return null;
+  }, [location.search, storedAar]);
 
   useEffect(() => {
     const fetchNotificationFromQrCode = async () => {
@@ -41,7 +52,10 @@ const AARGuard = () => {
         }
       }
     };
-    void fetchNotificationFromQrCode();
+    // momentarily updated for pn-5157
+    void fetchNotificationFromQrCode().then(() =>
+      localStorage.removeItem(DETTAGLIO_NOTIFICA_QRCODE_QUERY_PARAM)
+    );
   }, [aar]);
 
   useEffect(() => {
