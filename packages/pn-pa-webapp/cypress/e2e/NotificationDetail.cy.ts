@@ -13,11 +13,14 @@ const notifications = [
 describe("Notification Detail", () => {
   before(() => {
     cy.loginWithTokenExchange();
-  })
+  });
+
   beforeEach(() => {
+    // this prevents random errors in the app from breaking cypress tests
     Cypress.on('uncaught:exception', (err, runnable) => {
       return false;
     });
+
     cy.viewport(1920, 1080);
 
     cy.intercept('GET', NOTIFICATIONS_LIST(getParams({})), {
@@ -25,14 +28,9 @@ describe("Notification Detail", () => {
       fixture: 'notifications/list-10/page-1'
     }).as('notifications');
 
-    cy.intercept(/TOS/, {
-      statusCode: 200,
-      fixture: 'tos/tos-accepted'
-    });
-    cy.intercept(/DATAPRIVACY/, {
-      statusCode: 200,
-      fixture: 'tos/privacy-accepted',
-    });
+    // stubs tos and privacy consents
+    cy.stubConsents();
+
     cy.visit('/dashboard');
   });
 

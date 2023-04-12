@@ -37,9 +37,11 @@
 //   }
 // }
 
-import { PNRole } from '../../src/models/user';
-import { User } from '../../src/redux/auth/types';
+import {PNRole} from '../../src/models/user';
+import {User} from '../../src/redux/auth/types';
 import './NewNotification';
+import {GET_CONSENTS} from "../../src/api/consents/consents.routes";
+import {ConsentType} from "../../src/models/consents";
 
 /*
  * Set user role
@@ -58,24 +60,6 @@ Cypress.Commands.add('setRole', (role: PNRole) => {
 Cypress.Commands.add('loginWithTokenExchange', (role?: PNRole) => {
   Cypress.on("window:before:load", window => {
     window.document.cookie =
-      'OptanonAlertBoxClosed=2023-03-17T15:26:49.072Z; ' +
-      'OptanonConsent=isGpcEnabled=0&datestamp=Thu+Apr+06+2023+11%3A18%3A13+GMT%2B0200+(Central+European+Summer+Time)&version=202302.1.0&isIABGlobal=false&hosts=&landingPath=NotLandingPage&groups=C0001%3A1%2CC0002%3A1&geolocation=%3B&AwaitingReconsent=false';
-  });
-  cy.intercept({
-    method: 'POST',
-    url: 'token-exchange',
-  }).as('login');
-  cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
-  cy.wait('@login');
-  if (role) {
-    cy.log(`Setting user role to ${role}`);
-    cy.setRole(role);
-  }
-});
-
-Cypress.Commands.add('getExchangedToken', () => {
-  Cypress.on("window:before:load", window => {
-    window.document.cookie =
       'OptanonAlertBoxClosed=2023-03-17T15:26:49.072Z; '
       + 'OptanonConsent=isGpcEnabled=0'
       + '&datestamp=Thu+Apr+06+2023+11%3A18%3A13+GMT%2B0200+(Central+European+Summer+Time)'
@@ -90,19 +74,14 @@ Cypress.Commands.add('getExchangedToken', () => {
   cy.intercept({
     method: 'POST',
     url: 'token-exchange',
-  }).as('tokenExchange');
+  }).as('login');
   cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
-  return cy.wait('@tokenExchange').then((interception) => interception.response);
+  cy.wait('@login');
+  if (role) {
+    cy.log(`Setting user role to ${role}`);
+    cy.setRole(role);
+  }
 });
-
-Cypress.Commands.add('loginWithMockedTokenExchange', (tokenExchangeResponse) => {
-  cy.intercept({
-      method: 'POST',
-      url: 'token-exchange',
-    },
-    tokenExchangeResponse
-  );
-})
 
 /**
  * Logout programmatically
@@ -121,10 +100,6 @@ Cypress.Commands.add('logout', () => {
 });
 
 Cypress.Commands.add('loginWithUI', () => {
-  Cypress.on('uncaught:exception', (err, runnable) => {
-    return false;
-  });
-
   cy.visit('');
   cy.get('.css-131dr2y-MuiStack-root > :nth-child(2) > .MuiButton-root').click();
   cy.get('#onetrust-accept-btn-handler').click();
@@ -144,3 +119,14 @@ Cypress.Commands.add('loginWithUI', () => {
     ':nth-child(7) > .MuiPaper-root > .MuiCardContent-root > .MuiGrid-container > .css-gzsrxl > .MuiCardActions-root > .MuiButton-root'
   ).click();
 });
+
+Cypress.Commands.add('stubConsents', () => {
+  cy.intercept(GET_CONSENTS(ConsentType.TOS), {
+    statusCode: 200,
+    fixture: 'tos/tos-accepted',
+  });
+  cy.intercept(GET_CONSENTS(ConsentType.DATAPRIVACY), {
+    statusCode: 200,
+    fixture: 'tos/privacy-accepted',
+  });
+})

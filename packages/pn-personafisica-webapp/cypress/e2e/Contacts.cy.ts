@@ -20,19 +20,14 @@ describe('Contacts', () => {
       fixture: 'commons/activated-parties',
     }).as('getParties');
 
-    cy.intercept(/TOS/, {
-      statusCode: 200,
-      fixture: 'tos/tos-accepted',
-    });
-    cy.intercept(/DATAPRIVACY/, {
-      statusCode: 200,
-      fixture: 'tos/privacy-accepted'
-    });
     cy.login();
     cy.visit(RECAPITI);
   });
 
   beforeEach(() => {
+    // stubs tos and privacy consents
+    cy.stubConsents();
+
     cy.viewport(1920, 1080);
   })
 

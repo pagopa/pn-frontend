@@ -28,18 +28,18 @@ describe('Filter Notifications', () => {
   };
 
   before(() => {
-    cy.intercept(/TOS/, {
-      statusCode: 200,
-      fixture: 'tos/tos-accepted',
-    });
-    cy.intercept(/DATAPRIVACY/, {
-      statusCode: 200,
-      fixture: 'tos/privacy-accepted',
-    });
     cy.loginWithTokenExchange();
   });
 
   beforeEach(() => {
+    // this prevents random errors in the app from breaking cypress tests
+    Cypress.on('uncaught:exception', (err, runnable) => {
+      return false;
+    });
+
+    // stubs tos and privacy consents
+    cy.stubConsents();
+
     cy.intercept('GET', NOTIFICATIONS_LIST(getParams({})), {
       statusCode: 200,
       fixture: 'notifications/list-10/page-1',

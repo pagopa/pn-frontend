@@ -1,12 +1,14 @@
 import { cesare, garibaldi } from '../fixtures/recipients';
-import { CREATE_NOTIFICATION } from '../../src/api/notifications/notifications.routes';
+import {CREATE_NOTIFICATION, NOTIFICATIONS_LIST} from '../../src/api/notifications/notifications.routes';
 import { PNRole } from '../../src/models/user';
+import {getParams} from "../support/utils";
 
 describe('New Notification without payment methods', () => {
   const pdfTest1 = './cypress/fixtures/attachments/pdf_test_1.pdf';
   const pdfTest2 = './cypress/fixtures/attachments/pdf_test_2.pdf';
 
   beforeEach(() => {
+    // this prevents random errors in the app from breaking cypress tests
     Cypress.on('uncaught:exception', (err, runnable) => {
       return false;
     });
@@ -22,6 +24,13 @@ describe('New Notification without payment methods', () => {
     }).as('saveNewNotification');
 
     cy.intercept('/delivery/attachments/preload').as('preloadAttachments');
+    cy.intercept('GET', NOTIFICATIONS_LIST(getParams({})), {
+      statusCode: 200,
+      fixture: 'notifications/list-10/page-1',
+    }).as('notifications');
+
+    // stubs tos and privacy consents
+    cy.stubConsents();
   });
 
   describe('Single/multi recipients', () => {
@@ -30,14 +39,6 @@ describe('New Notification without payment methods', () => {
     });
 
     beforeEach(() => {
-      cy.intercept(/TOS/, {
-        statusCode: 200,
-        fixture: 'tos/tos-accepted',
-      });
-      cy.intercept(/DATAPRIVACY/, {
-        statusCode: 200,
-        fixture: 'tos/privacy-accepted',
-      });
       cy.intercept(/groups/, { fixture: 'groups/no-groups' });
       cy.visit('/dashboard/nuova-notifica');
     });

@@ -1,21 +1,21 @@
+import { GET_CONSENTS } from "../../src/api/consents/consents.routes";
+import { ConsentType } from "../../src/models/consents";
+
 describe('TOS agreement', () => {
   before(() => {
     cy.loginWithTokenExchange();
   });
 
   beforeEach(() => {
-    Cypress.on('uncaught:exception', (err, runnable) => {
-      return false;
-    });
     cy.viewport(1920, 1080);
   });
 
   it('Accept TOS and PRIVACY - first acceptance', () => {
-    cy.intercept(/TOS/, {
+    cy.intercept(GET_CONSENTS(ConsentType.TOS), {
       statusCode: 200,
       fixture: 'tos/tos-first-acceptance'
     });
-    cy.intercept(/DATAPRIVACY/, {
+    cy.intercept(GET_CONSENTS(ConsentType.DATAPRIVACY), {
       statusCode: 200,
       fixture: 'tos/privacy-first-acceptance'
     });
@@ -25,11 +25,11 @@ describe('TOS agreement', () => {
   });
 
   it('Accept TOS and PRIVACY - no first acceptance', () => {
-    cy.intercept(/TOS/, {
+    cy.intercept(GET_CONSENTS(ConsentType.TOS), {
       statusCode: 200,
       fixture: 'tos/tos-no-first-acceptance'
     });
-    cy.intercept(/DATAPRIVACY/, {
+    cy.intercept(GET_CONSENTS(ConsentType.DATAPRIVACY), {
       statusCode: 200,
       fixture: 'tos/privacy-no-first-acceptance'
     });
@@ -39,11 +39,11 @@ describe('TOS agreement', () => {
   });
 
   it('Accepted TOS and not accepted PRIVACY', () => {
-    cy.intercept(/TOS/, {
+    cy.intercept(GET_CONSENTS(ConsentType.TOS), {
       statusCode: 200,
       fixture: 'tos/tos-accepted'
     });
-    cy.intercept(/DATAPRIVACY/, {
+    cy.intercept(GET_CONSENTS(ConsentType.DATAPRIVACY), {
       statusCode: 200,
       fixture: 'tos/privacy-no-first-acceptance'
     });
@@ -53,11 +53,11 @@ describe('TOS agreement', () => {
   });
 
   it('Not accepted TOS and accepted PRIVACY', () => {
-    cy.intercept(/TOS/, {
+    cy.intercept(GET_CONSENTS(ConsentType.TOS), {
       statusCode: 200,
       fixture: 'tos/tos-no-first-acceptance'
     });
-    cy.intercept(/DATAPRIVACY/, {
+    cy.intercept(GET_CONSENTS(ConsentType.DATAPRIVACY), {
       statusCode: 200,
       fixture: 'tos/privacy-accepted'
     });

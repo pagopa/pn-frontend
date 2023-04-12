@@ -8,25 +8,19 @@ describe.skip('New Notification with payment methods', () => {
   const pdfTest2 = './cypress/fixtures/attachments/pdf_test_2.pdf';
   const pdfTest3 = './cypress/fixtures/attachments/pdf_test_3.pdf';
   const pdfTest4 = './cypress/fixtures/attachments/pdf_test_4.pdf';
-  let tokenExchangeResponse;
 
   before(() => {
-    cy.intercept(/TOS/, {
-      statusCode: 200,
-      fixture: 'tos/tos-accepted',
-    });
-    cy.intercept(/DATAPRIVACY/, {
-      statusCode: 200,
-      fixture: 'tos/privacy-accepted',
-    });
-    tokenExchangeResponse = cy.getExchangedToken();
-    cy.log('token', tokenExchangeResponse)
+    cy.loginWithTokenExchange();
   });
 
   beforeEach(() => {
+    // this prevents random errors in the app from breaking cypress tests
     Cypress.on('uncaught:exception', (err, runnable) => {
       return false;
     });
+
+    // stubs tos and privacy consents
+    cy.stubConsents();
 
     // intercepts send notification request stubbing its successful response
     cy.intercept('POST', CREATE_NOTIFICATION(), {
