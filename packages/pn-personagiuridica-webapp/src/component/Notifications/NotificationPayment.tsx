@@ -258,15 +258,16 @@ const NotificationPayment: React.FC<Props> = ({
 
   /** returns disclaimer JSX */
   const getDisclaimer = useCallback((): JSX.Element | undefined => (
-    completeFaqDifferentAmountsUrl 
-    ? <>
+    <>
       {t('detail.payment.disclaimer', { ns: 'notifiche' })}
       &nbsp;
-      <Link href={completeFaqDifferentAmountsUrl} target="_blank">
-        {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
-      </Link>
+      {
+        completeFaqDifferentAmountsUrl &&
+        <Link href={completeFaqDifferentAmountsUrl} target="_blank">
+          {t('detail.payment.disclaimer-link', { ns: 'notifiche' })}
+        </Link>
+      }
     </>
-    : undefined
   ), [completeFaqDifferentAmountsUrl]);
 
 
