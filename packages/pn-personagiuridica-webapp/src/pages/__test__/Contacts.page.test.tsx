@@ -102,7 +102,7 @@ describe('Contacts page - assuming contact API works properly', () => {
   // The link to profile page has been removed from pg.
   // I comment out this test waiting to have a clear requirement on it
   it.skip('subtitle link properly redirects to profile page', () => {
-    const subtitleLink = result.getByText('subtitle-link-3');
+    const subtitleLink = result.getByText('subtitle-link');
     expect(subtitleLink).toBeInTheDocument();
 
     fireEvent.click(subtitleLink);
