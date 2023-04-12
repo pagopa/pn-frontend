@@ -1,6 +1,6 @@
 {
   "title": "Notifiche di {{recipient}}",
-  "subtitle": "Qui puoi visualizzare tutte le notifiche destinate a {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
+  "subtitle": "Leggi le notifiche di {{recipient}}. Puoi filtrarle per Codice IUN e data di invio.",
   "table": {
     "data": "Data",
     "mittente": "Mittente",
@@ -44,7 +44,7 @@
     "groups": "Gruppi",
     "notice-code": "Codice Avviso",
     "creditor-tax-id": "Codice Fiscale Ente",
-    "breadcrumb-root": "Notifiche",
+    "breadcrumb-root": "Le tue notifiche",
     "breadcrumb-leaf": "Dettaglio notifica",
     "acts": "Documenti allegati",
     "other-acts": "Altri documenti",
