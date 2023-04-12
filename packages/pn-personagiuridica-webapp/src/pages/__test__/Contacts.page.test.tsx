@@ -48,6 +48,9 @@ const initialState = {
     userState: {
       user: {
         uid: 'mocked-recipientId',
+        organization: {
+          name: 'Mocked organization',
+        },
       },
     },
     contactsState: {
