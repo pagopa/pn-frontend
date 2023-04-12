@@ -58,7 +58,7 @@
     "email-verify": "Verifica e-mail",
     "email-verify-descr": "Abbiamo inviato un codice all’indirizzo e-mail indicato. Il codice è valido per <strong>10 minuti</strong>.",
     "phone-verify": "Verifica numero",
-    "phone-verify-descr": "Abbiamo inviato un codice numero di cellulare indicato. Il codice è valido per <strong>10 minuti</strong>.",
+    "phone-verify-descr": "Abbiamo inviato un codice al numero di cellulare indicato. Il codice è valido per <strong>10 minuti</strong>.",
     "insert-code": "Inserisci codice",
     "email-new-code": "Non l’hai ricevuto? Controlla di aver inserito l’e-mail corretta oppure",
     "phone-new-code": "Non l’hai ricevuto? Controlla di aver inserito il numero di cellulare corretto oppure",
