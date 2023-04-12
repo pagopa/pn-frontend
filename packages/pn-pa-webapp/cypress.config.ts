@@ -23,13 +23,7 @@ export default defineConfig({
 
       if (config.isTextTerminal) {
         // cypress launched using run
-        excludeSpecPattern.push('cypress/e2e/Auth.cy.ts');
-        excludeSpecPattern.push('cypress/e2e/FilterNotification.cy.ts');
-        excludeSpecPattern.push('cypress/e2e/NewNotification.cy.ts');
-        excludeSpecPattern.push('cypress/e2e/NewNotification.without.payment.methods.cy.ts');
-        excludeSpecPattern.push('cypress/e2e/NotificationDetail.cy.ts');
-        excludeSpecPattern.push('cypress/e2e/Pagination.cy.ts');
-        excludeSpecPattern.push('cypress/e2e/TosAgreement.cy.ts');
+        excludeSpecPattern.push('cypress/e2e/All.cy.ts');
       }
 
       // webpack config
