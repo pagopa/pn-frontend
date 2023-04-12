@@ -140,7 +140,7 @@ const CodeModal = memo(
           {confirmLabel && confirmCallback && (
             <Button
               variant="contained"
-              data-testid="code confirm button"
+              data-testid="codeConfirmButton"
               onClick={confirmHandler}
               disabled={!codeIsValid}
               fullWidth={isMobile}

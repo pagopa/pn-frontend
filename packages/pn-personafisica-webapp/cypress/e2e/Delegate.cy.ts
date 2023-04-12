@@ -1,4 +1,6 @@
-import { NOTIFICHE, DELEGHE } from '../../src/navigation/routes.const';
+import { getNextDay, formatToSlicedISOString } from '@pagopa-pn/pn-commons';
+
+import { DELEGHE } from '../../src/navigation/routes.const';
 import { NOTIFICATION_PAYMENT_INFO } from '../../src/api/notifications/notifications.routes';
 import { NOTIFICATION_DETAIL, NOTIFICATIONS_LIST } from '../../src/api/notifications/notifications.routes';
 import {
@@ -11,12 +13,15 @@ import {
 } from '../../src/api/delegations/delegations.routes';
 
 import mockData from '../fixtures/delegations/test-data';
-import { getNextDay, formatToSlicedISOString } from '../../../pn-commons/src/utils/date.utility';
 
 const tomorrow = getNextDay( new Date() );
 const formattedTomorrowSliced = formatToSlicedISOString(tomorrow);
 
 describe('Delegation', () => {
+  before(() => {
+    cy.login();
+  });
+
   beforeEach(() => {
     cy.viewport(1920, 1080);
 
@@ -42,15 +47,12 @@ describe('Delegation', () => {
       statusCode: 200,
       fixture: 'tos/privacy-accepted'
     });
-    cy.login();
-    cy.visit(NOTIFICHE);
+    cy.visit(DELEGHE);
   });
 
   describe('As delegate', () => {
     it('Should access delegator\'s notifications list and access one', () => {
       const iun = 'WYEJ-VDAL-XDHJ-202211-Q-1';
-
-      cy.wait('@getNotifications');
 
       cy.fixture('delegations/mandates-by-delegate').then((mandates) => {
 
@@ -65,7 +67,8 @@ describe('Delegation', () => {
           statusCode: 200,
           fixture: 'notifications/delegator/detail',
         }).as('notificationDetailAsDelegate');
-        
+
+        cy.get('[data-testid="sideMenuItem-Notifiche"]').click();
         cy.get('[data-cy="collapsible-list"] > :nth-child(2)').click();
 
         cy.wait('@notificationsListAsDelegate').then((interception) => {
@@ -73,11 +76,9 @@ describe('Delegation', () => {
           expect(interception.response.statusCode).to.equal(200);
         });
 
-        // cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
         cy.get('[data-cy="table(notifications).row"]').should('have.length', 10);
         cy.contains(iun).click();
         
-        // cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
         cy.wait('@notificationDetailAsDelegate').then((interception) => {
           expect(interception.request.url).include(`mandateId=${mandateId}`);
           expect(interception.request.url).include(iun);
@@ -87,24 +88,26 @@ describe('Delegation', () => {
     });
 
     it('Should reject delegator\'s request', () => {
-      cy.get('[data-testid="menu-list"] > :nth-child(4) > .MuiBox-root').contains(/1/).should('exist');
-      cy.visit(DELEGHE);
       cy.wait('@getDelegators');
+
+      cy.get('[data-testid="sideMenuItem-Deleghe"]').contains(/1/).should('exist');
       cy.get('[data-testid="delegators-wrapper"] [data-cy="table(notifications)"] > .MuiTableBody-root > :nth-child(1) [data-testid="delegationMenuIcon"]').click();
       cy.get('.MuiPaper-root > .MuiList-root > .MuiButtonBase-root').click();
+
       cy.intercept('PATCH', `${REJECT_DELEGATION('af02d543-c67e-4c64-8259-4f7ac12249fd')}`, {
         statusCode: 200
       }).as('rejectDelegation');
       cy.get('.css-pj2eij-MuiGrid-root > [data-testid="dialogAction"]').click();
       cy.wait('@rejectDelegation');
+
       cy.get('[data-testid="delegators-wrapper"]').contains(/Giuseppe Maria Garibaldi/).should('not.exist');
     });
 
-    it('Should accept delegator\s request', () => {
-      cy.get('[data-testid="menu-list"] > :nth-child(4) > .MuiBox-root').contains(/1/).should('exist');
-      cy.visit(DELEGHE);
+    it('Should accept delegator\'s request', () => {
+      cy.get('[data-testid="sideMenuItem-Deleghe"]').contains(/1/).should('exist');
       cy.wait('@getDelegators');
-      cy.get('.MuiTableCell-alignCenter > .MuiButtonBase-root').click();
+      cy.get('[data-testid="statusChip-Attiva"]').should('have.length', 1);
+      cy.get('[data-testid="acceptButton"]').contains('Accetta').click();
       const verificationCode = '25622';
       verificationCode.split('').forEach((code, i) =>
         cy.get(`:nth-child(${i + 1}) > .MuiInputBase-root > #outlined-basic`).type(code)
@@ -116,20 +119,19 @@ describe('Delegation', () => {
       cy.intercept(`${DELEGATIONS_BY_DELEGATE()}`, {
         fixture: 'delegations/mandates-by-delegate-after-activation',
       }).as('getDelegatesAfterActivation');
-      cy.get('.MuiDialogActions-root > .MuiButton-contained').click();
+
+      cy.get('[data-testid="codeConfirmButton"]').contains('Accetta').click();
       cy.wait('@acceptDelegation').its('request.body').should('deep.equal', {
         verificationCode: '25622'
       });
       cy.wait('@getDelegatesAfterActivation')
-      cy.get(':nth-child(2) > .MuiTableCell-alignCenter > .MuiChip-root > .MuiChip-label').contains(/Attiva/).should('exist');
+      cy.get('[data-testid="statusChip-Attiva"]').should('have.length', 2);
     });
   });
 
   describe('As delegator', () => {
     it('Should create new delegate', () => {
-      cy.intercept(DELEGHE).as('getDeleghePage');
-      cy.visit(DELEGHE);
-      cy.wait(['@getDeleghePage', '@getDelegates', '@getDelegators']);
+      cy.wait(['@getDelegates', '@getDelegators']);
       cy.get('[data-testid="loading-skeleton"]').should('not.exist');
       cy.get('[data-testid="add-delegation"]').click();
       
@@ -176,7 +178,6 @@ describe('Delegation', () => {
     });
 
     it('Shoud revoke a delegate', () => {
-      cy.visit(DELEGHE);
       cy.wait('@getDelegators');
       cy.intercept('PATCH', `${REOVKE_DELEGATION('6c969e5d-b3a0-4c11-a82a-3b8360d1436c')}`, {
         statusCode: 200

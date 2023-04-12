@@ -54,6 +54,7 @@ const SideMenuListItem = ({
         }
       }}
       sx={style}
+      data-testid={`sideMenuItem-${item.label}`}
     >
       {item.icon && (
         <ListItemIcon>

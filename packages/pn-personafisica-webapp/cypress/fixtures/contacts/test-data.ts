@@ -76,7 +76,7 @@ export default {
       title: 'Altri recapiti',
       subtitle:
         'Se vuoi che le notifiche di alcuni enti siano indirizzate a dei recapiti diversi puoi indicarli qui, in sostituzione di quelli principali.',
-      senderPlaceholder: 'Ente*',
+      senderPlaceholder: 'Ente',
       addrTypePlaceholder: 'Indirizzo PEC',
       pecPlaceholder: 'Indirizzo PEC*',
       mailPlaceholder: 'Indirizzo mail*',

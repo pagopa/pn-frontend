@@ -26,6 +26,10 @@ const notifications = [
 ];
 
 describe('Notification Detail', () => {
+  before(() => {
+    cy.login();
+  });
+
   beforeEach(() => {
     cy.viewport(1920, 1080);
 
@@ -52,7 +56,6 @@ describe('Notification Detail', () => {
       fixture: 'tos/privacy-accepted'
     });
 
-    cy.login();
     cy.visit(NOTIFICHE);
 
     cy.wait('@getNotifications');
