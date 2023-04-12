@@ -59,7 +59,7 @@ export default function ConfirmationModal({
                 onClick={handleClose}
                 color="primary"
                 variant="outlined"
-                data-testid="dialogAction-close"
+                data-testid="dialogAction"
               >
                 {onCloseLabel}
               </Button>
@@ -72,7 +72,7 @@ export default function ConfirmationModal({
                   color="primary"
                   variant="contained"
                   onClick={onConfirm}
-                  data-testid="dialogAction-confirm"
+                  data-testid="dialogAction"
                 >
                   {onConfirmLabel}
                 </Button>

@@ -90,7 +90,7 @@ describe('Delegation', () => {
       cy.intercept('PATCH', `${REJECT_DELEGATION('af02d543-c67e-4c64-8259-4f7ac12249fd')}`, {
         statusCode: 200
       }).as('rejectDelegation');
-      cy.get('.css-pj2eij-MuiGrid-root > [data-testid="dialogAction"]').click();
+      cy.get('[data-testid="dialogAction"]').eq(1).click();
       cy.wait('@rejectDelegation');
 
       cy.get('[data-testid="delegators-wrapper"]').contains(/Giuseppe Maria Garibaldi/).should('not.exist');
@@ -158,15 +158,16 @@ describe('Delegation', () => {
 
     it('Shoud revoke a delegate', () => {
       cy.wait(['@getDelegators', '@getDelegates']);
+      cy.get('[data-testid="delegates-wrapper"]').contains(/Gaio Giulio Cesare/).should('exist');
       cy.intercept('PATCH', `${REOVKE_DELEGATION('6c969e5d-b3a0-4c11-a82a-3b8360d1436c')}`, {
         statusCode: 200
       }).as('revokeDelegation');
 
       cy.get('[data-testid="delegates-wrapper"] [data-testid="delegationMenuIcon"]').click();
       cy.get('[data-testid="menuItem-revokeDelegate"]').click();
-      cy.get('[data-testid="dialogAction-confirm"]').click();
+      cy.get('[data-testid="dialogAction"]').eq(1).click();
 
-      cy.get('[data-testid="delegates-wrapper"]').contains(/Ettore Fieramosca/).should('not.exist');
+      cy.get('[data-testid="delegates-wrapper"]').contains(/Gaio Giulio Cesare/).should('not.exist');
     });
   });
 });
