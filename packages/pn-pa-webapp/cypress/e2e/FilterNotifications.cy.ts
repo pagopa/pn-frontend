@@ -1,7 +1,10 @@
-import { formatDate } from '../../../pn-commons/src/utils/date.utility';
-import { NotificationStatus } from '../../../pn-commons/src/types/NotificationStatus';
-import {NOTIFICATION_DETAIL, NOTIFICATIONS_LIST} from "../../src/api/notifications/notifications.routes";
-import { getParams } from "../support/utils";
+import { formatDate, NotificationStatus } from '@pagopa-pn/pn-commons';
+
+import {
+  NOTIFICATION_DETAIL,
+  NOTIFICATIONS_LIST,
+} from '../../src/api/notifications/notifications.routes';
+import { getParams } from '../support/utils';
 
 const filters = {
   taxId: 'GRBGPP87L04L741X',
@@ -13,8 +16,6 @@ const filters = {
   endFilteredDate: '2022-11-17',
   status: NotificationStatus.VIEWED,
 };
-
-
 
 describe('Filter Notifications', () => {
   const startDate = {
@@ -80,14 +81,17 @@ describe('Filter Notifications', () => {
 
     cy.get('[data-testid="loading-spinner"] > .MuiBox-root').should('not.exist');
 
-    cy.get('[data-cy="table(notifications).row"] > :nth-child(1)').first().should('be.visible').click();
+    cy.get('[data-testid="table(notifications).row"] > :nth-child(1)')
+      .first()
+      .should('be.visible')
+      .click();
     cy.wait('@notificationDetail');
     cy.get('[data-testid="breadcrumb-indietro-button"]').click();
     cy.wait('@filteredNotifications');
     cy.get('#startDate').should('have.value', startDate.formatted);
     cy.get('#endDate').should('have.value', endDate.formatted);
 
-    cy.get('[data-cy="table(notifications).row"]').should('have.length', 8);
+    cy.get('[data-testid="table(notifications).row"]').should('have.length', 8);
   });
 
   it(`Filter notifications by recipient tax id '${filters.taxId}'`, () => {
@@ -111,7 +115,7 @@ describe('Filter Notifications', () => {
 
     cy.get('#recipientId').should('have.value', filters.taxId);
 
-    cy.get('[data-cy="table(notifications).row"]').should('have.length', 10);
+    cy.get('[data-testid="table(notifications).row"]').should('have.length', 10);
   });
 
   it(`Filter notifications by IUN '${filters.iun}'`, () => {
@@ -136,7 +140,7 @@ describe('Filter Notifications', () => {
 
     cy.get('#iunMatch').should('have.value', filters.iun);
 
-    cy.get('[data-cy="table(notifications).row"]').should('have.length', 1);
+    cy.get('[data-testid="table(notifications).row"]').should('have.length', 1);
   });
 
   it(`Filter notifications by status '${filters.status}'`, () => {
@@ -162,6 +166,6 @@ describe('Filter Notifications', () => {
 
     cy.get('[name="status"]').should('have.value', filters.status);
 
-    cy.get('[data-cy="table(notifications).row"]').should('have.length', 10);
+    cy.get('[data-testid="table(notifications).row"]').should('have.length', 10);
   });
 });

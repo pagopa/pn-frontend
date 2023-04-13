@@ -1,11 +1,11 @@
-import {cesare, garibaldi} from '../fixtures/recipients';
+import { cesare, garibaldi } from '../fixtures/recipients';
 import {
   CREATE_NOTIFICATION,
   GET_USER_GROUPS,
-  NOTIFICATIONS_LIST
+  NOTIFICATIONS_LIST,
 } from '../../src/api/notifications/notifications.routes';
 import { GroupStatus, PNRole } from '../../src/models/user';
-import { getParams } from "../support/utils";
+import { getParams } from '../support/utils';
 
 describe('New Notification without payment methods', () => {
   const pdfTest1 = './cypress/fixtures/attachments/pdf_test_1.pdf';
@@ -57,7 +57,7 @@ describe('New Notification without payment methods', () => {
         communicationType: 'Model_890',
       });
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.fillRecipient({
         position: 0,
@@ -67,12 +67,12 @@ describe('New Notification without payment methods', () => {
         },
       });
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
@@ -91,7 +91,7 @@ describe('New Notification without payment methods', () => {
         communicationType: 'Model_890',
       });
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       // Fill step 2
 
@@ -101,7 +101,7 @@ describe('New Notification without payment methods', () => {
         data: cesare,
       });
 
-      cy.contains(/^Aggiungi un destinatario$/).click();
+      cy.get('[data-testid="add-recipient"]').click();
 
       // Recipient 2
       cy.fillRecipient({
@@ -109,14 +109,14 @@ describe('New Notification without payment methods', () => {
         data: garibaldi,
       });
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
-      cy.get('button[type="submit"]').should('be.disabled');
+      cy.get('[data-testid="step-submit"]').should('be.disabled');
 
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
@@ -131,7 +131,7 @@ describe('New Notification without payment methods', () => {
       cy.get('#subject').type('Nuova Notifica');
       cy.get('#taxonomyCode').type('012345X');
       cy.get('[data-testid="comunicationTypeRadio"]').eq(0).click();
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       // Fill step 2
       cy.get('input[name="recipients[0].firstName"]').type('Nome');
@@ -156,7 +156,7 @@ describe('New Notification without payment methods', () => {
       cy.get('input[name="recipients[0].province"]').type('MI');
       cy.get('input[name="recipients[0].zip"]').type('20100');
       cy.get('input[name="recipients[0].foreignState"]').type('Italia');
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       // Fill step 3
       cy.get('[data-testid="AddIcon"]').click();
@@ -164,7 +164,7 @@ describe('New Notification without payment methods', () => {
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest2, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
       cy.get('input[name="documents.1.name"]').type('pdf di Test 2');
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.wait('@saveNewNotification');
 
@@ -195,7 +195,7 @@ describe('New Notification without payment methods', () => {
 
       cy.get('#group').should('be.disabled');
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.fillRecipient({
         position: 0,
@@ -205,12 +205,12 @@ describe('New Notification without payment methods', () => {
         },
       });
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
@@ -232,12 +232,12 @@ describe('New Notification without payment methods', () => {
       });
 
       // The following validation need to be resolved with PN-2198
-      // cy.get('button[type="submit"]').should('be.disabled')
+      // cy.get('[data-testid="step-submit"]').should('be.disabled')
 
       cy.get('#group').click();
       cy.get('.MuiMenuItem-root').click();
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.fillRecipient({
         position: 0,
@@ -247,12 +247,12 @@ describe('New Notification without payment methods', () => {
         },
       });
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
@@ -285,7 +285,7 @@ describe('New Notification without payment methods', () => {
 
       cy.get('#group').should('be.disabled');
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.fillRecipient({
         position: 0,
@@ -295,12 +295,12 @@ describe('New Notification without payment methods', () => {
         },
       });
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 
@@ -322,12 +322,12 @@ describe('New Notification without payment methods', () => {
       });
 
       // The following validation need to be resolved with PN-2198
-      // cy.get('button[type="submit"]').should('be.disabled')
+      // cy.get('[data-testid="step-submit"]').should('be.disabled')
 
       cy.get('#group').click();
       cy.get('.MuiMenuItem-root').click();
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.fillRecipient({
         position: 0,
@@ -337,12 +337,12 @@ describe('New Notification without payment methods', () => {
         },
       });
 
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       // Fill step 3
       cy.get('input[type="file"]').eq(0).selectFile(pdfTest1, { force: true });
       cy.get('input[name="documents.0.name"]').type('pdf di Test 1');
-      cy.get('button[type="submit"]').should('be.enabled').click();
+      cy.get('[data-testid="step-submit"]').should('be.enabled').click();
 
       cy.wait('@preloadAttachments').its('response.statusCode').should('eq', 200);
 

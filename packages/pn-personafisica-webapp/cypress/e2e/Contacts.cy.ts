@@ -28,7 +28,7 @@ describe('Contacts', () => {
     }).as('getParties');
     cy.viewport(1920, 1080);
     cy.visit(RECAPITI);
-  })
+  });
 
   it('Should add a valid PEC', () => {
     // mock contacts (empty list)
