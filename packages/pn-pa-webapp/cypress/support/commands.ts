@@ -37,11 +37,12 @@
 //   }
 // }
 
-import {PNRole} from '../../src/models/user';
-import {User} from '../../src/redux/auth/types';
+import { PNRole } from '../../src/models/user';
+import { User } from '../../src/redux/auth/types';
 import './NewNotification';
-import {GET_CONSENTS} from "../../src/api/consents/consents.routes";
-import {ConsentType} from "../../src/models/consents";
+import { GET_CONSENTS } from '../../src/api/consents/consents.routes';
+import { AUTH_TOKEN_EXCHANGE } from '../../src/api/auth/auth.routes';
+import { ConsentType } from '../../src/models/consents';
 
 /*
  * Set user role
@@ -58,22 +59,22 @@ Cypress.Commands.add('setRole', (role: PNRole) => {
  * Login with token exchange
  */
 Cypress.Commands.add('loginWithTokenExchange', (role?: PNRole) => {
-  Cypress.on("window:before:load", window => {
+  Cypress.on('window:before:load', (window) => {
     window.document.cookie =
-      'OptanonAlertBoxClosed=2023-03-17T15:26:49.072Z; '
-      + 'OptanonConsent=isGpcEnabled=0'
-      + '&datestamp=Thu+Apr+06+2023+11%3A18%3A13+GMT%2B0200+(Central+European+Summer+Time)'
-      + '&version=202302.1.0'
-      + '&isIABGlobal=false'
-      + '&hosts='
-      + '&landingPath=NotLandingPage'
-      + '&groups=C0001%3A1%2CC0002%3A1'
-      + '&geolocation=%3B'
-      + '&AwaitingReconsent=false';
+      'OptanonAlertBoxClosed=2023-03-17T15:26:49.072Z; ' +
+      'OptanonConsent=isGpcEnabled=0' +
+      '&datestamp=Thu+Apr+06+2023+11%3A18%3A13+GMT%2B0200+(Central+European+Summer+Time)' +
+      '&version=202302.1.0' +
+      '&isIABGlobal=false' +
+      '&hosts=' +
+      '&landingPath=NotLandingPage' +
+      '&groups=C0001%3A1%2CC0002%3A1' +
+      '&geolocation=%3B' +
+      '&AwaitingReconsent=false';
   });
   cy.intercept({
     method: 'POST',
-    url: 'token-exchange',
+    url: AUTH_TOKEN_EXCHANGE(),
   }).as('login');
   cy.visit('/#selfCareToken=' + Cypress.env('tokenExchange'));
   cy.wait('@login');
@@ -108,4 +109,4 @@ Cypress.Commands.add('stubConsents', () => {
     statusCode: 200,
     fixture: 'tos/privacy-accepted',
   });
-})
+});
