@@ -4,7 +4,7 @@ import { FormikErrors, FormikState, FormikTouched, FormikValues } from 'formik';
 import currentLocale from 'date-fns/locale/it';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { MenuItem, TextField } from '@mui/material';
+import { ListItemText, MenuItem, TextField } from '@mui/material';
 import {
   CustomDatePicker,
   DatePickerTypes,
@@ -60,7 +60,12 @@ const FilterNotificationsFormBody = ({
       const originalEvent = e.target as HTMLInputElement;
       const cursorPosition = originalEvent.selectionStart || 0;
       const newInput = formatIun(originalEvent.value);
-      const newCursorPosition = cursorPosition + (originalEvent.value.length !== newInput?.length && cursorPosition >= originalEvent.value.length ? 1 : 0);
+      const newCursorPosition =
+        cursorPosition +
+        (originalEvent.value.length !== newInput?.length &&
+        cursorPosition >= originalEvent.value.length
+          ? 1
+          : 0);
 
       await formikInstance.setFieldValue('iunMatch', newInput);
 
@@ -199,13 +204,13 @@ const FilterNotificationsFormBody = ({
           '& .MuiInputBase-root': {
             pr: 4,
             overflow: 'hidden',
-            textOverflow: 'ellipsis'
+            textOverflow: 'ellipsis',
           },
         }}
       >
         {localizedNotificationStatus.map((status) => (
           <MenuItem key={status.value} value={status.value}>
-            {status.label}
+            <ListItemText>{status.label}</ListItemText>
           </MenuItem>
         ))}
       </TextField>
