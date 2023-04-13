@@ -51,6 +51,7 @@ const navigation: INavigationBarProps = {
   chip: "Beta",
   pf: "Državljani",
   pa: "Odvetnik",
+  faq: 'FAQ',
 };
 
 // eslint-disable-next-line no-extra-boolean-cast
@@ -830,12 +831,5 @@ export const slAppData: IAppData = {
     showcases: pfShowcases,
     walkthrough: pfWalkthrough,
     horizontalNav: pfHorizontalNav,
-  },
-  co: {
-    hero: coHero,
-    infoblocks: coInfoBlocks,
-    showcases: coShowcases,
-    walkthrough: coWalkthrough,
-    horizontalNav: coHorizontalNav,
-  },
+  }
 };

@@ -1,6 +1,10 @@
-import Link from "next/link";
-
-import { List, ListItem, SvgIcon, Typography } from "@mui/material";
+import {
+  Link,
+  List,
+  ListItem,
+  SvgIcon,
+  Typography,
+} from "@mui/material";
 
 import {
   FooterLinksType,
@@ -20,7 +24,6 @@ import {
   EcologyIcon,
   FireworksIcon,
   HourglassIcon,
-  IOIcon,
   MessageIcon,
   NotificationIcon,
   PECIcon,
@@ -31,7 +34,13 @@ import {
   UploadIcon,
   WalletIcon,
 } from "./icons";
-import { IAppData, IInfoblockData, ILinkData, INavigationBarProps, IShowcaseData } from "model";
+import {
+  IAppData,
+  IInfoblockData,
+  ILinkData,
+  INavigationBarProps,
+  IShowcaseData,
+} from "model";
 
 import {
   IMAGES_PATH,
@@ -57,7 +66,8 @@ const navigation: INavigationBarProps = {
   title: "Piattaforma Notifiche",
   chip: "Beta",
   pf: "Cittadini",
-  pa: "Enti"
+  pa: "Enti",
+  faq: 'FAQ',
 };
 
 const selfCareUrl = "https://selfcare.pagopa.it/auth/login?onSuccess=dashboard";
@@ -406,26 +416,6 @@ const pfInfoBlocks: Array<IInfoblockData> = [
   },
 ];
 
-const coInfoBlocks: Array<IInfoblockData> = [
-  {
-    name: "infoblock 1",
-    data: {
-      title: "",
-      inverse: false,
-      image: "",
-      imageShadow: false,
-    },
-  },
-  {
-    name: "infoblock 2",
-    data: {
-      title: "",
-      inverse: true,
-      image: "",
-      imageShadow: false,
-    },
-  },
-];
 /* ************************************** */
 
 /** Showcase mocked data */
@@ -548,35 +538,6 @@ const pfShowcases: Array<IShowcaseData> = [
     },
   },
 ];
-
-const coShowcases: Array<IShowcaseData> = [
-  {
-    name: "",
-    data: {
-      title: "",
-      items: [
-        {
-          icon: <PECIcon />,
-          title: "",
-          subtitle: `
-            `,
-        },
-        {
-          icon: <IOIcon />,
-          title: "",
-          subtitle: `
-          `,
-        },
-        {
-          icon: <MessageIcon />,
-          title: "",
-          subtitle: `
-          `,
-        },
-      ],
-    },
-  },
-];
 /* ************************************** */
 
 /** Walkthrough mocked data */
@@ -654,19 +615,6 @@ const pfWalkthrough: WalkthroughProps = {
   ],
 };
 
-const coWalkthrough: WalkthroughProps = {
-  title: "",
-  items: [
-    {
-      title: "",
-      subtitle: "",
-    },
-    {
-      title: "",
-      subtitle: "",
-    },
-  ],
-};
 /* ************************************** */
 
 /** HorizontalNav mocked data */
@@ -731,28 +679,6 @@ const pfHorizontalNav = {
 };
 
 // const pfHorizontalNav: HorizontalNavProps = {
-const coHorizontalNav = {
-  sections: [
-    {
-      title: "",
-      subtitle: "",
-      cta: {
-        label: "",
-        title: "",
-        href: "",
-      },
-    },
-    {
-      title: "",
-      subtitle: "",
-      cta: {
-        label: "",
-        title: "",
-        href: "",
-      },
-    },
-  ],
-};
 /* ************************************** */
 
 /**
@@ -915,7 +841,6 @@ const postLoginLinks: Array<FooterLinksType> = [
   },
 ];
 
-
 /** Application Data Mock */
 export const itAppData: IAppData = {
   common: {
@@ -924,7 +849,7 @@ export const itAppData: IAppData = {
     pagoPALink,
     companyLegalInfo,
     preLoginLinks,
-    postLoginLinks
+    postLoginLinks,
   },
   pa: {
     hero: paHero,
@@ -939,12 +864,5 @@ export const itAppData: IAppData = {
     showcases: pfShowcases,
     walkthrough: pfWalkthrough,
     horizontalNav: pfHorizontalNav,
-  },
-  co: {
-    hero: coHero,
-    infoblocks: coInfoBlocks,
-    showcases: coShowcases,
-    walkthrough: coWalkthrough,
-    horizontalNav: coHorizontalNav,
-  },
+  }
 };
