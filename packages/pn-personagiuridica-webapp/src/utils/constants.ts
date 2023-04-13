@@ -6,9 +6,7 @@ export const LOG_REDUX_ACTIONS = IS_DEVELOP;
 export const API_BASE_URL = process.env.REACT_APP_URL_API;
 export const SELFCARE_BASE_URL = process.env.REACT_APP_URL_SELFCARE_BASE;
 
-// momentarily commented for pn-5157
-// export const URL_FE_LOGIN = process.env.REACT_APP_URL_FE_LOGIN;
-export const URL_FE_LOGIN = process.env.REACT_APP_URL_SELFCARE_LOGIN;
+export const URL_FE_LOGIN = process.env.REACT_APP_URL_FE_LOGIN;
 export const URL_FE_LOGOUT = `${URL_FE_LOGIN}logout`;
 
 export const PAGOPA_HELP_EMAIL = process.env.REACT_APP_PAGOPA_HELP_EMAIL;
