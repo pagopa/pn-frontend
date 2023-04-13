@@ -34,7 +34,7 @@ describe('Pagination', () => {
 
     cy.get('[data-testid="table(notifications).row"]').should('have.length', 10);
 
-    cy.get('[aria-label="Righe per pagina"]').click();
+    cy.get('[data-testid="rows-per-page"]').click();
     cy.get('[data-testid="pageSize-20"]').click();
 
     cy.wait('@notifications_2').then((interception) => {
