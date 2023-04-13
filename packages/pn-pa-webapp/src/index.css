@@ -31,18 +31,18 @@ body {
   background-color: transparent;
 }
 
-.otnotice .otnotice-content .otnotice-menu > .otnotice-menu-section {
+.otnotice .otnotice-content .otnotice-menu>.otnotice-menu-section {
   margin: 0;
   padding: 1rem;
   width: 100%;
 }
 
-.otnotice .otnotice-content .otnotice-menu > .otnotice-menu-section:hover,
+.otnotice .otnotice-content .otnotice-menu>.otnotice-menu-section:hover,
 .otnotice .otnotice-content .otnotice-menu-mobile .otnotice-menu-section-mobile:hover {
   background-color: rgba(23, 50, 77, 0.08);
 }
 
-.otnotice .otnotice-content .otnotice-menu > .otnotice-menu-section a,
+.otnotice .otnotice-content .otnotice-menu>.otnotice-menu-section a,
 .otnotice .otnotice-content .otnotice-menu-mobile .otnotice-menu-selected,
 .otnotice .otnotice-content .otnotice-menu-mobile .otnotice-menu-section-mobile a {
   font-size: 1.125rem;
@@ -65,4 +65,5 @@ body {
   font-size: 1.75rem;
   color: #17324d;
 }
+
 /* END: ONETRUST STYLES */
