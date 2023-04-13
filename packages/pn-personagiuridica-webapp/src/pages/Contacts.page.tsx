@@ -26,6 +26,7 @@ const Contacts = () => {
   const { t } = useTranslation(['recapiti']);
   const dispatch = useAppDispatch();
   const recipientId = useAppSelector((state: RootState) => state.userState.user.uid);
+  const organization =  useAppSelector((state: RootState) => state.userState.user.organization);
   const digitalAddresses = useAppSelector(
     (state: RootState) => state.contactsState.digitalAddresses
   );
@@ -48,7 +49,7 @@ const Contacts = () => {
 
   const subtitle = (
     <>
-      {t('subtitle-1', { ns: 'recapiti' })}
+      {t('subtitle-1', { ns: 'recapiti', recipient: organization.name })}
       {/* <Link color="primary" fontWeight={'bold'} onClick={handleRedirectToProfilePage}>
         {t('subtitle-link', { ns: 'recapiti' })}
       </Link> */}
